@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-10-13 10:07\n"
+"PO-Revision-Date: 2023-10-13 17:26\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -147,7 +147,7 @@ msgstr "Группа пользователей в ACL"
 msgid "Access control"
 msgstr "Управление доступом"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:544
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:574
 msgid "Access control rules"
 msgstr "Правила доступа"
 
@@ -159,12 +159,12 @@ msgstr "Добавить правило"
 msgid "Add links to the collaboration group"
 msgstr "Добавлять связи в группу сотрудничества"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:91./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:109./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:110
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:91./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:119./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:110
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:46./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:127./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:158./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:45
 msgid "All"
 msgstr "Все"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:35
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:39
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:53./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:49./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:75
 msgid "All Categories"
 msgstr "Все категории"
@@ -201,7 +201,7 @@ msgstr "Ты уверен, что хочешь сделать все прави�
 msgid "Are you sure you want to restore all ACL rules to their currently published version?"
 msgstr "Вы уверены, что хотите восстановить все правила ACL до их версии, опубикованной на данный момент?"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:150./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:78
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:160./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:78
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:171./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:70./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:68./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:251./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:282./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:85./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38./apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:52
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:21
@@ -242,6 +242,11 @@ msgstr "Категория &amp; Группа контента"
 msgid "Change category and/or content group..."
 msgstr "Изменить категорию и/или группу контента..."
 
+#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:144
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:120
+msgid "Changed configuration."
+msgstr "Конфигурация изменена."
+
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:22
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:171
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:67./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:69
@@ -264,7 +269,7 @@ msgstr "Менеджеры групп сотрудничества"
 msgid "Collaboration group members"
 msgstr "Члены группы сотрудничества"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:540
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:570
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:120
 msgid "Collaboration groups"
 msgstr "Группы сотрудничества"
@@ -276,6 +281,10 @@ msgstr "Группы сотрудничества добавляются пут�
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:30
 msgid "Collaboration groups are user groups where all content belongs to the group."
 msgstr "Группы сотрудничества - это группы пользователей, в которых весь контент принадлежит группе."
+
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_options.tpl:12
+msgid "Consider resource authors to be owner."
+msgstr ""
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:19
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4./apps/zotonic_mod_admin/src/mod_admin.erl:95
@@ -308,7 +317,7 @@ msgstr "Не смог перейти в группу по сотрудничес
 msgid "Define who can see or edit this page."
 msgstr "Определить, кто сможет просматривать или редактировать эту страницу."
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:51./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:158
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:51./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:168
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:41./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:58./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:83./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:18./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:21./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:25./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:110
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:53
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:52
@@ -327,7 +336,7 @@ msgstr "Удалить"
 msgid "Delete all user groups"
 msgstr "Удалить все группы пользователей"
 
-#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:131
+#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:132
 msgid "Delete is canceled, there are users in the user groups."
 msgstr "Удаление отменяется, есть пользователи в группах пользователей."
 
@@ -335,12 +344,16 @@ msgstr "Удаление отменяется, есть пользователи
 msgid "Delete user group and move users"
 msgstr "Удалить группу пользователей и переместить пользователей"
 
-#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:159
+#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:177
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:75./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:93
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:86./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:92
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:79./apps/zotonic_mod_content_groups/src/mod_content_groups.erl:107
 msgid "Deleting..."
 msgstr "Удаление..."
+
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
+msgid "Deny"
+msgstr ""
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:43
 msgid "Edit &amp; link rights on the collaboration groups"
@@ -357,6 +370,10 @@ msgstr "Редактирование группы сотрудничества"
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:11
 msgid "Enter extensions (like <tt>.png</tt>), mime types (like <tt>image/png</tt>) or one of:"
 msgstr "Введите расширения (например, <tt>.png</tt>), типы MIME (например, <tt>image/png</tt>) или одно из следующего:"
+
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:106
+msgid "Exactly this category, no sub-categories"
+msgstr ""
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:22
 msgid "Export edit rules"
@@ -390,6 +407,10 @@ msgstr "Члены и менеджеры группы могут редакти�
 msgid "Group members and managers can link"
 msgstr "Члены и менеджеры группы могут добавлять связи"
 
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_options.tpl:19
+msgid "If checked then users connected with an <em>author</em> predicate are considered resource owners for the ACL rule evaluation. This ensures that ACL rules marked as <em>manage own</em> are applicable to authors."
+msgstr ""
+
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:18
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:51
 msgid "Import"
@@ -411,6 +432,10 @@ msgstr "Выполняется импорт, список правил обно�
 msgid "Keep"
 msgstr "Оставить"
 
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:137
+msgid "Manage own"
+msgstr ""
+
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:6
 msgid "Maximum file upload size per user group. This restricts file uploads for users."
 msgstr "Максимальный размер загрузки файла для каждой группы пользователей. Это ограничивает загрузку файлов для пользователей."
@@ -427,7 +452,7 @@ msgstr "Аутентифицированным пользователям"
 msgid "Members of same user group"
 msgstr "Членам той же группы пользователей"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:11./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:105
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:11./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:115
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:147
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:4./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:5./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
@@ -467,21 +492,35 @@ msgstr "Нужна помощь?"
 msgid "No ACL rules"
 msgstr "Нет правил ACL"
 
-#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:152
+#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:170
 msgid "Not all user groups could be deleted."
 msgstr "Не все группы пользователей могли быть удалены"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:47
+#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:150
+msgid "Not allowed to change ACL options."
+msgstr ""
+
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:50
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:87./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:116
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:41
 msgid "Not allowed."
 msgstr "Не разрешено."
 
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:31
+#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:55
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:28./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:35./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:62
+msgid "Options"
+msgstr "Опции"
+
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_options.tpl:5
+msgid "Options for the ACL module."
+msgstr ""
+
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:31
 msgid "Or click <strong>Delete all user groups</strong> to disconnect all users and delete the user groups."
 msgstr "Или нажмите <strong>Удалить все группы пользователей</strong> , чтобы отключить всех пользователей и удалить группы пользователей."
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:122
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:132
 msgid "Own content"
 msgstr "Собственный контент"
 
@@ -489,7 +528,7 @@ msgstr "Собственный контент"
 msgid "People who can view this page"
 msgstr "Людям, которые могут просматривать эту страницу"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:13./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:135
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:13./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:145
 msgid "Permissions"
 msgstr "Разрешения"
 
@@ -526,7 +565,7 @@ msgstr "Вернуться к опубликованной версии"
 msgid "Reverted rules"
 msgstr "Правила возвращены"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:151./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:64
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:161./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:64
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:77./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:29
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:125./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
@@ -563,7 +602,7 @@ msgstr "Показывать скрытые свойства"
 msgid "Show this ACL user group first:"
 msgstr "Сначала показать эту группу пользователей ACL:"
 
-#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:110./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:126
+#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:111./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:127
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:52./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:68
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:61./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:76
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:56./apps/zotonic_mod_content_groups/src/mod_content_groups.erl:72
@@ -654,7 +693,7 @@ msgstr "Использовать опубликованные правила"
 msgid "Use the following URL to test the access control rules before publishing them."
 msgstr "Используйте следующий URL для проверки правил контроля доступа перед их публикацией."
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:535
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:565
 msgid "User groups"
 msgstr "Группы пользователей"
 
@@ -670,7 +709,7 @@ msgstr "Вы не имеете права переходить в эту гру�
 msgid "You are not allowed to perform this action"
 msgstr "Вам не разрешено выполнять это действие"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:48
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:51
 msgid "You are not allowed to view this page."
 msgstr "Вам не разрешено просматривать эту страницу."
 
@@ -706,15 +745,11 @@ msgstr "нажав на <b>Использовать опубликованные
 msgid "closing this browser tab"
 msgstr "закрыв эту вкладку браузера"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:221
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:223
 msgid "delete (acl action)"
 msgstr "удалить (действие в acl)"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
-msgid "deny"
-msgstr "отказать"
-
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:220
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:222
 msgid "edit (acl action)"
 msgstr "редактировать (действие в acl)"
 
@@ -722,15 +757,15 @@ msgstr "редактировать (действие в acl)"
 msgid "in the group"
 msgstr "в группе"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:219
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:221
 msgid "insert (acl action)"
 msgstr "вставить (действие в acl)"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:222
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:224
 msgid "link (acl action)"
 msgstr "ссылка (действие в acl)"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:27./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:29./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:127
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:27./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:29
 msgid "manage own"
 msgstr "самостоятельно управлять"
 
@@ -738,7 +773,7 @@ msgstr "самостоятельно управлять"
 msgid "send this URL to somebody else for testing"
 msgstr "отправьте этот URL кому-нибудь другому для тестирования."
 
-#: apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:226
+#: apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:228
 msgid "use (acl action)"
 msgstr "использовать (действие в acl)"
 
@@ -750,7 +785,7 @@ msgstr "используйте <b>Новое приватное окно</b> (п
 msgid "use another browser (eg. Chrome if you are now using Firefox)"
 msgstr "используйте другой браузер (например, Chrome, если сейчас вы используете Firefox)"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:218
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:220
 msgid "view (acl action)"
 msgstr "просматривать (действие в acl)"
 
@@ -3826,11 +3861,6 @@ msgstr "Показываю только связи с:"
 msgid "Ontologies define predicates for a defined set of subject and object categories. Sometimes it is more practical to have the predicate’s connection direction reversed from the formal definition. Export and import functions can use this option to swap subject/object relation when exporting or importing data."
 msgstr "Онтологии определяют предикаты для определенного набора категорий субъектов и объектов. Иногда более практично изменить направление соединения предиката по сравнению с формальным определением. Функции экспорта и импорта могут использовать эту опцию для замены отношений субъект/объект при экспорте или импорте данных."
 
-#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:55
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:28./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:35./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:62
-msgid "Options"
-msgstr "Опции"
-
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:25
 msgid "Or click <strong>Delete All Connections</strong> to delete all connections with this predicate."
 msgstr "Или нажмите <strong>Удалить все соединения</strong> , чтобы удалить все соединения с этим предикатом."
@@ -4704,10 +4734,6 @@ msgstr "Параметры резервного копирования и вос
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:9
 msgid "Backups"
 msgstr "Резервные копии"
-
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:120
-msgid "Changed configuration."
-msgstr "Конфигурация изменена."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:10
 msgid "Changes since"
@@ -10487,7 +10513,7 @@ msgstr "Видеозапись"
 msgid "Youtube Video"
 msgstr "Youtube Video"
 
-#: apps/zotonic_mod_wires/src/actions/action_wires_alert.erl:35
+#: apps/zotonic_mod_wires/src/actions/action_wires_alert.erl:38
 msgid "Alert"
 msgstr "Предупреждение"
 
