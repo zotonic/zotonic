@@ -88,6 +88,11 @@
                 });
             }
 
+            let title = options.title ?? "";
+            if (options.title_icon) {
+                title = '<span style="font-weight: normal" class="' + options.title_icon + '"></span>&nbsp; ' + title;
+            }
+
             if (options.backdrop !== 'static') {
               $title = $('<div>')
                 .addClass('modal-header')
@@ -97,13 +102,13 @@
                 .html('<span>&times;</span>'))
                 .append($('<h4>')
                 .addClass('modal-title')
-                .html(options.title));
+                .html(title));
             } else {
               $title = $('<div>')
                 .addClass('modal-header')
                 .append($('<h4>')
                 .addClass('modal-title')
-                .html(options.title));
+                .html(title));
             }
             $modalContent = $('<div>').addClass('modal-content');
             $text = $('<div>').html(options.text);
