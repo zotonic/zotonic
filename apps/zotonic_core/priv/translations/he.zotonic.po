@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-10-05 16:33\n"
+"PO-Revision-Date: 2023-10-13 18:43\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -147,7 +147,7 @@ msgstr "קבוצת משתמשים של ACL"
 msgid "Access control"
 msgstr "בקרת גישה"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:544
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:574
 msgid "Access control rules"
 msgstr "כללי בקרת גישה"
 
@@ -159,12 +159,12 @@ msgstr "הוסף כלל"
 msgid "Add links to the collaboration group"
 msgstr "הוסף קישורים לקבוצת שיתוף הפעולה"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:91./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:109./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:110
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:91./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:119./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:110
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:46./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:127./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:158./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:45
 msgid "All"
 msgstr "את כל"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:35
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:39
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:53./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:49./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:75
 msgid "All Categories"
 msgstr "כל הקטגוריות"
@@ -201,7 +201,7 @@ msgstr "האם אתה בטוח שברצונך להפוך את כל הכללים 
 msgid "Are you sure you want to restore all ACL rules to their currently published version?"
 msgstr "האם אתה בטוח שברצונך להחזיר את כל כללי ה- ACL לגרסתם שפורסמה כעת?"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:150./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:78
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:160./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:78
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:171./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:70./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:68./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:251./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:282./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:85./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38./apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:52
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:21
@@ -242,6 +242,11 @@ msgstr "קטגוריה &amp; קבוצת תוכן"
 msgid "Change category and/or content group..."
 msgstr "שנה קטגוריה ו / או קבוצת תוכן ..."
 
+#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:144
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:120
+msgid "Changed configuration."
+msgstr "תצורה שונתה."
+
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:22
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:171
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:67./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:69
@@ -264,7 +269,7 @@ msgstr "מנהלי קבוצות שיתוף פעולה"
 msgid "Collaboration group members"
 msgstr "חברי קבוצת שיתוף פעולה"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:540
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:570
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:120
 msgid "Collaboration groups"
 msgstr "קבוצות שיתוף פעולה"
@@ -276,6 +281,10 @@ msgstr "קבוצות שיתוף פעולה מתווספות על ידי יציר
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:30
 msgid "Collaboration groups are user groups where all content belongs to the group."
 msgstr "קבוצות שיתוף פעולה הן קבוצות משתמשים בהן כל התוכן שייך לקבוצה."
+
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_options.tpl:12
+msgid "Consider resource authors to be owner."
+msgstr "ראה מחברי משאבים כבעלים."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:19
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4./apps/zotonic_mod_admin/src/mod_admin.erl:95
@@ -308,7 +317,7 @@ msgstr "לא ניתן היה לעבור לקבוצת שיתוף פעולה."
 msgid "Define who can see or edit this page."
 msgstr "הגדר מי יכול לראות או לערוך דף זה."
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:51./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:158
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:51./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:168
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:41./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:58./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:83./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:18./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:21./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:25./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:110
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:53
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:52
@@ -327,7 +336,7 @@ msgstr "לִמְחוֹק"
 msgid "Delete all user groups"
 msgstr "מחק את כל קבוצות המשתמשים"
 
-#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:131
+#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:132
 msgid "Delete is canceled, there are users in the user groups."
 msgstr "המחיקה בוטלה, ישנם משתמשים בקבוצות המשתמשים."
 
@@ -335,12 +344,16 @@ msgstr "המחיקה בוטלה, ישנם משתמשים בקבוצות המשת
 msgid "Delete user group and move users"
 msgstr "מחק את קבוצת המשתמשים והעבר משתמשים"
 
-#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:159
+#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:177
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:75./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:93
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:86./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:92
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:79./apps/zotonic_mod_content_groups/src/mod_content_groups.erl:107
 msgid "Deleting..."
 msgstr "מוחק ..."
+
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
+msgid "Deny"
+msgstr "לְהַכּחִישׁ"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:43
 msgid "Edit &amp; link rights on the collaboration groups"
@@ -357,6 +370,10 @@ msgstr "ערוך את קבוצת שיתוף הפעולה"
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:11
 msgid "Enter extensions (like <tt>.png</tt>), mime types (like <tt>image/png</tt>) or one of:"
 msgstr "הזן סיומות (כמו <tt>.png</tt>), סוגי פנטומימה (כמו <tt>image / png</tt>) או אחד מ:"
+
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:106
+msgid "Exactly this category, no sub-categories"
+msgstr "בדיוק הקטגוריה הזו, אין קטגוריות משנה"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:22
 msgid "Export edit rules"
@@ -390,6 +407,10 @@ msgstr "חברי הקבוצה ומנהליה יכולים לערוך"
 msgid "Group members and managers can link"
 msgstr "חברי הקבוצה ומנהליה יכולים לקשר"
 
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_options.tpl:19
+msgid "If checked then users connected with an <em>author</em> predicate are considered resource owners for the ACL rule evaluation. This ensures that ACL rules marked as <em>manage own</em> are applicable to authors."
+msgstr "אם מסומן, משתמשים המחוברים לפרדיקט <em>מחבר</em> נחשבים לבעלי משאבים עבור הערכת כלל ACL. זה מבטיח שכללי ACL המסומנים כ <em>מנהלים משלו</em> חלים על מחברים."
+
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:18
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:51
 msgid "Import"
@@ -411,6 +432,10 @@ msgstr "ייבוא, רשימת הכללים תתרענן לאחר הייבוא."
 msgid "Keep"
 msgstr "לִשְׁמוֹר"
 
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:137
+msgid "Manage own"
+msgstr "נהל בעצמו"
+
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:6
 msgid "Maximum file upload size per user group. This restricts file uploads for users."
 msgstr "גודל העלאת קבצים מרבי לכל קבוצת משתמשים. זה מגביל את העלאת הקבצים למשתמשים."
@@ -427,7 +452,7 @@ msgstr "חברים"
 msgid "Members of same user group"
 msgstr "חברים מאותה קבוצת משתמשים"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:11./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:105
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:11./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:115
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:147
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:4./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:5./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
@@ -467,21 +492,35 @@ msgstr "צריך עוד עזרה?"
 msgid "No ACL rules"
 msgstr "אין כללי ACL"
 
-#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:152
+#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:170
 msgid "Not all user groups could be deleted."
 msgstr "לא ניתן למחוק את כל קבוצות המשתמשים."
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:47
+#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:150
+msgid "Not allowed to change ACL options."
+msgstr "אסור לשנות אפשרויות ACL."
+
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:50
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:87./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:116
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:41
 msgid "Not allowed."
 msgstr "לא מורשה."
 
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:31
+#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:55
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:28./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:35./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:62
+msgid "Options"
+msgstr "אפשרויות"
+
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_options.tpl:5
+msgid "Options for the ACL module."
+msgstr "אפשרויות עבור מודול ACL."
+
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:31
 msgid "Or click <strong>Delete all user groups</strong> to disconnect all users and delete the user groups."
 msgstr "או לחץ על <strong>מחק את כל קבוצות המשתמשים</strong> כדי לנתק את כל המשתמשים ולמחוק את קבוצות המשתמשים."
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:122
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:132
 msgid "Own content"
 msgstr "תוכן משלו"
 
@@ -489,7 +528,7 @@ msgstr "תוכן משלו"
 msgid "People who can view this page"
 msgstr "אנשים שיכולים לצפות בדף זה"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:13./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:135
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:13./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:145
 msgid "Permissions"
 msgstr "אישורים"
 
@@ -526,7 +565,7 @@ msgstr "חזור לגרסה שפורסמה"
 msgid "Reverted rules"
 msgstr "חוקים שהוחזרו"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:151./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:64
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:161./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:64
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:77./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:29
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:125./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
@@ -563,7 +602,7 @@ msgstr "הצג נכסים פרטיים ל-"
 msgid "Show this ACL user group first:"
 msgstr "הראה תחילה את קבוצת המשתמשים של ACL זו:"
 
-#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:110./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:126
+#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:111./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:127
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:52./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:68
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:61./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:76
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:56./apps/zotonic_mod_content_groups/src/mod_content_groups.erl:72
@@ -654,7 +693,7 @@ msgstr "השתמש בכללים שפורסמו"
 msgid "Use the following URL to test the access control rules before publishing them."
 msgstr "השתמש בכתובת האתר הבאה כדי לבדוק את כללי בקרת הגישה לפני פרסום אותם."
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:535
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:565
 msgid "User groups"
 msgstr "קבוצות משתמש"
 
@@ -670,7 +709,7 @@ msgstr "אינך רשאי לעבור לקבוצת שיתוף פעולה זו."
 msgid "You are not allowed to perform this action"
 msgstr "אינך רשאי לבצע פעולה זו"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:48
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:51
 msgid "You are not allowed to view this page."
 msgstr "אינך רשאי לצפות בדף זה."
 
@@ -706,15 +745,11 @@ msgstr "לחיצה על <b>השתמש בכללים שפורסמו</b> למטה"
 msgid "closing this browser tab"
 msgstr "סגירת כרטיסיית דפדפן זו"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:221
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:223
 msgid "delete (acl action)"
 msgstr "מחק (פעולת acl)"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
-msgid "deny"
-msgstr "לְהַכּחִישׁ"
-
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:220
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:222
 msgid "edit (acl action)"
 msgstr "עריכה (פעולת acl)"
 
@@ -722,15 +757,15 @@ msgstr "עריכה (פעולת acl)"
 msgid "in the group"
 msgstr "בקבוצה"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:219
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:221
 msgid "insert (acl action)"
 msgstr "הוסף (acl action)"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:222
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:224
 msgid "link (acl action)"
 msgstr "קישור (פעולת acl)"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:27./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:29./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:127
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:27./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row.tpl:29
 msgid "manage own"
 msgstr "לנהל את עצמו"
 
@@ -738,7 +773,7 @@ msgstr "לנהל את עצמו"
 msgid "send this URL to somebody else for testing"
 msgstr "שלח כתובת אתר זו למישהו אחר לבדיקה"
 
-#: apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:226
+#: apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:228
 msgid "use (acl action)"
 msgstr "שימוש (acl action)"
 
@@ -750,7 +785,7 @@ msgstr "השתמש ב- <b>חלון פרטי חדש</b> (בדוק את התפרי
 msgid "use another browser (eg. Chrome if you are now using Firefox)"
 msgstr "השתמש בדפדפן אחר (למשל, Chrome אם אתה משתמש כעת ב- Firefox)"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:43./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:218
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46./apps/zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:220
 msgid "view (acl action)"
 msgstr "תצוגה (פעולת acl)"
 
@@ -3826,11 +3861,6 @@ msgstr "מציג רק קשרים עם:"
 msgid "Ontologies define predicates for a defined set of subject and object categories. Sometimes it is more practical to have the predicate’s connection direction reversed from the formal definition. Export and import functions can use this option to swap subject/object relation when exporting or importing data."
 msgstr "אונטולוגיות מגדירות פרדיקטים לקבוצה מוגדרת של קטגוריות נושא ואובייקט. לפעמים זה יותר מעשי להפוך את כיוון החיבור של הפרדיקט מההגדרה הפורמלית. פונקציות ייצוא וייבוא יכולות להשתמש באפשרות זו כדי להחליף יחס בין נושא/אובייקט בעת ייצוא או ייבוא נתונים."
 
-#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:55
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:28./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:35./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:62
-msgid "Options"
-msgstr "אפשרויות"
-
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:25
 msgid "Or click <strong>Delete All Connections</strong> to delete all connections with this predicate."
 msgstr "או לחץ על <strong>מחק את כל החיבורים</strong> כדי למחוק את כל החיבורים עם פרדיקט זה."
@@ -4704,10 +4734,6 @@ msgstr "אפשרויות גיבוי ושחזור לתוכן שלך."
 #: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:9
 msgid "Backups"
 msgstr "גיבויים"
-
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:120
-msgid "Changed configuration."
-msgstr "תצורה שונתה."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:10
 msgid "Changes since"
@@ -5588,7 +5614,7 @@ msgstr "גרף התלות של כל התבניות המעקבות. הכל כול
 msgid "Dependendy graph of all templates"
 msgstr "גרף תלוי של כל התבניות"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:558
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:537
 msgid "Development"
 msgstr "התפתחות"
 
@@ -10487,7 +10513,7 @@ msgstr "וידיאו וידיאו"
 msgid "Youtube Video"
 msgstr "סרטון יוטיוב"
 
-#: apps/zotonic_mod_wires/src/actions/action_wires_alert.erl:35
+#: apps/zotonic_mod_wires/src/actions/action_wires_alert.erl:38
 msgid "Alert"
 msgstr "עֵרָנִי"
 
