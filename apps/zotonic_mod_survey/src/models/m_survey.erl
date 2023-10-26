@@ -51,6 +51,7 @@
     delete_result/4,
     delete_results/2,
     get_questions/2,
+    get_stored/2,
 
     rsc_merge/3,
 
@@ -205,6 +206,10 @@ m_get([ <<"result_columns">>, SurveyId, Format | Rest ], _Msg, Context) ->
         {error, _} = Error ->
             Error
     end;
+m_get([ <<"get_stored">>, UserId | Rest ], _Msg, Context) ->
+    {ok, {get_stored(m_rsc:rid(UserId, Context), Context), Rest}};
+m_get([ <<"get_stored">> | Rest ], _Msg, Context) ->
+    {ok, {get_stored(z_acl:user(Context), Context), Rest}};
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
@@ -485,7 +490,7 @@ prep_chart(Type, Block, Stats, Context) ->
 
 
 %% @doc Fetch the aggregate answers of a survey.
--spec survey_stats(m_rsc:resource_id(), z:context()) -> 
+-spec survey_stats(m_rsc:resource_id(), z:context()) ->
     list({Block::binary(), [{QName::binary(),[{Answer::binary(),Count::integer()}]}]}).
 survey_stats(SurveyId, Context) ->
     Rows = z_db:q("
@@ -578,6 +583,17 @@ get_questions(SurveyId, Context) ->
         _ ->
             undefined
     end.
+
+%% @doc Return a list of survey ids a user has stored answers for.
+get_stored(undefined, _Context) ->
+    [];
+get_stored(UserId, Context) when is_integer(UserId) ->
+    [Id || {Id} <- z_db:q("
+        SELECT survey_id
+        FROM survey_answers
+        WHERE user_id = $1 AND NOT is_anonymous
+        ORDER BY created ASC;", [UserId], Context)].
+
 
 %% @doc Return all results of a survey
 -spec survey_results(SurveyId, IsForceAnonymous, Context) -> {Headers, Data} when
