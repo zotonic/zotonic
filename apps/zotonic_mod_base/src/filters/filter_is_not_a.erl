@@ -1,8 +1,9 @@
 %% @author Paul Guyot <pguyot@kallisys.net>
-%% @copyright 2011 Paul Guyot
-%% @doc 'is_not_a' filter, filters a list of ids
+%% @copyright 2011-2023 Paul Guyot
+%% @doc 'is_not_a' filter, filters a list of ids or test if a single
+%% resource is in a category.
 
-%% Copyright 2011 Paul Guyot
+%% Copyright 2011-2023 Paul Guyot
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,12 +21,23 @@
 -export([is_not_a/3, is_not_a/4]).
 
 
-is_not_a(Arg, Cat, Context) ->
+is_not_a(Arg, Cat, Context) when not is_integer(Cat), not is_atom(Cat) ->
     case m_category:name_to_id(Cat, Context) of
-        {ok, CatId} -> z_list_of_ids_filter:filter(Arg, fun(Id) -> not m_rsc:is_a(Id, CatId, Context) end, Context);
-        {error, _Reason} when is_integer(Arg) -> false;
-        {error, _Reason} when is_list(Arg) -> []
-    end.
+        {ok, CatId} ->
+            is_not_a(Arg, CatId, Context);
+        {error, _} when is_list(Arg); is_tuple(Arg) ->
+            z_template_compiler_runtime:to_list(Arg, Context);
+        {error, _} ->
+            true
+    end;
+is_not_a(Rsc, Cat, Context) when is_integer(Rsc); is_atom(Rsc); is_binary(Rsc) ->
+    % Single resource test.
+    not m_rsc:is_a(Rsc, Cat, Context);
+is_not_a(RscList, undefined, Context) ->
+    z_template_compiler_runtime:to_list(RscList, Context);
+is_not_a(RscList, Cat, Context) ->
+    % Ensure argument is a list, return a list.
+    z_list_of_ids_filter:filter(RscList, fun(Id) -> not m_rsc:is_a(Id, Cat, Context) end, Context).
 
 is_not_a(List, Cat, N, Context) ->
     case m_category:name_to_id(Cat, Context) of
