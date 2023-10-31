@@ -58,6 +58,7 @@
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+-include_lib("zotonic_mod_survey/include/survey.hrl").
 
 
 %% @doc Fetch the value for the key from a model source
@@ -119,14 +120,11 @@ m_get([ <<"get_result">>, SurveyId, AnswerId | Rest ], _Msg, Context) ->
         undefined ->
             {error, enoent};
         RId ->
-            case single_result(SurveyId, AnswerId, Context) of
+            case single_result(RId, AnswerId, Context) of
                 [] ->
                     {ok, {[], Rest}};
                 Result ->
-                    UId = proplists:get_value(user_id, Result),
-                    case (is_integer(UId) andalso z_acl:user(Context) =:= UId)
-                        orelse z_acl:rsc_editable(RId, Context)
-                    of
+                    case z_acl:is_allowed(view_result, #acl_survey{id=RId, answer_id=AnswerId}, Context) of
                         true -> {ok, {Result, Rest}};
                         false -> {error, eacces}
                     end
@@ -485,7 +483,7 @@ prep_chart(Type, Block, Stats, Context) ->
 
 
 %% @doc Fetch the aggregate answers of a survey.
--spec survey_stats(m_rsc:resource_id(), z:context()) -> 
+-spec survey_stats(m_rsc:resource_id(), z:context()) ->
     list({Block::binary(), [{QName::binary(),[{Answer::binary(),Count::integer()}]}]}).
 survey_stats(SurveyId, Context) ->
     Rows = z_db:q("
