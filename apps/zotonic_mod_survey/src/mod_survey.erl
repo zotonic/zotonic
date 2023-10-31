@@ -239,10 +239,10 @@ observe_export_resource_data(#export_resource_data{}, _Context) ->
 
 %% @doc Check access to the survey answers.
 observe_acl_is_allowed(#acl_is_allowed{action=view_result, object=#acl_survey{id=SurveyId, answer_id=AnswerId}}, Context) ->
-    z_acl:rsc_editable(SurveyId, Context) orelse is_answer_user(AnswerId, Context);
+    z_acl:rsc_editable(SurveyId, Context) orelse m_survey:is_answer_user(AnswerId, Context);
 observe_acl_is_allowed(#acl_is_allowed{action=update_result, object=#acl_survey{id=SurveyId, answer_id=AnswerId}}, Context) ->
     z_acl:rsc_editable(SurveyId, Context) orelse (z_convert:to_integer(m_rsc:p_no_acl(SurveyId, <<"survey_multiple">>, Context)) =:= 2
-                                                  andalso is_answer_user(AnswerId, Context));
+                                                  andalso m_survey:is_answer_user(AnswerId, Context));
 observe_acl_is_allowed(#acl_is_allowed{action=delete_result, object=#acl_survey{id=SurveyId}}, Context) ->
     z_acl:rsc_editable(SurveyId, Context);
 observe_acl_is_allowed(#acl_is_allowed{}, _Context) ->
@@ -931,18 +931,6 @@ collect_answers(SurveyId, [Q|Qs], Answers, FoundAnswers, Missing, Context) ->
         _ ->
             collect_answers(SurveyId, Qs, Answers, FoundAnswers, Missing, Context)
     end.
-
--spec is_answer_user(pos_integer() | {user, pos_integer()}, zotonic:context()) -> boolean().
-is_answer_user({user, UserId}, Context) when is_integer(UserId) ->
-    UserId =:= z_acl:user(Context);
-is_answer_user(AnswerId, Context) when is_integer(AnswerId) ->
-    case z_acl:user(Context) of
-        UserId when is_integer(UserId) ->
-            m_survey:is_answer_user(AnswerId, UserId, Context);
-        _ -> false
-    end;
-is_answer_user(_, _Context) ->
-    false.
 
 survey_answers_to_storage(AnsPerBlock) ->
     lists:flatten(
