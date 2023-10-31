@@ -932,6 +932,7 @@ collect_answers(SurveyId, [Q|Qs], Answers, FoundAnswers, Missing, Context) ->
             collect_answers(SurveyId, Qs, Answers, FoundAnswers, Missing, Context)
     end.
 
+-spec is_answer_user(pos_integer() | {user, pos_integer()}, zotonic:context()) -> boolean().
 is_answer_user({user, UserId}, Context) when is_integer(UserId) ->
     UserId =:= z_acl:user(Context);
 is_answer_user(AnswerId, Context) when is_integer(AnswerId) ->
