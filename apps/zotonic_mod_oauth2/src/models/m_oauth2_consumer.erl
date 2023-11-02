@@ -270,7 +270,16 @@ fetch_token(ConsumerId, UserId, Context) ->
                     ],
                     Type = <<"mod_oauth2">>,
                     Key = <<AppName/binary, $:, AppCode/binary>>,
-                    case z_fetch:fetch_json(post, TokenUrl, Payload, Options, Context) of
+                    TokenUrl1 = if
+                        TokenUrl =:= <<>> ->
+                            iolist_to_binary([
+                                <<"https://", Domain/binary>>,
+                                z_dispatcher:url_for(oauth2_server_access_token, Context)
+                            ]);
+                        true ->
+                            TokenUrl
+                    end,
+                    case z_fetch:fetch_json(post, TokenUrl1, Payload, Options, Context) of
                         {ok, #{
                             <<"access_token">> := AccessToken
                             % <<"expires_in">> := ExpiresInSecs
@@ -353,8 +362,11 @@ is_permanent_error({Code, _FinalUrl, _Hs, _Size, _Body})
          Code =:= 401;
          Code =:= 403 ->
     true;
-is_permanent_error({_Code, _FinalUrl, _Hs, _Size, _Body}) ->
+is_permanent_error(url) ->
+    true;
+is_permanent_error(_) ->
     false.
+
 
 %% @doc Fetch id of consumer with the given name.
 name_to_id(undefined, _Context) ->
