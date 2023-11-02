@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019-2021 Marc Worrell
+%% @copyright 2019-2022 Marc Worrell
 %% @doc Generate TOTP image data: urls.
+%% @enddoc
 
-%% Copyright 2019-2021 Marc Worrell
+%% Copyright 2019-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,14 +30,16 @@
     is_totp_enabled/2,
     is_valid_totp/3,
 
+    is_valid_totp_test/2,
+
     mode/1,
     user_mode/1,
 
     totp_image_url/2,
-    totp_disable/2
+    totp_disable/2,
+    totp_set/3
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
 -include("../support/z_auth2fa_qrcode.hrl").
 
 -define(TOTP_PERIOD, 30).
@@ -59,6 +62,17 @@ m_get([ <<"totp_image_url">>, RequestKey | Rest ], _Msg, Context) ->
                 {error, _} = Error ->
                     Error
             end
+    end;
+m_get([ <<"new_totp_image_url">> | Rest ], _Msg, Context) ->
+    case new_totp_image_url(Context) of
+        {ok, {Url, Secret}} ->
+            Result = #{
+                url => Url,
+                secret => z_auth2fa_base32:encode(Secret)
+            },
+            {ok, {Result, Rest}};
+        {error, _} = Error ->
+            Error
     end;
 m_get([ User, <<"is_totp_enabled">> | Rest ], _Msg, Context) ->
     UserId = m_rsc:rid(User, Context),
@@ -133,20 +147,22 @@ is_totp_enabled(UserId, Context) ->
     end.
 
 %% @doc Check the totp mode
--spec mode( z:context() ) -> 0 | 1 | 2.
+-spec mode( z:context() ) -> 0 | 1 | 2 | 3.
 mode(Context) ->
     case z_convert:to_integer(m_config:get_value(mod_auth2fa, mode, Context)) of
+        3 -> 3;
         2 -> 2;
         1 -> 1;
         _ -> 0
     end.
 
 %% @doc Check the totp mode for the current user: 0 = optional, 1 = ask, 2 = required
--spec user_mode( z:context() ) -> 0 | 1 | 2.
+-spec user_mode( z:context() ) -> 0 | 1 | 2 | 3.
 user_mode(Context) ->
     case z_auth:is_auth(Context) of
         true ->
             case z_convert:to_integer(m_config:get_value(mod_auth2fa, mode, Context)) of
+                3 -> 3;
                 2 -> 2;
                 1 -> erlang:max( user_group_mode(Context), 1 );
                 _ -> erlang:max( user_group_mode(Context), 0 )
@@ -178,6 +194,17 @@ user_group_mode(Context) ->
 totp_disable(UserId, Context) ->
     m_identity:delete_by_type(UserId, ?TOTP_IDENTITY_TYPE, Context).
 
+%% @doc Set the totp token for the user
+-spec totp_set( m_rsc:resource_id(), Passcode::string()|binary(), z:context() ) -> ok | {error, already_set}.
+totp_set(UserId, Passcode, Context) ->
+    case is_totp_enabled(UserId, Context) of
+        true ->
+            {error, already_set};
+        false ->
+            {ok, _} = set_user_secret(UserId, Passcode, Context),
+            ok
+    end.
+
 %% @doc Generate a new totp code and return the barcode / QR code
 -spec totp_image_url( m_rsc:resource_id(), z:context() ) -> {ok, {Url::binary(), Secret::binary()}} | {error, eacces}.
 totp_image_url(UserId, Context) when is_integer(UserId) ->
@@ -203,6 +230,25 @@ totp_image_url(UserId, Context) when is_integer(UserId) ->
             {error, eacces}
     end.
 
+%% @doc Generate a new totp code and return the barcode, do not save it.
+-spec new_totp_image_url( z:context() ) -> {ok, {binary(), binary()}} | {error, eacces}.
+new_totp_image_url(Context) ->
+    Issuer = z_convert:to_binary( z_context:hostname(Context) ),
+    Title = z_convert:to_binary(m_site:get(title, Context)),
+    ServicePart = iolist_to_binary([
+        Issuer,
+        <<"%3A">>,
+        z_url:url_encode(Title),
+        case Issuer of
+            Title -> <<>>;
+            _ -> [ <<"%20%2F%20">>, Issuer ]
+        end
+    ]),
+    Passcode = new_secret(),
+    {ok, Png} = generate_png(ServicePart, Issuer, Passcode, ?TOTP_PERIOD),
+    {ok, {encode_data_url(Png, <<"image/png">>), Passcode}}.
+
+
 %% Only the admin user can enable totp for the admin user
 is_allowed_totp_enable(1, Context) ->
     z_acl:user(Context) =:= 1;
@@ -223,21 +269,29 @@ is_valid_totp(UserId, Code, Context) when is_integer(UserId), is_binary(Code) ->
     case m_identity:get_rsc_by_type(UserId, ?TOTP_IDENTITY_TYPE, Context) of
         [Idn] ->
             Passcode = proplists:get_value(propb, Idn),
-            {A, B, C} = totp(Passcode, ?TOTP_PERIOD),
-            case Code of
-                A -> true;
-                B -> true;
-                C -> true;
-                _ -> false
-            end;
+            is_valid_totp_test(Passcode, Code);
         [] ->
             false
     end.
 
+%% @doc Check if the given code is a valid TOTP code
+-spec is_valid_totp_test( Secret::string()|binary(), Code::string()|binary() ) -> boolean().
+is_valid_totp_test(Secret, Code) ->
+    {A, B, C} = totp(z_convert:to_binary(Secret), ?TOTP_PERIOD),
+    case z_convert:to_binary(Code) of
+        A -> true;
+        B -> true;
+        C -> true;
+        _ -> false
+    end.
+
 regenerate_user_secret(UserId, Context) ->
+    Passcode = new_secret(),
+    set_user_secret(UserId, Passcode, Context).
+
+set_user_secret(UserId, Passcode, Context) ->
     F = fun(Ctx) ->
-        totp_disable(UserId, Context),
-        Passcode = crypto:hash(sha, z_ids:rand_bytes(32)),
+        totp_disable(UserId, Ctx),
         Props = [
             {propb, {term, Passcode}}
         ],
@@ -245,6 +299,10 @@ regenerate_user_secret(UserId, Context) ->
         {ok, Passcode}
     end,
     z_db:transaction(F, Context).
+
+new_secret() ->
+    crypto:hash(sha, z_ids:id(32)).
+
 
 % url format: https://github.com/google/google-authenticator/wiki/Key-Uri-Format
 generate_png(Domain, Issuer, Passcode, Seconds) ->

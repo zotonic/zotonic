@@ -178,6 +178,10 @@ logon_1({error, need_passcode}, _Payload, Context) ->
     { #{ status => error, error => need_passcode }, Context };
 logon_1({error, passcode}, _Payload, Context) ->
     { #{ status => error, error => passcode }, Context };
+logon_1({error, set_passcode}, _Payload, Context) ->
+    { #{ status => error, error => set_passcode }, Context };
+logon_1({error, set_passcode_error}, _Payload, Context) ->
+    { #{ status => error, error => set_passcode_error }, Context };
 logon_1({error, Reason}, _Payload, Context) ->
     % Hide other error codes, map to generic 'pw' error
     ?LOG_INFO(#{
@@ -404,6 +408,10 @@ change_1(UserId, Username, Password, NewPassword, Passcode, Context) ->
             { #{ status => error, error => need_passcode }, Context };
         {error, passcode} ->
             { #{ status => error, error => passcode }, Context };
+        {error, set_passcode} ->
+            { #{ status => error, error => set_passcode }, Context };
+        {error, set_passcode_error} ->
+            { #{ status => error, error => set_passcode_error }, Context };
         {ok, _} ->
             { #{ status => error, error => pw }, Context }
     end.
@@ -480,6 +488,10 @@ reset_1(UserId, Username, Password, Passcode, Context) ->
             end;
         {error, need_passcode} ->
             {error, need_passcode};
+        {error, set_passcode} ->
+            {error, set_passcode};
+        {error, set_passcode_error} ->
+            {error, set_passcode_error};
         {error, passcode} ->
             z_notifier:notify_sync(
                 #auth_checked{
