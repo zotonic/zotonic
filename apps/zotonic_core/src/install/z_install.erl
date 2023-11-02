@@ -343,7 +343,8 @@ model_pgsql() ->
       CONSTRAINT pk_auth_rsc_id FOREIGN KEY (rsc_id)
         REFERENCES rsc (id)
         ON UPDATE CASCADE ON DELETE CASCADE,
-      CONSTRAINT identity_verify_key_unique UNIQUE (verify_key)
+      CONSTRAINT identity_verify_key_unique UNIQUE (verify_key),
+      CONSTRAINT identity_rsc_id_type_key_unique UNIQUE (rsc_id, type, key)
     )",
 
     "CREATE INDEX fki_identity_rsc_id ON identity (rsc_id)",

@@ -1232,21 +1232,40 @@ insert(Rsc, Type, Key, Context) ->
 insert(Rsc, Type, Key, Props, Context) ->
     KeyNorm = normalize_key(Type, Key),
     case is_valid_key(Type, KeyNorm, Context) of
-        true -> insert_1(Rsc, Type, KeyNorm, Props, Context);
-        false -> {error, invalid_key}
+        true ->
+            F = fun(Ctx) ->
+                        insert_1(Rsc, Type, KeyNorm, Props, Ctx)
+                end,
+            z_db:transaction(F, Context);
+        false ->
+            {error, invalid_key}
     end.
 
 insert_1(Rsc, Type, Key, Props, Context) ->
     RscId = m_rsc:rid(Rsc, Context),
     TypeB = z_convert:to_binary(Type),
     KeyB = z_convert:to_binary(Key),
-    case z_db:q1("select id
-                  from identity
-                  where rsc_id = $1
-                    and type = $2
-                    and key = $3",
-        [RscId, TypeB, KeyB],
-        Context)
+
+    FlushAndPublish = fun() ->
+                              flush(RscId, Context),
+                              z_mqtt:publish(
+                                [ <<"model">>, <<"identity">>, <<"event">>, RscId, TypeB ],
+                                #{
+                                  id => RscId,
+                                  type => TypeB
+                                 },
+                                z_acl:sudo(Context))
+                      end,
+
+    case z_db:q1("
+            select id
+            from identity
+            where rsc_id = $1
+              and type = $2
+              and key = $3
+            for update",
+            [RscId, TypeB, KeyB],
+            Context)
     of
         undefined ->
             Props1 = [
@@ -1255,39 +1274,25 @@ insert_1(Rsc, Type, Key, Props, Context) ->
                 {key, KeyB}
                 | Props
             ],
-            Result = z_db:insert(identity, Props1, Context),
-            flush(RscId, Context),
-            z_mqtt:publish(
-                [ <<"model">>, <<"identity">>, <<"event">>, RscId, TypeB ],
-                #{
-                    id => RscId,
-                    type => TypeB
-                },
-                z_acl:sudo(Context)),
-            Result;
+            case z_db:insert(identity, Props1, Context) of
+                {ok, _}=Result ->
+                    FlushAndPublish(),
+                    Result;
+                {error, _}=Error ->
+                    Error
+            end;
         IdnId ->
             Props1 = case proplists:get_value(is_verified, Props, false) of
-                true ->
-                    [
-                        {verify_key, undefined},
-                        {modified, calendar:universal_time()}
-                        | Props
-                    ];
-                false ->
-                    [
-                        {modified, calendar:universal_time()}
-                        | Props
-                    ]
-            end,
+                         true ->
+                             [ {verify_key, undefined},
+                               {modified, calendar:universal_time()}
+                               | Props ];
+                         false ->
+                             [ {modified, calendar:universal_time()}
+                               | Props ]
+                     end,
             _ = z_db:update(identity, IdnId, Props1, Context),
-            flush(RscId, Context),
-            z_mqtt:publish(
-                [ <<"model">>, <<"identity">>, <<"event">>, RscId, TypeB ],
-                #{
-                    id => RscId,
-                    type => TypeB
-                },
-                z_acl:sudo(Context)),
+            FlushAndPublish(),
             {ok, IdnId}
     end.
 
