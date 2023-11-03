@@ -1197,7 +1197,7 @@ preflight_check_uri(_Id, _Props, _Context) ->
 preflight_check_query(Id, #{ <<"query">> := Query }, Context) when Query =/= undefined ->
     try
         SearchContext = z_context:new( Context ),
-        search_query:search(search_query:parse_query_text(z_html:unescape(Query)), SearchContext),
+        search_query:search(search_query_props:from_text(z_html:unescape(Query)), SearchContext),
         ok
     catch
         _:Reason:Stack ->

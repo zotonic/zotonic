@@ -183,7 +183,7 @@ event(#postback{message={query_preview, Opts}}, Context) ->
     RscId = proplists:get_value(rsc_id, Opts),
     try
         IsCollection = m_rsc:is_a(RscId, collection, Context),
-        S = case search_query:parse_query_text(z_context:get_q(<<"triggervalue">>, Context)) of
+        S = case search_query_props:from_text(z_context:get_q(<<"triggervalue">>, Context)) of
             [] when not IsCollection ->
                 [];
             Q ->
