@@ -68,17 +68,31 @@ watches_remove(Id, Watches, _Context) ->
 %% @spec check_rsc(Id, Watches, Context) -> list()
 check_rsc(Id, Watches, Context) ->
     IsA = m_rsc:p_no_acl(Id, is_a, Context),
-    Cats   = [ {cat, z_convert:to_binary(A)} || A <- IsA ],
-    CatsEx = [ {cat_exclude, z_convert:to_binary(A)} || A <- IsA ],
+    Cats   = [
+        #{
+            <<"term">> => <<"cat">>,
+            <<"value">> => z_convert:to_binary(A)
+        } || A <- IsA ],
+    CatsEx   = [
+        #{
+            <<"term">> => <<"cat_exclude">>,
+            <<"value">> => z_convert:to_binary(A)
+        } || A <- IsA ],
     %% Pre-filter the list of queries according to category check
-    W = lists:filter(fun({_, Props}) -> cat_matches(Cats, Props) andalso not(cat_matches(CatsEx, Props)) end, Watches),
+    W = lists:filter(
+        fun({_, Props}) ->
+            cat_matches(Cats, Props) andalso not(cat_matches(CatsEx, Props))
+        end, Watches),
     %% Filter the list by executing the query
-    W2 = lists:filter(fun({_, QueryProps}) -> execute_query_check(Id, QueryProps, Context) end, W),
+    W2 = lists:filter(
+        fun({_, QueryProps}) ->
+            execute_query_check(Id, QueryProps, Context)
+        end, W),
     [QueryId || {QueryId, _} <- W2].
 
 
 cat_matches([], _Props) -> false;
-cat_matches([Cat|Rest], Props) ->
+cat_matches([Cat|Rest], #{ <<"q">> := Props }) ->
     case lists:member(Cat, Props) of
         true -> true;
         false -> cat_matches(Rest, Props)
@@ -92,9 +106,17 @@ send_notifications(Id, [QueryId|Rest], Context) ->
 
 
 %% @doc Check the given resource ID against the props of the query. Returns true if matches.
-execute_query_check(CheckId, QueryProps, Context) ->
-    Query = [{rsc_id, CheckId} | QueryProps],
-    case z_search:query_(Query, Context) of
+execute_query_check(CheckId, #{ <<"q">> := Terms } = Query, Context) ->
+    Query1 = Query#{
+        <<"q">> => [
+            #{
+                <<"term">> => <<"id">>,
+                <<"value">> => CheckId
+            }
+            | Terms
+        ]
+    },
+    case z_search:query_(Query1, Context) of
         [CheckId] -> true;
         [] -> false
     end.
