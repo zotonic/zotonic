@@ -88,11 +88,7 @@ from_text(Text) ->
 
 %% @doc Parses a query text. Every line is an argument; of which the first
 %% '=' separates argument key from argument value.
--spec parse_query_text( binary() | string() | undefined ) -> list( {atom(), term()} ).
-parse_query_text(undefined) ->
-    [];
-parse_query_text(Text) when is_list(Text) ->
-    parse_query_text(unicode:characters_to_binary(Text));
+-spec parse_query_text( binary() ) -> list( {binary(), term()} ).
 parse_query_text(Text) when is_binary(Text) ->
     Lines = binary:split(Text, <<"\n">>, [global]),
     KVs = [ split_arg(z_string:trim(Line)) || Line <- Lines],
