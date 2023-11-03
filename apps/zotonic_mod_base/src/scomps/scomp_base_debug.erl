@@ -27,10 +27,46 @@
 vary(_Params, _Context) -> nocache.
 
 render([], #{} = Vars, Context) ->
-    do_render(Vars, Context);
+    do_render(ensure_q(Vars, Context), Context);
 render(Params, #{} = Vars, Context) ->
-    do_render(maps:with(proplists:get_keys(Params), Vars), Context).
+    Vars1 = lists:foldl(
+        fun({K, _}, Acc) ->
+            case get_key(K, Vars, Context) of
+                {ok, V} ->
+                    Acc#{ K => V };
+                error ->
+                    Acc
+            end
+        end,
+        #{},
+        Params),
+    do_render(Vars1, Context).
 
 do_render(Vars, Context) ->
     Vars1 = [{K, io_lib:format("~p", [V])} || {K, V} <- maps:to_list(Vars)],
     {ok, z_template:render("_debug.tpl", [{vars, Vars1}], Context)}.
+
+ensure_q(Vars, Context) ->
+    case maps:is_key(q, Vars) orelse maps:is_key(<<"q">>, Vars) of
+        true ->
+            Vars;
+        false ->
+            Vars#{
+                q => z_context:get_q_all(Context)
+            }
+    end.
+
+get_key(q, #{ <<"q">> := Q }, _Context) ->
+    Q;
+get_key(q, #{ q := Q }, _Context) ->
+    Q;
+get_key(q, _Vars, Context) ->
+    {ok, z_context:get_q_all(Context)};
+get_key(K, Vars, _Context) ->
+    case maps:find(K, Vars) of
+        error ->
+            maps:find(z_convert:to_binary(K), Vars);
+        {ok, _} = V ->
+            V
+    end.
+

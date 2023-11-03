@@ -137,7 +137,7 @@ observe_dispatch(#dispatch{path=Path}, Context) ->
                     {ok, #dispatch_match{
                         mod=controller_template,
                         mod_opts=[{template, Template}, {ssl, any}],
-                        bindings=[{path, SlashPath}, {is_static, true}]
+                        bindings=[]
                     }};
                 {error, _} ->
                     % Check again, assuming the path is a directory (without trailing $/)
@@ -151,7 +151,7 @@ observe_dispatch(#dispatch{path=Path}, Context) ->
                                     {ok, #dispatch_match{
                                         mod=controller_template,
                                         mod_opts=[{template, Template1}, {ssl, any}],
-                                        bindings=[{path, SlashPath}, {is_static, true}]
+                                        bindings=[]
                                     }};
                                 {error, _} ->
                                     undefined

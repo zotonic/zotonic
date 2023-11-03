@@ -1,10 +1,10 @@
 /* live js
 ----------------------------------------------------------
 
-@package:   Zotonic 2014-2018
+@package:   Zotonic 2014-2023
 @Author:    Marc Worrell <marc@worrell.nl>
 
-Copyright 2014-2018 Marc Worrell
+Copyright 2014-2023 Marc Worrell
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ function ZLive ()
     setInterval(function() { self.prune(); }, 10000);
 }
 
-ZLive.prototype.subscribe = function(topics, target, postback) {
+ZLive.prototype.subscribe = function(topics, target, isUiInsert, postback) {
     var self = this;
     for(var i=topics.length-1; i >= 0; i--) {
         var topic = topics[i];
@@ -46,14 +46,15 @@ ZLive.prototype.subscribe = function(topics, target, postback) {
             target: target,
             postback: postback
         });
+
+        if (isUiInsert) {
+            cotonic.broker.publish("model/ui/insert/" + target, {});
+        }
     }
 };
 
 ZLive.prototype.update = function(topic, target, postback, payload, wid) {
     if ($('#'+target).length) {
-        if (typeof payload._record != 'undefined' && payload._record == 'z_mqtt_payload') {
-            payload = payload.payload;
-        }
         z_queue_postback(target, postback, {topic: topic, message: payload});
     } else {
         this.unsubscribe(topic, { wid: wid});

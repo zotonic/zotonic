@@ -1789,7 +1789,7 @@ function z_jquery_init() {
         options = options || {};
         if (this.length > 0) {
             var form = this[0];
-            var els = options.semantic ? form.getElementsByTagName('*') : form.elements;
+            var els = form.elements;
             var n;
 
             if (els) {

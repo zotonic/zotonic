@@ -1,6 +1,21 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2018 Marc Worrell
+%% @copyright 2018-2023 Marc Worrell
 %% @doc Simplified parsing of lists containing strings, integers, names or sub-lists.
+%% @end
+
+%% Copyright 2018-2023 Marc Worrell
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
 
 -module(search_parse_list).
 
@@ -30,7 +45,10 @@ parse_term(<<$[, Rest/binary>>, List) ->
 parse_term(<<$], Rest/binary>>, List) ->
     {List, Rest};
 parse_term(<<$", Rest/binary>>, List) ->
-    {S, Rest1} = parse_string(Rest, <<>>),
+    {S, Rest1} = parse_string(Rest, $", <<>>),
+    parse_term(Rest1, [ S | List ]);
+parse_term(<<$', Rest/binary>>, List) ->
+    {S, Rest1} = parse_string(Rest, $', <<>>),
     parse_term(Rest1, [ S | List ]);
 parse_term(<<C, Rest/binary>>, List) when C =< 32 ->
     parse_term(Rest, List);
@@ -47,14 +65,16 @@ parse_value(<<$[, _/binary>> = Rest, V) -> {V, Rest};
 parse_value(<<C/utf8, Rest/binary>>, V) -> parse_value(Rest, <<V/binary, C/utf8>>).
 
 % String value, keep spaces.
-parse_string(<<>>, S) ->
+parse_string(<<>>, _Q, S) ->
     {S, <<>>};
-parse_string(<<$", Rest/binary>>, S) ->
+parse_string(<<$", Rest/binary>>, $", S) ->
     {S, Rest};
-parse_string(<<$\\, C/utf8, Rest/binary>>, S) ->
-    parse_string(Rest, <<S/binary, (map_escape(C))/binary>>);
-parse_string(<<C/utf8, Rest/binary>>, S) ->
-    parse_string(Rest, <<S/binary, C/utf8>>).
+parse_string(<<$', Rest/binary>>, $', S) ->
+    {S, Rest};
+parse_string(<<$\\, C/utf8, Rest/binary>>, Q, S) ->
+    parse_string(Rest, Q, <<S/binary, (map_escape(C))/binary>>);
+parse_string(<<C/utf8, Rest/binary>>, Q, S) ->
+    parse_string(Rest, Q, <<S/binary, C/utf8>>).
 
 map_escape($n) -> <<10>>;
 map_escape($r) -> <<13>>;

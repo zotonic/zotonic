@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2021 Marc Worrell
+%% @copyright 2021-2023 Marc Worrell
 %% @doc Combine search terms into a sql search query.
 
-%% Copyright 2021 Marc Worrell
+%% Copyright 2021-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ combine(#search_sql_terms{ terms = Terms, post_func = PostFunc }) ->
 combine(Terms) when is_list(Terms) ->
     % All tables merged from the terms
     Q = lists:foldr(
-        fun combine/2,
+        fun combine_acc/2,
         #search_sql_term{},
         Terms),
     From = iolist_to_binary([
@@ -57,7 +57,7 @@ combine(Terms) when is_list(Terms) ->
     #search_sql{
         select = iolist_to_binary(lists:join(", ", Q#search_sql_term.select)),
         from = From,
-        where = iolist_to_binary(lists:join(<<" AND ">>, Q#search_sql_term.where)),
+        where = iolist_to_binary(lists:join(" AND ", Q#search_sql_term.where)),
         order = iolist_to_binary(
                     lists:join(", ",   make_sort(Q#search_sql_term.asort, Q)
                                     ++ make_sort(Q#search_sql_term.sort, Q)
@@ -135,7 +135,28 @@ find_edge_alias(Map) when is_map(Map) ->
         undefined,
         Map).
 
-combine(Term, Acc) ->
+combine_acc(#search_sql_nested{ operator = Op, terms = Terms }, Acc) ->
+    SubAcc = Acc#search_sql_term{ where = [] },
+    Acc1 = lists:foldr(
+        fun combine_acc/2,
+        SubAcc,
+        Terms),
+    SubWhere = case Acc1#search_sql_term.where of
+        <<>> ->
+            <<>>;
+        [] ->
+            <<>>;
+        List ->
+            [
+                op_prefix(Op),
+                lists:join(op(Op), List),
+                op_postfix(Op)
+            ]
+    end,
+    Acc1#search_sql_term{
+        where = merge_where(Acc#search_sql_term.where, SubWhere)
+    };
+combine_acc(Term, Acc) ->
     {_, NewArgs, Mapping} = merge_args(Term, Acc),
     Term1 = map_args(Term, Mapping),
     #search_sql_term{
@@ -168,10 +189,24 @@ combine(Term, Acc) ->
         args = NewArgs
     }.
 
+op(<<"allof">>) -> <<" AND ">>;
+op(<<"anyof">>) -> <<" OR ">>;
+op(<<"noneof">>) -> <<" OR ">>.
+
+op_prefix(<<"noneof">>) -> <<" NOT(">>;
+op_prefix(_) -> <<"(">>.
+
+op_postfix(_) -> <<")">>.
+
+
 merge_select(SAcc, Select) ->
     Select2 = Select -- SAcc,
     SAcc ++ Select2.
 
+merge_where(SAcc, []) ->
+    SAcc;
+merge_where(SAcc, <<>>) ->
+    SAcc;
 merge_where(SAcc, Where) ->
     case iolist_to_binary(Where) of
         <<>> -> SAcc;

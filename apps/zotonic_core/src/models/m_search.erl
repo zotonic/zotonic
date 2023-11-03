@@ -152,6 +152,8 @@ search_pager(Search, Context) ->
 
 search_args(#{ payload := Args }) when is_map(Args) ->
     Args;
+search_args(#{ payload := [ [_,_] | _ ] = Args }) ->
+    Args;
 search_args(_) ->
     #{ <<"qargs">> => true }.
 
