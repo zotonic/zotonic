@@ -183,7 +183,7 @@ event(#postback{message={query_preview, Opts}}, Context) ->
     DivId = proplists:get_value(div_id, Opts),
     RscId = proplists:get_value(rsc_id, Opts),
     try
-        Q = search_query_props:from_text(z_context:get_q(<<"triggervalue">>, Context)),
+        Q = z_search_props:from_text(z_context:get_q(<<"triggervalue">>, Context)),
         S = z_search:search(<<"query">>, Q, 1, 20, Context),
         Vars = [
             {id, RscId},

@@ -18,7 +18,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(search_query_props).
+-module(z_search_props).
 
 -export([
     from_text/1,
@@ -301,7 +301,7 @@ options(#{ <<"options">> := Opts }) when is_map(Opts) ->
         #{},
         Opts);
 options(#{ <<"options">> := Opts }) when is_binary(Opts) ->
-    OptsList = search_parse_list:parse(Opts),
+    OptsList = z_parse_list:parse(Opts),
     OptsList1 = [ {z_convert:to_binary(K), true} || K <- OptsList ],
     maps:from_list(OptsList1);
 options(#{ <<"options">> := Opts }) when is_list(Opts) ->
@@ -394,7 +394,7 @@ map_value(_K, V) when is_binary(V) ->
         andalso binary:match(V, <<"[">>) =:= nomatch
     of
         true -> V;
-        false -> search_parse_list:parse(V)
+        false -> z_parse_list:parse(V)
     end;
 map_value(_K, V) ->
     V.

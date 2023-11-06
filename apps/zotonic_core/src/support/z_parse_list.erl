@@ -17,7 +17,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(search_parse_list).
+-module(z_parse_list).
 
 -export([
     parse/1

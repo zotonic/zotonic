@@ -69,9 +69,9 @@ search(#{ <<"q">> := Qs }, Context) when is_list(Qs) ->
     Qs1 = filter_empty(Qs),
     build_query(lists:sort(Qs1), Context);
 search(Query, Context) when is_map(Query) ->
-    search(search_query_props:from_map(Query), Context);
+    search(z_search_props:from_map(Query), Context);
 search(Query, Context) when is_list(Query) ->
-    search(search_query_props:from_list(Query), Context).
+    search(z_search_props:from_list(Query), Context).
 
 -spec build_query(list(), z:context()) -> #search_sql_terms{} | #search_result{}.
 build_query(Terms, Context) ->
@@ -312,7 +312,7 @@ qterm(#{ <<"term">> := <<"id">>, <<"value">> := Id} = T, Context) ->
         RscId ->
             Op = extract_term_op(T, <<"=">>),
             #search_sql_term{
-                where = ?DEBUG([ <<"rsc.id">>, Op, '$1' ]),
+                where = [ <<"rsc.id">>, Op, '$1' ],
                 args = [ RscId ]
             }
     end;
@@ -620,7 +620,7 @@ qterm(#{ <<"term">> := <<"qargs">>, <<"value">> := Boolean}, Context) ->
     %% Add all query terms from the current query arguments
     case z_convert:to_bool(Boolean) of
         true ->
-            #{ <<"q">> := Terms } = search_query_props:from_qargs(Context),
+            #{ <<"q">> := Terms } = z_search_props:from_qargs(Context),
             qterm(Terms, Context);
         false ->
             []
@@ -630,7 +630,7 @@ qterm(#{ <<"term">> := <<"query_id">>, <<"value">> := Id}, Context) ->
     %% Get the query terms from given resource ID, and use those terms.
     QueryText = z_html:unescape(m_rsc:p(Id, <<"query">>, Context)),
     QueryTerms = try
-        #{ <<"q">> := Terms } = search_query_props:from_text(QueryText),
+        #{ <<"q">> := Terms } = z_search_props:from_text(QueryText),
         Terms
     catch
         throw:{error,{unknown_query_term,Term}}:S ->
@@ -1022,9 +1022,17 @@ to_language_atom(Code, _Context) ->
 
 %% @doc Parse hassubject and hasobject edges.
 -spec parse_edges(hassubject | hasobject, list(), z:context()) -> #search_sql_term{}.
-parse_edges(Term, [[Id, Predicate]], Context) ->
-    parse_edges(Term, [[Id, Predicate, "rsc"]], Context);
-parse_edges(hassubject, [[Id, Predicate, JoinAlias]], Context) ->
+parse_edges(Term, [H|_] = Es, Context) when is_list(H) ->
+    lists:map(
+        fun(E) ->
+            parse_edges(Term, E, Context)
+        end,
+        Es);
+parse_edges(Term, Id, Context) when is_number(Id); is_binary(Id); is_atom(Id) ->
+    parse_edges(Term, [Id], Context);
+parse_edges(Term, [Id, Predicate], Context) ->
+    parse_edges(Term, [Id, Predicate, <<"rsc">>], Context);
+parse_edges(hassubject, [Id, Predicate, JoinAlias], Context) ->
     JoinAlias1 = sql_safe(JoinAlias),
     #search_sql_term{
         where = [
@@ -1046,7 +1054,7 @@ parse_edges(hassubject, [Id], Context) ->
             m_rsc:rid(Id, Context)
         ]
     };
-parse_edges(hasobject, [[Id, Predicate, JoinAlias]], Context) ->
+parse_edges(hasobject, [Id, Predicate, JoinAlias], Context) ->
     JoinAlias1 = sql_safe(JoinAlias),
     #search_sql_term{
         where = [
@@ -1544,7 +1552,7 @@ map_filter_operator(Op) -> throw({error, {unknown_filter_operator, Op}}).
 
 %% Expand the argument for hasanyobject, make pairs of {ObjectId,PredicateId}
 expand_object_predicates(Bin, Context) when is_binary(Bin) ->
-    map_rids(search_parse_list:parse(Bin), Context);
+    map_rids(z_parse_list:parse(Bin), Context);
 expand_object_predicates(OPs, Context) ->
     map_rids(OPs, Context).
 

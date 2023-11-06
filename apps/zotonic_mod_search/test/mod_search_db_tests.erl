@@ -61,7 +61,7 @@ search_query_notify_test() ->
 
     %% There's exactly one query
     Watches = search_query_notify:init(C),
-    ?assert(lists:member({Query1, search_query_props:from_text(Q)}, Watches)),
+    ?assert(lists:member({Query1, z_search_props:from_text(Q)}, Watches)),
 
     %% Create an item which fits the query
     {ok, Id} = m_rsc:insert([{category, keyword},
