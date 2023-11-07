@@ -25,8 +25,8 @@ cotonic.ready.then(() => {
 
         if (msg.payload.url) {
             url = msg.payload.url;
-        } else if (msg.payload.message && msg.payload.message.href) {
-            url = msg.payload.message.href;
+        } else if (typeof msg.payload.message == "object") {
+            url = msg.payload.message['data-url'] ?? msg.payload.message.href;
         }
         return url;
     }
