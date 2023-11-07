@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2019-2023 Marc Worrell
 %% @doc Render templates
+%% @end
 
 %% Copyright 2019-2023 Marc Worrell
 %%
@@ -29,7 +30,6 @@
 -include_lib("zotonic.hrl").
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
-% Error, unknown lookup.
 m_get([ <<"render">> | TemplatePath ], Msg, Context) when is_map(Msg) ->
     Template = to_template(TemplatePath),
     Payload = case maps:get(payload, Msg, #{}) of

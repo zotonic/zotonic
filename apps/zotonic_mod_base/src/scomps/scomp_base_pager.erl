@@ -33,7 +33,7 @@ vary(_Params, _Context) -> nocache.
 render(Params, _Vars, Context) ->
     Result = proplists:get_value(result, Params),
     Dispatch = case proplists:get_value(dispatch, Params) of
-                   undefined -> z_context:get(zotonic_dispatch, Context, search);
+                   undefined -> z_context:get(zotonic_dispatch, Context, none);
                    Dp -> Dp
                end,
     HideSinglePage  = z_convert:to_bool(proplists:get_value(hide_single_page, Params, false)),
@@ -43,42 +43,45 @@ render(Params, _Vars, Context) ->
             proplists:delete(Arg, Acc)
         end,
         Params,
-        [dispatch, result, hide_single_page, template]),
-
+        [dispatch, result, hide_single_page, template, topic, hash]),
+    TemplateVars = [
+        {topic, proplists:get_value(topic, Params)},
+        {hash, proplists:get_value(hash, Params)}
+    ],
     case Result of
         #search_result{page=Page, pages=undefined, prev=Prev, next=Next} ->
-            Html = build_prevnext(Template, Page, Prev, Next, Dispatch, DispatchArgs, Context),
+            Html = build_prevnext(Template, Page, Prev, Next, Dispatch, DispatchArgs, TemplateVars, Context),
             {ok, Html};
         #search_result{page=Page, pages=Pages, is_total_estimated=IsEstimated} when Page =< Pages ->
-            Html = build_html(Template, Page, Pages, IsEstimated, HideSinglePage, Dispatch, DispatchArgs, Context),
+            Html = build_html(Template, Page, Pages, IsEstimated, HideSinglePage, Dispatch, DispatchArgs, TemplateVars, Context),
             {ok, Html};
         #search_result{page=Page, pages=Pages} when Page > Pages ->
-            Html = build_html(Template, 2, 1, false, false, Dispatch, DispatchArgs, Context),
+            Html = build_html(Template, 2, 1, false, false, Dispatch, DispatchArgs, TemplateVars, Context),
             {ok, Html};
         [ Chunk | _ ] = List when is_list(Chunk) ->
             % Paginated list with page chunks
             Page = lookup_arg(page, 1, Params, Context),
             Pages = length(List),
-            {ok, build_html(Template, Page, Pages, false, HideSinglePage, Dispatch, DispatchArgs, Context)};
+            {ok, build_html(Template, Page, Pages, false, HideSinglePage, Dispatch, DispatchArgs, TemplateVars, Context)};
         List when is_list(List) ->
             % Flat list
-            render_list(Template, List, Params, HideSinglePage, Dispatch, DispatchArgs, Context);
+            render_list(Template, List, Params, HideSinglePage, Dispatch, DispatchArgs, TemplateVars, Context);
         #rsc_list{list=Ids} ->
-            render_list(Template, Ids, Params, HideSinglePage, Dispatch, DispatchArgs, Context);
+            render_list(Template, Ids, Params, HideSinglePage, Dispatch, DispatchArgs, TemplateVars, Context);
         undefined ->
-            render_list(Template, [], Params, HideSinglePage, Dispatch, DispatchArgs, Context);
+            render_list(Template, [], Params, HideSinglePage, Dispatch, DispatchArgs, TemplateVars, Context);
         _ ->
             ?DEBUG(Result),
             {error, <<"scomp_pager: search result is not a #search_result{} or list">>}
     end.
 
-render_list(_Template, [], _Params, _HideSinglePage, _Dispatch, _DispatchArgs, _Context) ->
+render_list(_Template, [], _Params, _HideSinglePage, _Dispatch, _DispatchArgs, _TemplateVars, _Context) ->
     {ok, <<>>};
-render_list(Template, List, Params, HideSinglePage, Dispatch, DispatchArgs, Context) ->
+render_list(Template, List, Params, HideSinglePage, Dispatch, DispatchArgs, TemplateVars, Context) ->
     PageLen = lookup_arg(pagelen, ?SEARCH_PAGELEN, Params, Context),
     Page = lookup_arg(page, 1, Params, Context),
     Pages = (length(List) - 1) div PageLen + 1,
-    {ok, build_html(Template, Page, Pages, false, HideSinglePage, Dispatch, DispatchArgs, Context)}.
+    {ok, build_html(Template, Page, Pages, false, HideSinglePage, Dispatch, DispatchArgs, TemplateVars, Context)}.
 
 lookup_arg(Name, Default, Params, Context) ->
     V = case proplists:get_value(Name, Params) of
@@ -100,9 +103,9 @@ lookup_arg(Name, Default, Params, Context) ->
         _ -> V1
     end.
 
-build_prevnext(_Template, 1, _Prev, false, _Dispatch, _DispatchArgs, _Context) ->
+build_prevnext(_Template, 1, _Prev, false, _Dispatch, _DispatchArgs, _TemplateVars, _Context) ->
     <<>>;
-build_prevnext(Template, Page, Prev, Next, Dispatch, DispatchArgs, Context) ->
+build_prevnext(Template, Page, Prev, Next, Dispatch, DispatchArgs, TemplateVars, Context) ->
     DispatchQArgs = append_qargs(DispatchArgs, Context),
     Props = [
         {prev_url, case Page =< 1 of
@@ -117,13 +120,14 @@ build_prevnext(Template, Page, Prev, Next, Dispatch, DispatchArgs, Context) ->
         {page, Page},
         {dispatch, Dispatch},
         {is_estimated, true}
+        | TemplateVars
     ],
     {Html, _} = z_template:render_to_iolist(Template, Props, Context),
     Html.
 
-build_html(_Template, _Page, Pages, _IsEstimated, true, _Dispatch, _DispatchArgs, _Context) when Pages =< 1 ->
+build_html(_Template, _Page, Pages, _IsEstimated, true, _Dispatch, _DispatchArgs, _TemplateVars, _Context) when Pages =< 1 ->
     <<>>;
-build_html(Template, Page, Pages, IsEstimated, _HideSinglePage, Dispatch, DispatchArgs, Context) ->
+build_html(Template, Page, Pages, IsEstimated, _HideSinglePage, Dispatch, DispatchArgs, TemplateVars, Context) ->
     {S,M,E} = pages(Page, Pages),
     DispatchQArgs = append_qargs(DispatchArgs, Context),
     Urls = urls(S, M, E, IsEstimated, Dispatch, DispatchQArgs, Context),
@@ -141,7 +145,7 @@ build_html(Template, Page, Pages, IsEstimated, _HideSinglePage, Dispatch, Dispat
         {dispatch, Dispatch},
         {is_estimated, IsEstimated}
         | DispatchArgs
-    ],
+    ] ++ TemplateVars,
     {Html, _} = z_template:render_to_iolist(Template, Props, Context),
     Html.
 

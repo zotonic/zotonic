@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Search model, used as an interface to the search functions of modules etc.
+%% @end
 
-%% Copyright 2009-2022 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -226,21 +227,23 @@ get_optional_paging_props(Props, Context) when is_list(Props) ->
 
 get_paging_props(#{ <<"qargs">> := true } = Args, Context) ->
     try
-        Page = case z_convert:to_integer(z_context:get_q(<<"page">>, Context)) of
+        Page = case z_convert:to_integer(maps:get(<<"page">>, Args, undefined)) of
             undefined ->
-                case maps:get(<<"page">>, Args, 1) of
+                case z_convert:to_integer(z_context:get_q(<<"page">>, Context)) of
                     undefined -> 1;
                     P -> z_convert:to_integer(P)
                 end;
-            P -> P
+            P ->
+                P
         end,
-        PageLen = case z_convert:to_integer(z_context:get_q(<<"pagelen">>, Context)) of
+        PageLen = case z_convert:to_integer(maps:get(<<"pagelen">>, Args, undefined)) of
             undefined ->
-                case maps:get(<<"pagelen">>, Args, ?SEARCH_PAGELEN) of
+                case z_convert:to_integer(z_context:get_q(<<"pagelen">>, Context)) of
                     undefined -> ?SEARCH_PAGELEN;
                     PL -> z_convert:to_integer(PL)
                 end;
-            PL -> PL
+            PL ->
+                PL
         end,
         {Page, PageLen, maps:without([ <<"page">>, <<"pagelen">> ], Args)}
     catch
@@ -270,3 +273,4 @@ get_paging_props(Props, _Context) when is_list(Props) ->
     P1 = proplists:delete(page, Props),
     P2 = proplists:delete(pagelen, P1),
     {Page, PageLen, P2}.
+

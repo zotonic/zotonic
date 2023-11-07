@@ -327,19 +327,26 @@ options(QArgs) when is_list(QArgs) ->
     {ok, Opts} = z_props:from_qs(Terms),
     options(Opts).
 
-map_terms(Map) when is_map(Map) ->
+
+map_terms(Terms) ->
+    lists:flatten(
+        lists:map(fun map_terms_1/1, Terms)).
+
+map_terms_1(Map) when is_map(Map) ->
     maps:fold(
         fun(K, V, Acc) ->
             case map_term({K, V}) of
-                {true, Term} ->
-                    [ Term | Acc ];
+                {true, []} ->
+                    Acc;
+                {true, TermOrTerms} ->
+                    [ TermOrTerms | Acc ];
                 false ->
                     Acc
             end
         end,
         [],
         Map);
-map_terms(List) when is_list(List) ->
+map_terms_1(List) when is_list(List) ->
     lists:filtermap(fun map_term/1, List).
 
 map_term({K, V}) when is_atom(K) ->
@@ -352,6 +359,22 @@ map_term({K, V}) when
         <<"operator">> => K,
         <<"terms">> => combine_category_terms(map_terms(V))
     }};
+map_term({K, #{ <<"all">> := All, <<"any">> := Any }}) ->
+    All1 = filter_empty( lists:map(fun(V) -> {K, V} end, All) ),
+    Terms = case lists:filter(fun z_utils:is_empty/1, Any) of
+        [] -> All1;
+        Any1 -> {true, [ {K, Any1} | All1 ]}
+    end,
+    {true, lists:map(fun map_term/1, Terms)};
+map_term({K, #{ <<"all">> := All }}) ->
+    Terms = filter_empty( lists:map(fun(V) -> {K, V} end, All) ),
+    {true, lists:map(fun map_term/1, Terms)};
+map_term({K, #{ <<"any">> := Any }}) ->
+    Terms = case lists:filter(fun z_utils:is_empty/1, Any) of
+        [] -> [];
+        Any1 -> {K, Any1}
+    end,
+    {true, lists:map(fun map_term/1, Terms)};
 map_term({K, V}) ->
     {K1, V1} = maybe_rename_arg({K, V}),
     case V1 of
@@ -399,6 +422,17 @@ map_value(_K, V) when is_binary(V) ->
 map_value(_K, V) ->
     V.
 
+filter_empty(Q) when is_map(Q) ->
+    filter_empty(maps:to_list(Q));
+filter_empty(Q) when is_list(Q) ->
+    lists:filter(fun({_, X}) -> not(empty_term(X)) end, Q).
+
+empty_term([]) -> true;
+empty_term(<<>>) -> true;
+empty_term(undefined) -> true;
+empty_term(null) -> true;
+empty_term([X, _]) -> empty_term(X);
+empty_term(_) -> false.
 
 %% @doc Combine keys like cat, cat_exact and cat_exclude terms in a single term.
 combine_category_terms(Terms) ->
