@@ -10,7 +10,7 @@
         <link rel="canonical" href="{% block canonical %}{{ id.page_url_abs }}{% endblock %}?page={{ q.page|escape }}">
     {% elseif id %}
         {% with z_seo_language as z_language %}
-    	<link rel="canonical" href="{% block canonical %}{{ id.page_url_abs }}{% endblock %}">
+        <link rel="canonical" href="{% block canonical %}{{ id.page_url_abs }}{% endblock %}">
         <link rel="shortlink" href="{% block shortlink %}{% url id id=id absolute_url %}{% endblock %}">
         {% endwith %}
     {% endif %}
@@ -104,36 +104,14 @@
     {% with script_type|default:"text/javascript" as script_type %}
     {% if not m.acl.is_admin and not notrack %}
         {% if m.seo.google.analytics as ga %}
-            {% if ga|match:"^G-" %}
-                <script type="{{ script_type }}" async src="https://www.googletagmanager.com/gtag/js?id={{ ga|urlencode }}"></script>
-                <script type="text/javascript" nonce="{{ m.req.csp_nonce }}">
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
+            <script type="{{ script_type }}" async src="https://www.googletagmanager.com/gtag/js?id={{ ga|urlencode }}"></script>
+            <script type="text/javascript" nonce="{{ m.req.csp_nonce }}">
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
 
-                  gtag('config', '{{ ga|escapejs }}', { 'anonymize_ip': true });
-                </script>
-            {% else %}
-                <script type="text/javascript" nonce="{{ m.req.csp_nonce }}">
-                    var GA_LOCAL_STORAGE_KEY = 'ga:clientId';
-                    var ga_options = {% include '_ga_params.tpl' %};
-                    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-                    if (window.localStorage) {
-                      ga_options.storage = 'none';
-                      ga_options.clientId = localStorage.getItem(GA_LOCAL_STORAGE_KEY);
-                      ga('create', '{{ ga|escapejs }}', ga_options);
-                      ga(function(tracker) {
-                        localStorage.setItem(GA_LOCAL_STORAGE_KEY, tracker.get('clientId'));
-                      });
-                    }
-                    else {
-                      ga('create', '{{ ga|escapejs }}', 'auto', ga_options);
-                    }
-                    ga('set', 'anonymizeIp', true);
-                    ga('send', 'pageview');
-                </script>
-                <script type="{{ script_type }}" async src='https://www.google-analytics.com/analytics.js'></script>
-            {% endif %}
+              gtag('config', '{{ ga|escapejs }}', { 'anonymize_ip': true });
+            </script>
         {% endif %}
         {% if m.seo.google.gtm as gtm %}
             <script type="{{ script_type }}" nonce="{{ m.req.csp_nonce }}">
