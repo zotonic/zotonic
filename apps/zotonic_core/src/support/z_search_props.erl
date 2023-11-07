@@ -329,8 +329,7 @@ options(QArgs) when is_list(QArgs) ->
 
 
 map_terms(Terms) ->
-    lists:flatten(
-        lists:map(fun map_terms_1/1, Terms)).
+    lists:flatten(map_terms_1(Terms)).
 
 map_terms_1(Map) when is_map(Map) ->
     maps:fold(

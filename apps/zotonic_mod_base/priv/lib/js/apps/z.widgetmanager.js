@@ -67,7 +67,7 @@ limitations under the License.
         }
     }
 
-    if (typeof IncrementalDOM == "objectx") {
+    if (typeof IncrementalDOM == "object") {
         const prevNodesCreated = IncrementalDOM.notifications.nodesCreated;
         IncrementalDOM.notifications.nodesCreated = (newNodes) => {
             let widgetNodes = [];
