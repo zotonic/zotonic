@@ -74,7 +74,11 @@ cotonic.ready.then(() => {
                 qargs = msg.payload;
             }
 
-            cotonic.broker.publish("model/location/post/replace-silent", url),
+            if (msg.payload.replace_location
+                    ?? msg.payload?.message['data-replace-location']
+                    ?? true) {
+                cotonic.broker.publish("model/location/post/replace-silent", url);
+            }
             cotonic.broker.publish(
                 "bridge/origin/model/template/get/render/" + template,
                 qargs,
