@@ -24,15 +24,16 @@ function ZLive ()
 {
     this._subscriptions = [];
     this._wid = 0;
-    var self = this;
+    const self = this;
     setInterval(function() { self.prune(); }, 10000);
 }
 
 ZLive.prototype.subscribe = function(topics, target, isUiInsert, postback) {
-    var self = this;
-    for(var i=topics.length-1; i >= 0; i--) {
-        var topic = topics[i];
-        var wid = 'z-live-' + self._wid++;
+    for(let i = topics.length-1; i >= 0; i--) {
+        const self = this;
+        const topic = topics[i];
+        const wid = 'z-live-' + self._wid++;
+
         cotonic.broker.subscribe(
             topic,
             function(msg, _mapping, opts) {
@@ -54,15 +55,20 @@ ZLive.prototype.subscribe = function(topics, target, isUiInsert, postback) {
 };
 
 ZLive.prototype.update = function(topic, target, postback, payload, wid) {
-    if ($('#'+target).length) {
-        z_queue_postback(target, postback, {topic: topic, message: payload});
+    if (document.getElementById(target)) {
+        const dedup_key = target;
+        const extraParams = {
+            topic: topic,
+            message: payload
+        };
+        z_queue_postback(target, postback, extraParams, undefined, undefined, undefined, { dedup_key: dedup_key });
     } else {
         this.unsubscribe(topic, { wid: wid});
     }
 };
 
 ZLive.prototype.unsubscribe = function(wid) {
-    for (var i=0; i < this._subscriptions.length; i++) {
+    for (let i = 0; i < this._subscriptions.length; i++) {
         if (this._subscriptions[i].wid == wid) {
             cotonic.broker.unsubscribe(this._subscriptions[i].topic, { wid: wid });
             this._subscriptions.splice(i,1);
@@ -72,9 +78,10 @@ ZLive.prototype.unsubscribe = function(wid) {
 };
 
 ZLive.prototype.prune = function() {
-    for (var i=this._subscriptions.length-1; i >= 0; i--) {
-        var target = this._subscriptions[i].target;
-        if ($('#'+target).length === 0) {
+    for (let i = this._subscriptions.length-1; i >= 0; i--) {
+        const target = this._subscriptions[i].target;
+
+        if (!document.getElementById(target)) {
             cotonic.broker.unsubscribe(this._subscriptions[i].topic, { wid: this._subscriptions[i].wid });
             this._subscriptions.splice(i,1);
         }
