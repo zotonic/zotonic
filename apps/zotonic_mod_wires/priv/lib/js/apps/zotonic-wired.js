@@ -379,21 +379,6 @@ function z_notify(message, extraParams)
 }
 
 
-/* Session handling and restarts
----------------------------------------------------------- */
-
-
-// - checks pubzub registry for the local "session" topic
-// - if any handlers then publish the new user to the topic
-// - if no handlers then the default reload dialog is shown
-//
-// if (typeof pubzub == "object" && pubzub.subscribers("~pagesession/session").length > 0) {
-//     z_session_valid = true;
-//     pubzub.publish("~pagesession/session", status);
-//     z_stream_restart();
-// }
-
-
 /* Transport between user-agent and server
 ---------------------------------------------------------- */
 
@@ -445,6 +430,15 @@ function z_transport(delegate, content_type, data, options)
                     z_transport_queue_add(delegate, content_type, data, options);
                 }
             });
+    } else if (options.dedup_key) {
+        const message = {
+            topic: "$promised/bridge/origin/zotonic-transport/" + delegate,
+            payload: data,
+        }
+        cotonic.broker.publish(
+            "model/dedup/post/message/" + btoa(options.dedup_key),
+            message,
+            { qos: 1 });
     } else {
         cotonic.broker.publish(
             "$promised/bridge/origin/zotonic-transport/" + delegate,
@@ -452,6 +446,7 @@ function z_transport(delegate, content_type, data, options)
             { qos: 1 });
     }
 }
+
 
 function z_transport_queue_add( delegate, content_type, data, options )
 {
@@ -485,11 +480,11 @@ function z_transport_queue_check()
 // Queue form data to be transported to the server
 // This is called by the server generated javascript and jquery triggered postback events.
 // 'transport' is one of: '', 'form', 'fileuploader'
-function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, transport, optPostForm)
+function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, transport, optPostForm, extraOptions)
 {
-    var triggervalue = '';
-    var trigger;
-    var target_id;
+    let triggervalue = '';
+    let trigger;
+    let target_id;
 
     if (typeof extraParams == 'object') {
         target_id = extraParams.z_target_id || undefined;
@@ -515,12 +510,12 @@ function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, tra
     params = extraParams || [];
     params = ensure_name_value(params);
 
-    var postbackAttr = document.body.getAttribute("data-wired-postback");
+    const postbackAttr = document.body.getAttribute("data-wired-postback");
     if (postbackAttr) {
         params.push({ name: "z_postback_data", value: JSON.parse(postbackAttr) });
     }
 
-    var pb_event = {
+    const pb_event = {
         _type: "postback_event",
         postback: postback,
         trigger: trigger_id,
@@ -538,10 +533,11 @@ function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, tra
     // }
 
     // logon_form and .setcookie forms are always posted, as they will set cookies.
-    var options = {
+    const options = {
         transport: transport,
         trigger_id: trigger_id,
-        post_form: optPostForm
+        post_form: optPostForm,
+        dedup_key: extraOptions?.dedup_key
     };
 
     z_transport_queue_add('postback', 'ubf', pb_event, options);
@@ -1789,7 +1785,7 @@ function z_jquery_init() {
         options = options || {};
         if (this.length > 0) {
             var form = this[0];
-            var els = options.semantic ? form.getElementsByTagName('*') : form.elements;
+            var els = form.elements;
             var n;
 
             if (els) {

@@ -29,9 +29,12 @@
     m/0,
     compile/0,
     flush/0,
-    flush/1,
     restart/0,
+
+    start/1,
+    flush/1,
     restart/1,
+    stop/1,
 
     open/1,
     open_secure/1,
@@ -149,9 +152,17 @@ restart() ->
     application:stop(zotonic_core),
     application:start(zotonic_core).
 
+%% @doc Start a site
+start(Site) ->
+    z_sites_manager:start(Site).
+
 %% @doc Restart a site
 restart(Site) ->
     z_sites_manager:restart(Site).
+
+%% @doc Stop a site
+stop(Site) ->
+    z_sites_manager:stop(Site).
 
 %% @doc Open a site in Chrome or the default browser(macOS)
 open(Site) ->

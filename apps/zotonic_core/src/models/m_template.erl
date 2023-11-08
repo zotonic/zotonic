@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019 Marc Worrell
+%% @copyright 2019-2023 Marc Worrell
 %% @doc Render templates
+%% @end
 
-%% Copyright 2019 Marc Worrell
+%% Copyright 2019-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,16 +30,15 @@
 -include_lib("zotonic.hrl").
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
-% Error, unknown lookup.
 m_get([ <<"render">> | TemplatePath ], Msg, Context) when is_map(Msg) ->
     Template = to_template(TemplatePath),
     Payload = case maps:get(payload, Msg, #{}) of
         undefined -> #{};
         L when is_list(L) -> L;
         M when is_map(M) -> M;
-        V -> #{ payload => V }
+        V -> #{ <<"payload">> => V }
     end,
-    Context1 = z_context:set_q(Payload, Context),
+    Context1 = z_context:add_q(Payload, Context),
     {Tpl, _} = z_template:render_to_iolist(Template, [], Context1),
     {ok, {iolist_to_binary(Tpl), []}};
 m_get(_Vs, _Msg, _Context) ->

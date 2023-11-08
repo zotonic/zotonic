@@ -74,6 +74,7 @@
     set_q/2,
     add_q/3,
     add_q/2,
+    delete_q/2,
     get_q/2,
     get_q/3,
     get_qargs/1,
@@ -614,7 +615,7 @@ set_render_state(RS, Context) ->
     Context#context{ render_state = RS }.
 
 
-%% @doc Set the value of a request parameter argument
+%% @doc Replace the value of a request parameter argument
 %%      Always filter the #upload{} arguments to prevent upload of non-temp files.
 -spec set_q(binary()|string()|atom(), z:qvalue(), z:context()) -> z:context().
 set_q(Key, #upload{ tmpfile = TmpFile } = Upload, Context) when TmpFile =/= undefined ->
@@ -627,7 +628,13 @@ set_q(Key, Value, Context) ->
     set_q(z_convert:to_binary(Key), Value, Context).
 
 %% @doc Set the value of multiple request parameter arguments
--spec set_q( list( {binary()|string()|atom(), z:qvalue()} ) | map(), z:context() ) -> z:context().
+-spec set_q(Qs, Context) -> NewContext when
+    Qs :: [ {Key, z:qvalue()} | Key ]
+        | map()
+        | [ list() ],
+    Key :: binary() | string() | atom(),
+    Context :: z:context(),
+    NewContext :: z:context().
 set_q(KVs, Context) when is_map(KVs) ->
     maps:fold(
         fun(K, V, Ctx) ->
@@ -637,32 +644,82 @@ set_q(KVs, Context) when is_map(KVs) ->
         KVs);
 set_q(KVs, Context) when is_list(KVs) ->
     lists:foldl(
-        fun({K, V}, Ctx) ->
-            set_q(K, V, Ctx)
+        fun
+            ({K, V}, Ctx) ->
+                set_q(K, V, Ctx);
+            ([K, V], Ctx) ->
+                set_q(K, V, Ctx);
+            (K, Ctx) ->
+                set_q(K, true, Ctx)
         end,
         Context,
         KVs).
 
-%% @doc Add the value of a request parameter argument
+%% @doc Add the value of a request parameter argument. This allows for multiple
+%%      arguments with the same name. The new argument is pre-pended to the existing
+%%      arguments.
 %%      Always filter the #upload{} arguments to prevent upload of non-temp files.
--spec add_q(binary()|string()|atom(), z:qvalue(), z:context()) -> z:context().
+-spec add_q(Key, Value, Context) -> NewContext when
+    Key :: binary()|string()|atom(),
+    Value :: z:qvalue(),
+    Context :: z:context(),
+    NewContext :: z:context().
 add_q(Key, #upload{ tmpfile = TmpFile } = Upload, Context) when TmpFile =/= undefined ->
     add_q(Key, Upload#upload{ tmpfile = undefined }, Context);
 add_q(Key, Value, Context) when is_binary(Key) ->
     Qs = get_q_all(Context),
     z_context:set('q', [{Key,Value}|Qs], Context);
 add_q(Key, Value, Context) ->
-    set_q(z_convert:to_binary(Key), Value, Context).
+    add_q(z_convert:to_binary(Key), Value, Context).
 
-%% @doc Add the value of multiple request parameter arguments
--spec add_q( list(), z:context() ) -> z:context().
-add_q(KVs, Context) ->
-    lists:foldl(
-        fun({K, V}, Ctx) ->
+%% @doc Add the value of multiple request parameter arguments. This allows for the
+%% insertion of multiple keys with the same value. The new arguments are prepended
+%% before the existing arguments.
+-spec add_q(KeyValues, Context) -> NewContext when
+    KeyValues :: list() | map(),
+    Context :: z:context(),
+    NewContext :: z:context().
+add_q(KVs, Context) when is_list(KVs) ->
+    lists:foldr(
+        fun
+            ({K, V}, Ctx) ->
+                add_q(K, V, Ctx);
+            ([K, V], Ctx) ->
+                add_q(K, V, Ctx);
+            (K, Ctx) ->
+                add_q(K, true, Ctx)
+        end,
+        Context,
+        KVs);
+add_q(KVs, Context) when is_map(KVs) ->
+    maps:fold(
+        fun(K, V, Ctx) ->
             add_q(K, V, Ctx)
         end,
         Context,
         KVs).
+
+%% @doc Delete all values of one or more request parameter arguments.
+-spec delete_q(Keys, Context) -> NewContext when
+    Keys :: Key | [ Key ],
+    Context :: z:context(),
+    NewContext :: z:context().
+delete_q([C|_] = Key, Context) when is_integer(C) ->
+    delete_q(list_to_binary(Key), Context);
+delete_q(Key, Context) when is_binary(Key); is_atom(Key) ->
+    Key1 = z_convert:to_binary(Key),
+    Qs = get_q_all(Context),
+    z_context:set('q', proplists:delete(Key1, Qs), Context);
+delete_q(Keys, Context) when is_list(Keys) ->
+    Qs = get_q_all(Context),
+    Qs1 = lists:foldl(
+        fun(K, Acc) ->
+            K1 = z_convert:to_binary(K),
+            proplists:delete(K1, Acc)
+        end,
+        Qs,
+        Keys),
+    z_context:set('q', Qs1, Context).
 
 %% @doc Get a request parameter, either from the query string or the post body.  Post body has precedence over the query string.
 %%      Note that this can also be populated from a JSON MQTT call, and as such contain arbitrary data.

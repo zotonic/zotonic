@@ -171,12 +171,12 @@ object with id 456::
 Substitute ``'*'`` for the object id to match *any* object. So, to select all
 resources that have any author or editor edge::
 
-    hasanyobject[['*', 'author'], ['*', 'editor']]
+    hasanyobject=[['*', 'author'], ['*', 'editor']]
 
 You can also mix the two types of elements. To select all resources that have an
 author or a connection (with any predicate) to resource 2 or 3::
 
-    hasanyobject[['*', 'author'], 2, 3]
+    hasanyobject=[['*', 'author'], 2, 3]
 
 
 hasanysubject

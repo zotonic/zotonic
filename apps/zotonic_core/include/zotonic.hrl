@@ -196,8 +196,13 @@
     args = []
 }).
 
+-record(search_sql_nested, {
+    terms = [] :: [ #search_sql_term{} | #search_sql_nested{} ],
+    operator = <<"allof">> :: binary()
+}).
+
 -record(search_sql_terms, {
-    terms = [] :: [ #search_sql_term{} ],
+    terms = [] :: [ #search_sql_term{} | #search_sql_nested{} ],
     post_func :: fun( (#search_result{}, #search_sql{}, z:context()) -> #search_result{} ) | undefined
 }).
 

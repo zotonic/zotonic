@@ -1,8 +1,9 @@
-%% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell, Arjan Scherpenisse
+%% @author Marc Worrell, Arjan Scherpenisse
+%% @copyright 2009-2023 Marc Worrell, Arjan Scherpenisse
 %% @doc Admin webmachine_controller.
+%% @end
 
-%% Copyright 2009-2022 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2009-2023 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -182,13 +183,8 @@ event(#postback{message={query_preview, Opts}}, Context) ->
     DivId = proplists:get_value(div_id, Opts),
     RscId = proplists:get_value(rsc_id, Opts),
     try
-        IsCollection = m_rsc:is_a(RscId, collection, Context),
-        S = case search_query:parse_query_text(z_context:get_q(<<"triggervalue">>, Context)) of
-            [] when not IsCollection ->
-                [];
-            Q ->
-                z_search:search(<<"query">>, Q, 1, 20, Context)
-        end,
+        Q = z_search_props:from_text(z_context:get_q(<<"triggervalue">>, Context)),
+        S = z_search:search(<<"query">>, Q, 1, 20, Context),
         Vars = [
             {id, RscId},
             {result, S}

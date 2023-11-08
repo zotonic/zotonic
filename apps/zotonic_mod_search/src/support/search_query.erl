@@ -24,7 +24,6 @@
 -export([
          search/2,
          parse_request_args/1,
-         parse_query_text/1,
          build_query/2
         ]).
 
@@ -40,56 +39,39 @@
 
 
 %% @doc Build a SQL search query from the filter arguments.
--spec search( map() | proplists:proplist(), z:context() ) -> #search_sql_terms{} | #search_result{}.
-search(Query, Context) ->
-    Query1 = filter_empty(Query),
-    Query2 = lists:filtermap(
-        fun
-            ({K, V}) when is_binary(K) ->
-                case request_arg(K) of
-                    undefined -> false;
-                    A -> {true, {A, V}}
-                end;
-            ({K, _} = KV) when is_atom(K) ->
-                {true, KV};
-            ({{filter, _}, _} = KV) ->
-                {true, KV};
-            ({{facet, _}, _} = KV) ->
-                {true, KV};
-            ({{custom, _}, _} = KV) ->
-                {true, KV}
-        end,
-        Query1),
-    Query3 = lists:flatten(
-        lists:map(
-            fun
-                ({K, #{ <<"all">> := All, <<"any">> := Any }}) ->
-                    All1 = filter_empty( lists:map(fun(V) -> {K, V} end, All) ),
-                    case lists:filter(fun z_utils:is_empty/1, Any) of
-                        [] -> All1;
-                        Any1 -> [ {K, Any1} | All1 ]
-                    end;
-                ({K, #{ <<"all">> := All }}) ->
-                    filter_empty( lists:map(fun(V) -> {K, V} end, All) );
-                ({K, #{ <<"any">> := Any }}) ->
-                    case lists:filter(fun z_utils:is_empty/1, Any) of
-                        [] -> [];
-                        Any1 -> {K, Any1}
-                    end;
-                (KV) ->
-                    KV
-            end,
-            Query2)),
-    Query4 = case lists:flatten( proplists:get_all_values(cat, Query3) ) of
-        [] -> Query3;
-        Cats -> [{cat, Cats} | proplists:delete(cat, Query3)]
-    end,
-    Query5 = case lists:flatten( proplists:get_all_values(cat_exclude, Query4) ) of
-        [] -> Query4;
-        CatsX -> [{cat_exclude, CatsX} | proplists:delete(cat_exclude, Query4)]
-    end,
-    build_query(lists:sort(Query5), Context).
-
+%% @todo: also return the options and paging?
+-spec search(Query, Context) -> SqlTerms | EmptyResult when
+    Query ::  map() | proplists:proplist(),
+    Context :: z:context(),
+    SqlTerms :: #search_sql_terms{},
+    EmptyResult :: #search_result{}.
+search(#{ <<"q">> := Qs }, Context) when is_list(Qs) ->
+    % Qs1 = lists:flatten(
+    %     lists:map(
+    %         fun
+    %             ({K, #{ <<"all">> := All, <<"any">> := Any }}) ->
+    %                 All1 = filter_empty( lists:map(fun(V) -> {K, V} end, All) ),
+    %                 case lists:filter(fun z_utils:is_empty/1, Any) of
+    %                     [] -> All1;
+    %                     Any1 -> [ {K, Any1} | All1 ]
+    %                 end;
+    %             ({K, #{ <<"all">> := All }}) ->
+    %                 filter_empty( lists:map(fun(V) -> {K, V} end, All) );
+    %             ({K, #{ <<"any">> := Any }}) ->
+    %                 case lists:filter(fun z_utils:is_empty/1, Any) of
+    %                     [] -> [];
+    %                     Any1 -> {K, Any1}
+    %                 end;
+    %             (KV) ->
+    %                 KV
+    %         end,
+    %         Qs)),
+    Qs1 = filter_empty(Qs),
+    build_query(lists:sort(Qs1), Context);
+search(Query, Context) when is_map(Query) ->
+    search(z_search_props:from_map(Query), Context);
+search(Query, Context) when is_list(Query) ->
+    search(z_search_props:from_list(Query), Context).
 
 -spec build_query(list(), z:context()) -> #search_sql_terms{} | #search_result{}.
 build_query(Terms, Context) ->
@@ -101,21 +83,8 @@ build_query(Terms, Context) ->
             #search_sql_terms{ terms = Ts }
     end.
 
-%% @doc Fetch all arguments from the query string in the HTTP request.
--spec qargs( z:context() ) -> list( {binary(), term()} ).
-qargs(Context) ->
-    Args = z_context:get_q_all_noz(Context),
-    lists:filtermap(
-                fun
-                    ({<<"qargs">>, _}) -> false;
-                    ({<<"q", _Term/binary>>, <<>>}) -> false;
-                    ({<<"qs">>, V}) -> {true, {<<"text">>, V}};
-                    ({<<"q", Term/binary>>, V}) -> {true, {Term, V}};
-                    (_) -> false
-                end,
-                Args).
 
--spec parse_request_args( list( {binary(), term()} ) ) -> list( {atom(), term()} ).
+-spec parse_request_args( list( {binary(), term()} ) ) -> list( {binary(), term()} ).
 parse_request_args(Args) ->
     parse_request_args(Args, []).
 
@@ -126,154 +95,78 @@ parse_request_args([{K,V}|Rest], Acc) when is_binary(K) ->
         true ->
             parse_request_args(Rest, Acc);
         false ->
-            case request_arg(K) of
-                undefined -> parse_request_args(Rest, Acc);
-                Arg -> parse_request_args(Rest, [{Arg, V}|Acc])
+            case is_request_arg(K) of
+                false -> parse_request_args(Rest, Acc);
+                true -> parse_request_args(Rest, [{K, V}|Acc])
             end
     end;
 parse_request_args([{K,V}|Rest], Acc) ->
     parse_request_args([{z_convert:to_binary(K), V}|Rest], Acc).
 
 
-%% @doc Parses a query text. Every line is an argument; of which the first
-%% '=' separates argument key from argument value.
--spec parse_query_text( binary() | string() | undefined ) -> list( {atom(), term()} ).
-parse_query_text(undefined) ->
-    [];
-parse_query_text(Text) when is_list(Text) ->
-    parse_query_text(list_to_binary(Text));
-parse_query_text(Text) when is_binary(Text) ->
-    Lines = binary:split(Text, <<"\n">>, [global]),
-    KVs = [ split_arg(z_string:trim(Line)) || Line <- Lines],
-    Args = [ {request_arg(K), V} || {K,V} <- KVs, K =/= <<>> ],
-    [ {K,V} || {K,V} <- Args, K =/= undefined ].
-
-split_arg(<<>>) ->
-    {<<>>, <<>>};
-split_arg(B) ->
-    case binary:split(B, <<"=">>) of
-        [K,V] -> {z_string:trim(K), z_string:trim(V)};
-        [K] -> {z_string:trim(K), <<"true">>}
-    end.
-
-
-% Convert known request arguments to atoms.
-request_arg(<<"content_group">>)       -> content_group;
-request_arg(<<"visible_for">>)         -> visible_for;
-request_arg(<<"cat">>)                 -> cat;
-request_arg(<<"cat_exact">>)           -> cat_exact;
-request_arg(<<"cat_exclude">>)         -> cat_exclude;
-request_arg(<<"creator_id">>)          -> creator_id;
-request_arg(<<"modifier_id">>)         -> modifier_id;
-request_arg(<<"facet">>)               -> facet;
-request_arg(<<"facet.", F/binary>>)    -> {facet, F};
-request_arg(<<"filter">>)              -> filter;
-request_arg(<<"filter.facet.", F/binary>>)-> {facet, F};
-request_arg(<<"filter.", F/binary>>)   -> {filter, F};
-request_arg(<<"pivot.", _/binary>> = F)-> {filter, F};
-request_arg(<<"pivot_", F/binary>>)    -> {filter, <<"pivot.", F/binary>>};
-request_arg(<<"id">>)                  -> id;
-request_arg(<<"id_exclude">>)          -> id_exclude;
-request_arg(<<"hasobject">>)           -> hasobject;
-request_arg(<<"hasobjectpredicate">>)  -> hasobjectpredicate;
-request_arg(<<"hassubject">>)          -> hassubject;
-request_arg(<<"hassubjectpredicate">>) -> hassubjectpredicate;
-request_arg(<<"hasanyobject">>)        -> hasanyobject;
-request_arg(<<"hasanysubject">>)       -> hasanysubject;
-request_arg(<<"hasmedium">>)           -> hasmedium;
-request_arg(<<"is_authoritative">>)    -> is_authoritative;
-request_arg(<<"is_featured">>)         -> is_featured;
-request_arg(<<"is_published">>)        -> is_published;
-request_arg(<<"is_public">>)           -> is_public;
-request_arg(<<"is_findable">>)         -> is_findable;
-request_arg(<<"is_unfindable">>)       -> is_unfindable;
-request_arg(<<"is_protected">>)        -> is_protected;
-request_arg(<<"is_dependent">>)        -> is_dependent;
-request_arg(<<"date_start_after">>)    -> date_start_after;
-request_arg(<<"date_start_before">>)   -> date_start_before;
-request_arg(<<"date_start_year">>)     -> date_start_year;
-request_arg(<<"date_end_after">>)      -> date_end_after;
-request_arg(<<"date_end_before">>)     -> date_end_before;
-request_arg(<<"date_end_year">>)       -> date_end_year;
-request_arg(<<"publication_month">>)   -> publication_month;
-request_arg(<<"publication_year">>)    -> publication_year;
-request_arg(<<"publication_after">>)   -> publication_after;
-request_arg(<<"publication_before">>)  -> publication_before;
-request_arg(<<"qargs">>)               -> qargs;
-request_arg(<<"query_id">>)            -> query_id;
-request_arg(<<"rsc_id">>)              -> rsc_id;
-request_arg(<<"name">>)                -> name;
-request_arg(<<"language">>)            -> language;
-request_arg(<<"notlanguage">>)         -> notlanguage;
-request_arg(<<"sort">>)                -> sort;
-request_arg(<<"asort">>)               -> asort;
-request_arg(<<"zsort">>)               -> zsort;
-request_arg(<<"text">>)                -> text;
-request_arg(<<"match_objects">>)       -> match_objects;
-request_arg(<<"match_object_ids">>)    -> match_object_ids;
-request_arg(<<"upcoming">>)            -> upcoming;
-request_arg(<<"ongoing">>)             -> ongoing;
-request_arg(<<"finished">>)            -> finished;
-request_arg(<<"unfinished">>)          -> unfinished;
-request_arg(<<"unfinished_or_nodate">>)-> unfinished_or_nodate;
 % Skip these
-request_arg(<<"page">>)                -> undefined;
-request_arg(<<"pagelen">>)             -> undefined;
-request_arg(<<"options">>)             -> undefined;
-% Complain about all else
-request_arg(<<"custompivot">>)         ->
+is_request_arg(<<"page">>) -> false;
+is_request_arg(<<"pagelen">>) -> false;
+is_request_arg(<<"options">>) -> false;
+% Complain about deprecated terms
+is_request_arg(<<"custompivot">>)         ->
     ?LOG_ERROR(#{
         in => zotonic_mod_search,
-        text => <<"The query term 'custompivot' has been removed. Use filters with 'pivot.pivotname.field' instead.">>,
+        text => <<"The query term 'custompivot' has been removed. Use filters with 'pivot:pivotname:field' instead.">>,
         result => error,
         reason => unknown_query_term,
         term => <<"custompivot">>
     }),
-    undefined;
-request_arg(Term) ->
-    {custom, Term}.
+    false;
+is_request_arg(_Term) ->
+    true.
 
 
 %% Private methods start here
 
-%% @doc Drop all empty query arguments. Search forms have empty values
-%% for unused filters.
-filter_empty(Q) when is_map(Q) ->
-    filter_empty(maps:to_list(Q));
+%% @doc Drop all undefined query arguments.
 filter_empty(Q) when is_list(Q) ->
-    lists:filter(fun({_, X}) -> not(empty_term(X)) end, Q).
-
-empty_term([]) -> true;
-empty_term(<<>>) -> true;
-empty_term(undefined) -> true;
-empty_term(null) -> true;
-empty_term([X, _]) -> empty_term(X);
-empty_term(_) -> false.
+    lists:filter(
+        fun
+            (#{ <<"terms">> := [] }) -> false;
+            (#{ <<"value">> := undefined }) -> false;
+            (#{ <<"value">> := null }) -> false;
+            (#{ <<"value">> := [] }) -> false;
+            (#{}) -> true
+        end,
+        Q).
 
 qterm(undefined, _Context) ->
     [];
 qterm([], _Context) ->
     [];
 qterm(Ts, Context) when is_list(Ts) ->
-    lists:map(fun(T) -> qterm(T, Context) end, Ts);
-qterm({cat, Cats}, Context) ->
+    lists:flatten(lists:map(fun(T) -> qterm(T, Context) end, Ts));
+qterm(#{ <<"operator">> := Op, <<"terms">> := Terms }, Context) ->
+    #search_sql_nested{
+        operator = z_convert:to_binary(Op),
+        terms = qterm(Terms, Context)
+    };
+qterm(#{ <<"term">> := Term } = Q, Context) when is_atom(Term) ->
+    qterm(Q#{ <<"term">> => atom_to_binary(Term, utf8) }, Context);
+qterm(#{ <<"term">> := <<"cat">>, <<"value">> := Cats}, Context) ->
     %% cat=categoryname
     %% Filter results on a certain category.
     Cats1 = assure_categories(Cats, Context),
     % Cats2 = add_or_append(<<"rsc">>, Cats1, []),
     #search_sql_term{ cats = [ {<<"rsc">>, Cats1}] };
     % parse_query(Rest, Context, Result#search_sql{cats=Cats2});
-qterm({cat_exclude, Cats}, Context) ->
+qterm(#{ <<"term">> := <<"cat_exclude">>, <<"value">> := Cats}, Context) ->
     %% cat_exclude=categoryname
     %% Filter results outside a certain category.
     Cats1 = assure_categories(Cats, Context),
     #search_sql_term{ cats_exclude = [ {<<"rsc">>, Cats1} ] };
-qterm({cat_exact, Cats}, Context) ->
+qterm(#{ <<"term">> := <<"cat_exact">>, <<"value">> := Cats}, Context) ->
     %% cat_exact=categoryname
     %% Filter results excactly of a category (excluding subcategories)
     Cats1 = assure_categories(Cats, Context),
     #search_sql_term{ cats_exact = [ {<<"rsc">>, Cats1} ] };
-qterm({content_group, ContentGroup}, Context) ->
+qterm(#{ <<"term">> := <<"content_group">>, <<"value">> := ContentGroup}, Context) ->
     %% content_group=id
     %% Include only resources which are member of the given content group (or one of its children)
     Q = #search_sql_term{
@@ -322,7 +215,7 @@ qterm({content_group, ContentGroup}, Context) ->
                     }
             end
     end;
-qterm({visible_for, VisFor}, _Context) when is_list(VisFor) ->
+qterm(#{ <<"term">> := <<"visible_for">>, <<"value">> := VisFor}, _Context) when is_list(VisFor) ->
     %% visible_for=[5,6]
     %% Filter results for visibility levels
     try
@@ -343,7 +236,7 @@ qterm({visible_for, VisFor}, _Context) when is_list(VisFor) ->
             }),
             []
     end;
-qterm({visible_for, VisFor}, _Context) ->
+qterm(#{ <<"term">> := <<"visible_for">>, <<"value">> := VisFor} = T, _Context) ->
     %% visible_for=5
     %% Filter results for a certain visibility level
     try
@@ -351,8 +244,9 @@ qterm({visible_for, VisFor}, _Context) ->
             undefined ->
                 [];
             VisFor1 ->
+                Op = extract_term_op(T, <<"=">>),
                 #search_sql_term{
-                    where = [ <<"rsc.visible_for = ">>, '$1'],
+                    where = [ <<"rsc.visible_for">>, Op, '$1'],
                     args = [ VisFor1 ]
                 }
         end
@@ -367,7 +261,7 @@ qterm({visible_for, VisFor}, _Context) ->
             }),
             []
     end;
-qterm({id_exclude, Ids}, Context) when is_list(Ids) ->
+qterm(#{ <<"term">> := <<"id_exclude">>, <<"value">> := Ids}, Context) when is_list(Ids) ->
     %% id_exclude=resource-id
     %% Exclude an id or multiple ids from the result
     RscIds = lists:filtermap(
@@ -384,7 +278,7 @@ qterm({id_exclude, Ids}, Context) when is_list(Ids) ->
         ],
         args = [ RscIds ]
     };
-qterm({id_exclude, Id}, Context) ->
+qterm(#{ <<"term">> := <<"id_exclude">>, <<"value">> := Id}, Context) ->
     case m_rsc:rid(Id, Context) of
         undefined ->
             [];
@@ -394,7 +288,7 @@ qterm({id_exclude, Id}, Context) ->
                 args = [ RscId ]
             }
     end;
-qterm({id, Ids}, Context) when is_list(Ids) ->
+qterm(#{ <<"term">> := <<"id">>, <<"value">> := Ids}, Context) when is_list(Ids) ->
     %% id=resource-id
     %% Limit to an id or multiple ids
     RscIds = lists:filtermap(
@@ -411,17 +305,18 @@ qterm({id, Ids}, Context) when is_list(Ids) ->
         ],
         args = [ RscIds ]
     };
-qterm({id, Id}, Context) ->
+qterm(#{ <<"term">> := <<"id">>, <<"value">> := Id} = T, Context) ->
     case m_rsc:rid(Id, Context) of
         undefined ->
             [];
         RscId ->
+            Op = extract_term_op(T, <<"=">>),
             #search_sql_term{
-                where = [ <<"rsc.id = ">>, '$1' ],
+                where = [ <<"rsc.id">>, Op, '$1' ],
                 args = [ RscId ]
             }
     end;
-qterm({hasmedium, HasMedium}, _Context) ->
+qterm(#{ <<"term">> := <<"hasmedium">>, <<"value">> := HasMedium}, _Context) ->
     %% hasmedium=true|false
     %% Give all things which have a medium record attached (or not)
     case z_convert:to_bool(HasMedium) of
@@ -441,11 +336,11 @@ qterm({hasmedium, HasMedium}, _Context) ->
                 ]
             }
     end;
-qterm({hassubject, Id}, Context) ->
-    parse_edges(hassubject, maybe_split_list(Id), Context);
-qterm({hasobject, Id}, Context) ->
-    parse_edges(hasobject, maybe_split_list(Id), Context);
-qterm({hasanyobject, ObjPreds}, Context) ->
+qterm(#{ <<"term">> := <<"hassubject">>, <<"value">> := Subject }, Context) ->
+    parse_edges(hassubject, Subject, Context);
+qterm(#{ <<"term">> := <<"hasobject">>, <<"value">> := Object }, Context) ->
+    parse_edges(hasobject, Object, Context);
+qterm(#{ <<"term">> := <<"hasanyobject">>, <<"value">> := ObjPreds}, Context) ->
     %% hasanyobject=[[id,predicate]|id, ...]
     %% Give all things which have an outgoing edge to Id with any of the given object/predicate combinations
     OPs = expand_object_predicates(ObjPreds, Context),
@@ -458,7 +353,7 @@ qterm({hasanyobject, ObjPreds}, Context) ->
             "))"
         ]
     };
-qterm({hasanysubject, ObjPreds}, Context) ->
+qterm(#{ <<"term">> := <<"hasanysubject">>, <<"value">> := ObjPreds}, Context) ->
     %% hasanysubbject=[[id,predicate]|id, ...]
     %% Give all things which have an incoming edge to Id with any of the given subject/predicate combinations
     OPs = expand_object_predicates(ObjPreds, Context),
@@ -470,7 +365,7 @@ qterm({hasanysubject, ObjPreds}, Context) ->
             "))"
         ]
     };
-qterm({hasobjectpredicate, Predicate}, Context) ->
+qterm(#{ <<"term">> := <<"hasobjectpredicate">>, <<"value">> := Predicate}, Context) ->
     %% hasobjectpredicate=predicate
     %% Give all things which have any outgoing edge with given predicate
     #search_sql_term{
@@ -481,7 +376,7 @@ qterm({hasobjectpredicate, Predicate}, Context) ->
             predicate_to_id(Predicate, Context)
         ]
     };
-qterm({hassubjectpredicate, Predicate}, Context) ->
+qterm(#{ <<"term">> := <<"hassubjectpredicate">>, <<"value">> := Predicate}, Context) ->
     %% hassubjectpredicate=predicate
     %% Give all things which have any incoming edge with given predicate
     #search_sql_term{
@@ -492,7 +387,7 @@ qterm({hassubjectpredicate, Predicate}, Context) ->
             predicate_to_id(Predicate, Context)
         ]
     };
-qterm({is_featured, Boolean}, _Context) ->
+qterm(#{ <<"term">> := <<"is_featured">>, <<"value">> := Boolean}, _Context) ->
     %% is_featured or is_featured={false,true}
     %% Filter on whether an item is featured or not.
     #search_sql_term{
@@ -503,7 +398,7 @@ qterm({is_featured, Boolean}, _Context) ->
             z_convert:to_bool(Boolean)
         ]
     };
-qterm({is_published, Boolean}, _Context) ->
+qterm(#{ <<"term">> := <<"is_published">>, <<"value">> := Boolean}, _Context) ->
     %% is_published or is_published={false,true,all}
     %% Filter on whether an item is published or not.
     case z_convert:to_binary(Boolean) of
@@ -533,7 +428,7 @@ qterm({is_published, Boolean}, _Context) ->
                     }
             end
     end;
-qterm({is_public, Boolean}, _Context) ->
+qterm(#{ <<"term">> := <<"is_public">>, <<"value">> := Boolean}, _Context) ->
     %% is_public or is_public={false,true,all}
     %% Filter on whether an item is publicly visible or not.
     %% TODO: Adapt this for the different ACL modules
@@ -556,7 +451,7 @@ qterm({is_public, Boolean}, _Context) ->
                     }
           end
     end;
-qterm({is_findable, Boolean}, _Context) ->
+qterm(#{ <<"term">> := <<"is_findable">>, <<"value">> := Boolean}, _Context) ->
     %% is_findable or is_findable={false,true}
     %% Filter on whether an item is findable or not.
     #search_sql_term{
@@ -567,7 +462,7 @@ qterm({is_findable, Boolean}, _Context) ->
             not z_convert:to_bool(Boolean)
         ]
     };
-qterm({is_unfindable, Boolean}, _Context) ->
+qterm(#{ <<"term">> := <<"is_unfindable">>, <<"value">> := Boolean}, _Context) ->
     %% is_unfindable or is_unfindable={false,true}
     %% Filter on whether an item is unfindable or not.
     #search_sql_term{
@@ -578,7 +473,7 @@ qterm({is_unfindable, Boolean}, _Context) ->
             z_convert:to_bool(Boolean)
         ]
     };
-qterm({is_protected, Boolean}, _Context) ->
+qterm(#{ <<"term">> := <<"is_protected">>, <<"value">> := Boolean}, _Context) ->
     %% is_protected or is_protected={false,true}
     %% Filter on whether an item is protected or not.
     #search_sql_term{
@@ -589,7 +484,7 @@ qterm({is_protected, Boolean}, _Context) ->
             z_convert:to_bool(Boolean)
         ]
     };
-qterm({is_dependent, Boolean}, _Context) ->
+qterm(#{ <<"term">> := <<"is_dependent">>, <<"value">> := Boolean}, _Context) ->
     %% is_dependent or is_dependent={false,true}
     %% Filter on whether an item is dependent or not.
     #search_sql_term{
@@ -600,7 +495,7 @@ qterm({is_dependent, Boolean}, _Context) ->
             z_convert:to_bool(Boolean)
         ]
     };
-qterm({upcoming, Boolean}, _Context) ->
+qterm(#{ <<"term">> := <<"upcoming">>, <<"value">> := Boolean}, _Context) ->
     %% upcoming
     %% Filter on items whose start date lies in the future
     case z_convert:to_bool(Boolean) of
@@ -617,7 +512,7 @@ qterm({upcoming, Boolean}, _Context) ->
                 ]
             }
     end;
-qterm({ongoing, Boolean}, _Context) ->
+qterm(#{ <<"term">> := <<"ongoing">>, <<"value">> := Boolean}, _Context) ->
     %% ongoing
     %% Filter on items whose date range is around the current date
     case z_convert:to_bool(Boolean) of
@@ -636,7 +531,7 @@ qterm({ongoing, Boolean}, _Context) ->
                 ]
             }
     end;
-qterm({finished, Boolean}, _Context) ->
+qterm(#{ <<"term">> := <<"finished">>, <<"value">> := Boolean}, _Context) ->
     %% finished
     %% Filter on items whose end date lies in the past
     case z_convert:to_bool(Boolean) of
@@ -653,7 +548,7 @@ qterm({finished, Boolean}, _Context) ->
                 ]
             }
     end;
-qterm({unfinished, Boolean}, _Context) ->
+qterm(#{ <<"term">> := <<"unfinished">>, <<"value">> := Boolean}, _Context) ->
     %% Filter on items whose start date lies in the future
     case z_convert:to_bool(Boolean) of
         true ->
@@ -669,7 +564,7 @@ qterm({unfinished, Boolean}, _Context) ->
                 ]
             }
     end;
-qterm({unfinished_or_nodate, Boolean}, _Context) ->
+qterm(#{ <<"term">> := <<"unfinished_or_nodate">>, <<"value">> := Boolean}, _Context) ->
     %% Filter on items whose start date lies in the future or don't have an end_date
     case z_convert:to_bool(Boolean) of
         true ->
@@ -687,7 +582,7 @@ qterm({unfinished_or_nodate, Boolean}, _Context) ->
                 ]
             }
     end;
-qterm({is_authoritative, Boolean}, _Context) ->
+qterm(#{ <<"term">> := <<"is_authoritative">>, <<"value">> := Boolean}, _Context) ->
     %% authoritative={true|false}
     %% Filter on items which are authoritative or not
     #search_sql_term{
@@ -698,7 +593,7 @@ qterm({is_authoritative, Boolean}, _Context) ->
             z_convert:to_bool(Boolean)
         ]
     };
-qterm({creator_id, Id}, Context) ->
+qterm(#{ <<"term">> := <<"creator_id">>, <<"value">> := Id}, Context) ->
     %% creator_id=<rsc id>
     %% Filter on items which are created by <rsc id>
     #search_sql_term{
@@ -709,7 +604,7 @@ qterm({creator_id, Id}, Context) ->
             m_rsc:rid(Id, Context)
         ]
     };
-qterm({modifier_id, Id}, Context) ->
+qterm(#{ <<"term">> := <<"modifier_id">>, <<"value">> := Id}, Context) ->
     %% modifier_id=<rsc id>
     %% Filter on items which are last modified by <rsc id>
     #search_sql_term{
@@ -720,21 +615,23 @@ qterm({modifier_id, Id}, Context) ->
             m_rsc:rid(Id, Context)
         ]
     };
-qterm({qargs, Boolean}, Context) ->
+qterm(#{ <<"term">> := <<"qargs">>, <<"value">> := Boolean}, Context) ->
     %% qargs
     %% Add all query terms from the current query arguments
     case z_convert:to_bool(Boolean) of
         true ->
-            Terms = parse_request_args(qargs(Context)),
+            #{ <<"q">> := Terms } = z_search_props:from_qargs(Context),
             qterm(Terms, Context);
         false ->
             []
     end;
-qterm({query_id, Id}, Context) ->
+qterm(#{ <<"term">> := <<"query_id">>, <<"value">> := Id}, Context) ->
     %% query_id=<rsc id>
     %% Get the query terms from given resource ID, and use those terms.
-    QArgs = try
-        parse_query_text(z_html:unescape(m_rsc:p(Id, 'query', Context)))
+    QueryText = z_html:unescape(m_rsc:p(Id, <<"query">>, Context)),
+    QueryTerms = try
+        #{ <<"q">> := Terms } = z_search_props:from_text(QueryText),
+        Terms
     catch
         throw:{error,{unknown_query_term,Term}}:S ->
             ?LOG_ERROR(#{
@@ -748,19 +645,20 @@ qterm({query_id, Id}, Context) ->
             }),
             []
     end,
-    qterm(QArgs, Context);
-qterm({rsc_id, Id}, Context) ->
+    qterm(QueryTerms, Context);
+qterm(#{ <<"term">> := <<"rsc_id">>, <<"value">> := Id} = T, Context) ->
     %% rsc_id=<rsc id>
     %% Filter to *only* include the given rsc id. Can be used for resource existence check.
+    Op = extract_term_op(T, <<"=">>),
     #search_sql_term{
         where = [
-            <<"rsc.id = ">>, '$1'
+            <<"rsc.id">>, Op, '$1'
         ],
         args = [
             m_rsc:rid(Id, Context)
         ]
     };
-qterm({name, Name}, Context) ->
+qterm(#{ <<"term">> := <<"name">>, <<"value">> := Name} = T, Context) ->
     %% name=<name-pattern>
     %% Filter on the unique name of a resource.
     case z_string:to_lower(mod_search:trim(z_convert:to_binary(Name), Context)) of
@@ -772,26 +670,39 @@ qterm({name, Name}, Context) ->
             };
         Name1 ->
             Name2 = binary:replace(Name1, <<"*">>, <<"%">>, [global]),
-            #search_sql_term{
-                where = [
-                    <<"rsc.name like ">>, '$1'
-                ],
-                args = [
-                    Name2
-                ]
-            }
+            case binary:match(Name2, <<"%">>) of
+                nomatch ->
+                    Op = extract_term_op(T, <<"=">>),
+                    #search_sql_term{
+                        where = [
+                            <<"rsc.name">>, Op, '$1'
+                        ],
+                        args = [
+                            Name2
+                        ]
+                    };
+                {_,_} ->
+                    #search_sql_term{
+                        where = [
+                            <<"rsc.name like ">>, '$1'
+                        ],
+                        args = [
+                            Name2
+                        ]
+                    }
+            end
     end;
-qterm({language, []}, _Context) ->
+qterm(#{ <<"term">> := <<"language">>, <<"value">> := []}, _Context) ->
     %% language=<iso-code>
     %% Filter on the presence of a translation
     [];
-qterm({language, [ Lang | _ ] = Langs}, Context) when is_list(Lang) ->
+qterm(#{ <<"term">> := <<"language">>, <<"value">> := [ Lang | _ ] = Langs}, Context) when is_list(Lang) ->
     lists:map(
         fun(Code) ->
-            qterm({language, Code}, Context)
+            qterm(#{ <<"term">> => <<"language">>, <<"value">> => Code }, Context)
         end,
         Langs);
-qterm({language, [ Lang | _ ] = Langs}, Context) when is_atom(Lang); is_binary(Lang) ->
+qterm(#{ <<"term">> := <<"language">>, <<"value">> := [ Lang | _ ] = Langs}, Context) when is_atom(Lang); is_binary(Lang) ->
     Langs1 = lists:map(
         fun(Lng) ->
             case to_language_atom(Lng, Context) of
@@ -808,10 +719,7 @@ qterm({language, [ Lang | _ ] = Langs}, Context) when is_atom(Lang); is_binary(L
         ],
         args = [ lists:usort(Langs1) ]
     };
-qterm({language, <<"[", _/binary>> = Langs}, Context) ->
-    Langs1 = maybe_split_list(Langs),
-    qterm({language, Langs1}, Context);
-qterm({language, Lang}, Context) ->
+qterm(#{ <<"term">> := <<"language">>, <<"value">> := Lang}, Context) ->
     case to_language_atom(Lang, Context) of
         {ok, Code} ->
             #search_sql_term{
@@ -826,17 +734,17 @@ qterm({language, Lang}, Context) ->
             % Unknown iso code, ignore
             []
     end;
-qterm({notlanguage, []}, _Context) ->
+qterm(#{ <<"term">> := <<"notlanguage">>, <<"value">> := []}, _Context) ->
     %% notlanguage=<iso-code>
     %% Filter on the presence of a translation
     [];
-qterm({notlanguage, [ Lang | _ ] = Langs}, Context) when is_list(Lang) ->
+qterm(#{ <<"term">> := <<"notlanguage">>, <<"value">> := [ Lang | _ ] = Langs}, Context) when is_list(Lang) ->
     lists:map(
         fun(Code) ->
-            qterm({notlanguage, Code}, Context)
+            qterm(#{ <<"term">> => <<"notlanguage">>, <<"value">> => Code }, Context)
         end,
         Langs);
-qterm({notlanguage, [ Lang | _ ] = Langs}, Context) when is_atom(Lang); is_binary(Lang) ->
+qterm(#{ <<"term">> := <<"notlanguage">>, <<"value">> := [ Lang | _ ] = Langs}, Context) when is_atom(Lang); is_binary(Lang) ->
     Langs1 = lists:map(
         fun(Lng) ->
             case to_language_atom(Lng, Context) of
@@ -853,10 +761,7 @@ qterm({notlanguage, [ Lang | _ ] = Langs}, Context) when is_atom(Lang); is_binar
         ],
         args = [ lists:usort(Langs1) ]
     };
-qterm({notlanguage, <<"[", _/binary>> = Langs}, Context) ->
-    Langs1 = maybe_split_list(Langs),
-    qterm({notlanguage, Langs1}, Context);
-qterm({notlanguage, Lang}, Context) ->
+qterm(#{ <<"term">> := <<"notlanguage">>, <<"value">> := Lang}, Context) ->
     case to_language_atom(Lang, Context) of
         {ok, Code} ->
             #search_sql_term{
@@ -871,45 +776,42 @@ qterm({notlanguage, Lang}, Context) ->
             % Unknown iso code, ignore
             []
     end;
-qterm({sort, Sort}, _Context) ->
+qterm(#{ <<"term">> := <<"sort">>, <<"value">> := Sort}, _Context) ->
     %% sort=fieldname
     %% Order by a given field. Putting a '-' in front of the field name reverts the ordering.
     sort_term(Sort);
-qterm({asort, Sort}, _Context) ->
+qterm(#{ <<"term">> := <<"asort">>, <<"value">> := Sort}, _Context) ->
     asort_term(Sort);
-qterm({zsort, Sort}, _Context) ->
+qterm(#{ <<"term">> := <<"zsort">>, <<"value">> := Sort}, _Context) ->
     zsort_term(Sort);
-qterm({facet, Facets}, Context) when is_map(Facets) ->
-    maps:fold(
-        fun(Facet, Value, Acc) ->
-            Terms = qterm({{facet, Facet}, Value}, Context),
-            [ Terms | Acc ]
-        end,
-        [],
-        Facets);
-qterm({{facet, Field}, <<"[", _>> = V}, Context) ->
-    %% facet.foo=value
-    %% Add a join with the search_facet table.
-    V1 = maybe_split_list(V),
-    qterm({{facet, Field}, V1}, Context);
-qterm({{facet, Field}, V}, Context) ->
+qterm(#{ <<"term">> := <<"facet:", Field/binary>>, <<"value">> := V}, Context) ->
     case search_facet:qterm(sql_safe(Field), V, Context) of
         {ok, Res1} ->
             Res1;
         {error, _} ->
             none
     end;
-qterm({filter, R}, Context) ->
+qterm(#{ <<"term">> := <<"filter">>, <<"value">> := R}, Context) ->
     add_filters(R, Context);
-qterm({{filter, Field}, V}, Context) ->
+qterm(#{ <<"term">> := <<"filter:", Field/binary>>, <<"value">> := V } = T, Context) ->
     {Tab, Alias, Col, Q1} = map_filter_column(Field, #search_sql_term{}),
-    case pivot_qterm(Tab, Alias, Col, V, Q1, Context) of
+    Op = extract_term_op(T, undefined),
+    case pivot_qterm(Tab, Alias, Col, V, Op, Q1, Context) of
         {ok, QTerm} ->
             QTerm;
         {error, _} ->
             none
     end;
-qterm({text, Text}, Context) ->
+qterm(#{ <<"term">> := <<"pivot:", _/binary>> = Field, <<"value">> := V} = T, Context) ->
+    {Tab, Alias, Col, Q1} = map_filter_column(Field, #search_sql_term{}),
+    Op = extract_term_op(T, undefined),
+    case pivot_qterm(Tab, Alias, Col, Op, V, Q1, Context) of
+        {ok, QTerm} ->
+            QTerm;
+        {error, _} ->
+            none
+    end;
+qterm(#{ <<"term">> := <<"text">>, <<"value">> := Text}, Context) ->
     %% text=...
     %% Perform a fulltext search
     case mod_search:trim(z_convert:to_binary(Text), Context) of
@@ -942,7 +844,7 @@ qterm({text, Text}, Context) ->
                 ]
             }
     end;
-qterm({match_objects, RId}, Context) ->
+qterm(#{ <<"term">> := <<"match_objects">>, <<"value">> := RId}, Context) ->
     %% match_objects=<id>
     %% Match on the objects of the resource, best matching return first.
     %% Similar to the {match_objects id=...} query.
@@ -956,7 +858,7 @@ qterm({match_objects, RId}, Context) ->
                 {id_exclude, Id}
             ], Context)
     end;
-qterm({match_object_ids, ObjectIds}, Context) ->
+qterm(#{ <<"term">> := <<"match_object_ids">>, <<"value">> := ObjectIds}, Context) ->
     ObjectIds1 = [ m_rsc:rid(OId, Context) || OId <- lists:flatten(ObjectIds) ],
     MatchTerms = [ ["zpo",integer_to_list(ObjId)] || ObjId <- ObjectIds1, is_integer(ObjId) ],
     TsQuery = lists:flatten(lists:join("|", MatchTerms)),
@@ -979,7 +881,7 @@ qterm({match_object_ids, ObjectIds}, Context) ->
                 ]
             }
     end;
-qterm({date_start_after, Date}, Context) ->
+qterm(#{ <<"term">> := <<"date_start_after">>, <<"value">> := Date}, Context) ->
     %% date_start_after=date
     %% Filter on date_start after a specific date.
     #search_sql_term{
@@ -990,7 +892,7 @@ qterm({date_start_after, Date}, Context) ->
             z_datetime:to_datetime(Date, Context)
         ]
     };
-qterm({date_start_before, Date}, Context) ->
+qterm(#{ <<"term">> := <<"date_start_before">>, <<"value">> := Date}, Context) ->
     %% date_start_after=date
     %% Filter on date_start before a specific date.
     #search_sql_term{
@@ -1001,7 +903,7 @@ qterm({date_start_before, Date}, Context) ->
             z_datetime:to_datetime(Date, Context)
         ]
     };
-qterm({date_start_year, Year}, _Context) ->
+qterm(#{ <<"term">> := <<"date_start_year">>, <<"value">> := Year}, _Context) ->
     %% date_start_year=year
     %% Filter on year of start date
     #search_sql_term{
@@ -1012,7 +914,7 @@ qterm({date_start_year, Year}, _Context) ->
             z_convert:to_integer(Year)
         ]
     };
-qterm({date_end_after, Date}, Context) ->
+qterm(#{ <<"term">> := <<"date_end_after">>, <<"value">> := Date}, Context) ->
     %% date_end_after=date
     %% Filter on date_end after a specific date.
     #search_sql_term{
@@ -1023,7 +925,7 @@ qterm({date_end_after, Date}, Context) ->
             z_datetime:to_datetime(Date, Context)
         ]
     };
-qterm({date_end_before, Date}, Context) ->
+qterm(#{ <<"term">> := <<"date_end_before">>, <<"value">> := Date}, Context) ->
     %% date_end_after=date
     %% Filter on date_end before a specific date.
     #search_sql_term{
@@ -1034,40 +936,43 @@ qterm({date_end_before, Date}, Context) ->
             z_datetime:to_datetime(Date, Context)
         ]
     };
-qterm({date_end_year, Year}, _Context) ->
+qterm(#{ <<"term">> := <<"date_end_year">>, <<"value">> := Year} = T, _Context) ->
     %% date_end_year=year
     %% Filter on year of end date
+    Op = extract_term_op(T, <<"=">>),
     #search_sql_term{
         where = [
-            <<"date_part('year', rsc.pivot_date_end) = ">>, '$1'
+            <<"date_part('year', rsc.pivot_date_end)">>, Op, '$1'
         ],
         args = [
             z_convert:to_integer(Year)
         ]
     };
-qterm({publication_year, Year}, _Context) ->
+qterm(#{ <<"term">> := <<"publication_year">>, <<"value">> := Year} = T, _Context) ->
     %% publication_year=year
     %% Filter on year of publication
+    Op = extract_term_op(T, <<"=">>),
     #search_sql_term{
         where = [
-            <<"date_part('year', rsc.publication_start) = ">>, '$1'
+            <<"date_part('year', rsc.publication_start)">>, Op, '$1'
         ],
         args = [
             z_convert:to_integer(Year)
         ]
     };
-qterm({publication_month, Month}, _Context) ->
+qterm(#{ <<"term">> := <<"publication_month">>, <<"value">> := Month} = T, _Context) ->
     %% publication_month=month
     %% Filter on month of publication
+    Op = extract_term_op(T, <<"=">>),
     #search_sql_term{
         where = [
-            <<"date_part('month', rsc.publication_start) = ">>, '$1'
+            <<"date_part('month', rsc.publication_start)">>, Op, '$1'
         ],
         args = [
             z_convert:to_integer(Month)
         ]
     };
-qterm({publication_after, Date}, Context) ->
+qterm(#{ <<"term">> := <<"publication_after">>, <<"value">> := Date}, Context) ->
     #search_sql_term{
         where = [
             <<"rsc.publication_start >= ">>, '$1'
@@ -1076,7 +981,7 @@ qterm({publication_after, Date}, Context) ->
             z_datetime:to_datetime(Date, Context)
         ]
     };
-qterm({publication_before, Date}, Context) ->
+qterm(#{ <<"term">> := <<"publication_before">>, <<"value">> := Date}, Context) ->
     #search_sql_term{
         where = [
             <<"rsc.publication_start <= ">>, '$1'
@@ -1085,7 +990,7 @@ qterm({publication_before, Date}, Context) ->
             z_datetime:to_datetime(Date, Context)
         ]
     };
-qterm({{custom, Term}, Arg}, Context) ->
+qterm(#{ <<"term">> := Term, <<"value">> := Arg}, Context) ->
     case z_notifier:first(#search_query_term{ term = Term, arg = Arg }, Context) of
         undefined ->
             ?LOG_WARNING(#{
@@ -1101,10 +1006,7 @@ qterm({{custom, Term}, Arg}, Context) ->
             [];
         #search_sql_term{} = SQL ->
             SQL
-    end;
-qterm(Term, _Context) ->
-    %% No match found
-    throw({error, {unknown_query_term, Term}}).
+    end.
 
 %%
 %% Helper functions
@@ -1120,9 +1022,17 @@ to_language_atom(Code, _Context) ->
 
 %% @doc Parse hassubject and hasobject edges.
 -spec parse_edges(hassubject | hasobject, list(), z:context()) -> #search_sql_term{}.
-parse_edges(Term, [[Id, Predicate]], Context) ->
-    parse_edges(Term, [[Id, Predicate, "rsc"]], Context);
-parse_edges(hassubject, [[Id, Predicate, JoinAlias]], Context) ->
+parse_edges(Term, [H|_] = Es, Context) when is_list(H) ->
+    lists:map(
+        fun(E) ->
+            parse_edges(Term, E, Context)
+        end,
+        Es);
+parse_edges(Term, Id, Context) when is_number(Id); is_binary(Id); is_atom(Id) ->
+    parse_edges(Term, [Id], Context);
+parse_edges(Term, [Id, Predicate], Context) ->
+    parse_edges(Term, [Id, Predicate, <<"rsc">>], Context);
+parse_edges(hassubject, [Id, Predicate, JoinAlias], Context) ->
     JoinAlias1 = sql_safe(JoinAlias),
     #search_sql_term{
         where = [
@@ -1144,7 +1054,7 @@ parse_edges(hassubject, [Id], Context) ->
             m_rsc:rid(Id, Context)
         ]
     };
-parse_edges(hasobject, [[Id, Predicate, JoinAlias]], Context) ->
+parse_edges(hasobject, [Id, Predicate, JoinAlias], Context) ->
     JoinAlias1 = sql_safe(JoinAlias),
     #search_sql_term{
         where = [
@@ -1223,8 +1133,10 @@ add_order(<<C, "edge.", Column/binary>>, Search) when C =:= $-; C =:= $+ ->
         sort = Search#search_sql_term.sort
                ++ [ {edge, C, Column1} ]
     };
-add_order(<<C, "pivot.", Pivot/binary>>, Search)  when C =:= $-; C =:= $+ ->
-    case binary:split(Pivot, <<".">>) of
+add_order(<<C, "pivot.", _/binary>> = S, Search) when C =:= $-; C =:= $+ ->
+    add_order(binary:replace(S, <<".">>, <<":">>, [global]), Search);
+add_order(<<C, "pivot:", Pivot/binary>>, Search)  when C =:= $-; C =:= $+ ->
+    case binary:split(Pivot, <<":">>) of
         [ PivotTable, Column ] ->
             Tab1 = sql_safe(<<"pivot_", PivotTable/binary>>),
             Col1 = sql_safe(Column),
@@ -1244,7 +1156,9 @@ add_order(<<C, "pivot.", Pivot/binary>>, Search)  when C =:= $-; C =:= $+ ->
                        ++ [ {<<"rsc">>, C, Col2} ]
             }
     end;
-add_order(<<C, "facet.", Column/binary>>, Search)  when C =:= $-; C =:= $+ ->
+add_order(<<C, "facet.", _/binary>> = S, Search) when C =:= $-; C =:= $+ ->
+    add_order(binary:replace(S, <<".">>, <<":">>, [global]), Search);
+add_order(<<C, "facet:", Column/binary>>, Search)  when C =:= $-; C =:= $+ ->
     Col1 = <<"f_", Column/binary>>,
     Col2 = sql_safe(Col1),
     Join = Search#search_sql_term.join_inner,
@@ -1377,23 +1291,24 @@ assure_category_1(Name, Context) ->
 %             ok
 %     end.
 
--spec pivot_qterm(Table, Alias, Column, Value, Q, Context) -> {ok, QResult} | {error, term()}
+-spec pivot_qterm(Table, Alias, Column, Value, Op, Q, Context) -> {ok, QResult} | {error, term()}
     when Table :: binary(),
          Alias :: binary(),
          Column :: binary(),
+         Op :: binary() | undefined,
          Value :: term(),
          Q :: #search_sql_term{},
          QResult :: #search_sql_term{},
          Context :: z:context().
-pivot_qterm(_Tab, _Alias, _Col, [], Q, _Context) ->
+pivot_qterm(_Tab, _Alias, _Col, _Op, [], Q, _Context) ->
     {ok, Q};
-pivot_qterm(Tab, Alias, Col, [Value], Q, Context) ->
-    pivot_qterm_1(Tab, Alias, Col, Value, Q, Context);
-pivot_qterm(Tab, Alias, Col, Vs, Q, Context) when is_list(Vs) ->
+pivot_qterm(Tab, Alias, Col, Op, [Value], Q, Context) ->
+    pivot_qterm_1(Tab, Alias, Col, Op, Value, Q, Context);
+pivot_qterm(Tab, Alias, Col, Op, Vs, Q, Context) when is_list(Vs) ->
     % 'OR' query for all values
     Q2 = lists:foldl(
         fun(V, QAcc) ->
-            case pivot_qterm_1(Tab, Alias, Col, V, QAcc, Context) of
+            case pivot_qterm_1(Tab, Alias, Col, Op, V, QAcc, Context) of
                 {ok, QAcc1} ->
                     QAcc1;
                 {error, _} ->
@@ -1410,12 +1325,18 @@ pivot_qterm(Tab, Alias, Col, Vs, Q, Context) when is_list(Vs) ->
         ]
     },
     {ok, Q3};
-pivot_qterm(Tab, Alias, Col, Value, Q, Context) ->
-    pivot_qterm_1(Tab, Alias, Col, Value, Q, Context).
+pivot_qterm(Tab, Alias, Col, Op, Value, Q, Context) ->
+    pivot_qterm_1(Tab, Alias, Col, Op, Value, Q, Context).
 
-pivot_qterm_1(Tab, Alias, Col, Value, Query, Context) ->
-    {Op, Value1} = extract_op(Value),
-    case z_db:to_column_value(Tab, Col, Value1, Context) of
+pivot_qterm_1(Tab, Alias, Col, undefined, Value, Query, Context) ->
+    {Op, Value1} = extract_value_op(Value, <<"=">>),
+    pivot_qterm_op(Tab, Alias, Col, Op, Value1, Query, Context);
+pivot_qterm_1(Tab, Alias, Col, Op, Value, Query, Context) ->
+    {Op, Value1} = extract_value_op(Value, Op),
+    pivot_qterm_op(Tab, Alias, Col, Op, Value1, Query, Context).
+
+pivot_qterm_op(Tab, Alias, Col, Op, Value, Query, Context) ->
+    case z_db:to_column_value(Tab, Col, Value, Context) of
         {ok, Value2} ->
             {ArgN, Query2} = add_term_arg(Value2, Query),
             W = [
@@ -1434,7 +1355,7 @@ pivot_qterm_1(Tab, Alias, Col, Value, Query, Context) ->
                 table => Tab,
                 alias => Alias,
                 column => Col,
-                value => Value1
+                value => Value
             }),
             Error
     end.
@@ -1443,32 +1364,53 @@ add_term_arg(ArgValue, #search_sql_term{ args = Args } = Q) ->
     Arg = [$$] ++ integer_to_list(length(Args) + 1),
     {list_to_atom(Arg), Q#search_sql_term{args = Args ++ [ ArgValue ]}}.
 
-extract_op(<<"=", V/binary>>) ->
-    {"=", V};
-extract_op(<<">", V/binary>>) ->
-    {">", V};
-extract_op(<<"<", V/binary>>) ->
-    {"<", V};
-extract_op(<<"<=", V/binary>>) ->
-    {"<=", V};
-extract_op(<<">=", V/binary>>) ->
-    {">=", V};
-extract_op(<<"!=", V/binary>>) ->
-    {"<>", V};
-extract_op(<<"<>", V/binary>>) ->
-    {"<>", V};
-extract_op(V) ->
-    {"=", V}.
+% extract_value_op(#{
+%         <<"operator">> := Op,
+%         <<"value">> := V
+%     }) ->
+%     {sanitize_op(z_convert:to_binary(Op)), V};
+% extract_value_op(#{
+%         <<"value">> := V
+%     }) ->
+%     {<<"=">>, V};
+extract_value_op(<<"=", V/binary>>, _Op) ->
+    {<<"=">>, V};
+extract_value_op(<<">", V/binary>>, _Op) ->
+    {<<">">>, V};
+extract_value_op(<<"<", V/binary>>, _Op) ->
+    {<<"<">>, V};
+extract_value_op(<<"<=", V/binary>>, _Op) ->
+    {<<"<=">>, V};
+extract_value_op(<<">=", V/binary>>, _Op) ->
+    {<<">=">>, V};
+extract_value_op(<<"!=", V/binary>>, _Op) ->
+    {<<"<>">>, V};
+extract_value_op(<<"<>", V/binary>>, _Op) ->
+    {<<"<>">>, V};
+extract_value_op(V, Op) ->
+    {Op, V}.
 
+extract_term_op(#{ <<"operator">> := Op }, _Op) ->
+    sanitize_op(z_convert:to_binary(Op));
+extract_term_op(_, Op) ->
+    Op.
 
+sanitize_op(<<"=">>) -> <<"=">>;
+sanitize_op(<<">">>) -> <<">">>;
+sanitize_op(<<"<">>) -> <<"<">>;
+sanitize_op(<<">=">>) -> <<">=">>;
+sanitize_op(<<"<=">>) -> <<"<=">>;
+sanitize_op(<<"!=">>) -> <<"<>">>;
+sanitize_op(<<"<>">>) -> <<"<>">>;
+sanitize_op(_) -> <<"=">>.
 
 
 add_filters(Filters, Context) ->
     add_filters(Filters, #search_sql_term{}, Context).
 
 %% Add filters
-add_filters(<<"[", _/binary>> = Filter, Q, Context) ->
-    add_filters(maybe_split_list(Filter), Q, Context);
+% add_filters(<<"[", _/binary>> = Filter, Q, Context) ->
+%     add_filters(maybe_split_list(Filter), Q, Context);
 add_filters([ [Column|_] | _ ] = Filters, Q, Context)
     when is_list(Column);
          is_binary(Column);
@@ -1530,8 +1472,10 @@ create_filter(_Tab, Alias, Col, Operator, Value, Q) ->
     {[Alias, $., Col, <<" ">>, Operator1, <<" ">>, Arg], Q1}.
 
 
-map_filter_column(<<"pivot.", P/binary>>, #search_sql_term{ join_inner = Join } = Q) ->
-    case binary:split(P, <<".">>) of
+map_filter_column(<<"pivot.", _/binary>> = P, Q) ->
+    map_filter_column(binary:replace(P, <<".">>, <<":">>, [global]), Q);
+map_filter_column(<<"pivot:", P/binary>>, #search_sql_term{ join_inner = Join } = Q) ->
+    case binary:split(P, <<":">>) of
         [ Table, Field ] ->
             T1 = sql_safe(Table),
             T2 = <<"pivot_", T1/binary>>,
@@ -1546,7 +1490,9 @@ map_filter_column(<<"pivot.", P/binary>>, #search_sql_term{ join_inner = Join } 
             F1 = z_convert:to_binary(sql_safe(Field)),
             {<<"rsc">>, <<"rsc">>, <<"pivot_", F1/binary>>, Q}
     end;
-map_filter_column(<<"facet.", P/binary>>, #search_sql_term{ join_inner = Join } = Q) ->
+map_filter_column(<<"facet.", _/binary>> = P, Q) ->
+    map_filter_column(binary:replace(P, <<".">>, <<":">>, [global]), Q);
+map_filter_column(<<"facet:", P/binary>>, #search_sql_term{ join_inner = Join } = Q) ->
     Q1 = Q#search_sql_term{
         join_inner = Join#{
             <<"facet">> => {<<"search_facet">>, <<"facet.id = rsc.id">>}
@@ -1604,38 +1550,16 @@ map_filter_operator(<<"<=">>) -> "<=";
 map_filter_operator(Op) -> throw({error, {unknown_filter_operator, Op}}).
 
 
-% Convert an expression like [123,hasdocument]
-maybe_split_list(<<"[", _/binary>> = Term) ->
-    unquote_all(search_parse_list:parse(Term));
-maybe_split_list("[" ++ _ = Term) ->
-    unquote_all(search_parse_list:parse(Term));
-maybe_split_list(Other) ->
-    [ Other ].
-
-unquote_all(L) when is_list(L) ->
-    lists:map(fun unquote_all/1, L);
-unquote_all(B) when is_binary(B) ->
-    unquot(z_string:trim(B));
-unquote_all(T) ->
-    T.
-
-unquot(<<C, Rest/binary>>) when C =:= $'; C =:= $"; C =:= $` ->
-    binary:replace(Rest, <<C>>, <<>>);
-unquot([C|Rest]) when C =:= $'; C =:= $"; C =:= $` ->
-    [ X || X <- Rest, X =/= C ];
-unquot(B) ->
-    B.
-
 %% Expand the argument for hasanyobject, make pairs of {ObjectId,PredicateId}
 expand_object_predicates(Bin, Context) when is_binary(Bin) ->
-    map_rids(search_parse_list:parse(Bin), Context);
+    map_rids(z_parse_list:parse(Bin), Context);
 expand_object_predicates(OPs, Context) ->
     map_rids(OPs, Context).
 
 map_rids({rsc_list, L}, Context) ->
     map_rids(L, Context);
 map_rids(L, Context) when is_list(L) ->
-    [ map_rid(unquot(X),Context) || X <- L, X =/= <<>> ];
+    [ map_rid(X,Context) || X <- L, X =/= <<>> ];
 map_rids(Id, Context) ->
     map_rid(Id, Context).
 
@@ -1653,30 +1577,7 @@ rid(<<>>, _Context) -> any;
 rid(Id, _Context) when is_integer(Id) -> Id;
 rid(Id, Context) -> m_rsc:rid(Id, Context).
 
-predicate_to_id([$'|_] = Name, Context) ->
-    case lists:last(Name) of
-        $' -> predicate_to_id_1(z_string:trim(Name, $'), Context);
-        _ -> predicate_to_id_1(Name, Context)
-    end;
-predicate_to_id([$"|_] = Name, Context) ->
-    case lists:last(Name) of
-        $" -> predicate_to_id_1(z_string:trim(Name, $"), Context);
-        _ -> predicate_to_id_1(Name, Context)
-    end;
-predicate_to_id(<<$', _/binary>> = Name, Context) ->
-    case binary:last(Name) of
-        $' -> predicate_to_id_1(z_string:trim(Name, $'), Context);
-        _ -> predicate_to_id_1(Name, Context)
-    end;
-predicate_to_id(<<$", _/binary>> = Name, Context) ->
-    case binary:last(Name) of
-        $" -> predicate_to_id_1(z_string:trim(Name, $"), Context);
-        _ -> predicate_to_id_1(Name, Context)
-    end;
 predicate_to_id(Pred, Context) ->
-    predicate_to_id_1(Pred, Context).
-
-predicate_to_id_1(Pred, Context) ->
     case m_predicate:name_to_id(Pred, Context) of
         {ok, Id} ->
             Id;

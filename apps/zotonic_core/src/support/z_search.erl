@@ -535,49 +535,15 @@ opt_props(L) when is_list(L) ->
 opt_props(P) ->
     z_convert:to_bool(P).
 
-%% @doc Change a search props list to a map with binary keys.
--spec props_to_map( proplists:proplist() | map() ) -> #{ binary() => term() }.
+%% @doc Change a search props list to a standard query format.
+-spec props_to_map( list() | map() | undefined ) -> #{ binary() => term() }.
 props_to_map(Props) when is_map(Props) ->
-    maps:fold(
-        fun(K, V, Acc) ->
-            Acc#{ z_convert:to_binary(K) => V }
-        end,
-        #{},
-        Props);
-props_to_map(Props) ->
-    {Map, _} = lists:foldr(fun props_to_map_fun/2, {#{}, #{}}, Props),
-    Map.
+    z_search_props:from_map(Props);
+props_to_map(Props) when is_list(Props) ->
+    z_search_props:from_list(Props);
+props_to_map(undefined) ->
+    z_search_props:from_list([]).
 
-props_to_map_fun({K, V}, Acc) when is_atom(K); is_list(K) ->
-    props_to_map_fun_1({z_convert:to_binary(K), V}, Acc);
-props_to_map_fun({K, V}, Acc) ->
-    props_to_map_fun_1({K, V}, Acc).
-
-props_to_map_fun_1({K, V}, {Acc, Counts}) ->
-    case maps:get(K, Counts, 0) of
-        0 ->
-            Acc1 = Acc#{ K => V },
-            Counts1 = Counts#{ K => 1 },
-            {Acc1, Counts1};
-        1 ->
-            V1 = #{
-                <<"all">> => [
-                    V,
-                    maps:get(K, Acc)
-                ]
-            },
-            Acc1 = Acc#{ K => V1 },
-            Counts1 = Counts#{ K => 2 },
-            {Acc1, Counts1};
-        N ->
-            #{ <<"all">> := Vs } = maps:get(K, Acc),
-            V1 = #{
-                <<"all">> => [ V | Vs ]
-            },
-            Acc1 = Acc#{ K => V1 },
-            Counts1 = Counts#{ K => N + 1 },
-            {Acc1, Counts1}
-    end.
 
 %% @doc Given a query as proplist or map, return all results.
 -spec query_( proplists:proplist() | map(), z:context() ) -> list( m_rsc:resource_id() ).

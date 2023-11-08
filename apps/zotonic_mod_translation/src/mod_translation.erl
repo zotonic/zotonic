@@ -297,6 +297,10 @@ observe_set_user_language(#set_user_language{}, Context, _Context) ->
 
 observe_url_rewrite(#url_rewrite{}, Url, #context{language=[_,'x-default']}) ->
     Url;
+observe_url_rewrite(#url_rewrite{}, <<"?", _/binary>> = Url, _Context) ->
+    Url;
+observe_url_rewrite(#url_rewrite{}, <<"#", _/binary>> = Url, _Context) ->
+    Url;
 observe_url_rewrite(#url_rewrite{args=Args}, Url, Context) ->
     case z_context:language(Context) of
         undefined ->

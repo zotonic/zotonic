@@ -1,11 +1,11 @@
-<ul class="pagination pagination-centered">
-    <li {% if not prev_url %}class="disabled"{% endif %}><a href="{{ prev_url }}#content-pager">←</a></li>
+<ul class="pagination pagination-centered" {% if topic %}data-onclick-topic="{{ topic|escape }}"{% endif %}>
+    <li {% if not prev_url %}class="disabled"{% endif %}><a href="{{ prev_url }}{{ hash }}">←</a></li>
     {% for nr, url in pages %}
         {% if nr %}
-            <li {% if nr == page %}class="active"{% endif %}><a href="{{ url }}#content-pager">{{ nr }}</a></li>
+            <li {% if nr == page %}class="active"{% endif %}><a href="{{ url }}{{ hash }}">{{ nr }}</a></li>
         {% else %}
-            <li><a href="{{ url }}#content-pager">…</a></li>
+            <li><a href="{{ url }}{{ hash }}">…</a></li>
         {% endif %}
     {% endfor %}
-    <li {% if not next_url %}class="disabled"{% endif %}><a href="{{ next_url }}#content-pager">→</a></li>
+    <li {% if not next_url %}class="disabled"{% endif %}><a href="{{ next_url }}{{ hash }}">→</a></li>
 </ul>
