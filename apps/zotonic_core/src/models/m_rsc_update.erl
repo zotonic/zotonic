@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2023 Marc Worrell, Arjan Scherpenisse
 %% @doc Update routines for resources.  For use by the m_rsc module.
+%% @end
 
 %% Copyright 2009-2023 Marc Worrell, Arjan Scherpenisse
 %%
@@ -983,19 +984,32 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
     end,
 
     % 7. Ensure that the publication_start is set if the is_published flag is set
-    NewPropsDiffPub = case NewPropsDiffTz of
-        #{ <<"is_published">> := true, <<"publication_start">> := {_, _} } ->
-            NewPropsDiffTz;
-        #{ <<"is_published">> := true } ->
-            case maps:get(<<"publication_start">>, Raw, undefined) of
-                undefined ->
-                    NewPropsDiffTz#{
-                        <<"publication_start">> => calendar:universal_time()
-                    };
-                _ ->
-                    NewPropsDiffTz
-            end;
-        #{} ->
+    IsPublished = case NewPropsDiffTz of
+        #{ <<"is_published">> := IsPub } ->
+            IsPub;
+        _ ->
+            case Raw of
+                #{ <<"is_published">> := IsPub } -> IsPub;
+                _ -> false
+            end
+    end,
+    HasPubStart = case NewPropsDiffTz of
+        #{ <<"publication_start">> := {_, _} } ->
+            true;
+        #{ <<"publication_start">> := undefined } ->
+            false;
+        _ ->
+            case Raw of
+                #{ <<"publication_start">> := {_, _} } -> true;
+                _ -> false
+            end
+    end,
+    NewPropsDiffPub = if
+        IsPublished and not HasPubStart ->
+            NewPropsDiffTz#{
+                <<"publication_start">> => calendar:universal_time()
+            };
+        true ->
             NewPropsDiffTz
     end,
 
