@@ -275,7 +275,7 @@ is_sudo(_) ->
     false.
 
 %% @doc Call a function with admin privileges.
--spec sudo( Fun, z:context() ) -> any()
+-spec sudo( Fun, z:context() | atom() ) -> any()
     when Fun :: { module(), atom() }
              | mfa()
              | fun( (z:context()) -> any() ).
@@ -286,16 +286,17 @@ sudo({M,F,A}, Context) ->
 sudo(F, Context) when is_function(F, 1) ->
     F(set_admin(Context)).
 
--spec sudo(z:context()) -> z:context().
+-spec sudo(z:context() | atom()) -> z:context().
 sudo(Context) ->
     set_admin(Context).
 
--spec set_admin(z:context()) -> z:context().
+-spec set_admin(z:context() | atom()) -> z:context().
 set_admin(#context{ acl = undefined } = Context) ->
     Context#context{ acl = admin, user_id = ?ACL_ADMIN_USER_ID };
-set_admin(Context) ->
-    Context#context{ acl = admin }.
-
+set_admin(#context{} = Context) ->
+    Context#context{ acl = admin };
+set_admin(Site) when is_atom(Site) ->
+    set_admin(z_context:new(Site)).
 
 %% @doc Check if an admin is logged on and the read only flag is not set.
 %% Exception for sudo, where updates are always allowed.
