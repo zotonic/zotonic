@@ -127,37 +127,55 @@ observe_dispatch(#dispatch{path=Path}, Context) ->
                 <<"/", _/binary>> -> Path;
                 _ -> <<"/", Path/binary>>
             end,
-            Last = last(SlashPath),
-            Template= case Last of
-                         $/ -> <<"static", SlashPath/binary, "index.tpl">>;
-                         _ -> <<"static", SlashPath/binary, ".tpl">>
-                      end,
-            case z_module_indexer:find(template, Template, Context) of
-                {ok, _} ->
-                    {ok, #dispatch_match{
-                        mod=controller_template,
-                        mod_opts=[{template, Template}, {ssl, any}],
-                        bindings=[]
-                    }};
-                {error, _} ->
-                    % Check again, assuming the path is a directory (without trailing $/)
-                    case Last of
-                        $/ -> undefined;
-                        $. -> undefined;
-                        _ ->
-                            Template1 = <<"static", SlashPath/binary, "/index.tpl">>,
-                            case z_module_indexer:find(template, Template1, Context) of
-                                {ok, _} ->
-                                    {ok, #dispatch_match{
-                                        mod=controller_template,
-                                        mod_opts=[{template, Template1}, {ssl, any}],
-                                        bindings=[]
-                                    }};
-                                {error, _} ->
-                                    undefined
-                            end
-                    end
+            case filename:extension(SlashPath) of
+                <<".tpl">> ->
+                    undefined;
+                _ ->
+                    find_static_file(SlashPath, Context)
             end
+    end.
+
+find_static_file(SlashPath, Context) ->
+    Lang = z_convert:to_binary(z_context:language(Context)),
+    Files = case last(SlashPath) of
+        $/ ->
+            [
+                <<"static/", Lang/binary, SlashPath/binary, "index.tpl">>,
+                <<"static", SlashPath/binary, "index.tpl">>
+            ];
+        _ ->
+            [
+                <<"static/", Lang/binary, SlashPath/binary, ".tpl">>,
+                <<"static", SlashPath/binary, ".tpl">>,
+                <<"static/", Lang/binary, SlashPath/binary>>,
+                <<"static", SlashPath/binary>>,
+                <<"static/", Lang/binary, SlashPath/binary, "/index.tpl">>,
+                <<"static", SlashPath/binary, "/index.tpl">>
+            ]
+    end,
+    find_static_files_first(Files, Context).
+
+find_static_files_first([], _Context) ->
+    undefined;
+find_static_files_first([F|Fs], Context) ->
+    case z_module_indexer:find(template, F, Context) of
+        {ok, #module_index{ filepath = Filepath }} ->
+            case filename:extension(F) of
+                <<".tpl">> ->
+                    {ok, #dispatch_match{
+                        mod = controller_template,
+                        mod_opts = [ {template, F} ],
+                        bindings = []
+                    }};
+                _ ->
+                    {ok, #dispatch_match{
+                        mod = controller_static_pages,
+                        mod_opts = [ {fullpath, Filepath} ],
+                        bindings = []
+                    }}
+            end;
+        {error, _} ->
+            find_static_files_first(Fs, Context)
     end.
 
 last(<<>>) -> $/;
