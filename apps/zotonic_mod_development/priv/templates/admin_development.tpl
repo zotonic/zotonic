@@ -160,10 +160,19 @@
 </div>
 
 <div class="widget">
+
+
     <div class="widget-header">
         {_ Dispatch rule debugging _}
     </div>
     <div class="widget-content">
+        <p>
+            <a href="{% url admin_development_dispatch_details %}">{_ View all dispatch rules  _} &gt;</a>
+        </p>
+        <p class="help-block">{_ View all dispatch rules and hostnames usable in the site. _}</p>
+
+        <hr />
+
         <p>{_ Match a request URL, display matched dispatch rule. _}</p>
 
         {% wire id="explain-dispatch" type="submit"

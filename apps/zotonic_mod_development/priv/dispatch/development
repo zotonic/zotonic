@@ -7,5 +7,7 @@
  {admin_development_templates_trace, ["admin", "development", "templates", "trace"], controller_admin, [{template, "admin_development_templates_trace.tpl"}, {selected, "development"}]},
  {admin_development_templates_graph, ["admin", "development", "templates", "graph"], controller_admin, [{template, "admin_development_templates_graph.tpl"}, {selected, "development"}]},
 
+ {admin_development_dispatch_details, ["admin", "development", "dispatch"], controller_admin, [{template, "admin_development_dispatch_details.tpl"}, {selected, "development"}]},
+
  {admin_development_observers, ["admin", "development", "observers"], controller_admin, [{template, "admin_development_observers.tpl"}, {selected, "development"}]}
 ].
