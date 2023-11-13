@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell
-%% Date: 2009-06-08
+%% @copyright 2009-2023 Marc Worrell
 %% @doc The base module, implementing basic Zotonic scomps, actions, models and validators.
+%% @end
 
-%% Copyright 2009-2021 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
