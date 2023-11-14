@@ -90,10 +90,18 @@ all(Context) ->
                 {M, z_utils:index_proplist(key, CMs)}
                 || {M, CMs} <- z_utils:group_proplists(module, Cs)
             ],
-            Indexed1 = [
-                {z_convert:to_atom(M), [{z_convert:to_atom(K), Vs} || {K, Vs} <- CMs]}
-                || {M, CMs} <- Indexed
-            ],
+            Indexed1 = lists:map(
+                fun({M, CMs}) ->
+                    CMs1 = lists:map(
+                        fun({K, Vs}) ->
+                            K1 = z_convert:to_atom(K),
+                            Vs1 = set_is_secret(z_convert:to_binary(K), Vs),
+                            {K1, Vs1}
+                        end,
+                        CMs),
+                    {z_convert:to_atom(M), CMs1}
+                end,
+                Indexed),
             z_depcache:set(config, Indexed1, ?DAY, Context),
             Indexed1
     end.
@@ -361,6 +369,24 @@ set_prop(Module, Key, Prop, PropValue, Context) ->
         {error, _} = Error ->
             Error
     end.
+
+
+set_is_secret(Key, CMs) ->
+    case proplists:get_value(is_secret, CMs) of
+        undefined ->
+            [ {is_secret, is_secret_key(Key)} | proplists:delete(is_secret, CMs) ];
+        V ->
+            z_convert:to_bool(V)
+    end.
+
+is_secret_key(<<"password_min_length">>) -> false;
+is_secret_key(<<"password_regex">>) -> false;
+is_secret_key(<<"s3key">>) -> false;
+is_secret_key(K) ->
+    binary:match(K, <<"password">>) /= nomatch
+    orelse binary:match(K, <<"secret">>) /= nomatch
+    orelse binary:match(K, <<"key">>) /= nomatch.
+
 
 %% @doc Get a "complex" config value.
 -spec get_prop(Module, Key, Prop, Context) -> Value | undefined when
