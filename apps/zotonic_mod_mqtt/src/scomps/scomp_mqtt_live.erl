@@ -160,7 +160,10 @@ maybe_add_q(_, Context) ->
 
 add_q(undefined, Context) ->
     Context;
-add_q(Qs, Context) when is_list(Qs); is_map(Qs) ->
+add_q([ {K, _} | _ ] = Qs, Context) when is_binary(K) ->
+    Context1 = z_context:delete_q([ <<"topic">>, <<"message">> ], Context),
+    z_context:add_q(Qs, Context1);
+add_q(Qs, Context) when is_map(Qs) ->
     Context1 = z_context:delete_q([ <<"topic">>, <<"message">> ], Context),
     z_context:add_q(Qs, Context1);
 add_q(V, Context) ->

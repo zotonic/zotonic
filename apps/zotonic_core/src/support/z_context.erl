@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2023  Marc Worrell
 %% @doc Request context for Zotonic request evaluation.
+%% @end
 
 %% Copyright 2009-2023 Marc Worrell
 %%
@@ -660,7 +661,7 @@ set_q(KVs, Context) when is_list(KVs) ->
 %%      arguments.
 %%      Always filter the #upload{} arguments to prevent upload of non-temp files.
 -spec add_q(Key, Value, Context) -> NewContext when
-    Key :: binary()|string()|atom(),
+    Key :: binary()|atom(),
     Value :: z:qvalue(),
     Context :: z:context(),
     NewContext :: z:context().
@@ -669,8 +670,10 @@ add_q(Key, #upload{ tmpfile = TmpFile } = Upload, Context) when TmpFile =/= unde
 add_q(Key, Value, Context) when is_binary(Key) ->
     Qs = get_q_all(Context),
     z_context:set('q', [{Key,Value}|Qs], Context);
-add_q(Key, Value, Context) ->
-    add_q(z_convert:to_binary(Key), Value, Context).
+add_q(Key, Value, Context) when is_atom(Key) ->
+    add_q(z_convert:to_binary(Key), Value, Context);
+add_q(_, _Value, Context) ->
+    Context.
 
 %% @doc Add the value of multiple request parameter arguments. This allows for the
 %% insertion of multiple keys with the same value. The new arguments are prepended
