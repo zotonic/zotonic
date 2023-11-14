@@ -10,7 +10,7 @@
 
 <div id="dialog_new_rsc_results">
     {% with m.search.paged[
-            {query page=1 pagelen=10
+            {query page=1 pagelen=20
                     text=text
                     cat=cat
                     creator_id=creator_id

@@ -148,17 +148,21 @@
             }
 
             const id = (level == 0) ? "zmodal" : ("zmodal-" + level);
+            const zIndex = 1000 * (level+1) + 50
             $dialog = $('<div>')
               .attr('id', id)
               .attr('data-modal-level', level)
-              .css({ 'z-index': 1000 * (level+1) + 50})
               .addClass(dialogClass)
               .append($modalDialog)
               .appendTo($('body'));
 
             $dialog
               .modal({backdrop: options.backdrop, keyboard: options.keyboard ?? true})
-              .css({'overflow-x': 'hidden', 'overflow-y': 'auto'});
+              .css({
+                    'overflow-x': 'hidden',
+                    'overflow-y': 'auto',
+                    'z-index': zIndex
+                });
 
             if (options.center) {
                 $modalDialog.hide();

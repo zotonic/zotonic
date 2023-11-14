@@ -24,7 +24,7 @@
 -mod_description("Provides administrative interface for editing pages, media, users etc.").
 -mod_depends([ base, authentication, mod_search, mod_mqtt, mod_wires ]).
 -mod_provides([ admin ]).
--mod_schema(2).
+-mod_schema(3).
 -mod_prio(1000).
 
 -export([
@@ -32,6 +32,7 @@
      observe_admin_menu/3,
      observe_admin_edit_blocks/3,
      observe_module_ready/2,
+     observe_rsc_pivot_done/2,
      event/2,
 
      do_link/5,
@@ -182,16 +183,23 @@ observe_admin_edit_blocks(#admin_edit_blocks{}, Menu, Context) ->
 observe_module_ready(module_ready, Context) ->
     z_depcache:flush(admin_menu, Context).
 
+observe_rsc_pivot_done(#rsc_pivot_done{ id = Id }, Context) ->
+    case m_config:get_boolean(?MODULE, is_notrack_refers, Context) of
+        true ->
+            ok;
+        false ->
+            z_admin_refers:ensure_refers(Id, z_acl:sudo(Context))
+    end.
 
 event(#postback_notify{message= <<"admin-insert-block">>}, Context) ->
-    Language = case z_context:get_q("language", Context) of
+    Language = case z_context:get_q(<<"language">>, Context) of
                     undefined ->
                         [];
                     Ls ->
                         Ls1 = string:tokens(Ls, ","),
                         [ list_to_atom(L) || L <- lists:filter(fun z_language:is_valid/1, Ls1) ]
                end,
-    EditLanguage = case z_context:get_q("edit_language", Context) of
+    EditLanguage = case z_context:get_q(<<"edit_language">>, Context) of
                     undefined ->
                         z_context:language(Context);
                     EL ->
@@ -200,8 +208,8 @@ event(#postback_notify{message= <<"admin-insert-block">>}, Context) ->
                             false -> z_context:language(Context)
                         end
                    end,
-    Type = z_string:to_name(z_context:get_q("type", Context)),
-    RscId = z_convert:to_integer(z_context:get_q("rsc_id", Context)),
+    Type = z_string:to_name(z_context:get_q(<<"type">>, Context)),
+    RscId = z_convert:to_integer(z_context:get_q(<<"rsc_id">>, Context)),
     Render = #render{
                 template="_admin_edit_block_li.tpl",
                 vars=[
@@ -216,7 +224,7 @@ event(#postback_notify{message= <<"admin-insert-block">>}, Context) ->
                     {blocks, lists:sort(z_notifier:foldl(#admin_edit_blocks{id=RscId}, [], Context))}
                 ]
             },
-    case z_html:escape(z_context:get_q("after", Context)) of
+    case z_html:escape(z_context:get_q(<<"after">>, Context)) of
         undefined -> z_render:insert_top("edit-blocks", Render, Context);
         AfterId -> z_render:insert_after(AfterId, Render, Context)
     end;
@@ -233,8 +241,8 @@ event(#postback_notify{message = <<"feedback">>, trigger = Trigger, target=Targe
         CrId ->
             CrId
     end,
-    SubjectId = z_convert:to_integer(z_context:get_q(<<"subject_id">>, Context)),
-    ObjectId = z_convert:to_integer(z_context:get_q(<<"object_id">>, Context)),
+    SubjectId = m_rsc:rid(z_context:get_q(<<"subject_id">>, Context), Context),
+    ObjectId = m_rsc:rid(z_context:get_q(<<"object_id">>, Context), Context),
     Predicate = z_convert:to_binary(z_context:get_q(<<"predicate">>, Context, <<>>)),
     PredicateId = m_rsc:rid(Predicate, Context),
     TextL = lists:foldl(
@@ -310,6 +318,7 @@ event(#postback{message={admin_connect_select, Args}}, Context) ->
     ObjectId0 = proplists:get_value(object_id, Args),
     Predicate = proplists:get_value(predicate, Args),
     Callback = proplists:get_value(callback, Args),
+    Intent = proplists:get_value(intent, Args),
     IsConnectToggle = z_convert:to_bool( proplists:get_value(is_connect_toggle, Args) ),
 
     QAction = proplists:get_all_values(action, Args),
@@ -339,7 +348,11 @@ event(#postback{message={admin_connect_select, Args}}, Context) ->
         false -> false;
         true -> IsConnected
     end,
-    case do_link_unlink(IsUnlink, SubjectId, Predicate, ObjectId, Callback, Context) of
+    OptPredicate = case Intent of
+        <<"select">> -> undefined;
+        _ -> Predicate
+    end,
+    case do_link_unlink(IsUnlink, SubjectId, OptPredicate, ObjectId, Callback, Context) of
         {ok, Context1} ->
             Context2 = case z_convert:to_bool(proplists:get_value(autoclose, Args)) of
                             true -> z_render:dialog_close(Context1);
@@ -700,28 +713,36 @@ do_link_unlink_feedback(IsNew, IsDelete, EdgeId, SubjectId, Predicate, ObjectId,
     end.
 
 context_language(Context) ->
-    case z_context:get_q("language", Context) of
+    case z_context:get_q(<<"language">>, Context) of
         undefined -> Context;
-        [] -> Context;
+        <<>> -> Context;
         Lang ->
             case z_language:to_language_atom(Lang) of
                 {ok, LanguageCode} -> z_context:set_language(LanguageCode, Context);
-                _ -> Context
+                {error, _} -> Context
             end
     end.
-
 
 manage_schema(_Version, Context) ->
     m_admin_note:install(Context),
     #datamodel{
-        categories=[
-            {admin_content_query,
-             'query',
-             [
-                {title, {trans, [
-                            {en, <<"Admin content query">>},
-                            {nl, <<"Admin inhoud zoekopdracht">>}
-                    ]}}
-             ]}
+        categories = [
+            {admin_content_query, 'query', #{
+                <<"title">> => #trans{ tr = [
+                    {en, <<"Admin content query">>},
+                    {nl, <<"Admin inhoud zoekopdracht">>}
+                ]}
+            }}
+        ],
+        predicates = [
+            {refers, #{
+                <<"title">> => #trans{
+                    tr = [
+                        {en, <<"Refers">>},
+                        {nl, <<"Refereert">>}
+                    ]
+                },
+                <<"is_object_noindex">> => true
+            }, []}
         ]
     }.

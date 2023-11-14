@@ -56,6 +56,9 @@ m_get([ <<"object_category">>, Key | Rest ], _Msg, Context) ->
     {ok, {object_category(Key, Context), Rest}};
 m_get([ <<"subject_category">>, Key | Rest ], _Msg, Context) ->
     {ok, {subject_category(Key, Context), Rest}};
+m_get([ <<"is_valid_object_in_category">>, Predicate, Category | Rest ], _Msg, Context) ->
+    IsValid = is_valid_object_in_category(Predicate, Category, Context),
+    {ok, {IsValid, Rest}};
 m_get([ <<"is_valid_object_subcategory">>, Predicate, Category | Rest ], _Msg, Context) ->
     IsValid = is_valid_object_category(Predicate, Category, true, Context),
     {ok, {IsValid, Rest}};
@@ -98,6 +101,21 @@ is_used(Predicate, Context) ->
             is_integer(z_db:q1("select id from edge where predicate_id = $1 limit 1", [Id], Context))
     end.
 
+is_valid_object_in_category(Predicate, Category, Context) ->
+    case is_valid_object_category(Predicate, Category, true, Context) of
+        true ->
+            true;
+        false ->
+            CatId = m_rsc:rid(Category, Context),
+            ValidCats = object_category(Predicate, Context),
+            lists:any(
+                fun(ValidCat) ->
+                    IsACats = m_category:is_a(ValidCat, Context),
+                    IsACatIds = [ m_rsc:rid(Cat, Context) || Cat <- IsACats ],
+                    lists:member(CatId, IsACatIds)
+                end,
+                ValidCats)
+    end.
 
 is_valid_object_category(Predicate, Category, IsSubcats, Context) ->
     CatId = m_rsc:rid(Category, Context),
@@ -112,7 +130,7 @@ is_valid_object_category(Predicate, Category, IsSubcats, Context) ->
             lists:any(
                 fun(IsACat) ->
                     IsACatId = m_rsc:rid(IsACat, Context),
-                    lists:member({IsACatId}, ValidCats)
+                    lists:member(IsACatId, ValidCats)
                 end,
                 IsA);
         false ->
@@ -145,7 +163,7 @@ is_valid_subject_category(Predicate, Category, IsSubcats, Context) ->
                         fun(C) -> proplists:get_value(id, C) end,
                         SubCats),
                     lists:any(
-                        fun(CId) -> lists:member({CId}, ValidCats) end,
+                        fun(CId) -> lists:member(CId, ValidCats) end,
                         SubCatIds);
                 false ->
                     false

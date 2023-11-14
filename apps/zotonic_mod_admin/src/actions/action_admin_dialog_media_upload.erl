@@ -74,11 +74,18 @@ event(#submit{message={media_upload, EventProps}}, Context) ->
             Intent = proplists:get_value(intent, EventProps),
             Props = case Intent of
                 <<"update">> ->
-                    #{
+                    R = #{
                         <<"original_filename">> => OriginalFilename
-                    };
+                    },
+                    case z_context:get_q(<<"medium_language">>, Context) of
+                        undefined ->
+                            R;
+                        Language when is_binary(Language) ->
+                            R#{
+                                <<"medium_language">> => Language
+                            }
+                    end;
                 _ ->
-                    Lang = z_context:language(Context),
                     Title = z_context:get_q(<<"new_media_title">>, Context),
                     NewTitle = case z_utils:is_empty(Title) of
                                    true -> OriginalFilename;
@@ -89,9 +96,9 @@ event(#submit{message={media_upload, EventProps}}, Context) ->
                     Props0 = #{
                         <<"is_published">> => IsPublished,
                         <<"is_dependent">> => IsDependent,
-                        <<"title">> =>  #trans{ tr = [{Lang,NewTitle}] },
-                        <<"language">> => [Lang],
-                        <<"original_filename">> => OriginalFilename
+                        <<"title">> =>  NewTitle,
+                        <<"original_filename">> => OriginalFilename,
+                        <<"medium_language">> => z_context:get_q(<<"medium_language">>, Context)
                     },
                     add_content_group(EventProps, Props0, Context)
             end,

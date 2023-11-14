@@ -136,5 +136,4 @@ flush_process_dict() ->
 record_depcache_event({eviction, _DepcacheName}, Host) ->
     z_stats:record_event(depcache, eviction, Host);
 record_depcache_event(_Event, _Metadata) ->
-    ?DEBUG(_Event),
     ok.
