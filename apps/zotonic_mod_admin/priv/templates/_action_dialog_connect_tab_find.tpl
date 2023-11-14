@@ -19,7 +19,8 @@
                     {% if cat|member:ocats %}
                         {% if m.search.query::%{
                                 cat: cat,
-                                cat_exclude: ocats -- [ cat ]
+                                cat_exclude: ocats -- [ cat ],
+                                pagelen: 1000
                             }|is_visible as ids
                         %}
                             {% if ocats|length > 1 %}
