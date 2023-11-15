@@ -41,7 +41,7 @@ media_for_language(Ids, Language, Context) ->
     media_1(Ids, Context1).
 
 
-media_1(Ids, Context) ->
+media_1(Ids, Context) when is_list(Ids) ->
     LangIds = lists:filtermap(
         fun(Id) ->
             case m_rsc:rid(Id, Context) of
@@ -76,4 +76,7 @@ media_1(Ids, Context) ->
             [];
         SelectedIds ->
             SelectedIds
-    end.
+    end;
+media_1(Ids, Context) ->
+    L = z_template_compiler_runtime:to_list(Ids, Context),
+    media_1(L, Context).

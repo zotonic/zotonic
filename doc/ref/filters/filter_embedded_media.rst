@@ -1,7 +1,7 @@
 .. highlight:: django
 .. include:: meta-embedded_media.rst
 
-.. seealso:: :ref:`filter-show_media`, :ref:`filter-without_embedded_media`
+.. seealso:: :ref:`filter-show_media`, :ref:`filter-without_embedded_media`, :ref:`filter-media_for_language`
 
 Fetch media ids that are embedded in the ``body``, ``body_extra``
 and *text* blocks of your page.
