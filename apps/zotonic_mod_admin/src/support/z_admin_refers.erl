@@ -20,9 +20,50 @@
 
 -module(z_admin_refers).
 
--export([ ensure_refers/2 ]).
+-export([
+    ensure_refers/2,
+    insert_ensure_refers_all_task/1,
+    task_ensure_refers_all/2
+]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+
+
+%% @doc Insert a task to check all resource for embedded resource references and
+%% add a refers edge for all of those references.
+-spec insert_ensure_refers_all_task( Context ) -> ok when
+    Context :: z:context().
+insert_ensure_refers_all_task(Context) ->
+    {ok, _} = z_pivot_rsc:insert_task(?MODULE, task_ensure_refers_all, <<>>, [1], Context),
+    ok.
+
+
+%% @doc Check all resource for embedded resource references and add a refers
+%% edge for all of them.
+-spec task_ensure_refers_all(FromId, Context) -> ok when
+    FromId :: pos_integer(),
+    Context :: z:context().
+task_ensure_refers_all(FromId, Context) ->
+    timer:sleep(2000),
+    case z_db:q("
+        select id from rsc
+        where id > $1
+        limit 1000",
+        [ FromId ],
+        Context)
+    of
+        [] ->
+            ok;
+        Rs ->
+            Ids = [ Id || {Id} <- Rs ],
+            ContextSudo = z_acl:sudo(Context),
+            lists:foreach(
+                fun(Id) ->
+                    ensure_refers(Id, ContextSudo)
+                end, Ids),
+            {delay, 0, [ lists:max(Ids) ]}
+    end.
+
 
 %% @doc Set the 'refers' edges to keep track which resourcees are used where.
 %% This is needed for the automatic cleanup of 'dependent' resources.

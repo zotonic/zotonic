@@ -32,7 +32,7 @@
      observe_admin_menu/3,
      observe_admin_edit_blocks/3,
      observe_module_ready/2,
-     observe_rsc_pivot_done/2,
+     observe_rsc_update_done/2,
      event/2,
 
      do_link/5,
@@ -183,13 +183,17 @@ observe_admin_edit_blocks(#admin_edit_blocks{}, Menu, Context) ->
 observe_module_ready(module_ready, Context) ->
     z_depcache:flush(admin_menu, Context).
 
-observe_rsc_pivot_done(#rsc_pivot_done{ id = Id }, Context) ->
+observe_rsc_update_done(#rsc_update_done{ action = Action, id = Id }, Context) when
+    Action =:= insert;
+    Action =:= update ->
     case m_config:get_boolean(?MODULE, is_notrack_refers, Context) of
         true ->
             ok;
         false ->
             z_admin_refers:ensure_refers(Id, z_acl:sudo(Context))
-    end.
+    end;
+observe_rsc_update_done(#rsc_update_done{}, _Context) ->
+    ok.
 
 event(#postback_notify{message= <<"admin-insert-block">>}, Context) ->
     Language = case z_context:get_q(<<"language">>, Context) of
@@ -522,6 +526,15 @@ event(#submit{ message = {update_all, Args}}, Context) ->
             z_render:wire(proplists:get_all_values(on_success, Args), Context);
         _ ->
             Context
+    end;
+
+event(#postback{ message = {ensure_refers, _} }, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            z_admin_refers:insert_ensure_refers_all_task(Context),
+            z_render:growl(?__("Scheduled background task to check all refers connections.", Context), Context);
+        false ->
+            z_render:growl_error(?__("Sorry, only an admin is allowed to do this", Context), Context)
     end;
 
 event(_E, Context) ->
