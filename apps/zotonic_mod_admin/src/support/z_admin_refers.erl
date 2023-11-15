@@ -64,7 +64,7 @@ task_ensure_refers_all(FromId, Context) ->
     end.
 
 
-%% @doc Set the 'refers' edges to keep track which resourcees are used where.
+%% @doc Set the 'refers' edges to keep track which resources are used where.
 %% This is needed for the automatic cleanup of 'dependent' resources.
 -spec ensure_refers(Id, Context) -> ok when
     Id :: m_rsc:resource_id(),
