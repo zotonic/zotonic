@@ -44,7 +44,6 @@ insert_ensure_refers_all_task(Context) ->
     FromId :: pos_integer(),
     Context :: z:context().
 task_ensure_refers_all(FromId, Context) ->
-    timer:sleep(2000),
     case z_db:q("
         select id from rsc
         where id > $1
