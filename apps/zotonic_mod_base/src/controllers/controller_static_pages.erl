@@ -50,7 +50,13 @@
 service_available(Context) ->
     case z_context:get(root, Context) of
         undefined ->
-            {false, Context};
+            FullPath = z_context:get(fullpath, Context),
+            case z_utils:is_empty(FullPath) of
+                false when is_binary(FullPath); is_list(FullPath) ->
+                    {true, Context};
+                _ ->
+                    {false, Context}
+            end;
         "" ->
             {false, Context};
         "/" ->
