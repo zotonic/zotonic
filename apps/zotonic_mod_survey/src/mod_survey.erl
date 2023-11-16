@@ -738,9 +738,13 @@ do_submit(SurveyId, Questions, Answers, undefined, SubmitArgs, Context) ->
         ok ->
             maybe_mail(SurveyId, Answers, undefined, false, Context),
             ok;
-        {save, ContextOrRender} ->
+        {save, #context{}=Context1} ->
+            %% Use the passed context to save the answers.
+            save_submit(SurveyId, FoundAnswers, Answers, Context1),
+            {ok, Context1};
+        {save, #render{}=Render} ->
             save_submit(SurveyId, FoundAnswers, Answers, Context),
-            {ok, ContextOrRender};
+            {ok, Render};
         {ok, _ContextOrRender} = Handled ->
             maybe_mail(SurveyId, Answers, undefined, false, Context),
             Handled;
