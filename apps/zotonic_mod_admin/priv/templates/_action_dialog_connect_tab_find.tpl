@@ -59,7 +59,6 @@
                     autoclose=false
                     is_connect_toggle=true
                 }
-                action={alert text='a'}
             }
         %}
         {% javascript %}

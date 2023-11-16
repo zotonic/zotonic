@@ -425,7 +425,6 @@
 				    	var select_id = $(this).closest(".item,.rsc-preview-panel").data('id');
 				    	if (select_id) {
 					    	var $item = $(".item[data-id='"+ select_id +"']");
-					    	alert('a');
 					        z_event('dialog_new_rsc_find', {
 					            select_id: select_id,
 					            is_connected: $item.hasClass('item-connected')
