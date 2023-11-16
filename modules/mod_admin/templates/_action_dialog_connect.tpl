@@ -87,6 +87,7 @@ find params:
             {# only one tab, so no conditional #}
                 {% include "_action_dialog_connect_tab_new.tpl"
                     tab=#tab
+                    intent=intent
                     predicate=predicate
                     delegate=delegate
                     subject_id=subject_id
@@ -101,6 +102,7 @@ find params:
             {% if has_depiction_tab %}
                 {% include "_action_dialog_connect_tab_depictions.tpl"
                     tab=#tab
+                    intent=intent
                     predicate=predicate
                     delegate=delegate
                     subject_id=subject_id
@@ -112,6 +114,7 @@ find params:
             {% if not tabs_enabled or "new"|member:tabs_enabled %}
                 {% include "_action_dialog_connect_tab_findnew.tpl"
                     tab=#tab
+                    intent=intent
                     predicate=predicate
                     delegate=delegate
                     subject_id=subject_id
@@ -124,6 +127,7 @@ find params:
             {% elseif tabs_enabled and "find"|member:tabs_enabled %}
                 {% include "_action_dialog_connect_tab_find.tpl"
                     tab=#tab
+                    intent=intent
                     predicate=predicate
                     delegate=delegate
                     subject_id=subject_id
@@ -139,6 +143,7 @@ find params:
                 {% if not tabs_enabled or "url"|member:tabs_enabled %}
                     {% include "_action_dialog_media_upload_tab_url.tpl"
                         tab=#tab
+                        intent=intent
                         predicate=predicate
                         delegate=delegate
                         subject_id=subject_id
@@ -149,6 +154,7 @@ find params:
                 {% endif %}
                 {% all include "_media_upload_panel.tpl"
                     tab=#tab
+                    intent=intent
                     predicate=predicate
                     delegate=delegate
                     subject_id=subject_id

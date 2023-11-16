@@ -580,6 +580,27 @@ update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Contex
     UpdateProps = [ {version, Version+1} | proplists:delete(version, Props) ],
     UpdateProps1 = set_if_normal_update(RscUpd, modified, erlang:universaltime(), UpdateProps),
     UpdateProps2 = set_if_normal_update(RscUpd, modifier_id, z_acl:user(Context), UpdateProps1),
+
+    UpdateProps3 = case proplists:get_value(language, Raw) of
+        undefined ->
+            case proplists:get_value(language, UpdateProps2) of
+                undefined ->
+                    case proplists:get_value(medium_language, UpdateProps2) of
+                        undefined ->
+                            UpdateProps2;
+                        MediumLang ->
+                            [
+                                {language, [MediumLang]}
+                                | UpdateProps2
+                            ]
+                    end;
+                _ ->
+                    UpdateProps2
+            end;
+        _ ->
+            UpdateProps2
+    end,
+
     {IsChanged, UpdatePropsN} = z_notifier:foldr(#rsc_update{
                                             action=case RscUpd#rscupd.id of
                                                         insert_rsc -> insert;
@@ -588,7 +609,7 @@ update_transaction_fun_db(RscUpd, Id, Props, Raw, IsABefore, IsCatInsert, Contex
                                             id=Id,
                                             props=Raw
                                         },
-                                        {false, UpdateProps2},
+                                        {false, UpdateProps3},
                                         Context),
 
     % Pre-pivot of the category-id to the category sequence nr.
@@ -899,6 +920,13 @@ props_filter([{pref_language, Lang}|T], Acc, Context) ->
                 {error, not_a_language} -> undefined
             end,
     props_filter(T, [{pref_language, Lang1} | Acc], Context);
+
+props_filter([{medium_language, Lang}|T], Acc, Context) ->
+    Lang1 = case z_trans:to_language_atom(Lang) of
+                {ok, LangAtom} -> LangAtom;
+                {error, not_a_language} -> undefined
+            end,
+    props_filter(T, [{medium_language, Lang1} | Acc], Context);
 
 props_filter([{language, Langs}|T], Acc, Context) ->
     props_filter(T, [{language, filter_languages(Langs)}|Acc], Context);

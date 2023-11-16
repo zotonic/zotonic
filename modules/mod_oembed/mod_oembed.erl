@@ -263,7 +263,7 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
     Callback = proplists:get_value(callback, EventProps),
     Stay = z_convert:to_bool(proplists:get_value(stay, EventProps, false)),
     EmbedUrl = z_context:get_q_validated("oembed_url", Context),
-
+    Intent = proplists:get_value(intent, EventProps),
     case Id of
         %% Create a new page
         undefined ->
@@ -275,6 +275,7 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
             Predicate = proplists:get_value(predicate, EventProps, depiction),
             Title   = z_context:get_q_validated("title", Context),
             Summary = z_context:get_q("summary", Context),
+            MediumLanguage = z_context:get_q("medium_language", Context),
             Props = [
                 {title, Title},
                 {summary, Summary},
@@ -282,15 +283,21 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
                 {category, media},
                 {mime, ?OEMBED_MIME},
                 {oembed_url, EmbedUrl},
-                {content_group_id, ContentGroupdId}
+                {content_group_id, ContentGroupdId},
+                {medium_language, MediumLanguage}
             ],
 
             case m_rsc:insert(Props, Context) of
                 {ok, MediaId} ->
                     spawn(fun() -> preview_create(MediaId, Props, Context) end),
 
-                    {_, ContextLink} = mod_admin:do_link(z_convert:to_integer(SubjectId), Predicate,
-                                                         MediaId, Callback, Context),
+                    {_, ContextLink} = case z_convert:to_binary(Intent) of
+                        <<"select">> ->
+                            mod_admin:do_link(undefined, undefined, MediaId, Callback, Context);
+                        _ ->
+                            mod_admin:do_link(z_convert:to_integer(SubjectId), Predicate,
+                                                         MediaId, Callback, Context)
+                    end,
 
                     ContextRedirect = case SubjectId of
                         undefined ->
@@ -311,8 +318,10 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
 
         %% Update the current page
         N when is_integer(N) ->
+            MediumLanguage = z_context:get_q("medium_language", Context),
             Props = [
-                {oembed_url, EmbedUrl}
+                {oembed_url, EmbedUrl},
+                {medium_language, MediumLanguage}
             ],
             case m_rsc:update(Id, Props, Context) of
                 {ok, _} ->

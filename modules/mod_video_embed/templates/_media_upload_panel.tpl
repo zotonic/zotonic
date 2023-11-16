@@ -39,6 +39,8 @@
             </div>
 	</div>
 
+	{% include "_edit_medium_language.tpl" is_form_row %}
+
 	<div class="modal-footer">
 	    {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
 	    <button class="btn btn-primary" type="submit">{% if id %}{_ Replace media item _}{% else %}{_ Make media item _}{% endif %}</button>

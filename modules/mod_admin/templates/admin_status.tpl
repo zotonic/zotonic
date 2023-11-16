@@ -72,6 +72,18 @@
     <div class="col-md-6">
         <div class="well">
 	        {% all include "_admin_status.tpl" %}
+
+            {% if not m.config.mod_admin.is_notrack_refers %}
+                <div class="form-group">
+                    <div>
+                        {% button class="btn btn-default" text=_"Ensure <i>refers</i> connections"
+                                  postback={ensure_refers}
+                                  delegate=`mod_admin`
+                        %}
+                        <p class="help-block">{_ Check all resource for embedded resource references and add a <i>refers</i> connection for all of those references. _}</p>
+                    </div>
+                </div>
+            {% endif %}
         </div>
 
         <div class="well">

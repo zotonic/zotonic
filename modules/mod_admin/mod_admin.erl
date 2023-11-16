@@ -25,7 +25,7 @@
 -mod_depends([base, authentication, mod_search, mod_mqtt]).
 -mod_provides([admin]).
 -mod_depends([bootstrap]).
--mod_schema(1).
+-mod_schema(2).
 -mod_prio(1000).
 
 -export([
@@ -33,6 +33,7 @@
      observe_admin_menu/3,
      observe_admin_edit_blocks/3,
      observe_module_ready/2,
+     observe_rsc_update_done/2,
      event/2,
 
      do_link/5,
@@ -166,6 +167,17 @@ observe_admin_edit_blocks(#admin_edit_blocks{}, Menu, Context) ->
 observe_module_ready(module_ready, Context) ->
     z_depcache:flush(admin_menu, Context).
 
+observe_rsc_update_done(#rsc_update_done{ action = Action, id = Id }, Context) when
+    Action =:= insert;
+    Action =:= update ->
+    case z_convert:to_bool(m_config:get(?MODULE, is_notrack_refers, Context)) of
+        true ->
+            ok;
+        false ->
+            z_admin_refers:ensure_refers(Id, z_acl:sudo(Context))
+    end;
+observe_rsc_update_done(#rsc_update_done{}, _Context) ->
+    ok.
 
 event(#postback_notify{message="admin-insert-block"}, Context) ->
     Language = case z_context:get_q("language", Context) of
@@ -286,6 +298,7 @@ event(#postback{message={admin_connect_select, Args}}, Context) ->
     ObjectId0 = proplists:get_value(object_id, Args),
     Predicate = proplists:get_value(predicate, Args),
     Callback = proplists:get_value(callback, Args),
+    Intent = z_convert:to_binary(proplists:get_value(intent, Args)),
     IsConnectToggle = z_convert:to_bool( proplists:get_value(is_connect_toggle, Args) ),
 
     QAction = proplists:get_all_values(action, Args),
@@ -315,7 +328,11 @@ event(#postback{message={admin_connect_select, Args}}, Context) ->
         false -> false;
         true -> IsConnected
     end,
-    case do_link_unlink(IsUnlink, SubjectId, Predicate, ObjectId, Callback, Context) of
+    OptPredicate = case Intent of
+        <<"select">> -> undefined;
+        _ -> Predicate
+    end,
+    case do_link_unlink(IsUnlink, SubjectId, OptPredicate, ObjectId, Callback, Context) of
         {ok, Context1} ->
             Context2 = case z_convert:to_bool(proplists:get_value(autoclose, Args)) of
                             true -> z_render:dialog_close(Context1);
@@ -346,6 +363,15 @@ event(#postback_notify{message="update", target=TargetId}, Context) ->
     ],
     Context1 = z_render:wire({unmask, [{target_id, TargetId}]}, Context),
     z_render:update(TargetId, #render{template={cat, "_rsc_block_item.tpl"}, vars=Vars}, Context1);
+
+event(#postback{ message = {ensure_refers, _} }, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            z_admin_refers:insert_ensure_refers_all_task(Context),
+            z_render:growl(?__("Scheduled background task to check all refers connections.", Context), Context);
+        false ->
+            z_render:growl_error(?__("Sorry, only an admin is allowed to do this", Context), Context)
+    end;
 
 event(_E, Context) ->
     Context.
@@ -521,5 +547,14 @@ manage_schema(_Version, _Context) ->
                             {nl, <<"Admin inhoud zoekopdracht">>}
                     ]}}
              ]}
+        ],
+        predicates=[
+            {refers, [
+                {title, {trans, [
+                    {en, <<"Refers">>},
+                    {nl, <<"Refereert">>}
+                ]}},
+                {is_object_noindex, true}
+            ], []}
         ]
     }.
