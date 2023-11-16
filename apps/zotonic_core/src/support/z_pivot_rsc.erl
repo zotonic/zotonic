@@ -59,6 +59,8 @@
     pivot_job_ping/2,
     pivot_job_done/1,
 
+    publish_task_event/5,
+
     stemmer_language/1,
     stemmer_language_config/1,
     cleanup_tsv_text/1,
@@ -285,16 +287,31 @@ to_utc_date({{Y,M,D},{H,I,S}} = Date) when is_integer(Y), is_integer(M), is_inte
 
 -spec delete_task( module(), atom(), z:context() ) -> non_neg_integer().
 delete_task(Module, Function, Context) ->
-    z_db:q("delete from pivot_task_queue where module = $1 and function = $2",
+    case z_db:q("delete from pivot_task_queue where module = $1 and function = $2",
            [Module, Function],
-           Context).
+           Context)
+    of
+        0 ->
+            0;
+        N ->
+            publish_task_event(delete, Module, Function, undefined, Context),
+            N
+    end.
+
 
 -spec delete_task( module(), atom(), term(), z:context() ) -> non_neg_integer().
 delete_task(Module, Function, UniqueKey, Context) ->
     UniqueKeyBin = z_convert:to_binary(UniqueKey),
-    z_db:q("delete from pivot_task_queue where module = $1 and function = $2 and key = $3",
+    case z_db:q("delete from pivot_task_queue where module = $1 and function = $2 and key = $3",
            [Module, Function, UniqueKeyBin],
-           Context).
+           Context)
+    of
+        0 ->
+            0;
+        N ->
+            publish_task_event(delete, Module, Function, undefined, Context),
+            N
+    end.
 
 -spec list_tasks( z:context() ) -> {ok, list( map() )} | {error, term()}.
 list_tasks(Context) ->
@@ -312,7 +329,13 @@ count_tasks(Context) ->
 
 -spec delete_tasks( z:context() ) -> non_neg_integer().
 delete_tasks(Context) ->
-    z_db:q("delete from pivot_task_queue", Context).
+    case z_db:q("delete from pivot_task_queue", Context) of
+        0 ->
+            0;
+        N ->
+            publish_task_event(delete, <<"*">>, <<"*">>, undefined, Context),
+            N
+    end.
 
 -spec get_pivot_title( m_rsc:resource_id(), z:context() ) -> binary().
 get_pivot_title(Id, Context) ->
@@ -646,6 +669,26 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
+publish_task_event(What, Module, Function, undefined, Context) ->
+    z_mqtt:publish(task_topic(Context),
+            #{
+                what => What,
+                module => Module,
+                function => Function
+            },
+            z_acl:sudo(Context));
+publish_task_event(What, Module, Function, Due, Context) ->
+    z_mqtt:publish(task_topic(Context),
+            #{
+                what => What,
+                module => Module,
+                function => Function,
+                due => Due
+            },
+            z_acl:sudo(Context)).
+
+task_topic(Context) ->
+    [ <<"$SYS">>, <<"site">>, z_convert:to_binary(z_context:site(Context)), <<"task-queue">> ].
 
 next_poll(State = #state{ poll_timer = TRef }, Interval) ->
     timer:cancel(TRef),
@@ -703,7 +746,7 @@ do_insert_task_after(SecondsOrDate, Module, Function, undefined, ArgsFun, Contex
 do_insert_task_after(SecondsOrDate, Module, Function, UniqueKey, ArgsFun, Context) when is_function(ArgsFun) ->
     Due = to_utc_date(SecondsOrDate),
     UniqueKeyBin = z_convert:to_binary(UniqueKey),
-    z_db:transaction(
+    case z_db:transaction(
         fun(Ctx) ->
             OldTask = z_db:q_row("
                 select props, due
@@ -747,11 +790,25 @@ do_insert_task_after(SecondsOrDate, Module, Function, UniqueKey, ArgsFun, Contex
                     Error
             end
         end,
-        Context);
+        Context)
+    of
+        {ok, _} = Ok ->
+            z_mqtt:publish(<<"model/sysconfig/event/task">>,
+                           #{
+                                what => <<"insert">>,
+                                module => Module,
+                                function => Function,
+                                due => Due
+                           },
+                           Context),
+            Ok;
+        {error, _} = Error ->
+            Error
+    end;
 do_insert_task_after(SecondsOrDate, Module, Function, UniqueKey, Args, Context) ->
     Due = to_utc_date(SecondsOrDate),
     UniqueKeyBin = z_convert:to_binary(UniqueKey),
-    z_db:transaction(
+    case z_db:transaction(
         fun(Ctx) ->
             _ = z_db:q("
                 delete from pivot_task_queue
@@ -769,7 +826,21 @@ do_insert_task_after(SecondsOrDate, Module, Function, UniqueKey, Args, Context) 
             },
             z_db:insert(pivot_task_queue, Fields, Ctx)
         end,
-        Context).
+        Context)
+    of
+        {ok, _} = Ok ->
+            z_mqtt:publish(<<"model/sysconfig/event/task">>,
+                           #{
+                                what => <<"insert">>,
+                                module => Module,
+                                function => Function,
+                                due => Due
+                           },
+                           Context),
+            Ok;
+        {error, _} = Error ->
+            Error
+    end.
 
 
 %% @doc Insert a list of ids into the pivot queue.

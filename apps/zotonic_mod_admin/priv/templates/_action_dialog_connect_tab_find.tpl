@@ -47,6 +47,7 @@
             action={postback
                 delegate=delegate|default:`mod_admin`
                 postback={admin_connect_select
+                    intent=intent
                     id=id
                     subject_id=subject_id
                     object_id=object_id
@@ -58,6 +59,7 @@
                     autoclose=false
                     is_connect_toggle=true
                 }
+                action={alert text='a'}
             }
         %}
         {% javascript %}
@@ -178,6 +180,7 @@
         action={postback
             delegate=delegate|default:`mod_admin`
             postback={admin_connect_select
+                intent=intent
                 id=id
                 subject_id=subject_id
                 object_id=object_id

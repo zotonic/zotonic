@@ -64,7 +64,8 @@ task_job(
                         is_tuple(Delay) ->
                             Delay
                       end,
-                z_db:update(pivot_task_queue, TaskId, [ {due, Due} ], Context);
+                z_db:update(pivot_task_queue, TaskId, [ {due, Due} ], Context),
+                z_pivot_rsc:publish_task_event(delay, Module, Function, Due, Context);
             {delay, Delay, NewArgs} ->
                 Due = if
                         is_integer(Delay) ->
@@ -77,9 +78,11 @@ task_job(
                     <<"due">> => Due,
                     <<"args">> => NewArgs
                 },
-                z_db:update(pivot_task_queue, TaskId, Fields, Context);
+                z_db:update(pivot_task_queue, TaskId, Fields, Context),
+                z_pivot_rsc:publish_task_event(delay, Module, Function, Due, Context);
             _OK ->
-                z_db:delete(pivot_task_queue, TaskId, Context)
+                z_db:delete(pivot_task_queue, TaskId, Context),
+                z_pivot_rsc:publish_task_event(delete, Module, Function, undefined, Context)
         end
     catch
         error:undef:Trace ->
@@ -92,7 +95,8 @@ task_job(
                 reason => undef,
                 stack => Trace
             }),
-            z_db:delete(pivot_task_queue, TaskId, Context);
+            z_db:delete(pivot_task_queue, TaskId, Context),
+            z_pivot_rsc:publish_task_event(delete, Module, Function, undefined, Context);
         Error:Reason:Trace ->
             maybe_schedule_retry(Task, Error, Reason, Trace, Context)
     after
@@ -119,6 +123,8 @@ maybe_schedule_retry(#{ task_id := TaskId, error_count := ErrCt, mfa := MFA }, E
         <<"error_count">> => ErrCt+1
     },
     {ok, _} = z_db:update(pivot_task_queue, TaskId, RetryFields, Context),
+    {Module, Function, _} = MFA,
+    z_pivot_rsc:publish_task_event(retry, Module, Function, RetryDue, Context),
     ok;
 maybe_schedule_retry(#{ task_id := TaskId, mfa := MFA }, Error, Reason, Trace, Context) ->
     ?LOG_ERROR(#{
@@ -131,6 +137,8 @@ maybe_schedule_retry(#{ task_id := TaskId, mfa := MFA }, Error, Reason, Trace, C
         stack => Trace
     }),
     z_db:delete(pivot_task_queue, TaskId, Context),
+    {Module, Function, _} = MFA,
+    z_pivot_rsc:publish_task_event(delete, Module, Function, undefined, Context),
     {error, stopped}.
 
 call_function(Module, Function, As, Context) ->

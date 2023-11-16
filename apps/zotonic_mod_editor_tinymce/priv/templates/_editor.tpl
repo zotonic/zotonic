@@ -14,7 +14,7 @@ params:
 {% wire name="zmedia"
     action={
         dialog_open
-        intent="connect"
+        intent="select"
         template="_action_dialog_connect.tpl"
         title=_"Insert media"
         width="large"

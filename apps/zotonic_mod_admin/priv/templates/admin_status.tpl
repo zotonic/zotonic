@@ -113,6 +113,18 @@
             <div class="widget">
                 <div class="widget-content">
         	        {% all include "_admin_status.tpl" %}
+
+                    {% if not m.admin.is_notrack_refers %}
+                        <div class="form-group">
+                            <div>
+                                {% button class="btn btn-default" text=_"Ensure <i>refers</i> connections"
+                                          postback={ensure_refers}
+                                          delegate=`mod_admin`
+                                %}
+                                <p class="help-block">{_ Check all resource for embedded resource references and add a <i>refers</i> connection for all of those references. _}</p>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 
@@ -141,46 +153,10 @@
             <div class="widget">
                 <div class="widget-header">{_ Task queue _}</div>
                 <div class="widget-content">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>{_ Module _}</th>
-                                <th>{_ Function _}</th>
-                                <th>{_ Count _}</th>
-                                <th>{_ Next due _}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for t in m.admin_status.task_queue %}
-                                <tr>
-                                    <td>{{ t.module|escape }}</td>
-                                    <td>{{ t.function|escape }}</td>
-                                    <td>{{ t.count }}</td>
-                                    <td>
-                                        {{ t.due|date:"Y-m-d H:i:s" }}
-                                        {% if t.error_count_total %}
-                                            <br>
-                                            <span class="text-danger">
-                                                <span class="fa fa-warning"></span>
-                                                {% trans "Some tasks are retrying.<br>Total errors: {total}<br>Highest for single task: {max}"
-                                                        total=t.error_count_total
-                                                        max=t.error_count_max
-                                                %}
-                                            </span>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                            {% empty %}
-                                <tr>
-                                    <td colspan="3">
-                                        <p>
-                                            {_ There are no tasks in the task queue. _}
-                                        </p>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                    {% live topic="bridge/origin/$SYS/site/"++m.site.site++"/task-queue"
+                            template="_admin_status_task_queue.tpl"
+                    %}
+
                     <p class="help-block">
                         {_ Tasks are functions scheduled to run at a certain time. _}<br>
                         {_ Tasks with errors will retry five times before being dropped. _}

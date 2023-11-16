@@ -138,7 +138,8 @@ body.noframe > .admin-container {
             hyphens: auto;
 }
 
-p .z-btn-help {
+p .z-btn-help,
+label .z-btn-help {
     display: inline;
     vertical-align: text-bottom;
 }
@@ -180,4 +181,10 @@ pre:empty {
     border: 1px dotted #333;
     z-index: 10000;
 }
+
+.modal.in {
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+}
+
 

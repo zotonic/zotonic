@@ -116,6 +116,7 @@ do_new_page_actions(Id, Args, Context) ->
     Callback = proplists:get_value(callback, Args),
     Actions = proplists:get_value(actions, Args, []),
     Objects = proplists:get_value(objects, Args, []),
+    Intent = proplists:get_value(intent, Args),
 
     Callback1 = case dispatch(Redirect) of
         false -> Callback;
@@ -124,14 +125,14 @@ do_new_page_actions(Id, Args, Context) ->
 
     % Optionally add an edge from the subject to this new resource
     {_,Context1} = case {is_integer(SubjectId), is_integer(ObjectId)} of
-        {true, _} ->
+        {true, _} when Intent =/= <<"select">> ->
             mod_admin:do_link(SubjectId, Predicate, Id, Callback1, Context);
-        {_, true} ->
+        {_, true} when Intent =/= <<"select">> ->
             mod_admin:do_link(Id, Predicate, ObjectId, Callback1, Context);
-        {false, false} when Callback1 =/= undefined ->
+        _ when Callback1 =/= undefined ->
             % Call the optional callback
             mod_admin:do_link(undefined, undefined, Id, Callback1, Context);
-        {false, false} ->
+        _ ->
             {ok, Context}
     end,
 
@@ -228,7 +229,6 @@ get_base_props(undefined, Context) ->
         },
         z_context:get_q_all_noz(Context));
 get_base_props(NewRscTitle, Context) ->
-    Lang = z_context:language(Context),
     Props = lists:foldl(fun({Prop,Val}, Acc) ->
                             maybe_add_prop(Prop, Val, Acc)
                         end,
@@ -237,8 +237,7 @@ get_base_props(NewRscTitle, Context) ->
                         },
                         z_context:get_q_all_noz(Context)),
     Props#{
-        <<"title">> => #trans{ tr = [ {Lang, NewRscTitle} ] },
-        <<"language">> => [ Lang ]
+        <<"title">> => NewRscTitle
     }.
 
 maybe_add_prop(_P, #upload{}, Acc) -> Acc;

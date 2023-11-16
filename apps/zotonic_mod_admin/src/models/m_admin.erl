@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017-2022 Marc Worrell
+%% @copyright 2017-2023 Marc Worrell
 %% @doc Model for mod_admin
+%% @end
 
-%% Copyright 2017-2022 Marc Worrell
+%% Copyright 2017-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,8 +20,6 @@
 -module(m_admin).
 
 -export([ m_get/3 ]).
-
--include_lib("kernel/include/logger.hrl").
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ <<"pivot_queue_count">> | Rest ], _Msg, Context) ->
@@ -48,5 +47,7 @@ m_get([ <<"edge_list_max_length">> | Rest ], _Msg, Context) ->
     {ok, {Len, Rest}};
 m_get([ <<"connect_created_me">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_boolean(mod_admin, connect_created_me, Context), Rest}};
+m_get([ <<"is_notrack_refers">> | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_boolean(mod_admin, is_notrack_refers, Context), Rest}};
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.

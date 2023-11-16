@@ -1,6 +1,6 @@
 .. highlight:: django
 .. include:: meta-show_media.rst
-.. seealso:: :ref:`filter-embedded_media`, :ref:`filter-without_embedded_media`
+.. seealso:: :ref:`filter-embedded_media`, :ref:`filter-without_embedded_media`, :ref:`filter-media_for_language`
 
 Convert the image markers in HTML from the Rich Text editor into image tags.
 
