@@ -1435,6 +1435,12 @@ props_filter(<<"pref_language">>, Lang, Acc, _Context) ->
         {error, not_a_language} -> undefined
     end,
     Acc#{ <<"pref_language">> => Lang1 };
+props_filter(<<"medium_language">>, Lang, Acc, _Context) ->
+    Lang1 = case z_language:to_language_atom(Lang) of
+        {ok, LangAtom} -> LangAtom;
+        {error, not_a_language} -> undefined
+    end,
+    Acc#{ <<"medium_language">> => Lang1 };
 props_filter(<<"language">>, Langs, Acc, _Context) ->
     Acc#{ <<"language">> => filter_languages(Langs) };
 props_filter(<<"crop_center">>, CropCenter, Acc, _Context) when ?is_empty(CropCenter) ->
