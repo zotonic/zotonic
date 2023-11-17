@@ -97,6 +97,14 @@ m_get([ <<"reindex">> | Rest ], _Msg, Context) ->
         false ->
             {error, disabled}
     end;
+m_get([ <<"dispatch_info">> | Rest ], _Msg, Context) ->
+    case z_acl:is_allowed(use, mod_development, Context) of
+        true ->
+            {ok, DispatchInfo} = z:dispatch_list(z_context:site(Context)),
+            {ok, {DispatchInfo, Rest}};
+        false ->
+            {error, eacces}
+    end;
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
