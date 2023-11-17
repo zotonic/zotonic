@@ -41,6 +41,8 @@
     observe_export_resource_header/2,
     observe_export_resource_data/2,
 
+    observe_acl_is_allowed/2,
+
     get_page/3,
 
     do_submit/4,
@@ -54,6 +56,7 @@
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+-include_lib("zotonic_mod_survey/include/survey.hrl").
 
 
 %% @doc Schema for mod_survey lives in separate module
@@ -116,8 +119,9 @@ event(#postback{message={survey_back, Args}}, Context) ->
 
 event(#postback{message={survey_remove_result_confirm, Args}}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
-    {answer_id, _AnswerId} = proplists:lookup(answer_id, Args),
-    case z_acl:rsc_editable(SurveyId, Context) of
+    {answer_id, AnswerId} = proplists:lookup(answer_id, Args),
+
+    case z_acl:is_allowed(delete_result, #acl_survey{id=SurveyId, answer_id=AnswerId}, Context) of
         true ->
             z_render:wire({confirm, [
                     {is_dangerous_action, true},
@@ -134,7 +138,8 @@ event(#postback{message={survey_remove_result_confirm, Args}}, Context) ->
 event(#postback{message={survey_remove_result, Args}}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
     {answer_id, AnswerId} = proplists:lookup(answer_id, Args),
-    case z_acl:rsc_editable(SurveyId, Context) of
+
+    case z_acl:is_allowed(delete_result, #acl_survey{id=SurveyId, answer_id=AnswerId}, Context) of
         true ->
             m_survey:delete_result(SurveyId, AnswerId, Context),
             Target = "survey-result-"++z_convert:to_list(AnswerId),
@@ -232,6 +237,16 @@ observe_export_resource_data(#export_resource_data{dispatch=survey_results_downl
 observe_export_resource_data(#export_resource_data{}, _Context) ->
     undefined.
 
+%% @doc Check access to the survey answers.
+observe_acl_is_allowed(#acl_is_allowed{action=view_result, object=#acl_survey{id=SurveyId, answer_id=AnswerId}}, Context) ->
+    z_acl:rsc_editable(SurveyId, Context) orelse m_survey:is_answer_user(AnswerId, Context);
+observe_acl_is_allowed(#acl_is_allowed{action=update_result, object=#acl_survey{id=SurveyId, answer_id=AnswerId}}, Context) ->
+    z_acl:rsc_editable(SurveyId, Context) orelse (z_convert:to_integer(m_rsc:p_no_acl(SurveyId, <<"survey_multiple">>, Context)) =:= 2
+                                                  andalso m_survey:is_answer_user(AnswerId, Context));
+observe_acl_is_allowed(#acl_is_allowed{action=delete_result, object=#acl_survey{id=SurveyId}}, Context) ->
+    z_acl:rsc_editable(SurveyId, Context);
+observe_acl_is_allowed(#acl_is_allowed{}, _Context) ->
+    undefined.
 
 get_page(Id, Nr, #context{} = Context) when is_integer(Nr) ->
     case m_rsc:p(Id, <<"blocks">>, Context) of
@@ -284,9 +299,9 @@ render_update(#render{} = Render, Args, Context) ->
 render_next_page(Id, 0, _Direction, _Answers, _History, _Editing, Args, Context) when is_integer(Id) ->
     case z_convert:to_binary(proplists:get_value(viewer, Args)) of
         <<"overlay">> ->
-            z_render:dialog_close(Context);
-        <<"dialog">> ->
             z_render:overlay_close(Context);
+        <<"dialog">> ->
+            z_render:dialog_close(Context);
         _ ->
             z_render:wire({redirect, [{id, Id}]}, Context)
     end;
@@ -723,9 +738,13 @@ do_submit(SurveyId, Questions, Answers, undefined, SubmitArgs, Context) ->
         ok ->
             maybe_mail(SurveyId, Answers, undefined, false, Context),
             ok;
-        {save, ContextOrRender} ->
+        {save, #context{}=Context1} ->
+            %% Use the passed context to save the answers.
+            save_submit(SurveyId, FoundAnswers, Answers, Context1),
+            {ok, Context1};
+        {save, #render{}=Render} ->
             save_submit(SurveyId, FoundAnswers, Answers, Context),
-            {ok, ContextOrRender};
+            {ok, Render};
         {ok, _ContextOrRender} = Handled ->
             maybe_mail(SurveyId, Answers, undefined, false, Context),
             Handled;
@@ -734,11 +753,7 @@ do_submit(SurveyId, Questions, Answers, undefined, SubmitArgs, Context) ->
     end;
 do_submit(SurveyId, Questions, Answers, {editing, AnswerId, _Actions}, _SubmitArgs, Context) ->
     % Save the modified survey results
-    case z_acl:rsc_editable(SurveyId, Context)
-        orelse (
-            z_convert:to_integer(m_rsc:p(SurveyId,<<"survey_multiple">>, Context)) =:= 2
-            andalso is_answer_user(AnswerId, Context))
-    of
+    case z_acl:is_allowed(update_result, #acl_survey{id=SurveyId, answer_id=AnswerId}, Context) of
         true ->
             {FoundAnswers, _Missing} = collect_answers(SurveyId, Questions, Answers, Context),
             StorageAnswers = survey_answers_to_storage(FoundAnswers),
@@ -920,17 +935,6 @@ collect_answers(SurveyId, [Q|Qs], Answers, FoundAnswers, Missing, Context) ->
         _ ->
             collect_answers(SurveyId, Qs, Answers, FoundAnswers, Missing, Context)
     end.
-
-is_answer_user({user, UserId}, Context) when is_integer(UserId) ->
-    UserId =:= z_acl:user(Context);
-is_answer_user(AnswerId, Context) when is_integer(AnswerId) ->
-    case z_acl:user(Context) of
-        UserId when is_integer(UserId) ->
-            m_survey:is_answer_user(AnswerId, UserId, Context);
-        _ -> false
-    end;
-is_answer_user(_, _Context) ->
-    false.
 
 survey_answers_to_storage(AnsPerBlock) ->
     lists:flatten(
