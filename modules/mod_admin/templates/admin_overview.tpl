@@ -108,7 +108,7 @@
                     {% with m.rsc[q.qquery|default:`admin_overview_query`].id as qquery_id %}
                           {% with (qquery_id.is_visible and not q.qcat)|
                                     if:{query query_id=qquery_id cat=qcat cat_exclude=qcat_exclude content_group=q.qgroup text=q.qs page=q.page pagelen=qpagelen asort=qsort zsort="-modified" custompivot=q.qcustompivot}
-                                      :{query authoritative=1 cat=qcat cat_exclude=qcat_exclude content_group=q.qgroup text=q.qs page=q.page pagelen=qpagelen asort=qsort zsort="-modified" custompivot=q.qcustompivot}
+                                      :{query cat=qcat cat_exclude=qcat_exclude content_group=q.qgroup text=q.qs page=q.page pagelen=qpagelen asort=qsort zsort="-modified" custompivot=q.qcustompivot}
                              as query
                           %}
                               {% with m.search.paged[query] as result %}
