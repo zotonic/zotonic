@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-10-13 18:43\n"
+"PO-Revision-Date: 2023-11-16 12:50\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -202,7 +202,7 @@ msgid "Are you sure you want to restore all ACL rules to their currently publish
 msgstr "Sind Sie sicher, dass Sie alle ACL-Regeln in ihrer aktuell veröffentlichten Version wiederherstellen möchten?"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:160./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:78
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:171./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:70./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:68./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:251./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:282./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:85./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:174./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:70./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:70./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:259./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:282./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:85./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38./apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:52
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:21
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:92
@@ -227,7 +227,7 @@ msgid "Cancel"
 msgstr "Abbrechen"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:6./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:87
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:192./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:62./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:96./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:29./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:196./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:62./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:96./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:29./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45./apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:26
 #: apps/zotonic_mod_survey/src/mod_survey.erl:159
@@ -248,7 +248,7 @@ msgid "Changed configuration."
 msgstr "Konfiguration geändert."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:22
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:171
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:174
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:67./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:69
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:31./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:46
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:30
@@ -270,7 +270,7 @@ msgid "Collaboration group members"
 msgstr "Mitglieder der Zusammenartbeitsgruppe"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:570
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:120
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:123
 msgid "Collaboration groups"
 msgstr "Zusammenarbeitsgruppen"
 
@@ -287,7 +287,7 @@ msgid "Consider resource authors to be owner."
 msgstr "Betrachten Sie Ressourcenautoren als Eigentümer."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:19
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4./apps/zotonic_mod_admin/src/mod_admin.erl:95
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4./apps/zotonic_mod_admin/src/mod_admin.erl:96
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:65
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:108
 msgid "Content"
@@ -299,7 +299,7 @@ msgid "Content group"
 msgstr "Inhaltsgruppe"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:16
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:128
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:131
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:197
 msgid "Content groups"
 msgstr "Inhaltsgruppen"
@@ -318,9 +318,9 @@ msgid "Define who can see or edit this page."
 msgstr "Gebe an, wer diese Seite sehen oder editieren kann."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:51./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:168
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:41./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:58./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:83./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:18./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:21./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:25./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:110
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:41./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:64./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:83./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:18./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:21./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:25./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:110
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:53
-#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:52
+#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:65
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_delete_username.tpl:8./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:25./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:30./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:53./apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:186
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:47
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:51
@@ -453,7 +453,7 @@ msgid "Members of same user group"
 msgstr "Mitglieder der gleichen Benutzergruppe"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:11./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:115
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:147
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:4
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:4./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:5./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
 #: apps/zotonic_mod_base/priv/templates/error.tpl:78
@@ -463,7 +463,7 @@ msgid "Module"
 msgstr "Modul"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:25
-#: apps/zotonic_mod_admin/src/mod_admin.erl:121
+#: apps/zotonic_mod_admin/src/mod_admin.erl:122
 #: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:3./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:7./apps/zotonic_mod_admin_modules/src/mod_admin_modules.erl:100
 msgid "Modules"
 msgstr "Modules"
@@ -586,7 +586,7 @@ msgid "Saved collaboration group settings"
 msgstr "Zusammenarbeitsgruppen gespeichert."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_category_dropdown.tpl:3
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:199
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:203
 msgid "Select category"
 msgstr "Kategorie wählen"
 
@@ -789,7 +789,7 @@ msgstr "einen anderen Browser verwenden (z. B. Chrome, wenn Sie jetzt Firefox ve
 msgid "view (acl action)"
 msgstr "Ansehen"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:163./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:165
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:182./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:184
 msgid "&lt; Prev"
 msgstr "&lt; Zurück"
 
@@ -817,11 +817,11 @@ msgstr "<em>Ohne Titel</em>"
 msgid "<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name."
 msgstr "<strong>Vorname</strong> auch bekannt als Vorname, Vorname oder Taufname.<br/><strong>Mittlerer</strong> oft verkürzt auf eine Initiale wie in <em>John D. Rockefeller</em>.<br/><strong>Nachnamenspräfix</strong> wie das niederländische <em>van, van de, der</em>.<br/><strong>Nachname</strong> auch als Familienname oder Nachname bekannt."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:115
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:123
 msgid "A copy that will remain connected so that a new version can be fetched."
 msgstr "Eine Kopie, die verbunden bleibt, damit eine neue Version abgerufen werden kann."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:119
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:127
 msgid "A local copy, disconnected from the remote site."
 msgstr "Eine lokale Kopie, die von der Remote-Site getrennt ist."
 
@@ -838,7 +838,7 @@ msgstr "Ungefähr {n} Artikel gefunden."
 msgid "Add a connection:"
 msgstr "Verbindung hinzufügen:"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:65./apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:104
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:65./apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:111
 msgid "Add a new media file"
 msgstr "Neue Mediendatei hinzufügen"
 
@@ -850,7 +850,7 @@ msgstr "Neue Mediendatei hinzufügen"
 msgid "Add a note about this page."
 msgstr "Fügen Sie eine Notiz zu dieser Seite hinzu."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:110
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:116
 msgid "Add media content"
 msgstr "Medieninhalte hinzufügen"
 
@@ -862,7 +862,7 @@ msgstr "Mediendatei zur Seite hinzufügen"
 msgid "Add note"
 msgstr "Notiz hinzufügen"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:661./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
+#: apps/zotonic_mod_admin/src/mod_admin.erl:687./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
 msgid "Added the connection to"
 msgstr "Hinzufügen der Verbindung zu"
 
@@ -920,16 +920,16 @@ msgstr "Höhe"
 msgid "And media can also be viewed on their own page."
 msgstr "Und Medien können auch auf einer eigenen Seite betrachtet werden."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:93
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:96
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:14
 msgid "Any category"
 msgstr "Beliebige Kategorie"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:117
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:120
 msgid "Anybody’s"
 msgstr "Jedermanns"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:63
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:69
 msgid "Are you sure you want to delete the media from this page?"
 msgstr "Möchten Sie die Medien wirklich von dieser Seite löschen?"
 
@@ -957,7 +957,7 @@ msgstr "Beiseite"
 msgid "Attached media"
 msgstr "Benutzte Mediendateien"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:126
+#: apps/zotonic_mod_admin/src/mod_admin.erl:127
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:50
 msgid "Auth"
 msgstr "Auth"
@@ -966,7 +966,7 @@ msgstr "Auth"
 msgid "Authoritative"
 msgstr "Maßgeblich"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:151
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:170
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:28./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:23./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:62./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:38
 msgid "Back"
 msgstr "Zurück"
@@ -1013,6 +1013,10 @@ msgstr "Kategorie ändern"
 msgid "Change the category of this page"
 msgstr "Ändern Sie die Kategorie dieser Seite"
 
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:124
+msgid "Check all resource for embedded resource references and add a <i>refers</i> connection for all of those references."
+msgstr "Überprüfen Sie alle Ressourcen auf eingebettete Ressourcenreferenzen und fügen Sie für alle diese Referenzen eine <i>Referenz-</i> Verbindung hinzu."
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_bulk_actions.tpl:41
 msgid "Check the pages you want to delete."
 msgstr "Markieren Sie die Seiten, die Sie löschen möchten."
@@ -1034,7 +1038,7 @@ msgstr "Stadt"
 msgid "Click here for more information"
 msgstr "Klicken Sie hier für weitere Informationen"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:279
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:287
 msgid "Click to preview."
 msgstr "Zur Vorschau anklicken."
 
@@ -1067,7 +1071,7 @@ msgstr "Löschen bestätigen"
 msgid "Confirm logoff"
 msgstr "Abmeldung bestätigen"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:254./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:36./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:45
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:262./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:36./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:45
 msgid "Connect"
 msgstr "Verbinden"
 
@@ -1075,19 +1079,23 @@ msgstr "Verbinden"
 msgid "Connect a page"
 msgstr "Verbinden einer Seite"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:126./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:57
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:134./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:57
 msgid "Connections"
 msgstr "Anschlüsse"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:53
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:24
+msgid "Content type"
+msgstr "Inhaltstyp"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:59
 msgid "Copied download link to clipboard"
 msgstr "Download-Link in die Zwischenablage kopiert"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:50
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:56
 msgid "Copy download link"
 msgstr "Download-Link kopieren"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:147
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:160
 msgid "Could not connect to the website."
 msgstr "Die Verbindung zur Website konnte nicht hergestellt werden."
 
@@ -1095,7 +1103,7 @@ msgstr "Die Verbindung zur Website konnte nicht hergestellt werden."
 msgid "Could not detect anything to import on that URL or embed code."
 msgstr "Konnte nichts zum Importieren auf dieser URL oder dem Einbettungscode erkennen."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:149
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:6
 msgid "Count"
 msgstr "Anzahl"
 
@@ -1104,7 +1112,7 @@ msgstr "Anzahl"
 msgid "Country"
 msgstr "Land"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:65./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:253./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:112
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:65./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:261./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:120
 msgid "Create"
 msgstr "Erstellen"
 
@@ -1113,7 +1121,7 @@ msgstr "Erstellen"
 msgid "Created by"
 msgstr "Erstellt von:"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:292
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:300
 msgid "Created by me"
 msgstr "Von mir erstellt"
 
@@ -1135,7 +1143,7 @@ msgstr "Erstellungsdatum, das Neueste zuerst"
 msgid "Creation date, oldest first"
 msgstr "Erstellungsdatum, Ältestes zuerst"
 
-#: apps/zotonic_mod_admin/priv/templates/admin.tpl:4./apps/zotonic_mod_admin/priv/templates/admin.tpl:8./apps/zotonic_mod_admin/src/mod_admin.erl:90
+#: apps/zotonic_mod_admin/priv/templates/admin.tpl:4./apps/zotonic_mod_admin/priv/templates/admin.tpl:8./apps/zotonic_mod_admin/src/mod_admin.erl:91
 msgid "Dashboard"
 msgstr "Übersicht"
 
@@ -1171,7 +1179,7 @@ msgstr "Datum Beginn/Ende"
 msgid "Delete if no other page is connected to this page."
 msgstr "Löschen, wenn keine andere Seite mit dieser Seite verbunden ist."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:49./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:235./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:90
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:49./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:239./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:90
 msgid "Delete if not connected anymore"
 msgstr "Löschen, wenn keine Verbindung mehr besteht"
 
@@ -1209,7 +1217,11 @@ msgstr "Medien entdecken"
 msgid "Disks"
 msgstr "Festplatten"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:129
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:27
+msgid "Display size"
+msgstr "Bildschirmgröße"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:137
 msgid "Do not import connections."
 msgstr "Importieren Sie keine Verbindungen."
 
@@ -1221,7 +1233,7 @@ msgstr "Keine Mailings versenden (Opt-Out)"
 msgid "Do you want to remove this block?"
 msgstr "Möchten Sie diesen Block entfernen?"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:47
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:53
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:33
 msgid "Download"
 msgstr "Herunterladen"
@@ -1242,12 +1254,16 @@ msgstr "Seite duplizieren"
 msgid "Duplicate this page."
 msgstr "Diese Seite duplizieren."
 
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:31
+msgid "Duration"
+msgstr "Dauer"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address_email.tpl:2./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address_email.tpl:4
 msgid "E-mail address"
 msgstr "E-Mail-Adresse"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:19./apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:3
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:53./apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:50
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:66./apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:50
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:39
 #: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.collection.tpl:40./apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:23
@@ -1286,11 +1302,11 @@ msgstr "Einbetten"
 msgid "Embed code will be sanitized for allowed sites and html."
 msgstr "Der eingebettete Code wird für erlaubte Seiten und HTML bereinigt."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:176
+#: apps/zotonic_mod_admin/src/mod_admin.erl:177
 msgid "Embed page"
 msgstr "Seite einbetten"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:211
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:224
 #: apps/zotonic_mod_oembed/src/mod_oembed.erl:245
 msgid "Embedded Content"
 msgstr "Eingebettete Inhalte"
@@ -1298,6 +1314,10 @@ msgstr "Eingebettete Inhalte"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:34
 msgid "Emergency telephone"
 msgstr "Notrufnummer"
+
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:120
+msgid "Ensure <i>refers</i> connections"
+msgstr "Stellen Sie sicher, <i>auf</i> Verbindungen verweist"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:21
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
@@ -1315,11 +1335,11 @@ msgstr "Erlang-Installationswurzel"
 msgid "Erlang Version"
 msgstr "Erlang-Version"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:180
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:193
 msgid "Error checking the website."
 msgstr "Fehler bei der Überprüfung der Website."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:179
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:180
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:113
 msgid "Error creating the page."
 msgstr "Fehler beim Erstellen der Seite."
@@ -1328,19 +1348,19 @@ msgstr "Fehler beim Erstellen der Seite."
 msgid "Error importing page from the remote server."
 msgstr "Fehler beim Importieren der Seite vom Remote-Server."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:189
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:196
 msgid "Error uploading the file."
 msgstr "Fehler beim Hochladen der Datei."
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:149
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:150
 msgid "Error, duplicate name. Please change the name."
 msgstr "Fehler, doppelter Name. Bitte ändern Sie den Namen."
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:147
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:148
 msgid "Error, duplicate page path. Please change the uri."
 msgstr "Fehler, doppelter Seitenpfad. Bitte ändern Sie die uri."
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:145
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:146
 msgid "Error, duplicate uri. Please change the uri."
 msgstr "Fehler, doppelte uri. Bitte ändern Sie die uri."
 
@@ -1360,11 +1380,11 @@ msgstr "Genaue Kategorie"
 msgid "Exclude category"
 msgstr "Kategorie ausschließen"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:279
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:287
 msgid "Existing pages"
 msgstr "Vorhandene Seiten"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:175./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:165./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:155
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:182./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:166./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:168
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:99
 msgid "Failed to download the file."
 msgstr "Fehler beim Herunterladen der Datei."
@@ -1389,9 +1409,18 @@ msgstr "Neue Version wird abgerufen..."
 msgid "File / media content"
 msgstr "Datei/Medieninhalt"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:434
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:35
+msgid "File size"
+msgstr "Dateigröße"
+
+#: apps/zotonic_mod_admin/src/mod_admin.erl:451
 msgid "File uploaded to the drop folder, will be handled shortly."
 msgstr "Die in den Drop-Ordner hochgeladene Datei wird in Kürze bearbeitet."
+
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:39
+#: apps/zotonic_mod_base/priv/templates/directory_index.tpl:14
+msgid "Filename"
+msgstr "Dateiname"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:24./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:20
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:45./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:157./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:44
@@ -1441,7 +1470,7 @@ msgstr "Leeren Sie alle URL-Versandregeln, Template- und Bibliotheks-Caches und 
 msgid "Flush system caches"
 msgstr "System-Caches leeren"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:137
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:145
 msgid "Follow connections and import all (deep copy)."
 msgstr "Folgen Sie den Verbindungen und importieren Sie alle (Deep Copy)."
 
@@ -1450,7 +1479,7 @@ msgstr "Folgen Sie den Verbindungen und importieren Sie alle (Deep Copy)."
 msgid "From"
 msgstr "Von"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:148
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:5
 msgid "Function"
 msgstr "Funktion"
 
@@ -1470,10 +1499,14 @@ msgstr "Hat mittel"
 msgid "Has medium attached"
 msgstr "Hat Medium angeschlossen"
 
-#: apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:21./apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:22./apps/zotonic_mod_admin/src/mod_admin.erl:174
+#: apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:21./apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:22./apps/zotonic_mod_admin/src/mod_admin.erl:175
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:119
 msgid "Header"
 msgstr "Kopfzeile"
+
+#: apps/zotonic_mod_admin/priv/templates/_edit_medium_language.tpl:6
+msgid "Help"
+msgstr "Helfen"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:17
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:23
@@ -1496,7 +1529,7 @@ msgstr "IP-Adresse"
 msgid "If a page has a publication date range then it will only be visible between the two dates. Note that if you are allowed to edit the page then you can always see it."
 msgstr "Wenn eine Seite einen Veröffentlichungsdatumsbereich hat, ist sie nur zwischen diesen beiden Daten sichtbar. Beachten Sie, dass Sie die Seite immer sehen können, wenn Sie berechtigt sind, sie zu bearbeiten."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:133
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:141
 msgid "Import only direct connections (shallow copy)."
 msgstr "Nur direkte Verbindungen importieren (flache Kopie)."
 
@@ -1530,6 +1563,10 @@ msgstr "Ist mit Prädikat verbunden"
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:39
 msgid "Items per page"
 msgstr "Artikel pro Seite"
+
+#: apps/zotonic_mod_admin/priv/templates/_edit_medium_language.tpl:3./apps/zotonic_mod_admin/priv/templates/_edit_medium_language.tpl:5
+msgid "Language of media content"
+msgstr "Sprache der Medieninhalte"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_dashboard_events.tpl:3
 msgid "Latest modified events"
@@ -1582,7 +1619,7 @@ msgstr "Postalische Anschrift"
 msgid "Main"
 msgstr "Haupt"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:176
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:195
 msgid "Make"
 msgstr "Anlegen: "
 
@@ -1604,7 +1641,7 @@ msgstr "Eine neue Seite oder ein neues Medium erstellen"
 msgid "Matching"
 msgstr "Passend dazu"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:3./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:78./apps/zotonic_mod_admin/src/mod_admin.erl:104
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:3./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:78./apps/zotonic_mod_admin/src/mod_admin.erl:105
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:100./apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:103./apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:113
 msgid "Media"
 msgstr "Mediendatei"
@@ -1613,15 +1650,19 @@ msgstr "Mediendatei"
 msgid "Media URL or HTML"
 msgstr "Medien-URL oder HTML"
 
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:4
+msgid "Media content"
+msgstr "Medieninhalt"
+
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:81
 msgid "Media encompasses all uploaded images, movies and documents. Media can be attached to pages."
 msgstr "Medien umfassen alle hochgeladenen Bilder, Filme und Dokumente. Medien können an Seiten angehängt werden."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:36./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:37./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:42
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:36./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:37./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:43
 msgid "Media file"
 msgstr "Mediendatei"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:154
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:161
 msgid "Media item created."
 msgstr "Medienelement angelegt."
 
@@ -1633,7 +1674,7 @@ msgstr "Auf dieser Seite benutzte Mediendateien"
 msgid "Media title"
 msgstr "Titel der Mediendatei"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:136
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:149
 msgid "Media updated."
 msgstr "Medien aktualisiert."
 
@@ -1645,7 +1686,7 @@ msgstr "Speicher"
 msgid "Middle"
 msgstr "Zweiter"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:118
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:121
 msgid "Mine"
 msgstr "Meine"
 
@@ -1690,7 +1731,7 @@ msgstr "Block nach unten verschieben"
 msgid "Move block up"
 msgstr "Block nach oben verschieben"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:221./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:223
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:225./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:227
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:9./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:49
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:23./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
@@ -1712,11 +1753,11 @@ msgstr "Netzwerk-Verbindungen"
 msgid "New Page"
 msgstr "Neue Seite"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:169./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:171
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:188./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:190
 msgid "Next &gt;"
 msgstr "Nächste &gt;"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:150
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:7
 msgid "Next due"
 msgstr "Als nächstes fällig"
 
@@ -1724,7 +1765,7 @@ msgstr "Als nächstes fällig"
 msgid "Next in category:"
 msgstr "Nächster in der Kategorie:"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_depictions.tpl:14
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_depictions.tpl:21
 msgid "No connected images."
 msgstr "Keine verbundenen Bilder."
 
@@ -1735,6 +1776,10 @@ msgstr "Für diese Meta-Ressource sind keine Funktionen aktiviert."
 #: apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:85
 msgid "No items"
 msgstr "Keine Elemente"
+
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:55
+msgid "No media content."
+msgstr "Kein Medieninhalt."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:179
 msgid "No media found."
@@ -1799,7 +1844,7 @@ msgstr "Seitenpfad"
 msgid "Page referrers"
 msgstr "Seitenverweise"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:3./apps/zotonic_mod_admin/src/mod_admin.erl:99
+#: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:3./apps/zotonic_mod_admin/src/mod_admin.erl:100
 msgid "Pages"
 msgstr "Seiten"
 
@@ -1880,7 +1925,7 @@ msgstr "Veröffentlichungszeitraum"
 msgid "Publish this page"
 msgstr "Diese Seite veröffentlichen"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:51./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:61./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:244./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:102./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:53./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:21
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:51./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:61./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:248./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:102./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:53./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:21
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:47
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:44
 msgid "Published"
@@ -1963,7 +2008,7 @@ msgstr "Anmerkungen"
 msgid "Remove"
 msgstr "Entfernen"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:665
+#: apps/zotonic_mod_admin/src/mod_admin.erl:691
 msgid "Removed the connection to"
 msgstr "Entfernt die Verbindung zu"
 
@@ -1971,7 +2016,7 @@ msgstr "Entfernt die Verbindung zu"
 msgid "Renumber category tree"
 msgstr "Kategorienbaum neu durchnummerieren"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:77./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:110./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:176
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:83./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:116./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:195
 msgid "Replace"
 msgstr "Ersetzen"
 
@@ -2014,6 +2059,10 @@ msgstr "Seite Speichern und anzeigen."
 msgid "Save this page."
 msgstr "Seite speichern."
 
+#: apps/zotonic_mod_admin/src/mod_admin.erl:535
+msgid "Scheduled background task to check all refers connections."
+msgstr "Geplante Hintergrundaufgabe zur Überprüfung aller Referenzverbindungen."
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:284
 msgid "Search"
 msgstr "Suche"
@@ -2047,7 +2096,7 @@ msgstr "Sicherheitsverzeichnis"
 msgid "See also: <a href=\"http://docs.zotonic.com/en/stable/ref/configuration/zotonic-configuration.html#the-erlang-config-file\">The erlang.config file</a>"
 msgstr "Siehe auch: <a href=\"http://docs.zotonic.com/en/stable/ref/configuration/zotonic-configuration.html#the-erlang-config-file\">Die Datei erlang.config</a>"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:255./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:263./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:34
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:47./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:103
 msgid "Select"
 msgstr "Wählen"
@@ -2064,7 +2113,7 @@ msgstr "Ausgewählt"
 msgid "Selected Categories"
 msgstr "Ausgewählte Kategorien"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:50
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:51
 msgid "Selecting a file will make the page a media item."
 msgstr "Wenn Sie eine Datei auswählen, wird die Seite zu einem Medienelement."
 
@@ -2106,7 +2155,11 @@ msgstr "Größe"
 msgid "Some disks are almost full."
 msgstr "Einige Festplatten sind fast voll."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:165
+#: apps/zotonic_mod_admin/priv/templates/_edit_medium_language.tpl:5
+msgid "Some images, PDFs, audio and video are presented in a single language. Here you can select this language."
+msgstr "Einige Bilder, PDFs, Audio- und Videodateien werden in einer einzigen Sprache präsentiert. Hier können Sie diese Sprache auswählen."
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:22
 msgid "Some tasks are retrying.<br>Total errors: {total}<br>Highest for single task: {max}"
 msgstr "Einige Aufgaben werden wiederholt.<br>Gesamtfehler: {total}<br>Höchste für einzelne Aufgabe: {max}"
 
@@ -2114,23 +2167,27 @@ msgstr "Einige Aufgaben werden wiederholt.<br>Gesamtfehler: {total}<br>Höchste 
 msgid "Something went wrong. Sorry."
 msgstr "Etwas lief schief. Entschuldigung!!"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:407
+#: apps/zotonic_mod_admin/src/mod_admin.erl:424
 msgid "Sorry, could not handle this filename."
 msgstr "Dieser Dateiname konnte leider nicht verarbeitet werden."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:446
+#: apps/zotonic_mod_admin/src/mod_admin.erl:463
 msgid "Sorry, could not move the file to the drop folder."
 msgstr "Leider konnte die Datei nicht in den Drop-Ordner verschoben werden."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:382./apps/zotonic_mod_admin/src/mod_admin.erl:393
+#: apps/zotonic_mod_admin/src/mod_admin.erl:537
+msgid "Sorry, only an admin is allowed to do this"
+msgstr "Leider ist dies nur einem Administrator gestattet"
+
+#: apps/zotonic_mod_admin/src/mod_admin.erl:399./apps/zotonic_mod_admin/src/mod_admin.erl:410
 msgid "Sorry, that page is unknown."
 msgstr "Entschuldigung, diese Seite ist unbekannt."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:384./apps/zotonic_mod_admin/src/mod_admin.erl:395
+#: apps/zotonic_mod_admin/src/mod_admin.erl:401./apps/zotonic_mod_admin/src/mod_admin.erl:412
 msgid "Sorry, you are not allowed to edit notes."
 msgstr "Tut mir leid, Sie sind nicht berechtigt, Notizen zu bearbeiten."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:450
+#: apps/zotonic_mod_admin/src/mod_admin.erl:467
 msgid "Sorry, you are not allowed to upload drop folder files."
 msgstr "Leider ist es Ihnen nicht gestattet, Drop-Folder-Dateien hochzuladen."
 
@@ -2138,11 +2195,11 @@ msgstr "Leider ist es Ihnen nicht gestattet, Drop-Folder-Dateien hochzuladen."
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "Tut mir leid, Sie haben keine Berechtigung, die Verbindung hinzuzufügen."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:647
+#: apps/zotonic_mod_admin/src/mod_admin.erl:673
 msgid "Sorry, you have no permission to add the connection."
 msgstr "Tut mir leid, Sie haben keine Berechtigung, die Verbindung hinzuzufügen."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:649
+#: apps/zotonic_mod_admin/src/mod_admin.erl:675
 msgid "Sorry, you have no permission to delete the connection."
 msgstr "Tut mir leid, Sie haben keine Berechtigung, die Verbindung zu löschen."
 
@@ -2150,7 +2207,7 @@ msgstr "Tut mir leid, Sie haben keine Berechtigung, die Verbindung zu löschen."
 msgid "Sort by"
 msgstr "Sortiere nach"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:173
+#: apps/zotonic_mod_admin/src/mod_admin.erl:174
 msgid "Standard"
 msgstr "Standard"
 
@@ -2163,7 +2220,7 @@ msgstr "Startet"
 msgid "State"
 msgstr "Bundesland"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:135
+#: apps/zotonic_mod_admin/src/mod_admin.erl:136
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:12
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:104
@@ -2181,7 +2238,7 @@ msgstr "Straße"
 msgid "Street Line 2"
 msgstr "Noch Straße"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:116
+#: apps/zotonic_mod_admin/src/mod_admin.erl:117
 msgid "Structure"
 msgstr "Aufbau"
 
@@ -2206,7 +2263,7 @@ msgstr "Namenszusatz"
 msgid "Surname"
 msgstr "Nachname"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:130
+#: apps/zotonic_mod_admin/src/mod_admin.erl:131
 msgid "System"
 msgstr "System"
 
@@ -2218,15 +2275,15 @@ msgstr "Systemzustand"
 msgid "System administration"
 msgstr "Systemadministration"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:142
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:154
 msgid "Task queue"
 msgstr "Aufgabenwarteschlange"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:185
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:161
 msgid "Tasks are functions scheduled to run at a certain time."
 msgstr "Aufgaben sind Funktionen, die zu einem bestimmten Zeitpunkt ausgeführt werden sollen."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:186
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:162
 msgid "Tasks with errors will retry five times before being dropped."
 msgstr "Aufgaben mit Fehlern werden fünfmal wiederholt, bevor sie gelöscht werden."
 
@@ -2244,7 +2301,7 @@ msgstr "Templates werden neu kompiliert."
 msgid "Test query"
 msgstr "Testabfrage"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:42./apps/zotonic_mod_admin/src/mod_admin.erl:175
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:42./apps/zotonic_mod_admin/src/mod_admin.erl:176
 msgid "Text"
 msgstr "Text"
 
@@ -2260,7 +2317,7 @@ msgstr "Der Kategoriebaum wird gerade neu aufgebaut. Dies kann sehr lange dauern
 msgid "The page"
 msgstr "Die Seite"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:65
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:71
 msgid "The page will stay, but without the media item."
 msgstr "Die Seite bleibt bestehen, jedoch ohne das Medienelement."
 
@@ -2276,11 +2333,11 @@ msgstr "Die Daten der Website werden neu installiert. Beobachten Sie die Konsole
 msgid "There are no pages with a connection to the page"
 msgstr "Es gibt keine Seiten mit Verbindungen zu dieser Seite"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:177
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:34
 msgid "There are no tasks in the task queue."
 msgstr "Es befinden sich keine Aufgaben in der Aufgabenwarteschlange."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:159
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:160
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:93
 msgid "There is already a page with this name."
 msgstr "Es gibt bereits eine Seite mit diesem Namen."
@@ -2293,29 +2350,29 @@ msgstr "Dies kann nicht rückgängig gemacht werden. Ihre Seite wird für immer 
 msgid "This connection already exists."
 msgstr "Diese Verbindung ist bereits vorhanden."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:179./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:169./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:159
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:186./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:170./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:172
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:103
 msgid "This file contains links to other files or locations."
 msgstr "Diese Datei enthält Links zu anderen Dateien oder Speicherorten."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:94
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:100
 msgid "This file has been scanned for viruses."
 msgstr "Diese Datei wurde auf Viren überprüft."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:90
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:96
 msgid "This file has not been scanned for viruses because it is too large."
 msgstr "Diese Datei wurde nicht auf Viren überprüft, da sie zu groß ist."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:98
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:104
 msgid "This file has not been scanned for viruses."
 msgstr "Diese Datei wurde nicht auf Viren überprüft."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:177./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:167./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:157
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:184./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:168./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:170
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:101
 msgid "This file is infected with a virus."
 msgstr "Diese Datei ist mit einem Virus infiziert."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:181./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:161
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:188./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:172./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:174
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:105
 msgid "This file is too large."
 msgstr "Diese Datei ist zu groß."
@@ -2360,11 +2417,11 @@ msgstr "Diese Resource wurde erzeugt durch das Modul"
 msgid "Till"
 msgstr "Bis"
 
-#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:149
+#: apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:162
 msgid "Timeout while trying to fetch data from the website."
 msgstr "Timeout beim Versuch, Daten von der Website zu holen."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:27./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:36./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:93./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:124./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:28./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:36./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:93./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:124./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:9./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:11./apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:26
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:23
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:16./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:20
@@ -2384,7 +2441,7 @@ msgstr "Navigation umschalten"
 msgid "Too many connections, only the first and last are shown."
 msgstr "Zu viele Verbindungen, nur die erste und die letzte werden angezeigt."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:81
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:84
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
 msgid "Type text to search"
 msgstr "Text für die Suche eingeben"
@@ -2413,7 +2470,7 @@ msgstr "Eindeutiger URI"
 msgid "Unpublished"
 msgstr "Unveröffentlicht"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:655./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:69./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:125
+#: apps/zotonic_mod_admin/src/mod_admin.erl:681./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:69./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:125
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58./apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:57
 #: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
@@ -2441,7 +2498,7 @@ msgstr "Ausgewählte Seiten aktualisieren"
 msgid "Update {n} pages with the following properties:"
 msgstr "Aktualisieren Sie {n} Seiten mit den folgenden Eigenschaften:"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:89./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:134
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:89./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:17./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:146
 msgid "Upload"
 msgstr "Hochladen"
 
@@ -2453,11 +2510,11 @@ msgstr "Datei hochladen"
 msgid "Upload a file from your computer."
 msgstr "Eine Datei von Ihrem Computer hochladen."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:124
+#: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:136
 msgid "Upload a file to the drop folder. This file will be handled in the background by the mailinglists for recipient import and other modules."
 msgstr "Laden Sie eine Datei in den Drop-Ordner hoch. Diese Datei wird im Hintergrund von den Mailinglisten für den Empfängerimport und anderen Modulen verarbeitet."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:69./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:121
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:71./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:133
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:27./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:26
 msgid "Upload file"
 msgstr "Datei hochladen"
@@ -2466,6 +2523,10 @@ msgstr "Datei hochladen"
 #: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:75
 msgid "Uploaded"
 msgstr "Hochgeladen"
+
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:42
+msgid "Uploaded on"
+msgstr "Hochgeladen am"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:10./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:34
 msgid "Usage"
@@ -2487,11 +2548,11 @@ msgstr "Gebraucht"
 msgid "User page"
 msgstr "Benutzer-Seite"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:91
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:94
 msgid "Valid for:"
 msgstr "Gültig für:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:2./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:46
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:2./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:52
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:130
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:41
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
@@ -2586,21 +2647,21 @@ msgstr "Sie dürfen diese Seite nicht löschen."
 msgid "You are not allowed to edit this page."
 msgstr "Sie sind nicht berechtigt, diese Seite zu bearbeiten."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:171./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:151
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:178./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:164
 msgid "You don't have permission to change this media item."
 msgstr "Sie haben nicht die Berechtigung, dieses Medienelement zu ändern."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:161
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:162
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:95
 msgid "You don't have permission to create this page."
 msgstr "Sie haben nicht die Berechtigung, diese Seite zu erstellen."
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:151
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:152
 #: apps/zotonic_mod_image_edit/src/mod_image_edit.erl:51
 msgid "You don't have permission to edit this page."
 msgstr "Sie sind nicht berechtigt, diese Seite zu bearbeiten."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:173./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:163./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:153
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:180./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:164./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:166
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:97
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "Sie haben nicht die richtigen Berechtigungen, um diesen Dateityp hochzuladen."
@@ -2613,7 +2674,7 @@ msgstr "Sie haben nicht die Berechtigung, diese Aktion auszuführen."
 msgid "You have to specify a description of the file to make it easier to find and share."
 msgstr "Sie müssen eine Beschreibung der Datei angeben, damit sie leichter gefunden und freigegeben werden kann."
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:153
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:154
 msgid "Your search query is invalid. Please correct it before saving."
 msgstr "Ihre Suchanfrage ist ungültig. Bitte korrigieren Sie diese vor dem Speichern."
 
@@ -2636,7 +2697,7 @@ msgid "by"
 msgstr "von"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:55./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:56./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:138./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:139./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:140./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:152./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:155./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:55
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:68
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:32./apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:33./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:70./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:71./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:73
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:44
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:31
@@ -2694,7 +2755,7 @@ msgstr "Name"
 msgid "page"
 msgstr "Seite"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:17
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:28./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:17
 msgid "pixels"
 msgstr "Pixel"
 
@@ -2714,7 +2775,7 @@ msgstr "rückgängig"
 msgid "untitled"
 msgstr "unbenannt"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:105
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:51./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:111
 msgid "uploaded on"
 msgstr "hochgeladen am"
 
@@ -2893,7 +2954,7 @@ msgstr "Schlüssel"
 msgid "Make a new config setting"
 msgstr "Neue Konfigurationseinstellung erstellen"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:66
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:79
 msgid "No configurations found."
 msgstr "Keine Konfigurationen gefunden."
 
@@ -4678,7 +4739,6 @@ msgid "external service"
 msgstr "externer Service"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_extra.tpl:6
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:85
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:9
 msgid "or"
 msgstr "oder"
@@ -5020,10 +5080,6 @@ msgstr "Excel-Arbeitsmappe"
 #: apps/zotonic_mod_base/priv/templates/error.tpl:81
 msgid "File"
 msgstr "Datei"
-
-#: apps/zotonic_mod_base/priv/templates/directory_index.tpl:14
-msgid "Filename"
-msgstr "Dateiname"
 
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:28
 msgid "Folder"
@@ -10109,7 +10165,7 @@ msgstr "Möchten Sie diese Sprache entfernen?"
 msgid "Available sub-languages"
 msgstr "Verfügbare Untersprachen"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:498
+#: apps/zotonic_mod_translation/src/mod_translation.erl:502
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "Kann keine Übersetzungsdateien erzeugen, weil <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext nicht installiert ist</a>."
 
@@ -10265,7 +10321,7 @@ msgstr "Übersetzungen nachladen"
 msgid "Reload all translations from the modules and site. All templates will be recompiled."
 msgstr "Laden Sie alle Übersetzungen aus den Modulen und der Site neu. Alle Vorlagen werden neu kompiliert."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:513
+#: apps/zotonic_mod_translation/src/mod_translation.erl:517
 msgid "Reloading all .po files in the background."
 msgstr "Alle .po-Dateien im Hintergrund neu laden."
 
@@ -10309,23 +10365,23 @@ msgstr "Wählen Sie Ihre bevorzugte Sprache."
 msgid "Show the language in the URL"
 msgstr "Anzeigen der Sprache in der URL"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:415./apps/zotonic_mod_translation/src/mod_translation.erl:463
+#: apps/zotonic_mod_translation/src/mod_translation.erl:419./apps/zotonic_mod_translation/src/mod_translation.erl:467
 msgid "Sorry, could not change the language."
 msgstr "Sorry, konnte die Sprache nicht ändern."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:402./apps/zotonic_mod_translation/src/mod_translation.erl:431./apps/zotonic_mod_translation/src/mod_translation.erl:443./apps/zotonic_mod_translation/src/mod_translation.erl:466
+#: apps/zotonic_mod_translation/src/mod_translation.erl:406./apps/zotonic_mod_translation/src/mod_translation.erl:435./apps/zotonic_mod_translation/src/mod_translation.erl:447./apps/zotonic_mod_translation/src/mod_translation.erl:470
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "Tut mir leid, Sie haben keine Berechtigung, die Sprachliste zu ändern."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:515
+#: apps/zotonic_mod_translation/src/mod_translation.erl:519
 msgid "Sorry, you don't have permission to reload translations."
 msgstr "Tut mir leid, Sie haben keine Berechtigung zum Nachladen von Übersetzungen."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:505
+#: apps/zotonic_mod_translation/src/mod_translation.erl:509
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "Tut mir leid, Sie haben keine Erlaubnis, nach Übersetzungen zu scannen."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:418./apps/zotonic_mod_translation/src/mod_translation.erl:584
+#: apps/zotonic_mod_translation/src/mod_translation.erl:422./apps/zotonic_mod_translation/src/mod_translation.erl:588
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "Sie haben leider nicht die Berechtigung, die Standardsprache einzustellen."
 
@@ -10333,7 +10389,7 @@ msgstr "Sie haben leider nicht die Berechtigung, die Standardsprache einzustelle
 msgid "Spanish"
 msgstr "Spanisch"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:485
+#: apps/zotonic_mod_translation/src/mod_translation.erl:489
 msgid "Started building the .pot files. This may take a while..."
 msgstr "Ich habe begonnen, die .pot-Dateien zu erstellen. Dies kann eine Weile dauern..."
 
@@ -10353,7 +10409,7 @@ msgstr "Der Titel, der Textkörper und andere Texte können in verschiedene Spra
 msgid "Translate this page in other languages."
 msgstr "Übersetzen Sie diese Seite in andere Sprachen."
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:819
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:823
 msgid "Translation"
 msgstr "Übersetzung"
 
