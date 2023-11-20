@@ -206,10 +206,10 @@ connect(#{ type := connect, username := U, password := P }, _IsSessionPresent, O
 connect(#{ type := connect, username := U, password := P, properties := Props }, IsSessionPresent, Options, Context) when not ?none(U), not ?none(P) ->
     % User login, and no user from the MQTT controller
     % The username might be something like: "example.com:localuser"
-    Username = case binary:split(U, <<":">>) of
-        [ _VHost, U1 ] -> U1;
-        _ -> U
-    end,
+    Username = case split_vhost_username(U) of
+                   [ _VHost, U1 ] -> U1;
+                   _ -> U
+               end,
     LogonArgs = #{
         <<"username">> => Username,
         <<"password">> => P
@@ -456,3 +456,26 @@ is_valid_message(_Msg, #{ auth_user_id := UserId }, Context) ->
 is_valid_message(_Msg, _Options, _Context) ->
     true.
 
+split_vhost_username(Username) ->
+    case z_config:get(mqtt_username_format_0x, false) of
+        true ->
+            % "example.com:localuser"  (Zotonic 1.x format)
+            % "localuser@examplesite"  (Zotonic 0.x format)
+            split_vhost_username(Username, Username);
+        false ->
+            % "example.com:localuser"  (Zotonic 1.x format)
+            binary:split(Username, <<":">>)
+    end.
+
+split_vhost_username(<<>>, Username) ->
+    % Username without designation
+    [Username];
+split_vhost_username(<<":", _/binary>>, Username) ->
+    % "example.com:localuser"  (Zotonic 1.x format)
+    binary:split(Username, <<":">>);
+split_vhost_username(<<"@", _/binary>>, Username) ->
+    % "localuser@examplesite"  (Zotonic 0.x format)
+    [Username, VHost] = binary:split(Username, <<"@">>),
+    [VHost, Username];
+split_vhost_username(<<_/utf8, R/binary>>, Username) ->
+    split_vhost_username(R, Username).
