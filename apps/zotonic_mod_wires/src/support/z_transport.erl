@@ -188,7 +188,7 @@ is_submit_event(submit) -> true;
 is_submit_event(_Type) -> false.
 
 maybe_set_q(#{ <<"q">> := Qs }, Context) when is_list(Qs) ->
-    Qs1 = lists:foldl(
+    Qs1 = lists:foldr(
         fun
             (#{ <<"name">> := K, <<"value">> := V }, Acc) ->
                 [ {K, V} | Acc ];
