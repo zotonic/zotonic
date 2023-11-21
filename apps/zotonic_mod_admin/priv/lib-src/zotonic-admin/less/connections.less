@@ -9,3 +9,22 @@
         margin: 0 10px 0 0;
     }
 }
+
+.checkbox-list {
+    display: flex;
+    flex-wrap: wrap;
+
+    .checkbox {
+        flex-grow: 1;
+        width: 25%;
+        min-width: 200px;
+        margin-top: 0;
+        padding-right: 10px;
+    }
+
+    @media (max-width: @screen-tablet) {
+        .checkbox {
+            width: 25%;
+        }
+    }
+}

@@ -9,7 +9,7 @@
                    autofocus
                    class="form-control do_listfilter do_autofocus"
                    placeholder="{_ Type to filter the list below. _}"
-                   data-listfilter="method: 'words', list: '#find-connect-objects .connect-object'"
+                   data-listfilter="method: 'words', list: '#find-connect-objects .checkbox'"
             >
         </form>
 
@@ -19,17 +19,26 @@
                     <h4>{{ cat.category.title }}</h4>
                 {% endif %}
 
-                <div class="row">
-                {% for id in cat.resources %}
-                    <div class="connect-object col-md-3 col-sm-4">
+                <div class="checkbox-list">
+                    {% for id in cat.resources %}
                         <label class="checkbox">
                             <input type="checkbox" value="{{ id }}" {% if id|member:oids %}checked{% endif %}>
                             {{ id.title|default:id.short_title }}
                         </label>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                    {# Padding for flexbox last row #}
+                    <label class="checkbox"></label>
+                    <label class="checkbox"></label>
+                    <label class="checkbox"></label>
                 </div>
             {% endfor %}
+        </div>
+
+        <div class="modal-footer">
+            <a class="btn btn-default" id="{{ #close }}">
+                {% if autoclose %}{_ Cancel _}{% else %}{_ Close _}{% endif %}
+            </a>
+            {% wire id=#close action={dialog_close} %}
         </div>
 
         {% wire name="dialog_connect_find"
