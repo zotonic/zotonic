@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-06-03
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Add a module management screen to the admin.
+%% @end
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -45,13 +45,16 @@ all(Context) ->
     Modules = z_module_manager:scan(Context),
     Descrs  = lists:map(
         fun({Module, App, Path}) ->
+            Prio = z_module_manager:prio(Module),
             ModProps = [
                 {is_active, lists:member(Module, Active)},
                 {path, Path},
-                {app, App}
+                {app, App},
+                {schema, z_module_manager:mod_schema(Module)},
+                {prio, Prio}
                 | descr(Module)
             ],
-            add_sort_key({z_module_manager:prio(Module), Module, ModProps})
+            add_sort_key({Prio, Module, ModProps})
         end,
         Modules),
     lists:sort(Descrs).

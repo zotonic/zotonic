@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Overview of modules, allows activating/deactivating the modules.
+%% @end
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -22,7 +23,9 @@
 -export([
     service_available/1,
     is_authorized/1,
-    process/4
+    process/4,
+
+    event/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -49,3 +52,16 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Template = z_context:get(template, Context, "admin_modules.tpl"),
 	Html = z_template:render(Template, Vars, Context),
 	z_context:output(Html, Context).
+
+event(#postback{ message = {reinstall, [ {module, Module} ]} }, Context) ->
+    case z_acl:is_allowed(user, mod_admin_modules, Context) of
+        true ->
+            case z_module_manager:reinstall(Module, Context) of
+                ok ->
+                    z_render:growl(?__("Reinstalled the data model.", Context), Context);
+                nop ->
+                    z_render:growl(?__("This module does not have a <tt>manage_schema/2</tt> function.", Context), Context)
+            end;
+        false ->
+            z_render:growl_error(?__("Sorry, you are not allowed to do this.", Context), Context)
+    end.
