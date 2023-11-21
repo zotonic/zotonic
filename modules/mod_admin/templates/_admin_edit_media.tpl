@@ -13,6 +13,8 @@
         &ndash; {_ uploaded on _} {{ medium.created|date:"Y-m-d H:i:s" }}
     </p>
 
+    <hr>
+
     <div class="admin-edit-media {% if id.is_a.image %}do_cropcenter{% endif %}" id="rsc-image" data-original-width="{{ medium.width }}">
         {% if medium.width < 597 and medium.height < 597 %}
             {% media medium mediaclass="admin-media-cropcenter" %}
@@ -29,7 +31,13 @@
             </a>
             <span id="crop-center-message" class="text-muted">{_ Click the image to set the cropping center. _}</span>
         {% endif %}
+    </div>
 
+    <hr>
+
+    {% include "_edit_medium_language.tpl" %}
+
+    <div class="form-group clearfix">
         <p class="text-right">
             {% if medium.size > 0 %}
                 <a target="_blank" class="btn btn-default" href="{% url media_inline id=id %}" class="button">{_ View _}</a>

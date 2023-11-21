@@ -40,14 +40,15 @@ render_action(TriggerId, TargetId, Args, Context) ->
     Callback = proplists:get_value(callback, Args),
     Actions = proplists:get_all_values(action, Args),
     Objects = proplists:get_all_values(object, Args),
-    Postback = {new_rsc_dialog, Title, Cat, NoCatSelect, TabsEnabled, Redirect, SubjectId, ObjectId, Predicate, Callback, Actions, Objects},
+    Intent = proplists:get_value(intent, Args),
+    Postback = {new_rsc_dialog, Title, Cat, NoCatSelect, TabsEnabled, Redirect, SubjectId, ObjectId, Predicate, Intent, Callback, Actions, Objects},
     {PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
     {PostbackMsgJS, Context}.
 
 
 %% @doc Fill the dialog with the new page form. The form will be posted back to this module.
 %% @spec event(Event, Context1) -> Context2
-event(#postback{message={new_rsc_dialog, Title, Cat, NoCatSelect, TabsEnabled, Redirect, SubjectId, ObjectId, Predicate, Callback, Actions, Objects}}, Context) ->
+event(#postback{message={new_rsc_dialog, Title, Cat, NoCatSelect, TabsEnabled, Redirect, SubjectId, ObjectId, Predicate, Intent, Callback, Actions, Objects}}, Context) ->
     CatId = case Cat of
                 [] -> undefined;
                 undefined -> undefined;
@@ -63,6 +64,7 @@ event(#postback{message={new_rsc_dialog, Title, Cat, NoCatSelect, TabsEnabled, R
     end,
     Vars = [
         {delegate, atom_to_list(?MODULE)},
+        {intent, Intent},
         {redirect, Redirect},
         {subject_id, SubjectId},
         {object_id, ObjectId},
@@ -122,18 +124,24 @@ do_new_page_actions(Id, Args, Context) ->
     Callback = proplists:get_value(callback, Args),
     Actions = proplists:get_value(actions, Args, []),
     Objects = proplists:get_value(objects, Args, []),
+    Intent = z_convert:to_binary(proplists:get_value(intent, Args)),
 
     Callback1 = case dispatch(Redirect) of
         false -> Callback;
         _Dispatch -> undefined
     end,
 
+    OptPredicate = case Intent of
+        <<"select">> -> undefined;
+        _ -> Predicate
+    end,
+
     % Optionally add an edge from the subject to this new resource
     {_,Context1} = case {is_integer(SubjectId), is_integer(ObjectId)} of
         {true, _} ->
-            mod_admin:do_link(SubjectId, Predicate, Id, Callback1, Context);
+            mod_admin:do_link(SubjectId, OptPredicate, Id, Callback1, Context);
         {_, true} ->
-            mod_admin:do_link(Id, Predicate, ObjectId, Callback1, Context);
+            mod_admin:do_link(Id, OptPredicate, ObjectId, Callback1, Context);
         {false, false} when Callback1 =/= undefined ->
             % Call the optional callback
             mod_admin:do_link(undefined, undefined, Id, Callback1, Context);
@@ -216,15 +224,13 @@ get_base_props(undefined, Context) ->
                 [],
                 z_context:get_q_all_noz(Context));
 get_base_props(NewRscTitle, Context) ->
-    Lang = z_context:language(Context),
     Props = lists:foldl(fun({Prop,Val}, Acc) ->
                             maybe_add_prop(Prop, Val, Acc)
                         end,
                         [],
                         z_context:get_q_all_noz(Context)),
     [
-        {title, {trans, [{Lang, NewRscTitle}]}},
-        {language, [Lang]}
+        {title, NewRscTitle}
         | Props
     ].
 

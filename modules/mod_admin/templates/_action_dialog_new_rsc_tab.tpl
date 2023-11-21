@@ -4,6 +4,7 @@
     id="dialog-new-rsc-tab"
     type="submit"
 	postback={new_page
+		intent=intent
 	    subject_id=subject_id
         object_id=object_id
 	    predicate=predicate
@@ -104,6 +105,12 @@
 		            			case 'audio': new_cat = '{{ m.rsc.audio.id }}'; break;
 		            			case 'video': new_cat = '{{ m.rsc.video.id }}'; break;
 		            			case 'document': new_cat = '{{ m.rsc.document.id }}'; break;
+		            		}
+
+		            		if (filename) {
+								$('#{{ form }} .if-upload').show();
+		            		} else {
+		            			$('#{{ form }} .if-upload').hide();
 		            		}
 
 		            		if ($('#{{ form }} select[name=category_id] option[value='+new_cat+']').length > 0) {
@@ -222,6 +229,10 @@
 						</div>
 				    </div>
 				</div>
+
+				<div class="if-upload" style="display: none">
+			        {% include "_edit_medium_language.tpl" %}
+			    </div>
 			{% endblock %}
 
 			{% block new_rsc_footer %}

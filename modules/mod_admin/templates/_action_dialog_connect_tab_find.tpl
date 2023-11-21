@@ -83,6 +83,7 @@
     action={postback
         delegate=delegate|default:`mod_admin`
         postback={admin_connect_select
+            intent=intent
             id=id
             subject_id=subject_id
             object_id=object_id

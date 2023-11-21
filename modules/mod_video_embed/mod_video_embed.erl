@@ -321,13 +321,15 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
                               end,
             Predicate = proplists:get_value(predicate, EventProps, depiction),
             Title   = z_context:get_q_validated("title", Context),
+            MediumLanguage = z_context:get_q("medium_language", Context),
             Props = [
                 {title, Title},
                 {is_published, true},
                 {category, video},
                 {video_embed_service, EmbedService},
                 {video_embed_code, EmbedCode},
-                {content_group_id, ContentGroupdId}
+                {content_group_id, ContentGroupdId},
+                {medium_language, MediumLanguage}
             ],
 
             case m_rsc:insert(Props, Context) of
@@ -356,10 +358,12 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
 
         %% Update the current page
         N when is_integer(N) ->
+            MediumLanguage = z_context:get_q("medium_language", Context),
             Props = [
                 {category, video},
                 {video_embed_service, EmbedService},
-                {video_embed_code, EmbedCode}
+                {video_embed_code, EmbedCode},
+                {medium_language, MediumLanguage}
             ],
             case m_rsc:update(Id, Props, Context) of
                 {ok, _} ->

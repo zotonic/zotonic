@@ -7,8 +7,16 @@
     <p>{_ Embed a video or other media URL. Here you can paste any URL from YouTube, Vimeo or other services. _}</p>
 
     {% wire id=#form type="submit"
-        postback={add_video_embed predicate=predicate actions=actions id=id
-                                subject_id=subject_id stay=stay content_group_id=content_group_id callback=callback}
+        postback={add_video_embed
+            intent=intent
+            predicate=predicate
+            actions=actions
+            id=id
+            subject_id=subject_id
+            stay=stay
+            content_group_id=content_group_id
+            callback=callback
+        }
         delegate="mod_oembed"
     %}
     <form id="{{ #form }}" method="POST" action="postback" class="form form-horizontal">
@@ -67,6 +75,8 @@
                 </div>
             </div>
         {% endif %}
+
+        {% include "_edit_medium_language.tpl" is_form_row %}
 
         <div class="modal-footer">
             {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}

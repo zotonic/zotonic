@@ -37,16 +37,18 @@ render_action(TriggerId, TargetId, Args, Context) ->
     Stay = proplists:get_value(stay, Args, false),
     Center = proplists:get_value(center, Args, 1),
     Callback = proplists:get_value(callback, Args),
-    Postback = {media_upload_dialog, Title, Id, SubjectId, Predicate, Stay, Center, Callback, Actions},
+    Intent = proplists:get_value(intent, Args),
+    Postback = {media_upload_dialog, Title, Id, SubjectId, Predicate, Intent, Stay, Center, Callback, Actions},
         {PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
         {PostbackMsgJS, Context}.
 
 
 %% @doc Fill the dialog with the new page form. The form will be posted back to this module.
 %% @spec event(Event, Context1) -> Context2
-event(#postback{message={media_upload_dialog, Title, Id, SubjectId, Predicate, Stay, Center, Callback, Actions}}, Context) ->
+event(#postback{message={media_upload_dialog, Title, Id, SubjectId, Predicate, Intent, Stay, Center, Callback, Actions}}, Context) ->
     Vars = [
         {delegate, atom_to_list(?MODULE)},
+        {intent, Intent},
         {id, Id},
         {subject_id, SubjectId},
         {title, Title},
@@ -77,7 +79,10 @@ event(#submit{message={media_upload, EventProps}}, Context) ->
                             ],
                             add_content_group(EventProps, Props0, Context);
                         _Id ->
-                            [{original_filename, OriginalFilename}]
+                            [
+                                {original_filename, OriginalFilename}
+                                | get_base_props(undefined, Context)
+                            ]
                     end,
             handle_media_upload(EventProps, Context,
                                 %% insert fun
@@ -95,7 +100,7 @@ event(#submit{message={media_url, EventProps}}, Context) ->
                     Title = z_context:get_q_validated("new_media_title_url", Context),
                     add_content_group(EventProps, get_base_props(Title, Context), Context);
                 _ ->
-                    []
+                    get_base_props(undefined, Context)
             end,
     handle_media_upload(EventProps, Context,
                         %% insert fun
@@ -127,6 +132,7 @@ handle_media_upload(EventProps, Context, InsertFun, ReplaceFun) ->
     Id = proplists:get_value(id, EventProps),
     Stay = z_convert:to_bool(proplists:get_value(stay, EventProps, false)),
     Callback = proplists:get_value(callback, EventProps),
+    Intent = proplists:get_value(intent, EventProps),
     case Id of
         %% Create a new media page
         undefined ->
@@ -135,7 +141,12 @@ handle_media_upload(EventProps, Context, InsertFun, ReplaceFun) ->
 
             case InsertFun(Context) of
                 {ok, MediaId} ->
-                    {_, ContextCb} = mod_admin:do_link(z_convert:to_integer(SubjectId), Predicate, MediaId, Callback, Context),
+                    {_, ContextCb} = case z_convert:to_binary(Intent) of
+                        <<"select">> ->
+                            mod_admin:do_link(undefined, undefined, MediaId, Callback, Context);
+                        _ ->
+                            mod_admin:do_link(z_convert:to_integer(SubjectId), Predicate, MediaId, Callback, Context)
+                    end,
 
                     ContextRedirect =
                             case SubjectId of
@@ -203,17 +214,19 @@ add_arg_to_action(_A, B) ->
 
 
 get_base_props(undefined, Context) ->
-    z_context:get_q_all_noz(Context);
+    lists:foldl(fun({Prop,Val}, Acc) ->
+                    maybe_add_prop(Prop, Val, Acc)
+                end,
+                [],
+                z_context:get_q_all_noz(Context));
 get_base_props(NewRscTitle, Context) ->
-    Lang = z_context:language(Context),
     Props = lists:foldl(fun({Prop,Val}, Acc) ->
                             maybe_add_prop(Prop, Val, Acc)
                         end,
                         [],
                         z_context:get_q_all_noz(Context)),
     [
-        {title, {trans, [{Lang, NewRscTitle}]}},
-        {language, [Lang]}
+        {title, NewRscTitle}
         | Props
     ].
 
