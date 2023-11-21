@@ -32,7 +32,7 @@ media_for_language(Ids, Context) ->
     media_1(Ids, Context).
 
 media_for_language(Ids, Language, Context) ->
-    Context1 = case z_language:to_language_atom(Language) of
+    Context1 = case z_trans:to_language_atom(Language) of
         {ok, Code} ->
             z_context:set_language(Code, Context);
         {error, _} ->
@@ -51,7 +51,7 @@ media_1(Ids, Context) when is_list(Ids) ->
                     case z_acl:rsc_visible(RId, Context) of
                         true ->
                             MediaLang = m_rsc:p(RId, medium_language, Context),
-                            Lang = case z_language:to_language_atom(MediaLang) of
+                            Lang = case z_trans:to_language_atom(MediaLang) of
                                 {ok, Code} -> Code;
                                 {error, _} -> 'x-default'
                             end,
