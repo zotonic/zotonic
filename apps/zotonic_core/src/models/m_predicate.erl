@@ -26,6 +26,7 @@
 -export([
     m_get/3,
 
+    object_resources/2,
     is_predicate/2,
     is_used/2,
     id_to_name/2,
@@ -52,6 +53,11 @@ m_get([ <<"all">> | Rest ], _Msg, Context) ->
     {ok, {all(Context), Rest}};
 m_get([ <<"is_used">>, Pred | Rest ], _Msg, Context) ->
     {ok, {is_used(Pred, Context), Rest}};
+m_get([ <<"object_resources">>, Key | Rest ], _Msg, Context) ->
+    case object_resources(Key, Context) of
+        {ok, List} -> {ok, {List, Rest}};
+        {error, _} = Error -> Error
+    end;
 m_get([ <<"object_category">>, Key | Rest ], _Msg, Context) ->
     {ok, {object_category(Key, Context), Rest}};
 m_get([ <<"subject_category">>, Key | Rest ], _Msg, Context) ->
@@ -71,10 +77,90 @@ m_get([ <<"is_valid_subject_subcategory">>, Predicate, Category | Rest ], _Msg, 
 m_get([ <<"is_valid_subject_category">>, Predicate, Category | Rest ], _Msg, Context) ->
     IsValid = is_valid_subject_category(Predicate, Category, false, Context),
     {ok, {IsValid, Rest}};
+m_get([ <<"predicate">>, Key | Rest ], _Msg, Context) ->
+    {ok, {get(Key, Context), Rest}};
 m_get([ Key | Rest ], _Msg, Context) ->
     {ok, {get(Key, Context), Rest}};
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
+
+
+%% @doc Fetch a list of all resources matching valid as an object for the given predicates.
+%% The list is bucket-sorted by valid category. All buckets are sorted by title.
+-spec object_resources(Predicate, Context) -> {ok, Result} | {error, unknown_predicate} when
+    Predicate :: m_rsc:resource(),
+    Context :: z:context(),
+    Result :: [ #{ category := atom(), resources := list( m_rsc:resource_id() ) } ].
+object_resources(Predicate, Context) ->
+    case is_predicate(Predicate, Context) of
+        true ->
+            object_resources_1(object_category(Predicate, Context), Context);
+        false ->
+            {error, unknown_predicate}
+    end.
+
+object_resources_1([], _Context) ->
+    {ok, #{}};
+object_resources_1(ValidCats, Context) ->
+    Query = #{
+        cat => ValidCats,
+        is_published => true
+    },
+    #search_result{ result = Ids } = z_search:search(<<"query">>, Query, 1, 10000, Context),
+    Ids1 = lists:filter(fun(Id) -> z_acl:rsc_visible(Id, Context) end, Ids),
+    % Place the list of object categories in the order of the category tree.
+    AllCats = m_category:tree_flat_meta(Context),
+    ObjCats = lists:filtermap(
+        fun(Cat) ->
+            CatId = proplists:get_value(id, Cat),
+            case lists:member(CatId, ValidCats) of
+                true ->
+                    Name = z_convert:to_atom( m_rsc:p(CatId, <<"name">>, Context) ),
+                    {true, Name};
+                false ->
+                    false
+            end
+        end,
+        AllCats),
+    ObjCatsRev = lists:reverse(ObjCats),
+    Buckets = lists:foldl(
+        fun(Id, Acc) ->
+            IsA = lists:reverse(m_rsc:is_a(Id, Context)),
+            case first_match(IsA, ObjCatsRev) of
+                undefined ->
+                    Acc;
+                IdCat ->
+                    Acc#{
+                        IdCat => [ Id | maps:get(IdCat, Acc, []) ]
+                    }
+            end
+        end,
+        #{},
+        Ids1),
+    ByCat = lists:filtermap(
+        fun(CatId) ->
+            case maps:get(CatId, Buckets, []) of
+                [] ->
+                    false;
+                OIds ->
+                    OIds1 = filter_sort:sort(OIds, <<"title">>, Context),
+                    {true, #{
+                        category => CatId,
+                        resources => OIds1
+                    }}
+            end
+        end,
+        ObjCats),
+    {ok, ByCat}.
+
+first_match([], _ObjCats) ->
+    undefined;
+first_match([Cat|IsA], ObjCats) ->
+    case lists:member(Cat, ObjCats) of
+        true -> Cat;
+        false -> first_match(IsA, ObjCats)
+    end.
+
 
 
 %% @doc Test if the resource id is a predicate.
@@ -209,7 +295,24 @@ get(PredId, Context) when is_integer(PredId) ->
         {ok, Name} -> get(Name, Context)
     end;
 get(Pred, Context) when is_list(Pred) orelse is_binary(Pred) ->
-    get(z_convert:to_atom(z_string:to_lower(Pred)), Context);
+    Pred1 = z_string:to_lower(Pred),
+    try
+        PredAsAtom = erlang:binary_to_existing_atom(Pred1, utf8),
+        get(PredAsAtom, Context)
+    catch
+        error:badarg ->
+            % The predicate list might not have been read yet - then not all atoms are known.
+            % Reaad all predicates and try again.
+            % TODO: replace all keys with binaries (and a map)
+            All = all(Context),
+            try
+                PredAsAtom1 = erlang:binary_to_existing_atom(Pred1, utf8),
+                proplists:get_value(PredAsAtom1, All)
+            catch
+                error:badarg ->
+                    undefined
+            end
+    end;
 get(Pred, Context) ->
     case z_depcache:get(predicate, Pred, Context) of
         {ok, undefined} ->

@@ -14,32 +14,21 @@
         </form>
 
         <div id="find-connect-objects">
-            {% for category in m.category.tree_flat %}
-                {% with category.id as cat %}
-                    {% if cat|member:ocats %}
-                        {% if m.search.query::%{
-                                cat: cat,
-                                cat_exclude: ocats -- [ cat ],
-                                pagelen: 1000
-                            }|is_visible as ids
-                        %}
-                            {% if ocats|length > 1 %}
-                                <h4>{{ cat.title }}</h4>
-                            {% endif %}
+            {% for cat in m.predicate.object_resources[predicate] %}
+                {% if ocats|length > 1 %}
+                    <h4>{{ cat.category.title }}</h4>
+                {% endif %}
 
-                            <div class="row">
-                            {% for id in ids|sort:`title` %}
-                                <div class="connect-object col-md-3 col-sm-4">
-                                    <label class="checkbox">
-                                        <input type="checkbox" value="{{ id }}" {% if id|member:oids %}checked{% endif %}>
-                                        {{ id.title|default:id.short_title }}
-                                    </label>
-                                </div>
-                            {% endfor %}
-                            </div>
-                        {% endif %}
-                    {% endif %}
-                {% endwith %}
+                <div class="row">
+                {% for id in cat.resources %}
+                    <div class="connect-object col-md-3 col-sm-4">
+                        <label class="checkbox">
+                            <input type="checkbox" value="{{ id }}" {% if id|member:oids %}checked{% endif %}>
+                            {{ id.title|default:id.short_title }}
+                        </label>
+                    </div>
+                {% endfor %}
+                </div>
             {% endfor %}
         </div>
 
