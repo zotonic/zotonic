@@ -854,8 +854,14 @@ qterm(#{ <<"term">> := <<"match_objects">>, <<"value">> := RId}, Context) ->
         Id ->
             ObjectIds = m_edge:objects(Id, Context),
             qterm([
-                {match_object_ids, ObjectIds},
-                {id_exclude, Id}
+                #{
+                    <<"term">> => <<"match_object_ids">>,
+                    <<"value">> => ObjectIds
+                },
+                #{
+                    <<"term">> => <<"id_exclude">>,
+                    <<"value">> => Id
+                }
             ], Context)
     end;
 qterm(#{ <<"term">> := <<"match_object_ids">>, <<"value">> := ObjectIds}, Context) ->
