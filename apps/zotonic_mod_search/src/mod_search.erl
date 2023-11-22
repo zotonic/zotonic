@@ -490,7 +490,7 @@ search(<<"latest">>, Args, _OffsetLimit, Context) ->
     Q1 = Q ++ [
         #{
             <<"term">> => <<"sort">>,
-            <<"value">> => <<"-rsc.modfied">>
+            <<"value">> => <<"-rsc.modified">>
         }
     ],
     search_query:search(Args#{ <<"q">> => Q1 }, Context);
