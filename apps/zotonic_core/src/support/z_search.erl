@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2023 Marc Worrell
 %% @doc Search the database, interfaces to specific search routines.
+%% @end
 
 %% Copyright 2009-2023 Marc Worrell
 %%
@@ -82,10 +83,8 @@ search(Name, Args, undefined, PageLen, Options, Context) ->
     search(Name, Args, 1, PageLen, Options, Context);
 search(Name, Args, Page, undefined, Options, Context) ->
     search(Name, Args, Page, default_pagelen(Context), Options, Context);
-search(Name, Args, Page, PageLen, Options, Context) when is_list(Args) ->
-    Args1 = props_to_map(Args),
-    search(Name, Args1, Page, PageLen, Options, Context);
-search(Name, Args, Page, PageLen, Options0, Context) when is_binary(Name), is_map(Args), is_map(Options0) ->
+search(Name, Args0, Page, PageLen, Options0, Context) when is_binary(Name), is_map(Options0) ->
+    Args = props_to_map(Args0),
     Options = map_to_options(Options0),
     OffsetLimit = offset_limit(Page, PageLen),
     Q = #search_query{

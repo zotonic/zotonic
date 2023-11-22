@@ -87,25 +87,25 @@ The following searches are implemented in mod_search:
 +------------------------+---------------------------------------------------------------+-------------------+
 |media                   |All pages with a medium, ordered by descending creation date.  |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
-|all_bytitle             |Return all ``{id,title}`` pairs for a category, sorted on      |cat                |
+|all_bytitle             |Return all ``{title,id}`` pairs for a category, sorted on      |cat                |
 |                        |title.                                                         |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
-|all_bytitle_featured    |Return all ``{id,title}`` pairs for a category, sorted on      |cat                |
+|all_bytitle_featured    |Return all ``{title,id}`` pairs for a category, sorted on      |cat                |
 |                        |title, featured pages first                                    |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
-|all_bytitle             |Return all ``{id,title}`` pairs for a category without         |cat_is             |
+|all_bytitle             |Return all ``{title,id}`` pairs for a category without         |cat_is             |
 |                        |subcategories, sorted on title.                                |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
-|all_bytitle_featured    |Return all ``{id,title}`` pairs for a category without         |cat_is             |
+|all_bytitle_featured    |Return all ``{title,id}`` pairs for a category without         |cat_is             |
 |                        |subcategories, sorted on title, featured pages first.          |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
 |match_objects           |Returns a list of pages with similar object ids to the objects |id                 |
-|                        |of the given resource with the given id.  Returns ``{id,       |                   |
-|                        |rank}``. Accepts optional cat parameters for filtering on      |                   |
+|                        |of the given resource with the given id.                       |                   |
+|                        |Accepts optional cat parameters for filtering on               |                   |
 |                        |category.                                                      |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
 |match_objects_cats      |Returns a list of pages with similar object ids or categories. |id                 |
-|                        |Returns ``{id, rank}`` tuples. Accepts an optional ``cat``     |                   |
+|                        |Accepts an optional ``cat``                                    |                   |
 |                        |parameter for filtering on category.                           |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
 |archive_year            |Returns an overview on publication year basis, for a specified |cat                |
