@@ -1,11 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-07-04
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Return a list of ids of a category, sorted by title.  This needs to fetch and sort all
 %% resources of that category, so use this with care for situations where you know that the number
 %% of returned resources is relatively low.
+%% @end
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
