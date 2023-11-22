@@ -294,15 +294,15 @@ search_prevnext(Type, Args, Context) ->
     Cat = maps:get(<<"cat">>, Args),
     FieldValue = m_rsc:p(Id, z_convert:to_binary(Field), Context),
     #search_sql{
-                 select="r.id",
-                 from="rsc r",
-                 where="(" ++ MapField(Field) ++ " " ++ Operator(Type) ++ " $1) and r.id <> $2",
-                 tables=[{rsc, "r"}],
-                 cats=[{"r", Cat}],
-                 args=[FieldValue, z_convert:to_integer(Id), Limit],
-                 order=MapField(Field) ++ " " ++ Order(Type) ++ ", id " ++ Order(Type),
-                 limit="limit $3"
-               }.
+        select="r.id",
+        from="rsc r",
+        where="(" ++ MapField(Field) ++ " " ++ Operator(Type) ++ " $1) and r.id <> $2",
+        tables=[{rsc, "r"}],
+        cats=[{"r", Cat}],
+        args=[FieldValue, z_convert:to_integer(Id), Limit],
+        order=MapField(Field) ++ " " ++ Order(Type) ++ ", id " ++ Order(Type),
+        limit="limit $3"
+    }.
 
 
 %% Retrieve the previous/next id(s) (on sort field, defaults to publication date)
@@ -326,19 +326,19 @@ search(<<"keyword_cloud">>, Args, _OffsetLimit, Context) ->
         args=[Subject],
         group_by="kw.id, kw.pivot_title",
         order="kw.pivot_title"
-       };
+    };
 
 search(<<"archive_year">>, Args, OffsetLimit, Context) ->
     Cat = qarg(<<"cat">>, Args, undefined),
     Q = #search_sql{
-      select="date_part('year', r.publication_start)::int as year, count(*) as count",
-      from="rsc r",
-      tables=[{rsc, "r"}],
-      assoc=true,
-      cats=[{"r", Cat}],
-      group_by="date_part('year', r.publication_start)",
-      order="year desc"
-     },
+        select="date_part('year', r.publication_start)::int as year, count(*) as count",
+        from="rsc r",
+        tables=[{rsc, "r"}],
+        assoc=true,
+        cats=[{"r", Cat}],
+        group_by="date_part('year', r.publication_start)",
+        order="year desc"
+    },
     R = z_search:search_result(Q, OffsetLimit, Context),
     Result = [ [{as_date, {{z_convert:to_integer(Y),1,1},{0,0,0}}}|Rest]
                || Rest = [{year, Y}, {count, _}] <- R#search_result.result],
@@ -347,14 +347,14 @@ search(<<"archive_year">>, Args, OffsetLimit, Context) ->
 search(<<"archive_year_month">>, Args, OffsetLimit, Context) ->
     Cat = qarg(<<"cat">>, Args, undefined),
     Q = #search_sql{
-      select="date_part('year', r.publication_start)::int as year, date_part('month', r.publication_start)::int as month, count(*) as count",
-      from="rsc r",
-      tables=[{rsc, "r"}],
-      assoc=true,
-      cats=[{"r", Cat}],
-      group_by="date_part('year', r.publication_start), date_part('month', r.publication_start)",
-      order="year desc, month desc"
-     },
+        select="date_part('year', r.publication_start)::int as year, date_part('month', r.publication_start)::int as month, count(*) as count",
+        from="rsc r",
+        tables=[{rsc, "r"}],
+        assoc=true,
+        cats=[{"r", Cat}],
+        group_by="date_part('year', r.publication_start), date_part('month', r.publication_start)",
+        order="year desc, month desc"
+    },
     R = z_search:search_result(Q, OffsetLimit, Context),
     Result = [ [{month_as_date, {{z_convert:to_integer(Y),z_convert:to_integer(M),1},{0,0,0}}}|Rest]
                || Rest = [{year, Y}, {month, M}, {count, _}] <- R#search_result.result],
