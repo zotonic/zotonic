@@ -312,10 +312,10 @@ search(<<"next">>, Args, _OffsetLimit, Context) ->
     search_prevnext(<<"next">>, Args, Context);
 
 search(<<"keyword_cloud">>, Args, _OffsetLimit, Context) ->
-    Cat = maps:get(<<"cat">>, Args, undefined),
-    KeywordCatName = maps:get(<<"keywordcat">>, Args, <<"keyword">>),
+    Cat = qarg(<<"cat">>, Args, undefined),
+    KeywordCatName = qarg(<<"keywordcat">>, Args, <<"keyword">>),
     KeywordCat = z_convert:to_binary(KeywordCatName),
-    KeywordPredName = maps:get(<<"keywordpred">>, Args, <<"subject">>),
+    KeywordPredName = qarg(<<"keywordpred">>, Args, <<"subject">>),
     {ok, Subject} = m_predicate:name_to_id(KeywordPredName, Context),
     #search_sql{
         select="kw.id as id, count(*) as count",
@@ -328,7 +328,8 @@ search(<<"keyword_cloud">>, Args, _OffsetLimit, Context) ->
         order="kw.pivot_title"
        };
 
-search(<<"archive_year">>, #{ <<"cat">> := Cat }, OffsetLimit, Context) ->
+search(<<"archive_year">>, Args, OffsetLimit, Context) ->
+    Cat = qarg(<<"cat">>, Args, undefined),
     Q = #search_sql{
       select="date_part('year', r.publication_start)::int as year, count(*) as count",
       from="rsc r",
@@ -343,7 +344,8 @@ search(<<"archive_year">>, #{ <<"cat">> := Cat }, OffsetLimit, Context) ->
                || Rest = [{year, Y}, {count, _}] <- R#search_result.result],
     #search_result{result=Result};
 
-search(<<"archive_year_month">>, #{ <<"cat">> := Cat}, OffsetLimit, Context) ->
+search(<<"archive_year_month">>, Args, OffsetLimit, Context) ->
+    Cat = qarg(<<"cat">>, Args, undefined),
     Q = #search_sql{
       select="date_part('year', r.publication_start)::int as year, date_part('month', r.publication_start)::int as month, count(*) as count",
       from="rsc r",
@@ -360,116 +362,50 @@ search(<<"archive_year_month">>, #{ <<"cat">> := Cat}, OffsetLimit, Context) ->
 
 
 %% @doc Return the rsc records that have similar objects
-search(<<"match_objects">>, #{
-        <<"content_group">> := CG,
-        <<"id_exclude">> := Exclude,
-        <<"ids">> := ObjectIds
-    }, _OffsetLimit, Context) ->
-    CGId = m_rsc:rid(CG, Context),
-    ExcludeId = m_rsc:rid(Exclude, Context),
-    ObjectIds1 = [ m_rsc:rid(OId, Context) || OId <- ObjectIds ],
-    MatchTerms = [ ["zpo",integer_to_list(ObjId)] || ObjId <- ObjectIds1, ObjId =/= undefined ],
-    TsQuery = lists:flatten(lists:join("|", MatchTerms)),
-    case TsQuery of
-        [] ->
-            #search_result{};
-        _ when is_integer(ExcludeId) ->
-            #search_sql{
-                select="r.id, ts_rank(pivot_rtsv, query) AS rank",
-                from="rsc r, to_tsquery($1) query",
-                where=" r.content_group_id = $3 and query @@ pivot_rtsv and r.id <> $2",
-                order="rank desc, r.publication_start desc",
-                args=[TsQuery, z_convert:to_integer(ExcludeId), CGId],
-                tables=[{rsc,"r"}]
-            };
-        _ ->
-            #search_sql{
-                select="r.id, ts_rank(pivot_rtsv, query) AS rank",
-                from="rsc r, to_tsquery($1) query",
-                where=" r.content_group_id = $2 and query @@ pivot_rtsv",
-                order="rank desc, r.publication_start desc",
-                args=[TsQuery, CGId],
-                tables=[{rsc,"r"}]
-            }
-    end;
-search(<<"match_objects">>, #{
-        <<"id_exclude">> := Exclude,
-        <<"ids">> := ObjectIds
-    }, _OffsetLimit, Context) ->
-    ExcludeId = m_rsc:rid(Exclude, Context),
-    ObjectIds1 = [ m_rsc:rid(OId, Context) || OId <- ObjectIds ],
-    MatchTerms = [ ["zpo",integer_to_list(ObjId)] || ObjId <- ObjectIds1, ObjId =/= undefined ],
-    TsQuery = lists:flatten(lists:join("|", MatchTerms)),
-    case TsQuery of
-        [] ->
-            #search_result{};
-        _ when is_integer(ExcludeId) ->
-            #search_sql{
-                select="r.id, ts_rank(pivot_rtsv, query) AS rank",
-                from="rsc r, to_tsquery($1) query",
-                where=" query @@ pivot_rtsv and r.id <> $2",
-                order="rank desc, r.publication_start desc",
-                args=[TsQuery, z_convert:to_integer(ExcludeId)],
-                tables=[{rsc,"r"}]
-            };
-        _ ->
-            #search_sql{
-                select="r.id, ts_rank(pivot_rtsv, query) AS rank",
-                from="rsc r, to_tsquery($1) query",
-                where=" query @@ pivot_rtsv",
-                order="rank desc, r.publication_start desc",
-                args=[TsQuery],
-                tables=[{rsc,"r"}]
-            }
-    end;
-search(<<"match_objects">>, #{
-        <<"cat">> := Cat,
-        <<"content_group">> := CG,
-        <<"id">> := Id
-    }, OffsetLimit, Context) ->
-    ObjectIds = m_edge:objects(Id, Context),
-    Args = #{
-        <<"content_group">> => CG,
-        <<"id_exclude">> => Id,
-        <<"ids">> => ObjectIds
-    },
-    case search(<<"match_objects">>, Args, OffsetLimit, Context) of
-        #search_sql{} = Search -> Search#search_sql{cats=[{"r", Cat}]};
-        Result -> Result
-    end;
-search(<<"match_objects">>, #{
-        <<"cat">> := Cat,
-        <<"id">> := Id
-    }, OffsetLimit, Context) ->
-    case search(<<"match_objects">>, #{ <<"id">> => Id }, OffsetLimit, Context) of
-        #search_sql{} = Search -> Search#search_sql{cats=[{"r", Cat}]};
-        Result -> Result
-    end;
-search(<<"match_objects">>, #{
-        <<"id">> := Id
-    }, OffsetLimit, Context) ->
-    ObjectIds = m_edge:objects(Id, Context),
-    search(<<"match_objects">>, #{ <<"id_exclude">> => Id, <<"ids">> => ObjectIds }, OffsetLimit, Context);
-search(<<"match_objects">>, #{
-        <<"ids">> := ObjectIds
-    }, OffsetLimit, Context) ->
-    search(<<"match_objects">>, #{ <<"id_exclude">> => undefined, <<"ids">> => ObjectIds }, OffsetLimit, Context);
+search(<<"match_objects">>, Args, _OffsetLimit, Context) ->
+    CG = qarg(<<"content_group">>, Args, undefined),
+    Exclude = qarg(<<"id_exclude">>, Args, undefined),
+    ObjectIds = qarg(<<"ids">>, Args, undefined),
+    Id = qarg(<<"id">>, Args, undefined),
+    Cat = qarg(<<"cat">>, Args, undefined),
+    Terms = if
+            is_list(ObjectIds) ->
+                [
+                    #{
+                        <<"term">> => <<"match_object_ids">>,
+                        <<"value">> => ObjectIds
+                    }
+                ];
+            true ->
+                []
+        end ++ [
+        #{
+            <<"term">> => <<"cat">>,
+            <<"value">> => Cat
+        },
+        #{
+            <<"term">> => <<"id_exclude">>,
+            <<"value">> => Exclude
+        },
+        #{
+            <<"term">> => <<"match_objects">>,
+            <<"value">> => Id
+        },
+        #{
+            <<"term">> => <<"content_group">>,
+            <<"value">> => CG
+        },
+        #{
+            <<"term">> => <<"sort">>,
+            <<"value">> => <<"-rsc.publication_start">>
+        }
+    ],
+    search_query:search(#{ <<"q">> => Terms }, Context);
 
 %% @doc Return the rsc records that have similar objects
-search(<<"match_objects_cats">>, #{
-        <<"cat">> := Cat,
-        <<"id">> := Id
-    }, OffsetLimit, Context) ->
-    Args = #{
-        <<"id">> => Id
-    },
-    case search(<<"match_objects_cats">>, Args, OffsetLimit, Context) of
-        #search_sql{} = Search -> Search#search_sql{cats=[{"r", Cat}]};
-        Result -> Result
-    end;
-search(<<"match_objects_cats">>, #{
-        <<"id">> := Id
-    }, _OffsetLimit, Context) ->
+search(<<"match_objects_cats">>, Args, _OffsetLimit, Context) ->
+    Cat = qarg(<<"cat">>, Args, undefined),
+    Id = qarg(<<"id">>, Args, undefined),
     IsCats = m_rsc:is_a_id(Id, Context),
     CatTerms = [ ["zpc",integer_to_list(CatId)] || CatId <- IsCats ],
     ObjectIds = m_edge:objects(Id, Context),
@@ -478,7 +414,7 @@ search(<<"match_objects_cats">>, #{
     case TsQuery of
         [] ->
             #search_result{};
-        _ ->
+        _ when Cat =:= undefined ->
             #search_sql{
                 select="r.id, ts_rank(pivot_rtsv, query) AS rank",
                 from="rsc r, to_tsquery($1) query",
@@ -486,80 +422,123 @@ search(<<"match_objects_cats">>, #{
                 order="rank desc, r.publication_start desc",
                 args=[TsQuery, z_convert:to_integer(Id)],
                 tables=[{rsc,"r"}]
+            };
+        _ when Cat =/= undefined ->
+            #search_sql{
+                select="r.id, ts_rank(pivot_rtsv, query) AS rank",
+                from="rsc r, to_tsquery($1) query",
+                where=" query @@ pivot_rtsv and id <> $2",
+                order="rank desc, r.publication_start desc",
+                args=[TsQuery, z_convert:to_integer(Id)],
+                tables=[{rsc,"r"}],
+                cats=[{"r", Cat}]
             }
     end;
 
-%% @doc Return a list of featured resource ids inside a category having a object_id as predicate
-search(<<"featured">>, #{
-        <<"cat">> := Cat,
-        <<"object">> := ObjectId,
-        <<"predicate">> := Predicate
-    }, OffsetLimit, Context) ->
-    Args = #{
-        <<"cat">> => Cat,
-        <<"hassubject">> => [ ObjectId, Predicate ]
-    },
-    search(<<"query">>, Args, OffsetLimit, Context);
-
-%% @doc Return a list of resource ids inside a category, featured ones first
-search(<<"featured">>, Args, OffsetLimit, Context) ->
-    Args1 = Args#{
-        <<"sort">> => [
-            <<"-rsc.is_featured">>,
-            <<"-rsc.publication_start">>
-        ]
-    },
-    search(<<"query">>, Args1, OffsetLimit, Context);
+%% @doc Return a list of featured resource ids inside a category optionally having a object_id as predicate
+search(<<"featured">>, Args, _OffsetLimit, Context) ->
+    Cat = qarg(<<"cat">>, Args, undefined),
+    Terms = case qarg(<<"object">>, Args, undefined) of
+        undefined ->
+            [];
+        Object ->
+            Predicate = qarg(<<"predicate">>, Args, undefined),
+            [
+                #{
+                    <<"term">> => <<"hassubject">>,
+                    <<"value">> => [ Object, Predicate ]
+                }
+            ]
+    end ++ [
+        #{
+            <<"term">> => <<"cat">>,
+            <<"value">> => Cat
+        },
+        #{
+            <<"term">> => <<"sort">>,
+            <<"value">> => [
+                <<"-rsc.is_featured">>,
+                <<"-rsc.publication_start">>
+            ]
+        }
+    ],
+    search_query:search(Args#{ <<"q">> => Terms }, Context);
 
 %% @doc Return the list of resource ids, on descending id
-search(<<"all">>, #{} = Args, OffsetLimit, Context) ->
-    Args1 = Args#{
-        <<"sort">> => [
-            <<"-rsc.id">>
-        ]
-    },
-    search(<<"query">>, Args1, OffsetLimit, Context);
+search(<<"all">>, #{} = Args, _OffsetLimit, Context) ->
+    Q = maps:get(<<"q">>, Args, []),
+    Q1 = Q ++ [
+        #{
+            <<"term">> => <<"sort">>,
+            <<"value">> => <<"-rsc.id">>
+        }
+    ],
+    search_query:search(Args#{ <<"q">> => Q1 }, Context);
 
+search(<<"published">>, Args, _OffsetLimit, Context) ->
+    Q = maps:get(<<"q">>, Args, []),
+    Q1 = Q ++ [
+        #{
+            <<"term">> => <<"sort">>,
+            <<"value">> => <<"-rsc.publication_start">>
+        }
+    ],
+    search_query:search(Args#{ <<"q">> => Q1 }, Context);
 
-search(<<"published">>, Args, OffsetLimit, Context) ->
-    Args1 = Args#{
-        <<"sort">> => [
-            <<"-rsc.publication_start">>
-        ]
-    },
-    search(<<"query">>, Args1, OffsetLimit, Context);
+search(<<"latest">>, Args, _OffsetLimit, Context) ->
+    Q = maps:get(<<"q">>, Args, []),
+    Q1 = Q ++ [
+        #{
+            <<"term">> => <<"sort">>,
+            <<"value">> => <<"-rsc.modfied">>
+        }
+    ],
+    search_query:search(Args#{ <<"q">> => Q1 }, Context);
 
-search(<<"latest">>, Args, OffsetLimit, Context) ->
-    Args1 = Args#{
-        <<"sort">> => [
-            <<"-rsc.modified">>
-        ]
-    },
-    search(<<"query">>, Args1, OffsetLimit, Context);
+search(<<"upcoming">>, Args, _OffsetLimit, Context) ->
+    Q = maps:get(<<"q">>, Args, []),
+    Q1 = Q ++ [
+        #{
+            <<"term">> => <<"upcoming">>,
+            <<"value">> => true
+        },
+        #{
+            <<"term">> => <<"sort">>,
+            <<"value">> => <<"rsc.pivot_date_start">>
+        }
+    ],
+    search_query:search(Args#{ <<"q">> => Q1 }, Context);
 
-search(<<"upcoming">>, Args, OffsetLimit, Context) ->
-    Args1 = Args#{
-        <<"upcoming">> => true,
-        <<"sort">> => [
-            <<"rsc.pivot_date_start">>
-        ]
-    },
-    search(<<"query">>, Args1, OffsetLimit, Context);
+search(<<"finished">>, Args, _OffsetLimit, Context) ->
+    Q = maps:get(<<"q">>, Args, []),
+    Q1 = Q ++ [
+        #{
+            <<"term">> => <<"finished">>,
+            <<"value">> => true
+        },
+        #{
+            <<"term">> => <<"sort">>,
+            <<"value">> => <<"-rsc.pivot_date_start">>
+        }
+    ],
+    search_query:search(Args#{ <<"q">> => Q1 }, Context);
 
-search(<<"finished">>, Args, OffsetLimit, Context) ->
-    Args1 = Args#{
-        <<"finished">> => true,
-        <<"sort">> => [
-            <<"-rsc.pivot_date_start">>
-        ]
-    },
-    search(<<"query">>, Args1, OffsetLimit, Context);
-
-search(<<"autocomplete">>, #{ <<"text">> := QueryText } = Args, _OffsetLimit, Context) ->
+search(<<"autocomplete">>, Args, _OffsetLimit, Context) ->
+    QueryText = z_convert:to_binary(qarg(<<"text">>, Args, <<>>)),
+    Cat = qarg(<<"cat">>, Args, undefined),
+    IsEmptyCat = z_utils:is_empty(Cat),
     case trim(QueryText, Context) of
+        <<>> when not IsEmptyCat ->
+            #search_sql{
+                select="r.id, 1 AS rank",
+                from="rsc r",
+                order="r.modified desc",
+                cats=[{"r", Cat}],
+                tables=[{rsc,"r"}]
+            };
         <<"id:", S/binary>> ->
             find_by_id(S, true, Context);
-        _ ->
+        _ when IsEmptyCat ->
             TsQuery = to_tsquery(QueryText, Context),
             case TsQuery of
                 A when A == <<>> ->
@@ -575,24 +554,7 @@ search(<<"autocomplete">>, #{ <<"text">> := QueryText } = Args, _OffsetLimit, Co
                         cats=[{"r", Cat}],
                         tables=[{rsc,"r"}]
                     }
-            end
-    end;
-
-search(<<"fulltext">>, #{ <<"cat">> := Cat } = Args, OffsetLimit, Context)
-    when Cat =:= undefined orelse Cat =:= [] orelse Cat =:= <<>> ->
-    search(<<"fulltext">>, maps:remove(<<"cat">>, Args), OffsetLimit, Context);
-search(<<"fulltext">>, #{ <<"cat">> := Cat, <<"text">> := QueryText }, _OffsetLimit, Context) ->
-    case trim(QueryText, Context) of
-        <<>> ->
-            #search_sql{
-                select="r.id, 1 AS rank",
-                from="rsc r",
-                order="r.modified desc",
-                cats=[{"r", Cat}],
-                tables=[{rsc,"r"}]
-            };
-        <<"id:", S/binary>> ->
-            find_by_id(S, true, Context);
+            end;
         _ ->
             TsQuery = to_tsquery(QueryText, Context),
             #search_sql{
@@ -605,41 +567,20 @@ search(<<"fulltext">>, #{ <<"cat">> := Cat, <<"text">> := QueryText }, _OffsetLi
                 tables=[{rsc,"r"}]
             }
     end;
-search(<<"fulltext">>, #{ <<"text">> := QueryText }, _OffsetLimit, Context) ->
-    case trim(QueryText, Context) of
-        <<>> ->
-            #search_sql{
-                select="r.id, 1 AS rank",
-                from="rsc r",
-                order="r.modified desc",
-                args=[],
-                tables=[{rsc,"r"}]
-            };
-        <<"id:", S/binary>> ->
-            find_by_id(S, true, Context);
-        _ ->
-            TsQuery = to_tsquery(QueryText, Context),
-            #search_sql{
-                select=["r.id, ts_rank_cd(", rank_weight(Context), ", pivot_tsv, $1, $2) AS rank"],
-                from="rsc r",
-                where=" $1 @@ r.pivot_tsv",
-                order="rank desc",
-                args=[TsQuery, rank_behaviour(Context)],
-                tables=[{rsc,"r"}]
-            }
-    end;
 
-search(<<"referrers">>, #{ <<"id">> := Id }, _OffsetLimit, _Context) ->
+search(<<"referrers">>, Args, _OffsetLimit, Context) ->
+    Id = qarg(<<"id">>, Args, undefined),
     #search_sql{
         select="o.id, e.predicate_id",
         from="edge e join rsc o on o.id = e.subject_id",
         where="e.object_id = $1",
         order="e.id desc",
-        args=[z_convert:to_integer(Id)],
+        args=[m_rsc:rid(Id, Context)],
         tables=[{rsc,"o"}]
     };
 
-search(<<"media_category_image">>, #{ <<"cat">> := Cat }, _OffsetLimit, _Context) ->
+search(<<"media_category_image">>, Args, _OffsetLimit, _Context) ->
+    Cat = qarg(<<"cat">>, Args, undefined),
     #search_sql{
         select="m.filename",
         from="rsc r, medium m",
@@ -648,7 +589,8 @@ search(<<"media_category_image">>, #{ <<"cat">> := Cat }, _OffsetLimit, _Context
         tables=[{rsc,"r"}, {medium, "m"}]
     };
 
-search(<<"media_category_depiction">>, #{ <<"cat">> := Cat }, _OffsetLimit, Context) ->
+search(<<"media_category_depiction">>, Args, _OffsetLimit, Context) ->
+    Cat = qarg(<<"cat">>, Args, undefined),
     {ok, PredDepictionId} = m_predicate:name_to_id(depiction, Context),
     #search_sql{
         select="m.filename",
@@ -659,26 +601,37 @@ search(<<"media_category_depiction">>, #{ <<"cat">> := Cat }, _OffsetLimit, Cont
         cats=[{"r", Cat}]
     };
 
-search(<<"media">>, Args, OffsetLimit, Context) ->
-    Args1 = Args#{
-        <<"hasmedium">> => true,
-        <<"sort">> => [
-            <<"-m.created">>
-        ]
-    },
-    search(<<"query">>, Args1, OffsetLimit, Context);
+search(<<"media">>, Args, _OffsetLimit, Context) ->
+    Q = maps:get(<<"q">>, Args, []),
+    Q1 = Q ++ [
+        #{
+            <<"term">> => <<"hasmedium">>,
+            <<"value">> => true
+        },
+        #{
+            <<"term">> => <<"sort">>,
+            <<"value">> => <<"-m.created">>
+        }
+    ],
+    search_query:search(Args#{ <<"q">> => Q1 }, Context);
 
-search(<<"all_bytitle">>, #{ <<"cat">> := Cat }, _OffsetLimit, Context) ->
-    search_all_bytitle:search(Cat, all_bytitle, Context);
+search(<<"all_bytitle">>, Args, _OffsetLimit, Context) ->
+    case qarg(<<"cat_is">>, Args, undefined) of
+        undefined ->
+            Cat = qarg(<<"cat">>, Args, undefined),
+            search_all_bytitle:search(Cat, all_bytitle, Context);
+        CatIs ->
+            search_all_bytitle:search_cat_is(CatIs, all_bytitle, Context)
+    end;
 
-search(<<"all_bytitle_featured">>, #{ <<"cat">> := Cat }, _OffsetLimit, Context) ->
-    search_all_bytitle:search(Cat, all_bytitle_featured, Context);
-
-search(<<"all_bytitle">>, #{ <<"cat_is">> := Cat }, _OffsetLimit, Context) ->
-    search_all_bytitle:search_cat_is(Cat, all_bytitle, Context);
-
-search(<<"all_bytitle_featured">>, #{ <<"cat_is">> := Cat }, _OffsetLimit, Context) ->
-    search_all_bytitle:search_cat_is(Cat, all_bytitle_featured, Context);
+search(<<"all_bytitle_featured">>, Args, _OffsetLimit, Context) ->
+    case qarg(<<"cat_is">>, Args, undefined) of
+        undefined ->
+            Cat = qarg(<<"cat">>, Args, undefined),
+            search_all_bytitle:search(Cat, all_bytitle_featured, Context);
+        CatIs ->
+            search_all_bytitle:search_cat_is(CatIs, all_bytitle_featured, Context)
+    end;
 
 search(<<"query">>, Args, _OffsetLimit, Context) ->
     search_query:search(Args, Context);
@@ -687,7 +640,9 @@ search(<<"events">>, #{
         <<"end">> := End,
         <<"start">> := Start
     } = Args, _OffsetLimit, _Context) ->
-    Cat = maps:get(<<"cat">>, Args, event),
+    Cat = qarg(<<"cat">>, Args, event),
+    Start = z_datetime:to_datetime(qarg(<<"start">>, Args, undefined)),
+    End = z_datetime:to_datetime(qarg(<<"end">>, Args, undefined)),
     #search_sql{
         select="r.id, r.pivot_date_start, r.pivot_date_end",
         from="rsc r",
@@ -780,6 +735,18 @@ fixup_tsquery(_Stemmer, TsQ) ->
     TsQ.
 
 
+%% @doc Fetch the argument from the query.
+qarg(K, #{ <<"q">> := Terms }, Default) ->
+    qarg1(K, Terms, Default).
+
+qarg1(_K, [], Default) ->
+    Default;
+qarg1(K, [ #{ <<"term">> := T, <<"value">> := V } | _ ], _Default) when T =:= K ->
+    V;
+qarg1(K, [ _ | Terms ], Default) ->
+    qarg1(K, Terms, Default).
+
+
 %% @doc Find one more more resources by id or name, when the resources exists.
 %% Input may be a single token or a comma-separated string.
 %% Search results contain a list of ids.
@@ -822,6 +789,8 @@ find_by_id(S, Rank, Context) ->
         result = Ids2,
         total = length(Ids2)
     }.
+
+
 
 %% @doc The ranking behaviour for scoring words in a full text search
 %% See also: https://www.postgresql.org/docs/14/textsearch-controls.html

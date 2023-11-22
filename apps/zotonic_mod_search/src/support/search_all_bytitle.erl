@@ -35,7 +35,7 @@ search([Cat], Search, Context) ->
 search(Cat, Search, Context) ->
     case m_category:name_to_id(Cat, Context) of
         {ok, CatId} ->
-            {Left,Right} = m_category:get_range(CatId, Context),
+            {Left, Right} = m_category:get_range(CatId, Context),
 			search1(Left, Right, Search, Context);
         {error, _Reason} ->
             #search_result{}
@@ -44,9 +44,8 @@ search(Cat, Search, Context) ->
 search_cat_is(Cat, Search, Context) ->
     case m_category:name_to_id(Cat, Context) of
         {ok, CatId} ->
-			Props = m_category:get(CatId, Context),
-			Nr = proplists:get_value(nr, Props),
-			search1(Nr, Nr, Search, Context);
+            {Left, _Right} = m_category:get_range(CatId, Context),
+			search1(Left, Left, Search, Context);
         {error, _Reason} ->
             #search_result{}
     end.
