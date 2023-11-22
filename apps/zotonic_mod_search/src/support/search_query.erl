@@ -76,7 +76,7 @@ search(Query, Context) when is_list(Query) ->
 -spec build_query(list(), z:context()) -> #search_sql_terms{} | #search_result{}.
 build_query(Terms, Context) ->
     Ts = lists:flatten(lists:map(fun(T) -> qterm(T, Context) end, Terms)),
-    case lists:member(none, Ts) of
+    case lists:member(none(), Ts) of
         true ->
             #search_result{};
         false ->
@@ -136,6 +136,10 @@ filter_empty(Q) when is_list(Q) ->
         end,
         Q).
 
+-spec qterm(Term, Context) -> QueryTerms when
+    Term :: list() | map(),
+    Context :: z:context(),
+    QueryTerms :: list() | #search_sql_term{}.
 qterm(undefined, _Context) ->
     [];
 qterm([], _Context) ->
@@ -177,7 +181,7 @@ qterm(#{ <<"term">> := <<"content_group">>, <<"value">> := ContentGroup}, Contex
             Q;
         undefined ->
             % Force an empty result
-            none;
+            none();
         CGId ->
             case m_rsc:is_a(CGId, content_group, Context) of
                 true ->
@@ -789,7 +793,7 @@ qterm(#{ <<"term">> := <<"facet:", Field/binary>>, <<"value">> := V}, Context) -
         {ok, Res1} ->
             Res1;
         {error, _} ->
-            none
+            none()
     end;
 qterm(#{ <<"term">> := <<"filter">>, <<"value">> := R}, Context) ->
     add_filters(R, Context);
@@ -800,7 +804,7 @@ qterm(#{ <<"term">> := <<"filter:", Field/binary>>, <<"value">> := V } = T, Cont
         {ok, QTerm} ->
             QTerm;
         {error, _} ->
-            none
+            none()
     end;
 qterm(#{ <<"term">> := <<"pivot:", _/binary>> = Field, <<"value">> := V} = T, Context) ->
     {Tab, Alias, Col, Q1} = map_filter_column(Field, #search_sql_term{}),
@@ -809,7 +813,7 @@ qterm(#{ <<"term">> := <<"pivot:", _/binary>> = Field, <<"value">> := V} = T, Co
         {ok, QTerm} ->
             QTerm;
         {error, _} ->
-            none
+            none()
     end;
 qterm(#{ <<"term">> := <<"text">>, <<"value">> := Text}, Context) ->
     %% text=...
@@ -850,19 +854,23 @@ qterm(#{ <<"term">> := <<"match_objects">>, <<"value">> := RId}, Context) ->
     %% Similar to the {match_objects id=...} query.
     case m_rsc:rid(RId, Context) of
         undefined ->
-            none;
+            none();
         Id ->
             ObjectIds = m_edge:objects(Id, Context),
-            qterm([
-                #{
-                    <<"term">> => <<"match_object_ids">>,
-                    <<"value">> => ObjectIds
+            qterm(#{
+                    <<"operator">> => <<"allof">>,
+                    <<"terms">> => [
+                        #{
+                            <<"term">> => <<"match_object_ids">>,
+                            <<"value">> => ObjectIds
+                        },
+                        #{
+                            <<"term">> => <<"id_exclude">>,
+                            <<"value">> => Id
+                        }
+                    ]
                 },
-                #{
-                    <<"term">> => <<"id_exclude">>,
-                    <<"value">> => Id
-                }
-            ], Context)
+                Context)
     end;
 qterm(#{ <<"term">> := <<"match_object_ids">>, <<"value">> := ObjectIds}, Context) ->
     ObjectIds1 = [ m_rsc:rid(OId, Context) || OId <- lists:flatten(ObjectIds) ],
@@ -870,7 +878,7 @@ qterm(#{ <<"term">> := <<"match_object_ids">>, <<"value">> := ObjectIds}, Contex
     TsQuery = lists:flatten(lists:join("|", MatchTerms)),
     case TsQuery of
         [] ->
-            none;
+            none();
         _ ->
             #search_sql_term{
                 tables = #{
@@ -1017,6 +1025,11 @@ qterm(#{ <<"term">> := Term, <<"value">> := Arg}, Context) ->
 %%
 %% Helper functions
 %%
+
+none() ->
+    #search_sql_term{
+        where = <<" false ">>
+    }.
 
 to_language_atom(<<"z_language">>, Context) ->
     {ok, z_context:language(Context)};

@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2021-2023 Marc Worrell
 %% @doc Combine search terms into a sql search query.
+%% @end
 
 %% Copyright 2021-2023 Marc Worrell
 %%
