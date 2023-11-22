@@ -445,7 +445,7 @@ search(<<"featured">>, Args, _OffsetLimit, Context) ->
             Predicate = qarg(<<"predicate">>, Args, undefined),
             [
                 #{
-                    <<"term">> => <<"hassubject">>,
+                    <<"term">> => <<"hasobject">>,
                     <<"value">> => [ Object, Predicate ]
                 }
             ]
