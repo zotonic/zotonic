@@ -195,21 +195,16 @@ observe_rsc_update_done(#rsc_update_done{ action = Action, id = Id }, Context) w
 observe_rsc_update_done(#rsc_update_done{}, _Context) ->
     ok.
 
+
 event(#postback_notify{message= <<"admin-insert-block">>}, Context) ->
-    Language = case z_context:get_q(<<"language">>, Context) of
-                    undefined ->
-                        [];
-                    Ls ->
-                        Ls1 = string:tokens(Ls, ","),
-                        [ list_to_atom(L) || L <- lists:filter(fun z_language:is_valid/1, Ls1) ]
-               end,
+    Language = language_list(z_context:get_q(<<"language">>, Context)),
     EditLanguage = case z_context:get_q(<<"edit_language">>, Context) of
                     undefined ->
                         z_context:language(Context);
                     EL ->
-                        case z_language:is_valid(EL) of
-                            true -> list_to_atom(EL);
-                            false -> z_context:language(Context)
+                        case z_language:to_language_atom(EL) of
+                            {ok, ELA} -> ELA;
+                            {error, _} -> z_context:language(Context)
                         end
                    end,
     Type = z_string:to_name(z_context:get_q(<<"type">>, Context)),
@@ -541,6 +536,21 @@ event(_E, Context) ->
     ?DEBUG(_E),
     Context.
 
+language_list(undefined) ->
+    [];
+language_list(<<>>) ->
+    [];
+language_list(B) when is_binary(B) ->
+    language_list(binary:split(B, <<",">>, [global, trim_all]));
+language_list(L) ->
+    lists:filtermap(
+        fun(Lang) ->
+            case z_language:to_language_atom(Lang) of
+                {ok, Code} -> {true, Code};
+                {error, _} -> false
+            end
+        end,
+        L).
 
 sanitize_filename(<<>>, Acc) ->
     Acc;
