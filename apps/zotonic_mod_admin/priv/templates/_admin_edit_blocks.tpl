@@ -82,7 +82,7 @@ $('#edit-blocks-wrapper').on('click', '.block-add-block .dropdown-menu a', funct
         block_type = $this.data('block-type'),
         after_block = $(this).closest('li.block').attr('id');
         langs = '';
-    $('input[name=language]:checked').each(function() { langs += ',' + $(this).val(); });
+    $('input[name="language[]"]:checked').each(function() { langs += ',' + $(this).val(); });
 
     z_notify('admin-insert-block', {
                 z_delegate: 'mod_admin',
