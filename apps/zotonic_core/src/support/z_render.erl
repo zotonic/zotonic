@@ -890,10 +890,10 @@ merge_scripts(RS, Acc) ->
         render= combine1(Acc#render_state.render, RS#render_state.render)
     }.
 
--spec add_content_script(Script, Context) -> NewContext when
+-spec add_content_script(Script, RenderState) -> NewRenderState when
     Script :: iodata() | undefined,
-    Context :: z:context(),
-    NewContext :: z:context().
+    RenderState :: #render_state{} | z:context(),
+    NewRenderState :: #render_state{} | z:context().
 add_content_script([], Context) -> Context;
 add_content_script(<<>>, Context) -> Context;
 add_content_script(undefined, Context) -> Context;
