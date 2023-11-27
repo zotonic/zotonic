@@ -47,6 +47,7 @@ task_ensure_refers_all(FromId, Context) ->
     case z_db:q("
         select id from rsc
         where id > $1
+        order by id asc
         limit 1000",
         [ FromId ],
         Context)
