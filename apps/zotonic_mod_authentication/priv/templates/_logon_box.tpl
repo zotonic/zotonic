@@ -121,7 +121,7 @@
 {% elseif q.logon_view == "confirm" %}
 
     <h2>{_ Confirm to connect _}</h2>
-    <p>{% trans "Sign in to connect with your existing account on {site}." site=m.site.title %}</p>
+    <p>{% trans "Sign in with your existing {site} account to connect the accounts. You only have to do this once." site=m.site.title %}</p>
 
     {% include "_logon_box_view.tpl"
         form_form_tpl="_logon_login_form.tpl"
