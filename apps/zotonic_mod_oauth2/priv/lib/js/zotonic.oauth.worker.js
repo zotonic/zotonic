@@ -195,6 +195,24 @@ model.present = function(data) {
                         });
                     model.status = "confirming";
                     break;
+                case "need_logon":
+                    // Found matching account - need confirmation before connecting
+                    // Reload the opener window with the logon confirm form. The external
+                    // logon buttons will be hidden.
+                    // TODO: check if there is an opener, otherwise we need to redirect to
+                    // the confirm form, keeping the url.
+                    self.publish(
+                        "bridge/opener/model/auth-ui/post/form/confirm",
+                        {
+                            // url: data.payload.result.url || undefined,
+                            authuser: data.payload.result.authuser,
+                            username: data.payload.result.username
+                        });
+                    setTimeout(
+                        () => self.publish("model/window/post/close", {}),
+                        10);
+                    model.status = "confirming";
+                    break;
                 case "need_passcode":
                     // Auth ok, but matching account is protected by 2FA
                     self.publish(

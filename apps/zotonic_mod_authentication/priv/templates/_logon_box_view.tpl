@@ -14,7 +14,7 @@ Params:
 {% endif %}
 
 <div class="z-logon-form">
-    {% if m.rsc.page_logon.body %}
+    {% if q.logon_view != "confirm" and m.rsc.page_logon.body %}
         <div class="logon-body">{{ m.rsc.page_logon.body|show_media }}</div>
     {% endif %}
 

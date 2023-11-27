@@ -118,6 +118,18 @@
         {% wire id=#cancel action={redirect back} %}
     {% endif %}
 
+{% elseif q.logon_view == "confirm" %}
+
+    <h2>{_ Confirm to connect _}</h2>
+    <p>{% trans "Sign in to connect with your existing account on {site}." site=m.site.title %}</p>
+
+    {% include "_logon_box_view.tpl"
+        form_form_tpl="_logon_login_form.tpl"
+        form_fields_tpl="_logon_login_form_fields.tpl"
+        form_support_tpl="_logon_login_support.tpl"
+        style_boxed=style_boxed
+    %}
+
 {% else %}
 
     {% include "_logon_box_view.tpl"

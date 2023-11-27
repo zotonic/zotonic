@@ -209,6 +209,7 @@ model.present = function(data) {
                     username: data.username,
                     password: data.password,
                     passcode: data.passcode,
+                    authuser: data.authuser || null,
                     setautologon: !!data.setautologon
                 })
         .then(function(resp) { return resp.json(); })
@@ -595,6 +596,7 @@ actions.logonForm = function(data) {
         password: data.value.password || null,
         passcode: data.value.passcode || null,
         setautologon: data.value.rememberme ? true : false,
+        authuser: data.value.authuser || null,
         onauth: data.value.onauth
     }
     model.present(dataLogon);
