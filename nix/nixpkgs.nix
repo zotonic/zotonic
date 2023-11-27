@@ -1,6 +1,6 @@
 import
   (builtins.fetchTarball {
-    url = "https://github.com/NixOS/nixpkgs/archive/219b2fc946a59851cdfc59efdd11129e1cee2b44.zip"; # Most recent 22.11 commit as of 5 Dec 2022 16:18
-    sha256 = "sha256:05sgy7bdbqyyin07vzbx8fnc4mjw5780qf0r1ia8188ss2vxw4yr";
+    url = "https://github.com/NixOS/nixpkgs/archive/4784a12198f7434971d5bb8aa6f111acef662ff4.zip"; # Most recent 23.11 commit as of 23 Nov 2023 16:07
+    sha256 = "sha256:14r6xpdx2rrp750p6h29mpsa2wbkfyz4jqrvdflfzq7mf007zy2w";
   })
 { }
