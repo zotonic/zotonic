@@ -4,7 +4,9 @@
             data-onsubmit-message="{{ %{ username: q.options.username|default:q.username }|to_json|escape }}"
       {% endif %}
       >
-    {#  <input type="hidden" name="onauth" value="{{ page|escape }}" /> #}
+    {% if q.authuser %}
+          <input type="hidden" name="authuser" value="{{ q.authuser|escape }}">
+    {% endif %}
 
     {% include form_fields_tpl %}
 

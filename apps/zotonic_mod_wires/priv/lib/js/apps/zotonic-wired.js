@@ -121,6 +121,14 @@ function zotonic_startup() {
                 });
             });
 
+    // Start bridge to opener if opened from a window with a cotonic broker
+    if (window.opener && typeof window.opener.cotonic === 'object') {
+        cotonic.mqtt_bridge.newBridge('opener', {
+            client_id: '',
+            clean_start: true
+        });
+    }
+
     setInterval(function() { z_transport_queue_check(); }, 500);
 }
 

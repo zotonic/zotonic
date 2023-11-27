@@ -37,7 +37,9 @@
     decode_token/2,
 
     auth_tokens/2,
-    cookie_url/1
+    cookie_url/1,
+
+    handle_auth_confirm/3
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

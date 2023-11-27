@@ -125,6 +125,7 @@ logon_1({ok, UserId}, Payload, Context) when is_integer(UserId) ->
             Options = z_context:get(auth_options, Context, #{}),
             Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options, Context1),
             Context3 = maybe_setautologon(Payload, Context2),
+            maybe_auth_connect(maps:get(<<"authuser">>, Payload, undefined), Context3),
             return_status(Payload, Context3);
         {error, user_not_enabled} ->
             ?LOG_INFO(#{
@@ -222,6 +223,25 @@ username(UserId, Context) ->
         Username when is_binary(Username) -> Username;
         undefined -> <<>>
     end.
+
+maybe_auth_connect(AuthUserEncoded, Context) when is_binary(AuthUserEncoded) ->
+    Secret = z_context:state_cookie_secret(Context),
+    case termit:decode_base64(AuthUserEncoded, Secret) of
+        {ok, AuthExp} ->
+            UserId = z_acl:user(Context),
+            case termit:check_expired(AuthExp) of
+                {ok, #{ auth := Auth, user_id := AuthUserId }} when UserId =:= AuthUserId ->
+                    m_authentication:handle_auth_confirm(Auth, undefined, Context);
+                {ok, _} ->
+                    {error, user_id};
+                {error, _} = Error ->
+                    Error
+            end;
+        {error, _} ->
+            {error, illegal_auth}
+    end;
+maybe_auth_connect(_Auth, _Context) ->
+    ok.
 
 
 -spec maybe_add_logon_options( map(), map(), z:context() ) -> { map(), z:context() }.

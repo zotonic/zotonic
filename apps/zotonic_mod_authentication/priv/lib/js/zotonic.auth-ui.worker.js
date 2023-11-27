@@ -32,6 +32,7 @@ var model = {
     need_passcode: false,
     is_expired: false,
     is_location_provided: false,
+    authuser: undefined,
     options : {}
 };
 
@@ -66,6 +67,10 @@ model.present = function(data) {
         self.subscribe(
             "model/auth-ui/post/form/change",
             function(msg) { actions.changeForm(msg.payload); });
+
+        self.subscribe(
+            "model/auth-ui/post/form/confirm",
+            function(msg) { actions.confirmForm(msg.payload); });
 
         model.status = "waiting";
 
@@ -218,6 +223,13 @@ model.present = function(data) {
         }
     }
 
+    if (data.confirm) {
+        model.logon_view = "confirm";
+        model.username = data.username;
+        model.options = data.options || {};
+        model.authuser = data.authuser;
+    }
+
     if (data.auth_user_id && model.status == 'change_wait') {
         model.is_expired = false;
         model.logon_view = 'change_done';
@@ -281,6 +293,7 @@ state.representation = function(model) {
                     secret: model.secret,
                     need_passcode: model.need_passcode,
                     is_expired: model.is_expired,
+                    authuser: model.authuser,
                     options: model.options
                 }
             });
@@ -372,7 +385,7 @@ actions.sendVerificationMessage = function(data) {
 
 actions.sendVerificationMessageResponse = function(data) {
     const proposal = { };
-    
+
     if(data.payload && data.payload.status === "ok") {
         proposal.is_error = false;
         proposal.logon_view = "verification_sent";
@@ -404,6 +417,19 @@ actions.changeForm = function(data) {
         passcode: data.value.passcode || ""
     }
     model.present(dataChange);
+};
+
+actions.confirmForm = function(data) {
+    let dataConfirm = {
+        confirm: true,
+        username: data.username,
+        authuser: data.authuser,
+        options: {
+            is_username_checked: true,
+            is_user_local: true
+        }
+    }
+    model.present(dataConfirm);
 };
 
 actions.reminderResponse = function(data) {

@@ -74,7 +74,7 @@
                    tabindex="-1">
         </div>
         <p class="clearfix">
-            <b>{{ q.options.username|escape }}</b>
+            <b>{{ q.options.username|default:q.username|escape }}</b>
             <a class="pull-right" href="{% url logon %}" data-onclick-topic="model/auth-ui/post/view/logon">{_ Change _}</a>
         </p>
     {% else %}

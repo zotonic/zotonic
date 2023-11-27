@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2020-2022 Marc Worrell
+%% @copyright 2020-2023 Marc Worrell
 %% @doc OAuth2 model for authentication using remote OAuth2 services.
 %% @end
 
-%% Copyright 2020-2022 Marc Worrell
+%% Copyright 2020-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@
 -behaviour(zotonic_model).
 
 -include_lib("kernel/include/logger.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 -export([
     m_get/3,
@@ -191,10 +192,25 @@ user_data({ok, Auth}, InitialQArgs, SId, Context) ->
                 auth => Encoded,
                 url => url(<<"p">>, InitialQArgs)
             }};
+        {error, {logon_confirm, UserId, Email}} ->
+            % We need a logon by the user before we connect the accounts
+            AuthUser = #{
+                auth => Auth,
+                user_id => UserId
+            },
+            Secret = z_context:state_cookie_secret(Context),
+            Expires = termit:expiring(AuthUser, ?SESSION_AUTH_TTL),
+            Encoded = termit:encode_base64(Expires, Secret),
+            {ok, #{
+                result => need_logon,
+                url => url(<<"p">>, InitialQArgs),
+                authuser => Encoded,
+                username => Email
+            }};
         {error, {need_passcode, UserId}} ->
             % There is an existing account with matching confirmed identities.
             % The existing account is protected by 2FA, so we need a code
-            % before we can merge the accounts.
+            % before we can connect the accounts.
             AuthUser = #{
                 auth => Auth,
                 user_id => UserId

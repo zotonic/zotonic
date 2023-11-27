@@ -250,33 +250,43 @@ observe_auth_validated(#auth_validated{} = Auth, Context) ->
 maybe_add_identity_logon(Auth, Context) ->
     case auth_identity(Auth, Context) of
         undefined ->
-            case auth_match_verified_email(Auth, Context) of
+            UserEmails = auth_match_email(Auth, Context),
+            {UserIds, Emails} = lists:unzip(UserEmails),
+            case lists:usort(UserIds) of
                 [] ->
                     maybe_signup(Auth, Context);
-                [1] ->
+                [1|_] ->
                     % Never add an external identity to the admin user during log on.
                     {error, duplicate};
                 [UserId] when Auth#auth_validated.is_signup_confirm ->
-                    % Local user with an email address that was
-                    % verified both here and at the external service.
-                    % We can now assume this is the same user.
-                    % Connect the service's identity to the user.
-                    % The optional 2FA has been checked at this point.
+                    % Local user where the user has confirmed their identity by
+                    % logging in into their account.
                     {ok, _} = insert_identity(UserId, Auth, Context),
                     {ok, UserId};
+                %
+                % ENABLE THIS CODE IFF WE CAN BE COMPLETELY SURE THAT
+                % THE EMAIL ADDRESS HAD BEEN VERFIED SECURELY BY THE
+                % REMOTE SERVICE.
+                %
+                % [UserId] when not Auth#auth_validated.is_signup_confirm ->
+                %     % Local user with matching verified email identity.
+                %     % Check if 2FA is enabled for local user.
+                %     case z_notifier:first(#auth_postcheck{id = UserId, query_args = #{}}, Context) of
+                %         {error, need_passcode} ->
+                %             {error, {need_passcode, UserId}};
+                %         undefined ->
+                %             {error, {logon_confirm, UserId, hd(Emails)}}
+                %     end;
+                %
+                % END OF OPTIONAL CODE
+                %
                 [UserId] when not Auth#auth_validated.is_signup_confirm ->
-                    % Local user with matching verified email identity.
-                    % Check if 2FA is enabled for local user.
-                    case z_notifier:first(#auth_postcheck{id = UserId, query_args = #{}}, Context) of
-                        {error, need_passcode} ->
-                            {error, {need_passcode, UserId}};
-                        undefined ->
-                            {ok, _} = insert_identity(UserId, Auth, Context),
-                            {ok, UserId}
-                    end;
-                [Email|_] ->
+                    % Email address matches a known verified email address here - allow to
+                    % send a confirmation code to the first matching email address.
+                    {error, {logon_confirm, UserId, hd(Emails)}};
+                _Multiple  ->
                     % Ambiguous - multiple matching accounts
-                    {error, {multiple_email, Email}}
+                    {error, {multiple_email, hd(Emails)}}
             end;
         Ps when is_list(Ps) ->
             update_identity(Auth, Ps, Context)
@@ -333,8 +343,11 @@ maybe_signup(Auth, Context) ->
             {error, {duplicate_email, Email}}
     end.
 
--spec auth_match_verified_email(#auth_validated{}, z:context()) -> list( m_rsc:resource_id() ).
-auth_match_verified_email(#auth_validated{ identities = Identities }, Context) ->
+-spec auth_match_email(#auth_validated{}, Context) -> list( {UserId, Email} ) when
+    Context :: z:context(),
+    UserId :: m_rsc:resource_id(),
+    Email :: binary().
+auth_match_email(#auth_validated{ identities = Identities }, Context) ->
     VerifiedEmails = lists:filtermap(
         fun
             (#{ type := <<"email">>, key := E, is_verified := true }) ->
@@ -343,12 +356,35 @@ auth_match_verified_email(#auth_validated{ identities = Identities }, Context) -
                 false
         end,
         Identities),
+    UnverifiedEmails = lists:filtermap(
+        fun
+            (#{ type := <<"email">>, key := E, is_verified := false }) ->
+                {true, m_identity:normalize_key(email, E)};
+            (_) ->
+                false
+        end,
+        Identities),
+    case find_verified_email_idns(VerifiedEmails, Context) of
+        [] ->
+            find_verified_email_idns(UnverifiedEmails, Context);
+        Verified ->
+            Verified
+    end.
+
+%% Find all user ids with a verified email address matching the given email addresses.
+find_verified_email_idns(Emails, Context) ->
     lists:usort(lists:flatten(lists:map(
         fun(Email) ->
             Idns = m_identity:lookup_users_by_verified_type_and_key(email, Email, Context),
-            lists:map(fun(Idn) -> proplists:get_value(rsc_id, Idn) end, Idns)
+            RscIds = lists:map(
+                fun(Idn) ->
+                    Id = proplists:get_value(rsc_id, Idn),
+                    {Id, Email}
+                end, Idns),
+            lists:filter(fun({Id, _}) -> m_identity:is_user(Id, Context) end, RscIds)
         end,
-        VerifiedEmails))).
+        Emails))).
+
 
 
 -spec auth_match_primary_email(#auth_validated{}, z:context()) -> list( Email::binary() ).
