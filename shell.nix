@@ -2,7 +2,7 @@
 pkgs.mkShell {
   buildInputs = with pkgs; [
     bashInteractive
-    erlangR25
+    erlangR26
     rebar3
     erlfmt
     imagemagick
