@@ -10,7 +10,7 @@
 
 <div class="admin-header">
     <h2>{_ Cross-reference check of all templates _}</h2>
-    <p>{_ This checks all templates to see if included of extended templates are available. _}</p>
+    <p>{_ This checks all templates to see if included or extended templates are available. _}</p>
 </div>
 
 <div class="well">

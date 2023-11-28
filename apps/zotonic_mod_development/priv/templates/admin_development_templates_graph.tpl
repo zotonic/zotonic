@@ -5,7 +5,7 @@
 {% block content %}
 <ul class="breadcrumb">
     <li><a href="{% url admin_development %}">{_ Site Development _}</a></li>
-    <li class="active">{_ Dependendy graph of all templates _}</li>
+    <li class="active">{_ Dependency graph of all templates _}</li>
 </ul>
 
 <div class="admin-header">

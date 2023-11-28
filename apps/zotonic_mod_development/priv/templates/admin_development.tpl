@@ -153,8 +153,7 @@
                       action={module_rescan}
             %}
         </p>
-        <p class="help-block">{_ Force a recompilation of all templates. This fixes any issues where
-        the compiled templates might be out of sync with the template index. _}</p>
+        <p class="help-block">{_ Force a recompilation of all templates. This fixes any issues where the compiled templates might be out of sync with the template index. _}</p>
         </p>
     </div>
 </div>
