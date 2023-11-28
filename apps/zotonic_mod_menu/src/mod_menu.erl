@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Menu module. Supports menu trees in Zotonic. Adds admin interface to define the menu.
+%% @end
 
-%% Copyright 2009-2021 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -21,7 +22,7 @@
 
 -mod_title("Menus").
 -mod_description("Menus in Zotonic, adds admin interface to define menus and other hierarchical lists.").
--mod_schema(3).
+-mod_schema(4).
 -mod_depends([]).
 -mod_provides([menu]).
 
@@ -37,7 +38,7 @@
     observe_rsc_get/3,
     observe_admin_menu/3,
     observe_rsc_update/3,
-    observe_rsc_pivot_done/2,
+    observe_rsc_update_done/2,
 
     get_menu/1,
     get_menu/2,
@@ -46,7 +47,10 @@
     menu_flat/3,
     menu_subtree/3,
     menu_subtree/4,
-    remove_invisible/2
+    remove_invisible/2,
+
+    ensure_hasmenupart/1,
+    update_hasmenupart/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -74,7 +78,15 @@ event(#postback_notify{message= <<"menuedit">>, trigger=TriggerId}, Context) ->
             hierarchy_edge(m_rsc:rid(RootId, Context1), Predicate, Tree1, Context1)
     end;
 event(#z_msg_v1{data=Data}, Context) ->
-    handle_cmd(proplists:get_value(<<"cmd">>, Data), Data, Context).
+    handle_cmd(proplists:get_value(<<"cmd">>, Data), Data, Context);
+event(#postback{ message = {ensure_hasmenupart, []} }, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            z_pivot_rsc:insert_task(?MODULE, ensure_hasmenupart, <<>>, Context),
+            z_render:growl(?__("Checking all menu resources in the backgroud", Context), Context);
+        false ->
+            z_render:growl_error(?__("Sorry, only an admin is allowed to do this", Context), Context)
+    end.
 
 
 %% @doc Notifier handler to get all menu ids for the default menu.
@@ -116,31 +128,58 @@ observe_rsc_get(#rsc_get{}, R, _Context) ->
 observe_rsc_update(#rsc_update{ action = Action }, {ok, #{ <<"menu">> := Menu } = R}, _Context)
     when Action =:= update;
          Action =:= insert ->
-
     Menu1 = validate(Menu, []),
     {ok, R#{ <<"menu">> => Menu1 }};
 observe_rsc_update(#rsc_update{}, Result, _Context) ->
     Result.
 
+
 %% @doc Set the 'hasmenupart' edges to keep track which resourcees are used in a menu.
 %% This is needed for the automatic cleanup of 'dependent' resources and the
 %% breadcrumb paths of mod_seo.
-observe_rsc_pivot_done(#rsc_pivot_done{id = Id, is_a = IsA}, Context) ->
+observe_rsc_update_done(#rsc_update_done{ action = Action, id = Id, post_is_a = IsA }, Context)
+    when Action =:= insert;
+         Action =:= update ->
     case lists:member(menu, IsA) of
         true ->
-            ContextSudo = z_acl:sudo(Context),
-            NewMenuIds = filter_menu_ids:menu_ids(Id, ContextSudo),
-            OldMenuIds = m_edge:objects(Id, hasmenupart, ContextSudo),
-            New = NewMenuIds -- OldMenuIds,
-            Del = OldMenuIds -- NewMenuIds,
-            NewExists = lists:filter(fun(ObjId) -> m_rsc:exists(ObjId, ContextSudo) end, New),
-            [ m_edge:insert(Id, hasmenupart, ObjId, [no_touch], ContextSudo) || ObjId <- NewExists ],
-            [ m_edge:delete(Id, hasmenupart, ObjId, [no_touch], ContextSudo) || ObjId <- Del ],
-            ok;
+            update_hasmenupart(Id, Context);
         false ->
             ok
-    end.
+    end;
+observe_rsc_update_done(#rsc_update_done{}, _Context) ->
+    ok.
 
+%% @doc Ensure that all menu resources have the correct 'hasmenupart' edges.
+-spec ensure_hasmenupart(Context) -> ok | {error, Reason} when
+    Context :: z:context(),
+    Reason :: term().
+ensure_hasmenupart(Context) ->
+    ?LOG_INFO(#{
+        in => mod_menu,
+        text => <<"Checking all menu resource for hasmenupart connections">>
+    }),
+    ContextSudo = z_acl:sudo(Context),
+    m_category:foreach(
+        menu,
+        fun(Id, Ctx) ->
+            update_hasmenupart(Id, Ctx)
+        end,
+        ContextSudo).
+
+%% @doc Ensure that all hasmenupart connections of the resource are correct.
+-spec update_hasmenupart(Id, Context) -> ok when
+    Id :: m_rsc:resource_id(),
+    Context :: z:context().
+update_hasmenupart(Id, Context) ->
+    ContextSudo = z_acl:sudo(Context),
+    NewMenuIds = filter_menu_ids:menu_ids(Id, ContextSudo),
+    OldMenuIds = m_edge:objects(Id, hasmenupart, ContextSudo),
+    New = NewMenuIds -- OldMenuIds,
+    Del = OldMenuIds -- NewMenuIds,
+    NewExists = lists:filter(fun(ObjId) -> m_rsc:exists(ObjId, ContextSudo) end, New),
+    [ m_edge:insert(Id, hasmenupart, ObjId, [no_touch], ContextSudo) || ObjId <- NewExists ],
+    [ m_edge:delete(Id, hasmenupart, ObjId, [no_touch], ContextSudo) || ObjId <- Del ],
+    ok.
 
 % Event handler command handling.
 handle_cmd(<<"copy">>, Data, Context) ->
@@ -482,14 +521,10 @@ manage_schema(_Version, Context) ->
     datamodel(Context).
 
 %% @doc Modify the menu data on module upgrade.
-manage_data({upgrade, 3}, Context) ->
-    % Pivot all menu's to add the 'hasmenupart' edges
-    m_category:foreach(
-        menu,
-        fun(Id, Context1) ->
-            z_pivot_rsc:insert_queue(Id, Context1)
-        end,
-        Context);
+manage_data({upgrade, 4}, Context) ->
+    % Check all menus to add the 'hasmenupart' edges
+    z_pivot_rsc:insert_task_after(5, ?MODULE, ensure_hasmenupart, <<>>, [], Context),
+    ok;
 manage_data(_Version, _Context) ->
     ok.
 
