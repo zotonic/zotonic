@@ -22,7 +22,7 @@
 
 -mod_title("Menus").
 -mod_description("Menus in Zotonic, adds admin interface to define menus and other hierarchical lists.").
--mod_schema(3).
+-mod_schema(4).
 -mod_depends([]).
 -mod_provides([menu]).
 
@@ -521,14 +521,10 @@ manage_schema(_Version, Context) ->
     datamodel(Context).
 
 %% @doc Modify the menu data on module upgrade.
-manage_data({upgrade, 3}, Context) ->
-    % Pivot all menu's to add the 'hasmenupart' edges
-    m_category:foreach(
-        menu,
-        fun(Id, Context1) ->
-            z_pivot_rsc:insert_queue(Id, Context1)
-        end,
-        Context);
+manage_data({upgrade, 4}, Context) ->
+    % Check all menus to add the 'hasmenupart' edges
+    z_pivot_rsc:insert_task_after(5, ?MODULE, ensure_hasmenupart, <<>>, [], Context),
+    ok;
 manage_data(_Version, _Context) ->
     ok.
 
