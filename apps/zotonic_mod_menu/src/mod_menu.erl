@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Menu module. Supports menu trees in Zotonic. Adds admin interface to define the menu.
+%% @end
 
-%% Copyright 2009-2021 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -37,7 +38,7 @@
     observe_rsc_get/3,
     observe_admin_menu/3,
     observe_rsc_update/3,
-    observe_rsc_pivot_done/2,
+    observe_rsc_update_done/2,
 
     get_menu/1,
     get_menu/2,
@@ -116,16 +117,18 @@ observe_rsc_get(#rsc_get{}, R, _Context) ->
 observe_rsc_update(#rsc_update{ action = Action }, {ok, #{ <<"menu">> := Menu } = R}, _Context)
     when Action =:= update;
          Action =:= insert ->
-
     Menu1 = validate(Menu, []),
     {ok, R#{ <<"menu">> => Menu1 }};
 observe_rsc_update(#rsc_update{}, Result, _Context) ->
     Result.
 
+
 %% @doc Set the 'hasmenupart' edges to keep track which resourcees are used in a menu.
 %% This is needed for the automatic cleanup of 'dependent' resources and the
 %% breadcrumb paths of mod_seo.
-observe_rsc_pivot_done(#rsc_pivot_done{id = Id, is_a = IsA}, Context) ->
+observe_rsc_update_done(#rsc_update_done{ action = Action, id = Id, post_is_a = IsA }, Context)
+    when Action =:= insert;
+         Action =:= update ->
     case lists:member(menu, IsA) of
         true ->
             ContextSudo = z_acl:sudo(Context),
@@ -139,7 +142,9 @@ observe_rsc_pivot_done(#rsc_pivot_done{id = Id, is_a = IsA}, Context) ->
             ok;
         false ->
             ok
-    end.
+    end;
+observe_rsc_update_done(#rsc_update_done{}, _Context) ->
+    ok.
 
 
 % Event handler command handling.
