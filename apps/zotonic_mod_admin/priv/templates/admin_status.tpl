@@ -121,7 +121,7 @@
                                           postback={ensure_refers}
                                           delegate=`mod_admin`
                                 %}
-                                <p class="help-block">{_ Check all resource for embedded resource references and add a <i>refers</i> connection for all of those references. _}</p>
+                                <p class="help-block">{_ Check all pages for embedded page references and add a <i>refers</i> connection for all of those references. _}</p>
                             </div>
                         </div>
                     {% endif %}
