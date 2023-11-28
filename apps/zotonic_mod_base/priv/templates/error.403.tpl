@@ -20,14 +20,14 @@
         <p>
           {% if m.acl.user %}
               {_ To view this page, you need to have other access rights. _}<br/>
-              {_ You may try to sign in as a different user. _}
+              {_ You may try to log in as a different user. _}
           {% else %}
-              {_ To view this page you must be signed in. _}
+              {_ To view this page you must be logged in. _}
           {% endif %}
         </p>
 
         <p>
-          <a class="btn btn-primary" href="{% url logon p=m.req.raw_path %}">{_ Sign in _}</a>
+          <a class="btn btn-primary" href="{% url logon p=m.req.raw_path %}">{_ Login _}</a>
         </p>
       </div>
 </div>

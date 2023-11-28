@@ -8,7 +8,7 @@ page: page to redirect to after succesful logon
 
 
 Changes relative to the logon *page*:
-* The page title for the sign in form is omitted. A (generic) title is shown in the dialog header.
+* The page title for the login form is omitted. A (generic) title is shown in the dialog header.
 * Forms are posted using a wire postback because we cannot use controller_logon.
 * State is maintained to switch between screens. This is used to replace the modal contents, instead of loading a page at a dispatch url.
    * The variable 'logon_state' is used in external templates (for instance '_logon_link.tpl') to create wired update links; values: 'logon', 'signup', 'reset', 'reminder'

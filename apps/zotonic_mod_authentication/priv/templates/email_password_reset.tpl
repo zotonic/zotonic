@@ -11,7 +11,7 @@
     <p>{_ However this email address does not belong to one of our registered users so you will not be able to change the password. _}</p><br/>
     <p> {_ Are you sure you have created an account? If not, you can create one here: _} https://{{ m.site.hostname }}/signup</p><br/>
 
-    <p>{_ If you think you have an account and were expecting this email, please try again using the email address you gave when signing up. _}</p>
+    <p>{_ If you think you have an account and were expecting this email, please try again using the email address you gave when you created your account. _}</p>
 {% else %}
     <p>{_ Hello _} {{ m.rsc[id].name_first|default:m.rsc[id].title }},</p>
 

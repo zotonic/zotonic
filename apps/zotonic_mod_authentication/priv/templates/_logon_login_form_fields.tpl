@@ -48,14 +48,14 @@
             <div class="checkbox">
                 <label>
                     <input type="checkbox" name="rememberme" value="1" {% if q.rememberme or m.authentication.is_rememberme %}checked{% endif %}>
-                    {_ Keep me signed in _}
+                    {_ Keep me logged in _}
                 </label>
             </div>
         </div>
     {% endif %}
 
     <div class="form-group">
-        <button class="btn btn-primary" type="submit">{_ Sign in _}</button>
+        <button class="btn btn-primary" type="submit">{_ Log in _}</button>
     </div>
 {% else %}
     {% if q.options.is_username_checked %}
@@ -167,7 +167,7 @@
                         <label title="{_ Stay logged on unless I log off. _}">
                             <input type="checkbox" name="rememberme" value="1"
                                 {% if q.rememberme or m.authentication.is_rememberme %}checked{% endif %}>
-                            {_ Keep me signed in _}
+                            {_ Keep me logged in _}
                         </label>
                     </div>
                 </div>
@@ -182,7 +182,7 @@
             {% endif %}
             <div class="form-group">
                 <button class="btn btn-success" style="margin-right: 0px" type="submit">
-                    {_ Sign in _}
+                    {_ Log in _}
                 </button>
             </div>
         {% endif %}

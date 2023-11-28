@@ -40,7 +40,7 @@
                     %}
                     <label class="radio-inline">
                         <input name="2fa_mode" type="radio" id="ask2fa" value="1" {% if m.auth2fa.mode  == '1' %}checked="checked"{% endif %} />
-                        {_ Ask after signing in _}
+                        {_ Ask after logging in _}
                     </label>
                 </div>
 

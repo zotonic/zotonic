@@ -27,7 +27,7 @@
     {% endwith %}
 
     <p>
-        {_ From now on an extra passcode is needed to sign in. _}
+        {_ From now on an extra passcode is needed to log in. _}
     </p>
 
     <div class="modal-footer">

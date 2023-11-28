@@ -1,6 +1,6 @@
 {% if m.acl.user %}
-	<a href="{% url logoff %}">{_ Sign out _}</a>
+	<a href="{% url logoff %}">{_ Log out _}</a>
 {% else %}
-	<a href="{% url logon %}">{_ Sign in _}</a>
+	<a href="{% url logon %}">{_ Log in _}</a>
 {% endif %}
 

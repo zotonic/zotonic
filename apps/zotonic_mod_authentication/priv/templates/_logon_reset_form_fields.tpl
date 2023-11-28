@@ -30,7 +30,7 @@
         <div class="checkbox">
             <label>
                 <input type="checkbox" name="rememberme" value="1" />
-                {_ Keep me signed in _}
+                {_ Keep me logged in _}
             </label>
         </div>
     </div>
@@ -38,6 +38,6 @@
 
 <div class="form-group">
     <div>
-        <button class="btn btn-primary" type="submit">{_ Reset password and Sign in _}</button>
+        <button class="btn btn-primary" type="submit">{_ Reset password and log in _}</button>
     </div>
 </div>

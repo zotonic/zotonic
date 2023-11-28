@@ -26,7 +26,7 @@ form_outside_tpl
 
         <div id="signup_error_duplicate_username" class="alert alert-danger">
             {% if m.signup.config.username_equals_email %} 
-                {_ You already have an account, _} <a href="{% url logon p=q.p %}" id="back_to_logon">{_ sign in _}</a>.
+                {_ You already have an account, _} <a href="{% url logon p=q.p %}" id="back_to_logon">{_ log in _}</a>.
             {% else %}
                 {_ Sorry, this username is already in use. Please try another one. _}
             {% endif %}
