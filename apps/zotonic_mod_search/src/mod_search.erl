@@ -281,27 +281,45 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
-search_prevnext(Type, Args, Context) ->
-    Order = fun(<<"next">>) -> "ASC"; (<<"previous">>) -> "DESC" end,
-    Operator = fun(<<"next">>) -> " > "; (<<"previous">>) -> " < " end,
-    MapField = fun(<<"date_start">>) -> "pivot_date_start";
-                  (<<"date_end">>) -> "pivot_date_end";
-                  (<<"title">>) -> "pivot_title";
-                  (X) -> z_convert:to_list(z_string:to_name(X)) end,
-    Field = z_convert:to_binary(maps:get(<<"sort">>, Args, <<"publication_start">>)),
-    Limit = z_convert:to_integer(maps:get(<<"limit">>, Args, 1)),
-    Id = maps:get(<<"id">>, Args),
-    Cat = maps:get(<<"cat">>, Args),
-    FieldValue = m_rsc:p(Id, z_convert:to_binary(Field), Context),
+search_prevnext(<<"next">>, Args, Context) ->
+    search_prevnext("ASC", ">", Args, Context);
+search_prevnext(<<"prev">>, Args, Context) ->
+    search_prevnext("DESC", "<", Args, Context).
+
+search_prevnext(Order, Operator, Args, Context) ->
+    SortField = z_convert:to_binary(qarg(<<"sort">>, Args, <<"publication_start">>)),
+    SortField1 = case SortField of
+        <<"date_start">> -> "pivot_date_start";
+        <<"date_end">> -> "pivot_date_end";
+        <<"title">> -> "pivot_title";
+        X -> z_convert:to_list(z_string:to_name(X))
+    end,
+    Limit = z_convert:to_integer(qarg(<<"limit">>, Args, 1)),
+    Id = m_rsc:rid(qarg(<<"id">>, Args, undefined), Context),
+    Cat = qarg(<<"cat">>, Args, undefined),
+    FieldValue = m_rsc:p(Id, SortField, Context),
+    Published = case qarg(<<"is_published">>, Args, undefined) of
+        undefined ->
+            "";
+        IsPub ->
+            case z_convert:to_bool(IsPub) of
+                true -> " and is_published = true ";
+                false -> " and is_published = false "
+            end
+    end,
     #search_sql{
-        select="r.id",
-        from="rsc r",
-        where="(" ++ MapField(Field) ++ " " ++ Operator(Type) ++ " $1) and r.id <> $2",
-        tables=[{rsc, "r"}],
-        cats=[{"r", Cat}],
-        args=[FieldValue, z_convert:to_integer(Id), Limit],
-        order=MapField(Field) ++ " " ++ Order(Type) ++ ", id " ++ Order(Type),
-        limit="limit $3"
+        select = "r.id",
+        from = "rsc r",
+        where = [
+            "(", SortField1, " ", Operator, " $1)",
+            " and r.id <> $2",
+            Published
+        ],
+        tables = [{rsc, "r"}],
+        cats = [{"r", Cat}],
+        args = [FieldValue, Id, Limit],
+        order = SortField1 ++ " " ++ Order ++ ", id " ++ Order,
+        limit = "limit $3"
     }.
 
 
