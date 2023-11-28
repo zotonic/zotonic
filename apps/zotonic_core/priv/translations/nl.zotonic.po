@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-11-28 15:33\n"
+"PO-Revision-Date: 2023-11-28 16:44\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -409,7 +409,7 @@ msgstr "Groepsleden en -beheerders mogen koppelen"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_options.tpl:19
 msgid "If checked then users connected with an <em>author</em> predicate are considered resource owners for the ACL rule evaluation. This ensures that ACL rules marked as <em>manage own</em> are applicable to authors."
-msgstr "Indien aangevinkt, worden gebruikers die verbonden zijn met een predikaat <em>auteur</em> beschouwd als broneigenaren voor de evaluatie van de ACL-regel. Dit zorgt ervoor dat ACL-regels gemarkeerd als <em>manage own</em> van toepassing zijn op auteurs."
+msgstr "Indien aangevinkt, worden gebruikers die verbonden zijn met een <em>auteur</em> predikaat  beschouwd als eigenaren voor de evaluatie van de ACL-regel. Dit zorgt ervoor dat ACL-regels gemarkeerd als <em>manage own</em> van toepassing zijn op auteurs."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:18
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:51
@@ -779,7 +779,7 @@ msgstr "gebruik (acl actie)"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:7
 msgid "use <b>New Private Window</b> (check the <b>File</b> menu of your browser)"
-msgstr "gebruik <b>Nieuw privévenster</b> (controleer het menu <b>Bestand</b> van uw browser)"
+msgstr "gebruik <b>Nieuw privévenster</b> (controleer het menu <b>Bestand</b> van je browser)"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:8
 msgid "use another browser (eg. Chrome if you are now using Firefox)"
@@ -1320,7 +1320,7 @@ msgstr "Noodnummer (telefoon)"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:120
 msgid "Ensure <i>refers</i> connections"
-msgstr "Zorg ervoor dat <i>verwijst naar</i> verbindingen"
+msgstr "Zorg voor <i>verwijst naar</i> verbindingen"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:21
 msgid "Enter a URL or embed code. It will be analyzed and you can choose how to import the data."
@@ -3222,7 +3222,7 @@ msgstr "Klik OK om te inloggen als deze gebruiker. Je wordt doorgestuurd naar de
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:16
 msgid "Click on the link to confirm your email address. Copy the whole link and paste it in your browser if this doesn't work."
-msgstr "Klik op de link om uw e-mailadres te bevestigen. Kopieer de hele link en plak deze in uw browser als dit niet werkt."
+msgstr "Klik op de link om uw e-mailadres te bevestigen. Kopieer de hele link en plak deze in je browser als dit niet werkt."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:10
 msgid "Click “delete” to remove any existing username/password from the person; this person will no longer be a user."
@@ -3303,7 +3303,7 @@ msgstr "Identiteiten met dit e-mailadres"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:20
 msgid "If you don't know this site, please ignore this email. Maybe someone made an error."
-msgstr "Als u deze site niet kent, kunt u deze e-mail negeren. Misschien heeft iemand een fout gemaakt."
+msgstr "Als je deze site niet kent, negeer deze e-mail dan. Misschien heeft iemand een fout gemaakt."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:22
 msgid "If you don’t know your password, click on <i>Forgot your password?</i> at the login."
@@ -3377,7 +3377,7 @@ msgstr "Alleen een beheerder of de gebruiker zelf kan het wachtwoord instellen."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:3
 msgid "Please verify your email address"
-msgstr "Verifieer uw e-mailadres alstublieft"
+msgstr "Verifieer je e-mailadres alsjeblieft"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:22
 msgid "Random secure password:"
@@ -3461,7 +3461,7 @@ msgstr "Dit kan niet ongedaan worden gemaakt. Gebruikersnaam en wachtwoord zulle
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:8
 msgid "This email address was added to your personal information on"
-msgstr "Dit e-mailadres is toegevoegd aan uw persoonlijke gegevens op"
+msgstr "Dit e-mailadres is toegevoegd aan je persoonlijke gegevens op"
 
 #: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:172
 msgid "This is not a valid e-mail address."
@@ -3551,7 +3551,7 @@ msgstr "Bezig met bevestigen..."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity.tpl:10
 msgid "When you add credentials to a person then the person becomes a user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What a user can do depends on the groups the user is member of."
-msgstr "Wanneer u inloggegevens aan een persoon toevoegt, wordt de persoon een gebruiker. Een persoon of machine kan inloggen met die inloggegevens en acties uitvoeren op uw Zotonic-systeem.<br/><br/>Wat een gebruiker kan doen hangt af van de groepen waarvan de gebruiker lid is."
+msgstr "Wanneer je inloggegevens aan een persoon toevoegt, wordt de persoon een gebruiker. Een persoon of machine kan inloggen met die inloggegevens en acties uitvoeren op uw Zotonic-systeem.<br/><br/>Wat een gebruiker kan doen hangt af van de groepen waarvan de gebruiker lid is."
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:103
 msgid "You are not allowed to create the person page."
@@ -3587,7 +3587,7 @@ msgstr "Je moet een administrator zijn om gebruikers toe te voegen."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:25
 msgid "You received this email because you verified your email address. You will not receive any additional emails because of this request."
-msgstr "U heeft deze e-mail ontvangen omdat u uw e-mailadres heeft geverifieerd. U ontvangt naar aanleiding van dit verzoek geen extra e-mails."
+msgstr "Je hebt deze e-mail ontvangen omdat je je e-mailadres hebt geverifieerd. Je ontvangt naar aanleiding van dit verzoek geen extra e-mails."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:12
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:21
@@ -3910,7 +3910,7 @@ msgstr "Voeg nieuwe verbindingen in vóór bestaande verbindingen."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:63
 msgid "Instead of a search box this will show a list of all pages in the <i>To</i> categories checked above. At least one category must be checked."
-msgstr "In plaats van een zoekvak wordt hier een lijst weergegeven met alle pagina's in de hierboven aangevinkte <i>naar</i> categorieën. Er moet minimaal één categorie worden aangevinkt."
+msgstr "In plaats van een zoekveld wordt hier een lijst weergegeven met alle pagina's in de hierboven aangevinkte <i>naar</i> categorieën. Er moet minimaal één categorie worden aangevinkt."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:19./apps/zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:47
 msgid "Make a new predicate"
@@ -4156,11 +4156,11 @@ msgstr "Help over twee-factor authenticatie"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:14
 msgid "Here you can define which users need or should use two-factor authentication when signing in."
-msgstr "Hier kunt u definiëren welke gebruikers een twee-factor-authenticatie nodig hebben of moeten gebruiken bij het aanmelden."
+msgstr "Hier kan je definiëren welke gebruikers een twee-factor-authenticatie nodig hebben of moeten gebruiken bij het aanmelden."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:3
 msgid "If you are not able to scan the QR code then copy the code manually to your authentication App."
-msgstr "Als u de QR-code niet kunt scannen, kopieer de code handmatig naar je authenticatie-app."
+msgstr "Als je de QR-code niet kan scannen, kopieer de code handmatig naar je authenticatie-app."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:61
 msgid "It is possible to force two-factor authentication for a specific user group, regardless of the setting above."
@@ -4294,7 +4294,7 @@ msgstr "Wachtwoord wijzigen en inloggen"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_title.tpl:5
 msgid "Change your password"
-msgstr "Wijzig uw wachtwoord"
+msgstr "Wijzig je wachtwoord"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:78
 msgid "Change your permissions"
@@ -4345,7 +4345,7 @@ msgstr "Dubbele e-mail"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.pw.tpl:2
 msgid "Either the email or the password you entered is incorrect. Please try again."
-msgstr "Het e-mailadres of het wachtwoord dat u hebt ingevoerd, is onjuist. Probeer het a.u.b. opnieuw."
+msgstr "Het e-mailadres of het wachtwoord dat je hebt ingevoerd, is onjuist. Probeer het opnieuw."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:7./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:13./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:63./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:82
 msgid "Email or username"
@@ -4378,7 +4378,7 @@ msgstr "Vul je e-mailadres of gebruikersnaam in"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:2
 msgid "Enter your email address to receive instructions on how to reset your password."
-msgstr "Voer uw e-mailadres in om instructies te ontvangen om uw wachtwoord opnieuw in te stellen."
+msgstr "Voer je e-mailadres in om instructies te ontvangen om je wachtwoord opnieuw in te stellen."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service_error.tpl:5
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:14
@@ -4446,11 +4446,11 @@ msgstr "Ik wil een nieuw account aanmaken"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:9
 msgid "If you are already a user of {site} then <a href=\"{logon_url}\">log on</a>."
-msgstr "<a href=\"{logon_url}\">Logt in</a> als je al een gebruiker van {site} bent."
+msgstr "<a href=\"{logon_url}\">Log in</a> als je al een gebruiker van {site} bent."
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:31
 msgid "If you didn't request a password reset, you can safely ignore this email. Maybe someone made an error typing his or her email address."
-msgstr "Als je geen wachtwoord reset heeft aangevraagd, kan je deze e-mail veilig negeren. Misschien heeft iemand een fout gemaakt bij het typen van zijn of haar e-mail adres."
+msgstr "Als je geen wachtwoord reset hebt aangevraagd, kan je deze e-mail veilig negeren. Misschien heeft iemand een fout gemaakt bij het typen van zijn of haar e-mail adres."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:92./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:108
 msgid "If you do not receive the email within a few minutes, please check your spam folder."
@@ -4458,7 +4458,7 @@ msgstr "Als je deze e-email niet in een paar minuten ontvangt, controleer dan je
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:14
 msgid "If you think you have an account and were expecting this email, please try again using the email address you gave when you created your account."
-msgstr "Als u denkt dat u een account heeft en deze e-mail verwachtte, probeer het dan opnieuw met het e-mailadres dat u heeft opgegeven toen u uw account aanmaakte."
+msgstr "Als je denkt dat je een account hebt en deze e-mail verwachtte, probeer het dan opnieuw met het e-mailadres dat je hebt ingevoerd toen je het account aanmaakte."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:107
 msgid "In the email you will find instructions on how to confirm your account."
@@ -4707,7 +4707,7 @@ msgstr "Om de App Keys te wijzigen, moet je rechten hebben om de systeemconfigur
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:37
 msgid "You received this email because you requested a password reset for your account by entering your username or email address. You will not receive any additional emails because of this request."
-msgstr "U hebt deze e-mail ontvangen omdat u een verzoek hebt ingediend om uw wachtwoord opnieuw in te stellen door uw gebruikersnaam of e-mailadres in te voeren. U ontvangt naar aanleiding van dit verzoek geen extra e-mails."
+msgstr "Je hebt deze e-mail ontvangen omdat je een verzoek hebt ingediend om je wachtwoord opnieuw in te stellen door je gebruikersnaam of e-mailadres in te voeren. Je ontvangt naar aanleiding van dit verzoek geen extra e-mails."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:111
 msgid "You used another account on {service} than was expected."
@@ -4773,7 +4773,7 @@ msgstr "of"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:123
 msgid "or you can enter the password that you have for"
-msgstr "of u kunt het wachtwoord invoeren dat u heeft voor"
+msgstr "of je kan het wachtwoord invoeren dat je hebt voor"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:85./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:95./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:112./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:120
 msgid "the service"
@@ -5259,7 +5259,7 @@ msgstr "De stack trace wordt getoond omdat dit geen productie site is."
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:121
 msgid "The stack trace is shown because you are an administrator of this site."
-msgstr "De stack trace wordt getoond omdat u een beheerder van deze site bent."
+msgstr "De stack trace wordt getoond omdat je een beheerder van deze site bent."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:76
 msgid "The test below checks the connection between your machine, Google and our site."
@@ -5305,7 +5305,7 @@ msgstr "Probeer in te loggen als een andere gebruiker"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:65
 msgid "Your browser as it identifies itself to our server and your IP address. This is essential information for the help desk, but we do not store any personal data."
-msgstr "Jouw browser zoals deze zich identificeert aan onze server en jouwIP-adres. Dit is essentiële informatie voor de helpdesk, maar wij slaan geen persoonsgegevens op."
+msgstr "Jouw browser zoals deze zich identificeert aan onze server en jouw IP-adres. Dit is essentiële informatie voor de helpdesk, maar wij slaan geen persoonsgegevens op."
 
 #: apps/zotonic_mod_base/priv/templates/error.tpl:16
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
@@ -5330,7 +5330,7 @@ msgstr "Toegevoegd op"
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:40
 msgid "Are you sure you wish to delete that comment?"
-msgstr "Weet u zeker dat u deze reactie wilt verwijderen?"
+msgstr "Weet je zeker dat je deze reactie wilt verwijderen?"
 
 #: apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:3./apps/zotonic_mod_comment/priv/templates/admin_comments_settings.tpl:16
 msgid "Comment Form Settings"
@@ -5662,7 +5662,7 @@ msgstr "Gekopieerd puntbestand naar het klembord."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:1./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:76
 msgid "Copy GraphViz data"
-msgstr "Kopieer GraphViz-gegevens"
+msgstr "Kopieer GraphViz-data"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:29./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:125
 msgid "Could not copy dot file to the clipboard."
@@ -5787,8 +5787,7 @@ msgstr "Voor meer informatie zie: { url }"
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:153
 msgid "Force a recompilation of all templates. This fixes any issues where\n"
 "     the compiled templates might be out of sync with the template index."
-msgstr "Forceer een hercompilatie van alle sjablonen. Hiermee worden alle problemen opgelost waarbij\n"
-"     gecompileerde sjablonen mogelijk niet synchroon lopen met de sjabloonindex."
+msgstr "Forceer een hercompilatie van alle sjablonen. Hiermee worden problemen opgelost waarbij gecompileerde sjablonen mogelijk niet synchroon lopen met de sjabloonindex."
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:42
 msgid "Forced switch of protocol to"
@@ -5804,11 +5803,11 @@ msgstr "Grafiek van alle sjabloonafhankelijkheden"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:35
 msgid "Hostalias"
-msgstr "Hostalia's"
+msgstr "Hostalias"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:63./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:125
 msgid "Included template"
-msgstr "Inbegrepen sjabloon"
+msgstr "Ingevoegd sjabloon"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:4
 msgid "Includes using variable names or expressions are not shown."
@@ -5936,7 +5935,7 @@ msgstr "Regels voor siteverzending"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:28
 msgid "Site Name"
-msgstr "Site naam"
+msgstr "Site-naam"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:21
 msgid "Start matching dispatch rules"
@@ -5948,7 +5947,7 @@ msgstr "Begonnen met het traceren van alle sjablooninsluitsels."
 
 #: apps/zotonic_mod_development/src/mod_development.erl:119
 msgid "Started tracing template inclusions for your session."
-msgstr "Begonnen met het traceren van sjablooninsluitsels voor uw sessie."
+msgstr "Begonnen met het traceren van sjablooninsluitsels voor je sessie."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:50
 #: apps/zotonic_mod_survey/src/mod_survey.erl:172
@@ -6454,11 +6453,11 @@ msgstr "Alle geüploade en voorbeeldbestanden kunnen naar de Cloud worden verpla
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:191
 msgid "Are you sure you want to move all files to the cloud?"
-msgstr "Weet u zeker dat u alle bestanden naar de cloud wilt verplaatsen?"
+msgstr "Weet je zeker dat je alle bestanden naar de cloud wilt verplaatsen?"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
 msgid "Are you sure you want to move all files to the disk of the server?"
-msgstr "Weet u zeker dat u alle bestanden naar de schijf van de server wilt verplaatsen?"
+msgstr "Weet je zeker dat je alle bestanden naar de schijf van de server wilt verplaatsen?"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:36
 msgid "Base URL"
@@ -6534,15 +6533,15 @@ msgstr "Voor WebDAV moet de URL beginnen met <b><tt>webdavs:</tt></b> of <b><tt>
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:177
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
-msgstr "Als u \"Lokale bestanden behouden na uploaden naar de cloud-bestandsopslag\" hebt geselecteerd, worden de lokale bestanden niet verwijderd, omdat de externe bestanden worden beschouwd als een back-up van de lokale bestanden."
+msgstr "Als je \"Lokale bestanden behouden na uploaden naar de cloud-bestandsopslag\" hebt geselecteerd, worden de lokale bestanden niet verwijderd, omdat de externe bestanden worden beschouwd als een back-up van de lokale bestanden."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
-msgstr "Als u \"Lokale bestanden behouden na uploaden naar de cloud-bestandsopslag\" hebt geselecteerd, worden de externe bestanden niet verwijderd, omdat de externe bestanden worden beschouwd als een back-up van de lokale bestanden."
+msgstr "Als je \"Lokale bestanden behouden na uploaden naar de cloud-bestandsopslag\" hebt geselecteerd, worden de externe bestanden niet verwijderd, omdat de externe bestanden worden beschouwd als een back-up van de lokale bestanden."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:17
 msgid "If you use an FTP server then that server MUST support FTPS (secure ftp)"
-msgstr "Als u een FTP-server gebruikt, MOET die server FTPS (secure ftp) ondersteunen"
+msgstr "Als je een FTP-server gebruikt, MOET die server FTPS (secure ftp) ondersteunen"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:94
 msgid "Immediately"
@@ -6631,7 +6630,7 @@ msgstr "Bij FTP en WebDAV worden de mappen altijd automatisch aangemaakt."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:19
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
-msgstr "Met WebDAV worden de gebruikersnaam en het wachtwoord onversleuteld overgedragen, dus zorg ervoor dat u <tt>webdavs:</tt> URL's gebruikt (die gebruik maakt van https)."
+msgstr "Met WebDAV worden de gebruikersnaam en het wachtwoord onversleuteld overgedragen, dus zorg ervoor dat je <tt>webdavs:</tt> URL's gebruikt (die gebruik maakt van https)."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:235./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:63./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:70./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:77
 msgid "You are not allowed to change these settings."
@@ -7225,11 +7224,11 @@ msgstr "Alle mailinglijsten"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:19
 msgid "All recipients of the mailing list. You can upload or download this list, which must be a file with one e-mail address per line."
-msgstr "Alle ontvangers van de mailinglijst. U kunt deze lijst uploaden of downloaden, dat moet een bestand zijn met één e-mailadres per regel."
+msgstr "Alle ontvangers van de mailinglijst. Je kan deze lijst uploaden of downloaden, dat moet een bestand zijn met één e-mailadres per regel."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:9
 msgid "Any page can be sent as a mailing. You can send a mailing from any edit page. On this page you can add or remove mailing lists and their recipients."
-msgstr "Elke pagina kan als een mailing worden verstuurd. U kunt een mailing versturen vanaf elke bewerkte pagina. Op deze pagina kunt u mailinglijsten en hun ontvangers toevoegen of verwijderen."
+msgstr "Elke pagina kan als een mailing worden verstuurd. Je kan een mailing versturen vanaf elke bewerkte pagina. Op deze pagina kan je mailinglijsten en hun ontvangers toevoegen of verwijderen."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_cancel_confirm.tpl:1
 msgid "Are you sure you want to cancel the mailing to"
@@ -7779,7 +7778,7 @@ msgstr "Deze pagina kan naar verschillende mailinglijsten worden gestuurd."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipient.tpl:6
 msgid "Tick the checkbox if you want the recipient to receive a welcome e-mail message."
-msgstr "Vink het vakje aan als u wilt dat de ontvanger een welkomstbericht per e-mail ontvangt."
+msgstr "Vink het vakje aan als je wilt dat de ontvanger een welkomstbericht per e-mail ontvangt."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:17./apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:21./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:18./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:22./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:75./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_unsubscribe.tpl:13
 msgid "Unsubscribe"
@@ -8061,7 +8060,7 @@ msgstr "Lege hiërarchie"
 
 #: apps/zotonic_mod_menu/priv/templates/_admin_status.tpl:3
 msgid "Ensure <i>hasmenupart</i> connections"
-msgstr "Zorg ervoor dat <i>menudeel</i> verbindingen heeft"
+msgstr "Zorg voor <i>hasmenupart</i> verbindingen"
 
 #: apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:74
 msgid "Hierarchies can be defined for any existing category."
@@ -8229,7 +8228,7 @@ msgstr "Weet je zeker dat je deze app wilt verwijderen?"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:22./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:36
 msgid "Are you sure you want to delete this Consumer App?"
-msgstr "Weet je zeker dat u deze consumenten-app wilt verwijderen?"
+msgstr "Weet je zeker dat je deze consumenten-app wilt verwijderen?"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:13
 msgid "Ask users on this website for their credentials to authenticate on their website or App."
@@ -8249,7 +8248,7 @@ msgstr "URL autoriseren"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:16
 msgid "Authorize access to your account"
-msgstr "Toegang tot uw account toestaan"
+msgstr "Toegang tot je account toestaan"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:73
 msgid "Automatically extend tokens obtained using “{client}” before they expire"
@@ -8664,7 +8663,7 @@ msgstr "Google Tag Manager-ID"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:9
 msgid "Here you find settings to optimize the indexing of your site by search engines."
-msgstr "Hier vind je instellingen om te optimaliseren hoe zoekmachines je website indexeren."
+msgstr "Hier vindt je instellingen voor het optimaliseren van het indexeren van je site door zoekmachines."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:52
 msgid "If your site does not have a search page, check this box to prevent displaying a search box on Google et al."
@@ -8960,7 +8959,7 @@ msgstr "Dit komt niet overeen met het eerste wachtwoord"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:14
 msgid "To sign up you must agree with the Terms of Service and Privacy policies."
-msgstr "Om u aan te melden, moet u akkoord gaan met de Servicevoorwaarden en het privacybeleid."
+msgstr "Om je aan te melden, moet je akkoord gaan met de Servicevoorwaarden en het privacybeleid."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:63
 msgid "Verify password"
@@ -8977,7 +8976,7 @@ msgstr "We zijn erg zorgvuldig met alle persoonlijke informatie die ons wordt ve
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:23
 msgid "When you created your account, you received an email with a link but it looks like something went wrong."
-msgstr "Toen u uw account aanmaakte, heeft u een e-mail ontvangen met een link, maar het lijkt erop dat er iets mis is gegaan."
+msgstr "Toen je je account aanmaakte, heb je een e-mail ontvangen met een link, maar het lijkt erop dat er iets mis is gegaan."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:29
 msgid "You already have an account,"
@@ -9001,7 +9000,7 @@ msgstr "en de"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:29./apps/zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
 msgid "log in"
-msgstr "Log in"
+msgstr "Inloggen"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:2
 msgid "sign up for a username and password"
@@ -9139,7 +9138,7 @@ msgstr "Als er problemen zijn met het aanvragen van een Let's Encrypt-certificaa
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:55
 msgid "If you want different hostnames in the certificate then request a new certificate below."
-msgstr "Als u andere hostnamen in het certificaat wilt hebben, vraag dan hieronder een nieuw certificaat aan."
+msgstr "Als je andere hostnamen in het certificaat wilt hebben, vraag dan hieronder een nieuw certificaat aan"
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:4./apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_config_ssl_panel.mod_ssl_letsencrypt.tpl:10
 msgid "Let’s Encrypt Certificate"
@@ -9215,7 +9214,7 @@ msgstr "Er is een certificaat met de volgende gegevens:"
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:59
 msgid "There is no certificate from Let’s Encrypt. You can request one with the form."
-msgstr "Er is geen certificaat van Let's Encrypt. U kunt er een aanvragen met het formulier."
+msgstr "Er is geen certificaat van Let's Encrypt. Je kan er een aanvragen met het formulier."
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_admin_ssl_letsencrypt_running.tpl:3
 msgid "This might take a while, hang on!"
@@ -9451,7 +9450,7 @@ msgstr "Gedeactiveerd"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:36
 msgid "Dead end. Remove Next button. No questions will be submitted unless you add a button jump to a next page."
-msgstr "Doodlopende weg. Verwijder Volgende knop. Er zullen geen vragen worden ingediend tenzij u een knop toevoegt die naar een volgende pagina springt."
+msgstr "Doodlopende weg. Verwijder Volgende knop. Er zullen geen vragen worden ingediend tenzij je een knop toevoegt die naar een volgende pagina springt."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:37
 msgid "Default"
@@ -10875,7 +10874,7 @@ msgstr "Deze naam is in gebruik door een andere Erlang-module"
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:80
 msgid "To add config files to your Git repo, place them in the <tt>config.d</tt> directory of your site."
-msgstr "Om configuratiebestanden aan uw Git repo toe te voegen, plaatst u ze in de <tt>config.d</tt> directory van uw site."
+msgstr "Om configuratiebestanden aan je Git repo toe te voegen, plaatst je ze in de <tt>config.d</tt> directory van je site."
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/_addsite_success.tpl:8
 msgid "To manage your site:"
@@ -10969,7 +10968,7 @@ msgstr "Gestopt"
 
 #: apps/zotonic_site_status/priv/templates/error.503.tpl:12
 msgid "The site you are trying to visit is experiencing some problems. Please try again later."
-msgstr "De site die u probeert te bezoeken ondervindt momenteel problemen. Probeer het later nog eens."
+msgstr "De site die je probeert te bezoeken ondervindt momenteel problemen. Probeer het later nog eens."
 
 #: apps/zotonic_site_status/priv/templates/logon.tpl:33
 msgid "This password is not correct."
@@ -10994,7 +10993,7 @@ msgid "Welcome, visitor! The page you are\n"
 "                this page could mean that the website you are\n"
 "                trying to visit has not been configured\n"
 "                correctly."
-msgstr "Welkom, bezoeker! De pagina die u momenteel\n"
+msgstr "Welkom, bezoeker! De pagina die je momenteel\n"
 "                bekijkt is de standaardpagina voor een\n"
 "                Zotonic-webserver. Het feit dat je\n"
 "                deze pagina ziet, kan betekenen dat de website die je probeert te bezoeken\n"
@@ -11008,7 +11007,7 @@ msgid "Welcome, visitor! The page you are\n"
 "            this page could mean that the website you are\n"
 "   trying to visit has not been configured\n"
 "            correctly."
-msgstr "Welkom, bezoeker! De pagina die u momenteel\n"
+msgstr "Welkom, bezoeker! De pagina die je momenteel\n"
 "            bekijkt is de standaardpagina voor een\n"
 "            Zotonic-webserver. Het feit dat je\n"
 "            deze pagina ziet, kan betekenen dat de website die je probeert te bezoeken\n"
