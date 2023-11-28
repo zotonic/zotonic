@@ -134,7 +134,16 @@ map_prop({<<"url">>, M}) when is_binary(M) -> {url, z_string:truncatechars(M, 50
 
 
 -spec search_query( map(), z:context() ) -> #search_sql{}.
-search_query(Args, Context) ->
+search_query(Query, Context) ->
+    Terms = maps:get(<<"q">>, Query, []),
+    Args = lists:foldl(
+        fun(#{ <<"term">> := Term, <<"value">> := Value }, Acc) ->
+            Acc#{
+                Term => Value
+            }
+        end,
+        #{},
+        Terms),
     % Filter on log type
     W1 = case z_convert:to_binary( maps:get(<<"type">>, Args, <<"warning">>) ) of
         <<"error">> -> " type = 'error' ";

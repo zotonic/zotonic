@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2021 Marc Worrell
-%%
+%% @copyright 2011-2023 Marc Worrell
 %% @doc Model for email log messages.
+%% @end
 
-%% Copyright 2011-2021 Marc Worrell
+%% Copyright 2011-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -30,13 +30,18 @@
 
 
 
-search(Filter, Context) ->
-    {Where, Args} = maps:fold(
-        fun(F, V, Acc) ->
-            map_search(F, V, Acc, Context)
+search(Query, Context) ->
+    Terms = maps:get(<<"q">>, Query, []),
+    ?DEBUG(Terms),
+    {Where, Args} = lists:foldl(
+        fun
+            (#{ <<"term">> := F, <<"value">> := V }, Acc) ->
+                map_search(F, V, Acc, Context);
+            (_, Acc) ->
+                Acc
         end,
         {[], []},
-        Filter),
+        Terms),
     #search_sql{
         select="*",
         from="log_email",
