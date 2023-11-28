@@ -281,10 +281,10 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
-search_prevnext(<<"next">>, Args, Context) ->
-    search_prevnext("ASC", ">", Args, Context);
-search_prevnext(<<"prev">>, Args, Context) ->
-    search_prevnext("DESC", "<", Args, Context).
+search_prevnext(prev, Args, Context) ->
+    search_prevnext("DESC", "<", Args, Context);
+search_prevnext(next, Args, Context) ->
+    search_prevnext("ASC", ">", Args, Context).
 
 search_prevnext(Order, Operator, Args, Context) ->
     SortField = z_convert:to_binary(qarg(<<"sort">>, Args, <<"publication_start">>)),
@@ -325,9 +325,9 @@ search_prevnext(Order, Operator, Args, Context) ->
 
 %% Retrieve the previous/next id(s) (on sort field, defaults to publication date)
 search(<<"previous">>, Args, _OffsetLimit, Context) ->
-    search_prevnext(<<"previous">>, Args, Context);
+    search_prevnext(prev, Args, Context);
 search(<<"next">>, Args, _OffsetLimit, Context) ->
-    search_prevnext(<<"next">>, Args, Context);
+    search_prevnext(next, Args, Context);
 
 search(<<"keyword_cloud">>, Args, _OffsetLimit, Context) ->
     Cat = qarg(<<"cat">>, Args, undefined),
