@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-11-16 12:51\n"
+"PO-Revision-Date: 2023-11-28 15:33\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -147,7 +147,7 @@ msgstr "ACL-i kasutajagrupp"
 msgid "Access control"
 msgstr "Ligip√§√§s"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:574
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:550
 msgid "Access control rules"
 msgstr "Juurdepääsu kontrolli reeglid"
 
@@ -202,7 +202,7 @@ msgid "Are you sure you want to restore all ACL rules to their currently publish
 msgstr "Kas olete kindel, et soovite taastada kõik ACL-reeglid nende praegu avaldatud versioonis?"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:160./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:78
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:174./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:70./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:70./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:259./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:282./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:85./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:171./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:70./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:70./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:259./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:282./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:85./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38./apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:52
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:21
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:92
@@ -230,7 +230,7 @@ msgstr "Katkesta"
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:196./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:62./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:96./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:29./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45./apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:26
-#: apps/zotonic_mod_survey/src/mod_survey.erl:159
+#: apps/zotonic_mod_survey/src/mod_survey.erl:164
 msgid "Category"
 msgstr "Kategooria"
 
@@ -248,7 +248,7 @@ msgid "Changed configuration."
 msgstr "Konfiguratsiooni muudetud."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:22
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:174
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:171
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:67./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:69
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:31./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:46
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:30
@@ -269,8 +269,8 @@ msgstr "Koostöögruppide juhid"
 msgid "Collaboration group members"
 msgstr "Koostöögrupi liikmed"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:570
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:123
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:546
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:120
 msgid "Collaboration groups"
 msgstr "Koostöögrupid"
 
@@ -299,7 +299,7 @@ msgid "Content group"
 msgstr "Sisurühm"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:16
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:131
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:128
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:197
 msgid "Content groups"
 msgstr "Sisurühmad"
@@ -328,7 +328,7 @@ msgstr "Kes saab lehte n√§ha v√µi muuta."
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:43
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:249
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:19./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:34
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125./apps/zotonic_mod_survey/src/mod_survey.erl:125
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125./apps/zotonic_mod_survey/src/mod_survey.erl:129
 msgid "Delete"
 msgstr "Kustuta"
 
@@ -457,14 +457,14 @@ msgstr "Sama kasutajagrupi liikmed"
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:4./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:5./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
 #: apps/zotonic_mod_base/priv/templates/error.tpl:78
-#: apps/zotonic_mod_development/priv/templates/_development_template.tpl:3./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:10./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:60./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:122./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:189
+#: apps/zotonic_mod_development/priv/templates/_development_template.tpl:3./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:10./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:60./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:122./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:189./apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:49
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:24
 msgid "Module"
 msgstr "Moodul"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:25
 #: apps/zotonic_mod_admin/src/mod_admin.erl:122
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:3./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:7./apps/zotonic_mod_admin_modules/src/mod_admin_modules.erl:100
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:3./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:7./apps/zotonic_mod_admin_modules/src/mod_admin_modules.erl:103
 msgid "Modules"
 msgstr "Moodulid"
 
@@ -508,7 +508,7 @@ msgstr "Ei ole lubatud."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:31
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:55
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:28./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:35./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:62
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:28./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:35./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:62./apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:47
 msgid "Options"
 msgstr "Parameetrid"
 
@@ -606,7 +606,7 @@ msgstr "Kõigepealt kuvage see ACL-i kasutajagrupp:"
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:52./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:68
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:61./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:76
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:56./apps/zotonic_mod_content_groups/src/mod_content_groups.erl:72
-#: apps/zotonic_mod_menu/src/mod_menu.erl:193
+#: apps/zotonic_mod_menu/src/mod_menu.erl:232
 msgid "Sorry, you are not allowed to delete this."
 msgstr "Vabandust, teil pole lubatud seda kustutada."
 
@@ -693,7 +693,7 @@ msgstr "Kasutage avaldatud reegleid"
 msgid "Use the following URL to test the access control rules before publishing them."
 msgstr "Enne juurdepääsu avaldamist kontrollige enne URL-i avaldamist järgmist URL-i."
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:565
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:541
 msgid "User groups"
 msgstr "Kasutajagrupid"
 
@@ -862,7 +862,7 @@ msgstr "Lisa meedia sisule"
 msgid "Add note"
 msgstr "Lisada märkus"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:687./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
+#: apps/zotonic_mod_admin/src/mod_admin.erl:697./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
 msgid "Added the connection to"
 msgstr "Lisas ühenduse domeeniga"
 
@@ -920,12 +920,12 @@ msgstr "Summa"
 msgid "And media can also be viewed on their own page."
 msgstr "Ja meediat saab vaadata ka oma lehel."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:96
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:93
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:14
 msgid "Any category"
 msgstr "Mis tahes kategooria"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:120
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:117
 msgid "Anybody’s"
 msgstr "Kellegi oma"
 
@@ -1014,8 +1014,8 @@ msgid "Change the category of this page"
 msgstr "Muutke selle lehe kategooriat"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:124
-msgid "Check all resource for embedded resource references and add a <i>refers</i> connection for all of those references."
-msgstr "Kontrollige kõiki ressursse manustatud ressursside viidete osas ja lisage kõigi nende viidete jaoks ühendus <i>viitab</i>."
+msgid "Check all pages for embedded page references and add a <i>refers</i> connection for all of those references."
+msgstr "Kontrollige kõigilt lehtedelt manustatud leheviiteid ja lisage kõigi nende viidete jaoks ühendus <i>viitab</i>."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_bulk_actions.tpl:41
 msgid "Check the pages you want to delete."
@@ -1159,7 +1159,7 @@ msgstr "Andmebaasi versioon"
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:16
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:20./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:111./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:20
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:16./apps/zotonic_mod_survey/src/models/m_survey.erl:626./apps/zotonic_mod_survey/src/models/m_survey.erl:629
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:16./apps/zotonic_mod_survey/src/models/m_survey.erl:624./apps/zotonic_mod_survey/src/models/m_survey.erl:627
 msgid "Date"
 msgstr "Datum"
 
@@ -1413,7 +1413,7 @@ msgstr "File / meedia"
 msgid "File size"
 msgstr "Faili suurus"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:451
+#: apps/zotonic_mod_admin/src/mod_admin.erl:446
 msgid "File uploaded to the drop folder, will be handled shortly."
 msgstr "Rippkausta üles laaditud fail käsitletakse peagi."
 
@@ -1637,7 +1637,7 @@ msgid "Make a new page or media"
 msgstr "Tehke uus leht või meedium"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
-#: apps/zotonic_mod_survey/src/mod_survey.erl:160
+#: apps/zotonic_mod_survey/src/mod_survey.erl:165
 msgid "Matching"
 msgstr "Sobitamine"
 
@@ -1686,7 +1686,7 @@ msgstr "Mälu"
 msgid "Middle"
 msgstr "Keskmine"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:121
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:118
 msgid "Mine"
 msgstr "Minu oma"
 
@@ -1737,7 +1737,7 @@ msgstr "Liigutage plokk üles"
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:23./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:11./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:10
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:13./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:14./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:47
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:631
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:629
 msgid "Name"
 msgstr "Nimi"
 
@@ -2008,7 +2008,7 @@ msgstr "M√§rkused"
 msgid "Remove"
 msgstr "Eemalda"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:691
+#: apps/zotonic_mod_admin/src/mod_admin.erl:701
 msgid "Removed the connection to"
 msgstr "Ühendus saidiga eemaldati"
 
@@ -2059,7 +2059,7 @@ msgstr "Salvesta ja vaata lehte."
 msgid "Save this page."
 msgstr "Salvesta see leht."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:535
+#: apps/zotonic_mod_admin/src/mod_admin.erl:530
 msgid "Scheduled background task to check all refers connections."
 msgstr "Ajastatud taustaülesanne kõigi viitade ühenduste kontrollimiseks."
 
@@ -2167,27 +2167,28 @@ msgstr "Mõned ülesanded proovivad uuesti.<br>Vigu kokku: {total}<br>Suurim üh
 msgid "Something went wrong. Sorry."
 msgstr "Midagi l√§ks valesti. Sorry."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:424
+#: apps/zotonic_mod_admin/src/mod_admin.erl:419
 msgid "Sorry, could not handle this filename."
 msgstr "Kahjuks ei saanud selle failinimega hakkama."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:463
+#: apps/zotonic_mod_admin/src/mod_admin.erl:458
 msgid "Sorry, could not move the file to the drop folder."
 msgstr "Kahjuks ei saanud faili rippkausta teisaldada."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:537
+#: apps/zotonic_mod_admin/src/mod_admin.erl:532
+#: apps/zotonic_mod_menu/src/mod_menu.erl:88
 msgid "Sorry, only an admin is allowed to do this"
 msgstr "Kahjuks võib seda teha ainult administraator"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:399./apps/zotonic_mod_admin/src/mod_admin.erl:410
+#: apps/zotonic_mod_admin/src/mod_admin.erl:394./apps/zotonic_mod_admin/src/mod_admin.erl:405
 msgid "Sorry, that page is unknown."
 msgstr "Vabandust, see leht on tundmatu."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:401./apps/zotonic_mod_admin/src/mod_admin.erl:412
+#: apps/zotonic_mod_admin/src/mod_admin.erl:396./apps/zotonic_mod_admin/src/mod_admin.erl:407
 msgid "Sorry, you are not allowed to edit notes."
 msgstr "Kahjuks ei ole teil lubatud märkmeid redigeerida."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:467
+#: apps/zotonic_mod_admin/src/mod_admin.erl:462
 msgid "Sorry, you are not allowed to upload drop folder files."
 msgstr "Kahjuks ei ole teil lubatud rippkausta faile üles laadida."
 
@@ -2195,11 +2196,11 @@ msgstr "Kahjuks ei ole teil lubatud rippkausta faile üles laadida."
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "Vabandust, teil pole ühenduse lisamiseks luba."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:673
+#: apps/zotonic_mod_admin/src/mod_admin.erl:683
 msgid "Sorry, you have no permission to add the connection."
 msgstr "Vabandust, teil pole ühenduse lisamiseks luba."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:675
+#: apps/zotonic_mod_admin/src/mod_admin.erl:685
 msgid "Sorry, you have no permission to delete the connection."
 msgstr "Vabandust, teil pole ühenduse kustutamiseks luba."
 
@@ -2441,7 +2442,7 @@ msgstr "Lülita navigeerimine sisse"
 msgid "Too many connections, only the first and last are shown."
 msgstr "Liiga palju ühendusi, kuvatakse ainult esimene ja viimane."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:84
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:81
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
 msgid "Type text to search"
 msgstr "Sisestage otsimiseks tekst"
@@ -2470,7 +2471,7 @@ msgstr "Unikaalne uri"
 msgid "Unpublished"
 msgstr "Avaldamata"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:681./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:69./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:125
+#: apps/zotonic_mod_admin/src/mod_admin.erl:691./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:69./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:125
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58./apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:57
 #: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
@@ -2548,7 +2549,7 @@ msgstr "Kasutatud"
 msgid "User page"
 msgstr "Kasutaja leht"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:94
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:91
 msgid "Valid for:"
 msgstr "Kehtiv:"
 
@@ -2934,6 +2935,7 @@ msgid "Here you can see all the email configurations and send test emails."
 msgstr "Siin näete kõiki e-posti konfiguratsioone ja saate testimeile."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:4
+#: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:31
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:25
 msgid "Hostname"
 msgstr "Hostinimi"
@@ -3732,11 +3734,11 @@ msgstr "Teil pole luba võitjat muuta."
 msgid "not implemented yet"
 msgstr "pole veel rakendatud"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:82
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:90
 msgid "Activate"
 msgstr "Aktiveeri"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:73
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:81
 msgid "Configure"
 msgstr "Seadistamine"
 
@@ -3748,7 +3750,7 @@ msgstr "Moodulit ei leitud."
 msgid "Cyclic dependencies"
 msgstr "Tsüklilised sõltuvused"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:77
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:85
 msgid "Deactivate"
 msgstr "Deaktiveeri"
 
@@ -3772,6 +3774,10 @@ msgstr "Kas soovite ikkagi mooduli aktiveerida"
 msgid "Do you still want to deactivate the module"
 msgstr "Kas soovite ikkagi mooduli deaktiveerida"
 
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:72
+msgid "Install the module’s model and data."
+msgstr "Installige mooduli mudel ja andmed."
+
 #: apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:62./apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:89
 msgid "Module dependencies"
 msgstr "Mooduli sõltuvused"
@@ -3780,17 +3786,21 @@ msgstr "Mooduli sõltuvused"
 msgid "Modules are missing dependencies"
 msgstr "Moodulitel puudub sõltuvus"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:95
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:103
 msgid "No modules found"
 msgstr "Ei leia mooduleid"
-
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:18
-msgid "Prio"
-msgstr "Prio"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:17
 msgid "Provides"
 msgstr "Annab"
+
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:71
+msgid "Reinstall"
+msgstr "Installige uuesti"
+
+#: apps/zotonic_mod_admin_modules/src/controllers/controller_admin_module_manager.erl:61
+msgid "Reinstalled the data model."
+msgstr "Andmemudel uuesti installitud."
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:3
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:149
@@ -3801,6 +3811,12 @@ msgstr "Skaneeri moodulid uuesti"
 msgid "Rescanning will rebuild the index of all modules, actions, templates etc. It will also reload all dispatch rules."
 msgstr "Uuesti skannimine taastab kõigi moodulite, toimingute, mallide jms registri. Samuti laadib uuesti kõik saatmisreeglid."
 
+#: apps/zotonic_mod_admin_modules/src/controllers/controller_admin_module_manager.erl:66
+#: apps/zotonic_mod_search/src/mod_search.erl:92
+#: apps/zotonic_mod_survey/src/support/survey_admin.erl:40./apps/zotonic_mod_survey/src/support/survey_admin.erl:62./apps/zotonic_mod_survey/src/support/survey_admin.erl:107./apps/zotonic_mod_survey/src/support/survey_admin.erl:202
+msgid "Sorry, you are not allowed to do this."
+msgstr "Kahjuks pole teil lubatud seda teha."
+
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:3
 msgid "The following modules will not start because they miss dependencies:"
 msgstr "Järgmised moodulid ei käivitu, kuna neil puudub sõltuvus:"
@@ -3808,6 +3824,10 @@ msgstr "Järgmised moodulid ei käivitu, kuna neil puudub sõltuvus:"
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:1
 msgid "There are modules depending on"
 msgstr "Mooduleid on sõltuvalt"
+
+#: apps/zotonic_mod_admin_modules/src/controllers/controller_admin_module_manager.erl:63
+msgid "This module does not have a <tt>manage_schema/2</tt> function."
+msgstr "Sellel moodulil ei ole funktsiooni <tt>manage_schema/2</tt>."
 
 #: apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:52
 msgid "You are not allowed to activate or deactivate modules."
@@ -4079,8 +4099,8 @@ msgid "Add two-factor authentication"
 msgstr "Lisage kaheastmeline autentimine"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:43
-msgid "Ask after signing in"
-msgstr "Küsi pärast sisselogimist"
+msgid "Ask after logging in"
+msgstr "Küsi peale sisselogimist"
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:43
 msgid "Changed the 2FA setting."
@@ -4121,8 +4141,8 @@ msgid "Force two-factor authentication"
 msgstr "Sundige kaheastmeline autentimine"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:27
-msgid "From now on an extra passcode is needed to sign in."
-msgstr "Nüüdsest on sisselogimiseks vaja täiendavat pääsukoodi."
+msgid "From now on an extra passcode is needed to log in."
+msgstr "Nüüdsest on sisselogimiseks vaja lisapääsukoodi."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:23
 msgid "Generate QR code"
@@ -4197,8 +4217,8 @@ msgid "Two-factor authentication"
 msgstr "Kaheastmeline autentimine"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:8
-msgid "Two-factor authentication adds an extra check on sign in. The user will need to enter a code which is generated by an App on their telephone."
-msgstr "Kaheastmeline autentimine lisab sisselogimisel täiendava kontrolli. Kasutaja peab sisestama rakenduse poolt oma telefonis genereeritud koodi."
+msgid "Two-factor authentication adds an extra check on log in. The user will need to enter a code which is generated by an App on their telephone."
+msgstr "Kahefaktoriline autentimine lisab sisselogimisel täiendava kontrolli. Kasutaja peab sisestama koodi, mille loob tema telefoni rakendus."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:7
 msgid "Two-factor authentication configuration"
@@ -4254,8 +4274,8 @@ msgid "Authorizing..."
 msgstr "Autoriseerimine ..."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:93./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:115./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/_logon_reset_support.tpl:3
-msgid "Back to sign in"
-msgstr "Tagasi sisselogimiseks"
+msgid "Back to login"
+msgstr "Tagasi sisselogimise juurde"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:78
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:42
@@ -4267,8 +4287,8 @@ msgid "Change password"
 msgstr "Muuda salasõna"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:42
-msgid "Change password and Sign in"
-msgstr "Muuda parool ja Logi sisse"
+msgid "Change password and log in"
+msgstr "Muutke parool ja logige sisse"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_title.tpl:5
 msgid "Change your password"
@@ -4299,6 +4319,10 @@ msgstr "Sulgege see aken ja logige sisse, kui olete juba {site}kasutaja."
 #: apps/zotonic_mod_wires/src/actions/action_wires_confirm.erl:38
 msgid "Confirm"
 msgstr "Kinnita"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:123
+msgid "Confirm to connect"
+msgstr "Ühenduse loomiseks kinnitage"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:20
 msgid "Confirmation failure"
@@ -4431,20 +4455,36 @@ msgid "If you do not receive the email within a few minutes, please check your s
 msgstr "Kui te ei saa meili mõne minuti jooksul, kontrollige palun oma rämpspostikausta."
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:14
-msgid "If you think you have an account and were expecting this email, please try again using the email address you gave when signing up."
-msgstr "Kui arvate, et teil on konto ja ootasite seda meili, proovige uuesti registreerumisel antud e-posti aadressi."
+msgid "If you think you have an account and were expecting this email, please try again using the email address you gave when you created your account."
+msgstr "Kui arvate, et teil on konto ja ootasite seda meili, proovige uuesti, kasutades konto loomisel antud e-posti aadressi."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:107
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr "Sealt leiad juhendid oma kasutajakonto kinnitamiseks."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:51./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:170./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
-msgid "Keep me signed in"
-msgstr "Hoia mind sisselogituna"
+msgid "Keep me logged in"
+msgstr "Hoia mind sisse logituna"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:58./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:185./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
+msgid "Log in"
+msgstr "Logi sisse"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:1./apps/zotonic_mod_authentication/priv/templates/logon.tpl:11
+msgid "Log in to"
+msgstr "Logi sisse"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:124
+msgid "Log in with your existing {site} account to connect the accounts. You only have to do this once."
+msgstr "Kontode ühendamiseks logige sisse oma olemasoleva {site} kontoga. Seda tuleb teha ainult üks kord."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:115
 msgid "Log on with"
 msgstr "Logige sisse"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon.tpl:37
+msgid "Log out"
+msgstr "Logi välja"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:16
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:51./apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:55
@@ -4510,7 +4550,7 @@ msgid "Repeat your password"
 msgstr "Korrake oma parooli"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:41
-msgid "Reset password and Sign in"
+msgid "Reset password and log in"
 msgstr "Lähtestage parool ja logige sisse"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:50./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:1./apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:9
@@ -4520,19 +4560,6 @@ msgstr "Vaheta parool"
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:101
 msgid "Send Verification Message"
 msgstr "Saada kontrollteade"
-
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:58./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:185./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
-#: apps/zotonic_mod_base/priv/templates/error.403.tpl:30
-msgid "Sign in"
-msgstr "Logi sisse"
-
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:1./apps/zotonic_mod_authentication/priv/templates/logon.tpl:11
-msgid "Sign in to"
-msgstr "Logige sisse"
-
-#: apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon.tpl:37
-msgid "Sign out"
-msgstr "Logi välja"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:27
 msgid "Simply try again:"
@@ -4600,7 +4627,7 @@ msgstr "{service}-ga autentimisel ilmnes probleem."
 
 #: apps/zotonic_mod_authentication/priv/templates/error.403.tpl:19
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:25
-msgid "To view this page you must be signed in."
+msgid "To view this page you must be logged in."
 msgstr "Selle lehe vaatamiseks peate olema sisse logitud."
 
 #: apps/zotonic_mod_authentication/priv/templates/error.403.tpl:16
@@ -4644,13 +4671,13 @@ msgstr "Olete loomas uut kontot."
 msgid "You are about to log on."
 msgstr "Oled sisse logimas."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:70
-msgid "You are now signed in."
-msgstr "Olete nüüd sisse logitud."
-
 #: apps/zotonic_mod_authentication/priv/templates/logon.tpl:32
-msgid "You are signed in"
+msgid "You are logged in"
 msgstr "Olete sisse logitud"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:70
+msgid "You are now logged in."
+msgstr "Olete nüüd sisse logitud."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:93
 msgid "You can connect the account on {site} with your account on {service} if both accounts have a verified email address but this is not the case. Check both sites and then try again."
@@ -4669,8 +4696,7 @@ msgid "You have to share your email address to be able to log in."
 msgstr "Sisselogimiseks peate jagama oma e-posti aadressi."
 
 #: apps/zotonic_mod_authentication/priv/templates/error.403.tpl:17
-#: apps/zotonic_mod_base/priv/templates/error.403.tpl:23
-msgid "You may try to sign in as a different user."
+msgid "You may try to login as a different user."
 msgstr "Võite proovida sisse logida teise kasutajana."
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:11
@@ -5113,6 +5139,10 @@ msgstr "JSON"
 msgid "JSON-LD"
 msgstr "JSON-LD"
 
+#: apps/zotonic_mod_base/priv/templates/error.403.tpl:30
+msgid "Login"
+msgstr "Logi sisse"
+
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:112
 msgid "MQTT Bridge"
 msgstr "MQTT sild"
@@ -5122,6 +5152,7 @@ msgid "MQTT Bridge Connection Status"
 msgstr "MQTT silla ühenduse olek"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:145./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
+#: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:39
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:48./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:35./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:28./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:35./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
 msgid "No"
 msgstr "Ei"
@@ -5261,9 +5292,14 @@ msgid "Websocket Support?"
 msgstr "Websockti tugi?"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:251./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
+#: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:39
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:47./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:30./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
 msgid "Yes"
 msgstr "Jah"
+
+#: apps/zotonic_mod_base/priv/templates/error.403.tpl:23
+msgid "You may try to log in as a different user."
+msgstr "Võite proovida sisse logida teise kasutajana."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:65
 msgid "Your browser as it identifies itself to our server and your IP address. This is essential information for the help desk, but we do not store any personal data."
@@ -5614,7 +5650,7 @@ msgstr "Kustutage andmed ja jälgige kõike"
 msgid "Column"
 msgstr "Veerg"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:26./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:26./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60./apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:50
 msgid "Controller"
 msgstr "Kontroller"
 
@@ -5686,7 +5722,11 @@ msgstr "Keela vahemällu salvestamine märgendi <tt>{% cache %}</tt>."
 msgid "Disabled database query tracing"
 msgstr "Andmebaasi päringute jälgimine on keelatud"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:160
+#: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:48
+msgid "Dispatch Name"
+msgstr "Saatmisnimi"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:162
 msgid "Dispatch rule debugging"
 msgstr "Lähetusreegli silumine"
 
@@ -5714,7 +5754,11 @@ msgstr "Andmebaasi päringute jälgimine on lubatud"
 msgid "Event"
 msgstr "Sündmus"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:179
+#: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:14
+msgid "Every URL which is reachable in the site is defined with dispatch rules. This page shows all available dispatch rules in this site."
+msgstr "Iga saidil juurdepääsetav URL on määratletud väljasaatmisreeglitega. Sellel lehel kuvatakse kõik sellel saidil saadaolevad saatmisreeglid."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:188
 msgid "Explain"
 msgstr "Seletama"
 
@@ -5734,6 +5778,10 @@ msgstr "Leidke"
 msgid "Find a template, check which template will be selected"
 msgstr "Leidke mall, kontrollige, milline mall valitakse"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:15
+msgid "For more information see: { url }"
+msgstr "Lisateabe saamiseks vaadake: { url }"
+
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:153
 msgid "Force a recompilation of all templates. This fixes any issues where\n"
 "     the compiled templates might be out of sync with the template index."
@@ -5752,6 +5800,10 @@ msgstr "Leiti vastav saatmisreegel"
 msgid "Graph of all template dependencies"
 msgstr "Kõigi mallide sõltuvuste graafik"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:35
+msgid "Hostalias"
+msgstr "Hostalias"
+
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:63./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:125
 msgid "Included template"
 msgstr "Kaasas mall"
@@ -5760,7 +5812,7 @@ msgstr "Kaasas mall"
 msgid "Includes using variable names or expressions are not shown."
 msgstr "Muutujate nimede või väljendite kasutamist ei kuvata."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:190
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:199
 msgid "Introspection"
 msgstr "Enesevaatlus"
 
@@ -5788,7 +5840,7 @@ msgstr "Laadimine..."
 msgid "Location"
 msgstr "Asukoht"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:163
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:172
 msgid "Match a request URL, display matched dispatch rule."
 msgstr "Sobitage päringu URL, kuvage sobitatud saatmisreegel."
 
@@ -5856,7 +5908,7 @@ msgstr "Värskenda"
 msgid "Rerun graph"
 msgstr "Käivita graafik uuesti"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:196
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:205
 msgid "Show an overview of all observers"
 msgstr "Kuvage ülevaade kõigist vaatlejatest"
 
@@ -5864,7 +5916,7 @@ msgstr "Kuvage ülevaade kõigist vaatlejatest"
 msgid "Show defined blocks in generated templates"
 msgstr "Määratud plokkide kuvamine loodud mallides"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:193
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:202
 msgid "Show internals of Zotonic and the modules"
 msgstr "Kuva Zotonicu sisemised osad ja moodulid"
 
@@ -5872,9 +5924,17 @@ msgstr "Kuva Zotonicu sisemised osad ja moodulid"
 msgid "Show paths to included template files in generated templates"
 msgstr "Näita loodud mallides olevate mallifailide teid"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:31./apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:7
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:31./apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:7
 msgid "Site Development"
 msgstr "Saidi arendamine"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:23
+msgid "Site Dispatch Rules"
+msgstr "Saidi saatmise reeglid"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:28
+msgid "Site Name"
+msgstr "Saidi nimi"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:21
 msgid "Start matching dispatch rules"
@@ -5889,7 +5949,7 @@ msgid "Started tracing template inclusions for your session."
 msgstr "Alustati teie seansi malli lisamiste jälgimist."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:50
-#: apps/zotonic_mod_survey/src/mod_survey.erl:167
+#: apps/zotonic_mod_survey/src/mod_survey.erl:172
 msgid "Stop"
 msgstr "Lõpeta"
 
@@ -5985,6 +6045,22 @@ msgstr "Selle seansi jälgimine..."
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:64./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:126
 msgid "Type of include"
 msgstr "Kaasamise tüüp"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:46
+msgid "URI Pattern"
+msgstr "URI muster"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:166./apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:8
+msgid "View all dispatch rules"
+msgstr "Vaadake kõiki saatmisreegleid"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:168
+msgid "View all dispatch rules and hostnames usable in the site."
+msgstr "Vaadake kõiki saidil kasutatavaid saatmisreegleid ja hostinimesid."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:12
+msgid "View all dispatch rules available in the site"
+msgstr "Vaadake kõiki saidil saadaolevaid saatmisreegleid"
 
 #: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:49
 msgid "You are not allowed to use the dispatch debugging."
@@ -7097,7 +7173,7 @@ msgid "User"
 msgstr "Kasutaja"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:42./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:630
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:628
 msgid "User Id"
 msgstr "Kasutaja ID"
 
@@ -7943,11 +8019,21 @@ msgstr "Lisa menüüelement"
 msgid "Add top"
 msgstr "Lisage ülaosa"
 
+#: apps/zotonic_mod_menu/priv/templates/_admin_status.tpl:7
+msgid "Check all menu pages and add <i>hasmenupart</i> connections for all of the \n"
+"    pages in the menu."
+msgstr "Kontrollige kõiki menüülehti ja lisage <i>menüüosa</i> ühendust kõigi \n"
+"    menüü lehekülje jaoks."
+
+#: apps/zotonic_mod_menu/src/mod_menu.erl:86
+msgid "Checking all menu resources in the backgroud"
+msgstr "Kõikide menüüressursside kontrollimine taustal"
+
 #: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:20
 msgid "Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add pages."
 msgstr "Lehekülgede lisamiseks klõpsake nuppu <strong>Lisa menüüelement</strong> või <strong>Menüüpunkt</strong>."
 
-#: apps/zotonic_mod_menu/src/mod_menu.erl:201
+#: apps/zotonic_mod_menu/src/mod_menu.erl:240
 msgid "Copy of:"
 msgstr "Koopia:"
 
@@ -7971,6 +8057,10 @@ msgstr "Lohistage lehed sinna, kuhu soovite neid hierarhiasse lisada."
 msgid "Empty hierarchy"
 msgstr "Tühi hierarhia"
 
+#: apps/zotonic_mod_menu/priv/templates/_admin_status.tpl:3
+msgid "Ensure <i>hasmenupart</i> connections"
+msgstr "Veenduge, et menüüs</i> oleks <i>ühendust"
+
 #: apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:74
 msgid "Hierarchies can be defined for any existing category."
 msgstr "Hierarhiaid saab määratleda mis tahes olemasoleva kategooria jaoks."
@@ -7979,11 +8069,11 @@ msgstr "Hierarhiaid saab määratleda mis tahes olemasoleva kategooria jaoks."
 msgid "Hierarchy for"
 msgstr "Hierarhia"
 
-#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:3./apps/zotonic_mod_menu/src/mod_menu.erl:95
+#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:3./apps/zotonic_mod_menu/src/mod_menu.erl:107
 msgid "Menu"
 msgstr "Menüü"
 
-#: apps/zotonic_mod_menu/src/mod_menu.erl:166
+#: apps/zotonic_mod_menu/src/mod_menu.erl:205
 msgid "Sorry, can’t copy that page."
 msgstr "Vabandust, seda lehte ei saa kopeerida."
 
@@ -8024,8 +8114,8 @@ msgid "Connect with Microsoft"
 msgstr "Võtke ühendust Microsoftiga"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:36
-msgid "Control who can sign in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers."
-msgstr "Kontrollige, kes saab sisse logida. Lubatud väärtused on: <tt>ühist</tt>, <tt>organisatsiooni</tt>, <tt>tarbijat</tt>ja üürniku identifikaatorid."
+msgid "Control who can log in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers."
+msgstr "Kontrollige, kes saavad sisse logida. Lubatud väärtused on: <tt>common</tt>, <tt>Organisations</tt>, <tt>Consultants</tt>ja rentni Identifiers."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:3./apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
 msgid "Disconnect from Microsoft"
@@ -8494,11 +8584,6 @@ msgstr "Ehitage uuesti otsingu tahud"
 msgid "Rebuilding the faceted search table."
 msgstr "Lihvitud otsingutabeli taastamine."
 
-#: apps/zotonic_mod_search/src/mod_search.erl:92
-#: apps/zotonic_mod_survey/src/support/survey_admin.erl:40./apps/zotonic_mod_survey/src/support/survey_admin.erl:62./apps/zotonic_mod_survey/src/support/survey_admin.erl:107./apps/zotonic_mod_survey/src/support/survey_admin.erl:202
-msgid "Sorry, you are not allowed to do this."
-msgstr "Kahjuks pole teil lubatud seda teha."
-
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:71
 msgid "Add a noindex, nofollow element to all pages."
 msgstr "Lisa noindex, nofollow elemendid kõigile lehtedele."
@@ -8888,8 +8973,8 @@ msgid "We will be very careful with all the information given to us and will nev
 msgstr "Oleme kogu meile edastatud teabega väga ettevaatlikud ega anna kunagi teie nime ega aadressi ilma teie loata ära. Meil on mõned reeglid, millega peame nõustuma."
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:23
-msgid "When you signed up, you received an email with a link but it looks like something went wrong."
-msgstr "Registreerudes saite e-kirja lingiga, kuid näib, et midagi läks valesti."
+msgid "When you created your account, you received an email with a link but it looks like something went wrong."
+msgstr "Kui lõite oma konto, saite lingiga meili, kuid tundub, et midagi läks valesti."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:29
 msgid "You already have an account,"
@@ -8912,7 +8997,7 @@ msgid "and the"
 msgstr "ja"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:29./apps/zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
-msgid "sign in"
+msgid "log in"
 msgstr "Logi sisse"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:2
@@ -9253,7 +9338,7 @@ msgstr "Kas soovite kindlasti selle lehe kustutada?<br/>See kustutab ka kõik se
 msgid "Are you sure you want to delete this question?"
 msgstr "Kas soovite selle küsimuse kindlasti kustutada?"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:124
+#: apps/zotonic_mod_survey/src/mod_survey.erl:128
 msgid "Are you sure you want to delete this result?"
 msgstr "Kas soovite selle tulemuse kindlasti kustutada?"
 
@@ -9265,7 +9350,7 @@ msgstr "Kas olete kindel, et soovite lõpetada ilma salvestamata?"
 msgid "Because you can edit, you can proceed for testing."
 msgstr "Kuna saate redigeerida, võite jätkata testimist."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111./apps/zotonic_mod_survey/src/mod_survey.erl:165
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111./apps/zotonic_mod_survey/src/mod_survey.erl:170
 msgid "Button"
 msgstr "Nupp"
 
@@ -9321,7 +9406,7 @@ msgstr "Saajaid ei saanud lisada."
 msgid "Could not create the mailinglist."
 msgstr "Meililisti ei saanud luua."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:164
+#: apps/zotonic_mod_survey/src/mod_survey.erl:169
 msgid "Country select"
 msgstr "Valige riik"
 
@@ -9349,7 +9434,7 @@ msgstr "Loo uus meililist"
 msgid "Create new person"
 msgstr "Loo uus inimene"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:975
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:973
 msgid "Created"
 msgstr "Loodud"
 
@@ -9437,7 +9522,7 @@ msgstr "Tagasiside, kui see on õige"
 msgid "Feedback if wrong"
 msgstr "Tagasiside vale korral"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:168
+#: apps/zotonic_mod_survey/src/mod_survey.erl:173
 msgid "File upload"
 msgstr "Faili üleslaadimine"
 
@@ -9541,7 +9626,7 @@ msgstr "Hüppa järgmise lehe küsimuse juurde."
 msgid "Jump to this question label (must be on an other page below)"
 msgstr "Liikuge sellele küsimusesildile (peab asuma teisel alloleval lehel)"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:157
+#: apps/zotonic_mod_survey/src/mod_survey.erl:162
 msgid "Likert"
 msgstr "Likert"
 
@@ -9549,7 +9634,7 @@ msgstr "Likert"
 msgid "Link with person"
 msgstr "Seos inimesega"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:163
+#: apps/zotonic_mod_survey/src/mod_survey.erl:168
 msgid "Long answer"
 msgstr "Pikk vastus"
 
@@ -9593,7 +9678,7 @@ msgstr "Võimalik on mitu vastust"
 msgid "Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer."
 msgstr "Võimalikud mitmed vastused: õige vastuse eest antakse punkte <i>ja</i> punkti <i>, mitte</i> vale vastuse eest. Vaikimisi: 1 punkt õige vastuse eest, 1 punkt vale vastuse mittevalimise eest."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:169
+#: apps/zotonic_mod_survey/src/mod_survey.erl:174
 msgid "Multiple choice"
 msgstr "Valikvastustega"
 
@@ -9609,7 +9694,7 @@ msgstr "Mitu lehelõike plokki ühendatakse üheks."
 msgid "Multiple times per user/browser (each time with new results)"
 msgstr "Mitu korda kasutaja/brauseri kohta (iga kord uute tulemustega)"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:161
+#: apps/zotonic_mod_survey/src/mod_survey.erl:166
 msgid "Narrative"
 msgstr "Jutustav"
 
@@ -9649,7 +9734,7 @@ msgstr "Aktsepteerige ainult pilte."
 msgid "Options from a page category"
 msgstr "Valikud lehekategooriast"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:166
+#: apps/zotonic_mod_survey/src/mod_survey.erl:171
 msgid "Page break"
 msgstr "Leheküljevahe"
 
@@ -9661,7 +9746,7 @@ msgstr "Lehe hüppe tingimus"
 msgid "Pass?"
 msgstr "Üle andma?"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:95./apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:10./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:637
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:95./apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:10./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:635
 msgid "Passed"
 msgstr "Läbitud"
 
@@ -9669,7 +9754,7 @@ msgstr "Läbitud"
 msgid "Passing score"
 msgstr "Läbimise tulemus"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:639
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:637
 msgid "Percent"
 msgstr "Protsent"
 
@@ -9733,7 +9818,7 @@ msgstr "Pika vastusega küsimus"
 msgid "Question with a short answer"
 msgstr "Lühikese vastusega küsimus"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8./apps/zotonic_mod_survey/src/mod_survey.erl:154
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8./apps/zotonic_mod_survey/src/mod_survey.erl:159
 msgid "Questions"
 msgstr "Küsimused"
 
@@ -9757,7 +9842,7 @@ msgstr "Punane"
 msgid "Required, this question must be answered."
 msgstr "Vajalik, sellele küsimusele tuleb vastata."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:142
+#: apps/zotonic_mod_survey/src/mod_survey.erl:147
 msgid "Result deleted."
 msgstr "Tulemus kustutatud."
 
@@ -9781,7 +9866,7 @@ msgstr "Tulemused kuni"
 msgid "Saved"
 msgstr "Salvestatud"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:23./apps/zotonic_mod_survey/src/models/m_survey.erl:638
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:23./apps/zotonic_mod_survey/src/models/m_survey.erl:636
 msgid "Score"
 msgstr "Skoor"
 
@@ -9809,7 +9894,7 @@ msgstr "Saatke vastajale kinnitus. E-posti aadress peab olema teada (sisselogitu
 msgid "Separate multiple email addresses with a comma."
 msgstr "Eraldage mitu e-posti aadressi komaga."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:162
+#: apps/zotonic_mod_survey/src/mod_survey.erl:167
 msgid "Short answer"
 msgstr "Lühike vastus"
 
@@ -9973,7 +10058,7 @@ msgstr "Seda teksti näidatakse uuringu sissejuhatuseks."
 msgid "This text is shown below the start button."
 msgstr "See tekst on näidatud käivitusnupu all."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:158
+#: apps/zotonic_mod_survey/src/mod_survey.erl:163
 msgid "Thurstone"
 msgstr "Thurstone"
 
@@ -9997,7 +10082,7 @@ msgstr "Tõsi"
 msgid "True or false question"
 msgstr "Õige või vale küsimus"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:155
+#: apps/zotonic_mod_survey/src/mod_survey.erl:160
 msgid "True/False"
 msgstr "Õige Vale"
 
@@ -10037,7 +10122,7 @@ msgstr "Ymd"
 msgid "Yes or no question"
 msgstr "Jah või ei"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:156
+#: apps/zotonic_mod_survey/src/mod_survey.erl:161
 msgid "Yes/No"
 msgstr "Jah ei"
 
@@ -10049,7 +10134,7 @@ msgstr "Selle olete juba täitnud, kuid saate oma varasemaid vastuseid muuta."
 msgid "You already filled this in."
 msgstr "Selle olete juba täitnud."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:131./apps/zotonic_mod_survey/src/mod_survey.erl:146./apps/zotonic_mod_survey/src/mod_survey.erl:754
+#: apps/zotonic_mod_survey/src/mod_survey.erl:135./apps/zotonic_mod_survey/src/mod_survey.erl:151./apps/zotonic_mod_survey/src/mod_survey.erl:769
 msgid "You are not allowed to change these results."
 msgstr "Teil pole lubatud neid tulemusi muuta."
 

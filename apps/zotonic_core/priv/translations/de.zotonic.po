@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-11-16 12:50\n"
+"PO-Revision-Date: 2023-11-28 15:32\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -147,7 +147,7 @@ msgstr "ACL-Benutzergruppe"
 msgid "Access control"
 msgstr "Zugriffskontrolle"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:574
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:550
 msgid "Access control rules"
 msgstr "Zugriffskontrollregeln"
 
@@ -202,7 +202,7 @@ msgid "Are you sure you want to restore all ACL rules to their currently publish
 msgstr "Sind Sie sicher, dass Sie alle ACL-Regeln in ihrer aktuell veröffentlichten Version wiederherstellen möchten?"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:160./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:78
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:174./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:70./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:70./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:259./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:282./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:85./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:171./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:70./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:70./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:259./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:282./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:85./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38./apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:52
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:21
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:92
@@ -230,7 +230,7 @@ msgstr "Abbrechen"
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:196./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:62./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:96./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:29./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45./apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:26
-#: apps/zotonic_mod_survey/src/mod_survey.erl:159
+#: apps/zotonic_mod_survey/src/mod_survey.erl:164
 msgid "Category"
 msgstr "Kategorie"
 
@@ -248,7 +248,7 @@ msgid "Changed configuration."
 msgstr "Konfiguration geändert."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:22
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:174
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:171
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:67./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:69
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:31./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:46
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:30
@@ -269,8 +269,8 @@ msgstr "Manager von Zusammenarbeitsgruppen"
 msgid "Collaboration group members"
 msgstr "Mitglieder der Zusammenartbeitsgruppe"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:570
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:123
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:546
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:120
 msgid "Collaboration groups"
 msgstr "Zusammenarbeitsgruppen"
 
@@ -299,7 +299,7 @@ msgid "Content group"
 msgstr "Inhaltsgruppe"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:16
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:131
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:128
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:197
 msgid "Content groups"
 msgstr "Inhaltsgruppen"
@@ -328,7 +328,7 @@ msgstr "Gebe an, wer diese Seite sehen oder editieren kann."
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:43
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:249
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:19./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:34
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125./apps/zotonic_mod_survey/src/mod_survey.erl:125
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125./apps/zotonic_mod_survey/src/mod_survey.erl:129
 msgid "Delete"
 msgstr "Löschen"
 
@@ -457,14 +457,14 @@ msgstr "Mitglieder der gleichen Benutzergruppe"
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:4./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:5./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
 #: apps/zotonic_mod_base/priv/templates/error.tpl:78
-#: apps/zotonic_mod_development/priv/templates/_development_template.tpl:3./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:10./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:60./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:122./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:189
+#: apps/zotonic_mod_development/priv/templates/_development_template.tpl:3./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:10./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:60./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:122./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:189./apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:49
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:24
 msgid "Module"
 msgstr "Modul"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:25
 #: apps/zotonic_mod_admin/src/mod_admin.erl:122
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:3./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:7./apps/zotonic_mod_admin_modules/src/mod_admin_modules.erl:100
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:3./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:7./apps/zotonic_mod_admin_modules/src/mod_admin_modules.erl:103
 msgid "Modules"
 msgstr "Modules"
 
@@ -508,7 +508,7 @@ msgstr "Nicht erlaubt."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:31
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:55
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:28./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:35./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:62
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:28./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:35./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:62./apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:47
 msgid "Options"
 msgstr "Optionen"
 
@@ -606,7 +606,7 @@ msgstr "Zeige diese ACL-Benutzergruppe zuerst an:"
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:52./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:68
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:61./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:76
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:56./apps/zotonic_mod_content_groups/src/mod_content_groups.erl:72
-#: apps/zotonic_mod_menu/src/mod_menu.erl:193
+#: apps/zotonic_mod_menu/src/mod_menu.erl:232
 msgid "Sorry, you are not allowed to delete this."
 msgstr "Sorry, Sie dürfen das nicht löschen."
 
@@ -693,7 +693,7 @@ msgstr "Veröffentlichte Regeln verwenden"
 msgid "Use the following URL to test the access control rules before publishing them."
 msgstr "Verwende die folgende URL, um die Zugriffskontrollregeln zu testen, bevor veröffentlichung."
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:565
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:541
 msgid "User groups"
 msgstr "Benutzergruppen"
 
@@ -862,7 +862,7 @@ msgstr "Mediendatei zur Seite hinzufügen"
 msgid "Add note"
 msgstr "Notiz hinzufügen"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:687./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
+#: apps/zotonic_mod_admin/src/mod_admin.erl:697./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
 msgid "Added the connection to"
 msgstr "Hinzufügen der Verbindung zu"
 
@@ -920,12 +920,12 @@ msgstr "Höhe"
 msgid "And media can also be viewed on their own page."
 msgstr "Und Medien können auch auf einer eigenen Seite betrachtet werden."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:96
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:93
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:14
 msgid "Any category"
 msgstr "Beliebige Kategorie"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:120
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:117
 msgid "Anybody’s"
 msgstr "Jedermanns"
 
@@ -1014,8 +1014,8 @@ msgid "Change the category of this page"
 msgstr "Ändern Sie die Kategorie dieser Seite"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:124
-msgid "Check all resource for embedded resource references and add a <i>refers</i> connection for all of those references."
-msgstr "Überprüfen Sie alle Ressourcen auf eingebettete Ressourcenreferenzen und fügen Sie für alle diese Referenzen eine <i>Referenz-</i> Verbindung hinzu."
+msgid "Check all pages for embedded page references and add a <i>refers</i> connection for all of those references."
+msgstr "Überprüfen Sie alle Seiten auf eingebettete Seitenverweise und fügen Sie für alle diese Verweise eine <i>verweist</i> Verbindung hinzu."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_bulk_actions.tpl:41
 msgid "Check the pages you want to delete."
@@ -1159,7 +1159,7 @@ msgstr "Datenbankversion"
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:5
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:16
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:20./apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:111./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:20
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:16./apps/zotonic_mod_survey/src/models/m_survey.erl:626./apps/zotonic_mod_survey/src/models/m_survey.erl:629
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:16./apps/zotonic_mod_survey/src/models/m_survey.erl:624./apps/zotonic_mod_survey/src/models/m_survey.erl:627
 msgid "Date"
 msgstr "Datum"
 
@@ -1413,7 +1413,7 @@ msgstr "Datei/Medieninhalt"
 msgid "File size"
 msgstr "Dateigröße"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:451
+#: apps/zotonic_mod_admin/src/mod_admin.erl:446
 msgid "File uploaded to the drop folder, will be handled shortly."
 msgstr "Die in den Drop-Ordner hochgeladene Datei wird in Kürze bearbeitet."
 
@@ -1637,7 +1637,7 @@ msgid "Make a new page or media"
 msgstr "Eine neue Seite oder ein neues Medium erstellen"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
-#: apps/zotonic_mod_survey/src/mod_survey.erl:160
+#: apps/zotonic_mod_survey/src/mod_survey.erl:165
 msgid "Matching"
 msgstr "Passend dazu"
 
@@ -1686,7 +1686,7 @@ msgstr "Speicher"
 msgid "Middle"
 msgstr "Zweiter"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:121
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:118
 msgid "Mine"
 msgstr "Meine"
 
@@ -1737,7 +1737,7 @@ msgstr "Block nach oben verschieben"
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:23./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:11./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:10
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:13./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:14./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:47
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:631
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:629
 msgid "Name"
 msgstr "Name"
 
@@ -2008,7 +2008,7 @@ msgstr "Anmerkungen"
 msgid "Remove"
 msgstr "Entfernen"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:691
+#: apps/zotonic_mod_admin/src/mod_admin.erl:701
 msgid "Removed the connection to"
 msgstr "Entfernt die Verbindung zu"
 
@@ -2059,7 +2059,7 @@ msgstr "Seite Speichern und anzeigen."
 msgid "Save this page."
 msgstr "Seite speichern."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:535
+#: apps/zotonic_mod_admin/src/mod_admin.erl:530
 msgid "Scheduled background task to check all refers connections."
 msgstr "Geplante Hintergrundaufgabe zur Überprüfung aller Referenzverbindungen."
 
@@ -2167,27 +2167,28 @@ msgstr "Einige Aufgaben werden wiederholt.<br>Gesamtfehler: {total}<br>Höchste 
 msgid "Something went wrong. Sorry."
 msgstr "Etwas lief schief. Entschuldigung!!"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:424
+#: apps/zotonic_mod_admin/src/mod_admin.erl:419
 msgid "Sorry, could not handle this filename."
 msgstr "Dieser Dateiname konnte leider nicht verarbeitet werden."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:463
+#: apps/zotonic_mod_admin/src/mod_admin.erl:458
 msgid "Sorry, could not move the file to the drop folder."
 msgstr "Leider konnte die Datei nicht in den Drop-Ordner verschoben werden."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:537
+#: apps/zotonic_mod_admin/src/mod_admin.erl:532
+#: apps/zotonic_mod_menu/src/mod_menu.erl:88
 msgid "Sorry, only an admin is allowed to do this"
 msgstr "Leider ist dies nur einem Administrator gestattet"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:399./apps/zotonic_mod_admin/src/mod_admin.erl:410
+#: apps/zotonic_mod_admin/src/mod_admin.erl:394./apps/zotonic_mod_admin/src/mod_admin.erl:405
 msgid "Sorry, that page is unknown."
 msgstr "Entschuldigung, diese Seite ist unbekannt."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:401./apps/zotonic_mod_admin/src/mod_admin.erl:412
+#: apps/zotonic_mod_admin/src/mod_admin.erl:396./apps/zotonic_mod_admin/src/mod_admin.erl:407
 msgid "Sorry, you are not allowed to edit notes."
 msgstr "Tut mir leid, Sie sind nicht berechtigt, Notizen zu bearbeiten."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:467
+#: apps/zotonic_mod_admin/src/mod_admin.erl:462
 msgid "Sorry, you are not allowed to upload drop folder files."
 msgstr "Leider ist es Ihnen nicht gestattet, Drop-Folder-Dateien hochzuladen."
 
@@ -2195,11 +2196,11 @@ msgstr "Leider ist es Ihnen nicht gestattet, Drop-Folder-Dateien hochzuladen."
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "Tut mir leid, Sie haben keine Berechtigung, die Verbindung hinzuzufügen."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:673
+#: apps/zotonic_mod_admin/src/mod_admin.erl:683
 msgid "Sorry, you have no permission to add the connection."
 msgstr "Tut mir leid, Sie haben keine Berechtigung, die Verbindung hinzuzufügen."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:675
+#: apps/zotonic_mod_admin/src/mod_admin.erl:685
 msgid "Sorry, you have no permission to delete the connection."
 msgstr "Tut mir leid, Sie haben keine Berechtigung, die Verbindung zu löschen."
 
@@ -2441,7 +2442,7 @@ msgstr "Navigation umschalten"
 msgid "Too many connections, only the first and last are shown."
 msgstr "Zu viele Verbindungen, nur die erste und die letzte werden angezeigt."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:84
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:81
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
 msgid "Type text to search"
 msgstr "Text für die Suche eingeben"
@@ -2470,7 +2471,7 @@ msgstr "Eindeutiger URI"
 msgid "Unpublished"
 msgstr "Unveröffentlicht"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:681./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:69./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:125
+#: apps/zotonic_mod_admin/src/mod_admin.erl:691./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:69./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:125
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58./apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:57
 #: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
@@ -2548,7 +2549,7 @@ msgstr "Gebraucht"
 msgid "User page"
 msgstr "Benutzer-Seite"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:94
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:91
 msgid "Valid for:"
 msgstr "Gültig für:"
 
@@ -2934,6 +2935,7 @@ msgid "Here you can see all the email configurations and send test emails."
 msgstr "Hier können Sie alle E-Mail-Konfigurationen anzeigen und Test-E-Mails senden."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:4
+#: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:31
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:25
 msgid "Hostname"
 msgstr "Hostname"
@@ -3732,11 +3734,11 @@ msgstr "Sie haben nicht die Berechtigung, den Gewinner zu bearbeiten."
 msgid "not implemented yet"
 msgstr "noch nicht implementiert"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:82
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:90
 msgid "Activate"
 msgstr "Aktivieren"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:73
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:81
 msgid "Configure"
 msgstr "Konfigurieren"
 
@@ -3748,7 +3750,7 @@ msgstr "Das Modul konnte nicht gefunden werden."
 msgid "Cyclic dependencies"
 msgstr "Zyklische Abhängigkeiten"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:77
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:85
 msgid "Deactivate"
 msgstr "Deaktivieren"
 
@@ -3772,6 +3774,10 @@ msgstr "Wollen Sie das Modul trotzdem aktivieren"
 msgid "Do you still want to deactivate the module"
 msgstr "Wollen Sie das Modul trotzdem deaktivieren"
 
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:72
+msgid "Install the module’s model and data."
+msgstr "Installieren Sie das Modell und die Daten des Moduls."
+
 #: apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:62./apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:89
 msgid "Module dependencies"
 msgstr "Modul-Abhängigkeiten"
@@ -3780,17 +3786,21 @@ msgstr "Modul-Abhängigkeiten"
 msgid "Modules are missing dependencies"
 msgstr "Modulen fehlen Abhängigkeiten"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:95
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:103
 msgid "No modules found"
 msgstr "Keine Module gefunden"
-
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:18
-msgid "Prio"
-msgstr "Prio"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:17
 msgid "Provides"
 msgstr "Bietet"
+
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:71
+msgid "Reinstall"
+msgstr "Neu installieren"
+
+#: apps/zotonic_mod_admin_modules/src/controllers/controller_admin_module_manager.erl:61
+msgid "Reinstalled the data model."
+msgstr "Datenmodell neu installiert."
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:3
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:149
@@ -3801,6 +3811,12 @@ msgstr "Module neu scannen"
 msgid "Rescanning will rebuild the index of all modules, actions, templates etc. It will also reload all dispatch rules."
 msgstr "Beim erneuten Scannen wird der Index aller Module, Aktionen, Vorlagen usw. neu erstellt. Es werden auch alle Versandregeln neu geladen."
 
+#: apps/zotonic_mod_admin_modules/src/controllers/controller_admin_module_manager.erl:66
+#: apps/zotonic_mod_search/src/mod_search.erl:92
+#: apps/zotonic_mod_survey/src/support/survey_admin.erl:40./apps/zotonic_mod_survey/src/support/survey_admin.erl:62./apps/zotonic_mod_survey/src/support/survey_admin.erl:107./apps/zotonic_mod_survey/src/support/survey_admin.erl:202
+msgid "Sorry, you are not allowed to do this."
+msgstr "Dies ist Ihnen leider nicht gestattet."
+
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:3
 msgid "The following modules will not start because they miss dependencies:"
 msgstr "Die folgenden Module werden nicht gestartet, da ihnen Abhängigkeiten fehlen:"
@@ -3808,6 +3824,10 @@ msgstr "Die folgenden Module werden nicht gestartet, da ihnen Abhängigkeiten fe
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:1
 msgid "There are modules depending on"
 msgstr "Es gibt Module in Abhängigkeit von"
+
+#: apps/zotonic_mod_admin_modules/src/controllers/controller_admin_module_manager.erl:63
+msgid "This module does not have a <tt>manage_schema/2</tt> function."
+msgstr "Dieses Modul verfügt nicht über eine <tt>manage_schema/2</tt> Funktion."
 
 #: apps/zotonic_mod_admin_modules/src/actions/action_admin_modules_module_toggle.erl:52
 msgid "You are not allowed to activate or deactivate modules."
@@ -4079,8 +4099,8 @@ msgid "Add two-factor authentication"
 msgstr "Zwei-Faktor-Authentifizierung hinzufügen"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:43
-msgid "Ask after signing in"
-msgstr "Nach der Anmeldung fragen"
+msgid "Ask after logging in"
+msgstr "Fragen Sie nach der Anmeldung"
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:43
 msgid "Changed the 2FA setting."
@@ -4121,8 +4141,8 @@ msgid "Force two-factor authentication"
 msgstr "Zwei-Faktor-Authentifizierung erzwingen"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:27
-msgid "From now on an extra passcode is needed to sign in."
-msgstr "Von nun an ist ein zusätzlicher Passcode für die Anmeldung erforderlich."
+msgid "From now on an extra passcode is needed to log in."
+msgstr "Von nun an ist für die Anmeldung ein zusätzlicher Passcode erforderlich."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:23
 msgid "Generate QR code"
@@ -4197,8 +4217,8 @@ msgid "Two-factor authentication"
 msgstr "Zwei-Faktor-Authentifizierung"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:8
-msgid "Two-factor authentication adds an extra check on sign in. The user will need to enter a code which is generated by an App on their telephone."
-msgstr "Die Zwei-Faktor-Authentifizierung fügt eine zusätzliche Prüfung bei der Anmeldung hinzu. Der Benutzer muss einen Code eingeben, der von einer App auf seinem Telefon generiert wird."
+msgid "Two-factor authentication adds an extra check on log in. The user will need to enter a code which is generated by an App on their telephone."
+msgstr "Die Zwei-Faktor-Authentifizierung fügt eine zusätzliche Überprüfung bei der Anmeldung hinzu. Der Benutzer muss einen Code eingeben, der von einer App auf seinem Telefon generiert wird."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:7
 msgid "Two-factor authentication configuration"
@@ -4254,7 +4274,7 @@ msgid "Authorizing..."
 msgstr "Autorisierend..."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:93./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:115./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/_logon_reset_support.tpl:3
-msgid "Back to sign in"
+msgid "Back to login"
 msgstr "Zurück zur Anmeldung"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:78
@@ -4267,7 +4287,7 @@ msgid "Change password"
 msgstr "Kennwort ändern"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:42
-msgid "Change password and Sign in"
+msgid "Change password and log in"
 msgstr "Passwort ändern und anmelden"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_title.tpl:5
@@ -4299,6 +4319,10 @@ msgstr "Schließen Sie dieses Fenster und melden Sie sich an, wenn Sie bereits B
 #: apps/zotonic_mod_wires/src/actions/action_wires_confirm.erl:38
 msgid "Confirm"
 msgstr "Bestätigen"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:123
+msgid "Confirm to connect"
+msgstr "Bestätigen Sie, um eine Verbindung herzustellen"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:20
 msgid "Confirmation failure"
@@ -4431,20 +4455,36 @@ msgid "If you do not receive the email within a few minutes, please check your s
 msgstr "Wenn Sie die E-Mail nicht innerhalb weniger Minuten erhalten, überprüfen Sie bitte Ihren Spam-Ordner."
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:14
-msgid "If you think you have an account and were expecting this email, please try again using the email address you gave when signing up."
-msgstr "Wenn Sie glauben, dass Sie ein Konto haben und diese E-Mail erwartet haben, versuchen Sie es bitte erneut mit der E-Mail-Adresse, die Sie bei der Anmeldung angegeben haben."
+msgid "If you think you have an account and were expecting this email, please try again using the email address you gave when you created your account."
+msgstr "Wenn Sie der Meinung sind, dass Sie über ein Konto verfügen und diese E-Mail erwartet haben, versuchen Sie es bitte erneut mit der E-Mail-Adresse, die Sie bei der Erstellung Ihres Kontos angegeben haben."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:107
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr "In der E-Mail finden Sie Anweisungen, wie Sie Ihr Konto bestätigen können."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:51./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:170./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:33
-msgid "Keep me signed in"
-msgstr "Angemeldet bleiben"
+msgid "Keep me logged in"
+msgstr "Eingeloggt bleiben"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:58./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:185./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
+msgid "Log in"
+msgstr "Anmeldung"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:1./apps/zotonic_mod_authentication/priv/templates/logon.tpl:11
+msgid "Log in to"
+msgstr "Einloggen in"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:124
+msgid "Log in with your existing {site} account to connect the accounts. You only have to do this once."
+msgstr "Melden Sie sich mit Ihrem bestehenden {site} Konto an, um die Konten zu verbinden. Sie müssen dies nur einmal tun."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:115
 msgid "Log on with"
 msgstr "Melden Sie sich mit an"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon.tpl:37
+msgid "Log out"
+msgstr "Ausloggen"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_expired_form.tpl:16
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:51./apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:55
@@ -4510,7 +4550,7 @@ msgid "Repeat your password"
 msgstr "Wiederholen Sie Ihr Passwort"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:41
-msgid "Reset password and Sign in"
+msgid "Reset password and log in"
 msgstr "Passwort zurücksetzen und anmelden"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:50./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:1./apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:9
@@ -4520,19 +4560,6 @@ msgstr "Ihr Passwort zurücksetzen"
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:101
 msgid "Send Verification Message"
 msgstr "Verifizierungsnachricht senden"
-
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:58./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:185./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
-#: apps/zotonic_mod_base/priv/templates/error.403.tpl:30
-msgid "Sign in"
-msgstr "Anmelden"
-
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:1./apps/zotonic_mod_authentication/priv/templates/logon.tpl:11
-msgid "Sign in to"
-msgstr "Anmelden bei"
-
-#: apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon.tpl:37
-msgid "Sign out"
-msgstr "Abmelden"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:27
 msgid "Simply try again:"
@@ -4600,7 +4627,7 @@ msgstr "Bei der Authentifizierung mit {service}ist ein Problem aufgetreten."
 
 #: apps/zotonic_mod_authentication/priv/templates/error.403.tpl:19
 #: apps/zotonic_mod_base/priv/templates/error.403.tpl:25
-msgid "To view this page you must be signed in."
+msgid "To view this page you must be logged in."
 msgstr "Um diese Seite anzuzeigen, müssen Sie angemeldet sein."
 
 #: apps/zotonic_mod_authentication/priv/templates/error.403.tpl:16
@@ -4644,13 +4671,13 @@ msgstr "Sie sind dabei, ein neues Konto zu erstellen."
 msgid "You are about to log on."
 msgstr "Sie sind dabei, sich anzumelden."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:70
-msgid "You are now signed in."
-msgstr "Du bist jetzt angemeldet."
-
 #: apps/zotonic_mod_authentication/priv/templates/logon.tpl:32
-msgid "You are signed in"
-msgstr "Sie sind angemeldet"
+msgid "You are logged in"
+msgstr "Du bist eingeloggt"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:70
+msgid "You are now logged in."
+msgstr "Sie sind jetzt eingeloggt."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:93
 msgid "You can connect the account on {site} with your account on {service} if both accounts have a verified email address but this is not the case. Check both sites and then try again."
@@ -4669,8 +4696,7 @@ msgid "You have to share your email address to be able to log in."
 msgstr "Sie müssen Ihre E-Mail-Adresse teilen, um sich anmelden zu können."
 
 #: apps/zotonic_mod_authentication/priv/templates/error.403.tpl:17
-#: apps/zotonic_mod_base/priv/templates/error.403.tpl:23
-msgid "You may try to sign in as a different user."
+msgid "You may try to login as a different user."
 msgstr "Sie können versuchen, sich als ein anderer Benutzer anzumelden."
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:11
@@ -5113,6 +5139,10 @@ msgstr "JSON"
 msgid "JSON-LD"
 msgstr "JSON-LD"
 
+#: apps/zotonic_mod_base/priv/templates/error.403.tpl:30
+msgid "Login"
+msgstr "Anmeldung"
+
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:112
 msgid "MQTT Bridge"
 msgstr "MQTT-Brücke"
@@ -5122,6 +5152,7 @@ msgid "MQTT Bridge Connection Status"
 msgstr "MQTT-Bridge-Verbindungsstatus"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:145./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
+#: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:39
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:48./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:35./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:28./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:35./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
 msgid "No"
 msgstr "Nein"
@@ -5261,9 +5292,14 @@ msgid "Websocket Support?"
 msgstr "Websocket-Support?"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:251./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
+#: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:39
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:47./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:30./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
 msgid "Yes"
 msgstr "Ja"
+
+#: apps/zotonic_mod_base/priv/templates/error.403.tpl:23
+msgid "You may try to log in as a different user."
+msgstr "Möglicherweise versuchen Sie, sich als ein anderer Benutzer anzumelden."
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:65
 msgid "Your browser as it identifies itself to our server and your IP address. This is essential information for the help desk, but we do not store any personal data."
@@ -5614,7 +5650,7 @@ msgstr "Daten löschen und alles verfolgen"
 msgid "Column"
 msgstr "Spalte"
 
-#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:26./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60
+#: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:26./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:33./apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:60./apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:50
 msgid "Controller"
 msgstr "Controller"
 
@@ -5686,7 +5722,11 @@ msgstr "Deaktivieren Sie die Zwischenspeicherung mit dem Tag <tt>{% cache %}</tt
 msgid "Disabled database query tracing"
 msgstr "Deaktivierte Ablaufverfolgung von Datenbankabfragen"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:160
+#: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:48
+msgid "Dispatch Name"
+msgstr "Versandname"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:162
 msgid "Dispatch rule debugging"
 msgstr "Debuggen von Versandregeln"
 
@@ -5714,7 +5754,11 @@ msgstr "Aktiviert die Ablaufverfolgung von Datenbankabfragen"
 msgid "Event"
 msgstr "Veranstaltung"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:179
+#: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:14
+msgid "Every URL which is reachable in the site is defined with dispatch rules. This page shows all available dispatch rules in this site."
+msgstr "Jede auf der Website erreichbare URL ist mit Versandregeln definiert. Auf dieser Seite werden alle verfügbaren Versandregeln auf dieser Site angezeigt."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:188
 msgid "Explain"
 msgstr "Erklären"
 
@@ -5734,6 +5778,10 @@ msgstr "Finden"
 msgid "Find a template, check which template will be selected"
 msgstr "Suchen Sie eine Vorlage, prüfen Sie, welche Vorlage ausgewählt werden soll"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:15
+msgid "For more information see: { url }"
+msgstr "Weitere Informationen finden Sie unter: { url }"
+
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:153
 msgid "Force a recompilation of all templates. This fixes any issues where\n"
 "     the compiled templates might be out of sync with the template index."
@@ -5752,6 +5800,10 @@ msgstr "Passende Versandregel gefunden"
 msgid "Graph of all template dependencies"
 msgstr "Diagramm aller Vorlagenabhängigkeiten"
 
+#: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:35
+msgid "Hostalias"
+msgstr "Hostalias"
+
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:63./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:125
 msgid "Included template"
 msgstr "Enthaltene Vorlage"
@@ -5760,7 +5812,7 @@ msgstr "Enthaltene Vorlage"
 msgid "Includes using variable names or expressions are not shown."
 msgstr "Einschlüsse, die Variablennamen oder Ausdrücke verwenden, werden nicht angezeigt."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:190
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:199
 msgid "Introspection"
 msgstr "Introspektion"
 
@@ -5788,7 +5840,7 @@ msgstr "Wird geladen..."
 msgid "Location"
 msgstr "Standort"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:163
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:172
 msgid "Match a request URL, display matched dispatch rule."
 msgstr "Übereinstimmung mit einer Anfrage-URL, Anzeige der übereinstimmenden Versandregel."
 
@@ -5856,7 +5908,7 @@ msgstr "Aktualisierung"
 msgid "Rerun graph"
 msgstr "Diagramm erneut ausführen"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:196
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:205
 msgid "Show an overview of all observers"
 msgstr "Eine Übersicht aller Beobachter anzeigen"
 
@@ -5864,7 +5916,7 @@ msgstr "Eine Übersicht aller Beobachter anzeigen"
 msgid "Show defined blocks in generated templates"
 msgstr "Definierte Blöcke in generierten Vorlagen anzeigen"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:193
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:202
 msgid "Show internals of Zotonic and the modules"
 msgstr "Interna von Zotonic und den Modulen anzeigen"
 
@@ -5872,9 +5924,17 @@ msgstr "Interna von Zotonic und den Modulen anzeigen"
 msgid "Show paths to included template files in generated templates"
 msgstr "Pfade zu eingebundenen Vorlagendateien in generierten Vorlagen anzeigen"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:31./apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:7
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:31./apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:7
 msgid "Site Development"
 msgstr "Standortentwicklung"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:23
+msgid "Site Dispatch Rules"
+msgstr "Regeln für den Site-Versand"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:28
+msgid "Site Name"
+msgstr "Site-Name"
 
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:21
 msgid "Start matching dispatch rules"
@@ -5889,7 +5949,7 @@ msgid "Started tracing template inclusions for your session."
 msgstr "Mit der Verfolgung von Vorlageneinschlüssen für Ihre Sitzung begonnen."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:50
-#: apps/zotonic_mod_survey/src/mod_survey.erl:167
+#: apps/zotonic_mod_survey/src/mod_survey.erl:172
 msgid "Stop"
 msgstr "Stopp"
 
@@ -5985,6 +6045,22 @@ msgstr "Diese Sitzung wird verfolgt..."
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:64./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:126
 msgid "Type of include"
 msgstr "Art des Include"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:46
+msgid "URI Pattern"
+msgstr "URI-Muster"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:166./apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:8
+msgid "View all dispatch rules"
+msgstr "Alle Versandregeln anzeigen"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:168
+msgid "View all dispatch rules and hostnames usable in the site."
+msgstr "Sehen Sie sich alle Versandregeln und Hostnamen an, die auf der Site verwendet werden können."
+
+#: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:12
+msgid "View all dispatch rules available in the site"
+msgstr "Sehen Sie sich alle auf der Website verfügbaren Versandregeln an"
 
 #: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:49
 msgid "You are not allowed to use the dispatch debugging."
@@ -7097,7 +7173,7 @@ msgid "User"
 msgstr "Benutzer"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:42./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:630
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:628
 msgid "User Id"
 msgstr "Benutzer-ID"
 
@@ -7943,11 +8019,21 @@ msgstr "Menüpunkt hinzufügen"
 msgid "Add top"
 msgstr "Oben hinzufügen"
 
+#: apps/zotonic_mod_menu/priv/templates/_admin_status.tpl:7
+msgid "Check all menu pages and add <i>hasmenupart</i> connections for all of the \n"
+"    pages in the menu."
+msgstr "Überprüfen Sie alle Menüseiten und fügen Sie <i>Hasmenupart</i> Verbindungen für alle \n"
+"    Seiten im Menü hinzu."
+
+#: apps/zotonic_mod_menu/src/mod_menu.erl:86
+msgid "Checking all menu resources in the backgroud"
+msgstr "Überprüfung aller Menüressourcen im Hintergrund"
+
 #: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:20
 msgid "Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add pages."
 msgstr "Klicken Sie auf <strong>Menüpunkt</strong> oder <strong>Menüpunkt</strong> um Seiten hinzuzufügen."
 
-#: apps/zotonic_mod_menu/src/mod_menu.erl:201
+#: apps/zotonic_mod_menu/src/mod_menu.erl:240
 msgid "Copy of:"
 msgstr "Kopie von:"
 
@@ -7971,6 +8057,10 @@ msgstr "Ziehen Sie die Seiten an die Stelle, an der Sie sie in der Hierarchie ha
 msgid "Empty hierarchy"
 msgstr "Leere Hierarchie"
 
+#: apps/zotonic_mod_menu/priv/templates/_admin_status.tpl:3
+msgid "Ensure <i>hasmenupart</i> connections"
+msgstr "Stellen Sie sicher, dass <i>hasmenupart</i> Verbindungen vorhanden sind"
+
 #: apps/zotonic_mod_menu/priv/templates/admin_menu_hierarchy.tpl:74
 msgid "Hierarchies can be defined for any existing category."
 msgstr "Hierarchien können für jede vorhandene Kategorie definiert werden."
@@ -7979,11 +8069,11 @@ msgstr "Hierarchien können für jede vorhandene Kategorie definiert werden."
 msgid "Hierarchy for"
 msgstr "Hierarchie für"
 
-#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:3./apps/zotonic_mod_menu/src/mod_menu.erl:95
+#: apps/zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:3./apps/zotonic_mod_menu/src/mod_menu.erl:107
 msgid "Menu"
 msgstr "Menü"
 
-#: apps/zotonic_mod_menu/src/mod_menu.erl:166
+#: apps/zotonic_mod_menu/src/mod_menu.erl:205
 msgid "Sorry, can’t copy that page."
 msgstr "Sorry, kann die Seite nicht kopieren."
 
@@ -8024,8 +8114,8 @@ msgid "Connect with Microsoft"
 msgstr "Stellen Sie eine Verbindung mit Microsoft her"
 
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:36
-msgid "Control who can sign in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers."
-msgstr "Steuern Sie, wer sich anmelden kann. Zulässige Werte sind: <tt>gemeinsame</tt>, <tt>Organisationen</tt>, <tt>Verbraucher</tt>und Mandantenkennungen."
+msgid "Control who can log in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers."
+msgstr "Steuern Sie, wer sich anmelden kann. Zulässige Werte sind: <tt>allgemein</tt>, <tt>Organisationen</tt>, <tt>Verbraucher</tt>und Mandanten-IDs."
 
 #: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:3./apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:6
 msgid "Disconnect from Microsoft"
@@ -8494,11 +8584,6 @@ msgstr "Suchfacetten neu aufbauen"
 msgid "Rebuilding the faceted search table."
 msgstr "Neuaufbau der facettierten Suchtabelle."
 
-#: apps/zotonic_mod_search/src/mod_search.erl:92
-#: apps/zotonic_mod_survey/src/support/survey_admin.erl:40./apps/zotonic_mod_survey/src/support/survey_admin.erl:62./apps/zotonic_mod_survey/src/support/survey_admin.erl:107./apps/zotonic_mod_survey/src/support/survey_admin.erl:202
-msgid "Sorry, you are not allowed to do this."
-msgstr "Dies ist Ihnen leider nicht gestattet."
-
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:71
 msgid "Add a noindex, nofollow element to all pages."
 msgstr "Ein noindex, nofollow-Element in alle Seiten einfügen."
@@ -8888,8 +8973,8 @@ msgid "We will be very careful with all the information given to us and will nev
 msgstr "Wir gehen sehr sorgfältig mit allen uns gegebenen Informationen um und werden niemals Ihren Namen oder Ihre Adresse ohne Ihre Zustimmung weitergeben. Wir haben einige Regeln, mit denen Sie einverstanden sein müssen."
 
 #: apps/zotonic_mod_signup/priv/templates/signup_confirm.tpl:23
-msgid "When you signed up, you received an email with a link but it looks like something went wrong."
-msgstr "Als Sie sich angemeldet haben, haben Sie eine E-Mail mit einem Link erhalten, aber es sieht so aus, als ob etwas schief gelaufen ist."
+msgid "When you created your account, you received an email with a link but it looks like something went wrong."
+msgstr "Als Sie Ihr Konto erstellt haben, haben Sie eine E-Mail mit einem Link erhalten, aber anscheinend ist ein Fehler aufgetreten."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:29
 msgid "You already have an account,"
@@ -8912,8 +8997,8 @@ msgid "and the"
 msgstr "und die"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_box.tpl:29./apps/zotonic_mod_signup/priv/templates/_signup_outside.tpl:1
-msgid "sign in"
-msgstr "Anmelden"
+msgid "log in"
+msgstr "Anmeldung"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:2
 msgid "sign up for a username and password"
@@ -9253,7 +9338,7 @@ msgstr "Sind Sie sicher, dass Sie diese Seite möchten? <br/> Dies löscht auch 
 msgid "Are you sure you want to delete this question?"
 msgstr "Möchten Sie diese Frage wirklich löschen?"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:124
+#: apps/zotonic_mod_survey/src/mod_survey.erl:128
 msgid "Are you sure you want to delete this result?"
 msgstr "Möchten Sie dieses Ergebnis wirklich löschen?"
 
@@ -9265,7 +9350,7 @@ msgstr "Möchten Sie wirklich aufhören, ohne zu speichern?"
 msgid "Because you can edit, you can proceed for testing."
 msgstr "Da Sie bearbeiten können, können Sie mit dem Testen fortfahren."
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111./apps/zotonic_mod_survey/src/mod_survey.erl:165
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111./apps/zotonic_mod_survey/src/mod_survey.erl:170
 msgid "Button"
 msgstr "Taste"
 
@@ -9321,7 +9406,7 @@ msgstr "Die Empfänger konnten nicht hinzugefügt werden."
 msgid "Could not create the mailinglist."
 msgstr "Die Mailingliste konnte nicht erstellt werden."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:164
+#: apps/zotonic_mod_survey/src/mod_survey.erl:169
 msgid "Country select"
 msgstr "Land auswählen"
 
@@ -9349,7 +9434,7 @@ msgstr "Neue Mailingliste erstellen"
 msgid "Create new person"
 msgstr "Neue Person anlegen"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:975
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:973
 msgid "Created"
 msgstr "Erstellt"
 
@@ -9437,7 +9522,7 @@ msgstr "Rückmeldung wenn richtig"
 msgid "Feedback if wrong"
 msgstr "Rückmeldung, wenn falsch"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:168
+#: apps/zotonic_mod_survey/src/mod_survey.erl:173
 msgid "File upload"
 msgstr "Datei hochladen"
 
@@ -9541,7 +9626,7 @@ msgstr "Sprung zu einer Frage auf einer nächsten Seite."
 msgid "Jump to this question label (must be on an other page below)"
 msgstr "Zu dieser Fragebezeichnung springen (muss sich auf einer anderen Seite unten befinden)"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:157
+#: apps/zotonic_mod_survey/src/mod_survey.erl:162
 msgid "Likert"
 msgstr "Likert"
 
@@ -9549,7 +9634,7 @@ msgstr "Likert"
 msgid "Link with person"
 msgstr "Mit Person verknüpfen"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:163
+#: apps/zotonic_mod_survey/src/mod_survey.erl:168
 msgid "Long answer"
 msgstr "Lange Antwort"
 
@@ -9593,7 +9678,7 @@ msgstr "Mehrere Antworten möglich"
 msgid "Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer."
 msgstr "Mehrfachnennungen möglich: Punkte gibt es für die richtige Antwort <i>und</i> Punkte gibt es für <i>statt</i> für die falsche Antwort. Standard: 1 Punkt für eine richtige Antwort, 1 Punkt für keine falsche Antwort."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:169
+#: apps/zotonic_mod_survey/src/mod_survey.erl:174
 msgid "Multiple choice"
 msgstr "Mehrfachauswahl"
 
@@ -9609,7 +9694,7 @@ msgstr "Mehrere Seitenumbruchblöcke werden zu einem zusammengeführt."
 msgid "Multiple times per user/browser (each time with new results)"
 msgstr "Mehrfach pro Benutzer/Browser (jeweils mit neuen Ergebnissen)"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:161
+#: apps/zotonic_mod_survey/src/mod_survey.erl:166
 msgid "Narrative"
 msgstr "Erzählung"
 
@@ -9649,7 +9734,7 @@ msgstr "Nur Bilder akzeptieren."
 msgid "Options from a page category"
 msgstr "Optionen einer Seitenkategorie"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:166
+#: apps/zotonic_mod_survey/src/mod_survey.erl:171
 msgid "Page break"
 msgstr "Seitenumbruch"
 
@@ -9661,7 +9746,7 @@ msgstr "Seitensprungsbedingung"
 msgid "Pass?"
 msgstr "Passieren?"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:95./apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:10./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:637
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:95./apps/zotonic_mod_survey/priv/templates/_survey_results_user.tpl:10./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:34./apps/zotonic_mod_survey/src/models/m_survey.erl:635
 msgid "Passed"
 msgstr "Bestanden"
 
@@ -9669,7 +9754,7 @@ msgstr "Bestanden"
 msgid "Passing score"
 msgstr "Bestehendes Ergebnis"
 
-#: apps/zotonic_mod_survey/src/models/m_survey.erl:639
+#: apps/zotonic_mod_survey/src/models/m_survey.erl:637
 msgid "Percent"
 msgstr "Prozent"
 
@@ -9733,7 +9818,7 @@ msgstr "Frage mit langer Antwort"
 msgid "Question with a short answer"
 msgstr "Frage mit kurzer Antwort"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8./apps/zotonic_mod_survey/src/mod_survey.erl:154
+#: apps/zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7./apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8./apps/zotonic_mod_survey/src/mod_survey.erl:159
 msgid "Questions"
 msgstr "Fragen"
 
@@ -9757,7 +9842,7 @@ msgstr "Rot"
 msgid "Required, this question must be answered."
 msgstr "Erforderlich, diese Frage muss beantwortet werden."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:142
+#: apps/zotonic_mod_survey/src/mod_survey.erl:147
 msgid "Result deleted."
 msgstr "Ergebnis gelöscht."
 
@@ -9781,7 +9866,7 @@ msgstr "Ergebnisse bis"
 msgid "Saved"
 msgstr "Gespeichert"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:23./apps/zotonic_mod_survey/src/models/m_survey.erl:638
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:23./apps/zotonic_mod_survey/src/models/m_survey.erl:636
 msgid "Score"
 msgstr "Ergebnis"
 
@@ -9809,7 +9894,7 @@ msgstr "Senden Sie eine Bestätigung an den Befragten. Die E-Mail-Adresse muss b
 msgid "Separate multiple email addresses with a comma."
 msgstr "Trennen Sie mehrere E-Mail-Adressen mit einem Komma."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:162
+#: apps/zotonic_mod_survey/src/mod_survey.erl:167
 msgid "Short answer"
 msgstr "Kurze Antwort"
 
@@ -9973,7 +10058,7 @@ msgstr "Dieser Text wird als Einführung in die Umfrage angezeigt."
 msgid "This text is shown below the start button."
 msgstr "Dieser Text wird unter dem Start-Button angezeigt."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:158
+#: apps/zotonic_mod_survey/src/mod_survey.erl:163
 msgid "Thurstone"
 msgstr "Thurstone"
 
@@ -9997,7 +10082,7 @@ msgstr "Wahr"
 msgid "True or false question"
 msgstr "Wahre oder falsche Frage"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:155
+#: apps/zotonic_mod_survey/src/mod_survey.erl:160
 msgid "True/False"
 msgstr "Wahr/Falsch"
 
@@ -10037,7 +10122,7 @@ msgstr "Ymd"
 msgid "Yes or no question"
 msgstr "Ja oder Nein Frage"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:156
+#: apps/zotonic_mod_survey/src/mod_survey.erl:161
 msgid "Yes/No"
 msgstr "Ja/Nein"
 
@@ -10049,7 +10134,7 @@ msgstr "Sie haben dies bereits ausgefüllt, aber Sie können Ihre vorherigen Ant
 msgid "You already filled this in."
 msgstr "Sie haben dies bereits ausgefüllt."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:131./apps/zotonic_mod_survey/src/mod_survey.erl:146./apps/zotonic_mod_survey/src/mod_survey.erl:754
+#: apps/zotonic_mod_survey/src/mod_survey.erl:135./apps/zotonic_mod_survey/src/mod_survey.erl:151./apps/zotonic_mod_survey/src/mod_survey.erl:769
 msgid "You are not allowed to change these results."
 msgstr "Sie dürfen diese Ergebnisse nicht verändern."
 
