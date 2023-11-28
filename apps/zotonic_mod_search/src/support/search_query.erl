@@ -132,6 +132,7 @@ filter_empty(Q) when is_list(Q) ->
             (#{ <<"value">> := undefined }) -> false;
             (#{ <<"value">> := null }) -> false;
             (#{ <<"value">> := [] }) -> false;
+            (#{ <<"value">> := <<>> }) -> false;
             (#{}) -> true
         end,
         Q).
