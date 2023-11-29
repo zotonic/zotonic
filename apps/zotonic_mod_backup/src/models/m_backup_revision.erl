@@ -82,7 +82,7 @@ list_deleted({Offset, Limit}, Context) ->
         [ ?BACKUP_TYPE_PROPS_DELETED, Offset-1, Limit ],
         Context),
     Total = z_db:q1("
-        select count(distinct r.id)
+        select count(*)
         from backup_revision b
             left join rsc r
             on r.id = b.rsc_id
