@@ -33,6 +33,7 @@
     delete_username/2,
     set_username/3,
     set_username_pw/4,
+    reset_password/2,
     set_expired/3,
     set_identity_expired/3,
     set_visited/2,
@@ -587,7 +588,9 @@ set_username_pw(?ACL_ADMIN_USER_ID, _, _, Context) ->
     ?LOG_WARNING(#{
         text => <<"Trying to set admin username (1)">>,
         in => zotonic_core,
-        user_id => z_acl:user(Context)
+        user_id => z_acl:user(Context),
+        result => error,
+        reason => eacces
     }),
     {error, eacces};
 set_username_pw(Id, Username, Password, Context)  when is_integer(Id) ->
@@ -751,7 +754,7 @@ ensure_username_pw_1(Id, Username, Context) ->
                         Username =:= undefined ->generate_username(Id, Context);
                         true -> Username
                     end,
-                    Password = z_ids:id(),
+                    Password = z_ids:password(),
                     set_username_pw(Id, Username1, Password, Context);
                 _N ->
                     ok
@@ -759,6 +762,71 @@ ensure_username_pw_1(Id, Username, Context) ->
         false ->
             {error, eacces}
     end.
+
+%% @doc Reset the password of an user - the user will need to request a new password.
+%% All authentication tokens will be reset by generating a new user secret.
+-spec reset_password(UserId, Context) -> ok | {error, Reason} when
+    UserId :: m_rsc:resource(),
+    Context :: z:context(),
+    Reason :: enoent | eacces | nouser.
+reset_password(undefined, _Context) ->
+    {error, enoent};
+reset_password(?ACL_ADMIN_USER_ID, Context) ->
+    % The password of the admin is set in the priv/zotonic_site.config file.
+    ?LOG_WARNING(#{
+        text => <<"Trying to reset admin password (1)">>,
+        in => zotonic_core,
+        user_id => z_acl:user(Context),
+        result => error,
+        reason => eacces
+    }),
+    {error, eacces};
+reset_password(UserId, Context)  when is_integer(UserId) ->
+    case is_allowed_set_username(UserId, Context) of
+        true ->
+            NewPassword = z_ids:password(),
+            Hash = hash(NewPassword),
+            case z_db:q("
+                update identity
+                set propb = $2
+                where rsc_id = $1
+                  and type = 'username_pw'",
+                [ UserId, ?DB_PROPS(Hash) ],
+                Context)
+            of
+                0 ->
+                    ?LOG_WARNING(#{
+                        in => zotonic_core,
+                        text => <<"Password reset of user, but no username_pw identity">>,
+                        result => error,
+                        reason => nouser,
+                        user => UserId
+                    }),
+                    {error, nouser};
+                1 ->
+                    reset_auth_tokens(UserId, Context),
+                    flush(UserId, Context),
+                    z_mqtt:publish(
+                        [ <<"model">>, <<"identity">>, <<"event">>, UserId, <<"username_pw">> ],
+                        #{
+                            id => UserId,
+                            type => <<"username_pw">>
+                        },
+                        z_acl:sudo(Context)),
+                    ?LOG_INFO(#{
+                        in => zotonic_core,
+                        text => <<"Password reset of user">>,
+                        result => ok,
+                        user => UserId
+                    }),
+                    ok
+            end;
+        false ->
+            {error, eacces}
+    end;
+reset_password(UserId, Context) ->
+    reset_password(m_rsc:rid(UserId, Context), Context).
+
 
 generate_username(Id, Context) ->
     Username = base_username(Id, Context),
