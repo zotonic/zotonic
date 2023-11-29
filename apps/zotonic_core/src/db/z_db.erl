@@ -1371,6 +1371,8 @@ convert_value(Type, _, V) ->
 
 
 %% @doc Flush all cached information about the database.
+-spec flush(Context) -> ok when
+    Context :: z:context().
 flush(Context) ->
     Options = z_db_pool:get_database_options(Context),
     Db = proplists:get_value(dbdatabase, Options),

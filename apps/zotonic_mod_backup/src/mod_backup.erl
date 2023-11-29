@@ -27,7 +27,7 @@
 -mod_prio(600).
 -mod_provides([backup]).
 -mod_depends([admin]).
--mod_schema(1).
+-mod_schema(2).
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
@@ -114,6 +114,8 @@ observe_rsc_update_done(#rsc_update_done{ action = insert, id = Id, post_props =
     m_backup_revision:save_revision(Id, Props, Context);
 observe_rsc_update_done(#rsc_update_done{ action = update, id = Id, post_props = Props }, Context) ->
     m_backup_revision:save_revision(Id, Props, Context);
+observe_rsc_update_done(#rsc_update_done{ action = delete, id = Id, pre_props = Props }, Context) ->
+    m_backup_revision:save_deleted(Id, Props, Context);
 observe_rsc_update_done(#rsc_update_done{}, _Context) ->
     ok.
 

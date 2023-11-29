@@ -26,6 +26,7 @@
 
     list_deleted/2,
 
+    save_deleted/3,
     save_revision/3,
     get_revision/2,
     list_revisions/2,
@@ -34,12 +35,15 @@
     periodic_cleanup/1,
     retention_months/1,
 
-    install/1
+    install/1,
+
+    insert_deleted_revisions/1
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -define(BACKUP_TYPE_PROPS, $P).
+-define(BACKUP_TYPE_PROPS_DELETED, $D).
 
 % Number of months we keep revisions
 -define(BACKUP_REVISION_RETENTION_MONTHS, 18).
@@ -66,34 +70,26 @@ m_get(_Vs, _Msg, _Context) ->
     Result :: #search_result{}.
 list_deleted({Offset, Limit}, Context) ->
     {ok, Rs} = z_db:qmap("
-        with last_revision as (
-            select *
-            from backup_revision
-            where id in (
-                select max(id)
-                from backup_revision
-                where type = $3
-                group by rsc_id
-            )
-        )
-        select rsc_gone.*,
-               last_revision.*
-        from rsc_gone
-        join last_revision
-            on rsc_gone.id = last_revision.rsc_id
-        order by rsc_gone.created desc, rsc_gone.id desc
-        offset $1
-        limit $2
-        ",
-        [ Offset-1, Limit, ?BACKUP_TYPE_PROPS ],
+        select b.*
+        from backup_revision b
+            left join rsc r
+            on r.id = b.rsc_id
+        where b.type = $1
+          and r.id is null
+        order by b.created desc
+        offset $2
+        limit $3",
+        [ ?BACKUP_TYPE_PROPS_DELETED, Offset-1, Limit ],
         Context),
     Total = z_db:q1("
         select count(distinct r.id)
-        from rsc_gone r
-        join backup_revision b
+        from backup_revision b
+            left join rsc r
             on r.id = b.rsc_id
-            and b.type = $1
-        ", [ ?BACKUP_TYPE_PROPS ], Context),
+        where b.type = $1
+          and r.id is null",
+        [ ?BACKUP_TYPE_PROPS_DELETED ],
+        Context),
     Rs1 = lists:map(fun expand/1, Rs),
     #search_result{
         result = Rs1,
@@ -113,23 +109,41 @@ expand(R) ->
     R.
 
 
-save_revision(Id, #{ <<"version">> := Version } = Props, Context) when is_integer(Id), is_map(Props) ->
-    LastVersion = z_db:q1("select version from backup_revision where rsc_id = $1 order by created desc limit 1", [Id], Context),
+save_deleted(Id, Props, Context) when is_integer(Id), is_map(Props) ->
+    save_revision(Id, Props, true, Context).
+
+save_revision(Id, Props, Context) when is_integer(Id), is_map(Props) ->
+    save_revision(Id, Props, false, Context).
+
+save_revision(Id, #{ <<"version">> := Version } = Props, IsDeleted, Context) when is_integer(Id) ->
+    LastVersion = z_db:q1("
+        select version
+        from backup_revision
+        where rsc_id = $1
+        order by created desc
+        limit 1", [Id], Context),
     case Version of
-        LastVersion when LastVersion =/= undefined ->
+        LastVersion when LastVersion =/= undefined andalso not IsDeleted ->
             ok;
         _ ->
             UserId = z_acl:user(Context),
-            1 = z_db:q("
+            Type = case IsDeleted of
+                false ->
+                    ?BACKUP_TYPE_PROPS;
+                true ->
+                    ?BACKUP_TYPE_PROPS_DELETED
+            end,
+            RevId = z_db:q1("
                 insert into backup_revision
                     (rsc_id, type, version, user_id, user_name, data_type, data)
                 values ($1, $2, $3, $4, $5, $6, $7)
-                ", [
+                returning id",
+                [
                     Id,
-                    ?BACKUP_TYPE_PROPS,
+                    Type,
                     Version,
                     UserId,
-                    z_string:truncate(
+                    z_string:truncatechars(
                         z_trans:lookup_fallback(
                             m_rsc:p_no_acl(UserId, title, Context),
                             Context),
@@ -138,6 +152,19 @@ save_revision(Id, #{ <<"version">> := Version } = Props, Context) when is_intege
                     erlang:term_to_binary(Props, [compressed])
                 ],
                 Context),
+            case IsDeleted of
+                true ->
+                    z_db:q("
+                        delete from backup_revision
+                        where type = $1
+                          and rsc_id = $2
+                          and id <> $3
+                        ",
+                        [ ?BACKUP_TYPE_PROPS_DELETED, Id, RevId ],
+                        Context);
+                false ->
+                    ok
+            end,
             ok
     end.
 
@@ -226,7 +253,83 @@ install(Context) ->
             [] = z_db:q("
                     create index backup_revision_id_created on backup_revision (rsc_id, created)
                 ", Context),
-            ok;
+            [] = z_db:q("
+                    create index backup_revision_created_deleted_key
+                    on backup_revision (created, type)
+                    where type = 'D'
+                ", Context),
+            z_db:flush(Context);
         true ->
-            ok
+            case z_db:key_exists(backup_revision, backup_revision_created_deleted_key, Context) of
+                true ->
+                    ok;
+                false ->
+                    [] = z_db:q("
+                            create index backup_revision_created_deleted_key
+                            on backup_revision (created, type)
+                            where type = 'D'
+                        ", Context),
+                    z_pivot_rsc:insert_task(?MODULE, insert_deleted_revisions, <<>>, Context),
+                    z_db:flush(Context)
+            end
     end.
+
+
+insert_deleted_revisions(Context) ->
+    ?LOG_INFO(#{
+        in => zotonic_mod_backup,
+        text => <<"Inserting deleted revisions for resources">>
+    }),
+    Rs = z_db:q("
+        select rsc_gone.id, rsc_gone.modified, max(rev.id)
+        from rsc_gone
+        join backup_revision rev
+            on rsc_gone.id = rev.rsc_id
+        where rev.type = $1
+        group by rsc_gone.id
+        ",
+        [ ?BACKUP_TYPE_PROPS ],
+        Context),
+    lists:foreach(
+        fun({RscId, GoneDate, RevId}) ->
+            case z_db:q1("
+                select id
+                from backup_revision
+                where rsc_id = $1
+                  and type = $2",
+                [ RscId, ?BACKUP_TYPE_PROPS_DELETED ],
+                Context)
+            of
+                undefined ->
+                    {ok, R} = z_db:qmap_row("
+                        select *
+                        from backup_revision
+                        where id = $1",
+                        [ RevId ],
+                        Context),
+                    #{
+                        <<"version">> := Version,
+                        <<"user_id">> := UserId,
+                        <<"user_name">> := Username,
+                        <<"data">> := Data
+                    } = R,
+                    1 = z_db:q("
+                        insert into backup_revision
+                            (rsc_id, type, version, user_id, user_name, data_type, data, created)
+                        values ($1, $2, $3, $4, $5, $6, $7, $8)
+                        ", [
+                            RscId,
+                            ?BACKUP_TYPE_PROPS_DELETED,
+                            Version,
+                            UserId,
+                            Username,
+                            <<"erlang">>,
+                            Data,
+                            GoneDate
+                        ],
+                        Context);
+                _DelRevId ->
+                    ok
+            end
+        end,
+        Rs).
