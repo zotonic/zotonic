@@ -801,9 +801,9 @@ qterm(#{ <<"term">> := <<"filter">>, <<"value">> := R}, Context) ->
 qterm(#{ <<"term">> := <<"filter:", Field/binary>>, <<"value">> := V } = T, Context) ->
     {Tab, Alias, Col, Q1} = map_filter_column(Field, #search_sql_term{}),
     Op = extract_term_op(T, undefined),
-    case pivot_qterm(Tab, Alias, Col, V, Op, Q1, Context) of
+    case pivot_qterm(Tab, Alias, Col, Op, V, Q1, Context) of
         {ok, QTerm} ->
-            QTerm;
+            ?DEBUG(QTerm);
         {error, _} ->
             none()
     end;
