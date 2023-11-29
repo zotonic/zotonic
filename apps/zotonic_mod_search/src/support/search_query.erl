@@ -803,7 +803,7 @@ qterm(#{ <<"term">> := <<"filter:", Field/binary>>, <<"value">> := V } = T, Cont
     Op = extract_term_op(T, undefined),
     case pivot_qterm(Tab, Alias, Col, Op, V, Q1, Context) of
         {ok, QTerm} ->
-            ?DEBUG(QTerm);
+            QTerm;
         {error, _} ->
             none()
     end;
