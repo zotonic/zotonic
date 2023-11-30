@@ -219,20 +219,33 @@ function z_dialog_overlay_open(options)
 {
     let overlay_id = 'modal-overlay';
     let level;
+    let is_top = false;
 
-    if (typeof options.level !== 'undefined' && options.level > 0) {
-        overlay_id = overlay_id + "-level-" + options.level;
+    if (options.level === 'top') {
+        is_top = true;
+        level = 3;
+        overlay_id = overlay_id + "-level-" + level;
+    } else if (typeof options.level !== 'undefined' && options.level > 0) {
         level = options.level;
+        overlay_id = overlay_id + "-level-" + level;
     } else {
         level = 0;
     }
 
     let $overlay = $('#'+overlay_id);
+    let style;
+
+    if (is_top) {
+        style = { zIndex: 9000 };
+    } else {
+        style = {};
+    }
 
     if ($overlay.length > 0) {
         $overlay
             .html('<a href="#close" class="modal-overlay-close" onclick="return z_dialog_overlay_close(this)">&times;</a>' + options.html)
             .attr('class', 'modal-overlay')
+            .css(style)
             .show();
     } else {
         const html = '<div class="modal-overlay modal-overlay-level-' + level + '" id="' + overlay_id + '">' +
@@ -241,6 +254,7 @@ function z_dialog_overlay_open(options)
                      '</div>';
         $('body').append(html);
         $overlay = $('#'+overlay_id);
+        $overlay.css(style);
 
         setTimeout(function() {
             // If there already is an input field with focus, do nothing
@@ -249,7 +263,7 @@ function z_dialog_overlay_open(options)
             }
         }, 50);
     }
-    
+
     if (options.class) {
         $overlay.addClass(options.class);
     }

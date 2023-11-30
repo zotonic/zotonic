@@ -1,6 +1,7 @@
 {% if id.is_editable %}
     {% button
-        text=_"Edit image"
+        text=_"Image editor"
+        title=_"Change the image rotation, crop and contrast."
         class="btn btn-default"
         element="a"
         action={overlay_open

@@ -129,6 +129,8 @@ do_new_page_actions(Id, Args, Context) ->
             mod_admin:do_link(SubjectId, Predicate, Id, Callback1, Context);
         {_, true} when Intent =/= <<"select">> ->
             mod_admin:do_link(Id, Predicate, ObjectId, Callback1, Context);
+        {true, true} when Intent =:= <<"select">> ->
+            mod_admin:do_link(Id, refers, ObjectId, Callback1, Context);
         _ when Callback1 =/= undefined ->
             % Call the optional callback
             mod_admin:do_link(undefined, undefined, Id, Callback1, Context);
