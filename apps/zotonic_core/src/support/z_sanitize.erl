@@ -228,6 +228,7 @@ sanitize_z_media_arg(<<"align">>, <<"right">>) -> #{<<"align">> => <<"right">>};
 sanitize_z_media_arg(<<"align">>, _) -> #{<<"align">> => <<"block">>};
 sanitize_z_media_arg(<<"crop">>, Crop) -> #{<<"crop">> => z_convert:to_bool(Crop)};
 sanitize_z_media_arg(<<"link">>, Link) -> #{<<"link">> => z_convert:to_bool(Link)};
+sanitize_z_media_arg(<<"link_new">>, LinkNew) -> #{<<"link_new">> => z_convert:to_bool(LinkNew)};
 sanitize_z_media_arg(<<"link_url">>, LinkUrl) ->
     #{<<"link_url">> => z_html:sanitize_uri(z_string:trim(LinkUrl))};
 sanitize_z_media_arg(<<"caption">>, Caption) ->
