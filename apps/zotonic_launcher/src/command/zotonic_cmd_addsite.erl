@@ -116,9 +116,6 @@ make_valid_hostname(Hostname) ->
    H1 = z_string:to_lower( unicode:characters_to_binary(Hostname) ),
    unicode:characters_to_list( binary:replace(H1, <<"_">>, <<"-">>, [ global ]) ).
 
-addsite(_Target, Sitename, #{ hostname := undefined }) ->
-    io:format(standard_error, "Please specify the hostname, for example: -H ~s.test~n~n", [ Sitename ]),
-    halt(1);
 addsite(_Target, Sitename, Options0) ->
     Options = set_dbschema(Sitename, Options0),
     Context = z_context:new(zotonic_site_status),
