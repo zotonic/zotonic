@@ -789,6 +789,17 @@ qterm(#{ <<"term">> := <<"asort">>, <<"value">> := Sort}, _Context) ->
     asort_term(Sort);
 qterm(#{ <<"term">> := <<"zsort">>, <<"value">> := Sort}, _Context) ->
     zsort_term(Sort);
+qterm(#{ <<"term">> := <<"facet">>, <<"value">> := V }, Context) when is_map(V) ->
+    maps:fold(
+        fun(Field, FV, Acc) ->
+            Term = qterm(#{
+                    <<"term">> => <<"facet:", Field/binary>>,
+                    <<"value">> => FV
+                }, Context),
+            [ Term | Acc ]
+        end,
+        [],
+        V);
 qterm(#{ <<"term">> := <<"facet:", Field/binary>>, <<"value">> := V}, Context) ->
     case search_facet:qterm(sql_safe(Field), V, Context) of
         {ok, Res1} ->
@@ -796,6 +807,17 @@ qterm(#{ <<"term">> := <<"facet:", Field/binary>>, <<"value">> := V}, Context) -
         {error, _} ->
             none()
     end;
+qterm(#{ <<"term">> := <<"filter">>, <<"value">> := V }, Context) when is_map(V) ->
+    maps:fold(
+        fun(Field, FV, Acc) ->
+            Term = qterm(#{
+                    <<"term">> => <<"filter:", Field/binary>>,
+                    <<"value">> => FV
+                }, Context),
+            [ Term | Acc ]
+        end,
+        [],
+        V);
 qterm(#{ <<"term">> := <<"filter">>, <<"value">> := R}, Context) ->
     add_filters(R, Context);
 qterm(#{ <<"term">> := <<"filter:", Field/binary>>, <<"value">> := V } = T, Context) ->
