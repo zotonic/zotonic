@@ -16,3 +16,21 @@ The overlay template is a ``div`` with the class ``modal-overlay``. Extra classe
 the ``class`` argument::
 
    {% wire action={overlay_open template="_splash.tpl" class="splash"} %}
+
+The overlay action has the following arguments:
+
+=========  ====================================  =======================
+Argument   Description                           Example
+=========  ====================================  =======================
+template   Template to render in the overlay     template="_overlay.tpl"
+class      Extra CSS class(es) to add to the     class="myclass other"
+           overlay diff.
+level      Nesting of the overlay. Non negative  level="top"
+           integer, higher numbered levels are
+           displayed above lower levels.
+           Special level ``"top"`` to force
+           display on top, above all dialogs
+           and other overlays.
+=========  ====================================  =======================
+
+All (extra) arguments are passed to the rendered template.
