@@ -267,15 +267,15 @@ event(#postback_notify{message = <<"feedback">>, trigger = Trigger, target=Targe
         Cat -> Cat
     end,
     Cats = case z_convert:to_binary(Category) of
-                <<"p:", Predicate/binary>> ->
-                    feedback_categories(SubjectId, Predicate, ObjectId, Context);
+                <<"p:", PredicateName/binary>> ->
+                    feedback_categories(SubjectId, PredicateName, ObjectId, Context);
                 <<>> when PredicateId =/= undefined ->
                     feedback_categories(SubjectId, Predicate, ObjectId, Context);
                 <<>> -> [];
                 <<"*">> -> [];
                 CIds ->
                     CatIds = binary:split(CIds, <<",">>, [ global ]),
-                    [ {m_rsc:rid(CatId, Context)} || CatId <- CatIds, CatId =/= <<>> ]
+                    [ m_rsc:rid(CatId, Context) || CatId <- CatIds, CatId =/= <<>> ]
            end,
     Vars = [
         {intent, z_context:get_q(<<"intent">>, Context)},
@@ -287,7 +287,7 @@ event(#postback_notify{message = <<"feedback">>, trigger = Trigger, target=Targe
         {text, Text},
         {is_multi_cat, length(Cats) > 1},
         {category_id, case Cats of
-            [{CId}] -> CId;
+            [CId] -> CId;
             _ -> undefined
         end},
         {is_zlink, z_convert:to_bool( z_context:get_q(<<"is_zlink">>, Context) )}
