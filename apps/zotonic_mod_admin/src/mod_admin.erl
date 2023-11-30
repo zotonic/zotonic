@@ -348,6 +348,7 @@ event(#postback{message={admin_connect_select, Args}}, Context) ->
         true -> IsConnected
     end,
     OptPredicate = case Intent of
+        <<"select">> when is_integer(SubjectId) -> refers;
         <<"select">> -> undefined;
         _ -> Predicate
     end,
