@@ -68,7 +68,7 @@
     {% block modal_footer %}
         <div class="modal-footer">
             {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
-            {% if id.is_a.image %}
+            {% if id.is_a.media %}
                 {% button class="btn btn-default"
                           action={dialog_close}
                           action={overlay_open id=id
