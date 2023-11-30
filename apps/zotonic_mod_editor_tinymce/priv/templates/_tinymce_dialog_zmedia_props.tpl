@@ -100,6 +100,12 @@
                                    </label>
                               </div>
                               <div class="checkbox">
+                                   <label>
+                                        <input type="checkbox" name="link_new" {% if options.link_new %}checked{% endif %} value="1" id="a-link_new">
+                                        {_ Open link in new window _}
+                                   </label>
+                              </div>
+                              <div>
                                    <input type="text" class="form-control" name="link_url" id="a-link_url" placeholder="{_ Website. Leave empty for media link _}" value="{{ options.link_url|escape_check }}">
                               </div>
                          </div>
