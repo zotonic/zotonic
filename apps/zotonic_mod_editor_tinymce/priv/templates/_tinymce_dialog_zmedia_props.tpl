@@ -118,7 +118,7 @@
           <button class="btn btn-default pull-left" type="button" name="delete">{_ Remove from text _}</button>
 
           {% block button_edit %}
-               <a class="btn btn-default pull-left" id="{{ #edit }}" href="{% url admin_edit_rsc id=id %}" style="margin-left:5px">{% trans "Edit {cat}" cat=id.category_id.title|lower %}</a>
+               <a class="btn btn-default pull-left" id="{{ #edit }}" href="{% url admin_edit_rsc id=id %}">{_ Edit _}</a>
                {% wire id=#edit action={dialog_edit_basics id=id level=6} %}
           {% endblock %}
 
