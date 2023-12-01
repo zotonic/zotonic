@@ -207,9 +207,7 @@
             }
             if (typeof level !== 'undefined') {
                 $(".modal").each(function() {
-                    console.log(dialogLevel($(this)), '>=', level);
                     if (dialogLevel($(this)) >= level) {
-                        console.log('hide');
                         $(this).modal('hide');
                     }
                 });
