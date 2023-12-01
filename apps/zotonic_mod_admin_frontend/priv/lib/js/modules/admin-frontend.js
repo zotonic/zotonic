@@ -48,7 +48,7 @@ $(function() {
 
 	function hashchange( id ) {
 		if (window.location.hash) {
-			z_dialog_close();
+			z_dialog_close(0);
 			$('#rscform').mask();
 
 			var query = window.location.hash.substring(1);

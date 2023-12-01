@@ -143,7 +143,13 @@ function z_dialog_open(options)
 
 function z_dialog_close(options)
 {
-    $.dialogClose(options);
+    if (typeof options === "number") {
+        $.dialogClose({ level: options });
+    } else if (options === "top") {
+        $.dialogClose({ level: "top" });
+    } else {
+        $.dialogClose(options);
+    }
 }
 
 function z_dialog_confirm(options)
@@ -174,7 +180,7 @@ function z_dialog_confirm(options)
         text: html,
         width: (options.width),
         backdrop: backdrop,
-        level: options.level ?? 0
+        level: options.level ?? "top"
     });
     $(".z-dialog-cancel-button").click(function() {
         z_dialog_close();

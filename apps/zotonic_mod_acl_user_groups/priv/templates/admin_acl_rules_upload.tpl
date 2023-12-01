@@ -74,8 +74,8 @@
     		    	</div>
 
     		    	<div class="col-md-7">
-    		    		<button type="submit" class="btn btn-primary">{_ Save Upload Permissions _}</button>
     		    		<button class="btn btn-default" id="{{ #cancel }}">{_ Cancel _}</button>
+                        <button type="submit" class="btn btn-primary">{_ Save Upload Permissions _}</button>
     		    		{% wire id=#cancel action={reload} %}
     		    	</div>
     		    </div>

@@ -183,8 +183,14 @@ pre:empty {
 }
 
 .modal.in {
-    -webkit-backdrop-filter: blur(2px);
-    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px) brightness(50%);
+    backdrop-filter: blur(2px) brightness(50%);
 }
 
+.modal-footer {
+    .btn + .btn,
+    .btn.pull-left + .btn.pull-left {
+        margin-left: 3px;
+    }
+}
 

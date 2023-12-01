@@ -122,8 +122,8 @@
                {% wire id=#edit action={dialog_edit_basics id=id level=6} %}
           {% endblock %}
 
-          <button class="btn btn-primary" type="submit">{_ Save _}</button>
           <button class="btn btn-default" type="button" id="{{ #cancel }}">{_ Cancel _}</button>
+          <button class="btn btn-primary" type="submit">{_ Save _}</button>
      </div>
 </form>
 
