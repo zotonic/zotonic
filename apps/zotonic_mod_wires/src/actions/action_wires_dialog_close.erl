@@ -29,8 +29,8 @@
 
 render_action(_TriggerId, _TargetId, Args, Context) ->
 	Level = case proplists:get_value(level, Args) of
-		undefined -> 0;
-		<<"top">> -> <<"top">>;
-		Lvl -> z_convert:to_integer(Lvl)
+		undefined -> <<"undefined">>;
+		<<"top">> -> <<"'top'">>;
+		Lvl -> z_convert:to_binary(z_convert:to_integer(Lvl))
 	end,
-	{<<"z_dialog_close({level:", (integer_to_binary(Level))/binary ,"});">>, Context}.
+	{<<"z_dialog_close({level:", Level/binary ,"});">>, Context}.

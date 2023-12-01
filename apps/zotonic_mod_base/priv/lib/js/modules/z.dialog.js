@@ -196,7 +196,7 @@
 
         dialogClose: function(options) {
             let level;
-            if (options && options.level) {
+            if (options && typeof options.level !== 'undefined') {
                 if (options.level === "top") {
                     level = dialogTopLevel();
                 } else {
@@ -207,7 +207,9 @@
             }
             if (typeof level !== 'undefined') {
                 $(".modal").each(function() {
-                    if ($(this).is(":visible") && dialogLevel($(this)) >= level) {
+                    console.log(dialogLevel($(this)), '>=', level);
+                    if (dialogLevel($(this)) >= level) {
+                        console.log('hide');
                         $(this).modal('hide');
                     }
                 });
