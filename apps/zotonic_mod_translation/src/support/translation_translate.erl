@@ -57,27 +57,31 @@ translate_1({ok, FromCode}, {ok, ToCode}, Texts, Context) ->
 
 
 add_service_trans(FromCode, ToCode, PartlyTranslated, Context) ->
-    ToTranslate = lists:filtermap(
+    case lists:filtermap(
         fun
-            ({FromText, undefined}) ->
-                {true, FromText};
-            (_) ->
-                false
+            ({FromText, undefined}) -> {true, FromText};
+            (_) -> false
         end,
-        PartlyTranslated),
-    Notification = #translate{
-        from = FromCode,
-        to = ToCode,
-        texts = ToTranslate
-    },
-    case z_notifier:first(Notification, Context) of
-        {ok, Translations} ->
-            {ok, merge_translations(PartlyTranslated, Translations, [])};
-        {error, _} = Error ->
-            Error;
-        undefined ->
-            {_, Translations} = lists:unzip(PartlyTranslated),
-            {ok, Translations}
+        PartlyTranslated)
+    of
+        [] ->
+            Translations = [ T || {_, T} <- PartlyTranslated ],
+            {ok, Translations};
+        ToTranslate ->
+            Notification = #translate{
+                from = FromCode,
+                to = ToCode,
+                texts = ToTranslate
+            },
+            case z_notifier:first(Notification, Context) of
+                {ok, Translations} ->
+                    {ok, merge_translations(PartlyTranslated, Translations, [])};
+                {error, _} = Error ->
+                    Error;
+                undefined ->
+                    {_, Translations} = lists:unzip(PartlyTranslated),
+                    {ok, Translations}
+            end
     end.
 
 merge_translations([], [], Acc) ->
