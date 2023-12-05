@@ -112,7 +112,7 @@
 
 
             {% with q.qsort|default:"-medium.created" as qsort %}
-                {% with m.search.paged[{query hasmedium qargs is_published="all" page=q.page sort=qsort pagelen=qpagelen zsort=qsort }] as result %}
+                {% with m.search.paged[{query hasmedium qargs is_published=`all` page=q.page sort=qsort pagelen=qpagelen zsort=qsort }] as result %}
 
                     <table class="table table-striped do_adminLinkedTable">
                         <thead>
