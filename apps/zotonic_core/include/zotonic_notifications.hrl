@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2011-2023 Marc Worrell
 %% @doc Notifications used in Zotonic core
+%% @end
 
 %% Copyright 2011-2023 Marc Worrell
 %%
@@ -959,6 +960,17 @@
     width :: non_neg_integer(),
     height :: non_neg_integer(),
     options :: proplists:proplist()
+    }).
+
+%% @doc Request a translation of a list of strings. The resulting translations must
+%% be in the same order as the request. This notification is handled by modules
+%% that interface to external translation services like DeepL or Google Translate.
+%% Type: first
+%% Return {ok, List} | {error, Reason} | undefined.
+-record(translate, {
+    from :: atom(),
+    to :: atom(),
+    texts = [] :: list( binary() )
     }).
 
 %% @doc Send a notification that the resource 'id' is added to the query query_id.
