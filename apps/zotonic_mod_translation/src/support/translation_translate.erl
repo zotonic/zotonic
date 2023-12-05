@@ -101,21 +101,21 @@ local_trans(_FromCode, _ToCode, #trans{ tr = [] }, _Context) ->
 local_trans(FromCode, ToCode, #trans{ tr = Tr }, Context) ->
     FromCodeText = lists:keyfind(FromCode, 1, Tr),
     case lists:keyfind(ToCode, 1, Tr) of
-        error when FromCode =:= en, FromCodeText =:= error ->
+        {_ToCode, ToText} ->
+            {<<>>, ToText};
+        false when FromCode =:= en, FromCodeText =:= false ->
             {<<>>, <<>>};
-        error when FromCode =:= en ->
+        false when FromCode =:= en ->
             {en, FromText} = FromCodeText,
             case trans(FromText, ToCode, Context) of
                 undefined -> {FromText, undefined};
                 ToText -> {FromText, ToText}
             end;
-        error when FromCodeText =:= error ->
+        false when FromCodeText =:= false ->
             {<<>>, <<>>};
-        error ->
-            {_, FromText} = FromCodeText,
-            {FromText, undefined};
-        ToText ->
-            {<<>>, ToText}
+        false ->
+            {_FromCode, FromText} = FromCodeText,
+            {FromText, undefined}
     end;
 local_trans(en, ToCode, Text, Context) ->
     {Text, trans(Text, ToCode, Context)};
