@@ -546,14 +546,6 @@ search(<<"autocomplete">>, Args, _OffsetLimit, Context) ->
     Cat = qarg(<<"cat">>, Args, undefined),
     IsEmptyCat = z_utils:is_empty(Cat),
     case trim(QueryText, Context) of
-        <<>> when not IsEmptyCat ->
-            #search_sql{
-                select="r.id, 1 AS rank",
-                from="rsc r",
-                order="r.modified desc",
-                cats=[{"r", Cat}],
-                tables=[{rsc,"r"}]
-            };
         <<"id:", S/binary>> ->
             find_by_id(S, true, Context);
         _ when IsEmptyCat ->
