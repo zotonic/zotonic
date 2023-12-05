@@ -27,7 +27,7 @@
     m_get/3,
 
     translate/4,
-    
+
     language_list_configured/1,
     language_list_enabled/1,
     language_list_editable/1,
@@ -111,7 +111,7 @@ m_get(_Vs, _Msg, _Context) ->
     Texts :: [ Text ] | Text,
     Text :: binary() | #trans{},
     Context :: z:context(),
-    Translations :: [ binary() ],
+    Translations :: [ binary() | undefined ],
     Reason :: term().
 translate(FromLanguage, ToLanguage, Texts, Context) ->
     translation_translate:translate(FromLanguage, ToLanguage, Texts, Context).

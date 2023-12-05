@@ -36,7 +36,7 @@
     Texts :: [ Text ] | Text,
     Text :: binary() | #trans{},
     Context :: z:context(),
-    Translations :: [ binary() ],
+    Translations :: [ binary() | undefined ],
     Reason :: term().
 translate(FromLanguage, ToLanguage, Texts, Context) ->
     FromCode = to_lang(FromLanguage, Context),
@@ -105,7 +105,7 @@ local_trans(FromCode, ToCode, #trans{ tr = Tr }, Context) ->
             {<<>>, <<>>};
         error when FromCode =:= en ->
             {en, FromText} = FromCodeText,
-            case z_trans:trans(FromText, ToCode, Context) of
+            case trans(FromText, ToCode, Context) of
                 undefined -> {FromText, undefined};
                 ToText -> {FromText, ToText}
             end;
@@ -118,9 +118,19 @@ local_trans(FromCode, ToCode, #trans{ tr = Tr }, Context) ->
             {<<>>, ToText}
     end;
 local_trans(en, ToCode, Text, Context) ->
-    {Text, z_trans:trans(Text, ToCode, Context)};
+    {Text, trans(Text, ToCode, Context)};
 local_trans(_FromCode, _ToCode, Text, _Context) ->
     {Text, undefined}.
+
+trans(Text, Language, Context) ->
+    case z_trans:translations(Text, Context) of
+        #trans{ tr = Tr } ->
+            proplists:get_value(Language, Tr);
+        _ ->
+            undefined
+    end.
+
+
 
 to_list(#trans{} = Tr) ->
     [Tr];
