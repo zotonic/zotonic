@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2023 Marc Worrell
+%% @copyright 2023 Driebit BV
 %% @doc Translate strings from one language to another. Try to use the .po files and
 %% optional translation services provided by other modules.
 %% @end
 
-%% Copyright 2023 Marc Worrell
+%% Copyright 2023 Driebit BV
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
