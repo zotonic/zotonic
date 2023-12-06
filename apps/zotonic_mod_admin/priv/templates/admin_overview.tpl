@@ -121,7 +121,7 @@
                     {% pager result=result dispatch="admin_overview_rsc" qargs pagelen=q.pagelen hide_single_page %}
                 {% endwith %}
             {% else %}
-                {% with m.search.paged[{query query_id=`admin_overview_query` is_published="all" qargs zsort="-modified" page=q.page pagelen=q.pagelen}] as result %}
+                {% with m.search.paged[{query query_id=`admin_overview_query` is_published=`all` qargs zsort="-modified" page=q.page pagelen=q.pagelen}] as result %}
                     {% catinclude "_admin_overview_list.tpl"
                                   m.category[q.qcat].is_a
                                   result=result
