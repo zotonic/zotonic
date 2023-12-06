@@ -409,6 +409,8 @@ map_value(<<"text">>, V) ->
     z_string:trim(z_convert:to_binary(V));
 map_value(<<"is_", _/binary>>, <<>>) ->
     undefined;
+map_value(<<"is_published", _/binary>>, All) when All =:= <<"all">>; All =:= all ->
+    <<"all">>;
 map_value(<<"is_", _/binary>>, V) when is_binary(V) ->
     z_convert:to_bool(V);
 map_value(_K, V) when is_binary(V) ->
