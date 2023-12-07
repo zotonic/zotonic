@@ -1354,6 +1354,8 @@ props_filter(<<"slug">>, Slug, Acc, _Context) ->
     end;
 props_filter(<<"is_", _/binary>> = B, P, Acc, _Context) ->
     Acc#{ B => z_convert:to_bool(P) };
+props_filter(<<"visible_for">> = B, P, Acc, _Context) ->
+    Acc#{ B => z_convert:to_integer(P) };
 props_filter(<<"custom_slug">> = B, P, Acc, _Context) ->
     Acc#{ B => z_convert:to_bool(P) };
 props_filter(<<"date_is_all_day">> = B, P, Acc, _Context) ->
