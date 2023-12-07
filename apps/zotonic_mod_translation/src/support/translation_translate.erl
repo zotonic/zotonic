@@ -103,7 +103,7 @@ local_trans(FromCode, ToCode, #trans{ tr = Tr }, Context) ->
     case lists:keyfind(ToCode, 1, Tr) of
         {_ToCode, ToText} ->
             {<<>>, ToText};
-        false when FromCode =:= en, FromCodeText =:= false ->
+        false when FromCodeText =:= false ->
             {<<>>, <<>>};
         false when FromCode =:= en ->
             {en, FromText} = FromCodeText,
@@ -111,8 +111,6 @@ local_trans(FromCode, ToCode, #trans{ tr = Tr }, Context) ->
                 undefined -> {FromText, undefined};
                 ToText -> {FromText, ToText}
             end;
-        false when FromCodeText =:= false ->
-            {<<>>, <<>>};
         false ->
             {_FromCode, FromText} = FromCodeText,
             {FromText, undefined}
