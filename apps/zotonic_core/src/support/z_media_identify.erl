@@ -530,6 +530,7 @@ extension(<<"font/woff2">>, _PreferExtension) -> <<".woff2">>;
 extension(<<"font/ttf">>, _PreferExtension) -> <<".ttf">>;
 extension(<<"font/eot">>, _PreferExtension) -> <<".eot">>;
 extension(<<"font/otf">>, _PreferExtension) -> <<".otf">>;
+extension(<<"image/heic">>, _PreferExtension) -> <<".heic">>;
 extension(Mime, undefined) ->
     Extensions = mimetypes:extensions(Mime),
     first_extension(Extensions);
@@ -563,6 +564,8 @@ guess_mime(File) ->
         <<".ttf">> -> <<"font/ttf">>;
         <<".eot">> -> <<"font/eot">>;
         <<".otf">> -> <<"font/otf">>;
+        <<".heic">> -> <<"image/heic">>;
+        <<".mjs">> -> <<"text/javascript">>;
         <<".", Ext/binary>> ->
             [Mime|_] = mimetypes:ext_to_mimes(Ext),
             maybe_map_mime(Mime);
