@@ -93,7 +93,8 @@ encoders() ->
         export_encoder_csv,
         export_encoder_xlsx,
         export_encoder_ics,
-        export_encoder_atom
+        export_encoder_atom,
+        export_encoder_json
     ].
 
 do_header(StreamState, Context) ->
@@ -127,7 +128,7 @@ is_empty(_) -> false.
 
 
 do_body(#stream_state{is_query=true, id=Id} = StreamState, Context) ->
-    #search_result{result=Ids} = z_search:search({'query', [{query_id, Id}]}, Context),
+    #search_result{all=Ids} = z_search:search_pager({'query', [{query_id, Id}]}, 1, Context),
     do_body_data(Ids, StreamState, Context);
 do_body(StreamState, Context) ->
     case z_notifier:first(#export_resource_data{

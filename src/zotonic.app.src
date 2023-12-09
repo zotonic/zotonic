@@ -19,6 +19,7 @@
                   poolboy, public_key, ssl,
                   jobs, gproc, filezcache, s3filez,
                   qdate,
-                  bcrypt, erlpass
+                  bcrypt, erlpass,
+                  jsxrecord
   ]}
  ]}.

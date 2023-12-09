@@ -904,6 +904,7 @@ postfix(N) -> integer_to_list(N).
 %% @doc Common properties, these are used by exporter and backup routines.
 common_properties(_Context) ->
     [
+        id,
         title,
 
         category_id,
