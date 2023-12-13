@@ -77,14 +77,13 @@ $.widget("ui.forminit",
                 } else if (control.nodeName === "TEXTAREA") {
                     control.value = args[name].shift() ?? "";
                 } else if (control.nodeName === "SELECT") {
-                    // Select correct option
-                    let index = 0;
+                    // Select correct option - TODO: handle multiple select
                     for (let k = 0; k < control.options.length; k++) {
                         if (args[name].includes(control.options[k].value)) {
-                            index = k;
+                            controls[i].selectedIndex = k;
+                            break;
                         }
                     }
-                    controls[i].selectedIndex = index;
                 }
             } else {
                 if (controls[i].nodeName === "INPUT") {
