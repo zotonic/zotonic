@@ -68,16 +68,7 @@
     {% block modal_footer %}
         <div class="modal-footer">
             {% if id.is_a.media %}
-                {% button class="btn btn-default pull-left"
-                          action={dialog_close}
-                          action={overlay_open id=id
-                                template="_overlay_image_edit.tpl"
-                                class="dark image-edit-overlay"
-                                level="top"
-                          }
-                          text=_"Image editor"
-                          title=_"Change the image rotation, crop and contrast."
-                %}
+                {% optional include "_image_edit_button.tpl" %}
             {% endif %}
             {% if id.is_editable and (m.acl.use.mod_admin_frontend or m.acl.use.mod_admin) %}
                 <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default pull-left">{_ Visit full edit page _}</a>
