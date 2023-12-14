@@ -16,6 +16,41 @@
 {% endwith %}
 
 {% javascript %}
+    cotonic.broker.subscribe("model/translation/post/disable", function(msg) {
+        const lang = msg.payload.language;
+
+        // Disable the language
+        $('#admin-translation-checkboxes input').each( function() {
+            if ($(this).attr('value') == lang) {
+                $(this).prop('checked', false).trigger('change');
+            }
+        });
+    });
+
+    cotonic.broker.subscribe("model/translation/post/submit", function(msg) {
+        const value = msg.payload.value;
+
+        if (value.action) {
+            if (value.action == 'dialog_close') {
+                z_dialog_close();
+            }
+        }
+
+        // Enable the language
+        $('#admin-translation-checkboxes input').each( function() {
+            if ($(this).attr('value') == value.dst) {
+                $(this).prop('checked', true).trigger('change');
+            }
+        });
+
+        // Fill in the new language following the method selected
+
+        // src
+        // dst
+        // method
+        console.log(value);
+    });
+
     $('#admin-translation-checkboxes input').on('change', function() {
         let enabled = {};
         let tabBars = $(".language-tabs");

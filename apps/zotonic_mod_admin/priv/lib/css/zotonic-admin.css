@@ -1516,6 +1516,15 @@ th a:hover .arrow.down {
   color: black;
   background: none;
 }
+.minimalTabs ul.nav-tabs li.tab-action > a:hover,
+.minimalTabs li.tab-action > a:hover,
+.nav.nav-pills ul.nav-tabs li.tab-action > a:hover,
+.nav.nav-pills li.tab-action > a:hover,
+.widget ul.nav-tabs ul.nav-tabs li.tab-action > a:hover,
+.widget ul.nav-tabs li.tab-action > a:hover {
+  color: black;
+  border-bottom-color: transparent;
+}
 .minimalTabs ul.nav-tabs.nav-justified,
 .minimalTabs.nav-justified,
 .nav.nav-pills ul.nav-tabs.nav-justified,

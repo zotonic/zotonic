@@ -41,7 +41,7 @@
     	<div class="rscform-columns">
     		<div id="poststuff">
                 <div id="translation-tabs" class="minimalTabs">
-                    {% include "_admin_translation_tabs.tpl" prefix=#prefix r_language=r_language %}
+                    {% include "_admin_translation_tabs.tpl" prefix=#prefix r_language=r_language top %}
                 </div>
 
                 {% block admin_edit_form_top %}{% endblock %}
