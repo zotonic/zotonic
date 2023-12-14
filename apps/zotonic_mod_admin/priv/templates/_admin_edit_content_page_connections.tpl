@@ -18,7 +18,7 @@
 
 {% with predicate_ids|default:id.predicates_edit as pred_shown %}
     {% for name, p in m.predicate %}
-        {% if p.id|member:pred_shown %}
+        {% if p.id|member:pred_shown and name != 'refers' %}
            {% ifnotequal name "depiction" %}
                <h4>{{ p.title }}</h4>
 
