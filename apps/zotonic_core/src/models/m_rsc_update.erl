@@ -802,7 +802,7 @@ update_transaction_fun_insert(#rscupd{id = insert_rsc} = RscUpd, Props, _Raw, Up
     % Create dummy resource with correct creator, category and content group.
     % This resource will be updated with the other properties.
     InsertId = case maps:get(<<"creator_id">>, UpdateProps, undefined) of
-                   self ->
+                   <<"self">> ->
                         {ok, InsId} = z_db:insert(
                             rsc,
                             InsProps#{ <<"creator_id">> => undefined },
@@ -1639,4 +1639,3 @@ update_page_path_log(RscId, OldProps, NewProps, Context) ->
             z_db:q("INSERT INTO rsc_page_path_log(id, page_path) VALUES ($1, $2)", [RscId, Old], Context),
             ok
     end.
-
