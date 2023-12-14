@@ -157,12 +157,6 @@ ul.media {
         h2 {
             margin-bottom: 10px;
         }
-        .admin-btn-category {
-            font-size: 12px;
-        }
-        .admin-btn-category {
-            margin-top: -2px;
-        }
         .admin-edit-dates {
             &,
             a {
@@ -176,7 +170,49 @@ ul.media {
             padding-left: @_leaderImageWidth + 20px;
         }
     }
+
+    .rscform-columns {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        grid-template-rows: auto auto;
+        grid-gap: @baseMargin;
+
+        #poststuff {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        #sidebar {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        @media (max-width: @breakpointMediumMaxWidth) {
+            grid-template-columns: 1fr;
+
+            #poststuff {
+                grid-column: 1;
+                grid-row: 1;
+            }
+
+            #sidebar {
+                grid-column: 1;
+                grid-row: 2;
+            }
+
+        }
+    }
 }
+
+#translation-tabs {
+    position: sticky;
+    top: @navbar-height - 4px;
+    z-index: 1;
+
+    margin-bottom: 4px;
+    background-color: @backgroundColorLighter;
+}
+
 
 /* small image in admin edit */
 img.mediaclass-admin-leader-image {
