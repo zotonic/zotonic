@@ -26,6 +26,8 @@
 -export([
     m_get/3,
 
+    translate/4,
+
     language_list_configured/1,
     language_list_enabled/1,
     language_list_editable/1,
@@ -39,6 +41,7 @@
     sort/1
 ]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
@@ -87,8 +90,32 @@ m_get([ <<"english_name">>, Code | Rest ], _Msg, _Context) ->
     {ok, {z_language:english_name(Code), Rest}};
 m_get([ <<"properties">>, Code | Rest ], _Msg, _Context) ->
     {ok, {z_language:properties(Code), Rest}};
+m_get([ <<"translate">>, FromCode, ToCode | Rest ], #{ payload := Payload }, Context) ->
+    case translate(FromCode, ToCode, Payload, Context) of
+        {ok, Result} ->
+            {ok, {Result, Rest}};
+        {error, _} = Error ->
+            Error
+    end;
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
+
+
+%% @doc Translate one or more strings from one language to another. The strings
+%% can be trans records, a single string or a list of strings. If the source language
+%% is 'en' then the .po files are consulted for a preferred translation.
+%% Both the from and to language must be configured as editable languages.
+-spec translate(FromLanguage, ToLanguage, Texts, Context) -> {ok, Translations} | {error, Reason} when
+    FromLanguage :: z_language:language(),
+    ToLanguage :: z_language:language(),
+    Texts :: [ Text ] | Text,
+    Text :: binary() | #trans{},
+    Context :: z:context(),
+    Translations :: [ binary() | undefined ],
+    Reason :: term().
+translate(FromLanguage, ToLanguage, Texts, Context) ->
+    translation_translate:translate(FromLanguage, ToLanguage, Texts, Context).
+
 
 language_list_configured(Context) ->
     Default = z_language:default_language(Context),
