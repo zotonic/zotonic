@@ -831,6 +831,11 @@ input[type='time'] {
   width: auto;
   display: inline;
 }
+#sidebar-publish-page {
+  position: sticky;
+  top: 46px;
+  z-index: 1;
+}
 #sidebar-date-range .tab-content {
   overflow: visible;
 }
@@ -852,10 +857,6 @@ input[type='time'] {
   -moz-box-shadow: none;
   box-shadow: none;
 }
-.scrolled .admin-navbar-fixed-save {
-  display: block;
-  opacity: 1.0;
-}
 div + .admin-edit-no-features {
   display: none;
 }
@@ -873,6 +874,10 @@ div + .admin-edit-no-features {
     top: 0;
     right: 0;
     left: 0;
+  }
+  .scrolled .admin-navbar-fixed-save {
+    display: block;
+    opacity: 1.0;
   }
 }
 .form-field-error,

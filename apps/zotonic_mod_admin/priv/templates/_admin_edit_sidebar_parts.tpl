@@ -1,7 +1,7 @@
 {% include "_admin_edit_floating_buttons.tpl" %}
 
 <div> {# also sidebar #}
-    {% include "_admin_edit_content_publish.tpl" headline="simple" %}
+    {% include "_admin_edit_content_publish.tpl" header="none" %}
 
     {% include "_admin_edit_content_note.tpl" %}
 
@@ -9,16 +9,43 @@
         {% include "_admin_edit_meta_features.tpl" %}
     {% endif %}
 
-    {% include "_admin_edit_content_acl.tpl" %}
-
     {% if not id.is_a.meta %}
-        {% include "_admin_edit_content_pub_period.tpl" %}
         {% include "_admin_edit_content_date_range.tpl" show_header %}
-        {% optional include "_admin_edit_content_timezone.tpl" %}
     {% endif %}
 
-    {% all catinclude "_admin_edit_sidebar.tpl" id languages=languages %}
-
-    {% include "_admin_edit_content_page_connections.tpl" %}
-    {% include "_admin_edit_content_page_referrers.tpl"%}
+    <div>
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#connections" aria-controls="connections" role="tab" data-toggle="tab">
+                    {_ Connected to _}
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="#referrers" aria-controls="referrers" role="tab" data-toggle="tab">
+                    {_ Connected from _}
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="#tools" aria-controls="tools" role="tab" data-toggle="tab">
+                    <i class="fa fa-cog"></i> {_ Settings &amp; more _}
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="connections">
+                {% include "_admin_edit_content_page_connections.tpl" %}
+            </div>
+            <div role="tabpanel" class="tab-pane" id="referrers">
+                {% include "_admin_edit_content_page_referrers.tpl"%}
+            </div>
+            <div role="tabpanel" class="tab-pane" id="tools">
+                {% include "_admin_edit_content_acl.tpl" %}
+                {% if not id.is_a.meta %}
+                    {% include "_admin_edit_content_pub_period.tpl" %}
+                {% endif %}
+                {% optional include "_admin_edit_content_timezone.tpl" %}
+                {% all catinclude "_admin_edit_sidebar.tpl" id languages=languages %}
+            </div>
+        </div>
+    </div>
 </div>
