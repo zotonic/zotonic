@@ -8,7 +8,7 @@
 
     {% javascript %}
         $('#language-add').on('click', (e) => {
-            e.stopImmediatePropagation();
+            e.preventDefault();
             z_editor_save($('body'));
 
             const active = $('#rscform .language-tabs li.active').attr('lang');

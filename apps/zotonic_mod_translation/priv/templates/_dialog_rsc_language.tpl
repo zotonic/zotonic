@@ -13,6 +13,7 @@
                     {% wire id=#del.code
                             action={confirm
                                 title=_"Delete translation"
+                                level=1
                                 text=[
                                     _"Are you sure you want to delete:",
                                     " <b>", lang.name,
@@ -29,6 +30,7 @@
                                     "$('#", #current, " li[lang=", lang.code_bin, "]').remove();",
                                     "$('#form-new-language select[name=src] option[value=", lang.code_bin, "]').remove();"
                                 ]}
+                                action={dialog_close}
                             }
                     %}
                 </li>
