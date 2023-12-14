@@ -103,9 +103,11 @@ limitations under the License.
         }, 200);
     });
 
-    $(window).bind('keydown.ctrl_s keydown.meta_s', function(event) {
-        event.preventDefault();
-        $('#rscform').submit();
+    window.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+            event.preventDefault();
+            $('#rscform').submit();
+        }
     });
 
 })(jQuery);
