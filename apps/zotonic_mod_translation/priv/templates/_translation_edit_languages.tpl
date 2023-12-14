@@ -29,6 +29,8 @@
 
     cotonic.broker.subscribe("model/translation/post/submit", function(msg) {
         const value = msg.payload.value;
+        const src = value.src.replace(/[^a-z0-9A-Z-]/g, '');
+        const dst = value.dst.replace(/[^a-z0-9A-Z-]/g, '');
 
         if (value.action) {
             if (value.action == 'dialog_close') {
@@ -38,12 +40,45 @@
 
         // Enable the language
         $('#admin-translation-checkboxes input').each( function() {
-            if ($(this).attr('value') == value.dst) {
+            if ($(this).attr('value') == dst) {
                 $(this).prop('checked', true).trigger('change');
+
+                $('.language-tabs li[lang='+dst+'] a').click();
+                $('.tab-pane.language-'+dst).addClass('active');
             }
         });
 
         // Fill in the new language following the method selected
+
+        switch (value.method) {
+            case 'copy':
+                // Copy src language to the dst language
+                $('.tab-pane.edit-language-' + dst).each(function() {
+                    let $form = $(this).closest("form");
+                    $("input,textarea", this).each(function() {
+                        if ($.trim($(this).val()) == '') {
+                            let from_name = $(this).attr('name').split('$')[0] + '$' + src;
+                            let from_val = $form.find('[name="' + from_name + '"]').val();
+                            if ($(this).hasClass('z_editor-installed')) {
+                                z_editor_remove($(this));
+                                $(this).val(from_val);
+                                z_editor_add($(this));
+                            } else {
+                                $(this).val(from_val);
+                            }
+                        }
+                    });
+                });
+                break;
+            case 'translate':
+                // 1. Collect all translatable strings from src
+                // 2. Make index
+                // 3. Call translation api with (src, dst) language pair
+                // 4. Use index to update the input fields
+                break;
+            default:
+                break;
+        }
 
         // src
         // dst

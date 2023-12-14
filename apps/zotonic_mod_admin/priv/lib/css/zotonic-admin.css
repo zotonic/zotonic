@@ -1952,8 +1952,7 @@ ul.tree-list.connections-list {
   margin-top: 18px;
 }
 .admin-container .widget .language-tabs {
-  height: 0;
-  overflow: hidden;
+  display: none;
 }
 .widget .widget-content {
   position: relative;
