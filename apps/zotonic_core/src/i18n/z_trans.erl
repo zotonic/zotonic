@@ -172,8 +172,6 @@ lookup_fallback(#trans{} = Text, Lang, Context) when is_binary(Lang) ->
     case z_language:to_language_atom(Lang) of
         {ok, Code} ->
             lookup_fallback(Text, [Code], Context);
-        {error, _} when is_binary(Text) ->
-            Text;
         {error, _} ->
             undefined
     end;
