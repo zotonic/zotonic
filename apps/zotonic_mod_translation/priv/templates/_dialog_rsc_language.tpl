@@ -94,8 +94,6 @@
             </div>
         </div>
 
-        <br>
-
         <p class="help-block">
             {% if m.translation.has_translation_service %}
                 {_ If you automatically translate texts then your texts will be sent to the remote translation service for automatic translation. _}
