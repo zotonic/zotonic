@@ -1,10 +1,16 @@
 {# Called from _admin_translation_tabs.tpl - Appends to the language tabs on top of the edit window #}
-{% if top %}
-    <li class="tab-action">
-        <a href="#" role="button" id="language-add" title="{_ Add a new language or change languages. _}">
-            + {_ Translate _}
+{% if top or button %}
+    {% if top %}
+        <li class="tab-action">
+            <a href="#" role="button" id="language-add" title="{_ Add a new language or change languages. _}">
+                + {_ Translate _}
+            </a>
+        </li>
+    {% else %}
+        <a class="btn btn-primary" href="#" role="button" id="language-add" title="{_ Add a new language or change languages. _}">
+            {_ Add translation _}
         </a>
-    </li>
+    {% endif %}
 
     {% javascript %}
         $('#language-add').on('click', (e) => {

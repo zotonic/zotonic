@@ -1,20 +1,25 @@
 {% block language_options %}
 {% with m.rsc[id].language as r_lang %}
 <div class="form-group">
-    <div id="admin-translation-checkboxes">
+    <ul id="admin-translation-checkboxes">
         {% for code, lang in m.translation.language_list_editable %}
-            <label class="checkbox-inline">
-    	    <input type="checkbox" id="{{ #language.code }}" name="language[]" value="{{ code }}"
-    	           {% if code|member:r_lang or (not r_lang and z_language == code) %}checked="checked"{% endif %} />
-    	    <span {% include "_language_attrs.tpl" language=code %}>{{ lang.name }}</span>
+            {% with code|member:r_lang or (not r_lang and z_language == code) as checked %}
+            <label class="checkbox">
+        	    <input type="checkbox" id="{{ #language.code }}" name="language[]" value="{{ code }}"
+    	           {% if checked %}checked="checked"{% endif %} />
+    	        <span {% include "_language_attrs.tpl" language=code %}>{{ lang.name }}</span>
+                <span class="text-muted">&ndash; {% if code != 'en' %}{{ lang.name_en }}{% endif %} ({{ code }})</span>
             </label>
+            {% endwith%}
         {% empty %}
             <div class="checkbox"><label><input type="checkbox" checked="checked" disabled="disabled"> {{ z_language }}</label></div>
         {% endfor %}
-    </div>
+    </ul>
 </div>
 {% endwith %}
+{% endblock %}
 
+{% block language_wires %}
 {% wire name="translation-done"
         action={alert
             title=_"Ready"
@@ -44,6 +49,7 @@
             is_danger
         }
 %}
+{% endblock %}
 
 {% javascript %}
     cotonic.broker.subscribe("model/translation/post/disable", function(msg) {
@@ -216,5 +222,3 @@
 
     });
 {% endjavascript %}
-
-{% endblock %}

@@ -97,7 +97,13 @@
 				        {_ Language _}
 				    </div>
 				    <div class="widget-content">
+				    	<p class="help-block">{_ Enabled or disable language tabs. _}</p>
 						{% optional include "_translation_edit_languages.tpl" %}
+
+				    	<p class="help-block">{_ Add a translation or copy texts between languages. _}</p>
+						<div class="padding" style="padding-top: 0">
+							{% include "_admin_translation_tabs_extra.tpl" button %}
+						</div>
 					</div>
 				</div>
 			</div>

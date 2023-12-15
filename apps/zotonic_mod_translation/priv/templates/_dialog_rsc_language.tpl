@@ -38,6 +38,11 @@
         {% endfor %}
     </ul>
 
+    <p class="help-block">
+        {_ Removing a language will hide it on the edit form. If the page is saved then the translation will be deleted from the database. _}
+    </p>
+
+
     <hr>
 
     <p>{_ Add a new translation _}:</p>
@@ -88,6 +93,15 @@
                 </div>
             </div>
         </div>
+
+        <br>
+
+        <p class="help-block">
+            {% if m.translation.has_translation_service %}
+                {_ If you automatically translate texts then your texts will be sent to the remote translation service for automatic translation. _}
+            {% endif %}
+            {_ Copying and translating texts will never overwrite an existing text and can be used to fill in blank text fields in the desitination language. _}
+        </p>
 
         <div class="modal-footer">
             {% button class="btn btn-default"
