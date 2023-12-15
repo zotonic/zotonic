@@ -86,6 +86,16 @@
 
     <div class="form-group">
         <label class="checkbox-inline">
+            <input type="checkbox" name="is_connections_hide" {% if id.is_connections_hide %}checked="checked"{% endif %} value="1">
+            {_ Do not show on the connections list on the resource edit page. _}
+        </label>
+        <div class="help-block">
+            {_ Some predicates are mostly for internal purposes. Check this if you don’t want to show this predicate on the <em>Connected to</em> list. _}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="checkbox-inline">
             <input type="checkbox" name="reversed" {% if id.reversed %}checked="checked"{% endif %} value="1">
             {_ The direction (from/to) of this predicate is reversed from the normal definition. _}
         </label>

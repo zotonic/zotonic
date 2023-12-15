@@ -79,7 +79,9 @@
                 <div class="form-group">
                     <label>{_ Method _}</label>
                     <select name="method" class="form-control" required>
-                        <option value="translate">{_ Automatic translation _}</option>
+                        {% if m.translation.has_translation_service %}
+                            <option value="translate">{_ Automatic translation _}</option>
+                        {% endif %}
                         <option value="copy">{_ Copy texts _}</option>
                         <option value="empty">{_ Leave texts empty _}</option>
                     </select>

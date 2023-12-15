@@ -15,6 +15,36 @@
 </div>
 {% endwith %}
 
+{% wire name="translation-done"
+        action={alert
+            title=_"Ready"
+            text = [
+                _"All texts were translated.",
+                "<br><br>",
+                _"Please check the translations and save the page when you are ready."
+            ]
+        }
+%}
+
+{% wire name="translation-incomplete"
+        action={alert
+            title=_"Incomplete translation"
+            text = [
+                _"Not all texts could be translated.",
+                _"The source language text was used for the missing translations.",
+                "<br><br>",
+                _"Please check the translations and save the page when you are ready."
+            ]
+        }
+%}
+
+{% wire name="translation-error"
+        action={alert
+            text = _"There was an error translating the texts. Please try again later."
+            is_danger
+        }
+%}
+
 {% javascript %}
     cotonic.broker.subscribe("model/translation/post/disable", function(msg) {
         const lang = msg.payload.language;
@@ -26,6 +56,58 @@
             }
         });
     });
+
+    function fill_texts(src, dst, mapping) {
+        let is_complete = true;
+
+        $('.tab-pane.edit-language-' + dst).each(function() {
+            const $form = $(this).closest("form");
+            $("input,textarea", this).each(function() {
+                if ($(this).val().trim() == '') {
+                    const from_name = $(this).attr('name').split('$')[0] + '$' + src;
+                    if (!from_name.endsWith("_json")) {
+                        const from_val = $form.find('[name="' + from_name + '"]').val().trim();
+
+                        if (from_val !== '') {
+                            let to_val = from_val;
+                            if (mapping[from_val]) {
+                                to_val = mapping[from_val];
+                            } else {
+                                is_complete = false;
+                            }
+                            if ($(this).hasClass('z_editor-installed')) {
+                                z_editor_remove($(this));
+                                $(this).val(to_val);
+                                z_editor_add($(this));
+                            } else {
+                                $(this).val(to_val);
+                            }
+                        }
+                    }
+                }
+            });
+        });
+        return is_complete;
+    }
+
+    function collect_texts(src, dst) {
+        const texts = [];
+        $('.tab-pane.edit-language-' + dst).each(function() {
+            const $form = $(this).closest("form");
+            $("input,textarea", this).each(function() {
+                if ($.trim($(this).val()) == '') {
+                    const from_name = $(this).attr('name').split('$')[0] + '$' + src;
+                    if (!from_name.endsWith("_json")) {
+                        const from_val = $form.find('[name="' + from_name + '"]').val().trim();
+                        if (from_val !== '') {
+                            texts.push(from_val);
+                        }
+                    }
+                }
+            });
+        });
+        return texts;
+    }
 
     cotonic.broker.subscribe("model/translation/post/submit", function(msg) {
         const value = msg.payload.value;
@@ -48,42 +130,40 @@
             }
         });
 
-        // Fill in the new language following the method selected
-
         switch (value.method) {
             case 'copy':
-                // Copy src language to the dst language
-                $('.tab-pane.edit-language-' + dst).each(function() {
-                    let $form = $(this).closest("form");
-                    $("input,textarea", this).each(function() {
-                        if ($.trim($(this).val()) == '') {
-                            let from_name = $(this).attr('name').split('$')[0] + '$' + src;
-                            let from_val = $form.find('[name="' + from_name + '"]').val();
-                            if ($(this).hasClass('z_editor-installed')) {
-                                z_editor_remove($(this));
-                                $(this).val(from_val);
-                                z_editor_add($(this));
-                            } else {
-                                $(this).val(from_val);
-                            }
-                        }
-                    });
-                });
+                fill_texts(src, dst, []);
                 break;
             case 'translate':
-                // 1. Collect all translatable strings from src
-                // 2. Make index
-                // 3. Call translation api with (src, dst) language pair
-                // 4. Use index to update the input fields
+                z_mask('body');
+                const texts = collect_texts(src, dst);
+                cotonic.broker.call("bridge/origin/model/translation/get/translate", {
+                        from: src,
+                        to: dst,
+                        texts: texts
+                    }).then((msg) => {
+                        if (msg.payload.status == 'ok') {
+                            const result = msg.payload.result;
+                            const mapping = {};
+                            console.log(result);
+                            for (let i=0; i < result.length; i++) {
+                                console.log(i);
+                                mapping[result[i].text] = result[i].translation;
+                            }
+                            if (fill_texts(src, dst, mapping)) {
+                                z_event("translation-done");
+                            } else {
+                                z_event("translation-incomplete");
+                            }
+                        } else {
+                            z_event("translation-error");
+                        }
+                        z_unmask('body');
+                    });
                 break;
             default:
                 break;
         }
-
-        // src
-        // dst
-        // method
-        console.log(value);
     });
 
     $('#admin-translation-checkboxes input').on('change', function() {

@@ -766,7 +766,8 @@ manage_schema(_Version, Context) ->
                         {nl, <<"Refereert">>}
                     ]
                 },
-                <<"is_object_noindex">> => true
+                <<"is_object_noindex">> => true,
+                <<"is_connections_hide">> => true
             }, []}
         ]
     }.
