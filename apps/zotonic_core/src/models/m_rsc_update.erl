@@ -802,6 +802,13 @@ update_transaction_fun_insert(#rscupd{id = insert_rsc} = RscUpd, Props, _Raw, Up
     % Create dummy resource with correct creator, category and content group.
     % This resource will be updated with the other properties.
     InsertId = case maps:get(<<"creator_id">>, UpdateProps, undefined) of
+                   self ->
+                        {ok, InsId} = z_db:insert(
+                            rsc,
+                            InsProps#{ <<"creator_id">> => undefined },
+                            Context),
+                        1 = z_db:q("update rsc set creator_id = id where id = $1", [InsId], Context),
+                        InsId;
                    <<"self">> ->
                         {ok, InsId} = z_db:insert(
                             rsc,
@@ -859,6 +866,8 @@ update_transaction_fun_insert(#rscupd{id = Id} = RscUpd, Props, Raw, UpdateProps
     Props2 = case z_acl:is_admin(Context) of
                  true ->
                      case maps:get(<<"creator_id">>, UpdateProps, undefined) of
+                         self ->
+                             Props#{ <<"creator_id">> => Id };
                          <<"self">> ->
                              Props#{ <<"creator_id">> => Id };
                          CreatorId when is_integer(CreatorId) ->
