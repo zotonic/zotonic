@@ -12,6 +12,8 @@
 
 {% block widget_content %}
     <div class="form-group">
-        <a href="{% url admin_merge_rsc id=id %}">{_ Merge with another page … _}</a>
+        <a href="{% url admin_merge_rsc id=id %}" class="btn btn-default btn-sm">
+        <i class="glyphicon glyphicon glyphicon-retweet"></i> {_ Merge with another page … _}
+        </a>
     </div>
 {% endblock %}
