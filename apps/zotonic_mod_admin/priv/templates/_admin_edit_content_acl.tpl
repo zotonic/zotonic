@@ -13,7 +13,8 @@
 
 {% block widget_content %}
     <div class="form-group">
-
+        <h4>{_ Page settings _}</h4>
+        
         <div class="row">
             <div class="col-md-6">
 
