@@ -835,7 +835,7 @@ ul.media > li .bottom .caption a {
 #translation-tabs {
   position: sticky;
   top: 46px;
-  z-index: 1;
+  z-index: 10;
   margin-bottom: 4px;
   background-color: #f2f2f2;
 }
@@ -906,6 +906,9 @@ div + .admin-edit-no-features {
   .scrolled .admin-navbar-fixed-save {
     display: block;
     opacity: 1.0;
+  }
+  body.scrolled #translation-tabs {
+    top: 114px;
   }
 }
 .form-field-error,
@@ -2158,6 +2161,9 @@ ul.tree-list.connections-list {
 .widget .navbar {
   background-color: #dadada;
   padding: 10px 0;
+}
+.admin-container .widget.translations .widget-content {
+  padding-top: 0;
 }
 .widget.widget-active:not(.widget-expanded) .widget-header:hover {
   -webkit-transition: background 0.1s ease-in-out;
