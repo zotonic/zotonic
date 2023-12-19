@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-12-13 17:03\n"
+"PO-Revision-Date: 2023-12-19 17:06\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -140,13 +140,6 @@ msgstr "Bestand met toegangsregels"
 msgid "ACL user group"
 msgstr "Gebruikersgroep"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:8
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:8
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:107
-#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_edit_basics.person.tpl:7
-msgid "Access control"
-msgstr "Toegangsrechten"
-
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:550
 msgid "Access control rules"
 msgstr "Toegangsregels"
@@ -202,7 +195,7 @@ msgid "Are you sure you want to restore all ACL rules to their currently publish
 msgstr "Weet je zeker dat je alle regels wilt terugzetten vanaf de gepubliceerde versie?"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:160./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:77
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:171./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:77./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:70./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:259./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:282./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:85./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:171./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:77./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:70./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:259./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:282./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:85./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38./apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:52
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:21
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:92
@@ -221,7 +214,7 @@ msgstr "Weet je zeker dat je alle regels wilt terugzetten vanaf de gepubliceerde
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:69./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:88./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:39./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:51./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26./apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:141./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:149
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:158./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:113./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:85./apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:49./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:81./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:14./apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6./apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:106
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:189
 msgid "Cancel"
 msgstr "Annuleer"
@@ -234,11 +227,11 @@ msgstr "Annuleer"
 msgid "Category"
 msgstr "Categorie"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:6./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:29
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:17
 msgid "Category &amp; Content group"
 msgstr "Categorie en paginagroep"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:26
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:14
 msgid "Change category and/or content group..."
 msgstr "Verander categorie en/of paginagroep..."
 
@@ -261,11 +254,11 @@ msgstr "Configuratie veranderd."
 msgid "Close"
 msgstr "Sluit"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:45
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:33
 msgid "Collaboration group managers"
 msgstr "Samenwerkingsgroep beheerders"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:44
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:32
 msgid "Collaboration group members"
 msgstr "Samenwerkingsgroep leden"
 
@@ -312,13 +305,8 @@ msgstr "Regels voor leden en beheerders van samenwerkingsgroepen"
 msgid "Could not move to collaboration group."
 msgstr "Kon niet naar de samenwerkingsgroep verplaatsen."
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:8
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:8
-msgid "Define who can see or edit this page."
-msgstr "Bepaal wie deze pagina mag bekijken en bewerken."
-
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:51./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:168
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:41./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:64./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:83./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:18./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:21./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:25./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:110
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:41./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:64./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:83./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:18./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:21./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:25./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:110
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:53
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:65
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_delete_username.tpl:8./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:25./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:30./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:53./apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:186
@@ -329,6 +317,7 @@ msgstr "Bepaal wie deze pagina mag bekijken en bewerken."
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:249
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:19./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:34
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125./apps/zotonic_mod_survey/src/mod_survey.erl:129
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:24
 msgid "Delete"
 msgstr "Verwijder"
 
@@ -444,11 +433,11 @@ msgstr "Maximum bestandsgrootte per gebruikersgroep. Dit beperkt uploads voor ge
 msgid "Maximum upload size"
 msgstr "Maximum bestandsgrootte"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:40
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:28
 msgid "Members"
 msgstr "Leden"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:42
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:30
 msgid "Members of same user group"
 msgstr "Leden van dezelfde groep"
 
@@ -475,18 +464,6 @@ msgstr "Verplaats alle gebruikers in deze gebruikersgroepen naar:"
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:23./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:31
 msgid "Move to another"
 msgstr "Verplaats naar een andere"
-
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:8
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:6
-#: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity.tpl:10
-#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:6
-#: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:8
-#: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:13
-#: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:6
-#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:8
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:6./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:11
-msgid "Need more help?"
-msgstr "Meer hulp nodig?"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list.tpl:15
 msgid "No ACL rules"
@@ -524,7 +501,7 @@ msgstr "Of klik <strong>Verwijder alle gebruikersgroepen</strong> om alle gebrui
 msgid "Own content"
 msgstr "Eigen pagina’s"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:39
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:27
 msgid "People who can view this page"
 msgstr "Mensen die deze pagina kunnen bekijken"
 
@@ -536,11 +513,11 @@ msgstr "Permissies"
 msgid "Please select a collaboration_group"
 msgstr "Selecteer een samenwerkingsgroep"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:46
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:34
 msgid "Private"
 msgstr "Privé"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:50
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:38
 msgid "Private properties are email, phone, visiting address, and date range."
 msgstr "Privé waardes zijn e-mail, telefoon, bezoekadres en datumbereik."
 
@@ -566,9 +543,9 @@ msgid "Reverted rules"
 msgstr "Regels zijn teruggezet"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:161./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:64
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:78./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:29
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:78./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:17./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:29
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:125./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:131./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:30
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:102
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:126
@@ -594,7 +571,7 @@ msgstr "Selecteer categorie"
 msgid "Show"
 msgstr "Toon"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:35
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:23
 msgid "Show private properties to"
 msgstr "Toon privégegevens aan"
 
@@ -657,7 +634,7 @@ msgstr "Ze worden beheerd door hun eigen beheerder en gebruiken de onderstaande 
 msgid "This can not be undone."
 msgstr "Dit kan niet ongedaan worden gemaakt."
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:19
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:7
 msgid "This page is a"
 msgstr "Deze pagina is een"
 
@@ -753,7 +730,7 @@ msgstr "verwijder"
 msgid "edit (acl action)"
 msgstr "bewerk"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:21
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:9
 msgid "in the group"
 msgstr "in de groep"
 
@@ -836,6 +813,12 @@ msgstr "Over categorieën"
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:96
 msgid "About {n} items found."
 msgstr "Ongeveer {n} items gevonden."
+
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:62
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:113
+#: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_edit_basics.person.tpl:7
+msgid "Access control"
+msgstr "Toegangsrechten"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections_list.tpl:53./apps/zotonic_mod_admin/priv/templates/_admin_edit_depiction.tpl:24
 msgid "Add a connection:"
@@ -969,7 +952,7 @@ msgstr "Authenticatie"
 msgid "Authoritative"
 msgstr "Gezaghebbend"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:170
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:170
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:28./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:23./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:62./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:38
 msgid "Back"
 msgstr "Terug"
@@ -1004,11 +987,11 @@ msgstr "De caches zijn geleegd."
 msgid "Category name:"
 msgstr "Categorienaam:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:31./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:39
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:35./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:43
 msgid "Category:"
 msgstr "Categorie:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:30
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:34
 msgid "Change category"
 msgstr "Verander categorie"
 
@@ -1082,6 +1065,14 @@ msgstr "Verbind"
 msgid "Connect a page"
 msgstr "Paginaconnectie maken"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:25
+msgid "Connected from"
+msgstr ""
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:20
+msgid "Connected to"
+msgstr ""
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:134./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:57
 msgid "Connections"
 msgstr "Verbindingen"
@@ -1134,7 +1125,7 @@ msgstr "Gemaakt door mij"
 msgid "Created on"
 msgstr "Gemaakt op"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:8
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:12
 msgid "Created:"
 msgstr "Aangemaakt:"
 
@@ -1178,7 +1169,7 @@ msgstr "Datumbereiken"
 msgid "Date start/end"
 msgstr "Datum begin/einde"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:46
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:23
 msgid "Delete if no other page is connected to this page."
 msgstr "Verwijder als geen andere pagina’s een connectie met deze pagina hebben."
 
@@ -1190,15 +1181,15 @@ msgstr "Verwijder indien niet meer verbonden"
 msgid "Delete selected pages"
 msgstr "Verwijder geselecteerde pagina's"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:72
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:51
 msgid "Delete this page."
 msgstr "Verwijder deze pagina."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:18
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:19
 msgid "Deleted."
 msgstr "Verwijderd."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:48./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:222./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:226./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:63./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:67
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:25./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:222./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:226./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:63./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:67
 msgid "Dependent"
 msgstr "Afhankelijk"
 
@@ -1245,7 +1236,7 @@ msgstr "Download"
 msgid "Drag to change position"
 msgstr "Sleep om de positie te wijzigen"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:76./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:79
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:38
 msgid "Duplicate"
 msgstr "Dupliceer"
 
@@ -1253,7 +1244,7 @@ msgstr "Dupliceer"
 msgid "Duplicate page"
 msgstr "Dupliceer pagina"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:76./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:81
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:34./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:40
 msgid "Duplicate this page."
 msgstr "Dupliceer deze pagina."
 
@@ -1388,7 +1379,7 @@ msgstr "Bestaande pagina's"
 msgid "Failed to download the file."
 msgstr "Downloaden van het bestand is mislukt."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:38./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:189./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:193
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:52./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:189./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:193
 msgid "Featured"
 msgstr "Prominent"
 
@@ -1481,10 +1472,6 @@ msgstr "Van"
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:5
 msgid "Function"
 msgstr "Functie"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:18
-msgid "Go back."
-msgstr "Ga terug."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:126
 msgid "Has connections with predicate"
@@ -1718,7 +1705,7 @@ msgstr "Bewerkt door"
 msgid "Modified on"
 msgstr "Bewerkt op"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:13
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:17
 msgid "Modified:"
 msgstr "Bewerkt:"
 
@@ -1744,6 +1731,17 @@ msgstr "Naam"
 msgid "Name for invoices"
 msgstr "Naam voor facturen"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_meta_features.tpl:6
+#: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity.tpl:10
+#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:6
+#: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:8
+#: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:13
+#: apps/zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:6
+#: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:8
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:6./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:11
+msgid "Need more help?"
+msgstr "Meer hulp nodig?"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:62
 msgid "Network Connections"
 msgstr "Netwerkverbindingen"
@@ -1760,7 +1758,7 @@ msgstr "Volgende &gt;"
 msgid "Next due"
 msgstr "Volgende"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:61
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:34
 msgid "Next in category:"
 msgstr "Volgende in categorie:"
 
@@ -1843,6 +1841,10 @@ msgstr "Paginapad"
 msgid "Page referrers"
 msgstr "Pagina-verwijzers"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:5./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:13
+msgid "Page settings"
+msgstr ""
+
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:3./apps/zotonic_mod_admin/src/mod_admin.erl:100
 msgid "Pages"
 msgstr "Pagina's"
@@ -1888,7 +1890,7 @@ msgstr "Predicaat"
 msgid "Preview"
 msgstr "Voorbeeld"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:57
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:30
 msgid "Previous in category:"
 msgstr "Vorige in categorie:"
 
@@ -1896,11 +1898,11 @@ msgstr "Vorige in categorie:"
 msgid "Proceed with care:"
 msgstr "Ga voorzichtig te werk:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:43
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:20
 msgid "Protect"
 msgstr "Bescherm"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:41
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:18
 msgid "Protect from deletion"
 msgstr "Bescherm tegen verwijderen"
 
@@ -1924,7 +1926,7 @@ msgstr "Publicatieperiode"
 msgid "Publish this page"
 msgstr "Publiceer deze pagina"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:51./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:61./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:248./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:33./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:102./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:53./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:21
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:51./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:61./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:248./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:47./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:102./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:53./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:21
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:47
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:44
 msgid "Published"
@@ -2045,17 +2047,17 @@ msgstr "SEO"
 msgid "SSL Application uses Erlang defaults, it is recommended to change this configuration in your <tt>erlang.config</tt>."
 msgstr "SSL applicatie maakt gebruik van Erlang defaults, het is aanbevolen om deze configuratie te wijzigen in je <tt>erlang.config</tt>."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:23./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
 msgid "Save and View"
 msgstr "Bewaar en Bekijk"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:23./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:128./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:134./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
 msgid "Save and view the page."
 msgstr "Bewaar de pagina en bekijk aan de voorkant."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:125./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:17./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:131./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
 msgid "Save this page."
 msgstr "Bewaar deze pagina."
 
@@ -2117,6 +2119,10 @@ msgstr "Geselecteerde categorieën"
 msgid "Selecting a file will make the page a media item."
 msgstr "Door een bestand te selecteren wordt de pagina een media-item."
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:30
+msgid "Settings &amp; more"
+msgstr ""
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:31./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:36
 msgid "Short title"
 msgstr "Korte titel"
@@ -2125,7 +2131,7 @@ msgstr "Korte titel"
 msgid "Show address on edit page"
 msgstr "Toon adres op editpagina"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:47
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:51
 msgid "Show all {title} pages"
 msgstr "Toon alle {title} pagina's"
 
@@ -2394,7 +2400,7 @@ msgstr "Deze notitie is alleen zichtbaar voor mensen die de pagina kunnen bewerk
 msgid "This page can be connected from other pages. For example it could be an author of an article."
 msgstr "Deze pagina kan verbonden zijn met andere pagina's. Het zou bijvoorbeeld een auteur van een artikel kunnen zijn."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:18
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_js.tpl:19
 msgid "This page has been deleted."
 msgstr "Deze pagina is verwijderd."
 
@@ -2554,7 +2560,7 @@ msgid "Valid for:"
 msgstr "Geldig voor:"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:2./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:52
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:130
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:136
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:41
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:38
@@ -2578,7 +2584,7 @@ msgid "View status"
 msgstr "Status bekijken"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:130
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:136
 msgid "View this page."
 msgstr "Bekijk deze pagina."
 
@@ -2691,7 +2697,7 @@ msgstr "Media-item toevoegen"
 msgid "block"
 msgstr "blok"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:7./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:10./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:15
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:7./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:14./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:19
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:48
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:6./apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:16
 msgid "by"
@@ -2772,7 +2778,7 @@ msgstr "systeeminhoud"
 msgid "undo"
 msgstr "ongedaan maken"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:28./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:39./apps/zotonic_mod_admin/priv/templates/_choose_media.tpl:9./apps/zotonic_mod_admin/priv/templates/_rsc_edge_item.tpl:9./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:11./apps/zotonic_mod_admin/priv/templates/_rsc_item.tpl:10
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:43./apps/zotonic_mod_admin/priv/templates/_choose_media.tpl:9./apps/zotonic_mod_admin/priv/templates/_rsc_edge_item.tpl:9./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:11./apps/zotonic_mod_admin/priv/templates/_rsc_item.tpl:10
 msgid "untitled"
 msgstr "zonder titel"
 
@@ -3121,9 +3127,17 @@ msgstr "Zotonic verzendt e-mail met behulp van een ingebouwde e-mailserver. Je k
 msgid "test@example.com"
 msgstr "test@example.com"
 
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:103
+msgid "Add a translation or copy texts between languages."
+msgstr ""
+
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_nopage.tpl:2
 msgid "Add pages or click on a page in the menu."
 msgstr "Voeg pagina’s toe of klik op een pagina in het menu."
+
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:100
+msgid "Enabled or disable language tabs."
+msgstr ""
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:68./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:97
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:24
@@ -3136,15 +3150,15 @@ msgstr "Taal"
 msgid "Loading ..."
 msgstr "Laden ..."
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:161
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:167
 msgid "No page"
 msgstr "Geen pagina"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:128./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:134./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
 msgid "Save &amp; view"
 msgstr "Bewaar en bekijk"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:163
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:169
 msgid "The page might have been deleted."
 msgstr "De pagina is misschien verwijderd."
 
@@ -3666,7 +3680,7 @@ msgstr "Pagina’s samenvoegen"
 msgid "Merge two pages together. You can select with which page to merge and which page will remain after the merge."
 msgstr "Voeg twee pagina’s samen. Je kunt selecteren met welke pagina je wilt samenvoegen en welke pagina blijft bestaan."
 
-#: apps/zotonic_mod_admin_merge/priv/templates/_admin_edit_sidebar.tpl:15
+#: apps/zotonic_mod_admin_merge/priv/templates/_admin_edit_sidebar.tpl:16
 msgid "Merge with another page …"
 msgstr "Samenvoegen met een andere pagina …"
 
@@ -3884,6 +3898,10 @@ msgstr "Het verwijderen is afgebroken, er zijn connecties met dit predicaat."
 msgid "Do not find subjects using this predicate’s object titles."
 msgstr "Vind geen onderwerpen gebaseerd op de objecttitels van dit predicaat."
 
+#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:90
+msgid "Do not show on the connections list on the resource edit page."
+msgstr ""
+
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:1
 msgid "Enter the title of the new predicate:"
 msgstr "Vul de titel van het nieuwe predicaat in:"
@@ -3936,7 +3954,7 @@ msgstr "Object"
 msgid "Only showing connections with:"
 msgstr "Toont alleen connecties met:"
 
-#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:93
+#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:103
 msgid "Ontologies define predicates for a defined set of subject and object categories. Sometimes it is more practical to have the predicate’s connection direction reversed from the formal definition. Export and import functions can use this option to swap subject/object relation when exporting or importing data."
 msgstr "Ontologieën definiëren predikaten voor een gedefinieerde reeks subject- en objectcategorieën. Soms is het praktischer om de verbindingsrichting van het predikaat om te draaien ten opzichte van de formele definitie. Export- en importfuncties kunnen deze optie gebruiken om de subject-/objectrelatie om te wisselen bij het exporteren of importeren van gegevens."
 
@@ -3956,6 +3974,10 @@ msgstr "Paginaconnecties met het predicaat"
 msgid "Predicates"
 msgstr "Predicaten"
 
+#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:93
+msgid "Some predicates are mostly for internal purposes. Check this if you don’t want to show this predicate on the <em>Connected to</em> list."
+msgstr ""
+
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:58
 msgid "Sorry, you are not allowed to insert connections with this predicate."
 msgstr "Sorry, je hebt geen rechten connecties met dit predicaat toe te voegen."
@@ -3964,7 +3986,7 @@ msgstr "Sorry, je hebt geen rechten connecties met dit predicaat toe te voegen."
 msgid "Subject"
 msgstr "Onderwerp"
 
-#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:90
+#: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:100
 msgid "The direction (from/to) of this predicate is reversed from the normal definition."
 msgstr "De richting (van/naar) van dit predicaat wordt omgedraaid ten opzichte van de normale definitie."
 
@@ -4114,7 +4136,6 @@ msgstr "Gekopieerd naar het klembord"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:16
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:33
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:15
 msgid "Copy"
 msgstr "Kopieer"
 
@@ -10231,9 +10252,21 @@ msgstr "tekst"
 msgid "years old. I like"
 msgstr "jaar oud. Ik hou van"
 
+#: apps/zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:5./apps/zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:10
+msgid "Add a new language or change languages."
+msgstr ""
+
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:48
+msgid "Add a new translation"
+msgstr ""
+
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:14./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:15
 msgid "Add language"
 msgstr "Voeg taal toe"
+
+#: apps/zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:11./apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:111
+msgid "Add translation"
+msgstr ""
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:28
 msgid "Added"
@@ -10243,9 +10276,25 @@ msgstr "Toegevoegd"
 msgid "All languages"
 msgstr "Alle talen"
 
+#: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:27
+msgid "All texts were translated."
+msgstr ""
+
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:21
+msgid "All translated texts will be removed."
+msgstr ""
+
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:18
+msgid "Are you sure you want to delete:"
+msgstr ""
+
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:1
 msgid "Are you sure you want to remove this language?"
 msgstr "Weet je zeker dat je deze taal wilt verwijderen?"
+
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:88
+msgid "Automatic translation"
+msgstr ""
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:80
 msgid "Available sub-languages"
@@ -10259,13 +10308,17 @@ msgstr "Kan de vertaalbestanden niet genereren omdat <a href=\"http://docs.zoton
 msgid "Code"
 msgstr "Code"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:1
-msgid "Copy texts from a language to the currently selected language."
-msgstr "Kopieer teksten vanaf een taal naar de momenteel geselecteerde taal."
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:90
+msgid "Copy texts"
+msgstr ""
 
-#: apps/zotonic_mod_translation/priv/templates/_admin_edit_sidebar.tpl:19./apps/zotonic_mod_translation/priv/templates/_admin_edit_sidebar.tpl:22
-msgid "Copy translation"
-msgstr "Kopieer vertaling"
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:101
+msgid "Copying and translating texts will never overwrite an existing text and can be used to fill in blank text fields in the desitination language."
+msgstr ""
+
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:2
+msgid "Current translations"
+msgstr ""
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:126
 msgid "Danish"
@@ -10274,6 +10327,10 @@ msgstr "Deens"
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_sublanguage_note.tpl:2
 msgid "Deciding on a main language or sub-language"
 msgstr "Kiezen tussen een hoofdtaal of subtaal"
+
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:9./apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:15
+msgid "Delete translation"
+msgstr ""
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:43
 msgid "Details"
@@ -10323,6 +10380,10 @@ msgstr "Hanteer de standaardtaal voor nieuwe bezoekers"
 msgid "French"
 msgstr "Frans"
 
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:58
+msgid "From existing language"
+msgstr ""
+
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:172
 msgid "Generate .pot files"
 msgstr "Genereer .pot-bestanden"
@@ -10334,10 +10395,6 @@ msgstr "Duits"
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:3
 msgid "Heads up! Removing this language will <strong>not</strong> delete any of the existing translations. But until you add (and activate) the language again, you will not be able to select or edit content written in this language."
 msgstr "Let op! Met het verwijderen van deze taal zullen bestaande vertalingen <em>niet</em> worden verwijderd. Maar totdat je de taal weer activeert, kan je content niet in deze taal bewerken."
-
-#: apps/zotonic_mod_translation/priv/templates/_admin_edit_sidebar.tpl:8
-msgid "Help about translations"
-msgstr "Hulp over talen"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:132
 msgid "Hungarian"
@@ -10351,9 +10408,17 @@ msgstr "Als een taal op 'uit' staat, verliezen bewerkte teksten hun vertaling in
 msgid "If a language is set to 'view' or 'editable' then texts for that language are editable in the admin."
 msgstr "Als een taal is ingesteld op 'bekijken' of 'bewerkbaar' dan zijn teksten voor die taal bewerkbaar in de admin."
 
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:99
+msgid "If you automatically translate texts then your texts will be sent to the remote translation service for automatic translation."
+msgstr ""
+
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:147
 msgid "If you change the stemmer language then you will need to reindex all data."
 msgstr "Als je de stemmer-taal verandert, moet je de zoekindex opnieuw opbouwen."
+
+#: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:36
+msgid "Incomplete translation"
+msgstr ""
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:133
 msgid "Italian"
@@ -10371,9 +10436,13 @@ msgstr "Taal gebruikt voor het stemmen van zoekindexen."
 msgid "Languages overview"
 msgstr "Taal overzicht"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:9
-msgid "More than one language must be active."
-msgstr "Meer dan één taal moet actief zijn."
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:91
+msgid "Leave texts empty"
+msgstr ""
+
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:85
+msgid "Method"
+msgstr ""
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:33
 msgid "Name in menu"
@@ -10387,6 +10456,10 @@ msgstr "Geen talen geconfigureerd."
 msgid "Norwegian"
 msgstr "Noors"
 
+#: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:38
+msgid "Not all texts could be translated."
+msgstr ""
+
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:40
 msgid "Off"
 msgstr "Uit"
@@ -10394,6 +10467,14 @@ msgstr "Uit"
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:9
 msgid "Part of"
 msgstr "Onderdeel van:"
+
+#: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:29./apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:41
+msgid "Please check the translations and save the page when you are ready."
+msgstr ""
+
+#: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:25
+msgid "Ready"
+msgstr ""
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:38./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:43
 msgid "Region"
@@ -10414,6 +10495,10 @@ msgstr "Alle .po bestanden worden opnieuw geladen in een achtergrondproces."
 #: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:37
 msgid "Remove language"
 msgstr "Verwijder taal"
+
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:42
+msgid "Removing a language will hide it on the edit form. If the page is saved then the translation will be deleted from the database."
+msgstr ""
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:135
 msgid "Romanian"
@@ -10438,10 +10523,6 @@ msgstr "Zie ook:"
 #: apps/zotonic_mod_translation/priv/templates/language_switch.tpl:3
 msgid "Select language"
 msgstr "Selecteer taal"
-
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_copy.tpl:5
-msgid "Select the language to copy from:"
-msgstr "Selecteer de brontaal voor het kopiëren"
 
 #: apps/zotonic_mod_translation/priv/templates/language_switch.tpl:13
 msgid "Select your preferred language."
@@ -10487,21 +10568,25 @@ msgstr "Zweeds"
 msgid "The golden rule when choosing a language is simplicity. Stick to the main language if you can; use a sub-language (adding region or script) when it adds useful distinguishing information."
 msgstr "De gouden regel bij het kiezen van een taal is eenvoud. Houd het bij de hoofdtaal als je kunt; gebruik een subtaal (door regio of script toe te voegen) wanneer dat nuttig onderscheid toevoegt."
 
-#: apps/zotonic_mod_translation/priv/templates/_admin_edit_sidebar.tpl:8
-msgid "The title, body and other texts can be translated in different languages. Here you can select which languages will be used."
-msgstr "De titel en andere teksten kunnen vertaald kunnen worden in verschillende talen. Hier kun je aangeven welke talen zullen worden gebruikt."
+#: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:39
+msgid "The source language text was used for the missing translations."
+msgstr ""
 
-#: apps/zotonic_mod_translation/priv/templates/_admin_edit_sidebar.tpl:8
-msgid "Translate this page in other languages."
-msgstr "Vertaal deze pagina in andere talen."
+#: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:48
+msgid "There was an error translating the texts. Please try again later."
+msgstr ""
+
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:72
+msgid "To new language"
+msgstr ""
+
+#: apps/zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:6./apps/zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:32
+msgid "Translate"
+msgstr ""
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:823
 msgid "Translation"
 msgstr "Vertaling"
-
-#: apps/zotonic_mod_translation/priv/templates/_admin_edit_sidebar.tpl:6
-msgid "Translations"
-msgstr "Vertalingen"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:139
 msgid "Turkish"
