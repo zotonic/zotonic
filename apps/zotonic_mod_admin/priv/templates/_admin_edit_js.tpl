@@ -1,9 +1,10 @@
 {% javascript %}
-$('#rscform').on('shown.bs.tab', '.language-tabs > li > a[data-toggle="tab"]', function (e) {
+$('#rscform, #translation-tabs').on('shown.bs.tab', '.language-tabs > li > a[data-toggle="tab"]', function (e) {
 	if (e.target != e.relatedTarget) {
         const showLang = e.target.closest('li').getAttribute('lang');
         const hideLang = e.relatedTarget.closest('li').getAttribute('lang');
-		$("li[lang='"+showLang+"']:visible > a").tab('show');
+
+		$("li[lang='"+showLang+"'] > a").tab('show');
 
 		// Also switch language dependent parts that are not inside the tab panes.
 		$(".widget-content-lang-" + hideLang).hide()

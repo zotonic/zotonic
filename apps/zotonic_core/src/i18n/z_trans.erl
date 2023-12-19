@@ -153,6 +153,15 @@ lookup_fallback(Trans, Context) ->
 
 lookup_fallback(Text, Lang, Context) when is_atom(Lang) ->
     lookup_fallback(Text, [Lang], Context);
+lookup_fallback(Text, Lang, Context) when is_binary(Lang) ->
+    case z_language:to_language_atom(Lang) of
+        {ok, Code} ->
+            lookup_fallback(Text, [Code], Context);
+        {error, _} when is_binary(Text) ->
+            Text;
+        {error, _} ->
+            undefined
+    end;
 lookup_fallback(#trans{ tr = Tr }, Langs, Context) when is_list(Langs) ->
     case find_first(Langs, Tr) of
         undefined ->
@@ -170,6 +179,7 @@ lookup_fallback(#trans{ tr = Tr }, Langs, Context) when is_list(Langs) ->
     end;
 lookup_fallback(Text, _Lang, _Context) ->
     Text.
+
 
 find_first(_Langs, []) ->
     undefined;

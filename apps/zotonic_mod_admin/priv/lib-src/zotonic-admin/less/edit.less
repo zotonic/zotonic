@@ -157,12 +157,6 @@ ul.media {
         h2 {
             margin-bottom: 10px;
         }
-        .admin-btn-category {
-            font-size: 12px;
-        }
-        .admin-btn-category {
-            margin-top: -2px;
-        }
         .admin-edit-dates {
             &,
             a {
@@ -176,7 +170,49 @@ ul.media {
             padding-left: @_leaderImageWidth + 20px;
         }
     }
+
+    .rscform-columns {
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+        grid-template-rows: auto auto;
+        grid-gap: @baseMargin;
+
+        #poststuff {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        #sidebar {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        @media (max-width: @breakpointMediumMaxWidth) {
+            grid-template-columns: minmax(0, 1fr);
+
+            #poststuff {
+                grid-column: 1;
+                grid-row: 1;
+            }
+
+            #sidebar {
+                grid-column: 1;
+                grid-row: 2;
+            }
+
+        }
+    }
 }
+
+#translation-tabs {
+    position: sticky;
+    top: @navbar-height - 4px;
+    z-index: 10;
+
+    margin-bottom: 4px;
+    background-color: @backgroundColorLighter;
+}
+
 
 /* small image in admin edit */
 img.mediaclass-admin-leader-image {
@@ -202,6 +238,12 @@ input[type='time'] {
     display: inline;
 }
 
+#sidebar-publish-page {
+    position: sticky;
+    top: @navbar-height - 4px;
+    z-index: 1;
+}
+
 #sidebar-date-range .tab-content {
     overflow: visible;
 }
@@ -225,11 +267,6 @@ input[type='time'] {
     #3L > .box-shadow(none);
 }
 
-.scrolled .admin-navbar-fixed-save {
-    display: block;
-    opacity: 1.0;
-}
-
 div + .admin-edit-no-features {
     display: none;
 }
@@ -250,5 +287,14 @@ div + .admin-edit-no-features {
         top: 0;
         right: 0;
         left: 0;
+    }
+
+    .scrolled .admin-navbar-fixed-save {
+        display: block;
+        opacity: 1.0;
+    }
+
+    body.scrolled #translation-tabs {
+        top: 114px;
     }
 }

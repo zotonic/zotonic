@@ -1,7 +1,8 @@
 
 {% optional include "_translation_init_languages.tpl" %}
 
-{% catinclude "_admin_edit_basics.tpl" id show_header %}
+{% catinclude "_admin_edit_basics.tpl" id show_header=false %}
+
 {% all catinclude "_admin_edit_content.tpl" id %}
 
 {% if id.category_id.is_feature_show_address|if_undefined:true %}

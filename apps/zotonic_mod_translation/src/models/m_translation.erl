@@ -26,7 +26,9 @@
 -export([
     m_get/3,
 
+    translate_to_lookup/4,
     translate/4,
+    has_translation_service/1,
 
     language_list_configured/1,
     language_list_enabled/1,
@@ -90,21 +92,74 @@ m_get([ <<"english_name">>, Code | Rest ], _Msg, _Context) ->
     {ok, {z_language:english_name(Code), Rest}};
 m_get([ <<"properties">>, Code | Rest ], _Msg, _Context) ->
     {ok, {z_language:properties(Code), Rest}};
-m_get([ <<"translate">>, FromCode, ToCode | Rest ], #{ payload := Payload }, Context) ->
-    case translate(FromCode, ToCode, Payload, Context) of
-        {ok, Result} ->
-            {ok, {Result, Rest}};
-        {error, _} = Error ->
-            Error
+m_get([ <<"translate">> | Rest ], #{ payload := Payload }, Context) ->
+    case Payload of
+        #{
+            <<"from">> := FromCode,
+            <<"texts">> := Texts
+        } ->
+            ToCode = maps:get(<<"to">>, Payload, z_context:language(Context)),
+            case translate_to_lookup(FromCode, ToCode, Texts, Context) of
+                {ok, Result} ->
+                    {ok, {Result, Rest}};
+                {error, _} = Error ->
+                    Error
+            end;
+        _ ->
+            {error, payload}
     end;
+m_get([ <<"has_translation_service">> | Rest ], _Msg, Context) ->
+    {ok, {has_translation_service(Context), Rest}};
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
+
+%% @doc Check if there are modules that offer the translation service.
+-spec has_translation_service(Context) -> boolean() when
+    Context :: z:context().
+has_translation_service(Context) ->
+    case z_notifier:get_observers(#translate{}, Context) of
+        [] -> false;
+        [_|_] -> true
+    end.
 
 %% @doc Translate one or more strings from one language to another. The strings
 %% can be trans records, a single string or a list of strings. If the source language
 %% is 'en' then the .po files are consulted for a preferred translation.
 %% Both the from and to language must be configured as editable languages.
+%% The result is a list of maps with keys 'text' and 'translation'. The translation can be
+%% 'undefined' if no translation could be provided.
+-spec translate_to_lookup(FromLanguage, ToLanguage, Texts, Context) -> {ok, Translations} | {error, Reason} when
+    FromLanguage :: z_language:language(),
+    ToLanguage :: z_language:language(),
+    Texts :: [ Text ] | Text,
+    Text :: binary() | #trans{},
+    Context :: z:context(),
+    Translations :: list( map() ),
+    Reason :: term().
+translate_to_lookup(FromLanguage, ToLanguage, Texts, Context) ->
+    TextList = to_list(Texts),
+    case translate(FromLanguage, ToLanguage, Texts, Context) of
+        {ok, Result} ->
+            R = lists:map(
+                fun({From, To}) ->
+                    #{
+                        <<"text">> => From,
+                        <<"translation">> => To
+                    }
+                end,
+                lists:zip(TextList, Result)),
+            {ok, R};
+        {error, _} = Error ->
+            Error
+    end.
+
+%% @doc Translate one or more strings from one language to another. The strings
+%% can be trans records, a single string or a list of strings. If the source language
+%% is 'en' then the .po files are consulted for a preferred translation.
+%% Both the from and to language must be configured as editable languages.
+%% The result is a list of translations, in the same order as the input Texts. Translations
+%% that could not be done result in 'undefined'.
 -spec translate(FromLanguage, ToLanguage, Texts, Context) -> {ok, Translations} | {error, Reason} when
     FromLanguage :: z_language:language(),
     ToLanguage :: z_language:language(),
@@ -116,6 +171,12 @@ m_get(_Vs, _Msg, _Context) ->
 translate(FromLanguage, ToLanguage, Texts, Context) ->
     translation_translate:translate(FromLanguage, ToLanguage, Texts, Context).
 
+to_list(#trans{} = Tr) ->
+    [Tr];
+to_list(Text) when is_binary(Text) ->
+    [Text];
+to_list(L) when is_list(L) ->
+    L.
 
 language_list_configured(Context) ->
     Default = z_language:default_language(Context),

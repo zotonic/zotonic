@@ -23,6 +23,12 @@
         margin-top: 18px;
     }
 
+    .admin-container & {
+        .language-tabs {
+            display: none;
+        }
+    }
+
     .widget-content {
         position: relative;
         padding: @widgetVerticalPadding @widgetSidePadding 0 @widgetSidePadding;
@@ -214,6 +220,13 @@
         padding: 10px 0;
     }
 }
+
+.admin-container {
+    .widget.translations .widget-content {
+        padding-top: 0;
+    }
+}
+
 
 // TODO: html.no-touch only
 .widget.widget-active:not(.widget-expanded) {

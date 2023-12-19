@@ -1,9 +1,13 @@
-{#
-Params:
-id
-#}
+{# Showed on top of the resource edit page #}
 <div class="admin-header">
     <div class="admin-header-meta">
+        <a class="btn btn-default btn-xs"
+           data-onclick-topic="model/location/post/redirect/back"
+           href="{% url admin %}"
+        >
+            &lt; {_ Back _}
+        </a>
+        &nbsp;
         <span class='admin-edit-dates'>
             {_ Created: _} {{ id.created|date:"Y-m-d H:i" }}
             {% if id.creator_id %}
