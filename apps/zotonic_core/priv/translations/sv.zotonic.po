@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-12-19 17:06\n"
+"PO-Revision-Date: 2023-12-19 18:21\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -1064,11 +1064,11 @@ msgstr "Anslut en sida"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:25
 msgid "Connected from"
-msgstr ""
+msgstr "Ansluten från"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:20
 msgid "Connected to"
-msgstr ""
+msgstr "Ansluten till"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:134./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:57
 msgid "Connections"
@@ -1840,7 +1840,7 @@ msgstr "Sidhänvisare"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:5./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:13
 msgid "Page settings"
-msgstr ""
+msgstr "Sidinställningar"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:3./apps/zotonic_mod_admin/src/mod_admin.erl:100
 msgid "Pages"
@@ -2117,7 +2117,7 @@ msgstr "Om du väljer en fil blir sidan till ett medieobjekt."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:30
 msgid "Settings &amp; more"
-msgstr ""
+msgstr "Inställningar &amp; till"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:31./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:36
 msgid "Short title"
@@ -3125,7 +3125,7 @@ msgstr "test@example.com"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:103
 msgid "Add a translation or copy texts between languages."
-msgstr ""
+msgstr "Lägg till en översättning eller kopiera texter mellan språk."
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_nopage.tpl:2
 msgid "Add pages or click on a page in the menu."
@@ -3133,7 +3133,7 @@ msgstr "Lägga till sidor eller klicka på en sida i menyn."
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:100
 msgid "Enabled or disable language tabs."
-msgstr ""
+msgstr "Aktiverade eller inaktiverade språkflikar."
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:68./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:97
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:24
@@ -3898,7 +3898,7 @@ msgstr "Hitta inte ämnen som använder detta predikats objekttitlar."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:90
 msgid "Do not show on the connections list on the resource edit page."
-msgstr ""
+msgstr "Visas inte i anslutningslistan på resursredigeringssidan."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:1
 msgid "Enter the title of the new predicate:"
@@ -3974,7 +3974,7 @@ msgstr "Förutsägelser"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:93
 msgid "Some predicates are mostly for internal purposes. Check this if you don’t want to show this predicate on the <em>Connected to</em> list."
-msgstr ""
+msgstr "Vissa predikat är mest för interna ändamål. Markera detta om du inte vill visa detta predikat på listan <em>Ansluten till</em>."
 
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:58
 msgid "Sorry, you are not allowed to insert connections with this predicate."
@@ -10251,11 +10251,11 @@ msgstr "år gammal. jag gillar"
 
 #: apps/zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:5./apps/zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:10
 msgid "Add a new language or change languages."
-msgstr ""
+msgstr "Lägg till ett nytt språk eller byt språk."
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:48
 msgid "Add a new translation"
-msgstr ""
+msgstr "Lägg till en ny översättning"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:14./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:15
 msgid "Add language"
@@ -10263,7 +10263,7 @@ msgstr "Lägg till språk"
 
 #: apps/zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:11./apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:111
 msgid "Add translation"
-msgstr ""
+msgstr "Lägg till översättning"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:28
 msgid "Added"
@@ -10275,15 +10275,15 @@ msgstr "Alla språk"
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:27
 msgid "All texts were translated."
-msgstr ""
+msgstr "Alla texter översattes."
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:21
 msgid "All translated texts will be removed."
-msgstr ""
+msgstr "Alla översatta texter kommer att tas bort."
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:18
 msgid "Are you sure you want to delete:"
-msgstr ""
+msgstr "Är du säker att du vill radera:"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:1
 msgid "Are you sure you want to remove this language?"
@@ -10291,7 +10291,7 @@ msgstr "Är du säker på att du vill ta bort det här språket?"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:88
 msgid "Automatic translation"
-msgstr ""
+msgstr "Automatisk översättning"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:80
 msgid "Available sub-languages"
@@ -10307,15 +10307,15 @@ msgstr "Koda"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:90
 msgid "Copy texts"
-msgstr ""
+msgstr "Kopiera texter"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:101
 msgid "Copying and translating texts will never overwrite an existing text and can be used to fill in blank text fields in the desitination language."
-msgstr ""
+msgstr "Att kopiera och översätta texter kommer aldrig att skriva över en befintlig text och kan användas för att fylla i tomma textfält på målspråket."
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:2
 msgid "Current translations"
-msgstr ""
+msgstr "Aktuella översättningar"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:126
 msgid "Danish"
@@ -10327,7 +10327,7 @@ msgstr "Beslut om ett huvudspråk eller delspråk"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:9./apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:15
 msgid "Delete translation"
-msgstr ""
+msgstr "Ta bort översättning"
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:43
 msgid "Details"
@@ -10379,7 +10379,7 @@ msgstr "Franska"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:58
 msgid "From existing language"
-msgstr ""
+msgstr "Från befintligt språk"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:172
 msgid "Generate .pot files"
@@ -10407,7 +10407,7 @@ msgstr "Om ett språk är inställt på \"visa\" eller \"redigerbart\" kan texte
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:99
 msgid "If you automatically translate texts then your texts will be sent to the remote translation service for automatic translation."
-msgstr ""
+msgstr "Om du automatiskt översätter texter kommer dina texter att skickas till fjärröversättningstjänsten för automatisk översättning."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:147
 msgid "If you change the stemmer language then you will need to reindex all data."
@@ -10415,7 +10415,7 @@ msgstr "Om du ändrar röstspråket måste du indexera om alla uppgifter."
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:36
 msgid "Incomplete translation"
-msgstr ""
+msgstr "Ofullständig översättning"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:133
 msgid "Italian"
@@ -10435,11 +10435,11 @@ msgstr "Språk: översikt"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:91
 msgid "Leave texts empty"
-msgstr ""
+msgstr "Lämna texter tomma"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:85
 msgid "Method"
-msgstr ""
+msgstr "Metod"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:33
 msgid "Name in menu"
@@ -10455,7 +10455,7 @@ msgstr "Norska"
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:38
 msgid "Not all texts could be translated."
-msgstr ""
+msgstr "Alla texter gick inte att översätta."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:40
 msgid "Off"
@@ -10467,11 +10467,11 @@ msgstr "Del av"
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:29./apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:41
 msgid "Please check the translations and save the page when you are ready."
-msgstr ""
+msgstr "Kontrollera översättningarna och spara sidan när du är redo."
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:25
 msgid "Ready"
-msgstr ""
+msgstr "Redo"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:38./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:43
 msgid "Region"
@@ -10495,7 +10495,7 @@ msgstr "Ta bort språk"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:42
 msgid "Removing a language will hide it on the edit form. If the page is saved then the translation will be deleted from the database."
-msgstr ""
+msgstr "Om du tar bort ett språk döljs det i redigeringsformuläret. Om sidan sparas kommer översättningen att raderas från databasen."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:135
 msgid "Romanian"
@@ -10567,19 +10567,19 @@ msgstr "Den gyllene regeln när man väljer språk är enkelhet. Håll dig till 
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:39
 msgid "The source language text was used for the missing translations."
-msgstr ""
+msgstr "Källspråkstexten användes för de saknade översättningarna."
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:48
 msgid "There was an error translating the texts. Please try again later."
-msgstr ""
+msgstr "Det uppstod ett fel när texterna skulle översättas. Vänligen försök igen senare."
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:72
 msgid "To new language"
-msgstr ""
+msgstr "Till ett nytt språk"
 
 #: apps/zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:6./apps/zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:32
 msgid "Translate"
-msgstr ""
+msgstr "Översätt"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:823
 msgid "Translation"
