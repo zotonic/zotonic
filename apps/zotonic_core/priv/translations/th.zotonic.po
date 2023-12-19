@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-12-19 17:06\n"
+"PO-Revision-Date: 2023-12-19 18:21\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -10283,7 +10283,7 @@ msgstr "ข้อความที่แปลทั้งหมดจะถู
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:18
 msgid "Are you sure you want to delete:"
-msgstr ""
+msgstr "คุณแน่ใจหรือว่าต้องการลบ:"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:1
 msgid "Are you sure you want to remove this language?"
@@ -10291,7 +10291,7 @@ msgstr "แน่ใจไหมว่าต้องการลบภาษา
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:88
 msgid "Automatic translation"
-msgstr ""
+msgstr "การแปลอัตโนมัติ"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:80
 msgid "Available sub-languages"
@@ -10307,15 +10307,15 @@ msgstr "รหัส"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:90
 msgid "Copy texts"
-msgstr ""
+msgstr "คัดลอกข้อความ"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:101
 msgid "Copying and translating texts will never overwrite an existing text and can be used to fill in blank text fields in the desitination language."
-msgstr ""
+msgstr "การคัดลอกและการแปลข้อความจะไม่เขียนทับข้อความที่มีอยู่ และสามารถใช้เพื่อเติมข้อความว่างในภาษาปลายทางได้"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:2
 msgid "Current translations"
-msgstr ""
+msgstr "การแปลในปัจจุบัน"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:126
 msgid "Danish"
@@ -10327,7 +10327,7 @@ msgstr "การตัดสินใจเลือกภาษาหลัก
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:9./apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:15
 msgid "Delete translation"
-msgstr ""
+msgstr "ลบคำแปล"
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:43
 msgid "Details"
@@ -10379,7 +10379,7 @@ msgstr "ฝรั่งเศส"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:58
 msgid "From existing language"
-msgstr ""
+msgstr "จากภาษาที่มีอยู่"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:172
 msgid "Generate .pot files"
@@ -10407,7 +10407,7 @@ msgstr "หากตั้งค่าภาษาเป็น \"ดู\" หร
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:99
 msgid "If you automatically translate texts then your texts will be sent to the remote translation service for automatic translation."
-msgstr ""
+msgstr "หากคุณแปลข้อความโดยอัตโนมัติ ข้อความของคุณจะถูกส่งไปยังบริการแปลระยะไกลเพื่อทำการแปลอัตโนมัติ"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:147
 msgid "If you change the stemmer language then you will need to reindex all data."
@@ -10415,7 +10415,7 @@ msgstr "หากคุณเปลี่ยนภาษาต้นกำเน
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:36
 msgid "Incomplete translation"
-msgstr ""
+msgstr "การแปลไม่สมบูรณ์"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:133
 msgid "Italian"
@@ -10435,11 +10435,11 @@ msgstr "ภาพรวมภาษา"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:91
 msgid "Leave texts empty"
-msgstr ""
+msgstr "ปล่อยให้ข้อความว่างเปล่า"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:85
 msgid "Method"
-msgstr ""
+msgstr "วิธี"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:33
 msgid "Name in menu"
@@ -10455,7 +10455,7 @@ msgstr "นอร์เวย์"
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:38
 msgid "Not all texts could be translated."
-msgstr ""
+msgstr "ไม่สามารถแปลข้อความทั้งหมดได้"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:40
 msgid "Off"
