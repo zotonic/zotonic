@@ -807,7 +807,7 @@ ul.media > li .bottom .caption a {
 }
 .edit-page .rscform-columns {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
   grid-template-rows: auto auto;
   grid-gap: 15px;
 }
@@ -821,7 +821,7 @@ ul.media > li .bottom .caption a {
 }
 @media (max-width: 991px) {
   .edit-page .rscform-columns {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
   .edit-page .rscform-columns #poststuff {
     grid-column: 1;

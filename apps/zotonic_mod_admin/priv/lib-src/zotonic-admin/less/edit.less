@@ -173,7 +173,7 @@ ul.media {
 
     .rscform-columns {
         display: grid;
-        grid-template-columns: 2fr 1fr;
+        grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
         grid-template-rows: auto auto;
         grid-gap: @baseMargin;
 
@@ -188,7 +188,7 @@ ul.media {
         }
 
         @media (max-width: @breakpointMediumMaxWidth) {
-            grid-template-columns: 1fr;
+            grid-template-columns: minmax(0, 1fr);
 
             #poststuff {
                 grid-column: 1;
