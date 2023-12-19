@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-12-19 17:06\n"
+"PO-Revision-Date: 2023-12-19 18:21\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -1064,11 +1064,11 @@ msgstr "חבר דף"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:25
 msgid "Connected from"
-msgstr ""
+msgstr "מחובר מ"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:20
 msgid "Connected to"
-msgstr ""
+msgstr "מחובר ל"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:134./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:57
 msgid "Connections"
@@ -1840,7 +1840,7 @@ msgstr "מפנים לדף"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:5./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:13
 msgid "Page settings"
-msgstr ""
+msgstr "הגדרות עמוד"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:3./apps/zotonic_mod_admin/src/mod_admin.erl:100
 msgid "Pages"
@@ -2117,7 +2117,7 @@ msgstr "בחירת קובץ תהפוך את הדף לפריט מדיה."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:30
 msgid "Settings &amp; more"
-msgstr ""
+msgstr "הגדרות עוד &amp;"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:31./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:36
 msgid "Short title"
@@ -3125,7 +3125,7 @@ msgstr "test@example.com"
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:103
 msgid "Add a translation or copy texts between languages."
-msgstr ""
+msgstr "הוסף תרגום או העתק טקסטים בין שפות."
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_nopage.tpl:2
 msgid "Add pages or click on a page in the menu."
@@ -3133,7 +3133,7 @@ msgstr "הוסף עמודים או לחץ על דף בתפריט."
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:100
 msgid "Enabled or disable language tabs."
-msgstr ""
+msgstr "הפעלה או השבתה של כרטיסיות שפה."
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:68./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:97
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:24
@@ -3898,7 +3898,7 @@ msgstr "אל תמצא נושאים המשתמשים בכותרות האוביי�
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:90
 msgid "Do not show on the connections list on the resource edit page."
-msgstr ""
+msgstr "אל תוצג ברשימת החיבורים בדף עריכת המשאבים."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:1
 msgid "Enter the title of the new predicate:"
@@ -3974,7 +3974,7 @@ msgstr "מנבא"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:93
 msgid "Some predicates are mostly for internal purposes. Check this if you don’t want to show this predicate on the <em>Connected to</em> list."
-msgstr ""
+msgstr "חלק מהפרדיקטים הם בעיקר למטרות פנימיות. סמן זאת אם אינך רוצה להציג את הפרדיקט הזה ברשימה <em>מחוברים ל</em>."
 
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:58
 msgid "Sorry, you are not allowed to insert connections with this predicate."
@@ -10251,11 +10251,11 @@ msgstr "שנים. אני אוהב"
 
 #: apps/zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:5./apps/zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:10
 msgid "Add a new language or change languages."
-msgstr ""
+msgstr "הוסף שפה חדשה או שנה שפות."
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:48
 msgid "Add a new translation"
-msgstr ""
+msgstr "הוסף תרגום חדש"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:14./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:15
 msgid "Add language"
@@ -10263,7 +10263,7 @@ msgstr "הוסף שפה"
 
 #: apps/zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:11./apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:111
 msgid "Add translation"
-msgstr ""
+msgstr "הוסף תרגום"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:28
 msgid "Added"
@@ -10275,15 +10275,15 @@ msgstr "כל השפות"
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:27
 msgid "All texts were translated."
-msgstr ""
+msgstr "כל הטקסטים תורגמו."
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:21
 msgid "All translated texts will be removed."
-msgstr ""
+msgstr "כל הטקסטים המתורגמים יוסרו."
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:18
 msgid "Are you sure you want to delete:"
-msgstr ""
+msgstr "אתה בטוח שאתה רוצה למחוק:"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:1
 msgid "Are you sure you want to remove this language?"
@@ -10291,7 +10291,7 @@ msgstr "האם אתה בטוח שברצונך להסיר את השפה הזו?"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:88
 msgid "Automatic translation"
-msgstr ""
+msgstr "תרגום אוטומטי"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:80
 msgid "Available sub-languages"
@@ -10307,15 +10307,15 @@ msgstr "קוד"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:90
 msgid "Copy texts"
-msgstr ""
+msgstr "העתק טקסטים"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:101
 msgid "Copying and translating texts will never overwrite an existing text and can be used to fill in blank text fields in the desitination language."
-msgstr ""
+msgstr "העתקה ותרגום של טקסטים לעולם לא ידרוס טקסט קיים וניתן להשתמש בהם כדי למלא שדות טקסט ריקים בשפת היעד."
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:2
 msgid "Current translations"
-msgstr ""
+msgstr "תרגומים עדכניים"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:126
 msgid "Danish"
@@ -10327,7 +10327,7 @@ msgstr "החלטה על שפה עיקרית או שפת משנה"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:9./apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:15
 msgid "Delete translation"
-msgstr ""
+msgstr "מחק את התרגום"
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:43
 msgid "Details"
@@ -10379,7 +10379,7 @@ msgstr "צָרְפָתִית"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:58
 msgid "From existing language"
-msgstr ""
+msgstr "משפה קיימת"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:172
 msgid "Generate .pot files"
@@ -10407,7 +10407,7 @@ msgstr "אם שפה מוגדרת כ'תצוגה 'או' ניתנת לעריכה ',
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:99
 msgid "If you automatically translate texts then your texts will be sent to the remote translation service for automatic translation."
-msgstr ""
+msgstr "אם אתה מתרגם אוטומטית טקסטים, הטקסטים שלך יישלחו לשירות התרגום המרוחק לתרגום אוטומטי."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:147
 msgid "If you change the stemmer language then you will need to reindex all data."
@@ -10415,7 +10415,7 @@ msgstr "אם תשנה את שפת הקולות, תצטרך להוסיף מחדש
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:36
 msgid "Incomplete translation"
-msgstr ""
+msgstr "תרגום לא שלם"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:133
 msgid "Italian"
@@ -10435,11 +10435,11 @@ msgstr "סקירת שפות"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:91
 msgid "Leave texts empty"
-msgstr ""
+msgstr "השאר טקסטים ריקים"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:85
 msgid "Method"
-msgstr ""
+msgstr "שיטה"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:33
 msgid "Name in menu"
@@ -10455,7 +10455,7 @@ msgstr "נורווגית"
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:38
 msgid "Not all texts could be translated."
-msgstr ""
+msgstr "לא ניתן היה לתרגם את כל הטקסטים."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:40
 msgid "Off"
@@ -10467,11 +10467,11 @@ msgstr "חלק מ"
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:29./apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:41
 msgid "Please check the translations and save the page when you are ready."
-msgstr ""
+msgstr "אנא בדוק את התרגומים ושמור את הדף כשתהיה מוכן."
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:25
 msgid "Ready"
-msgstr ""
+msgstr "מוּכָן"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:38./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:43
 msgid "Region"
@@ -10495,7 +10495,7 @@ msgstr "הסר שפה"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:42
 msgid "Removing a language will hide it on the edit form. If the page is saved then the translation will be deleted from the database."
-msgstr ""
+msgstr "הסרת שפה תסתיר אותה בטופס העריכה. אם הדף נשמר אז התרגום יימחק ממסד הנתונים."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:135
 msgid "Romanian"
@@ -10567,19 +10567,19 @@ msgstr "כלל הזהב בבחירת שפה הוא פשטות. היצמד לשפ
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:39
 msgid "The source language text was used for the missing translations."
-msgstr ""
+msgstr "טקסט שפת המקור שימש לתרגומים החסרים."
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:48
 msgid "There was an error translating the texts. Please try again later."
-msgstr ""
+msgstr "אירעה שגיאה בתרגום הטקסטים. בבקשה נסה שוב מאוחר יותר."
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:72
 msgid "To new language"
-msgstr ""
+msgstr "לשפה חדשה"
 
 #: apps/zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:6./apps/zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:32
 msgid "Translate"
-msgstr ""
+msgstr "לתרגם"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:823
 msgid "Translation"
