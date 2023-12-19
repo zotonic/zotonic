@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-12-19 17:06\n"
+"PO-Revision-Date: 2023-12-19 18:21\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "MIME-Version: 1.0\n"
@@ -10283,7 +10283,7 @@ msgstr "Todos os textos traduzidos serão removidos."
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:18
 msgid "Are you sure you want to delete:"
-msgstr ""
+msgstr "Tem certeza de que deseja excluir:"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:1
 msgid "Are you sure you want to remove this language?"
@@ -10291,7 +10291,7 @@ msgstr "Tem certeza de que deseja remover este idioma?"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:88
 msgid "Automatic translation"
-msgstr ""
+msgstr "Tradução automática"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:80
 msgid "Available sub-languages"
@@ -10307,15 +10307,15 @@ msgstr "Código"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:90
 msgid "Copy texts"
-msgstr ""
+msgstr "Copiar textos"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:101
 msgid "Copying and translating texts will never overwrite an existing text and can be used to fill in blank text fields in the desitination language."
-msgstr ""
+msgstr "Copiar e traduzir textos nunca substituirá um texto existente e pode ser usado para preencher campos de texto em branco no idioma de destino."
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:2
 msgid "Current translations"
-msgstr ""
+msgstr "Traduções atuais"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:126
 msgid "Danish"
@@ -10327,7 +10327,7 @@ msgstr "Decidir sobre um idioma principal ou sub-idioma"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:9./apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:15
 msgid "Delete translation"
-msgstr ""
+msgstr "Excluir tradução"
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:43
 msgid "Details"
@@ -10379,7 +10379,7 @@ msgstr "Francês"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:58
 msgid "From existing language"
-msgstr ""
+msgstr "Do idioma existente"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:172
 msgid "Generate .pot files"
@@ -10407,7 +10407,7 @@ msgstr "Se um idioma estiver definido como 'visualizar' ou 'editável', os texto
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:99
 msgid "If you automatically translate texts then your texts will be sent to the remote translation service for automatic translation."
-msgstr ""
+msgstr "Se você traduzir textos automaticamente, seus textos serão enviados ao serviço de tradução remota para tradução automática."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:147
 msgid "If you change the stemmer language then you will need to reindex all data."
@@ -10415,7 +10415,7 @@ msgstr "Se você alterar o idioma do lematizador, precisará reindexar todos os 
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:36
 msgid "Incomplete translation"
-msgstr ""
+msgstr "Tradução incompleta"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:133
 msgid "Italian"
@@ -10435,11 +10435,11 @@ msgstr "Visão geral dos idiomas"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:91
 msgid "Leave texts empty"
-msgstr ""
+msgstr "Deixe os textos vazios"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:85
 msgid "Method"
-msgstr ""
+msgstr "Método"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:33
 msgid "Name in menu"
@@ -10455,7 +10455,7 @@ msgstr "norueguês"
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:38
 msgid "Not all texts could be translated."
-msgstr ""
+msgstr "Nem todos os textos puderam ser traduzidos."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:40
 msgid "Off"
