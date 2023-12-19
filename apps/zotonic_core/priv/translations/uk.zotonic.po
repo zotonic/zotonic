@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-12-19 17:06\n"
+"PO-Revision-Date: 2023-12-19 18:21\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -10283,7 +10283,7 @@ msgstr "Усі перекладені тексти буде видалено."
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:18
 msgid "Are you sure you want to delete:"
-msgstr ""
+msgstr "Ви впевнені, що хочете видалити:"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:1
 msgid "Are you sure you want to remove this language?"
@@ -10291,7 +10291,7 @@ msgstr "Ви впевнені, що хочете видалити цю мову?
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:88
 msgid "Automatic translation"
-msgstr ""
+msgstr "Автоматичний переклад"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:80
 msgid "Available sub-languages"
@@ -10307,15 +10307,15 @@ msgstr "Код"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:90
 msgid "Copy texts"
-msgstr ""
+msgstr "Копіювати тексти"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:101
 msgid "Copying and translating texts will never overwrite an existing text and can be used to fill in blank text fields in the desitination language."
-msgstr ""
+msgstr "Копіювання та переклад текстів ніколи не перезапише існуючий текст і може використовуватися для заповнення порожніх текстових полів мовою призначення."
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:2
 msgid "Current translations"
-msgstr ""
+msgstr "Актуальні переклади"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:126
 msgid "Danish"
@@ -10327,7 +10327,7 @@ msgstr "Вибір основної або підмови"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:9./apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:15
 msgid "Delete translation"
-msgstr ""
+msgstr "Видалити переклад"
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:43
 msgid "Details"
@@ -10379,7 +10379,7 @@ msgstr "Французька"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:58
 msgid "From existing language"
-msgstr ""
+msgstr "З існуючої мови"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:172
 msgid "Generate .pot files"
@@ -10407,7 +10407,7 @@ msgstr "Якщо для мови встановлено значення \"пе�
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:99
 msgid "If you automatically translate texts then your texts will be sent to the remote translation service for automatic translation."
-msgstr ""
+msgstr "Якщо ви автоматично перекладаєте тексти, ваші тексти будуть надіслані до служби віддаленого перекладу для автоматичного перекладу."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:147
 msgid "If you change the stemmer language then you will need to reindex all data."
@@ -10415,7 +10415,7 @@ msgstr "Якщо Ви зміните мову stemmer, вам потрібно �
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:36
 msgid "Incomplete translation"
-msgstr ""
+msgstr "Неповний переклад"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:133
 msgid "Italian"
@@ -10435,11 +10435,11 @@ msgstr "Огляд мов"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:91
 msgid "Leave texts empty"
-msgstr ""
+msgstr "Залиште тексти порожніми"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:85
 msgid "Method"
-msgstr ""
+msgstr "метод"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:33
 msgid "Name in menu"
@@ -10455,7 +10455,7 @@ msgstr "Норвезька"
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:38
 msgid "Not all texts could be translated."
-msgstr ""
+msgstr "Не всі тексти можна було перекласти."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:40
 msgid "Off"
