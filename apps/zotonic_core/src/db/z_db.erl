@@ -729,7 +729,7 @@ equery(Sql, Parameters, Context, Timeout) ->
         end,
     with_connection(F, Context).
 
--spec equery(sql(), list(parameters()), z:context(), integer()) -> query_result().
+-spec execute_batch(sql(), list(parameters()), z:context(), integer()) -> query_result().
 execute_batch(Sql, Batch, Context) ->
     execute_batch(Sql, Batch, Context, ?TIMEOUT).
 
