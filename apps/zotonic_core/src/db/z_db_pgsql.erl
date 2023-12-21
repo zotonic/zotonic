@@ -42,6 +42,7 @@
     test_connection/1,
     squery/3,
     equery/4,
+    execute_batch/4,
     get_raw_connection/1
 ]).
 
@@ -180,6 +181,25 @@ equery(Worker, Sql, Parameters, Timeout) ->
             case fetch_conn(Worker, Sql, Parameters, Timeout) of
                 {ok, {Conn, Ref}} ->
                     Result = epgsql:equery(Conn, Sql, encode_values(Parameters)),
+                    ok = return_conn(Worker, Ref),
+                    decode_reply(Result);
+                {error, _} = Error ->
+                    Error
+            end;
+        false ->
+            {error, connection_down}
+    end.
+
+%% @doc Batch Query, the query is interrupted if it takes
+%%      longer than Timeout msec.
+-spec execute_batch( pid(), string() | binary(), list(), pos_integer() ) -> query_result().
+execute_batch(Worker, Sql, Batch, Timeout) ->
+    case is_connection_alive(Worker) of
+        true ->
+            case fetch_conn(Worker, Sql, Batch, Timeout) of
+                {ok, {Conn, Ref}} ->
+                    EncodedBatch = [encode_values(P) || P <- Batch],
+                    Result = epgsql:execute_batch(Conn, Sql, EncodedBatch),
                     ok = return_conn(Worker, Ref),
                     decode_reply(Result);
                 {error, _} = Error ->
