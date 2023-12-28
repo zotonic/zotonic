@@ -108,7 +108,9 @@
                           | {integer(),integer(),integer()}
                           | {{integer(),integer(),integer()}, {integer()|undefined,integer()|undefined,integer()|undefined}}.
 
--export_type([ datetime/0, date/0, fixable_datetime/0 ]).
+-type timestamp() :: integer().
+
+-export_type([ datetime/0, date/0, fixable_datetime/0, timestamp/0 ]).
 
 
 %% @doc Format the current date according to the format and the timezone settings in the context.
@@ -641,6 +643,8 @@ day_add(Date, Num) when Num > 0 ->
 -define(SECS_1970, 62167219200).
 
 %% @doc Calculate the current UNIX timestamp (seconds since Jan 1, 1970)
+-spec timestamp() -> SecondsSince1970
+    when SecondsSince1970 :: integer().
 timestamp() ->
     calendar:datetime_to_gregorian_seconds(calendar:universal_time())-?SECS_1970.
 

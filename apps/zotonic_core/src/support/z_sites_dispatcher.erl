@@ -115,6 +115,7 @@
 
 -export_type([
     site_dispatch_list/0,
+    dispatch/0,
     dispatch_rule/0,
     redirect/0,
     redirect_protocol/0,
@@ -1079,6 +1080,9 @@ trace(TracerPid, PathTokens, What, Args) ->
     TracerPid ! Trace,
     ok.
 
+-spec trace_final(TracerPid, Dispatch) -> Dispatch when
+    TracerPid :: undefined | pid(),
+    Dispatch :: dispatch().
 trace_final(TracerPid, #dispatch_controller{
             controller = Controller,
             controller_options = ControllerOptions,

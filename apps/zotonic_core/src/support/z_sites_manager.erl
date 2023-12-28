@@ -85,7 +85,7 @@
     is_enabled = true,
     status = new :: site_status(),
     pid = undefined :: undefined | pid(),
-    start_time = undefined :: undefined | erlang:timestamp(),
+    start_time = undefined :: undefined | z_datetime:timestamp(),
     stop_time = undefined :: undefined | erlang:timestamp(),
     stop_count = 0 :: integer(),
     crash_time = undefined :: undefined | erlang:timestamp(),
