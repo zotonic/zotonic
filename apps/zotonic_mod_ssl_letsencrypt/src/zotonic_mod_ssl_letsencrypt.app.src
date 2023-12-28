@@ -2,7 +2,11 @@
     {description, "Use SSL Certificate from a Certificiate Authority."},
     {vsn, {file, "../../VERSION"}},
     {registered, []},
-    {applications, [kernel, stdlib, zotonic_core]},
+    {applications, [
+        kernel, stdlib, crypto,
+        zotonic_ssl, zotonic_core,
+        jsx
+    ]},
     {env, []},
     {modules, []},
     {doc, "doc"},

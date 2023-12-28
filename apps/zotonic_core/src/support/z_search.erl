@@ -38,8 +38,6 @@
     concat_sql_query/2
 ]).
 
--include_lib("zotonic.hrl").
-
 % The tuple format is deprecated. Use separate binary search term with a map.
 -type search_query():: {atom(), list()}
                      | {binary(), map()|undefined}.
@@ -51,8 +49,11 @@
 
 -export_type([
     search_query/0,
-    search_offset/0
+    search_offset/0,
+    search_options/0
     ]).
+
+-include_lib("zotonic.hrl").
 
 -define(SEARCH_ALL_LIMIT, 30000).
 -define(MIN_LOOKAHEAD, 200).

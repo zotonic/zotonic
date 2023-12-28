@@ -114,6 +114,7 @@
 }.
 
 -export_type([
+    site_dispatch_list/0,
     dispatch_rule/0,
     redirect/0,
     redirect_protocol/0,
