@@ -62,7 +62,8 @@
 
 -type site_dispatch_list() :: #site_dispatch_list{}.
 -type dispatch_rule() :: dispatch_compiler:dispatch_rule().
--type bindings() :: list(dispatch_compiler:binding()).
+-type binding() :: dispatch_compiler:binding() | {atom(), atom()}.
+-type bindings() :: list(binding()).
 -type hostname() :: binary() | string().
 
 -record(state, {
@@ -122,6 +123,8 @@
     stop_request/0,
     hostname/0,
     trace_step/0,
+    bindings/0,
+    binding/0,
     trace/0
 ]).
 
