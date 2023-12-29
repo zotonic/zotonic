@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017 Marc Worrell
+%% @copyright 2017-2023 Marc Worrell
 %% @doc Supervisor for a site's modules
+%% @end
 
-%% Copyright 2017 Marc Worrell
+%% Copyright 2017-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -51,7 +52,9 @@ start_module(Application, ChildSpec, Site) ->
             Error
     end.
 
--spec stop_module(supervisor:child_id(), atom()) -> ok | {error, not_found}.
+-spec stop_module(ChildId, Site) -> ok | {error, not_found} when
+    ChildId :: term(),
+    Site :: atom().
 stop_module(ChildId, Site) ->
     Name = z_utils:name_for_site(z_module_sup, Site),
     supervisor:terminate_child(Name, ChildId).

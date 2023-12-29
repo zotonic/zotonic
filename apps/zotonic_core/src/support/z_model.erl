@@ -126,7 +126,7 @@ publish(Model, Verb, Path, Msg, Context) ->
     end.
 
 
--spec callback( model_name(), verb(), path(), mqtt_packet_map:mqtt_message(), z:context() ) -> {ok, term()} | {error, term()}.
+-spec callback( model_name(), verb(), path(), mqtt_packet_map:mqtt_packet(), z:context() ) -> {ok, term()} | {error, term()}.
 callback(Model, Verb, Path, Msg, Context) ->
     case get_module(Model, Context) of
         {ok, Mod} ->
@@ -221,7 +221,7 @@ map_verb(post) -> m_post;
 map_verb(delete) -> m_delete.
 
 
--spec model_call( module(), atom(), path(), mqtt_packet_map:mqtt_message(), z:context() ) -> {ok, term()} | ok | {error, unacceptable | term()}.
+-spec model_call( module(), atom(), path(), mqtt_packet_map:mqtt_packet(), z:context() ) -> {ok, term()} | ok | {error, unacceptable | term()}.
 model_call(Mod, m_get, Path, Msg, Context) ->
     Mod:m_get(binarize(Path), Msg, Context);
 model_call(Mod, Callback, Path, Msg, Context) ->

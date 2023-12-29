@@ -959,7 +959,7 @@ reupload_2(_Id, _Medium, _Filename, {error, _} = Error, _Context) ->
     Error.
 
 
--spec rsc_is_media_cat( m_resource:id(), z:context() ) -> boolean().
+-spec rsc_is_media_cat( m_rsc:resource_id(), z:context() ) -> boolean().
 rsc_is_media_cat(Id, Context) ->
     case z_db:q1("select c.name from rsc c join rsc r on r.category_id = c.id where r.id = $1", [Id],
         Context) of

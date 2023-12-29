@@ -63,9 +63,9 @@
 
 -record(state, {
     context :: z:context(),
-    backup_start :: undefined | calendar:date_time(),
+    backup_start :: undefined | calendar:datetime(),
     backup_pid :: undefined | pid(),
-    upload_start :: undefined | calendar:date_time(),
+    upload_start :: undefined | calendar:datetime(),
     upload_pid :: undefined | pid(),
     upload_name :: undefined | binary(),
     timer_ref :: timer:tref()

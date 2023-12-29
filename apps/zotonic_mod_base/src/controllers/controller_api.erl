@@ -75,7 +75,7 @@ is_method_topic_match(<<"OPTIONS">>, _) -> true.
 
 
 %% @doc Content types accepted for the post body
--spec content_types_accepted( z:context() ) -> {list( cowmachine_req:mime_type() ), z:context()}.
+-spec content_types_accepted( z:context() ) -> {list( cowmachine_req:media_type() ), z:context()}.
 content_types_accepted(Context) ->
     {[
         {<<"application">>, <<"json">>, []},
@@ -88,7 +88,7 @@ content_types_accepted(Context) ->
     ], Context}.
 
 %% @doc Content types provided for the resulting body
--spec content_types_provided( z:context() ) -> {list( cowmachine_req:mime_type() ), z:context()}.
+-spec content_types_provided( z:context() ) -> {list( cowmachine_req:media_type() ), z:context()}.
 content_types_provided(Context) ->
     {[
         {<<"application">>, <<"json">>, []},

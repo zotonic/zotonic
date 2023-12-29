@@ -37,8 +37,11 @@
                                 kid => binary(),
                                 url => string() | binary()
                             }.
+
+-type key_integer() :: integer() | binary().
+-type rsa_private() :: [key_integer()].
 -type ssl_privatekey() :: #{
-                                raw => crypto:rsa_private(),
+                                raw => rsa_private(),
                                 b64 => {binary(), binary()},
                                 file => string()
                             }.

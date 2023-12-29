@@ -2,7 +2,7 @@
     {description, "Add external media in your site by their URL."},
     {vsn, {file, "../../VERSION"}},
     {registered, []},
-    {applications, [kernel, stdlib, zotonic_core]},
+    {applications, [kernel, stdlib, mochiweb, zotonic_core]},
     {env, []},
     {modules, []},
     {doc, "doc"},
