@@ -187,7 +187,7 @@ mark_imported(RscId, Status, Context) ->
 
 
 %% @doc Find or create a placeholder resource for later import of referred ids.
--spec maybe_create_empty( map(), map(), options(), z:context() ) -> {ok, {m_rsc:rescource_id(), map()}} | {error, term()}.
+-spec maybe_create_empty( map(), map(), options(), z:context() ) -> {ok, {m_rsc:resource_id(), map()}} | {error, term()}.
 maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
     case is_known_resource(Rsc, ImportedAcc, Options, Context) of
         false ->

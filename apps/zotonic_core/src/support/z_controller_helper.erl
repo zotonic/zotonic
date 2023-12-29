@@ -251,7 +251,7 @@ encode_response({<<"text">>, <<"x-ubf">>, _}, Data) ->
 encode_response({<<"application">>, <<"x-bert">>, _}, Data) ->
     erlang:term_to_binary(Data);
 encode_response({<<"application">>, <<"x-www-form-urlencoded">>, _}, Data) ->
-    cow_qs:urlencode( encode_prep_qs(Data) ).
+    cow_qs:qs( encode_prep_qs(Data) ).
 
 encode_prep_qs(Map) when is_map(Map) ->
     encode_prep_qs( maps:to_list(Map) );

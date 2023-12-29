@@ -356,7 +356,7 @@ auth_tokens( #{ <<"username">> := Username, <<"password">> := Password } = QArgs
 
 
 %% @doc Fetch the secret user key. This key is used to add an extra hash of the tokens.
--spec user_auth_key( m_rsc:rid(), z:context() ) -> binary().
+-spec user_auth_key( m_rsc:resource_id(), z:context() ) -> binary().
 user_auth_key(UserId, Context) ->
     case m_identity:get_rsc(UserId, auth_key, Context) of
         undefined ->
@@ -385,7 +385,7 @@ site_auth_key(Context) ->
     end.
 
 %% @doc Decode a token, check the hashes.
--spec decode_token( binary(), z:context() ) -> {ok, {cookie|auth, UserId :: m_rsc:rid(), Timestamp::pos_integer()}} | {error, illegal}.
+-spec decode_token( binary(), z:context() ) -> {ok, {cookie|auth, UserId :: m_rsc:resource_id(), Timestamp::pos_integer()}} | {error, illegal}.
 decode_token(Token, Context) ->
     try
         <<1, Hash:32/binary, Payload/binary>> = base64:decode(Token),

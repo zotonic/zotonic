@@ -88,7 +88,7 @@ terminate(_Reason, _State) ->
 %%====================================================================
 
 %% Check if the config table exists, if so then assume that all is ok
--spec install_check( proplists:list() ) -> ok | {error, nodbinstall | database | term()}.
+-spec install_check( proplists:proplist() ) -> ok | {error, nodbinstall | database | term()}.
 install_check(SiteProps) ->
     {site, Site} = proplists:lookup(site, SiteProps),
     logger:set_process_metadata(#{

@@ -121,7 +121,9 @@
     props/0,
     props_all/0,
     props_legacy/0,
-    update_function/0
+    update_function/0,
+    duplicate_option/0,
+    duplicate_options/0
 ]).
 
 

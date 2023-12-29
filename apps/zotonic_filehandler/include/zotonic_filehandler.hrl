@@ -7,7 +7,7 @@
 
 %% Called with zotonic_notifier:first. Maps a categorized file to a list of actions.
 -record(zotonic_filehandler_map, {
-    verb :: zotonic_filewatcher:verb(),
+    verb :: zotonic_filehandler:verb(),
     application :: module(),
     what :: term(),
     extension :: binary(),

@@ -179,7 +179,7 @@ await_response( Topic, Timeout, Context ) ->
 
 -spec map_topic(Topic, Context) -> {ok, mqtt_sessions:topic()} | {error, no_client | term()} when
     Topic :: mqtt_sessions:topic() | undefined | atom() | m_rsc:resource_id(),
-    Context :: z:contxt().
+    Context :: z:context().
 map_topic(undefined, _Context) ->
     {error, no_topic};
 map_topic(<<>>, _Context) ->

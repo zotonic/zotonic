@@ -671,7 +671,7 @@ module_exists(M) ->
         schema := integer() | undefined,
         title := binary() | undefined,
         description := binary() | undefined,
-        app_dir := filename:filename_all() | undefined
+        app_dir := file:filename_all() | undefined
     }.
 mod_info(Module) ->
     App = module_to_app(Module),

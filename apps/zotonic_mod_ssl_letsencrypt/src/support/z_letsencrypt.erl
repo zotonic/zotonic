@@ -37,19 +37,24 @@
                                 kid => binary(),
                                 url => string() | binary()
                             }.
+
+-type key_integer() :: integer() | binary().
+-type rsa_private() :: [key_integer()].
 -type ssl_privatekey() :: #{
-                                raw => crypto:rsa_private(),
+                                raw => rsa_private(),
                                 b64 => {binary(), binary()},
                                 file => string()
                             }.
 -type domain()         :: binary() | string().
+-type ssl_csr()        :: binary().
 
 -export_type([
         domain/0,
         ssl_privatekey/0,
         jws/0,
         challenge_type/0,
-        nonce/0
+        nonce/0,
+        ssl_csr/0
     ]).
 
 -record(state, {

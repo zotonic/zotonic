@@ -15,7 +15,7 @@
     push_queue = page :: page | session | user,
 
     % Set by transports from user-agent to server
-    ua_class = undefined :: ua_classifier:device_type() | undefined,
+    ua_class = undefined :: term() | undefined,  % used to be ua_classifier:device_type()
     session_id :: undefined | binary(),
     page_id :: undefined | binary(),
 

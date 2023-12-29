@@ -2,7 +2,7 @@
     {description, "Admin interface to edit content and administrate a Zotonic site."},
     {vsn, {file, "../../VERSION"}},
     {registered, []},
-    {applications, [kernel, stdlib, zotonic_core]},
+    {applications, [kernel, stdlib, recon, zotonic_core]},
     {env, []},
     {modules, []},
     {doc, "doc"},

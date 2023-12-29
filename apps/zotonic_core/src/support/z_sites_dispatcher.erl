@@ -62,7 +62,8 @@
 
 -type site_dispatch_list() :: #site_dispatch_list{}.
 -type dispatch_rule() :: dispatch_compiler:dispatch_rule().
--type bindings() :: list(dispatch_compiler:binding()).
+-type binding() :: dispatch_compiler:binding() | {atom(), atom()}.
+-type bindings() :: list(binding()).
 -type hostname() :: binary() | string().
 
 -record(state, {
@@ -114,12 +115,16 @@
 }.
 
 -export_type([
+    site_dispatch_list/0,
+    dispatch/0,
     dispatch_rule/0,
     redirect/0,
     redirect_protocol/0,
     stop_request/0,
     hostname/0,
     trace_step/0,
+    bindings/0,
+    binding/0,
     trace/0
 ]).
 
@@ -800,7 +805,7 @@ map_z_language_2(z_language) -> {z_language, {?MODULE, is_bind_language}};
 map_z_language_2(X) -> X.
 
 
--spec do_dispatch_rule(dispatch_rule(), list(), list( binary() ), boolean(), #dispatch{}, z:context()) -> #dispatch_controller{}.
+-spec do_dispatch_rule(dispatch_rule(), bindings(), list( binary() ), boolean(), #dispatch{}, z:context()) -> #dispatch_controller{}.
 do_dispatch_rule({DispatchName, _, Mod, Props}, Bindings, Tokens, _IsDir, DispReq, Context) ->
     Bindings1 = [ {zotonic_dispatch, DispatchName} | Bindings ],
     trace(DispReq#dispatch.tracer_pid,
@@ -826,7 +831,7 @@ redirect_protocol(Hostname, TracerPid, Tokens) ->
     trace(TracerPid, Tokens, forced_protocol_switch, [{protocol, https}, {host, NewHostname}]),
     {redirect_protocol, https, NewHostname, true}.
 
--spec do_dispatch_fail(list(), list( binary() ), boolean(), #dispatch{}, z:context()) -> dispatch().
+-spec do_dispatch_fail(bindings(), list( binary() ), boolean(), #dispatch{}, z:context()) -> dispatch().
 do_dispatch_fail(Bindings, Tokens, _IsDir, DispReq, Context0) ->
     TokenPath = tokens_to_path(Tokens),
     trace(DispReq#dispatch.tracer_pid, DispReq#dispatch.path, notify_dispatch, []),
@@ -841,6 +846,17 @@ tokens_to_path(Ts) ->
 
 
 %% Handle possible request rewrite; used when no dispatch rule matched
+-spec handle_rewrite(DispatchResult, DispReq, MatchedHost, NonMatchedPathTokens, Bindings, Context) -> Dispatch when
+    DispatchResult :: {ok, m_rsc:resource_id()}
+                    | {ok, #dispatch_match{}}
+                    | {ok, #dispatch_redirect{}}
+                    | undefined,
+    DispReq :: #dispatch{},
+    MatchedHost :: binary(),
+    NonMatchedPathTokens :: list( binary() ),
+    Bindings :: bindings(),
+    Context :: z:context(),
+    Dispatch :: dispatch().
 handle_rewrite({ok, Id}, DispReq, MatchedHost, NonMatchedPathTokens, Bindings, Context) when is_integer(Id) ->
     %% Retry with the resource's default page uri
     UrlContext = case proplists:get_value(z_language, Bindings) of
@@ -1078,6 +1094,9 @@ trace(TracerPid, PathTokens, What, Args) ->
     TracerPid ! Trace,
     ok.
 
+-spec trace_final(TracerPid, Dispatch) -> Dispatch when
+    TracerPid :: undefined | pid(),
+    Dispatch :: dispatch().
 trace_final(TracerPid, #dispatch_controller{
             controller = Controller,
             controller_options = ControllerOptions,
