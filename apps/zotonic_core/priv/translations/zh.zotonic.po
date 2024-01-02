@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-01-02 16:44\n"
+"PO-Revision-Date: 2024-01-02 20:37\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -10278,6 +10278,10 @@ msgstr "所有文本均已翻译。"
 msgid "All translated texts will be removed."
 msgstr "所有翻译的文本将被删除。"
 
+#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:10
+msgid "Approve translation"
+msgstr "批准翻译"
+
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:18
 msgid "Are you sure you want to delete:"
 msgstr "你确定你要删除："
@@ -10438,10 +10442,6 @@ msgstr "语言概览"
 msgid "Leave texts empty"
 msgstr "将文本留空"
 
-#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:10
-msgid "Mark translation as reviewed"
-msgstr "将翻译标记为已审阅"
-
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:85
 msgid "Method"
 msgstr "方法"
@@ -10475,8 +10475,8 @@ msgid "Please check the translations and save the page when you are ready."
 msgstr "请检查翻译并在准备好后保存页面。"
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:5
-msgid "Please review all texts and correct any mistakes. If the translation is correct then mark it as reviewed. This message will then disappear."
-msgstr "请检查所有文本并纠正任何错误。如果翻译正确，则将其标记为已审阅。此消息随后将消失。"
+msgid "Please review all texts and correct any mistakes. Approve the translation if it is correct. This message will then disappear."
+msgstr "请检查所有文本并纠正任何错误。如果翻译正确，请批准。此消息随后将消失。"
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:25
 msgid "Ready"
