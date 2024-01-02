@@ -16,7 +16,7 @@
         action={confirm
             text=_"Did you review all texts and correct any mistakes?"
             ok=_"Yes"
-            action={set_value target="trans-status-"++lang_code value="0"}
+            action={set_value target="trans-status-"++lang_code value=""}
             action={fade_out target="trans-review-" ++ lang_code}
         }
 %}
