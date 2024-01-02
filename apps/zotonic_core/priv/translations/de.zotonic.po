@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-01-02 18:19\n"
+"PO-Revision-Date: 2024-01-02 20:36\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -10282,6 +10282,10 @@ msgstr "Alle Texte wurden übersetzt."
 msgid "All translated texts will be removed."
 msgstr "Alle übersetzten Texte werden entfernt."
 
+#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:10
+msgid "Approve translation"
+msgstr "Übersetzung genehmigen"
+
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:18
 msgid "Are you sure you want to delete:"
 msgstr "Sind Sie sicher, dass Sie löschen möchten:"
@@ -10442,10 +10446,6 @@ msgstr "Sprachübersicht"
 msgid "Leave texts empty"
 msgstr "Lassen Sie die Texte leer"
 
-#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:10
-msgid "Mark translation as reviewed"
-msgstr "Markieren Sie die Übersetzung als überprüft"
-
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:85
 msgid "Method"
 msgstr "Methode"
@@ -10479,8 +10479,8 @@ msgid "Please check the translations and save the page when you are ready."
 msgstr "Bitte überprüfen Sie die Übersetzungen und speichern Sie die Seite, wenn Sie fertig sind."
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:5
-msgid "Please review all texts and correct any mistakes. If the translation is correct then mark it as reviewed. This message will then disappear."
-msgstr "Bitte überprüfen Sie alle Texte und korrigieren Sie etwaige Fehler. Wenn die Übersetzung korrekt ist, markieren Sie sie als überprüft. Diese Meldung verschwindet dann."
+msgid "Please review all texts and correct any mistakes. Approve the translation if it is correct. This message will then disappear."
+msgstr "Bitte überprüfen Sie alle Texte und korrigieren Sie etwaige Fehler. Genehmigen Sie die Übersetzung, wenn sie korrekt ist. Diese Meldung verschwindet dann."
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:25
 msgid "Ready"
