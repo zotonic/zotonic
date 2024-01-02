@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-12-19 18:21\n"
+"PO-Revision-Date: 2024-01-02 16:44\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -61,70 +61,70 @@ msgstr "Brak autoryzacji dostępu do adresu URL zdalnego zasobu."
 msgid "Website"
 msgstr "Strona internetowa"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:316
+#: apps/zotonic_core/src/support/z_datetime.erl:318
 msgid "ago"
 msgstr "temu"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:374./apps/zotonic_core/src/support/z_datetime.erl:377
+#: apps/zotonic_core/src/support/z_datetime.erl:376./apps/zotonic_core/src/support/z_datetime.erl:379
 msgid "day"
 msgstr "dzień"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:374./apps/zotonic_core/src/support/z_datetime.erl:377
+#: apps/zotonic_core/src/support/z_datetime.erl:376./apps/zotonic_core/src/support/z_datetime.erl:379
 msgid "days"
 msgstr "dni"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:372./apps/zotonic_core/src/support/z_datetime.erl:375
+#: apps/zotonic_core/src/support/z_datetime.erl:374./apps/zotonic_core/src/support/z_datetime.erl:377
 msgid "hour"
 msgstr "godzina"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:372./apps/zotonic_core/src/support/z_datetime.erl:375
+#: apps/zotonic_core/src/support/z_datetime.erl:374./apps/zotonic_core/src/support/z_datetime.erl:377
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:12./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
 msgid "hours"
 msgstr "godziny"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:316
+#: apps/zotonic_core/src/support/z_datetime.erl:318
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in"
 msgstr "w"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:370./apps/zotonic_core/src/support/z_datetime.erl:373
+#: apps/zotonic_core/src/support/z_datetime.erl:372./apps/zotonic_core/src/support/z_datetime.erl:375
 msgid "minute"
 msgstr "minuta"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:370./apps/zotonic_core/src/support/z_datetime.erl:373
+#: apps/zotonic_core/src/support/z_datetime.erl:372./apps/zotonic_core/src/support/z_datetime.erl:375
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:13./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
 msgid "minutes"
 msgstr "minuty"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:367
+#: apps/zotonic_core/src/support/z_datetime.erl:369
 msgid "moments"
 msgstr "chwile"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:376./apps/zotonic_core/src/support/z_datetime.erl:379
+#: apps/zotonic_core/src/support/z_datetime.erl:378./apps/zotonic_core/src/support/z_datetime.erl:381
 msgid "month"
 msgstr "miesiąc"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:376./apps/zotonic_core/src/support/z_datetime.erl:379
+#: apps/zotonic_core/src/support/z_datetime.erl:378./apps/zotonic_core/src/support/z_datetime.erl:381
 msgid "months"
 msgstr "miesiące"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:316./apps/zotonic_core/src/support/z_datetime.erl:366
+#: apps/zotonic_core/src/support/z_datetime.erl:318./apps/zotonic_core/src/support/z_datetime.erl:368
 msgid "now"
 msgstr "teraz"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:368./apps/zotonic_core/src/support/z_datetime.erl:371
+#: apps/zotonic_core/src/support/z_datetime.erl:370./apps/zotonic_core/src/support/z_datetime.erl:373
 msgid "second"
 msgstr "sekunda"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:368./apps/zotonic_core/src/support/z_datetime.erl:371
+#: apps/zotonic_core/src/support/z_datetime.erl:370./apps/zotonic_core/src/support/z_datetime.erl:373
 msgid "seconds"
 msgstr "sekundy"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:378
+#: apps/zotonic_core/src/support/z_datetime.erl:380
 msgid "year"
 msgstr "rok"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:378
+#: apps/zotonic_core/src/support/z_datetime.erl:380
 msgid "years"
 msgstr "lata"
 
@@ -5311,6 +5311,7 @@ msgstr "Wsparcie dla gniazd sieciowych?"
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:251./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
 #: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:39
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:47./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:30./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
+#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:18
 msgid "Yes"
 msgstr "Tak"
 
@@ -10337,6 +10338,10 @@ msgstr "Szczegóły"
 msgid "Developer Documentation"
 msgstr "Dokumentacja deweloperska"
 
+#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:17
+msgid "Did you review all texts and correct any mistakes?"
+msgstr ""
+
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:23
 msgid "Drag languages to define the preferred order, the first 'view' language will be the default language."
 msgstr "Przeciągnij języki, aby określić preferowaną kolejność, język pierwszego widoku będzie językiem domyślnym."
@@ -10437,6 +10442,10 @@ msgstr "Języki"
 msgid "Leave texts empty"
 msgstr "Pozostaw teksty puste"
 
+#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:10
+msgid "Mark translation as reviewed"
+msgstr ""
+
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:85
 msgid "Method"
 msgstr "metoda"
@@ -10468,6 +10477,10 @@ msgstr "Część"
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:29./apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:41
 msgid "Please check the translations and save the page when you are ready."
 msgstr "Sprawdź tłumaczenia i zapisz stronę, gdy będziesz gotowy."
+
+#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:5
+msgid "Please review all texts and correct any mistakes. If the translation is correct then mark it as reviewed. This message will then disappear."
+msgstr ""
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:25
 msgid "Ready"
@@ -10572,6 +10585,10 @@ msgstr "Do brakujących tłumaczeń wykorzystano tekst w języku źródłowym."
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:48
 msgid "There was an error translating the texts. Please try again later."
 msgstr "Podczas tłumaczenia tekstów wystąpił błąd. Spróbuj ponownie później."
+
+#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:4
+msgid "This translation is automatically generated."
+msgstr ""
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:72
 msgid "To new language"
