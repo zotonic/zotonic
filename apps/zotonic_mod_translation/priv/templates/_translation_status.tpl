@@ -2,12 +2,12 @@
     <div id="trans-review-{{ lang_code }}" class="help-block" {% if not status %}style="display:none"{% endif %}>
         <br><span class="glyphicon glyphicon-info-sign"></span>
         <b>{_ This translation is automatically generated._}</b>
-        {_ Please review all texts and correct any mistakes. If the translation is correct then mark it as reviewed. This message will then disappear. _}
+        {_ Please review all texts and correct any mistakes. Approve the translation if it is correct. This message will then disappear. _}
 
         <input type="hidden" id="trans-status-{{ lang_code }}" name="translation_status.{{ lang_code }}" value="{{ status }}">
 
         <button id="trans-review-btn-{{ lang_code }}" class="btn btn-xs btn-primary">
-            {_ Mark translation as reviewed _}
+            {_ Approve translation _}
         </button>
     </div>
 {% endwith %}

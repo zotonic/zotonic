@@ -10880,6 +10880,10 @@ msgstr ""
 msgid "All translated texts will be removed."
 msgstr ""
 
+#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:10
+msgid "Approve translation"
+msgstr ""
+
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:18
 msgid "Are you sure you want to delete:"
 msgstr ""
@@ -11056,10 +11060,6 @@ msgstr ""
 msgid "Leave texts empty"
 msgstr ""
 
-#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:10
-msgid "Mark translation as reviewed"
-msgstr ""
-
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:85
 msgid "Method"
 msgstr ""
@@ -11094,8 +11094,8 @@ msgstr ""
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:5
 msgid ""
-"Please review all texts and correct any mistakes. If the translation is "
-"correct then mark it as reviewed. This message will then disappear."
+"Please review all texts and correct any mistakes. Approve the translation if "
+"it is correct. This message will then disappear."
 msgstr ""
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:25
