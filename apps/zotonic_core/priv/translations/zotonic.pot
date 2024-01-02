@@ -63,70 +63,70 @@ msgstr ""
 msgid "Website"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:316
+#: apps/zotonic_core/src/support/z_datetime.erl:318
 msgid "ago"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:374./apps/zotonic_core/src/support/z_datetime.erl:377
+#: apps/zotonic_core/src/support/z_datetime.erl:376./apps/zotonic_core/src/support/z_datetime.erl:379
 msgid "day"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:374./apps/zotonic_core/src/support/z_datetime.erl:377
+#: apps/zotonic_core/src/support/z_datetime.erl:376./apps/zotonic_core/src/support/z_datetime.erl:379
 msgid "days"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:372./apps/zotonic_core/src/support/z_datetime.erl:375
+#: apps/zotonic_core/src/support/z_datetime.erl:374./apps/zotonic_core/src/support/z_datetime.erl:377
 msgid "hour"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:372./apps/zotonic_core/src/support/z_datetime.erl:375
+#: apps/zotonic_core/src/support/z_datetime.erl:374./apps/zotonic_core/src/support/z_datetime.erl:377
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:12./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
 msgid "hours"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:316
+#: apps/zotonic_core/src/support/z_datetime.erl:318
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:370./apps/zotonic_core/src/support/z_datetime.erl:373
+#: apps/zotonic_core/src/support/z_datetime.erl:372./apps/zotonic_core/src/support/z_datetime.erl:375
 msgid "minute"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:370./apps/zotonic_core/src/support/z_datetime.erl:373
+#: apps/zotonic_core/src/support/z_datetime.erl:372./apps/zotonic_core/src/support/z_datetime.erl:375
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:13./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
 msgid "minutes"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:367
+#: apps/zotonic_core/src/support/z_datetime.erl:369
 msgid "moments"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:376./apps/zotonic_core/src/support/z_datetime.erl:379
+#: apps/zotonic_core/src/support/z_datetime.erl:378./apps/zotonic_core/src/support/z_datetime.erl:381
 msgid "month"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:376./apps/zotonic_core/src/support/z_datetime.erl:379
+#: apps/zotonic_core/src/support/z_datetime.erl:378./apps/zotonic_core/src/support/z_datetime.erl:381
 msgid "months"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:316./apps/zotonic_core/src/support/z_datetime.erl:366
+#: apps/zotonic_core/src/support/z_datetime.erl:318./apps/zotonic_core/src/support/z_datetime.erl:368
 msgid "now"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:368./apps/zotonic_core/src/support/z_datetime.erl:371
+#: apps/zotonic_core/src/support/z_datetime.erl:370./apps/zotonic_core/src/support/z_datetime.erl:373
 msgid "second"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:368./apps/zotonic_core/src/support/z_datetime.erl:371
+#: apps/zotonic_core/src/support/z_datetime.erl:370./apps/zotonic_core/src/support/z_datetime.erl:373
 msgid "seconds"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:378
+#: apps/zotonic_core/src/support/z_datetime.erl:380
 msgid "year"
 msgstr ""
 
-#: apps/zotonic_core/src/support/z_datetime.erl:378
+#: apps/zotonic_core/src/support/z_datetime.erl:380
 msgid "years"
 msgstr ""
 
@@ -4392,11 +4392,11 @@ msgstr ""
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:2
 msgid ""
-"Scan the two-factor authentication QR code with an app such as <a target="
-"\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/"
-"accounts/answer/1066447\">Google Authenticator</a> or <a target=\"_blank\" "
-"rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-"
-"factor-authentication/duo-mobile\">Duo Mobile</a>."
+"Scan the two-factor authentication QR code with an app such as <a "
+"target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google."
+"com/accounts/answer/1066447\">Google Authenticator</a> or <a "
+"target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/"
+"trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
 msgstr ""
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:92
@@ -4455,8 +4455,8 @@ msgid ""
 "You can add two-factor authentication to your account.<br>You will need an "
 "App on your Phone to scan the QR code and generate passcodes.<br>Examples "
 "are <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support."
-"google.com/accounts/answer/1066447\">Google Authenticator</a> and <a target="
-"\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/"
+"google.com/accounts/answer/1066447\">Google Authenticator</a> and <a "
+"target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/"
 "trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>"
 msgstr ""
 
@@ -5601,6 +5601,7 @@ msgstr ""
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:251./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
 #: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:39
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:47./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:30./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
+#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:18
 msgid "Yes"
 msgstr ""
 
@@ -6554,8 +6555,8 @@ msgstr ""
 
 #: apps/zotonic_mod_email_dkim/priv/templates/_admin_config_email_panel.tpl:25
 msgid ""
-"When all is setup, you can use the <a href=\"http://dkimcore.org/c/keycheck"
-"\">DKIM keycheck</a> website to verify your domain's DKIM record."
+"When all is setup, you can use the <a href=\"http://dkimcore.org/c/"
+"keycheck\">DKIM keycheck</a> website to verify your domain's DKIM record."
 msgstr ""
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:187
@@ -10939,6 +10940,10 @@ msgstr ""
 msgid "Developer Documentation"
 msgstr ""
 
+#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:17
+msgid "Did you review all texts and correct any mistakes?"
+msgstr ""
+
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:23
 msgid ""
 "Drag languages to define the preferred order, the first 'view' language will "
@@ -11051,6 +11056,10 @@ msgstr ""
 msgid "Leave texts empty"
 msgstr ""
 
+#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:10
+msgid "Mark translation as reviewed"
+msgstr ""
+
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:85
 msgid "Method"
 msgstr ""
@@ -11081,6 +11090,12 @@ msgstr ""
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:29./apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:41
 msgid "Please check the translations and save the page when you are ready."
+msgstr ""
+
+#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:5
+msgid ""
+"Please review all texts and correct any mistakes. If the translation is "
+"correct then mark it as reviewed. This message will then disappear."
 msgstr ""
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:25
@@ -11196,6 +11211,10 @@ msgstr ""
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:48
 msgid "There was an error translating the texts. Please try again later."
+msgstr ""
+
+#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:4
+msgid "This translation is automatically generated."
 msgstr ""
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:72
