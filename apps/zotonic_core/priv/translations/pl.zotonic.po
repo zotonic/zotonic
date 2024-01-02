@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-01-02 18:19\n"
+"PO-Revision-Date: 2024-01-02 20:36\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -10282,6 +10282,10 @@ msgstr "Wszystkie teksty zostały przetłumaczone."
 msgid "All translated texts will be removed."
 msgstr "Wszystkie przetłumaczone teksty zostaną usunięte."
 
+#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:10
+msgid "Approve translation"
+msgstr "Zatwierdź tłumaczenie"
+
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:18
 msgid "Are you sure you want to delete:"
 msgstr "Czy jesteś pewien, że chcesz usunąć:"
@@ -10442,10 +10446,6 @@ msgstr "Języki"
 msgid "Leave texts empty"
 msgstr "Pozostaw teksty puste"
 
-#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:10
-msgid "Mark translation as reviewed"
-msgstr "Oznacz tłumaczenie jako sprawdzone"
-
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:85
 msgid "Method"
 msgstr "metoda"
@@ -10479,8 +10479,8 @@ msgid "Please check the translations and save the page when you are ready."
 msgstr "Sprawdź tłumaczenia i zapisz stronę, gdy będziesz gotowy."
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:5
-msgid "Please review all texts and correct any mistakes. If the translation is correct then mark it as reviewed. This message will then disappear."
-msgstr "Prosimy o sprawdzenie wszystkich tekstów i poprawienie ewentualnych błędów. Jeśli tłumaczenie jest poprawne, oznacz je jako sprawdzone. Komunikat ten zniknie."
+msgid "Please review all texts and correct any mistakes. Approve the translation if it is correct. This message will then disappear."
+msgstr "Prosimy o sprawdzenie wszystkich tekstów i poprawienie ewentualnych błędów. Zatwierdź tłumaczenie, jeśli jest poprawne. Komunikat ten zniknie."
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:25
 msgid "Ready"
