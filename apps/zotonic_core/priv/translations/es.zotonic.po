@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-01-02 16:44\n"
+"PO-Revision-Date: 2024-01-02 18:19\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -10341,7 +10341,7 @@ msgstr "Documentación para el desarrollador"
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:17
 msgid "Did you review all texts and correct any mistakes?"
-msgstr ""
+msgstr "¿Revisó todos los textos y corrigió algún error?"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:23
 msgid "Drag languages to define the preferred order, the first 'view' language will be the default language."
@@ -10445,7 +10445,7 @@ msgstr "Dejar los textos vacíos"
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:10
 msgid "Mark translation as reviewed"
-msgstr ""
+msgstr "Marcar la traducción como revisada"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:85
 msgid "Method"
@@ -10481,7 +10481,7 @@ msgstr "Verifique las traducciones y guarde la página cuando esté listo."
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:5
 msgid "Please review all texts and correct any mistakes. If the translation is correct then mark it as reviewed. This message will then disappear."
-msgstr ""
+msgstr "Por favor revise todos los textos y corrija cualquier error. Si la traducción es correcta márquela como revisada. Este mensaje desaparecerá entonces."
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:25
 msgid "Ready"
@@ -10589,7 +10589,7 @@ msgstr "Hubo un error al traducir los textos. Por favor, inténtelo de nuevo má
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:4
 msgid "This translation is automatically generated."
-msgstr ""
+msgstr "Esta traducción se genera automáticamente."
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:72
 msgid "To new language"
