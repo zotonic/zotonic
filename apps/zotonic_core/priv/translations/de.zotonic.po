@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-01-02 16:44\n"
+"PO-Revision-Date: 2024-01-02 18:19\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -10340,7 +10340,7 @@ msgstr "Dokumentation für Entwickler"
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:17
 msgid "Did you review all texts and correct any mistakes?"
-msgstr ""
+msgstr "Haben Sie alle Texte überprüft und etwaige Fehler korrigiert?"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:23
 msgid "Drag languages to define the preferred order, the first 'view' language will be the default language."
@@ -10444,7 +10444,7 @@ msgstr "Lassen Sie die Texte leer"
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:10
 msgid "Mark translation as reviewed"
-msgstr ""
+msgstr "Markieren Sie die Übersetzung als überprüft"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:85
 msgid "Method"
@@ -10480,7 +10480,7 @@ msgstr "Bitte überprüfen Sie die Übersetzungen und speichern Sie die Seite, w
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:5
 msgid "Please review all texts and correct any mistakes. If the translation is correct then mark it as reviewed. This message will then disappear."
-msgstr ""
+msgstr "Bitte überprüfen Sie alle Texte und korrigieren Sie etwaige Fehler. Wenn die Übersetzung korrekt ist, markieren Sie sie als überprüft. Diese Meldung verschwindet dann."
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:25
 msgid "Ready"
@@ -10588,7 +10588,7 @@ msgstr "Bei der Übersetzung der Texte ist ein Fehler aufgetreten. Bitte versuch
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:4
 msgid "This translation is automatically generated."
-msgstr ""
+msgstr "Diese Übersetzung wird automatisch generiert."
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:72
 msgid "To new language"
