@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-01-02 16:44\n"
+"PO-Revision-Date: 2024-01-02 20:37\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -10282,6 +10282,10 @@ msgstr "Tüm metinler tercüme edildi."
 msgid "All translated texts will be removed."
 msgstr "Çevrilen tüm metinler kaldırılacaktır."
 
+#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:10
+msgid "Approve translation"
+msgstr "Çeviriyi onayla"
+
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:18
 msgid "Are you sure you want to delete:"
 msgstr "Silmek istediğine emin misin:"
@@ -10442,10 +10446,6 @@ msgstr "Dillere genel bakış"
 msgid "Leave texts empty"
 msgstr "Metinleri boş bırakın"
 
-#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:10
-msgid "Mark translation as reviewed"
-msgstr "Çeviriyi incelendi olarak işaretle"
-
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:85
 msgid "Method"
 msgstr "Yöntem"
@@ -10479,8 +10479,8 @@ msgid "Please check the translations and save the page when you are ready."
 msgstr "Lütfen çevirileri kontrol edin ve hazır olduğunuzda sayfayı kaydedin."
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:5
-msgid "Please review all texts and correct any mistakes. If the translation is correct then mark it as reviewed. This message will then disappear."
-msgstr "Lütfen tüm metinleri inceleyin ve hataları düzeltin. Çeviri doğruysa incelendi olarak işaretleyin. Daha sonra bu mesaj kaybolacaktır."
+msgid "Please review all texts and correct any mistakes. Approve the translation if it is correct. This message will then disappear."
+msgstr "Lütfen tüm metinleri inceleyin ve hataları düzeltin. Çeviri doğruysa onaylayın. Daha sonra bu mesaj kaybolacaktır."
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:25
 msgid "Ready"
