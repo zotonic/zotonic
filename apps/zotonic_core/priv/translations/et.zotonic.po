@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-01-02 16:44\n"
+"PO-Revision-Date: 2024-01-02 20:37\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -10282,6 +10282,10 @@ msgstr "Kõik tekstid tõlgiti."
 msgid "All translated texts will be removed."
 msgstr "Kõik tõlgitud tekstid eemaldatakse."
 
+#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:10
+msgid "Approve translation"
+msgstr "Kinnitage tõlge"
+
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:18
 msgid "Are you sure you want to delete:"
 msgstr "Kas soovite kindlasti kustutada:"
@@ -10442,10 +10446,6 @@ msgstr "Keelte ülevaade"
 msgid "Leave texts empty"
 msgstr "Jätke tekstid tühjaks"
 
-#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:10
-msgid "Mark translation as reviewed"
-msgstr "Märgi tõlge üle vaadatuks"
-
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:85
 msgid "Method"
 msgstr "meetod"
@@ -10479,8 +10479,8 @@ msgid "Please check the translations and save the page when you are ready."
 msgstr "Kontrollige tõlkeid ja salvestage leht, kui olete valmis."
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:5
-msgid "Please review all texts and correct any mistakes. If the translation is correct then mark it as reviewed. This message will then disappear."
-msgstr "Palun vaadake kõik tekstid üle ja parandage vead. Kui tõlge on õige, märkige see läbivaadatuks. Seejärel see teade kaob."
+msgid "Please review all texts and correct any mistakes. Approve the translation if it is correct. This message will then disappear."
+msgstr "Palun vaadake kõik tekstid üle ja parandage vead. Kinnitage tõlge, kui see on õige. Seejärel see teade kaob."
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:25
 msgid "Ready"
