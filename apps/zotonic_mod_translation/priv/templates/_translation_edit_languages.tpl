@@ -69,7 +69,7 @@
         $('.tab-pane.edit-language-' + dst).each(function() {
             const $form = $(this).closest("form");
             $("input,textarea", this).each(function() {
-                if ($(this).val().trim() == '') {
+                if ($.trim($(this).val()) == '' && $(this).attr('name').includes("$")) {
                     const from_name = $(this).attr('name').split('$')[0] + '$' + src;
                     if (!from_name.endsWith("_json")) {
                         const from_val = $form.find('[name="' + from_name + '"]').val().trim();
@@ -101,7 +101,7 @@
         $('.tab-pane.edit-language-' + dst).each(function() {
             const $form = $(this).closest("form");
             $("input,textarea", this).each(function() {
-                if ($.trim($(this).val()) == '') {
+                if ($.trim($(this).val()) == '' && $(this).attr('name').includes("$")) {
                     const from_name = $(this).attr('name').split('$')[0] + '$' + src;
                     if (!from_name.endsWith("_json")) {
                         const from_val = $form.find('[name="' + from_name + '"]').val().trim();
@@ -151,12 +151,14 @@
                         if (msg.payload.status == 'ok') {
                             const result = msg.payload.result;
                             const mapping = {};
-                            console.log(result);
                             for (let i=0; i < result.length; i++) {
-                                console.log(i);
                                 mapping[result[i].text] = result[i].translation;
                             }
                             if (fill_texts(src, dst, mapping)) {
+                                $("#trans-review-" + dst)
+                                    .fadeIn()
+                                    .find("input")
+                                    .val("1");
                                 z_event("translation-done");
                             } else {
                                 z_event("translation-incomplete");

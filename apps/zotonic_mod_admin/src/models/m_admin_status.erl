@@ -1,8 +1,9 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
-%% @copyright 2019-2021 Maas-Maarten Zeeman 
+%% @copyright 2019-2024 Maas-Maarten Zeeman
 %% @doc Zotonic: admin status model
+%% @end
 
-%% Copyright 2019-2021 Maas-Maarten Zeeman
+%% Copyright 2019-2024 Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -202,16 +203,31 @@ socket_reaper([_|Rest], Max, Acc) ->
 disks() ->
     DiskData = disksup:get_disk_data(),
     Threshold = disks_threshold(),
-    lists:map(
+    lists:filtermap(
         fun({Disk, Size, Capacity}) ->
-            #{
-                disk => unicode:characters_to_binary(Disk),
-                size => Size,
-                percent_used => Capacity,
-                alert => Capacity > Threshold
-            }
+            DiskBin = unicode:characters_to_binary(Disk),
+            case is_hidden_disk(DiskBin) of
+                true ->
+                    false;
+                false ->
+                    {true, #{
+                        disk => DiskBin,
+                        size => Size,
+                        percent_used => Capacity,
+                        alert => Capacity > Threshold
+                    }}
+            end
         end,
         DiskData).
+
+%% @doc Hide macOS system disks from the overview and disk space checks.
+is_hidden_disk(<<"/Library/Developer/CoreSimulator/", _/binary>>) -> true;
+is_hidden_disk(<<"/System/Volumes/xarts">>) -> true;
+is_hidden_disk(<<"/System/Volumes/iSCPreboot">>) -> true;
+is_hidden_disk(<<"/System/Volumes/Hardware">>) -> true;
+is_hidden_disk(<<"/System/Volumes/Preboot">>) -> true;
+is_hidden_disk(<<"/System/Volumes/VM">>) -> true;
+is_hidden_disk(_) -> false.
 
 %% @doc Return disk space information
 -spec disks_alert() -> boolean().
@@ -219,8 +235,9 @@ disks_alert() ->
     DiskData = disksup:get_disk_data(),
     Threshold = disks_threshold(),
     lists:any(
-        fun({_Disk, _Size, Capacity}) ->
-            Capacity > Threshold
+        fun({Disk, _Size, Capacity}) ->
+            DiskBin = unicode:characters_to_binary(Disk),
+            not is_hidden_disk(DiskBin) andalso (Capacity > Threshold)
         end,
         DiskData).
 

@@ -10,6 +10,7 @@
 {% block widget_id %}edit-basics{% endblock %}
 
 {% block widget_content %}
+    {% optional include "_translation_status.tpl" %}
     {% catinclude "_admin_edit_basics_form.tpl" id
                   r_language=r_language
                   is_i18n=is_i18n
