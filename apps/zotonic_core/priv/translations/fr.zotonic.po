@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-01-02 16:43\n"
+"PO-Revision-Date: 2024-01-02 18:19\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -10340,7 +10340,7 @@ msgstr "Documentation du développeur"
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:17
 msgid "Did you review all texts and correct any mistakes?"
-msgstr ""
+msgstr "Avez-vous révisé tous les textes et corrigé les erreurs ?"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:23
 msgid "Drag languages to define the preferred order, the first 'view' language will be the default language."
@@ -10444,7 +10444,7 @@ msgstr "Laisser les textes vides"
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:10
 msgid "Mark translation as reviewed"
-msgstr ""
+msgstr "Marquer la traduction comme révisée"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:85
 msgid "Method"
@@ -10480,7 +10480,7 @@ msgstr "Veuillez vérifier les traductions et enregistrer la page lorsque vous �
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:5
 msgid "Please review all texts and correct any mistakes. If the translation is correct then mark it as reviewed. This message will then disappear."
-msgstr ""
+msgstr "Veuillez réviser tous les textes et corriger les éventuelles erreurs. Si la traduction est correcte, marquez-la comme révisée. Ce message disparaîtra alors."
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:25
 msgid "Ready"
@@ -10588,7 +10588,7 @@ msgstr "Il y a eu une erreur dans la traduction des textes. Veuillez réessayer 
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:4
 msgid "This translation is automatically generated."
-msgstr ""
+msgstr "Cette traduction est générée automatiquement."
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:72
 msgid "To new language"
