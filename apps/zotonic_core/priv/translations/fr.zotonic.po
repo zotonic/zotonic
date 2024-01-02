@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-01-02 20:36\n"
+"PO-Revision-Date: 2024-01-02 21:49\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -10284,7 +10284,7 @@ msgstr "Tous les textes traduits seront supprimés."
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:10
 msgid "Approve translation"
-msgstr ""
+msgstr "Approuver la traduction"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:18
 msgid "Are you sure you want to delete:"
@@ -10480,7 +10480,7 @@ msgstr "Veuillez vérifier les traductions et enregistrer la page lorsque vous �
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:5
 msgid "Please review all texts and correct any mistakes. Approve the translation if it is correct. This message will then disappear."
-msgstr ""
+msgstr "Veuillez réviser tous les textes et corriger les éventuelles erreurs. Approuvez la traduction si elle est correcte. Ce message disparaîtra alors."
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:25
 msgid "Ready"
