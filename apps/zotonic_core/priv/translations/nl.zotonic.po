@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-01-02 16:44\n"
+"PO-Revision-Date: 2024-01-02 18:19\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -10343,7 +10343,7 @@ msgstr "Documentatie voor ontwikkelaars"
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:17
 msgid "Did you review all texts and correct any mistakes?"
-msgstr ""
+msgstr "Heeft u alle teksten gecontroleerd en eventuele fouten gecorrigeerd?"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:23
 msgid "Drag languages to define the preferred order, the first 'view' language will be the default language."
@@ -10447,7 +10447,7 @@ msgstr "Laat teksten leeg"
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:10
 msgid "Mark translation as reviewed"
-msgstr ""
+msgstr "Markeer de vertaling als beoordeeld"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:85
 msgid "Method"
@@ -10483,7 +10483,7 @@ msgstr "Controleer de vertalingen en sla de pagina op als u klaar bent."
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:5
 msgid "Please review all texts and correct any mistakes. If the translation is correct then mark it as reviewed. This message will then disappear."
-msgstr ""
+msgstr "Controleer alle teksten en corrigeer eventuele fouten. Als de vertaling correct is, markeer deze dan als beoordeeld. Deze melding verdwijnt dan."
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:25
 msgid "Ready"
@@ -10591,7 +10591,7 @@ msgstr "Er is een fout opgetreden bij het vertalen van de teksten. Probeer het l
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:4
 msgid "This translation is automatically generated."
-msgstr ""
+msgstr "Deze vertaling wordt automatisch gegenereerd."
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:72
 msgid "To new language"
