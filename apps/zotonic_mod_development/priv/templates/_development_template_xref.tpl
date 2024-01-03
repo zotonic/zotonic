@@ -1,7 +1,7 @@
 
 <h3>{_ Syntax errors _}</h3>
 <p class="help-block">
-    {_ These templates have syntax errors and could not be checked for included files. _}
+    {_ These templates have syntax errors and could not be checked for included templates. _}
 </p>
 
 <table class="table table-bordered">
@@ -47,7 +47,7 @@
     </tbody>
 </table>
 
-<h3>{_ Missing includes _}</h3>
+<h3>{_ Missing included templates _}</h3>
 <p class="help-block">
     {% trans "These templates have non optional <tt>{include}</tt> statements that are referring to missing templates."
         include="include"
@@ -61,7 +61,7 @@
             <th>{_ Template _}</th>
             <th>{_ Line _}</th>
             <th>{_ Included template _}</th>
-            <th>{_ Type of include _}</th>
+            <th>{% trans "Type of {include}" include="include" %}</th>
         </tr>
     </thead>
     <tbody>
@@ -109,7 +109,7 @@
 </table>
 
 
-<h3>{_ Missing optional includes _}</h3>
+<h3>{_ Missing optional included templates _}</h3>
 <p class="help-block">
     {% trans "These templates have <tt>{optional}</tt> statements that are referring to missing templates."
         optional="optional include"

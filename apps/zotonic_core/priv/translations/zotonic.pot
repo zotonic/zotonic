@@ -6183,11 +6183,11 @@ msgid "Match a request URL, display matched dispatch rule."
 msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:50
-msgid "Missing includes"
+msgid "Missing included templates"
 msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:112
-msgid "Missing optional includes"
+msgid "Missing optional included templates"
 msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:174
@@ -6345,7 +6345,7 @@ msgstr ""
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:4
 msgid ""
 "These templates have syntax errors and could not be checked for included "
-"files."
+"templates."
 msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:13
@@ -6394,8 +6394,12 @@ msgstr ""
 msgid "Tracing this session..."
 msgstr ""
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:64./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:126
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:126
 msgid "Type of include"
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:64
+msgid "Type of {include}"
 msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:46
