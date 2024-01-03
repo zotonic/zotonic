@@ -878,18 +878,18 @@ relay_site_options(_State, Context) ->
             TLS = case SSL of
                 true ->
                     [
-                        {tls, always},
-                        {tls_options, [
-                            {versions, ['tlsv1.2']}
-                            | tls_certificate_check:options(SmtpHost)
-                        ]}
+                        {tls, always}
                     ];
                 false ->
                     []
             end,
             {true, [
                 {relay, SmtpHost},
-                {port, Port}
+                {port, Port},
+                {tls_options, [
+                    {versions, ['tlsv1.2']}
+                    | tls_certificate_check:options(SmtpHost)
+                ]}
             ] ++ Creds ++ TLS};
         false ->
             false
