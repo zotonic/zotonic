@@ -784,8 +784,7 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
             SmtpOpts = [
                 {no_mx_lookups, State#state.smtp_no_mx_lookups},
                 {hostname, z_convert:to_list(z_email:email_domain(Context))},
-                {timeout, ?SMTP_CONNECT_TIMEOUT},
-                {tls_options, [{versions, ['tlsv1.2']}]}
+                {timeout, ?SMTP_CONNECT_TIMEOUT}
             ] ++ case relay_site_options(State, Context) of
                 {true, RelayOpts} -> RelayOpts;
                 false -> [{relay, z_convert:to_list(RecipientDomain)}]
@@ -799,8 +798,7 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
                     [
                         {no_mx_lookups, State#state.smtp_no_mx_lookups},
                         {hostname, z_convert:to_list(z_email:email_domain(Context))},
-                        {timeout, ?SMTP_CONNECT_TIMEOUT},
-                        {tls_options, [{versions, ['tlsv1.2']}]}
+                        {timeout, ?SMTP_CONNECT_TIMEOUT}
                     ] ++ case relay_site_options(State, Context) of
                         {true, BccRelayOpts} -> BccRelayOpts;
                         false -> [{relay, z_convert:to_list(BccDomain)}]
@@ -836,7 +834,15 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
 %% @doc Fetch the SMTP relay options, if the Zotonic system is configured to use a relay
 %% then that relay is always used. Otherwise the relay configuration of the site is used.
 relay_site_options(#state{ smtp_relay = true } = State, _Context) ->
-    {true, State#state.smtp_relay_opts};
+    Relay = proplists:get_value(relay, State#state.smtp_relay_opts),
+    RelayOpts = [
+        {tls_options, [
+            {versions, ['tlsv1.2']}
+            | tls_certificate_check:options(Relay)
+        ]}
+        | State#state.smtp_relay_opts
+    ],
+    {true, RelayOpts};
 relay_site_options(_State, Context) ->
     case m_config:get_boolean(site, smtp_relay, Context) of
         true ->
