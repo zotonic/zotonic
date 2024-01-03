@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-01-02 20:36\n"
+"PO-Revision-Date: 2024-01-03 08:34\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -5684,7 +5684,7 @@ msgstr "Kopieer GraphViz-data"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:29./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:125
 msgid "Could not copy dot file to the clipboard."
-msgstr "Kan het puntbestand niet naar het klembord kopiëren."
+msgstr "Kan dotbestand niet naar het klembord kopiëren."
 
 #: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:46
 msgid "Could not fetch tracer output, please try again."
@@ -5824,7 +5824,7 @@ msgstr "Ingevoegd sjabloon"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:4
 msgid "Includes using variable names or expressions are not shown."
-msgstr "Inclusief het gebruik van variabelenamen of expressies worden niet weergegeven."
+msgstr "Ingevoegde sjablonen via het gebruik van variabelenamen of expressies worden niet weergegeven."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:199
 msgid "Introspection"
@@ -5844,7 +5844,7 @@ msgstr "Live reload van gewijzigde CSS-bestanden. Herladen van pagina's na wijzi
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:32./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:36
 msgid "Live traces of template rendering"
-msgstr "Live sporen van sjabloonweergave"
+msgstr "Live sporen van sjabloonrendering"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:88
 msgid "Loading..."
@@ -5860,11 +5860,11 @@ msgstr "Match een request URL, toon overeenkomstige dispatchregel"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:50
 msgid "Missing includes"
-msgstr "Ontbrekende omvat"
+msgstr "Ontbrekende ingevoegde sjablonen"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:112
 msgid "Missing optional includes"
-msgstr "Ontbrekende optionele omvat"
+msgstr "Ontbrekende optionele ingevoegde sjablonen"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:174
 msgid "Missing {extends} or {overrules}"
