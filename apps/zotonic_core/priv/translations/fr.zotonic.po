@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-01-03 10:10\n"
+"PO-Revision-Date: 2024-01-03 11:28\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -5858,11 +5858,11 @@ msgstr "Faire correspondre une URL de requête, afficher la règle de routage co
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:50
 msgid "Missing included templates"
-msgstr ""
+msgstr "Modèles inclus manquants"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:112
 msgid "Missing optional included templates"
-msgstr ""
+msgstr "Modèles inclus facultatifs manquants"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:174
 msgid "Missing {extends} or {overrules}"
@@ -6012,7 +6012,7 @@ msgstr "Ces modèles comportent des instructions <tt>{include}</tt> non facultat
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:4
 msgid "These templates have syntax errors and could not be checked for included templates."
-msgstr ""
+msgstr "Ces modèles comportent des erreurs de syntaxe et n'ont pas pu être vérifiés pour les modèles inclus."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:13
 msgid "This calculates and visualizes the dependency graph of all templates."
@@ -6060,7 +6060,7 @@ msgstr "Type d'inclusion"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:64
 msgid "Type of {include}"
-msgstr ""
+msgstr "Type de {include}"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:46
 msgid "URI Pattern"
@@ -10592,7 +10592,7 @@ msgstr "Il y a eu une erreur dans la traduction des textes. Veuillez réessayer 
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:4
 msgid "This translation has been automatically generated."
-msgstr ""
+msgstr "Cette traduction a été générée automatiquement."
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:72
 msgid "To new language"
