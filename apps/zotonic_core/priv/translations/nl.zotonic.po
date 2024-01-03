@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2023-12-19 18:21\n"
+"PO-Revision-Date: 2024-01-03 11:29\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -61,70 +61,70 @@ msgstr "Niet geautoriseerd voor toegang tot de externe bron-URL."
 msgid "Website"
 msgstr "Website"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:316
+#: apps/zotonic_core/src/support/z_datetime.erl:318
 msgid "ago"
 msgstr "geleden"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:374./apps/zotonic_core/src/support/z_datetime.erl:377
+#: apps/zotonic_core/src/support/z_datetime.erl:376./apps/zotonic_core/src/support/z_datetime.erl:379
 msgid "day"
 msgstr "dag"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:374./apps/zotonic_core/src/support/z_datetime.erl:377
+#: apps/zotonic_core/src/support/z_datetime.erl:376./apps/zotonic_core/src/support/z_datetime.erl:379
 msgid "days"
 msgstr "dagen"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:372./apps/zotonic_core/src/support/z_datetime.erl:375
+#: apps/zotonic_core/src/support/z_datetime.erl:374./apps/zotonic_core/src/support/z_datetime.erl:377
 msgid "hour"
 msgstr "uur"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:372./apps/zotonic_core/src/support/z_datetime.erl:375
+#: apps/zotonic_core/src/support/z_datetime.erl:374./apps/zotonic_core/src/support/z_datetime.erl:377
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:12./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:19./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:6
 msgid "hours"
 msgstr "uur"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:316
+#: apps/zotonic_core/src/support/z_datetime.erl:318
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:11
 msgid "in"
 msgstr "over"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:370./apps/zotonic_core/src/support/z_datetime.erl:373
+#: apps/zotonic_core/src/support/z_datetime.erl:372./apps/zotonic_core/src/support/z_datetime.erl:375
 msgid "minute"
 msgstr "minuut"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:370./apps/zotonic_core/src/support/z_datetime.erl:373
+#: apps/zotonic_core/src/support/z_datetime.erl:372./apps/zotonic_core/src/support/z_datetime.erl:375
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form.tpl:13./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:20./apps/zotonic_mod_authentication/priv/templates/logon_error/message.ratelimit.tpl:7
 msgid "minutes"
 msgstr "minuten"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:367
+#: apps/zotonic_core/src/support/z_datetime.erl:369
 msgid "moments"
 msgstr "momenten"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:376./apps/zotonic_core/src/support/z_datetime.erl:379
+#: apps/zotonic_core/src/support/z_datetime.erl:378./apps/zotonic_core/src/support/z_datetime.erl:381
 msgid "month"
 msgstr "maand"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:376./apps/zotonic_core/src/support/z_datetime.erl:379
+#: apps/zotonic_core/src/support/z_datetime.erl:378./apps/zotonic_core/src/support/z_datetime.erl:381
 msgid "months"
 msgstr "maanden"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:316./apps/zotonic_core/src/support/z_datetime.erl:366
+#: apps/zotonic_core/src/support/z_datetime.erl:318./apps/zotonic_core/src/support/z_datetime.erl:368
 msgid "now"
 msgstr "nu"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:368./apps/zotonic_core/src/support/z_datetime.erl:371
+#: apps/zotonic_core/src/support/z_datetime.erl:370./apps/zotonic_core/src/support/z_datetime.erl:373
 msgid "second"
 msgstr "seconde"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:368./apps/zotonic_core/src/support/z_datetime.erl:371
+#: apps/zotonic_core/src/support/z_datetime.erl:370./apps/zotonic_core/src/support/z_datetime.erl:373
 msgid "seconds"
 msgstr "seconden"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:378
+#: apps/zotonic_core/src/support/z_datetime.erl:380
 msgid "year"
 msgstr "jaar"
 
-#: apps/zotonic_core/src/support/z_datetime.erl:378
+#: apps/zotonic_core/src/support/z_datetime.erl:380
 msgid "years"
 msgstr "jaar"
 
@@ -3232,7 +3232,7 @@ msgstr "Klik OK om te inloggen als deze gebruiker. Je wordt doorgestuurd naar de
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:16
 msgid "Click on the link to confirm your email address. Copy the whole link and paste it in your browser if this doesn't work."
-msgstr "Klik op de link om uw e-mailadres te bevestigen. Kopieer de hele link en plak deze in je browser als dit niet werkt."
+msgstr "Klik op de link om je e-mailadres te bevestigen. Kopieer de hele link en plak deze in je browser als dit niet werkt."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:10
 msgid "Click “delete” to remove any existing username/password from the person; this person will no longer be a user."
@@ -3561,7 +3561,7 @@ msgstr "Bezig met bevestigen..."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity.tpl:10
 msgid "When you add credentials to a person then the person becomes a user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What a user can do depends on the groups the user is member of."
-msgstr "Wanneer je inloggegevens aan een persoon toevoegt, wordt de persoon een gebruiker. Een persoon of machine kan inloggen met die inloggegevens en acties uitvoeren op uw Zotonic-systeem.<br/><br/>Wat een gebruiker kan doen hangt af van de groepen waarvan de gebruiker lid is."
+msgstr "Wanneer je inloggegevens aan een persoon toevoegt, wordt de persoon een gebruiker. Een persoon of machine kan inloggen met die inloggegevens en acties uitvoeren op je Zotonic-systeem.<br/><br/>Wat een gebruiker kan doen hangt af van de groepen waarvan de gebruiker lid is."
 
 #: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:103
 msgid "You are not allowed to create the person page."
@@ -3976,7 +3976,7 @@ msgstr "Predicaten"
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:93
 msgid "Some predicates are mostly for internal purposes. Check this if you don’t want to show this predicate on the <em>Connected to</em> list."
-msgstr "Sommige predikaten zijn meestal voor interne doeleinden. Vink dit aan als u dit predikaat niet wilt weergeven in de lijst <em>Verbonden met</em>."
+msgstr "Sommige predicaten zijn vooral voor interne doeleinden. Vink dit aan als je dit predicaat niet wilt weergeven op de <em>Verbonden met</em> lijst."
 
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:58
 msgid "Sorry, you are not allowed to insert connections with this predicate."
@@ -4024,7 +4024,7 @@ msgstr "Gebruik een lijst met selectievakjes met titels bij het toevoegen van pa
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:73
 msgid "Usually new connections are inserted after existing connections. Check this to insert new connections before existing connections."
-msgstr "Meestal worden nieuwe verbindingen na bestaande verbindingen ingevoegd. Vink dit aan om nieuwe verbindingen vóór bestaande verbindingen in te voegen."
+msgstr "Gewoonlijk worden nieuwe verbindingen ingevoegd na bestaande verbindingen. Vink dit aan om nieuwe verbindingen vóór bestaande verbindingen in te voegen."
 
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:4
 msgid "Valid between"
@@ -5313,6 +5313,7 @@ msgstr "Websocket-ondersteuning?"
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:251./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
 #: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:39
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:47./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:30./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
+#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:18
 msgid "Yes"
 msgstr "Ja"
 
@@ -5683,7 +5684,7 @@ msgstr "Kopieer GraphViz-data"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:29./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:125
 msgid "Could not copy dot file to the clipboard."
-msgstr "Kan het puntbestand niet naar het klembord kopiëren."
+msgstr "Kan dotbestand niet naar het klembord kopiëren."
 
 #: apps/zotonic_mod_development/src/support/z_development_dispatch.erl:46
 msgid "Could not fetch tracer output, please try again."
@@ -5823,7 +5824,7 @@ msgstr "Ingevoegd sjabloon"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_graph.tpl:4
 msgid "Includes using variable names or expressions are not shown."
-msgstr "Inclusief het gebruik van variabelenamen of expressies worden niet weergegeven."
+msgstr "Ingevoegde sjablonen via het gebruik van variabelenamen of expressies worden niet weergegeven."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:199
 msgid "Introspection"
@@ -5843,7 +5844,7 @@ msgstr "Live reload van gewijzigde CSS-bestanden. Herladen van pagina's na wijzi
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:32./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:36
 msgid "Live traces of template rendering"
-msgstr "Live sporen van sjabloonweergave"
+msgstr "Live sporen van sjabloonrendering"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:88
 msgid "Loading..."
@@ -5858,12 +5859,12 @@ msgid "Match a request URL, display matched dispatch rule."
 msgstr "Match een request URL, toon overeenkomstige dispatchregel"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:50
-msgid "Missing includes"
-msgstr "Ontbrekende omvat"
+msgid "Missing included templates"
+msgstr "Er ontbreken meegeleverde sjablonen"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:112
-msgid "Missing optional includes"
-msgstr "Ontbrekende optionele omvat"
+msgid "Missing optional included templates"
+msgstr "Er ontbreken optionele meegeleverde sjablonen"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:174
 msgid "Missing {extends} or {overrules}"
@@ -5919,7 +5920,7 @@ msgstr "Verversen"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:17
 msgid "Rerun graph"
-msgstr "Grafiek opnieuw uitvoeren"
+msgstr "Grafiek opnieuw berekenen"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:205
 msgid "Show an overview of all observers"
@@ -6012,8 +6013,8 @@ msgid "These templates have non optional <tt>{include}</tt> statements that are 
 msgstr "Deze sjablonen bevatten niet-optionele <tt>{include}</tt> -verklaringen die verwijzen naar ontbrekende sjablonen."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:4
-msgid "These templates have syntax errors and could not be checked for included files."
-msgstr "Deze sjablonen bevatten syntaxisfouten en konden niet worden gecontroleerd op opgenomen bestanden."
+msgid "These templates have syntax errors and could not be checked for included templates."
+msgstr "Deze sjablonen bevatten syntaxisfouten en konden niet worden gecontroleerd op opgenomen sjablonen."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:13
 msgid "This calculates and visualizes the dependency graph of all templates."
@@ -6055,9 +6056,13 @@ msgstr "Andere sessie traceren..."
 msgid "Tracing this session..."
 msgstr "Deze sessie volgen..."
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:64./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:126
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:126
 msgid "Type of include"
 msgstr "Soort opnemen"
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:64
+msgid "Type of {include}"
+msgstr "Soort {include}"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:46
 msgid "URI Pattern"
@@ -6662,7 +6667,7 @@ msgstr "Helderheid"
 
 #: apps/zotonic_mod_image_edit/priv/templates/_image_edit_button.tpl:9
 msgid "Change the image rotation, crop and contrast."
-msgstr "Wijzig de beeldrotatie, bijsnijden en contrast."
+msgstr "Wijzig de rotatie, de uitsnede en het contrast van de afbeelding."
 
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:39
 msgid "Click the image to set the cropping center."
@@ -10284,6 +10289,10 @@ msgstr "Alle teksten zijn vertaald."
 msgid "All translated texts will be removed."
 msgstr "Alle vertaalde teksten worden verwijderd."
 
+#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:10
+msgid "Approve translation"
+msgstr "Vertaling goedkeuren"
+
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:18
 msgid "Are you sure you want to delete:"
 msgstr "Weet je zeker dat je wilt verwijderen:"
@@ -10314,7 +10323,7 @@ msgstr "Kopieer teksten"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:101
 msgid "Copying and translating texts will never overwrite an existing text and can be used to fill in blank text fields in the desitination language."
-msgstr "Het kopiëren en vertalen van teksten zal nooit een bestaande tekst overschrijven en kan worden gebruikt om lege tekstvelden in de doeltaal in te vullen."
+msgstr "Het kopiëren en vertalen van teksten zal nooit een bestaande tekst overschrijven en kan gebruikt worden om lege tekstvelden in de doeltaal in te vullen."
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:2
 msgid "Current translations"
@@ -10339,6 +10348,10 @@ msgstr "Details"
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:9
 msgid "Developer Documentation"
 msgstr "Documentatie voor ontwikkelaars"
+
+#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:17
+msgid "Did you review all texts and correct any mistakes?"
+msgstr "Heb je alle teksten nagekeken en eventuele fouten gecorrigeerd?"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:23
 msgid "Drag languages to define the preferred order, the first 'view' language will be the default language."
@@ -10410,7 +10423,7 @@ msgstr "Als een taal is ingesteld op 'bekijken' of 'bewerkbaar' dan zijn teksten
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:99
 msgid "If you automatically translate texts then your texts will be sent to the remote translation service for automatic translation."
-msgstr "Als u teksten automatisch vertaalt, worden uw teksten voor automatische vertaling naar de vertaalservice op afstand gestuurd."
+msgstr "Als je teksten automatisch vertaalt, dan worden je teksten naar de vertaalservice op afstand gestuurd voor automatische vertaling."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:147
 msgid "If you change the stemmer language then you will need to reindex all data."
@@ -10470,7 +10483,11 @@ msgstr "Onderdeel van:"
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:29./apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:41
 msgid "Please check the translations and save the page when you are ready."
-msgstr "Controleer de vertalingen en sla de pagina op als u klaar bent."
+msgstr "Controleer de vertalingen en sla de pagina op als je klaar bent."
+
+#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:5
+msgid "Please review all texts and correct any mistakes. Approve the translation if it is correct. This message will then disappear."
+msgstr "Controleer alle teksten en corrigeer eventuele fouten. Keur de vertaling goed als deze correct is. Deze melding verdwijnt dan."
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:25
 msgid "Ready"
@@ -10498,7 +10515,7 @@ msgstr "Verwijder taal"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:42
 msgid "Removing a language will hide it on the edit form. If the page is saved then the translation will be deleted from the database."
-msgstr "Als u een taal verwijdert, wordt deze verborgen op het bewerkingsformulier. Als de pagina wordt opgeslagen, wordt de vertaling uit de database verwijderd."
+msgstr "Als je een taal verwijdert, wordt deze verborgen op het bewerkingsformulier. Als de pagina wordt opgeslagen, wordt de vertaling verwijderd uit de database."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:135
 msgid "Romanian"
@@ -10575,6 +10592,10 @@ msgstr "Voor de ontbrekende vertalingen werd de tekst in de brontaal gebruikt."
 #: apps/zotonic_mod_translation/priv/templates/_translation_edit_languages.tpl:48
 msgid "There was an error translating the texts. Please try again later."
 msgstr "Er is een fout opgetreden bij het vertalen van de teksten. Probeer het later opnieuw."
+
+#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:4
+msgid "This translation has been automatically generated."
+msgstr "Deze vertaling is automatisch gegenereerd."
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:72
 msgid "To new language"
