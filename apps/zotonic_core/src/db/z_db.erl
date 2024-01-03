@@ -72,6 +72,9 @@
     equery/3,
     equery/4,
 
+    execute_batch/3,
+    execute_batch/4,
+
     insert/2,
     insert/3,
     update/4,
@@ -726,6 +729,19 @@ equery(Sql, Parameters, Context, Timeout) ->
         end,
     with_connection(F, Context).
 
+-spec execute_batch(sql(), list(parameters()), z:context(), integer()) -> query_result().
+execute_batch(Sql, Batch, Context) ->
+    execute_batch(Sql, Batch, Context, ?TIMEOUT).
+
+
+execute_batch(Sql, Batch, Context, Timeout) ->
+    F = fun(none) ->
+                {error, noresult};
+           (C) ->
+                DbDriver = z_context:db_driver(Context),
+                DbDriver:execute_batch(C, Sql, Batch, Timeout)
+        end,
+    with_connection(F, Context).
 
 %% @doc Insert a new row in a table, use only default values.
 -spec insert(table_name(), z:context()) -> {ok, pos_integer()|undefined} | {error, term()}.
@@ -751,8 +767,8 @@ insert(Table, Parameters, Context) ->
     BinParams = ensure_binary_keys(Parameters),
     case prepare_cols(Cols, BinParams) of
         {ok, InsertProps} ->
-            HasProps = maps:is_key(<<"props">>, InsertProps), 
-            HasPropsJSON = maps:is_key(<<"props_json">>, InsertProps), 
+            HasProps = maps:is_key(<<"props">>, InsertProps),
+            HasPropsJSON = maps:is_key(<<"props_json">>, InsertProps),
 
             InsertProps1 = if HasPropsJSON ->
                                   #{<<"props_json">> := PropsJSONCol} = InsertProps,
@@ -951,11 +967,11 @@ get_current_props(Table, Id, Context) ->
 get_current_props(DBDriver, Connection, Table, Id, Context) when is_atom(Table) ->
     get_current_props(DBDriver, Connection, atom_to_list(Table), Id, Context);
 get_current_props(DBDriver, Connection, Table, Id, Context) ->
-    ColNames = column_names(Table, Context), 
+    ColNames = column_names(Table, Context),
     get_current_props(DBDriver, Connection,
                       lists:member(props_json, ColNames), lists:member(props, ColNames), Table, Id, Context).
 
-   
+
 get_current_props(_DBDriver, _Connection, false, false, _Table, _Id, _Context) ->
     %% There is no props column
     {error, no_properties};
@@ -1965,7 +1981,7 @@ merge_props_test() ->
                       {props, [{message,  <<"test test">>}, {extra, <<"hello">>} ]},
                       {created,{{2020,6,25},{11,54,55}}},
                       {props_json,<<"{\"message\": \"123\"}">>}] ]),
-    
+
     ?assertEqual([[{id,1},
                    {is_visible,true},
                    {rsc_id,330},
