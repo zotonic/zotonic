@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-01-02 20:37\n"
+"PO-Revision-Date: 2024-01-03 10:10\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -5856,12 +5856,12 @@ msgid "Match a request URL, display matched dispatch rule."
 msgstr "Sesuai permintaan URL, tampilan sesuai aturan pengiriman."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:50
-msgid "Missing includes"
-msgstr "Termasuk yang hilang"
+msgid "Missing included templates"
+msgstr "Templat yang disertakan tidak ada"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:112
-msgid "Missing optional includes"
-msgstr "Termasuk opsional yang hilang"
+msgid "Missing optional included templates"
+msgstr "Templat opsional yang disertakan tidak ada"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:174
 msgid "Missing {extends} or {overrules}"
@@ -6010,8 +6010,8 @@ msgid "These templates have non optional <tt>{include}</tt> statements that are 
 msgstr "Templat ini memiliki pernyataan non-opsional <tt>{include}</tt> yang mengacu pada templat yang hilang."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:4
-msgid "These templates have syntax errors and could not be checked for included files."
-msgstr "Templat ini memiliki kesalahan sintaksis dan tidak dapat diperiksa untuk mengetahui file yang disertakan."
+msgid "These templates have syntax errors and could not be checked for included templates."
+msgstr "Templat ini memiliki kesalahan sintaksis dan tidak dapat diperiksa untuk templat yang disertakan."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:13
 msgid "This calculates and visualizes the dependency graph of all templates."
@@ -6053,9 +6053,13 @@ msgstr "Menelusuri sesi lainnya..."
 msgid "Tracing this session..."
 msgstr "Menelusuri sesi ini..."
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:64./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:126
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:126
 msgid "Type of include"
 msgstr "Jenis penyertaan"
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:64
+msgid "Type of {include}"
+msgstr "Tipe {include}"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:46
 msgid "URI Pattern"
@@ -10587,8 +10591,8 @@ msgid "There was an error translating the texts. Please try again later."
 msgstr "Terjadi kesalahan saat menerjemahkan teks. Silakan coba lagi nanti."
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:4
-msgid "This translation is automatically generated."
-msgstr "Terjemahan ini dibuat secara otomatis."
+msgid "This translation has been automatically generated."
+msgstr "Terjemahan ini telah dibuat secara otomatis."
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:72
 msgid "To new language"
