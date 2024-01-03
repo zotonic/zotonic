@@ -11214,7 +11214,7 @@ msgid "There was an error translating the texts. Please try again later."
 msgstr ""
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:4
-msgid "This translation is automatically generated."
+msgid "This translation has been automatically generated."
 msgstr ""
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:72
