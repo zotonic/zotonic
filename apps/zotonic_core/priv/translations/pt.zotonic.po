@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-01-02 20:36\n"
+"PO-Revision-Date: 2024-01-03 10:10\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -5857,12 +5857,12 @@ msgid "Match a request URL, display matched dispatch rule."
 msgstr "Combinar um URL de solicitação, exibir a regra de envio correspondente."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:50
-msgid "Missing includes"
-msgstr "Faltando inclui"
+msgid "Missing included templates"
+msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:112
-msgid "Missing optional includes"
-msgstr "Inclusões opcionais ausentes"
+msgid "Missing optional included templates"
+msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:174
 msgid "Missing {extends} or {overrules}"
@@ -6011,8 +6011,8 @@ msgid "These templates have non optional <tt>{include}</tt> statements that are 
 msgstr "Esses modelos possuem instruções <tt>{include}</tt> não opcionais que se referem a modelos ausentes."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:4
-msgid "These templates have syntax errors and could not be checked for included files."
-msgstr "Esses modelos apresentam erros de sintaxe e não foi possível verificar os arquivos incluídos."
+msgid "These templates have syntax errors and could not be checked for included templates."
+msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:13
 msgid "This calculates and visualizes the dependency graph of all templates."
@@ -6054,9 +6054,13 @@ msgstr "Rastreando outra sessão..."
 msgid "Tracing this session..."
 msgstr "Rastreando esta sessão..."
 
-#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:64./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:126
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:126
 msgid "Type of include"
 msgstr "Tipo de inclusão"
+
+#: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:64
+msgid "Type of {include}"
+msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:46
 msgid "URI Pattern"
@@ -10587,8 +10591,8 @@ msgid "There was an error translating the texts. Please try again later."
 msgstr "Ocorreu um erro na tradução dos textos. Por favor, tente novamente mais tarde."
 
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:4
-msgid "This translation is automatically generated."
-msgstr "Esta tradução é gerada automaticamente."
+msgid "This translation has been automatically generated."
+msgstr "Esta tradução foi gerada automaticamente."
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:72
 msgid "To new language"
