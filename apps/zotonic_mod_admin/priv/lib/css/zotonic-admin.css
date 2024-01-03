@@ -184,7 +184,7 @@ label .z-btn-help {
   margin-top: 1em;
 }
 h3 {
-  margin: 1.25em 0 .75em 0;
+  margin: 1.25em 0 0.75em 0;
 }
 pre:empty {
   display: none;
@@ -220,7 +220,7 @@ pre:empty {
   top: 50%;
   height: 14px;
   width: 14px;
-  margin-top: -7px;
+  margin-top: -14px/2;
 }
 .nav.nav-pills {
   border-style: none none solid none;
@@ -248,8 +248,6 @@ pre:empty {
   text-shadow: 0 1px 0 rgba(0,0,0,.1);
 }
 .well {
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
   box-shadow: none;
   padding: 15px 15px 11px 15px;
   background-color: white;
@@ -326,7 +324,7 @@ code {
 .btn > .z-icon {
   width: 18px;
   height: 18px;
-  margin-top: -9px;
+  margin-top: -18px/2;
   line-height: 18px;
   vertical-align: bottom;
   text-align: center;
@@ -338,7 +336,7 @@ code {
   opacity: 1;
 }
 .btn.disabled .glyphicon {
-  opacity: .6;
+  opacity: 0.6;
 }
 .btn .glyphicon {
   top: 3px;
@@ -556,7 +554,7 @@ fieldset[disabled] .btn-primary.active {
   color: #aaa;
 }
 #dialog_new_rsc_results .items .item.item-connected:not(.item-depiction) img {
-  opacity: .3;
+  opacity: 0.3;
 }
 #dialog_new_rsc_results .items .item .z-item-text {
   left: 5px;
@@ -568,11 +566,7 @@ fieldset[disabled] .btn-primary.active {
 }
 #dialog_new_rsc_results .items .item img {
   padding: 0;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
   border-radius: 0;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
   box-shadow: none;
   margin: 0 7.5px 0 0;
 }
@@ -881,8 +875,6 @@ input[type='time'] {
   -o-transition: opacity 0.3s ease-in-out;
   transition: opacity 0.3s ease-in-out;
   min-height: inherit;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
   box-shadow: none;
 }
 div + .admin-edit-no-features {
@@ -905,7 +897,7 @@ div + .admin-edit-no-features {
   }
   .scrolled .admin-navbar-fixed-save {
     display: block;
-    opacity: 1.0;
+    opacity: 1;
   }
   body.scrolled #translation-tabs {
     top: 114px;
@@ -966,11 +958,7 @@ fieldset > label.checkbox > input[type="radio"],
 }
 img.thumb {
   padding: 0;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
   border-radius: 0;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
   box-shadow: none;
 }
 img {
@@ -1358,8 +1346,8 @@ table.do_adminLinkedTable .admin-list-thumb > span {
   vertical-align: top;
 }
 table.do_adminLinkedTable .admin-list-thumb > img {
-  width: 40px;
-  height: 30px;
+  width: 80px / 2;
+  height: 60px / 2;
   margin: 0 10px 0 0;
 }
 .table > thead > tr > th {
@@ -1369,7 +1357,6 @@ table.do_adminLinkedTable .admin-list-thumb > img {
 .table tbody tr.clickable th,
 .table tbody tr td.clickable,
 .table tbody tr th.clickable {
-  -webkit-transition: all 0.1s ease-in-out;
   transition: all 0.1s ease-in-out;
 }
 .table tbody tr.clickable:hover td,
@@ -1576,11 +1563,7 @@ th a:hover .arrow.down {
   min-height: 72px;
   max-height: 72px;
   overflow: hidden;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
   border-radius: 2px;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
   box-shadow: none;
   cursor: pointer;
   margin-bottom: 12px;
@@ -1610,7 +1593,7 @@ th a:hover .arrow.down {
   color: #aaa;
 }
 .thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction) img {
-  opacity: .3;
+  opacity: 0.3;
 }
 .thumbnails .thumbnail .z-thumbnail-text {
   position: absolute;
@@ -1626,11 +1609,7 @@ th a:hover .arrow.down {
 }
 .thumbnails .thumbnail img {
   padding: 0;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
   border-radius: 0;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
   box-shadow: none;
   margin: 0 7.5px 0 0;
 }
@@ -2163,16 +2142,13 @@ ul.tree-list.connections-list {
   padding: 10px 0;
 }
 .admin-container .widget.translations .widget-content {
-  padding-top: 0;
+  padding-top: 4px;
 }
 .widget.widget-active:not(.widget-expanded) .widget-header:hover {
-  -webkit-transition: background 0.1s ease-in-out;
   transition: background 0.1s ease-in-out;
   cursor: pointer;
 }
 li h3.widget-header {
-  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
-  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
 }
 .widget ul.nav-tabs.language-tabs {
