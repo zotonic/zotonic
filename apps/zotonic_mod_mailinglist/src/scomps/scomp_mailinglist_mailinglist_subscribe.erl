@@ -37,7 +37,7 @@ render(Params, _Vars, Context) ->
     {ok, z_template:render(Template, Props, Context)}.
 
 
-event(#submit{message={recipient_add, Props}}, Context) ->
+event(#submit{message={recipient_add, Props}, form=FormId}, Context) ->
     ListId = proplists:get_value(id, Props),
     InAdmin = z_convert:to_bool(proplists:get_value(in_admin, Props)),
 	case z_acl:rsc_visible(ListId, Context) of
@@ -63,15 +63,15 @@ event(#submit{message={recipient_add, Props}}, Context) ->
         									{dialog_close, []},
         									{reload, []}], Context);
         				false ->
-					        z_render:wire([ {slide_fade_in, [{target, "mailinglist_subscribe_done-" ++ integer_to_list(ListId)}]},
-					                        {slide_fade_out, [{target, "mailinglist_subscribe_form-" ++ integer_to_list(ListId)}]}], Context)
+					        z_render:wire([ {slide_fade_in, [{target, <<FormId/binary, "-done">>}]},
+					                        {slide_fade_out, [{target, <<FormId/binary, "-form">>}]}], Context)
         			end;
 				{error, _Reason} ->
 				    case InAdmin of
 				        true ->
 					        z_render:growl_error(?__("Could not add the recipient.", Context), Context);
 					    false ->
-					        z_render:wire([ {slide_fade_in, [{target, "mailinglist_subscribe_error-" ++ integer_to_list(ListId)}]}], Context)
+					        z_render:wire([ {slide_fade_in, [{target, <<FormId/binary, "-error">>}]}], Context)
 					end
 			end;
 		false ->
@@ -79,7 +79,7 @@ event(#submit{message={recipient_add, Props}}, Context) ->
 		        true ->
 			        z_render:growl_error(?__("You are not allowed to add or enable recipients.", Context), Context);
 			    false ->
-			        z_render:wire([ {slide_fade_in, [{target, "mailinglist_subscribe_error-" ++ integer_to_list(ListId)}]}], Context)
+			        z_render:wire([ {slide_fade_in, [{target, <<FormId/binary, "-error">>}]}], Context)
 			end
 	end;
 
