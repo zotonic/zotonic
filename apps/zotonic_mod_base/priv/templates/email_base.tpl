@@ -172,12 +172,12 @@
 
 </head>
 {% comment %}
-    The email background color (#222222) is defined in three places:
+    The email background color (#ffffff) is defined in three places:
     1. body tag: for most email clients
     2. center tag: for Gmail and Inbox mobile apps and web versions of Gmail, GSuite, Inbox, Yahoo, AOL, Libero, Comcast, freenet, Mail.ru, Orange.fr
     3. mso conditional: For Windows 10 Mail
 {% endcomment %}
-{% with bgcolor|default:"#222222" as bgcolor %}
+{% with bgcolor|default:"#ffffff" as bgcolor %}
 <body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: {{ bgcolor }};">
     <center role="article" aria-roledescription="email" lang="en" style="width: 100%; background-color: {{ bgcolor }};">
     <!--[if mso | IE]>
