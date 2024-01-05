@@ -126,12 +126,12 @@ train() ->
 -spec train(Directory) -> list( {z_language:language_code(), map()} ) when
     Directory :: file:filename_all().
 train(Directory) ->
-    Files = filelib:wildcard(filename:join(Directory, "*-utf8.txt")),
+    Files = filelib:wildcard(filename:join(Directory, "*.txt")),
     TrainingData = lists:filtermap(
         fun(File) ->
             Filename = filename:basename(File),
-            [A,B|_] = Filename,
-            case z_language:to_language_atom([A, B]) of
+            Language = filename:rootname(Filename),
+            case z_language:to_language_atom(Language) of
                 {ok, Iso} ->
                     {true, {Iso, File}};
                 {error, Reason} ->
@@ -140,7 +140,7 @@ train(Directory) ->
                         text => <<"Unknown language for language detect trainings data">>,
                         result => error,
                         reason => Reason,
-                        language => <<A,B>>,
+                        language => iolist_to_binary(Language),
                         file => File
                     }),
                     false
