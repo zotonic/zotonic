@@ -42,6 +42,7 @@
     detect/1,
 
     ngrams/1,
+    ngram_count/3,
     tokenize/1,
     compute_distance/3,
     profile_to_erl/0,
