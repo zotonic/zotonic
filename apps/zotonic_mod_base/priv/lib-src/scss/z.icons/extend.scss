@@ -1,0 +1,50 @@
+
+// Extend a class with a Zotonic icon class
+.extend_icon(@name) {
+    .extend_icon(z, @name);
+}
+
+
+// Extend a class with a Zotonic icon class
+//
+// Example:
+// .z-btn-help {
+//    .extend_icon(z, icon-help-circle);
+// }
+
+.extend_icon(z, @name) {
+    &:before {
+        &:extend(.z-icon);
+        content: @@name;
+    }
+}
+
+
+// Extend a class with a Font Awesome class
+//
+// Example:
+// .btn-bookmark {
+//    .extend_icon(fa, fa-var-bookmark);
+// }
+
+.extend_icon(fa, @name) {
+    &:before {
+        &:extend(.fa-icon);
+        content: @@name;
+    }
+}
+
+
+// Extend a class with a Material Design character code
+//
+// Example:
+// .btn-bookmark {
+//    .extend_icon(md, "\f019");
+// }
+
+.extend_icon(md, @charstr) {
+    &:before {
+        &:extend(.md-icon);
+        content: @charstr;
+    }
+}
