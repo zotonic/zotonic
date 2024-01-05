@@ -110,8 +110,28 @@ m_get([ <<"translate">> | Rest ], #{ payload := Payload }, Context) ->
     end;
 m_get([ <<"has_translation_service">> | Rest ], _Msg, Context) ->
     {ok, {has_translation_service(Context), Rest}};
+m_get([ <<"detect">> | Rest ], Msg, Context) ->
+    case translation_detect:detect(get_text_arg(Msg, Context)) of
+        {ok, Iso} ->
+            {ok, {Iso, Rest}};
+        {error, _} = Error ->
+            Error
+    end;
+m_get([ <<"detect_enabled">> | Rest ], Msg, Context) ->
+    case translation_detect:detect(get_text_arg(Msg, Context), Context) of
+        {ok, Iso} ->
+            {ok, {Iso, Rest}};
+        {error, _} = Error ->
+            Error
+    end;
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
+
+
+get_text_arg(#{ payload := #{ <<"text">> := Text } }, _Context) when is_binary(Text) ->
+    Text;
+get_text_arg(_Payload, Context) ->
+    z_convert:to_binary(z_context:get_q(<<"text">>, Context)).
 
 
 %% @doc Check if there are modules that offer the translation service.
