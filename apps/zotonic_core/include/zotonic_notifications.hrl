@@ -973,6 +973,15 @@
     texts = [] :: list( binary() )
     }).
 
+%% @doc Try to detect the language of a translation. Set is_editable_only to false
+%% to detect any language, even if the language is not enabled for the site.
+%% Type: first
+%% Return atom() | undefined.
+-record(language_detect, {
+    text = <<>> :: binary(),
+    is_editable_only = true :: boolean()
+    }).
+
 %% @doc Send a notification that the resource 'id' is added to the query query_id.
 %% Type: notify
 %% Return: return value is ignored

@@ -87,3 +87,14 @@ detect_lang_test() ->
     {ok, En} = translation_detect:detect(<<"TaffyDB finders looking nice so far!"/utf8>>),
     ?assertEqual(en, En).
 
+rsc_insert_text_test() ->
+    Context = z_acl:sudo( z_context:new(zotonic_site_testsandbox) ),
+    Props = #{
+        <<"is_published">> => true,
+        <<"category_id">> => text,
+        <<"title">> => <<"Hallo dit is een tekst"/utf8>>,
+        <<"body">> => <<"Een langer verhaal om de taal beter detecteerbaar te maken."/utf8>>
+    },
+    {ok, Id} = m_rsc:insert(Props, Context),
+    Language = m_rsc:p_no_acl(Id, language, Context),
+    ?assertEqual([nl], Language).

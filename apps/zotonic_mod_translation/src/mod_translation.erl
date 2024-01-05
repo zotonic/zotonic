@@ -43,6 +43,7 @@
     observe_dispatch_rewrite/3,
     observe_scomp_script_render/2,
     observe_admin_menu/3,
+    observe_language_detect/2,
 
     set_language/2,
     set_user_language/2,
@@ -825,6 +826,22 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
                 visiblecheck={acl, use, ?MODULE}}
 
      |Acc].
+
+observe_language_detect(#language_detect{ text = Text, is_editable_only = true }, Context) ->
+    case translation_detect:detect(Text, Context) of
+        {ok, Lang} ->
+            Lang;
+        {error, _} ->
+            undefined
+    end;
+observe_language_detect(#language_detect{ text = Text, is_editable_only = false }, _Context) ->
+    case translation_detect:detect(Text) of
+        {ok, Lang} ->
+            Lang;
+        {error, _} ->
+            undefined
+    end.
+
 
 %% @doc Are the gettext tools available?
 -spec gettext_installed() -> boolean().
