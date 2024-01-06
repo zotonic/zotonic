@@ -1,0 +1,16 @@
+.dragover:after {
+    content: '⇪';
+    position: fixed;
+    display: block;
+    padding-top: 40vh;
+    text-align: center;
+    top: 0px;
+    left: 0px;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(255, 255, 255, 0.6);
+    color: rgba(0, 0, 0, .5);
+    font-size: 128px;
+    line-height: 1;
+    z-index: 10000;
+}

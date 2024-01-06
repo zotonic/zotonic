@@ -1866,6 +1866,12 @@ li h3.widget-header {
   display: none;
 }
 
+.rsc-preview-wrapper .rsc-preview {
+  max-width: 800px;
+  margin: 10px auto;
+  padding: 10px;
+}
+
 .notice-wrap {
   position: fixed;
   top: 60px;

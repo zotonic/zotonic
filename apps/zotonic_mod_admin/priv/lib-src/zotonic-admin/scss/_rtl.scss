@@ -1,0 +1,9 @@
+input[type="text"].rtl,
+textarea.rtl {
+    font-size: 150%;
+}
+
+body[dir=rtl] label {
+    float: right;
+    text-align: right;
+}

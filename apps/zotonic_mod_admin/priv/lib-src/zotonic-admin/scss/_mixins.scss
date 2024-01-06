@@ -1,0 +1,20 @@
+@mixin clearfix {
+    *zoom:1;
+    
+    &:before,
+    &:after {
+        content:" ";
+        display:table;
+    }
+
+    &:after{
+        clear:both;
+    }
+}
+
+@mixin user-select ($arguments) {
+    -webkit-user-select: $arguments;
+    -moz-user-select: $arguments;
+    -ms-user-select: $arguments;
+    user-select: $arguments;
+}
