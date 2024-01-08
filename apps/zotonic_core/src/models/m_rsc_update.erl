@@ -1052,11 +1052,12 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
     end.
 
 detect_language(NewProps, Context) ->
-    case extract_text(NewProps) of
+    Text = z_html:unescape(z_html:strip(extract_text(NewProps))),
+    case z_string:trim(Text) of
         <<>> ->
             [ z_context:language(Context) ];
-        Text ->
-            case z_notifier:first(#language_detect{ text = Text }, Context) of
+        Text1 ->
+            case z_notifier:first(#language_detect{ text = Text1 }, Context) of
                 undefined ->
                     [ z_context:language(Context) ];
                 Language ->
