@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell, Arjan Scherpenisse
+%% @copyright 2009-2024 Marc Worrell, Arjan Scherpenisse
 %% @doc Update routines for resources.  For use by the m_rsc module.
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2009-2024 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -948,8 +948,8 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
             % If no language, but medium_language is defined, then assume
             % content is also in the medium language
             case maps:get(<<"medium_language">>, NewProps, undefined) of
-                undefined -> [ z_context:language(Context) ];
-                <<>> -> [ z_context:language(Context) ];
+                undefined -> detect_language(NewProps, Context);
+                <<>> -> detect_language(NewProps, Context);
                 MLang -> [ MLang ]
             end;
         _ ->
@@ -1050,6 +1050,45 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
         false ->
             {error, eacces}
     end.
+
+detect_language(NewProps, Context) ->
+    Text = z_html:unescape(z_html:strip(extract_text(NewProps))),
+    case z_string:trim(Text) of
+        <<>> ->
+            [ z_context:language(Context) ];
+        Text1 ->
+            case z_notifier:first(#language_detect{ text = Text1 }, Context) of
+                undefined ->
+                    [ z_context:language(Context) ];
+                Language ->
+                    [ Language ]
+            end
+    end.
+
+extract_text(NewProps) ->
+    Texts = [
+        extract_title(NewProps),
+        extract_summary(NewProps),
+        extract_body(NewProps)
+    ],
+    Texts1 = [ T || T <- Texts, T =/= <<>> ],
+    iolist_to_binary(lists:join(32, Texts1)).
+
+extract_title(#{ <<"title">> := Title }) when is_binary(Title) ->
+    Title;
+extract_title(_) ->
+    <<>>.
+
+extract_summary(#{ <<"summary">> := Summary }) when is_binary(Summary) ->
+    Summary;
+extract_summary(_) ->
+    <<>>.
+
+extract_body(#{ <<"body">> := Body }) when is_binary(Body) ->
+    Body;
+extract_body(_) ->
+    <<>>.
+
 
 %% @doc Some forced props, depending on the resource being updated.
 set_forced_props(1, Props) ->
