@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-01-03 11:29\n"
+"PO-Revision-Date: 2024-01-09 14:01\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -214,7 +214,7 @@ msgstr "Czy na pewno chcesz przywrócić wszystkie reguły ACL do ich obecnie op
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:69./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:88./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:39./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:51./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26./apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:141./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:149
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:158./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:113./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:85./apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:49./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:81./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6./apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:106
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6./apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:114
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:189
 msgid "Cancel"
 msgstr "Anuluj"
@@ -10258,7 +10258,7 @@ msgstr "latami. Podoba mi się"
 msgid "Add a new language or change languages."
 msgstr "Dodaj nowy język lub zmień języki."
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:48
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:47
 msgid "Add a new translation"
 msgstr "Dodaj nowe tłumaczenie"
 
@@ -10266,7 +10266,7 @@ msgstr "Dodaj nowe tłumaczenie"
 msgid "Add language"
 msgstr "Dodaj język"
 
-#: apps/zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:11./apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:111
+#: apps/zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:11./apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:119
 msgid "Add translation"
 msgstr "Dodaj tłumaczenie"
 
@@ -10298,7 +10298,7 @@ msgstr "Czy jesteś pewien, że chcesz usunąć:"
 msgid "Are you sure you want to remove this language?"
 msgstr "Jesteś pewien, że chcesz usunąć ten język?"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:88
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:87
 msgid "Automatic translation"
 msgstr "Automatyczne tłumaczenie"
 
@@ -10306,7 +10306,7 @@ msgstr "Automatyczne tłumaczenie"
 msgid "Available sub-languages"
 msgstr "Dostępne podjęzyki"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:502
+#: apps/zotonic_mod_translation/src/mod_translation.erl:503
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "Nie można generować plików tłumaczeniowych, ponieważ <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext nie jest zainstalowany</a>."
 
@@ -10314,13 +10314,13 @@ msgstr "Nie można generować plików tłumaczeniowych, ponieważ <a href=\"http
 msgid "Code"
 msgstr "Kod"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:90
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:89
 msgid "Copy texts"
 msgstr "Kopiuj teksty"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:101
-msgid "Copying and translating texts will never overwrite an existing text and can be used to fill in blank text fields in the desitination language."
-msgstr "Kopiowanie i tłumaczenie tekstów nigdy nie spowoduje zastąpienia istniejącego tekstu i można je wykorzystać do wypełnienia pustych pól tekstowych w języku docelowym."
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:109
+msgid "Copying and translating texts is used to fill in blank text fields in the destination language. Existing texts will never be overwritten unless the “overwrite existing texts” checkbox is checked."
+msgstr "Kopiowanie i tłumaczenie tekstów służy do wypełniania pustych pól tekstowych w języku docelowym. Istniejące teksty nigdy nie zostaną nadpisane, chyba że zaznaczone jest pole wyboru „Zastąp istniejące teksty”."
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:2
 msgid "Current translations"
@@ -10390,7 +10390,7 @@ msgstr "Dla nowych gości należy ustawić język na domyślny"
 msgid "French"
 msgstr "Francuski"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:58
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:57
 msgid "From existing language"
 msgstr "Z istniejącego języka"
 
@@ -10418,9 +10418,9 @@ msgstr "Jeśli język jest wyłączony, edytowane teksty utracą swoje tłumacze
 msgid "If a language is set to 'view' or 'editable' then texts for that language are editable in the admin."
 msgstr "Jeśli dany język jest ustawiony na \"view\" lub \"editable\", wówczas teksty dla tego języka są edytowalne w administracji."
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:99
-msgid "If you automatically translate texts then your texts will be sent to the remote translation service for automatic translation."
-msgstr "Jeśli automatycznie tłumaczysz teksty, Twoje teksty zostaną przesłane do usługi zdalnego tłumaczenia w celu automatycznego przetłumaczenia."
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:105
+msgid "If you automatically translate texts then your texts will be sent to a remote translation service."
+msgstr "Jeśli automatycznie tłumaczysz teksty, zostaną one przesłane do zdalnej usługi tłumaczeniowej."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:147
 msgid "If you change the stemmer language then you will need to reindex all data."
@@ -10446,11 +10446,11 @@ msgstr "Język używany do generowania wskaźników wyszukiwania"
 msgid "Languages overview"
 msgstr "Języki"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:91
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:90
 msgid "Leave texts empty"
 msgstr "Pozostaw teksty puste"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:85
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:84
 msgid "Method"
 msgstr "metoda"
 
@@ -10473,6 +10473,10 @@ msgstr "Nie wszystkie teksty udało się przetłumaczyć."
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:40
 msgid "Off"
 msgstr "Off"
+
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:99
+msgid "Overwrite existing texts with new translations"
+msgstr "Zastąp istniejące teksty nowymi tłumaczeniami"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:9
 msgid "Part of"
@@ -10502,7 +10506,7 @@ msgstr "Przeładuj tłumaczenia"
 msgid "Reload all translations from the modules and site. All templates will be recompiled."
 msgstr "Przeładuj wszystkie tłumaczenia z modułów i strony. Wszystkie szablony zostaną ponownie skompilowane."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:517
+#: apps/zotonic_mod_translation/src/mod_translation.erl:518
 msgid "Reloading all .po files in the background."
 msgstr "Przeładowanie wszystkich plików .po w tle."
 
@@ -10546,23 +10550,23 @@ msgstr "Wybierz swój domyślny język."
 msgid "Show the language in the URL"
 msgstr "Pokaż język w adresie URL"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:419./apps/zotonic_mod_translation/src/mod_translation.erl:467
+#: apps/zotonic_mod_translation/src/mod_translation.erl:420./apps/zotonic_mod_translation/src/mod_translation.erl:468
 msgid "Sorry, could not change the language."
 msgstr "Przepraszam, nie mogłem zmienić języka."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:406./apps/zotonic_mod_translation/src/mod_translation.erl:435./apps/zotonic_mod_translation/src/mod_translation.erl:447./apps/zotonic_mod_translation/src/mod_translation.erl:470
+#: apps/zotonic_mod_translation/src/mod_translation.erl:407./apps/zotonic_mod_translation/src/mod_translation.erl:436./apps/zotonic_mod_translation/src/mod_translation.erl:448./apps/zotonic_mod_translation/src/mod_translation.erl:471
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "Przepraszam, nie ma pan pozwolenia na zmianę listy języków."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:519
+#: apps/zotonic_mod_translation/src/mod_translation.erl:520
 msgid "Sorry, you don't have permission to reload translations."
 msgstr "Przepraszam, nie ma pan pozwolenia na przeładowanie tłumaczeń."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:509
+#: apps/zotonic_mod_translation/src/mod_translation.erl:510
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "Przepraszam, nie masz pozwolenia na skanowanie w poszukiwaniu tłumaczeń."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:422./apps/zotonic_mod_translation/src/mod_translation.erl:588
+#: apps/zotonic_mod_translation/src/mod_translation.erl:423./apps/zotonic_mod_translation/src/mod_translation.erl:589
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "Przepraszam, nie masz uprawnień do ustawiania domyślnego języka."
 
@@ -10570,7 +10574,7 @@ msgstr "Przepraszam, nie masz uprawnień do ustawiania domyślnego języka."
 msgid "Spanish"
 msgstr "Hiszpański"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:489
+#: apps/zotonic_mod_translation/src/mod_translation.erl:490
 msgid "Started building the .pot files. This may take a while..."
 msgstr "Zacząłem budować pliki .pot. To może trochę potrwać..."
 
@@ -10594,7 +10598,7 @@ msgstr "Podczas tłumaczenia tekstów wystąpił błąd. Spróbuj ponownie póź
 msgid "This translation has been automatically generated."
 msgstr "To tłumaczenie zostało wygenerowane automatycznie."
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:72
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:71
 msgid "To new language"
 msgstr "Do nowego języka"
 
@@ -10602,7 +10606,7 @@ msgstr "Do nowego języka"
 msgid "Translate"
 msgstr "Tłumaczyć"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:823
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:824
 msgid "Translation"
 msgstr "Tłumaczenia"
 
