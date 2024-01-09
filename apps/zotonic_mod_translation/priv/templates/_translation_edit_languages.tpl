@@ -63,13 +63,14 @@
         });
     });
 
-    function fill_texts(src, dst, mapping) {
+    function fill_texts(src, dst, mapping, overwrite) {
         let is_complete = true;
 
         $('.tab-pane.edit-language-' + dst).each(function() {
             const $form = $(this).closest("form");
             $("input,textarea", this).each(function() {
-                if ($.trim($(this).val()) == '' && $(this).attr('name').includes("$")) {
+                if ((overwrite || $.trim($(this).val()) == '')
+                    && $(this).attr('name').includes("$")) {
                     const from_name = $(this).attr('name').split('$')[0] + '$' + src;
                     if (!from_name.endsWith("_json")) {
                         const from_val = $form.find('[name="' + from_name + '"]').val().trim();
@@ -96,12 +97,13 @@
         return is_complete;
     }
 
-    function collect_texts(src, dst) {
+    function collect_texts(src, dst, overwrite) {
         const texts = [];
         $('.tab-pane.edit-language-' + dst).each(function() {
             const $form = $(this).closest("form");
             $("input,textarea", this).each(function() {
-                if ($.trim($(this).val()) == '' && $(this).attr('name').includes("$")) {
+                if ((overwrite || $.trim($(this).val()) == '')
+                    && $(this).attr('name').includes("$")) {
                     const from_name = $(this).attr('name').split('$')[0] + '$' + src;
                     if (!from_name.endsWith("_json")) {
                         const from_val = $form.find('[name="' + from_name + '"]').val().trim();
@@ -119,6 +121,7 @@
         const value = msg.payload.value;
         const src = value.src.replace(/[^a-z0-9A-Z-]/g, '');
         const dst = value.dst.replace(/[^a-z0-9A-Z-]/g, '');
+        const overwrite = value.overwrite ?? false;
 
         if (value.action) {
             if (value.action == 'dialog_close') {
@@ -138,11 +141,11 @@
 
         switch (value.method) {
             case 'copy':
-                fill_texts(src, dst, []);
+                fill_texts(src, dst, [], overwrite);
                 break;
             case 'translate':
                 z_mask('body');
-                const texts = collect_texts(src, dst);
+                const texts = collect_texts(src, dst, overwrite);
                 cotonic.broker.call("bridge/origin/model/translation/get/translate", {
                         from: src,
                         to: dst,
@@ -154,7 +157,7 @@
                             for (let i=0; i < result.length; i++) {
                                 mapping[result[i].text] = result[i].translation;
                             }
-                            if (fill_texts(src, dst, mapping)) {
+                            if (fill_texts(src, dst, mapping, overwrite)) {
                                 $("#trans-review-" + dst)
                                     .fadeIn()
                                     .find("input")

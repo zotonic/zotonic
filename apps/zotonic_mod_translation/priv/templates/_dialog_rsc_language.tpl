@@ -42,7 +42,6 @@
         {_ Removing a language will hide it on the edit form. If the page is saved then the translation will be deleted from the database. _}
     </p>
 
-
     <hr>
 
     <p>{_ Add a new translation _}:</p>
@@ -94,11 +93,20 @@
             </div>
         </div>
 
+        <div class="form-group">
+            <label class="checkbox">
+                <input type="checkbox" value="1" name="overwrite">
+                {_ Overwrite existing texts with new translations _}
+            </label>
+        </div>
+
+        {% if m.translation.has_translation_service %}
+            <p class="help-block">
+                {_ If you automatically translate texts then your texts will be sent to a remote translation service. _}
+            </p>
+        {% endif %}
         <p class="help-block">
-            {% if m.translation.has_translation_service %}
-                {_ If you automatically translate texts then your texts will be sent to the remote translation service for automatic translation. _}
-            {% endif %}
-            {_ Copying and translating texts will never overwrite an existing text and can be used to fill in blank text fields in the desitination language. _}
+            {_ Copying and translating texts is used to fill in blank text fields in the destination language. Existing texts will never be overwritten unless the “overwrite existing texts” checkbox is checked. _}
         </p>
 
         <div class="modal-footer">
