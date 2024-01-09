@@ -184,6 +184,10 @@ model.present = function(data) {
                     req.wait_count--;
 
                     setTimeout(actions.startUploader, 0);
+
+                    if (data.upload.start_topic) {
+                        self.publish(data.upload.start_topic, upload);
+                    }
                 });
             }
             if (data.response_topic) {
