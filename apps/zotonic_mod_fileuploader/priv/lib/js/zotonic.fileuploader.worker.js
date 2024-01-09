@@ -192,7 +192,7 @@ model.present = function(data) {
             is_next = true;
         } else {
             console.log("Fileuploader request without files ", data.upload);
-            self.publish(msg.properties.response_topic, { status: "error", error: "No files" });
+            self.publish(data.response_topic, { status: "error", error: "No files" });
         }
     }
 
