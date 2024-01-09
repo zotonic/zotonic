@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-01-09 14:00\n"
+"PO-Revision-Date: 2024-01-09 15:34\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -10320,7 +10320,7 @@ msgstr "Copier des textes"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:109
 msgid "Copying and translating texts is used to fill in blank text fields in the destination language. Existing texts will never be overwritten unless the “overwrite existing texts” checkbox is checked."
-msgstr ""
+msgstr "La copie et la traduction de textes permettent de remplir des champs de texte vides dans la langue de destination. Les textes existants ne seront jamais écrasés à moins que la case « écraser les textes existants » ne soit cochée."
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:2
 msgid "Current translations"
@@ -10420,7 +10420,7 @@ msgstr "Si une langue est définie en 'afficher' ou 'modifiable', les textes de 
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:105
 msgid "If you automatically translate texts then your texts will be sent to a remote translation service."
-msgstr ""
+msgstr "Si vous traduisez automatiquement des textes, vos textes seront envoyés à un service de traduction à distance."
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:147
 msgid "If you change the stemmer language then you will need to reindex all data."
@@ -10476,7 +10476,7 @@ msgstr "Off"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:99
 msgid "Overwrite existing texts with new translations"
-msgstr ""
+msgstr "Remplacer les textes existants par de nouvelles traductions"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:9
 msgid "Part of"
