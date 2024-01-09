@@ -43,6 +43,9 @@ var startUploader = function(fileIndex) {
     let f = model.files[fileIndex];
     let offset;
 
+    // File was deleted
+    if (!f) return
+
     if (f.failed.length > 0) {
         offset = f.failed.pop();
     } else {
@@ -66,13 +69,13 @@ var startUploader = function(fileIndex) {
                 if (response.status == "ok") {
                     f.status = response.result;
                     f.req.uploaded_size += end - offset;
-                } else {
+                } else if (!isFileDeleted(fileIndex, f)) {
                     if (f.failed.indexOf(offset) == -1) {
                         f.failed.push(offset);
                     }
                     console.log("Fileuploader status error", response, f);
                 }
-            } else if (xhr.status != 0) {
+            } else if (xhr.status != 0 && !isFileDeleted(fileIndex, f)) {
                 if (f.failed.indexOf(offset) == -1) {
                     f.failed.push(offset);
                 }
@@ -86,24 +89,38 @@ var startUploader = function(fileIndex) {
     //     console.log(percent_complete, "%");
     // });
     xhr.addEventListener("error", function() {
-        if (f.failed.indexOf(offset) == -1) {
-            f.failed.push(offset);
+        if (!isFileDeleted(fileIndex, f)) {
+            if (f.failed.indexOf(offset) == -1) {
+                f.failed.push(offset);
+            }
+            f.error_count++;
+            console.log("Fileuploader xhr error", f);
         }
-        f.error_count++;
-        console.log("Fileuploader xhr error", f);
     });
     xhr.addEventListener("loadend", function() {
-        let upl = [];
-        for (let i=0; i<f.uploading.length; i++) {
-            if (f.uploading[i] != offset) {
-                upl.push(f.uploading[i]);
+        if (!isFileDeleted(fileIndex, f)) {
+            let upl = [];
+            for (let i=0; i<f.uploading.length; i++) {
+                if (f.uploading[i] != offset) {
+                    upl.push(f.uploading[i]);
+                }
             }
+            f.uploading = upl;
+            self.publish("model/fileuploader/post/next", {});
         }
-        f.uploading = upl;
         model.uploaders--;
-        self.publish("model/fileuploader/post/next", {});
     });
-    xhr.send(data);
+    xhr.addEventListener("abort", function() {
+        model.uploaders--;
+    });
+    isFileDeleted(fileIndex, f)
+        ? xhr.abort()
+        : xhr.send(data);
+}
+
+function isFileDeleted(fileIndex, f) {
+    return !model.files[fileIndex] ||
+            model.files[fileIndex].status?.name !== f.status?.name;
 }
 
 
@@ -120,6 +137,10 @@ model.present = function(data) {
             // The post consists of a files array and a topic/payload to
             // publish after the files have been uploaded.
             actions.newUpload(msg);
+        });
+
+        self.subscribe("model/fileuploader/post/delete/+name", function(_msg, bindings) {
+            actions.deleteUpload(bindings.name);
         });
 
         self.subscribe("model/fileuploader/post/next", function(_msg) {
@@ -194,6 +215,13 @@ model.present = function(data) {
             console.log("Fileuploader request without files ", data.upload);
             self.publish(msg.properties.response_topic, { status: "error", error: "No files" });
         }
+    } else if (data.delete_upload) {
+        model.files = model.files.filter(f => f.status?.name !== data.delete_upload);
+        model.requests = model.requests.map(r => {
+            r.uploads = r.uploads.filter(u => u.status?.name !== data.delete_upload);
+            return r;
+        });
+        self.publish(`bridge/origin/model/fileuploader/post/delete/${data.delete_upload}`);
     }
 
     let fs = [];
@@ -410,6 +438,13 @@ actions.newUpload = function(msg) {
     let data = {
         upload: msg.payload,
         response_topic: msg.properties.response_topic
+    };
+    model.present(data);
+};
+
+actions.deleteUpload = function(name) {
+    let data = {
+        delete_upload: name
     };
     model.present(data);
 };
