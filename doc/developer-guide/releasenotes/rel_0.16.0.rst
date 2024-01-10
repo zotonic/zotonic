@@ -55,7 +55,7 @@ Marc Worrell (29):
       * mod_base: fix a problem with Firefox when uploading files via the postback controller. Fixes #1230
       * mod_base: fix a problem with firefox and sortable. Fixes #1239
       * mod_acl_user_groups: added support for collaboration groups. Issue #1099
-      * Fix a problem where an user can't update their own 'person' resource. Issue #1229
+      * Fix a problem where a user can't update their own 'person' resource. Issue #1229
       * mod_acl_user_groups: fix a problem where 'sudo' was not handled properly during rsc updates. Issue #1229
       * mod_acl_user_groups: remove default 'view' rights on collaboration group.
       * core: do not require additional permissions to change the is_authoritative flag. Fixes #1236

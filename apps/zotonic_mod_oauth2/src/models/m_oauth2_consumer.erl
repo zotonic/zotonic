@@ -123,9 +123,9 @@ list_consumers_all(Context) ->
         Context).
 
 %% @doc List all consumers, the secrets of these consumers are copied from the remote site.
-%% Tokens are coupled to a consumer. Consumers are coupled to an user, if the user
+%% Tokens are coupled to a consumer. Consumers are coupled to a user, if the user
 %% is deleted then all their consumers and tokens are deleted. Consumers should be registered by
-%% an user with config rights, as such all admin users can see all apps.
+%% a user with config rights, as such all admin users can see all apps.
 -spec list_consumers( z:context() ) -> {ok, list( map() )} | {error, eacces | term()}.
 list_consumers(Context) ->
     case z_acl:is_admin(Context) of

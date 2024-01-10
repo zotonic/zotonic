@@ -73,7 +73,7 @@ confirm(UserId, Context) ->
             {error, user_not_enabled}
     end.
 
-%% @doc Logon an user whose id we know, set all user prefs in the context.
+%% @doc Logon a user whose id we know, set all user prefs in the context.
 -spec logon( m_rsc:resource_id(), z:context() ) -> {ok, z:context()} | {error, user_not_enabled}.
 logon(UserId, Context) ->
     case is_enabled(UserId, Context) of
@@ -110,7 +110,7 @@ logon_switch(UserId, SudoUserId, Context) ->
             {error, eacces}
     end.
 
-%% @doc Logon an user and redirect the user agent. The MQTT websocket MUST be connected.
+%% @doc Logon a user and redirect the user agent. The MQTT websocket MUST be connected.
 -spec logon_redirect( m_rsc:resource_id(), binary() | undefined, z:context() ) -> ok | {error, term()}.
 logon_redirect(UserId, Url, Context) ->
     case z_notifier:first(#auth_client_logon_user{
@@ -145,7 +145,7 @@ logoff(Context) ->
     z_acl:logoff(Context1).
 
 
-%% @doc Check if the user is enabled, an user is enabled when the rsc is published and within its publication date range.
+%% @doc Check if the user is enabled, a user is enabled when the rsc is published and within its publication date range.
 -spec is_enabled( m_rsc:resource_id(), z:context() ) -> boolean().
 is_enabled(UserId, Context) ->
     case z_notifier:first(#user_is_enabled{id=UserId}, Context) of

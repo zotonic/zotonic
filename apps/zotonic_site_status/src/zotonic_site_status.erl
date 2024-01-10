@@ -97,7 +97,7 @@ observe_auth_validate( #auth_validate{ username = Username }, Context ) ->
     {error, pw}.
 
 
-%% @doc Check if an user is enabled.
+%% @doc Check if a user is enabled.
 observe_user_is_enabled(#user_is_enabled{ id = 1 }, _Context) -> true;
 observe_user_is_enabled(#user_is_enabled{}, _Context) -> false.
 

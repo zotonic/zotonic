@@ -133,7 +133,7 @@ Marc Worrell (67):
 * mod_mqtt: allow topics like ['~site', 'rsc', 1234].
 * mod_oembed/mod_video_embed: fix problem with access rights if new media insert was done without admin rights.
 * mod_oembed: don't crash on oembed connect timeouts.
-* mod_signup: show external auth services for signup using the logon methods. Also always force the presence of an username_pw identity for signed up users.
+* mod_signup: show external auth services for signup using the logon methods. Also always force the presence of a username_pw identity for signed up users.
 * mod_survey: fix 'stop' survey button.
 * mod_twitter: Fix twitter redirect url
 * rebar.config.lock: lock new z_stdlib

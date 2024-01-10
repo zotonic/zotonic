@@ -319,7 +319,7 @@ model_pgsql() ->
     "CREATE INDEX fki_predicate_category_category_id ON predicate_category (category_id)",
 
     % Table identity
-    % Identities of an user, used for authentication.  Examples are password, openid, msn, xmpp etc.
+    % Identities of a user, used for authentication.  Examples are password, openid, msn, xmpp etc.
 
     "CREATE TABLE identity
     (

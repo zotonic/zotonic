@@ -606,8 +606,8 @@
 %% Return: ``[ m_rsc:resource_id() ]`` or ``undefined``
 -record(acl_user_groups, {}).
 
-%% @doc Modify the list of user groups of an user. Called internally
-%% by the ACL modules when fetching the list of user groups an user
+%% @doc Modify the list of user groups of a user. Called internally
+%% by the ACL modules when fetching the list of user groups a user
 %% is member of.
 %% Type: foldl
 %% Return: ``[ m_rsc:resource_id() ]``
@@ -616,8 +616,8 @@
     groups :: list( m_rsc:resource_id() )
 }).
 
-%% @doc Modify the list of collaboration groups of an user. Called internally
-%% by the ACL modules when fetching the list of collaboration groups an user
+%% @doc Modify the list of collaboration groups of a user. Called internally
+%% by the ACL modules when fetching the list of collaboration groups a user
 %% is member of.
 %% Type: foldl
 %% Return: ``[ m_rsc:resource_id() ]``
@@ -703,7 +703,7 @@
         request_options = #{} :: map()
     }).
 
-%% @doc Send a request to the client to login an user. The zotonic.auth.worker.js will
+%% @doc Send a request to the client to login a user. The zotonic.auth.worker.js will
 %%      send a request to controller_authentication to exchange the one time token with
 %%      a z.auth cookie for the given user. The client will redirect to the Url.
 %% Type: first

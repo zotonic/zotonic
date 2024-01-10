@@ -239,7 +239,7 @@ is_player_needed(<<"video/", _/binary>>) -> true;
 is_player_needed(<<"audio/", _/binary>>) -> true;
 is_player_needed(_) -> false.
 
-%% @doc Check if the served file originated from an user-upload (ie. it is a resource)
+%% @doc Check if the served file originated from a user-upload (ie. it is a resource)
 is_resource( #z_file_info{ acls = Acls }) ->
     lists:any(fun is_integer/1, Acls).
 

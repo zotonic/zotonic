@@ -68,7 +68,7 @@ Activating/deactivating modules
 Resetting a user password
 -------------------------
 
-Sometimes it happens that you want to reset an user's password from the Erlang shell. You can do this from the Erlang shell without using the admin or the reset-password mail/dialog.
+Sometimes it happens that you want to reset a user's password from the Erlang shell. You can do this from the Erlang shell without using the admin or the reset-password mail/dialog.
 
 ``m_identity:set_username_pw(1234, "username", "password", z:c(sitename)).``
   Where 1234 is the rsc id of your user (1 for the admin), this must be an integer.

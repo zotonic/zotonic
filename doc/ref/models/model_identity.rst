@@ -20,7 +20,7 @@ The following m_identity model properties are available in templates:
 |        |m.identity[page_id].is_user |             |
 +--------+----------------------------+-------------+
 |username|Fetch the username, if any, |<<"admin">>  |
-|        |of an user. Returns a binary|             |
+|        |of a user. Returns a binary |             |
 |        |or undefined. Usage:        |             |
 |        |m.identity[page_id].username|             |
 +--------+----------------------------+-------------+

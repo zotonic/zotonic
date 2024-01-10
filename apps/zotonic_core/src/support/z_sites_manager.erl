@@ -1115,7 +1115,7 @@ do_is_site_redirect(Cfg) ->
         undefined -> true
     end.
 
-% Handle the case where an user just gives a single hostname.
+% Handle the case where a user just gives a single hostname.
 ensure_alias_list([C|_] = Alias) when is_integer(C) -> [Alias];
 ensure_alias_list(Alias) -> Alias.
 

@@ -3,8 +3,8 @@
 acl_collab_groups_modify
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Modify the list of collaboration groups of an user. Called internally 
-by the ACL modules when fetching the list of collaboration groups an user 
+Modify the list of collaboration groups of a user. Called internally 
+by the ACL modules when fetching the list of collaboration groups a user 
 is member of. 
 
 

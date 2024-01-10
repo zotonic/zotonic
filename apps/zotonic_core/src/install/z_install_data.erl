@@ -153,7 +153,7 @@ install_rsc(C) ->
     ok.
 
 
-%% @doc Install the admin user as an user.  Uses the hard coded password "admin" when no password defined in the environment.
+%% @doc Install the admin user as a user.  Uses the hard coded password "admin" when no password defined in the environment.
 install_identity(C) ->
     ?LOG_INFO(#{
         text => <<"Site install: inserting username for the admin">>,

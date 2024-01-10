@@ -247,7 +247,7 @@ try_url({ok, <<"ftp:", _/binary>>}, _Context) ->
     % Use anonymous ftp
     {error, todo};
 try_url({ok, <<"email:", _/binary>>}, _Context) ->
-    % Make an user for this email address?
+    % Make a user for this email address?
     {error, todo};
 try_url(_, _Context) ->
     {error, unknown}.

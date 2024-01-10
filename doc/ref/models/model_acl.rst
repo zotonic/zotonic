@@ -28,7 +28,7 @@ The following m_acl model properties are available in templates:
 |                    |check if a *typical* user is allowed  |
 |                    |to perform some actions. Example:     |
 |                    |``m.acl.authenticated.insert.article``|
-|                    |If an user is logged on the that      |
+|                    |If a user is logged on the that       |
 |                    |user’s permissions are used.          |
 +--------------------+--------------------------------------+
 

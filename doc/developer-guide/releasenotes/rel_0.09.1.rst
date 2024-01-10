@@ -121,7 +121,7 @@ Marc Worrell (57):
 * doc: fix in docs for split_in and vsplit_in filters.
 * eiconv: fix for warning on linux about missing iconv library.
 * facebook/twitter: fix redirects, page_url is now a binary.
-* mod_admin_identity: added #identity_verified{} notitication. Used to mark a verified identity to an user.
+* mod_admin_identity: added #identity_verified{} notitication. Used to mark a verified identity to a user.
 * mod_admin_identity: added a control to add/verify e-mail identities instead of the e-mail address input for a person.
 * mod_admin_identity: fix for update_done notifications other than insert and update.
 * mod_authentication: fixes for password reset e-mail and some error feedback messages.

@@ -53,7 +53,7 @@ Marc Worrell (16):
  * mod_admin: add admin notes; mailinglist opt out (#3222)
  * New pot
  * core: allow send to recipient-id email address if recipient is visible. (#3227)
- * mod_acl_user_groups: add notification to update an user's user groups on lookup (#3225)
+ * mod_acl_user_groups: add notification to update a user's user groups on lookup (#3225)
  * mod_mailinglist: allow multiple mailinglists subscribe forms on one page (#3223)
 
 Michiel Klønhammer (4):
