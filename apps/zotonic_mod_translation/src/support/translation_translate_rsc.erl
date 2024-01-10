@@ -23,12 +23,16 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -export([
-    add_translation/5,
-    remove_translation/3,
     has_language/3,
 
+    add_translation/5,
     add_translation_map/5,
-    remove_translation_map/2
+
+    remove_translation/3,
+    remove_translation_map/2,
+
+    keep_translation/3,
+    keep_translation_map/2
 ]).
 
 
@@ -109,6 +113,47 @@ has_language(Id, Langs, Context) when is_list(Langs) ->
                 Langs)
     end.
 
+%% @doc Remove all translations except the given ones from a resource.
+-spec keep_translation(Id, Language, Context) -> ok | {error, Reason} when
+    Id :: m_rsc:resource(),
+    Language :: z_language:language_code() | [ z_language:language_code() ],
+    Context :: z:context(),
+    Reason :: term().
+keep_translation(Id, Language, Context) when is_atom(Language) ->
+    keep_translation(Id, [Language], Context);
+keep_translation(_Id, [], _Context) ->
+    {error, language};
+keep_translation(Id, KeepLangs, Context) when is_list(KeepLangs) ->
+    case z_acl:rsc_editable(Id, Context) of
+        true ->
+            case has_language(Id, KeepLangs, Context) of
+                true ->
+                    RscLanguage = case m_rsc:p_no_acl(Id, <<"language">>, Context) of
+                        undefined -> [];
+                        Lng -> Lng
+                    end,
+                    RemoveLangs = RscLanguage -- KeepLangs,
+                    remove_translation(Id, RemoveLangs, Context);
+                false ->
+                    {error, language}
+            end;
+        false ->
+            {error, eacces}
+    end.
+
+%% @doc Remove all translations except the given ones from a map.
+-spec keep_translation_map(Map, Language) -> {ok, NewMap} when
+    Map :: map(),
+    NewMap :: map(),
+    Language :: z_language:language_code() | [ z_language:language_code() ].
+keep_translation_map(Map, Language) when is_atom(Language) ->
+    keep_translation_map(Map, [Language]);
+keep_translation_map(_Id, []) ->
+    {error, language};
+keep_translation_map(Map, KeepLangs) when is_list(KeepLangs) ->
+    MapLangs = collect_langs(Map),
+    RemoveLangs = MapLangs -- KeepLangs,
+    {ok, remove_1(Map, RemoveLangs, true, true)}.
 
 %% @doc Remove languages from a resource.
 -spec remove_translation(Id, Language, Context) -> ok | {error, Reason} when
@@ -118,30 +163,31 @@ has_language(Id, Langs, Context) when is_list(Langs) ->
     Reason :: term().
 remove_translation(Id, Language, Context) when is_atom(Language) ->
     remove_translation(Id, [ Language ], Context);
+remove_translation(_Id, [], _Context) ->
+    ok;
 remove_translation(Id, Langs, Context) when is_list(Langs) ->
     case z_acl:rsc_editable(Id, Context) of
         true ->
             case has_language(Id, Langs, Context) of
                 true ->
-                    Rsc = m_rsc:get(Id, Context),
-                    Props = remove_1(Rsc, Langs, false),
-                    TransStatus = case m_rsc:p_no_acl(Id, <<"translation_status">>, Context) of
-                        undefined -> #{};
-                        TrSt -> TrSt
-                    end,
-                    BinLangs = [ atom_to_binary(Lang) || Lang <- Langs ],
-                    Language = case m_rsc:p_no_acl(Id, <<"language">>, Context) of
-                        undefined -> [];
-                        Lng -> Lng
-                    end,
-                    Props1 = Props#{
-                        <<"translation_status">> => maps:without(BinLangs, TransStatus),
-                        <<"language">> => Language -- Langs
-                    },
-                    case m_rsc:update(Id, Props1, Context) of
-                        {ok, _} -> ok;
-                        {error, _} = Error -> Error
-                    end;
+                    case m_rsc:get(Id, Context) of
+                        undefined ->
+                            {error, enoent};
+                        Rsc ->
+                            Rsc1 = case Rsc of
+                                #{ <<"language">> := _ } -> Rsc;
+                                _ -> Rsc#{ <<"language">> => [] }
+                            end,
+                            Rsc2 = case Rsc1 of
+                                #{ <<"translation_status">> := _ } -> Rsc;
+                                _ -> Rsc#{ <<"translation_status">> => #{} }
+                            end,
+                            Props = remove_1(Rsc2, Langs, false, true),
+                            case m_rsc:update(Id, Props, Context) of
+                                {ok, _} -> ok;
+                                {error, _} = Error -> Error
+                            end
+                        end;
                 false ->
                     ok
             end;
@@ -157,23 +203,33 @@ remove_translation(Id, Langs, Context) when is_list(Langs) ->
 remove_translation_map(Map, Language) when is_atom(Language) ->
     remove_translation_map(Map, [ Language ]);
 remove_translation_map(Map, Langs) when is_list(Langs) ->
-    {ok, remove_1(Map, Langs, false)}.
+    {ok, remove_1(Map, Langs, false, true)}.
 
-remove_1(Map, Langs, IsCopyAll) when is_map(Map) ->
+remove_1(Map, Langs, IsCopyAll, IsTopLevel) when is_map(Map) ->
     maps:fold(
-        fun(K, V, Acc) ->
-            case remove_1(V, Langs, true) of
-                V when not IsCopyAll -> Acc;
-                V1 -> Acc#{ K => V1 }
-            end
+        fun
+            (<<"language">>, V, Acc) when is_list(V), IsTopLevel ->
+                Acc#{
+                    <<"language">> => V -- Langs
+                };
+            (<<"translation_status">>, V, Acc) when is_map(V), IsTopLevel ->
+                LangsB = [ atom_to_binary(Iso) || Iso <- Langs ],
+                Acc#{
+                    <<"translation_status">> => maps:without(LangsB, V)
+                };
+            (K, V, Acc) ->
+                case remove_1(V, Langs, true, false) of
+                    V when not IsCopyAll -> Acc;
+                    V1 -> Acc#{ K => V1 }
+                end
         end,
         #{},
         Map);
-remove_1(L, Langs, _IsCopyAll) when is_list(L) ->
+remove_1(L, Langs, _IsCopyAll, _IsTopLevel) when is_list(L) ->
     lists:map(
-        fun(V) -> remove_1(V, Langs, true) end,
+        fun(V) -> remove_1(V, Langs, true, false) end,
         L);
-remove_1(#trans{ tr = Tr }, Langs, _IsCopyAll) ->
+remove_1(#trans{ tr = Tr }, Langs, _IsCopyAll, _IsTopLevel) ->
     Tr1 = lists:foldl(
         fun(Lang, Acc) ->
             lists:keydelete(Lang, 1, Acc)
@@ -181,7 +237,7 @@ remove_1(#trans{ tr = Tr }, Langs, _IsCopyAll) ->
         Tr,
         Langs),
     #trans{ tr = Tr1 };
-remove_1(V, _Language, _IsCopyAll) ->
+remove_1(V, _Language, _IsCopyAll, _IsTopLevel) ->
     V.
 
 
@@ -318,6 +374,17 @@ insert_dst_texts(Id, FromLanguage, ToLanguage, Translations, IsOverwrite, Contex
 insert_dst_texts_1(Map, FromLanguage, ToLanguage, Translations, IsOverwrite, CopyAll) when is_map(Map) ->
     maps:fold(
         fun
+            (<<"language">>, V, Acc) when is_list(V), CopyAll ->
+                Acc#{
+                    <<"language">> => lists:sort([ ToLanguage | V ])
+                };
+            (<<"translation_status">>, V, Acc) when is_map(V), CopyAll ->
+                ToLanguageB = atom_to_binary(ToLanguage),
+                Acc#{
+                    <<"translation_status">> => V#{
+                        ToLanguageB => <<"1">>
+                    }
+                };
             (K, V, Acc) when is_binary(V) ->
                 case is_text(K) of
                     true ->
@@ -401,3 +468,27 @@ dst_trans(K, #trans{ tr = Tr } = V, FromLanguage, ToLanguage, Translations, IsOv
         true ->
             V
     end.
+
+%% @doc Determine which languages are used in the data structure.
+collect_langs(#{ <<"language">> := Langs }) when is_list(Langs) ->
+    Langs;
+collect_langs(Map) ->
+    collect_langs_1(Map, []).
+
+collect_langs_1(#trans{ tr = Tr }, Acc) ->
+    Langs = [ Iso || {Iso, _} <- Tr ],
+    lists:usort(Acc ++ Langs);
+collect_langs_1(M, Acc) when is_map(M) ->
+    maps:fold(
+        fun(_K, V, Acc1) ->
+            collect_langs_1(V, Acc1)
+        end,
+        Acc,
+        M);
+collect_langs_1(L, Acc) when is_list(L) ->
+    lists:foldl(
+        fun(V, Acc1) ->
+            collect_langs_1(V, Acc1)
+        end,
+        Acc,
+        L).
