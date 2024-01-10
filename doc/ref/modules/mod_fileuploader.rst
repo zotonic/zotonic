@@ -22,6 +22,9 @@ Files are sent to the webworker on the topic ``model/fileuploader/post/new``:
                 file: f                 // Must be a File object
             }
         ],
+
+        start_topic: "bridge/origin/foo", // Receives the upload metadata when the upload starts
+
         ready_msg: {
             foo: "bar",                 // Anything you want to send if all files are uploaded
             files: []                   // This will be set by the worker

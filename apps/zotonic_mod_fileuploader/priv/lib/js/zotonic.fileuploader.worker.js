@@ -184,6 +184,10 @@ model.present = function(data) {
                     req.wait_count--;
 
                     setTimeout(actions.startUploader, 0);
+
+                    if (data.upload.start_topic) {
+                        self.publish(data.upload.start_topic, upload);
+                    }
                 });
             }
             if (data.response_topic) {
@@ -192,7 +196,7 @@ model.present = function(data) {
             is_next = true;
         } else {
             console.log("Fileuploader request without files ", data.upload);
-            self.publish(msg.properties.response_topic, { status: "error", error: "No files" });
+            self.publish(data.response_topic, { status: "error", error: "No files" });
         }
     }
 
