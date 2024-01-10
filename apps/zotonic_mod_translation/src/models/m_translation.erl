@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013-2023 Marc Worrell
+%% @copyright 2013-2024 Marc Worrell
 %% @doc Model for access to request language, language lists and language configuration.
 %% @end
 
-%% Copyright 2013-2023 Marc Worrell
+%% Copyright 2013-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -132,6 +132,13 @@ m_get([ <<"detect_enabled">> | Rest ], Msg, Context) ->
     case translation_detect:detect(get_text_arg(Msg, Context), Context) of
         {ok, Iso} ->
             {ok, {Iso, Rest}};
+        {error, _} = Error ->
+            Error
+    end;
+m_get([ <<"has_language">>, RscId, Language | Rest ], _Msg, Context) ->
+    case z_language:to_language_atom(Language) of
+        {ok, Code} ->
+            {ok, {has_language(RscId, Code, Context), Rest}};
         {error, _} = Error ->
             Error
     end;
