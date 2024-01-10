@@ -79,7 +79,7 @@ add_translation(Id, FromLanguage, ToLanguage, IsOverwrite, Context) ->
     Context :: z:context(),
     Reason :: term().
 add_translation_map(Map, FromLanguage, ToLanguage, IsOverwrite, Context) ->
-    Texts = collect_texts_1(Map, FromLanguage, ToLanguage, IsOverwrite, Context),
+    Texts = collect_texts_1(Map, FromLanguage, ToLanguage, IsOverwrite, []),
     case m_translation:translate_to_lookup(FromLanguage, ToLanguage, Texts, Context) of
         {ok, Translations} ->
             TransMap = lists:foldl(
@@ -287,7 +287,7 @@ translate_1(Id, FromLanguage, ToLanguage, IsOverwrite, Context) ->
                     end,
                     Props1 = Props#{
                         <<"translation_status">> => TransStatus1,
-                        <<"language">> => lists:sort(Language1)
+                        <<"language">> => lists:usort(Language1)
                     },
                     case m_rsc:update(Id, Props1, Context) of
                         {ok, _} -> ok;
@@ -389,7 +389,7 @@ insert_dst_texts_1(Map, FromLanguage, ToLanguage, Translations, IsOverwrite, Cop
         fun
             (<<"language">>, V, Acc) when is_list(V), CopyAll ->
                 Acc#{
-                    <<"language">> => lists:sort([ ToLanguage | V ])
+                    <<"language">> => lists:usort([ ToLanguage | V ])
                 };
             (<<"translation_status">>, V, Acc) when is_map(V), CopyAll ->
                 ToLanguageB = atom_to_binary(ToLanguage),
