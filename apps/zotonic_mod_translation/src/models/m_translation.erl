@@ -30,6 +30,17 @@
     translate/4,
     has_translation_service/1,
 
+    has_language/3,
+
+    add_translation/5,
+    add_translation_map/5,
+
+    remove_translation/3,
+    remove_translation_map/2,
+
+    keep_translation/3,
+    keep_translation_map/2,
+
     language_list_configured/1,
     language_list_enabled/1,
     language_list_editable/1,
@@ -133,6 +144,71 @@ get_text_arg(#{ payload := #{ <<"text">> := Text } }, _Context) when is_binary(T
 get_text_arg(_Payload, Context) ->
     z_convert:to_binary(z_context:get_q(<<"text">>, Context)).
 
+%% @doc Check if a resource has a language or one of the languages.
+-spec has_language(Rsc, Language, Context) -> boolean() when
+    Rsc :: m_rsc:resource() | map(),
+    Language :: z_language:language_code() | [ z_language:language_code() ],
+    Context :: z:context().
+has_language(Rsc, Language, Context) ->
+    translation_translate_rsc:has_language(Rsc, Language, Context).
+
+%% @doc Add a translation to the resource. The source and destination language must be editable
+%% languages for the site. If the source language is not in the resource then an error is returned.
+-spec add_translation(Id, FromLanguage, ToLanguage, IsOverwrite, Context) -> ok | {error, Reason} when
+    Id :: m_rsc:resource(),
+    FromLanguage :: z_language:language_code(),
+    ToLanguage :: z_language:language_code(),
+    IsOverwrite :: boolean(),
+    Context :: z:context(),
+    Reason :: term().
+add_translation(Id, FromLanguage, ToLanguage, IsOverwrite, Context) ->
+    translation_translate_rsc:add_translation(Id, FromLanguage, ToLanguage, IsOverwrite, Context).
+
+%% @doc Add a translation to a map. The source and destination language must be editable
+%% languages for the site.
+-spec add_translation_map(Map, FromLanguage, ToLanguage, IsOverwrite, Context) -> {ok, NewMap} | {error, Reason} when
+    Map :: map(),
+    NewMap :: map(),
+    FromLanguage :: z_language:language_code(),
+    ToLanguage :: z_language:language_code(),
+    IsOverwrite :: boolean(),
+    Context :: z:context(),
+    Reason :: term().
+add_translation_map(Map, FromLanguage, ToLanguage, IsOverwrite, Context) ->
+    translation_translate_rsc:add_translation_map(Map, FromLanguage, ToLanguage, IsOverwrite, Context).
+
+-spec remove_translation(Id, Language, Context) -> ok | {error, Reason} when
+    Id :: m_rsc:resource(),
+    Language :: z_language:language_code() | [ z_language:language_code() ],
+    Context :: z:context(),
+    Reason :: term().
+remove_translation(Id, Language, Context) ->
+    translation_translate_rsc:remove_translation(Id, Language, Context).
+
+%% @doc Remove languages from a map.
+-spec remove_translation_map(Map, Language) -> {ok, NewMap} when
+    Map :: map(),
+    NewMap :: map(),
+    Language :: z_language:language_code() | [ z_language:language_code() ].
+remove_translation_map(Map, Language) ->
+    translation_translate_rsc:remove_translation_map(Map, Language).
+
+%% @doc Remove all translations except the given ones from a resource.
+-spec keep_translation(Id, Language, Context) -> ok | {error, Reason} when
+    Id :: m_rsc:resource(),
+    Language :: z_language:language_code() | [ z_language:language_code() ],
+    Context :: z:context(),
+    Reason :: term().
+keep_translation(Id, Language, Context) when is_atom(Language) ->
+    translation_translate_rsc:keep_translation(Id, Language, Context).
+
+%% @doc Remove all translations except the given ones from a map.
+-spec keep_translation_map(Map, Language) -> {ok, NewMap} when
+    Map :: map(),
+    NewMap :: map(),
+    Language :: z_language:language_code() | [ z_language:language_code() ].
+keep_translation_map(Map, Language) ->
+    translation_translate_rsc:keep_translation_map(Map, Language).
 
 %% @doc Check if there are modules that offer the translation service.
 -spec has_translation_service(Context) -> boolean() when
