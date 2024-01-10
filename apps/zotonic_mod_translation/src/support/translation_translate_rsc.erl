@@ -23,22 +23,25 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -export([
-    translate/5,
+    add_translation/5,
     remove_translation/3,
-    has_language/3
+    has_language/3,
+
+    add_translation_map/5,
+    remove_translation_map/2
 ]).
 
 
 %% @doc Add a translation to the resource. The source and destination language must be editable
 %% languages for the site. If the source language is not in the resource then an error is returned.
--spec translate(Id, FromLanguage, ToLanguage, IsOverwrite, Context) -> ok | {error, Reason} when
+-spec add_translation(Id, FromLanguage, ToLanguage, IsOverwrite, Context) -> ok | {error, Reason} when
     Id :: m_rsc:resource(),
     FromLanguage :: z_language:language_code(),
     ToLanguage :: z_language:language_code(),
     IsOverwrite :: boolean(),
     Context :: z:context(),
     Reason :: term().
-translate(Id, FromLanguage, ToLanguage, IsOverwrite, Context) ->
+add_translation(Id, FromLanguage, ToLanguage, IsOverwrite, Context) ->
     case z_acl:rsc_editable(Id, Context) of
         true ->
             case {z_language:is_language_editable(FromLanguage, Context),
@@ -58,6 +61,35 @@ translate(Id, FromLanguage, ToLanguage, IsOverwrite, Context) ->
             end;
         false ->
             {error, eacces}
+    end.
+
+
+%% @doc Add a translation to a map. The source and destination language must be editable
+%% languages for the site.
+-spec add_translation_map(Map, FromLanguage, ToLanguage, IsOverwrite, Context) -> {ok, NewMap} | {error, Reason} when
+    Map :: map(),
+    NewMap :: map(),
+    FromLanguage :: z_language:language_code(),
+    ToLanguage :: z_language:language_code(),
+    IsOverwrite :: boolean(),
+    Context :: z:context(),
+    Reason :: term().
+add_translation_map(Map, FromLanguage, ToLanguage, IsOverwrite, Context) ->
+    Texts = collect_texts_1(Map, FromLanguage, ToLanguage, IsOverwrite, Context),
+    case m_translation:translate_to_lookup(FromLanguage, ToLanguage, Texts, Context) of
+        {ok, Translations} ->
+            TransMap = lists:foldl(
+                fun(#{ <<"text">> := Txt, <<"translation">> := TxtTr }, Acc) ->
+                    Acc#{
+                        Txt => TxtTr
+                    }
+                end,
+                #{},
+                Translations),
+            Map1 = insert_dst_texts_1(Map, FromLanguage, ToLanguage, TransMap, IsOverwrite, true),
+            {ok, Map1};
+        {error, _} = Error ->
+            Error
     end.
 
 %% @doc Check if a resource has a language or one of the languages.
@@ -116,6 +148,16 @@ remove_translation(Id, Langs, Context) when is_list(Langs) ->
         false ->
             {error, eacces}
     end.
+
+%% @doc Remove languages from a map.
+-spec remove_translation_map(Map, Language) -> {ok, NewMap} when
+    Map :: map(),
+    NewMap :: map(),
+    Language :: z_language:language_code() | [ z_language:language_code() ].
+remove_translation_map(Map, Language) when is_atom(Language) ->
+    remove_translation_map(Map, [ Language ]);
+remove_translation_map(Map, Langs) when is_list(Langs) ->
+    {ok, remove_1(Map, Langs, false)}.
 
 remove_1(Map, Langs, IsCopyAll) when is_map(Map) ->
     maps:fold(
