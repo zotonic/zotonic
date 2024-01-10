@@ -63,7 +63,7 @@ add_language_map_test() ->
 
 add_language_map_overwrite_test() ->
     Context = z_acl:sudo( z_context:new(zotonic_site_testsandbox) ),
-    Rsc1 = #{
+    Rsc = #{
         <<"language">> => [ en, nl ],
         <<"translation_status">> => #{},
         <<"title">> => #trans{ tr = [ {en, <<"Yes">>}, {nl, <<"AAA">>} ]},
