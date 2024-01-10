@@ -97,12 +97,16 @@ add_translation_map(Map, FromLanguage, ToLanguage, IsOverwrite, Context) ->
     end.
 
 %% @doc Check if a resource has a language or one of the languages.
--spec has_language(Id, Language, Context) -> boolean() when
-    Id :: m_rsc:resource(),
+-spec has_language(Rsc, Language, Context) -> boolean() when
+    Rsc :: m_rsc:resource() | map(),
     Language :: z_language:language_code() | [ z_language:language_code() ],
     Context :: z:context().
-has_language(Id, Language, Context) when is_atom(Language) ->
-    has_language(Id, [ Language ], Context);
+has_language(Rsc, Language, Context) when is_atom(Language) ->
+    has_language(Rsc, [ Language ], Context);
+has_language(#{ <<"language">> := Language }, Langs, _Context) when is_list(Langs), is_list(Language) ->
+    lists:any(
+        fun(Lang) -> lists:member(Lang, Language) end,
+        Langs);
 has_language(Id, Langs, Context) when is_list(Langs) ->
     case m_rsc:p_no_acl(Id, <<"language">>, Context) of
         undefined ->
@@ -168,28 +172,33 @@ remove_translation(_Id, [], _Context) ->
 remove_translation(Id, Langs, Context) when is_list(Langs) ->
     case z_acl:rsc_editable(Id, Context) of
         true ->
-            case has_language(Id, Langs, Context) of
+            case m_rsc:exists(Id, Context) of
                 true ->
-                    case m_rsc:get(Id, Context) of
-                        undefined ->
-                            {error, enoent};
-                        Rsc ->
-                            Rsc1 = case Rsc of
-                                #{ <<"language">> := _ } -> Rsc;
-                                _ -> Rsc#{ <<"language">> => [] }
-                            end,
-                            Rsc2 = case Rsc1 of
-                                #{ <<"translation_status">> := _ } -> Rsc;
-                                _ -> Rsc#{ <<"translation_status">> => #{} }
-                            end,
-                            Props = remove_1(Rsc2, Langs, false, true),
-                            case m_rsc:update(Id, Props, Context) of
-                                {ok, _} -> ok;
-                                {error, _} = Error -> Error
-                            end
-                        end;
+                    case has_language(Id, Langs, Context) of
+                        true ->
+                            case m_rsc:get(Id, Context) of
+                                undefined ->
+                                    {error, enoent};
+                                Rsc ->
+                                    Rsc1 = case Rsc of
+                                        #{ <<"language">> := _ } -> Rsc;
+                                        _ -> Rsc#{ <<"language">> => [] }
+                                    end,
+                                    Rsc2 = case Rsc1 of
+                                        #{ <<"translation_status">> := _ } -> Rsc;
+                                        _ -> Rsc#{ <<"translation_status">> => #{} }
+                                    end,
+                                    Props = remove_1(Rsc2, Langs, false, true),
+                                    case m_rsc:update(Id, Props, Context) of
+                                        {ok, _} -> ok;
+                                        {error, _} = Error -> Error
+                                    end
+                                end;
+                        false ->
+                            ok
+                    end;
                 false ->
-                    ok
+                    {error, enoent}
             end;
         false ->
             {error, eacces}
@@ -205,6 +214,10 @@ remove_translation_map(Map, Language) when is_atom(Language) ->
 remove_translation_map(Map, Langs) when is_list(Langs) ->
     {ok, remove_1(Map, Langs, false, true)}.
 
+remove_1(V, [], true, _IsTopLevel) ->
+    V;
+remove_1(M, [], false, true) when is_map(M) ->
+    #{};
 remove_1(Map, Langs, IsCopyAll, IsTopLevel) when is_map(Map) ->
     maps:fold(
         fun
