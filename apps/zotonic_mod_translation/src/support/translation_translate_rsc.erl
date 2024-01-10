@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2024 Driebit BV
-%% @doc Translate a resource, adds a new language to all language properties.
+%% @doc Translate a resource or property map, adds or removes languages.
 %% @end
 
 %% Copyright 2024 Driebit BV
