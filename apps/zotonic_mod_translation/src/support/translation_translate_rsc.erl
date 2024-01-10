@@ -61,12 +61,12 @@ translate(Id, FromLanguage, ToLanguage, IsOverwrite, Context) ->
     end.
 
 %% @doc Check if a resource has a language or one of the languages.
--spec has_language(Id, Lang, Context) -> boolean() when
+-spec has_language(Id, Language, Context) -> boolean() when
     Id :: m_rsc:resource(),
-    Lang :: z_language:language_code(),
+    Language :: z_language:language_code() | [ z_language:language_code() ],
     Context :: z:context().
-has_language(Id, Lang, Context) when is_atom(Lang) ->
-    has_language(Id, [ Lang ], Context);
+has_language(Id, Language, Context) when is_atom(Language) ->
+    has_language(Id, [ Language ], Context);
 has_language(Id, Langs, Context) when is_list(Langs) ->
     case m_rsc:p_no_acl(Id, <<"language">>, Context) of
         undefined ->
@@ -271,7 +271,7 @@ is_text(K) ->
 %% @doc Add the translation to all translatable texts.
 insert_dst_texts(Id, FromLanguage, ToLanguage, Translations, IsOverwrite, Context) ->
     Rsc = m_rsc:get(Id, Context),
-    insert_dst_texts_1(Rsc, FromLanguage, ToLanguage, Translations, IsOverwrite, true).
+    insert_dst_texts_1(Rsc, FromLanguage, ToLanguage, Translations, IsOverwrite, false).
 
 insert_dst_texts_1(Map, FromLanguage, ToLanguage, Translations, IsOverwrite, CopyAll) when is_map(Map) ->
     maps:fold(
