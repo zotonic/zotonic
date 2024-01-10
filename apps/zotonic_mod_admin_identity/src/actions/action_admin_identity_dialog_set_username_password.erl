@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2023 Marc Worrell
-%% @doc Open a dialog with some fields to add or change an username/password identity
+%% @doc Open a dialog with some fields to add or change a username/password identity
 
 %% Copyright 2009-2023 Marc Worrell
 %%

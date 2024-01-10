@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2023 Marc Worrell
-%% @doc Manage identities of users. An identity can be an username/password, openid, oauth credentials etc.
+%% @doc Manage identities of users. An identity can be a username/password, openid, oauth credentials etc.
 %% @end
 
 %% Copyright 2009-2023 Marc Worrell
@@ -265,7 +265,7 @@ filter_idns(Idns) ->
     lists:map(fun filter_idn/1, Idns).
 
 
-%% @doc Check if the resource has any credentials that will make them an user
+%% @doc Check if the resource has any credentials that will make them a user
 -spec is_user(m_rsc:resource(), z:context()) -> boolean().
 is_user(Id, Context) ->
     case z_db:q1("
@@ -353,7 +353,7 @@ is_allowed_set_username(Id, Context) when is_integer(Id) ->
     orelse (z_acl:is_allowed(update, Id, Context) andalso Id =:= z_acl:user(Context)).
 
 
-%% @doc Delete an username from a resource.
+%% @doc Delete a username from a resource.
 -spec delete_username(m_rsc:resource() | undefined, z:context()) -> ok | {error, eacces | enoent}.
 delete_username(undefined, _Context) ->
     {error, enoent};
@@ -388,7 +388,7 @@ delete_username(Id, Context) ->
     delete_username( m_rsc:rid(Id, Context), Context ).
 
 
-%% @doc Mark the username_pw identity of an user as 'expired', this forces a prompt
+%% @doc Mark the username_pw identity of a user as 'expired', this forces a prompt
 %%      for a password reset on the next authentication.
 -spec set_expired(UserId, DateTime, Context) -> ok | {error, enoent} when
     UserId :: m_rsc:resource_id(),
@@ -445,7 +445,7 @@ set_expired(UserId, DateTime, Context) when is_integer(UserId) ->
             {error, enoent}
     end.
 
-%% @doc Mark the username_pw identity of an user as 'expired', this forces a prompt
+%% @doc Mark the username_pw identity of a user as 'expired', this forces a prompt
 %%      for a password reset on the next authentication.
 -spec set_identity_expired(IdnId, DateTime, Context) -> ok | {error, enoent} when
     IdnId :: pos_integer(),
@@ -499,7 +499,7 @@ set_identity_expired(IdnId, DateTime, Context) when is_integer(IdnId) ->
 
 
 %% @doc Change the username of the resource id, only possible if there is
-%% already an username/password set
+%% already a username/password set
 -spec set_username( m_rsc:resource() | undefined, binary() | string(), z:context()) -> ok | {error, eacces | enoent | eexist}.
 set_username(undefined, _Username, _Context) ->
     {error, enoent};
@@ -763,7 +763,7 @@ ensure_username_pw_1(Id, Username, Context) ->
             {error, eacces}
     end.
 
-%% @doc Reset the password of an user - the user will need to request a new password.
+%% @doc Reset the password of a user - the user will need to request a new password.
 %% All authentication tokens will be reset by generating a new user secret.
 -spec reset_password(UserId, Context) -> ok | {error, Reason} when
     UserId :: m_rsc:resource(),
@@ -1080,7 +1080,7 @@ ip_allowlist(Context) ->
         false -> SiteAllowlist
     end.
 
-%% @doc Check is the password belongs to an user with the given e-mail address.
+%% @doc Check is the password belongs to a user with the given e-mail address.
 %% Multiple users can have the same e-mail address, so multiple checks are needed.
 %% If succesful then updates the 'visited' timestamp of the entry.
 %% @spec check_email_pw(Email, Password, Context) -> {ok, Id} | {error, Reason}
@@ -1135,7 +1135,7 @@ get_rsc(Id, Context) ->
     z_db:assoc("select * from identity where rsc_id = $1", [m_rsc:rid(Id, Context)], Context).
 
 
-%% @doc Fetch all different identity types of an user
+%% @doc Fetch all different identity types of a user
 -spec get_rsc_types(m_rsc:resource(), z:context()) -> [ binary() ].
 get_rsc_types(Id, Context) ->
     Rs = z_db:q("select type from identity where rsc_id = $1", [m_rsc:rid(Id, Context)], Context),
@@ -1442,7 +1442,7 @@ set_verified(IdnId, Context) ->
 
 
 %% @doc Set the verified flag on a record by rescource id, identity type and
-%% value (eg an user's email address).
+%% value (eg a user's email address).
 -spec set_verified( m_rsc:resource_id(), type(), key(), z:context()) -> ok | {error, badarg}.
 set_verified(RscId, Type, Key, Context)
     when is_integer(RscId),

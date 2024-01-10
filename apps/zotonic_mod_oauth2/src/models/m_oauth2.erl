@@ -351,9 +351,9 @@ update_app_secret(AppId, Context) ->
 
 
 %% @doc List all apps, the secrets of these apps must be copied to the consumer site.
-%% Tokens are always coupled to an app. Apps are coupled to an user, if the user
+%% Tokens are always coupled to an app. Apps are coupled to a user, if the user
 %% is deleted then all their apps and tokens are deleted. Apps should be registered by
-%% an user with config rights, as such all admin users can see all apps.
+%% a user with config rights, as such all admin users can see all apps.
 -spec list_apps( z:context() ) -> {ok, list( map() )} | {error, eacces | term()}.
 list_apps(Context) ->
     case z_acl:is_admin(Context) of

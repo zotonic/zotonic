@@ -161,7 +161,7 @@ observe_logon_options(#logon_options{}, Acc, _Context) ->
     Acc.
 
 
-%% @doc Send a request to the client to login an user. The zotonic.auth.worker.js will
+%% @doc Send a request to the client to login a user. The zotonic.auth.worker.js will
 %% send a request to controller_authentication to exchange the one time token with
 %% a z,auth cookie for the given user. The client will redirect to the Url.
 observe_auth_client_logon_user(#auth_client_logon_user{ user_id = UserId, url = Url }, Context) ->

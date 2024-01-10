@@ -6,7 +6,7 @@ Emergency password reset when you can’t get into the admin interface.
 Why
 ---
 
-Sometimes it happens that you want to reset an user’s password from
+Sometimes it happens that you want to reset a user’s password from
 the Erlang shell.
 
 Assumptions

@@ -264,7 +264,7 @@ maybe_add_logon_options(#{ status := error } = Result, Payload, Context) ->
         #{ is_user_external := true } -> {Result1, Context};
         #{ is_user_local := true } -> {Result1, Context};
         #{ is_user_local := false, is_user_external := false, username := Username } when is_binary(Username), Username =/= <<>> ->
-            % Hide the fact an user is unknown, this prevents fishing for known usernames.
+            % Hide the fact a user is unknown, this prevents fishing for known usernames.
             Options3 = Options2#{
                 is_user_local => true,
                 is_username_checked => true
@@ -428,7 +428,7 @@ change_1(UserId, Username, Password, NewPassword, Passcode, Context) ->
             { #{ status => error, error => pw }, Context }
     end.
 
-%% @doc Reset the password for an user, using the mailed reset secret and (optional) 2FA code.
+%% @doc Reset the password for a user, using the mailed reset secret and (optional) 2FA code.
 -spec reset( map(), z:context() ) -> { map(), z:context() }.
 reset(#{
         <<"secret">> := Secret,

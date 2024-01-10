@@ -358,7 +358,7 @@ Marc Worrell (136):
 * Added download link to media on page.tpl
 * _existing_module/1 which checks if a module name can be found (and loaded) as a module.  This without creating a new atom when the module does not exist.
 * Added flattr button
-* Added fold set_user_language, sets the context language to the pref_language of an user.
+* Added fold set_user_language, sets the context language to the pref_language of a user.
 * Added freebsd to iconv rebar config. Thanks to Thomas Legg.
 * Added id_exclude search term. With thanks to Michael Connors.
 * Added is_even filter. Thanks to Michael Connors

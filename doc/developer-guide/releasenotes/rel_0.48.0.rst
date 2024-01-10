@@ -47,7 +47,7 @@ Marc Worrell (20):
  * mod_search: fix a problem with specifying 'qargs' in a stored query. Fixes #2026
  * Suppress backup files for dispatch rules.
  * mod_clamav: fix spec
- * mod_acl_user_groups: reconnect all websocket connections of an user if their permissions change. Fixes #2028 (#2029)
+ * mod_acl_user_groups: reconnect all websocket connections of a user if their permissions change. Fixes #2028 (#2029)
  * Redesign of connect/new tab. (#2034)
  * Fix a problem with the preflight_check  of a query with 'qargs' term.
  * clamav: set medium flags 'is_av_scanned' and 'is_av_sizelimit' (#2031)

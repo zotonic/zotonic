@@ -42,7 +42,7 @@ The following options can be given to the dispatch rule:
 |                     |See also: :ref:`tag-catinclude`.      |                        |
 +---------------------+--------------------------------------+------------------------+
 |anonymous            |Render the template always as the     |{anonymous, true}       |
-|                     |anonymous user, even when an user is  |                        |
+|                     |anonymous user, even when a user is   |                        |
 |                     |logged on. Defaults to false.         |                        |
 +---------------------+--------------------------------------+------------------------+
 |content_type         |The content type provided by the      |{content_type,          |

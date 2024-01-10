@@ -164,7 +164,7 @@ max_tempfile_age(0, Acc) -> Acc;
 max_tempfile_age(N, Acc) -> max_tempfile_age(N-1, period(N) + Acc).
 
 
-%% @doc Check if the sender is allowed to send email. If an user is disabled they are only
+%% @doc Check if the sender is allowed to send email. If a user is disabled they are only
 %%      allowed to send mail to themselves or to the admin.
 is_sender_enabled(#email{} = Email, Context) ->
     is_sender_enabled(z_acl:user(Context), Email#email.to, Context).

@@ -124,7 +124,7 @@ Maas-Maarten Zeeman (7):
 Marc Worrell (19):
 
     *  mod_acl_user_groups: show default user group if user is not member of any group.
-    *  mod_acl_user_groups: when displaying user's groups, check for displayed user being an user.
+    *  mod_acl_user_groups: when displaying user's groups, check for displayed user being a user.
     *  mod_admin: in dialog_edit_basics, only show the 'full edit' button if the user can access either mod_admin or mod_admin_frontend
     *  core: refactored pivot queue polling, now will poll faster if anything was found in the queue.
     *  core: force reload of client if page_id in z_msg is undefined.

@@ -84,11 +84,11 @@ Marc Worrell (26):
       * mod_survey: also mail all uploaded files to the 'survey_email' email address.
       * mod_admin: set X-Frame-Options: SAMEORIGIN header for admin pages. Issue #1132
       * mod_admin: fix is_authorized/2 in controller_admin_edit
-      * mod_base: set CSP sandbox header if an user uploaded file is served with controller_file. Issue #1132
+      * mod_base: set CSP sandbox header if a user uploaded file is served with controller_file. Issue #1132
       * mod_acl_user_group: add option to move resources to collaboration groups the user is not member of.
       * mod_admin: allow to select multiple connection in the connection-find dialog.     Use the option 'autoclose' to change the text of the close button to 'cancel'.
       * mod_acl_user_groups: better overview of rules. Use dialog for editing rules.
       * mod_acl_user_groups: in acl rule edit, clear collaboration group search when group is selected.
-      * mod_acl_user_groups: fix filtering on content groups when searching.     This fixes a problem when an user is allowed to see all or specific collaboration groups via the ACL rules.
+      * mod_acl_user_groups: fix filtering on content groups when searching.     This fixes a problem when a user is allowed to see all or specific collaboration groups via the ACL rules.
       * mod_survey: fix layout of admin options.
       * mod_survey: in the emails, also show any 'injected' fields.     This allows the template to dynamically inject some answers without corresponding questions.*

@@ -331,7 +331,7 @@ is_rtl(Code) ->
     get_property(Code, direction) =:= <<"RTL">>.
 
 
-%% @doc Check if a language code is allowed to be used as an user
+%% @doc Check if a language code is allowed to be used as a user
 %%      selectable language for the interface.
 is_language_enabled(Code, Context) when is_atom(Code) ->
     lists:member(Code, enabled_language_codes(Context));

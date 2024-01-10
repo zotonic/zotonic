@@ -152,7 +152,7 @@ edges(Id, Context) ->
     lists:foldl(
         fun
             ({hasusergroup, _Es}, Acc) ->
-                % Do not expose the groups an user is member of.
+                % Do not expose the groups a user is member of.
                 % TODO: make this configurable.
                 Acc;
             ({Pred, Es}, Acc) when is_atom(Pred) ->

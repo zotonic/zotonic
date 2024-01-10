@@ -138,7 +138,7 @@ The default is: ``image/*, video/*, audio/*, embed, .pdf, .txt, msoffice, openof
 The default mime types can be changed with the ``site.acl_mime_allowed`` key.
 The default upload size is 50MB.
 
-If an user group is not allowed to upload any files then enter ``none``.
+If a user group is not allowed to upload any files then enter ``none``.
 
 .. _properties-acl:
 

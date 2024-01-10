@@ -433,7 +433,7 @@ cookie_url(Context) ->
         z_dispatcher:url_for(authentication_cookie, Context),
         Context).
 
-%% @doc Return a token that can be used to logon an user. The token is only valid
+%% @doc Return a token that can be used to logon a user. The token is only valid
 %%      for a short period and can be used for a MQTT authentication.
 cookie_token(UserId, Context) when is_integer(UserId) ->
     cookie_token(UserId, user_auth_key(UserId, Context), Context).
@@ -448,12 +448,12 @@ cookie_token(UserId, UserSecret, Context) when is_integer(UserId) ->
     Payload = <<"cookie", 1, UserId:32, Timestamp:64/big-unsigned-integer, Nonce1:64>>,
     encode_payload_v1(Payload, UserSecret, Context).
 
-%% @doc Return a token that can be used to logon an user. The token is only valid
+%% @doc Return a token that can be used to logon a user. The token is only valid
 %%      for a short period and can be used for a MQTT authentication.
 auth_token(UserId, Context) when is_integer(UserId) ->
     auth_token(UserId, user_auth_key(UserId, Context), Context).
 
-%% @doc Return a token that can be used to logon an user. The token is only valid
+%% @doc Return a token that can be used to logon a user. The token is only valid
 %%      for a short period and can be used for a MQTT authentication.
 auth_token(UserId, UserSecret, Context) when is_integer(UserId) ->
     Timestamp = z_datetime:timestamp(),

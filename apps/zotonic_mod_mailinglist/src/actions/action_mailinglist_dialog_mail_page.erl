@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2012 Marc Worrell
-%% @doc Send a page by e-mail to an user supplied e-mail address
+%% @doc Send a page by e-mail to a user supplied e-mail address
 
 %% Copyright 2012 Marc Worrell, Arjan Scherpenisse
 %%

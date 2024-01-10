@@ -3,7 +3,7 @@
 %% @doc Simple drop folder handler, monitors a directory and signals new files.
 %%
 %% Flow:
-%% 1. An user uploads/moves a file to the drop folder directory
+%% 1. a user uploads/moves a file to the drop folder directory
 %% 2. Drop folder handler sees the file, moves it so a safe place, and notifies the file handler of it existance.
 %% @end
 
