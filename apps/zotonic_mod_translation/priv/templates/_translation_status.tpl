@@ -1,6 +1,6 @@
 {% with id.translation_status[lang_code] as status %}
     <div id="trans-review-{{ lang_code }}" class="help-block" {% if not status %}style="display:none"{% endif %}>
-        <br><span class="glyphicon glyphicon-info-sign"></span>
+        <span class="glyphicon glyphicon-info-sign"></span>
         <b>{_ This translation has been automatically generated._}</b>
         <button id="trans-review-btn-{{ lang_code }}" class="btn btn-xs btn-primary">
             {_ Approve translation _}
