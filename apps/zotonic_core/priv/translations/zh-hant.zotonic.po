@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-01-03 10:10\n"
+"PO-Revision-Date: 2024-01-09 14:01\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -214,7 +214,7 @@ msgstr "您確定要將所有ACL規則還原到其當前發布的版本嗎？"
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:69./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:88./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:39./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:51./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26./apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:141./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:149
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:158./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:113./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:85./apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:49./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:81./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
-#: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6./apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:106
+#: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6./apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:114
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:189
 msgid "Cancel"
 msgstr "取消"
@@ -10254,7 +10254,7 @@ msgstr "岁。我喜欢"
 msgid "Add a new language or change languages."
 msgstr "新增語言或更改語言。"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:48
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:47
 msgid "Add a new translation"
 msgstr "新增翻譯"
 
@@ -10262,7 +10262,7 @@ msgstr "新增翻譯"
 msgid "Add language"
 msgstr "添加语言"
 
-#: apps/zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:11./apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:111
+#: apps/zotonic_mod_translation/priv/templates/_admin_translation_tabs_extra.tpl:11./apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:119
 msgid "Add translation"
 msgstr "新增翻譯"
 
@@ -10294,7 +10294,7 @@ msgstr "你確定你要刪除："
 msgid "Are you sure you want to remove this language?"
 msgstr "你确定要删除这句话吗？"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:88
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:87
 msgid "Automatic translation"
 msgstr "自動翻譯"
 
@@ -10302,7 +10302,7 @@ msgstr "自動翻譯"
 msgid "Available sub-languages"
 msgstr "可用的子语言"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:502
+#: apps/zotonic_mod_translation/src/mod_translation.erl:503
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "无法生成翻译文件，因为 <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext没有安装</a>。"
 
@@ -10310,13 +10310,13 @@ msgstr "无法生成翻译文件，因为 <a href=\"http://docs.zotonic.com/en/l
 msgid "Code"
 msgstr "编码"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:90
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:89
 msgid "Copy texts"
 msgstr "複製文字"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:101
-msgid "Copying and translating texts will never overwrite an existing text and can be used to fill in blank text fields in the desitination language."
-msgstr "複製和翻譯文本永遠不會覆蓋現有文本，並且可用於填充目標語言的空白文本字段。"
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:109
+msgid "Copying and translating texts is used to fill in blank text fields in the destination language. Existing texts will never be overwritten unless the “overwrite existing texts” checkbox is checked."
+msgstr "複製和翻譯文字用於以目標語言填入空白文字欄位。除非選取「覆蓋現有文字」複選框，否則現有文字永遠不會被覆蓋。"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:2
 msgid "Current translations"
@@ -10386,7 +10386,7 @@ msgstr "对于新访客，将语言设置为默认语言"
 msgid "French"
 msgstr "法国人"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:58
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:57
 msgid "From existing language"
 msgstr "從現有語言"
 
@@ -10414,9 +10414,9 @@ msgstr "如果某種語言設置為“關閉”，則編輯後的文本將失去
 msgid "If a language is set to 'view' or 'editable' then texts for that language are editable in the admin."
 msgstr "如果语言被设置为 \"查看 \"或 \"可编辑\"，那么该语言的文本在管理员中是可以编辑的。"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:99
-msgid "If you automatically translate texts then your texts will be sent to the remote translation service for automatic translation."
-msgstr "如果您自動翻譯文本，那麼您的文本將被發送到遠端翻譯服務進行自動翻譯。"
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:105
+msgid "If you automatically translate texts then your texts will be sent to a remote translation service."
+msgstr "如果您自動翻譯文本，那麼您的文本將被發送到遠端翻譯服務。"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:147
 msgid "If you change the stemmer language then you will need to reindex all data."
@@ -10442,11 +10442,11 @@ msgstr "检索索引的题干使用的语言。"
 msgid "Languages overview"
 msgstr "语言概览"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:91
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:90
 msgid "Leave texts empty"
 msgstr "將文字留空"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:85
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:84
 msgid "Method"
 msgstr "方法"
 
@@ -10469,6 +10469,10 @@ msgstr "並非所有文字都可以翻譯。"
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:40
 msgid "Off"
 msgstr "关"
+
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:99
+msgid "Overwrite existing texts with new translations"
+msgstr "用新翻譯覆蓋現有文本"
 
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:9
 msgid "Part of"
@@ -10498,7 +10502,7 @@ msgstr "重新加载翻译"
 msgid "Reload all translations from the modules and site. All templates will be recompiled."
 msgstr "重新加载模块和站点的所有翻页。所有模版将被重新编译。"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:517
+#: apps/zotonic_mod_translation/src/mod_translation.erl:518
 msgid "Reloading all .po files in the background."
 msgstr "在后台重新加载所有.po文件。"
 
@@ -10542,23 +10546,23 @@ msgstr "选择首选语言。"
 msgid "Show the language in the URL"
 msgstr "在URL中显示语言"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:419./apps/zotonic_mod_translation/src/mod_translation.erl:467
+#: apps/zotonic_mod_translation/src/mod_translation.erl:420./apps/zotonic_mod_translation/src/mod_translation.erl:468
 msgid "Sorry, could not change the language."
 msgstr "抱歉，无法更改语言。"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:406./apps/zotonic_mod_translation/src/mod_translation.erl:435./apps/zotonic_mod_translation/src/mod_translation.erl:447./apps/zotonic_mod_translation/src/mod_translation.erl:470
+#: apps/zotonic_mod_translation/src/mod_translation.erl:407./apps/zotonic_mod_translation/src/mod_translation.erl:436./apps/zotonic_mod_translation/src/mod_translation.erl:448./apps/zotonic_mod_translation/src/mod_translation.erl:471
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "对不起，你没有权限更改语言列表。"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:519
+#: apps/zotonic_mod_translation/src/mod_translation.erl:520
 msgid "Sorry, you don't have permission to reload translations."
 msgstr "对不起，你没有权限重装翻译。"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:509
+#: apps/zotonic_mod_translation/src/mod_translation.erl:510
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "对不起，你没有扫描翻译的权限。"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:422./apps/zotonic_mod_translation/src/mod_translation.erl:588
+#: apps/zotonic_mod_translation/src/mod_translation.erl:423./apps/zotonic_mod_translation/src/mod_translation.erl:589
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "对不起，你没有设置默认语言的权限。"
 
@@ -10566,7 +10570,7 @@ msgstr "对不起，你没有设置默认语言的权限。"
 msgid "Spanish"
 msgstr "西班牙语"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:489
+#: apps/zotonic_mod_translation/src/mod_translation.erl:490
 msgid "Started building the .pot files. This may take a while..."
 msgstr "开始建立.pot文件。这可能需要一段时间..."
 
@@ -10590,7 +10594,7 @@ msgstr "翻譯文字時出現錯誤。請稍後再試。"
 msgid "This translation has been automatically generated."
 msgstr "該翻譯是自動產生的。"
 
-#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:72
+#: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:71
 msgid "To new language"
 msgstr "到新語言"
 
@@ -10598,7 +10602,7 @@ msgstr "到新語言"
 msgid "Translate"
 msgstr "翻譯"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:823
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:824
 msgid "Translation"
 msgstr "翻译"
 
