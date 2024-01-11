@@ -176,6 +176,7 @@ model.present = function(data) {
                 req.total_size += f.file.size;
 
                 self.call("bridge/origin/model/fileuploader/post/new", {
+                        name: f.upload,
                         filename: f.file.name,
                         size: f.file.size,
                         mime: f.file.type

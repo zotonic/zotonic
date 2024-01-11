@@ -31,7 +31,7 @@
 
 %% API
 -export([start_link/1]).
--export([start_child/3]).
+-export([start_child/3, start_child/4]).
 -export([observe_validate_query_args/3]).
 
 %% Supervisor callbacks
@@ -117,9 +117,14 @@ start_link(Args) ->
 %% @doc Start a file uploader.
 -spec start_child( Filename :: binary(), Size :: non_neg_integer(), Context :: z:context() ) -> {ok, map()} | {error, term()}.
 start_child(Filename, Size, Context) ->
+    start_child(z_ids:id(), Filename, Size, Context).
+
+%% @doc Start a file uploader.
+-spec start_child( Name :: binary(), Filename :: binary(), Size :: non_neg_integer(), Context :: z:context() ) -> {ok, map()} | {error, term()}.
+start_child(Name, Filename, Size, Context) ->
     SupName = z_utils:name_for_site(?MODULE, Context),
     ContextSpawn = z_context:prune_for_spawn(Context),
-    case supervisor:start_child(SupName, [Filename, Size, ContextSpawn]) of
+    case supervisor:start_child(SupName, [Name, Filename, Size, ContextSpawn]) of
         {ok, Pid} ->
             z_fileuploader:status(Pid);
         {error, _} = Error ->
