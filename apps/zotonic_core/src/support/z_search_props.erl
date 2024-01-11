@@ -392,6 +392,9 @@ map_term({K, V}) ->
                 <<"value">> => map_value(K1, V1)
             }}
     end;
+map_term(#{ <<"terms">> := Terms } = Term) when is_list(Terms) ->
+    Terms1 = lists:filtermap(fun map_term/1, Terms),
+    {true, Term#{ <<"terms">> => Terms1 }};
 map_term(#{ <<"term">> := K } = Term) ->
     {K1, _} = maybe_rename_arg({K, undefined}),
     {true, Term#{ <<"term">> => K1 }};
