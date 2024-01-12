@@ -25,6 +25,7 @@
 
 -export([
     start_link/3,
+    start_link/4,
     stop/1,
     status/1,
     exists/1,
@@ -67,7 +68,12 @@
 %% @doc Create a new process managing a file upload.
 -spec start_link( file:filename_all(), pos_integer(), z:context() ) -> {ok, pid()} | {error, term()}.
 start_link(Filename, Size, Context) ->
-    gen_server:start_link(?MODULE, [Filename, Size, Context], []).
+    start_link(z_ids:id(), Filename, Size, Context).
+
+%% @doc Create a new process managing a file upload.
+-spec start_link( binary(), file:filename_all(), pos_integer(), z:context() ) -> {ok, pid()} | {error, term()}.
+start_link(Name, Filename, Size, Context) ->
+    gen_server:start_link(?MODULE, [Name, Filename, Size, Context], []).
 
 
 %% @doc Return the topics and status for the file upload.
@@ -113,8 +119,7 @@ upload(Name, Offset, Data) when is_binary(Name) ->
 %% gen_server Function Definitions
 %% ------------------------------------------------------------------
 
-init([Filename, Size, Context]) ->
-    Name = z_ids:id(),
+init([Name, Filename, Size, Context]) ->
     gproc:add_local_name({?MODULE, Name}),
     {ok, {_TmpPid, TmpFile}} = z_tempfile:monitored_new(),
     {ok, Fd} = file:open(TmpFile, [ write, binary ]),
