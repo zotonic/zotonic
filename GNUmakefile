@@ -45,7 +45,7 @@ compile: $(REBAR)
 	@echo ============================================================================
 	@echo =========================== Compiling user apps ============================
 	@echo ============================================================================
-	$(REBAR) $(REBAR_OPTS) compile
+	ZOTONIC_UMBRELLA=1 $(REBAR) $(REBAR_OPTS) compile
 
 dev:
 	docker-compose run --rm --service-ports zotonic sh
