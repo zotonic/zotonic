@@ -20,6 +20,13 @@
             <div class="z-thumbnail-text">
                 <h6>{{ id.category_id.title }}</h6>
                 <h5>{{ id.title|default:id.short_title }}</h5>
+                {% if id.medium as medium %}
+                    {% if medium.filename|split:"/"|last as filename %}
+                        {% if medium.rootname != id.title and filename != id.title %}
+                            <p>{{ filename }}</p>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
                 <p>{{ id|summary:50 }}</p>
             </div>
         </a>

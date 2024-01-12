@@ -20,16 +20,17 @@
             {% block item_text %}
                 <h6>{{ id.category_id.title }}</h6>
                 <h5>{{ id.title|default:id.short_title }}</h5>
+                {% if id.medium as medium %}
+                    {% if medium.filename|split:"/"|last as filename %}
+                        {% if medium.rootname != id.title and filename != id.title %}
+                            <p>{{ filename }}</p>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
                 <p>{{ id|summary:80 }}</p>
             {% endblock %}
             {% block item_actions %}
             <p class="rsc-actions">
-{% comment %}
-                <a href="#" class="btn btn-default action-preview">{_ Preview _}</a>
-                {% if id.is_editable %}
-                    <a href="#" class="btn btn-default action-edit">{_ Edit _}</a>
-                {% endif %}
-{% endcomment %}
                 {% if intent == "select" %}
                     <a href="#" class="btn btn-primary action-connect">{_ Select _}</a>
                 {% elseif intent == "connect" and is_linkable %}
