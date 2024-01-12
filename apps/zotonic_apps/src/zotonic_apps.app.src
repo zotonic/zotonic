@@ -1,7 +1,7 @@
 %% -*- mode: erlang -*-
 {application, zotonic_apps,
  [{description, "All Zotonic applications from the Zotonic core umbrella project."},
-  {vsn, {file, "../../../VERSION"}},
+  {vsn, {file, "../../VERSION"}},
   {registered, []},
   {mod, {zotonic_apps_app, []}},
   {applications, [

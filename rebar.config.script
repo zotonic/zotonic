@@ -7,6 +7,22 @@ CONFIG1 = case os:getenv("ZOTONIC_APPS") of
         CONFIG;
     "" ->
         CONFIG;
+    "none" ->
+        AppsDir = filename:join("apps", "*"),
+        C1 = lists:keystore(project_app_dirs, 1, CONFIG, {project_app_dirs, [ AppsDir ]}),
+
+        ErlOpts = proplists:get_value(erl_opts, CONFIG, []),
+        ErlOpts1 = [ {i, AppsDir} | ErlOpts ],
+        C2 = lists:keystore(erl_opts, 1, C1, {erl_opts, ErlOpts1}),
+
+        io:format("Core Application Dirs:~n"),
+        lists:foreach(
+            fun(Dir) ->
+                io:format("- ~s~n", [Dir])
+            end,
+            proplists:get_value(project_app_dirs, C2, [])),
+
+        C2;
     "apps_user" ->
         CONFIG;
     ZotonicApps ->
