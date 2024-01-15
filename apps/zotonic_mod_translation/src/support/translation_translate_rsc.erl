@@ -212,7 +212,7 @@ remove_translation(Id, Langs, Context) when is_list(Langs) ->
 remove_translation_map(Map, Language) when is_atom(Language) ->
     remove_translation_map(Map, [ Language ]);
 remove_translation_map(Map, Langs) when is_list(Langs) ->
-    {ok, remove_1(Map, Langs, false, true)}.
+    {ok, remove_1(Map, Langs, true, true)}.
 
 remove_1(V, [], true, _IsTopLevel) ->
     V;
