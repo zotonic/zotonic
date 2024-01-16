@@ -174,7 +174,7 @@ update(RscId, Url, Context) when is_list(Url); is_binary(Url) ->
     end.
 
 update_1(_, RscId, #media_import_props{ rsc_props = #{ <<"uri">> := Uri }, importer = rsc_import }, Context) ->
-    m_rsc_import:update_medium_uri(RscId, Uri, [], Context);
+    m_rsc_import:update_medium_uri(RscId, Uri, [ {is_forced_update, true} ], Context);
 update_1(_, RscId, #media_import_props{ importer = Importer } = MI, Context)
     when is_atom(Importer), Importer =/= undefined ->
     Importer:media_import(RscId, MI, #{}, Context);

@@ -52,12 +52,17 @@ event(#submit{ message = {edit_form, Args} }, Context) ->
     end.
 
 
-observe_media_upload_rsc_props(#media_upload_rsc_props{ }, Props, _Context) ->
+observe_media_upload_rsc_props(#media_upload_rsc_props{ options = Options }, Props, _Context) ->
     case maps:get(<<"medium_edit_settings">>, Props, undefined) of
         M when is_map(M) ->
             Props;
         _ ->
-            Props#{ <<"medium_edit_settings">> => #{} }
+            case z_convert:to_bool(proplists:get_value(is_import, Options)) of
+                true ->
+                    Props;
+                false ->
+                    Props#{ <<"medium_edit_settings">> => #{} }
+            end
     end.
 
 observe_rsc_update(#rsc_update{}, {ok, #{ <<"medium_edit_settings">> := Settings } = Props}, _Context) ->
