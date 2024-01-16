@@ -1,6 +1,7 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2010-2021 Arjan Scherpenisse, Marc Worrell
+%% @copyright 2010-2024 Arjan Scherpenisse, Marc Worrell
 %% @doc Importing non-authoritative things exported by m_rsc_export into the system.
+%% @end
 
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -68,7 +69,8 @@
                 | {deny_category, [ binary() ]}
                 | {deny_predicate, [ binary() ]}
                 | {fetch_options, z_url_fetch:options()}
-                | {uri_template, binary()}.
+                | {uri_template, binary()}
+                | {is_forced_update, boolean()}.               % Set to true on forced medium imports
 -type options() :: [ option() ].
 
 -type import_result() :: {ok, {m_rsc:resource_id(), import_map()}}
@@ -498,6 +500,8 @@ update_medium_uri(LocalId, Uri, Options, Context) ->
             case fetch_json(Uri, Context) of
                 {ok, {RscId, ImportMap}} when is_integer(RscId) ->
                     {ok, {RscId, ImportMap}};
+                {ok, #{ <<"result">> := JSON, <<"status">> := <<"ok">> }} ->
+                    maybe_import_medium(LocalId, JSON, Options, Context);
                 {ok, JSON} ->
                     maybe_import_medium(LocalId, JSON, Options, Context);
                 {error, _} = Error ->
@@ -1216,7 +1220,7 @@ is_html_prop(K) ->
     binary:longest_common_suffix([ K, <<"_html">> ]) =:= 5.
 
 
-maybe_import_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := MediaUrl }, Options, Context)
+maybe_import_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := MediaUrl } = JSON, Options, Context)
     when is_binary(MediaUrl), MediaUrl =/= <<>>, is_map(Medium) ->
     % If medium is outdated (compare with created date in medium record)
     %    - download URL
@@ -1226,8 +1230,9 @@ maybe_import_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := Medi
     RemoteMedium = #{
         <<"created">> => Created
     },
+    IsForcedUpdate = z_convert:to_bool( proplists:get_value(is_forced_update, Options, Context) ),
     LocalMedium = m_media:get(LocalId, Context),
-    case is_newer_medium(RemoteMedium, LocalMedium) of
+    case IsForcedUpdate orelse is_newer_medium(RemoteMedium, LocalMedium) of
         true ->
             MediaOptions = [
                 {is_escape_texts, false},
@@ -1238,7 +1243,19 @@ maybe_import_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := Medi
             RscProps = #{
                 <<"original_filename">> => maps:get(<<"original_filename">>, Medium, undefined)
             },
-            _ = m_media:replace_url(MediaUrl, LocalId, RscProps, MediaOptions, Context);
+            RscProps1 = case JSON of
+                #{ <<"resource">> := Rsc } when is_map(Rsc) ->
+                    RscProps#{
+                        <<"medium_language">> => maps:get(<<"medium_language">>, Rsc, undefined),
+                        <<"medium_edit_settings">> => maps:get(<<"medium_edit_settings">>, Rsc, undefined)
+                    };
+                _ ->
+                    RscProps#{
+                        <<"medium_language">> => undefined,
+                        <<"medium_edit_settings">> => undefined
+                    }
+            end,
+            _ = m_media:replace_url(MediaUrl, LocalId, RscProps1, MediaOptions, Context);
         false ->
             ok
     end,
