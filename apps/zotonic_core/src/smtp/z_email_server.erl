@@ -1,8 +1,9 @@
 %% @author Atilla Erdodi <atilla@maximonster.com>
-%% @copyright 2010-2021 Maximonster Interactive Things
+%% @copyright 2010-2024 Maximonster Interactive Things
 %% @doc Email server. Queues, renders and sends e-mails.
+%% @end
 
-%% Copyright 2010-2021 Maximonster Interactive Things
+%% Copyright 2010-2024 Maximonster Interactive Things
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -783,8 +784,7 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
             SmtpOpts = [
                 {no_mx_lookups, State#state.smtp_no_mx_lookups},
                 {hostname, z_convert:to_list(z_email:email_domain(Context))},
-                {timeout, ?SMTP_CONNECT_TIMEOUT},
-                {tls_options, [{versions, ['tlsv1.2']}]}
+                {timeout, ?SMTP_CONNECT_TIMEOUT}
             ] ++ case relay_site_options(State, Context) of
                 {true, RelayOpts} -> RelayOpts;
                 false -> [{relay, z_convert:to_list(RecipientDomain)}]
@@ -798,8 +798,7 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
                     [
                         {no_mx_lookups, State#state.smtp_no_mx_lookups},
                         {hostname, z_convert:to_list(z_email:email_domain(Context))},
-                        {timeout, ?SMTP_CONNECT_TIMEOUT},
-                        {tls_options, [{versions, ['tlsv1.2']}]}
+                        {timeout, ?SMTP_CONNECT_TIMEOUT}
                     ] ++ case relay_site_options(State, Context) of
                         {true, BccRelayOpts} -> BccRelayOpts;
                         false -> [{relay, z_convert:to_list(BccDomain)}]
@@ -835,24 +834,37 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
 %% @doc Fetch the SMTP relay options, if the Zotonic system is configured to use a relay
 %% then that relay is always used. Otherwise the relay configuration of the site is used.
 relay_site_options(#state{ smtp_relay = true } = State, _Context) ->
-    {true, State#state.smtp_relay_opts};
+    Relay = proplists:get_value(relay, State#state.smtp_relay_opts),
+    RelayOpts = [
+        {tls_options, [
+            {versions, ['tlsv1.2']}
+            | tls_certificate_check:options(Relay)
+        ]}
+        | State#state.smtp_relay_opts
+    ],
+    {true, RelayOpts};
 relay_site_options(_State, Context) ->
     case m_config:get_boolean(site, smtp_relay, Context) of
         true ->
+            SSL = m_config:get_boolean(site, smtp_relay_ssl, Context),
             SmtpHost = case z_convert:to_binary( m_config:get_value(site, smtp_relay_host, Context) ) of
                 <<>> -> "localhost";
                 SHost -> z_convert:to_list(SHost)
             end,
+            DefaultPort = case SSL of
+                true -> 587;
+                false -> 25
+            end,
             Port = case z_convert:to_binary( m_config:get_value(site, smtp_relay_port, Context) ) of
-                <<>> -> 25;
+                <<>> ->
+                    DefaultPort;
                 SPort ->
                     try
                         z_convert:to_integer(SPort)
                     catch
-                        _:_ -> 25
+                        _:_ -> DefaultPort
                     end
             end,
-            SSL = m_config:get_boolean(site, smtp_relay_ssl, Context),
             Creds = case z_convert:to_binary( m_config:get_value(site, smtp_relay_username, Context) ) of
                 <<>> ->
                     [];
@@ -863,11 +875,22 @@ relay_site_options(_State, Context) ->
                         {password, z_convert:to_list(m_config:get_value(site, smtp_relay_password, Context))}
                     ]
             end,
+            TLS = case SSL of
+                true ->
+                    [
+                        {tls, always}
+                    ];
+                false ->
+                    []
+            end,
             {true, [
                 {relay, SmtpHost},
                 {port, Port},
-                {ssl, SSL}
-            ] ++ Creds};
+                {tls_options, [
+                    {versions, ['tlsv1.2']}
+                    | tls_certificate_check:options(SmtpHost)
+                ]}
+            ] ++ Creds ++ TLS};
         false ->
             false
     end.
@@ -912,8 +935,10 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
 
             %% use the unique id as 'envelope sender' (VERP)
             SendResult = case z_config:get(smtp_is_blackhole, false) of
-                true -> <<"Blackhole - zotonic config smtp_is_blackhole is set.">>;
-                false -> send_blocking(Id, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context)
+                true ->
+                    <<"Blackhole - zotonic config smtp_is_blackhole is set.">>;
+                false ->
+                    send_blocking(Id, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context)
             end,
             case SendResult of
                 {error, Reason, {FailureType, Host, Message}} ->
