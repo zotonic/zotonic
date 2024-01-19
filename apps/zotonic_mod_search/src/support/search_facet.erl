@@ -1,8 +1,8 @@
-%% @copyright 2021-2022 Driebit BV
+%% @copyright 2021-2024 Driebit BV
 %% @doc Faceted search using a facet.tpl for definition and a
 %% postgresql table for searches.
 
-%% Copyright 2021-2022 Driebit BV
+%% Copyright 2021-2024 Driebit BV
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -456,13 +456,7 @@ facet_union(#facet_def{ name = Name }) ->
 qterm(_Field, [], _Context) ->
     {ok, []};
 qterm(Field, [Value], Context) ->
-    Q = #search_sql_term{
-        label = {facet, Field},
-        join_inner = #{
-            <<"facet">> => {<<"search_facet">>, <<"facet.id = rsc.id">>}
-        }
-    },
-    qterm_1(Field, Value, Q, Context);
+    qterm(Field, Value, Context);
 qterm(Field, Vs, Context) when is_list(Vs) ->
     % 'OR' query for all values
     Q = #search_sql_term{
@@ -496,7 +490,21 @@ qterm(Field, Value, Context) ->
             <<"facet">> => {<<"search_facet">>, <<"facet.id = rsc.id">>}
         }
     },
-    qterm_1(Field, Value, Q, Context).
+    case qterm_1(Field, Value, Q, Context) of
+        {ok, #search_sql_term{ where = Where} = Q2} when is_list(Where), length(Where) > 1 ->
+            Q3 = Q2#search_sql_term{
+                where = [
+                    <<"(">>,
+                    lists:join(<<" AND ">>, Q2#search_sql_term.where),
+                    <<")">>
+                ]
+            },
+            {ok, Q3};
+        {ok, _} = Ok ->
+            Ok;
+        {error, _} = Error ->
+            Error
+    end.
 
 qterm_1(Field, Value, Query, Context) ->
     case facet_def(Field, Context) of
@@ -506,14 +514,20 @@ qterm_1(Field, Value, Query, Context) ->
             Final = case Def#facet_def.type of
                 fulltext when Op =:= "=" ->
                     NormV = z_string:normalize(Value2),
-                    {ArgN, Query2} = add_term_arg(<<"%", NormV/binary, "%">>, Query),
-                    W = [
-                        <<"facet.ft_">>, Field, <<" like ">>, ArgN
-                    ],
-                    Query2#search_sql_term{
-                        label = {facet_ft, Field},
-                        where = Query2#search_sql_term.where ++ [ W ]
-                    };
+                    Words = words(NormV),
+                    lists:foldl(
+                        fun(Word, AccQ) ->
+                            {ArgN, AccQ1} = add_term_arg(<<"%", Word/binary, "%">>, AccQ),
+                            W = [
+                                <<"facet.ft_">>, Field, <<" like ">>, ArgN
+                            ],
+                            AccQ1#search_sql_term{
+                                label = {facet_ft, Field},
+                                where = AccQ1#search_sql_term.where ++ [ W ]
+                            }
+                        end,
+                        Query,
+                        Words);
                 Array when Array =:= ids; Array =:= list ->
                     {ArgN, Query2} = add_term_arg(Value2, Query),
                     W = [
@@ -542,6 +556,9 @@ qterm_1(Field, Value, Query, Context) ->
             }),
             Error
     end.
+
+words(Text) ->
+    binary:split(Text, [ <<" ">>, <<"\n">>, <<"\r">>, <<"\t">> ], [ global, trim_all ]).
 
 add_term_arg(ArgValue, #search_sql_term{ args = Args } = Q) ->
     Arg = [$$] ++ integer_to_list(length(Args) + 1),
@@ -626,17 +643,17 @@ pivot_rsc(Id, Context) ->
     end.
 
 render_facet(Id, #facet_def{ name = Name, type = fulltext } = F, Context) ->
-    case render_block(F#facet_def.block, {cat, <<"pivot/facet.tpl">>}, #{ <<"id">> => Id }, Context) of
+    case render_block(F#facet_def.block, {cat, <<"pivot/facet.tpl">>}, #{ id => Id }, Context) of
         <<>> ->
             [];
         V ->
             [
                 {<<"f_", Name/binary>>, z_string:truncatechars(V, ?TEXT_LENGTH)},
-                {<<"ft_", Name/binary>>, z_string:truncatechars(z_string:normalize(V), ?TEXT_LENGTH)}
+                {<<"ft_", Name/binary>>, z_string:normalize(V)}
             ]
     end;
 render_facet(Id, #facet_def{ name = Name, type = Type } = F, Context) ->
-    V = render_block(F#facet_def.block, {cat, <<"pivot/facet.tpl">>}, #{ <<"id">> => Id }, Context),
+    V = render_block(F#facet_def.block, {cat, <<"pivot/facet.tpl">>}, #{ id => Id }, Context),
     {<<"f_", Name/binary>>, convert_type(Type, V, Context)}.
 
 

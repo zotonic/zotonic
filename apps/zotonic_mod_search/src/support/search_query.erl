@@ -1041,6 +1041,10 @@ qterm(#{ <<"term">> := Term, <<"value">> := Arg}, Context) ->
             [];
         [] ->
             [];
+        Map when is_map(Map) ->
+            qterm(Map, Context);
+        List when is_list(List) ->
+            qterm(List, Context);
         #search_sql_term{} = SQL ->
             SQL
     end.
