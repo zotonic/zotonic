@@ -24,111 +24,113 @@ $_thumbnail_gutter: 6px;
         padding-right: $_thumbnail_gutter;
     }
 
-    .thumbnail {
-        $_padding: 5px;
-        $_contentPartMargin: 0.25em;
-        $_contentHeight: $thumbImageHeight; // 60
-        $_height: calc($_contentHeight + 32px); // add border
-        $_contentMargin: calc(1.5 * $_padding);
-        $_fontSize: 12px;
-        $_lineHeight: 1.1em;
-        
-        min-height: $_height;
-        max-height: $_height;
-        overflow: hidden;    
-        border-radius: 2px;
-        box-shadow: none;
-        cursor: pointer;
-        margin-bottom: calc(2 * $_thumbnail_gutter);
-        padding: $_padding;
-        font-size: $_fontSize;
-        line-height: $_lineHeight;
-        position: relative;
-        transition-duration: 0;
-        -webkit-transition-duration: 0;
-        
-        &,
-        a:link, 
-        a:visited {
-            color: $textColorDark;
-        }
-        
-        &:hover {
-            border-color: $borderColorSelection;
-        }
-        
-        // fade out thumbnails that are connected to the page
-        // except when it is a depiction predicate
-        &.thumbnail-connected:not(.thumbnail-depiction) {
-            background-color: $backgroundColorLightest;
+    .thumbnail:hover,
+    .thumbnail:active,
+    .thumbnail:focus {
+        border-color: $borderColorSelection;
+    }
+}
 
-            &,
-            h5, h6,
-            a:link, 
-            a:visited {
-                color: $textColorLight;
-            }
+.thumbnail {
+    $_padding: 5px;
+    $_height: calc($thumbImageHeight + 32px); // add border
+    
+    display: flex;
+    gap: $_padding;
+    min-height: $_height;
+    max-height: $_height;
+    padding: $_padding;
+    margin-bottom: calc(2 * $_thumbnail_gutter);
+    position: relative;
+    overflow: hidden;  
+    border-radius: 2px;
+    cursor: pointer;
+    
+    font-size: 12px;
+    line-height: 1.15;
+    
+    transition-duration: 0;
+    color: $textColorDark;
+    
+    &:hover,
+    &:focus,
+    &:active {
+        border-color: $borderColorSelection;
+        color: $textColorDark;
+        text-decoration: none;
+    }
+    
+    // fade out thumbnails that are connected to the page
+    // except when it is a depiction predicate
+    &.thumbnail-connected:not(.thumbnail-depiction) {
+        background-color: $backgroundColorLightest;
+        color: $textColorLight;
 
-            img {
-                opacity: .3;
-            }
-        }
-        
-        .z-thumbnail-text {
-            $_content_height: calc(($_height - 2px - $_padding)); // subtract border too
-
-            position: absolute;
-            left: $_padding;
-            top: $_padding;
-            margin-right: $_padding;
-            height: $_content_height;
-            max-height: $_content_height;
-            max-width: calc(100% - 7px);
-            overflow: hidden;
-        }
-
-        .z-thumbnail-filename {
-            overflow-x: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            max-width: 100%;
-        }
-        
-        img + .z-thumbnail-text {
-            left: calc($_padding + $thumbImageWidth + $_contentMargin);
-            max-width: calc(100% - ($_padding + $thumbImageWidth + $_contentMargin));
-        }
-        
         img {
-            padding: 0;
-            border-radius: 0;
-            box-shadow: none;
-            margin: 0 $_contentMargin 0 0;
-        }
-        
-        h5, h6, p {
-            font-size: $_fontSize;
-            line-height: $_lineHeight;
-            font-weight: normal;
-            margin: 0;
-        }
-
-        h5, h6 {
-            @extend .admin-word-break;
-        }
-
-        h5 {
-            font-weight: bold;
-            margin-bottom: 2px;
-        }
-
-        h6 {
-            text-transform: lowercase;
-        }
-
-        p {
-            max-height: calc(2 * $_lineHeight);
-            overflow: hidden;
+            opacity: .3;
         }
     }
+    
+    .z-thumbnail-text {
+        display: flex;
+        flex-flow: column wrap;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .z-thumbnail-filename {
+        margin-top: auto;
+    }
+
+    .z-thumbnail-image {
+        flex-shrink: 0;
+        width: 30%;
+    }
+    
+    img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center center;
+    }
+    
+    h5, h6, p {
+        font-size: inherit;
+        line-height: inherit;
+        margin: 0;
+    }
+
+    h5, h6 {
+        @extend .admin-word-break;
+    }
+
+    h5 {
+        font-weight: bold;
+        margin-bottom: 0.5em;
+    }
+
+    h6 {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 1px 3px 2px 5px;
+        background: $thumbnail-border;
+        border-bottom-left-radius: 2px;
+        text-transform: lowercase;
+    }
+
+    .rsc-actions {
+        position: absolute;
+        bottom: $_padding;
+        right: $_padding;
+    }
+}
+
+.z-thumbnail-filename {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+    color: #aaa;
 }

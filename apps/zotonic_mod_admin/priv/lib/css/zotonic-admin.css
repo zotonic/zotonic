@@ -140,7 +140,7 @@ body.noframe > .admin-container {
   color: #777;
 }
 
-.admin-word-break, .thumbnails .thumbnail h5, .thumbnails .thumbnail h6, table.do_adminLinkedTable .admin-list-thumb > span, table.do_adminLinkedTable th, table.do_adminLinkedTable td, #dialog_new_rsc_results .items .item h5, #dialog_new_rsc_results .items .item h6, .admin-header h2 {
+.admin-word-break, .thumbnail h5, .thumbnail h6, table.do_adminLinkedTable .admin-list-thumb > span, table.do_adminLinkedTable th, table.do_adminLinkedTable td, .admin-header h2 {
   word-break: break-all;
   word-break: break-word;
   hyphens: auto;
@@ -496,77 +496,12 @@ fieldset[disabled] .btn-primary.active {
   overflow-x: hidden;
   overflow-y: scroll;
 }
-#dialog-new-rsc-tab .new-find-cols > .new-find-results > #dialog-rsc-new-found .item {
-  background-color: white;
-}
 #dialog-new-rsc-tab .new-find-cols > .new-find-results #dialog_new_rsc_results {
   margin-top: 0;
 }
 
 #dialog_new_rsc_results {
   margin-top: 10px;
-}
-#dialog_new_rsc_results .items {
-  padding: 0;
-}
-#dialog_new_rsc_results .items .item {
-  min-height: 72px;
-  overflow: hidden;
-  border: 1px solid #d7d7d7;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-bottom: 12px;
-  padding: 5px;
-  font-size: 12px;
-  line-height: 1.1em;
-  position: relative;
-  transition-duration: 0;
-}
-#dialog_new_rsc_results .items .item:hover {
-  border-color: #888;
-}
-#dialog_new_rsc_results .items .item.item-connected:not(.item-depiction) {
-  background-color: #f5f5f5;
-}
-#dialog_new_rsc_results .items .item.item-connected:not(.item-depiction),
-#dialog_new_rsc_results .items .item.item-connected:not(.item-depiction) h5, #dialog_new_rsc_results .items .item.item-connected:not(.item-depiction) h6,
-#dialog_new_rsc_results .items .item.item-connected:not(.item-depiction) a:link,
-#dialog_new_rsc_results .items .item.item-connected:not(.item-depiction) a:visited {
-  color: #aaa;
-}
-#dialog_new_rsc_results .items .item.item-connected:not(.item-depiction) img {
-  opacity: 0.3;
-}
-#dialog_new_rsc_results .items .item .z-item-text {
-  left: 5px;
-  top: 5px;
-  margin-right: 5px;
-}
-#dialog_new_rsc_results .items .item img + .z-item-text {
-  left: 92.5px;
-}
-#dialog_new_rsc_results .items .item img {
-  padding: 0;
-  border-radius: 0;
-  box-shadow: none;
-  margin: 0 7.5px 0 0;
-}
-#dialog_new_rsc_results .items .item h5, #dialog_new_rsc_results .items .item h6, #dialog_new_rsc_results .items .item p {
-  font-size: 12px;
-  line-height: 1.1em;
-  font-weight: normal;
-  margin: 0;
-}
-#dialog_new_rsc_results .items .item h5 {
-  font-weight: bold;
-  margin-bottom: 2px;
-}
-#dialog_new_rsc_results .items .item h6 {
-  text-transform: lowercase;
-  color: #777777;
-}
-#dialog_new_rsc_results .items .item .rsc-actions {
-  text-align: right;
 }
 
 .panel-footer .inline-div {
@@ -1489,83 +1424,90 @@ th a:hover .arrow.down {
   padding-left: 6px;
   padding-right: 6px;
 }
-.thumbnails .thumbnail {
-  min-height: 92px;
-  max-height: 92px;
-  overflow: hidden;
-  border-radius: 2px;
-  box-shadow: none;
-  cursor: pointer;
-  margin-bottom: 12px;
-  padding: 5px;
-  font-size: 12px;
-  line-height: 1.1em;
-  position: relative;
-  transition-duration: 0;
-  -webkit-transition-duration: 0;
-}
-.thumbnails .thumbnail,
-.thumbnails .thumbnail a:link,
-.thumbnails .thumbnail a:visited {
-  color: #222;
-}
-.thumbnails .thumbnail:hover {
+.thumbnails .thumbnail:hover,
+.thumbnails .thumbnail:active,
+.thumbnails .thumbnail:focus {
   border-color: #888;
 }
-.thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction) {
-  background-color: #f5f5f5;
+
+.thumbnail {
+  display: flex;
+  gap: 5px;
+  min-height: 92px;
+  max-height: 92px;
+  padding: 5px;
+  margin-bottom: 12px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1.15;
+  transition-duration: 0;
+  color: #222;
 }
-.thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction),
-.thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction) h5, .thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction) h6,
-.thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction) a:link,
-.thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction) a:visited {
+.thumbnail:hover, .thumbnail:focus, .thumbnail:active {
+  border-color: #888;
+  color: #222;
+  text-decoration: none;
+}
+.thumbnail.thumbnail-connected:not(.thumbnail-depiction) {
+  background-color: #f5f5f5;
   color: #aaa;
 }
-.thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction) img {
+.thumbnail.thumbnail-connected:not(.thumbnail-depiction) img {
   opacity: 0.3;
 }
-.thumbnails .thumbnail .z-thumbnail-text {
-  position: absolute;
-  left: 5px;
-  top: 5px;
-  margin-right: 5px;
-  height: 85px;
-  max-height: 85px;
-  max-width: calc(100% - 7px);
+.thumbnail .z-thumbnail-text {
+  display: flex;
+  flex-flow: column wrap;
   overflow: hidden;
+  width: 100%;
 }
-.thumbnails .thumbnail .z-thumbnail-filename {
-  overflow-x: hidden;
+.thumbnail .z-thumbnail-filename {
+  margin-top: auto;
+}
+.thumbnail .z-thumbnail-image {
+  flex-shrink: 0;
+  width: 30%;
+}
+.thumbnail img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+.thumbnail h5, .thumbnail h6, .thumbnail p {
+  font-size: inherit;
+  line-height: inherit;
+  margin: 0;
+}
+.thumbnail h5 {
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+.thumbnail h6 {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 1px 3px 2px 5px;
+  background: #ddd;
+  border-bottom-left-radius: 2px;
+  text-transform: lowercase;
+}
+.thumbnail .rsc-actions {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+}
+
+.z-thumbnail-filename {
+  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width: 100%;
-}
-.thumbnails .thumbnail img + .z-thumbnail-text {
-  left: 92.5px;
-  max-width: calc(100% - 92.5px);
-}
-.thumbnails .thumbnail img {
-  padding: 0;
-  border-radius: 0;
-  box-shadow: none;
-  margin: 0 7.5px 0 0;
-}
-.thumbnails .thumbnail h5, .thumbnails .thumbnail h6, .thumbnails .thumbnail p {
-  font-size: 12px;
-  line-height: 1.1em;
-  font-weight: normal;
-  margin: 0;
-}
-.thumbnails .thumbnail h5 {
-  font-weight: bold;
-  margin-bottom: 2px;
-}
-.thumbnails .thumbnail h6 {
-  text-transform: lowercase;
-}
-.thumbnails .thumbnail p {
-  max-height: 2.2em;
-  overflow: hidden;
+  color: #aaa;
 }
 
 table.mceLayout, textarea.tinyMCE {
