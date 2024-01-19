@@ -1576,7 +1576,7 @@ ul.tree-list li.menu-item > div {
   background-color: #fefefe;
 }
 ul.tree-list li.menu-item > div > a {
-  color: #textColorMedium;
+  color: #777;
 }
 ul.tree-list li.menu-item > div > a:hover {
   color: #textColorDark;
