@@ -29,11 +29,11 @@
                 <h5>{{ id.title|default:id.short_title|default:_"Untitled" }}</h5>
 
                 {% if id.summary %}
-                    <p>{{ id|summary:80 }}</p>
+                    <p>{{ id|summary:80|striptags }}</p>
                 {% endif %}
 
                 {% if id.medium.filename|split:"/"|last as filename %}
-                    <div class="z-thumbnail-filename">
+                    <div class="z-thumbnail-filename" title="{{ filename }}">
                         <span class="glyphicon glyphicon-file"></span> {{ filename }}
                     </div>
                 {% endif %}

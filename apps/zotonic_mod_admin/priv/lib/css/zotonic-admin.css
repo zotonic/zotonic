@@ -1460,12 +1460,16 @@ th a:hover .arrow.down {
 }
 .thumbnail .z-thumbnail-text {
   display: flex;
-  flex-flow: column wrap;
-  overflow: hidden;
+  flex-flow: column nowrap;
   width: 100%;
+  position: relative;
+  overflow: hidden;
 }
 .thumbnail .z-thumbnail-filename {
-  margin-top: auto;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: white;
 }
 .thumbnail .z-thumbnail-image {
   flex-shrink: 0;
@@ -1488,18 +1492,13 @@ th a:hover .arrow.down {
   margin-bottom: 0.5em;
 }
 .thumbnail h6 {
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 1px 3px 2px 5px;
-  background: #ddd;
-  border-bottom-left-radius: 2px;
   text-transform: lowercase;
 }
 .thumbnail .rsc-actions {
   position: absolute;
   bottom: 5px;
   right: 5px;
+  z-index: 20;
 }
 
 .z-thumbnail-filename {
