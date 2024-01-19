@@ -1,0 +1,39 @@
+.dashboard {
+	.widget {
+  		.widget-header {
+  			.btn {
+  				margin-top: -2px;
+  			}
+  		}
+  	}
+
+  	.table {
+      border-bottom: 0;
+      margin-bottom: 0 !important;
+
+  		> thead > tr,
+  		> tbody > tr {
+  		    &:first-child {
+  		        th, td {
+  		            border: none;
+  		        }
+  		    }
+  		}
+
+  		> thead > tr > th,
+  		> tbody > tr > td {
+  			&:first-child {
+  				width: 60%;
+  			};
+            
+  			&:last-child {
+  				width: 40%;
+  				color: $textColorMuted;
+  			};
+  		}
+
+  		th {
+  			display: none;
+  		}
+  	}
+ }

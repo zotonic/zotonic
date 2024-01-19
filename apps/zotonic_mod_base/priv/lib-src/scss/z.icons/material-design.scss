@@ -1,0 +1,33 @@
+@import (reference) "material-design-iconic-font.less";
+
+@md-font-path: "/lib/material-design/fonts";
+@md-css-prefix: md-icon;
+
+@font-face {
+  font-family: 'Material Design Iconic Font';
+  src: url('@{md-font-path}/Material-Design-Iconic-Font.eot?v=@{md-version}');
+  src: url('@{md-font-path}/Material-Design-Iconic-Font.eot?#iefix&v=@{md-version}') format('embedded-opentype'),
+  url('@{md-font-path}/Material-Design-Iconic-Font.woff?v=@{md-version}') format('woff'),
+  url('@{md-font-path}/Material-Design-Iconic-Font.ttf?v=@{md-version}') format('truetype'),
+  url('@{md-font-path}/Material-Design-Iconic-Font.svg?v=@{md-version}#Material-Design-Iconic-Font') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.@{md-css-prefix},
+[class^="@{md-css-prefix}-"], [class*=" @{md-css-prefix}-"] {
+  display: inline-block;
+  font: normal normal normal 14px/1 'Material Design Iconic Font';
+  font-size: inherit;
+  speak: none;
+  text-rendering: auto;
+
+  // Better Font Rendering
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.@{md-css-prefix} {
+  line-height: inherit;
+  vertical-align: bottom;
+}
