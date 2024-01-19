@@ -46,3 +46,9 @@
     {{ id.date_start }}
     {{ id.date_end }}
 {% endif %}
+
+{% if id.medium as medium %}
+    {% if medium.filename as filename %}
+        {{ filename|split:"/"|last }}
+    {% endif %}
+{% endif %}

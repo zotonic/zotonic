@@ -9,33 +9,44 @@
      or (object_id and m.acl.is_allowed.link[id])
    as is_linkable
 %}
-    <div class="item{% if depict %} z-image-item{% endif %}{% if predicate %} item-{{ predicate }}{% endif %}{% if is_connected %} item-connected{% endif %}{% if is_linkable %} item-linkable{% endif %}{% if not id.is_published %} unpublished{% endif %}" data-id="{{ id }}">
-        {%
-            image
-            depict
-            mediaclass="admin-list-overview"
-            class="thumb pull-left"
-        %}
-        <div class="z-item-text">
+
+    <div class="item thumbnail{% if depict %} z-image-thumbnail{% endif %}{% if predicate %} thumbnail-{{ predicate }}{% endif %}{% if is_connected %} thumbnail-connected{% endif %}{% if is_linkable %} thumbnail-linkable{% endif %}{% if not id.is_published %} unpublished{% endif %}" data-id="{{ id }}">
+        {% if depict %}
+            <div class="z-thumbnail-image">
+                {%
+                    image
+                    depict
+                    mediaclass="admin-list-overview"
+                    class="thumb pull-left"
+                %}
+            </div>
+        {% endif %}
+
+        <div class="z-thumbnail-text">
             {% block item_text %}
                 <h6>{{ id.category_id.title }}</h6>
-                <h5>{{ id.title|default:id.short_title }}</h5>
-                <p>{{ id|summary:80 }}</p>
+
+                <h5>{{ id.title|default:id.short_title|default:_"Untitled" }}</h5>
+
+                {% if id.summary %}
+                    <p>{{ id|summary:80 }}</p>
+                {% endif %}
+
+                {% if id.medium.filename|split:"/"|last as filename %}
+                    <div class="z-thumbnail-filename">
+                        <span class="glyphicon glyphicon-file"></span> {{ filename }}
+                    </div>
+                {% endif %}
             {% endblock %}
+            
             {% block item_actions %}
-            <p class="rsc-actions">
-{% comment %}
-                <a href="#" class="btn btn-default action-preview">{_ Preview _}</a>
-                {% if id.is_editable %}
-                    <a href="#" class="btn btn-default action-edit">{_ Edit _}</a>
-                {% endif %}
-{% endcomment %}
-                {% if intent == "select" %}
-                    <a href="#" class="btn btn-primary action-connect">{_ Select _}</a>
-                {% elseif intent == "connect" and is_linkable %}
-                    <a href="#" class="btn btn-primary action-connect">{_ Connect _}</a>
-                {% endif %}
-            </p>
+                <p class="rsc-actions">
+                    {% if intent == "select" %}
+                        <a href="#" class="btn btn-primary action-connect">{_ Select _}</a>
+                    {% elseif intent == "connect" and is_linkable %}
+                        <a href="#" class="btn btn-primary btn-sm action-connect">{_ Connect _}</a>
+                    {% endif %}
+                </p>
             {% endblock %}
         </div>
     </div>
