@@ -28,13 +28,13 @@ $_thumbnail_gutter: 6px;
         $_padding: 5px;
         $_contentPartMargin: 0.25em;
         $_contentHeight: $thumbImageHeight; // 60
-        $_heigth: calc(($_contentHeight + 2px) * (5 + 2)); // add border
+        $_height: calc($_contentHeight + 32px); // add border
         $_contentMargin: calc(1.5 * $_padding);
         $_fontSize: 12px;
         $_lineHeight: 1.1em;
         
-        min-height: $_heigth;
-        max-height: $_heigth;
+        min-height: $_height;
+        max-height: $_height;
         overflow: hidden;    
         border-radius: 2px;
         box-shadow: none;
@@ -75,7 +75,7 @@ $_thumbnail_gutter: 6px;
         }
         
         .z-thumbnail-text {
-            $_content_height: calc(($_heigth - 2px) * (5 - 2)); // subtract border too
+            $_content_height: calc(($_height - 2px - $_padding)); // subtract border too
 
             position: absolute;
             left: $_padding;
@@ -83,11 +83,20 @@ $_thumbnail_gutter: 6px;
             margin-right: $_padding;
             height: $_content_height;
             max-height: $_content_height;
+            max-width: calc(100% - 7px);
             overflow: hidden;
+        }
+
+        .z-thumbnail-filename {
+            overflow-x: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 100%;
         }
         
         img + .z-thumbnail-text {
             left: calc($_padding + $thumbImageWidth + $_contentMargin);
+            max-width: calc(100% - ($_padding + $thumbImageWidth + $_contentMargin));
         }
         
         img {

@@ -1490,8 +1490,8 @@ th a:hover .arrow.down {
   padding-right: 6px;
 }
 .thumbnails .thumbnail {
-  min-height: 434px;
-  max-height: 434px;
+  min-height: 92px;
+  max-height: 92px;
   overflow: hidden;
   border-radius: 2px;
   box-shadow: none;
@@ -1529,12 +1529,20 @@ th a:hover .arrow.down {
   left: 5px;
   top: 5px;
   margin-right: 5px;
-  height: 1296px;
-  max-height: 1296px;
+  height: 85px;
+  max-height: 85px;
+  max-width: calc(100% - 7px);
   overflow: hidden;
+}
+.thumbnails .thumbnail .z-thumbnail-filename {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
 }
 .thumbnails .thumbnail img + .z-thumbnail-text {
   left: 92.5px;
+  max-width: calc(100% - 92.5px);
 }
 .thumbnails .thumbnail img {
   padding: 0;

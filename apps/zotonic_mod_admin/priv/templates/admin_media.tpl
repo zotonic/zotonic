@@ -139,7 +139,11 @@
                                             <td>{% image medium mediaclass="admin-list-overview" class="thumb" %}</td>
                                             <td>
                                                 <strong>{{ id.title|default:id.short_title|default:_"<em>Untitled</em>" }}</strong><br />
-                                                <span class="text-muted">{{ medium.filename|default:"-" }}</span>
+                                                {% if id.medium.filename|split:"/"|last as filename %}
+                                                    <span class="text-muted">
+                                                        <span class="glyphicon glyphicon-file"></span> {{ filename }}
+                                                    </span>
+                                                {% endif %}
                                             </td>
                                             <td>
                                                 <p class="help-block">
