@@ -80,6 +80,7 @@
     is_table_ok/1,
     facet_def/2,
     template_facets/1,
+    template_facets_map/1,
     facet_table/1,
     create_table/1,
     recreate_table/1
@@ -1033,6 +1034,26 @@ facet_def(F, Context) ->
                 [ D | _ ] -> {ok, D};
                 [] -> {error, enoent}
             end;
+        {error, _} = Error ->
+            Error
+    end.
+
+%% @doc Fetch all facet definitions from the current facet template as a map.
+-spec template_facets_map( z:context() ) -> {ok, [ map() ]} | {error, term()}.
+template_facets_map(Context) ->
+    case template_facets(Context) of
+        {ok, Fs} ->
+            Ms = lists:map(
+                fun(#facet_def{ name = Name, block = Block, type = Type, is_range = IsRange }) ->
+                    #{
+                        <<"name">> => Name,
+                        <<"block">> => Block,
+                        <<"type">> => Type,
+                        <<"is_range">> => IsRange
+                    }
+                end,
+                Fs),
+            {ok, Ms};
         {error, _} = Error ->
             Error
     end.
