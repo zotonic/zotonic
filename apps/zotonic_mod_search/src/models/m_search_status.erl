@@ -1,6 +1,5 @@
-%% @doc Maintenance and status functions for the search module.
-%% @copyright 2024 Marc Worrell
 %% @doc Search model, used as an interface to the search functions of modules etc.
+%% @copyright 2024 Marc Worrell
 %% @end
 
 %% Copyright 2024 Marc Worrell
