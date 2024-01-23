@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016-2023 Marc Worrell
+%% @copyright 2016-2024 Marc Worrell
 %% @doc Runtime for the compiled templates with Zotonic specific interfaces.
 %% @end
 
-%% Copyright 2016-2023 Marc Worrell
+%% Copyright 2016-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -64,6 +64,8 @@ map_template(#template_file{} = Tpl, _Vars, _Context) ->
 map_template({cat, Template}, #{ '$cat' := Cats }, Context) when is_list(Cats) ->
     map_template_cat(Template, Cats, Context);
 map_template({cat, Template}, #{ 'id' := Id } = Vars, Context) ->
+    map_template({cat, Template, Id}, Vars, Context);
+map_template({cat, Template}, #{ <<"id">> := Id } = Vars, Context) ->
     map_template({cat, Template, Id}, Vars, Context);
 map_template({cat, Template}, _Vars, Context) ->
     map_template_1(Template, Context);
