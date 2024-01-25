@@ -73,13 +73,17 @@ $_thumbnail_gutter: 6px;
     
     .z-thumbnail-text {
         display: flex;
-        flex-flow: column wrap;
-        overflow: hidden;
+        flex-flow: column nowrap;
         width: 100%;
+        position: relative;
+        overflow: hidden;
     }
 
     .z-thumbnail-filename {
-        margin-top: auto;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        background: white;
     }
 
     .z-thumbnail-image {
@@ -111,12 +115,6 @@ $_thumbnail_gutter: 6px;
     }
 
     h6 {
-        position: absolute;
-        top: 0;
-        right: 0;
-        padding: 1px 3px 2px 5px;
-        background: $thumbnail-border;
-        border-bottom-left-radius: 2px;
         text-transform: lowercase;
     }
 
@@ -124,6 +122,7 @@ $_thumbnail_gutter: 6px;
         position: absolute;
         bottom: $_padding;
         right: $_padding;
+        z-index: 20;
     }
 }
 
