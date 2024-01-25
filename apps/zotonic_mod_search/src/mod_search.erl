@@ -746,15 +746,8 @@ fixup_tsquery(_Stemmer, TsQ) ->
 
 
 %% @doc Fetch the argument from the query.
-qarg(K, #{ <<"q">> := Terms }, Default) ->
-    qarg1(K, Terms, Default).
-
-qarg1(_K, [], Default) ->
-    Default;
-qarg1(K, [ #{ <<"term">> := T, <<"value">> := V } | _ ], _Default) when T =:= K ->
-    V;
-qarg1(K, [ _ | Terms ], Default) ->
-    qarg1(K, Terms, Default).
+qarg(K, Terms, Default) ->
+    z_search:lookup_qarg_value(K, Terms, Default).
 
 
 %% @doc Find one more more resources by id or name, when the resources exists.

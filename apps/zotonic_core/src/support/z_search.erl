@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Search the database, interfaces to specific search routines.
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,6 +31,12 @@
     search_pager/4,
     search_result/3,
     query_/2,
+
+    lookup_qarg_value/2,
+    lookup_qarg_value/3,
+
+    lookup_qarg/2,
+    lookup_qarg/3,
 
     map_to_options/1,
     props_to_map/1,
@@ -225,6 +231,52 @@ default_pagelen(Context) ->
 -spec default_offset_limit( z:context() ) -> search_offset().
 default_offset_limit(Context) ->
     {1, default_pagelen(Context)}.
+
+
+%% @doc Find the term value of a named argument in a query terms list or map.
+-spec lookup_qarg_value(Arg, Terms) -> TermValue | undefined when
+    Arg :: binary(),
+    Terms :: map(),
+    TermValue :: term().
+lookup_qarg_value(Arg, Terms) ->
+    lookup_qarg_value(Arg, Terms, undefined).
+
+%% @doc Find the term value of a named argument in a query terms list or map. Return
+%% the default when the term is not found or doesn't have a value.
+-spec lookup_qarg_value(Arg, Terms, Default) -> TermValue | Default when
+    Arg :: binary(),
+    Terms :: map(),
+    Default :: term(),
+    TermValue :: term().
+lookup_qarg_value(Arg, Terms, Default) ->
+    case lookup_qarg(Arg, Terms, undefined) of
+        #{ <<"value">> := V } -> V;
+        #{} -> Default;
+        undefined -> Default
+    end.
+
+%% @doc Find a named argument in a query terms list or map.
+-spec lookup_qarg(Arg, Terms) -> Term | undefined when
+    Arg :: binary(),
+    Terms :: map(),
+    Term :: #{ binary() => term() } | undefined.
+lookup_qarg(Arg, Terms) ->
+    lookup_qarg(Arg, Terms, undefined).
+
+-spec lookup_qarg(Arg, Terms, Default) -> Term | Default when
+    Arg :: binary(),
+    Terms :: map(),
+    Default :: term(),
+    Term :: #{ binary() => term() }.
+lookup_qarg(Arg, #{ <<"q">> := Terms }, Default) when is_list(Terms) ->
+    lookup_qarg_1(Arg, Terms, Default).
+
+lookup_qarg_1(_Arg, [], Default) ->
+    Default;
+lookup_qarg_1(Arg, [ #{ <<"term">> := T } = Term | _ ], _Default) when T =:= Arg ->
+    Term;
+lookup_qarg_1(Arg, [ _ | Terms ], Default) ->
+    lookup_qarg_1(Arg, Terms, Default).
 
 
 %% @doc Handle a return value from a search function.  This can be an intermediate SQL statement

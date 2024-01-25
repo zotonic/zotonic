@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Interface to database, uses database definition from Context
+%% @end
 
-%% Copyright 2009-2021 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,6 +29,10 @@
     has_connection/1,
     database_version_string/1,
     database_version/1,
+
+    dbschema/1,
+    dbdatabase/1,
+    dbusername/1,
 
     transaction/2,
     transaction/3,
@@ -329,6 +334,31 @@ database_version(Context) ->
         false ->
             {error, no_database_connection}
     end.
+
+%% @doc Return the schema name used for the current site.
+-spec dbschema(Context) -> Schema when
+    Context :: z:context(),
+    Schema :: string() | undefined.
+dbschema(Context) ->
+    Options = z_db_pool:get_database_options(Context),
+    proplists:get_value(dbschema, Options).
+
+%% @doc Return the database name used for the current site.
+-spec dbdatabase(Context) -> Database when
+    Context :: z:context(),
+    Database :: string() | undefined.
+dbdatabase(Context) ->
+    Options = z_db_pool:get_database_options(Context),
+    proplists:get_value(dbdatabase, Options).
+
+%% @doc Return the user name used for the current site.
+-spec dbusername(Context) -> Username when
+    Context :: z:context(),
+    Username :: string() | undefined.
+dbusername(Context) ->
+    Options = z_db_pool:get_database_options(Context),
+    proplists:get_value(dbusername, Options).
+
 
 %% @doc Transaction handler safe function for fetching a db connection
 -spec get_connection( z:context() ) -> {ok, pid()} | {error, nodatabase | none | full}.
