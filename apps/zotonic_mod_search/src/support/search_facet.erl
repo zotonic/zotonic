@@ -1004,6 +1004,8 @@ facet_to_index(#facet_def{
         <<"CREATE INDEX search_facet_f_", Name/binary, "_key ",
           "ON search_facet(f_", Name/binary, ")">>,
 
+        <<"CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA public">>,
+
         <<"CREATE INDEX search_facet_ft_", Name/binary, "_key ",
            "ON search_facet USING gin (ft_", Name/binary, " public.gin_trgm_ops)">>
     ];

@@ -59,12 +59,17 @@
         <div class="alert alert-info edit-message">{_ This resource was created by the module _} <strong>{{ m.modules.info[id.installed_by].title|default:id.installed_by }}</strong></div>
     {% endif %}
 
-    {% if m.acl.use.mod_admin_config %}
-	    {% if id.is_a.meta or not id.is_authoritative %}
+    {% if id.is_a.meta or not id.is_authoritative or id.uri %}
+        {% if m.acl.use.mod_admin_config %}
 	        <div class="form-group label-floating">
-                <input class="form-control" type="text" id="field-uri" name="uri" value="{{ id.uri_raw }}" {% if not id.is_editable %}disabled="disabled"{% endif %}
+                <input class="form-control" type="text" id="field-uri" name="uri" value="{{ id.uri_raw|escape }}" {% if not id.is_editable %}disabled="disabled"{% endif %}
                 placeholder="{_ Unique uri _}">
                 <label class="control-label" for="field-uri">{_ Unique uri _}</label>
+            </div>
+        {% elseif id.uri %}
+            <div class="form-group">
+                <label class="control-label">{_ Unique uri _}</label>
+                <p class="text-muted">{{ id.uri_raw|escape }}</p>
             </div>
 	    {% endif %}
     {% endif %}
