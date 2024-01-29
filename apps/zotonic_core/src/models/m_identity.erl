@@ -215,7 +215,7 @@ m_get([ <<"get">>, IdnId | Rest ], _Msg, Context) ->
 m_get([ <<"verify">>, IdnId, VerifyKey | Rest ], _Msg, Context) ->
     Idn1 = case get(IdnId, Context) of
         Idn when is_list(Idn), is_binary(VerifyKey), VerifyKey =/= <<>> ->
-            IdnVerifyKey = proplists:get_value(verify_key, Idn, <<>>),
+            IdnVerifyKey = z_convert:to_binary(proplists:get_value(verify_key, Idn, <<>>)),
             case is_equal(VerifyKey, IdnVerifyKey) of
                 true -> Idn;
                 false -> undefined
