@@ -257,7 +257,7 @@ maybe_add_logon_options(#{ status := error } = Result, Payload, Context) ->
         page => maps:get(<<"page">>, Payload, undefined),
         is_password_entered => not z_utils:is_empty(maps:get(<<"password">>, Payload, <<>>))
     },
-    Options1 = case Result of #{ token := Token } -> Options#{ token => Token}; _ -> Options end, 
+    Options1 = case Result of #{ token := Token } -> Options#{ token => Token}; _ -> Options end,
     Options2 = z_notifier:foldr(#logon_options{ payload = Payload }, Options1, Context),
     Result1 = Result#{ options => Options2 },
     case Options2 of
@@ -576,7 +576,8 @@ check_reminder_secret(#{ <<"secret">> := Secret, <<"username">> := Username }, C
                                 result => error,
                                 reason => username_mismatch,
                                 username_given => Username,
-                                username => OtherUsername
+                                username => OtherUsername,
+                                user_id => UserId
                             }),
                             #{
                                 status => error,
