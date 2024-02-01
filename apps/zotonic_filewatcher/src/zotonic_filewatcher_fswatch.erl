@@ -1,11 +1,11 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2014-2018 Arjan Scherpenisse <arjan@scherpenisse.net>
-
+%% @copyright 2014-2024 Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @doc Watch for changed files using fswatch (MacOS X; brew install fswatch).
 %%      https://github.com/emcrisostomo/fswatch
+%% @end
 
 %% Copyright 2014-2018 Arjan Scherpenisse
-%% Copyright 2015-2018 Marc Worrell
+%% Copyright 2015-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -38,6 +38,7 @@
 %% interface functions
 -export([
     is_installed/0,
+    is_running/0,
     restart/0
 ]).
 
@@ -60,6 +61,15 @@ start_link() ->
 -spec is_installed() -> boolean().
 is_installed() ->
     os:find_executable("fswatch") =/= false.
+
+-spec is_running() -> boolean().
+is_running() ->
+    case whereis(zotonic_filewatcher_fswatch) of
+        undefined ->
+            false;
+        Pid ->
+            gen_server:call(Pid, is_running)
+    end.
 
 -spec restart() -> ok.
 restart() ->
@@ -85,13 +95,12 @@ init([Executable]) ->
     timer:send_after(100, start),
     {ok, State}.
 
-%% @doc Trap unknown calls
+handle_call(is_running, _From, #state{ pid = Pid } = State) ->
+    {reply, is_pid(Pid), State};
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
-%% @spec handle_cast(Msg, State) -> {noreply, State} |
-%%                                  {noreply, State, Timeout} |
-%%                                  {stop, Reason, State}
+
 handle_cast(restart, #state{ pid = undefined } = State) ->
     {noreply, State};
 handle_cast(restart, #state{ pid = Pid } = State) when is_pid(Pid) ->
@@ -112,7 +121,7 @@ handle_info({stdout, _Port, FilenameFlags}, #state{ data = Data } = State) ->
         FVs),
     {noreply, State#state{ data = Rest }};
 
-handle_info({'DOWN', _Port, process, Pid, Reason}, #state{pid = Pid} = State) ->
+handle_info({'EXIT', Pid, Reason}, #state{pid = Pid} = State) ->
     ?LOG_ERROR(#{
         text => <<"[fswatch] fswatch port closed, restarting in 5 seconds.">>,
         in => zotonic_filewatcher,
@@ -125,9 +134,6 @@ handle_info({'DOWN', _Port, process, Pid, Reason}, #state{pid = Pid} = State) ->
     },
     timer:send_after(5000, start),
     {noreply, State1};
-
-handle_info({'EXIT', _Pid, _Reason}, State) ->
-    {noreply, State};
 
 handle_info(start, #state{port = undefined} = State) ->
     {noreply, start_fswatch(State)};
