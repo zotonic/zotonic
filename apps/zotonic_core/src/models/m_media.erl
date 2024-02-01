@@ -1015,18 +1015,62 @@ download_file(Url, Options, Context) ->
     case z_fetch:fetch_partial(Url, FetchOptions1, Context) of
         {ok, {_FinalUrl, Hs, Length, _Data}} when Length < MaxLength ->
             file:close(Device),
-            {ok, File, filename(Url, Hs)};
+            case proplists:get_value("content-length", Hs) of
+                undefined ->
+                    {ok, File, filename(Url, Hs)};
+                "" ->
+                    {ok, File, filename(Url, Hs)};
+                CL ->
+                    ContentLength = z_convert:to_integer(CL),
+                    if
+                        ContentLength =:= Length ->
+                            {ok, File, filename(Url, Hs)};
+                        true ->
+                            ?LOG_ERROR(#{
+                                in => zotonic_core,
+                                text => <<"File download was incomplete">>,
+                                result => error,
+                                reason => download_incomplete,
+                                content_length => ContentLength,
+                                download_length => Length,
+                                url => Url
+                            }),
+                            file:delete(File),
+                            {error, download_incomplete}
+                    end
+            end;
         {ok, {_FinalUrl, _Hs, Length, _Data}} when Length >= MaxLength ->
             file:close(Device),
             file:delete(File),
+            ?LOG_ERROR(#{
+                in => zotonic_core,
+                text => <<"File download was too large">>,
+                max_length => MaxLength,
+                url => Url
+            }),
             {error, file_too_large};
-        {ok, _Other} ->
+        {ok, Other} ->
             file:close(Device),
             file:delete(File),
+            ?LOG_ERROR(#{
+                in => zotonic_core,
+                text => <<"File download failed">>,
+                result => error,
+                reason => download_failed,
+                returned => Other,
+                url => Url
+            }),
             {error, download_failed};
-        {error, _} = Error ->
+        {error, Reason} = Error ->
             file:close(Device),
             file:delete(File),
+            ?LOG_ERROR(#{
+                in => zotonic_core,
+                text => <<"File download failed">>,
+                result => error,
+                reason => Reason,
+                url => Url
+            }),
             Error
     end.
 
