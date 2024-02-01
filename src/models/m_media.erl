@@ -741,7 +741,22 @@ download_file(Url, Options) ->
     case z_url_fetch:fetch_partial(Url, FetchOptions) of
         {ok, {_FinalUrl, Hs, Length, _Data}} when Length < MaxLength ->
             file:close(Device),
-            {ok, File, filename(Url, Hs)};
+            case proplists:get_value("content-length", Hs) of
+                undefined ->
+                    {ok, File, filename(Url, Hs)};
+                "" ->
+                    {ok, File, filename(Url, Hs)};
+                CL ->
+                    ContentLength = z_convert:to_integer(CL),
+                    if
+                        ContentLength =:= Length ->
+                            {ok, File, filename(Url, Hs)};
+                        true ->
+                            lager:error("File download was incomplete"),
+                            file:delete(File),
+                            {error, file_incomplete}
+                    end
+            end;
         {ok, {_FinalUrl, _Hs, Length, _Data}} when Length >= MaxLength ->
             file:close(Device),
             file:delete(File),
