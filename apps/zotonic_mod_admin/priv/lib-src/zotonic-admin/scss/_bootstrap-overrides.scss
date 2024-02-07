@@ -38,14 +38,10 @@
             padding-left: 40px;
             position: relative;
             
-            .glyphicon {
-                $_height: 18px + 2 * 3px; // line-height + padding
-                $_icon_height: 13px; // icon font size
+            .fa-solid {
                 position: absolute;
                 left: 10px;
-                top: 0;
-                bottom: 0;
-                line-height: $_height;
+                top: 8px;
             }
         }
     }

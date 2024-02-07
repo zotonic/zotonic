@@ -16,6 +16,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ---------------------------------------------------------- */
 
+// importing core styling file
+@import "./fontawesome/scss/fontawesome.scss";
+
+// our project needs Solid + Brands
+@import "./fontawesome/scss/solid.scss";
+@import "./fontawesome/scss/brands.scss";
+
 @import "variables";
 @import "mixins";
 @import "base";

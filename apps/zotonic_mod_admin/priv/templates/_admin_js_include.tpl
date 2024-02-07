@@ -1,7 +1,11 @@
 {% include "_js_include_jquery.tpl" %}
 
-{% lib
+{# {% lib
     "js/bootstrap3/bootstrap.min.js"
+%} #}
+
+{% lib
+    "js/bootstrap5/bootstrap.bundle.min.js"
 %}
 
 {% lib
