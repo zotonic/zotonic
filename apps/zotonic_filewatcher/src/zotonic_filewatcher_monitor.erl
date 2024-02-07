@@ -403,8 +403,8 @@ stop(Server) ->
 %%
 
 %% @private
-init(Options) ->
-    Time = safe_interval(proplists:get_value(interval, Options)),
+init(_Options) ->
+    Time = safe_interval(z_config:get(filewatcher_scanner_interval)),
     St = #state{interval = Time,
                 files = dict:new(),
                 dirs = dict:new(),
@@ -474,6 +474,8 @@ handle_info({?MSGTAG, Ref, Event}, St) ->
             %% ignore the message
             {noreply, St}
     end;
+handle_info(check_watchers, St) ->
+    {noreply, set_timer(St)};
 handle_info(poll, St) ->
     {noreply, set_timer(poll(St))};
 handle_info(enable_poll, St) ->
@@ -526,11 +528,25 @@ join_to_path(Path, File) when is_binary(Path), is_binary(File) ->
 
 safe_interval(N) when is_integer(N) ->
     min(16#FFFFffff, max(N, ?MIN_INTERVAL));
-safe_interval(_) -> ?DEFAULT_INTERVAL.
+safe_interval(_) ->
+    ?DEFAULT_INTERVAL.
 
-set_timer(St) ->
-    erlang:send_after(St#state.interval, self(), poll),
-    St.
+set_timer(State) ->
+    State1 = State#state{
+        interval = safe_interval(z_config:get(filewatcher_scanner_interval))
+    },
+    case z_config:get(filewatcher_scanner_enabled) of
+        false ->
+            erlang:send_after(State1#state.interval, self(), check_watchers);
+        true ->
+            case zotonic_filewatcher_sup:is_watcher_running() of
+                true ->
+                    erlang:send_after(State1#state.interval, self(), check_watchers);
+                false ->
+                    erlang:send_after(State1#state.interval, self(), poll)
+            end
+    end,
+    State.
 
 %% Handling of auto-monitoring events
 %%
