@@ -1,0 +1,92 @@
+/* Zotonic admin scss main file, setting our preferences. */
+
+ /* import the necessary Bootstrap files */
+
+@import "bootstrap-5.3.2/scss/functions";
+@import "bootstrap-5.3.2/scss/variables";
+
+/* -------begin customization-------- */
+
+$blue:       red !default;
+$primary:       #0fa2db !default;
+
+$body-bg:           #f8f8f8;
+
+// $gray-base:         #000 !default;
+// $gray-darker:       lighten($gray-base, 13.5%); // #222
+// $gray-dark:         lighten($gray-base, 20%);   // #333
+// $gray:              lighten($gray-base, 33.5%); // #555
+// $gray-light:        lighten($gray-base, 46.7%); // #777
+// $gray-lighter:      lighten($gray-base, 69%);   // #b0b0b0
+// $gray-lightest:     lighten($gray-base, 93.5%); // #eee
+
+// $icon-font-path: "/lib/fonts/";
+
+$input-border-radius:         0;
+$input-border-radius-large:   0;
+$input-border-radius-small:   0;
+
+
+$font-family-sans-serif:  "-apple-system", BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+$font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace;
+$font-family-base:        $font-family-sans-serif;
+
+
+/* -------end customization-------- */
+
+/* Zotonic definitions */
+// @import "zotonic/forms";
+
+/* finally, import Bootstrap to set the changes! */
+
+@import "bootstrap-5.3.2/scss/mixins/banner";
+
+
+// scss-docs-start import-stack
+// Configuration
+@import "bootstrap-5.3.2/scss/variables-dark";
+@import "bootstrap-5.3.2/scss/maps";
+@import "bootstrap-5.3.2/scss/mixins";
+@import "bootstrap-5.3.2/scss/utilities";
+
+// Layout & components
+@import "bootstrap-5.3.2/scss/root";
+@import "bootstrap-5.3.2/scss/reboot";
+@import "bootstrap-5.3.2/scss/type";
+@import "bootstrap-5.3.2/scss/images";
+@import "bootstrap-5.3.2/scss/containers";
+@import "bootstrap-5.3.2/scss/grid";
+@import "bootstrap-5.3.2/scss/tables";
+@import "bootstrap-5.3.2/scss/forms";
+@import "bootstrap-5.3.2/scss/buttons";
+@import "bootstrap-5.3.2/scss/transitions";
+@import "bootstrap-5.3.2/scss/dropdown";
+@import "bootstrap-5.3.2/scss/button-group";
+@import "bootstrap-5.3.2/scss/nav";
+@import "bootstrap-5.3.2/scss/navbar";
+@import "bootstrap-5.3.2/scss/card";
+@import "bootstrap-5.3.2/scss/accordion";
+@import "bootstrap-5.3.2/scss/breadcrumb";
+@import "bootstrap-5.3.2/scss/pagination";
+@import "bootstrap-5.3.2/scss/badge";
+@import "bootstrap-5.3.2/scss/alert";
+@import "bootstrap-5.3.2/scss/progress";
+@import "bootstrap-5.3.2/scss/list-group";
+@import "bootstrap-5.3.2/scss/close";
+@import "bootstrap-5.3.2/scss/toasts";
+@import "bootstrap-5.3.2/scss/modal";
+@import "bootstrap-5.3.2/scss/tooltip";
+@import "bootstrap-5.3.2/scss/popover";
+@import "bootstrap-5.3.2/scss/carousel";
+@import "bootstrap-5.3.2/scss/spinners";
+@import "bootstrap-5.3.2/scss/offcanvas";
+@import "bootstrap-5.3.2/scss/placeholders";
+
+// Helpers
+@import "bootstrap-5.3.2/scss/helpers";
+
+// Utilities
+@import "bootstrap-5.3.2/scss/utilities/api";
+// scss-docs-end import-stack
+
+

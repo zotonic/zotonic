@@ -12,8 +12,13 @@
         <meta name="description" content="">
         <meta name="robots" content="noindex,nofollow">
 
-        {% lib
+        {# {% lib
             "css/admin-bootstrap3.css"
+            minify
+        %} #}
+
+        {% lib
+            "css/admin-bootstrap5.css"
             minify
         %}
 
