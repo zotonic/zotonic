@@ -27,7 +27,7 @@
     	</div>
     </div>
     <div class="form-group">
-        <a id="{{ #test_query }}" class="btn btn-default">{_ Test query _}</a>
+        <a id="{{ #test_query }}" class="btn btn-outline-secondary">{_ Test query _}</a>
         {% wire id=#test_query type="click" action={script script="$('#query').trigger('change')"} %}
     </div>
 

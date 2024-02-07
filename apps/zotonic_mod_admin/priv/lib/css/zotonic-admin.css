@@ -10371,7 +10371,7 @@ body.page-edit.wait .btn {
   cursor: wait;
 }
 
-@media (max-width: 991px) {
+@media (max-width: 992px) {
   body > div.container-fluid {
     margin-top: 0;
   }
@@ -10407,6 +10407,14 @@ details summary {
   cursor: pointer;
 }
 
+a {
+  color: #095F81;
+}
+
+dl dt, dl dd {
+  margin: 0;
+}
+
 .drag-handle {
   cursor: move;
   background: repeat-y url("/lib/images/grippy2.png") 3px 0;
@@ -10414,6 +10422,9 @@ details summary {
   cursor: drag;
 }
 
+.unpublished {
+  --bs-table-color-state: $textColorUnpublished;
+}
 .unpublished,
 .unpublished a:not(.btn),
 .unpublished .text-muted,
@@ -10581,22 +10592,9 @@ pre:empty {
 .dropdown-menu > li.active > a,
 .dropdown-menu > li.active > a:hover,
 .dropdown-menu > li > a:hover {
-  background-color: #0fa2db;
+  background-color: #095F81;
   color: #fff;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
-}
-
-.well {
-  box-shadow: none;
-  padding: 15px 15px 11px 15px;
-  background-color: white;
-  border: 0;
-  border-radius: 10px;
-}
-.well > .btn,
-.well > a[href],
-.well .btn + .btn {
-  margin: 0 4px 4px 0;
 }
 
 .alert {
@@ -10653,57 +10651,6 @@ button.close {
 }
 code {
   padding: 0;
-}
-
-.z-btn-remove {
-  color: #555;
-}
-.z-btn-remove:hover {
-  color: #222;
-}
-
-.btn {
-  position: relative;
-}
-
-.btn > .z-icon {
-  width: 18px;
-  height: 18px;
-  margin-top: calc(-18px / 2);
-  line-height: 18px;
-  vertical-align: bottom;
-  text-align: center;
-}
-
-.btn.disabled {
-  pointer-events: none;
-  background: transparent;
-  color: #b7b7b7;
-  opacity: 1;
-}
-.btn.disabled .glyphicon {
-  opacity: 0.6;
-}
-.btn .glyphicon {
-  top: 3px;
-}
-.btn.btn-xs .glyphicon {
-  top: 2px;
-}
-.btn.btn-sm .glyphicon {
-  top: 1px;
-}
-.btn.btn-primary:hover {
-  background-color: #0c91cb;
-  border-color: #0b80b3;
-}
-
-.btn-primary.disabled, .btn-primary[disabled], fieldset[disabled] .btn-primary,
-.btn-primary.disabled:hover, .btn-primary[disabled]:hover, fieldset[disabled] .btn-primary:hover, .btn-primary.disabled:focus, .btn-primary[disabled]:focus, fieldset[disabled] .btn-primary:focus, .btn-primary.disabled.focus, .btn-primary[disabled].focus,
-fieldset[disabled] .btn-primary.focus, .btn-primary.disabled:active, .btn-primary[disabled]:active, fieldset[disabled] .btn-primary:active, .btn-primary.disabled.active, .btn-primary[disabled].active,
-fieldset[disabled] .btn-primary.active {
-  background-color: #c0c0c0;
-  border-color: #bbb;
 }
 
 #unlink-undo-message div.alert {
@@ -11001,7 +10948,7 @@ ul.blocks.ui-sortable > li > .widget > .widget {
   text-decoration: underline;
 }
 .system-content-warning a:hover {
-  color: #0a6d93;
+  color: #042a39;
 }
 
 .edit-page .system-content-warning {
@@ -11123,7 +11070,7 @@ ul.media > li .bottom .caption a {
   grid-column: 2;
   grid-row: 1;
 }
-@media (max-width: 991px) {
+@media (max-width: 992px) {
   .edit-page .rscform-columns {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -11206,7 +11153,7 @@ div + .admin-edit-no-features {
   margin-top: -2px;
 }
 
-@media (max-width: 991px) {
+@media (max-width: 992px) {
   .admin-navbar-fixed-save {
     position: fixed;
     top: 0;
@@ -11351,21 +11298,78 @@ div.modal .modal-footer .pull-left {
   height: auto;
 }
 
-.navbar.navbar-branded {
+.navbar {
+  --bs-navbar-active-color: white;
+  min-height: 4rem;
   padding: 0;
-  background-color: #0fa2db;
+  background-color: #095F81;
 }
-.navbar.navbar-branded .navbar-brand,
-.navbar.navbar-branded .navbar-collapse > ul > li > a {
+.navbar .navbar-brand,
+.navbar .navbar-collapse > ul > li > a {
   color: #fff;
 }
-.navbar.navbar-branded .fa-solid {
+.navbar .fa-solid {
   margin-right: 5px;
 }
-.navbar.navbar-branded .nav-item > a {
+.navbar .nav-item > a {
   padding: 1em 0.9em;
 }
+.navbar .navbar-brand {
+  font-size: 15px;
+  line-height: 15px;
+  padding: 17px 15px;
+}
+.navbar .navbar-brand .zotonic-logo {
+  height: 15px;
+  width: 87px;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+.navbar .navbar-collapse {
+  padding-bottom: 2rem;
+  background-color: #095F81;
+}
 
+.navbar-form .form-control {
+  width: 9em;
+  transition: width 200ms lineair;
+  color: white;
+  padding-left: 4px;
+  padding-right: 4px;
+  background-color: inherit;
+  border: none;
+  border-bottom: 1px solid white;
+}
+.navbar-form .form-control::placeholder {
+  color: white;
+}
+.navbar-form .form-control.search-query:focus {
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.95);
+  color: #222;
+}
+.navbar-form .form-control.search-query:focus::placeholder {
+  color: #666;
+}
+
+@media (min-width: 992px) {
+  .navbar {
+    --bs-navbar-nav-link-padding-x: 15px;
+    min-height: auto;
+  }
+  .navbar .navbar-collapse {
+    padding-bottom: 0;
+  }
+  .navbar-form .search-query:focus {
+    width: 90vw;
+    max-width: 500px;
+    position: absolute;
+    top: 10px;
+    right: 0;
+    z-index: 100;
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #222;
+  }
+}
 .modal-overlay.dark {
   background-color: #1e1e1e;
   color: #f8f8f8;
@@ -11485,9 +11489,6 @@ tr.clickable td {
   cursor: pointer;
 }
 
-.table > thead > tr > th,
-.table > tbody > tr > th,
-.table > tfoot > tr > th,
 .table > thead > tr > td,
 .table > tbody > tr > td,
 .table > tfoot > tr > td {
@@ -11495,17 +11496,25 @@ tr.clickable td {
 }
 
 .table {
+  --bs-table-bg: white;
   border-bottom: 1px solid #e5e5e5;
+  overflow: hidden;
+}
+.table tr td {
+  border-bottom: 0;
 }
 
-table.data-table {
-  max-width: 100%;
-}
-table.data-table th, table.data-table td {
-  word-break: break-all;
+.table > :not(caption) > * > * {
+  border: none;
 }
 
+table.do_adminLinkedTable th {
+  color: #095F81;
+}
 table.do_adminLinkedTable th a:hover {
+  text-decoration: none;
+}
+table.do_adminLinkedTable a {
   text-decoration: none;
 }
 table.do_adminLinkedTable td.view-link {
@@ -11539,56 +11548,6 @@ table.do_adminLinkedTable .admin-list-thumb > img {
   height: 30px;
   margin: 0 10px 0 0;
 }
-.table > thead > tr > th {
-  border-width: 1px;
-}
-
-.table tbody tr.clickable td,
-.table tbody tr.clickable th,
-.table tbody tr td.clickable,
-.table tbody tr th.clickable {
-  transition: all 0.1s ease-in-out;
-}
-
-.table tbody tr.clickable:hover td,
-.table tbody tr.clickable:hover th,
-.table tbody tr:hover td.clickable,
-.table tbody tr:hover th.clickable {
-  background-color: #eee;
-}
-
-table.table tr.unpublished td a.btn-success {
-  color: white;
-}
-
-.arrow {
-  height: 0;
-  width: 0;
-  border: 4px solid transparent;
-  vertical-align: middle;
-}
-.arrow.up {
-  border-bottom-color: #000;
-  border-bottom-color: currentColor;
-  margin-top: -4px;
-}
-.arrow.down {
-  border-top-color: #000;
-  border-top-color: currentColor;
-  margin-top: 4px;
-}
-
-th .arrow {
-  display: inline-block;
-  margin-left: 8px;
-}
-th a:hover .arrow.up {
-  border-bottom-color: currentColor;
-}
-th a:hover .arrow.down {
-  border-top-color: currentColor;
-}
-
 .nav-tabs > li > a {
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
@@ -11889,18 +11848,11 @@ ul.tree-list.connections-list li.menu-item-alert {
 }
 
 .widget {
-  background-color: white;
   margin-bottom: 15px;
+  background-color: white;
   border-bottom: none;
   border-radius: 10px;
-  *zoom: 1;
-}
-.widget:before, .widget:after {
-  content: " ";
-  display: table;
-}
-.widget:after {
-  clear: both;
+  overflow: hidden;
 }
 .widget .widget {
   margin-bottom: 0;
@@ -12028,7 +11980,7 @@ ul.tree-list.connections-list li.menu-item-alert {
   border-radius: 10px 10px 0 0;
 }
 .widget.widget-expanded .widget-header .widget-header-tools .z-btn-help, .widget.dark.widget-expanded .widget-header .widget-header-tools .z-btn-help {
-  color: #069cd1;
+  color: #095F81;
 }
 .widget h5 {
   display: block;
@@ -12095,6 +12047,21 @@ li h3.widget-header {
   padding: 10px;
 }
 
+.well {
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: white;
+  border-radius: 10px;
+}
+.well:has(.btn) {
+  padding-bottom: 10px;
+}
+.well > .btn,
+.well > a[href],
+.well .btn + .btn {
+  margin: 0 5px 5px 0;
+}
+
 .notice-wrap {
   position: fixed;
   top: 60px;
@@ -12120,14 +12087,14 @@ li h3.widget-header {
   z-index: 10000;
 }
 
-.environment-development body,
-.environment-test body,
-.environment-acceptance body,
-.environment-education body,
-.environment-backup body {
-  padding-left: 24px;
-}
 @media (min-width: 480px) {
+  .environment-development body,
+  .environment-test body,
+  .environment-acceptance body,
+  .environment-education body,
+  .environment-backup body {
+    padding-left: 24px;
+  }
   .environment-development body::before,
   .environment-test body::before,
   .environment-acceptance body::before,
@@ -12144,14 +12111,6 @@ li h3.widget-header {
     writing-mode: tb-rl;
     text-align: center;
   }
-}
-.environment-development body .navbar .nav .caret,
-.environment-test body .navbar .nav .caret,
-.environment-acceptance body .navbar .nav .caret,
-.environment-education body .navbar .nav .caret,
-.environment-backup body .navbar .nav .caret {
-  border-top-color: white;
-  border-bottom-color: white;
 }
 
 @media (min-width: 480px) {
@@ -12175,15 +12134,10 @@ li h3.widget-header {
 .environment-development.zotonic-admin .navbar.navbar-branded .navbar-nav > .active > a {
   background-color: #1f4922;
 }
-@media (max-width: 768px) {
-  .environment-development.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a {
-    color: white;
-  }
-}
 .environment-development.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a,
 .environment-development.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a:hover,
 .environment-development.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a:hover {
-  background-color: #1f4922;
+  background-color: #2e6d32;
 }
 
 @media (min-width: 480px) {
@@ -12207,15 +12161,10 @@ li h3.widget-header {
 .environment-test.zotonic-admin .navbar.navbar-branded .navbar-nav > .active > a {
   background-color: #331d77;
 }
-@media (max-width: 768px) {
-  .environment-test.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a {
-    color: white;
-  }
-}
 .environment-test.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a,
 .environment-test.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a:hover,
 .environment-test.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a:hover {
-  background-color: #331d77;
+  background-color: #4527a0;
 }
 
 @media (min-width: 480px) {
@@ -12239,15 +12188,10 @@ li h3.widget-header {
 .environment-acceptance.zotonic-admin .navbar.navbar-branded .navbar-nav > .active > a {
   background-color: #b33f00;
 }
-@media (max-width: 768px) {
-  .environment-acceptance.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a {
-    color: white;
-  }
-}
 .environment-acceptance.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a,
 .environment-acceptance.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a:hover,
 .environment-acceptance.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a:hover {
-  background-color: #b33f00;
+  background-color: #e65100;
 }
 
 @media (min-width: 480px) {
@@ -12271,15 +12215,10 @@ li h3.widget-header {
 .environment-education.zotonic-admin .navbar.navbar-branded .navbar-nav > .active > a {
   background-color: #002f31;
 }
-@media (max-width: 768px) {
-  .environment-education.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a {
-    color: white;
-  }
-}
 .environment-education.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a,
 .environment-education.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a:hover,
 .environment-education.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a:hover {
-  background-color: #002f31;
+  background-color: #006064;
 }
 
 @media (min-width: 480px) {
@@ -12303,13 +12242,16 @@ li h3.widget-header {
 .environment-backup.zotonic-admin .navbar.navbar-branded .navbar-nav > .active > a {
   background-color: #222c31;
 }
-@media (max-width: 768px) {
-  .environment-backup.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a {
-    color: white;
-  }
-}
 .environment-backup.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a,
 .environment-backup.zotonic-admin .navbar.navbar-branded .dropdown-menu > li.active > a:hover,
 .environment-backup.zotonic-admin .navbar.navbar-branded .dropdown-menu > li > a:hover {
-  background-color: #222c31;
+  background-color: #37474f;
+}
+
+.label {
+  border: 2px solid red;
+}
+
+.btn-default {
+  border: 1px solid red;
 }

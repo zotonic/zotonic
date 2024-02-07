@@ -12,7 +12,7 @@
     %}
 
     {% button text=_"Try rules..."
-        class="btn btn-default"
+        class="btn btn-outline-secondary"
         action={dialog_open
             title=_"Try ACL rules"
             template="_dialog_acl_rules_try.tpl"
@@ -20,12 +20,12 @@
     %}
 
     {% button text=_"Export edit rules"
-        class="btn btn-default"
+        class="btn btn-outline-secondary"
         action={redirect dispatch=`admin_acl_export`}
     %}
 
     {% button text=_"Import edit rules..."
-        class="btn btn-default"
+        class="btn btn-outline-secondary"
         action={dialog_open
             title=_"Import edit version of ACL rules"
             template="_dialog_acl_rules_import.tpl"
@@ -33,7 +33,7 @@
     %}
 
     {% button text=_"Revert back to published version"
-        class="btn btn-default"
+        class="btn btn-outline-secondary"
         action={confirm
             text=_"Are you sure you want to restore all ACL rules to their currently published version?"
             title=_"Revert back to published version"

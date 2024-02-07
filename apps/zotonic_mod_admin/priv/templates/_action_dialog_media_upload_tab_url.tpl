@@ -32,7 +32,7 @@
 		</p>
 
 		<div class="modal-footer">
-		    {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
+		    {% button class="btn btn-outline-secondary" action={dialog_close} text=_"Cancel" tag="a" %}
 		    <button class="btn btn-primary" type="submit">{_ Discover media _}</button>
 	    </div>
 	</form>

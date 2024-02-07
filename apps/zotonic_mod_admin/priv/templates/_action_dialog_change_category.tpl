@@ -12,7 +12,7 @@ cat_id
     <p>{_ Every page is categorized in exactly one category. The category defines what the page represents. For example an event, a product or a person. The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle. _}</p>
 
     <div class="form-group">
-        {% button class="btn btn-default" action={redirect dispatch="admin_overview_rsc" qcat=cat_id} text=_"View all pages from this category" %}
+        {% button class="btn btn-outline-secondary" action={redirect dispatch="admin_overview_rsc" qcat=cat_id} text=_"View all pages from this category" %}
     </div>
 {% endblock %}
 
@@ -36,7 +36,7 @@ cat_id
                 </div>
 
                 <div class="modal-footer clearfix">
-                    {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
+                    {% button class="btn btn-outline-secondary" action={dialog_close} text=_"Cancel" tag="a" %}
                     {% button class="btn btn-primary" text=_"Save" type="submit" %}
                 </div>
             </fieldset>

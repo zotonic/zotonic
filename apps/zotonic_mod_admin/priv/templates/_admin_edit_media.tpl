@@ -2,7 +2,7 @@
 
     {% if medium.media_import %}
     <p class="clear">
-        <span class="label label-info">{_ Embed _}</span>
+        <span class="badge text-bg-info">{_ Embed _}</span>
         {% if medium.media_import|match:'^https?:' %}
             <a href="{{ medium.media_import|sanitize_url|escape }}" target="_blank" rel="noopener noreferrer">{{ medium.media_import|truncate:80:'…'|escape }}</a>
         {% else %}
@@ -49,12 +49,12 @@
             {% all include "_admin_edit_media_button.tpl" %}
 
             {% if medium.size > 0 %}
-                <a target="_blank" class="btn btn-default" href="{% url media_inline id=id %}" class="button">{_ View _}</a>
-                <a target="_blank" class="btn btn-default" href="{% url media_attachment id=id %}" class="button">{_ Download _}</a>
+                <a target="_blank" class="btn btn-outline-secondary" href="{% url media_inline id=id %}" class="button">{_ View _}</a>
+                <a target="_blank" class="btn btn-outline-secondary" href="{% url media_attachment id=id %}" class="button">{_ Download _}</a>
                 <input type="text" style="position: absolute; top:0; left:-9999px;" id="url-media-download" value="{% url media_attachment id=id absolute_url %}">
                 {% button
                     text=_"Copy download link"
-                    class="btn btn-default"
+                    class="btn btn-outline-secondary"
                     action={script
                         script=["
                             var copyText = document.getElementById('url-media-download');

@@ -71,10 +71,10 @@
                 {% optional include "_image_edit_button.tpl" %}
             {% endif %}
             {% if id.is_editable and (m.acl.use.mod_admin_frontend or m.acl.use.mod_admin) %}
-                <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default pull-left">{_ Visit full edit page _}</a>
+                <a href="{% url admin_edit_rsc id=id %}" class="btn btn-outline-secondary pull-left">{_ Visit full edit page _}</a>
             {% endif %}
 
-            {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
+            {% button class="btn btn-outline-secondary" action={dialog_close} text=_"Cancel" tag="a" %}
             {% button class="btn btn-primary" type="submit" text=_"Save" %}
         </div>
     {% endblock %}

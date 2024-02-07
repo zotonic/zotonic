@@ -11,7 +11,7 @@ qcat
         {% if id.is_visible %}
             <h2>{_ Unique Page _}</h2>
 
-            <table class="table table-striped do_adminLinkedTable">
+            <table class="table do_adminLinkedTable">
                 <thead>
                     <tr>
                         <th width="30%">
@@ -35,11 +35,11 @@ qcat
                     <tr class="{% if not id.is_published %}unpublished{% endif %}" data-href="{% url admin_edit_rsc id=id %}">
                         <td>
                             {% if id == 1 or id.is_a.meta or id.content_group_id.name == 'system_content_group' %}
-                                <span class="label label-warning pull-right" title="{_ This is system content. _}">
+                                <span class="badge text-bg-warning pull-right" title="{_ This is system content. _}">
                                     {{ id.name|default:_"system content" }}
                                 </span>
                             {% elseif id.name %}
-                                <span class="label label-default pull-right">
+                                <span class="badge text-bg-secondary pull-right">
                                     {{ id.name }}
                                 </span>
                             {% endif %}
@@ -57,8 +57,8 @@ qcat
                         <td>
                             <span class="hidden-xs">{{ id.modifier_id.title|default:"-" }}</span>
                             <span class="pull-right buttons">
-                                <a href="{{ id.page_url }}" class="btn btn-default btn-xs">{_ view _}</a>
-                                <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default btn-xs">{_ edit _}</a>
+                                <a href="{{ id.page_url }}" class="btn btn-outline-secondary btn-sm">{_ view _}</a>
+                                <a href="{% url admin_edit_rsc id=id %}" class="btn btn-outline-secondary btn-sm">{_ edit _}</a>
                             </span>
                         </td>
                     </tr>
@@ -79,11 +79,11 @@ qcat
 <p>
     <span id="sel-count">0</span> <span class="text-muted">{_ Selected _}</span>
 
-    <button class="btn btn-default btn-xs" id="csel-update">{_ Update _}...</button>
-    <button class="btn btn-default btn-xs" id="csel-delete">{_ Delete _}...</button>
+    <button class="btn btn-outline-secondary btn-sm" id="csel-update">{_ Update _}...</button>
+    <button class="btn btn-outline-secondary btn-sm" id="csel-delete">{_ Delete _}...</button>
 </p>
 
-<table class="table table-striped do_adminLinkedTable">
+<table class="table  do_adminLinkedTable">
     <thead>
         <tr>
             <th>
@@ -118,11 +118,11 @@ qcat
             </td>
             <td>
                 {% if id == 1 or id.is_a.meta or id.content_group_id.name == 'system_content_group' %}
-                    <span class="label label-warning pull-right" title="{_ This is system content. _}">
+                    <span class="badge text-bg-warning pull-right" title="{_ This is system content. _}">
                         {{ id.name|default:_"system content" }}
                     </span>
                 {% elseif id.name %}
-                    <span class="label label-default pull-right">
+                    <span class="badge text-bg-secondary pull-right">
                         {{ id.name }}
                     </span>
                 {% endif %}
@@ -141,8 +141,8 @@ qcat
             <td>
                 <span class="hidden-xs">{{ id.modifier_id.title|default:"-" }}</span>
                 <span class="pull-right buttons">
-                    <a href="{{ id.page_url }}" class="btn btn-default btn-xs">{_ view _}</a>
-                    <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default btn-xs">{_ edit _}</a>
+                    <a href="{{ id.page_url }}" class="btn btn-outline-secondary btn-sm">{_ view _}</a>
+                    <a href="{% url admin_edit_rsc id=id %}" class="btn btn-outline-secondary btn-sm">{_ edit _}</a>
                 </span>
             </td>
         </tr>

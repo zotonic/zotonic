@@ -6,7 +6,7 @@
 
         {% if id.is_editable %}
             <span class="pull-right">
-                <button class="btn btn-default btn-xs" id="{{ #refresh }}">{_ Fetch new version _}</button>
+                <button class="btn btn-outline-secondary btn-sm" id="{{ #refresh }}">{_ Fetch new version _}</button>
                 {% wire id=#refresh
                         action={mask target="non-authoritative" message=_"Fetching new version..."}
                         postback={import_refresh

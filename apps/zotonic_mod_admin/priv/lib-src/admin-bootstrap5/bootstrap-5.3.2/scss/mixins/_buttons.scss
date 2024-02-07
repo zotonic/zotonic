@@ -18,6 +18,7 @@
   $disabled-border: $border,
   $disabled-color: color-contrast($disabled-background)
 ) {
+  --bliep: #{$hover-background};
   --#{$prefix}btn-color: #{$color};
   --#{$prefix}btn-bg: #{$background};
   --#{$prefix}btn-border-color: #{$border};

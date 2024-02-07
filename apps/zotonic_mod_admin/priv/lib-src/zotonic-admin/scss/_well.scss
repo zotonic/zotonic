@@ -1,0 +1,16 @@
+.well {
+    padding: 15px;
+    margin-bottom: $widgetVerticalPadding;
+    background-color: white;
+    border-radius: 10px;
+
+    &:has(.btn) {
+        padding-bottom: 10px;
+    }
+
+    > .btn,
+    > a[href],
+    .btn + .btn {
+        margin: 0 5px 5px 0;
+    }
+}

@@ -1,7 +1,7 @@
 {% if m.acl.is_admin or m.acl.use.mod_search %}
 <div class="form-group">
     <div>
-        {% button class="btn btn-default" text=_"Rebuild search facets"
+        {% button class="btn btn-outline-secondary" text=_"Rebuild search facets"
                   postback={facet_rebuild}
                   delegate=`mod_search`
         %}

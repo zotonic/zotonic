@@ -24,7 +24,7 @@
 		<p>{_ Which version of the ACL rules do you want to use? _}</p>
 		<p>
 			<a href="#" role="button" id="{{ #acl_edit }}" class="btn btn-warning">{_ Test ACL rules _}</a>
-			<a href="#" role="button" id="{{ #acl_publish }}" class="btn btn-default">{_ Use published rules _}</a>
+			<a href="#" role="button" id="{{ #acl_publish }}" class="btn btn-outline-secondary">{_ Use published rules _}</a>
 
 			{% wire id=#acl_edit
 					action={mask target=" body"}

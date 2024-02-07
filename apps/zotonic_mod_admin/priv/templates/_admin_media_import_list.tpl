@@ -27,7 +27,7 @@
 
                 <div class="panel-body">
                     <h4>
-                        <span class="label label-default">{{ m.rsc[mi.category].title }}</span>
+                        <span class="badge text-bg-secondary">{{ m.rsc[mi.category].title }}</span>
                         {{ mi.props.title|escape_check }}
                     </h4>
 
@@ -167,7 +167,7 @@
                 </div>
 
                 <div class="panel-footer clearfix">
-                    <a href="#" id="{{ #back.index }}" class="btn btn-default">{_ Back _}</a>
+                    <a href="#" id="{{ #back.index }}" class="btn btn-outline-secondary">{_ Back _}</a>
                     {% wire id=#back.index
                             action={hide target=discover_id}
                             action={fade_in target=form_id}
@@ -179,15 +179,15 @@
                             next
                     %}
                         {% if forloop.first %}
-                            <a href="#" id="{{ #prev.index }}" class="btn btn-default disabled">{_ &lt; Prev _}</a>
+                            <a href="#" id="{{ #prev.index }}" class="btn btn-outline-secondary disabled">{_ &lt; Prev _}</a>
                         {% else %}
-                            <a href="#" id="{{ #prev.index }}" class="btn btn-default">{_ &lt; Prev _}</a>
+                            <a href="#" id="{{ #prev.index }}" class="btn btn-outline-secondary">{_ &lt; Prev _}</a>
                             {% wire id=#prev.index action={hide target=#panel.index} action={fade_in speed="fast" target=#panel.prev} %}
                         {% endif %}
                         {% if forloop.last %}
-                            <a href="#" id="{{ #prev.index }}" class="btn btn-default disabled">{_ Next &gt; _}</a>
+                            <a href="#" id="{{ #prev.index }}" class="btn btn-outline-secondary disabled">{_ Next &gt; _}</a>
                         {% else %}
-                            <a href="#" id="{{ #next.index }}" class="btn btn-default">{_ Next &gt; _}</a>
+                            <a href="#" id="{{ #next.index }}" class="btn btn-outline-secondary">{_ Next &gt; _}</a>
                             {% wire id=#next.index action={hide target=#panel.index} action={fade_in speed="fast" target=#panel.next} %}
                         {% endif %}
                     {% endwith %}

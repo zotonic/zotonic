@@ -56,6 +56,16 @@ details {
     }
 }
 
+a {
+    color: $brand-primary;
+}
+
+dl {
+    dt, dd {
+        margin: 0;
+    }
+}
+
 // zotonic specific
 .drag-handle {
     cursor: move;
@@ -65,6 +75,10 @@ details {
 }
 
 .unpublished {
+    --bs-table-color-state: $textColorUnpublished;
+    // --bs-table-color-type: $textColorUnpublished;
+    // --bs-table-color: $textColorUnpublished;
+
     &,
     a:not(.btn),
     .text-muted,

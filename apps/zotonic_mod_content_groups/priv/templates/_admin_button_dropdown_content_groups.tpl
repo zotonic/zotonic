@@ -5,7 +5,7 @@
 #}
 {% for c in m.hierarchy.content_group.tree_flat %}
     <li class="{% if c.id == selected_qvalue %}active{% endif %}">
-        <a href="#" class="{{ option_class }}" data-value="{{ c.id }}">{{ c.indent }}{{ c.id.title }}</a>
+        <a href="#" class="dropdown-item {{ option_class }}" data-value="{{ c.id }}">{{ c.indent }}{{ c.id.title }}</a>
     </li>
 {% endfor %}
 
@@ -17,7 +17,7 @@
         </li>
         {% for id in collaboration_groups %}
             <li class="{% if id == selected_qvalue %}active{% endif %}">
-                <a href="#" class="{{ option_class }}" data-value="{{ id }}">{{ id.title }}</a>
+                <a href="#" class="dropdown-item {{ option_class }}" data-value="{{ id }}">{{ id.title }}</a>
             </li>
         {% endfor %}
     {% endwith %}

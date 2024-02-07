@@ -1,5 +1,5 @@
 <div class="form-group">
-    {% button class="btn btn-default" text=_"Rebuild sitemap"
+    {% button class="btn btn-outline-secondary" text=_"Rebuild sitemap"
               action={postback
                     postback=`sitemap_rebuild`
                     delegate=`mod_seo_sitemap`

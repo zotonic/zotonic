@@ -1,5 +1,5 @@
 
-<nav class="navbar navbar-branded navbar-light navbar-expand-lg" role="navigation">
+<nav class="navbar navbar-branded fixed-top navbar-expand-lg" role="navigation">
     <div class="container-fluid">
         {% include "_admin_navbar_brand.tpl" %}
 
@@ -48,6 +48,17 @@
                 {% endfor %}
             </ul>
             
+            {% block search %}
+                <form class="navbar-form d-flex" action="{% block search_target %}{% url admin_overview_rsc %}{% endblock %}" method="get">
+                    <input type="hidden" name="qcat" value="{{ q.qcat|escape }}" />
+                    <input type="hidden" name="qquery_id" value="{{ q.qquery_id|escape }}" />
+                    
+                    <label class="visually-hidden">{_ Search _}</label>
+
+                    <input autocomplete="off" class="search-query form-control me-2" type="search" name="qs" value="{{q.qs|escape}}" placeholder="{% block search_placeholder %}{_ Search... _}{% endblock %}" data-search-view="true" />
+                </form>
+            {% endblock %}
+
             <ul class="nav navbar-nav">
                 {% all include "_admin_headeritem.tpl" is_nav %}
 
@@ -79,18 +90,6 @@
                     </li>
                 {% endwith %}
             </ul>
-
-            {% block search %}
-              {#   <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-              </form> #}
-                <form class="d-flex" action="{% block search_target %}{% url admin_overview_rsc %}{% endblock %}" method="get">
-                    <input type="hidden" name="qcat" value="{{ q.qcat|escape }}" />
-                    <input type="hidden" name="qquery_id" value="{{ q.qquery_id|escape }}" />
-                    <input autocomplete="off" class="search-query form-control me-2" type="search" name="qs" value="{{q.qs|escape}}" placeholder="{% block search_placeholder %}{_ Search... _}{% endblock %}" data-search-view="true" />
-                </form>
-            {% endblock %}
         </div>
     </div>
 </nav>

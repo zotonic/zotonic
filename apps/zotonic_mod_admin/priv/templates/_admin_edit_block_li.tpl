@@ -9,8 +9,8 @@
         <div class="drag-handle"></div>
 
         <div class="widget-header label-floating" title="{_ Drag to change position _}">
-            <a title="{_ Move block up _}" class="btn btn-default block-up">&uarr;</a>
-            <a title="{_ Move block down _}" class="btn btn-default block-down">&darr;</a>
+            <a title="{_ Move block up _}" class="btn btn-outline-secondary block-up">&uarr;</a>
+            <a title="{_ Move block down _}" class="btn btn-outline-secondary block-down">&darr;</a>
             &nbsp;
             <input type="text"
                    class="block-name form-control form-control-small"

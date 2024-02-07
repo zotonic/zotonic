@@ -35,7 +35,7 @@
         </div>
 
         <div class="modal-footer">
-            <a class="btn btn-default" id="{{ #close }}">
+            <a class="btn btn-outline-secondary" id="{{ #close }}">
                 {% if autoclose %}{_ Cancel _}{% else %}{_ Close _}{% endif %}
             </a>
             {% wire id=#close action={dialog_close} %}
@@ -167,7 +167,7 @@
     	</div>
 
         <div class="modal-footer">
-            <a class="btn btn-default" id="{{ #close }}">
+            <a class="btn btn-outline-secondary" id="{{ #close }}">
                 {% if autoclose %}{_ Cancel _}{% else %}{_ Close _}{% endif %}
             </a>
             {% wire id=#close action={dialog_close} %}

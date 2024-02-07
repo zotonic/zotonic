@@ -15,8 +15,9 @@
                 <form id="{{ #form }}" method="GET" action="{% url admin_overview_rsc %}" class="form-inline">
                     <input type="hidden" name="qs" value="{{ q.qs|escape }}">
                     <input type="hidden" name="qquery_id" value="{{ q.qquery_id|escape }}">
+
                     <div class="btn-group pull-right">
-                        <button class="btn btn-default" id="btn-filter">
+                        <button class="btn btn-outline-secondary" id="btn-filter">
                             <i class="glyphicon glyphicon-filter"></i> {_ Filter _}...
                         </button>
                         {% wire id="btn-filter" action={slide_toggle target="filter-panel"} %}
@@ -75,7 +76,7 @@
                     {% if not q.qcat %}{{ m.rsc[q.qquery_id].title|default:_"Pages overview" }}{% else %}{_ Pages overview _}{% endif %}{% if q.qcat == '*' %}: {_ All Categories _}{% elseif q.qcat %}: {{ m.rsc[q.qcat].title }}{% endif %}{% if q.qcat_exclude %}, {_ excluding _}: {{ m.rsc[q.qcat_exclude].title }}{% endif %}{% if q.qs %}, {_ matching _} “{{ q.qs|escape }}”{% endif %}
 
                     {% if q.qs %}
-                        {% button text=_"show all" class="btn btn-default btn-xs"
+                        {% button text=_"show all" class="btn btn-outline-secondary btn-sm"
                                   action={redirect dispatch="admin_overview_rsc" qcat=q.qcat qquery_id=q.qquery_id} %}
                     {% endif %}
                 </h2>
@@ -99,8 +100,8 @@
 
                 {% all include "_admin_make_page_buttons.tpl" %}
 
-                <a class="btn btn-default{% if not q.qcat and not q.qquery_id %} disabled{% endif %}" href="{% url admin_overview_rsc %}">{_ All pages _}</a>
-                <a class="btn btn-default" href="{% url admin_media %}">{_ All media _}</a>
+                <a class="btn btn-outline-secondary{% if not q.qcat and not q.qquery_id %} disabled{% endif %}" href="{% url admin_overview_rsc %}">{_ All pages _}</a>
+                <a class="btn btn-outline-secondary" href="{% url admin_media %}">{_ All media _}</a>
                 {% all include "_admin_extra_buttons.tpl" %}
             </div>
 

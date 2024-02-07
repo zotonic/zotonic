@@ -20,7 +20,7 @@
                     <input type="hidden" name="qquery_id" value="{{ q.qquery_id|escape }}" />
 
                     <div class="btn-group pull-right">
-                        <button class="btn btn-default" id="btn-filter">
+                        <button class="btn btn-outline-secondary" id="btn-filter">
                             <i class="glyphicon glyphicon-filter"></i> {_ Filter _}...
                         </button>
                         {% wire id="btn-filter"action={slide_toggle target="filter-panel"} %}
@@ -90,8 +90,8 @@
                     text=_"Make a new media item"
                     action={dialog_media_upload intent="create"}
                 %}
-                <a class="btn btn-default" href="{% url admin_overview_rsc %}">{_ All pages _}</a>
-                <a class="btn btn-default{% if not q.qcat %} disabled{% endif %}" href="{% url admin_media %}">{_ All media _}</a>
+                <a class="btn btn-outline-secondary" href="{% url admin_overview_rsc %}">{_ All pages _}</a>
+                <a class="btn btn-outline-secondary{% if not q.qcat %} disabled{% endif %}" href="{% url admin_media %}">{_ All media _}</a>
                 {% all include "_admin_extra_buttons.tpl" %}
             </div>
 
@@ -106,15 +106,15 @@
             <p>
                 <span id="sel-count">0</span> <span class="text-muted">{_ Selected _}</span>
 
-                <button class="btn btn-default btn-xs" id="csel-update">{_ Update _}...</button>
-                <button class="btn btn-default btn-xs" id="csel-delete">{_ Delete _}...</button>
+                <button class="btn btn-outline-secondary btn-sm" id="csel-update">{_ Update _}...</button>
+                <button class="btn btn-outline-secondary btn-sm" id="csel-delete">{_ Delete _}...</button>
             </p>
 
 
             {% with q.qsort|default:"-medium.created" as qsort %}
                 {% with m.search.paged[{query hasmedium qargs is_published=`all` page=q.page sort=qsort pagelen=qpagelen zsort=qsort }] as result %}
 
-                    <table class="table table-striped do_adminLinkedTable">
+                    <table class="table do_adminLinkedTable">
                         <thead>
                             <tr>
                                 <th>
@@ -159,7 +159,7 @@
                                                 {{ medium.created|date:_"d M Y, H:i"|default:"&nbsp;" }}
                                                 <div class="pull-right buttons">
                                                     {% button
-                                                        class="btn btn-default btn-xs"
+                                                        class="btn btn-outline-secondary btn-sm"
                                                         text=_"delete"
                                                         disabled=id.is_protected
                                                         action={
@@ -171,7 +171,7 @@
                                                             }
                                                         }
                                                     %}
-                                                    <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default btn-xs">{_ edit _}</a>
+                                                    <a href="{% url admin_edit_rsc id=id %}" class="btn btn-outline-secondary btn-sm">{_ edit _}</a>
                                                 </div>
                                             </td>
                                         </tr>

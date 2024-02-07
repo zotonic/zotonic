@@ -20,7 +20,7 @@
             <label class="control-label" for="new_password">{_ New password _}</label>
             <p class="help-block">
                 {_ Random secure password: _} <tt>{{ password }}</tt>
-                <a href="#" id="password-use-generated" class="btn btn-xs btn-default">{_ Use this password _}</a>
+                <a href="#" id="password-use-generated" class="btn btn-sm btn-outline-secondary">{_ Use this password _}</a>
                 {% wire id="password-use-generated"
                         action={set_value target="new_password" value=password}
                 %}

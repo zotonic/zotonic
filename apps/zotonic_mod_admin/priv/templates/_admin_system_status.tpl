@@ -87,7 +87,7 @@
 
             <div class="form-group">
                 <div>
-                    {% button class="btn btn-default" text=_"Close Sockets" action={admin_tasks task='close_sockets'} %}
+                    {% button class="btn btn-outline-secondary" text=_"Close Sockets" action={admin_tasks task='close_sockets'} %}
                     <span class="help-block">{_ Close all sockets from ip addresses which have over &gt; 250 open sockets. _}</span>
                 </div>
             </div>

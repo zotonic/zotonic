@@ -29,12 +29,12 @@
                     {% if id.is_editable %}
                         {% button type="submit"
                                   id="save_duplicate"
-                                  class="btn btn-default btn"
+                                  class="btn btn-outline-secondary btn"
                                   text=[_"Duplicate", "…"]
                                   title=_"Duplicate this page."
                         %}
                     {% else %}
-                        {% button class="btn btn-default btn"
+                        {% button class="btn btn-outline-secondary btn"
                                   text=[_"Duplicate", "…"]
                                   action={dialog_duplicate_rsc id=id}
                                   title=_"Duplicate this page."

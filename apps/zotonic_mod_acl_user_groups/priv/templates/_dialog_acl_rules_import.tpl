@@ -14,7 +14,7 @@
     </div>
 
     <div class="modal-footer">
-        {% button class="btn btn-default" action={dialog_close} text=_"Keep" tag="a" %}
+        {% button class="btn btn-outline-secondary" action={dialog_close} text=_"Keep" tag="a" %}
         <button class="btn btn-primary" type="submit">{_ Import _}</button>
     </div>
 </form>

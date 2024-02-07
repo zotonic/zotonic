@@ -169,7 +169,7 @@
                     <input type="email" required class="form-control" name="email" value="" placeholder="{_ test@example.com _}" style="width:40ch;">
                     <button type="submit" name="send" class="btn btn-primary">{_ Send _}</button>
                     {% if m.modules.active.mod_email_status %}
-                        <button type="submit" name="status" class="btn btn-default">{_ View email status _}</button>
+                        <button type="submit" name="status" class="btn btn-outline-secondary">{_ View email status _}</button>
                     {% endif %}
                 </form>
 

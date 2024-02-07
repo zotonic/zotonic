@@ -67,7 +67,7 @@
             {% include "_edit_medium_language.tpl" %}
 
             <div class="modal-footer">
-                {% button class="btn btn-default" action={dialog_close} text=_"Cancel" %}
+                {% button class="btn btn-outline-secondary" action={dialog_close} text=_"Cancel" %}
                 {% button class="btn btn-primary" type="submit" text=_"Upload file" %}
             </div>
         </fieldset>

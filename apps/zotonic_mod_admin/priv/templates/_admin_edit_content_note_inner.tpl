@@ -8,7 +8,7 @@
                     {% include "_name.tpl" id=note.modifier_id %}
                 {% endif %}
                 <span class="pull-right">
-                    <button id="rsc-note-btn" class="btn btn-default btn-xs">
+                    <button id="rsc-note-btn" class="btn btn-outline-secondary btn-sm">
                         {_ Edit note _}
                     </button>
                     {% wire id="rsc-note-btn"
@@ -31,7 +31,7 @@
             <small>
                 <span class="fa fa-info-circle"></span> {_ Add a note about this page. _}
                 <span class="pull-right">
-                    <button id="rsc-note-btn" class="btn btn-default btn-xs">
+                    <button id="rsc-note-btn" class="btn btn-outline-secondary btn-sm">
                         {_ Add note _}
                     </button>
                     {% wire id="rsc-note-btn"

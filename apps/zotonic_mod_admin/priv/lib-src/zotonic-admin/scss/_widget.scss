@@ -5,11 +5,11 @@
 }
 
 .widget {
-    background-color: white;
     margin-bottom: $widgetVerticalPadding;
+    background-color: white;
     border-bottom: none;
     border-radius: $radiusWidget;
-    @include clearfix;
+    overflow: hidden;
 
     .widget {
         margin-bottom: 0;

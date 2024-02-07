@@ -20,9 +20,9 @@ $env-backup:        #37474f;        // Gray
 .environment-backup {
 
     body {
-        padding-left: 24px;
-
         @media (min-width: $screen-phone) {
+            padding-left: 24px;
+
             &::before {
                 position: fixed;
                 top: 0;
@@ -36,11 +36,6 @@ $env-backup:        #37474f;        // Gray
                 writing-mode: tb-rl;
                 text-align: center;
             }
-        }
-
-        .navbar .nav .caret {
-            border-top-color: white;
-            border-bottom-color: white;
         }
     }
 }
@@ -67,15 +62,6 @@ $env-backup:        #37474f;        // Gray
                 background-color: darken($color, 10%);
             }
             
-            // .nav {
-            //     > li > a {
-            //         &:hover,
-            //         &:focus {
-                        
-            //         }
-            //     }
-            // }
-
             .navbar-nav {
                 > .open > a,
                 > .active > a {
@@ -83,16 +69,10 @@ $env-backup:        #37474f;        // Gray
                 }
             }
 
-            @media (max-width: $screen-tablet) {
-                .dropdown-menu > li > a {
-                    color: white;
-                }
-            }
-
             .dropdown-menu > li.active > a,
             .dropdown-menu > li.active > a:hover,
             .dropdown-menu > li > a:hover {
-                background-color: darken($color, 10%);
+                background-color: $color;
             }
         }
     }

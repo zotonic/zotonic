@@ -1,4 +1,4 @@
-<table class="table table-striped do_adminLinkedTable">
+<table class="table do_adminLinkedTable">
     <thead>
         <tr>
             <th width="35%">
@@ -25,7 +25,7 @@
                 <strong>
                     <span {% include "_language_attrs.tpl" %}>{{ edge.predicate_id.title }}</span>
                     {% if m.acl.is_allowed.link[edge.subject_id] %}
-                        <button id="{{ #unlink.id }}" class="btn btn-xs btn-default">{_ Disconnect _}</button>
+                        <button id="{{ #unlink.id }}" class="btn btn-sm btn-outline-secondary">{_ Disconnect _}</button>
                         {% wire id=#unlink.id
                             action={confirm
                                 text=[_"Are you sure you want to disconnect:", " ", edge.object_id.title, "?" ]

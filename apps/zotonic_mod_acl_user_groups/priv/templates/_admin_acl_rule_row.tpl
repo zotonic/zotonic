@@ -40,7 +40,7 @@
     </td>
     <td>
         {% if is_editable %}
-            <a class="btn btn-primary btn-xs" id="{{ #edit }}">{_ Edit Rule _}</a>
+            <a class="btn btn-primary btn-sm" id="{{ #edit }}">{_ Edit Rule _}</a>
             {% wire id=#edit
                     action={dialog_open
                                 template="_dialog_acl_rule_edit.tpl"

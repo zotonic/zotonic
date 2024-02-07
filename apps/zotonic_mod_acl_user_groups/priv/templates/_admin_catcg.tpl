@@ -19,7 +19,7 @@
 
         {% if not no_collab %}
             <br/>
-            <a href="#" class="btn btn-default" id="{{ #collab_select }}">
+            <a href="#" class="btn btn-outline-secondary" id="{{ #collab_select }}">
                 {_ Move to another _} {{ m.rsc.acl_collaboration_group.title }} …
             </a>
 

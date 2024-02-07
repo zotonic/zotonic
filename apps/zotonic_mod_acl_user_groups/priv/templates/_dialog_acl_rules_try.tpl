@@ -19,5 +19,5 @@
 {% endjavascript %}
 
 <div class="modal-footer clearfix">
-    {% button class="btn btn-default" action={dialog_close} text=_"Close" tag="a" %}
+    {% button class="btn btn-outline-secondary" action={dialog_close} text=_"Close" tag="a" %}
 </div>

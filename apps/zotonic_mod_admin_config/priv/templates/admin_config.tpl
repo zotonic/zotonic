@@ -62,8 +62,8 @@
                 </td>
                 <td>
                     <div class="pull-right buttons">
-                        {% button class="btn btn-default btn-xs" text=_"Delete" action=deleteAction %}
-                        {% button class="btn btn-default btn-xs" text=_"Edit" action=updateAction %}
+                        {% button class="btn btn-outline-secondary btn-xs" text=_"Delete" action=deleteAction %}
+                        {% button class="btn btn-outline-secondary btn-xs" text=_"Edit" action=updateAction %}
                     </div>
                     {{ c.modified|date:_"d M Y, H:i" }}
                 </td>
