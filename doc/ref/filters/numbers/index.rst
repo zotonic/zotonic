@@ -16,3 +16,4 @@ Numbers
    ../filter_round
    ../filter_round_significant
    ../filter_to_integer
+   ../filter_format_duration

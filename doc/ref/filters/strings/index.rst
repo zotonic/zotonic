@@ -12,6 +12,7 @@ Strings
    ../filter_format_integer
    ../filter_format_number
    ../filter_format_price
+   ../filter_format_duration
    ../filter_insert
    ../filter_is_valid_email
    ../filter_length
