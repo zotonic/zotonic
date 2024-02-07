@@ -3,13 +3,13 @@
     height: $navbar-height;
     background-color: $brand-primary;
 
-    .navbar-header > a,
-    .nav > li > a {
+    .navbar-brand,
+    .navbar-collapse > ul > li > a {
         color: #fff;
     }
 
-    .nav > li > a:hover,
-    .nav > li > a:focus,
+    .navbar-collapse > ul > li > a:hover,
+    .navbar-collapse > ul > li > a:focus,
     .navbar-nav > .open > a,
     .navbar-nav > .active > a {
         background-color: $brandPrimaryDark;
@@ -20,15 +20,14 @@
         font-size: 15px;
         line-height: 15px;
         padding: 17px 15px;
+
         .zotonic-logo {
             height: 15px;
             width: 87px;
             text-shadow: $lightOnDarkTextShadow;
         }
     }
-    .navbar-right {
-        margin-right: 15px;
-    }
+
     .navbar-nav > li > a,
     .navbar-nav > li > .dropdown-menu > li > a {
         text-shadow: $lightOnDarkTextShadow;
@@ -90,6 +89,7 @@
             > li > a {
                 background-color: $backgroundColorLight;
                 text-shadow: $darkOnLightTextShadow;
+                
                 &:hover {
                     background: $brand-primary;
                     color: #fff;
