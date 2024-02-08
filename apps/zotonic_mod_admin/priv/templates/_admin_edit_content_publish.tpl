@@ -41,15 +41,18 @@
     </div>
 </div>
 
-<div class="form-group">
-    <label for="is_published" class="checkbox-inline" style="padding-left: 0">
-        <input type="checkbox" id="is_published" name="is_published" value="1" {% if id.is_published %}checked="checked"{% endif %}/>
-        {_ Published _}
-    </label>
-
-    <label for="is_featured" class="checkbox-inline">
-        <input type="checkbox" id="is_featured" name="is_featured" value="1" {% if id.is_featured %}checked="checked"{% endif %}/>
-        {_ Featured _}
-    </label>
+<div class="d-flex">
+    <div class="form-check me-3">
+        <input type="checkbox" id="is_published" class="form-check-input" name="is_published" value="1" {% if id.is_published %}checked="checked"{% endif %}/>
+        <label for="is_published" class="form-check-label" style="padding-left: 0">
+            {_ Published _}
+        </label>
+    </div>
+    <div class="form-check">
+        <input type="checkbox" id="is_featured" class="form-check-input" name="is_featured" value="1" {% if id.is_featured %}checked="checked"{% endif %}/>
+        <label for="is_featured" class="form-check-label">
+            {_ Featured _}
+        </label>
+    </div>
 </div>
 {% endblock %}

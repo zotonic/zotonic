@@ -34,9 +34,10 @@
 
 <div class="date-range">
     <fieldset>
-        <div class="checkbox">
-            <label>
-                <input name="date_is_all_day" id="{{ #all_day }}" type="checkbox" {% if id.date_is_all_day %}checked{% endif %}> {_ All day _}
+        <div class="form-check">
+            <input class="form-check-input" name="date_is_all_day" id="{{ #all_day }}" type="checkbox" {% if id.date_is_all_day %}checked{% endif %}>
+            <label class="form-check-label" for="{{ #all_day }}">
+                {_ All day _}
             </label>
         </div>
 
@@ -52,13 +53,13 @@
         <div class="row">
             <div class="col-sm-6">
                 <label class="control-label">{_ From _}</label>
-                <div>
+                <div class="d-flex">
                     {% include "_edit_date.tpl" date=id.date_start name="date_start" is_end=0 date_is_all_day=id.date_is_all_day is_editable=id.is_editable timezone=id.tz %}
                 </div>
             </div>
             <div class="col-sm-6">
                 <label class="control-label">{_ Till _}</label>
-                <div>
+                <div class="d-flex">
                     {% include "_edit_date.tpl" date=id.date_end name="date_end" is_end=1 date_is_all_day=id.date_is_all_day  is_editable=id.is_editable timezone=id.tz %}
                 </div>
             </div>

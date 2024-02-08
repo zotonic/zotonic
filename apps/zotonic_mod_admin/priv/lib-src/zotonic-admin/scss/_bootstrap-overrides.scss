@@ -140,3 +140,12 @@ code {
     @extend .fa-solid;
     @extend .fa-arrow-right;
 }
+
+// Form
+
+// Fix error when label-floating has a col class.
+.label-floating[class*="col-md-"] {
+    label {
+        left: calc(var(--bs-gutter-x) * 0.5);
+    }
+}

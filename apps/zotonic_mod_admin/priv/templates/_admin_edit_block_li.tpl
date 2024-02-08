@@ -8,12 +8,12 @@
     <div class="widget">
         <div class="drag-handle"></div>
 
-        <div class="widget-header label-floating" title="{_ Drag to change position _}">
+        <div class="widget-header" title="{_ Drag to change position _}">
             <a title="{_ Move block up _}" class="btn btn-outline-secondary block-up">&uarr;</a>
             <a title="{_ Move block down _}" class="btn btn-outline-secondary block-down">&darr;</a>
             &nbsp;
             <input type="text"
-                   class="block-name form-control form-control-small"
+                   class="block-name form-control form-control-sm w-25 d-inline-block"
                    name="blocks[].name"
                    value="{{ blk.name|escape }}"
                    title="{_ Block name _}"

@@ -5,18 +5,26 @@
 }
 
 div.modal {
+    --bs-modal-bg: #fff;
+    
     div.tab-content {
         overflow: visible;
     }
-    .nav.nav-pills {
+
+    .nav.nav-pills,
+    .nav.nav-tabs {
         margin: -15px -15px 15px -15px;
         padding: 0 15px;
     }
+
     .modal-body {
+        // background: white;
+
         > :first-child:not(.nav) {
             margin-top: 0;
         }
     }
+
     .modal-footer {
         font-size: 0;
         

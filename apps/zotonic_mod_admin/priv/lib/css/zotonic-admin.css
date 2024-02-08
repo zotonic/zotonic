@@ -10667,6 +10667,10 @@ code {
   padding: 0;
 }
 
+.label-floating[class*=col-md-] label {
+  left: calc(var(--bs-gutter-x) * 0.5);
+}
+
 #unlink-undo-message div.alert {
   padding-right: 14px; /* right-aligned undo button in page connections */
 }
@@ -10742,7 +10746,7 @@ code {
   grid-column: 1;
   grid-row: 1;
   background-color: white;
-  padding: 10px 15px 0 15px;
+  padding: 20px 15px 0 15px;
   max-height: 100%;
   overflow-y: auto;
 }
@@ -11120,11 +11124,7 @@ img.mediaclass-admin-leader-image {
   margin: 0 0 10px 0;
 }
 
-input[type=date] {
-  width: auto;
-  display: inline;
-}
-
+input[type=date],
 input[type=time] {
   width: auto;
   display: inline;
@@ -11133,7 +11133,7 @@ input[type=time] {
 #sidebar-publish-page {
   position: sticky;
   top: 46px;
-  z-index: 1;
+  z-index: 100;
 }
 
 #sidebar-date-range .tab-content {
@@ -11141,7 +11141,6 @@ input[type=time] {
 }
 
 .navbar.admin-navbar-fixed-save {
-  z-index: 1000;
   opacity: 0;
   position: fixed;
   display: none;
@@ -11295,10 +11294,14 @@ img {
     min-width: 700px;
   }
 }
+div.modal {
+  --bs-modal-bg: #fff;
+}
 div.modal div.tab-content {
   overflow: visible;
 }
-div.modal .nav.nav-pills {
+div.modal .nav.nav-pills,
+div.modal .nav.nav-tabs {
   margin: -15px -15px 15px -15px;
   padding: 0 15px;
 }
@@ -11640,7 +11643,7 @@ table.do_adminLinkedTable .admin-list-thumb > img {
 .minimalTabs li.active > a:hover {
   border-style: none none solid none;
   border-width: 2px;
-  border-bottom-color: #00C853;
+  border-bottom-color: #095F81;
   color: black;
   background: none;
 }
@@ -11662,6 +11665,14 @@ table.do_adminLinkedTable .admin-list-thumb > img {
 .widget ul.nav-justified.nav-tabs > li > a,
 .nav-justified.nav.nav-pills > li > a {
   margin-bottom: -1px;
+}
+
+.z-nav-tabs {
+  --bs-nav-tabs-link-active-bg: #fff;
+}
+.z-nav-tabs + .tab-content .widget {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 .connect-results {
@@ -11888,7 +11899,7 @@ ul.tree-list.connections-list li.menu-item-alert {
 }
 .widget .widget-content {
   position: relative;
-  padding: 15px 15px 0 15px;
+  padding: 15px;
   border-radius: 0 0 10px 10px;
   border-top: none;
 }
@@ -12018,10 +12029,6 @@ ul.tree-list.connections-list li.menu-item-alert {
 .widget .navbar {
   background-color: #dadada;
   padding: 10px 0;
-}
-
-.admin-container .widget.translations .widget-content {
-  padding-top: 4px;
 }
 
 .widget.widget-active:not(.widget-expanded) .widget-header:hover {
@@ -12291,7 +12298,8 @@ body[data-bs="3"] select.form-control .nav-tabs li:not(.nav-item),
 body[data-bs="3"] .nav-tabs li a:not(.nav-link),
 body[data-bs="3"] .form-inline,
 body[data-bs="3"] .breadcrumb a:not(.breadcrumb-item),
-body[data-bs="3"] .label-floating {
+body[data-bs="3"] .label-floating,
+body[data-bs="3"] .control-label {
   border: 2px solid red;
 }
 body[data-bs="3"] span.help-block {

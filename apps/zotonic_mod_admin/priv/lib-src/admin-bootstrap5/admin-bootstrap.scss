@@ -176,6 +176,10 @@ $labels: (
     @extend .form-floating;
 }
 
+.control-label {
+    @extend .form-label;
+}
+
 .dropdown-menu a:not(.dropdown-item) {
     --bs-dropdown-link-hover-bg: var(--primaryColor);
     --bs-dropdown-link-hover-color: white;

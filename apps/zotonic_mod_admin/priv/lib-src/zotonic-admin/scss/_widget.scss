@@ -30,7 +30,7 @@
 
     .widget-content {
         position: relative;
-        padding: $widgetVerticalPadding $widgetSidePadding 0 $widgetSidePadding;
+        padding: 15px;
         border-radius: 0 0 $radiusWidget $radiusWidget;
         border-top: none;
 
@@ -213,9 +213,9 @@
 }
 
 .admin-container {
-    .widget.translations .widget-content {
-        padding-top: 4px;
-    }
+    // .widget.translations .widget-content {
+    //     padding-top: 4px;
+    // }
 }
 
 

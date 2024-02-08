@@ -12,7 +12,7 @@
 
 {% block widget_content %}
 	<div class="row">
-		<div class="col-lg-6 col-md-6">
+		<div class="col-md-6">
 			<div class="form-group label-floating">
 					<input class="form-control" id="phone" type="text" name="phone" inputmode="tel" value="{{ id.phone }}" placeholder="{_ Telephone _}">
 				<label class="control-label" for="phone">{_ Telephone _}</label>
@@ -23,7 +23,7 @@
 			</div>
 		</div>
 
-		<div class="col-lg-6 col-md-6">
+		<div class="col-md-6">
 			<div class="form-group label-floating">
 				<input class="form-control" id="phone_alt" type="text" name="phone_alt" inputmode="tel" value="{{ id.phone_alt }}" placeholder="{_ Alternative telephone _}">
 				<label class="control-label" for="phone_alt">{_ Alternative telephone _}</label>
@@ -98,19 +98,19 @@
 		</div>
 
 		<div class="row">
-			<div class="form-group col-lg-6 col-md-6 label-floating">
+			<div class="form-group col-md-6 label-floating">
 				<input class="form-control" id="address_city" type="text" name="address_city" value="{{ id.address_city }}" placeholder="{_ City _}">
 				<label class="control-label" for="address_city">{_ City _}</label>
 			</div>
 
-			<div class="form-group col-lg-6 col-md-6 label-floating">
+			<div class="form-group col-md-6 label-floating">
 				<input class="form-control" id="address_postcode" type="text" name="address_postcode" value="{{ id.address_postcode }}" placeholder="{_ Postcode _}">
 				<label class="control-label" for="address_postcode">{_ Postcode _}</label>
 			</div>
 		</div>
 
 		<div class="row">
-			<div class="form-group col-lg-6 col-md-6 label-floating">
+			<div class="form-group col-md-6 label-floating">
 				<input class="form-control" id="address_state" type="text" name="address_state" value="{{ id.address_state }}" placeholder="{_ State _}">
 				<label class="control-label" for="address_state">{_ State _}</label>
 			</div>
@@ -160,19 +160,19 @@
 		</div>
 
 		<div class="row">
-			<div class="form-group col-lg-6 col-md-6 label-floating">
+			<div class="form-group col-md-6 label-floating">
 				<input class="form-control" id="mail_city" type="text" name="mail_city" value="{{ id.mail_city }}" placeholder="{_ City _}">
 				<label class="control-label" for="mail_city">{_ City _}</label>
 			</div>
 
-			<div class="form-group col-lg-6 col-md-6 label-floating">
+			<div class="form-group col-md-6 label-floating">
 				<input class="form-control" id="mail_postcode" type="text" name="mail_postcode" value="{{ id.mail_postcode }}" placeholder="{_ Postcode _}">
 				<label class="control-label" for="mail_postcode">{_ Postcode _}</label>
 			</div>
 		</div>
 
 		<div class="row">
-			<div class="form-group col-lg-6 col-md-6 label-floating">
+			<div class="form-group col-md-6 label-floating">
 				<input class="form-control" id="mail_state" type="text" name="mail_state" value="{{ id.mail_state }}" placeholder="{_ State _}">
 				<label class="control-label" for="mail_state">{_ State _}</label>
 			</div>
@@ -186,11 +186,11 @@
 	    <p class="help-block">{_ The billing address is only visible for people who can edit this page. _}</p>
 
 		<div class="row">
-			<div class="form-group col-lg-6 col-md-6 label-floating">
+			<div class="form-group col-md-6 label-floating">
 				<input class="form-control" id="billing_name" type="text" name="billing_name" value="{{ id.billing_name }}" placeholder="{_ Name for invoices _}">
 				<label class="control-label" for="billing_name">{_ Name for invoices _}</label>
 			</div>
-			<div class="form-group col-lg-6 col-md-6 label-floating">
+			<div class="form-group col-md-6 label-floating">
 				<input class="form-control" id="billing_email" type="text" name="billing_email" value="{{ id.billing_email }}" placeholder="{_ Email address for invoices _}">
 				{% validate id="billing_email" type={email} %}
 				<label class="control-label" for="billing_email">{_ Email address for invoices _}</label>
@@ -230,19 +230,19 @@
 			</div>
 
 			<div class="row">
-				<div class="form-group col-lg-6 col-md-6 label-floating">
+				<div class="form-group col-md-6 label-floating">
 					<input class="form-control" id="billing_city" type="text" name="billing_city" value="{{ id.billing_city }}" placeholder="{_ City _}">
 					<label class="control-label" for="billing_city">{_ City _}</label>
 				</div>
 
-				<div class="form-group col-lg-6 col-md-6 label-floating">
+				<div class="form-group col-md-6 label-floating">
 					<input class="form-control" id="billing_postcode" type="text" name="billing_postcode" value="{{ id.billing_postcode }}" placeholder="{_ Postcode _}">
 					<label class="control-label" for="billing_postcode">{_ Postcode _}</label>
 				</div>
 			</div>
 
 			<div class="row">
-				<div class="form-group col-lg-6 col-md-6 label-floating">
+				<div class="form-group col-md-6 label-floating">
 					<input class="form-control" id="billing_state" type="text" name="mail_state" value="{{ id.billing_state }}" placeholder="{_ State _}">
 					<label class="control-label" for="billing_state">{_ State _}</label>
 				</div>

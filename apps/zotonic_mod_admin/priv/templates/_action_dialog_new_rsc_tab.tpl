@@ -21,13 +21,13 @@
 		{% with 'dialog-new-rsc-tab' as form %}
 
 		 	{% block rsc_props_title %}
-			 	<div class="form-group label-floating">
+			 	<div class="form-group">
 			 		{# The new resource title, also used for the feedback search #}
+			 		<label for="new_rsc_title" class="form-label">{_ Title _}</label>
 			 	    <input type="text" id="new_rsc_title" name="title"
 			 	    	   value="{{ title|escape }}" class="form-control do_autofocus"
 			 	    	   placeholder="{_ Title _}"
 			 	    	   autofocus {% if accept %}accept="{{ accept }}"{% endif %}>
-			 	    <label for="new_rsc_title">{_ Title _}</label>
 			 	</div>
 			{% endblock %}
 
@@ -242,11 +242,11 @@
 		            {% endif %}
 	            {% endif %}
 				<div class="form-group form__is_published">
-					<label class="checkbox">
-						<input type="checkbox" id="{{ #published }}" name="is_published" value="1"
+					<div class="form-check">
+						<input type="checkbox" id="{{ #published }}" class="form-check-input" name="is_published" value="1"
 							{% if subject_id or m.admin.rsc_dialog_is_published %}checked{% endif %}>
-						{_ Published _}
-					</label>
+						<label for="{{ #published }}" class="form-check-label">{_ Published _}</label>
+					</div>
 				</div>
 
 		        <div class="if-upload" style="display: none">

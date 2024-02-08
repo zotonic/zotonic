@@ -22,7 +22,7 @@
         <div class="col-sm-6">
             <div class="form-group">
                 <label class="control-label">{_ Visible from _}</label>
-                <div>
+                <div class="d-flex">
                     {% include "_edit_date.tpl" date=id.publication_start name="publication_start" is_end=0 is_editable=id.is_editable timezone=id.tz %}
                 </div>
             </div>
@@ -30,7 +30,7 @@
         <div class="col-sm-6">
             <div class="form-group">
                 <label class="control-label">{_ Visible till _}</label>
-                <div>
+                <div class="d-flex">
                     {% include "_edit_date.tpl" date=id.publication_end name="publication_end" is_end=1 is_editable=id.is_editable timezone=id.tz %}
                 </div>
             </div>

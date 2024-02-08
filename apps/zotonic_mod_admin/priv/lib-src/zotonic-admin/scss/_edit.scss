@@ -233,10 +233,7 @@ img.mediaclass-admin-leader-image {
     @extend .admin-image-border;
 }
 
-input[type='date'] {
-    width: auto;
-    display: inline;
-}
+input[type='date'],
 input[type='time'] {
     width: auto;
     display: inline;
@@ -245,7 +242,7 @@ input[type='time'] {
 #sidebar-publish-page {
     position: sticky;
     top: calc($navbar-height - 4px);
-    z-index: 1;
+    z-index: 100;
 }
 
 #sidebar-date-range .tab-content {
@@ -253,9 +250,6 @@ input[type='time'] {
 }
 
 .navbar.admin-navbar-fixed-save {
-    $_transation_duration: 0.3s;
-    
-    z-index: 1000;
     opacity: 0;
     position: fixed;
     display: none;
@@ -263,7 +257,7 @@ input[type='time'] {
     border-radius: 0;
     padding: $widgetVerticalPadding $widgetSidePadding;
     background-color: $backgroundColorInfo;
-    transition: opacity $_transation_duration ease-in-out;
+    transition: opacity 0.3s ease-in-out;
     min-height: inherit;
     box-shadow: none;
 }

@@ -2080,7 +2080,7 @@ progress {
     -webkit-overflow-scrolling: touch;
   }
 }
-.form-label {
+.form-label, .control-label {
   margin-bottom: 0.5rem;
 }
 

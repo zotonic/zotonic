@@ -161,7 +161,8 @@
               .css({
                     'overflow-x': 'hidden',
                     'overflow-y': 'auto',
-                    'z-index': zIndex
+                    'z-index': zIndex,
+                    'display': 'block'
                 });
 
             if (options.center) {
