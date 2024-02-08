@@ -31,6 +31,8 @@ limitations under the License.
 .fa-sharp,
 .fas,
 .fa-solid,
+.glyphicon.glyphicon-arrow-right,
+.glyphicon.glyphicon-arrow-left,
 .glyphicon.glyphicon-cog,
 .far,
 .fa-regular,
@@ -48,6 +50,8 @@ limitations under the License.
 .fas,
 .fa-classic,
 .fa-solid,
+.glyphicon.glyphicon-arrow-right,
+.glyphicon.glyphicon-arrow-left,
 .glyphicon.glyphicon-cog,
 .far,
 .fa-regular {
@@ -3821,7 +3825,7 @@ readers do not read off random characters that represent icons */
   content: "\e524";
 }
 
-.fa-arrow-right::before {
+.fa-arrow-right::before, .glyphicon.glyphicon-arrow-right::before {
   content: "\f061";
 }
 
@@ -4665,7 +4669,7 @@ readers do not read off random characters that represent icons */
   content: "\f75e";
 }
 
-.fa-arrow-left::before {
+.fa-arrow-left::before, .glyphicon.glyphicon-arrow-left::before {
   content: "\f060";
 }
 
@@ -8262,6 +8266,8 @@ readers do not read off random characters that represent icons */
 }
 .fas,
 .fa-solid,
+.glyphicon.glyphicon-arrow-right,
+.glyphicon.glyphicon-arrow-left,
 .glyphicon.glyphicon-cog {
   font-weight: 900;
 }
@@ -10585,7 +10591,7 @@ pre:empty {
   padding-left: 40px;
   position: relative;
 }
-.dropdown-menu.admin-dropdown-menu-has-icons > li > a .fa-solid, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-cog {
+.dropdown-menu.admin-dropdown-menu-has-icons > li > a .fa-solid, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-arrow-right, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-arrow-left, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-cog {
   position: absolute;
   left: 10px;
   top: 8px;
@@ -11320,7 +11326,7 @@ div.modal .modal-footer .pull-left {
 .navbar .navbar-collapse > ul > li > a {
   color: #fff;
 }
-.navbar .fa-solid, .navbar .glyphicon.glyphicon-cog {
+.navbar .fa-solid, .navbar .glyphicon.glyphicon-cog, .navbar .glyphicon.glyphicon-arrow-left, .navbar .glyphicon.glyphicon-arrow-right {
   margin-right: 5px;
 }
 .navbar .nav-item > a {
@@ -11867,7 +11873,6 @@ ul.tree-list.connections-list li.menu-item-alert {
   background-color: white;
   border-bottom: none;
   border-radius: 10px;
-  overflow: hidden;
 }
 .widget .widget {
   margin-bottom: 0;

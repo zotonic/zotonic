@@ -130,3 +130,13 @@ code {
     @extend .fa-solid;
     @extend .fa-cog;
 }
+
+.glyphicon.glyphicon-arrow-left {
+    @extend .fa-solid;
+    @extend .fa-arrow-left;
+}
+
+.glyphicon.glyphicon-arrow-right {
+    @extend .fa-solid;
+    @extend .fa-arrow-right;
+}
