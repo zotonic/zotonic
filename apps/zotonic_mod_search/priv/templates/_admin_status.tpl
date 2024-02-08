@@ -5,7 +5,7 @@
                   postback={facet_rebuild}
                   delegate=`mod_search`
         %}
-        <span class="help-block">{_ Check the table for the faceted search and fill it by reindexing all pages. _}</span>
+        <p class="help-block">{_ Check the table for the faceted search and fill it by reindexing all pages. _}</p>
     </div>
 </div>
 {% endif %}

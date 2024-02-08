@@ -20,6 +20,10 @@ $font-family-sans-serif:  "-apple-system", BlinkMacSystemFont, "Segoe UI", Robot
 $font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace;
 $font-family-base:        $font-family-sans-serif;
 
+:root {
+    --primaryColor: #095F81;
+}
+
 /* -------end customization-------- */
 
 /* Zotonic definitions */
@@ -89,4 +93,92 @@ $font-family-base:        $font-family-sans-serif;
 
 html {
     font-size: var(--bs-body-font-size);
+}
+
+// Bootstrap 3 fallbacks
+
+.help-block {
+    @extend .form-text;
+}
+
+.btn-default {
+    @extend .btn-outline-secondary;
+}
+
+.btn-xs {
+    @extend .btn-sm;
+}
+
+select.form-control {
+    @extend .form-select;
+}
+
+.nav-tabs li {
+    @extend .nav-item;
+
+    &.active a {
+        // Copy paste from _nav.scss in bootstrap 5
+        color: var(--#{$prefix}nav-tabs-link-active-color);
+        background-color: var(--#{$prefix}nav-tabs-link-active-bg);
+        border-color: var(--#{$prefix}nav-tabs-link-active-border-color);
+    }
+}
+
+.nav-tabs li a {
+    @extend .nav-link;
+}
+
+$labels: (
+  "primary",
+  "secondary",
+  "success",
+  "danger",
+  "warning",
+  "info",
+);
+
+.label {
+    @extend .badge;
+}
+
+@each $label in $labels {
+    .label-#{$label} {
+        @extend .text-bg-#{$label};
+    }
+}
+
+.label-default {
+    @extend .text-bg-secondary;
+}
+
+.breadcrumb li:not(.breadcrumb-item) {
+    @extend .breadcrumb-item;
+}
+
+.dl-horizontal {
+    @extend .row;
+}
+
+.dl-horizontal dt {
+    @extend .col-sm-3;
+}
+
+.dl-horizontal dd {
+    @extend .col-sm-9;
+}
+
+.form-group,
+.form-actions {
+    @extend .mb-3;
+}
+
+.label-floating {
+    @extend .form-floating;
+}
+
+.dropdown-menu a:not(.dropdown-item) {
+    --bs-dropdown-link-hover-bg: var(--primaryColor);
+    --bs-dropdown-link-hover-color: white;
+
+    @extend .dropdown-item;
 }

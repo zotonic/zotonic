@@ -5,7 +5,7 @@
     {% if is_nav %}
         {# Bootstrap nav item #}
         <li class="nav-item dropdown" id="languages">
-            <a href="#languages" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-toggle="dropdown">
+            <a href="#languages" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                 {{ z_language|upper }} {{ icon_after }}
             </a>
 

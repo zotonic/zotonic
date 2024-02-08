@@ -31,6 +31,7 @@ limitations under the License.
 .fa-sharp,
 .fas,
 .fa-solid,
+.glyphicon.glyphicon-cog,
 .far,
 .fa-regular,
 .fab,
@@ -47,6 +48,7 @@ limitations under the License.
 .fas,
 .fa-classic,
 .fa-solid,
+.glyphicon.glyphicon-cog,
 .far,
 .fa-regular {
   font-family: "Font Awesome 6 Free";
@@ -5231,7 +5233,7 @@ readers do not read off random characters that represent icons */
   content: "\f013";
 }
 
-.fa-cog::before {
+.fa-cog::before, .glyphicon.glyphicon-cog::before {
   content: "\f013";
 }
 
@@ -8259,7 +8261,8 @@ readers do not read off random characters that represent icons */
   src: url("../webfonts/fa-solid-900.woff2") format("woff2"), url("../webfonts/fa-solid-900.ttf") format("truetype");
 }
 .fas,
-.fa-solid {
+.fa-solid,
+.glyphicon.glyphicon-cog {
   font-weight: 900;
 }
 
@@ -10409,6 +10412,7 @@ details summary {
 
 a {
   color: #095F81;
+  text-decoration: none;
 }
 
 dl dt, dl dd {
@@ -10581,7 +10585,7 @@ pre:empty {
   padding-left: 40px;
   position: relative;
 }
-.dropdown-menu.admin-dropdown-menu-has-icons > li > a .fa-solid {
+.dropdown-menu.admin-dropdown-menu-has-icons > li > a .fa-solid, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-cog {
   position: absolute;
   left: 10px;
   top: 8px;
@@ -10622,6 +10626,10 @@ button.close {
   margin-left: 0;
   margin-right: 10px;
   margin-bottom: 5px;
+}
+
+.checkbox {
+  white-space: nowrap;
 }
 
 .checkbox label {
@@ -11215,6 +11223,10 @@ fieldset > label.checkbox > input[type=radio],
   margin-left: 0;
 }
 
+.checkbox {
+  display: block;
+}
+
 img.thumb {
   padding: 0;
   border-radius: 0;
@@ -11308,7 +11320,7 @@ div.modal .modal-footer .pull-left {
 .navbar .navbar-collapse > ul > li > a {
   color: #fff;
 }
-.navbar .fa-solid {
+.navbar .fa-solid, .navbar .glyphicon.glyphicon-cog {
   margin-right: 5px;
 }
 .navbar .nav-item > a {
@@ -11527,6 +11539,9 @@ table.do_adminLinkedTable td a.view-link {
 }
 table.do_adminLinkedTable td a.view-link:hover {
   text-decoration: none;
+}
+table.do_adminLinkedTable .btn {
+  white-space: nowrap;
 }
 table.do_adminLinkedTable .buttons {
   margin-top: -2px;
@@ -12047,18 +12062,23 @@ li h3.widget-header {
   padding: 10px;
 }
 
-.well {
+.well,
+.panel {
   padding: 15px;
   margin-bottom: 15px;
   background-color: white;
   border-radius: 10px;
 }
-.well:has(.btn) {
+.well:has(.btn),
+.panel:has(.btn) {
   padding-bottom: 10px;
 }
 .well > .btn,
 .well > a[href],
-.well .btn + .btn {
+.well .btn + .btn,
+.panel > .btn,
+.panel > a[href],
+.panel .btn + .btn {
   margin: 0 5px 5px 0;
 }
 
@@ -12248,10 +12268,27 @@ li h3.widget-header {
   background-color: #37474f;
 }
 
-.label {
+body[data-bs="3"] .label,
+body[data-bs="3"] .btn-default,
+body[data-bs="3"] .help-block,
+body[data-bs="3"] .btn-xs .glyphicon,
+body[data-bs="3"] .page-header,
+body[data-bs="3"] .dl-horizontal,
+body[data-bs="3"] .radio-inline,
+body[data-bs="3"] .checkbox-inline,
+body[data-bs="3"] .checkbox,
+body[data-bs="3"] .btn-group-xs,
+body[data-bs="3"] .form-horizontal:has(:not(.row)) .panel,
+body[data-bs="3"] .thumbnail,
+body[data-bs="3"] .well,
+body[data-bs="3"] .panel,
+body[data-bs="3"] select.form-control .nav-tabs li:not(.nav-item),
+body[data-bs="3"] .nav-tabs li a:not(.nav-link),
+body[data-bs="3"] .form-inline,
+body[data-bs="3"] .breadcrumb a:not(.breadcrumb-item),
+body[data-bs="3"] .label-floating {
   border: 2px solid red;
 }
-
-.btn-default {
-  border: 1px solid red;
+body[data-bs="3"] span.help-block {
+  border: 2px solid orange;
 }

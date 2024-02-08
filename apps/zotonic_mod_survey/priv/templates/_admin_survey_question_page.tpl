@@ -1,6 +1,6 @@
 <li class="page" id="{{ #p }}">
 	<div class="options btn-group pull-right">
-		<a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+		<a class="btn btn-default btn-sm dropdown-toggle" data-bs-toggle="dropdown" href="#">
 			<span class="caret"></span>
 		</a>
 		<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">

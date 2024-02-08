@@ -80,7 +80,7 @@
         <div class="pull-right">
             <div class="btn-group">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown">
+                    <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
                         {_ Show _}
                         {% if q.g %}
                             {{ m.rsc[q.g].title }}

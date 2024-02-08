@@ -5,5 +5,5 @@
                     delegate=`mod_seo_sitemap`
                 }
     %}
-    <span class="help-block">{_ Rebuild the sitemap index for all pages. _}</span>
+    <p class="help-block">{_ Rebuild the sitemap index for all pages. _}</p>
 </div>

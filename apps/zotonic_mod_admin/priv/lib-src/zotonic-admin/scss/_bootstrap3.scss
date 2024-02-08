@@ -1,7 +1,36 @@
-.label {
-    border: 2px solid red;
+body[data-bs="3"] {
+
+// Dropped classes
+    .label, // badge
+    .btn-default, // btn-outline-secondary
+    .help-block, // form-text
+    .btn-xs // btn-sm
+    .glyphicon, // fontawesome fa-solid fa-icon
+    .page-header, // all its styles can be applied via utilities.
+    .dl-horizontal, // use col system
+    .radio-inline, // No replacement
+    .checkbox-inline, // No replacement
+    .checkbox, // form-check
+    .btn-group-xs, // No replacement
+    .form-horizontal:has(:not(.row)) // Form-horizontal needs the row class 
+    .panel, // Dropped, use card now 
+    .thumbnail, // Dropped, use card now 
+    .well, // Dropped, use card now 
+    .panel, // Dropped, use card now 
+    select.form-control // form-select
+    .nav-tabs li:not(.nav-item), // Need to add nav-item class
+    .nav-tabs li a:not(.nav-link), // Need to add nav-link class
+    .form-inline, // use layout classes
+    .breadcrumb a:not(.breadcrumb-item), // links now need the breadcrumb-item class
+    .label-floating // form-floating
+    {
+        border: 2px solid red;
+    }
+
+    span.help-block // Should be a p
+    {
+        border: 2px solid orange;
+    }
 }
 
-.btn-default {
-    border: 1px solid red;
-}
+// There have been made fallbacks in admin-bootstrap.scss, that extend the new classes.

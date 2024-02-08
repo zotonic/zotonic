@@ -5,7 +5,7 @@
         {% if mid %}
             {% if action==`down` %}
                 <li class="dropdown{% if mid|member:parents %} active{% endif %}">
-                    <a href="{{ mid.page_url }}" class="dropdown-toggle {{ mid.name }}" data-toggle="dropdown" data-target="#">
+                    <a href="{{ mid.page_url }}" class="dropdown-toggle {{ mid.name }}" data-bs-toggle="dropdown" data-target="#">
                         {{ mid.short_title|default:mid.title }} <b class="caret"></b></a>
                     <ul class="dropdown-menu">
             {% else %}

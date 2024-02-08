@@ -45,13 +45,14 @@
             }
         }
     }
+
     > li > a {
         text-shadow: $darkOnLightTextShadow;
     }
     > li.active > a,
     > li.active > a:hover,
     > li > a:hover {
-        background-color: $brand-primary;
+        background-color: $brand-primary;   
         color: #fff;
         text-shadow: $lightOnDarkTextShadow;
     }
@@ -83,6 +84,10 @@ button.close {
     margin-left: 0;
     margin-right: 10px;
     margin-bottom: 5px;
+}
+
+.checkbox {
+    white-space: nowrap;
 }
 
 .checkbox label {
@@ -117,4 +122,11 @@ button.close {
 
 code {
 	padding: 0;
+}
+
+// Glyphicon to fontawesome
+
+.glyphicon.glyphicon-cog {
+    @extend .fa-solid;
+    @extend .fa-cog;
 }

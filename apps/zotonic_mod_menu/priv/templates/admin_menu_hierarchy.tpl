@@ -12,7 +12,7 @@
 
         <div class="admin-header">
 			<h2>{_ Hierarchy for _}: {{ id.title }}</h2>
-		<div>
+		</div>
 
 		<div class="row">
 			{# For now demand mod_admin_config rights #}
@@ -23,7 +23,7 @@
                             <div class="clearfix panel">
                                 {% if editable %}
                                 <div class="btn-group pull-right">
-                                    <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown">{_ Add _} {{ id.title }} <span class="caret"></span></a>
+                                    <a href="#" class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown">{_ Add _} {{ id.title }} <span class="caret"></span></a>
                                     <ul class="dropdown-menu">
                                         <!-- dropdown menu links -->
                                         <li><a href="#" data-where="top">&uarr; {_ Add top _}</a></li>

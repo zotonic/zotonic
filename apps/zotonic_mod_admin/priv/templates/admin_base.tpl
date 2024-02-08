@@ -40,7 +40,7 @@
         {% block head_extra %}
         {% endblock %}
     </head>
-    <body id="body" class="{% block bodyclass %}{% endblock %}"{% block bodyattr %}{% endblock %}>
+    <body id="body" class="{% block bodyclass %}{% endblock %}"{% block bodyattr %}{% endblock %} {% if q.bs == "3" %}data-bs="3"{% endif %}>
 
     {% block navigation %}
         {% include "_admin_menu.tpl" %}
