@@ -16,10 +16,10 @@
         <div id="find-connect-objects">
             {% for cat in m.predicate.object_resources[predicate] %}
                 {% if ocats|length > 1 %}
-                    <h4>{{ cat.category.title }}</h4>
+                    <h4 class="text-muted">{{ cat.category.title }}</h4>
                 {% endif %}
 
-                <div class="checkbox-list">
+                <div class="checkbox-list" {% if not forloop.last %}style="border-bottom: 1px solid #e5e5e5"{% endif %}>
                     {% for id in cat.resources %}
                         <label class="checkbox">
                             <input type="checkbox" value="{{ id }}" {% if id|member:oids %}checked{% endif %}>
@@ -60,7 +60,7 @@
             }
         %}
         {% javascript %}
-            $('#{{ tab }}-find input').on('click', function() {
+            $('#{{ tab }}-find input[type=checkbox]').on('click', function() {
                 z_event('dialog_connect_find', {
                     select_id: $(this).val(),
                     is_connected: !$(this).is(":checked")

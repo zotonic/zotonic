@@ -115,6 +115,14 @@
 }).
 
 
+-type task_key() :: undefined | binary() | string() | atom() | integer().
+
+-export_type([
+    task_key/0
+]).
+
+
+
 %% @doc Poll the pivot queue for the database in the context
 -spec poll( z:context() ) -> ok.
 poll(Context) ->
@@ -195,7 +203,7 @@ insert_task(Module, Function, Context) ->
 -spec insert_task(Module, Function, UniqueKey, Context) -> {ok, TaskId} | {error, term()}
     when Module :: atom(),
          Function :: atom(),
-         UniqueKey :: undefined | binary() | string() | atom(),
+         UniqueKey :: task_key(),
          Context :: z:context(),
          TaskId :: integer().
 insert_task(Module, Function, UniqueKey, Context) ->
@@ -205,7 +213,7 @@ insert_task(Module, Function, UniqueKey, Context) ->
 -spec insert_task(Module, Function, UniqueKey, Args, Context) -> {ok, TaskId} | {error, term()}
     when Module :: atom(),
          Function :: atom(),
-         UniqueKey :: undefined | binary() | string() | atom(),
+         UniqueKey :: task_key(),
          Args :: list()
                | fun( ( OldDue :: undefined | calendar:datetime(),
                         OldArgs :: undefined | list(),
@@ -225,7 +233,7 @@ insert_task(Module, Function, UniqueKey, Args, Context) ->
     when SecondsOrDate::undefined | integer() | calendar:datetime(),
          Module :: atom(),
          Function :: atom(),
-         UniqueKey :: undefined | binary() | string() | atom(),
+         UniqueKey :: task_key(),
          Args :: list()
                | fun( ( OldDue :: undefined | calendar:datetime(),
                         OldArgs :: undefined | list(),
@@ -264,7 +272,7 @@ get_task(Module, Function, Context) ->
             [Module, Function],
             Context).
 
--spec get_task( module(), atom(), binary()|string(), z:context() ) -> {ok, map()} | {error, term()}.
+-spec get_task( module(), atom(), task_key(), z:context() ) -> {ok, map()} | {error, term()}.
 get_task(Module, Function, UniqueKey, Context) ->
     UniqueKeyBin = z_convert:to_binary(UniqueKey),
     z_db:qmap_row("
@@ -299,7 +307,7 @@ delete_task(Module, Function, Context) ->
     end.
 
 
--spec delete_task( module(), atom(), term(), z:context() ) -> non_neg_integer().
+-spec delete_task( module(), atom(), task_key(), z:context() ) -> non_neg_integer().
 delete_task(Module, Function, UniqueKey, Context) ->
     UniqueKeyBin = z_convert:to_binary(UniqueKey),
     case z_db:q("delete from pivot_task_queue where module = $1 and function = $2 and key = $3",

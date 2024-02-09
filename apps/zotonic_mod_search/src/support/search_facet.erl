@@ -1,6 +1,7 @@
 %% @copyright 2021-2024 Driebit BV
 %% @doc Faceted search using a facet.tpl for definition and a
 %% postgresql table for searches.
+%% @end
 
 %% Copyright 2021-2024 Driebit BV
 %%
@@ -55,6 +56,7 @@
 
 -type facet_type() :: text
                     | fulltext
+                    | fts
                     | integer
                     | float
                     | boolean
@@ -529,6 +531,17 @@ qterm_1(Field, Value, Query, Context) ->
                         end,
                         Query,
                         Words);
+                fts when Op =:= "=" ->
+                    NormV = z_string:normalize(Value2),
+                    TsQuery = mod_search:to_tsquery(NormV, Context),
+                    {ArgN, Query2} = add_term_arg(TsQuery, Query),
+                    W = [
+                        <<"facet.fts_">>, Field, " @@ ", ArgN
+                    ],
+                    Query2#search_sql_term{
+                        label = {facet, Field},
+                        where = Query2#search_sql_term.where ++ [ W ]
+                    };
                 Array when Array =:= ids; Array =:= list ->
                     {ArgN, Query2} = add_term_arg(Value2, Query),
                     W = [
@@ -648,9 +661,28 @@ render_facet(Id, #facet_def{ name = Name, type = fulltext } = F, Context) ->
         <<>> ->
             [];
         V ->
+            V1 = z_pivot_rsc:cleanup_tsv_text(V),
+            V2 = z_string:trim(z_string:normalize(V1)),
             [
-                {<<"f_", Name/binary>>, z_string:truncatechars(V, ?TEXT_LENGTH)},
-                {<<"ft_", Name/binary>>, z_string:normalize(V)}
+                {<<"f_", Name/binary>>, z_string:truncatechars(V1, ?TEXT_LENGTH)},
+                {<<"ft_", Name/binary>>, V2}
+            ]
+    end;
+render_facet(Id, #facet_def{ name = Name, type = fts } = F, Context) ->
+    case render_block(F#facet_def.block, {cat, <<"pivot/facet.tpl">>}, #{ id => Id }, Context) of
+        <<>> ->
+            [];
+        V ->
+            V1 = z_pivot_rsc:cleanup_tsv_text(V),
+            V2 = z_string:trim(z_string:normalize(V1)),
+            Stemmer = z_pivot_rsc:stemmer_language(Context),
+            Tsv = z_db:q1(
+                    "select to_tsvector('pg_catalog."++Stemmer++"', $1)",
+                    [V2],
+                    Context),
+            [
+                {<<"f_", Name/binary>>, z_string:truncatechars(V1, ?TEXT_LENGTH)},
+                {<<"fts_", Name/binary>>, Tsv}
             ]
     end;
 render_facet(Id, #facet_def{ name = Name, type = Type } = F, Context) ->
@@ -724,8 +756,11 @@ convert_type_1(ids, V, Context) when is_binary(V) ->
     convert_type_1(ids, lists:filter( fun(B) -> B =/= <<>> end, L1 ), Context);
 convert_type_1(fulltext, V, _Context) ->
     z_string:truncatechars(z_convert:to_binary(V), ?TEXT_LENGTH);
+convert_type_1(fts, V, _Context) ->
+    z_string:truncatechars(z_convert:to_binary(V), ?TEXT_LENGTH);
 convert_type_1(text, V, _Context) ->
-    z_string:truncatechars(z_convert:to_binary(V), ?TEXT_LENGTH).
+    V1 = z_string:trim(z_html:unescape(z_html:strip(z_convert:to_binary(V)))),
+    z_string:truncatechars(V1, ?TEXT_LENGTH).
 
 
 %% @doc Ensure that the facet table is correct, if not then drop the existing
@@ -940,6 +975,30 @@ facet_to_column(#facet_def{
     ];
 facet_to_column(#facet_def{
         name = Name,
+        type = fts
+    }) ->
+    [
+        #column_def{
+            name = binary_to_atom(<<"f_", Name/binary>>, utf8),
+            type = col_type(text),
+            length = col_length(text),
+            is_nullable = true,
+            default = undefined,
+            primary_key = false,
+            unique = false
+        },
+        #column_def{
+            name = binary_to_atom(<<"fts_", Name/binary>>, utf8),
+            type = <<"tsvector">>,
+            length = undefined,
+            is_nullable = true,
+            default = undefined,
+            primary_key = false,
+            unique = false
+        }
+    ];
+facet_to_column(#facet_def{
+        name = Name,
         type = list
     }) ->
     #column_def{
@@ -1008,6 +1067,17 @@ facet_to_index(#facet_def{
 
         <<"CREATE INDEX search_facet_ft_", Name/binary, "_key ",
            "ON search_facet USING gin (ft_", Name/binary, " public.gin_trgm_ops)">>
+    ];
+facet_to_index(#facet_def{
+        name = Name,
+        type = fts
+    }) ->
+    [
+        <<"CREATE INDEX search_facet_f_", Name/binary, "_key ",
+          "ON search_facet(f_", Name/binary, ")">>,
+
+        <<"CREATE INDEX search_facet_fts_", Name/binary, "_key ",
+           "ON search_facet USING gin (fts_", Name/binary, ")">>
     ];
 facet_to_index(#facet_def{
         name = Name,
@@ -1142,6 +1212,9 @@ block_type(B) ->
 
         [ <<"ft">> | Rs ] when length(Rs) >= 1 ->
             {fulltext, n(Rs), false};
+
+        [ <<"fts">> | Rs ] when length(Rs) >= 1 ->
+            {fts, n(Rs), false};
 
         [ <<"list">> | Rs ] when length(Rs) >= 1 ->
             {list, n(Rs), false};

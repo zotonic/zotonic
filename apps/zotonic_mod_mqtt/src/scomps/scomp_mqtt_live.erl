@@ -98,7 +98,11 @@ render_as_template(Template, Params, Context) ->
             % In case of 'update' we do an initial render of the template.
             % In all other cases we only render the template if the live tag
             % is triggered.
-            TplVars1 = [ {target, Target} | TplVars ],
+            TplVars1 = [
+                {is_live_update, false},
+                {target, Target}
+                | TplVars
+            ],
             Html = opt_wrap_element(
                         HasTarget,
                         proplists:get_value(element, LiveVars, "div"),
@@ -145,6 +149,7 @@ event(#postback{message={live, Method, Template, TplVars}, target=Target}, Conte
     Render = #render{
         template=Template,
         vars=[
+            {is_live_update, true},
             {target, Target}
             | TplVars
         ]
