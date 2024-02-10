@@ -86,62 +86,65 @@
                         postback={toggle_url_rewrite}
                         delegate="mod_translation"
                     %}
-                    <label class="checkbox-inline">
-                        <input type="checkbox" id="{{ #redir }}" value="1"
+                    <div class="form-check">
+                        <input type="checkbox" id="{{ #redir }}" class="form-check-input" value="1"
                         {% if m.translation.rewrite_url %}checked="checked"{% endif %}
                         />
-                        <span>{_ Show the language in the URL _} (<tt>/en/page/...</tt>).</span>
-                    </label>
+                        <label for="{{ #redir }}" class="form-check-label"><span>{_ Show the language in the URL _} (<tt>/en/page/...</tt>).</span></label>
+                    </div>
                 </div>
 
                 <div class="form-group">
                     {% wire id=#force
                         action={config_toggle module="mod_translation" key="force_default"}
                     %}
-                    <label class="checkbox-inline">
-                        <input type="checkbox" id="{{ #force }}" value="1"
+                    <div class="form-check">
+                        <input type="checkbox" id="{{ #force }}" class="form-check-input" value="1"
                         {% if m.translation.force_default %}checked="checked"{% endif %}
                         />
-                        <span>
+                        <label for="{{ #force }}" class="form-check-label"><span>
                             {_ For new visitors, set the language to the default language _}
                             ({{ m.translation.language_list_configured[m.translation.default_language].name }})
-                        </span>
-                    </label>
+                        </span></label>
+                    </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     {# See z_pivot_rsc for the list of languages #}
                     {# TODO: make a model call to fetch this list from the database #}
+                    <div class="row">
+                        <label for="{{ #stemmer }}" class="control-label col-md-5">{_ Language used for stemming of the search indices _}</label>
 
-                    {_ Language used for stemming of the search indices _} &nbsp;
-
-                    {% wire id=#stemmer type="change"
-                        action={config_toggle module="i18n" key="language_stemmer"}
-                    %}
-                    {% with m.translation.language_stemmer as stm %}
-                    <select id="{{ #stemmer }}">
-                        <option></option>
-                        {% for lang, text in [
-                                ["dk", _"Danish" ],
-                                ["en", _"English" ],
-                                ["nl", _"Dutch" ],
-                                ["fi", _"Finnish" ],
-                                ["fr", _"French" ],
-                                ["de", _"German" ],
-                                ["hu", _"Hungarian" ],
-                                ["it", _"Italian" ],
-                                ["no", _"Norwegian" ],
-                                ["ro", _"Romanian" ],
-                                ["ru", _"Russian" ],
-                                ["es", _"Spanish" ],
-                                ["se", _"Swedish" ],
-                                ["tr", _"Turkish" ]
-                            ]
+                        {% wire id=#stemmer type="change"
+                            action={config_toggle module="i18n" key="language_stemmer"}
                         %}
-                            <option value="{{ lang }}" {% if stm == lang %}selected{% endif %}>{{ text }}</option>
-                        {% endfor %}
-                    </select>
+                        {% with m.translation.language_stemmer as stm %}
+                            <div class="col-md-7">
+                            <select id="{{ #stemmer }}" class="form-select ">
+                                <option></option>
+                                {% for lang, text in [
+                                        ["dk", _"Danish" ],
+                                        ["en", _"English" ],
+                                        ["nl", _"Dutch" ],
+                                        ["fi", _"Finnish" ],
+                                        ["fr", _"French" ],
+                                        ["de", _"German" ],
+                                        ["hu", _"Hungarian" ],
+                                        ["it", _"Italian" ],
+                                        ["no", _"Norwegian" ],
+                                        ["ro", _"Romanian" ],
+                                        ["ru", _"Russian" ],
+                                        ["es", _"Spanish" ],
+                                        ["se", _"Swedish" ],
+                                        ["tr", _"Turkish" ]
+                                    ]
+                                %}
+                                    <option value="{{ lang }}" {% if stm == lang %}selected{% endif %}>{{ text }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
                     {% endwith %}
                     <p class="help-block">
                         {_ If you change the stemmer language then you will need to reindex all data. _}

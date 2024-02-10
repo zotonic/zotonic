@@ -90,7 +90,7 @@
 
             let title = options.title ?? "";
             if (options.title_icon) {
-                title = '<span style="font-weight: normal" class="' + options.title_icon + '"></span>&nbsp; ' + title;
+                title = '<span class="' + options.title_icon + '"></span>&nbsp; ' + title;
             }
 
             if (options.backdrop !== 'static') {

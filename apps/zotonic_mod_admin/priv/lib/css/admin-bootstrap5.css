@@ -7361,7 +7361,7 @@ textarea.form-control-lg {
   display: table-cell !important;
 }
 
-.d-flex, .form-inline {
+.d-flex {
   display: flex !important;
 }
 
@@ -8294,7 +8294,7 @@ textarea.form-control-lg {
   gap: 0 !important;
 }
 
-.gap-1, .form-inline {
+.gap-1 {
   gap: 0.25rem !important;
 }
 

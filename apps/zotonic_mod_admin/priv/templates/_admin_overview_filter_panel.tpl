@@ -12,7 +12,7 @@
             as admin_queries
         %}
         {% if admin_queries or query_id %}
-            <div class="form-group">
+            <div class="form-group row">
                 <label class="col-sm-3 control-label">{_ Query _}</label>
                 <div class="col-sm-9">
                     <select name="qquery_id" class="form-select">
@@ -28,24 +28,24 @@
                             </option>
                         {% endfor %}
                     </select>
-                    <label class="checkbox">
-                        <input type="checkbox" name="qquery_id" value="{{ query_id }}" checked>
-                        {{ query_id.title }}
-                    </label>
+                    <div class="form-check">
+                        <input type="checkbox" name="qquery_id" id="qquery_id" class="form-check-input" value="{{ query_id }}" checked>
+                        <label for="qquery_id" class="form-check-label">{{ query_id.title }}</label>
+                    </div>
                 </div>
             </div>
         {% endif %}
         {% endwith %}
         {% endwith %}
 
-        <div class="form-group">
+        <div class="form-group row">
             <label class="col-sm-3 control-label">{_ Text _}</label>
             <div class="col-sm-9">
                 <input type="text" name="qs" class="form-control" value="{{ qargs.qs|escape }}">
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group row">
             <label class="col-sm-3 control-label">{_ Published _}</label>
             <div class="col-sm-4">
                 <select name="qis_published" class="form-select col-md-8">
@@ -58,7 +58,7 @@
 
         {% block category %}
             {% with m.rsc[qargs.qcat].id as cat_id %}
-                <div class="form-group">
+                <div class="form-group row">
                     <label class="col-sm-3 control-label">{_ Category _}</label>
                     <div class="col-sm-9">
                         <select name="qcat" class="form-select">
@@ -76,7 +76,7 @@
             {% endwith %}
 
             {% with m.rsc[qargs.qcat_exact].id as cat_id %}
-                <div class="form-group">
+                <div class="form-group row">
                     <label class="col-sm-3 control-label">{_ Exact category _}</label>
                     <div class="col-sm-9">
                         <select name="qcat_exact" class="form-select">
@@ -94,7 +94,7 @@
             {% endwith %}
 
             {% with m.rsc[qargs.qcat_exclude].id as cat_id %}
-                <div class="form-group">
+                <div class="form-group row">
                     <label class="col-sm-3 control-label">{_ Exclude category _}</label>
                     <div class="col-sm-9">
                         <select name="qcat_exclude" class="form-select">
@@ -122,7 +122,7 @@
 
         {% with m.search.all_bytitle::%{ cat: 'predicate' } as predicates %}
             {% with qargs.qhasobjectpredicate as qpred %}
-            <div class="form-group">
+            <div class="form-group row">
                 <label class="col-sm-3 control-label">{_ Has connections with predicate _}</label>
                 <div class="col-sm-9">
                     <select name="qhasobjectpredicate" class="form-select col-md-8">
@@ -138,7 +138,7 @@
             {% endwith %}
 
             {% with qargs.qhassubjectpredicate as qpred %}
-            <div class="form-group">
+            <div class="form-group row">
                 <label class="col-sm-3 control-label">{_ Is connected with predicate _}</label>
                 <div class="col-sm-9">
                     <select name="qhassubjectpredicate" class="form-select">
@@ -154,25 +154,25 @@
             {% endwith %}
         {% endwith %}
 
-        <div class="form-group">
+        <div class="form-group row">
             <label class="col-sm-3 control-label">{_ Date start/end _}</label>
             <div class="col-sm-9">
-                <label class="checkbox">
-                    <input type="checkbox" name="qupcoming" value="1" {% if q.qupcoming %}checked{% endif %}>
-                    {_ Upcoming _}
-                </label>
-                <label class="checkbox">
-                    <input type="checkbox" name="qongoing" value="1" {% if q.qongoing %}checked{% endif %}>
-                    {_ Ongoing _}
-                </label>
-                <label class="checkbox">
-                    <input type="checkbox" name="qfinished" value="1" {% if q.qfinished %}checked{% endif %}>
-                    {_ Finished _}
-                </label>
+                <div class="form-check">
+                    <input type="checkbox" name="qupcoming" id="qupcoming" class="form-check-input" value="1" {% if q.qupcoming %}checked{% endif %}>
+                    <label for="qupcoming" class="form-check-label">{_ Upcoming _}</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" name="qongoing" id="qongoing" class="form-check-input" value="1" {% if q.qongoing %}checked{% endif %}>
+                    <label for="qongoing" class="form-check-label">{_ Ongoing _}</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" name="qfinished" id="qfinished" class="form-check-input" value="1" {% if q.qfinished %}checked{% endif %}>
+                    <label for="qfinished" class="form-check-label">{_ Finished _}</label>
+                </div>
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group row">
             <label class="col-sm-3 control-label">{_ Has medium attached _}</label>
             <div class="col-sm-4">
                 <select name="qhasmedium" class="form-select">
@@ -185,7 +185,7 @@
     </div>
 
     <div class="col-sm-4">
-        <div class="form-group">
+        <div class="form-group row">
             <label class="col-sm-3 control-label">{_ Featured _}</label>
             <div class="col-sm-4">
                 <select name="qis_featured" class="form-select">
@@ -196,7 +196,7 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group row">
             <label class="col-sm-3 control-label">{_ Findable _}</label>
             <div class="col-sm-4">
                 <select name="qis_findable" class="form-select">
@@ -207,7 +207,7 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group row">
             <label class="col-sm-3 control-label">{_ Protected _}</label>
             <div class="col-sm-4">
                 <select name="qis_protected" class="form-select">
@@ -218,7 +218,7 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group row">
             <label class="col-sm-3 control-label">{_ Dependent _}</label>
             <div class="col-sm-4">
                 <select name="qis_dependent" class="form-select">
@@ -229,7 +229,7 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group row">
             <label class="col-sm-3 control-label">{_ Authoritative _}</label>
             <div class="col-sm-4">
                 <select name="qis_authoritative" class="form-select">
@@ -240,7 +240,7 @@
             </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group row">
             <label class="col-sm-3 control-label">{_ Unique name _}</label>
             <div class="col-sm-9">
                 <input type="text" name="qname" class="form-control" value="{{ qargs.qname|escape }}">
@@ -248,7 +248,7 @@
         </div>
 
         {% with qargs.qsort as qsort %}
-            <div class="form-group">
+            <div class="form-group row">
                 <label class="col-sm-3 control-label">{_ Sort by _}</label>
                 <div class="col-sm-9">
                     <select name="qsort" class="form-select">

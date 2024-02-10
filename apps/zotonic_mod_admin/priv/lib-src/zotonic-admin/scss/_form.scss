@@ -53,6 +53,14 @@ fieldset,
 
 .checkbox {
     display: block;
+
+    + .checkbox {
+        margin-top: 2px;
+    }
+
+    input {
+        margin-right: 5px;
+    }
 }
 
 .form-check-input {

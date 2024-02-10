@@ -1,7 +1,7 @@
 {% overrules %}
 
 {% block properties %}
-    <div class="form-group">
+    <div class="form-group row">
         <label class="col-sm-3 control-label">{_ With language _}</label>
         <div class="col-sm-9">
             <select name="qlanguage" class="form-select">
@@ -15,7 +15,7 @@
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group row">
         <label class="col-sm-3 control-label">{_ Without language _}</label>
         <div class="col-sm-9">
             <select name="qnotlanguage" class="form-select">

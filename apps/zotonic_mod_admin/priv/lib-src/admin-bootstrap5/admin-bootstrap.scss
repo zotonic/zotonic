@@ -188,11 +188,6 @@ $labels: (
     @extend .mb-3;
 }
 
-.form-inline {
-    @extend .d-flex;
-    @extend .gap-1;
-}
-
 .label-floating {
     @extend .form-floating;
 }

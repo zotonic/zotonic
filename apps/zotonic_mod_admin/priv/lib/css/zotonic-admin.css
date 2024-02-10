@@ -11287,6 +11287,12 @@ fieldset > label.checkbox > input[type=radio],
 .checkbox {
   display: block;
 }
+.checkbox + .checkbox {
+  margin-top: 2px;
+}
+.checkbox input {
+  margin-right: 5px;
+}
 
 .form-check-input {
   --bs-border-color: var(--textColorDark);
