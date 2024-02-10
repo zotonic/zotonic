@@ -1,5 +1,5 @@
 {% with id.medium as medium %}
-<div class="tab-pane" id="{{ tab }}-url">
+<div class="tab-pane {% if is_active %}active show{% endif %}" id="{{ tab }}-url" >
 	{% wire id=#urlform type="submit"
 		postback={media_url_embed
 						intent=intent

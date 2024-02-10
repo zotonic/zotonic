@@ -27,7 +27,7 @@
 
                 <div class="panel-body">
                     <h4>
-                        <span class="badge text-bg-secondary">{{ m.rsc[mi.category].title }}</span>
+                        <span class="badge text-bg-primary">{{ m.rsc[mi.category].title }}</span>
                         {{ mi.props.title|escape_check }}
                     </h4>
 
@@ -84,23 +84,19 @@
                                             {% if m.admin.rsc_dialog_hide_dependent and not m.acl.is_admin %}
                                                 <input type="hidden" name="is_dependent" value="{% if args.dependent %}1{% endif %}">
                                             {% else %}
-                                                <div class="checkbox form__is_dependent">
-                                                    <label>
-                                                        <input type="checkbox" id="{{ #dependent.index }}" name="is_dependent" value="1" {% if args.dependent %}checked{% endif %}>
-                                                        {_ Delete if not connected anymore _}
-                                                    </label>
+                                                <div class="form-check form__is_dependent">
+                                                    <input type="checkbox" id="{{ #dependent.index }}" class="form-check-input" name="is_dependent" value="1" {% if args.dependent %}checked{% endif %}>
+                                                    <label for="{{ #dependent.index }}" class="form-check-label">{_ Delete if not connected anymore _}</label>
                                                 </div>
                                             {% endif %}
                                         {% endif %}
 
-                                        <div class="checkbox form__is_published">
-                                            <label>
-                                                <input type="checkbox" id="{{ #published.index }}" name="is_published" value="1"
+                                        <div class="form-check form__is_published">
+                                            <input type="checkbox" id="{{ #published.index }}" class="form-check-input" name="is_published" value="1"
                                                     {% if args.subject_id or m.admin.rsc_dialog_is_published %}
                                                         checked
                                                     {% endif %}>
-                                                {_ Published _}
-                                            </label>
+                                                <label for="{{ #published.index }}" class="form-check-label">{_ Published _}</label>
                                         </div>
 
                                         {% if mi.medium and (

@@ -1,7 +1,7 @@
 <div class="form-group">
     <div>
-        <select class="form-control" id="pref_tz" name="pref_tz">
-            <option></option>
+        <select class="form-select" id="pref_tz" name="pref_tz">
+            <option value="">{_ Select _}</option>
             {% include "_l10n_timezone_options.tpl" timezone=m.l10n.default_timezone %}
         </select>
         {% wire id="pref_tz"
@@ -16,13 +16,11 @@
 </div>
 
 <div class="form-group">
-    <div class="checkbox">
-        <label>
-            <input type="checkbox" name="pref_tz_fixed" id="pref_tz_fixed" value="1"
+    <div class="form-check">
+        <input type="checkbox" name="pref_tz_fixed" id="pref_tz_fixed" class="form-check-input" value="1"
                 {% if m.l10n.timezone_is_fixed %}checked{% endif %}
             />
-            {_ Fix timezone, show all dates in the above timezone. _}
-        </label>
+        <label for="pref_tz_fixed" class="form-check-label">{_ Fix timezone, show all dates in the above timezone. _}</label>
     </div>
     {% wire id="pref_tz_fixed"
         action={config_toggle module="mod_l10n" key="timezone_is_fixed"}

@@ -1,5 +1,5 @@
 {% javascript %}
-$('#rscform, #translation-tabs').on('shown.bs.tab', '.language-tabs > li > a[data-toggle="tab"]', function (e) {
+$('#rscform, #translation-tabs').on('shown.bs.tab', '.language-tabs > li > a[data-bs-toggle="tab"]', function (e) {
 	if (e.target != e.relatedTarget) {
         const showLang = e.target.closest('li').getAttribute('lang');
         const hideLang = e.relatedTarget.closest('li').getAttribute('lang');

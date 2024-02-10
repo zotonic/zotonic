@@ -31,6 +31,22 @@ limitations under the License.
 .fa-sharp,
 .fas,
 .fa-solid,
+.glyphicon.glyphicon-record,
+.glyphicon.glyphicon-envelope,
+.glyphicon.glyphicon-retweet,
+.glyphicon.glyphicon-ok,
+.glyphicon.glyphicon-ban-circle,
+.glyphicon.glyphicon-eye-close,
+.glyphicon.glyphicon-filter,
+.glyphicon.glyphicon-exclamation-sign,
+.glyphicon.glyphicon-link,
+.glyphicon.glyphicon-ok-sign,
+.glyphicon.glyphicon-alert,
+.glyphicon.glyphicon-camera,
+.glyphicon.glyphicon-list,
+.glyphicon.glyphicon-file,
+.glyphicon.glyphicon-remove,
+.glyphicon.glyphicon-info-sign,
 .glyphicon.glyphicon-arrow-right,
 .glyphicon.glyphicon-arrow-left,
 .glyphicon.glyphicon-cog,
@@ -50,6 +66,22 @@ limitations under the License.
 .fas,
 .fa-classic,
 .fa-solid,
+.glyphicon.glyphicon-record,
+.glyphicon.glyphicon-envelope,
+.glyphicon.glyphicon-retweet,
+.glyphicon.glyphicon-ok,
+.glyphicon.glyphicon-ban-circle,
+.glyphicon.glyphicon-eye-close,
+.glyphicon.glyphicon-filter,
+.glyphicon.glyphicon-exclamation-sign,
+.glyphicon.glyphicon-link,
+.glyphicon.glyphicon-ok-sign,
+.glyphicon.glyphicon-alert,
+.glyphicon.glyphicon-camera,
+.glyphicon.glyphicon-list,
+.glyphicon.glyphicon-file,
+.glyphicon.glyphicon-remove,
+.glyphicon.glyphicon-info-sign,
 .glyphicon.glyphicon-arrow-right,
 .glyphicon.glyphicon-arrow-left,
 .glyphicon.glyphicon-cog,
@@ -769,7 +801,7 @@ readers do not read off random characters that represent icons */
   content: "\e58f";
 }
 
-.fa-record-vinyl::before {
+.fa-record-vinyl::before, .glyphicon.glyphicon-record::before {
   content: "\f8d9";
 }
 
@@ -1265,7 +1297,7 @@ readers do not read off random characters that represent icons */
   content: "\f0d9";
 }
 
-.fa-circle-exclamation::before {
+.fa-circle-exclamation::before, .glyphicon.glyphicon-exclamation-sign::before {
   content: "\f06a";
 }
 
@@ -1413,7 +1445,7 @@ readers do not read off random characters that represent icons */
   content: "\f6e2";
 }
 
-.fa-list::before {
+.fa-list::before, .glyphicon.glyphicon-list::before {
   content: "\f03a";
 }
 
@@ -1601,7 +1633,7 @@ readers do not read off random characters that represent icons */
   content: "\f0c0";
 }
 
-.fa-eye-slash::before {
+.fa-eye-slash::before, .glyphicon.glyphicon-eye-close::before {
   content: "\f070";
 }
 
@@ -2093,7 +2125,7 @@ readers do not read off random characters that represent icons */
   content: "\e540";
 }
 
-.fa-ban::before {
+.fa-ban::before, .glyphicon.glyphicon-ban-circle::before {
   content: "\f05e";
 }
 
@@ -2877,7 +2909,7 @@ readers do not read off random characters that represent icons */
   content: "\f6c0";
 }
 
-.fa-circle-check::before {
+.fa-circle-check::before, .glyphicon.glyphicon-ok-sign::before {
   content: "\f058";
 }
 
@@ -3589,7 +3621,7 @@ readers do not read off random characters that represent icons */
   content: "\f598";
 }
 
-.fa-filter::before {
+.fa-filter::before, .glyphicon.glyphicon-filter::before {
   content: "\f0b0";
 }
 
@@ -4841,7 +4873,7 @@ readers do not read off random characters that represent icons */
   content: "\f1fd";
 }
 
-.fa-envelope::before {
+.fa-envelope::before, .glyphicon.glyphicon-envelope::before {
   content: "\f0e0";
 }
 
@@ -4921,7 +4953,7 @@ readers do not read off random characters that represent icons */
   content: "\f0f0";
 }
 
-.fa-circle-info::before {
+.fa-circle-info::before, .glyphicon.glyphicon-info-sign::before {
   content: "\f05a";
 }
 
@@ -4933,7 +4965,7 @@ readers do not read off random characters that represent icons */
   content: "\f73b";
 }
 
-.fa-camera::before {
+.fa-camera::before, .glyphicon.glyphicon-camera::before {
   content: "\f030";
 }
 
@@ -6137,7 +6169,7 @@ readers do not read off random characters that represent icons */
   content: "\f3c5";
 }
 
-.fa-file::before {
+.fa-file::before, .glyphicon.glyphicon-file::before {
   content: "\f15b";
 }
 
@@ -6321,7 +6353,7 @@ readers do not read off random characters that represent icons */
   content: "\f468";
 }
 
-.fa-link::before {
+.fa-link::before, .glyphicon.glyphicon-link::before {
   content: "\f0c1";
 }
 
@@ -6701,7 +6733,7 @@ readers do not read off random characters that represent icons */
   content: "\e4e5";
 }
 
-.fa-xmark::before {
+.fa-xmark::before, .glyphicon.glyphicon-remove::before {
   content: "\f00d";
 }
 
@@ -6929,7 +6961,7 @@ readers do not read off random characters that represent icons */
   content: "\f054";
 }
 
-.fa-retweet::before {
+.fa-retweet::before, .glyphicon.glyphicon-retweet::before {
   content: "\f079";
 }
 
@@ -7581,7 +7613,7 @@ readers do not read off random characters that represent icons */
   content: "\f234";
 }
 
-.fa-check::before {
+.fa-check::before, .glyphicon.glyphicon-ok::before {
   content: "\f00c";
 }
 
@@ -7701,7 +7733,7 @@ readers do not read off random characters that represent icons */
   content: "\e4f8";
 }
 
-.fa-triangle-exclamation::before {
+.fa-triangle-exclamation::before, .glyphicon.glyphicon-alert::before {
   content: "\f071";
 }
 
@@ -8266,6 +8298,22 @@ readers do not read off random characters that represent icons */
 }
 .fas,
 .fa-solid,
+.glyphicon.glyphicon-record,
+.glyphicon.glyphicon-envelope,
+.glyphicon.glyphicon-retweet,
+.glyphicon.glyphicon-ok,
+.glyphicon.glyphicon-ban-circle,
+.glyphicon.glyphicon-eye-close,
+.glyphicon.glyphicon-filter,
+.glyphicon.glyphicon-exclamation-sign,
+.glyphicon.glyphicon-link,
+.glyphicon.glyphicon-ok-sign,
+.glyphicon.glyphicon-alert,
+.glyphicon.glyphicon-camera,
+.glyphicon.glyphicon-list,
+.glyphicon.glyphicon-file,
+.glyphicon.glyphicon-remove,
+.glyphicon.glyphicon-info-sign,
 .glyphicon.glyphicon-arrow-right,
 .glyphicon.glyphicon-arrow-left,
 .glyphicon.glyphicon-cog {
@@ -10366,6 +10414,11 @@ readers do not read off random characters that represent icons */
   content: "\f3f6";
 }
 
+:root {
+  --primaryColor: #095F81;
+  --textColorDark: #222;
+}
+
 body,
 body.page-edit {
   color: #222;
@@ -10502,7 +10555,7 @@ body.noframe > .admin-container {
   color: #777;
 }
 
-.admin-word-break, .thumbnails .thumbnail h5, .thumbnails .thumbnail h6, table.do_adminLinkedTable .admin-list-thumb > span, table.do_adminLinkedTable th, table.do_adminLinkedTable td, #dialog_new_rsc_results .items .item h5, #dialog_new_rsc_results .items .item h6, .admin-header h2 {
+.admin-word-break, .thumbnail h5, .thumbnail h6, table.do_adminLinkedTable .admin-list-thumb > span, table.do_adminLinkedTable th, table.do_adminLinkedTable td, #dialog_new_rsc_results .items .item h5, #dialog_new_rsc_results .items .item h6, .admin-header h2 {
   word-break: break-all;
   word-break: break-word;
   hyphens: auto;
@@ -10541,6 +10594,14 @@ h3 {
   margin: 1.25em 0 0.75em 0;
 }
 
+h1 small,
+h2 small,
+h3 small,
+h4 small {
+  font-weight: 400;
+  font-size: 0.65em;
+}
+
 pre:empty {
   display: none;
 }
@@ -10555,17 +10616,8 @@ pre:empty {
   z-index: 10000;
 }
 
-.modal.in {
-  backdrop-filter: blur(2px) brightness(50%);
-}
-
-.modal-footer .btn + .btn,
-.modal-footer .btn.pull-left + .btn.pull-left {
-  margin-left: 3px;
-}
-
 .text-muted {
-  color: #999;
+  --bs-secondary-color: #999;
 }
 
 .nav .dropdown-menu > li > a.has-icon,
@@ -10591,7 +10643,7 @@ pre:empty {
   padding-left: 40px;
   position: relative;
 }
-.dropdown-menu.admin-dropdown-menu-has-icons > li > a .fa-solid, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-arrow-right, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-arrow-left, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-cog {
+.dropdown-menu.admin-dropdown-menu-has-icons > li > a .fa-solid, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-record, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-envelope, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-retweet, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-ok, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-ban-circle, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-eye-close, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-filter, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-exclamation-sign, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-link, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-ok-sign, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-alert, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-camera, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-list, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-file, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-remove, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-info-sign, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-arrow-right, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-arrow-left, .dropdown-menu.admin-dropdown-menu-has-icons > li > a .glyphicon.glyphicon-cog {
   position: absolute;
   left: 10px;
   top: 8px;
@@ -10740,7 +10792,7 @@ code {
 #dialog-new-rsc-tab .new-find-cols .modal-footer {
   position: sticky;
   bottom: 0;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: white;
 }
 #dialog-new-rsc-tab .new-find-cols > .form-panel {
   grid-column: 1;
@@ -11228,8 +11280,16 @@ fieldset > label.checkbox > input[type=radio],
   margin-left: 0;
 }
 
+.label-floating > textarea.form-control {
+  height: calc((3.5rem + var(--bs-border-width) * 2) * 3);
+}
+
 .checkbox {
   display: block;
+}
+
+.form-check-input {
+  --bs-border-color: var(--textColorDark);
 }
 
 img.thumb {
@@ -11289,16 +11349,14 @@ img {
   border-radius: 6px;
 }
 
-@media (min-width: 720px) {
-  .modal-dialog {
-    min-width: 700px;
-  }
-}
 div.modal {
   --bs-modal-bg: #fff;
 }
 div.modal div.tab-content {
   overflow: visible;
+}
+div.modal .modal-header .close {
+  order: 2;
 }
 div.modal .nav.nav-pills,
 div.modal .nav.nav-tabs {
@@ -11315,6 +11373,20 @@ div.modal .modal-footer .pull-left {
   margin-left: 0;
 }
 
+.modal.in {
+  backdrop-filter: blur(2px) brightness(50%);
+}
+
+.modal-footer .btn + .btn,
+.modal-footer .btn.pull-left + .btn.pull-left {
+  margin-left: 3px;
+}
+
+@media (min-width: 720px) {
+  .modal-dialog {
+    min-width: 700px;
+  }
+}
 #menu-editor .widget-header {
   height: auto;
 }
@@ -11329,7 +11401,7 @@ div.modal .modal-footer .pull-left {
 .navbar .navbar-collapse > ul > li > a {
   color: #fff;
 }
-.navbar .fa-solid, .navbar .glyphicon.glyphicon-cog, .navbar .glyphicon.glyphicon-arrow-left, .navbar .glyphicon.glyphicon-arrow-right {
+.navbar .fa-solid, .navbar .glyphicon.glyphicon-cog, .navbar .glyphicon.glyphicon-arrow-left, .navbar .glyphicon.glyphicon-arrow-right, .navbar .glyphicon.glyphicon-info-sign, .navbar .glyphicon.glyphicon-remove, .navbar .glyphicon.glyphicon-file, .navbar .glyphicon.glyphicon-list, .navbar .glyphicon.glyphicon-camera, .navbar .glyphicon.glyphicon-alert, .navbar .glyphicon.glyphicon-ok-sign, .navbar .glyphicon.glyphicon-link, .navbar .glyphicon.glyphicon-exclamation-sign, .navbar .glyphicon.glyphicon-filter, .navbar .glyphicon.glyphicon-eye-close, .navbar .glyphicon.glyphicon-ban-circle, .navbar .glyphicon.glyphicon-ok, .navbar .glyphicon.glyphicon-retweet, .navbar .glyphicon.glyphicon-envelope, .navbar .glyphicon.glyphicon-record {
   margin-right: 5px;
 }
 .navbar .nav-item > a {
@@ -11682,96 +11754,71 @@ table.do_adminLinkedTable .admin-list-thumb > img {
   overflow-x: hidden;
   overflow-y: auto;
 }
-.connect-results .row {
-  margin-left: -6px;
-  margin-right: -6px;
-}
 
 .thumbnails {
-  list-style: none;
-  padding: 0;
-  *zoom: 1;
+  padding-left: calc(var(--bs-gutter-x) * 0.5);
+  padding-right: calc(var(--bs-gutter-x) * 0.5);
 }
-.thumbnails:before, .thumbnails:after {
-  content: " ";
-  display: table;
+.thumbnails .row {
+  --bs-gutter-x: 0.5rem;
 }
-.thumbnails:after {
-  clear: both;
-}
-.thumbnails [class*=col-] {
-  padding-left: 6px;
-  padding-right: 6px;
-}
-.thumbnails .thumbnail {
-  min-height: 434px;
-  max-height: 434px;
-  overflow: hidden;
-  border-radius: 2px;
-  box-shadow: none;
-  cursor: pointer;
-  margin-bottom: 12px;
+
+.thumbnail {
+  width: 100%;
+  height: 80px;
   padding: 5px;
+  margin-bottom: 0.5rem;
+  background: white;
   font-size: 12px;
-  line-height: 1.1em;
-  position: relative;
-  transition-duration: 0;
-  -webkit-transition-duration: 0;
+  text-align: left;
+  border: var(--bs-modal-header-border-width) solid var(--bs-modal-header-border-color);
 }
-.thumbnails .thumbnail,
-.thumbnails .thumbnail a:link,
-.thumbnails .thumbnail a:visited {
-  color: #222;
-}
-.thumbnails .thumbnail:hover {
-  border-color: #888;
-}
-.thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction) {
-  background-color: #f5f5f5;
-}
-.thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction),
-.thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction) h5, .thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction) h6,
-.thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction) a:link,
-.thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction) a:visited {
-  color: #aaa;
-}
-.thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction) img {
-  opacity: 0.3;
-}
-.thumbnails .thumbnail .z-thumbnail-text {
-  position: absolute;
-  left: 5px;
-  top: 5px;
-  margin-right: 5px;
-  height: 1296px;
-  max-height: 1296px;
-  overflow: hidden;
-}
-.thumbnails .thumbnail img + .z-thumbnail-text {
-  left: 92.5px;
-}
-.thumbnails .thumbnail img {
-  padding: 0;
-  border-radius: 0;
-  box-shadow: none;
-  margin: 0 7.5px 0 0;
-}
-.thumbnails .thumbnail h5, .thumbnails .thumbnail h6, .thumbnails .thumbnail p {
-  font-size: 12px;
-  line-height: 1.1em;
+.thumbnail h5, .thumbnail h6, .thumbnail p {
+  font-size: inherit;
+  line-height: 1.1;
   font-weight: normal;
   margin: 0;
 }
-.thumbnails .thumbnail h5 {
+.thumbnail h5 {
   font-weight: bold;
-  margin-bottom: 2px;
 }
-.thumbnails .thumbnail h6 {
-  text-transform: lowercase;
+.thumbnail h6 {
+  margin-bottom: 3px;
+  font-size: 0.9em;
 }
-.thumbnails .thumbnail p {
-  max-height: 2.2em;
+.thumbnail .rsc-actions {
+  margin-top: 5px;
+  float: right;
+}
+
+.item.thumbnail {
+  height: auto;
+}
+.item.thumbnail .z-thumbnail-text {
+  height: inherit;
+}
+
+.z-thumbnail-image {
+  flex-shrink: 0;
+  width: 68px;
+  height: 68px;
+  margin-right: 5px;
+}
+.z-thumbnail-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.z-thumbnail-text {
+  width: 100%;
+  height: 68px;
   overflow: hidden;
+}
+
+.z-thumbnail-max {
+  width: auto;
+  height: auto;
 }
 
 table.mceLayout, textarea.tinyMCE {
@@ -12031,6 +12078,22 @@ ul.tree-list.connections-list li.menu-item-alert {
   padding: 10px 0;
 }
 
+.widget-default {
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+.widget-default .widget-header {
+  border-radius: inherit;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  color: #333333;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+.widget-default .widget-content {
+  border-radius: inherit;
+}
+
 .widget.widget-active:not(.widget-expanded) .widget-header:hover {
   transition: background 0.1s ease-in-out;
   cursor: pointer;
@@ -12091,7 +12154,7 @@ li h3.widget-header {
 .panel > .btn,
 .panel > a[href],
 .panel .btn + .btn {
-  margin: 0 5px 5px 0;
+  margin: 0 0 0 5px;
 }
 
 .notice-wrap {

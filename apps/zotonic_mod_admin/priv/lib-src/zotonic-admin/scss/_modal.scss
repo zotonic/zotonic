@@ -1,14 +1,12 @@
-@media (min-width: 720px) {
-    .modal-dialog {
-        min-width: 700px;
-    }
-}
-
 div.modal {
     --bs-modal-bg: #fff;
     
     div.tab-content {
         overflow: visible;
+    }
+
+    .modal-header .close { 
+        order: 2;
     }
 
     .nav.nav-pills,
@@ -18,8 +16,6 @@ div.modal {
     }
 
     .modal-body {
-        // background: white;
-
         > :first-child:not(.nav) {
             margin-top: 0;
         }
@@ -31,5 +27,22 @@ div.modal {
         .pull-left {
             margin-left: 0;
         }
+    }
+}
+
+.modal.in {
+    backdrop-filter: blur(2px) brightness(50%);
+}
+
+.modal-footer {
+    .btn + .btn,
+    .btn.pull-left + .btn.pull-left {
+        margin-left: 3px;
+    }
+}
+
+@media (min-width: 720px) {
+    .modal-dialog {
+        min-width: 700px;
     }
 }

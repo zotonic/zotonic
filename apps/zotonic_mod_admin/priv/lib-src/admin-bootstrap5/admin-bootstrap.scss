@@ -128,6 +128,22 @@ select.form-control {
     @extend .nav-link;
 }
 
+.nav-pills li {
+    @extend .nav-item;
+}
+
+.nav-pills li a {
+    @extend .nav-link;
+}
+
+.nav.nav-pills > li:not(.disabled) > a {
+    &.active {
+        color: var(--#{$prefix}nav-tabs-link-active-color);
+        background-color: var(--#{$prefix}nav-tabs-link-active-bg);
+        border-color: var(--#{$prefix}nav-tabs-link-active-border-color);
+    }
+}
+
 $labels: (
   "primary",
   "secondary",
@@ -172,6 +188,11 @@ $labels: (
     @extend .mb-3;
 }
 
+.form-inline {
+    @extend .d-flex;
+    @extend .gap-1;
+}
+
 .label-floating {
     @extend .form-floating;
 }
@@ -185,4 +206,15 @@ $labels: (
     --bs-dropdown-link-hover-color: white;
 
     @extend .dropdown-item;
+}
+
+.embed-responsive {
+    @extend .ratio; 
+    @extend .ratio-16x9;
+
+    padding: 0 !important;
+}
+
+.do_adminLinkedTable {
+    @extend .table-hover;
 }

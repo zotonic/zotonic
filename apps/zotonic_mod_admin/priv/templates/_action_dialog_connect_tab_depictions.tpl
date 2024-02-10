@@ -1,4 +1,4 @@
-<div class="tab-pane {% if is_active %}active{% endif %}" id="{{ tab }}-depiction">
+<div class="tab-pane {% if is_active %}active show{% endif %}" id="{{ tab }}-depiction">
 	<p>{_ Select a connected image _}</p>
 
 	<div id="dialog_connect_depictions" class="connect-results thumbnails">

@@ -1,8 +1,5 @@
-// For reference, all Bootstrap classes:
-// https://gist.github.com/geksilla/6543145
-
 .text-muted {
-    color: $textColorMuted;
+    --bs-secondary-color: #999;
 }
 
 .nav {
@@ -140,6 +137,87 @@ code {
     @extend .fa-solid;
     @extend .fa-arrow-right;
 }
+
+.glyphicon.glyphicon-info-sign {
+    @extend .fa-solid;
+    @extend .fa-circle-info;
+}
+
+.glyphicon.glyphicon-remove {
+    @extend .fa-solid;
+    @extend .fa-xmark;
+}
+
+.glyphicon.glyphicon-file {
+    @extend .fa-solid;
+    @extend .fa-file;
+}
+
+.glyphicon.glyphicon-list {
+    @extend .fa-solid;
+    @extend .fa-list;
+}
+
+.glyphicon.glyphicon-camera {
+    @extend .fa-solid;
+    @extend .fa-camera;
+}
+
+.glyphicon.glyphicon-alert {
+    @extend .fa-solid;
+    @extend .fa-triangle-exclamation;
+}
+
+.glyphicon.glyphicon-ok-sign {
+    @extend .fa-solid;
+    @extend .fa-circle-check;
+}
+
+.glyphicon.glyphicon-link {
+    @extend .fa-solid;
+    @extend .fa-link;
+}
+
+.glyphicon.glyphicon-exclamation-sign {
+    @extend .fa-solid;
+    @extend .fa-circle-exclamation;
+}
+
+.glyphicon.glyphicon-filter {
+    @extend .fa-solid;
+    @extend .fa-filter;
+}
+
+.glyphicon.glyphicon-eye-close {
+    @extend .fa-solid;
+    @extend .fa-eye-slash;
+}
+
+.glyphicon.glyphicon-ban-circle {
+    @extend .fa-solid;
+    @extend .fa-ban;
+}
+
+.glyphicon.glyphicon-ok {
+    @extend .fa-solid;
+    @extend .fa-check;
+}
+
+.glyphicon.glyphicon-retweet {
+    @extend .fa-solid;
+    @extend .fa-retweet;
+}
+
+.glyphicon.glyphicon-envelope {
+    @extend .fa-solid;
+    @extend .fa-envelope;
+}
+
+.glyphicon.glyphicon-record {
+    @extend .fa-solid;
+    @extend .fa-record-vinyl;
+}
+
 
 // Form
 

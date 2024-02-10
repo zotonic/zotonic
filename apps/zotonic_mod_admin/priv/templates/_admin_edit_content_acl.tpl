@@ -19,10 +19,8 @@
                         <label for="is_protected" class="form-check-label" title="{_ Protect from deletion _}">{_ Protect _}</label>
                     </div>
                     <div class="form-check">
-                        <label for="is_dependent" class="form-check-label" title="{_ Delete if no other page is connected to this page. _}">
-                            <input type="checkbox" id="is_dependent" class="form-check-input" name="is_dependent" value="1" {% if id.is_dependent %}checked="checked"{% endif %} {% if id == 1 or id.is_protected %}disabled="disabled"{% endif %} />
-                            {_ Dependent _}
-                        </label>
+                        <input type="checkbox" id="is_dependent" class="form-check-input" name="is_dependent" value="1" {% if id.is_dependent %}checked="checked"{% endif %} {% if id == 1 or id.is_protected %}disabled="disabled"{% endif %} />
+                        <label for="is_dependent" class="form-check-label" title="{_ Delete if no other page is connected to this page. _}">{_ Dependent _}</label>
                     </div>
                 </div>
                 <div class="col-md-6 text-right">

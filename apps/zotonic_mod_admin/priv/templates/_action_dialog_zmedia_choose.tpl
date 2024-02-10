@@ -1,8 +1,8 @@
 {% tabs id=#tabs %}
 <div class="tabbable">
     <ul class="nav nav-pills">
-	<li class="active"><a data-toggle="tab" href="#{{ #tab }}-media">{_ Media on this page _}</a></li>
-	<li><a data-toggle="tab" href="#{{ #tab }}-search">{_ Search other media _}</a></li>
+	<li class="nav-item"><a data-bs-toggle="tab" class="nav-link active" href="#{{ #tab }}-media">{_ Media on this page _}</a></li>
+	<li class="nav-item"><a data-bs-toggle="tab" class="nav-link" href="#{{ #tab }}-search">{_ Search other media _}</a></li>
     </ul>
 
     <div class="tab-content">

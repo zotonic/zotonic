@@ -43,7 +43,7 @@
 
         {% with m.search.paged[{users text=q.qs page=q.page users_only=not(q.persons)}] as result %}
 
-            <table class="table table-striped do_adminLinkedTable">
+            <table class="table do_adminLinkedTable">
                 <thead>
                     <tr>
                         <th width="20%">{_ Name _}</th>

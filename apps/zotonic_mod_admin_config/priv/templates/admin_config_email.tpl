@@ -49,8 +49,8 @@
                                 </label>
                             </div>
                             <div class="form-group label-floating">
-                                <label class="control-label">{_ Relay hostname _}</label>
                                 <input disabled class="form-control" type="text" value="{{ m.sysconfig.smtp_host|default:'localhost' }}" placeholder="{_ Relay hostname _}">
+                                <label class="control-label">{_ Relay hostname _}</label>
                             </div>
                             <div class="form-group label-floating">
                                 <input disabled class="form-control" type="text" value="{{ m.sysconfig.smtp_port|default:'25' }}">
@@ -127,9 +127,10 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label">
-                                <input type="checkbox" name="site.email_images_noembed" value="1" {% if m.config.site.email_images_noembed.value %}checked{% endif %}> {_ Download images in emails after opening the message _}
-                            </label>
+                            <div class="form-check">
+                                <input type="checkbox" name="site.email_images_noembed" id="email_images_noembed" class="form-check-input" value="1" {% if m.config.site.email_images_noembed.value %}checked{% endif %}>
+                                <label for="email_images_noembed" class="form-check-label">{_ Download images in emails after opening the message _}</label>
+                            </div>
                             <p class="help-block">
                                 {_ Per default images smaller than 1MB are embedded in email messages. Using a separate download for images results in a smaller message size but non-public images will not be visible. Leave this disabled if you are sending non-public images. _}
                             </p>
