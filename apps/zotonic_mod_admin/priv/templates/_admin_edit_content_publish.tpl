@@ -26,11 +26,11 @@
     <div class="pull-right">
         <div class="btn-group">
             {% with m.rsc[q.qcat].id|default:id.category_id as cat_id %}
-                <a id="rsc-prev-incat" href="#previous" class="btn btn-outline-secondary btn-sm"
+                <a id="rsc-prev-incat" href="#previous" class="btn btn-outline-dark btn-sm"
                    title="{_ Previous in category: _} {{ cat_id.title }}">
                     <span class='glyphicon glyphicon-arrow-left'></span>
                 </a>
-                <a id="rsc-next-incat" href="#previous" class="btn btn-outline-secondary btn-sm"
+                <a id="rsc-next-incat" href="#previous" class="btn btn-outline-dark btn-sm"
                    title="{_ Next in category: _} {{ cat_id.title }}">
                     <span class='glyphicon glyphicon-arrow-right'></span>
                 </a>
