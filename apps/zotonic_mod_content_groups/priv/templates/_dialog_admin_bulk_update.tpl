@@ -1,7 +1,7 @@
 {% overrules %}
 
 {% block content_group %}
-    <div class="form-group">
+    <div class="form-group row">
         <label class="col-sm-3 control-label">{_ Content group _}</label>
         <div class="col-sm-9">
             <select class="form-control" name="content_group_id">
