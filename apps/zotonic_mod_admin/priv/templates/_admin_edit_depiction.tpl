@@ -16,7 +16,7 @@
         {% if id.is_editable %}
             <div class="form-group clearfix">
                 <div class="pull-right">
-                    <a class="btn btn-default" id="{{ #connect }}" href="#connect"><i class="icon glyphicon glyphicon-camera"></i> {_ add media item _}</a>
+                    <a class="btn btn-outline-secondary" id="{{ #connect }}" href="#connect"><i class="icon glyphicon glyphicon-camera"></i> {_ add media item _}</a>
                     {% wire id=#connect
                         action={dialog_open
                             intent="connect"

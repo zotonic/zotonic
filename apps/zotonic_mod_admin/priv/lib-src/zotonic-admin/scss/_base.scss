@@ -1,3 +1,7 @@
+// html {
+//     font-size: 10px;
+// }
+
 body,
 body.page-edit {
     color: $textColorDark;
@@ -52,6 +56,17 @@ details {
     }
 }
 
+a {
+    color: $brand-primary;
+    text-decoration: none;
+}
+
+dl {
+    dt, dd {
+        margin: 0;
+    }
+}
+
 // zotonic specific
 .drag-handle {
     cursor: move;
@@ -61,6 +76,8 @@ details {
 }
 
 .unpublished {
+    --bs-table-color-state: $textColorUnpublished;
+
     &,
     a:not(.btn),
     .text-muted,
@@ -129,7 +146,7 @@ body.noframe > .admin-container {
     word-break: break-all;
 
     // Non standard for webkit
-    word-break: break-word;
+     word-break: break-word;
     hyphens: auto;
 }
 
@@ -162,6 +179,14 @@ h3 {
     margin: 1.25em 0 .75em 0;
 }
 
+h1 small,
+h2 small, 
+h3 small, 
+h4 small {
+    font-weight: 400;
+    font-size: 0.65em;
+}
+
 pre:empty {
     display: none;
 }
@@ -175,15 +200,4 @@ pre:empty {
 .ui-effects-transfer {
     border: 1px dotted #333;
     z-index: 10000;
-}
-
-.modal.in {
-    backdrop-filter: blur(2px) brightness(50%);
-}
-
-.modal-footer {
-    .btn + .btn,
-    .btn.pull-left + .btn.pull-left {
-        margin-left: 3px;
-    }
 }

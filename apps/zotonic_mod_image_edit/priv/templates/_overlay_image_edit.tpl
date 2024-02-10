@@ -42,7 +42,7 @@
                 {% block image_edit_rotate %}
                     <div class="form-group">
                         <p>
-                            <a href="#" id="image-edit-orientation-btn" class="btn btn-default">
+                            <a href="#" id="image-edit-orientation-btn" class="btn btn-outline-light">
                                 <i class="fa fa-undo"></i> {_ Rotate _}
                             </a>
                         </p>
@@ -58,81 +58,81 @@
                 {% endblock %}
 
                 {% block image_edit_crop %}
-                    <a class="collapse-toggle" role="button" data-toggle="collapse" href="#image-edit-crop" aria-expanded="false" aria-controls="collapseExample">{_ Crop image _}</a>
+                    <a class="collapse-toggle" role="button" data-bs-toggle="collapse" href="#image-edit-crop" aria-expanded="false" aria-controls="collapseExample">{_ Crop image _}</a>
                     <div class="collapse" id="image-edit-crop">
                         <div class="image-edit-group">
                             <div class="form-group">
                                 <label>{_ Crop top _}: <span></span>%</label>
-                                <input id="image-edit-crop-top" class="form-control -is-reset" type="range" name="crop_top" min="0" max="100" value="{{ settings.crop_top|default:'0' }}" step="0.1" list="image-edit-percentage">
+                                <input id="image-edit-crop-top" class="form-range -is-reset" type="range" name="crop_top" min="0" max="100" value="{{ settings.crop_top|default:'0' }}" step="0.1" list="image-edit-percentage">
                             </div>
                             <div class="form-group">
                                 <label>{_ Crop left _}: <span></span>%</label>
-                                <input id="image-edit-crop-left" class="form-control -is-reset" type="range" name="crop_left" min="0" max="100" value="{{ settings.crop_left|default:'0' }}" step="0.1" list="image-edit-percentage">
+                                <input id="image-edit-crop-left" class="form-range -is-reset" type="range" name="crop_left" min="0" max="100" value="{{ settings.crop_left|default:'0' }}" step="0.1" list="image-edit-percentage">
                             </div>
                             <div class="form-group">
                                 <label>{_ Crop right _}: <span></span>%</label>
-                                <input id="image-edit-crop-right" class="form-control -is-reset" type="range" name="crop_right" min="0" max="100" value="{{ settings.crop_right|default:'0' }}" step="0.1" list="image-edit-percentage">
+                                <input id="image-edit-crop-right" class="form-range -is-reset" type="range" name="crop_right" min="0" max="100" value="{{ settings.crop_right|default:'0' }}" step="0.1" list="image-edit-percentage">
                             </div>
                             <div class="form-group">
                                 <label>{_ Crop bottom _}: <span></span>%</label>
-                                <input id="image-edit-crop-bottom" class="form-control -is-reset" type="range" name="crop_bottom" min="0" max="100" value="{{ settings.crop_bottom|default:'0' }}" step="0.1" list="image-edit-percentage">
+                                <input id="image-edit-crop-bottom" class="form-range -is-reset" type="range" name="crop_bottom" min="0" max="100" value="{{ settings.crop_bottom|default:'0' }}" step="0.1" list="image-edit-percentage">
                             </div>
                         </div>
                     </div>
                 {% endblock %}
 
                 {% block image_edit_contrast %}
-                    <a class="collapse-toggle" role="button" data-toggle="collapse" href="#image-edit-conbri" aria-expanded="false" aria-controls="collapseExample">{_ Contrast &amp; Brightness _}</a>
+                    <a class="collapse-toggle" role="button" data-bs-toggle="collapse" href="#image-edit-conbri" aria-expanded="false" aria-controls="collapseExample">{_ Contrast &amp; Brightness _}</a>
                     <div class="collapse" id="image-edit-conbri">
                         <div class="image-edit-group">
                             <div class="form-group">
                                 <label>{_ Contrast _}: <span></span>%</label>
-                                <input id="image-edit-contrast" class="form-control -is-reset" name="contrast" type="range" min="-100" max="100" value="{{ settings.contrast|default:'0' }}" list="image-edit-range">
+                                <input id="image-edit-contrast" class="form-range -is-reset" name="contrast" type="range" min="-100" max="100" value="{{ settings.contrast|default:'0' }}" list="image-edit-range">
                             </div>
                             <div class="form-group">
                                 <label>{_ Brightness _}: <span></span>%</label>
-                                <input id="image-edit-brightness" class="form-control -is-reset" name="brightness" type="range" min="-100" max="100" value="{{ settings.brightness|default:'0' }}" list="image-edit-range">
+                                <input id="image-edit-brightness" class="form-range -is-reset" name="brightness" type="range" min="-100" max="100" value="{{ settings.brightness|default:'0' }}" list="image-edit-range">
                             </div>
                         </div>
                     </div>
                 {% endblock %}
 
                 {% block image_edit_rtp %}
-                    <a class="collapse-toggle" role="button" data-toggle="collapse" href="#image-edit-tilpan" aria-expanded="false" aria-controls="collapseExample">{_ Roll, Tilt &amp; Pan _}</a>
+                    <a class="collapse-toggle" role="button" data-bs-toggle="collapse" href="#image-edit-tilpan" aria-expanded="false" aria-controls="collapseExample">{_ Roll, Tilt &amp; Pan _}</a>
                     <div class="collapse" id="image-edit-tilpan">
                         <div class="image-edit-group">
                             <div class="form-group">
                                 <label>{_ Roll _}: <span></span>˚</label>
-                                <input id="image-edit-roll" class="form-control -is-reset" type="range" name="roll" min="-45" max="45" value="{{ settings.roll|default:'0' }}" list="image-edit-rotate-roll">
+                                <input id="image-edit-roll" class="form-range -is-reset" type="range" name="roll" min="-45" max="45" value="{{ settings.roll|default:'0' }}" list="image-edit-rotate-roll">
                             </div>
                             <div class="form-group">
                                 <label>{_ Tilt _}: <span></span>˚</label>
-                                <input id="image-edit-tilt" class="form-control -is-reset" type="range" name="tilt" min="-180" max="180" value="{{ settings.tilt|default:'0' }}" list="image-edit-angles">
+                                <input id="image-edit-tilt" class="form-range -is-reset" type="range" name="tilt" min="-180" max="180" value="{{ settings.tilt|default:'0' }}" list="image-edit-angles">
                             </div>
                             <div class="form-group">
                                 <label>{_ Pan _}: <span></span>˚</label>
-                                <input id="image-edit-pan" class="form-control -is-reset" type="range" name="pan" min="-180" max="180" value="{{ settings.pan|default:'0' }}" list="image-edit-angles">
+                                <input id="image-edit-pan" class="form-range -is-reset" type="range" name="pan" min="-180" max="180" value="{{ settings.pan|default:'0' }}" list="image-edit-angles">
                             </div>
                         </div>
                     </div>
                 {% endblock %}
 
                 {% block image_edit_lossless %}
-                    <a class="collapse-toggle" role="button" data-toggle="collapse" href="#image-edit-lossless" aria-expanded="false" aria-controls="collapseExample">{_ Lossless _}</a>
+                    <a class="collapse-toggle" role="button" data-bs-toggle="collapse" href="#image-edit-lossless" aria-expanded="false" aria-controls="collapseExample">{_ Lossless _}</a>
                     <div class="collapse" id="image-edit-lossless">
                         <div class="form-group">
-                            <label>
-                                <input type="checkbox" value="1" name="is_lossless" {% if settings.is_lossless %}checked{% endif %}>
-                                {_ Lossless resize _}
-                            </label>
-                            <p class="help-block"><small>{_ Keep logos and clip art sharp. _}</small></p>
+                            <div class="form-check">
+                                <input type="checkbox" value="1" id="is_lossless" class="form-check-input" name="is_lossless" {% if settings.is_lossless %}checked{% endif %}>
+                                <label for="is_lossless" class="form-check-label">{_ Lossless resize _}</label>
+                            </div>
+                            <p class="form-text"><small>{_ Keep logos and clip art sharp. _}</small></p>
                         </div>
                     </div>
                 {% endblock %}
 
                 <div class="form-actions">
-                    <a class="btn btn-default" id="image-edit-cancel">{_ Cancel _}</a>
-                    <button class="btn btn-default" id="image-edit-reset">{_ Reset _}</button>
+                    <a class="btn btn-outline-light" id="image-edit-cancel">{_ Cancel _}</a>
+                    <button class="btn btn-outline-light" id="image-edit-reset">{_ Reset _}</button>
                     <button class="btn btn-primary">{_ Save _}</button>
 
                     {% if modal %}

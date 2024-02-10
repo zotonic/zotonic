@@ -7,7 +7,7 @@
         <div class="widget-content">
             {% if id.is_editable %}
                 <span class="btn-group pull-right">
-                    <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown">{_ Add menu item _} <span class="caret"></span></a>
+                    <a href="#" class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown">{_ Add menu item _} <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <!-- dropdown menu links -->
                         <li><a href="#" data-where="top">&uarr; {_ Add top _}</a></li>

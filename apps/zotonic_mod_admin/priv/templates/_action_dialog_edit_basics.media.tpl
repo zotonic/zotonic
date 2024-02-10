@@ -1,7 +1,7 @@
 {% extends "_action_dialog_edit_basics.tpl" %}
 
 {% block tabbar_extra %}
-    <li><a data-toggle="tab" data-tab="media" href="#{{ #media }}">{_ Media content _}</a></li>
+    <li class="nav-item"><a data-bs-toggle="tab" data-bs-target="#{{ #media }}" class="nav-item" data-tab="media" href="#{{ #media }}">{_ Media content _}</a></li>
 {% endblock %}
 
 {% block tab_extra %}

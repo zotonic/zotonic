@@ -28,9 +28,9 @@
     </div>
 
     <div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">IO</div>
-            <div class="panel-body">
+        <div class="widget widget-default">
+            <div class="widget-header">IO</div>
+            <div class="widget-content">
                 <table class="table table-condensed">
                     <thead></thead>
                     <tbody>

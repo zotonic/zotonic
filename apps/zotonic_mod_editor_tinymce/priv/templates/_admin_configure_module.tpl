@@ -7,10 +7,10 @@
                 ["d", "5.10.2", "5.10.2", "Nov 17 2021"],
                 ["c", "4.9.3",  "4.9.3",  "Jan 31 2019"]
             ] %}
-                <div class="radio">
-                    <label>
-                        <input type="radio" name="version" id="{{ #config.id }}" value="{{ version|escape }}" {% if m.editor_tinymce.version|escape==version%} checked{% endif %} /> {{ version_txt }} <span class="text-muted">{{ date_txt }}</span>
-                    </label>
+                <div class="form-check">
+                    <input type="radio" name="version" id="{{ #config.id }}" class="form-check-input" value="{{ version|escape }}" {% if m.editor_tinymce.version|escape==version%} checked{% endif %} />
+                    <label for="{{ #config.id }}" class="form-check-label">{{ version_txt }} <span class="text-muted">{{ date_txt }}</span></label>
+
                     {% wire
                         id=#config.id
                         type="click"

@@ -1,7 +1,7 @@
 /* Specific styles for Zotonic search view admin
    ----------------------------------------------------------
 
-@package:	Zotonic admin CSS
+@package:   Zotonic admin CSS
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -24,12 +24,12 @@ limitations under the License.
   position: absolute;
   right: 1rem;
   top: 5rem;
+  z-index: 100;
   overflow-y: scroll;
   background-color: rgba(255, 255, 255, 0.95);
   list-style: none;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   border-bottom: 1px solid #eee;
-  font-size: 1.6rem;
 }
 .search-view-results li {
   border: 1px solid #e8e8e8;
@@ -39,7 +39,6 @@ limitations under the License.
 .search-view-results li.list-header {
   padding: 10px;
   font-weight: bold;
-  color: #ccc;
 }
 .search-view-results li .list-item {
   display: grid;
@@ -64,20 +63,21 @@ limitations under the License.
   text-transform: lowercase;
 }
 .search-view-results li .list-item .btn-group {
-  grid-row: 1 / span 3;
+  grid-row: 1/span 3;
   grid-column: 4;
   text-align: right;
+  align-items: center;
 }
 .search-view-results li .list-item img {
-  grid-row: 1 / span 3;
+  grid-row: 1/span 3;
   grid-column: 1;
   margin-top: 6px;
   height: 32px;
   width: 32px;
   border: 1px solid #eee;
 }
-.search-view-results li .list-item .glyphicon {
-  grid-row: 1 / span 3;
+.search-view-results li .list-item .fa-solid {
+  grid-row: 1/span 3;
   grid-column: 1;
   margin-top: 6px;
   font-size: 16px;

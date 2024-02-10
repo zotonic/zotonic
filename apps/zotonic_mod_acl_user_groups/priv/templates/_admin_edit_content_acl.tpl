@@ -11,7 +11,7 @@
         </p>
 
         {% if m.acl_rule.can_insert[id.content_group_id][id.category_id] %}
-    	    <a href="#" id="{{ #changecg }}" class="btn btn-default">{_ Change category and/or content group... _}</a>
+    	    <a href="#" id="{{ #changecg }}" class="btn btn-outline-secondary">{_ Change category and/or content group... _}</a>
     		{% wire id=#changecg
     				action={submit closest}
     				action={dialog_open title=_"Category &amp; Content group" template="_action_dialog_change_category.tpl" id=id}

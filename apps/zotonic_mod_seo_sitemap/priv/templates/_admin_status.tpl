@@ -1,9 +1,9 @@
 <div class="form-group">
-    {% button class="btn btn-default" text=_"Rebuild sitemap"
+    {% button class="btn btn-outline-secondary" text=_"Rebuild sitemap"
               action={postback
                     postback=`sitemap_rebuild`
                     delegate=`mod_seo_sitemap`
                 }
     %}
-    <span class="help-block">{_ Rebuild the sitemap index for all pages. _}</span>
+    <p class="help-block">{_ Rebuild the sitemap index for all pages. _}</p>
 </div>

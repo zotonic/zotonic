@@ -27,7 +27,7 @@
 
                 <div class="panel-body">
                     <h4>
-                        <span class="label label-default">{{ m.rsc[mi.category].title }}</span>
+                        <span class="badge text-bg-primary">{{ m.rsc[mi.category].title }}</span>
                         {{ mi.props.title|escape_check }}
                     </h4>
 
@@ -84,23 +84,19 @@
                                             {% if m.admin.rsc_dialog_hide_dependent and not m.acl.is_admin %}
                                                 <input type="hidden" name="is_dependent" value="{% if args.dependent %}1{% endif %}">
                                             {% else %}
-                                                <div class="checkbox form__is_dependent">
-                                                    <label>
-                                                        <input type="checkbox" id="{{ #dependent.index }}" name="is_dependent" value="1" {% if args.dependent %}checked{% endif %}>
-                                                        {_ Delete if not connected anymore _}
-                                                    </label>
+                                                <div class="form-check form__is_dependent">
+                                                    <input type="checkbox" id="{{ #dependent.index }}" class="form-check-input" name="is_dependent" value="1" {% if args.dependent %}checked{% endif %}>
+                                                    <label for="{{ #dependent.index }}" class="form-check-label">{_ Delete if not connected anymore _}</label>
                                                 </div>
                                             {% endif %}
                                         {% endif %}
 
-                                        <div class="checkbox form__is_published">
-                                            <label>
-                                                <input type="checkbox" id="{{ #published.index }}" name="is_published" value="1"
+                                        <div class="form-check form__is_published">
+                                            <input type="checkbox" id="{{ #published.index }}" class="form-check-input" name="is_published" value="1"
                                                     {% if args.subject_id or m.admin.rsc_dialog_is_published %}
                                                         checked
                                                     {% endif %}>
-                                                {_ Published _}
-                                            </label>
+                                                <label for="{{ #published.index }}" class="form-check-label">{_ Published _}</label>
                                         </div>
 
                                         {% if mi.medium and (
@@ -167,7 +163,7 @@
                 </div>
 
                 <div class="panel-footer clearfix">
-                    <a href="#" id="{{ #back.index }}" class="btn btn-default">{_ Back _}</a>
+                    <a href="#" id="{{ #back.index }}" class="btn btn-outline-secondary">{_ Back _}</a>
                     {% wire id=#back.index
                             action={hide target=discover_id}
                             action={fade_in target=form_id}
@@ -179,15 +175,15 @@
                             next
                     %}
                         {% if forloop.first %}
-                            <a href="#" id="{{ #prev.index }}" class="btn btn-default disabled">{_ &lt; Prev _}</a>
+                            <a href="#" id="{{ #prev.index }}" class="btn btn-outline-secondary disabled">{_ &lt; Prev _}</a>
                         {% else %}
-                            <a href="#" id="{{ #prev.index }}" class="btn btn-default">{_ &lt; Prev _}</a>
+                            <a href="#" id="{{ #prev.index }}" class="btn btn-outline-secondary">{_ &lt; Prev _}</a>
                             {% wire id=#prev.index action={hide target=#panel.index} action={fade_in speed="fast" target=#panel.prev} %}
                         {% endif %}
                         {% if forloop.last %}
-                            <a href="#" id="{{ #prev.index }}" class="btn btn-default disabled">{_ Next &gt; _}</a>
+                            <a href="#" id="{{ #prev.index }}" class="btn btn-outline-secondary disabled">{_ Next &gt; _}</a>
                         {% else %}
-                            <a href="#" id="{{ #next.index }}" class="btn btn-default">{_ Next &gt; _}</a>
+                            <a href="#" id="{{ #next.index }}" class="btn btn-outline-secondary">{_ Next &gt; _}</a>
                             {% wire id=#next.index action={hide target=#panel.index} action={fade_in speed="fast" target=#panel.next} %}
                         {% endif %}
                     {% endwith %}

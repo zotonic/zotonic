@@ -13,11 +13,11 @@
     <span class="list-item__title">{{ id.title|default:_"Untitled" }}</span>
     <small class="text-muted list-item__meta"> {{ id.category_id.title }} </small>
     <div class="btn-group" role="group">
-        <a href="{{ id.page_url }}" class="btn btn-default btn-secondary">
+        <a href="{{ id.page_url }}" class="btn btn-sm btn-outline-secondary">
             {_ view _}
         </a>
         {% if m.acl.use.mod_admin and id.is_editable %}
-            <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default btn-secondary">
+            <a href="{% url admin_edit_rsc id=id %}" class="btn btn-sm btn-outline-secondary">
                 {_ edit _}
             </a>
         {% endif %}

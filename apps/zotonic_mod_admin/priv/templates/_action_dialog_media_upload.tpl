@@ -16,13 +16,13 @@ params:
     {% if not (tabs_enabled and tabs_enabled|length == 1) %}
         <ul class="nav nav-pills">
             {% if (not tabs_enabled or "upload"|member:tabs_enabled) and not "upload"|member:tabs_disabled %}
-            <li class="active">
-                <a data-toggle="tab" href="#{{ #tab }}-upload">{_ Upload File _}</a>
+            <li class="nav-item">
+                <a data-bs-toggle="tab" class="nav-link active" href="#{{ #tab }}-upload">{_ Upload File _}</a>
             </li>
             {% endif %}
             {% if (not tabs_enabled or "url"|member:tabs_enabled) and not "url"|member:tabs_disabled %}
-            <li>
-                <a data-toggle="tab" href="#{{ #tab }}-url">{_ Website or Embed _}</a>
+            <li class="nav-item">
+                <a data-bs-toggle="tab" class="nav-link" href="#{{ #tab }}-url">{_ Website or Embed _}</a>
             </li>
             {% endif %}
             {% all include "_media_upload_tab.tpl" tab=#tab %}

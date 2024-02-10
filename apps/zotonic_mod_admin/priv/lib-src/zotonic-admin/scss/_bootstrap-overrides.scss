@@ -1,8 +1,5 @@
-// For reference, all Bootstrap classes:
-// https://gist.github.com/geksilla/6543145
-
 .text-muted {
-    color: $textColorMuted;
+    --bs-secondary-color: #999;
 }
 
 .nav {
@@ -38,45 +35,26 @@
             padding-left: 40px;
             position: relative;
             
-            .glyphicon {
-                $_height: 18px + 2 * 3px; // line-height + padding
-                $_icon_height: 13px; // icon font size
+            .fa-solid {
                 position: absolute;
                 left: 10px;
-                top: 0;
-                bottom: 0;
-                line-height: $_height;
+                top: 8px;
             }
         }
     }
+
     > li > a {
         text-shadow: $darkOnLightTextShadow;
     }
     > li.active > a,
     > li.active > a:hover,
     > li > a:hover {
-        background-color: $brand-primary;
+        background-color: $brand-primary;   
         color: #fff;
         text-shadow: $lightOnDarkTextShadow;
     }
 }
 
-.well {
-    $_padding: 15px;
-    $_button_margin: 4px;
-
-    box-shadow: none;
-    padding: $_padding $_padding ($_padding - $_button_margin) $_padding;
-    background-color: white;
-    border: 0;
-    border-radius: $radiusWidget;
-
-    > .btn,
-    > a[href],
-    .btn + .btn {
-        margin: 0 $_button_margin $_button_margin 0;
-    }
-}
 .alert {
     padding: 10px;
     margin-bottom: $baseMargin;
@@ -103,6 +81,10 @@ button.close {
     margin-left: 0;
     margin-right: 10px;
     margin-bottom: 5px;
+}
+
+.checkbox {
+    white-space: nowrap;
 }
 
 .checkbox label {
@@ -137,4 +119,111 @@ button.close {
 
 code {
 	padding: 0;
+}
+
+// Glyphicon to fontawesome
+
+.glyphicon.glyphicon-cog {
+    @extend .fa-solid;
+    @extend .fa-cog;
+}
+
+.glyphicon.glyphicon-arrow-left {
+    @extend .fa-solid;
+    @extend .fa-arrow-left;
+}
+
+.glyphicon.glyphicon-arrow-right {
+    @extend .fa-solid;
+    @extend .fa-arrow-right;
+}
+
+.glyphicon.glyphicon-info-sign {
+    @extend .fa-solid;
+    @extend .fa-circle-info;
+}
+
+.glyphicon.glyphicon-remove {
+    @extend .fa-solid;
+    @extend .fa-xmark;
+}
+
+.glyphicon.glyphicon-file {
+    @extend .fa-solid;
+    @extend .fa-file;
+}
+
+.glyphicon.glyphicon-list {
+    @extend .fa-solid;
+    @extend .fa-list;
+}
+
+.glyphicon.glyphicon-camera {
+    @extend .fa-solid;
+    @extend .fa-camera;
+}
+
+.glyphicon.glyphicon-alert {
+    @extend .fa-solid;
+    @extend .fa-triangle-exclamation;
+}
+
+.glyphicon.glyphicon-ok-sign {
+    @extend .fa-solid;
+    @extend .fa-circle-check;
+}
+
+.glyphicon.glyphicon-link {
+    @extend .fa-solid;
+    @extend .fa-link;
+}
+
+.glyphicon.glyphicon-exclamation-sign {
+    @extend .fa-solid;
+    @extend .fa-circle-exclamation;
+}
+
+.glyphicon.glyphicon-filter {
+    @extend .fa-solid;
+    @extend .fa-filter;
+}
+
+.glyphicon.glyphicon-eye-close {
+    @extend .fa-solid;
+    @extend .fa-eye-slash;
+}
+
+.glyphicon.glyphicon-ban-circle {
+    @extend .fa-solid;
+    @extend .fa-ban;
+}
+
+.glyphicon.glyphicon-ok {
+    @extend .fa-solid;
+    @extend .fa-check;
+}
+
+.glyphicon.glyphicon-retweet {
+    @extend .fa-solid;
+    @extend .fa-retweet;
+}
+
+.glyphicon.glyphicon-envelope {
+    @extend .fa-solid;
+    @extend .fa-envelope;
+}
+
+.glyphicon.glyphicon-record {
+    @extend .fa-solid;
+    @extend .fa-record-vinyl;
+}
+
+
+// Form
+
+// Fix error when label-floating has a col class.
+.label-floating[class*="col-md-"] {
+    label {
+        left: calc(var(--bs-gutter-x) * 0.5);
+    }
 }

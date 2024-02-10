@@ -4,7 +4,7 @@
 
 {% block panel_body %}
 
-<div class="progress">
+<div class="progress-stacked">
     <div id="usage-process_memory-progress" class="progress-bar" style="background-color: gold"></div>
     <div id="usage-atom_memory-progress" class="progress-bar" style="background-color: dodgerblue"></div>
     <div id="usage-ets_memory-progress" class="progress-bar" style="background-color: lightgreen"></div>

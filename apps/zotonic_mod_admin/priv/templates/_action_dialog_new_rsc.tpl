@@ -6,24 +6,36 @@ params:
 
 {% with tabs_disabled|default:[] as tabs_disabled %}
 {% if not (tabs_enabled and tabs_enabled|length == 1) %}
-    <ul class="nav nav-pills">
+    <ul class="nav nav-pills" id="nav-tab" role="tablist">
         {% if (not tabs_enabled or "new"|member:tabs_enabled) and not "new"|member:tabs_disabled %}
-            <li class="active">
-                <a data-toggle="tab" href="#{{ #tab }}-findnew">{_ New Page  _}</a>
+            <li class="nav-item">
+                <a href="#{{ #tab }}-findnew" class="nav-link active" data-bs-toggle="tab" data-bs-target="#{{ #tab }}-findnew">{_ New Page  _}</a>
             </li>
         {% endif %}
         {% if (not tabs_enabled or "upload"|member:tabs_enabled) and not "upload"|member:tabs_disabled %}
-            <li>
-                <a data-toggle="tab" href="#{{ #tab }}-upload">{_ Upload _}</a>
+            <li class="nav-item">
+                <a href="#{{ #tab }}-upload" class="nav-link" data-bs-toggle="tab" data-bs-target="#{{ #tab }}-upload">{_ Upload _}</a>
             </li>
         {% endif %}
         {% if (not tabs_enabled or "url"|member:tabs_enabled) and not "url"|member:tabs_disabled %}
-        <li>
-            <a data-toggle="tab" href="#{{ #tab }}-url">{_ Website or Embed _}</a>
+        <li class="nav-item">
+            <a data-bs-toggle="tab" data-bs-target="#{{ #tab }}-url" href="#{{ #tab }}-url" class="nav-link">{_ Website or Embed _}</a>
         </li>
         {% endif %}
         {% all include "_media_upload_tab.tpl" tab=#tab %}
     </ul>
+{% javascript %}
+    $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+        var tabRef = e.target.getAttribute('href');
+        if (!tabRef) return;
+        var tabId = tabRef.substr(1);
+        var tabEl = document.getElementById(tabId);
+        if (!tabEl) return;
+        var focusEl = tabEl.querySelector('.do_autofocus');
+        if (!focusEl) return;
+        focusEl.focus();
+    });
+{% endjavascript %}
 {% endif %}
 <div class="tab-content">
     {% if (not tabs_enabled or "new"|member:tabs_enabled) and not "new"|member:tabs_disabled %}

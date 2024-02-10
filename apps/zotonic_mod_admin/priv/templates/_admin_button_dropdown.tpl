@@ -23,7 +23,7 @@ Optional:
    unique_id,
    option_class
 %}
-<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+<button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
     {% if default_value2 and selected_qvalue == default_value2 %}
         {{ default_label2 }}
     {% elseif selected_qvalue %}
@@ -42,14 +42,14 @@ Optional:
     {% endif %}
     {% if default_label %}
         <li class="{% if not selected_qvalue %}active{% endif %}">
-            <a href="#" class="{{ option_class }}" data-value="{{ default_value }}">
+            <a href="#" class="dropdown-item {{ option_class }}" data-value="{{ default_value }}">
                 {{ default_label }}
             </a>
         </li>
     {% endif %}
     {% if default_label2 %}
         <li class="{% if selected_qvalue == default_value2 %}active{% endif %}">
-            <a href="#" class="{{ option_class }}" data-value="{{ default_value2 }}">
+            <a href="#" class="dropdown-item {{ option_class }}" data-value="{{ default_value2 }}">
                 {{ default_label2 }}
             </a>
         </li>
@@ -65,7 +65,7 @@ Optional:
     {% elseif options %}
         {% for value, label in options %}
             <li class="{% ifequal value selected_qvalue %}active{% endifequal %}">
-            <a href="#" class="{{ option_class }}" data-value="{{ value }}">{{ label }}</a>
+            <a href="#" class=dropdown-item {{ option_class }}" data-value="{{ value }}">{{ label }}</a>
         </li>
         {% endfor %}
     {% endif %}

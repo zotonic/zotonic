@@ -43,7 +43,7 @@
 
         {% with m.search.paged[{users text=q.qs page=q.page users_only=not(q.persons)}] as result %}
 
-            <table class="table table-striped do_adminLinkedTable">
+            <table class="table do_adminLinkedTable">
                 <thead>
                     <tr>
                         <th width="20%">{_ Name _}</th>
@@ -73,12 +73,12 @@
                                 {{ id.modified|date:_"d M Y, H:i" }}
                                 <div class="pull-right buttons">
                                     {% if is_users_editable and id != 1 %}
-                                        {% button class="btn btn-default btn-xs"
+                                        {% button class="btn btn-outline-secondary btn-sm"
                                                   action={dialog_set_username_password id=id on_delete={slide_fade_out target=#tr.id}}
                                                   text=_"set username / password"
                                         %}
                                     {% endif %}
-                                    {% button class="btn btn-default btn-xs" text=_"edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
+                                    {% button class="btn btn-outline-secondary btn-sm" text=_"edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
                                 </div>
                             </td>
                         </tr>

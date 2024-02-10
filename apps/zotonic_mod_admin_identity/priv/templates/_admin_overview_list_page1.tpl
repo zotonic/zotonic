@@ -34,8 +34,8 @@
                             <td>
                                 <span class="hidden-xs">{{ m.rsc[m.rsc[id].modifier_id].title|default:"-" }}</span>
                                 <span class="pull-right">
-                                    {% if id.page_url %}<a href="{{ m.rsc[id].page_url }}" class="btn btn-xs btn-default">{_ view _}</a>{% endif %}
-                                    <a href="{% url admin_edit_rsc id=id %}" class="btn btn-xs btn-default">{_ edit _}</a>
+                                    {% if id.page_url %}<a href="{{ m.rsc[id].page_url }}" class="btn btn-sm btn-outline-secondary">{_ view _}</a>{% endif %}
+                                    <a href="{% url admin_edit_rsc id=id %}" class="btn btn-sm btn-outline-secondary">{_ edit _}</a>
                                 </span>
                             </td>
                         </tr>

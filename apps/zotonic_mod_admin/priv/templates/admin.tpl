@@ -14,7 +14,7 @@
             <b>{_ Warning! _}</b>
             {_ Some disks are almost full. _}
 
-            &nbsp; <a class="btn btn-danger btn-xs" href="{% url admin_status %}">{_ View status _}</a>
+            &nbsp; <a class="btn btn-danger btn-sm" href="{% url admin_status %}">{_ View status _}</a>
         </div>
     {% endif %}
 

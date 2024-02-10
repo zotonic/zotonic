@@ -12,8 +12,13 @@
         <meta name="description" content="">
         <meta name="robots" content="noindex,nofollow">
 
-        {% lib
+        {# {% lib
             "css/admin-bootstrap3.css"
+            minify
+        %} #}
+
+        {% lib
+            "css/admin-bootstrap5.css"
             minify
         %}
 
@@ -35,7 +40,7 @@
         {% block head_extra %}
         {% endblock %}
     </head>
-    <body id="body" class="{% block bodyclass %}{% endblock %}"{% block bodyattr %}{% endblock %}>
+    <body id="body" class="{% block bodyclass %}{% endblock %}"{% block bodyattr %}{% endblock %} {% if q.bs == "3" %}data-bs="3"{% endif %}>
 
     {% block navigation %}
         {% include "_admin_menu.tpl" %}

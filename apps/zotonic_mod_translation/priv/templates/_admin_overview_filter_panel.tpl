@@ -1,10 +1,10 @@
 {% overrules %}
 
 {% block properties %}
-    <div class="form-group">
+    <div class="form-group row">
         <label class="col-sm-3 control-label">{_ With language _}</label>
         <div class="col-sm-9">
-            <select name="qlanguage" class="form-control">
+            <select name="qlanguage" class="form-select">
                 <option value=""></option>
                 {% for code, lang in m.translation.language_list_editable %}
                     <option value="{{ code }}" {% if qargs.qlanguage == code %}selected{% endif %}>
@@ -15,10 +15,10 @@
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group row">
         <label class="col-sm-3 control-label">{_ Without language _}</label>
         <div class="col-sm-9">
-            <select name="qnotlanguage" class="form-control">
+            <select name="qnotlanguage" class="form-select">
                 <option value=""></option>
                 {% for code, lang in m.translation.language_list_editable %}
                     <option value="{{ code }}" {% if qargs.qnotlanguage == code %}selected{% endif %}>

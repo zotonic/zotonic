@@ -6,7 +6,7 @@ $gray-dark: lighten($gray-base, 20%);
 $gray: lighten($gray-base, 33.5%);
 $gray-light: lighten($gray-base, 46.7%);
 $gray-lighter: lighten($gray-base, 93.5%);
-$brand-primary: #0fa2db;
+$brand-primary: #095F81;
 $brand-success: #5cb85c;
 $brand-info: #5bc0de;
 $brand-warning: #f0ad4e;
@@ -400,13 +400,13 @@ $topbarBottomMargin: 26px;
 $screen-small-desktop: 1050px;
 
 // responsive
-$breakpointMediumMaxWidth: 991px;
+$breakpointMediumMaxWidth: 992px;
 $breakpointSmallMaxWidth: 767px;
 
 $fontSizeSmall: 12px;
 
 // general colors
-$brandPrimaryDark: #0c91cb;
+$brandPrimaryDark: $brand-primary;
 $warningColor: #E4522A;
 
 $backgroundColorMediumDark: #dadada;
@@ -432,8 +432,8 @@ $textColorMuted: #999;
 $textColorLight: #aaa;
 $textColorError: #D84315;
 
-$colorLink: #069cd1;
-$colorLinkHover: #046487;
+$colorLink: #095F81;
+$colorLinkHover: #053143;
 
 // colors in context
 $backgroundColorRowHover: $backgroundColorInteractive;
@@ -446,3 +446,13 @@ $lightOnDarkTextShadow: 0 1px 0 rgba(0,0,0,.1);
 
 // box shadow
 $boxShadow: 0 0 4px rgba(0,0,0,.125);
+
+// Fontawesome
+
+$fa-font-path: "/lib/fonts";
+
+
+:root {
+    --primaryColor: #095F81;
+    --textColorDark: #222;
+}

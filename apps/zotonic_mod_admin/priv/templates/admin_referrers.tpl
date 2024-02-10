@@ -15,7 +15,7 @@
 
 <div>
     {% ifnotequal result.total 0 %}
-        <table class="table table-striped do_adminLinkedTable">
+        <table class="table do_adminLinkedTable">
             <thead>
                 <tr>
                     <th width="30%">{_ Title _}</th>
@@ -36,8 +36,8 @@
                     <td>
                         {{ m.rsc[m.rsc[id].modifier_id].title|default:"-" }}
                         <span class="pull-right buttons">
-                            {% if id.page_url %}<a href="{{ id.page_url }}" class="btn btn-default btn-xs">{_ view _}</a>{% endif %}
-                            <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default btn-xs">{_ edit _}</a>
+                            {% if id.page_url %}<a href="{{ id.page_url }}" class="btn btn-outline-secondary btn-sm">{_ view _}</a>{% endif %}
+                            <a href="{% url admin_edit_rsc id=id %}" class="btn btn-outline-secondary btn-sm">{_ edit _}</a>
                         </span>
                     </td>
                 </tr>

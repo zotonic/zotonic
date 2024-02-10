@@ -17,48 +17,48 @@
                 <div class="widget-content">
                     <div class="row">
                         <div class="col-md-6">
-                            <dl class="dl-horizontal">
-                                <dt>{_ Zotonic Version _}</dt>
-                                <dd>{{ m.admin_status.zotonic_version }}</dd>
+                            <dl class="row">
+                                <dt class="col-md-3">{_ Zotonic Version _}</dt>
+                                <dd class="col-md-9">{{ m.admin_status.zotonic_version }}</dd>
 
                                 {% if m.acl.is_admin %} {# Only admins are allowed to see the all versions #}
-                                    <dt>{_ Erlang Version _}</dt>
-                                    <dd>{{ m.admin_status.otp_version }}</dd>
+                                    <dt class="col-md-3">{_ Erlang Version _}</dt>
+                                    <dd class="col-md-9">{{ m.admin_status.otp_version }}</dd>
 
-                                    <dt>{_ Database Version _}</dt>
-                                    <dd>{{ m.admin_status.database_version }}</dd>
+                                    <dt class="col-md-3">{_ Database Version _}</dt>
+                                    <dd class="col-md-9">{{ m.admin_status.database_version }}</dd>
                                 {% endif %}
                             </dl>
                         </div>
                         <div class="col-md-6">
-                            <dl class="dl-horizontal">
+                            <dl class="row">
                                 {% if m.acl.is_admin %} {# Only admins are allowed to see the full paths #}
-                                    <dt>{_ Site Files Directory _}</dt>
-                                    <dd>{{ m.admin_status.files_dir }}</dd>
+                                    <dt class="col-md-3">{_ Site Files Directory _}</dt>
+                                    <dd class="col-md-9">{{ m.admin_status.files_dir }}</dd>
 
-                                    <dt>{_ Data Directory _}</dt>
-                                    <dd>{{ m.admin_status.data_dir }}</dd>
+                                    <dt class="col-md-3">{_ Data Directory _}</dt>
+                                    <dd class="col-md-9">{{ m.admin_status.data_dir }}</dd>
 
-                                    <dt>{_ Log Directory _}</dt>
-                                    <dd>{{ m.admin_status.log_dir }}</dd>
+                                    <dt class="col-md-3">{_ Log Directory _}</dt>
+                                    <dd class="col-md-9">{{ m.admin_status.log_dir }}</dd>
 
-                                    <dt>{_ Config Directory _}</dt>
-                                    <dd>{{ m.admin_status.config_dir }}</dd>
+                                    <dt class="col-md-3">{_ Config Directory _}</dt>
+                                    <dd class="col-md-9">{{ m.admin_status.config_dir }}</dd>
 
-                                    <dt>{_ Erlang Init Files _}</dt>
-                                    <dd>{{ m.admin_status.init_arguments.config | join:"<br>" }}</dd>
+                                    <dt class="col-md-3">{_ Erlang Init Files _}</dt>
+                                    <dd class="col-md-9">{{ m.admin_status.init_arguments.config | join:"<br>" }}</dd>
 
-                                    <dt>{_ Security Directory _}</dt>
-                                    <dd>{{ m.admin_status.security_dir }}</dd>
+                                    <dt class="col-md-3">{_ Security Directory _}</dt>
+                                    <dd class="col-md-9">{{ m.admin_status.security_dir }}</dd>
 
-                                    <dt>{_ Home Directory _}</dt>
-                                    <dd>{{ m.admin_status.init_arguments.home }}</dd>
+                                    <dt class="col-md-3">{_ Home Directory _}</dt>
+                                    <dd class="col-md-9">{{ m.admin_status.init_arguments.home }}</dd>
 
-                                    <dt>{_ Work Directory _}</dt>
-                                    <dd>{{ m.admin_status.work_dir }}</dd>
+                                    <dt class="col-md-3">{_ Work Directory _}</dt>
+                                    <dd class="col-md-9">{{ m.admin_status.work_dir }}</dd>
 
-                                    <dt>{_ Erlang Installation Root  _}</dt>
-                                    <dd>{{ m.admin_status.init_arguments.root }}</dd>
+                                    <dt class="col-md-3">{_ Erlang Installation Root  _}</dt>
+                                    <dd class="col-md-9">{{ m.admin_status.init_arguments.root }}</dd>
                                 {% endif %}
                             </dl>
                         </div>
@@ -73,14 +73,14 @@
             <div class="widget">
                 <div class="widget-content">
     	            <div class="form-group">
-                        {% button class="btn btn-default" text=_"Flush system caches" action={admin_tasks task='flush'} %}
+                        {% button class="btn btn-outline-secondary" text=_"Flush system caches" action={admin_tasks task='flush'} %}
                         <p class="help-block">{_ Flush all URL dispatch rules, template- and library caches and other in-memory cached data. _}</p>
                     </div>
 
     	            <div class="form-group">
                         {% button
                             id="btn-rebuild-indices"
-                            class="btn btn-default"
+                            class="btn btn-outline-secondary"
                             text=_"Rebuild search indices"
                             action={admin_tasks task='pivot_all'}
                             action={script script="queueCountInfo('#pivot-queue-count', '#btn-rebuild-indices')"}
@@ -95,12 +95,12 @@
                     </div>
 
         	        <div class="form-group">
-                        {% button class="btn btn-default" text=_"Renumber category tree" action={admin_tasks task='renumber_categories'} %}
+                        {% button class="btn btn-outline-secondary" text=_"Renumber category tree" action={admin_tasks task='renumber_categories'} %}
                         <p class="help-block">{_ Recalculate the numbering of the category tree. This can take a long time. _}</p>
                     </div>
 
         	        <div class="form-group">
-                        {% button class="btn btn-default" text=_"Reinstall site datamodel" action={admin_tasks task='site_reinstall'} %}
+                        {% button class="btn btn-outline-secondary" text=_"Reinstall site datamodel" action={admin_tasks task='site_reinstall'} %}
                         <p class="help-block">{_ Runs the schema install command from the site's module again. _}</p>
                     </div>
                 </div>
@@ -117,7 +117,7 @@
                     {% if not m.admin.is_notrack_refers %}
                         <div class="form-group">
                             <div>
-                                {% button class="btn btn-default" text=_"Ensure <i>refers</i> connections"
+                                {% button class="btn btn-outline-secondary" text=_"Ensure <i>refers</i> connections"
                                           postback={ensure_refers}
                                           delegate=`mod_admin`
                                 %}

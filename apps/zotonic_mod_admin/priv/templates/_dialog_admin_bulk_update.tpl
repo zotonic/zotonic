@@ -13,7 +13,7 @@
 %}
 <form id="{{ #update_all }}" action="postback" class="form-horizontal">
 
-    <div class="form-group">
+    <div class="form-group row">
         <label class="col-sm-3 control-label">{_ Published _}</label>
         <div class="col-sm-4">
             <select name="is_published" class="form-control col-md-8">
@@ -25,7 +25,7 @@
     </div>
 
     {% block category %}
-        <div class="form-group">
+        <div class="form-group row">
             <label class="col-sm-3 control-label">{_ Category _}</label>
             <div class="col-sm-9">
                 <select id="category_id" name="category_id" class="col-lg-4 col-md-4 form-control">
@@ -48,7 +48,7 @@
     {% block properties %}
     {% endblock %}
 
-    <div class="form-group">
+    <div class="form-group row">
         <label class="col-sm-3 control-label">{_ Protected _}</label>
         <div class="col-sm-4">
             <select name="is_protected" class="form-control col-md-8">
@@ -59,7 +59,7 @@
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group row">
         <label class="col-sm-3 control-label">{_ Dependent _}</label>
         <div class="col-sm-4">
             <select name="is_dependent" class="form-control col-md-8">
@@ -70,7 +70,7 @@
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group row">
         <label class="col-sm-3 control-label">{_ SEO _}</label>
         <div class="col-sm-4">
             <select name="seo_noindex" class="form-control col-md-8">
@@ -82,7 +82,7 @@
     </div>
 
     <div class="modal-footer">
-        {% button class="btn btn-default" action={dialog_close} text=_"Cancel" %}
+        {% button class="btn btn-outline-secondary" action={dialog_close} text=_"Cancel" %}
         {% button class="btn btn-primary" type="submit" text=_"Update" %}
     </div>
 

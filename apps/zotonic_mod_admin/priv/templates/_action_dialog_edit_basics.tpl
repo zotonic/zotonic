@@ -15,8 +15,8 @@
     <div class="tabbable">
         {% block tabbar %}
             <ul class="nav nav-pills">
-                <li class="active"><a data-toggle="tab" data-tab="main" href="#{{ #main }}">{_ Main _}</a></li>
-                <li><a data-toggle="tab" data-tab="acl" href="#{{ #acl }}">{_ Access control _}</a></li>
+                <li class="nav-item"><a data-bs-toggle="tab" data-bs-target="#{{ #main }}" class="nav-link active" data-tab="main" href="#{{ #main }}">{_ Main _}</a></li>
+                <li class="nav-item"><a data-bs-toggle="tab" data-bs-target="#{{ #acl }}" class="nav-link" data-tab="acl" href="#{{ #acl }}">{_ Access control _}</a></li>
                 {% block tabbar_extra %}
                 {% endblock %}
                 </ul>
@@ -46,10 +46,10 @@
                     {% endif %}
 
                     <div class="form-group">
-                        <label class="checkbox">
-                            <input type="checkbox" id="{{ #published }}" name="is_published" value="1" {% if id.is_published %}checked="checked"{% endif %}>
-                            {_ Published _}
-                        </label>
+                        <div class="form-check">
+                            <input type="checkbox" id="{{ #published }}" class="form-check-input" name="is_published" value="1" {% if id.is_published %}checked="checked"{% endif %}>
+                            <label for="{{ #published }}" class="form-check-label">{_ Published _}</label>
+                        </div>
                     </div>
                 </div>
             {% endblock %}
@@ -71,10 +71,10 @@
                 {% optional include "_image_edit_button.tpl" %}
             {% endif %}
             {% if id.is_editable and (m.acl.use.mod_admin_frontend or m.acl.use.mod_admin) %}
-                <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default pull-left">{_ Visit full edit page _}</a>
+                <a href="{% url admin_edit_rsc id=id %}" class="btn btn-outline-secondary pull-left">{_ Visit full edit page _}</a>
             {% endif %}
 
-            {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
+            {% button class="btn btn-outline-secondary" action={dialog_close} text=_"Cancel" tag="a" %}
             {% button class="btn btn-primary" type="submit" text=_"Save" %}
         </div>
     {% endblock %}

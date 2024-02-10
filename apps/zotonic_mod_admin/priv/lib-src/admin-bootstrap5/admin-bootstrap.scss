@@ -1,0 +1,215 @@
+/* Zotonic admin scss main file, setting our preferences. */
+
+ /* import the necessary Bootstrap files */
+
+@import "bootstrap-5.3.2/scss/functions";
+@import "bootstrap-5.3.2/scss/variables";
+
+/* -------begin customization-------- */
+
+$primary:       #095F81 !default;
+
+$body-bg:           #f8f8f8;
+
+$input-border-radius:         0;
+$input-border-radius-large:   0;
+$input-border-radius-small:   0;
+
+
+$font-family-sans-serif:  "-apple-system", BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+$font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace;
+$font-family-base:        $font-family-sans-serif;
+
+:root {
+    --primaryColor: #095F81;
+}
+
+/* -------end customization-------- */
+
+/* Zotonic definitions */
+// @import "zotonic/forms";
+
+/* finally, import Bootstrap to set the changes! */
+
+@import "bootstrap-5.3.2/scss/mixins/banner";
+
+
+// scss-docs-start import-stack
+// Configuration
+@import "bootstrap-5.3.2/scss/variables-dark";
+@import "bootstrap-5.3.2/scss/maps";
+@import "bootstrap-5.3.2/scss/mixins";
+@import "bootstrap-5.3.2/scss/utilities";
+
+// Layout & components
+@import "bootstrap-5.3.2/scss/root";
+@import "bootstrap-5.3.2/scss/reboot";
+@import "bootstrap-5.3.2/scss/type";
+@import "bootstrap-5.3.2/scss/images";
+@import "bootstrap-5.3.2/scss/containers";
+@import "bootstrap-5.3.2/scss/grid";
+@import "bootstrap-5.3.2/scss/tables";
+@import "bootstrap-5.3.2/scss/forms";
+@import "bootstrap-5.3.2/scss/buttons";
+@import "bootstrap-5.3.2/scss/transitions";
+@import "bootstrap-5.3.2/scss/dropdown";
+@import "bootstrap-5.3.2/scss/button-group";
+@import "bootstrap-5.3.2/scss/nav";
+@import "bootstrap-5.3.2/scss/navbar";
+@import "bootstrap-5.3.2/scss/card";
+@import "bootstrap-5.3.2/scss/accordion";
+@import "bootstrap-5.3.2/scss/breadcrumb";
+@import "bootstrap-5.3.2/scss/pagination";
+@import "bootstrap-5.3.2/scss/badge";
+@import "bootstrap-5.3.2/scss/alert";
+@import "bootstrap-5.3.2/scss/progress";
+@import "bootstrap-5.3.2/scss/list-group";
+@import "bootstrap-5.3.2/scss/close";
+@import "bootstrap-5.3.2/scss/toasts";
+@import "bootstrap-5.3.2/scss/modal";
+@import "bootstrap-5.3.2/scss/tooltip";
+@import "bootstrap-5.3.2/scss/popover";
+@import "bootstrap-5.3.2/scss/carousel";
+@import "bootstrap-5.3.2/scss/spinners";
+@import "bootstrap-5.3.2/scss/offcanvas";
+@import "bootstrap-5.3.2/scss/placeholders";
+
+// Helpers
+@import "bootstrap-5.3.2/scss/helpers";
+
+// Utilities
+@import "bootstrap-5.3.2/scss/utilities/api";
+// scss-docs-end import-stack
+
+:root {
+    --bs-body-font-size: 14px;
+    --bs-btn-font-size: var(--bs-body-font-size);
+    --bs-link-color-rgb: $primary;
+
+    //Buttons
+
+    --bs-btn-bg: $primary;
+}
+
+html {
+    font-size: var(--bs-body-font-size);
+}
+
+// Bootstrap 3 fallbacks
+
+.help-block {
+    @extend .form-text;
+}
+
+.btn-default {
+    @extend .btn-outline-secondary;
+}
+
+.btn-xs {
+    @extend .btn-sm;
+}
+
+select.form-control {
+    @extend .form-select;
+}
+
+.nav-tabs li {
+    @extend .nav-item;
+
+    &.active a {
+        // Copy paste from _nav.scss in bootstrap 5
+        color: var(--#{$prefix}nav-tabs-link-active-color);
+        background-color: var(--#{$prefix}nav-tabs-link-active-bg);
+        border-color: var(--#{$prefix}nav-tabs-link-active-border-color);
+    }
+}
+
+.nav-tabs li a {
+    @extend .nav-link;
+}
+
+.nav-pills li {
+    @extend .nav-item;
+}
+
+.nav-pills li a {
+    @extend .nav-link;
+}
+
+.nav.nav-pills > li:not(.disabled) > a {
+    &.active {
+        color: var(--#{$prefix}nav-tabs-link-active-color);
+        background-color: var(--#{$prefix}nav-tabs-link-active-bg);
+        border-color: var(--#{$prefix}nav-tabs-link-active-border-color);
+    }
+}
+
+$labels: (
+  "primary",
+  "secondary",
+  "success",
+  "danger",
+  "warning",
+  "info",
+);
+
+.label {
+    @extend .badge;
+}
+
+@each $label in $labels {
+    .label-#{$label} {
+        @extend .text-bg-#{$label};
+    }
+}
+
+.label-default {
+    @extend .text-bg-secondary;
+}
+
+.breadcrumb li:not(.breadcrumb-item) {
+    @extend .breadcrumb-item;
+}
+
+.dl-horizontal {
+    @extend .row;
+}
+
+.dl-horizontal dt {
+    @extend .col-sm-3;
+}
+
+.dl-horizontal dd {
+    @extend .col-sm-9;
+}
+
+.form-group,
+.form-actions {
+    @extend .mb-3;
+}
+
+.label-floating {
+    @extend .form-floating;
+}
+
+.control-label {
+    @extend .form-label;
+}
+
+.dropdown-menu a:not(.dropdown-item) {
+    --bs-dropdown-link-hover-bg: var(--primaryColor);
+    --bs-dropdown-link-hover-color: white;
+
+    @extend .dropdown-item;
+}
+
+.embed-responsive {
+    @extend .ratio; 
+    @extend .ratio-16x9;
+
+    padding: 0 !important;
+}
+
+.do_adminLinkedTable {
+    @extend .table-hover;
+}

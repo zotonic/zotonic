@@ -2,9 +2,9 @@
 
 {% block tabbar %}
 	<ul class="nav nav-pills">
-	    <li class="active"><a data-toggle="tab" href="#{{ #main }}">{_ Main _}</a></li>
-	    <li><a data-toggle="tab" href="#{{ #user }}">{_ User account _}</a></li>
-	    <li><a data-toggle="tab" href="#{{ #acl }}">{_ Access control _}</a></li>
+	    <li class="nav-item"><a data-bs-toggle="tab" class="nav-link active" href="#{{ #main }}">{_ Main _}</a></li>
+	    <li class="nav-item"><a data-bs-toggle="tab" class="nav-link" href="#{{ #user }}">{_ User account _}</a></li>
+	    <li class="nav-item"><a data-bs-toggle="tab" class="nav-link" href="#{{ #acl }}">{_ Access control _}</a></li>
 	</ul>
 {% endblock %}
 

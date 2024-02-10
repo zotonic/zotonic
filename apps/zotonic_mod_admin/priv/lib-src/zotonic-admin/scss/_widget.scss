@@ -5,11 +5,10 @@
 }
 
 .widget {
-    background-color: white;
     margin-bottom: $widgetVerticalPadding;
+    background-color: white;
     border-bottom: none;
     border-radius: $radiusWidget;
-    @include clearfix;
 
     .widget {
         margin-bottom: 0;
@@ -31,7 +30,7 @@
 
     .widget-content {
         position: relative;
-        padding: $widgetVerticalPadding $widgetSidePadding 0 $widgetSidePadding;
+        padding: 15px;
         border-radius: 0 0 $radiusWidget $radiusWidget;
         border-top: none;
 
@@ -213,9 +212,21 @@
     }
 }
 
-.admin-container {
-    .widget.translations .widget-content {
-        padding-top: 4px;
+.widget-default {
+    border-radius: 5px;
+    border: 1px solid #ddd;
+
+    .widget-header {
+        border-radius: inherit;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        color: #333333;
+        background-color: #f5f5f5;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .widget-content {
+        border-radius: inherit;
     }
 }
 

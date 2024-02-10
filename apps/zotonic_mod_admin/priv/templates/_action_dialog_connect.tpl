@@ -58,21 +58,21 @@ find params:
 {% with (tab == "depiction" and not m.rsc[subject_id].o.depiction)|if:"upload":tab as tab %}
 {% with tabs_disabled|default:[] as tabs_disabled %}
 {% if not (tabs_enabled and tabs_enabled|length == 1) %}
-    <ul class="nav nav-pills">
+    <ul class="nav nav-pills" id="nav-tab" role="tablist">
         {% block tabs %}
             {% if in_sorter == "category" %}
-                <li class="active">
-                    <a data-toggle="tab" href="#{{ #tab }}-new">{_ Create _}</a>
+                <li class="nav-item active">
+                    <a data-bs-toggle="tab" data-bs-target="#{{ #tab }}-new" href="#{{ #tab }}-new" class="nav-link active">{_ Create _}</a>
                 </li>
             {% else %}
                 {% if has_depiction_tab and subject_id %}
-                    <li {% if tab == "depiction" %}class="active"{% endif %}>
-                        <a data-toggle="tab" href="#{{ #tab }}-depiction">{_ Attached media _}</a>
+                    <li>
+                        <a data-bs-toggle="tab" data-bs-target="#{{ #tab }}-depiction" href="#{{ #tab }}-depiction" class="nav-link {% if tab == "depiction" %}active{% endif %}">{_ Attached media _}</a>
                     </li>
                 {% endif %}
                 {% if (not tabs_enabled or "find"|member:tabs_enabled) and not "find"|member:tabs_disabled %}
-                    <li {% if tab == "find" %}class="active"{% endif %}>
-                        <a data-toggle="tab" href="#{{ #tab }}-find">
+                    <li>
+                        <a data-bs-toggle="tab" data-bs-target="#{{ #tab }}-find" href="#{{ #tab }}-find" class="nav-link {% if tab == "find" %}active{% endif %}">
                             {% if predicate == 'depiction' %}{_ Find Media _}
                             {% else %}{_ Find Page _}
                             {% endif %}
@@ -80,24 +80,24 @@ find params:
                     </li>
                 {% endif %}
                 {% if (not tabs_enabled or "new"|member:tabs_enabled) and not "new"|member:tabs_disabled %}
-                    <li {% if not tab or tab == "new" %}class="active"{% endif %}>
-                        <a data-toggle="tab" href="#{{ #tab }}-findnew">{_ New Page _}</a>
+                    <li>
+                        <a data-bs-toggle="tab" data-bs-target="#{{ #tab }}-findnew" href="#{{ #tab }}-findnew" class="nav-link {% if not tab or tab == "new" %}active{% endif %}">{_ New Page _}</a>
                     </li>
                 {% endif %}
                 {% if (not tabs_enabled or "upload"|member:tabs_enabled) and not "upload"|member:tabs_disabled %}
-                    <li {% if tab == "upload" %}class="active"{% endif %}>
-                        <a data-toggle="tab" href="#{{ #tab }}-upload">{_ Upload _}</a>
+                    <li>
+                        <a data-bs-toggle="tab" data-bs-target="#{{ #tab }}-upload" href="#{{ #tab }}-upload" class="nav-link {% if tab == "upload" %}active{% endif %}">{_ Upload _}</a>
                     </li>
                 {% endif %}
                 {% if (not tabs_enabled or "url"|member:tabs_enabled) and not "url"|member:tabs_disabled %}
-                    <li {% if tab == "url" %}class="active"{% endif %}>
-                        <a data-toggle="tab" href="#{{ #tab }}-url">{_ Website or Embed _}</a>
+                    <li>
+                        <a data-bs-toggle="tab" data-bs-target="#{{ #tab }}-url" href="#{{ #tab }}-url" class="nav-link {% if tab == "url" %}active{% endif %}">{_ Website or Embed _}</a>
                     </li>
                 {% endif %}
                 {% all include "_media_upload_tab.tpl" tab=#tab %}
             {% endif %}
             {% javascript %}
-                $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
                     var tabRef = e.target.getAttribute('href');
                     if (!tabRef) return;
                     var tabId = tabRef.substr(1);

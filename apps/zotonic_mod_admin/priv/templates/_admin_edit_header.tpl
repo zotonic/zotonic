@@ -1,7 +1,7 @@
 {# Showed on top of the resource edit page #}
 <div class="admin-header">
     <div class="admin-header-meta">
-        <a class="btn btn-default btn-xs"
+        <a class="btn btn-outline-secondary btn-sm"
            data-onclick-topic="model/location/post/redirect/back"
            href="{% url admin %}"
         >
@@ -31,7 +31,7 @@
                 <h2 {% include "_language_attrs.tpl" %}>
                     {{ id.title|default:id.short_title|default:("<em>" ++ _"untitled" ++ "</em>")}}
                 </h2>
-                <a class='btn btn-default btn-xs admin-btn-category' href="javascript:;" id="changecategory" title="{_ Change category _}">
+                <a class='btn btn-outline-secondary btn-sm admin-btn-category' href="javascript:;" id="changecategory" title="{_ Change category _}">
                     <span class="text-muted">{_ Category: _}</span>
                     {% for cid in m.category[cat_id].path|reversed %}
                         {{ cid.title }} &gt;
@@ -47,7 +47,7 @@
                     }
                 %}
 
-                <a class="btn btn-default btn-xs" href="{% url admin_overview_rsc qcat=cat_id %}">
+                <a class="btn btn-outline-secondary btn-sm" href="{% url admin_overview_rsc qcat=cat_id %}">
                     {% trans "Show all {title} pages" title=cat_id.title %}
                 </a>
             </div>

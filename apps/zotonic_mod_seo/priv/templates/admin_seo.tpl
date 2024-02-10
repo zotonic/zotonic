@@ -28,8 +28,8 @@
 
                         <div class="form-group label-floating">
                             <input type="text" id="seo-description" name="seo-description" value="{{ m.config.seo.description.value|escape }}" class="form-control" placeholder="{_ Description _}">
-                            <p class="help-block">
                             <label class="control-label" for="seo-description">{_ Description _}</label>
+                            <p class="help-block">
                                 {_ Description to include on every page _}
                             </p>
                         </div>

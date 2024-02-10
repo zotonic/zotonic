@@ -1,4 +1,4 @@
-<div class="widget {% block widget_class %}{% endblock %}">
+<div class="widget widget-default {% block widget_class %}{% endblock %}">
     <div class="widget-header">
 	    {% block widget_headline %}{% endblock %}
     </div>

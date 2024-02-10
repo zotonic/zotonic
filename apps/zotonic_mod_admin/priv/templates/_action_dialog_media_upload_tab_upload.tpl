@@ -1,5 +1,5 @@
 {% block upload_form %}
-<div class="tab-pane {% if is_active %}active{% endif %}" id="{{ tab }}-upload">
+<div class="tab-pane {% if is_active %}active show{% endif %}" id="{{ tab }}-upload">
     <p>
         {_ Upload a file from your computer. _}
         {% if not id %}
@@ -29,7 +29,7 @@
             {% endif %}
 
             <div id="{{ #upload_file_preview }}" style="display: none;">
-                <img src="" class="thumbnail" style="max-height:200px">
+                <img src="" class="thumbnail z-thumbnail-max" style="max-height:200px">
             </div>
 
             <div class="form-group label-floating">
@@ -43,23 +43,19 @@
                         <input type="hidden" name="is_dependent" value="{% if dependent %}1{% endif %}">
                     {% else %}
                         <div class="form-group form__is_dependent">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" id="{{ #dependent }}" name="is_dependent" value="1" {% if dependent %}checked{% endif %}>
-                                    {_ Delete if not connected anymore _}
-                                </label>
+                            <div class="form-check">
+                                <input type="checkbox" id="{{ #dependent }}" class="form-check-input" name="is_dependent" value="1" {% if dependent %}checked{% endif %}>
+                                <label for="{{ #dependent }}" class="form-check-label">{_ Delete if not connected anymore _}</label>
                             </div>
                         </div>
                     {% endif %}
                 {% endif %}
 
                 <div class="form-group form__is_published">
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" id="{{ #published }}" name="is_published" value="1"
+                    <div class="form-check">
+                        <input type="checkbox" id="{{ #published }}" class="form-check-input" name="is_published" value="1"
                                 {% if subject_id or m.admin.rsc_dialog_is_published %}checked{% endif %}>
-                            {_ Published _}
-                        </label>
+                        <label for="{{ #published }}" class="form-check-label">{_ Published _}</label>
                     </div>
                 </div>
             {% endif %}
@@ -67,7 +63,7 @@
             {% include "_edit_medium_language.tpl" %}
 
             <div class="modal-footer">
-                {% button class="btn btn-default" action={dialog_close} text=_"Cancel" %}
+                {% button class="btn btn-outline-secondary" action={dialog_close} text=_"Cancel" %}
                 {% button class="btn btn-primary" type="submit" text=_"Upload file" %}
             </div>
         </fieldset>

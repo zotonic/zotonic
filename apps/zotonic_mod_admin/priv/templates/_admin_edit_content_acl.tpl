@@ -14,27 +14,25 @@
 
             <div class="row">
                 <div class="col-md-6">
-
-                    <label for="is_protected" class="checkbox-inline" title="{_ Protect from deletion _}">
-                        <input type="checkbox" id="is_protected" name="is_protected" value="1" {% if id.is_protected %}checked="checked"{% endif %} {% if id == 1 %}disabled="disabled"{% endif %} />
-                        {_ Protect _}
-                    </label>
-
-                    <label for="is_dependent" class="checkbox-inline" title="{_ Delete if no other page is connected to this page. _}">
-                        <input type="checkbox" id="is_dependent" name="is_dependent" value="1" {% if id.is_dependent %}checked="checked"{% endif %} {% if id == 1 or id.is_protected %}disabled="disabled"{% endif %} />
-                        {_ Dependent _}
-                    </label>
+                    <div class="form-check">
+                        <input type="checkbox" id="is_protected" class="form-check-input" name="is_protected" value="1" {% if id.is_protected %}checked="checked"{% endif %} {% if id == 1 %}disabled="disabled"{% endif %} />
+                        <label for="is_protected" class="form-check-label" title="{_ Protect from deletion _}">{_ Protect _}</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" id="is_dependent" class="form-check-input" name="is_dependent" value="1" {% if id.is_dependent %}checked="checked"{% endif %} {% if id == 1 or id.is_protected %}disabled="disabled"{% endif %} />
+                        <label for="is_dependent" class="form-check-label" title="{_ Delete if no other page is connected to this page. _}">{_ Dependent _}</label>
+                    </div>
                 </div>
                 <div class="col-md-6 text-right">
                     {% if id.is_editable %}
                         {% button type="submit"
                                   id="save_duplicate"
-                                  class="btn btn-default btn"
+                                  class="btn btn-outline-secondary btn"
                                   text=[_"Duplicate", "…"]
                                   title=_"Duplicate this page."
                         %}
                     {% else %}
-                        {% button class="btn btn-default btn"
+                        {% button class="btn btn-outline-secondary btn"
                                   text=[_"Duplicate", "…"]
                                   action={dialog_duplicate_rsc id=id}
                                   title=_"Duplicate this page."

@@ -1,17 +1,20 @@
+
+{% with icon_after|default:'<i class="caret"><span class="visually-hidden">{_ Open language menu _}</span></i>' as icon_after %}
 {% if m.translation.language_list_enabled as list %}
 {% if list|length > 1 %}
     {% if is_nav %}
         {# Bootstrap nav item #}
-        <li class="dropdown" id="languages">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#languages">
-                {{ z_language|upper }} <b class="caret"></b>
+        <li class="nav-item dropdown" id="languages">
+            <a href="#languages" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                {{ z_language|upper }} {{ icon_after }}
             </a>
-            <ul class="dropdown-menu mod_translation_menu-has-icons">
+
+            <ul class="dropdown-menu admin-dropdown-menu-has-icons">
                 {% if id %}
                     {% for code,lang in list %}
                         <li>
-                            <a href="{{ id.page_url with z_language = code }}">
-                                {% if z_language == code %}<i class="glyphicon glyphicon-ok"></i>{% endif %}
+                            <a href="{{ id.page_url with z_language = code }}" class="dropdown-item">
+                                {% if z_language == code %}<i class="fa-solid fa-check"></i>{% endif %}
                                 {{ lang.name }}
                             </a>
                         </li>
@@ -19,8 +22,8 @@
                 {% else %}
                     {% for code,lang in list %}
                         <li>
-                            <a href="#" id="{{ #l.code }}">
-                                {% if z_language == code %}<i class="glyphicon glyphicon-ok"></i>{% endif %}
+                            <a href="#" id="{{ #l.code }}" class="dropdown-item">
+                                {% if z_language == code %}<i class="fa-solid fa-check"></i>{% endif %}
                                 {{ lang.name }}
                             </a>
                         </li>
@@ -40,3 +43,4 @@
     {% endif %}
 {% endif %}
 {% endif %}
+{% endwith %}

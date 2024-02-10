@@ -21,13 +21,13 @@
 		{% with 'dialog-new-rsc-tab' as form %}
 
 		 	{% block rsc_props_title %}
-			 	<div class="form-group label-floating">
+			 	<div class="form-group">
 			 		{# The new resource title, also used for the feedback search #}
+			 		<label for="new_rsc_title" class="form-label">{_ Title _}</label>
 			 	    <input type="text" id="new_rsc_title" name="title"
 			 	    	   value="{{ title|escape }}" class="form-control do_autofocus"
 			 	    	   placeholder="{_ Title _}"
 			 	    	   autofocus {% if accept %}accept="{{ accept }}"{% endif %}>
-			 	    <label for="new_rsc_title">{_ Title _}</label>
 			 	</div>
 			{% endblock %}
 
@@ -191,6 +191,7 @@
 	        {% endif %}
 
 			{# Category selects #}
+			
 			{% block category %}
 				<div class="form-group">
 				    <label class="control-label" for="{{ #category }}">{_ Category _}</label>
@@ -199,6 +200,7 @@
 					    <input type="hidden" name="category_id" value="{{ cat }}">
 				    {% else %}
 					    {% block category_select %}
+					    	{% print m.category.tree_flat|length %}
 					        <select class="form-control" id="{{ #category }}" name="category_id" required>
 							    <option value="" disabled {% if not cat %}selected{% endif %}>{_ Select category _}</option>
 					            {% for c in m.category.tree_flat %}
@@ -234,19 +236,19 @@
                         <input type="hidden" name="is_dependent" value="{% if dependent %}1{% endif %}">
                     {% else %}
 		                <div class="form-group form__is_dependent">
-	                        <label class="checkbox">
-	                            <input type="checkbox" id="{{ #dependent }}" name="is_dependent" value="1" {% if dependent %}checked{% endif %}>
-	                            {_ Delete if not connected anymore _}
-	                        </label>
+		                	<div class="form-check">
+	                            <input type="checkbox" id="{{ #dependent }}" class="form-check-input" name="is_dependent" value="1" {% if dependent %}checked{% endif %}>
+	                            <label for="{{ #dependent }}" class="form-check-label">{_ Delete if not connected anymore _}</label>
+	                        </div>
 		                </div>
 		            {% endif %}
 	            {% endif %}
 				<div class="form-group form__is_published">
-					<label class="checkbox">
-						<input type="checkbox" id="{{ #published }}" name="is_published" value="1"
+					<div class="form-check">
+						<input type="checkbox" id="{{ #published }}" class="form-check-input" name="is_published" value="1"
 							{% if subject_id or m.admin.rsc_dialog_is_published %}checked{% endif %}>
-						{_ Published _}
-					</label>
+						<label for="{{ #published }}" class="form-check-label">{_ Published _}</label>
+					</div>
 				</div>
 
 		        <div class="if-upload" style="display: none">
@@ -256,7 +258,7 @@
 
 			{% block new_rsc_footer %}
 			    <div class="modal-footer">
-				    {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
+				    {% button class="btn btn-outline-secondary" action={dialog_close} text=_"Cancel" tag="a" %}
 				    <button class="btn btn-primary" type="submit">
 				    	{_ Create _} {{ catname }}
 				    	{% if intent == 'connect' %} &amp; {_ Connect _}
@@ -293,12 +295,11 @@
 		    {% block category_find %}
 		    {% endblock %}
 
-        	<label class="checkbox-inline">
-        		<input type="checkbox" class="nosubmit" id="{{ #find_me }}"
-        			   name="find_creator_id" value="{{ m.acl.user }}"
+		    <div class="form-check">
+        		<input type="checkbox" class="nosubmit form-check-input" id="{{ #find_me }}" name="find_creator_id" value="{{ m.acl.user }}"
         			   {% if m.admin.connect_created_me %}checked{% endif %}>
-        		{_ Created by me _}
-        	</label>
+        		<label class="form-check-label" for="{{ #find_me }}">{_ Created by me _}</label>
+        	</div>
 
         	{% javascript %}
         		switch (window.sessionStorage.getItem('dialog_connect_created_me')) {

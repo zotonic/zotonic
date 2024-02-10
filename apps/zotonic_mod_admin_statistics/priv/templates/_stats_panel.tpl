@@ -1,6 +1,6 @@
-<div class="panel panel-default">
-    <div class="panel-heading">{% block panel_title %}{% endblock %}</div>
-    <div class="panel-body">
+<div class="widget widget-default">
+    <div class="widget-header">{% block panel_title %}{% endblock %}</div>
+    <div class="widget-content">
         {% block panel_body %}
         {% endblock %}
     </div>

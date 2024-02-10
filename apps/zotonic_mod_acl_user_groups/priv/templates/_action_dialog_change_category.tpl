@@ -13,7 +13,7 @@ cat_id
         {% include "_admin_catcg.tpl" cg_id=id.content_group_id cat_id=id.category_id form=#form error=#error %}
 
         <div class="modal-footer clearfix">
-    	    {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
+    	    {% button class="btn btn-outline-secondary" action={dialog_close} text=_"Cancel" tag="a" %}
     	    {% button class="btn btn-primary" text=_"Save" type="submit" %}
         </div>
 

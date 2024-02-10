@@ -19,27 +19,27 @@
             action={config_toggle module="mod_development" key="debug_includes"}
             action={admin_tasks task='flush'}
         %}
-        <label class="checkbox">
-            <input type="checkbox" id="tpldbg" value="1" {% if m.development.debug_includes %}checked="checked"{% endif %} />
-            {_ Show paths to included template files in generated templates _}
-        </label>
+        <div class="form-check">
+            <input type="checkbox" id="tpldbg" class="form-check-input" value="1" {% if m.development.debug_includes %}checked="checked"{% endif %} />
+            <label for="tpldbg" class="form-check-label">{_ Show paths to included template files in generated templates _}</label>
+        </div>
 
         {% wire id="blkdbg"
             action={config_toggle module="mod_development" key="debug_blocks"}
             action={admin_tasks task='flush'}
         %}
-        <label class="checkbox">
-            <input type="checkbox" id="blkdbg" value="1" {% if m.development.debug_blocks %}checked="checked"{% endif %} />
-            {_ Show defined blocks in generated templates _}
-        </label>
+        <div class="form-check">
+            <input type="checkbox" id="blkdbg" class="form-check-input" value="1" {% if m.development.debug_blocks %}checked="checked"{% endif %} />
+            <label for="blkdbg" class="form-check-label">{_ Show defined blocks in generated templates _}</label>
+        </div>
 
         {% wire id="libsep"
             action={config_toggle module="mod_development" key="libsep"}
         %}
-        <label class="checkbox">
-            <input type="checkbox" id="libsep" value="1" {% if m.development.libsep %}checked="checked"{% endif %} />
-            {_ Download CSS and JavaScript files as separate files. Don’t combine them in one URL. _}
-        </label>
+        <div class="form-check">
+            <input type="checkbox" id="libsep" class="form-check-input" value="1" {% if m.development.libsep %}checked="checked"{% endif %} />
+            <label for="libsep" class="form-check-label">{_ Download CSS and JavaScript files as separate files. Don’t combine them in one URL. _}</label>
+        </div>
 
         {% wire id="livereload"
             action={config_toggle module="mod_development" key="livereload"}
@@ -48,36 +48,36 @@
                     $('#libsep').click();
                 };" }
         %}
-        <label class="checkbox">
-            <input type="checkbox" id="livereload" value="1" {% if m.development.livereload %}checked="checked"{% endif %} />
-            {_ Live reload of changed CSS files. Reload page on change of templates or JavaScript. _}
-        </label>
+        <div class="form-check">
+            <input type="checkbox" id="livereload" class="form-check-input" value="1" {% if m.development.livereload %}checked="checked"{% endif %} />
+            <label for="livereload" class="form-check-label">{_ Live reload of changed CSS files. Reload page on change of templates or JavaScript. _}</label>
+        </div>
 
         {% wire id="devapi"
             action={config_toggle module="mod_development" key="enable_api"}
         %}
-        <label class="checkbox">
-            <input type="checkbox" id="devapi" value="1" {% if m.development.enable_api %}checked="checked"{% endif %} />
-            {_ Enable API to recompile and build Zotonic _}
-        </label>
+        <div class="form-check">
+            <input type="checkbox" id="devapi" class="form-check-input" value="1" {% if m.development.enable_api %}checked="checked"{% endif %} />
+            <label for="devapi" class="form-check-label">{_ Enable API to recompile and build Zotonic _}</label>
+        </div>
 
         {% wire id="nocache"
             action={config_toggle module="mod_development" key="nocache"}
         %}
-        <label class="checkbox">
-            <input type="checkbox" id="nocache" value="1" {% if m.development.nocache %}checked="checked"{% endif %} />
-            {_ Disable caching by the <tt>{% cache %}</tt> tag. _}
-        </label>
+        <div class="form-check">
+            <input type="checkbox" id="nocache" class="form-check-input" value="1" {% if m.development.nocache %}checked="checked"{% endif %} />
+            <label for="nocache" class="form-check-label">{_ Disable caching by the <tt>{% cache %}</tt> tag. _}</label>
+        </div>
 
         {% if m.modules.provided.server_storage %}
             {% wire id="dbtrace"
                     postback=`dbtrace_toggle`
                     delegate=`z_development_dbtrace`
             %}
-            <label class="checkbox">
-                <input type="checkbox" id="dbtrace" value="1" {% if m.development.is_dbtrace %}checked="checked"{% endif %} />
-                {_ Trace all database queries for the current session _}
-            </label>
+            <div class="form-check">
+                <input type="checkbox" id="dbtrace" class="form-check-input" value="1" {% if m.development.is_dbtrace %}checked="checked"{% endif %} />
+                <label for="dbtrace" class="form-check-label">{_ Trace all database queries for the current session _}</label>
+            </div>
         {% else %}
             <p class="help-block">
                 <br>
@@ -98,8 +98,8 @@
                 postback=`explain_tpl`
                 delegate=`z_development_template`
         %}
-        <form id="explain-tpl" class="form-inline" method="GET" action="postback">
-            <div class="form-group">
+        <form id="explain-tpl" class="row" method="GET" action="postback">
+            <div class="form-group col-sm-3">
                 <select class="form-control" name="tpl_cat">
                     <option value="">{_ Optional category for catinclude _}</option>
                     <option disabled></option>
@@ -108,10 +108,10 @@
                     {% endfor%}
                 </select>
             </div>
-            <div class="form-group">
+            <div class="form-group col-sm-2">
                 <input class="form-control" type="text" name="tpl_name" placeholder="foo.tpl" value="" />
             </div>
-            <button class="btn btn-primary" type="submit">{_ Find _}</button>
+            <button class="btn btn-primary col-sm-1" type="submit">{_ Find _}</button>
         </form>
 
         <div id="explain-tpl-output" style="display:none"></div>
@@ -178,17 +178,17 @@
                 postback=`explain_dispatch`
                 delegate=`z_development_dispatch`
         %}
-        <form id="explain-dispatch" class="form-inline" method="GET" action="postback">
-            <div class="form-group">
+        <form id="explain-dispatch" class="row" method="GET" action="postback">
+            <div class="form-group col-sm-3">
                 <select id="explain_protocol" name="explain_protocol" class="col-md-4 form-control">
                     <option value="https">https://{{ m.site.hostname }}</option>
                     <option value="http">http://{{ m.site.hostname }}</option>
                 </select>
             </div>
-            <div class="form-group">
+            <div class="form-group col-sm-2">
                 <input class="form-control" type="text" id="explain_req" name="explain_req" placeholder="/foo/bar" value="" />
             </div>
-            <button class="btn btn-primary" type="submit">{_ Explain _}</button>
+            <button class="btn btn-primary col-sm-1" type="submit">{_ Explain _}</button>
         </form>
         <br>
 

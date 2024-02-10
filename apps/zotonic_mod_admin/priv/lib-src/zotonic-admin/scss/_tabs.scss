@@ -9,6 +9,7 @@
 // .widget > ul.nav-tabs {
 //    &:extend(.minimalTabs all);
 // }
+
 .minimalTabs ul.nav-tabs,
 .minimalTabs {
 	padding: 0;
@@ -59,7 +60,7 @@
 		&:hover {
 			border-style: none none solid none;
 		    border-width: 2px;
-		    border-bottom-color: #00C853;
+		    border-bottom-color: $brand-primary;
 		    color: black;
 		    background: none;
 		}
@@ -80,5 +81,14 @@
 		> li > a {
 			margin-bottom: -1px;
 		}
+	}
+}
+
+.z-nav-tabs {
+	--bs-nav-tabs-link-active-bg: #fff;
+
+	+.tab-content .widget {
+		border-top-left-radius: 0;
+		border-top-right-radius: 0;
 	}
 }
