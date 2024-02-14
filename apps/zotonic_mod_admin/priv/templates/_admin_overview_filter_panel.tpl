@@ -6,7 +6,10 @@
         {% with m.rsc[qargs.qquery_id].id as query_id %}
         {% with m.search.query::%{
                             cat: 'admin_content_query'
-                            sort: 'pivot_title'
+                            sort: [
+                                '-is_featured',
+                                'pivot_title'
+                            ],
                             pagelen: 100
                         }
             as admin_queries
@@ -23,15 +26,11 @@
                             </option>
                         {% endif %}
                         {% for id in admin_queries %}
-                            <option value="{{ id }}" {% if id == qargs.qquery_id %}selected{% endif %}>
+                            <option value="{{ id }}" {% if id == query_id %}selected{% endif %}>
                                 {{ id.title }}
                             </option>
                         {% endfor %}
                     </select>
-                    <label class="checkbox">
-                        <input type="checkbox" name="qquery_id" value="{{ query_id }}" checked>
-                        {{ query_id.title }}
-                    </label>
                 </div>
             </div>
         {% endif %}

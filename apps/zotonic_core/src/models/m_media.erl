@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2020 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Model for medium database
+%% @end
 
-%% Copyright 2009-2020 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -492,7 +493,8 @@ insert_file(File, RscProps, Options, Context) ->
 
 insert_file(File, RscProps, MediaProps, Options, Context) ->
     Mime = maps:get(<<"mime">>, MediaProps, undefined),
-    case z_acl:is_allowed(insert, #acl_rsc{category = mime_to_category(Mime), props = RscProps}, Context) andalso
+    MimeCat = mime_to_category(Mime, Options, Context),
+    case z_acl:is_allowed(insert, #acl_rsc{category = MimeCat, props = RscProps}, Context) andalso
         z_acl:is_allowed(insert, #acl_media{mime = Mime, size = filelib:file_size(File)}, Context) of
         true ->
             insert_file_mime_ok(File, RscProps, MediaProps, Options, Context);
@@ -667,7 +669,7 @@ replace_file_mime_ok(File, insert_rsc, RscProps, MediaProps, Opts, Context) ->
                     m_rsc:rid(CName, Context);
                 error ->
                     Mime = maps:get(<<"mime">>, MediaProps, undefined),
-                    m_rsc:rid(mime_to_category(Mime), Context)
+                    m_rsc:rid(mime_to_category(Mime, Opts, Context), Context)
             end
     end,
     case m_category:id_to_name(CatId, Context) of
@@ -809,7 +811,7 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
                 PropsM1;
             false ->
                 PropsM1#{
-                    <<"category_id">> => mime_to_category(Mime)
+                    <<"category_id">> => mime_to_category(Mime, Opts, Context)
                 }
         end,
         {ok, Id} = case RscId of
@@ -989,6 +991,20 @@ mime_to_category(Mime) ->
         "text/" ++ _ -> document;
 
         _ -> media
+    end.
+
+mime_to_category(Mime, Opts, Context) ->
+    Cat = mime_to_category(Mime),
+    case proplists:get_value(preferred_category, Opts) of
+        undefined ->
+            Cat;
+        PrefCat ->
+            case m_category:is_a(PrefCat, Cat, Context) of
+                true ->
+                    PrefCat;
+                false ->
+                    Cat
+            end
     end.
 
 
