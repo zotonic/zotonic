@@ -11,6 +11,7 @@
         postback={media_upload
                     intent=intent
                     predicate=predicate
+                    category=cat
                     actions=actions
                     id=id
                     subject_id=subject_id

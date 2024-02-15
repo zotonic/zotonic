@@ -242,6 +242,12 @@ compile_map_nested_value([{identifier, _, <<"q">>}, {identifier, _, QArg}|Rest],
                 erl_syntax:atom(get_q),
                 [ erl_syntax:abstract(QArg), erl_syntax:variable(ContextVar) ]),
     [{ast, Ast} | Rest];
+compile_map_nested_value([{identifier, _, <<"q">>}, {expr, {string_literal, _, QArg}}|Rest], ContextVar, _Context) ->
+    Ast = erl_syntax:application(
+                erl_syntax:atom(z_context),
+                erl_syntax:atom(get_q),
+                [ erl_syntax:abstract(QArg), erl_syntax:variable(ContextVar) ]),
+    [{ast, Ast} | Rest];
 compile_map_nested_value([{identifier, _, <<"z_language">>}], ContextVar, _Context) ->
     Ast = erl_syntax:application(
                 erl_syntax:atom(z_context),

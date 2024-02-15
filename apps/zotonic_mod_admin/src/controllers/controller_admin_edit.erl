@@ -130,13 +130,14 @@ event(#submit{message={rscform, Args}}, Context) ->
                                            true ->  z_render:wire("delete-button", {disable, []}, Context4a);
                                            false -> z_render:wire("delete-button", {enable, []}, Context4a)
                                        end,
-                            Title = z_trans:lookup_fallback(m_rsc:p(Id, title, Context5), Context5),
+                            Title = z_convert:to_binary(
+                                z_trans:lookup_fallback(m_rsc:p(Id, title, Context5), Context5)),
                             Context6 = z_render:growl([<<"Saved \"">>, Title, <<"\".">>], Context5),
                             case Submitter of
                                 <<"save_duplicate">> ->
                                     z_render:wire({dialog_duplicate_rsc, [{id, Id}]}, Context6);
                                 _SaveStay ->
-                                    Context6
+                                    z_render:wire(proplists:get_all_values(on_success, Args), Context6)
                             end;
                         _CatOther ->
                             z_render:wire({reload, []}, Context)

@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Open a dialog with some fields to upload a new media.
+%% @end
 
-%% Copyright 2009-2021 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -71,6 +72,7 @@ event(#postback{message={media_upload_dialog, Title, Intent, Id, SubjectId, Pred
 event(#submit{message={media_upload, EventProps}}, Context) ->
     case z_context:get_q(<<"upload_file">>, Context) of
         #upload{ filename = OriginalFilename } = Upload ->
+            Category = proplists:get_value(category, EventProps),
             Intent = proplists:get_value(intent, EventProps),
             Props = case Intent of
                 <<"update">> ->
@@ -102,16 +104,20 @@ event(#submit{message={media_upload, EventProps}}, Context) ->
                     },
                     add_content_group(EventProps, Props0, Context)
             end,
+            Opts = [
+                {preferred_category, Category}
+            ],
             handle_media_upload(Intent, EventProps, Context,
                                 %% insert fun
-                                fun(Ctx) -> m_media:insert_file(Upload, Props, Ctx) end,
+                                fun(Ctx) -> m_media:insert_file(Upload, Props, Opts, Ctx) end,
                                 %% replace fun
-                                fun(Id, Ctx) -> m_media:replace_file(Upload, Id, Props, Ctx) end);
+                                fun(Id, Ctx) -> m_media:replace_file(Upload, Id, Props, Opts, Ctx) end);
         _ ->
             z_render:growl(?__("Add a new media file", Context), Context)
     end;
 
 event(#submit{message={media_url, EventProps}}, Context) ->
+    Category = proplists:get_value(category, EventProps),
     Url = z_context:get_q(<<"url">>, Context),
     Intent = proplists:get_value(intent, EventProps),
     Props = case Intent of
@@ -127,11 +133,14 @@ event(#submit{message={media_url, EventProps}}, Context) ->
             },
             add_content_group(EventProps, Props0, Context)
     end,
+    Opts = [
+        {preferred_category, Category}
+    ],
     handle_media_upload(Intent, EventProps, Context,
                         %% insert fun
-                        fun(Ctx) -> m_media:insert_url(Url, Props, Ctx) end,
+                        fun(Ctx) -> m_media:insert_url(Url, Props, Opts, Ctx) end,
                         %% replace fun
-                        fun(Id, Ctx) -> m_media:replace_url(Url, Id, Props, Ctx) end).
+                        fun(Id, Ctx) -> m_media:replace_url(Url, Id, Props, Opts, Ctx) end).
 
 
 add_content_group(EventProps, Props, Context) ->

@@ -10,7 +10,8 @@
 {# - ..._int          (integer number)                              #}
 {# - ..._float        (floating point number)                       #}
 {# - ..._date         (datetime in UTC)                             #}
-{# - ..._ft           (fulltext search)                             #}
+{# - ..._ft           (fulltext search using ngrams)                #}
+{# - ..._fts          (fulltext search using tsvector)              #}
 {# - ..._id           (resource id)                                 #}
 {# - is_...           (boolean value)                               #}
 {# - ..._range_float  (floating point number for minmax reporting)  #}

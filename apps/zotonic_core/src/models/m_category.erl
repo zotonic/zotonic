@@ -725,7 +725,10 @@ ensure_hierarchy(Context) ->
 
 
 %% @doc Move a category below another category (or the root set if undefined)
--spec move_below(integer(), integer(), z:context()) -> ok | {error, notfound}.
+-spec move_below(Cat, Parent, Context) -> ok | {error, notfound} when
+    Cat :: category(),
+    Parent :: category(),
+    Context :: z:context().
 move_below(Cat, Parent, Context) ->
     {ok, Id} = name_to_id(Cat, Context),
     ParentId = maybe_name_to_id(Parent, Context),
@@ -754,7 +757,10 @@ move_below(Cat, Parent, Context) ->
     end.
 
 %% @doc Move a category after another category (on the same level).
--spec move_after( category(), category() | undefined, z:context() ) -> ok | {error, notfound}.
+-spec move_after(Cat, After, Context) -> ok | {error, notfound} when
+    Cat :: category(),
+    After :: category(),
+    Context :: z:context().
 move_after(Cat, After, Context) ->
     {ok, Id} = name_to_id(Cat, Context),
     AfterId = maybe_name_to_id(After, Context),

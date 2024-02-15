@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Generic template controller, serves the template mentioned in the dispatch configuration.
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@
     process/4
 ]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 service_available(Context) ->
     Context1 = case z_convert:to_bool(z_context:get(nocache, Context)) of
@@ -82,18 +83,33 @@ process_1(Context) ->
     Context1 = z_context:set_resource_headers(OptRscId, Context0),
     Context2 = set_optional_cache_header(Context1),
     Template = z_context:get(template, Context2),
-    Vars2 = [
-        {seo_noindex, IsSeoNoIndex}
-        | proplists:delete(seo_noindex, Vars1)
-    ],
-    Rendered = z_template:render(Template, Vars2, Context2),
-    {RespBody, ContextOut} = z_context:output(Rendered, Context2),
-    case z_context:get(http_status, ContextOut) of
-        Status when is_integer(Status) ->
-            ContextReply = cowmachine_req:set_resp_body(RespBody, ContextOut),
-            {{halt, Status}, ContextReply};
+    case Template of
+        undefined ->
+            ?LOG_ERROR(#{
+                in => zotonic_mod_base,
+                text => <<"No template config in dispatch for controller_template">>,
+                result => error,
+                reason => enoent,
+                dispatch_rule => z_context:get_q(<<"zotonic_dispatch">>, Context2),
+                dispatch_file => z_context:get(zotonic_dispatch_file, Context2),
+                dispatch_module => z_context:get(zotonic_dispatch_module, Context2),
+                path => m_req:get(path, Context2)
+            }),
+            {{halt, 500}, Context};
         _ ->
-            {RespBody, ContextOut}
+            Vars2 = [
+                {seo_noindex, IsSeoNoIndex}
+                | proplists:delete(seo_noindex, Vars1)
+            ],
+            Rendered = z_template:render(Template, Vars2, Context2),
+            {RespBody, ContextOut} = z_context:output(Rendered, Context2),
+            case z_context:get(http_status, ContextOut) of
+                Status when is_integer(Status) ->
+                    ContextReply = cowmachine_req:set_resp_body(RespBody, ContextOut),
+                    {{halt, Status}, ContextReply};
+                _ ->
+                    {RespBody, ContextOut}
+            end
     end.
 
 -spec maybe_configured_id(list(), z:context()) -> {list(), m_rsc:resource_id()|undefined}.
