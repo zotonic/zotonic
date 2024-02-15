@@ -21,7 +21,10 @@
 	{% with id.is_a|default:(m.category[cat].is_a) as cats %}
 	{% wire id="rscform"
 			type="submit"
-			postback={rscform view_location=view_location}
+			postback={rscform
+				view_location=view_location
+				on_success=on_save
+			}
 			delegate=`controller_admin_edit`
 	%}
 	<form id="rscform" method="post" action="postback" class="form do_formdirty">
