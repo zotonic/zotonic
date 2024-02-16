@@ -1,10 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2014 Marc Worrell
-%%
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Identify files, fetch metadata about an image
-%% @todo Recognize more files based on magic number, think of office files etc.
+%% @end
 
-%% Copyright 2009-2014 Marc Worrell, Konstantin Nikiforov
+%% Copyright 2009-2024 Marc Worrell, Konstantin Nikiforov
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -531,6 +530,7 @@ extension(<<"font/ttf">>, _PreferExtension) -> <<".ttf">>;
 extension(<<"font/eot">>, _PreferExtension) -> <<".eot">>;
 extension(<<"font/otf">>, _PreferExtension) -> <<".otf">>;
 extension(<<"image/heic">>, _PreferExtension) -> <<".heic">>;
+extension(<<"message/rfc822">>, _PreferExtension) -> <<".eml">>;
 extension(Mime, undefined) ->
     Extensions = mimetypes:extensions(Mime),
     first_extension(Extensions);
@@ -566,6 +566,7 @@ guess_mime(File) ->
         <<".otf">> -> <<"font/otf">>;
         <<".heic">> -> <<"image/heic">>;
         <<".mjs">> -> <<"text/javascript">>;
+        <<".eml">> -> <<"message/rfc822">>;
         <<".", Ext/binary>> ->
             [Mime|_] = mimetypes:ext_to_mimes(Ext),
             maybe_map_mime(Mime);

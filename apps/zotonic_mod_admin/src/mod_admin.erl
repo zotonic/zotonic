@@ -332,8 +332,6 @@ event(#postback{message={admin_connect_select, Args}}, Context) ->
     end,
     Actions = QAction1 ++ QActions1,
 
-?DEBUG(Args),
-
     {SubjectId, ObjectId} =
         case z_utils:is_empty(ObjectId0) of
             true ->
