@@ -132,7 +132,22 @@ fetch_json(Method, Url, Args, Options, Context) ->
         {ok, {_Final, _Hs, _Length, <<>>}} ->
             {ok, #{}};
         {ok, {_Final, _Hs, _Length, Body}} ->
-            {ok, jsxrecord:decode(Body)};
+            try
+                {ok, jsxrecord:decode(Body)}
+            catch
+                error:badarg:Stack ->
+                    ?LOG_ERROR(#{
+                        in => zotonic_core,
+                        text => <<"Expected JSON payload data, but could not decode">>,
+                        result => error,
+                        reason => json,
+                        url => Url,
+                        method => Method,
+                        payload => Body,
+                        stack => Stack
+                    }),
+                    {error, json}
+            end;
         {error, _} = Error ->
             Error
     end.
