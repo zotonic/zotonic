@@ -245,7 +245,7 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
             z_dialog_confirm({
                 text: "{_ Are you sure you want to delete _}: "
                     + "<b>" + $menu_item.find(".menu-label").html() + "</b><br>"
-                    + "{_ and all indented items below it? _}<br><br><b>{_ THIS CAN NOT BE UNDONE! _}</b>",
+                    + "{_ and all indented items below it from the menu? _}<br><br>",
                 ok: "{_ Delete _}",
                 on_confirm: function() {
                     $(self).closest('li.menu-item').fadeOut(500, function() {
