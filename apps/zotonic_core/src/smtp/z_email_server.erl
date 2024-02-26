@@ -1080,9 +1080,9 @@ send_blocking(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context) ->
         {ok, Receipt} ->
             {ok, Receipt};
         undefined ->
-            send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts);
+            send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context);
         smtp ->
-            send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts);
+            send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context);
         {error, _} = Error ->
             Error;
         {error, _, _} = Error ->
@@ -1090,43 +1090,59 @@ send_blocking(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context) ->
     end.
 
 
-send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts) ->
+send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context) ->
     {relay, Relay} = proplists:lookup(relay, SmtpOpts),
     ?LOG_INFO(#{
         text => <<"Sending email">>,
         in => zotonic_core,
         recipient => RecipientEmail,
         message_id => MsgId,
-        relay => Relay
+        relay => Relay,
+        port => proplists:get_value(port, SmtpOpts)
     }),
     case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
         Receipt when is_binary(Receipt) ->
             {ok, Receipt};
         {error, no_more_hosts, {permanent_failure, _Host, <<"ign Root ", _/binary>>}} ->
             % Don't ask ...
-            send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts);
+            send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts, Context);
         {error, retries_exceeded, {_FailureType, _Host, {error, closed}}} ->
-            send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts);
+            send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts, Context);
         {error, retries_exceeded, {_FailureType, _Host, {error, timeout}}} ->
-            send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts);
+            send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts, Context);
         {error, _} = Error ->
             Error;
         {error, _, _} = Error ->
             Error
     end.
 
-send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts) ->
-    ?LOG_NOTICE(#{
-        text => <<"Bounce error, retrying without TLS">>,
-        in => zotonic_core,
-        recipient => RecipientEmail,
-        relay => proplists:get_value(relay, SmtpOpts)
-    }),
+send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts, Context) ->
     SmtpOpts1 = [
         {tls, never}
-        | proplists:delete(tls, SmtpOpts)
+        | proplists:delete(tls, proplists:delete(tls_options, SmtpOpts))
     ],
-    case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts1) of
+    Port = case z_convert:to_binary( m_config:get_value(site, smtp_relay_port, Context) ) of
+        <<>> ->
+            25;
+        SPort ->
+            try
+                z_convert:to_integer(SPort)
+            catch
+                _:_ -> 25
+            end
+    end,
+    SmtpOpts2 = [
+        {port, Port}
+        | proplists:delete(port, SmtpOpts1)
+    ],
+    ?LOG_NOTICE(#{
+        text => <<"SMTP closed or timeout error, retrying without TLS">>,
+        in => zotonic_core,
+        recipient => RecipientEmail,
+        relay => proplists:get_value(relay, SmtpOpts2),
+        port => proplists:get_value(port, SmtpOpts2)
+    }),
+    case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts2) of
         Receipt when is_binary(Receipt) ->
             {ok, Receipt};
         {error, _} = Error ->
