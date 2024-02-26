@@ -418,10 +418,12 @@ devnull(win32) -> "nul";
 devnull(unix)  -> "/dev/null".
 
 
-%% @doc Map ImageMagick identify to mime_type, special case for PDF/PS files identifying as PBM
-%%      This is a known problem of IM 6.8.9 (used on Ubuntu 16)
+%% @doc ImageMagick identify can identify PDF files as:
+%% - PBM which is a known problem of IM 6.8.9 (used on Ubuntu 16)
+%% - AI see https://github.com/ImageMagick/ImageMagick/discussions/6724
 -spec im_mime(binary(), mime_type()|undefined) -> mime_type().
 im_mime(<<"PBM">>, MimeFile) when MimeFile =/= undefined -> MimeFile;
+im_mime(<<"AI">>, <<"application/pdf">>) -> <<"application/pdf">>;
 im_mime(Type, _) -> mime(Type).
 
 %% @doc Map the type returned by ImageMagick to a mime type
