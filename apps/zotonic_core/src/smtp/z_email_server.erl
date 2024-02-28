@@ -1109,7 +1109,7 @@ send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context) 
         {error, retries_exceeded, {_FailureType, _Host, {error, Reason}}}
             when Reason =:= closed; Reason =:= timeout ->
             send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts, Context);
-        {error, network_failure, {_FailureType, _Host, {error, Reason}}}
+        {error, send, {_FailureType, _Host, {error, Reason}}}
             when Reason =:= closed; Reason =:= timeout ->
             send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts, Context);
         {error, _} = Error ->
