@@ -65,6 +65,11 @@
 % Timeout (in msec) for the connect to external SMTP server (default is 5000)
 -define(SMTP_CONNECT_TIMEOUT, 15000).
 
+% Default port for TLS email delivery
+-define(SMTP_PORT_TLS, 587).
+
+% Default port for plain text email delivery
+-define(SMTP_PORT_PLAIN_TEXT, 25).
 
 -record(state, {smtp_relay, smtp_relay_opts, smtp_no_mx_lookups,
                 smtp_verp_as_from, smtp_bcc, override,
@@ -562,7 +567,7 @@ update_config(State) ->
         case SmtpRelay of
             true ->
                 [{relay, z_config:get(smtp_host, "localhost")},
-                 {port, z_config:get(smtp_port, 25)},
+                 {port, z_config:get(smtp_port, ?SMTP_PORT_PLAIN_TEXT)},
                  {ssl, z_config:get(smtp_ssl, false)}]
                 ++ case {z_config:get(smtp_username),
                          z_config:get(smtp_password)} of
@@ -852,8 +857,8 @@ relay_site_options(_State, Context) ->
                 SHost -> z_convert:to_list(SHost)
             end,
             DefaultPort = case SSL of
-                true -> 587;
-                false -> 25
+                true -> ?SMTP_PORT_TLS;
+                false -> ?SMTP_PORT_PLAIN_TEXT
             end,
             Port = case z_convert:to_binary( m_config:get_value(site, smtp_relay_port, Context) ) of
                 <<>> ->
@@ -1125,12 +1130,12 @@ send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts, Context) ->
     ],
     Port = case z_convert:to_binary( m_config:get_value(site, smtp_relay_port, Context) ) of
         <<>> ->
-            25;
+            ?SMTP_PORT_PLAIN_TEXT;
         SPort ->
             try
                 z_convert:to_integer(SPort)
             catch
-                _:_ -> 25
+                _:_ -> ?SMTP_PORT_PLAIN_TEXT
             end
     end,
     SmtpOpts2 = [
