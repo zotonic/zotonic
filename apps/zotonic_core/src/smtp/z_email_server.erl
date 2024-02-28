@@ -1128,18 +1128,8 @@ send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts, Context) ->
         {tls, never}
         | proplists:delete(tls, proplists:delete(tls_options, SmtpOpts))
     ],
-    Port = case z_convert:to_binary( m_config:get_value(site, smtp_relay_port, Context) ) of
-        <<>> ->
-            ?SMTP_PORT_PLAIN_TEXT;
-        SPort ->
-            try
-                z_convert:to_integer(SPort)
-            catch
-                _:_ -> ?SMTP_PORT_PLAIN_TEXT
-            end
-    end,
     SmtpOpts2 = [
-        {port, Port}
+        {port, plaintext_port(Context)}
         | proplists:delete(port, SmtpOpts1)
     ],
     ?LOG_NOTICE(#{
@@ -1157,6 +1147,30 @@ send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts, Context) ->
         {error, _, _} = Error ->
             Error
     end.
+
+plaintext_port(Context) ->
+    DefaultPort = case z_config:get(smtp_relay) of
+        true ->
+            z_config:get(smtp_port, ?SMTP_PORT_PLAIN_TEXT);
+        false ->
+            ?SMTP_PORT_PLAIN_TEXT
+    end,
+    case m_config:get_boolean(site, smtp_relay, Context) of
+        true ->
+            case z_convert:to_binary( m_config:get_value(site, smtp_relay_port, Context) ) of
+                <<>> ->
+                    DefaultPort;
+                SPort ->
+                    try
+                        z_convert:to_integer(SPort)
+                    catch
+                        _:_ -> DefaultPort
+                    end
+            end;
+        false ->
+            DefaultPort
+    end.
+
 
 is_retry_possible(_Reason, _FailureType, auth_failed) ->
     true;  % proxy - could be temporary
