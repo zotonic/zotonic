@@ -11,6 +11,8 @@ services:
             POSTGRES_PASSWORD: zotonic
         volumes:
             - pgdata:/var/lib/postgresql/data
+        ports:
+            - '${DB_FORWARD_PORT:-5432}:5432'
 
     zotonic:
         image: zotonic/zotonic-dev
