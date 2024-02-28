@@ -1106,9 +1106,11 @@ send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context) 
         {error, no_more_hosts, {permanent_failure, _Host, <<"ign Root ", _/binary>>}} ->
             % Don't ask ...
             send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts, Context);
-        {error, retries_exceeded, {_FailureType, _Host, {error, closed}}} ->
+        {error, retries_exceeded, {_FailureType, _Host, {error, Reason}}}
+            when Reason =:= closed; Reason =:= timeout ->
             send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts, Context);
-        {error, retries_exceeded, {_FailureType, _Host, {error, timeout}}} ->
+        {error, network_failure, {_FailureType, _Host, {error, Reason}}}
+            when Reason =:= closed; Reason =:= timeout ->
             send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts, Context);
         {error, _} = Error ->
             Error;
