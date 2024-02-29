@@ -1113,11 +1113,10 @@ send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context) 
             when IsFallbackPlainText ->
             % Don't ask ...
             send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts, Context);
-        {error, retries_exceeded, {_FailureType, _Host, {error, Reason}}}
-            when IsFallbackPlainText, (Reason =:= closed orelse Reason =:= timeout) ->
-            send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts, Context);
-        {error, send, {_FailureType, _Host, {error, Reason}}}
-            when IsFallbackPlainText, (Reason =:= closed orelse Reason =:= timeout) ->
+        {error, Failure, {_FailureType, _Host, {error, Reason}}}
+            when IsFallbackPlainText,
+                 (Failure =:= send orelse Failure =:= retries_exceeded),
+                 (Reason =:= closed orelse Reason =:= timeout) ->
             send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts, Context);
         {error, _} = Error ->
             Error;
