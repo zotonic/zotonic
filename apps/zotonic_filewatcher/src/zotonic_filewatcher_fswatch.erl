@@ -32,7 +32,8 @@
     pid :: pid() | undefined,
     port :: integer() | undefined,
     data :: binary(),
-    executable :: string()
+    executable :: string(),
+    tries = 0 :: non_neg_integer()
 }).
 
 %% interface functions
@@ -90,7 +91,8 @@ init([Executable]) ->
         executable = Executable,
         port = undefined,
         pid = undefined,
-        data = <<>>
+        data = <<>>,
+        tries = 0
     },
     timer:send_after(100, start),
     {ok, State}.
@@ -106,7 +108,7 @@ handle_cast(restart, #state{ pid = undefined } = State) ->
 handle_cast(restart, #state{ pid = Pid } = State) when is_pid(Pid) ->
     ?LOG_INFO("[inotify] Stopping fswatch file monitor."),
     catch exec:stop(Pid),
-    {noreply, start_fswatch(State#state{ port = undefined })};
+    {noreply, start_fswatch(State#state{ port = undefined, tries = 0 })};
 
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
@@ -119,23 +121,26 @@ handle_info({stdout, _Port, FilenameFlags}, #state{ data = Data } = State) ->
             zotonic_filewatcher_handler:file_changed(Verb, Filename)
         end,
         FVs),
-    {noreply, State#state{ data = Rest }};
+    {noreply, State#state{ data = Rest, tries = 0 }};
 
-handle_info({'EXIT', Pid, Reason}, #state{pid = Pid} = State) ->
+handle_info({'EXIT', Pid, Reason}, #state{ pid = Pid, tries = Tries } = State) ->
+    Delay = backoff(Tries),
     ?LOG_ERROR(#{
-        text => <<"[fswatch] fswatch port closed, restarting in 5 seconds.">>,
+        text => <<"[fswatch] fswatch port closed, restarting in delay seconds.">>,
         in => zotonic_filewatcher,
         result => error,
+        delay => Delay,
         reason => Reason
     }),
     State1 = State#state{
         pid = undefined,
-        port = undefined
+        port = undefined,
+        tries = Tries + 1
     },
-    timer:send_after(5000, start),
+    timer:send_after(Delay, start),
     {noreply, State1};
 
-handle_info(start, #state{port = undefined} = State) ->
+handle_info(start, #state{ port = undefined } = State) ->
     {noreply, start_fswatch(State)};
 handle_info(start, State) ->
     {noreply, State};
@@ -163,6 +168,9 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+backoff(0) -> 5000;
+backoff(N) -> max(900_000, N * 5000).
 
 start_fswatch(State=#state{executable = Executable, port = undefined}) ->
     ?LOG_INFO("[fswatch] Starting fswatch file monitor."),
