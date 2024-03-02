@@ -15,10 +15,10 @@ PROXY_PORT=$(shell echo ${https_proxy} | awk -F ":" '{print $$3}')
 SET_HTTPS_PROXY=ok = httpc:set_options([{https_proxy, {{"${PROXY_HOSTNAME}", ${PROXY_PORT}}, []}}]),
 endif
 
-.PHONY: all upgrade-deps compile dev test update-cotonic update
+.PHONY: all upgrade-deps compile-core compile dev test update-cotonic update
 
 # Default target - update sources and call all compile rules in succession
-all: compile
+all: compile-core compile
 	@echo "Zotonic" `bin/zotonic -v` "was successfully compiled"
 
 $(REBAR): $(REBAR_ETAG)
@@ -33,8 +33,19 @@ $(REBAR): $(REBAR_ETAG)
 upgrade-deps: $(REBAR)
 	$(REBAR) $(REBAR_OPTS) upgrade --all
 
+compile-core: $(REBAR) _build/default/lib/zotonic_core/include/zotonic.hrl
+
+_build/default/lib/zotonic_core/include/zotonic.hrl: $(REBAR)
+	@echo ============================================================================
+	@echo ======================= Compiling Zotonic core apps =========================
+	@echo ============================================================================
+	ZOTONIC_APPS=none $(REBAR) $(REBAR_OPTS) compile
+
 compile: $(REBAR)
-	$(REBAR) $(REBAR_OPTS) compile
+	@echo ============================================================================
+	@echo =========================== Compiling user apps ============================
+	@echo ============================================================================
+	ZOTONIC_UMBRELLA=1 $(REBAR) $(REBAR_OPTS) compile
 
 dev:
 	docker-compose run --rm --service-ports zotonic sh
