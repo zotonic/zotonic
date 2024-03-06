@@ -783,7 +783,7 @@ q1(Sql, Parameters, Context, Timeout) ->
 -spec q_row(SQL, Context) -> Row | undefined when
     SQL :: sql(),
     Context :: z:context(),
-    Row :: list( term() ).
+    Row :: tuple() | undefined.
 q_row(Sql, Context) ->
     q_row(Sql, [], Context).
 
@@ -793,7 +793,7 @@ q_row(Sql, Context) ->
     SQL :: sql(),
     Parameters :: parameter(),
     Context :: z:context(),
-    Row :: list( term() ).
+    Row :: tuple() | undefined.
 q_row(Sql, Args, Context) ->
     case q(Sql, Args, Context) of
         [Row|_] -> Row;
