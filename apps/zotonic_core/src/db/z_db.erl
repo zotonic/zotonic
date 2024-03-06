@@ -670,10 +670,15 @@ q(Sql, Context) ->
 %% The parameters are used for argument $1 etc. in the query. Query timeout
 %% of 30 seconds.
 -spec q(SQL, Parameters, Context) -> Result when
-    SQL :: sql(),
-    Parameters :: parameters(),
-    Context :: z:context(),
-    Result :: term().
+        SQL :: sql(),
+        Parameters :: parameters(),
+        Context :: z:context(),
+        Result :: term()
+    ; (SQL, Context, Timeout) -> Result when
+        SQL :: sql(),
+        Context :: z:context(),
+        Timeout :: pos_integer(),
+        Result :: term().
 q(Sql, Parameters, #context{} = Context) ->
     q(Sql, Parameters, Context, ?TIMEOUT);
 q(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
@@ -726,10 +731,15 @@ q1(Sql, Context) ->
 %% are used for argument $1 etc. Crash if the query errors. There is a query
 %% timeout of 30 seconds.
 -spec q1(SQL, Parameters, Context) -> Result when
-    SQL :: sql(),
-    Parameters :: parameters(),
-    Context :: z:context(),
-    Result :: term() | undefined.
+        SQL :: sql(),
+        Parameters :: parameters(),
+        Context :: z:context(),
+        Result :: term() | undefined
+    ; (SQL, Context, Timeout) -> Result when
+        SQL :: sql(),
+        Context :: z:context(),
+        Timeout :: pos_integer(),
+        Result :: term() | undefined.
 q1(Sql, Parameters, #context{} = Context) ->
     q1(Sql, Parameters, Context, ?TIMEOUT);
 q1(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
