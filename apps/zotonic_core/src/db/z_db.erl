@@ -657,14 +657,37 @@ map_merge_props(_, Acc) ->
 %% Simple queries - return tuples or number of rows updated.
 %% ----------------------------------------------------------------
 
+%% @doc Do an SQL query, return its results. Crash if the query errors.
+%% There is a query timeout of 30 seconds.
+-spec q(SQL, Context) -> Result when
+    SQL :: sql(),
+    Context :: z:context(),
+    Result :: term().
 q(Sql, Context) ->
     q(Sql, [], Context, ?TIMEOUT).
 
+%% @doc Do an SQL query, return its results. Crash if the query errors.
+%% The parameters are used for argument $1 etc. in the query. Query timeout
+%% of 30 seconds.
+-spec q(SQL, Parameters, Context) -> Result when
+    SQL :: sql(),
+    Parameters :: parameters(),
+    Context :: z:context(),
+    Result :: term().
 q(Sql, Parameters, #context{} = Context) ->
     q(Sql, Parameters, Context, ?TIMEOUT);
 q(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
     q(Sql, [], Context, Timeout).
 
+%% @doc Do an SQL query, return its results. Crash if the query errors.
+%% The parameters are used for argument $1 etc. in the query. Supply a
+%% timeout in milliseconds after which the query is canceled.
+-spec q(SQL, Parameters, Context, Timeout) -> Result when
+    SQL :: sql(),
+    Parameters :: parameters(),
+    Context :: z:context(),
+    Timeout :: pos_integer(),
+    Result :: term().
 q(Sql, Parameters, Context, Timeout) ->
     F = fun
         (none) -> [];
@@ -688,15 +711,40 @@ q(Sql, Parameters, Context, Timeout) ->
     end,
     with_connection(F, Context).
 
+%% @doc Do an SQL query, returns the first result of
+%% the first row or undefined if there are no returned rows. Crash if the
+%% query errors. There is a query timeout of 30 seconds.
+-spec q1(SQL, Context) -> Result when
+    SQL :: sql(),
+    Context :: z:context(),
+    Result :: term() | undefined.
 q1(Sql, Context) ->
     q1(Sql, [], Context).
 
+%% @doc Do an SQL query, returns the first result of
+%% the first row or undefined if there are no returned rows. The parameters
+%% are used for argument $1 etc. Crash if the query errors. There is a query
+%% timeout of 30 seconds.
+-spec q1(SQL, Parameters, Context) -> Result when
+    SQL :: sql(),
+    Parameters :: parameters(),
+    Context :: z:context(),
+    Result :: term() | undefined.
 q1(Sql, Parameters, #context{} = Context) ->
     q1(Sql, Parameters, Context, ?TIMEOUT);
 q1(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
     q1(Sql, [], Context, Timeout).
 
--spec q1(sql(), parameters(), #context{}, pos_integer()) -> term() | undefined.
+%% @doc Do an SQL query, returns the first result of
+%% the first row or undefined if there are no returned rows. Crash if
+%% the query errors. The parameters are used for argument $1 etc. in the query.
+%% Supply a timeout in milliseconds after which the query is canceled.
+-spec q1(SQL, Parameters, Context, Timeout) -> Result when
+    SQL :: sql(),
+    Parameters :: parameters(),
+    Context :: z:context(),
+    Timeout :: pos_integer(),
+    Result :: term() | undefined.
 q1(Sql, Parameters, Context, Timeout) ->
     F = fun
         (none) -> undefined;
@@ -720,9 +768,22 @@ q1(Sql, Parameters, Context, Timeout) ->
     with_connection(F, Context).
 
 
+%% @doc Do an SQL query, return the first row or undefined if no rows are
+%% returned. Crash if the query errors. There is a query timeout of 30 seconds.
+-spec q_row(SQL, Context) -> Row | undefined when
+    SQL :: sql(),
+    Context :: z:context(),
+    Row :: list( term() ).
 q_row(Sql, Context) ->
     q_row(Sql, [], Context).
 
+%% @doc Do an SQL query, return the first row or undefined if no rows are
+%% returned. Crash if the query errors. There is a query timeout of 30 seconds.
+-spec q_row(SQL, Parameters, Context) -> Row | undefined when
+    SQL :: sql(),
+    Parameters :: parameter(),
+    Context :: z:context(),
+    Row :: list( term() ).
 q_row(Sql, Args, Context) ->
     case q(Sql, Args, Context) of
         [Row|_] -> Row;
@@ -730,9 +791,22 @@ q_row(Sql, Args, Context) ->
     end.
 
 
+%% @doc Do an SQL query without parameters, returns the result without mapping
+%% from the database driver. There is a query timeout of 30 seconds.
+-spec squery(SQL, Context) -> Result when
+    SQL :: sql(),
+    Context :: z:context(),
+    Result :: query_result().
 squery(Sql, Context) ->
     squery(Sql, Context, ?TIMEOUT).
 
+%% @doc Do an SQL query without parameters, returns the result without mapping
+%% from the database driver. There is a query timeout of 30 seconds.
+-spec squery(SQL, Context, Timeout) -> Result when
+    SQL :: sql(),
+    Context :: z:context(),
+    Timeout :: pos_integer(),
+    Result :: query_result().
 squery(Sql, Context, Timeout) when is_integer(Timeout) ->
     F = fun(C) when C =:= none -> {error, noresult};
            (C) ->
@@ -742,15 +816,35 @@ squery(Sql, Context, Timeout) when is_integer(Timeout) ->
     with_connection(F, Context).
 
 
+%% @doc Do an SQL query with empty parameters, returns the result without mapping
+%% from the database driver. There is a query timeout of 30 seconds.
+-spec equery(SQL, Context) -> Result when
+    SQL :: sql(),
+    Context :: z:context(),
+    Result :: query_result().
 equery(Sql, Context) ->
     equery(Sql, [], Context).
 
+%% @doc Do an SQL query with parameters, returns the result without mapping
+%% from the database driver. There is a query timeout of 30 seconds.
+-spec equery(SQL, Parameters, Context) -> Result when
+    SQL :: sql(),
+    Parameters :: parameters(),
+    Context :: z:context(),
+    Result :: query_result().
 equery(Sql, Parameters, #context{} = Context) ->
     equery(Sql, Parameters, Context, ?TIMEOUT);
 equery(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
     equery(Sql, [], Context, Timeout).
 
--spec equery(sql(), parameters(), z:context(), integer()) -> query_result().
+%% @doc Do an SQL query empty parameters, returns the result without mapping
+%% from the database driver. The given timeout is in milliseconds.
+-spec equery(SQL, Parameters, Context, Timeout) -> Result when
+    SQL :: sql(),
+    Parameters :: parameters(),
+    Context :: z:context(),
+    Timeout :: pos_integer(),
+    Result :: query_result().
 equery(Sql, Parameters, Context, Timeout) ->
     F = fun(C) when C =:= none -> {error, noresult};
            (C) ->
@@ -759,11 +853,22 @@ equery(Sql, Parameters, Context, Timeout) ->
         end,
     with_connection(F, Context).
 
--spec execute_batch(sql(), list(parameters()), z:context(), integer()) -> query_result().
+%% @doc Execute the same SQL statement for a list of parameters. Default timeout
+%% of 30 seconds.
+-spec execute_batch(SQL, ParametersList, Context) -> query_result() when
+    SQL :: sql(),
+    ParametersList :: list( parameters() ),
+    Context :: z:context().
 execute_batch(Sql, Batch, Context) ->
     execute_batch(Sql, Batch, Context, ?TIMEOUT).
 
 
+%% @doc Execute the same SQL statement for a list of parameters.
+-spec execute_batch(SQL, ParametersList, Context, Timeout) -> query_result() when
+    SQL :: sql(),
+    ParametersList :: list( parameters() ),
+    Context :: z:context(),
+    Timeout :: pos_integer().
 execute_batch(Sql, Batch, Context, Timeout) ->
     F = fun(none) ->
                 {error, noresult};
@@ -773,8 +878,15 @@ execute_batch(Sql, Batch, Context, Timeout) ->
         end,
     with_connection(F, Context).
 
-%% @doc Insert a new row in a table, use only default values.
--spec insert(table_name(), z:context()) -> {ok, pos_integer()|undefined} | {error, term()}.
+%% @doc Insert a new row in a table, use only default values and return the new record id.
+%% If the table has an 'id' column then the new id is returned. The 'id' column shoud be
+%% the primary key column and have type 'serial' (or bigserial). All columns must
+%% have a default value or be nullable.
+-spec insert(Table, Context) -> {ok, NewId | undefined} | {error, Reason} when
+    Table :: table_name(),
+    Context :: z:context(),
+    NewId :: id(),
+    Reason :: term().
 insert(Table, Context) ->
     {_Schema, _Tab, QTab} = quoted_table_name(Table),
     with_connection(
@@ -785,10 +897,16 @@ insert(Table, Context) ->
         Context).
 
 
-%% @doc Insert a row, setting the fields to the props. Unknown columns are
-%% serialized in the props column. When the table has an 'id' column then the
-%% new id is returned.
--spec insert(table_name(), props(), z:context()) -> {ok, integer()|undefined} | {error, term()}.
+%% @doc Insert a new row in a table and return the new record id.
+%% Unknown columns are serialized in the props or props_json column. If the table has an 'id'
+%% column then the new id is returned. The 'id' column shoud be the primary key column
+%% and have type 'serial' (or bigserial).
+-spec insert(Table, Parameters, Context) -> {ok, NewId | undefined} | {error, Reason} when
+    Table :: table_name(),
+    Parameners :: props(),
+    Context :: z:context(),
+    NewId :: id(),
+    Reason :: term().
 insert(Table, Parameters, Context) when is_list(Parameters) ->
     insert(Table, z_props:from_props(Parameters), Context);
 insert(Table, Parameters, Context) ->
@@ -892,8 +1010,17 @@ insert(Table, Parameters, Context) ->
     end.
 
 
-%% @doc Update a row in a table, merging the props list with any new props values
--spec update(table_name(), id(), props(), z:context()) -> {ok, RowsUpdated::integer()} | {error, term()}.
+%% @doc Update a row in a table, merging the properties with any new property values. The table
+%% must have a column id of some integer type. If there is no matching column then 0 is returned
+%% for the number of updated columns. The update is done within a transaction, first the old values
+%% are read and then merged with the new values.
+-spec update(Table, Id, Props, Context) -> {ok, RowsUpdated} | {error, Reason} when
+    Table :: table_name(),
+    Id :: id(),
+    Props :: props(),
+    Context :: z:context(),
+    RowsUpdated :: non_neg_integer(),
+    Reason :: term().
 update(Table, Id, Parameters, Context) when is_list(Parameters) ->
     update(Table, Id, z_props:from_props(Parameters), Context);
 update(Table, Id, Parameters, Context) when is_map(Parameters) ->
