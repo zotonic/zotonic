@@ -657,16 +657,16 @@ map_merge_props(_, Acc) ->
 %% Simple queries - return tuples or number of rows updated.
 %% ----------------------------------------------------------------
 
-%% @doc Do an SQL query, return its results. Crash if the query errors.
+%% @doc Do an SQL query, return its results. Throws if the query errors.
 %% There is a query timeout of 30 seconds.
 -spec q(SQL, Context) -> Result when
     SQL :: sql(),
     Context :: z:context(),
-    Result :: term().
+    Result :: list() | integer().
 q(Sql, Context) ->
     q(Sql, [], Context, ?TIMEOUT).
 
-%% @doc Do an SQL query, return its results. Crash if the query errors.
+%% @doc Do an SQL query, return its results. Throws if the query errors.
 %% The parameters are used for argument $1 etc. in the query. Query timeout
 %% of 30 seconds.
 -spec q(SQL, Parameters, Context) -> Result when
@@ -678,13 +678,13 @@ q(Sql, Context) ->
         SQL :: sql(),
         Context :: z:context(),
         Timeout :: pos_integer(),
-        Result :: term().
+        Result :: list() | integer().
 q(Sql, Parameters, #context{} = Context) ->
     q(Sql, Parameters, Context, ?TIMEOUT);
 q(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
     q(Sql, [], Context, Timeout).
 
-%% @doc Do an SQL query, return its results. Crash if the query errors.
+%% @doc Do an SQL query, return its results. Throws if the query errors.
 %% The parameters are used for argument $1 etc. in the query. Supply a
 %% timeout in milliseconds after which the query is canceled.
 -spec q(SQL, Parameters, Context, Timeout) -> Result when
@@ -692,7 +692,7 @@ q(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
     Parameters :: parameters(),
     Context :: z:context(),
     Timeout :: pos_integer(),
-    Result :: term().
+    Result :: list() | integer().
 q(Sql, Parameters, Context, Timeout) ->
     F = fun
         (none) -> [];
