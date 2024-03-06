@@ -903,7 +903,7 @@ insert(Table, Context) ->
 %% and have type 'serial' (or bigserial).
 -spec insert(Table, Parameters, Context) -> {ok, NewId | undefined} | {error, Reason} when
     Table :: table_name(),
-    Parameners :: props(),
+    Parameters :: props(),
     Context :: z:context(),
     NewId :: id(),
     Reason :: term().
