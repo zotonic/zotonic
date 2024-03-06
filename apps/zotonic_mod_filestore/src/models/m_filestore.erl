@@ -470,7 +470,11 @@ fetch_move_to_local(Context) ->
 
 %% @doc Called after a file has been moved from the remote service to local.
 %% Marks the entry as deleted and removes the 'move to local' flag.
--spec purge_move_to_local( FileId::integer(), IsLocalKeep::boolean(), z:context() ) -> ok | {error, enoent}.
+-spec purge_move_to_local(FileId, IsLocalKeep, Context) -> Count when
+    FileId :: pos_integer(),
+    IsLocalKeep :: boolean(),
+    Context :: z:context(),
+    Count :: non_neg_integer().
 purge_move_to_local(Id, true, Context) ->
     z_db:q("update filestore
             set is_move_to_local = false,
