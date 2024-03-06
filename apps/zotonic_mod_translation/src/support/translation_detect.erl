@@ -139,7 +139,8 @@ compute_distance([{K, Val}|R], Profile, Best, Dist) ->
     compute_distance(R, Profile, Best, D + Dist).
 
 %% %% @doc Compile the language profiles into data files, reload the data files.
--spec generate_profile_data() -> ok.
+-spec generate_profile_data() -> {ok, Languages} when
+    Languages :: [ z_language:language_code() ].
 generate_profile_data() ->
     Profiles = train(),
     lists:foreach(
