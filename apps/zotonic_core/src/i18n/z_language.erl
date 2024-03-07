@@ -193,8 +193,11 @@ maybe_set(K, V, Map) ->
     end.
 
 
-%% @doc Get the list of configured languages that are enabled.
--spec enabled_languages(z:context()) -> list( atom() ).
+%% @doc Get the list of configured languages that are enabled. The list is
+%% in the order of configured priority.
+-spec enabled_languages(Context) -> LanguageCodes when
+    Context :: z:context(),
+    LanguageCodes :: [ language_code() ].
 enabled_languages(Context) ->
     MemoKey = {'z_language$enabled_languages', z_context:site(Context)},
     case z_memo:get(MemoKey) of
@@ -210,8 +213,11 @@ enabled_languages(Context) ->
             z_memo:set(MemoKey, ConfigLanguages)
     end.
 
-%% @doc Get the list of configured languages that are editable.
--spec editable_languages(z:context()) -> list( atom() ).
+%% @doc Get the list of configured languages that are editable. The list is
+%% in the order of configured priority.
+-spec editable_languages(Context) -> LanguageCodes when
+    Context :: z:context(),
+    LanguageCodes :: [ language_code() ].
 editable_languages(Context) ->
     MemoKey = {'z_language$editable_languages', z_context:site(Context)},
     case z_memo:get(MemoKey) of
@@ -229,24 +235,31 @@ editable_languages(Context) ->
     end.
 
 %% @doc Get the list of configured languages.
--spec language_config(z:context()) -> list( {atom(), boolean()} ).
+-spec language_config(Context) -> LanguageConfigList when
+    Context :: z:context(),
+    LanguageConfigList :: [ {language_code(), language_status()} ].
 language_config(Context) ->
     case m_config:get(i18n, languages, Context) of
         undefined -> [];
         LanguageConfig -> proplists:get_value(list, LanguageConfig, [])
     end.
 
-%% @doc Save a new language config list
--spec set_language_config( list(), z:context() ) -> ok.
+%% @doc Save a new language config list. If the empty list is saved then the
+%% default language (en) is enabled. There must be a language enabled. The list
+%% is in the order of preference. The default system language is the first
+%% enabled (true) language in the list.
+-spec set_language_config( LanguageStatusList, Context ) -> ok when
+    Context :: z:context(),
+    LanguageStatusList :: [ {language_code(), language_status()} ].
 set_language_config([], Context) ->
     set_language_config([ {?DEFAULT_LANGUAGE, true} ], Context);
-set_language_config(NewConfig, Context) ->
+set_language_config(LanguageStatusList, Context) ->
     case language_config(Context) of
-        NewConfig -> ok;
-        _ -> m_config:set_prop(i18n, languages, list, NewConfig, Context)
+        LanguageStatusList -> ok;
+        _ -> m_config:set_prop(i18n, languages, list, LanguageStatusList, Context)
     end,
     % Store the first enabled language as the default language
-    Default = first_enabled(NewConfig),
+    Default = first_enabled(LanguageStatusList),
     DefaultB = z_convert:to_binary(Default),
     case m_config:get_value(i18n, language, Context) of
         DefaultB -> ok;
@@ -266,7 +279,8 @@ first_enabled([_|Cs]) ->
 
 %% @doc Returns the configured default language for this server; if not set, 'en'
 %%      (English).
--spec default_language( z:context() | undefined ) -> language_code().
+-spec default_language(OptContext) -> language_code() when
+    OptContext :: z:context() | undefined.
 default_language(undefined) ->
     ?DEFAULT_LANGUAGE;
 default_language(Context) ->
@@ -284,7 +298,7 @@ is_valid(Code) ->
 
 %% @doc Translate a language-code to an atom; only return known codes.
 %% Also map aliased language codes to their preferred format. Eg. 'zh-tw' to 'zh-hant'
--spec to_language_atom( language() ) -> {ok, language()} | {error, not_a_language}.
+-spec to_language_atom( language() ) -> {ok, language_code()} | {error, not_a_language}.
 to_language_atom(Code) when is_binary(Code); is_atom(Code) ->
     z_language_data:to_language_atom(Code);
 to_language_atom(Code) ->
@@ -332,7 +346,11 @@ is_rtl(Code) ->
 
 
 %% @doc Check if a language code is allowed to be used as a user
-%%      selectable language for the interface.
+%% selectable language for the interface. Returns false for
+%% unknown languages.
+-spec is_language_enabled(Language, Context) -> boolean() when
+    Language :: language(),
+    Context :: z:context().
 is_language_enabled(Code, Context) when is_atom(Code) ->
     lists:member(Code, enabled_language_codes(Context));
 is_language_enabled(Code, Context) ->
@@ -344,7 +362,8 @@ is_language_enabled(Code, Context) ->
     end.
 
 %% @doc Check if a language code is allowed to be edited.
-%%      This is a superset of the enabled languages.
+%% This is a superset of the enabled languages. Returns false for
+%% unknown languages.
 -spec is_language_editable( language(), z:context() ) -> boolean().
 is_language_editable(Code, Context) when is_atom(Code) ->
     lists:member(Code, editable_language_codes(Context));
