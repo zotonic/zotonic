@@ -67,6 +67,8 @@ The following searches are implemented in mod_search:
 +------------------------+---------------------------------------------------------------+-------------------+
 |ongoing                 |Pages with past date_start and future date_end.                |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
+|ongoing_on              |Pages with a date_start - date_end range around the given date.|                   |
++------------------------+---------------------------------------------------------------+-------------------+
 |autocomplete            |Full text search where the last word gets a wildcard.          |text               |
 +------------------------+---------------------------------------------------------------+-------------------+
 |autocomplete            |Full text search where the last word gets a wildcard, filtered |cat, text          |

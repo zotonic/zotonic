@@ -288,6 +288,15 @@ and an end date which lies in the future::
 
     ongoing
 
+ongoing_on
+^^^^^^^^^^
+
+Specifying 'ongoing' means that you only want to select things that
+are happening on the given date: that have a start date which lies before
+the given date and an end date which lies after the given date::
+
+    ongoing_on='yesterday'
+
 finished
 ^^^^^^^^
 
