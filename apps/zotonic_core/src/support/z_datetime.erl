@@ -260,51 +260,51 @@ to_datetime(DT, Tz) ->
 
 to_dt({{_,_,_},{_,_,_}} = DT, _Now) -> DT;
 to_dt({_,_,_} = D, _Now) -> {D, {0,0,0}};
-to_dt(B, Now) when is_binary(B) ->  to_dt(binary_to_list(B), Now);
 to_dt(<<"now">>, Now) -> Now;
 to_dt(<<"today">>, Now) -> Now;
-to_dt(<<"tomorrow">>, Now) ->    relative_time(1, '+', "day", Now);
-to_dt(<<"yesterday">>, Now) ->   relative_time(1, '+', "day", Now);
-to_dt(<<"+", Relative/binary>>, Now) -> to_relative_time('+', binary_to_list(Relative), Now);
-to_dt(<<"-", Relative/binary>>, Now) -> to_relative_time('-', binary_to_list(Relative), Now);
+to_dt(<<"tomorrow">>, Now) -> relative_time(1, '+', [<<"day">>], Now);
+to_dt(<<"yesterday">>, Now) -> relative_time(1, '+', [<<"day">>], Now);
+to_dt(<<"+", Relative/binary>>, Now) -> to_relative_time('+', Relative, Now);
+to_dt(<<"-", Relative/binary>>, Now) -> to_relative_time('-', Relative, Now);
 to_dt("now", Now) -> Now;
 to_dt("today", Now) -> Now;
-to_dt("tomorrow", Now) ->    relative_time(1, '+', "day", Now);
-to_dt("yesterday", Now) ->   relative_time(1, '+', "day", Now);
+to_dt("tomorrow", Now) -> relative_time(1, '+', [<<"day">>], Now);
+to_dt("yesterday", Now) -> relative_time(1, '+', [<<"day">>], Now);
 to_dt("+"++Relative, Now) -> to_relative_time('+', Relative, Now);
 to_dt("-"++Relative, Now) -> to_relative_time('-', Relative, Now);
-to_dt(DT, _Now) -> z_convert:to_datetime(DT).
+to_dt(DT, _Now) -> to_datetime(DT).
 
-to_relative_time(Op, S, Now) ->
-    Ts = string:tokens(S, " "),
-    Ts1 = [ T || T <- Ts, T =/= [] ],
-    relative_time(1, Op, Ts1, Now).
+to_relative_time(Op, S, Now) when is_list(S) ->
+    to_relative_time(Op, z_convert:to_binary(S), Now);
+to_relative_time(Op, S, Now) when is_binary(S) ->
+    Ts = binary:split(S, <<" ">>, [ global, trim_all ]),
+    relative_time(1, Op, Ts, Now).
 
-relative_time(_N, Op, [[C|_]=N|Ts], Now) when C >= $0, C =< $9 ->
+relative_time(_N, Op, [<<C, _/binary>>=N|Ts], Now) when C >= $0, C =< $9 ->
     relative_time(list_to_integer(N), Op, Ts, Now);
-relative_time(N, '+', ["minute"|_], Now) ->    next_minute(Now, N);
-relative_time(N, '+', ["hour"|_], Now) ->      next_hour(Now, N);
-relative_time(N, '+', ["day"|_], Now) ->       next_day(Now, N);
-relative_time(N, '+', ["sunday"|_], Now) ->    next_day(week_start(7, Now), N*7);
-relative_time(N, '+', ["monday"|_], Now) ->    next_day(week_start(1, Now), N*7);
-relative_time(N, '+', ["tuesday"|_], Now) ->   next_day(week_start(2, Now), N*7);
-relative_time(N, '+', ["wednesday"|_], Now) -> next_day(week_start(3, Now), N*7);
-relative_time(N, '+', ["thursday"|_], Now) ->  next_day(week_start(4, Now), N*7);
-relative_time(N, '+', ["friday"|_], Now) ->    next_day(week_start(5, Now), N*7);
-relative_time(N, '+', ["saturday"|_], Now) ->  next_day(week_start(6, Now), N*7);
-relative_time(N, '+', ["week"|_], Now) ->      next_week(Now, N);
-relative_time(N, '+', ["month"|_], Now) ->     next_month(Now, N);
-relative_time(N, '+', ["year"|_], Now) ->      next_year(Now, N);
-relative_time(N, '-', ["day"|_], Now) ->       prev_day(Now, N);
-relative_time(N, '-', ["sunday"|_], Now) ->    prev_day(week_start(7, Now), N*7);
-relative_time(N, '-', ["monday"|_], Now) ->    prev_day(week_start(1, Now), N*7);
-relative_time(N, '-', ["tuesday"|_], Now) ->   prev_day(week_start(2, Now), N*7);
-relative_time(N, '-', ["wednesday"|_], Now) -> prev_day(week_start(3, Now), N*7);
-relative_time(N, '-', ["thursday"|_], Now) ->  prev_day(week_start(4, Now), N*7);
-relative_time(N, '-', ["friday"|_], Now) ->    prev_day(week_start(5, Now), N*7);
-relative_time(N, '-', ["week"|_], Now) ->      prev_week(Now, N);
-relative_time(N, '-', ["month"|_], Now) ->     prev_month(Now, N);
-relative_time(N, '-', ["year"|_], Now) ->      prev_year(Now, N);
+relative_time(N, '+', [<<"minute", _/binary>>|_], Now) ->    next_minute(Now, N);
+relative_time(N, '+', [<<"hour", _/binary>>|_], Now) ->      next_hour(Now, N);
+relative_time(N, '+', [<<"day", _/binary>>|_], Now) ->       next_day(Now, N);
+relative_time(N, '+', [<<"sunday", _/binary>>|_], Now) ->    next_day(week_start(7, Now), N*7);
+relative_time(N, '+', [<<"monday", _/binary>>|_], Now) ->    next_day(week_start(1, Now), N*7);
+relative_time(N, '+', [<<"tuesday", _/binary>>|_], Now) ->   next_day(week_start(2, Now), N*7);
+relative_time(N, '+', [<<"wednesday", _/binary>>|_], Now) -> next_day(week_start(3, Now), N*7);
+relative_time(N, '+', [<<"thursday", _/binary>>|_], Now) ->  next_day(week_start(4, Now), N*7);
+relative_time(N, '+', [<<"friday", _/binary>>|_], Now) ->    next_day(week_start(5, Now), N*7);
+relative_time(N, '+', [<<"saturday", _/binary>>|_], Now) ->  next_day(week_start(6, Now), N*7);
+relative_time(N, '+', [<<"week", _/binary>>|_], Now) ->      next_week(Now, N);
+relative_time(N, '+', [<<"month", _/binary>>|_], Now) ->     next_month(Now, N);
+relative_time(N, '+', [<<"year", _/binary>>|_], Now) ->      next_year(Now, N);
+relative_time(N, '-', [<<"day", _/binary>>|_], Now) ->       prev_day(Now, N);
+relative_time(N, '-', [<<"sunday", _/binary>>|_], Now) ->    prev_day(week_start(7, Now), N*7);
+relative_time(N, '-', [<<"monday", _/binary>>|_], Now) ->    prev_day(week_start(1, Now), N*7);
+relative_time(N, '-', [<<"tuesday", _/binary>>|_], Now) ->   prev_day(week_start(2, Now), N*7);
+relative_time(N, '-', [<<"wednesday", _/binary>>|_], Now) -> prev_day(week_start(3, Now), N*7);
+relative_time(N, '-', [<<"thursday", _/binary>>|_], Now) ->  prev_day(week_start(4, Now), N*7);
+relative_time(N, '-', [<<"friday", _/binary>>|_], Now) ->    prev_day(week_start(5, Now), N*7);
+relative_time(N, '-', [<<"week", _/binary>>|_], Now) ->      prev_week(Now, N);
+relative_time(N, '-', [<<"month", _/binary>>|_], Now) ->     prev_month(Now, N);
+relative_time(N, '-', [<<"year", _/binary>>|_], Now) ->      prev_year(Now, N);
 relative_time(_N, _Op, _Unit, _Now) ->         undefined.
 
 %% @doc Show a humanized version of a relative datetime.  Like "4 months, 3 days ago".

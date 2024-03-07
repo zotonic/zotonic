@@ -536,6 +536,21 @@ qterm(#{ <<"term">> := <<"ongoing">>, <<"value">> := Boolean}, _Context) ->
                 ]
             }
     end;
+qterm(#{ <<"term">> := <<"ongoing_on">>, <<"value">> := Date}, Context) ->
+    %% ongoing_on
+    %% Filter on items whose date range is around the given date
+    case z_datetime:to_datetime(Date, Context) of
+        {_,_} = DT ->
+            #search_sql_term{
+                where = [
+                    <<"rsc.pivot_date_start <= ">>, '$1',
+                    <<"and rsc.pivot_date_end >= ">>, '$1'
+                ],
+                args = [ DT ]
+            };
+        undefined ->
+            []
+    end;
 qterm(#{ <<"term">> := <<"finished">>, <<"value">> := Boolean}, _Context) ->
     %% finished
     %% Filter on items whose end date lies in the past
