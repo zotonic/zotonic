@@ -281,7 +281,7 @@ to_relative_time(Op, S, Now) when is_binary(S) ->
     relative_time(1, Op, Ts, Now).
 
 relative_time(_N, Op, [<<C, _/binary>>=N|Ts], Now) when C >= $0, C =< $9 ->
-    relative_time(list_to_integer(N), Op, Ts, Now);
+    relative_time(binary_to_integer(N), Op, Ts, Now);
 relative_time(N, '+', [<<"minute", _/binary>>|_], Now) ->    next_minute(Now, N);
 relative_time(N, '+', [<<"hour", _/binary>>|_], Now) ->      next_hour(Now, N);
 relative_time(N, '+', [<<"day", _/binary>>|_], Now) ->       next_day(Now, N);
