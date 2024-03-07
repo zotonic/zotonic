@@ -53,6 +53,8 @@
 
 -define(is_empty(V), (V =:= undefined orelse V =:= <<>> orelse V =:= "" orelse V =:= null)).
 
+%% Minimum amount of characters for a language detect on the basis of texts.
+-define(LANGUAGE_DETECT_THRESHOLD, 10).
 
 %% @doc Insert a new resource. Crashes when insertion is not allowed.
 -spec insert(m_rsc:props_all(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
@@ -1054,41 +1056,33 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
 detect_language(NewProps, Context) ->
     Text = z_html:unescape(z_html:strip(extract_text(NewProps))),
     case z_string:trim(Text) of
-        <<>> ->
-            [ z_context:language(Context) ];
-        Text1 ->
+        Text1 when size(Text1) > ?LANGUAGE_DETECT_THRESHOLD ->
             case z_notifier:first(#language_detect{ text = Text1 }, Context) of
                 undefined ->
                     [ z_context:language(Context) ];
                 Language ->
                     [ Language ]
-            end
+            end;
+        _ ->
+            [ z_context:language(Context) ]
     end.
 
 extract_text(NewProps) ->
     Texts = [
-        extract_title(NewProps),
-        extract_summary(NewProps),
-        extract_body(NewProps)
+        extract_text_prop(<<"title">>, NewProps),
+        extract_text_prop(<<"chapeau">>, NewProps),
+        extract_text_prop(<<"subtitle">>, NewProps),
+        extract_text_prop(<<"summary">>, NewProps),
+        extract_text_prop(<<"body">>, NewProps)
     ],
     Texts1 = [ T || T <- Texts, T =/= <<>> ],
     iolist_to_binary(lists:join(32, Texts1)).
 
-extract_title(#{ <<"title">> := Title }) when is_binary(Title) ->
-    Title;
-extract_title(_) ->
-    <<>>.
-
-extract_summary(#{ <<"summary">> := Summary }) when is_binary(Summary) ->
-    Summary;
-extract_summary(_) ->
-    <<>>.
-
-extract_body(#{ <<"body">> := Body }) when is_binary(Body) ->
-    Body;
-extract_body(_) ->
-    <<>>.
-
+extract_text_prop(K, Props) ->
+    case maps:get(K, Props, undefined) of
+        T when is_binary(T) -> T;
+        _ -> <<>>
+    end.
 
 %% @doc Some forced props, depending on the resource being updated.
 set_forced_props(1, Props) ->

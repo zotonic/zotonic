@@ -573,18 +573,25 @@ set_user_language(Code, Context) ->
     end,
     Context1.
 
-%% @doc Set the default language.
--spec set_default_language(atom(), z:context()) -> z:context().
+%% @doc Event handler to set the default language. Ignores non-enabled languages.
+-spec set_default_language(LanguageCode, Context) -> NewContext when
+    LanguageCode :: z_language:language_code(),
+    Context :: z:context(),
+    NewContext :: z:context().
 set_default_language(Code, Context) ->
     case z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
-            ok = language_status(Code, true, Context),
-            CodeB = z_convert:to_binary(Code),
-            case m_config:get_value(i18n, language, Context) of
-                CodeB -> ok;
-                _ -> m_config:set_value(i18n, language, Code, Context)
-            end,
-            Context;
+            case language_status(Code, true, Context) of
+                ok ->
+                    CodeB = z_convert:to_binary(Code),
+                    case m_config:get_value(i18n, language, Context) of
+                        CodeB -> ok;
+                        _ -> m_config:set_value(i18n, language, Code, Context)
+                    end,
+                    Context;
+                {error, _} ->
+                    z_render:growl_error(?__(<<"Sorry, that language is unknown or not enabled.">>, Context), Context)
+            end;
         false ->
             z_render:growl_error(?__(<<"Sorry, you don't have permission to set the default language.">>, Context), Context)
     end.
@@ -616,8 +623,12 @@ valid_config_language(Code, Context, Tries) ->
             Code
     end.
 
-%% @doc Set/reset the is_enabled flag of a language.
--spec language_status(atom(), boolean() | editable, z:context()) -> ok | {error, nolang|default}.
+%% @doc Set the enabled/editable status of a language. Returns an error if the
+%% language is unknown or the default language is being disabled.
+-spec language_status(Code, Status, Context) -> ok | {error, nolang|default} when
+    Code :: z_language:language_code(),
+    Status :: z_language:language_status(),
+    Context :: z:context().
 language_status(Code, Status, Context) when is_atom(Code), is_atom(Status) ->
     case z_language:default_language(Context) of
         Code when Status =/= true ->
@@ -643,24 +654,17 @@ language_status(Code, Status, Context) when is_atom(Code), is_atom(Status) ->
 
 
 %% @doc Add a language to the i18n configuration
--spec language_add(atom() | binary(), boolean(), z:context()) -> ok | {error, not_a_language}.
-language_add(NewLanguageCode, IsEnabled, Context) when is_boolean(IsEnabled) ->
-    case z_language:is_valid(NewLanguageCode) of
-        false ->
-            ?LOG_WARNING(#{
-                text => <<"mod_translation error. language_add: language does not exist">>,
-                in => zotonic_mod_translation,
-                result => error,
-                reason => not_a_language,
-                language => NewLanguageCode
-            }),
-            {error, not_a_language};
-        true ->
-            NewCode = z_convert:to_atom(NewLanguageCode),
+-spec language_add(Language, Status, Context) -> ok | {error, not_a_language} when
+    Language :: z_language:language(),
+    Status :: z_language:language_status(),
+    Context :: z:context().
+language_add(Language, Status, Context) when is_boolean(Status); Status =:= editable ->
+    case z_language:to_language_atom(Language) of
+        {ok, NewCode} ->
             ConfigLanguages = z_language:language_config(Context),
             ConfigLanguages1 = lists:map(
                 fun
-                    ({Code, _}) when Code =:= NewCode -> {Code, IsEnabled};
+                    ({Code, _}) when Code =:= NewCode -> {Code, Status};
                     (Other) -> Other
                 end,
                 ConfigLanguages),
@@ -668,15 +672,24 @@ language_add(NewLanguageCode, IsEnabled, Context) when is_boolean(IsEnabled) ->
                 true ->
                     ConfigLanguages1;
                 false ->
-                    ConfigLanguages1 ++ [ {NewCode, IsEnabled} ]
+                    ConfigLanguages1 ++ [ {NewCode, Status} ]
             end,
             z_language:set_language_config(ConfigLanguages2, Context),
-            ok
+            ok;
+        {error, _} ->
+            ?LOG_WARNING(#{
+                text => <<"mod_translation error. language_add: language does not exist">>,
+                in => zotonic_mod_translation,
+                result => error,
+                reason => not_a_language,
+                language => Language
+            }),
+            {error, not_a_language}
     end.
 
 
 %% @doc Remove a language from the i18n configuration
--spec language_delete(atom(), z:context()) -> z:context().
+-spec language_delete(z_language:language_code(), z:context()) -> z:context().
 language_delete(LanguageCode, Context) when is_atom(LanguageCode) ->
     DeletesCurrentLanguage = z_context:language(Context) =:= LanguageCode,
     remove_from_config(LanguageCode, Context),
@@ -689,7 +702,7 @@ language_delete(LanguageCode, Context) when is_atom(LanguageCode) ->
     end.
 
 %% @doc Remove a language from the i18n configuration
--spec remove_from_config(atom(), z:context()) -> ok.
+-spec remove_from_config(z_language:language_code(), z:context()) -> ok.
 remove_from_config(LanguageCode, Context) ->
     ConfigLanguages = z_language:language_config(Context),
     ConfigLanguages1 = proplists:delete(LanguageCode, ConfigLanguages),
