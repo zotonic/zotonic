@@ -272,7 +272,7 @@ to_dt("tomorrow", Now) -> relative_time(1, '+', [<<"day">>], Now);
 to_dt("yesterday", Now) -> relative_time(1, '+', [<<"day">>], Now);
 to_dt("+"++Relative, Now) -> to_relative_time('+', Relative, Now);
 to_dt("-"++Relative, Now) -> to_relative_time('-', Relative, Now);
-to_dt(DT, _Now) -> to_datetime(DT).
+to_dt(DT, _Now) -> z_convert:to_datetime(DT).
 
 to_relative_time(Op, S, Now) when is_list(S) ->
     to_relative_time(Op, z_convert:to_binary(S), Now);
