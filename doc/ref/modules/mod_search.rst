@@ -63,11 +63,19 @@ The following searches are implemented in mod_search:
 +------------------------+---------------------------------------------------------------+-------------------+
 |upcoming                |Selects pages with future date_end.                            |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
+|upcoming_on             |Selects pages with date_end after the given date.              |date               |
++------------------------+---------------------------------------------------------------+-------------------+
 |finished                |Selects pages with a past date_end.                            |                   |
++------------------------+---------------------------------------------------------------+-------------------+
+|finished_on             |Selects pages with a date_end before the given date.           |date               |
++------------------------+---------------------------------------------------------------+-------------------+
+|unfinished              |Selects pages with a date_end in the future.                   |                   |
++------------------------+---------------------------------------------------------------+-------------------+
+|unfinished_on           |Selects pages with a date_end after the given date.            |date               |
 +------------------------+---------------------------------------------------------------+-------------------+
 |ongoing                 |Pages with past date_start and future date_end.                |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
-|ongoing_on              |Pages with a date_start - date_end range around the given date.|                   |
+|ongoing_on              |Pages with a date_start - date_end range around the given date.|date               |
 +------------------------+---------------------------------------------------------------+-------------------+
 |autocomplete            |Full text search where the last word gets a wildcard.          |text               |
 +------------------------+---------------------------------------------------------------+-------------------+
