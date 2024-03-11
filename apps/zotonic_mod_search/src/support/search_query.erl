@@ -517,6 +517,20 @@ qterm(#{ <<"term">> := <<"upcoming">>, <<"value">> := Boolean}, _Context) ->
                 ]
             }
     end;
+qterm(#{ <<"term">> := <<"upcoming_on">>, <<"value">> := Date}, Context) ->
+    %% upcoming_on
+    %% Filter on items whose start date lies after the date
+    case z_datetime:to_datetime(Date, Context) of
+        {_,_} = DT ->
+            #search_sql_term{
+                where = [
+                    <<"rsc.pivot_date_start >= ">>, '$1'
+                ],
+                args = [ DT ]
+            };
+        undefined ->
+            []
+    end;
 qterm(#{ <<"term">> := <<"ongoing">>, <<"value">> := Boolean}, _Context) ->
     %% ongoing
     %% Filter on items whose date range is around the current date
@@ -536,6 +550,21 @@ qterm(#{ <<"term">> := <<"ongoing">>, <<"value">> := Boolean}, _Context) ->
                 ]
             }
     end;
+qterm(#{ <<"term">> := <<"ongoing_on">>, <<"value">> := Date}, Context) ->
+    %% ongoing_on
+    %% Filter on items whose date range is around the given date
+    case z_datetime:to_datetime(Date, Context) of
+        {_,_} = DT ->
+            #search_sql_term{
+                where = [
+                    <<"rsc.pivot_date_start <= ">>, '$1',
+                    <<"and rsc.pivot_date_end >= ">>, '$1'
+                ],
+                args = [ DT ]
+            };
+        undefined ->
+            []
+    end;
 qterm(#{ <<"term">> := <<"finished">>, <<"value">> := Boolean}, _Context) ->
     %% finished
     %% Filter on items whose end date lies in the past
@@ -553,8 +582,22 @@ qterm(#{ <<"term">> := <<"finished">>, <<"value">> := Boolean}, _Context) ->
                 ]
             }
     end;
+qterm(#{ <<"term">> := <<"finished_on">>, <<"value">> := Date}, Context) ->
+    %% finished_on
+    %% Filter on items whose end date lies before a date
+    case z_datetime:to_datetime(Date, Context) of
+        {_,_} = DT ->
+            #search_sql_term{
+                where = [
+                    <<"rsc.pivot_date_end < ">>, '$1'
+                ],
+                args = [ DT ]
+            };
+        undefined ->
+            []
+    end;
 qterm(#{ <<"term">> := <<"unfinished">>, <<"value">> := Boolean}, _Context) ->
-    %% Filter on items whose start date lies in the future
+    %% Filter on items whose end date lies in the future
     case z_convert:to_bool(Boolean) of
         true ->
             #search_sql_term{
@@ -568,6 +611,19 @@ qterm(#{ <<"term">> := <<"unfinished">>, <<"value">> := Boolean}, _Context) ->
                     <<"rsc.pivot_date_end < current_timestamp">>
                 ]
             }
+    end;
+qterm(#{ <<"term">> := <<"unfinished_on">>, <<"value">> := Date}, Context) ->
+    %% Filter on items whose end date lies after the date
+    case z_datetime:to_datetime(Date, Context) of
+        {_,_} = DT ->
+            #search_sql_term{
+                where = [
+                    <<"rsc.pivot_date_end >= ">>, '$1'
+                ],
+                args = [ DT ]
+            };
+        undefined ->
+            []
     end;
 qterm(#{ <<"term">> := <<"unfinished_or_nodate">>, <<"value">> := Boolean}, _Context) ->
     %% Filter on items whose start date lies in the future or don't have an end_date

@@ -279,6 +279,15 @@ useful to select upcoming events::
 
     upcoming
 
+upcoming_on
+^^^^^^^^^^^
+
+Specifying 'upcoming' means that you only want to select things that
+have a start date after the given date. Like the name says,
+useful to select upcoming events::
+
+    upcoming_on='+1 week'
+
 ongoing
 ^^^^^^^
 
@@ -288,6 +297,15 @@ and an end date which lies in the future::
 
     ongoing
 
+ongoing_on
+^^^^^^^^^^
+
+Specifying 'ongoing' means that you only want to select things that
+are happening on the given date: that have a start date which lies before
+the given date and an end date which lies after the given date::
+
+    ongoing_on='yesterday'
+
 finished
 ^^^^^^^^
 
@@ -296,6 +314,14 @@ have a start date which lies in the past::
 
     finished
 
+finished_on
+^^^^^^^^^^^
+
+Specifying 'finished' means that you only want to select things that
+have a start date which lies before the given date::
+
+    finished_on='tomorrow'
+
 unfinished
 ^^^^^^^^^^
 
@@ -303,6 +329,14 @@ Specifying 'unfinished' means that you only want to select things that
 have an end date which lies in the future::
 
     unfinished
+
+unfinished_on
+^^^^^^^^^^^^^
+
+Specifying 'unfinished' means that you only want to select things that
+have an end date which after the given date::
+
+    unfinished_on='+3 days'
 
 unfinished_or_nodate
 ^^^^^^^^^^^^^^^^^^^^

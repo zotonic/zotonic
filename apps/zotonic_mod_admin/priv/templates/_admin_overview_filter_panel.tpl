@@ -55,6 +55,9 @@
             </div>
         </div>
 
+        {% block meta %}
+        {% endblock %}
+
         {% block category %}
             {% with m.rsc[qargs.qcat].id as cat_id %}
                 <div class="form-group">
@@ -112,6 +115,9 @@
         {% endblock %}
 
         {% block content_group %}
+        {% endblock %}
+
+        {% block meta_after %}
         {% endblock %}
     </div>
 
@@ -181,9 +187,15 @@
                 </select>
             </div>
         </div>
+
+        {% block properties_after %}
+        {% endblock %}
     </div>
 
     <div class="col-sm-4">
+        {% block flags %}
+        {% endblock %}
+
         <div class="form-group">
             <label class="col-sm-3 control-label">{_ Featured _}</label>
             <div class="col-sm-4">
@@ -239,6 +251,9 @@
             </div>
         </div>
 
+        {% block flags_after %}
+        {% endblock %}
+
         <div class="form-group">
             <label class="col-sm-3 control-label">{_ Unique name _}</label>
             <div class="col-sm-9">
@@ -246,33 +261,38 @@
             </div>
         </div>
 
-        {% with qargs.qsort as qsort %}
-            <div class="form-group">
-                <label class="col-sm-3 control-label">{_ Sort by _}</label>
-                <div class="col-sm-9">
-                    <select name="qsort" class="form-control">
-                        <option value=""></option>
-                        {% for name, title in [
-                                [ "-created", _"Creation date, newest first" ],
-                                [ "created", _"Creation date, oldest first" ],
-                                [ "-modified", _"Modification date, newest first" ],
-                                [ "modified", _"Modification date, oldest first" ],
-                                [ "-publication_start", _"Published on, newest first" ],
-                                [ "publication_start", _"Published on, oldest first" ],
-                                [ "-publication_end", _"Published ends, newest first" ],
-                                [ "publication_end", _"Published ends, oldest first" ]
-                            ]
-                        %}
-                            <option value="{{ name }}" {% if qsort == name %}selected{% endif %}>
-                                {{ title }}
-                            </option>
-                        {% endfor %}
-                        {% block sort_options %}
-                        {% endblock %}
-                    </select>
+        {% block sort %}
+            {% with qargs.qsort as qsort %}
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">{_ Sort by _}</label>
+                    <div class="col-sm-9">
+                        <select name="qsort" class="form-control">
+                            <option value=""></option>
+                            {% for name, title in [
+                                    [ "-created", _"Creation date, newest first" ],
+                                    [ "created", _"Creation date, oldest first" ],
+                                    [ "-modified", _"Modification date, newest first" ],
+                                    [ "modified", _"Modification date, oldest first" ],
+                                    [ "-publication_start", _"Published on, newest first" ],
+                                    [ "publication_start", _"Published on, oldest first" ],
+                                    [ "-publication_end", _"Published ends, newest first" ],
+                                    [ "publication_end", _"Published ends, oldest first" ]
+                                ]
+                            %}
+                                <option value="{{ name }}" {% if qsort == name %}selected{% endif %}>
+                                    {{ title }}
+                                </option>
+                            {% endfor %}
+                            {% block sort_options %}
+                            {% endblock %}
+                        </select>
+                    </div>
                 </div>
-            </div>
-        {% endwith %}
+            {% endwith %}
+        {% endblock %}
+
+        {% block sort_after %}
+        {% endblock %}
     </div>
 </div>
 
