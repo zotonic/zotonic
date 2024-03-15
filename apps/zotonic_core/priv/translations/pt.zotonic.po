@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-01-09 14:01\n"
+"PO-Revision-Date: 2024-03-06 15:11\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -16,11 +16,11 @@ msgstr ""
 "X-Crowdin-File-ID: 8692\n"
 "Language: pt_PT\n"
 
-#: apps/zotonic_core/src/support/z_fetch.erl:200
+#: apps/zotonic_core/src/support/z_fetch.erl:215
 msgid "Could not fetch the remote resource URL."
 msgstr "Não foi possível buscar o URL do recurso remoto."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:186
+#: apps/zotonic_core/src/support/z_fetch.erl:201
 msgid "Forbidden to access the remote resource URL."
 msgstr "Proibido acessar o URL do recurso remoto."
 
@@ -28,31 +28,31 @@ msgstr "Proibido acessar o URL do recurso remoto."
 msgid "Page Import"
 msgstr "Importação de página"
 
-#: apps/zotonic_core/src/support/z_fetch.erl:194
+#: apps/zotonic_core/src/support/z_fetch.erl:209
 msgid "The remote server can not handle this URL."
 msgstr "O servidor remoto não pode lidar com este URL."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:198
+#: apps/zotonic_core/src/support/z_fetch.erl:213
 msgid "The remote server for the URL is having problems."
 msgstr "O servidor remoto da URL está com problemas."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:196
+#: apps/zotonic_core/src/support/z_fetch.erl:211
 msgid "The remote server for the URL is having temporary problems."
 msgstr "O servidor remoto da URL está com problemas temporários."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:188
+#: apps/zotonic_core/src/support/z_fetch.erl:203
 msgid "The resource at the URL can not be found."
 msgstr "O recurso no URL não pode ser encontrado."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:190
+#: apps/zotonic_core/src/support/z_fetch.erl:205
 msgid "The resource at the URL is gone."
 msgstr "O recurso no URL se foi."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:192
+#: apps/zotonic_core/src/support/z_fetch.erl:207
 msgid "Too many requests for the remote server, try again later."
 msgstr "Muitos pedidos para o servidor remoto, tente novamente mais tarde."
 
-#: apps/zotonic_core/src/support/z_fetch.erl:184
+#: apps/zotonic_core/src/support/z_fetch.erl:199
 msgid "Unauthorized to access the remote resource URL."
 msgstr "Não autorizado a acessar a URL do recurso remoto."
 
@@ -195,7 +195,7 @@ msgid "Are you sure you want to restore all ACL rules to their currently publish
 msgstr "Você tem certeza de que quer restaurar todas as regras do LCA à sua versão publicada atualmente?"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:160./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:77
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:171./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:77./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:70./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:259./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:282./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:85./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:171./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:77./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:71./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:259./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:281./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:85./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38./apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:52
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:21
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:92
@@ -220,7 +220,7 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:6./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:87
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:196./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:62./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:96./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:29./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:196./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:61./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:96./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:29./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45./apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:26
 #: apps/zotonic_mod_survey/src/mod_survey.erl:164
@@ -281,7 +281,7 @@ msgstr "Considere os autores dos recursos como proprietários."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:19
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4./apps/zotonic_mod_admin/src/mod_admin.erl:96
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:65
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:68
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:113
 msgid "Content"
 msgstr "Conteúdo"
@@ -545,7 +545,7 @@ msgstr "Regras revertidas"
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:161./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:64
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:78./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:17./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:29
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:131./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:134./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:30
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:102
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:126
@@ -806,13 +806,13 @@ msgstr "Uma cópia local, desconectada do site remoto."
 msgid "About categories"
 msgstr "Sobre as categorias"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:16./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:187./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:131./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:56
+#: apps/zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:16./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:191./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:131./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:56
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:96
 msgid "About {n} items found."
 msgstr "Cerca de {n} itens encontrados."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:19./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:62
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:70./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:113
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:73./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:116
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_edit_basics.person.tpl:7
 msgid "Access control"
 msgstr "Controle de acesso"
@@ -821,7 +821,7 @@ msgstr "Controle de acesso"
 msgid "Add a connection:"
 msgstr "Acrescente uma ligação:"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:65./apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:111
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:66./apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:116
 msgid "Add a new media file"
 msgstr "Adicionar um novo arquivo de mídia"
 
@@ -945,7 +945,7 @@ msgstr "Mídia anexada"
 msgid "Auth"
 msgstr "Auth"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:233
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:232
 msgid "Authoritative"
 msgstr "Autoritário"
 
@@ -1054,7 +1054,7 @@ msgstr "Confirma excluir"
 msgid "Confirm logoff"
 msgstr "Confirma logoff"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:262./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:36./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:45
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:262./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:47./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:45
 msgid "Connect"
 msgstr "Vincular"
 
@@ -1126,11 +1126,11 @@ msgstr "Criado em"
 msgid "Created:"
 msgstr "Criado:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:257
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:256
 msgid "Creation date, newest first"
 msgstr "Data de criação, mais recente primeiro"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:258
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:257
 msgid "Creation date, oldest first"
 msgstr "Data de criação, mais antigo primeiro"
 
@@ -1162,7 +1162,7 @@ msgstr "Intervalo de datas"
 msgid "Date ranges"
 msgstr "Intervalos de datas"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:158
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:157
 msgid "Date start/end"
 msgstr "Data início/fim"
 
@@ -1170,7 +1170,7 @@ msgstr "Data início/fim"
 msgid "Delete if no other page is connected to this page."
 msgstr "Apagar se nenhuma outra página estiver ligada a esta página."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:49./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:239./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:90
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:50./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:239./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:90
 msgid "Delete if not connected anymore"
 msgstr "Excluir se não estiver mais conectado"
 
@@ -1186,7 +1186,7 @@ msgstr "Apagar esta página."
 msgid "Deleted."
 msgstr "Apagado."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:25./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:222./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:226./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:63./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:67
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:25./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:221./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:225./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:63./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:67
 msgid "Dependent"
 msgstr "Dependente"
 
@@ -1196,7 +1196,6 @@ msgstr "Dependente"
 #: apps/zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:8
 #: apps/zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:8
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:17
-#: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:8
 msgid "Disconnect"
 msgstr "Desconectar"
 
@@ -1253,7 +1252,7 @@ msgstr "Duração"
 msgid "E-mail address"
 msgstr "Endereço de e-mail"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:19./apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:3
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:19./apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:3
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:66./apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:50
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:121
@@ -1335,19 +1334,19 @@ msgstr "Erro ao criar a página."
 msgid "Error importing page from the remote server."
 msgstr "Erro ao importar página do servidor remoto."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:196
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:205
 msgid "Error uploading the file."
 msgstr "Erro ao fazer o upload do arquivo."
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:150
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:151
 msgid "Error, duplicate name. Please change the name."
 msgstr "Erro, nome duplicado. Por favor, mude o nome."
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:148
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:149
 msgid "Error, duplicate page path. Please change the uri."
 msgstr "Erro, caminho de página duplicado. Por favor, altere o uri."
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:146
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:147
 msgid "Error, duplicate uri. Please change the uri."
 msgstr "Erro, uri duplicado. Por favor, altere o uri."
 
@@ -1359,11 +1358,11 @@ msgstr "Cada página pode ter um intervalo de datas. Por exemplo, se a página f
 msgid "Every page is categorized in exactly one category. The category defines what the page represents. For example an event, a product or a person. The categories are hierarchically defined. In that way you can have a vehicles category with subcategories car and bicycle."
 msgstr "Cada página é categorizada em exatamente uma categoria. A categoria define o que a página representa. Por exemplo, um evento, um produto ou uma pessoa. As categorias são definidas hierarquicamente. Dessa forma é possível ter uma categoria de veículos com subcategorias carro e bicicleta."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:80
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:79
 msgid "Exact category"
 msgstr "categoria exata"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:98
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:97
 msgid "Exclude category"
 msgstr "Excluir categoria"
 
@@ -1371,12 +1370,12 @@ msgstr "Excluir categoria"
 msgid "Existing pages"
 msgstr "Páginas existentes"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:182./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:168./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:168
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:191./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:168./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:168
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:99
 msgid "Failed to download the file."
 msgstr "Falha no download do arquivo."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:52./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:189./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:193
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:52./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:188./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:192
 msgid "Featured"
 msgstr "Destaque"
 
@@ -1435,11 +1434,11 @@ msgstr "Encontrar Página"
 msgid "Find page"
 msgstr "Encontrar página"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:200./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:204
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:199./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:203
 msgid "Findable"
 msgstr "Localizável"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:170
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:169
 msgid "Finished"
 msgstr "Finalizado"
 
@@ -1470,15 +1469,15 @@ msgstr "A partir de"
 msgid "Function"
 msgstr "Função"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:126
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:125
 msgid "Has connections with predicate"
 msgstr "Tem conexões com predicado"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:180
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:179
 msgid "Has medium"
 msgstr "tem médio"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:176
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:175
 msgid "Has medium attached"
 msgstr "Tem mídia anexada"
 
@@ -1516,7 +1515,7 @@ msgstr "Se uma página tem um intervalo de datas de publicação, então ela só
 msgid "Import only direct connections (shallow copy)."
 msgstr "Importe apenas conexões diretas (cópia superficial)."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:238
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:237
 msgid "Imported content"
 msgstr "conteúdo importado"
 
@@ -1538,7 +1537,7 @@ msgstr "Link informativo com popup modal"
 msgid "Inline block"
 msgstr "Bloco em linha"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:142
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:141
 msgid "Is connected with predicate"
 msgstr "Está conectado com predicado"
 
@@ -1580,7 +1579,7 @@ msgstr "Link"
 msgid "Live query, send notifications when matching items are updated or inserted."
 msgstr "Consulta ao vivo, enviar notificações quando os itens correspondentes são atualizados ou inseridos."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:237
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:236
 msgid "Local content"
 msgstr "Conteúdo local"
 
@@ -1641,11 +1640,11 @@ msgstr "Conteudo de midia"
 msgid "Media encompasses all uploaded images, movies and documents. Media can be attached to pages."
 msgstr "A mídia engloba todas as imagens, filmes e documentos carregados. As mídias podem ser anexadas às páginas."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:36./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:37./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:43
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:37./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:38./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:43
 msgid "Media file"
 msgstr "Arquivo de mídia"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:161
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:170
 msgid "Media item created."
 msgstr "Item de mídia criado."
 
@@ -1653,7 +1652,7 @@ msgstr "Item de mídia criado."
 msgid "Media on this page"
 msgstr "Mídia nesta página"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:26./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:27
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:27./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:28
 msgid "Media title"
 msgstr "Título da mídia"
 
@@ -1677,11 +1676,11 @@ msgstr "Mina"
 msgid "Mobile"
 msgstr "Telemóvel"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:259
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:258
 msgid "Modification date, newest first"
 msgstr "Data de modificação, mais recente primeiro"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:260
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:259
 msgid "Modification date, oldest first"
 msgstr "Data de modificação, mais antiga primeiro"
 
@@ -1775,11 +1774,11 @@ msgstr "Nenhum artigo"
 msgid "No media content."
 msgstr "Nenhum conteúdo de mídia."
 
-#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:179
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:183
 msgid "No media found."
 msgstr "Não foram encontrados meios de comunicação."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:181
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:180
 msgid "No medium"
 msgstr "sem meio"
 
@@ -1801,15 +1800,15 @@ msgstr "Nenhuma página selecionada"
 msgid "No results."
 msgstr "Sem resultados."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:227./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:68
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:226./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:68
 msgid "Not dependent"
 msgstr "não dependente"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:194
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:193
 msgid "Not featured"
 msgstr "Não apresentado"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:205
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:204
 msgid "Not findable"
 msgstr "Não localizável"
 
@@ -1817,11 +1816,11 @@ msgstr "Não localizável"
 msgid "Not indexed by search engines"
 msgstr "Não indexado pelos motores de busca"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:216./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:57
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:215./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:57
 msgid "Not protected"
 msgstr "Não protegido"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:166
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:165
 msgid "Ongoing"
 msgstr "Em andamento"
 
@@ -1883,7 +1882,7 @@ msgstr "Movido por"
 msgid "Predicate"
 msgstr "Predicado"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:28./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:28./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:123
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:28./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:123
 msgid "Preview"
 msgstr "Pré-visualização"
 
@@ -1903,7 +1902,7 @@ msgstr "Proteja"
 msgid "Protect from deletion"
 msgstr "Proteger contra apagamento"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:211./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:215./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:52./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:56
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:210./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:214./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:52./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:56
 msgid "Protected"
 msgstr "Protegido"
 
@@ -1923,17 +1922,17 @@ msgstr "Período de publicação"
 msgid "Publish this page"
 msgstr "Publicar esta página"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:51./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:61./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:248./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:47./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:102./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:53./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:21
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:47
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:51./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:62./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:248./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:47./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:102./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:48./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:52./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:21
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:50
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:44
 msgid "Published"
 msgstr "Publicado em"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:263
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:262
 msgid "Published ends, newest first"
 msgstr "Finais publicados, mais recentes primeiro"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:264
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:263
 msgid "Published ends, oldest first"
 msgstr "Fim publicado, o mais antigo primeiro"
 
@@ -1941,15 +1940,15 @@ msgstr "Fim publicado, o mais antigo primeiro"
 msgid "Published on"
 msgstr "publicado em"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:261
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:260
 msgid "Published on, newest first"
 msgstr "Publicado em, mais recente primeiro"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:262
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:261
 msgid "Published on, oldest first"
 msgstr "Publicado em, mais antigo primeiro"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:16
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:19
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:27
 msgid "Query"
 msgstr "Consulta"
@@ -2018,7 +2017,7 @@ msgstr "Renumerar árvore de categorias"
 msgid "Replace"
 msgstr "Substitua"
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:66
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:67
 msgid "Replace current medium"
 msgstr "Substituir o meio corrente"
 
@@ -2048,12 +2047,12 @@ msgid "Save and View"
 msgstr "Salvar e Ver"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:6
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:134./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:137./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
 msgid "Save and view the page."
 msgstr "Guardar e ver a página."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:17./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:131./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:134./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
 msgid "Save this page."
 msgstr "Guardar esta página."
 
@@ -2061,7 +2060,7 @@ msgstr "Guardar esta página."
 msgid "Scheduled background task to check all refers connections."
 msgstr "Tarefa agendada em segundo plano para verificar todas as conexões de referência."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:284
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:283
 msgid "Search"
 msgstr "Procurar"
 
@@ -2094,7 +2093,7 @@ msgstr "Diretório de Segurança"
 msgid "See also: <a href=\"http://docs.zotonic.com/en/stable/ref/configuration/zotonic-configuration.html#the-erlang-config-file\">The erlang.config file</a>"
 msgstr "Veja também: <a href=\"http://docs.zotonic.com/en/stable/ref/configuration/zotonic-configuration.html#the-erlang-config-file\">O arquivo erlang.config</a>"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:263./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:263./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:45
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:47./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:103
 msgid "Select"
 msgstr "Selecione"
@@ -2206,7 +2205,7 @@ msgstr "Desculpe, não tem permissão para adicionar a ligação."
 msgid "Sorry, you have no permission to delete the connection."
 msgstr "Desculpe, não tem permissão para apagar a ligação."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:252
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:251
 msgid "Sort by"
 msgstr "Ordenar por"
 
@@ -2304,7 +2303,7 @@ msgstr "Os gabaritos serão recompilados."
 msgid "Test query"
 msgstr "Consulta de teste"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:42./apps/zotonic_mod_admin/src/mod_admin.erl:176
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:41./apps/zotonic_mod_admin/src/mod_admin.erl:176
 msgid "Text"
 msgstr "Texto"
 
@@ -2353,7 +2352,7 @@ msgstr "Isto não pode ser desfeito. A tua página ficará perdida para sempre."
 msgid "This connection already exists."
 msgstr "Esta ligação já existe."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:186./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:172./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:172
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:195./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:172./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:172
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:103
 msgid "This file contains links to other files or locations."
 msgstr "Este arquivo contém links para outros arquivos ou locais."
@@ -2370,12 +2369,12 @@ msgstr "Este ficheiro não foi verificado por vírus porque é demasiado grande.
 msgid "This file has not been scanned for viruses."
 msgstr "Este ficheiro não foi verificado à procura de vírus."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:184./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:170./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:170
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:193./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:170./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:170
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:101
 msgid "This file is infected with a virus."
 msgstr "Este ficheiro está infectado com um vírus."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:188./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:174./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:174
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:197./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:174./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:174
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:105
 msgid "This file is too large."
 msgstr "Este arquivo é muito grande."
@@ -2457,7 +2456,7 @@ msgstr "Digite para filtrar a lista abaixo."
 msgid "Unique Page"
 msgstr "Página única"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:31./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:44./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:51./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:244
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:31./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:44./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:51./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:243
 msgid "Unique name"
 msgstr "Nome único"
 
@@ -2465,15 +2464,15 @@ msgstr "Nome único"
 msgid "Unique page"
 msgstr "Página única"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:66./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:67
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:66./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:71
 msgid "Unique uri"
 msgstr "Unique uri"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:54./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:22
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:53./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:22
 msgid "Unpublished"
 msgstr "não publicado"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:692./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:71./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:127
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_item.tpl:29./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:29./apps/zotonic_mod_admin/src/mod_admin.erl:692./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:71./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:127
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58./apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:57
 #: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
@@ -2484,7 +2483,7 @@ msgstr "Sem título"
 msgid "Unused"
 msgstr "Não utilizado"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:162
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:161
 msgid "Upcoming"
 msgstr "Por vir"
 
@@ -2517,7 +2516,7 @@ msgstr "Carregue um ficheiro a partir do seu computador."
 msgid "Upload a file to the drop folder. This file will be handled in the background by the mailinglists for recipient import and other modules."
 msgstr "Carregue um arquivo para a pasta suspensa. Este arquivo será tratado em segundo plano pelas listas de discussão para importação de destinatários e outros módulos."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:71./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:133
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:72./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:133
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:27./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:26
 msgid "Upload file"
 msgstr "Carregar arquivo"
@@ -2556,7 +2555,7 @@ msgid "Valid for:"
 msgstr "Válido para:"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish_view.tpl:2./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:52
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:136
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:139
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:41
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
 #: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:38
@@ -2580,7 +2579,7 @@ msgid "View status"
 msgstr "Ver status"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:8
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:136
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:139
 msgid "View this page."
 msgstr "Veja esta página."
 
@@ -2650,7 +2649,7 @@ msgstr "Você não está autorizado a apagar esta página."
 msgid "You are not allowed to edit this page."
 msgstr "Você não está autorizado a editar esta página."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:178./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:164
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:187./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:164
 msgid "You don't have permission to change this media item."
 msgstr "Você não tem permissão para mudar este item de mídia."
 
@@ -2659,12 +2658,12 @@ msgstr "Você não tem permissão para mudar este item de mídia."
 msgid "You don't have permission to create this page."
 msgstr "Você não tem permissão para criar esta página."
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:152
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:153
 #: apps/zotonic_mod_image_edit/src/mod_image_edit.erl:51
 msgid "You don't have permission to edit this page."
 msgstr "Você não tem permissão para editar esta página."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:180./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:166./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:166
+#: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:189./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:166./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:166
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:97
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "Você não tem as permissões adequadas para carregar este tipo de arquivo."
@@ -2677,7 +2676,7 @@ msgstr "Você não tem permissão para realizar esta acção."
 msgid "You have to specify a description of the file to make it easier to find and share."
 msgstr "Tem de especificar uma descrição do ficheiro para facilitar a sua localização e partilha."
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:154
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:155
 msgid "Your search query is invalid. Please correct it before saving."
 msgstr "Sua consulta de pesquisa é inválida. Corrija-o antes de salvar."
 
@@ -2699,7 +2698,7 @@ msgstr "bloco"
 msgid "by"
 msgstr "por"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:55./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:56./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:138./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:139./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:140./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:152./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:155./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:55./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:56./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:138./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:139./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:140./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:156./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:159./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:68
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:32./apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:33./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:70./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:71./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:73
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:44
@@ -2709,7 +2708,7 @@ msgstr "por"
 msgid "d M Y, H:i"
 msgstr "d M Y, H:i"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:159
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:163
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:42
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:39
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
@@ -2720,7 +2719,7 @@ msgstr "excluir"
 msgid "e.g. might change"
 msgstr "por exemplo, pode mudar"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:61./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:145./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:170./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:61./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:145./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:174./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:38./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:81
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:45
 #: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:21./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:16
@@ -2793,7 +2792,7 @@ msgstr "view"
 msgid "visit site"
 msgstr "local de visita"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:17./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:188./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:132./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:57
+#: apps/zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:17./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:192./apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:132./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:57
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:97
 msgid "{n} items found."
 msgstr "{n} itens encontrados."
@@ -3123,7 +3122,7 @@ msgstr "Zotonic envia e-mail usando um servidor de e-mail integrado. Você pode 
 msgid "test@example.com"
 msgstr "test@example.com"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:103
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:106
 msgid "Add a translation or copy texts between languages."
 msgstr "Adicione uma tradução ou copie textos entre idiomas."
 
@@ -3131,11 +3130,11 @@ msgstr "Adicione uma tradução ou copie textos entre idiomas."
 msgid "Add pages or click on a page in the menu."
 msgstr "Adicione páginas ou clique em uma página do menu."
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:100
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:103
 msgid "Enabled or disable language tabs."
 msgstr "Habilite ou desabilite as guias de idioma."
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:68./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:97
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:71./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:100
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:24
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:56
 #: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:46./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:41
@@ -3146,15 +3145,15 @@ msgstr "Idioma"
 msgid "Loading ..."
 msgstr "Carregamento ..."
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:167
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:170
 msgid "No page"
 msgstr "Sem página"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:134./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:137./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:83
 msgid "Save &amp; view"
 msgstr "Save &amp; view"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:169
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:172
 msgid "The page might have been deleted."
 msgstr "A página pode ter sido excluída."
 
@@ -3170,7 +3169,7 @@ msgstr "Esta página"
 msgid "Yes, discard changes"
 msgstr "Sim, descarte as mudanças"
 
-#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:52
+#: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:55
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:11
 msgid "till"
 msgstr "até"
@@ -3377,7 +3376,7 @@ msgstr "Apenas administradores podem apagar nomes de usuários."
 msgid "Only an administrator can delete usernames."
 msgstr "Apenas um administrador pode apagar nomes de utilizador."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:74./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:88./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:135
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:74./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:88./apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:134
 msgid "Only an administrator or the user him/herself can set a password."
 msgstr "Somente um administrador ou o próprio usuário pode definir uma senha."
 
@@ -3445,7 +3444,7 @@ msgstr "O usuário administrador não pode ser removido."
 msgid "The e-mail address has been verified."
 msgstr "O endereço de e-mail foi verificado."
 
-#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:130
+#: apps/zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:129
 msgid "The new username/ password has been set."
 msgstr "O novo nome de usuário/senha foi definido."
 
@@ -5311,7 +5310,7 @@ msgstr "Suporte para Websocket?"
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:251./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
 #: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:39
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:47./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:30./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
-#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:18
+#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:19
 msgid "Yes"
 msgstr "Sim"
 
@@ -6381,7 +6380,6 @@ msgstr "App Secret"
 
 #: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:9
 #: apps/zotonic_mod_microsoft/priv/templates/_admin_authentication_service.tpl:9
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:9
 msgid "Application keys can be found in"
 msgstr "As chaves de aplicação podem ser encontradas em"
 
@@ -10286,7 +10284,7 @@ msgstr "Todos os textos foram traduzidos."
 msgid "All translated texts will be removed."
 msgstr "Todos os textos traduzidos serão removidos."
 
-#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:10
+#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:6
 msgid "Approve translation"
 msgstr "Aprovar tradução"
 
@@ -10346,7 +10344,7 @@ msgstr "Detalhes"
 msgid "Developer Documentation"
 msgstr "Documentação do Desenvolvedor"
 
-#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:17
+#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:18
 msgid "Did you review all texts and correct any mistakes?"
 msgstr "Você revisou todos os textos e corrigiu algum erro?"
 
@@ -10486,7 +10484,7 @@ msgstr "Parte de"
 msgid "Please check the translations and save the page when you are ready."
 msgstr "Verifique as traduções e salve a página quando estiver pronto."
 
-#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:5
+#: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:9
 msgid "Please review all texts and correct any mistakes. Approve the translation if it is correct. This message will then disappear."
 msgstr "Por favor, revise todos os textos e corrija quaisquer erros. Aprove a tradução se estiver correta. Esta mensagem desaparecerá então."
 
@@ -10625,130 +10623,6 @@ msgstr "sem idioma"
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:60./apps/zotonic_mod_translation/priv/templates/_dialog_language_edit_detail_item.tpl:67
 msgid "not enabled"
 msgstr "não ativadas"
-
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:62
-msgid "1 hour"
-msgstr "1 hora"
-
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:56
-msgid "1 minute"
-msgstr "1 minuto"
-
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:59
-msgid "10 minutes"
-msgstr "10 minutos"
-
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:60
-msgid "15 minutes"
-msgstr "15 minutos"
-
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:63
-msgid "2 hours"
-msgstr "2 horas"
-
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:57
-msgid "2 minutes"
-msgstr "2 minutos"
-
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:61
-msgid "30 minutes"
-msgstr "30 minutos"
-
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:58
-msgid "5 minutes"
-msgstr "5 minutos"
-
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:37./apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:38
-msgid "Access Token"
-msgstr "Ficha de Acesso"
-
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:41./apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:42
-msgid "Access Token Secret"
-msgstr "Acesse o Token Secreto"
-
-#: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:19
-msgid "Connect with Twitter"
-msgstr "Conecte-se com o Twitter"
-
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:15./apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:16
-msgid "Consumer Key"
-msgstr "Chave do Consumidor"
-
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:20./apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:21
-msgid "Consumer Secret"
-msgstr "Segredo do Consumidor"
-
-#: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:4./apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:6
-msgid "Disconnect from Twitter"
-msgstr "Desligue-se do Twitter"
-
-#: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:7
-msgid "Do you want to disconnect your Twitter account?"
-msgstr "Você quer desconectar sua conta no Twitter?"
-
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:45./apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:46
-msgid "Follow tags/accounts"
-msgstr "Siga as etiquetas/contas"
-
-#: apps/zotonic_mod_twitter/priv/templates/_logon_extra.tpl:20
-msgid "Log in with Twitter"
-msgstr "Entre com o Twitter"
-
-#: apps/zotonic_mod_twitter/priv/templates/_logon_extra_email_reset.tpl:2
-msgid "Log on with Twitter"
-msgstr "Entre com o Twitter"
-
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:53
-msgid "Maximum poll delay"
-msgstr "Atraso máximo nas pesquisas"
-
-#: apps/zotonic_mod_twitter/priv/templates/_admin_edit_sidebar_twitter.tpl:16
-msgid "Note that this user or organization must have <em>create</em> rights on the <em>Tweet</em> category."
-msgstr "Note que este usuário ou organização deve ter <em>criar</em> direitos na categoria <em>Tweet</em> ."
-
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:73
-msgid "Save Twitter Settings"
-msgstr "Salvar configurações do Twitter"
-
-#: apps/zotonic_mod_twitter/src/mod_twitter.erl:76
-msgid "Saved the Twitter settings."
-msgstr "Salvou as configurações do Twitter."
-
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:49
-msgid "Separate #tags, @usernames and phrases with commas or newlines."
-msgstr "Separe #tags, @usernames e frases com vírgulas ou novas linhas."
-
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:34
-msgid "To import tweets, Zotonic needs an access token and secret. You can find these on the <b>Keys and Access Tokens</b> tab on your Twitter application page."
-msgstr "Para importar tweets, Zotonic precisa de uma ficha de acesso e segredo. Você pode encontrá-los na guia <b>Keys and Access Tokens</b> na sua página de aplicação do Twitter."
-
-#: apps/zotonic_mod_twitter/priv/templates/_admin_edit_sidebar_twitter.tpl:4
-msgid "Twitter Account"
-msgstr "Conta no Twitter"
-
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:67
-msgid "Twitter is periodically polled for new content. If there is no content then the waiting period will be extended up to this maximum."
-msgstr "O Twitter é periodicamente pesquisado para novos conteúdos. Se não houver conteúdo, o período de espera será estendido até este máximo."
-
-#: apps/zotonic_mod_twitter/priv/templates/_admin_edit_sidebar_twitter.tpl:15
-msgid "Use <tt>@foobar</tt> or <tt>foobar</tt> to import all recent and future tweets from \"foobar\"."
-msgstr "Use <tt>@foobar</tt> ou <tt>foobar</tt> para importar todos os tweets recentes e futuros do \"foobar\"."
-
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:27
-msgid "Use Twitter authentication"
-msgstr "Use a autenticação no Twitter"
-
-#: apps/zotonic_mod_twitter/src/mod_twitter.erl:78
-msgid "You don't have permission to change the Twitter settings."
-msgstr "Você não tem permissão para alterar as configurações do Twitter."
-
-#: apps/zotonic_mod_twitter/priv/templates/_logon_extra_email_reset.tpl:2
-msgid "You have coupled your <strong>Twitter</strong> account."
-msgstr "Você acoplou a sua conta <strong>Twitter</strong> ."
-
-#: apps/zotonic_mod_twitter/priv/templates/_admin_authentication_service.tpl:9
-msgid "Your Twitter Application Management page"
-msgstr "Sua página de gerenciamento de aplicativos no Twitter"
 
 #: apps/zotonic_mod_video/priv/templates/_video_viewer.tpl:11
 msgid "Converting"
