@@ -167,8 +167,8 @@ process_done(ok, ProvidedCT, Context) ->
 process_done({ok, #{
         <<"status">> := <<"error">>,
         <<"error">> := Reason
-    }}, ProvidedCT, Context) ->
-    error_response({error, Reason}, ProvidedCT, Context);
+    } = S}, ProvidedCT, Context) when is_binary(Reason); is_atom(Reason) ->
+    error_response({error, S}, ProvidedCT, Context);
 process_done({ok, Resp}, ProvidedCT, Context) ->
     % z_mqtt:call response
     Body = z_controller_helper:encode_response(ProvidedCT, Resp),
@@ -227,6 +227,14 @@ error_response({error, StatusCode}, CT, Context) when ?is_http_status(StatusCode
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, StatusCode}, Context1};
+error_response({error, #{
+        <<"status">> := Status,
+        <<"error">> := _
+    } = Reason}, CT, Context) when is_binary(Status); is_atom(Status) ->
+    Resp = maps:with([ <<"status">>, <<"error">>, <<"message">> ], Reason),
+    RespBody = z_controller_helper:encode_response(CT, Resp),
+    Context1 = cowmachine_req:set_resp_body(RespBody, Context),
+    {{halt, 500}, Context1};
 error_response({error, Reason}, CT, Context) ->
     RespBody = z_controller_helper:encode_response(CT, #{
             <<"status">> => <<"error">>,
