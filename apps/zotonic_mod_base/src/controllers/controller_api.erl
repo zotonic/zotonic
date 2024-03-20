@@ -1,8 +1,9 @@
 %% @author Arjan Scherpenisse, Marc Worrell
-%% @copyright 2009-2022 Arjan Scherpenisse <arjan@scherpenisse.net>, Marc Worrell <marc@worrell.nl>
+%% @copyright 2009-2024 Arjan Scherpenisse <arjan@scherpenisse.net>, Marc Worrell <marc@worrell.nl>
 %% @doc Entrypoint for model requests via HTTP.
+%% @end
 
-%% Copyright 2009-2022 Arjan Scherpenisse, Marc Worrell
+%% Copyright 2009-2024 Arjan Scherpenisse, Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
