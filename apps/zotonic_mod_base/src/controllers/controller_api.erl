@@ -174,8 +174,8 @@ process_done({ok, #{
 process_done({ok, #{
         <<"status">> := <<"error">>,
         <<"error">> := Reason
-    } = S}, ProvidedCT, Context) when is_binary(Reason); is_atom(Reason) ->
-    error_response({error, S}, ProvidedCT, Context);
+    }}, ProvidedCT, Context) ->
+    error_response({error, Reason}, ProvidedCT, Context);
 process_done({ok, Resp}, ProvidedCT, Context) ->
     % z_mqtt:call response
     Body = z_controller_helper:encode_response(ProvidedCT, Resp),
