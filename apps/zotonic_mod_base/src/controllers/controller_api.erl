@@ -1,8 +1,9 @@
 %% @author Arjan Scherpenisse, Marc Worrell
-%% @copyright 2009-2022 Arjan Scherpenisse <arjan@scherpenisse.net>, Marc Worrell <marc@worrell.nl>
+%% @copyright 2009-2024 Arjan Scherpenisse <arjan@scherpenisse.net>, Marc Worrell <marc@worrell.nl>
 %% @doc Entrypoint for model requests via HTTP.
+%% @end
 
-%% Copyright 2009-2022 Arjan Scherpenisse, Marc Worrell
+%% Copyright 2009-2024 Arjan Scherpenisse, Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -166,6 +167,12 @@ process_done(ok, ProvidedCT, Context) ->
     {Body, Context};
 process_done({ok, #{
         <<"status">> := <<"error">>,
+        <<"error">> := Reason,
+        <<"message">> := _
+    } = S}, ProvidedCT, Context) when is_binary(Reason); is_atom(Reason) ->
+    error_response({error, S}, ProvidedCT, Context);
+process_done({ok, #{
+        <<"status">> := <<"error">>,
         <<"error">> := Reason
     }}, ProvidedCT, Context) ->
     error_response({error, Reason}, ProvidedCT, Context);
@@ -227,6 +234,14 @@ error_response({error, StatusCode}, CT, Context) when ?is_http_status(StatusCode
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, StatusCode}, Context1};
+error_response({error, #{
+        <<"status">> := Status,
+        <<"error">> := _
+    } = Reason}, CT, Context) when is_binary(Status); is_atom(Status) ->
+    Resp = maps:with([ <<"status">>, <<"error">>, <<"message">> ], Reason),
+    RespBody = z_controller_helper:encode_response(CT, Resp),
+    Context1 = cowmachine_req:set_resp_body(RespBody, Context),
+    {{halt, 500}, Context1};
 error_response({error, Reason}, CT, Context) ->
     RespBody = z_controller_helper:encode_response(CT, #{
             <<"status">> => <<"error">>,
