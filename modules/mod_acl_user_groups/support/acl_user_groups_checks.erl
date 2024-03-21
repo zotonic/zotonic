@@ -586,29 +586,20 @@ can_rsc_for_collab(Id, Action, CGId, CatId, UGs, Context) ->
     m_rsc:is_a(CGId, acl_collaboration_group, Context)
     andalso (
         can_rsc_for_collab_ugs(Id, Action, CGId, CatId, UGs, Context)
-        orelse can_rsc_collab_group_content(Action, CGId, UGs, Context)
-        orelse has_unrestricted_collab_content_user_groups(Context)
+        orelse can_rsc_collab_group_content(Action, CGId, UGs, Context)  % Other actions than view
+        orelse user_is_editor_or_manager(Context)
     ).
-
-has_unrestricted_collab_content_user_groups(Context) ->
-    AllUGs = sets:from_list(user_groups_all(Context)),
-    UnrestrictedUGs = sets:from_list(
-        lists:map(fun (UG) -> m_rsc:rid(UG, Context) end,
-        unrestricted_collab_content_user_groups())
-    ),
-    not sets:is_disjoint(AllUGs, UnrestrictedUGs).
 
 % todo: find a better solution than completely excluding some specific user groups from ACL on collab groups
 % The issue is that we want to be able to deny access to some collab groups for some users (anonymous, members etc)
-% with a deny rule, but a deny rule on anonnymous also blocks access on higher user groups
+% with a deny rule, but a deny rule on anonymous also blocks access on higher user groups
 % We might be able to come up with a more general condition (like being able to delete collab groups)
-% or we should change deny rules to only work for the collab group they are on, or in the opposite direction of inheritance (so a deny rule blocks access for lower user groups but not higher ones)
-unrestricted_collab_content_user_groups() ->
-    [
-        <<"acl_user_group_managers">>,
-        <<"acl_user_group_editors">>
-    ].
-
+% or we should change deny rules to only work for the collab group they are on, or in the opposite direction of inheritance
+% (so a deny rule blocks access for lower user groups but not higher ones)
+user_is_editor_or_manager(Context) ->
+    UserUGs = user_groups_all(Context),
+    lists:member(m_rsc:rid(<<"acl_user_group_editors">>, Context), UserUGs)
+    orelse lists:member(m_rsc:rid(<<"acl_user_group_managers">>, Context), UserUGs).
 
 % User is member of collab group CGId, check ACL rules for collaboration groups
 can_rsc_collab_member(Id, Action, CGId, CatId, Context) ->
@@ -661,31 +652,40 @@ can_rsc_for_collab_ugs(Id, Action, CollabId, CatId, UGs, Context) ->
     AllCollabId = m_rsc:rid(acl_collaboration_group, Context),
     lists:any(
         fun (GId) ->
-            case {
-                can_rsc_for_collab_ug(Id, Action, CollabId, CatId, GId, Context),
-                can_rsc_for_collab_ug(Id, Action, AllCollabId, CatId, GId, Context)
-            } of
-                {false, _AllCollabPermission} -> false;
-                {_CollabPermission, false} -> false;
-                {true, _AllCollabPermission} -> true;
-                {undefined, undefined} -> false;
-                {undefined, AllCollabPermission} -> AllCollabPermission
+            case can_rsc_for_collab_ug(Id, Action, CollabId, CatId, GId, Context) of
+                false ->
+                    % Deny rule: no permission to see the resource of the collab group itself
+                    false;
+                MaybePermission ->
+                    case can_rsc_for_collab_ug(Id, Action, AllCollabId, CatId, GId, Context) of
+                        false ->
+                            % Deny rule: No permission to see this content inside collab groups I am member of
+                            false;
+                        true ->
+                            % Allow rule: Permission to see this content inside collab groups I am member of
+                            true;
+                        undefined when MaybePermission =:= true ->
+                            % No rule set, use rights on the collab group resource
+                            true;
+                        undefined when MaybePermission =:= undefined ->
+                            % No rule set, use rights on the collab group resource
+                            false
+                    end
             end
         end,
-        UGs
-    ).
+        UGs).
 
 can_rsc_for_collab_ug(Id, Action, CollabId, CatId, GId, Context) ->
-    case {
-        mod_acl_user_groups:await_lookup({CollabId, {CatId, Action, false}, GId}, Context),
-        is_owner(Id, Context),
-        mod_acl_user_groups:await_lookup({CollabId, {CatId, Action, true}, GId}, Context)
-    } of
-        {Permission, false, _} -> Permission;
-        {undefined, true, undefined} -> undefined;
-        {undefined, true, OwnerPermission} -> OwnerPermission;
-        {Permission, true, undefined} -> Permission;
-        {Permission, true, OwnerPermission} -> Permission orelse OwnerPermission
+    case mod_acl_user_groups:await_lookup({CollabId, {CatId, Action, false}, GId}, Context) of
+        true ->
+            true;
+        FalseOrUndefined ->
+            case is_owner(Id, Context) of
+                true ->
+                    mod_acl_user_groups:await_lookup({CollabId, {CatId, Action, true}, GId}, Context);
+                false ->
+                    FalseOrUndefined
+            end
     end.
 
 % If the user can update/link/delete a collaboration group then the user is
