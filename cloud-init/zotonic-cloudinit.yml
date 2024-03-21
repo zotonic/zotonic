@@ -1,4 +1,4 @@
-#cloud-config for Ubuntu 20
+#cloud-config for Ubuntu 22
 #
 # Example configs here:
 # https://cloudinit.readthedocs.io/en/latest/topics/examples.html
@@ -41,11 +41,17 @@ packages:
   - ffmpeg
 
 runcmd:
-  # Fetch erlang from erlang solutions
-  - wget -O- https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | apt-key add -
-  - echo "deb https://packages.erlang-solutions.com/ubuntu `lsb_release -c | sed -E 's/^.*\s([a-z]+)$/\1/g'` contrib" | tee /etc/apt/sources.list.d/erlang-solutions.list
   - apt update
-  - apt-get -y install erlang
+  # Use kerl to install a good and recent version of Erlang
+  - curl -O https://raw.githubusercontent.com/kerl/kerl/master/kerl
+  - chmod a+x kerl
+  - mv kerl /usr/local/bin/kerl
+  - kerl update releases
+  - kerl build 26.2
+  - kerl install 26.2 /usr/local/lib/erlang/26.2
+  - echo ". /usr/local/lib/erlang/26.2/activate" >> /etc/profile
+  # Restrict epmd listen IP addresses
+  - echo "ERL_EPMD_ADDRESS=127.0.0.1,127.0.1.1" >> /etc/environment
   # IP4 port mapping
   - iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to 8000
   - iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to 8443
@@ -69,8 +75,8 @@ runcmd:
   # Set ulimit file handles
   - echo "zotonic   soft   nofile   20000" > /etc/security/limits.d/zotonic.conf
   - echo "zotonic   hard   nofile   20000" >> /etc/security/limits.d/zotonic.conf
-  # Fix openssl config
-  - sed -i 's/^.*RANDFILE.*$/# &1/g' /etc/ssl/openssl.cnf
+  # Max inotify files setting
+  - sudo echo "fs.inotify.max_user_watches=10000" > /etc/sysctl.d/40-max-user-watches.conf
   # Enable ImageMagick PDF rendering
   - sed -i 's/^.*pattern="PDF".*$/<!-- &1 -->/g' /etc/ImageMagick-6/policy.xml
   # Let clamav listen on localhost and update definitions
@@ -89,3 +95,4 @@ runcmd:
   - sudo su zotonic -l -c "cp zotonic/cloud-init/config.d/* .config/zotonic/config/1/config.d/."
   - sudo su zotonic -l -c "cd zotonic; make"
   - sudo su zotonic -l -c "cd zotonic; bin/zotonic start"
+
