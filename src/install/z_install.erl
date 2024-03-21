@@ -182,12 +182,17 @@ model_pgsql() ->
     "ALTER TABLE rsc ADD CONSTRAINT fk_rsc_modifier_id FOREIGN KEY (modifier_id)
       REFERENCES rsc (id)
       ON UPDATE CASCADE ON DELETE SET NULL",
+     "ALTER TABLE rsc ADD CONSTRAINT fk_rsc_category_id FOREIGN KEY (category_id)
+      REFERENCES rsc (id)
+      ON UPDATE CASCADE ON DELETE RESTRICT",
 
      "CREATE INDEX fki_rsc_content_group_id ON rsc (content_group_id)",
      "CREATE INDEX fki_rsc_creator_id ON rsc (creator_id)",
      "CREATE INDEX fki_rsc_modifier_id ON rsc (modifier_id)",
-     "CREATE INDEX fki_rsc_created ON rsc (created)",
-     "CREATE INDEX fki_rsc_modified ON rsc (modified)",
+     "CREATE INDEX fki_rsc_category_id ON rsc (category_id)",
+
+     "CREATE INDEX rsc_created_key ON rsc (created)",
+     "CREATE INDEX rsc_modified_key ON rsc (modified)",
 
      "CREATE INDEX rsc_pivot_tsv_key ON rsc USING gin(pivot_tsv)",
      "CREATE INDEX rsc_pivot_rtsv_key ON rsc USING gin(pivot_rtsv)",

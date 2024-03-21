@@ -229,6 +229,8 @@ upgrade(C, Database, Schema) ->
     ok = install_content_group_dependent(C, Database, Schema),
     ok = convert_category_hierarchy(C, Database, Schema),
     ok = publication_start_nullable(C, Database, Schema),
+    % 0.82
+    ok = check_category_id_key(C, Database, Schema),
     ok.
 
 upgrade_config_schema(C, Database, Schema) ->
@@ -588,3 +590,10 @@ publication_start_nullable(C, Database, Schema) ->
             ),
             ok
     end.
+
+check_category_id_key(C, _Database, _Schema) ->
+    {ok, [], []} = epgsql:squery(
+        C,
+        "CREATE INDEX IF NOT EXISTS fki_rsc_category_id ON rsc (category_id)"
+    ),
+    ok.
