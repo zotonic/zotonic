@@ -40,6 +40,7 @@ packages:
   - imagemagick
   - ffmpeg
   - wkhtmltopdf
+  - libcap2-bin
 
 runcmd:
   - apt update
@@ -51,6 +52,8 @@ runcmd:
   - kerl build 26.2
   - kerl install 26.2 /usr/local/lib/erlang/26.2
   - echo ". /usr/local/lib/erlang/26.2/activate" >> /etc/profile
+  # Allow Erlang (beam.smp) to listen on restricted ports (below 1024)
+  - setcap 'cap_net_bind_service=+ep' /usr/lib/erlang/erts-*/bin/beam.smp
   # Restrict epmd listen IP addresses
   - echo "ERL_EPMD_ADDRESS=127.0.0.1,127.0.1.1" >> /etc/environment
   # IP4 port mapping
