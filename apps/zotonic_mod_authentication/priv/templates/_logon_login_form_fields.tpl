@@ -147,6 +147,10 @@
                        autocapitalize="off"
                        autocorrect="off">
             </div>
+        {% elseif is_set_passcode %}
+            <div class="form-group set-passcode">
+                {% include "_logon_login_set_passcode.tpl" %}
+            </div>
         {% endif %}
     {% elseif not q.options.is_username_checked %}
         <div class="form-group hidden">

@@ -187,6 +187,8 @@ model.present = function(data) {
                 secret: model.secret,
                 passcode: data.passcode,
                 password: data.password,
+                test_passcode: data.test_passcode,
+                "code-new": data["code-new"],
                 onauth: "#"
             };
             self.publish("model/auth/post/reset", reset);
@@ -211,7 +213,9 @@ model.present = function(data) {
     if (data.change) {
         if (data.is_password_equal) {
             let change = {
+                "code-new": data["code-new"],
                 passcode: data.passcode,
+                test_passcode: data.test_passcode,
                 password: data.password,
                 password_reset: data.password_reset,
                 onauth: "#"
@@ -410,6 +414,7 @@ actions.resetForm = function(data) {
         password: data.value.password_reset1,
         is_password_equal: data.value.password_reset1 === data.value.password_reset2,
         passcode: data.value.passcode || "",
+        "code-new": data["code-new"],
         setautologon: data.value.rememberme ? true : false
     }
     model.present(dataReset);
@@ -421,7 +426,8 @@ actions.changeForm = function(data) {
         password: data.value.password,
         password_reset: data.value.password_reset1,
         is_password_equal: data.value.password_reset1 === data.value.password_reset2,
-        passcode: data.value.passcode || ""
+        passcode: data.value.passcode || "",
+        "code-new": data["code-new"],
     }
     model.present(dataChange);
 };
