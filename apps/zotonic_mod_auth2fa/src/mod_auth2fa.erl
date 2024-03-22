@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019 Marc Worrell
+%% @copyright 2019-2024 Marc Worrell
 %% @doc Add 2FA TOTP authentication
+%% @end
 
-%% Copyright 2010-2019 Marc Worrell
+%% Copyright 2019-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -21,7 +22,7 @@
 
 -mod_title("Two-Factor authentication").
 -mod_description("Add two-factor authentication using TOTP").
--mod_prio(600).
+-mod_prio(400).
 -mod_depends([authentication]).
 
 -export([
@@ -125,5 +126,27 @@ observe_auth_postcheck(#auth_postcheck{ id = UserId, query_args = QueryArgs }, C
                     end
             end;
         false ->
-            undefined
+            % Could also have a POST of the new passcode secret to be set.
+            % In that case the passcode can be set for the user and 'undefined'
+            % returned
+            case z_convert:to_integer(m_config:get_value(mod_auth2fa, mode, Context)) of
+                3 ->
+                    case maps:get(<<"code-new">>, QueryArgs, undefined) of
+                        CodeNew when is_binary(CodeNew), CodeNew =/= <<>> ->
+                            Secret = z_auth2fa_base32:decode(CodeNew),
+                            Code = maps:get(<<"test_passcode">>, QueryArgs, <<>>),
+                            case m_auth2fa:is_valid_totp_test(Secret, Code) of
+                                true ->
+                                    % Save the new 2FA code
+                                    m_auth2fa:totp_set(UserId, Secret, Context),
+                                    undefined;
+                                false ->
+                                    {error, set_passcode_error}
+                            end;
+                        _ ->
+                            {error, set_passcode}
+                    end;
+                _ ->
+                    undefined
+            end
     end.
