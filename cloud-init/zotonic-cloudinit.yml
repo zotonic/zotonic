@@ -39,6 +39,7 @@ packages:
   - file
   - imagemagick
   - ffmpeg
+  - wkhtmltopdf
 
 runcmd:
   - apt update
