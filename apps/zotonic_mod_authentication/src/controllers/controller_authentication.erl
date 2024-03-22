@@ -177,6 +177,10 @@ logon_1({error, ratelimit}, _Payload, Context) ->
     { #{ status => error, error => ratelimit }, Context };
 logon_1({error, need_passcode}, _Payload, Context) ->
     { #{ status => error, error => need_passcode }, Context };
+logon_1({error, set_passcode}, _Payload, Context) ->
+    { #{ status => error, error => set_passcode }, Context };
+logon_1({error, set_passcode_error}, _Payload, Context) ->
+    { #{ status => error, error => set_passcode_error }, Context };
 logon_1({error, passcode}, _Payload, Context) ->
     { #{ status => error, error => passcode }, Context };
 logon_1({error, Reason}, _Payload, Context) ->
@@ -422,6 +426,10 @@ change_1(UserId, Username, Password, NewPassword, Passcode, Context) ->
             { #{ status => error, error => ratelimit }, Context };
         {error, need_passcode} ->
             { #{ status => error, error => need_passcode }, Context };
+        {error, set_passcode} ->
+            { #{ status => error, error => set_passcode }, Context };
+        {error, set_passcode_error} ->
+            { #{ status => error, error => set_passcode_error }, Context };
         {error, passcode} ->
             { #{ status => error, error => passcode }, Context };
         {ok, _} ->
@@ -498,8 +506,12 @@ reset_1(UserId, Username, Password, Passcode, Context) ->
                 {error, _} ->
                     {error, error}
             end;
-        {error, need_passcode} ->
-            {error, need_passcode};
+        {error, need_passcode} = Error ->
+            Error;
+        {error, set_passcode} = Error ->
+            Error;
+        {error, set_passcode_error} = Error ->
+            Error;
         {error, passcode} ->
             z_notifier:notify_sync(
                 #auth_checked{

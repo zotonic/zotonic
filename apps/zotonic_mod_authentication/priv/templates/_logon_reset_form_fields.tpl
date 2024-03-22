@@ -23,6 +23,10 @@
                    placeholder="{_ Two-factor passcode _}" />
         </div>
     {% endblock %}
+{% elseif is_set_passcode %}
+    <div class="form-group set-passcode">
+        {% include "_logon_reset_set_passcode.tpl" %}
+    </div>
 {% endif %}
 
 {% if m.authentication.is_supported.rememberme %}
