@@ -21,7 +21,7 @@ users:
 
 packages:
   - build-essential
-  - iptables-persistent
+  - libcap2-bin
   - libssl-dev
   - automake
   - autoconf
@@ -40,7 +40,6 @@ packages:
   - imagemagick
   - ffmpeg
   - wkhtmltopdf
-  - libcap2-bin
 
 runcmd:
   - apt update
@@ -56,29 +55,13 @@ runcmd:
   - setcap 'cap_net_bind_service=+ep' /usr/lib/erlang/erts-*/bin/beam.smp
   # Restrict epmd listen IP addresses
   - echo "ERL_EPMD_ADDRESS=127.0.0.1,127.0.1.1" >> /etc/environment
-  # IP4 port mapping
-  - iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to 8000
-  - iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to 8443
-  - iptables -t nat -A PREROUTING -p tcp --dport 25 -j REDIRECT --to 2525
-  - iptables -t nat -A OUTPUT -p tcp -d `/sbin/ip route get 8.8.8.8 | grep -oP 'src \K[^ ]+'` --dport 80 -j REDIRECT --to 8000
-  - iptables -t nat -A OUTPUT -p tcp -d `/sbin/ip route get 8.8.8.8 | grep -oP 'src \K[^ ]+'` --dport 443 -j REDIRECT --to 8443
-  - iptables -t nat -A OUTPUT -p tcp -d `/sbin/ip route get 8.8.8.8 | grep -oP 'src \K[^ ]+'` --dport 25 -j REDIRECT --to 2525
-  - iptables-save > /etc/iptables/rules.v4
-  # IP6 port mapping
-  - ip6tables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to 8000
-  - ip6tables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to 8443
-  - ip6tables -t nat -A PREROUTING -p tcp --dport 25 -j REDIRECT --to 2525
-  - ip6tables -t nat -A OUTPUT -p tcp -d `/sbin/ip route get 2001:4860:4860::8888 | grep -oP 'src \K[^ ]+'` --dport 80 -j REDIRECT --to 8000
-  - ip6tables -t nat -A OUTPUT -p tcp -d `/sbin/ip route get 2001:4860:4860::8888 | grep -oP 'src \K[^ ]+'` --dport 443 -j REDIRECT --to 8443
-  - ip6tables -t nat -A OUTPUT -p tcp -d `/sbin/ip route get 2001:4860:4860::8888 | grep -oP 'src \K[^ ]+'` --dport 25 -j REDIRECT --to 2525
-  - ip6tables-save > /etc/iptables/rules.v6
   # Postgres installation
   - sudo --user=postgres -- psql -c "CREATE USER zotonic WITH PASSWORD 'zotonic';"
   - sudo --user=postgres -- psql -c "CREATE DATABASE zotonic WITH OWNER = zotonic ENCODING = 'UTF8';"
   - sudo --user=postgres -- psql -c "GRANT ALL ON DATABASE zotonic TO zotonic;"
   # Set ulimit file handles
-  - echo "zotonic   soft   nofile   20000" > /etc/security/limits.d/zotonic.conf
-  - echo "zotonic   hard   nofile   20000" >> /etc/security/limits.d/zotonic.conf
+  - echo "zotonic   soft   nofile   60000" > /etc/security/limits.d/zotonic.conf
+  - echo "zotonic   hard   nofile   60000" >> /etc/security/limits.d/zotonic.conf
   # Max inotify files setting
   - sudo echo "fs.inotify.max_user_watches=10000" > /etc/sysctl.d/40-max-user-watches.conf
   # Enable ImageMagick PDF rendering
