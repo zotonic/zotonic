@@ -177,7 +177,7 @@ finds (assuming the name of the page ``page_name``):
 2. ``page.category.tpl`` (:ref:`category <categories>`)
 3. ``page.tpl`` (fallback)
 
-So if you have a page in the category ‘article’ (which is a sub-category or ‘text’)
+So if you have a page in the category ‘article’ (which is a sub-category of ‘text’)
 and that page has a unique name ‘my_text_page’, Zotonic will look for the
 following templates:
 

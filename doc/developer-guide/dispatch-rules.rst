@@ -99,7 +99,7 @@ Say you want to only accept numerical arguments as an id in::
 
   {foo, ["foo", id], controller_foo, []}
 
-The you can use a dispatch rule with a regular expression test::
+Then you can use a dispatch rule with a regular expression test::
 
   {foo, ["foo", {id, "^[0-9]+$"}], controller_foo, []}
 
@@ -131,7 +131,7 @@ Generating URLs
 In templates
 ^^^^^^^^^^^^
 
-To generate URLs in templates, use the :ref:`url tag <tag-url>` and pass the
+To generate URLs in templates, use the :ref:`url tag <tag-url>`, and pass the
 dispatch rule name:
 
 .. code-block:: django
