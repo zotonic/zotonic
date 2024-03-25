@@ -193,7 +193,7 @@ search_query_facets(Result, #search_sql{ search_sql_terms = Terms }, Context) ->
         limit = undefined
     },
     Q3 = move_unused_order_args_to_select(Q2),
-    Q4 = z_search:reformat_sql_query(Q3, Context),
+    Q4 = z_search:reformat_sql_query(Q3, #{}, Context),
     {SQL, Args} = z_search:concat_sql_query(Q4, undefined),
     SQL2 = [
         "with result as (", SQL, ")"
