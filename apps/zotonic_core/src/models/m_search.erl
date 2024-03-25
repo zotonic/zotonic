@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Search model, used as an interface to the search functions of modules etc.
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -51,6 +51,13 @@ m_get([ <<"paged">>, SearchName | Rest ], Msg, Context) when is_binary(SearchNam
         {ok, Result} ->
             {ok, {Result, Rest}}
     end;
+m_get([ <<"count">>, SearchName | Rest ], Msg, Context) when is_binary(SearchName) ->
+    case search(SearchName, search_args(Msg), #{ is_count_rows => true }, Context) of
+        {error, _} = Error ->
+            Error;
+        {ok, Result} ->
+            {ok, {Result, Rest}}
+    end;
 m_get([ <<"paged">>, {Name, Props} = SearchProps | Rest ], _Msg, Context) when is_list(Props), is_atom(Name) ->
     case search_deprecated(SearchProps, true, Context) of
         {error, _} = Error ->
@@ -79,6 +86,13 @@ m_get([ <<"paged">> ], Msg, Context) ->
         {ok, Result} ->
             {ok, {Result, []}}
     end;
+m_get([ <<"count">> ], Msg, Context) ->
+    case search(<<"query">>, search_args(Msg), #{ is_count_rows => true }, Context) of
+        {error, _} = Error ->
+            Error;
+        {ok, Result} ->
+            {ok, {Result, []}}
+    end;
 m_get([], Msg, Context) ->
     case search(<<"query">>, search_args(Msg), Context) of
         {error, _} = Error ->
@@ -91,10 +105,16 @@ m_get([], Msg, Context) ->
 %% @doc Perform a search. Pass page and pagelen as arguments for paging.
 -spec search( binary(), map(), z:context() ) -> {ok, #search_result{}} | {error, term()}.
 search(Name, Args, Context) when is_binary(Name), is_map(Args) ->
+    search(Name, Args, #{}, Context).
+
+-spec search( binary(), map(), ForcedOptions, z:context() ) -> {ok, #search_result{}} | {error, term()} when
+    ForcedOptions :: z_search:search_options().
+search(Name, Args, ForcedOptions, Context) when is_binary(Name), is_map(Args), is_map(ForcedOptions) ->
     {Page, PageLen, Args1} = get_paging_props(Args, Context),
     {Options, Args2} = get_search_options(Args1),
+    Options1 = maps:merge(Options, ForcedOptions),
     try
-        {ok, z_search:search(Name, Args2, Page, PageLen, Options, Context)}
+        {ok, z_search:search(Name, Args2, Page, PageLen, Options1, Context)}
     catch
         Result:Reason:Stack ->
             ?LOG_ERROR(#{
@@ -214,7 +234,8 @@ empty_result() ->
 
 
 get_search_options(#{ <<"options">> := Options } = Args) when is_map(Options) ->
-    {Options, maps:remove(<<"options">>, Args)};
+    Options1 = z_search:map_to_options(Options),
+    {Options1, maps:remove(<<"options">>, Args)};
 get_search_options(Args) ->
     {#{}, Args}.
 
