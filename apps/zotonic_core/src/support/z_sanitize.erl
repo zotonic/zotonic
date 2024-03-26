@@ -119,11 +119,13 @@ sanitize_element_1({<<"object">>, _Props, Inner}, _Stack, _Opts, _Context) ->
     Inner;
 sanitize_element_1({<<"script">>, Props, _Inner}, _Stack, _Opts, Context) ->
     sanitize_script(Props, Context);
-sanitize_element_1(Element, Stack, Opts, _Context) ->
+sanitize_element_1(Element, Stack, Opts, Context) ->
     sanitize_element_opts(Element, Stack, Opts).
 
+sanitize_element_opts(Element, Stack, Opts) ->
+    sanitize_element_opts(Element, Stack, Opts, undefined).
 
-sanitize_element_opts({<<"a">>, Attrs, Inner} = Element, _Stack, _Opts) ->
+sanitize_element_opts({<<"a">>, Attrs, Inner} = Element, _Stack, _Opts, _Context) ->
     case proplists:is_defined(<<"target">>, Attrs) of
         true ->
             Attrs1 = [ Attr || Attr = {K,_} <- Attrs, K =/= <<"rel">> ],
@@ -132,16 +134,16 @@ sanitize_element_opts({<<"a">>, Attrs, Inner} = Element, _Stack, _Opts) ->
         false ->
             Element
     end;
-sanitize_element_opts({comment, <<" [", _/binary>> = Comment} = Element, _Stack, _Opts) ->
+sanitize_element_opts({comment, <<" [", _/binary>> = Comment} = Element, _Stack, _Opts, _Context) ->
     % Conditionals by Microsoft Word: <!-- [if (..)] (..) [endif]-->
     case binary:last(Comment) of
         $] -> <<>>;
         _ -> Element
     end;
-sanitize_element_opts({comment, <<"StartFragment">>}, _Stack, _Opts) ->
+sanitize_element_opts({comment, <<"StartFragment">>}, _Stack, _Opts, _Context) ->
     % Inserted by Microsoft Word: <!--StartFragment-->
     <<>>;
-sanitize_element_opts({comment, <<"EndFragment">>}, _Stack, _Opts) ->
+sanitize_element_opts({comment, <<"EndFragment">>}, _Stack, _Opts, _Context) ->
     % Inserted by Microsoft Word: <!--EndFragment-->
     <<>>;
 sanitize_element_opts({comment, <<" z-media ", ZMedia/binary>>}, _Stack, _Opts) ->
@@ -150,7 +152,18 @@ sanitize_element_opts({comment, <<" z-media ", ZMedia/binary>>}, _Stack, _Opts) 
         [Id, Opts] = binary:split(ZMedia, <<" {">>),
         Opts1 = sanitize_z_media(<<${, Opts/binary>>),
         Id1 = z_string:to_name(z_string:trim(Id)),
-        {comment, <<" z-media ", Id1/binary, " ", Opts1/binary, " ">>}
+        case Context =:= undefined orelse z_acl:rsc_visible(Id1, Context) of
+            true ->
+                {comment, <<" z-media ", Id1/binary, " ", Opts1/binary, " ">>};
+            false ->
+                ?LOG_NOTICE(#{
+                    text => <<"Dropping invisibile media from z-media">>,
+                    in => zotonic_core,
+                    zmedia => ZMedia,
+                    rsc_id => Id1
+                }),
+                <<" ">>
+        end
     catch
         _:_ ->
             ?LOG_NOTICE(#{
@@ -158,12 +171,12 @@ sanitize_element_opts({comment, <<" z-media ", ZMedia/binary>>}, _Stack, _Opts) 
                 in => zotonic_core,
                 zmedia => ZMedia
             }),
-            {comment, <<" ">>}
+            <<" ">>
     end;
-sanitize_element_opts({Tag, Attrs, Inner}, _Stack, _Opts) ->
+sanitize_element_opts({Tag, Attrs, Inner}, _Stack, _Opts, _Context) ->
     Attrs1 = cleanup_element_attrs(Attrs),
     {Tag, Attrs1, Inner};
-sanitize_element_opts(Element, _Stack, _Opts) ->
+sanitize_element_opts(Element, _Stack, _Opts, _Context) ->
     Element.
 
 cleanup_element_attrs(Attrs) ->
