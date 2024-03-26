@@ -120,7 +120,7 @@ sanitize_element_1({<<"object">>, _Props, Inner}, _Stack, _Opts, _Context) ->
 sanitize_element_1({<<"script">>, Props, _Inner}, _Stack, _Opts, Context) ->
     sanitize_script(Props, Context);
 sanitize_element_1(Element, Stack, Opts, Context) ->
-    sanitize_element_opts(Element, Stack, Opts).
+    sanitize_element_opts(Element, Stack, Opts, Context).
 
 sanitize_element_opts(Element, Stack, Opts) ->
     sanitize_element_opts(Element, Stack, Opts, undefined).
