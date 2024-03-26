@@ -18,9 +18,12 @@ services:
         build:
             dockerfile: Dockerfile.dev
             context: .
+            args:
+                - UID=${UID:-1000}
+                - GID=${GID:-1000}
         environment:
-            ZOTONIC_PORT: 8000
-            ZOTONIC_SSL_PORT: 8443
+            ZOTONIC_PORT: ${ZOTONIC_PORT:-8000}
+            ZOTONIC_SSL_PORT: ${ZOTONIC_SSL_PORT:-8443}
             ZOTONIC_APPS: /opt/zotonic/apps_user
         depends_on:
             - postgres

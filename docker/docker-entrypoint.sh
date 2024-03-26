@@ -5,9 +5,6 @@ set -x
 HOME=/opt/zotonic
 SHELL=/bin/sh
 
-USER_ID=$PUID
-GROUP_ID=$PGID
-
 ZOTONIC_PIDFILE=/run/zotonic.pid
 
 ZOTONIC_DIR=/opt/zotonic
@@ -27,8 +24,8 @@ then
     echo "Found user zotonic"
 else
     echo "Create user zotonic"
-    addgroup -S -g $GROUP_ID zotonic
-    adduser -S -D -u $USER_ID -G zotonic zotonic
+    addgroup -S -g $GID zotonic
+    adduser -S -D -u $UID -G zotonic zotonic
 fi
 
 # Ensure the data and log directories are present and owned by the zotonic user

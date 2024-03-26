@@ -1,7 +1,10 @@
 FROM erlang:26-alpine
 
-ENV PUID=1000
-ENV PGID=1000
+ARG UID=1000
+ARG GID=1000
+
+ENV UID=${UID}
+ENV GID=${GID}
 
 # This Docker image is used to run Zotonic inside the container
 # in conjunction with a postgresql container.
