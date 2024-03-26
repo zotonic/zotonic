@@ -163,7 +163,7 @@ sleep 20
 ../rebar3 update
 
 
-# Publish all remaining apps - skip core dependencies
+# Publish all remaining apps - skip core dependencies and zotonic_apps
 
 for i in *
 do
@@ -222,27 +222,35 @@ done
 sleep 20
 ../rebar3 update
 
-
-popd
-
-
 # Publish the app that includes all zotonic_apps (for easy deps)
 
-pushd release/packages/zotonic_apps
+APPS6="zotonic_apps"
 
+# Ensure that all Zotonic core apps are in the deps of zotonic_apps
+pushd apps/zotonic_apps
 ./update-deps.sh
-../../../rebar3 compile
-../../../rebar3 edoc
-
-../../../rebar3 hex publish -r hexpm --yes
-
 popd
+
+for i in $APPS6
+do
+    pushd $i
+
+    # Take zotonic_core as the basis for the build, this prevents
+    # fetching and recompiling all dependencies of zotonic_core for
+    # every module
+    rm -rf _build
+    cp -r ../zotonic_core/_build .
+
+    ../../rebar3 compile
+    ../../rebar3 edoc
+
+    ../../rebar3 hex publish -r hexpm --yes
+
+    popd
+done
 
 
 # Cleanup
 # rm -rf apps/*/_build
 rm -f apps/*/rebar.lock
 rm -f apps/*/rebar.config.bck
-
-# rm -rf packages/zotonic_apps/*/_build
-rm -f packages/zotonic_apps/*/rebar.lock

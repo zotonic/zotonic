@@ -1,0 +1,48 @@
+'''Fyzika''' (z [[řečtina|řeckého]] (''physis''): ''[[příroda]]'')
+je [[Věda|vědní]] obor, který zkoumá [[hmota|hmotu]], její vlastnosti a chování během dějů. Vlastnosti a vztahy mezi nimi popisuje zpravidla jazykem [[matematika|matematiky]].
+
+== Rozdělení fyziky ==
+Fyzikální výzkum lze velmi obecně rozdělit na [[teoretická fyzika|teoretickou fyziku]],  [[experiment|experimentální fyziku]] a [[počítačové modelování]]. Ani jedno odvětví dnes nemůže existovat bez zbylých dvou. Teoretická fyzika se snaží vyvodit z experimentálních výsledků obecně platné zákony, naopak experimentální fyzika se snaží potvrdit nebo vyvrátit existující teorie, přitom často objevuje zcela nové jevy. Třetí větev je poměrně mladá, ale s rozvojem [[počítač]]ů se jí v moderní fyzice dostává stále větší důležitosti. Jejím úkolem jsou předpovědi a ověřování teorií na komplexních jevech, kdy je chování jejích jednotlivých částí dáno relativně jednoduchým vztahem, ze kterého ale ihned neplyne chování celého souboru.
+
+== Fyzikální obory ==
+Asi nejobyklejší dělení fyziky je podle oborů zájmu
+
+* [[Akustika]]
+* [[Astrofyzika]] 
+* [[Biofyzika]]
+* [[Elektřina a magnetismus]]
+* [[Fyzika částic]]
+* [[Fyzika kondenzovaného stavu]]
+* [[Fyzika plazmatu]]
+* [[Kosmologie a gravitace]]
+* [[Mechanika]]
+* [[Optika]]
+* [[Počítačová fyzika]]
+* [[Termika]]
+
+== Vztah fyziky k dalším vědám ==
+
+Fyzika se někdy označuje jako věda ''fundamentální''. Kdybychom disponovali neomezenou výpočetní silou, celá [[chemie]] by se redukovala na řešení rovnic [[kvantové teorie]]. Skutečnost je ale taková, že přímé výpočty ze základních rovnic jsou dnes proveditelné jen pro jednodušší případy. Proto chemie vychází z fyziky jen částečně. Obdobný vztah (přinejmenším podle [[redukcionismus|redukcionistického]] pohledu) platí pro [[biologie|biologii]], ale protože biologické systémy jsou ještě složitější, přímé výpočty jsou ještě méně praktické. Na pomezí mezi fyzikou, biologií a chemií leží [[biofyzika]]. Kromě výpočtů chování [[molekula|molekul]] mají velké uplatnění v biologii i [[lékařství]] zobrazovací metody založené na složitějších fyzikálních základech ([[NMR]], [[pozitronová emisní tomografie|PET]], [[spektroskopie]] a další).
+
+Fyzika těsně souvisí s [[Astronomie|astronomií]].
+
+== Historie fyziky ==
+
+Počátky fyziky lze hledat ve starověku. Fyzika převážně patřila do [[filosofie]], rozvíjela se [[kosmologie]]. Převažující metodou poznání byla úvaha a pozorování. [[Aristoteles|Aristotelova]] fyzika tak odpovídá přirozené, vypozorované zkušenosti - vržený předmět se zastaví, těžké předměty padají dolů, lehké míří nahoru. (Přestože v porovnání se současnou mechanikou se taková teorie zdá úplně špatná, v určitém smyslu pořád platí - je limitou mechaniky ve viskózním prostředí). Výjimkou značně předbíhající dobu byl [[Archimédés]], který prováděl [[experiment]]y a odvodil některé přesné kvantitativní zákony. 
+
+Arisotelovo učení se stalo vrcholem poznání na tisíc let. Pokroků v chemii a astronomii dosáhli arabští učenci, ale ve fyzice vývoj nastal teprve v [[renesance|renesanci]]. V [[Itálie|Itálii]] [[Galileo Galilei]] začal systematicky provádět experimenty, což se stalo základem rozvoje fyziky a [[vědecká metoda|vědecké metody]] vůbec. Galilei také odvodil některé výsledky v mechanice, mimo jiné [[Galileiho princip relativity|princip relativity]]. V astronomii [[Mikuláš Koperník]] navrhl [[heliocentrismus|heliocentrický systém]] a [[Johannes Kepler]] odvodil [[Keplerovy zákony|zákony pohybu nebeských těles]]. [[René Descartes]] a další položili základy pozdější matematizace fyziky ([[kartézské souřadnice]]).
+
+Ke konci 17. stol [[Isaac Newton]] vydává asi nejvýznamnější dílo v dějinách fyziky vůbec ''Philosophiae Naturalis Principia Mathematica'' (Matematické základy filosofie přírody). Vyslovuje [[Newtonovy pohybové zákony|zákony pohybu]], které jsou základem [[mechanika|mechaniky]] až do 20. století. V jednotném rámci s mechanikou formuluje univerzální zákon [[gravitace]] a odvozuje z něj Keplerovy zákony. Newton vymyslel i potřebný matematický aparát, [[integrál]] a [[derivace]].
+
+Klasickou mechaniku rozvíjejí [[Joseph Louis Lagrange|Lagrange]], [[William Rowan Hamilton|Hamilton]], [[Leonhard Euler|Euler]], [[Pierre-Simon Laplace|Laplace]] a další. Úspěšně popisují [[mechanika tekutin|mechaniku tekutin]].  
+
+[[Charles-Augustin de Coulomb|Coulomb]], [[Alessandro Volta|Volta]] a [[Adré Marie Ampere|Ampere]] studují elektrické jevy. [[Hans Christian Oersted|Oersted]] objevuje magnetické účinky [[elektrický proud|elektrického proudu]]. [[Michael Faraday]] objevuje [[elektrická indukce|indukci]]. V druhé polovině 19. století [[James Clerk Maxwell]] přichází s teorií [[elektromagnetické pole|elektromagnetického pole]], která spojuje a vysvětluje veškeré elektrické a magnetické jevy. Jako důsledek teorie předpovídá [[elektromagnetické vlny]], a přivádí tak na stejný základ i optiku. Předpověď experimentálně ověřil [[Heinrich Rudolf Hertz|Herz]].
+
+Roku [[1895]] [[Wilhelm Conrad Röntgen|Roentgen]] objevuje "paprsky X" (rentgenovské záření), o rok později [[Henri Becquerel|Becquerel]] objevuje radioaktivitu, o další rok později [[J.J.Thomspon|Thompson]] [[elektron]]. [[Jáchymov]]ské [[rádium]] studují [[Pierre Curie|Piere]] a [[Marie Curie-Skłodowska|Marie Curie-Skłodowská]]. Vzniká tak [[jaderná fyzika]].
+
+V ''zázračném roce'' [[1905]] [[Albert Einstein]] zveřejňuje [[speciální teorie relativity|speciální teorii relativity]], popisující chování [[časoprostor]]u při rychlostech větších než malých (časoprostorovou interpetaci STR popsal [[Hermann Minkowski|Minkowski]]). Kvantové vysvětluje [[fotoefekt]] - Einstein byl první, kdo vzal kvanta vážně. O desetiletí později pak Einstein představuje [[obecná teorie relativity|obecnou teorii relativity]], geometrickou relativistickou čtyřrozměrnou teorii gravitace.
+
+[[Rozdělení záření černého tělesa]] objevené [[Max Planck|Planckem]], fotoefekt, potíže s modelem atomu, vztahy mezi polohami [[spektrální čáry|spektrálních čar]] a další jevy s diskrétní energetickou strukturou vedly počátkem [[20. století]] k prvním kvantovým hypotézám ([[Niels Bohr|Bohr]] a další). Ucelené teorie [[kvantová mechanika|kvantové mechaniky]] ve dvacátých letech formulovali [[Werner Heisenberg|Heisenberg]] (''"maticová mechanika"'') a [[Erwin Schrödinger|Schrödinger]] (''"vlnová mechanika"''), který dokázal ekvivalenci obou přístupů. Teorii značně zdokonalili [[Paul Dirac]] a [[John von Neumann]].
+
+V druhé polovině [[20. století]] byla představena sjednocená [[kvantová teorie pole]], přičemž zásadní úlohu při jejím hledání měl [[Richard Feynman]]. Tato teorie sjednotila [[elektromagnetismus]] se [[slabá interakce|slabou]] a [[silná interakce|silnou interakcí]]. Rozvinuty byly také teorie o vzniku Vesmíru, které vycházejí z hypotézy [[Velký třesk|Velkého třesku]]. Zde za všechny vědce jmenujme [[George Gamow]]a. Od [[80. léta|80. let]] se vrcholná fyzika snaží propracovat [[teorie strun|teorii strun]], která má potenciál sjednotit dva pilíře moderní fyziky: [[kvantová teorie pole|kvantovou teorii pole]] a [[obecná teorie relativity|obecnou teorii relativity]], které jsou vzájemně neslučitelné. Nicméně teorie strun ještě není zcela bezvýhradně uznávanou teorií.
+

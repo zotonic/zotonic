@@ -567,9 +567,7 @@ set_username(Id, Username, Context) when is_integer(Id) ->
                                         Ctx)
                                 of
                                     1 -> ok;
-                                    0 -> {error, enoent};
-                                    {error, _} ->
-                                        {error, eexist} % assume duplicate key error?
+                                    0 -> {error, enoent}
                                 end;
                             _Other ->
                                 {error, eexist}

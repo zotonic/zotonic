@@ -81,6 +81,7 @@ model.present = function(data) {
                 data.logon_view = msg.payload.logon_view || "logon";
                 data.secret = msg.payload.secret || undefined;
                 data.username = msg.payload.u || undefined,
+                data.email = msg.payload.email || undefined,
                 model.present(data);
             });
     }
@@ -107,6 +108,7 @@ model.present = function(data) {
         model.logon_view = data.logon_view;
         model.secret = data.secret || model.secret;
         model.username = data.username || model.username;
+        model.email = data.email || model.email;
         model.options = data.options || {};
         model.error = data.error || undefined;
         if (state.loaded(model)) {

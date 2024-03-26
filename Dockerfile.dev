@@ -1,4 +1,4 @@
-FROM erlang:24-alpine
+FROM erlang:26-alpine
 
 ENV PUID=1000
 ENV PGID=1000

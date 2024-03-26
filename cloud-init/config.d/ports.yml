@@ -8,14 +8,14 @@ zotonic:
     # Outside ports
     port: 80
     ssl_port: 443
-    # HTTP port, iptables maps port 80 to 8000
-    listen_port: 8000
-    # HTTPS port, iptables maps port 443 to 8443
-    ssl_listen_port: 8443
+    # HTTP port, opened directly due to using setcap
+    listen_port: 80
+    # HTTPS port, opened directly due to using setcap
+    ssl_listen_port: 443
     # Let SMTP listen on all IP addresses
     smtp_listen_ip: any
-    # SMTP ports, iptables maps port 25 to 2525
-    smtp_listen_port: 2525
+    # SMTP ports, opened directly due to using setcap
+    smtp_listen_port: 25
     # MQTT ports, opened directly
     mqtt_listen_port: 1883
     mqtt_listen_ssl_port: 8883

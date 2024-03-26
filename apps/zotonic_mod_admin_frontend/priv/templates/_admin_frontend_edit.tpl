@@ -94,32 +94,36 @@
 				{% endblock %}
 			</div>
 			{% block meta_panels %}{% endblock %}
-			<div class="tab-pane" id="meta-language">
-				<div class="widget">
-				    <div class="widget-header">
-				        {_ Language _}
-				    </div>
-				    <div class="widget-content">
-				    	<p class="help-block">{_ Enabled or disable language tabs. _}</p>
-						{% optional include "_translation_edit_languages.tpl" %}
+			{% block meta_panel_language %}
+				<div class="tab-pane" id="meta-language">
+					<div class="widget">
+					    <div class="widget-header">
+					        {_ Language _}
+					    </div>
+					    <div class="widget-content">
+					    	<p class="help-block">{_ Enabled or disable language tabs. _}</p>
+							{% optional include "_translation_edit_languages.tpl" %}
 
-				    	<p class="help-block">{_ Add a translation or copy texts between languages. _}</p>
-						<div class="padding" style="padding-top: 0">
-							{% include "_admin_translation_tabs_extra.tpl" button %}
+					    	<p class="help-block">{_ Add a translation or copy texts between languages. _}</p>
+							<div class="padding" style="padding-top: 0">
+								{% include "_admin_translation_tabs_extra.tpl" button %}
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="tab-pane" id="meta-acl">
-				<div class="widget">
-				    <div class="widget-header">
-				        {_ Access control _}
-				    </div>
-				    <div class="widget-content">
-						{% optional include "_admin_edit_visible_for.tpl" id=id is_admin_frontend %}
+			{% endblock %}
+			{% block meta_panel_access_control %}
+				<div class="tab-pane" id="meta-acl">
+					<div class="widget">
+					    <div class="widget-header">
+					        {_ Access control _}
+					    </div>
+					    <div class="widget-content">
+							{% optional include "_admin_edit_visible_for.tpl" id=id is_admin_frontend %}
+						</div>
 					</div>
 				</div>
-			</div>
+			{% endblock %}
 		</div>
 
 		{# Hidden safe buttons and publish state - controlled via the nabvar #}

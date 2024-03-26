@@ -304,6 +304,9 @@ upgrade(C, Database, Schema) ->
     % 0.22.0
     ok = add_edge_log_details(C, Database, Schema),
 
+    % 0.82
+    ok = check_category_id_key(C, Database, Schema),
+
     % 1.0
     ok = set_default_visible_for(C, Database, Schema),
     ok = drop_persist(C, Database, Schema),
@@ -919,3 +922,10 @@ rsc_unfindable(C, Database, Schema) ->
                                     "CREATE INDEX rsc_is_unfindable_key ON rsc (is_unfindable)"),
             ok
     end.
+
+check_category_id_key(C, _Database, _Schema) ->
+    {ok, [], []} = epgsql:squery(
+        C,
+        "CREATE INDEX IF NOT EXISTS fki_rsc_category_id ON rsc (category_id)"
+    ),
+    ok.

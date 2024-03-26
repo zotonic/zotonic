@@ -1,10 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011 Marc Worrell
+%% @copyright 2011-2024 Marc Worrell
 
 %% @doc Convert a html text to markdown syntax.
-%%      This is used when editing TinyMCE texts with the markdown editor.
+%% This is used when editing TinyMCE texts with the markdown editor.
+%% @end
 
-%% Copyright 2011 Marc Worrell
+%% Copyright 2011-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -127,14 +128,14 @@ to_md({<<"pre">>, _Args, Enclosed}, M, S) ->
     {EncText, M1} = to_md(Enclosed, M, S1),
     {[nl(S1), trl(EncText), nl(S)], M1};
 
-to_md({<<"quote">>, _Args, Enclosed}, M, S) ->
+to_md({<<"blockquote">>, _Args, Enclosed}, M, S) ->
     S1 = S#ms{indent=[quote|S#ms.indent]},
     {EncText, M1} = to_md(Enclosed, M, S1),
-    {[nl(S1), trl(EncText), nl(S)], M1};
+    {[nl(S1), EncText, nl(S)], M1};
 
 to_md({<<"ul">>, _Args, Enclosed}, M, S) ->
     {EncText, M1} = to_md(Enclosed, M, S#ms{li=ul}),
-    {[nl(S), trl(EncText), nl(S)], M1};
+    {[nl(S), EncText, nl(S)], M1};
 to_md({<<"ol">>, _Args, Enclosed}, M, S) ->
     {EncText, M1} = to_md(Enclosed, M, S#ms{li=ol}),
     {[nl(S), trl(EncText), nl(S)], M1};

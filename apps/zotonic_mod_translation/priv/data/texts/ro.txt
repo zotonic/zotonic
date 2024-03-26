@@ -1,0 +1,66 @@
+----
+''Parte din seria [[Wikipedia:WikiCivică|WikiCivică]]''
+----
+Contrbuitorii la Wikipedia vin din culturi şi ţări diferite şi pot avea puncte de vedere foarte diferite. Tratarea celor din jur cu respect este fundamentală pentru colaborarea serioasă la construcţia unei enciclopedii care se bazează la modul spiritual pe colegialitate şi uniune de păreri (vezi [[Wikipedia:WikiLove|conceptul WikiLove]]).   
+
+Această pagină oferă câteva principii ale '''"Wikichetei"''' (''Wikiquette''), un ghid asupra modului de lucru cu alţii pe Wikipedia. Poţi citi convenţiile cele mai de bază la [[Wikipedia:politica]].
+
+== Principii ale etichetei Wikipedia ==
+* Pe cât posibil, presupune că ceilalţi colaboratori au intenţii bune. Wikipedia a lucrat remarcabil de bine până acum, bazându-se pe o politică de libertate de revizuire cvasi completă.
+* Evită să restaurezi versiunile anterioare ale paginilor sau să ştergi.
+** Corectează, revizuieşte, [[Wikipedia:Pagină de discuţii|discută]].     
+* Fii educat. 
+**Lumea nu poate vedea şi şti cât de mult glumeşti. Ironia nu este întodeauna vizibilă, şi un text crud şi insensibil poate fi considerat grosolan.
+* [[Wikipedia:Utilizarea semnăturii|Semnează şi datează]] mesajele trimise de tine.  
+* [[Wikipedia:Angajamentele colaboratorilor|Lucrează în acord]] cu restul [[Wikipedia:Wikipedist|wikipediştiilor]]
+* Nu ignora întrebările. 
+** Dacă o persoană nu este de acord cu modificarea ta, furnizează motive valide pentru modificarea făcută.  
+* Admite un punct de vedere dacă nu ai un răspuns; sau admite că nu eşti de acord bazându-te pe intuiţie sau gusturi. 
+** Nu purta discuţii cu persoane pe teme pe care nu le poţi susţine.
+* Fii prompt în a te scuza. 
+**În discuţiile în care se iscă conflicte, de multe ori spunem lucruri pe care mai târziu le regretăm. Recunoaşte.
+* Fii promt în a accepta o scuză în mod educat, şi fără a răsuci cuţitul în rană.
+* Laudă când e necesar. Cu toţii iubim să ne simţim apreciaţi, în special într-un mediu care cere compromisuri.
+* Elimină sau reasumă-ţi disputele pe care le-ai iniţiat.  
+* Ajută la medierea dezacordurilor între alte persoane.  
+* Dacă discuţia educată eşuează, ia o pauză dacă porţi o discuţie, sau sugerează o pauză dacă mediezi o discuţie.
+** Întoarce-te după o săptămână, sau două. Dacă nimeni nu a apărut un mediator, şi consideri că ar fi necesar, desemnează pe cineva.
+** Pleacă sau găseşte-ţi un alt proiect Wikipedia pentru a te distrage. Serviciile tale sunt ''întodeauna'' necesare [[Wikipedia:Articolul ciot perfect|amplifică un articol]] sau [[Wikipedia:Curăţenieleanup|curăţă]] pe Wikipedia.
+* Reţine [[Wikipedia:Ce nu este Wikipedia|ce nu e Wikipedia]].
+* Aruncă o privire peste [[Wikipedia:Greşeli comune|greşelile comune în utilizarea Wikipediei]].
+* Fii [[Wikipedia:Civilizaţie|civilizat]].
+
+== Cum să eviţi utilizarea excesivă a paginilor de discuţie ==
+
+Multe persoane ţin mult la ceea ce au scris în articole şi la punctul lor de vedere. Ego-urile lor pot fi rănite uşor de modificări aduse de alţi utilizatori, însă paginile de discuţie nu trebuie folosite pentru a întreţine lupte şi certuri. Aceste pagini sunt bune pentru a calma spiritele şi, mai ales, pentru a ajunge la înţelegeri care să fie spre binele articolelor aflate în discuţie.
+
+===Câteva lucruri de ţinut minte===
+
+* Articolele de pe Wikipedie se presupune a reprezanta toate punctele de vedere (vezi [[PDVN]]). Paginile de discuţie nu sunt locuri de dezbatere a celor mai juste, mai greşite sau mai bune opinii. Dacă vrei să faci asta, există locuri publice ca [[Usenet]], [[weblog]] sau alte [[wiki]].
+* Dacă cineva nu e de acord cu tine, asta nu înseamnă în mod necesar că (1) acea persoană te urăşte, (2) crede că eşti prost, (3) acea persoană este proastă, (4) acea persoană este rea, etc. Când cineva îşi trimite părerile care nu au legături directe cu articolul, cel mai bine e să le laşi pierdute.
+* Wikipedia te invită să [[Wikipedia:fii curajos|fii curajos]]. Înainte de a începe o discuţie, întreabă-te: e într-adevăr necesar a discuta? Pot să furnizez un sumar al reviziei mele şi să aştept ca alţii să obiecteze dacă doresc? 
+* Poţi să porţi întodeauna o discuţie pe [[Wikipedia:Mailing list ro.wiki|e-mail]] sau pe pagina ta de utilizator, dacă nu e absolut esenţial pentru articol.
+
+===Alte câteva sfaturi asupra discuţiei educate===
+
+* Atribuie întotdeauna clar punctul de vedere pe care îl trimiţi, în special în replici
+** A cita un post e bine, dar a declara cum îl interpretezi e rău. Înainte de a spune ce a spus cineva, gândeşte-te la faptul că s-ar putea să-l fi interpretat greşit.
+* Nu ''eticheta'' sau ''[[wikipedia:fără atacuri la persoană|ataca în mod direct]]'' persoanele sau reviziile lor.  
+**Termină cu "rasist", "pervers" sau "scris rău", cuvinte care pun persoana căreia i te adresezi în defensivă. Aceasta duce la dificultăţi în a realiza o discuţie productivă asupra unui articol.
+
+===Alte sfaturi===
+
+Ultimele sfaturi de la [[:en:User:Larry_Sanger|Larry Sanger]]:
+*fii deschis şi primitor, nu izolat, 
+*concentrează-te asupra scrierii unei enciclopedii şi nu a unei dezbateri în stil Usenet, 
+*recunoaşte şi laudă munca bună, o muncă care e detaliată se limitează la fapte concrete, e bine informat şi bine referenţiat, 
+*lucrează pentru a înţelege de ce e necesară neutralitatea şi de ce e aşa de esenţială şi de bună pentru acest proiect, 
+*tratează membrii productivi, bine intenţionaţi ai Wikipediei cu respect şi bunăvoinţă, 
+*atrage şi onorează persoanele care ştiu mult şi pot scrie bine despre anumite lucruri. 
+
+Profil al unui Wiki-angajament de
+* Fă-i pe ceilalţi să se simtă bine veniţi (chiar şi pe cei care participă de mult timp, chiar şi pe cei care nu-ţi plac)
+* Creează şi menţine un mediu de amiciţie
+* Întoarce şi celălalt obraz (ceea ce include şi evitarea unui potenţial război de editare)
+* Laudă, în special pe cei pe care nu-i cunoşti (multora le place să ştie că sunt doriţi şi apreciaţi)
+* Iartă!

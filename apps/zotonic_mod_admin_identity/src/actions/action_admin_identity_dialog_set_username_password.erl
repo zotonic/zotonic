@@ -119,8 +119,7 @@ event(#submit{message=set_username_password}, Context) ->
                             case z_convert:to_bool(z_context:get_q(<<"send_welcome">>, Context)) of
                                 true ->
                                     Vars = [{id, Id},
-                                            {username, Username},
-                                            {password, Password}],
+                                            {username, Username}],
                                     z_email:send_render(m_rsc:p(Id, email_raw, Context), "email_admin_new_user.tpl", Vars, Context);
                                 false ->
                                     nop

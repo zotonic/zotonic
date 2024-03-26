@@ -48,9 +48,11 @@
                     <tr>
                         <th width="20%">{_ Name _}</th>
                         <th width="20%">{_ Username _}</th>
-                        <th width="15%">{_ Last logon _}</th>
-                        <th width="15%">{_ Created on _}</th>
-                        <th width="25%">{_ Modified on _}</th>
+                        <th></th>
+                        <th>{_ Last logon _}</th>
+                        <th>{_ Created on _}</th>
+                        <th>{_ Modified on _}</th>
+                        <th></th>
                     </tr>
                 </thead>
 
@@ -67,10 +69,11 @@
                                     {% if id == me %}  <strong>{_ (that's you) _}</strong>{% endif %}
                                 {% endif %}
                             </td>
+                            <td>{% all include "_admin_user_info.tpl" id=id %}</td>
                             <td>{{ user_info.visited|date:_"d M Y, H:i" }}</td>
                             <td>{{ id.created|date:_"d M Y, H:i" }}</td>
+                            <td>{{ id.modified|date:_"d M Y, H:i" }}</td>
                             <td>
-                                {{ id.modified|date:_"d M Y, H:i" }}
                                 <div class="pull-right buttons">
                                     {% if is_users_editable and id != 1 %}
                                         {% button class="btn btn-default btn-xs"

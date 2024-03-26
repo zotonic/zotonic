@@ -1,0 +1,47 @@
+ (viết tắt từ chữ "PHP: Hypertext Preprocessor") là một ngôn ngữ lập trình kịch bản phía máy chủ, [[mã nguồn mở]], dùng cho mục đích tổng quát. Nó rất thích hợp với [[Internet|web]] và có thể dễ dạng nhúng vào trang [[HTML]]. Do được tối ưu hóa cho các ứng dụng web, tốc độ nhanh, nhỏ gọn, cú pháp giống [[Ngôn ngữ C|C]] và [[Java]], dễ học và thời gian xây dựng sản phẩm tương đối ngắn hơn so với các ngôn ngữ khác nên PHP đã nhanh chóng trở thành một ngôn ngữ lập trình web phổ biến nhất thế giới.
+
+Đoạn mã sau minh họa giúp cách viết PHP lồng vào các trang HTML dễ dàng như thế nào:
+
+Thẻ <&lt;?<à  sẽ bao gói phần mã PHP giúp cho máy chủ biết cách xử lý phần mã logic nào trên máy chủ. Đây là một điểm khá tiện lợi của PHP giúp cho việc viết mã PHP trở nên khá trực quan và dễ dàng trong việc xây dựng phần giao diện ứng dụng 
+
+Ngôn ngữ, các thư viện, tài liệu gốc của PHP được xây dựng bởi cộng đồng và có sự đóng góp rất lớn của [[Zend Inc.]], công ty do các nhà phát triển cốt lõi của PHP lập nên nhằm tại ra một môi trường chuyên nghiệp để đưa PHP phát triển ở quy mô xí nghiệp.
+
+==Lịch sử phát triển của PHP==
+
+
+PHP phát triển lên từ một sản phẩm có tên là [[PHP/FI]]. PHP/FI do [[Rasmus Lerdorf]] tạo ra năm [[1995]], ban đầu được xem như là một tập con đơn giản của các [[mã kịch bản]] [[Perl]] để theo dõi tình hình truy cập đến bản sơ yếu lí lịch của ông trên mạng. Ông đã đặt tên cho bộ mã kịch bản này là 'Personal Home Page Tools'. Khi cần đến các chức năng rộng hơn, Rasmus đã viết ra một bộ thực thi bằng C lớn hơn, để có thể truy vấn với các [[cơ sở dữ liệu]], và giúp cho người sử dụng phát triển các ứng dụng web đơn giản. Rasmus đã quyết định công bố mã nguồn của PHP/FI cho mọi người xem, sử dụng cũng như chữa các lỗi có trong nó đồng thời cải tiến mã nguồn.
+
+PHP/FI, viết tắt cho chữ Personal Home Page / Forms Interpreter, bao gồm một số các chức năng cơ bản cho PHP như ta đã biết đến chúng ngày nay. Nó có các biến kiểu như Perl, thông dịch tự động các biến của form và cú pháp HTML nhúng. Cú pháp này giống như của Perl, mặc dù hạn chế hơn nhiều, đơn giản và có phần thiếu nhất quán.
+
+Vào năm [[1997]], PHP/FI 2.0, lần viết lại thứ hai của phiên bản C, đã thu hút được hàng ngàn người sử dụng trên tòan thế giới, với xấp xỉ 50000 tên miền đã được ghi nhận là có cài đặt nó, chiếm khoảng 1% số tên miền có trên mạng Internet. Tuy đã có tới hàng nghìn người tham gia đống góp vào việc tu chỉnh mã nguồn của dự án này thì vào thời đó nó vẫn chủ yếu chỉ là dự án của một người.
+
+PHP/FI 2.0 được chính thức công bố vào tháng 11 năm 1997, sau một thời gian khá dài chỉ được công bố dưới dạng các bản [[beta]]. Nhưng không lâu sau đó, nó đã được thay thế bởi các bản alpha đầu tiên của PHP 3.0.
+
+
+là phiên bản đầu tiên cho chúng ta thấy một hình ảnh gần gũi với các phiên bản PHP mà chúng ta được biết ngày nay. Nó đã được [[Andi Gutmans]] và [[Zeev Suraski]] tạo ra năm 1997 sau khi viết lại hoàn toàn bộ mã nguồn trước đó. Lý do chính mà họ đã tạo ra phiên bản này là do nhận họ thấy PHP/FI 2.0 hết sức yếu kém trong việc phát triển một ứng dụng [[Thương mại điện tử]] mà họ đang xúc tiến trong một dự án của trường đại học. Trong một nỗ lực hợp tác và bắt đầu xây dựng dựa trên cơ sỏ người dùng đã có của PHP/FI, [[Andi]], [[Rasmus]] và [[Zeev]] đã quyết định hợp tác và công bố PHP 3.0 như là phiên bản thế hệ kế tiếp của PHP/FI 2.0, và chấm dứt phát triển PHP/FI 2.0.
+
+Một trong những sức mạnh lớn nhất của PHP 3.0 là các tính năng mở rộng mạnh mẽ của nó. Ngoài khả năng cung cấp cho người dùng cuối một cơ sỏ hạ tầng chặt chẽ dùng cho nhiều cơ sở dữ liệu, giao thức và API khác nhau, các tính năng mở rộng của PHP 3.0 đã thu hút rất nhiều nhà phát triển tham gia và đề xuất các mô đun mở rộng mới. Hoàn toàn có thể kết luận được rằng đây chính là điểm mấu chốt dẫn đến thành công vang dội của PHP 3.0. Các tính năng khác được giới thiệu trong PHP 3.0 gồm có hỗ trợ cú pháp [[hướng đối tượng]] và nhiều cú pháp ngôn ngữ nhất quán khác.
+
+Ngôn ngữ hoàn toàn mới đã được công bố dưới một cái tên mới, xóa bỏ mối liên hệ với việc sử dụng vào mục đích cá nhân hạn hẹp mà cái tên PHP/FI 2.0 gợi nhắc. Nó đã được đặt tên ngắn gọn là 'PHP', một kiểu viết tắt hồi quy của - PHP: Hypertext Preprocessor.
+
+Vào cuối năm [[1998]], PHP đã phát triển được cơ số cài dặt lên tới hàng chục ngàn người sử dụng và hàng chục ngàn Web site báo cáo là đã cài nó. Vào thời kì đỉnh cao, PHP 3.0 đã được cài đặt cho xấp xỉ 10% số Web server có trên mạng Internet.
+
+PHP 3.0 đã chính thức được công bố vào tháng 6 năm 1998, sau thời gian 9 tháng được công đồng kiểm nghiệm.
+
+
+Vào mùa đông năm 1998, ngay sau khi PHP 3.0 chính thức được công bố, Andi Gutmans và Zeev Suraski đã bắt đầu bắt tay vào việc viết lại phần lõi của PHP. Mục đích thiết kế là nhằm cải tiến tốc độ xử lý các ứng dụng phức tạp, và cải tiến tính mô đun của cơ sở mã PHP. Những ứng dụng như vậy đã chạy được trên PHP 3.0 dựa trên các tính năng mới và sự hỗ trợ cảu khá nhiều các cở sở dữ liệu và API của bên thứ ba, nhưng PHP 3.0 đã không được thiết kế để xử lý các ứng dụng phức tạp như thế này một cách có hiệu quả.
+
+Một động cơ mới, có tên 'Zend Engine' (ghép từ các chữ đầu trong tên của Zeev và Andi), đã đáp ứng được các nhu cầu thiết kế này một cách thành công, và lần đầu tiên được giới thiệu vào giữa năm [[1999]]. PHP 4.0, dựa trên động cơ này, và đi kèm với hàng loạt các tính năng mới bổ sung, đã chính thức được công bố vào tháng 5 năm 2000, gần 2 năm sau khi bản PHP 3.0 ra đời. Ngoài tốc độ xử lý được cải thiện rất nhiều, PHP 4.0 đem đến các tính năng chủ yếu khác gồm có sự hỗ trợ nhiều Web server hơn, hỗ trợ phiên làm việc HTTP, tạo bộ đệm thông tin đầu ra, nhiều cách xử lý thông tin người sử dụng nhập vào bảo mật hơn và cung cấp một vài các cấu trúc ngôn ngữ mới.
+
+Với  số nhà phát triển dùng PHP đã lên đến hàng trăm nghìn và hàng triệu site đã công bố cài đặt PHP, chiếm khoảng 20% số tên miền trên mạng Internet.
+
+Nhóm phát triển PHP cũng đã lên tới con số hàng nghìn người và nhiều nghìn người khác tham gia vào các dự án có liên quan đến PHP như [[PEAR]], [[PECL]] và tài liệu kĩ thuật cho PHP.
+
+
+Sự thành công hết sức to lớn của PHP 4.0 đã không làm cho nhóm phát triển PHP tự mãn. Cộng đồng đã nhanh chóng giúp họ nhận ra những yếu kém của PHP 4 đặc biệt với khả năng hỗ trợ lập trình hướng đối tượng, xử lý [[XML]], không hỗ trợ giao thức máy khách mới của [[]] 4.1 và 5.0, hỗ trợ dịch vụ web yếu. Những điểm này chính là mục đích để Zeev và Andi viết Zend Engine 2.0, lõi của PHP 5.0. [ Một thảo luận trên Slashdot] đã cho thấy việc phát triển PHP 5.0 có thể đã bắt đầu vào thời điểm tháng 12 năm [[2002]] nhưng những bài phỏng vấn Zeev liên quan đến phiên bản này thì đã có mặt trên mạng Internet vào khoảng tháng 7-2002. Ngày [[29 tháng 6]] năm [[2003]], PHP 5 Beta 1 đã chính thức được công bố để cộng đồng kiểm nghiệm. Đó cũng là phiên bản đầu tiên của Zend Engine 2.0. Phiên bản Beta 2 sau đó đã ra mắt vào tháng 10 năm 2003 với sự xuất hiện của hai tính năng rất được chờ đợi: [[]]s, [[]] nhưng [[]]s một tính năng gây tranh cãi khác đã bị loại khỏi mã nguồn. Ngày [[21 tháng 12]] năm 2003: PHP5 Beta 3 đã được công bố để kiểm tra với việc phân phối kèm với [[Tidy]], bỏ hỗ trợ [[]], khả năng gọi các hàm PHP bên trong [[XSLT]], sửa chữa nhiều lỗi và thêm khá nhiều hàm mới. PHP5 bản chính thức đã ra mắt ngày [[13 tháng 7]] năm [[2004]] sau một chuỗi khá dài các bản kiểm tra thử bao gồm Beta 4, RC 1, RC2, RC3. Mặc dù coi đây là phiên bản sản xuất đầu tiên nhưng PHP 5.0 vẫn còn một số lỗi trong đó đáng kể là lỗi xác thực HTTP. Nhóm [[]] đã kỉ niệm sự kiện này bằng hai bài viết về PHP 5.0 đăng trên tờ Thế giới Vi tính (số A) tháng 8-2004.
+
+Mặc dù đây PHP 5 được coi là đã sẵn sàng cho doanh nghiệp nhưng sự chấp nhận PHP vẫn tiến triển khá chậm chạm đặc biệt là ở Việt Nam. Nhưng những nỗ lực đầu tiên để phổ biến PHP trong đó có dự án xây dựng [[Chuẩn viết mã PHP]] [[tiếng Việt]] đã được xúc tiến. Ngày 24-10-2004, nhóm PHPVietnam đã đề xuất xây dựng PHPVietnam Mailing List đầu tiên trên Google Groups tại địa chỉ: . Tại đây cũng đã diễn ra những thảo luận để xây dựng forum cho cộng đồng 
+
+==Đóng góp của nguười Việt cho cộng đồng PHP thế giới==
+Người Việt chưa đóng góp được gì nhiều. Chủ yếu sự tham gia của người Việt là thông qua việc dịch các file ngôn ngữ và dựa trên những script PHP sẵn có với chút sửa đổi để tạo nên các hệ thống thông tin thuần Việt như Nuke Việt.
+

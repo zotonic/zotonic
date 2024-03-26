@@ -88,6 +88,8 @@ m_get([ <<"all_languages">> | Rest ], _Msg, _Context) ->
     {ok, {all_languages(), Rest}};
 m_get([ <<"enabled_language_codes">> | Rest ], _Msg, Context) ->
     {ok, {z_language:enabled_language_codes(Context), Rest}};
+m_get([ <<"editable_language_codes">> | Rest ], _Msg, Context) ->
+    {ok, {z_language:editable_language_codes(Context), Rest}};
 m_get([ <<"language_list">> | Rest ], _Msg, Context) ->
     {ok, {z_language:language_list(Context), Rest}};
 m_get([ <<"language_stemmer">> | Rest ], _Msg, Context) ->

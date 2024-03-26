@@ -88,11 +88,7 @@ event(#submit{message={media_upload, EventProps}}, Context) ->
                             }
                     end;
                 _ ->
-                    Title = z_context:get_q(<<"new_media_title">>, Context),
-                    NewTitle = case z_utils:is_empty(Title) of
-                                   true -> OriginalFilename;
-                                   false -> Title
-                               end,
+                    NewTitle = z_string:trim(z_convert:to_binary(z_context:get_q(<<"new_media_title">>, Context))),
                     IsDependent = z_convert:to_bool( z_context:get_q(<<"is_dependent">>, Context, false) ),
                     IsPublished = z_convert:to_bool( z_context:get_q(<<"is_published">>, Context, true) ),
                     Props0 = #{
