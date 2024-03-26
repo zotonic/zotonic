@@ -32,7 +32,7 @@
     escape_link/2,
     html/1,
     html/2
-    ]).
+]).
 
 -include_lib("zotonic.hrl").
 
@@ -146,7 +146,7 @@ sanitize_element_opts({comment, <<"StartFragment">>}, _Stack, _Opts, _Context) -
 sanitize_element_opts({comment, <<"EndFragment">>}, _Stack, _Opts, _Context) ->
     % Inserted by Microsoft Word: <!--EndFragment-->
     <<>>;
-sanitize_element_opts({comment, <<" z-media ", ZMedia/binary>>}, _Stack, _Opts) ->
+sanitize_element_opts({comment, <<" z-media ", ZMedia/binary>>}, _Stack, _Opts, Context) ->
     % The z-media tag is very strict with spaces
     try
         [Id, Opts] = binary:split(ZMedia, <<" {">>),
