@@ -2,7 +2,7 @@ version: '3.1'
 
 services:
     postgres:
-        image: postgres:11.6-alpine
+        image: postgres:16.2-alpine
         hostname: postgres
         restart: always
         environment:
@@ -15,7 +15,9 @@ services:
             - '${DB_FORWARD_PORT:-5432}:5432'
 
     zotonic:
-        image: zotonic/zotonic-dev
+        build:
+            dockerfile: Dockerfile.dev
+            context: .
         environment:
             ZOTONIC_PORT: 8000
             ZOTONIC_SSL_PORT: 8443
