@@ -1,5 +1,7 @@
 FROM erlang:25-alpine
 
+# Start this image using ./start-docker.sh
+
 # This Docker image is used to run Zotonic inside the container
 # in conjunction with a postgresql container.
 # All Zotonic sources, configuration and other data is stored outside the
