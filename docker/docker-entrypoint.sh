@@ -84,6 +84,6 @@ if [ -e "$ZOTONIC_DIR/apps/zotonic_launcher/src/command/zotonic_cmd_$1.erl" ] ||
 else
     # Start shell
     bin/zotonic
-    printf '\n\n####\n#### Usage: bin/zotonic [options] [command]\n####\n#### To rebuild zotonic run: make\n####\n#### To start in foreground with Erlang terminial: ./start.sh\n####\n\n'
+    printf '\n\n####\n#### Usage: bin/zotonic [options] [command]\n####\n#### To rebuild zotonic run: make\n####\n#### To start in foreground with Erlang terminal: ./start.sh\n####\n\n'
     exec /usr/bin/gosu zotonic /bin/bash
 fi
