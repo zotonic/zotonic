@@ -1,4 +1,6 @@
-FROM erlang:26-alpine
+FROM erlang:25-alpine
+
+# Start this image using ./start-docker.sh
 
 # This Docker image is used to run Zotonic inside the container
 # in conjunction with a postgresql container.
@@ -11,19 +13,19 @@ WORKDIR /opt/zotonic
 
 # Fix for untrusted keys https://gitlab.alpinelinux.org/alpine/aports/-/issues/14043
 RUN apk upgrade
-RUN apk add -X https://dl-cdn.alpinelinux.org/alpine/v3.16/main -u alpine-keys
+RUN apk add -X https://dl-cdn.alpinelinux.org/alpine/v3.18/main -u alpine-keys
 
 # Install Zotonic runtime dependencies.
 # Git is necessary because rebar3 compile requires git.
 RUN apk add --no-cache bsd-compat-headers ca-certificates wget curl \
         make gcc musl-dev g++ libstdc++ \
         bash file gettext git openssl inotify-tools \
-        imagemagick ffmpeg
+        imagemagick ffmpeg \
+        dumb-init
 
 # Note: gosu is pulled from edge; remove that when upgrading to an alpine release that
 # includes the package.
-RUN apk add --no-cache dumb-init \
-    && apk add --no-cache --repository https://dl-cdn.alpinelinux.org/alpine/edge/testing/ gosu
+RUN apk add --no-cache --repository https://dl-cdn.alpinelinux.org/alpine/edge/testing/ gosu
 
 COPY docker/docker-entrypoint.sh /opt/zotonic-docker/docker-entrypoint.sh
 
