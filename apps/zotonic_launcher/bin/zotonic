@@ -14,24 +14,28 @@ done
 readonly ZOTONIC_BIN=$(\cd `\dirname -- "$0"`;\pwd)
 export ZOTONIC_BIN
 
-readonly ERL_EPMD_ADDRESS=${ERL_EPMD_ADDRESS:=127.0.0.1,127.0.1.1}
+unameOut="$(uname -s)"
+case "${unameOut}" in
+    Linux*)     machine=Linux;;
+    Darwin*)    machine=Mac;;
+    FreeBSD*)   machine=BSD;;
+    DragonFly*) machine=BSD;;
+    CYGWIN*)    machine=Cygwin;;
+    MINGW*)     machine=MinGw;;
+    *)          machine="UNKNOWN:${unameOut}"
+esac
+case "${machine}" in
+    Linux)
+        readonly ERL_EPMD_ADDRESS=${ERL_EPMD_ADDRESS:=127.0.0.1,127.0.1.1};;
+    *)
+        readonly ERL_EPMD_ADDRESS=${ERL_EPMD_ADDRESS:=127.0.0.1}
+esac
 export ERL_EPMD_ADDRESS
 
 cd -- "${ZOTONIC}" || \exit 1
 
 case "$1" in
     completion)
-        unameOut="$(uname -s)"
-        case "${unameOut}" in
-            Linux*)     machine=Linux;;
-            Darwin*)    machine=Mac;;
-            FreeBSD*)   machine=BSD;;
-            DragonFly*) machine=BSD;;
-            CYGWIN*)    machine=Cygwin;;
-            MINGW*)     machine=MinGw;;
-            *)          machine="UNKNOWN:${unameOut}"
-        esac
-
         case "${machine}" in
             Linux*)     BASH_FILE=~/.bashrc;;
             Mac*)       BASH_FILE=~/.bash_profile;;
