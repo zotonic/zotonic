@@ -173,6 +173,12 @@ Then start Zotonic in debug mode::
 
     $ bin/zotonic debug
 
+If you get the error ``Protocol 'inet_tcp': register/listen error: econnrefused``,
+you need to start the `epmd <https://www.erlang.org/doc/man/epmd.html>`_ daemon
+manually before starting zotonic::
+
+    $epmd -daemon
+
 Now point your browser to: https://localhost:8443/.  You should see
 a welcome message, ‘Powered by Zotonic’. This is the so-called
 :ref:`status website <ref-status-site>`. So far, so good! Now it's
