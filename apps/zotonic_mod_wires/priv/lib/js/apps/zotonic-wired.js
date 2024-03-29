@@ -1739,9 +1739,11 @@ function is_equal(x, y) {
     return true;
 }
 
-window.addEventListener('load', function() {
+// Initialize the Zotonic page on load.
+
+window.addEventListener('load', () => {
     z_jquery_init_await();
-}, true);
+}, { capture: true, passive: true, once: true });
 
 function z_jquery_init_await() {
     if (typeof window.$ !== 'undefined') {
@@ -1750,6 +1752,21 @@ function z_jquery_init_await() {
         setTimeout(function() { z_jquery_init_await(); }, 50);
     }
 }
+
+// Publish the presence of activity max once per 100 msec
+let z_last_act_publish = 0;
+function publish_activity(type) {
+    const now = Math.floor(Date.now() / 100);
+    if (now > z_last_act_publish) {
+        cotonic.broker.publish("model/activity/event", { type: type });
+        z_last_act_publish = now;
+    }
+}
+window.addEventListener('scroll', (e) => publish_activity(e.type), { capture: true, passive: true });
+window.addEventListener('mousemove', (e) => publish_activity(e.type), { capture: true, passive: true });
+window.addEventListener('keyup', (e) => publish_activity(e.type), { capture: true, passive: true });
+window.addEventListener('touchstart', (e) => publish_activity(e.type), { capture: true, passive: true });
+
 
 function z_jquery_init() {
     if (typeof window.zotonicPageInit == 'function') {
