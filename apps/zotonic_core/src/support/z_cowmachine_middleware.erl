@@ -25,7 +25,8 @@
 -behaviour(cowboy_middleware).
 
 -export([
-    execute/2
+    execute/2,
+    set_accept_context/2
 ]).
 
 -include_lib("../../include/zotonic.hrl").
