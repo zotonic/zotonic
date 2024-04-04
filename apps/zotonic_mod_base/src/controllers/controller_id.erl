@@ -114,7 +114,6 @@ get_id(Context) ->
                     case maybe_split_extension(Id) of
                         {Root, Ext} ->
                             RscId = m_rsc:rid(Root, Context),
-                            ?DEBUG(Ext),
                             Context1 = z_cowmachine_middleware:set_accept_context(Ext, Context),
                             {RscId, z_context:set(id, {ok, RscId}, Context1)};
                         false ->
