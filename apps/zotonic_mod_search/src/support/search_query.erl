@@ -558,7 +558,7 @@ qterm(#{ <<"term">> := <<"ongoing_on">>, <<"value">> := Date}, Context) ->
             #search_sql_term{
                 where = [
                     <<"rsc.pivot_date_start <= ">>, '$1',
-                    <<"and rsc.pivot_date_end >= ">>, '$1'
+                    <<" and rsc.pivot_date_end >= ">>, '$1'
                 ],
                 args = [ DT ]
             };
