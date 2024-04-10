@@ -76,7 +76,7 @@ handle_redirect(StateId, ServiceMod, ServiceData, InitialQArgs, QArgs, SId, Cont
                 InitialQArgs,
                 SId,
                 Context);
-        2 ->
+        Version when Version =:= 2; Version =:= oidc ->
             case maps:get(<<"error">>, QArgs, undefined) of
                 undefined ->
                     case maps:get(<<"state">>, QArgs, undefined) of

@@ -191,12 +191,16 @@ transaction(Function, Context) ->
 transaction(Function, Options, Context) ->
     z_context:logger_md(Context),
     Result = case transaction1(Function, Context) of
+                {rollback, {error, #error{ codename = deadlock_detected }}} ->
+                    {rollback, {deadlock, []}};
                 {rollback, {{error, #error{ codename = deadlock_detected }}, Trace1}} ->
                     {rollback, {deadlock, Trace1}};
                 {rollback, {{case_clause, {error, #error{ codename = deadlock_detected }}}, Trace1}} ->
                     {rollback, {deadlock, Trace1}};
                 {rollback, {{badmatch, {error, #error{ codename = deadlock_detected }}}, Trace1}} ->
                     {rollback, {deadlock, Trace1}};
+                {error, #error{ codename = deadlock_detected }} ->
+                    {rollback, {deadlock, []}};
                 Other ->
                     Other
             end,

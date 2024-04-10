@@ -1042,10 +1042,14 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
             case (IsInsert orelse is_changed(Raw, NewPropsDiffPub)) of
                 true ->
                     UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(Id, NewPropsDiffPub, Raw, Context),
-                    {ok, 1} = z_db:update(rsc, Id, UpdatePropsPrePivoted, Context),
-                    ok = update_page_path_log(Id, Raw, NewPropsDiffPub, Context),
-                    NewPropsFinal = maps:merge(NewPropsLangPruned, UpdatePropsPrePivoted),
-                    {ok, Id, {Raw, NewPropsFinal, IsABefore, IsCatInsert}};
+                    case z_db:update(rsc, Id, UpdatePropsPrePivoted, Context) of
+                        {ok, 1} ->
+                            ok = update_page_path_log(Id, Raw, NewPropsDiffPub, Context),
+                            NewPropsFinal = maps:merge(NewPropsLangPruned, UpdatePropsPrePivoted),
+                            {ok, Id, {Raw, NewPropsFinal, IsABefore, IsCatInsert}};
+                        {error, _} = Error ->
+                            Error
+                    end;
                 false ->
                     {ok, Id, notchanged}
             end;
