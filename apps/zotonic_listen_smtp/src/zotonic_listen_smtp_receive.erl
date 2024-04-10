@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2021 Marc Worrell
+%% @copyright 2011-2024 Marc Worrell
 %% @doc Handle received e-mail.
+%% @end
 
-%% Copyright 2011-2021 Marc Worrell
+%% Copyright 2011-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,6 +26,7 @@
 ]).
 
 -export([
+    parse_email/4,
     parse_file/1
 ]).
 
@@ -204,10 +206,48 @@ sanitize_utf8(S) ->
 
 %% @doc Parse a file using the html/text parse routines. This is used for testing
 parse_file(Filename) ->
-    {ok, Data} = file:read_file(Filename),
-    {Type, Subtype, Headers, Params, Body} = mimemail:decode(Data),
-    parse_email({Type,Subtype}, Headers, Params, Body).
+    case file:read_file(Filename) of
+        {ok, Data} ->
+            case decode(Data) of
+                {ok, {Type, Subtype, Headers, Params, Body}} ->
+                    LHeaders = lowercase_headers(Headers),
+                    ParsedEmail = parse_email({Type,Subtype}, Headers, Params, Body),
+                    From = fix_email(proplists:get_value(<<"from">>, LHeaders)),
+                    To = fix_email(proplists:get_value(<<"to">>, LHeaders)),
+                    ParsedEmail1 = generate_text(generate_html(ParsedEmail)),
+                    ParsedEmail2 = ParsedEmail1#email{
+                         subject = sanitize_utf8(proplists:get_value(<<"Subject">>, Headers)),
+                         headers = LHeaders,
+                         to = To,
+                         body = Body,
+                         from = sanitize_utf8(From),
+                         html = sanitize_utf8(ParsedEmail1#email.html),
+                         text = sanitize_utf8(ParsedEmail1#email.text)
+                    },
+                    {ok, ParsedEmail2};
+                {error, _} = Error ->
+                    Error
+            end;
+        {error, _} = Error ->
+            Error
+    end.
 
+decode(Data) ->
+    try
+        {ok, mimemail:decode(Data)}
+    catch
+        Type:Reason ->
+            {error, {Type,Reason}}
+    end.
+
+fix_email(undefined) ->
+    <<"nobody@example.com">>;
+fix_email(Email) ->
+    % Fix illegal addresses like "k..allen@enron.com"
+    case binary:replace(Email, <<"..">>, <<".">>, [ global ]) of
+        Email -> Email;
+        E1 -> fix_email(E1)
+    end.
 
 %% @doc Parse an #email_received to a sanitized #email try to make
 %% sense of all parts.
