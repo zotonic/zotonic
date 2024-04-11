@@ -142,6 +142,7 @@ from_list([ {K, _} | _ ] = L) when is_binary(K) ->
 %%    'd', 'dmy', 'his', 'hi', 'h', 'i', or 's'</li>
 %%  <li> 'prop$en' is the 'en' translation of the property named 'prop'</li>
 %%  <li> 'a.b.c.d' is a nested map</li>
+%%  <li> 'a~1' is a multi occurence of 'a', useful for same named items</li>
 %%  <li> 'blocks[].name' is a list of maps, use 'blocks[].' to append a new empty
 %%    entry. Use 'name[]' to append to a list of values.</li>
 %% </ul>

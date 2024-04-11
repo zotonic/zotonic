@@ -1475,20 +1475,20 @@ add_term_arg(ArgValue, #search_sql_term{ args = Args } = Q) ->
 %         <<"value">> := V
 %     }) ->
 %     {<<"=">>, V};
-extract_value_op(<<"=", V/binary>>, _Op) ->
-    {<<"=">>, V};
-extract_value_op(<<">", V/binary>>, _Op) ->
-    {<<">">>, V};
-extract_value_op(<<"<", V/binary>>, _Op) ->
-    {<<"<">>, V};
+extract_value_op(<<"<>", V/binary>>, _Op) ->
+    {<<"<>">>, V};
 extract_value_op(<<"<=", V/binary>>, _Op) ->
     {<<"<=">>, V};
 extract_value_op(<<">=", V/binary>>, _Op) ->
     {<<">=">>, V};
 extract_value_op(<<"!=", V/binary>>, _Op) ->
     {<<"<>">>, V};
-extract_value_op(<<"<>", V/binary>>, _Op) ->
-    {<<"<>">>, V};
+extract_value_op(<<"=", V/binary>>, _Op) ->
+    {<<"=">>, V};
+extract_value_op(<<">", V/binary>>, _Op) ->
+    {<<">">>, V};
+extract_value_op(<<"<", V/binary>>, _Op) ->
+    {<<"<">>, V};
 extract_value_op(V, Op) ->
     {Op, V}.
 
@@ -1497,13 +1497,13 @@ extract_term_op(#{ <<"operator">> := Op }, _Op) ->
 extract_term_op(_, Op) ->
     Op.
 
+sanitize_op(<<"!=">>) -> <<"<>">>;
+sanitize_op(<<"<>">>) -> <<"<>">>;
+sanitize_op(<<">=">>) -> <<">=">>;
+sanitize_op(<<"<=">>) -> <<"<=">>;
 sanitize_op(<<"=">>) -> <<"=">>;
 sanitize_op(<<">">>) -> <<">">>;
 sanitize_op(<<"<">>) -> <<"<">>;
-sanitize_op(<<">=">>) -> <<">=">>;
-sanitize_op(<<"<=">>) -> <<"<=">>;
-sanitize_op(<<"!=">>) -> <<"<>">>;
-sanitize_op(<<"<>">>) -> <<"<>">>;
 sanitize_op(_) -> <<"=">>.
 
 
