@@ -578,20 +578,20 @@ add_term_arg(ArgValue, #search_sql_term{ args = Args } = Q) ->
     Arg = [$$] ++ integer_to_list(length(Args) + 1),
     {list_to_atom(Arg), Q#search_sql_term{args = Args ++ [ ArgValue ]}}.
 
+extract_op(<<"!=", V/binary>>) ->
+    {"<>", V};
+extract_op(<<"<>", V/binary>>) ->
+    {"<>", V};
+extract_op(<<"<=", V/binary>>) ->
+    {"<=", V};
+extract_op(<<">=", V/binary>>) ->
+    {">=", V};
 extract_op(<<"=", V/binary>>) ->
     {"=", V};
 extract_op(<<">", V/binary>>) ->
     {">", V};
 extract_op(<<"<", V/binary>>) ->
     {"<", V};
-extract_op(<<"<=", V/binary>>) ->
-    {"<=", V};
-extract_op(<<">=", V/binary>>) ->
-    {">=", V};
-extract_op(<<"!=", V/binary>>) ->
-    {"<>", V};
-extract_op(<<"<>", V/binary>>) ->
-    {"<>", V};
 extract_op(V) ->
     {"=", V}.
 

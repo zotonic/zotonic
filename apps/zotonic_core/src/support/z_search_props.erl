@@ -164,7 +164,6 @@ from_qargs(QArgs0) when is_list(QArgs0) ->
             QArgs),
     from_list(TermArgs).
 
-
 %% @doc Translate a map with query term keys to a query term map.
 -spec from_map(TermMap) -> Query when
     TermMap :: map(),
@@ -239,12 +238,13 @@ maybe_from_zprops(TermArgs) ->
 maybe_rename_arg({K, V}) when is_atom(K) ->
     maybe_rename_arg({atom_to_binary(K, utf8), V});
 maybe_rename_arg({K, V}) when is_binary(K) ->
-    case is_filter_arg(K) of
+    [ K1 | _ ] = binary:split(K, <<"~">>),
+    case is_filter_arg(K1) of
         true ->
-            K1 = binary:replace(K, <<".">>, <<":">>, [ global ]),
-            {K1, V};
+            K2 = binary:replace(K1, <<".">>, <<":">>, [ global ]),
+            {K2, V};
         false ->
-            {K, V}
+            {K1, V}
     end.
 
 is_filter_arg(<<"filter.", _/binary>>) -> true;
