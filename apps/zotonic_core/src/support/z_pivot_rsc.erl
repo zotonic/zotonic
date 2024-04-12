@@ -1034,11 +1034,6 @@ fetch_queue(Context) ->
             end
         end.
 
-%% @doc Fetch the serial of the id's queue record
--spec fetch_queue_id( m_rsc:resource_id(), z:context() ) -> Serial::non_neg_integer() | undefined.
-fetch_queue_id(Id, Context) ->
-    z_db:q1("select max(id) from rsc_pivot_log where rsc_id = $1", [Id], Context).
-
 
 %% @doc Delete pivot log entries for all pivoted ids. Use the due date
 %% so that optional newer entries are still queued.
