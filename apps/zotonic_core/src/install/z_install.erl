@@ -40,6 +40,12 @@
          edge_log_function/0,
          edge_log_trigger/0,
 
+         rsc_pivot_log_table/0,
+         rsc_pivot_log_index_1/0,
+         rsc_pivot_log_index_2/0,
+         rsc_pivot_log_function/0,
+         rsc_pivot_log_trigger/0,
+
          rsc_page_path_log/0,
          rsc_page_path_log_fki/0
         ]).
@@ -372,24 +378,15 @@ model_pgsql() ->
     "CREATE INDEX email_created_key ON emailq (created)",
     "CREATE INDEX email_status_retry_key ON emailq (status, retry_on)",
 
-    % pivot queue for rsc, all things that are updated are queued here for later full text indexing
-    "CREATE TABLE rsc_pivot_queue
-    (
-        rsc_id int NOT NULL,
-        serial int NOT NULL DEFAULT 1,
-        due timestamp with time zone,
-        is_update boolean NOT NULL default true,
+    % Pivot queue for rsc, all things that are updated are queued here for later full text indexing.
+    rsc_pivot_log_table(),
+    rsc_pivot_log_index_1(),
+    rsc_pivot_log_index_2(),
+    rsc_pivot_log_function(),
+    rsc_pivot_log_trigger(),
 
-        CONSTRAINT rsc_pivot_queue_pkey PRIMARY KEY (rsc_id),
-        CONSTRAINT fk_rsc_pivot_queue_rsc_id FOREIGN KEY (rsc_id)
-          REFERENCES rsc(id)
-          ON UPDATE CASCADE ON DELETE CASCADE
-    )",
-
-    "CREATE INDEX fki_rsc_pivot_queue_rsc_id ON rsc_pivot_queue (rsc_id)",
-    "CREATE INDEX fki_rsc_pivot_queue_due ON rsc_pivot_queue (is_update, due)",
-
-    % queue for slow pivoting queries, for example syncing category nrs after the categories are changed.
+    % Queue for scheduled functions, runs when there is time and the load is low enough.
+    % For example syncing category nrs after the categories are changed.
     "CREATE TABLE pivot_task_queue
     (
         id serial NOT NULL,
@@ -403,62 +400,6 @@ model_pgsql() ->
         CONSTRAINT pivot_task_queue_pkey PRIMARY KEY (id),
         CONSTRAINT pivot_task_queue_module_function_key_key UNIQUE (module, function, key)
     )
-    ",
-
-    % Update/insert trigger on rsc to fill the update queue
-    % The text indexing is delayed until the updates are stable
-    % Also checks if the rsc is set to protected, if so makes an entry in the 'protect' table.
-    "
-    CREATE FUNCTION rsc_pivot_update() RETURNS trigger AS $$
-    declare
-        duetime timestamp;
-        do_queue boolean;
-    begin
-        if (tg_op = 'INSERT') then
-            do_queue := true;
-        elseif (new.version <> old.version or new.modified <> old.modified) then
-            do_queue := true;
-        else
-            do_queue := false;
-        end if;
-
-        if (do_queue) then
-            <<insert_update_queue>>
-            loop
-                update rsc_pivot_queue
-                set due = (case when now() < due then now() else due end),
-                    serial = serial + 1
-                where rsc_id = new.id;
-
-                exit insert_update_queue when found;
-
-                begin
-                    insert into rsc_pivot_queue (rsc_id, due, is_update) values (new.id, now(), tg_op = 'UPDATE');
-                    exit insert_update_queue;
-                exception
-                    when unique_violation then
-                        -- do nothing
-                end;
-            end loop insert_update_queue;
-        end if;
-
-        if (new.is_protected) then
-            begin
-                insert into protect (id) values (new.id);
-            exception
-                when unique_violation then
-                    -- do nothing
-            end;
-        else
-            delete from protect where id = new.id;
-        end if;
-        return null;
-    end;
-    $$ LANGUAGE plpgsql
-    ",
-    "
-    CREATE TRIGGER rsc_update_queue_trigger AFTER INSERT OR UPDATE
-    ON rsc FOR EACH ROW EXECUTE PROCEDURE rsc_pivot_update()
     ",
 
     % Queue for deleted medium files, periodically checked for deleting files that are not referenced anymore
@@ -540,6 +481,70 @@ hierarchy_index_1() ->
 hierarchy_index_2() ->
     "CREATE INDEX fki_hierarchy_id ON hierarchy (id)".
 
+
+rsc_pivot_log_table() ->
+    "CREATE TABLE rsc_pivot_log
+    (
+        rsc_id int NOT NULL,
+        due timestamp with time zone,
+        is_update boolean NOT NULL default true,
+
+        CONSTRAINT fk_rsc_pivot_log_rsc_id FOREIGN KEY (rsc_id)
+          REFERENCES rsc(id)
+          ON UPDATE CASCADE ON DELETE CASCADE
+    )".
+
+rsc_pivot_log_index_1() ->
+    "CREATE INDEX fki_rsc_pivot_log_rsc_id ON rsc_pivot_log (rsc_id)".
+
+rsc_pivot_log_index_2() ->
+    "CREATE INDEX rsc_pivot_log_update_due_key ON rsc_pivot_log (is_update, due)".
+
+rsc_pivot_log_function() ->
+    % Update/insert trigger on rsc to fill the pivot log.
+    % Only queues if the rsc version or modification date is changed, otherwise it is
+    % assumed that the resource is not significantly changed for the indices.
+    % The text indexing is delayed until the updates are stable, quick successive updates
+    % will be grouped together by the consumer of the rsc pivot log.
+    % Also checks if the rsc is set to protected, if so makes an entry in the 'protect' table.
+    "
+    CREATE FUNCTION rsc_pivot_log_insert() RETURNS trigger AS $$
+    declare
+        do_queue boolean;
+    begin
+        if (tg_op = 'INSERT') then
+            do_queue := true;
+        elseif (new.version <> old.version or new.modified <> old.modified) then
+            do_queue := true;
+        else
+            do_queue := false;
+        end if;
+
+        if (do_queue) then
+            insert into rsc_pivot_log (rsc_id, due, is_update)
+            values (
+              new.id,
+              (case when now() < due then now() else due end),
+              tg_op = 'UPDATE'
+            );
+        end if;
+
+        if (new.is_protected) then
+            insert into protect (id) values (new.id)
+            on conflict (id) do nothing;
+        else
+            delete from protect where id = new.id;
+        end if;
+        return null;
+    end;
+    $$ LANGUAGE plpgsql
+    ".
+
+rsc_pivot_log_trigger() ->
+    "
+    CREATE TRIGGER rsc_update_log_trigger AFTER INSERT OR UPDATE
+    ON rsc FOR EACH ROW EXECUTE PROCEDURE rsc_pivot_log_insert()
+    ".
 
 edge_log_table() ->
     "CREATE TABLE edge_log

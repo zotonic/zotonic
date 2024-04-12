@@ -316,6 +316,7 @@ upgrade(C, Database, Schema) ->
     ok = task_queue_error_count(C, Database, Schema),
     ok = identity_expires(C, Database, Schema),
     ok = rsc_unfindable(C, Database, Schema),
+    ok = rsc_pivot_log(C, Database, Schema),
     ok.
 
 
@@ -922,6 +923,30 @@ rsc_unfindable(C, Database, Schema) ->
                                     "CREATE INDEX rsc_is_unfindable_key ON rsc (is_unfindable)"),
             ok
     end.
+
+
+rsc_pivot_log(C, Database, Schema) ->
+    case has_table(C, "rsc_pivot_log", Database, Schema) of
+        false ->
+            {ok,[],[]} = epgsql:squery(C, z_install:rsc_pivot_log_table()),
+            {ok,[],[]} = epgsql:squery(C, z_install:rsc_pivot_log_index_1()),
+            {ok,[],[]} = epgsql:squery(C, z_install:rsc_pivot_log_index_2()),
+            {ok,[],[]} = epgsql:squery(C, z_install:rsc_pivot_log_function()),
+            {ok,[],[]} = epgsql:squery(C, z_install:rsc_pivot_log_trigger()),
+
+            {ok, _} = epgsql:squery(C, "
+                            insert into rsc_pivot_log (rsc_id, due, is_update)
+                            select rsc_id, due, is_update
+                            from rsc_pivot_queue
+                            "),
+            epgsql:squery(C, "drop trigger if exists rsc_update_queue_trigger on rsc cascade"),
+            epgsql:squery(C, "drop function if exists rsc_pivot_update"),
+            epgsql:squery(C, "drop table if exists rsc_pivot_queue cascade"),
+            ok;
+        true ->
+            ok
+    end.
+
 
 check_category_id_key(C, _Database, _Schema) ->
     {ok, [], []} = epgsql:squery(
