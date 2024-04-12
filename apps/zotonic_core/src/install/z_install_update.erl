@@ -936,7 +936,7 @@ rsc_pivot_log(C, Database, Schema) ->
 
             {ok, _} = epgsql:squery(C, "
                             insert into rsc_pivot_log (rsc_id, due, is_update)
-                            select rsc_id, due, is_update
+                            select rsc_id, coalesce(due, now()), is_update
                             from rsc_pivot_queue
                             "),
             epgsql:squery(C, "drop trigger if exists rsc_update_queue_trigger on rsc cascade"),
