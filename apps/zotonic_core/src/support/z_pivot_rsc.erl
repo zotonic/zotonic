@@ -152,17 +152,26 @@ pivot_resource_update(Id, UpdateProps, RawProps, Context) ->
 %% @doc Rebuild the search index by queueing all resources for pivot.
 queue_all(Context) ->
     erlang:spawn(fun() ->
-                    queue_all(0, Context)
+                    queue_all_1(0, Context)
                  end).
 
-queue_all(FromId, Context) ->
-    case z_db:q("select id from rsc where id > $1 order by id limit 1000", [FromId], Context) of
+queue_all_1(FromId, Context) ->
+    case z_db:q("
+        insert into rsc_pivot_log (rsc_id)
+        select id
+        from rsc
+        where id > $1
+        oder by id
+        limit 10000
+        returning rsc_id",
+        [ FromId ],
+        Context)
+    of
         [] ->
             done;
         Rs ->
             Ids = [ Id || {Id} <- Rs ],
-            do_insert_queue(Ids, calendar:universal_time(), Context),
-            queue_all(lists:last(Ids), Context)
+            queue_all_1(lists:max(Ids), Context)
     end.
 
 
@@ -177,15 +186,20 @@ queue_count_backlog(Context) ->
     z_db:q1("
         select count(distinct rsc_id)
         from rsc_pivot_log
-        where (due is null or due < current_timestamp)", Context).
+        where due < current_timestamp", Context).
 
 %% @doc Insert a rsc_id in the pivot queue
--spec insert_queue(m_rsc:resource_id() | list(m_rsc:resource_id()), z:context()) -> ok | {error, eexist}.
+-spec insert_queue(IdOrIds, Context) -> ok when
+    IdOrIds :: m_rsc:resource_id() | list( m_rsc:resource_id() ),
+    Context :: z:context().
 insert_queue(IdorIds, Context) ->
     insert_queue(IdorIds, calendar:universal_time(), Context).
 
 %% @doc Insert a rsc_id in the pivot queue for a certain date
--spec insert_queue(m_rsc:resource_id() | list(m_rsc:resource_id()), calendar:datetime(), z:context()) -> ok | {error, eexist}.
+-spec insert_queue(IdOrIds, DueDate, Context) -> ok when
+    IdOrIds :: m_rsc:resource_id() | list( m_rsc:resource_id() ),
+    DueDate :: calendar:datetime(),
+    Context :: z:context().
 insert_queue(Id, DueDate, Context) when is_integer(Id), is_tuple(DueDate) ->
     insert_queue([Id], DueDate, Context);
 insert_queue(Ids, DueDate, Context) when is_list(Ids), is_tuple(DueDate) ->
