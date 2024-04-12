@@ -58,7 +58,7 @@
     task_job_done/2,
 
     pivot_job_ping/2,
-    pivot_job_done/3,
+    pivot_job_done/2,
 
     publish_task_event/5,
 
@@ -112,6 +112,9 @@
     pivot_pid :: undefined | pid(),
     pivot_rsc_id :: undefined | m_rsc:resource_id(),
     pivot_queue = [] :: [ m_rsc:resource_id() ],
+    pivot_queue_inflight = [] :: [ m_rsc:resource_id() ],
+    pivot_queue_inflight_date :: undefined | calendar:datetime(),
+    pivot_inflight_date :: undefined | calendar:datetime(),
     pivot_ping :: undefined | erlang:timestamp()
 }).
 
@@ -375,12 +378,11 @@ pivot_job_ping(Id, Context) ->
     gen_server:cast(Context#context.pivot_server, {pivot_ping, self(), Id}).
 
 %% @doc Signal from pivot job that processing is done.
--spec pivot_job_done(Ids, DueDate, Context) -> ok when
-    Ids :: list( m_rsc:resource_id() ),
-    DueDate :: calendar:universal_time() | error,
+-spec pivot_job_done(IdsOrError, Context) -> ok when
+    IdsOrError :: list( m_rsc:resource_id() ) | error,
     Context :: z:context().
-pivot_job_done(Ids, DueDate, Context) ->
-    gen_server:call(Context#context.pivot_server, {pivot_done, self(), Ids, DueDate}).
+pivot_job_done(IdsOrError, Context) ->
+    gen_server:call(Context#context.pivot_server, {pivot_done, self(), IdsOrError}, infinity).
 
 %% @doc Ping from task process to keep alive and report progress
 -spec task_job_ping( TaskId :: integer(), Percentage :: 0..100, z:context() ) -> ok.
@@ -466,15 +468,29 @@ handle_call({task_done, _TaskPid, TaskId}, _From, State) ->
     }),
     {reply, {error, unknown_task}, State};
 
-handle_call({pivot_done, PivotPid, _Ids, error}, _From, #state{ pivot_pid = PivotPid } = State) ->
+handle_call({pivot_done, PivotPid, error}, _From, #state{ pivot_pid = PivotPid } = State) ->
     % Error during pivot - keep the pivot log queue as is.
-    {reply, ok, State#state{ pivot_pid = undefined }};
-handle_call({pivot_done, PivotPid, Ids, DueDate}, _From, #state{ pivot_pid = PivotPid, site = Site } = State) ->
+    {reply, ok, State#state{
+        pivot_pid = undefined,
+        pivot_queue_inflight = [],
+        pivot_queue_inflight_date = undefined,
+        pivot_inflight_date = undefined
+    }};
+handle_call({pivot_done, PivotPid, Ids}, _From, #state{ pivot_pid = PivotPid, site = Site } = State) ->
     % Signal that ids are pivoted, delete all entries before the cut off date.
     Context = z_context:new(Site),
-    delete_queue(Ids, DueDate, Context),
-    {reply, ok, State#state{ pivot_pid = undefined }};
-handle_call({pivot_done, PivotPid}, _From, State) ->
+    {Prio, Normal} = lists:partition(
+        fun(Id) -> lists:member(Id, State#state.pivot_queue_inflight) end,
+        Ids),
+    delete_queue(Prio, State#state.pivot_queue_inflight_date, Context),
+    delete_queue(Normal, State#state.pivot_inflight_date, Context),
+    {reply, ok, State#state{
+        pivot_pid = undefined,
+        pivot_queue_inflight = [],
+        pivot_queue_inflight_date = undefined,
+        pivot_inflight_date = undefined
+    }};
+handle_call({pivot_done, PivotPid, _IdsOrError}, _From, State) ->
     ?LOG_ERROR(#{
         text => <<"Pivot received 'pivot_done' from unknown pivot job">>,
         in => zotonic_core,
@@ -540,15 +556,18 @@ handle_cast({insert_queue, DueDate, Ids}, State) when is_list(Ids) ->
     {noreply, State};
 
 handle_cast({pivot, Id}, #state{ is_initial_delay = true } = State) when is_integer(Id) ->
-    % Immediate pivot of an resource-id
+    % Immediate pivot of an resource-id - but we are still starting up
     Due = z_datetime:next_minute(calendar:universal_time()),
     do_insert_queue([ Id ], Due, z_context:new(State#state.site)),
     {noreply, State};
 handle_cast({pivot, Id}, #state{ backoff_counter = Ct } = State) when Ct > 0 ->
+    % Immediate pivot of an resource-id - but we are in a back off due to errors
     Due = z_datetime:next_minute(calendar:universal_time()),
     do_insert_queue([ Id ], Due, z_context:new(State#state.site)),
     {noreply, State};
 handle_cast({pivot, Id}, State) when is_integer(Id) ->
+    % Immediate pivot of an resource-id - queue and add as priority
+    do_insert_queue([ Id ], calendar:universal_time(), z_context:new(State#state.site)),
     State1 = State#state{ pivot_queue = [ Id | State#state.pivot_queue ]},
     State2 = do_poll(State1),
     {noreply, State2};
@@ -900,12 +919,15 @@ maybe_start_pivot(#state{ pivot_queue = Queue } = State, Context) ->
                 [] ->
                     State;
                 PivotIds ->
-                    case z_pivot_rsc_job:start_pivot(PivotIds, DueDate, Context) of
+                    case z_pivot_rsc_job:start_pivot(PivotIds, Context) of
                         {ok, Pid} ->
                             erlang:monitor(process, Pid),
                             State#state{
                                 pivot_pid = Pid,
                                 pivot_queue = [],
+                                pivot_queue_inflight = Queue,
+                                pivot_queue_inflight_date = calendar:universal_time(),
+                                pivot_inflight_date = DueDate,
                                 pivot_ping = os:timestamp(),
                                 pivot_rsc_id = undefined
                             };

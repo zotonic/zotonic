@@ -20,9 +20,9 @@
 -module(z_pivot_rsc_job).
 
 -export([
-    start_pivot/3,
+    start_pivot/2,
 
-    pivot_job/3,
+    pivot_job/2,
 
     pivot_resource_update/4,
     get_pivot_title/1,
@@ -47,14 +47,13 @@
 
 
 %% @doc Start a task queue sidejob.
--spec start_pivot(RscIds, DueDate, Context) -> {ok, pid()} | {error, overload} when
+-spec start_pivot(RscIds, Context) -> {ok, pid()} | {error, overload} when
     RscIds :: list( m_rsc:resource_id() ),
-    DueDate :: calendar:datetime(),
     Context :: z:context().
-start_pivot(RscIds, DueDate, Context) ->
+start_pivot(RscIds, Context) ->
     sidejob_supervisor:spawn(
             zotonic_sidejobs,
-            {?MODULE, pivot_job, [ RscIds, DueDate, Context ]}).
+            {?MODULE, pivot_job, [ RscIds, Context ]}).
 
 
 %% @doc Return a modified property list with fields that need immediate pivoting on an update.
@@ -83,11 +82,10 @@ pivot_resource_update(Id, UpdateProps, RawProps, Context) ->
 
 
 %% @doc Run the sidejob task queue task.
--spec pivot_job(RscIds, DueDate, Context) -> ok when
+-spec pivot_job(RscIds, Context) -> ok when
     RscIds :: list( m_rsc:resource_id() ),
-    DueDate :: calendar:datetime(),
     Context :: z:context().
-pivot_job(PivotRscList, DueDate, Context) ->
+pivot_job(PivotRscList, Context) ->
     z_context:logger_md(Context),
     ?LOG_DEBUG(#{
         text => <<"Pivot start">>,
@@ -106,7 +104,7 @@ pivot_job(PivotRscList, DueDate, Context) ->
                 error => rollback,
                 reason => PivotError
             }),
-            z_pivot_rsc:pivot_job_done([], error, Context);
+            z_pivot_rsc:pivot_job_done(error, Context);
         L when is_list(L) ->
             lists:map(
                 fun(Id) ->
@@ -134,7 +132,7 @@ pivot_job(PivotRscList, DueDate, Context) ->
                             reason => Reason
                         })
                 end, L),
-            z_pivot_rsc:pivot_job_done(PivotRscList, DueDate, Context)
+            z_pivot_rsc:pivot_job_done(PivotRscList, Context)
     end.
 
 
