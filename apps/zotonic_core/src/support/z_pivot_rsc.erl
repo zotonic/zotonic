@@ -164,7 +164,7 @@ queue_all_1(FromId, Context) ->
         select id
         from rsc
         where id > $1
-        oder by id
+        order by id
         limit 10000
         returning rsc_id",
         [ FromId ],
@@ -1043,19 +1043,19 @@ fetch_queue(Context) ->
             ToPivot = lists:foldl(
                 fun({Id}, Acc) ->
                     case z_db:q_row("
-                        select max(id), max(due) >= $2
+                        select max(due), max(due) >= $2
                         from rsc_pivot_log
                         where rsc_id = $1
                         ", [ Id, PivotDate ], Context)
                     of
-                        {_MaxSerial, false} ->
+                        {_MaxDue, false} ->
                             [ Id | Acc ];
-                        {MaxSerial, true} ->
+                        {MaxDue, true} ->
                             z_db:q("
                                 delete from rsc_pivot_log
                                 where rsc_id = $1
-                                  and id < $2
-                                ", [ Id, MaxSerial ],
+                                  and due < $2
+                                ", [ Id, MaxDue ],
                                 Context),
                             Acc
                     end
@@ -1076,7 +1076,7 @@ fetch_queue(Context) ->
 delete_queue(Ids, DueDate, Context) ->
     z_db:q("
         delete from rsc_pivot_log
-        where id = any($1)
+        where rsc_id = any($1)
           and due < $2",
         [ Ids, DueDate ],
         Context).

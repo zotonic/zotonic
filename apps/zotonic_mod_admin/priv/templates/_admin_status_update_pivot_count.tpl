@@ -9,7 +9,7 @@ function queueCountInfo(feedbackSelector) {
 
         $feedback = $(feedbackSelector),
         isUpdating = false,
-        retryIvalId,
+        retryInvalId,
         retryCount = RETRIES,
 
         setFeedback,
@@ -25,7 +25,7 @@ function queueCountInfo(feedbackSelector) {
             msg += " " + backlog;
         }
         if (total !== undefined && total > 0) {
-            msg += " (" + total + ")";
+            msg += " (" + (total - backlog) + ")";
         }
         $feedback.text(msg);
     };
@@ -48,8 +48,8 @@ function queueCountInfo(feedbackSelector) {
             setTimeout(requestUpdate, UPDATE_REPEAT_MS);
         } else {
             setFeedback(COUNT_SIZE_MSG, 0, queueTotal);
-            clearInterval(retryIvalId);
-            retryIvalId = undefined;
+            clearInterval(retryInvalId);
+            retryInvalId = undefined;
             if (isUpdating) {
                 isUpdating = false;
                 z_growl_add("{_ Search indices rebuilt. _}");
@@ -60,14 +60,14 @@ function queueCountInfo(feedbackSelector) {
     // it make take a short while before the info is available
     // so we try a couple of times
     startTrying = function() {
-        if (retryIvalId) {
-            clearInterval(retryIvalId);
+        if (retryInvalId) {
+            clearInterval(retryInvalId);
         }
-        retryIvalId = setInterval(function () {
+        retryInvalId = setInterval(function () {
             if (isUpdating) {
-                clearInterval(retryIvalId);
+                clearInterval(retryInvalId);
             } else if (retryCount === 0) {
-                clearInterval(retryIvalId);
+                clearInterval(retryInvalId);
                 resetUI();
             } else {
                 requestUpdate();

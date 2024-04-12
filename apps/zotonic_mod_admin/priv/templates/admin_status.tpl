@@ -85,13 +85,12 @@
                             action={admin_tasks task='pivot_all'}
                             action={script script="queueCountInfo('#pivot-queue-count')"}
                         %}
-                        <span id="pivot-queue-count">
-                            {% javascript %}
-                                queueCountInfo('#pivot-queue-count');
-                            {% endjavascript %}
-                        </span>
+                        <span id="pivot-queue-count"></span>
                         <p class="help-block">{_ Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time! _}
                         </p>
+                        {% javascript %}
+                            queueCountInfo('#pivot-queue-count');
+                        {% endjavascript %}
                     </div>
 
         	        <div class="form-group">
