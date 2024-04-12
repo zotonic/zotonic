@@ -486,7 +486,7 @@ rsc_pivot_log_table() ->
     "CREATE TABLE rsc_pivot_log
     (
         rsc_id int NOT NULL,
-        due timestamp with time zone,
+        due timestamp with time zone NOT NULL DEFAULT now(),
         is_update boolean NOT NULL default true,
 
         CONSTRAINT fk_rsc_pivot_log_rsc_id FOREIGN KEY (rsc_id)
@@ -521,12 +521,8 @@ rsc_pivot_log_function() ->
         end if;
 
         if (do_queue) then
-            insert into rsc_pivot_log (rsc_id, due, is_update)
-            values (
-              new.id,
-              (case when now() < due then now() else due end),
-              tg_op = 'UPDATE'
-            );
+            insert into rsc_pivot_log (rsc_id, is_update)
+            values (new.id, tg_op = 'UPDATE');
         end if;
 
         if (new.is_protected) then
