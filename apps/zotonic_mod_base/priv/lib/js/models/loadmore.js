@@ -41,6 +41,26 @@ cotonic.ready.then(() => {
         return ps;
     }
 
+    function is_replace_location(msg) {
+        const r = msg.payload.replace_location
+                  ?? msg.payload?.message['data-replace-location']
+                  ?? true;
+
+        if (typeof r === "string") {
+            switch (r.toLowerCase()) {
+                case "":
+                case "0":
+                case "false":
+                case "no":
+                    return false;
+                default:
+                    return true;
+            }
+        } else {
+            return !!r;
+        }
+    }
+
     cotonic.broker.subscribe("model/loadmore/post/replace", (msg) => {
         let target;
         let template;
@@ -74,9 +94,7 @@ cotonic.ready.then(() => {
                 qargs = msg.payload;
             }
 
-            if (msg.payload.replace_location
-                    ?? msg.payload?.message['data-replace-location']
-                    ?? true) {
+            if (is_replace_location(msg)) {
                 cotonic.broker.publish("model/location/post/replace-silent", url);
             }
             cotonic.broker.publish(
