@@ -1,5 +1,5 @@
 {% javascript %}
-function queueCountInfo(feedbackSelector, invokeSelector) {
+function queueCountInfo(feedbackSelector) {
     "use strict";
 
     var RETRIES = 10,
@@ -8,7 +8,6 @@ function queueCountInfo(feedbackSelector, invokeSelector) {
         COUNT_SIZE_MSG = "{_ Pivot queue count size: _}",
 
         $feedback = $(feedbackSelector),
-        $btn = $(invokeSelector),
         isUpdating = false,
         retryIvalId,
         retryCount = RETRIES,
@@ -55,9 +54,6 @@ function queueCountInfo(feedbackSelector, invokeSelector) {
                 isUpdating = false;
                 z_growl_add("{_ Search indices rebuilt. _}");
             }
-            setTimeout(function() {
-                $btn.removeAttr("disabled");
-            }, 1500);
         }
     };
 
@@ -81,12 +77,10 @@ function queueCountInfo(feedbackSelector, invokeSelector) {
     };
 
     resetUI = function () {
-        $btn.removeAttr("disabled");
         $feedback.hide("slow");
     };
 
     initUI = function () {
-        $btn.attr("disabled", "disabled");
         $feedback.addClass("label label-info");
         setFeedback("{_ Retrieving status... _}");
         startTrying();
