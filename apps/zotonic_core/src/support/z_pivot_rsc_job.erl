@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2022 Marc Worrell
+%% @copyright 2022-2024 Marc Worrell
 %% @doc Run a resource pivot job.
+%% @end
 
-%% Copyright 2022 Marc Worrell
+%% Copyright 2022-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -46,11 +47,13 @@
 
 
 %% @doc Start a task queue sidejob.
--spec start_pivot( list(), z:context() ) -> {ok, pid()} | {error, overload}.
-start_pivot(PivotRscList, Context) ->
+-spec start_pivot(RscIds, Context) -> {ok, pid()} | {error, overload} when
+    RscIds :: list( m_rsc:resource_id() ),
+    Context :: z:context().
+start_pivot(RscIds, Context) ->
     sidejob_supervisor:spawn(
             zotonic_sidejobs,
-            {?MODULE, pivot_job, [ PivotRscList, Context ]}).
+            {?MODULE, pivot_job, [ RscIds, Context ]}).
 
 
 %% @doc Return a modified property list with fields that need immediate pivoting on an update.
@@ -79,7 +82,9 @@ pivot_resource_update(Id, UpdateProps, RawProps, Context) ->
 
 
 %% @doc Run the sidejob task queue task.
--spec pivot_job( list(), z:context() ) -> ok.
+-spec pivot_job(RscIds, Context) -> ok when
+    RscIds :: list( m_rsc:resource_id() ),
+    Context :: z:context().
 pivot_job(PivotRscList, Context) ->
     z_context:logger_md(Context),
     ?LOG_DEBUG(#{
@@ -98,10 +103,11 @@ pivot_job(PivotRscList, Context) ->
                 rsc_list => PivotRscList,
                 error => rollback,
                 reason => PivotError
-            });
+            }),
+            z_pivot_rsc:pivot_job_done(error, Context);
         L when is_list(L) ->
             lists:map(
-                fun({Id, _Serial}) ->
+                fun(Id) ->
                     IsA = m_rsc:is_a(Id, Context),
                     z_notifier:notify(#rsc_pivot_done{id=Id, is_a=IsA}, Context),
                     % Flush the resource, as some synthesized attributes might depend on the pivoted fields.
@@ -126,32 +132,9 @@ pivot_job(PivotRscList, Context) ->
                             reason => Reason
                         })
                 end, L),
-            delete_queue(PivotRscList, Context)
-    end,
-    z_pivot_rsc:pivot_job_done(Context).
+            z_pivot_rsc:pivot_job_done(PivotRscList, Context)
+    end.
 
-
-%% @doc Delete the previously queued ids iff the queue entry has not been updated in the meanwhile
-delete_queue(Qs, Context) ->
-    F = fun(Ctx) ->
-        lists:foreach(
-            fun({Id, Serial}) ->
-                delete_queue(Id, Serial, Ctx)
-            end,
-            Qs)
-    end,
-    z_db:transaction(F, Context).
-
-%% @doc Delete a specific id/serial combination
-delete_queue(_Id, undefined, _Context) ->
-    ok;
-delete_queue(Id, Serial, Context) ->
-    z_db:q("
-        delete from rsc_pivot_queue
-        where rsc_id = $1
-          and serial = $2",
-        [ Id, Serial ],
-        Context).
 
 -spec pivot_resource(m_rsc:resource_id(), z:context()) -> ok | {error, enoent | term()}.
 pivot_resource(Id, Context0) ->

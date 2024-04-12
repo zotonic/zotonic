@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell, Maas-Maarten Zeeman
+%% @copyright 2009-2024 Marc Worrell, Maas-Maarten Zeeman
 %% @doc Pivoting server for the rsc table. Takes care of full text indices. Polls the pivot queue for any changed resources.
+%% @end
 
-%% Copyright 2009-2023 Marc Worrell, Maas-Maarten Zeeman
+%% Copyright 2009-2024 Marc Worrell, Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -57,7 +58,7 @@
     task_job_done/2,
 
     pivot_job_ping/2,
-    pivot_job_done/1,
+    pivot_job_done/2,
 
     publish_task_event/5,
 
@@ -111,6 +112,9 @@
     pivot_pid :: undefined | pid(),
     pivot_rsc_id :: undefined | m_rsc:resource_id(),
     pivot_queue = [] :: [ m_rsc:resource_id() ],
+    pivot_queue_inflight = [] :: [ m_rsc:resource_id() ],
+    pivot_queue_inflight_date :: undefined | calendar:datetime(),
+    pivot_inflight_date :: undefined | calendar:datetime(),
     pivot_ping :: undefined | erlang:timestamp()
 }).
 
@@ -151,40 +155,54 @@ pivot_resource_update(Id, UpdateProps, RawProps, Context) ->
 %% @doc Rebuild the search index by queueing all resources for pivot.
 queue_all(Context) ->
     erlang:spawn(fun() ->
-                    queue_all(0, Context)
+                    queue_all_1(0, Context)
                  end).
 
-queue_all(FromId, Context) ->
-    case z_db:q("select id from rsc where id > $1 order by id limit 1000", [FromId], Context) of
+queue_all_1(FromId, Context) ->
+    case z_db:q("
+        insert into rsc_pivot_log (rsc_id)
+        select id
+        from rsc
+        where id > $1
+        order by id
+        limit 10000
+        returning rsc_id",
+        [ FromId ],
+        Context)
+    of
         [] ->
             done;
         Rs ->
             Ids = [ Id || {Id} <- Rs ],
-            do_insert_queue(Ids, calendar:universal_time(), Context),
-            queue_all(lists:last(Ids), Context)
+            queue_all_1(lists:max(Ids), Context)
     end.
 
 
 %% @doc Return the length of the pivot queue.
--spec queue_count(z:context()) -> integer().
+-spec queue_count(z:context()) -> non_neg_integer().
 queue_count(Context) ->
-    z_db:q1("SELECT COUNT(*) FROM rsc_pivot_queue", Context).
+    z_db:q1("SELECT COUNT(distinct rsc_id) FROM rsc_pivot_log", Context).
 
 %% @doc Return the number of pivot queue items scheduled for direct pivot.
--spec queue_count_backlog(z:context()) -> integer().
+-spec queue_count_backlog(z:context()) -> non_neg_integer().
 queue_count_backlog(Context) ->
     z_db:q1("
-        select count(*)
-        from rsc_pivot_queue
-        where (due is null or due < current_timestamp)", Context).
+        select count(distinct rsc_id)
+        from rsc_pivot_log
+        where due < current_timestamp", Context).
 
 %% @doc Insert a rsc_id in the pivot queue
--spec insert_queue(m_rsc:resource_id() | list(m_rsc:resource_id()), z:context()) -> ok | {error, eexist}.
+-spec insert_queue(IdOrIds, Context) -> ok when
+    IdOrIds :: m_rsc:resource_id() | list( m_rsc:resource_id() ),
+    Context :: z:context().
 insert_queue(IdorIds, Context) ->
     insert_queue(IdorIds, calendar:universal_time(), Context).
 
 %% @doc Insert a rsc_id in the pivot queue for a certain date
--spec insert_queue(m_rsc:resource_id() | list(m_rsc:resource_id()), calendar:datetime(), z:context()) -> ok | {error, eexist}.
+-spec insert_queue(IdOrIds, DueDate, Context) -> ok when
+    IdOrIds :: m_rsc:resource_id() | list( m_rsc:resource_id() ),
+    DueDate :: calendar:datetime(),
+    Context :: z:context().
 insert_queue(Id, DueDate, Context) when is_integer(Id), is_tuple(DueDate) ->
     insert_queue([Id], DueDate, Context);
 insert_queue(Ids, DueDate, Context) when is_list(Ids), is_tuple(DueDate) ->
@@ -360,9 +378,11 @@ pivot_job_ping(Id, Context) ->
     gen_server:cast(Context#context.pivot_server, {pivot_ping, self(), Id}).
 
 %% @doc Signal from pivot job that processing is done.
--spec pivot_job_done( z:context() ) -> ok.
-pivot_job_done(Context) ->
-    gen_server:call(Context#context.pivot_server, {pivot_done, self()}).
+-spec pivot_job_done(IdsOrError, Context) -> ok when
+    IdsOrError :: list( m_rsc:resource_id() ) | error,
+    Context :: z:context().
+pivot_job_done(IdsOrError, Context) ->
+    gen_server:call(Context#context.pivot_server, {pivot_done, self(), IdsOrError}, infinity).
 
 %% @doc Ping from task process to keep alive and report progress
 -spec task_job_ping( TaskId :: integer(), Percentage :: 0..100, z:context() ) -> ok.
@@ -448,9 +468,29 @@ handle_call({task_done, _TaskPid, TaskId}, _From, State) ->
     }),
     {reply, {error, unknown_task}, State};
 
-handle_call({pivot_done, PivotPid}, _From, #state{ pivot_pid = PivotPid } = State) ->
-    {reply, ok, State#state{ pivot_pid = undefined }};
-handle_call({pivot_done, PivotPid}, _From, State) ->
+handle_call({pivot_done, PivotPid, error}, _From, #state{ pivot_pid = PivotPid } = State) ->
+    % Error during pivot - keep the pivot log queue as is.
+    {reply, ok, State#state{
+        pivot_pid = undefined,
+        pivot_queue_inflight = [],
+        pivot_queue_inflight_date = undefined,
+        pivot_inflight_date = undefined
+    }};
+handle_call({pivot_done, PivotPid, Ids}, _From, #state{ pivot_pid = PivotPid, site = Site } = State) ->
+    % Signal that ids are pivoted, delete all entries before the cut off date.
+    Context = z_context:new(Site),
+    {Prio, Normal} = lists:partition(
+        fun(Id) -> lists:member(Id, State#state.pivot_queue_inflight) end,
+        Ids),
+    delete_queue(Prio, State#state.pivot_queue_inflight_date, Context),
+    delete_queue(Normal, State#state.pivot_inflight_date, Context),
+    {reply, ok, State#state{
+        pivot_pid = undefined,
+        pivot_queue_inflight = [],
+        pivot_queue_inflight_date = undefined,
+        pivot_inflight_date = undefined
+    }};
+handle_call({pivot_done, PivotPid, _IdsOrError}, _From, State) ->
     ?LOG_ERROR(#{
         text => <<"Pivot received 'pivot_done' from unknown pivot job">>,
         in => zotonic_core,
@@ -516,15 +556,18 @@ handle_cast({insert_queue, DueDate, Ids}, State) when is_list(Ids) ->
     {noreply, State};
 
 handle_cast({pivot, Id}, #state{ is_initial_delay = true } = State) when is_integer(Id) ->
-    % Immediate pivot of an resource-id
+    % Immediate pivot of an resource-id - but we are still starting up
     Due = z_datetime:next_minute(calendar:universal_time()),
     do_insert_queue([ Id ], Due, z_context:new(State#state.site)),
     {noreply, State};
 handle_cast({pivot, Id}, #state{ backoff_counter = Ct } = State) when Ct > 0 ->
+    % Immediate pivot of an resource-id - but we are in a back off due to errors
     Due = z_datetime:next_minute(calendar:universal_time()),
     do_insert_queue([ Id ], Due, z_context:new(State#state.site)),
     {noreply, State};
 handle_cast({pivot, Id}, State) when is_integer(Id) ->
+    % Immediate pivot of an resource-id - queue and add as priority
+    do_insert_queue([ Id ], calendar:universal_time(), z_context:new(State#state.site)),
     State1 = State#state{ pivot_queue = [ Id | State#state.pivot_queue ]},
     State2 = do_poll(State1),
     {noreply, State2};
@@ -637,7 +680,7 @@ handle_info({'DOWN', _MRef, process, Pid, Reason}, #state{ pivot_pid = Pid } = S
     }),
     Context = z_context:new(State#state.site),
     z_db:q("
-        delete from rsc_pivot_queue
+        delete from rsc_pivot_log
         where rsc_id = $1
         ",
         [ LastRscId ],
@@ -850,35 +893,12 @@ do_insert_task_after(SecondsOrDate, Module, Function, UniqueKey, Args, Context) 
             Error
     end.
 
-
 %% @doc Insert a list of ids into the pivot queue.
 do_insert_queue(Ids, DueDate, Context) when is_list(Ids) ->
-    F = fun(Ctx) ->
-        z_db:q("
-            insert into rsc_pivot_queue as p (rsc_id, due, is_update)
-            select r.id, $2, true from rsc r where r.id = any($1)
-            on conflict (rsc_id) do update
-            set due = excluded.due,
-                serial = p.serial + 1",
-            [ Ids, DueDate ], Ctx)
-    end,
-    case z_db:transaction(F, Context) of
-        N when is_integer(N) ->
-            ok;
-        {rollback, Reason} ->
-            ?LOG_ERROR(#{
-                text => <<"Rollback during pivot queue insert">>,
-                in => zotonic_core,
-                reason => Reason
-            }),
-            timer:apply_after(100, ?MODULE, insert_queue, [Ids, DueDate, Context]);
-        {error, Reason} ->
-            ?LOG_ERROR(#{
-                text => <<"Error during pivot queue insert">>,
-                in => zotonic_core,
-                reason => Reason
-            })
-    end.
+    z_db:q("insert into rsc_pivot_log as p (rsc_id, due, is_update)
+            select r.id, $2, true from rsc r where r.id = any($1)",
+            [ Ids, DueDate ], Context),
+    ok.
 
 
 %% @doc Poll a database for any queued updates.
@@ -891,35 +911,30 @@ do_poll(State) ->
 maybe_start_pivot(#state{ pivot_pid = Pid } = State, _Context) when is_pid(Pid) ->
     State;
 maybe_start_pivot(#state{ pivot_queue = Queue } = State, Context) ->
-    Qs = do_poll_queue(Context),
-    Qs1 = lists:foldl(
-        fun(Id, Acc) ->
-            case lists:keymember(Id, 1, Acc) of
-                true ->
-                    Acc;
-                false ->
-                    OptSerial = fetch_queue_id(Id, Context),
-                    [ {Id, OptSerial} | Acc ]
-            end
-        end,
-        Qs,
-        Queue),
-    case Qs1 of
-        [] ->
+    case do_poll_queue(Context) of
+        {_, undefined} ->
             State;
-        _ ->
-            case z_pivot_rsc_job:start_pivot(Qs1, Context) of
-                {ok, Pid} ->
-                    erlang:monitor(process, Pid),
-                    State#state{
-                        pivot_pid = Pid,
-                        pivot_queue = [],
-                        pivot_ping = os:timestamp(),
-                        pivot_rsc_id = undefined
-                    };
-                {error, _} ->
-                    % overload - ignore
-                    State
+        {Ids, DueDate} ->
+            case lists:usort(Queue ++ Ids) of
+                [] ->
+                    State;
+                PivotIds ->
+                    case z_pivot_rsc_job:start_pivot(PivotIds, Context) of
+                        {ok, Pid} ->
+                            erlang:monitor(process, Pid),
+                            State#state{
+                                pivot_pid = Pid,
+                                pivot_queue = [],
+                                pivot_queue_inflight = Queue,
+                                pivot_queue_inflight_date = calendar:universal_time(),
+                                pivot_inflight_date = DueDate,
+                                pivot_ping = os:timestamp(),
+                                pivot_rsc_id = undefined
+                            };
+                        {error, _} ->
+                            % overload - ignore
+                            State
+                    end
             end
     end.
 
@@ -928,9 +943,9 @@ do_poll_queue(Context) ->
         fetch_queue(Context)
     catch
         exit:{timeout, _} ->
-            [];
+            {[], undefined};
         throw:{error, econnrefused} ->
-            []
+            {[], undefined}
     end.
 
 maybe_start_task(#state{ task_pid = undefined } = State, Context) ->
@@ -1005,23 +1020,68 @@ get_args(undefined) ->
 
 %% @doc Fetch the next batch of ids from the queue. Remembers the serials, as a new
 %% pivot request might come in while we are pivoting.
--spec fetch_queue( z:context() ) -> [ { Id::m_rsc:resource_id(), Serial::integer() }].
+-spec fetch_queue(Context) -> {Ids, DueDate} when
+    Context :: z:context(),
+    Ids :: [ m_rsc:resource_id() ],
+    DueDate :: calendar:datetime().
 fetch_queue(Context) ->
-    z_db:q("
-        select rsc_id, serial
-        from rsc_pivot_queue
-        where due < current_timestamp - '10 second'::interval
+    PivotDate = z_db:q1("select current_timestamp - '10 second'::interval", Context),
+    Rows = z_db:q("
+        select rsc_id
+        from rsc_pivot_log
+        where due < $2
         order by is_update, due
-        limit $1", [?POLL_BATCH], Context).
+        limit $1",
+        [ ?POLL_BATCH, PivotDate ],
+        Context),
+    if
+        Rows =:= [] ->
+            {[], PivotDate};
+        true ->
+            % Remove log entries that have a pivot date after the cutoff date.
+            % They will be pivoted at a later date.
+            ToPivot = lists:foldl(
+                fun({Id}, Acc) ->
+                    case z_db:q_row("
+                        select max(due), max(due) >= $2
+                        from rsc_pivot_log
+                        where rsc_id = $1
+                        ", [ Id, PivotDate ], Context)
+                    of
+                        {_MaxDue, false} ->
+                            [ Id | Acc ];
+                        {MaxDue, true} ->
+                            z_db:q("
+                                delete from rsc_pivot_log
+                                where rsc_id = $1
+                                  and due < $2
+                                ", [ Id, MaxDue ],
+                                Context),
+                            Acc
+                    end
+                end,
+                [],
+                lists:usort(Rows)),
+            if
+                ToPivot =:= [] ->
+                    fetch_queue(Context);
+                true ->
+                    {ToPivot, PivotDate}
+            end
+        end.
 
-%% @doc Fetch the serial of the id's queue record
--spec fetch_queue_id( m_rsc:resource_id(), z:context() ) -> Serial::integer() | undefined.
-fetch_queue_id(Id, Context) ->
-    z_db:q1("select serial from rsc_pivot_queue where rsc_id = $1", [Id], Context).
+
+%% @doc Delete pivot log entries for all pivoted ids. Use the due date
+%% so that optional newer entries are still queued.
+delete_queue(Ids, DueDate, Context) ->
+    z_db:q("
+        delete from rsc_pivot_log
+        where rsc_id = any($1)
+          and due < $2",
+        [ Ids, DueDate ],
+        Context).
 
 
-
-%% @spec define_custom_pivot(Module, columns(), Context) -> ok
 %% @doc Let a module define a custom pivot
 %% columns() -> [column()]
 %% column()  -> {ColumName::atom(), ColSpec::string()} | {atom(), string(), options::list()}
