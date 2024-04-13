@@ -77,11 +77,21 @@ $.widget("ui.forminit",
                 } else if (control.nodeName === "TEXTAREA") {
                     control.value = args[name].shift() ?? "";
                 } else if (control.nodeName === "SELECT") {
-                    // Select correct option - TODO: handle multiple select
+                    // NOTE: If number of options change you cannot use
+                    // method="patch" in live tag as _init will not be
+                    // called subsequently
                     for (let k = 0; k < control.options.length; k++) {
-                        if (args[name].includes(control.options[k].value)) {
-                            controls[i].selectedIndex = k;
-                            break;
+                        if( control.hasAttribute("multiple")) {
+                            if (args[name].includes(control.options[k].value)) {
+                                controls[i].options[k].selected = true;
+                            } else {
+                                controls[i].options[k].selected = false;
+                            }
+                        } else {
+                            if (args[name].includes(control.options[k].value)) {
+                                controls[i].selectedIndex = k;
+                                break;
+                            }
                         }
                     }
                 }
