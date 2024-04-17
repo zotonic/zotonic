@@ -44,6 +44,9 @@
     answer_user/2,
     set_answer_user/4,
 
+    did_survey/2,
+    find_answer_id/4,
+
     list_results/2,
     single_result/3,
     single_result/4,
