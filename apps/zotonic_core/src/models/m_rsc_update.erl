@@ -792,14 +792,17 @@ get_raw_lock(Id, Context) ->
 update_transaction_fun_insert(#rscupd{id = insert_rsc} = RscUpd, Props, _Raw, UpdateProps, Context) ->
     % Allow the initial insertion props to be modified.
     CategoryId = z_convert:to_integer(maps:get(<<"category_id">>, Props)),
-    InitProps = #{
+    InitProps0 = #{
         <<"version">> => 0,
         <<"category_id">> => CategoryId,
         <<"content_group_id">> => maps:get(<<"content_group_id">>, Props, undefined),
-        <<"visible_for">> => maps:get(<<"visible_for">>, Props, undefined),
         <<"is_published">> => false,
         <<"publication_start">> => undefined
     },
+    InitProps = case z_convert:to_integer(maps:get(<<"visible_for">>, Props, undefined)) of
+        undefined -> InitProps0;
+        VisFor -> InitProps0#{ <<"visible_for">> => VisFor }
+    end,
     InsProps = z_notifier:foldr(#rsc_insert{ props = Props }, InitProps, Context),
 
     % Create dummy resource with correct creator, category and content group.
