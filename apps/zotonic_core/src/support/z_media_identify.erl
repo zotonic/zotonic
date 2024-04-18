@@ -516,6 +516,7 @@ extension({A, B, _}, PreferExtension) ->
     extension(<<A/binary, $/, B/binary>>, PreferExtension);
 extension(Mime, PreferExtension) when is_list(Mime) ->
     extension(list_to_binary(Mime), PreferExtension);
+extension(<<"application/ld+json">>, _PreferExtension) -> <<".jsonld">>;
 extension(<<"image/jpeg">>, _PreferExtension) -> <<".jpg">>;
 extension(<<"application/vnd.ms-excel">>, _) -> <<".xls">>;
 extension(<<"text/plain">>, _PreferExtension) -> <<".txt">>;
@@ -559,6 +560,7 @@ first_extension([ Ext | _ ]) ->
 -spec guess_mime( file:filename_all() ) -> mime_type().
 guess_mime(File) ->
     case z_string:to_lower( filename:extension( File ) ) of
+        <<".jsonld">> -> <<"application/ld+json">>;
         <<".bert">> -> <<"application/x-bert">>;
         % Fonts have since 2017 their own mime types- https://tools.ietf.org/html/rfc8081#section-4.4.5
         <<".woff">> -> <<"font/woff">>;
