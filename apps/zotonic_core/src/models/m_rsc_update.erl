@@ -796,6 +796,7 @@ update_transaction_fun_insert(#rscupd{id = insert_rsc} = RscUpd, Props, _Raw, Up
         <<"version">> => 0,
         <<"category_id">> => CategoryId,
         <<"content_group_id">> => maps:get(<<"content_group_id">>, Props, undefined),
+        <<"visible_for">> => maps:get(<<"visible_for">>, Props, undefined),
         <<"is_published">> => false,
         <<"publication_start">> => undefined
     },
