@@ -88,7 +88,8 @@
     recreate_table/1
     ]).
 
--define(TEXT_LENGTH, 80).
+-define(FULLTEXT_LENGTH, 80).
+-define(FTS_LENGTH, 500).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -617,7 +618,7 @@ pivot_all(Context) ->
 %% at a time.
 pivot_batch(FromId, Context0) ->
     Context = z_acl:sudo(Context0),
-    case z_db:q("select id from rsc where id > $1 order by id limit 1000", [FromId], Context) of
+    case z_db:q("select id from rsc where id > $1 order by id limit 5000", [FromId], Context) of
         [] ->
             done;
         Rs ->
@@ -664,7 +665,7 @@ render_facet(Id, #facet_def{ name = Name, type = fulltext } = F, Context) ->
             V1 = z_pivot_rsc:cleanup_tsv_text(V),
             V2 = z_string:trim(z_string:normalize(V1)),
             [
-                {<<"f_", Name/binary>>, z_string:truncatechars(V1, ?TEXT_LENGTH)},
+                {<<"f_", Name/binary>>, z_string:truncatechars(V1, ?FULLTEXT_LENGTH)},
                 {<<"ft_", Name/binary>>, V2}
             ]
     end;
@@ -681,7 +682,7 @@ render_facet(Id, #facet_def{ name = Name, type = fts } = F, Context) ->
                     [V2],
                     Context),
             [
-                {<<"f_", Name/binary>>, z_string:truncatechars(V1, ?TEXT_LENGTH)},
+                {<<"f_", Name/binary>>, z_string:truncatechars(V1, ?FTS_LENGTH)},
                 {<<"fts_", Name/binary>>, Tsv}
             ]
     end;
@@ -755,12 +756,12 @@ convert_type_1(ids, V, Context) when is_binary(V) ->
     L1 = lists:map(fun z_string:trim/1, L),
     convert_type_1(ids, lists:filter( fun(B) -> B =/= <<>> end, L1 ), Context);
 convert_type_1(fulltext, V, _Context) ->
-    z_string:truncatechars(z_convert:to_binary(V), ?TEXT_LENGTH);
+    z_string:truncatechars(z_convert:to_binary(V), ?FULLTEXT_LENGTH);
 convert_type_1(fts, V, _Context) ->
-    z_string:truncatechars(z_convert:to_binary(V), ?TEXT_LENGTH);
+    z_string:truncatechars(z_convert:to_binary(V), ?FTS_LENGTH);
 convert_type_1(text, V, _Context) ->
     V1 = z_string:trim(z_html:unescape(z_html:strip(z_convert:to_binary(V)))),
-    z_string:truncatechars(V1, ?TEXT_LENGTH).
+    z_string:truncatechars(V1, ?FULLTEXT_LENGTH).
 
 
 %% @doc Ensure that the facet table is correct, if not then drop the existing
@@ -980,8 +981,8 @@ facet_to_column(#facet_def{
     [
         #column_def{
             name = binary_to_atom(<<"f_", Name/binary>>, utf8),
-            type = col_type(text),
-            length = col_length(text),
+            type = col_type(fts),
+            length = col_length(fts),
             is_nullable = true,
             default = undefined,
             primary_key = false,
@@ -1041,13 +1042,15 @@ facet_to_column(#facet_def{
 
 
 col_type(text) -> <<"character varying">>;
+col_type(fts) -> <<"character varying">>;
 col_type(integer) -> <<"integer">>;
 col_type(float) -> <<"double precision">>;
 col_type(boolean) -> <<"boolean">>;
 col_type(datetime) -> <<"timestamp with time zone">>;
 col_type(id) -> <<"integer">>.
 
-col_length(text) -> ?TEXT_LENGTH;
+col_length(text) -> ?FULLTEXT_LENGTH;
+col_length(fts) -> ?FTS_LENGTH;
 col_length(integer) -> undefined;
 col_length(float) -> undefined;
 col_length(boolean) -> undefined;
@@ -1073,9 +1076,6 @@ facet_to_index(#facet_def{
         type = fts
     }) ->
     [
-        <<"CREATE INDEX search_facet_f_", Name/binary, "_key ",
-          "ON search_facet(f_", Name/binary, ")">>,
-
         <<"CREATE INDEX search_facet_fts_", Name/binary, "_key ",
            "ON search_facet USING gin (fts_", Name/binary, ")">>
     ];
