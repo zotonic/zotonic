@@ -93,7 +93,7 @@ pivot_job(PivotRscList, Context) ->
         rsc_list => PivotRscList
     }),
     F = fun(Ctx) ->
-            [ {Id, pivot_resource(Id, Ctx)} || {Id,_Serial} <- PivotRscList ]
+            [ {Id, pivot_resource(Id, Ctx)} || Id <- PivotRscList ]
     end,
     case z_db:transaction(F, Context) of
         {rollback, PivotError} ->
