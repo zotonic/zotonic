@@ -58,8 +58,11 @@ command_names() ->
             end
         end,
         FileNames),
-    lists:sort(CommandNames).
+    CommandNames1 = [ <<"completion">> | CommandNames ],
+    lists:sort(CommandNames1).
 
+command_info(<<"completion">>) ->
+    "Install bash command completion for bin/zotonic";
 command_info(Cmd) ->
     CommandMod = binary_to_atom(<<"zotonic_cmd_", Cmd/binary>>, utf8),
     case code:ensure_loaded(CommandMod) of
