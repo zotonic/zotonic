@@ -102,6 +102,11 @@
                         {% button class="btn btn-default" text=_"Reinstall site datamodel" action={admin_tasks task='site_reinstall'} %}
                         <p class="help-block">{_ Runs the schema install command from the site's module again. _}</p>
                     </div>
+
+                    <div class="form-group">
+                        {% button class="btn btn-default" text=_"Reinstall Zotonic datamodel" action={admin_tasks task='zotonic_reinstall'} %}
+                        <p class="help-block">{_ Runs the schema install for Zotonic core again. _}</p>
+                    </div>
                 </div>
             </div>
 
