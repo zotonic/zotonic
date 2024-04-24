@@ -39,7 +39,11 @@
     {# All metadata tags, used by bots and when sharing links on social media. #}
     {% with m.seo.keywords as keywords %}
     {% with m.seo.description|escape|default:m.rsc.page_home.seo_desc as description %}
-    {% with id.depiction|default:m.rsc.page_home.depiction as depiction %}
+    {% with seo_depiction
+            |default:id.depiction
+            |default:m.rsc.page_home.depiction
+      as depiction
+    %}
         {% with z_seo_language as z_language %}
             {% if id %}
                 {% with id.seo_keywords as seo_keywords %}
