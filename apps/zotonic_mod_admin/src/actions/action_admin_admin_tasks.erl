@@ -40,17 +40,22 @@ event(#postback{message={admin_tasks, [{task, <<"templates_reset">>}]}}, Context
        ?__(<<"Templates will be recompiled.">>, Context),
        Context);
 
-
 %% @doc Pivot everything
 event(#postback{message={admin_tasks, [{task, <<"pivot_all">>}]}}, Context) ->
     do(fun() -> z_pivot_rsc:queue_all(Context) end,
        ?__(<<"The search index is rebuilding. Depending on the database size, this can take a long time."/utf8>>, Context),
        Context);
 
-%% @doc Renumber the category tree
+%% @doc Reinstall site datamodel
 event(#postback{message={admin_tasks, [{task, <<"site_reinstall">>}]}}, Context) ->
     do(fun() -> z_module_manager:reinstall(z_context:site(Context), Context) end,
        ?__(<<"The site’s data is being reinstalled. Watch the console for messages"/utf8>>, Context),
+       Context);
+
+%% @doc Reinstall zotonic datamodel
+event(#postback{message={admin_tasks, [{task, <<"zotonic_reinstall">>}]}}, Context) ->
+    do(fun() -> z_install:install_datamodel(Context) end,
+       ?__(<<"The Zotonic datamodel is being reinstalled. Watch the console for messages"/utf8>>, Context),
        Context);
 
 %% @doc Renumber the category tree

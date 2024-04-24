@@ -1615,7 +1615,7 @@ install(Context) ->
             ok;
         false ->
             [] = z_db:q("
-                create table rsc_import (
+                create table if not exists rsc_import (
                     id int not null,
                     user_id int,
                     host character varying(128) not null,
@@ -1644,7 +1644,7 @@ install(Context) ->
                 {"import_rsc_last_import_check_key", "last_import_check"},
                 {"import_rsc_next_import_check_key", "next_import_check"}
             ],
-            [ z_db:q("create index "++Name++" on rsc_import ("++Cols++")", Context) || {Name, Cols} <- Indices ],
+            [ z_db:q("create index if not exists "++Name++" on rsc_import ("++Cols++")", Context) || {Name, Cols} <- Indices ],
             z_db:flush(Context)
     end.
 

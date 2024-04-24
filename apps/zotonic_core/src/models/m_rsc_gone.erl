@@ -191,7 +191,7 @@ install(Context) ->
     case z_db:table_exists(rsc_gone, Context) of
         false ->
             [] = z_db:q("
-                CREATE TABLE rsc_gone
+                CREATE TABLE IF NOT EXISTS rsc_gone
                 (
                     id bigint not null,
                     new_id bigint,
@@ -209,17 +209,17 @@ install(Context) ->
                 )",
                 Context),
 
-            [] = z_db:q("CREATE INDEX rsc_gone_name_key ON rsc_gone(name)", Context),
-            [] = z_db:q("CREATE INDEX rsc_gone_uri_key ON rsc_gone(uri)", Context),
-            [] = z_db:q("CREATE INDEX rsc_gone_page_path_key ON rsc_gone(page_path)", Context),
-            [] = z_db:q("CREATE INDEX rsc_gone_modified_key ON rsc_gone(modified)", Context),
+            [] = z_db:q("CREATE INDEX IF NOT EXISTS rsc_gone_name_key ON rsc_gone(name)", Context),
+            [] = z_db:q("CREATE INDEX IF NOT EXISTS rsc_gone_uri_key ON rsc_gone(uri)", Context),
+            [] = z_db:q("CREATE INDEX IF NOT EXISTS rsc_gone_page_path_key ON rsc_gone(page_path)", Context),
+            [] = z_db:q("CREATE INDEX IF NOT EXISTS rsc_gone_modified_key ON rsc_gone(modified)", Context),
             z_db:flush(Context),
             ok;
         true ->
             % Check for rsc_gone_uri_key
             case z_db:key_exists(rsc_gone, rsc_gone_uri_key, Context) of
                 false ->
-                    [] = z_db:q("CREATE INDEX rsc_gone_uri_key ON rsc_gone(uri)", Context),
+                    [] = z_db:q("CREATE INDEX IF NOT EXISTS rsc_gone_uri_key ON rsc_gone(uri)", Context),
                     ok;
                 true ->
                     ok
