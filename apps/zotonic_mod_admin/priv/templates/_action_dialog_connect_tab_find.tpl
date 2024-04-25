@@ -21,10 +21,12 @@
 
                 <div class="checkbox-list" {% if not forloop.last %}style="border-bottom: 1px solid #e5e5e5"{% endif %}>
                     {% for id in cat.resources %}
-                        <label class="checkbox">
-                            <input type="checkbox" value="{{ id }}" {% if id|member:oids %}checked{% endif %}>
-                            {{ id.title|default:id.short_title }}
-                        </label>
+                        {% if id.is_visible %}
+                            <label class="checkbox">
+                                <input type="checkbox" value="{{ id }}" {% if id|member:oids %}checked{% endif %}>
+                                {{ id.title|default:id.short_title }}
+                            </label>
+                        {% endif %}
                     {% endfor %}
                     {# Padding for flexbox last row #}
                     <label class="checkbox"></label>
