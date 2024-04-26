@@ -80,9 +80,10 @@ pivot_resource_update(Id, UpdateProps, RawProps, Context) ->
         {ok, Tz0} -> Tz0;
         error -> maps:get(<<"tz">>, RawProps, undefined)
     end,
+    ContextTz = z_context:set_tz(Tz, Context),
     Props1 = Props#{
-        <<"pivot_date_start">> => tz_all_day(IsAllDay, DateStart, Tz),
-        <<"pivot_date_end">> => tz_all_day(IsAllDay, DateEnd, Tz),
+        <<"pivot_date_start">> => tz_all_day(IsAllDay, DateStart, ContextTz),
+        <<"pivot_date_end">> => tz_all_day(IsAllDay, DateEnd, ContextTz),
         <<"pivot_date_start_month_day">> => month_day(DateStart),
         <<"pivot_date_end_month_day">> => month_day(DateEnd),
         <<"pivot_title">> => PivotTitle
@@ -213,8 +214,9 @@ pivot_resource_1(Id, Lang, Context) ->
                     % Shift the "date_is_all_day" dates to the timezone they were entered in.
                     IsAllDay = z_convert:to_bool(maps:get(<<"date_is_all_day">>, RscProps, false)),
                     Tz = maps:get(<<"tz">>, RscProps, undefined),
-                    DateStart = tz_all_day(IsAllDay, DateStart0, Tz),
-                    DateEnd = tz_all_day(IsAllDay, DateEnd0, Tz),
+                    ContextTz = z_context:set_tz(Tz, Context),
+                    DateStart = tz_all_day(IsAllDay, DateStart0, ContextTz),
+                    DateEnd = tz_all_day(IsAllDay, DateEnd0, ContextTz),
 
                     % Make psql tsv texts from the A..D blocks
                     StemmerLanguage = stemmer_language(Context),
