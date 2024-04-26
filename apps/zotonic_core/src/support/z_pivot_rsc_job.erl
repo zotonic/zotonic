@@ -56,7 +56,7 @@ start_pivot(RscIds, Context) ->
             {?MODULE, pivot_job, [ RscIds, Context ]}).
 
 
-%% @doc Return a modified property list with fields that need immediate pivoting on an update.
+%% @doc Return a modified property map with fields that need immediate pivoting on an update.
 pivot_resource_update(Id, UpdateProps, RawProps, Context) ->
     Props = lists:foldl(
         fun(Key, Acc) ->
@@ -71,15 +71,35 @@ pivot_resource_update(Id, UpdateProps, RawProps, Context) ->
         [ <<"date_start">>, <<"date_end">>, <<"title">> ]),
     {DateStart, DateEnd} = pivot_date(Props),
     PivotTitle = truncate(get_pivot_title(Props), 100),
+    IsAllDay0 = case maps:find(<<"date_is_all_day">>, Props) of
+        {ok, V} -> V;
+        error -> maps:get(<<"date_is_all_day">>, RawProps, undefined)
+    end,
+    IsAllDay = z_convert:to_bool(IsAllDay0),
+    Tz = case maps:find(<<"tz">>, Props) of
+        {ok, Tz0} -> Tz0;
+        error -> maps:get(<<"tz">>, RawProps, undefined)
+    end,
     Props1 = Props#{
-        <<"pivot_date_start">> => DateStart,
-        <<"pivot_date_end">> => DateEnd,
+        <<"pivot_date_start">> => tz_all_day(IsAllDay, DateStart, Tz),
+        <<"pivot_date_end">> => tz_all_day(IsAllDay, DateEnd, Tz),
         <<"pivot_date_start_month_day">> => month_day(DateStart),
         <<"pivot_date_end_month_day">> => month_day(DateEnd),
         <<"pivot_title">> => PivotTitle
     },
     z_notifier:foldr(#pivot_update{id=Id, raw_props=RawProps}, Props1, Context).
 
+tz_all_day(true, ?EPOCH_START = Date, _Context) ->
+    Date;
+tz_all_day(true, ?ST_JUTTEMIS = Date, _Context) ->
+    Date;
+tz_all_day(true, Date, Tz) when is_tuple(Date) ->
+    % All-day dates are stored without timezone conversion.
+    % For indexing we store them as-if they were entered in the
+    % timezone of the resource.
+    z_datetime:to_utc(Date, Tz);
+tz_all_day(_IsAllDay, Date, _Context) ->
+    Date.
 
 %% @doc Run the sidejob task queue task.
 -spec pivot_job(RscIds, Context) -> ok when
@@ -183,12 +203,18 @@ pivot_resource_1(Id, Lang, Context) ->
                     NameFirst = render_block(name_first, Template, Vars, Context),
                     NameSurname = render_block(name_surname, Template, Vars, Context),
                     Gender = render_block(gender, Template, Vars, Context),
-                    DateStart = to_datetime(render_block(date_start, Template, Vars, Context)),
-                    DateEnd = to_datetime(render_block(date_end, Template, Vars, Context)),
+                    DateStart0 = to_datetime(render_block(date_start, Template, Vars, Context)),
+                    DateEnd0 = to_datetime(render_block(date_end, Template, Vars, Context)),
                     DateStartMonthDay = to_integer(render_block(date_start_month_day, Template, Vars, Context)),
                     DateEndMonthDay = to_integer(render_block(date_end_month_day, Template, Vars, Context)),
                     LocationLat = to_float(render_block(location_lat, Template, Vars, Context)),
                     LocationLng = to_float(render_block(location_lng, Template, Vars, Context)),
+
+                    % Shift the "date_is_all_day" dates to the timezone they were entered in.
+                    IsAllDay = z_convert:to_bool(maps:get(<<"date_is_all_day">>, RscProps, false)),
+                    Tz = maps:get(<<"tz">>, RscProps, undefined),
+                    DateStart = tz_all_day(IsAllDay, DateStart0, Tz),
+                    DateEnd = tz_all_day(IsAllDay, DateEnd0, Tz),
 
                     % Make psql tsv texts from the A..D blocks
                     StemmerLanguage = stemmer_language(Context),
