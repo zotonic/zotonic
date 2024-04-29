@@ -565,7 +565,7 @@ qterm(#{ <<"term">> := <<"ongoing_on">>, <<"value">> := DateTime}, Context) ->
         undefined ->
             []
     end;
-qterm(#{ <<"term">> := <<"ongoing_ondate">>, <<"value">> := Date}, Context) ->
+qterm(#{ <<"term">> := <<"ongoing_date">>, <<"value">> := Date}, Context) ->
     %% ongoing_on
     %% Filter on items whose date range is around the given day
     case z_datetime:to_datetime(Date) of
@@ -613,7 +613,7 @@ qterm(#{ <<"term">> := <<"finished_on">>, <<"value">> := DateTime}, Context) ->
         undefined ->
             []
     end;
-qterm(#{ <<"term">> := <<"finished_ondate">>, <<"value">> := Date}, Context) ->
+qterm(#{ <<"term">> := <<"finished_date">>, <<"value">> := Date}, Context) ->
     %% finished_on
     %% Filter on items whose end date lies before a date
     case z_datetime:to_datetime(Date) of
@@ -657,7 +657,7 @@ qterm(#{ <<"term">> := <<"unfinished_on">>, <<"value">> := DateTime}, Context) -
         undefined ->
             []
     end;
-qterm(#{ <<"term">> := <<"unfinished_ondate">>, <<"value">> := Date}, Context) ->
+qterm(#{ <<"term">> := <<"unfinished_date">>, <<"value">> := Date}, Context) ->
     %% Filter on items whose end date lies after the date
     case z_datetime:to_datetime(Date, Context) of
         {Day,_} ->
