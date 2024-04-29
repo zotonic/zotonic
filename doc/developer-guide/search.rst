@@ -288,6 +288,15 @@ useful to select upcoming events::
 
     upcoming_on='+1 week'
 
+upcoming_date
+^^^^^^^^^^^^^
+
+Specifying 'upcoming' means that you only want to select things that
+have a start date after the start of the given date. Like the name says,
+useful to select upcoming events::
+
+    upcoming_date='+1 week'
+
 ongoing
 ^^^^^^^
 
@@ -301,10 +310,19 @@ ongoing_on
 ^^^^^^^^^^
 
 Specifying 'ongoing' means that you only want to select things that
-are happening on the given date: that have a start date which lies before
-the given date and an end date which lies after the given date::
+are happening on the given moment: that have a start datetime which lies before
+the given datetime and an end date which lies after the given datetime::
 
     ongoing_on='yesterday'
+
+ongoing_date
+^^^^^^^^^^^^
+
+Specifying 'ongoing' means that you only want to select things that
+are happening on the given day: that have a start date which lies before
+the given day and an end date which lies after the start of the given day::
+
+    ongoing_date='yesterday'
 
 finished
 ^^^^^^^^
@@ -318,9 +336,17 @@ finished_on
 ^^^^^^^^^^^
 
 Specifying 'finished' means that you only want to select things that
-have a start date which lies before the given date::
+have a start datetime which lies before the given moment::
 
     finished_on='tomorrow'
+
+finished_date
+^^^^^^^^^^^^^
+
+Specifying 'finished' means that you only want to select things that
+have a start day which lies before the start of the given day::
+
+    finished_date='tomorrow'
 
 unfinished
 ^^^^^^^^^^
@@ -337,6 +363,14 @@ Specifying 'unfinished' means that you only want to select things that
 have an end date which after the given date::
 
     unfinished_on='+3 days'
+
+unfinished_date
+^^^^^^^^^^^^^^^
+
+Specifying 'unfinished' means that you only want to select things that
+have an end date which after the end of the given day::
+
+    unfinished_date='+3 days'
 
 unfinished_or_nodate
 ^^^^^^^^^^^^^^^^^^^^
