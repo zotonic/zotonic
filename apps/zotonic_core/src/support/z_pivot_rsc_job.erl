@@ -82,24 +82,24 @@ pivot_resource_update(Id, UpdateProps, RawProps, Context) ->
     end,
     ContextTz = z_context:set_tz(Tz, Context),
     Props1 = Props#{
-        <<"pivot_date_start">> => tz_all_day(IsAllDay, DateStart, ContextTz),
-        <<"pivot_date_end">> => tz_all_day(IsAllDay, DateEnd, ContextTz),
+        <<"pivot_date_start">> => tz_shift_all_day(IsAllDay, DateStart, ContextTz),
+        <<"pivot_date_end">> => tz_shift_all_day(IsAllDay, DateEnd, ContextTz),
         <<"pivot_date_start_month_day">> => month_day(DateStart),
         <<"pivot_date_end_month_day">> => month_day(DateEnd),
         <<"pivot_title">> => PivotTitle
     },
     z_notifier:foldr(#pivot_update{id=Id, raw_props=RawProps}, Props1, Context).
 
-tz_all_day(true, ?EPOCH_START = Date, _Context) ->
+tz_shift_all_day(true, ?EPOCH_START = Date, _Context) ->
     Date;
-tz_all_day(true, ?ST_JUTTEMIS = Date, _Context) ->
+tz_shift_all_day(true, ?ST_JUTTEMIS = Date, _Context) ->
     Date;
-tz_all_day(true, Date, Tz) when is_tuple(Date) ->
+tz_shift_all_day(true, Date, Tz) when is_tuple(Date) ->
     % All-day dates are stored without timezone conversion.
     % For indexing we store them as-if they were entered in the
     % timezone of the resource.
     z_datetime:to_utc(Date, Tz);
-tz_all_day(_IsAllDay, Date, _Context) ->
+tz_shift_all_day(_IsAllDay, Date, _Context) ->
     Date.
 
 %% @doc Run the sidejob task queue task.
@@ -215,8 +215,8 @@ pivot_resource_1(Id, Lang, Context) ->
                     IsAllDay = z_convert:to_bool(maps:get(<<"date_is_all_day">>, RscProps, false)),
                     Tz = maps:get(<<"tz">>, RscProps, undefined),
                     ContextTz = z_context:set_tz(Tz, Context),
-                    DateStart = tz_all_day(IsAllDay, DateStart0, ContextTz),
-                    DateEnd = tz_all_day(IsAllDay, DateEnd0, ContextTz),
+                    DateStart = tz_shift_all_day(IsAllDay, DateStart0, ContextTz),
+                    DateEnd = tz_shift_all_day(IsAllDay, DateEnd0, ContextTz),
 
                     % Make psql tsv texts from the A..D blocks
                     StemmerLanguage = stemmer_language(Context),
