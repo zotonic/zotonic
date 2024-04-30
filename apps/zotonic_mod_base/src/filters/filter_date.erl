@@ -26,6 +26,13 @@
 
 -include_lib("kernel/include/logger.hrl").
 
+date(Date, Format, Id, Context) when Id =:= 0; Id =:= 1 ->
+    ?LOG_INFO(#{
+        in => zotonic_mod_base,
+        text => <<"Filter 'date' now accepts a resource id as the timezone. Use 'UTC' to not convert timezones.">>
+    }),
+    Tz = m_rsc:p(Id, <<"tz">>, Context),
+    date(Date, Format, z_context:set_tz(Tz, Context));
 date(Date, Format, Id, Context) when is_integer(Id) ->
     Tz = m_rsc:p(Id, <<"tz">>, Context),
     date(Date, Format, z_context:set_tz(Tz, Context));
