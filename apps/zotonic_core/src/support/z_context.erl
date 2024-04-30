@@ -1177,9 +1177,23 @@ tz_config(Context) ->
     MaybeTimezone :: string() | binary() | boolean() | 1 | 0 | term(),
     Context :: z:context(),
     TzContext :: z:context().
+set_tz(undefined, Context) ->
+    Context;
+set_tz(<<>>, Context) ->
+    Context;
+set_tz("", Context) ->
+    Context;
+set_tz(true, Context) ->
+    Context#context{ tz = <<"UTC">> };
+set_tz(false, Context) ->
+    Context;
+set_tz(1, Context) ->
+    Context#context{ tz = <<"UTC">> };
+set_tz(0, Context) ->
+    Context;
 set_tz(Tz, Context) when is_list(Tz) ->
     set_tz(unicode:characters_to_binary(Tz, utf8), Context);
-set_tz(Tz, Context) when is_binary(Tz), Tz =/= <<>> ->
+set_tz(Tz, Context) when is_binary(Tz) ->
     case m_l10n:is_timezone(Tz) of
         true ->
             Context#context{ tz = Tz };
@@ -1191,14 +1205,6 @@ set_tz(Tz, Context) when is_binary(Tz), Tz =/= <<>> ->
             }),
             Context
     end;
-set_tz(true, Context) ->
-    Context#context{ tz = <<"UTC">> };
-set_tz(false, Context) ->
-    Context;
-set_tz(1, Context) ->
-    Context#context{ tz = <<"UTC">> };
-set_tz(0, Context) ->
-    Context;
 set_tz(Tz, Context) ->
     ?LOG_ERROR(#{
         text => <<"Ignoring unknown timezone">>,

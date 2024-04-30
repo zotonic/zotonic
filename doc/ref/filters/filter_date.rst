@@ -40,6 +40,12 @@ For example, to display a date in UTC::
 
     {{ mydate|date:"Y-m-d H:i T":"UTC" }}
 
+Instead of the timezone, the following arguments are also accepted:
+
+  * ``true`` set the timezone to UTC
+  * ``false`` leave the timezone as is
+  * ``undefined`` leave the timezone as is
+  * a resource id (integer), set the timezone according to the `tz` property of the resource
 
 Timezone and *all day* date ranges
 ----------------------------------
@@ -52,6 +58,10 @@ The timezone conversion can be prevented by adding the *date_is_all_day* flag to
 Example, for displaying the start date of a resource::
 
     {{ id.date_start|date:"Y-m-d":id.date_is_all_day }}
+
+An alternative is to display the "all day" date in the timezone of the resource itself:
+
+    {{ id.date_start|date:"Y-m-d":id }}
 
 
 Date formatting characters
