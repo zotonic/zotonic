@@ -941,7 +941,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
             %% use the unique id as 'envelope sender' (VERP)
             SendResult = case z_config:get(smtp_is_blackhole, false) of
                 true ->
-                    <<"Blackhole - zotonic config smtp_is_blackhole is set.">>;
+                    {ok, <<"Blackhole - zotonic config smtp_is_blackhole is set.">>};
                 false ->
                     send_blocking(Id, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context)
             end,
