@@ -533,6 +533,17 @@ event(#postback{ message = {ensure_refers, _} }, Context) ->
             z_render:growl_error(?__("Sorry, only an admin is allowed to do this", Context), Context)
     end;
 
+event(#postback{ message = {delete_tasks, Args} }, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            {module, Module} = proplists:lookup(module, Args),
+            {function, Function} = proplists:lookup(function, Args),
+            z_pivot_rsc:delete_task(Module, Function, Context),
+            z_render:growl(?__("Deleted tasks.", Context), Context);
+        false ->
+            z_render:growl_error(?__("Sorry, only an admin is allowed to do this", Context), Context)
+    end;
+
 event(_E, Context) ->
     ?DEBUG(_E),
     Context.
