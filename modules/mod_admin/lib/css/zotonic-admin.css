@@ -187,7 +187,7 @@ pre:empty {
   top: 50%;
   height: 14px;
   width: 14px;
-  margin-top: -14px/2;
+  margin-top: -7px;
 }
 .nav.nav-pills {
   border-style: none none solid none;
@@ -1172,8 +1172,8 @@ table.do_adminLinkedTable .admin-list-thumb > span {
   vertical-align: top;
 }
 table.do_adminLinkedTable .admin-list-thumb > img {
-  width: 80px / 2;
-  height: 60px / 2;
+  width: 40px;
+  height: 30px;
   margin: 0 10px 0 0;
 }
 .table > thead > tr > th {
@@ -1460,14 +1460,14 @@ ul.tree-list li.menu-item .z-btn-remove {
   line-height: 16px;
   position: absolute;
   top: 50%;
-  margin-top: -16px/2;
+  margin-top: -8px;
 }
 ul.tree-list li.menu-item .z-icon-drag {
   color: #999;
-  left: 24px / 2;
+  left: 12px;
 }
 ul.tree-list li.menu-item .z-btn-remove {
-  right: 24px / 2;
+  right: 12px;
 }
 ul.tree-list li.menu-item > div {
   position: relative;
@@ -1513,7 +1513,7 @@ ul.tree-list li.menu-item > div a.menu-toggle:hover {
 }
 ul.tree-list li.menu-item > div a.menu-toggle > i {
   left: 50%;
-  margin-left: -16px/2;
+  margin-left: -8px;
   cursor: pointer;
 }
 ul.tree-list li.menu-item > div a.menu-toggle > i.menu-collapse {
@@ -1526,8 +1526,8 @@ ul.tree-list li.menu-item > div .label {
   color: #999;
 }
 ul.tree-list li.menu-item img.admin-list-dashboard {
-  width: 32px / 3 * 2;
-  height: 24px / 3 * 2;
+  width: 21.33333333px;
+  height: 16px;
   margin-bottom: 2px;
 }
 ul.tree-list li.menu-item.has-submenu > div a.menu-toggle {
@@ -1553,7 +1553,7 @@ ul.tree-list li.menu-item .warning {
 ul.tree-list li.menu-item .btns {
   display: block;
   position: absolute;
-  right: 24px / 2;
+  right: 12px;
   top: 7px;
 }
 ul.tree-list li.menu-item .btns .btn-group {
@@ -1790,7 +1790,7 @@ ul.tree-list.connections-list li.menu-item-alert {
   height: 16px;
   background-color: #333;
   border-color: #fff;
-  border-radius: calc(16px/2);
+  border-radius: 8px;
 }
 .widget .navbar {
   background-color: #dadada;

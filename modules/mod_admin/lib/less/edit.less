@@ -60,8 +60,8 @@ ul.media {
         @_padding: 5px;
         @_image_width: 180px; // set in mediaclass.config
         @_image_height: 180px; // set in mediaclass.config
-        @_width: @_image_width + 2 * @_padding + 2; // add border
-        @_height: @_image_height + 2 * @_padding + 2 + 30;
+        @_width: (@_image_width + 2 * @_padding + 2); // add border
+        @_height: (@_image_height + 2 * @_padding + 2 + 30);
         
         margin: 0 @_item_spacing @_item_spacing 0;
         background: #fff;
