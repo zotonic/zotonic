@@ -8,6 +8,7 @@
   {applications, [kernel, stdlib, crypto, public_key, ssl, inets,
                   compiler, tools, syntax_tools, eunit,
                   mimetypes, mnesia, gproc, jobs, sidejob,
+                  tls_certificate_check,
                   os_mon,
                   bert, dh_date, eiconv, exometer_core,
                   epgsql,
