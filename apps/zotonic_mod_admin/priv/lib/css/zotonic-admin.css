@@ -947,6 +947,11 @@ div.modal .modal-footer .pull-left {
   height: auto;
 }
 
+/* Fix for Safari 17.4.1 on macOS */
+.navbar-nav li {
+  white-space: nowrap;
+}
+
 .navbar.navbar-branded {
   min-height: 50px;
   height: 50px;

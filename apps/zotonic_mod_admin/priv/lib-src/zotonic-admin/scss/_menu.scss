@@ -1,3 +1,11 @@
 #menu-editor .widget-header {
     height: auto;
 }
+
+/* Fix for Safari 17.4.1 on macOS */
+
+.navbar-nav {
+    li {
+        white-space: nowrap;
+    }
+}
