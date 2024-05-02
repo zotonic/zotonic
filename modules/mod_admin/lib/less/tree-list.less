@@ -16,7 +16,7 @@ ul.tree-list {
         @_icon_size: 16px;
         @_item_height: 34px;
         @_line_height: 1.2;
-        @_side_spacing: (@_toggle_width - @_icon_size) / 2;
+        @_side_spacing: ((@_toggle_width - @_icon_size) / 2);
 
         line-height: @_line_height;
         border: none;
@@ -35,14 +35,14 @@ ul.tree-list {
             line-height: @_icon_size;
             position: absolute;
             top: 50%;
-            margin-top: -@_icon_size/2;
+            margin-top: (-@_icon_size/2);
         }
         .z-icon-drag {
             color: #999;
-            left: @_side_spacing;
+            left: (@_side_spacing);
         }
         .z-btn-remove {
-            right: @_side_spacing;
+            right: (@_side_spacing);
         }
         > div {
             position: relative;
@@ -85,9 +85,10 @@ ul.tree-list {
                     text-decoration: none;
                     color: black;
                 }
+                @_menu_toggle_margin: (-@_icon_size/2);
                 > i {
                     left: 50%;
-                    margin-left: -@_icon_size/2;
+                    margin-left: @_menu_toggle_margin;
                     cursor: pointer;
                 }
                 > i.menu-collapse {
@@ -102,8 +103,8 @@ ul.tree-list {
             }
         }
 
-        @_img_width: 32px / 3 * 2;
-		@_img_height: 24px / 3 * 2;
+        @_img_width: (32px / 3 * 2);
+		@_img_height: (24px / 3 * 2);
 
 		img.admin-list-dashboard {
 			width: @_img_width;
@@ -146,7 +147,7 @@ ul.tree-list {
         .btns {
             display: block;
             position: absolute;
-            right: @_side_spacing;
+            right: (@_side_spacing);
             top: 7px;
 
             .btn-group {

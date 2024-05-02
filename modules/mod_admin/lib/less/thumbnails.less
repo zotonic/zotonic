@@ -36,8 +36,8 @@
         min-height: @_heigth;
         max-height: @_heigth;
         overflow: hidden;    
-        #3L > .border-radius(2px);
-        #3L > .box-shadow(none);
+        border-radius: 2px;
+        box-shadow: none;
         cursor: pointer;
         margin-bottom: 2 * @_thumbnail_gutter;
         padding: @_padding;
@@ -45,7 +45,6 @@
         line-height: @_lineHeight;
         position: relative;
         transition-duration: 0;
-        -webkit-transition-duration: 0;
         
         &,
         a:link, 
@@ -89,8 +88,8 @@
         
         img {
             padding: 0;
-            #3L > .border-radius(0);
-            #3L > .box-shadow(none);
+            border-radius: 0;
+            box-shadow: none;
             margin: 0 @_contentMargin 0 0;
         }
         

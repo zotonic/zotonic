@@ -60,8 +60,8 @@ ul.media {
         @_padding: 5px;
         @_image_width: 180px; // set in mediaclass.config
         @_image_height: 180px; // set in mediaclass.config
-        @_width: @_image_width + 2 * @_padding + 2; // add border
-        @_height: @_image_height + 2 * @_padding + 2 + 30;
+        @_width: (@_image_width + 2 * @_padding + 2); // add border
+        @_height: (@_image_height + 2 * @_padding + 2 + 30);
         
         margin: 0 @_item_spacing @_item_spacing 0;
         background: #fff;
@@ -71,8 +71,8 @@ ul.media {
         position: relative;
         padding: @_padding;
         border: 1px solid @borderColorMedium;
-        #3L > .border-radius(@radiusBlockElement);
-        #3L > .box-shadow(none);
+        border-radius: @radiusBlockElement;
+        box-shadow: none;
         
         &.sortable {
             cursor: move;
@@ -200,12 +200,9 @@ input.do_timepicker {
     border-radius: 0;
     padding: @widgetVerticalPadding @widgetSidePadding;
     background-color: @backgroundColorInfo;
-    -webkit-transition: opacity @_transation_duration ease-in-out;
-    -moz-transition: opacity @_transation_duration ease-in-out;
-    -o-transition: opacity @_transation_duration ease-in-out;
     transition: opacity @_transation_duration ease-in-out;
     min-height: inherit;
-    #3L > .box-shadow(none);
+    box-shadow: none;
 }
 
 .scrolled .admin-navbar-fixed-save {
