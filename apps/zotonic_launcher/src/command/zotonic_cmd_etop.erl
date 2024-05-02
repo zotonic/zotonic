@@ -24,6 +24,8 @@
 info() ->
     "Show top processes running in the Erlang VM.".
 
+% Suppress warning about etop missing (it is optional).
+-dialyzer({nowarn_function, run/1}).
 run(_) ->
     case zotonic_command:net_start() of
         ok ->
