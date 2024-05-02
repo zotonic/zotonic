@@ -16,15 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ---------------------------------------------------------- */
 ul.blocks.ui-sortable .widget-header:before {
-  speak: none;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  display: inline-block;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  speak: none;font-style: normal;font-weight: normal;font-variant: normal;text-transform: none;line-height: 1;display: inline-block;-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;
 }
 ul.blocks.ui-sortable .widget-header:before {
   font-family: "Zotonic";
@@ -171,7 +163,7 @@ p .z-btn-help {
   margin-top: 1em;
 }
 h3 {
-  margin: 1.25em 0 .75em 0;
+  margin: 1.25em 0 0.75em 0;
 }
 pre:empty {
   display: none;
@@ -195,7 +187,7 @@ pre:empty {
   top: 50%;
   height: 14px;
   width: 14px;
-  margin-top: -7px;
+  margin-top: -14px/2;
 }
 .nav.nav-pills {
   border-style: none none solid none;
@@ -225,8 +217,6 @@ pre:empty {
 .well {
   background-color: #f5f5f5;
   padding: 15px;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
   box-shadow: none;
 }
 .well.z-button-row {
@@ -302,7 +292,7 @@ code {
 .btn > .z-icon {
   width: 18px;
   height: 18px;
-  margin-top: -9px;
+  margin-top: -18px/2;
   line-height: 18px;
   vertical-align: bottom;
   text-align: center;
@@ -314,7 +304,7 @@ code {
   opacity: 1;
 }
 .btn.disabled .glyphicon {
-  opacity: .6;
+  opacity: 0.6;
 }
 .btn .glyphicon {
   top: 3px;
@@ -515,7 +505,7 @@ fieldset[disabled] .btn-primary.active {
   color: #aaa;
 }
 #dialog_new_rsc_results .items .item.item-connected:not(.item-depiction) img {
-  opacity: .3;
+  opacity: 0.3;
 }
 #dialog_new_rsc_results .items .item .z-item-text {
   left: 5px;
@@ -527,11 +517,7 @@ fieldset[disabled] .btn-primary.active {
 }
 #dialog_new_rsc_results .items .item img {
   padding: 0;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
   border-radius: 0;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
   box-shadow: none;
   margin: 0 7.5px 0 0;
 }
@@ -663,11 +649,7 @@ ul.media > li {
   position: relative;
   padding: 5px;
   border: 1px solid #d7d7d7;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
   border-radius: 3px;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
   box-shadow: none;
 }
 ul.media > li.sortable {
@@ -769,17 +751,12 @@ input.do_timepicker {
   border-radius: 0;
   padding: 15px 15px;
   background-color: #a6daf0;
-  -webkit-transition: opacity 0.3s ease-in-out;
-  -moz-transition: opacity 0.3s ease-in-out;
-  -o-transition: opacity 0.3s ease-in-out;
   transition: opacity 0.3s ease-in-out;
   min-height: inherit;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
   box-shadow: none;
 }
 .scrolled .admin-navbar-fixed-save {
-  opacity: 1.0;
+  opacity: 1;
 }
 div + .admin-edit-no-features {
   display: none;
@@ -841,11 +818,7 @@ img {
 }
 img.thumb {
   padding: 0;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
   border-radius: 0;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
   box-shadow: none;
 }
 .widget.admin-logon {
@@ -917,6 +890,10 @@ div.modal .modal-footer .pull-left {
 }
 #menu-editor .widget-header {
   height: auto;
+}
+/* Fix for Safari 17.4.1 on macOS */
+.navbar-nav li {
+  white-space: nowrap;
 }
 .navbar.navbar-branded {
   min-height: 50px;
@@ -1195,8 +1172,8 @@ table.do_adminLinkedTable .admin-list-thumb > span {
   vertical-align: top;
 }
 table.do_adminLinkedTable .admin-list-thumb > img {
-  width: 40px;
-  height: 30px;
+  width: 80px / 2;
+  height: 60px / 2;
   margin: 0 10px 0 0;
 }
 .table > thead > tr > th {
@@ -1206,7 +1183,6 @@ table.do_adminLinkedTable .admin-list-thumb > img {
 .table tbody tr.clickable th,
 .table tbody tr td.clickable,
 .table tbody tr th.clickable {
-  -webkit-transition: all 0.1s ease-in-out;
   transition: all 0.1s ease-in-out;
 }
 .table tbody tr.clickable:hover td,
@@ -1354,11 +1330,7 @@ th a:hover .arrow.down {
   min-height: 72px;
   max-height: 72px;
   overflow: hidden;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
   border-radius: 2px;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
   box-shadow: none;
   cursor: pointer;
   margin-bottom: 12px;
@@ -1367,7 +1339,6 @@ th a:hover .arrow.down {
   line-height: 1.1em;
   position: relative;
   transition-duration: 0;
-  -webkit-transition-duration: 0;
 }
 .thumbnails .thumbnail,
 .thumbnails .thumbnail a:link,
@@ -1388,7 +1359,7 @@ th a:hover .arrow.down {
   color: #aaa;
 }
 .thumbnails .thumbnail.thumbnail-connected:not(.thumbnail-depiction) img {
-  opacity: .3;
+  opacity: 0.3;
 }
 .thumbnails .thumbnail .z-thumbnail-text {
   position: absolute;
@@ -1404,11 +1375,7 @@ th a:hover .arrow.down {
 }
 .thumbnails .thumbnail img {
   padding: 0;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
   border-radius: 0;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
   box-shadow: none;
   margin: 0 7.5px 0 0;
 }
@@ -1493,14 +1460,14 @@ ul.tree-list li.menu-item .z-btn-remove {
   line-height: 16px;
   position: absolute;
   top: 50%;
-  margin-top: -8px;
+  margin-top: -16px/2;
 }
 ul.tree-list li.menu-item .z-icon-drag {
   color: #999;
-  left: 12px;
+  left: 24px / 2;
 }
 ul.tree-list li.menu-item .z-btn-remove {
-  right: 12px;
+  right: 24px / 2;
 }
 ul.tree-list li.menu-item > div {
   position: relative;
@@ -1546,7 +1513,7 @@ ul.tree-list li.menu-item > div a.menu-toggle:hover {
 }
 ul.tree-list li.menu-item > div a.menu-toggle > i {
   left: 50%;
-  margin-left: -8px;
+  margin-left: -16px/2;
   cursor: pointer;
 }
 ul.tree-list li.menu-item > div a.menu-toggle > i.menu-collapse {
@@ -1559,8 +1526,8 @@ ul.tree-list li.menu-item > div .label {
   color: #999;
 }
 ul.tree-list li.menu-item img.admin-list-dashboard {
-  width: 21.33333333px;
-  height: 16px;
+  width: 32px / 3 * 2;
+  height: 24px / 3 * 2;
   margin-bottom: 2px;
 }
 ul.tree-list li.menu-item.has-submenu > div a.menu-toggle {
@@ -1586,7 +1553,7 @@ ul.tree-list li.menu-item .warning {
 ul.tree-list li.menu-item .btns {
   display: block;
   position: absolute;
-  right: 12px;
+  right: 24px / 2;
   top: 7px;
 }
 ul.tree-list li.menu-item .btns .btn-group {
@@ -1800,18 +1767,12 @@ ul.tree-list.connections-list li.menu-item-alert {
 }
 .widget.widget-active:not(.widget-expanded) {
   background-color: #f5f5f5;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
   border-radius: 3px;
-  -webkit-transition: background 0.5s ease-in-out;
   transition: background 0.5s ease-in-out;
 }
 .widget.widget-active:not(.widget-expanded) .widget-header {
   background-color: #f5f5f5;
-  -webkit-border-radius: 3px 3px 0;
-  -moz-border-radius: 3px 3px 0;
   border-radius: 3px 3px 0;
-  -webkit-transition: background 0.5s ease-in-out;
   transition: background 0.5s ease-in-out;
 }
 .widget.widget-expanded .widget-header .widget-header-tools .z-btn-help,
@@ -1829,9 +1790,7 @@ ul.tree-list.connections-list li.menu-item-alert {
   height: 16px;
   background-color: #333;
   border-color: #fff;
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
-  border-radius: 8px;
+  border-radius: calc(16px/2);
 }
 .widget .navbar {
   background-color: #dadada;
@@ -1839,7 +1798,6 @@ ul.tree-list.connections-list li.menu-item-alert {
 }
 .widget.widget-active:not(.widget-expanded) .widget-header:hover {
   background-color: #e9e9e9;
-  -webkit-transition: background 0.1s ease-in-out;
   transition: background 0.1s ease-in-out;
   cursor: pointer;
 }
@@ -1847,13 +1805,9 @@ ul.tree-list.connections-list li.menu-item-alert {
   background-color: #f5f5f5;
 }
 li > .widget {
-  -webkit-border-radius: 0 0 3px 3px;
-  -moz-border-radius: 0 0 3px 3px;
   border-radius: 0 0 3px 3px;
 }
 li h3.widget-header {
-  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
-  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
 }
 .widget ul.nav-tabs.language-tabs {
