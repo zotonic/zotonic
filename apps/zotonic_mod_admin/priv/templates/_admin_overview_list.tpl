@@ -86,27 +86,28 @@ qcat
 <table class="table table-striped do_adminLinkedTable">
     <thead>
         <tr>
-            <th>
+            <th width="2%">
                 <input id="check-all" type="checkbox" value="1">
             </th>
             <th width="30%">
                 {% include "_admin_sort_header.tpl" field="pivot.title" caption=_"Title" type=type|default:"string" %}
             </th>
-            <th width="15%">
+            <th>
                 {% catinclude "_admin_sort_header.tpl" m.category[qcat].is_a field=field|default:"category_id" type=type|default:"string" caption=_"Category" qsort=qsort %}
             </th>
-            <th width="12%">
+            <th>
                 {% include "_admin_sort_header.tpl" field="publication_start" caption=_"Published on" type="date" qsort=qsort %}
             </th>
-            <th width="12%" class="hidden-xs">
+            <th class="hidden-xs">
                 {% include "_admin_sort_header.tpl" field="created" caption=_"Created on" type="date" qsort=qsort %}
             </th>
-            <th width="12%">
+            <th>
                 {% include "_admin_sort_header.tpl" field="modified" caption=_"Modified on" type="date" qsort=qsort %}
             </th>
             <th width="20%" class="hidden-xs">
                 {% include "_admin_sort_header.tpl" field="modifier_id" caption=_"Modified by" type=type|default:"string" qsort=qsort %}
             </th>
+            <th></th>
         </tr>
     </thead>
 
@@ -138,9 +139,9 @@ qcat
             <td class="hidden-xs">{{ id.publication_start|date:_"d M Y, H:i" }}</td>
             <td class="hidden-xs">{{ id.created|date:_"d M Y, H:i" }}</td>
             <td>{{ id.modified|date:_"d M Y, H:i" }}</td>
-            <td>
-                <span class="hidden-xs">{{ id.modifier_id.title|default:"-" }}</span>
-                <span class="pull-right buttons">
+            <td class="hidden-xs">{% include "_name.tpl" id=id.modifier_id %}</td>
+            <td class="text-right">
+                <span class="buttons">
                     <a href="{{ id.page_url }}" class="btn btn-default btn-xs">{_ view _}</a>
                     <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default btn-xs">{_ edit _}</a>
                 </span>
