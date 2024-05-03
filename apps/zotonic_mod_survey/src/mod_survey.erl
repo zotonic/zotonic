@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2023 Marc Worrell
+%% @copyright 2010-2024 Marc Worrell
 %% @doc Survey module. Define surveys and generic forms and let people fill them in.
 %% @end
 
-%% Copyright 2010-2023 Marc Worrell
+%% Copyright 2010-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -238,13 +238,40 @@ observe_export_resource_data(#export_resource_data{}, _Context) ->
     undefined.
 
 %% @doc Check access to the survey answers.
-observe_acl_is_allowed(#acl_is_allowed{action=view_result, object=#acl_survey{id=SurveyId, answer_id=AnswerId}}, Context) ->
+observe_acl_is_allowed(#acl_is_allowed{
+        action = view_result,
+        object = #acl_survey{
+            id = SurveyId,
+            answer_id = AnswerId
+        }}, Context) ->
     z_acl:rsc_editable(SurveyId, Context) orelse m_survey:is_answer_user(AnswerId, Context);
-observe_acl_is_allowed(#acl_is_allowed{action=update_result, object=#acl_survey{id=SurveyId, answer_id=AnswerId}}, Context) ->
-    z_acl:rsc_editable(SurveyId, Context) orelse (z_convert:to_integer(m_rsc:p_no_acl(SurveyId, <<"survey_multiple">>, Context)) =:= 2
-                                                  andalso m_survey:is_answer_user(AnswerId, Context));
-observe_acl_is_allowed(#acl_is_allowed{action=delete_result, object=#acl_survey{id=SurveyId}}, Context) ->
+observe_acl_is_allowed(#acl_is_allowed{
+        action = update_result,
+        object = #acl_survey{
+            id = SurveyId,
+            answer_id = AnswerId
+        }}, Context) ->
+    z_acl:rsc_editable(SurveyId, Context)
+    orelse (        z_convert:to_integer(m_rsc:p_no_acl(SurveyId, <<"survey_multiple">>, Context)) =:= 2
+            andalso m_survey:is_answer_user(AnswerId, Context));
+observe_acl_is_allowed(#acl_is_allowed{
+        action = delete_result,
+        object = #acl_survey{ id = SurveyId }}, Context) ->
     z_acl:rsc_editable(SurveyId, Context);
+observe_acl_is_allowed(#acl_is_allowed{
+    action = Action,
+    object = #acl_mqtt{
+        topic = [ <<"user">>, UserId, <<"survey-submission">>, SurveyId | _ ]
+    }}, Context) when Action =:= subscribe; Action =:= publish ->
+    CurrentUser = z_acl:user(Context),
+    UserId1 = m_rsc:rid(UserId, Context),
+    SurveyId1 = m_rsc:rid(SurveyId, Context),
+    if
+        UserId1 =:= CurrentUser ->
+            z_acl:rsc_visible(SurveyId1, Context);
+        true ->
+            z_acl:rsc_editable(SurveyId1, Context)
+    end;
 observe_acl_is_allowed(#acl_is_allowed{}, _Context) ->
     undefined.
 
