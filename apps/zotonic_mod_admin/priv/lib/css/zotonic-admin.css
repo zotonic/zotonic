@@ -141,8 +141,7 @@ body.noframe > .admin-container {
 }
 
 .admin-word-break, .thumbnail h5, .thumbnail h6, table.do_adminLinkedTable .admin-list-thumb > span, table.do_adminLinkedTable th, table.do_adminLinkedTable td, .admin-header h2 {
-  word-break: break-all;
-  word-break: break-word;
+  word-break: auto-phrase;
   hyphens: auto;
 }
 
@@ -947,11 +946,6 @@ div.modal .modal-footer .pull-left {
   height: auto;
 }
 
-/* Fix for Safari 17.4.1 on macOS */
-.navbar-nav li {
-  white-space: nowrap;
-}
-
 .navbar.navbar-branded {
   min-height: 50px;
   height: 50px;
@@ -1239,6 +1233,7 @@ table.do_adminLinkedTable td a.view-link:hover {
 table.do_adminLinkedTable .buttons {
   margin-top: -2px;
   margin-bottom: -2px;
+  word-break: none !important;
 }
 table.do_adminLinkedTable h5, table.do_adminLinkedTable p {
   margin: 0;

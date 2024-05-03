@@ -126,10 +126,8 @@ body.noframe > .admin-container {
 }
 
 .admin-word-break {
-    word-break: break-all;
-
-    // Non standard for webkit
-    word-break: break-word;
+    // word-break: break-all; --- This triggers a layout bug in Safari 17.4.1
+    word-break: auto-phrase;
     hyphens: auto;
 }
 

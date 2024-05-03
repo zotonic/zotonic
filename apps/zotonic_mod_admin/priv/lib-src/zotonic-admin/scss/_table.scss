@@ -59,6 +59,7 @@ table.do_adminLinkedTable {
     .buttons {
         margin-top: -2px;
         margin-bottom: -2px;
+        word-break: none !important;
     }
     
     h5, p {
