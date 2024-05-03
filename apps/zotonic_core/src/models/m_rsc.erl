@@ -54,6 +54,7 @@
     exists/2,
 
     is_visible/2, is_editable/2, is_deletable/2, is_linkable/2,
+    is_published_date/2,
     is_me/2,
     is_cat/3,
     is_a/2,
