@@ -127,12 +127,7 @@ table.do_adminLinkedTable td,
 table.do_adminLinkedTable .admin-list-thumb > span,
 .thumbnails .thumbnail h5,
 .thumbnails .thumbnail h6 {
-  -ms-word-break: break-all;
-  word-break: break-all;
-  word-break: break-word;
-  -webkit-hyphens: auto;
-  -moz-hyphens: auto;
-  -ms-hyphens: auto;
+  word-break: auto-phrase;
   hyphens: auto;
 }
 p .z-btn-help {
@@ -890,10 +885,6 @@ div.modal .modal-footer .pull-left {
 }
 #menu-editor .widget-header {
   height: auto;
-}
-/* Fix for Safari 17.4.1 on macOS */
-.navbar-nav li {
-  white-space: nowrap;
 }
 .navbar.navbar-branded {
   min-height: 50px;
