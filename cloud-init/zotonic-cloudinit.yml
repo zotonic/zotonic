@@ -39,6 +39,7 @@ packages:
   - file
   - imagemagick
   - ffmpeg
+  - xvfb
   - wkhtmltopdf
 
 runcmd:
