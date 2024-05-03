@@ -32,7 +32,6 @@
 
 search(Query, Context) ->
     Terms = maps:get(<<"q">>, Query, []),
-    ?DEBUG(Terms),
     {Where, Args} = lists:foldl(
         fun
             (#{ <<"term">> := F, <<"value">> := V }, Acc) ->
