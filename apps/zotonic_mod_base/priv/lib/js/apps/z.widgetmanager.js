@@ -54,6 +54,10 @@ limitations under the License.
                             defaultsName: defaultsName
                         });
                     }
+                    else
+                    {
+                        console?.warn("Missing ui function for widget", functionName, element);
+                    }
                 }
             }
         }
