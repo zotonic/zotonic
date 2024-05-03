@@ -127,12 +127,7 @@ table.do_adminLinkedTable td,
 table.do_adminLinkedTable .admin-list-thumb > span,
 .thumbnails .thumbnail h5,
 .thumbnails .thumbnail h6 {
-  -ms-word-break: break-all;
-  word-break: break-all;
-  word-break: break-word;
-  -webkit-hyphens: auto;
-  -moz-hyphens: auto;
-  -ms-hyphens: auto;
+  word-break: auto-phrase;
   hyphens: auto;
 }
 p .z-btn-help {
