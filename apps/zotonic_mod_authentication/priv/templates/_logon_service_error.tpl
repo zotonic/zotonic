@@ -113,6 +113,16 @@
                     %}
                 </p>
             </div>
+        {% elseif qerror == "disabled_user" %}
+            <div class="container">
+                <h1>{_ Disabled account _}</h1>
+
+                <p class="alert alert-warning">
+                    {% trans "Your account on {site} is disabled."
+                             site=m.site.title
+                    %}
+                </p>
+            </div>
         {% else %}
             <div class="container">
                 <h1>{_ Sorry _}</h1>

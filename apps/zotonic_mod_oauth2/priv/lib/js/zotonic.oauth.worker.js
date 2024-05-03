@@ -162,6 +162,7 @@ model.present = function(data) {
     // - on 'denied' or 'cancel' status: silently close the window
     // - on error: display an error message (template)
     if (data.is_auth_confirm) {
+        const error_message = (data.payload.message ?? data.payload.error);
         if (data.payload.status == 'ok') {
             switch (data.payload.result.result) {
                 case "token":
@@ -230,7 +231,7 @@ model.present = function(data) {
                     model.status = "confirming";
                     break;
             }
-        } else if (data.payload.message == 'passcode') {
+        } else if (error_message == 'passcode') {
             // Auth ok, wrong 2FA passcode entered for matching account
             self.publish(
                 "model/ui/render-template/oauth-status",
@@ -244,7 +245,7 @@ model.present = function(data) {
                     }
                 });
             model.status = "confirming";
-        } else if (data.payload.message == 'denied') {
+        } else if (error_message == 'denied') {
             // Auth failed, remote denied. Close the window or redirect.
             if (data.payload.url) {
                 self.publish("model/location/post/redirect", {
@@ -253,7 +254,7 @@ model.present = function(data) {
             } else {
                 self.publish("model/window/post/close", { url: "/" });
             }
-        } else if (data.payload.message == 'cancel') {
+        } else if (error_message == 'cancel') {
             // Auth failed, user canceled. Close the window or redirect.
             if (data.payload.url) {
                 self.publish("model/location/post/redirect", {
@@ -270,7 +271,7 @@ model.present = function(data) {
                     topic: "bridge/origin/model/template/get/render/_logon_service_error.tpl",
                     dedup: true,
                     data: {
-                        error: data.payload.message
+                        error: error_message
                     }
                 });
             model.status = "error";
