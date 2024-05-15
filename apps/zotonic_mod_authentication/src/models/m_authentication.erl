@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017-2023 Marc Worrell
+%% @copyright 2017-2024 Marc Worrell
 %% @doc Model for mod_authentication
 %% @end
 
-%% Copyright 2017-2023 Marc Worrell
+%% Copyright 2017-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@
     m_get/3,
     m_post/3,
 
+    acceptable_password/2,
     is_valid_password/2,
     is_powned/1,
 
@@ -152,6 +153,26 @@ m_post([ <<"send-verification-message">> ], #{ payload := Payload }, Context) wh
 m_post(Vs, _Msg, _Context) ->
     ?LOG_INFO("Unknown ~p post: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
+
+%% @doc Check if the password matches the criteria of this site.
+-spec acceptable_password(Password, Context) -> ok | {error, Reason} when
+    Password :: binary(),
+    Context :: z:context(),
+    Reason :: tooshort | dataleak.
+acceptable_password(Password, Context) ->
+    case m_authentication:is_valid_password(Password, Context) of
+        true ->
+            case not m_config:get_boolean(mod_authentication, password_disable_powned, Context)
+                andalso m_authentication:is_powned(Password)
+            of
+                true ->
+                    {error, dataleak};
+                false ->
+                    ok
+            end;
+        false ->
+            {error, tooshort}
+    end.
 
 
 %% @doc Check if the password matches the criteria of the minimum length

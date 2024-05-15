@@ -421,7 +421,15 @@ change_1(UserId, Username, Password, NewPassword, Passcode, Context) ->
             { #{ status => error, error => need_passcode }, Context };
         {error, passcode} ->
             { #{ status => error, error => passcode }, Context };
-        {error, _} ->
+        {error, Reason} ->
+            ?LOG_WARNING(#{
+                in => zotonic_mod_authentication,
+                text => <<"Password change request with password mismatch">>,
+                result => error,
+                reason => Reason,
+                user_id => UserId,
+                username => Username
+            }),
             { #{ status => error, error => pw }, Context }
     end.
 
@@ -485,7 +493,7 @@ reset_1(UserId, Username, Password, Passcode, Context) ->
     },
     case auth_postcheck(UserId, QArgs, Context) of
         ok ->
-            case check_password(Password, Context) of
+            case m_authentication:acceptable_password(Password, Context) of
                 ok ->
                     case m_identity:set_username_pw(UserId, Username, Password, z_acl:sudo(Context)) of
                         ok ->
@@ -515,20 +523,6 @@ reset_1(UserId, Username, Password, Passcode, Context) ->
             {error, error}
     end.
 
-check_password(Password, Context) ->
-    case m_authentication:is_valid_password(Password, Context) of
-        true ->
-            case not m_config:get_boolean(mod_authentication, password_disable_powned, Context)
-                andalso m_authentication:is_powned(Password)
-            of
-                true ->
-                    {error, dataleak};
-                false ->
-                    ok
-            end;
-        false ->
-            {error, tooshort}
-    end.
 
 %% @doc Return information about the current user and request language/timezone
 -spec status( map(), z:context() ) -> { map(), z:context() }.
