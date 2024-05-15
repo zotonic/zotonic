@@ -149,7 +149,13 @@ m_post([ <<"send-verification-message">> ], #{ payload := Payload }, Context) wh
             end;
         _ -> {error, missing_token}
     end;
-
+m_post([ <<"acceptable-password">> ], #{ payload := Payload }, Context) when is_map(Payload) ->
+    case Payload of
+        #{ <<"password">> := Password } when is_binary(Password) ->
+            acceptable_password(Password, Context);
+        _ ->
+            {error, missing_password}
+    end;
 m_post(Vs, _Msg, _Context) ->
     ?LOG_INFO("Unknown ~p post: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
