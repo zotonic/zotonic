@@ -31,7 +31,11 @@
     {% endif %}
 
     {% if m.admin_identity.password_regex %}
-        {% validate id="new_password" type={format pattern=m.admin_identity.password_regex failure_message=_"This password does not meet the security requirements"} %}
+        {% validate id="new_password"
+                    type={format pattern=m.admin_identity.password_regex
+                                 failure_message=_"This password does not meet the security requirements"}
+                    type={length minimum=m.authentication.password_min_length}
+        %}
     {% else %}
         {% validate id="new_password" type={length minimum=m.authentication.password_min_length} %}
     {% endif %}

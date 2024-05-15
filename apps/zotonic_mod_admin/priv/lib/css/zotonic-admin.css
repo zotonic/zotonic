@@ -941,6 +941,11 @@ div.modal .modal-footer {
 div.modal .modal-footer .pull-left {
   margin-left: 0;
 }
+div.modal .modal-footer.sticky-bottom {
+  position: sticky;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.9);
+}
 
 #menu-editor .widget-header {
   height: auto;

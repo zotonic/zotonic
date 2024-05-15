@@ -53,6 +53,10 @@ model.present = function(data) {
             function(msg) { actions.authUserId(msg.payload); });
 
         self.subscribe(
+            "model/auth/event/auth-change-result",
+            function(msg) { actions.authChangeResult(msg.payload); });
+
+        self.subscribe(
             "model/auth-ui/post/form/reminder",
             function(msg) { actions.reminderForm(msg.payload); });
 
@@ -225,17 +229,18 @@ model.present = function(data) {
         }
     }
 
+    if (data.is_change_done && model.status == 'change_wait') {
+        model.is_error = false;
+        model.is_expired = false;
+        model.logon_view = 'change_done';
+        model.status = 'updated';
+    }
+
     if (data.confirm) {
         model.logon_view = "confirm";
         model.username = data.username;
         model.options = data.options || {};
         model.authuser = data.authuser;
-    }
-
-    if (data.auth_user_id && model.status == 'change_wait') {
-        model.is_expired = false;
-        model.logon_view = 'change_done';
-        model.status = 'updated';
     }
 
     state.render(model) ;
@@ -480,6 +485,20 @@ actions.authError = function(data) {
 
 actions.authUserId = function(data) {
     model.present({ auth_user_id: data });
+};
+
+actions.authChangeResult = function(data) {
+    if (data.status == "ok") {
+        model.present({
+            is_change_done: true
+        });
+    } else {
+        model.present({
+            is_error: true,
+            error: data.error,
+            options: {}
+        });
+    }
 };
 
 actions.resetCodeCheck = function(data) {

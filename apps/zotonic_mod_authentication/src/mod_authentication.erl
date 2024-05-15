@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2022 Marc Worrell
+%% @copyright 2010-2024 Marc Worrell
 %% @doc Authentication and identification of users.
+%% @end
 
-%% Copyright 2010-2022 Marc Worrell
+%% Copyright 2010-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -120,13 +121,16 @@ observe_logon_submit(#logon_submit{
             } = Payload
         }, Context) when is_binary(Username), is_binary(Password) ->
     case m_identity:check_username_pw(Username, Password, Payload, Context) of
+        {ok, 1} ->
+            {ok, 1};
         {ok, UserId} ->
-            case Password of
-                <<>> ->
-                    %% If empty password existed in identity table, prompt for a new password.
-                    {expired, UserId};
-                _ ->
-                    {ok, UserId}
+            case m_authentication:is_valid_password(Password, Context) of
+                true ->
+                    {ok, UserId};
+                false ->
+                    % If empty or invalid password existed in identity
+                    % table then prompt for a new password.
+                    {expired, UserId}
             end;
         {error, {expired, UserId}} ->
             {expired, UserId};
@@ -250,43 +254,49 @@ observe_auth_validated(#auth_validated{} = Auth, Context) ->
 maybe_add_identity_logon(Auth, Context) ->
     case auth_identity(Auth, Context) of
         undefined ->
-            UserEmails = auth_match_email(Auth, Context),
-            {UserIds, Emails} = lists:unzip(UserEmails),
-            case lists:usort(UserIds) of
-                [] ->
+            VerifiedUserEmails = auth_match_email(Auth, true, Context),
+            UnverifiedUserEmails = auth_match_email(Auth, false, Context),
+            {VerifiedUserIds, VerifiedEmails} = lists:unzip(VerifiedUserEmails),
+            {UnVerifiedUserIds, UnVerifiedEmails} = lists:unzip(UnverifiedUserEmails),
+            case {lists:usort(VerifiedUserIds), lists:usort(UnVerifiedUserIds)} of
+                {[], []} ->
+                    % The SSO supplied email addresses do not match any locally verified
+                    % email address.
                     maybe_signup(Auth, Context);
-                [1|_] ->
+                {[1|_], _} ->
                     % Never add an external identity to the admin user during log on.
                     {error, duplicate};
-                [UserId] when Auth#auth_validated.is_signup_confirm ->
+                {_, [1|_]} ->
+                    {error, duplicate};
+                {[UserId], _} when Auth#auth_validated.is_signup_confirm ->
                     % Local user where the user has confirmed their identity by
                     % logging in into their account.
                     {ok, _} = insert_identity(UserId, Auth, Context),
                     {ok, UserId};
-                %
-                % ENABLE THIS CODE IFF WE CAN BE COMPLETELY SURE THAT
-                % THE EMAIL ADDRESS HAD BEEN VERFIED SECURELY BY THE
-                % REMOTE SERVICE.
-                %
-                % [UserId] when not Auth#auth_validated.is_signup_confirm ->
-                %     % Local user with matching verified email identity.
-                %     % Check if 2FA is enabled for local user.
-                %     case z_notifier:first(#auth_postcheck{id = UserId, query_args = #{}}, Context) of
-                %         {error, need_passcode} ->
-                %             {error, {need_passcode, UserId}};
-                %         undefined ->
-                %             {error, {logon_confirm, UserId, hd(Emails)}}
-                %     end;
-                %
-                % END OF OPTIONAL CODE
-                %
-                [UserId] when not Auth#auth_validated.is_signup_confirm ->
-                    % Email address matches a known verified email address here - allow to
-                    % send a confirmation code to the first matching email address.
-                    {error, {logon_confirm, UserId, hd(Emails)}};
-                _Multiple  ->
+                {[], [UserId]} when Auth#auth_validated.is_signup_confirm ->
+                    {ok, _} = insert_identity(UserId, Auth, Context),
+                    {ok, UserId};
+                {[UserId], _} when not Auth#auth_validated.is_signup_confirm ->
+                    % Local user with matching verified email identity.
+                    case z_notifier:first(#auth_postcheck{ id = UserId, query_args = #{} }, Context) of
+                        {error, need_passcode} ->
+                            % Local 2FA enabled - let the user enter their code
+                            {error, {need_passcode, UserId}};
+                        undefined ->
+                            % As both SSO and local email addresses are confirmed AND there
+                            % is no local 2FA enabled, add SSO identities and allow direct logon.
+                            {ok, _} = insert_identity(UserId, Auth, Context),
+                            {ok, UserId}
+                    end;
+                {[], [UserId]} when not Auth#auth_validated.is_signup_confirm ->
+                    % As the external email address is not verified, the user has to log on
+                    % using their local username and password.
+                    {error, {logon_confirm, UserId, hd(UnVerifiedEmails)}};
+                {_, []}  ->
                     % Ambiguous - multiple matching accounts
-                    {error, {multiple_email, hd(Emails)}}
+                    {error, {multiple_email, hd(VerifiedEmails)}};
+                {[], _}  ->
+                    {error, {multiple_email, hd(UnVerifiedEmails)}}
             end;
         Ps when is_list(Ps) ->
             update_identity(Auth, Ps, Context)
@@ -300,10 +310,10 @@ maybe_add_identity_connect(CurrUserId, Auth, Context) ->
             {ok, CurrUserId};
         Ps ->
             {rsc_id, IdnRscId} = proplists:lookup(rsc_id, Ps),
-            case IdnRscId of
-                CurrUserId ->
+            if
+                IdnRscId =:= CurrUserId ->
                     {ok, CurrUserId};
-                _UserId ->
+                true ->
                     {error, duplicate}
             end
     end.
@@ -343,33 +353,21 @@ maybe_signup(Auth, Context) ->
             {error, {duplicate_email, Email}}
     end.
 
--spec auth_match_email(#auth_validated{}, Context) -> list( {UserId, Email} ) when
+-spec auth_match_email(#auth_validated{}, IsVerified, Context) -> list( {UserId, Email} ) when
+    IsVerified :: boolean(),
     Context :: z:context(),
     UserId :: m_rsc:resource_id(),
     Email :: binary().
-auth_match_email(#auth_validated{ identities = Identities }, Context) ->
-    VerifiedEmails = lists:filtermap(
+auth_match_email(#auth_validated{ identities = Identities }, IsVerified, Context) ->
+    Emails = lists:filtermap(
         fun
-            (#{ type := <<"email">>, key := E, is_verified := true }) ->
+            (#{ type := <<"email">>, key := E, is_verified := IsIdnVerified }) when IsIdnVerified =:= IsVerified ->
                 {true, m_identity:normalize_key(email, E)};
             (_) ->
                 false
         end,
         Identities),
-    UnverifiedEmails = lists:filtermap(
-        fun
-            (#{ type := <<"email">>, key := E, is_verified := false }) ->
-                {true, m_identity:normalize_key(email, E)};
-            (_) ->
-                false
-        end,
-        Identities),
-    case find_verified_email_idns(VerifiedEmails, Context) of
-        [] ->
-            find_verified_email_idns(UnverifiedEmails, Context);
-        Verified ->
-            Verified
-    end.
+    find_verified_email_idns(Emails, Context).
 
 %% Find all user ids with a verified email address matching the given email addresses.
 find_verified_email_idns(Emails, Context) ->

@@ -25,6 +25,9 @@
     m_get/3,
     m_post/3,
 
+    is_valid_password/2,
+    is_powned/1,
+
     send_reminder/2,
     set_reminder_secret/2,
 
@@ -150,6 +153,44 @@ m_post(Vs, _Msg, _Context) ->
     ?LOG_INFO("Unknown ~p post: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
+
+%% @doc Check if the password matches the criteria of the minimum length
+%% and the (optional) password regexp.
+is_valid_password(Password, Context) ->
+    PasswordMinLength = z_convert:to_integer(m_config:get_value(mod_authentication, password_min_length, 8, Context)),
+    if
+        size(Password) < PasswordMinLength ->
+            false;
+        true ->
+            case z_convert:to_binary(m_config:get_value(mod_admin_identity, password_regex, Context)) of
+                <<>> ->
+                    true;
+                RegExp ->
+                    case re:run(Password, RegExp) of
+                        nomatch -> false;
+                        {match, _} -> true
+                    end
+            end
+    end.
+
+%% @doc Check is a password has been registerd with the service at https://haveibeenpwned.com
+%% They keep a list of passwords, any match is reported.
+is_powned(Password) ->
+    <<Pre:5/binary, Post/binary>>  = z_string:to_upper(z_utils:hex_sha(Password)),
+    Url = <<"https://api.pwnedpasswords.com/range/", Pre/binary>>,
+    case z_url_fetch:fetch(Url, []) of
+        {ok, {_Url, _Hs, _Sz, Body}} ->
+            case binary:match(Body, <<Post/binary, ":">>) of
+                {_, _} -> true;
+                nomatch -> false
+            end;
+        {error, {404, _Url, _Hs, _Sz, _Body}} ->
+            false;
+        {error, {Code, _Url, _Hs, _Sz, _Body}} ->
+            {error, Code};
+        {error, _} = Error ->
+            Error
+    end.
 
 handle_auth_confirm(Auth, Url, Context) ->
     Auth1 = Auth#auth_validated{ is_signup_confirm = true },

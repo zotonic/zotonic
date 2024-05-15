@@ -19,9 +19,15 @@ div.modal {
     }
     .modal-footer {
         font-size: 0;
-        
+
         .pull-left {
             margin-left: 0;
+        }
+
+        &.sticky-bottom {
+             position: sticky;
+             bottom: 0;
+             background-color: rgba(255, 255, 255, 0.9);
         }
     }
 }

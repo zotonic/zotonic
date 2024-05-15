@@ -381,13 +381,18 @@ change(#{
                 Username ->
                     case auth_precheck(Username, Context) of
                         ok ->
-                            PasswordMinLength = z_convert:to_integer(m_config:get_value(mod_authentication, password_min_length, 8, Context)),
-
-                            case size(Password) of
-                                N when N < PasswordMinLength ->
-                                    { #{ status => error, error => tooshort }, Context };
-                                _ ->
-                                    change_1(UserId, Username, Password, NewPassword, Passcode, Context)
+                            case m_authentication:is_valid_password(NewPassword, Context) of
+                                true ->
+                                    case not m_config:get_boolean(mod_authentication, password_disable_powned, Context)
+                                        andalso m_authentication:is_powned(NewPassword)
+                                    of
+                                        true ->
+                                            { #{ status => error, error => dataleak }, Context };
+                                        false ->
+                                            change_1(UserId, Username, Password, NewPassword, Passcode, Context)
+                                    end;
+                                false ->
+                                    { #{ status => error, error => tooshort }, Context }
                             end;
                         {error, ratelimit} ->
                             { #{ status => error, error => ratelimit }, Context };
@@ -403,18 +408,21 @@ change(_Payload, Context) ->
         message => <<"Missing one of: password, password_reset, passcode">>
     }, Context }.
 
-
 change_1(UserId, Username, Password, NewPassword, Passcode, Context) ->
-    Payload = #{
+    LogonPayload = #{
         <<"username">> => Username,
         <<"password">> => Password,
         <<"passcode">> => Passcode
     },
-    case z_notifier:first(#logon_submit{ payload = Payload }, Context) of
-        {ok, UserId} ->
+    case z_notifier:first(#logon_submit{ payload = LogonPayload }, Context) of
+        {OK, UserId} when OK =:= ok; OK =:= expired ->
             case reset_1(UserId, Username, NewPassword, Passcode, Context) of
                 ok ->
-                    logon_1({ok, UserId}, Payload, Context);
+                    delete_reminder_secret(UserId, Context),
+                    Options = z_context:get(auth_options, Context, #{}),
+                    Context1 = z_acl:logon(UserId, Context),
+                    Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options, Context1),
+                    { #{ status => ok }, Context2 };
                 {error, Reason} ->
                     { #{ status => error, error => Reason }, Context }
             end;
@@ -424,7 +432,7 @@ change_1(UserId, Username, Password, NewPassword, Passcode, Context) ->
             { #{ status => error, error => need_passcode }, Context };
         {error, passcode} ->
             { #{ status => error, error => passcode }, Context };
-        {ok, _} ->
+        {error, _} ->
             { #{ status => error, error => pw }, Context }
     end.
 
