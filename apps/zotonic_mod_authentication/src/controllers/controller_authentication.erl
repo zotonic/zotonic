@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019-2021 Marc Worrell
+%% @copyright 2019-2024 Marc Worrell
 %% @doc Handle HTTP authentication of users.
+%% @end
 
-%% Copyright 2019-2021 Marc Worrell
+%% Copyright 2019-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -381,19 +382,7 @@ change(#{
                 Username ->
                     case auth_precheck(Username, Context) of
                         ok ->
-                            case m_authentication:is_valid_password(NewPassword, Context) of
-                                true ->
-                                    case not m_config:get_boolean(mod_authentication, password_disable_powned, Context)
-                                        andalso m_authentication:is_powned(NewPassword)
-                                    of
-                                        true ->
-                                            { #{ status => error, error => dataleak }, Context };
-                                        false ->
-                                            change_1(UserId, Username, Password, NewPassword, Passcode, Context)
-                                    end;
-                                false ->
-                                    { #{ status => error, error => tooshort }, Context }
-                            end;
+                            change_1(UserId, Username, Password, NewPassword, Passcode, Context);
                         {error, ratelimit} ->
                             { #{ status => error, error => ratelimit }, Context };
                         _ ->
@@ -496,15 +485,20 @@ reset_1(UserId, Username, Password, Passcode, Context) ->
     },
     case auth_postcheck(UserId, QArgs, Context) of
         ok ->
-            case m_identity:set_username_pw(UserId, Username, Password, z_acl:sudo(Context)) of
+            case check_password(Password, Context) of
                 ok ->
-                    ContextLoggedon = z_acl:logon(UserId, Context),
-                    delete_reminder_secret(UserId, ContextLoggedon),
-                    ok;
-                {error, password_match} ->
-                    {error, password_change_match};
-                {error, _} ->
-                    {error, error}
+                    case m_identity:set_username_pw(UserId, Username, Password, z_acl:sudo(Context)) of
+                        ok ->
+                            ContextLoggedon = z_acl:logon(UserId, Context),
+                            delete_reminder_secret(UserId, ContextLoggedon),
+                            ok;
+                        {error, password_match} ->
+                            {error, password_change_match};
+                        {error, _} ->
+                            {error, error}
+                    end;
+                {error, _} = Error ->
+                    Error
             end;
         {error, need_passcode} ->
             {error, need_passcode};
@@ -519,6 +513,21 @@ reset_1(UserId, Username, Password, Passcode, Context) ->
             {error, passcode};
         _Error ->
             {error, error}
+    end.
+
+check_password(Password, Context) ->
+    case m_authentication:is_valid_password(Password, Context) of
+        true ->
+            case not m_config:get_boolean(mod_authentication, password_disable_powned, Context)
+                andalso m_authentication:is_powned(Password)
+            of
+                true ->
+                    {error, dataleak};
+                false ->
+                    ok
+            end;
+        false ->
+            {error, tooshort}
     end.
 
 %% @doc Return information about the current user and request language/timezone
