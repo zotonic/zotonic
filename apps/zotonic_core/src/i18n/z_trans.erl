@@ -2,7 +2,7 @@
 %% @copyright 2009-2023 Marc Worrell
 %% @doc Translate english sentences into other languages, following
 %% the GNU gettext principle.
-%% @enddoc
+%% @end
 
 %% Copyright 2009-2023 Marc Worrell
 %%

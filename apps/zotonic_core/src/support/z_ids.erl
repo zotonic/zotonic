@@ -91,11 +91,11 @@ password() ->
 -spec random_id(charset(), Length::integer()) -> binary().
 %% @doc Get a random identifier of the specified length, consisting of
 %% characters from the specified set:
-%% - 'az'      [a-z]      : lower case characters only.
-%% - 'az09'    [a-z0-9]   : lower case characters and numbers only.
-%% - 'azAZ09'  [a-zA-Z0-9]: lower and upper case characters and numbers.
-%% - '09'      [0-9]      : numbers only.
-%% - 'special' [!#$%&()*+/;:<>=?@]: special characters for passwords.
+%% - 'az'      ```[a-z]'''       : lower case characters only.
+%% - 'az09'    ```[a-z0-9]'''    : lower case characters and numbers only.
+%% - 'azAZ09'  ```[a-zA-Z0-9]''' : lower and upper case characters and numbers.
+%% - '09'      ```[0-9]'''       : numbers only.
+%% - 'special' ```[!#$%&()*+/;:<>=?@]''' : special characters for passwords.
 random_id('az', Len) ->
     make_lower_id(Len);
 random_id('az09', Len) ->
