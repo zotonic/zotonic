@@ -26,36 +26,22 @@ show_signup_password2
     {% endif %}
 
     {% if show_signup_password %}
-        {% with m.authentication.password_min_length as min_length %}
-            <div class="form-group" id="signup_password1">
-                <label for="password1" class="control-label">{_ Password _}</label>
-                <input class="form-control" id="password1" name="password1" type="password" value=""
-                       required
-                       autocomplete="new-password"
-                       autocapitalize="off"
-                       autocorrect="off">
-                {% if m.admin_identity.password_regex %}
-                    {% validate id="password1"
-                        type={presence failure_message=_"Enter a password"}
-                        type={format
-                            pattern=m.admin_identity.password_regex
-                            failure_message=_"This password does not meet the security requirements"
-                        }
-                        only_on_blur
-                    %}
-                {% else %}
-                    {% validate id="password1"
-                        type={presence failure_message=_"Enter a password"}
-                        type={
-                            length minimum=min_length
-                            too_short_message=_"Your password is too short." ++ " " ++ _"Minimum characters: " ++ min_length
-                        }
-                        only_on_blur
-                    %}
-                    <p class="help-block">{_ Minimum characters: _} {{ min_length }}</p>
-                {% endif %}
-            </div>
-        {% endwith %}
+        <div class="form-group" id="signup_password1">
+            <label for="password1" class="control-label">{_ Password _}</label>
+            <input class="form-control" id="password1" name="password1" type="password" value=""
+                   required
+                   minlength="{{ m.authentication.password_min_length }}"
+                   autocomplete="new-password"
+                   autocapitalize="off"
+                   autocorrect="off">
+            {% validate id="password1"
+                type={presence failure_message=_"Enter a password"}
+                type={acceptable_password
+                    failure_message=_"This password does not meet the security requirements"
+                }
+                only_on_blur
+            %}
+        </div>
     {% endif %}
 
     {% if show_signup_password2 %}

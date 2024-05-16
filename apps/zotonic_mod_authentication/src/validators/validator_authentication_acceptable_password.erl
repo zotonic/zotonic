@@ -46,6 +46,7 @@ event(#postback{message={validate, _Args}, trigger=TriggerId}, Context) ->
         ok -> true;
         {error, _} -> false
     end,
+    ?DEBUG(IsAcceptable),
     z_render:add_script(iolist_to_binary([
         "z_async_validation_result(",
             "'", TriggerId, "',",
