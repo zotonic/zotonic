@@ -1,4 +1,4 @@
-<p>
+<p class="text-danger">
     {_ The two-factor authentication passcode did not match. Please try again. _}
 </p>
 

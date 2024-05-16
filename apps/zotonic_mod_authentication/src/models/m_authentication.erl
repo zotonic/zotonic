@@ -48,6 +48,8 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
+-define(DEFAULT_PASSWORD_MIN_LENGTH, 8).
+
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ <<"authenticate">>, <<"password">> | Rest ], #{ payload := Payload }, Context) when is_map(Payload) ->
     case auth_tokens(Payload, Context) of
@@ -56,8 +58,8 @@ m_get([ <<"authenticate">>, <<"password">> | Rest ], #{ payload := Payload }, Co
     end;
 m_get([ <<"password_min_length">> | Rest ], _Msg, Context) ->
     Len = case m_config:get_value(mod_authentication, password_min_length, Context) of
-        undefined -> 8;
-        <<>> -> 8;
+        undefined -> ?DEFAULT_PASSWORD_MIN_LENGTH;
+        <<>> -> ?DEFAULT_PASSWORD_MIN_LENGTH;
         N -> z_convert:to_integer(N)
     end,
     {ok, {Len, Rest}};
@@ -184,7 +186,8 @@ acceptable_password(Password, Context) ->
 %% @doc Check if the password matches the criteria of the minimum length
 %% and the (optional) password regexp.
 is_valid_password(Password, Context) ->
-    PasswordMinLength = z_convert:to_integer(m_config:get_value(mod_authentication, password_min_length, 8, Context)),
+    PasswordMinLength = z_convert:to_integer(
+        m_config:get_value(mod_authentication, password_min_length, ?DEFAULT_PASSWORD_MIN_LENGTH, Context)),
     if
         size(Password) < PasswordMinLength ->
             false;
