@@ -1640,8 +1640,9 @@ ensure_schema(Site, Options) ->
     close_connection(DbConnection),
     Result.
 
-drop_schema(Context) ->
-    Options = z_db_pool:get_database_options(Context),
+drop_schema(#context{} = Context) ->
+    drop_schema(z_db_pool:get_database_options(Context));
+drop_schema(Options) when is_list(Options) ->
     Schema = proplists:get_value(dbschema, Options),
     Database = proplists:get_value(dbdatabase, Options),
     case open_connection(Database, Options) of
