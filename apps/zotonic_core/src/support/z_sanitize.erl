@@ -147,6 +147,9 @@ sanitize_element_opts({comment, <<"[", _/binary>>}, _Stack, _Opts, _Context) ->
 sanitize_element_opts({comment, <<"<![">>}, _Stack, _Opts, _Context) ->
     % End of conditional comment, as used for Outlook <!--[if !mso]><!-->...<!--<![endif]-->
     <<>>;
+sanitize_element_opts({comment, <<"StartFragment">>}, _Stack, _Opts, _Context) ->
+    % Inserted by Microsoft Word: <!--StartFragment-->
+    <<>>;
 sanitize_element_opts({comment, <<"EndFragment">>}, _Stack, _Opts, _Context) ->
     % Inserted by Microsoft Word: <!--EndFragment-->
     <<>>;
