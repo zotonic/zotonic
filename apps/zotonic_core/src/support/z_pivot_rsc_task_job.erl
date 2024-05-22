@@ -30,7 +30,7 @@
 -include_lib("zotonic.hrl").
 
 % Max number of times a task will retry on fatal exceptions
--define(MAX_TASK_ERROR_COUNT, 5).
+-define(MAX_TASK_ERROR_COUNT, 10).
 
 
 %% @doc Start a task queue sidejob.

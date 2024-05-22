@@ -163,7 +163,7 @@
 
                     <p class="help-block">
                         {_ Tasks are functions scheduled to run at a certain time. _}<br>
-                        {_ Tasks with errors will retry five times before being dropped. _}
+                        {_ Tasks with errors will retry 10 times before being dropped. _}
                     </p>
                 </div>
             </div>
