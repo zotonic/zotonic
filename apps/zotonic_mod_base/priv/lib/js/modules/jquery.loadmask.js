@@ -79,12 +79,7 @@
 			maskDiv.height(element.height() + parseInt(element.css("padding-top")) + parseInt(element.css("padding-bottom")));
 			maskDiv.width(element.width() + parseInt(element.css("padding-left")) + parseInt(element.css("padding-right")));
 		}
-		
-		//fix for z-index bug with selects in IE6
-		if(navigator.userAgent.toLowerCase().indexOf("msie 6") > -1){
-			element.find("select").addClass("masked-hidden");
-		}
-		
+				
 		element.append(maskDiv);
 		
 		if ($(element).progressbar != undefined) {
@@ -122,7 +117,6 @@
 		element.find(".loadmask-msg,.loadmask-progress,.loadmask").remove();
 		element.removeClass("masked");
 		element.removeClass("masked-relative");
-		element.find("select").removeClass("masked-hidden");
 	};
  
 })(jQuery);

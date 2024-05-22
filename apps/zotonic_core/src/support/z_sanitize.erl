@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014 Marc Worrell
+%% @copyright 2014-2024 Marc Worrell
 %% @doc Interface to z_html sanitizers, sets options and adds embed sanitization.
+%% @end
 
-%% Copyright 2014 Marc Worrell
+%% Copyright 2014-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -140,6 +141,12 @@ sanitize_element_opts({comment, <<" [", _/binary>> = Comment} = Element, _Stack,
         $] -> <<>>;
         _ -> Element
     end;
+sanitize_element_opts({comment, <<"[", _/binary>>}, _Stack, _Opts, _Context) ->
+    % Conditional comment, as used for Outlook <!--[if mso]>..<![endif]-->
+    <<>>;
+sanitize_element_opts({comment, <<"<![">>}, _Stack, _Opts, _Context) ->
+    % End of conditional comment, as used for Outlook <!--[if !mso]><!-->...<!--<![endif]-->
+    <<>>;
 sanitize_element_opts({comment, <<"StartFragment">>}, _Stack, _Opts, _Context) ->
     % Inserted by Microsoft Word: <!--StartFragment-->
     <<>>;

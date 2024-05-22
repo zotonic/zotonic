@@ -206,6 +206,7 @@ pivot_resource_1(Id, Lang, Context) ->
                     Gender = render_block(gender, Template, Vars, Context),
                     DateStart0 = to_datetime(render_block(date_start, Template, Vars, Context)),
                     DateEnd0 = to_datetime(render_block(date_end, Template, Vars, Context)),
+                    {DateStart1, DateEnd1} = pivot_date1(DateStart0, DateEnd0),
                     DateStartMonthDay = to_integer(render_block(date_start_month_day, Template, Vars, Context)),
                     DateEndMonthDay = to_integer(render_block(date_end_month_day, Template, Vars, Context)),
                     LocationLat = to_float(render_block(location_lat, Template, Vars, Context)),
@@ -215,8 +216,8 @@ pivot_resource_1(Id, Lang, Context) ->
                     IsAllDay = z_convert:to_bool(maps:get(<<"date_is_all_day">>, RscProps, false)),
                     Tz = maps:get(<<"tz">>, RscProps, undefined),
                     ContextTz = z_context:set_tz(Tz, Context),
-                    DateStart = tz_shift_all_day(IsAllDay, DateStart0, ContextTz),
-                    DateEnd = tz_shift_all_day(IsAllDay, DateEnd0, ContextTz),
+                    DateStart = tz_shift_all_day(IsAllDay, DateStart1, ContextTz),
+                    DateEnd = tz_shift_all_day(IsAllDay, DateEnd1, ContextTz),
 
                     % Make psql tsv texts from the A..D blocks
                     StemmerLanguage = stemmer_language(Context),

@@ -9,7 +9,7 @@
             <h3 class="panel-title">{_ Add or checkout a new site _}</h3>
         </div>
         <div class="panel-body">
-            {% wire id=#addsite 
+            {% wire id=#addsite
                     type="submit"
                     postback=`addsite`
                     delegate=`mod_zotonic_site_management`
@@ -166,7 +166,7 @@
                             <div class="col-sm-7">
                                 <input class="form-control" type="text" id="{{ #dbuser }}" name="dbuser" value="" placeholder="{{ m.config.zotonic.dbuser.value|escape }}" />
                                 {% validate id=#dbuser name="dbuser"
-                                    type={format pattern="^[A-Za-z0-9_]*$" failure_message=_"Please use only a…z and 0…9 characters."}
+                                    type={format pattern="^[A-Za-z0-9_.]*$" failure_message=_"Please use only a…z and 0…9 and . characters."}
                                 %}
                             </div>
                         </div>

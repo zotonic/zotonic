@@ -75,7 +75,7 @@ entity(<<";", R/binary>>, Acc) ->
 entity(<<>>, Acc) ->
     {Acc, <<>>};
 entity(<<C, _/binary>> = R, Acc) when C =< $0 ->
-    {R, Acc};
+    {Acc, R};
 entity(<<C/utf8, R/binary>>, Acc) ->
     entity(R, <<Acc/binary, C/utf8>>).
 

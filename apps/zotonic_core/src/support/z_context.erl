@@ -705,6 +705,7 @@ add_q(KVs, Context) when is_map(KVs) ->
 %% @doc Delete all values of one or more request parameter arguments.
 -spec delete_q(Keys, Context) -> NewContext when
     Keys :: Key | [ Key ],
+    Key :: binary() | atom() | string(),
     Context :: z:context(),
     NewContext :: z:context().
 delete_q([C|_] = Key, Context) when is_integer(C) ->

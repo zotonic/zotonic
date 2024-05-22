@@ -592,10 +592,13 @@ insert_file_mime_ok(File, RscProps, MediaProps, Options, Context) ->
     replace_file_mime_ok(File, insert_rsc, RscProps1, MediaProps, Options, Context).
 
 filename_to_title(undefined) -> <<>>;
+filename_to_title("") -> <<>>;
+filename_to_title(<<>>) -> <<>>;
 filename_to_title(Filename) ->
     F1 = z_convert:to_binary(Filename),
     F2 = filename:basename(F1),
-    F3 = lists:last(binary:split(F2, [ <<"/">>, <<"\\">> ], [global,trim])),
+    F3 = lists:last(
+    binary:split(F2, [ <<"/">>, <<"\\">> ], [global,trim])),
     filename:rootname(F3).
 
 %% @doc Replaces a medium file, when the file is not in archive then a copy is
