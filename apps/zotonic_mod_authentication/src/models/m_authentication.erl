@@ -223,7 +223,7 @@ is_powned(Password) ->
     end.
 
 handle_auth_confirm(Auth, Url, Context) ->
-    Auth1 = Auth#auth_validated{ is_signup_confirm = true },
+    Auth1 = Auth#auth_validated{ is_signup_confirmed = true },
     case z_notifier:first(Auth1, Context) of
         undefined ->
             ?LOG_WARNING(#{

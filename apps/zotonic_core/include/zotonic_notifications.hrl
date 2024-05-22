@@ -692,7 +692,7 @@
     props = #{} :: m_rsc:props(),
     identities = [] :: list( map() ),
     is_connect = false :: boolean(),
-    is_signup_confirm = false :: boolean()
+    is_signup_confirmed = false :: boolean()
 }).
 
 %% @doc Update the given (accumulator) authentication options with the request options.

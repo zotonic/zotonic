@@ -55,7 +55,7 @@ init(Context) ->
 
 event(#submit{ message={signup_confirm, Props} }, Context) ->
     {auth, Auth} = proplists:get_value(auth, Props),
-    Auth1 = Auth#auth_validated{ is_signup_confirm = true },
+    Auth1 = Auth#auth_validated{ is_signup_confirmed = true },
     case z_notifier:first(Auth1, Context) of
         undefined ->
             ?LOG_ERROR(#{
@@ -268,15 +268,15 @@ maybe_add_identity_logon(Auth, Context) ->
                     {error, duplicate};
                 {_, [1|_]} ->
                     {error, duplicate};
-                {[UserId], _} when Auth#auth_validated.is_signup_confirm ->
+                {[UserId], _} when Auth#auth_validated.is_signup_confirmed ->
                     % Local user where the user has confirmed their identity by
                     % logging in into their account.
                     {ok, _} = insert_identity(UserId, Auth, Context),
                     {ok, UserId};
-                {[], [UserId]} when Auth#auth_validated.is_signup_confirm ->
+                {[], [UserId]} when Auth#auth_validated.is_signup_confirmed ->
                     {ok, _} = insert_identity(UserId, Auth, Context),
                     {ok, UserId};
-                {[UserId], _} when not Auth#auth_validated.is_signup_confirm ->
+                {[UserId], _} when not Auth#auth_validated.is_signup_confirmed ->
                     % Local user with matching verified email identity.
                     case z_notifier:first(#auth_postcheck{ id = UserId, query_args = #{} }, Context) of
                         {error, need_passcode} ->
@@ -288,7 +288,7 @@ maybe_add_identity_logon(Auth, Context) ->
                             {ok, _} = insert_identity(UserId, Auth, Context),
                             {ok, UserId}
                     end;
-                {[], [UserId]} when not Auth#auth_validated.is_signup_confirm ->
+                {[], [UserId]} when not Auth#auth_validated.is_signup_confirmed ->
                     % As the external email address is not verified, the user has to log on
                     % using their local username and password.
                     {error, {logon_confirm, UserId, hd(UnVerifiedEmails)}};
@@ -413,7 +413,7 @@ auth_match_primary_email(#auth_validated{ identities = Identities }, Context) ->
 
 
 try_signup(Auth, Context) ->
-    case not Auth#auth_validated.is_signup_confirm
+    case not Auth#auth_validated.is_signup_confirmed
         andalso m_config:get_boolean(mod_authentication, is_signup_confirm, Context)
     of
         true ->
