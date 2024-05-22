@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019 Marc Worrell
+%% @copyright 2019-2024 Marc Worrell
 %% @doc Load and manage site configuration files.
 %% @end
 
-%% Copyright 2019 Marc Worrell
+%% Copyright 2019-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@
 
 -spec site_config(Site) -> {ok, Config} | {error, Reason} when
     Site :: atom(),
-    Config :: proplists:proplist(),
+    Config :: map(),
     Reason :: term().
 site_config(Site) when is_atom(Site) ->
     case app_is_site(Site) of
@@ -59,8 +59,11 @@ site_config(Site) when is_atom(Site) ->
 %% @doc Check if the Erlang application is a Zotonic site. A Zotonic site has a site
 %% configuration file in its priv directory.
 -spec app_is_site( atom() ) -> boolean().
-app_is_site( App ) ->
-    filelib:is_regular( site_config_file( App ) ).
+app_is_site(App) ->
+    case site_config_file(App) of
+        {error, _} -> false;
+        Filename -> filelib:is_regular(Filename)
+    end.
 
 %% @doc Return the main configuration file for a site
 -spec site_config_file( atom() ) -> file:filename_all() | {error, bad_name}.
