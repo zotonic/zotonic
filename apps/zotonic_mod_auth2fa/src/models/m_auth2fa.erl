@@ -54,9 +54,9 @@ m_get([ <<"totp_image_url">>, RequestKey | Rest ], _Msg, Context) ->
         RequestKey ->
             reset_request_key(Context),
             case totp_image_url(z_acl:user(Context), Context) of
-                {ok, {Url, Secret}} ->
+                {ok, {ImageDataUrl, Secret}} ->
                     Result = #{
-                        url => Url,
+                        url => ImageDataUrl,
                         secret => z_auth2fa_base32:encode(Secret)
                     },
                     {ok, {Result, Rest}};
@@ -65,15 +65,11 @@ m_get([ <<"totp_image_url">>, RequestKey | Rest ], _Msg, Context) ->
             end
     end;
 m_get([ <<"new_totp_image_url">> | Rest ], _Msg, Context) ->
-    R = case new_totp_image_url(Context) of
-        {ok, {Url, Secret}} ->
-            #{
-                url => Url,
-                secret => z_auth2fa_base32:encode(Secret)
-            };
-        {error, _} ->
-            undefined
-    end,
+    {ok, {ImageDataUrl, Secret}} = new_totp_image_url(Context),
+    R = #{
+        url => ImageDataUrl,
+        secret => z_auth2fa_base32:encode(Secret)
+    },
     {ok, {R, Rest}};
 m_get([ User, <<"is_totp_enabled">> | Rest ], _Msg, Context) ->
     UserId = m_rsc:rid(User, Context),
@@ -232,7 +228,7 @@ totp_image_url(UserId, Context) when is_integer(UserId) ->
     end.
 
 %% @doc Generate a new totp code and return the barcode, do not save it.
--spec new_totp_image_url( z:context() ) -> {ok, {binary(), binary()}} | {error, eacces}.
+-spec new_totp_image_url( z:context() ) -> {ok, {binary(), binary()}}.
 new_totp_image_url(Context) ->
     Issuer = z_convert:to_binary( z_context:hostname(Context) ),
     Title = z_convert:to_binary(m_site:get(title, Context)),
