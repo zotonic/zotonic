@@ -395,7 +395,7 @@ delete_username(RscId, Context) when is_integer(RscId) ->
     case is_allowed_set_username(RscId, Context)  of
         true ->
             z_db:q(
-                "delete from identity where rsc_id = $1 and type = 'username_pw'",
+                "delete from identity where rsc_id = $1 and type = any('username_pw', 'auth_autologon_secret')",
                 [RscId],
                 Context
             ),
