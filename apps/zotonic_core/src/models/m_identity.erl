@@ -274,12 +274,17 @@ filter_idns(Idns) ->
     RscId :: m_rsc:resource(),
     Context :: z:context().
 is_user(Id, Context) ->
+    IdentityTypes = z_notifier:foldl(
+        #auth_identity_types{ type = user },
+        [ username_pw ],
+        Context),
+    IdentityTypes1 = [ z_convert:to_binary(Idn) || Idn <- lists:usort(IdentityTypes) ],
     case z_db:q1("
         select count(*)
         from identity
         where rsc_id = $1
-          and type in ('username_pw', 'openid')",
-        [ m_rsc:rid(Id, Context) ],
+          and type = any($1)",
+        [ m_rsc:rid(Id, Context), IdentityTypes1 ],
         Context)
     of
         0 -> false;

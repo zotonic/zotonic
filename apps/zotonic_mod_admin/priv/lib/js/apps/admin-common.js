@@ -154,4 +154,4 @@ function z_admin_ensure_block_names() {
             }
         }
     });
-}
+};

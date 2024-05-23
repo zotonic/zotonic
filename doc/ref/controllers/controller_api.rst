@@ -11,9 +11,9 @@ patterns ``/api/:topic``.
 
 The topic can refer to a model. In this case the topic pattern is one of:
 
- * ``/api/mymodel/get/foo/bar`` maps to ``m_mymodel:m_get([ <<"foo">>, <<"bar">> ], Msg, Context)``
- * ``/api/mymodel/post/foo/bar`` maps to ``m_mymodel:m_delete([ <<"foo">>, <<"bar">> ], Msg, Context)``
- * ``/api/mymodel/delete/foo/bar`` maps to ``m_mymodel:m_delete([ <<"foo">>, <<"bar">> ], Msg, Context)``
+ * ``/api/model/mymodel/get/foo/bar`` maps to ``m_mymodel:m_get([ <<"foo">>, <<"bar">> ], Msg, Context)``
+ * ``/api/model/mymodel/post/foo/bar`` maps to ``m_mymodel:m_delete([ <<"foo">>, <<"bar">> ], Msg, Context)``
+ * ``/api/model/mymodel/delete/foo/bar`` maps to ``m_mymodel:m_delete([ <<"foo">>, <<"bar">> ], Msg, Context)``
 
 In all case the ``Msg`` is an MQTT message map, with the ``payload`` set to the body of the received
 request.  In case of a GET or DELETE the payload is set to a map of the query arguments.

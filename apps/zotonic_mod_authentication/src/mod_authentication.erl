@@ -242,9 +242,9 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
 %% @doc Handle a validation against an (external) authentication service.
 %%      If identity is known: log on the associated user and set auth cookies.
 %%      If unknown, add identity to current user or signup a new user
-observe_auth_validated(#auth_validated{} = Auth, Context) ->
+observe_auth_validated(#auth_validated{ is_connect = IsConnect } = Auth, Context) ->
     Context1 = z_context:set(auth_method, Auth#auth_validated.service, Context),
-    case Auth#auth_validated.is_connect of
+    case IsConnect of
         true ->
             maybe_add_identity_connect(z_acl:user(Context1), Auth, Context1);
         false ->
@@ -427,11 +427,8 @@ try_signup(Auth, Context) ->
             },
             case z_notifier:first(Signup, Context) of
                 {ok, NewUserId} ->
-                    case auth_identity(Auth, Context) of
-                        undefined -> insert_identity(NewUserId, Auth, Context);
-                        _ -> nop
-                    end,
-                    _ = m_identity:ensure_username_pw(NewUserId, z_acl:sudo(Context)),
+                    maybe_add_auth_identity(Auth, NewUserId, Context),
+                    maybe_ensure_username_pw(Auth, NewUserId, Context),
                     {ok, NewUserId};
                 {error, _Reason} = Error ->
                     Error;
@@ -447,6 +444,22 @@ try_signup(Auth, Context) ->
                     undefined
             end
     end.
+
+%% @doc Add the identity of the authentication provider to the user. Add the identity iff the
+%% identity is not already connected to any resource.
+maybe_add_auth_identity(Auth, UserId, Context) ->
+    case auth_identity(Auth, Context) of
+        undefined -> insert_identity(UserId, Auth, z_acl:sudo(Context));
+        _ -> ok
+    end.
+
+%% @doc Ensure a username_pw identity when signing up, unless the identity service explicitly asks to not
+%% add the username_pw identity.
+%% @todo Delete the username_pw identity if the service asks not to add it?
+maybe_ensure_username_pw(#auth_validated{ ensure_username_pw = true, is_connect = false }, UserId, Context) ->
+    m_identity:ensure_username_pw(UserId, z_acl:sudo(Context));
+maybe_ensure_username_pw(#auth_validated{}, _UserId, _Context) ->
+    ok.
 
 email_identities(Identities) ->
     lists:filtermap(
