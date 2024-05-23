@@ -283,7 +283,7 @@ is_user(Id, Context) ->
         select count(*)
         from identity
         where rsc_id = $1
-          and type = any($1)",
+          and type = any($2)",
         [ m_rsc:rid(Id, Context), IdentityTypes1 ],
         Context)
     of
