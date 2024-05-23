@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2020-2023 Marc Worrell
+%% @copyright 2020-2024 Marc Worrell
 %% @doc OAuth2 model for authentication using remote OAuth2 services.
 %% @end
 
-%% Copyright 2020-2023 Marc Worrell
+%% Copyright 2020-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -164,23 +164,35 @@ user_data({ok, Auth}, InitialQArgs, SId, Context) ->
             }),
             {error, auth_user_undefined};
         {ok, UserId} ->
-            % Generate one time token to login for this user
-            case z_authentication_tokens:encode_onetime_token(UserId, SId, Context) of
-                {ok, Token} ->
-                    {ok, #{
-                        result => token,
-                        url => url(<<"p">>, InitialQArgs),
-                        token => Token
-                    }};
-                {error, Reason} = Err ->
-                    ?LOG_WARNING(#{
-                        text => <<"Error return for user">>,
+            case m_rsc:is_published_date(UserId, Context) of
+                true ->
+                    % Generate one time token to login for this user
+                    case z_authentication_tokens:encode_onetime_token(UserId, SId, Context) of
+                        {ok, Token} ->
+                            {ok, #{
+                                result => token,
+                                url => url(<<"p">>, InitialQArgs),
+                                token => Token
+                            }};
+                        {error, Reason} = Err ->
+                            ?LOG_WARNING(#{
+                                text => <<"Error return for user">>,
+                                in => zotonic_mod_oauth2,
+                                result => error,
+                                reason => Reason,
+                                props => Auth
+                            }),
+                            Err
+                    end;
+                false ->
+                    ?LOG_INFO(#{
+                        text => <<"User is not published">>,
                         in => zotonic_mod_oauth2,
+                        user_id => UserId,
                         result => error,
-                        reason => Reason,
-                        props => Auth
+                        reason => disabled_user
                     }),
-                    Err
+                    {error, disabled_user}
             end;
         {error, signup_confirm} ->
             % We need a confirmation from the user before we add a new account
@@ -249,6 +261,14 @@ user_data({ok, Auth}, InitialQArgs, SId, Context) ->
                 reason => multiple_email
             }),
             {error, multiple_email};
+        {error, email_required} ->
+            ?LOG_INFO(#{
+                text => <<"Log in without an email address">>,
+                in => zotonic_mod_oauth2,
+                result => error,
+                reason => email_required
+            }),
+            {error, email_required};
         {error, Reason} ->
             ?LOG_WARNING(#{
                 text => <<"Error return for user">>,
@@ -261,6 +281,14 @@ user_data({ok, Auth}, InitialQArgs, SId, Context) ->
     end;
 user_data({error, unexpected_user}, _InitialQArgs, _SId, _Context) ->
     {error, unexpected_user};
+user_data({error, email_required}, _InitialQArgs, _SId, _Context) ->
+    ?LOG_INFO(#{
+        text => <<"Log in without an email address">>,
+        in => zotonic_mod_oauth2,
+        result => error,
+        reason => email_required
+    }),
+    {error, email_required};
 user_data(_UserError, _InitialQArgs, _SId, _Context) ->
     {error, service_user_data}.
 

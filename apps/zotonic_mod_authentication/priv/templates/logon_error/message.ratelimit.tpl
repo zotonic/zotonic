@@ -1,4 +1,4 @@
-<p>
+<p class="text-danger">
     {_ Too many retries. _}
     {_ Please try again in _}
     {% with m.ratelimit.timeout as seconds %}

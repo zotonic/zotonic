@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019-2021 Marc Worrell
+%% @copyright 2019-2024 Marc Worrell
 %% @doc Handle HTTP authentication of users.
+%% @end
 
-%% Copyright 2019-2021 Marc Worrell
+%% Copyright 2019-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -381,14 +382,7 @@ change(#{
                 Username ->
                     case auth_precheck(Username, Context) of
                         ok ->
-                            PasswordMinLength = z_convert:to_integer(m_config:get_value(mod_authentication, password_min_length, 8, Context)),
-
-                            case size(Password) of
-                                N when N < PasswordMinLength ->
-                                    { #{ status => error, error => tooshort }, Context };
-                                _ ->
-                                    change_1(UserId, Username, Password, NewPassword, Passcode, Context)
-                            end;
+                            change_1(UserId, Username, Password, NewPassword, Passcode, Context);
                         {error, ratelimit} ->
                             { #{ status => error, error => ratelimit }, Context };
                         _ ->
@@ -403,18 +397,21 @@ change(_Payload, Context) ->
         message => <<"Missing one of: password, password_reset, passcode">>
     }, Context }.
 
-
 change_1(UserId, Username, Password, NewPassword, Passcode, Context) ->
-    Payload = #{
+    LogonPayload = #{
         <<"username">> => Username,
         <<"password">> => Password,
         <<"passcode">> => Passcode
     },
-    case z_notifier:first(#logon_submit{ payload = Payload }, Context) of
-        {ok, UserId} ->
+    case z_notifier:first(#logon_submit{ payload = LogonPayload }, Context) of
+        {OK, UserId} when OK =:= ok; OK =:= expired ->
             case reset_1(UserId, Username, NewPassword, Passcode, Context) of
                 ok ->
-                    logon_1({ok, UserId}, Payload, Context);
+                    delete_reminder_secret(UserId, Context),
+                    Options = z_context:get(auth_options, Context, #{}),
+                    Context1 = z_acl:logon(UserId, Context),
+                    Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options, Context1),
+                    { #{ status => ok }, Context2 };
                 {error, Reason} ->
                     { #{ status => error, error => Reason }, Context }
             end;
@@ -424,7 +421,15 @@ change_1(UserId, Username, Password, NewPassword, Passcode, Context) ->
             { #{ status => error, error => need_passcode }, Context };
         {error, passcode} ->
             { #{ status => error, error => passcode }, Context };
-        {ok, _} ->
+        {error, Reason} ->
+            ?LOG_WARNING(#{
+                in => zotonic_mod_authentication,
+                text => <<"Password change request with password mismatch">>,
+                result => error,
+                reason => Reason,
+                user_id => UserId,
+                username => Username
+            }),
             { #{ status => error, error => pw }, Context }
     end.
 
@@ -488,15 +493,20 @@ reset_1(UserId, Username, Password, Passcode, Context) ->
     },
     case auth_postcheck(UserId, QArgs, Context) of
         ok ->
-            case m_identity:set_username_pw(UserId, Username, Password, z_acl:sudo(Context)) of
+            case m_authentication:acceptable_password(Password, Context) of
                 ok ->
-                    ContextLoggedon = z_acl:logon(UserId, Context),
-                    delete_reminder_secret(UserId, ContextLoggedon),
-                    ok;
-                {error, password_match} ->
-                    {error, password_change_match};
-                {error, _} ->
-                    {error, error}
+                    case m_identity:set_username_pw(UserId, Username, Password, z_acl:sudo(Context)) of
+                        ok ->
+                            ContextLoggedon = z_acl:logon(UserId, Context),
+                            delete_reminder_secret(UserId, ContextLoggedon),
+                            ok;
+                        {error, password_match} ->
+                            {error, password_change_match};
+                        {error, _} ->
+                            {error, error}
+                    end;
+                {error, _} = Error ->
+                    Error
             end;
         {error, need_passcode} ->
             {error, need_passcode};
@@ -512,6 +522,7 @@ reset_1(UserId, Username, Password, Passcode, Context) ->
         _Error ->
             {error, error}
     end.
+
 
 %% @doc Return information about the current user and request language/timezone
 -spec status( map(), z:context() ) -> { map(), z:context() }.

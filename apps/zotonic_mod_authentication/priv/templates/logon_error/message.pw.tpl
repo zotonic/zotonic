@@ -1,4 +1,4 @@
-<p>
+<p class="text-danger">
     {_ Either the email or the password you entered is incorrect. Please try again. _}
 </p>
 

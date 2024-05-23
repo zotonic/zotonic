@@ -81,7 +81,7 @@
                                                   text=_"set username / password"
                                         %}
                                     {% endif %}
-                                    {% button class="btn btn-default btn-xs" text=_"edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
+                                    <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default btn-xs">{_ edit _}</a>
                                 </div>
                             </td>
                         </tr>

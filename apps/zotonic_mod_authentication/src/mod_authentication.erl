@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2022 Marc Worrell
+%% @copyright 2010-2024 Marc Worrell
 %% @doc Authentication and identification of users.
+%% @end
 
-%% Copyright 2010-2022 Marc Worrell
+%% Copyright 2010-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -54,7 +55,7 @@ init(Context) ->
 
 event(#submit{ message={signup_confirm, Props} }, Context) ->
     {auth, Auth} = proplists:get_value(auth, Props),
-    Auth1 = Auth#auth_validated{ is_signup_confirm = true },
+    Auth1 = Auth#auth_validated{ is_signup_confirmed = true },
     case z_notifier:first(Auth1, Context) of
         undefined ->
             ?LOG_ERROR(#{
@@ -120,13 +121,16 @@ observe_logon_submit(#logon_submit{
             } = Payload
         }, Context) when is_binary(Username), is_binary(Password) ->
     case m_identity:check_username_pw(Username, Password, Payload, Context) of
+        {ok, 1} ->
+            {ok, 1};
         {ok, UserId} ->
-            case Password of
-                <<>> ->
-                    %% If empty password existed in identity table, prompt for a new password.
-                    {expired, UserId};
-                _ ->
-                    {ok, UserId}
+            case m_authentication:is_valid_password(Password, Context) of
+                true ->
+                    {ok, UserId};
+                false ->
+                    % If empty or invalid password existed in identity
+                    % table then prompt for a new password.
+                    {expired, UserId}
             end;
         {error, {expired, UserId}} ->
             {expired, UserId};
@@ -238,9 +242,9 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
 %% @doc Handle a validation against an (external) authentication service.
 %%      If identity is known: log on the associated user and set auth cookies.
 %%      If unknown, add identity to current user or signup a new user
-observe_auth_validated(#auth_validated{} = Auth, Context) ->
+observe_auth_validated(#auth_validated{ is_connect = IsConnect } = Auth, Context) ->
     Context1 = z_context:set(auth_method, Auth#auth_validated.service, Context),
-    case Auth#auth_validated.is_connect of
+    case IsConnect of
         true ->
             maybe_add_identity_connect(z_acl:user(Context1), Auth, Context1);
         false ->
@@ -250,43 +254,49 @@ observe_auth_validated(#auth_validated{} = Auth, Context) ->
 maybe_add_identity_logon(Auth, Context) ->
     case auth_identity(Auth, Context) of
         undefined ->
-            UserEmails = auth_match_email(Auth, Context),
-            {UserIds, Emails} = lists:unzip(UserEmails),
-            case lists:usort(UserIds) of
-                [] ->
+            VerifiedUserEmails = auth_match_email(Auth, true, Context),
+            UnverifiedUserEmails = auth_match_email(Auth, false, Context),
+            {VerifiedUserIds, VerifiedEmails} = lists:unzip(VerifiedUserEmails),
+            {UnVerifiedUserIds, UnVerifiedEmails} = lists:unzip(UnverifiedUserEmails),
+            case {lists:usort(VerifiedUserIds), lists:usort(UnVerifiedUserIds)} of
+                {[], []} ->
+                    % The SSO supplied email addresses do not match any locally verified
+                    % email address.
                     maybe_signup(Auth, Context);
-                [1|_] ->
+                {[1|_], _} ->
                     % Never add an external identity to the admin user during log on.
                     {error, duplicate};
-                [UserId] when Auth#auth_validated.is_signup_confirm ->
+                {_, [1|_]} ->
+                    {error, duplicate};
+                {[UserId], _} when Auth#auth_validated.is_signup_confirmed ->
                     % Local user where the user has confirmed their identity by
                     % logging in into their account.
                     {ok, _} = insert_identity(UserId, Auth, Context),
                     {ok, UserId};
-                %
-                % ENABLE THIS CODE IFF WE CAN BE COMPLETELY SURE THAT
-                % THE EMAIL ADDRESS HAD BEEN VERFIED SECURELY BY THE
-                % REMOTE SERVICE.
-                %
-                % [UserId] when not Auth#auth_validated.is_signup_confirm ->
-                %     % Local user with matching verified email identity.
-                %     % Check if 2FA is enabled for local user.
-                %     case z_notifier:first(#auth_postcheck{id = UserId, query_args = #{}}, Context) of
-                %         {error, need_passcode} ->
-                %             {error, {need_passcode, UserId}};
-                %         undefined ->
-                %             {error, {logon_confirm, UserId, hd(Emails)}}
-                %     end;
-                %
-                % END OF OPTIONAL CODE
-                %
-                [UserId] when not Auth#auth_validated.is_signup_confirm ->
-                    % Email address matches a known verified email address here - allow to
-                    % send a confirmation code to the first matching email address.
-                    {error, {logon_confirm, UserId, hd(Emails)}};
-                _Multiple  ->
+                {[], [UserId]} when Auth#auth_validated.is_signup_confirmed ->
+                    {ok, _} = insert_identity(UserId, Auth, Context),
+                    {ok, UserId};
+                {[UserId], _} when not Auth#auth_validated.is_signup_confirmed ->
+                    % Local user with matching verified email identity.
+                    case z_notifier:first(#auth_postcheck{ id = UserId, query_args = #{} }, Context) of
+                        {error, need_passcode} ->
+                            % Local 2FA enabled - let the user enter their code
+                            {error, {need_passcode, UserId}};
+                        undefined ->
+                            % As both SSO and local email addresses are confirmed AND there
+                            % is no local 2FA enabled, add SSO identities and allow direct logon.
+                            {ok, _} = insert_identity(UserId, Auth, Context),
+                            {ok, UserId}
+                    end;
+                {[], [UserId]} when not Auth#auth_validated.is_signup_confirmed ->
+                    % As the external email address is not verified, the user has to log on
+                    % using their local username and password.
+                    {error, {logon_confirm, UserId, hd(UnVerifiedEmails)}};
+                {_, []}  ->
                     % Ambiguous - multiple matching accounts
-                    {error, {multiple_email, hd(Emails)}}
+                    {error, {multiple_email, hd(VerifiedEmails)}};
+                {[], _}  ->
+                    {error, {multiple_email, hd(UnVerifiedEmails)}}
             end;
         Ps when is_list(Ps) ->
             update_identity(Auth, Ps, Context)
@@ -300,10 +310,10 @@ maybe_add_identity_connect(CurrUserId, Auth, Context) ->
             {ok, CurrUserId};
         Ps ->
             {rsc_id, IdnRscId} = proplists:lookup(rsc_id, Ps),
-            case IdnRscId of
-                CurrUserId ->
+            if
+                IdnRscId =:= CurrUserId ->
                     {ok, CurrUserId};
-                _UserId ->
+                true ->
                     {error, duplicate}
             end
     end.
@@ -343,33 +353,21 @@ maybe_signup(Auth, Context) ->
             {error, {duplicate_email, Email}}
     end.
 
--spec auth_match_email(#auth_validated{}, Context) -> list( {UserId, Email} ) when
+-spec auth_match_email(#auth_validated{}, IsVerified, Context) -> list( {UserId, Email} ) when
+    IsVerified :: boolean(),
     Context :: z:context(),
     UserId :: m_rsc:resource_id(),
     Email :: binary().
-auth_match_email(#auth_validated{ identities = Identities }, Context) ->
-    VerifiedEmails = lists:filtermap(
+auth_match_email(#auth_validated{ identities = Identities }, IsVerified, Context) ->
+    Emails = lists:filtermap(
         fun
-            (#{ type := <<"email">>, key := E, is_verified := true }) ->
+            (#{ type := <<"email">>, key := E, is_verified := IsIdnVerified }) when IsIdnVerified =:= IsVerified ->
                 {true, m_identity:normalize_key(email, E)};
             (_) ->
                 false
         end,
         Identities),
-    UnverifiedEmails = lists:filtermap(
-        fun
-            (#{ type := <<"email">>, key := E, is_verified := false }) ->
-                {true, m_identity:normalize_key(email, E)};
-            (_) ->
-                false
-        end,
-        Identities),
-    case find_verified_email_idns(VerifiedEmails, Context) of
-        [] ->
-            find_verified_email_idns(UnverifiedEmails, Context);
-        Verified ->
-            Verified
-    end.
+    find_verified_email_idns(Emails, Context).
 
 %% Find all user ids with a verified email address matching the given email addresses.
 find_verified_email_idns(Emails, Context) ->
@@ -415,7 +413,7 @@ auth_match_primary_email(#auth_validated{ identities = Identities }, Context) ->
 
 
 try_signup(Auth, Context) ->
-    case not Auth#auth_validated.is_signup_confirm
+    case not Auth#auth_validated.is_signup_confirmed
         andalso m_config:get_boolean(mod_authentication, is_signup_confirm, Context)
     of
         true ->
@@ -429,11 +427,8 @@ try_signup(Auth, Context) ->
             },
             case z_notifier:first(Signup, Context) of
                 {ok, NewUserId} ->
-                    case auth_identity(Auth, Context) of
-                        undefined -> insert_identity(NewUserId, Auth, Context);
-                        _ -> nop
-                    end,
-                    _ = m_identity:ensure_username_pw(NewUserId, z_acl:sudo(Context)),
+                    maybe_add_auth_identity(Auth, NewUserId, Context),
+                    maybe_ensure_username_pw(Auth, NewUserId, Context),
                     {ok, NewUserId};
                 {error, _Reason} = Error ->
                     Error;
@@ -449,6 +444,22 @@ try_signup(Auth, Context) ->
                     undefined
             end
     end.
+
+%% @doc Add the identity of the authentication provider to the user. Add the identity iff the
+%% identity is not already connected to any resource.
+maybe_add_auth_identity(Auth, UserId, Context) ->
+    case auth_identity(Auth, Context) of
+        undefined -> insert_identity(UserId, Auth, z_acl:sudo(Context));
+        _ -> ok
+    end.
+
+%% @doc Ensure a username_pw identity when signing up, unless the identity service explicitly asks to not
+%% add the username_pw identity.
+%% @todo Delete the username_pw identity if the service asks not to add it?
+maybe_ensure_username_pw(#auth_validated{ ensure_username_pw = true, is_connect = false }, UserId, Context) ->
+    m_identity:ensure_username_pw(UserId, z_acl:sudo(Context));
+maybe_ensure_username_pw(#auth_validated{}, _UserId, _Context) ->
+    ok.
 
 email_identities(Identities) ->
     lists:filtermap(

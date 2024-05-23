@@ -691,8 +691,9 @@
     service_props = #{} :: map(),
     props = #{} :: m_rsc:props(),
     identities = [] :: list( map() ),
+    ensure_username_pw = true :: boolean(),
     is_connect = false :: boolean(),
-    is_signup_confirm = false :: boolean()
+    is_signup_confirmed = false :: boolean()
 }).
 
 %% @doc Update the given (accumulator) authentication options with the request options.
@@ -719,6 +720,15 @@
 %% Return: ``ok | {error, term()}``
 -record(auth_client_switch_user, {
         user_id :: m_rsc:resource_id()
+    }).
+
+%% @doc Return the list of identity types that allow somebody to logon and become an
+%% active user of the system. Defaults to [ username_pw ].  In the future more types
+%% can be requested, think of 'contact' - to be able to contact someone.
+%% Type: foldl
+%% Return: ``[ atom() ]``
+-record(auth_identity_types, {
+        type = user :: user
     }).
 
 %% @doc Called during different moments of the request.

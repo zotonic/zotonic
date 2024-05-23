@@ -5,7 +5,6 @@ logon.tpl // log on page
 |-- _logon_config.tpl // template and field configuration
 |   `-- _logon.tpl or _logon_modal.tpl // logon module
 |       `-- _logon_form.tpl
-|               `-- _logon_expired_form.tpl
 `-- logoff.tpl // log off page, redirects to q.p or homepage
 
 

@@ -23,6 +23,7 @@
                 <a href="#" id="password-use-generated" class="btn btn-xs btn-default">{_ Use this password _}</a>
                 {% wire id="password-use-generated"
                         action={set_value target="new_password" value=password}
+                        action={focus target="new_password"}
                 %}
                 <br>
                 {_ Leave empty to not change the password. _}
@@ -30,12 +31,12 @@
         </div>
     {% endif %}
 
-    {% if m.admin_identity.password_regex %}
-        {% validate id="new_password" type={format pattern=m.admin_identity.password_regex failure_message=_"This password does not meet the security requirements"} %}
-    {% else %}
-        {% validate id="new_password" type={length minimum=m.authentication.password_min_length} %}
-    {% endif %}
-
+    {% validate id="new_password"
+                type={acceptable_password
+                    message=_"This password does not meet the security requirements"
+                }
+                only_on_blur
+    %}
 {% endwith %}
 
 <div class="form-group">

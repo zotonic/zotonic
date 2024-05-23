@@ -16,4 +16,5 @@ Return:
     - name: ``union``
     - args: ``union``
     - offsetlimit: ``tuple``
+    - unknown: ``unknown``
     - search: ``union``

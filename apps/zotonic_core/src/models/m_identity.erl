@@ -26,6 +26,7 @@
     m_get/3,
 
     is_user/2,
+    user_types/1,
     get_username/1,
     get_username/2,
     get_user_info/1,
@@ -274,17 +275,29 @@ filter_idns(Idns) ->
     RscId :: m_rsc:resource(),
     Context :: z:context().
 is_user(Id, Context) ->
+    IdentityTypes = user_types(Context),
+    IdentityTypes1 = [ z_convert:to_binary(Idn) || Idn <- lists:usort(IdentityTypes) ],
     case z_db:q1("
         select count(*)
         from identity
         where rsc_id = $1
-          and type in ('username_pw', 'openid')",
-        [ m_rsc:rid(Id, Context) ],
+          and type = any($2)",
+        [ m_rsc:rid(Id, Context), IdentityTypes1 ],
         Context)
     of
         0 -> false;
         _ -> true
     end.
+
+%% @doc Return the identity types that define if a resource is a user.\
+-spec user_types(Context) -> [ Type ] when
+    Context :: z:context(),
+    Type :: atom().
+user_types(Context) ->
+    z_notifier:foldl(
+        #auth_identity_types{ type = user },
+        [ username_pw ],
+        Context).
 
 %% @doc Return the username of the current user
 -spec get_username(Context) -> Username | undefined when
@@ -390,7 +403,7 @@ delete_username(RscId, Context) when is_integer(RscId) ->
     case is_allowed_set_username(RscId, Context)  of
         true ->
             z_db:q(
-                "delete from identity where rsc_id = $1 and type = 'username_pw'",
+                "delete from identity where rsc_id = $1 and type = any('username_pw', 'auth_autologon_secret')",
                 [RscId],
                 Context
             ),
