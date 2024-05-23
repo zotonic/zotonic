@@ -26,6 +26,7 @@
     m_get/3,
 
     is_user/2,
+    user_types/1,
     get_username/1,
     get_username/2,
     get_user_info/1,
@@ -274,10 +275,7 @@ filter_idns(Idns) ->
     RscId :: m_rsc:resource(),
     Context :: z:context().
 is_user(Id, Context) ->
-    IdentityTypes = z_notifier:foldl(
-        #auth_identity_types{ type = user },
-        [ username_pw ],
-        Context),
+    IdentityTypes = user_types(Context),
     IdentityTypes1 = [ z_convert:to_binary(Idn) || Idn <- lists:usort(IdentityTypes) ],
     case z_db:q1("
         select count(*)
@@ -290,6 +288,16 @@ is_user(Id, Context) ->
         0 -> false;
         _ -> true
     end.
+
+%% @doc Return the identity types that define if a resource is a user.\
+-spec user_types(Context) -> [ Type ] when
+    Context :: z:context(),
+    Type :: atom().
+user_types(Context) ->
+    z_notifier:foldl(
+        #auth_identity_types{ type = user },
+        [ username_pw ],
+        Context).
 
 %% @doc Return the username of the current user
 -spec get_username(Context) -> Username | undefined when

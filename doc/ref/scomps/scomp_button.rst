@@ -67,6 +67,9 @@ Where TriggerId and TargetId are both the HTML id of the button.
 |type      |The type attribute of the      |type="submit"                  |
 |          |button.                        |                               |
 +----------+-------------------------------+-------------------------------+
+|tag       |The tag used for the button.   |tag="a"                        |
+|          |Defaults to 'button'.          |                               |
++----------+-------------------------------+-------------------------------+
 |title     |The title attribute of the     |title="click to submit"        |
 |          |button.                        |                               |
 +----------+-------------------------------+-------------------------------+

@@ -351,27 +351,32 @@ verify(IdnId, VerifyKey, Context) ->
             end
     end.
 
-
-search({users, []}, OffsetLimit, Context) ->
-    search({user, [{text,undefined},{users_only,true}]}, OffsetLimit, Context);
-search({users, [{users_only,UsersOnly}]}, OffsetLimit, Context) ->
-    search({user, [{text,undefined},{users_only,UsersOnly}]}, OffsetLimit, Context);
-search({users, [{text,Text}]}, OffsetLimit, Context) ->
-    search({user, [{text,Text},{user_only,true}]}, OffsetLimit, Context);
-search({users, [{text,QueryText}, {users_only, UsersOnly0}]}, _OffsetLimit, Context) ->
-    UsersOnly = z_convert:to_bool(UsersOnly0),
+search({users, QArgs}, _OffsetLimit, Context) ->
+    QueryText = proplists:get_value(text, QArgs, undefined),
+    UsersOnly = z_convert:to_bool(proplists:get_value(users_only, QArgs, true)),
     {TSJoin, Where, Args, Order} = case z_utils:is_empty(QueryText) of
                         true ->
-                            {[], [], [], "r.pivot_title"};
+                            {"", "", [], "r.pivot_title"};
                         false ->
                             {", plainto_tsquery($2, $1) query",
                              "query @@ r.pivot_tsv",
                              [QueryText, z_pivot_rsc:stemmer_language(Context)],
                              "ts_rank_cd(pivot_tsv, query, 32)"}
                      end,
-    IdnJoin = case UsersOnly of
-                true -> " join identity i on (r.id = i.rsc_id and i.type = 'username_pw') ";
-                false -> ""
+    {Where1, Args1} = case UsersOnly of
+                true ->
+                    Idns = m_identity:user_types(Context),
+                    {[
+                        case Where of
+                            "" -> "";
+                            _ -> [ Where, " and " ]
+                        end,
+                        " r.id in (select i.rsc_id from identity i where i.type = any($",
+                        integer_to_list(length(Args)+1),
+                        ")) "
+                    ], Args ++ [ Idns ]};
+                false ->
+                    {Where, Args}
               end,
     Cats = case UsersOnly of
                 true -> [];
@@ -379,10 +384,10 @@ search({users, [{text,QueryText}, {users_only, UsersOnly0}]}, _OffsetLimit, Cont
            end,
     #search_sql{
        select="r.id",
-       from="rsc r " ++ IdnJoin ++ TSJoin,
-       where=Where,
+       from="rsc r " ++ TSJoin,
+       where=Where1,
        order=Order,
-       args=Args,
+       args=Args1,
        cats=Cats,
        tables=[{rsc,"r"}]
       };
