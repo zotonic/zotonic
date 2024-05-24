@@ -12,20 +12,13 @@
                type="hidden"
                value="{{ totp.secret }}"
                name="code-new"
-               id="{{ #secret }}"
                style="text-align: center; border: none;">
-        <a class="btn btn-xs btn-default" id="{{ #btn }}">
+        <a class="btn btn-xs btn-default"
+           data-onclick-topic="model/clipboard/post/copy"
+           data-text="{{ totp.secret }}"
+        >
             <span class="fa fa-copy"></span> {_ Copy _}
         </a>
-        {% wire id=#btn
-                action={script
-                    script="
-                        document.getElementById('" ++ #secret ++ "').select();
-                        document.execCommand('copy');
-                    "
-                }
-                action={growl text=_"Copied to clipboard"}
-        %}
     </p>
 {% endwith %}
 </div>
