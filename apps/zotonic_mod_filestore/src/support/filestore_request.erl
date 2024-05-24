@@ -181,6 +181,8 @@ download_cb(_FD, stream_start) ->
     ok;
 download_cb(_FD, {headers, _}) ->
     ok;
+download_cb(_FD, {content_type, _}) ->
+    ok;
 download_cb(FD, Data) when is_binary(Data) ->
     file:write(FD, Data);
 download_cb(FD, eof) ->
