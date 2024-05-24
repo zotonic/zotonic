@@ -202,8 +202,9 @@ shorten_filename(Path) ->
 
 shorten_1(Root) ->
     Truncated = z_string:truncatechars(Root, 32),
+    Truncated2 = binary:replace(Truncated, [ <<"(">>, <<")">> ], <<"--">>, [ global ]),
     Hash = z_utils:hex_sha(Root),
-    <<Truncated/binary, $-, Hash/binary>>.
+    <<Truncated2/binary, $-, Hash/binary>>.
 
 is_defined(undefined) -> false;
 is_defined(<<>>) -> false;
