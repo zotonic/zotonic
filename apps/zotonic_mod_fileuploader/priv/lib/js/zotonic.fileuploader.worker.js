@@ -279,7 +279,12 @@ model.present = function(data) {
             if (r.failure_topic) {
                 self.publish(r.failure_topic, r.failure_msg);
             }
-        } else if (r.upload_count == 0 && r.wait_count == 0) {
+        // FIXME: Sometimes 'r.upload_count' never goes to zero.
+        //        It freezes in 1 and causes an infinite loop.
+        //        The 'r.progress_msg?.percentage === 100' is just a
+        //        workaround for the issue.
+        }  else if (r.progress_msg?.percentage === 100
+                    || (r.upload_count == 0 && r.wait_count == 0)) {
             // finished - publish result to ready topic
             if (r.ready_topic) {
                 let msg = r.ready_msg;
