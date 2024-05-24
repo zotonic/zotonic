@@ -185,10 +185,10 @@ model.present = function(data) {
             let reset = {
                 username: model.username,
                 secret: model.secret,
-                passcode: data.passcode,
                 password: data.password,
-                test_passcode: data.test_passcode,
+                passcode: data.passcode,
                 "code-new": data["code-new"],
+                test_passcode: data.test_passcode,
                 onauth: "#"
             };
             self.publish("model/auth/post/reset", reset);
@@ -213,11 +213,11 @@ model.present = function(data) {
     if (data.change) {
         if (data.is_password_equal) {
             let change = {
-                "code-new": data["code-new"],
-                passcode: data.passcode,
-                test_passcode: data.test_passcode,
                 password: data.password,
                 password_reset: data.password_reset,
+                passcode: data.passcode,
+                "code-new": data["code-new"],
+                test_passcode: data.test_passcode,
                 onauth: "#"
             };
             self.publish("model/auth/post/change", change);

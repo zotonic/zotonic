@@ -23,7 +23,7 @@
 -mod_title("Two-Factor authentication").
 -mod_description("Add two-factor authentication using TOTP").
 -mod_prio(400).
--mod_depends([authentication]).
+-mod_depends([authentication, server_storage]).
 
 -export([
     event/2,
@@ -67,37 +67,44 @@ event(#postback{ message={request_2fa, _Args} }, Context) ->
                 true ->
                     Context;
                 false ->
-                    z_render:wire({confirm, [
-                            {title, ?__("Add two-factor authentication", Context)},
-                            {text, ?__(
-                                "You can add two-factor authentication to your account."
-                                "<br>You will need an App on your Phone to scan the QR code and generate passcodes."
-                                "<br>Examples are <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> "
-                                "and <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>",
-                                Context)},
-                            {ok, ?__("Enable 2FA", Context)},
-                            {postback, {dialog_2fa, []}},
-                            {delegate, ?MODULE}
-                        ]}, Context)
+                    m_auth2fa:set_totp_requested(Context),
+                    {ok, {ImageUrl, PassCode}} = m_auth2fa:new_totp_image_url(Context),
+                    Vars = [
+                        {backdrop, static},
+                        {passcode, PassCode},
+                        {image_url, ImageUrl}
+                    ],
+                    z_render:dialog(
+                        ?__("Add two-factor authentication", Context),
+                        "_dialog_auth2fa_passcode.tpl",
+                        Vars,
+                        Context)
             end;
         false ->
             Context
     end;
-event(#postback{ message={dialog_2fa, _Args} }, Context) ->
-    case z_acl:user(Context) of
-        undefined ->
-            Context;
-        UserId ->
-            RequestKey = m_auth2fa:set_request_key(Context),
-            z_render:dialog(
-                ?__("Scan two-factor authentication passcode", Context),
-                "_dialog_auth2fa_passcode.tpl",
-                [
-                    {id, UserId},
-                    {backdrop, static},
-                    {request_key, RequestKey}
-                ],
-                Context)
+event(#submit{ message={auth2fa_set, Args} }, Context) ->
+    {id, Id} = proplists:lookup(id, Args),
+    {secret, Secret} = proplists:lookup(secret, Args),
+    UserId = z_acl:user(Context),
+    if
+        Id =:= UserId ->
+            Secret1 = z_auth2fa_base32:decode(Secret),
+            Code = z_context:get_q(<<"passcode">>, Context),
+            case m_auth2fa:is_valid_totp_test(Secret1, Code) of
+                true ->
+                    ok = m_auth2fa:totp_disable(UserId, Context),
+                    ok = m_auth2fa:totp_set(UserId, Secret1, Context),
+                    Context1 = z_render:dialog_close(Context),
+                    z_render:wire({alert, [
+                        {title, ?__("Success", Context1)},
+                        {text, ?__("Two-factor authentication has been enabled for your account.", Context1)}
+                    ]}, Context1);
+                false ->
+                    z_render:wire(proplists:get_all_values(onerror, Args), Context)
+            end;
+        true ->
+            z_render:growl(?__("Sorry, you are not allowed to set the 2FA.", Context), Context)
     end.
 
 

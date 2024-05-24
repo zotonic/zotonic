@@ -65,6 +65,7 @@
                         <input name="2fa_mode" type="radio" id="force2fa" value="3" {% if m.auth2fa.mode == 3 %}checked="checked"{% endif %} />
                         {_ Force two-factor authentication _}
                     </label>
+                    <p class="help-block">{_ The user will be prompted to set the two-factor authentication before being allowed to log in. _}</p>
                 </div>
             </div>
 

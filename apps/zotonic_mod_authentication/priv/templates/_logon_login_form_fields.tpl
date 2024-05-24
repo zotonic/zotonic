@@ -126,7 +126,7 @@
     {% endif %}
 
     {% if q.options.is_user_local %}
-        <div class="form-group">
+        <div class="form-group {% if is_show_passcode or is_set_passcode %}hidden{% endif %}">
             <label for="password" class="control-label">{_ Password _}</label>
             <input class="form-control" type="password" id="password" name="password" value="{{ q.password|escape }}"
                    required
