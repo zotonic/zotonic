@@ -1118,6 +1118,10 @@ send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context) 
                  (Failure =:= send orelse Failure =:= retries_exceeded),
                  (Reason =:= closed orelse Reason =:= timeout) ->
             send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts, Context);
+        {error, _Failure, {_FailureType, _Host, <<"554 TLS handshake failure", _/binary>>}}
+            when IsFallbackPlainText ->
+            % Seen with yahoo.com addresses and OTP 26
+            send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts, Context);
         {error, _} = Error ->
             Error;
         {error, _, _} = Error ->
