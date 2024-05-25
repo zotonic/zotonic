@@ -29,9 +29,9 @@ const PROGRESS_INTERVAL = 500;      // Every 500msec progress for a request
 
 var model = {
     is_subscribed: false,
-    files: [],
-    uploaders: 0,
-    requests: []
+    files: [],              // Files being uploaded
+    uploaders: 0,           // Number of uploaders busy uploading a single block from any file
+    requests: []            // Upload requests, each with one or more files
 };
 
 
@@ -162,16 +162,16 @@ model.present = function(data) {
                 total_size: 0,
                 uploaded_size: 0,
                 error_count: 0,
-                upload_count: 0,
-                wait_count: 0,
-                uploads: [],
+                upload_count: 0,    // Number of file uploads started on server and uploading
+                wait_count: 0,      // Number of file uploads awaiting response from server before starting
+                uploads: [],        // Files start are uploaded
                 start: Date.now(),
                 progress_published: 0
             };
             model.requests.push(req);
 
             for (let k = 0; k < data.upload.files.length; k++){
-                let f = data.upload.files[k];
+                const f = data.upload.files[k];
                 req.wait_count++;
                 req.total_size += f.file.size;
 
@@ -182,7 +182,7 @@ model.present = function(data) {
                         mime: f.file.type
                     }, { qos: 2 }
                 ).then(function(resp) {
-                    let max_error = MAX_ERROR_COUNT + Math.floor((f.file.size / UPLOAD_BLOCKSIZE) * MAX_ERROR_RATE);
+                    const max_error = MAX_ERROR_COUNT + Math.floor((f.file.size / UPLOAD_BLOCKSIZE) * MAX_ERROR_RATE);
                     let upload = {
                         start: Date.now(),
                         file: f.file,
@@ -242,12 +242,15 @@ model.present = function(data) {
     // Remove all files with failed req
     fs = [];
     for (let i = 0; i < model.files.length; i++) {
-        let f = model.files[i];
+        const f = model.files[i];
         if (f.req.error_count == 0) {
             fs.push(f);
         } else if (f.status && f.status.name) {
             // Tell server to remove this upload
             self.publish("bridge/origin/model/fileuploader/post/delete/"+f.status.name, {});
+            f.req.upload_count--;
+        } else {
+            f.req.upload_count--;
         }
     }
     model.files = fs;
@@ -255,7 +258,7 @@ model.present = function(data) {
     // Check all file uploads for status.is_complete
     fs = [];
     for (let i = 0; i < model.files.length; i++) {
-        let f = model.files[i];
+        const f = model.files[i];
         if (f.status.is_complete) {
             // console.log("Completed in ", Date.now() - f.start);
             f.req.uploads.push({
@@ -264,7 +267,7 @@ model.present = function(data) {
             });
             f.req.upload_count--;
         } else {
-            fs.push(model.files[i]);
+            fs.push(f);
         }
     }
     model.files = fs;
