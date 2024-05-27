@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell
-%%
+%% @copyright 2009-2024 Marc Worrell
 %% @doc This server will install the database when started. It will always return ignore to the supervisor.
 %% This server should be started after the database pool but before any database queries will be done.
+%% @end
 
-%% Copyright 2009-2021 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -317,6 +317,7 @@ upgrade(C, Database, Schema) ->
     ok = identity_expires(C, Database, Schema),
     ok = rsc_unfindable(C, Database, Schema),
     ok = rsc_pivot_log(C, Database, Schema),
+    ok = medium_size_bigint(C, Database, Schema),
     ok.
 
 
@@ -954,3 +955,13 @@ check_category_id_key(C, _Database, _Schema) ->
         "CREATE INDEX IF NOT EXISTS fki_rsc_category_id ON rsc (category_id)"
     ),
     ok.
+
+medium_size_bigint(C, Database, Schema) ->
+    case get_column_type(C, "medium", "size", Database, Schema) of
+        <<"bigint">> ->
+            ok;
+        _ ->
+            {ok,[],[]} = epgsql:squery(C, "alter table medium alter column size type bigint"),
+            ok
+    end.
+
