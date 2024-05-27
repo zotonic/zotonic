@@ -48,9 +48,18 @@ var startUploader = function(fileIndex) {
 
     if (f.failed.length > 0) {
         offset = f.failed.pop();
-    } else {
+        if (f.uploading.indexOf(offset) !== -1) {
+            f.failed.push(offset);
+            return;
+        }
+    } else if (f.offset < f.file.size) {
         offset = f.offset;
+        if (f.uploading.indexOf(offset) !== -1) {
+            return;
+        }
         f.offset += UPLOAD_BLOCKSIZE;
+    } else {
+        return;
     }
     model.uploaders++;
 
@@ -69,13 +78,13 @@ var startUploader = function(fileIndex) {
                 if (response.status == "ok") {
                     f.status = response.result;
                     f.req.uploaded_size += end - offset;
-                } else if (!isFileDeleted(fileIndex, f)) {
+                } else {
                     if (f.failed.indexOf(offset) == -1) {
                         f.failed.push(offset);
                     }
                     console.log("Fileuploader status error", response, f);
                 }
-            } else if (xhr.status != 0 && !isFileDeleted(fileIndex, f)) {
+            } else if (xhr.status != 0) {
                 if (f.failed.indexOf(offset) == -1) {
                     f.failed.push(offset);
                 }
@@ -89,33 +98,27 @@ var startUploader = function(fileIndex) {
     //     console.log(percent_complete, "%");
     // });
     xhr.addEventListener("error", function() {
-        if (!isFileDeleted(fileIndex, f)) {
-            if (f.failed.indexOf(offset) == -1) {
-                f.failed.push(offset);
-            }
-            f.error_count++;
-            console.log("Fileuploader xhr error", f);
+        if (f.failed.indexOf(offset) == -1) {
+            f.failed.push(offset);
         }
-    });
-    xhr.addEventListener("loadend", function() {
-        if (!isFileDeleted(fileIndex, f)) {
-            let upl = [];
-            for (let i=0; i<f.uploading.length; i++) {
-                if (f.uploading[i] != offset) {
-                    upl.push(f.uploading[i]);
-                }
-            }
-            f.uploading = upl;
-            self.publish("model/fileuploader/post/next", {});
-        }
-        model.uploaders--;
+        f.error_count++;
+        console.log("Fileuploader xhr error", offset, f);
     });
     xhr.addEventListener("abort", function() {
+        if (f.failed.indexOf(offset) == -1) {
+            f.failed.push(offset);
+        }
+        f.error_count++;
+        console.log("Fileuploader xhr abort", offset, f);
+    });
+    xhr.addEventListener("loadend", function() {
+        // console.log("loadend", offset);
+        f.uploading = f.uploading.filter(u => u !== offset);
+        self.publish("model/fileuploader/post/next", {});
         model.uploaders--;
     });
-    isFileDeleted(fileIndex, f)
-        ? xhr.abort()
-        : xhr.send(data);
+
+    xhr.send(data);
 }
 
 function isFileDeleted(fileIndex, f) {
@@ -164,7 +167,7 @@ model.present = function(data) {
                 error_count: 0,
                 upload_count: 0,    // Number of file uploads started on server and uploading
                 wait_count: 0,      // Number of file uploads awaiting response from server before starting
-                uploads: [],        // Files start are uploaded
+                uploads: [],        // Completed uploads
                 start: Date.now(),
                 progress_published: 0
             };
@@ -310,6 +313,7 @@ model.present = function(data) {
                 }
             }
         } else {
+            // Still busy uploading - publish progress and keep req
             if (r.progress_topic) {
                 let now = Date.now();
 
