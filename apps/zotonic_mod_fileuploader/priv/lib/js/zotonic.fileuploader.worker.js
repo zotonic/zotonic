@@ -248,7 +248,7 @@ model.present = function(data) {
         const f = model.files[i];
         if (f.req.error_count == 0) {
             fs.push(f);
-        } else if (f.status && f.status.name) {
+        } else if (f.status?.name) {
             // Tell server to remove this upload
             self.publish("bridge/origin/model/fileuploader/post/delete/"+f.status.name, {});
             f.req.upload_count--;
@@ -262,7 +262,7 @@ model.present = function(data) {
     fs = [];
     for (let i = 0; i < model.files.length; i++) {
         const f = model.files[i];
-        if (f.status.is_complete) {
+        if (f.status?.is_complete) {
             // console.log("Completed in ", Date.now() - f.start);
             f.req.uploads.push({
                 name: f.name,
