@@ -68,11 +68,8 @@ event(#postback{ message={request_2fa, _Args} }, Context) ->
                     Context;
                 false ->
                     m_auth2fa:set_totp_requested(Context),
-                    {ok, {ImageUrl, PassCode}} = m_auth2fa:new_totp_image_url(Context),
                     Vars = [
-                        {backdrop, static},
-                        {passcode, PassCode},
-                        {image_url, ImageUrl}
+                        {backdrop, static}
                     ],
                     z_render:dialog(
                         ?__("Add two-factor authentication", Context),
@@ -105,6 +102,21 @@ event(#submit{ message={auth2fa_set, Args} }, Context) ->
             end;
         true ->
             z_render:growl(?__("Sorry, you are not allowed to set the 2FA.", Context), Context)
+    end;
+event(#postback{ message={dialog_2fa, _Args} }, Context) ->
+    case z_acl:user(Context) of
+        undefined ->
+            Context;
+        UserId ->
+            m_auth2fa:set_totp_requested(Context),
+            z_render:dialog(
+                ?__("Scan two-factor authentication passcode", Context),
+                "_dialog_auth2fa_passcode.tpl",
+                [
+                    {id, UserId},
+                    {backdrop, static}
+                ],
+                Context)
     end.
 
 
