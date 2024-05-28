@@ -270,6 +270,14 @@ model.present = function(data) {
             });
             f.req.upload_count--;
         } else {
+            if (f.status?.missing && f.failed.length == 0 && f.offset == f.file.size) {
+                for (let k = 0; k < f.status.missing.length; k++) {
+                    const missingOffset = f.status.missing[k].start;
+                    if (f.failed.indexOf(missingOffset) == -1) {
+                        f.failed.push(missingOffset);
+                    }
+                }
+            }
             fs.push(f);
         }
     }
