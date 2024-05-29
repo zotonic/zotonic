@@ -310,7 +310,7 @@ model_pgsql() ->
       height int NOT NULL DEFAULT 0,
       orientation int NOT NULL DEFAULT 1,
       sha1 character varying(40),
-      size int NOT NULL DEFAULT 0,
+      size bigint NOT NULL DEFAULT 0,
       preview_filename character varying(400),
       preview_width int NOT NULL DEFAULT 0,
       preview_height int NOT NULL DEFAULT 0,
