@@ -171,54 +171,57 @@ qterm(#{ <<"term">> := <<"cat_exact">>, <<"value">> := Cats}, Context) ->
     %% Filter results excactly of a category (excluding subcategories)
     Cats1 = assure_categories(Cats, Context),
     #search_sql_term{ cats_exact = [ {<<"rsc">>, Cats1} ] };
-qterm(#{ <<"term">> := <<"content_group">>, <<"value">> := ContentGroup}, Context) ->
+qterm(#{ <<"term">> := <<"content_group">>, <<"value">> := ContentGroup}, Context) when not is_list(ContentGroup) ->
     %% content_group=id
-    %% Include only resources which are member of the given content group (or one of its children)
-    Q = #search_sql_term{
-        extra = [ no_content_group_check ]
-    },
     case rid(ContentGroup, Context) of
         any ->
-            Q;
+            #search_sql_term{ extra = [ no_content_group_check ] };
         undefined ->
             % Force an empty result
             none();
         CGId ->
+            qterm(#{ <<"term">> => <<"content_group">>, <<"value">> => [ CGId ] }, Context)
+        end;
+qterm(#{ <<"term">> := <<"content_group">>, <<"value">> := ContentGroups}, Context) when is_list(ContentGroups) ->
+    %% content_group=[id,..]
+    %% Include only resources which are member of the given content groups (or of their children)
+    Q = #search_sql_term{ extra = [ no_content_group_check ] },
+    {WithDefaultGroup, GroupsAndSubgroups} =
+        lists:foldl(
+          fun (CGId, {DG, CGs}) ->
             case m_rsc:is_a(CGId, content_group, Context) of
                 true ->
-                    List = m_hierarchy:contains(<<"content_group">>, ContentGroup, Context),
+                    List = m_hierarchy:contains(<<"content_group">>, CGId, Context),
                     case m_rsc:p_no_acl(CGId, name, Context) of
                         <<"default_content_group">> ->
-                            Q#search_sql_term{
-                                where = [
-                                    <<"(rsc.content_group_id = any(">>, '$1',
-                                    <<"::int[]) or rsc.content_group_id is null)">>
-                                ],
-                                args = [
-                                    List
-                                ]
-                            };
+                            { true, CGs ++ List };
                         _ ->
-                            Q#search_sql_term{
-                                where = [
-                                    <<"rsc.content_group_id = any(">>, '$1',
-                                    <<"::int[])">>
-                                ],
-                                args = [
-                                    List
-                                ]
-                            }
+                            { DG, CGs ++ List }
                     end;
                 false ->
-                    Q#search_sql_term{
-                        where = [
-                            <<"rsc.content_group_id = ">>, '$1'
-                        ],
-                        args = [
-                            CGId
-                        ]
-                    }
-            end
+                    { DG, CGs ++ [CGId] }
+                end
+          end,
+          {false, []},
+          ContentGroups
+         ),
+    case WithDefaultGroup of
+        true ->
+            Q#search_sql_term{
+                where = [
+                    <<"(rsc.content_group_id = any(">>, '$1',
+                    <<"::int[]) or rsc.content_group_id is null)">>
+                ],
+                args = [ GroupsAndSubgroups ]
+            };
+        false ->
+            Q#search_sql_term{
+                where = [
+                    <<"rsc.content_group_id = any(">>, '$1',
+                    <<"::int[])">>
+                ],
+                args = [ GroupsAndSubgroups ]
+            }
     end;
 qterm(#{ <<"term">> := <<"visible_for">>, <<"value">> := VisFor}, _Context) when is_list(VisFor) ->
     %% visible_for=[5,6]
