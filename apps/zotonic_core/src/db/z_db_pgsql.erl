@@ -43,7 +43,8 @@
     squery/3,
     equery/4,
     execute_batch/4,
-    get_raw_connection/1
+    get_raw_connection/1,
+    get_raw_connection/2
 ]).
 
 %% Used by the z_install_update to access props columns
@@ -259,9 +260,11 @@ is_tracing() ->
 %% @doc This function MUST NOT be used, but currently is required by the
 %% install / upgrade routines. Can only be called from inside a
 %% z_db:transaction/2.
-get_raw_connection(#context{dbc=Worker}) when Worker =/= undefined ->
-    gen_server:call(Worker, get_raw_connection).
+get_raw_connection(Context) ->
+    get_raw_connection(Context, undefined).
 
+get_raw_connection(#context{dbc=Worker}, Timeout) when Worker =/= undefined ->
+    gen_server:call(Worker, {get_raw_connection, Timeout}).
 
 %%
 %% gen_server callbacks
@@ -390,16 +393,18 @@ handle_call({return_conn, _Ref, Pid}, _From, #state{ busy_pid = OtherPid } = Sta
     }),
     {reply, {error, notyours}, State, timeout(State)};
 
-handle_call(get_raw_connection, From, #state{ conn = undefined, conn_args = Args } = State) ->
+handle_call({get_raw_connection, Timeout}, From, #state{ conn = undefined, conn_args = Args } = State) ->
     case connect(Args, From) of
         {ok, Conn} ->
             erlang:monitor(process, Conn),
-            handle_call(get_raw_connection, From, State#state{conn=Conn});
+            handle_call({get_raw_connection, Timeout}, From, State#state{conn=Conn});
         {error, _} = E ->
             {reply, E, State}
     end;
-handle_call(get_raw_connection, _From, #state{ conn = Conn } = State) ->
+handle_call({get_raw_connection, undefined}, _From, #state{ conn = Conn } = State) ->
     {reply, Conn, State, timeout(State)};
+handle_call({get_raw_connection, Timeout}, _From, #state{ conn = Conn } = State) ->
+    {reply, Conn, State, Timeout};
 
 handle_call(Message, _From, State) ->
     ?LOG_NOTICE(#{
