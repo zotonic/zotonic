@@ -23,6 +23,7 @@ limitations under the License.
 function ZLive ()
 {
     this._subscriptions = [];
+    this._timers = [];
     this._wid = 0;
     const self = this;
     setInterval(function() { self.prune(); }, 10000);
@@ -115,22 +116,30 @@ ZLive.prototype.update = function(topic, target, postback, message, wid) {
 
 ZLive.prototype.updateWidget = function(topic, target, options, message, wid) {
     if (document.getElementById(target)) {
-        const payload = {
-            topic: topic,
-            target: target,
-            message: message,
-            data: document.getElementById(target).dataset
-        };
-
-        cotonic.broker.publish(
-            "bridge/origin/model/template/get/render/" + options.template,
-            payload,
-            {
-                properties: {
-                    response_topic: "model/ui/replace/" + target
-                },
-                qos: 1
-            });
+        // Wait till 100 msecs passes without any triggererd events
+        if (this._timers[wid]) {
+            clearTimeout(wid);
+        }
+        this._timers[wid] = setTimeout(
+            function() {
+                const payload = {
+                    topic: topic,
+                    target: target,
+                    message: message,
+                    data: document.getElementById(target).dataset
+                };
+                cotonic.broker.publish(
+                    "bridge/origin/model/template/get/render/" + options.template,
+                    payload,
+                    {
+                        properties: {
+                            response_topic: "model/ui/replace/" + target
+                        },
+                        qos: 0
+                    });
+                this._timers[wid] = undefined;
+            },
+            100);
     } else {
         this.unsubscribe(wid);
     }
