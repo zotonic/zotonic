@@ -63,6 +63,11 @@
     viewer_options/0
     ]).
 
+% Max number of pixels we allow a (animated) GIF image resized output.
+% Larger will be served without resizing.
+-define(MAX_GIF_PIXELS, 500).
+-define(MAX_GIF_FRAMES, 50).
+
 
 %% @doc Called from template, render the media viewer for some resource/medium
 scomp_viewer(undefined, _Options, _Context) ->
@@ -384,7 +389,7 @@ maybe_replace_gif_url(_MediaRef, Url, _TagOpts, _Context) ->
 % More frames allows smaller image, less frames allows larger image.
 is_large_gif(Width, Height, FrameCount)
     when is_integer(Width), is_integer(Height), is_integer(FrameCount) ->
-    Width * Height * FrameCount > (400*400*50);
+    Width * Height * FrameCount > (?MAX_GIF_PIXELS * ?MAX_GIF_PIXELS * ?MAX_GIF_FRAMES);
 is_large_gif(_Width, _Height, _FrameCount) ->
     false.
 

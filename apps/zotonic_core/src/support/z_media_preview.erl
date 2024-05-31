@@ -38,10 +38,6 @@
 % Larger will be truncated to this size.
 -define(MAX_PIXSIZE,  20000).
 
-% Max number of pixels we allow a (animated) GIF image output.
-% Larger will be truncated to this size.
--define(MAX_GIF_PIXELS, 1000).
-
 % Low and max image size (in total pixels) for quality 99 and 55.
 % A small thumbnail needs less compression to keep image quality.
 -define(PIX_Q99, 1000).
