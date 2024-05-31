@@ -131,8 +131,10 @@ m_delete([ Id ], _Msg, Context) ->
 %% @doc Return the identification of a medium. Used by z_media_identify:identify()
 -spec identify( m_rsc:resource_id(), z:context() ) -> {ok, z_media_identify:media_info()} | {error, term()}.
 identify(Id, Context) when is_integer(Id) ->
-    z_db:qmap_props_row(
-        "select id, mime, width, height, orientation from medium where id = $1",
+    z_db:qmap_props_row("
+        select id, mime, width, height, orientation, frame_count
+        from medium
+        where id = $1",
         [ Id ],
         [ {keys, binary} ],
         Context);
@@ -147,7 +149,9 @@ identify(ImageFile, Context) ->
 
 identify_medium_filename(MediumFilename, Context) ->
     z_db:qmap_props_row("
-        select id, mime, width, height, orientation from medium where filename = $1",
+        select id, mime, width, height, orientation, frame_count
+        from medium
+        where filename = $1",
         [ MediumFilename ],
         [ {keys, binary} ],
         Context).

@@ -31,9 +31,7 @@
     out_mime/2,
     string2filter/2,
     cmd_args/3,
-    calc_size/1,
-
-    maybe_restrict_size/5
+    calc_size/1
 ]).
 
 % Max pixels of the target image
@@ -289,11 +287,10 @@ cmd_args(#{ <<"mime">> := Mime, <<"width">> := ImageWidth, <<"height">> := Image
     ReqHeight  = proplists:get_value(height, Filters),
     {CropPar,Filters1} = fetch_crop(Filters),
 
-    {ReqWidth1, ReqHeight1} = maybe_restrict_size(OutMime, ImageWidth, ImageHeight, ReqWidth, ReqHeight),
     {ResizeWidth,ResizeHeight,CropArgs} = calc_size(
                 #{
-                    req_width => ReqWidth1,
-                    req_height => ReqHeight1,
+                    req_width => ReqWidth,
+                    req_height => ReqHeight,
                     image_width => ImageWidth,
                     image_height => ImageHeight,
                     crop => CropPar,
@@ -350,45 +347,6 @@ cmd_args(#{ <<"mime">> := Mime, <<"width">> := ImageWidth, <<"height">> := Image
     {ok, {EndWidth, EndHeight, ["-strip" | lists:reverse(Args) ]}};
 cmd_args(_, _Filters, _OutMime) ->
     {error, no_size}.
-
-
-%% @doc Limit the output size to the max pixels for GIF and other images.
-maybe_restrict_size(Mime, 0, ImageHeight, ReqWidth, ReqHeight) ->
-    maybe_restrict_size(Mime, 1, ImageHeight, ReqWidth, ReqHeight);
-maybe_restrict_size(Mime, ImageWidth, 0, ReqWidth, ReqHeight) ->
-    maybe_restrict_size(Mime, ImageWidth, 1, ReqWidth, ReqHeight);
-maybe_restrict_size(_Mime, _ImageWidth, _ImageHeight, undefined, undefined) ->
-    {undefined, undefined};
-maybe_restrict_size(<<"image/gif">>, ImageWidth, _ImageHeight, ReqWidth, undefined)
-    when ReqWidth >= ?MAX_GIF_PIXELS, is_integer(ImageWidth) ->
-    {min(ImageWidth, ?MAX_GIF_PIXELS), undefined};
-maybe_restrict_size(<<"image/gif">>, _ImageWidth, ImageHeight, undefined, ReqHeight)
-    when ReqHeight >= ?MAX_GIF_PIXELS, is_integer(ImageHeight) ->
-    {undefined, min(ImageHeight, ?MAX_GIF_PIXELS)};
-maybe_restrict_size(<<"image/gif">>, ImageWidth, ImageHeight, ReqWidth, ReqHeight) ->
-    % 1. Shrink req to max bounding box with respect to the max GIF size
-    {RW, RH} = if
-        ReqWidth > ?MAX_GIF_PIXELS; ReqHeight > ?MAX_GIF_PIXELS ->
-            WidthRatio = ReqWidth / ?MAX_GIF_PIXELS,
-            HeightRatio = ReqHeight / ?MAX_GIF_PIXELS,
-            Ratio = max(WidthRatio, HeightRatio),
-            {trunc(ReqWidth / Ratio), trunc(ReqHeight / Ratio)};
-        true ->
-            {ReqWidth, ReqHeight}
-    end,
-    % 2. Prevent too much upscaling, shrink bouding box to exactly contain the image
-    if
-        RW > ImageWidth, RH > ImageHeight ->
-            WRatio = ImageWidth / RW,
-            HRatio = ImageHeight / RH,
-            Ratio1 = max(WRatio, HRatio),
-            {trunc(RW * Ratio1), trunc(RH * Ratio1)};
-        true ->
-            {RW, RH}
-    end;
-maybe_restrict_size(_Mime, _ImageWidth, _ImageHeight, ReqWidth, ReqHeight) ->
-    {ReqWidth, ReqHeight}.
-
 
 default_background(<<"image/gif">>) -> [coalesce];
 default_background(<<"image/png">>) -> [coalesce];

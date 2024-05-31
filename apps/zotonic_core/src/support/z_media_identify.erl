@@ -375,7 +375,8 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
                     _ ->
                        Props1
                 end,
-                {ok, Props2}
+                Props3 = maybe_add_frame_count(Props2, ImageFile),
+                {ok, Props3}
             catch
                 X:B:Stacktrace ->
                     ?LOG_WARNING(#{
@@ -390,6 +391,15 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
                     {error, identify}
             end
     end.
+
+%% @doc For (animated) GIFs, add the frame count.
+maybe_add_frame_count(#{ <<"mime">> := <<"image/gif">> } = Props, Filename) ->
+    Props#{
+        <<"frame_count">> => z_media_gif:frame_count_file(Filename)
+    };
+maybe_add_frame_count(Props, _Filename) ->
+    Props.
+
 
 %% @doc Prevent unneeded 'extents' for vector based inputs.
 maybe_size_correct(Mime, W, H) when W < 3000, H < 3000 ->
@@ -721,3 +731,5 @@ is_mime_compressed(<<"application/vnd.oasis.opendocument.", _/binary>>) -> true;
 is_mime_compressed(<<"application/vnd.openxml", _/binary>>)      -> true;
 is_mime_compressed(<<"application/x-shockwave-flash">>)          -> true;
 is_mime_compressed(_)                                            -> false.
+
+
