@@ -118,8 +118,9 @@ ZLive.prototype.updateWidget = function(topic, target, options, message, wid) {
     if (document.getElementById(target)) {
         // Wait till 100 msecs passes without any triggererd events
         if (this._timers[wid]) {
-            clearTimeout(wid);
+            clearTimeout(this._timers[wid]);
         }
+        const self = this;
         this._timers[wid] = setTimeout(
             function() {
                 const payload = {
@@ -137,7 +138,7 @@ ZLive.prototype.updateWidget = function(topic, target, options, message, wid) {
                         },
                         qos: 0
                     });
-                this._timers[wid] = undefined;
+                self._timers[wid] = undefined;
             },
             100);
     } else {
