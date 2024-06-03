@@ -89,7 +89,12 @@ start_upload(Name, Filename, Size, Context) ->
     Mime = z_media_identify:guess_mime(Filename),
     case z_acl:is_allowed(insert, #acl_media{ mime = Mime, size = Size }, Context) of
         true ->
-            mod_fileuploader:start_child(Name, Filename, Size, Context);
+            case z_fileuploader:exists(Name) of
+                true ->
+                    status(Name, Context);
+                false ->
+                    mod_fileuploader:start_child(Name, Filename, Size, Context)
+            end;
         false ->
             {error, eacces}
     end.
