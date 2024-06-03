@@ -1106,7 +1106,7 @@ send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context) 
         port => proplists:get_value(port, SmtpOpts)
     }),
     IsFallbackPlainText = z_config:get(smtp_plaintext_fallback),
-    case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
+    case catch gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
         Receipt when is_binary(Receipt) ->
             {ok, Receipt};
         {error, no_more_hosts, {permanent_failure, _Host, <<"ign Root ", _/binary>>}}
@@ -1125,7 +1125,11 @@ send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context) 
         {error, _} = Error ->
             Error;
         {error, _, _} = Error ->
-            Error
+            Error;
+        {'EXIT', _} when IsFallbackPlainText ->
+            send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts, Context);
+        {'EXIT', {Reason, _Stack}} ->
+            {error, Reason}
     end.
 
 send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts, Context) ->
