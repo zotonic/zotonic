@@ -375,7 +375,6 @@ is_allowed(subscribe, [ <<"model">>, Model,  <<"event">>, Id | _ ], Context)
     when Model =:= <<"rsc">>;
          Model =:= <<"media">>;
          Model =:= <<"identity">> ->
-?DEBUG(Id),
     case is_wildcard(Id) of
         true -> false;
         false -> z_acl:rsc_visible( m_rsc:rid(Id, Context), Context )
