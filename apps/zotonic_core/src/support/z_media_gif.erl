@@ -76,14 +76,10 @@ frame_count_1(<<
         _AspectRatio:8,
         Rest/binary>>) ->
     R1 = skip_pallette(Map, Pix+1, Rest),
-    R2 = skip_pixels(R1),
-    read_data(R2, 0);
+    read_data(R1, 0);
 frame_count_1(_) ->
-    false.
+    1.
 
-% read_data(_Data, 2) ->
-%     % More than 1 frame -> animated
-%     true;
 read_data(<<16#21, 16#f9,
             4, % Block size
             _:3, _DisposalMethod:3, _UserInput:1, _Transparent:1,
@@ -109,16 +105,16 @@ read_data(<<16#2c,
 read_data(<<16#3b, _/binary>>, Frames) ->
     % Trailer
     Frames;
-read_data(_Data, _Frames) ->
+read_data(<<_, _Data/binary>>, Frames) ->
     % Error in GIF format
-    false.
+    Frames.
 
 skip_pallette(0, _Pixel, Data) ->
     Data;
 skip_pallette(1, Pixel, Data) ->
     Sz = (1 bsl Pixel),
     case Data of
-        <<_:Sz/binary, R/binary>> -> R;
+        <<_:(Sz*3)/binary, R/binary>> -> R;
         _ -> error
     end.
 
