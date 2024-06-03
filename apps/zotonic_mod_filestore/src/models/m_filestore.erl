@@ -491,7 +491,7 @@ purge_move_to_local(Id, false, Context) ->
 -spec stats( z:context() ) -> map().
 stats(Context) ->
     {Archived, ArchiveSize} = z_db:q_row("
-                            select count(*), coalesce(sum(size), 0)
+                            select count(*), coalesce(sum(size), 0)::bigint
                             from medium
                             where filename is not null
                               and filename <> ''
@@ -499,7 +499,7 @@ stats(Context) ->
     Queued = z_db:q1("select count(*) from filestore_queue", Context),
     {Cloud, CloudSize, ToLocal, Deleted} = z_db:q_row("
                             select count(*),
-                                   coalesce(sum(size), 0),
+                                   coalesce(sum(size), 0)::bigint,
                                    coalesce(sum(is_move_to_local::integer), 0),
                                    coalesce(sum(is_deleted::integer), 0)
                             from filestore
@@ -507,7 +507,7 @@ stats(Context) ->
 
     {CloudLocal, CloudLocalSize, DeletedLocal} = z_db:q_row("
                             select count(*),
-                                   coalesce(sum(size), 0),
+                                   coalesce(sum(size), 0)::bigint,
                                    coalesce(sum(is_deleted::integer), 0)
                             from filestore
                             where is_local = true", Context),
@@ -515,7 +515,7 @@ stats(Context) ->
 
     % TODO: we need a separate index for this lookup
     {InCloudOnly, InCloudOnlySize} = z_db:q_row("
-                            select count(*), coalesce(sum(m.size), 0)
+                            select count(*), coalesce(sum(m.size), 0)::bigint
                             from medium m
                                     join filestore f
                                     on f.path = 'archive/' || m.filename
@@ -542,7 +542,8 @@ install(_Version, Context) ->
     ok = install_filestore(Context),
     ok = ensure_column_deleted(Context),
     ok = ensure_column_is_local(Context),
-    ok = install_filequeue(Context).
+    ok = install_filequeue(Context),
+    ok = ensure_size_bigint(Context).
 
 install_filestore(Context) ->
     case z_db:table_exists(filestore, Context) of
@@ -557,7 +558,7 @@ install_filestore(Context) ->
                     path character varying(255) not null,
                     service character varying(16) not null,
                     location character varying(400) not null,
-                    size int not null default 0,
+                    size bigint not null default 0,
                     modified timestamp with time zone not null default now(),
                     created timestamp with time zone not null default now(),
                     deleted timestamp with time zone,
@@ -618,5 +619,14 @@ ensure_column_is_local(Context) ->
             [] = z_db:q("alter table filestore add column is_local boolean not null default false", Context),
             {ok, _, _} = z_db:equery("create index filestore_is_local on filestore(is_local)", Context),
             z_db:flush(Context),
+            ok
+    end.
+
+ensure_size_bigint(Context) ->
+    case z_db:column(filestore, size, Context) of
+        {ok, #column_def{ type = "integer" }} ->
+            z_db:q("alter table filestore alter column size type bigint", Context),
+            z_db:flush(Context);
+        {ok, _} ->
             ok
     end.
