@@ -309,6 +309,7 @@ model_pgsql() ->
       width int NOT NULL DEFAULT 0,
       height int NOT NULL DEFAULT 0,
       orientation int NOT NULL DEFAULT 1,
+      frame_count int,
       sha1 character varying(40),
       size bigint NOT NULL DEFAULT 0,
       preview_filename character varying(400),

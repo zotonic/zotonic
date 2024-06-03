@@ -63,6 +63,11 @@
     viewer_options/0
     ]).
 
+% Max number of pixels we allow a (animated) GIF image resized output.
+% Larger will be served without resizing.
+-define(MAX_GIF_PIXELS, 500).
+-define(MAX_GIF_FRAMES, 50).
+
 
 %% @doc Called from template, render the media viewer for some resource/medium
 scomp_viewer(undefined, _Options, _Context) ->
@@ -336,7 +341,57 @@ attributes1(MediaRef, Filename, Options, Context) ->
     TagOpts5 = with_srcset(TagOpts4, Filename, Options, Context),
     % Filter some opts
     TagOpts6 = proplists:delete(link, TagOpts5),
-    {ok, {[{src,Url}|TagOpts6], TagOpts}}.
+    {Url1, TagOpts7} = case maybe_replace_gif_url(MediaRef, Url, TagOpts6, Context) of
+        Url ->
+            {Url, TagOpts6};
+        NewUrl ->
+            {NewUrl, proplists:delete(srcset, TagOpts6)}
+    end,
+    {ok, {[{src,Url1}|TagOpts7], TagOpts}}.
+
+
+%% @doc If resizing from animated GIF to a GIF, then use the original
+%% file for large animated GIFs.
+maybe_replace_gif_url(#{
+        <<"filename">> := Filename,
+        <<"mime">> := <<"image/gif">>,
+        <<"frame_count">> := FrameCount,
+        <<"width">> := OrgWidth,
+        <<"height">> := OrgHeight
+    },
+    Url, TagOpts, Context)
+    when is_integer(FrameCount), FrameCount > 1, is_binary(Filename) ->
+    case filename:extension(Url) of
+        <<".gif">> ->
+            UrlWidth = proplists:get_value(width, TagOpts),
+            UrlHeight = proplists:get_value(height, TagOpts),
+            case is_large_gif(OrgWidth, OrgHeight, FrameCount)
+                orelse is_large_gif(UrlWidth, UrlHeight, FrameCount)
+            of
+                true ->
+                    InlineMediaUrl = filename_to_urlpath(Filename, Context),
+                    case Url of
+                        <<"https:", _/binary>> ->
+                            z_context:abs_url(InlineMediaUrl, Context);
+                        _ ->
+                            InlineMediaUrl
+                    end;
+                false ->
+                    Url
+            end;
+        _ ->
+            Url
+    end;
+maybe_replace_gif_url(_MediaRef, Url, _TagOpts, _Context) ->
+    Url.
+
+% Arbitrary cut off at 500px x 500px x 30 frames.
+% More frames allows smaller image, less frames allows larger image.
+is_large_gif(Width, Height, FrameCount)
+    when is_integer(Width), is_integer(Height), is_integer(FrameCount) ->
+    Width * Height * FrameCount > (?MAX_GIF_PIXELS * ?MAX_GIF_PIXELS * ?MAX_GIF_FRAMES);
+is_large_gif(_Width, _Height, _FrameCount) ->
+    false.
 
 with_srcset(TagOptions, Filename, Options, Context) ->
     case proplists:get_value(mediaclass, Options) of
@@ -490,8 +545,9 @@ url(Props, Options, Context) when is_map(Props) ->
             {ok, <<>>};
         Filename ->
             Options1 = extra_image_options(Id, Props, Options, Context),
-            {url, Url, _TagOptions, _ImageOptions} = url1(Filename, Options1, Context),
-            {ok, Url}
+            {url, Url, TagOptions, _ImageOptions} = url1(Filename, Options1, Context),
+            Url1 = maybe_replace_gif_url(Props, Url, TagOptions, Context),
+            {ok, Url1}
     end;
 url(Filename, Options, Context) when is_list(Filename) ->
     url(list_to_binary(Filename), Options, Context);

@@ -1,11 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Make still previews of media, using image manipulation functions.  Resize, crop, grey, etc.
 %% This uses the command line imagemagick tools for all image manipulation.
-%% This code is adapted from PHP GD2 code, so the resize/crop could've been done more efficiently, but it works :-)
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -35,6 +34,8 @@
     calc_size/1
 ]).
 
+% Max pixels of the target image
+% Larger will be truncated to this size.
 -define(MAX_PIXSIZE,  20000).
 
 % Low and max image size (in total pixels) for quality 99 and 55.
@@ -342,7 +343,6 @@ cmd_args(#{ <<"mime">> := Mime, <<"width">> := ImageWidth, <<"height">> := Image
     {ok, {EndWidth, EndHeight, ["-strip" | lists:reverse(Args) ]}};
 cmd_args(_, _Filters, _OutMime) ->
     {error, no_size}.
-
 
 default_background(<<"image/gif">>) -> [coalesce];
 default_background(<<"image/png">>) -> [coalesce];

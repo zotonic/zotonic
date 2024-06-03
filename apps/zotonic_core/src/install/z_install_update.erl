@@ -318,6 +318,7 @@ upgrade(C, Database, Schema) ->
     ok = rsc_unfindable(C, Database, Schema),
     ok = rsc_pivot_log(C, Database, Schema),
     ok = medium_size_bigint(C, Database, Schema),
+    ok = media_frame_count(C, Database, Schema),
     ok.
 
 
@@ -925,6 +926,24 @@ rsc_unfindable(C, Database, Schema) ->
             ok
     end.
 
+
+media_frame_count(C, Database, Schema) ->
+    case has_column(C, "medium", "frame_count", Database, Schema) of
+        true ->
+            ok;
+        false ->
+            ?LOG_NOTICE(#{
+                text => <<"Upgrade: adding frame_count column to medium">>,
+                in => zotonic_core,
+                database => Database,
+                schema => Schema,
+                table => rsc
+            }),
+            {ok, [], []} = epgsql:squery(C,
+                                    "alter table medium "
+                                    "add column frame_count int"),
+            ok
+    end.
 
 rsc_pivot_log(C, Database, Schema) ->
     case has_table(C, "rsc_pivot_log", Database, Schema) of
