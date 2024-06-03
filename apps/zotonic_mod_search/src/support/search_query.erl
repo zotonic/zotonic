@@ -1060,12 +1060,13 @@ qterm(#{ <<"term">> := <<"date_start_before">>, <<"value">> := Date}, Context) -
             z_datetime:to_datetime(Date, Context)
         ]
     };
-qterm(#{ <<"term">> := <<"date_start_year">>, <<"value">> := Year}, _Context) ->
+qterm(#{ <<"term">> := <<"date_start_year">>, <<"value">> := Year} = T, _Context) ->
     %% date_start_year=year
     %% Filter on year of start date
+    Op = extract_term_op(T, <<"=">>),
     #search_sql_term{
         where = [
-            <<"date_part('year', rsc.pivot_date_start) ">>, '$1'
+            <<"date_part('year', rsc.pivot_date_start) ">>, Op, '$1'
         ],
         args = [
             z_convert:to_integer(Year)
@@ -1142,6 +1143,42 @@ qterm(#{ <<"term">> := <<"publication_before">>, <<"value">> := Date}, Context) 
     #search_sql_term{
         where = [
             <<"rsc.publication_start <= ">>, '$1'
+        ],
+        args = [
+            z_datetime:to_datetime(Date, Context)
+        ]
+    };
+qterm(#{ <<"term">> := <<"created_after">>, <<"value">> := Date}, Context) ->
+    #search_sql_term{
+        where = [
+            <<"rsc.created >= ">>, '$1'
+        ],
+        args = [
+            z_datetime:to_datetime(Date, Context)
+        ]
+    };
+qterm(#{ <<"term">> := <<"created_before">>, <<"value">> := Date}, Context) ->
+    #search_sql_term{
+        where = [
+            <<"rsc.created <= ">>, '$1'
+        ],
+        args = [
+            z_datetime:to_datetime(Date, Context)
+        ]
+    };
+qterm(#{ <<"term">> := <<"modified_after">>, <<"value">> := Date}, Context) ->
+    #search_sql_term{
+        where = [
+            <<"rsc.modified >= ">>, '$1'
+        ],
+        args = [
+            z_datetime:to_datetime(Date, Context)
+        ]
+    };
+qterm(#{ <<"term">> := <<"modified_before">>, <<"value">> := Date}, Context) ->
+    #search_sql_term{
+        where = [
+            <<"rsc.modified <= ">>, '$1'
         ],
         args = [
             z_datetime:to_datetime(Date, Context)
