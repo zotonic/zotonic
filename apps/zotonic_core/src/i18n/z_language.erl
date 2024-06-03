@@ -394,9 +394,10 @@ properties(Code) when is_list(Code) ->
     properties(z_convert:to_binary(Code)).
 
 %% @doc List of language data.
-%%      Returns a flattened list of property lists; sub-languages are added to the list of
-%%      main languages.
-%%      For each language a property list is returned - see properties/1.
+%% Returns a maps of language maps; sub-languages are added to the map of main languages.
+%% For each language a map with properties is returned - see properties/1.
+%% Each language is present with its iso code as an atom and binary key. This for
+%% easier lookups.
 -spec all_languages() -> map().
 all_languages() ->
     z_language_data:languages_map_flat().
