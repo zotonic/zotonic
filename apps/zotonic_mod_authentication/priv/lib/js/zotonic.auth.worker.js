@@ -209,6 +209,8 @@ model.present = function(data) {
                     username: data.username,
                     password: data.password,
                     passcode: data.passcode,
+                    "code-new": data["code-new"],
+                    test_passcode: data.test_passcode,
                     authuser: data.authuser || null,
                     setautologon: !!data.setautologon
                 })
@@ -334,7 +336,9 @@ model.present = function(data) {
             username: data.username,
             password: data.password,
             secret: data.secret,
-            passcode: data.passcode
+            passcode: data.passcode,
+            "code-new": data["code-new"],
+            test_passcode: data.test_passcode
         })
         .then(function(resp) { return resp.json(); })
         .then(function(body) { actions.authLogonResponse(body); })
@@ -349,6 +353,8 @@ model.present = function(data) {
             password: data.password,
             password_reset: data.password_reset,
             passcode: data.passcode,
+            "code-new": data["code-new"],
+            test_passcode: data.test_passcode,
             url: "#"
         })
         .then(function(resp) { return resp.json(); })
@@ -595,6 +601,8 @@ actions.logon = function(data) {
         username: data.username,
         password: data.password,
         passcode: data.passcode,
+        "code-new": data["code-new"],
+        test_passcode: data.test_passcode,
         setautologon: data.rememberme ? true : false
     };
     model.present(dataLogon)
@@ -613,6 +621,8 @@ actions.logonForm = function(data) {
         username: username,
         password: data.value.password || null,
         passcode: data.value.passcode || null,
+        "code-new": data.value["code-new"],
+        test_passcode: data.value.test_passcode,
         setautologon: data.value.rememberme ? true : false,
         authuser: data.value.authuser || null,
         onauth: data.value.onauth
@@ -650,7 +660,7 @@ actions.resetCodeCheck = function(msg) {
         cmd: "reset_check",
         username: msg.payload.username || "",
         secret: msg.payload.secret,
-        passcode: msg.payload.secret || ""
+        passcode: msg.payload.passcode || ""
     };
 
     fetch( self.abs_url("/zotonic-auth"), {
@@ -686,6 +696,8 @@ actions.resetPassword = function(msg) {
         password: msg.payload.password,
         secret: msg.payload.secret,
         passcode: msg.payload.passcode,
+        "code-new": msg.payload["code-new"],
+        test_passcode: msg.payload.test_passcode,
         setautologon: msg.payload.rememberme ? true : false,
         onauth: msg.payload.onauth || null
     };
@@ -698,6 +710,8 @@ actions.changePassword = function(msg) {
         password: msg.payload.password,
         password_reset: msg.payload.password_reset,
         passcode: msg.payload.passcode,
+        "code-new": msg.payload["code-new"],
+        test_passcode: msg.payload.test_passcode,
         onauth: msg.payload.onauth || null
     };
     model.present(data);

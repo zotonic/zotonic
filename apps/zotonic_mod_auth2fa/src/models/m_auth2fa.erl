@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019-2021 Marc Worrell
-%% @doc Generate TOTP image data: urls.
+%% @copyright 2019-2024 Marc Worrell
+%% @doc Generate TOTP image data: urls and manage TOTP user secrets.
+%% @end
 
-%% Copyright 2019-2021 Marc Worrell
+%% Copyright 2019-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,17 +24,20 @@
 -export([
     m_get/3,
 
-    request_key/1,
-    set_request_key/1,
+    set_totp_requested/1,
+    is_totp_requested/1,
 
     is_totp_enabled/2,
     is_valid_totp/3,
 
+    is_valid_totp_test/2,
+
     mode/1,
     user_mode/1,
 
-    totp_image_url/2,
-    totp_disable/2
+    new_totp_image_url/1,
+    totp_disable/2,
+    totp_set/3
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -41,25 +45,14 @@
 
 -define(TOTP_PERIOD, 30).
 -define(TOTP_IDENTITY_TYPE, auth2fa_totp).
--define(TOTP_IDENTITY_REQUEST_KEY, auth2fa_request_key).
 
-m_get([ <<"totp_image_url">>, RequestKey | Rest ], _Msg, Context) ->
-    case request_key(Context) of
-        undefined ->
-            {ok, {<<>>, Rest}};
-        RequestKey ->
-            reset_request_key(Context),
-            case totp_image_url(z_acl:user(Context), Context) of
-                {ok, {Url, Secret}} ->
-                    Result = #{
-                        url => Url,
-                        secret => z_auth2fa_base32:encode(Secret)
-                    },
-                    {ok, {Result, Rest}};
-                {error, _} = Error ->
-                    Error
-            end
-    end;
+m_get([ <<"new_totp_image_url">> | Rest ], _Msg, Context) ->
+    {ok, {ImageDataUrl, Secret}} = new_totp_image_url(Context),
+    R = #{
+        url => ImageDataUrl,
+        secret => z_auth2fa_base32:encode(Secret)
+    },
+    {ok, {R, Rest}};
 m_get([ User, <<"is_totp_enabled">> | Rest ], _Msg, Context) ->
     UserId = m_rsc:rid(User, Context),
     IsEnabled = case z_acl:is_allowed(use, mod_admin_identity, Context)
@@ -75,13 +68,8 @@ m_get([ <<"is_totp_enabled">> | Rest ], _Msg, Context) ->
         UserId -> is_totp_enabled(UserId, Context)
     end,
     {ok, {IsEnabled, Rest}};
-m_get([ <<"is_totp_requested">>, RequestKey | Rest ], _Msg, Context) ->
-    IsRequested = case request_key(Context) of
-        undefined -> false;
-        RequestKey -> true;
-        _ -> false
-    end,
-    {ok, {IsRequested, Rest}};
+m_get([ <<"is_totp_requested">> | Rest ], _Msg, Context) ->
+    {ok, {is_totp_requested(Context), Rest}};
 m_get([ <<"mode">> | Rest ], _Msg, Context) ->
     {ok, {mode(Context), Rest}};
 m_get([ <<"user_mode">> | Rest ], _Msg, Context) ->
@@ -89,40 +77,25 @@ m_get([ <<"user_mode">> | Rest ], _Msg, Context) ->
 m_get(_Path, _Msg, _Context) ->
     {error, unknown_path}.
 
--spec request_key( z:context() ) -> binary() | undefined.
-request_key( Context ) ->
-    case z_acl:user(Context) of
-        undefined ->
-            undefined;
-        UserId ->
-            case m_identity:get_rsc_by_type(UserId, ?TOTP_IDENTITY_REQUEST_KEY, Context) of
-                [] -> undefined;
-                [Idn] -> proplists:get_value(key, Idn)
-            end
+%% @doc Remember that for this session the TOTP dialog has been shown.
+-spec is_totp_requested(Context) -> boolean() when
+    Context :: z:context().
+is_totp_requested(Context) ->
+    case z_notifier:first({server_storage, lookup, is_totp_requested}, Context) of
+        {ok, true} -> true;
+        _ -> false
     end.
 
--spec set_request_key( z:context() ) -> binary() | undefined.
-set_request_key( Context ) ->
-    case z_acl:user(Context) of
-        undefined ->
-            undefined;
-        UserId ->
-            Key = z_ids:id(),
-            {ok, _} = m_identity:insert_single(UserId, ?TOTP_IDENTITY_REQUEST_KEY, Key, Context),
-            Key
+%% @doc Check if for this session the TOTP dialog has been shown.
+-spec set_totp_requested(Context) -> ok | {error, Reason} when
+    Context :: z:context(),
+    Reason :: server_storage | no_session | not_found | full | term().
+set_totp_requested(Context) ->
+    case z_notifier:first({server_storage, store, is_totp_requested, true}, Context) of
+        undefined -> {error, server_storage};
+        ok -> ok;
+        {error, _} = Error -> Error
     end.
-
--spec reset_request_key( z:context() ) -> ok.
-reset_request_key( Context ) ->
-    case z_acl:user(Context) of
-        undefined ->
-            ok;
-        UserId ->
-            _ = m_identity:delete_by_type(UserId, ?TOTP_IDENTITY_REQUEST_KEY, Context),
-            ok
-    end.
-
-
 
 %% @doc Check if totp is enabled for the given user
 -spec is_totp_enabled( m_rsc:resource_id(), z:context() ) -> boolean().
@@ -133,20 +106,23 @@ is_totp_enabled(UserId, Context) ->
     end.
 
 %% @doc Check the totp mode
--spec mode( z:context() ) -> 0 | 1 | 2.
+-spec mode( z:context() ) -> 0 | 1 | 2 | 3.
 mode(Context) ->
     case z_convert:to_integer(m_config:get_value(mod_auth2fa, mode, Context)) of
+        3 -> 3;
         2 -> 2;
         1 -> 1;
         _ -> 0
     end.
 
-%% @doc Check the totp mode for the current user: 0 = optional, 1 = ask, 2 = required
--spec user_mode( z:context() ) -> 0 | 1 | 2.
+%% @doc Check the totp mode for the current user:
+%% 0 = optional, 1 = ask, 2 = required, 3 = forced
+-spec user_mode( z:context() ) -> 0 | 1 | 2 | 3.
 user_mode(Context) ->
     case z_auth:is_auth(Context) of
         true ->
             case z_convert:to_integer(m_config:get_value(mod_auth2fa, mode, Context)) of
+                3 -> 3;
                 2 -> 2;
                 1 -> erlang:max( user_group_mode(Context), 1 );
                 _ -> erlang:max( user_group_mode(Context), 0 )
@@ -174,42 +150,67 @@ user_group_mode(Context) ->
     end.
 
 %% @doc Remove the totp tokens and disable totp for the user
--spec totp_disable( m_rsc:resource_id(), z:context() ) -> ok.
+-spec totp_disable(UserId, Context) -> ok when
+    UserId :: m_rsc:resource_id(),
+    Context :: z:context().
 totp_disable(UserId, Context) ->
+    ?LOG_INFO(#{
+        in => zotonic_mod_auth2fa,
+        text => <<"2FA code removed for user">>,
+        for_user_id => UserId,
+        by_user_id => z_acl:user(Context)
+    }),
     m_identity:delete_by_type(UserId, ?TOTP_IDENTITY_TYPE, Context).
 
-%% @doc Generate a new totp code and return the barcode / QR code
--spec totp_image_url( m_rsc:resource_id(), z:context() ) -> {ok, {Url::binary(), Secret::binary()}} | {error, eacces}.
-totp_image_url(UserId, Context) when is_integer(UserId) ->
-    case is_allowed_totp_enable(UserId, Context) of
+%% @doc Set the totp token for the user
+-spec totp_set(UserId, Secret, Context) -> ok | {error, already_set} when
+    UserId :: m_rsc:resource_id(),
+    Secret :: binary(),
+    Context :: z:context().
+totp_set(UserId, Secret, Context) ->
+    case is_totp_enabled(UserId, Context) of
         true ->
-            SiteTitle = m_config:get_value(site, title, Context),
-            Issuer = case z_utils:is_empty(SiteTitle) of
-                true -> z_context:hostname(Context);
-                false -> SiteTitle
-            end,
-            Username = z_convert:to_binary( m_identity:get_username(Context) ),
-            ServicePart = url_encode(
-                iolist_to_binary([
-                    Issuer,
-                    $:,
-                    Username, " / ", Issuer
-                ])),
-            {ok, Secret} = regenerate_user_secret(UserId, Context),
-            {ok, Png} = generate_png(ServicePart, Issuer, Secret, ?TOTP_PERIOD),
-            Url = encode_data_url(Png, <<"image/png">>),
-            {ok, {Url, Secret}};
+            {error, already_set};
         false ->
-            {error, eacces}
+            {ok, _} = set_user_secret(UserId, Secret, Context),
+            ok
     end.
 
-%% Only the admin user can enable totp for the admin user
-is_allowed_totp_enable(1, Context) ->
-    z_acl:user(Context) =:= 1;
-is_allowed_totp_enable(UserId, Context) ->
-    z_acl:user(Context) =:= UserId
-    orelse z_acl:is_allowed(use, mod_admin_identity, Context).
+%% @doc Generate a new totp code and return the barcode, do not save it.
+-spec new_totp_image_url(Context) -> {ok, {Url, Secret}} when
+    Context :: z:context(),
+    Url :: binary(),
+    Secret :: binary().
+new_totp_image_url(Context) ->
+    Issuer = issuer(Context),
+    ServicePart = service_part(z_acl:user(Context), Issuer, Context),
+    Passcode = new_secret(),
+    {ok, Png} = generate_png(ServicePart, Issuer, Passcode, ?TOTP_PERIOD),
+    {ok, {encode_data_url(Png, <<"image/png">>), Passcode}}.
 
+issuer(Context) ->
+    SiteTitle = m_config:get_value(site, title, Context),
+    Issuer = case z_utils:is_empty(SiteTitle) of
+        true -> z_context:hostname(Context);
+        false -> SiteTitle
+    end,
+    z_convert:to_binary(Issuer).
+
+service_part(undefined, Issuer, _Context) ->
+    url_encode(
+        iolist_to_binary([
+            Issuer,
+            $:,
+            Issuer
+        ]));
+service_part(UserId, Issuer, Context) ->
+    Username = z_convert:to_binary( m_identity:get_username(UserId, Context) ),
+    url_encode(
+        iolist_to_binary([
+            Issuer,
+            $:,
+            Username, " / ", Issuer
+        ])).
 
 encode_data_url(Data, Mime) ->
     iolist_to_binary([ <<"data:">>, Mime, <<";base64,">>, base64:encode(Data) ]).
@@ -217,34 +218,53 @@ encode_data_url(Data, Mime) ->
 url_encode(S) ->
     binary:replace(z_url:url_encode(S), <<"+">>, <<"%20">>, [ global ]).
 
-%% @doc Check if the given code is a valid TOTP code
--spec is_valid_totp( m_rsc:resource_id(), binary(), z:context() ) -> boolean().
+%% @doc Check if the given code is a valid TOTP code for the secret stored with
+%% the given user.
+-spec is_valid_totp(UserId, Code, Context) -> boolean() when
+    UserId :: m_rsc:resource_id(),
+    Code :: binary() | string() | integer(),
+    Context :: z:context().
 is_valid_totp(UserId, Code, Context) when is_integer(UserId), is_binary(Code) ->
     case m_identity:get_rsc_by_type(UserId, ?TOTP_IDENTITY_TYPE, Context) of
         [Idn] ->
             Passcode = proplists:get_value(propb, Idn),
-            {A, B, C} = totp(Passcode, ?TOTP_PERIOD),
-            case Code of
-                A -> true;
-                B -> true;
-                C -> true;
-                _ -> false
-            end;
+            is_valid_totp_test(Passcode, Code);
         [] ->
             false
     end.
 
-regenerate_user_secret(UserId, Context) ->
+%% @doc Check if the given code is a valid TOTP code for the given secret.
+-spec is_valid_totp_test(Secret, Code) -> boolean() when
+    Secret :: binary(),
+    Code :: string() | binary() | integer().
+is_valid_totp_test(Secret, Code) ->
+    {A, B, C} = totp(Secret, ?TOTP_PERIOD),
+    case z_convert:to_binary(Code) of
+        A -> true;
+        B -> true;
+        C -> true;
+        _ -> false
+    end.
+
+set_user_secret(UserId, Passcode, Context) ->
     F = fun(Ctx) ->
         totp_disable(UserId, Context),
-        Passcode = crypto:hash(sha, z_ids:rand_bytes(32)),
         Props = [
             {propb, {term, Passcode}}
         ],
         m_identity:insert(UserId, ?TOTP_IDENTITY_TYPE, <<>>, Props, Ctx),
+        ?LOG_INFO(#{
+            in => zotonic_mod_auth2fa,
+            text => <<"2FA code added for user">>,
+            for_user_id => UserId,
+            by_user_id => z_acl:user(Context)
+        }),
         {ok, Passcode}
     end,
     z_db:transaction(F, Context).
+
+new_secret() ->
+    crypto:hash(sha, z_ids:id(32)).
 
 % url format: https://github.com/google/google-authenticator/wiki/Key-Uri-Format
 generate_png(Domain, Issuer, Passcode, Seconds) ->

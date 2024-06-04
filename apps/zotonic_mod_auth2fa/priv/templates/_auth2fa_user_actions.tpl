@@ -18,12 +18,8 @@
       {% if id == m.acl.user %}
           {% button class="btn btn-default"
                     text=_"Reset two-factor..."
-                    action={confirm
-                        text=_"This will generate a new QR code for two-factor authentication.<br>The old QR code will not be valid anymore."
-                        ok=_"Generate QR code"
-                        postback={dialog_2fa}
-                        delegate=`mod_auth2fa`
-                    }
+                    postback={dialog_2fa}
+                    delegate=`mod_auth2fa`
           %}
       {% endif %}
     </p>

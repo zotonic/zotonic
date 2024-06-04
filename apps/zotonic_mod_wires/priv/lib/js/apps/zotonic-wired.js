@@ -102,6 +102,16 @@ function zotonic_startup() {
             z_dialog_alert(msg.payload);
         }, { wid: 'zotonicalert'});
 
+    cotonic.broker.subscribe(
+        "model/clipboard/post/copy",
+        function(msg) {
+            if (msg.payload?.message['data-text'] !== undefined) {
+                navigator.clipboard?.writeText(msg.payload.message['data-text']);
+            } else if (msg.payload?.text) {
+                navigator.clipboard?.writeText(msg.payload.text);
+            }
+        }, { wid: 'zotonicclip'});
+
     // Register the client-id to reuse on subsequent pages
     cotonic.broker.subscribe(
             "$bridge/origin/status",
