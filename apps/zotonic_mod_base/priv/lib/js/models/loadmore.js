@@ -94,7 +94,7 @@ cotonic.ready.then(() => {
                 qargs = msg.payload;
             }
 
-            if (is_replace_location(msg)) {
+            if (url && is_replace_location(msg)) {
                 cotonic.broker.publish("model/location/post/replace-silent", url);
             }
             cotonic.broker.publish(

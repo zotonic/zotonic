@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2019-2024 Marc Worrell
-%% @doc Generate TOTP image data: urls.
+%% @doc Generate TOTP image data: urls and manage TOTP user secrets.
 %% @end
 
 %% Copyright 2019-2024 Marc Worrell
@@ -24,8 +24,8 @@
 -export([
     m_get/3,
 
-    is_totp_requested/1,
     set_totp_requested/1,
+    is_totp_requested/1,
 
     is_totp_enabled/2,
     is_valid_totp/3,
@@ -71,9 +71,10 @@ m_get([ <<"is_totp_enabled">> | Rest ], _Msg, Context) ->
 m_get([ <<"is_totp_requested">> | Rest ], _Msg, Context) ->
     {ok, {is_totp_requested(Context), Rest}};
 m_get([ <<"mode">> | Rest ], _Msg, Context) ->
+    ?DEBUG(xxx),
     {ok, {mode(Context), Rest}};
 m_get([ <<"user_mode">> | Rest ], _Msg, Context) ->
-    {ok, {user_mode(Context), Rest}};
+    {ok, {?DEBUG(user_mode(Context)), Rest}};
 m_get(_Path, _Msg, _Context) ->
     {error, unknown_path}.
 

@@ -197,13 +197,17 @@ shorten_filename(Path) ->
                     filename:join(Dir, Basename1)
             end;
         true ->
-            Path
+            replace_special_chars(Path)
     end.
 
 shorten_1(Root) ->
     Truncated = z_string:truncatechars(Root, 32),
+    Truncated2 = replace_special_chars(Truncated),
     Hash = z_utils:hex_sha(Root),
-    <<Truncated/binary, $-, Hash/binary>>.
+    <<Truncated2/binary, $-, Hash/binary>>.
+
+replace_special_chars(Filename) ->
+    binary:replace(Filename, [ <<"(">>, <<")">> ], <<"--">>, [ global ]).
 
 is_defined(undefined) -> false;
 is_defined(<<>>) -> false;
