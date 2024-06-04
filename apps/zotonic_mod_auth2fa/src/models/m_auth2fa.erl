@@ -71,10 +71,9 @@ m_get([ <<"is_totp_enabled">> | Rest ], _Msg, Context) ->
 m_get([ <<"is_totp_requested">> | Rest ], _Msg, Context) ->
     {ok, {is_totp_requested(Context), Rest}};
 m_get([ <<"mode">> | Rest ], _Msg, Context) ->
-    ?DEBUG(xxx),
     {ok, {mode(Context), Rest}};
 m_get([ <<"user_mode">> | Rest ], _Msg, Context) ->
-    {ok, {?DEBUG(user_mode(Context)), Rest}};
+    {ok, {user_mode(Context), Rest}};
 m_get(_Path, _Msg, _Context) ->
     {error, unknown_path}.
 
@@ -155,6 +154,12 @@ user_group_mode(Context) ->
     UserId :: m_rsc:resource_id(),
     Context :: z:context().
 totp_disable(UserId, Context) ->
+    ?LOG_INFO(#{
+        in => zotonic_mod_auth2fa,
+        text => <<"2FA code removed for user">>,
+        for_user_id => UserId,
+        by_user_id => z_acl:user(Context)
+    }),
     m_identity:delete_by_type(UserId, ?TOTP_IDENTITY_TYPE, Context).
 
 %% @doc Set the totp token for the user
@@ -248,6 +253,12 @@ set_user_secret(UserId, Passcode, Context) ->
             {propb, {term, Passcode}}
         ],
         m_identity:insert(UserId, ?TOTP_IDENTITY_TYPE, <<>>, Props, Ctx),
+        ?LOG_INFO(#{
+            in => zotonic_mod_auth2fa,
+            text => <<"2FA code added for user">>,
+            for_user_id => UserId,
+            by_user_id => z_acl:user(Context)
+        }),
         {ok, Passcode}
     end,
     z_db:transaction(F, Context).

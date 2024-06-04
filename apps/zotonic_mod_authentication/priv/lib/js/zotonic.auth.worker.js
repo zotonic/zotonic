@@ -621,8 +621,8 @@ actions.logonForm = function(data) {
         username: username,
         password: data.value.password || null,
         passcode: data.value.passcode || null,
-        "code-new": data["code-new"],
-        test_passcode: data.test_passcode,
+        "code-new": data.value["code-new"],
+        test_passcode: data.value.test_passcode,
         setautologon: data.value.rememberme ? true : false,
         authuser: data.value.authuser || null,
         onauth: data.value.onauth

@@ -93,7 +93,6 @@ event(#submit{ message={auth2fa_set, Args} }, Context) ->
             Code = z_context:get_q(<<"passcode">>, Context),
             case m_auth2fa:is_valid_totp_test(Secret1, Code) of
                 true ->
-                    ok = m_auth2fa:totp_disable(UserId, Context),
                     ok = m_auth2fa:totp_set(UserId, Secret1, Context),
                     Context1 = z_render:dialog_close(Context),
                     z_render:wire({alert, [
@@ -110,15 +109,17 @@ event(#postback{ message={dialog_2fa, _Args} }, Context) ->
     case z_acl:user(Context) of
         undefined ->
             Context;
-        UserId ->
-            m_auth2fa:set_totp_requested(Context),
+        _UserId ->
+            {ok, {ImageUrl, PassCode}} = m_auth2fa:new_totp_image_url(Context),
+            Vars = [
+                {backdrop, static},
+                {passcode, PassCode},
+                {image_url, ImageUrl}
+            ],
             z_render:dialog(
-                ?__("Scan two-factor authentication passcode", Context),
+                ?__("Add two-factor authentication", Context),
                 "_dialog_auth2fa_passcode.tpl",
-                [
-                    {id, UserId},
-                    {backdrop, static}
-                ],
+                Vars,
                 Context)
     end.
 
