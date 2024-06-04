@@ -91,8 +91,22 @@ start_upload(Name, Filename, Size, Context) ->
         true ->
             case z_fileuploader:exists(Name) of
                 true ->
-                    status(Name, Context);
+                    Status = status(Name, Context),
+                    ?LOG_INFO(#{
+                        in => zotonic_mod_fileuploader,
+                        text => <<"New request for existing file uploader - reusing existing one">>,
+                        name => Name,
+                        status => Status
+                    }),
+                    Status;
                 false ->
+                    ?LOG_INFO(#{
+                        in => zotonic_mod_fileuploader,
+                        text => <<"New file uploader">>,
+                        name => Name,
+                        filename => Filename,
+                        size => Size
+                    }),
                     mod_fileuploader:start_child(Name, Filename, Size, Context)
             end;
         false ->
