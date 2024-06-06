@@ -51,7 +51,6 @@
     timeout :: non_neg_integer()
 }).
 
--include("../../include/zotonic.hrl").
 
 %%====================================================================
 %% API
@@ -69,7 +68,6 @@ new_token() ->
     Timestamp :: non_neg_integer(),
     Context :: z:context().
 invalidate_token(Token, Seconds, Context) ->
-    ?DEBUG({invalidate, Token}),
     Table = table(Context),
     Timestamp = z_datetime:timestamp() + Seconds,
     ets:insert(Table, #spent{ token = Token, timeout = Timestamp}),
@@ -80,9 +78,8 @@ invalidate_token(Token, Seconds, Context) ->
     Token :: binary(),
     Context :: z:context().
 is_spent_token(Token, Context) ->
-    ?DEBUG({check, Token}),
     Table = table(Context),
-    ?DEBUG([] =/= ets:lookup(Table, Token)).
+    [] =/= ets:lookup(Table, Token).
 
 
 %% @doc Starts the MQTT ticket server server
