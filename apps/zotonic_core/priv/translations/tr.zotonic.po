@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-06-06 14:11\n"
+"PO-Revision-Date: 2024-06-06 15:53\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -3508,11 +3508,6 @@ msgstr "Bu e-posta adresi kişisel bilgilerinize eklendi"
 msgid "This is not a valid e-mail address."
 msgstr "Bu geçerli bir e-posta adresi değil."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:36
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
-msgid "This password does not meet the security requirements"
-msgstr "Bu şifre güvenlik gereksinimlerini karşılamıyor"
-
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:57
 msgid "This person is also a user."
 msgstr "Bu kişi aynı zamanda bir kullanıcı."
@@ -3645,6 +3640,11 @@ msgstr "E-posya adresiniz doğrulandı."
 #: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:4
 msgid "Your login details for"
 msgstr "Şunun için giriş detaylarınız"
+
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:36
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
+msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, and symbol."
+msgstr "Yeni şifreniz çok kısa veya yeterince güçlü değil. A kullanın: büyük harf, küçük harf, sayı ve sembol."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:20
 msgid "Your username is:"
@@ -4554,11 +4554,11 @@ msgstr "Eğer bir kaç dakika içinde e-posta almazsanız, lütfen spam klasör�
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:33
 msgid "If you don't want to reset your password, you can ignore this email. Maybe someone made an error typing his or her email address."
-msgstr ""
+msgstr "Şifrenizi sıfırlamak istemiyorsanız bu e-postayı görmezden gelebilirsiniz. Belki birisi e-posta adresini yazarken hata yapmıştır."
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:14
 msgid "If you think you do have an account, please try again using the correct email address."
-msgstr ""
+msgstr "Hesabınız olduğunu düşünüyorsanız lütfen doğru e-posta adresini kullanarak tekrar deneyin."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:108
 msgid "In the email you will find instructions on how to confirm your account."
@@ -4588,6 +4588,10 @@ msgstr "İle oturum açın"
 msgid "Log out"
 msgstr "Çıkış Yap"
 
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.user_not_enabled.tpl:1
+msgid "Make sure you have verified your e-mail address."
+msgstr "E-posta adresinizi doğruladığınızdan emin olun."
+
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:101
 msgid "Multiple accounts"
 msgstr "Birden çok hesap"
@@ -4614,7 +4618,7 @@ msgstr "Şifre"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:1
 msgid "Please choose a different password as this password has been found in a public list of passwords that have appeared in a data breach."
-msgstr ""
+msgstr "Lütfen farklı bir şifre seçin çünkü bu şifre, bir veri ihlalinde ortaya çıkan herkese açık şifreler listesinde bulunmuştur."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:8
 msgid "Please confirm your"
@@ -4626,7 +4630,7 @@ msgstr "Lütfen yeni bir şifre girin"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:14
 msgid "Please enter a new password for your account"
-msgstr ""
+msgstr "Lütfen hesabınız için yeni bir şifre girin"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:1
 msgid "Please enter the two-factor authentication passcode."
@@ -4711,7 +4715,7 @@ msgstr "Yeni şifre öncekinden farklı olmalıdır. Lütfen tekrar deneyin."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.set_passcode_error.tpl:2
 msgid "The passcode you entered was not correct, please try again."
-msgstr ""
+msgstr "Girdiğiniz şifre doğru değil, lütfen tekrar deneyin."
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:29
 msgid "The redirect URL for OAuth configurations is:"
@@ -4755,9 +4759,9 @@ msgstr "Bu sayfası görüntülemek için başka erişim haklarına sahip olmal�
 msgid "Too many retries."
 msgstr "Çok fazla yeniden deneme."
 
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:3./apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:2
-msgid "Use a combination of uppercase letters, lowercase letters, numbers, and symbols."
-msgstr ""
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:3
+msgid "Use a: uppercase letter, lowercase letter, number, and symbol."
+msgstr "A kullanın: büyük harf, küçük harf, sayı ve sembol."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.unequal.tpl:2
 msgid "Use non alphabetical characters, digits and upper/lower case letters to make it harder to guess."
@@ -4821,7 +4825,7 @@ msgstr "Uygulama anahtarını görüntülemek yada değiştirmek için sistem ay
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:39
 msgid "You received this email as you entered your username or email address to reset your password. You will not receive any other emails because of this request."
-msgstr ""
+msgstr "Bu e-postayı, şifrenizi sıfırlamak için kullanıcı adınızı veya e-posta adresinizi girerken aldınız. Bu istek nedeniyle başka e-posta almayacaksınız."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:111
 msgid "You used another account on {service} than was expected."
@@ -4841,7 +4845,7 @@ msgstr "{site} hesabınız devre dışı bırakıldı."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:9
 msgid "Your current password has expired, is not strong enough, or has been found in <a href=\"https://haveibeenpwned.com/Passwords\" target=\"_blank\" rel=\"noreferrer noopener\">public records containing passwords appearing in data breaches</a>."
-msgstr ""
+msgstr "Mevcut şifrenizin süresi dolmuş, yeterince güçlü değil veya veri ihlallerinde görünen şifreleri içeren <a href=\"https://haveibeenpwned.com/Passwords\" target=\"_blank\" rel=\"noreferrer noopener\">herkese açık kayıtlarda</a>bulundu."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_form_fields.tpl:2
 msgid "Your email"
@@ -4850,10 +4854,6 @@ msgstr "E-posta adresiniz"
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:2
 msgid "Your email or username"
 msgstr "Kullanıcı adınız yada e-postanız"
-
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
-msgid "Your new password is too short or not strong enough."
-msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:31
 msgid "Your password has been changed"
@@ -5660,31 +5660,31 @@ msgstr "Çerezlerin kullanımı hakkında daha fazla bilgi eklemek için ya aşa
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:21
 msgid "All rights reserved"
-msgstr ""
+msgstr "Her hakkı saklıdır"
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:40./apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:41
 msgid "Attribution"
-msgstr ""
+msgstr "İlişkilendirme"
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:18
 msgid "License"
-msgstr ""
+msgstr "Lisans"
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:8
 msgid "License and attribution"
-msgstr ""
+msgstr "Lisans ve atıf"
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:49
 msgid "More about licenses:"
-msgstr ""
+msgstr "Lisanslar hakkında daha fazla bilgi:"
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:15
 msgid "Set the license and the attribution of this page."
-msgstr ""
+msgstr "Bu sayfanın lisansını ve niteliğini ayarlayın."
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:45./apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:46
 msgid "Year"
-msgstr ""
+msgstr "Yıl"
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:168
@@ -9140,6 +9140,10 @@ msgstr "Hesabınızın zaten onaylanmış olması için hesabınızı iki kez on
 msgid "You must agree to the Terms in order to sign up."
 msgstr "Kaydolmak için Şartları kabul etmeniz gerekir."
 
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
+msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, symbol."
+msgstr "Yeni şifreniz çok kısa veya yeterince güçlü değil. A kullanın: büyük harf, küçük harf, sayı, sembol."
+
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:23
 msgid "and the"
 msgstr "ve"
@@ -10900,7 +10904,7 @@ msgstr "Siteyi kontrol etmek için isteğe bağlı Git url'si. Mevcut bir <tt>ya
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
 msgid "Please only use: a…z, 0…9, and . (period)."
-msgstr ""
+msgstr "Lütfen yalnızca şunu kullanın: a…z, 0…9 ve . (dönem)."
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:136
 msgid "Please use a valid hostname."
