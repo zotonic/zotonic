@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-06-04 12:04\n"
+"PO-Revision-Date: 2024-06-06 16:56\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -203,7 +203,7 @@ msgstr "Tüm ACL kurallarını mevcut yayınlanmış sürülerine geri yüklemek
 #: apps/zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:100
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:31./apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:14
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:15
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:49
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:51./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:33
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:118./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:28./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:66./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:137./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
@@ -244,7 +244,7 @@ msgstr "Değiştirilmiş yapılandırma."
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:22
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:41./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:173
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:67./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:69
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:60
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:62./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:43
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:30
 #: apps/zotonic_mod_email_status/priv/templates/_dialog_email_status.tpl:4
 #: apps/zotonic_mod_l10n/priv/templates/_admin_configure_module.tpl:8
@@ -756,8 +756,8 @@ msgid "use (acl action)"
 msgstr "kullan (acl eylemi)"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:7
-msgid "use <b>New Private Window</b> (check the <b>File</b> menu of your browser)"
-msgstr "<b>Yeni Özel Pencere</b> kullanın ( tarayıcınızın <b>Dosta</b> menüsünü kontrol edin)"
+msgid "use a private or incognito window in your browser"
+msgstr "tarayıcınızda özel veya gizli bir pencere kullanın"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:8
 msgid "use another browser (eg. Chrome if you are now using Firefox)"
@@ -3118,6 +3118,7 @@ msgstr "E-posta göndermek için geçiş kullanın"
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:60./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:61./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:87./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:88
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:2./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:3./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:50
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:81
+#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:21
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:15
 msgid "Username"
 msgstr "Kullanıcı adı"
@@ -3296,6 +3297,7 @@ msgid "E-mail"
 msgstr "E-posta"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:10
+#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:23
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:69
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:18./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:29./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:30
@@ -3506,11 +3508,6 @@ msgstr "Bu e-posta adresi kişisel bilgilerinize eklendi"
 msgid "This is not a valid e-mail address."
 msgstr "Bu geçerli bir e-posta adresi değil."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:36
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
-msgid "This password does not meet the security requirements"
-msgstr "Bu şifre güvenlik gereksinimlerini karşılamıyor"
-
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:57
 msgid "This person is also a user."
 msgstr "Bu kişi aynı zamanda bir kullanıcı."
@@ -3629,7 +3626,6 @@ msgid "You received this email because you verified your email address. You will
 msgstr "Bu e-postayı, e-posta adresinizi doğruladığınız için aldınız. Bu istek nedeniyle başka e-posta almayacaksınız."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:12
-#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:21
 msgid "Your account name is"
 msgstr "Hesap isminiz"
 
@@ -3644,6 +3640,12 @@ msgstr "E-posya adresiniz doğrulandı."
 #: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:4
 msgid "Your login details for"
 msgstr "Şunun için giriş detaylarınız"
+
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:36
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
+msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, and symbol."
+msgstr "Yeni şifreniz çok kısa veya yeterince güçlü değil. A kullanın: büyük harf, küçük harf, sayı ve sembol."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:20
 msgid "Your username is:"
@@ -4137,13 +4139,17 @@ msgstr "Izlemek"
 msgid "2FA"
 msgstr "2FA"
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:78./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:120
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:107./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:149
 msgid "Add two-factor authentication"
 msgstr "İki faktörlü kimlik doğrulama ekleyin"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:27
 msgid "After you scanned the QR code, please enter the passcode generated by your two-factor authentication app below."
 msgstr "QR kodunu taradıktan sonra lütfen iki faktörlü kimlik doğrulama uygulamanız tarafından oluşturulan şifreyi aşağıya girin."
+
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:29
+msgid "Are you sure you want to remove the two-factor authentication from this account?"
+msgstr "Bu hesaptan iki faktörlü kimlik doğrulamayı kaldırmak istediğinizden emin misiniz?"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:44
 msgid "Ask after logging in"
@@ -4161,11 +4167,11 @@ msgstr "2FA ayarını değiştirdi."
 msgid "Check the user groups for which two-factor authentication should be forced."
 msgstr "İki faktörlü kimlik doğrulamanın zorlanması gereken kullanıcı gruplarını kontrol edin."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:21
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:23
 msgid "Copied to clipboard"
 msgstr "Panoya kopyalandı"
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:16./apps/zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:20
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:17./apps/zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:20
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:33
 msgid "Copy"
 msgstr "Kopyala"
@@ -4178,7 +4184,7 @@ msgstr "Varsayılan yapılandırma"
 msgid "Define who should use two-factor authentication, this is the default setting for all users."
 msgstr "İki faktörlü kimlik doğrulamayı kimin kullanması gerektiğini tanımlayın, bu tüm kullanıcılar için varsayılan ayardır."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:32
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:21
 msgid "Enable two-factor authentication..."
 msgstr "İki faktörlü kimlik doğrulamayı etkinleştirin ..."
 
@@ -4210,13 +4216,17 @@ msgstr "Her sayfa yüklemesinde, iki faktörlü kimlik doğrulamayı ayarlamak i
 msgid "On the first page load a dialog appears for setting the two-factor authentication."
 msgstr "İlk sayfa yüklemesinde, iki faktörlü kimlik doğrulamayı ayarlamak için bir iletişim kutusu görünür."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:42./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:55
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:31./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:53./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:68
 msgid "Only the admin can change the two-factor authentication of the admin."
 msgstr "Yalnızca yönetici, yöneticinin iki faktörlü kimlik doğrulamasını değiştirebilir."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:56
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:58
 msgid "Only the user themselves can set their new two-factor authentication QR code."
 msgstr "Yeni iki faktörlü kimlik doğrulama QR kodunu yalnızca kullanıcının kendisi ayarlayabilir."
+
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:12./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:39
+msgid "Only the user themselves or an admin can remove the two-factor authentication."
+msgstr "İki faktörlü kimlik doğrulamayı yalnızca kullanıcının kendisi veya bir yönetici kaldırabilir."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:33
 msgid "Optional"
@@ -4226,17 +4236,17 @@ msgstr "İsteğe bağlı"
 msgid "Passcode generated by your app"
 msgstr "Uygulamanız tarafından oluşturulan şifre kodu"
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:10
-msgid "Remove two-factor"
-msgstr "İki faktörü kaldır"
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:17
+msgid "Please enter the current two-factor authentication code to remove the two-factor authentication from this account."
+msgstr "Bu hesaptan iki faktörlü kimlik doğrulamayı kaldırmak için lütfen mevcut iki faktörlü kimlik doğrulama kodunu girin."
+
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:34./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:56
+msgid "Remove two-factor authentication"
+msgstr "İki faktörlü kimlik doğrulamayı kaldırın"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:7
 msgid "Remove two-factor..."
 msgstr "İki faktörü kaldır ..."
-
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:20
-msgid "Reset two-factor..."
-msgstr "İki faktörü sıfırla ..."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:2
 msgid "Scan the two-factor authentication QR code with an app such as <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
@@ -4246,7 +4256,7 @@ msgstr "İki faktörlü kimlik doğrulama QR kodunu <a href=\"https://support.go
 msgid "Scan the two-factor authentication QR code with an app such as <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
 msgstr "<a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> veya <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>gibi bir uygulamayla iki faktörlü kimlik doğrulama QR kodunu tarayın."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:50
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:52
 msgid "Set passcode"
 msgstr "Şifreyi ayarla"
 
@@ -4254,15 +4264,15 @@ msgstr "Şifreyi ayarla"
 msgid "Sorry, you are not allowed to change the 2FA settings."
 msgstr "Üzgünüz, 2FA ayarlarını değiştirmenize izin verilmiyor."
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:60
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:61./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:89
 msgid "Sorry, you are not allowed to remove the 2FA."
 msgstr "Üzgünüz, 2FA'yı kaldırmanıza izin verilmiyor."
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:106
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:135
 msgid "Sorry, you are not allowed to set the 2FA."
 msgstr "Üzgünüz, 2FA'yı ayarlamanıza izin verilmiyor."
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:99
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:128
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:170
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:40
 msgid "Success"
@@ -4272,10 +4282,10 @@ msgstr "Başarı"
 msgid "The two-factor authentication can be added per user in the admin or (if available on the site) on their profile page."
 msgstr "İki faktörlü kimlik doğrulama, kullanıcı başına yöneticiye veya (sitede mevcutsa) profil sayfasına eklenebilir."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:44
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:46./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:25
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:2
-msgid "The two-factor authentication passcode did not match. Please try again."
-msgstr "İki faktörlü kimlik doğrulama parolası eşleşmedi. Lütfen tekrar deneyin."
+msgid "The two-factor authentication passcode is not correct. Please try again."
+msgstr "İki faktörlü kimlik doğrulama parolası doğru değil. Lütfen tekrar deneyin."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:68
 msgid "The user will be prompted to set the two-factor authentication before being allowed to log in."
@@ -4285,11 +4295,7 @@ msgstr "Kullanıcıdan oturum açmasına izin verilmeden önce iki faktörlü ki
 msgid "This is done by showing the two-factor setup dialog on every page load."
 msgstr "Bu, her sayfa yüklemesinde iki faktörlü kurulum iletişim kutusunun gösterilmesiyle yapılır."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:9
-msgid "This will disable the two-factor authentication.<br>The old QR code will not be valid anymore."
-msgstr "Bu, iki faktörlü kimlik doğrulamayı devre dışı bırakacaktır.<br>Eski QR kodu artık geçerli olmayacak."
-
-#: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:6./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:132
+#: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:6./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:161
 msgid "Two-factor authentication"
 msgstr "İki faktörlü kimlik doğrulama"
 
@@ -4301,7 +4307,7 @@ msgstr "İki faktörlü kimlik doğrulama, oturum açma sırasında ekstra bir k
 msgid "Two-factor authentication configuration"
 msgstr "İki faktörlü kimlik doğrulama yapılandırması"
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:100
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:129
 msgid "Two-factor authentication has been enabled for your account."
 msgstr "Hesabınız için iki faktörlü kimlik doğrulama etkinleştirildi."
 
@@ -4317,7 +4323,7 @@ msgstr "Bu hesap için iki faktörlü kimlik doğrulama etkin."
 msgid "Two-factor authentication is not enabled"
 msgstr "İki faktörlü kimlik doğrulama etkin değil"
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:27
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:16
 msgid "Two-factor authentication is not enabled for this account."
 msgstr "Bu hesap için iki faktörlü kimlik doğrulama etkin değil."
 
@@ -4326,7 +4332,7 @@ msgstr "Bu hesap için iki faktörlü kimlik doğrulama etkin değil."
 msgid "Two-factor passcode"
 msgstr "İki faktörlü parola"
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:41./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:42
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:43./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:44./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:22./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:23
 msgid "Type the code generated by your app"
 msgstr "Uygulamanız tarafından oluşturulan kodu yazın"
 
@@ -4400,9 +4406,9 @@ msgstr "E-postanızı kontrol edin"
 msgid "Checking the reset code…"
 msgstr "Sıfırlama kodunu kontrol etme…"
 
-#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:25
-msgid "Click on the link below to enter a new password. When clicking doesn't work, please copy and paste the whole link."
-msgstr "Yeni bir şifre girmek için aşağıdaki bağlantıya tıklayın. Tıklama çalışmazsa, lütfen tüm bağlantıyı kopyalayıp yapıştırın."
+#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:27
+msgid "Click on the link to enter a new password or copy and paste the whole link."
+msgstr "Yeni bir şifre girmek için bağlantıya tıklayın veya bağlantının tamamını kopyalayıp yapıştırın."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:16
 msgid "Close this window and log on if you are already a user of {site}."
@@ -4459,10 +4465,6 @@ msgstr "Twitter ayarlarını görmek için <em>mod_twitter</em>'ı etkinleştiri
 msgid "Enable the signup module to automatically sign up users that are authenticating via the services below."
 msgstr "Aşağıdaki servisleri kullanarak kimlik doğrulama yapan kullanıcılar için otomatik olarak giriş modülünü etkinleştirin."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:14
-msgid "Enter the new password for your account"
-msgstr "Hesabınızın şifresini girin"
-
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_title.tpl:7
 msgid "Enter the new password for your account <strong>{username}</strong>."
 msgstr "Hesabınızın yeni şifresini girin <strong>{username}</strong>."
@@ -4490,7 +4492,7 @@ msgstr "Başka bir hesap bekleniyor"
 msgid "External Services"
 msgstr "Harici Servisler"
 
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:3
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:2
 msgid "For more information visit <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://haveibeenpwned.com/Passwords\">{title}</a>"
 msgstr "Daha fazla bilgi için <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://haveibeenpwned.com/Passwords\">{title}</a>adresini ziyaret edin"
 
@@ -4498,7 +4500,7 @@ msgstr "Daha fazla bilgi için <a target=\"_blank\" rel=\"noreferrer noopener\" 
 msgid "For security reasons, password reset codes are only kept for a limited amount of time and can only be used once."
 msgstr "Güvenlik nedeniyle, şifre sıfırlama kodları belirli bir süre saklanır ve sadece bir kere kullanılabilir."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:9./apps/zotonic_mod_authentication/priv/templates/_logon_login_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:8./apps/zotonic_mod_authentication/priv/templates/logon_error/message.pw.tpl:5
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:9./apps/zotonic_mod_authentication/priv/templates/_logon_login_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:8./apps/zotonic_mod_authentication/priv/templates/logon_error/message.pw.tpl:2
 msgid "Forgot your password?"
 msgstr "Şifrenizi mi unuttunuz?"
 
@@ -4547,17 +4549,17 @@ msgstr "Yeni bir hesap oluşturmak istiyorum"
 msgid "If you are already a user of {site} then <a href=\"{logon_url}\">log on</a>."
 msgstr "Zaten {site} kullanıcısıysanız, <a href=\"{logon_url}\">oturum açın</a>."
 
-#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:31
-msgid "If you didn't request a password reset, you can safely ignore this email. Maybe someone made an error typing his or her email address."
-msgstr "Parola sıfırlama talebinde bulunmadıysanız, bu e-postayı güvenle göz ardı edebilirsiniz. Belki birisi e-posta adresini yazarken bir hata yaptı."
-
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:93./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:109
 msgid "If you do not receive the email within a few minutes, please check your spam folder."
 msgstr "Eğer bir kaç dakika içinde e-posta almazsanız, lütfen spam klasörünüzü kontrol edin."
 
+#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:33
+msgid "If you don't want to reset your password, you can ignore this email. Maybe someone made an error typing his or her email address."
+msgstr "Şifrenizi sıfırlamak istemiyorsanız bu e-postayı görmezden gelebilirsiniz. Belki birisi e-posta adresini yazarken hata yapmıştır."
+
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:14
-msgid "If you think you have an account and were expecting this email, please try again using the email address you gave when you created your account."
-msgstr "Hesabınız olduğunu düşünüyorsanız ve bu e-postayı bekliyorsanız, lütfen hesabınızı oluştururken verdiğiniz e-posta adresini kullanarak tekrar deneyin."
+msgid "If you think you do have an account, please try again using the correct email address."
+msgstr "Hesabınız olduğunu düşünüyorsanız lütfen doğru e-posta adresini kullanarak tekrar deneyin."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:108
 msgid "In the email you will find instructions on how to confirm your account."
@@ -4587,6 +4589,10 @@ msgstr "İle oturum açın"
 msgid "Log out"
 msgstr "Çıkış Yap"
 
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.user_not_enabled.tpl:1
+msgid "Make sure you have verified your e-mail address."
+msgstr "E-posta adresinizi doğruladığınızdan emin olun."
+
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:101
 msgid "Multiple accounts"
 msgstr "Birden çok hesap"
@@ -4611,6 +4617,10 @@ msgstr "Bir saniye lütfen"
 msgid "Passcode"
 msgstr "Şifre"
 
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:1
+msgid "Please choose a different password as this password has been found in a public list of passwords that have appeared in a data breach."
+msgstr "Lütfen farklı bir şifre seçin çünkü bu şifre, bir veri ihlalinde ortaya çıkan herkese açık şifreler listesinde bulunmuştur."
+
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:8
 msgid "Please confirm your"
 msgstr "Lütfen onaylayın"
@@ -4618,6 +4628,10 @@ msgstr "Lütfen onaylayın"
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:7
 msgid "Please enter a new password"
 msgstr "Lütfen yeni bir şifre girin"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:14
+msgid "Please enter a new password for your account"
+msgstr "Lütfen hesabınız için yeni bir şifre girin"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:1
 msgid "Please enter the two-factor authentication passcode."
@@ -4696,21 +4710,13 @@ msgstr "Üzgünüz, şifre sıfırlama kodunuz yanlış ya da süresi dolmuş"
 msgid "Stay logged on unless I log off."
 msgstr "Oturumu kapatmadığım sürece oturumunuz açık kalsın."
 
-#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:21
-msgid "The email address associated with your account is"
-msgstr "Hesabınıza bağlı e-posta adresi"
-
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:1
-msgid "The new password has appeared in a data leak, which puts your account at risk of compromise."
-msgstr "Yeni şifre bir veri sızıntısında ortaya çıktı ve bu da hesabınızı tehlikeye atma riskiyle karşı karşıya bırakıyor."
-
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.password_change_match.tpl:2
 msgid "The new password must be different from the previous one. Please try again."
 msgstr "Yeni şifre öncekinden farklı olmalıdır. Lütfen tekrar deneyin."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.set_passcode_error.tpl:2
-msgid "The passcode you gave was not correct, please try again."
-msgstr "Verdiğiniz şifre doğru değil, lütfen tekrar deneyin."
+msgid "The passcode you entered was not correct, please try again."
+msgstr "Girdiğiniz şifre doğru değil, lütfen tekrar deneyin."
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:29
 msgid "The redirect URL for OAuth configurations is:"
@@ -4754,7 +4760,11 @@ msgstr "Bu sayfası görüntülemek için başka erişim haklarına sahip olmal�
 msgid "Too many retries."
 msgstr "Çok fazla yeniden deneme."
 
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon_error/message.unequal.tpl:2
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:3
+msgid "Use a: uppercase letter, lowercase letter, number, and symbol."
+msgstr "A kullanın: büyük harf, küçük harf, sayı ve sembol."
+
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.unequal.tpl:2
 msgid "Use non alphabetical characters, digits and upper/lower case letters to make it harder to guess."
 msgstr "Tahmin etmeyi zorlaştırmak için alfabetik olmayan karakterler, rakamlar ve büyük/küçük harfler kullanın."
 
@@ -4814,9 +4824,9 @@ msgstr "Farklı bir kullanıcı olarak giriş yapmayı deneyebilirsiniz."
 msgid "You need to be allowed to edit the system configuration to view or change the configured App Keys."
 msgstr "Uygulama anahtarını görüntülemek yada değiştirmek için sistem ayarlarını yapılandırma yetkisine sahip olmanız gerekir."
 
-#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:37
-msgid "You received this email because you requested a password reset for your account by entering your username or email address. You will not receive any additional emails because of this request."
-msgstr "Bu e-postayı, kullanıcı adınızı veya e-posta adresinizi girerek hesabınız için bir şifre sıfırlama talep ettiğiniz için aldınız. Bu istek nedeniyle başka e-posta almayacaksınız."
+#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:39
+msgid "You received this email as you entered your username or email address to reset your password. You will not receive any other emails because of this request."
+msgstr "Bu e-postayı, şifrenizi sıfırlamak için kullanıcı adınızı veya e-posta adresinizi girerken aldınız. Bu istek nedeniyle başka e-posta almayacaksınız."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:111
 msgid "You used another account on {service} than was expected."
@@ -4835,8 +4845,8 @@ msgid "Your account on {site} is disabled."
 msgstr "{site} hesabınız devre dışı bırakıldı."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:9
-msgid "Your current password is expired, does not meet our security requirements, or has been found in <a href=\"https://haveibeenpwned.com/Passwords\" target=\"_blank\" rel=\"noreferrer noopener\">public records</a>."
-msgstr "Mevcut şifrenizin süresi dolmuş, güvenlik gereksinimlerimizi karşılamıyor veya <a href=\"https://haveibeenpwned.com/Passwords\" target=\"_blank\" rel=\"noreferrer noopener\">genel kayıtlarda</a>bulundu."
+msgid "Your current password has expired, is not strong enough, or has been found in <a href=\"https://haveibeenpwned.com/Passwords\" target=\"_blank\" rel=\"noreferrer noopener\">public records containing passwords appearing in data breaches</a>."
+msgstr "Mevcut şifrenizin süresi dolmuş, yeterince güçlü değil veya veri ihlallerinde görünen şifreleri içeren <a href=\"https://haveibeenpwned.com/Passwords\" target=\"_blank\" rel=\"noreferrer noopener\">herkese açık kayıtlarda</a>bulundu."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_form_fields.tpl:2
 msgid "Your email"
@@ -4845,10 +4855,6 @@ msgstr "E-posta adresiniz"
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:2
 msgid "Your email or username"
 msgstr "Kullanıcı adınız yada e-postanız"
-
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
-msgid "Your new password is too short or too simple."
-msgstr "Yeni şifreniz çok kısa veya çok basit."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:31
 msgid "Your password has been changed"
@@ -5652,6 +5658,34 @@ msgstr "Bu web sitesi çerez kullanır"
 #: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:40
 msgid "To add more information about the use of cookies, either use the content field below or add a 'relation' in the page connections."
 msgstr "Çerezlerin kullanımı hakkında daha fazla bilgi eklemek için ya aşağıdaki içerik alanını kullanın ya da sayfa bağlantılarına bir 'ilişki' ekleyin."
+
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:21
+msgid "All rights reserved"
+msgstr "Her hakkı saklıdır"
+
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:40./apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:41
+msgid "Attribution"
+msgstr "İlişkilendirme"
+
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:18
+msgid "License"
+msgstr "Lisans"
+
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:8
+msgid "License and attribution"
+msgstr "Lisans ve atıf"
+
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:49
+msgid "More about licenses:"
+msgstr "Lisanslar hakkında daha fazla bilgi:"
+
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:15
+msgid "Set the license and the attribution of this page."
+msgstr "Bu sayfanın lisansını ve niteliğini ayarlayın."
+
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:45./apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:46
+msgid "Year"
+msgstr "Yıl"
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:168
@@ -10865,13 +10899,13 @@ msgstr "Site dizini oluşturulmasına izin verilmiyor"
 msgid "Optional Git url to checkout the site. An existing <tt>config</tt> file will be overwritten."
 msgstr "Siteyi kontrol etmek için isteğe bağlı Git url'si. Mevcut bir <tt>yapılandırma</tt> dosyasının üzerine yazılacaktır."
 
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
+msgid "Please only use: a…z, 0…9, and . (period)."
+msgstr "Lütfen yalnızca şunu kullanın: a…z, 0…9 ve . (dönem)."
+
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:136
 msgid "Please use a valid hostname."
 msgstr "Lütfen geçerli bir ana bilgisayar adı kullanın."
-
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
-msgid "Please use only a…z and 0…9 and . characters."
-msgstr "Lütfen yalnızca…z ve 0…9 ve . karakterler."
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:125./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:158
 msgid "Please use only a…z and 0…9 characters."

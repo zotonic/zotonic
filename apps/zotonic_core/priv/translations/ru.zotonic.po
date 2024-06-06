@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-06-04 12:04\n"
+"PO-Revision-Date: 2024-06-06 16:56\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -203,7 +203,7 @@ msgstr "Вы уверены, что хотите восстановить все
 #: apps/zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:100
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:31./apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:14
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:15
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:49
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:51./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:33
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:118./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:28./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:66./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:137./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
@@ -244,7 +244,7 @@ msgstr "Конфигурация изменена."
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:22
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:41./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:173
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:67./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:69
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:60
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:62./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:43
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:30
 #: apps/zotonic_mod_email_status/priv/templates/_dialog_email_status.tpl:4
 #: apps/zotonic_mod_l10n/priv/templates/_admin_configure_module.tpl:8
@@ -756,8 +756,8 @@ msgid "use (acl action)"
 msgstr "использовать (действие в acl)"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:7
-msgid "use <b>New Private Window</b> (check the <b>File</b> menu of your browser)"
-msgstr "используйте <b>Новое приватное окно</b> (проверьте в меню <b>Файл</b> вашего браузера)"
+msgid "use a private or incognito window in your browser"
+msgstr "используйте приватное окно или окно инкогнито в вашем браузере"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:8
 msgid "use another browser (eg. Chrome if you are now using Firefox)"
@@ -3118,6 +3118,7 @@ msgstr "Использовать релей для отправки электр
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:60./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:61./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:87./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:88
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:2./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:3./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:50
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:81
+#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:21
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:15
 msgid "Username"
 msgstr "Имя пользователя"
@@ -3296,6 +3297,7 @@ msgid "E-mail"
 msgstr "E-mail"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:10
+#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:23
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:69
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:18./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:29./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:30
@@ -3506,11 +3508,6 @@ msgstr "Этот адрес электронной почты был добав�
 msgid "This is not a valid e-mail address."
 msgstr "Это недействительный адрес электронной почты."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:36
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
-msgid "This password does not meet the security requirements"
-msgstr "Этот пароль не отвечает требованиям безопасности"
-
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:57
 msgid "This person is also a user."
 msgstr "Эта персона также является пользователем."
@@ -3629,7 +3626,6 @@ msgid "You received this email because you verified your email address. You will
 msgstr "Вы получили это письмо, потому что подтвердили свой адрес электронной почты. Вы не будете получать никаких дополнительных писем из-за этого запроса."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:12
-#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:21
 msgid "Your account name is"
 msgstr "Имя вашей учетной записи:"
 
@@ -3644,6 +3640,12 @@ msgstr "Ваш адрес электронной почты теперь про�
 #: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:4
 msgid "Your login details for"
 msgstr "Ваши регистрационные данные для"
+
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:36
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
+msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, and symbol."
+msgstr "Ваш новый пароль слишком короткий или недостаточно надежный. Используйте a: прописную букву, строчную букву, цифру и символ."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:20
 msgid "Your username is:"
@@ -4137,13 +4139,17 @@ msgstr "Трек"
 msgid "2FA"
 msgstr "2ФА"
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:78./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:120
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:107./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:149
 msgid "Add two-factor authentication"
 msgstr "Добавить двухфакторную аутентификацию"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:27
 msgid "After you scanned the QR code, please enter the passcode generated by your two-factor authentication app below."
 msgstr "После сканирования QR-кода введите ниже код доступа, сгенерированный вашим приложением двухфакторной аутентификации."
+
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:29
+msgid "Are you sure you want to remove the two-factor authentication from this account?"
+msgstr "Вы уверены, что хотите удалить двухфакторную аутентификацию из этой учетной записи?"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:44
 msgid "Ask after logging in"
@@ -4161,11 +4167,11 @@ msgstr "Настройка 2FA изменена."
 msgid "Check the user groups for which two-factor authentication should be forced."
 msgstr "Отметьте группы пользователей, для которых должна быть включена принудительная двухфакторная аутентификация."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:21
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:23
 msgid "Copied to clipboard"
 msgstr "Скопировано в буфер обмена"
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:16./apps/zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:20
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:17./apps/zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:20
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:33
 msgid "Copy"
 msgstr "Копировать"
@@ -4178,7 +4184,7 @@ msgstr "Конфигурация по умолчанию"
 msgid "Define who should use two-factor authentication, this is the default setting for all users."
 msgstr "Определите, кто должен использовать двухфакторную аутентификацию, это настройка по умолчанию для всех пользователей."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:32
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:21
 msgid "Enable two-factor authentication..."
 msgstr "Включить двухфакторную аутентификацию..."
 
@@ -4210,13 +4216,17 @@ msgstr "При каждой загрузке страницы появляетс
 msgid "On the first page load a dialog appears for setting the two-factor authentication."
 msgstr "При первой загрузке страницы появляется диалог настройки двухфакторной аутентификации."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:42./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:55
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:31./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:53./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:68
 msgid "Only the admin can change the two-factor authentication of the admin."
 msgstr "Только администратор может изменить двухфакторную аутентификацию администратора."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:56
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:58
 msgid "Only the user themselves can set their new two-factor authentication QR code."
 msgstr "Только сам пользователь может установить свой новый QR-код для двухфакторной аутентификации."
+
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:12./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:39
+msgid "Only the user themselves or an admin can remove the two-factor authentication."
+msgstr "Отключить двухфакторную аутентификацию может только сам пользователь или администратор."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:33
 msgid "Optional"
@@ -4226,17 +4236,17 @@ msgstr "Необязательно"
 msgid "Passcode generated by your app"
 msgstr "Код доступа, сгенерированный вашим приложением"
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:10
-msgid "Remove two-factor"
-msgstr "Удалить двухфакторный"
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:17
+msgid "Please enter the current two-factor authentication code to remove the two-factor authentication from this account."
+msgstr "Пожалуйста, введите текущий код двухфакторной аутентификации, чтобы удалить двухфакторную аутентификацию из этой учетной записи."
+
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:34./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:56
+msgid "Remove two-factor authentication"
+msgstr "Удалить двухфакторную аутентификацию"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:7
 msgid "Remove two-factor..."
 msgstr "Удалить двухфакторный..."
-
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:20
-msgid "Reset two-factor..."
-msgstr "Сбросить двухфакторный..."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:2
 msgid "Scan the two-factor authentication QR code with an app such as <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
@@ -4246,7 +4256,7 @@ msgstr "Отсканируйте QR-код двухфакторной аутен
 msgid "Scan the two-factor authentication QR code with an app such as <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
 msgstr "Отсканируйте QR-код двухфакторной аутентификации с помощью такого приложения, как <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> или <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:50
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:52
 msgid "Set passcode"
 msgstr "Установить пароль"
 
@@ -4254,15 +4264,15 @@ msgstr "Установить пароль"
 msgid "Sorry, you are not allowed to change the 2FA settings."
 msgstr "Извините, вам не разрешено изменять настройки 2FA."
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:60
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:61./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:89
 msgid "Sorry, you are not allowed to remove the 2FA."
 msgstr "Извините, вам не разрешается удалять 2FA."
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:106
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:135
 msgid "Sorry, you are not allowed to set the 2FA."
 msgstr "К сожалению, вам не разрешено устанавливать 2FA."
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:99
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:128
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:170
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:40
 msgid "Success"
@@ -4272,10 +4282,10 @@ msgstr "Успех"
 msgid "The two-factor authentication can be added per user in the admin or (if available on the site) on their profile page."
 msgstr "Двухфакторную аутентификацию можно добавить для каждого пользователя в админке или (если доступно на сайте) на странице его профиля."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:44
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:46./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:25
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:2
-msgid "The two-factor authentication passcode did not match. Please try again."
-msgstr "Код доступа двухфакторной аутентификации не совпадает. Пожалуйста, попробуйте еще раз."
+msgid "The two-factor authentication passcode is not correct. Please try again."
+msgstr "Неправильный пароль двухфакторной аутентификации. Пожалуйста, попробуйте еще раз."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:68
 msgid "The user will be prompted to set the two-factor authentication before being allowed to log in."
@@ -4285,11 +4295,7 @@ msgstr "Перед входом в систему пользователю бу�
 msgid "This is done by showing the two-factor setup dialog on every page load."
 msgstr "Это достигается путем отображения диалогового окна двухфакторной настройки при каждой загрузке страницы."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:9
-msgid "This will disable the two-factor authentication.<br>The old QR code will not be valid anymore."
-msgstr "Это отключит двухфакторную аутентификацию.<br>Старый QR-код больше не действует."
-
-#: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:6./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:132
+#: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:6./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:161
 msgid "Two-factor authentication"
 msgstr "Двухфакторная аутентификация"
 
@@ -4301,7 +4307,7 @@ msgstr "Двухфакторная аутентификация добавляе
 msgid "Two-factor authentication configuration"
 msgstr "Конфигурация двухфакторной аутентификации"
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:100
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:129
 msgid "Two-factor authentication has been enabled for your account."
 msgstr "Для вашей учетной записи включена двухфакторная аутентификация."
 
@@ -4317,7 +4323,7 @@ msgstr "Для этой учетной записи включена двухф�
 msgid "Two-factor authentication is not enabled"
 msgstr "Двухфакторная аутентификация не включена"
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:27
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:16
 msgid "Two-factor authentication is not enabled for this account."
 msgstr "Для этой учетной записи не включена двухфакторная аутентификация."
 
@@ -4326,7 +4332,7 @@ msgstr "Для этой учетной записи не включена дву
 msgid "Two-factor passcode"
 msgstr "Двухфакторный пароль"
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:41./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:42
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:43./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:44./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:22./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:23
 msgid "Type the code generated by your app"
 msgstr "Введите код, сгенерированный вашим приложением."
 
@@ -4400,9 +4406,9 @@ msgstr "Проверьте свой e-mail"
 msgid "Checking the reset code…"
 msgstr "Проверка кода сброса…."
 
-#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:25
-msgid "Click on the link below to enter a new password. When clicking doesn't work, please copy and paste the whole link."
-msgstr "Нажмите на ссылку ниже, чтобы ввести новый пароль. Если нажатие не работает, пожалуйста, скопируйте и вставьте всю ссылку."
+#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:27
+msgid "Click on the link to enter a new password or copy and paste the whole link."
+msgstr "Нажмите на ссылку, чтобы ввести новый пароль, или скопируйте и вставьте ссылку целиком."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:16
 msgid "Close this window and log on if you are already a user of {site}."
@@ -4459,10 +4465,6 @@ msgstr "Включите <em>mod_twitter</em> для просмотра наст
 msgid "Enable the signup module to automatically sign up users that are authenticating via the services below."
 msgstr "Включите модуль регистрации для автоматической регистрации пользователей с аутентификацией через нижеперечисленные сервисы."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:14
-msgid "Enter the new password for your account"
-msgstr "Введите новый пароль для вашей учетной записи"
-
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_title.tpl:7
 msgid "Enter the new password for your account <strong>{username}</strong>."
 msgstr "Введите новый пароль для вашей учетной записи <strong>{username}</strong>."
@@ -4490,7 +4492,7 @@ msgstr "Ожидался другой аккаунт"
 msgid "External Services"
 msgstr "Внешние службы"
 
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:3
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:2
 msgid "For more information visit <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://haveibeenpwned.com/Passwords\">{title}</a>"
 msgstr "Для получения дополнительной информации посетите <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://haveibeenpwned.com/Passwords\">{title}</a>"
 
@@ -4498,7 +4500,7 @@ msgstr "Для получения дополнительной информац�
 msgid "For security reasons, password reset codes are only kept for a limited amount of time and can only be used once."
 msgstr "Из соображений безопасности, коды сброса пароля хранятся только в течение ограниченного времени и могут быть использованы только один раз."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:9./apps/zotonic_mod_authentication/priv/templates/_logon_login_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:8./apps/zotonic_mod_authentication/priv/templates/logon_error/message.pw.tpl:5
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:9./apps/zotonic_mod_authentication/priv/templates/_logon_login_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:8./apps/zotonic_mod_authentication/priv/templates/logon_error/message.pw.tpl:2
 msgid "Forgot your password?"
 msgstr "Забыли пароль?"
 
@@ -4547,17 +4549,17 @@ msgstr "Я хочу создать новый аккаунт"
 msgid "If you are already a user of {site} then <a href=\"{logon_url}\">log on</a>."
 msgstr "Если вы уже являетесь пользователем {site} , тогда <a href=\"{logon_url}\">войдите в систему</a>."
 
-#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:31
-msgid "If you didn't request a password reset, you can safely ignore this email. Maybe someone made an error typing his or her email address."
-msgstr "Если вы не запрашивали сброс пароля, вы можете безопасно проигнорировать это письмо. Возможно, кто-то допустил ошибку при наборе своего адреса электронной почты."
-
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:93./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:109
 msgid "If you do not receive the email within a few minutes, please check your spam folder."
 msgstr "Если Вы не получите письмо в течение нескольких минут, проверьте папку \"Спам\"."
 
+#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:33
+msgid "If you don't want to reset your password, you can ignore this email. Maybe someone made an error typing his or her email address."
+msgstr "Если вы не хотите сбрасывать пароль, вы можете игнорировать это письмо. Возможно, кто-то допустил ошибку, набрав свой адрес электронной почты."
+
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:14
-msgid "If you think you have an account and were expecting this email, please try again using the email address you gave when you created your account."
-msgstr "Если вы считаете, что у вас есть учетная запись и ожидаете это письмо, попробуйте еще раз, используя адрес электронной почты, который вы указали при создании учетной записи."
+msgid "If you think you do have an account, please try again using the correct email address."
+msgstr "Если вы считаете, что у вас есть учетная запись, попробуйте еще раз, используя правильный адрес электронной почты."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:108
 msgid "In the email you will find instructions on how to confirm your account."
@@ -4587,6 +4589,10 @@ msgstr "Войти через"
 msgid "Log out"
 msgstr "Выйти"
 
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.user_not_enabled.tpl:1
+msgid "Make sure you have verified your e-mail address."
+msgstr "Убедитесь, что вы подтвердили свой адрес электронной почты."
+
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:101
 msgid "Multiple accounts"
 msgstr "Несколько учетных записей"
@@ -4611,6 +4617,10 @@ msgstr "Одну минуту, пожалуйста"
 msgid "Passcode"
 msgstr "Пасскод"
 
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:1
+msgid "Please choose a different password as this password has been found in a public list of passwords that have appeared in a data breach."
+msgstr "Пожалуйста, выберите другой пароль, поскольку этот пароль был найден в общедоступном списке паролей, которые были обнаружены в результате утечки данных."
+
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:8
 msgid "Please confirm your"
 msgstr "Пожалуйста, подтвердите ваш пароль для"
@@ -4618,6 +4628,10 @@ msgstr "Пожалуйста, подтвердите ваш пароль для"
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:7
 msgid "Please enter a new password"
 msgstr "Пожалуйста, введите новый пароль"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:14
+msgid "Please enter a new password for your account"
+msgstr "Пожалуйста, введите новый пароль для вашей учетной записи"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:1
 msgid "Please enter the two-factor authentication passcode."
@@ -4696,21 +4710,13 @@ msgstr "Извините, ваш код для сброса пароля нев�
 msgid "Stay logged on unless I log off."
 msgstr "Оставаться в системе, пока я не выйду."
 
-#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:21
-msgid "The email address associated with your account is"
-msgstr "Адрес e-mail, соответствующий вашей учетной записи:"
-
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:1
-msgid "The new password has appeared in a data leak, which puts your account at risk of compromise."
-msgstr "Новый пароль появился в результате утечки данных, что подвергает вашу учетную запись риску компрометации."
-
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.password_change_match.tpl:2
 msgid "The new password must be different from the previous one. Please try again."
 msgstr "Новый пароль должен отличаться от предыдущего. Пожалуйста, попробуйте еще раз."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.set_passcode_error.tpl:2
-msgid "The passcode you gave was not correct, please try again."
-msgstr "Введенный вами пароль неверен. Повторите попытку."
+msgid "The passcode you entered was not correct, please try again."
+msgstr "Введенный вами пароль неверен, попробуйте еще раз."
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:29
 msgid "The redirect URL for OAuth configurations is:"
@@ -4754,7 +4760,11 @@ msgstr "Для просмотра этой страницы необходимо
 msgid "Too many retries."
 msgstr "Слишком много попыток."
 
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon_error/message.unequal.tpl:2
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:3
+msgid "Use a: uppercase letter, lowercase letter, number, and symbol."
+msgstr "Используйте a: прописную букву, строчную букву, цифру и символ."
+
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.unequal.tpl:2
 msgid "Use non alphabetical characters, digits and upper/lower case letters to make it harder to guess."
 msgstr "Используйте неалфавитные символы, цифры и буквы верхнего/нижнего регистра, чтобы было сложнее угадать."
 
@@ -4814,9 +4824,9 @@ msgstr "Вы можете попробовать войти в систему п
 msgid "You need to be allowed to edit the system configuration to view or change the configured App Keys."
 msgstr "Для просмотра или изменения настроенных Клавиш приложений необходимо иметь разрешение редактировать конфигурацию системы."
 
-#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:37
-msgid "You received this email because you requested a password reset for your account by entering your username or email address. You will not receive any additional emails because of this request."
-msgstr "Вы получили это письмо, потому что запросили сброс пароля для своей учетной записи, указав свое имя пользователя или адрес электронной почты. Вы не будете получать никаких дополнительных писем из-за этого запроса."
+#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:39
+msgid "You received this email as you entered your username or email address to reset your password. You will not receive any other emails because of this request."
+msgstr "Вы получили это письмо, когда ввели свое имя пользователя или адрес электронной почты для сброса пароля. Из-за этого запроса вы не будете получать никаких других писем."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:111
 msgid "You used another account on {service} than was expected."
@@ -4835,8 +4845,8 @@ msgid "Your account on {site} is disabled."
 msgstr "Ваша учетная запись на {site} отключена."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:9
-msgid "Your current password is expired, does not meet our security requirements, or has been found in <a href=\"https://haveibeenpwned.com/Passwords\" target=\"_blank\" rel=\"noreferrer noopener\">public records</a>."
-msgstr "Срок действия вашего текущего пароля истек, он не соответствует нашим требованиям безопасности или был найден в <a href=\"https://haveibeenpwned.com/Passwords\" target=\"_blank\" rel=\"noreferrer noopener\">общедоступных записях</a>."
+msgid "Your current password has expired, is not strong enough, or has been found in <a href=\"https://haveibeenpwned.com/Passwords\" target=\"_blank\" rel=\"noreferrer noopener\">public records containing passwords appearing in data breaches</a>."
+msgstr "Срок действия вашего текущего пароля истек, он недостаточно надежен или был найден в <a href=\"https://haveibeenpwned.com/Passwords\" target=\"_blank\" rel=\"noreferrer noopener\">общедоступных записях, содержащих пароли, возникшие в результате утечки данных</a>."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_form_fields.tpl:2
 msgid "Your email"
@@ -4845,10 +4855,6 @@ msgstr "Ваш адрес электронной почты"
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:2
 msgid "Your email or username"
 msgstr "Ваш адрес электронной почты или имя пользователя"
-
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
-msgid "Your new password is too short or too simple."
-msgstr "Ваш новый пароль слишком короткий или слишком простой."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:31
 msgid "Your password has been changed"
@@ -5652,6 +5658,34 @@ msgstr "Этот веб-сайт использует файлы cookie"
 #: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:40
 msgid "To add more information about the use of cookies, either use the content field below or add a 'relation' in the page connections."
 msgstr "Чтобы добавить дополнительную информацию об использовании файлов cookie, либо используйте поле содержимого ниже, либо добавьте «связь» в соединениях страниц."
+
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:21
+msgid "All rights reserved"
+msgstr "Все права защищены"
+
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:40./apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:41
+msgid "Attribution"
+msgstr "Атрибуция"
+
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:18
+msgid "License"
+msgstr "Лицензия"
+
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:8
+msgid "License and attribution"
+msgstr "Лицензия и авторство"
+
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:49
+msgid "More about licenses:"
+msgstr "Подробнее о лицензиях:"
+
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:15
+msgid "Set the license and the attribution of this page."
+msgstr "Установите лицензию и атрибуцию этой страницы."
+
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:45./apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:46
+msgid "Year"
+msgstr "Год"
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:168
@@ -10865,13 +10899,13 @@ msgstr "Не разрешено создавать каталог сайта"
 msgid "Optional Git url to checkout the site. An existing <tt>config</tt> file will be overwritten."
 msgstr "Опционально Git url, чтобы проверить сайт. Существующий файл <tt>config</tt> будет перезаписан."
 
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
+msgid "Please only use: a…z, 0…9, and . (period)."
+msgstr "Пожалуйста, используйте только: a…z, 0…9 и . (период)."
+
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:136
 msgid "Please use a valid hostname."
 msgstr "Пожалуйста, используйте действительное имя хоста."
-
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
-msgid "Please use only a…z and 0…9 and . characters."
-msgstr "Пожалуйста, используйте только…z и 0…9 и . персонажи."
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:125./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:158
 msgid "Please use only a…z and 0…9 characters."

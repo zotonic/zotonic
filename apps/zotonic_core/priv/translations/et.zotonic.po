@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-06-04 12:04\n"
+"PO-Revision-Date: 2024-06-06 16:56\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -203,7 +203,7 @@ msgstr "Kas olete kindel, et soovite taastada kõik ACL-reeglid nende praegu ava
 #: apps/zotonic_mod_admin_merge/priv/templates/_confirm_merge.tpl:100
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:31./apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:14
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:15
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:49
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:51./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:33
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:118./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:28./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:66./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:137./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
@@ -244,7 +244,7 @@ msgstr "Konfiguratsiooni muudetud."
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:22
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:41./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:173
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:67./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:69
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:60
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:62./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:43
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:30
 #: apps/zotonic_mod_email_status/priv/templates/_dialog_email_status.tpl:4
 #: apps/zotonic_mod_l10n/priv/templates/_admin_configure_module.tpl:8
@@ -756,8 +756,8 @@ msgid "use (acl action)"
 msgstr "kasutamine (acl-toiming)"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:7
-msgid "use <b>New Private Window</b> (check the <b>File</b> menu of your browser)"
-msgstr "kasuta <b>uut privaatset akent</b> (kontrollige oma brauseri menüüd <b>fail</b>)"
+msgid "use a private or incognito window in your browser"
+msgstr "kasutage oma brauseris privaatset või inkognito akent"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:8
 msgid "use another browser (eg. Chrome if you are now using Firefox)"
@@ -3118,6 +3118,7 @@ msgstr "Kasutage meili saatmiseks releed"
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:60./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:61./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:87./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:88
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:2./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:3./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:50
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:81
+#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:21
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:15
 msgid "Username"
 msgstr "Kasutajanimi"
@@ -3296,6 +3297,7 @@ msgid "E-mail"
 msgstr "E-post"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:10
+#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:23
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:69
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:18./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:29./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:30
@@ -3506,11 +3508,6 @@ msgstr "See e-posti aadress lisati teie isikuandmetele veebisaidil"
 msgid "This is not a valid e-mail address."
 msgstr "See ei ole kehtiv e-posti aadress."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:36
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
-msgid "This password does not meet the security requirements"
-msgstr "See parool ei vasta turvanõuetele"
-
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:57
 msgid "This person is also a user."
 msgstr "See isik on ka kasutaja."
@@ -3629,7 +3626,6 @@ msgid "You received this email because you verified your email address. You will
 msgstr "Saite selle meili, kuna kinnitasite oma e-posti aadressi. Selle taotluse tõttu ei saa te täiendavaid e-kirju."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:12
-#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:21
 msgid "Your account name is"
 msgstr "Sinu konto kasutajanimi on"
 
@@ -3644,6 +3640,12 @@ msgstr "Teie e-posti aadress on nüüd kinnitatud."
 #: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:4
 msgid "Your login details for"
 msgstr "Teie sisselogimisandmed saidile"
+
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:36
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
+msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, and symbol."
+msgstr "Teie uus parool on liiga lühike või piisavalt tugev. Kasutage a: suurtähti, väiketähti, numbrit ja sümbolit."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:20
 msgid "Your username is:"
@@ -4137,13 +4139,17 @@ msgstr "Rada"
 msgid "2FA"
 msgstr "2FA"
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:78./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:120
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:107./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:149
 msgid "Add two-factor authentication"
 msgstr "Lisage kaheastmeline autentimine"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:27
 msgid "After you scanned the QR code, please enter the passcode generated by your two-factor authentication app below."
 msgstr "Pärast QR-koodi skannimist sisestage allpool oma kahefaktorilise autentimise rakenduse loodud pääsukood."
+
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:29
+msgid "Are you sure you want to remove the two-factor authentication from this account?"
+msgstr "Kas olete kindel, et soovite sellelt kontolt kahefaktorilise autentimise eemaldada?"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:44
 msgid "Ask after logging in"
@@ -4161,11 +4167,11 @@ msgstr "Muutis seadet 2FA."
 msgid "Check the user groups for which two-factor authentication should be forced."
 msgstr "Kontrollige kasutajagruppe, mille puhul tuleks kaheastmeline autentimine sundida."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:21
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:23
 msgid "Copied to clipboard"
 msgstr "Kopeeritud lõikelauale"
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:16./apps/zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:20
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:17./apps/zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:20
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:33
 msgid "Copy"
 msgstr "Kopeeri"
@@ -4178,7 +4184,7 @@ msgstr "Vaikekonfiguratsioon"
 msgid "Define who should use two-factor authentication, this is the default setting for all users."
 msgstr "Määrake, kes peaks kasutama kaheastmelist autentimist, see on kõigi kasutajate vaikeseade."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:32
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:21
 msgid "Enable two-factor authentication..."
 msgstr "Luba kaheastmeline autentimine ..."
 
@@ -4210,13 +4216,17 @@ msgstr "Igal lehe laadimisel kuvatakse kahefaktorilise autentimise seadistamise 
 msgid "On the first page load a dialog appears for setting the two-factor authentication."
 msgstr "Laadimise esimesel lehel kuvatakse kahefaktorilise autentimise seadistamise dialoog."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:42./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:55
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:31./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:53./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:68
 msgid "Only the admin can change the two-factor authentication of the admin."
 msgstr "Ainult admin saab muuta administraatori kaheastmelist autentimist."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:56
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:58
 msgid "Only the user themselves can set their new two-factor authentication QR code."
 msgstr "Ainult kasutaja saab ise määrata oma uue kaheastmelise autentimise QR-koodi."
+
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:12./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:39
+msgid "Only the user themselves or an admin can remove the two-factor authentication."
+msgstr "Kahefaktorilise autentimise saab eemaldada ainult kasutaja ise või administraator."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:33
 msgid "Optional"
@@ -4226,17 +4236,17 @@ msgstr "Valikuline"
 msgid "Passcode generated by your app"
 msgstr "Teie rakenduse loodud pääsukood"
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:10
-msgid "Remove two-factor"
-msgstr "Eemaldage kahefaktoriline"
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:17
+msgid "Please enter the current two-factor authentication code to remove the two-factor authentication from this account."
+msgstr "Sisestage praegune kahefaktoriline autentimiskood, et eemaldada sellelt kontolt kahefaktoriline autentimine."
+
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:34./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:56
+msgid "Remove two-factor authentication"
+msgstr "Eemaldage kahefaktoriline autentimine"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:7
 msgid "Remove two-factor..."
 msgstr "Eemaldage kahefaktoriline ..."
-
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:20
-msgid "Reset two-factor..."
-msgstr "Lähtestage kahefaktoriline ..."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:2
 msgid "Scan the two-factor authentication QR code with an app such as <a href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
@@ -4246,7 +4256,7 @@ msgstr "Skannige kahefaktorilise autentimise QR-koodi rakendusega, nagu <a href=
 msgid "Scan the two-factor authentication QR code with an app such as <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> or <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
 msgstr "Skannige kaheastmeline autentimise QR-kood rakendusega, näiteks <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://support.google.com/accounts/answer/1066447\">Google Authenticator</a> või <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile\">Duo Mobile</a>."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:50
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:52
 msgid "Set passcode"
 msgstr "Määra pääsukood"
 
@@ -4254,15 +4264,15 @@ msgstr "Määra pääsukood"
 msgid "Sorry, you are not allowed to change the 2FA settings."
 msgstr "Vabandust, teil pole lubatud 2FA seadeid muuta."
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:60
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:61./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:89
 msgid "Sorry, you are not allowed to remove the 2FA."
 msgstr "Vabandust, teil pole lubatud 2FA-d eemaldada."
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:106
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:135
 msgid "Sorry, you are not allowed to set the 2FA."
 msgstr "Kahjuks ei ole teil lubatud 2FA-d määrata."
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:99
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:128
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:170
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:40
 msgid "Success"
@@ -4272,10 +4282,10 @@ msgstr "Edu"
 msgid "The two-factor authentication can be added per user in the admin or (if available on the site) on their profile page."
 msgstr "Kahefaktorilise autentimise saab lisada iga kasutaja kohta administraatoris või (kui see on saidil saadaval) nende profiililehel."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:44
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:46./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:25
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:2
-msgid "The two-factor authentication passcode did not match. Please try again."
-msgstr "Kahefaktoriline autentimise pääsukood ei sobinud. Palun proovi uuesti."
+msgid "The two-factor authentication passcode is not correct. Please try again."
+msgstr "Kahefaktorilise autentimise pääsukood ei ole õige. Palun proovi uuesti."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:68
 msgid "The user will be prompted to set the two-factor authentication before being allowed to log in."
@@ -4285,11 +4295,7 @@ msgstr "Enne sisselogimist palutakse kasutajal seadistada kahefaktoriline autent
 msgid "This is done by showing the two-factor setup dialog on every page load."
 msgstr "Seda tehakse kahefaktorilise seadistuse dialoogi kuvamisega igal lehe laadimisel."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:9
-msgid "This will disable the two-factor authentication.<br>The old QR code will not be valid anymore."
-msgstr "See keelab kahetegurilise autentimise.<br>Vana QR-kood ei kehti enam."
-
-#: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:6./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:132
+#: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:6./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:161
 msgid "Two-factor authentication"
 msgstr "Kaheastmeline autentimine"
 
@@ -4301,7 +4307,7 @@ msgstr "Kahefaktoriline autentimine lisab sisselogimisel täiendava kontrolli. K
 msgid "Two-factor authentication configuration"
 msgstr "Kaheastmeline autentimise konfiguratsioon"
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:100
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:129
 msgid "Two-factor authentication has been enabled for your account."
 msgstr "Teie konto jaoks on lubatud kahefaktoriline autentimine."
 
@@ -4317,7 +4323,7 @@ msgstr "Selle konto jaoks on lubatud kahefaktoriline autentimine."
 msgid "Two-factor authentication is not enabled"
 msgstr "Kahefaktoriline autentimine pole lubatud"
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:27
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:16
 msgid "Two-factor authentication is not enabled for this account."
 msgstr "Kahefaktoriline autentimine pole selle konto jaoks lubatud."
 
@@ -4326,7 +4332,7 @@ msgstr "Kahefaktoriline autentimine pole selle konto jaoks lubatud."
 msgid "Two-factor passcode"
 msgstr "Kahefaktoriline pääsukood"
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:41./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:42
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:43./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:44./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:22./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:23
 msgid "Type the code generated by your app"
 msgstr "Sisestage oma rakenduse loodud kood"
 
@@ -4400,9 +4406,9 @@ msgstr "Kontrolli oma e-maili!"
 msgid "Checking the reset code…"
 msgstr "Lähtestuskoodi kontrollimine…"
 
-#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:25
-msgid "Click on the link below to enter a new password. When clicking doesn't work, please copy and paste the whole link."
-msgstr "Uue parooli sisestamiseks klõpsake alloleval lingil. Kui klõpsamine ei toimi, kopeerige ja kleepige kogu link."
+#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:27
+msgid "Click on the link to enter a new password or copy and paste the whole link."
+msgstr "Uue parooli sisestamiseks klõpsake lingil või kopeerige ja kleepige kogu link."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:16
 msgid "Close this window and log on if you are already a user of {site}."
@@ -4459,10 +4465,6 @@ msgstr "Twitteri seadete nägemiseks lubage <em>mod_twitter</em>."
 msgid "Enable the signup module to automatically sign up users that are authenticating via the services below."
 msgstr "Allolevate teenuste kaudu autentimist võimaldavate kasutajate automaatseks registreerimiseks lubage registreerimismoodul."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:14
-msgid "Enter the new password for your account"
-msgstr "Sisestage oma konto uus parool"
-
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_title.tpl:7
 msgid "Enter the new password for your account <strong>{username}</strong>."
 msgstr "Sisestage oma konto uus parool <strong>{username}</strong>."
@@ -4490,7 +4492,7 @@ msgstr "Oodati teist kontot"
 msgid "External Services"
 msgstr "Välisteenused"
 
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:3
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:2
 msgid "For more information visit <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://haveibeenpwned.com/Passwords\">{title}</a>"
 msgstr "Lisateabe saamiseks külastage <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://haveibeenpwned.com/Passwords\">{title}</a>"
 
@@ -4498,7 +4500,7 @@ msgstr "Lisateabe saamiseks külastage <a target=\"_blank\" rel=\"noreferrer noo
 msgid "For security reasons, password reset codes are only kept for a limited amount of time and can only be used once."
 msgstr "Turvalisuse huvides hoitakse parooli lähtestamise koode ainult piiratud aja jooksul ja neid saab kasutada ainult üks kord."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:9./apps/zotonic_mod_authentication/priv/templates/_logon_login_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:8./apps/zotonic_mod_authentication/priv/templates/logon_error/message.pw.tpl:5
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:9./apps/zotonic_mod_authentication/priv/templates/_logon_login_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:8./apps/zotonic_mod_authentication/priv/templates/logon_error/message.pw.tpl:2
 msgid "Forgot your password?"
 msgstr "Unustasid salasõna?"
 
@@ -4547,17 +4549,17 @@ msgstr "Soovin luua uue konto"
 msgid "If you are already a user of {site} then <a href=\"{logon_url}\">log on</a>."
 msgstr "Kui olete juba {site} kasutaja, siis <a href=\"{logon_url}\">logige sisse</a>."
 
-#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:31
-msgid "If you didn't request a password reset, you can safely ignore this email. Maybe someone made an error typing his or her email address."
-msgstr "Kui te ei taotlenud parooli lähtestamist, võite seda e-kirja turvaliselt eirata. Võib-olla tegi keegi vea oma e-posti aadressi sisestamisel."
-
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:93./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:109
 msgid "If you do not receive the email within a few minutes, please check your spam folder."
 msgstr "Kui te ei saa meili mõne minuti jooksul, kontrollige palun oma rämpspostikausta."
 
+#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:33
+msgid "If you don't want to reset your password, you can ignore this email. Maybe someone made an error typing his or her email address."
+msgstr "Kui te ei soovi oma parooli lähtestada, võite seda meili ignoreerida. Võib-olla tegi keegi oma e-posti aadressi sisestamisel vea."
+
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:14
-msgid "If you think you have an account and were expecting this email, please try again using the email address you gave when you created your account."
-msgstr "Kui arvate, et teil on konto ja ootasite seda meili, proovige uuesti, kasutades konto loomisel antud e-posti aadressi."
+msgid "If you think you do have an account, please try again using the correct email address."
+msgstr "Kui arvate, et teil on konto, proovige uuesti, kasutades õiget e-posti aadressi."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:108
 msgid "In the email you will find instructions on how to confirm your account."
@@ -4587,6 +4589,10 @@ msgstr "Logige sisse"
 msgid "Log out"
 msgstr "Logi välja"
 
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.user_not_enabled.tpl:1
+msgid "Make sure you have verified your e-mail address."
+msgstr "Veenduge, et olete oma e-posti aadressi kinnitanud."
+
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:101
 msgid "Multiple accounts"
 msgstr "Mitu kontot"
@@ -4611,6 +4617,10 @@ msgstr "Üks hetk palun"
 msgid "Passcode"
 msgstr "Pääsukood"
 
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:1
+msgid "Please choose a different password as this password has been found in a public list of passwords that have appeared in a data breach."
+msgstr "Valige mõni muu parool, kuna see parool on leitud andmetega seotud rikkumise käigus ilmnenud paroolide avalikust loendist."
+
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:8
 msgid "Please confirm your"
 msgstr "Palun kinnita oma"
@@ -4618,6 +4628,10 @@ msgstr "Palun kinnita oma"
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:7
 msgid "Please enter a new password"
 msgstr "Palun sisestage uus parool"
+
+#: apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:14
+msgid "Please enter a new password for your account"
+msgstr "Palun sisestage oma konto jaoks uus parool"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:1
 msgid "Please enter the two-factor authentication passcode."
@@ -4696,21 +4710,13 @@ msgstr "Kahjuks on teie paroolivahetuse kood tundmatu või vananenud"
 msgid "Stay logged on unless I log off."
 msgstr "Püsige sisselogituna, kui ma välja ei logi."
 
-#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:21
-msgid "The email address associated with your account is"
-msgstr "Sinu kontoga seotud e-mail on"
-
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:1
-msgid "The new password has appeared in a data leak, which puts your account at risk of compromise."
-msgstr "Uus parool ilmnes andmelekke tõttu, mis seab teie konto ohtu."
-
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.password_change_match.tpl:2
 msgid "The new password must be different from the previous one. Please try again."
 msgstr "Uus parool peab eelmisest erinema. Palun proovi uuesti."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.set_passcode_error.tpl:2
-msgid "The passcode you gave was not correct, please try again."
-msgstr "Teie antud pääsukood ei olnud õige, proovige uuesti."
+msgid "The passcode you entered was not correct, please try again."
+msgstr "Sisestatud pääsukood ei olnud õige, proovige uuesti."
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:29
 msgid "The redirect URL for OAuth configurations is:"
@@ -4754,7 +4760,11 @@ msgstr "Selle lehe vaatamiseks peavad teil olema muud juurdepääsuõigused."
 msgid "Too many retries."
 msgstr "Liiga palju kordusi."
 
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:2./apps/zotonic_mod_authentication/priv/templates/logon_error/message.unequal.tpl:2
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:3
+msgid "Use a: uppercase letter, lowercase letter, number, and symbol."
+msgstr "Kasutage a: suurtähti, väiketähti, numbrit ja sümbolit."
+
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.unequal.tpl:2
 msgid "Use non alphabetical characters, digits and upper/lower case letters to make it harder to guess."
 msgstr "Kasutage mittetähestikulisi märke, numbreid ja suuri/väiketähti, et seda oleks raskem ära arvata."
 
@@ -4814,9 +4824,9 @@ msgstr "Võite proovida sisse logida teise kasutajana."
 msgid "You need to be allowed to edit the system configuration to view or change the configured App Keys."
 msgstr "Konfigureeritud rakendusklahvide kuvamiseks või muutmiseks peate lubama süsteemi konfiguratsiooni muuta."
 
-#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:37
-msgid "You received this email because you requested a password reset for your account by entering your username or email address. You will not receive any additional emails because of this request."
-msgstr "Saite selle meili, kuna taotlesite oma konto parooli lähtestamist, sisestades oma kasutajanime või e-posti aadressi. Selle taotluse tõttu ei saa te täiendavaid e-kirju."
+#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:39
+msgid "You received this email as you entered your username or email address to reset your password. You will not receive any other emails because of this request."
+msgstr "Saite selle meili, kui sisestasite parooli lähtestamiseks oma kasutajanime või e-posti aadressi. Selle taotluse tõttu ei saa te muid meile."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:111
 msgid "You used another account on {service} than was expected."
@@ -4835,8 +4845,8 @@ msgid "Your account on {site} is disabled."
 msgstr "Teie konto aadressil {site} on keelatud."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:9
-msgid "Your current password is expired, does not meet our security requirements, or has been found in <a href=\"https://haveibeenpwned.com/Passwords\" target=\"_blank\" rel=\"noreferrer noopener\">public records</a>."
-msgstr "Teie praegune parool on aegunud, ei vasta meie turvanõuetele või on leitud <a href=\"https://haveibeenpwned.com/Passwords\" target=\"_blank\" rel=\"noreferrer noopener\">avalikest kirjetest</a>."
+msgid "Your current password has expired, is not strong enough, or has been found in <a href=\"https://haveibeenpwned.com/Passwords\" target=\"_blank\" rel=\"noreferrer noopener\">public records containing passwords appearing in data breaches</a>."
+msgstr "Teie praegune parool on aegunud, ei ole piisavalt tugev või on leitud <a href=\"https://haveibeenpwned.com/Passwords\" target=\"_blank\" rel=\"noreferrer noopener\">avalikest registritest, mis sisaldavad paroole, mis esinesid andmetega seotud rikkumiste korral</a>."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_form_fields.tpl:2
 msgid "Your email"
@@ -4845,10 +4855,6 @@ msgstr "Sinu email"
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:2
 msgid "Your email or username"
 msgstr "Teie e-posti aadress või kasutajanimi"
-
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
-msgid "Your new password is too short or too simple."
-msgstr "Teie uus parool on liiga lühike või liiga lihtne."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:31
 msgid "Your password has been changed"
@@ -5652,6 +5658,34 @@ msgstr "See veebisait kasutab küpsiseid"
 #: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:40
 msgid "To add more information about the use of cookies, either use the content field below or add a 'relation' in the page connections."
 msgstr "Küpsiste kasutamise kohta lisateabe lisamiseks kasutage allolevat sisuvälja või lisage leheühendustesse \"seos\"."
+
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:21
+msgid "All rights reserved"
+msgstr "Kõik õigused kaitstud"
+
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:40./apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:41
+msgid "Attribution"
+msgstr "Omistamine"
+
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:18
+msgid "License"
+msgstr "Litsents"
+
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:8
+msgid "License and attribution"
+msgstr "Litsents ja omistamine"
+
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:49
+msgid "More about licenses:"
+msgstr "Lisateavet litsentside kohta:"
+
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:15
+msgid "Set the license and the attribution of this page."
+msgstr "Määrake selle lehe litsents ja omistamine."
+
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:45./apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:46
+msgid "Year"
+msgstr "aasta"
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:168
@@ -10865,13 +10899,13 @@ msgstr "Saidikataloogi pole lubatud luua"
 msgid "Optional Git url to checkout the site. An existing <tt>config</tt> file will be overwritten."
 msgstr "Giti URL on valikuline saidi ostmiseks. Olemasolev <tt>config</tt> fail kirjutatakse üle."
 
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
+msgid "Please only use: a…z, 0…9, and . (period)."
+msgstr "Kasutage ainult: a…z, 0…9 ja . (periood)."
+
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:136
 msgid "Please use a valid hostname."
 msgstr "Kasutage kehtivat hostinime."
-
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
-msgid "Please use only a…z and 0…9 and . characters."
-msgstr "Kasutage ainult…z ja 0…9 ja . tegelased."
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:125./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:158
 msgid "Please use only a…z and 0…9 characters."
