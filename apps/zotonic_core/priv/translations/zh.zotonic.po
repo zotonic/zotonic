@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-06-06 14:11\n"
+"PO-Revision-Date: 2024-06-06 15:53\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -3508,11 +3508,6 @@ msgstr "此电子邮件地址已添加到您的以下个人信息中"
 msgid "This is not a valid e-mail address."
 msgstr "这不是一个有效的电子邮件地址。"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:36
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
-msgid "This password does not meet the security requirements"
-msgstr "该密码不符合安全要求"
-
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:57
 msgid "This person is also a user."
 msgstr "该人员也是站点用户。"
@@ -3645,6 +3640,11 @@ msgstr "您的电子邮件地址现在已被验证。"
 #: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:4
 msgid "Your login details for"
 msgstr "您的登录信息"
+
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:36
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
+msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, and symbol."
+msgstr "您的新密码太短或强度不够。请使用：大写字母、小写字母、数字和符号。"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:20
 msgid "Your username is:"
@@ -4588,6 +4588,10 @@ msgstr "使用登录"
 msgid "Log out"
 msgstr "登出"
 
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.user_not_enabled.tpl:1
+msgid "Make sure you have verified your e-mail address."
+msgstr "确保您已验证您的电子邮件地址。"
+
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:101
 msgid "Multiple accounts"
 msgstr "多个帐户"
@@ -4755,9 +4759,9 @@ msgstr "要查看本页面，您需要有其他访问权限。"
 msgid "Too many retries."
 msgstr "太多的重试。"
 
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:3./apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:2
-msgid "Use a combination of uppercase letters, lowercase letters, numbers, and symbols."
-msgstr "使用大写字母、小写字母、数字和符号的组合。"
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:3
+msgid "Use a: uppercase letter, lowercase letter, number, and symbol."
+msgstr "使用：大写字母、小写字母、数字和符号。"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.unequal.tpl:2
 msgid "Use non alphabetical characters, digits and upper/lower case letters to make it harder to guess."
@@ -4850,10 +4854,6 @@ msgstr "您的邮箱"
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:2
 msgid "Your email or username"
 msgstr "您的电子邮件或用户名"
-
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
-msgid "Your new password is too short or not strong enough."
-msgstr "您的新密码太短或强度不够。"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:31
 msgid "Your password has been changed"
@@ -9135,6 +9135,10 @@ msgstr "您可能已经两次确认您的帐户，以便该帐户已经被确认
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:26
 msgid "You must agree to the Terms in order to sign up."
 msgstr "您必须同意这些条款才能注册。"
+
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
+msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, symbol."
+msgstr "您的新密码太短或强度不够。请使用：大写字母、小写字母、数字、符号。"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:23
 msgid "and the"
