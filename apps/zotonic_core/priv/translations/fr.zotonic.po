@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-06-06 14:11\n"
+"PO-Revision-Date: 2024-06-06 15:53\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -757,7 +757,7 @@ msgstr "utiliser (action acl)"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:7
 msgid "use a private or incognito window in your browser"
-msgstr ""
+msgstr "utilisez une fenêtre privée ou incognito dans votre navigateur"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:8
 msgid "use another browser (eg. Chrome if you are now using Firefox)"
@@ -3508,11 +3508,6 @@ msgstr "Cette adresse e-mail a été ajoutée à vos informations personnelles l
 msgid "This is not a valid e-mail address."
 msgstr "Ceci n'est pas une adresse e-mail valide."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:36
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
-msgid "This password does not meet the security requirements"
-msgstr "Ce mot de passe ne respecte pas les règles de sécurité"
-
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:57
 msgid "This person is also a user."
 msgstr "Cette personne est également un utilisateur."
@@ -3645,6 +3640,11 @@ msgstr "Votre adresse e-mail est maintenant vérifiée."
 #: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:4
 msgid "Your login details for"
 msgstr "Vos informations de connexion pour"
+
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:36
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
+msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, and symbol."
+msgstr "Votre nouveau mot de passe est trop court ou pas assez fort. Utilisez a : une lettre majuscule, une lettre minuscule, un chiffre et un symbole."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:20
 msgid "Your username is:"
@@ -4148,7 +4148,7 @@ msgstr "Après avoir scanné le code QR, veuillez saisir ci-dessous le code d'ac
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:29
 msgid "Are you sure you want to remove the two-factor authentication from this account?"
-msgstr ""
+msgstr "Êtes-vous sûr de vouloir supprimer l'authentification à deux facteurs de ce compte ?"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:44
 msgid "Ask after logging in"
@@ -4225,7 +4225,7 @@ msgstr "Seul l'utilisateur lui-même peut définir son nouveau code QR d'authent
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:12./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:39
 msgid "Only the user themselves or an admin can remove the two-factor authentication."
-msgstr ""
+msgstr "Seul l'utilisateur lui-même ou un administrateur peut supprimer l'authentification à deux facteurs."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:33
 msgid "Optional"
@@ -4237,11 +4237,11 @@ msgstr "Code d'accès généré par votre application"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:17
 msgid "Please enter the current two-factor authentication code to remove the two-factor authentication from this account."
-msgstr ""
+msgstr "Veuillez saisir le code d'authentification à deux facteurs actuel pour supprimer l'authentification à deux facteurs de ce compte."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:34./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:56
 msgid "Remove two-factor authentication"
-msgstr ""
+msgstr "Supprimer l'authentification à deux facteurs"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:7
 msgid "Remove two-factor..."
@@ -4284,7 +4284,7 @@ msgstr "L'authentification à deux facteurs peut être ajoutée par utilisateur 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:46./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:25
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.passcode.tpl:2
 msgid "The two-factor authentication passcode is not correct. Please try again."
-msgstr ""
+msgstr "Le code d’authentification à deux facteurs n’est pas correct. Veuillez réessayer."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:68
 msgid "The user will be prompted to set the two-factor authentication before being allowed to log in."
@@ -4407,7 +4407,7 @@ msgstr "Vérification du code de réinitialisation…"
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:27
 msgid "Click on the link to enter a new password or copy and paste the whole link."
-msgstr ""
+msgstr "Cliquez sur le lien pour saisir un nouveau mot de passe ou copiez et collez l'intégralité du lien."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:16
 msgid "Close this window and log on if you are already a user of {site}."
@@ -4554,11 +4554,11 @@ msgstr "Si vous n'avez pas reçu d'e-mail dans les minutes à venir, veuillez v�
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:33
 msgid "If you don't want to reset your password, you can ignore this email. Maybe someone made an error typing his or her email address."
-msgstr ""
+msgstr "Si vous ne souhaitez pas réinitialiser votre mot de passe, vous pouvez ignorer cet e-mail. Peut-être que quelqu'un a fait une erreur en tapant son adresse e-mail."
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:14
 msgid "If you think you do have an account, please try again using the correct email address."
-msgstr ""
+msgstr "Si vous pensez avoir un compte, veuillez réessayer en utilisant la bonne adresse e-mail."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:108
 msgid "In the email you will find instructions on how to confirm your account."
@@ -4588,6 +4588,10 @@ msgstr "Connectez-vous avec"
 msgid "Log out"
 msgstr "Se déconnecter"
 
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.user_not_enabled.tpl:1
+msgid "Make sure you have verified your e-mail address."
+msgstr "Assurez-vous d'avoir vérifié votre adresse e-mail."
+
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:101
 msgid "Multiple accounts"
 msgstr "Comptes multiples"
@@ -4614,7 +4618,7 @@ msgstr "Code d'accès"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:1
 msgid "Please choose a different password as this password has been found in a public list of passwords that have appeared in a data breach."
-msgstr ""
+msgstr "Veuillez choisir un mot de passe différent, car ce mot de passe a été trouvé dans une liste publique de mots de passe apparus lors d'une violation de données."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:8
 msgid "Please confirm your"
@@ -4626,7 +4630,7 @@ msgstr "Veuillez entrer un nouveau mot de passe"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:14
 msgid "Please enter a new password for your account"
-msgstr ""
+msgstr "Veuillez saisir un nouveau mot de passe pour votre compte"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:1
 msgid "Please enter the two-factor authentication passcode."
@@ -4711,7 +4715,7 @@ msgstr "Le nouveau mot de passe doit être différent du précédent. Veuillez r
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.set_passcode_error.tpl:2
 msgid "The passcode you entered was not correct, please try again."
-msgstr ""
+msgstr "Le mot de passe que vous avez saisi n'est pas correct, veuillez réessayer."
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:29
 msgid "The redirect URL for OAuth configurations is:"
@@ -4755,9 +4759,9 @@ msgstr "Pour afficher cette page, vous devez avoir d'autres droits."
 msgid "Too many retries."
 msgstr "Nombre maxi d'essai atteint."
 
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:3./apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:2
-msgid "Use a combination of uppercase letters, lowercase letters, numbers, and symbols."
-msgstr ""
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:3
+msgid "Use a: uppercase letter, lowercase letter, number, and symbol."
+msgstr "Utilisez a : une lettre majuscule, une lettre minuscule, un chiffre et un symbole."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.unequal.tpl:2
 msgid "Use non alphabetical characters, digits and upper/lower case letters to make it harder to guess."
@@ -4821,7 +4825,7 @@ msgstr "Vous devez être autorisé à modifier la configuration du système pour
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:39
 msgid "You received this email as you entered your username or email address to reset your password. You will not receive any other emails because of this request."
-msgstr ""
+msgstr "Vous avez reçu cet e-mail lorsque vous avez saisi votre nom d'utilisateur ou votre adresse e-mail pour réinitialiser votre mot de passe. Vous ne recevrez aucun autre e-mail suite à cette demande."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:111
 msgid "You used another account on {service} than was expected."
@@ -4841,7 +4845,7 @@ msgstr "Votre compte sur {site} est désactivé."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:9
 msgid "Your current password has expired, is not strong enough, or has been found in <a href=\"https://haveibeenpwned.com/Passwords\" target=\"_blank\" rel=\"noreferrer noopener\">public records containing passwords appearing in data breaches</a>."
-msgstr ""
+msgstr "Votre mot de passe actuel a expiré, n'est pas assez fort ou a été trouvé dans <a href=\"https://haveibeenpwned.com/Passwords\" target=\"_blank\" rel=\"noreferrer noopener\">des enregistrements publics contenant des mots de passe apparaissant dans des violations de données</a>."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_form_fields.tpl:2
 msgid "Your email"
@@ -4850,10 +4854,6 @@ msgstr "Votre adresse électronique"
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:2
 msgid "Your email or username"
 msgstr "Votre e-mail ou identifiant"
-
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
-msgid "Your new password is too short or not strong enough."
-msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:31
 msgid "Your password has been changed"
@@ -5660,31 +5660,31 @@ msgstr "Pour ajouter plus d'informations sur l'utilisation des cookies, soit uti
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:21
 msgid "All rights reserved"
-msgstr ""
+msgstr "Tous droits réservés"
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:40./apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:41
 msgid "Attribution"
-msgstr ""
+msgstr "Attribution"
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:18
 msgid "License"
-msgstr ""
+msgstr "Licence"
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:8
 msgid "License and attribution"
-msgstr ""
+msgstr "Licence et attribution"
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:49
 msgid "More about licenses:"
-msgstr ""
+msgstr "En savoir plus sur les licences :"
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:15
 msgid "Set the license and the attribution of this page."
-msgstr ""
+msgstr "Définissez la licence et l'attribution de cette page."
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:45./apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:46
 msgid "Year"
-msgstr ""
+msgstr "Année"
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:168
@@ -9140,6 +9140,10 @@ msgstr "Vous avez peut-être confirmé votre compte deux fois afin que le compte
 msgid "You must agree to the Terms in order to sign up."
 msgstr "Vous devez accepter les conditions afin de vous inscrire."
 
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
+msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, symbol."
+msgstr "Votre nouveau mot de passe est trop court ou pas assez fort. Utilisez a : lettre majuscule, lettre minuscule, chiffre, symbole."
+
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:23
 msgid "and the"
 msgstr "et le"
@@ -10900,7 +10904,7 @@ msgstr "URL Git facultative pour extraire le site. Un fichier <tt>config</tt> ex
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
 msgid "Please only use: a…z, 0…9, and . (period)."
-msgstr ""
+msgstr "Veuillez utiliser uniquement : a…z, 0…9 et . (période)."
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:136
 msgid "Please use a valid hostname."
