@@ -3779,7 +3779,7 @@ msgstr ""
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:36
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
-msgid "Your new password is too short or not strong enough"
+msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, symbol."
 msgstr ""
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:20
@@ -5130,7 +5130,7 @@ msgid "Your email or username"
 msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
-msgid "Your new password is too short or not strong enough."
+msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, symbol.."
 msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:31
