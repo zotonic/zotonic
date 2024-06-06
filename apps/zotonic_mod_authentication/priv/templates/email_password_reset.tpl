@@ -18,9 +18,9 @@
     <p>{_ You've requested a new password for _} <a href="https://{{ m.site.hostname }}/">{{ m.site.hostname }}</a>.</p>
 
     {% with m.identity[id].username as username %}
-        <p>{_ Username _}: “<strong>{{ username|escape }}</strong>”.
+        <p>{_ Username _}: <strong>{{ username|escape }}</strong>.
     {% if username != email|default:(m.rsc[id].email_raw) %} 
-        <br/>{_ Email _}: “<strong>{{ email|default:(m.rsc[id].email_raw)|escape }}</strong>”.{% endif %}</p>
+        <br/>{_ Email _}: <strong>{{ email|default:(m.rsc[id].email_raw)|escape }}</strong>.{% endif %}</p>
 
         {% all include "_logon_extra_email_reset.tpl" identity_types=m.identity[id].all_types %}
 
