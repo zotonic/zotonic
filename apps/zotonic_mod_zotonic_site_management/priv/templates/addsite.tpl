@@ -166,7 +166,7 @@
                             <div class="col-sm-7">
                                 <input class="form-control" type="text" id="{{ #dbuser }}" name="dbuser" value="" placeholder="{{ m.config.zotonic.dbuser.value|escape }}" />
                                 {% validate id=#dbuser name="dbuser"
-                                    type={format pattern="^[A-Za-z0-9_.]*$" failure_message=_"Please use only a…z and 0…9 and . characters."}
+                                    type={format pattern="^[A-Za-z0-9_.]*$" failure_message=_"Please only use: a…z, 0…9, and . (period)."}
                                 %}
                             </div>
                         </div>

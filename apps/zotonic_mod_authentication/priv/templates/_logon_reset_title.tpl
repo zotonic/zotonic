@@ -6,10 +6,10 @@ Params:
     {% if q.is_expired %}
         <h2 class="z-logon-title">{_ Please enter a new password _}</h2>
 
-        <p>{_ Your current password is expired, does not meet our security requirements, or has been found in <a href="https://haveibeenpwned.com/Passwords" target="_blank" rel="noreferrer noopener">public records</a>. _}</p>
+        <p>{_ Your current password has expired, is not strong enough, or has been found in <a href="https://haveibeenpwned.com/Passwords" target="_blank" rel="noreferrer noopener">public records containing passwords appearing in data breaches</a>. _}</p>
     {% else %}
         <h2 class="z-logon-title">{_ Reset your password _}</h2>
     {% endif %}
 
-    <p>{_ Enter the new password for your account _} <strong>{{ q.username|escape }}</strong>.</p>
+    <p>{_ Please enter a new password for your account _} <strong>{{ q.username|escape }}</strong>.</p>
 {% endif %}
