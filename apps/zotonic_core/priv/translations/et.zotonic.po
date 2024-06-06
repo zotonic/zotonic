@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-06-06 14:11\n"
+"PO-Revision-Date: 2024-06-06 15:53\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -3508,11 +3508,6 @@ msgstr "See e-posti aadress lisati teie isikuandmetele veebisaidil"
 msgid "This is not a valid e-mail address."
 msgstr "See ei ole kehtiv e-posti aadress."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:36
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
-msgid "This password does not meet the security requirements"
-msgstr "See parool ei vasta turvanõuetele"
-
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:57
 msgid "This person is also a user."
 msgstr "See isik on ka kasutaja."
@@ -3645,6 +3640,11 @@ msgstr "Teie e-posti aadress on nüüd kinnitatud."
 #: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:4
 msgid "Your login details for"
 msgstr "Teie sisselogimisandmed saidile"
+
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:36
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
+msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, and symbol."
+msgstr "Teie uus parool on liiga lühike või piisavalt tugev. Kasutage a: suurtähti, väiketähti, numbrit ja sümbolit."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:20
 msgid "Your username is:"
@@ -4588,6 +4588,10 @@ msgstr "Logige sisse"
 msgid "Log out"
 msgstr "Logi välja"
 
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.user_not_enabled.tpl:1
+msgid "Make sure you have verified your e-mail address."
+msgstr "Veenduge, et olete oma e-posti aadressi kinnitanud."
+
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:101
 msgid "Multiple accounts"
 msgstr "Mitu kontot"
@@ -4755,9 +4759,9 @@ msgstr "Selle lehe vaatamiseks peavad teil olema muud juurdepääsuõigused."
 msgid "Too many retries."
 msgstr "Liiga palju kordusi."
 
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:3./apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:2
-msgid "Use a combination of uppercase letters, lowercase letters, numbers, and symbols."
-msgstr "Kasutage suurtähtede, väiketähtede, numbrite ja sümbolite kombinatsiooni."
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:3
+msgid "Use a: uppercase letter, lowercase letter, number, and symbol."
+msgstr "Kasutage a: suurtähti, väiketähti, numbrit ja sümbolit."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.unequal.tpl:2
 msgid "Use non alphabetical characters, digits and upper/lower case letters to make it harder to guess."
@@ -4850,10 +4854,6 @@ msgstr "Sinu email"
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:2
 msgid "Your email or username"
 msgstr "Teie e-posti aadress või kasutajanimi"
-
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
-msgid "Your new password is too short or not strong enough."
-msgstr "Teie uus parool on liiga lühike või piisavalt tugev."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:31
 msgid "Your password has been changed"
@@ -9139,6 +9139,10 @@ msgstr "Võimalik, et olete oma konto kaks korda kinnitanud, nii et konto on jub
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:26
 msgid "You must agree to the Terms in order to sign up."
 msgstr "Registreerumiseks peate nõustuma tingimustega."
+
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
+msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, symbol."
+msgstr "Teie uus parool on liiga lühike või piisavalt tugev. Kasutage a: suurtähti, väiketähti, numbrit, sümbolit."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:23
 msgid "and the"
