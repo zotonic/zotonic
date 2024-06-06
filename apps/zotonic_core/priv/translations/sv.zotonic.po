@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-06-06 14:11\n"
+"PO-Revision-Date: 2024-06-06 15:53\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -3508,11 +3508,6 @@ msgstr "Den här e-postadressen har lagts till i din personliga information den"
 msgid "This is not a valid e-mail address."
 msgstr "Detta är inte en giltig e-postadress."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:36
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
-msgid "This password does not meet the security requirements"
-msgstr "Det här lösenordet uppfyller inte säkerhetskraven"
-
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:57
 msgid "This person is also a user."
 msgstr "Denna person är också en användare."
@@ -3645,6 +3640,11 @@ msgstr "Din e-postadress har nu verifierats."
 #: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:4
 msgid "Your login details for"
 msgstr "Dina inloggningsuppgifter för"
+
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:36
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
+msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, and symbol."
+msgstr "Ditt nya lösenord är för kort eller inte tillräckligt starkt. Använd en: stor bokstav, liten bokstav, siffra och symbol."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:20
 msgid "Your username is:"
@@ -4554,11 +4554,11 @@ msgstr "Om du inte får e-post inom några minuter, vänligen kontrollera din sp
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:33
 msgid "If you don't want to reset your password, you can ignore this email. Maybe someone made an error typing his or her email address."
-msgstr ""
+msgstr "Om du inte vill återställa ditt lösenord kan du ignorera detta e-postmeddelande. Kanske har någon gjort ett fel när han skrev in sin e-postadress."
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:14
 msgid "If you think you do have an account, please try again using the correct email address."
-msgstr ""
+msgstr "Om du tror att du har ett konto, försök igen med rätt e-postadress."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:108
 msgid "In the email you will find instructions on how to confirm your account."
@@ -4588,6 +4588,10 @@ msgstr "Logga in med"
 msgid "Log out"
 msgstr "Logga ut"
 
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.user_not_enabled.tpl:1
+msgid "Make sure you have verified your e-mail address."
+msgstr "Se till att du har verifierat din e-postadress."
+
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:101
 msgid "Multiple accounts"
 msgstr "Flera konton"
@@ -4614,7 +4618,7 @@ msgstr "Lösenord"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:1
 msgid "Please choose a different password as this password has been found in a public list of passwords that have appeared in a data breach."
-msgstr ""
+msgstr "Välj ett annat lösenord eftersom detta lösenord har hittats i en offentlig lista över lösenord som har dykt upp i ett dataintrång."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:8
 msgid "Please confirm your"
@@ -4626,7 +4630,7 @@ msgstr "Vänligen ange ett nytt lösenord"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:14
 msgid "Please enter a new password for your account"
-msgstr ""
+msgstr "Vänligen ange ett nytt lösenord för ditt konto"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.need_passcode.tpl:1
 msgid "Please enter the two-factor authentication passcode."
@@ -4711,7 +4715,7 @@ msgstr "Det nya lösenordet måste skilja sig från det tidigare. Var god förs�
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.set_passcode_error.tpl:2
 msgid "The passcode you entered was not correct, please try again."
-msgstr ""
+msgstr "Lösenordet du angav var inte korrekt, försök igen."
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:29
 msgid "The redirect URL for OAuth configurations is:"
@@ -4755,9 +4759,9 @@ msgstr "För att se denna sida behöver du ha andra rättigheter."
 msgid "Too many retries."
 msgstr "För många försök igen."
 
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:3./apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:2
-msgid "Use a combination of uppercase letters, lowercase letters, numbers, and symbols."
-msgstr ""
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:3
+msgid "Use a: uppercase letter, lowercase letter, number, and symbol."
+msgstr "Använd en: stor bokstav, liten bokstav, siffra och symbol."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.unequal.tpl:2
 msgid "Use non alphabetical characters, digits and upper/lower case letters to make it harder to guess."
@@ -4821,7 +4825,7 @@ msgstr "Du måste ha rätt att redigera systemkonfigurationen för att se eller 
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:39
 msgid "You received this email as you entered your username or email address to reset your password. You will not receive any other emails because of this request."
-msgstr ""
+msgstr "Du fick detta e-postmeddelande när du angav ditt användarnamn eller e-postadress för att återställa ditt lösenord. Du kommer inte att få några andra e-postmeddelanden på grund av denna begäran."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:111
 msgid "You used another account on {service} than was expected."
@@ -4841,7 +4845,7 @@ msgstr "Ditt konto på {site} är inaktiverat."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:9
 msgid "Your current password has expired, is not strong enough, or has been found in <a href=\"https://haveibeenpwned.com/Passwords\" target=\"_blank\" rel=\"noreferrer noopener\">public records containing passwords appearing in data breaches</a>."
-msgstr ""
+msgstr "Ditt nuvarande lösenord har gått ut, är inte tillräckligt starkt eller har hittats i <a href=\"https://haveibeenpwned.com/Passwords\" target=\"_blank\" rel=\"noreferrer noopener\">offentliga register som innehåller lösenord som förekommer vid dataintrång</a>."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_form_fields.tpl:2
 msgid "Your email"
@@ -4850,10 +4854,6 @@ msgstr "Din email"
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:2
 msgid "Your email or username"
 msgstr "Ditt mail eller användarnamn"
-
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
-msgid "Your new password is too short or not strong enough."
-msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:31
 msgid "Your password has been changed"
@@ -5660,31 +5660,31 @@ msgstr "För att lägga till mer information om användningen av cookies, använ
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:21
 msgid "All rights reserved"
-msgstr ""
+msgstr "Alla rättigheter förbehållna"
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:40./apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:41
 msgid "Attribution"
-msgstr ""
+msgstr "Tillskrivning"
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:18
 msgid "License"
-msgstr ""
+msgstr "Licens"
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:8
 msgid "License and attribution"
-msgstr ""
+msgstr "Licens och attribution"
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:49
 msgid "More about licenses:"
-msgstr ""
+msgstr "Mer om licenser:"
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:15
 msgid "Set the license and the attribution of this page."
-msgstr ""
+msgstr "Ställ in licensen och attributionen för denna sida."
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:45./apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:46
 msgid "Year"
-msgstr ""
+msgstr "År"
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:168
@@ -9140,6 +9140,10 @@ msgstr "Du kanske har bekräftat ditt konto två gånger så att kontot redan ä
 msgid "You must agree to the Terms in order to sign up."
 msgstr "Du måste godkänna villkoren för att kunna registrera dig."
 
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
+msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, symbol."
+msgstr "Ditt nya lösenord är för kort eller inte tillräckligt starkt. Använd en: stor bokstav, liten bokstav, siffra, symbol."
+
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:23
 msgid "and the"
 msgstr "och den"
@@ -10900,7 +10904,7 @@ msgstr "Valfri Git-webbadress för att checka ut webbplatsen. En befintlig <tt>c
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
 msgid "Please only use: a…z, 0…9, and . (period)."
-msgstr ""
+msgstr "Använd endast: a…z, 0…9 och . (period)."
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:136
 msgid "Please use a valid hostname."
