@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-06-06 15:53\n"
+"PO-Revision-Date: 2024-06-06 16:56\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -3643,6 +3643,7 @@ msgstr "您的登录信息"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:36
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
 msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, and symbol."
 msgstr "您的新密碼太短或強度不夠。使用：大寫字母、小寫字母、數字和符號。"
 
@@ -9135,10 +9136,6 @@ msgstr "您可能已經兩次確認了您的帳戶，以便該帳戶已經被確
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:26
 msgid "You must agree to the Terms in order to sign up."
 msgstr "您必须同意这些条款才能注册。"
-
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
-msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, symbol."
-msgstr "您的新密碼太短或強度不夠。使用a：大寫字母、小寫字母、數字、符號。"
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:23
 msgid "and the"
