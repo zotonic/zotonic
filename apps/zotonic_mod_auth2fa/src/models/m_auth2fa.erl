@@ -27,6 +27,7 @@
     set_totp_requested/1,
     is_totp_requested/1,
 
+    is_allowed_reset/2,
     is_totp_enabled/2,
     is_valid_totp/3,
 
@@ -70,6 +71,9 @@ m_get([ <<"is_totp_enabled">> | Rest ], _Msg, Context) ->
     {ok, {IsEnabled, Rest}};
 m_get([ <<"is_totp_requested">> | Rest ], _Msg, Context) ->
     {ok, {is_totp_requested(Context), Rest}};
+m_get([ User, <<"is_allowed_reset">> | Rest ], _Msg, Context) ->
+    UserId = m_rsc:rid(User, Context),
+    {ok, {is_allowed_reset(UserId, Context), Rest}};
 m_get([ <<"mode">> | Rest ], _Msg, Context) ->
     {ok, {mode(Context), Rest}};
 m_get([ <<"user_mode">> | Rest ], _Msg, Context) ->
@@ -85,6 +89,19 @@ is_totp_requested(Context) ->
         {ok, true} -> true;
         _ -> false
     end.
+
+%% @doc Check if the current user is allowed to reset the 2FA of the given user.
+-spec is_allowed_reset(UserId, Context) -> boolean() when
+    UserId :: m_rsc:resource_id() | undefined,
+    Context :: z:context().
+is_allowed_reset(undefined, _Context) ->
+    false;
+is_allowed_reset(1, Context) ->
+    z_acl:user(Context) =:= 1;
+is_allowed_reset(UserId, Context) ->
+    (z_acl:user(Context) =:= UserId)
+    orelse (z_acl:rsc_editable(UserId, Context)
+            andalso z_acl:is_allowed(use, mod_admin_identity, Context)).
 
 %% @doc Check if for this session the TOTP dialog has been shown.
 -spec set_totp_requested(Context) -> ok | {error, Reason} when
@@ -239,7 +256,7 @@ is_valid_totp(UserId, Code, Context) when is_integer(UserId), is_binary(Code) ->
     Code :: string() | binary() | integer().
 is_valid_totp_test(Secret, Code) ->
     {A, B, C} = totp(Secret, ?TOTP_PERIOD),
-    case z_convert:to_binary(Code) of
+    case z_string:trim(z_convert:to_binary(Code)) of
         A -> true;
         B -> true;
         C -> true;

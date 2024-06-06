@@ -45,17 +45,46 @@ event(#postback{ message={auth2fa_ug, Args} }, Context) ->
         false ->
             z_render:growl(?__("Sorry, you are not allowed to change the 2FA settings.", Context), Context)
     end;
-event(#postback{ message={auth2fa_remove, Args} }, Context) ->
+event(#postback{ message={auth2fa_remove_confirm, Args} }, Context) ->
     {id, Id} = proplists:lookup(id, Args),
     UserId = z_acl:user(Context),
-    case z_acl:is_allowed(use, mod_admin_identity, Context)
-        orelse Id =:= UserId
-    of
+    case m_auth2fa:is_allowed_reset(UserId, Context) of
         true when Id =:= 1, UserId =/= 1 ->
             z_render:growl(?__("Only the admin can change the two-factor authentication of the admin.", Context), Context);
         true ->
+            z_render:dialog(
+                ?__("Remove two-factor authentication", Context),
+                "_dialog_auth2fa_remove.tpl",
+                [ {id, Id} ],
+                Context);
+        false ->
+            z_render:growl(?__("Sorry, you are not allowed to remove the 2FA.", Context), Context)
+    end;
+event(#submit{ message={auth2fa_remove, Args} }, Context) ->
+    {id, Id} = proplists:lookup(id, Args),
+    UserId = z_acl:user(Context),
+    case m_auth2fa:is_allowed_reset(UserId, Context) of
+        true when Id =:= 1, UserId =/= 1 ->
+            z_render:growl(?__("Only the admin can change the two-factor authentication of the admin.", Context), Context);
+        true when Id =:= 1, UserId =:= 1 ->
             ok = m_auth2fa:totp_disable(Id, Context),
-            Context;
+            z_render:dialog_close(Context);
+        true ->
+            case z_acl:is_allowed(use, mod_admin_identity, Context) of
+                true ->
+                    ok = m_auth2fa:totp_disable(Id, Context),
+                    z_render:dialog_close(Context);
+                false ->
+                    Code = z_convert:to_binary(z_context:get_q(<<"passcode">>, Context)),
+                    case m_auth2fa:is_valid_totp(UserId, Code, Context) of
+                        true ->
+                            ok = m_auth2fa:totp_disable(Id, Context),
+                            z_render:dialog_close(Context);
+                        false ->
+                            OnError = proplists:get_all_values(onerror, Args),
+                            z_render:wire(OnError, Context)
+                    end
+            end;
         false ->
             z_render:growl(?__("Sorry, you are not allowed to remove the 2FA.", Context), Context)
     end;
