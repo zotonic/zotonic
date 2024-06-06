@@ -3778,10 +3778,10 @@ msgid "Your login details for"
 msgstr ""
 
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:36
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
 msgid ""
 "Your new password is too short or not strong enough. Use a: uppercase "
-"letter, lowercase letter, number, symbol."
+"letter, lowercase letter, number, and symbol."
 msgstr ""
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:20
@@ -5013,10 +5013,8 @@ msgstr ""
 msgid "Too many retries."
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:3./apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:2
-msgid ""
-"Use at least one:<ul class=\"unstyled\"><li>uppercase letter</li>  "
-"<li>lowercase letter</li><li>number</li>symbol</li></ul>"
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:3
+msgid "Use a: uppercase letter, lowercase letter, number, and symbol."
 msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.unequal.tpl:2
@@ -5129,12 +5127,6 @@ msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:2
 msgid "Your email or username"
-msgstr ""
-
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
-msgid ""
-"Your new password is too short or not strong enough. Use a: uppercase "
-"letter, lowercase letter, number, symbol.."
 msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:31
@@ -9704,6 +9696,12 @@ msgstr ""
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:26
 msgid "You must agree to the Terms in order to sign up."
+msgstr ""
+
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
+msgid ""
+"Your new password is too short or not strong enough. Use a: uppercase "
+"letter, lowercase letter, number, symbol."
 msgstr ""
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:23
