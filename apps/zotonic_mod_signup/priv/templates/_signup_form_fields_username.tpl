@@ -37,7 +37,7 @@ show_signup_password2
             {% validate id="password1"
                 type={presence failure_message=_"Enter a password"}
                 type={acceptable_password
-                    failure_message=_"Your new password it too short or not strong enough"
+                    failure_message=_"Your new password is too short or not strong enough"
                 }
                 only_on_blur
             %}
