@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-06-06 14:11\n"
+"PO-Revision-Date: 2024-06-06 15:53\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -3508,11 +3508,6 @@ msgstr "Alamat email ini telah ditambahkan ke informasi pribadi Anda pada"
 msgid "This is not a valid e-mail address."
 msgstr "Ini bukan alamat e-mail yang sah."
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:36
-#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
-msgid "This password does not meet the security requirements"
-msgstr "Kata sandi ini tidak memenuhi persyaratan keamanan"
-
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:57
 msgid "This person is also a user."
 msgstr "Orang ini juga pengguna."
@@ -3645,6 +3640,11 @@ msgstr "Alamat e-mail anda sekarang sudah terverifikasi."
 #: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:4
 msgid "Your login details for"
 msgstr "Rincian login anda untuk"
+
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:36
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
+msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, and symbol."
+msgstr "Kata sandi baru Anda terlalu pendek atau tidak cukup kuat. Gunakan a: huruf besar, huruf kecil, angka, dan simbol."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:20
 msgid "Your username is:"
@@ -4587,6 +4587,10 @@ msgstr "Masuk dengan"
 msgid "Log out"
 msgstr "Keluar"
 
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.user_not_enabled.tpl:1
+msgid "Make sure you have verified your e-mail address."
+msgstr "Pastikan Anda telah memverifikasi alamat email Anda."
+
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:101
 msgid "Multiple accounts"
 msgstr "Banyak akun"
@@ -4754,9 +4758,9 @@ msgstr "Untuk melihat halaman ini, anda harus memiliki hak akses."
 msgid "Too many retries."
 msgstr "Terlalu banyak percobaan ulang."
 
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:3./apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:2
-msgid "Use a combination of uppercase letters, lowercase letters, numbers, and symbols."
-msgstr "Gunakan kombinasi huruf besar, huruf kecil, angka, dan simbol."
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:3
+msgid "Use a: uppercase letter, lowercase letter, number, and symbol."
+msgstr "Gunakan a: huruf besar, huruf kecil, angka, dan simbol."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.unequal.tpl:2
 msgid "Use non alphabetical characters, digits and upper/lower case letters to make it harder to guess."
@@ -4849,10 +4853,6 @@ msgstr "Email mu"
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:2
 msgid "Your email or username"
 msgstr "Nama e-mail anda"
-
-#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
-msgid "Your new password is too short or not strong enough."
-msgstr "Kata sandi baru Anda terlalu pendek atau tidak cukup kuat."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:31
 msgid "Your password has been changed"
@@ -9139,6 +9139,10 @@ msgstr "Anda mungkin telah mengkonfirmasi akun Anda dua kali sehingga akun terse
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:26
 msgid "You must agree to the Terms in order to sign up."
 msgstr "Anda harus menyetujui Persyaratan untuk mendaftar."
+
+#: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
+msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, symbol."
+msgstr "Kata sandi baru Anda terlalu pendek atau tidak cukup kuat. Gunakan a: huruf besar, huruf kecil, angka, simbol."
 
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_tos.tpl:23
 msgid "and the"
