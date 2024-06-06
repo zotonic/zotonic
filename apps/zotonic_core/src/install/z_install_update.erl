@@ -795,13 +795,13 @@ key_changes_v1_0(C, Database, Schema) ->
                     ON UPDATE CASCADE ON DELETE RESTRICT
             "),
 
-            {ok, [], []} = epgsql:squery(C, "CREATE INDEX fki_rsc_category_id ON rsc (category_id)"),
-            {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_modified_category_nr_key ON rsc (modified, pivot_category_nr)"),
-            {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_created_category_nr_key ON rsc (created, pivot_category_nr)"),
-            {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_pivot_date_start_category_nr_key ON rsc (pivot_date_start, pivot_category_nr)"),
-            {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_pivot_date_end_category_nr_key ON rsc (pivot_date_end, pivot_category_nr)"),
-            {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_publication_start_category_nr_key ON rsc (publication_start, pivot_category_nr)"),
-            {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_publication_end_category_nr_key ON rsc (publication_end, pivot_category_nr)")
+            {ok, [], []} = epgsql:squery(C, "CREATE INDEX IF NOT EXISTS fki_rsc_category_id ON rsc (category_id)"),
+            {ok, [], []} = epgsql:squery(C, "CREATE INDEX IF NOT EXISTS rsc_modified_category_nr_key ON rsc (modified, pivot_category_nr)"),
+            {ok, [], []} = epgsql:squery(C, "CREATE INDEX IF NOT EXISTS rsc_created_category_nr_key ON rsc (created, pivot_category_nr)"),
+            {ok, [], []} = epgsql:squery(C, "CREATE INDEX IF NOT EXISTS rsc_pivot_date_start_category_nr_key ON rsc (pivot_date_start, pivot_category_nr)"),
+            {ok, [], []} = epgsql:squery(C, "CREATE INDEX IF NOT EXISTS rsc_pivot_date_end_category_nr_key ON rsc (pivot_date_end, pivot_category_nr)"),
+            {ok, [], []} = epgsql:squery(C, "CREATE INDEX IF NOT EXISTS rsc_publication_start_category_nr_key ON rsc (publication_start, pivot_category_nr)"),
+            {ok, [], []} = epgsql:squery(C, "CREATE INDEX IF NOT EXISTS rsc_publication_end_category_nr_key ON rsc (publication_end, pivot_category_nr)")
     end,
     ok.
 
