@@ -123,3 +123,10 @@ $.widget("ui.forminit",
 
 $.ui.forminit.defaults = {
 };
+
+// On form reset, push an 'input' event re-submit the form itself
+$('body').on('reset', 'form.do_forminit', function(e) {
+    setTimeout(function() {
+        e.target.dispatchEvent(new Event('input', { bubbles: true }));
+    }, 0);
+});
