@@ -84,7 +84,7 @@ req_auth_cookie(Context) ->
                     Context2 = z_context:set(auth_expires, Expires, Context1),
                     Context3 = z_context:set(auth_replay_token, ReplayToken, Context2),
                     z_context:set(auth_options, AuthOptions, Context3);
-                {error, _} ->
+                {error, _Reason} ->
                     reset_auth_cookie(Context)
             end
     end.
@@ -102,9 +102,15 @@ set_auth_cookie(UserId, AuthOptions, Context) ->
 -spec set_auth_cookie(OptUserId, Options, ReplayToken, Context) -> NewContext when
     OptUserId :: m_rsc:resource_id() | undefined,
     Options :: map(),
-    ReplayToken :: binary(),
+    ReplayToken :: binary() | undefined,
     Context :: z:context(),
     NewContext :: z:context().
+set_auth_cookie(UserId, AuthOptions, undefined, Context) ->
+    NewReplayToken = case replay_token(Context) of
+        undefined -> z_replay_token:new_token();
+        ReplayToken -> ReplayToken
+    end,
+    set_auth_cookie(UserId, AuthOptions, NewReplayToken, Context);
 set_auth_cookie(UserId, AuthOptions, ReplayToken, Context) ->
     % Invalidate optional existing replay token, if it is different from the
     % replay token of the new auth cookie.

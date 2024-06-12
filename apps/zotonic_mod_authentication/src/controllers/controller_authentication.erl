@@ -312,7 +312,7 @@ switch_user(#{ <<"user_id">> := UserId } = Payload, Context) when is_integer(Use
             Options2 = AuthOptions#{
                 sudo_user_id => SudoUserId
             },
-            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options2, Context1),
+            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options2, undefined, Context1),
             return_status(Payload, Context2);
         {error, _Reason} ->
             { #{ status => error, error => eacces }, Context }
