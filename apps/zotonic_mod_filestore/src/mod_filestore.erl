@@ -23,7 +23,7 @@
 -mod_title("File Storage").
 -mod_description("Store files on cloud storage services using FTP, S3 and WebDAV").
 -mod_prio(500).
--mod_schema(10).
+-mod_schema(12).
 -mod_provides([filestore]).
 -mod_depends([cron]).
 

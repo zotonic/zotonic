@@ -555,7 +555,7 @@ install_filestore(Context) ->
                     is_local boolean not null default false,
                     is_move_to_local boolean not null default false,
                     error character varying(32),
-                    path character varying(255) not null,
+                    path character varying(500) not null,
                     service character varying(16) not null,
                     location character varying(400) not null,
                     size bigint not null default 0,
@@ -575,7 +575,18 @@ install_filestore(Context) ->
             z_db:flush(Context),
             ok;
         true ->
-            ok
+            case z_db:column(filestore, path, Context) of
+                {ok, #column_def{ length = Len2 }} when Len2 < 500 ->
+                    [] = z_db:q("
+                        alter table filestore
+                        alter column path type character varying(500)
+                        ",
+                        Context),
+                    z_db:flush(Context),
+                    ok;
+                {ok, _} ->
+                    ok
+            end
     end.
 
 install_filequeue(Context) ->
@@ -584,7 +595,7 @@ install_filequeue(Context) ->
             [] = z_db:q("
                 create table filestore_queue (
                     id serial not null,
-                    path character varying(255) not null,
+                    path character varying(500) not null,
                     props bytea,
                     created timestamp with time zone not null default now(),
 
@@ -595,7 +606,18 @@ install_filequeue(Context) ->
             z_db:flush(Context),
             ok;
         true ->
-            ok
+            case z_db:column(filestore_queue, path, Context) of
+                {ok, #column_def{ length = Len1 }} when Len1 < 500 ->
+                    [] = z_db:q("
+                        alter table filestore_queue
+                        alter column path type character varying(500)
+                        ",
+                        Context),
+                    z_db:flush(Context),
+                    ok;
+                {ok, _} ->
+                    ok
+            end
     end.
 
 ensure_column_deleted(Context) ->
