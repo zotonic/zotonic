@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-11-27
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Open a dialog for sending an e-mail to a mailing list.
+%% @end
 
-%% Copyright 2009,2011 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2009-2024 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -49,14 +49,25 @@ event(#postback{message={dialog_mailing_page, Id, ListId, OnSuccess}}, Context) 
 event(#submit{message={mailing_page, Args}}, Context) ->
 	PageId = proplists:get_value(id, Args),
 	OnSuccess = proplists:get_all_values(on_success, Args),
-	ListId = z_convert:to_integer(z_context:get_q("list_id", Context)),
-    When = z_context:get_q("mail_when", Context),
-	Context1 = case z_acl:rsc_visible(PageId, z_acl:anondo(Context)) orelse When =:= "now" of
+	ListId = m_rsc:rid(z_context:get_q(<<"list_id">>, Context), Context),
+	IsMatchLanguage = z_convert:to_bool(z_context:get_q(<<"is_match_language">>, Context)),
+	IsSendAll = z_convert:to_bool(z_context:get_q(<<"is_send_all">>, Context)),
+    When = z_context:get_q(<<"mail_when">>, Context),
+    Options = [
+    	{is_match_language, IsMatchLanguage},
+    	{is_send_all, IsSendAll}
+    ],
+	Context1 = case z_acl:rsc_visible(PageId, z_acl:anondo(Context)) orelse When =:= <<"now">> of
 		true ->
-			z_notifier:notify(#mailinglist_mailing{list_id=ListId, page_id=PageId}, Context),
+			Notification = #mailinglist_mailing{
+				list_id = ListId,
+				page_id = PageId,
+				options = Options
+			},
+			z_notifier:notify(Notification, Context),
 			z_render:growl(?__("The e-mails are being sent...", Context), Context);
 		false ->
-			m_mailinglist:insert_scheduled(ListId, PageId, Context),
+			m_mailinglist:insert_scheduled(ListId, PageId, Options, Context),
 			z_render:growl(?__("The mailing will be send when the page becomes visible.", Context), Context)
 	end,
 	z_render:wire(OnSuccess, Context1).
