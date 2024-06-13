@@ -404,13 +404,13 @@
 }).
 
 %% @doc Send a welcome or goodbye message to the given recipient.
-%% The recipient is either an e-mail address or a resource id.
+%% The recipient is either a recipient-id or a recipient props.
 %% 'what' is send_welcome, send_confirm, send_goobye or silent.
 %% Type: notify
 -record(mailinglist_message, {
-    what :: send_welcome | send_confirm | send_goobye | silent,
+    what :: send_welcome | send_confirm | send_goodbye | silent,
     list_id :: m_rsc:resource(),
-    recipient :: binary() | string()
+    recipient :: proplists:proplist() | integer()
 }).
 
 %% @doc Save (and update) the complete category hierarchy

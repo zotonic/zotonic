@@ -273,6 +273,10 @@ recipient_is_enabled_toggle(RecipientId, Context) ->
     end.
 
 %% @doc Fetch the recipient record for the recipient id.
+-spec recipient_get(RecipientId, Context) -> undefined | RecipientProps when
+    RecipientId :: integer() | binary() | string(),
+    Context :: z:context(),
+    RecipientProps :: proplists:proplist().
 recipient_get(RecipientId, Context) ->
     z_db:assoc_row("
         select *
@@ -282,6 +286,11 @@ recipient_get(RecipientId, Context) ->
         Context).
 
 %% @doc Fetch the recipient record by e-mail address
+-spec recipient_get(ListId, Email, Context) -> undefined | RecipientProps when
+    ListId :: undefined | m_rsc:resource(),
+    Email :: binary() | string(),
+    Context :: z:context(),
+    RecipientProps :: proplists:proplist().
 recipient_get(undefined, _Email, _Context) ->
     undefined;
 recipient_get(<<>>, _Email, _Context) ->
@@ -316,14 +325,20 @@ recipient_delete(ListId, Email, Context) ->
         RecipientProps -> recipient_delete1(RecipientProps, false, Context)
     end.
 
-recipient_delete1(RecipientProps, Quiet, Context) ->
+recipient_delete1(RecipientProps, IsQuiet, Context) ->
     RecipientId = proplists:get_value(id, RecipientProps),
     z_db:delete(mailinglist_recipient, RecipientId, Context),
     ListId = proplists:get_value(mailinglist_id, RecipientProps),
-    case Quiet of
-        false ->
-            z_notifier:notify1(#mailinglist_message{what=send_goodbye, list_id=ListId, recipient=RecipientProps}, Context);
-        _ -> nop
+    if
+        IsQuiet == false ->
+            z_notifier:notify1(
+                #mailinglist_message{
+                    what = send_goodbye,
+                    list_id = ListId,
+                    recipient = RecipientProps
+                }, Context);
+        true ->
+            ok
     end,
     ok.
 
@@ -334,7 +349,11 @@ recipient_confirm(ConfirmKey, Context) ->
         {RecipientId, _IsEnabled, ListId} ->
             NewConfirmKey = z_ids:id(20),
             z_db:q("update mailinglist_recipient set confirm_key = $2, is_enabled = true where confirm_key = $1", [ConfirmKey, NewConfirmKey], Context),
-            z_notifier:notify(#mailinglist_message{what=send_welcome, list_id=ListId, recipient=RecipientId}, Context),
+            z_notifier:notify(#mailinglist_message{
+                    what = send_welcome,
+                    list_id = ListId,
+                    recipient = RecipientId
+                }, Context),
             {ok, RecipientId};
         undefined ->
             {error, enoent}

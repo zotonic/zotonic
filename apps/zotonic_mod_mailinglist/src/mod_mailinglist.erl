@@ -112,7 +112,7 @@ observe_search_query(_, _) ->
 %% @doc Send status messages to a recipient.
 observe_mailinglist_message(#mailinglist_message{what=silent}, _Context) ->
     ok;
-observe_mailinglist_message(#mailinglist_message{what=send_goodbye, list_id=ListId, recipient=Props}, Context) ->
+observe_mailinglist_message(#mailinglist_message{what=send_goodbye, list_id=ListId, recipient=Props}, Context) when is_list(Props) ->
     Email = proplists:get_value(email, Props),
     Vars = [
         {list_id, ListId},
