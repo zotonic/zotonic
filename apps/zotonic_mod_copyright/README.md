@@ -16,3 +16,13 @@ The properties manages are:
  * `rights_year`
 
 Override the template `_copyright.tpl` to change the way the copyrights are displayed.
+
+Defaults
+--------
+
+If no specific rights are defined then there are defaults:
+
+ * `rights` - the config key `mod_copyright.rights` or otherwise `CR` (All rights reserved).
+ * `attribution` - the config key `mod_copyright.attribution` or otherwise the site title.
+ * `year` - the config key `mod_copyright.year` or otherwise the current year (in UTC).
+
