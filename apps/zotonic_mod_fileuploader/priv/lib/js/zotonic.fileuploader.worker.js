@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 Marc Worrell <marc@worrell.nl>
+ * Copyright 2021-2024 Marc Worrell <marc@worrell.nl>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,10 +58,14 @@ var startUploader = function(fileIndex) {
             return;
         }
         f.offset += UPLOAD_BLOCKSIZE;
+        if (f.offset > f.file_size) {
+            f.offset = f.file_size;
+        }
     } else {
         return;
     }
     model.uploaders++;
+    f.uploading.push(offset);
 
     const end = Math.min(f.file.size, offset + UPLOAD_BLOCKSIZE);
     const data = f.file.slice(offset, end, "application/octet-stream");
@@ -114,8 +118,8 @@ var startUploader = function(fileIndex) {
     xhr.addEventListener("loadend", function() {
         // console.log("loadend", offset);
         f.uploading = f.uploading.filter(u => u !== offset);
-        self.publish("model/fileuploader/post/next", {});
         model.uploaders--;
+        self.publish("model/fileuploader/post/next", {});
     });
 
     xhr.send(data);
@@ -263,14 +267,16 @@ model.present = function(data) {
     for (let i = 0; i < model.files.length; i++) {
         const f = model.files[i];
         if (f.status?.is_complete) {
-            // console.log("Completed in ", Date.now() - f.start);
+            // File is complete - add it to the uploaded files and
+            // remove it from the uploading files.
             f.req.uploads.push({
                 name: f.name,
                 upload: f.status.name
             });
             f.req.upload_count--;
         } else {
-            if (f.status?.missing && f.failed.length == 0 && f.offset == f.file.size) {
+            // Start uploading missing blocks if the last block has been uploaded
+            if (f.status?.missing && f.offset >= f.file.size) {
                 for (let k = 0; k < f.status.missing.length; k++) {
                     const missingOffset = f.status.missing[k].start;
                     if (f.failed.indexOf(missingOffset) == -1) {
