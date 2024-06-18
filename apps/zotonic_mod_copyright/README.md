@@ -11,6 +11,8 @@ This modules uses two sets of rights statements:
 
 The properties manages are:
 
- * `license`
- * `copyright_attribution`
+ * `rights`
+ * `rights_attribution`
+ * `rights_year`
 
+Override the template `_copyright.tpl` to change the way the copyrights are displayed.
