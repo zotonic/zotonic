@@ -20,6 +20,18 @@ limitations under the License.
 
 ---------------------------------------------------------- */
 
+/**
+ * - On form reset, push an 'input' event to re-submit the form itself
+ */
+const configureFormReset = (element) => {
+    $(element).on('reset', (e) => {
+        //Force submit
+        setTimeout(function () {
+            e.target.dispatchEvent(new Event('input', {bubbles: true}));
+        }, 0);
+    })
+}
+
 $.widget("ui.forminit",
 {
     _init: function()
@@ -118,15 +130,10 @@ $.widget("ui.forminit",
                 }
             }
         }
+
+        configureFormReset(this.element);
     }
 });
 
 $.ui.forminit.defaults = {
 };
-
-// On form reset, push an 'input' event re-submit the form itself
-$('body').on('reset', 'form.do_forminit', function(e) {
-    setTimeout(function() {
-        e.target.dispatchEvent(new Event('input', { bubbles: true }));
-    }, 0);
-});
