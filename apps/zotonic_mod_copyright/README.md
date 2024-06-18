@@ -26,3 +26,10 @@ If no specific rights are defined then there are defaults:
  * `attribution` - the config key `mod_copyright.attribution` or otherwise the site title.
  * `year` - the config key `mod_copyright.year` or otherwise the current year (in UTC).
 
+Semantic Web
+------------
+
+The following mappings should be considered:
+
+ * `rights`  schema:license / dcterms:license
+ * `rights_attribution`  schema:copyrightHolder / dcterms:rightsHolder
