@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Mailinglist model.
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -55,6 +55,7 @@
     list_subscriptions_by_rsc_id/3,
 
     insert_scheduled/3,
+    insert_scheduled/4,
     delete_scheduled/3,
     get_scheduled/2,
     check_scheduled/1,
@@ -272,6 +273,10 @@ recipient_is_enabled_toggle(RecipientId, Context) ->
     end.
 
 %% @doc Fetch the recipient record for the recipient id.
+-spec recipient_get(RecipientId, Context) -> undefined | RecipientProps when
+    RecipientId :: integer() | binary() | string(),
+    Context :: z:context(),
+    RecipientProps :: proplists:proplist().
 recipient_get(RecipientId, Context) ->
     z_db:assoc_row("
         select *
@@ -281,6 +286,11 @@ recipient_get(RecipientId, Context) ->
         Context).
 
 %% @doc Fetch the recipient record by e-mail address
+-spec recipient_get(ListId, Email, Context) -> undefined | RecipientProps when
+    ListId :: undefined | m_rsc:resource(),
+    Email :: binary() | string(),
+    Context :: z:context(),
+    RecipientProps :: proplists:proplist().
 recipient_get(undefined, _Email, _Context) ->
     undefined;
 recipient_get(<<>>, _Email, _Context) ->
@@ -315,14 +325,20 @@ recipient_delete(ListId, Email, Context) ->
         RecipientProps -> recipient_delete1(RecipientProps, false, Context)
     end.
 
-recipient_delete1(RecipientProps, Quiet, Context) ->
+recipient_delete1(RecipientProps, IsQuiet, Context) ->
     RecipientId = proplists:get_value(id, RecipientProps),
     z_db:delete(mailinglist_recipient, RecipientId, Context),
     ListId = proplists:get_value(mailinglist_id, RecipientProps),
-    case Quiet of
-        false ->
-            z_notifier:notify1(#mailinglist_message{what=send_goodbye, list_id=ListId, recipient=RecipientProps}, Context);
-        _ -> nop
+    if
+        IsQuiet == false ->
+            z_notifier:notify1(
+                #mailinglist_message{
+                    what = send_goodbye,
+                    list_id = ListId,
+                    recipient = RecipientProps
+                }, Context);
+        true ->
+            ok
     end,
     ok.
 
@@ -333,7 +349,11 @@ recipient_confirm(ConfirmKey, Context) ->
         {RecipientId, _IsEnabled, ListId} ->
             NewConfirmKey = z_ids:id(20),
             z_db:q("update mailinglist_recipient set confirm_key = $2, is_enabled = true where confirm_key = $1", [ConfirmKey, NewConfirmKey], Context),
-            z_notifier:notify(#mailinglist_message{what=send_welcome, list_id=ListId, recipient=RecipientId}, Context),
+            z_notifier:notify(#mailinglist_message{
+                    what = send_welcome,
+                    list_id = ListId,
+                    recipient = RecipientId
+                }, Context),
             {ok, RecipientId};
         undefined ->
             {error, enoent}
@@ -823,6 +843,10 @@ list_single_subscription(RscId, ListId, Context) ->
 
 %% @doc Insert a mailing to be send when the page becomes visible
 insert_scheduled(ListId, PageId, Context) ->
+    insert_scheduled(ListId, PageId, [], Context).
+
+%% @doc Insert a mailing to be send when the page becomes visible
+insert_scheduled(ListId, PageId, Options, Context) ->
     true = z_acl:rsc_editable(ListId, Context),
     Exists = z_db:q1("
                 select count(*)
@@ -833,12 +857,22 @@ insert_scheduled(ListId, PageId, Context) ->
            z_mqtt:publish(
                 [ <<"model">>, <<"mailinglist">>, <<"event">>, ListId, <<"scheduled">> ],
                 #{ id => ListId, page_id => PageId, action => <<"insert">> },
-                Context),
-            z_db:q("insert into mailinglist_scheduled (page_id, mailinglist_id) values ($1,$2)",
-                    [PageId, ListId], Context);
+                Context);
         1 ->
             nop
-    end.
+    end,
+    z_db:q("
+        insert into mailinglist_scheduled
+            (page_id, mailinglist_id, props)
+        values
+            ($1, $2, $3)
+        on conflict (page_id, mailinglist_id)
+        do update set props = $3
+        ",
+        [ PageId, ListId, ?DB_PROPS([ {options, Options} ]) ],
+        Context),
+    ok.
+
 
 %% @doc Delete a scheduled mailing
 delete_scheduled(ListId, PageId, Context) ->
@@ -862,18 +896,28 @@ delete_scheduled(ListId, PageId, Context) ->
 
 
 %% @doc Get the list of scheduled mailings for a page.
-get_scheduled(Id, Context) ->
+-spec get_scheduled(PageId, Context) -> [ ListId ] when
+    PageId :: m_rsc:resource_id(),
+    Context :: z:context(),
+    ListId :: m_rsc:resource_id().
+get_scheduled(PageId, Context) ->
     Lists = z_db:q("
         select mailinglist_id
         from mailinglist_scheduled
-        where page_id = $1", [Id], Context),
+        where page_id = $1", [PageId], Context),
     [ ListId || {ListId} <- Lists ].
 
 
 %% @doc Fetch the next scheduled mailing that are published and in the publication date range.
+-spec check_scheduled(Context) -> undefined | Mailing when
+    Context :: z:context(),
+    Mailing :: { ListId, PageId, Options },
+    ListId :: m_rsc:resource_id(),
+    PageId :: m_rsc:resource_id(),
+    Options :: mod_mailinglist:mailing_options().
 check_scheduled(Context) ->
-    z_db:q_row("
-        select m.mailinglist_id, m.page_id
+    case z_db:assoc_props_row("
+        select m.*
         from mailinglist_scheduled m
         where (
             select r.is_published
@@ -882,7 +926,17 @@ check_scheduled(Context) ->
             from rsc r
             where r.id = m.mailinglist_id
         )
-        limit 1", Context).
+        limit 1", Context)
+    of
+        undefined ->
+            undefined;
+        Row ->
+            {
+                proplists:get_value(mailinglist_id, Row),
+                proplists:get_value(page_id, Row),
+                proplists:get_value(options, Row, [])
+            }
+    end.
 
 
 %% @doc Reset the email log for given list/page combination, allowing one to send the same page again to the given list.
@@ -951,7 +1005,8 @@ normalize_email(Email) ->
         false -> undefined
     end.
 
-%% @doc Periodically remove bouncing and disabled addresses from the mailinglist
+%% @doc Periodically remove bouncing and disabled addresses from the mailinglist.
+%% Due to the GDPR and privacy in general we delete unused email addresses.
 -spec periodic_cleanup(z:context()) -> ok.
 periodic_cleanup(Context) ->
     % Remove disabled entries that were not updated for more than 3 months
@@ -974,21 +1029,18 @@ periodic_cleanup(Context) ->
         ",
         Context,
         300000),
-    Invalid = lists:filter(
+    Invalid = lists:filtermap(
         fun({Email}) ->
-            m_email_status:is_ok_to_send(Email, Context)
+            case m_email_status:is_ok_to_send(Email, Context) of
+                true -> false;
+                false -> {true, Email}
+            end
         end,
         MaybeBouncing),
-    z_db:transaction(
-        fun(Ctx) ->
-            lists:foreach(
-                fun({Email}) ->
-                    z_db:q("
-                        delete from mailinglist_recipient
-                        where email = $1",
-                        [Email],
-                        Ctx)
-                end,
-                Invalid)
-        end,
-        Context).
+    z_db:q("
+        delete from mailinglist_recipient
+        where email = any($1)
+        ",
+        [ Invalid ],
+        Context),
+    ok.

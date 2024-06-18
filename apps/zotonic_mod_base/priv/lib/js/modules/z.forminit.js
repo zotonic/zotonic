@@ -20,6 +20,41 @@ limitations under the License.
 
 ---------------------------------------------------------- */
 
+/**
+ * On form reset:
+ * - Prevent specified 'input' and 'select' elements in the form from being reset by a 'reset' event/input.
+ *   Elements are ignored by reset if they have the attribute `data-skip-reset`
+ * - Push an 'input' event to re-submit the form itself
+ */
+const configureFormReset = (formElement) => {
+    $(formElement).on('reset', (e) => {
+        /**
+         * Set element's defaultValue to selected value, before reset sets value to defaultValue.
+         */
+        $( formElement ).find('[data-skip-reset]').each(( index, skippedElement ) => {
+
+            //Select
+            if($(skippedElement).is('select')) {
+                $( skippedElement )
+                    .find('option')
+                    .each(( optionIndex, optionEl ) => {
+                        optionEl.defaultSelected = optionEl.selected;
+                });
+                return;
+            }
+            //Checkbox
+            skippedElement.defaultChecked = skippedElement.checked;
+            //Other inputs
+            skippedElement.defaultValue = skippedElement.value;
+        });
+
+        //Force submit
+        setTimeout(function () {
+            e.target.dispatchEvent(new Event('input', {bubbles: true}));
+        }, 0);
+    })
+}
+
 $.widget("ui.forminit",
 {
     _init: function()
@@ -118,6 +153,8 @@ $.widget("ui.forminit",
                 }
             }
         }
+        // TODO: make this optional or a separate widget?
+        configureFormReset(this.element);
     }
 });
 

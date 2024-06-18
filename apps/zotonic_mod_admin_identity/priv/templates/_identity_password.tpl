@@ -33,7 +33,7 @@
 
     {% validate id="new_password"
                 type={acceptable_password
-                    message=_"This password does not meet the security requirements"
+                    failure_message=_"Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, and symbol."
                 }
                 only_on_blur
     %}

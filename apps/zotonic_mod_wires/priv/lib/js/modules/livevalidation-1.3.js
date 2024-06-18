@@ -461,6 +461,7 @@ LiveValidation.prototype = {
                     if (isValid){
                         this.onValid();
                     } else {
+                        this.showErrorMessage(validation.params?.failureMessage);
                         this.onInvalid();
                     }
                     if (this.formObj) {

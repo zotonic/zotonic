@@ -396,13 +396,22 @@
 
 %% @doc Send a page to a mailinglist (notify)
 %% Use {single_test_address, Email} when sending to a specific e-mail address.
--record(mailinglist_mailing, {list_id, page_id}).
+-record(mailinglist_mailing, {
+    list_id = undefined :: m_rsc:resource() | undefined,
+    email = undefined :: binary() | string() | undefined,
+    page_id :: m_rsc:resource(),
+    options = [] :: [ {is_match_language, boolean()} | {is_send_all, boolean()} ]
+}).
 
 %% @doc Send a welcome or goodbye message to the given recipient.
-%% The recipient is either an e-mail address or a resource id.
+%% The recipient is either a recipient-id or a recipient props.
 %% 'what' is send_welcome, send_confirm, send_goobye or silent.
 %% Type: notify
--record(mailinglist_message, {what, list_id, recipient}).
+-record(mailinglist_message, {
+    what :: send_welcome | send_confirm | send_goodbye | silent,
+    list_id :: m_rsc:resource(),
+    recipient :: proplists:proplist() | integer()
+}).
 
 %% @doc Save (and update) the complete category hierarchy
 %% Type: notify

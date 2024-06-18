@@ -1,9 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
-%% @doc Mailinglist implementation. Enables to send pages to a list of recipients.
+%% @copyright 2009-2024 Marc Worrell
+%% @doc Mailinglist implementation. Mailings are pages sent to a list of recipients.
+%% Recipients are either email addresses in the recipients table, resources matching
+%% the mailinglist query, or resources subscribed to the mailinglist using an edge.
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,7 +26,7 @@
 -mod_title("Mailing list").
 -mod_description("Mailing lists. Send a page to a list of recipients.").
 -mod_prio(600).
--mod_schema(2).
+-mod_schema(3).
 -mod_depends([ admin, mod_wires, mod_logging, mod_email_status ]).
 -mod_provides([ mailinglist ]).
 
@@ -34,20 +36,36 @@
 
 %% interface functions
 -export([
-         manage_schema/2,
-         observe_acl_is_allowed/2,
-         observe_search_query/2,
-         observe_mailinglist_message/2,
-         observe_tick_24h/2,
-         event/2,
-         observe_admin_menu/3
-        ]).
+    manage_schema/2,
+    observe_acl_is_allowed/2,
+    observe_search_query/2,
+    observe_mailinglist_message/2,
+    observe_tick_24h/2,
+    event/2,
+    observe_admin_menu/3
+]).
+
+-export([
+    send_mailing_process/4
+]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 -include_lib("epgsql/include/epgsql.hrl").
 
--record(state, {context}).
+-record(state, { context :: z:context() }).
+
+-type mailing_options() :: [ mailing_option() ].
+-type mailing_option() :: {is_match_language, boolean()}
+                        | {is_send_all, boolean()}.
+
+-export_type([
+    mailing_options/0,
+    mailing_option/0
+]).
+
+%% Check every three minutes if there is queued mailing that can be sent.
+-define(MAILING_POLL_SCHEDULED_INTERVAL, 180_000).
 
 
 %% @doc Install the tables needed for the mailinglist and return the rsc datamodel.
@@ -60,14 +78,14 @@ manage_schema(Version, Context) ->
 -spec observe_acl_is_allowed(#acl_is_allowed{}, z:context()) -> true | undefined.
 observe_acl_is_allowed(#acl_is_allowed{
         object = #acl_edge{
-            subject_id = SubjectId,
+            subject_id = RecipientId,
             predicate = Pred,
             object_id = ListId
         }
     }, Context) when
         Pred =:= subscriberof;
         Pred =:= exsubscriberof ->
-    case        z_acl:is_allowed(SubjectId, view, Context)
+    case        z_acl:is_allowed(RecipientId, view, Context)
         andalso z_acl:is_allowed(ListId, update, Context)
         andalso z_acl:is_allowed(use, mod_mailinglist, Context)
     of
@@ -94,7 +112,7 @@ observe_search_query(_, _) ->
 %% @doc Send status messages to a recipient.
 observe_mailinglist_message(#mailinglist_message{what=silent}, _Context) ->
     ok;
-observe_mailinglist_message(#mailinglist_message{what=send_goodbye, list_id=ListId, recipient=Props}, Context) ->
+observe_mailinglist_message(#mailinglist_message{what=send_goodbye, list_id=ListId, recipient=Props}, Context) when is_list(Props) ->
     Email = proplists:get_value(email, Props),
     Vars = [
         {list_id, ListId},
@@ -186,7 +204,10 @@ event(#submit{message={mailing_testaddress, [{id, PageId}]}}, Context) ->
     case z_acl:is_allowed(use, mod_mailinglist, Context) andalso z_acl:rsc_visible(PageId, Context) of
         true ->
             Email = z_context:get_q_validated(<<"email">>, Context),
-            z_notifier:notify(#mailinglist_mailing{list_id={single_test_address, Email}, page_id=PageId}, Context),
+            z_notifier:notify(#mailinglist_mailing{
+                    email = Email,
+                    page_id = PageId
+                }, Context),
             Context1 = z_render:growl([?__("Sending the page to", Context), " ", Email, "..."], Context),
             z_render:wire([{dialog_close, []}], Context1);
         false ->
@@ -280,10 +301,6 @@ start_link(Args) when is_list(Args) ->
 %% gen_server callbacks
 %%====================================================================
 
-%% @spec init(Args) -> {ok, State} |
-%%                     {ok, State, Timeout} |
-%%                     ignore               |
-%%                     {stop, Reason}
 %% @doc Initiates the server.
 init(Args) ->
     process_flag(trap_exit, true),
@@ -294,25 +311,19 @@ init(Args) ->
     }),
     z_notifier:observe(mailinglist_mailing, self(), Context),
     z_notifier:observe(dropbox_file, self(), 100, Context),
-    timer:send_interval(180000, poll),
-    {ok, #state{context=z_context:new(Context)}}.
+    timer:send_interval(?MAILING_POLL_SCHEDULED_INTERVAL, poll),
+    {ok, #state{ context = z_context:new(Context) }}.
 
 
-%% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
-%%                                      {reply, Reply, State, Timeout} |
-%%                                      {noreply, State} |
-%%                                      {noreply, State, Timeout} |
-%%                                      {stop, Reason, Reply, State} |
-%%                                      {stop, Reason, State}
 %% @doc Handle a drop folder file with recipients.
 handle_call({#dropbox_file{ filename = File }, _SenderContext}, _From, State = #state{ context = Context }) ->
     GetFiles = fun() ->
-        C = z_acl:sudo(Context),
-        #search_result{result=Ids} = z_search:search(
-            <<"query">>, #{ <<"cat">> => mailinglist },
-            1, 1000,
-            C),
-        [ {m_rsc:p(Id, <<"mailinglist_dropbox_filename">>, C), Id} || Id <- Ids ]
+        #search_result{ result = Ids } = z_search:search(
+            <<"query">>,
+            #{ <<"cat">> => mailinglist },
+            1, 10000,
+            Context),
+        [ {m_rsc:p_no_acl(Id, <<"mailinglist_dropbox_filename">>, Context), Id} || Id <- Ids ]
     end,
     Files = z_depcache:memo(GetFiles, mailinglist_dropbox_filenames, ?WEEK, [mailinglist], Context),
     Basename = filename:basename(unicode:characters_to_binary(File)),
@@ -324,7 +335,7 @@ handle_call({#dropbox_file{ filename = File }, _SenderContext}, _From, State = #
                 C = z_acl:sudo(Context),
                 case import_file(File, true, ListId, C) of
                     ok ->
-                        Title = case z_trans:lookup_fallback(m_rsc:p(ListId, <<"title">>, C), C) of
+                        Title = case z_trans:lookup_fallback(m_rsc:p_no_acl(ListId, <<"title">>, C), C) of
                             undefined -> integer_to_binary(ListId);
                             T -> T
                         end,
@@ -343,21 +354,64 @@ handle_call({#dropbox_file{ filename = File }, _SenderContext}, _From, State = #
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
-%% @spec handle_cast(Msg, State) -> {noreply, State} |
-%%                                  {noreply, State, Timeout} |
-%%                                  {stop, Reason, State}
 %% @doc Send a mailing.
-handle_cast({#mailinglist_mailing{list_id=ListId, page_id=PageId}, SenderContext}, State) ->
-    send_mailing(ListId, PageId, SenderContext),
+handle_cast({#mailinglist_mailing{
+        list_id = List,
+        page_id = Page,
+        options = Options
+    }, SenderContext}, State) when List =/= undefined ->
+    ListId = m_rsc:rid(List, SenderContext),
+    PageId = m_rsc:rid(Page, SenderContext),
+    ?LOG_INFO(#{
+        in => zotonic_mod_mailinglist,
+        text => <<"Mailing page to mailing list">>,
+        list_id => ListId,
+        page_id => PageId,
+        sender_id => z_acl:user(SenderContext),
+        options => Options
+    }),
+    case proplists:get_bool(is_send_all, Options) of
+        true ->
+            % Reset the recipient stats so that the mailing can be
+            % sent again to all recipients.
+            m_mailinglist:reset_log_email(ListId, PageId, SenderContext);
+        false ->
+            ok
+    end,
+    send_mailing(ListId, PageId, Options, SenderContext),
+    {noreply, State};
+handle_cast({#mailinglist_mailing{
+        list_id = undefined,
+        email = Email,
+        page_id = Page,
+        options = Options
+    }, SenderContext}, State) when Email =/= undefined ->
+    PageId = m_rsc:rid(Page, SenderContext),
+    Email1 = unicode:characters_to_binary(Email),
+    ?LOG_INFO(#{
+        in => zotonic_mod_mailinglist,
+        text => <<"Mailing page to test mailing address">>,
+        email => Email1,
+        page_id => PageId,
+        sender_id => z_acl:user(SenderContext),
+        options => Options
+    }),
+    send_mailing({single_test_address, Email}, PageId, Options, SenderContext),
+    {noreply, State};
+handle_cast({#mailinglist_mailing{} = Mailing, _Context}, State) ->
+    ?LOG_ERROR(#{
+        in => zotonic_mod_mailinglist,
+        text => <<"Unmatched mailinglist_mailing notification">>,
+        result => error,
+        reason => nomatch,
+        mailing => Mailing
+    }),
     {noreply, State};
 
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
-%% @spec handle_info(Info, State) -> {noreply, State} |
-%%                                   {noreply, State, Timeout} |
-%%                                   {stop, Reason, State}
 %% @doc Poll the database for scheduled mailings.
 handle_info(poll, State) ->
     poll_scheduled(z_acl:sudo(State#state.context)),
@@ -368,7 +422,6 @@ handle_info(poll, State) ->
 handle_info(_Info, State) ->
     {noreply, State}.
 
-%% @spec terminate(Reason, State) -> void()
 %% @doc This function is called by a gen_server when it is about to
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
@@ -378,7 +431,6 @@ terminate(_Reason, State) ->
     z_notifier:detach(dropbox_file, self(), State#state.context),
     ok.
 
-%% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
 %% @doc Convert process state when code is changed
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
@@ -397,9 +449,9 @@ import_file(TmpFile, IsTruncate, Id, Context) ->
         ok = m_mailinglist:insert_recipients(Id, Data, IsTruncate, Context)
     catch
         _:{badmatch, {rollback, {{case_clause, {error, #error{ codename = character_not_in_repertoire }}},_}}}->
-            {error, "The encoding of the input file is not right. Please upload a file with UTF-8 encoding."};
+            {error, <<"The encoding of the input file is not right. Please upload a file with UTF-8 encoding.">>};
         _:_ ->
-            {error, "Something unexpected went wrong while importing the recipients list."}
+            {error, <<"Something unexpected went wrong while importing the recipients list.">>}
     end.
 
 
@@ -407,20 +459,26 @@ import_file(TmpFile, IsTruncate, Id, Context) ->
 %% @doc Check if there are any scheduled mailings waiting.
 poll_scheduled(Context) ->
     case m_mailinglist:check_scheduled(Context) of
-        {ListId, PageId} ->
+        {ListId, PageId, Options} ->
             m_mailinglist:delete_scheduled(ListId, PageId, Context),
-            send_mailing(ListId, PageId, Context);
+            send_mailing(ListId, PageId, Options, Context);
         undefined ->
             ok
     end.
 
 
 %% @doc Send the page to the mailinglist.
-send_mailing(ListId, PageId, Context) ->
-    spawn(fun() -> send_mailing_process(ListId, PageId, z_acl:sudo(Context)) end).
+send_mailing(undefined, _PageId, _Options, _Context) ->
+    ok;
+send_mailing(_ListId, undefined, _Options, _Context) ->
+    ok;
+send_mailing(ListId, PageId, Options, Context) ->
+    ContextAsync = z_acl:sudo(z_context:prune_for_async(Context)),
+    sidejob_supervisor:spawn(
+            zotonic_sidejobs,
+            {?MODULE, send_mailing_process, [ ListId, PageId, Options, ContextAsync ]}).
 
-
-send_mailing_process({single_test_address, Email}, PageId, Context) ->
+send_mailing_process({single_test_address, Email}, PageId, Options, Context) ->
     Email1 = m_mailinglist:normalize_email(Email),
     {ok, ListId} = m_rsc:name_to_id(mailinglist_test, Context),
     Recipients = #{
@@ -429,21 +487,22 @@ send_mailing_process({single_test_address, Email}, PageId, Context) ->
             <<"email">> => Email1
         }
     },
-    send_mailing_process(ListId, Recipients, PageId, Context);
-send_mailing_process(ListId, PageId, Context) ->
+    send_mailing_process(ListId, Recipients, PageId, Options, Context);
+send_mailing_process(ListId, PageId, Options, Context) ->
     Recipients = z_mailinglist_recipients:list_recipients(ListId, Context),
-    send_mailing_process(ListId, Recipients, PageId, Context).
+    send_mailing_process(ListId, Recipients, PageId, Options, Context).
 
-send_mailing_process(ListId, Recipients, PageId, Context) when is_map(Recipients) ->
+send_mailing_process(ListId, Recipients, PageId, Options, Context) when is_map(Recipients) ->
     From = m_mailinglist:get_email_from(ListId, Context),
-    Options = [
+    Options1 = [
         {id, PageId},
         {list_id, ListId},
         {email_from, From}
+        | Options
     ],
     maps:fold(
         fun(Email, Recipient, _Acc) ->
-            send(Email, Recipient, From, Options, Context)
+            send(Email, Recipient, From, Options1, Context)
         end,
         ok,
         Recipients).
@@ -453,24 +512,31 @@ send(_Email, RecipientId, From, Options, Context) when is_integer(RecipientId) -
         undefined ->
             skip;
         Email ->
+            IsMatchLanguage = proplists:get_bool(is_match_language, Options),
             PageId = proplists:get_value(id, Options),
             ListId = proplists:get_value(list_id, Options),
-            Attachments = m_edge:objects(PageId, hasdocument, Context),
-            {ok, RecipientKey} = z_mailinglist_recipients:recipient_key_encode(RecipientId, ListId, Context),
-            z_email:send(
-                #email{
-                    to = Email,
-                    from = From,
-                    html_tpl = {cat, "mailing_page.tpl"},
-                    vars = [
-                        {recipient_id, RecipientId},
-                        {recipient_key, RecipientKey},
-                        {email, Email}
-                        | Options
-                    ],
-                    attachments = Attachments
-                },
-                Context)
+            PrefLanguage = m_rsc:p_no_acl(RecipientId, <<"pref_language">>, Context),
+            case is_matching_language(IsMatchLanguage, PrefLanguage, PageId, Context) of
+                true ->
+                    Attachments = m_edge:objects(PageId, hasdocument, Context),
+                    {ok, RecipientKey} = z_mailinglist_recipients:recipient_key_encode(RecipientId, ListId, Context),
+                    z_email:send(
+                        #email{
+                            to = Email,
+                            from = From,
+                            html_tpl = {cat, "mailing_page.tpl"},
+                            vars = [
+                                {recipient_id, RecipientId},
+                                {recipient_key, RecipientKey},
+                                {email, Email}
+                                | Options
+                            ],
+                            attachments = Attachments
+                        },
+                        Context);
+                false ->
+                    skip
+            end
     end;
 send(Email, #{ <<"rsc_id">> := RscId }, From, Options, Context) when is_integer(RscId) ->
     send(Email, RscId, From, Options, Context);
@@ -479,30 +545,62 @@ send(undefined, _R, _From, _Options, _Context) ->
 send(<<>>, _R, _From, _Options, _Context) ->
     skip;
 send(Email, Recipient, From, Options, Context) when is_map(Recipient) ->
-    Context1 = case maps:get(<<"pref_language">>, Recipient, undefined) of
-        undefined ->
-            Context;
-        PrefLanguage ->
-            z_context:set_language(PrefLanguage, Context)
-    end,
+    PrefLanguage = maps:get(<<"pref_language">>, Recipient, undefined),
+    IsMatchLanguage = proplists:get_bool(is_match_language, Options),
     PageId = proplists:get_value(id, Options),
     ListId = proplists:get_value(list_id, Options),
-    Attachments = m_edge:objects(PageId, hasdocument, Context),
-    {ok, RecipientKey} = z_mailinglist_recipients:recipient_key_encode(Email, ListId, Context),
-    z_email:send(
-        #email{
-            to = Email,
-            from = From,
-            html_tpl = {cat, "mailing_page.tpl"},
-            vars = [
-                {recipient_id, undefined},
-                {recipient_key, RecipientKey},
-                {email, Email}
-                | Options
-            ],
-            attachments = Attachments
-        },
-        Context1).
+    case is_matching_language(IsMatchLanguage, PrefLanguage, PageId, Context) of
+        true ->
+            Context1 = if
+                PrefLanguage =:= undefined ->
+                    Context;
+                true ->
+                    z_context:set_language(PrefLanguage, Context)
+            end,
+            Attachments = m_edge:objects(PageId, hasdocument, Context),
+            {ok, RecipientKey} = z_mailinglist_recipients:recipient_key_encode(Email, ListId, Context),
+            z_email:send(
+                #email{
+                    to = Email,
+                    from = From,
+                    html_tpl = {cat, "mailing_page.tpl"},
+                    vars = [
+                        {recipient_id, undefined},
+                        {recipient_key, RecipientKey},
+                        {email, Email}
+                        | Options
+                    ],
+                    attachments = Attachments
+                },
+                Context1);
+        false ->
+            skip
+    end.
+
+%% @doc Check if the recipient's preferred language matches the languages the page is in.
+%% This is not exact science, as there are also language variations. For now we check also
+%% the "fallback language" of the preferred language against the provided languages. We do not
+%% check the fallback languages of the provided languages against the preferred (fallback) language
+%% as it is up to the writer of the email to decide if they write specific language content or
+%% more generic language content.
+is_matching_language(false, _PrefLanguage, _PageId, _Context) ->
+    true;
+is_matching_language(true, undefined, _PageId, _Context) ->
+    true;
+is_matching_language(true, PrefLanguage, PageId, Context) ->
+    case z_language:to_language_atom(PrefLanguage) of
+        {ok, PrefLang} ->
+            case m_rsc:p_no_acl(PageId, <<"language">>, Context) of
+                undefined ->
+                    true;
+                PageLangs ->
+                    Fallback = z_language:fallback_language(PrefLang),
+                    lists:member(PrefLang, PageLangs) orelse lists:member(Fallback, PageLangs)
+            end;
+        {error, _} ->
+            true
+    end.
+
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [

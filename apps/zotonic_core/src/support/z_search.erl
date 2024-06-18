@@ -41,7 +41,9 @@
     map_to_options/1,
     props_to_map/1,
     reformat_sql_query/3,
-    concat_sql_query/2
+    concat_sql_query/2,
+
+    default_pagelen/1
 ]).
 
 % The tuple format is deprecated. Use separate binary search term with a map.

@@ -27,7 +27,7 @@ You can pass a ``failure_message``::
     <input type="password" id="password" name="password" autocomplete="new-password" value="">
     {% validate id="password"
                 type={acceptable_password
-                    failure_message=_"This password does not meet the security requirements"
+                    failure_message=_"Your new password it too short or not strong enough"
                 }
                 only_on_blur
     %}

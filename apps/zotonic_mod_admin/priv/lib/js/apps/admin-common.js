@@ -86,8 +86,8 @@ limitations under the License.
     $.widget("ui.autofocus",
     {
         _init: function() {
-            var self = this;
-            self.element.focus();
+            self = this;
+            setTimeout(() => self.element.focus(), 0);
         }
     });
 

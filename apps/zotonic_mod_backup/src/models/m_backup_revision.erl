@@ -109,6 +109,8 @@ expand(R) ->
     R.
 
 
+save_deleted(_Id, undefined, _Context) ->
+    ok;
 save_deleted(Id, Props, Context) when is_integer(Id), is_map(Props) ->
     save_revision(Id, Props, true, Context).
 

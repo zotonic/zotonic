@@ -178,6 +178,10 @@ logon_1({error, ratelimit}, _Payload, Context) ->
     { #{ status => error, error => ratelimit }, Context };
 logon_1({error, need_passcode}, _Payload, Context) ->
     { #{ status => error, error => need_passcode }, Context };
+logon_1({error, set_passcode}, _Payload, Context) ->
+    { #{ status => error, error => set_passcode }, Context };
+logon_1({error, set_passcode_error}, _Payload, Context) ->
+    { #{ status => error, error => set_passcode_error }, Context };
 logon_1({error, passcode}, _Payload, Context) ->
     { #{ status => error, error => passcode }, Context };
 logon_1({error, Reason}, _Payload, Context) ->
@@ -308,7 +312,7 @@ switch_user(#{ <<"user_id">> := UserId } = Payload, Context) when is_integer(Use
             Options2 = AuthOptions#{
                 sudo_user_id => SudoUserId
             },
-            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options2, Context1),
+            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options2, undefined, Context1),
             return_status(Payload, Context2);
         {error, _Reason} ->
             { #{ status => error, error => eacces }, Context }
@@ -419,6 +423,10 @@ change_1(UserId, Username, Password, NewPassword, Passcode, Context) ->
             { #{ status => error, error => ratelimit }, Context };
         {error, need_passcode} ->
             { #{ status => error, error => need_passcode }, Context };
+        {error, set_passcode} ->
+            { #{ status => error, error => set_passcode }, Context };
+        {error, set_passcode_error} ->
+            { #{ status => error, error => set_passcode_error }, Context };
         {error, passcode} ->
             { #{ status => error, error => passcode }, Context };
         {error, Reason} ->
@@ -508,8 +516,12 @@ reset_1(UserId, Username, Password, Passcode, Context) ->
                 {error, _} = Error ->
                     Error
             end;
-        {error, need_passcode} ->
-            {error, need_passcode};
+        {error, need_passcode} = Error ->
+            Error;
+        {error, set_passcode} = Error ->
+            Error;
+        {error, set_passcode_error} = Error ->
+            Error;
         {error, passcode} ->
             z_notifier:notify_sync(
                 #auth_checked{

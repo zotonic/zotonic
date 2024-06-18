@@ -1,5 +1,5 @@
 <p class="text-danger">
-    {_ The two-factor authentication passcode did not match. Please try again. _}
+    {_ The two-factor authentication passcode is not correct. Please try again. _}
 </p>
 
 {% if not hide_links %}

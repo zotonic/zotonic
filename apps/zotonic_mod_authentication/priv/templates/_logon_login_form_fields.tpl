@@ -126,7 +126,7 @@
     {% endif %}
 
     {% if q.options.is_user_local %}
-        <div class="form-group">
+        <div class="form-group {% if is_show_passcode or is_set_passcode %}hidden{% endif %}">
             <label for="password" class="control-label">{_ Password _}</label>
             <input class="form-control" type="password" id="password" name="password" value="{{ q.password|escape }}"
                    required
@@ -146,6 +146,10 @@
                        autocomplete="one-time-code"
                        autocapitalize="off"
                        autocorrect="off">
+            </div>
+        {% elseif is_set_passcode %}
+            <div class="form-group set-passcode">
+                {% include "_logon_login_set_passcode.tpl" %}
             </div>
         {% endif %}
     {% elseif not q.options.is_username_checked %}
