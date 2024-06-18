@@ -1041,7 +1041,7 @@ Which should log it in a separate ui error log.
 var oldOnError = window.onerror;
 var z_page_unloading = false;
 
-window.addEventListener("unload", function(event) {
+window.addEventListener("pagehide", function(event) {
     z_page_unloading = true;
 });
 
