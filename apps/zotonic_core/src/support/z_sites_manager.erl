@@ -446,7 +446,8 @@ handle_call({stop, Site}, _From, State) ->
 handle_call({get_site_config, Site}, _From, #state{ sites = Sites } = State) ->
     case maps:find(Site, Sites) of
         {ok, #site_status{ config = Config }} ->
-            {reply, {ok, Config}, State};
+            Overrides = get_site_config_overrides(Site),
+            {reply, {ok, z_utils:props_merge(Overrides, Config)}, State};
         error ->
             {reply, {error, bad_name}, State}
     end;
