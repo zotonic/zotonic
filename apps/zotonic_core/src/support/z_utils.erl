@@ -578,16 +578,23 @@ prefix(_Sep, [], Acc) -> lists:reverse(Acc);
 prefix(Sep, [H|T], Acc) -> prefix(Sep, T, [H,Sep|Acc]).
 
 
-%%% COALESCE %%%
+%% @doc COALESCE, select the first value non-null-ish value in a list.
+%% Return 'undefined' if there are no non-null-ish values. A value is
+%% is considered null-ish if it is undefined, null or the empty list.
+-spec coalesce(List) -> Value when
+    List :: list(),
+    Value :: term().
 coalesce([]) -> undefined;
-coalesce([H]) -> H;
 coalesce([undefined|T]) -> coalesce(T);
 coalesce([null|T]) -> coalesce(T);
 coalesce([[]|T]) -> coalesce(T);
 coalesce([H|_]) -> H.
 
 
-%% @doc Check if a value is 'empty'
+%% @doc Check if a value is 'empty'. Special empty values are empty strings,
+%% dates in the year 9999 and trans records with no or only empty values.
+-spec is_empty(Value) -> boolean() when
+    Value :: term().
 is_empty(undefined) -> true;
 is_empty(null) -> true;
 is_empty([]) -> true;
@@ -600,6 +607,8 @@ is_empty(_) -> false.
 
 
 %% @doc Check if the parameter could represent the logical value of "true"
+-spec is_true(Value) -> boolean() when
+    Value :: string() | binary() | boolean() | on | yes | number() | term().
 is_true([$t|_T]) -> true;
 is_true([$y|_T]) -> true;
 is_true([$T|_T]) -> true;
@@ -621,24 +630,42 @@ is_true(yes) -> true;
 is_true(on) -> true;
 
 is_true(N) when is_integer(N) andalso N =/= 0 -> true;
-is_true(N) when is_float(N) andalso N /= 0.0 -> true;
+is_true(0.0) -> false;
+is_true(-0.0) -> false;
+is_true(N) when is_float(N) -> true;
 
 is_true(_) -> false.
 
 
-%% @spec assert(bool(), error) -> none()
-%% @doc Check if an assertion is ok or failed
+%% @doc Check if an assertion is ok or failed, raise an erlang error
+%% exception if the condition failed.
+-spec assert(Condition, Error) -> ok when
+    Condition :: boolean(),
+    Error :: term().
 assert(false, Error) -> erlang:error(Error);
 assert(_, _) -> ok.
 
 
-%% @doc Replace a property in a proplist
+%% @doc Replace a property in a proplist with a new value.
+-spec prop_replace(Prop, Value, List) -> List1 when
+    Prop :: term(),
+    Value :: term(),
+    List :: proplists:proplist(),
+    List1 :: proplists:proplist().
 prop_replace(Prop, Value, List) ->
     [{Prop,Value} | lists:keydelete(Prop,1,List)].
 
 prop_delete(Prop, List) ->
     lists:keydelete(Prop, 1, List).
 
+%% @doc Overlay property list List1 over List2, keys in List1 overrule
+%% keys in List2.
+-spec props_merge(List1, List2) -> List3 when
+    List1 :: proplists:proplist(),
+    List2 :: proplists:proplist(),
+    List3 :: proplists:property().
+props_merge([], Ps) ->
+    Ps;
 props_merge(Ps, []) ->
     Ps;
 props_merge(Ps, [{K,_}=P|Xs]) ->
@@ -687,7 +714,7 @@ index_proplist(Prop, [L|Rest], Acc) ->
     index_proplist(Prop, Rest, [{proplists:get_value(Prop,L),L}|Acc]).
 
 
-%% @doc Scan the props of a proplist, when the prop is a list with a $. characters in it then split the prop.
+%% @doc Scan the props of a proplist, when the prop is a string with "." characters in it then split the prop.
 nested_proplist(Props) ->
     nested_proplist(Props, []).
 
@@ -728,9 +755,25 @@ nested_props_assign([H|T], V, Acc) ->
             prop_replace(H, NewV, Acc)
     end.
 
-get_nth(N, L) when N >= 1 ->
-    try lists:nth(N, L) catch _:_ -> undefined end.
 
+%% @doc Get the Nth value of a list, if the list is too short then return 'undefined'.
+%% The first value is 1.
+-spec get_nth(N, L) -> Value | undefined when
+    N :: non_neg_integer(),
+    L :: list(),
+    Value :: term().
+get_nth(N, L) when N >= 1 ->
+    try lists:nth(N, L) catch _:_ -> undefined end;
+get_nth(_N, _L) ->
+    undefined.
+
+%% @doc Update the nth value of a list. The first value is 1. If the list is too
+%% short then it is appended with 'undefined' values till the correct length.
+-spec set_nth(N, Value, List) -> List2 when
+    N :: pos_integer(),
+    Value :: term(),
+    List :: list(),
+    List2 :: list().
 set_nth(N, V, L) when N >= 1 ->
     try
         case lists:split(N-1, L) of
