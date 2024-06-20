@@ -74,7 +74,7 @@ render(Params, _Vars, Context) ->
 
     {Class2, Attrs1} = case z_convert:to_bool(Disabled) of
         false -> {Class1, Attrs};
-        true -> { [<<"disabled">>|Class1], [{<<"disabled">>,<<"disabled">>}|Attrs] }
+        true -> { [<<"disabled">> | Class1], [{<<"disabled">>,<<"disabled">>} | Attrs] }
     end,
 
     Attrs2 = if
