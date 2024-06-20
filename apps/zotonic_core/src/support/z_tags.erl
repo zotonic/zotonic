@@ -37,10 +37,19 @@ render_tag(TagName, Props, Content) ->
 
 
 %%% Tags with child content %%%
+
+%% @doc Render a tag, append it to the render_state of the Context.
+-spec render_tag(TagName, Props, Content, Context) -> Context1 when
+    TagName :: binary() | string(),
+    Props :: [ Prop ],
+    Prop :: {binary()|atom(), string()|binary()},
+    Content :: iodata(),
+    Context :: z:context(),
+    Context1 :: z:context().
 render_tag(TagName, Props, undefined, Context) ->
     render_tag(TagName, Props, Context);
 render_tag(TagName, Props, Content, Context) ->
-	Render   = [ $<, TagName, write_props(Props), $>, Content, $<, $/, TagName, $> ],
+	Render = [ $<, TagName, write_props(Props), $>, Content, $<, $/, TagName, $> ],
 	z_render:render(Render, Context).
 
 
