@@ -1,5 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-20124 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Generate a button with actions. Based on code (c) 2008-2009 Rusty Klophaus
 %% @end
 
