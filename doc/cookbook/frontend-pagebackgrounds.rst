@@ -123,8 +123,8 @@ So, the code to go with our checklist is as follows:
 
 .. code-block:: django
 
-  <div{% if id.background %}{# we check to see if background exists #}
-      style="background: url( {% image_url id.background.medium.filename %}{# output web accessible URL to the image #} ) no-repeat"
+  <div{% if id.o.background %}{# we check to see if background exists #}
+      style="background: url( {% image_url id.o.background.medium.filename %}{# output web accessible URL to the image #} ) no-repeat"
       {% endif %}>
     &nbsp;
   </div>
@@ -135,6 +135,6 @@ this:
 
 .. code-block:: django
 
-  <div{% if id.background %} style="background: url({% image_url id.background.medium.filename %})"{% endif %}>
+  <div{% if id.o.background %} style="background: url({% image_url id.o.background.medium.filename %})"{% endif %}>
     &nbsp;
   </div>
