@@ -30,7 +30,6 @@
 
 -define(CONFIG_FILE, "zotonic_site.*").
 
-
 -spec site_config(Site) -> {ok, Config} | {error, Reason} when
     Site :: atom(),
     Config :: map(),
@@ -130,6 +129,9 @@ read_configs(Fs) when is_list(Fs) ->
         {ok, #{}},
         Fs).
 
+apps_config(_File, [], Cfgs) ->
+    % Skip config file with no definitions in it.
+    {ok, Cfgs};
 apps_config(File, Data, Cfgs) when is_list(Data) ->
     lists:foldl(
         fun
@@ -156,7 +158,12 @@ apps_config(File, Data, Cfgs) when is_list(Data) ->
                             Error
                     end,
                     {ok, Acc},
-                    AppConfig)
+                    AppConfig);
+            (null, Acc) ->
+                % Skip null, this is probably a yml file with a comment.
+                {ok, Acc};
+            (Term, _Acc) ->
+                {error, {config_file, format, File, {unknown_term, Term}}}
         end,
         Cfgs,
         Data).
