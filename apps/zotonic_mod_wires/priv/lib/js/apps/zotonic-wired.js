@@ -426,7 +426,7 @@ function z_transport(delegate, content_type, data, options)
     options = options || {};
     if (options.transport == 'fileuploader' && cotonic.whereis("fileuploader")) {
         // Post via the fileuploader worker
-        let fileInputs = $('input:file', options.post_form);
+        let fileInputs = $('input:file:not(.nosubmit)', options.post_form);
         let files = [];
 
         fileInputs.each(function() {
@@ -1135,7 +1135,7 @@ function z_init_postback_forms()
             var form_id      = $(theForm).attr('id');
             var validations  = $(theForm).formValidationPostback();
             var transport    = '';
-            var files        = $('input:file', theForm).fieldValue();
+            var files        = $('input:file:not(.nosubmit)', theForm).fieldValue();
             var is_file_form = false;
 
             if (!postback) {
