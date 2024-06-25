@@ -1047,7 +1047,7 @@ download_file(Url, Options, Context) ->
                 CL ->
                     ContentLength = z_convert:to_integer(CL),
                     if
-                        ContentLength =:= Length ->
+                        ContentLength =< Length ->
                             {ok, File, filename(Url, Hs)};
                         true ->
                             ?LOG_ERROR(#{
@@ -1151,7 +1151,10 @@ add_medium_info(File, OriginalFilename, MediaProps, Context) ->
 
 %% @doc Save a new file from a preview_url as the preview of a medium
 save_preview_url(RscId, Url, Context) ->
-    case download_file(Url, [{max_length, ?MEDIA_MAX_LENGTH_PREVIEW}], Context) of
+    DownloadOptions = [
+        {fetch_options, [ {max_length, ?MEDIA_MAX_LENGTH_PREVIEW} ]}
+    ],
+    case download_file(Url, DownloadOptions, Context) of
         {ok, TmpFile, Filename} ->
             case z_media_identify:identify_file(TmpFile, Filename, Context) of
                 {ok, #{ <<"mime">> := <<"image/", _/binary>> } = MediaInfo} ->
