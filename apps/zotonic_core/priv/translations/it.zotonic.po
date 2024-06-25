@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-06-06 16:56\n"
+"PO-Revision-Date: 2024-06-25 14:10\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -194,7 +194,7 @@ msgstr "Sei sicuro di voler rendere permanenti tutte le regole?"
 msgid "Are you sure you want to restore all ACL rules to their currently published version?"
 msgstr "Sei sicuro di voler ripristinare tutte le regole ACL alla loro versione attualmente pubblicata?"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:160./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:77
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:160./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:78
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:41./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:173./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:77./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:71./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:259./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:301./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:85./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38./apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:52
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:21
@@ -211,7 +211,7 @@ msgstr "Sei sicuro di voler ripristinare tutte le regole ACL alla loro versione 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:101
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:125
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:134
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:50./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:33./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:13./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:77
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:50./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:53./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:13./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:77
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:69./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:88./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:39./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:51./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26./apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:141./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:149
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:158./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:113./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:85./apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:49./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:81./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
@@ -555,7 +555,7 @@ msgstr "Regole ripristinate"
 msgid "Save"
 msgstr "Salva"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:78
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:79
 msgid "Save Upload Permissions"
 msgstr "Salvare le autorizzazioni di caricamento"
 
@@ -2548,7 +2548,7 @@ msgid "Upload file"
 msgstr "Carica il file"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:127
-#: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:75
+#: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:82
 msgid "Uploaded"
 msgstr "Caricato"
 
@@ -2729,7 +2729,7 @@ msgstr "da"
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:32./apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:33./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:73./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:74./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:75
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:44
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:31
-#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:26
+#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:46
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:70./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:71./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:77
 msgid "d M Y, H:i"
 msgstr "d M Y, H:i"
@@ -5659,11 +5659,15 @@ msgstr "Questo sito web utilizza i cookie"
 msgid "To add more information about the use of cookies, either use the content field below or add a 'relation' in the page connections."
 msgstr "Per aggiungere ulteriori informazioni sull'uso dei cookie, utilizzare il campo del contenuto sottostante o aggiungere una 'relazione' nei collegamenti della pagina."
 
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:15
+msgid "<b>NB</b> connected pages and images have their own rights."
+msgstr "<b>NB</b> le pagine e le immagini collegate hanno i propri diritti."
+
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:21
-msgid "All rights reserved"
+msgid "All Rights Reserved"
 msgstr "Tutti i diritti riservati"
 
-#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:40./apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:41
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:41./apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:42
 msgid "Attribution"
 msgstr "Attribuzione"
 
@@ -5675,15 +5679,19 @@ msgstr "Licenza"
 msgid "License and attribution"
 msgstr "Licenza e attribuzione"
 
-#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:49
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:52
 msgid "More about licenses:"
 msgstr "Maggiori informazioni sulle licenze:"
 
-#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:15
-msgid "Set the license and the attribution of this page."
-msgstr "Imposta la licenza e l'attribuzione di questa pagina."
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:22
+msgid "Public Domain"
+msgstr "Dominio pubblico"
 
-#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:45./apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:46
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:15
+msgid "The license and the attribution of this page."
+msgstr "La licenza e l'attribuzione di questa pagina."
+
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:47./apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:48
 msgid "Year"
 msgstr "Anno"
 
@@ -6777,7 +6785,7 @@ msgstr "Non ti è permesso cambiare queste impostazioni."
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
 msgstr "Zotonic può memorizzare i file caricati e ridimensionati nel cloud. Qui puoi configurare la posizione e le chiavi di accesso per il servizio cloud."
 
-#: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:78
+#: apps/zotonic_mod_fileuploader/src/mod_fileuploader.erl:85
 msgid "Could not upload"
 msgstr "Impossibile caricare"
 
@@ -7427,7 +7435,7 @@ msgstr "Combinare la mailing list"
 msgid "Combine…"
 msgstr "Combina…"
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:140
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:158
 msgid "Confirm mailing cancelation."
 msgstr "Confermare la cancellazione dell'invio."
 
@@ -7447,7 +7455,7 @@ msgstr "Impossibile aggiungere il destinatario."
 msgid "Could not delete the mailing list."
 msgstr "Impossibile cancellare la mailing list."
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:259
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:280
 msgid "Could not save the opt-out preference."
 msgstr "Impossibile salvare la preferenza di disattivazione."
 
@@ -7528,6 +7536,10 @@ msgstr "Elenco gestito esternamente &mdash; nessun link di cancellazione / sotto
 msgid "First name"
 msgstr "Nome"
 
+#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:21
+msgid "Forget previous e-mails, mail all recipients again."
+msgstr "Dimentica le e-mail precedenti, invia nuovamente l'e-mail a tutti i destinatari."
+
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:7
 msgid "From now on you will receive mail from our mailing list."
 msgstr "D'ora in poi riceverai posta dalla nostra mailing list."
@@ -7560,17 +7572,17 @@ msgstr "Qui puoi modificare gli abbonamenti collegati al tuo indirizzo email <b>
 msgid "If you opt-out then it is still possible to subscribe to mailing lists using an e-mail address (instead of your account)."
 msgstr "Se disattivi, è comunque possibile iscriversi alle mailing list utilizzando un indirizzo e-mail (invece del proprio account)."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:6
+#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:16
 msgid "It appears you have sent\n"
-"    this page once already to this list. If you send it again, only\n"
-"    the recipients that did not yet receive the mail will get it. As a\n"
-"    safety-caution, it is impossible to send the same page twice to\n"
-"    the same e-mail address."
-msgstr "Sembra che tu abbia inviato\n"
-"    questa pagina già una volta a questa lista. Se la invii di nuovo, solo\n"
-"    i destinatari che non hanno ancora ricevuto la mail la riceveranno. Come\n"
-"    precauzione di sicurezza, è impossibile inviare la stessa pagina due volte allo stesso\n"
-"    indirizzo e-mail."
+"        this page once already to this list. If you send it again, only\n"
+"        the recipients that did not yet receive the mail will get it. As a\n"
+"        safety-caution, it is impossible to send the same page twice to\n"
+"        the same e-mail address."
+msgstr "Sembra che tu abbia già inviato\n"
+"        questa pagina una volta a questa lista. Se lo invii di nuovo, solo\n"
+"        i destinatari che non hanno ancora ricevuto la posta la riceveranno. Come\n"
+"        avvertenza di sicurezza, è impossibile inviare la stessa pagina due volte a\n"
+"        lo stesso indirizzo e-mail."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_cancel_confirm.tpl:4
 msgid "Keep mailing"
@@ -7588,7 +7600,7 @@ msgstr "Liste di distribuzione"
 msgid "Mailing list"
 msgstr "Mailing list"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:512
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:610
 msgid "Mailing lists"
 msgstr "Liste di distribuzione"
 
@@ -7628,6 +7640,10 @@ msgstr "Numero di destinatari su questa lista:"
 msgid "Only keep recipients on this list that appear <em>on both lists</em>"
 msgstr "Mantenere in questa lista solo i destinatari che appaiono <em>in entrambe le liste</em>."
 
+#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:30
+msgid "Only send to recipients whose preferred language match the translations of the mailing."
+msgstr "Invia solo a destinatari la cui lingua preferita corrisponde alle traduzioni dell'e-mail."
+
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:46
 msgid "Only the enabled email addresses are used, the subscriber connections are not used and are not affected."
 msgstr "Vengono utilizzati solo gli indirizzi e-mail abilitati, le connessioni degli abbonati non vengono utilizzate e non sono interessate."
@@ -7660,9 +7676,9 @@ msgstr "Pagine che corrispondono alla query qui sotto."
 msgid "Perform operation"
 msgstr "Eseguire l'operazione"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:3
-msgid "Please confirm that you want to send the page"
-msgstr "Confermate che volete inviare la pagina"
+#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:4
+msgid "Please confirm that you want to send the page <i>{page}</i> to the list <i>{list}</i>."
+msgstr "Conferma di voler inviare la pagina <i>{page}</i> alla lista <i>{list}</i>."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:12
 msgid "Please confirm your subscription"
@@ -7684,7 +7700,7 @@ msgstr "Inserisci l'indirizzo e-mail a cui vuoi inviare questa pagina."
 msgid "Please follow"
 msgstr "Si prega di seguire"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:6
+#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:16
 msgid "Please note:"
 msgstr "Si prega di notare:"
 
@@ -7729,7 +7745,7 @@ msgstr "Rimuovi questo destinatario. Nessun annullamento possibile."
 msgid "Removed subscription."
 msgstr "Abbonamento rimosso."
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:257
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:278
 msgid "Saved the opt-out preference."
 msgstr "Preferenza di disattivazione salvata."
 
@@ -7745,7 +7761,7 @@ msgstr "Seleziona..."
 msgid "Send e-mail"
 msgstr "Inviare e-mail"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:34
+#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:54
 msgid "Send mailing"
 msgstr "Inviare il mailing"
 
@@ -7757,15 +7773,15 @@ msgstr "Invia un mailing di prova"
 msgid "Send test to address"
 msgstr "Invia il test all'indirizzo"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:26
+#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:46
 msgid "Send the mailing automatically after the publication start date of"
 msgstr "Inviare il mailing automaticamente dopo la data di inizio della pubblicazione di"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:24
+#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:44
 msgid "Send the mailing immediately after the \"published\" checkbox has been checked in the edit page."
 msgstr "Invia l'invio immediatamente dopo che la casella di controllo \"pubblicato\" è stata selezionata nella pagina di modifica."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:19
+#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:39
 msgid "Send the mailing right now, but do not include a link back to the website."
 msgstr "Invia subito il mailing, ma non includere un link al sito web."
 
@@ -7797,11 +7813,11 @@ msgstr "Nome del mittente per le e-mail (opzionale)"
 msgid "Sending the e-mail..."
 msgstr "Invio dell'e-mail..."
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:190
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:211
 msgid "Sending the page to"
 msgstr "Inviare la pagina a"
 
-#: apps/zotonic_mod_mailinglist/src/actions/action_mailinglist_mailing_page_test.erl:47
+#: apps/zotonic_mod_mailinglist/src/actions/action_mailinglist_mailing_page_test.erl:48
 msgid "Sending the page to the test mailing list..."
 msgstr "Invio della pagina alla mailing list di prova..."
 
@@ -7869,7 +7885,7 @@ msgstr "Grazie. Ora non sei più iscritto."
 msgid "The confirmation key is unknown. Either you already confirmed or something else went wrong."
 msgstr "La chiave di conferma è sconosciuta. O hai già confermato o qualcos'altro è andato storto."
 
-#: apps/zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:57
+#: apps/zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:68
 msgid "The e-mails are being sent..."
 msgstr "Le e-mail vengono inviate..."
 
@@ -7877,15 +7893,15 @@ msgstr "Le e-mail vengono inviate..."
 msgid "The key in your link does not match any subscription. Either you already unsubscribed, or the mailing list has been deleted."
 msgstr "La chiave del tuo link non corrisponde a nessuna iscrizione. O ti sei già disiscritto, o la mailing list è stata cancellata."
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:153
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:171
 msgid "The mailing has been canceled."
 msgstr "L'invio è stato cancellato."
 
-#: apps/zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:60
+#: apps/zotonic_mod_mailinglist/src/actions/action_mailinglist_dialog_mailing_page.erl:71
 msgid "The mailing will be send when the page becomes visible."
 msgstr "L'invio sarà effettuato quando la pagina diventa visibile."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:15
+#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:36
 msgid "The page you are trying to e-mail is not yet published. What do you want to do?"
 msgstr "La pagina che stai cercando di inviare via e-mail non è ancora pubblicata. Cosa vuoi fare?"
 
@@ -7893,11 +7909,11 @@ msgstr "La pagina che stai cercando di inviare via e-mail non è ancora pubblica
 msgid "The recipients list of the mailing list will be deleted as well."
 msgstr "Anche l'elenco dei destinatari della mailing list sarà cancellato."
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:163
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:181
 msgid "The statistics have been cleared."
 msgstr "Le statistiche sono state cancellate."
 
-#: apps/zotonic_mod_mailinglist/src/actions/action_mailinglist_mailing_page_test.erl:53
+#: apps/zotonic_mod_mailinglist/src/actions/action_mailinglist_mailing_page_test.erl:54
 msgid "There is no mailing list with the name ‘mailinglist_test’."
 msgstr "Non esiste una mailing list con il nome 'mailinglist_test'."
 
@@ -7973,7 +7989,7 @@ msgstr "Quando non vuoi più ricevere posta, allora"
 msgid "You are not allowed to add or enable recipients."
 msgstr "Non ti è permesso aggiungere o abilitare i destinatari."
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:145./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:155
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:163./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:173
 msgid "You are not allowed to cancel this mailing."
 msgstr "Non ti è permesso di cancellare questo invio."
 
@@ -7985,15 +8001,15 @@ msgstr "Non ti è permesso di cancellare la mailing list."
 msgid "You are not allowed to edit recipients."
 msgstr "Non ti è permesso modificare i destinatari."
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:165./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:181
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:183./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:199
 msgid "You are not allowed to reset this mailing."
 msgstr "Non ti è permesso resettare questo invio."
 
-#: apps/zotonic_mod_mailinglist/src/actions/action_mailinglist_mailing_page_test.erl:50
+#: apps/zotonic_mod_mailinglist/src/actions/action_mailinglist_mailing_page_test.erl:51
 msgid "You are not allowed to send mail to the test mailing list."
 msgstr "Non ti è permesso inviare posta alla mailing list di prova."
 
-#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:193
+#: apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:214
 msgid "You are not allowed to send this page."
 msgstr "Non ti è permesso inviare questa pagina."
 
@@ -8124,10 +8140,6 @@ msgstr "inviare a"
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:11
 msgid "this link to confirm"
 msgstr "questo link per confermare"
-
-#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:3
-msgid "to the list"
-msgstr "alla lista"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:7
 msgid "with your e-mail address"
@@ -10108,6 +10120,7 @@ msgid "Strongly Disagree"
 msgstr "Fortemente in disaccordo"
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:86./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:91
+#: apps/zotonic_mod_wires/src/scomps/scomp_wires_button.erl:31
 msgid "Submit"
 msgstr "Invia"
 
