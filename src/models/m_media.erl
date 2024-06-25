@@ -454,7 +454,7 @@ insert_url(Url, Props, Context) ->
     insert_url(Url, Props, [], Context).
 
 insert_url(Url, Props, Options, Context) ->
-    case download_file(Url) of
+    case download_file(Url, Options) of
         {ok, TmpFile, Filename} ->
             Result = insert_file(TmpFile, [{original_filename, Filename}|Props], Options, Context),
             file:delete(TmpFile),
@@ -683,7 +683,7 @@ replace_url(Url, RscId, Props, Context) ->
 replace_url(Url, RscId, Props, Options, Context) ->
     case z_acl:rsc_editable(RscId, Context) orelse not(m_rsc:p(RscId, is_authoritative, Context)) of
         true ->
-            case download_file(Url) of
+            case download_file(Url, Options) of
                 {ok, File, Filename} ->
                     Result = replace_file(File, RscId, [{original_filename, Filename}|Props], Options, Context),
                     file:delete(File),
@@ -749,7 +749,7 @@ download_file(Url, Options) ->
                 CL ->
                     ContentLength = z_convert:to_integer(CL),
                     if
-                        ContentLength =:= Length ->
+                        ContentLength =< Length ->
                             {ok, File, filename(Url, Hs)};
                         true ->
                             lager:error("File download was incomplete"),
