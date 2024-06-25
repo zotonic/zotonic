@@ -56,6 +56,8 @@
     read_admin_file/1
 ]).
 
+-export([password_encrypt_file/2, password_decrypt_file/2]).
+
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_core/include/zotonic_file.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
@@ -831,6 +833,93 @@ archive(Name, Tar, Context) ->
             ok
     end.
 
+%%
+%%
+%%
+
+%% @doc Encrypt InFile
+password_encrypt_file(InFile, Password) ->
+    password_encrypt_file(InFile, <<InFile/binary, ".enc">>, Password).
+
+password_encrypt_file(InFile, OutFile, Password) ->
+    {ok, In} = file:open(InFile, [read, binary]),
+    try
+        {ok, Out} = file:open(OutFile, [write, binary]),
+        try
+            password_encrypt(In, Out, Password)
+        after
+            file:close(Out)
+        end
+    after
+        file:close(In)
+    end.
+
+password_encrypt(InIODevice, OutIODevice, Password) ->
+    password_encrypt(InIODevice, OutIODevice, Password, new_salt(), new_iter()).
+
+password_encrypt(InIODevice, OutIODevice, Password, Salt, Iter) ->
+    %% Write the non-secret salt and extra iteration count, they are not
+    %% secret. It is handy to store these parameters together with the
+    %% encrypted data.
+    ok = file:write(OutIODevice, get_header(Salt, Iter)),
+
+    #{ key := Key, iv := IV } = derive_key_and_iv(Password, Salt, Iter),
+    CipherState = crypto:crypto_init(aes_256_cfb8, Key, IV, [{encrypt, true}, {padding, random}]),
+
+    ok = do_crypto(InIODevice, OutIODevice, CipherState),
+    ok.
+
+password_decrypt_file(Filename, Password) ->
+    {ok, In} = file:open(Filename, [read, binary]),
+    try
+        {ok, Header} = file:read(In, 2+4+16),
+        case get_decrypt_params(Header) of
+            {ok, #{ alg := Alg, iter := Iter, salt := Salt}} ->
+                #{ key := Key, iv := IV } = derive_key_and_iv(Password, Salt, Iter),
+                CipherState = crypto:crypto_init(Alg, Key, IV, [{encrypt, false}, {padding, random}]),
+
+                do_crypto(In, standard_error, CipherState);
+            {error, _}=Error ->
+                Error
+        end
+    after
+        file:close(In)
+    end.
+
+do_crypto(In, Out, CipherState) ->
+    case file:read(In, 100000) of
+        {ok, Data} ->
+            ok = file:write(Out, crypto:crypto_update(CipherState, Data)),
+            do_crypto(In, Out, CipherState);
+        eof ->
+            ok = file:write(Out, crypto:crypto_final(CipherState)),
+            ok;
+        {error, _}=Error ->
+            Error
+    end.
+
+new_salt() ->
+    crypto:strong_rand_bytes(16).
+
+new_iter() ->
+    600_000 + rand:uniform(65535).
+
+derive_key_and_iv(Password, Salt, Iter) ->
+    <<IV:16/binary, Key:32/binary>> = crypto:pbkdf2_hmac(sha256, Password, Salt, Iter, 16+32),
+    #{ key => Key, iv => IV }.
+
+get_header(Salt, Iter) when size(Salt) =:= 16 andalso (Iter =< 0 orelse Iter < 20_000_000) ->
+    <<"Z1", Iter:32/little-unsigned-integer, Salt/binary>>.
+
+get_decrypt_params(<<"Z1", Iter:32/little-unsigned-integer, Salt:16/binary, _/binary>>) ->
+    Params = #{ alg => aes_256_cfb8, iter => Iter, salt => Salt},
+    {ok, Params};
+get_decrypt_params(_) ->
+    {error, bad_prefix}.
+
+%%
+%%
+%%
 
 %% @doc Check if we can make backups, the configuration is ok
 check_configuration() ->

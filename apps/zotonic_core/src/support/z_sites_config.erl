@@ -24,6 +24,7 @@
     app_is_site/1,
     config_files/1,
     config_files/2,
+    security_dir/1,
     read_configs/1,
     merge_global_configs/3
     ]).
@@ -111,6 +112,14 @@ config_files(Node, Site) ->
             end
     end.
 
+-spec security_dir( atom() ) -> {ok, file:filename_all()} | {error, term()}.
+security_dir(Site) ->
+    case z_config_files:security_dir() of
+        {ok, SecurityDir} ->
+            {ok, filename:join( SecurityDir, Site)};
+        {error, _}=Error ->
+            Error
+    end.
 
 -spec read_configs( [ file:filename_all() ] ) -> {ok, map()} | {error, term()}.
 read_configs(Fs) when is_list(Fs) ->
