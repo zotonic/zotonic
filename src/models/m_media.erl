@@ -749,7 +749,7 @@ download_file(Url, Options) ->
                 CL ->
                     ContentLength = z_convert:to_integer(CL),
                     if
-                        ContentLength =:= Length ->
+                        ContentLength =< Length ->
                             {ok, File, filename(Url, Hs)};
                         true ->
                             lager:error("File download was incomplete"),
