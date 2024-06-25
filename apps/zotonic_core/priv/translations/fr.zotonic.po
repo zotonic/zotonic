@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-06-25 14:10\n"
+"PO-Revision-Date: 2024-06-25 15:19\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -5661,11 +5661,11 @@ msgstr "Pour ajouter plus d'informations sur l'utilisation des cookies, soit uti
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:15
 msgid "<b>NB</b> connected pages and images have their own rights."
-msgstr ""
+msgstr "<b>NB</b> les pages et images connectées ont leurs droits propres."
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:21
 msgid "All Rights Reserved"
-msgstr ""
+msgstr "Tous droits réservés"
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:41./apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:42
 msgid "Attribution"
@@ -5685,11 +5685,11 @@ msgstr "En savoir plus sur les licences :"
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:22
 msgid "Public Domain"
-msgstr ""
+msgstr "Domaine public"
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:15
 msgid "The license and the attribution of this page."
-msgstr ""
+msgstr "La licence et l'attribution de cette page."
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:47./apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:48
 msgid "Year"
@@ -7538,7 +7538,7 @@ msgstr "Prénom"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:21
 msgid "Forget previous e-mails, mail all recipients again."
-msgstr ""
+msgstr "Oubliez les e-mails précédents, envoyez à nouveau un courrier à tous les destinataires."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:7
 msgid "From now on you will receive mail from our mailing list."
@@ -7578,7 +7578,11 @@ msgid "It appears you have sent\n"
 "        the recipients that did not yet receive the mail will get it. As a\n"
 "        safety-caution, it is impossible to send the same page twice to\n"
 "        the same e-mail address."
-msgstr ""
+msgstr "Il semble que vous ayez déjà envoyé\n"
+"        cette page une fois à cette liste. Si vous le renvoyez, seuls\n"
+"        les destinataires qui n'ont pas encore reçu le mail le recevront. Par mesure de sécurité\n"
+"        , il est impossible d'envoyer deux fois la même page à\n"
+"        la même adresse e-mail."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_cancel_confirm.tpl:4
 msgid "Keep mailing"
@@ -7638,7 +7642,7 @@ msgstr "Gardez uniquement les destinataires sur cette liste qui apparaissent <em
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:30
 msgid "Only send to recipients whose preferred language match the translations of the mailing."
-msgstr ""
+msgstr "Envoyez uniquement aux destinataires dont la langue préférée correspond aux traductions du mailing."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:46
 msgid "Only the enabled email addresses are used, the subscriber connections are not used and are not affected."
@@ -7674,7 +7678,7 @@ msgstr "Exécuter l'opération"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:4
 msgid "Please confirm that you want to send the page <i>{page}</i> to the list <i>{list}</i>."
-msgstr ""
+msgstr "Veuillez confirmer que vous souhaitez envoyer la page <i>{page}</i> à la liste <i>{list}</i>."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:12
 msgid "Please confirm your subscription"
