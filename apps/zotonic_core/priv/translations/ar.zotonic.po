@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-06-25 14:10\n"
+"PO-Revision-Date: 2024-06-25 15:20\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -5661,11 +5661,11 @@ msgstr "لإضافة المزيد من المعلومات حول استخدام 
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:15
 msgid "<b>NB</b> connected pages and images have their own rights."
-msgstr ""
+msgstr "<b>ملاحظة</b> الصفحات والصور المتصلة لها حقوقها الخاصة."
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:21
 msgid "All Rights Reserved"
-msgstr ""
+msgstr "كل الحقوق محفوظة"
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:41./apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:42
 msgid "Attribution"
@@ -5689,7 +5689,7 @@ msgstr "المجال العام"
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:15
 msgid "The license and the attribution of this page."
-msgstr ""
+msgstr "الترخيص وإسناد هذه الصفحة."
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:47./apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:48
 msgid "Year"
@@ -7678,7 +7678,7 @@ msgstr "تنفيذ العملية"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:4
 msgid "Please confirm that you want to send the page <i>{page}</i> to the list <i>{list}</i>."
-msgstr ""
+msgstr "يرجى تأكيد رغبتك في إرسال الصفحة <i>{page}</i> إلى القائمة <i>{list}</i>."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:12
 msgid "Please confirm your subscription"
