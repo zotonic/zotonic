@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2021 Marc Worrell
+%% @copyright 2021-2024 Marc Worrell
 %% @doc Process buffering uploaded files till they are complete.
+%% @end
 
-%% Copyright 2021 Marc Worrell
+%% Copyright 2021-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -47,6 +48,7 @@
 -record(state, {
     name :: binary(),
     user_id :: m_rsc:resource_id() | undefined,
+    start_msec :: non_neg_integer(),
 
     filename :: binary(),
     size :: non_neg_integer(),
@@ -125,6 +127,7 @@ init([Name, Filename, Size, Context]) ->
     {ok, Fd} = file:open(TmpFile, [ write, binary ]),
     {ok, #state{
         name = Name,
+        start_msec = os:system_time(millisecond),
         user_id = z_acl:user(Context),
         filename = Filename,
         size = Size,
@@ -153,11 +156,24 @@ handle_call({upload, Offset, Data}, _From, State) ->
             blocks = Blocks1,
             received = count_size(Blocks1, 0)
         },
+        if
+            State1#state.size =:= State1#state.received ->
+                ?LOG_INFO(#{
+                    in => zotonic_mod_fileuploader,
+                    text => <<"Upload complete">>,
+                    result => ok,
+                    filename => State1#state.filename,
+                    size => State1#state.size,
+                    speed_kbs => speed_kbs(State1#state.start_msec, State1#state.size)
+                });
+            true ->
+                ok
+        end,
         {reply, {ok, state_status(State1)}, State1, ?TIMEOUT}
     catch Type:Error ->
         ?LOG_ERROR(#{
-            text => <<"fileuploader: error uploading to file">>,
             in => zotonic_mod_fileuploader,
+            text => <<"fileuploader: error uploading to file">>,
             bytes => size(Data),
             filename => State#state.filename,
             size => State#state.size,
@@ -179,6 +195,13 @@ handle_info(timeout, State) ->
 %% ------------------------------------------------------------------
 %% Support functions
 %% ------------------------------------------------------------------
+
+speed_kbs(Start, Bytes) ->
+    case os:system_time(millisecond) - Start of
+        0 -> 0;
+        Delta -> erlang:round((Bytes / Delta) / 1024 * 1000)
+    end.
+
 
 %% @doc Return the status of this uploader.
 state_status(State) ->
