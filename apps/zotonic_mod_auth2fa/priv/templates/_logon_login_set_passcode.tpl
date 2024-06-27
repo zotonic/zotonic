@@ -35,5 +35,3 @@
         <b>{_ Warning. _}</b> {_ The clock of your computer is more than 20 seconds off. This can cause problems with two-factor authentication. _}
     </p>
 {% endif %}
-
-{% debug %}
