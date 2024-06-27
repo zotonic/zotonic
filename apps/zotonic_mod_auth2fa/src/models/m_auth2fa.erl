@@ -39,6 +39,8 @@
     user_mode/1,
 
     new_totp_image_url/1,
+    new_totp_image_url/2,
+
     totp_disable/2,
     totp_set/3
 
@@ -237,11 +239,11 @@ new_totp_image_url(Context) ->
 
 %% @doc Generate a new totp secret and return the QR code, do not save it. If
 %% the code is not valid then a new code (aka secret) is generated.
--spec new_totp_image_url(Secret, Context) -> {ok, {Url, Secret}} when
+-spec new_totp_image_url(Secret, Context) -> {ok, {Url, NewSecret}} when
     Secret :: undefined | binary(),
     Context :: z:context(),
     Url :: binary(),
-    Secret :: binary().
+    NewSecret :: binary().
 new_totp_image_url(Secret, Context) ->
     case is_valid_secret(Secret) of
         true ->
