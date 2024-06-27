@@ -50,6 +50,20 @@
                 </p>
             </div>
 
+            <p style="display: none" id="auth2fa-clock-warning">
+                <b>{_ Warning. _}</b> {_ The clock of your computer is more than 20 seconds off. This can cause problems with two-factor authentication. _}
+            </p>
+
+            {% javascript %}
+                cotonic.broker
+                    .call("bridge/origin/model/auth2fa/get/clock_check", { timestamp: Math.floor(Date.now() / 1000) })
+                    .then((m) => {
+                        if (!m.payload?.result?.is_ok) {
+                            document.getElementById('auth2fa-clock-warning').style["display"] = "block";
+                        }
+                    });
+            {% endjavascript %}
+
             <div class="modal-footer">
                 {% button tag="a" class="btn btn-default" text=_"Cancel" action={dialog_close} %}
                 <button type="submit" class="btn btn-primary">{_ Set passcode _}</button>
