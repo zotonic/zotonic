@@ -470,7 +470,7 @@ reset(#{
                                     }),
                                     { #{ status => error, error => username }, Context };
                                 Username ->
-                                    case reset_1(UserId, Username, Password, Passcode, Context) of
+                                    case reset_1(UserId, Username, Password, Payload, Context) of
                                         ok ->
                                             logon_1({ok, UserId}, Payload, Context);
                                         {error, Reason} ->
@@ -494,14 +494,10 @@ reset(_Payload, Context) ->
     }, Context }.
 
 
-reset_1(UserId, Username, Password, Passcode, Context) ->
-    QArgs = #{
-        <<"username">> => Username,
-        <<"passcode">> => Passcode
-    },
-    case auth_postcheck(UserId, QArgs, Context) of
+reset_1(UserId, Username, Password, Payload, Context) ->
+    case m_authentication:acceptable_password(Password, Context) of
         ok ->
-            case m_authentication:acceptable_password(Password, Context) of
+            case auth_postcheck(UserId, Payload, Context) of
                 ok ->
                     case m_identity:set_username_pw(UserId, Username, Password, z_acl:sudo(Context)) of
                         ok ->
@@ -513,28 +509,27 @@ reset_1(UserId, Username, Password, Passcode, Context) ->
                         {error, _} ->
                             {error, error}
                     end;
-                {error, _} = Error ->
-                    Error
+                {error, need_passcode} = Error ->
+                    Error;
+                {error, set_passcode} = Error ->
+                    Error;
+                {error, set_passcode_error} = Error ->
+                    Error;
+                {error, passcode} ->
+                    z_notifier:notify_sync(
+                        #auth_checked{
+                            id = UserId,
+                            username = Username,
+                            is_accepted = false
+                        },
+                        Context),
+                    {error, passcode};
+                _Error ->
+                    {error, error}
             end;
-        {error, need_passcode} = Error ->
-            Error;
-        {error, set_passcode} = Error ->
-            Error;
-        {error, set_passcode_error} = Error ->
-            Error;
-        {error, passcode} ->
-            z_notifier:notify_sync(
-                #auth_checked{
-                    id = UserId,
-                    username = Username,
-                    is_accepted = false
-                },
-                Context),
-            {error, passcode};
-        _Error ->
-            {error, error}
+        {error, _} = Error ->
+            Error
     end.
-
 
 %% @doc Return information about the current user and request language/timezone
 -spec status( map(), z:context() ) -> { map(), z:context() }.
