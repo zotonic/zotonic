@@ -40,6 +40,7 @@
     observe_rsc_upload/2,
     observe_search_query/2,
     observe_tick_24h/2,
+    observe_m_config_update/2,
 
     start_backup/1,
     start_backup/2,
@@ -133,6 +134,21 @@ observe_search_query(#search_query{}, _Context) ->
 
 observe_tick_24h(tick_24h, Context) ->
     m_backup_revision:periodic_cleanup(Context).
+
+observe_m_config_update(#m_config_update{module=?MODULE, key=encrypt_backups}, Context) ->
+    case m_config:get_boolean(?MODULE, encrypt_backups, Context) of
+        true ->
+            case m_config:get(?MODULE, backup_encrypt_password, Context) of
+                Password when is_binary(Password) andalso size(Password) > 0 ->
+                    ok;
+                _ ->
+                    m_config:set_value(?MODULE, backup_encrypt_password, z_ids:password(), Context)
+            end;
+        false ->
+            ok
+    end;
+observe_m_config_update(#m_config_update{}, _Context) ->
+    ok.
 
 
 %% @doc Callback for controller_file. Check if the file exists and return
@@ -585,6 +601,8 @@ do_backup_process(Name, IsFullBackup, Context) ->
     end.
 
 do_backup_process_1(Name, IsFullBackup, Context) ->
+    ?DEBUG(do_backup_process_1),
+
     IsFilesBackup = IsFullBackup andalso not is_filestore_enabled(Context),
     case check_configuration() of
         {ok, Cmds} ->
@@ -594,6 +612,9 @@ do_backup_process_1(Name, IsFullBackup, Context) ->
                 full_backup => IsFilesBackup,
                 name => Name
             }),
+
+            archive_config(Name, Context),
+
             case pg_dump(Name, maps:get(db_dump, Cmds), Context) of
                 {ok, DumpFile} ->
                     case IsFilesBackup of
@@ -832,6 +853,49 @@ archive(Name, Tar, Context) ->
             %% No files uploaded
             ok
     end.
+
+%% Make an archive of the configuraton and security files of a site.
+archive_config(Name, Context) ->
+    Site = z_context:site(Context),
+    ConfigDirName = "config-" ++ z_convert:to_list(Site),
+
+    %% Collect all config files.
+    ConfigFiles = z_sites_config:config_files(Site),
+    ConfigFileList = make_config_filelist(filename:join([ConfigDirName, config]), ConfigFiles, []),
+
+    %% Collect all the security files of the site.
+    {ok, SecurityDir} = z_sites_config:security_dir(Site),
+    SecurityFiles = all_files(SecurityDir),
+    SecurityFileList = make_filelist(filename:join([ConfigDirName, security]),
+                                     SecurityDir, SecurityFiles, []),
+
+    %% Create the tarball.
+    ConfigName = <<"config-", Name/binary>>,
+    Dir = dir(Context),
+    ArchiveName = <<ConfigName/binary,  ".tgz">>,
+    filename:join([Dir, ArchiveName]),
+    FileList = ConfigFileList ++ SecurityFileList,
+    ok = erl_tar:create(filename:join([Dir, ArchiveName]), FileList, [compressed]).
+
+
+all_files(Dir) ->
+    filelib:wildcard("**", Dir).
+
+make_config_filelist(_Prefix, [], Acc) ->
+    lists:reverse(Acc);
+make_config_filelist(Prefix, [Filename|Rest], Acc) ->
+    SplitFilename = filename:split(Filename),
+    ArchiveName = filename:join([Prefix | lists:nthtail(length(SplitFilename)-2, SplitFilename)]),
+    make_config_filelist(Prefix, Rest, [{ArchiveName, Filename} | Acc]).
+
+
+make_filelist(_Prefix, _Dir, [], Acc) ->
+    lists:reverse(Acc);
+make_filelist(Prefix, Dir, [File|Rest], Acc) ->
+    ArchiveName = filename:join(Prefix, File),
+    FullName = filename:join(Dir, File),
+    make_filelist(Prefix, Dir, Rest, [{ArchiveName, FullName} | Acc]).
+
 
 %%
 %%

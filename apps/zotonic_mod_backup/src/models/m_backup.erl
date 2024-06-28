@@ -30,6 +30,8 @@ m_get([ <<"admin_panel">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_value(mod_backup, admin_panel, Context), Rest}};
 m_get([ <<"daily_dump">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_value(mod_backup, daily_dump, Context), Rest}};
+m_get([ <<"encrypt_backups">> | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_value(mod_backup, encrypt_backups, Context), Rest}};
 m_get([ <<"list_backups">> | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_backup, Context) of
         true -> {ok, {mod_backup:list_backups(Context), Rest}};

@@ -97,6 +97,22 @@
                 <div class="widget">
                     <div class="widget-content">
                         <p>
+                        {_ By default the backup of the database and files are not encrypted. It is
+                           possible to encrypt the backups. This makes it safer to store them on an 
+                           external server. _}
+                        </p>
+                        <div class="checkbox">
+                            <label>
+                                <input id="encrypt_backups" name="encrypt_backups" type="checkbox" value="1" {% if m.backup.encrypt_backups %}checked="checked"{% endif %} /> {_ Encrypt Backups _}
+                            </label>
+                            {% wire id="encrypt_backups" postback=`config_encrypt_backups` %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="widget">
+                    <div class="widget-content">
+                        <p>
                             {_ At any moment you can make a backup of your system. _}
                             {% if not is_filestore_enabled %}
                                 {_ The backup comprises two parts, the database and the uploaded files. _}
