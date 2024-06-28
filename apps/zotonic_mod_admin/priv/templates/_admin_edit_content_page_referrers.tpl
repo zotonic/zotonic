@@ -13,22 +13,36 @@
 {% block widget_id %}sidebar-referrers{% endblock %}
 
 {% block widget_content %}
-    <ul class="tree-list connections-list">
-        {% for s_id in m.search[{query hasobject=id sort="-seq" pagelen=10}] %}
-            {% with forloop.counter as index %}
-            <li id="{{ #unlink_wrapper }}" class="menu-item">
-                <div class="menu-wrapper">
-                    <a id="{{ #edit.index }}" href="{% url admin_edit_rsc id=s_id %}" title="{_ Edit _}">
-                        {% catinclude "_rsc_edge_item.tpl" s_id %}
-                    </a>
-                    {% wire id=#edit.index
-                        action={dialog_edit_basics id=s_id}
-                    %}
-                </div>
-            </li>
-            {% endwith %}
-        {% endfor %}
-    </ul>
+    {% if m.search[{query hasobject=id sort="-seq" pagelen=10}] as incoming %}
+        <p class="help-block">{_ Newest incoming connections. _}</p>
+
+        <ul class="tree-list connections-list">
+            {% for s_id in incoming %}
+                {% with forloop.counter as index %}
+                <li id="{{ #unlink_wrapper }}" class="menu-item">
+                    <div class="menu-wrapper">
+                        <a id="{{ #edit.index }}" href="{% url admin_edit_rsc id=s_id %}" title="{_ Edit _}">
+                            {% catinclude "_rsc_edge_item.tpl" s_id %}
+                        </a>
+                        {% wire id=#edit.index
+                            action={dialog_edit_basics id=s_id}
+                        %}
+                    </div>
+                </li>
+                {% endwith %}
+            {% endfor %}
+        </ul>
+
+        {% with m.search.count::%{ hasobject: id } as count %}
+        {% if count.result[1] > 10 %}
+            <p class="help-block">
+                {% trans "And {n} more." n=count.result[1]-10 %}
+            </p>
+        {% endif %}
+        {% endwith %}
+    {% else %}
+        <p class="help-block">{_ There are no incoming connections. _}</p>
+    {% endif %}
 
     <div class="form-group">
        <a class="btn btn-default btn-sm" href="{% url admin_edges qhasobject=id %}"><i class="glyphicon glyphicon-list"></i> {_ View all referrers _}</a>

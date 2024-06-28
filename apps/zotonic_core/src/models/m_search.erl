@@ -65,13 +65,6 @@ m_get([ <<"paged">>, {Name, Props} = SearchProps | Rest ], _Msg, Context) when i
         {ok, Result} ->
             {ok, {Result, Rest}}
     end;
-m_get([ SearchName | Rest ], Msg, Context) when is_binary(SearchName) ->
-    case search(SearchName, search_args(Msg), Context) of
-        {error, _} = Error ->
-            Error;
-        {ok, Result} ->
-            {ok, {Result, Rest}}
-    end;
 m_get([ {Name, Props} = SearchProps | Rest ], _Msg, Context) when is_list(Props), is_atom(Name) ->
     case search_deprecated(SearchProps, false, Context) of
         {error, _} = Error ->
@@ -92,6 +85,13 @@ m_get([ <<"count">> ], Msg, Context) ->
             Error;
         {ok, Result} ->
             {ok, {Result, []}}
+    end;
+m_get([ SearchName | Rest ], Msg, Context) when is_binary(SearchName) ->
+    case search(SearchName, search_args(Msg), Context) of
+        {error, _} = Error ->
+            Error;
+        {ok, Result} ->
+            {ok, {Result, Rest}}
     end;
 m_get([], Msg, Context) ->
     case search(<<"query">>, search_args(Msg), Context) of
