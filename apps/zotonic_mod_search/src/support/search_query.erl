@@ -740,6 +740,15 @@ qterm(#{ <<"term">> := <<"modifier_id">>, <<"value">> := Id}, Context) ->
             m_rsc:rid(Id, Context)
         ]
     };
+qterm(#{ <<"term">> := <<"country">>, <<"value">> := V}, Context) ->
+    %% country=<value>
+    %% Filter on items which are in a country
+    #search_sql_term{
+        where = [
+            <<"rsc.pivot_country = ">>, '$1'
+        ],
+        args = [ V ]
+    };
 qterm(#{ <<"term">> := <<"qargs">>, <<"value">> := Boolean}, Context) ->
     %% qargs
     %% Add all query terms from the current query arguments
