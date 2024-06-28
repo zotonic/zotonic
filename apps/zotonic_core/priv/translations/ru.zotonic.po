@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-06-27 15:01\n"
+"PO-Revision-Date: 2024-06-28 11:27\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -904,6 +904,10 @@ msgstr "Количество"
 msgid "And media can also be viewed on their own page."
 msgstr "Также материалы могут быть просмотрены на собственной странице."
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:39
+msgid "And {n} more."
+msgstr "И {n} ещё."
+
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:95
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:14
 msgid "Any category"
@@ -1266,7 +1270,7 @@ msgstr "Продолжительность"
 msgid "E-mail address"
 msgstr "Адрес e-mail"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:19./apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:3
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:24./apps/zotonic_mod_admin/priv/templates/_rsc_edge.tpl:19./apps/zotonic_mod_admin/priv/templates/admin_edit.tpl:3
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:66./apps/zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:50
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:121
@@ -1759,6 +1763,10 @@ msgstr "Сетевые подключения"
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect.tpl:84./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc.tpl:12
 msgid "New Page"
 msgstr "Новая страница"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:17
+msgid "Newest incoming connections."
+msgstr "Новейшие входящие соединения."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:188./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:190
 msgid "Next &gt;"
@@ -2357,6 +2365,10 @@ msgstr "Поисковый индекс перестраивается. В за�
 msgid "The site’s data is being reinstalled. Watch the console for messages"
 msgstr "Данные сайта переустанавливаются. Следите за сообщениями в консоли"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:44
+msgid "There are no incoming connections."
+msgstr "Входящих соединений нет."
+
 #: apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:12
 msgid "There are no pages with a connection to the page"
 msgstr "Страницы, связанные с этой, отсутствуют"
@@ -2596,7 +2608,7 @@ msgstr "Просмотреть все соединения"
 msgid "View all pages from this category"
 msgstr "Просмотреть все страницы из этой категории"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:48
 msgid "View all referrers"
 msgstr "Просмотр всех рефереров"
 
