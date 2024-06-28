@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-06-28 11:27\n"
+"PO-Revision-Date: 2024-06-28 12:38\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -906,7 +906,7 @@ msgstr "Et le média est aussi visible sur leur propre page."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:39
 msgid "And {n} more."
-msgstr ""
+msgstr "Et {n} plus."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:95
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:14
@@ -1766,7 +1766,7 @@ msgstr "Nouvelle page"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:17
 msgid "Newest incoming connections."
-msgstr ""
+msgstr "Connexions entrantes les plus récentes."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:188./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:190
 msgid "Next &gt;"
@@ -2367,7 +2367,7 @@ msgstr "Les données du site est en cours de réinstallation. Voir la console po
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:44
 msgid "There are no incoming connections."
-msgstr ""
+msgstr "Il n'y a aucune connexion entrante."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:12
 msgid "There are no pages with a connection to the page"
