@@ -585,7 +585,10 @@ do_backup(DT, Name, IsFullBackup, Context) ->
         fun() ->
             % NEVER have an upload and backup in parallel
             Result = do_backup_process(Name, IsFullBackup, Context),
-            update_admin_file(DT, Name, Result, Context)
+
+            Result1 = maybe_encrypt_files(Result, Context),
+
+            update_admin_file(DT, Name, Result1, Context)
         end).
 
 
@@ -601,8 +604,6 @@ do_backup_process(Name, IsFullBackup, Context) ->
     end.
 
 do_backup_process_1(Name, IsFullBackup, Context) ->
-    ?DEBUG(do_backup_process_1),
-
     IsFilesBackup = IsFullBackup andalso not is_filestore_enabled(Context),
     case check_configuration() of
         {ok, Cmds} ->
@@ -613,27 +614,36 @@ do_backup_process_1(Name, IsFullBackup, Context) ->
                 name => Name
             }),
 
-            archive_config(Name, Context),
-
             case pg_dump(Name, maps:get(db_dump, Cmds), Context) of
                 {ok, DumpFile} ->
                     case IsFilesBackup of
                         true ->
                             case archive(Name, maps:get(archive, Cmds), Context) of
                                 {ok, TarFile} ->
-                                    ?LOG_INFO(#{
-                                        text => <<"Backup finished">>,
-                                        in => zotonic_mod_backup,
-                                        result => ok,
-                                        full_backup => IsFilesBackup,
-                                        name => Name,
-                                        database => DumpFile,
-                                        files => TarFile
-                                    }),
-                                    {ok, #{
-                                        database => DumpFile,
-                                        files => TarFile
-                                    }};
+                                    case archive_config(Name, Context) of
+                                        {ok, ConfigTarFile} ->
+                                            ?LOG_INFO(#{
+                                                        text => <<"Backup finished">>,
+                                                        in => zotonic_mod_backup,
+                                                        result => ok,
+                                                        full_backup => IsFilesBackup,
+                                                        name => Name,
+                                                        database => DumpFile,
+                                                        files => TarFile,
+                                                        config_files => ConfigTarFile
+                                                       }),
+                                            {ok, #{
+                                                   database => DumpFile,
+                                                   files => TarFile,
+                                                   config_files => ConfigTarFile
+                                                  }};
+                                        {error, _} ->
+                                            % Ignore failed config tar regeister the db and file tar
+                                            {ok, #{
+                                                   database => DumpFile,
+                                                   files => TarFile
+                                                  }}
+                                    end;
                                 {error, _} ->
                                     % Ignore failed tar, at least register the db dump
                                     {ok, #{
@@ -668,6 +678,47 @@ do_backup_process_1(Name, IsFullBackup, Context) ->
             }),
             Error
     end.
+
+maybe_encrypt_files({ok, Files}, Context) ->
+    case m_config:get_boolean(?MODULE, encrypt_backups, Context) of
+        true ->
+            Password = m_config:get_value(?MODULE, backup_encrypt_password, Context),
+
+            %% [TODO] netter maken.
+            Files1 = case maps:get_value(database, Files, undefined) of
+                         DB when is_binary(DB) andalso size(DB) > 0 ->
+                             {ok, EncDB} = password_encrypt_file(DB, Password),
+                             ok = file:delete(DB),
+                             maps:update(database, EncDB);
+                         _ ->
+                             Files
+                     end,
+            Files2 = case maps:get_value(files, Files1, undefined) of
+                         F when is_binary(F) andalso size(F) > 0 ->
+                             {ok, EncF} = password_encrypt_file(F, Password),
+                             ok = file:delete(F),
+                             maps:update(database, EncF);
+                         _ ->
+                             Files1
+                     end,
+            Files3 = case maps:get_value(config_files, Files2, undefined) of
+                         CF when is_binary(CF) andalso size(CF) > 0 ->
+                             {ok, EncCF} = password_encrypt_file(CF, Password),
+                             ok = file:delete(CF),
+                             maps:update(database, EncCF);
+                         _ ->
+                             Files2
+                     end,
+
+            Files4 = maps:update(encrypted, true, Files3),
+            {ok, Files4};
+            
+        false ->
+            {ok, Files}
+    end;
+maybe_encrypt_files({error, _}=Error, _Context) ->
+    Error.
+
 
 update_admin_file(DT, Name, {ok, Files}, Context) ->
     Data = read_admin_file(Context),
@@ -865,21 +916,21 @@ archive_config(Name, Context) ->
 
     %% Collect all the security files of the site.
     {ok, SecurityDir} = z_sites_config:security_dir(Site),
-    SecurityFiles = all_files(SecurityDir),
+    SecurityFiles = filelib:wildcard("**", SecurityDir),
     SecurityFileList = make_filelist(filename:join([ConfigDirName, security]),
                                      SecurityDir, SecurityFiles, []),
 
     %% Create the tarball.
     ConfigName = <<"config-", Name/binary>>,
     Dir = dir(Context),
-    ArchiveName = <<ConfigName/binary,  ".tgz">>,
+    ArchiveName = <<ConfigName/binary,  ".tar.gz">>,
     filename:join([Dir, ArchiveName]),
     FileList = ConfigFileList ++ SecurityFileList,
-    ok = erl_tar:create(filename:join([Dir, ArchiveName]), FileList, [compressed]).
 
+    ConfigArchiveName = filename:join([Dir, ArchiveName]),
+    ok = erl_tar:create(ConfigArchiveName, FileList, [compressed]),
 
-all_files(Dir) ->
-    filelib:wildcard("**", Dir).
+    {ok, ConfigArchiveName}.
 
 make_config_filelist(_Prefix, [], Acc) ->
     lists:reverse(Acc);
