@@ -14,11 +14,19 @@
                             {% if backup.is_running %}
                                 <span class="label label-info">{_ this backup is in progress _}</span>
                             {% else %}
-                                {% if backup.is_files_present %}
-                                    <a class="btn btn-default btn-xs" target="_blank" href="{% url backup_download star=backup.name++".tar.gz" %}">{_ download files _}</a>
+                                {% if backup.is_encrypted %}
+                                    <span class="label label-warning">{_ Encrypted _}</span>
                                 {% endif %}
-                                {% if backup.is_database_present %}
-                                    <a class="btn btn-default btn-xs" target="_blank" href="{% url backup_download star=backup.name++".sql.gz" %}">{_ download database _}</a>
+                                {% if backup.is_files_present and backup.is_encrypted %}
+                                    <a class="btn btn-default btn-xs" download href="{% url backup_download star=backup.name++".tar.gz.enc" %}">{_ download files _}</a>
+                                {% elif backup.is_files_present %}
+                                    <a class="btn btn-default btn-xs" download href="{% url backup_download star=backup.name++".tar.gz" %}">{_ download files _}</a>
+                                {% endif %}
+
+                                {% if backup.is_database_present and backup.is_encrypted %}
+                                    <a class="btn btn-default btn-xs" download href="{% url backup_download star=backup.name++".sql.gz.enc" %}">{_ download database _}</a>
+                                {% elif backup.is_database_present %}
+                                    <a class="btn btn-default btn-xs" download href="{% url backup_download star=backup.name++".sql.gz" %}">{_ download database _}</a>
                                 {% endif %}
                             {% endif %}
                         </div>

@@ -158,8 +158,9 @@ observe_m_config_update(#m_config_update{}, _Context) ->
     Context :: z:context(),
     FilePath :: file:filename_all().
 file_exists(File, Context) ->
-    Root = filename:rootname(filename:rootname(File)),
+    Root = without_extension(File),
     Admin = read_admin_file(Context),
+
     case maps:get(Root, Admin, undefined) of
         undefined ->
             ?LOG_WARNING(#{
@@ -175,8 +176,8 @@ file_exists(File, Context) ->
             <<"database">> := Database,
             <<"files">> := Files
         } ->
-            case filename:extension(filename:rootname(File)) of
-                <<".sql">> when Database =/= undefined ->
+            case File of
+                Database ->
                     ?LOG_INFO(#{
                         text => <<"Download of database backup requested">>,
                         in => zotonic_mod_backup,
@@ -185,7 +186,7 @@ file_exists(File, Context) ->
                         file => File
                     }),
                     {true, filename:join([dir(Context), Database])};
-                <<".tar">> when Files =/= undefined ->
+                Files ->
                     ?LOG_INFO(#{
                         text => <<"Download of files backup requested">>,
                         in => zotonic_mod_backup,
@@ -585,9 +586,7 @@ do_backup(DT, Name, IsFullBackup, Context) ->
         fun() ->
             % NEVER have an upload and backup in parallel
             Result = do_backup_process(Name, IsFullBackup, Context),
-
             Result1 = maybe_encrypt_files(Result, Context),
-
             update_admin_file(DT, Name, Result1, Context)
         end).
 
@@ -682,54 +681,53 @@ do_backup_process_1(Name, IsFullBackup, Context) ->
 maybe_encrypt_files({ok, Files}, Context) ->
     case m_config:get_boolean(?MODULE, encrypt_backups, Context) of
         true ->
+            ?LOG_INFO(#{
+                text => <<"Encrypting backup">>,
+                in => zotonic_mod_backup
+            }),
+
             Password = m_config:get_value(?MODULE, backup_encrypt_password, Context),
+            Dir = dir(Context),
+            Files1 = maps:map(fun(_K, File) ->
+                                      FullName = filename:join(Dir, File),
+                                      {ok, FullNameEnc} = password_encrypt_file(FullName, Password),
+                                      ok = file:delete(FullName),
+                                      filename(FullNameEnc)
+                              end,
+                              Files),
 
-            %% [TODO] netter maken.
-            Files1 = case maps:get_value(database, Files, undefined) of
-                         DB when is_binary(DB) andalso size(DB) > 0 ->
-                             {ok, EncDB} = password_encrypt_file(DB, Password),
-                             ok = file:delete(DB),
-                             maps:update(database, EncDB);
-                         _ ->
-                             Files
-                     end,
-            Files2 = case maps:get_value(files, Files1, undefined) of
-                         F when is_binary(F) andalso size(F) > 0 ->
-                             {ok, EncF} = password_encrypt_file(F, Password),
-                             ok = file:delete(F),
-                             maps:update(database, EncF);
-                         _ ->
-                             Files1
-                     end,
-            Files3 = case maps:get_value(config_files, Files2, undefined) of
-                         CF when is_binary(CF) andalso size(CF) > 0 ->
-                             {ok, EncCF} = password_encrypt_file(CF, Password),
-                             ok = file:delete(CF),
-                             maps:update(database, EncCF);
-                         _ ->
-                             Files2
-                     end,
+            ?LOG_INFO(#{
+                text => <<"Encryption done">>,
+                in => zotonic_mod_backup,
+                encrypted => Files1
+            }),
 
-            Files4 = maps:update(encrypted, true, Files3),
-            {ok, Files4};
-            
+            {ok, Files1};
         false ->
             {ok, Files}
     end;
 maybe_encrypt_files({error, _}=Error, _Context) ->
     Error.
 
+filename(Fullname) ->
+    lists:last(filename:split(Fullname)).
 
 update_admin_file(DT, Name, {ok, Files}, Context) ->
     Data = read_admin_file(Context),
+
     Data1 = Data#{
         Name => #{
             timestamp => z_datetime:datetime_to_timestamp(DT),
+
             database => maps:get(database, Files),
             files => maps:get(files, Files, undefined),
-            is_filestore_uploaded => false
+            config_files => maps:get(config_files, Files, undefined),
+
+            is_filestore_uploaded => false,
+            is_encrypted => m_config:get_boolean(?MODULE, encrypt_backups, Context)
         }
     },
+
     write_admin_file(Data1, Context);
 update_admin_file(_DT, Name, {error, _}, Context) ->
     % Delete Name, backup failed
@@ -775,14 +773,18 @@ list_backup_files(Context) ->
     List = maps:fold(
         fun(Name, Dump, Acc) ->
             Timestamp = maps:get(<<"timestamp">>, Dump),
+            IsEncrypted = (maps:get(<<"is_encrypted">>, Dump, false) =:= true),
             IsDatabase = (maps:get(<<"database">>, Dump, undefined) =/= undefined),
             IsFiles = (maps:get(<<"files">>, Dump, undefined) =/= undefined),
+            IsConfigFiles = (maps:get(<<"config_files">>, Dump, undefined) =/= undefined),
             [
                 {Timestamp, #{
                     name => Name,
                     timestamp => z_datetime:timestamp_to_datetime(Timestamp),
+                    is_encrypted => IsEncrypted,
                     is_database_present => IsDatabase,
                     is_files_present => IsFiles,
+                    is_config_files_present => IsConfigFiles,
                     is_filestore_uploaded => maps:get(<<"is_filestore_uploaded">>, Dump, false)
                 }}
                 | Acc
@@ -930,7 +932,7 @@ archive_config(Name, Context) ->
     ConfigArchiveName = filename:join([Dir, ArchiveName]),
     ok = erl_tar:create(ConfigArchiveName, FileList, [compressed]),
 
-    {ok, ConfigArchiveName}.
+    {ok, ArchiveName}.
 
 make_config_filelist(_Prefix, [], Acc) ->
     lists:reverse(Acc);
@@ -961,7 +963,8 @@ password_encrypt_file(InFile, OutFile, Password) ->
     try
         {ok, Out} = file:open(OutFile, [write, binary]),
         try
-            password_encrypt(In, Out, Password)
+            ok = password_encrypt(In, Out, Password),
+            {ok, OutFile}
         after
             file:close(Out)
         end
@@ -1035,6 +1038,13 @@ get_decrypt_params(_) ->
 %%
 %%
 %%
+
+%% Strip all extensions from a filename.
+without_extension(Filename) ->
+    case filename:rootname(Filename) of
+        Filename -> Filename;
+        Root -> without_extension(Root)
+    end.
 
 %% @doc Check if we can make backups, the configuration is ok
 check_configuration() ->
