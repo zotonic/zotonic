@@ -19,6 +19,8 @@
                 {_ by _} <a href="{% url admin_edit_rsc id=id.modifier_id %}">{% include "_name.tpl" id=id.modifier_id %}</a>
             {% endif %}
         </span>
+        &middot;
+        <span class="text-muted">{_ id: _} {{ id }}</span>
     </div>
 
     {% with id.depiction as depict %}
