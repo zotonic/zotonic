@@ -152,10 +152,11 @@ derive_key_and_iv(Password, Salt, Iter) ->
 get_header_size() ->
     2 + 4 + ?SALT_SIZE.
 
-make_header(Salt, Iter) when size(Salt) == ?SALT_SIZE andalso (Iter =< ?MIN_ITER orelse Iter < 20_000_000) ->
+make_header(Salt, Iter) when size(Salt) == ?SALT_SIZE andalso (Iter =< ?MIN_ITER orelse Iter < ?MAX_ITER) ->
     <<"Z1", Iter:32/little-unsigned-integer, Salt/binary>>.
 
-get_decrypt_params(<<"Z1", Iter:32/little-unsigned-integer, Salt:?SALT_SIZE/binary, _/binary>>) ->
+get_decrypt_params(<<"Z1", Iter:32/little-unsigned-integer, Salt:?SALT_SIZE/binary, _/binary>>)
+  when Iter < ?MAX_ITER ->
     %% [TODO] sanity check op de header.
     Params = #{ alg => aes_256_cfb8, iter => Iter, salt => Salt},
     {ok, Params};
