@@ -142,19 +142,6 @@ stop() ->
     application:stop(mnesia),
     application:stop(epgsql),
     application:stop(erlexec),
-    lists:foreach(
-        fun
-            (kernel) -> ok;
-            (stdlib) -> ok;
-            (os_mon) -> ok;
-            (setup) -> ok;
-            (tools) -> ok;
-            (inets) -> ok;
-            (logger) -> ok;
-            (sasl) -> ok;
-            (A) -> application:stop(A)
-        end,
-        [ A || {A, _, _} <- application:which_applications() ]),
     init:stop().
 
 await_sites_stopping(0) -> ok;
