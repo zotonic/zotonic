@@ -984,19 +984,41 @@ password_encrypt(InIODevice, OutIODevice, Password, Salt, Iter) ->
     #{ key := Key, iv := IV } = derive_key_and_iv(Password, Salt, Iter),
     CipherState = crypto:crypto_init(aes_256_cfb8, Key, IV, [{encrypt, true}, {padding, random}]),
 
+    KeyMac = crypto:mac(hmac, sha256, Password, <<Salt/binary, Password/binary>>),
+    do_mac(KeyMac, OutIODevice, CipherState),
     ok = do_crypto(InIODevice, OutIODevice, CipherState),
     ok.
 
 password_decrypt_file(Filename, Password) ->
-    {ok, In} = file:open(Filename, [read, binary]),
+    case filename:extension(Filename) of
+        DotEnc when DotEnc == <<".enc">> orelse DotEnc == ".enc" ->
+            OutFilename = filename:rootname(Filename),
+            password_decrypt_file(Filename, OutFilename, Password);
+        _ ->
+            {error, outfile}
+    end.
+
+password_decrypt_file(InFile, OutFile, Password) -> 
+    {ok, In} = file:open(InFile, [read, binary]),
     try
         {ok, Header} = file:read(In, 2+4+16),
         case get_decrypt_params(Header) of
             {ok, #{ alg := Alg, iter := Iter, salt := Salt}} ->
-                #{ key := Key, iv := IV } = derive_key_and_iv(Password, Salt, Iter),
-                CipherState = crypto:crypto_init(Alg, Key, IV, [{encrypt, false}, {padding, random}]),
+                {ok, Out} = file:open(OutFile, [write, binary]),
+                try
+                    #{ key := Key, iv := IV } = derive_key_and_iv(Password, Salt, Iter),
+                    CipherState = crypto:crypto_init(Alg, Key, IV, [{encrypt, false}, {padding, random}]),
 
-                do_crypto(In, standard_error, CipherState);
+                    KeyMac = crypto:mac(hmac, sha256, Password, <<Salt/binary, Password/binary>>),
+                    case check_mac(KeyMac, In, CipherState) of
+                        ok ->
+                            do_crypto(In, Out, CipherState);
+                        {error, _}=Error ->
+                            Error
+                    end
+                after
+                    file:close(Out)
+                end;
             {error, _}=Error ->
                 Error
         end
@@ -1004,6 +1026,26 @@ password_decrypt_file(Filename, Password) ->
         file:close(In)
     end.
 
+do_mac(Mac, Out, CipherState) ->
+    ok = file:write(Out, crypto:crypto_update(CipherState, Mac)).
+
+check_mac(Mac, In, CipherState) ->
+    case file:read(In, size(Mac)) of
+        {ok, Data} ->
+            case crypto:crypto_update(CipherState, Data) of
+                Mac ->
+                    ok;
+                _ ->
+                    {error, wrong_password}
+            end;
+        eof ->
+            {error, eof};
+        {error, _}=Error ->
+            Error
+    end.
+
+
+%%
 do_crypto(In, Out, CipherState) ->
     case file:read(In, 100000) of
         {ok, Data} ->
