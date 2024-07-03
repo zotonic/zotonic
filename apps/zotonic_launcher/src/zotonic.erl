@@ -127,51 +127,14 @@ stop() ->
         HeartPid when is_pid(HeartPid) -> heart:set_cmd("echo ok")
     end,
 
-    % Stop all other running applications. Note: on OTP 25 we can simply use init:stop(0).
-    % On earlier OTP versions this is problematic because all modules are unloaded before
-    % the node is stopped. This can take a long time.
-    case z_utils:otp_release() of
-        Version when Version >= 25 ->
-            init:stop();
-        _ ->
-            application:stop(exometer),
-
-            [ maybe_app_stop(A) || {A, _, _} <- application:which_applications() ],
-
-            application:stop(os_mon),
-            application:stop(jobs),
-            application:stop(sidejob),
-            application:stop(mnesia),
-            application:stop(epgsql),
-
-            erlang:halt(0)
-    end.
-
-
-maybe_app_stop(jobs) -> false;
-maybe_app_stop(sidejob) -> false;
-maybe_app_stop(mnesia) -> false;
-maybe_app_stop(epgsql) -> false;
-maybe_app_stop(zotonic_core) -> false;
-
-maybe_app_stop(sasl) -> false;
-maybe_app_stop(kernel) -> false;
-maybe_app_stop(stdlib) -> false;
-maybe_app_stop(inets) -> false;
-maybe_app_stop(ssl) -> false;
-maybe_app_stop(public_key) -> false;
-maybe_app_stop(crypto) -> false;
-maybe_app_stop(asn1) -> false;
-maybe_app_stop(tls_certificate_check) -> false;
-maybe_app_stop(ssl_verify_fun) -> false;
-maybe_app_stop(os_mon) -> false;
-maybe_app_stop(poolboy) -> false;
-maybe_app_stop(depcache) -> false;
-maybe_app_stop(setup) -> false;
-maybe_app_stop(syslog) -> false;
-maybe_app_stop(exometer_core) -> false;
-maybe_app_stop(A) -> application:stop(A).
-
+    % Stop all other running applications.
+    application:stop(zotonic_launcher),
+    application:stop(exometer),
+    application:stop(jobs),
+    application:stop(mnesia),
+    application:stop(epgsql),
+    [ application:stop(A) || {A, _, _} <- application:which_applications() ],
+    init:stop(0).
 
 await_sites_stopping(0) -> ok;
 await_sites_stopping(N) ->
