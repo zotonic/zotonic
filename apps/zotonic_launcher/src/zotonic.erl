@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Start/stop functions for Zotonic
 %% @enddoc
 
-%% Copyright 2009-2022 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -108,7 +108,7 @@ runtests(Tests) ->
 %% @doc Stop all sites, the zotonic server and the beam.
 -spec stop() -> ok.
 stop() ->
-    ?LOG_INFO(#{
+    ?LOG_NOTICE(#{
         text => <<"Stopping Zotonic">>
     }),
     logger:set_primary_config(level, error),
@@ -134,12 +134,28 @@ stop() ->
 
     % Stop all other running applications.
     application:stop(zotonic_launcher),
+    application:stop(zotonic_filewatcher),
+    application:stop(zotonic_fileindexer),
+    application:stop(filezcache),
     application:stop(exometer),
     application:stop(jobs),
     application:stop(mnesia),
     application:stop(epgsql),
-    [ application:stop(A) || {A, _, _} <- application:which_applications() ],
-    init:stop(0).
+    application:stop(erlexec),
+    lists:foreach(
+        fun
+            (kernel) -> ok;
+            (stdlib) -> ok;
+            (os_mon) -> ok;
+            (setup) -> ok;
+            (tools) -> ok;
+            (inets) -> ok;
+            (logger) -> ok;
+            (sasl) -> ok;
+            (A) -> application:stop(A)
+        end,
+        [ A || {A, _, _} <- application:which_applications() ]),
+    init:stop().
 
 await_sites_stopping(0) -> ok;
 await_sites_stopping(N) ->
