@@ -262,7 +262,7 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 
             cotonic.broker
                 .call("bridge/origin/model/menu/get/is_menu_item_delete_safe/" ++ page_id)
-                .then((m) -> {
+                .then((m) => {
                     if (m.payload.result) {
                         $('#menu-delete-undo-text').hide();
                     } else {
