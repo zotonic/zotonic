@@ -30,10 +30,11 @@
 -define(IV_SIZE, 16).
 -define(KEY_SIZE, 32).
 
-%% @doc Encrypt InFile
-password_encrypt(InFile, Password) ->
-    password_encrypt(InFile, <<InFile/binary, ".enc">>, Password).
+% @doc Encrypt file named Filename with a password. The output will be written to the file named InFile + ".enc".
+password_encrypt(Filename, Password) ->
+    password_encrypt(Filename, <<Filename/binary, ".enc">>, Password).
 
+% @doc Encrypt file named InFile with a password. The encrypted output will be written to OutFile.
 password_encrypt(InFile, OutFile, Password) ->
     {ok, In} = file:open(InFile, [read, binary]),
     try
@@ -48,21 +49,8 @@ password_encrypt(InFile, OutFile, Password) ->
         file:close(In)
     end.
 
-password_encrypt_stream(InIODevice, OutIODevice, Password) ->
-    password_encrypt_stream(InIODevice, OutIODevice, Password, new_salt(), new_iter()).
-
-password_encrypt_stream(InIODevice, OutIODevice, Password, Salt, Iter) ->
-    %% Write the non-secret salt and extra iteration count, they are not
-    %% secret. It is handy to store these parameters together with the
-    %% encrypted data.
-    ok = file:write(OutIODevice, make_header(Salt, Iter)),
-
-    #{ key := Key, iv := IV } = derive_key_and_iv(Password, Salt, Iter),
-    CipherState = crypto:crypto_init(aes_256_cfb8, Key, IV, [{encrypt, true}, {padding, random}]),
-    write_encrypted_mac(password_mac(Salt, Password), OutIODevice, CipherState),
-    ok = stream_crypto(InIODevice, OutIODevice, CipherState),
-    ok.
-
+% @doc Decrypt the file name Filename with the given password. When the extension of the file is ".enc"
+% the decrypted content will be written to the file without that extenstion.
 password_decrypt(Filename, Password) ->
     case filename:extension(Filename) of
         DotEnc when DotEnc == <<".enc">> orelse DotEnc == ".enc" ->
@@ -72,6 +60,7 @@ password_decrypt(Filename, Password) ->
             {error, no_outfile}
     end.
 
+% @doc Decrypt the file name InFile with Password and write the output to OutFile.
 password_decrypt(InFile, OutFile, Password) -> 
     {ok, In} = file:open(InFile, [read, binary]),
     try
@@ -98,6 +87,26 @@ password_decrypt(InFile, OutFile, Password) ->
     after
         file:close(In)
     end.
+
+%%
+%% Helpers
+%%
+
+password_encrypt_stream(InIODevice, OutIODevice, Password) ->
+    password_encrypt_stream(InIODevice, OutIODevice, Password, new_salt(), new_iter()).
+
+password_encrypt_stream(InIODevice, OutIODevice, Password, Salt, Iter) ->
+    %% Write the non-secret salt and extra iteration count, they are not
+    %% secret. It is handy to store these parameters together with the
+    %% encrypted data.
+    ok = file:write(OutIODevice, make_header(Salt, Iter)),
+
+    #{ key := Key, iv := IV } = derive_key_and_iv(Password, Salt, Iter),
+    CipherState = crypto:crypto_init(aes_256_cfb8, Key, IV, [{encrypt, true}, {padding, random}]),
+    write_encrypted_mac(password_mac(Salt, Password), OutIODevice, CipherState),
+    ok = stream_crypto(InIODevice, OutIODevice, CipherState),
+    ok.
+
 
 % Create a mac of the salt and the password. Used to check the password before
 % decrypting the whole file.
