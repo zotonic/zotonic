@@ -1,8 +1,20 @@
+# Start this with ./start-docker.sh
+
+# This will start two containers.
+#
+# - postgres: with PosgreSQL, storing its data on the volume 'pgdata'
+# - zotonic: with Erlang and other tools
+#
+# The Zotonic container mounts the Zotonic "home" directory and
+# builds Zotonic in the "./_build/" directory.
+#
+# You can start Zotonic in the Zotonic container using: "./start.sh"
+
 version: '3.1'
 
 services:
     postgres:
-        image: postgres:11.6-alpine
+        image: postgres:16.2-alpine
         hostname: postgres
         restart: always
         environment:
@@ -15,7 +27,9 @@ services:
             - '${DB_FORWARD_PORT:-5432}:5432'
 
     zotonic:
-        image: zotonic/zotonic-dev
+        build:
+            dockerfile: docker/Dockerfile.dev
+            context: .
         environment:
             ZOTONIC_PORT: 8000
             ZOTONIC_SSL_PORT: 8443
