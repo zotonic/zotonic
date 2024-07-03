@@ -1,10 +1,10 @@
 %% @author Marc Worrell
-%% @copyright 2009-2022 Marc Worrell
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Misc utility functions for zotonic
 %% Parts are from wf_utils.erl which is Copyright (c) 2008-2009 Rusty Klophaus
-%% @enddoc
+%% @end
 
-%% Copyright 2009-2022 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -46,6 +46,8 @@
     group_proplists/2,
     hex_decode/1,
     hex_encode/1,
+    hex_sha/1,
+    hex_sha2/1,
     index_proplist/2,
     nested_proplist/1,
     nested_proplist/2,
@@ -332,82 +334,110 @@ erase_process_dict() ->
     ok.
 
 
-%% Encode value securely, for use in cookies.
+%% @doc Encode value to a binary with a checksum, for use in cookies.
+%% @deprecated Use z_crypto:encode_value/2 instead.
+encode_value(Value, ContextOrSecret) ->
+    z_crypto:encode_value(Value, ContextOrSecret).
 
-encode_value(Value, #context{} = Context) ->
-    encode_value(Value, z_ids:sign_key(Context));
-encode_value(Value, Secret) when is_list(Secret); is_binary(Secret) ->
-    Salt = z_ids:rand_bytes(4),
-    BinVal = erlang:term_to_binary(Value),
-    Hash = hmac(sha, Secret, [ BinVal, Salt ]),
-    base64:encode(iolist_to_binary([ 1, Salt, Hash, BinVal ])).
+%% @doc Decode a value. Crash if the checksum is invalid.
+%% @deprecated Use z_crypto:decode_value/2 instead.
+decode_value(Data, ContextOrSecret) ->
+    z_crypto:decode_value(Data, ContextOrSecret).
 
-decode_value(Data, #context{} = Context) ->
-    decode_value(Data, z_ids:sign_key(Context));
-decode_value(Data, Secret) when is_list(Secret); is_binary(Secret) ->
-    <<1, Salt:4/binary, Hash:20/binary, BinVal/binary>> = base64:decode(Data),
-    Hash = hmac(sha, Secret, [ BinVal, Salt ]),
-    erlang:binary_to_term(BinVal).
-
+%% @doc Encode a value using a checksum, add a date to check for expiration.
+%% @deprecated Use z_crypto:encode_value_expire/3 instead.
+-spec encode_value_expire(Value, Date, Context) -> Encoded when
+    Value :: term(),
+    Date :: calendar:datetime(),
+    Context :: z:context(),
+    Encoded :: binary().
 encode_value_expire(Value, Date, Context) ->
-    encode_value({Value, Date}, Context).
+    z_crypto:encode_value_expire(Value, Date, Context).
 
+%% @doc Decode a value using a checksum, check date to check for expiration. Crashes
+%% if the checksum is invalid.
+%% @deprecated Use z_crypto:decode_value_expire/3 instead.
+-spec decode_value_expire(Encoded, Context) -> {ok, Value} | {error, expired} when
+    Encoded :: binary(),
+    Value :: term(),
+    Context :: z:context().
 decode_value_expire(Data, Context) ->
-    {Value, Expire} = decode_value(Data, Context),
-    case Expire >= calendar:universal_time() of
-        false -> {error, expired};
-        true -> {ok, Value}
-    end.
+    z_crypto:decode_value_expire(Data, Context).
 
+%% @deprecated Use crypto:mac/4 instead.
 hmac(Type, Key, Data) ->
     crypto:mac(hmac, Type, Key, Data).
 
-
 %%% CHECKSUM %%%
+
+%% @doc Calculate a checksum for the given data using the sign_key_simple of the site.
+%% @deprecated Use z_crypto:checksum/2 instead.
+-spec checksum(Data, Context) -> Checksum when
+    Data :: iodata(),
+    Context :: z:context(),
+    Checksum :: binary().
 checksum(Data, Context) ->
-    Sign = z_ids:sign_key_simple(Context),
-    z_utils:hex_encode(erlang:md5([Sign,Data])).
+    z_crypto:checksum(Data, Context).
 
-checksum_assert(Data, Checksum, Context) ->
-    Sign = z_ids:sign_key_simple(Context),
-    try
-        assert(list_to_binary(z_utils:hex_decode(Checksum)) == erlang:md5([Sign,Data]), checksum_invalid)
-    catch
-        error:badarg ->
-            erlang:error(checksum_invalid);
-        error:{case_clause, _} ->
-            % Odd length checksum
-            erlang:error(checksum_invalid)
-    end.
-
+%% @doc Assert that the checksum is correct. Throws an exception of class error with
+%% reason checksum_invalid if the checksum is not valid. The sign_key_simple if used
+%% for the checksum calculation.
+%% @deprecated Use z_crypto:checksum_assert/3 instead.
+-spec checksum_assert(Data, Checksum, Context) -> ok | no_return() when
+    Data :: iodata(),
+    Checksum :: binary() | string(),
+    Context :: z:context().
+checksum_assert(Data, Checksum, Context) when is_binary(Checksum )->
+    z_crypto:checksum_assert(Data, Checksum, Context).
 
 %%% PICKLE / UNPICKLE %%%
-pickle(Data, Context) ->
-    BData = erlang:term_to_binary(Data),
-    Nonce = z_ids:rand_bytes(4),
-    Sign  = z_ids:sign_key(Context),
-    SData = <<BData/binary, Nonce:4/binary>>,
-    <<Mac:16/binary>> = hmac(md5, Sign, SData),
-    base64url:encode(<<Mac:16/binary, Nonce:4/binary, BData/binary>>).
 
+%% @doc Encode an arbitrary to a binary. A checksum is added to prevent
+%% decoding erlang terms not originating from this server. An Nonce is
+%% added so that identical terms vary in their checksum. The encoded value
+%% is safe to use in URLs (base64url). The site's sign_key is used as the
+%% secret.
+%% @deprecated Use z_crypto:pickle/2 instead.
+-spec pickle(Term, Context) -> Data when
+    Term :: term(),
+    Context :: z:context(),
+    Data :: binary().
+pickle(Data, Context) ->
+    z_crypto:pickle(Data, Context).
+
+%% @doc Decode pickled base64url data. If the data checksum is invalid then an exception
+%% of class error with reason {checksum_invalid, Data} is thrown. The site's sign_key is
+%% used as the secret.
+%% @deprecated Use z_crypto:depickle/2 instead.
+-spec depickle(Data, Context) -> Term | no_return() when
+    Data :: binary(),
+    Context :: z:context(),
+    Term :: term().
 depickle(Data, Context) ->
-    try
-        <<Mac:16/binary, Nonce:4/binary, BData/binary>> = base64url:decode(Data),
-        Sign  = z_ids:sign_key(Context),
-        SData = <<BData/binary, Nonce:4/binary>>,
-        <<Mac:16/binary>> = hmac(md5, Sign, SData),
-        erlang:binary_to_term(BData)
-    catch
-        _M:_E ->
-            ?LOG_ERROR("Postback data invalid, could not depickle: ~p", [Data]),
-            erlang:throw({checksum_invalid, Data})
-    end.
+    z_crypto:depickle(Data, Context).
 
 
 %%% HEX ENCODE and HEX DECODE
+
+-spec hex_encode(iodata()) -> binary().
 hex_encode(Value) -> z_url:hex_encode(Value).
+
+-spec hex_decode(iodata()) -> binary().
 hex_decode(Value) -> z_url:hex_decode(Value).
 
+%% @doc Hash data and encode into a hex string safe for filenames and texts.
+-spec hex_sha(Value) -> Hash when
+    Value :: iodata(),
+    Hash :: binary().
+hex_sha(Value) ->
+    z_url:hex_encode_lc(crypto:hash(sha, Value)).
+
+%% @doc Hash256 data and encode into a hex string safe for filenames and texts.
+-spec hex_sha2(Value) -> Hash when
+    Value :: iodata(),
+    Hash :: binary().
+hex_sha2(Value) ->
+    z_url:hex_encode_lc(crypto:hash(sha256, Value)).
 
 %% @doc Simple escape function for filenames as commandline arguments.
 %% foo/"bar.jpg -> "foo/\"bar.jpg"; on windows "foo\\\"bar.jpg" (both including quotes!)
@@ -558,16 +588,23 @@ prefix(_Sep, [], Acc) -> lists:reverse(Acc);
 prefix(Sep, [H|T], Acc) -> prefix(Sep, T, [H,Sep|Acc]).
 
 
-%%% COALESCE %%%
+%% @doc COALESCE, select the first value non-null-ish value in a list.
+%% Return 'undefined' if there are no non-null-ish values. A value is
+%% is considered null-ish if it is undefined, null or the empty list.
+-spec coalesce(List) -> Value when
+    List :: list(),
+    Value :: term().
 coalesce([]) -> undefined;
-coalesce([H]) -> H;
 coalesce([undefined|T]) -> coalesce(T);
 coalesce([null|T]) -> coalesce(T);
 coalesce([[]|T]) -> coalesce(T);
 coalesce([H|_]) -> H.
 
 
-%% @doc Check if a value is 'empty'
+%% @doc Check if a value is 'empty'. Special empty values are empty strings,
+%% dates in the year 9999 and trans records with no or only empty values.
+-spec is_empty(Value) -> boolean() when
+    Value :: term().
 is_empty(undefined) -> true;
 is_empty(null) -> true;
 is_empty([]) -> true;
@@ -580,6 +617,8 @@ is_empty(_) -> false.
 
 
 %% @doc Check if the parameter could represent the logical value of "true"
+-spec is_true(Value) -> boolean() when
+    Value :: string() | binary() | boolean() | on | yes | number() | term().
 is_true([$t|_T]) -> true;
 is_true([$y|_T]) -> true;
 is_true([$T|_T]) -> true;
@@ -601,24 +640,42 @@ is_true(yes) -> true;
 is_true(on) -> true;
 
 is_true(N) when is_integer(N) andalso N =/= 0 -> true;
-is_true(N) when is_float(N) andalso N =/= 0.0 -> true;
+is_true(0.0) -> false;
+is_true(-0.0) -> false;
+is_true(N) when is_float(N) -> true;
 
 is_true(_) -> false.
 
 
-%% @spec assert(bool(), error) -> none()
-%% @doc Check if an assertion is ok or failed
+%% @doc Check if an assertion is ok or failed, raise an erlang error
+%% exception if the condition failed.
+-spec assert(Condition, Error) -> ok when
+    Condition :: boolean(),
+    Error :: term().
 assert(false, Error) -> erlang:error(Error);
 assert(_, _) -> ok.
 
 
-%% @doc Replace a property in a proplist
+%% @doc Replace a property in a proplist with a new value.
+-spec prop_replace(Prop, Value, List) -> List1 when
+    Prop :: term(),
+    Value :: term(),
+    List :: proplists:proplist(),
+    List1 :: proplists:proplist().
 prop_replace(Prop, Value, List) ->
     [{Prop,Value} | lists:keydelete(Prop,1,List)].
 
 prop_delete(Prop, List) ->
     lists:keydelete(Prop, 1, List).
 
+%% @doc Overlay property list List1 over List2, keys in List1 overrule
+%% keys in List2.
+-spec props_merge(List1, List2) -> List3 when
+    List1 :: proplists:proplist(),
+    List2 :: proplists:proplist(),
+    List3 :: proplists:property().
+props_merge([], Ps) ->
+    Ps;
 props_merge(Ps, []) ->
     Ps;
 props_merge(Ps, [{K,_}=P|Xs]) ->
@@ -667,7 +724,7 @@ index_proplist(Prop, [L|Rest], Acc) ->
     index_proplist(Prop, Rest, [{proplists:get_value(Prop,L),L}|Acc]).
 
 
-%% @doc Scan the props of a proplist, when the prop is a list with a $. characters in it then split the prop.
+%% @doc Scan the props of a proplist, when the prop is a string with "." characters in it then split the prop.
 nested_proplist(Props) ->
     nested_proplist(Props, []).
 
@@ -708,9 +765,25 @@ nested_props_assign([H|T], V, Acc) ->
             prop_replace(H, NewV, Acc)
     end.
 
-get_nth(N, L) when N >= 1 ->
-    try lists:nth(N, L) catch _:_ -> undefined end.
 
+%% @doc Get the Nth value of a list, if the list is too short then return 'undefined'.
+%% The first value is 1.
+-spec get_nth(N, L) -> Value | undefined when
+    N :: non_neg_integer(),
+    L :: list(),
+    Value :: term().
+get_nth(N, L) when N >= 1 ->
+    try lists:nth(N, L) catch _:_ -> undefined end;
+get_nth(_N, _L) ->
+    undefined.
+
+%% @doc Update the nth value of a list. The first value is 1. If the list is too
+%% short then it is appended with 'undefined' values till the correct length.
+-spec set_nth(N, Value, List) -> List2 when
+    N :: pos_integer(),
+    Value :: term(),
+    List :: list(),
+    List2 :: list().
 set_nth(N, V, L) when N >= 1 ->
     try
         case lists:split(N-1, L) of

@@ -98,7 +98,7 @@ Marc Worrell
  * Fix for binary results from translations.
  * Made do_listfilter more generic.
  * Make erlydtl_dateformat a binary. Correct handling of binaries or lists for day/month representations.  Re-enable test set.
- * Allow institutions to have an username/password.
+ * Allow institutions to have a username/password.
  * Show date range for surveys.  Always show poll results.
  * Let the 'remeber me' be valid for 10 years or so instead of two weeks.
  * Fix for max_age of persist cookie

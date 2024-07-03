@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2021 Marc Worrell, 2014 Arjan Scherpenisse
+%% @copyright 2010-2024 Marc Worrell, 2014 Arjan Scherpenisse
 %% @doc Wrapper for Zotonic application environment configuration
+%% @end
 
-%% Copyright 2010-2021 Marc Worrell, 2014 Arjan Scherpenisse
+%% Copyright 2010-2024 Marc Worrell, 2014 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -173,8 +174,14 @@ map_ip_address(Name, IP) when is_list(IP) ->
     case getaddr(Name, IP) of
         {ok, IpN} -> IpN;
         {error, Reason} ->
-            ?LOG_ERROR("Invalid '~p' address: ~p, assuming 'none' instead (~p)",
-                        [Name, IP, Reason]),
+            ?LOG_ERROR(#{
+                text => <<"Invalid IP address for config, assuming 'none">>,
+                in => zotonic_core,
+                config_name => Name,
+                ip => IP,
+                result => error,
+                reason => Reason
+            }),
             none
     end;
 map_ip_address(Name, IP) when is_binary(IP) ->
@@ -182,8 +189,14 @@ map_ip_address(Name, IP) when is_binary(IP) ->
 map_ip_address(smtp_spamd_ip, undefined) ->
     none;
 map_ip_address(Name, IP) ->
-    ?LOG_ERROR("Invalid ~p address: ~p, assuming 'any' instead",
-                [Name, IP]),
+    ?LOG_ERROR(#{
+        text => <<"Invalid IP address for config, assuming 'any'">>,
+        in => zotonic_core,
+        config_name => Name,
+        ip => IP,
+        result => error,
+        reason => invalid_ip
+    }),
     any.
 
 getaddr(listen_ip6, IP) -> inet:getaddr(IP, inet6);
@@ -257,6 +270,7 @@ default(smtp_relay) -> false;
 default(smtp_host) -> "localhost";
 default(smtp_port) -> 25;
 default(smtp_ssl) -> false;
+default(smtp_plaintext_fallback) -> true;
 default(smtp_listen_ip) -> {127,0,0,1};
 default(smtp_listen_port) -> 2525;
 default(smtp_spamd_ip) -> none;
@@ -285,6 +299,7 @@ default(dbschema) -> "public";
 default(filewatcher_enabled) -> true;
 default(filewatcher_scanner_enabled) -> true;
 default(filewatcher_scanner_interval) -> 10000;
+default(filewatcher_terminal_notifier) -> true;
 default(syslog_ident) -> "zotonic";
 default(syslog_opts) -> [ndelay];
 default(syslog_facility) -> local0;

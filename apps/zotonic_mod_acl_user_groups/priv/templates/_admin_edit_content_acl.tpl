@@ -1,25 +1,13 @@
-{% extends "admin_edit_widget_std.tpl" %}
+{% overrules %}
 
-{# Widget for editing access control to rsc  #}
-
-{% block widget_title %}
-{_ Category &amp; Content group _}
-<div class="widget-header-tools">
-    <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{{ _"Access control"|escapejs }}', text: '{{ _"Define who can see or edit this page."|escapejs }}'" title="{_ Need more help? _}"></a>
-</div>
-{% endblock %}
-
-{% block widget_show_minimized %}false{% endblock %}
-{% block widget_id %}sidebar-catcg{% endblock %}
-
-{% block widget_content %}
+{% block access_control %}
 <fieldset>
     <div class="form-group">
         <p>
         	{_ This page is a _}
         	<strong>{{ id.category_id.title }}</strong>
         	{_ in the group _}
-        	<strong><a href="{% url admin_edit_rsc id=id.content_group_id %}">{{ id.content_group_id.title }}</strong>
+        	<strong><a href="{% url admin_edit_rsc id=id.content_group_id %}">{{ id.content_group_id.title }}</a></strong>
         </p>
 
         {% if m.acl_rule.can_insert[id.content_group_id][id.category_id] %}

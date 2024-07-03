@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019-2021 Marc Worrell
+%% @copyright 2019-2024 Marc Worrell
 %% @doc Generic support for finding and parsing config files.
+%% @end
 
-%% Copyright 2019-2021 Marc Worrell
+%% Copyright 2019-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,6 +20,9 @@
 -module(z_config_files).
 
 -export([
+    zotonic_config_files/0,
+    zotonic_config_files/1,
+
     security_dir/0,
     log_dir/0,
     data_dir/0,
@@ -34,6 +38,35 @@
 -include_lib("yamerl/include/yamerl_errors.hrl").
 -include_lib("kernel/include/logger.hrl").
 
+%% @doc List all zotonic config files in the zotonic config directory
+%%      and the "config.d" subdirectory for the current node.
+%%      Zotonic config files are "zotonic.*" files in the root of the
+%%      config directory and all files the 'config.d' subdirectory.
+-spec zotonic_config_files() -> list( file:filename() ).
+zotonic_config_files() ->
+    zotonic_config_files(node()).
+
+%% @doc List all zotonic config files in the zotonic config directory
+%%      and the "config.d" subdirectory.
+%%      Zotonic config files are "zotonic.*" files in the root of the
+%%      config directory and all files the 'config.d' subdirectory.
+-spec zotonic_config_files( node() ) -> list( file:filename() ).
+zotonic_config_files(Node) ->
+    case config_dir(Node) of
+        {ok, Dir} ->
+            Files = lists:filter(fun(F) -> not is_erlang_config(F) end, files(Dir)),
+            SubFiles= files( filename:join([ Dir, "config.d" ]) ),
+            Files ++ SubFiles;
+        {error, _} ->
+            []
+    end.
+
+is_erlang_config(F) ->
+    case filename:basename(F) of
+        "zotonic" -> false;
+        "zotonic." ++ _ -> false;
+        _ -> filename:extension(F) =:= ".config"
+    end.
 
 %% @doc Find the default directory for certificates and other secrets.
 %% Checks the following locations:
@@ -107,12 +140,14 @@ security_dir_1() ->
                 true ->
                     ?LOG_INFO(#{
                         text => <<"Created security directory">>,
+                        in => zotonic_core,
                         path => SecurityDir
                     }),
                     {ok, SecurityDir};
                 false ->
                     ?LOG_ERROR(#{
                         text => <<"Could not create security directory">>,
+                        in => zotonic_core,
                         path => SecurityDir
                     }),
                     {error, enoent}
@@ -173,12 +208,14 @@ logs_dir_1() ->
                 true ->
                     ?LOG_INFO(#{
                         text => <<"Create log directory">>,
+                        in => zotonic_core,
                         path => SystemLogDir
                     }),
                     {ok, SystemLogDir};
                 false ->
                     ?LOG_ERROR(#{
                         text => <<"Could not create log directory">>,
+                        in => zotonic_core,
                         path => SystemLogDir
                     }),
                     {error, enoent}
@@ -239,12 +276,14 @@ data_dir_1() ->
                 true ->
                     ?LOG_INFO(#{
                         text => <<"Created data directory">>,
+                        in => zotonic_core,
                         path => SystemDataDir
                     }),
                     {ok, SystemDataDir};
                 false ->
                     ?LOG_ERROR(#{
                         text => <<"Could not create data directory">>,
+                        in => zotonic_core,
                         path => SystemDataDir
                     }),
                     {error, enoent}
@@ -306,12 +345,14 @@ cache_dir_1() ->
                 true ->
                     ?LOG_INFO(#{
                         text => <<"Created cache directory">>,
+                        in => zotonic_core,
                         path => SystemCacheDir
                     }),
                     {ok, SystemCacheDir};
                 false ->
                     ?LOG_ERROR(#{
                         text => <<"Could not create cache directory">>,
+                        in => zotonic_core,
                         path => SystemCacheDir
                     }),
                     {error, enoent}
@@ -446,7 +487,13 @@ config_dir_find(Node) ->
                 true ->
                     {ok, VersionDir};
                 false ->
-                    ?LOG_ERROR("Could not create config directory: ~p", [ VersionDir ]),
+                    ?LOG_ERROR(#{
+                        text => <<"Could not create config directory">>,
+                        in => zotonic_core,
+                        path => VersionDir,
+                        result => error,
+                        reason => not_directory
+                    }),
                     {error, enoent}
             end;
         [ D | _ ] ->

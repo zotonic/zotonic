@@ -1,8 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2011 Arjan Scherpenisse
+%% @copyright 2011-2023 Arjan Scherpenisse
 %% @doc Mailing status/control page
+%% @end
 
-%% Copyright 2011 Arjan Scherpenisse
+%% Copyright 2011-2023 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.

@@ -33,24 +33,27 @@ render_validator(username_unique, TriggerId, TargetId, Args, Context)  ->
 %% @spec validate(Type, TriggerId, Value, Args, Context) -> {{ok,AcceptedValue}, NewContext} | {{error,Id,Error}, NewContext}
 %%          Error = invalid | novalue | {script, Script} | novalidator | string()
 validate(username_unique, Id, Value, Args, Context) ->
-    UserId = z_convert:to_integer(proplists:get_value(id, Args)),
-    case z_string:trim(Value) of
-        <<>> -> {{ok, <<>>}, Context};
-        Username ->
-            case m_identity:is_reserved_name(Username) of
-                true ->
-                    {{error, Id, ?__("Sorry, this username is already in use. Please try another one.", Context)}, Context};
-                false ->
-                    case m_identity:lookup_by_username(Username, Context) of
-                        undefined ->
-                            {{ok, Username}, Context};
-                        Identity ->
-                            case proplists:get_value(rsc_id, Identity) of
-                                UserId -> {{ok, Username}, Context};
-                                _Other -> {{error, Id, ?__("Sorry, this username is already in use. Please try another one.", Context)}, Context}
-                            end
-                    end
-            end
+    Username = z_string:trim(Value),
+    case Username =:= <<>> orelse is_username_unique(Username, Args, Context) of
+        true ->
+            {{ok, Username}, Context};
+        false ->
+            {{error, Id, ?__("Sorry, this username is already in use. Please try another one.", Context)}, Context}
+    end.
+
+is_username_unique(Username, Args, Context) ->
+    case m_identity:is_reserved_name(Username) of
+        false ->
+            case m_identity:lookup_by_username(Username, Context) of
+                undefined ->
+                    true;
+                Identity ->
+                    %% When an id is passed as argument, skip this user for the unique check
+                    SkipUserId = z_convert:to_integer(proplists:get_value(id, Args)),
+                    SkipUserId =:= proplists:get_value(rsc_id, Identity)
+            end;
+        true ->
+            false
     end.
 
 %% @spec event(Event, Context) -> Context

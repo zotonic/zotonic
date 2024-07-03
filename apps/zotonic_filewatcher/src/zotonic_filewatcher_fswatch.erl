@@ -1,11 +1,11 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2014-2018 Arjan Scherpenisse <arjan@scherpenisse.net>
-
+%% @copyright 2014-2024 Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @doc Watch for changed files using fswatch (MacOS X; brew install fswatch).
 %%      https://github.com/emcrisostomo/fswatch
+%% @end
 
 %% Copyright 2014-2018 Arjan Scherpenisse
-%% Copyright 2015-2018 Marc Worrell
+%% Copyright 2015-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -32,12 +32,14 @@
     pid :: pid() | undefined,
     port :: integer() | undefined,
     data :: binary(),
-    executable :: string()
+    executable :: string(),
+    tries = 0 :: non_neg_integer()
 }).
 
 %% interface functions
 -export([
     is_installed/0,
+    is_running/0,
     restart/0
 ]).
 
@@ -61,6 +63,15 @@ start_link() ->
 is_installed() ->
     os:find_executable("fswatch") =/= false.
 
+-spec is_running() -> boolean().
+is_running() ->
+    case whereis(zotonic_filewatcher_fswatch) of
+        undefined ->
+            false;
+        Pid ->
+            gen_server:call(Pid, is_running)
+    end.
+
 -spec restart() -> ok.
 restart() ->
     gen_server:cast(?MODULE, restart).
@@ -80,24 +91,24 @@ init([Executable]) ->
         executable = Executable,
         port = undefined,
         pid = undefined,
-        data = <<>>
+        data = <<>>,
+        tries = 0
     },
     timer:send_after(100, start),
     {ok, State}.
 
-%% @doc Trap unknown calls
+handle_call(is_running, _From, #state{ pid = Pid } = State) ->
+    {reply, is_pid(Pid), State};
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
-%% @spec handle_cast(Msg, State) -> {noreply, State} |
-%%                                  {noreply, State, Timeout} |
-%%                                  {stop, Reason, State}
+
 handle_cast(restart, #state{ pid = undefined } = State) ->
     {noreply, State};
 handle_cast(restart, #state{ pid = Pid } = State) when is_pid(Pid) ->
     ?LOG_INFO("[inotify] Stopping fswatch file monitor."),
     catch exec:stop(Pid),
-    {noreply, start_fswatch(State#state{ port = undefined })};
+    {noreply, start_fswatch(State#state{ port = undefined, tries = 0 })};
 
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
@@ -110,21 +121,26 @@ handle_info({stdout, _Port, FilenameFlags}, #state{ data = Data } = State) ->
             zotonic_filewatcher_handler:file_changed(Verb, Filename)
         end,
         FVs),
-    {noreply, State#state{ data = Rest }};
+    {noreply, State#state{ data = Rest, tries = 0 }};
 
-handle_info({'DOWN', _Port, process, Pid, Reason}, #state{pid = Pid} = State) ->
-    ?LOG_ERROR("[fswatch] fswatch port closed with ~p, restarting in 5 seconds.", [Reason]),
+handle_info({'EXIT', Pid, Reason}, #state{ pid = Pid, tries = Tries } = State) ->
+    Delay = backoff(Tries),
+    ?LOG_ERROR(#{
+        text => <<"[fswatch] fswatch port closed, restarting in delay seconds.">>,
+        in => zotonic_filewatcher,
+        result => error,
+        delay => Delay,
+        reason => Reason
+    }),
     State1 = State#state{
         pid = undefined,
-        port = undefined
+        port = undefined,
+        tries = Tries + 1
     },
-    timer:send_after(5000, start),
+    timer:send_after(Delay, start),
     {noreply, State1};
 
-handle_info({'EXIT', _Pid, _Reason}, State) ->
-    {noreply, State};
-
-handle_info(start, #state{port = undefined} = State) ->
+handle_info(start, #state{ port = undefined } = State) ->
     {noreply, start_fswatch(State)};
 handle_info(start, State) ->
     {noreply, State};
@@ -152,6 +168,9 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+backoff(0) -> 5000;
+backoff(N) -> max(900_000, N * 5000).
 
 start_fswatch(State=#state{executable = Executable, port = undefined}) ->
     ?LOG_INFO("[fswatch] Starting fswatch file monitor."),

@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2012-2021 Marc Worrell
+%% @copyright 2012-2023 Marc Worrell
 
-%% Copyright 2012-2021 Marc Worrell
+%% Copyright 2012-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 -module(survey_q_category).
 
 -export([
-    answer/3,
+    answer/4,
     prep_chart/3,
     prep_answer_header/2,
     prep_answer/3,
@@ -26,10 +26,8 @@
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--include_lib("zotonic_mod_survey/include/survey.hrl").
 
-
-answer(Block, Answers, _Context) ->
+answer(_SurveyId, Block, Answers, _Context) ->
     Name = maps:get(<<"name">>, Block, undefined),
     case proplists:get_value(Name, Answers) of
         undefined ->

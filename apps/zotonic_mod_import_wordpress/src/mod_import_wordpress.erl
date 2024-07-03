@@ -50,8 +50,15 @@ do_import(TmpFile, Reset, OriginalFilename, Context) ->
             Msg = lists:flatten(io_lib:format("The import of ~p has completed.", [OriginalFilename])),
             {growl, [ {text, Msg} ]}
         catch
-            _:E:Stacktrace ->
-                ?LOG_WARNING("WordPress failed import of ~p: ~p", [OriginalFilename, E], #{ stack => Stacktrace }),
+            Type:E:Stacktrace ->
+                ?LOG_WARNING(#{
+                    text => <<"WordPress failed import">>,
+                    in => zotonic_mod_import_wordpress,
+                    file => OriginalFilename,
+                    result => Type,
+                    reason => E,
+                    stack => Stacktrace
+                }),
                 Msg1 = unicode:characters_to_binary(
                     io_lib:format("~p failed to import. The error was: ~p", [OriginalFilename, E])),
                 {growl, [ {text, Msg1}, {type, error}, {stay, true} ]}

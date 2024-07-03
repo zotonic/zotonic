@@ -5,7 +5,7 @@
 @Author:    Tim Benniks <tim@timbenniks.nl>
 @Author:    Marc Worrell <marc@worrell.nl>
 
-Copyright 2009-2021 Tim Benniks, Marc Worrell
+Copyright 2009-2023 Tim Benniks, Marc Worrell
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,8 +23,11 @@ Based on nitrogen.js which is copyright 2008-2009 Rusty Klophaus
 
 ---------------------------------------------------------- */
 
+var zotonic                 = zotonic || {};
+
 // Client state
 var z_language              = "en";
+var z_languages             = ["en"];
 // var z_userid;
 var z_editor;
 var z_default_form_postback;
@@ -99,6 +102,16 @@ function zotonic_startup() {
             z_dialog_alert(msg.payload);
         }, { wid: 'zotonicalert'});
 
+    cotonic.broker.subscribe(
+        "model/clipboard/post/copy",
+        function(msg) {
+            if (msg.payload?.message['data-text'] !== undefined) {
+                navigator.clipboard?.writeText(msg.payload.message['data-text']);
+            } else if (msg.payload?.text) {
+                navigator.clipboard?.writeText(msg.payload.text);
+            }
+        }, { wid: 'zotonicclip'});
+
     // Register the client-id to reuse on subsequent pages
     cotonic.broker.subscribe(
             "$bridge/origin/status",
@@ -118,6 +131,14 @@ function zotonic_startup() {
                 });
             });
 
+    // Start bridge to opener if opened from a window with a cotonic broker
+    if (window.opener && typeof window.opener.cotonic === 'object') {
+        cotonic.mqtt_bridge.newBridge('opener', {
+            client_id: '',
+            clean_start: true
+        });
+    }
+
     setInterval(function() { z_transport_queue_check(); }, 500);
 }
 
@@ -130,9 +151,15 @@ function z_dialog_open(options)
     $.dialogAdd(options);
 }
 
-function z_dialog_close()
+function z_dialog_close(options)
 {
-    $.dialogClose();
+    if (typeof options === "number") {
+        $.dialogClose({ level: options });
+    } else if (options === "top") {
+        $.dialogClose({ level: "top" });
+    } else {
+        $.dialogClose(options);
+    }
 }
 
 function z_dialog_confirm(options)
@@ -162,7 +189,8 @@ function z_dialog_confirm(options)
         title: (options.title||z_translate('Confirm')),
         text: html,
         width: (options.width),
-        backdrop: backdrop
+        backdrop: backdrop,
+        level: options.level ?? "top"
     });
     $(".z-dialog-cancel-button").click(function() {
         z_dialog_close();
@@ -192,6 +220,7 @@ function z_dialog_alert(options)
          + '</div>';
     $.dialogAdd({
         title: (options.title||z_translate('Alert')),
+        title_icon: "glyphicon glyphicon-exclamation-sign",
         text: html,
         width: (options.width),
         backdrop: backdrop
@@ -204,35 +233,69 @@ function z_dialog_alert(options)
 
 function z_dialog_overlay_open(options)
 {
-    var overlay_id = 'modal-overlay';
+    let overlay_id = 'modal-overlay';
+    let level;
+    let is_top = false;
 
-    if (typeof options.level !== 'undefined' && options.level > 0) {
-        overlay_id = overlay_id + "-level-" + options.level;
+    if (options.level === 'top') {
+        is_top = true;
+        level = 3;
+        overlay_id = overlay_id + "-level-" + level;
+    } else if (typeof options.level !== 'undefined' && options.level > 0) {
         level = options.level;
+        overlay_id = overlay_id + "-level-" + level;
     } else {
         level = 0;
     }
-    var $overlay = $('#'+overlay_id);
+
+    let $overlay = $('#'+overlay_id);
+    let style;
+
+    if (is_top) {
+        style = { zIndex: 9000 };
+    } else {
+        style = {};
+    }
+
     if ($overlay.length > 0) {
         $overlay
             .html('<a href="#close" class="modal-overlay-close" onclick="return z_dialog_overlay_close(this)">&times;</a>' + options.html)
             .attr('class', 'modal-overlay')
+            .css(style)
             .show();
     } else {
-        html = '<div class="modal-overlay modal-overlay-level-' + level + '" id="' + overlay_id + '">' +
-               '<a href="#close" class="modal-overlay-close" onclick="return z_dialog_overlay_close(this)">&times;</a>' +
-               options.html +
-               '</div>';
+        const html = '<div class="modal-overlay modal-overlay-level-' + level + '" id="' + overlay_id + '">' +
+                     '<a href="#close" class="modal-overlay-close" onclick="return z_dialog_overlay_close(this)">&times;</a>' +
+                     options.html +
+                     '</div>';
         $('body').append(html);
         $overlay = $('#'+overlay_id);
+        $overlay.css(style);
+
+        setTimeout(function() {
+            // If there already is an input field with focus, do nothing
+            if ($overlay.find("input:focus").length == 0) {
+                $overlay.find('.survey-overlay-close').focus();
+            }
+        }, 50);
     }
+
     if (options.class) {
         $overlay.addClass(options.class);
     }
+
+    $(document).keyup(function(e) {
+         if (e.key === "Escape") { // escape key maps to keycode `27`
+            z_dialog_overlay_close();
+        }
+    });
+    
     $('body').addClass('overlay-open');
+    
     if (typeof($.widgetManager) != 'undefined') {
         $overlay.widgetManager();
     }
+
     z_editor_add($overlay);
 }
 
@@ -245,10 +308,13 @@ function z_dialog_overlay_close( closeButton )
     } else {
         $overlay = $('.modal-overlay');
     }
+
     $overlay.remove();
+    
     if ($('.modal-overlay').length == 0) {
         $('body').removeClass('overlay-open');
     }
+
     return false;
 }
 
@@ -285,6 +351,11 @@ function z_growl_close()
 function z_event_register(name, func)
 {
     z_registered_events[name] = func;
+}
+
+function z_event_remove(name)
+{
+    delete z_registered_events[name];
 }
 
 function z_event(name, extraParams)
@@ -346,21 +417,6 @@ function z_notify(message, extraParams)
 }
 
 
-/* Session handling and restarts
----------------------------------------------------------- */
-
-
-// - checks pubzub registry for the local "session" topic
-// - if any handlers then publish the new user to the topic
-// - if no handlers then the default reload dialog is shown
-//
-// if (typeof pubzub == "object" && pubzub.subscribers("~pagesession/session").length > 0) {
-//     z_session_valid = true;
-//     pubzub.publish("~pagesession/session", status);
-//     z_stream_restart();
-// }
-
-
 /* Transport between user-agent and server
 ---------------------------------------------------------- */
 
@@ -370,7 +426,7 @@ function z_transport(delegate, content_type, data, options)
     options = options || {};
     if (options.transport == 'fileuploader' && cotonic.whereis("fileuploader")) {
         // Post via the fileuploader worker
-        let fileInputs = $('input:file', options.post_form);
+        let fileInputs = $('input:file:not(.nosubmit)', options.post_form);
         let files = [];
 
         fileInputs.each(function() {
@@ -412,6 +468,15 @@ function z_transport(delegate, content_type, data, options)
                     z_transport_queue_add(delegate, content_type, data, options);
                 }
             });
+    } else if (options.dedup_key) {
+        const message = {
+            topic: "$promised/bridge/origin/zotonic-transport/" + delegate,
+            payload: data,
+        }
+        cotonic.broker.publish(
+            "model/dedup/post/message/" + btoa(options.dedup_key),
+            message,
+            { qos: 1 });
     } else {
         cotonic.broker.publish(
             "$promised/bridge/origin/zotonic-transport/" + delegate,
@@ -419,6 +484,7 @@ function z_transport(delegate, content_type, data, options)
             { qos: 1 });
     }
 }
+
 
 function z_transport_queue_add( delegate, content_type, data, options )
 {
@@ -452,11 +518,11 @@ function z_transport_queue_check()
 // Queue form data to be transported to the server
 // This is called by the server generated javascript and jquery triggered postback events.
 // 'transport' is one of: '', 'form', 'fileuploader'
-function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, transport, optPostForm)
+function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, transport, optPostForm, extraOptions)
 {
-    var triggervalue = '';
-    var trigger;
-    var target_id;
+    let triggervalue = '';
+    let trigger;
+    let target_id;
 
     if (typeof extraParams == 'object') {
         target_id = extraParams.z_target_id || undefined;
@@ -482,12 +548,12 @@ function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, tra
     params = extraParams || [];
     params = ensure_name_value(params);
 
-    var postbackAttr = document.body.getAttribute("data-wired-postback");
+    const postbackAttr = document.body.getAttribute("data-wired-postback");
     if (postbackAttr) {
         params.push({ name: "z_postback_data", value: JSON.parse(postbackAttr) });
     }
 
-    var pb_event = {
+    const pb_event = {
         _type: "postback_event",
         postback: postback,
         trigger: trigger_id,
@@ -505,10 +571,11 @@ function z_queue_postback(trigger_id, postback, extraParams, noTriggerValue, tra
     // }
 
     // logon_form and .setcookie forms are always posted, as they will set cookies.
-    var options = {
+    const options = {
         transport: transport,
         trigger_id: trigger_id,
-        post_form: optPostForm
+        post_form: optPostForm,
+        dedup_key: extraOptions?.dedup_key
     };
 
     z_transport_queue_add('postback', 'ubf', pb_event, options);
@@ -615,67 +682,81 @@ function z_reload(args)
         parts;
 
     if (page.length > 0 && page.val() !== "" && page.val() !== '#reload') {
-        window.location.href = window.location.protocol
+        window.location.href = `${ window.location.protocol }//${ window.location.host }${ page.val() }`;
+        return;
+    } 
+
+    if (typeof args === "undefined") {
+        window.location.reload(true);
+        return;
+    }
+
+    newLanguage = args.z_language;
+
+    if (typeof newLanguage === "string") {
+        // Change the language cookie when it is set. 
+        for (const cookie of document.cookie.split(';') ){
+            const kv = cookie.trim().split("=");
+            if(kv[0] === "z.lang" && kv[1] !== newLanguage) {
+                const expirationDate = new Date();
+                expirationDate.setTime(expirationDate.getTime() + (365 * 24 * 60 * 60 * 1000));
+                const expires = "expires=" + expirationDate.toUTCString();
+                document.cookie = `z.lang=${ newLanguage };${ expires };path=/`;
+            }
+        }
+
+        // Add or remove language from URL:
+        pathname = window.location.pathname.substring(1);
+        if (z_language) {
+            // Remove current language
+            re = new RegExp("^" + z_language);
+            pathname = pathname.replace(re, "");
+        }
+
+        // Get path parts
+        parts = pathname.split("/")
+            .filter(function(p) {
+                return p !== "";
+            });
+
+        rewriteUrl = Boolean(args["z_rewrite_url"]);
+        if (rewriteUrl) {
+            // Add language to start
+            parts.unshift(newLanguage);
+        }
+
+        href = window.location.protocol
             + "//"
             + window.location.host
-            + page.val();
+            + "/"
+            + parts.join("/")
+            + ((rewriteUrl && (pathname === "" || pathname === "/")) ? "/" : "")
     } else {
-        if (typeof args === "undefined") {
-            window.location.reload(true);
-            return;
-        }
-        newLanguage = args.z_language;
-        if (typeof newLanguage === "string") {
-            rewriteUrl = Boolean(args["z_rewrite_url"]);
-            // Add or remove language from URL:
-            pathname = window.location.pathname.substring(1);
-            if (z_language) {
-                // Remove current language
-                re = new RegExp("^" + z_language);
-                pathname = pathname.replace(re, "");
-            }
-            // Get path parts
-            parts = pathname.split("/")
-                .filter(function(p) {
-                    return p !== "";
-                });
-            if (rewriteUrl) {
-                // Add language to start
-                parts.unshift(newLanguage);
-            }
-            href = window.location.protocol
-                + "//"
-                + window.location.host
-                + "/"
-                + parts.join("/")
-                + ((rewriteUrl && (pathname === "" || pathname === "/")) ? "/" : "")
-        } else {
-            href = window.location.protocol
-                + "//"
-                + window.location.host
-                + window.location.pathname;
-        }
-        if (window.location.search == "") {
-            window.location.href = href;
-        } else {
-            // remove z_language and z_rewrite_url, keep other query params
-            var kvs;
-            kvs = window.location.search.substring(1)
-                .split(/[&;]/)
-                .map(function(kv) {
-                    return (kv.match("^z_language") || kv.match("^z_rewrite_url"))
-                        ? ""
-                        : kv;
-                })
-                .filter(function(kv) {
-                    return kv !== "";
-                });
-            if (kvs === "") {
-                window.location.href = href;
-            } else {
-                window.location.href = href + "?" + kvs.join("&");
-            }
-        }
+        href = `${ window.location.protocol }//${ window.location.host }${ window.location.pathname }`;
+    }
+
+    if (window.location.search == "") {
+        window.location.href = href;
+        return;
+    } 
+
+    // remove z_language and z_rewrite_url, keep other query params
+    var kvs;
+    kvs = window.location.search.substring(1)
+        .split(/[&;]/)
+        .map(function(kv) {
+            return (kv.match("^z_language") || kv.match("^z_rewrite_url"))
+                ? ""
+                : kv;
+        })
+        .filter(function(kv) {
+            return kv !== "";
+        });
+
+    if (kvs === "") {
+        window.location.href = href;
+    } else {
+        window.location.href = `${ href }?${ kvs.join("&") }`;
     }
 }
 
@@ -689,6 +770,13 @@ function z_translate(text)
     return text;
 }
 
+function z_translation_set(text, trans)
+{
+    if (typeof z_translations == "undefined") {
+        z_translations = {};
+    }
+    z_translations[text] = trans;
+}
 
 /* Render text as html nodes
 ---------------------------------------------------------- */
@@ -891,13 +979,9 @@ function z_typeselect(ElementId, postbackInfo)
 
     z_input_updater = setTimeout(function()
     {
-        var obj = $('#'+ElementId);
-
-        if(obj.val().length >= 2)
-        {
-            obj.addClass('loading');
-            z_queue_postback(ElementId, postbackInfo);
-        }
+        const obj = $('#'+ElementId);
+        obj.addClass('loading');
+        z_queue_postback(ElementId, postbackInfo);
     }, 400);
 }
 
@@ -957,7 +1041,7 @@ Which should log it in a separate ui error log.
 var oldOnError = window.onerror;
 var z_page_unloading = false;
 
-window.addEventListener("unload", function(event) {
+window.addEventListener("pagehide", function(event) {
     z_page_unloading = true;
 });
 
@@ -968,25 +1052,29 @@ window.addEventListener("beforeunload", function(event) {
 
 window.onerror = function(message, file, line, col, error) {
     if (!z_page_unloading) {
-        let payload = {
-            type: 'error',
-            message: message,
-            file: file,
-            line: line,
-            col: col,
-            stack: error ? error.stack : null,
-            user_agent: navigator.userAgent,
-            url: window.location.href
-        };
+        // Some code (plugin?) on Safari assumes that a JSON-LD context is always a string.
+        // As it can also be an object that code will throw an error, ignore this error here.
+        if (message.indexOf('r["@context"].toLowerCase') == -1) {
+            let payload = {
+                type: 'error',
+                message: message,
+                file: file,
+                line: line,
+                col: col,
+                stack: error ? error.stack : null,
+                user_agent: navigator.userAgent,
+                url: window.location.href
+            };
 
-        let xhr = new XMLHttpRequest();
-        xhr.open('POST', '/log-client-event', true);
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.send(JSON.stringify(payload));
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', '/log-client-event', true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(JSON.stringify(payload));
 
-        if ($("form.masked").length > 0 || (payload.stack && payload.stack.match(/(submitFunction|doValidations)/))) {
-            alert("Sorry, something went wrong.\n\n(" + message + ")");
-            try { $("form.masked").unmask(); } catch (e) {}
+            if ($("form.masked").length > 0 || (payload.stack && payload.stack.match(/(submitFunction|doValidations)/))) {
+                alert("Sorry, something went wrong.\n\n(" + message + ")");
+                try { $("form.masked").unmask(); } catch (e) {}
+            }
         }
     }
 
@@ -1047,7 +1135,7 @@ function z_init_postback_forms()
             var form_id      = $(theForm).attr('id');
             var validations  = $(theForm).formValidationPostback();
             var transport    = '';
-            var files        = $('input:file', theForm).fieldValue();
+            var files        = $('input:file:not(.nosubmit)', theForm).fieldValue();
             var is_file_form = false;
 
             if (!postback) {
@@ -1224,29 +1312,49 @@ function z_transport_form(qmsg)
             setTimeout(function() { timedOut = true; cb(); }, opts.timeout);
         }
 
-        zmsgInput = $('<input />')
-                        .attr('type', 'hidden')
-                        .attr('name', 'z_postback')
-                        .attr('value', JSON.stringify(qmsg.postback))
-                     .prependTo(form)[0];
+        let extraInputs = [];
 
-        zmsgReplyTopic = $('<input />')
-                        .attr('type', 'hidden')
-                        .attr('name', 'zotonic_topic_reply')
-                        .attr('value', qmsg.reply_topic)
-                     .prependTo(form)[0];
+        extraInputs.push(
+            $('<input />')
+                .attr('type', 'hidden')
+                .attr('name', 'z_postback')
+                .attr('value', JSON.stringify(qmsg.postback))
+             .prependTo(form)[0]);
 
-        zmsgProgressTopic = $('<input />')
-                        .attr('type', 'hidden')
-                        .attr('name', 'zotonic_topic_progress')
-                        .attr('value', qmsg.progress_topic)
-                     .prependTo(form)[0];
+        extraInputs.push(
+            $('<input />')
+                .attr('type', 'hidden')
+                .attr('name', 'zotonic_topic_reply')
+                .attr('value', qmsg.reply_topic)
+             .prependTo(form)[0]);
 
-        zmsgTriggerId = $('<input />')
-                        .attr('type', 'hidden')
-                        .attr('name', 'z_trigger_id')
-                        .attr('value', $form.attr('id') || "")
-                     .prependTo(form)[0];
+        extraInputs.push(
+            $('<input />')
+                .attr('type', 'hidden')
+                .attr('name', 'zotonic_topic_progress')
+                .attr('value', qmsg.progress_topic)
+             .prependTo(form)[0]);
+
+        extraInputs.push(
+            $('<input />')
+                .attr('type', 'hidden')
+                .attr('name', 'z_trigger_id')
+                .attr('value', $form.attr('id') || "")
+             .prependTo(form)[0]);
+
+        // Prepend all unchecked checkboxes as empty hidden input values
+        $(form).find('input[type="checkbox"]:not(:checked):not(.nosubmit)').each(
+            function() {
+                const name = $(this).attr('name');
+                if (name) {
+                    extraInputs.push(
+                        $('<input />')
+                            .attr('type', 'hidden')
+                            .attr('name', name)
+                            .attr('value', '')
+                         .prependTo(form)[0]);
+                }
+            });
 
         try {
             // add iframe to doc and submit the form
@@ -1266,10 +1374,9 @@ function z_transport_form(qmsg)
             } else {
                 $form.removeAttr('target');
             }
-            $(zmsgInput).remove();
-            $(zmsgReplyTopic).remove();
-            $(zmsgProgressTopic).remove();
-            $(zmsgTriggerId).remove();
+            for (let n in extraInputs) {
+                $(n).remove();
+            }
         }
     }, 10);
 
@@ -1355,6 +1462,7 @@ function z_add_validator(id, type, args)
                 case 'length':          v.add(Validate.Length, args);       break;
                 case 'format':          v.add(Validate.Format, args);       break;
                 case 'numericality':    v.add(Validate.Numericality, args); break;
+                case 'json':            v.add(Validate.Json, args);         break;
                 case 'custom':          v.add(Validate.Custom, args);       break;
                 case 'postback':
                     args['z_id'] = id;
@@ -1494,6 +1602,135 @@ function z_update_iframe(name, doc)
     }
 }
 
+
+// Store the current cookie consent status
+function z_cookie_consent_store( status )
+{
+    if (status !== 'all') {
+        z_cookie_remove_all();
+    }
+    switch (status) {
+        case "functional":
+        case "stats":
+        case "all":
+            const prev = z_cookie_consent_cache;
+            window.z_cookie_consent_cache = status;
+            try {
+                // Use stringify to be compatible with model.localStorage
+                localStorage.setItem('z_cookie_consent', JSON.stringify(status));
+            } catch (e) {
+            }
+            const ev = new CustomEvent("zotonic:cookie-consent", {
+                detail: {
+                    cookie_consent: status
+                }
+            });
+            if (prev != status) {
+                window.dispatchEvent(ev);
+            }
+            break;
+        default:
+            console.error("Cookie consent status must be one of 'all', 'stats' or 'functional'", status);
+            break;
+    }
+}
+
+// Trigger on consent changes in other windows/tabs
+window.addEventListener("storage", function(ev) {
+    if (ev.key == 'z_cookie_consent') {
+        if (ev.newValue === null) {
+            window.z_cookie_consent_cache = 'functional';
+        } else if (ev.oldValue != ev.newValue) {
+            z_cookie_consent_store(ev.newValue);
+        }
+    }
+}, false);
+
+// Fetch the current cookie consent status - default to 'functional'
+function z_cookie_consent_fetch()
+{
+    if (window.z_cookie_consent_cache) {
+        return window.z_cookie_consent_cache;
+    } else {
+        let status;
+        try {
+            status = localStorage.getItem('z_cookie_consent');
+        } catch (e) {
+            status = null;
+        }
+        if (status !== null) {
+            status = JSON.parse(status);
+        } else {
+            status = 'functional';
+        }
+        window.z_cookie_consent_cache = status
+        return status;
+    }
+}
+
+// Check if the user consented to some cookies
+function z_cookie_consent_given()
+{
+    try {
+        return typeof (localStorage.getItem('z_cookie_consent')) === 'string';
+    } catch (e) {
+        return false;
+    }
+}
+
+// Check if something is allowed according to the stored consent status
+function z_cookie_consented( wanted )
+{
+    const consent = z_cookie_consent_fetch();
+    switch (wanted) {
+        case 'functional':
+            return true;
+        case 'stats':
+            return consent === 'all' || consent === 'stats';
+        case 'all':
+            return consent === 'all';
+        default:
+            return false;
+    }
+}
+
+// Remove all non-functional cookies from the current document domain
+function z_cookie_remove_all()
+{
+    for ( const cookie of document.cookie.split(';') ){
+        const cookieName = cookie.split('=')[0].trim();
+        switch (cookieName) {
+            case "z_sid":
+            case "z_rldid":
+            case "z_ua":
+            case "z.sid":
+            case "z.lang":
+            case "z.auth":
+            case "z.autologon":
+                // Functional - keep the cookie
+                break;
+            default:
+                // Non-functional - remove the cookie
+                let domains = window.location.hostname.split('.');
+                while ( domains.length > 0 ) {
+                    const domain = domains.join('.');
+                    const cookieReset = encodeURIComponent(cookieName) + '=; expires=Thu, 01-Jan-1970 00:00:01 GMT';
+                    document.cookie = cookieReset;
+                    document.cookie = cookieReset + '; domain=' + domain + ' ;path=/';
+                    let pathSegments = location.pathname.split('/');
+                    while ( pathSegments.length > 0 ){
+                        const path = pathSegments.join('/');
+                        document.cookie = cookieReset + '; domain=' + domain + ' ;path=' + path;
+                        pathSegments.pop();
+                    }
+                    domains.shift();
+                }
+                break;
+        }
+    }
+}
+
+
 // Used in z.feedback.js
 function is_equal(x, y) {
     if ( x === y ) return true;
@@ -1512,9 +1749,11 @@ function is_equal(x, y) {
     return true;
 }
 
-window.addEventListener('load', function() {
+// Initialize the Zotonic page on load.
+
+window.addEventListener('load', () => {
     z_jquery_init_await();
-}, true);
+}, { capture: true, passive: true, once: true });
 
 function z_jquery_init_await() {
     if (typeof window.$ !== 'undefined') {
@@ -1523,6 +1762,21 @@ function z_jquery_init_await() {
         setTimeout(function() { z_jquery_init_await(); }, 50);
     }
 }
+
+// Publish the presence of activity max once per 100 msec
+let z_last_act_publish = 0;
+function publish_activity(type) {
+    const now = Math.floor(Date.now() / 100);
+    if (now > z_last_act_publish) {
+        cotonic.broker.publish("model/activity/event", { type: type });
+        z_last_act_publish = now;
+    }
+}
+window.addEventListener('scroll', (e) => publish_activity(e.type), { capture: true, passive: true });
+window.addEventListener('mousemove', (e) => publish_activity(e.type), { capture: true, passive: true });
+window.addEventListener('keyup', (e) => publish_activity(e.type), { capture: true, passive: true });
+window.addEventListener('touchstart', (e) => publish_activity(e.type), { capture: true, passive: true });
+
 
 function z_jquery_init() {
     if (typeof window.zotonicPageInit == 'function') {
@@ -1586,7 +1840,7 @@ function z_jquery_init() {
         options = options || {};
         if (this.length > 0) {
             var form = this[0];
-            var els = options.semantic ? form.getElementsByTagName('*') : form.elements;
+            var els = form.elements;
             var n;
 
             if (els) {
@@ -1792,4 +2046,8 @@ function z_jquery_init() {
     });
 }
 
+// Signal start the base Zotonic wired functions are loaded.
+if (typeof zotonic.wiresLoadedResolve == "function") {
+    zotonic.wiresLoadedResolve();
+}
 

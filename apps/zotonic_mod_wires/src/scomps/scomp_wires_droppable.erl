@@ -63,7 +63,7 @@ render(Params, _Vars, Context) ->
 %% @doc Drops will be delegated to this event handler, which will call the postback resource.
 event(#postback{message={DropTag,DropDelegate}, trigger=TriggerId}, Context) ->
 	DragItem = z_context:get_q(<<"drag_item">>, Context),
-	{DragTag,DragDelegate,DragId} = z_utils:depickle(DragItem, Context),
+	{DragTag,DragDelegate,DragId} = z_crypto:depickle(DragItem, Context),
 
     Drop = #dragdrop{tag=DropTag, delegate=DropDelegate, id=TriggerId},
     Drag = #dragdrop{tag=DragTag, delegate=DragDelegate, id=DragId},
@@ -79,8 +79,16 @@ event(#postback{message={DropTag,DropDelegate}, trigger=TriggerId}, Context) ->
 	    end
 
     catch
-        _M2:E:Stack ->
-            ?LOG_ERROR("Error in drop routing: ~p", [E], #{ stack => Stack }),
+        M2:E:Stack ->
+            ?LOG_ERROR(#{
+                text => <<"Error in drop routing">>,
+                in => zotonic_mod_wires,
+                result => M2,
+                reason => E,
+                drop_delegate => DropDelegate,
+                drag_delegate => DragDelegate,
+                stack => Stack
+            }),
             Error = io_lib:format("Error in routing drop to module \"~s\"; error: \"~p\"", [DropDelegate,E]),
             z_render:wire({growl, [{text,Error}, {stay,1}]}, Context)
     end.

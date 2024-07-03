@@ -1,7 +1,8 @@
-%% @copyright 2015-2016 Marc Worrell
+%% @copyright 2015-2023 Marc Worrell
 %% @doc Expansion of all user groups and content groups, used to fill acl lookup tables.
+%% @end
 
-%% Copyright 2015-2016 Marc Worrell
+%% Copyright 2015-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -141,6 +142,7 @@ expand_rule_row(Prop, Row, Cs, NonMetaCs, Context) when is_binary(Prop) ->
     IsOwner = maps:get(<<"is_owner">>, Row, false),
     UserGroupId = maps:get(<<"acl_user_group_id">>, Row, undefined),
     ContentGroupId = maps:get(<<"content_group_id">>, Row, undefined),
+    IsCategoryExact = maps:get(<<"is_category_exact">>, Row, false),
     PropId = maps:get(Prop, Row),
     ContentGroupName = m_rsc:p_no_acl(ContentGroupId, name, Context),
     CIdsEdit = maybe_filter_meta(ContentGroupName, Prop, PropId, Cs, NonMetaCs, Context),
@@ -149,13 +151,16 @@ expand_rule_row(Prop, Row, Cs, NonMetaCs, Context) when is_binary(Prop) ->
         [
             [
               {ContentGroupId, {CId, Action, IsOwner, IsAllow}, UserGroupId}
-              || CId <- select_cids(Action, CIdsEdit, CIdsView)
+              || CId <- select_cids(Action, IsCategoryExact, CIdsEdit, CIdsView)
             ]
             || Action <- Actions
         ]).
 
-select_cids(view, _Edit, View) -> View;
-select_cids(_Action, Edit, _View) -> Edit.
+select_cids(view, false, _Edit, View) -> View;
+select_cids(view, true, _Edit, [View|_]) -> [View];
+select_cids(_Action, false, Edit, _View) -> Edit;
+select_cids(_Action, true, [Edit|_], _View) -> [Edit];
+select_cids(_Action, _IsExact, _Edit, _View) -> [].
 
 maybe_filter_meta(<<"system_content_group">>, <<"category_id">>, PropId, Cs, _NonMetaCs, _Context) ->
     proplists:get_value(PropId, Cs, [PropId]);
@@ -180,8 +185,14 @@ expand_rules(TreeA, Rules, TreeB, _Context) ->
                                 % acl_collaboration_groups are not part of the group hierarchy
                                 expand_rule([A], Pred, B1);
                             Other ->
-                                ?LOG_WARNING("Tree expand of {~p, ~p, ~p} returned ~p",
-                                              [A, Pred, B, Other]),
+                                ?LOG_WARNING(#{
+                                    text => <<"ACL tree expand returned unexpected value">>,
+                                    in => zotonic_mod_acl_user_groups,
+                                    actor => A,
+                                    predicate => Pred,
+                                    object => B,
+                                    result => Other
+                                }),
                                 []
                         end
                   end,

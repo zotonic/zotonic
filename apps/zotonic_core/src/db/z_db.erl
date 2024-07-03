@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Interface to database, uses database definition from Context
+%% @end
 
-%% Copyright 2009-2021 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,6 +29,10 @@
     has_connection/1,
     database_version_string/1,
     database_version/1,
+
+    dbschema/1,
+    dbdatabase/1,
+    dbusername/1,
 
     transaction/2,
     transaction/3,
@@ -71,6 +76,9 @@
     equery/2,
     equery/3,
     equery/4,
+
+    execute_batch/3,
+    execute_batch/4,
 
     insert/2,
     insert/3,
@@ -183,12 +191,16 @@ transaction(Function, Context) ->
 transaction(Function, Options, Context) ->
     z_context:logger_md(Context),
     Result = case transaction1(Function, Context) of
+                {rollback, {error, #error{ codename = deadlock_detected }}} ->
+                    {rollback, {deadlock, []}};
                 {rollback, {{error, #error{ codename = deadlock_detected }}, Trace1}} ->
                     {rollback, {deadlock, Trace1}};
                 {rollback, {{case_clause, {error, #error{ codename = deadlock_detected }}}, Trace1}} ->
                     {rollback, {deadlock, Trace1}};
                 {rollback, {{badmatch, {error, #error{ codename = deadlock_detected }}}, Trace1}} ->
                     {rollback, {deadlock, Trace1}};
+                {error, #error{ codename = deadlock_detected }} ->
+                    {rollback, {deadlock, []}};
                 Other ->
                     Other
             end,
@@ -198,12 +210,14 @@ transaction(Function, Options, Context) ->
                 true ->
                     ?LOG_ERROR(#{
                         text => <<"DEADLOCK on database transaction, NO RETRY">>,
+                        in => zotonic_core,
                         stack => Stack
                     }),
                     DeadlockError;
                 _False ->
                     ?LOG_WARNING(#{
                         text => <<"DEADLOCK on database transaction, will retry">>,
+                        in => zotonic_core,
                         stack => Stack
                     }),
                     % Sleep random time, then retry transaction
@@ -250,6 +264,7 @@ transaction1(Function, #context{dbc=undefined} = Context) ->
                         E:Why:S ->
                             ?LOG_ERROR(#{
                                 text => <<"Error on database transaction">>,
+                                in => zotonic_core,
                                 result => E,
                                 reason => Why,
                                 stack => S
@@ -324,6 +339,31 @@ database_version(Context) ->
             {error, no_database_connection}
     end.
 
+%% @doc Return the schema name used for the current site.
+-spec dbschema(Context) -> Schema when
+    Context :: z:context(),
+    Schema :: string() | undefined.
+dbschema(Context) ->
+    Options = z_db_pool:get_database_options(Context),
+    proplists:get_value(dbschema, Options).
+
+%% @doc Return the database name used for the current site.
+-spec dbdatabase(Context) -> Database when
+    Context :: z:context(),
+    Database :: string() | undefined.
+dbdatabase(Context) ->
+    Options = z_db_pool:get_database_options(Context),
+    proplists:get_value(dbdatabase, Options).
+
+%% @doc Return the user name used for the current site.
+-spec dbusername(Context) -> Username when
+    Context :: z:context(),
+    Username :: string() | undefined.
+dbusername(Context) ->
+    Options = z_db_pool:get_database_options(Context),
+    proplists:get_value(dbusername, Options).
+
+
 %% @doc Transaction handler safe function for fetching a db connection
 -spec get_connection( z:context() ) -> {ok, pid()} | {error, nodatabase | none | full}.
 get_connection(#context{dbc=undefined} = Context) ->
@@ -371,6 +411,7 @@ with_connection(_F, {error, _} = Error, _Context) ->
 with_connection(F, {ok, Connection}, Context) when is_pid(Connection) ->
     z_stats:record_event(db, requests, Context),
     try
+        z_context:ensure_logger_md(Context),
         {Time, Result} = timer:tc(F, [Connection]),
         z_stats:record_duration(db, request, Time, Context),
         Result
@@ -383,7 +424,7 @@ end.
 %% Query - return proplists
 %% ----------------------------------------------------------------
 
--spec assoc_row(sql(), z:context()) -> proplists:proplist().
+-spec assoc_row(sql(), z:context()) -> proplists:proplist() | undefined.
 assoc_row(Sql, Context) ->
     assoc_row(Sql, [], Context).
 
@@ -523,6 +564,7 @@ qmap(Sql, Args, Options, Context) ->
                 {error, Reason} = Error ->
                     ?LOG_ERROR(#{
                         text => <<"z_db error in query">>,
+                        in => zotonic_core,
                         result => error,
                         reason => Reason,
                         query => Sql,
@@ -561,6 +603,7 @@ qmap_props(Sql, Args, Options, Context) ->
                 {error, Reason} = Error ->
                     ?LOG_ERROR(#{
                         text => <<"z_db error in query">>,
+                        in => zotonic_core,
                         result => error,
                         reason => Reason,
                         query => Sql,
@@ -618,14 +661,42 @@ map_merge_props(_, Acc) ->
 %% Simple queries - return tuples or number of rows updated.
 %% ----------------------------------------------------------------
 
+%% @doc Do an SQL query, return its results. Throws if the query errors.
+%% There is a query timeout of 30 seconds.
+-spec q(SQL, Context) -> Result when
+    SQL :: sql(),
+    Context :: z:context(),
+    Result :: list() | integer().
 q(Sql, Context) ->
     q(Sql, [], Context, ?TIMEOUT).
 
+%% @doc Do an SQL query, return its results. Throws if the query errors.
+%% The parameters are used for argument $1 etc. in the query. Query timeout
+%% of 30 seconds.
+-spec q(SQL, Parameters, Context) -> Result when
+        SQL :: sql(),
+        Parameters :: parameters(),
+        Context :: z:context(),
+        Result :: term()
+    ; (SQL, Context, Timeout) -> Result when
+        SQL :: sql(),
+        Context :: z:context(),
+        Timeout :: pos_integer(),
+        Result :: list() | integer().
 q(Sql, Parameters, #context{} = Context) ->
     q(Sql, Parameters, Context, ?TIMEOUT);
 q(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
     q(Sql, [], Context, Timeout).
 
+%% @doc Do an SQL query, return its results. Throws if the query errors.
+%% The parameters are used for argument $1 etc. in the query. Supply a
+%% timeout in milliseconds after which the query is canceled.
+-spec q(SQL, Parameters, Context, Timeout) -> Result when
+    SQL :: sql(),
+    Parameters :: parameters(),
+    Context :: z:context(),
+    Timeout :: pos_integer(),
+    Result :: list() | integer().
 q(Sql, Parameters, Context, Timeout) ->
     F = fun
         (none) -> [];
@@ -638,6 +709,7 @@ q(Sql, Parameters, Context, Timeout) ->
                 {error, Reason} = Error ->
                     ?LOG_ERROR(#{
                         text => <<"z_db error in query">>,
+                        in => zotonic_core,
                         result => error,
                         reason => Reason,
                         query => Sql,
@@ -648,15 +720,45 @@ q(Sql, Parameters, Context, Timeout) ->
     end,
     with_connection(F, Context).
 
+%% @doc Do an SQL query, returns the first result of
+%% the first row or undefined if there are no returned rows. Crash if the
+%% query errors. There is a query timeout of 30 seconds.
+-spec q1(SQL, Context) -> Result when
+    SQL :: sql(),
+    Context :: z:context(),
+    Result :: term() | undefined.
 q1(Sql, Context) ->
     q1(Sql, [], Context).
 
+%% @doc Do an SQL query, returns the first result of
+%% the first row or undefined if there are no returned rows. The parameters
+%% are used for argument $1 etc. Crash if the query errors. There is a query
+%% timeout of 30 seconds.
+-spec q1(SQL, Parameters, Context) -> Result when
+        SQL :: sql(),
+        Parameters :: parameters(),
+        Context :: z:context(),
+        Result :: term() | undefined
+    ; (SQL, Context, Timeout) -> Result when
+        SQL :: sql(),
+        Context :: z:context(),
+        Timeout :: pos_integer(),
+        Result :: term() | undefined.
 q1(Sql, Parameters, #context{} = Context) ->
     q1(Sql, Parameters, Context, ?TIMEOUT);
 q1(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
     q1(Sql, [], Context, Timeout).
 
--spec q1(sql(), parameters(), #context{}, pos_integer()) -> term() | undefined.
+%% @doc Do an SQL query, returns the first result of
+%% the first row or undefined if there are no returned rows. Crash if
+%% the query errors. The parameters are used for argument $1 etc. in the query.
+%% Supply a timeout in milliseconds after which the query is canceled.
+-spec q1(SQL, Parameters, Context, Timeout) -> Result when
+    SQL :: sql(),
+    Parameters :: parameters(),
+    Context :: z:context(),
+    Timeout :: pos_integer(),
+    Result :: term() | undefined.
 q1(Sql, Parameters, Context, Timeout) ->
     F = fun
         (none) -> undefined;
@@ -668,6 +770,7 @@ q1(Sql, Parameters, Context, Timeout) ->
                 {error, Reason} = Error ->
                     ?LOG_ERROR(#{
                         text => <<"z_db error in query">>,
+                        in => zotonic_core,
                         result => error,
                         reason => Reason,
                         query => Sql,
@@ -679,9 +782,22 @@ q1(Sql, Parameters, Context, Timeout) ->
     with_connection(F, Context).
 
 
+%% @doc Do an SQL query, return the first row or undefined if no rows are
+%% returned. Crash if the query errors. There is a query timeout of 30 seconds.
+-spec q_row(SQL, Context) -> Row | undefined when
+    SQL :: sql(),
+    Context :: z:context(),
+    Row :: tuple() | undefined.
 q_row(Sql, Context) ->
     q_row(Sql, [], Context).
 
+%% @doc Do an SQL query, return the first row or undefined if no rows are
+%% returned. Crash if the query errors. There is a query timeout of 30 seconds.
+-spec q_row(SQL, Parameters, Context) -> Row | undefined when
+    SQL :: sql(),
+    Parameters :: parameter(),
+    Context :: z:context(),
+    Row :: tuple() | undefined.
 q_row(Sql, Args, Context) ->
     case q(Sql, Args, Context) of
         [Row|_] -> Row;
@@ -689,9 +805,22 @@ q_row(Sql, Args, Context) ->
     end.
 
 
+%% @doc Do an SQL query without parameters, returns the result without mapping
+%% from the database driver. There is a query timeout of 30 seconds.
+-spec squery(SQL, Context) -> Result when
+    SQL :: sql(),
+    Context :: z:context(),
+    Result :: query_result().
 squery(Sql, Context) ->
     squery(Sql, Context, ?TIMEOUT).
 
+%% @doc Do an SQL query without parameters, returns the result without mapping
+%% from the database driver. There is a query timeout of 30 seconds.
+-spec squery(SQL, Context, Timeout) -> Result when
+    SQL :: sql(),
+    Context :: z:context(),
+    Timeout :: pos_integer(),
+    Result :: query_result().
 squery(Sql, Context, Timeout) when is_integer(Timeout) ->
     F = fun(C) when C =:= none -> {error, noresult};
            (C) ->
@@ -701,15 +830,35 @@ squery(Sql, Context, Timeout) when is_integer(Timeout) ->
     with_connection(F, Context).
 
 
+%% @doc Do an SQL query with empty parameters, returns the result without mapping
+%% from the database driver. There is a query timeout of 30 seconds.
+-spec equery(SQL, Context) -> Result when
+    SQL :: sql(),
+    Context :: z:context(),
+    Result :: query_result().
 equery(Sql, Context) ->
     equery(Sql, [], Context).
 
+%% @doc Do an SQL query with parameters, returns the result without mapping
+%% from the database driver. There is a query timeout of 30 seconds.
+-spec equery(SQL, Parameters, Context) -> Result when
+    SQL :: sql(),
+    Parameters :: parameters(),
+    Context :: z:context(),
+    Result :: query_result().
 equery(Sql, Parameters, #context{} = Context) ->
     equery(Sql, Parameters, Context, ?TIMEOUT);
 equery(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
     equery(Sql, [], Context, Timeout).
 
--spec equery(sql(), parameters(), z:context(), integer()) -> query_result().
+%% @doc Do an SQL query empty parameters, returns the result without mapping
+%% from the database driver. The given timeout is in milliseconds.
+-spec equery(SQL, Parameters, Context, Timeout) -> Result when
+    SQL :: sql(),
+    Parameters :: parameters(),
+    Context :: z:context(),
+    Timeout :: pos_integer(),
+    Result :: query_result().
 equery(Sql, Parameters, Context, Timeout) ->
     F = fun(C) when C =:= none -> {error, noresult};
            (C) ->
@@ -718,9 +867,40 @@ equery(Sql, Parameters, Context, Timeout) ->
         end,
     with_connection(F, Context).
 
+%% @doc Execute the same SQL statement for a list of parameters. Default timeout
+%% of 30 seconds.
+-spec execute_batch(SQL, ParametersList, Context) -> query_result() when
+    SQL :: sql(),
+    ParametersList :: list( parameters() ),
+    Context :: z:context().
+execute_batch(Sql, Batch, Context) ->
+    execute_batch(Sql, Batch, Context, ?TIMEOUT).
 
-%% @doc Insert a new row in a table, use only default values.
--spec insert(table_name(), z:context()) -> {ok, pos_integer()|undefined} | {error, term()}.
+
+%% @doc Execute the same SQL statement for a list of parameters.
+-spec execute_batch(SQL, ParametersList, Context, Timeout) -> query_result() when
+    SQL :: sql(),
+    ParametersList :: list( parameters() ),
+    Context :: z:context(),
+    Timeout :: pos_integer().
+execute_batch(Sql, Batch, Context, Timeout) ->
+    F = fun(none) ->
+                {error, noresult};
+           (C) ->
+                DbDriver = z_context:db_driver(Context),
+                DbDriver:execute_batch(C, Sql, Batch, Timeout)
+        end,
+    with_connection(F, Context).
+
+%% @doc Insert a new row in a table, use only default values and return the new record id.
+%% If the table has an 'id' column then the new id is returned. The 'id' column shoud be
+%% the primary key column and have type 'serial' (or bigserial). All columns must
+%% have a default value or be nullable.
+-spec insert(Table, Context) -> {ok, NewId | undefined} | {error, Reason} when
+    Table :: table_name(),
+    Context :: z:context(),
+    NewId :: id(),
+    Reason :: term().
 insert(Table, Context) ->
     {_Schema, _Tab, QTab} = quoted_table_name(Table),
     with_connection(
@@ -731,10 +911,16 @@ insert(Table, Context) ->
         Context).
 
 
-%% @doc Insert a row, setting the fields to the props. Unknown columns are
-%% serialized in the props column. When the table has an 'id' column then the
-%% new id is returned.
--spec insert(table_name(), props(), z:context()) -> {ok, integer()|undefined} | {error, term()}.
+%% @doc Insert a new row in a table and return the new record id.
+%% Unknown columns are serialized in the props or props_json column. If the table has an 'id'
+%% column then the new id is returned. The 'id' column shoud be the primary key column
+%% and have type 'serial' (or bigserial).
+-spec insert(Table, Parameters, Context) -> {ok, NewId | undefined} | {error, Reason} when
+    Table :: table_name(),
+    Parameters :: props(),
+    Context :: z:context(),
+    NewId :: id(),
+    Reason :: term().
 insert(Table, Parameters, Context) when is_list(Parameters) ->
     insert(Table, z_props:from_props(Parameters), Context);
 insert(Table, Parameters, Context) ->
@@ -743,8 +929,8 @@ insert(Table, Parameters, Context) ->
     BinParams = ensure_binary_keys(Parameters),
     case prepare_cols(Cols, BinParams) of
         {ok, InsertProps} ->
-            HasProps = maps:is_key(<<"props">>, InsertProps), 
-            HasPropsJSON = maps:is_key(<<"props_json">>, InsertProps), 
+            HasProps = maps:is_key(<<"props">>, InsertProps),
+            HasPropsJSON = maps:is_key(<<"props_json">>, InsertProps),
 
             InsertProps1 = if HasPropsJSON ->
                                   #{<<"props_json">> := PropsJSONCol} = InsertProps,
@@ -796,16 +982,39 @@ insert(Table, Parameters, Context) ->
                         {ok, Id};
                      {error, noresult} ->
                         {ok, undefined};
-                     {error, #error{ codename = unique_violation }} = Error ->
-                        ?LOG_NOTICE(#{ text => "z_db unique_violation in insert",
-                                       table => Table,
-                                       parameters => Parameters}),
+                     {error, #error{ codename = unique_violation, message = Message }} = Error ->
+                        ?LOG_NOTICE(#{
+                            in => zotonic_core,
+                            text => <<"z_db unique_violation in insert">>,
+                            result => error,
+                            reason => unique_violation,
+                            message => Message,
+                            table => Table,
+                            parameters => Parameters
+                        }),
+                        Error;
+                     {error, #error{ codename = ErrCode, message = Message }} = Error ->
+                        ?LOG_ERROR(#{
+                            in => zotonic_core,
+                            text => <<"z_db error in insert">>,
+                            result => error,
+                            reason => ErrCode,
+                            message => Message,
+                            table => Table,
+                            query => FinalSql,
+                            parameters => Parameters
+                        }),
                         Error;
                      {error, Reason} = Error ->
-                        ?LOG_ERROR(#{ text => "z_db error in query",
-                                      reason => Reason,
-                                      query => FinalSql, 
-                                      parameters => ColParams }),
+                        ?LOG_ERROR(#{
+                            in => zotonic_core,
+                            text => <<"z_db error in query">>,
+                            result => error,
+                            reason => Reason,
+                            table => Table,
+                            query => FinalSql,
+                            parameters => ColParams
+                        }),
                         Error
                  end
             end,
@@ -815,8 +1024,17 @@ insert(Table, Parameters, Context) ->
     end.
 
 
-%% @doc Update a row in a table, merging the props list with any new props values
--spec update(table_name(), id(), props(), z:context()) -> {ok, RowsUpdated::integer()} | {error, term()}.
+%% @doc Update a row in a table, merging the properties with any new property values. The table
+%% must have a column id of some integer type. If there is no matching column then 0 is returned
+%% for the number of updated columns. The update is done within a transaction, first the old values
+%% are read and then merged with the new values.
+-spec update(Table, Id, Props, Context) -> {ok, RowsUpdated} | {error, Reason} when
+    Table :: table_name(),
+    Id :: id(),
+    Props :: props(),
+    Context :: z:context(),
+    RowsUpdated :: non_neg_integer(),
+    Reason :: term().
 update(Table, Id, Parameters, Context) when is_list(Parameters) ->
     update(Table, Id, z_props:from_props(Parameters), Context);
 update(Table, Id, Parameters, Context) when is_map(Parameters) ->
@@ -840,15 +1058,42 @@ update(Table, Id, Parameters, Context) when is_map(Parameters) ->
                     lists:join(", ", ColAssigns),
                     " where id = $1"
                 ]),
-                case equery1(DbDriver, C, Sql, [Id | Params]) of
-                    {ok, _RowsUpdated} = Ok -> Ok;
+                SqlParams = [ Id | Params ],
+                case equery1(DbDriver, C, Sql, SqlParams) of
+                    {ok, _RowsUpdated} = Ok ->
+                        Ok;
+                    {error, #error{ codename = unique_violation, message = Message }} = Error ->
+                        ?LOG_NOTICE(#{
+                            in => zotonic_core,
+                            text => <<"z_db unique_violation in update">>,
+                            message => Message,
+                            result => error,
+                            reason => unique_violation,
+                            table => Table,
+                            parameters => SqlParams
+                        }),
+                        Error;
+                    {error, #error{ codename = ErrCode, message = Message }} = Error ->
+                        ?LOG_ERROR(#{
+                            in => zotonic_core,
+                            text => <<"z_db error in update">>,
+                            result => error,
+                            reason => ErrCode,
+                            message => Message,
+                            table => Table,
+                            query => Sql,
+                            parameters => SqlParams
+                        }),
+                        Error;
                     {error, Reason} = Error ->
                         ?LOG_ERROR(#{
+                            in => zotonic_core,
                             text => <<"z_db error in query">>,
                             result => error,
                             reason => Reason,
+                            table => Table,
                             query => Sql,
-                            args => [Id | Params]
+                            parameters => SqlParams
                         }),
                         Error
                 end
@@ -893,11 +1138,11 @@ get_current_props(Table, Id, Context) ->
 get_current_props(DBDriver, Connection, Table, Id, Context) when is_atom(Table) ->
     get_current_props(DBDriver, Connection, atom_to_list(Table), Id, Context);
 get_current_props(DBDriver, Connection, Table, Id, Context) ->
-    ColNames = column_names(Table, Context), 
+    ColNames = column_names(Table, Context),
     get_current_props(DBDriver, Connection,
                       lists:member(props_json, ColNames), lists:member(props, ColNames), Table, Id, Context).
 
-   
+
 get_current_props(_DBDriver, _Connection, false, false, _Table, _Id, _Context) ->
     %% There is no props column
     {error, no_properties};
@@ -962,7 +1207,6 @@ update_merge_props(DbDriver, Connection, Table, Cols, Id, #{ <<"props_json">> :=
             _ ->
                 UpdateProps#{<<"props_json">> => ?DB_PROPS_JSON( drop_undefined(NewProps) )}
         end,
-
     %% Clear the existing props column
     case lists:member(<<"props">>, Cols) of
         true -> P#{ <<"props">> => null };
@@ -1133,7 +1377,8 @@ columns(Schema, Table, Context) when is_list(Table) ->
         {ok, Cols} ->
             Cols;
         _ ->
-            Cols = q("  select column_name, data_type, character_maximum_length, is_nullable, column_default
+            Cols = q("  select column_name, data_type, character_maximum_length,
+                               is_nullable, column_default, udt_name
                         from information_schema.columns
                         where table_catalog = $1
                           and table_schema = $2
@@ -1145,7 +1390,7 @@ columns(Schema, Table, Context) when is_list(Table) ->
     end.
 
 
-columns1({<<"id">>, <<"integer">>, undefined, Nullable, <<"nextval(", _/binary>>}) ->
+columns1({<<"id">>, <<"integer">>, undefined, Nullable, <<"nextval(", _/binary>>, _UdtName}) ->
     #column_def{
         name = id,
         type = "serial",
@@ -1153,17 +1398,22 @@ columns1({<<"id">>, <<"integer">>, undefined, Nullable, <<"nextval(", _/binary>>
         is_nullable = z_convert:to_bool(Nullable),
         default = undefined
     };
-columns1({Name, <<"ARRAY">>, _MaxLength, Nullable, Default}) ->
+columns1({Name, <<"ARRAY">>, _MaxLength, Nullable, Default, UdtName}) ->
     % @todo derive the type of the array elements.
     #column_def{
         name = z_convert:to_atom(Name),
-        type = "text",
+        type = case UdtName of
+            <<"_text">> -> "text";
+            <<"_varchar">> -> "character varying";
+            <<"_int", _/binary>> -> "integer";
+            _ -> UdtName
+        end,
         length = undefined,
         is_array = true,
         is_nullable = z_convert:to_bool(Nullable),
         default = column_default(Default)
     };
-columns1({Name,Type,MaxLength,Nullable,Default}) ->
+columns1({Name,Type,MaxLength,Nullable,Default,_UdtName}) ->
     #column_def{
         name = z_convert:to_atom(Name),
         type = z_convert:to_list(Type),
@@ -1308,6 +1558,8 @@ convert_value(Type, _, V) ->
 
 
 %% @doc Flush all cached information about the database.
+-spec flush(Context) -> ok when
+    Context :: z:context().
 flush(Context) ->
     Options = z_db_pool:get_database_options(Context),
     Db = proplists:get_value(dbdatabase, Options),
@@ -1388,8 +1640,9 @@ ensure_schema(Site, Options) ->
     close_connection(DbConnection),
     Result.
 
-drop_schema(Context) ->
-    Options = z_db_pool:get_database_options(Context),
+drop_schema(#context{} = Context) ->
+    drop_schema(z_db_pool:get_database_options(Context));
+drop_schema(Options) when is_list(Options) ->
     Schema = proplists:get_value(dbschema, Options),
     Database = proplists:get_value(dbdatabase, Options),
     case open_connection(Database, Options) of
@@ -1900,7 +2153,7 @@ merge_props_test() ->
                       {props, [{message,  <<"test test">>}, {extra, <<"hello">>} ]},
                       {created,{{2020,6,25},{11,54,55}}},
                       {props_json,<<"{\"message\": \"123\"}">>}] ]),
-    
+
     ?assertEqual([[{id,1},
                    {is_visible,true},
                    {rsc_id,330},

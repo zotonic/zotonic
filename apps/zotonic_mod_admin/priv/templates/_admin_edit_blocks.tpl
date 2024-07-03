@@ -82,7 +82,7 @@ $('#edit-blocks-wrapper').on('click', '.block-add-block .dropdown-menu a', funct
         block_type = $this.data('block-type'),
         after_block = $(this).closest('li.block').attr('id');
         langs = '';
-    $('input[name=language]:checked').each(function() { langs += ',' + $(this).val(); });
+    $('input[name="language[]"]:checked').each(function() { langs += ',' + $(this).val(); });
 
     z_notify('admin-insert-block', {
                 z_delegate: 'mod_admin',
@@ -101,6 +101,12 @@ $('#edit-blocks-wrapper').on('click', '.block-add-block .dropdown-menu a', funct
 $('#edit-blocks-wrapper').on('click', '.block-page a.page-connect', function(event) {
     window.zBlockConnectTrigger = this;
     z_event("admin-block-connect", {});
+    event.preventDefault();
+});
+
+$('#edit-blocks-wrapper').on('click', '.block-page a.page-disconnect', function(event) {
+    window.zBlockConnectTrigger = this;
+    window.zAdminBlockConnectDone({object_id: '', predicate: '', subject_id: '', title: '', title_language: '', url_language: '' });
     event.preventDefault();
 });
 

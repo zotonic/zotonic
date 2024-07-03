@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell <marc@worrell.nl>
-%% Date: 2009-04-28
+%% @copyright 2009-2023 Marc Worrell <marc@worrell.nl>
 %% @doc Redirect to resources depening on the content type requested.
+%% @end
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
 -export([
     resource_exists/1,
     previously_existed/1,
-    moved_temporarily/1,
+    moved_permanently/1,
     content_types_provided/1,
     process/4,
     get_rsc_content_types/2
@@ -40,7 +40,7 @@ previously_existed(Context) ->
     {Id, Context2} = get_id(Context),
     {m_rsc_gone:is_gone(Id, Context2), Context2}.
 
-moved_temporarily(Context) ->
+moved_permanently(Context) ->
     {Id, Context2} = get_id(Context),
     redirect(m_rsc_gone:get_new_location(Id, Context2), Context2).
 
@@ -100,6 +100,8 @@ find_html([ {{<<"text">>, <<"html">>, _}, _} = Prov | _CTs ]) ->
 find_html([ _ | CTs ]) ->
     find_html(CTs).
 
+% Fetch id from the request. Check if the id has an extension, if so split it
+% and set the accept header.
 get_id(Context) ->
     case z_context:get(id, Context) of
         undefined ->
@@ -109,9 +111,42 @@ get_id(Context) ->
                 <<>> ->
                     {undefined, Context};
                 Id ->
-                    RscId = m_rsc:rid(Id, Context),
-                    {RscId, z_context:set(id, {ok, RscId}, Context)}
+                    case maybe_split_extension(Id) of
+                        {Root, Ext} ->
+                            RscId = m_rsc:rid(Root, Context),
+                            Context1 = z_cowmachine_middleware:set_accept_context(Ext, Context),
+                            {RscId, z_context:set(id, {ok, RscId}, Context1)};
+                        false ->
+                            RscId = m_rsc:rid(Id, Context),
+                            {RscId, z_context:set(id, {ok, RscId}, Context)}
+                    end
             end;
         {ok, Id} ->
             {Id, Context}
     end.
+
+maybe_split_extension(<<"http:", _/binary>>) ->
+    false;
+maybe_split_extension(<<"https:", _/binary>>) ->
+    false;
+maybe_split_extension(Id) ->
+    case filename:extension(Id) of
+        <<".", Ext/binary>> when Ext =/= <<>> ->
+            Root = filename:rootname(Id),
+            case is_name_like(Root) of
+                true ->
+                    {Root, Ext};
+                false ->
+                    false
+            end;
+        _ ->
+            false
+    end.
+
+is_name_like(<<>>) -> true;
+is_name_like(<<$_, R/binary>>) -> is_name_like(R);
+is_name_like(<<C, _/binary>>) when C < $0 -> false;
+is_name_like(<<C, _/binary>>) when C > $9, C < $A -> false;
+is_name_like(<<C, _/binary>>) when C > $Z, C < $a -> false;
+is_name_like(<<C, _/binary>>) when C > $z, C < 128 -> false;
+is_name_like(<<_, R/binary>>) -> is_name_like(R).

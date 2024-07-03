@@ -1,8 +1,9 @@
-%% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell, Arjan Scherpenisse
+%% @author Marc Worrell, Arjan Scherpenisse
+%% @copyright 2009-2023 Marc Worrell, Arjan Scherpenisse
 %% @doc Admin webmachine_controller.
+%% @end
 
-%% Copyright 2009-2021 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2009-2023 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -41,7 +42,7 @@ service_available(Context) ->
 is_authorized(Context) ->
     Context1 = z_context:set_resp_header(<<"x-frame-options">>, <<"SAMEORIGIN">>, Context),
     {Context2, Id} = ensure_id(Context1),
-    z_controller_helper:is_authorized([ {use, mod_admin}, {view, Id} ], Context2).
+    z_controller_helper:is_authorized(Id, [ {use, mod_admin}, {view, Id} ], Context2).
 
 resource_exists(Context) ->
     {Context2, Id} = ensure_id(Context),
@@ -119,22 +120,24 @@ event(#submit{message={rscform, Args}}, Context) ->
                 Submitter ->
                     case m_rsc:p(Id, category_id, Context) of
                         CatBefore ->
+                            PagePath = filter_urldecode:urldecode(m_rsc:p(Id, page_path, Context), Context),
                             Context1 = z_render:set_value("field-name", m_rsc:p(Id, name, Context), Context),
-                            Context2 = z_render:set_value("field-uri",  m_rsc:p(Id, uri, Context), Context1),
-                            Context3 = z_render:set_value("field-page-path",  m_rsc:p(Id, page_path, Context), Context2),
+                            Context2 = z_render:set_value("field-uri",  m_rsc:p(Id, uri_raw, Context), Context1),
+                            Context3 = z_render:set_value("field-page-path", PagePath, Context2),
                             Context4 = z_render:set_value("website",  m_rsc:p(Id, website, Context), Context3),
                             Context4a = set_value_slug(m_rsc:p(Id, title_slug, Context), Context4),
                             Context5 = case z_convert:to_bool(m_rsc:p(Id, is_protected, Context)) of
                                            true ->  z_render:wire("delete-button", {disable, []}, Context4a);
                                            false -> z_render:wire("delete-button", {enable, []}, Context4a)
                                        end,
-                            Title = z_trans:lookup_fallback(m_rsc:p(Id, title, Context5), Context5),
+                            Title = z_convert:to_binary(
+                                z_trans:lookup_fallback(m_rsc:p(Id, title, Context5), Context5)),
                             Context6 = z_render:growl([<<"Saved \"">>, Title, <<"\".">>], Context5),
                             case Submitter of
                                 <<"save_duplicate">> ->
                                     z_render:wire({dialog_duplicate_rsc, [{id, Id}]}, Context6);
                                 _SaveStay ->
-                                    Context6
+                                    z_render:wire(proplists:get_all_values(on_success, Args), Context6)
                             end;
                         _CatOther ->
                             z_render:wire({reload, []}, Context)
@@ -179,10 +182,15 @@ event(#sort{items=Sorted, drop={dragdrop, {object_sorter, Props}, _, _}}, Contex
 %% Previewing the results of a query in the admin edit
 event(#postback{message={query_preview, Opts}}, Context) ->
     DivId = proplists:get_value(div_id, Opts),
+    RscId = proplists:get_value(rsc_id, Opts),
     try
-        Q = search_query:parse_query_text(z_context:get_q(<<"triggervalue">>, Context)),
-        S = z_search:search(<<"query">>, Q, 1, 10, Context),
-        {Html, Context1} = z_template:render_to_iolist("_admin_query_preview.tpl", [{result,S}], Context),
+        Q = z_search_props:from_text(z_context:get_q(<<"triggervalue">>, Context)),
+        S = z_search:search(<<"query">>, Q, 1, 20, Context),
+        Vars = [
+            {id, RscId},
+            {result, S}
+        ],
+        {Html, Context1} = z_template:render_to_iolist("_admin_query_preview.tpl", Vars, Context),
         z_render:update(DivId, Html, Context1)
     catch
         _: {error, {Kind, Arg}} ->

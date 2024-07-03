@@ -125,8 +125,21 @@ delete_all([{Id}|Ids], N, Total, Context) ->
         ok ->
             maybe_progress(N, N+1, Total, Context),
             delete_all(Ids, N+1, Total, Context);
+        {erro, Reason} ->
+            ?LOG_ERROR(#{
+                text => <<"Content group delete: could not delete resource">>,
+                result => error,
+                reason => Reason,
+                rsc_id => Id
+            }),
+            {error, Id};
         Error ->
-            ?LOG_ERROR("Content group delete: could not delete resource: ~p (~p)", [Id, Error]),
+            ?LOG_ERROR(#{
+                text => <<"Content group delete: could not delete resource">>,
+                result => error,
+                reason => Error,
+                rsc_id => Id
+            }),
             {error, Id}
     end.
 

@@ -18,20 +18,22 @@ jobs:
 
     strategy:
       matrix:
-        otp_version: [23]
-        os: [ubuntu-18.04]
+        otp_version: [24]
+        os: [ubuntu-20.04]
 
     container:
       image: erlang:${{ matrix.otp_version }}
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
         with:
-          python-version: '3.6'
-      - uses: BSFishy/pip-action@v1
-        with:
-          requirements: "doc/requirements.txt"
+          python-version: '3.7'
+      - name: Install PIP
+        run: |
+          apt-get update
+          apt-get -y install python3-pip
+      - run: pip3 install -r doc/requirements.txt
       - name: Compile
         run: make
       - name: EDocs

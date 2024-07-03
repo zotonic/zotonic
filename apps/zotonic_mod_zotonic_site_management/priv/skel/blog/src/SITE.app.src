@@ -2,6 +2,7 @@
     {description, "Default Zotonic webblog site"},
     {vsn, "git"},
     {registered, []},
+    {mod, %%APPSRCMOD%%},
     {applications, [kernel, stdlib, zotonic_core]},
     {env, []},
     {modules, []},

@@ -1,10 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2017 Marc Worrell
+%% @copyright 2009-2022 Marc Worrell
 %% @doc Enables embedding video's as media pages.  Handles the embed information for showing video's.
 %% The embed information is stored in the medium table associated with the page. You can not have embed
 %% information and a medium file. Either one or the other.
+%% @end
 
-%% Copyright 2009-2017 Marc Worrell
+%% Copyright 2009-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -77,8 +78,15 @@ observe_rsc_update(#rsc_update{action=insert, id=Id}, {ok, Props}, Context) ->
                     ok = m_media:replace(Id, MediaProps, Context),
                     spawn_preview_create(Id, MediaProps, Context);
                 false ->
-                    ?LOG_NOTICE("Denied user ~p to embed ~p: ~p",
-                               [z_acl:user(Context), ?EMBED_MIME, EmbedCodeRaw]),
+                    ?LOG_NOTICE(#{
+                        text => <<"User not allowed to insert ", ?EMBED_MIME/binary>>,
+                        in => zotonic_mod_video_embed,
+                        result => error,
+                        reason => eacces,
+                        user_id => z_acl:user(Context),
+                        mime => ?EMBED_MIME,
+                        embed_code => EmbedCodeRaw
+                    }),
                     ok
             end,
             Props1 = maps:remove(<<"video_embed_code">>,
@@ -133,7 +141,11 @@ observe_rsc_update(#rsc_update{}, {error, _} = Error, _Context) ->
 
 %% @doc Return the media viewer for the embedded video (that is, when it is an embedded media).
 -spec observe_media_viewer(#media_viewer{}, z:context()) -> undefined | {ok, template_compiler:render_result()}.
-observe_media_viewer(#media_viewer{props= #{ <<"mime">> := ?EMBED_MIME } = Props}, Context) ->
+observe_media_viewer(#media_viewer{
+        id = Id,
+        props = #{ <<"mime">> := ?EMBED_MIME } = Props,
+        options = Options
+    }, Context) ->
     case maps:get(<<"video_embed_code">>, Props, undefined) of
         EmbedCode when is_binary(EmbedCode) ->
             EmbedCode1 = binary:replace(EmbedCode, <<"http://">>, <<"https://">>, [global]),
@@ -143,8 +155,20 @@ observe_media_viewer(#media_viewer{props= #{ <<"mime">> := ?EMBED_MIME } = Props
                 {is_iframe, IsIframe},
                 {medium, Props}
             ],
-            Html = z_template:render("_video_embed.tpl", Vars, Context),
-            {ok, Html};
+            {Html, _} = z_template:render_to_iolist("_video_embed.tpl", Vars, Context),
+            case z_notifier:first(#media_viewer_consent{
+                    id = Id,
+                    consent = all,
+                    html = Html,
+                    viewer_props = Props,
+                    viewer_options = Options
+                }, Context)
+            of
+                undefined ->
+                    {ok, Html};
+                {ok, _} = ConsentHtml ->
+                    ConsentHtml
+            end;
         _ ->
             undefined
     end;
@@ -223,6 +247,14 @@ observe_media_import(#media_import{}, _Context) ->
     undefined.
 
 media_import(Service, Descr, MD, MI, Context) ->
+    case media_import_1(Service, Descr, MD, MI, Context) of
+        undefined ->
+            media_import_retry(Service, Descr, MD, MI, Context);
+        Imports ->
+            Imports
+    end.
+
+media_import_1(Service, Descr, MD, MI, Context) ->
     H = z_convert:to_integer(z_url_metadata:p([<<"og:video:height">>, <<"twitter:player:height">>], MD)),
     W = z_convert:to_integer(z_url_metadata:p([<<"og:video:width">>, <<"twitter:player:width">>], MD)),
     VideoId = fetch_videoid_from_url(Service, MI#media_import.url),
@@ -231,14 +263,35 @@ media_import(Service, Descr, MD, MI, Context) ->
             VideoIdBin = z_convert:to_binary(VideoId),
             PreviewUrl = videoid_to_image(Service, VideoIdBin),
             [
-                media_import_props_video(Service, Descr, MD, MI, H, W, VideoId, PreviewUrl),
+                media_import_props_video(Service, Descr, MD, MI, H, W, VideoId, PreviewUrl, Context),
                 media_import_props_image(MD, PreviewUrl, Context)
             ];
         false ->
             undefined
     end.
 
-media_import_props_video(Service, Descr, MD, MI, H, W, VideoId, PreviewUrl) ->
+media_import_retry(<<"youtube">>, Descr, MD, MI, Context) ->
+    case z_url_metadata:p(final_url, MD) of
+        <<"https://www.youtube.com/embed/", Code/binary>> ->
+            URL = case z_url_metadata:p(canonical_url, MD) of
+                undefined ->
+                    <<"https://www.youtube.com/watch?v=", Code/binary>>;
+                CanonicalUrl ->
+                    CanonicalUrl
+            end,
+            case z_url_metadata:fetch(URL) of
+                {ok, MD1} ->
+                    media_import_1(<<"youtube">>, Descr, MD1, MI, Context);
+                {error, _} ->
+                    undefined
+            end;
+        _ ->
+            undefined
+    end;
+media_import_retry(_Service, _Descr, _MD, _MI, _Context) ->
+    undefined.
+
+media_import_props_video(Service, Descr, MD, MI, H, W, VideoId, PreviewUrl, Context) ->
     VideoIdBin = z_convert:to_binary(VideoId),
     PreviewUrl1 = case PreviewUrl of
         undefined -> z_url_metadata:p(image, MD);
@@ -259,7 +312,7 @@ media_import_props_video(Service, Descr, MD, MI, H, W, VideoId, PreviewUrl) ->
             <<"width">> => W,
             <<"height">> => H,
             <<"video_embed_service">> => Service,
-            <<"video_embed_code">> => embed_code(Service, H, W, VideoId),
+            <<"video_embed_code">> => embed_code(Service, H, W, VideoId, Context),
             <<"video_embed_id">> => VideoIdBin,
             <<"media_import">> => MI#media_import.url
         },
@@ -315,17 +368,22 @@ fetch_videoid_from_url(<<"youtube">>, Url) ->
             z_convert:to_binary(proplists:get_value("v", Qs1))
     end;
 fetch_videoid_from_url(<<"vimeo">>, Url) ->
-    {_Protocol, _Host, Path, _Qs, _Hash} = mochiweb_util:urlsplit(z_convert:to_list(Url)),
-    P1 = lists:last(string:tokens(Path, "/")),
-    case z_utils:only_digits(P1) of
-        true -> z_convert:to_binary(P1);
-        false -> <<>>
+    case uri_string:parse(Url) of
+        #{ path := Path } ->
+            case lists:reverse(binary:split(Path, <<"/">>, [global])) of
+                [P1|_] ->
+                    case z_utils:only_digits(P1) of
+                        true -> z_convert:to_binary(P1);
+                        false -> <<>>
+                    end;
+                [] ->
+                    <<>>
+            end;
+        _ ->
+            <<>>
     end;
 fetch_videoid_from_url(_Service, _Url) ->
     <<>>.
-
-
-
 
 url_to_service(<<"https://", Url/binary>>) -> url_to_service(Url);
 url_to_service(<<"http://", Url/binary>>) -> url_to_service(Url);
@@ -338,18 +396,20 @@ url_to_service(<<"player.vimeo.com/", _/binary>>) -> <<"vimeo">>;
 url_to_service(_) -> undefined.
 
 
-embed_code(<<"youtube">>, H, W, V) ->
+embed_code(<<"youtube">>, H, W, V, Context) ->
     iolist_to_binary([
         <<"<iframe width=\"">>,integer_to_list(W),
         <<"\" height=\"">>,integer_to_list(H),
         <<"\" src=\"//www.youtube.com/embed/">>, z_url:url_encode(V),
+        <<"\" sandbox=\"">>, z_sanitize:default_sandbox_attr(Context),
         <<"\" style=\"border:none;\" allowfullscreen></iframe>">>
         ]);
-embed_code(<<"vimeo">>, H, W, V) ->
+embed_code(<<"vimeo">>, H, W, V, Context) ->
     iolist_to_binary([
         <<"<iframe width=\"">>,integer_to_list(W),
         <<"\" height=\"">>,integer_to_list(H),
         <<"\" src=\"//player.vimeo.com/video/">>, z_url:url_encode(V),
+        <<"\" sandbox=\"">>, z_sanitize:default_sandbox_attr(Context),
         <<"\" style=\"border:none;\" allowfullscreen></iframe>">>
         ]).
 
@@ -381,7 +441,7 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
                 <<"video_embed_code">> => EmbedCode,
                 <<"content_group_id">> => ContentGroupdId
             },
-            try m_rsc:insert(Props, Context) of
+            case m_rsc:insert(Props, Context) of
                 {ok, MediaId} ->
                     spawn_preview_create(MediaId, Props, Context),
 
@@ -404,10 +464,17 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
                     z_render:wire([
                         {dialog_close, []},
                         {growl, [{text, "Made the media page."}]}
-                        | Actions], ContextRedirect)
-            catch
+                        | Actions], ContextRedirect);
+
                 {error, Error} ->
-                    ?LOG_ERROR("[mod_video_embed] Error in add_video_embed: ~p on ~p", [Error, Props]),
+                    ?LOG_ERROR(#{
+                        text => <<"Error in add_video_embed">>,
+                        in => zotonic_mod_video_embed,
+                        result => error,
+                        reason => Error,
+                        props => Props,
+                        subject_id => SubjectId
+                    }),
                     z_render:growl_error("Could not create the media page.", Context)
             end;
 
@@ -418,10 +485,10 @@ event(#submit{message={add_video_embed, EventProps}}, Context) ->
                 <<"video_embed_service">> => EmbedService,
                 <<"video_embed_code">> => EmbedCode
             },
-            try
-                {ok, _} = m_rsc:update(Id, Props, Context)
-            catch
-                _ ->
+            case m_rsc:update(Id, Props, Context) of
+                {ok, _} = Ok ->
+                    Ok;
+                {error, _} ->
                     z_render:growl_error("Could not update the page with the new embed code.", Context)
             end
     end.
@@ -478,7 +545,13 @@ videoid_to_image(<<"vimeo">>, EmbedId) ->
             #{ <<"thumbnail_large">> := Thumbnail } = JSON,
             iolist_to_binary(re:replace(Thumbnail, <<"_[0-9]+(x[0-9]+)?$">>, <<"_1280">>));
         {ok, {StatusCode, _Header, Data}} ->
-            ?LOG_WARNING("Vimeo metadata fetch returns ~p ~p", [StatusCode, Data]),
+            ?LOG_WARNING(#{
+                text => <<"Vimeo metadata fetch returned error">>,
+                in => zotonic_mod_video_embed,
+                reason => error,
+                result => StatusCode,
+                date => Data
+            }),
             undefined;
         _ ->
             undefined

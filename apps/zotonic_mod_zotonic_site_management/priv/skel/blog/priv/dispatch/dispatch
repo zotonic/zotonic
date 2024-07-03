@@ -1,12 +1,33 @@
 %% -*- mode: erlang -*-
 %% Dispatch rules for mod_zotonic.
 [
+
+ % The home page, convention is to call the dispatch rule 'home' and the resource
+ % being displayed normally has the unique name "page_home".
  {home,         [],                         controller_template,  [ {template, "home.tpl"}, {id, page_home} ]},
- {article,      ["article", id, slug],      controller_page,      [ {template, "article.tpl"}, {cat, article} ]},
+
+ % These are the default dispatch rules for displaying a resource (aka "page")
+ % The template used will be page.tpl, with variations like "page.article.tpl" for a resource
+ % in the category 'article', and "page.name.foobar.tpl" for a resource with unique name "foobar".
+ {page,         ["page", id],               controller_page,      []},
+ {page,         ["page", id, slug],         controller_page,      []},
+
+ % If you want a different page path for some category, then you can make a
+ % dispatch rule for that category, and (optionally) define a special template.
+ % The 'cat' will ensure that the id passed is indeed of the category 'article'
+ % {article,      ["article", id],            controller_page,      [ {template, "page.article.tpl"}, {cat, article} ]},
+ % {article,      ["article", id, slug],      controller_page,      [ {template, "page.article.tpl"}, {cat, article} ]},
+
+ {keyword,      ["by_keyword", id],         controller_page,      [ {template, "by_keyword.tpl"} ]},
  {keyword,      ["by_keyword", id, slug],   controller_page,      [ {template, "by_keyword.tpl"} ]},
- 
+
+ % Here we pass the fixed unique name of the page (page_contact) to the controller_page, this is the
+ % id of the page being displayed.
  {page_contact, ["contact"],                controller_page,      [ {template, "contact.tpl"}, {id, page_contact} ]},
- 
+
+ % These are search pages, handled by the template controller, which does not need a special
+ % resource to be displayed. The "cat" is passed to the archives.tpl template and used there to determine
+ % what category of resources is being displayed.
  {archives_y,   ["archives", year],         controller_template,  [ {template, "archives.tpl"}, {cat, article} ]},
  {archives_m,   ["archives", year, month],  controller_template,  [ {template, "archives.tpl"}, {cat, article} ]}
 ].

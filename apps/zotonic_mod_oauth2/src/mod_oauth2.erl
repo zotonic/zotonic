@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019-2021 Marc Worrell
+%% @copyright 2019-2022 Marc Worrell
 %% @doc OAuth2 (https://tools.ietf.org/html/draft-ietf-oauth-v2-26)
 
-%% Copyright 2019-2021 Marc Worrell
+%% Copyright 2019-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@
 -mod_title("OAuth2").
 -mod_description("Provides authentication over OAuth2.").
 -mod_prio(900).
--mod_schema(6).
+-mod_schema(11).
 -mod_depends([ authentication ]).
 
 -export([
@@ -30,6 +30,7 @@
     observe_request_context/3,
     observe_url_fetch_options/2,
     observe_admin_menu/3,
+    observe_tick_3h/2,
     manage_schema/2
 ]).
 
@@ -114,7 +115,9 @@ event(#submit{ message={oauth2_consumer_insert, []} }, Context) ->
         <<"is_use_auth">> => z_convert:to_bool(z_context:get_q(<<"is_use_auth">>, Context)),
         <<"is_use_import">> => z_convert:to_bool(z_context:get_q(<<"is_use_import">>, Context)),
         <<"authorize_url">> => z_string:trim(z_context:get_q(<<"authorize_url">>, Context)),
-        <<"access_token_url">> => z_string:trim(z_context:get_q(<<"access_token_url">>, Context))
+        <<"access_token_url">> => z_string:trim(z_context:get_q(<<"access_token_url">>, Context)),
+        <<"grant_type">> => z_string:trim(z_context:get_q(<<"grant_type">>, Context)),
+        <<"is_extend_automatic">> => z_convert:to_bool(z_context:get_q(<<"is_extend_automatic">>, Context))
     },
     case m_oauth2_consumer:insert_consumer(Consumer, Context) of
         {ok, _AppId} ->
@@ -133,7 +136,9 @@ event(#submit{ message={oauth2_consumer_update, [ {app_id, AppId} ]} }, Context)
         <<"is_use_auth">> => z_convert:to_bool(z_context:get_q(<<"is_use_auth">>, Context)),
         <<"is_use_import">> => z_convert:to_bool(z_context:get_q(<<"is_use_import">>, Context)),
         <<"authorize_url">> => z_string:trim(z_context:get_q(<<"authorize_url">>, Context)),
-        <<"access_token_url">> => z_string:trim(z_context:get_q(<<"access_token_url">>, Context))
+        <<"access_token_url">> => z_string:trim(z_context:get_q(<<"access_token_url">>, Context)),
+        <<"grant_type">> => z_string:trim(z_context:get_q(<<"grant_type">>, Context)),
+        <<"is_extend_automatic">> => z_convert:to_bool(z_context:get_q(<<"is_extend_automatic">>, Context))
     },
     case m_oauth2_consumer:update_consumer(AppId, Consumer, Context) of
         ok ->
@@ -147,6 +152,47 @@ event(#postback{ message={oauth2_consumer_delete, [ {app_id, AppId} ]} }, Contex
             z_render:wire({redirect, [ {dispatch, admin_oauth2_consumers} ]}, Context);
         {error, _} ->
             z_render:growl_error(?__("Could not insert the Consumer.", Context), Context)
+    end;
+event(#postback{ message={oauth2_fetch_consumer_token, [ {app_id, AppId} ]} }, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            case m_oauth2_consumer:fetch_token(AppId, z_acl:user(Context), Context) of
+                {ok, _AccessToken} ->
+                    ?LOG_INFO(#{
+                        text => <<"Fetched new consumer token">>,
+                        in => mod_oauth2,
+                        result => ok,
+                        app_id => AppId,
+                        user_id => z_acl:user(Context)
+                    }),
+                    z_render:wire([
+                            {alert, [
+                                {title, ?__("Success", Context)},
+                                {text, ?__("Fetched a new access token.", Context)},
+                                {action, {reload, []}}
+                            ]}
+                        ], Context);
+                {error, Reason} ->
+                    ?LOG_ERROR(#{
+                        text => <<"Could not fetch a new consumer token">>,
+                        in => mod_oauth2,
+                        result => error,
+                        reason => Reason,
+                        app_id => AppId,
+                        user_id => z_acl:user(Context)
+                    }),
+                    ReasonText = iolist_to_binary(io_lib:format("~p", [ Reason ])),
+                    z_render:wire([
+                            {alert, [
+                                {text, [
+                                    ?__("Could not fetch a new access token.", Context),
+                                    " (", z_html:escape(ReasonText), ")"
+                                ]}
+                            ]}
+                        ], Context)
+            end;
+        false ->
+            z_render:growl_error(?__("You are not allowed to fetch a consumer token.", Context), Context)
     end.
 
 
@@ -221,24 +267,75 @@ observe_url_fetch_options(#url_fetch_options{
                     host = Host,
                     options = Options
                 }, Context) ->
-    case z_acl:user(Context) of
-        UserId when is_integer(UserId) ->
-            case m_oauth2_consumer:find_token(UserId, Host, Context) of
-                {ok, AccessToken} ->
-                    [
-                        {authorization, <<"Bearer ", AccessToken/binary>>}
-                        | Options
-                    ];
-                {error, _} ->
+    case proplists:is_defined(authorization, Options) of
+        false ->
+            case z_acl:user(Context) of
+                UserId when is_integer(UserId) ->
+                    case m_oauth2_consumer:find_token(UserId, Host, Context) of
+                        {ok, AccessToken} ->
+                            [
+                                {authorization, <<"Bearer ", AccessToken/binary>>}
+                                | Options
+                            ];
+                        {error, _} ->
+                            undefined
+                    end;
+                _ ->
                     undefined
             end;
-        _ ->
+        true ->
             undefined
     end;
 observe_url_fetch_options(_, _Context) ->
     undefined.
 
 
+%% @doc Periodically try to extend tokens that are expiring in the next 8 hours.
+observe_tick_3h(tick_3h, Context) ->
+    Next8H = z_datetime:next_hour(calendar:universal_time(), 8),
+    Expiring = z_db:q("
+        select id, rsc_id, key
+        from identity
+        where expires > now()
+          and expires < $1
+          and type = 'mod_oauth2'
+        ",
+        [ Next8H ],
+        Context),
+    lists:foreach(
+        fun({_IdnId, RscId, Key}) ->
+            case binary:split(Key, <<":">>) of
+                [Name, RId] ->
+                    AppId = m_oauth2_consumer:name_to_id(Name, Context),
+                    case m_rsc:rid(RId, Context) of
+                        RscId ->
+                            case m_oauth2_consumer:fetch_token(Name, RscId, z_acl:sudo(Context)) of
+                                {ok, _} ->
+                                    ?LOG_INFO(#{
+                                        text => <<"Fetched new consumer token">>,
+                                        in => mod_oauth2,
+                                        result => ok,
+                                        app_id => AppId,
+                                        user_id => RscId
+                                    });
+                                {error, Reason} ->
+                                    ?LOG_ERROR(#{
+                                        text => <<"Could not fetch a new consumer token">>,
+                                        in => mod_oauth2,
+                                        result => error,
+                                        reason => Reason,
+                                        app_id => AppId,
+                                        user_id => RscId
+                                    })
+                            end;
+                        _ ->
+                            ok
+                    end;
+                _ ->
+                    ok
+            end
+        end,
+        Expiring).
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
      [
@@ -281,7 +378,13 @@ try_bearer(Token, Context) ->
             Context;
         {error, Reason} ->
             % Illegal token, maybe throw a 400 here?
-            ?LOG_NOTICE("Could not decode OAuth2 token, error ~p for ~p", [ Reason, Token ]),
+            ?LOG_NOTICE(#{
+                text => <<"Could not decode OAuth2 token">>,
+                in => zotonic_mod_oauth2,
+                result => error,
+                reason => Reason,
+                token => Token
+            }),
             Context
     end.
 
@@ -310,7 +413,14 @@ try_token(#{
             z_acl:logon(UserId, Options, Context);
         false ->
             % User is disabled, maybe throw a 403 here?
-            ?LOG_NOTICE("Authenticated OAuth2 request for disabled user ~p with token ~p", [ UserId, TokenId ]),
+            ?LOG_NOTICE(#{
+                text => <<"Authenticated OAuth2 request for disabled user">>,
+                in => zotonic_mod_oauth2,
+                user_id => UserId,
+                result => error,
+                reason => disabled,
+                token_id => TokenId
+            }),
             Context
     end.
 

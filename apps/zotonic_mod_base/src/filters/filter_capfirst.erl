@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2014 Marc Worrell
+%% @copyright 2010-2023 Marc Worrell
 %% @doc 'capfirst' filter, capitalize the first character
+%% @end
 
-%% Copyright 2010-2014 Marc Worrell
+%% Copyright 2010-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,25 +20,24 @@
 -module(filter_capfirst).
 -export([capfirst/2]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
+
 
 capfirst(undefined, _Context) ->
     undefined;
-
 capfirst(<<Byte, Binary/binary>>, _Context) when Byte >= $a andalso Byte =< $z ->
     [<<(Byte + $A - $a)>>, Binary];
 capfirst(<<Byte, _/binary>> = S, _Context) when Byte =< 127 ->
     S;
-capfirst(<<C/utf8, Binary/binary>>, _Context) ->
-    [z_string:to_upper(<<C/utf8>>), Binary ];
-
-capfirst([H|T], _Context) when H >= $a andalso H =< $z ->
-    [H + $A - $a | T];
-capfirst([H|_] = S, _Context) when H =< 127 ->
-    S;
+capfirst(<<C/utf8, Rest/binary>>, _Context) ->
+    First = z_string:to_upper(<<C/utf8>>),
+    <<First/binary, Rest/binary>>;
+capfirst([H|T], _Context) when is_integer(H) ->
+    First = z_string:to_upper(<<H/utf8>>),
+    <<First/binary, (unicode:characters_to_binary(T))/binary>>;
 capfirst(L, Context) when is_list(L) ->
-    capfirst(iolist_to_binary(L), Context);
-
-capfirst({trans, _} = In, Context) ->
+    capfirst(unicode:characters_to_binary(L), Context);
+capfirst(#trans{} = In, Context) ->
     capfirst(z_trans:lookup_fallback(In, Context), Context);
 capfirst(A, _Context) ->
     A.

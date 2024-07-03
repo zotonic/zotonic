@@ -3,7 +3,7 @@
 	<p>{_ Select the backup file you want to upload. The file must be a .bert file. _}</p>
 
     <div class="form-group">
-		<input class="form-control" id="{{ #upload }}" name="file" type="file" accept=".bert" />
+		<input class="form-control" id="{{ #upload }}" name="file" type="file" accept=".bert,.json" />
 		{% validate id=#upload name="file" type={presence} %}
 	</div>
 

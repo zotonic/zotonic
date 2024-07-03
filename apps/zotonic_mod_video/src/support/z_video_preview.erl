@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014-2020 Marc Worrell
+%% @copyright 2014-2023 Marc Worrell
 %% @doc Fetch a preview from a video file using ffmpeg.
+%% @end
 
-%% Copyright 2014-2020 Marc Worrell
+%% Copyright 2014-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,14 +26,16 @@
 
 -include_lib("kernel/include/logger.hrl").
 
+% Default timeout for video previews - 10 minutes
+-define(FFMPEG_TIMEOUT, 10*60*1000).
+
 -define(PREVIEW_CMDLINE, "ffmpeg -itsoffset -~p -i ~s -vcodec png -vframes 1 -an -f rawvideo -loglevel error -y").
 
 -spec preview(file:filename_all(), map()) -> {ok, file:filename_all()} | {error, string()}.
-preview(MovieFile, Props) ->
-    #{
+preview(MovieFile, #{
         <<"duration">> := Duration,
         <<"orientation">> := Orientation
-    } = Props,
+    }) ->
     Start = case Duration of
         N when N =< 1 -> 0;
         N when N =< 30 -> 1;
@@ -45,28 +48,54 @@ preview(MovieFile, Props) ->
         CmdlineCfg -> z_convert:to_list(CmdlineCfg)
     end,
     TmpFile = z_tempfile:new(),
-    FfmpegCmd = z_convert:to_list(
-        iolist_to_binary([
+    FfmpegCmd = unicode:characters_to_binary([
             case string:str(Cmdline, "-itsoffset") of
-                0 -> io_lib:format(Cmdline, [MovieFile]);
-                _ -> io_lib:format(Cmdline, [Start, MovieFile])
+                0 -> io_lib:format(Cmdline, [z_filelib:os_filename(MovieFile)]);
+                _ -> io_lib:format(Cmdline, [Start, z_filelib:os_filename(MovieFile)])
             end,
             " ",
             orientation_to_transpose(Orientation),
             z_filelib:os_filename(TmpFile)
-        ])),
+        ]),
     jobs:run(media_preview_jobs,
         fun() ->
-            ?LOG_DEBUG("Video preview: ~p", [FfmpegCmd]),
-            case os:cmd(FfmpegCmd) of
-                [] ->
-                   ?LOG_DEBUG("Preview ok, file: ~p", [TmpFile]),
-                   {ok, TmpFile};
-                Other ->
-                   ?LOG_WARNING("Video preview error: ~p", [Other]),
-                   {error, Other}
+            ?LOG_DEBUG(#{
+                text => <<"Video preview">>,
+                movie_file => MovieFile,
+                tmp_file => TmpFile,
+                command => FfmpegCmd
+            }),
+            case z_exec:run(FfmpegCmd, #{ timeout => ?FFMPEG_TIMEOUT }) of
+                {ok, Stdout} ->
+                   ?LOG_DEBUG(#{
+                        text => <<"FFMPEG video preview ok">>,
+                        result => ok,
+                        command => FfmpegCmd,
+                        movie_file => MovieFile,
+                        tmp_file => TmpFile,
+                        stdout => Stdout
+                    }),
+                    {ok, TmpFile};
+                {error, Reason} ->
+                   ?LOG_WARNING(#{
+                        text => <<"FFMPEG video preview error">>,
+                        result => error,
+                        reason => Reason,
+                        movie_file => MovieFile,
+                        tmp_file => TmpFile,
+                        command => FfmpegCmd
+                    }),
+                   {error, Reason}
             end
-        end).
+        end);
+preview(MovieFile, _Props) ->
+   ?LOG_WARNING(#{
+        text => <<"Video preview skipped for non video">>,
+        result => error,
+        reason => novideo,
+        movie_file => MovieFile
+    }),
+    {error, novideo}.
 
 orientation_to_transpose(8) -> " -vf 'transpose=2' ";
 orientation_to_transpose(3) -> " -vf 'transpose=2,transpose=2' ";

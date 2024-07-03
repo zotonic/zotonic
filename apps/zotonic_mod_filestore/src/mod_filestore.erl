@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014-2020 Marc Worrell
+%% @copyright 2014-2024 Marc Worrell
 %% @doc Module managing the storage of files on remote servers.
+%% @end
 
-%% Copyright 2014-2020 Marc Worrell
+%% Copyright 2014-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,9 +21,9 @@
 
 -author("Marc Worrell <marc@worrell.nl>").
 -mod_title("File Storage").
--mod_description("Store files on cloud storage services like Amazon S3 and Google Cloud Storage").
+-mod_description("Store files on cloud storage services using FTP, S3 and WebDAV").
 -mod_prio(500).
--mod_schema(1).
+-mod_schema(12).
 -mod_provides([filestore]).
 -mod_depends([cron]).
 
@@ -33,9 +34,11 @@
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 
 -define(BATCH_SIZE, 200).
+-define(MAX_FILENAME_LENGTH, 64).
 
 -export([
     observe_filestore/2,
+    observe_filestore_request/2,
     observe_media_update_done/2,
     observe_filestore_credentials_lookup/2,
     observe_filestore_credentials_revlookup/2,
@@ -60,6 +63,9 @@
     init/1
     ]).
 
+-export([
+    shorten_filename/1
+    ]).
 
 observe_media_update_done(#media_update_done{action=insert, post_props=Props}, Context) ->
     queue_medium(Props, Context);
@@ -82,6 +88,7 @@ observe_filestore(#filestore{action=delete, path=Path}, Context) ->
         ok ->
             ?LOG_INFO(#{
                 text => <<"Filestore marked entries as deleted.">>,
+                in => zotonic_mod_filestore,
                 path => Path
             }),
             ok;
@@ -89,7 +96,30 @@ observe_filestore(#filestore{action=delete, path=Path}, Context) ->
             ok
     end.
 
+observe_filestore_request(#filestore_request{
+            action = upload,
+            remote = RemoteFile,
+            local = LocalFile,
+            mime = Mime
+    }, Context) ->
+    filestore_request:upload(LocalFile, RemoteFile, Mime, Context);
+observe_filestore_request(#filestore_request{
+            action = download,
+            remote = RemoteFile,
+            local = LocalFile
+    }, Context) ->
+    filestore_request:download(LocalFile, RemoteFile, Context);
+observe_filestore_request(#filestore_request{
+            action = delete,
+            remote = RemoteFile
+    }, Context) ->
+    filestore_request:delete(RemoteFile, Context).
+
+
+%% @doc Map the local path to the URL of the remotely stored file. This depends on the
+%% service configured in the filestore config.
 observe_filestore_credentials_lookup(#filestore_credentials_lookup{path=Path}, Context) ->
+    Service = m_config:get_value(?MODULE, service, <<"s3">>, Context),
     S3Key = m_config:get_value(?MODULE, s3key, Context),
     S3Secret = m_config:get_value(?MODULE, s3secret, Context),
     S3Url = m_config:get_value(?MODULE, s3url, Context),
@@ -97,7 +127,7 @@ observe_filestore_credentials_lookup(#filestore_credentials_lookup{path=Path}, C
         true ->
             Url = make_url(S3Url, Path),
             {ok, #filestore_credentials{
-                    service = <<"s3">>,
+                    service = Service,
                     location = Url,
                     credentials = {S3Key,S3Secret}
             }};
@@ -105,17 +135,24 @@ observe_filestore_credentials_lookup(#filestore_credentials_lookup{path=Path}, C
             undefined
     end.
 
-observe_filestore_credentials_revlookup(#filestore_credentials_revlookup{service= <<"s3">>, location=Location}, Context) ->
-    S3Key = m_config:get_value(?MODULE, s3key, Context),
-    S3Secret = m_config:get_value(?MODULE, s3secret, Context),
-    case is_defined(S3Key) andalso is_defined(S3Secret) of
+%% @doc Given the service, find the credentials to do a lookup of the remote file.
+observe_filestore_credentials_revlookup(#filestore_credentials_revlookup{service=Service, location=Location}, Context) ->
+    ConfiguredService = m_config:get_value(?MODULE, service, <<"s3">>, Context),
+    if
+        Service =:= ConfiguredService ->
+            S3Key = m_config:get_value(?MODULE, s3key, Context),
+            S3Secret = m_config:get_value(?MODULE, s3secret, Context),
+            case is_defined(S3Key) andalso is_defined(S3Secret) of
+                true ->
+                    {ok, #filestore_credentials{
+                            service = Service,
+                            location = Location,
+                            credentials = {S3Key,S3Secret}
+                    }};
+                false ->
+                    undefined
+            end;
         true ->
-            {ok, #filestore_credentials{
-                    service = <<"s3">>,
-                    location = Location,
-                    credentials = {S3Key,S3Secret}
-            }};
-        false ->
             undefined
     end.
 
@@ -130,11 +167,64 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
      |Acc].
 
 
-
-make_url(S3Url, <<$/, _/binary>> = Path) ->
-    <<S3Url/binary, Path/binary>>;
 make_url(S3Url, Path) ->
+    make_url_1(S3Url, z_url:url_path_encode(shorten_filename(Path))).
+
+make_url_1(S3Url, <<$/, _/binary>> = Path) ->
+    <<S3Url/binary, Path/binary>>;
+make_url_1(S3Url, Path) ->
     <<S3Url/binary, $/, Path/binary>>.
+
+
+%% @doc Not all remote services allow the long filenames generated by
+%% filters and user generated filenames. Shorten those path by truncating
+%% the path's basename and adding a hash of the rootname. Also replace all
+%% non "simple" ascii characters with a "-", this because some S3 compatible
+%% services have a problem with characters like () and *.
+-spec shorten_filename(Path) -> ShortPath when
+    Path :: binary(),
+    ShortPath :: binary().
+shorten_filename(Path) ->
+    Basename = filename:basename(Path),
+    CleanedBasename = replace_special_chars(Basename, <<>>),
+    Basename1 = shorten(CleanedBasename, Basename),
+    case filename:dirname(Path) of
+        <<".">> -> Basename1;
+        Dir -> filename:join(Dir, Basename1)
+    end.
+
+shorten(Name, OrgName) when size(Name) > ?MAX_FILENAME_LENGTH; OrgName =/= Name ->
+    Root = filename:rootname(Name),
+    Ext = filename:extension(Name),
+    case size(Ext) < 10 of
+        true ->
+            Short = shorten_1(Root, OrgName),
+            <<Short/binary, Ext/binary>>;
+        false ->
+            shorten_1(Name, OrgName)
+    end;
+shorten(_Name, OrgName) ->
+    OrgName.
+
+shorten_1(Root, OrgName) ->
+    Truncated = z_string:truncatechars(Root, 32),
+    Hash = z_utils:hex_sha(OrgName),
+    <<Truncated/binary, $-, Hash/binary>>.
+
+replace_special_chars(<<>>, Acc) ->
+    Acc;
+replace_special_chars(<<C/utf8, Rest/binary>>, Acc) when C >= $a, C =< $z ->
+    replace_special_chars(Rest, <<Acc/binary, C/utf8>>);
+replace_special_chars(<<C/utf8, Rest/binary>>, Acc) when C >= $A, C =< $Z ->
+    replace_special_chars(Rest, <<Acc/binary, C/utf8>>);
+replace_special_chars(<<C/utf8, Rest/binary>>, Acc) when C >= $0, C =< $9 ->
+    replace_special_chars(Rest, <<Acc/binary, C/utf8>>);
+replace_special_chars(<<C/utf8, Rest/binary>>, Acc) when
+    C =:= $_; C =:= $-; C =:= $.  ->
+    replace_special_chars(Rest, <<Acc/binary, C/utf8>>);
+replace_special_chars(<<_/utf8, Rest/binary>>, Acc) ->
+    replace_special_chars(Rest, <<Acc/binary, $->>).
+
 
 is_defined(undefined) -> false;
 is_defined(<<>>) -> false;
@@ -154,7 +244,7 @@ pid_observe_tick_1m(Pid, tick_1m, Context) ->
         <<"false">> ->
             nop;
         undefined ->
-            %% For BC, when the config option was not set.
+            %% For backwards compat, if the config option was not set.
             start_deleters(m_filestore:fetch_deleted(<<"0">>, Context), Context);
         Interval ->
             start_deleters(m_filestore:fetch_deleted(Interval, Context), Context)
@@ -189,20 +279,29 @@ load_cache(#{
         #filestore_credentials_revlookup{ service=Service, location=Location },
         Context)
     of
-        {ok, #filestore_credentials{ service= <<"s3">>, location=Location1, credentials=Cred }} ->
-            ?LOG_DEBUG("File store cache load of ~p", [Location]),
+        {ok, #filestore_credentials{ service=CredService, location=Location1, credentials=Cred }} when
+            CredService =:= <<"s3">>;
+            CredService =:= <<"webdav">>;
+            CredService =:= <<"ftp">> ->
+            ?LOG_DEBUG(#{
+                text => <<"File store cache load">>,
+                in => zotonic_mod_filestore,
+                location => Location
+            }),
             Ctx = z_context:prune_for_async(Context),
             StreamFun = fun(CachePid) ->
-                s3filez:stream(
+                Mod = filestore_request:filezmod(CredService),
+                Mod:stream(
                     Cred,
                     Location1,
                     fun
                         ({error, FinalError}) when FinalError =:= enoent; FinalError =:= forbidden ->
                             ?LOG_ERROR(#{
                                 text => <<"File store remote file has problems.">>,
+                                in => zotonic_mod_filestore,
                                 result => error,
                                 reason => FinalError,
-                                service => Service,
+                                service => CredService,
                                 remote => Location,
                                 id => Id
                             }),
@@ -213,13 +312,16 @@ load_cache(#{
                             % This takes down the cache entry.
                             ?LOG_ERROR(#{
                                 text => <<"File store error on cache load.">>,
+                                in => zotonic_mod_filestore,
                                 result => error,
                                 reason => Reason,
-                                service => Service,
+                                service => CredService,
                                 remote => Location,
                                 id => Id
                             }),
                             exit(Error);
+                        (stream_start) ->
+                            nop;
                         (T) when is_tuple(T) ->
                             nop;
                         (B) when is_binary(B) ->
@@ -259,6 +361,7 @@ task_queue_all(Offset, Max, Context) when Offset =< Max ->
         {ok, Media} ->
             ?LOG_INFO(#{
                 text => <<"Ensuring files are queued for remote upload.">>,
+                in => zotonic_mod_filestore,
                 count => length(Media)
             }),
             lists:foreach(fun(M) ->
@@ -269,6 +372,7 @@ task_queue_all(Offset, Max, Context) when Offset =< Max ->
         {error, Reason} ->
             ?LOG_ERROR(#{
                 text => <<"Error queueing files for remote upload.">>,
+                in => zotonic_mod_filestore,
                 result => error,
                 reason => Reason
             }),
@@ -295,9 +399,9 @@ queue_medium(Medium, Context) ->
     maybe_queue_file(<<"archive/">>, Preview, PreviewDeletable, MediumPreview, Context).
 
 
-maybe_queue_file(_Prefix, undefined, _IsDeletable, _MediaInfo, _Context) ->
+maybe_queue_file(_Prefix, undefined, _IsStaticFile, _MediaInfo, _Context) ->
     nop;
-maybe_queue_file(_Prefix, <<>>, _IsDeletable, _MediaInfo, _Context) ->
+maybe_queue_file(_Prefix, <<>>, _IsStaticFile, _MediaInfo, _Context) ->
     nop;
 maybe_queue_file(_Prefix, _Path, false, _MediaInfo, _Context) ->
     nop;
@@ -374,19 +478,34 @@ start_deleter(#{
             location := Location
         }, Context) ->
     case z_notifier:first(#filestore_credentials_revlookup{service=Service, location=Location}, Context) of
-        {ok, #filestore_credentials{service= <<"s3">>, location=Location1, credentials=Cred}} ->
+        {ok, #filestore_credentials{service=CredService, location=Location1, credentials=Cred}}
+            when CredService =:= <<"s3">>;
+                 CredService =:= <<"webdav">>;
+                 CredService =:= <<"ftp">> ->
             ?LOG_DEBUG(#{
                 text => <<"Queue delete.">>,
+                in => zotonic_mod_filestore,
                 path => Path,
-                service => Service,
+                service => CredService,
                 location => Location1,
                 id => Id
             }),
             ContextAsync = z_context:prune_for_async(Context),
-            _ = s3filez:queue_delete_id({?MODULE, delete, Id}, Cred, Location1, {?MODULE, delete_ready, [Id, Path, ContextAsync]});
+            Mod = filestore_request:filezmod(CredService),
+            _ = Mod:queue_delete_id({?MODULE, delete, Id}, Cred, Location1, {?MODULE, delete_ready, [Id, Path, ContextAsync]});
+        {ok, _} ->
+            ?LOG_DEBUG(#{
+                text => <<"No credentials for queue delete -- service mismatch">>,
+                in => zotonic_mod_filestore,
+                service => Service,
+                location => Location,
+                path => Path,
+                id => Id
+            });
         undefined ->
             ?LOG_DEBUG(#{
                 text => <<"No credentials for queue delete.">>,
+                in => zotonic_mod_filestore,
                 service => Service,
                 location => Location,
                 path => Path,
@@ -397,21 +516,25 @@ start_deleter(#{
 delete_ready(Id, Path, Context, _Ref, ok) ->
     ?LOG_DEBUG(#{
         text => <<"Delete remote file done.">>,
+        in => zotonic_mod_filestore,
         result => ok,
         path => Path
     }),
     m_filestore:purge_deleted(Id, Context);
-delete_ready(Id, Path, Context, _Ref, {error, enoent}) ->
+delete_ready(Id, Path, Context, _Ref, {error, Reason})
+    when Reason =:= enoent; Reason =:= epath ->
     ?LOG_DEBUG(#{
         text => <<"Delete remote file was not found">>,
+        in => zotonic_mod_filestore,
         result => error,
-        reason => enoent,
+        reason => Reason,
         path => Path
     }),
     m_filestore:purge_deleted(Id, Context);
 delete_ready(Id, Path, Context, _Ref, {error, forbidden}) ->
     ?LOG_INFO(#{
         text => <<"Delete remote file was forbidden">>,
+        in => zotonic_mod_filestore,
         path => Path,
         result => error,
         reason => forbidden,
@@ -421,6 +544,7 @@ delete_ready(Id, Path, Context, _Ref, {error, forbidden}) ->
 delete_ready(Id, Path, _Context, _Ref, {error, Reason}) ->
     ?LOG_ERROR(#{
         text => <<"Delete remote file failed,">>,
+        in => zotonic_mod_filestore,
         path => Path,
         result => error,
         reason => Reason,
@@ -445,22 +569,40 @@ start_downloader(#{
             location := Location
         }, Context) ->
     case z_notifier:first(#filestore_credentials_revlookup{service=Service, location=Location}, Context) of
-        {ok, #filestore_credentials{service= <<"s3">>, location=Location1, credentials=Cred}} ->
+        {ok, #filestore_credentials{service=CredService, location=Location1, credentials=Cred}}
+            when CredService =:= <<"s3">>;
+                 CredService =:= <<"webdav">>;
+                 CredService =:= <<"ftp">> ->
             LocalPath = z_path:files_subdir(Path, Context),
             ok = z_filelib:ensure_dir(LocalPath),
             ?LOG_DEBUG(#{
                 text => <<"Queue moved to local.">>,
-                service => Service,
+                in => zotonic_mod_filestore,
+                service => CredService,
                 location => Location1,
                 path => Path,
                 local_path => LocalPath,
                 id => Id
             }),
-            ContextAsync = z_context:prune_for_async(Context),
-            _ = s3filez:queue_stream_id({?MODULE, stream, Id}, Cred, Location1, {?MODULE, download_stream, [Id, Path, LocalPath, ContextAsync]});
+            case filelib:is_file(LocalPath) of
+                true ->
+                    % File is present - no download needed;
+                    ?LOG_DEBUG(#{
+                        text => <<"Download remote file skipped, file already downloaded">>,
+                        result => ok,
+                        in => zotonic_mod_filestore,
+                        local => LocalPath
+                    }),
+                    download_done(Id, Path, Context);
+                false ->
+                    ContextAsync = z_context:prune_for_async(Context),
+                    Mod = filestore_request:filezmod(CredService),
+                    _ = Mod:queue_stream_id({?MODULE, stream, Id}, Cred, Location1, {?MODULE, download_stream, [Id, Path, LocalPath, ContextAsync]})
+            end;
         undefined ->
             ?LOG_DEBUG(#{
                 text => <<"No credentials for downloader.">>,
+                in => zotonic_mod_filestore,
                 service => Service,
                 location => Location,
                 path => Path,
@@ -468,23 +610,52 @@ start_downloader(#{
             })
     end.
 
+download_stream(_Id, _Path, LocalPath, _Context, stream_start) ->
+    ?LOG_DEBUG(#{
+        text => <<"Download remote file stream started">>,
+        result => ok,
+        in => zotonic_mod_filestore,
+        local => LocalPath
+    }),
+    file:delete(temp_path(LocalPath));
 download_stream(_Id, _Path, LocalPath, _Context, {content_type, _}) ->
-    ?LOG_DEBUG("Download remote file ~p started", [LocalPath]),
+    ?LOG_DEBUG(#{
+        text => <<"Download remote file stream started">>,
+        result => ok,
+        in => zotonic_mod_filestore,
+        local => LocalPath
+    }),
     file:delete(temp_path(LocalPath));
 download_stream(_Id, _Path, LocalPath, _Context, Data) when is_binary(Data) ->
     file:write_file(temp_path(LocalPath), Data, [append,raw,binary]);
 download_stream(Id, Path, LocalPath, Context, eof) ->
-    ?LOG_DEBUG("Download remote file ~p ready", [LocalPath]),
+    ?LOG_DEBUG(#{
+        text => <<"Download remote file stream ended">>,
+        result => ok,
+        in => zotonic_mod_filestore,
+        local => LocalPath
+    }),
     ok = file:rename(temp_path(LocalPath), LocalPath),
-    m_filestore:purge_move_to_local(Id, Context),
-    filezcache:delete({z_context:site(Context), Path}),
-    filestore_uploader:stale_file_entry(Path, Context);
-download_stream(Id, _Path, LocalPath, Context, {error, _} = Error) ->
-    ?LOG_DEBUG("Download error ~p file ~p", [Error, LocalPath]),
+    download_done(Id, Path, Context);
+download_stream(Id, Path, LocalPath, Context, {error, Reason}) ->
+    ?LOG_WARNING(#{
+        text => <<"Download error on file stream">>,
+        in => zotonic_mod_filestore,
+        result => error,
+        reason => Reason,
+        local => LocalPath,
+        id => Id,
+        path => Path
+    }),
     file:delete(temp_path(LocalPath)),
     m_filestore:unmark_move_to_local(Id, Context);
 download_stream(_Id, _Path, _LocalPath, _Context, _Other) ->
     ok.
+
+download_done(Id, Path, Context) ->
+    m_filestore:purge_move_to_local(Id, m_filestore:is_local_keep(Context), Context),
+    filezcache:delete({z_context:site(Context), Path}),
+    filestore_uploader:stale_file_entry(Path, Context).
 
 temp_path(F) when is_list(F) ->
     F ++ ".downloading";

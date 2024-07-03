@@ -1,6 +1,6 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %}{_ Edit _} “{{ id.title }}”{% endblock %}
+{% block title %}{_ Edit _} “{{ id.title|default:id.short_title }}”{% endblock %}
 
 {% block bodyclass %}edit-page cg-{{ id.content_group_id.name }} {% for cat,_ in id.is_a %}cat-{{ cat }} {% endfor %} name-{{ id.name }}{% endblock %}
 
@@ -38,13 +38,17 @@
     <form id="rscform" method="post" action="postback" class="form">
     	<input type="hidden" name="id" value="{{ id }}" />
 
-    	<div class="row">
-    		<div class="col-lg-8 col-md-8" id="poststuff">
+    	<div class="rscform-columns">
+    		<div id="poststuff">
+                <div id="translation-tabs" class="minimalTabs">
+                    {% include "_admin_translation_tabs.tpl" prefix=#prefix r_language=r_language top %}
+                </div>
+
                 {% block admin_edit_form_top %}{% endblock %}
     			{% catinclude "_admin_edit_main_parts.tpl" id %}
     		</div>
 
-    		<div class="col-lg-4 col-md-4" id="sidebar">
+    		<div id="sidebar">
     			{% catinclude "_admin_edit_sidebar_parts.tpl" id %}
     		</div>
     	</div>

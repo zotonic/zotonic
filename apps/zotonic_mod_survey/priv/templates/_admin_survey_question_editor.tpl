@@ -83,8 +83,8 @@
 					<div class="col-lg-4 col-md-4" data-block-type='survey_matching'>
 						<p>{_ Matching question _}</p>
 						<p>
-							{_ Apple _}<select class="form-control" disabled><option>{_ Wagner _}</option></select><br/>
-							{_ Melk _} <select class="form-control" disabled><option>{_ Red _}</option></select><br/>
+							{_ Apple _}<select class="form-control" disabled><option>{_ Red _}</option></select><br/>
+							{_ Milk _} <select class="form-control" disabled><option>{_ White _}</option></select><br/>
 						</p>
 					</div>
 				</div>

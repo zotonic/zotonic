@@ -38,6 +38,15 @@ load_mod_paths() ->
     end.
 
 usage() ->
+    io:format("USAGE: ~s (options) [command] ~n~n", [ filename:rootname(escript:script_name()) ]),
+    io:format("Where [command] is one of: ~n"),
+    lists:map(fun(Cmd) -> io:format("   ~-16s ~s~n", [Cmd, command_info(Cmd)]) end, command_names()),
+    io:format("~n"),
+    io:format("See http://zotonic.com/docs/latest/manuals/cli.html for more info. ~n~n"),
+    io:format("Options: ~n"),
+    io:format("  -v : Prints Zotonic version ~n~n").
+
+command_names() ->
     {ok, ListItems0} = file:list_dir(?COMMANDS),
     ListItems = [ unicode:characters_to_binary(Item) || Item <- ListItems0 ],
     FileNames = [ ListItem || ListItem <- ListItems, size(ListItem) > 12 ],
@@ -49,15 +58,11 @@ usage() ->
             end
         end,
         FileNames),
+    CommandNames1 = [ <<"completion">> | CommandNames ],
+    lists:sort(CommandNames1).
 
-    io:format("USAGE: ~s (options) [command] ~n~n", [ filename:rootname(escript:script_name()) ]),
-    io:format("Where [command] is one of: ~n"),
-    lists:map(fun(Cmd) -> io:format("   ~-16s ~s~n", [Cmd, command_info(Cmd)]) end, lists:sort(CommandNames)),
-    io:format("~n"),
-    io:format("See http://zotonic.com/docs/latest/manuals/cli.html for more info. ~n~n"),
-    io:format("Options: ~n"),
-    io:format("  -v : Prints Zotonic version ~n~n").
-
+command_info(<<"completion">>) ->
+    "Install bash command completion for bin/zotonic";
 command_info(Cmd) ->
     CommandMod = binary_to_atom(<<"zotonic_cmd_", Cmd/binary>>, utf8),
     case code:ensure_loaded(CommandMod) of
@@ -83,6 +88,8 @@ main([ Command | T ]) ->
     case Command of
         "-v" ->
             zotonic_release:run();
+        "command_names" ->
+            io:format("~p", [unicode:characters_to_list(lists:join(" ", command_names()))]);
         _ ->
             CommandMod = list_to_atom( "zotonic_cmd_" ++ Command ),
             case code:ensure_loaded(CommandMod) of

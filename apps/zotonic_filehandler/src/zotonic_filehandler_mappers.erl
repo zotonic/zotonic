@@ -244,8 +244,14 @@ compile_sass(Application, SrcPath) ->
                                 z_filelib:os_escape(OutFile)
                             ],
                             zotonic_filehandler_compile:run_cmd(Cmd);
-                        {error, _} = Error ->
-                            ?LOG_ERROR("Could not create directory for ~p", [OutPath]),
+                        {error, Reason} = Error ->
+                            ?LOG_ERROR(#{
+                                text => <<"Could not create directory">>,
+                                in => zotonic_filehandler,
+                                path => OutPath,
+                                result => error,
+                                reason => Reason
+                            }),
                             Error
                     end;
                 false ->
@@ -305,8 +311,14 @@ compile_less(Application, SrcPath) ->
                         z_filelib:os_escape(OutPath)
                     ],
                     zotonic_filehandler_compile:run_cmd(Cmd);
-                {error, _} = Error ->
-                    ?LOG_ERROR("Could not create directory for ~p", [OutPath]),
+                {error, Reason} = Error ->
+                    ?LOG_ERROR(#{
+                        text => <<"Could not create directory">>,
+                        in => zotonic_filehandler,
+                        path => OutPath,
+                        result => error,
+                        reason => Reason
+                    }),
                     Error
             end;
         false ->
@@ -332,8 +344,14 @@ compile_coffee(Application, SrcPath) ->
                         z_filelib:os_escape(InPath)
                     ],
                     zotonic_filehandler_compile:run_cmd(Cmd);
-                {error, _} = Error ->
-                    ?LOG_ERROR("Could not create directory for ~p", [OutPath]),
+                {error, Reason} = Error ->
+                    ?LOG_ERROR(#{
+                        text => <<"Could not create directory">>,
+                        in => zotonic_filehandler,
+                        path => OutPath,
+                        result => error,
+                        reason => Reason
+                    }),
                     Error
             end;
         false ->
@@ -351,7 +369,18 @@ run_build(Application, {make, Makefile}) ->
     ],
     BuildDir = filename:dirname(Makefile),
     MakeCmd = "cd " ++ z_filelib:os_escape(BuildDir) ++ "; sh -c make " ++ z_filelib:os_escape(Makefile),
-    zotonic_filehandler_compile:run_cmd(MakeCmd, CmdOpts, #{ ignore_dir => BuildDir }).
+    zotonic_filehandler_compile:run_cmd(MakeCmd, CmdOpts, #{ ignore_dir => BuildDir });
+run_build(Application, {task, Taskfile}) ->
+    zotonic_filehandler:terminal_notifier("Task: " ++ app_path(Application, Taskfile)),
+    CmdOpts = [
+        {env, [
+            {"APP_DIR", code:lib_dir(Application)},
+            {"ZOTONIC_LIB", "1"}
+        ]}
+    ],
+    BuildDir = filename:dirname(Taskfile),
+    TaskCmd = "cd " ++ z_filelib:os_escape(BuildDir) ++ "; sh -c task",
+    zotonic_filehandler_compile:run_cmd(TaskCmd, CmdOpts, #{ ignore_dir => BuildDir }).
 
 %% ---------------------------------------- Support routines ------------------------------
 
@@ -383,6 +412,8 @@ build_command(Application, SrcPath) ->
     case find_build(LibSrcDir, filename:split(filename:dirname(SrcPath))) of
         {ok, {make, _Makefile} = BuildCmd} ->
             {ok, BuildCmd};
+        {ok, {task, _Taskfile} = BuildCmd} ->
+            {ok, BuildCmd};
         false ->
             false
     end.
@@ -393,13 +424,18 @@ find_build(LibSrcDir, Dir) ->
         false ->
             Dirname = filename:join([LibSrcDir] ++ Dir),
             Makefile = filename:join(Dirname, <<"Makefile">>),
-            case filelib:is_file(Makefile) of
-                true ->
+            Taskfile = filename:join(Dirname, <<"Taskfile.yml">>),
+            IsMakefile = filelib:is_file(Makefile),
+            IsTaskfile = filelib:is_file(Taskfile),
+            if
+                IsMakefile ->
                     {ok, {make, Makefile}};
-                false when Dir =/= [] ->
+                IsTaskfile ->
+                    {ok, {task, Taskfile}};
+                Dir =/= [] ->
                     Up = lists:reverse(tl(lists:reverse(Dir))),
                     find_build(LibSrcDir, Up);
-                false ->
+                true ->
                     false
             end
     end.

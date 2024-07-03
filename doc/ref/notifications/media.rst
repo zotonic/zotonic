@@ -18,3 +18,4 @@ Media notifications
    notification/media_upload_props
    notification/media_upload_rsc_props
    notification/media_viewer
+   notification/media_viewer_consent

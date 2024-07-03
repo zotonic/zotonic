@@ -11,19 +11,22 @@
 	<input type="hidden" class="block-type" name="blocks[].type" value="{{ blk.type|default:block_type }}" />
 
 	<div class="row">
-		<div class="col-md-2">
-			<input name="blocks[].name"
-                   id="block-{{ #s }}-name"
-				   type="text"
-				   class="form-control block-name"
-				   placeholder="{_ name _}"
-				   value="{{ blk.name|escape }}"
-                   noautocomplete
-                   required
-			>
-			<label class="block-type">{{ blk.type|replace:"survey_":""|escape }}</label>
+		<div class="col-md-12">
+			<br>
+			<label class="block-type col-md-2">{{ blk.type|replace:"survey_":""|escape }}</label>
+			<div class="col-md-4">
+				<input name="blocks[].name"
+	                   id="block-{{ #s }}-name"
+					   type="text"
+					   class="form-control block-name"
+					   placeholder="{_ name _}"
+					   value="{{ blk.name|escape }}"
+	                   noautocomplete
+	                   required
+				>
+			</div>
 		</div>
-		<div class="col-md-10">
+		<div class="col-md-12">
 			<div class="block-options">
 				{% optional include ["blocks/_admin_edit_block_li_",blk.type,".tpl"]|join name=element_id blk=blk id=id is_new=is_new %}
 			</div>

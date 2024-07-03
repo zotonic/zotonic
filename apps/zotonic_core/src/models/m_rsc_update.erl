@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2020 Marc Worrell, Arjan Scherpenisse
+%% @copyright 2009-2024 Marc Worrell, Arjan Scherpenisse
 %% @doc Update routines for resources.  For use by the m_rsc module.
+%% @end
 
-%% Copyright 2009-2020 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2009-2024 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -41,7 +42,7 @@
 -include_lib("zotonic.hrl").
 
 -record(rscupd, {
-    id = undefined,
+    id = undefined :: m_rsc:resource_id() | insert_rsc,
     is_escape_texts = true,
     is_acl_check = true,
     is_import = false,
@@ -52,6 +53,8 @@
 
 -define(is_empty(V), (V =:= undefined orelse V =:= <<>> orelse V =:= "" orelse V =:= null)).
 
+%% Minimum amount of characters for a language detect on the basis of texts.
+-define(LANGUAGE_DETECT_THRESHOLD, 10).
 
 %% @doc Insert a new resource. Crashes when insertion is not allowed.
 -spec insert(m_rsc:props_all(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
@@ -342,12 +345,15 @@ merge_block_single(W, L, Context) ->
 
 %% Flush all cached entries depending on this entry, one of its subjects or its categories.
 flush(Id, Context) ->
-    CatList = m_rsc:is_a(Id, Context),
-    flush(Id, CatList, Context).
+    RscId = m_rsc:rid(Id, Context),
+    CatList = m_rsc:is_a(RscId, Context),
+    flush(RscId, CatList, Context).
 
 flush(Id, CatList, Context) ->
-    z_depcache:flush(m_rsc:rid(Id, Context), Context),
+    RscId = m_rsc:rid(Id, Context),
+    z_depcache:flush(RscId, Context),
     [z_depcache:flush(Cat, Context) || Cat <- CatList],
+    z_acl:flush(RscId),
     ok.
 
 
@@ -508,8 +514,11 @@ update(Name, PropsOrFun, Options, Context) ->
     case m_rsc:name_to_id(Name, Context) of
         {ok, Id} ->
             update(Id, PropsOrFun, Options, Context);
-        {error, _} = Error ->
-            Error
+        {error, _} ->
+            case m_rsc:rid(Name, Context) of
+                undefined -> {error, enoent};
+                Id -> update(Id, PropsOrFun, Options, Context)
+            end
     end.
 
 update_imported_check(#rscupd{is_import = true, id = Id} = RscUpd, PropsOrFun, Context) when is_integer(Id) ->
@@ -586,6 +595,7 @@ update_transaction(RscUpd, Func, Context) ->
     update_result(Result, RscUpd, Context).
 
 update_result({ok, NewId, notchanged}, _RscUpd, _Context) ->
+    z_acl:flush(NewId),
     {ok, NewId};
 update_result({ok, NewId, {OldProps, NewProps, OldCatList, IsCatInsert}}, #rscupd{id = Id}, Context) ->
     % Flush some low level caches
@@ -597,6 +607,7 @@ update_result({ok, NewId, {OldProps, NewProps, OldCatList, IsCatInsert}}, #rscup
         undefined -> nop;
         Uri -> z_depcache:flush({rsc_uri, z_convert:to_binary(Uri)}, Context)
     end,
+    z_acl:flush(NewId),
 
     % Flush category caches if a category is inserted.
     case IsCatInsert of
@@ -642,6 +653,12 @@ update_result({rollback, {error, _} = Er}, _RscUpd, _Context) ->
     Er;
 update_result({rollback, {_Why, _} = Er}, _RscUpd, _Context) ->
     {error, Er};
+update_result({error, {expected, _, _}} = Error, #rscupd{ id = Id }, Context) ->
+    % We might have an out-of-date cached value, flush caches to force
+    % an update from the database.
+    z_depcache:flush_process_dict(),
+    flush(Id, Context),
+    Error;
 update_result({error, _} = Error, _RscUpd, _Context) ->
     Error.
 
@@ -668,12 +685,11 @@ update_transaction_filter_props(#rscupd{id = Id} = RscUpd, UpdateProps, Raw, Con
     EditableProps = props_filter_protected( props_filter( props_trim(UpdateProps1), Context), RscUpd),
     SafeProps = escape_props(RscUpd#rscupd.is_escape_texts, EditableProps, Context),
     SafeSlugProps = generate_slug(Id, SafeProps, Context),
-    DefaultProps = props_defaults(Id, SafeSlugProps, Context),
-    case preflight_check(Id, DefaultProps, Context) of
+    case preflight_check(Id, SafeSlugProps, Context) of
         ok ->
             try
-                throw_if_category_not_allowed(Id, DefaultProps, RscUpd#rscupd.is_acl_check, Context),
-                Result = update_transaction_fun_insert(RscUpd, DefaultProps, Raw, UpdateProps, Context),
+                throw_if_category_not_allowed(Id, SafeSlugProps, RscUpd#rscupd.is_acl_check, Context),
+                Result = update_transaction_fun_insert(RscUpd, SafeSlugProps, Raw, UpdateProps, Context),
                 insert_edges(Result, Edges, Context)
             catch
                 throw:{error, _} = Error -> {rollback, Error}
@@ -712,36 +728,52 @@ split_edges_map(What, Map, Acc) ->
         Acc,
         Map).
 
-insert_edges({ok, Id, Res}, Edges, Context) ->
-    lists:foreach(
-        fun
-            ({_ ,<<>>, _}) ->
-                ok;
-            ({_ ,undefined, _}) ->
-                ok;
-            ({_ ,_, undefined}) ->
-                ok;
-            ({object, Pred, Es}) when is_list(Es) ->
-                Es1 = lists:filtermap(
-                    fun(EId) ->
-                        case m_rsc:rid(EId, Context) of
-                            undefined -> false;
-                            Rid -> {true, Rid}
-                        end
-                    end,
-                    Es),
-                m_edge:replace(Id, Pred, Es1, Context);
-            ({object, Pred, E}) ->
-                m_edge:insert(Id, Pred, E, Context);
-            ({subject, Pred, Es}) when is_list(Es) ->
-                lists:map(
-                    fun(E) -> m_edge:insert(E, Pred, Id, Context) end,
-                    Es);
-            ({subject, Pred, E}) ->
-                m_edge:insert(E, Pred, Id, Context)
-        end,
-        Edges),
-    {ok, Id, Res};
+insert_edges({ok, _Id, _Res} = Result, [], _Context) ->
+    Result;
+insert_edges({ok, Id, _Res} = Result, Edges, Context) ->
+    case z_acl:is_sudo(Context) of
+        true ->
+            ?LOG_ERROR(#{
+                text => <<"Not allowed to insert edges during rsc update with sudo">>,
+                result => error,
+                error => eacces,
+                in => zotonic_core,
+                rsc_id => Id,
+                edges => Edges
+            }),
+            % ignore edge insertion error
+            Result;
+        false ->
+            lists:foreach(
+                fun
+                    ({_ ,<<>>, _}) ->
+                        ok;
+                    ({_ ,undefined, _}) ->
+                        ok;
+                    ({_ ,_, undefined}) ->
+                        ok;
+                    ({object, Pred, Es}) when is_list(Es) ->
+                        Es1 = lists:filtermap(
+                            fun(EId) ->
+                                case m_rsc:rid(EId, Context) of
+                                    undefined -> false;
+                                    Rid -> {true, Rid}
+                                end
+                            end,
+                            Es),
+                        m_edge:replace(Id, Pred, Es1, Context);
+                    ({object, Pred, E}) ->
+                        m_edge:insert(Id, Pred, E, Context);
+                    ({subject, Pred, Es}) when is_list(Es) ->
+                        lists:map(
+                            fun(E) -> m_edge:insert(E, Pred, Id, Context) end,
+                            Es);
+                    ({subject, Pred, E}) ->
+                        m_edge:insert(E, Pred, Id, Context)
+                end,
+                Edges),
+            Result
+    end;
 insert_edges({error, _} = Error , _, _Context) ->
     Error.
 
@@ -760,17 +792,23 @@ get_raw_lock(Id, Context) ->
 update_transaction_fun_insert(#rscupd{id = insert_rsc} = RscUpd, Props, _Raw, UpdateProps, Context) ->
     % Allow the initial insertion props to be modified.
     CategoryId = z_convert:to_integer(maps:get(<<"category_id">>, Props)),
-    InitProps = #{
+    InitProps0 = #{
         <<"version">> => 0,
         <<"category_id">> => CategoryId,
-        <<"content_group_id">> => maps:get(<<"content_group_id">>, Props, undefined)
+        <<"content_group_id">> => maps:get(<<"content_group_id">>, Props, undefined),
+        <<"is_published">> => false,
+        <<"publication_start">> => undefined
     },
+    InitProps = case z_convert:to_integer(maps:get(<<"visible_for">>, Props, undefined)) of
+        undefined -> InitProps0;
+        VisFor -> InitProps0#{ <<"visible_for">> => VisFor }
+    end,
     InsProps = z_notifier:foldr(#rsc_insert{ props = Props }, InitProps, Context),
 
     % Create dummy resource with correct creator, category and content group.
     % This resource will be updated with the other properties.
     InsertId = case maps:get(<<"creator_id">>, UpdateProps, undefined) of
-                   self ->
+                   Self when Self =:= <<"self">>; Self =:= self ->
                         {ok, InsId} = z_db:insert(
                             rsc,
                             InsProps#{ <<"creator_id">> => undefined },
@@ -814,6 +852,8 @@ update_transaction_fun_insert(#rscupd{id = insert_rsc} = RscUpd, Props, _Raw, Up
         fun
             (<<"version">>, _V, Acc) -> Acc;
             (<<"creator_id">>, _V, Acc) -> Acc;
+            (<<"is_published">>, _V, Acc) -> Acc;
+            (<<"publication_start">>, _V, Acc) -> Acc;
             (P, V, Acc) when is_binary(P) ->
                 Acc#{ P => V }
         end,
@@ -825,7 +865,7 @@ update_transaction_fun_insert(#rscupd{id = Id} = RscUpd, Props, Raw, UpdateProps
     Props2 = case z_acl:is_admin(Context) of
                  true ->
                      case maps:get(<<"creator_id">>, UpdateProps, undefined) of
-                         <<"self">> ->
+                         Self when Self =:= <<"self">>; Self =:= self ->
                              Props#{ <<"creator_id">> => Id };
                          CreatorId when is_integer(CreatorId) ->
                              Props#{ <<"creator_id">> => CreatorId };
@@ -910,28 +950,51 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
         _ -> z_props:extract_languages(NewProps)
     end,
     Langs1 = case Langs of
-        [] -> [ z_context:language(Context) ];
-        _ -> Langs
+        [] ->
+            % If no language, but medium_language is defined, then assume
+            % content is also in the medium language
+            case maps:get(<<"medium_language">>, NewProps, undefined) of
+                undefined -> detect_language(NewProps, Context);
+                <<>> -> detect_language(NewProps, Context);
+                MLang -> [ MLang ]
+            end;
+        _ ->
+            Langs
     end,
     % Only editable languages
-    Langs2 = lists:filter(
-        fun(Iso) ->
-            case z_language:is_language_editable(Iso, Context) of
-                false ->
-                    ?LOG_INFO("Dropping non editable language ~p from resource ~p", [ Iso, Id ]),
-                    false;
-                true ->
-                    true
+    Langs2 = lists:filtermap(
+        fun(Lang) ->
+            case z_language:to_language_atom(Lang) of
+                {ok, Iso} ->
+                    case z_language:is_language_editable(Iso, Context) of
+                        false ->
+                            ?LOG_INFO(#{
+                                text => <<"Dropping non editable language from resource">>,
+                                in => zotonic_core,
+                                language => Iso,
+                                rsc_id => Id
+                            }),
+                            false;
+                        true ->
+                            {true, Iso}
+                    end;
+                {error, not_a_language} ->
+                    false
             end
         end,
         Langs1),
-    NewPropsLang = maybe_set_langs(NewProps, Langs2),
+    % Ensure there is always a language
+    Langs3 = case Langs2 of
+        [] -> [ z_context:language(Context ) ];
+        _ -> Langs2
+    end,
+    NewPropsLang = maybe_set_langs(NewProps, Langs3),
 
     % 4. Prune languages
     NewPropsLangPruned = z_props:prune_languages(NewPropsLang, maps:get(<<"language">>, NewPropsLang)),
 
     % 5. Diff the update
-    NewPropsLangPruned1 = clear_empty(NewPropsLangPruned, Context),
+    NewPropsLangPruned1 = set_forced_props(Id, clear_empty(NewPropsLangPruned, Context)),
     NewPropsDiff = diff(NewPropsLangPruned1, Raw),
 
     % 6. Ensure that there is a Timezone set in the saved resource
@@ -944,23 +1007,98 @@ update_transaction_fun_db_1({ok, UpdatePropsN}, Id, RscUpd, Raw, IsABefore, IsCa
             NewPropsDiff
     end,
 
-    % 7. Perform optional update, check diff
-    IsInsert = (RscUpd#rscupd.id =:= insert_rsc),
-    case is_update_allowed(IsInsert, Id, NewPropsLangPruned, Context) of
+    % 7. Ensure that the publication_start is set if the is_published flag is set
+    IsPublished = case NewPropsDiffTz of
+        #{ <<"is_published">> := IsPub } ->
+            IsPub;
+        _ ->
+            case Raw of
+                #{ <<"is_published">> := IsPub } -> IsPub;
+                _ -> false
+            end
+    end,
+    HasPubStart = case NewPropsDiffTz of
+        #{ <<"publication_start">> := {_, _} } ->
+            true;
+        #{ <<"publication_start">> := undefined } ->
+            false;
+        _ ->
+            case Raw of
+                #{ <<"publication_start">> := {_, _} } -> true;
+                _ -> false
+            end
+    end,
+    NewPropsDiffPub = if
+        IsPublished and not HasPubStart ->
+            NewPropsDiffTz#{
+                <<"publication_start">> => calendar:universal_time()
+            };
         true ->
-            case (IsInsert orelse is_changed(Raw, NewPropsDiffTz)) of
+            NewPropsDiffTz
+    end,
+
+    % 8. Perform optional update, check diff
+    IsInsert = (RscUpd#rscupd.id =:= insert_rsc),
+    case RscUpd#rscupd.is_acl_check =:= false
+        orelse is_update_allowed(IsInsert, Id, NewPropsLangPruned, Context)
+    of
+        true ->
+            case (IsInsert orelse is_changed(Raw, NewPropsDiffPub)) of
                 true ->
-                    UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(Id, NewPropsDiffTz, Raw, Context),
-                    {ok, 1} = z_db:update(rsc, Id, UpdatePropsPrePivoted, Context),
-                    ok = update_page_path_log(Id, Raw, NewPropsDiffTz, Context),
-                    NewPropsFinal = maps:merge(NewPropsLangPruned, UpdatePropsPrePivoted),
-                    {ok, Id, {Raw, NewPropsFinal, IsABefore, IsCatInsert}};
+                    UpdatePropsPrePivoted = z_pivot_rsc:pivot_resource_update(Id, NewPropsDiffPub, Raw, Context),
+                    case z_db:update(rsc, Id, UpdatePropsPrePivoted, Context) of
+                        {ok, 1} ->
+                            ok = update_page_path_log(Id, Raw, NewPropsDiffPub, Context),
+                            NewPropsFinal = maps:merge(NewPropsLangPruned, UpdatePropsPrePivoted),
+                            {ok, Id, {Raw, NewPropsFinal, IsABefore, IsCatInsert}};
+                        {error, _} = Error ->
+                            Error
+                    end;
                 false ->
                     {ok, Id, notchanged}
             end;
         false ->
             {error, eacces}
     end.
+
+detect_language(NewProps, Context) ->
+    Text = z_html:unescape(z_html:strip(extract_text(NewProps))),
+    case z_string:trim(Text) of
+        Text1 when size(Text1) > ?LANGUAGE_DETECT_THRESHOLD ->
+            case z_notifier:first(#language_detect{ text = Text1 }, Context) of
+                undefined ->
+                    [ z_context:language(Context) ];
+                Language ->
+                    [ Language ]
+            end;
+        _ ->
+            [ z_context:language(Context) ]
+    end.
+
+extract_text(NewProps) ->
+    Texts = [
+        extract_text_prop(<<"title">>, NewProps),
+        extract_text_prop(<<"chapeau">>, NewProps),
+        extract_text_prop(<<"subtitle">>, NewProps),
+        extract_text_prop(<<"summary">>, NewProps),
+        extract_text_prop(<<"body">>, NewProps)
+    ],
+    Texts1 = [ T || T <- Texts, T =/= <<>> ],
+    iolist_to_binary(lists:join(32, Texts1)).
+
+extract_text_prop(K, Props) ->
+    case maps:get(K, Props, undefined) of
+        T when is_binary(T) -> T;
+        _ -> <<>>
+    end.
+
+%% @doc Some forced props, depending on the resource being updated.
+set_forced_props(1, Props) ->
+    Props#{
+        <<"is_protected">> => true
+    };
+set_forced_props(_Id, Props) ->
+    Props.
 
 %% Set all non-column fields with empty values to 'undefined'.
 %% This makes the props blob smaller by removing all empty address (etc) fields.
@@ -1079,7 +1217,14 @@ preflight_check_name(Id, #{ <<"name">> := Name }, Context) when Name =/= undefin
         0 ->
             ok;
         _N ->
-            ?LOG_WARNING("Trying to insert duplicate name ~p", [Name]),
+            ?LOG_WARNING(#{
+                text => <<"Trying to insert duplicate name">>,
+                in => zotonic_core,
+                name => Name,
+                rsc_id => Id,
+                result => error,
+                reason => duplicate_name
+            }),
             {error, duplicate_name}
     end;
 preflight_check_name(_Id, _Props, _Context) ->
@@ -1091,7 +1236,14 @@ preflight_check_page_path(Id, #{ <<"page_path">> := Path }, Context) when Path =
         0 ->
             ok;
         _N ->
-            ?LOG_WARNING("Trying to insert duplicate page_path ~p", [Path]),
+            ?LOG_WARNING(#{
+                text => <<"Trying to insert duplicate page_path">>,
+                in => zotonic_core,
+                result => error,
+                reason => duplicate_page_path,
+                rsc_id => Id,
+                page_path => Path
+            }),
             {error, duplicate_page_path}
     end;
 preflight_check_page_path(_Id, _Props, _Context) ->
@@ -1102,19 +1254,35 @@ preflight_check_uri(Id, #{ <<"uri">> := Uri }, Context) when Uri =/= undefined -
         0 ->
             ok;
         _N ->
-            ?LOG_WARNING("Trying to insert duplicate uri ~p", [Uri]),
+            ?LOG_WARNING(#{
+                text => <<"Trying to insert duplicate uri">>,
+                in => zotonic_core,
+                result => error,
+                reason => duplicate_uri,
+                rsc_id => Id,
+                uri => Uri
+            }),
             {error, duplicate_uri}
     end;
 preflight_check_uri(_Id, _Props, _Context) ->
     ok.
 
-preflight_check_query(_Id, #{ <<"query">> := Query }, Context) when Query =/= undefined ->
+preflight_check_query(Id, #{ <<"query">> := Query }, Context) when Query =/= undefined ->
     try
         SearchContext = z_context:new( Context ),
-        search_query:search(search_query:parse_query_text(z_html:unescape(Query)), SearchContext),
+        search_query:search(z_search_props:from_text(z_html:unescape(Query)), SearchContext),
         ok
     catch
-        _: {error, {_, _}} ->
+        _:Reason:Stack ->
+            ?LOG_WARNING(#{
+                in => zotonic_core,
+                text => <<"Error in preflight test of query text">>,
+                rsc_id => Id,
+                result => error,
+                reason => Reason,
+                stack => Stack,
+                query => Query
+            }),
             {error, invalid_query}
     end;
 preflight_check_query(_Id, _Props, _Context) ->
@@ -1227,6 +1395,8 @@ props_filter(<<"slug">>, Slug, Acc, _Context) ->
     end;
 props_filter(<<"is_", _/binary>> = B, P, Acc, _Context) ->
     Acc#{ B => z_convert:to_bool(P) };
+props_filter(<<"visible_for">> = B, P, Acc, _Context) ->
+    Acc#{ B => z_convert:to_integer(P) };
 props_filter(<<"custom_slug">> = B, P, Acc, _Context) ->
     Acc#{ B => z_convert:to_bool(P) };
 props_filter(<<"date_is_all_day">> = B, P, Acc, _Context) ->
@@ -1237,8 +1407,14 @@ props_filter(P, DT, Acc, _Context)
     when P =:= <<"created">>;           P =:= <<"modified">>;
          P =:= <<"date_start">>;        P =:= <<"date_end">>;
          P =:= <<"publication_start">>; P =:= <<"publication_end">>  ->
+    DateTime = case z_datetime:to_datetime(DT) of
+        undefined when P =:= <<"publication_end">> ->
+            ?ST_JUTTEMIS;
+        DT1 ->
+            DT1
+    end,
     Acc#{
-        P => z_datetime:to_datetime(DT)
+        P => DateTime
     };
 props_filter(P, Id, Acc, Context)
     when P =:= <<"creator_id">>;
@@ -1258,7 +1434,11 @@ props_filter(<<"category_id">>, CatId, Acc, Context) ->
         true ->
             Acc#{ <<"category_id">> => CatId1 };
         false ->
-            ?LOG_ERROR("Ignoring unknown category '~p' in update, using 'other' instead.", [CatId]),
+            ?LOG_WARNING(#{
+                text => <<"Ignoring unknown category in update, using 'other' instead.">>,
+                in => zotonic_core,
+                category_id => CatId
+            }),
             {ok, OtherId} = m_category:name_to_id(other, Context),
             Acc#{ <<"category_id">> => OtherId }
     end;
@@ -1276,7 +1456,11 @@ props_filter(<<"content_group_id">>, CgId, Acc, Context) ->
         true ->
             Acc#{ <<"content_group_id">> => CgId1 };
         false ->
-            ?LOG_ERROR("Ignoring unknown content group '~p' in update.", [CgId]),
+            ?LOG_WARNING(#{
+                text => <<"Ignoring unknown content group">>,
+                in => zotonic_core,
+                content_group_id => CgId
+            }),
             Acc
     end;
 props_filter(Location, P, Acc, _Context)
@@ -1294,6 +1478,12 @@ props_filter(<<"pref_language">>, Lang, Acc, _Context) ->
         {error, not_a_language} -> undefined
     end,
     Acc#{ <<"pref_language">> => Lang1 };
+props_filter(<<"medium_language">>, Lang, Acc, _Context) ->
+    Lang1 = case z_language:to_language_atom(Lang) of
+        {ok, LangAtom} -> LangAtom;
+        {error, not_a_language} -> undefined
+    end,
+    Acc#{ <<"medium_language">> => Lang1 };
 props_filter(<<"language">>, Langs, Acc, _Context) ->
     Acc#{ <<"language">> => filter_languages(Langs) };
 props_filter(<<"crop_center">>, CropCenter, Acc, _Context) when ?is_empty(CropCenter) ->
@@ -1391,28 +1581,6 @@ props_defaults(Props, Context) ->
         _ -> Props
     end.
 
-%% @doc Set default properties on resource insert and update.
--spec props_defaults(m_rsc:resource(), m_rsc:properties(), z:context()) -> m_rsc:properties().
-props_defaults(_Id, Props, Context) ->
-    lists:foldl(
-        fun(Key, Acc) ->
-            prop_default(Key, maps:get(Key, Props, undefined), Acc, Context)
-        end,
-        Props,
-        [ <<"publication_start">> ]
-    ).
-
--spec prop_default(binary(), any(), m_rsc:properties(), z:context()) -> m_rsc:properties().
-prop_default(<<"publication_start">>, undefined, Props, _Context) ->
-    case maps:get(<<"is_published">>, Props, false) of
-        true ->
-            Props#{ <<"publication_start">> => erlang:universaltime() };
-        _ ->
-            Props
-    end;
-prop_default(_Key, _Value, Props, _Context) ->
-    Props.
-
 props_filter_protected(Props, RscUpd) ->
     IsNormalUpdate = is_normal_update(RscUpd),
     maps:filter(
@@ -1465,7 +1633,11 @@ is_protected(<<"modified">>, true) -> true;
 is_protected(<<"modifier_id">>, true) -> true;
 is_protected(<<"props">>, _IsNormal) -> true;
 is_protected(<<"version">>, _IsNormal) -> true;
+is_protected(<<"short_url">>, _IsNormal) -> true;
 is_protected(<<"page_url">>, _IsNormal) -> true;
+is_protected(<<"page_url_abs">>, _IsNormal) -> true;
+is_protected(<<"alternate_page_url">>, _IsNormal) -> true;
+is_protected(<<"alternate_page_url_abs">>, _IsNormal) -> true;
 is_protected(<<"medium">>, _IsNormal) -> true;
 is_protected(<<"pivot_", _binary>>, _IsNormal) -> true;
 is_protected(<<"computed_", _/binary>>, _IsNormal) -> true;
@@ -1474,7 +1646,7 @@ is_protected(_, _IsNormal) -> false.
 
 is_trimmable(_, V) when not is_binary(V) -> false;
 is_trimmable(<<"title">>, _) -> true;
-is_trimmable(<<"title_short">>, _) -> true;
+is_trimmable(<<"short_title">>, _) -> true;
 is_trimmable(<<"summary">>, _) -> true;
 is_trimmable(<<"chapeau">>, _) -> true;
 is_trimmable(<<"subtitle">>, _) -> true;
@@ -1508,4 +1680,3 @@ update_page_path_log(RscId, OldProps, NewProps, Context) ->
             z_db:q("INSERT INTO rsc_page_path_log(id, page_path) VALUES ($1, $2)", [RscId, Old], Context),
             ok
     end.
-

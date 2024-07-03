@@ -1,10 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2014 Marc Worrell
-%%
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Identify files, fetch metadata about an image
-%% @todo Recognize more files based on magic number, think of office files etc.
+%% @end
 
-%% Copyright 2009-2014 Marc Worrell, Konstantin Nikiforov
+%% Copyright 2009-2024 Marc Worrell, Konstantin Nikiforov
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -60,8 +59,12 @@ identify(#upload{tmpfile=undefined, data=Data, filename=Filename}, Context) when
             Result;
         {error, _} = Error ->
             file:delete(TmpFile),
-            ?LOG_WARNING("z_media_identify: could not write temporary file with ~p bytes to '~s'",
-                          [ size(Data), TmpFile ]),
+            ?LOG_WARNING(#{
+                text => <<"z_media_identify: could not write temporary file">>,
+                in => zotonic_core,
+                size => size(Data),
+                file => TmpFile
+            }),
             Error
     end;
 identify(#upload{tmpfile=File, filename=Filename}, Context) ->
@@ -334,7 +337,13 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
                          ++ " -quiet "
                          ++ z_convert:to_list(CleanedImageFile)
                          ++ " 2>&1"),
-            ?LOG_NOTICE("identify of ~s failed:~n~s", [CleanedImageFile, Err]),
+            ?LOG_NOTICE(#{
+                text => <<"identify of file failed">>,
+                in => zotonic_core,
+                file => CleanedImageFile,
+                result => error,
+                output => Err
+            }),
             {error, identify};
         [Result|_] ->
             %% ["test/a.jpg","JPEG","3440x2285","3440x2285+0+0","8-bit","DirectClass","2.899mb"]
@@ -366,15 +375,31 @@ identify_file_imagemagick_1(Cmd, OsFamily, ImageFile, MimeTypeFromFile) ->
                     _ ->
                        Props1
                 end,
-                {ok, Props2}
+                Props3 = maybe_add_frame_count(Props2, ImageFile),
+                {ok, Props3}
             catch
                 X:B:Stacktrace ->
-                    ?LOG_WARNING("identify of \"~s\" failed - ~p with ~p:~p",
-                                [CleanedImageFile, CmdOutput, X, B],
-                                #{ stack => Stacktrace }),
+                    ?LOG_WARNING(#{
+                        text => <<"identify of file failed">>,
+                        in => zotonic_core,
+                        file => CleanedImageFile,
+                        result => X,
+                        reason => B,
+                        output => CmdOutput,
+                        stack => Stacktrace
+                    }),
                     {error, identify}
             end
     end.
+
+%% @doc For (animated) GIFs, add the frame count.
+maybe_add_frame_count(#{ <<"mime">> := <<"image/gif">> } = Props, Filename) ->
+    Props#{
+        <<"frame_count">> => z_media_gif:frame_count_file(Filename)
+    };
+maybe_add_frame_count(Props, _Filename) ->
+    Props.
+
 
 %% @doc Prevent unneeded 'extents' for vector based inputs.
 maybe_size_correct(Mime, W, H) when W < 3000, H < 3000 ->
@@ -403,10 +428,12 @@ devnull(win32) -> "nul";
 devnull(unix)  -> "/dev/null".
 
 
-%% @doc Map ImageMagick identify to mime_type, special case for PDF/PS files identifying as PBM
-%%      This is a known problem of IM 6.8.9 (used on Ubuntu 16)
+%% @doc ImageMagick identify can identify PDF files as:
+%% - PBM which is a known problem of IM 6.8.9 (used on Ubuntu 16)
+%% - AI see https://github.com/ImageMagick/ImageMagick/discussions/6724
 -spec im_mime(binary(), mime_type()|undefined) -> mime_type().
 im_mime(<<"PBM">>, MimeFile) when MimeFile =/= undefined -> MimeFile;
+im_mime(<<"AI">>, <<"application/pdf">>) -> <<"application/pdf">>;
 im_mime(Type, _) -> mime(Type).
 
 %% @doc Map the type returned by ImageMagick to a mime type
@@ -499,6 +526,7 @@ extension({A, B, _}, PreferExtension) ->
     extension(<<A/binary, $/, B/binary>>, PreferExtension);
 extension(Mime, PreferExtension) when is_list(Mime) ->
     extension(list_to_binary(Mime), PreferExtension);
+extension(<<"application/ld+json">>, _PreferExtension) -> <<".jsonld">>;
 extension(<<"image/jpeg">>, _PreferExtension) -> <<".jpg">>;
 extension(<<"application/vnd.ms-excel">>, _) -> <<".xls">>;
 extension(<<"text/plain">>, _PreferExtension) -> <<".txt">>;
@@ -514,6 +542,8 @@ extension(<<"font/woff2">>, _PreferExtension) -> <<".woff2">>;
 extension(<<"font/ttf">>, _PreferExtension) -> <<".ttf">>;
 extension(<<"font/eot">>, _PreferExtension) -> <<".eot">>;
 extension(<<"font/otf">>, _PreferExtension) -> <<".otf">>;
+extension(<<"image/heic">>, _PreferExtension) -> <<".heic">>;
+extension(<<"message/rfc822">>, _PreferExtension) -> <<".eml">>;
 extension(Mime, undefined) ->
     Extensions = mimetypes:extensions(Mime),
     first_extension(Extensions);
@@ -540,6 +570,7 @@ first_extension([ Ext | _ ]) ->
 -spec guess_mime( file:filename_all() ) -> mime_type().
 guess_mime(File) ->
     case z_string:to_lower( filename:extension( File ) ) of
+        <<".jsonld">> -> <<"application/ld+json">>;
         <<".bert">> -> <<"application/x-bert">>;
         % Fonts have since 2017 their own mime types- https://tools.ietf.org/html/rfc8081#section-4.4.5
         <<".woff">> -> <<"font/woff">>;
@@ -547,6 +578,9 @@ guess_mime(File) ->
         <<".ttf">> -> <<"font/ttf">>;
         <<".eot">> -> <<"font/eot">>;
         <<".otf">> -> <<"font/otf">>;
+        <<".heic">> -> <<"image/heic">>;
+        <<".mjs">> -> <<"text/javascript">>;
+        <<".eml">> -> <<"message/rfc822">>;
         <<".", Ext/binary>> ->
             [Mime|_] = mimetypes:ext_to_mimes(Ext),
             maybe_map_mime(Mime);
@@ -585,7 +619,14 @@ exif(File) ->
         end
     catch
         A:B:Stacktrace ->
-            ?LOG_ERROR("Error reading exif ~p:~p", [A,B], #{ stack => Stacktrace }),
+            ?LOG_ERROR(#{
+                text => <<"Error reading exif data from file">>,
+                in => zotonic_core,
+                result => A,
+                reason => B,
+                filename => File,
+                stack => Stacktrace
+            }),
             #{}
     end.
 
@@ -690,3 +731,5 @@ is_mime_compressed(<<"application/vnd.oasis.opendocument.", _/binary>>) -> true;
 is_mime_compressed(<<"application/vnd.openxml", _/binary>>)      -> true;
 is_mime_compressed(<<"application/x-shockwave-flash">>)          -> true;
 is_mime_compressed(_)                                            -> false.
+
+

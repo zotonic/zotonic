@@ -63,9 +63,27 @@ The following searches are implemented in mod_search:
 +------------------------+---------------------------------------------------------------+-------------------+
 |upcoming                |Selects pages with future date_end.                            |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
+|upcoming_on             |Selects pages with date_end after the given time.              |datetime           |
++------------------------+---------------------------------------------------------------+-------------------+
+|upcoming_date           |Selects pages with date_end after the given date.              |date               |
++------------------------+---------------------------------------------------------------+-------------------+
 |finished                |Selects pages with a past date_end.                            |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
+|finished_on             |Selects pages with a date_end before the given time.           |datetime           |
++------------------------+---------------------------------------------------------------+-------------------+
+|finished_date           |Selects pages with a date_end before the given date.           |date               |
++------------------------+---------------------------------------------------------------+-------------------+
+|unfinished              |Selects pages with a date_end in the future.                   |                   |
++------------------------+---------------------------------------------------------------+-------------------+
+|unfinished_on           |Selects pages with a date_end after the given time.            |datetime           |
++------------------------+---------------------------------------------------------------+-------------------+
+|unfinished_date         |Selects pages with a date_end after the given date.            |date               |
++------------------------+---------------------------------------------------------------+-------------------+
 |ongoing                 |Pages with past date_start and future date_end.                |                   |
++------------------------+---------------------------------------------------------------+-------------------+
+|ongoing_on              |Pages with a date_start - date_end range around the given time.|datetime           |
++------------------------+---------------------------------------------------------------+-------------------+
+|ongoing_date            |Pages with a date_start - date_end range around the given date.|date               |
 +------------------------+---------------------------------------------------------------+-------------------+
 |autocomplete            |Full text search where the last word gets a wildcard.          |text               |
 +------------------------+---------------------------------------------------------------+-------------------+
@@ -87,25 +105,25 @@ The following searches are implemented in mod_search:
 +------------------------+---------------------------------------------------------------+-------------------+
 |media                   |All pages with a medium, ordered by descending creation date.  |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
-|all_bytitle             |Return all ``{id,title}`` pairs for a category, sorted on      |cat                |
+|all_bytitle             |Return all ``{title,id}`` pairs for a category, sorted on      |cat                |
 |                        |title.                                                         |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
-|all_bytitle_featured    |Return all ``{id,title}`` pairs for a category, sorted on      |cat                |
+|all_bytitle_featured    |Return all ``{title,id}`` pairs for a category, sorted on      |cat                |
 |                        |title, featured pages first                                    |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
-|all_bytitle             |Return all ``{id,title}`` pairs for a category without         |cat_is             |
+|all_bytitle             |Return all ``{title,id}`` pairs for a category without         |cat_is             |
 |                        |subcategories, sorted on title.                                |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
-|all_bytitle_featured    |Return all ``{id,title}`` pairs for a category without         |cat_is             |
+|all_bytitle_featured    |Return all ``{title,id}`` pairs for a category without         |cat_is             |
 |                        |subcategories, sorted on title, featured pages first.          |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
 |match_objects           |Returns a list of pages with similar object ids to the objects |id                 |
-|                        |of the given resource with the given id.  Returns ``{id,       |                   |
-|                        |rank}``. Accepts optional cat parameters for filtering on      |                   |
+|                        |of the given resource with the given id.                       |                   |
+|                        |Accepts optional cat parameters for filtering on               |                   |
 |                        |category.                                                      |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
 |match_objects_cats      |Returns a list of pages with similar object ids or categories. |id                 |
-|                        |Returns ``{id, rank}`` tuples. Accepts an optional ``cat``     |                   |
+|                        |Accepts an optional ``cat``                                    |                   |
 |                        |parameter for filtering on category.                           |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
 |archive_year            |Returns an overview on publication year basis, for a specified |cat                |

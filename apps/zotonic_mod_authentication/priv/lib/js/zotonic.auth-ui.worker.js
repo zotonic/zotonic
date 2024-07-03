@@ -29,9 +29,11 @@ var model = {
     email: undefined,
     username: undefined,
     secret: undefined,
+    "code-new": undefined,
     need_passcode: false,
     is_expired: false,
     is_location_provided: false,
+    authuser: undefined,
     options : {}
 };
 
@@ -52,6 +54,10 @@ model.present = function(data) {
             function(msg) { actions.authUserId(msg.payload); });
 
         self.subscribe(
+            "model/auth/event/auth-change-result",
+            function(msg) { actions.authChangeResult(msg.payload); });
+
+        self.subscribe(
             "model/auth-ui/post/form/reminder",
             function(msg) { actions.reminderForm(msg.payload); });
 
@@ -67,6 +73,10 @@ model.present = function(data) {
             "model/auth-ui/post/form/change",
             function(msg) { actions.changeForm(msg.payload); });
 
+        self.subscribe(
+            "model/auth-ui/post/form/confirm",
+            function(msg) { actions.confirmForm(msg.payload); });
+
         model.status = "waiting";
 
         self.call("model/location/get/q")
@@ -76,8 +86,13 @@ model.present = function(data) {
                 data.logon_view = msg.payload.logon_view || "logon";
                 data.secret = msg.payload.secret || undefined;
                 data.username = msg.payload.u || undefined,
+                data.email = msg.payload.email || undefined,
                 model.present(data);
             });
+    }
+
+    if (data["code-new"]) {
+        model["code-new"] = data["code-new"];
     }
 
     if (data.is_location_provided) {
@@ -89,7 +104,7 @@ model.present = function(data) {
 
     if ("is_error" in data) {
         model.is_error = data.is_error;
-        model.logon_view = model.error = data.error;
+        model.error = data.error;
         model.options = data.options || {};
         model.status = 'updated';
     }
@@ -102,6 +117,7 @@ model.present = function(data) {
         model.logon_view = data.logon_view;
         model.secret = data.secret || model.secret;
         model.username = data.username || model.username;
+        model.email = data.email || model.email;
         model.options = data.options || {};
         model.error = data.error || undefined;
         if (state.loaded(model)) {
@@ -174,9 +190,12 @@ model.present = function(data) {
             let reset = {
                 username: model.username,
                 secret: model.secret,
-                passcode: data.passcode,
                 password: data.password,
-                onauth: "#"
+                passcode: data.passcode,
+                "code-new": data["code-new"],
+                test_passcode: data.test_passcode,
+                onauth: "#",
+                timestamp: Math.floor(Date.now() / 1000)
             };
             self.publish("model/auth/post/reset", reset);
             model.status = 'reset_wait';
@@ -200,10 +219,13 @@ model.present = function(data) {
     if (data.change) {
         if (data.is_password_equal) {
             let change = {
-                passcode: data.passcode,
                 password: data.password,
                 password_reset: data.password_reset,
-                onauth: "#"
+                passcode: data.passcode,
+                "code-new": data["code-new"],
+                test_passcode: data.test_passcode,
+                onauth: "#",
+                timestamp: Math.floor(Date.now() / 1000)
             };
             self.publish("model/auth/post/change", change);
             model.status = 'change_wait';
@@ -218,10 +240,18 @@ model.present = function(data) {
         }
     }
 
-    if (data.auth_user_id && model.status == 'change_wait') {
+    if (data.is_change_done && model.status == 'change_wait') {
+        model.is_error = false;
         model.is_expired = false;
         model.logon_view = 'change_done';
         model.status = 'updated';
+    }
+
+    if (data.confirm) {
+        model.logon_view = "confirm";
+        model.username = data.username;
+        model.options = data.options || {};
+        model.authuser = data.authuser;
     }
 
     state.render(model) ;
@@ -280,8 +310,11 @@ state.representation = function(model) {
                     username: model.username,
                     secret: model.secret,
                     need_passcode: model.need_passcode,
+                    "code-new": model["code-new"],
                     is_expired: model.is_expired,
-                    options: model.options
+                    authuser: model.authuser,
+                    options: model.options,
+                    timestamp: Math.floor(Date.now() / 1000)
                 }
             });
     }
@@ -372,7 +405,7 @@ actions.sendVerificationMessage = function(data) {
 
 actions.sendVerificationMessageResponse = function(data) {
     const proposal = { };
-    
+
     if(data.payload && data.payload.status === "ok") {
         proposal.is_error = false;
         proposal.logon_view = "verification_sent";
@@ -390,6 +423,8 @@ actions.resetForm = function(data) {
         password: data.value.password_reset1,
         is_password_equal: data.value.password_reset1 === data.value.password_reset2,
         passcode: data.value.passcode || "",
+        "code-new": data.value["code-new"],
+        test_passcode: data.value.test_passcode,
         setautologon: data.value.rememberme ? true : false
     }
     model.present(dataReset);
@@ -401,9 +436,24 @@ actions.changeForm = function(data) {
         password: data.value.password,
         password_reset: data.value.password_reset1,
         is_password_equal: data.value.password_reset1 === data.value.password_reset2,
-        passcode: data.value.passcode || ""
+        passcode: data.value.passcode || "",
+        "code-new": data["code-new"],
+        test_passcode: data.value.test_passcode
     }
     model.present(dataChange);
+};
+
+actions.confirmForm = function(data) {
+    let dataConfirm = {
+        confirm: true,
+        username: data.username,
+        authuser: data.authuser,
+        options: {
+            is_username_checked: true,
+            is_user_local: true
+        }
+    }
+    model.present(dataConfirm);
 };
 
 actions.reminderResponse = function(data) {
@@ -452,6 +502,20 @@ actions.authError = function(data) {
 
 actions.authUserId = function(data) {
     model.present({ auth_user_id: data });
+};
+
+actions.authChangeResult = function(data) {
+    if (data.status == "ok") {
+        model.present({
+            is_change_done: true
+        });
+    } else {
+        model.present({
+            is_error: true,
+            error: data.error,
+            options: {}
+        });
+    }
 };
 
 actions.resetCodeCheck = function(data) {

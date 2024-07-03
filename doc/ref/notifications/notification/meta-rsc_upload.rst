@@ -4,16 +4,15 @@ rsc_upload
 ^^^^^^^^^^
 
 Upload and replace the resource with the given data. The data is in the given format. 
-Return {ok, Id} or {error, Reason}, return {error, badarg} when the data is corrupt. 
 
 
 Type: 
     :ref:`notification-first`
 
 Return: 
-    
+    {ok, Id} or {error, Reason}, return {error, badarg} when the data is corrupt.
 
 ``#rsc_upload{}`` properties:
-    - id: ``unknown``
+    - id: ``m_rsc:resource()|undefined``
     - format: ``json|bert``
-    - data: ``unknown``
+    - data: ``binary|map``

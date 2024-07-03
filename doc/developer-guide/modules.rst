@@ -361,7 +361,7 @@ Module startup order
 
 Note that when a site starts, its modules are started in order of
 module dependency, in such a way that a module's dependencies are
-always started before the module itsef starts.
+always started before the module itself starts.
 
 .. _guide-modules-versioning:
 
@@ -378,7 +378,7 @@ Module versioning
 Modules can export a ``-module_schema()`` attribute which contains an
 integer number, denoting the current module’s version. On module
 initialization, ``Module:manage_schema/2`` is called which handles
-installation and upgrade of data. 
+installation and upgrade of data.
 
 The ``manage_schema/2`` function returns either ``ok``, a ``#datamodel{}``
 record or a list of ``#datamodel{}`` records:

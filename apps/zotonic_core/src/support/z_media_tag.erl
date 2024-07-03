@@ -1,5 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell, David de Boer
+%% @copyright 2009-2023 Marc Worrell, David de Boer
 %% @doc Generate media urls and html for viewing media, based on the filename, size and optional filters.
 %% Does not generate media previews itself, this is done when fetching the image.
 %%
@@ -7,8 +7,9 @@
 %% /image/2007/03/31/wedding.jpg(300x300)(crop-center)(a3ab6605e5c8ce801ac77eb76289ac12).jpg
 %% /media/inline/2007/03/31/wedding.jpg
 %% /media/attachment/2007/03/31/wedding.jpg
+%% @end
 
-%% Copyright 2009-2021 Marc Worrell, David de Boer
+%% Copyright 2009-2023 Marc Worrell, David de Boer
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,6 +35,7 @@
 
     viewer/3,
     tag/3,
+    attributes/3,
     url/3,
     url2props/2,
 
@@ -42,6 +44,30 @@
 ]).
 
 -include_lib("zotonic.hrl").
+
+-type mediaref() :: undefined
+                  | m_rsc:resource_id()
+                  | z_media_identify:media_info()
+                  | #rsc_list{}
+                  | proplists:proplist()
+                  | file:filename_all().
+
+-type fileref() :: file:filename_all()
+                 | {filepath, file:filename_all(), file:filename_all()}.
+
+-type viewer_options() :: proplists:proplist().
+
+-export_type([
+    mediaref/0,
+    fileref/0,
+    viewer_options/0
+    ]).
+
+% Max number of pixels we allow a (animated) GIF image resized output.
+% Larger will be served without resizing.
+-define(MAX_GIF_PIXELS, 500).
+-define(MAX_GIF_FRAMES, 50).
+
 
 %% @doc Called from template, render the media viewer for some resource/medium
 scomp_viewer(undefined, _Options, _Context) ->
@@ -86,12 +112,11 @@ scomp_data_url(IdOrName, Options, Context) ->
 
 
 %% @doc Generate a html fragment for displaying a medium.  This can generate audio or video player html.
--spec viewer(MediaReference, z_media_identify:media_info(), z:context()) -> {ok, iodata()}
-    when MediaReference :: undefined
-                         | m_rsc:resource_id()
-                         | #rsc_list{}
-                         | proplists:list()
-                         | file:filename_all().
+-spec viewer(MediaReference, Options, Context) -> {ok, HTML} when
+    MediaReference :: mediaref(),
+    Options :: viewer_options(),
+    Context :: z:context(),
+    HTML :: iodata().
 viewer(undefined, _Options, _Context) ->
     {ok, <<>>};
 viewer([], _Options, _Context) ->
@@ -115,7 +140,7 @@ viewer(Id, Options, Context) when is_integer(Id) ->
 viewer(Props, Options, Context) when is_map(Props) ->
     Id = maps:get(<<"id">>, Props, undefined),
     case maps:get(<<"filename">>, Props, undefined) of
-        None when None =:= <<>>; None =:= undefined; None =:= <<>> ->
+        None when None =:= <<>>; None =:= undefined ->
             viewer1(Id, Props, undefined, Options, Context);
         Filename ->
             FilePath = filename_to_filepath(Filename, Context),
@@ -152,12 +177,11 @@ viewer1(Id, Props, FilePath, Options, Context) ->
 
 %% @doc Generate a HTML image tag for the image with the filename and options. The medium _must_ be in
 %% a format for which we can generate a preview.  Note that this will never generate video or audio.
--spec tag(MediaReference, Options :: list(), z:context()) -> {ok, iodata()}
-    when MediaReference :: undefined
-                         | m_rsc:resource_id()
-                         | #rsc_list{}
-                         | proplists:list()
-                         | file:filename_all().
+-spec tag(MediaReference, Options, Context) -> {ok, ImgTag} when
+    MediaReference :: mediaref(),
+    Options :: viewer_options(),
+    Context :: z:context(),
+    ImgTag :: binary().
 tag(undefined, _Options, _Context) ->
     {ok, <<>>};
 tag([], _Options, _Context) ->
@@ -193,14 +217,67 @@ tag({filepath, Filename, FilePath}, Options, Context) ->
     tag1(FilePath, Filename, Options, Context).
 
 
--spec tag1( file:filename_all() | map(),
-            file:filename_all() | {filepath, file:filename_all(), file:filename_all()},
-            proplists:proplist(),
-            z:context() )
-        -> {ok, binary()}.
-tag1(_MediaRef, {filepath, Filename, FilePath}, Options, Context) ->
-    tag1(FilePath, Filename, Options, Context);
 tag1(MediaRef, Filename, Options, Context) ->
+    {ok, {Attrs, TagOpts}} = attributes1(MediaRef, Filename, Options, Context),
+    case proplists:get_value(link, TagOpts) of
+        None when None =:= []; None =:= <<>>; None =:= undefined ->
+            {ok, iolist_to_binary(z_tags:render_tag("img", Attrs))};
+        Link ->
+            HRef = iolist_to_binary(get_link(MediaRef, Link, Context)),
+            Tag = z_tags:render_tag("img", Attrs),
+            {ok, iolist_to_binary(z_tags:render_tag("a", [{href,HRef}], Tag))}
+    end.
+
+
+%% @doc Generate a HTML image tag attributes for the image with the filename and options. The medium _must_ be in
+%% a format for which we can generate a preview.  Note that this will never generate video or audio.
+-spec attributes(MediaReference, Options, Context) -> {ok, Attrs} | {error, Reason} when
+    MediaReference :: mediaref(),
+    Options :: viewer_options(),
+    Context :: z:context(),
+    Attrs :: list( {atom(), iodata()} ),
+    Reason :: enoent.
+attributes(undefined, _Options, _Context) ->
+    {error, enoent};
+attributes([], _Options, _Context) ->
+    {error, enoent};
+attributes([ Id | _ ], Options, Context) when is_integer(Id) ->
+    attributes(Id, Options, Context);
+attributes(#rsc_list{list=[]}, _Options, _Context) ->
+    {error, enoent};
+attributes(#rsc_list{list=[Id|_]}, Options, Context) ->
+    attributes(Id, Options, Context);
+attributes(Name, Options, Context) when is_atom(Name) ->
+    case m_rsc:name_to_id(Name, Context) of
+        {ok, Id} -> attributes(Id, Options, Context);
+        _ -> {error, enoent}
+    end;
+attributes(Id, Options, Context) when is_integer(Id) ->
+    attributes(m_media:depiction(Id, Context), Options, Context);
+attributes(Props, Options, Context) when is_map(Props) ->
+    Id = maps:get(<<"id">>, Props, undefined),
+    case mediaprops_filename(Id, Props, Context) of
+        None when None =:= []; None =:= <<>>; None =:= undefined ->
+            {error, enoent};
+        Filename ->
+            Options1 = extra_image_options(Id, Props, Options, Context),
+            {ok, {Attrs, _}} = attributes1(Props, Filename, Options1, Context),
+            {ok, Attrs}
+    end;
+attributes(<<"/", Filename/binary>>, Options, Context) ->
+    attributes(Filename, Options, Context);
+attributes(Filename, Options, Context) when is_binary(Filename) ->
+    FilePath = filename_to_filepath(Filename, Context),
+    {ok, {Attrs, _}} = attributes1(FilePath, Filename, Options, Context),
+    {ok, Attrs};
+attributes({filepath, Filename, FilePath}, Options, Context) ->
+    {ok, {Attrs, _}} = attributes1(FilePath, Filename, Options, Context),
+    {ok, Attrs}.
+
+
+attributes1(_MediaRef, {filepath, Filename, FilePath}, Options, Context) ->
+    attributes1(FilePath, Filename, Options, Context);
+attributes1(MediaRef, Filename, Options, Context) ->
     Options1 = drop_undefined(Options),
     {url, Url, TagOpts, _ImageOpts} = url1(Filename, Options1, Context),
     % Expand the mediaclass for the correct size options
@@ -263,14 +340,58 @@ tag1(MediaRef, Filename, Options, Context) ->
     % Add the optional srcset
     TagOpts5 = with_srcset(TagOpts4, Filename, Options, Context),
     % Filter some opts
-    case proplists:get_value(link, TagOpts) of
-        None when None =:= []; None =:= <<>>; None =:= undefined ->
-            {ok, iolist_to_binary(z_tags:render_tag("img", [{src,Url}|TagOpts5]))};
-        Link ->
-            HRef = iolist_to_binary(get_link(MediaRef, Link, Context)),
-            Tag = z_tags:render_tag("img", [{src,Url}|proplists:delete(link, TagOpts5)]),
-            {ok, iolist_to_binary(z_tags:render_tag("a", [{href,HRef}], Tag))}
-    end.
+    TagOpts6 = proplists:delete(link, TagOpts5),
+    {Url1, TagOpts7} = case maybe_replace_gif_url(MediaRef, Url, TagOpts6, Context) of
+        Url ->
+            {Url, TagOpts6};
+        NewUrl ->
+            {NewUrl, proplists:delete(srcset, TagOpts6)}
+    end,
+    {ok, {[{src,Url1}|TagOpts7], TagOpts}}.
+
+
+%% @doc If resizing from animated GIF to a GIF, then use the original
+%% file for large animated GIFs.
+maybe_replace_gif_url(#{
+        <<"filename">> := Filename,
+        <<"mime">> := <<"image/gif">>,
+        <<"frame_count">> := FrameCount,
+        <<"width">> := OrgWidth,
+        <<"height">> := OrgHeight
+    },
+    Url, TagOpts, Context)
+    when is_integer(FrameCount), FrameCount > 1, is_binary(Filename) ->
+    case filename:extension(Url) of
+        <<".gif">> ->
+            UrlWidth = proplists:get_value(width, TagOpts),
+            UrlHeight = proplists:get_value(height, TagOpts),
+            case is_large_gif(OrgWidth, OrgHeight, FrameCount)
+                orelse is_large_gif(UrlWidth, UrlHeight, FrameCount)
+            of
+                true ->
+                    InlineMediaUrl = filename_to_urlpath(Filename, Context),
+                    case Url of
+                        <<"https:", _/binary>> ->
+                            z_context:abs_url(InlineMediaUrl, Context);
+                        _ ->
+                            InlineMediaUrl
+                    end;
+                false ->
+                    Url
+            end;
+        _ ->
+            Url
+    end;
+maybe_replace_gif_url(_MediaRef, Url, _TagOpts, _Context) ->
+    Url.
+
+% Arbitrary cut off at 500px x 500px x 30 frames.
+% More frames allows smaller image, less frames allows larger image.
+is_large_gif(Width, Height, FrameCount)
+    when is_integer(Width), is_integer(Height), is_integer(FrameCount) ->
+    Width * Height * FrameCount > (?MAX_GIF_PIXELS * ?MAX_GIF_PIXELS * ?MAX_GIF_FRAMES);
+is_large_gif(_Width, _Height, _FrameCount) ->
+    false.
 
 with_srcset(TagOptions, Filename, Options, Context) ->
     case proplists:get_value(mediaclass, Options) of
@@ -401,8 +522,13 @@ filename_to_urlpath(Filename, Context) ->
     z_dispatcher:url_for(image, [{star, Filename}], z_context:set_language(undefined, Context)).
 
 
-%% @spec url(MediaRef, Options, Context) -> {ok, Url::binary()} | {error, Reason}
 %% @doc Generate the url for the image with the filename and options
+-spec url(MediaRef, Options, Context) -> {ok, Url} | {error, Reason} when
+    MediaRef :: mediaref(),
+    Options :: viewer_options(),
+    Context :: z:context(),
+    Url :: binary(),
+    Reason :: enoent.
 url(undefined, _Options, _Context) ->
     {error, enoent};
 url(Name, Options, Context) when is_atom(Name) ->
@@ -419,8 +545,9 @@ url(Props, Options, Context) when is_map(Props) ->
             {ok, <<>>};
         Filename ->
             Options1 = extra_image_options(Id, Props, Options, Context),
-            {url, Url, _TagOptions, _ImageOptions} = url1(Filename, Options1, Context),
-            {ok, Url}
+            {url, Url, TagOptions, _ImageOptions} = url1(Filename, Options1, Context),
+            Url1 = maybe_replace_gif_url(Props, Url, TagOptions, Context),
+            {ok, Url1}
     end;
 url(Filename, Options, Context) when is_list(Filename) ->
     url(list_to_binary(Filename), Options, Context);
@@ -430,11 +557,17 @@ url(Filename, Options, Context) when is_binary(Filename) ->
     {url, Url, _TagOptions, _ImageOptions} = url1(Filename, Options, Context),
     {ok, Url}.
 
-
-%% @spec url1(Filename, Options, Context) -> {url, Url::binary(), TagOptions, ImageOpts} | {error, Reason}
-%% @doc Creates an url for the given filename and filters.  This does not check the filename or if it is convertible.
-url1(File, Options, Context) ->
-    UrlAndOpts = url2(File, Options, Context),
+%% @doc Creates an url for the given filename and filters. This does not check the filename
+%% or if it is convertible.
+-spec url1(Filename, Options, Context) -> {url, Url, TagOptions, ImageOptions} when
+    Filename :: binary() | string(),
+    Options :: viewer_options(),
+    Context :: z:context(),
+    Url :: binary(),
+    TagOptions :: proplists:proplist(),
+    ImageOptions :: proplists:proplist().
+url1(Filename, Options, Context) ->
+    UrlAndOpts = url2(Filename, Options, Context),
     case use_absolute_url(Options, Context) of
         true ->
             {url, Url, TagOpts, ImageOpts} = UrlAndOpts,
@@ -494,6 +627,7 @@ url2(Filename, Options, Context) ->
             % Map all ImageOpts to an opt string
             MimeFile = z_media_identify:guess_mime(Filename),
             {_Mime, Extension} = z_media_preview:out_mime(MimeFile, ImageOpts, Context),
+
             case props2url(ImageOpts, Context) of
                 {no_checksum, UrlProps} ->
                     PropsQuoted = z_url:url_encode(UrlProps),
@@ -501,7 +635,7 @@ url2(Filename, Options, Context) ->
                           TagOpts,
                           ImageOpts};
                 {checksum, UrlProps} ->
-                    Checksum = z_utils:checksum([Filename,UrlProps,Extension], Context),
+                    Checksum = z_crypto:checksum([Filename,UrlProps,Extension], Context),
                     PropCheck = z_url:url_encode(iolist_to_binary([UrlProps,$(,Checksum,$)])),
                     {url, filename_to_urlpath(iolist_to_binary([Filename,PropCheck,Extension]), Context),
                           TagOpts,
@@ -602,7 +736,11 @@ props2url([{crop,[ X, Y ]}|Rest], Width, Height, Acc, Context) ->
 props2url([{mediaclass,Class}|Rest], Width, Height, Acc, Context) ->
     case z_mediaclass:get(Class, Context) of
         {ok, [], <<>>} ->
-            ?LOG_WARNING("unknown mediaclass ~p", [Class]),
+            ?LOG_WARNING(#{
+                text => <<"Ignoring unknown mediaclass">>,
+                in => zotonic_core,
+                mediaclass => Class
+            }),
             props2url(Rest, Width, Height, Acc, Context);
         {ok, _Props, Checksum} ->
             MC = [
@@ -669,7 +807,7 @@ url2props(Url, Context) ->
                                 _ ->
                                     % multiple args, also needs a checksum
                                     try
-                                        z_utils:checksum_assert([Filepath,Props,Extension], Check1, Context),
+                                        z_crypto:checksum_assert([Filepath,Props,Extension], Check1, Context),
                                         PropList1 = case PropList of
                                             [] ->
                                                 [];
@@ -708,6 +846,7 @@ url2props(Url, Context) ->
 is_valid_resize_mime(<<"image/jpeg">>) -> true;
 is_valid_resize_mime(<<"image/gif">>) -> true;
 is_valid_resize_mime(<<"image/png">>) -> true;
+is_valid_resize_mime(<<"image/webp">>) -> true;
 is_valid_resize_mime(_) -> false.
 
 map_mime_props(Props) ->

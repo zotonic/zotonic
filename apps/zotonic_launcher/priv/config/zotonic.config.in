@@ -25,6 +25,12 @@
 %%% Default timezone (for example: <<"Europe/Berlin">>)
    %% {timezone, <<"UTC">>},
 
+%%% Global security.txt settings
+   %% {security_email, <<"security@example.com">>},
+   %% {security_url, <<"https://example.com/security">>},
+   %% {security_policy_url, <<"https://example.com/security-policy">>},
+   %% {security_hiring_url, <<"https://example.com/security-hiring">>},
+
 %%% PostgreSQL database defaults.
 %%% These are the defaults for the equally named options in your site's config file.
    %% {dbdatabase, "zotonic"},
@@ -142,6 +148,12 @@
    %% {smtp_username, undefined},
    %% {smtp_password, undefined},
 
+%%% SMTP fallback to plaintext delivery if the TLS connection failed.
+%%% This defaults to 'true' because many SMTP servers use self-signed certificates, which will
+%%% fail on verification of the hostname. In those cases Zotonic will retry delivery without
+%%% TLS on port 25 (or the above configured smtp_port).
+   %% {smtp_plaintext_fallback, true},
+
 %%% SMTP send all email into a blackhole, ideal for testing large mailings
    %% {smtp_is_blackhole, false},
 
@@ -248,6 +260,9 @@
 %% In milliseconds, lower values makes your system slower. With higher values updates to the source
 %% code will take longer to be detected.
    %% {filewatcher_scanner_interval, 10000},
+
+%%% Show a growl message on the terminal if a file is compiled or handled.
+   %% {filewatcher_terminal_notifier, true},
 
 %%% Maximum number of entries in the metrics log buffer. There are two buffers, one for 1/2/3xx
 %%% results and one for 4/5xx results. All metrics are buffered so that the loggers can easily

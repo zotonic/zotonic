@@ -1,0 +1,135 @@
+// use smaller grid gutter
+$_thumbnail_gutter: 6px;
+
+.connect-results {
+    max-height: 400px;
+    margin-top: $baseMargin;
+    padding: 10px 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    
+    .row {
+        margin-left: -($_thumbnail_gutter);
+        margin-right: -($_thumbnail_gutter);
+    }
+}
+
+.thumbnails {
+    list-style: none;
+    padding: 0;
+    @include clearfix;
+    
+    [class*="col-"] {
+        padding-left: $_thumbnail_gutter;
+        padding-right: $_thumbnail_gutter;
+    }
+
+    .thumbnail:hover,
+    .thumbnail:active,
+    .thumbnail:focus {
+        border-color: $borderColorSelection;
+    }
+}
+
+.thumbnail {
+    $_padding: 5px;
+    $_height: calc($thumbImageHeight + 32px); // add border
+    
+    display: flex;
+    gap: $_padding;
+    min-height: $_height;
+    max-height: $_height;
+    padding: $_padding;
+    margin-bottom: calc(2 * $_thumbnail_gutter);
+    position: relative;
+    overflow: hidden;  
+    border-radius: 2px;
+    cursor: pointer;
+    
+    font-size: 12px;
+    line-height: 1.15;
+    
+    transition-duration: 0;
+    color: $textColorDark;
+    
+    &:hover,
+    &:focus,
+    &:active {
+        border-color: $borderColorSelection;
+        color: $textColorDark;
+        text-decoration: none;
+    }
+    
+    // fade out thumbnails that are connected to the page
+    // except when it is a depiction predicate
+    &.thumbnail-connected:not(.thumbnail-depiction) {
+        background-color: $backgroundColorLightest;
+        color: $textColorLight;
+
+        img {
+            opacity: .3;
+        }
+    }
+    
+    .z-thumbnail-text {
+        display: flex;
+        flex-flow: column nowrap;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .z-thumbnail-filename {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        background: white;
+    }
+
+    .z-thumbnail-image {
+        flex-shrink: 0;
+        width: 30%;
+    }
+    
+    img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center center;
+    }
+    
+    h5, h6, p {
+        font-size: inherit;
+        line-height: inherit;
+        margin: 0;
+    }
+
+    h5, h6 {
+        @extend .admin-word-break;
+    }
+
+    h5 {
+        font-weight: bold;
+        margin-bottom: 0.5em;
+    }
+
+    h6 {
+        text-transform: lowercase;
+    }
+
+    .rsc-actions {
+        position: absolute;
+        bottom: $_padding;
+        right: $_padding;
+        z-index: 20;
+    }
+}
+
+.z-thumbnail-filename {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+    color: #aaa;
+}

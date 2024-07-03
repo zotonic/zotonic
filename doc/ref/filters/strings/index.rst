@@ -20,6 +20,7 @@ Strings
    ../filter_ljust
    ../filter_log_format_stack
    ../filter_lower
+   ../filter_normalize_email
    ../filter_replace_args
    ../filter_rjust
    ../filter_split
@@ -27,6 +28,8 @@ Strings
    ../filter_to_name
    ../filter_toc
    ../filter_tokens
+   ../filter_translate
    ../filter_trim
    ../filter_truncate
+   ../filter_truncatechars
    ../filter_upper

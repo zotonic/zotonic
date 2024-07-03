@@ -134,12 +134,12 @@ parse_line_binary(<<C/utf8, Rest/binary>>, Sep, Col, Cols) ->
 
 
 %% @doc Scan the file (or device) and return lines with fields.
--spec scan_lines( file:filename() | pid() ) -> lines().
+-spec scan_lines( file:filename_all() | pid() ) -> lines().
 scan_lines(DeviceOrFilename) ->
     scan_lines(DeviceOrFilename, $,).
 
 %% @doc Scan the file (or device) and return lines with fields.
--spec scan_lines( file:filename() | pid(), sep() ) -> lines().
+-spec scan_lines( file:filename_all() | pid(), sep() ) -> lines().
 scan_lines(Filename, FieldSep) when is_list(Filename); is_binary(Filename) ->
     {ok, Device} = file:open(Filename, [read, binary, {encoding, latin1}]),
     Res = scan_lines(Device, FieldSep, <<>>, 0, [[]], <<>>, false),

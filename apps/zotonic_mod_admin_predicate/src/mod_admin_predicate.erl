@@ -113,7 +113,7 @@ pred_move(EdgeIds, ToPredId, Ct, N, Context) ->
     {UpdIds, RestIds} = take(EdgeIds, 100),
     z_db:q("update edge
             set predicate_id = $1
-            where id in (SELECT(unnest($2::int[])))",
+            where id = any($2::int[])",
            [ToPredId, UpdIds],
            Context,
            120000),
@@ -145,21 +145,16 @@ take([Id|L], N, Acc) ->
     take(L, N-1, [Id|Acc]).
 
 %% @doc Check if the update contains information for a predicate.  If so then update
-%% the predicate information in the db and remove it from the update props.
+%% the predicate information in the db.
 observe_rsc_update(#rsc_update{id=Id}, {ok, Props}, Context) ->
     case       maps:is_key(<<"predicate_subject_list">>, Props)
-        orelse maps:is_key(<<"predicate_object_list">>, Props) of
-
+        orelse maps:is_key(<<"predicate_object_list">>, Props)
+    of
         true ->
             Subjects = maps:get(<<"predicate_subject_list">>, Props, []),
             Objects  = maps:get(<<"predicate_object_list">>, Props, []),
             m_predicate:update_noflush(Id, Subjects, Objects, Context),
-
-            Props1 = maps:without([
-                    <<"predicate_subject_list">>,
-                    <<"predicate_object_list">>
-                ], Props),
-            {ok, Props1};
+            {ok, Props};
         false ->
             {ok, Props}
     end;

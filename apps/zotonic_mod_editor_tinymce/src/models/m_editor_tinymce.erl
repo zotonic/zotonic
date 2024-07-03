@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017 Marc Worrell
+%% @copyright 2017-2023 Marc Worrell
 %% @doc Model for mod_editor_tinymce
 
-%% Copyright 2017 Marc Worrell
+%% Copyright 2017-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,15 +20,39 @@
 
 -behaviour (zotonic_model).
 
--export([ m_get/3 ]).
+-export([
+    m_get/3,
 
--include_lib("kernel/include/logger.hrl").
+    version/1,
+    version_current/1
+]).
+
+
+-include("../tinymce_version.hrl").
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
 m_get([ <<"version">> | Rest ], _Msg, Context) ->
-    {ok, {m_config:get_value(mod_editor_tinymce, version, Context), Rest}};
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    {ok, {version(Context), Rest}};
+m_get([ <<"version_current">> | Rest ], _Msg, Context) ->
+    {ok, {version_current(Context), Rest}};
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
+%% @doc Return the configured tinyMCE version. Either the tinyMCE version or 'newest'.
+-spec version(z:context()) -> binary().
+version(Context) ->
+    case m_config:get_value(mod_editor_tinymce, version, Context) of
+        <<>> -> <<"newest">>;
+        undefined -> <<"newest">>;
+        Version -> Version
+    end.
 
+%% @doc Return the configured tinyMCE version. 'newest' is mapped to the actual version.
+-spec version_current(z:context()) -> binary().
+version_current(Context) ->
+    case version(Context) of
+        <<"newest">> ->
+            z_convert:to_binary(?TINYMCE_VERSION);
+        Version ->
+            Version
+    end.

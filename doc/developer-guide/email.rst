@@ -43,6 +43,11 @@ Site-specific configuration
 |          |                      |generated. See also the discussion about |
 |          |                      |``smtp_bounce_email_override`` below.    |
 +----------+----------------------+-----------------------------------------+
+|site      |email_images_noembed  |Images in emails are inlined if they are |
+|          |                      |smaller than 1MB. Setting this config    |
+|          |                      |disables the inlining of images, the html|
+|          |                      |image tags will be unchanged.            |
++----------+----------------------+-----------------------------------------+
 
 Zotonic-wide configuration
 --------------------------
@@ -96,6 +101,12 @@ Zotonic-wide configuration for sending email
 |smtp_bounce_email_override|The email address for bounce handling.|
 |                          |Only use if all else fails (see       |
 |                          |the paragraphs after the next one).   |
++--------------------------+--------------------------------------+
+|smtp_plaintext_fallback   |Retry using plain-text delivery if the|
+|                          |SSL delivery failed with timeout or   |
+|                          |closed error. Useful for servers with |
+|                          |self-signed certificates.             |
+|                          |(default: true)                       |
 +--------------------------+--------------------------------------+
 |smtp_is_blackhole         |Drop all outgoing email, the mail is  |
 |                          |still logged. Good for testing large  |

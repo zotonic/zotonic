@@ -18,7 +18,13 @@
                 <form id="{{ #form }}" method="GET" action="{% url admin_media %}" class="form-inline">
                     <input type="hidden" name="qs" value="{{ q.qs|escape }}" />
                     <input type="hidden" name="qquery_id" value="{{ q.qquery_id|escape }}" />
+
                     <div class="btn-group pull-right">
+                        <button class="btn btn-default" id="btn-filter">
+                            <i class="glyphicon glyphicon-filter"></i> {_ Filter _}...
+                        </button>
+                        {% wire id="btn-filter"action={slide_toggle target="filter-panel"} %}
+
                         {% if `mod_content_groups`|member:m.modules.enabled %}
                             {% if m.search[{query cat=`content_group`}]|length %}
                                 <div class="btn-group">
@@ -89,12 +95,31 @@
                 {% all include "_admin_extra_buttons.tpl" %}
             </div>
 
+            <div id="filter-panel" class="well" style="display:none">
+                {% include "_admin_overview_filter_panel.tpl"
+                           on_cancel={slide_toggle target="filter-panel"}
+                           qargs=q.qargs
+                           dispatch=zotonic_dispatch
+                %}
+            </div>
+
+            <p>
+                <span id="sel-count">0</span> <span class="text-muted">{_ Selected _}</span>
+
+                <button class="btn btn-default btn-xs" id="csel-update">{_ Update _}...</button>
+                <button class="btn btn-default btn-xs" id="csel-delete">{_ Delete _}...</button>
+            </p>
+
+
             {% with q.qsort|default:"-medium.created" as qsort %}
-                {% with m.search.paged[{query hasmedium qargs is_published="all" page=q.page sort=qsort pagelen=qpagelen zsort=qsort }] as result %}
+                {% with m.search.paged[{query hasmedium qargs is_published=`all` page=q.page sort=qsort pagelen=qpagelen zsort=qsort }] as result %}
 
                     <table class="table table-striped do_adminLinkedTable">
                         <thead>
                             <tr>
+                                <th>
+                                    <input id="check-all" type="checkbox" value="1">
+                                </th>
                                 <th width="10%">{_ Preview _}</th>
                                 <th width="35%">{% include "_admin_sort_header.tpl" field="pivot_title" caption=_"Title" qsort=qsort %}</th>
                                 <th width="15%">{% include "_admin_sort_header.tpl" field="medium.size" caption=_"Info" qsort=qsort %}</th>
@@ -108,10 +133,17 @@
                                 {% if id.is_visible %}
                                     {% with id.medium as medium %}
                                         <tr id="{{ #li.id }}" {% if not id.is_published %}class="unpublished" {% endif %} data-href="{% url admin_edit_rsc id=id %}">
+                                            <td class="not-clickable">
+                                                <input type="checkbox" value="{{ id }}" name="csel">
+                                            </td>
                                             <td>{% image medium mediaclass="admin-list-overview" class="thumb" %}</td>
                                             <td>
-                                                <strong>{{ id.title|striptags|default:_"<em>Untitled</em>" }}</strong><br />
-                                                <span class="text-muted">{{ medium.filename|default:"-" }}</span>
+                                                <strong>{{ id.title|default:id.short_title|default:_"<em>Untitled</em>" }}</strong><br />
+                                                {% if id.medium.filename|split:"/"|last as filename %}
+                                                    <span class="text-muted">
+                                                        <span class="glyphicon glyphicon-file"></span> {{ filename }}
+                                                    </span>
+                                                {% endif %}
                                             </td>
                                             <td>
                                                 <p class="help-block">
@@ -155,10 +187,17 @@
                         </tbody>
                     </table>
                     {% pager result=result dispatch="admin_media" qargs hide_single_page %}
+                    <div class="text-muted clear-left">
+                        {% if result.is_total_estimated %}{% trans "About {n} items found." n=result.total|round_significant:2 %}
+                        {% else %}{% trans "{n} items found." n=result.total %}
+                        {% endif %}
+                    </div>
                 {% endwith %}
             {% endwith %}
 
         {% endwith %}
     {% endwith %}
+
+    {% include "_admin_overview_bulk_actions.tpl" %}
 
 {% endblock %}

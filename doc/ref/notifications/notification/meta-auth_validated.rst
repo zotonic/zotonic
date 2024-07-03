@@ -17,5 +17,6 @@ Return:
     - service_uid: ``binary``
     - service_props: ``map``
     - unknown: ``unknown``
+    - identities: ``list``
     - is_connect: ``boolean``
     - is_signup_confirm: ``boolean``

@@ -147,6 +147,7 @@ start_http_listeners_ip4(WebIp, WebPort) ->
         {ok, _} ->
             ?LOG_NOTICE(#{
                 text => "HTTP IPv4 server listening",
+                in => zotonic_listen_http,
                 ip => ip_to_string(WebIp),
                 port => WebPort,
                 protocol => http
@@ -155,6 +156,7 @@ start_http_listeners_ip4(WebIp, WebPort) ->
         {error, {already_started, _Pid}} ->
             ?LOG_NOTICE(#{
                 text => "HTTP IPv4 server listening",
+                in => zotonic_listen_http,
                 ip => ip_to_string(WebIp),
                 port => WebPort,
                 protocol => http
@@ -163,6 +165,7 @@ start_http_listeners_ip4(WebIp, WebPort) ->
         {error, eaddrinuse} ->
             ?LOG_ERROR(#{
                 text => "HTTP IPv4 server not started. Address in use.",
+                in => zotonic_listen_http,
                 reason => eaddrinuse,
                 ip => ip_to_string(WebIp),
                 port => WebPort,
@@ -172,6 +175,7 @@ start_http_listeners_ip4(WebIp, WebPort) ->
         {error, Reason} ->
             ?LOG_ERROR(#{
                 text => "HTTP IPv4 server not started",
+                in => zotonic_listen_http,
                 reason => Reason,
                 ip => ip_to_string(WebIp),
                 port => WebPort,
@@ -210,6 +214,7 @@ start_https_listeners_ip4(WebIp, SSLPort) ->
         {ok, _} ->
             ?LOG_NOTICE(#{
                 text => "HTTPS IPv4 server listening",
+                in => zotonic_listen_http,
                 ip => ip_to_string(WebIp),
                 port => SSLPort,
                 protocol => https
@@ -218,6 +223,7 @@ start_https_listeners_ip4(WebIp, SSLPort) ->
         {error, {already_started, _Pid}} ->
             ?LOG_NOTICE(#{
                 text => "HTTPS IPv4 server listening",
+                in => zotonic_listen_http,
                 ip => ip_to_string(WebIp),
                 port => SSLPort,
                 protocol => https
@@ -226,6 +232,7 @@ start_https_listeners_ip4(WebIp, SSLPort) ->
         {error, eaddrinuse} ->
             ?LOG_ERROR(#{
                 text => "HTTPS IPv4 server not started. Address in use.",
+                in => zotonic_listen_http,
                 reason => eaddrinuse,
                 ip => ip_to_string(WebIp),
                 port => SSLPort,
@@ -235,6 +242,7 @@ start_https_listeners_ip4(WebIp, SSLPort) ->
         {error, Reason} ->
             ?LOG_ERROR(#{
                 text => "HTTPS IPv4 server not started",
+                in => zotonic_listen_http,
                 reason => Reason,
                 ip => ip_to_string(WebIp),
                 port => SSLPort,
@@ -271,6 +279,7 @@ start_http_listeners_ip6(WebIp, WebPort) ->
         {ok, _} ->
             ?LOG_NOTICE(#{
                 text => "HTTP IPv6 server listening",
+                in => zotonic_listen_http,
                 ip => ip_to_string(WebIp),
                 port => WebPort,
                 protocol => http
@@ -279,6 +288,7 @@ start_http_listeners_ip6(WebIp, WebPort) ->
         {error, {already_started, _Pid}} ->
             ?LOG_NOTICE(#{
                 text => "HTTP IPv6 server listening",
+                in => zotonic_listen_http,
                 ip => ip_to_string(WebIp),
                 port => WebPort,
                 protocol => http
@@ -287,6 +297,7 @@ start_http_listeners_ip6(WebIp, WebPort) ->
         {error, eaddrinuse} ->
             ?LOG_ERROR(#{
                 text => "HTTP IPv6 server not started. Address in use.",
+                in => zotonic_listen_http,
                 reason => eaddrinuse,
                 ip => ip_to_string(WebIp),
                 port => WebPort,
@@ -296,6 +307,7 @@ start_http_listeners_ip6(WebIp, WebPort) ->
         {error, Reason} ->
             ?LOG_ERROR(#{
                 text => "HTTP IPv6 server not started",
+                in => zotonic_listen_http,
                 reason => Reason,
                 ip => ip_to_string(WebIp),
                 port => WebPort,
@@ -333,6 +345,7 @@ start_https_listeners_ip6(WebIp, SSLPort) ->
         {ok, _} ->
             ?LOG_NOTICE(#{
                 text => "HTTPS IPv6 server listening",
+                in => zotonic_listen_http,
                 ip => ip_to_string(WebIp),
                 port => SSLPort,
                 protocol => https
@@ -341,6 +354,7 @@ start_https_listeners_ip6(WebIp, SSLPort) ->
         {error, {already_started, _Pid}} ->
             ?LOG_NOTICE(#{
                 text => "HTTPS IPv6 server listening",
+                in => zotonic_listen_http,
                 ip => ip_to_string(WebIp),
                 port => SSLPort,
                 protocol => https
@@ -349,6 +363,7 @@ start_https_listeners_ip6(WebIp, SSLPort) ->
         {error, eaddrinuse} ->
             ?LOG_ERROR(#{
                 text => "HTTPS IPv6 server not started. Address in use.",
+                in => zotonic_listen_http,
                 reason => eaddrinuse,
                 ip => ip_to_string(WebIp),
                 port => SSLPort,
@@ -358,6 +373,7 @@ start_https_listeners_ip6(WebIp, SSLPort) ->
         {error, Reason} ->
             ?LOG_ERROR(#{
                 text => "HTTPS IPv6 server not started",
+                in => zotonic_listen_http,
                 reason => Reason,
                 ip => ip_to_string(WebIp),
                 port => SSLPort,

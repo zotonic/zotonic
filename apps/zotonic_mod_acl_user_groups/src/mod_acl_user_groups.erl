@@ -1,7 +1,8 @@
-%% @copyright 2015-2017 Arjan Scherpenisse
+%% @copyright 2015-2023 Arjan Scherpenisse
 %% @doc Adds content groups to enable access-control rules on resources.
+%% @end
 
-%% Copyright 2015-2017 Arjan Scherpenisse
+%% Copyright 2015-2023 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,7 +21,7 @@
 -mod_title("ACL User Groups").
 -mod_description("Organize users into hierarchical groups").
 -mod_prio(400).
--mod_schema(9).
+-mod_schema(12).
 -mod_depends([menu, mod_content_groups]).
 -mod_provides([acl]).
 
@@ -128,10 +129,27 @@ event(#postback{message={delete_all, Args}}, Context) ->
         false ->
             z_render:wire(
                 {alert, [
-                    {message, ?__("Delete is canceled, there are users in the user groups.", Context)}
+                    {text, ?__("Delete is canceled, there are users in the user groups.", Context)}
                 ]},
                 Context
             )
+    end;
+event(#postback{message={set_config, [{key, Key}]}}, Context) when is_atom(Key) ->
+    case z_acl:is_admin(Context) orelse z_acl:is_allowed(use, mod_acl_user_groups, Context) of
+        true ->
+            Value = z_convert:to_bool(z_context:get_q(<<"triggervalue">>, Context)),
+            m_config:set_value(?MODULE, Key, Value, Context),
+            z_render:wire(
+                {growl, [
+                    {text, ?__("Changed configuration.", Context)}
+                ]},
+                Context);
+        false ->
+            z_render:wire(
+                {growl, [
+                    {text, ?__("Not allowed to change ACL options.", Context)}
+                ]},
+                Context)
     end.
 
 %% @todo let the client subscribe to the resources to reflect the deletions
@@ -149,7 +167,7 @@ ug_delete(Ids, Context) ->
         {error, _} ->
             Actions = [
                 {unmask, []},
-                {alert, [{message, ?__("Not all user groups could be deleted.", Context)}]}
+                {alert, [{text, ?__("Not all user groups could be deleted.", Context)}]}
             ],
             page_actions(Actions, Context)
     end.
@@ -234,9 +252,21 @@ deletable(Ids, Context) ->
 
 
 % @doc Per default users own their person record and creators own the created content.
-observe_acl_is_owner(#acl_is_owner{id=Id, user_id=Id}, _Context) -> true;
-observe_acl_is_owner(#acl_is_owner{user_id=UserId, creator_id=UserId}, _Context) -> true;
-observe_acl_is_owner(#acl_is_owner{}, _Context) -> undefined.
+observe_acl_is_owner(#acl_is_owner{id=Id, user_id=Id}, _Context) ->
+    true;
+observe_acl_is_owner(#acl_is_owner{user_id=UserId, creator_id=UserId}, _Context) ->
+    true;
+observe_acl_is_owner(#acl_is_owner{id=Id, user_id=UserId}, Context) ->
+    case m_config:get_boolean(?MODULE, author_is_owner, Context) of
+        true ->
+            As = m_edge:objects(Id, author, Context),
+            case lists:member(UserId, As) of
+                true -> true;
+                false -> undefined
+            end;
+        false ->
+            undefined
+    end.
 
 observe_acl_is_allowed(AclIsAllowed, Context) ->
     acl_user_groups_checks:acl_is_allowed(AclIsAllowed, Context).
@@ -353,27 +383,21 @@ observe_rsc_delete(#rsc_delete{id=Id, is_a=IsA}, Context) ->
             ok
     end.
 
-observe_edge_insert(#edge_insert{ subject_id = UserId, predicate = hasusergroup } = L, Context) ->
-    log_membership(L, Context),
-    signal_user_changed(UserId, Context);
-observe_edge_insert(#edge_insert{ predicate = hascollabmember, object_id = UserId } = L, Context) ->
-    log_membership(L, Context),
-    signal_user_changed(UserId, Context);
-observe_edge_insert(#edge_insert{ predicate = hascollabmanager, object_id = UserId } = L, Context) ->
-    log_membership(L, Context),
-    signal_user_changed(UserId, Context);
+observe_edge_insert(#edge_insert{ predicate = hasusergroup } = L, Context) ->
+    log_membership(L, Context);
+observe_edge_insert(#edge_insert{ predicate = hascollabmember } = L, Context) ->
+    log_membership(L, Context);
+observe_edge_insert(#edge_insert{ predicate = hascollabmanager } = L, Context) ->
+    log_membership(L, Context);
 observe_edge_insert(_, _Context) ->
     ok.
 
-observe_edge_delete(#edge_delete{ subject_id = UserId, predicate = hasusergroup } = L, Context) ->
-    log_membership(L, Context),
-    signal_user_changed(UserId, Context);
-observe_edge_delete(#edge_delete{ predicate = hascollabmember, object_id = UserId } = L, Context) ->
-    log_membership(L, Context),
-    signal_user_changed(UserId, Context);
-observe_edge_delete(#edge_delete{ predicate = hascollabmanager, object_id = UserId } = L, Context) ->
-    log_membership(L, Context),
-    signal_user_changed(UserId, Context);
+observe_edge_delete(#edge_delete{ predicate = hasusergroup } = L, Context) ->
+    log_membership(L, Context);
+observe_edge_delete(#edge_delete{ predicate = hascollabmember } = L, Context) ->
+    log_membership(L, Context);
+observe_edge_delete(#edge_delete{ predicate = hascollabmanager } = L, Context) ->
+    log_membership(L, Context);
 observe_edge_delete(_, _Context) ->
     ok.
 
@@ -426,24 +450,6 @@ title_bin(Id, Context) ->
 
 email_bin(Id, Context) ->
     z_convert:to_binary( m_rsc:p_no_acl(Id, email_raw, Context) ).
-
-%% @doc Reattach all websocket connections of an user, this forces a refresh of the permissions
-%% used by the websocket processes.
-%% @todo Adapt this for the MQTT sessions.
--spec signal_user_changed( m_rsc:resource_id(), z:context() ) -> ok.
-signal_user_changed(_UserId, _Context) ->
-    ok.
-    % Sessions = z_session_manager:list_sessions_user(UserId, Context),
-    % lists:foreach(
-    %     fun(Session) ->
-    %         {pid, SessionPid} = proplists:lookup(pid, Session),
-    %         lists:foreach(
-    %             fun(PagePid) ->
-    %                 z_session_page:websocket_detach(PagePid)
-    %             end,
-    %             z_session:get_pages(SessionPid))
-    %     end,
-    %     Sessions).
 
 %% @doc Ensure that the privacy property is set.
 observe_rsc_get(#rsc_get{}, #{ <<"category_id">> := CatId } = Map, Context) ->

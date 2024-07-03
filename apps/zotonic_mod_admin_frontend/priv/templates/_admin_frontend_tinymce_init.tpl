@@ -1,7 +1,8 @@
 {% javascript %}
-	window.tinyInit = {
+	window.z_editor_config = window.z_editor_config || {};
+	window.z_editor_config.admin_frontend = window.z_editor_config.admin_frontend || {
 		selector: "textarea",
-		plugins: "advlist code paste table link zlink zmedia autosave directionality autoresize lists searchreplace fullscreen",
+		plugins: "code paste table link zlink zmedia autosave directionality autoresize lists searchreplace fullscreen",
 		menubar: "edit format table tools insert",
 		toolbar: [
 			"styleselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | ltr rtl | removeformat",
@@ -66,6 +67,8 @@
 		table_row_limit: 100,
 		table_col_limit: 10
 	};
+
+	window.tinyInit = window.z_editor_config.admin_frontend;
 {% endjavascript %}
 
 {% block tinymce_init_extra %}

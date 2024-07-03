@@ -1,8 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2010 Arjan Scherpenisse
+%% @copyright 2010-2023 Arjan Scherpenisse
 %% @doc 'show_media' filter, show the media inserted with the html editor.
+%% @end
 
-%% Copyright 2010 Arjan Scherpenisse
+%% Copyright 2010-2023 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,7 +30,7 @@ show_media(undefined, _Template, _Context) ->
 show_media(Input, Template, Context) when is_binary(Input) ->
     Context1 = z_context:set(show_media_template, Template, Context),
     show_media1(Input, 0, Context1);
-show_media({trans, _} = Tr, Template, Context) ->
+show_media(#trans{} = Tr, Template, Context) ->
     Text = z_trans:lookup_fallback(Tr, Context),
     show_media(Text, Template, Context);
 show_media(Input, _Template, _Context) ->
@@ -101,6 +102,7 @@ to_atom(<<"caption">>) -> caption;
 to_atom(<<"crop">>) -> crop;
 to_atom(<<"link">>) -> link;
 to_atom(<<"link_url">>) -> link_url;
+to_atom(<<"link_new">>) -> link_new;
 to_atom(<<"align">>) -> align;
 to_atom(A) -> binary_to_existing_atom(A, 'utf8').
 
@@ -163,10 +165,14 @@ filter_args([{link, Link}|Args], Acc) when Link =:= true; Link =:= <<"link">> ->
     filter_args(Args, [{link,true}|Acc]);
 filter_args([{link, _}|Args], Acc) ->
     filter_args(Args, Acc);
-filter_args([{caption, Caption}|Args], Acc) ->
-    filter_args(Args, [{caption,z_html:escape(Caption)}|Acc]);
+filter_args([{link_new, Link}|Args], Acc) when Link =:= true; Link =:= <<"new">> ->
+    filter_args(Args, [{link_new,true}|Acc]);
+filter_args([{link_new, _}|Args], Acc) ->
+    filter_args(Args, [{link_new,false}|Acc]);
 filter_args([{link_url, LinkUrl}|Args], Acc) ->
-    filter_args(Args, [{link_url,z_html:escape(LinkUrl)}|Acc]);
+    filter_args(Args, [{link_url,z_html:escape_check(LinkUrl)}|Acc]);
+filter_args([{caption, Caption}|Args], Acc) ->
+    filter_args(Args, [{caption,z_html:escape_check(Caption)}|Acc]);
 filter_args([{K, V}|Args], Acc) when is_binary(V) ->
     % Escape unknown arguments
     filter_args(Args, [{K,z_html:escape_check(V)}|Acc]);

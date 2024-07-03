@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019 Marc Worrell
+%% @copyright 2019-2024 Marc Worrell
 %% @doc Load and manage site configuration files.
+%% @end
 
-%% Copyright 2019 Marc Worrell
+%% Copyright 2019-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,6 +20,7 @@
 -module(z_sites_config).
 
 -export([
+    site_config/1,
     app_is_site/1,
     config_files/1,
     config_files/2,
@@ -28,9 +30,40 @@
 
 -define(CONFIG_FILE, "zotonic_site.*").
 
+
+-spec site_config(Site) -> {ok, Config} | {error, Reason} when
+    Site :: atom(),
+    Config :: map(),
+    Reason :: term().
+site_config(Site) when is_atom(Site) ->
+    case app_is_site(Site) of
+        true ->
+            ConfigFiles = config_files(Site),
+            ZotonicFiles = z_config_files:zotonic_config_files(),
+            case read_configs(ConfigFiles) of
+                {ok, SiteConfig} ->
+                    case read_configs(ZotonicFiles) of
+                        {ok, GlobalConfig} ->
+                            SiteConfig1 = merge_global_configs(Site, SiteConfig, GlobalConfig),
+                            {ok, SiteConfig1};
+                        {error, _} = Error ->
+                            Error
+                    end;
+                {error, _} = Error ->
+                    Error
+            end;
+        false ->
+            {error, nosite}
+    end.
+
+%% @doc Check if the Erlang application is a Zotonic site. A Zotonic site has a site
+%% configuration file in its priv directory.
 -spec app_is_site( atom() ) -> boolean().
-app_is_site( App ) ->
-    filelib:is_regular( site_config_file( App ) ).
+app_is_site(App) ->
+    case site_config_file(App) of
+        {error, _} -> false;
+        Filename -> filelib:is_regular(Filename)
+    end.
 
 %% @doc Return the main configuration file for a site
 -spec site_config_file( atom() ) -> file:filename_all() | {error, bad_name}.
@@ -131,13 +164,14 @@ apps_config(File, Data, Cfgs) when is_list(Data) ->
 %% @doc Merge the global config options into the site's options, adding defaults.
 -spec merge_global_configs( atom(), map(), map() ) -> map().
 merge_global_configs( Sitename, SiteConfig, GlobalConfig ) ->
-    ZotonicConfig = maps:get(zotonic, GlobalConfig, #{}),
-    DbOptions = z_db_pool:database_options( Sitename, maps:to_list(SiteConfig), maps:to_list(ZotonicConfig) ),
+    ZotonicConfig = case maps:get(zotonic, GlobalConfig, #{}) of
+        L when is_list(L) -> L;
+        M when is_map(M) -> maps:to_list(M)
+    end,
+    DbOptions = z_db_pool:database_options( Sitename, maps:to_list(SiteConfig), ZotonicConfig ),
     lists:foldl(
         fun({K, V}, Acc) ->
             Acc#{ K => V }
         end,
         SiteConfig,
         DbOptions).
-
-

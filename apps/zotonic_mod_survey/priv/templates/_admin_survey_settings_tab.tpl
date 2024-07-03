@@ -1,6 +1,7 @@
 {% extends "admin_edit_widget_std.tpl" %}
 
-{# Admin controls for the survey #}
+{# Admin controls for the survey (form) #}
+
 
 {% block widget_title %}
 {_ Settings _}
@@ -25,6 +26,10 @@
 			<label class="checkbox">
 				<input type="checkbox" name="survey_anonymous" id="survey_anonymous" value="1" {% if id.survey_anonymous %}checked="checked"{% endif %} /> {_ Hide the user’s id or browser-id from result exports _}
 			</label>
+        	<label class="checkbox">
+                <input type="checkbox" name="survey_is_disabled" id="survey_is_disabled" value="1" {% if id.survey_is_disabled %}checked="checked"{% endif %} />
+                {_ Deactivated _}
+            </label>
 		</div>
 
 		{% block survey_settings_answering %}{% endblock %}
@@ -156,7 +161,7 @@
 
 		{% if m.survey.handlers|length %}
 		<div class="form-group">
-			<label class="control-label">{_ Handle this survey with _}</label>
+			<label class="control-label">{_ Handle this form with _}</label>
 			<div>
 				<select class="form-control" name="survey_handler" id="survey_handler">
 					<option value=""></option>

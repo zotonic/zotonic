@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2012-2013 Marc Worrell
+%% @copyright 2012-2023 Marc Worrell
 %% @doc Manage, compile and find mediaclass definitions per context/site.
+%% @end
 
-%% Copyright 2012-2013 Marc Worrell
+%% Copyright 2012-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -30,6 +31,8 @@
 -export([
     new_ets/0,
     get/2,
+    list/1,
+    list/2,
 
     expand_mediaclass_checksum/1,
     expand_mediaclass_checksum/2,
@@ -44,16 +47,19 @@
     last = []
 }).
 
+-type checksum() :: binary().
+
 %% Index record for the mediaclass ets table.
 -record(mediaclass_index_key, {
     site :: atom(),
-    mediaclass
+    mediaclass :: binary()
 }).
 -record(mediaclass_index, {
-    key,
-    props = [],
-    checksum,
-    tag
+    key :: #mediaclass_index_key{} | checksum(),
+    props = [] :: proplists:proplist(),
+    module :: module(),
+    checksum :: checksum(),
+    tag :: reference()
 }).
 
 -define(MEDIACLASS_FILENAME, <<"mediaclass.config">>).
@@ -63,6 +69,7 @@
 -define(MEDIACLASS_INDEX, 'zotonic$mediaclass_index').
 
 -include("zotonic.hrl").
+-include_lib("stdlib/include/qlc.hrl").
 
 %%====================================================================
 %% API
@@ -92,6 +99,42 @@ get(MediaClass, Context) ->
         [MC|_] -> {ok, MC#mediaclass_index.props, MC#mediaclass_index.checksum}
     end.
 
+%% @doc Get all mediaclasses for a site.
+-spec list(Context) -> MediaClasses when
+    Context :: z:context(),
+    MediaClasses :: #{ ClassName => PreviewProps },
+    ClassName :: binary(),
+    PreviewProps :: proplists:proplist().
+list(Context) ->
+    Site = z_context:site(Context),
+    Q = qlc:q([ {R#mediaclass_index.key#mediaclass_index_key.mediaclass, R#mediaclass_index.props}
+                || R <- ets:table(?MEDIACLASS_INDEX),
+                   R#mediaclass_index.key#mediaclass_index_key.site =:= Site
+              ]
+             ),
+    List = qlc:eval(Q),
+    maps:from_list(List).
+
+
+%% @doc Get all mediaclasses defined in a module for a site.
+-spec list(Module, Context) -> MediaClasses when
+    Module :: module(),
+    Context :: z:context(),
+    MediaClasses :: #{ ClassName => PreviewProps },
+    ClassName :: binary(),
+    PreviewProps :: proplists:proplist().
+list(Module, Context) ->
+    Site = z_context:site(Context),
+    Q = qlc:q([ {R#mediaclass_index.key#mediaclass_index_key.mediaclass, R#mediaclass_index.props}
+                || R <- ets:table(?MEDIACLASS_INDEX),
+                   R#mediaclass_index.key#mediaclass_index_key.site =:= Site,
+                   R#mediaclass_index.module =:= Module
+              ]
+             ),
+    List = qlc:eval(Q),
+    maps:from_list(List).
+
+
 %% @doc Expand the mediaclass, use the checksum when available
 -spec expand_mediaclass_checksum(list() | binary()) -> {ok, list()} | {error, term()}.
 expand_mediaclass_checksum(Checksum) when is_binary(Checksum) ->
@@ -101,7 +144,12 @@ expand_mediaclass_checksum(Props) ->
         undefined ->
             {ok, Props};
         {MC, Checksum} when Checksum =/= undefined ->
-            expand_mediaclass_checksum_1(MC, Checksum, Props);
+            case is_valid_mediaclass_name(MC) of
+                true ->
+                    expand_mediaclass_checksum_1(MC, Checksum, Props);
+                false ->
+                    {error, invalid_mediaclass_name}
+            end;
         Checksum ->
             expand_mediaclass_checksum_1(undefined, z_convert:to_binary(Checksum), Props)
     end.
@@ -110,15 +158,22 @@ expand_mediaclass_checksum(Props) ->
 expand_mediaclass_checksum(Checksum, Props) ->
     expand_mediaclass_checksum_1(undefined, Checksum, Props).
 
-    expand_mediaclass_checksum_1(Class, Checksum, Props) ->
-        % Expand for preview generation, we got the checksum from the URL.
-        case ets:lookup(?MEDIACLASS_INDEX, Checksum) of
-            [#mediaclass_index{props=Ps}|_] ->
-                {ok, expand_mediaclass_2(Props, Ps)};
-            [] ->
-                ?LOG_WARNING("mediaclass expand for unknown mediaclass checksum ~p:~p", [Class, Checksum]),
-                {error, checksum}
-        end.
+expand_mediaclass_checksum_1(Class, Checksum, Props) ->
+    % Expand for preview generation, we got the checksum from the URL.
+    case ets:lookup(?MEDIACLASS_INDEX, Checksum) of
+        [#mediaclass_index{props=Ps}|_] ->
+            {ok, expand_mediaclass_2(Props, Ps)};
+        [] ->
+            ?LOG_WARNING(#{
+                text => <<"mediaclass expand for unknown mediaclass checksum">>,
+                in => zotonic_core,
+                result => error,
+                reason => checksum,
+                mediaclass => Class,
+                checksum => Checksum
+            }),
+            {error, checksum}
+    end.
 
 
 %% @doc Expand the optional mediaclass for tag generation
@@ -151,6 +206,32 @@ expand_mediaclass_2(Props, ClassProps) ->
 
     key({K,_}) -> K;
     key(K) -> K.
+
+
+%% @doc Check if a mediaclass name is valid. Should be a-z, 0-9, or - or _
+-spec is_valid_mediaclass_name(MediaClass) -> boolean() when
+    MediaClass :: binary() | string().
+is_valid_mediaclass_name([]) -> false;
+is_valid_mediaclass_name(<<>>) -> false;
+is_valid_mediaclass_name(Name) -> is_valid_name(Name).
+
+-define(is_valid_mediaclass_char(C),
+        (C >= $a andalso C =< $z) orelse
+        (C >= $0 andalso C =< $9) orelse
+        C =:= $- orelse
+        C =:= $_).
+
+is_valid_name([C|Rest]) when ?is_valid_mediaclass_char(C) ->
+    is_valid_name(Rest);
+is_valid_name(<<C/utf8, Rest/binary>>) when ?is_valid_mediaclass_char(C) ->
+    is_valid_name(Rest);
+is_valid_name([]) ->
+    true;
+is_valid_name(<<>>) ->
+    true;
+is_valid_name(_) ->
+    false.
+
 
 %% @doc Call this to force a re-index and parse of all moduleclass definitions.
 -spec reset(#context{}) -> ok.
@@ -262,55 +343,90 @@ reindex_files(Files, Site) ->
     MCs = lists:flatten([ expand_file(MP) || MP <- Files ]),
     ByModulePrio = prio_sort(MCs),
     % Insert least prio first, later overwrite with higher priority modules
-    [ insert_mcs(MCs1, Tag, Site) || MCs1 <- ByModulePrio ],
+    lists:foreach(
+        fun(MCs1) ->
+            insert_mcs(MCs1, Tag, Site)
+        end,
+        ByModulePrio),
     cleanup_ets(Tag, Site),
     ok.
 
 % Sort all defs, lowest prio first, higher prios later
 prio_sort(MProps) ->
-    WithPrio = [ {z_module_manager:prio(M), M, X} || {M, X} <- MProps ],
+    WithPrio = lists:map(
+        fun({M, X}) ->
+            {z_module_manager:prio(M), M, X}
+        end,
+        MProps),
     Sorted = lists:sort(fun prio_comp/2, WithPrio),
-    [ X || {_Prio, _M, X} <- Sorted ].
+    lists:map(
+        fun({_Prio, Module, MCs}) ->
+            lists:map(
+                fun({MC, Props}) ->
+                    {MC, Module, Props}
+                end,
+                MCs)
+        end,
+        Sorted).
 
 prio_comp({P1, M1, _}, {P2, M2, _}) ->
     {P1, M1} > {P2, M2}.
 
 
 insert_mcs(MCs, Tag, Site) ->
-    Defs = [
-        begin
+    Defs = lists:map(
+        fun({MediaClass, Module, Props}) ->
             Props1 = lists:sort(Props),
             {z_convert:to_binary(MediaClass),
              Props1,
+             Module,
              z_convert:to_binary(
                 z_string:to_lower(iolist_to_binary(z_utils:hex_encode(crypto:hash(sha, term_to_binary(Props1)))))
              )}
-        end
-        || {MediaClass, Props} <- lists:flatten(MCs)
-    ],
+        end,
+        lists:flatten(MCs)),
     insert_defs(Defs, Tag, Site).
 
 insert_defs(Defs, Tag, Site) ->
-    [ insert_def(Def, Tag, Site) || Def <- Defs ].
+    lists:foreach(
+        fun(Def) ->
+            insert_def(Def, Tag, Site)
+        end,
+        Defs).
 
 % Insert the mediaclass definition by lookup key and checksum
-insert_def({MC, Ps, Checksum}, Tag, Site) ->
-    K = #mediaclass_index_key{site=Site, mediaclass=MC},
-    ets:insert(?MEDIACLASS_INDEX,
-                #mediaclass_index{
-                    key=K,
-                    props=Ps,
-                    checksum=Checksum,
-                    tag=Tag
-                }),
-    ets:insert(?MEDIACLASS_INDEX,
-                #mediaclass_index{
-                    key=Checksum,
-                    props=Ps,
-                    checksum=Checksum,
-                    tag=Tag
-                }).
-
+insert_def({MC, Ps, Module, Checksum}, Tag, Site) ->
+    case is_valid_mediaclass_name(MC) of
+        true ->
+            K = #mediaclass_index_key{site=Site, mediaclass=MC},
+            ets:insert(?MEDIACLASS_INDEX,
+                        #mediaclass_index{
+                            key=K,
+                            props=Ps,
+                            module=Module,
+                            checksum=Checksum,
+                            tag=Tag
+                        }),
+            ets:insert(?MEDIACLASS_INDEX,
+                        #mediaclass_index{
+                            key=Checksum,
+                            props=Ps,
+                            module=Module,
+                            checksum=Checksum,
+                            tag=Tag
+                        });
+        false ->
+            ?LOG_ERROR(#{
+                in => zotonic_core,
+                text => <<"Invalid mediaclass name in mediaclass.config file">>,
+                result => error,
+                reason => invalid_mediaclass_name,
+                module => Module,
+                mediaclass => MC,
+                checksum => Checksum,
+                site => Site
+            })
+    end.
 
 expand_file({Module, Path}) ->
     {Module, lists:flatten(consult_file(Path))}.
@@ -319,7 +435,13 @@ consult_file(Path) ->
     case file:consult(Path) of
         {error, Reason} ->
             % log an error and continue
-            ?LOG_ERROR("Error consulting media class file ~p: ~p (skipped)", [Path, Reason]),
+            ?LOG_ERROR(#{
+                text => <<"Error consulting media class file">>,
+                in => zotonic_core,
+                file => Path,
+                result => error,
+                reason => Reason
+            }),
             [];
         {ok, MediaClasses} ->
             MediaClasses

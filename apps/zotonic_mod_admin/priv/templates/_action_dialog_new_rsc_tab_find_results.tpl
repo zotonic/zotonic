@@ -10,7 +10,7 @@
 
 <div id="dialog_new_rsc_results">
     {% with m.search.paged[
-            {query page=1 pagelen=10
+            {query page=1 pagelen=20
                     text=text
                     cat=cat
                     creator_id=creator_id
@@ -20,7 +20,7 @@
             }]
         as result
     %}
-        <div id="dialog_new_rsc_loop_results" class="items">
+        <div id="dialog_new_rsc_loop_results">
             {% include "_action_dialog_new_rsc_tab_find_results_loop.tpl"
                 id
                 result=result

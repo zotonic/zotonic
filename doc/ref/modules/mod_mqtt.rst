@@ -238,8 +238,8 @@ The JavaScript API uses callback functions:
 
 .. code-block:: javascript
 
-	cotonic.broker.subscribe("bridge/origin/foo/#", function(msg, bindings, options) { console.log(msg); });
-	cotonic.broker.publish("bridge/origin/foo/bar", "hello world");
+	cotonic.broker.subscribe("bridge/origin/test/#", function(msg, bindings, options) { console.log(msg); });
+	cotonic.broker.publish("bridge/origin/test/foo", "hello world");
 
 The received message is an JSON object:
 
@@ -314,7 +314,7 @@ Per default it listens on MQTT port 1883 and MQTT with TLS on port 8883::
 Authentication
 ^^^^^^^^^^^^^^
 
-All connections must authenticate using an username and password.
+All connections must authenticate using a username and password.
 The username is prefixed with the hostname of the user’s site, for example: ``foobar.com:myusername``.
 In this way Zotonic knows which site the user belongs to.
 

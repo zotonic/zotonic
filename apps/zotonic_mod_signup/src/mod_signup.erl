@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2021 Marc Worrell
+%% @copyright 2010-2022 Marc Worrell
 %% @doc Let new members register themselves.
 
-%% Copyright 2010-2021 Marc Worrell
+%% Copyright 2010-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -151,7 +151,11 @@ do_signup(UserId, Props, SignupProps, RequestConfirm, Context) ->
     IsVerified = not RequestConfirm orelse has_verified_identity(SignupProps),
     case insert_or_update(UserId, props_to_rsc(Props, IsVerified, Context), Context) of
         {ok, NewUserId} ->
-            ContextUser = z_acl:logon(NewUserId, Context),
+            ContextLogon = z_acl:logon(NewUserId, Context),
+            ContextUser = case m_rsc:p_no_acl(NewUserId, creator_id, Context) of
+                NewUserId -> z_acl:sudo(ContextLogon);
+                _ -> ContextLogon
+            end,
             ensure_identities(NewUserId, SignupProps, ContextUser),
             z_notifier:map(#signup_done{id=NewUserId, is_verified=IsVerified, props=Props, signup_props=SignupProps}, ContextUser),
             case IsVerified of
@@ -165,7 +169,7 @@ do_signup(UserId, Props, SignupProps, RequestConfirm, Context) ->
     end.
 
 %% @doc Optionally add a depiction using the 'depiction_url' in the user's props
--spec maybe_add_depiction( m_rsc:resource_id(), map(), z:context() ) -> ok | {error, term()}.
+-spec maybe_add_depiction( UserId :: m_rsc:resource_id(), map(), z:context() ) -> ok | {error, term()}.
 maybe_add_depiction(Id, #{ <<"depiction_url">> := Url }, ContextUser)
     when Url =/= <<>>, Url =/= "", Url =/= undefined ->
     case z_convert:to_bool( m_config:get_value(mod_signup, depiction_as_medium, ContextUser) ) of
@@ -179,13 +183,25 @@ maybe_add_depiction(Id, #{ <<"depiction_url">> := Url }, ContextUser)
                     },
                     case m_media:insert_url(Url, MediaProps, ContextUser) of
                         {ok, MediaId} ->
-                            ?LOG_INFO("Added depiction from depiction_url for ~p: ~p",
-                                       [Id, Url]),
+                            ?LOG_INFO(#{
+                                text => <<"Added user depiction from depiction_url">>,
+                                in => zotonic_mod_signup,
+                                result => ok,
+                                user_id => Id,
+                                rsc_id => MediaId,
+                                url => Url
+                            }),
                             {ok, _} = m_edge:insert(Id, depiction, MediaId, ContextUser),
                             ok;
-                        {error, _} = Error ->
-                            ?LOG_WARNING("Could not insert depiction_url for ~p: ~p ~p",
-                                          [Id, Error, Url]),
+                        {error, Reason} = Error ->
+                            ?LOG_WARNING(#{
+                                text => <<"Could not insert user depiction_url">>,
+                                in => zotonic_mod_signup,
+                                user_id => Id,
+                                result => error,
+                                reason => Reason,
+                                url => Url
+                            }),
                             Error
                     end;
                 _ ->
@@ -196,12 +212,24 @@ maybe_add_depiction(Id, #{ <<"depiction_url">> := Url }, ContextUser)
                 undefined ->
                     case m_media:replace_url(Url, Id, #{}, ContextUser) of
                         {ok, _Id} ->
-                            ?LOG_INFO("Added medium from depiction_url for ~p: ~p",
-                                       [Id, Url]),
+                            ?LOG_INFO(#{
+                                text => <<"Added medium from depiction_url for user">>,
+                                in => zotonic_mod_signup,
+                                result => ok,
+                                user_id => Id,
+                                rsc_id => Id,
+                                url => Url
+                            }),
                             ok;
-                        {error, _} = Error ->
-                            ?LOG_WARNING("Could not insert depiction_url for ~p: ~p ~p",
-                                          [Id, Error, Url]),
+                        {error, Reason} = Error ->
+                            ?LOG_WARNING(#{
+                                text => <<"Could not set user medium from depiction_url">>,
+                                in => zotonic_mod_signup,
+                                user_id => Id,
+                                result => error,
+                                reason => Reason,
+                                url => Url
+                            }),
                             Error
                     end;
                 _Medium ->
@@ -325,7 +353,7 @@ send_verify_email(UserId, Ident, Context) ->
         {email, Email},
         {verify_key, Key}
     ],
-    z_email:send_render(Email, "email_verify.tpl", Vars, z_acl:sudo(Context)),
+    z_email:send_render(UserId, "email_verify.tpl", Vars, z_acl:sudo(Context)),
     ok.
 
 
@@ -336,14 +364,14 @@ manage_schema(install, _Context) ->
                 <<"is_published">> => true,
                 <<"page_path">> => <<"/terms">>,
                 <<"title">> => <<"Terms of Service">>,
-                <<"summary">> => <<"These Terms of Service (\"Terms\") govern your access to and use of the services and COMPANY’s web sites (the \"Services\"), and any information, text, graphics, or other materials uploaded, downloaded or appearing on the Services (collectively referred to as \"Content\"). Your access to and use of the Services is conditioned on your acceptance of and compliance with these Terms. By accessing or using the Services you agree to be bound by these Terms.">>,
+                <<"summary">> => <<"These Terms of Service (\"Terms\") govern your access to and use of the services and COMPANY’s web sites (the \"Services\"), and any information, text, graphics, or other materials uploaded, downloaded or appearing on the Services (collectively referred to as \"Content\"). Your access to and use of the Services is conditioned on your acceptance of and compliance with these Terms. By accessing or using the Services you agree to be bound by these Terms."/utf8>>,
                 <<"body">> => <<"<h2>INSERT YOUR TERMS OF SERVICE HERE</h2>">>
             }},
             {signup_privacy, text, #{
                 <<"is_published">> => true,
                 <<"page_path">> => <<"/privacy">>,
                 <<"title">> => <<"Privacy Policy">>,
-                <<"summary">> => <<"This Privacy Policy describes COMPANY’s policies and procedures on the collection, use and disclosure of your information. COMPANY receives your information through our various web sites, SMS, APIs, services and third-parties (\"Services\"). When using any of our Services you consent to the collection, transfer, manipulation, storage, disclosure and other uses of your information as described in this Privacy Policy. Irrespective of which country that you reside in or create information from, your information may be used by COMPANY in any country where COMPANY operates.">>,
+                <<"summary">> => <<"This Privacy Policy describes COMPANY’s policies and procedures on the collection, use and disclosure of your information. COMPANY receives your information through our various web sites, SMS, APIs, services and third-parties (\"Services\"). When using any of our Services you consent to the collection, transfer, manipulation, storage, disclosure and other uses of your information as described in this Privacy Policy. Irrespective of which country that you reside in or create information from, your information may be used by COMPANY in any country where COMPANY operates."/utf8>>,
                 <<"body">> => <<"<h2>INSERT YOUR PRIVACY POLICY HERE</h2>">>
             }}
         ]

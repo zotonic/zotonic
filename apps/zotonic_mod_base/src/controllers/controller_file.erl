@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013-2014 Marc Worrell
+%% @copyright 2013-2022 Marc Worrell
 %%
 %% @doc Serve a file (possibly resized)
 
-%% Copyright 2013-2014 Marc Worrell
+%% Copyright 2013-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -44,18 +44,21 @@
 
 
 %% @doc Initialize the context for the request. Optionally continue the user's session.
-service_available(Context0) ->
-    Context = z_context:set_noindex_header(Context0),
+service_available(Context) ->
     Context1 = z_context:ensure_qs(Context),
     Context2 = z_context:set_cors_headers([{<<"access-control-allow-origin">>, <<"*">>}], Context1),
     z_context:logger_md(Context2),
     case get_file_info(Context2) of
         {ok, Info} ->
-            {true, z_context:set(?MODULE, Info, Context2)};
+            IsNoIndex = is_noindex(Info, Context),
+            Context3 = z_context:set_noindex_header(IsNoIndex, Context2),
+            {true, z_context:set(?MODULE, Info, Context3)};
         {error, enoent} = Error ->
-            {true, z_context:set(?MODULE, Error, Context2)};
+            Context3 = z_context:set_noindex_header(Context2),
+            {true, z_context:set(?MODULE, Error, Context3)};
         {error, _} = Error ->
-            {false, z_context:set(?MODULE, Error, Context2)}
+            Context3 = z_context:set_noindex_header(Context2),
+            {false, z_context:set(?MODULE, Error, Context3)}
     end.
 
 allowed_methods(Context) ->
@@ -79,7 +82,8 @@ forbidden(Context) ->
         {error, _ } ->
             {false, Context};
         #z_file_info{} = FInfo ->
-            case z_controller_helper:is_authorized(Context) of
+            Id = get_id(Context),
+            case z_controller_helper:is_authorized(Id, Context) of
                 {false, Context2} ->
                     {true, Context2};
                 {true, Context2} ->
@@ -148,6 +152,25 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
 
 %%%%% -------------------------- Support functions ------------------------
 
+is_noindex(#z_file_info{acls=Acls}, Context) ->
+    lists:any(
+        fun
+            (Id) when is_integer(Id) ->
+                CatId = m_rsc:p_no_acl(Id, category_id, Context),
+                z_convert:to_bool(m_rsc:p_no_acl(Id, seo_noindex, Context))
+                orelse z_convert:to_bool(m_rsc:p_no_acl(CatId, is_seo_noindex_cat, Context));
+            (_) ->
+                false
+        end,
+        Acls).
+
+get_id(Context) ->
+    case maybe_id(Context) of
+        false -> undefined;
+        undefined -> undefined;
+        RscId -> RscId
+    end.
+
 maybe_id(Context) ->
     case z_context:get(?MODULE, Context) of
         {error, _} ->
@@ -191,22 +214,32 @@ is_public([Id|T], Context, _Answer) ->
 set_content_policy(#z_file_info{acls=[]}, Context) ->
     Context;
 set_content_policy(#z_file_info{ mime = Mime } = Info, Context) ->
+    IsPlayerNeeded = is_player_needed(Mime),
     case is_resource(Info) of
-        true when Mime =:= <<"application/pdf">> ->
+        true when IsPlayerNeeded ->
             z_context:set_resp_headers([
-                    {<<"content-security-policy">>, <<"object-src 'self'; plugin-types application/pdf">>},
-                    {<<"x-content-security-policy">>,<<"plugin-types: application/pdf">>}
+                    {<<"content-security-policy">>, <<"default-src 'none'; media-src 'self'; object-src 'self'">>},
+                    {<<"x-content-security-policy">>, <<"default-src 'none'; media-src 'self'; object-src 'self'; plugin-types: application/pdf">>}
                 ],
                 Context);
         true ->
             % Do not set the IE11 X-CSP with sandbox as that disables file downloading
             % https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/sandbox
-            z_context:set_resp_header(<<"content-security-policy">>, <<"sandbox">>, Context);
+            z_context:set_resp_headers([
+                    {<<"content-security-policy">>, <<"default-src 'none'; sandbox">>},
+                    {<<"x-content-security-policy">>, <<"default-src 'none'">>}
+                ],
+                Context);
         false ->
             Context
     end.
 
-%% @doc Check if the served file originated from an user-upload (ie. it is a resource)
+is_player_needed(<<"application/pdf">>) -> true;
+is_player_needed(<<"video/", _/binary>>) -> true;
+is_player_needed(<<"audio/", _/binary>>) -> true;
+is_player_needed(_) -> false.
+
+%% @doc Check if the served file originated from a user-upload (ie. it is a resource)
 is_resource( #z_file_info{ acls = Acls }) ->
     lists:any(fun is_integer/1, Acls).
 

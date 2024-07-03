@@ -4,16 +4,14 @@
 .. seealso:: :ref:`filter-urlize`
 
 Convert any URLs in a plaintext into HTML links, with adding the
-``rel="nofollow"`` attribute.
+``rel="nofollow"`` attribute, and replaces all newlines with ``<br>`` tags.
 
 Example::
 
-  {{ "http://foo.bar/"|escape_link }}
+  {{ "Hello http://foo.bar/\n\nAnd bye."|escape_link }}
 
 Outputs::
 
-  <a href="http://foo.bar/" rel="nofollow">http://foo.bar/</a>
+  "Hello <a href="http://foo.bar/" rel="noopener nofollow noreferrer">http://foo.bar/</a><br /><br />And bye."
 
-This filter is very useful when displaying user-generated plaintexts,
-like comments.
-
+This filter is very useful when displaying user-generated plaintexts, like comments.

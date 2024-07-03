@@ -38,6 +38,8 @@
                 | {minify, boolean()}
                 | async
                 | {async, boolean()}
+                | defer
+                | {defer, boolean()}
                 | absolute_url
                 | {absolute_url, boolean()}
                 | {media, binary()}
@@ -100,9 +102,18 @@ lib(Args, Context) ->
     MinifyRequested = z_convert:to_bool( proplists:get_value(minify, Args, false))
                orelse m_config:get_boolean(site, minification_enabled, Context),
     IsLiveReload = m_config:get_boolean(mod_development, livereload, Context),
-    case MinifyRequested and not IsLiveReload of
-        true -> lib_min;
-        false -> lib
+    IsNoCache = z_convert:to_bool( proplists:get_value(nocache, Args, false) ),
+    IsMinify = MinifyRequested and not IsLiveReload,
+    case IsNoCache of
+        true when IsMinify ->
+            lib_min_nocache;
+        true ->
+            lib_nocache;
+        false ->
+            case IsMinify of
+                true -> lib_min;
+                false -> lib
+            end
     end.
 
 tag1(Files, Args, Context) ->
@@ -170,13 +181,17 @@ script_element(JsFiles, Args, Context) ->
         lib(Args, Context),
         url_for_args(JsFiles, <<".js">>, Args, Context),
         Context),
-    AsyncAttr = case z_convert:to_bool( proplists:get_value(async, Args, false)) of
-        true -> <<" async ">>;
-        false -> <<>>
+    AsyncDeferAttr = case z_convert:to_bool( proplists:get_value(async, Args, false)) of
+        true -> <<" async defer ">>;
+        false ->
+            case z_convert:to_bool( proplists:get_value(defer, Args, false)) of
+                true -> <<" defer ">>;
+                false -> <<>>
+            end
     end,
     iolist_to_binary([
             <<"<script src=\"">>, JsUrl, <<"\"">>,
-                AsyncAttr,
+                AsyncDeferAttr,
                 <<" type=\"text/javascript\"">>,
             <<">">>,
             <<"</script>">>
@@ -306,12 +321,18 @@ checksum([File|Files], FoundFiles, State, Context) ->
                             checksum(Files, [ File1 | FoundFiles ], State1, Context);
                         {error, enoent} ->
                             %% Not found, skip the file
-                            ?LOG_WARNING("lib file not found: ~s", [File]),
+                            ?LOG_WARNING(#{
+                                text => <<"Lib file not found">>,
+                                file => File
+                            }),
                             checksum(Files, [ File | FoundFiles ], State, Context)
                     end;
                 _ ->
                     %% Not found, skip the file
-                    ?LOG_WARNING("lib file not found: ~s", [File]),
+                    ?LOG_WARNING(#{
+                        text => <<"Lib file not found">>,
+                        file => File
+                    }),
                     checksum(Files, [ File | FoundFiles ], State, Context)
             end
     end.

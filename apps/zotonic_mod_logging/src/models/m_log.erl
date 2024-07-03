@@ -39,17 +39,16 @@
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([], _Msg, Context) ->
-    case z_acl:is_admin(Context) of
+    case z_acl:is_allowed(use, mod_logging, Context) of
         true -> {ok, {list(Context), []}};
         false -> {error, eacces}
     end;
 m_get([ Index | Rest ], _Msg, Context) ->
-    case z_acl:is_admin(Context) of
+    case z_acl:is_allowed(use, mod_logging, Context) of
         true -> {ok, {get(z_convert:to_integer(Index), Context), Rest}};
         false -> {error, eacces}
     end;
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 
@@ -69,7 +68,16 @@ merge_props(R) ->
 
 
 -spec search_query( map(), z:context() ) -> #search_sql{}.
-search_query(Args, Context) ->
+search_query(Query, Context) ->
+    Terms = maps:get(<<"q">>, Query, []),
+    Args = lists:foldl(
+        fun(#{ <<"term">> := Term, <<"value">> := Value }, Acc) ->
+            Acc#{
+                Term => Value
+            }
+        end,
+        #{},
+        Terms),
     % Filter on log type
     W1 = case z_convert:to_binary( maps:get(<<"type">>, Args, <<"warning">>) ) of
         <<"error">> -> " type = 'error' ";

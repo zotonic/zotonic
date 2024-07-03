@@ -1,5 +1,5 @@
 {% javascript %}
-function queueCountInfo(feedbackSelector, invokeSelector) {
+function queueCountInfo(feedbackSelector) {
     "use strict";
 
     var RETRIES = 10,
@@ -8,9 +8,8 @@ function queueCountInfo(feedbackSelector, invokeSelector) {
         COUNT_SIZE_MSG = "{_ Pivot queue count size: _}",
 
         $feedback = $(feedbackSelector),
-        $btn = $(invokeSelector),
         isUpdating = false,
-        retryIvalId,
+        retryInvalId,
         retryCount = RETRIES,
 
         setFeedback,
@@ -20,10 +19,13 @@ function queueCountInfo(feedbackSelector, invokeSelector) {
         resetUI,
         initUI;
 
-    setFeedback = function (message, count) {
+    setFeedback = function (message, backlog, total) {
         var msg = message;
-        if (count !== undefined) {
-            msg += " " + count;
+        if (backlog !== undefined) {
+            msg += " " + backlog;
+        }
+        if (total !== undefined && total > 0) {
+            msg += " (" + (total - backlog) + ")";
         }
         $feedback.text(msg);
     };
@@ -37,37 +39,35 @@ function queueCountInfo(feedbackSelector, invokeSelector) {
             });
     };
 
-    updateFeedback = function (count) {
-        var queueCount = parseInt(count, 10);
+    updateFeedback = function (result) {
+        let queueCount = parseInt(result.backlog, 10);
+        let queueTotal = parseInt(result.total, 10);
         if (queueCount > 0) {
             isUpdating = true;
-            setFeedback(COUNT_SIZE_MSG, queueCount);
+            setFeedback(COUNT_SIZE_MSG, queueCount, queueTotal);
             setTimeout(requestUpdate, UPDATE_REPEAT_MS);
         } else {
-            setFeedback(COUNT_SIZE_MSG, 0);
-            clearInterval(retryIvalId);
-            retryIvalId = undefined;
+            setFeedback(COUNT_SIZE_MSG, 0, queueTotal);
+            clearInterval(retryInvalId);
+            retryInvalId = undefined;
             if (isUpdating) {
                 isUpdating = false;
                 z_growl_add("{_ Search indices rebuilt. _}");
             }
-            setTimeout(function() {
-                $btn.removeAttr("disabled");
-            }, 1500);
         }
     };
 
     // it make take a short while before the info is available
     // so we try a couple of times
     startTrying = function() {
-        if (retryIvalId) {
-            clearInterval(retryIvalId);
+        if (retryInvalId) {
+            clearInterval(retryInvalId);
         }
-        retryIvalId = setInterval(function () {
+        retryInvalId = setInterval(function () {
             if (isUpdating) {
-                clearInterval(retryIvalId);
+                clearInterval(retryInvalId);
             } else if (retryCount === 0) {
-                clearInterval(retryIvalId);
+                clearInterval(retryInvalId);
                 resetUI();
             } else {
                 requestUpdate();
@@ -77,12 +77,10 @@ function queueCountInfo(feedbackSelector, invokeSelector) {
     };
 
     resetUI = function () {
-        $btn.removeAttr("disabled");
         $feedback.hide("slow");
     };
 
     initUI = function () {
-        $btn.attr("disabled", "disabled");
         $feedback.addClass("label label-info");
         setFeedback("{_ Retrieving status... _}");
         startTrying();

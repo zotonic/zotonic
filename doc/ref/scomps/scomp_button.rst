@@ -76,3 +76,7 @@ Where TriggerId and TargetId are both the HTML id of the button.
 |          |then the class "disabled" id   |                               |
 |          |added to the class list.       |                               |
 +----------+-------------------------------+-------------------------------+
+|href      |The href attribute of the      |href="/foobar"                 |
+|          |button if tag "a" is used.     |                               |
+|          |Defaults to "#".               |                               |
++----------+-------------------------------+-------------------------------+

@@ -1,10 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2020 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Server managing all sites running inside Zotonic. Starts the sites
 %% according to the config files in the sites subdirectories. Handles scanning
 %% of all site directories for config files.
+%% @end
 
-%% Copyright 2009-2020 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -85,7 +86,7 @@
     is_enabled = true,
     status = new :: site_status(),
     pid = undefined :: undefined | pid(),
-    start_time = undefined :: undefined | erlang:timestam(),
+    start_time = undefined :: undefined | z_datetime:timestamp(),
     stop_time = undefined :: undefined | erlang:timestamp(),
     stop_count = 0 :: integer(),
     crash_time = undefined :: undefined | erlang:timestamp(),
@@ -375,6 +376,24 @@ filechanged_observer(#zotonic_filehandler_filechange{} = ChangeEvent, _CallConte
         end).
 
 
+%% @doc Set extra configurations for a site. Will overlay the read configuration when
+%% the site is started.
+-spec get_site_config_overrides(Site) -> List when
+    Site :: atom(),
+    List :: proplists:proplist().
+get_site_config_overrides(Site) when is_atom(Site) ->
+    Key = z_convert:to_atom(z_convert:to_list(Site) ++ "_config_overrides"),
+    application:get_env(zotonic_core, Key, []).
+
+%% @doc Override a given site config with arbitrary key/value pairs. Should be called before
+%% the site is started.
+-spec put_site_config_overrides(Site, Overrides) -> ok when
+    Site :: atom(),
+    Overrides :: proplists:proplist().
+put_site_config_overrides(Site, Overrides) when is_atom(Site), is_list(Overrides) ->
+    Key = z_convert:to_atom(z_convert:to_list(Site) ++ "_config_overrides"),
+    application:set_env(zotonic_core, Key, Overrides).
+
 %%====================================================================
 %% gen_server callbacks
 %%====================================================================
@@ -446,7 +465,8 @@ handle_call({stop, Site}, _From, State) ->
 handle_call({get_site_config, Site}, _From, #state{ sites = Sites } = State) ->
     case maps:find(Site, Sites) of
         {ok, #site_status{ config = Config }} ->
-            {reply, {ok, Config}, State};
+            Overrides = get_site_config_overrides(Site),
+            {reply, {ok, z_utils:props_merge(Overrides, Config)}, State};
         error ->
             {reply, {error, bad_name}, State}
     end;
@@ -513,13 +533,20 @@ handle_cast({set_site_status, Site, Status}, #state{ sites = Sites } = State) ->
             },
             Sites#{ Site => S1 };
         {ok, #site_status{ status = CurStatus }} ->
-            ?LOG_NOTICE("Site status change from ~p to ~p ignored.",
-                        [CurStatus, Status],
-                        #{ site => Site }),
+            ?LOG_NOTICE(#{
+                text => <<"Site status change">>,
+                in => zotonic_core,
+                old_status => CurStatus,
+                status => Status
+            }, #{ site => Site }),
             Sites;
         error ->
-            ?LOG_NOTICE("Site status change of unknown ~p to ~p ignored.",
-                        [Site, Status]),
+            ?LOG_NOTICE(#{
+                text => <<"Site status change">>,
+                in => zotonic_core,
+                old_status => unknown,
+                status => Status
+            }, #{ site => Site }),
             Sites
     end,
     do_sync_status(Sites1),
@@ -709,6 +736,7 @@ do_start(Site, #state{ sites = Sites } = State) ->
         error ->
             ?LOG_WARNING(#{
                 action => start_request,
+                in => zotonic_core,
                 result => error,
                 reason => bad_name,
                 text => <<"Requested to start unknown site">>
@@ -719,7 +747,11 @@ do_start(Site, #state{ sites = Sites } = State) ->
 do_start_site(#site_status{ site = Site } = SiteStatus) ->
     case site_is_startable(SiteStatus) of
         {true, StartState} ->
-            ?LOG_NOTICE(#{ action => starting }, #{ site => Site }),
+            ?LOG_NOTICE(#{
+                text => <<"Site starting">>,
+                in => zotonic_core,
+                action => starting
+            }, #{ site => Site }),
             case z_sites_sup:start_site(Site) of
                 {ok, Pid} ->
                     {ok, SiteStatus#site_status{
@@ -730,6 +762,7 @@ do_start_site(#site_status{ site = Site } = SiteStatus) ->
                     % seems we have a race condition here
                     ?LOG_ERROR(#{
                         text => <<"Site already started, this shouldn't happen.">>,
+                        in => zotonic_core,
                         result => error,
                         reason => already_started
                     }, #{ site => Site }),
@@ -739,6 +772,7 @@ do_start_site(#site_status{ site = Site } = SiteStatus) ->
                 {error, Reason} = Error ->
                     ?LOG_ERROR(#{
                         text => "Site start failed",
+                        in => zotonic_core,
                         result => error,
                         reason => Reason
                     }, #{ site => Site }),
@@ -808,6 +842,7 @@ handle_down(MRef, Pid, Reason, #state{ site_monitors = Ms } = State) ->
         error ->
             ?LOG_WARNING(#{
                 text => <<"'DOWN' for unknown site">>,
+                in => zotonic_core,
                 result => error,
                 reason => Reason
             }),
@@ -832,6 +867,7 @@ do_site_down(Site, Reason, Sites) ->
         error ->
             ?LOG_WARNING(#{
                 text => <<"'DOWN' for site, but no site status found">>,
+                in => zotonic_core,
                 site => Site,
                 result => error,
                 reason => Reason
@@ -842,8 +878,13 @@ do_site_down(Site, Reason, Sites) ->
 new_status_after_down(_Site, stopping, shutdown) ->
     stopped;
 new_status_after_down(Site, Status, Reason) ->
-    ?LOG_ERROR("Site ~p in state ~p is down with reason ~p",
-                [Site, Status, Reason]),
+    ?LOG_ERROR(#{
+        text => <<"Site is down">>,
+        in => zotonic_core,
+        old_status => Status,
+        status => failed,
+        reason => Reason
+    }, #{ site => Site }),
     failed.
 
 maybe_schedule_restart(#site_status{ status = stopped } = Status) ->
@@ -895,7 +936,11 @@ do_reload_site_config(Site, Sites) ->
                     {ok, Sites}
             end;
         error ->
-            ?LOG_INFO("Requested to reload site config from unknown site ~p", [Site]),
+            ?LOG_INFO(#{
+                text => <<"Requested to reload site config from unknown site">>,
+                in => zotonic_core,
+                site => Site
+            }),
             {error, bad_name}
     end.
 
@@ -1017,7 +1062,13 @@ scan_app(App) ->
                     Map1 = Map#{ site => App },
                     {true, to_list(Map1)};
                 {error, Reason} ->
-                    ?LOG_ERROR("Error reading config files for ~p: ~p", [ App, Reason ]),
+                    ?LOG_ERROR(#{
+                        text => <<"Error reading config files">>,
+                        in => zotonic_core,
+                        app => App,
+                        result => error,
+                        reason => Reason
+                    }),
                     false
             end
     end.
@@ -1084,7 +1135,7 @@ do_is_site_redirect(Cfg) ->
         undefined -> true
     end.
 
-% Handle the case where an user just gives a single hostname.
+% Handle the case where a user just gives a single hostname.
 ensure_alias_list([C|_] = Alias) when is_integer(C) -> [Alias];
 ensure_alias_list(Alias) -> Alias.
 
@@ -1159,7 +1210,11 @@ is_testsandbox_node() ->
 
 %% @doc Handle the load of a module by the code_server, maybe reattach observers.
 do_load_module(Module, State) ->
-    ?LOG_DEBUG("z_sites_manager: reloading ~p", [Module]),
+    ?LOG_DEBUG(#{
+        text => <<"Reloading module">>,
+        in => zotonic_core,
+        module => Module
+    }),
     do_load_module(is_running_site(Module, State), is_module(Module), Module, State).
 
 do_load_module(true, _IsModule, Site, _State) ->
@@ -1202,13 +1257,3 @@ is_module(Module) ->
         "mod_" ++ _ -> true;
         ModS -> string:str(ModS, "_mod_") > 0
     end.
-
-get_site_config_overrides(Site) when is_atom(Site) ->
-    Key = z_convert:to_atom(z_convert:to_list(Site) ++ "_config_overrides"),
-    application:get_env(zotonic_core, Key, []).
-
-%% @doc Override a given site config with arbitrary key/value
-%% pairs. Should be called before the site is started.
-put_site_config_overrides(Site, Overrides) when is_atom(Site), is_list(Overrides) ->
-    Key = z_convert:to_atom(z_convert:to_list(Site) ++ "_config_overrides"),
-    application:set_env(zotonic_core, Key, Overrides).

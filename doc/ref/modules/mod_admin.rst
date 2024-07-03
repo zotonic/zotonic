@@ -251,6 +251,7 @@ For the admin there are the following configuration keys:
  * ``mod_admin.rsc_dialog_is_published``
  * ``mod_admin.rsc_dialog_is_dependent``
  * ``mod_admin.rsc_dialog_hide_dependent``
+ * ``mod_admin.connect_created_me``
 
 The ``mod_admin.rsc_dialog_tabs`` key defines which tabs are shown in the new resource, media-upload, and image-link dialogs.
 Per defauls these dialogs show all the possible tabs, with this configurarion key it is possible to change that.
@@ -269,3 +270,8 @@ The configuration ``mod_admin.rsc_dialog_is_dependent`` defines the default *is_
 Setting this key to `1` will check the *is_dependent* checkbox.
 
 With the configuration ``mod_admin.rsc_dialog_hide_dependent`` the *dependent* checkbox can be hidden for non admin users.
+
+If the ``mod_admin.connect_created_me`` is set then the connect dialogs will per default filter for content made
+by the current user. The current setting is stored in the sessionStorage with the key ``dialog_connect_created_me``.
+
+

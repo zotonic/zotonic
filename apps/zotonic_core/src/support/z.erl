@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell
-%% @doc Some easy shortcut and error logging functions.
+%% @copyright 2009-2023 Marc Worrell
+%% @doc Some easy shortcuts and error logging functions.
+%% @end
 
-%% Copyright 2009-2022 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,9 +29,15 @@
     m/0,
     compile/0,
     flush/0,
-    flush/1,
     restart/0,
+
+    start/1,
+    flush/1,
     restart/1,
+    stop/1,
+
+    open/1,
+    open_secure/1,
 
     ld/0,
     ld/1,
@@ -145,9 +152,25 @@ restart() ->
     application:stop(zotonic_core),
     application:start(zotonic_core).
 
+%% @doc Start a site
+start(Site) ->
+    z_sites_manager:start(Site).
+
 %% @doc Restart a site
 restart(Site) ->
     z_sites_manager:restart(Site).
+
+%% @doc Stop a site
+stop(Site) ->
+    z_sites_manager:stop(Site).
+
+%% @doc Open a site in Chrome or the default browser(macOS)
+open(Site) ->
+    z_exec_browser:open(Site).
+
+%% @doc Open a site in a new fresh Chrome
+open_secure(Site) ->
+    z_exec_browser:chrome(Site, [], #{ secure => true }).
 
 %% @doc Reload all changed Erlang modules
 ld() ->

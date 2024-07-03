@@ -43,9 +43,12 @@ start() ->
             %
             % Show the startup message
             %
-            ?LOG_NOTICE("Zotonic starting"),
-            [ ?LOG_NOTICE("Init file: - ~s", [Cfg]) || Cfg <- zotonic_launcher_config:erlang_config_files( node() ) ],
-            [ ?LOG_NOTICE("Config file: ~s", [Cfg]) || Cfg <- ZotonicConfigFiles ],
+            ?LOG_NOTICE(#{
+                text => <<"Zotonic starting">>,
+                in => zotonic_launcher,
+                init_files => zotonic_launcher_config:erlang_config_files( node() ),
+                config_files => ZotonicConfigFiles
+            }),
             %
             % Start the launcher and Zotonic
             %
@@ -107,6 +110,7 @@ load_config_files(ZotonicCfgs) ->
         {error, _} = Error ->
             ?LOG_ERROR(#{
                 text => "Fatal error reading configuration files",
+                in => zotonic_launcher,
                 reason => Error
             }),
             Error
@@ -156,6 +160,7 @@ write_pidfile() ->
         {error, Reason} ->
             ?LOG_ERROR(#{
                 text => "Could not write ZOTONIC_PIDFILE",
+                in => zotonic_launcher,
                 file => get_pidfile(),
                 reason => Reason
             }),
@@ -171,6 +176,7 @@ remove_pidfile() ->
         {error, Reason} ->
             ?LOG_ERROR(#{
                 text => "Could not delete ZOTONIC_PIDFILE",
+                in => zotonic_launcher,
                 file => get_pidfile(),
                 reason => Reason
             }),

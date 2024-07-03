@@ -17,9 +17,9 @@
 			    id="block-{{name}}-body{{ lang_code_for_id }}"
 			    name="blocks[].body{{ lang_code_with_dollar }}"
 			    class="body z_editor-init form-control"
-			    {% include "_language_attrs.tpl" language=lang_code %}>{{ blk.body[lang_code] |escape }}</textarea>
+			    {% include "_language_attrs.tpl" language=lang_code %}>{{ blk.body|translation:lang_code  |escape }}</textarea>
 		{% else %}
-			{{ blk.body[lang_code]  }}
+			{{ blk.body|translation:lang_code  }}
 		{% endif %}
 	</div>
 </fieldset>

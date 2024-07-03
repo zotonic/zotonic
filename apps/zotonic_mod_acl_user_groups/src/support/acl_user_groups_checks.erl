@@ -1,7 +1,7 @@
-%% @copyright 2015-2016 Marc Worrell
+%% @copyright 2015-2022 Marc Worrell
 %% @doc Routines for ACL notifications.
 
-%% Copyright 2015-2016 Marc Worrell
+%% Copyright 2015-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -67,7 +67,7 @@
         state = publish :: publish | edit
     }).
 
-state(#context{acl=#aclug{state=State}}) ->
+state(#context{ acl = #aclug{ state = State }}) ->
     State;
 state(#context{}) ->
     publish.
@@ -87,9 +87,9 @@ max_upload_size_default() ->
 
 
 %% @doc Fetch the list if user groups the user is member of
-user_groups(#context{acl=#aclug{user_groups=Ids}}) ->
+user_groups(#context{ acl = #aclug{ user_groups = Ids }}) ->
     Ids;
-user_groups(#context{user_id=UserId, acl=admin} = Context) ->
+user_groups(#context{ user_id = UserId, acl = admin } = Context) ->
     MgrId = m_rsc:rid(acl_user_group_managers, Context),
     Groups = m_edge:objects(UserId, hasusergroup, Context),
     case {MgrId, lists:member(MgrId, Groups)} of
@@ -97,7 +97,7 @@ user_groups(#context{user_id=UserId, acl=admin} = Context) ->
         {_, true} -> Groups;
         {_, false} -> Groups ++ [MgrId]
     end;
-user_groups(#context{user_id=UserId} = Context) ->
+user_groups(#context{ user_id = UserId } = Context) ->
     has_user_groups(UserId, Context).
 
 %% @doc Return all user groups the user is directly or indirectly member of.
@@ -110,9 +110,9 @@ user_groups_expand(Ids, Context) ->
     lists:usort(lists:flatten(Ids3)).
 
 %% @doc API to check if a category can be updated in a content-group
-can_update_category(_, _, #context{acl=admin}) ->
+can_update_category(_, _, #context{ acl = admin }) ->
     true;
-can_update_category(_, _, #context{user_id=1}) ->
+can_update_category(_, _, #context{ user_id = 1 }) ->
     true;
 can_update_category(CGId, CatId, Context) ->
     CGId1 = m_rsc:rid(CGId, Context),
@@ -121,17 +121,17 @@ can_update_category(CGId, CatId, Context) ->
     can_rsc_ug(CGId1, CatId1, update, false, UGs, Context).
 
 %% @doc API to check if a category can be inserted into any content-group
-can_insert_category(_, #context{acl=admin}) ->
+can_insert_category(_, #context{ acl = admin }) ->
     true;
-can_insert_category(_, #context{user_id=1}) ->
+can_insert_category(_, #context{ user_id = 1 }) ->
     true;
 can_insert_category(Cat, Context) ->
     can_insert(Cat, Context).
 
 %% @doc API to check if a category can be inserted into a content-group
-can_insert_category(_, _, #context{acl=admin}) ->
+can_insert_category(_, _, #context{ acl = admin }) ->
     true;
-can_insert_category(_, _, #context{user_id=1}) ->
+can_insert_category(_, _, #context{ user_id = 1 }) ->
     true;
 can_insert_category(CGId, CatId, Context) ->
     CGId1 = m_rsc:rid(CGId, Context),
@@ -159,9 +159,9 @@ can_insert_category_rsc_ug(CGId1, CatId1, IsCollabGroup, Context) ->
     ).
 
 %% @doc API to check if a category can be inserted into (any) collaboration-group
-can_insert_category_collab(_, #context{acl=admin}) ->
+can_insert_category_collab(_, #context{ acl = admin }) ->
     true;
-can_insert_category_collab(_, #context{user_id=1}) ->
+can_insert_category_collab(_, #context{ user_id = 1 }) ->
     true;
 can_insert_category_collab(Cat, Context) ->
     CatId = m_rsc:rid(Cat, Context),
@@ -177,18 +177,18 @@ can_insert_category_collab(Cat, Context) ->
     end.
 
 
-can_rsc_insert(_, _, #context{acl=admin}) ->
+can_rsc_insert(_, _, #context{ acl = admin }) ->
     true;
-can_rsc_insert(_, _, #context{user_id=1}) ->
+can_rsc_insert(_, _, #context{ user_id = 1 }) ->
     true;
 can_rsc_insert(CGId, RscId, Context) ->
     CatId = m_rsc:p_no_acl(RscId, category_id, Context),
     can_insert_category(CGId, CatId, Context).
 
 %% @doc API to check if a category can be inserted into a content-group
-can_move(_, _, #context{acl=admin}) ->
+can_move(_, _, #context{ acl = admin }) ->
     true;
-can_move(_, _, #context{user_id=1}) ->
+can_move(_, _, #context{ user_id = 1 }) ->
     true;
 can_move(CGId, RscId, Context) ->
     can_rsc(RscId, delete, Context)
@@ -196,15 +196,23 @@ can_move(CGId, RscId, Context) ->
 
 
 -spec acl_is_allowed( #acl_is_allowed{}, z:context() ) -> boolean() | undefined.
-acl_is_allowed(_, #context{acl=admin}) ->
+acl_is_allowed(_, #context{ acl = admin }) ->
     true;
-acl_is_allowed(_, #context{user_id=1}) ->
+acl_is_allowed(_, #context{ user_id = 1 }) ->
     true;
-acl_is_allowed(#acl_is_allowed{object=undefined}, _Context) ->
+acl_is_allowed(#acl_is_allowed{ object = undefined }, _Context) ->
     undefined;
-acl_is_allowed(#acl_is_allowed{action=view, object=Id}, Context) when is_integer(Id) orelse is_atom(Id) ->
+acl_is_allowed(#acl_is_allowed{ action = view, object = UserId}, #context{ user_id = UserId })
+    when is_integer(UserId) ->
+    % User can view their own resource
+    true;
+acl_is_allowed(#acl_is_allowed{ action = update, object = UserId}, #context{ user_id = UserId })
+    when is_integer(UserId) ->
+    % User can update their own resource
+    true;
+acl_is_allowed(#acl_is_allowed{ action = view, object = Id }, Context) when is_integer(Id) orelse is_atom(Id) ->
     can_rsc(Id, view, Context);
-acl_is_allowed(#acl_is_allowed{action=insert, object=#acl_media{mime=Mime, size=Size}}, Context) ->
+acl_is_allowed(#acl_is_allowed{ action = insert, object = #acl_media{ mime = Mime, size = Size }}, Context) ->
     can_media(Mime, Size, Context);
 acl_is_allowed(#acl_is_allowed{
         action = insert,
@@ -237,38 +245,43 @@ acl_is_allowed(#acl_is_allowed{
     }, Context) when Action =:= insert; Action =:= update ->
     % Final check just before db update, after sanitizer etc.
     acl_update_check(Action, Id, Props, Context);
-acl_is_allowed(#acl_is_allowed{action=insert, object=Cat}, Context) when is_atom(Cat) ->
+acl_is_allowed(#acl_is_allowed{ action = insert, object = Cat }, Context) when is_atom(Cat) ->
     can_insert(Cat, Context);
-acl_is_allowed(#acl_is_allowed{action=update, object=Id}, Context) ->
+acl_is_allowed(#acl_is_allowed{ action = update, object = Id }, Context) ->
     can_rsc(Id, update, Context);
-acl_is_allowed(#acl_is_allowed{object=#acl_edge{} = Edge}, Context) ->
+acl_is_allowed(#acl_is_allowed{ object = #acl_edge{} = Edge }, Context) ->
     can_edge(Edge, Context);
-acl_is_allowed(#acl_is_allowed{action=delete, object=Id}, Context) ->
+acl_is_allowed(#acl_is_allowed{ action = delete, object = Id }, Context) ->
     can_rsc(Id, delete, Context);
-acl_is_allowed(#acl_is_allowed{action=Action, object=ModuleName}, Context) when is_atom(Action), is_atom(ModuleName) ->
+acl_is_allowed(#acl_is_allowed{ action = Action, object = ModuleName }, Context) when is_atom(Action), is_atom(ModuleName) ->
     can_module(Action, ModuleName, Context);
 acl_is_allowed(#acl_is_allowed{}, _Context) ->
     undefined.
 
-acl_is_allowed_prop(_Id, _Prop, #context{acl=admin}) ->
+acl_is_allowed_prop(_Id, _Prop, #context{ acl = admin }) ->
     true;
-acl_is_allowed_prop(_Id, _Prop, #context{user_id=1}) ->
+acl_is_allowed_prop(_Id, _Prop, #context{ user_id = 1 }) ->
     true;
-acl_is_allowed_prop(Id, _Prop, #context{user_id=Id}) ->
+acl_is_allowed_prop(UserId, _Prop, #context{ user_id = UserId}) when is_integer(UserId) ->
     true;
 acl_is_allowed_prop(Id, Prop, Context) ->
-    case is_private_property(Prop) of
+    case is_always_private_property(Prop) of
         true ->
-            case privacy(Id, Context) of
-                ?ACL_PRIVACY_PUBLIC -> true;
-                ?ACL_PRIVACY_MEMBER -> z_acl:user(Context) =/= undefined;
-                ?ACL_PRIVACY_PRIVATE -> can_rsc(Id, update, Context);
-                N ->
-                    privacy_check(N, m_rsc:is_a(Id, person, Context), Id, Context)
-                    orelse can_rsc(Id, update, Context)
-            end;
+            can_rsc(Id, update, Context);
         false ->
-            undefined
+            case is_private_property(Prop) of
+                true ->
+                    case privacy(Id, Context) of
+                        ?ACL_PRIVACY_PUBLIC -> true;
+                        ?ACL_PRIVACY_MEMBER -> z_acl:user(Context) =/= undefined;
+                        ?ACL_PRIVACY_PRIVATE -> can_rsc(Id, update, Context);
+                        N ->
+                            privacy_check(N, m_rsc:is_a(Id, person, Context), Id, Context)
+                            orelse can_rsc(Id, update, Context)
+                    end;
+                false ->
+                    undefined
+            end
     end.
 
 %% The privacy levels are:
@@ -337,6 +350,7 @@ privacy_check(_Privacy, _IsPerson, _Id, _Context) ->
 
 
 is_private_property(<<"email">>) -> true;
+is_private_property(<<"email_raw">>) -> true;
 is_private_property(<<"phone">>) -> true;
 is_private_property(<<"phone_mobile">>) -> true;
 is_private_property(<<"phone_alt">>) -> true;
@@ -353,6 +367,15 @@ is_private_property(<<"pivot_location_lng">>) -> true;
 is_private_property(<<"pivot_geocode">>) -> true;
 is_private_property(<<"pivot_geocode_qhash">>) -> true;
 is_private_property(_) -> false.
+
+is_always_private_property(<<"billing_email">>) -> true;
+is_always_private_property(<<"billing_street_1">>) -> true;
+is_always_private_property(<<"billing_street_2">>) -> true;
+is_always_private_property(<<"billing_postcode">>) -> true;
+is_always_private_property(<<"billing_city">>) -> true;
+is_always_private_property(<<"billing_state">>) -> true;
+is_always_private_property(<<"billing_country">>) -> true;
+is_always_private_property(_) -> false.
 
 
 acl_logon(#acl_logon{ id = UserId, options = Options }, Context) ->
@@ -407,7 +430,7 @@ acl_logoff(#acl_logoff{}, Context) ->
             user_id=undefined}.
 
 %% @doc Set an anonymous context to the context of a 'typical' member.
-acl_context_authenticated(#context{user_id=undefined} = Context) ->
+acl_context_authenticated(#context{ user_id = undefined } = Context) ->
     UserGroups = [ m_rsc:rid(acl_user_group_members, Context) ],
     Context#context{
         acl=#aclug{user_groups=UserGroups, state=session_state(Context)},
@@ -426,8 +449,13 @@ acl_update_check(insert, _Id, Props, Context) ->
         true ->
             true;
         false ->
-            ?LOG_DEBUG("[acl_user_group] denied user ~p insert of category ~p in content-group ~p",
-                        [z_acl:user(Context), CatId, CGId]),
+            ?LOG_DEBUG(#{
+                text => <<"ACL denied user to inACL dert resource">>,
+                in => zotonic_mod_acl_user_groups,
+                user_id => z_acl:user(Context),
+                category_id => CatId,
+                content_group_od => CGId
+            }),
             false
     end;
 acl_update_check(update, Id, Props, Context) ->
@@ -439,8 +467,14 @@ acl_update_check(update, Id, Props, Context) ->
         true ->
             true;
         false ->
-            ?LOG_DEBUG("[acl_user_group] denied user ~p update on ~p of category ~p in content-group ~p",
-                        [z_acl:user(Context), Id, CatId, CGId]),
+            ?LOG_DEBUG(#{
+                text => <<"ACL denied user to update resource">>,
+                in => zotonic_mod_acl_user_groups,
+                user_id => z_acl:user(Context),
+                rsc_id => Id,
+                category_id => CatId,
+                content_group_id => CGId
+            }),
             false
     end.
 
@@ -467,9 +501,9 @@ maybe_filter_acl_props(Props, Context) ->
             maps:remove(<<"acl_2fa">>, Props2)
     end.
 
-acl_rsc_update_check_1(_Id, _CGId, _CatId, #context{acl=admin}) ->
+acl_rsc_update_check_1(_Id, _CGId, _CatId, #context{ acl = admin }) ->
     true;
-acl_rsc_update_check_1(_Id, _CGId, _CatId, #context{user_id=1}) ->
+acl_rsc_update_check_1(_Id, _CGId, _CatId, #context{ user_id = 1 }) ->
     true;
 acl_rsc_update_check_1(insert_rsc, CGId, CatId, Context) ->
     can_insert_category(CGId, CatId, Context);
@@ -586,7 +620,7 @@ acl_add_sql_check(#acl_add_sql_check{alias=Alias, args=Args, search_sql=SearchSq
                     % User can see some content groups
                     Clause = lists:flatten([
                                 " (",Alias,".content_group_id is null or ",
-                                     Alias,".content_group_id in (SELECT(unnest($",integer_to_list(length(Args)+1),"::int[]))))",
+                                     Alias,".content_group_id = any($",integer_to_list(length(Args)+1),"::int[]))",
                                 publish_check(" and ", Alias, SearchSql, Context)]),
                     {Clause, Args ++ [Ids]}
             end
@@ -598,14 +632,14 @@ publish_check(MaybeAnd, Alias, #search_sql{extra=Extra}, Context) ->
             "";
         false ->
             [MaybeAnd,
-             Alias,".is_published and ",
+             Alias,".is_published = true and ",
              Alias,".publication_start <= now() and ",
              Alias,".publication_end >= now()"]
     end.
 
-restrict_content_groups(#context{user_id=1}) ->
+restrict_content_groups(#context{ user_id = 1 }) ->
     all;
-restrict_content_groups(#context{acl=admin}) ->
+restrict_content_groups(#context{ acl = admin }) ->
     all;
 restrict_content_groups(Context) ->
     % If user can see all collaboration groups, then give up on restricting (too many groups)
@@ -627,13 +661,24 @@ session_state(Context) ->
     end.
 
 
-% Fetch all usergroups the user is member of.
-% Anonymous user are member of `acl_user_group_anonymous`.
-% Users are member of `acl_user_group_members`, unless they have hasusergroup connections to other groups.
--spec has_user_groups(integer()|undefined, #context{}) -> list(integer()).
-has_user_groups(undefined, Context) ->
+%% @doc Fetch all usergroups the user is member of.
+%% Anonymous user are member of 'acl_user_group_anonymous'.
+%% Users are member of 'acl_user_group_members', unless they have hasusergroup connections to other groups.
+-spec has_user_groups(UserId, Context) -> Groups when
+    UserId :: m_rsc:resource_id() | undefined,
+    Context :: z:context(),
+    Groups :: list(m_rsc:resource_id()).
+has_user_groups(UserId, Context) ->
+    Groups = has_user_groups_1(UserId, Context),
+    z_notifier:foldl(
+        #acl_user_groups_modify{
+            id = UserId,
+            groups = Groups
+        }, Groups, Context).
+
+has_user_groups_1(undefined, Context) ->
     [ m_rsc:rid(acl_user_group_anonymous, Context) ];
-has_user_groups(1, Context) ->
+has_user_groups_1(1, Context) ->
     MgrId = m_rsc:rid(acl_user_group_managers, Context),
     Groups = m_edge:objects(1, hasusergroup, Context),
     case {MgrId, lists:member(MgrId, Groups)} of
@@ -641,7 +686,7 @@ has_user_groups(1, Context) ->
         {_, true} -> Groups;
         {_, false} -> Groups ++ [MgrId]
     end;
-has_user_groups(UserId, Context) ->
+has_user_groups_1(UserId, Context) ->
     case m_edge:objects(UserId, hasusergroup, Context) of
         [] ->
             [ m_rsc:rid(acl_user_group_members, Context) ];
@@ -651,38 +696,51 @@ has_user_groups(UserId, Context) ->
 
 % Fetch all collaboration groups the current is member of.
 -spec has_collab_groups(#context{}) -> list(integer()).
-has_collab_groups(#context{acl=#aclug{collab_groups=Ids}}) ->
+has_collab_groups(#context{ acl = #aclug{ collab_groups = Ids }}) ->
     Ids;
 has_collab_groups(_Context) ->
     [].
 
 % Fetch all collaboration groups the user is member of.
--spec has_collab_groups(integer()|undefined, #context{}) -> list(integer()).
-has_collab_groups(undefined, _Context) ->
-    [];
+-spec has_collab_groups(UserId, Context) -> CollabGroups when
+    UserId :: m_rsc:resource_id() | undefined,
+    Context :: z:context(),
+    CollabGroups :: [ m_rsc:resource_id() ].
 has_collab_groups(UserId, Context) ->
+    CollabGroups = has_collab_groups_1(UserId, Context),
+    z_notifier:foldl(
+        #acl_collab_groups_modify{
+            id = UserId,
+            groups = CollabGroups
+        }, CollabGroups, Context).
+
+has_collab_groups_1(undefined, _Context) ->
+    [];
+has_collab_groups_1(UserId, Context) ->
     m_edge:subjects(UserId, hascollabmanager, Context)
     ++ m_edge:subjects(UserId, hascollabmember, Context).
 
 %% @doc Check if the user is manager of a collaboration group.
-is_collab_group_manager(_GroupId, #context{acl=#aclug{collab_groups=[]}}) ->
+is_collab_group_manager(_GroupId, #context{ acl = #aclug{ collab_groups = [] }}) ->
     false;
-is_collab_group_manager(GroupId, #context{user_id=UserId, acl=#aclug{collab_groups=CollabGroups}} = Context) ->
+is_collab_group_manager(GroupId, #context{ user_id = UserId, acl = #aclug{ collab_groups = CollabGroups}} = Context) ->
     lists:member(GroupId, CollabGroups)
-    andalso lists:member(GroupId, m_edge:subjects(UserId, hascollabmanager, Context)).
+    andalso lists:member(GroupId, m_edge:subjects(UserId, hascollabmanager, Context));
+is_collab_group_manager(_GroupId, _Context) ->
+    false.
 
 %% @doc Check if the user is a member of the collaboration group
-is_collab_group_member(CGId, #context{acl=#aclug{collab_groups=CollabGroups}}) ->
+is_collab_group_member(CGId, #context{ acl = #aclug{ collab_groups = CollabGroups }}) ->
     lists:member(CGId, CollabGroups);
 is_collab_group_member(_CGId, _Context) ->
     false.
 
 %% @doc Check if the user can insert the category in some content group
-can_insert(_Cat, #context{acl=admin}) ->
+can_insert(_Cat, #context{ acl = admin }) ->
     true;
-can_insert(_Cat, #context{user_id=1}) ->
+can_insert(_Cat, #context{ user_id = 1 }) ->
     true;
-can_insert(Cat, #context{acl=#aclug{collab_groups=[]}} = Context) ->
+can_insert(Cat, #context{ acl = #aclug{ collab_groups = [] }} = Context) ->
     can_insert_with_ug(Cat, Context);
 can_insert(Cat, Context) ->
     CatId = m_rsc:rid(Cat, Context),
@@ -733,7 +791,7 @@ can_rsc(Id, Action, Context) when is_integer(Id); Id =:= insert_rsc ->
 can_rsc(Id, Action, Context) ->
     can_rsc(m_rsc:rid(Id, Context), Action, Context).
 
-can_rsc_1(Id, Action, CGId, CatId, UGs, #context{acl=#aclug{collab_groups=CollabGroups}} = Context) ->
+can_rsc_1(Id, Action, CGId, CatId, UGs, #context{ acl = #aclug{ collab_groups = CollabGroups }} = Context) ->
     (
         lists:member(CGId, CollabGroups)
         andalso can_rsc_collab_member(Id, Action, CGId, CatId, Context)
@@ -835,11 +893,11 @@ can_rsc_ug(CGId, CatId, Action, IsOwner, UGs, Context) ->
 
 is_owner(insert_rsc, _Context) ->
     true;
-is_owner(Id, #context{user_id=UserId} = Context) ->
+is_owner(Id, #context{ user_id = UserId } = Context) ->
     case z_notifier:first(#acl_is_owner{
-            id=Id,
-            creator_id=m_rsc:p_no_acl(Id, creator_id, Context),
-            user_id=UserId
+            id = Id,
+            creator_id = m_rsc:p_no_acl(Id, creator_id, Context),
+            user_id = UserId
         },
         Context)
     of
@@ -849,28 +907,28 @@ is_owner(Id, #context{user_id=UserId} = Context) ->
     end.
 
 %% @doc Check if the user has a collaboration group in common with another user.
-has_common_collab_group(_Id, #context{acl=#aclug{collab_groups=[]}}) ->
+has_common_collab_group(_Id, #context{ acl = #aclug{ collab_groups = [] }}) ->
     false;
-has_common_collab_group(Id, #context{acl=#aclug{collab_groups=CGs}}=Context) when is_list(CGs) ->
+has_common_collab_group(Id, #context{ acl = #aclug{ collab_groups = CGs }}=Context) when is_list(CGs) ->
     lists:any(fun(G) -> lists:member(G, CGs) end, has_collab_groups(Id, Context));
 has_common_collab_group(_Id, _Context) ->
     false.
 
 %% @doc Check if an edge can be made, special checks for the hasusergroup edge
-can_edge(#acl_edge{predicate=hasusergroup, subject_id=MemberId, object_id=UserGroupId}, Context) ->
+can_edge(#acl_edge{ predicate = hasusergroup, subject_id = MemberId, object_id = UserGroupId }, Context) ->
     m_rsc:is_a(UserGroupId, acl_user_group, Context)
     andalso can_rsc(UserGroupId, link, Context)
     andalso can_rsc(MemberId, view, Context)
     andalso can_module(use, mod_acl_user_groups, Context);
-can_edge(#acl_edge{predicate=hascollabmanager, subject_id=CollabGroupId, object_id=UserId}, Context) ->
+can_edge(#acl_edge{ predicate = hascollabmanager, subject_id = CollabGroupId, object_id = UserId }, Context) ->
     m_rsc:is_a(CollabGroupId, acl_collaboration_group, Context)
     andalso can_rsc(CollabGroupId, update, Context)
     andalso can_rsc(UserId, view, Context);
-can_edge(#acl_edge{predicate=hascollabmember, subject_id=CollabGroupId, object_id=UserId}, Context) ->
+can_edge(#acl_edge{ predicate = hascollabmember, subject_id = CollabGroupId, object_id = UserId }, Context) ->
     m_rsc:is_a(CollabGroupId, acl_collaboration_group, Context)
     andalso can_rsc(CollabGroupId, update, Context)
     andalso can_rsc(UserId, view, Context);
-can_edge(#acl_edge{predicate=P, subject_id=SubjectId, object_id=ObjectId}, Context) when is_atom(P) ->
+can_edge(#acl_edge{ predicate = P, subject_id = SubjectId, object_id = ObjectId }, Context) when is_atom(P) ->
     can_rsc(SubjectId, link, Context)
     andalso can_rsc(ObjectId, view, Context).
 

@@ -86,8 +86,8 @@ limitations under the License.
     $.widget("ui.autofocus",
     {
         _init: function() {
-            var self = this;
-            self.element.focus();
+            self = this;
+            setTimeout(() => self.element.focus(), 0);
         }
     });
 
@@ -103,9 +103,11 @@ limitations under the License.
         }, 200);
     });
 
-    $(window).bind('keydown.ctrl_s keydown.meta_s', function(event) {
-        event.preventDefault();
-        $('#rscform').submit();
+    window.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+            event.preventDefault();
+            $('#rscform').submit();
+        }
     });
 
 })(jQuery);
@@ -120,7 +122,7 @@ window.zAdminLinkDone = function(v) {
 };
 
 window.zAdminMediaDone = function(v) {
-    window.z_choose_zmedia(v.object_id);
+    window.z_choose_zmedia(v.object_id, v);
 };
 
 window.zEditLanguage = function() {
@@ -152,4 +154,4 @@ function z_admin_ensure_block_names() {
             }
         }
     });
-}
+};

@@ -2,7 +2,7 @@
     {description, "Basic scomps, actions and validators"},
     {vsn, {file, "../../VERSION"}},
     {registered, []},
-    {applications, [kernel, stdlib, zotonic_core]},
+    {applications, [kernel, stdlib, cowmachine, zotonic_core]},
     {env, []},
     {modules, []},
     {doc, "doc"},

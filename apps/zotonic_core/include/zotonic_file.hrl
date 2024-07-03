@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013-2014 Marc Worrell
+%% @copyright 2013-2022 Marc Worrell
 %% @doc File/media interface definitions. See also z_media_request.erl
 
-%% Copyright 2013-2014 Marc Worrell
+%% Copyright 2013-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,9 +31,20 @@
         mime :: binary() | string() | undefined
     }).
 
+%% @doc Synchronous download, upload or delete a file on the filestore service.
+%% Report the result to the handler_pid.
+%% Where Result is ok or {error, Reason}.
+-record(filestore_request, {
+        action = upload :: upload | download | delete,
+        remote :: file:filename_all(),
+        local :: file:filename_all(),
+        mime :: binary() | string() | undefined,
+        handler_pid :: pid() | undefined
+    }).
+
 %%% @doc Notification to find the filestore credentials
 -record(filestore_credentials_lookup, {
-        id :: integer(),
+        id :: undefined | integer(),
         path :: binary()
     }).
 

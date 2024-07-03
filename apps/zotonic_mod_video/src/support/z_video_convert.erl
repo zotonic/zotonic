@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014 Marc Worrell
+%% @copyright 2014-2023 Marc Worrell
 %% @doc Process for converting a video to mp4
+%% @end
 
-%% Copyright 2014 Marc Worrell
+%% Copyright 2014-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -42,6 +43,9 @@
           pickled_context
          }).
 
+% Default timeout for video conversions - 6 hours
+-define(FFMPEG_TIMEOUT, 6*3600*1000).
+
 start_link({convert_v1, _Id, _Medium, _Upload, _QueueFilename, _PickledContext}, _Context) ->
                                                 % Flush old convert queue
     ok;
@@ -76,8 +80,12 @@ handle_cast(convert, State) ->
             remove_task(State);
         false ->
             % Queue file was deleted, remove our task
-            ?LOG_NOTICE("Video conversion (startup): medium is not current or queue file missing (id ~p, file ~p)",
-                       [State#state.id, State#state.queue_filename]),
+            ?LOG_NOTICE(#{
+                text => <<"Video conversion (startup): medium is not current or queue file missing">>,
+                in => zotonic_mod_video,
+                rsc_id => State#state.id,
+                filename => State#state.queue_filename
+            }),
             remove_task(State)
     end,
     {stop, normal, State}.
@@ -97,8 +105,15 @@ do_convert(QueuePath, State) ->
     case video_convert(QueuePath, Upload#media_upload_preprocess.mime) of
         {ok, TmpFile} ->
             insert_movie(TmpFile, State);
-        Error ->
-            ?LOG_WARNING("ffmpeg conversion error on ~p: ~p", [State#state.id, Error]),
+        {error, Reason} ->
+            ?LOG_WARNING(#{
+                text => <<"ffmpeg conversion error">>,
+                in => zotonic_mod_video,
+                rsc_id => State#state.id,
+                filename => QueuePath,
+                result => error,
+                reason => Reason
+            }),
             insert_broken(State)
     end.
 
@@ -119,7 +134,11 @@ insert_movie(TmpFile, State) ->
                 [no_touch],
                 Context);
         false ->
-            ?LOG_INFO("Video conversion (ok): medium is not current anymore (id ~p)", [State#state.id])
+            ?LOG_INFO(#{
+                text => <<"Video conversion (ok): medium is not current anymore">>,
+                in => zotonic_mod_video,
+                rsc_id => State#state.id
+            })
     end.
 
 -spec original_filename( #media_upload_preprocess{} ) -> binary().
@@ -138,7 +157,11 @@ insert_broken(State) ->
             },
             m_media:replace_file(undefined, State#state.id, #{}, PropsMedia, [no_touch], Context);
         false ->
-            ?LOG_NOTICE("Video conversion (broken): medium is not current anymore (id ~p)", [State#state.id])
+            ?LOG_NOTICE(#{
+                text => <<"Video conversion (broken): medium is not current anymore">>,
+                in => zotonic_mod_video,
+                rsc_id => State#state.id
+            })
     end.
 
 is_current_upload(State, Context) ->
@@ -175,7 +198,7 @@ video_convert(QueuePath, Mime) ->
         " -preset medium "
         " -metadata:s:v:0 rotate=0 ").
 
--spec video_convert_1(file:filename(), integer(), string() | binary()) ->
+-spec video_convert_1(file:filename_all(), integer(), string() | binary()) ->
     {ok, file:filename_all()} | term().
 video_convert_1(QueuePath, Orientation, Mime) ->
     Cmdline = case z_config:get(ffmpeg_cmdline) of
@@ -190,34 +213,54 @@ video_convert_1(QueuePath, Orientation, Mime) ->
                 case maybe_reset_metadata(TransposeOption, QueuePath, Mime) of
                     {ok, QueuePath1} ->
                         TmpFile = z_tempfile:new(),
-                        FfmpegCmd = z_convert:to_list(
-                                      iolist_to_binary(
+                        FfmpegCmd = unicode:characters_to_binary(
                                         [io_lib:format(Cmdline, [z_filelib:os_filename(QueuePath1)]),
                                          " ",
                                          TransposeOption,
                                          " ",
                                          z_filelib:os_filename(TmpFile)
-                                        ])),
+                                        ]),
 
-                        ?LOG_DEBUG("Video convert: ~p", [FfmpegCmd]),
-                        case os:cmd(FfmpegCmd) of
-                            [] ->
+                        ?LOG_DEBUG(#{
+                            text => <<"Video convert">>,
+                            in => zotonic_mod_video,
+                            command => FfmpegCmd
+                        }),
+                        RunOptions = #{
+                            timeout => ?FFMPEG_TIMEOUT
+                        },
+                        case z_exec:run(FfmpegCmd, RunOptions) of
+                            {ok, Stdout} ->
                                 case filelib:file_size(TmpFile) of
                                     0 ->
-                                        ?LOG_WARNING("Video convert error: (empty result file)  [queue: ~p]", [QueuePath]),
+                                        ?LOG_WARNING(#{
+                                            in => zotonic_mod_video,
+                                            text => <<"Video convert error: (empty result file)">>,
+                                            result => error,
+                                            reason => convert,
+                                            command => FfmpegCmd,
+                                            stdout => Stdout,
+                                            filename => unicode:characters_to_binary(QueuePath)
+                                        }),
                                         {error, convert};
                                     _ ->
                                         {ok, TmpFile}
                                 end;
-                            Other ->
-                                ?LOG_WARNING("Video convert error: ~p [queue: ~p]", [Other, QueuePath]),
-                                {error, Other}
+                            {error, Reason} ->
+                                ?LOG_ERROR(#{
+                                    in => zotonic_mod_video,
+                                    text => <<"Video convert error">>,
+                                    result => error,
+                                    reason => Reason,
+                                    command => FfmpegCmd,
+                                    filename => unicode:characters_to_binary(QueuePath)
+                                }),
+                                {error, Reason}
                         end;
                     {error, _} = Error ->
                         Error
                 end
              end).
-
 
   -define(CMDLINE_RESETMETA,
         "ffmpeg -i "
@@ -230,23 +273,40 @@ video_convert_1(QueuePath, Orientation, Mime) ->
 maybe_reset_metadata("", QueuePath, _Mime) ->
     {ok, QueuePath};
 maybe_reset_metadata(_TransposeOption, QueuePath, Mime) ->
-    TmpFile = z_tempfile:new( z_convert:to_list( z_media_identify:extension(Mime) ) ),
-    FfmpegCmd = z_convert:to_list(
-                  iolist_to_binary(
+    TmpFile = z_tempfile:new(z_media_identify:extension(Mime)),
+    FfmpegCmd = unicode:characters_to_binary(
                     [io_lib:format(?CMDLINE_RESETMETA, [z_filelib:os_filename(QueuePath)]),
                      " ",
                      z_filelib:os_filename(TmpFile)
-                    ])),
-    case os:cmd(FfmpegCmd) of
-        [] ->
+                    ]),
+    RunOptions = #{
+        timeout => ?FFMPEG_TIMEOUT
+    },
+    case z_exec:run(FfmpegCmd, RunOptions) of
+        {ok, Stdout} ->
             case filelib:file_size(TmpFile) of
                 0 ->
-                    ?LOG_WARNING("Video convert error: (empty result file during metadata reset)  [queue: ~p]", [QueuePath]),
+                    ?LOG_WARNING(#{
+                        in => zotonic_mod_video,
+                        text => <<"Video convert error: (empty result file during metadata reset)">>,
+                        result => error,
+                        reason => convert,
+                        command => FfmpegCmd,
+                        stdout => Stdout,
+                        filename => QueuePath
+                    }),
                     {error, convert};
                 _ ->
                     {ok, TmpFile}
             end;
-        Other ->
-            ?LOG_WARNING("Video convert error: (during metadata reset) ~p [queue: ~p]", [Other, QueuePath]),
-            {error, Other}
+        {error, Reason} ->
+            ?LOG_WARNING(#{
+                in => zotonic_mod_video,
+                text => <<"Video convert error: (during metadata reset)">>,
+                command => FfmpegCmd,
+                result => error,
+                reason => Reason,
+                filename => QueuePath
+            }),
+            {error, Reason}
     end.

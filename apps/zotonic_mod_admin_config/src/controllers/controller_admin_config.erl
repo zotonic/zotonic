@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-08-07
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Overview of all config settings with string values.
+%% @end
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -26,6 +26,8 @@
     process/4
 ]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
+
 service_available(Context) ->
     Context1 = z_context:set_noindex_header(Context),
     Context2 = z_context:set_nocache_headers(Context1),
@@ -46,21 +48,27 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
 
 
 %% @doc Check if the config does not have a non-string setting.  We only edit string values.
-%% @spec only_value_config({module, [{key,Value}]}) -> bool()
 only_value_config({Module, Keys}) ->
     {Module, lists:filter(fun is_value_config_key/1, Keys)}.
 
-    is_value_config_key({_Key, Props}) ->
-        is_value_config_props(Props).
+is_value_config_key({_Key, Props}) ->
+    is_value_config_props(Props).
 
-    is_value_config_props([]) ->
-        true;
-    is_value_config_props([{Prop,_}|Rest]) when Prop == created; Prop == modified; Prop == value; Prop == id; Prop == module; Prop == key ->
-        is_value_config_props(Rest);
-    is_value_config_props([{props,<<>>}|Rest]) ->
-        is_value_config_props(Rest);
-    is_value_config_props([{props,undefined}|Rest]) ->
-        is_value_config_props(Rest);
-    is_value_config_props(_X) ->
-        false.
+is_value_config_props([]) ->
+    true;
+is_value_config_props([{Prop,_}|Rest]) when
+        Prop =:= created;
+        Prop =:= modified;
+        Prop =:= is_secret;
+        Prop =:= value;
+        Prop =:= id;
+        Prop =:= module;
+        Prop =:= key ->
+    is_value_config_props(Rest);
+is_value_config_props([{props,<<>>}|Rest]) ->
+    is_value_config_props(Rest);
+is_value_config_props([{props,undefined}|Rest]) ->
+    is_value_config_props(Rest);
+is_value_config_props(_X) ->
+    false.
 

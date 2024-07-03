@@ -1,9 +1,9 @@
 {% for mid, _rank in result %}
 
-<li class="header" id="{{ #m.mid }}" data-nestedsortable-receive="{{ mid }}">
+<li class="header" id="{{ #menu.mid }}" data-nestedsortable-receive="{{ mid }}">
 	{% include "_menu_edit_item.tpl" id=mid %}
 </li>
-{% draggable id=#m.mid to_sorter=["menu-",id|to_binary] helper='clone' %}
+{% draggable id=#menu.mid to_sorter=["menu-",id|to_binary] helper='clone' %}
 
 {% empty %}
 

@@ -30,7 +30,7 @@
 -include_lib("zotonic.hrl").
 
 % Max number of times a task will retry on fatal exceptions
--define(MAX_TASK_ERROR_COUNT, 5).
+-define(MAX_TASK_ERROR_COUNT, 10).
 
 
 %% @doc Start a task queue sidejob.
@@ -52,6 +52,7 @@ task_job(
         Args1 = ensure_list(Args),
         ?LOG_DEBUG(#{
             text => <<"Pivot task starting">>,
+            in => zotonic_core,
             mfa => {Module, Function, length(Args1)+1}
         }),
         case call_function(Module, Function, Args1, Context) of
@@ -63,7 +64,8 @@ task_job(
                         is_tuple(Delay) ->
                             Delay
                       end,
-                z_db:update(pivot_task_queue, TaskId, [ {due, Due} ], Context);
+                z_db:update(pivot_task_queue, TaskId, [ {due, Due} ], Context),
+                z_pivot_rsc:publish_task_event(delay, Module, Function, Due, Context);
             {delay, Delay, NewArgs} ->
                 Due = if
                         is_integer(Delay) ->
@@ -76,21 +78,25 @@ task_job(
                     <<"due">> => Due,
                     <<"args">> => NewArgs
                 },
-                z_db:update(pivot_task_queue, TaskId, Fields, Context);
+                z_db:update(pivot_task_queue, TaskId, Fields, Context),
+                z_pivot_rsc:publish_task_event(delay, Module, Function, Due, Context);
             _OK ->
-                z_db:delete(pivot_task_queue, TaskId, Context)
+                z_db:delete(pivot_task_queue, TaskId, Context),
+                z_pivot_rsc:publish_task_event(delete, Module, Function, undefined, Context)
         end
     catch
         error:undef:Trace ->
             ?LOG_ERROR(#{
                 text => <<"Pivot task failed - undefined function, aborting">>,
+                in => zotonic_core,
                 task_id => TaskId,
                 mfa => {Module, Function, Args},
                 result => error,
                 reason => undef,
                 stack => Trace
             }),
-            z_db:delete(pivot_task_queue, TaskId, Context);
+            z_db:delete(pivot_task_queue, TaskId, Context),
+            z_pivot_rsc:publish_task_event(delete, Module, Function, undefined, Context);
         Error:Reason:Trace ->
             maybe_schedule_retry(Task, Error, Reason, Trace, Context)
     after
@@ -104,6 +110,7 @@ maybe_schedule_retry(#{ task_id := TaskId, error_count := ErrCt, mfa := MFA }, E
     RetryDue = task_retry_due(ErrCt),
     ?LOG_ERROR(#{
         text => <<"Pivot task failed - will retry">>,
+        in => zotonic_core,
         task_id => TaskId,
         mfa => MFA,
         result => Error,
@@ -116,10 +123,13 @@ maybe_schedule_retry(#{ task_id := TaskId, error_count := ErrCt, mfa := MFA }, E
         <<"error_count">> => ErrCt+1
     },
     {ok, _} = z_db:update(pivot_task_queue, TaskId, RetryFields, Context),
+    {Module, Function, _} = MFA,
+    z_pivot_rsc:publish_task_event(retry, Module, Function, RetryDue, Context),
     ok;
 maybe_schedule_retry(#{ task_id := TaskId, mfa := MFA }, Error, Reason, Trace, Context) ->
     ?LOG_ERROR(#{
         text => <<"Pivot task failed - aborting">>,
+        in => zotonic_core,
         task_id => TaskId,
         mfa => MFA,
         result => Error,
@@ -127,6 +137,8 @@ maybe_schedule_retry(#{ task_id := TaskId, mfa := MFA }, Error, Reason, Trace, C
         stack => Trace
     }),
     z_db:delete(pivot_task_queue, TaskId, Context),
+    {Module, Function, _} = MFA,
+    z_pivot_rsc:publish_task_event(delete, Module, Function, undefined, Context),
     {error, stopped}.
 
 call_function(Module, Function, As, Context) ->

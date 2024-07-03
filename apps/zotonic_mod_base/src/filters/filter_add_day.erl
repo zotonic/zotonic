@@ -28,7 +28,5 @@ add_day(undefined, _N, _Context) ->
 	undefined;
 add_day(Date, 0, _Context) ->
 	Date;
-add_day(Date, N, Context) when is_integer(N), N > 0 ->
-	add_day(z_datetime:next_day(Date), N-1, Context);
-add_day(Date, N, Context) when is_integer(N), N < 0 ->
-	add_day(z_datetime:prev_day(Date), N+1, Context).
+add_day(Date, N, _Context) when is_integer(N) ->
+	z_datetime:next_day(Date, N).

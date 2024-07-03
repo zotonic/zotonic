@@ -26,14 +26,18 @@
     "js/modules/z.dialog.js"
     "js/modules/z.feedback.js"
     "js/modules/z.formreplace.js"
+    "js/modules/z.forminit.js"
     "js/modules/z.datepicker.js"
+    "js/modules/z.listfilter.js"
     "js/modules/z.menuedit.js"
-    "js/modules/z.cropcenter.js"
     "js/modules/z.popupwindow.js"
     "js/modules/z.zeditor.js"
     "js/modules/livevalidation-1.3.js"
     "js/modules/jquery.loadmask.js"
     "js/modules/jquery.timepicker.min.js"
+
+    "js/prism.js"
+    "js/zotonic-search-view.js"
 
     minify
 %}
@@ -48,4 +52,3 @@ $(function()
 	$.widgetManager();
 });
 </script>
-

@@ -48,4 +48,9 @@ delegate       Erlang module handling the postback.
                generating the page.                  delegate="my_event_module"
 is_danger      If the 'ok' button should be flagged  is_danger
                as dangerous.
+level          Nesting of the dialog. Non negative   level="top"
+               integer, higher numbered levels are
+               displayed above lower levels.
+               Special level ``"top"`` to force
+               display on top.
 =============  ====================================  =====================================

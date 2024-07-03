@@ -5,9 +5,9 @@
 ``post_is_a``
     List of resource categories after the update.
 ``pre_props``
-    List of properties before the update.
+    Map of properties before the update.
 ``post_props``
-    List of properties after the update.
+    Map of properties after the update.
 
 Example
 """""""

@@ -34,11 +34,15 @@
     get_boolean/3,
     get_boolean/4,
 
+    set_default_value/4,
     set_value/4,
     set_prop/5,
+    get_prop/4,
 
     delete/3,
-    get_id/3
+    get_id/3,
+
+    is_public_config_key/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -56,12 +60,11 @@ m_get([ Module ], _Msg, Context) ->
         false -> {error, eacces}
     end;
 m_get([ Module, Key | Rest ], _Msg, Context) ->
-    case z_acl:is_admin(Context) of
+    case is_public_config_key(Key) orelse z_acl:is_admin(Context) of
         true -> {ok, {get(Module, Key, Context), Rest}};
         false -> {error, eacces}
     end;
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_ERROR("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 %% @doc Return all configurations from the configuration table. Returns a nested proplist (module, key)
@@ -87,10 +90,18 @@ all(Context) ->
                 {M, z_utils:index_proplist(key, CMs)}
                 || {M, CMs} <- z_utils:group_proplists(module, Cs)
             ],
-            Indexed1 = [
-                {z_convert:to_atom(M), [{z_convert:to_atom(K), Vs} || {K, Vs} <- CMs]}
-                || {M, CMs} <- Indexed
-            ],
+            Indexed1 = lists:map(
+                fun({M, CMs}) ->
+                    CMs1 = lists:map(
+                        fun({K, Vs}) ->
+                            K1 = z_convert:to_atom(K),
+                            Vs1 = set_is_secret(z_convert:to_binary(K), Vs),
+                            {K1, Vs1}
+                        end,
+                        CMs),
+                    {z_convert:to_atom(M), CMs1}
+                end,
+                Indexed),
             z_depcache:set(config, Indexed1, ?DAY, Context),
             Indexed1
     end.
@@ -216,6 +227,18 @@ get_boolean(Module, Key, Context) ->
 -spec get_boolean( atom() | binary(), atom() | binary(), term(), z:context() ) -> boolean().
 get_boolean(Module, Key, Default, Context) ->
     z_convert:to_bool(get_value(Module, Key, Default, Context)).
+
+
+%% @doc Set the value of a config iff the current value is 'undefined'. Useful for initialization
+%% of new module data schemas.
+-spec set_default_value( atom() | binary(), atom() | binary(), string() | binary() | atom(), z:context() ) -> ok | {error, term()}.
+set_default_value(Module, Key, Value, Context) ->
+    case get_value(Module, Key, Context) of
+        undefined ->
+            set_value(Module, Key, Value, Context);
+        _Value ->
+            ok
+    end.
 
 %% @doc Set a "simple" config value.
 -spec set_value( atom() | binary(), atom() | binary(), string() | binary() | atom(), z:context() ) -> ok | {error, term()}.
@@ -348,6 +371,38 @@ set_prop(Module, Key, Prop, PropValue, Context) ->
     end.
 
 
+set_is_secret(Key, CMs) ->
+    case proplists:get_value(is_secret, CMs) of
+        undefined ->
+            [ {is_secret, is_secret_key(Key)} | proplists:delete(is_secret, CMs) ];
+        V ->
+            z_convert:to_bool(V)
+    end.
+
+is_secret_key(<<"password_min_length">>) -> false;
+is_secret_key(<<"password_regex">>) -> false;
+is_secret_key(<<"s3key">>) -> false;
+is_secret_key(K) ->
+    binary:match(K, <<"password">>) /= nomatch
+    orelse binary:match(K, <<"secret">>) /= nomatch
+    orelse binary:match(K, <<"key">>) /= nomatch.
+
+
+%% @doc Get a "complex" config value.
+-spec get_prop(Module, Key, Prop, Context) -> Value | undefined when
+    Module :: atom() | binary(),
+    Key :: atom() | binary(),
+    Prop :: atom() | binary(),
+    Context :: z:context(),
+    Value :: term().
+get_prop(Module, Key, Prop, Context) ->
+    case m_config:get(Module, Key, Context) of
+        undefined ->
+            undefined;
+        Config when is_list(Config) ->
+            proplists:get_value(z_convert:to_atom(Prop), Config)
+    end.
+
 %% @doc Delete the specified module/key combination
 -spec delete( atom()|binary(), atom()|binary(), z:context() ) -> ok.
 delete(Module, Key, Context) ->
@@ -371,4 +426,11 @@ delete(Module, Key, Context) ->
 get_id(Module, Key, Context) ->
     z_db:q1("select id from config where module = $1 and key = $2", [Module, Key], Context).
 
-
+%% @doc Return true when the argument is a public readable configuration key "public_" prefix.
+-spec is_public_config_key(atom() | binary()) -> boolean().
+is_public_config_key(Atom) when is_atom(Atom) ->
+    is_public_config_key(z_convert:to_binary(Atom));
+is_public_config_key(<<"public_", _/binary>>) ->
+    true;
+is_public_config_key(_) ->
+    false.

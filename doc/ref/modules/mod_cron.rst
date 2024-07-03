@@ -21,6 +21,7 @@ and *h* for hours.
   * tick_1h
   * tick_2h
   * tick_3h
+  * tick_4h
   * tick_6h
   * tick_12h
   * tick_24h

@@ -18,7 +18,7 @@
 
 {% with predicate_ids|default:id.predicates_edit as pred_shown %}
     {% for name, p in m.predicate %}
-        {% if p.id|member:pred_shown %}
+        {% if p.id|member:pred_shown and not p.id.is_connections_hide %}
            {% ifnotequal name "depiction" %}
                <h4>{{ p.title }}</h4>
 
@@ -31,6 +31,8 @@
                     dialog_title_add=dialog_title_add
                     callback=callback
                     action=action
+                    nocatselect=nocatselect
+                    content_group=content_group
                     unlink_action=unlink_action
                     undo_message_id="unlink-undo-message"
                     list_id=list_id

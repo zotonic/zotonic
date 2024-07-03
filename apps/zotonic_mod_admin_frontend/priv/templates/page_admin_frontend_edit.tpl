@@ -7,9 +7,11 @@
 			"css/zp-menuedit.css"
 			"css/z.icons.css"
 			"css/zotonic-admin.css"
+			"css/z.modal.css"
 			"css/admin-bootstrap3.css"
 			"css/admin-frontend.css"
             "font-awesome/css/font-awesome.css"
+            "css/image-edit.css"
 	%}
 {% endblock %}
 
@@ -105,7 +107,6 @@
 	    "js/modules/z.formreplace.js"
 	    "js/modules/z.datepicker.js"
 	    "js/modules/z.menuedit.js"
-	    "js/modules/z.cropcenter.js"
 	    "js/modules/z.formdirty.js"
 	    "js/modules/jquery.shorten.js"
 	    "js/modules/jquery.timepicker.min.js"
@@ -117,7 +118,7 @@
 	    "js/jquery.ui.nestedSortable.js"
 	%}
 	{% all include "_admin_lib_js.tpl" %}
-	{% include "_editor.tpl" is_editor_include %}
+	{% include "_admin_frontend_editor.tpl" is_editor_include %}
 
 	{% optional include "_fileuploader_worker.tpl" %}
 

@@ -1,9 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell, Arjan Scherpenisse
-%%
+%% @copyright 2009-2023 Marc Worrell, Arjan Scherpenisse
 %% @doc Initialize the database with start data.
+%% @todo Insert these after translation functions have started so that we can use the
+%% Zotonic .po files for selecting all translations of the predicates.
+%% @end
 
-%% Copyright 2009-2021 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2009-2023 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,10 +31,13 @@
 -include_lib("zotonic.hrl").
 
 %% @doc Insert boot data into the database.
--spec install(atom(), #context{}) -> ok.
+-spec install(Site, Context) -> ok when
+    Site :: atom(),
+    Context :: z:context().
 install(Site, Context) ->
     ?LOG_NOTICE(#{
         text => <<"Site install start.">>,
+        in => zotonic_core,
         site => Site
     }),
     ok = install_category(Context),
@@ -42,13 +47,15 @@ install(Site, Context) ->
     z_db:equery("SELECT setval('rsc_id_seq', m) FROM (select 1 + max(id) as m from rsc) sub", Context),
     ?LOG_NOTICE(#{
         text => <<"Site install done.">>,
+        in => zotonic_core,
         site => Site
     }),
     ok.
 
 install_category(C) ->
     ?LOG_INFO(#{
-        text => <<"Site install: Inserting categories">>
+        text => <<"Site install: Inserting categories">>,
+        in => zotonic_core
     }),
     %% The egg has to lay a fk-checked chicken here, so the insertion order is sensitive.
 
@@ -65,15 +72,15 @@ install_category(C) ->
 
     %% "http://purl.org/dc/terms/DCMIType" ?
     {ok, 1} = z_db:equery("
-            insert into rsc (id, is_protected, visible_for, category_id, name, uri, props, language)
-            values (116, true, 0, 116, 'category', $1, $2, '{nl,en}')
+            insert into rsc (id, is_protected, visible_for, category_id, name, uri, props, language, publication_start)
+            values (116, true, 0, 116, 'category', $1, $2, '{nl,en}', now())
             ", [    undefined,
                     ?DB_PROPS([{title, {trans, [{en, <<"Category">>}, {nl, <<"Categorie">>}]}}])
                 ], C),
 
     {ok, 1} = z_db:equery("
-            insert into rsc (id, is_protected, visible_for, category_id, name, uri, props, language)
-            values (115, true, 0, 116, 'meta', $1, $2, '{nl,en}')
+            insert into rsc (id, is_protected, visible_for, category_id, name, uri, props, language, publication_start)
+            values (115, true, 0, 116, 'meta', $1, $2, '{nl,en}', now())
             ", [    undefined,
                     ?DB_PROPS([{title, {trans, [{en, <<"Meta">>}, {nl, <<"Meta">>}]}}])
                 ], C),
@@ -116,8 +123,8 @@ install_category(C) ->
 
     InsertCatFun = fun({Id, ParentId, Nr, Lvl, Left, Right, Name, Protected, Uri, Props}) ->
         {ok, 1} = z_db:equery("
-                insert into rsc (id, visible_for, category_id, is_protected, name, uri, props, language)
-                values ($1, 0, 116, $2, $3, $4, $5, '{nl,en}')
+                insert into rsc (id, visible_for, category_id, is_protected, name, uri, props, language, publication_start)
+                values ($1, 0, 116, $2, $3, $4, $5, '{nl,en}', now())
                 ", [ Id, Protected, Name, Uri, ?DB_PROPS(Props) ], C),
         {ok, 1} = z_db:equery("
                 insert into hierarchy (name, id, parent_id, nr, lvl, lft, rght)
@@ -129,29 +136,30 @@ install_category(C) ->
 
 
 %% @doc Install some initial resources, most important is the system administrator
-%% @todo Add the hostname to the uri
 install_rsc(C) ->
     ?LOG_INFO(#{
-        text => <<"Site install: inserting base resources (admin, etc.)">>
+        text => <<"Site install: inserting base resources (admin, etc.)">>,
+        in => zotonic_core
     }),
     Rsc = [
         % id  vsfr  cat   protect name,         props
         [   1,  0,  102,  true,    "administrator",   ?DB_PROPS([{title,<<"Site Administrator">>}]) ]
     ],
     [ {ok,1} = z_db:equery("
-            insert into rsc (id, visible_for, category_id, is_protected, name, props, language)
-            values ($1, $2, $3, $4, $5, $6, '{nl,en}')
+            insert into rsc (id, visible_for, category_id, is_protected, name, props, language, publication_start)
+            values ($1, $2, $3, $4, $5, $6, '{nl,en}', now())
             ", R, C) || R <- Rsc ],
     {ok, _} = z_db:equery("update rsc set creator_id = 1, modifier_id = 1, is_published = true", C),
     ok.
 
 
-%% @doc Install the admin user as an user.  Uses the hard coded password "admin" when no password defined in the environment.
+%% @doc Install the admin user as a user.  Uses the hard coded password "admin" when no password defined in the environment.
 install_identity(C) ->
     ?LOG_INFO(#{
-        text => <<"Site install: inserting username for the admin">>
+        text => <<"Site install: inserting username for the admin">>,
+        in => zotonic_core
     }),
-    Hash = m_identity:hash([]),
+    Hash = m_identity:hash(<<>>),
     {ok, 1} = z_db:equery("
         insert into identity (rsc_id, type, key, is_unique, propb)
         values (1, 'username_pw', 'admin', true, $1)", [{term, Hash}], C),
@@ -160,27 +168,27 @@ install_identity(C) ->
 
 %% @doc Install some initial predicates, this list should be extended with common and useful predicates
 %% See http://dublincore.org/documents/dcmi-terms/
-%% @todo Extend and check this list.  Add allowed from/to categories.
 install_predicate(C) ->
     ?LOG_INFO(#{
-        text => <<"Site install: inserting predicates">>
+        text => <<"Site install: inserting predicates">>,
+        in => zotonic_core
     }),
     Preds = [
         % id   protect name       uri                                                  props
-        [ 300, true,   "about",    "http://www.w3.org/1999/02/22-rdf-syntax-ns#about",  ?DB_PROPS([{reversed, false},{title, {trans, [{en,"About"},    {nl,"Over"}]}}])],
-        [ 301, true,   "author",   "http://purl.org/dc/terms/creator",                  ?DB_PROPS([{reversed, false},{title, {trans, [{en,"Author"},   {nl,"Auteur"}]}}])],
-        [ 303, true,   "relation", "http://purl.org/dc/terms/relation",                 ?DB_PROPS([{reversed, false},{title, {trans, [{en,"Relation"}, {nl,"Relatie"}]}}])],
-        [ 304, true,   "depiction","http://xmlns.com/foaf/0.1/depiction",               ?DB_PROPS([{reversed, false},{title, {trans, [{en,"Depiction"},{nl,"Afbeelding"}]}}])],
-        [ 308, true,   "subject",  "http://purl.org/dc/elements/1.1/subject",           ?DB_PROPS([{reversed, false},{title, {trans, [{en,"Keyword"},  {nl,"Trefwoord"}]}}])],
-        [ 309, true,   "hasdocument", "http://zotonic.net/predicate/hasDocument",       ?DB_PROPS([{reversed, false},{title, {trans, [{en,"Document"}, {nl,"Document"}]}}])],
-		[ 310, true,   "haspart",  "http://purl.org/dc/terms/hasPart",					?DB_PROPS([{reversed, false},{title, {trans, [{en,"Contains"}, {nl,"Bevat"}]}}])]
+        [ 300, true,   "about",    "http://www.w3.org/1999/02/22-rdf-syntax-ns#about",  ?DB_PROPS([{reversed, false},{title, #trans{ tr = [{en,<<"About">>},    {nl,<<"Over">>}]}}])],
+        [ 301, true,   "author",   "http://purl.org/dc/terms/creator",                  ?DB_PROPS([{reversed, false},{title, #trans{ tr = [{en,<<"Author">>},   {nl,<<"Auteur">>}]}}])],
+        [ 303, true,   "relation", "http://purl.org/dc/terms/relation",                 ?DB_PROPS([{reversed, false},{title, #trans{ tr = [{en,<<"Relation">>}, {nl,<<"Relatie">>}]}}])],
+        [ 304, true,   "depiction","http://xmlns.com/foaf/0.1/depiction",               ?DB_PROPS([{reversed, false},{title, #trans{ tr = [{en,<<"Depiction">>},{nl,<<"Afbeelding">>}]}}])],
+        [ 308, true,   "subject",  "http://purl.org/dc/elements/1.1/subject",           ?DB_PROPS([{reversed, false},{title, #trans{ tr = [{en,<<"Keyword">>},  {nl,<<"Trefwoord">>}]}}, {is_connect_checkbox, true}])],
+        [ 309, true,   "hasdocument", "http://zotonic.net/predicate/hasDocument",       ?DB_PROPS([{reversed, false},{title, #trans{ tr = [{en,<<"Document">>}, {nl,<<"Document">>}]}}])],
+		[ 310, true,   "haspart",  "http://purl.org/dc/terms/hasPart",					?DB_PROPS([{reversed, false},{title, #trans{ tr = [{en,<<"Contains">>}, {nl,<<"Bevat">>}]}}])]
     ],
 
     CatId   = z_db:q1("select id from rsc where name = 'predicate'", C),
 
     [ {ok,1} = z_db:equery("
-            insert into rsc (id, visible_for, is_protected, name, uri, props, category_id, is_published, creator_id, modifier_id, language)
-            values ($1, 0, $2, $3, $4, $5, $6, true, 1, 1, '{nl,en}')
+            insert into rsc (id, visible_for, is_protected, name, uri, props, category_id, is_published, creator_id, modifier_id, language, publication_start)
+            values ($1, 0, $2, $3, $4, $5, $6, true, 1, 1, '{nl,en}', now())
             ", R ++ [CatId], C) || R <- Preds],
 
     ObjSubj = [

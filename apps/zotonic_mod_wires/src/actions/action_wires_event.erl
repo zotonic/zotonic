@@ -79,7 +79,10 @@ script(continuation, TriggerId, Trigger, PostbackMsgJS, PickledPostback, Actions
 script(interval, _TriggerId, _Trigger, PostbackMsgJS, _PickledPostback, ActionsJS, _Propagate, Args, Context) ->
     Interval = proplists:get_value(interval, Args, 250),
     {[
-        <<"setTimeout(\"">>,z_utils:js_escape(PostbackMsgJS), z_utils:js_escape(ActionsJS), <<"\", ">>,
+        <<"setTimeout(function() { ">>,
+            z_utils:js_escape(PostbackMsgJS),
+            z_utils:js_escape(ActionsJS),
+        <<" }, ">>,
         io_lib:format("~p", [Interval]), <<");\n">>
     ], Context};
 
@@ -138,7 +141,11 @@ script(EventType, TriggerId, Trigger, PostbackMsgJS, PickledPostback, ActionsJS,
         {ok, Script, Context} ->
             {Script, Context};
         undefined ->
-            ?LOG_ERROR("Unhandled event type: ~p", [EventType]),
+            ?LOG_ERROR(#{
+                text => <<"Unhandled event type for wires scomp">>,
+                in => zotonic_mod_wires,
+                type => EventType
+            }),
             {[], Context}
     end;
 

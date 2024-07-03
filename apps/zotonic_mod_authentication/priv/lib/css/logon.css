@@ -5,15 +5,18 @@ body.err403 .z-logon-box {
   background-color: white;
   padding: 20px 10px;
 }
+
 .z-logon-prompt {
   text-align: center;
   max-width: 400px;
   margin: 40px auto;
 }
+
 .z-logon-back {
   float: left;
   margin: 40px 20px;
 }
+
 .z-logon-box {
   float: none;
   margin: 15px auto;
@@ -37,14 +40,12 @@ body.err403 .z-logon-box {
 .z-logon-box p {
   margin-bottom: 10px;
 }
-.z-logon-box button[type="submit"],
-.z-logon-box input[type="submit"] {
+.z-logon-box button[type=submit],
+.z-logon-box input[type=submit] {
   width: 100%;
 }
 .z-logon-box .z-logon-title:first-of-type,
-.z-logon-box h2:first-of-type,
-.z-logon-box h3:first-of-type,
-.z-logon-box h4:first-of-type {
+.z-logon-box h2:first-of-type, .z-logon-box h3:first-of-type, .z-logon-box h4:first-of-type {
   margin-top: 0;
 }
 .z-logon-box .z-logon-form {
@@ -74,7 +75,7 @@ body.err403 .z-logon-box {
   width: 40px;
   background-color: #fff;
   content: "";
-  margin: -8px 0 0 -20px;
+  margin: calc(-16px / 2) 0 0 calc(-16px / 2);
   z-index: -1;
 }
 .z-logon-box .z-logon-extra .z-logon-extra-separator:after {
@@ -135,11 +136,7 @@ body.err403 .z-logon-box {
 .z-logon-box #signup_error_duplicate_identity {
   display: none;
 }
-.z-logon-box.error_tos_agree #signup_error_tos_agree,
-.z-logon-box.error_duplicate_username #signup_error_duplicate_username,
-.z-logon-box.error_duplicate_identity #signup_error_duplicate_identity,
-.z-logon-box.error_custom_1 #signup_error_custom_1,
-.z-logon-box.error_custom_2 #signup_error_custom_2 {
+.z-logon-box.error_tos_agree #signup_error_tos_agree, .z-logon-box.error_duplicate_username #signup_error_duplicate_username, .z-logon-box.error_duplicate_identity #signup_error_duplicate_identity, .z-logon-box.error_custom_1 #signup_error_custom_1, .z-logon-box.error_custom_2 #signup_error_custom_2 {
   display: block;
 }
 .z-logon-box .z_validation_message {

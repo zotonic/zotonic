@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013 Marc Worrell
+%% @copyright 2013-2024 Marc Worrell
 %% @doc Model for configurable host/path redirects
+%% @end
 
-%% Copyright 2013 Marc Worrell
+%% Copyright 2013-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@
 -export([
     m_get/3,
 
+    is_allowed/1,
     get/2,
     get/3,
     insert/2,
@@ -43,18 +45,24 @@
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ <<"list">> | Rest ], _Msg, Context) ->
-    case z_acl:is_admin(Context) of
+    case is_allowed(Context) of
         true -> {ok, {list(Context), Rest}};
         false -> {error, eacces}
     end;
 m_get([ Id | Rest ], _Msg, Context) ->
-    case z_acl:is_admin(Context) of
+    case is_allowed(Context) of
         true -> {ok, {get(Id, Context), Rest}};
         false -> {error, eacces}
     end;
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
+
+
+%% @doc Check is the user is allowed to make changes to the custom redirects.
+-spec is_allowed(Context) -> boolean() when
+    Context :: z:context().
+is_allowed(Context) ->
+    z_acl:is_allowed(use, mod_custom_redirect, Context).
 
 
 get(Id, Context) ->

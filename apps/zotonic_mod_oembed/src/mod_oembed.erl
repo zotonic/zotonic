@@ -1,8 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2011-2021 Arjan Scherpenisse <arjan@scherpenisse.net>
+%% @copyright 2011-2023 Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @doc Enables embedding media from their URL.
+%% @end
 
-%% Copyright 2011-2021 Arjan Scherpenisse <arjan@scherpenisse.net>
+%% Copyright 2011-2023 Arjan Scherpenisse <arjan@scherpenisse.net>
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -33,7 +34,8 @@
 
     event/2,
 
-    preview_create/2
+    preview_create/2,
+    oembed_request/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -162,24 +164,37 @@ observe_media_viewer(#media_viewer{
         {options, Options},
         {filename, Filename}
     ],
-    Html = case maps:find(<<"oembed">>, Props) of
+    case maps:find(<<"oembed">>, Props) of
        {ok, OEmbed} ->
-            case lookup(<<"provider_name">>, provider_name, OEmbed) of
+            EmbedCode = case lookup(<<"provider_name">>, provider_name, OEmbed) of
                 {ok, N} ->
                     Tpl = iolist_to_binary(["_oembed_embeddable_",z_string:to_name(N),".tpl"]),
                     case z_module_indexer:find(template, Tpl, Context) of
                         {ok, Found} ->
-                            z_template:render(Found, TplOpts, Context);
+                            {TplHtml, _} = z_template:render_to_iolist(Found, TplOpts, Context),
+                            TplHtml;
                         {error, _} ->
                             media_viewer_fallback(OEmbed, TplOpts, Context)
                     end;
                 error ->
                     media_viewer_fallback(OEmbed, TplOpts, Context)
-            end;
+            end,
+            case z_notifier:first(#media_viewer_consent{
+                    id = Id,
+                    consent = all,
+                    html = EmbedCode,
+                    viewer_props = Props,
+                    viewer_options = Options
+                 }, Context)
+             of
+                undefined ->
+                    {ok, EmbedCode};
+                {ok, _} = ConsentHtml ->
+                    ConsentHtml
+             end;
         error ->
-            <<"<!-- No oembed code found -->">>
-    end,
-    {ok, Html};
+            {ok, <<"<!-- No oembed code found -->">>}
+    end;
 observe_media_viewer(#media_viewer{}, _Context) ->
     undefined.
 
@@ -199,19 +214,20 @@ lookup(K1, K2, OEmbed) when is_map(OEmbed) ->
     end.
 
 media_viewer_fallback(OEmbed, TplOpts, Context) ->
-    case lookup(<<"html">>, html, OEmbed) of
+    Vars = case lookup(<<"html">>, html, OEmbed) of
         {ok, Html} ->
             Html1 = binary:replace(Html, <<"http://">>, <<"https://">>, [global]),
             IsIframe = binary:match(Html1, <<"<iframe">>) =/= nomatch,
-            TplOpts1 = [
+            [
                 {html, Html1},
                 {is_iframe, IsIframe}
                 | TplOpts
-            ],
-            z_template:render("_oembed_embeddable.tpl", TplOpts1, Context);
+            ];
         error ->
-            z_template:render("_oembed_embeddable.tpl", TplOpts, Context)
-    end.
+            TplOpts
+    end,
+    {EmbedHtml, _} = z_template:render_to_iolist("_oembed_embeddable.tpl", Vars, Context),
+    EmbedHtml.
 
 
 % @doc Recognize youtube and vimeo URLs, generate the correct embed code
@@ -263,32 +279,49 @@ first([<<>>|Xs]) -> first(Xs);
 first([X|_]) -> X.
 
 
-%% @doc Import a embedded medium for a rsc_import. Sanitize the provided html.
+%% @doc Import a embedded medium for a rsc_import. Sanitize the provided html. Try to fetch
+%% a fresh embed copy, as sometimes the preview URLs are not valid anymore. If the fresh OEmbed
+%% request fails then use the JSON from the importer.
 -spec observe_media_import_medium(#media_import_medium{}, z:context()) -> undefined | ok.
 observe_media_import_medium(#media_import_medium{
         id = Id,
         medium = #{
             <<"mime">> := ?OEMBED_MIME,
             <<"oembed_url">> := Url,
-            <<"oembed">> := Json
-        } = Medium }, Context) when is_map(Json) ->
+            <<"oembed">> := ImportJson
+        } = Medium }, Context) when is_map(ImportJson) ->
     case m_media:get(Id, Context) of
-        #{ <<"oembed_url">> := Url } ->
+        #{ <<"oembed_url">> := CurrentUrl } when CurrentUrl =:= Url ->
             ok;
         _Other ->
-            Service = z_convert:to_binary(maps:get(<<"oembed_service">>, Medium, undefined)),
-            MediaProps = #{
-                <<"mime">> => ?OEMBED_MIME,
-                <<"oembed_service">> => Service,
-                <<"oembed_url">> => z_sanitize:uri(Url),
-                <<"oembed">> => sanitize_json(Json, Context),
-                <<"height">> => as_int(maps:get(<<"height">>, Medium, undefined)),
-                <<"width">> => as_int(maps:get(<<"width">>, Medium, undefined)),
-                <<"orientation">> => as_int(maps:get(<<"orientation">>, Medium, undefined)),
-                <<"media_import">> => z_sanitize:uri( maps:get(<<"media_import">>, Medium, undefined ))
-            },
+            SafeUrl = z_sanitize:uri(Url),
+            {MediaProps, MediaJson} = case oembed_request(SafeUrl, Context) of
+                {ok, EmbedJson} ->
+                    {#{
+                        <<"mime">> => ?OEMBED_MIME,
+                        <<"width">> => maps:get(<<"width">>, EmbedJson, undefined),
+                        <<"height">> => maps:get(<<"height">>, EmbedJson, undefined),
+                        <<"oembed_service">> => maps:get(<<"provider_name">>, EmbedJson, undefined),
+                        <<"oembed_url">> => SafeUrl,
+                        <<"oembed">> => EmbedJson,
+                        <<"media_import">> => SafeUrl
+                    }, EmbedJson};
+                {error, _} ->
+                    SafeJson = sanitize_json(ImportJson, Context),
+                    Service = z_convert:to_binary(maps:get(<<"oembed_service">>, Medium, undefined)),
+                    {#{
+                        <<"mime">> => ?OEMBED_MIME,
+                        <<"oembed_service">> => Service,
+                        <<"oembed_url">> => SafeUrl,
+                        <<"oembed">> => SafeJson,
+                        <<"height">> => as_int(maps:get(<<"height">>, Medium, undefined)),
+                        <<"width">> => as_int(maps:get(<<"width">>, Medium, undefined)),
+                        <<"orientation">> => as_int(maps:get(<<"orientation">>, Medium, undefined)),
+                        <<"media_import">> => z_sanitize:uri( maps:get(<<"media_import">>, Medium, undefined ))
+                    }, SafeJson}
+            end,
             ok = m_media:replace(Id, MediaProps, Context),
-            preview_create_from_json(Id, Json, Context),
+            preview_create_from_json(Id, MediaJson, Context),
             ok
     end;
 observe_media_import_medium(#media_import_medium{}, _Context) ->
@@ -476,10 +509,22 @@ thumbnail_request(ThumbUrl, _Context) ->
                  end,
             {ok, {CT, ImageData}};
         {ok, {{_, 404, _}, _Headers, _ImageData}} ->
-            ?LOG_INFO("mod_oembed: 404 on thumbnail url ~p", [ThumbUrl]),
+            ?LOG_INFO(#{
+                text => <<"mod_oembed: 404 on thumbnail url">>,
+                in => zotonic_mod_oembed,
+                result => error,
+                reason => enoent,
+                url => ThumbUrl
+            }),
             {error, enoent};
         Other ->
-            ?LOG_WARNING("mod_oembed: unexpected result for ~p: ~p", [ThumbUrl, Other]),
+            ?LOG_WARNING(#{
+                text => <<"mod_oembed: unexpected result for thumbnail url">>,
+                in => zotonic_mod_oembed,
+                result => error,
+                reason => Other,
+                url => ThumbUrl
+            }),
             {error, httpc}
     end.
 

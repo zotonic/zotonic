@@ -1,34 +1,19 @@
 {% if m.auth2fa[id].is_totp_enabled %}
-    <p><span class="fa fa-check-circle"></span> {_ Two-factor authentication is enabled for this user. _}</p>
+    <p><span class="fa fa-check-circle"></span> {_ Two-factor authentication is enabled for this account. _}</p>
 
     <p>
-      {% if (id == 1 and m.acl.user.id == 1) or id != 1 %}
+      {% if m.auth2fa[id].is_allowed_reset %}
           {% button class="btn btn-default"
                     text=_"Remove two-factor..."
-                    action={confirm
-                        text=_"This will disable the two-factor authentication.<br>The old QR code will not be valid anymore."
-                        ok=_"Remove two-factor"
-                        is_danger
-                        postback={auth2fa_remove id=id}
-                        delegate=`mod_auth2fa`
-                    }
+                    postback={auth2fa_remove_confirm id=id}
+                    delegate=`mod_auth2fa`
           %}
-      {% endif %}
-
-      {% if id == m.acl.user %}
-          {% button class="btn btn-default"
-                    text=_"Reset two-factor..."
-                    action={confirm
-                        text=_"This will generate a new QR code for two-factor authentication.<br>The old QR code will not be valid anymore."
-                        ok=_"Generate QR code"
-                        postback={dialog_2fa}
-                        delegate=`mod_auth2fa`
-                    }
-          %}
+      {% else %}
+          {_ Only the user themselves or an admin can remove the two-factor authentication. _}
       {% endif %}
     </p>
 {% else %}
-    <p class="text-danger"><span class="fa fa-warning"></span> {_ Two-factor authentication is not enabled for this user. _}</p>
+    <p class="text-danger"><span class="fa fa-warning"></span> {_ Two-factor authentication is not enabled for this account. _}</p>
 
     {% if id == m.acl.user %}
         <p>

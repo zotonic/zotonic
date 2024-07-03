@@ -1,6 +1,7 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2010-2021 Arjan Scherpenisse, Marc Worrell
+%% @copyright 2010-2024 Arjan Scherpenisse, Marc Worrell
 %% @doc Importing non-authoritative things exported by m_rsc_export into the system.
+%% @end
 
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -35,6 +36,7 @@
 
     import/2,
     import/3,
+    import/4,
     import_uri/2,
     import_uri/3,
     import_uri_recursive/3,
@@ -67,7 +69,8 @@
                 | {deny_category, [ binary() ]}
                 | {deny_predicate, [ binary() ]}
                 | {fetch_options, z_url_fetch:options()}
-                | {uri_template, binary()}.
+                | {uri_template, binary()}
+                | {is_forced_update, boolean()}.               % Set to true on forced medium imports
 -type options() :: [ option() ].
 
 -type import_result() :: {ok, {m_rsc:resource_id(), import_map()}}
@@ -186,9 +189,9 @@ mark_imported(RscId, Status, Context) ->
 
 
 %% @doc Find or create a placeholder resource for later import of referred ids.
--spec maybe_create_empty( map(), map(), options(), z:context() ) -> {ok, {m_rsc:rescource_id(), map()}} | {error, term()}.
+-spec maybe_create_empty( map(), map(), options(), z:context() ) -> {ok, {m_rsc:resource_id(), map()}} | {error, term()}.
 maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
-    case is_imported_resource(Rsc, ImportedAcc, Options, Context) of
+    case is_known_resource(Rsc, ImportedAcc, Options, Context) of
         false ->
             Uri = maps:get(<<"uri">>, Rsc),
             case find_allowed_category(Rsc, #{}, Options, Context) of
@@ -237,9 +240,10 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
                             },
                             {ok, {LocalId, ImportedAcc1}};
                         {error, duplicate_page_path} ->
-                            PagePath = unique_page_path( maps:get(<<"page_path">>, Rsc), Context ),
+                            PagePath = unique_page_path(undefined, maps:get(<<"page_path">>, Rsc), Context ),
                             ?LOG_WARNING(#{
                                 text => <<"Import of duplicate page_path">>,
+                                in => zotonic_core,
                                 result => error,
                                 reason => duplicate_page_path,
                                 uri => Uri,
@@ -248,9 +252,10 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
                             Rsc1 = Rsc#{ <<"page_path">> => PagePath },
                             maybe_create_empty(Rsc1, ImportedAcc, Options, Context);
                         {error, duplicate_name} ->
-                            Name = unique_name( maps:get(<<"name">>, Rsc), Context ),
+                            Name = unique_name(undefined, maps:get(<<"name">>, Rsc), Context ),
                             ?LOG_WARNING(#{
                                 text => <<"Import of duplicate name">>,
+                                in => zotonic_core,
                                 result => error,
                                 reason => duplicate_name,
                                 uri => Uri,
@@ -262,6 +267,7 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
                         {error, Reason} = Error ->
                             ?LOG_NOTICE(#{
                                 text => <<"Not importing menu entry from remote">>,
+                                in => zotonic_core,
                                 result => error,
                                 reason => Reason,
                                 uri => Uri,
@@ -273,6 +279,7 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
                     % Unknown category, deny access
                     ?LOG_INFO(#{
                         text => <<"Not importing menu entry from remote, category disallowed">>,
+                        in => zotonic_core,
                         result => error,
                         reason => Reason,
                         uri => Uri,
@@ -284,7 +291,7 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
             {ok, {RscId, ImportedAcc}}
     end.
 
-is_imported_resource(Rsc, ImportedAcc, Options, Context) ->
+is_known_resource(Rsc, ImportedAcc, Options, Context) ->
     Uri = uri(Rsc),
     case maps:find(Uri, ImportedAcc) of
         {ok, LocalId} ->
@@ -296,11 +303,15 @@ is_imported_resource(Rsc, ImportedAcc, Options, Context) ->
                 RId ->
                     case proplists:get_value(is_authoritative, Options, false) of
                         true ->
-                            % A local copy was requested but the one present is
-                            % not authoritative.
                             case m_rsc:p_no_acl(RId, is_authoritative, Context) of
-                                true -> {true, RId};
-                                false -> false
+                                true ->
+                                    {true, RId};
+                                false ->
+                                    % A local authoritative copy was requested but the one
+                                    % present is not authoritative - in this case we will
+                                    % force a new copy that is authoritative without changing
+                                    % the current non-authoritative resource.
+                                    false
                             end;
                         false ->
                             {true, RId}
@@ -420,6 +431,8 @@ reimport_1(Id, ImportedAcc, IsForceImport, Context) ->
             of
                 true ->
                     case fetch_json(Uri, Context) of
+                        {ok, {RscId, ImportMap}} when is_integer(RscId) ->
+                            {ok, {RscId, maps:merge(ImportMap, ImportedAcc)}};
                         {ok, JSON} ->
                             import_data(Id, Uri, JSON, ImportedAcc, Options, Context);
                         {error, _} = Error ->
@@ -442,6 +455,8 @@ reimport_nonauth(Id, ImportedAcc, Context) ->
                     {error, uri};
                 Uri ->
                     case fetch_json(Uri, Context) of
+                        {ok, {RscId, ImportMap}} when is_integer(RscId) ->
+                            {ok, {RscId, maps:merge(ImportMap, ImportedAcc)}};
                         {ok, JSON} ->
                             import_data(Id, Uri, JSON, ImportedAcc, [], Context);
                         {error, _} = Error ->
@@ -469,6 +484,8 @@ reimport(Id, RefIds, Options, Context) ->
             m_rsc:p(Id, uri_raw, Context)
     end,
     case fetch_json(Uri, Context) of
+        {ok, {RscId, ImportMap}} when is_integer(RscId) ->
+            {ok, {RscId, maps:merge(ImportMap, RefIds)}};
         {ok, JSON} ->
             import_data(Id, Uri, JSON, RefIds, Options1, Context);
         {error, _} = Error ->
@@ -481,6 +498,10 @@ update_medium_uri(LocalId, Uri, Options, Context) ->
     case z_acl:rsc_editable(LocalId, Context) of
         true ->
             case fetch_json(Uri, Context) of
+                {ok, {RscId, ImportMap}} when is_integer(RscId) ->
+                    {ok, {RscId, ImportMap}};
+                {ok, #{ <<"result">> := JSON, <<"status">> := <<"ok">> }} ->
+                    maybe_import_medium(LocalId, JSON, Options, Context);
                 {ok, JSON} ->
                     maybe_import_medium(LocalId, JSON, Options, Context);
                 {error, _} = Error ->
@@ -509,11 +530,16 @@ fetch_json(Uri, Context) ->
                         <<"status">> => <<"ok">>,
                         <<"result">> => Data
                     }};
-                {ok, Data} ->
+                {ok, RscId} when is_integer(RscId) ->
+                    {ok, {RscId, #{ Uri => RscId }}};
+                {ok, {RscId, ImportMap}} when is_integer(RscId) ->
+                    {ok, {RscId, ImportMap#{ Uri => RscId }}};
+                {ok, Data} when is_map(Data); is_list(Data) ->
                     {ok, Data};
                 {error, Reason} = Error ->
                     ?LOG_WARNING(#{
                         text => <<"Error fetching resource">>,
+                        in => zotonic_core,
                         result => error,
                         reason => Reason,
                         uri => Uri
@@ -531,6 +557,7 @@ fetch_json(Uri, Context) ->
                         {error, Reason} = Error ->
                             ?LOG_WARNING(#{
                                 text => <<"Error fetching resource for import">>,
+                                in => zotonic_core,
                                 result => error,
                                 reason => Reason,
                                 uri => Uri
@@ -610,6 +637,7 @@ import_data(Id, _Url, #{ <<"status">> := <<"ok">>, <<"result">> := JSON }, Impor
 import_data(_Id, Url, #{ <<"status">> := <<"error">> } = JSON, _ImportedAcc, _Options, _Context) ->
     ?LOG_WARNING(#{
         text => <<"Remote returned error on import">>,
+        in => zotonic_core,
         uri => Url,
         json => JSON
     }),
@@ -621,6 +649,7 @@ import_data(Id, Url, #{ <<"rdf_triples">> := _ } = Data, ImportedAcc, Options, C
 import_data(_Id, Url, JSON, _ImportedAcc, _Options, _Context) ->
     ?LOG_WARNING(#{
         text => <<"Import of JSON with unknown structure">>,
+        in => zotonic_core,
         uri => Url,
         json => JSON
     }),
@@ -726,6 +755,15 @@ import(JSON, Context) ->
 import(JSON, Options, Context) ->
     import(undefined, JSON, #{}, Options, Context).
 
+%% @doc Import a resource. Overwrites the given resource.
+-spec import( OptLocalId, JSON, options(), z:context() ) -> import_result() when
+    OptLocalId :: m_rsc:resource() | undefined,
+    JSON :: map().
+import(OptLocalId, JSON, Options, Context) ->
+    import(OptLocalId, JSON, #{}, Options, Context).
+
+import(OptLocalId, #{ <<"status">> := <<"ok">>, <<"result">> := JSON }, ImportedAcc, Options, Context) ->
+    import(OptLocalId, JSON, ImportedAcc, Options, Context);
 import(OptLocalId, #{
         <<"resource">> := Rsc,
         <<"uri">> := Uri
@@ -733,12 +771,12 @@ import(OptLocalId, #{
 
     ?LOG_INFO(#{
         text => <<"Importing resource">>,
+        in => zotonic_core,
         uri => Uri,
         local_id => OptLocalId
     }),
     RemoteRId = #{
         <<"uri">> => Uri,
-        <<"name">> => maps:get(<<"name">>, JSON, undefined),
         <<"is_a">> => maps:get(<<"is_a">>, JSON, [])
     },
     case is_local_site(Uri, Context) of
@@ -793,6 +831,7 @@ import(OptLocalId, #{
                         {error, Reason} = Error ->
                             ?LOG_INFO(#{
                                 text => <<"Importing resource returned error">>,
+                                in => zotonic_core,
                                 result => error,
                                 reason => Reason,
                                 uri => Uri,
@@ -810,6 +849,7 @@ import(OptLocalId, #{ <<"rdf_triples">> := _ } = Data, ImportedAcc, Options, Con
 import(_OptLocalId, JSON, _ImportedAcc, _Options, _Context) ->
     ?LOG_WARNING(#{
         text => <<"Import of JSON without required fields resource and uri">>,
+        in => zotonic_core,
         json => JSON
     }),
     {error, status}.
@@ -821,9 +861,10 @@ update_rsc(OptLocalId, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
             OK;
         {error, duplicate_page_path} ->
             OldPath = maps:get(<<"page_path">>, Rsc),
-            PagePath = unique_page_path(OldPath, Context),
+            PagePath = unique_page_path(OptLocalId, OldPath, Context),
             ?LOG_WARNING(#{
                 text => <<"Import of duplicate page_path">>,
+                in => zotonic_core,
                 result => error,
                 reason => duplicate_page_path,
                 rsc_id => OptLocalId,
@@ -836,9 +877,10 @@ update_rsc(OptLocalId, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
             update_rsc(OptLocalId, RemoteRId, Rsc1, ImportedAcc, Options, Context);
         {error, duplicate_name} ->
             OldName = maps:get(<<"name">>, Rsc),
-            Name = unique_name(OldName, Context),
+            Name = unique_name(OptLocalId, OldName, Context),
             ?LOG_WARNING(#{
                 text => <<"Import of duplicate name">>,
+                in => zotonic_core,
                 result => error,
                 reason => duplicate_name,
                 rsc_id => OptLocalId,
@@ -861,7 +903,7 @@ update_rsc_1(undefined, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
     ],
     Uri = maps:get(<<"uri">>, RscLang),
     IsImportDeleted = proplists:get_value(is_import_deleted, Options, false),
-    case is_imported_resource(RemoteRId, ImportedAcc, Options, Context) of
+    case is_known_resource(RemoteRId, ImportedAcc, Options, Context) of
         false when IsImportDeleted ->
             m_rsc:insert(Rsc, UpdateOptions, Context);
         false when not IsImportDeleted ->
@@ -872,13 +914,11 @@ update_rsc_1(undefined, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
                     m_rsc:insert(RscLang, UpdateOptions, Context)
             end;
         {true, LocalId} ->
-            case not is_imported(LocalId, Context)
-                or not m_rsc:p_no_acl(LocalId, is_authoritative, Context)
-            of
+            case m_rsc:p_no_acl(LocalId, is_authoritative, Context) of
                 true ->
-                    m_rsc:update(LocalId, RscLang, UpdateOptions, Context);
+                    {error, authoritative};
                 false ->
-                    {error, authoritative}
+                    m_rsc:update(LocalId, RscLang, UpdateOptions, Context)
             end
     end;
 update_rsc_1(LocalId, _RemoteRId, Rsc, _ImportedAcc, _Options, Context) when is_integer(LocalId) ->
@@ -1180,7 +1220,7 @@ is_html_prop(K) ->
     binary:longest_common_suffix([ K, <<"_html">> ]) =:= 5.
 
 
-maybe_import_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := MediaUrl }, Options, Context)
+maybe_import_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := MediaUrl } = JSON, Options, Context)
     when is_binary(MediaUrl), MediaUrl =/= <<>>, is_map(Medium) ->
     % If medium is outdated (compare with created date in medium record)
     %    - download URL
@@ -1190,8 +1230,9 @@ maybe_import_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := Medi
     RemoteMedium = #{
         <<"created">> => Created
     },
+    IsForcedUpdate = z_convert:to_bool( proplists:get_value(is_forced_update, Options, Context) ),
     LocalMedium = m_media:get(LocalId, Context),
-    case is_newer_medium(RemoteMedium, LocalMedium) of
+    case IsForcedUpdate orelse is_newer_medium(RemoteMedium, LocalMedium) of
         true ->
             MediaOptions = [
                 {is_escape_texts, false},
@@ -1202,7 +1243,19 @@ maybe_import_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := Medi
             RscProps = #{
                 <<"original_filename">> => maps:get(<<"original_filename">>, Medium, undefined)
             },
-            _ = m_media:replace_url(MediaUrl, LocalId, RscProps, MediaOptions, Context);
+            RscProps1 = case JSON of
+                #{ <<"resource">> := Rsc } when is_map(Rsc) ->
+                    RscProps#{
+                        <<"medium_language">> => maps:get(<<"medium_language">>, Rsc, undefined),
+                        <<"medium_edit_settings">> => maps:get(<<"medium_edit_settings">>, Rsc, undefined)
+                    };
+                _ ->
+                    RscProps#{
+                        <<"medium_language">> => undefined,
+                        <<"medium_edit_settings">> => undefined
+                    }
+            end,
+            _ = m_media:replace_url(MediaUrl, LocalId, RscProps1, MediaOptions, Context);
         false ->
             ok
     end,
@@ -1215,6 +1268,7 @@ maybe_import_medium(LocalId, #{ <<"medium">> := Medium }, _Options, Context)
         undefined ->
             ?LOG_NOTICE(#{
                 text => <<"Resource import dropped medium record">>,
+                in => zotonic_core,
                 rsc_id => LocalId
             }),
             {ok, LocalId};
@@ -1303,6 +1357,7 @@ import_edges(LocalId, #{ <<"edges">> := Edges }, ImportedAcc, Options, Context) 
             (Name, V, Acc) ->
                 ?LOG_WARNING(#{
                     text => <<"Import of unknown predicate">>,
+                    in => zotonic_core,
                     name => Name,
                     props => V
                 }),
@@ -1316,7 +1371,7 @@ replace_edges(LocalId, PredId, Os, ImportedAcc, Options, Context) ->
     {ObjectIds, ImportedAcc1} = lists:foldr(
         fun(Edge, {Acc, ImpAcc}) ->
             Object = maps:get(<<"object_id">>, Edge),
-            case is_imported_resource(Object, ImpAcc, Options, Context) of
+            case is_known_resource(Object, ImpAcc, Options, Context) of
                 false ->
                     case maybe_create_empty(Object, ImpAcc, Options, Context) of
                         {ok, {ObjectId, ImpAcc1}} ->
@@ -1324,6 +1379,7 @@ replace_edges(LocalId, PredId, Os, ImportedAcc, Options, Context) ->
                         {error, Reason} ->
                             ?LOG_DEBUG(#{
                                 text => <<"Skipping import of object">>,
+                                in => zotonic_core,
                                 result => error,
                                 reason => Reason,
                                 object => Object
@@ -1363,6 +1419,7 @@ find_allowed_predicate(Name, Pred, Options, Context) ->
                 false ->
                     ?LOG_NOTICE(#{
                         text => <<"Not importing edges because predicate is not allowed.">>,
+                        in => zotonic_core,
                         result => error,
                         reason => eacces,
                         predicate => PredName
@@ -1423,6 +1480,7 @@ find_allowed_category(RId, Rsc, Options, Context) ->
         false ->
             ?LOG_NOTICE(#{
                 text => <<"Not importing resource because category is disallowed">>,
+                in => zotonic_core,
                 result => error,
                 reason => eacces,
                 category => CatName,
@@ -1504,16 +1562,22 @@ is_local_site(Uri, Context ) ->
     end.
 
 %% @doc Generate a new page path by appending a number.
--spec unique_page_path(binary(), z:context()) -> binary() | undefined.
-unique_page_path(Path, Context) ->
-    unique_page_path(Path, 1, Context).
+-spec unique_page_path(OptRscId, Path, Context) -> NewPath | undefined when
+    OptRscId :: m_rsc:resource_id() | undefined,
+    Path :: binary(),
+    Context :: z:context(),
+    NewPath :: binary().
+unique_page_path(OptRscId, Path, Context) ->
+    unique_page_path(OptRscId, Path, 1, Context).
 
-unique_page_path(Path, N, Context) ->
+unique_page_path(OptRscId, Path, N, Context) ->
     B = integer_to_binary(N),
     Path1 = <<Path/binary, $-, B/binary>>,
     case m_rsc:page_path_to_id(Path1, Context) of
+        {ok, OptRscId} ->
+            Path1;
         {ok, _} ->
-            unique_page_path(Path, N+1, Context);
+            unique_page_path(OptRscId, Path, N+1, Context);
         {redirect, _} ->
             Path1;
         {error, {unknown_page_path, _}} ->
@@ -1523,16 +1587,22 @@ unique_page_path(Path, N, Context) ->
     end.
 
 %% @doc Generate a new name by appending a number.
--spec unique_name(binary(), z:context()) -> binary() | undefined.
-unique_name(Name, Context) ->
-    unique_name(Name, 1, Context).
+-spec unique_name(OptRscId, Name, Context) -> NewName | undefined when
+    OptRscId :: m_rsc:resource_id() | undefined,
+    Name :: binary(),
+    Context :: z:context(),
+    NewName :: binary().
+unique_name(OptRscId, Name, Context) ->
+    unique_name(OptRscId, Name, 1, Context).
 
-unique_name(Name, N, Context) ->
+unique_name(OptRscId, Name, N, Context) ->
     B = integer_to_binary(N),
     Name1 = <<Name/binary, $_, B/binary>>,
     case m_rsc:name_to_id(Name1, Context) of
+        {ok, OptRscId} ->
+            Name1;
         {ok, _} ->
-            unique_page_path(Name, N+1, Context);
+            unique_page_path(OptRscId, Name, N+1, Context);
         {error, _} ->
             Name1
     end.
@@ -1545,7 +1615,7 @@ install(Context) ->
             ok;
         false ->
             [] = z_db:q("
-                create table rsc_import (
+                create table if not exists rsc_import (
                     id int not null,
                     user_id int,
                     host character varying(128) not null,
@@ -1574,7 +1644,7 @@ install(Context) ->
                 {"import_rsc_last_import_check_key", "last_import_check"},
                 {"import_rsc_next_import_check_key", "next_import_check"}
             ],
-            [ z_db:q("create index "++Name++" on rsc_import ("++Cols++")", Context) || {Name, Cols} <- Indices ],
+            [ z_db:q("create index if not exists "++Name++" on rsc_import ("++Cols++")", Context) || {Name, Cols} <- Indices ],
             z_db:flush(Context)
     end.
 

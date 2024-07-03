@@ -1,10 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-04-09
-%%
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Model for predicates
+%% @end
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -27,6 +26,7 @@
 -export([
     m_get/3,
 
+    object_resources/2,
     is_predicate/2,
     is_used/2,
     id_to_name/2,
@@ -53,36 +53,122 @@ m_get([ <<"all">> | Rest ], _Msg, Context) ->
     {ok, {all(Context), Rest}};
 m_get([ <<"is_used">>, Pred | Rest ], _Msg, Context) ->
     {ok, {is_used(Pred, Context), Rest}};
+m_get([ <<"object_resources">>, Key | Rest ], _Msg, Context) ->
+    case object_resources(Key, Context) of
+        {ok, List} -> {ok, {List, Rest}};
+        {error, _} = Error -> Error
+    end;
 m_get([ <<"object_category">>, Key | Rest ], _Msg, Context) ->
     {ok, {object_category(Key, Context), Rest}};
 m_get([ <<"subject_category">>, Key | Rest ], _Msg, Context) ->
     {ok, {subject_category(Key, Context), Rest}};
+m_get([ <<"is_valid_object_in_category">>, Predicate, Category | Rest ], _Msg, Context) ->
+    IsValid = is_valid_object_in_category(Predicate, Category, Context),
+    {ok, {IsValid, Rest}};
 m_get([ <<"is_valid_object_subcategory">>, Predicate, Category | Rest ], _Msg, Context) ->
     IsValid = is_valid_object_category(Predicate, Category, true, Context),
     {ok, {IsValid, Rest}};
 m_get([ <<"is_valid_object_category">>, Predicate, Category | Rest ], _Msg, Context) ->
     IsValid = is_valid_object_category(Predicate, Category, false, Context),
     {ok, {IsValid, Rest}};
-m_get([ <<"is_valid_subbject_subcategory">>, Predicate, Category | Rest ], _Msg, Context) ->
+m_get([ <<"is_valid_subject_subcategory">>, Predicate, Category | Rest ], _Msg, Context) ->
     IsValid = is_valid_subject_category(Predicate, Category, true, Context),
     {ok, {IsValid, Rest}};
-m_get([ <<"is_valid_subbject_category">>, Predicate, Category | Rest ], _Msg, Context) ->
+m_get([ <<"is_valid_subject_category">>, Predicate, Category | Rest ], _Msg, Context) ->
     IsValid = is_valid_subject_category(Predicate, Category, false, Context),
     {ok, {IsValid, Rest}};
+m_get([ <<"predicate">>, Key | Rest ], _Msg, Context) ->
+    {ok, {get(Key, Context), Rest}};
 m_get([ Key | Rest ], _Msg, Context) ->
     {ok, {get(Key, Context), Rest}};
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 
-%% @doc Test if the property is the name of a predicate
-%% @spec is_predicate(Pred, Context) -> bool()
+%% @doc Fetch a list of all resources matching valid as an object for the given predicates.
+%% The list is bucket-sorted by valid category. All buckets are sorted by title.
+-spec object_resources(Predicate, Context) -> {ok, Result} | {error, unknown_predicate} when
+    Predicate :: m_rsc:resource(),
+    Context :: z:context(),
+    Result :: [ #{ category := atom(), resources := list( m_rsc:resource_id() ) } ].
+object_resources(Predicate, Context) ->
+    case is_predicate(Predicate, Context) of
+        true ->
+            object_resources_1(object_category(Predicate, Context), Context);
+        false ->
+            {error, unknown_predicate}
+    end.
+
+object_resources_1([], _Context) ->
+    {ok, #{}};
+object_resources_1(ValidCats, Context) ->
+    Query = #{
+        cat => ValidCats,
+        is_published => true
+    },
+    #search_result{ result = Ids } = z_search:search(<<"query">>, Query, 1, 10000, Context),
+    Ids1 = lists:filter(fun(Id) -> z_acl:rsc_visible(Id, Context) end, Ids),
+    % Place the list of object categories in the order of the category tree.
+    AllCats = m_category:tree_flat_meta(Context),
+    ObjCats = lists:filtermap(
+        fun(Cat) ->
+            CatId = proplists:get_value(id, Cat),
+            case lists:member(CatId, ValidCats) of
+                true ->
+                    Name = z_convert:to_atom( m_rsc:p(CatId, <<"name">>, Context) ),
+                    {true, Name};
+                false ->
+                    false
+            end
+        end,
+        AllCats),
+    ObjCatsRev = lists:reverse(ObjCats),
+    Buckets = lists:foldl(
+        fun(Id, Acc) ->
+            IsA = lists:reverse(m_rsc:is_a(Id, Context)),
+            case first_match(IsA, ObjCatsRev) of
+                undefined ->
+                    Acc;
+                IdCat ->
+                    Acc#{
+                        IdCat => [ Id | maps:get(IdCat, Acc, []) ]
+                    }
+            end
+        end,
+        #{},
+        Ids1),
+    ByCat = lists:filtermap(
+        fun(CatId) ->
+            case maps:get(CatId, Buckets, []) of
+                [] ->
+                    false;
+                OIds ->
+                    OIds1 = filter_sort:sort(OIds, <<"title">>, Context),
+                    {true, #{
+                        category => CatId,
+                        resources => OIds1
+                    }}
+            end
+        end,
+        ObjCats),
+    {ok, ByCat}.
+
+first_match([], _ObjCats) ->
+    undefined;
+first_match([Cat|IsA], ObjCats) ->
+    case lists:member(Cat, ObjCats) of
+        true -> Cat;
+        false -> first_match(IsA, ObjCats)
+    end.
+
+
+
+%% @doc Test if the resource id is a predicate.
+-spec is_predicate(Id, Context) -> boolean() when
+    Id :: m_rsc:resource(),
+    Context :: z:context().
 is_predicate(Id, Context) when is_integer(Id) ->
-    case m_rsc:p_no_acl(Id, category_id, Context) of
-        undefined -> false;
-        CatId -> m_category:is_a(CatId, predicate, Context)
-    end;
+    m_rsc:is_a(Id, predicate, Context);
 is_predicate(Pred, Context) ->
     case m_rsc:name_to_id(Pred, Context) of
         {ok, Id} -> is_predicate(Id, Context);
@@ -90,15 +176,37 @@ is_predicate(Pred, Context) ->
     end.
 
 %% @doc Check if a predicate is actually in use for an existing edge.
+-spec is_used(Predicate, Context) -> boolean() when
+    Predicate :: m_rsc:resource(),
+    Context :: z:context().
 is_used(Predicate, Context) ->
-    Id = m_rsc:rid(Predicate, Context),
-    z_db:q1("select id from edge where predicate_id = $1 limit 1", [Id], Context) =/= undefined.
+    case m_rsc:rid(Predicate, Context) of
+        undefined ->
+            false;
+        Id ->
+            is_integer(z_db:q1("select id from edge where predicate_id = $1 limit 1", [Id], Context))
+    end.
 
+is_valid_object_in_category(Predicate, Category, Context) ->
+    case is_valid_object_category(Predicate, Category, true, Context) of
+        true ->
+            true;
+        false ->
+            CatId = m_rsc:rid(Category, Context),
+            ValidCats = object_category(Predicate, Context),
+            lists:any(
+                fun(ValidCat) ->
+                    IsACats = m_category:is_a(ValidCat, Context),
+                    IsACatIds = [ m_rsc:rid(Cat, Context) || Cat <- IsACats ],
+                    lists:member(CatId, IsACatIds)
+                end,
+                ValidCats)
+    end.
 
 is_valid_object_category(Predicate, Category, IsSubcats, Context) ->
     CatId = m_rsc:rid(Category, Context),
     ValidCats = object_category(Predicate, Context),
-    case lists:member({CatId}, ValidCats) of
+    case lists:member(CatId, ValidCats) of
         true ->
             true;
         false when ValidCats =:= [] ->
@@ -108,7 +216,7 @@ is_valid_object_category(Predicate, Category, IsSubcats, Context) ->
             lists:any(
                 fun(IsACat) ->
                     IsACatId = m_rsc:rid(IsACat, Context),
-                    lists:member({IsACatId}, ValidCats)
+                    lists:member(IsACatId, ValidCats)
                 end,
                 IsA);
         false ->
@@ -118,7 +226,7 @@ is_valid_object_category(Predicate, Category, IsSubcats, Context) ->
 is_valid_subject_category(Predicate, Category, IsSubcats, Context) ->
     CatId = m_rsc:rid(Category, Context),
     ValidCats = subject_category(Predicate, Context),
-    case lists:member({CatId}, ValidCats) of
+    case lists:member(CatId, ValidCats) of
         true ->
             true;
         false when ValidCats =:= [] ->
@@ -128,7 +236,7 @@ is_valid_subject_category(Predicate, Category, IsSubcats, Context) ->
             case lists:any(
                 fun(IsACat) ->
                     IsACatId = m_rsc:rid(IsACat, Context),
-                    lists:member({IsACatId}, ValidCats)
+                    lists:member(IsACatId, ValidCats)
                 end,
                 IsA)
             of
@@ -141,7 +249,7 @@ is_valid_subject_category(Predicate, Category, IsSubcats, Context) ->
                         fun(C) -> proplists:get_value(id, C) end,
                         SubCats),
                     lists:any(
-                        fun(CId) -> lists:member({CId}, ValidCats) end,
+                        fun(CId) -> lists:member(CId, ValidCats) end,
                         SubCatIds);
                 false ->
                     false
@@ -187,7 +295,24 @@ get(PredId, Context) when is_integer(PredId) ->
         {ok, Name} -> get(Name, Context)
     end;
 get(Pred, Context) when is_list(Pred) orelse is_binary(Pred) ->
-    get(z_convert:to_atom(z_string:to_lower(Pred)), Context);
+    Pred1 = z_string:to_lower(Pred),
+    try
+        PredAsAtom = erlang:binary_to_existing_atom(Pred1, utf8),
+        get(PredAsAtom, Context)
+    catch
+        error:badarg ->
+            % The predicate list might not have been read yet - then not all atoms are known.
+            % Reaad all predicates and try again.
+            % TODO: replace all keys with binaries (and a map)
+            All = all(Context),
+            try
+                PredAsAtom1 = erlang:binary_to_existing_atom(Pred1, utf8),
+                proplists:get_value(PredAsAtom1, All)
+            catch
+                error:badarg ->
+                    undefined
+            end
+    end;
 get(Pred, Context) ->
     case z_depcache:get(predicate, Pred, Context) of
         {ok, undefined} ->
@@ -303,18 +428,19 @@ update_predicate_category(Id, IsSubject, CatIds, Context) ->
 
 %% @doc Return all the valid categories for objects.
 %% Return the empty list when there is no constraint.
-%% Note that the resulting array is a bit strangely formatted
-%% [{id}, {id2}, ...], this is compatible with the category name lookup and
-%% prevents mixups with strings (lists of integers).
-%% @spec object_category(Id, Context) -> List
+-spec object_category(Id, Context) -> Categories when
+    Id :: m_rsc:resource(),
+    Context :: z:context(),
+    Categories :: [ m_rsc:resource_id() ].
 object_category(Id, Context) ->
     F = fun() ->
         case name_to_id(Id, Context) of
             {ok, PredId} ->
-                z_db:q(
+                Ids = z_db:q(
                     "select category_id from predicate_category where predicate_id = $1 and "
                         ++ "is_subject = false",
-                    [PredId], Context);
+                    [PredId], Context),
+                [ CId || {CId} <- Ids ];
             _ ->
                 []
         end
@@ -323,17 +449,18 @@ object_category(Id, Context) ->
 
 %% @doc Return all the valid categories for subjects.
 %% Return the empty list when there is no constraint.
-%% Note that the resulting array is a bit strangely formatted [{id}, {id2}, ...],
-%% this is compatible with the category name lookup and prevents mixups with
-%% strings (lists of integers).
-%% @spec subject_category(Id, Context) -> List
+-spec subject_category(Id, Context) -> Categories when
+    Id :: m_rsc:resource(),
+    Context :: z:context(),
+    Categories :: [ m_rsc:resource_id() ].
 subject_category(Id, Context) ->
     F = fun() ->
         case name_to_id(Id, Context) of
             {ok, PredId} ->
-                z_db:q("select category_id from predicate_category where predicate_id = $1 "
+                Ids = z_db:q("select category_id from predicate_category where predicate_id = $1 "
                     "and is_subject = true",
-                    [PredId], Context);
+                    [PredId], Context),
+                [ CId || {CId} <- Ids ];
             _ ->
                 []
         end

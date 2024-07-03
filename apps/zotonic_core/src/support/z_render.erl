@@ -1,14 +1,14 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @author Rusty Klophaus
-%% @copyright 2009-2021 Marc Worrell
-%%
+%% @copyright 2008-2009 Rusty Klophaus, 2009-2023 Marc Worrell
 %% @doc Render routines using wires and actions.
 %%      Based on Nitrogen, which is copyright (c) 2008-2009 Rusty Klophaus
+%% @end
 
 %% This is the MIT license.
 %%
 %% Copyright (c) 2008-2009 Rusty Klophaus
-%% Copyright (c) 2009-2021 Marc Worrell
+%% Copyright (c) 2009-2023 Marc Worrell
 %%
 %% Permission is hereby granted, free of charge, to any person obtaining a copy
 %% of this software and associated documentation files (the "Software"), to deal
@@ -98,6 +98,7 @@
 
     dialog/4,
     dialog_close/1,
+    dialog_close/2,
 
     overlay/3,
     overlay_close/1,
@@ -146,14 +147,14 @@
 -type html_element_id() :: binary() | string() | undefined.
 -type render_state() :: #render_state{}.
 -type ctx_rs() :: render_state() | z:context().
+-type action() :: {atom(), proplists:proplist()}.
 
 -export_type([
     render_state/0,
     html_element_id/0,
-    ctx_rs/0
+    ctx_rs/0,
+    action/0
 ]).
-
-
 
 
 %% @doc Replace the placeholders with their rendered content and collect all scripts from the mixed html and context.
@@ -340,7 +341,13 @@ render_actions(TriggerId, TargetId, {Action, Args}, Context) ->
                 {ok, #module_index{ erlang_module = ActionModule }} ->
                     ActionModule:render_action(Trigger, Target, Args, Context);
                 {error, enoent} ->
-                    ?LOG_WARNING("No action enabled for \"~p\"", [Action]),
+                    ?LOG_WARNING(#{
+                        text => <<"Action not enabled">>,
+                        in => zotonic_core,
+                        result => error,
+                        reason => enoent,
+                        action => Action
+                    }),
                     {[], Context}
             end;
         false ->
@@ -385,8 +392,15 @@ render_validator(TriggerId, TargetId, Args, Context) ->
                                     case z_module_indexer:find(validator, VType, Context) of
                                         {ok, #module_index{ erlang_module = Mod }} ->
                                             {ok, Mod};
-                                        {error, enoent} ->
-                                            ?LOG_WARNING("No validator found for \"~p\"", [VType])
+                                        {error, enoent} = Error ->
+                                            ?LOG_WARNING(#{
+                                                text => <<"Validator not found">>,
+                                                in => zotonic_core,
+                                                result => error,
+                                                reason => enoent,
+                                                validator => VType
+                                            }),
+                                            Error
                                     end;
                                 Delegate  ->
                                     {ok, Delegate}
@@ -406,7 +420,7 @@ render_validator(TriggerId, TargetId, Args, Context) ->
         [] ->
             [VldScript|Append];
         _ ->
-            Pickled  = z_utils:pickle({Trigger,Name,Postback}, Context),
+            Pickled  = z_crypto:pickle({Trigger,Name,Postback}, Context),
             PbScript = [<<"z_set_validator_postback('">>,Trigger,<<"', '">>, Pickled, <<"');\n">>],
             [PbScript,VldScript|Append]
     end.
@@ -596,17 +610,27 @@ render_html(Html, Context) when is_binary(Html) ->
     {Html, Context};
 render_html(Html, Context) ->
     {Html1, Context1} = render_to_iolist(Html, Context),
-    {iolist_to_binary(Html1), Context1}.
+    {sanitize_utf8(iolist_to_binary(Html1)), Context1}.
 
 
 render_html_opt_all(false, Template, Vars, Context) ->
     MixedHtml = z_template:render(Template, Vars, Context),
     {Html, Context1} = render_to_iolist(MixedHtml, Context),
-    {iolist_to_binary(Html), Context1};
+    {sanitize_utf8(iolist_to_binary(Html)), Context1};
 render_html_opt_all(true, Template, Vars, Context) ->
     Templates = z_module_indexer:find_all(template, Template, Context),
     Html = [ z_template:render(Tpl, Vars, Context) || Tpl <- Templates ],
     render_html(Html, Context).
+
+sanitize_utf8(B) ->
+    case is_utf8(B) of
+        true -> B;
+        false -> z_string:sanitize_utf8(B)
+    end.
+
+is_utf8(<<>>) -> true;
+is_utf8(<<_/utf8, S/binary>>) -> is_utf8(S);
+is_utf8(_) -> false.
 
 
 %%% SIMPLE FUNCTION TO SHOW DIALOG OR GROWL (uses the dialog and growl actions) %%%
@@ -647,7 +671,11 @@ dialog(Title, Template, Vars, Context) ->
                 undefined -> Args3;
                 Center -> [{center, Center} | Args3]
             end,
-    wire({dialog, Args4}, Context1).
+    Args5 = case get_value(level, Vars) of
+                undefined -> Args4;
+                Level -> [{level, Level} | Args4]
+            end,
+    wire({dialog, Args5}, Context1).
 
 get_value(K, Map) when is_map(Map) ->
     maps:get(K, Map, undefined);
@@ -656,6 +684,9 @@ get_value(K, List) when is_list(List) ->
 
 dialog_close(Context) ->
     wire({dialog_close, []}, Context).
+
+dialog_close(Level, Context) ->
+    wire({dialog_close, [{level, Level}]}, Context).
 
 overlay(Template, Vars, Context) ->
     MixedHtml = z_template:render(Template, Vars, Context),
@@ -691,7 +722,7 @@ make_postback_info(Tag, EventType, TriggerId, TargetId, Delegate, Context) ->
                     _         -> z_convert:to_atom(Delegate)
                 end,
     PostbackInfo = {EventType, TriggerId, TargetId, Tag, Delegate1},
-    z_utils:pickle(PostbackInfo, Context).
+    z_crypto:pickle(PostbackInfo, Context).
 
 
 %% @doc Make a javascript to call the postback, posting an encoded string containing callback information.
@@ -740,14 +771,14 @@ make_postback_zevtargs(QArgs) when is_list(QArgs) ->
 make_validation_postback(Validator, Context) ->
     make_validation_postback(Validator, {}, Context).
 make_validation_postback(Validator, Args, Context) ->
-    z_utils:pickle({Validator, Args}, Context).
+    z_crypto:pickle({Validator, Args}, Context).
 
 
 %%% ACTION WIRING %%%
 
 %% Add to the queue of wired actions. These will be rendered in get_script().
 
--spec wire(tuple() | [tuple()], ctx_rs()) -> ctx_rs().
+-spec wire(action() | [action()], ctx_rs()) -> ctx_rs().
 wire(Actions, Context) ->
     wire(<<>>, <<>>, Actions, Context).
 
@@ -859,6 +890,10 @@ merge_scripts(RS, Acc) ->
         render= combine1(Acc#render_state.render, RS#render_state.render)
     }.
 
+-spec add_content_script(Script, RenderState) -> NewRenderState when
+    Script :: iodata() | undefined,
+    RenderState :: #render_state{} | z:context(),
+    NewRenderState :: #render_state{} | z:context().
 add_content_script([], Context) -> Context;
 add_content_script(<<>>, Context) -> Context;
 add_content_script(undefined, Context) -> Context;
@@ -869,6 +904,10 @@ add_content_script(Script, Context) ->
     },
     set_render_state(RS1, Context).
 
+-spec add_script(Script, Context) -> NewContext when
+    Script :: iodata() | undefined,
+    Context :: z:context(),
+    NewContext :: z:context().
 add_script([], Context) -> Context;
 add_script(<<>>, Context) -> Context;
 add_script(undefined, Context) -> Context;

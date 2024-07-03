@@ -43,7 +43,7 @@
 {% block address_country %}{{ id.address_country|default:mail_country }}{% endblock %}
 
 {% block name_first %}{{ id.name_first }}{% endblock %}
-{% block name_surname %}{{ id.surname }}{% endblock %}
+{% block name_surname %}{{ id.name_surname }}{% endblock %}
 {% block gender %}{{ id.gender }}{% endblock %}
 
 {% block date_start %}{{ id.date_start }}{% endblock %}

@@ -37,7 +37,9 @@
          is_read_only/1,
          set_read_only/2,
 
+         is_admin_editable/1,
          is_admin/1,
+         is_sudo/1,
          sudo/1,
          sudo/2,
          anondo/1,
@@ -47,7 +49,9 @@
          logon_prefs/2,
          logon_prefs/3,
          logon_refresh/1,
-         logoff/1
+         logoff/1,
+
+         flush/1
         ]).
 
 -include_lib("zotonic.hrl").
@@ -128,9 +132,6 @@ is_allowed_prop(Action, Object, Property, Context) ->
 -spec rsc_visible( m_rsc:resource(), z:context() ) -> boolean().
 rsc_visible(undefined, _Context) ->
     true;
-rsc_visible(Id, #context{user_id = UserId}) when Id =:= UserId andalso is_integer(UserId) ->
-    %% Can always see myself
-    true;
 rsc_visible(_Id, #context{user_id=?ACL_ADMIN_USER_ID}) ->
     true;
 rsc_visible(_Id, #context{acl=admin}) ->
@@ -159,8 +160,6 @@ rsc_visible(RscName, Context) ->
 %% @doc Check if a property of the resource is visible for the current user
 -spec rsc_prop_visible(m_rsc:resource(), atom() | binary(), z:context()) -> boolean().
 rsc_prop_visible(undefined, _Property, _Context) ->
-    true;
-rsc_prop_visible(Id, _Property, #context{user_id=UserId}) when Id == UserId andalso is_integer(UserId) ->
     true;
 rsc_prop_visible(_Id, _Property, #context{user_id=?ACL_ADMIN_USER_ID}) ->
     true;
@@ -192,10 +191,7 @@ rsc_prop_visible(RscName, Property, Context) ->
 -spec rsc_editable(m_rsc:resource(), z:context()) -> boolean().
 rsc_editable(undefined, _Context) ->
     false;
-rsc_editable(Id, #context{user_id=Id}) when is_integer(Id) ->
-    %% Can always edit myself
-    true;
-rsc_editable(_Id, #context{acl=admin}) ->
+rsc_editable(_Id, #context{ acl = admin }) ->
     true;
 rsc_editable(Id, Context) when is_integer(Id) ->
     is_allowed(update, Id, Context);
@@ -209,9 +205,9 @@ rsc_editable(RscName, Context) ->
 -spec rsc_deletable(m_rsc:resource(), z:context()) -> boolean().
 rsc_deletable(undefined, _Context) ->
     false;
-rsc_deletable(_Id, #context{user_id=undefined}) ->
+rsc_deletable(_Id, #context{ user_id = undefined }) ->
     false;
-rsc_deletable(Id, #context{acl=admin} = Context) ->
+rsc_deletable(Id, #context{ acl = admin } = Context) ->
     not z_convert:to_bool(m_rsc:p_no_acl(Id, <<"is_protected">>, Context));
 rsc_deletable(Id, Context) when is_integer(Id) ->
     not z_convert:to_bool(m_rsc:p_no_acl(Id, <<"is_protected">>, Context))
@@ -255,17 +251,31 @@ user_groups(Context) ->
         L when is_list(L) -> L
     end.
 
+%% @doc Check if the current access permissions are set to read-only.
+%% This is an authorization option for the current z.auth cookie or
+%% bearer token.
 -spec is_read_only( z:context() ) -> boolean().
+is_read_only(#context{ acl = admin }) ->
+    % Sudo is never read only.
+    false;
 is_read_only(#context{ acl_is_read_only = IsReadOnly }) ->
     IsReadOnly.
 
+%% @doc Set the current context to read only. Models can use this
+%% state to prevent updates to data.
 -spec set_read_only( boolean(), z:context() ) -> z:context().
 set_read_only(IsReadOnly, Context) ->
     Context#context{ acl_is_read_only = IsReadOnly }.
 
+%% @doc Check if the current context acl is set using a sudo.
+-spec is_sudo( z:context() ) -> boolean().
+is_sudo(#context{ acl = admin }) ->
+    true;
+is_sudo(_) ->
+    false.
 
 %% @doc Call a function with admin privileges.
--spec sudo( Fun, z:context() ) -> any()
+-spec sudo( Fun, z:context() | atom() ) -> any()
     when Fun :: { module(), atom() }
              | mfa()
              | fun( (z:context()) -> any() ).
@@ -276,15 +286,24 @@ sudo({M,F,A}, Context) ->
 sudo(F, Context) when is_function(F, 1) ->
     F(set_admin(Context)).
 
--spec sudo(z:context()) -> z:context().
+-spec sudo(z:context() | atom()) -> z:context().
 sudo(Context) ->
     set_admin(Context).
 
--spec set_admin(z:context()) -> z:context().
+-spec set_admin(z:context() | atom()) -> z:context().
 set_admin(#context{ acl = undefined } = Context) ->
     Context#context{ acl = admin, user_id = ?ACL_ADMIN_USER_ID };
-set_admin(Context) ->
-    Context#context{ acl = admin }.
+set_admin(#context{} = Context) ->
+    Context#context{ acl = admin };
+set_admin(Site) when is_atom(Site) ->
+    set_admin(z_context:new(Site)).
+
+%% @doc Check if an admin is logged on and the read only flag is not set.
+%% Exception for sudo, where updates are always allowed.
+-spec is_admin_editable( z:context() ) -> boolean().
+is_admin_editable(#context{ acl = admin }) -> true;
+is_admin_editable(#context{ acl_is_read_only = true }) -> false;
+is_admin_editable(Context) -> is_admin(Context).
 
 %% @doc Check if the current user is an admin or a sudo action
 -spec is_admin( z:context() ) -> boolean().
@@ -364,4 +383,12 @@ logoff(Context) ->
         undefined -> Context#context{ user_id = undefined, acl = undefined};
         #context{} = NewContext -> NewContext
     end.
+
+
+%% @doc Flush the memo cache of ACL lookups for the given resource id.
+-spec flush(Id) -> ok when
+    Id :: m_rsc:resource_id().
+flush(Id) ->
+     z_memo:delete({rsc_visible, Id}),
+     ok.
 

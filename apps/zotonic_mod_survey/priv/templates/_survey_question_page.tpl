@@ -5,6 +5,10 @@
 		{% endblock %}
 	{% endif %}
 
+    {% if id.survey_is_disabled and id.is_editable %}
+		<p class="alert alert-info">{_ This form is disabled. Because you can edit, you can proceed for testing. _}</p>
+    {% endif %}
+
 	{% wire id=#q type="submit"
 		postback={survey_next
 			id=id
@@ -111,7 +115,7 @@
 
 	{% if page_nr == 1 and id.survey_is_autostart %}
 		{% block autostart_footer %}
-			{% include "_survey_autostart_footer.tpl" %}
+			{% optional include "_survey_autostart_footer.tpl" %}
 		{% endblock %}
 	{% endif %}
 {% endblock %}

@@ -603,7 +603,7 @@ Marc Worrell (280):
 * mod_admin_identity: some extra padding for the identity verification page.
 * mod_authentication: add optional page_logon for logon-title and an alert box on the logon page.
 * mod_authentication: add special error message if there are cookie problems and the current browser is Safari 8.  Issue #902
-* mod_signup: show external auth services for signup using the logon methods.     Also always force the presence of an username_pw identity for * signed up users.
+* mod_signup: show external auth services for signup using the logon methods.     Also always force the presence of a username_pw identity for * signed up users.
 * mod_linkedin: seems LinkedIn doesn't like URL encoded secrets?
 * mod_admin: also log stacktrace on a catch.
 * mod_oembed/mod_video_embed: fix problem with access rights if new media insert was done without admin rights.
@@ -725,7 +725,7 @@ Marc Worrell (280):
 * mod_survey: change the thank you text, remove the 'Be sure to come back for other surveys' text.
 * mod_search: add cat_exact query argument.
 * mod_base: fix html_escape function in zotonic-1.0.js
-* mod_admin_identity: on the users page, only show those with an username_pw entry. Issue #747
+* mod_admin_identity: on the users page, only show those with a username_pw entry. Issue #747
 * mod_admin_identity: show 'email status' buttons if mod_email_status is enabled.
 * mod_search: add 2nd ordering on -publication_start to featured search.
 * mod_search: fix search_query for 'hasobject=123'. Fixes #953

@@ -45,6 +45,8 @@ observe_request_context(#request_context{}, Context, _Context) ->
     Context.
 
 %% @doc Decoupling of server storage from other modules.
+observe_server_storage({server_storage, Verb, Key}, Context) ->
+    observe_server_storage({server_storage, Verb, Key, undefined}, Context);
 observe_server_storage({server_storage, Verb, Key, OptValue}, Context) ->
     case Verb of
         lookup  -> m_server_storage:lookup(Key, Context);

@@ -23,9 +23,45 @@
  ---------------------------------------------------------- */
 
 (function($) {
+
+    function dialogLevel($dialog) {
+        const level = $dialog.attr('data-modal-level');
+        if (typeof level !== 'undefined') {
+            return parseInt(level);
+        } else {
+            return 0;
+        }
+    }
+
+    function dialogTopLevel() {
+        let maxLevel = undefined;
+        $(".modal").each(function() {
+            if ($(this).is(":visible")) {
+                maxLevel = Math.max(maxLevel ?? 0, dialogLevel($(this)));
+            }
+        });
+        return maxLevel;
+    }
+
+    function topDialog() {
+        let maxLevel = 0;
+        let dialog = undefined;
+        $(".modal").each(function() {
+            if ($(this).is(":visible")) {
+                const lev = dialogLevel($(this));
+                if (lev >= maxLevel) {
+                    maxLevel = lev;
+                    dialog = $(this);
+                }
+            }
+        });
+        return dialog;
+    }
+
     $.extend({
         dialogAdd: function(options) {
             var width,
+                level,
                 $title,
                 $body,
                 $text,
@@ -34,28 +70,45 @@
                 $modalDialog,
                 $dialog;
 
-            $('#zmodal').remove();
-            $('.modal-backdrop').remove();
-
             options = $.extend({}, $.ui.dialog.defaults, options);
 
+            level = options.level ?? 0;
+            if (level === "top") {
+                let topLevel = dialogTopLevel();
+                if (typeof topLevel == 'undefined') {
+                    level = 0;
+                } else {
+                    level = topLevel + 1;
+                }
+            } else {
+                $(".modal").each(function() {
+                    if ($(this).is(":visible") && dialogLevel($(this)) >= level) {
+                        $(this).modal('hide');
+                    }
+                });
+            }
+
+            let title = options.title ?? "";
+            if (options.title_icon) {
+                title = '<span style="font-weight: normal" class="' + options.title_icon + '"></span>&nbsp; ' + title;
+            }
 
             if (options.backdrop !== 'static') {
               $title = $('<div>')
                 .addClass('modal-header')
-                .append($('<a>')
+                .append($('<a href="#">')
                 .addClass('close')
                 .attr('data-dismiss', 'modal')
                 .html('<span>&times;</span>'))
                 .append($('<h4>')
                 .addClass('modal-title')
-                .html(options.title));
+                .html(title));
             } else {
               $title = $('<div>')
                 .addClass('modal-header')
                 .append($('<h4>')
                 .addClass('modal-title')
-                .html(options.title));
+                .html(title));
             }
             $modalContent = $('<div>').addClass('modal-content');
             $text = $('<div>').html(options.text);
@@ -94,20 +147,27 @@
                 }
             }
 
+            const id = (level == 0) ? "zmodal" : ("zmodal-" + level);
+            const zIndex = 1000 * (level+1) + 50
             $dialog = $('<div>')
-              .attr('id', 'zmodal')
+              .attr('id', id)
+              .attr('data-modal-level', level)
               .addClass(dialogClass)
               .append($modalDialog)
               .appendTo($('body'));
 
             $dialog
-              .modal({backdrop: options.backdrop})
-              .css({'overflow-x': 'hidden', 'overflow-y': 'auto'});
+              .modal({backdrop: options.backdrop, keyboard: options.keyboard ?? true})
+              .css({
+                    'overflow-x': 'hidden',
+                    'overflow-y': 'auto',
+                    'z-index': zIndex
+                });
 
             if (options.center) {
                 $modalDialog.hide();
                 setTimeout(function() {
-                    $.dialogCenter();
+                    $.dialogCenter($modalDialog);
                     $modalDialog.show();
                 }, 0);
             }
@@ -115,44 +175,74 @@
             if (typeof($.widgetManager) != 'undefined') {
                 $dialog.widgetManager();
             }
+
             z_editor_add($dialog);
 
-            $('#zmodal').on('hidden.bs.modal', () => $('#zmodal').remove());
+            setTimeout(function() {
+                // If there already is an input field with focus, do nothing
+                if ($dialog.find("input:focus").length == 0) {
+                    $dialog.find('a.close').focus();
+                }
+            }, 50);
+
+            $(document).keyup(function(e) {
+                 if (e.key === "Escape") { // escape key maps to keycode `27`
+                    $.dialogClose($dialog);
+                }
+            });
+
+            $dialog.on('hidden.bs.modal', () => $.dialogRemove($dialog));
         },
 
-        dialogClose: function() {
-            $('#zmodal').modal('hide');
+        dialogClose: function(options) {
+            let level;
+            if (options && typeof options.level !== 'undefined') {
+                if (options.level === "top") {
+                    level = dialogTopLevel();
+                } else {
+                    level = options.level;
+                }
+            } else {
+                level = dialogTopLevel();
+            }
+            if (typeof level !== 'undefined') {
+                $(".modal").each(function() {
+                    if (dialogLevel($(this)) >= level) {
+                        $(this).modal('hide');
+                    }
+                });
+            }
         },
 
+        // Called after the dialog is hidden.
         dialogRemove: function(obj) {
-            obj = obj || $('#zmodal');
-            z_editor_remove(obj);
-            obj
-              .draggable('destroy')
-              .resizable('destroy')
-              .fadeOut(300, function() {
-                  $(this).remove();
-              });
+            if (obj) {
+                z_editor_remove(obj);
+                obj.remove();
+            }
         },
 
-        dialogCenter: function() {
-            var $dialog,
-                newMarginTop;
-            $dialog = $('#zmodal:visible').find('.modal-dialog');
-            newMarginTop = Math.max(0, ($(window).height() - $dialog.height()) / 2);
-            newMarginTop *= .96; // visual coherence
+        dialogCenter: function($modalDialog) {
+            $modalDialog = $modalDialog || $("#zmodal");
+            let newMarginTop = Math.max(0, ($(window).height() - $modalDialog.height()) / 2);
+            newMarginTop *= 0.96; // visual coherence
             newMarginTop = Math.max(newMarginTop, 30);
-            $dialog.css('margin-top', newMarginTop);
+            $modalDialog.css('margin-top', newMarginTop);
         },
 
         dialogScrollTo: function(position) {
+            const $dialog = topDialog();
             position = position || 0;
-            $("#zmodal")[0].scrollTop = position
+            if ($dialog) {
+                $dialog[0].scrollTop = position;
+            }
         }
     });
 
     $(window).on('resize', function() {
-        $.dialogCenter();
+        $(".dialog:visible .modal-dialog").each(function() {
+            $.dialogCenter($(this));
+        })
     });
 
     $.widget('ui.show_dialog', {
@@ -164,7 +254,9 @@
                     text: self.options.text,
                     width: self.options.width,
                     addclass: self.options.addclass,
-                    backdrop: self.options.backdrop
+                    backdrop: self.options.backdrop,
+                    keyboard: self.options.keyboard,
+                    level: self.options.level
                 });
             });
         }
@@ -178,6 +270,7 @@
     addclass: (optional) classname will be appended to default dialog class
     backdrop: (optional) boolean (0, 1) or the string 'static'
     center: (optional) boolean (0, 1); set to 0 to align dialog to the top
+    level: (optional) the nesting level of the dialog
     */
     $.ui.dialog.defaults = {
         title: 'Title',
@@ -185,6 +278,8 @@
         width: undefined,
         addclass: undefined,
         backdrop: true,
-        center: true
+        center: true,
+        keyboard: true,
+        level: 0
     };
 })(jQuery);

@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
+%% @copyright 2010-2023 Marc Worrell
 %% @doc Reset all input fields in a form.
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -22,7 +22,4 @@
 
 render_action(_TriggerId, TargetId, Args, Context) ->
     CssSelector = z_render:css_selector(proplists:get_value(id, Args, TargetId), Args),
-    {[<<"$(':input',">>,
-        z_render:quote_css_selector(CssSelector),
-      <<").not(':button, :submit, :reset, :hidden').val('').removeAttr('checked').removeAttr('selected');">>
-     ], Context}.
+    {iolist_to_binary([<<"$(">>, z_render:quote_css_selector(CssSelector), <<").resetForm();">>]), Context}.

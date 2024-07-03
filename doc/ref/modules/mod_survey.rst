@@ -114,5 +114,15 @@ to intercept the survey submission::
       undefined.
 
 
+Configurations keys
+-------------------
+
+In the survey result editor it is possible to link an answer to a newly created person.
+
+The category and content group for this person can be configured via the following two keys:
+
+ * ``mod_survey.person_category``, default to ``person``
+ * ``mod_survey.person_content_group``, defaults to ``default_content_group``
+
 
 .. todo:: Add more documentation

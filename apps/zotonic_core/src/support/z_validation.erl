@@ -118,7 +118,13 @@ validate_query_args(Context) ->
                         _  -> {error, Context3}
                     end;
                 {error, Reason} ->
-                    ?LOG_ERROR("Error validating query args: ~p", [ Reason ]),
+                    ?LOG_ERROR(#{
+                        text => <<"Error validating query args">>,
+                        in => zotonic_core,
+                        result => error,
+                        reason => Reason,
+                        qargs => QArgs
+                    }),
                     % TODO: add a generic validation error
                     {error, Context}
             end;
@@ -142,7 +148,7 @@ report_errors([{_Id, {error, ErrId, Error}}|T], Context) ->
 %% @doc Perform all validations
 validate(Val, Context) ->
     {Name,Pickled} = split_name_pickled(Val),
-    {Id,Name,Validations} = z_utils:depickle(Pickled, Context),
+    {Id,Name,Validations} = z_crypto:depickle(Pickled, Context),
     Value = case [ V || V <- z_context:get_q_all(Name, Context), V =/= [], V =/= <<>> ] of
                 [A] -> A;
                 Vs -> Vs

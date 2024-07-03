@@ -1,15 +1,16 @@
-if (typeof tinyInit !== 'object')
-  tinyInit = {
+
+window.z_editorConfig = window.z_editorConfig || {};
+window.z_editorConfig.default = window.z_editorConfig.default || {
     selector: "textarea",
 
     // mode: "none",
     // theme: "modern",
 
-    plugins: "advlist code paste table link zlink zmedia autosave directionality autoresize lists fullscreen searchreplace codesample",
+    plugins: "advlist code paste table link zanchor zlink zmedia autosave directionality autoresize lists fullscreen searchreplace codesample",
     menubar: "edit format table tools insert",
     toolbar: [
         "styleselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | ltr rtl | removeformat",
-        "link unlink | zlink zmedia | code | searchreplace | fullscreen"
+        "zanchor link unlink | zlink zmedia | code | searchreplace | fullscreen"
     ],
 
     contextmenu: "zlink zmedia link",
@@ -116,5 +117,9 @@ if (typeof tinyInit !== 'object')
     wpeditimage_disable_captions: "",
     table_row_limit: 100,
     table_col_limit: 10,
-    autoresize_max_height: 400
+    max_height: Math.max($(window).height() - 300, 400)
 };
+
+if (typeof window.tinyInit !== 'object') {
+    window.tinyInit = window.z_editorConfig.default;
+}

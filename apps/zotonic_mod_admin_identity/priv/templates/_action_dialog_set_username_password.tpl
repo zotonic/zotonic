@@ -1,8 +1,7 @@
 {% if id == 1 %}
     <p>
-        {_ The password of the admin user cannot be changed in the database. Please edit your site's configuration file at _} <strong>priv/sites/{{ m.site.host }}/config</strong> {_ if you want to change the admin password. _}
+        {_ The password of the admin user cannot be changed in the database. Please edit your site’s configuration file in <tt>priv/zotonic_site.config</tt> if you want to change the admin password. _}
     </p>
-
 {% else %}
     <p>
 	    {_ Enter a unique username and password. Usernames and passwords are case sensitive, so be careful when entering them. _}
@@ -18,12 +17,9 @@
         {% include "_identity_password.tpl" %}
 
         <div class="modal-footer">
-            {% if username and id != m.acl.user %}
-                {% button class="btn btn-danger pull-left"
-                        postback={delete_username id=id on_delete={dialog_close} on_delete=on_delete}
-                        delegate=delegate
-                        text=_"Delete"
-                        tag="a"
+            {% if username and id != m.acl.user and id != 1 %}
+                {% button class="btn btn-danger pull-left" text=_"Delete Username"
+                          action={dialog_delete_username id=id}
                 %}
             {% endif %}
 	        {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}

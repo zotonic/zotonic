@@ -23,44 +23,80 @@ limitations under the License.
 
 ;(function($)
 {
+    function checkForWidgets(element, nodes) {
+        if (typeof element.className == "string")
+        {
+            let classList = element.classList;
+            for (let i = 0; i < classList.length; i++) {
+                if (classList[i].startsWith("do_")) {
+                    let functionName = classList[i].substring(3);
+                    let defaultsName = functionName;
+
+                    if ('dialog' == functionName) {
+                        functionName = 'show_dialog'; // work around to prevent ui.dialog redefinition
+                    }
+                    if (typeof $(element)[functionName] == "function")
+                    {
+                        let defaults;
+
+                        if ($.ui && $.ui[functionName] && $.ui[functionName].defaults)
+                        {
+                            defaults = $.ui[functionName].defaults;
+                        }
+                        else
+                        {
+                            defaults = {}
+                        }
+                        nodes.push({
+                            element: element,
+                            functionName: functionName,
+                            defaults: defaults,
+                            defaultsName: defaultsName
+                        });
+                    }
+                    else
+                    {
+                        console?.warn("Missing ui function for widget", functionName, element);
+                    }
+                }
+            }
+        }
+    }
+
+    function callWidgets(nodes) {
+        while (nodes.length > 0)
+        {
+            const n = nodes.pop();
+            $(n.element)[n.functionName]( $.extend({}, n.defaults, $(n.element).metadata(n.defaultsName)) );
+        }
+    }
+
+    if (typeof IncrementalDOM == "object") {
+        const prevNodesCreated = IncrementalDOM.notifications.nodesCreated;
+        IncrementalDOM.notifications.nodesCreated = (newNodes) => {
+            let widgetNodes = [];
+            newNodes.forEach((node) => {
+                checkForWidgets(node, widgetNodes);
+            });
+            callWidgets(widgetNodes);
+            if (prevNodesCreated) {
+                prevNodesCreated(newNodes);
+            }
+        }
+    }
+
     $.extend(
     {
         widgetManager: function(context)
         {
-            context		= context || document.body;
-            var stack	= [context];
+            let stack    = [context || document.body];
+            let nodes   = [];
 
             while (stack.length > 0)
             {
-                var defaults, element = stack.pop();
-                if (typeof element.className == "string")
-                {
-                    var objectClass = element.className.match(/do_[a-zA-Z0-9_]+/g);
-                    if (objectClass)
-                    {
-                        var n = objectClass.length;
-                        for (var i=0; i<n; i++)
-                        {
-                            var functionName = objectClass[i].substring(3);
-                            var defaultsName = functionName;
+                let element = stack.pop();
 
-                            if ('dialog' == functionName) functionName = 'show_dialog'; // work around to prevent ui.dialog redefinition
-
-                            if (typeof $(element)[functionName] == "function")
-                            {
-                                if ($.ui && $.ui[functionName] && $.ui[functionName].defaults)
-                                {
-                                    defaults = $.ui[functionName].defaults;
-                                }
-                                else
-                                {
-                                    defaults = {}
-                                }
-                                $(element)[functionName]( $.extend({}, defaults, $(element).metadata(defaultsName)) );
-                            }
-                        }
-                    }
-                }
+                checkForWidgets(element, nodes);
 
                 if (element.childNodes)
                 {
@@ -73,6 +109,7 @@ limitations under the License.
                     }
                 }
             }
+            callWidgets(nodes);
         },
 
         misc:
@@ -157,18 +194,23 @@ limitations under the License.
         var elem = this[0];
         var data_name = 'widget-'+functionName;
         var data = $(elem).data(data_name);
-        if(typeof data === "undefined")
+
+        if (typeof data === "undefined")
         {
             data = elem.getAttribute("data-"+functionName);
-            if (data) {
-                if (data.substr(0,1) == "{") {
+            if (data)
+            {
+                if (data.substr(0,1) == "{")
+                {
                     try {
                         data = JSON.parse(data);
                     } catch (e) {
                         console.error("Error parsing JSON in widget data attribute:", data);
                         data = {};
                     }
-                } else {
+                }
+                else
+                {
                     try {
                         data = eval("({" + data.replace(/[\n\r]/g,' ') + "})");
                     } catch (e) {
@@ -176,7 +218,9 @@ limitations under the License.
                         data = {};
                     }
                 }
-            } else {
+            }
+            else
+            {
                 data = {};
             }
             $(elem).data(data_name, data);

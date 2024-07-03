@@ -91,3 +91,51 @@ Example return value for ``{% print m.edge[10635] %}``::
                {created,{{2015,2,3},{16,23,20}}},
                {creator_id,1}]]}]
 
+
+Other Topics
+------------
+
+``model/edge/post/o/+subject/+predicate/+object`` or
+``model/edge/post/s/+object/+predicate/+object`` inserts a new edge between resources.
+
+The posted message can optionally include the name or id of the object, predicate and subject.
+
+.. code-block:: javascript
+
+   cotonic.broker.publish("bridge/origin/edge/post/o/4312",
+                          {
+                            predicate: "author",
+                            subject: 7575
+                          });
+
+It is also possible to insert edges via cotonics onclick topics.
+
+.. code-block:: django
+
+   <div data-onclick-topic="bridge/origin/model/edge/post/o/{{ id }}/?/{{ m.acl.user }}">
+      <button data-edge-predicate="is_going">Is Going</button>
+      <button data-edge-predicate="is_interested">Might Go</button>
+   </div>
+
+When a user clicks on a button, the model retrieves the predicate name (or id) from the
+``data-edge-predicate`` attribute. This is also possible by for the object and subject attributes
+of the edge. When there is a ``?`` in the topic path, the value can be retrieved from a
+data attribute. The attribute value for object is: ``data-edge-object``. For subject it is:
+``data-edge-subject``.
+
+
+``model/edge/post/delete/o/+subject/+predicate/+object``,
+``model/edge/post/delete/s/+object/+predicate/+subject`` or
+``model/edge/post/delete/edge/+edge_id`` deletes the specified edge.
+
+.. code-block:: javascript
+
+   cotonic.broker.publish("bridge/origin/edge/delete/edge/6776");
+
+Or via a onclick topic.
+
+.. code-block:: django
+
+   <button data-onclick-topic="bridge/origin/edge/delete/{{ edge_id }}">Delete</button
+
+

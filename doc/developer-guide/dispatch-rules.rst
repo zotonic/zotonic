@@ -8,7 +8,7 @@ Dispatch rules route incoming requests to :ref:`controllers <guide-controllers>`
 A dispatch rule contains a pattern that is matched against the URL of an
 incoming request. When a URL is requested by the web browser, the dispatcher
 looks at the URL and matches it against all dispatch rules. Based on the match,
-it calls a to handle the request.
+it calls a :term:`controller <Controller>` to handle the request.
 
 Dispatch rules are also used for the reverse action of generating request URLs
 in your templates and Erlang code. As long as you use dispatch rules in your
@@ -99,7 +99,7 @@ Say you want to only accept numerical arguments as an id in::
 
   {foo, ["foo", id], controller_foo, []}
 
-The you can use a dispatch rule with a regular expression test::
+Then you can use a dispatch rule with a regular expression test::
 
   {foo, ["foo", {id, "^[0-9]+$"}], controller_foo, []}
 
@@ -131,7 +131,7 @@ Generating URLs
 In templates
 ^^^^^^^^^^^^
 
-To generate URLs in templates, use the :ref:`url tag <tag-url>` and pass the
+To generate URLs in templates, use the :ref:`url tag <tag-url>`, and pass the
 dispatch rule name:
 
 .. code-block:: django

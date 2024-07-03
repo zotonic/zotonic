@@ -27,6 +27,9 @@
             <li class="{% if kind == `upload` %}active{% endif %}">
                 <a href="{% url admin_acl_rules_upload %}">{_ File uploads _}</a>
             </li>
+            <li class="{% if kind == `options` %}active{% endif %}">
+                <a href="{% url admin_acl_rules_options %}">{_ Options _}</a>
+            </li>
         </ul>
 
         <div class="widget">

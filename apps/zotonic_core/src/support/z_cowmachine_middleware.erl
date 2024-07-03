@@ -25,7 +25,8 @@
 -behaviour(cowboy_middleware).
 
 -export([
-    execute/2
+    execute/2,
+    set_accept_context/2
 ]).
 
 -include_lib("../../include/zotonic.hrl").
@@ -44,19 +45,22 @@ execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_optio
     Context4 = z_context:set_csp_nonce(Context3),
     Context5 = z_context:set_security_headers(Context4),
     Options = #{
-        on_welformed => fun(Ctx) ->
+        on_request => fun(Ctx) ->
             erlang:erase(is_dbtrace),
-            Ctx0 = case z_context:get_cookie(<<"cotonic-sid">>, Ctx) of
+            Ctx1 = case z_context:get_cookie(<<"cotonic-sid">>, Ctx) of
                 undefined -> Ctx;
-                Sid ->
-                    z_context:set_session_id(Sid, Ctx)
+                Sid -> z_context:set_session_id(Sid, Ctx)
             end,
-            z_context:logger_md(Ctx0),
-            Ctx1 = z_context:ensure_qs(Ctx0),
-            case z_context:get_q(<<"zotonic_http_accept">>, Ctx1) of
+            z_context:logger_md(Ctx1),
+            z_notifier:foldl(#middleware{ on = request }, Ctx1, Ctx1)
+        end,
+        on_welformed => fun(Ctx) ->
+            Ctx1 = z_context:ensure_qs(Ctx),
+            Ctx2 = case z_context:get_q(<<"zotonic_http_accept">>, Ctx1) of
                 undefined -> Ctx1;
                 HttpAccept -> set_accept_context(HttpAccept, Ctx1)
-            end
+            end,
+            z_notifier:foldl(#middleware{ on = welformed }, Ctx2, Ctx2)
         end,
         on_handled => fun(Ctx) ->
             z_context:set_req_metrics(#{
@@ -65,7 +69,7 @@ execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_optio
                     language => z_context:language(Ctx),
                     timezone => z_context:tz(Ctx)
                 }, Ctx),
-            Ctx
+            z_notifier:foldl(#middleware{ on = handled }, Ctx, Ctx)
         end
     },
     cowmachine:request(Context5, Options).

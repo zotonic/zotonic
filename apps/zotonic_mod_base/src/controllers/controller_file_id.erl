@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014 Marc Worrell
+%% @copyright 2014-2022 Marc Worrell
 %% @doc Redirect the path associated with the media of a file.
+%% @end
 
-%% Copyright 2014 Marc Worrell
+%% Copyright 2014-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,7 +29,6 @@
     moved_permanently/1
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
 
 service_available(Context) ->
     Context1 = z_context:ensure_qs(Context),
@@ -109,7 +109,7 @@ do_redirect(_Id, #{ <<"filename">> := Filename }, Context)
                 undefined ->
                     Args;
                 true ->
-                    z_context:get_q_all(Context) ++ Args;
+                    z_context:get_q_all_noz(Context) ++ Args;
                 ArgList when is_list(ArgList) ->
                     [{K, z_context:get_q(K, Context)} || K <- ArgList ] ++ Args
             end,
@@ -117,7 +117,7 @@ do_redirect(_Id, #{ <<"filename">> := Filename }, Context)
                             proplists:delete(K, Acc)
                         end,
                         Args1,
-                        [ id, star, ?MODULE | z_dispatcher:dispatcher_args() ]),
+                        [ id, star, ?MODULE, is_permanent | z_dispatcher:dispatcher_args() ]),
     Location = z_dispatcher:url_for(Dispatch, [{star, Filename}|Args2], Context),
     {{true, z_context:abs_url(Location, Context)}, Context};
 do_redirect(_Id, _Medium, Context) ->

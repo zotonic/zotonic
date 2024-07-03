@@ -5,7 +5,7 @@
 {% block widget_title %}
 {_ Date range _}
 <div class="widget-header-tools">
-    <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{{ _"Date ranges"|escapejs }}', text: '{{ _"Every page can have a date range. For example if the page is an event or description of someone’s life."|escapejs }}'" title="{_ Need more help? _}"></a>
+    <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{{ _"Date ranges"|escapejs }}', text: '{{ _"Every page can have a date range. For example if the page is an event or description of someone's life."|escapejs }}'" title="{_ Need more help? _}"></a>
 </div>
 {% endblock %}
 
@@ -27,6 +27,11 @@
 {% endblock %}
 
 {% block widget_content_nolang_before %}
+<p class="help-block" {% if not id.tz or id.tz == m.req.timezone %}style="display:none"{% endif %}>
+    <i class="fa fa-exclamation-triangle"></i>
+    {_ Showing dates in _}: <b class="rsc-timezone">{{ id.tz|escape }}</b>
+</p>
+
 <div class="date-range">
     <fieldset>
         <div class="checkbox">
@@ -48,13 +53,13 @@
             <div class="col-sm-6">
                 <label class="control-label">{_ From _}</label>
                 <div>
-                    {% include "_edit_date.tpl" date=id.date_start name="date_start" is_end=0 date_is_all_day=id.date_is_all_day  is_editable=id.is_editable %}
+                    {% include "_edit_date.tpl" date=id.date_start name="date_start" is_end=0 date_is_all_day=id.date_is_all_day is_editable=id.is_editable timezone=id.tz %}
                 </div>
             </div>
             <div class="col-sm-6">
                 <label class="control-label">{_ Till _}</label>
                 <div>
-                    {% include "_edit_date.tpl" date=id.date_end name="date_end" is_end=1 date_is_all_day=id.date_is_all_day  is_editable=id.is_editable %}
+                    {% include "_edit_date.tpl" date=id.date_end name="date_end" is_end=1 date_is_all_day=id.date_is_all_day  is_editable=id.is_editable timezone=id.tz %}
                 </div>
             </div>
         </div>

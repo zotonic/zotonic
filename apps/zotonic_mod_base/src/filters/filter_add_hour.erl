@@ -26,9 +26,5 @@ add_hour(Date, Context) ->
 
 add_hour(undefined, _N, _Context) ->
 	undefined;
-add_hour(Date, 0, _Context) ->
-	Date;
-add_hour(Date, N, Context) when is_integer(N), N > 0 ->
-	add_hour(z_datetime:next_hour(Date), N-1, Context);
-add_hour(Date, N, Context) when is_integer(N), N < 0 ->
-	add_hour(z_datetime:prev_hour(Date), N+1, Context).
+add_hour(Date, N, _Context) ->
+	z_datetime:next_hour(Date, N).

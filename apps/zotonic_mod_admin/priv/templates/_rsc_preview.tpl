@@ -12,7 +12,7 @@
         <b>{{ id.content_group_id.title }}</b>
     {% endif %}
 </p>
-<h1>{{ id.title }}</h1>
+<h1>{{ id.title|default:id.short_title }}</h1>
 
 {% if id.summary %}
     <p class="summary">
@@ -21,9 +21,13 @@
 {% endif %}
 
 {% if id.medium as medium %}
-<div class="medium">
-    {% media medium mediaclass="admin-media" %}
-</div>
+    <div class="medium">
+        {% media medium mediaclass="admin-media" %}
+    </div>
+
+    {% if id.medium.filename|split:"/"|last as filename %}
+        <span class="glyphicon glyphicon-file"></span> {{ filename }}
+    {% endif %}
 {% endif %}
 
 {{ id.body }}
@@ -34,11 +38,11 @@
 
 {% if id.o.haspart as haspart %}
     <h2>{{ m.rsc.haspart.title }}</h2>
-    <ul class="">
+    <ul>
         {% for id in haspart %}
             {% if id.is_visible %}
                 <li>
-                    {{ id.title }}
+                    {{ id.title|default:id.short_title }}
                 </li>
             {% endif %}
         {% endfor %}

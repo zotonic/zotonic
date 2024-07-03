@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%% @doc 'is_a' filter, filters a list of ids
+%% @copyright 2010-2023 Marc Worrell
+%% @doc 'is_a' filter. Filters a list of ids on category, or tests a single resource id
+%% if it is in a category.
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,18 +20,27 @@
 -module(filter_is_a).
 -export([is_a/3, is_a/4]).
 
-
-is_a({rsc_list, List}, Cat, Context) ->
-    is_a(List, Cat, Context);
-is_a(Arg, Cat, Context) ->
+is_a(Arg, Cat, Context) when not is_integer(Cat), not is_atom(Cat) ->
     case m_category:name_to_id(Cat, Context) of
-        {ok, CatId} -> z_list_of_ids_filter:filter(Arg, fun(Id) -> m_rsc:is_a(Id, CatId, Context) end, Context);
-        {error, _Reason} when is_integer(Arg) -> false;
-        {error, _Reason} when is_list(Arg) -> []
-    end.
+        {ok, CatId} ->
+            is_a(Arg, CatId, Context);
+        {error, _} when is_list(Arg); is_tuple(Arg) ->
+            [];
+        {error, _} ->
+            false
+    end;
+is_a(Rsc, Cat, Context) when is_integer(Rsc); is_atom(Rsc); is_binary(Rsc) ->
+    % Single resource test.
+    m_rsc:is_a(Rsc, Cat, Context);
+is_a(_, undefined, _Context) ->
+    [];
+is_a(RscList, Cat, Context) ->
+    % Ensure argument is a list, return a list.
+    z_list_of_ids_filter:filter(RscList, fun(Id) -> m_rsc:is_a(Id, Cat, Context) end, Context).
 
 is_a(List, Cat, N, Context) ->
     case m_category:name_to_id(Cat, Context) of
-        {ok, CatId} -> z_list_of_ids_filter:filter(List, fun(Id) -> m_rsc:is_a(Id, CatId, Context) end, N, Context);
+        {ok, CatId} ->
+            z_list_of_ids_filter:filter(List, fun(Id) -> m_rsc:is_a(Id, CatId, Context) end, N, Context);
         {error, _Reason} -> []
     end.

@@ -118,17 +118,60 @@
 
         <hr/>
 
-        <p><a href="{% url admin_development_templates %}">{_ Show which files are included in a template compilation _}</a></p>
-        <p class="help-block">{_ At times it can be confusing which templates are actually used during a template compilation.  Here you can see which files are included whilst compiling a template. _}</p>
+        <p>
+            <a href="{% url admin_development_templates_xref %}">{_ Cross-reference check of templates _} &gt;</a>
+        </p>
+        <p class="help-block">
+            {% trans "All templates are checked for missing includes or missing <tt>{ext}</tt> template references."
+                ext="extends/overrules"
+            %}
+            {_ All templates will be compiled. _}
+        </p>
 
+        <hr/>
+
+        <p>
+            <a href="{% url admin_development_templates_trace %}">{_ Live dependency graph of templates _} &gt;</a>
+        </p>
+        <p class="help-block">{_ Traces all templates for the current session-id, or all sessions, and renders them as a graph. _}</p>
+
+        <hr/>
+
+        <p>
+            <a href="{% url admin_development_templates_graph %}">{_ Dependency graph of all available templates _} &gt;</a>
+        </p>
+        <p class="help-block">{_ Calculate and visualize a dependency graph of all templates. _}
+        {_ All templates will be compiled. _}</p>
+
+        <hr/>
+
+        <p>
+            {% button class="btn btn-primary" text=_"Recompile templates"
+                      action={admin_tasks task="templates_reset"}
+            %}
+            {% button class="btn btn-default" text=_"Rescan modules"
+                      action={module_rescan}
+            %}
+        </p>
+        <p class="help-block">{_ Force a recompilation of all templates. This fixes any issues where the compiled templates might be out of sync with the template index. _}</p>
+        </p>
     </div>
 </div>
 
 <div class="widget">
+
+
     <div class="widget-header">
         {_ Dispatch rule debugging _}
     </div>
     <div class="widget-content">
+        <p>
+            <a href="{% url admin_development_dispatch_details %}">{_ View all dispatch rules  _} &gt;</a>
+        </p>
+        <p class="help-block">{_ View all dispatch rules and hostnames usable in the site. _}</p>
+
+        <hr />
+
         <p>{_ Match a request URL, display matched dispatch rule. _}</p>
 
         {% wire id="explain-dispatch" type="submit"
@@ -162,7 +205,7 @@
         <p>{_ Show internals of Zotonic and the modules _}</p>
 
         <p>
-            <a href="{% url admin_development_observers %}">{_ Show an overview of all observers. _}</a>
+            <a href="{% url admin_development_observers %}">{_ Show an overview of all observers _} &gt;</a>
         </p>
     </div>
 </div>

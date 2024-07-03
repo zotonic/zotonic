@@ -11,16 +11,16 @@
 
 {% block widget_content %}
     <p class="alert alert-info view-expanded">
-        {_ This block show a file upload field. This can only be used as the last question of a survey. The default survey routines can’t handle file upload, you will need to add your own survey handler to your site or module. _}
+        {_ This block show a file upload field. This can only be used as the last question of a form. The default form routines can’t handle file upload, you will need to add your own form handler to your site or module. _}
     </p>
 
     {% if id.is_editable %}
     <div class="form-group">
-        <input class="form-control" type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="blocks[].prompt{{ lang_code_with_dollar }}" value="{{ blk.prompt[lang_code]  }}"
+        <input class="form-control" type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="blocks[].prompt{{ lang_code_with_dollar }}" value="{{ blk.prompt|translation:lang_code  }}"
                placeholder="{_ Please upload your image. _} ({{ lang_code }})" />
     </div>
     {% else %}
-        <p>{{ blk.prompt[lang_code]  }}</p>
+        <p>{{ blk.prompt|translation:lang_code  }}</p>
     {% endif %}
 {% endblock %}
 

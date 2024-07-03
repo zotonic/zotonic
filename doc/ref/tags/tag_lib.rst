@@ -57,6 +57,23 @@ Accepted arguments are:
 +-----------------+-------------+---------------------------------------------------------+
 |minify           |             |Force minification use as ``{% lib ... minify %}``       |
 +-----------------+-------------+---------------------------------------------------------+
+|nocache          |             |Let the browser cacte the URL at most 1 second           |
+|                 |             | ``{% lib ... nocache %}``                               |
++-----------------+-------------+---------------------------------------------------------+
 |async            |             |Load css or javascript asynchronously, use as            |
 |                 |             | ``{% lib ... async %}``                                 |
 +-----------------+-------------+---------------------------------------------------------+
+|defer            |             |Load javascript in parallel and executes it after the    |
+|                 |             |page has finished parsing, use as ``{% lib ... defer %}``|
++-----------------+-------------+---------------------------------------------------------+
+
+The ```minify``` argument can be enabled for all lib tags by setting the config ```site.minification_enabled``` to
+a true-ish value (like ```1```).
+
+.. note::
+
+    The ``defer`` argument is set even if the ``async`` attribute is
+    specified to cause legacy Web browsers that only support defer (and not async)
+    to fall back to the defer behavior instead of the synchronous blocking
+    behavior that is the default.
+    See more in `W3 <https://www.w3.org/TR/2011/WD-html5-20110525/scripting-1.html#attr-script-async>`_ documentation.

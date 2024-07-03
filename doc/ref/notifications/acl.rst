@@ -15,3 +15,5 @@ ACL notifications
    notification/acl_logon
    notification/acl_mqtt
    notification/acl_user_groups
+   notification/acl_user_groups_modify
+   notification/acl_collab_groups_modify

@@ -1,2 +1,1 @@
-<p>{_ Your new password is too short. _}</p>
-<p>{_ Use some non alphabetical characters or digits to make it harder to guess. _}</p>
+<p class="text-danger">{_ Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, and symbol. _}</p>

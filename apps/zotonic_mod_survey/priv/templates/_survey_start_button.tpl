@@ -1,4 +1,4 @@
-{% if id.survey_is_autostart %}
+{% if is_autostart or id.survey_is_autostart %}
     {% wire
         postback={survey_start
             id=id

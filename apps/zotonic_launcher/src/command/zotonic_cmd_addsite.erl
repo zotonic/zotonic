@@ -26,24 +26,28 @@
     run/1
 ]).
 
--define(SKEL, blog).
+-define(SKEL, "blog").
+-define(APP, false).
+-define(UMBRELLA, false).
 
 info() ->
     "Add a site and install database".
 
 usage() ->
     io:format("Usage: zotonic addsite [options] <site_name> ~n~n"),
-    io:format(" -s <skel>     Skeleton site (one of 'blog', 'empty', 'nodb'; default: ~s~n", [?SKEL]),
-    io:format(" -H <host>     Site's hostname (default: <site_name.test>) ~n"),
-    io:format(" -L            Create the site in the current directory and add a symlink to zotonic app_user~n"),
-    io:format(" -G <url>      Clone from this Git url, before copying skeleton~n"),
-    io:format(" -h <host>     Database host (default: ~s) ~n", [ z_config:get(dbhost) ]),
-    io:format(" -p <port>     Database port (default: ~p) ~n", [ z_config:get(dbport) ]),
-    io:format(" -u <user>     Database user (default: ~s) ~n", [ z_config:get(dbuser) ]),
-    io:format(" -P <pass>     Database password (default: ~s) ~n", [ z_config:get(dbpassword) ]),
-    io:format(" -d <name>     Database name (default: ~s) ~n", [ z_config:get(dbdatabase) ]),
-    io:format(" -n <schema>   Database schema (defaults to <site_name>) ~n"),
-    io:format(" -a <pass>     Admin password~n~n").
+    io:format(" -s <skel>        Skeleton site (one of 'blog', 'empty', 'nodb'; default: ~s~n", [?SKEL]),
+    io:format(" -H <host>        Site's hostname (default: <site_name.test>) ~n"),
+    io:format(" -L               Create the site in the current directory and add a symlink to zotonic app_user~n"),
+    io:format(" -G <url>         Clone from this Git url, before copying skeleton~n"),
+    io:format(" -h <host>        Database host (default: ~s) ~n", [ z_config:get(dbhost) ]),
+    io:format(" -p <port>        Database port (default: ~p) ~n", [ z_config:get(dbport) ]),
+    io:format(" -u <user>        Database user (default: ~s) ~n", [ z_config:get(dbuser) ]),
+    io:format(" -P <pass>        Database password (default: ~s) ~n", [ z_config:get(dbpassword) ]),
+    io:format(" -d <name>        Database name (default: ~s) ~n", [ z_config:get(dbdatabase) ]),
+    io:format(" -n <schema>      Database schema (defaults to <site_name>) ~n"),
+    io:format(" -a <pass>        Admin password~n"),
+    io:format(" -A <app>         If true, initializes a site app and a root supervisor when the site starts (default: ~p)~n", [?APP]),
+    io:format(" -U <umbrella>    If true, the site dir becomes a multi-app structure (default: ~p)~n~n", [?UMBRELLA]).
 
 run(Args) ->
     case zotonic_command:get_target_node() of
@@ -103,14 +107,15 @@ is_valid_sitename(Sitename) ->
         nomatch -> false
     end.
 
-maybe_default_hostname(Sitename, #{ hostname := undefined } = Options) ->
-    Options#{ hostname => Sitename ++ ".test" };
-maybe_default_hostname(_Sitename, Options) ->
-    Options.
+maybe_default_hostname(Sitename, #{ hostname := None } = Options) when None =:= undefined; None =:= "" ->
+    Options#{ hostname => make_valid_hostname(Sitename ++ ".test") };
+maybe_default_hostname(_Sitename, #{ hostname := Hostname } = Options) ->
+    Options#{ hostname => make_valid_hostname(Hostname) }.
 
-addsite(_Target, Sitename, #{ hostname := undefined }) ->
-    io:format(standard_error, "Please specify the hostname, for example: -H ~s.test~n~n", [ Sitename ]),
-    halt(1);
+make_valid_hostname(Hostname) ->
+   H1 = z_string:to_lower( unicode:characters_to_binary(Hostname) ),
+   unicode:characters_to_list( binary:replace(H1, <<"_">>, <<"-">>, [ global ]) ).
+
 addsite(_Target, Sitename, Options0) ->
     Options = set_dbschema(Sitename, Options0),
     Context = z_context:new(zotonic_site_status),
@@ -162,7 +167,9 @@ set_dbschema(Sitename, Options) ->
 parse(Args) when is_list(Args) ->
     Options = #{
         hostname => undefined,
-        skeleton => "empty"
+        skeleton => ?SKEL,
+        app => ?APP,
+        umbrella => ?UMBRELLA
     },
     parse_args(Args, Options).
 
@@ -177,8 +184,8 @@ parse_args([ "-G", GitUrl | Args ], Acc) ->
     parse_args(Args, Acc#{ git => GitUrl });
 parse_args([ "-h", Host | Args ], Acc) ->
     parse_args(Args, Acc#{ dbhost => Host });
-parse_args([ "-p", Host | Args ], Acc) ->
-    parse_args(Args, Acc#{ dbhost => Host });
+parse_args([ "-p", Port | Args ], Acc) ->
+    parse_args(Args, Acc#{ dbport => Port });
 parse_args([ "-u", User | Args ], Acc) ->
     parse_args(Args, Acc#{ dbuser => User });
 parse_args([ "-P", Pw | Args ], Acc) ->
@@ -189,7 +196,21 @@ parse_args([ "-n", Schema | Args ], Acc) ->
     parse_args(Args, Acc#{ dbschema => Schema });
 parse_args([ "-a", Pw | Args ], Acc) ->
     parse_args(Args, Acc#{ admin_password => Pw });
+parse_args([ "-A", App | Args ], Acc) ->
+    parse_bool_arg(app, App, Args, Acc);
+parse_args([ "-U", Umbrella | Args ], Acc) ->
+    parse_bool_arg(umbrella, Umbrella, Args, Acc);
 parse_args([ "-" ++ _ = Arg | _ ], _Acc) ->
     {error, Arg};
 parse_args(Rest, Acc) ->
     {ok, {Acc, Rest}}.
+
+parse_bool_arg(Key, Arg, Args, Acc) ->
+    {ok, RE} = re:compile("^(true|false|1|0)$", [unicode, ucp, caseless]),
+    case re:run(Arg, RE, [{capture, none}]) of
+        match ->
+            Bool = z_convert:to_bool(string:to_lower(Arg)),
+            parse_args(Args, Acc#{ Key => Bool });
+        nomatch ->
+            {error, Arg}
+    end.

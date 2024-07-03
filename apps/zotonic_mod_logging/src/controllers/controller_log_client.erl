@@ -60,7 +60,11 @@ log(Body, Context) ->
             case mod_logging:is_ui_ratelimit_check(Context) of
                 true ->
                     m_log_ui:insert_event(LogEvent, Context),
-                    ?LOG_INFO("UI event: ~s", [Body1]);
+                    ?LOG_INFO(#{
+                        text => <<"UI event">>,
+                        in => zotonic_mod_logging,
+                        event => Body1
+                    });
                 false ->
                     ok
             end;

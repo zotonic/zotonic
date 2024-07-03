@@ -1,8 +1,9 @@
-%% @copyright 2021 Marc Worrell
+%% @copyright 2021-2024 Marc Worrell
 %% @author Marc Worrell <marc@worrell.nl>
 %% @doc Add functionality to the admin to edit images.
+%% @end
 
-%% Copyright 2021 Marc Worrell
+%% Copyright 2021-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -52,18 +53,29 @@ event(#submit{ message = {edit_form, Args} }, Context) ->
     end.
 
 
-observe_media_upload_rsc_props(#media_upload_rsc_props{ }, Props, _Context) ->
+observe_media_upload_rsc_props(#media_upload_rsc_props{ options = Options }, Props, _Context) ->
     case maps:get(<<"medium_edit_settings">>, Props, undefined) of
         M when is_map(M) ->
             Props;
         _ ->
-            Props#{ <<"medium_edit_settings">> => #{} }
+            case z_convert:to_bool(proplists:get_value(is_import, Options)) of
+                true ->
+                    Props;
+                false ->
+                    Props#{ <<"medium_edit_settings">> => #{} }
+            end
     end.
 
-observe_rsc_update(#rsc_update{}, {ok, #{ <<"medium_edit_settings">> := Settings } = Props}, _Context) ->
+observe_rsc_update(#rsc_update{}, {ok, #{ <<"medium_edit_settings">> := undefined }} = Acc, _Context) ->
+    Acc;
+observe_rsc_update(#rsc_update{}, {ok, #{ <<"medium_edit_settings">> := Settings } = Props}, _Context) when is_map(Settings) ->
     Sanitized = m_image_edit:sanitize(Settings),
     {ok, Props#{
         <<"medium_edit_settings">> => Sanitized
+    }};
+observe_rsc_update(#rsc_update{}, {ok, #{ <<"medium_edit_settings">> := _ } = Props}, _Context) ->
+    {ok, Props#{
+        <<"medium_edit_settings">> => undefined
     }};
 observe_rsc_update(_, Acc, _Context) ->
     Acc.

@@ -1,8 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@miraclethings.nl>
-%% @copyright 2016 Arjan Scherpenisse
+%% @copyright 2016-2023 Arjan Scherpenisse
 %% @doc 'without' filter, removes values from the given list
+%% @end
 
-%% Copyright 2016 Arjan Scherpenisse
+%% Copyright 2016-2023 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.

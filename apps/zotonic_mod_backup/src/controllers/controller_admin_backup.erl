@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
+%% @copyright 2010-2022 Marc Worrell
 %% @doc Overview of all backups.
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -38,9 +38,18 @@ is_authorized(Context) ->
 
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
+    Config = case mod_backup:check_configuration() of
+        {ok, Cfg} ->
+            Cfg#{
+                ok => true
+            };
+        {error, _} ->
+            #{}
+    end,
     Vars = [
+        {is_filestore_enabled, mod_backup:is_filestore_enabled(Context)},
         {page_admin_backup, true},
-        {backup_config, mod_backup:check_configuration()},
+        {backup_config, Config},
         {backup_in_progress, mod_backup:backup_in_progress(Context)}
     ],
 	Html = z_template:render("admin_backup.tpl", Vars, Context),
@@ -56,9 +65,13 @@ event(#submit{message={restore, Args}}, Context) ->
     {id, Id} = proplists:lookup(id, Args),
     case z_acl:rsc_editable(Id, Context) of
         true ->
-            #upload{filename=_Filename, tmpfile=Tmpfile} = z_context:get_q_validated(<<"file">>, Context),
+            #upload{filename=Filename, tmpfile=Tmpfile} = z_context:get_q_validated(<<"file">>, Context),
             {ok, Data} = file:read_file(Tmpfile),
-            case catch z_notifier:first(#rsc_upload{id=Id, format=bert, data=Data}, Context) of
+            Format = case filename:extension(Filename) of
+                <<".json">> -> json;
+                _ -> bert
+            end,
+            case catch z_notifier:first(#rsc_upload{id=Id, format=Format, data=Data}, Context) of
                 {ok, NewId} ->
                     z_render:wire([{dialog_close, []},
                                    {redirect, [{dispatch, admin_edit_rsc}, {id,NewId}]}], Context);
@@ -90,13 +103,18 @@ error_message(av_external_links, Context) ->
     ?__("This file contains links to other files or locations.", Context);
 error_message(sizelimit, Context) ->
     ?__("This file is too large.", Context);
-error_message(_R, Context) ->
-    ?LOG_WARNING("Unknown page creation or upload error: ~p", [_R]),
+error_message(R, Context) ->
+    ?LOG_WARNING(#{
+        text => <<"Unknown page creation or upload error">>,
+        in => zotonic_mod_backup,
+        result => error,
+        reason => R
+    }),
     ?__("Error creating the page.", Context).
 
 
 set_config(What, Context) ->
-    case z_acl:is_admin(Context) of
+    case z_acl:is_admin_editable(Context) of
         true ->
             m_config:set_value(mod_backup, What, z_context:get_q(<<"triggervalue">>, Context), Context),
             z_render:growl(?__("Changed configuration.", Context), Context);

@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
 %% Date: 2009-07-07
-%% @doc Delete username from an user, no confirmation.
+%% @doc Delete username from a user, no confirmation.
 
 %% Copyright 2009 Marc Worrell
 %%
@@ -36,10 +36,10 @@ render_action(TriggerId, TargetId, Args, Context) ->
 	{PostbackMsgJS, Context}.
 
 
-%% @doc Delete an username from an user.
+%% @doc Delete a username from a user.
 %% @spec event(Event, Context1) -> Context2
 event(#postback{message={delete_username, Id, OnSuccess}}, Context) ->
-    case z_acl:is_allowed(use, mod_admin_identity, Context) of
+    case not z_acl:is_read_only(Context) andalso z_acl:is_allowed(use, mod_admin_identity, Context) of
         true ->
             ok = m_identity:delete_username(Id, Context),
             z_render:wire([{growl, [{text, ?__("Username has been deleted.", Context)}]} | OnSuccess], Context);

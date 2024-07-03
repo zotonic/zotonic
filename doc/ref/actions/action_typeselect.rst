@@ -9,14 +9,14 @@ Performs a search for the typed text whilst typing in an input field.  Shows pos
 Example::
 
    <form method="get" action="/search">
-     <input type="text" id="person" name="person" value="" />
+     <input type="search" id="person" name="person" value="" />
      <ul id="suggestions"></ul>
      <input type="hidden" id="person_id" value="" />
-     {% wire id="person" type="keyup"
+     {% wire id="person" type="input"
              action={typeselect cat="person" 
-                               target="suggestions"
-                               action_with_id={with_args action={set_value target="person_id"} arg={value select_id}}
-                               action={submit}} 
+                                target="suggestions"
+                                action_with_id={with_args action={set_value target="person_id"} arg={value select_id}}
+                                action={submit}} 
      %}
    </form>
 

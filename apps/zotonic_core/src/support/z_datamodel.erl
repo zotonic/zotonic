@@ -1,9 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2009-2022 Arjan Scherpenisse
+%% @copyright 2009-2023 Arjan Scherpenisse
 %% @doc Installing parts of the zotonic datamodel. Installs
 %% predicates, categories and default resources.
 
-%% Copyright 2009-2022 Arjan Scherpenisse
+%% Copyright 2009-2023 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -37,17 +37,32 @@
 
 
 %% @doc Reset the state of an imported datamodel, causing all deleted resources to be reimported
+-spec reset_deleted(Module, Context) -> ok when
+    Module :: atom(),
+    Context :: z:context().
 reset_deleted(Module, Context) ->
     m_config:delete(Module, datamodel, Context).
 
 %% @doc Install / update a set of named, predefined resources, categories, predicates, media and edges.
--spec manage(atom(), #datamodel{}, #context{}) -> ok.
+-spec manage(Module, Datamodel, Context) -> ok when
+    Module :: atom(),
+    Datamodel :: #datamodel{},
+    Context :: z:context().
 manage(Module, Datamodel, Context) ->
     manage(Module, Datamodel, [], Context).
 
 %% @doc Install / update a set of named, predefined resources, categories, predicates, media and edges.
--spec manage(atom(), #datamodel{}, datamodel_options(), #context{}) -> ok.
+-spec manage(Module, Datamodel, Options, Context) -> ok when
+    Module :: atom(),
+    Datamodel :: #datamodel{},
+    Options :: datamodel_options(),
+    Context :: z:context().
 manage(Module, Datamodel, Options, Context) ->
+    ?LOG_INFO(#{
+        text => <<"Installing datamodel for module">>,
+        in => zotonic_core,
+        module => Module
+    }),
     AdminContext = z_acl:sudo(Context),
     jobs:run(manage_module_jobs, fun() ->
         [ manage_category(Module, Cat, Options, AdminContext)   || Cat    <- Datamodel#datamodel.categories ],
@@ -81,21 +96,26 @@ manage_medium(Module, {Name, Filename, Props}, Options, Context) when is_list(Pr
 manage_medium(Module, {Name, Filename, Props}, Options, Context) ->
     case manage_resource(Module, {Name, media, Props}, Options, Context) of
         ok ->
-            ok;
+            Id = m_rsc:rid(Name, Context),
+            case m_media:get(Id, Context) of
+                undefined ->
+                    insert_medium(Id, Filename, Context);
+                _Medium ->
+                    ok
+            end;
         {ok, Id} ->
-            case manage_resource(Module, {Name, media, Props}, Options, Context) of
-                ok ->
-                    ok;
-                {ok, Id} ->
-                    case is_http_url(Filename) of
-                        true ->
-                            z_media_import:update(Id, Filename, Context);
-                        false ->
-                            m_media:replace_file(path(Filename, Context), Id, Context)
-                    end,
-                    {ok, Id}
-            end
+            insert_medium(Id, Filename, Context)
     end.
+
+insert_medium(Id, Filename, Context) ->
+    case is_http_url(Filename) of
+        true ->
+            z_media_import:update(Id, Filename, Context);
+        false ->
+            m_media:replace_file(path(Filename, Context), Id, Context)
+    end,
+    {ok, Id}.
+
 
 manage_category(Module, {Name, ParentCategory, Props}, Options, Context) when is_list(Props) ->
     manage_category(Module, {Name, ParentCategory, z_props:from_props(Props)}, Options, Context);
@@ -114,7 +134,9 @@ manage_category(Module, {Name, ParentCategory, Props}, Options, Context) ->
                         _ ->
                             throw({error, {nonexisting_parent_category, ParentCategory}})
                     end
-            end
+            end;
+        {error, _} = Error ->
+            Error
     end.
 
 manage_predicate(Module, {Name, Uri, Props, ValidFor}, Options, Context) when is_list(Props) ->
@@ -131,7 +153,9 @@ manage_predicate(Module, {Name, Props, ValidFor}, Options, Context) ->
             ok;
         {ok, Id} ->
             ok = manage_predicate_validfor(Id, ValidFor, Options, Context),
-            {ok, Id}
+            {ok, Id};
+        {error, _} = Error ->
+            Error
     end.
 
 
@@ -157,6 +181,7 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                             %% Resource exists but is not installed by us.
                             ?LOG_NOTICE(#{
                                 text => <<"Resource exists but is managed by another module.">>,
+                                in => zotonic_core,
                                 name => Name,
                                 rsc_id => Id,
                                 module => Module,
@@ -186,28 +211,44 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                              end,
                     ?LOG_NOTICE(#{
                         text => <<"Creating new managed resource.">>,
+                        in => zotonic_core,
                         module => Module,
                         category => Category,
                         name => Name
                     }),
-                    {ok, Id} = m_rsc_update:update(insert_rsc, Props5, [{is_import, true}], Context),
-                    case maps:get(<<"media_url">>, Props5, undefined) of
-                        undefined -> nop;
-                        <<>> -> nop;
-                        Url ->
-                            m_media:replace_url(Url, Id, [], Context)
-                    end,
-                    case maps:get(<<"media_file">>, Props5, undefined) of
-                        undefined -> nop;
-                        <<>> -> nop;
-                        File ->
-                            m_media:replace_file(path(File, Context), Id, Context)
-                    end,
-                    {ok, Id}
+                    case m_rsc_update:update(insert_rsc, Props5, [{is_import, true}], Context) of
+                        {ok, Id} ->
+                            case maps:get(<<"media_url">>, Props5, undefined) of
+                                undefined -> nop;
+                                <<>> -> nop;
+                                Url ->
+                                    m_media:replace_url(Url, Id, [], Context)
+                            end,
+                            case maps:get(<<"media_file">>, Props5, undefined) of
+                                undefined -> nop;
+                                <<>> -> nop;
+                                File ->
+                                    m_media:replace_file(path(File, Context), Id, Context)
+                            end,
+                            {ok, Id};
+                        {error, Reason} = Error ->
+                            ?LOG_ERROR(#{
+                                in => zotonic_core,
+                                text => <<"Error creating new managed resource. Not installing.">>,
+                                result => error,
+                                reason => Reason,
+                                module => Module,
+                                category => Category,
+                                name => Name,
+                                page_path => maps:get(<<"page_path">>, Props5, undefined)
+                            }),
+                            Error
+                    end
             end;
         {error, _} ->
             ?LOG_WARNING(#{
                 text => <<"Managed resource could not be handled because the category does not exist.">>,
+                in => zotonic_core,
                 name => Name,
                 category => Category,
                 module => Module
@@ -262,6 +303,7 @@ maybe_force_update(K, V, Props, Module, Id, Options, _Context) ->
         true ->
             ?LOG_NOTICE(#{
                 text => <<"Managed resource property changed in database, updating.">>,
+                in => zotonic_core,
                 rsc_id => Id,
                 property => K,
                 module => Module
@@ -270,6 +312,7 @@ maybe_force_update(K, V, Props, Module, Id, Options, _Context) ->
         false ->
             ?LOG_DEBUG(#{
                 text => <<"Managed resource property changed in database, not updating.">>,
+                in => zotonic_core,
                 rsc_id => Id,
                 property => K,
                 module => Module

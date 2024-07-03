@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016-2021 Marc Worrell
-%% @doc Simple runtime for the compiled templates. Needs to be
-%%      copied and adapted for different environments.
+%% @copyright 2016-2024 Marc Worrell
+%% @doc Runtime for the compiled templates with Zotonic specific interfaces.
+%% @end
 
-%% Copyright 2016-2021 Marc Worrell
+%% Copyright 2016-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -65,6 +65,8 @@ map_template({cat, Template}, #{ '$cat' := Cats }, Context) when is_list(Cats) -
     map_template_cat(Template, Cats, Context);
 map_template({cat, Template}, #{ 'id' := Id } = Vars, Context) ->
     map_template({cat, Template, Id}, Vars, Context);
+map_template({cat, Template}, #{ <<"id">> := Id } = Vars, Context) ->
+    map_template({cat, Template, Id}, Vars, Context);
 map_template({cat, Template}, _Vars, Context) ->
     map_template_1(Template, Context);
 map_template({cat, Template, [Cat|_] = IsA}, _Vars, Context) when is_atom(Cat); is_binary(Cat); is_list(Cat) ->
@@ -82,6 +84,7 @@ map_template({overrules, Template, Filename}, _Vars, Context) ->
         {error, enoent} ->
             ?LOG_WARNING(#{
                 text => <<"No template for overrules">>,
+                in => zotonic_core,
                 template => Template,
                 filename => Filename
             }),
@@ -239,6 +242,12 @@ compile_map_nested_value([{identifier, _, <<"q">>}, {identifier, _, QArg}|Rest],
                 erl_syntax:atom(get_q),
                 [ erl_syntax:abstract(QArg), erl_syntax:variable(ContextVar) ]),
     [{ast, Ast} | Rest];
+compile_map_nested_value([{identifier, _, <<"q">>}, {expr, {string_literal, _, QArg}}|Rest], ContextVar, _Context) ->
+    Ast = erl_syntax:application(
+                erl_syntax:atom(z_context),
+                erl_syntax:atom(get_q),
+                [ erl_syntax:abstract(QArg), erl_syntax:variable(ContextVar) ]),
+    [{ast, Ast} | Rest];
 compile_map_nested_value([{identifier, _, <<"z_language">>}], ContextVar, _Context) ->
     Ast = erl_syntax:application(
                 erl_syntax:atom(z_context),
@@ -331,6 +340,7 @@ find_value(Key, #search_result{} = S, _TplVars, _Context) ->
         result -> S#search_result.result;
         options -> S#search_result.options;
         total -> S#search_result.total;
+        is_total_estimated -> S#search_result.total;
         page -> S#search_result.page;
         pages -> S#search_result.pages;
         next -> S#search_result.next;
@@ -342,6 +352,7 @@ find_value(Key, #search_result{} = S, _TplVars, _Context) ->
         <<"result">> -> S#search_result.result;
         <<"options">> -> S#search_result.options;
         <<"total">> -> S#search_result.total;
+        <<"is_total_estimated">> -> S#search_result.is_total_estimated;
         <<"page">> -> S#search_result.page;
         <<"pages">> -> S#search_result.pages;
         <<"next">> -> S#search_result.next;
@@ -501,6 +512,7 @@ builtin_tag_1(media, Expr, Args, _Vars, Context) ->
 builtin_tag_1(Tag, _Expr, _Args, _Vars, _Context) ->
     ?LOG_WARNING(#{
         text => <<"Unknown template tag">>,
+        in => zotonic_core,
         tag => Tag
     }),
     <<>>.
@@ -684,13 +696,14 @@ trace_compile(Module, Filename, Options, Context) ->
     SrcPos = proplists:get_value(trace_position, Options),
     z_notifier:notify(
         #debug{
-            what=template,
-            arg={compile, Filename, SrcPos, Module}
+            what = template,
+            arg = {compile, Filename, SrcPos, Module}
         }, Context),
     case SrcPos of
         {File, Line, _Col} ->
             ?LOG_DEBUG(#{
                 text => <<"Template compile">>,
+                in => zotonic_core,
                 template => Filename,
                 at => File,
                 line => Line
@@ -698,21 +711,47 @@ trace_compile(Module, Filename, Options, Context) ->
         undefined ->
             ?LOG_DEBUG(#{
                 text => <<"Template compile">>,
+                in => zotonic_core,
                 template => Filename
             })
     end,
     ok.
 
-%% @doc Called when a template is rendered (could be from an include)
--spec trace_render(binary(), template_compiler:options(), z:context()) -> ok | {ok, iodata(), iodata()}.
+%% @doc Called when a template is rendered (could be from an include). Optionally inserts
+%% text before and after the text inclusion into the output stream.
+-spec trace_render(TemplateFilename, Options, Context) -> ok | {ok, Before, After} when
+    TemplateFilename :: binary(),
+    Options :: template_compiler:options(),
+    Context :: z:context(),
+    Before :: iodata(),
+    After :: iodata().
 trace_render(Filename, Options, Context) ->
     SrcPos = proplists:get_value(trace_position, Options),
-    case z_convert:to_bool(m_config:get_value(mod_development, debug_includes, Context)) of
+    z_notifier:notify_sync(
+        #debug{
+            what = template,
+            arg = {render, Filename, SrcPos}
+        }, Context),
+    case m_config:get_boolean(mod_development, debug_includes, Context) of
         true ->
             case SrcPos of
+                {File, 0, _Col} ->
+                    ?LOG_NOTICE(#{
+                        text => <<"Template extends/overrules">>,
+                        in => zotonic_core,
+                        template => Filename,
+                        at => File
+                    }),
+                    {ok,
+                        [ <<"\n<!-- START ">>, relpath(Filename),
+                          <<" by ">>, relpath(File),
+                          <<" -->\n">> ],
+                        [ <<"\n<!-- END ">>, relpath(Filename),  <<" -->\n">> ]
+                    };
                 {File, Line, _Col} ->
                     ?LOG_NOTICE(#{
                         text => <<"Template include">>,
+                        in => zotonic_core,
                         template => Filename,
                         at => File,
                         line => Line
@@ -726,6 +765,7 @@ trace_render(Filename, Options, Context) ->
                 undefined ->
                     ?LOG_NOTICE(#{
                         text => <<"Template render">>,
+                        in => zotonic_core,
                         template => Filename
                     }),
                     {ok,
@@ -745,6 +785,7 @@ trace_block({File, Line, _Col}, Name, Module, Context) ->
         true ->
             ?LOG_NOTICE(#{
                 text => <<"Template call block">>,
+                in => zotonic_core,
                 block => Name,
                 template => Module:filename(),
                 at => File,

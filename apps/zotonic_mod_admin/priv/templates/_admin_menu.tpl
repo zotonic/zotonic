@@ -20,7 +20,7 @@
                         <li class="dropdown" id="nav-{{ id }}">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#nav-{{ id }}">
                                 {% if item.icon %}<i class="glyphicon glyphicon-{{ item.icon }}"></i>{% endif %}
-                                {{ item.label|escape }}
+                                {{ item.label|escape_check }}
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
@@ -30,7 +30,7 @@
                                     {% else %}
                                         <li><a href="{{ item.url }}">
                                                 {% if item.icon %}<i class="glyphicon glyphicon-{{ item.icon }}"></i>{% endif %}
-                                                {{ item.label|escape }}</a>
+                                                {{ item.label|escape_check }}</a>
                                         </li>
                                     {% endif %}
                                 {% endfor %}
@@ -38,7 +38,7 @@
                         </li>
                     {% else %}
                         <li>
-                            <a href="{{ item.url }}">{{ item.label|escape }}</a>
+                            <a href="{{ item.url }}">{{ item.label|escape_check }}</a>
                         </li>
                     {% endif %}
                 {% endfor %}
@@ -82,7 +82,7 @@
                 <form class="navbar-right navbar-form form-inline" action="{% block search_target %}{% url admin_overview_rsc %}{% endblock %}" method="get">
                     <input type="hidden" name="qcat" value="{{ q.qcat|escape }}" />
                     <input type="hidden" name="qquery_id" value="{{ q.qquery_id|escape }}" />
-                    <input class="search-query form-control" type="text" name="qs" value="{{q.qs|escape}}" placeholder="{% block search_placeholder %}{_ Search... _}{% endblock %}" />
+                    <input autocomplete="off" class="search-query form-control" type="search" name="qs" value="{{q.qs|escape}}" placeholder="{% block search_placeholder %}{_ Search... _}{% endblock %}" data-search-view="true" />
                 </form>
             {% endblock %}
 

@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013 Marc Worrell
-%% @doc Get a "flat" of menu parents
+%% @copyright 2013-2023 Marc Worrell
+%% @doc Return the menu of a resource.
+%% @end
 
-%% Copyright 2013 Marc Worrell
+%% Copyright 2013-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -22,9 +23,14 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 menu_rsc(RscId, Context) ->
-	case z_notifier:first(#menu_rsc{id=RscId}, Context) of
-		undefined -> m_rsc:rid(main_menu, Context);
-		none -> undefined;
-		MenuId -> m_rsc:rid(MenuId, Context)
+	case z_notifier:first(#menu_rsc{ id = RscId }, Context) of
+		undefined ->
+			case m_edge:objects(RscId, hasmenu, Context) of
+				[MId|_] -> MId;
+				[] -> m_rsc:rid(main_menu, Context)
+			end;
+		none ->
+			undefined;
+		MenuId ->
+			m_rsc:rid(MenuId, Context)
 	end.
-

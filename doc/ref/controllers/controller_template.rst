@@ -42,7 +42,7 @@ The following options can be given to the dispatch rule:
 |                     |See also: :ref:`tag-catinclude`.      |                        |
 +---------------------+--------------------------------------+------------------------+
 |anonymous            |Render the template always as the     |{anonymous, true}       |
-|                     |anonymous user, even when an user is  |                        |
+|                     |anonymous user, even when a user is   |                        |
 |                     |logged on. Defaults to false.         |                        |
 +---------------------+--------------------------------------+------------------------+
 |content_type         |The content type provided by the      |{content_type,          |
@@ -71,6 +71,9 @@ The following options can be given to the dispatch rule:
 |seo_noindex          |Ask crawlers to not index this page.  |seo_noindex             |
 +---------------------+--------------------------------------+------------------------+
 |nocache              |Prevent browser caching this page.    |nocache                 |
++---------------------+--------------------------------------+------------------------+
+|http_status          |The HTTP status code to return. This  |{http_status, 418}      |
+|                     |defaults to 200.                      |                        |
 +---------------------+--------------------------------------+------------------------+
 
 .. include:: acl_options.rst

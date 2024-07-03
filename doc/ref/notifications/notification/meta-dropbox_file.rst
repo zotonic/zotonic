@@ -14,4 +14,5 @@ Return:
     
 
 ``#dropbox_file{}`` properties:
-    - filename: ``unknown``
+    - filename: ``file:filename_all()``
+    - basename: ``binary``

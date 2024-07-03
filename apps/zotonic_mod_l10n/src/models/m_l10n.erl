@@ -34,7 +34,7 @@
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--include_lib("erlang_localtime/include/tz_database.hrl").
+-include_lib("qdate_localtime/include/tz_database.hrl").
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
@@ -48,8 +48,7 @@ m_get([ <<"default_timezone">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_value(mod_l10n, timezone, Context), Rest}};
 m_get([ <<"timezone_is_fixed">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_boolean(mod_l10n, timezone_is_fixed, Context), Rest}};
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 
@@ -77,7 +76,9 @@ country_name(Code, Language, Context) ->
 is_timezone(Tz) ->
     Mapped = case mochiglobal:get(timezones_map) of
         undefined ->
-            TzMap = maps:from_list([ {T, true} || T <- timezones() ]),
+            TzMap1 = maps:from_list([ {T, true} || T <- timezones() ]),
+            TzMap2 = maps:from_list([ {binary_to_list(T), true} || T <- timezones() ]),
+            TzMap = maps:merge(TzMap1, TzMap2),
             mochiglobal:put(timezones_map, TzMap),
             TzMap;
         TzMap ->

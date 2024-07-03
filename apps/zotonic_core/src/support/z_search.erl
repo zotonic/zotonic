@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Search the database, interfaces to specific search routines.
+%% @end
 
-%% Copyright 2009-2022 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,13 +32,19 @@
     search_result/3,
     query_/2,
 
+    lookup_qarg_value/2,
+    lookup_qarg_value/3,
+
+    lookup_qarg/2,
+    lookup_qarg/3,
+
     map_to_options/1,
     props_to_map/1,
-    reformat_sql_query/2,
-    concat_sql_query/2
-]).
+    reformat_sql_query/3,
+    concat_sql_query/2,
 
--include_lib("zotonic.hrl").
+    default_pagelen/1
+]).
 
 % The tuple format is deprecated. Use separate binary search term with a map.
 -type search_query():: {atom(), list()}
@@ -45,26 +52,31 @@
 -type search_offset() :: Limit :: pos_integer()
                        | {Offset :: pos_integer(), Limit :: pos_integer()}.
 -type search_options() :: #{
-        properties => list(binary()) | boolean()
+        properties => list(binary()) | boolean(),
+        is_count_rows => boolean()
     }.
 
 -export_type([
     search_query/0,
-    search_offset/0
+    search_offset/0,
+    search_options/0
     ]).
 
--define(OFFSET_LIMIT, {1,?SEARCH_PAGELEN}).
--define(SEARCH_ALL_LIMIT, 30000).
+-include_lib("zotonic.hrl").
 
+-define(SEARCH_ALL_LIMIT, 30000).
+-define(MIN_LOOKAHEAD, 200).
 
 %% @doc Perform a named search with arguments.
 -spec search(Name, Args, Page, PageLen, Context) -> Result when
     Name :: binary(),
     Args :: map() | proplists:proplist() | undefined,
-    Page :: pos_integer(),
-    PageLen :: pos_integer(),
+    Page :: pos_integer() | undefined,
+    PageLen :: pos_integer() | undefined,
     Context :: z:context(),
     Result :: #search_result{}.
+search(Name, #{ <<"options">> := Options } = Args, Page, PageLen, Context) ->
+    search(Name, Args, Page, PageLen, Options, Context);
 search(Name, Args, Page, PageLen, Context) ->
     search(Name, Args, Page, PageLen, #{}, Context).
 
@@ -72,23 +84,26 @@ search(Name, Args, Page, PageLen, Context) ->
 -spec search(Name, Args, Page, PageLen, Options, Context) -> Result when
     Name :: binary(),
     Args :: map() | proplists:proplist() | undefined,
-    Page :: pos_integer(),
-    PageLen :: pos_integer(),
+    Page :: pos_integer() | undefined,
+    PageLen :: pos_integer() | undefined,
     Options :: map(),
     Context :: z:context(),
     Result :: #search_result{}.
 search(Name, undefined, Page, PageLen, Options, Context) ->
     search(Name, #{}, Page, PageLen, Options, Context);
-search(Name, Args, Page, PageLen, Options, Context) when is_list(Args) ->
-    Args1 = props_to_map(Args),
-    search(Name, Args1, Page, PageLen, Options, Context);
-search(Name, Args, Page, PageLen, Options0, Context) when is_binary(Name), is_map(Args), is_map(Options0) ->
+search(Name, Args, undefined, PageLen, Options, Context) ->
+    search(Name, Args, 1, PageLen, Options, Context);
+search(Name, Args, Page, undefined, Options, Context) ->
+    search(Name, Args, Page, default_pagelen(Context), Options, Context);
+search(Name, Args0, Page, PageLen, Options0, Context) when is_binary(Name), is_map(Options0) ->
+    Args = props_to_map(Args0),
     Options = map_to_options(Options0),
-    OffsetLimit = offset_limit(Page, PageLen),
+    OffsetLimit = offset_limit(Page, PageLen, Options),
     Q = #search_query{
         name = Name,
         args = Args,
-        offsetlimit = OffsetLimit
+        offsetlimit = OffsetLimit,
+        options = Options
     },
     case z_notifier:first(Q, Context) of
         undefined when Name =/= <<"query">> ->
@@ -102,21 +117,36 @@ search(Name, Args, Page, PageLen, Options0, Context) when is_binary(Name), is_ma
                             },
                             search(<<"query">>, Args1, Page, PageLen, Options, Context);
                         false ->
-                            ?LOG_NOTICE("z_search: ignored unknown search query ~p with ~p", [ Name, Args ]),
+                            ?LOG_NOTICE(#{
+                                text => <<"z_search: ignored unknown search query">>,
+                                in => zotonic_core,
+                                name => Name,
+                                args => Args
+                            }),
                             #search_result{
                                 search_name = Name,
                                 search_args = Args
                             }
                     end;
                 undefined ->
-                    ?LOG_NOTICE("z_search: ignored unknown search query ~p with ~p", [ Name, Args ]),
+                    ?LOG_NOTICE(#{
+                        text => <<"z_search: ignored unknown search query">>,
+                        in => zotonic_core,
+                        name => Name,
+                        args => Args
+                    }),
                     #search_result{
                         search_name = Name,
                         search_args = Args
                     }
             end;
         undefined ->
-            ?LOG_NOTICE("z_search: ignored unknown search query ~p with ~p", [ Name, Args ]),
+            ?LOG_NOTICE(#{
+                text => <<"z_search: ignored unknown search query">>,
+                in => zotonic_core,
+                name => Name,
+                args => Args
+            }),
             #search_result{
                 search_name = Name,
                 search_args = Args
@@ -130,18 +160,42 @@ search(Name, Args, Page, PageLen, Options0, Context) when is_binary(Name), is_ma
 
 %% @doc Search items and handle the paging. Uses the default page length.
 %% @deprecated use search/5
--spec search_pager(search_query(), Page :: pos_integer(), z:context()) -> #search_result{}.
+-spec search_pager(Query, Page, Context) -> Result when
+    Query :: search_query(),
+    Page :: pos_integer(),
+    Context :: z:context(),
+    Result :: #search_result{}.
 search_pager(Search, Page, Context) ->
-    search_pager(Search, Page, ?SEARCH_PAGELEN, Context).
+    search_pager(Search, Page, default_pagelen(Context), Context).
 
-%% @doc Search items and handle the paging
--spec search_pager(search_query(), Page :: pos_integer(), PageLen :: pos_integer(), z:context()) -> #search_result{}.
+%% @doc Search items and handle the paging. This fetches extra rows beyond the requested
+%% rows to ensure that the pager has the information for the "next page" options.
+%% The number of extra rows depends on the current page, more for page 1, less for later pages.
+-spec search_pager(Query, Page, PageLen, Context) -> Result when
+    Query :: search_query(),
+    Page :: pos_integer() | undefined,
+    PageLen :: pos_integer() | undefined,
+    Context :: z:context(),
+    Result :: #search_result{}.
 search_pager(Search, undefined, PageLen, Context) ->
     search_pager(Search, 1, PageLen, Context);
+search_pager(Search, Page, undefined, Context) ->
+    search_pager(Search, Page, default_pagelen(Context), Context);
 search_pager({Name, Args}, Page, PageLen, Context) when is_binary(Name) ->
     search(Name, Args, Page, PageLen, Context);
+search_pager({Name, Args}, _Page, PageLen, _Context) when PageLen < 1 ->
+    #search_result{
+        search_name = Name,
+        search_args = Args,
+        result = [],
+        page = 1,
+        pagelen = PageLen,
+        pages = 0,
+        prev = 1,
+        next = false
+    };
 search_pager({Name, Args} = Search, Page, PageLen, Context) when is_atom(Name) ->
-    OffsetLimit = offset_limit(Page, PageLen),
+    OffsetLimit = offset_limit(Page, PageLen, #{}),
     SearchResult = search_1(Search, Page, PageLen, OffsetLimit, Context),
     handle_search_result(SearchResult, Page, PageLen, OffsetLimit, Name, Args, #{}, Context).
 
@@ -150,7 +204,7 @@ search_pager({Name, Args} = Search, Page, PageLen, Context) when is_atom(Name) -
 %% @deprecated use search/5
 -spec search({atom()|binary(), proplists:proplist()|map()}, z:context()) -> #search_result{}.
 search(Search, Context) ->
-    search(Search, ?OFFSET_LIMIT, Context).
+    search(Search, default_offset_limit(Context), Context).
 
 %% @doc Perform the named search and its arguments
 %% @deprecated use search/5
@@ -164,11 +218,71 @@ search(Search, {1, Limit} = OffsetLimit, Context) ->
 search(Search, {Offset, Limit} = OffsetLimit, Context) ->
     case (Offset - 1) rem Limit of
         0 ->
-            PageNr = (Offset - 1) div Limit,
+            % On a page boundary, we can calculate the page number.
+            PageNr = (Offset - 1) div Limit + 1,
             search_1(Search, PageNr, Limit, OffsetLimit, Context);
         _ ->
-            search_1(Search, undefined, undefined, OffsetLimit, Context)
+            % Not on a page boundary, give up on calculating the page number.
+            search_1(Search, 1, ?SEARCH_ALL_LIMIT, OffsetLimit, Context)
     end.
+
+-spec default_pagelen( z:context() ) -> pos_integer().
+default_pagelen(Context) ->
+    case m_config:get_value(site, pagelen, Context) of
+        undefined -> ?SEARCH_PAGELEN;
+        <<>> -> ?SEARCH_PAGELEN;
+        Len -> z_convert:to_integer(Len)
+    end.
+
+-spec default_offset_limit( z:context() ) -> search_offset().
+default_offset_limit(Context) ->
+    {1, default_pagelen(Context)}.
+
+
+%% @doc Find the term value of a named argument in a query terms list or map.
+-spec lookup_qarg_value(Arg, Terms) -> TermValue | undefined when
+    Arg :: binary(),
+    Terms :: map(),
+    TermValue :: term().
+lookup_qarg_value(Arg, Terms) ->
+    lookup_qarg_value(Arg, Terms, undefined).
+
+%% @doc Find the term value of a named argument in a query terms list or map. Return
+%% the default when the term is not found or doesn't have a value.
+-spec lookup_qarg_value(Arg, Terms, Default) -> TermValue | Default when
+    Arg :: binary(),
+    Terms :: map(),
+    Default :: term(),
+    TermValue :: term().
+lookup_qarg_value(Arg, Terms, Default) ->
+    case lookup_qarg(Arg, Terms, undefined) of
+        #{ <<"value">> := V } -> V;
+        #{} -> Default;
+        undefined -> Default
+    end.
+
+%% @doc Find a named argument in a query terms list or map.
+-spec lookup_qarg(Arg, Terms) -> Term | undefined when
+    Arg :: binary(),
+    Terms :: map(),
+    Term :: #{ binary() => term() } | undefined.
+lookup_qarg(Arg, Terms) ->
+    lookup_qarg(Arg, Terms, undefined).
+
+-spec lookup_qarg(Arg, Terms, Default) -> Term | Default when
+    Arg :: binary(),
+    Terms :: map(),
+    Default :: term(),
+    Term :: #{ binary() => term() }.
+lookup_qarg(Arg, #{ <<"q">> := Terms }, Default) when is_list(Terms) ->
+    lookup_qarg_1(Arg, Terms, Default).
+
+lookup_qarg_1(_Arg, [], Default) ->
+    Default;
+lookup_qarg_1(Arg, [ #{ <<"term">> := T } = Term | _ ], _Default) when T =:= Arg ->
+    Term;
+lookup_qarg_1(Arg, [ _ | Terms ], Default) ->
+    lookup_qarg_1(Arg, Terms, Default).
 
 
 %% @doc Handle a return value from a search function.  This can be an intermediate SQL statement
@@ -182,26 +296,17 @@ search(Search, {Offset, Limit} = OffsetLimit, Context) ->
     Args :: map() | proplists:proplist(),
     Options :: search_options(),
     Context :: z:context().
-handle_search_result(#search_result{ pages = N } = S, _Page, _PageLen, _OffsetLimit, Name, Args, Options, _Context)
-    when is_integer(N) ->
-    S#search_result{
-        search_name = Name,
-        search_args = Args,
-        options = Options
-    };
 handle_search_result(#search_result{ result = L, total = Total } = S, Page, PageLen, _OffsetLimit, Name, Args, Options, _Context)
     when is_integer(Total) ->
-    L1 = lists:sublist(L, 1, PageLen),
     Pages = (Total+PageLen-1) div PageLen,
-    Len = length(L),
     Next = if
-        Len > PageLen -> Page + 1;
+        Page < Pages -> Page + 1;
         true -> false
     end,
     S#search_result{
         search_name = Name,
         search_args = Args,
-        result = L1,
+        result = lists:sublist(L, 1, PageLen),
         options = Options,
         page = Page,
         pagelen = PageLen,
@@ -210,7 +315,7 @@ handle_search_result(#search_result{ result = L, total = Total } = S, Page, Page
         next = Next
     };
 handle_search_result(#search_result{ result = L, total = undefined } = S, Page, PageLen, _OffsetLimit, Name, Args, Options, _Context) ->
-    L1 = lists:sublist(L, 1, PageLen),
+    % Search result without page nr, but which should have used the OffsetLimit.
     Len = length(L),
     Next = if
         Len > PageLen -> Page + 1;
@@ -219,30 +324,30 @@ handle_search_result(#search_result{ result = L, total = undefined } = S, Page, 
     S#search_result{
         search_name = Name,
         search_args = Args,
-        result = L1,
+        result = lists:sublist(L, 1, PageLen),
         options = Options,
         page = Page,
         pagelen = PageLen,
         prev = erlang:max(Page-1, 1),
         next = Next
     };
-handle_search_result(L, Page, PageLen, _OffsetLimit, Name, Args, Options, _Context) when is_list(L) ->
-    L1 = lists:sublist(L, 1, PageLen),
-    Len = length(L),
-    Pages = (Len+PageLen-1) div PageLen + Page - 1,
+handle_search_result(L, Page, PageLen, {Offset, _Limit}, Name, Args, Options, _Context) when is_list(L) ->
+    % Simple search results that don't do their paging and offset/limit handling, do the paging here.
+    Total = length(L),
+    Pages = (Total + PageLen - 1) div PageLen,
     Next = if
-        Len > PageLen -> Page + 1;
+        Page < Pages -> Page + 1;
         true -> false
     end,
     #search_result{
         search_name = Name,
         search_args = Args,
-        result = L1,
-        options = Options,
+        result = sublist(L, Offset, PageLen),
         page = Page,
         pagelen = PageLen,
         pages = Pages,
-        total = Len,
+        options = Options,
+        total = Total,
         is_total_estimated = false,
         prev = erlang:max(Page-1, 1),
         next = Next
@@ -251,7 +356,7 @@ handle_search_result(#search_sql_terms{} = Terms, Page, PageLen, OffsetLimit, Na
     SearchSQL = z_search_terms:combine(Terms),
     handle_search_result(SearchSQL, Page, PageLen, OffsetLimit, Name, Args, Options, Context);
 handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit, Name, Args, Options, Context) ->
-    Q1 = reformat_sql_query(Q, Context),
+    Q1 = reformat_sql_query(Q, Options, Context),
     {Sql, SqlArgs} = concat_sql_query(Q1, OffsetLimit),
     case Q#search_sql.run_func of
         F when is_function(F) ->
@@ -271,14 +376,23 @@ handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit,
             RowCount = length(Rows),
             FoundTotal = (Page-1) * PageLen + RowCount,
             {Total, IsEstimate} = if
-                Limit > RowCount ->
+                Limit > RowCount andalso RowCount > 0 ->
                     % Didn't return all rows, assume we are at the end of the result set.
                     {FoundTotal, false};
                 true ->
-                    % The number of requested rows was returned, assume there is more.
+                    % No rows or the number of requested rows was returned.
                     {SqlNoLimit, ArgsNoLimit} = concat_sql_query(Q1, undefined),
                     {ok, EstimatedTotal} = z_db:estimate_rows(SqlNoLimit, ArgsNoLimit, Context),
-                    {erlang:max(FoundTotal, EstimatedTotal), true}
+                    if
+                        RowCount > 0 ->
+                            % Max rows returned, the total is more
+                            {erlang:max(FoundTotal, EstimatedTotal), true};
+                        RowCount =:= 0 andalso Page =:= 1 ->
+                            {0, false};
+                        RowCount =:= 0 ->
+                            % We are beyond the number of available rows
+                            {erlang:min(FoundTotal, EstimatedTotal), true}
+                    end
             end,
             Pages = (Total + PageLen - 1) div PageLen,
             Next = if
@@ -307,24 +421,25 @@ handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit,
 %% Calculate an offset/limit for the query. This takes such a range from the results
 %% that we can display a pager. We don't need exact results, as we will use the query
 %% planner to give an estimated number of rows.
-offset_limit(1, PageLen) ->
-    % Take 5 pages + 1
-    {1, 5 * PageLen + 1};
-offset_limit(2, PageLen) ->
-    % Take 4 pages + 1
-    {PageLen + 1, 4 * PageLen + 1};
-offset_limit(3, PageLen) ->
-    % Take 3 pages + 1
-    {2 * PageLen + 1, 3 * PageLen + 1};
-offset_limit(N, PageLen) ->
-    % Take 2 pages + 1
-    {(N-1) * PageLen + 1, 2 * PageLen + 1}.
+offset_limit(_Page, _PageLen, #{ is_count_rows := true }) ->
+    {1, 1};
+offset_limit(1, PageLen, _Options) ->
+    % Take 6 pages + 1 or the MIN_LOOKAHEAD
+    {1, erlang:max(6 * PageLen + 1, ?MIN_LOOKAHEAD)};
+offset_limit(N, PageLen, _Options) ->
+    % Take at least 5 pages + 1 to accomodate for the default slider of the pager.
+    {(N-1) * PageLen + 1, erlang:max(5 * PageLen + 1, ?MIN_LOOKAHEAD - N * PageLen)}.
 
+
+sublist(L, Offset, Limit) ->
+    try
+        lists:sublist(L, Offset, Limit)
+    catch
+        error:function_clause ->
+            []
+    end.
 
 %% @doc Handle deprecated searches in the {atom, list()} format.
-search_1({SearchName, Props}, undefined, _PageLen, {1, Limit}, Context) when is_binary(SearchName) ->
-    ArgsMap = props_to_map(Props),
-    search(SearchName, ArgsMap, 1, Limit, Context);
 search_1({SearchName, Props}, Page, PageLen, _OffsetLimit, Context) when is_binary(SearchName), is_integer(Page) ->
     ArgsMap = props_to_map(Props),
     search(SearchName, ArgsMap, Page, PageLen, Context);
@@ -340,7 +455,10 @@ search_1({SearchName, Props}, Page, PageLen, {Offset, Limit} = OffsetLimit, Cont
         CatsX -> [{cat_exclude, CatsX} | proplists:delete(cat_exclude, Props1)]
     end,
     PropsSorted = lists:keysort(1, Props2),
-    Q = #search_query{search={SearchName, PropsSorted}, offsetlimit=OffsetLimit},
+    Q = #search_query{
+        search={SearchName, PropsSorted},
+        offsetlimit=OffsetLimit
+    },
     PageRest = (Offset - 1) rem PageLen,
     case z_notifier:first(Q, Context) of
         undefined when PageRest =:= 0 ->
@@ -351,7 +469,12 @@ search_1({SearchName, Props}, Page, PageLen, {Offset, Limit} = OffsetLimit, Cont
             search(SearchNameBin, ArgsMap, PageNr, PageLen, Context);
         undefined ->
             % Not on a page boundary so we can't use the new search, return the empty result.
-            ?LOG_NOTICE("z_search: ignored unknown search query ~p", [ {SearchName, PropsSorted} ]),
+            ?LOG_NOTICE(#{
+                text => <<"z_search: ignored unknown search query">>,
+                in => zotonic_core,
+                name => SearchName,
+                args => PropsSorted
+            }),
             #search_result{};
         Result when Page =/= undefined ->
             handle_search_result(Result, Page, PageLen, OffsetLimit, SearchName, PropsSorted, #{}, Context);
@@ -368,7 +491,11 @@ search_1({SearchName, Props}, Page, PageLen, {Offset, Limit} = OffsetLimit, Cont
 search_1(Name, Page, PageLen, OffsetLimit, Context) when is_atom(Name) ->
     search_1({Name, []}, Page, PageLen, OffsetLimit, Context);
 search_1(Name, _Page, _PageLen, _OffsetLimit, _Context) ->
-    ?LOG_NOTICE("z_search: ignored unknown search query ~p", [ Name ]),
+    ?LOG_NOTICE(#{
+        text => <<"z_search: ignored unknown search query">>,
+        in => zotonic_core,
+        name => Name
+    }),
     #search_result{}.
 
 
@@ -413,6 +540,16 @@ option_properties(Id, Props, Context) when is_integer(Id), is_list(Props) ->
                                 <<"title">> => m_rsc:p(CatId, <<"title">>, Context)
                             }
                         };
+                    (<<"o.", Predicate/binary>> = P, Acc) ->
+                        OProps = sub_properties(m_edge:objects(Id, Predicate, Context), Context),
+                        Acc#{
+                            P => OProps
+                        };
+                    (<<"s.", Predicate/binary>> = P, Acc) ->
+                        SProps = sub_properties(m_edge:subjects(Id, Predicate, Context), Context),
+                        Acc#{
+                            P => SProps
+                        };
                     (P, Acc) when is_binary(P) ->
                         Acc#{
                             P => m_rsc:p(Id, P, Context)
@@ -437,6 +574,20 @@ option_properties({Title, Id}, Props, Context) when is_integer(Id) ->
 option_properties(R, _Props, _Context) ->
     R.
 
+
+sub_properties(Ids, Context) ->
+    lists:filtermap(
+        fun(Id) ->
+            case z_acl:rsc_visible(Id, Context) of
+                true ->
+                    {true, option_properties(Id, true, Context)};
+                false ->
+                    false
+            end
+        end,
+        Ids).
+
+
 %% @doc Map a map with (binary) search options to a search option list.
 -spec map_to_options( map() ) -> search_options().
 map_to_options(Map) ->
@@ -446,9 +597,14 @@ map_to_options(Map) ->
                 Acc#{ properties => opt_props(V) };
             (<<"properties">>, V, Acc) ->
                 Acc#{ properties => opt_props(V) };
+            (is_count_rows, V, Acc) ->
+                Acc#{ is_count_rows => z_convert:to_bool(V) };
+            (<<"is_count_rows">>, V, Acc) ->
+                Acc#{ is_count_rows => z_convert:to_bool(V) };
             (K, V, Acc) ->
                 ?LOG_INFO(#{
                     text => <<"Dropping unknown search option">>,
+                    in => zotonic_core,
                     option => K,
                     value => V
                 }),
@@ -470,47 +626,14 @@ opt_props(L) when is_list(L) ->
 opt_props(P) ->
     z_convert:to_bool(P).
 
-%% @doc Change a search props list to a map with binary keys.
--spec props_to_map( proplists:proplist() | map() ) -> #{ binary() => term() }.
+%% @doc Change a search props list to a standard query format.
+-spec props_to_map( list() | map() | undefined ) -> #{ binary() => term() }.
 props_to_map(Props) when is_map(Props) ->
-    maps:fold(
-        fun(K, V, Acc) ->
-            Acc#{ z_convert:to_binary(K) => V }
-        end,
-        #{},
-        Props);
-props_to_map(Props) ->
-    {Map, _} = lists:foldr(
-        fun({K, V}, {Acc, Counts}) ->
-            K1 = z_convert:to_binary(K),
-            case maps:get(K1, Counts, 0) of
-                0 ->
-                    Acc1 = Acc#{ K1 => V },
-                    Counts1 = Counts#{ K1 => 1 },
-                    {Acc1, Counts1};
-                1 ->
-                    V1 = #{
-                        <<"all">> => [
-                            V,
-                            maps:get(K1, Acc)
-                        ]
-                    },
-                    Acc1 = Acc#{ K1 => V1 },
-                    Counts1 = Counts#{ K1 => 2 },
-                    {Acc1, Counts1};
-                N ->
-                    #{ <<"all">> := Vs } = maps:get(K1, Acc),
-                    V1 = #{
-                        <<"all">> => [ V | Vs ]
-                    },
-                    Acc1 = Acc#{ K1 => V1 },
-                    Counts1 = Counts#{ K1 => N + 1 },
-                    {Acc1, Counts1}
-            end
-        end,
-        {#{}, #{}},
-        Props),
-    Map.
+    z_search_props:from_map(Props);
+props_to_map(Props) when is_list(Props) ->
+    z_search_props:from_list(Props);
+props_to_map(undefined) ->
+    z_search_props:from_list([]).
 
 
 %% @doc Given a query as proplist or map, return all results.
@@ -526,8 +649,7 @@ query_(Props, Context) ->
 
 %% @doc Handle a return value from a search function.  This can be an intermediate SQL statement that still needs to be
 %% augmented with extra ACL checks.
--spec search_result(Result , search_offset(), Context) ->
-    #search_result{} when
+-spec search_result(Result, search_offset(), Context) -> #search_result{} when
     Result :: list() | #search_result{} | #search_sql{},
     Context :: z:context().
 search_result(L, _Limit, _Context) when is_list(L) ->
@@ -537,7 +659,7 @@ search_result(L, _Limit, _Context) when is_list(L) ->
 search_result(#search_result{} = S, _Limit, _Context) ->
     S;
 search_result(#search_sql{} = Q, Limit, Context) ->
-    Q1 = reformat_sql_query(Q, Context),
+    Q1 = reformat_sql_query(Q, #{}, Context),
     {Sql, Args} = concat_sql_query(Q1, Limit),
     case Q#search_sql.run_func of
         F when is_function(F) ->
@@ -624,10 +746,12 @@ concat_sql_query(#search_sql{
     {iolist_to_binary( lists:join(" ", Parts) ), FinalArgs}.
 
 %% @doc Inject the ACL checks in the SQL query.
--spec reformat_sql_query(#search_sql{}, z:context()) -> #search_sql{}.
+-spec reformat_sql_query(#search_sql{}, search_options(), z:context()) -> #search_sql{}.
 reformat_sql_query(#search_sql{where=Where, from=From, tables=Tables, args=Args,
                                cats=TabCats, cats_exclude=TabCatsExclude,
-                               cats_exact=TabCatsExact} = Q, Context) ->
+                               cats_exact=TabCatsExact} = Q,
+                    Options,
+                    Context) ->
     {ExtraWhere, Args1} = lists:foldl(
                                 fun(Table, {Acc,As}) ->
                                     {W,As1} = add_acl_check(Table, As, Q, Context),
@@ -657,8 +781,16 @@ reformat_sql_query(#search_sql{where=Where, from=From, tables=Tables, args=Args,
         L when is_list(L) -> L
     end,
     Where2 = iolist_to_binary(concat_where(ExtraWhere3, Where1)),
-    Q#search_sql{where=Where2, from=From2, args=Args2}.
-
+    Q1 = Q#search_sql{ where=Where2, from=From2, args=Args2 },
+    case Options of
+        #{ is_count_rows := true } ->
+            Q1#search_sql{
+                select = "count(*)",
+                limit = ""
+            };
+        #{} ->
+            Q1
+    end.
 
 %% @doc Concatenate the where clause with the extra ACL checks using "and".  Skip empty clauses.
 concat_where([], Acc) ->
@@ -748,8 +880,7 @@ publish_check(Alias, #search_sql{extra=Extra}) ->
             [];
         false ->
             [
-                " and "
-                , Alias, ".is_published = true and "
+                  Alias, ".is_published = true and "
                 , Alias, ".publication_start <= now() and "
                 , Alias, ".publication_end >= now()"
             ]
@@ -852,7 +983,7 @@ add_cat_exact_check([], _Alias, WAcc, As, _Context) ->
 add_cat_exact_check(CatsExact, Alias, WAcc, As, Context) ->
     CatIds = [ m_rsc:rid(CId, Context) || CId <- CatsExact ],
     {WAcc ++ [
-        [Alias, [ ".category_id in (SELECT(unnest($", (integer_to_list(length(As)+1)), "::int[])))"] ]
+        [Alias, [ ".category_id = any($", (integer_to_list(length(As)+1)), "::int[])"] ]
      ],
      As ++ [CatIds]}.
 

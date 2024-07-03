@@ -3,29 +3,19 @@
     {% for code, lang in m.translation.language_list_configured %}
         <tr id="{{ #li.code }}" class="{% if not lang.is_enabled %}unpublished{% endif %}">
             <td>
-                <input type="radio" id="{{ #default.code }}" name="is_default" value="{{ code }}"
-                        {% if code == default_code %}checked{% endif %}>
-                {% wire id=#default.code postback={language_default code=code} delegate="mod_translation" %}
+                <div class="drag-handle"></div>
             </td>
             <td>
                 <input type="radio" id="{{ #enabled.code }}" name="status-{{ code }}" value="enabled"
-                {% if lang.is_enabled %}checked{% endif %}
-                />
-                {% wire type="change" id=#enabled.code postback={language_status code=code} delegate="mod_translation" %}
+                {% if lang.is_enabled %}checked{% endif %}>
             </td>
             <td>
                 <input type="radio" id="{{ #editable.code }}" name="status-{{ code }}" value="editable"
-                {% if not lang.is_enabled and lang.is_editable %}checked{% endif %}
-                {% if lang.is_default %}disabled{% endif %}
-                />
-                {% wire type="change" id=#editable.code postback={language_status code=code} delegate="mod_translation" %}
+                {% if not lang.is_enabled and lang.is_editable %}checked{% endif %}>
             </td>
             <td>
                 <input type="radio" id="{{ #disabled.code }}" name="status-{{ code }}" value="disabled"
-                {% if not lang.is_enabled and not lang.is_editable %}checked{% endif %}
-                {% if lang.is_default %}disabled{% endif %}
-                />
-                {% wire type="change" id=#disabled.code postback={language_status code=code} delegate="mod_translation" %}
+                {% if not lang.is_enabled and not lang.is_editable %}checked{% endif %}>
             </td>
             <td>
                 {{ lang.name_en|default:"-" }}

@@ -57,6 +57,7 @@ insert(Url, RscProps, Context) when is_list(Url); is_binary(Url) ->
         {ok, []} ->
             ?LOG_NOTICE(#{
                 text => <<"Import of url or embed returned no media import definitions.">>,
+                in => zotonic_core,
                 result => warning,
                 reason => no_media_imports,
                 url_or_embed => Url
@@ -65,6 +66,7 @@ insert(Url, RscProps, Context) when is_list(Url); is_binary(Url) ->
         {error, Reason} = Error ->
             ?LOG_ERROR(#{
                 text => <<"Import of url or embed returned error.">>,
+                in => zotonic_core,
                 result => error,
                 reason => Reason,
                 url_or_embed => Url
@@ -154,6 +156,7 @@ update(RscId, Url, Context) when is_list(Url); is_binary(Url) ->
         {ok, []} ->
             ?LOG_NOTICE(#{
                 text => <<"Import of url returned no media import definitions.">>,
+                in => zotonic_core,
                 result => warning,
                 reason => no_media_imports,
                 url => Url
@@ -162,6 +165,7 @@ update(RscId, Url, Context) when is_list(Url); is_binary(Url) ->
         {error, Reason} = Error ->
             ?LOG_ERROR(#{
                 text => <<"Import of url returned error.">>,
+                in => zotonic_core,
                 result => error,
                 reason => Reason,
                 url => Url
@@ -170,7 +174,7 @@ update(RscId, Url, Context) when is_list(Url); is_binary(Url) ->
     end.
 
 update_1(_, RscId, #media_import_props{ rsc_props = #{ <<"uri">> := Uri }, importer = rsc_import }, Context) ->
-    m_rsc_import:update_medium_uri(RscId, Uri, [], Context);
+    m_rsc_import:update_medium_uri(RscId, Uri, [ {is_forced_update, true} ], Context);
 update_1(_, RscId, #media_import_props{ importer = Importer } = MI, Context)
     when is_atom(Importer), Importer =/= undefined ->
     Importer:media_import(RscId, MI, #{}, Context);
@@ -266,6 +270,7 @@ import_as_resource(MD, Context) ->
         {error, {Code, FinalUrl, _Hs, _Size, _Body}} ->
             ?LOG_WARNING(#{
                 text => <<"Error importing as resource">>,
+                in => zotonic_core,
                 result => error,
                 reason => http_error,
                 http_code => Code,
@@ -276,6 +281,7 @@ import_as_resource(MD, Context) ->
         {error, Reason} ->
             ?LOG_WARNING(#{
                 text => <<"Error importing as resource">>,
+                in => zotonic_core,
                 result => error,
                 reason => Reason,
                 url => z_url_metadata:p(final_url, MD)

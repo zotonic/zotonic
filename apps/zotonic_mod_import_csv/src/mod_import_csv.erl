@@ -34,11 +34,11 @@
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--include_lib("include/import_csv.hrl").
+-include_lib("zotonic_mod_import_csv/include/import_csv.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 
 
-%% @doc Handle a dropbox file when it is a tsv/csv file we know.
+%% @doc Handle a drop folder file when it is a tsv/csv file we know.
 observe_dropbox_file(#dropbox_file{ filename = F }, Context) ->
     case is_csv( filename:extension(F) ) of
         true ->
@@ -161,11 +161,24 @@ can_handle(OriginalFilename, DataFile, Context) ->
                         true ->
                             {ok, FD};
                         false ->
-                            ?LOG_WARNING("Invalid CSV file, missing 'name' and/or 'category' columns: ~p", [Cols]),
+                            ?LOG_WARNING(#{
+                                text => <<"Invalid CSV file, missing 'name' and/or 'category' columns">>,
+                                in => zotonic_mod_import_csv,
+                                result => error,
+                                reason => missing_columns,
+                                columns => Cols,
+                                file => DataFile
+                            }),
                             {error, invalid_csv_file}
                     end;
-                {error, _} = Error ->
-                    ?LOG_WARNING("Invalid CSV file, error during inspect: ~p", [Error]),
+                {error, Reason} = Error ->
+                    ?LOG_WARNING(#{
+                        text => <<"Invalid CSV file, error during inspect">>,
+                        in => zotonic_mod_import_csv,
+                        result => error,
+                        reason => Reason,
+                        file => DataFile
+                    }),
                     Error
             end
     end.

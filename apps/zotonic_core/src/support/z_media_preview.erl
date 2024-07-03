@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Make still previews of media, using image manipulation functions.  Resize, crop, grey, etc.
 %% This uses the command line imagemagick tools for all image manipulation.
-%% This code is adapted from PHP GD2 code, so the resize/crop could've been done more efficiently, but it works :-)
+%% @end
 
-%% Copyright 2009-2022 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,6 +34,8 @@
     calc_size/1
 ]).
 
+% Max pixels of the target image
+% Larger will be truncated to this size.
 -define(MAX_PIXSIZE,  20000).
 
 % Low and max image size (in total pixels) for quality 99 and 55.
@@ -47,7 +49,13 @@
 %% @doc Convert the Infile to an outfile with a still image using the filters.
 -spec convert(file:filename_all(), file:filename_all(), list(), #context{}) -> ok | {error, term()}.
 convert(InFile, InFile, _, _Context) ->
-    ?LOG_ERROR("Image convert will overwrite input file ~p", [InFile]),
+    ?LOG_ERROR(#{
+        text => <<"Image convert will overwrite input file">>,
+        in => zotonic_core,
+        result => error,
+        reason => will_overwrite_infile,
+        file => InFile
+    }),
     {error, will_overwrite_infile};
 convert(InFile, OutFile, Filters, Context) ->
     convert(InFile, InFile, OutFile, Filters, Context).
@@ -60,18 +68,22 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
                 true ->
                     case z_mediaclass:expand_mediaclass_checksum(Filters) of
                         {ok, FiltersExpanded} ->
-                            convert_1(os:find_executable("convert"), InFile, OutFile, Mime, FileProps, FiltersExpanded);
+                            SiteDir = z_path:site_dir(Context),
+                            convert_1(os:find_executable("convert"), InFile, OutFile, Mime, FileProps, FiltersExpanded, SiteDir);
                         {error, Reason} = Error ->
                             ?LOG_WARNING(#{
                                 text => <<"Cannot expand mediaclass">>,
-                                filters => Filters,
-                                reason => Reason
+                                in => zotonic_core,
+                                result => error,
+                                reason => Reason,
+                                filters => Filters
                             }),
                             Error
                     end;
                 false ->
                     ?LOG_NOTICE(#{
                         text => <<"cannot convert mime type">>,
+                        in => zotonic_core,
                         mime => Mime,
                         file => unicode:characters_to_binary(InFile)
                     }),
@@ -83,26 +95,28 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
             {error, Reason}
     end.
 
-convert_1(false, _InFile, _OutFile, _InMime, _FileProps, _Filters) ->
+convert_1(false, _InFile, _OutFile, _InMime, _FileProps, _Filters, _SiteDir) ->
     ?LOG_ERROR(#{
-        text => <<"Install ImageMagick 'convert' to generate previews of images.">>
+        text => <<"Install ImageMagick 'convert' to generate previews of images.">>,
+        in => zotonic_core
     }),
     {error, convert_missing};
-convert_1(ConvertCmd, InFile, OutFile, InMime, FileProps, Filters) ->
+convert_1(ConvertCmd, InFile, OutFile, InMime, FileProps, Filters, SiteDir) ->
     OutMime = z_media_identify:guess_mime(OutFile),
     case cmd_args(FileProps, Filters, OutMime) of
         {ok, {EndWidth, EndHeight, _CmdArgs}} when EndWidth > ?MAX_PIXSIZE; EndHeight > ?MAX_PIXSIZE ->
             {error, image_too_big};
         {ok, {_, _, CmdArgs}} ->
-            convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps);
+            convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps, SiteDir);
         {error, _} = Error ->
             Error
     end.
 
-convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps) ->
+convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps, SiteDir) ->
     file:delete(OutFile),
     ok = z_filelib:ensure_dir(OutFile),
     Cmd = lists:flatten([
+        "cd ", z_filelib:os_filename(SiteDir), "; ",
         z_filelib:os_filename(ConvertCmd), " ",
         opt_density(FileProps),
         z_filelib:os_filename( unicode:characters_to_list(InFile) ++ infile_suffix(InMime) ), " ",
@@ -123,6 +137,7 @@ convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps) ->
         {error, Reason} = Error ->
             ?LOG_ERROR(#{
                 text => <<"convert cmd failed">>,
+                in => zotonic_core,
                 command => unicode:characters_to_binary(Cmd),
                 reason => Reason
             }),
@@ -146,29 +161,47 @@ run_cmd(Cmd, OutFile) ->
 
 once(Cmd, OutFile) ->
     Key = {n,l,Cmd},
+    CmdBin = unicode:characters_to_binary(Cmd),
     case gproc:reg_or_locate(Key) of
         {Pid, _} when Pid =:= self() ->
             ?LOG_DEBUG(#{
-                text => <<"Image convert">>,
-                command => unicode:characters_to_binary(Cmd)
+                in => zotonic_core,
+                text => <<"ImageMagick convert command started">>,
+                command => CmdBin
             }),
-            Result = os:cmd(Cmd),
+            Result = z_exec:run(CmdBin),
             gproc:unreg(Key),
-            case filelib:is_regular(OutFile) of
-                true ->
-                    ok;
-                false ->
+            case Result of
+                {ok, StdOut} ->
+                    case filelib:is_regular(OutFile) of
+                        true ->
+                            ok;
+                        false ->
+                            ?LOG_ERROR(#{
+                                in => zotonic_core,
+                                text => <<"ImageMagick convert command failed - no output file">>,
+                                result => error,
+                                reason => enoent,
+                                command => CmdBin,
+                                stdout => StdOut
+                            }),
+                            {error, convert_error}
+                    end;
+                {error, Reason} ->
                     ?LOG_ERROR(#{
-                        text => <<"convert cmd failed">>,
-                        command => unicode:characters_to_binary(Cmd),
-                        result => unicode:characters_to_binary(Result)
+                        in => zotonic_core,
+                        text => <<"ImageMagick convert command failed">>,
+                        result => error,
+                        reason => Reason,
+                        command => CmdBin
                     }),
                     {error, convert_error}
             end;
         {_OtherPid, _} ->
             ?LOG_DEBUG(#{
                 text => "Waiting for parallel resizer",
-                command => unicode:characters_to_binary(Cmd)
+                in => zotonic_core,
+                command => CmdBin
             }),
             Ref = gproc:monitor(Key),
             receive
@@ -176,7 +209,6 @@ once(Cmd, OutFile) ->
                     ok
             end
     end.
-
 
 
 %% Return the ImageMagick input-file suffix.
@@ -296,19 +328,25 @@ cmd_args(#{ <<"mime">> := Mime, <<"width">> := ImageWidth, <<"height">> := Image
     Filters6 = add_optional_quality(Filters5, is_lossless(OutMime), ResizeWidth, ResizeHeight),
     Filters7 = add_optional_interlace(Filters6, OutMime),
     Filters8 = move_pre_post_filters(Filters7),
+    Filters9 = case lists:member(coalesce, Filters8) of
+        true ->
+            Filters8 ++ [deconstruct];
+        false ->
+            Filters8
+    end,
     {EndWidth,EndHeight,Args} = lists:foldl(fun (Filter, {W,H,Acc}) ->
                                                 {NewW,NewH,Arg} = filter2arg(Filter, W, H, Filters7),
                                                 {NewW,NewH,[Arg|Acc]}
                                             end,
                                             {ImageWidth,ImageHeight,[]},
-                                            Filters8),
+                                            Filters9),
     {ok, {EndWidth, EndHeight, ["-strip" | lists:reverse(Args) ]}};
 cmd_args(_, _Filters, _OutMime) ->
     {error, no_size}.
 
-
 default_background(<<"image/gif">>) -> [coalesce];
 default_background(<<"image/png">>) -> [coalesce];
+default_background(<<"image/webp">>) -> [coalesce];
 default_background(_) -> [{background,"white"}, {layers,"flatten"}].
 
 %% @doc Check if there is a blurring filter that prevents us from sharpening the resulting image
@@ -373,13 +411,21 @@ out_mime(Mime, Options, Context) ->
 %% @doc Return the preferred mime type of the image generated by resizing an image of a certain type and size.
 -spec out_mime( InMime :: binary(), list() ) -> { OutMime :: binary(), Extension :: string()}.
 out_mime(Mime, Options) ->
-    out_mime1(get_lossless_value(Options), Mime).
+    Mime1 = case proplists:get_value(format, Options) of
+                webp ->
+                    <<"image/webp">>;
+                undefined -> 
+                    Mime
+            end,
+    out_mime1(get_lossless_value(Options), Mime1).
 
-out_mime1(_,     <<"image/gif">>) -> {<<"image/gif">>,  ".gif"};
-out_mime1(false, _Mime)           -> {<<"image/jpeg">>, ".jpg"};
-out_mime1(true,  _Mime)           -> {<<"image/png">>,  ".png"};
-out_mime1(auto,  <<"image/png">>) -> {<<"image/png">>,  ".png"};
-out_mime1(auto,  _)               -> {<<"image/jpeg">>, ".jpg"}.
+
+out_mime1(_,     <<"image/gif">>)  -> {<<"image/gif">>,  ".gif"};
+out_mime1(_,     <<"image/webp">>) -> {<<"image/webp">>, ".webp"};
+out_mime1(false, _Mime)            -> {<<"image/jpeg">>, ".jpg"};
+out_mime1(true,  _Mime)            -> {<<"image/png">>,  ".png"};
+out_mime1(auto,  <<"image/png">>)  -> {<<"image/png">>,  ".png"};
+out_mime1(auto,  _)                -> {<<"image/jpeg">>, ".jpg"}.
 
 
 get_lossless_value(Options) ->
@@ -400,6 +446,8 @@ filter2arg({make_image, <<"application/pdf">>}, Width, Height, _AllFilters) ->
     {Width, Height, RArg};
 filter2arg(coalesce, Width, Height, _AllFilters) ->
     {Width, Height, "-coalesce"};
+filter2arg(deconstruct, Width, Height, _AllFilters) ->
+    {Width, Height, "-deconstruct"};
 filter2arg({make_image, Mime}, Width, Height, _AllFilters) when is_binary(Mime) ->
     {Width, Height, []};
 filter2arg({correct_orientation, Orientation}, Width, Height, _AllFilters) ->
@@ -568,7 +616,23 @@ filter2arg({contrast, Arg}, Width, Height, AllFilters) ->
             {Width, Height, brightness_contrast(0, Arg)};
         _ ->
             {Width, Height, ""}
+    end;
+filter2arg({format, webp}, Width, Height, AllFilters) ->
+    case get_lossless_value(AllFilters) of
+        true ->
+            {Width, Height, "-define webp:lossless=true"};
+        false ->
+            {Width, Height, []};
+        auto ->
+            {make_image, InMime} = proplists:lookup(make_image, AllFilters),
+            case is_lossless(InMime) of
+                true ->
+                    {Width, Height, "-define webp:lossless=true"};
+                false ->
+                    {Width, Height, []}
+            end
     end.
+    
 
 % Map css3 brightness/contrast to ImageMagick options.
 %

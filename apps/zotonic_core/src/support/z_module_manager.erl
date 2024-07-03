@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Module manager, starts/restarts a site's modules.
+%% @end
 
-%% Copyright 2009-2022 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -58,7 +59,12 @@
     dependencies/1,
     startable/2,
     module_exists/1,
-    title/1,
+    mod_info/1,
+    mod_version/1,
+    mod_title/1,
+    mod_description/1,
+    mod_author/1,
+    mod_schema/1,
     reinstall/2
 ]).
 
@@ -397,13 +403,34 @@ active_dir(Context) ->
 lib_dir(Module) when is_atom(Module) ->
     code:lib_dir(module_to_app(Module)).
 
--spec module_to_app(atom()) -> atom().
-module_to_app(Module) ->
+-spec module_to_app(ModuleName) -> Module when
+    ModuleName :: binary() | atom() | string(),
+    Module :: module().
+module_to_app(<<"mod_", _/binary>> = M) ->
+    binary_to_atom(<<"zotonic_", M/binary>>, utf8);
+module_to_app("mod_" ++ _ = M) ->
+    list_to_atom("zotonic_" ++ M);
+module_to_app(Module) when is_atom(Module) ->
     case atom_to_list(Module) of
         "mod_" ++ _ = M ->
             list_to_atom("zotonic_"++M);
         _ ->
             Module
+    end;
+module_to_app(Module) ->
+    z_convert:to_atom(Module).
+
+-spec module_to_mod(ModuleName) -> Module when
+    ModuleName :: binary() | atom() | string(),
+    Module :: module().
+module_to_mod(ModuleName) ->
+    App = module_to_app(ModuleName),
+    case atom_to_binary(App, utf8) of
+        <<"zotonic_mod_", _/binary>> = B ->
+            <<"zotonic_", M/binary>> = B,
+            binary_to_atom(M, utf8);
+        _ ->
+            App
     end.
 
 %% @doc Return the list of all modules running.
@@ -634,21 +661,138 @@ module_exists(M) ->
         {error, _} -> false
     end.
 
+%% @doc Fetch information about a module or site.
+-spec mod_info(Module) -> Info when
+    Module :: atom() | binary() | string(),
+    Info :: #{
+        app := atom(),
+        prio := integer(),
+        version := binary() | undefined,
+        schema := integer() | undefined,
+        title := binary() | undefined,
+        description := binary() | undefined,
+        app_dir := file:filename_all() | undefined
+    }.
+mod_info(Module) ->
+    App = module_to_app(Module),
+    Mod = module_to_mod(App),
+    LibDir = case code:lib_dir(App) of
+        {error, _} -> undefined;
+        Dir -> unicode:characters_to_binary(Dir)
+    end,
+    #{
+        app => App,
+        prio => prio(Mod),
+        version => mod_version(App),
+        schema => mod_schema(App),
+        title => mod_title(App),
+        description => mod_description(App),
+        app_dir => LibDir
+    }.
+
+-spec mod_version(Module) -> Version when
+    Module :: atom() | binary() | string(),
+    Version :: binary().
+mod_version(Module) ->
+    App = module_to_app(Module),
+    case application:get_key(App, vsn) of
+        {ok, ""} ->
+            app_git_version(App);
+        {ok, "git"} ->
+            app_git_version(App);
+        {ok, Vsn} ->
+            unicode:characters_to_binary(Vsn, utf8);
+        undefined ->
+            app_git_version(App)
+    end.
+
+app_git_version(App) ->
+    case maybe_git_version(code:lib_dir(App)) of
+        undefined ->
+            maybe_git_version(z_path:site_source_dir(App));
+        Vsn ->
+            Vsn
+    end.
+
+maybe_git_version({error, _}) ->
+    undefined;
+maybe_git_version(LibDir) ->
+    GitDir = filename:join(LibDir, ".git"),
+    case filelib:is_dir(GitDir) of
+        true ->
+            git_version(LibDir);
+        false ->
+            undefined
+    end.
+
+git_version(LibDir) ->
+    Cmd = "git rev-parse --short HEAD",
+    case exec:run(Cmd, [sync, stdout, {cd, LibDir}]) of
+        {ok, Res} ->
+            {stdout, Hash} = proplists:lookup(stdout, Res),
+            iolist_to_binary([
+                "git-", z_string:trim(unicode:characters_to_binary(Hash))
+            ]);
+        {error, Reason} ->
+            ?LOG_WARNING(#{
+                in => zotonic_core,
+                text => <<"Git rev-parse for module version failed">>,
+                cmd => unicode:characters_to_binary(Cmd),
+                lib_dir => LibDir,
+                result => error,
+                reason => Reason
+            }),
+            undefined
+    end.
 
 %% @doc Get the title of a module.
-title(M) ->
+-spec mod_title(Module) -> Title when
+    Module :: atom() | binary() | string(),
+    Title :: binary() | undefined.
+mod_title(Module) ->
+    Mod = module_to_mod(Module),
     try
-        proplists:get_value(mod_title, M:module_info(attributes))
+        Title = proplists:get_value(mod_title, Mod:module_info(attributes), <<>>),
+        bin(Title)
     catch
         _M:_E -> undefined
     end.
 
+%% @doc Get the description of a module.
+-spec mod_description(Module) -> Desc when
+    Module :: atom() | binary() | string(),
+    Desc :: binary() | undefined.
+mod_description(Module) ->
+    Mod = module_to_mod(Module),
+    try
+        Desc = proplists:get_value(mod_description, Mod:module_info(attributes), <<>>),
+        bin(Desc)
+    catch
+        _M:_E -> undefined
+    end.
+
+%% @doc Get the author of a module.
+-spec mod_author(Module) -> Author when
+    Module :: atom() | binary() | string(),
+    Author :: binary() | undefined.
+mod_author(Module) ->
+    Mod = module_to_mod(Module),
+    try
+        Author = proplists:get_value(author, Mod:module_info(attributes), <<>>),
+        bin(Author)
+    catch
+        _M:_E -> undefined
+    end.
 
 %% @doc Get the schema version of a module.
-mod_schema(M) ->
+-spec mod_schema(Module) -> SchemaVersion when
+    Module :: atom() | binary() | string(),
+    SchemaVersion :: integer() | undefined.
+mod_schema(Module) ->
+    Mod = module_to_mod(Module),
     try
-        {mod_schema, [S]} = proplists:lookup(mod_schema, M:module_info(attributes)),
-        S
+        {mod_schema, [SchemaVersion]} = proplists:lookup(mod_schema, Mod:module_info(attributes)),
+        z_convert:to_integer(SchemaVersion)
     catch
         _M:_E -> undefined
     end.
@@ -661,6 +805,12 @@ set_db_schema_version(M, V, Context) ->
     ok.
 
 
+bin(A) when is_atom(A) ->
+    atom_to_binary(A, utf8);
+bin(A) when is_list(A) ->
+    unicode:characters_to_binary(A);
+bin(A) when is_binary(A) ->
+    A.
 
 %%====================================================================
 %% gen_server callbacks
@@ -772,6 +922,7 @@ handle_cast({start_child_result, Module, Result}, #state{ site = Site } = State)
 handle_cast({module_reloaded, Module}, State) ->
     ?LOG_DEBUG(#{
         text => <<"Checking observers of (re-)loaded module">>,
+        in => zotonic_core,
         module => Module
     }),
     TmpState = refresh_module_exports(Module, refresh_module_schema(Module, State)),
@@ -789,6 +940,7 @@ handle_cast({module_reloaded, Module}, State) ->
             % Exports or schema changed, assume the worst and restart the complete module
             ?LOG_NOTICE(#{
                 text => <<"Exports or schema of (re-)loaded module changed, restarting module">>,
+                in => zotonic_core,
                 module => Module
             }),
             gen_server:cast(self(), {restart_module, Module}),
@@ -799,6 +951,7 @@ handle_cast({module_reloaded, Module}, State) ->
 handle_cast(Message, State) ->
     ?LOG_ERROR(#{
         text => <<"z_module_manager: unknown cast">>,
+        in => zotonic_core,
         message_in => Message,
         state => State
     }),
@@ -919,6 +1072,7 @@ do_module_down(Module, #state{ modules = Modules } = State, Pid, Reason) ->
 do_module_down_1(Modules, #module_status{ module = Mod, status = removing }, shutdown) ->
     ?LOG_DEBUG(#{
         text => <<"Module stopped">>,
+        in => zotonic_core,
         old_status => removing,
         new_status => removed,
         result => ok,
@@ -929,6 +1083,7 @@ do_module_down_1(Modules, #module_status{ module = Mod, status = removing }, shu
 do_module_down_1(Modules, #module_status{ module = Mod, status = stopping } = Ms, shutdown) ->
     ?LOG_DEBUG(#{
         text => <<"Module stopped">>,
+        in => zotonic_core,
         old_status => stopping,
         new_status => stopped,
         result => ok,
@@ -943,6 +1098,7 @@ do_module_down_1(Modules, #module_status{ module = Mod, status = stopping } = Ms
 do_module_down_1(Modules, #module_status{ module = Mod, status = running } = Ms, normal) ->
     ?LOG_INFO(#{
         text => <<"Module stopped">>,
+        in => zotonic_core,
         old_status => running,
         new_status => stopped,
         result => ok,
@@ -955,11 +1111,12 @@ do_module_down_1(Modules, #module_status{ module = Mod, status = running } = Ms,
     },
     Modules#{ Mod => Ms1 };
 do_module_down_1(Modules, #module_status{ module = Mod, status = restarting } = Ms, shutdown) ->
-    ?LOG_ERROR(#{
-        text => <<"Module failed">>,
+    ?LOG_INFO(#{
+        text => <<"Module shutdown during restart">>,
+        in => zotonic_core,
         old_status => restarting,
-        new_status => failed,
-        result => error,
+        new_status => failed,       % set to failed to enforce restart
+        result => ok,
         reason => shutdown,
         module => Mod,
         crash_count => 0
@@ -975,6 +1132,7 @@ do_module_down_1(Modules, #module_status{ module = Mod, status = restarting } = 
 do_module_down_1(Modules, #module_status{ module = Mod, status = Status } = Ms, Reason) ->
     ?LOG_ERROR(#{
         text => <<"Module failed">>,
+        in => zotonic_core,
         old_status => Status,
         new_status => failed,
         result => error,
@@ -1040,6 +1198,7 @@ handle_restart_module(Module, #state{ site = Site, modules = Modules } = State) 
         error ->
             ?LOG_WARNING(#{
                 text => <<"Restart of unknown module">>,
+                in => zotonic_core,
                 module => Module
             }),
             State
@@ -1062,6 +1221,7 @@ handle_upgrade(#state{ site = Site, modules = Modules } = State) ->
 
     ?LOG_DEBUG(#{
         text => <<"Stopping/starting modules">>,
+        in => zotonic_core,
         stopping => [sets:to_list(Kill)],
         starting => [StartList]
     }),
@@ -1239,6 +1399,7 @@ is_module(Module) ->
         M:E ->
             ?LOG_ERROR(#{
                 text => <<"Can not fetch module info for module">>,
+                in => zotonic_core,
                 module => Module,
                 error => M,
                 reason => E
@@ -1256,6 +1417,7 @@ start_child(ManagerPid, Module, App, ChildSpec, Site) ->
             z_context:logger_md(Context),
             ?LOG_DEBUG(#{
                 text => <<"Starting module">>,
+                in => zotonic_core,
                 module => Module,
                 app => App
             }),
@@ -1265,10 +1427,12 @@ start_child(ManagerPid, Module, App, ChildSpec, Site) ->
                 {error, Reason} ->
                     ?LOG_ERROR(#{
                         text => <<"Error starting module due to schema initialization error">>,
+                        in => zotonic_core,
                         module => Module,
                         result => error,
                         reason => Reason
                     }),
+                    z:flush(Context),
                     {error, {schema_init, Reason}}
             end,
             gen_server:cast(ManagerPid, {start_child_result, Module, Result})
@@ -1310,6 +1474,7 @@ handle_start_child_result(Module, Result, #state{ site = Site, module_monitors =
         {error, Reason} = Error ->
             ?LOG_ERROR(#{
                 text => <<"Could not start module">>,
+                in => zotonic_core,
                 module => Module,
                 result => error,
                 reason => Reason
@@ -1347,7 +1512,11 @@ stop_children_with_missing_depends(#state{ site = Site, modules = Modules } = St
         [] ->
             State;
         Unstartable ->
-            ?LOG_DEBUG("Stopping child modules ~p", [Unstartable]),
+            ?LOG_DEBUG(#{
+                text => <<"Stopping child modules">>,
+                in => zotonic_core,
+                modules => Unstartable
+            }),
             Modules1 = lists:foldl(
                 fun(Module, ModAcc) ->
                     case maps:find(Module, ModAcc) of
@@ -1437,6 +1606,7 @@ has_behaviour(M, Behaviour) ->
         {error, Reason} ->
             ?LOG_ERROR(#{
                 text => <<"Could not load module">>,
+                in => zotonic_core,
                 module => M,
                 result => error,
                 reason => Reason
@@ -1456,6 +1626,7 @@ manage_schema(Module, Context) ->
         {false, true} ->
             ?LOG_ERROR(#{
                 text => <<"Schema version defined in module but no manage_schema/2 function">>,
+                in => zotonic_core,
                 module => Module,
                 result => error,
                 reason => no_manage_schema
@@ -1488,6 +1659,7 @@ manage_schema_if_db(true, Module, Current, Target, #context{} = Context) ->
 manage_schema_if_db(false, Module, _Current, _Target, #context{}) ->
     ?LOG_INFO(#{
         text => <<"Skipping schema for module as the site has no database ('nodb')">>,
+        in => zotonic_core,
         module => Module,
         result => skip,
         reason => nodb
@@ -1503,14 +1675,15 @@ call_manage_schema(Module, Current, Target, _Context)
     when is_integer(Current), is_integer(Target), Target < Current ->
     % Downgrade
     ?LOG_ERROR(#{
-        text => <<"Module downgrades not supported">>,
+        text => <<"Module downgrades not supported - continuing without schema modifications">>,
+        in => zotonic_core,
         module => Module,
         result => error,
         reason => module_downgrade_unsupported,
         version_current => Current,
         version_target => Target
     }),
-    {error, {version_downgrade, Module}};
+    ok;
 call_manage_schema(Module, undefined, Target, Context) ->
     % New install
     SchemaRet = z_db:transaction(
@@ -1540,6 +1713,7 @@ call_manage_schema(Module, Current, Target, _) ->
     % Should be an integer (or undefined)\
     ?LOG_ERROR(#{
         text => <<"Invalid schema version numbering">>,
+        in => zotonic_core,
         module => Module,
         result => error,
         reason => invalid_schema_number,

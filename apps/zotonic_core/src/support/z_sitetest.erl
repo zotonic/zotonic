@@ -100,7 +100,7 @@ ensure_drop_test_schema(Site) ->
     close_connection(Conn).
 
 %% @doc Drop a schema
--spec drop_schema(atom(), pgsql:connection(), string()) -> ok | {error, term()}.
+-spec drop_schema(atom(), epgsql:connection(), string()) -> ok | {error, term()}.
 drop_schema(_Site, Connection, Schema) ->
     case epgsql:equery(
            Connection,
@@ -111,7 +111,13 @@ drop_schema(_Site, Connection, Schema) ->
         {error, #error{ codename = invalid_schema_name }} ->
             ok;
         {error, Reason} = Error ->
-            ?LOG_ERROR("z_sitetest: error while dropping schema ~p: ~p", [Schema, Reason]),
+            ?LOG_ERROR(#{
+                text => <<"z_sitetest: error while dropping schema">>,
+                in => zotonic_core,
+                schema => Schema,
+                result => error,
+                reason => Reason
+            }),
             Error
     end.
 

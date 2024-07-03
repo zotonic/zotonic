@@ -1,9 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%%
+%% @copyright 2009-2023 Marc Worrell
+%% @doc Display a confirmation dialog.
+%% @end
+
 %% Based on code copyright (c) 2008-2009 Rusty Klophaus
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -51,6 +53,7 @@ event(#postback{message={confirm, Args}}, Context) ->
         {action, proplists:get_all_values(action, Args)},
         {on_cancel, proplists:get_all_values(on_cancel, Args)},
         {postback, proplists:get_value(postback, Args)},
-        {delegate, proplists:get_value(delegate, Args)}
+        {delegate, proplists:get_value(delegate, Args)},
+        {level, proplists:get_value(level, Args)}
     ],
     z_render:dialog(Title, "_action_dialog_confirm.tpl", Vars, Context1).

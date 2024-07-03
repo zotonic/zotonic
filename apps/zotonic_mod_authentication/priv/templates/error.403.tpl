@@ -14,9 +14,9 @@
     <div class="z-logon-prompt text-muted">
         {% if m.acl.user %}
             {_ To view this page, you need to have other access rights. _}<br/>
-            {_ You may try to sign in as a different user. _}
+            {_ You may try to login as a different user. _}
         {% else %}
-            {_ To view this page you must be signed in. _}
+            {_ To view this page you must be logged in. _}
         {% endif %}
     </div>
 

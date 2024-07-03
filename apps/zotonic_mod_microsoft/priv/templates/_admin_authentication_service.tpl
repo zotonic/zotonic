@@ -21,10 +21,10 @@
                     </div>
 
                     <div class="form-group label-floating">
-                        <input type="text" id="microsoft_scope" name="scope" value="{{ m.config.mod_microsoft.scope.value|default:'email profile'|escape }}" class="form-control" placeholder="{_ Scope _}">
+                        <input type="text" id="microsoft_scope" name="scope" value="{{ m.config.mod_microsoft.scope.value|default:'User.Read email'|escape }}" class="form-control" placeholder="{_ Scope _}">
                         <label class="control-label" for="microsoft_scope">{_ Scope _}</label>
                         <p class="help-block">
-                            {_ Space separated list of scopes that you want the user to consent to. Examples are: <tt>email</tt>, <tt>offline_access</tt> and <tt>profile</tt>. The <tt>openid</tt> scope is always added automatically. _}
+                            {_ Space separated list of scopes that you want the user to consent to. Examples are: <tt>User.Read</tt>, <tt>email</tt>, <tt>offline_access</tt> and <tt>profile</tt>. The <tt>openid</tt> scope is always added automatically. _} {% trans "Add these permissions under {perm}" perm="Azure API Permissions -> Microsoft Graph -> Delegated Permissions" %}
                             <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent" target="_blank" rel="noopener noreferrer">{_ More information about scopes _}</a>
                         </p>
                     </div>
@@ -33,7 +33,7 @@
                         <input type="text" id="microsoft_scope" name="tenant" value="{{ m.config.mod_microsoft.tenant.value|default:'common'|escape }}" class="form-control" placeholder="{_ Tenant _}">
                         <label class="control-label" for="microsoft_tenant">{_ Tenant _}</label>
                         <p class="help-block">
-                            {_ Control who can sign in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers. _}
+                            {_ Control who can log in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers. _}
                             <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-v2-protocols#endpoints" target="_blank" rel="noopener noreferrer">{_ More information about tenant identifiers _}</a>
                         </p>
                     </div>

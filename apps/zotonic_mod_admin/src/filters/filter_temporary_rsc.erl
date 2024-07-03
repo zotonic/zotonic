@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015 Marc Worrell
+%% @copyright 2015-2023 Marc Worrell
 %% @doc Creates a temporary resource. If not modified then it will be deleted.
 
-%% Copyright 2015 Marc Worrell
+%% Copyright 2015-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@
 
 %% Check every hour if the page can be deleted.
 -define(INACTIVE_CHECK_DELAY, 3600).
--define(DELETE_TIMEOUT, ?INACTIVE_CHECK_DELAY*1000).
 
 -include_lib("kernel/include/logger.hrl").
 
@@ -53,12 +52,24 @@ task_delete_inactive(RscId, Key, SessionId, Context) ->
                 {ok, RscId} ->
                     {delay, ?INACTIVE_CHECK_DELAY};
                 _Other ->
-                    ?LOG_DEBUG("Deleting unmodified temporary resource ~p", [RscId]),
+                    ?LOG_DEBUG(#{
+                        text => <<"Deleting unmodified temporary resource">>,
+                        in => zotonic_mod_admin,
+                        rsc_id => RscId
+                    }),
                     ok = m_rsc:delete(RscId, z_acl:sudo(Context)),
                     ok
             end;
         false ->
-            ok
+            % Remove temporary flag
+            case m_rsc:p_no_acl(RscId, <<"is_temporary">>, Context) of
+                true ->
+                    m_rsc:update(RscId, #{ <<"is_temporary">> => undefined },
+                                 [ no_touch, {is_acl_check, false} ], Context),
+                    ok;
+                _ ->
+                    ok
+            end
     end.
 
 
@@ -73,7 +84,11 @@ make_temporary_rsc({ok, _SessionId}, Props, Context) ->
     {Cat, Props1} = ensure_category(Props, Context),
     case m_rsc:rid(Cat, Context) of
         undefined ->
-            ?LOG_WARNING("filter_temporary_rsc: could not find category '~p'", [Cat]),
+            ?LOG_WARNING(#{
+                text => <<"filter_temporary_rsc: could not find category">>,
+                in => zotonic_mod_admin,
+                category => Cat
+            }),
             undefined;
         CatId ->
             make_rsc(
@@ -85,16 +100,15 @@ make_temporary_rsc({ok, _SessionId}, Props, Context) ->
 make_rsc({ok, RscId}, _CatId, _Props, _Context) ->
     RscId;
 make_rsc({error, not_found}, CatId, Props, Context) ->
-    case m_rsc:insert(Props, Context) of
+    Props1 = [ {is_temporary, true} | Props ],
+    case m_rsc:insert(Props1, Context) of
         {ok, RscId} ->
             Key = {temporary_rsc, CatId},
             {ok, SessionId} = z_context:session_id(Context),
-            {ok, ClientId} = z_context:client_id(Context),
             m_server_storage:secure_store(Key, RscId, Context),
             Args = [
                 RscId,
                 Key,
-                ClientId,
                 SessionId
             ],
             z_pivot_rsc:insert_task_after(
@@ -102,13 +116,17 @@ make_rsc({error, not_found}, CatId, Props, Context) ->
                         ?MODULE, task_delete_inactive, z_convert:to_binary(RscId), Args,
                         Context),
             RscId;
-        {error, _} = Error ->
-            ?LOG_ERROR("Can not make temporary resource error ~p on ~p", [Error, Props]),
+        {error, Reason} ->
+            ?LOG_ERROR(#{
+                text => <<"Can not make temporary resource">>,
+                in => zotonic_mod_admin,
+                result => error,
+                reason => Reason,
+                category_id => CatId,
+                props => Props1
+            }),
             undefined
-    end;
-make_rsc({error, _} = Error, _CatId, _Props, _Context) ->
-    ?LOG_ERROR("Can not make temporary resource error ~p on storage lookup", [ Error ]),
-    undefined.
+    end.
 
 %% If no user then limit to 1 temporary rsc per client
 find_existing(CatId, Context) ->
@@ -120,8 +138,8 @@ find_existing(CatId, Context) ->
             end;
         {error, not_found} ->
             {error, not_found};
-        {error, _} = Error ->
-            Error
+        {error, no_session} ->
+            {error, not_found}
     end.
 
 is_unmodified_rsc(Id, Context) ->

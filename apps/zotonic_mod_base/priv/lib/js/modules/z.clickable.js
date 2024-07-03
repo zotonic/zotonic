@@ -33,13 +33,17 @@ $.widget("ui.clickable",
 				case 'TEXTAREA':
 					break;
 				default:
-					var target = $(this).find("a").attr("href");
+					const $anchor = $(this).find("a");
+					const target = $anchor.attr("href");
+
 					if (target == '#') {
-						$(this).find("a").click();
-					} else if ($(this).find("a").attr("rel") == "external"){
+						$anchor.click();
+					} else if ($anchor.attr("rel") == "external") {
 						window.open(target);
+					} else if ($anchor.attr("target") == "_blank") {
+						$anchor.click();
 					} else {
-						window.location=target;
+						window.location = target;
 					}
 					return false;
 			}

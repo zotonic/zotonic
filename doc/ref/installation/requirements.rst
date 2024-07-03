@@ -10,7 +10,7 @@ Before running Zotonic, you must make sure your system meets the
 minimum requirements to do so. Zotonic needs the following software
 installed:
 
-1. Erlang/OTP version **22** or newer. Build it from source, or use
+1. Erlang/OTP version **23** or newer. Build it from source, or use
    packages.
 
 2. **ImageMagick** (version 6.5 or higher) for the ``convert`` and
@@ -47,7 +47,7 @@ The output should be something like::
 
 (Press ctrl+c twice to exit)
 
-If your version is below release **22**, you need to upgrade. If
+If your version is below release **23**, you need to upgrade. If
 you don't have Erlang installed, we recommend downloading a build for
 your operating system from the Erlang Solutions website:
 

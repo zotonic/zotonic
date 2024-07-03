@@ -20,4 +20,4 @@
 -export([escapejs/2]).
 
 escapejs(Input, Context) ->
-    z_utils:js_escape(Input, Context).
+    z_convert:to_binary(z_utils:js_escape(Input, Context)).

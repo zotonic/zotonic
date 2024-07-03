@@ -17,7 +17,7 @@ you are upgrading from before 0.12. See `the upgrade notes on 0.x <https://githu
 Erlang/OTP
 ^^^^^^^^^^
 
-Support for Erlang versions before 22 was dropped.
+Support for Erlang versions before 23 was dropped.
 
 Zotonic modules are now separately published as packages to `Hex.pm`_, which
 allows you to build your own Zotonic distribution and to have each of your
@@ -268,6 +268,8 @@ Removed older TinyMCE versions 3.5.0 and 4.2.4.
 
 ``z_utils:combine_defined/2`` is renamed to ``z_utils:join_defined/2``.
 
+Removed the ``notify`` action, use the MQTT topics instead.
+
 Module schema and data initialization
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -430,6 +432,8 @@ Modules
 ^^^^^^^
 
 Moved ``mod_base_site`` to https://github.com/zotonic/zotonic_mod_base_site
+
+Removed ``mod_twitter`` due to API and other changes at Twitter.
 
 
 Menus

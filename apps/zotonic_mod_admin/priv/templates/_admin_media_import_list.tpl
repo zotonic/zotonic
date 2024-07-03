@@ -102,6 +102,14 @@
                                                 {_ Published _}
                                             </label>
                                         </div>
+
+                                        {% if mi.medium and (
+                                                   mi.props.is_authoritative|is_undefined
+                                                or mi.props.is_authoritative)
+                                        %}
+                                            {% include "_edit_medium_language.tpl" %}
+                                        {% endif %}
+
                                     {% endblock %}
                                 </div>
                                 <div class="col-md-6">
@@ -144,6 +152,17 @@
                             </div>
                         {% endblock %}
                     {% endwith %}
+                    {% else %}
+                        <div class="media-import__options">
+                            {% block import_update_options__rsc %}
+                                {% if mi.medium and (
+                                           mi.props.is_authoritative|is_undefined
+                                        or mi.props.is_authoritative)
+                                %}
+                                    {% include "_edit_medium_language.tpl" %}
+                                {% endif %}
+                            {% endblock %}
+                        </div>
                     {% endif %}
                 </div>
 

@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 Marc Worrell <marc@worrell.nl>
+ * Copyright 2021-2024 Marc Worrell <marc@worrell.nl>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,9 +29,9 @@ const PROGRESS_INTERVAL = 500;      // Every 500msec progress for a request
 
 var model = {
     is_subscribed: false,
-    files: [],
-    uploaders: 0,
-    requests: []
+    files: [],              // Files being uploaded
+    uploaders: 0,           // Number of uploaders busy uploading a single block from any file
+    requests: []            // Upload requests, each with one or more files
 };
 
 
@@ -43,13 +43,29 @@ var startUploader = function(fileIndex) {
     let f = model.files[fileIndex];
     let offset;
 
+    // File was deleted
+    if (!f) return
+
     if (f.failed.length > 0) {
         offset = f.failed.pop();
-    } else {
+        if (f.uploading.indexOf(offset) !== -1) {
+            f.failed.push(offset);
+            return;
+        }
+    } else if (f.offset < f.file.size) {
         offset = f.offset;
+        if (f.uploading.indexOf(offset) !== -1) {
+            return;
+        }
         f.offset += UPLOAD_BLOCKSIZE;
+        if (f.offset > f.file_size) {
+            f.offset = f.file_size;
+        }
+    } else {
+        return;
     }
     model.uploaders++;
+    f.uploading.push(offset);
 
     const end = Math.min(f.file.size, offset + UPLOAD_BLOCKSIZE);
     const data = f.file.slice(offset, end, "application/octet-stream");
@@ -90,20 +106,28 @@ var startUploader = function(fileIndex) {
             f.failed.push(offset);
         }
         f.error_count++;
-        console.log("Fileuploader xhr error", f);
+        console.log("Fileuploader xhr error", offset, f);
+    });
+    xhr.addEventListener("abort", function() {
+        if (f.failed.indexOf(offset) == -1) {
+            f.failed.push(offset);
+        }
+        f.error_count++;
+        console.log("Fileuploader xhr abort", offset, f);
     });
     xhr.addEventListener("loadend", function() {
-        let upl = [];
-        for (let i=0; i<f.uploading.length; i++) {
-            if (f.uploading[i] != offset) {
-                upl.push(f.uploading[i]);
-            }
-        }
-        f.uploading = upl;
+        // console.log("loadend", offset);
+        f.uploading = f.uploading.filter(u => u !== offset);
         model.uploaders--;
         self.publish("model/fileuploader/post/next", {});
     });
+
     xhr.send(data);
+}
+
+function isFileDeleted(fileIndex, f) {
+    return !model.files[fileIndex] ||
+            model.files[fileIndex].status?.name !== f.status?.name;
 }
 
 
@@ -120,6 +144,10 @@ model.present = function(data) {
             // The post consists of a files array and a topic/payload to
             // publish after the files have been uploaded.
             actions.newUpload(msg);
+        });
+
+        self.subscribe("model/fileuploader/post/delete/+name", function(_msg, bindings) {
+            actions.deleteUpload(bindings.name);
         });
 
         self.subscribe("model/fileuploader/post/next", function(_msg) {
@@ -141,26 +169,27 @@ model.present = function(data) {
                 total_size: 0,
                 uploaded_size: 0,
                 error_count: 0,
-                upload_count: 0,
-                wait_count: 0,
-                uploads: [],
+                upload_count: 0,    // Number of file uploads started on server and uploading
+                wait_count: 0,      // Number of file uploads awaiting response from server before starting
+                uploads: [],        // Completed uploads
                 start: Date.now(),
                 progress_published: 0
             };
             model.requests.push(req);
 
             for (let k = 0; k < data.upload.files.length; k++){
-                let f = data.upload.files[k];
+                const f = data.upload.files[k];
                 req.wait_count++;
                 req.total_size += f.file.size;
 
                 self.call("bridge/origin/model/fileuploader/post/new", {
+                        name: f.upload,
                         filename: f.file.name,
                         size: f.file.size,
                         mime: f.file.type
                     }, { qos: 2 }
                 ).then(function(resp) {
-                    let max_error = MAX_ERROR_COUNT + Math.floor((f.file.size / UPLOAD_BLOCKSIZE) * MAX_ERROR_RATE);
+                    const max_error = MAX_ERROR_COUNT + Math.floor((f.file.size / UPLOAD_BLOCKSIZE) * MAX_ERROR_RATE);
                     let upload = {
                         start: Date.now(),
                         file: f.file,
@@ -184,6 +213,10 @@ model.present = function(data) {
                     req.wait_count--;
 
                     setTimeout(actions.startUploader, 0);
+
+                    if (data.upload.start_topic) {
+                        self.publish(data.upload.start_topic, upload);
+                    }
                 });
             }
             if (data.response_topic) {
@@ -192,8 +225,15 @@ model.present = function(data) {
             is_next = true;
         } else {
             console.log("Fileuploader request without files ", data.upload);
-            self.publish(msg.properties.response_topic, { status: "error", error: "No files" });
+            self.publish(data.response_topic, { status: "error", error: "No files" });
         }
+    } else if (data.delete_upload) {
+        model.files = model.files.filter(f => f.status?.name !== data.delete_upload);
+        model.requests = model.requests.map(r => {
+            r.uploads = r.uploads.filter(u => u.status?.name !== data.delete_upload);
+            return r;
+        });
+        self.publish(`bridge/origin/model/fileuploader/post/delete/${data.delete_upload}`);
     }
 
     let fs = [];
@@ -209,12 +249,15 @@ model.present = function(data) {
     // Remove all files with failed req
     fs = [];
     for (let i = 0; i < model.files.length; i++) {
-        let f = model.files[i];
+        const f = model.files[i];
         if (f.req.error_count == 0) {
             fs.push(f);
-        } else if (f.status && f.status.name) {
+        } else if (f.status?.name) {
             // Tell server to remove this upload
             self.publish("bridge/origin/model/fileuploader/post/delete/"+f.status.name, {});
+            f.req.upload_count--;
+        } else {
+            f.req.upload_count--;
         }
     }
     model.files = fs;
@@ -222,16 +265,26 @@ model.present = function(data) {
     // Check all file uploads for status.is_complete
     fs = [];
     for (let i = 0; i < model.files.length; i++) {
-        let f = model.files[i];
-        if (f.status.is_complete) {
-            // console.log("Completed in ", Date.now() - f.start);
+        const f = model.files[i];
+        if (f.status?.is_complete) {
+            // File is complete - add it to the uploaded files and
+            // remove it from the uploading files.
             f.req.uploads.push({
                 name: f.name,
                 upload: f.status.name
             });
             f.req.upload_count--;
         } else {
-            fs.push(model.files[i]);
+            // Start uploading missing blocks if the last block has been uploaded
+            if (f.status?.missing && f.offset >= f.file.size) {
+                for (let k = 0; k < f.status.missing.length; k++) {
+                    const missingOffset = f.status.missing[k].start;
+                    if (f.failed.indexOf(missingOffset) == -1) {
+                        f.failed.push(missingOffset);
+                    }
+                }
+            }
+            fs.push(f);
         }
     }
     model.files = fs;
@@ -274,6 +327,7 @@ model.present = function(data) {
                 }
             }
         } else {
+            // Still busy uploading - publish progress and keep req
             if (r.progress_topic) {
                 let now = Date.now();
 
@@ -410,6 +464,13 @@ actions.newUpload = function(msg) {
     let data = {
         upload: msg.payload,
         response_topic: msg.properties.response_topic
+    };
+    model.present(data);
+};
+
+actions.deleteUpload = function(name) {
+    let data = {
+        delete_upload: name
     };
     model.present(data);
 };

@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2022 Marc Worrell
+%% @copyright 2011-2023 Marc Worrell
 
-%% Copyright 2011-2022 Marc Worrell
+%% Copyright 2011-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 -module(survey_q_thurstone).
 
 -export([
-    answer/3,
+    answer/4,
     prep_chart/3,
     prep_answer_header/2,
     prep_answer/3,
@@ -29,12 +29,11 @@
     test_max_points/1
 ]).
 
-% -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_survey/include/survey.hrl").
 
 
--spec answer( map(), list(), z:context() ) -> {ok, list()} | {error, missing}.
-answer(Block, Answers, Context) ->
+-spec answer( m_rsc:resource_id(), map(), list(), z:context() ) -> {ok, list()} | {error, missing}.
+answer(_SurveyId, Block, Answers, Context) ->
     Name = maps:get(<<"name">>, Block, undefined),
     Props = filter_survey_prepare_thurstone:survey_prepare_thurstone(Block, false, Context),
     Options = maps:get(<<"answers">>, Props),

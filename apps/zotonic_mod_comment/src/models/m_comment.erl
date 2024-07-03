@@ -81,8 +81,7 @@ m_get([ <<"get">>, CommentId | Rest ], _Msg, Context) ->
                 false -> {error, eacces}
             end
     end;
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 
@@ -187,7 +186,7 @@ toggle(CommentId, Context) ->
             Error
     end.
 
-%% @doc Check if an user can edit the comment
+%% @doc Check if a user can edit the comment
 check_editable(CommentId, Context) ->
     case z_db:q_row("select rsc_id, user_id from comment where id = $1", [CommentId], Context) of
         {RscId, UserId} ->

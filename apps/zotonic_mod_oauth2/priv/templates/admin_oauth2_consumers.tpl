@@ -38,7 +38,6 @@
                 }
         %}
     {% endif %}
-
 {% endif %}
 
 {% if m.acl.is_admin %}
@@ -61,7 +60,9 @@
                 {% with app.id as id %}
                     <tr id="{{ #app.id }}" class="clickable">
                         <td>{{ app.name|escape }}</td>
-                        <td>{{ app.domain|escape }}</td>
+                        <td>
+                            {{ app.domain|escape }}
+                        </td>
                         <td>{{ app.description|escape }}</td>
                         <td>{% if app.is_use_auth %}√{% else %}-{% endif %}</td>
                         <td>{% if app.is_use_import %}√{% else %}-{% endif %}</td>
@@ -75,6 +76,29 @@
                         </td>
                         <td>{{ app.created|date:_"d M Y, H:i" }}</td>
                         <td>{{ app.token_count }}</td>
+                        <td>
+                            {% if app.grant_type == 'client_credentials' %}
+                                <button class="btn btn-primary btn-xs" id="{{ #token.id }}">
+                                    {_ Fetch Token _}
+                                </button>
+                                {% wire id=#token.id
+                                        action={confirm
+                                            text=[
+                                                "<p>",
+                                                _"Fetch your access token to this site?",
+                                                "</p><p>",
+                                                _"The token will be registered with your account and only you (or routines acting on your behalf) will be able to use it.",
+                                                "</p><p>",
+                                                _"Fetching a token can take some time.",
+                                                "</p>"
+                                            ]
+                                            ok=_"Fetch Token"
+                                            postback={oauth2_fetch_consumer_token app_id=app.id}
+                                            delegate=`mod_oauth2`
+                                        }
+                                %}
+                            {% endif %}
+                        </td>
                     </tr>
                     {% wire id=#app.id
                             action={dialog_open

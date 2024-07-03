@@ -1,9 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013 Marc Worrell
+%% @copyright 2013-2024 Marc Worrell
 %% @doc Redirect custom domains/paths to other domains/paths.
 %%      This module is notified when the dispatcher found an unknown host name.
+%% @end
 
-%% Copyright 2013 Marc Worrell
+%% Copyright 2013-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -63,7 +64,7 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
      |Acc].
 
 event(#submit{message=custom_redirects}, Context) ->
-    case z_acl:is_allowed(use, mod_custom_redirect, Context) of
+    case m_custom_redirect:is_allowed(Context) of
         true ->
             Qs = z_context:get_q_all_noz(Context),
             Rows = group_rows(Qs),

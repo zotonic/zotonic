@@ -18,13 +18,13 @@ jobs:
 
     strategy:
       matrix:
-        otp_version: [22.3]
+        otp_version: [26.2]
         os: [ubuntu-latest]
 
     container:
       image: erlang:${{ matrix.otp_version }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Dialyzer
         run: make dialyzer

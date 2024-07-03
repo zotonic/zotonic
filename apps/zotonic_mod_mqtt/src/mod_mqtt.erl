@@ -39,7 +39,11 @@
 
 -spec 'mqtt:test/#'(mqtt_packet_map:mqtt_packet(), z:context()) -> ok.
 'mqtt:test/#'(Msg, _Context) ->
-    ?LOG_DEBUG("mod_mqtt test topic: ~p", [Msg]),
+    ?LOG_DEBUG(#{
+        text => <<"mod_mqtt test topic">>,
+        in => zotonic_mod_mqtt,
+        mqtt_msg => Msg
+    }),
     ok.
 
 %% @doc Handle 'get' request for a model
@@ -82,7 +86,7 @@ publish_response(
     z_mqtt:publish(Topic, Res, #{ qos => QoS }, Context);
 publish_response(#{ properties := #{ response_topic := Topic } } = Msg, {error, Res}, Context) ->
     QoS = maps:get(qos, Msg, 0),
-    z_mqtt:publish(Topic, #{ <<"status">> => <<"error">>, <<"message">> => Res }, #{ qos => QoS }, Context);
+    z_mqtt:publish(Topic, #{ <<"status">> => <<"error">>, <<"error">> => Res }, #{ qos => QoS }, Context);
 publish_response(#{}, _Res, _Context) ->
     ok.
 

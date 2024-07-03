@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019-2021 Marc Worrell
+%% @copyright 2019-2024 Marc Worrell
 %% @doc Handle HTTP authentication of users.
+%% @end
 
-%% Copyright 2019-2021 Marc Worrell
+%% Copyright 2019-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -97,7 +98,11 @@ handle_cmd(<<"reset">>, Payload, Context) ->
 handle_cmd(<<"status">>, Payload, Context) ->
     status(Payload, Context);
 handle_cmd(Cmd, _Payload, Context) ->
-    ?LOG_INFO("controller_authentication: unknown cmd ~p", [ Cmd ]),
+    ?LOG_INFO(#{
+        text => <<"controller_authentication: unknown cmd">>,
+        in => zotonic_mod_authentication,
+        cmd => Cmd
+    }),
     {
         #{
             status => error,
@@ -121,13 +126,21 @@ logon_1({ok, UserId}, Payload, Context) when is_integer(UserId) ->
             Options = z_context:get(auth_options, Context, #{}),
             Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options, Context1),
             Context3 = maybe_setautologon(Payload, Context2),
+            maybe_auth_connect(maps:get(<<"authuser">>, Payload, undefined), Context3),
             return_status(Payload, Context3);
         {error, user_not_enabled} ->
+            ?LOG_INFO(#{
+                text => <<"Logon attempt of disabled user">>,
+                in => zotonic_mod_authentication,
+                user_id => UserId,
+                result => error,
+                reason => user_not_enabled
+            }),
             Reply = #{ status => error, user_id => UserId },
             case m_rsc:p_no_acl(UserId, is_verified_account, Context) of
                 false ->
                     % The account is awaiting verification
-                    Token = z_utils:pickle( #{ user_id => UserId, timestamp => calendar:universal_time() }, Context),
+                    Token = z_crypto:pickle( #{ user_id => UserId, timestamp => calendar:universal_time() }, Context),
                     { Reply#{ error => verification_pending, token => Token }, Context };
                 V when V == true orelse V == undefined ->
                     % The account has been disabled after verification, or
@@ -142,8 +155,22 @@ logon_1({expired, UserId}, _Payload, Context) when is_integer(UserId) ->
     % The password is expired and needs a reset - this is similar to password reset
     case m_identity:get_username(UserId, Context) of
         undefined ->
+            ?LOG_NOTICE(#{
+                text => <<"Logon attempt of user with expired password and no username">>,
+                in => zotonic_mod_authentication,
+                user_id => UserId,
+                result => error,
+                reason => expired
+            }),
             { #{ status => error, error => pw }, Context };
         Username ->
+            ?LOG_INFO(#{
+                text => <<"Logon attempt of user wth expired password">>,
+                in => zotonic_mod_authentication,
+                user_id => UserId,
+                result => error,
+                reason => expired_password
+            }),
             Code = m_authentication:set_reminder_secret(UserId, Context),
             { #{ status => error, error => password_expired, username => Username, secret => Code }, Context }
     end;
@@ -151,30 +178,75 @@ logon_1({error, ratelimit}, _Payload, Context) ->
     { #{ status => error, error => ratelimit }, Context };
 logon_1({error, need_passcode}, _Payload, Context) ->
     { #{ status => error, error => need_passcode }, Context };
+logon_1({error, set_passcode}, _Payload, Context) ->
+    { #{ status => error, error => set_passcode }, Context };
+logon_1({error, set_passcode_error}, _Payload, Context) ->
+    { #{ status => error, error => set_passcode_error }, Context };
 logon_1({error, passcode}, _Payload, Context) ->
     { #{ status => error, error => passcode }, Context };
-logon_1({error, _Reason}, _Payload, Context) ->
+logon_1({error, Reason}, _Payload, Context) ->
     % Hide other error codes, map to generic 'pw' error
+    ?LOG_INFO(#{
+        text => <<"Logon attempt of user">>,
+        in => zotonic_mod_authentication,
+        result => error,
+        reason => Reason
+    }),
     { #{ status => error, error => pw }, Context };
 logon_1(undefined, _Payload, Context) ->
     { #{ status => error, error => pw }, Context }.
 
 
 log_logon(UserId, #{ <<"username">> := Username }, Context) when is_binary(Username) ->
-    ?LOG_NOTICE("~p: Logon of user ~p (~s) using username '~s'",
-                [ z_context:site(Context), UserId, username(UserId, Context), Username ]);
+    ?LOG_NOTICE(#{
+        text => <<"Logon of user using username">>,
+        in => zotonic_mod_authentication,
+        result => ok,
+        user_id => UserId,
+        username_used => Username,
+        username => username(UserId, Context)
+    });
 log_logon(UserId, #{ <<"token">> := Token }, Context) when is_binary(Token) ->
-    ?LOG_NOTICE("~p: Logon of user ~p (~s) using token",
-                [ z_context:site(Context), UserId, username(UserId, Context) ]);
+    ?LOG_NOTICE(#{
+        text => <<"Logon of user using token">>,
+        in => zotonic_mod_authentication,
+        result => ok,
+        user_id => UserId,
+        username => username(UserId, Context)
+    });
 log_logon(UserId, #{}, Context) ->
-    ?LOG_NOTICE("~p: Logon of user ~p (~s)",
-                [ z_context:site(Context), UserId, username(UserId, Context) ]).
+    ?LOG_NOTICE(#{
+        text => <<"Logon of user">>,
+        in => zotonic_mod_authentication,
+        result => ok,
+        user_id => UserId,
+        username => username(UserId, Context)
+    }).
 
 username(UserId, Context) ->
     case m_identity:get_username(UserId, Context) of
         Username when is_binary(Username) -> Username;
         undefined -> <<>>
     end.
+
+maybe_auth_connect(AuthUserEncoded, Context) when is_binary(AuthUserEncoded) ->
+    Secret = z_context:state_cookie_secret(Context),
+    case termit:decode_base64(AuthUserEncoded, Secret) of
+        {ok, AuthExp} ->
+            UserId = z_acl:user(Context),
+            case termit:check_expired(AuthExp) of
+                {ok, #{ auth := Auth, user_id := AuthUserId }} when UserId =:= AuthUserId ->
+                    m_authentication:handle_auth_confirm(Auth, undefined, Context);
+                {ok, _} ->
+                    {error, user_id};
+                {error, _} = Error ->
+                    Error
+            end;
+        {error, _} ->
+            {error, illegal_auth}
+    end;
+maybe_auth_connect(_Auth, _Context) ->
+    ok.
 
 
 -spec maybe_add_logon_options( map(), map(), z:context() ) -> { map(), z:context() }.
@@ -190,14 +262,14 @@ maybe_add_logon_options(#{ status := error } = Result, Payload, Context) ->
         page => maps:get(<<"page">>, Payload, undefined),
         is_password_entered => not z_utils:is_empty(maps:get(<<"password">>, Payload, <<>>))
     },
-    Options1 = case Result of #{ token := Token } -> Options#{ token => Token}; _ -> Options end, 
+    Options1 = case Result of #{ token := Token } -> Options#{ token => Token}; _ -> Options end,
     Options2 = z_notifier:foldr(#logon_options{ payload = Payload }, Options1, Context),
     Result1 = Result#{ options => Options2 },
     case Options2 of
         #{ is_user_external := true } -> {Result1, Context};
         #{ is_user_local := true } -> {Result1, Context};
         #{ is_user_local := false, is_user_external := false, username := Username } when is_binary(Username), Username =/= <<>> ->
-            % Hide the fact an user is unknown, this prevents fishing for known usernames.
+            % Hide the fact a user is unknown, this prevents fishing for known usernames.
             Options3 = Options2#{
                 is_user_local => true,
                 is_username_checked => true
@@ -240,7 +312,7 @@ switch_user(#{ <<"user_id">> := UserId } = Payload, Context) when is_integer(Use
             Options2 = AuthOptions#{
                 sudo_user_id => SudoUserId
             },
-            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options2, Context1),
+            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options2, undefined, Context1),
             return_status(Payload, Context2);
         {error, _Reason} ->
             { #{ status => error, error => eacces }, Context }
@@ -303,19 +375,18 @@ change(#{
         UserId ->
             case m_identity:get_username(UserId, Context) of
                 undefined ->
-                    ?LOG_ERROR("Password change: User ~p does not have an username defined.", [ UserId ]),
+                    ?LOG_ERROR(#{
+                        text => <<"Password change for user without username">>,
+                        in => zotonic_mod_authentication,
+                        result => error,
+                        reason => no_username,
+                        user_id => UserId
+                    }),
                     { #{ status => error, error => username }, Context };
                 Username ->
                     case auth_precheck(Username, Context) of
                         ok ->
-                            PasswordMinLength = z_convert:to_integer(m_config:get_value(mod_authentication, password_min_length, 8, Context)),
-
-                            case size(Password) of
-                                N when N < PasswordMinLength ->
-                                    { #{ status => error, error => tooshort }, Context };
-                                _ ->
-                                    change_1(UserId, Username, Password, NewPassword, Passcode, Context)
-                            end;
+                            change_1(UserId, Username, Password, NewPassword, Passcode, Context);
                         {error, ratelimit} ->
                             { #{ status => error, error => ratelimit }, Context };
                         _ ->
@@ -330,18 +401,21 @@ change(_Payload, Context) ->
         message => <<"Missing one of: password, password_reset, passcode">>
     }, Context }.
 
-
 change_1(UserId, Username, Password, NewPassword, Passcode, Context) ->
-    Payload = #{
+    LogonPayload = #{
         <<"username">> => Username,
         <<"password">> => Password,
         <<"passcode">> => Passcode
     },
-    case z_notifier:first(#logon_submit{ payload = Payload }, Context) of
-        {ok, UserId} ->
+    case z_notifier:first(#logon_submit{ payload = LogonPayload }, Context) of
+        {OK, UserId} when OK =:= ok; OK =:= expired ->
             case reset_1(UserId, Username, NewPassword, Passcode, Context) of
                 ok ->
-                    logon_1({ok, UserId}, Payload, Context);
+                    delete_reminder_secret(UserId, Context),
+                    Options = z_context:get(auth_options, Context, #{}),
+                    Context1 = z_acl:logon(UserId, Context),
+                    Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options, Context1),
+                    { #{ status => ok }, Context2 };
                 {error, Reason} ->
                     { #{ status => error, error => Reason }, Context }
             end;
@@ -349,13 +423,25 @@ change_1(UserId, Username, Password, NewPassword, Passcode, Context) ->
             { #{ status => error, error => ratelimit }, Context };
         {error, need_passcode} ->
             { #{ status => error, error => need_passcode }, Context };
+        {error, set_passcode} ->
+            { #{ status => error, error => set_passcode }, Context };
+        {error, set_passcode_error} ->
+            { #{ status => error, error => set_passcode_error }, Context };
         {error, passcode} ->
             { #{ status => error, error => passcode }, Context };
-        {ok, _} ->
+        {error, Reason} ->
+            ?LOG_WARNING(#{
+                in => zotonic_mod_authentication,
+                text => <<"Password change request with password mismatch">>,
+                result => error,
+                reason => Reason,
+                user_id => UserId,
+                username => Username
+            }),
             { #{ status => error, error => pw }, Context }
     end.
 
-%% @doc Reset the password for an user, using the mailed reset secret and (optional) 2FA code.
+%% @doc Reset the password for a user, using the mailed reset secret and (optional) 2FA code.
 -spec reset( map(), z:context() ) -> { map(), z:context() }.
 reset(#{
         <<"secret">> := Secret,
@@ -375,10 +461,16 @@ reset(#{
                         {ok, UserId} ->
                             case m_identity:get_username(UserId, Context) of
                                 undefined ->
-                                    ?LOG_ERROR("Password reset: User ~p does not have an username defined.", [ UserId ]),
+                                    ?LOG_ERROR(#{
+                                        text => <<"Password reset for user without username">>,
+                                        in => zotonic_mod_authentication,
+                                        result => error,
+                                        reason => no_username,
+                                        user_id => UserId
+                                    }),
                                     { #{ status => error, error => username }, Context };
                                 Username ->
-                                    case reset_1(UserId, Username, Password, Passcode, Context) of
+                                    case reset_1(UserId, Username, Password, Payload, Context) of
                                         ok ->
                                             logon_1({ok, UserId}, Payload, Context);
                                         {error, Reason} ->
@@ -402,36 +494,41 @@ reset(_Payload, Context) ->
     }, Context }.
 
 
-reset_1(UserId, Username, Password, Passcode, Context) ->
-    QArgs = #{
-        <<"username">> => Username,
-        <<"passcode">> => Passcode
-    },
-    case auth_postcheck(UserId, QArgs, Context) of
+reset_1(UserId, Username, Password, Payload, Context) ->
+    case m_authentication:acceptable_password(Password, Context) of
         ok ->
-            case m_identity:set_username_pw(UserId, Username, Password, z_acl:sudo(Context)) of
+            case auth_postcheck(UserId, Payload, Context) of
                 ok ->
-                    ContextLoggedon = z_acl:logon(UserId, Context),
-                    delete_reminder_secret(UserId, ContextLoggedon),
-                    ok;
-                {error, password_match} ->
-                    {error, password_change_match};
-                {error, _} ->
+                    case m_identity:set_username_pw(UserId, Username, Password, z_acl:sudo(Context)) of
+                        ok ->
+                            ContextLoggedon = z_acl:logon(UserId, Context),
+                            delete_reminder_secret(UserId, ContextLoggedon),
+                            ok;
+                        {error, password_match} ->
+                            {error, password_change_match};
+                        {error, _} ->
+                            {error, error}
+                    end;
+                {error, need_passcode} = Error ->
+                    Error;
+                {error, set_passcode} = Error ->
+                    Error;
+                {error, set_passcode_error} = Error ->
+                    Error;
+                {error, passcode} ->
+                    z_notifier:notify_sync(
+                        #auth_checked{
+                            id = UserId,
+                            username = Username,
+                            is_accepted = false
+                        },
+                        Context),
+                    {error, passcode};
+                _Error ->
                     {error, error}
             end;
-        {error, need_passcode} ->
-            {error, need_passcode};
-        {error, passcode} ->
-            z_notifier:notify_sync(
-                #auth_checked{
-                    id = UserId,
-                    username = Username,
-                    is_accepted = false
-                },
-                Context),
-            {error, passcode};
-        _Error ->
-            {error, error}
+        {error, _} = Error ->
+            Error
     end.
 
 %% @doc Return information about the current user and request language/timezone
@@ -455,6 +552,7 @@ return_status(Payload, Context) ->
         username => m_identity:get_username(Context1),
         preferences => #{
             language => z_context:language(Context1),
+            languages => z_context:languages(Context1),
             timezone => z_context:tz(Context1)
         },
         options => z_context:get(auth_options, Context1, #{}),
@@ -490,8 +588,15 @@ check_reminder_secret(#{ <<"secret">> := Secret, <<"username">> := Username }, C
                                 need_passcode => NeedPasscode
                             };
                         OtherUsername ->
-                            ?LOG_ERROR("Password reset with username mismatch: got \"~s\", expected \"~s\"",
-                                        [ Username, OtherUsername ]),
+                            ?LOG_ERROR(#{
+                                text => <<"Password reset with username mismatch">>,
+                                in => zotonic_mod_authentication,
+                                result => error,
+                                reason => username_mismatch,
+                                username_given => Username,
+                                username => OtherUsername,
+                                user_id => UserId
+                            }),
                             #{
                                 status => error,
                                 error => unknown_code
@@ -532,7 +637,13 @@ get_by_reminder_secret(Code, Context) ->
                 true ->
                     {ok, UserId};
                 false ->
-                    ?LOG_NOTICE("Accessing expired reminder secret for user ~p", [UserId]),
+                    ?LOG_INFO(#{
+                        text => <<"Accessing expired reminder secret for user">>,
+                        in => zotonic_mod_authentication,
+                        result => warning,
+                        reason => expired_secret,
+                        user_id => UserId
+                    }),
                     delete_reminder_secret(UserId, Context),
                     undefined
             end

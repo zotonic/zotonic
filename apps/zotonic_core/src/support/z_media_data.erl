@@ -19,6 +19,8 @@
 -module(z_media_data).
 
 -export([
+    is_file_data_visible/2,
+
     file_data/2,
     file_data_url/2
     ]).
@@ -38,6 +40,17 @@ file_data_url(Path, Context) ->
             Error
     end.
 
+-spec is_file_data_visible(Path, Context) -> boolean() when
+    Path :: binary(),
+    Context :: z:context().
+is_file_data_visible(Path, Context) ->
+    case lookup(Path, Context) of
+        {ok, #z_file_info{} = Info} ->
+            z_file_request:is_visible(Info, Context);
+        {error, _} ->
+            false
+    end.
+
 file_data(Path, Context) ->
     case lookup(Path, Context) of
         {ok, #z_file_info{ mime = Mime } = Info} ->
@@ -45,7 +58,13 @@ file_data(Path, Context) ->
                 {ok, {Mime, z_file_request:content_data(Info, identity)}}
             catch
                 Type:Err ->
-                    ?LOG_WARNING("File data error for ~p: ~p", [ Path, {Type, Err} ]),
+                    ?LOG_WARNING(#{
+                        text => <<"File data error">>,
+                        in => zotonic_core,
+                        file => Path,
+                        result => Type,
+                        reason => Err
+                    }),
                     {error, data}
             end;
         {error, _} = Error ->

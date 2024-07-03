@@ -101,7 +101,7 @@ cat_move_and_delete(Ids, ToGroupId, Context) ->
     ok.
 
 in_categories(Ids, Context) when is_list(Ids) ->
-    RscIds = z_db:q("select id from rsc where category_id in (SELECT(unnest($1::int[])))", [Ids], Context, 60000),
+    RscIds = z_db:q("select id from rsc where category_id = any($1::int[])", [Ids], Context, 60000),
     [ RscId || {RscId} <- RscIds ].
 
 delete_all([], _N, _Total, _Context) ->
@@ -111,9 +111,23 @@ delete_all([Id|Ids], N, Total, Context) ->
         ok ->
             maybe_progress(N, N+1, Total, Context),
             delete_all(Ids, N+1, Total, Context);
+        {error, Reason} ->
+            ?LOG_ERROR(#{
+                text => <<"mod_admin_category: could not delete resource">>,
+                in => zotonic_mod_admin,
+                result => error,
+                reason => Reason,
+                rsc_id => Id
+            }),
+            {error, Reason};
         Error ->
-            ?LOG_ERROR("mod_admin_category: could not delete ~p: ~p",
-                        [Id, Error]),
+            ?LOG_ERROR(#{
+                text => <<"mod_admin_category: could not delete resource">>,
+                in => zotonic_mod_admin,
+                result => error,
+                reason => Error,
+                rsc_id => Id
+            }),
             {error, Error}
     end.
 

@@ -24,7 +24,7 @@
         padding: 4px;
     }
     td {
-        text-align: right;
+        text-align: left;
         border-bottom: 1px solid #ccc;
         border-right: 1px solid #ccc;
         padding: 2px 4px;
@@ -39,7 +39,7 @@
 <body>
     <h1>{{ m.rsc[id].title }}</h1>
 
-    <p>{_ All survey entries up until _} <strong>{{ now|date:"Y-m-d H:i" }}</strong> ({{ results|length }} {_ Results _})</p>
+    <p>{_ Results until _} <strong>{{ now|date:"Y-m-d H:i" }}</strong> ({{ results|length }})</p>
 
     <table>
         {% with m.survey.captions[id] as captions %}
@@ -53,9 +53,10 @@
 
         {% for ans_id,ans in rows %}
         <tr id="survey-result-{{ ans_id }}">
-            <td>{{ forloop.counter }}.</td>
+            <td style="text-align: right">{{ forloop.counter }}.</td>
             {% for value in ans %}
-                <td>{{ value|escape }}</td>
+                <td {% if value|match:"^[0-9]+(\\.[0-9]*)?$" %}style="text-align: right"{% endif %}>{{ value|escape|linebreaksbr }}</td>
+
             {% endfor %}
         </tr>
         {% endfor %}

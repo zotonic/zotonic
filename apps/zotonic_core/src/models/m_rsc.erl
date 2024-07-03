@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2020 Marc Worrell
-%%
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Model for resource data. Interfaces between zotonic, templates and the database.
+%% @end
 
-%% Copyright 2009-2020 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
 
 -export([
     m_get/3,
-    % m_post/3,
+    m_post/3,
     m_delete/3,
 
     name_to_id/2,
@@ -33,6 +33,7 @@
     page_path_to_id/2,
 
     get/2,
+    get_export/2,
     get_raw/2,
     get_raw_lock/2,
     get_acl_props/2,
@@ -53,6 +54,7 @@
     exists/2,
 
     is_visible/2, is_editable/2, is_deletable/2, is_linkable/2,
+    is_published_date/2,
     is_me/2,
     is_cat/3,
     is_a/2,
@@ -120,12 +122,41 @@
     props/0,
     props_all/0,
     props_legacy/0,
-    update_function/0
+    update_function/0,
+    duplicate_option/0,
+    duplicate_options/0
 ]).
 
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ <<"-">>, <<"lookup">>, <<"page_path">> | Path ], _Msg, Context) ->
+    Path1 = iolist_to_binary(lists:join($/, Path)),
+    case page_path_to_id(Path1, Context) of
+        {ok, Id} ->
+            {#{
+                <<"id">> => Id,
+                <<"is_redirect">> => false
+            }, []};
+        {redirect, Id} ->
+            {#{
+                <<"id">> => Id,
+                <<"is_redirect">> => true,
+                <<"page_url">> => m_rsc:p(Id, <<"page_url">>, Context)
+            }, []};
+        {error, _} = Error ->
+            Error
+    end;
+m_get([ <<"-">>, <<"lookup">>, <<"rid">>, Id | Rest ], _Msg, Context) ->
+    case m_rsc:rid(Id, Context) of
+        undefined ->
+            {error, enoent};
+        RscId ->
+            {ok, {RscId, Rest}}
+    end;
+m_get([ <<"-">>, <<"lookup">>, <<"name">>, Name | Rest ], _Msg, Context) ->
+    Result = m_rsc:name_to_id(Name, Context),
+    {ok, {Result, Rest}};
 m_get([ Id, <<"is_cat">>, Key | Rest ], _Msg, Context) ->
     {ok, {is_cat(Id, Key, Context), Rest}};
 m_get([ Id, <<"is_a">>, Cat | Rest ], _Msg, Context) ->
@@ -137,12 +168,27 @@ m_get([ Id, <<"is_a">> ], _Msg, Context) ->
 m_get([ Id, Key | Rest ], _Msg, Context) ->
     {ok, {p(Id, Key, Context), Rest}};
 m_get([ Id ], _Msg, Context) ->
-    {ok, {get(Id, Context), []}};
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_DEBUG("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+    case get_export(Id, Context) of
+        {ok, Rsc} ->
+            {ok, {Rsc, []}};
+        {error, _} = Error ->
+            Error
+    end;
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
+%% @doc API to update or insert resources.
+-spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | ok | {error, term()}.
+m_post([ Id ], #{ payload := Payload }, Context) when is_map(Payload) ->
+    case m_rsc:rid(Id, Context) of
+        undefined -> {error, enoent};
+        RId -> m_rsc:update(RId, Payload, Context)
+    end;
+m_post([], #{ payload := Payload }, Context) when is_map(Payload) ->
+    m_rsc:insert(Payload, Context).
 
+%% @doc API to delete a resource
+-spec m_delete( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | ok | {error, term()}.
 m_delete([ Id ], _Msg, Context) ->
     delete(Id, Context).
 
@@ -222,6 +268,58 @@ page_path_to_id(Path, Context) ->
 is_utf8(<<>>) -> true;
 is_utf8(<<_/utf8, S/binary>>) -> is_utf8(S);
 is_utf8(_) -> false.
+
+
+%% @doc Get all properties of a resource for export. This adds the
+%% page urls for all languages and the language neutral uri to the
+%% resource properties. Note that normally the page_url is a single
+%% property without translation, as it is generated using the current
+%% language context. As this export is used for UIs, all language
+%% variants are added.
+-spec get_export(Id, Context) -> {ok, Rsc} | {error, Reason} when
+    Id :: resource(),
+    Context :: z:context(),
+    Rsc :: props(),
+    Reason :: eacces | enoent.
+get_export(Id, Context) ->
+    RscId = m_rsc:rid(Id, Context),
+    case get(RscId, Context) of
+        undefined ->
+            case m_rsc:exists(RscId, Context) of
+                true ->
+                    {error, eacces};
+                false ->
+                    {error, enoent}
+            end;
+        Rsc ->
+            Rsc1 = add_export_props(RscId, Rsc, Context),
+            {ok, Rsc1}
+    end.
+
+-spec add_export_props( Id, Rsc, Context ) -> Rsc1 when
+    Id :: m_rsc:resource_id(),
+    Rsc :: m_rsc:props(),
+    Rsc1 :: m_rsc:props(),
+    Context :: z:context().
+add_export_props(Id, Rsc, Context) ->
+    Languages = [ 'x-default' | z_language:enabled_language_codes(Context) ],
+    PageUrl = page_url(Id, Context),
+    PageUrlAbs = z_context:abs_url(PageUrl, Context),
+    PageUrls = lists:map(
+        fun(Lang) -> {Lang, page_url(Id, z_context:set_language(Lang, Context))} end,
+        Languages),
+    PageUrlsAbs = lists:map(
+        fun({Lang, Url}) -> {Lang, z_context:abs_url(Url, Context)} end,
+        PageUrls),
+    ShortUrl = z_dispatcher:url_for(id, [ {id, Id}, {absolute_url, true} ], Context),
+    Rsc#{
+        <<"uri">> => uri(Id, z_context:set_language('x-default', Context)),
+        <<"short_url">> => ShortUrl,
+        <<"page_url">> => PageUrl,
+        <<"page_url_abs">> => PageUrlAbs,       % canonical url
+        <<"alternate_page_url">> => #trans{ tr = PageUrls },
+        <<"alternate_page_url_abs">> => #trans{ tr = PageUrlsAbs }
+    }.
 
 %% @doc Read a whole resource. Return 'undefined' if the resource was
 %%      not found, crash on database errors. The properties are filtered
@@ -785,7 +883,7 @@ uri_dispatch(Id, Context) ->
         {true, Name} -> Name;
         false -> Id
     end,
-    case z_dispatcher:url_for(id, [{id, DispatchId}], z_context:set_language(undefined, Context)) of
+    case z_dispatcher:url_for(id, [{id, DispatchId}], z_context:set_language('x-default', Context)) of
         undefined ->
             iolist_to_binary(z_context:abs_url(<<"/id/", (z_convert:to_binary(DispatchId))/binary>>, Context));
         Url ->
@@ -1127,18 +1225,20 @@ is_cat(Id, Cat, Context) ->
             false
     end.
 
-%% @doc Return the categories and the inherited categories of the resource. Returns a list with category atoms
+%% @doc Return the categories and the inherited categories of the resource. Returns a list with category atoms.
+%% The first atom is the most generic category, the last is the most specific. Example:
+%% [text, article, news, local_news]
 -spec is_a(resource(), z:context()) -> list(atom()).
 is_a(Id, Context) ->
     RscCatId = p(Id, category_id, Context),
     m_category:is_a(RscCatId, Context).
 
 %% @doc Return the categories and the inherited categories of the resource. Returns a list with
-%% category ids
--spec is_a_id(resource(), z:context()) -> list(pos_integer()).
+%% category ids. The first id is the most generic category, the last is the most specific.
+-spec is_a_id(resource(), z:context()) -> list(m_rsc:resource_id()).
 is_a_id(Id, Context) ->
     RscCatId = p(Id, <<"category_id">>, Context),
-    [RscCatId | m_category:get_path(RscCatId, Context)].
+    m_category:get_path(RscCatId, Context) ++ [RscCatId].
 
 %% @doc Check if the resource is in a category.
 -spec is_a(resource(), m_category:category(), z:context()) -> boolean().
@@ -1240,19 +1340,8 @@ ensure_name_maxlength(<<Name:70/binary, _/binary>>) -> Name;
 ensure_name_maxlength(Name) -> Name.
 
 english_title(Id, Context) ->
-    case p_no_acl(Id, <<"title">>, Context) of
-        Title when is_binary(Title) -> Title;
-        #trans{ tr=[] } -> <<>>;
-        undefined -> <<>>;
-        #trans{ tr=Tr } ->
-            case proplists:get_value(en, Tr) of
-                undefined ->
-                    {_, T} = hd(Tr),
-                    T;
-                T ->
-                    T
-            end
-    end.
+    Text = p_no_acl(Id, <<"title">>, Context),
+    z_convert:to_binary(z_trans:lookup_fallback(Text, [en, 'en-us', 'en-gb'], Context)).
 
 ensure_name_unique(BaseName, N, Context) ->
     Name = iolist_to_binary([BaseName, postfix(N)]),
@@ -1313,12 +1402,21 @@ common_properties(_Context) ->
         <<"address_postcode">>,
         <<"address_country">>,
 
+        <<"mail_email">>,
         <<"mail_street_1">>,
         <<"mail_street_2">>,
         <<"mail_city">>,
         <<"mail_state">>,
         <<"mail_postcode">>,
         <<"mail_country">>,
+
+        <<"billing_email">>,
+        <<"billing_street_1">>,
+        <<"billing_street_2">>,
+        <<"billing_city">>,
+        <<"billing_state">>,
+        <<"billing_postcode">>,
+        <<"billing_country">>,
 
         <<"location_lng">>,
         <<"location_lat">>,

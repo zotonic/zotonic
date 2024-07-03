@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2020 Marc Worrell
+%% @copyright 2020-2023 Marc Worrell
 %% @doc 'url_abs' filter, generates an url with hostname/protocol.
+%% @end
 
-%% Copyright 2020 Marc Worrell
+%% Copyright 2020-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.

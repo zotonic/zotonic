@@ -21,10 +21,10 @@
 
 sub_day(undefined, _Context) ->
 	undefined;
-sub_day(Date, Context) ->
-	filter_add_day:add_day(Date, -1, Context).
+sub_day(Date, _Context) ->
+	z_datetime:prev_day(Date).
 sub_day(undefined, _N, _Context) ->
 	undefined;
-sub_day(Date, N, Context) ->
-	filter_add_day:add_day(Date, 0-N, Context).
+sub_day(Date, N, _Context) ->
+	z_datetime:prev_day(Date, N).
 

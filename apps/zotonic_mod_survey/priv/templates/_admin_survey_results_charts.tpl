@@ -1,6 +1,6 @@
 {% extends "admin_edit_widget_std.tpl" %}
 
-{# Admin controls for the survey #}
+{# Admin controls for the survey (form) #}
 
 {% block widget_title %}
 {_ Charts _}
@@ -11,6 +11,7 @@
 {% block widget_id %}content-survey-charts{% endblock %}
 
 {% block widget_content %}
+    <p class="help-block">{_ The charts show aggregated results from closed questions like thurstone and yes/no. _}</p>
     <div class="survey-results">
         {% for result, chart, question in m.survey.results[id] %}
             <div class="survey-result">

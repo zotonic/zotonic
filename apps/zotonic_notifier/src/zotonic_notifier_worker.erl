@@ -154,8 +154,10 @@ notify_async(Notifier, Event, Msg, ContextArg) ->
                         end,
                         Observers);
                 false ->
+                    MD = logger:get_process_metadata(),
                     erlang:spawn(
                         fun() ->
+                            set_process_metadata(MD),
                             lists:foreach(
                                 fun(Obs) ->
                                     notify_observer(Msg, Obs, false, ContextArg)
@@ -173,11 +175,16 @@ notify1(Notifier, Event, Msg, ContextArg) ->
         [ {_, Pid, _} = Obs | _ ] when is_pid(Pid) ->
             notify_observer(Msg, Obs, false, ContextArg);
         [ Obs | _ ] ->
+            MD = logger:get_process_metadata(),
             erlang:spawn(
                 fun() ->
+                    set_process_metadata(MD),
                     notify_observer(Msg, Obs, false, ContextArg)
                 end)
     end.
+
+set_process_metadata(undefined) -> ok;
+set_process_metadata(MD) -> logger:set_process_metadata(MD).
 
 %% @doc Call all observers till one returns something else than undefined.
 %% The prototype of the observer is: f(Msg, Context)
@@ -437,9 +444,15 @@ notify_observer(Msg, {_Prio, Pid, _OwnerPid}, true, ContextArg) when is_pid(Pid)
         gen_server:call(Pid, {Msg, ContextArg}, ?TIMEOUT)
     catch
         EM:E:Trace ->
-            ?LOG_ERROR("Error notifying ~p with event ~p. Error ~p:~p",
-                        [Pid, Msg, EM, E],
-                        #{ stack => Trace }),
+            ?LOG_ERROR(#{
+                text => <<"Error notifying observer">>,
+                in => zotonic_notifier,
+                result => EM,
+                reason => E,
+                pid => Pid,
+                event => Msg,
+                stack => Trace
+            }),
             {error, {notify_observer, Pid, Msg, EM, E}}
     end;
 notify_observer(Msg, {_Prio, Pid, _OwnerPid}, false, ContextArg) when is_pid(Pid) ->
@@ -457,9 +470,15 @@ notify_observer_fold(Msg, {_Prio, Pid, _OwnerPid}, Acc, ContextArg) when is_pid(
         gen_server:call(Pid, {Msg, Acc, ContextArg}, ?TIMEOUT)
     catch
         EM:E:Trace ->
-            ?LOG_ERROR("Error folding ~p with event ~p. Error ~p:~p",
-                        [Pid, Msg, EM, E],
-                        #{ stack => Trace }),
+            ?LOG_ERROR(#{
+                text => <<"Error folding observers">>,
+                in => zotonic_notifier,
+                pid => Pid,
+                result => EM,
+                reason => E,
+                message => Msg,
+                stack => Trace
+            }),
             Acc
     end;
 notify_observer_fold(Msg, {_Prio, {M, F}, _OwnerPid}, Acc, ContextArg) ->

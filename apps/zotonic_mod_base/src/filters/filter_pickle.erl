@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013 Marc Worrell
+%% @copyright 2013-2023 Marc Worrell
 %% @doc Pickle a term, for inclusion in an input field or query argument.
+%% @end
 
-%% Copyright 2013 Marc Worrell
+%% Copyright 2013-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,4 +21,4 @@
 -export([pickle/2]).
 
 pickle(Data, Context) ->
-	z_utils:pickle(Data, Context).
+    z_crypto:pickle(Data, Context).

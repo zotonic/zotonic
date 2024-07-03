@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2021 Marc Worrell
-%% @doc Log off an user, remove "autologon" cookies
+%% @copyright 2010-2022 Marc Worrell
+%% @doc Log off a user, remove "autologon" cookies
 
-%% Copyright 2010-2021 Marc Worrell
+%% Copyright 2010-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -32,7 +32,9 @@ service_available(Context) ->
     {true, Context2}.
 
 resource_exists(Context) ->
-    {false, z_authentication_tokens:reset_cookies(Context)}.
+    Context1 = z_authentication_tokens:reset_cookies(Context),
+    Context2 = z_auth:logoff(Context1),
+    {false, Context2}.
 
 previously_existed(Context) ->
     {true, Context}.
@@ -43,6 +45,6 @@ moved_temporarily(Context) ->
         true -> Location;
         false -> <<"/">>
     end,
-    LocationAbs = z_context:abs_url(Location1, Context),
+    LocationAbs = z_context:abs_url(z_sanitize:uri(Location1), Context),
     {{true, LocationAbs}, Context}.
 

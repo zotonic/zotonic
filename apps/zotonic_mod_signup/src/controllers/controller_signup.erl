@@ -192,8 +192,13 @@ handle_confirm(UserId, SignupProps, RequestConfirm, Context) ->
                     },
                     z_mqtt:publish(<<"~client/model/auth/post/onetime-token">>, AuthMsg, Context),
                     z_render:wire({mask, []}, Context);
-                {error, _} = Error ->
-                    ?LOG_ERROR("Error making onetime token: ~p", [ Error ]),
+                {error, Reason} ->
+                    ?LOG_ERROR(#{
+                        text => <<"Error making onetime token">>,
+                        in => zotonic_mod_signup,
+                        result => error,
+                        reason => Reason
+                    }),
                     show_errors([internal], Context)
             end;
         false ->

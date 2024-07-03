@@ -1,9 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%%
-%% @doc Serve static pages relative to a defined root.  This resource is useful to add a complete static html subsite to an existing site.
+%% @copyright 2010-2022 Marc Worrell
+%% @doc Serve static pages relative to a defined root.  This resource is useful
+%% to add a complete static html subsite to an existing site.
+%% @end
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2022 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,6 +20,7 @@
 
 -module(controller_static_pages).
 -export([
+     service_available/1,
      allowed_methods/1,
      resource_exists/1,
      last_modified/1,
@@ -45,15 +47,29 @@
 -define(MAX_AGE, 86400).
 
 
-% service_available(Context) ->
-%     Root     = z_context:get(root, Context),
-%     DirIndex = z_convert:to_bool(z_context:get(allow_directory_index, Context, false)),
-%     UseCache = z_context:get(use_cache, Context, false),
-%     State = #state{
-%         root = Root,
-%         use_cache = UseCache,
-%         allow_directory_index=DirIndex
-%     }}.
+service_available(Context) ->
+    case z_context:get(root, Context) of
+        undefined ->
+            FullPath = z_context:get(fullpath, Context),
+            case z_utils:is_empty(FullPath) of
+                false when is_binary(FullPath); is_list(FullPath) ->
+                    {true, Context};
+                _ ->
+                    {false, Context}
+            end;
+        "" ->
+            {false, Context};
+        "/" ->
+            {false, Context};
+        <<>> ->
+            {false, Context};
+        <<"/">> ->
+            {false, Context};
+        {files, SubDir} ->
+            {true, z_context:set(root, {files, bin(SubDir)}, Context)};
+        Root ->
+            {true, z_context:set(root, bin(Root), Context)}
+    end.
 
 allowed_methods(Context) ->
     {[<<"HEAD">>, <<"GET">>], Context}.
@@ -80,11 +96,11 @@ moved_temporarily(Context) ->
         <<>> ->
             <<"/">>;
         <<$/, Path/binary>> ->
-            iolist_to_binary([
+            unicode:characters_to_binary([
                     $/,
-                    mochiweb_util:safe_relative_path(z_convert:to_list(Path)),
+                    mochiweb_util:safe_relative_path(unicode:characters_to_list(Path)),
                     $/
-                ])
+                ], utf8)
     end,
     {{true, z_context:abs_url(Location, Context)}, Context}.
 
@@ -243,12 +259,14 @@ check_resource(Context) ->
             Context
     end.
 
+bin(undefined) -> <<>>;
+bin(B) when is_binary(B) -> B;
+bin(L) -> unicode:characters_to_binary(L, utf8).
+
 check_resource_1(Context) ->
     Context1 = z_context:set_noindex_header(Context),
-    DispPath = cow_qs:urldecode(cowmachine_req:disp_path(Context1)),
-    SafePath = z_convert:to_binary(
-                    mochiweb_util:safe_relative_path(
-                        z_convert:to_list(DispPath))),
+    DispPath = bin(cow_qs:urldecode(cowmachine_req:disp_path(Context1))),
+    SafePath = bin(mochiweb_util:safe_relative_path(unicode:characters_to_list(DispPath, utf8))),
     Cached = case z_context:get(use_cache, Context, false) of
         true -> z_depcache:get(cache_key(SafePath), Context);
         false -> undefined
@@ -288,7 +306,7 @@ check_resource_1(Context) ->
                         ], Context);
                 {error, _Reason} ->
                     Dir = filename:join(Root, SafePath),
-                    AllowDirIndex = z_context:get(allow_directory_index, Context, false),
+                    AllowDirIndex = z_convert:to_bool(z_context:get(allow_directory_index, Context, false)),
                     case filelib:is_dir(Dir) andalso AllowDirIndex of
                         true ->
                             case last(DispPath) of
@@ -323,7 +341,6 @@ check_resource_1(Context) ->
                 ], Context)
     end.
 
-last(undefined) -> undefined;
 last(<<>>) -> undefined;
 last(B) when is_binary(B) -> binary:last(B).
 
@@ -423,19 +440,20 @@ directory_index_vars(FullPath, RelRoot, Context) ->
 
     Files = lists:sort(
                 fun fileinfo_cmp/2,
-                    lists:map(
-                        fun fileinfo/1,
-                        lists:sort(
-                            z_utils:wildcard("*", FullPath)
-                        )
+                lists:map(
+                    fun fileinfo/1,
+                    lists:sort(
+                        z_utils:wildcard("*", FullPath)
                     )
+                )
             ),
     [{basename, filename:basename(FullPath)},
      {files, UpFileEntry ++ Files}
     ].
 
 fileinfo(F) ->
-    fileinfo(F, filename:basename(F)).
+    F1 = bin(F),
+    fileinfo(F1, filename:basename(F1)).
 
 fileinfo(F, N) ->
     [{name, N},

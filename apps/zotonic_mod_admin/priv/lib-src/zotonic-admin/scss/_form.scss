@@ -1,0 +1,49 @@
+
+.form-field-error,
+.invalid {
+    color: #B94A48;
+}
+
+form.form-horizontal .z_validation_message {
+    margin-bottom: 0;
+}
+
+textarea,
+input {
+    &.form-field-error,
+    &.invalid {
+        background: #ffeeee;
+    }
+}
+
+// file input buttons have varying heights on different platforms
+input.form-control[type=file] {
+    height: auto;
+}
+
+// https://stackoverflow.com/a/29806043/457795
+// Create a gray placeholder for selects
+select:required:invalid {
+    color: gray;
+}
+
+option[value=""][disabled] {
+    display: none;
+}
+
+option {
+    color: black;
+}
+
+fieldset,
+.form-group {
+    > label,
+    > label.radio,
+    > label.checkbox {
+        > input[type="checkbox"],
+        > input[type="radio"] {
+            position: relative;
+            margin-left: 0;
+        }
+    }
+}

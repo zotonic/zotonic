@@ -139,33 +139,40 @@ is_visible(_, _, _Context) ->
 maybe_add_category_attrs(#{ category_id := undefined } = Map, _Context) ->
     {true, Map};
 maybe_add_category_attrs(#{ category_id := CatId } = Map, Context) ->
+    IsSeoNoIndexCat = z_convert:to_bool(m_rsc:p_no_acl(CatId, is_seo_noindex_cat, Context)),
     Map2 = case Map of
+        _ when IsSeoNoIndexCat ->
+            Map#{ priority => 0.0 };
         #{ changefreq := undefined } ->
             Freq = case m_rsc:p_no_acl(CatId, seo_sitemap_changefreq, Context) of
                 <<>> -> <<"weekly">>;
                 undefined -> <<"weekly">>;
                 CF -> CF
             end,
-            Map#{ changefreq := Freq };
+            Map#{ changefreq => Freq };
         _ ->
             Map
     end,
-    case Map2 of
+    Map3 = case Map2 of
         #{ priority := undefined } ->
             case m_rsc:p_no_acl(CatId, seo_sitemap_priority, Context) of
-                <<"0.0">> ->
-                    false;
                 undefined ->
-                    {true, Map2#{ priority := 0.5 }};
-                Prio ->
+                    Map2#{ priority => 0.5 };
+                CatPrio ->
                     try
-                        {true, Map2#{ priority := z_convert:to_float(Prio) }}
+                        Map2#{ priority => z_convert:to_float(CatPrio) }
                     catch
-                        _:_ -> {true, Map2}
+                        _:_ -> Map2
                     end
             end;
         _ ->
-            {true, Map2}
+            Map2
+    end,
+    case Map3 of
+        #{ priority := MPrio } when is_number(MPrio), MPrio < 0.1 ->
+            false;
+        _ ->
+            {true, Map3}
     end.
 
 
@@ -305,6 +312,7 @@ update_rsc(Id, Context) ->
     case m_rsc:exists(Id, AnonContext)
         andalso m_rsc:is_visible(Id, AnonContext)
         andalso not z_convert:to_bool( m_rsc:p_no_acl(Id, seo_noindex, AnonContext) )
+        andalso not is_redirect(Id, Context)
     of
         true ->
             Langs = case m_rsc:p_no_acl(Id, language, Context) of
@@ -356,20 +364,38 @@ update_rsc(Id, Context) ->
                     LastMod = m_rsc:p_no_acl(Id, modified, Context),
                     CatId = m_rsc:p_no_acl(Id, category_id, Context),
                     PubEnd = m_rsc:p_no_acl(Id, publication_end, Context),
-                    Prio = case m_rsc:p_no_acl(Id, page_path, Context) of
-                        <<"/">> -> 1.0;
-                        undefined -> undefined;
-                        <<>> -> undefined;
-                        _ -> 0.8
+                    IsCategory = m_rsc:is_a(Id, category, Context),
+                    Prio = case m_rsc:p_no_acl(Id, seo_sitemap_priority, Context) of
+                        undefined ->
+                            case m_rsc:p_no_acl(Id, page_path, Context) of
+                                <<"/">> -> 1.0;
+                                undefined -> undefined;
+                                <<>> -> undefined;
+                                _ -> 0.8
+                            end;
+                        SeoPrio when not IsCategory ->
+                            z_convert:to_float(SeoPrio);
+                        _ ->
+                            undefined
+                    end,
+                    Freq = if
+                        IsCategory -> undefined;
+                        true -> m_rsc:p_no_acl(Id, seo_sitemap_changefreq, Context)
                     end,
                     lists:foreach(
                         fun({Lang, Loc}) ->
                             z_db:q(
                                 "insert into seo_sitemap
-                                    (source, rsc_id, category_id, loc, lastmod, priority, publication_end, language)
+                                    (source, rsc_id, category_id, loc,
+                                     lastmod, priority, changefreq,
+                                     publication_end, language)
                                 values
-                                    ('rsc', $1, $2, $3, $4, $5, $6, $7)",
-                                [ Id, CatId, Loc, LastMod, Prio, PubEnd, Lang ],
+                                    ('rsc', $1, $2, $3, $4, $5, $6, $7, $8)",
+                                [
+                                  Id, CatId, Loc,
+                                  LastMod, Prio, Freq,
+                                  PubEnd, Lang
+                                ],
                                 Ctx)
                         end,
                         New),
@@ -381,14 +407,18 @@ update_rsc(Id, Context) ->
                                 update seo_sitemap
                                 set category_id = $1,
                                     lastmod = $2,
-                                    publication_end = $3,
+                                    priority = $3,
+                                    changefreq = $4,
+                                    publication_end = $5,
                                     modified = now()
-                                where rsc_id = $4
+                                where rsc_id = $6
                                   and source = 'rsc'
                                   and (   category_id <> $1
                                        or lastmod <> $2
-                                       or publication_end <> $3)",
-                                [ CatId, LastMod, PubEnd, Id ],
+                                       or COALESCE(priority, 2.0) <> COALESCE($3, 2.0)
+                                       or COALESCE(changefreq, 'x') <> COALESCE($4, 'x')
+                                       or publication_end <> $5)",
+                                [ CatId, LastMod, Prio, Freq, PubEnd, Id ],
                                 Ctx)
                     end,
                     ok
@@ -399,6 +429,15 @@ update_rsc(Id, Context) ->
             maybe_insert_update_task(Id, Context)
     end.
 
+is_redirect(Id, Context) ->
+    case m_rsc:p_no_acl(Id, website, Context) of
+        undefined ->
+            false;
+        <<>> ->
+            false;
+        _ ->
+            z_convert:to_bool(m_rsc:p_no_acl(Id, is_website_redirect, Context))
+    end.
 
 %% @doc Insert an update task for if the resource is not visible now but has a
 %% publication date in the future. The resource sitemap entries will be updated

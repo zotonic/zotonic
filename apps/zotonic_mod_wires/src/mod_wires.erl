@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2018-2020 Marc Worrell
+%% @copyright 2018-2023 Marc Worrell
 %% @doc Support for wires, actions, and transport.
+%% @end
 
-%% Copyright 2018-2020 Marc Worrell
+%% Copyright 2018-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -63,7 +64,14 @@ observe_page_actions(#page_actions{ actions = Actions }, Context) ->
         type := publish,
         payload := Payload,
         topic := [ _, Delegate ]
-    },
+    } = Msg,
     Context) ->
+    z_context:logger_md(Context),
     z_context:q_upload_keepalive(true, Context),
-    z_transport:transport(Delegate, Payload, Context).
+    z_transport:transport(Delegate, Payload, Context),
+    maybe_send_ack(Msg, Context).
+
+maybe_send_ack(#{ properties := #{ response_topic := RespTopic }}, Context) when is_binary(RespTopic); is_list(RespTopic) ->
+    z_mqtt:publish(RespTopic, true, Context);
+maybe_send_ack(_Msg, _Context) ->
+    ok.

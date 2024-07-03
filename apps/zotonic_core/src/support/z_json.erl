@@ -1,8 +1,9 @@
 %% @author Marc Worrell
-%% @copyright 2012-2021 Marc Worrell
+%% @copyright 2012-2023 Marc Worrell
 %% @doc JSON support routines.
+%% @end
 
-%% Copyright 2012-2021 Marc Worrell
+%% Copyright 2012-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,10 +26,11 @@
     json_escape/1
 ]).
 
-%% @doc Encode an Erlang term to JSON.
+%% @doc Encode an Erlang term to JSON. Ensure all '/' characters in the JSON
+%% are escaped for save embedding the generated JSON in HTML text.
 -spec encode(binary() | map() | list() | undefined) -> binary().
 encode(Erlang) ->
-    jsxrecord:encode(Erlang).
+    binary:replace(jsxrecord:encode(Erlang), <<"/">>, <<"\\/">>, [ global ]).
 
 %% @doc Decode a JSON binary to an Erlang term.
 -spec decode(binary() | undefined) -> term().

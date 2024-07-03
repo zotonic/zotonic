@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
+%% @copyright 2010-2023 Marc Worrell
 %% @doc 'append' filter, concatenate two values as lists.
+%% @end
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,14 +20,15 @@
 -module(filter_append).
 -export([append/3]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 append(Input, undefined, _Context) ->
     Input;
 append(undefined, Append, _Context) ->
     Append;
-append({trans, _} = Tr, Append, Context) ->
+append(#trans{} = Tr, Append, Context) ->
     append(z_trans:lookup_fallback(Tr, Context), Append, Context);
-append(Input, {trans, _} = Tr, Context) ->
+append(Input, #trans{} = Tr, Context) ->
     append(Input, z_trans:lookup_fallback(Tr, Context), Context);
 append(Input, Append, _Context) when is_binary(Input), is_binary(Append) ->
     <<Input/binary, Append/binary>>;

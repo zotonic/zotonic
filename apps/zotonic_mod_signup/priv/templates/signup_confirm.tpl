@@ -20,7 +20,7 @@
     {% else %}
         <h1>{_ Confirm my account _}</h1>
 
-        <p>{_ When you signed up, you received an email with a link but it looks like something went wrong. _}</p>
+        <p>{_ When you created your account, you received an email with a link but it looks like something went wrong. _}</p>
     {% endif %}
 
 {% endblock %}

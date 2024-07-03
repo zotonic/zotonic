@@ -42,6 +42,10 @@
         </div>
     </div>
 
+    <p class="help-block">
+        {_ Only the enabled email addresses are used, the subscriber connections are not used and are not affected. _}
+    </p>
+
     <div class="modal-footer">
 	    {% button class="btn btn-default" text=_"Cancel" action={dialog_close} tag="a" %}
 	    {% button class="btn btn-primary" type="submit" text=_"Perform operation" %}

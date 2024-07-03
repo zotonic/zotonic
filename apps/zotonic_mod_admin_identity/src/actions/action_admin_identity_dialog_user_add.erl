@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009 Marc Worrell
 %% Date: 2009-07-13
-%% @doc Add a complete new person and make it into an user.
+%% @doc Add a complete new person and make it into a user.
 
 %% Copyright 2009 Marc Worrell
 %%
@@ -36,7 +36,7 @@ render_action(TriggerId, TargetId, Args, Context) ->
 
 
 event(#postback{message={dialog_user_add, OnSuccess}}, Context) ->
-    case z_acl:is_allowed(use, mod_admin_identity, Context) of
+    case not z_acl:is_read_only(Context) andalso z_acl:is_allowed(use, mod_admin_identity, Context) of
         true ->
             Vars = [
                 {on_success, OnSuccess}
@@ -49,7 +49,7 @@ event(#postback{message={dialog_user_add, OnSuccess}}, Context) ->
 %% @doc Create user resource and a password identity
 %% @spec event(Event, Context1) -> Context2
 event(#submit{message={user_add, Args}}, Context) ->
-    case z_acl:is_allowed(use, mod_admin_identity, Context) of
+    case not z_acl:is_read_only(Context) andalso z_acl:is_allowed(use, mod_admin_identity, Context) of
         true ->
             Username = z_context:get_q_validated(<<"new_username">>, Context),
             Password = z_context:get_q_validated(<<"new_password">>, Context),
@@ -72,39 +72,37 @@ event(#submit{message={user_add, Args}}, Context) ->
                 case m_rsc:insert(PersonProps, Ctx) of
                     {ok, PersonId} ->
                         case m_identity:set_username_pw(PersonId, Username, Password, Ctx) of
-                            ok -> ok;
-                            {error, PWReason} -> throw({error, PWReason})
-                        end,
-                        case z_convert:to_bool(z_context:get_q(<<"send_welcome">>, Context)) of
-                            true ->
-                                Vars = [
-                                    {id, PersonId},
-                                    {username, Username}
-                                ],
-                                z_email:send_render(Email, "email_admin_new_user.tpl", Vars, Context);
-                            false ->
-                                nop
-                        end,
-                        {ok, PersonId};
-                    {error, InsReason} ->
-                        throw({error, InsReason})
+                            ok -> {ok, PersonId};
+                            {error, _} = Error -> Error
+                        end;
+                    {error, _} = Error ->
+                        Error
                 end
             end,
 
             case z_db:transaction(F, Context) of
-                {ok, _PersonId} ->
+                {ok, NewPersonId} ->
+                    case z_convert:to_bool(z_context:get_q(<<"send_welcome">>, Context)) of
+                        true ->
+                            ContextUser = z_acl:logon(NewPersonId, Context),
+                            IsAllowedAdmin = z_acl:is_allowed(use, mod_admin, ContextUser),
+                            Vars = [
+                                {id, NewPersonId},
+                                {username, Username},
+                                {is_allowed_use_mod_admin, IsAllowedAdmin}
+                            ],
+                            z_email:send_render(Email, "email_admin_new_user.tpl", Vars, Context);
+                        false ->
+                            ok
+                    end,
                     Context1 = z_render:growl(["Created the user ",z_html:escape(Title), "."], Context),
                     z_render:wire(proplists:get_all_values(on_success, Args), Context1);
-                {rollback, {Error, _CallStack}} ->
-                    case Error of
-                        {error, eexist} ->
-                            z_render:growl_error(?__("Duplicate username, please choose another username.", Context), Context);
-                        {error, eacces} ->
-                            z_render:growl_error(?__("You are not allowed to create the person page.", Context), Context);
-                        _OtherError ->
-                            io:format("~p", [ _CallStack ]),
-                            z_render:growl_error(?__("Could not create the user. Sorry.", Context), Context)
-                    end
+                {error, eexist} ->
+                    z_render:growl_error(?__("Duplicate username, please choose another username.", Context), Context);
+                {error, eacces} ->
+                    z_render:growl_error(?__("You are not allowed to create the person page.", Context), Context);
+                {error, _} ->
+                    z_render:growl_error(?__("Could not create the user. Sorry.", Context), Context)
             end;
         false ->
             z_render:growl_error(?__("Only administrators can add users.", Context), Context)

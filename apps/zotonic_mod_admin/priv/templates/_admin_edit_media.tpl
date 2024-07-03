@@ -30,6 +30,8 @@
         </span>
     </p>
 
+    <hr>
+
     <div class="admin-edit-media" id="rsc-image" data-original-width="{{ medium.width }}">
         {% if medium.width < 597 and medium.height < 597 %}
             {% media medium mediaclass="admin-media-cropcenter" %}
@@ -38,13 +40,17 @@
         {% endif %}
     </div>
 
+    <hr>
+
+    {% include "_edit_medium_language.tpl" %}
+
     <div class="form-group clearfix">
         <p class="text-right">
             {% all include "_admin_edit_media_button.tpl" %}
 
             {% if medium.size > 0 %}
                 <a target="_blank" class="btn btn-default" href="{% url media_inline id=id %}" class="button">{_ View _}</a>
-                <a target="_blank" class="btn btn-default" href="{% url media_attachment id=id %}" class="button">{_ Download _}</a>
+                <a target="_blank" class="btn btn-default" href="{% url media_attachment id=id %}" class="button"download>{_ Download _}</a>
                 <input type="text" style="position: absolute; top:0; left:-9999px;" id="url-media-download" value="{% url media_attachment id=id absolute_url %}">
                 {% button
                     text=_"Copy download link"

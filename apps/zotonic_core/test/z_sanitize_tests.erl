@@ -3,16 +3,25 @@
 -include_lib("eunit/include/eunit.hrl").
 
 youtube_test() ->
-	Context = z_context:new(zotonic_site_testsandbox),
-	In  = <<"<iframe width=\"560\" height=\"315\" src=\"//www.youtube.com/embed/2RXp3r2gb3A\" frameborder=\"0\" allowfullscreen></iframe>">>,
-	Out = <<"<iframe src=\"https://www.youtube.com/embed/2RXp3r2gb3A\" width=\"560\" height=\"315\" frameborder=\"0\" allowfullscreen=\"allowfullscreen\"></iframe>">>,
-	?assertEqual(Out, z_sanitize:html(In, Context)).
+    Context = z_context:new(zotonic_site_testsandbox),
+    In  = <<"<iframe width=\"560\" height=\"315\" src=\"//www.youtube.com/embed/2RXp3r2gb3A\" frameborder=\"0\" allowfullscreen></iframe>">>,
+    Out = <<
+        "<iframe src=\"https://www.youtube.com/embed/2RXp3r2gb3A\" "
+        "sandbox=\"allow-popups allow-scripts allow-same-origin\" "
+        "width=\"560\" height=\"315\" "
+        "frameborder=\"0\" allowfullscreen=\"allowfullscreen\">"
+        "</iframe>">>,
+    ?assertEqual(Out, z_sanitize:html(In, Context)).
 
 youtube_object_test() ->
-	Context = z_context:new(zotonic_site_testsandbox),
-	In  = <<"<object data=\"http://www.youtube.com/embed/dQw4w9WgXcQ\" width=\"560\" height=\"315\"></object>">>,
-	Out = <<"<iframe width=\"560\" height=\"315\" allowfullscreen=\"1\" frameborder=\"0\" src=\"https://www.youtube.com/embed/dQw4w9WgXcQ\"></iframe>">>,
-	?assertEqual(Out, z_sanitize:html(In, Context)).
+    Context = z_context:new(zotonic_site_testsandbox),
+    In  = <<"<object data=\"http://www.youtube.com/embed/dQw4w9WgXcQ\" width=\"560\" height=\"315\"></object>">>,
+    Out = <<
+        "<iframe width=\"560\" height=\"315\" allowfullscreen=\"1\" frameborder=\"0\" "
+        "sandbox=\"allow-popups allow-scripts allow-same-origin\" "
+        "src=\"https://www.youtube.com/embed/dQw4w9WgXcQ\">"
+        "</iframe>">>,
+    ?assertEqual(Out, z_sanitize:html(In, Context)).
 
 mso1_test() ->
     Context = z_context:new(zotonic_site_testsandbox),

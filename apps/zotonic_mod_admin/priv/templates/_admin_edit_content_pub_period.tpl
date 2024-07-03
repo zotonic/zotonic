@@ -13,13 +13,17 @@
 {% block widget_id %}sidebar-pub-period{% endblock %}
 
 {% block widget_content %}
+<p class="help-block" {% if not id.tz or id.tz == m.req.timezone %}style="display:none"{% endif %}>
+    <i class="fa fa-exclamation-triangle"></i>
+    {_ Showing dates in _}: <b class="rsc-timezone">{{ id.tz|escape }}</b>
+</p>
 <fieldset>
     <div class="row">
         <div class="col-sm-6">
             <div class="form-group">
                 <label class="control-label">{_ Visible from _}</label>
                 <div>
-                    {% include "_edit_date.tpl" date=id.publication_start name="publication_start" is_end=0 is_editable=id.is_editable %}
+                    {% include "_edit_date.tpl" date=id.publication_start name="publication_start" is_end=0 is_editable=id.is_editable timezone=id.tz %}
                 </div>
             </div>
         </div>
@@ -27,7 +31,7 @@
             <div class="form-group">
                 <label class="control-label">{_ Visible till _}</label>
                 <div>
-                    {% include "_edit_date.tpl" date=id.publication_end name="publication_end" is_end=1 is_editable=id.is_editable %}
+                    {% include "_edit_date.tpl" date=id.publication_end name="publication_end" is_end=1 is_editable=id.is_editable timezone=id.tz %}
                 </div>
             </div>
         </div>
@@ -36,7 +40,7 @@
     <div class="form-group">
         <label class="control-label">{_ Publication date of original article _}</label>
         <div>
-            {% include "_edit_date.tpl" date=id.org_pubdate name="org_pubdate" is_end=0 is_editable=id.is_editable %}
+            {% include "_edit_date.tpl" date=id.org_pubdate name="org_pubdate" is_end=0 is_editable=id.is_editable timezone=id.tz %}
         </div>
     </div>
 </fieldset>

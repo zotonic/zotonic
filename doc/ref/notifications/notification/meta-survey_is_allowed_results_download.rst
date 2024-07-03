@@ -13,4 +13,4 @@ Return:
     ``true``, ``false`` or ``undefined``
 
 ``#survey_is_allowed_results_download{}`` properties:
-    - id: ``unknown``
+    - id: ``m_rsc:resource_id()``

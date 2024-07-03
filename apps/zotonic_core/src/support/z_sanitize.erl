@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014 Marc Worrell
+%% @copyright 2014-2024 Marc Worrell
 %% @doc Interface to z_html sanitizers, sets options and adds embed sanitization.
+%% @end
 
-%% Copyright 2014 Marc Worrell
+%% Copyright 2014-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -22,6 +23,7 @@
 
 -export([
     uri/1,
+    default_sandbox_attr/1,
     ensure_safe_js_callback/1,
     escape_props/1,
     escape_props/2,
@@ -31,12 +33,26 @@
     escape_link/2,
     html/1,
     html/2
-    ]).
+]).
 
 -include_lib("zotonic.hrl").
 
+
+% Youtube needs at least: allow-popups allow-same-origin allow-scripts
+% See: https://csplite.com/csp/test186/
+-define(IFRAME_SANDBOX, <<"allow-popups allow-scripts allow-same-origin">>).
+
+
 uri(Uri) ->
     z_html:sanitize_uri(Uri).
+
+
+default_sandbox_attr(Context) ->
+    case m_config:get_value(site, html_iframe_sandbox, Context) of
+        undefined -> ?IFRAME_SANDBOX;
+        <<>> -> ?IFRAME_SANDBOX;
+        Sb -> Sb
+    end.
 
 %% @doc Escape a Javascript callback function. Crash if not a safe callback function name.
 -spec ensure_safe_js_callback( string() | binary() ) -> binary().
@@ -104,11 +120,13 @@ sanitize_element_1({<<"object">>, _Props, Inner}, _Stack, _Opts, _Context) ->
     Inner;
 sanitize_element_1({<<"script">>, Props, _Inner}, _Stack, _Opts, Context) ->
     sanitize_script(Props, Context);
-sanitize_element_1(Element, Stack, Opts, _Context) ->
-    sanitize_element_opts(Element, Stack, Opts).
+sanitize_element_1(Element, Stack, Opts, Context) ->
+    sanitize_element_opts(Element, Stack, Opts, Context).
 
+sanitize_element_opts(Element, Stack, Opts) ->
+    sanitize_element_opts(Element, Stack, Opts, undefined).
 
-sanitize_element_opts({<<"a">>, Attrs, Inner} = Element, _Stack, _Opts) ->
+sanitize_element_opts({<<"a">>, Attrs, Inner} = Element, _Stack, _Opts, _Context) ->
     case proplists:is_defined(<<"target">>, Attrs) of
         true ->
             Attrs1 = [ Attr || Attr = {K,_} <- Attrs, K =/= <<"rel">> ],
@@ -117,34 +135,55 @@ sanitize_element_opts({<<"a">>, Attrs, Inner} = Element, _Stack, _Opts) ->
         false ->
             Element
     end;
-sanitize_element_opts({comment, <<" [", _/binary>> = Comment} = Element, _Stack, _Opts) ->
+sanitize_element_opts({comment, <<" [", _/binary>> = Comment} = Element, _Stack, _Opts, _Context) ->
     % Conditionals by Microsoft Word: <!-- [if (..)] (..) [endif]-->
     case binary:last(Comment) of
         $] -> <<>>;
         _ -> Element
     end;
-sanitize_element_opts({comment, <<"StartFragment">>}, _Stack, _Opts) ->
+sanitize_element_opts({comment, <<"[", _/binary>>}, _Stack, _Opts, _Context) ->
+    % Conditional comment, as used for Outlook <!--[if mso]>..<![endif]-->
+    <<>>;
+sanitize_element_opts({comment, <<"<![">>}, _Stack, _Opts, _Context) ->
+    % End of conditional comment, as used for Outlook <!--[if !mso]><!-->...<!--<![endif]-->
+    <<>>;
+sanitize_element_opts({comment, <<"StartFragment">>}, _Stack, _Opts, _Context) ->
     % Inserted by Microsoft Word: <!--StartFragment-->
     <<>>;
-sanitize_element_opts({comment, <<"EndFragment">>}, _Stack, _Opts) ->
+sanitize_element_opts({comment, <<"EndFragment">>}, _Stack, _Opts, _Context) ->
     % Inserted by Microsoft Word: <!--EndFragment-->
     <<>>;
-sanitize_element_opts({comment, <<" z-media ", ZMedia/binary>>}, _Stack, _Opts) ->
+sanitize_element_opts({comment, <<" z-media ", ZMedia/binary>>}, _Stack, _Opts, Context) ->
     % The z-media tag is very strict with spaces
     try
         [Id, Opts] = binary:split(ZMedia, <<" {">>),
         Opts1 = sanitize_z_media(<<${, Opts/binary>>),
         Id1 = z_string:to_name(z_string:trim(Id)),
-        {comment, <<" z-media ", Id1/binary, " ", Opts1/binary, " ">>}
+        case Context =:= undefined orelse z_acl:rsc_visible(Id1, Context) of
+            true ->
+                {comment, <<" z-media ", Id1/binary, " ", Opts1/binary, " ">>};
+            false ->
+                ?LOG_NOTICE(#{
+                    text => <<"Dropping invisibile media from z-media">>,
+                    in => zotonic_core,
+                    zmedia => ZMedia,
+                    rsc_id => Id1
+                }),
+                <<" ">>
+        end
     catch
         _:_ ->
-            ?LOG_NOTICE("Dropping illegal z-media tag: ~p", [ZMedia]),
-            {comment, <<" ">>}
+            ?LOG_NOTICE(#{
+                text => <<"Dropping illegal z-media tag">>,
+                in => zotonic_core,
+                zmedia => ZMedia
+            }),
+            <<" ">>
     end;
-sanitize_element_opts({Tag, Attrs, Inner}, _Stack, _Opts) ->
+sanitize_element_opts({Tag, Attrs, Inner}, _Stack, _Opts, _Context) ->
     Attrs1 = cleanup_element_attrs(Attrs),
     {Tag, Attrs1, Inner};
-sanitize_element_opts(Element, _Stack, _Opts) ->
+sanitize_element_opts(Element, _Stack, _Opts, _Context) ->
     Element.
 
 cleanup_element_attrs(Attrs) ->
@@ -209,6 +248,7 @@ sanitize_z_media_arg(<<"align">>, <<"right">>) -> #{<<"align">> => <<"right">>};
 sanitize_z_media_arg(<<"align">>, _) -> #{<<"align">> => <<"block">>};
 sanitize_z_media_arg(<<"crop">>, Crop) -> #{<<"crop">> => z_convert:to_bool(Crop)};
 sanitize_z_media_arg(<<"link">>, Link) -> #{<<"link">> => z_convert:to_bool(Link)};
+sanitize_z_media_arg(<<"link_new">>, LinkNew) -> #{<<"link_new">> => z_convert:to_bool(LinkNew)};
 sanitize_z_media_arg(<<"link_url">>, LinkUrl) ->
     #{<<"link_url">> => z_html:sanitize_uri(z_string:trim(LinkUrl))};
 sanitize_z_media_arg(<<"caption">>, Caption) ->
@@ -224,7 +264,11 @@ sanitize_script(Props, Context) ->
         {ok, Url} ->
             {<<"script">>, [{<<"src">>,Url} | proplists:delete(<<"src">>, Props)], []};
         false ->
-            ?LOG_NOTICE("Dropped script with url ~p", [Src]),
+            ?LOG_NOTICE(#{
+                text => <<"Dropped script with url">>,
+                in => zotonic_core,
+                url => Src
+            }),
             <<>>
     end.
 
@@ -232,77 +276,87 @@ sanitize_iframe(Props, Context) ->
     Src = proplists:get_value(<<"src">>, Props),
     case to_allowed(Src, Context) of
         {ok, Url} ->
-            {<<"iframe">>, [{<<"src">>,Url} | proplists:delete(<<"src">>, Props)], []};
+            {<<"iframe">>, [
+                {<<"src">>,Url},
+                {<<"sandbox">>, default_sandbox_attr(Context)}
+                | proplists:delete(<<"src">>,
+                    proplists:delete(<<"sandbox">>, Props))], []};
         false ->
-            ?LOG_NOTICE("Dropped iframe url ~p", [Src]),
+            ?LOG_NOTICE(#{
+                text => <<"Dropped iframe url">>,
+                in => zotonic_core,
+                url => Src
+            }),
             <<>>
     end.
 
 sanitize_object(Props, Context) ->
     Src = proplists:get_value(<<"data">>, Props),
-    case maybe_embed2iframe(Src, Props) of
-        {ok, NewElement} ->
-            NewElement;
+    case maybe_youtube(Src, Props, Context) of
+        {ok, YoutubeIframe} ->
+            YoutubeIframe;
         false ->
             case to_allowed(Src, Context) of
                 {ok, Url} ->
                     {<<"embed">>, [{<<"src">>,Url} | proplists:delete(<<"data">>, Props)], []};
                 false ->
-                    ?LOG_NOTICE("Dropped object url ~p", [Src]),
+                    ?LOG_NOTICE(#{
+                        text => <<"Dropped object url">>,
+                        in => zotonic_core,
+                        url => Src
+                    }),
                     <<>>
             end
     end.
 
 sanitize_embed(Props, Context) ->
     Src = proplists:get_value(<<"src">>, Props),
-    case maybe_embed2iframe(Src, Props) of
-        {ok, NewElement} ->
-            NewElement;
+    case maybe_youtube(Src, Props, Context) of
+        {ok, YoutubeIframe} ->
+            YoutubeIframe;
         false ->
             case to_allowed(Src, Context) of
                 {ok, Url} ->
                     {<<"embed">>, [{<<"src">>,Url} | proplists:delete(<<"src">>, Props)], []};
                 false ->
-                    ?LOG_NOTICE("Dropped embed url ~p", [Src]),
+                    ?LOG_NOTICE(#{
+                        text => <<"Dropped embed url">>,
+                        in => zotonic_core,
+                        url => Src
+                    }),
                     <<>>
             end
     end.
 
-maybe_embed2iframe(undefined, _Props) ->
+maybe_youtube(undefined, _Props, _Context) ->
     false;
-maybe_embed2iframe(Url, Props) ->
+maybe_youtube(Url, Props, Context) ->
     case binary:split(Url, <<"//">>) of
         [_,Loc] ->
-            maybe_embed2iframe_1(Loc, Props);
+            maybe_youtube_1(Loc, Props, Context);
         _ ->
             false
     end.
 
-maybe_embed2iframe_1(<<"www.youtube.com/v/", Rest/binary>>, Props) ->
+maybe_youtube_1(<<"www.youtube.com/v/", Rest/binary>>, Props, Context) ->
     [VideoCode|_] = binary:split(hd(binary:split(Rest, <<"?">>)), <<"&">>),
-    make_iframe(<<"https://www.youtube.com/embed/", VideoCode/binary>>, Props);
-maybe_embed2iframe_1(<<"www.youtube.com/embed/", _Rest/binary>> = EmbedUrl, Props) ->
-    make_iframe(<<"https://",EmbedUrl/binary>>, Props);
-maybe_embed2iframe_1(_, _Props) ->
+    make_iframe(<<"https://www.youtube.com/embed/", VideoCode/binary>>, Props, Context);
+maybe_youtube_1(<<"www.youtube.com/embed/", _Rest/binary>> = EmbedUrl, Props, Context) ->
+    make_iframe(<<"https://",EmbedUrl/binary>>, Props, Context);
+maybe_youtube_1(_, _Props, _Context) ->
     false.
 
-make_iframe(Url, Props) ->
+make_iframe(Url, Props, Context) ->
     {ok, {<<"iframe">>,
         [
             {<<"width">>, proplists:get_value(<<"width">>, Props, <<"480">>)},
             {<<"height">>, proplists:get_value(<<"height">>, Props, <<"360">>)},
             {<<"allowfullscreen">>, proplists:get_value(<<"allowfullscreen">>, Props, <<"1">>)},
             {<<"frameborder">>, <<"0">>},
-            {<<"src">>, maybe_append_flashvars(Url, proplists:get_value(<<"flashvars">>, Props) )}
+            {<<"sandbox">>, default_sandbox_attr(Context)},
+            {<<"src">>, Url}
         ],
         []}}.
-
-maybe_append_flashvars(Url, undefined) ->
-    Url;
-maybe_append_flashvars(Url, <<>>) ->
-    Url;
-maybe_append_flashvars(Url, FlashVars) ->
-    iolist_to_binary([ Url, $?, z_convert:to_binary(z_url:url_path_encode(FlashVars)) ]).
 
 to_allowed(undefined, _Context) ->
     false;
@@ -366,6 +420,7 @@ allowlist(<<"vk.com/video_ext",  _/binary>> = Url) -> {ok, Url};
 allowlist(<<"platform.twitter.com/",  _/binary>> = Url) -> {ok, Url};
 allowlist(<<"prezi.com/v/", _/binary>> = Url) -> {ok, Url};
 allowlist(<<"prezi.com/embed/", _/binary>> = Url) -> {ok, Url};
+allowlist(<<"open.spotify.com/embed/", _/binary>> = Url) -> {ok, Url};
 allowlist(Url) ->
     case lists:dropwhile(fun(Re) ->
                             re:run(Url, Re) =:= nomatch

@@ -38,6 +38,7 @@ toc(V, Context) ->
 parse_toc(<<>>, _Level, _Path, Toc, Html) ->
     {Toc, Html};
 parse_toc(<<"<h", N, Rest/binary>>, Lvl, Path, Toc, Html) when N >= $2, N =< $6 ->
+    Rest1 = drop_rest_tag(Rest),
     if
         N =< Lvl ->
             % Pop Lvl - N items from prefix
@@ -46,13 +47,13 @@ parse_toc(<<"<h", N, Rest/binary>>, Lvl, Path, Toc, Html) when N >= $2, N =< $6 
             Count1 = Count+1,
             Path2 = [ Count1 | Path1 ],
             Html1 = <<Html/binary, "</div><div id=\"", (prefix_id(Path2))/binary, "\"><h", N>>,
-            Toc1 = [ {Path2, header_text(Rest)} | Toc ],
+            Toc1 = [ {Path2, header_text(Rest1)} | Toc ],
             parse_toc(Rest, N, Path2, Toc1, Html1);
         N > Lvl ->
             % Push items to prefix
             Path1 = push(N - Lvl, Path),
             Html1 = <<Html/binary, "</div><div id=\"", (prefix_id(Path1))/binary, "\"><h", N>>,
-            Toc1 = [ {Path1, header_text(Rest)} | Toc ],
+            Toc1 = [ {Path1, header_text(Rest1)} | Toc ],
             parse_toc(Rest, N, Path1, Toc1, Html1)
     end;
 parse_toc(<<C/utf8, Rest/binary>>, Lvl, Prefix, Toc, Html) ->
@@ -89,6 +90,14 @@ nested([ {T, Text} | Ts ] = TTs, Depth, Acc) ->
         TLen < Depth ->
             {lists:reverse(Acc), TTs}
     end.
+
+drop_rest_tag(<<>>) ->
+    <<>>;
+drop_rest_tag(<<$>, B/binary>>) ->
+    B;
+drop_rest_tag(<<_, B/binary>>) ->
+    drop_rest_tag(B).
+
 
 header_text(B) ->
     z_string:trim(z_html:strip(header_text(B, <<>>))).

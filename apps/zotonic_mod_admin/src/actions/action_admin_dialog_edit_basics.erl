@@ -33,14 +33,15 @@ render_action(TriggerId, TargetId, Args, Context) ->
     RscId = proplists:get_value(id, Args),
     Template = proplists:get_value(template, Args),
     Actions = proplists:get_all_values(action, Args),
-    Postback = {edit_basics, RscId, EdgeId, Template, Actions, Callback},
+    Level = proplists:get_value(level, Args, 0),
+    Postback = {edit_basics, RscId, EdgeId, Template, Level, Actions, Callback},
     {PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
     {PostbackMsgJS, Context}.
 
 
 %% @doc Fill the dialog with the edit basics form. The form will be posted back to this module.
 %% @spec event(Event, Context1) -> Context2
-event(#postback{message={edit_basics, RscId, EdgeId, Template, Actions, Callback}, target=TargetId}, Context) ->
+event(#postback{message={edit_basics, RscId, EdgeId, Template, Level, Actions, Callback}, target=TargetId}, Context) ->
     ObjectId = case RscId of
                     undefined ->
                         case EdgeId of
@@ -63,7 +64,8 @@ event(#postback{message={edit_basics, RscId, EdgeId, Template, Actions, Callback
         {is_update, z_convert:to_bool(z_context:get_q(<<"is_update">>, Context))},
         {actions, Actions},
         {callback, Callback},
-        {center, 0}
+        {center, 0},
+        {level, Level}
     ],
     Title = case m_rsc:p(ObjectId, title, Context) of
         undefined -> ?__("Untitled", Context);

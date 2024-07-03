@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2021 Marc Worrell
+%% @copyright 2011-2024 Marc Worrell
 %% @doc Handle received e-mail.
+%% @end
 
-%% Copyright 2011-2021 Marc Worrell
+%% Copyright 2011-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,6 +26,7 @@
 ]).
 
 -export([
+    parse_email/4,
     parse_file/1
 ]).
 
@@ -57,8 +59,15 @@ received(Recipient, ParsedEmail,
          Body, Data) ->
     case get_site(Recipient) of
         {ok, {LocalPart, LocalTags, Domain, Site}} ->
-            ?LOG_NOTICE("SMTP received email for <~s>, mapped to ~p",
-                       [ Recipient, {LocalPart, LocalTags, Domain, Site} ]),
+            ?LOG_INFO(#{
+                text => <<"SMTP received email">>,
+                in => zotonic_listen_smtp,
+                recipient => Recipient,
+                localpart => LocalPart,
+                localtags => LocalTags,
+                domain => Domain,
+                site => Site
+            }),
             Context = z_context:new(Site),
             z_notifier:notify(
                 #zlog{
@@ -93,35 +102,77 @@ received(Recipient, ParsedEmail,
                   },
             case z_notifier:first(Email1, Context) of
                 {ok, MsgId} when is_binary(MsgId) ->
-                    ?LOG_NOTICE("SMTP received email for <~s>, handled as ~p",
-                               [ Recipient, MsgId ]),
+                    ?LOG_INFO(#{
+                        text => <<"SMTP received email handled">>,
+                        in => zotonic_listen_smtp,
+                        result => ok,
+                        recipient => Recipient,
+                        message_id => MsgId
+                    }),
                     {ok, MsgId};
                 {ok, Other} ->
-                    ?LOG_NOTICE("SMTP received email for <~s>, handled as ~p",
-                               [ Recipient, Other ]),
+                    ?LOG_INFO(#{
+                        text => <<"SMTP received email handled">>,
+                        in => zotonic_listen_smtp,
+                        result => ok,
+                        recipient => Recipient,
+                        message_id => Other
+                    }),
                     {ok, undefined};
                 ok ->
-                    ?LOG_NOTICE("SMTP received email for <~s>, handled as undefined",
-                               [ Recipient ]),
+                    ?LOG_INFO(#{
+                        text => <<"SMTP received email handled">>,
+                        in => zotonic_listen_smtp,
+                        result => ok,
+                        recipient => Recipient,
+                        message_id => undefined
+                    }),
                     {ok, undefined};
                 {error, Reason} = Error ->
-                    ?LOG_WARNING("SMTP received email for <~s>, handler returned error ~p",
-                               [ Recipient, Reason ]),
+                    ?LOG_WARNING(#{
+                        text => <<"SMTP received email, handler error">>,
+                        in => zotonic_listen_smtp,
+                        result => error,
+                        reason => Reason,
+                        recipient => Recipient
+                    }),
                     Error;
                 undefined ->
-                    ?LOG_WARNING("SMTP received email for <~s>, unhandled assuming unknown recipient",
-                               [ Recipient ]),
+                    ?LOG_WARNING(#{
+                        text => <<"SMTP received email, unhandled assuming unknown recipient">>,
+                        in => zotonic_listen_smtp,
+                        result => error,
+                        reason => unknown_recipient,
+                        recipient => Recipient
+                    }),
                     {error, unknown_recipient};
                 Other ->
-                    ?LOG_WARNING("SMTP received email for <~s>, unexpected return value ~p",
-                               [ Recipient, Other ]),
+                    ?LOG_WARNING(#{
+                        text => <<"SMTP received email, unexpected return value">>,
+                        in => zotonic_listen_smtp,
+                        result => error,
+                        reason => Other,
+                        recipient => Recipient
+                    }),
                     {ok, Other}
             end;
         {error, unknown_host} ->
-            ?LOG_WARNING("SMTP dropping email, unknown host for recipient: ~p", [Recipient]),
+            ?LOG_WARNING(#{
+                text => <<"SMTP received email, dropped">>,
+                in => zotonic_listen_smtp,
+                result => error,
+                reason => unknown_host,
+                recipient => Recipient
+            }),
             {error, unknown_host};
         {error, not_running} ->
-            ?LOG_NOTICE("SMTP delaying email, host for recipient is not up: ~p", [Recipient]),
+            ?LOG_NOTICE(#{
+                text => <<"SMTP received email, host for recipient is not up">>,
+                in => zotonic_listen_smtp,
+                result => warning,
+                reason => not_running,
+                recipient => Recipient
+            }),
             {error, not_running}
     end.
 
@@ -155,10 +206,48 @@ sanitize_utf8(S) ->
 
 %% @doc Parse a file using the html/text parse routines. This is used for testing
 parse_file(Filename) ->
-    {ok, Data} = file:read_file(Filename),
-    {Type, Subtype, Headers, Params, Body} = mimemail:decode(Data),
-    parse_email({Type,Subtype}, Headers, Params, Body).
+    case file:read_file(Filename) of
+        {ok, Data} ->
+            case decode(Data) of
+                {ok, {Type, Subtype, Headers, Params, Body}} ->
+                    LHeaders = lowercase_headers(Headers),
+                    ParsedEmail = parse_email({Type,Subtype}, Headers, Params, Body),
+                    From = fix_email(proplists:get_value(<<"from">>, LHeaders)),
+                    To = fix_email(proplists:get_value(<<"to">>, LHeaders)),
+                    ParsedEmail1 = generate_text(generate_html(ParsedEmail)),
+                    ParsedEmail2 = ParsedEmail1#email{
+                         subject = sanitize_utf8(proplists:get_value(<<"Subject">>, Headers)),
+                         headers = LHeaders,
+                         to = To,
+                         body = Body,
+                         from = sanitize_utf8(From),
+                         html = sanitize_utf8(ParsedEmail1#email.html),
+                         text = sanitize_utf8(ParsedEmail1#email.text)
+                    },
+                    {ok, ParsedEmail2};
+                {error, _} = Error ->
+                    Error
+            end;
+        {error, _} = Error ->
+            Error
+    end.
 
+decode(Data) ->
+    try
+        {ok, mimemail:decode(Data)}
+    catch
+        Type:Reason ->
+            {error, {Type,Reason}}
+    end.
+
+fix_email(undefined) ->
+    <<"nobody@example.com">>;
+fix_email(Email) ->
+    % Fix illegal addresses like "k..allen@enron.com"
+    case binary:replace(Email, <<"..">>, <<".">>, [ global ]) of
+        Email -> Email;
+        E1 -> fix_email(E1)
+    end.
 
 %% @doc Parse an #email_received to a sanitized #email try to make
 %% sense of all parts.

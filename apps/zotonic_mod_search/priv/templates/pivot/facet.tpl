@@ -10,13 +10,15 @@
 {# - ..._int          (integer number)                              #}
 {# - ..._float        (floating point number)                       #}
 {# - ..._date         (datetime in UTC)                             #}
-{# - ..._ft           (fulltext search)                             #}
+{# - ..._ft           (fulltext search using ngrams)                #}
+{# - ..._fts          (fulltext search using tsvector)              #}
 {# - ..._id           (resource id)                                 #}
 {# - is_...           (boolean value)                               #}
 {# - ..._range_float  (floating point number for minmax reporting)  #}
 {# - ..._range_int    (integer number for minmax reporting)         #}
 {# - ..._range_date   (date for minmax reporting)                   #}
-{# - ..._list         (comma separated list of string values)       #}
+{# - ..._list         (|| separated list of string values)          #}
+{# - ..._ids          (|| separated list of resource ids)           #}
 
 {# All others are mapped to text. Texts are always truncated at 80  #}
 {# characters for their column index. Full text blocks are using    #}

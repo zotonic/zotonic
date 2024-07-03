@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell, Maas-Maarten Zeeman
+%% @copyright 2009-2024 Marc Worrell, Maas-Maarten Zeeman
 %% @doc Pivoting server for the rsc table. Takes care of full text indices. Polls the pivot queue for any changed resources.
+%% @end
 
-%% Copyright 2009-2022 Marc Worrell, Maas-Maarten Zeeman
+%% Copyright 2009-2024 Marc Worrell, Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -33,6 +34,7 @@
     pivot_resource_update/4,
     queue_all/1,
     queue_count/1,
+    queue_count_backlog/1,
     insert_queue/2,
 
     get_pivot_title/1,
@@ -56,7 +58,9 @@
     task_job_done/2,
 
     pivot_job_ping/2,
-    pivot_job_done/1,
+    pivot_job_done/2,
+
+    publish_task_event/5,
 
     stemmer_language/1,
     stemmer_language_config/1,
@@ -97,6 +101,8 @@
     is_pivot_delay = false :: boolean(),
     backoff_counter = 0 :: integer(),
 
+    poll_timer :: timer:tref(),
+
     task_pid :: undefined | pid(),
     task_id :: undefined | integer(),
     task_progress :: undefined | 0..100,
@@ -106,8 +112,19 @@
     pivot_pid :: undefined | pid(),
     pivot_rsc_id :: undefined | m_rsc:resource_id(),
     pivot_queue = [] :: [ m_rsc:resource_id() ],
+    pivot_queue_inflight = [] :: [ m_rsc:resource_id() ],
+    pivot_queue_inflight_date :: undefined | calendar:datetime(),
+    pivot_inflight_date :: undefined | calendar:datetime(),
     pivot_ping :: undefined | erlang:timestamp()
 }).
+
+
+-type task_key() :: undefined | binary() | string() | atom() | integer().
+
+-export_type([
+    task_key/0
+]).
+
 
 
 %% @doc Poll the pivot queue for the database in the context
@@ -138,32 +155,54 @@ pivot_resource_update(Id, UpdateProps, RawProps, Context) ->
 %% @doc Rebuild the search index by queueing all resources for pivot.
 queue_all(Context) ->
     erlang:spawn(fun() ->
-                    queue_all(0, Context)
+                    queue_all_1(0, Context)
                  end).
 
-queue_all(FromId, Context) ->
-    case z_db:q("select id from rsc where id > $1 order by id limit 1000", [FromId], Context) of
+queue_all_1(FromId, Context) ->
+    case z_db:q("
+        insert into rsc_pivot_log (rsc_id)
+        select id
+        from rsc
+        where id > $1
+        order by id
+        limit 10000
+        returning rsc_id",
+        [ FromId ],
+        Context)
+    of
         [] ->
             done;
         Rs ->
             Ids = [ Id || {Id} <- Rs ],
-            do_insert_queue(Ids, calendar:universal_time(), Context),
-            queue_all(lists:last(Ids), Context)
+            queue_all_1(lists:max(Ids), Context)
     end.
 
 
 %% @doc Return the length of the pivot queue.
--spec queue_count(z:context()) -> integer().
+-spec queue_count(z:context()) -> non_neg_integer().
 queue_count(Context) ->
-    z_db:q1("SELECT COUNT(*) FROM rsc_pivot_queue", Context).
+    z_db:q1("SELECT COUNT(distinct rsc_id) FROM rsc_pivot_log", Context).
+
+%% @doc Return the number of pivot queue items scheduled for direct pivot.
+-spec queue_count_backlog(z:context()) -> non_neg_integer().
+queue_count_backlog(Context) ->
+    z_db:q1("
+        select count(distinct rsc_id)
+        from rsc_pivot_log
+        where due < current_timestamp", Context).
 
 %% @doc Insert a rsc_id in the pivot queue
--spec insert_queue(m_rsc:resource_id() | list(m_rsc:resource_id()), z:context()) -> ok | {error, eexist}.
+-spec insert_queue(IdOrIds, Context) -> ok when
+    IdOrIds :: m_rsc:resource_id() | list( m_rsc:resource_id() ),
+    Context :: z:context().
 insert_queue(IdorIds, Context) ->
     insert_queue(IdorIds, calendar:universal_time(), Context).
 
 %% @doc Insert a rsc_id in the pivot queue for a certain date
--spec insert_queue(m_rsc:resource_id() | list(m_rsc:resource_id()), calendar:datetime(), z:context()) -> ok | {error, eexist}.
+-spec insert_queue(IdOrIds, DueDate, Context) -> ok when
+    IdOrIds :: m_rsc:resource_id() | list( m_rsc:resource_id() ),
+    DueDate :: calendar:datetime(),
+    Context :: z:context().
 insert_queue(Id, DueDate, Context) when is_integer(Id), is_tuple(DueDate) ->
     insert_queue([Id], DueDate, Context);
 insert_queue(Ids, DueDate, Context) when is_list(Ids), is_tuple(DueDate) ->
@@ -182,7 +221,7 @@ insert_task(Module, Function, Context) ->
 -spec insert_task(Module, Function, UniqueKey, Context) -> {ok, TaskId} | {error, term()}
     when Module :: atom(),
          Function :: atom(),
-         UniqueKey :: undefined | binary() | string() | atom(),
+         UniqueKey :: task_key(),
          Context :: z:context(),
          TaskId :: integer().
 insert_task(Module, Function, UniqueKey, Context) ->
@@ -192,7 +231,7 @@ insert_task(Module, Function, UniqueKey, Context) ->
 -spec insert_task(Module, Function, UniqueKey, Args, Context) -> {ok, TaskId} | {error, term()}
     when Module :: atom(),
          Function :: atom(),
-         UniqueKey :: undefined | binary() | string() | atom(),
+         UniqueKey :: task_key(),
          Args :: list()
                | fun( ( OldDue :: undefined | calendar:datetime(),
                         OldArgs :: undefined | list(),
@@ -212,7 +251,7 @@ insert_task(Module, Function, UniqueKey, Args, Context) ->
     when SecondsOrDate::undefined | integer() | calendar:datetime(),
          Module :: atom(),
          Function :: atom(),
-         UniqueKey :: undefined | binary() | string() | atom(),
+         UniqueKey :: task_key(),
          Args :: list()
                | fun( ( OldDue :: undefined | calendar:datetime(),
                         OldArgs :: undefined | list(),
@@ -251,7 +290,7 @@ get_task(Module, Function, Context) ->
             [Module, Function],
             Context).
 
--spec get_task( module(), atom(), binary()|string(), z:context() ) -> {ok, map()} | {error, term()}.
+-spec get_task( module(), atom(), task_key(), z:context() ) -> {ok, map()} | {error, term()}.
 get_task(Module, Function, UniqueKey, Context) ->
     UniqueKeyBin = z_convert:to_binary(UniqueKey),
     z_db:qmap_row("
@@ -274,16 +313,31 @@ to_utc_date({{Y,M,D},{H,I,S}} = Date) when is_integer(Y), is_integer(M), is_inte
 
 -spec delete_task( module(), atom(), z:context() ) -> non_neg_integer().
 delete_task(Module, Function, Context) ->
-    z_db:q("delete from pivot_task_queue where module = $1 and function = $2",
+    case z_db:q("delete from pivot_task_queue where module = $1 and function = $2",
            [Module, Function],
-           Context).
+           Context)
+    of
+        0 ->
+            0;
+        N ->
+            publish_task_event(delete, Module, Function, undefined, Context),
+            N
+    end.
 
--spec delete_task( module(), atom(), term(), z:context() ) -> non_neg_integer().
+
+-spec delete_task( module(), atom(), task_key(), z:context() ) -> non_neg_integer().
 delete_task(Module, Function, UniqueKey, Context) ->
     UniqueKeyBin = z_convert:to_binary(UniqueKey),
-    z_db:q("delete from pivot_task_queue where module = $1 and function = $2 and key = $3",
+    case z_db:q("delete from pivot_task_queue where module = $1 and function = $2 and key = $3",
            [Module, Function, UniqueKeyBin],
-           Context).
+           Context)
+    of
+        0 ->
+            0;
+        N ->
+            publish_task_event(delete, Module, Function, undefined, Context),
+            N
+    end.
 
 -spec list_tasks( z:context() ) -> {ok, list( map() )} | {error, term()}.
 list_tasks(Context) ->
@@ -301,7 +355,13 @@ count_tasks(Context) ->
 
 -spec delete_tasks( z:context() ) -> non_neg_integer().
 delete_tasks(Context) ->
-    z_db:q("delete from pivot_task_queue", Context).
+    case z_db:q("delete from pivot_task_queue", Context) of
+        0 ->
+            0;
+        N ->
+            publish_task_event(delete, <<"*">>, <<"*">>, undefined, Context),
+            N
+    end.
 
 -spec get_pivot_title( m_rsc:resource_id(), z:context() ) -> binary().
 get_pivot_title(Id, Context) ->
@@ -318,9 +378,11 @@ pivot_job_ping(Id, Context) ->
     gen_server:cast(Context#context.pivot_server, {pivot_ping, self(), Id}).
 
 %% @doc Signal from pivot job that processing is done.
--spec pivot_job_done( z:context() ) -> ok.
-pivot_job_done(Context) ->
-    gen_server:call(Context#context.pivot_server, {pivot_done, self()}).
+-spec pivot_job_done(IdsOrError, Context) -> ok when
+    IdsOrError :: list( m_rsc:resource_id() ) | error,
+    Context :: z:context().
+pivot_job_done(IdsOrError, Context) ->
+    gen_server:call(Context#context.pivot_server, {pivot_done, self(), IdsOrError}, infinity).
 
 %% @doc Ping from task process to keep alive and report progress
 -spec task_job_ping( TaskId :: integer(), Percentage :: 0..100, z:context() ) -> ok.
@@ -380,9 +442,10 @@ init(Site) ->
         module => ?MODULE
     }),
     timer:send_interval(?JOB_CHECK_INTERVAL*1000, job_check),
-    timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
+    {ok, TRefPoll} = timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
     {ok, #state{
         site = Site,
+        poll_timer = TRefPoll,
         is_initial_delay = true,
         is_pivot_delay = false
     }}.
@@ -393,21 +456,44 @@ handle_call({task_done, _TaskPid, TaskId}, _From, #state{ task_id = TaskId } = S
         task_id = undefined,
         task_pid = undefined
     },
+    self() ! poll, % Request another poll, there could be more due tasks on the queue.
     {reply, ok, State1};
 handle_call({task_done, _TaskPid, TaskId}, _From, State) ->
     ?LOG_ERROR(#{
         text => <<"Pivot received 'task_done' from unknown task job">>,
+        in => zotonic_core,
         result => error,
         reason => unknown_task_job,
         task_id => TaskId
     }),
     {reply, {error, unknown_task}, State};
 
-handle_call({pivot_done, PivotPid}, _From, #state{ pivot_pid = PivotPid } = State) ->
-    {reply, ok, State#state{ pivot_pid = undefined }};
-handle_call({pivot_done, PivotPid}, _From, State) ->
+handle_call({pivot_done, PivotPid, error}, _From, #state{ pivot_pid = PivotPid } = State) ->
+    % Error during pivot - keep the pivot log queue as is.
+    {reply, ok, State#state{
+        pivot_pid = undefined,
+        pivot_queue_inflight = [],
+        pivot_queue_inflight_date = undefined,
+        pivot_inflight_date = undefined
+    }};
+handle_call({pivot_done, PivotPid, Ids}, _From, #state{ pivot_pid = PivotPid, site = Site } = State) ->
+    % Signal that ids are pivoted, delete all entries before the cut off date.
+    Context = z_context:new(Site),
+    {Prio, Normal} = lists:partition(
+        fun(Id) -> lists:member(Id, State#state.pivot_queue_inflight) end,
+        Ids),
+    delete_queue(Prio, State#state.pivot_queue_inflight_date, Context),
+    delete_queue(Normal, State#state.pivot_inflight_date, Context),
+    {reply, ok, State#state{
+        pivot_pid = undefined,
+        pivot_queue_inflight = [],
+        pivot_queue_inflight_date = undefined,
+        pivot_inflight_date = undefined
+    }};
+handle_call({pivot_done, PivotPid, _IdsOrError}, _From, State) ->
     ?LOG_ERROR(#{
         text => <<"Pivot received 'pivot_done' from unknown pivot job">>,
+        in => zotonic_core,
         result => error,
         reason => unknown_pivot_job,
         pid => PivotPid
@@ -417,7 +503,13 @@ handle_call({pivot_done, PivotPid}, _From, State) ->
 handle_call({insert_task_after, SecondsOrDate, Module, Function, UniqueKey, ArgsFun}, _From, State) ->
     Context = z_context:new(State#state.site),
     Result = do_insert_task_after(SecondsOrDate, Module, Function, UniqueKey, ArgsFun, Context),
-    {reply, Result, State};
+    State1 = if
+        SecondsOrDate =:= undefined ->
+            next_poll(State, 0);
+        true ->
+            State
+    end,
+    {reply, Result, State1};
 
 handle_call(status, _From, State) ->
     Status = #{
@@ -437,11 +529,11 @@ handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
 
-handle_cast(poll, #state{is_initial_delay=true} = State) ->
-    % Starting up - wait
+handle_cast(poll, #state{ is_initial_delay = true } = State) ->
+    % Manual poll of the pivot queue, but starting up - wait
     {noreply, State};
 handle_cast(poll, State) ->
-    % Poll the pivot queue
+    % Manual poll of the pivot queue
     try
         State1 = do_poll(State),
         {noreply, State1}
@@ -449,6 +541,7 @@ handle_cast(poll, State) ->
         Type:Err:Stack ->
             ?LOG_ERROR(#{
                 text => <<"Pivot poll error">>,
+                in => zotonic_core,
                 result => Type,
                 reason => Err,
                 stack => Stack
@@ -463,15 +556,18 @@ handle_cast({insert_queue, DueDate, Ids}, State) when is_list(Ids) ->
     {noreply, State};
 
 handle_cast({pivot, Id}, #state{ is_initial_delay = true } = State) when is_integer(Id) ->
-    % Immediate pivot of an resource-id
+    % Immediate pivot of an resource-id - but we are still starting up
     Due = z_datetime:next_minute(calendar:universal_time()),
     do_insert_queue([ Id ], Due, z_context:new(State#state.site)),
     {noreply, State};
 handle_cast({pivot, Id}, #state{ backoff_counter = Ct } = State) when Ct > 0 ->
+    % Immediate pivot of an resource-id - but we are in a back off due to errors
     Due = z_datetime:next_minute(calendar:universal_time()),
     do_insert_queue([ Id ], Due, z_context:new(State#state.site)),
     {noreply, State};
 handle_cast({pivot, Id}, State) when is_integer(Id) ->
+    % Immediate pivot of an resource-id - queue and add as priority
+    do_insert_queue([ Id ], calendar:universal_time(), z_context:new(State#state.site)),
     State1 = State#state{ pivot_queue = [ Id | State#state.pivot_queue ]},
     State2 = do_poll(State1),
     {noreply, State2};
@@ -485,6 +581,7 @@ handle_cast({pivot_ping, Pid, Id}, #state{ pivot_pid = Pid } = State) ->
 handle_cast({pivot_ping, Pid, Id}, State) ->
     ?LOG_NOTICE(#{
         text => <<"Pivot ping from unknown process">>,
+        in => zotonic_core,
         result => error,
         reason => unknown_process,
         pid => Pid,
@@ -502,6 +599,7 @@ handle_cast({task_ping, _Pid, TaskId, Percentage}, #state{ task_id = TaskId } = 
 handle_cast({task_ping, Pid, TaskId, _Percentage}, State) ->
     ?LOG_NOTICE(#{
         text => <<"Task ping for wrong task id">>,
+        in => zotonic_core,
         result => error,
         reason => wrong_task_id,
         pid => Pid,
@@ -520,48 +618,51 @@ handle_cast(Message, State) ->
 
 %% @doc Handling all non call/cast messages
 handle_info(poll, #state{ is_pivot_delay = true } = State) ->
-    timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
-    {noreply, State#state{ is_pivot_delay = false}};
+    State1 = State#state{ is_pivot_delay = false },
+    {noreply, next_poll(State1, ?PIVOT_POLL_INTERVAL_SLOW)};
 handle_info(poll, #state{backoff_counter = Ct} = State) when Ct > 0 ->
-    timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
-    {noreply, State#state{ backoff_counter = Ct - 1 }};
+    State1 = State#state{ backoff_counter = Ct - 1 },
+    {noreply, next_poll(State1, ?PIVOT_POLL_INTERVAL_SLOW)};
 handle_info(poll, #state{ pivot_pid = Pid } = State) when is_pid(Pid) ->
-    ?LOG_INFO(#{
+    ?LOG_DEBUG(#{
         text => <<"Pivot job still running, delaying next poll">>,
+        in => zotonic_core,
         pivot_pid => Pid,
         reason => busy
     }),
-    timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
-    {noreply, State};
+    {noreply, next_poll(State, ?PIVOT_POLL_INTERVAL_FAST)};
 handle_info(poll, #state{ site = Site } = State) ->
     case z_sites_manager:get_site_status(Site) of
         {ok, running} ->
             ?LOG_DEBUG(#{
-                text => <<"Pivot poll">>
+                text => <<"Pivot poll">>,
+                in => zotonic_core
             }),
             try
                 State1 = do_poll(State),
                 IsPivoting = is_pid(State1#state.pivot_pid)
                         orelse is_pid(State1#state.task_pid),
-                case IsPivoting of
-                    true ->  timer:send_after(?PIVOT_POLL_INTERVAL_FAST*1000, poll);
-                    false -> timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll)
+                Interval = case IsPivoting of
+                    true ->  ?PIVOT_POLL_INTERVAL_FAST;
+                    false -> ?PIVOT_POLL_INTERVAL_SLOW
                 end,
-                {noreply, State1#state{ is_initial_delay = false }}
+                State2 = State1#state{ is_initial_delay = false },
+                {noreply, next_poll(State2, Interval)}
             catch
                 Type:Err:Stack ->
                     ?LOG_ERROR(#{
                         text => <<"Pivot error">>,
+                        in => zotonic_core,
                         result => Type,
                         reason => Err,
                         stack => Stack
                     }),
-                    timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
-                    {noreply, State#state{ backoff_counter = ?BACKOFF_POLL_ERROR }}
+                    StateBackoff = State#state{ backoff_counter = ?BACKOFF_POLL_ERROR },
+                    {noreply, next_poll(StateBackoff, ?PIVOT_POLL_INTERVAL_SLOW)}
             end;
         _ ->
-            timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
-            {noreply, State#state{ is_initial_delay = true }}
+            State1 = State#state{ is_initial_delay = true },
+            {noreply, next_poll(State1, ?PIVOT_POLL_INTERVAL_SLOW)}
     end;
 
 handle_info({'DOWN', _MRef, process, _Pid, _Reason}, #state{ pivot_pid = undefined, task_pid = undefined } = State) ->
@@ -570,7 +671,8 @@ handle_info({'DOWN', _MRef, process, _Pid, _Reason}, #state{ pivot_pid = undefin
 handle_info({'DOWN', _MRef, process, Pid, Reason}, #state{ pivot_pid = Pid } = State) ->
     LastRscId = State#state.pivot_rsc_id,
     ?LOG_ERROR(#{
-        text=> <<"Pivot received DOWN from pivot job">>,
+        text => <<"Pivot received DOWN from pivot job">>,
+        in => zotonic_core,
         rsc_id => LastRscId,
         result => 'DOWN',
         reason => Reason,
@@ -578,7 +680,7 @@ handle_info({'DOWN', _MRef, process, Pid, Reason}, #state{ pivot_pid = Pid } = S
     }),
     Context = z_context:new(State#state.site),
     z_db:q("
-        delete from rsc_pivot_queue
+        delete from rsc_pivot_log
         where rsc_id = $1
         ",
         [ LastRscId ],
@@ -618,6 +720,34 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
+publish_task_event(What, Module, Function, undefined, Context) ->
+    z_mqtt:publish(task_topic(Context),
+            #{
+                what => What,
+                module => Module,
+                function => Function
+            },
+            z_acl:sudo(Context));
+publish_task_event(What, Module, Function, Due, Context) ->
+    z_mqtt:publish(task_topic(Context),
+            #{
+                what => What,
+                module => Module,
+                function => Function,
+                due => Due
+            },
+            z_acl:sudo(Context)).
+
+task_topic(Context) ->
+    [ <<"$SYS">>, <<"site">>, z_convert:to_binary(z_context:site(Context)), <<"task-queue">> ].
+
+next_poll(State = #state{ poll_timer = TRef }, Interval) ->
+    timer:cancel(TRef),
+    z_utils:flush_message(poll),
+    {ok, TRefNew} = timer:send_after(Interval*1000, poll),
+    State#state{ poll_timer = TRefNew }.
+
+
 check_pivot_job(#state{ pivot_pid = undefined }) ->
     ok;
 check_pivot_job(#state{ pivot_pid = Pid, pivot_ping = LastPing } = State) ->
@@ -628,6 +758,7 @@ check_pivot_job(#state{ pivot_pid = Pid, pivot_ping = LastPing } = State) ->
         true ->
             ?LOG_ERROR(#{
                 text => <<"Pivot job timeout, killing pivot job">>,
+                in => zotonic_core,
                 reason => timeout,
                 pivot_pid => Pid,
                 rsc_id => State#state.pivot_rsc_id
@@ -647,6 +778,7 @@ check_task_job(#state{ task_pid = Pid, task_id = TaskId, task_ping = LastPing } 
         true ->
             ?LOG_ERROR(#{
                 text => <<"Task job timeout, killing task for later retry">>,
+                in => zotonic_core,
                 reason => timeout,
                 task_id => TaskId,
                 task_pid => Pid,
@@ -665,7 +797,7 @@ do_insert_task_after(SecondsOrDate, Module, Function, undefined, ArgsFun, Contex
 do_insert_task_after(SecondsOrDate, Module, Function, UniqueKey, ArgsFun, Context) when is_function(ArgsFun) ->
     Due = to_utc_date(SecondsOrDate),
     UniqueKeyBin = z_convert:to_binary(UniqueKey),
-    z_db:transaction(
+    case z_db:transaction(
         fun(Ctx) ->
             OldTask = z_db:q_row("
                 select props, due
@@ -709,11 +841,25 @@ do_insert_task_after(SecondsOrDate, Module, Function, UniqueKey, ArgsFun, Contex
                     Error
             end
         end,
-        Context);
+        Context)
+    of
+        {ok, _} = Ok ->
+            z_mqtt:publish(<<"model/sysconfig/event/task">>,
+                           #{
+                                what => <<"insert">>,
+                                module => Module,
+                                function => Function,
+                                due => Due
+                           },
+                           Context),
+            Ok;
+        {error, _} = Error ->
+            Error
+    end;
 do_insert_task_after(SecondsOrDate, Module, Function, UniqueKey, Args, Context) ->
     Due = to_utc_date(SecondsOrDate),
     UniqueKeyBin = z_convert:to_binary(UniqueKey),
-    z_db:transaction(
+    case z_db:transaction(
         fun(Ctx) ->
             _ = z_db:q("
                 delete from pivot_task_queue
@@ -731,53 +877,28 @@ do_insert_task_after(SecondsOrDate, Module, Function, UniqueKey, Args, Context) 
             },
             z_db:insert(pivot_task_queue, Fields, Ctx)
         end,
-        Context).
-
+        Context)
+    of
+        {ok, _} = Ok ->
+            z_mqtt:publish(<<"model/sysconfig/event/task">>,
+                           #{
+                                what => <<"insert">>,
+                                module => Module,
+                                function => Function,
+                                due => Due
+                           },
+                           Context),
+            Ok;
+        {error, _} = Error ->
+            Error
+    end.
 
 %% @doc Insert a list of ids into the pivot queue.
 do_insert_queue(Ids, DueDate, Context) when is_list(Ids) ->
-    F = fun(Ctx) ->
-        z_db:q("lock table rsc_pivot_queue in share row exclusive mode", Ctx),
-        lists:foreach(
-            fun(Id) ->
-                case z_db:q1("select id from rsc where id = $1", [Id], Ctx) of
-                    Id ->
-                        case z_db:q("
-                            update rsc_pivot_queue
-                            set serial = serial + 1,
-                                due = $2
-                            where rsc_id = $1",
-                            [ Id, DueDate ],
-                            Ctx)
-                        of
-                            1 -> ok;
-                            0 ->
-                                z_db:q("
-                                    insert into rsc_pivot_queue (rsc_id, due, is_update)
-                                    select id, $2, true from rsc where id = $1",
-                                    [ Id, DueDate ], Ctx)
-                        end;
-                    undefined ->
-                        ok
-                end
-            end,
-            Ids)
-    end,
-    case z_db:transaction(F, Context) of
-        ok ->
-            ok;
-        {rollback, Reason} ->
-            ?LOG_ERROR(#{
-                text => <<"Rollback during pivot queue insert">>,
-                reason => Reason
-            }),
-            timer:apply_after(100, ?MODULE, insert_queue, [Ids, DueDate, Context]);
-        {error, Reason} ->
-            ?LOG_ERROR(#{
-                text => <<"Error during pivot queue insert">>,
-                reason => Reason
-            })
-    end.
+    z_db:q("insert into rsc_pivot_log as p (rsc_id, due, is_update)
+            select r.id, $2, true from rsc r where r.id = any($1)",
+            [ Ids, DueDate ], Context),
+    ok.
 
 
 %% @doc Poll a database for any queued updates.
@@ -790,35 +911,30 @@ do_poll(State) ->
 maybe_start_pivot(#state{ pivot_pid = Pid } = State, _Context) when is_pid(Pid) ->
     State;
 maybe_start_pivot(#state{ pivot_queue = Queue } = State, Context) ->
-    Qs = do_poll_queue(Context),
-    Qs1 = lists:foldl(
-        fun(Id, Acc) ->
-            case lists:keymember(Id, 1, Acc) of
-                true ->
-                    Acc;
-                false ->
-                    OptSerial = fetch_queue_id(Id, Context),
-                    [ {Id, OptSerial} | Acc ]
-            end
-        end,
-        Qs,
-        Queue),
-    case Qs1 of
-        [] ->
+    case do_poll_queue(Context) of
+        {_, undefined} ->
             State;
-        _ ->
-            case z_pivot_rsc_job:start_pivot(Qs1, Context) of
-                {ok, Pid} ->
-                    erlang:monitor(process, Pid),
-                    State#state{
-                        pivot_pid = Pid,
-                        pivot_queue = [],
-                        pivot_ping = os:timestamp(),
-                        pivot_rsc_id = undefined
-                    };
-                {error, _} ->
-                    % overload - ignore
-                    State
+        {Ids, DueDate} ->
+            case lists:usort(Queue ++ Ids) of
+                [] ->
+                    State;
+                PivotIds ->
+                    case z_pivot_rsc_job:start_pivot(PivotIds, Context) of
+                        {ok, Pid} ->
+                            erlang:monitor(process, Pid),
+                            State#state{
+                                pivot_pid = Pid,
+                                pivot_queue = [],
+                                pivot_queue_inflight = Queue,
+                                pivot_queue_inflight_date = calendar:universal_time(),
+                                pivot_inflight_date = DueDate,
+                                pivot_ping = os:timestamp(),
+                                pivot_rsc_id = undefined
+                            };
+                        {error, _} ->
+                            % overload - ignore
+                            State
+                    end
             end
     end.
 
@@ -827,9 +943,9 @@ do_poll_queue(Context) ->
         fetch_queue(Context)
     catch
         exit:{timeout, _} ->
-            [];
+            {[], undefined};
         throw:{error, econnrefused} ->
-            []
+            {[], undefined}
     end.
 
 maybe_start_task(#state{ task_pid = undefined } = State, Context) ->
@@ -854,6 +970,7 @@ maybe_start_task(#state{ task_pid = undefined } = State, Context) ->
         {error, Reason} ->
             ?LOG_ERROR(#{
                 text => "Pivot could not check task queue",
+                in => zotonic_core,
                 reason => Reason
             }),
             State
@@ -903,23 +1020,68 @@ get_args(undefined) ->
 
 %% @doc Fetch the next batch of ids from the queue. Remembers the serials, as a new
 %% pivot request might come in while we are pivoting.
--spec fetch_queue( z:context() ) -> [ { Id::m_rsc:resource_id(), Serial::integer() }].
+-spec fetch_queue(Context) -> {Ids, DueDate} when
+    Context :: z:context(),
+    Ids :: [ m_rsc:resource_id() ],
+    DueDate :: calendar:datetime().
 fetch_queue(Context) ->
-    z_db:q("
-        select rsc_id, serial
-        from rsc_pivot_queue
-        where due < current_timestamp - '10 second'::interval
+    PivotDate = z_db:q1("select current_timestamp - '10 second'::interval", Context),
+    Rows = z_db:q("
+        select rsc_id
+        from rsc_pivot_log
+        where due < $2
         order by is_update, due
-        limit $1", [?POLL_BATCH], Context).
+        limit $1",
+        [ ?POLL_BATCH, PivotDate ],
+        Context),
+    if
+        Rows =:= [] ->
+            {[], PivotDate};
+        true ->
+            % Remove log entries that have a pivot date after the cutoff date.
+            % They will be pivoted at a later date.
+            ToPivot = lists:foldl(
+                fun({Id}, Acc) ->
+                    case z_db:q_row("
+                        select max(due), max(due) >= $2
+                        from rsc_pivot_log
+                        where rsc_id = $1
+                        ", [ Id, PivotDate ], Context)
+                    of
+                        {_MaxDue, false} ->
+                            [ Id | Acc ];
+                        {MaxDue, true} ->
+                            z_db:q("
+                                delete from rsc_pivot_log
+                                where rsc_id = $1
+                                  and due < $2
+                                ", [ Id, MaxDue ],
+                                Context),
+                            Acc
+                    end
+                end,
+                [],
+                lists:usort(Rows)),
+            if
+                ToPivot =:= [] ->
+                    fetch_queue(Context);
+                true ->
+                    {ToPivot, PivotDate}
+            end
+        end.
 
-%% @doc Fetch the serial of the id's queue record
--spec fetch_queue_id( m_rsc:resource_id(), z:context() ) -> Serial::integer() | undefined.
-fetch_queue_id(Id, Context) ->
-    z_db:q1("select serial from rsc_pivot_queue where rsc_id = $1", [Id], Context).
+
+%% @doc Delete pivot log entries for all pivoted ids. Use the due date
+%% so that optional newer entries are still queued.
+delete_queue(Ids, DueDate, Context) ->
+    z_db:q("
+        delete from rsc_pivot_log
+        where rsc_id = any($1)
+          and due < $2",
+        [ Ids, DueDate ],
+        Context).
 
 
-
-%% @spec define_custom_pivot(Module, columns(), Context) -> ok
 %% @doc Let a module define a custom pivot
 %% columns() -> [column()]
 %% column()  -> {ColumName::atom(), ColSpec::string()} | {atom(), string(), options::list()}

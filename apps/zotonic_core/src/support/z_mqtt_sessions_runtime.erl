@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2018-2019 Marc Worrell
+%% @copyright 2018-2024 Marc Worrell
 %% @doc Zotonic specific callbacks for MQTT connections
+%% @end
 
-%% Copyright 2018-2019 Marc Worrell
+%% Copyright 2018-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -147,7 +148,7 @@ set_connect_context_options(Options, Context) ->
     end,
     z_acl:logon_refresh(Context5).
 
--spec connect( mqtt_packet_map:mqtt_packet(), boolean(), mqtt_session:msg_options(), z:context()) -> {ok, mqtt_packet_map:mqtt_packet(), z:context()} | {error, term()}.
+-spec connect( mqtt_packet_map:mqtt_packet(), boolean(), mqtt_sessions:msg_options(), z:context()) -> {ok, mqtt_packet_map:mqtt_packet(), z:context()} | {error, term()}.
 connect(#{ type := connect, username := U, password := P, properties := Props }, false,
         #{ context_prefs := #{ user_id := UserId } = Prefs } = Options,
         Context) when ?none(U), ?none(P) ->
@@ -206,10 +207,10 @@ connect(#{ type := connect, username := U, password := P }, _IsSessionPresent, O
 connect(#{ type := connect, username := U, password := P, properties := Props }, IsSessionPresent, Options, Context) when not ?none(U), not ?none(P) ->
     % User login, and no user from the MQTT controller
     % The username might be something like: "example.com:localuser"
-    Username = case binary:split(U, <<":">>) of
-        [ _VHost, U1 ] -> U1;
-        _ -> U
-    end,
+    Username = case split_vhost_username(U) of
+                   [ _VHost, U1 ] -> U1;
+                   _ -> U
+               end,
     LogonArgs = #{
         <<"username">> => Username,
         <<"password">> => P
@@ -227,17 +228,42 @@ connect(#{ type := connect, username := U, password := P, properties := Props },
                         undefined -> Context1;
                         Sid when Sid =/= <<>> -> z_context:set_session_id(Sid, Context1)
                     end,
-                    Context3 = z_acl:logon(UserId, Context2),
-                    ConnAck = #{
-                        type => connack,
-                        reason_code => ?MQTT_RC_SUCCESS,
-                        properties => #{
-                            % TODO: also return a token that can be exchanged for a cookie
-                            % ... token ...
-                        }
-                    },
-                    {ok, ConnAck, Context3};
+                    case z_auth:logon(UserId, Context2) of
+                        {ok, ContextAuth} ->
+                            ConnAck = #{
+                                type => connack,
+                                reason_code => ?MQTT_RC_SUCCESS,
+                                properties => #{
+                                    % TODO: also return a token that can be exchanged for a cookie
+                                    % ... token ...
+                                }
+                            },
+                            {ok, ConnAck, ContextAuth};
+                        {error, user_not_enabled} ->
+                            ?LOG_INFO(#{
+                                in => zotonic_core,
+                                text => <<"Logon attempt of disabled user">>,
+                                user_id => UserId,
+                                result => error,
+                                reason => user_not_enabled,
+                                protocol => mqtt
+                            }),
+                            ConnAck = #{
+                                type => connack,
+                                reason_code => ?MQTT_RC_NOT_AUTHORIZED
+                            },
+                            {ok, ConnAck, Context}
+                    end;
                 false ->
+                    ?LOG_INFO(#{
+                        in => zotonic_core,
+                        text => <<"Logon attempt of different user for existing in session">>,
+                        user_id => UserId,
+                        session_user_id => z_acl:user(Context),
+                        result => error,
+                        reason => user_mismatch,
+                        protocol => mqtt
+                    }),
                     ConnAck = #{
                         type => connack,
                         reason_code => ?MQTT_RC_NOT_AUTHORIZED
@@ -251,7 +277,11 @@ connect(#{ type := connect, username := U, password := P, properties := Props },
             },
             {ok, ConnAck, Context};
         undefined ->
-            ?LOG_WARNING("Auth module error: #logon_submit{} returned undefined."),
+            ?LOG_WARNING(#{
+                in => zotonic_core,
+                text => <<"Auth module error: #logon_submit{} returned undefined.">>,
+                protocol => mqtt
+            }),
             ConnAck = #{
                 type => connack,
                 reason_code => ?MQTT_RC_ERROR
@@ -427,3 +457,26 @@ is_valid_message(_Msg, #{ auth_user_id := UserId }, Context) ->
 is_valid_message(_Msg, _Options, _Context) ->
     true.
 
+split_vhost_username(Username) ->
+    case z_config:get(mqtt_username_format_0x, false) of
+        true ->
+            % "example.com:localuser"  (Zotonic 1.x format)
+            % "localuser@examplesite"  (Zotonic 0.x format)
+            split_vhost_username(Username, Username);
+        false ->
+            % "example.com:localuser"  (Zotonic 1.x format)
+            binary:split(Username, <<":">>)
+    end.
+
+split_vhost_username(<<>>, Username) ->
+    % Username without designation
+    [Username];
+split_vhost_username(<<":", _/binary>>, Username) ->
+    % "example.com:localuser"  (Zotonic 1.x format)
+    binary:split(Username, <<":">>);
+split_vhost_username(<<"@", _/binary>>, Username) ->
+    % "localuser@examplesite"  (Zotonic 0.x format)
+    [Username, VHost] = binary:split(Username, <<"@">>),
+    [VHost, Username];
+split_vhost_username(<<_/utf8, R/binary>>, Username) ->
+    split_vhost_username(R, Username).

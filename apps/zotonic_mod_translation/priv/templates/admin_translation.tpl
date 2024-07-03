@@ -18,30 +18,59 @@
 
 <div class="widget">
     <div class="widget-content">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th width="10%">{_ Default _}</th>
-                    <th width="5%">{_ View _}</th>
-                    <th width="5%">{_ Editable _}</th>
-                    <th width="5%">{_ Off _}</th>
-                    <th width="20%">{_ Language _}</th>
-                    <th width="10%">{_ Code _}</th>
-                    <th width="10%">{_ Region _}</th>
-                    <th width="10%">{_ Script _}</th>
-                    <th></th>
-                </tr>
-            </thead>
-
-            <tbody id="translation-language-status">
-                {% include "_translation_language_status.tpl" %}
-            </tbody>
-        </table>
 
         <p class="help-block">
+            {_ Drag languages to define the preferred order, the first 'view' language will be the default language. _}<br>
             {_ If a language is set to 'view' or 'editable' then texts for that language are editable in the admin. _}<br>
-            {_ If a language is set to 'off' then edited texts will loose their translation in that lanuage. _}
+            {_ If a language is set to 'off' then edited texts will loose their translation in that language. _}
         </p>
+
+        {% wire id="translation-language-form"
+                type="submit"
+                postback={language_list}
+                delegate=`mod_translation`
+        %}
+        <form id="translation-language-form" action="postback">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th width="40px"></th>
+                        <th width="5%">{_ View _}</th>
+                        <th width="5%">{_ Editable _}</th>
+                        <th width="5%">{_ Off _}</th>
+                        <th width="20%">{_ Language _}</th>
+                        <th width="10%">{_ Code _}</th>
+                        <th width="10%">{_ Region _}</th>
+                        <th width="10%">{_ Script _}</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody id="translation-language-status">
+                    {% include "_translation_language_status.tpl" %}
+                </tbody>
+            </table>
+        </form>
+
+        {% javascript %}
+            $('#translation-language-status').sortable({
+                handle: '.drag-handle',
+                items: 'tr',
+                revert: 'invalid',
+                axis: 'y',
+                start: function(event, ui) {
+                    $(this).find(".btn").hide();
+                },
+                stop: function(event, ui) {
+                    $(this).find(".btn").show();
+                    $('#translation-language-form').trigger('submit');
+                }
+            });
+
+            $('#translation-language-form').on('click', 'input[type="radio"]', function(e) {
+                $('#translation-language-form').trigger('submit');
+            });
+        {% endjavascript %}
     </div>
 </div>
 

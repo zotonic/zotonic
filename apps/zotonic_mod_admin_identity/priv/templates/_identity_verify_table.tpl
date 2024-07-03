@@ -1,6 +1,6 @@
 {% if identities %}
 	<table id="{{ #listemail }}" class="table">
-	{% with id.email_raw as email_raw %}
+	{% with id.email_raw|normalize_email as email_raw %}
 	{% for idn in identities %}
 	{% with idn.id as idn_id %}
 		<tr>
@@ -62,8 +62,10 @@
 	{% endfor %}
 	{% endwith%}
 	</table>
+{% elseif id.is_editable %}
+	<p class="help-block">{_ No verified e-mail addresses. Please add one below. _}</p>
 {% else %}
-<p class="help-block">{_ No verified e-mail addresses. Please add one below. _}</p>
+	<p class="help-block">{_ No verified e-mail addresses. _}</p>
 {% endif %}
 
 {% wire name="verify-preferred-email"

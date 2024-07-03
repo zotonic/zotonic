@@ -1,8 +1,9 @@
 %% @author Atilla Erdodi <atilla@maximonster.com>
-%% @copyright 2010-2021 Maximonster Interactive Things
+%% @copyright 2010-2024 Maximonster Interactive Things
 %% @doc Email server. Queues, renders and sends e-mails.
+%% @end
 
-%% Copyright 2010-2021 Maximonster Interactive Things
+%% Copyright 2010-2024 Maximonster Interactive Things
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -64,6 +65,11 @@
 % Timeout (in msec) for the connect to external SMTP server (default is 5000)
 -define(SMTP_CONNECT_TIMEOUT, 15000).
 
+% Default port for TLS email delivery
+-define(SMTP_PORT_TLS, 587).
+
+% Default port for plain text email delivery
+-define(SMTP_PORT_PLAIN_TEXT, 25).
 
 -record(state, {smtp_relay, smtp_relay_opts, smtp_no_mx_lookups,
                 smtp_verp_as_from, smtp_bcc, override,
@@ -164,7 +170,7 @@ max_tempfile_age(0, Acc) -> Acc;
 max_tempfile_age(N, Acc) -> max_tempfile_age(N-1, period(N) + Acc).
 
 
-%% @doc Check if the sender is allowed to send email. If an user is disabled they are only
+%% @doc Check if the sender is allowed to send email. If a user is disabled they are only
 %%      allowed to send mail to themselves or to the admin.
 is_sender_enabled(#email{} = Email, Context) ->
     is_sender_enabled(z_acl:user(Context), Email#email.to, Context).
@@ -340,6 +346,7 @@ handle_cast({bounced, Peer, BounceEmail}, State) ->
         {aborted, Reason} ->
             ?LOG_WARNING(#{
                 text => <<"Could not handle bounced messages">>,
+                in => zotonic_core,
                 src => Peer,
                 bounce_email => BounceEmail,
                 reason => Reason
@@ -423,6 +430,7 @@ code_change(_OldVsn, State, _Extra) ->
 handle_delivery_report(permanent_failure, MsgId, Recipient, OptMessage, Context) ->
     ?LOG_WARNING(#{
         text => <<"Permanent failure sending email">>,
+        in => zotonic_core,
         recipient => Recipient,
         message_id => MsgId,
         message => OptMessage
@@ -452,6 +460,7 @@ handle_delivery_report(permanent_failure, MsgId, Recipient, OptMessage, Context)
 handle_delivery_report(temporary_failure, MsgId, Recipient, OptMessage, Context) ->
     ?LOG_WARNING(#{
         text => <<"Temporary failure sending email">>,
+        in => zotonic_core,
         recipient => Recipient,
         message_id => MsgId,
         message => OptMessage
@@ -480,6 +489,7 @@ handle_delivery_report(Status, MsgId, Recipient, OptMessage, Context)
     when Status =:= sent; Status =:= relayed ->
     ?LOG_NOTICE(#{
         text => <<"Success sending email">>,
+        in => zotonic_core,
         recipient => Recipient,
         message_id => MsgId,
         state => Status
@@ -505,6 +515,7 @@ handle_delivery_report(Status, MsgId, Recipient, OptMessage, Context)
 handle_delivery_report(received, MsgId, Recipient, OptMessage, Context) ->
     ?LOG_NOTICE(#{
         text => <<"Success sending email">>,
+        in => zotonic_core,
         recipient => Recipient,
         message_id => MsgId,
         status => received
@@ -556,7 +567,7 @@ update_config(State) ->
         case SmtpRelay of
             true ->
                 [{relay, z_config:get(smtp_host, "localhost")},
-                 {port, z_config:get(smtp_port, 25)},
+                 {port, z_config:get(smtp_port, ?SMTP_PORT_PLAIN_TEXT)},
                  {ssl, z_config:get(smtp_ssl, false)}]
                 ++ case {z_config:get(smtp_username),
                          z_config:get(smtp_password)} of
@@ -681,6 +692,7 @@ spawn_send_check_email(Id, Recipient, Email, RetryCt, Context, State) ->
                         false ->
                             ?LOG_NOTICE(#{
                                 text => <<"Dropping email to invalid address">>,
+                                in => zotonic_core,
                                 recipient => Recipient
                             }),
                             %% delete email from the queue and notify the system
@@ -690,6 +702,7 @@ spawn_send_check_email(Id, Recipient, Email, RetryCt, Context, State) ->
                 false ->
                     ?LOG_NOTICE(#{
                         text => <<"Dropping email from disabled sender">>,
+                        in => zotonic_core,
                         recipient => Recipient,
                         sender => z_acl:user(Context)
                     }),
@@ -699,6 +712,7 @@ spawn_send_check_email(Id, Recipient, Email, RetryCt, Context, State) ->
         {error, Template} ->
             ?LOG_WARNING(#{
                 text => <<"Delayed sending email because template is not available">>,
+                in => zotonic_core,
                 template => Template
             }),
             State
@@ -775,8 +789,7 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
             SmtpOpts = [
                 {no_mx_lookups, State#state.smtp_no_mx_lookups},
                 {hostname, z_convert:to_list(z_email:email_domain(Context))},
-                {timeout, ?SMTP_CONNECT_TIMEOUT},
-                {tls_options, [{versions, ['tlsv1.2']}]}
+                {timeout, ?SMTP_CONNECT_TIMEOUT}
             ] ++ case relay_site_options(State, Context) of
                 {true, RelayOpts} -> RelayOpts;
                 false -> [{relay, z_convert:to_list(RecipientDomain)}]
@@ -790,8 +803,7 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
                     [
                         {no_mx_lookups, State#state.smtp_no_mx_lookups},
                         {hostname, z_convert:to_list(z_email:email_domain(Context))},
-                        {timeout, ?SMTP_CONNECT_TIMEOUT},
-                        {tls_options, [{versions, ['tlsv1.2']}]}
+                        {timeout, ?SMTP_CONNECT_TIMEOUT}
                     ] ++ case relay_site_options(State, Context) of
                         {true, BccRelayOpts} -> BccRelayOpts;
                         false -> [{relay, z_convert:to_list(BccDomain)}]
@@ -813,7 +825,13 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
                         #email_sender{id=Id, sender_pid=SenderPid, domain=Relay} | State#state.sending
                     ]};
         true ->
-            ?LOG_NOTICE("[smtp] Dropping email to blocked address ~p", [ RecipientEmail ]),
+            ?LOG_NOTICE(#{
+                text => <<"[smtp] Dropping email to blocked address">>,
+                in => zotonic_core,
+                result => error,
+                reason => blocked,
+                email => RecipientEmail
+            }),
             drop_blocked_email(Id, RecipientEmail, Email, Context),
             State
     end.
@@ -821,24 +839,37 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
 %% @doc Fetch the SMTP relay options, if the Zotonic system is configured to use a relay
 %% then that relay is always used. Otherwise the relay configuration of the site is used.
 relay_site_options(#state{ smtp_relay = true } = State, _Context) ->
-    {true, State#state.smtp_relay_opts};
+    Relay = proplists:get_value(relay, State#state.smtp_relay_opts),
+    RelayOpts = [
+        {tls_options, [
+            {versions, ['tlsv1.2']}
+            | tls_certificate_check:options(Relay)
+        ]}
+        | State#state.smtp_relay_opts
+    ],
+    {true, RelayOpts};
 relay_site_options(_State, Context) ->
     case m_config:get_boolean(site, smtp_relay, Context) of
         true ->
+            SSL = m_config:get_boolean(site, smtp_relay_ssl, Context),
             SmtpHost = case z_convert:to_binary( m_config:get_value(site, smtp_relay_host, Context) ) of
                 <<>> -> "localhost";
                 SHost -> z_convert:to_list(SHost)
             end,
+            DefaultPort = case SSL of
+                true -> ?SMTP_PORT_TLS;
+                false -> ?SMTP_PORT_PLAIN_TEXT
+            end,
             Port = case z_convert:to_binary( m_config:get_value(site, smtp_relay_port, Context) ) of
-                <<>> -> 25;
+                <<>> ->
+                    DefaultPort;
                 SPort ->
                     try
                         z_convert:to_integer(SPort)
                     catch
-                        _:_ -> 25
+                        _:_ -> DefaultPort
                     end
             end,
-            SSL = m_config:get_boolean(site, smtp_relay_ssl, Context),
             Creds = case z_convert:to_binary( m_config:get_value(site, smtp_relay_username, Context) ) of
                 <<>> ->
                     [];
@@ -849,11 +880,22 @@ relay_site_options(_State, Context) ->
                         {password, z_convert:to_list(m_config:get_value(site, smtp_relay_password, Context))}
                     ]
             end,
+            TLS = case SSL of
+                true ->
+                    [
+                        {tls, always}
+                    ];
+                false ->
+                    []
+            end,
             {true, [
                 {relay, SmtpHost},
                 {port, Port},
-                {ssl, SSL}
-            ] ++ Creds};
+                {tls_options, [
+                    {versions, ['tlsv1.2']}
+                    | tls_certificate_check:options(SmtpHost)
+                ]}
+            ] ++ Creds ++ TLS};
         false ->
             false
     end.
@@ -872,6 +914,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
         {error, wait} ->
             ?LOG_INFO(#{
                 text => <<"Delaying email send: too many parallel senders for relay">>,
+                in => zotonic_core,
                 recipient => RecipientEmail,
                 message_id => Id,
                 relay => Relay
@@ -897,13 +940,16 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
 
             %% use the unique id as 'envelope sender' (VERP)
             SendResult = case z_config:get(smtp_is_blackhole, false) of
-                true -> <<"Blackhole - zotonic config smtp_is_blackhole is set.">>;
-                false -> send_blocking(Id, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context)
+                true ->
+                    {ok, <<"Blackhole - zotonic config smtp_is_blackhole is set.">>};
+                false ->
+                    send_blocking(Id, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context)
             end,
             case SendResult of
                 {error, Reason, {FailureType, Host, Message}} ->
                     ?LOG_ERROR(#{
                         text => <<"Error sending email">>,
+                        in => zotonic_core,
                         recipient => RecipientEmail,
                         relay => Relay,
                         result => error,
@@ -948,7 +994,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                                                 props=LogEmail#log_email{
                                                         severity = ?LOG_LEVEL_ERROR,
                                                         mailer_status = bounce,
-                                                        mailer_message = z_convert:to_binary(Message),
+                                                        mailer_message = message(Message),
                                                         mailer_host = Host
                                                     }
                                               }, Context),
@@ -958,6 +1004,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                 {error, Reason} ->
                     ?LOG_ERROR(#{
                         text => <<"Error sending email">>,
+                        in => zotonic_core,
                         recipient => RecipientEmail,
                         result => error,
                         reason => Reason
@@ -984,6 +1031,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                     Receipt1 = z_string:trim(Receipt),
                     ?LOG_NOTICE(#{
                         text => <<"Sent email">>,
+                        in => zotonic_core,
                         result => ok,
                         recipient => RecipientEmail,
                         message => Receipt1
@@ -1037,9 +1085,9 @@ send_blocking(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context) ->
         {ok, Receipt} ->
             {ok, Receipt};
         undefined ->
-            send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts);
+            send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context);
         smtp ->
-            send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts);
+            send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context);
         {error, _} = Error ->
             Error;
         {error, _, _} = Error ->
@@ -1047,41 +1095,60 @@ send_blocking(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context) ->
     end.
 
 
-send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts) ->
+send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context) ->
     {relay, Relay} = proplists:lookup(relay, SmtpOpts),
     ?LOG_INFO(#{
         text => <<"Sending email">>,
+        in => zotonic_core,
         recipient => RecipientEmail,
         message_id => MsgId,
-        relay => Relay
+        relay => Relay,
+        port => proplists:get_value(port, SmtpOpts)
     }),
-    case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
+    IsFallbackPlainText = z_config:get(smtp_plaintext_fallback),
+    case catch gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts) of
         Receipt when is_binary(Receipt) ->
             {ok, Receipt};
-        {error, no_more_hosts, {permanent_failure, _Host, <<"ign Root ", _/binary>>}} ->
+        {error, no_more_hosts, {permanent_failure, _Host, <<"ign Root ", _/binary>>}}
+            when IsFallbackPlainText ->
             % Don't ask ...
-            send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts);
-        {error, retries_exceeded, {_FailureType, _Host, {error, closed}}} ->
-            send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts);
-        {error, retries_exceeded, {_FailureType, _Host, {error, timeout}}} ->
-            send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts);
+            send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts, Context);
+        {error, Failure, {_FailureType, _Host, {error, Reason}}}
+            when IsFallbackPlainText,
+                 (Failure =:= send orelse Failure =:= retries_exceeded),
+                 (Reason =:= closed orelse Reason =:= timeout) ->
+            send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts, Context);
+        {error, _Failure, {_FailureType, _Host, <<"554 TLS handshake failure", _/binary>>}}
+            when IsFallbackPlainText ->
+            % Seen with yahoo.com addresses and OTP 26
+            send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts, Context);
         {error, _} = Error ->
             Error;
         {error, _, _} = Error ->
-            Error
+            Error;
+        {'EXIT', _} when IsFallbackPlainText ->
+            send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts, Context);
+        {'EXIT', {Reason, _Stack}} ->
+            {error, Reason}
     end.
 
-send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts) ->
-    ?LOG_NOTICE(#{
-        text => <<"Bounce error, retrying without TLS">>,
-        recipient => RecipientEmail,
-        relay => proplists:get_value(relay, SmtpOpts)
-    }),
+send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts, Context) ->
     SmtpOpts1 = [
         {tls, never}
-        | proplists:delete(tls, SmtpOpts)
+        | proplists:delete(tls, proplists:delete(tls_options, SmtpOpts))
     ],
-    case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts1) of
+    SmtpOpts2 = [
+        {port, plaintext_port(Context)}
+        | proplists:delete(port, SmtpOpts1)
+    ],
+    ?LOG_NOTICE(#{
+        text => <<"SMTP closed or timeout error, retrying without TLS">>,
+        in => zotonic_core,
+        recipient => RecipientEmail,
+        relay => proplists:get_value(relay, SmtpOpts2),
+        port => proplists:get_value(port, SmtpOpts2)
+    }),
+    case gen_smtp_client:send_blocking({VERP, [RecipientEmail], EncodedMail}, SmtpOpts2) of
         Receipt when is_binary(Receipt) ->
             {ok, Receipt};
         {error, _} = Error ->
@@ -1090,10 +1157,45 @@ send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts) ->
             Error
     end.
 
-is_retry_possible(_Reason, _FailureType, auth_failed) -> true;  % proxy - could be temporary
-is_retry_possible(retries_exceeded, _FailureType, _Message) -> true;
-is_retry_possible(_Reason, permanent_failure, _Message) -> false;
-is_retry_possible(_Reason, __FailureType, _Message) -> true.
+plaintext_port(Context) ->
+    DefaultPort = case z_config:get(smtp_relay) of
+        true ->
+            z_config:get(smtp_port, ?SMTP_PORT_PLAIN_TEXT);
+        false ->
+            ?SMTP_PORT_PLAIN_TEXT
+    end,
+    case m_config:get_boolean(site, smtp_relay, Context) of
+        true ->
+            case z_convert:to_binary( m_config:get_value(site, smtp_relay_port, Context) ) of
+                <<>> ->
+                    DefaultPort;
+                SPort ->
+                    try
+                        z_convert:to_integer(SPort)
+                    catch
+                        _:_ -> DefaultPort
+                    end
+            end;
+        false ->
+            DefaultPort
+    end.
+
+
+is_retry_possible(_Reason, _FailureType, auth_failed) ->
+    true;  % proxy - could be temporary
+is_retry_possible(retries_exceeded, _FailureType, _Message) ->
+    true;
+is_retry_possible(_Reason, permanent_failure, Message) when is_binary(Message) ->
+    % Check for issue with proxy (https://github.com/zotonic/zotonic/issues/3508):
+    % 554 5.7.0 Your message could not be sent. The limit on the number of allowed outgoing messages was exceeded. Try again later.
+    case binary:match(Message, <<"Try again later.">>) of
+        {_, _} -> true;
+        nomatch -> false
+    end;
+is_retry_possible(_Reason, permanent_failure, _Message) ->
+    false;
+is_retry_possible(_Reason, __FailureType, _Message) ->
+    true.
 
 encode_email(_Id, #email{raw=Raw}, _MessageId, _From, _Context) when is_list(Raw); is_binary(Raw) ->
     z_convert:to_binary(Raw);
@@ -1362,6 +1464,7 @@ mark_sent(Id) ->
         {aborted, Reason} ->
             ?LOG_NOTICE(#{
                 text => <<"Could not mark message as sent">>,
+                in => zotonic_core,
                 message_id => id,
                 reason => Reason
             }),
@@ -1384,6 +1487,7 @@ delete_emailq(Id) ->
         {atomic, NotOk} ->
             ?LOG_NOTICE(#{
                 text => <<"Could not delete message">>,
+                in => zotonic_core,
                 message_id => Id,
                 reason => NotOk
             }),
@@ -1391,6 +1495,7 @@ delete_emailq(Id) ->
         {aborted, Reason} ->
             ?LOG_NOTICE(#{
                 text => <<"Could not delete message">>,
+                in => zotonic_core,
                 message_id => Id,
                 reason => Reason
             }),
@@ -1449,6 +1554,7 @@ delete_sent_messages(StatusSites, State) ->
         {aborted, Reason} ->
             ?LOG_NOTICE(#{
                 text => <<"Could not delete sent messages">>,
+                in => zotonic_core,
                 reason => Reason
             }),
             ok
@@ -1504,6 +1610,7 @@ delete_failed_messages(StatusSites) ->
         {aborted, Reason} ->
             ?LOG_NOTICE(#{
                 text => <<"Could not delete failed messages">>,
+                in => zotonic_core,
                 reason => Reason
             }),
             ok
@@ -1560,6 +1667,7 @@ send_next_batch(MaxListSize, StatusSites, State) ->
         {aborted, Reason} ->
             ?LOG_NOTICE(#{
                 text => <<"Could not fetch next messages to be sent">>,
+                in => zotonic_core,
                 reason => Reason
             }),
             {false, State}

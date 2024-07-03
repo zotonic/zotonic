@@ -40,7 +40,7 @@
 -type model_callback() :: m_get | m_post | m_delete.
 -type path_element() :: atom() | binary() | term().
 -type path() :: list( path_element() ).
--type opt_message() :: mqtt_packet_map:mqtt_message() | undefined.
+-type opt_message() :: mqtt_packet_map:mqtt_packet() | undefined.
 
 -export_type([
     model_name/0,
@@ -126,13 +126,20 @@ publish(Model, Verb, Path, Msg, Context) ->
     end.
 
 
--spec callback( model_name(), verb(), path(), mqtt_packet_map:mqtt_message(), z:context() ) -> {ok, term()} | {error, term()}.
+-spec callback( model_name(), verb(), path(), mqtt_packet_map:mqtt_packet(), z:context() ) -> {ok, term()} | {error, term()}.
 callback(Model, Verb, Path, Msg, Context) ->
     case get_module(Model, Context) of
         {ok, Mod} ->
             maybe_resolve(Verb, model_call(Mod, map_verb(Verb), Path, Msg, Context), Context);
         {error, _} = Error ->
-            ?LOG_NOTICE("Publish to unknown model ~p: ~p ~p ~p", [Model, Verb, Path, Msg]),
+            ?LOG_NOTICE(#{
+                text => <<"Publish to unknown model">>,
+                in => zotonic_core,
+                model => Model,
+                verb => Verb,
+                path => Path,
+                message => Msg
+            }),
             Error
     end.
 
@@ -214,7 +221,7 @@ map_verb(post) -> m_post;
 map_verb(delete) -> m_delete.
 
 
--spec model_call( module(), atom(), path(), mqtt_packet_map:mqtt_message(), z:context() ) -> {ok, term()} | ok | {error, unacceptable | term()}.
+-spec model_call( module(), atom(), path(), mqtt_packet_map:mqtt_packet(), z:context() ) -> {ok, term()} | ok | {error, unacceptable | term()}.
 model_call(Mod, m_get, Path, Msg, Context) ->
     Mod:m_get(binarize(Path), Msg, Context);
 model_call(Mod, Callback, Path, Msg, Context) ->
@@ -226,9 +233,16 @@ model_call(Mod, Callback, Path, Msg, Context) ->
                 [ {Mod, Callback, _As, _Loc} | _ ] ->
                     {error, unknown_path};
                 _ ->
-                    ?LOG_ERROR("Function clause in model call to ~p:~p(~p)",
-                                [ Mod, Callback, Path ],
-                                #{ stack => S }),
+                    ?LOG_ERROR(#{
+                        text => <<"Error in model function call">>,
+                        in => zotonic_core,
+                        result => error,
+                        reason => function_clause,
+                        model => Mod,
+                        callback => Callback,
+                        path => Path,
+                        stack => S
+                    }),
                     {error, function_clause}
             end;
         error:undef:S ->
@@ -236,9 +250,16 @@ model_call(Mod, Callback, Path, Msg, Context) ->
                 [ {Mod, Callback, _As, _Loc} | _ ] ->
                     {error, unknown_path};
                 _ ->
-                    ?LOG_ERROR("Undef in model call to ~p:~p(~p)",
-                                [ Mod, Callback, Path ],
-                                #{ stack => S }),
+                    ?LOG_ERROR(#{
+                        text => <<"Undef in model call">>,
+                        in => zotonic_core,
+                        result => error,
+                        reason => undef,
+                        model => Mod,
+                        callback => Callback,
+                        path => Path,
+                        stack => S
+                    }),
                     {error, undef}
             end
     end.

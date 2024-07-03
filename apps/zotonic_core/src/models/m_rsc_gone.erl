@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2012 Marc Worrell
-%%
+%% @copyright 2012-2023 Marc Worrell
 %% @doc Model for administration of deleted resources and their possible new location.
+%% @end
 
-%% Copyright 2012 Marc Worrell
+%% Copyright 2012-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,6 +34,8 @@
     gone/2,
     gone/3,
 
+    delete/2,
+
     install/1
 ]).
 
@@ -47,8 +49,7 @@ m_get([ Id, <<"new_location">> | Rest ], _Msg, Context) ->
     {ok, {get_new_location(Id, Context), Rest}};
 m_get([ Id, <<"is_gone">> | Rest ], _Msg, Context) ->
     {ok, {is_gone(Id, Context), Rest}};
-m_get(Vs, _Msg, _Context) ->
-    ?LOG_INFO("Unknown ~p lookup: ~p", [?MODULE, Vs]),
+m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 %% @doc Get the possible 'rsc_gone' resource for the id.
@@ -170,7 +171,15 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
             end
     end.
 
-
+%% @doc Delete a gone entry for a resource, used after recovery of a resource.
+-spec delete(Id, Context) -> ok | {error, enoent} when
+    Id :: m_rsc:resource_id(),
+    Context :: z:context().
+delete(Id, Context) ->
+    case z_db:q("delete from rsc_gone where id = $1", [ Id ], Context) of
+        1 -> ok;
+        0 -> {error, enoent}
+    end.
 
 %% @doc Install or upgrade the rsc_gone table.
 -spec install( z:context() ) -> ok.
@@ -182,7 +191,7 @@ install(Context) ->
     case z_db:table_exists(rsc_gone, Context) of
         false ->
             [] = z_db:q("
-                CREATE TABLE rsc_gone
+                CREATE TABLE IF NOT EXISTS rsc_gone
                 (
                     id bigint not null,
                     new_id bigint,
@@ -200,17 +209,17 @@ install(Context) ->
                 )",
                 Context),
 
-            [] = z_db:q("CREATE INDEX rsc_gone_name_key ON rsc_gone(name)", Context),
-            [] = z_db:q("CREATE INDEX rsc_gone_uri_key ON rsc_gone(uri)", Context),
-            [] = z_db:q("CREATE INDEX rsc_gone_page_path_key ON rsc_gone(page_path)", Context),
-            [] = z_db:q("CREATE INDEX rsc_gone_modified_key ON rsc_gone(modified)", Context),
+            [] = z_db:q("CREATE INDEX IF NOT EXISTS rsc_gone_name_key ON rsc_gone(name)", Context),
+            [] = z_db:q("CREATE INDEX IF NOT EXISTS rsc_gone_uri_key ON rsc_gone(uri)", Context),
+            [] = z_db:q("CREATE INDEX IF NOT EXISTS rsc_gone_page_path_key ON rsc_gone(page_path)", Context),
+            [] = z_db:q("CREATE INDEX IF NOT EXISTS rsc_gone_modified_key ON rsc_gone(modified)", Context),
             z_db:flush(Context),
             ok;
         true ->
             % Check for rsc_gone_uri_key
             case z_db:key_exists(rsc_gone, rsc_gone_uri_key, Context) of
                 false ->
-                    [] = z_db:q("CREATE INDEX rsc_gone_uri_key ON rsc_gone(uri)", Context),
+                    [] = z_db:q("CREATE INDEX IF NOT EXISTS rsc_gone_uri_key ON rsc_gone(uri)", Context),
                     ok;
                 true ->
                     ok

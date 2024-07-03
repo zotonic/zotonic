@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2012 Marc Worrell
+%% @copyright 2011-2023 Marc Worrell
 
-%% Copyright 2011-2012 Marc Worrell
+%% Copyright 2011-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 -module(survey_q_matching).
 
 -export([
-    answer/3,
+    answer/4,
     prep_chart/3,
     prep_answer_header/2,
     prep_answer/3,
@@ -27,7 +27,6 @@
 ]).
 
 -include_lib("zotonic_mod_survey/include/survey.hrl").
--include_lib("zotonic_core/include/zotonic.hrl").
 
 to_block(Q) ->
     #{
@@ -38,8 +37,8 @@ to_block(Q) ->
         <<"matching">> => z_convert:to_binary(Q#survey_question.text)
     }.
 
--spec answer( map(), list(), z:context() ) -> {ok, list()} | {error, missing}.
-answer(Block, Answers, Context) ->
+-spec answer( m_rsc:resource_id(), map(), list(), z:context() ) -> {ok, list()} | {error, missing}.
+answer(_SurveyId, Block, Answers, Context) ->
     Name = maps:get(<<"name">>, Block, undefined),
     Props = filter_survey_prepare_matching:survey_prepare_matching(Block, Context),
     Options = [ Val || {Val,_Text} <- maps:get(<<"options">>, Props, []) ],

@@ -171,12 +171,19 @@ object with id 456::
 Substitute ``'*'`` for the object id to match *any* object. So, to select all
 resources that have any author or editor edge::
 
-    hasanyobject[['*', 'author'], ['*', 'editor']]
+    hasanyobject=[['*', 'author'], ['*', 'editor']]
 
 You can also mix the two types of elements. To select all resources that have an
 author or a connection (with any predicate) to resource 2 or 3::
 
-    hasanyobject[['*', 'author'], 2, 3]
+    hasanyobject=[['*', 'author'], 2, 3]
+
+
+hasanysubject
+^^^^^^^^^^^^^
+
+Like ``hasanyobject`` but then searching for subjects (resources referring to) of
+the found resource id.
 
 
 hasmedium
@@ -244,6 +251,25 @@ values are true, false or all::
 
     is_published='all'
 
+is_findable
+^^^^^^^^^^^
+
+A boolean option that specifies if a page should be findable or not::
+
+    is_findable
+
+This checks the rescource’s ``is_unfindable`` flag. To be findable in
+searches the flag must be set to ``false``, which is the default.
+
+is_unfindable
+^^^^^^^^^^^^^
+
+A boolean option that specifies if a page should not be findable::
+
+    is_unfindable
+
+This checks the rescource’s ``is_unfindable`` flag.
+
 upcoming
 ^^^^^^^^
 
@@ -252,6 +278,24 @@ have a start date which lies in the future. Like the name says,
 useful to select upcoming events::
 
     upcoming
+
+upcoming_on
+^^^^^^^^^^^
+
+Specifying 'upcoming' means that you only want to select things that
+have a start date after the given date. Like the name says,
+useful to select upcoming events::
+
+    upcoming_on='+1 week'
+
+upcoming_date
+^^^^^^^^^^^^^
+
+Specifying 'upcoming' means that you only want to select things that
+have a start date after the start of the given date. Like the name says,
+useful to select upcoming events::
+
+    upcoming_date='+1 week'
 
 ongoing
 ^^^^^^^
@@ -262,6 +306,24 @@ and an end date which lies in the future::
 
     ongoing
 
+ongoing_on
+^^^^^^^^^^
+
+Specifying 'ongoing' means that you only want to select things that
+are happening on the given moment: that have a start datetime which lies before
+the given datetime and an end date which lies after the given datetime::
+
+    ongoing_on='yesterday'
+
+ongoing_date
+^^^^^^^^^^^^
+
+Specifying 'ongoing' means that you only want to select things that
+are happening on the given day: that have a start date which lies before
+the given day and an end date which lies after the start of the given day::
+
+    ongoing_date='yesterday'
+
 finished
 ^^^^^^^^
 
@@ -270,6 +332,22 @@ have a start date which lies in the past::
 
     finished
 
+finished_on
+^^^^^^^^^^^
+
+Specifying 'finished' means that you only want to select things that
+have a start datetime which lies before the given moment::
+
+    finished_on='tomorrow'
+
+finished_date
+^^^^^^^^^^^^^
+
+Specifying 'finished' means that you only want to select things that
+have a start day which lies before the start of the given day::
+
+    finished_date='tomorrow'
+
 unfinished
 ^^^^^^^^^^
 
@@ -277,6 +355,22 @@ Specifying 'unfinished' means that you only want to select things that
 have an end date which lies in the future::
 
     unfinished
+
+unfinished_on
+^^^^^^^^^^^^^
+
+Specifying 'unfinished' means that you only want to select things that
+have an end date which after the given date::
+
+    unfinished_on='+3 days'
+
+unfinished_date
+^^^^^^^^^^^^^^^
+
+Specifying 'unfinished' means that you only want to select things that
+have an end date which after the end of the given day::
+
+    unfinished_date='+3 days'
 
 unfinished_or_nodate
 ^^^^^^^^^^^^^^^^^^^^
@@ -552,6 +646,26 @@ code. Search terms with invalid language codes are ignored.
 Find all resources with a German translation::
 
     language=de
+
+Use the special language ``z_language`` to search in the current request language::
+
+    language=z_language
+
+Example, search in English or the current request language::
+
+    language=[en,z_language]
+
+
+visible_for
+^^^^^^^^^^^
+
+Filters on the ``visible_for`` resource property. This is used by some access control
+modules to filter the visibility of resources. The filtered value is an integer or a
+list of integers::
+
+    visible_for=[5,6]
+
+Note that the default :ref:`mod_acl_user_groups` does not use this property.
 
 
 Filter behaviour

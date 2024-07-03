@@ -115,7 +115,13 @@ full(Id, Context) when is_integer(Id) ->
             % URL used as the template for urls to export other resource ids.
             BaseUri0 = z_context:abs_url( z_dispatcher:url_for(id, [ {id, <<"ID">>} ], ContextNoLang), ContextNoLang),
             BaseUri = binary:replace(BaseUri0, <<"/ID">>, <<"/:id">>),
-
+            Languages = z_language:enabled_languages(Context),
+            PageUrls = lists:foldl(
+                fun(Iso, Acc) ->
+                    Acc#{ Iso => m_rsc:p(Id, <<"page_url_abs">>, z_context:set_language(Iso, Context))}
+                end,
+                #{ 'x-default' => m_rsc:p(Id, <<"page_url_abs">>, ContextNoLang) },
+                Languages),
             Export = #{
                 %% Essential fields
                 <<"id">> => Id,
@@ -123,6 +129,7 @@ full(Id, Context) when is_integer(Id) ->
                 <<"is_a">> => [ z_convert:to_binary(A) || A <- m_rsc:is_a(Id, Context) ],
                 <<"uri">> => m_rsc:uri(Id, ContextNoLang),
                 <<"uri_template">> => BaseUri,
+                <<"page_url">> => PageUrls,
 
                 %% Parts
                 <<"resource">> => maps:without([<<"id">>], Rsc),
@@ -145,7 +152,7 @@ edges(Id, Context) ->
     lists:foldl(
         fun
             ({hasusergroup, _Es}, Acc) ->
-                % Do not expose the groups an user is member of.
+                % Do not expose the groups a user is member of.
                 % TODO: make this configurable.
                 Acc;
             ({Pred, Es}, Acc) when is_atom(Pred) ->

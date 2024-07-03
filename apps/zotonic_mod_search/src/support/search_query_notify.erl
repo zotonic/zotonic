@@ -1,7 +1,7 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2009-2010 Arjan Scherpenisse
-%% Date: 2009-04-12
+%% @copyright 2009-2023 Arjan Scherpenisse
 %% @doc Notifications for 'query' resources when items are added to them.
+%% @end
 
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,8 +50,8 @@ watches_update(Id, Watches, Context) ->
             case z_convert:to_bool(m_rsc:p_no_acl(Id, is_query_live, Context)) of
                 true ->
                     try
-                        Props = search_query:parse_query_text(z_html:unescape(Q)),
-                        [{Id, Props} | proplists:delete(Id, Watches)]
+                        Query = z_search_props:from_text(z_html:unescape(Q)),
+                        [{Id, Query} | proplists:delete(Id, Watches)]
                     catch
                         throw:{error,{unknown_query_term, _Term}} ->
                             proplists:delete(Id, Watches)
@@ -65,23 +65,36 @@ watches_remove(Id, Watches, _Context) ->
     proplists:delete(Id, Watches).
 
 %% @doc Check whether the given resource matches to the queries. Returns list of matching query resource ids.
-%% @spec check_rsc(Id, Watches, Context) -> list()
 check_rsc(Id, Watches, Context) ->
     IsA = m_rsc:p_no_acl(Id, is_a, Context),
-    Cats   = [ {cat, z_convert:to_binary(A)} || A <- IsA ],
-    CatsEx = [ {cat_exclude, z_convert:to_binary(A)} || A <- IsA ],
+    Cats = [
+        #{
+            <<"term">> => <<"cat">>,
+            <<"value">> => z_convert:to_binary(A)
+        } || A <- IsA ],
+    CatsEx = [
+        #{
+            <<"term">> => <<"cat_exclude">>,
+            <<"value">> => z_convert:to_binary(A)
+        } || A <- IsA ],
     %% Pre-filter the list of queries according to category check
-    W = lists:filter(fun({_, Props}) -> cat_matches(Cats, Props) andalso not(cat_matches(CatsEx, Props)) end, Watches),
+    W = lists:filter(
+        fun({_Id, Query}) ->
+            cat_matches(Cats, Query) andalso not(cat_matches(CatsEx, Query))
+        end, Watches),
     %% Filter the list by executing the query
-    W2 = lists:filter(fun({_, QueryProps}) -> execute_query_check(Id, QueryProps, Context) end, W),
+    W2 = lists:filter(
+        fun({_Id, Query}) ->
+            execute_query_check(Id, Query, Context)
+        end, W),
     [QueryId || {QueryId, _} <- W2].
 
 
 cat_matches([], _Props) -> false;
-cat_matches([Cat|Rest], Props) ->
-    case lists:member(Cat, Props) of
+cat_matches([Cat|Rest], #{ <<"q">> := QueryTerms } = Query) ->
+    case lists:member(Cat, QueryTerms) of
         true -> true;
-        false -> cat_matches(Rest, Props)
+        false -> cat_matches(Rest, Query)
     end.
 
 send_notifications(_Id, [], _Context) ->
@@ -92,9 +105,17 @@ send_notifications(Id, [QueryId|Rest], Context) ->
 
 
 %% @doc Check the given resource ID against the props of the query. Returns true if matches.
-execute_query_check(CheckId, QueryProps, Context) ->
-    Query = [{rsc_id, CheckId} | QueryProps],
-    case z_search:query_(Query, Context) of
+execute_query_check(CheckId, #{ <<"q">> := Terms } = Query, Context) ->
+    Query1 = Query#{
+        <<"q">> => [
+            #{
+                <<"term">> => <<"id">>,
+                <<"value">> => CheckId
+            }
+            | Terms
+        ]
+    },
+    case z_search:query_(Query1, Context) of
         [CheckId] -> true;
         [] -> false
     end.

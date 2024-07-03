@@ -12,15 +12,15 @@
 {% block widget_content %}
     {% if id.is_editable %}
     <div class="form-group">
-        <input class="form-control" type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="blocks[].prompt{{ lang_code_with_dollar }}" value="{{ blk.prompt[lang_code]  }}"
+        <input class="form-control" type="text" id="block-{{name}}-prompt{{ lang_code_for_id }}" name="blocks[].prompt{{ lang_code_with_dollar }}" value="{{ blk.prompt|translation:lang_code }}"
                placeholder="{_ Prompt _} ({{ lang_code }})" />
     </div>
     <div class="form-group view-expanded">
        <textarea class="form-control" id="block-{{name}}-explanation{{ lang_code_for_id }}" name="blocks[].explanation{{ lang_code_with_dollar }}" rows="2"
-              placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation[lang_code]  }}</textarea>
+              placeholder="{_ Explanation _} ({{ lang_code }})" >{{ blk.explanation|translation:lang_code }}</textarea>
     </div>
     {% else %}
-        <p>{{ blk.prompt[lang_code]  }}</p>
+        <p>{{ blk.prompt|translation:lang_code }}</p>
     {% endif %}
 {% endblock %}
 
@@ -30,19 +30,19 @@
       <div class="form-group">
           <div class="radio">
               <label>
-                  <input type="radio" id="block-{{name}}-input_type" name="blocks[].input_type" value="" {% if not blk.input_type %}checked="checked"{% endif %} />
+                  <input type="radio" id="block-{{name}}-input_type" name="blocks[].input_type~{{ name }}" value="" {% if not blk.input_type %}checked="checked"{% endif %} />
                   {_ Single answer possible _}
               </label>
           </div>
           <div class="radio">
               <label>
-                  <input type="radio" id="block-{{name}}-input_type" name="blocks[].input_type" value="multi" {% if blk.input_type == 'multi' %}checked="checked"{% endif %} />
+                  <input type="radio" id="block-{{name}}-input_type" name="blocks[].input_type~{{ name }}" value="multi" {% if blk.input_type == 'multi' %}checked="checked"{% endif %} />
                   {_ Multiple answers possible _}
               </label>
           </div>
           <div class="radio">
               <label>
-                  <input type="radio" id="block-{{name}}-input_type" name="blocks[].input_type" value="submit" {% if blk.input_type == 'submit' %}checked="checked"{% endif %} />
+                  <input type="radio" id="block-{{name}}-input_type" name="blocks[].input_type~{{ name }}" value="submit" {% if blk.input_type == 'submit' %}checked="checked"{% endif %} />
                   {_ Submit on clicking an option _}
               </label>
           </div>
