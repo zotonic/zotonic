@@ -235,17 +235,21 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 	}
 
 	if (where == 'remove') {
+        let page_id = $menu_item.children('div').data('page-id');
+
 		{% if is_hierarchy or in_sorter == 'category' %}
 			z_transport('mod_menu', 'ubf', {
 				cmd: "delete",
-				id: $menu_item.children('div').data('page-id')
+				id: page_id
 			});
 		{% else %}
-            var self = this;
+            let self = this;
+
             z_dialog_confirm({
                 text: "{_ Are you sure you want to delete _}: "
                     + "<b>" + $menu_item.find(".menu-label").html() + "</b><br>"
-                    + "{_ and all indented items below it from the menu? _}<br><br>",
+                    + "{_ and all indented items below it from the menu? _}"
+                    + "<b id=\"menu-delete-undo-text\" style=\"display:none\"><br><br>{_ THIS CAN NOT BE UNDONE! _}</b>",
                 ok: "{_ Delete _}",
                 on_confirm: function() {
                     $(self).closest('li.menu-item').fadeOut(500, function() {
@@ -254,7 +258,17 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
                     });
                 },
                 is_danger: true
-            })
+            });
+
+            cotonic.broker
+                .call("bridge/origin/model/menu/get/is_menu_item_delete_safe/" ++ page_id)
+                .then((m) -> {
+                    if (m.payload.result) {
+                        $('#menu-delete-undo-text').hide();
+                    } else {
+                        $('#menu-delete-undo-text').show();
+                    }
+                });
 		{% endif %}
 	} else if (where == 'copy') {
 		z_transport("mod_menu", "ubf", {
