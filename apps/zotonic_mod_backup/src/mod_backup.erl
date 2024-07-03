@@ -618,30 +618,22 @@ do_backup_process_1(Name, IsFullBackup, Context) ->
                         true ->
                             case archive(Name, maps:get(archive, Cmds), Context) of
                                 {ok, TarFile} ->
-                                    case archive_config(Name, Context) of
-                                        {ok, ConfigTarFile} ->
-                                            ?LOG_INFO(#{
-                                                        text => <<"Backup finished">>,
-                                                        in => zotonic_mod_backup,
-                                                        result => ok,
-                                                        full_backup => IsFilesBackup,
-                                                        name => Name,
-                                                        database => DumpFile,
-                                                        files => TarFile,
-                                                        config_files => ConfigTarFile
-                                                       }),
-                                            {ok, #{
-                                                   database => DumpFile,
-                                                   files => TarFile,
-                                                   config_files => ConfigTarFile
-                                                  }};
-                                        {error, _} ->
-                                            % Ignore failed config tar regeister the db and file tar
-                                            {ok, #{
-                                                   database => DumpFile,
-                                                   files => TarFile
-                                                  }}
-                                    end;
+                                    {ok, ConfigTarFile} = archive_config(Name, Context),
+                                    ?LOG_INFO(#{
+                                                text => <<"Backup finished">>,
+                                                in => zotonic_mod_backup,
+                                                result => ok,
+                                                full_backup => IsFilesBackup,
+                                                name => Name,
+                                                database => DumpFile,
+                                                files => TarFile,
+                                                config_files => ConfigTarFile
+                                               }),
+                                    {ok, #{
+                                           database => DumpFile,
+                                           files => TarFile,
+                                           config_files => ConfigTarFile
+                                          }};
                                 {error, _} ->
                                     % Ignore failed tar, at least register the db dump
                                     {ok, #{
