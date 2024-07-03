@@ -57,7 +57,6 @@
     read_admin_file/1
 ]).
 
--export([password_encrypt_file/2, password_decrypt_file/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_core/include/zotonic_file.hrl").
@@ -690,7 +689,7 @@ maybe_encrypt_files({ok, Files}, Context) ->
             Dir = dir(Context),
             Files1 = maps:map(fun(_K, File) ->
                                       FullName = filename:join(Dir, File),
-                                      {ok, FullNameEnc} = password_encrypt_file(FullName, Password),
+                                      {ok, FullNameEnc} = z_file_crypto:password_encrypt(FullName, Password),
                                       ok = file:delete(FullName),
                                       filename(FullNameEnc)
                               end,
@@ -951,134 +950,7 @@ make_filelist(Prefix, Dir, [File|Rest], Acc) ->
 
 
 %%
-%%
-%%
-
-%% @doc Encrypt InFile
-password_encrypt_file(InFile, Password) ->
-    password_encrypt_file(InFile, <<InFile/binary, ".enc">>, Password).
-
-password_encrypt_file(InFile, OutFile, Password) ->
-    {ok, In} = file:open(InFile, [read, binary]),
-    try
-        {ok, Out} = file:open(OutFile, [write, binary]),
-        try
-            ok = password_encrypt(In, Out, Password),
-            {ok, OutFile}
-        after
-            file:close(Out)
-        end
-    after
-        file:close(In)
-    end.
-
-password_encrypt(InIODevice, OutIODevice, Password) ->
-    password_encrypt(InIODevice, OutIODevice, Password, new_salt(), new_iter()).
-
-password_encrypt(InIODevice, OutIODevice, Password, Salt, Iter) ->
-    %% Write the non-secret salt and extra iteration count, they are not
-    %% secret. It is handy to store these parameters together with the
-    %% encrypted data.
-    ok = file:write(OutIODevice, get_header(Salt, Iter)),
-
-    #{ key := Key, iv := IV } = derive_key_and_iv(Password, Salt, Iter),
-    CipherState = crypto:crypto_init(aes_256_cfb8, Key, IV, [{encrypt, true}, {padding, random}]),
-
-    KeyMac = crypto:mac(hmac, sha256, Password, <<Salt/binary, Password/binary>>),
-    do_mac(KeyMac, OutIODevice, CipherState),
-    ok = do_crypto(InIODevice, OutIODevice, CipherState),
-    ok.
-
-password_decrypt_file(Filename, Password) ->
-    case filename:extension(Filename) of
-        DotEnc when DotEnc == <<".enc">> orelse DotEnc == ".enc" ->
-            OutFilename = filename:rootname(Filename),
-            password_decrypt_file(Filename, OutFilename, Password);
-        _ ->
-            {error, outfile}
-    end.
-
-password_decrypt_file(InFile, OutFile, Password) -> 
-    {ok, In} = file:open(InFile, [read, binary]),
-    try
-        {ok, Header} = file:read(In, 2+4+16),
-        case get_decrypt_params(Header) of
-            {ok, #{ alg := Alg, iter := Iter, salt := Salt}} ->
-                {ok, Out} = file:open(OutFile, [write, binary]),
-                try
-                    #{ key := Key, iv := IV } = derive_key_and_iv(Password, Salt, Iter),
-                    CipherState = crypto:crypto_init(Alg, Key, IV, [{encrypt, false}, {padding, random}]),
-
-                    KeyMac = crypto:mac(hmac, sha256, Password, <<Salt/binary, Password/binary>>),
-                    case check_mac(KeyMac, In, CipherState) of
-                        ok ->
-                            do_crypto(In, Out, CipherState);
-                        {error, _}=Error ->
-                            Error
-                    end
-                after
-                    file:close(Out)
-                end;
-            {error, _}=Error ->
-                Error
-        end
-    after
-        file:close(In)
-    end.
-
-do_mac(Mac, Out, CipherState) ->
-    ok = file:write(Out, crypto:crypto_update(CipherState, Mac)).
-
-check_mac(Mac, In, CipherState) ->
-    case file:read(In, size(Mac)) of
-        {ok, Data} ->
-            case crypto:crypto_update(CipherState, Data) of
-                Mac ->
-                    ok;
-                _ ->
-                    {error, wrong_password}
-            end;
-        eof ->
-            {error, eof};
-        {error, _}=Error ->
-            Error
-    end.
-
-
-%%
-do_crypto(In, Out, CipherState) ->
-    case file:read(In, 100000) of
-        {ok, Data} ->
-            ok = file:write(Out, crypto:crypto_update(CipherState, Data)),
-            do_crypto(In, Out, CipherState);
-        eof ->
-            ok = file:write(Out, crypto:crypto_final(CipherState)),
-            ok;
-        {error, _}=Error ->
-            Error
-    end.
-
-new_salt() ->
-    crypto:strong_rand_bytes(16).
-
-new_iter() ->
-    600_000 + rand:uniform(65535).
-
-derive_key_and_iv(Password, Salt, Iter) ->
-    <<IV:16/binary, Key:32/binary>> = crypto:pbkdf2_hmac(sha256, Password, Salt, Iter, 16+32),
-    #{ key => Key, iv => IV }.
-
-get_header(Salt, Iter) when size(Salt) =:= 16 andalso (Iter =< 0 orelse Iter < 20_000_000) ->
-    <<"Z1", Iter:32/little-unsigned-integer, Salt/binary>>.
-
-get_decrypt_params(<<"Z1", Iter:32/little-unsigned-integer, Salt:16/binary, _/binary>>) ->
-    Params = #{ alg => aes_256_cfb8, iter => Iter, salt => Salt},
-    {ok, Params};
-get_decrypt_params(_) ->
-    {error, bad_prefix}.
-
-%%
-%%
+%% Helpers
 %%
 
 %% Strip all extensions from a filename.
