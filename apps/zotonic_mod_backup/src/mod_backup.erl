@@ -138,7 +138,7 @@ observe_tick_24h(tick_24h, Context) ->
 observe_m_config_update(#m_config_update{module=?MODULE, key=encrypt_backups}, Context) ->
     case m_config:get_boolean(?MODULE, encrypt_backups, Context) of
         true ->
-            case m_config:get(?MODULE, backup_encrypt_password, Context) of
+            case m_config:get_value(?MODULE, backup_encrypt_password, Context) of
                 Password when is_binary(Password) andalso size(Password) > 0 ->
                     ok;
                 _ ->
