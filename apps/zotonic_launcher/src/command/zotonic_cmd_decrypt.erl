@@ -22,7 +22,7 @@
 -export([info/0, run/1]).
 
 info() ->
-    "Decrypt a backup file.".
+    "Decrypt an encrypted backup.".
 
 run([ Password, InFilename]) ->
     decrypt(InFilename, Password);
