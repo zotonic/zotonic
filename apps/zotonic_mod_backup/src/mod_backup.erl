@@ -614,11 +614,11 @@ do_backup_process_1(Name, IsFullBackup, Context) ->
 
             case pg_dump(Name, maps:get(db_dump, Cmds), Context) of
                 {ok, DumpFile} ->
+                    {ok, ConfigTarFile} = archive_config(Name, Context),
                     case IsFilesBackup of
                         true ->
                             case archive(Name, maps:get(archive, Cmds), Context) of
                                 {ok, TarFile} ->
-                                    {ok, ConfigTarFile} = archive_config(Name, Context),
                                     ?LOG_INFO(#{
                                                 text => <<"Backup finished">>,
                                                 in => zotonic_mod_backup,
@@ -626,17 +626,18 @@ do_backup_process_1(Name, IsFullBackup, Context) ->
                                                 full_backup => IsFilesBackup,
                                                 name => Name,
                                                 database => DumpFile,
-                                                files => TarFile,
-                                                config_files => ConfigTarFile
+                                                config_files => ConfigTarFile,
+                                                files => TarFile
                                                }),
                                     {ok, #{
                                            database => DumpFile,
-                                           files => TarFile,
-                                           config_files => ConfigTarFile
+                                           config_files => ConfigTarFile,
+                                           files => TarFile
                                           }};
                                 {error, _} ->
                                     % Ignore failed tar, at least register the db dump
                                     {ok, #{
+                                        config_files => ConfigTarFile,
                                         database => DumpFile
                                     }}
                             end;
@@ -648,10 +649,12 @@ do_backup_process_1(Name, IsFullBackup, Context) ->
                                 full_backup => IsFilesBackup,
                                 name => Name,
                                 database => DumpFile,
+                                config_files => ConfigTarFile,
                                 files => none
                             }),
                             {ok, #{
-                                database => DumpFile
+                                database => DumpFile,
+                                config_files => ConfigTarFile
                             }}
                     end;
                 {error, _} = Error ->
