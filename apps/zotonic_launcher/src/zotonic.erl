@@ -108,9 +108,7 @@ runtests(Tests) ->
 %% @doc Stop all sites, the zotonic server and the beam.
 -spec stop() -> ok.
 stop() ->
-    ?LOG_NOTICE(#{
-        text => <<"Stopping Zotonic">>
-    }),
+    ?LOG_INFO(#{ text => <<"Stopping Zotonic">> }),
     logger:set_primary_config(level, error),
 
     Sites = z_sites_manager:get_sites(),
@@ -132,7 +130,8 @@ stop() ->
         HeartPid when is_pid(HeartPid) -> heart:set_cmd("echo ok")
     end,
 
-    % Stop all other running applications.
+    % Stop all other running applications -- keep an order here so that
+    % eg the filezcache, which depends on mnesia is stopped before mnesia.
     application:stop(zotonic_launcher),
     application:stop(zotonic_filewatcher),
     application:stop(zotonic_fileindexer),
@@ -141,8 +140,37 @@ stop() ->
     application:stop(jobs),
     application:stop(mnesia),
     application:stop(epgsql),
-    application:stop(erlexec),
-    init:stop().
+    %% Using init:stop() would do a clean shutdown, but also makes us wait
+    %% for erlexec to shutdown, which takes an additional 10 seconds.
+    %% For a kind-of-clean shutdown we stop all non-kernel-like and non-erlexec
+    %% apps by hand and then do a hard halt of the system.
+    stop_exec(),
+    stop_apps(),
+    halt().
+
+stop_apps() ->
+    lists:foreach(
+        fun({App, _Desc, _Version}) -> stop_app(App) end,
+        application:which_applications()).
+
+stop_app(erlexec) -> ok;
+stop_app(init) -> ok;
+stop_app(kernel) -> ok;
+stop_app(stdlib) -> ok;
+stop_app(syslog) -> ok;
+stop_app(logger) -> ok;
+stop_app(sasl) -> ok;
+stop_app(inets) -> ok;
+stop_app(os_mon) -> ok;
+stop_app(gproc) -> ok;
+stop_app(App) -> application:stop(App).
+
+stop_exec() ->
+    lists:foreach(
+        fun(ChildId) ->
+            exec:stop(ChildId)
+        end,
+        exec:which_children()).
 
 await_sites_stopping(0) -> ok;
 await_sites_stopping(N) ->
