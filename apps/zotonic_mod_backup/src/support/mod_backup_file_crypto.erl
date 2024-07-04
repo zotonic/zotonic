@@ -16,7 +16,7 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(z_file_crypto).
+-module(mod_backup_file_crypto).
 
 -export([
     password_encrypt/2, password_encrypt/3,
@@ -166,7 +166,6 @@ make_header(Salt, Iter) when size(Salt) == ?SALT_SIZE andalso (Iter =< ?MIN_ITER
 
 get_decrypt_params(<<"Z1", Iter:32/little-unsigned-integer, Salt:?SALT_SIZE/binary, _/binary>>)
   when Iter < ?MAX_ITER ->
-    %% [TODO] sanity check op de header.
     Params = #{ alg => aes_256_cfb8, iter => Iter, salt => Salt},
     {ok, Params};
 get_decrypt_params(_) ->

@@ -33,10 +33,10 @@ run(_) ->
     halt(1).
 
 decrypt(InFilename, Password) ->
-    feedback(z_file_crypto:password_decrypt(InFilename, z_convert:to_binary(Password))).
+    feedback(mod_backup_file_crypto:password_decrypt(InFilename, z_convert:to_binary(Password))).
 
 decrypt(InFilename, OutFilename, Password) ->
-    feedback(z_file_crypto:password_decrypt(InFilename, OutFilename, z_convert:to_binary(Password))).
+    feedback(mod_backup_file_crypto:password_decrypt(InFilename, OutFilename, z_convert:to_binary(Password))).
 
 feedback(ok) ->
     ok;

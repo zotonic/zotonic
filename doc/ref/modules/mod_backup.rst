@@ -15,15 +15,27 @@ well if you are building sites for them.  It is critical to keep
 backups of any Zotonic sites you develop.
 
 After enabling mod_backup, it will make a backup of the site’s data
-every night at 3 AM. It keeps the last 7 daily copies of the data, so
-you have always a backup to roll back to.
+and configuration every night at 3 AM. It keeps the last 7 daily
+copies of the data, so you have always a backup to roll back to.
 
 The backups are stored under ``backup`` in the files directory of
 your site. Check in the admin under System > Status to see where the
 site files directory is located.
 
-The site’s media files are stored as a ``.tar.gz`` file, while the
-database is stored as an uncrompressed ``.sql`` file.
+The site’s media files are stored as a ``<site-name>-N.tar.gz`` file. The
+configuration is named ``config-<site-name>-N.tar.gz``, while the
+database is stored compressed in a ``<site-name>-N.sql.gz`` file. N is 
+the day number.
+
+It is possible to encrypt the backups by enabeling the Encrypt Backups 
+option on the configuration page of the backup service. When you enable
+this for the first time, a password will be generated automatically. 
+This password should be stored in a safe location to be able to 
+decrypt the backups. When encryption is enabled, the files have
+the ``.enc`` extension. 
+
+The zotonic shell command ``decrypt`` can be used to decrypt encrypted
+zotonic backup files.
 
 If :ref:`mod_filestore` is enabled then the media files are not backed up, as
 it is assumed that the files are already backed up on the cloud filestore.

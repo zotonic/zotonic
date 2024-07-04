@@ -681,7 +681,7 @@ maybe_encrypt_files({ok, Files}, Context) ->
             Dir = dir(Context),
             Files1 = maps:map(fun(_K, File) ->
                                       FullName = filename:join(Dir, File),
-                                      {ok, FullNameEnc} = z_file_crypto:password_encrypt(FullName, Password),
+                                      {ok, FullNameEnc} = mod_backup_file_crypto:password_encrypt(FullName, Password),
                                       ok = file:delete(FullName),
                                       filename(FullNameEnc)
                               end,
