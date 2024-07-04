@@ -22,6 +22,7 @@
 -include("zotonic.hrl").
 
 -export([
+    otp_release/0,
     pipeline/2,
     write_terms/2,
     get_value/2,
@@ -92,6 +93,15 @@
     flush_message/1,
     ensure_existing_module/1
 ]).
+
+
+
+%% @doc Return the major OTP version as an integer.
+-spec otp_release() -> integer().
+otp_release() ->
+    {match, [Version]} = re:run(erlang:system_info(otp_release), "^R?([0-9]+)", [{capture, all_but_first, list}]),
+    list_to_integer(Version).
+
 
 %% @doc Apply a list of functions to a startlist of arguments.
 %% All functions must return: ok | {ok, term()} | {error, term()}.
