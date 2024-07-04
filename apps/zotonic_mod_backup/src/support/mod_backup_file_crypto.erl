@@ -1,6 +1,7 @@
 %% @author Maas-Maarten Zeeman <maas@channel.me>
 %% @copyright 2024 Maas-Maarten Zeeman
 %% @doc Decrypt and encrypt files.
+%% @end
 
 %% Copyright 2024 Maas-Maarten Zeeman
 %%
@@ -34,21 +35,6 @@
 password_encrypt(Filename, Password) ->
     password_encrypt(Filename, <<Filename/binary, ".enc">>, Password).
 
-% @doc Encrypt file named InFile with a password. The encrypted output will be written to OutFile.
-password_encrypt(InFile, OutFile, Password) ->
-    {ok, In} = file:open(InFile, [read, binary]),
-    try
-        {ok, Out} = file:open(OutFile, [write, binary]),
-        try
-            ok = password_encrypt_stream(In, Out, Password),
-            {ok, OutFile}
-        after
-            file:close(Out)
-        end
-    after
-        file:close(In)
-    end.
-
 % @doc Decrypt the file name Filename with the given password. When the extension of the file is ".enc"
 % the decrypted content will be written to the file without that extenstion.
 password_decrypt(Filename, Password) ->
@@ -60,33 +46,33 @@ password_decrypt(Filename, Password) ->
             {error, no_outfile}
     end.
 
+
+% @doc Encrypt file named InFile with a password. The encrypted output will be written to OutFile.
+password_encrypt(InFile, OutFile, Password) ->
+    with_read_write_files(fun(In, Out) ->
+                                  case password_encrypt_stream(In, Out, Password) of
+                                      ok ->
+                                          {ok, OutFile};
+                                      {error, _}=Error ->
+                                          Error
+                                  end
+                          end,
+                          InFile, OutFile).
+
 % @doc Decrypt the file name InFile with Password and write the output to OutFile.
 password_decrypt(InFile, OutFile, Password) -> 
-    {ok, In} = file:open(InFile, [read, binary]),
-    try
-        {ok, Header} = file:read(In, get_header_size()),
-        case get_decrypt_params(Header) of
-            {ok, #{ alg := Alg, iter := Iter, salt := Salt}} ->
-                
-                {ok, Out} = file:open(OutFile, [write, binary]),
-                try
-                    #{ key := Key, iv := IV } = derive_key_and_iv(Password, Salt, Iter),
-                    CipherState = crypto:crypto_init(Alg, Key, IV, [{encrypt, false}, {padding, random}]),
-                    case check_mac(password_mac(Salt, Password), In, CipherState) of
-                        ok ->
-                            stream_crypto(In, Out, CipherState);
-                        {error, _}=Error ->
-                            Error
-                    end
-                after
-                    file:close(Out)
-                end;
-            {error, _}=Error ->
-                Error
-        end
-    after
-        file:close(In)
-    end.
+    with_read_write_files(fun(In, Out) ->
+                                  case password_decrypt_stream(In, Out, Password) of
+                                      ok ->
+                                          {ok, OutFile};
+                                      {error, _}=Error ->
+                                          Error
+                                  end
+                          end,
+                          InFile, OutFile).
+
+
+
 
 %%
 %% Helpers
@@ -104,8 +90,23 @@ password_encrypt_stream(InIODevice, OutIODevice, Password, Salt, Iter) ->
     #{ key := Key, iv := IV } = derive_key_and_iv(Password, Salt, Iter),
     CipherState = crypto:crypto_init(aes_256_cfb8, Key, IV, [{encrypt, true}, {padding, random}]),
     write_encrypted_mac(password_mac(Salt, Password), OutIODevice, CipherState),
-    ok = stream_crypto(InIODevice, OutIODevice, CipherState),
-    ok.
+    stream_crypto(InIODevice, OutIODevice, CipherState).
+
+password_decrypt_stream(InIODevice, OutIODevice, Password) ->
+    {ok, Header} = file:read(InIODevice, get_header_size()),
+    case get_decrypt_params(Header) of
+        {ok, #{ alg := Alg, iter := Iter, salt := Salt}} ->
+            #{ key := Key, iv := IV } = derive_key_and_iv(Password, Salt, Iter),
+            CipherState = crypto:crypto_init(Alg, Key, IV, [{encrypt, false}, {padding, random}]),
+            case check_mac(password_mac(Salt, Password), InIODevice, CipherState) of
+                ok ->
+                    stream_crypto(InIODevice, OutIODevice, CipherState);
+                {error, _}=Error ->
+                    Error
+            end;
+        {error, _}=Error ->
+            Error
+    end.
 
 
 % Create a mac of the salt and the password. Used to check the password before
@@ -170,5 +171,26 @@ get_decrypt_params(<<"Z1", Iter:32/little-unsigned-integer, Salt:?SALT_SIZE/bina
     {ok, Params};
 get_decrypt_params(_) ->
     {error, bad_prefix}.
+
+with_read_write_files(Fun, InFile, OutFile) ->
+    case file:open(InFile, [read, binary]) of
+        {ok, In} ->
+            try
+                case file:open(OutFile, [write, binary]) of
+                    {ok, Out} ->
+                        try
+                            Fun(In, Out)
+                        after
+                            file:close(Out)
+                        end;
+                    {error, OutFileError} ->
+                        {error, {outfile, OutFileError}}
+                end
+            after
+                file:close(In)
+            end;
+        {error, InFileError} ->
+            {error, {infile, InFileError}}
+    end.
 
 
