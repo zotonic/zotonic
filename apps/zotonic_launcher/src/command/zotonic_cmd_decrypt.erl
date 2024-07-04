@@ -38,7 +38,7 @@ decrypt(InFilename, Password) ->
 decrypt(InFilename, OutFilename, Password) ->
     feedback(mod_backup_file_crypto:password_decrypt(InFilename, OutFilename, z_convert:to_binary(Password))).
 
-feedback(ok) ->
+feedback({ok, _OutFile}) ->
     ok;
 feedback({error, wrong_password}) ->
     io:format("ERROR: Wrong password.~n~nNote: The backup encryption password can be found in Admin -> System -> Config.");
