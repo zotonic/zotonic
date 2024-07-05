@@ -1,6 +1,7 @@
 %% @author Maas-Maarten Zeeman <maas@channel.me>
 %% @copyright 2024 Maas-Maarten Zeeman
 %% @doc Decrypt encrypted backup files.
+%% @end
 
 %% Copyright 2024 Maas-Maarten Zeeman
 %%
