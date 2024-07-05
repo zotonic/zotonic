@@ -786,7 +786,8 @@ reformat_sql_query(#search_sql{where=Where, from=From, tables=Tables, args=Args,
         #{ is_count_rows := true } ->
             Q1#search_sql{
                 select = "count(*)",
-                limit = ""
+                limit = "",
+                order = ""
             };
         #{} ->
             Q1
