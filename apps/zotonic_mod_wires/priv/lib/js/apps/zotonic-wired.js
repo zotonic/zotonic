@@ -84,7 +84,7 @@ function zotonic_startup() {
         } catch(e) {
             console.log("Error on eval", e, msg.payload);
         }
-    }, { wid: 'zotonicjs'});
+    }, { wid: 'zotonic-wired'});
 
     cotonic.broker.subscribe(
         "zotonic-transport/progress",
@@ -94,13 +94,13 @@ function zotonic_startup() {
             } else {
                 z_progress(msg.payload.form_id, msg.payload.percentage);
             }
-        }, { wid: 'zotonicprogress'});
+        }, { wid: 'zotonic-wired'});
 
     cotonic.broker.subscribe(
         "model/alert/post",
         function(msg) {
             z_dialog_alert(msg.payload);
-        }, { wid: 'zotonicalert'});
+        }, { wid: 'zotonic-wired'});
 
     cotonic.broker.subscribe(
         "model/clipboard/post/copy",
@@ -110,7 +110,13 @@ function zotonic_startup() {
             } else if (msg.payload?.text) {
                 navigator.clipboard?.writeText(msg.payload.text);
             }
-        }, { wid: 'zotonicclip'});
+        }, { wid: 'zotonic-wired'});
+
+    cotonic.broker.subscribe(
+        "model/wires/post/event/+name",
+        function(msg, bindings) {
+            z_event(bindings.name, msg.payload);
+        }, { wid: 'zotonic-wired'});
 
     // Register the client-id to reuse on subsequent pages
     cotonic.broker.subscribe(
@@ -119,7 +125,7 @@ function zotonic_startup() {
                 if (msg.payload.is_connected) {
                     cotonic.broker.publish("model/sessionStorage/post/mqtt-origin-client-id", msg.payload.client_id);
                 }
-            }, { wid: "zotonicjs" });
+            }, { wid: "zotonic-wired" });
 
     // Start the client-server bridge
     cotonic.broker.call("model/sessionStorage/get/mqtt-origin-client-id")
