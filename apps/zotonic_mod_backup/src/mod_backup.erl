@@ -150,8 +150,7 @@ observe_m_config_update(#m_config_update{module=ModBackup, key=EncryptBackups}, 
         false ->
             ok
     end;
-observe_m_config_update(#m_config_update{}=E, _Context) ->
-    ?DEBUG(E),
+observe_m_config_update(#m_config_update{}, _Context) ->
     ok.
 
 
