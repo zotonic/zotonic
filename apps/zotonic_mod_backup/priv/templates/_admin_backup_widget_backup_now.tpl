@@ -34,6 +34,14 @@
             </div>
         {% endif %}
 
+        {% if m.backup.encrypt_backups and not m.backup.has_encrypt_password %}
+            <p class="help-block alert-danger">
+            <i class="fa fa-info-circle"></i>
+
+            {_ Encryption is enabled, but there is no encryption password. Please
+               make sure there is an encryption password in the settings. _}
+            </p>
+        {% endif %}
         {% if is_filestore_enabled  %}
             <p class="help-block">
             <i class="fa fa-info-circle"></i>

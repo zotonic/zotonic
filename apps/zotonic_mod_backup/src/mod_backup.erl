@@ -134,10 +134,12 @@ observe_search_query(#search_query{}, _Context) ->
 observe_tick_24h(tick_24h, Context) ->
     m_backup_revision:periodic_cleanup(Context).
 
-observe_m_config_update(#m_config_update{module=?MODULE, key=encrypt_backups}, Context) ->
+observe_m_config_update(#m_config_update{module=ModBackup, key=EncryptBackups}, Context)
+  when (ModBackup == <<"mod_backup">> orelse ModBackup == ?MODULE)
+       andalso (EncryptBackups == encrypt_backups orelse EncryptBackups == <<"encrypt_backups">>) ->
     % When the backup encryption is enabled, make sure there is an encryption password
     % in the config. When there is no password, generate a new one.
-    case m_config:get_boolean(?MODULE, encrypt_backups, Context) of
+    case m_config:get_boolean(?MODULE, EncryptBackups, Context) of
         true ->
             case m_config:get_value(?MODULE, backup_encrypt_password, Context) of
                 Password when is_binary(Password) andalso size(Password) > 0 ->
@@ -148,7 +150,8 @@ observe_m_config_update(#m_config_update{module=?MODULE, key=encrypt_backups}, C
         false ->
             ok
     end;
-observe_m_config_update(#m_config_update{}, _Context) ->
+observe_m_config_update(#m_config_update{}=E, _Context) ->
+    ?DEBUG(E),
     ok.
 
 
@@ -677,28 +680,37 @@ do_backup_process_1(Name, IsFullBackup, Context) ->
 maybe_encrypt_files({ok, Files}, Context) ->
     case m_config:get_boolean(?MODULE, encrypt_backups, Context) of
         true ->
-            ?LOG_INFO(#{
-                text => <<"Encrypting backup">>,
-                in => zotonic_mod_backup
-            }),
+            case m_config:get_value(?MODULE, backup_encrypt_password, Context) of
+                Password when is_binary(Password) andalso size(Password) > 0 ->
+                    ?LOG_INFO(#{
+                                text => <<"Encrypting backup">>,
+                                in => zotonic_mod_backup
+                               }),
 
-            Password = m_config:get_value(?MODULE, backup_encrypt_password, Context),
-            Dir = dir(Context),
-            Files1 = maps:map(fun(_K, File) ->
-                                      FullName = filename:join(Dir, File),
-                                      {ok, FullNameEnc} = mod_backup_file_crypto:password_encrypt(FullName, Password),
-                                      ok = file:delete(FullName),
-                                      filename(FullNameEnc)
-                              end,
-                              Files),
+                    Dir = dir(Context),
+                    Files1 = maps:map(fun(_K, File) ->
+                                              FullName = filename:join(Dir, File),
+                                              {ok, FullNameEnc} = mod_backup_file_crypto:password_encrypt(FullName, Password),
+                                              ok = file:delete(FullName),
+                                              filename(FullNameEnc)
+                                      end,
+                                      Files),
 
-            ?LOG_INFO(#{
-                text => <<"Encryption done">>,
-                in => zotonic_mod_backup,
-                encrypted => Files1
-            }),
+                    ?LOG_INFO(#{
+                                text => <<"Encryption done">>,
+                                in => zotonic_mod_backup,
+                                encrypted => Files1
+                               }),
 
-            {ok, Files1};
+                    {ok, Files1};
+                _ ->
+                    ?LOG_WARNING(#{
+                                   text => <<"Could not encrypt backups. Encryption is enabled, but there is no backup password.">>,
+                                   in => zotonic_mod_backup
+                                  }),
+                    %% 
+                    {ok, Files}
+            end;
         false ->
             {ok, Files}
     end;
@@ -716,11 +728,13 @@ update_admin_file(DT, Name, {ok, Files}, Context) ->
             timestamp => z_datetime:datetime_to_timestamp(DT),
 
             database => maps:get(database, Files),
+            config_files => maps:get(config_files, Files),
             files => maps:get(files, Files, undefined),
-            config_files => maps:get(config_files, Files, undefined),
 
             is_filestore_uploaded => false,
-            is_encrypted => m_config:get_boolean(?MODULE, encrypt_backups, Context)
+
+            is_encrypted => m_config:get_boolean(?MODULE, encrypt_backups, Context) 
+                andalso (size(m_config:get_value(?MODULE, backup_encrypt_password, <<>>,  Context)) > 0)
         }
     },
 
