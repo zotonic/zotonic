@@ -27,9 +27,14 @@
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ <<"admin_panel">> | Rest ], _Msg, Context) ->
-    {ok, {m_config:get_value(mod_backup, admin_panel, Context), Rest}};
+    {ok, {m_config:get_boolean(mod_backup, admin_panel, Context), Rest}};
 m_get([ <<"daily_dump">> | Rest ], _Msg, Context) ->
-    {ok, {m_config:get_value(mod_backup, daily_dump, Context), Rest}};
+    {ok, {m_config:get_boolean(mod_backup, daily_dump, Context), Rest}};
+m_get([ <<"encrypt_backups">> | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_boolean(mod_backup, encrypt_backups, Context), Rest}};
+m_get([ <<"has_encrypt_password">> | Rest ], _Msg, Context) ->
+    PW = m_config:get_value(mod_backup, backup_encrypt_password, Context),
+    {ok, {is_binary(PW) andalso size(PW) > 0, Rest}};
 m_get([ <<"list_backups">> | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_backup, Context) of
         true -> {ok, {mod_backup:list_backups(Context), Rest}};
