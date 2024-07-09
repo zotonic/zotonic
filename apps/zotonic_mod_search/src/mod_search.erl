@@ -427,11 +427,17 @@ search(<<"match_objects">>, Args, _OffsetLimit, Context) ->
                     <<"value">> => CG
                 };
             true -> []
-        end
+        end,
+        #{
+            <<"term">> => <<"sort">>,
+            <<"value">> => <<"-rsc.publication_start">>
+        }
     ],
     case lists:flatten(Terms) of
-        [] -> #search_result{};
-        Terms1 -> search_query:search(#{ <<"q">> => Terms1 }, Context)
+        [ #{ <<"term">> := <<"sort">> } ] ->
+            #search_result{};
+        Terms1 ->
+            search_query:search(#{ <<"q">> => Terms1 }, Context)
     end;
 
 %% @doc Return the rsc records that have similar objects
