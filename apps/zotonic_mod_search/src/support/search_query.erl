@@ -991,7 +991,7 @@ qterm(#{ <<"term">> := <<"text">>, <<"value">> := Text}, Context) ->
                 ]
             }
     end;
-qterm(#{ <<"term">> := <<"match_objects">>, <<"value">> := RId}, Context) ->
+qterm(#{ <<"term">> := <<"match_objects">>, <<"value">> := RId } = Term, Context) ->
     %% match_objects=<id>
     %% Match on the objects of the resource, best matching return first.
     %% Similar to the {match_objects id=...} query.
@@ -999,13 +999,25 @@ qterm(#{ <<"term">> := <<"match_objects">>, <<"value">> := RId}, Context) ->
         undefined ->
             none();
         Id ->
-            ObjectIds = m_edge:objects(Id, Context),
+            ObjectIds = case Term of
+                #{
+                    <<"predicate">> := Ps
+                } when is_list(Ps) ->
+                    lists:map(fun(P) -> m_edge:objects(Id, P, Context) end, Ps);
+                #{
+                    <<"predicate">> := P
+                } when P =/= undefined ->
+                    m_edge:objects(Id, P, Context);
+                _ ->
+                    m_edge:objects(Id, Context)
+            end,
+            ObjectIds1 = lists:usort(lists:flatten(ObjectIds)),
             qterm(#{
                     <<"operator">> => <<"allof">>,
                     <<"terms">> => [
                         #{
                             <<"term">> => <<"match_object_ids">>,
-                            <<"value">> => ObjectIds
+                            <<"value">> => ObjectIds1
                         },
                         #{
                             <<"term">> => <<"id_exclude">>,
@@ -1015,12 +1027,12 @@ qterm(#{ <<"term">> := <<"match_objects">>, <<"value">> := RId}, Context) ->
                 },
                 Context)
     end;
-qterm(#{ <<"term">> := <<"match_object_ids">>, <<"value">> := ObjectIds}, Context) ->
+qterm(#{ <<"term">> := <<"match_object_ids">>, <<"value">> := ObjectIds }, Context) ->
     ObjectIds1 = [ m_rsc:rid(OId, Context) || OId <- lists:flatten(ObjectIds) ],
     MatchTerms = [ ["zpo",integer_to_list(ObjId)] || ObjId <- ObjectIds1, is_integer(ObjId) ],
-    TsQuery = lists:flatten(lists:join("|", MatchTerms)),
+    TsQuery = iolist_to_binary(lists:join("|", MatchTerms)),
     case TsQuery of
-        [] ->
+        <<>> ->
             none();
         _ ->
             #search_sql_term{
