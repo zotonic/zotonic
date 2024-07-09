@@ -30,6 +30,7 @@
 %% @doc Call the export observer or module.
 -spec call(Notification, Context) -> Result | undefined when
     Notification :: #export_resource_visible{}
+                  | #export_resource_content_disposition{}
                   | #export_resource_content_type{}
                   | #export_resource_header{}
                   | #export_resource_data{}
