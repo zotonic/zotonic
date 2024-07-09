@@ -1032,7 +1032,7 @@ qterm(#{ <<"term">> := <<"match_object_ids">>, <<"value">> := ObjectIds }, Conte
     MatchTerms = [ ["zpo",integer_to_list(ObjId)] || ObjId <- ObjectIds1, is_integer(ObjId) ],
     TsQuery = iolist_to_binary(lists:join("|", MatchTerms)),
     case TsQuery of
-        [] ->
+        <<>> ->
             none();
         _ ->
             #search_sql_term{
