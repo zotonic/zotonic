@@ -83,7 +83,9 @@ simplify({value, _, Expr, []}) ->
 %% @doc Evaluate a parsed expression tree.
 -spec eval(Tree, Vars, Context) -> Value when
     Tree :: tree(),
-    Vars :: proplists:proplist() | #{ binary() => term() },
+    Vars :: proplists:proplist()
+          | #{ binary() => term() }
+          | fun( (binary()|atom()) -> term() ),
     Context :: z:context(),
     Value :: term().
 eval(Tree, Vars, Context) ->
