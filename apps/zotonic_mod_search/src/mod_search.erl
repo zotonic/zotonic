@@ -386,39 +386,53 @@ search(<<"match_objects">>, Args, _OffsetLimit, Context) ->
     ObjectIds = qarg(<<"ids">>, Args, undefined),
     Id = qarg(<<"id">>, Args, undefined),
     Cat = qarg(<<"cat">>, Args, undefined),
-    Terms = if
+    Terms = [
+        if
             is_list(ObjectIds) ->
-                [
-                    #{
-                        <<"term">> => <<"match_object_ids">>,
-                        <<"value">> => ObjectIds
-                    }
-                ];
-            true ->
-                []
-        end ++ [
-        #{
-            <<"term">> => <<"cat">>,
-            <<"value">> => Cat
-        },
-        #{
-            <<"term">> => <<"id_exclude">>,
-            <<"value">> => Exclude
-        },
-        #{
-            <<"term">> => <<"match_objects">>,
-            <<"value">> => Id
-        },
-        #{
-            <<"term">> => <<"content_group">>,
-            <<"value">> => CG
-        },
-        #{
-            <<"term">> => <<"sort">>,
-            <<"value">> => <<"-rsc.publication_start">>
-        }
+                #{
+                    <<"term">> => <<"match_object_ids">>,
+                    <<"value">> => ObjectIds
+                };
+            true -> []
+        end,
+        if
+            Cat =/= undefined ->
+                #{
+                    <<"term">> => <<"cat">>,
+                    <<"value">> => Cat
+                };
+            true -> []
+        end,
+        if
+            Exclude =/= undefined ->
+                #{
+                    <<"term">> => <<"id_exclude">>,
+                    <<"value">> => Exclude
+                };
+            true -> []
+        end,
+        if
+            Id =/= undefined ->
+                 #{
+                    <<"term">> => <<"match_objects">>,
+                    <<"value">> => Id,
+                    <<"predicate">> => qarg(<<"predicate">>, Args, undefined)
+                };
+            true -> []
+        end,
+        if
+            CG =/= undefined ->
+                #{
+                    <<"term">> => <<"content_group">>,
+                    <<"value">> => CG
+                };
+            true -> []
+        end
     ],
-    search_query:search(#{ <<"q">> => Terms }, Context);
+    case lists:flatten(Terms) of
+        [] -> #search_result{};
+        Terms1 -> search_query:search(#{ <<"q">> => Terms1 }, Context)
+    end;
 
 %% @doc Return the rsc records that have similar objects
 search(<<"match_objects_cats">>, Args, _OffsetLimit, Context) ->
