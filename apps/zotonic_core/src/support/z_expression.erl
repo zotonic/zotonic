@@ -11,7 +11,24 @@
     eval/3
 ]).
 
+-type tree() :: number()
+              | binary()
+              | {find_value, [ tree() ]}
+              | {expr, op(), tree(), tree()}
+              | {expr, op(), tree()}
+              | {variable, binary()}
+              | {attribute, atom(), tree()}
+              | {index_value, tree(), tree()}
+              | {apply_filter, atom(), atom(), tree(), [ tree() ]}.
+
+-type op() :: atom().
+
+
 %% @doc Parse an expression to an expression tree.  Uses the template_compiler parser.
+-spec parse(Expr) -> {ok, ParseTree} | {error, Reason} when
+    Expr :: binary(),
+    ParseTree :: tree(),
+    Reason :: term().
 parse(Expr) when is_binary(Expr) ->
     case template_compiler_scanner:scan(<<"{{", Expr/binary, "}}">>) of
         {ok, Tokens} ->
@@ -30,12 +47,16 @@ parse(Expr) ->
 
 simplify({find_value, [Value]}) ->
     simplify(Value);
+simplify({find_value, Vs}) ->
+    {find_value, lists:map(fun simplify/1, Vs)};
 simplify({expr, {Op, _}, Left, Right}) ->
     {expr, z_convert:to_atom(Op), simplify(Left), simplify(Right)};
 simplify({expr, {Op, _}, Expr}) ->
     {expr, z_convert:to_atom(Op), simplify(Expr)};
-simplify({identifier, _, <<"m">>}) ->
-    m;
+simplify({expr, E}) ->
+    simplify(E);
+% simplify({identifier, _, <<"m">>}) ->
+%     m;
 simplify({identifier,_,Name}) ->
     {variable, Name};
 simplify({number_literal, _, Val}) ->
@@ -60,6 +81,13 @@ simplify({value, _, Expr, []}) ->
 
 
 %% @doc Evaluate a parsed expression tree.
+-spec eval(Tree, Vars, Context) -> Value when
+    Tree :: tree(),
+    Vars :: proplists:proplist()
+          | #{ binary() => term() }
+          | fun( (binary()|atom()) -> term() ),
+    Context :: z:context(),
+    Value :: term().
 eval(Tree, Vars, Context) ->
     eval1(Tree, Vars, Context).
 
@@ -99,5 +127,56 @@ eval1({apply_filter, Mod, Func, Expr, Args}, Vars, Context) ->
     EvalArgs = [ eval1(Arg, Vars, Context) || Arg <- Args],
     EvalExpr = eval1(Expr, Vars, Context),
     erlang:apply(Mod, Func, [EvalExpr | EvalArgs] ++[Context]);
+eval1({find_value, Ks}, Vars, Context) ->
+    find_value(Ks, Vars, Context);
 eval1(Val, _Vars, _Context) ->
     Val.
+
+find_value([ K | Ks ], Vars, Context) ->
+    V = eval1(K, Vars, Context),
+    find_value_1(V, Ks, Vars, Context).
+
+find_value_1(V, [], _Vars, _Context) ->
+    V;
+find_value_1(V, Ks, Vars, Context) when is_integer(V); is_binary(V); is_atom(V) ->
+    find_rsc_prop(V, Ks, Vars, Context);
+find_value_1([ V | _ ], [ {variable, _} | _ ] = Ks, Vars, Context) ->
+    find_value_1(V, Ks, Vars, Context);
+find_value_1([ _ | _ ] = V, [ {expr, _} = E | Ks ], Vars, Context) ->
+    V1 = case eval1(E, Vars, Context) of
+        N when is_integer(N) -> nth(N, V);
+        Index -> z_template_compiler_runtime:find_value(V, Index, #{}, Context)
+    end,
+    find_value_1(V1, Ks, Vars, Context);
+find_value_1([ _ | _ ] = V, [ N | Ks ], Vars, Context) when is_integer(N) ->
+    V1 = nth(N, V),
+    find_value_1(V1, Ks, Vars, Context);
+find_value_1(#{} = V, [ Index | _ ] = Ks, Vars, Context) ->
+    Index1 = eval1(Index, Vars, Context),
+    V1 = z_template_compiler_runtime:find_value(V, Index1, #{}, Context),
+    find_value_1(V1, Ks, Vars, Context);
+find_value_1(_, _, _Vars, _Context) ->
+    undefined.
+
+
+find_rsc_prop(V, [ {variable, <<"o">>}, {variable, Pred} | Ks ], Vars, Context) ->
+    V1 = m_edge:objects(V, Pred, Context),
+    find_value_1(V1, Ks, Vars, Context);
+find_rsc_prop(V, [ {variable, <<"s">>}, {variable, Pred} | Ks ], Vars, Context) ->
+    V1 = m_edge:subjects(V, Pred, Context),
+    find_value_1(V1, Ks, Vars, Context);
+find_rsc_prop(V, [ {variable, Var} | Ks ], Vars, Context) ->
+    V1 = m_rsc:p(V, Var, Context),
+    find_value_1(V1, Ks, Vars, Context);
+find_rsc_prop(V, [ {expr, _} = E | Ks ], Vars, Context) ->
+    V1 = case eval1(E, Vars, Context) of
+        1 -> V;
+        N when is_integer(N) -> undefined;
+        P -> m_rsc:p(V, P, Context)
+    end,
+    find_value_1(V1, Ks, Vars, Context).
+
+
+nth(1, [V|_]) -> V;
+nth(N, [_|Vs]) when N > 1 -> nth(N-1, Vs);
+nth(_, _) -> undefined.

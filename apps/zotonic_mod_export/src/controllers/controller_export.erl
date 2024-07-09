@@ -1,8 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013 Marc Worrell <marc@worrell.nl>
-%% @doc Export data in the given format, uses notifiers for fetching and encoding data.
+%% @copyright 2013-2024 Marc Worrell <marc@worrell.nl>
+%% @doc Export data in the given format, uses notifiers or the
+%% export_module controller option for fetching and encoding data.
+%% @end
 
-%% Copyright 2013 Marc Worrell
+%% Copyright 2013-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,7 +36,7 @@ forbidden(Context) ->
     Dispatch = z_context:get(zotonic_dispatch, Context2),
     case z_acl:is_allowed(use, mod_export, Context2) of
         true ->
-            case z_notifier:first(#export_resource_visible{dispatch=Dispatch}, Context2) of
+            case export_helper:call(#export_resource_visible{dispatch=Dispatch}, Context2) of
                 undefined -> {false, Context2};
                 true -> {false, Context2};
                 false -> {true, Context2}
@@ -45,7 +47,7 @@ forbidden(Context) ->
 
 content_types_provided(Context) ->
     Dispatch = z_context:get(zotonic_dispatch, Context),
-    case controller_export_resource:get_content_type(undefined, Dispatch, Context) of
+    case export_helper:get_content_type(undefined, Dispatch, Context) of
         {ok, ContentType} when is_binary(ContentType); is_tuple(ContentType) ->
             {[ ContentType ], Context};
         {error, Reason} = Error ->
@@ -71,5 +73,5 @@ process(_Method, _AcceptedCT, ProvidedCT, Context) ->
     {Stream, Context1}.
 
 set_filename(ProvidedCT, Dispatch, Context) ->
-    controller_export_resource:set_filename(undefined, ProvidedCT, Dispatch, Context).
+    export_helper:set_filename(undefined, ProvidedCT, Dispatch, Context).
 
