@@ -119,8 +119,10 @@ The following searches are implemented in mod_search:
 +------------------------+---------------------------------------------------------------+-------------------+
 |match_objects           |Returns a list of pages with similar object ids to the objects |id                 |
 |                        |of the given resource with the given id.                       |                   |
-|                        |Accepts optional cat parameters for filtering on               |                   |
-|                        |category.                                                      |                   |
+|                        |Accepts optional ``cat`` parameters for filtering on           |                   |
+|                        |category. Optionally accepts a ``predicate`` parameter to only |                   |
+|                        |use the objects that are connected to the given ``id`` using   |                   |
+|                        |the predicate or predicates.                                   |                   |
 +------------------------+---------------------------------------------------------------+-------------------+
 |match_objects_cats      |Returns a list of pages with similar object ids or categories. |id                 |
 |                        |Accepts an optional ``cat``                                    |                   |

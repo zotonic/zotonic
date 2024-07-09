@@ -219,6 +219,22 @@ objects ids will be returned first::
 
 An ``id_exlude=...`` is automatically added for the resource in the argument.
 
+Optionally accepts a ``predicate`` option to only match using the object-ids
+that are connected to the id using the given predicate or predicates.
+
+Example::
+
+    %{
+       term: "match_objects",
+       value: id,
+       predicate: [ "subject", "author" ]
+    }
+
+This returns a list of resource ids that have similar objects as the authors and
+subjects of the resource ``id``. The objects can be connected to the resulting
+ids using any predicate.
+
+
 match_object_ids
 ^^^^^^^^^^^^^^^^
 
