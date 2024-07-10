@@ -473,10 +473,7 @@ send_mailing(undefined, _PageId, _Options, _Context) ->
 send_mailing(_ListId, undefined, _Options, _Context) ->
     ok;
 send_mailing(ListId, PageId, Options, Context) ->
-    ContextAsync = z_acl:sudo(z_context:prune_for_async(Context)),
-    sidejob_supervisor:spawn(
-            zotonic_sidejobs,
-            {?MODULE, send_mailing_process, [ ListId, PageId, Options, ContextAsync ]}).
+    z_sidejob:start(?MODULE, send_mailing_process, [ ListId, PageId, Options ], Context).
 
 send_mailing_process({single_test_address, Email}, PageId, Options, Context) ->
     Email1 = m_mailinglist:normalize_email(Email),

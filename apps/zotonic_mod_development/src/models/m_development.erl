@@ -67,9 +67,7 @@ m_get([ <<"recompile">> | Rest ], _Msg, Context) ->
     case m_config:get_boolean(mod_development, enable_api, Context) of
         true ->
             ?LOG_NOTICE("Development API triggered recompilation."),
-            sidejob_supervisor:spawn(
-                    zotonic_sidejobs,
-                    {z, m, []}),
+            z_sidejob:start(z, m, [], Context),
             {ok, {<<"started">>, Rest}};
         false ->
             {error, disabled}
