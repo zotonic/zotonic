@@ -80,9 +80,7 @@ event(#postback{ message = {template_xref_check, Args} }, Context) ->
     {element_id, EltId} = proplists:lookup(element_id, Args),
     case z_acl:is_allowed(use, mod_development, Context) of
         true ->
-            sidejob_supervisor:spawn(
-                    zotonic_sidejobs,
-                    {?MODULE, task_xref_check, [ EltId, Context ]}),
+            z_sidejob:start(?MODULE, task_xref_check, [ EltId ], Context),
             z_render:wire({mask, [
                     {target, EltId},
                     {message, ?__("Checking all templates...", Context)}
@@ -97,9 +95,7 @@ event(#postback{ message = {template_graph, Args} }, Context) ->
     {element_id, EltId} = proplists:lookup(element_id, Args),
     case z_acl:is_allowed(use, mod_development, Context) of
         true ->
-            sidejob_supervisor:spawn(
-                    zotonic_sidejobs,
-                    {?MODULE, task_graph, [ EltId, Context ]}),
+            z_sidejob:start(?MODULE, task_graph, [ EltId ], Context),
             z_render:wire({mask, [
                     {target, EltId},
                     {message, ?__("Checking all templates...", Context)}

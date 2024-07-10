@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2017 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Supervisor for the zotonic application, started by zotonic_launcher.
+%% @end
 
-%% Copyright 2009-2017 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -139,7 +140,7 @@ ensure_job_queue(Name, Options) ->
 
 %% @doc The supervisor for websocket requests and other transient processes.
 ensure_sidejobs() ->
-    sidejob:new_resource(zotonic_sidejobs, sidejob_supervisor, z_config:get(sidejobs_limit)).
+    z_sidejob:init().
 
 
 mqtt_sessions_runtime() ->
