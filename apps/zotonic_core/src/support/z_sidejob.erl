@@ -53,7 +53,7 @@ usage() ->
 
 %% @doc Start a sidejob. There is a limit on the number of sidejobs, so do check the return value.
 -spec start(MFA) -> {ok, pid()} | {error, Reason} when
-    MFA :: mfa(),
+    MFA :: {module(), atom(), list()},
     Reason :: overload.
 start({M, F, A}) ->
     start(M, F, A).
@@ -72,7 +72,7 @@ start(Module, Function, Args) ->
 %% @doc Start a sidejob. There is a limit on the number of sidejobs, so do check the return value.
 %% The Context is pruned for async calls and appended to the argument list.
 -spec start(MFA, Context) -> {ok, pid()} | {error, Reason} when
-    MFA :: mfa(),
+    MFA :: {module(), atom(), list()},
     Context :: z:context(),
     Reason :: overload.
 start({M, F, A}, Context) ->
@@ -90,4 +90,4 @@ start(Module, Function, Args, Context) ->
     ContextAsync = z_context:prune_for_async(Context),
     sidejob_supervisor:spawn(
             zotonic_sidejobs,
-            {Module, Function, Args ++ ContextAsync}).
+            {Module, Function, Args ++ [ ContextAsync ]}).
