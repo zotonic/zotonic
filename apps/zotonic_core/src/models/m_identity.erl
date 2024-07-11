@@ -108,7 +108,11 @@
 -export_type([
     type/0,
     key/0,
-    password/0
+    password/0,
+    identity/0,
+    hash/0,
+    bcrypt_hash/0,
+    sha1_salted_hash/0
     ]).
 
 -include_lib("zotonic.hrl").

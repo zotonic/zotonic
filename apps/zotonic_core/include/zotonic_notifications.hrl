@@ -146,7 +146,7 @@
 -record(identity_password_match, {
     rsc_id :: m_rsc:resource_id() | undefined,
     password :: binary(),
-    hash :: binary()
+    hash :: m_identity:hash() | {hash, atom() | binary(), binary()}
 }).
 
 %% @doc Notify that a user's identity has been updated by the identity model.
@@ -156,7 +156,7 @@
     rsc_id :: m_rsc:resource_id(),
     type :: binary(),
     key :: m_identity:key() | undefined,
-    is_verified :: boolean()
+    is_verified :: boolean() | undefined
 }).
 
 
