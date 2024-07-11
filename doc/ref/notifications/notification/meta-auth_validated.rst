@@ -18,5 +18,6 @@ Return:
     - service_props: ``map``
     - unknown: ``unknown``
     - identities: ``list``
+    - ensure_username_pw: ``boolean``
     - is_connect: ``boolean``
-    - is_signup_confirm: ``boolean``
+    - is_signup_confirmed: ``boolean``
