@@ -164,7 +164,7 @@
     {% endif %}
 
     {% if q.options.is_username_checked %}
-        {% if is_user_local or is_user_local|is_undefined %}
+        {% if q.options.is_user_local or q.options.is_user_local|is_undefined %}
             {% if m.authentication.is_supported.rememberme %}
                 <div class="form-group">
                     <div class="checkbox">

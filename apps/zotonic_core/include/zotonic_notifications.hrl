@@ -109,7 +109,7 @@
 %% Type: first
 %% Return:: ``{ok, UserId}`` or ``{error, Reason}``
 -record(logon_submit, {
-    payload = #{} :: map()
+    payload = #{} :: #{ binary() => term() }
 }).
 
 %% @doc Check for logon options, called if logon_submit returns `undefined`.
@@ -118,20 +118,46 @@
 %% Type: foldl
 %% Return:: ``map()``
 -record(logon_options, {
-    payload = #{} :: map()
+    payload = #{} :: #{ binary() => term() }
 }).
 
 
-%% @doc Request to send a verification to the user. Return ok or an error
+%% @doc Request to send a verification to the user. Return ok or an error.
+%% Handled by mod_signup to send out verification emails.
 %% Type: first
-%% Identity may be undefined, or is a identity used for the verification.
--record(identity_verification, {user_id, identity}).
+%% Identity may be undefined, or is an identity used for the verification.
+-record(identity_verification, {
+    user_id :: m_rsc:resource_id(),
+    identity :: undefined | m_identity:identity()
+}).
 
-%% @doc Notification that a user's identity has been verified.
+%% @doc Notify that a user's identity has been verified. Signals to modules
+%% handling identities to mark this identity as verified. Handled by mod_admin_identity
+%% to call the m_identity model for this type/key.
 %% Type: notify
--record(identity_verified, {user_id, type, key}).
+-record(identity_verified, {
+    user_id :: m_rsc:resource_id(),
+    type :: m_identity:type(),
+    key :: m_identity:key()
+}).
 
--record(identity_password_match, {rsc_id, password, hash}).
+%% @doc Check if passwords are matching. Uses the password hashing algorithms.
+%% Type: first
+-record(identity_password_match, {
+    rsc_id :: m_rsc:resource_id() | undefined,
+    password :: binary(),
+    hash :: binary()
+}).
+
+%% @doc Notify that a user's identity has been updated by the identity model.
+%% Type: notify
+-record(identity_update_done, {
+    action :: insert | update | delete | verify,
+    rsc_id :: m_rsc:resource_id(),
+    type :: binary(),
+    key :: m_identity:key() | undefined,
+    is_verified :: boolean()
+}).
 
 
 %% @doc Handle a signup of a user, return the follow on page for after the signup.

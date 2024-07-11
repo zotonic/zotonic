@@ -168,7 +168,7 @@ m_post(Vs, _Msg, _Context) ->
     Context :: z:context(),
     Reason :: tooshort | dataleak.
 acceptable_password(Password, Context) ->
-    case m_authentication:is_valid_password(Password, Context) of
+    case is_valid_password(Password, Context) of
         true ->
             case not m_config:get_boolean(mod_authentication, password_disable_leak_check, Context)
                 andalso m_authentication:is_powned(Password)
