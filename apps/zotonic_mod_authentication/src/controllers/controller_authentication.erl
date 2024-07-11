@@ -184,6 +184,8 @@ logon_1({error, set_passcode_error}, _Payload, Context) ->
     { #{ status => error, error => set_passcode_error }, Context };
 logon_1({error, passcode}, _Payload, Context) ->
     { #{ status => error, error => passcode }, Context };
+logon_1({error, user_external}, _Payload, Context) ->
+    { #{ status => error, error => user_external }, Context };
 logon_1({error, Reason}, _Payload, Context) ->
     % Hide other error codes, map to generic 'pw' error
     ?LOG_INFO(#{
@@ -429,6 +431,8 @@ change_1(UserId, Username, Password, NewPassword, Passcode, Context) ->
             { #{ status => error, error => set_passcode_error }, Context };
         {error, passcode} ->
             { #{ status => error, error => passcode }, Context };
+        {error, use_provider} ->
+            { #{ status => error, error => use_provider }, Context };
         {error, Reason} ->
             ?LOG_WARNING(#{
                 in => zotonic_mod_authentication,
@@ -451,12 +455,10 @@ reset(#{
     } = Payload, Context) when is_binary(Secret), is_binary(Username), is_binary(Password), is_binary(Passcode) ->
     case auth_precheck(Username, Context) of
         ok ->
-            PasswordMinLength = z_convert:to_integer(m_config:get_value(mod_authentication, password_min_length, 8, Context)),
-
-            case size(Password) of
-                N when N < PasswordMinLength ->
+            case m_authentication:is_valid_password(Password, Context) of
+                false ->
                     { #{ status => error, error => tooshort }, Context };
-                _ ->
+                true ->
                     case get_by_reminder_secret(Secret, Context) of
                         {ok, UserId} ->
                             case m_identity:get_username(UserId, Context) of

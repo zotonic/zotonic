@@ -8,6 +8,7 @@ User notifications
    notification/identity_password_match
    notification/identity_verification
    notification/identity_verified
+   notification/identity_update_done
    notification/logon_options
    notification/logon_ready_page
    notification/logon_submit
