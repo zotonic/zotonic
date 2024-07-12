@@ -309,14 +309,16 @@ handle_info({logger, Data}, #state{ site = Site, log_client_topic = ClientTopic 
     Context = z_acl:sudo(z_context:new(Site)),
     case log_event_ratelimit(State) of
         {true, State1} ->
-            case m_site:environment(Context) of
-                development ->
+            ZotonicEnv = z_config:get(environment),
+            SiteEnv = m_site:environment(Context),
+            if
+                ZotonicEnv =:= development andalso SiteEnv =:= development ->
                     z_mqtt:publish(<<"model/log/event/console">>, Data, Context);
-                _Other when ClientTopic =/= undefined ->
+                ClientTopic =/= undefined ->
                     z_mqtt:publish(
                         ClientTopic ++ [ <<"model">>, <<"console">>, <<"post">>, <<"log">> ],
                         Data, Context);
-                _Other ->
+                true ->
                     ok
             end,
             {noreply, State1};
