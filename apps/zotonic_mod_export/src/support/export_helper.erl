@@ -44,6 +44,7 @@ call(Notification, Context) ->
         undefined ->
             z_notifier:first(Notification, Context);
         Module ->
+            code:ensure_loaded(Module),
             Function = erlang:element(1, Notification),
             case erlang:function_exported(Module, Function, 2) of
                 true ->
