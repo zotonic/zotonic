@@ -22,7 +22,7 @@
     Sitename :: atom().
 install(Sitename, LogPid) ->
     HandlerId = z_utils:name_for_site(?MODULE, Sitename),
-    case logger:add_handler(HandlerId, ?MODULE, #{ site => Sitename, pid => LogPid }) of
+    case logger:add_handler(HandlerId, ?MODULE, #{ config => #{ site => Sitename, pid => LogPid } }) of
         ok ->
             add_filter(Sitename);
         {error, {already_exist, HandlerId}} ->
@@ -73,7 +73,7 @@ handler_filter(#{ meta := Meta } = Event, Sitename) ->
 log(#{ level := info, meta := #{error_logger := #{type := progress}} }, _Config) ->
     % Ignore supervisor progress reports
     ok;
-log(#{ level := Level, msg := EventData, meta := Meta }, #{ pid := Pid }) ->
+log(#{ level := Level, msg := EventData, meta := Meta }, #{ config := #{ pid := Pid } }) ->
     {Msg, MsgMap} = format_msg(EventData),
     SafeMeta = safe_meta(Meta),
     {Msg1, MsgMap1} = case Msg of
@@ -96,7 +96,8 @@ log(#{ level := Level, msg := EventData, meta := Meta }, #{ pid := Pid }) ->
 %% Internal functions
 %%==============================================================================
 
--spec format_msg(Data) -> {binary(), [{binary() | atom(), jsx:json_term()}]} when
+-spec format_msg(Data) -> {binary(), #{ Key => jsx:json_term()} } when
+    Key :: binary() | atom(),
     Data ::  {io:format(), [term()]}
            | {report, logger:report()}
            | {string, unicode:chardata()}.
