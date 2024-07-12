@@ -37,6 +37,7 @@
     pid_observe_zlog/3,
     observe_admin_menu/3,
     is_ui_ratelimit_check/1,
+    is_log_client_allowed/1,
     log_client_start/1,
     log_client_stop/1,
     log_client_ping/3,
@@ -158,10 +159,8 @@ log_client_start(#context{ client_id = undefined }) ->
 log_client_start(#context{ client_topic = undefined }) ->
     {error, no_client};
 log_client_start(Context) ->
-    Environment = m_site:environment(Context),
-    IsAdmin = z_acl:is_admin(Context),
-    if
-        IsAdmin orelse Environment =:= development ->
+    case is_log_client_allowed(Context) of
+        true ->
             ClientId = Context#context.client_id,
             ClientTopic = Context#context.client_topic,
             {ok, Pid} = z_module_manager:whereis(mod_logging, Context),
@@ -172,7 +171,7 @@ log_client_start(Context) ->
                 result => ok
             }),
             ok;
-        true ->
+        false ->
             {error, eacces}
     end.
 
@@ -181,10 +180,8 @@ log_client_start(Context) ->
 -spec log_client_stop(Context) -> ok | {error, eacces} when
     Context :: z:context().
 log_client_stop(Context) ->
-    Environment = m_site:environment(Context),
-    IsAdmin = z_acl:is_admin(Context),
-    if
-        IsAdmin orelse Environment =:= development ->
+    case is_log_client_allowed(Context) of
+        true ->
             {ok, Pid} = z_module_manager:whereis(mod_logging, Context),
             ?LOG_INFO(#{
                 in => zotonic_mod_logging,
@@ -192,9 +189,24 @@ log_client_stop(Context) ->
                 result => ok
             }),
             gen_server:cast(Pid, log_client_stop);
-        true ->
+        false ->
             {error, eacces}
     end.
+
+%% @doc Check if the client is allowed to subscribe to the erlang console log.
+%% Only the admin or a development site is allowed to subscribe.
+-spec is_log_client_allowed(Context) -> boolean() when
+    Context :: z:context().
+is_log_client_allowed(Context) ->
+    case z_acl:user(Context) of
+        ?ACL_ADMIN_USER_ID -> true;
+        admin -> true;
+        _ ->
+            ZotonicEnv = z_config:get(environment),
+            SiteEnv = m_site:environment(Context),
+            SiteEnv =:= development andalso ZotonicEnv =:= development
+    end.
+
 
 %%====================================================================
 %% API

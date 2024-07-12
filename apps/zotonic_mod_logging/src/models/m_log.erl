@@ -38,6 +38,8 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ <<"is_log_client_allowed">> | Rest ], _Msg, Context) ->
+    {ok, {mod_logging:is_log_client_allowed(Context), Rest}};
 m_get([], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_logging, Context) of
         true -> {ok, {list(Context), []}};
