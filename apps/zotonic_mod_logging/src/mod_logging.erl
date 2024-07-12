@@ -200,7 +200,6 @@ log_client_stop(Context) ->
 is_log_client_allowed(Context) ->
     case z_acl:user(Context) of
         ?ACL_ADMIN_USER_ID -> true;
-        admin -> true;
         _ ->
             ZotonicEnv = z_config:get(environment),
             SiteEnv = m_site:environment(Context),
