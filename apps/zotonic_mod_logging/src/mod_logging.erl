@@ -293,7 +293,7 @@ handle_cast({log_client_pong, PongClientId, true}, #state{ log_client_id = Clien
     {noreply, State#state{ log_client_pong = z_datetime:timestamp() }};
 handle_cast({log_client_pong, PongClientId, false}, #state{ log_client_id = ClientId } = State) when PongClientId =:= ClientId ->
     {noreply, State#state{ log_client_id = undefined, log_client_topic = undefined }};
-handle_cast({log_client_pong, _}, State) ->
+handle_cast({log_client_pong, _, _}, State) ->
     {noreply, State};
 
 %% @doc Trap unknown casts
