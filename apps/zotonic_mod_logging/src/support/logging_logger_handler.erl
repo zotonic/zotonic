@@ -152,6 +152,8 @@ safe_fields(Terms) ->
 -spec safe_field(atom() | binary() | string(), term()) -> {atom() | binary(), jsx:json_term()}.
 safe_field(stack, Stack) when is_list(Stack) ->
     {stack, safe_stack(Stack)};
+safe_field(params, Params) when is_list(Params) ->
+    {params, lists:map(fun safe_value/1, Params)};
 safe_field(Key, Value) when is_atom(Key); is_binary(Key) ->
     {Key, safe_value(Value)};
 safe_field(Key, Value) when is_list(Key) ->

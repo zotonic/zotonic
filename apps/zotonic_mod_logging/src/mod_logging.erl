@@ -61,7 +61,7 @@
 -define(DEDUP_SECS, 600).
 
 % Max number of published log events per second.
--define(LOG_EVENT_RATE, 10).
+-define(LOG_EVENT_RATE, 20).
 -define(LOG_CLIENT_TIMEOUT, 900).
 
 %% interface functions
