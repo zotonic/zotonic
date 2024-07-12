@@ -118,10 +118,10 @@ set_filename(Id, ProvidedCT, Dispatch, Context) ->
             Context)
     of
         undefined ->
-            Cat = m_rsc:p_no_acl(Id, category, Context),
+            CatId = m_rsc:p_no_acl(Id, category_id, Context),
             iolist_to_binary([
                         "export-",
-                        z_convert:to_binary(proplists:get_value(name, Cat)),
+                        z_convert:to_binary(m_rsc:p_no_acl(CatId, name, Context)),
                         "-",
                         z_convert:to_binary(Id),
                         ".",
