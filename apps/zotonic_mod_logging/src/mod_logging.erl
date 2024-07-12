@@ -295,7 +295,6 @@ handle_cast(Message, State) ->
 %% @doc Handling all non call/cast messages
 handle_info({logger, Data}, #state{ site = Site, log_client_topic = ClientTopic } = State) ->
     Context = z_acl:sudo(z_context:new(Site)),
-    io:format("~p ~p~n", [ Site, ClientTopic ]),
     case log_event_ratelimit(State) of
         {true, State1} ->
             case m_site:environment(Context) of
