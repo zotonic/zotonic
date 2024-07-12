@@ -1,0 +1,200 @@
+-module(logging_logger_handler).
+
+-export([
+    install/2,
+    uninstall/1,
+    add_filter/1,
+    handler_filter/2
+]).
+
+%% logger callbacks
+-export([log/2]).
+
+%% Xref ignores
+-ignore_xref([log/2]).
+
+
+%% @doc Install the logger handler for the given sitename. The handler is installed
+%% for the site and the logging module. The logging module will install the handler
+%% when the module starts with copying the logs to a browser (or topic).
+-spec install(Sitename, LogPid) -> ok | {error, term()} when
+    LogPid :: pid(),
+    Sitename :: atom().
+install(Sitename, LogPid) ->
+    HandlerId = z_utils:name_for_site(?MODULE, Sitename),
+    case logger:add_handler(HandlerId, ?MODULE, #{ site => Sitename, pid => LogPid }) of
+        ok ->
+            add_filter(Sitename);
+        {error, {already_exist, HandlerId}} ->
+            uninstall(Sitename),
+            install(Sitename, LogPid);
+        {error, _} = Error ->
+            Error
+    end.
+
+%% @doc Remove the logger handler for the given sitename.
+-spec uninstall(Sitename) -> ok | {error, term()} when
+    Sitename :: atom().
+uninstall(Sitename) ->
+    HandlerId = z_utils:name_for_site(?MODULE, Sitename),
+    logger:remove_handler(HandlerId).
+
+
+%% @doc Set the logging filter level to only log events for this site or system
+%% level events without a specific site.
+-spec add_filter(Sitename) -> ok | {error, term()} when
+    Sitename :: atom().
+add_filter(Sitename) ->
+    HandlerId = z_utils:name_for_site(?MODULE, Sitename),
+    FilterId = z_utils:name_for_site(logger_filter, Sitename),
+    case logger:add_handler_filter(HandlerId, FilterId, {fun logging_logger_handler:handler_filter/2, Sitename}) of
+        ok ->
+            ok;
+        {error, {already_exist, FilterId}} ->
+            logger:remove_handler_filter(HandlerId, FilterId),
+            add_filter(Sitename);
+        {error, _} = Error ->
+            Error
+    end.
+
+handler_filter(#{ level := info, meta := #{error_logger := #{type := progress}} }, _Sitename) ->
+    stop;
+handler_filter(#{ meta := Meta } = Event, Sitename) ->
+    case maps:get(site, Meta, Sitename) of
+        Sitename -> Event;
+        _Other -> stop
+    end.
+
+%%==============================================================================
+%% API
+%%==============================================================================
+
+-spec log(logger:log_event(), logger:handler_config()) -> ok.
+log(#{ level := info, meta := #{error_logger := #{type := progress}} }, _Config) ->
+    % Ignore supervisor progress reports
+    ok;
+log(#{ level := Level, msg := EventData, meta := Meta }, #{ pid := Pid }) ->
+    {Msg, MsgMap} = format_msg(EventData),
+    SafeMeta = safe_meta(Meta),
+    {Msg1, MsgMap1} = case Msg of
+        null ->
+            {maps:get(text, MsgMap, null), maps:remove(text, MsgMap)};
+        _ ->
+            {Msg, MsgMap}
+    end,
+    Data = #{
+        severity => Level,
+        timestamp => format_timestamp(Meta),
+        message => Msg1,
+        fields => MsgMap1,
+        meta => SafeMeta
+    },
+    Pid ! {logger, Data},
+    ok.
+
+%%==============================================================================
+%% Internal functions
+%%==============================================================================
+
+-spec format_msg(Data) -> {binary(), [{binary() | atom(), jsx:json_term()}]} when
+    Data ::  {io:format(), [term()]}
+           | {report, logger:report()}
+           | {string, unicode:chardata()}.
+format_msg({string, Message}) ->
+    {unicode:characters_to_binary(Message), #{}};
+format_msg({report, Report}) when is_map(Report) ->
+    {maps:get(msg, Report, null), safe_fields(Report)};
+format_msg({report, Report}) when is_list(Report) ->
+    format_msg({report, maps:from_list(Report)});
+format_msg({"Error in process ~p on node ~p with exit value:~n~p~n", [_, _, {undef, Undef}]}) ->
+    format_undef(Undef);
+format_msg({Format, Params}) when is_list(Format), is_list(Params) ->
+    {unicode:characters_to_binary(io_lib:format(Format, Params)), #{}};
+format_msg(Other) ->
+    {unicode:characters_to_binary(io_lib:format("~p", [ Other ])), #{}}.
+
+format_undef([ {Module, Function, Args, _} | _ ] = Stack) when is_list(Args) ->
+    Arity = length(Args),
+    Message = io_lib:format("Undefined function ~p:~p/~p", [Module, Function, Arity]),
+    Report = #{
+        result => error,
+        reason => undef,
+        module => Module,
+        function => Function,
+        args => Args,
+        stack => Stack
+    },
+    {unicode:characters_to_binary(Message), safe_fields(Report)}.
+
+-spec format_timestamp(logger:metadata()) -> binary().
+format_timestamp(#{time := Ts}) ->
+    list_to_binary(calendar:system_time_to_rfc3339(Ts, [{unit, microsecond}, {offset, "Z"}])).
+
+-spec safe_meta(logger:metadata()) -> #{ Key => Term } when
+    Key :: binary() | atom(),
+    Term :: jsx:json_term().
+safe_meta(Meta) ->
+    safe_fields(Meta).
+
+-spec safe_fields(map()) -> map().
+safe_fields(Terms) ->
+    maps:fold(
+        fun(K, V, Acc) ->
+            {K1, V1} = safe_field(K, V),
+            Acc#{ K1 => V1 }
+        end,
+        #{},
+        Terms).
+
+-spec safe_field(atom() | binary() | string(), term()) -> {atom() | binary(), jsx:json_term()}.
+safe_field(stack, Stack) when is_list(Stack) ->
+    {stack, safe_stack(Stack)};
+safe_field(Key, Value) when is_atom(Key); is_binary(Key) ->
+    {Key, safe_value(Value)};
+safe_field(Key, Value) when is_list(Key) ->
+    safe_field(list_to_binary(Key), Value).
+
+safe_stack(Stack) ->
+    lists:map(fun safe_stack_entry/1, Stack).
+
+safe_stack_entry({Mod, Fun, Args, _}) when is_atom(Mod), is_atom(Fun), is_list(Args) ->
+    Arity = length(Args),
+    Function = io_lib:format("~p:~p/~p", [Mod, Fun, Arity]),
+    #{
+        function => unicode:characters_to_binary(Function)
+    };
+safe_stack_entry({Mod, Fun, Arity, Loc}) when is_atom(Mod), is_atom(Fun), is_integer(Arity) ->
+    Function = io_lib:format("~p:~p/~p", [ Mod, Fun, Arity ]),
+    #{
+        function => unicode:characters_to_binary(Function),
+        at => unicode:characters_to_binary([stack_file(Loc), $:, integer_to_binary(stack_line(Loc))])
+    }.
+
+stack_file(Loc) when is_list(Loc) -> proplists:get_value(file, Loc, "");
+stack_file({File, _}) -> File;
+stack_file({File, _, _}) -> File;
+stack_file(_) -> "".
+
+stack_line(Loc) when is_list(Loc) -> proplists:get_value(line, Loc, "");
+stack_line({_, Line}) -> Line;
+stack_line({_, Line, _}) -> Line;
+stack_line(_) -> 0.
+
+-spec safe_value(term()) -> jsx:json_term().
+safe_value(Pid) when is_pid(Pid) ->
+    list_to_binary(pid_to_list(Pid));
+safe_value(List) when is_list(List) ->
+    case io_lib:char_list(List) of
+        true ->
+            list_to_binary(List);
+        false ->
+            lists:map(fun safe_value/1, List)
+    end;
+safe_value(Map) when is_map(Map) ->
+    safe_fields(Map);
+safe_value(undefined) ->
+    null;
+safe_value(Val) when is_binary(Val); is_atom(Val); is_number(Val) ->
+    Val;
+safe_value(Val) ->
+    unicode:characters_to_binary(io_lib:format("~p", [Val])).

@@ -1,8 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2010-2021 Arjan Scherpenisse
+%% @copyright 2010-2024 Arjan Scherpenisse
 %% @doc Simple database logging.
+%% @end
 
-%% Copyright 2010-2021 Arjan Scherpenisse
+%% Copyright 2010-2024 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -36,6 +37,9 @@
     pid_observe_zlog/3,
     observe_admin_menu/3,
     is_ui_ratelimit_check/1,
+    log_client_start/1,
+    log_client_stop/1,
+    log_client_ping/3,
     manage_schema/2
 ]).
 
@@ -44,12 +48,20 @@
 
 -record(state, {
     site :: atom() | undefined,
-    admin_log_pages = [] :: list(),
     dedup :: map(),
-    last_ui_event = 0 :: integer()
+    last_ui_event = 0 :: integer(),
+    log_event_timestamp = 0 :: integer(),
+    log_event_count = 0 :: integer(),
+    log_client_id = undefined,
+    log_client_topic = undefined,
+    log_client_pong = 0
 }).
 
 -define(DEDUP_SECS, 600).
+
+% Max number of published log events per second.
+-define(LOG_EVENT_RATE, 10).
+-define(LOG_CLIENT_TIMEOUT, 900).
 
 %% interface functions
 
@@ -87,7 +99,8 @@ pid_observe_zlog(_Pid, #zlog{}, _Context) ->
 
 %% @doc Check the db_pool_health every minute
 pid_observe_tick_1m(Pid, tick_1m, _Context) ->
-    gen_server:cast(Pid, check_db_pool_health).
+    gen_server:cast(Pid, check_db_pool_health),
+    gen_server:cast(Pid, log_client_check).
 
 observe_tick_1h(tick_1h, Context) ->
     m_log:periodic_cleanup(Context),
@@ -136,6 +149,53 @@ is_ui_ratelimit_check(Context) ->
             end
     end.
 
+%% @doc Subscribe to event logs. The user subscribing must be an admin, or the
+%% environment must be development.
+-spec log_client_start(Context) -> ok | {error, eacces | no_client} when
+    Context :: z:context().
+log_client_start(#context{ client_id = undefined }) ->
+    {error, no_client};
+log_client_start(#context{ client_topic = undefined }) ->
+    {error, no_client};
+log_client_start(Context) ->
+    Environment = m_site:environment(Context),
+    IsAdmin = z_acl:is_admin(Context),
+    if
+        IsAdmin orelse Environment =:= development ->
+            ClientId = Context#context.client_id,
+            ClientTopic = Context#context.client_topic,
+            {ok, Pid} = z_module_manager:whereis(mod_logging, Context),
+            ok = gen_server:call(Pid, {log_client_start, ClientId, ClientTopic}),
+            ?LOG_INFO(#{
+                in => zotonic_mod_logging,
+                text => <<"Enabled logging to client console log">>,
+                result => ok
+            }),
+            ok;
+        true ->
+            {error, eacces}
+    end.
+
+%% @doc Unsubscribe from event logs. The user unsubscribing must be an admin, or the
+%% environment must be development.
+-spec log_client_stop(Context) -> ok | {error, eacces} when
+    Context :: z:context().
+log_client_stop(Context) ->
+    Environment = m_site:environment(Context),
+    IsAdmin = z_acl:is_admin(Context),
+    if
+        IsAdmin orelse Environment =:= development ->
+            {ok, Pid} = z_module_manager:whereis(mod_logging, Context),
+            ?LOG_INFO(#{
+                in => zotonic_mod_logging,
+                text => <<"Disabled logging to client console log">>,
+                result => ok
+            }),
+            gen_server:cast(Pid, log_client_stop);
+        true ->
+            {error, eacces}
+    end.
+
 %%====================================================================
 %% API
 %%====================================================================
@@ -158,8 +218,11 @@ init(Args) ->
     Context1 = z_acl:sudo(z_context:new(Context)),
     Site = z_context:site(Context1),
     z_context:logger_md(Context1),
+    case m_site:environment(Context1) of
+        development -> logging_logger_handler:install(Site, self());
+        _ -> ok
+    end,
     {ok, #state{ site = Site, dedup = #{} }}.
-
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -171,6 +234,15 @@ init(Args) ->
 handle_call(is_ui_ratelimit_check, _From, #state{ last_ui_event = LastUI } = State ) ->
     Now = z_datetime:timestamp(),
     {reply, Now > LastUI, State#state{ last_ui_event = Now }};
+
+handle_call({log_client_start, ClientId, ClientTopic}, _From, #state{ site = Site } = State) ->
+    logging_logger_handler:install(Site, self()),
+    State1 = State#state{
+        log_client_id = ClientId,
+        log_client_topic = ClientTopic,
+        log_client_pong = z_datetime:timestamp()
+    },
+    {reply, ok, State1};
 
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
@@ -186,6 +258,32 @@ handle_cast(check_db_pool_health, #state{ site = Site, dedup = Dedup } = State) 
     Dedup1 = check_db_pool_health(Dedup, Site),
     {noreply, State#state{ dedup = Dedup1 }};
 
+handle_cast(log_client_stop, State) ->
+    State1 = State#state{
+        log_client_id = undefined,
+        log_client_topic = undefined
+    },
+    {noreply, State1};
+handle_cast(log_client_check, #state{ log_client_id = undefined } = State) ->
+    {noreply, State};
+handle_cast(log_client_check, #state{ log_client_id = ClientId, log_client_pong = LastPong } = State) ->
+    Now = z_datetime:timestamp(),
+    State1 = if
+        LastPong + ?LOG_CLIENT_TIMEOUT < Now ->
+            State#state{ log_client_id = undefined, log_client_topic = undefined };
+        true ->
+            Context = z_acl:sudo(z_context:new(State#state.site)),
+            z_sidejob:start(?MODULE, log_client_ping, [ ClientId, self() ], Context),
+            State
+    end,
+    {noreply, State1};
+handle_cast({log_client_pong, PongClientId, true}, #state{ log_client_id = ClientId } = State) when PongClientId =:= ClientId ->
+    {noreply, State#state{ log_client_pong = z_datetime:timestamp() }};
+handle_cast({log_client_pong, PongClientId, false}, #state{ log_client_id = ClientId } = State) when PongClientId =:= ClientId ->
+    {noreply, State#state{ log_client_id = undefined, log_client_topic = undefined }};
+handle_cast({log_client_pong, _}, State) ->
+    {noreply, State};
+
 %% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
@@ -195,6 +293,25 @@ handle_cast(Message, State) ->
 %%                                       {noreply, State, Timeout} |
 %%                                       {stop, Reason, State}
 %% @doc Handling all non call/cast messages
+handle_info({logger, Data}, #state{ site = Site, log_client_topic = ClientTopic } = State) ->
+    Context = z_acl:sudo(z_context:new(Site)),
+    io:format("~p ~p~n", [ Site, ClientTopic ]),
+    case log_event_ratelimit(State) of
+        {true, State1} ->
+            case m_site:environment(Context) of
+                development ->
+                    z_mqtt:publish(<<"model/log/event/console">>, Data, Context);
+                _Other when ClientTopic =/= undefined ->
+                    z_mqtt:publish(
+                        ClientTopic ++ [ <<"model">>, <<"console">>, <<"post">>, <<"log">> ],
+                        Data, Context);
+                _Other ->
+                    ok
+            end,
+            {noreply, State1};
+        {false, State1} ->
+            {noreply, State1}
+    end;
 handle_info(_Info, State) ->
     {noreply, State}.
 
@@ -217,6 +334,29 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
+%% @doc Check the session state of the log client to see if we should keep logging
+log_client_ping(ClientId, Pid, Context) ->
+    Context1 = Context#context{ client_id = ClientId },
+    case m_client_session_storage:get(is_console_logging, Context1) of
+        {ok, Val} ->
+            gen_server:cast(Pid, {log_client_pong, ClientId, z_convert:to_bool(Val)});
+        {error, _} ->
+            % Retry in a minute
+            ok
+    end.
+
+%% @doc Check if we are rate limiting publishing log events to MQTT. Simple limiting
+%% of max number of messages in the current second window.
+log_event_ratelimit(#state{ log_event_count = Count, log_event_timestamp = Tm } = State) ->
+    Now = z_datetime:timestamp(),
+    if
+        Now =:= Tm, Count =< ?LOG_EVENT_RATE ->
+            {true, State#state{ log_event_count = Count + 1 }};
+        Now =:= Tm ->
+            {false, State};
+        true ->
+            {true, State#state{ log_event_count = 1, log_event_timestamp = Now }}
+    end.
 
 %% @private Check the health of the db pool. When usage is to high a warning will be
 %% put in the log. The warning is deduplicated every hour.

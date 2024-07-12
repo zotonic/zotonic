@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017 Marc Worrell
+%% @copyright 2017-2024 Marc Worrell
 %% @doc Periodic tasks and ticks for other modules.
+%% @end
 
-%% Copyright 2017 Marc Worrell
+%% Copyright 2017-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -61,6 +62,7 @@ start_link(Args) when is_list(Args) ->
     gen_server:start_link(?MODULE, Site, []).
 
 init(Site) when is_atom(Site) ->
+    z_context:logger_md(Site),
     lists:foreach(
         fun({Timeout, Event}) ->
             erlang:send_after(Timeout * 1000, self(), {tick, Timeout, Event})
