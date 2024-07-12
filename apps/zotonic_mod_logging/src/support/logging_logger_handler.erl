@@ -74,23 +74,27 @@ log(#{ level := info, meta := #{error_logger := #{type := progress}} }, _Config)
     % Ignore supervisor progress reports
     ok;
 log(#{ level := Level, msg := EventData, meta := Meta }, #{ config := #{ pid := Pid } }) ->
-    {Msg, MsgMap} = format_msg(EventData),
-    SafeMeta = safe_meta(Meta),
-    {Msg1, MsgMap1} = case Msg of
-        null ->
-            {maps:get(text, MsgMap, null), maps:remove(text, MsgMap)};
-        _ ->
-            {Msg, MsgMap}
-    end,
-    Data = #{
-        severity => Level,
-        timestamp => format_timestamp(Meta),
-        message => Msg1,
-        fields => MsgMap1,
-        meta => SafeMeta
-    },
-    Pid ! {logger, Data},
-    ok.
+    try
+        {Msg, MsgMap} = format_msg(EventData),
+        SafeMeta = safe_meta(Meta),
+        {Msg1, MsgMap1} = case Msg of
+            null ->
+                {maps:get(text, MsgMap, null), maps:remove(text, MsgMap)};
+            _ ->
+                {Msg, MsgMap}
+        end,
+        Data = #{
+            severity => Level,
+            timestamp => format_timestamp(Meta),
+            message => Msg1,
+            fields => MsgMap1,
+            meta => SafeMeta
+        },
+        Pid ! {logger, Data},
+        ok
+    catch
+        _:_ -> ok
+    end.
 
 %%==============================================================================
 %% Internal functions
