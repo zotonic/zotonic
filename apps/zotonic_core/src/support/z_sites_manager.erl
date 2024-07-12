@@ -1,10 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2020 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Server managing all sites running inside Zotonic. Starts the sites
 %% according to the config files in the sites subdirectories. Handles scanning
 %% of all site directories for config files.
+%% @end
 
-%% Copyright 2009-2020 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -375,6 +376,24 @@ filechanged_observer(#zotonic_filehandler_filechange{} = ChangeEvent, _CallConte
         end).
 
 
+%% @doc Set extra configurations for a site. Will overlay the read configuration when
+%% the site is started.
+-spec get_site_config_overrides(Site) -> List when
+    Site :: atom(),
+    List :: proplists:proplist().
+get_site_config_overrides(Site) when is_atom(Site) ->
+    Key = z_convert:to_atom(z_convert:to_list(Site) ++ "_config_overrides"),
+    application:get_env(zotonic_core, Key, []).
+
+%% @doc Override a given site config with arbitrary key/value pairs. Should be called before
+%% the site is started.
+-spec put_site_config_overrides(Site, Overrides) -> ok when
+    Site :: atom(),
+    Overrides :: proplists:proplist().
+put_site_config_overrides(Site, Overrides) when is_atom(Site), is_list(Overrides) ->
+    Key = z_convert:to_atom(z_convert:to_list(Site) ++ "_config_overrides"),
+    application:set_env(zotonic_core, Key, Overrides).
+
 %%====================================================================
 %% gen_server callbacks
 %%====================================================================
@@ -446,7 +465,8 @@ handle_call({stop, Site}, _From, State) ->
 handle_call({get_site_config, Site}, _From, #state{ sites = Sites } = State) ->
     case maps:find(Site, Sites) of
         {ok, #site_status{ config = Config }} ->
-            {reply, {ok, Config}, State};
+            Overrides = get_site_config_overrides(Site),
+            {reply, {ok, z_utils:props_merge(Overrides, Config)}, State};
         error ->
             {reply, {error, bad_name}, State}
     end;
@@ -1237,13 +1257,3 @@ is_module(Module) ->
         "mod_" ++ _ -> true;
         ModS -> string:str(ModS, "_mod_") > 0
     end.
-
-get_site_config_overrides(Site) when is_atom(Site) ->
-    Key = z_convert:to_atom(z_convert:to_list(Site) ++ "_config_overrides"),
-    application:get_env(zotonic_core, Key, []).
-
-%% @doc Override a given site config with arbitrary key/value
-%% pairs. Should be called before the site is started.
-put_site_config_overrides(Site, Overrides) when is_atom(Site), is_list(Overrides) ->
-    Key = z_convert:to_atom(z_convert:to_list(Site) ++ "_config_overrides"),
-    application:set_env(zotonic_core, Key, Overrides).

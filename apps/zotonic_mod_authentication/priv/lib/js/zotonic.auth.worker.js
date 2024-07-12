@@ -1,5 +1,5 @@
 /**
- * Copyright 2019-2021 Marc Worrell <marc@worrell.nl>
+ * Copyright 2019-2024 Marc Worrell <marc@worrell.nl>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ var AUTH_CHECK_PERIOD = 30;
 function fetchWithUA( body ) {
     return self.call("model/sessionId/get")
         .then( function(sid) {
+            body.timestamp = Math.floor(Date.now() / 1000);
             return self.call("model/document/get/all")
                 .then( function(msg) {
                     body.document = msg.payload;

@@ -84,7 +84,7 @@ function zotonic_startup() {
         } catch(e) {
             console.log("Error on eval", e, msg.payload);
         }
-    }, { wid: 'zotonicjs'});
+    }, { wid: 'zotonic-wired'});
 
     cotonic.broker.subscribe(
         "zotonic-transport/progress",
@@ -94,13 +94,13 @@ function zotonic_startup() {
             } else {
                 z_progress(msg.payload.form_id, msg.payload.percentage);
             }
-        }, { wid: 'zotonicprogress'});
+        }, { wid: 'zotonic-wired'});
 
     cotonic.broker.subscribe(
         "model/alert/post",
         function(msg) {
             z_dialog_alert(msg.payload);
-        }, { wid: 'zotonicalert'});
+        }, { wid: 'zotonic-wired'});
 
     cotonic.broker.subscribe(
         "model/clipboard/post/copy",
@@ -110,7 +110,13 @@ function zotonic_startup() {
             } else if (msg.payload?.text) {
                 navigator.clipboard?.writeText(msg.payload.text);
             }
-        }, { wid: 'zotonicclip'});
+        }, { wid: 'zotonic-wired'});
+
+    cotonic.broker.subscribe(
+        "model/wires/post/event/+name",
+        function(msg, bindings) {
+            z_event(bindings.name, msg.payload);
+        }, { wid: 'zotonic-wired'});
 
     // Register the client-id to reuse on subsequent pages
     cotonic.broker.subscribe(
@@ -119,7 +125,7 @@ function zotonic_startup() {
                 if (msg.payload.is_connected) {
                     cotonic.broker.publish("model/sessionStorage/post/mqtt-origin-client-id", msg.payload.client_id);
                 }
-            }, { wid: "zotonicjs" });
+            }, { wid: "zotonic-wired" });
 
     // Start the client-server bridge
     cotonic.broker.call("model/sessionStorage/get/mqtt-origin-client-id")
@@ -426,7 +432,7 @@ function z_transport(delegate, content_type, data, options)
     options = options || {};
     if (options.transport == 'fileuploader' && cotonic.whereis("fileuploader")) {
         // Post via the fileuploader worker
-        let fileInputs = $('input:file', options.post_form);
+        let fileInputs = $('input:file:not(.nosubmit)', options.post_form);
         let files = [];
 
         fileInputs.each(function() {
@@ -1041,7 +1047,7 @@ Which should log it in a separate ui error log.
 var oldOnError = window.onerror;
 var z_page_unloading = false;
 
-window.addEventListener("unload", function(event) {
+window.addEventListener("pagehide", function(event) {
     z_page_unloading = true;
 });
 
@@ -1135,7 +1141,7 @@ function z_init_postback_forms()
             var form_id      = $(theForm).attr('id');
             var validations  = $(theForm).formValidationPostback();
             var transport    = '';
-            var files        = $('input:file', theForm).fieldValue();
+            var files        = $('input:file:not(.nosubmit)', theForm).fieldValue();
             var is_file_form = false;
 
             if (!postback) {

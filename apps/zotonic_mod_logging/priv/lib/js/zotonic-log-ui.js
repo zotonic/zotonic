@@ -10,7 +10,7 @@ Which should log it in a separate ui error log.
     var oldOnError = window.onerror;
     var isUnloading = false;
 
-    window.addEventListener("unload", function(event) {
+    window.addEventListener("pagehide", function(event) {
         isUnloading = true;
     });
 

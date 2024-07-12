@@ -299,7 +299,7 @@ set_value_db(Module, Key, Value0, Context) ->
             z_notifier:notify(#m_config_update{module=Module, key=Key, value=Value}, Context),
             z:info(
                 "Configuration key '~p.~p' inserted, new value: '~s'",
-                [ ModuleAtom, KeyAtom, Value ],
+                [ ModuleAtom, KeyAtom, safe_log_value(Key, Value) ],
                 [ {module, ?MODULE}, {line, ?LINE} ],
                 Context),
             ok;
@@ -308,7 +308,7 @@ set_value_db(Module, Key, Value0, Context) ->
             z_notifier:notify(#m_config_update{module=Module, key=Key, value=Value}, Context),
             z:info(
                 "Configuration key '~p.~p' changed, new value: '~s', old value '~s'",
-                [ ModuleAtom, KeyAtom, Value, OldV ],
+                [ ModuleAtom, KeyAtom, safe_log_value(Key, Value), OldV ],
                 [ {module, ?MODULE}, {line, ?LINE} ],
                 Context),
             ok;
@@ -319,6 +319,7 @@ set_value_db(Module, Key, Value0, Context) ->
         {rollback, Error} ->
             {error, Error}
     end.
+
 
 %% @doc Set a "complex" config value.
 -spec set_prop(atom()|binary(), atom()|binary(), atom()|binary(), term(), z:context()) -> ok | {error, term()}.
@@ -434,3 +435,16 @@ is_public_config_key(<<"public_", _/binary>>) ->
     true;
 is_public_config_key(_) ->
     false.
+
+%% Create a safe value for the log. Secret values are abbreviated.
+safe_log_value(Key, Value) ->
+    case is_secret_key(z_convert:to_binary(Key)) of
+        true -> safe_log_value(Value);
+        false -> Value
+    end.
+
+safe_log_value(Value) when is_binary(Value) andalso size(Value) > 6 ->
+    <<First:3/binary, _/binary>> = Value,
+    <<First/binary, "****">>;
+safe_log_value(_) ->
+    <<"****">>.

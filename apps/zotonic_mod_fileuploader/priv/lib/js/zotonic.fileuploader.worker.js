@@ -1,5 +1,5 @@
 /**
- * Copyright 2021 Marc Worrell <marc@worrell.nl>
+ * Copyright 2021-2024 Marc Worrell <marc@worrell.nl>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,11 +48,24 @@ var startUploader = function(fileIndex) {
 
     if (f.failed.length > 0) {
         offset = f.failed.pop();
-    } else {
+        if (f.uploading.indexOf(offset) !== -1) {
+            f.failed.push(offset);
+            return;
+        }
+    } else if (f.offset < f.file.size) {
         offset = f.offset;
+        if (f.uploading.indexOf(offset) !== -1) {
+            return;
+        }
         f.offset += UPLOAD_BLOCKSIZE;
+        if (f.offset > f.file_size) {
+            f.offset = f.file_size;
+        }
+    } else {
+        return;
     }
     model.uploaders++;
+    f.uploading.push(offset);
 
     const end = Math.min(f.file.size, offset + UPLOAD_BLOCKSIZE);
     const data = f.file.slice(offset, end, "application/octet-stream");
@@ -69,13 +82,13 @@ var startUploader = function(fileIndex) {
                 if (response.status == "ok") {
                     f.status = response.result;
                     f.req.uploaded_size += end - offset;
-                } else if (!isFileDeleted(fileIndex, f)) {
+                } else {
                     if (f.failed.indexOf(offset) == -1) {
                         f.failed.push(offset);
                     }
                     console.log("Fileuploader status error", response, f);
                 }
-            } else if (xhr.status != 0 && !isFileDeleted(fileIndex, f)) {
+            } else if (xhr.status != 0) {
                 if (f.failed.indexOf(offset) == -1) {
                     f.failed.push(offset);
                 }
@@ -89,33 +102,27 @@ var startUploader = function(fileIndex) {
     //     console.log(percent_complete, "%");
     // });
     xhr.addEventListener("error", function() {
-        if (!isFileDeleted(fileIndex, f)) {
-            if (f.failed.indexOf(offset) == -1) {
-                f.failed.push(offset);
-            }
-            f.error_count++;
-            console.log("Fileuploader xhr error", f);
+        if (f.failed.indexOf(offset) == -1) {
+            f.failed.push(offset);
         }
-    });
-    xhr.addEventListener("loadend", function() {
-        if (!isFileDeleted(fileIndex, f)) {
-            let upl = [];
-            for (let i=0; i<f.uploading.length; i++) {
-                if (f.uploading[i] != offset) {
-                    upl.push(f.uploading[i]);
-                }
-            }
-            f.uploading = upl;
-            self.publish("model/fileuploader/post/next", {});
-        }
-        model.uploaders--;
+        f.error_count++;
+        console.log("Fileuploader xhr error", offset, f);
     });
     xhr.addEventListener("abort", function() {
-        model.uploaders--;
+        if (f.failed.indexOf(offset) == -1) {
+            f.failed.push(offset);
+        }
+        f.error_count++;
+        console.log("Fileuploader xhr abort", offset, f);
     });
-    isFileDeleted(fileIndex, f)
-        ? xhr.abort()
-        : xhr.send(data);
+    xhr.addEventListener("loadend", function() {
+        // console.log("loadend", offset);
+        f.uploading = f.uploading.filter(u => u !== offset);
+        model.uploaders--;
+        self.publish("model/fileuploader/post/next", {});
+    });
+
+    xhr.send(data);
 }
 
 function isFileDeleted(fileIndex, f) {
@@ -164,7 +171,7 @@ model.present = function(data) {
                 error_count: 0,
                 upload_count: 0,    // Number of file uploads started on server and uploading
                 wait_count: 0,      // Number of file uploads awaiting response from server before starting
-                uploads: [],        // Files start are uploaded
+                uploads: [],        // Completed uploads
                 start: Date.now(),
                 progress_published: 0
             };
@@ -245,7 +252,7 @@ model.present = function(data) {
         const f = model.files[i];
         if (f.req.error_count == 0) {
             fs.push(f);
-        } else if (f.status && f.status.name) {
+        } else if (f.status?.name) {
             // Tell server to remove this upload
             self.publish("bridge/origin/model/fileuploader/post/delete/"+f.status.name, {});
             f.req.upload_count--;
@@ -259,14 +266,24 @@ model.present = function(data) {
     fs = [];
     for (let i = 0; i < model.files.length; i++) {
         const f = model.files[i];
-        if (f.status.is_complete) {
-            // console.log("Completed in ", Date.now() - f.start);
+        if (f.status?.is_complete) {
+            // File is complete - add it to the uploaded files and
+            // remove it from the uploading files.
             f.req.uploads.push({
                 name: f.name,
                 upload: f.status.name
             });
             f.req.upload_count--;
         } else {
+            // Start uploading missing blocks if the last block has been uploaded
+            if (f.status?.missing && f.offset >= f.file.size) {
+                for (let k = 0; k < f.status.missing.length; k++) {
+                    const missingOffset = f.status.missing[k].start;
+                    if (f.failed.indexOf(missingOffset) == -1) {
+                        f.failed.push(missingOffset);
+                    }
+                }
+            }
             fs.push(f);
         }
     }
@@ -310,6 +327,7 @@ model.present = function(data) {
                 }
             }
         } else {
+            // Still busy uploading - publish progress and keep req
             if (r.progress_topic) {
                 let now = Date.now();
 

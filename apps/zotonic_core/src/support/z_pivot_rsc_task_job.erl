@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2020-2022 Marc Worrell
+%% @copyright 2020-2024 Marc Worrell
 %% @doc Run a pivot task queue job.
+%% @end
 
-%% Copyright 2020-2022 Marc Worrell
+%% Copyright 2020-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -36,9 +37,7 @@
 %% @doc Start a task queue sidejob.
 -spec start_task( map(), z:context() ) -> {ok, pid()} | {error, overload}.
 start_task(Task, Context) ->
-    sidejob_supervisor:spawn(
-            zotonic_sidejobs,
-            {?MODULE, task_job, [ Task, Context ]}).
+    z_sidejob:start(?MODULE, task_job, [ Task ], Context).
 
 %% @doc Run the sidejob task queue task.
 -spec task_job( map(), z:context() ) -> ok.

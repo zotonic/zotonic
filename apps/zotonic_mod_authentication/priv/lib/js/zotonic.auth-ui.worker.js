@@ -29,6 +29,7 @@ var model = {
     email: undefined,
     username: undefined,
     secret: undefined,
+    "code-new": undefined,
     need_passcode: false,
     is_expired: false,
     is_location_provided: false,
@@ -88,6 +89,10 @@ model.present = function(data) {
                 data.email = msg.payload.email || undefined,
                 model.present(data);
             });
+    }
+
+    if (data["code-new"]) {
+        model["code-new"] = data["code-new"];
     }
 
     if (data.is_location_provided) {
@@ -189,7 +194,8 @@ model.present = function(data) {
                 passcode: data.passcode,
                 "code-new": data["code-new"],
                 test_passcode: data.test_passcode,
-                onauth: "#"
+                onauth: "#",
+                timestamp: Math.floor(Date.now() / 1000)
             };
             self.publish("model/auth/post/reset", reset);
             model.status = 'reset_wait';
@@ -218,7 +224,8 @@ model.present = function(data) {
                 passcode: data.passcode,
                 "code-new": data["code-new"],
                 test_passcode: data.test_passcode,
-                onauth: "#"
+                onauth: "#",
+                timestamp: Math.floor(Date.now() / 1000)
             };
             self.publish("model/auth/post/change", change);
             model.status = 'change_wait';
@@ -303,9 +310,11 @@ state.representation = function(model) {
                     username: model.username,
                     secret: model.secret,
                     need_passcode: model.need_passcode,
+                    "code-new": model["code-new"],
                     is_expired: model.is_expired,
                     authuser: model.authuser,
-                    options: model.options
+                    options: model.options,
+                    timestamp: Math.floor(Date.now() / 1000)
                 }
             });
     }
@@ -414,7 +423,8 @@ actions.resetForm = function(data) {
         password: data.value.password_reset1,
         is_password_equal: data.value.password_reset1 === data.value.password_reset2,
         passcode: data.value.passcode || "",
-        "code-new": data["code-new"],
+        "code-new": data.value["code-new"],
+        test_passcode: data.value.test_passcode,
         setautologon: data.value.rememberme ? true : false
     }
     model.present(dataReset);
@@ -428,6 +438,7 @@ actions.changeForm = function(data) {
         is_password_equal: data.value.password_reset1 === data.value.password_reset2,
         passcode: data.value.passcode || "",
         "code-new": data["code-new"],
+        test_passcode: data.value.test_passcode
     }
     model.present(dataChange);
 };

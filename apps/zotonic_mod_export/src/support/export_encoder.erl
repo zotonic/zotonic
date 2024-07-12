@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016 Marc Worrell
+%% @copyright 2016-2024 Marc Worrell
 %% @doc Interface with the export encoders.
+%% @end
 
-%% Copyright 2016 Marc Worrell
+%% Copyright 2016-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -100,7 +101,7 @@ encoders() ->
     ].
 
 do_header(StreamState, Context) ->
-    case z_notifier:first(#export_resource_header{
+    case export_helper:call(#export_resource_header{
                                 id=StreamState#stream_state.id,
                                 content_type=StreamState#stream_state.content_type,
                                 dispatch=StreamState#stream_state.dispatch
@@ -136,7 +137,7 @@ do_body(#stream_state{is_query=true, id=Id} = StreamState, Context) ->
             Context),
     do_body_data(Ids, StreamState, Context);
 do_body(StreamState, Context) ->
-    case z_notifier:first(#export_resource_data{
+    case export_helper:call(#export_resource_data{
                                 id=StreamState#stream_state.id,
                                 content_type=StreamState#stream_state.content_type,
                                 dispatch=StreamState#stream_state.dispatch,
@@ -174,7 +175,7 @@ do_body_data(List, StreamState, Context) ->
 
 %% TODO: replace 'encode' with 'row' -> it is about a row of values for a resource
 body_encode_row(Item, StreamState, Context) ->
-    case z_notifier:first(#export_resource_encode{
+    case export_helper:call(#export_resource_encode{
                                 id=StreamState#stream_state.id,
                                 content_type=StreamState#stream_state.content_type,
                                 dispatch=StreamState#stream_state.dispatch,
@@ -197,7 +198,7 @@ encode_data_row(RowOrId, #stream_state{encoder=E, encoder_state=ES} = StreamStat
 
 
 do_footer(#stream_state{encoder=E, encoder_state=ES} = StreamState, Context) ->
-    case z_notifier:first(#export_resource_footer{
+    case export_helper:call(#export_resource_footer{
                                 id=StreamState#stream_state.id,
                                 dispatch=StreamState#stream_state.dispatch,
                                 content_type=StreamState#stream_state.content_type,

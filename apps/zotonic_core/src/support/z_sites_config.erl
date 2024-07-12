@@ -24,12 +24,12 @@
     app_is_site/1,
     config_files/1,
     config_files/2,
+    security_dir/1,
     read_configs/1,
     merge_global_configs/3
     ]).
 
 -define(CONFIG_FILE, "zotonic_site.*").
-
 
 -spec site_config(Site) -> {ok, Config} | {error, Reason} when
     Site :: atom(),
@@ -112,6 +112,14 @@ config_files(Node, Site) ->
             end
     end.
 
+-spec security_dir( atom() ) -> {ok, file:filename_all()} | {error, term()}.
+security_dir(Site) ->
+    case z_config_files:security_dir() of
+        {ok, SecurityDir} ->
+            {ok, filename:join( SecurityDir, Site)};
+        {error, _}=Error ->
+            Error
+    end.
 
 -spec read_configs( [ file:filename_all() ] ) -> {ok, map()} | {error, term()}.
 read_configs(Fs) when is_list(Fs) ->
@@ -130,6 +138,9 @@ read_configs(Fs) when is_list(Fs) ->
         {ok, #{}},
         Fs).
 
+apps_config(_File, [], Cfgs) ->
+    % Skip config file with no definitions in it.
+    {ok, Cfgs};
 apps_config(File, Data, Cfgs) when is_list(Data) ->
     lists:foldl(
         fun
@@ -156,7 +167,12 @@ apps_config(File, Data, Cfgs) when is_list(Data) ->
                             Error
                     end,
                     {ok, Acc},
-                    AppConfig)
+                    AppConfig);
+            (null, Acc) ->
+                % Skip null, this is probably a yml file with a comment.
+                {ok, Acc};
+            (Term, _Acc) ->
+                {error, {config_file, format, File, {unknown_term, Term}}}
         end,
         Cfgs,
         Data).

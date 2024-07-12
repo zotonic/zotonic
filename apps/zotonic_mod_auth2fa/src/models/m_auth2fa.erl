@@ -24,6 +24,8 @@
 -export([
     m_get/3,
 
+    clock_check/1,
+
     set_totp_requested/1,
     is_totp_requested/1,
 
@@ -37,8 +39,11 @@
     user_mode/1,
 
     new_totp_image_url/1,
+    new_totp_image_url/2,
+
     totp_disable/2,
     totp_set/3
+
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -47,13 +52,24 @@
 -define(TOTP_PERIOD, 30).
 -define(TOTP_IDENTITY_TYPE, auth2fa_totp).
 
-m_get([ <<"new_totp_image_url">> | Rest ], _Msg, Context) ->
+-define(MAX_CLOCK_CHECK_SKEW, 20).
+
+
+m_get([ <<"new_totp_image_url">> ], _Msg, Context) ->
     {ok, {ImageDataUrl, Secret}} = new_totp_image_url(Context),
     R = #{
         url => ImageDataUrl,
         secret => z_auth2fa_base32:encode(Secret)
     },
-    {ok, {R, Rest}};
+    {ok, {R, []}};
+m_get([ <<"new_totp_image_url">>, CurrentCode ], _Msg, Context) ->
+    CurrentSecret = try_decode(CurrentCode),
+    {ok, {ImageDataUrl, NewSecret}} = new_totp_image_url(CurrentSecret, Context),
+    R = #{
+        url => ImageDataUrl,
+        secret => z_auth2fa_base32:encode(NewSecret)
+    },
+    {ok, {R, []}};
 m_get([ User, <<"is_totp_enabled">> | Rest ], _Msg, Context) ->
     UserId = m_rsc:rid(User, Context),
     IsEnabled = case z_acl:is_allowed(use, mod_admin_identity, Context)
@@ -78,8 +94,28 @@ m_get([ <<"mode">> | Rest ], _Msg, Context) ->
     {ok, {mode(Context), Rest}};
 m_get([ <<"user_mode">> | Rest ], _Msg, Context) ->
     {ok, {user_mode(Context), Rest}};
+m_get([ <<"clock_check">> ], #{ payload := #{ <<"timestamp">> := Timestamp } }, _Context) ->
+    {ok, {clock_check(z_convert:to_integer(Timestamp)), []}};
+m_get([ <<"clock_check">>, Timestamp | Rest ], _Msg, _Context) ->
+    {ok, {clock_check(z_convert:to_integer(Timestamp)), Rest}};
 m_get(_Path, _Msg, _Context) ->
     {error, unknown_path}.
+
+
+%% @doc Check if the given clock time is within an acceptable delta with the
+%% server clock.
+-spec clock_check(Timestamp) -> map() when
+    Timestamp :: integer().
+clock_check(undefined) ->
+    clock_check(0);
+clock_check(Timestamp) ->
+    Delta = z_datetime:timestamp() - Timestamp,
+    #{
+        <<"delta">> => Delta,
+        <<"delta_abs">> => abs(Delta),
+        <<"delta_acceptable">> => ?MAX_CLOCK_CHECK_SKEW,
+        <<"is_ok">> => abs(Delta) =< ?MAX_CLOCK_CHECK_SKEW
+    }.
 
 %% @doc Remember that for this session the TOTP dialog has been shown.
 -spec is_totp_requested(Context) -> boolean() when
@@ -193,17 +229,31 @@ totp_set(UserId, Secret, Context) ->
             ok
     end.
 
-%% @doc Generate a new totp code and return the barcode, do not save it.
+%% @doc Generate a new totp QR code and secret, do not save it.
 -spec new_totp_image_url(Context) -> {ok, {Url, Secret}} when
     Context :: z:context(),
     Url :: binary(),
     Secret :: binary().
 new_totp_image_url(Context) ->
-    Issuer = issuer(Context),
-    ServicePart = service_part(z_acl:user(Context), Issuer, Context),
-    Passcode = new_secret(),
-    {ok, Png} = generate_png(ServicePart, Issuer, Passcode, ?TOTP_PERIOD),
-    {ok, {encode_data_url(Png, <<"image/png">>), Passcode}}.
+    new_totp_image_url(undefined, Context).
+
+%% @doc Generate a new totp secret and return the QR code, do not save it. If
+%% the code is not valid then a new code (aka secret) is generated.
+-spec new_totp_image_url(Secret, Context) -> {ok, {Url, NewSecret}} when
+    Secret :: undefined | binary(),
+    Context :: z:context(),
+    Url :: binary(),
+    NewSecret :: binary().
+new_totp_image_url(Secret, Context) ->
+    case is_valid_secret(Secret) of
+        true ->
+            Issuer = issuer(Context),
+            ServicePart = service_part(z_acl:user(Context), Issuer, Context),
+            {ok, Png} = generate_png(ServicePart, Issuer, Secret, ?TOTP_PERIOD),
+            {ok, {encode_data_url(Png, <<"image/png">>), Secret}};
+        false ->
+            new_totp_image_url(new_secret(), Context)
+    end.
 
 issuer(Context) ->
     SiteTitle = m_config:get_value(site, title, Context),
@@ -282,6 +332,20 @@ set_user_secret(UserId, Passcode, Context) ->
 
 new_secret() ->
     crypto:hash(sha, z_ids:id(32)).
+
+is_valid_secret(undefined) ->
+    false;
+is_valid_secret(Secret) when is_binary(Secret) ->
+    size(Secret) =:= size(crypto:hash(sha, <<>>)).
+
+try_decode(undefined) ->
+    undefined;
+try_decode(Code) when is_binary(Code) ->
+    try
+        z_auth2fa_base32:decode(Code)
+    catch
+        _:_ -> undefined
+    end.
 
 % url format: https://github.com/google/google-authenticator/wiki/Key-Uri-Format
 generate_png(Domain, Issuer, Passcode, Seconds) ->

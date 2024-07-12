@@ -447,7 +447,7 @@ mapping() ->
         <<"schema:license">> => <<"license">>,
 
         <<"schema:headline">> => <<"title">>,
-        <<"schema:subtitle">> => <<"alternativeHeadline">>,
+        <<"schema:subtitle">> => <<"subtitle">>,
         <<"schema:text">> => <<"body">>,
         <<"schema:url">> => <<"website">>,
 

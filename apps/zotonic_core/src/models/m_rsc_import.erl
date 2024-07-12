@@ -348,11 +348,13 @@ reimport_recursive(Id, RefIds, Options, Context) ->
 reimport_recursive_async(Id, Context) ->
     case reimport(Id, Context) of
         {ok, {LocalId, RefIds}} ->
-            ContextAsync = z_context:prune_for_async(Context),
-            sidejob_supervisor:spawn(
-                    zotonic_sidejobs,
-                    {?MODULE, import_referred_ids_task, [ RefIds, #{ LocalId => true }, ContextAsync ]}),
-            {ok, {LocalId, RefIds}};
+            Args = [ RefIds, #{ LocalId => true } ],
+            case z_sidejob:start(?MODULE, import_referred_ids_task, Args, Context) of
+                {ok, _} ->
+                    {ok, {LocalId, RefIds}};
+                {error, _} = Error ->
+                    Error
+            end;
         {error, _} = Error ->
             Error
     end.
@@ -733,11 +735,13 @@ import_uri_recursive(Uri, Options, Context) ->
 import_uri_recursive_async(Uri, Options, Context) ->
     case import_uri(Uri, Options, Context) of
         {ok, {LocalId, RefIds}} ->
-            ContextAsync = z_context:prune_for_async(Context),
-            sidejob_supervisor:spawn(
-                    zotonic_sidejobs,
-                    {?MODULE, import_referred_ids_task, [ RefIds, #{ LocalId => true }, ContextAsync ]}),
-            {ok, {LocalId, RefIds}};
+            Args = [ RefIds, #{ LocalId => true } ],
+            case z_sidejob:start(?MODULE, import_referred_ids_task, Args, Context) of
+                {ok, _} ->
+                    {ok, {LocalId, RefIds}};
+                {error, _} = Error ->
+                    Error
+            end;
         {error, _} = Error ->
             Error
     end.

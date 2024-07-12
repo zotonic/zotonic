@@ -62,6 +62,13 @@ do_upload({ok, #{ is_complete := true } = Status}, Data, Context) ->
         filename := Filename,
         uploaded_file := TmpFile
     } = Status,
+    ?LOG_DEBUG(#{
+        in => zotonic_mod_fileuploader,
+        text => <<"Upload finished with complete file">>,
+        result => ok,
+        filename => Filename,
+        tmp_file => TmpFile
+    }),
     RscProps = #{
         <<"is_published">> => true,
         <<"original_filename">> => Filename,
@@ -79,7 +86,23 @@ do_upload({ok, #{ is_complete := true } = Status}, Data, Context) ->
     end,
     z_fileuploader:stop(Name),
     Context1;
-do_upload({error, _}, _Data, Context) ->
+do_upload({ok, #{ is_complete := false, filename := Filename, uploaded_file := TmpFile }}, _Data, Context) ->
+    ?LOG_ERROR(#{
+        in => zotonic_mod_fileuploader,
+        text => <<"Upload finished with incomplete file">>,
+        result => error,
+        reason => incomplete,
+        filename => Filename,
+        tmp_file => TmpFile
+    }),
+    Context;
+do_upload({error, Reason}, _Data, Context) ->
+    ?LOG_ERROR(#{
+        in => zotonic_mod_fileuploader,
+        text => <<"Error uploading file">>,
+        result => error,
+        reason => Reason
+    }),
     Context.
 
 maybe_get(K, M, D) when is_map(M) -> maps:get(K, M, D);

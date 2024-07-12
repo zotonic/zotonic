@@ -57,6 +57,8 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
 
 
 
+event(#postback{message='config_encrypt_backups'}, Context) ->
+    set_config(encrypt_backups, Context);
 event(#postback{message='config_backup_panel'}, Context) ->
     set_config(admin_panel, Context);
 event(#postback{message='config_backup_daily'}, Context) ->

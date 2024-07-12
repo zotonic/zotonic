@@ -14,11 +14,26 @@
                             {% if backup.is_running %}
                                 <span class="label label-info">{_ this backup is in progress _}</span>
                             {% else %}
-                                {% if backup.is_files_present %}
-                                    <a class="btn btn-default btn-xs" target="_blank" href="{% url backup_download star=backup.name++".tar.gz" %}">{_ download files _}</a>
+                                {% if backup.is_encrypted %}
+                                    <span class="label label-info">{_ Encrypted _}</span>
                                 {% endif %}
+
+                                {% if backup.is_files_present %}
+                                    <a {% if backup.is_encrypted %}
+                                           href="{% url backup_download star=backup.name++".tar.gz.enc" %}"
+                                       {% else %}
+                                            href="{% url backup_download star=backup.name++".tar.gz" %}"
+                                       {% endif %}
+                                       download class="btn btn-default btn-xs">{_ download files _}</a>
+                                {% endif %}
+
                                 {% if backup.is_database_present %}
-                                    <a class="btn btn-default btn-xs" target="_blank" href="{% url backup_download star=backup.name++".sql.gz" %}">{_ download database _}</a>
+                                    <a {% if backup.is_encrypted %}
+                                           href="{% url backup_download star=backup.name++".sql.gz.enc" %}"
+                                       {% else %}
+                                           href="{% url backup_download star=backup.name++".sql.gz" %}"
+                                       {% endif %} 
+                                       download class="btn btn-default btn-xs">{_ download database _}</a>
                                 {% endif %}
                             {% endif %}
                         </div>
