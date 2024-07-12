@@ -96,11 +96,13 @@ log(#{ level := Level, msg := EventData, meta := Meta }, #{ config := #{ pid := 
 %% Internal functions
 %%==============================================================================
 
--spec format_msg(Data) -> {binary(), #{ Key => jsx:json_term()} } when
+-spec format_msg(Data) -> {Message, #{ Key => Value } } when
+    Data :: {io:format(), [ term() ]}
+          | {report, logger:report()}
+          | {string, unicode:chardata()},
+    Message :: binary() | null,
     Key :: binary() | atom(),
-    Data ::  {io:format(), [term()]}
-           | {report, logger:report()}
-           | {string, unicode:chardata()}.
+    Value :: jsx:json_term().
 format_msg({string, Message}) ->
     {unicode:characters_to_binary(Message), #{}};
 format_msg({report, Report}) when is_map(Report) ->
