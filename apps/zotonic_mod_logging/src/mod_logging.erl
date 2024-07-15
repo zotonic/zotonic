@@ -38,6 +38,7 @@
     observe_admin_menu/3,
     is_ui_ratelimit_check/1,
     is_log_client_allowed/1,
+    is_log_client_session/1,
     log_client_start/1,
     log_client_stop/1,
     log_client_ping/3,
@@ -63,6 +64,7 @@
 % Max number of published log events per second.
 -define(LOG_EVENT_RATE, 20).
 -define(LOG_CLIENT_TIMEOUT, 900).
+-define(LOG_CLIENT_PONG_RECENT, 120).
 
 %% interface functions
 
@@ -206,6 +208,19 @@ is_log_client_allowed(Context) ->
             SiteEnv =:= development andalso ZotonicEnv =:= development
     end.
 
+%% @doc Check if this session (clientId) is receiving the logs.
+-spec is_log_client_session(Context) -> boolean() when
+    Context :: z:context().
+is_log_client_session(Context) ->
+    case z_module_manager:whereis(mod_logging, Context) of
+        {ok, Pid} ->
+            {ok, #{
+                <<"log_client_id">> := ClientId
+            }} = gen_server:call(Pid, log_client_status),
+            ClientId =:= z_context:client_id(Context);
+        {error, _} ->
+            false
+    end.
 
 %%====================================================================
 %% API
@@ -254,7 +269,15 @@ handle_call({log_client_start, ClientId, ClientTopic}, _From, #state{ site = Sit
         log_client_pong = z_datetime:timestamp()
     },
     {reply, ok, State1};
-
+handle_call(log_client_status, _From, State) ->
+    Now = z_datetime:timestamp(),
+    Status = #{
+        log_client_id => State#state.log_client_id,
+        log_client_topic => State#state.log_client_topic,
+        log_client_pong => State#state.log_client_pong,
+        is_pong_recent => (Now - State#state.log_client_pong) < ?LOG_CLIENT_PONG_RECENT
+    },
+    {reply, {ok, Status}, State};
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
