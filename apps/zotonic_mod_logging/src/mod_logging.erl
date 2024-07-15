@@ -42,7 +42,7 @@
     is_log_client_active/1,
     log_client_start/1,
     log_client_stop/1,
-    log_client_ping/3,
+    log_client_ping/4,
     manage_schema/2
 ]).
 
@@ -213,12 +213,17 @@ is_log_client_allowed(Context) ->
 -spec is_log_client_session(Context) -> boolean() when
     Context :: z:context().
 is_log_client_session(Context) ->
-    case z_module_manager:whereis(mod_logging, Context) of
-        {ok, Pid} ->
-            {ok, #{
-                <<"log_client_id">> := ClientId
-            }} = gen_server:call(Pid, log_client_status),
-            ClientId =:= z_context:client_id(Context);
+    case z_context:client_id(Context) of
+        {ok, ClientId} ->
+            case z_module_manager:whereis(mod_logging, Context) of
+                {ok, Pid} ->
+                    {ok, #{
+                        log_client_id := LogClientId
+                    }} = gen_server:call(Pid, log_client_status),
+                    ClientId =:= LogClientId;
+                {error, _} ->
+                    false
+            end;
         {error, _} ->
             false
     end.
@@ -261,7 +266,7 @@ init(Args) ->
     Site = z_context:site(Context1),
     z_context:logger_md(Context1),
     case m_site:environment(Context1) of
-        development -> logging_logger_handler:install(Site, self());
+        development -> z_logging_logger_handler:install(Site, self());
         _ -> ok
     end,
     {ok, #state{ site = Site, dedup = #{} }}.
@@ -278,7 +283,7 @@ handle_call(is_ui_ratelimit_check, _From, #state{ last_ui_event = LastUI } = Sta
     {reply, Now > LastUI, State#state{ last_ui_event = Now }};
 
 handle_call({log_client_start, ClientId, ClientTopic}, _From, #state{ site = Site } = State) ->
-    logging_logger_handler:install(Site, self()),
+    z_logging_logger_handler:install(Site, self()),
     State1 = State#state{
         log_client_id = ClientId,
         log_client_topic = ClientTopic,
@@ -316,14 +321,16 @@ handle_cast(log_client_stop, State) ->
     {noreply, State1};
 handle_cast(log_client_check, #state{ log_client_id = undefined } = State) ->
     {noreply, State};
-handle_cast(log_client_check, #state{ log_client_id = ClientId, log_client_pong = LastPong } = State) ->
+handle_cast(log_client_check, #state{ log_client_pong = LastPong } = State) ->
     Now = z_datetime:timestamp(),
     State1 = if
         LastPong + ?LOG_CLIENT_TIMEOUT < Now ->
             State#state{ log_client_id = undefined, log_client_topic = undefined };
         true ->
             Context = z_acl:sudo(z_context:new(State#state.site)),
-            z_sidejob:start(?MODULE, log_client_ping, [ ClientId, self() ], Context),
+            ClientId = State#state.log_client_id,
+            ClientTopic = State#state.log_client_topic,
+            z_sidejob:start(?MODULE, log_client_ping, [ ClientId, ClientTopic, self() ], Context),
             State
     end,
     {noreply, State1};
@@ -385,12 +392,12 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
-%% @doc Check the session state of the log client to see if we should keep logging
-log_client_ping(ClientId, Pid, Context) ->
-    Context1 = Context#context{ client_id = ClientId },
-    case m_client_session_storage:get(is_console_logging, Context1) of
-        {ok, Val} ->
-            gen_server:cast(Pid, {log_client_pong, ClientId, z_convert:to_bool(Val)});
+%% @doc Check if the log client is still Active.
+log_client_ping(ClientId, ClientTopic, Pid, Context) ->
+    Topic = ClientTopic ++ [ <<"model">>, <<"console">>, <<"post">>, <<"ping">> ],
+    case z_mqtt:call(Topic, <<"ping">>, Context) of
+        {ok, <<"pong">>} ->
+            gen_server:cast(Pid, {log_client_pong, ClientId, true});
         {error, _} ->
             % Retry in a minute
             ok

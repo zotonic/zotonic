@@ -1,9 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2020 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Model for the zotonic config table. Performs a fallback to the site configuration when
 %% a key is not defined in the configuration table.
+%% @end
 
-%% Copyright 2009-2020 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -111,7 +112,10 @@ all(Context) ->
 %%      Returns the empty list for non existing keys, otherwise
 %%      a property list with all the module settings.
 %% @todo Change proplists to maps.
--spec get( atom() | binary() | undefined, z:context() ) -> proplists:proplist().
+-spec get(Module, Context) -> Configs when
+    Module :: atom() | binary() | undefined,
+    Context :: z:context(),
+    Configs :: proplists:proplist().
 get(undefined, _Context) ->
     [];
 get(Module, Context) when is_atom(Module) ->
@@ -138,7 +142,11 @@ get(Module, Context) when is_binary(Module) ->
     end.
 
 %% @doc Get a configuration value for the given module/key combination.
--spec get( atom() | binary(), atom() | binary(), z:context() ) -> proplists:proplist() | undefined.
+-spec get(Module, Key, Context) -> Config when
+    Module :: atom() | binary(),
+    Key :: atom() | binary(),
+    Context :: z:context(),
+    Config :: proplists:proplist() | undefined.
 get(zotonic, Key, _Context) when is_atom(Key) ->
     [
         {value, z_config:get(Key)}
@@ -183,9 +191,10 @@ get(Module, Key, Context) when is_binary(Key) ->
             undefined
     end.
 
-
-
--spec get_value( atom() | binary(), atom() | binary(), z:context() ) -> term() | undefined.
+-spec get_value(Module, Key, Context) -> term() when
+    Module :: atom() | binary(),
+    Key :: atom() | binary(),
+    Context :: z:context().
 get_value(Module, Key, Context) when is_atom(Module), is_atom(Key) ->
     Value = case get(Module, Key, Context) of
         undefined -> undefined;
@@ -212,26 +221,41 @@ get_value(Module, Key, Context) when is_binary(Key) ->
             undefined
     end.
 
-
--spec get_value( atom() | binary(), atom() | binary(), term(), z:context() ) -> term() | undefined.
+-spec get_value(Module, Key, Default, Context) -> term() when
+    Module :: atom() | binary(),
+    Key :: atom() | binary(),
+    Default :: term(),
+    Context :: z:context().
 get_value(Module, Key, Default, Context) ->
     case get_value(Module, Key, Context) of
         undefined -> Default;
         Value -> Value
     end.
 
--spec get_boolean( atom() | binary(), atom() | binary(), z:context() ) -> boolean().
+-spec get_boolean(Module, Key, Context) -> boolean() when
+    Module :: atom() | binary(),
+    Key :: atom() | binary(),
+    Context :: z:context().
 get_boolean(Module, Key, Context) ->
     z_convert:to_bool(get_value(Module, Key, Context)).
 
--spec get_boolean( atom() | binary(), atom() | binary(), term(), z:context() ) -> boolean().
+-spec get_boolean(Module, Key, Default, Context) -> boolean() when
+    Module :: atom() | binary(),
+    Key :: atom() | binary(),
+    Default :: term(),
+    Context :: z:context().
 get_boolean(Module, Key, Default, Context) ->
     z_convert:to_bool(get_value(Module, Key, Default, Context)).
 
 
 %% @doc Set the value of a config iff the current value is 'undefined'. Useful for initialization
 %% of new module data schemas.
--spec set_default_value( atom() | binary(), atom() | binary(), string() | binary() | atom(), z:context() ) -> ok | {error, term()}.
+-spec set_default_value(Module, Key, Value, Context) -> ok | {error, Reason} when
+    Module :: atom() | binary(),
+    Key :: atom() | binary(),
+    Value :: string() | binary() | atom(),
+    Context :: z:context(),
+    Reason :: term().
 set_default_value(Module, Key, Value, Context) ->
     case get_value(Module, Key, Context) of
         undefined ->
@@ -241,7 +265,12 @@ set_default_value(Module, Key, Value, Context) ->
     end.
 
 %% @doc Set a "simple" config value.
--spec set_value( atom() | binary(), atom() | binary(), string() | binary() | atom(), z:context() ) -> ok | {error, term()}.
+-spec set_value(Module, Key, Value, Context) -> ok | {error, Reason} when 
+    Module :: atom() | binary(),
+    Key :: atom() | binary(),
+    Value :: string() | binary() | atom(),
+    Context :: z:context(),
+    Reason :: term().
 set_value(Module, Key, Value, Context) ->
     case z_db:has_connection(Context) of
         true ->
@@ -257,6 +286,7 @@ set_value(Module, Key, Value, Context) ->
 set_value_db(Module, Key, Value0, Context) ->
     ModuleAtom = z_convert:to_atom(Module),
     KeyAtom = z_convert:to_atom(Key),
+    KeyBin = z_convert:to_binary(KeyAtom),
     Value = z_convert:to_binary(Value0),
     Result = z_db:transaction(
         fun(Ctx) ->
@@ -274,7 +304,8 @@ set_value_db(Module, Key, Value0, Context) ->
                     Props = #{
                         <<"module">> => ModuleAtom,
                         <<"key">> => KeyAtom,
-                        <<"value">> => Value
+                        <<"value">> => Value,
+                        <<"is_secret">> => is_secret_key(KeyBin)
                     },
                     {ok, _} = z_db:insert(config, Props, Ctx),
                     insert;
@@ -297,18 +328,20 @@ set_value_db(Module, Key, Value0, Context) ->
         insert ->
             z_depcache:flush(config, Context),
             z_notifier:notify(#m_config_update{module=Module, key=Key, value=Value}, Context),
+            IsSecret = is_secret_key(ModuleAtom, KeyAtom, Context),
             z:info(
                 "Configuration key '~p.~p' inserted, new value: '~s'",
-                [ ModuleAtom, KeyAtom, safe_log_value(Key, Value) ],
+                [ ModuleAtom, KeyAtom, safe_log_value(IsSecret, Key, Value) ],
                 [ {module, ?MODULE}, {line, ?LINE} ],
                 Context),
             ok;
         {update, OldV} ->
             z_depcache:flush(config, Context),
             z_notifier:notify(#m_config_update{module=Module, key=Key, value=Value}, Context),
+            IsSecret = is_secret_key(ModuleAtom, KeyAtom, Context),
             z:info(
                 "Configuration key '~p.~p' changed, new value: '~s', old value '~s'",
-                [ ModuleAtom, KeyAtom, safe_log_value(Key, Value), OldV ],
+                [ ModuleAtom, KeyAtom, safe_log_value(IsSecret, Key, Value), safe_log_value(IsSecret, Key, OldV) ],
                 [ {module, ?MODULE}, {line, ?LINE} ],
                 Context),
             ok;
@@ -322,7 +355,13 @@ set_value_db(Module, Key, Value0, Context) ->
 
 
 %% @doc Set a "complex" config value.
--spec set_prop(atom()|binary(), atom()|binary(), atom()|binary(), term(), z:context()) -> ok | {error, term()}.
+-spec set_prop(Module, Key, Prop, PropValue, Context) -> ok | {error, Reason} when
+    Module :: atom() | binary(),
+    Key :: atom() | binary(),
+    Prop :: atom() | binary(),
+    PropValue :: term(),
+    Context :: z:context(),
+    Reason :: term().
 set_prop(Module, Key, Prop, PropValue, Context) ->
     Result = z_db:transaction(
         fun(Ctx) ->
@@ -361,9 +400,11 @@ set_prop(Module, Key, Prop, PropValue, Context) ->
                 #m_config_update_prop{module = Module, key = Key, prop = Prop, value = PropValue},
                 Context
             ),
+            IsSecretKey = is_secret_key(Module, Key, Context),
+            SafeLogValue = safe_log_value(IsSecretKey, Prop, PropValue),
             z:info(
                 "Configuration key '~s.~s' changed, update property '~p' value: ~p",
-                [ z_convert:to_binary(Module), z_convert:to_binary(Key), Prop, PropValue ],
+                [ z_convert:to_binary(Module), z_convert:to_binary(Key), Prop, SafeLogValue ],
                 [ {module, ?MODULE}, {line, ?LINE} ],
                 Context),
             ok;
@@ -371,15 +412,25 @@ set_prop(Module, Key, Prop, PropValue, Context) ->
             Error
     end.
 
-
 set_is_secret(Key, CMs) ->
     case proplists:get_value(is_secret, CMs) of
         undefined ->
             [ {is_secret, is_secret_key(Key)} | proplists:delete(is_secret, CMs) ];
-        V ->
-            z_convert:to_bool(V)
+        _IsSet ->
+            CMs
     end.
 
+is_secret_key(Module, Key, Context) ->
+    case is_secret_key(z_convert:to_binary(Key)) of
+        true -> true;
+        false ->
+            case m_config:get(Module, Key, Context) of
+                undefined -> false;
+                Ps -> proplists:get_value(is_secret, Ps, false)
+            end
+    end.
+
+is_secret_key(<<"public_", _/binary>>) -> false;
 is_secret_key(<<"password_min_length">>) -> false;
 is_secret_key(<<"password_regex">>) -> false;
 is_secret_key(<<"s3key">>) -> false;
@@ -400,12 +451,15 @@ get_prop(Module, Key, Prop, Context) ->
     case m_config:get(Module, Key, Context) of
         undefined ->
             undefined;
-        Config when is_list(Config) ->
+        Config ->
             proplists:get_value(z_convert:to_atom(Prop), Config)
     end.
 
 %% @doc Delete the specified module/key combination
--spec delete( atom()|binary(), atom()|binary(), z:context() ) -> ok.
+-spec delete(Module, Key, Context) -> ok when
+    Module :: atom() | binary(),
+    Key :: atom() | binary(),
+    Context :: z:context().
 delete(Module, Key, Context) ->
     Module1 = z_convert:to_atom(Module),
     Key1 = z_convert:to_atom(Key),
@@ -427,17 +481,20 @@ delete(Module, Key, Context) ->
 get_id(Module, Key, Context) ->
     z_db:q1("select id from config where module = $1 and key = $2", [Module, Key], Context).
 
-%% @doc Return true when the argument is a public readable configuration key "public_" prefix.
--spec is_public_config_key(atom() | binary()) -> boolean().
-is_public_config_key(Atom) when is_atom(Atom) ->
-    is_public_config_key(z_convert:to_binary(Atom));
+%% @doc Return true if the argument is a public readable configuration key "public_" prefix.
+-spec is_public_config_key(Key) -> boolean() when
+    Key :: atom() | binary().
+is_public_config_key(Key) when is_atom(Key) ->
+    is_public_config_key(atom_to_binary(Key, utf8));
 is_public_config_key(<<"public_", _/binary>>) ->
     true;
 is_public_config_key(_) ->
     false.
 
 %% Create a safe value for the log. Secret values are abbreviated.
-safe_log_value(Key, Value) ->
+safe_log_value(true, _Key, Value) ->
+    safe_log_value(Value);
+safe_log_value(false, Key, Value) ->
     case is_secret_key(z_convert:to_binary(Key)) of
         true -> safe_log_value(Value);
         false -> Value

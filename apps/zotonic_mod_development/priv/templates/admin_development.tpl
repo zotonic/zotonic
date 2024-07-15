@@ -92,20 +92,23 @@
                 </p>
             {% elseif m.log.is_log_client_allowed %}
                 <label class="checkbox">
-                    <input type="checkbox" id="logclient" value="1">
+                    <input type="checkbox" id="logclient" value="1" disabled>
                     {_ Show server log in the browser console _}
                 </label>
                 {% javascript %}
                     cotonic.broker
-                        .call("model/sessionStorage/get/is_console_logging")
+                        .call("bridge/origin/model/log/get/is_log_client_session")
                         .then((msg) => {
-                            if (msg.payload) {
-                                document.getElementById("logclient").checked = true;
+                            const elt = document.getElementById("logclient");
+                            elt.disabled = false;
+                            if (msg.payload.result) {
+                                elt.checked = true;
+                            } else {
+                                elt.checked = false;
                             }
                         });
                     $('#logclient').on('input', function(e) {
                         const is_enabled = $(this).is(":checked");
-                        cotonic.broker.call("model/sessionStorage/post/is_console_logging", is_enabled);
                         z_event("log_client_enable", { is_enabled: is_enabled });
                     });
                 {% endjavascript %}

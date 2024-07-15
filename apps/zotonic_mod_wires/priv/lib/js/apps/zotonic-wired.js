@@ -163,6 +163,13 @@ function zotonic_startup() {
         cotonic.broker.subscribe("bridge/origin/model/log/event/console", console_log, { wid: 'zotonic-wired'});
     }
 
+    cotonic.broker.subscribe("model/console/post/ping",
+        function(msg) {
+            if (msg.properties?.response_topic) {
+                cotonic.broker.publish(msg.properties.response_topic, "pong", { qos: msg.qos });
+            }
+        }, { wid: 'zotonic-wired'});
+
     // Register the client-id to reuse on subsequent pages
     cotonic.broker.subscribe(
             "$bridge/origin/status",
