@@ -31,6 +31,7 @@
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 -export([start_link/1]).
 -export([
+    observe_acl_is_allowed/2,
     observe_search_query/2,
     pid_observe_tick_1m/3,
     observe_tick_1h/2,
@@ -68,6 +69,16 @@
 -define(LOG_CLIENT_PONG_RECENT, 120).
 
 %% interface functions
+
+observe_acl_is_allowed(#acl_is_allowed{
+        action = subscribe,
+        object = #acl_mqtt{
+            topic = [ <<"model">>,<<"log">>,<<"event">>, <<"console">> ]
+        }
+    }, Context) ->
+    is_log_client_allowed(Context);
+observe_acl_is_allowed(_AclIsAllowed, _Context) ->
+    undefined.
 
 observe_search_query(#search_query{ name = <<"log">>, args = Args }, Context) ->
     case z_acl:is_allowed(use, mod_logging, Context) of
