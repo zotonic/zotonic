@@ -1,10 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2010 Arjan Scherpenisse <arjan@scherpenisse.net>
-%% Date: 2010-06-01
-%%
+%% @copyright 2010-2024 Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @doc Model for log messages.
+%% @end
 
-%% Copyright 2010 Arjan Scherpenisse
+%% Copyright 2010-2024 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -38,6 +37,18 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ <<"is_log_client_allowed">> | Rest ], _Msg, Context) ->
+    {ok, {mod_logging:is_log_client_allowed(Context), Rest}};
+m_get([ <<"is_log_client_session">> | Rest ], _Msg, Context) ->
+    case mod_logging:is_log_client_allowed(Context) of
+        true -> {ok, {mod_logging:is_log_client_session(Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ <<"is_log_client_active">> | Rest ], _Msg, Context) ->
+    case mod_logging:is_log_client_allowed(Context) of
+        true -> {ok, {mod_logging:is_log_client_active(Context), Rest}};
+        false -> {error, eacces}
+    end;
 m_get([], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_logging, Context) of
         true -> {ok, {list(Context), []}};

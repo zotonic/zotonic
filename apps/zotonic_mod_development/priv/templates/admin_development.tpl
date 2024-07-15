@@ -84,6 +84,44 @@
                 {_ Enable <tt>mod_server_storage</tt> to use database query tracing. _}
             </p>
         {% endif %}
+
+        {% if m.modules.provided.mod_logging %}
+            {% if m.site.environment == `development` and m.log.is_log_client_allowed %}
+                <p class="alert alert-info">
+                    {_ Set the class <tt>environment-development</tt> on the <tt>&lt;html&gt;</tt> element of your pages to see the server log in the browser console.<br>In development, admin pages always show the server log in the javascript console. _}
+                </p>
+            {% elseif m.log.is_log_client_allowed %}
+                <label class="checkbox">
+                    <input type="checkbox" id="logclient" value="1" disabled>
+                    {_ Show server log in the browser console _}
+                </label>
+                {% javascript %}
+                    cotonic.broker
+                        .call("bridge/origin/model/log/get/is_log_client_session")
+                        .then((msg) => {
+                            const elt = document.getElementById("logclient");
+                            elt.disabled = false;
+                            if (msg.payload.result) {
+                                elt.checked = true;
+                            } else {
+                                elt.checked = false;
+                            }
+                        });
+                    $('#logclient').on('input', function(e) {
+                        const is_enabled = $(this).is(":checked");
+                        z_event("log_client_enable", { is_enabled: is_enabled });
+                    });
+                {% endjavascript %}
+                {% wire name="log_client_enable"
+                        postback=`log_client_enable`
+                        delegate=`mod_development`
+                %}
+            {% else %}
+                <p class="help-block">
+                    {_ Log in as the admin to enable logging to the javascript console. _}
+                </p>
+            {% endif %}
+        {% endif %}
     </div>
 </div>
 

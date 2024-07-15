@@ -118,6 +118,58 @@ function zotonic_startup() {
             z_event(bindings.name, msg.payload);
         }, { wid: 'zotonic-wired'});
 
+    const console_log = (msg) => {
+        let message = msg.payload?.message;
+        let style = "";
+        const severity = msg.payload?.severity || 'info';
+
+        if (message) {
+            message = message.replace("%", "%%");
+        }
+        switch (severity) {
+        case 'critical':
+        case 'fatal':
+        case 'error':
+            style = "color: red;";
+            break;
+        case 'warning':
+            style = "color: orange;";
+            break;
+        case 'notice':
+            style = "color: blue;";
+            break;
+        case 'info':
+        default:
+            style = "";
+            break;
+        }
+        let meta = msg.payload?.meta || {};
+        let file = meta.file || "";
+        let line = meta.line || "";
+        let loc = "";
+        if (file) {
+            loc = file + ":" + line;
+        }
+        message = "%c[" + severity + "] " + message
+        if (msg.payload?.fields && Object.keys(msg.payload.fields).length > 0) {
+            console.log(message, style, loc, msg.payload?.fields, msg.payload?.meta);
+        } else {
+            console.log(message, style, loc, msg.payload?.meta);
+        }
+    };
+
+    cotonic.broker.subscribe("model/console/post/log", console_log, { wid: 'zotonic-wired'});
+    if ($("html").hasClass('environment-development')) {
+        cotonic.broker.subscribe("bridge/origin/model/log/event/console", console_log, { wid: 'zotonic-wired'});
+    }
+
+    cotonic.broker.subscribe("model/console/post/ping",
+        function(msg) {
+            if (msg.properties?.response_topic) {
+                cotonic.broker.publish(msg.properties.response_topic, "pong", { qos: msg.qos });
+            }
+        }, { wid: 'zotonic-wired'});
+
     // Register the client-id to reuse on subsequent pages
     cotonic.broker.subscribe(
             "$bridge/origin/status",
