@@ -39,6 +39,7 @@
     is_ui_ratelimit_check/1,
     is_log_client_allowed/1,
     is_log_client_session/1,
+    is_log_client_active/1,
     log_client_start/1,
     log_client_stop/1,
     log_client_ping/3,
@@ -218,6 +219,21 @@ is_log_client_session(Context) ->
                 <<"log_client_id">> := ClientId
             }} = gen_server:call(Pid, log_client_status),
             ClientId =:= z_context:client_id(Context);
+        {error, _} ->
+            false
+    end.
+
+%% @doc Check if any session (clientId) is receiving the logs.
+-spec is_log_client_active(Context) -> boolean() when
+    Context :: z:context().
+is_log_client_active(Context) ->
+    case z_module_manager:whereis(mod_logging, Context) of
+        {ok, Pid} ->
+            {ok, #{
+                log_client_id := ClientId,
+                is_pong_recent := IsRecent
+            }} = gen_server:call(Pid, log_client_status),
+            is_binary(ClientId) andalso IsRecent;
         {error, _} ->
             false
     end.
