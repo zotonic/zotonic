@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-06-28 11:28\n"
+"PO-Revision-Date: 2024-07-16 12:36\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -237,7 +237,7 @@ msgid "Change category and/or content group..."
 msgstr "เปลี่ยนหมวดหมู่และ / หรือกลุ่มเนื้อหา ..."
 
 #: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:144
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:120
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:122
 msgid "Changed configuration."
 msgstr "เปลี่ยนการกำหนดค่า"
 
@@ -545,7 +545,7 @@ msgstr "กฎที่เปลี่ยนกลับ"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:161./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:64
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:78./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:17./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:29
-#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
+#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:152
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:138./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:26
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:102
@@ -993,11 +993,11 @@ msgstr "ล้างแคชแล้ว"
 msgid "Category name:"
 msgstr "ชื่อหมวดหมู่:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:35./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:43
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:37./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:45
 msgid "Category:"
 msgstr "ประเภท:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:36
 msgid "Change category"
 msgstr "เปลี่ยนหมวดหมู่"
 
@@ -1344,7 +1344,7 @@ msgid "Error checking the website."
 msgstr "เกิดข้อผิดพลาดในการตรวจสอบเว็บไซต์"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:182
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:113
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:115
 msgid "Error creating the page."
 msgstr "เกิดข้อผิดพลาดในการสร้างเพจ"
 
@@ -1389,7 +1389,7 @@ msgid "Existing pages"
 msgstr "หน้าที่มีอยู่"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:187./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:168./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:168
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:99
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:101
 msgid "Failed to download the file."
 msgstr "ดาวน์โหลดไฟล์ไม่สำเร็จ"
 
@@ -2156,7 +2156,7 @@ msgstr "ชื่อสั้น ๆ"
 msgid "Show address on edit page"
 msgstr "แสดงที่อยู่ในหน้าแก้ไข"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:51
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:53
 msgid "Show all {title} pages"
 msgstr "แสดงทั้งหมด {title} หน้า"
 
@@ -2378,7 +2378,7 @@ msgid "There are no tasks in the task queue."
 msgstr "ไม่มีงานในคิวงาน"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:162
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:93
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:95
 msgid "There is already a page with this name."
 msgstr "มีเพจชื่อนี้อยู่แล้ว"
 
@@ -2391,7 +2391,7 @@ msgid "This connection already exists."
 msgstr "มีการเชื่อมต่อนี้อยู่แล้ว"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:191./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:172./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:172
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:103
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:105
 msgid "This file contains links to other files or locations."
 msgstr "ไฟล์นี้มีลิงก์ไปยังไฟล์หรือตำแหน่งอื่น ๆ"
 
@@ -2408,12 +2408,12 @@ msgid "This file has not been scanned for viruses."
 msgstr "ไฟล์นี้ไม่ได้รับการสแกนหาไวรัส"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:189./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:170./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:170
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:101
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:103
 msgid "This file is infected with a virus."
 msgstr "ไฟล์นี้ติดไวรัส"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:193./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:174./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:174
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:105
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:107
 msgid "This file is too large."
 msgstr "ไฟล์นี้มีขนาดใหญ่เกินไป"
 
@@ -2692,7 +2692,7 @@ msgid "You don't have permission to change this media item."
 msgstr "คุณไม่ได้รับอนุญาตให้เปลี่ยนรายการสื่อนี้"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:164
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:95
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:97
 msgid "You don't have permission to create this page."
 msgstr "คุณไม่มีสิทธิ์สร้างเพจนี้"
 
@@ -2702,7 +2702,7 @@ msgid "You don't have permission to edit this page."
 msgstr "คุณไม่ได้รับอนุญาตให้แก้ไขหน้านี้"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:185./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:166./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:166
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:97
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:99
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "คุณไม่มีสิทธิ์ที่เหมาะสมในการอัปโหลดไฟล์ประเภทนี้"
 
@@ -2776,6 +2776,10 @@ msgstr "ไม่รวม"
 msgid "has been disconnected."
 msgstr "ถูกตัดการเชื่อมต่อ"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:23
+msgid "id:"
+msgstr "รหัส:"
+
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:75
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:15
 msgid "matching"
@@ -2811,7 +2815,7 @@ msgstr "เนื้อหาระบบ"
 msgid "undo"
 msgstr "เลิกทำ"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:43./apps/zotonic_mod_admin/priv/templates/_choose_media.tpl:9./apps/zotonic_mod_admin/priv/templates/_rsc_edge_item.tpl:9./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:11./apps/zotonic_mod_admin/priv/templates/_rsc_item.tpl:10
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:34./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:45./apps/zotonic_mod_admin/priv/templates/_choose_media.tpl:9./apps/zotonic_mod_admin/priv/templates/_rsc_edge_item.tpl:9./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:11./apps/zotonic_mod_admin/priv/templates/_rsc_item.tpl:10
 msgid "untitled"
 msgstr "ไม่มีชื่อ"
 
@@ -2903,6 +2907,10 @@ msgstr "สำเนาอีเมลทั้งหมดจะถูกส่
 msgid "Add configuration key"
 msgstr "เพิ่มคีย์การกำหนดค่า"
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:120
+msgid "Add email domains using <tt>@example.com</tt> and complete email addresses. Separate multiple entries using whitespace, semicolons or commas."
+msgstr "เพิ่มโดเมนอีเมลโดยใช้ <tt>@example.com</tt> และกรอกที่อยู่อีเมลให้ครบถ้วน คั่นหลายรายการโดยใช้ช่องว่าง อัฒภาค หรือเครื่องหมายจุลภาค"
+
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:25
 msgid "Add key"
 msgstr "เพิ่มคีย์"
@@ -2910,6 +2918,10 @@ msgstr "เพิ่มคีย์"
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:16
 msgid "All email is sent to"
 msgstr "อีเมลทั้งหมดจะถูกส่งไปที่"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:116
+msgid "All email is sent to <b>{email}</b>, except for the email addresses and domains defined here."
+msgstr "อีเมลทั้งหมดจะถูกส่งไปยัง <b>{email}</b>ยกเว้นที่อยู่อีเมลและโดเมนที่กำหนดไว้ที่นี่"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:8
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:29
@@ -2937,15 +2949,15 @@ msgstr "Config"
 msgid "Configuration"
 msgstr "การกำหนดค่า"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:116
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:129
 msgid "Defaults to the hostname of the site."
 msgstr "ค่าเริ่มต้นเป็นชื่อโฮสต์ของไซต์"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:115
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:128
 msgid "Domain for all generated from- and envelop-addresses."
 msgstr "โดเมนสำหรับทั้งหมดที่สร้างจากที่อยู่และซองจดหมาย"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:131
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:144
 msgid "Download images in emails after opening the message"
 msgstr "ดาวน์โหลดภาพในอีเมลหลังจากเปิดข้อความ"
 
@@ -2953,7 +2965,11 @@ msgstr "ดาวน์โหลดภาพในอีเมลหลังจ
 msgid "E-mail override"
 msgstr "ลบล้างอีเมล"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:122./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:123
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:112./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:113
+msgid "E-mail override &ndash; exceptions"
+msgstr "ข้อยกเว้นอีเมลแทนที่ &ndash;"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:135./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:136
 msgid "Email FROM"
 msgstr "อีเมลจาก"
 
@@ -2979,7 +2995,11 @@ msgstr "คุณสามารถดูการกำหนดค่าอี
 msgid "Hostname"
 msgstr "ชื่อโฮสต์"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:117
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:118
+msgid "If (and only if) there is an e-mail override address defined above, then all e-mail is sent to that address <em>except</em> for the e-mail addresses and domains defined here."
+msgstr "หาก (และเฉพาะในกรณีที่) มีที่อยู่แทนที่อีเมลที่กำหนดไว้ข้างต้น อีเมลทั้งหมดจะถูกส่งไปยังที่อยู่นั้น <em>ยกเว้น</em> สำหรับที่อยู่อีเมลและโดเมนที่กำหนดไว้ที่นี่"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:130
 msgid "If you change this then you might need to request a new SSL certificate that includes this hostname."
 msgstr "หากคุณเปลี่ยนแปลงสิ่งนี้คุณอาจต้องขอใบรับรอง SSL ใหม่ที่มีชื่อโฮสต์นี้"
 
@@ -3019,7 +3039,7 @@ msgstr "มีเพียงผู้ดูแลระบบเท่านั
 msgid "Password"
 msgstr "รหัสผ่าน"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:134
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:147
 msgid "Per default images smaller than 1MB are embedded in email messages. Using a separate download for images results in a smaller message size but non-public images will not be visible. Leave this disabled if you are sending non-public images."
 msgstr "ต่อรูปภาพเริ่มต้นที่มีขนาดเล็กกว่า 1MB จะถูกฝังในข้อความอีเมล การใช้การดาวน์โหลดรูปภาพแยกต่างหากจะทำให้ข้อความมีขนาดเล็กลง แต่รูปภาพที่ไม่ใช่แบบสาธารณะจะไม่ปรากฏให้เห็น ปล่อยให้สิ่งนี้ปิดการใช้งานหากคุณกำลังส่งรูปภาพที่ไม่เปิดเผยต่อสาธารณะ"
 
@@ -3035,7 +3055,7 @@ msgstr "ชื่อโฮสต์รีเลย์"
 msgid "Relay port"
 msgstr "พอร์ตรีเลย์"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:112./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:113
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:125./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:126
 msgid "SMTP Hostname"
 msgstr "ชื่อโฮสต์ SMTP"
 
@@ -3047,7 +3067,7 @@ msgstr "ใบรับรอง SSL"
 msgid "Self signed certificate"
 msgstr "ใบรับรองที่ลงนามด้วยตนเอง"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:170
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:183
 #: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:111
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:21./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_form_fields.tpl:17
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:49
@@ -3055,11 +3075,11 @@ msgstr "ใบรับรองที่ลงนามด้วยตนเอ
 msgid "Send"
 msgstr "ส่ง"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:157
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:170
 msgid "Send a test email"
 msgstr "ส่งอีเมลทดสอบ"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:161
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:174
 msgid "Send a test email or check the status of an email address."
 msgstr "ส่งอีเมลทดสอบหรือตรวจสอบสถานะของที่อยู่อีเมล"
 
@@ -3076,6 +3096,7 @@ msgid "Show log for message"
 msgstr "แสดงบันทึกข้อความ"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:8
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:14
 msgid "System Configuration"
 msgstr "การกำหนดค่าระบบ"
 
@@ -3091,7 +3112,7 @@ msgstr "การกำหนดค่าระบบ Zotonic ถูกตั้
 msgid "The config key already exists, please choose another key name."
 msgstr "มีคีย์การกำหนดค่าอยู่แล้วโปรดเลือกชื่อคีย์อื่น"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:125
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:138
 msgid "The default FROM address for emails. Defaults to"
 msgstr "ที่อยู่เริ่มต้นสำหรับอีเมล ค่าเริ่มต้นเป็น"
 
@@ -3144,12 +3165,12 @@ msgstr "ใช้ได้ถึง"
 msgid "Value"
 msgstr "มูลค่า"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:172./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:100
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:185./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:100
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 msgid "View email status"
 msgstr "ดูสถานะอีเมล"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:147
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:160
 msgid "You must be an administrator to view or change the email configuration."
 msgstr "คุณต้องเป็นผู้ดูแลระบบเพื่อดูหรือเปลี่ยนการกำหนดค่าอีเมล"
 
@@ -3157,7 +3178,7 @@ msgstr "คุณต้องเป็นผู้ดูแลระบบเพ
 msgid "Zotonic sends email using a built-in email server. You can send the email via an external relay."
 msgstr "Zotonic ส่งอีเมลโดยใช้เซิร์ฟเวอร์อีเมลในตัว คุณสามารถส่งอีเมลผ่านรีเลย์ภายนอก"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:169
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:182
 msgid "test@example.com"
 msgstr "test@example.com"
 
@@ -3848,7 +3869,7 @@ msgid "Reinstalled the data model."
 msgstr "ติดตั้งแบบจำลองข้อมูลอีกครั้ง"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:3
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:149
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:187
 msgid "Rescan modules"
 msgstr "สแกนโมดูลอีกครั้ง"
 
@@ -4677,6 +4698,10 @@ msgstr "โปรดลองอีกครั้งใน {n} นาที"
 msgid "Please try again later."
 msgstr "กรุณาลองใหม่อีกครั้งในภายหลัง."
 
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.user_external.tpl:2
+msgid "Please use a different method to sign in. You can’t sign in using a username and password."
+msgstr "โปรดใช้วิธีอื่นในการลงชื่อเข้าใช้ คุณไม่สามารถลงชื่อเข้าใช้ด้วยชื่อผู้ใช้และรหัสผ่านได้"
+
 #: apps/zotonic_mod_authentication/priv/templates/logon_service.tpl:13
 msgid "Redirecting to"
 msgstr "กำลังเปลี่ยนเส้นทางไปที่"
@@ -4925,11 +4950,11 @@ msgstr "การสำรองข้อมูลของผู้ดูแล
 msgid "Are you sure you want to revert to this version?"
 msgstr "แน่ใจไหมว่าต้องการเปลี่ยนกลับเป็นเวอร์ชันนี้"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:100
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:4
 msgid "At any moment you can make a backup of your system."
 msgstr "คุณสามารถสำรองข้อมูลระบบของคุณได้ตลอดเวลา"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:52
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:3
 msgid "Automatic daily backups of the database and uploaded files can be enabled. This is done at night and the last 7 backups are kept."
 msgstr "สามารถเปิดใช้งานการสำรองข้อมูลรายวันอัตโนมัติของฐานข้อมูลและไฟล์ที่อัพโหลดได้ ซึ่งจะดำเนินการในเวลากลางคืนและสำรองข้อมูล 7 รายการล่าสุดไว้"
 
@@ -4937,7 +4962,7 @@ msgstr "สามารถเปิดใช้งานการสำรอง
 msgid "Back to the edit page"
 msgstr "กลับไปที่หน้าแก้ไข"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:92
+#: apps/zotonic_mod_backup/src/mod_backup.erl:94
 msgid "Backup"
 msgstr "การสำรองข้อมูล"
 
@@ -4953,6 +4978,12 @@ msgstr "สำรองและกู้คืนตัวเลือกสำ
 msgid "Backups"
 msgstr "การสำรองข้อมูล"
 
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:4
+msgid "By default the backup of the database and files are not encrypted. It is\n"
+"        possible to encrypt the backups. This makes it safer to store them on an \n"
+"        external server."
+msgstr ""
+
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:10
 msgid "Changes since"
 msgstr "การเปลี่ยนแปลงตั้งแต่"
@@ -4965,11 +4996,11 @@ msgstr "ตรวจสอบและอาจกู้คืนเวอร์
 msgid "Click on <b>List and restore an earlier version</b> to get an overview of earlier saved versions of this page.<br/>You can also save the complete contents of a page to a file. Later you can reload this file, replacing the current page contents. Note that the file does not contain your unsaved changes. Connections and media are not saved as well."
 msgstr "คลิกที่ <b>รายการและกู้คืนเวอร์ชัน</b> ก่อนหน้าเพื่อดูภาพรวมของเวอร์ชันที่บันทึกไว้ก่อนหน้านี้ของเพจนี้<br/>คุณยังสามารถบันทึกเนื้อหาทั้งหมดของเพจลงในไฟล์ ในภายหลังคุณสามารถโหลดไฟล์นี้ซ้ำโดยแทนที่เนื้อหาของหน้าปัจจุบัน โปรดทราบว่าไฟล์ไม่มีการเปลี่ยนแปลงที่คุณไม่ได้บันทึกไว้ การเชื่อมต่อและสื่อจะไม่ถูกบันทึกด้วย"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:72
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:23
 msgid "Cloud file store is enabled. Backups of the database are uploaded to the cloud file store. Local files are copied to the cloud and not backed up locally."
 msgstr "เปิดใช้งานการจัดเก็บไฟล์บนคลาวด์แล้ว ข้อมูลสำรองของฐานข้อมูลจะถูกอัปโหลดไปยังที่เก็บไฟล์บนคลาวด์ ไฟล์ในเครื่องจะถูกคัดลอกไปยังระบบคลาวด์และไม่ได้สำรองข้อมูลในเครื่อง"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:136
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:47
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
 msgstr "เปิดใช้งานที่เก็บไฟล์บนคลาวด์ ไฟล์ในเครื่องจะไม่ถูกสำรอง ตรวจสอบให้แน่ใจว่าระบบจัดเก็บไฟล์บนคลาวด์ของคุณมีการสำรองข้อมูลที่เหมาะสม"
 
@@ -4989,7 +5020,7 @@ msgstr "ลบโดย"
 msgid "Deleted on"
 msgstr "ลบเมื่อ"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:105
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:107
 msgid "Deleted pages"
 msgstr "หน้าที่ถูกลบ"
 
@@ -4997,7 +5028,7 @@ msgstr "หน้าที่ถูกลบ"
 msgid "Directory"
 msgstr "ไดเรกทอรี"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:78
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:8./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:29
 msgid "Do not make a daily backup."
 msgstr "อย่าทำการสำรองข้อมูลรายวัน"
 
@@ -5009,9 +5040,27 @@ msgstr "ดาวน์โหลดไฟล์สำรอง"
 msgid "Enable <tt>mod_export</tt> to download backup files."
 msgstr "เปิดใช้งาน <tt>mod_export</tt> เพื่อดาวน์โหลดไฟล์สำรอง"
 
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:8
+msgid "Encrypt Backups"
+msgstr "เข้ารหัสข้อมูลสำรอง"
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:18
+msgid "Encrypted"
+msgstr "เข้ารหัสแล้ว"
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:40
+msgid "Encryption is enabled, but there is no encryption password. Please\n"
+"      make sure there is an encryption password in the settings."
+msgstr "เปิดใช้งานการเข้ารหัส แต่ไม่มีรหัสผ่านการเข้ารหัส โปรด\n"
+"      ตรวจสอบให้แน่ใจว่ามีรหัสผ่านการเข้ารหัสในการตั้งค่า"
+
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:13
 msgid "Help about backup &amp; restore"
 msgstr "ความช่วยเหลือเกี่ยวกับการสำรองข้อมูล &amp; คืนค่า"
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:14
+msgid "It can be found in the"
+msgstr "สามารถพบได้ใน"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:24
 msgid "List and restore an earlier version"
@@ -5021,25 +5070,33 @@ msgstr "แสดงรายการและกู้คืนเวอร์
 msgid "List of recently deleted pages and recover options via the resource revisions log."
 msgstr "รายการหน้าที่ถูกลบล่าสุดและตัวเลือกการกู้คืนผ่านบันทึกการแก้ไขทรัพยากร"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:65./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:86
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:16./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:37
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "ทำการสำรองฐานข้อมูลและไฟล์ที่อัปโหลดทุกวัน"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:82
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:12./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:33
 msgid "Make a daily backup of the database."
 msgstr "ทำการสำรองข้อมูลรายวันของฐานข้อมูล"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:45
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:60
 msgid "No backups present."
 msgstr "ไม่มีการสำรองข้อมูล"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:36
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:51
 msgid "Not uploaded to filestore"
 msgstr "ไม่ได้อัปโหลดไปยัง filestore"
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:13
+msgid "Note:"
+msgstr "บันทึก:"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:13
 msgid "Only the texts and other properties of pages are backed up."
 msgstr "สำรองข้อมูลเฉพาะข้อความและคุณสมบัติอื่นๆ ของเพจเท่านั้น"
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:14
+msgid "Please make sure you store the backup encryption password in a safe <u>external</u> location."
+msgstr "โปรดตรวจสอบให้แน่ใจว่าคุณเก็บรหัสผ่านการเข้ารหัสสำรองไว้ในตำแหน่ง <u>ภายนอก</u> ที่ปลอดภัย"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:79
 msgid "Previous"
@@ -5057,7 +5114,7 @@ msgstr "กู้คืนข้อมูลสำรอง"
 msgid "Revert to this version..."
 msgstr "เปลี่ยนกลับเป็นเวอร์ชันนี้..."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:45./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:58
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:14./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:58
 msgid "Revisions are kept for {n} months."
 msgstr "การแก้ไขจะถูกเก็บไว้เป็นเวลา {n} เดือน"
 
@@ -5069,15 +5126,15 @@ msgstr "การแก้ไขสำหรับ"
 msgid "Select the backup file you want to upload. The file must be a .bert file."
 msgstr "เลือกไฟล์สำรองที่คุณต้องการอัปโหลด ไฟล์นั้นต้องเป็นไฟล์ .bert"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:39
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:8
 msgid "Show import/export panel on the edit pages in the admin."
 msgstr "แสดงแผงนำเข้า/ส่งออกในหน้าแก้ไขในผู้ดูแลระบบ"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:79
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:81
 msgid "Sorry, there is no module that can import this."
 msgstr "ขออภัย ไม่มีโมดูลที่สามารถนำเข้าสิ่งนี้ได้"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:86./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:107
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:88./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:107
 msgid "Sorry, there was an error replacing your page."
 msgstr "ขออภัยเกิดข้อผิดพลาดในการแทนที่เพจของคุณ"
 
@@ -5089,37 +5146,39 @@ msgstr "ขออภัยข้อมูลสำรองนี้ถูกล
 msgid "Sorry, this backup is not valid."
 msgstr "ขออภัยข้อมูลสำรองนี้ไม่ถูกต้อง"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:81
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:83
 msgid "Sorry, this is not a backup file or it is corrupted."
 msgstr "ขออภัยนี่ไม่ใช่ไฟล์สำรองหรือไฟล์เสียหาย"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:89
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:91
 msgid "Sorry, you don't have permission to change this page."
 msgstr "ขออภัยคุณไม่ได้รับอนุญาตให้เปลี่ยนหน้านี้"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:122
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:124
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "ขออภัยคุณไม่ได้รับอนุญาตให้เปลี่ยนการกำหนดค่า"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:109
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:13
 msgid "Start backup now"
 msgstr "เริ่มการสำรองข้อมูลทันที"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:112
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:16
 msgid "Start database-only backup now"
 msgstr "เริ่มการสำรองฐานข้อมูลอย่างเดียวตอนนี้"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:123
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:27
 msgid "The \"pg_dump\" command was not found in the path. Set in zotonic.config the \"pg_dump\" config key to the path to <tt>pg_dump</tt> and return to this page."
 msgstr "ไม่พบคำสั่ง \"pg_dump\" ในเส้นทาง ตั้งค่าใน zotonic.config คีย์การกำหนดค่า \"pg_dump\" ไปยังพาธไปยัง <tt>pg_dump</tt> และกลับมาที่หน้านี้"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:126
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:30
 msgid "The \"tar\" command was not found in the path. Set in zotonic.config the \"tar\" config key to the path to <tt>tar</tt> and return to this page."
 msgstr "ไม่พบคำสั่ง \"tar\" ในเส้นทาง ตั้งค่าใน zotonic.config คีย์การกำหนดค่า \"tar\" ไปยังเส้นทางไปยัง <tt>tar</tt> และกลับมาที่หน้านี้"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:102
-msgid "The backup comprises two parts, the database and the uploaded files."
-msgstr "การสำรองข้อมูลประกอบด้วยสองส่วนฐานข้อมูลและไฟล์ที่อัปโหลด"
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:6
+msgid "The backup comprises three parts, the database, the configuration,\n"
+"      and the uploaded files."
+msgstr "การสำรองข้อมูลประกอบด้วยสามส่วน ได้แก่ ฐานข้อมูล การกำหนดค่า\n"
+"      และไฟล์ที่อัพโหลด"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5./apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:15
 msgid "This is the version saved on"
@@ -5129,21 +5188,21 @@ msgstr "นี่คือเวอร์ชันที่บันทึกไ
 msgid "This will overwrite your page with the contents of the backup file."
 msgstr "สิ่งนี้จะเขียนทับหน้าของคุณด้วยเนื้อหาของไฟล์สำรอง"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:32
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:47
 msgid "Uploaded to filestore"
 msgstr "อัพโหลดไปยัง filestore"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:119
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:23
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:124
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Warning"
 msgstr "คำเตือน"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:35
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:4
 msgid "With the import/export panel you can download a page as a file, see page revisions and restore a previous version."
 msgstr "ด้วยแผงการนำเข้า/ส่งออก คุณสามารถดาวน์โหลดหน้าเป็นไฟล์ ดูการแก้ไขหน้า และเรียกคืนเวอร์ชันก่อนหน้าได้"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:26
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:41
 msgid "Y-m-d H:i – l"
 msgstr "Ymd H:i – l"
 
@@ -5155,7 +5214,7 @@ msgstr "คุณไม่ได้รับอนุญาตให้กู้
 msgid "You are not allowed to see the revisions"
 msgstr "คุณไม่ได้รับอนุญาตให้ดูการแก้ไข"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:104
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:8
 msgid "You can have one backup per day of the week, older ones will be overwritten."
 msgstr "คุณสามารถสำรองข้อมูลได้หนึ่งรายการต่อวันในสัปดาห์ ข้อมูลสำรองที่เก่ากว่าจะถูกเขียนทับ"
 
@@ -5163,15 +5222,15 @@ msgstr "คุณสามารถสำรองข้อมูลได้ห
 msgid "You need to have access rights to the backup module."
 msgstr "คุณต้องมีสิทธิ์ในการเข้าถึงโมดูลสำรองข้อมูล"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:119
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:23
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "การสำรองข้อมูลของคุณไม่ได้กำหนดค่าอย่างถูกต้อง โมดูลสำรองจะไม่ทำงานจนกว่าปัญหาด้านล่างจะได้รับการแก้ไข:"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:21
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:36
 msgid "download database"
 msgstr "ดาวน์โหลดฐานข้อมูล"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:18
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:27
 msgid "download files"
 msgstr "ดาวน์โหลดไฟล์"
 
@@ -5779,7 +5838,7 @@ msgstr "คำสั่ง <tt>{optional}</tt> ทั้งหมดอ้าง
 msgid "All non-optional <tt>{include}</tt> statements are referring to existing templates."
 msgstr "คำสั่ง <tt>{include}</tt> ที่ไม่เป็นทางเลือกทั้งหมดอ้างอิงถึงเทมเพลตที่มีอยู่"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:122
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:160
 msgid "All templates are checked for missing includes or missing <tt>{ext}</tt> template references."
 msgstr "เทมเพลตทั้งหมดได้รับการตรวจสอบแล้วว่าไม่มีการรวมหรือการอ้างอิงเทมเพลต <tt>{ext}</tt> ที่ขาดหายไป"
 
@@ -5787,7 +5846,7 @@ msgstr "เทมเพลตทั้งหมดได้รับการต
 msgid "All templates are compiling."
 msgstr "เทมเพลตทั้งหมดกำลังรวบรวม"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:125./apps/zotonic_mod_development/priv/templates/admin_development.tpl:141
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:163./apps/zotonic_mod_development/priv/templates/admin_development.tpl:179
 msgid "All templates will be compiled."
 msgstr "เทมเพลตทั้งหมดจะถูกรวบรวม"
 
@@ -5799,11 +5858,11 @@ msgstr "ด้านล่างนี้คือรายการการแ
 msgid "Bindings"
 msgstr "การผูก"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:140
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:178
 msgid "Calculate and visualize a dependency graph of all templates."
 msgstr "คำนวณและแสดงภาพกราฟการขึ้นต่อกันของเทมเพลตทั้งหมด"
 
-#: apps/zotonic_mod_development/src/mod_development.erl:88./apps/zotonic_mod_development/src/mod_development.erl:105
+#: apps/zotonic_mod_development/src/mod_development.erl:86./apps/zotonic_mod_development/src/mod_development.erl:101
 msgid "Checking all templates..."
 msgstr "กำลังตรวจสอบเทมเพลตทั้งหมด..."
 
@@ -5843,7 +5902,7 @@ msgstr "ไม่สามารถดึงเอาต์พุตตัวต
 msgid "Cross-reference check of all templates"
 msgstr "การตรวจสอบตัวอ้างอิงโยงของเทมเพลตทั้งหมด"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:119
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:157
 msgid "Cross-reference check of templates"
 msgstr "การตรวจสอบการอ้างอิงโยงของเทมเพลต"
 
@@ -5855,7 +5914,7 @@ msgstr "ผลการตรวจสอบตัวอ้างอิงโย
 msgid "Dependency graph"
 msgstr "กราฟการพึ่งพา"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:138
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:176
 msgid "Dependency graph of all available templates"
 msgstr "กราฟการขึ้นต่อกันของเทมเพลตที่มีอยู่ทั้งหมด"
 
@@ -5871,7 +5930,7 @@ msgstr "กราฟการขึ้นต่อกันของเทมเ
 msgid "Dependency graph of all traced templates. All includes are shown."
 msgstr "กราฟการขึ้นต่อกันของเทมเพลตที่ติดตามทั้งหมด รวมทั้งหมดจะแสดง"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:537
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:552
 msgid "Development"
 msgstr "การพัฒนา"
 
@@ -5891,7 +5950,7 @@ msgstr "ปิดใช้งานการติดตามการสืบ
 msgid "Dispatch Name"
 msgstr "ชื่อที่จัดส่ง"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:162
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:200
 msgid "Dispatch rule debugging"
 msgstr "ส่งการแก้ไขข้อบกพร่องของกฎ"
 
@@ -5915,6 +5974,10 @@ msgstr "เปิดใช้งานการติดตามการเร
 msgid "Enabled database query tracing"
 msgstr "เปิดใช้งานการติดตามการสืบค้นฐานข้อมูล"
 
+#: apps/zotonic_mod_development/src/mod_development.erl:175
+msgid "Error changing the console logs."
+msgstr "เกิดข้อผิดพลาดในการเปลี่ยนบันทึกคอนโซล"
+
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:18
 msgid "Event"
 msgstr "เหตุการณ์"
@@ -5923,7 +5986,7 @@ msgstr "เหตุการณ์"
 msgid "Every URL which is reachable in the site is defined with dispatch rules. This page shows all available dispatch rules in this site."
 msgstr "ทุก URL ที่สามารถเข้าถึงได้บนเว็บไซต์ถูกกำหนดด้วยกฎการจัดส่ง หน้านี้แสดงกฎการจัดส่งทั้งหมดที่มีอยู่ในไซต์นี้"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:188
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:226
 msgid "Explain"
 msgstr "อธิบาย"
 
@@ -5935,11 +5998,11 @@ msgstr "ขยาย"
 msgid "Final dispatch"
 msgstr "การจัดส่งขั้นสุดท้าย"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:111
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:149
 msgid "Find"
 msgstr "หา"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:92
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:130
 msgid "Find a template, check which template will be selected"
 msgstr "ค้นหาเทมเพลตตรวจสอบว่าจะเลือกเทมเพลตใด"
 
@@ -5947,7 +6010,7 @@ msgstr "ค้นหาเทมเพลตตรวจสอบว่าจะ
 msgid "For more information see: { url }"
 msgstr "สำหรับข้อมูลเพิ่มเติมโปรดดูที่: { url }"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:153
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:191
 msgid "Force a recompilation of all templates. This fixes any issues where the compiled templates might be out of sync with the template index."
 msgstr "บังคับให้คอมไพล์เทมเพลตทั้งหมดใหม่ วิธีนี้แก้ไขปัญหาใด ๆ ที่เทมเพลตที่คอมไพล์อาจไม่ซิงค์กับดัชนีเทมเพลต"
 
@@ -5975,7 +6038,7 @@ msgstr "รวมเทมเพลตแล้ว"
 msgid "Includes using variable names or expressions are not shown."
 msgstr "รวมถึงการใช้ชื่อตัวแปรหรือนิพจน์จะไม่แสดง"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:199
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:237
 msgid "Introspection"
 msgstr "วิปัสสนา"
 
@@ -5983,7 +6046,7 @@ msgstr "วิปัสสนา"
 msgid "Line"
 msgstr "เส้น"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:131
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:169
 msgid "Live dependency graph of templates"
 msgstr "กราฟการขึ้นต่อกันของเทมเพลตแบบสด"
 
@@ -6003,7 +6066,11 @@ msgstr "กำลังโหลด..."
 msgid "Location"
 msgstr "สถานที่"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:172
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:118
+msgid "Log in as the admin to enable logging to the javascript console."
+msgstr "เข้าสู่ระบบในฐานะผู้ดูแลระบบเพื่อเปิดใช้งานการเข้าสู่ระบบคอนโซลจาวาสคริปต์"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:210
 msgid "Match a request URL, display matched dispatch rule."
 msgstr "จับคู่ URL คำขอแสดงกฎการจัดส่งที่ตรงกัน"
 
@@ -6035,7 +6102,11 @@ msgstr "ไม่มีข้อมูล."
 msgid "No matching dispatch rule found"
 msgstr "ไม่พบกฎการจัดส่งที่ตรงกัน"
 
-#: apps/zotonic_mod_development/src/mod_development.erl:93./apps/zotonic_mod_development/src/mod_development.erl:110./apps/zotonic_mod_development/src/mod_development.erl:125./apps/zotonic_mod_development/src/mod_development.erl:133./apps/zotonic_mod_development/src/mod_development.erl:160
+#: apps/zotonic_mod_development/src/mod_development.erl:173
+msgid "No permission to access the console logs."
+msgstr "ไม่มีสิทธิ์ในการเข้าถึงบันทึกของคอนโซล"
+
+#: apps/zotonic_mod_development/src/mod_development.erl:91./apps/zotonic_mod_development/src/mod_development.erl:106./apps/zotonic_mod_development/src/mod_development.erl:121./apps/zotonic_mod_development/src/mod_development.erl:129./apps/zotonic_mod_development/src/mod_development.erl:156
 msgid "No permission to use mod_development."
 msgstr "ไม่ได้รับอนุญาตให้ใช้ mod_development"
 
@@ -6047,7 +6118,7 @@ msgstr "ไม่พบ"
 msgid "Observers"
 msgstr "ผู้สังเกตการณ์"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:101
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:139
 msgid "Optional category for catinclude"
 msgstr "หมวดหมู่เสริมสำหรับ catinclude"
 
@@ -6055,7 +6126,7 @@ msgstr "หมวดหมู่เสริมสำหรับ catinclude"
 msgid "Permanent redirect"
 msgstr "เปลี่ยนเส้นทางถาวร"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:146
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:184
 msgid "Recompile templates"
 msgstr "คอมไพล์เทมเพลตอีกครั้ง"
 
@@ -6071,7 +6142,11 @@ msgstr "รีเฟรช"
 msgid "Rerun graph"
 msgstr "รีรันกราฟ"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:205
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:88
+msgid "Set the class <tt>environment-development</tt> on the <tt>&lt;html&gt;</tt> element of your pages to see the server log in the browser console.<br>In development, admin pages always show the server log in the javascript console."
+msgstr "ตั้งค่าคลาส <tt>การพัฒนาสภาพแวดล้อม</tt> บนองค์ประกอบ <tt>&lt;html&gt;</tt> ของเพจของคุณเพื่อดูบันทึกของเซิร์ฟเวอร์ในคอนโซลของเบราว์เซอร์<br>ในการพัฒนา หน้าผู้ดูแลระบบจะแสดงบันทึกของเซิร์ฟเวอร์ในคอนโซลจาวาสคริปต์เสมอ"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:243
 msgid "Show an overview of all observers"
 msgstr "แสดงภาพรวมของผู้สังเกตการณ์ทั้งหมด"
 
@@ -6079,13 +6154,17 @@ msgstr "แสดงภาพรวมของผู้สังเกตกา
 msgid "Show defined blocks in generated templates"
 msgstr "แสดงบล็อกที่กำหนดไว้ในเทมเพลตที่สร้างขึ้น"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:202
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:240
 msgid "Show internals of Zotonic and the modules"
 msgstr "แสดงภายในของ Zotonic และโมดูล"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:24
 msgid "Show paths to included template files in generated templates"
 msgstr "แสดงเส้นทางไปยังไฟล์เทมเพลตที่รวมอยู่ในเทมเพลตที่สร้างขึ้น"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:93
+msgid "Show server log in the browser console"
+msgstr "แสดงบันทึกเซิร์ฟเวอร์ในคอนโซลของเบราว์เซอร์"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:31./apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:7
 msgid "Site Development"
@@ -6103,11 +6182,15 @@ msgstr "ชื่อไซต์"
 msgid "Start matching dispatch rules"
 msgstr "เริ่มจับคู่กฎการจัดส่ง"
 
-#: apps/zotonic_mod_development/src/mod_development.erl:122
+#: apps/zotonic_mod_development/src/mod_development.erl:169
+msgid "Started logging to the console of your browser tab."
+msgstr "เริ่มเข้าสู่ระบบคอนโซลของแท็บเบราว์เซอร์ของคุณ"
+
+#: apps/zotonic_mod_development/src/mod_development.erl:118
 msgid "Started tracing all template inclusions."
 msgstr "เริ่มติดตามการรวมเทมเพลตทั้งหมด"
 
-#: apps/zotonic_mod_development/src/mod_development.erl:119
+#: apps/zotonic_mod_development/src/mod_development.erl:115
 msgid "Started tracing template inclusions for your session."
 msgstr "เริ่มการรวมเทมเพลตการติดตามสำหรับเซสชันของคุณ"
 
@@ -6116,7 +6199,11 @@ msgstr "เริ่มการรวมเทมเพลตการติด
 msgid "Stop"
 msgstr "เลิก"
 
-#: apps/zotonic_mod_development/src/mod_development.erl:131
+#: apps/zotonic_mod_development/src/mod_development.erl:171
+msgid "Stopped logging to the console of all browser tabs."
+msgstr "หยุดการเข้าสู่ระบบคอนโซลของแท็บเบราว์เซอร์ทั้งหมด"
+
+#: apps/zotonic_mod_development/src/mod_development.erl:127
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr "หยุดการรวมเทมเพลตการติดตามสำหรับเซสชันทั้งหมด"
 
@@ -6141,7 +6228,7 @@ msgstr "ข้อผิดพลาดทางไวยากรณ์"
 msgid "Template"
 msgstr "เทมเพลต"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:89
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:127
 msgid "Template debugging"
 msgstr "การดีบักเทมเพลต"
 
@@ -6185,7 +6272,7 @@ msgstr "เครื่องมือและการตั้งค่าท
 msgid "Trace all database queries for the current session"
 msgstr "ติดตามการสืบค้นฐานข้อมูลทั้งหมดสำหรับเซสชันปัจจุบัน"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:133
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:171
 msgid "Traces all templates for the current session-id, or all sessions, and renders them as a graph."
 msgstr "ติดตามเทมเพลตทั้งหมดสำหรับ session-id ปัจจุบันหรือเซสชันทั้งหมด และแสดงผลเป็นกราฟ"
 
@@ -6217,11 +6304,11 @@ msgstr "ประเภท {include}"
 msgid "URI Pattern"
 msgstr "รูปแบบ URI"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:166./apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:8
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:204./apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:8
 msgid "View all dispatch rules"
 msgstr "ดูกฎการจัดส่งทั้งหมด"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:168
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:206
 msgid "View all dispatch rules and hostnames usable in the site."
 msgstr "ดูกฎการจัดส่งและชื่อโฮสต์ทั้งหมดที่ใช้งานได้ในไซต์"
 
@@ -7225,7 +7312,7 @@ msgstr "ตีกลับ"
 msgid "Debug"
 msgstr "แก้ไขข้อบกพร่อง"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log_base.tpl:12./apps/zotonic_mod_logging/src/mod_logging.erl:107
+#: apps/zotonic_mod_logging/priv/templates/admin_log_base.tpl:12./apps/zotonic_mod_logging/src/mod_logging.erl:135
 msgid "Email log"
 msgstr "บันทึกอีเมล"
 
@@ -7248,7 +7335,7 @@ msgstr "ร้ายแรง"
 msgid "Identities"
 msgstr "อัตลักษณ์"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log_base.tpl:3./apps/zotonic_mod_logging/src/mod_logging.erl:102
+#: apps/zotonic_mod_logging/priv/templates/admin_log_base.tpl:3./apps/zotonic_mod_logging/src/mod_logging.erl:130
 msgid "Log"
 msgstr "บันทึก"
 
@@ -7351,7 +7438,7 @@ msgstr "ผู้ใช้"
 msgid "User Id"
 msgstr "รหัสผู้ใช้"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log_base.tpl:13./apps/zotonic_mod_logging/src/mod_logging.erl:112
+#: apps/zotonic_mod_logging/priv/templates/admin_log_base.tpl:13./apps/zotonic_mod_logging/src/mod_logging.erl:140
 msgid "User interface log"
 msgstr "บันทึกส่วนต่อประสานผู้ใช้"
 
@@ -7620,7 +7707,7 @@ msgstr "รายชื่ออีเมล"
 msgid "Mailing list"
 msgstr "รายชื่อผู้รับจดหมาย"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:610
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:607
 msgid "Mailing lists"
 msgstr "รายชื่ออีเมล"
 
@@ -9627,10 +9714,6 @@ msgstr "อันตราย"
 msgid "Deactivated"
 msgstr "ปิดใช้งาน"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:36
-msgid "Dead end. Remove Next button. No questions will be submitted unless you add a button jump to a next page."
-msgstr "ทางตัน. ปุ่มลบถัดไป จะไม่มีการส่งคำถามเว้นแต่คุณจะเพิ่มปุ่มข้ามไปที่หน้าถัดไป"
-
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:37
 msgid "Default"
 msgstr "ค่าเริ่มต้น"
@@ -10018,6 +10101,10 @@ msgstr "สุ่มคำตอบ"
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:86
 msgid "Red"
 msgstr "แดง"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:36
+msgid "Remove \"Next\" button. No answers will be submitted unless you add a button jump to a next page."
+msgstr "ลบปุ่ม \"ถัดไป\" จะไม่มีการส่งคำตอบเว้นแต่คุณจะเพิ่มปุ่มข้ามไปยังหน้าถัดไป"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:40./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:52./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:167./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:55./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:41./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:57
 msgid "Required, this question must be answered."
