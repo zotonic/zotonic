@@ -781,7 +781,11 @@ delete_email(Error, Id, Recipient, Email, Context) ->
 
 % Start a worker, prevent too many workers per domain.
 spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
-    Recipient1 = check_override(Recipient, m_config:get_value(site, email_override, Context), State),
+    Recipient1 = check_override(
+        Recipient,
+        m_config:get_value(site, email_override, Context),
+        m_config:get_value(site, email_override_exceptions, Context),
+        State),
     RecipientEmail = recipient_email_address(Recipient1),
     case is_recipient_blocked(RecipientEmail, Context) of
         false ->
@@ -1416,9 +1420,10 @@ expand_cr(<<C, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, C>>).
 
 
 
-check_override(EmailAddr, _SiteOverride, _State) when EmailAddr =:= undefined; EmailAddr =:= []; EmailAddr =:= <<>> ->
-    undefined;
-check_override(EmailAddr, SiteOverride, #state{override=ZotonicOverride}) ->
+check_override(undefined, _SiteOverride, _Exceptions, _State) -> undefined;
+check_override("", _SiteOverride, _Exceptions, _State) -> undefined;
+check_override(<<>>, _SiteOverride, _Exceptions, _State) -> undefined;
+check_override(EmailAddr, SiteOverride, Exceptions, #state{ override = ZotonicOverride }) ->
     UseOverride = case z_utils:is_empty(ZotonicOverride) of
         true -> SiteOverride;
         false -> ZotonicOverride
@@ -1427,11 +1432,36 @@ check_override(EmailAddr, SiteOverride, #state{override=ZotonicOverride}) ->
         true ->
             EmailAddr;
         false ->
-            z_email:combine_name_email(
-                iolist_to_binary([EmailAddr, " (override)"]),
-                UseOverride)
+            case is_override_exception(EmailAddr, Exceptions) of
+                true ->
+                    EmailAddr;
+                false ->
+                    z_email:combine_name_email(
+                        iolist_to_binary([EmailAddr, " (override)"]),
+                        UseOverride)
+            end
     end.
 
+is_override_exception(_Email, undefined) -> false;
+is_override_exception(_Email, <<>>) -> false;
+is_override_exception(_Email, "") -> false;
+is_override_exception(Email, OverrideExceptions) ->
+    Es = split_override_exceptions(z_string:to_lower(OverrideExceptions)),
+    Email1 = z_string:to_lower(
+        unicode:characters_to_binary(
+            re:replace(Email, <<"\\+.*@">>, <<"@">>), utf8)),
+    lists:any(fun(E) -> is_match_exception(Email1, E) end, Es).
+
+is_match_exception(Email, <<"@", Domain/binary>>) ->
+    case binary:split(Email, <<"@">>) of
+        [ _, Domain ] -> true;
+        _ -> false
+    end;
+is_match_exception(Email, Exception) ->
+    Email =:= Exception.
+
+split_override_exceptions(S) ->
+    binary:split(S, [ <<" ">>, <<"\t">>, <<"\n">>, <<";">>, <<",">> ], [ global, trim_all ]).
 
 optional_render(undefined, undefined, _Vars, _Context) ->
     [];
