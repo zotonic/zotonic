@@ -21,6 +21,7 @@
 
 -export([is_allowed/3,
          is_allowed_prop/4,
+         is_allowed_link/4,
          maybe_allowed/3,
 
          rsc_visible/2,
@@ -127,6 +128,44 @@ is_allowed_prop(Action, Object, Property, Context) ->
         Other -> Other
     end.
 
+%% @doc Check if it is allowed to create an edge between the subject and object using the predicate.
+-spec is_allowed_link(Subject, Predicate, Object, Context) -> boolean() when
+    Subject :: m_rsc:resource() | undefined,
+    Predicate :: m_rsc:resource() | undefined,
+    Object :: m_rsc:resource() | undefined,
+    Context :: z:context().
+is_allowed_link(SubjectId, PredicateId, ObjectId, Context) when
+    is_integer(SubjectId), is_integer(PredicateId), is_integer(ObjectId) ->
+    try
+        case z_acl:rsc_visible(SubjectId, Context)
+            andalso z_acl:rsc_visible(ObjectId, Context)
+            andalso z_acl:rsc_visible(PredicateId, Context)
+            andalso m_rsc:is_a(PredicateId, predicate, Context)
+        of
+            true ->
+                {ok, PredName} = m_predicate:id_to_name(PredicateId, Context),
+                z_acl:is_allowed(
+                    insert,
+                    #acl_edge{
+                        subject_id = SubjectId,
+                        predicate = PredName,
+                        object_id = ObjectId
+                    },
+                    Context);
+            false ->
+                false
+        end
+    catch
+        error:badarg -> false
+    end;
+is_allowed_link(undefined, _Predicate, _ObjectId, _Context) -> false;
+is_allowed_link(_Subject, undefined, _ObjectId, _Context) -> false;
+is_allowed_link(_Subject, _Predicate, undefined, _Context) -> false;
+is_allowed_link(Subject, Predicate, Object, Context) ->
+    SubjectId = m_rsc:rid(Subject, Context),
+    PredicateId = m_rsc:rid(Predicate, Context),
+    ObjectId = m_rsc:rid(Object, Context),
+    is_allowed_link(SubjectId, PredicateId, ObjectId, Context).
 
 %% @doc Check if the resource is visible for the current user
 -spec rsc_visible( m_rsc:resource(), z:context() ) -> boolean().

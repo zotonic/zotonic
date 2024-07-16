@@ -1,4 +1,12 @@
 <div id="dialog_connect_results" class="connect-results">
+    {% if intent == 'connect' %}
+        <p class="text-muted">
+            {% trans "Showing pages you can connect to using <b>{predicate}</b>."
+                     predicate=m.rsc[predicate].title
+            %}
+        </p>
+    {% endif %}
+
     {% with m.search.paged[
             {query text=text cat=cat page=1 pagelen=(6*3)
                    creator_id=creator_id content_group=content_group
@@ -38,6 +46,7 @@
                 object_id=object_id
                 creator_id=creator_id
                 content_group=content_group
+                intent=intent
                 is_result_render
 				visible
 			}

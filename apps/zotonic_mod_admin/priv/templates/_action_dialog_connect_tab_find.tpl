@@ -78,6 +78,7 @@
     		<input type="hidden" name="subject_id" value="{{ subject_id }}" />
             <input type="hidden" name="object_id" value="{{ object_id }}" />
     		<input type="hidden" name="predicate" value="{{ predicate|default:'' }}" />
+            <input type="hidden" name="intent" value="{{ intent|escape }}" />
 
             <div class="col-md-6">
     		    <input name="find_text" type="text" value="{{ text|default:'' }}" placeholder="{_ Type text to search _}" class="do_autofocus form-control" />
