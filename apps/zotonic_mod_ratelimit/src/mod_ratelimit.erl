@@ -1,9 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019-2023 Driebit BV
+%% @copyright 2019-2024 Driebit BV
 %% @doc Rate limiting of authentication tries and other types of requests
 %% This follows https://www.owasp.org/index.php/Slow_Down_Online_Guessing_Attacks_with_Device_Cookies
+%% @end
 
-%% Copyright 2019-2023 Driebit BV
+%% Copyright 2019-2024 Driebit BV
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -27,6 +28,7 @@
 -mod_depends([ cron ]).
 
 -export([
+    event/2,
     observe_auth_precheck/2,
     observe_auth_checked/2,
     observe_auth_logon/3,
@@ -51,6 +53,16 @@
         username :: binary(),
         device_id :: binary()
     }).
+
+
+event(#postback{ message = {reset_ratelimit, _Args} }, Context) ->
+    case z_acl:is_admin(Context) orelse z_acl:is_allowed(use, ?MODULE, Context) of
+        true ->
+            m_ratelimit:reset(Context),
+            z_render:growl(?__("The rate limit adminstration has been reset.", Context), Context);
+        false ->
+            z_render:growl_error(?__("You are not allowed to do this.", Context), Context)
+    end.
 
 %% @doc Setup the mnesia tables for registering the event counters.
 init(Context) ->

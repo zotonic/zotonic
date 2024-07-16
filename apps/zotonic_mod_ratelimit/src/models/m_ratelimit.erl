@@ -30,6 +30,7 @@
     list_event/3,
     delete_event/3,
     delete_event/4,
+    reset/1,
     prune/1
 ]).
 
@@ -162,6 +163,18 @@ ratelimit_n(Context) ->
         undefined -> ?RATELIMIT_N;
         N -> z_convert:to_integer(N)
     end.
+
+-spec reset(z:context()) -> ok.
+reset(Context) ->
+    Table = event_table(Context),
+    PruneFun = fun() ->
+        Query = qlc:q([ Ev || Ev <- mnesia:table(Table) ]),
+        lists:foreach(
+            fun(Ev) -> mnesia:delete_object(Table, Ev, write) end,
+            qlc:e(Query))
+    end,
+    {atomic, _} = mnesia:transaction(PruneFun),
+    ok.
 
 -spec prune(z:context()) -> ok.
 prune(Context) ->

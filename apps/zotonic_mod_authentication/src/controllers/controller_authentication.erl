@@ -413,10 +413,10 @@ change_1(UserId, Username, Password, NewPassword, Passcode, Context) ->
         <<"password">> => Password,
         <<"passcode">> => Passcode
     },
-    case z_notifier:first(#logon_submit{ payload = LogonPayload }, Context) of
-        {OK, UserId} when OK =:= ok; OK =:= expired ->
-            case m_authentication:acceptable_password(NewPassword, Context) of
-                ok ->
+    case m_authentication:acceptable_password(NewPassword, Context) of
+        ok ->
+            case z_notifier:first(#logon_submit{ payload = LogonPayload }, Context) of
+                {OK, UserId} when OK =:= ok; OK =:= expired ->
                     case reset_1(UserId, Username, NewPassword, LogonPayload, Context) of
                         ok ->
                             delete_reminder_secret(UserId, Context),
@@ -427,31 +427,31 @@ change_1(UserId, Username, Password, NewPassword, Passcode, Context) ->
                         {error, Reason} ->
                             { #{ status => error, error => Reason }, Context }
                     end;
+                {error, ratelimit} ->
+                    { #{ status => error, error => ratelimit }, Context };
+                {error, need_passcode} ->
+                    { #{ status => error, error => need_passcode }, Context };
+                {error, set_passcode} ->
+                    { #{ status => error, error => set_passcode }, Context };
+                {error, set_passcode_error} ->
+                    { #{ status => error, error => set_passcode_error }, Context };
+                {error, passcode} ->
+                    { #{ status => error, error => passcode }, Context };
+                {error, use_provider} ->
+                    { #{ status => error, error => use_provider }, Context };
                 {error, Reason} ->
-                    { #{ status => error, error => Reason }, Context }
+                    ?LOG_WARNING(#{
+                        in => zotonic_mod_authentication,
+                        text => <<"Password change request with password mismatch">>,
+                        result => error,
+                        reason => Reason,
+                        user_id => UserId,
+                        username => Username
+                    }),
+                    { #{ status => error, error => pw }, Context }
             end;
-        {error, ratelimit} ->
-            { #{ status => error, error => ratelimit }, Context };
-        {error, need_passcode} ->
-            { #{ status => error, error => need_passcode }, Context };
-        {error, set_passcode} ->
-            { #{ status => error, error => set_passcode }, Context };
-        {error, set_passcode_error} ->
-            { #{ status => error, error => set_passcode_error }, Context };
-        {error, passcode} ->
-            { #{ status => error, error => passcode }, Context };
-        {error, use_provider} ->
-            { #{ status => error, error => use_provider }, Context };
         {error, Reason} ->
-            ?LOG_WARNING(#{
-                in => zotonic_mod_authentication,
-                text => <<"Password change request with password mismatch">>,
-                result => error,
-                reason => Reason,
-                user_id => UserId,
-                username => Username
-            }),
-            { #{ status => error, error => pw }, Context }
+            { #{ status => error, error => Reason }, Context }
     end.
 
 %% @doc Reset the password for a user, using the mailed reset secret and (optional) 2FA code.
@@ -472,23 +472,28 @@ reset(#{
                 ok ->
                     case get_by_reminder_secret(Secret, Context) of
                         {ok, UserId} ->
-                            case m_identity:get_username(UserId, Context) of
-                                undefined ->
-                                    ?LOG_ERROR(#{
-                                        text => <<"Password reset for user without username">>,
-                                        in => zotonic_mod_authentication,
-                                        result => error,
-                                        reason => no_username,
-                                        user_id => UserId
-                                    }),
-                                    { #{ status => error, error => username }, Context };
-                                Username ->
-                                    case reset_1(UserId, Username, NewPassword, Payload, Context) of
-                                        ok ->
-                                            logon_1({ok, UserId}, Payload, Context);
-                                        {error, Reason} ->
-                                            { #{ status => error, error => Reason }, Context }
-                                    end
+                            case m_rsc:p_no_acl(UserId, <<"is_published">>, Context) of
+                                true ->
+                                    case m_identity:get_username(UserId, Context) of
+                                        undefined ->
+                                            ?LOG_ERROR(#{
+                                                text => <<"Password reset for user without username">>,
+                                                in => zotonic_mod_authentication,
+                                                result => error,
+                                                reason => no_username,
+                                                user_id => UserId
+                                            }),
+                                            { #{ status => error, error => username }, Context };
+                                        Username ->
+                                            case reset_1(UserId, Username, NewPassword, Payload, Context) of
+                                                ok ->
+                                                    logon_1({ok, UserId}, Payload, Context);
+                                                {error, Reason} ->
+                                                    { #{ status => error, error => Reason }, Context }
+                                            end
+                                    end;
+                                false ->
+                                    { #{ status => error, error => user_not_enabled }, Context }
                             end;
                         undefined ->
                             { #{ status => error, error => unknown_code }, Context }
@@ -537,6 +542,10 @@ reset_1(UserId, Username, Password, Payload, Context) ->
                 },
                 Context),
             {error, passcode};
+        {error, user_external} = Error ->
+            Error;
+        {error, user_not_enabled} = Error ->
+            Error;
         _Error ->
             {error, error}
     end.
