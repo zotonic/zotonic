@@ -417,7 +417,7 @@ change_1(UserId, Username, Password, NewPassword, Passcode, Context) ->
         {OK, UserId} when OK =:= ok; OK =:= expired ->
             case m_authentication:acceptable_password(NewPassword, Context) of
                 ok ->
-                    case reset_1(UserId, Username, NewPassword, Passcode, Context) of
+                    case reset_1(UserId, Username, NewPassword, LogonPayload, Context) of
                         ok ->
                             delete_reminder_secret(UserId, Context),
                             Options = z_context:get(auth_options, Context, #{}),
