@@ -59,7 +59,7 @@ event(#postback{ message = {reset_ratelimit, _Args} }, Context) ->
     case z_acl:is_admin(Context) orelse z_acl:is_allowed(use, ?MODULE, Context) of
         true ->
             m_ratelimit:reset(Context),
-            z_render:growl(?__("The rate limit adminstration has been reset.", Context), Context);
+            z_render:growl(?__("The counters have been reset.", Context), Context);
         false ->
             z_render:growl_error(?__("You are not allowed to do this.", Context), Context)
     end.
@@ -74,7 +74,7 @@ observe_auth_precheck( #auth_precheck{ username = Username }, Context ) ->
     case m_ratelimit:is_event_limited(auth, Username, DeviceId, Context) of
         true ->
             z:warning(
-                "Rate limit on auth hit for username '~s' (from ~p)",
+                "Ratelimit on auth hit for username '~s' (from ~p)",
                 [ Username, m_req:get(peer, Context) ],
                 [ {module, ?MODULE}, {line, ?LINE} ],
                 Context),
@@ -127,7 +127,7 @@ observe_auth_reset(#auth_reset{ username = Username }, Context) ->
     case m_ratelimit:is_event_limited(reset, Username, DeviceId, Context) of
         true ->
             z:warning(
-                "Rate limit on reset hit for username '~s' (from ~p)",
+                "Ratelimit on reset hit for username '~s' (from ~p)",
                 [ Username, m_req:get(peer, Context) ],
                 [ {module, ?MODULE}, {line, ?LINE} ],
                 Context),

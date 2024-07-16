@@ -9382,18 +9382,17 @@ msgid "your Embedly app dashboard"
 msgstr ""
 
 #: apps/zotonic_mod_ratelimit/priv/templates/_admin_status.tpl:4
-msgid "Reset ratelimit"
+msgid "Reset rate limit counters"
 msgstr ""
 
 #: apps/zotonic_mod_ratelimit/priv/templates/_admin_status.tpl:8
 msgid ""
-"Reset the rate limit administration. Useful when encountering rate limit "
-"errors during testing. Be careful to use on production as this enables more "
-"password tries."
+"Reset the authentication attempts counters. Useful when encountering rate "
+"limit errors during testing. Be careful as this enables more password tries."
 msgstr ""
 
 #: apps/zotonic_mod_ratelimit/src/mod_ratelimit.erl:62
-msgid "The rate limit adminstration has been reset."
+msgid "The counters have been reset."
 msgstr ""
 
 #: apps/zotonic_mod_ratelimit/src/mod_ratelimit.erl:64
