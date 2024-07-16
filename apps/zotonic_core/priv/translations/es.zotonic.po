@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-07-16 10:34\n"
+"PO-Revision-Date: 2024-07-16 12:36\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -2920,8 +2920,8 @@ msgid "All email is sent to"
 msgstr "Todo el correo electrónico se envía a"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:116
-msgid "All email is sent to <b>{email}</b> except for the email addresses and domains defined here."
-msgstr "Todo el correo electrónico se envía a <b>{email}</b> excepto las direcciones de correo electrónico y los dominios definidos aquí."
+msgid "All email is sent to <b>{email}</b>, except for the email addresses and domains defined here."
+msgstr "Todo el correo electrónico se envía a <b>{email}</b>, excepto las direcciones de correo electrónico y los dominios definidos aquí."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:8
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:29
@@ -2966,8 +2966,8 @@ msgid "E-mail override"
 msgstr "Anulación de correo electrónico"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:112./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:113
-msgid "E-mail override exceptions"
-msgstr "Excepciones de anulación de correo electrónico"
+msgid "E-mail override &ndash; exceptions"
+msgstr "Anulación de correo electrónico &ndash; excepciones"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:135./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:136
 msgid "Email FROM"
@@ -2997,7 +2997,7 @@ msgstr "Nombre de Host"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:118
 msgid "If (and only if) there is an e-mail override address defined above, then all e-mail is sent to that address <em>except</em> for the e-mail addresses and domains defined here."
-msgstr ""
+msgstr "Si (y solo si) hay una dirección de anulación de correo electrónico definida anteriormente, entonces todos los correos electrónicos se envían a esa dirección <em>excepto</em> para las direcciones de correo electrónico y los dominios definidos aquí."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:130
 msgid "If you change this then you might need to request a new SSL certificate that includes this hostname."
@@ -4700,7 +4700,7 @@ msgstr "Por favor Inténtalo más tarde."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.user_external.tpl:2
 msgid "Please use a different method to sign in. You can’t sign in using a username and password."
-msgstr ""
+msgstr "Utilice un método diferente para iniciar sesión. No puede iniciar sesión con un nombre de usuario y contraseña."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service.tpl:13
 msgid "Redirecting to"
@@ -4982,7 +4982,9 @@ msgstr "Copias de Seguridad"
 msgid "By default the backup of the database and files are not encrypted. It is\n"
 "        possible to encrypt the backups. This makes it safer to store them on an \n"
 "        external server."
-msgstr ""
+msgstr "De forma predeterminada, la copia de seguridad de la base de datos y los archivos no están cifradas. Es\n"
+"        posible cifrar las copias de seguridad. Esto hace que sea más seguro almacenarlos en un servidor externo \n"
+"        ."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:10
 msgid "Changes since"
@@ -5042,16 +5044,17 @@ msgstr "Habilite <tt>mod_export</tt> para descargar archivos de respaldo."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:8
 msgid "Encrypt Backups"
-msgstr ""
+msgstr "Cifrar copias de seguridad"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:18
 msgid "Encrypted"
-msgstr ""
+msgstr "cifrado"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:40
 msgid "Encryption is enabled, but there is no encryption password. Please\n"
 "      make sure there is an encryption password in the settings."
-msgstr ""
+msgstr "El cifrado está habilitado, pero no hay contraseña de cifrado. Por favor\n"
+"      asegúrese de que haya una contraseña de cifrado en la configuración."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:13
 msgid "Help about backup &amp; restore"
@@ -5059,7 +5062,7 @@ msgstr "Ayuda acerca de la copia de seguridad &amp; y restauración"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:14
 msgid "It can be found in the"
-msgstr ""
+msgstr "Se puede encontrar en el"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:24
 msgid "List and restore an earlier version"
@@ -5087,7 +5090,7 @@ msgstr "No subido a la tienda de archivos"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:13
 msgid "Note:"
-msgstr ""
+msgstr "Nota:"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:13
 msgid "Only the texts and other properties of pages are backed up."
@@ -5095,7 +5098,7 @@ msgstr "Solo se respaldan los textos y otras propiedades de las páginas."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:14
 msgid "Please make sure you store the backup encryption password in a safe <u>external</u> location."
-msgstr ""
+msgstr "Asegúrese de almacenar la contraseña de cifrado de respaldo en una ubicación segura <u>externa</u> ."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:79
 msgid "Previous"
@@ -5176,7 +5179,8 @@ msgstr "El comando \"tar\" no se encontró en la ruta. Configure en zotonic.conf
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:6
 msgid "The backup comprises three parts, the database, the configuration,\n"
 "      and the uploaded files."
-msgstr ""
+msgstr "La copia de seguridad consta de tres partes, la base de datos, la configuración,\n"
+"      y los archivos cargados."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5./apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:15
 msgid "This is the version saved on"
@@ -5974,7 +5978,7 @@ msgstr "Seguimiento de consultas de base de datos habilitado"
 
 #: apps/zotonic_mod_development/src/mod_development.erl:175
 msgid "Error changing the console logs."
-msgstr ""
+msgstr "Error al cambiar los registros de la consola."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:18
 msgid "Event"
@@ -6066,7 +6070,7 @@ msgstr "Ubicación"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:118
 msgid "Log in as the admin to enable logging to the javascript console."
-msgstr ""
+msgstr "Inicie sesión como administrador para habilitar el inicio de sesión en la consola de JavaScript."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:210
 msgid "Match a request URL, display matched dispatch rule."
@@ -6102,7 +6106,7 @@ msgstr "No se encuentra ninguna relación a las reglas de envió"
 
 #: apps/zotonic_mod_development/src/mod_development.erl:173
 msgid "No permission to access the console logs."
-msgstr ""
+msgstr "No hay permiso para acceder a los registros de la consola."
 
 #: apps/zotonic_mod_development/src/mod_development.erl:91./apps/zotonic_mod_development/src/mod_development.erl:106./apps/zotonic_mod_development/src/mod_development.erl:121./apps/zotonic_mod_development/src/mod_development.erl:129./apps/zotonic_mod_development/src/mod_development.erl:156
 msgid "No permission to use mod_development."
@@ -6142,7 +6146,7 @@ msgstr "Volver a ejecutar el gráfico"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:88
 msgid "Set the class <tt>environment-development</tt> on the <tt>&lt;html&gt;</tt> element of your pages to see the server log in the browser console.<br>In development, admin pages always show the server log in the javascript console."
-msgstr ""
+msgstr "Establezca la clase <tt>entorno-desarrollo</tt> en el elemento <tt>&lt;html&gt;</tt> de sus páginas para ver el registro del servidor en la consola del navegador.<br>En desarrollo, las páginas de administración siempre muestran el registro del servidor en la consola de JavaScript."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:243
 msgid "Show an overview of all observers"
@@ -6162,7 +6166,7 @@ msgstr "Mostrar rutas a archivos de plantilla incluidos en las plantillas genera
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:93
 msgid "Show server log in the browser console"
-msgstr ""
+msgstr "Mostrar el registro del servidor en la consola del navegador"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:31./apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:7
 msgid "Site Development"
@@ -6182,7 +6186,7 @@ msgstr "Empieza a emparejar las reglas de envío"
 
 #: apps/zotonic_mod_development/src/mod_development.erl:169
 msgid "Started logging to the console of your browser tab."
-msgstr ""
+msgstr "Comenzó a iniciar sesión en la consola de la pestaña de su navegador."
 
 #: apps/zotonic_mod_development/src/mod_development.erl:118
 msgid "Started tracing all template inclusions."
@@ -6199,7 +6203,7 @@ msgstr "Alto"
 
 #: apps/zotonic_mod_development/src/mod_development.erl:171
 msgid "Stopped logging to the console of all browser tabs."
-msgstr ""
+msgstr "Se dejó de iniciar sesión en la consola de todas las pestañas del navegador."
 
 #: apps/zotonic_mod_development/src/mod_development.erl:127
 msgid "Stopped tracing template inclusions for all sessions."
@@ -10102,7 +10106,7 @@ msgstr "Rojo"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:36
 msgid "Remove \"Next\" button. No answers will be submitted unless you add a button jump to a next page."
-msgstr ""
+msgstr "Quitar el botón \"Siguiente\". No se enviarán respuestas a menos que agregue un botón para saltar a la página siguiente."
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:40./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:52./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:167./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:55./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:41./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:57
 msgid "Required, this question must be answered."
