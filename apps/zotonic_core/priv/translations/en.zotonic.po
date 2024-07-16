@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-07-16 10:35\n"
+"PO-Revision-Date: 2024-07-16 12:36\n"
 "Last-Translator: \n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
@@ -2920,7 +2920,7 @@ msgid "All email is sent to"
 msgstr ""
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:116
-msgid "All email is sent to <b>{email}</b> except for the email addresses and domains defined here."
+msgid "All email is sent to <b>{email}</b>, except for the email addresses and domains defined here."
 msgstr ""
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:8
@@ -2966,7 +2966,7 @@ msgid "E-mail override"
 msgstr ""
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:112./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:113
-msgid "E-mail override exceptions"
+msgid "E-mail override &ndash; exceptions"
 msgstr ""
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:135./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:136
