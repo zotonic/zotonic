@@ -116,7 +116,7 @@
                         postback=`log_client_enable`
                         delegate=`mod_development`
                 %}
-            {% else %}
+            {% elseif m.acl.is_admin %}
                 <p class="help-block">
                     {_ Log in as the admin to enable logging to the javascript console. _}
                 </p>
