@@ -365,7 +365,11 @@ maybe_setautologon(_Payload, Context) ->
 
 
 %% @doc Change the password for the current user, use the (optional) 2FA code
--spec change( map(), z:context() ) -> { map(), z:context() }.
+-spec change(Payload, Context) -> {Status, Context1} when
+    Payload :: map(),
+    Context :: z:context(),
+    Status :: map(),
+    Context1 :: z:context().
 change(#{
         <<"password">> := Password,
         <<"password_reset">> := NewPassword,
@@ -411,13 +415,18 @@ change_1(UserId, Username, Password, NewPassword, Passcode, Context) ->
     },
     case z_notifier:first(#logon_submit{ payload = LogonPayload }, Context) of
         {OK, UserId} when OK =:= ok; OK =:= expired ->
-            case reset_1(UserId, Username, NewPassword, Passcode, Context) of
+            case m_authentication:acceptable_password(NewPassword, Context) of
                 ok ->
-                    delete_reminder_secret(UserId, Context),
-                    Options = z_context:get(auth_options, Context, #{}),
-                    Context1 = z_acl:logon(UserId, Context),
-                    Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options, Context1),
-                    { #{ status => ok }, Context2 };
+                    case reset_1(UserId, Username, NewPassword, Passcode, Context) of
+                        ok ->
+                            delete_reminder_secret(UserId, Context),
+                            Options = z_context:get(auth_options, Context, #{}),
+                            Context1 = z_acl:logon(UserId, Context),
+                            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options, Context1),
+                            { #{ status => ok }, Context2 };
+                        {error, Reason} ->
+                            { #{ status => error, error => Reason }, Context }
+                    end;
                 {error, Reason} ->
                     { #{ status => error, error => Reason }, Context }
             end;
@@ -446,19 +455,21 @@ change_1(UserId, Username, Password, NewPassword, Passcode, Context) ->
     end.
 
 %% @doc Reset the password for a user, using the mailed reset secret and (optional) 2FA code.
--spec reset( map(), z:context() ) -> { map(), z:context() }.
+-spec reset(Payload, Context) -> {Status, Context1} when
+    Payload :: map(),
+    Context :: z:context(),
+    Status :: map(),
+    Context1 :: z:context().
 reset(#{
         <<"secret">> := Secret,
         <<"username">> := Username,
-        <<"password">> := Password,
+        <<"password">> := NewPassword,
         <<"passcode">> := Passcode
-    } = Payload, Context) when is_binary(Secret), is_binary(Username), is_binary(Password), is_binary(Passcode) ->
-    case auth_precheck(Username, Context) of
+    } = Payload, Context) when is_binary(Secret), is_binary(Username), is_binary(NewPassword), is_binary(Passcode) ->
+    case m_authentication:acceptable_password(NewPassword, Context) of
         ok ->
-            case m_authentication:is_valid_password(Password, Context) of
-                false ->
-                    { #{ status => error, error => tooshort }, Context };
-                true ->
+            case auth_precheck(Username, Context) of
+                ok ->
                     case get_by_reminder_secret(Secret, Context) of
                         {ok, UserId} ->
                             case m_identity:get_username(UserId, Context) of
@@ -472,7 +483,7 @@ reset(#{
                                     }),
                                     { #{ status => error, error => username }, Context };
                                 Username ->
-                                    case reset_1(UserId, Username, Password, Payload, Context) of
+                                    case reset_1(UserId, Username, NewPassword, Payload, Context) of
                                         ok ->
                                             logon_1({ok, UserId}, Payload, Context);
                                         {error, Reason} ->
@@ -481,12 +492,14 @@ reset(#{
                             end;
                         undefined ->
                             { #{ status => error, error => unknown_code }, Context }
-                    end
+                    end;
+                {error, ratelimit} ->
+                    { #{ status => error, error => ratelimit }, Context };
+                _ ->
+                    { #{ status => error, error => error }, Context }
             end;
-        {error, ratelimit} ->
-            { #{ status => error, error => ratelimit }, Context };
-        _ ->
-            { #{ status => error, error => error }, Context }
+        {error, Reason} ->
+            { #{ status => error, error => Reason }, Context }
     end;
 reset(_Payload, Context) ->
     { #{
@@ -497,44 +510,43 @@ reset(_Payload, Context) ->
 
 
 reset_1(UserId, Username, Password, Payload, Context) ->
-    case m_authentication:acceptable_password(Password, Context) of
+    case auth_postcheck(UserId, Payload, Context) of
         ok ->
-            case auth_postcheck(UserId, Payload, Context) of
+            case m_identity:set_username_pw(UserId, Username, Password, z_acl:sudo(Context)) of
                 ok ->
-                    case m_identity:set_username_pw(UserId, Username, Password, z_acl:sudo(Context)) of
-                        ok ->
-                            ContextLoggedon = z_acl:logon(UserId, Context),
-                            delete_reminder_secret(UserId, ContextLoggedon),
-                            ok;
-                        {error, password_match} ->
-                            {error, password_change_match};
-                        {error, _} ->
-                            {error, error}
-                    end;
-                {error, need_passcode} = Error ->
-                    Error;
-                {error, set_passcode} = Error ->
-                    Error;
-                {error, set_passcode_error} = Error ->
-                    Error;
-                {error, passcode} ->
-                    z_notifier:notify_sync(
-                        #auth_checked{
-                            id = UserId,
-                            username = Username,
-                            is_accepted = false
-                        },
-                        Context),
-                    {error, passcode};
-                _Error ->
+                    ContextLoggedon = z_acl:logon(UserId, Context),
+                    delete_reminder_secret(UserId, ContextLoggedon),
+                    ok;
+                {error, password_match} ->
+                    {error, password_change_match};
+                {error, _} ->
                     {error, error}
             end;
-        {error, _} = Error ->
-            Error
+        {error, need_passcode} = Error ->
+            Error;
+        {error, set_passcode} = Error ->
+            Error;
+        {error, set_passcode_error} = Error ->
+            Error;
+        {error, passcode} ->
+            z_notifier:notify_sync(
+                #auth_checked{
+                    id = UserId,
+                    username = Username,
+                    is_accepted = false
+                },
+                Context),
+            {error, passcode};
+        _Error ->
+            {error, error}
     end.
 
 %% @doc Return information about the current user and request language/timezone
--spec status( map(), z:context() ) -> { map(), z:context() }.
+-spec status(Payload, Context) -> {Status, Context1} when
+    Payload :: map(),
+    Context :: z:context(),
+    Status :: map(),
+    Context1 :: z:context().
 status(Payload, Context) ->
     Context1 = z_authentication_tokens:ensure_auth_cookie(Context),
     return_status(Payload, Context1).
