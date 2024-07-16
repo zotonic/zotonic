@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-07-16 15:38\n"
+"PO-Revision-Date: 2024-07-16 16:43\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -2174,7 +2174,7 @@ msgstr "Affichage des dates en"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:4
 msgid "Showing pages you can connect to using <b>{predicate}</b>."
-msgstr ""
+msgstr "Affichage des pages auxquelles vous pouvez vous connecter en utilisant <b>{predicate}</b>."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:36
 msgid "Site Files Directory"
@@ -8835,15 +8835,15 @@ msgstr "votre tableau de bord intégré de l'application"
 
 #: apps/zotonic_mod_ratelimit/priv/templates/_admin_status.tpl:4
 msgid "Reset rate limit counters"
-msgstr ""
+msgstr "Réinitialiser les compteurs de limite de débit"
 
 #: apps/zotonic_mod_ratelimit/priv/templates/_admin_status.tpl:8
 msgid "Reset the authentication attempts counters. Useful when encountering rate limit errors during testing. Be careful as this enables more password tries."
-msgstr ""
+msgstr "Réinitialisez les compteurs de tentatives d'authentification. Utile lorsque vous rencontrez des erreurs de limite de débit lors des tests. Soyez prudent car cela permet davantage de tentatives de mot de passe."
 
 #: apps/zotonic_mod_ratelimit/src/mod_ratelimit.erl:62
 msgid "The counters have been reset."
-msgstr ""
+msgstr "Les compteurs ont été réinitialisés."
 
 #: apps/zotonic_mod_ratelimit/src/mod_ratelimit.erl:64
 msgid "You are not allowed to do this."
