@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-07-16 12:36\n"
+"PO-Revision-Date: 2024-07-16 14:32\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -8828,6 +8828,22 @@ msgstr "No tiene permisos para cambiar la configuración de Embedly."
 #: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:9
 msgid "your Embedly app dashboard"
 msgstr "su panel de la aplicación Embedly"
+
+#: apps/zotonic_mod_ratelimit/priv/templates/_admin_status.tpl:4
+msgid "Reset ratelimit"
+msgstr "Restablecer límite de velocidad"
+
+#: apps/zotonic_mod_ratelimit/priv/templates/_admin_status.tpl:8
+msgid "Reset the rate limit administration. Useful when encountering rate limit errors during testing. Be careful to use on production as this enables more password tries."
+msgstr "Restablecer la administración del límite de velocidad. Útil cuando se encuentran errores de límite de velocidad durante las pruebas. Tenga cuidado al usarlo en producción, ya que esto permite más intentos de contraseña."
+
+#: apps/zotonic_mod_ratelimit/src/mod_ratelimit.erl:62
+msgid "The rate limit adminstration has been reset."
+msgstr "La administración del límite de tarifas se ha restablecido."
+
+#: apps/zotonic_mod_ratelimit/src/mod_ratelimit.erl:64
+msgid "You are not allowed to do this."
+msgstr "No tienes permitido hacer esto."
 
 #: apps/zotonic_mod_search/priv/templates/_admin_status.tpl:8
 msgid "Check the table for the faceted search and fill it by reindexing all pages."
