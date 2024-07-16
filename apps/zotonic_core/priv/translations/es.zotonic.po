@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-06-28 12:38\n"
+"PO-Revision-Date: 2024-07-16 10:34\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -237,7 +237,7 @@ msgid "Change category and/or content group..."
 msgstr "Cambiar categoría y/o grupo de contenido..."
 
 #: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:144
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:120
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:122
 msgid "Changed configuration."
 msgstr "Configuración cambiada."
 
@@ -545,7 +545,7 @@ msgstr "Revertir reglas"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:161./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:64
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:78./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:17./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:29
-#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
+#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:152
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:138./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:26
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:102
@@ -993,11 +993,11 @@ msgstr "El caché ha sido vaciado."
 msgid "Category name:"
 msgstr "Nombre de la categoriía:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:35./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:43
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:37./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:45
 msgid "Category:"
 msgstr "Categoría:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:36
 msgid "Change category"
 msgstr "Cambiar categoria"
 
@@ -1344,7 +1344,7 @@ msgid "Error checking the website."
 msgstr "Error comprobando el sitio web."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:182
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:113
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:115
 msgid "Error creating the page."
 msgstr "Error al crear la página."
 
@@ -1389,7 +1389,7 @@ msgid "Existing pages"
 msgstr "Páginas existentes"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:187./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:168./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:168
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:99
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:101
 msgid "Failed to download the file."
 msgstr "Error al descargar el archivo."
 
@@ -2156,7 +2156,7 @@ msgstr "Título corto"
 msgid "Show address on edit page"
 msgstr "Mostrar la dirección en la página de edición"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:51
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:53
 msgid "Show all {title} pages"
 msgstr "Mostrar todas {title} páginas"
 
@@ -2378,7 +2378,7 @@ msgid "There are no tasks in the task queue."
 msgstr "No hay tareas en la cola de tareas."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:162
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:93
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:95
 msgid "There is already a page with this name."
 msgstr "Ya hay una página con este nombre."
 
@@ -2391,7 +2391,7 @@ msgid "This connection already exists."
 msgstr "Esta conexión ya existe."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:191./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:172./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:172
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:103
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:105
 msgid "This file contains links to other files or locations."
 msgstr "Este archivo contiene enlaces a otros archivos o lugares."
 
@@ -2408,12 +2408,12 @@ msgid "This file has not been scanned for viruses."
 msgstr "Este archivo no ha sido escaneado en busca de virus."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:189./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:170./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:170
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:101
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:103
 msgid "This file is infected with a virus."
 msgstr "Este archivo está infectado con un virus."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:193./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:174./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:174
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:105
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:107
 msgid "This file is too large."
 msgstr "Este archivo es demasiado grande."
 
@@ -2692,7 +2692,7 @@ msgid "You don't have permission to change this media item."
 msgstr "No se le permite cambiar este elemento multimedia."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:164
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:95
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:97
 msgid "You don't have permission to create this page."
 msgstr "No tienes permiso para crear esta página."
 
@@ -2702,7 +2702,7 @@ msgid "You don't have permission to edit this page."
 msgstr "No tienes permiso para editar esta página."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:185./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:166./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:166
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:97
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:99
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "No tiene los permisos adecuados para subir este tipo de archivo."
 
@@ -2776,6 +2776,10 @@ msgstr "con excepción de"
 msgid "has been disconnected."
 msgstr "se ha desconectado."
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:23
+msgid "id:"
+msgstr "identificación:"
+
 #: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:75
 #: apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:15
 msgid "matching"
@@ -2811,7 +2815,7 @@ msgstr "contenido del sistema"
 msgid "undo"
 msgstr "deshacer"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:43./apps/zotonic_mod_admin/priv/templates/_choose_media.tpl:9./apps/zotonic_mod_admin/priv/templates/_rsc_edge_item.tpl:9./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:11./apps/zotonic_mod_admin/priv/templates/_rsc_item.tpl:10
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:34./apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:45./apps/zotonic_mod_admin/priv/templates/_choose_media.tpl:9./apps/zotonic_mod_admin/priv/templates/_rsc_edge_item.tpl:9./apps/zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:11./apps/zotonic_mod_admin/priv/templates/_rsc_item.tpl:10
 msgid "untitled"
 msgstr "sin título"
 
@@ -2903,6 +2907,10 @@ msgstr "Se envía una copia de todo el correo electrónico a"
 msgid "Add configuration key"
 msgstr "Agregar la clave de configuración"
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:120
+msgid "Add email domains using <tt>@example.com</tt> and complete email addresses. Separate multiple entries using whitespace, semicolons or commas."
+msgstr "Agregue dominios de correo electrónico usando <tt>@example.com</tt> y direcciones de correo electrónico completas. Separe varias entradas utilizando espacios en blanco, punto y coma o comas."
+
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:25
 msgid "Add key"
 msgstr "Agregar clave"
@@ -2910,6 +2918,10 @@ msgstr "Agregar clave"
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:16
 msgid "All email is sent to"
 msgstr "Todo el correo electrónico se envía a"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:116
+msgid "All email is sent to <b>{email}</b> except for the email addresses and domains defined here."
+msgstr "Todo el correo electrónico se envía a <b>{email}</b> excepto las direcciones de correo electrónico y los dominios definidos aquí."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:8
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:29
@@ -2937,15 +2949,15 @@ msgstr "Configuración"
 msgid "Configuration"
 msgstr "Configuración"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:116
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:129
 msgid "Defaults to the hostname of the site."
 msgstr "Por defecto es el nombre de host del sitio."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:115
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:128
 msgid "Domain for all generated from- and envelop-addresses."
 msgstr "Dominio para todas las direcciones de origen y de envolvente generadas."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:131
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:144
 msgid "Download images in emails after opening the message"
 msgstr "Descargar imágenes en correos electrónicos después de abrir el mensaje"
 
@@ -2953,7 +2965,11 @@ msgstr "Descargar imágenes en correos electrónicos después de abrir el mensaj
 msgid "E-mail override"
 msgstr "Anulación de correo electrónico"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:122./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:123
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:112./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:113
+msgid "E-mail override exceptions"
+msgstr "Excepciones de anulación de correo electrónico"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:135./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:136
 msgid "Email FROM"
 msgstr "Email de"
 
@@ -2979,7 +2995,11 @@ msgstr "Aquí puede ver todas las configuraciones de correo electrónico y envia
 msgid "Hostname"
 msgstr "Nombre de Host"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:117
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:118
+msgid "If (and only if) there is an e-mail override address defined above, then all e-mail is sent to that address <em>except</em> for the e-mail addresses and domains defined here."
+msgstr ""
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:130
 msgid "If you change this then you might need to request a new SSL certificate that includes this hostname."
 msgstr "Si cambia esto, es posible que deba solicitar un nuevo certificado SSL que incluya este nombre de host."
 
@@ -3019,7 +3039,7 @@ msgstr "Solo un administrador puede agregar las claves de configuración."
 msgid "Password"
 msgstr "Clave"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:134
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:147
 msgid "Per default images smaller than 1MB are embedded in email messages. Using a separate download for images results in a smaller message size but non-public images will not be visible. Leave this disabled if you are sending non-public images."
 msgstr "Por defecto, las imágenes de menos de 1 MB están incrustadas en los mensajes de correo electrónico. El uso de una descarga separada para las imágenes da como resultado un tamaño de mensaje más pequeño, pero las imágenes no públicas no serán visibles. Deje esto deshabilitado si está enviando imágenes no públicas."
 
@@ -3035,7 +3055,7 @@ msgstr "Relay nombre de host"
 msgid "Relay port"
 msgstr "Puerto de relé"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:112./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:113
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:125./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:126
 msgid "SMTP Hostname"
 msgstr "Nombre de host SMTP"
 
@@ -3047,7 +3067,7 @@ msgstr "Certificado SSL"
 msgid "Self signed certificate"
 msgstr "Certificado auto firmado"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:170
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:183
 #: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:111
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:21./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_form_fields.tpl:17
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:49
@@ -3055,11 +3075,11 @@ msgstr "Certificado auto firmado"
 msgid "Send"
 msgstr "Enviar"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:157
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:170
 msgid "Send a test email"
 msgstr "Envíe un correo electrónico de prueba"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:161
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:174
 msgid "Send a test email or check the status of an email address."
 msgstr "Envíe un correo electrónico de prueba o verifique el estado de una dirección de correo electrónico."
 
@@ -3076,6 +3096,7 @@ msgid "Show log for message"
 msgstr "Mostrar registro para mensaje"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:8
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:14
 msgid "System Configuration"
 msgstr "Configuración de Sistema"
 
@@ -3091,7 +3112,7 @@ msgstr "La configuración del sistema Zotonic está configurada para utilizar un
 msgid "The config key already exists, please choose another key name."
 msgstr "La clave de configuración ya existe, por favor elija otro nombre para la clave."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:125
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:138
 msgid "The default FROM address for emails. Defaults to"
 msgstr "La dirección DE predeterminada para correos electrónicos. Predeterminado a"
 
@@ -3144,12 +3165,12 @@ msgstr "Válido hasta"
 msgid "Value"
 msgstr "Valor"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:172./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:100
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:185./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:100
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 msgid "View email status"
 msgstr "Ver estado de correo electrónico"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:147
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:160
 msgid "You must be an administrator to view or change the email configuration."
 msgstr "Debe ser administrador para ver o cambiar la configuración del correo electrónico."
 
@@ -3157,7 +3178,7 @@ msgstr "Debe ser administrador para ver o cambiar la configuración del correo e
 msgid "Zotonic sends email using a built-in email server. You can send the email via an external relay."
 msgstr "Zotonic envía correo electrónico mediante un servidor de correo electrónico integrado. Puede enviar el correo electrónico a través de un relé externo."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:169
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:182
 msgid "test@example.com"
 msgstr "test@example.com"
 
@@ -3848,7 +3869,7 @@ msgid "Reinstalled the data model."
 msgstr "Reinstalado el modelo de datos."
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_admin_status.tpl:3
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:149
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:187
 msgid "Rescan modules"
 msgstr "Reexaminar módulos"
 
@@ -4677,6 +4698,10 @@ msgstr "Inténtalo de nuevo en {n} minutos."
 msgid "Please try again later."
 msgstr "Por favor Inténtalo más tarde."
 
+#: apps/zotonic_mod_authentication/priv/templates/logon_error/message.user_external.tpl:2
+msgid "Please use a different method to sign in. You can’t sign in using a username and password."
+msgstr ""
+
 #: apps/zotonic_mod_authentication/priv/templates/logon_service.tpl:13
 msgid "Redirecting to"
 msgstr "Redirigiendo a"
@@ -4925,11 +4950,11 @@ msgstr "Copias de seguridad de Administrador"
 msgid "Are you sure you want to revert to this version?"
 msgstr "¿Estas seguro de volver a esta versión?"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:100
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:4
 msgid "At any moment you can make a backup of your system."
 msgstr "En cualquier momento puedes hacer una copia de seguridad de su sistema."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:52
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:3
 msgid "Automatic daily backups of the database and uploaded files can be enabled. This is done at night and the last 7 backups are kept."
 msgstr "Se pueden habilitar copias de seguridad diarias automáticas de la base de datos y de los archivos cargados. Esto se hace por la noche y se guardan las últimas 7 copias de seguridad."
 
@@ -4937,7 +4962,7 @@ msgstr "Se pueden habilitar copias de seguridad diarias automáticas de la base 
 msgid "Back to the edit page"
 msgstr "Regresar a la página de edición"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:92
+#: apps/zotonic_mod_backup/src/mod_backup.erl:94
 msgid "Backup"
 msgstr "Respaldo"
 
@@ -4953,6 +4978,12 @@ msgstr "Opciones de Copia de seguridad y Restauración para su contenido."
 msgid "Backups"
 msgstr "Copias de Seguridad"
 
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:4
+msgid "By default the backup of the database and files are not encrypted. It is\n"
+"        possible to encrypt the backups. This makes it safer to store them on an \n"
+"        external server."
+msgstr ""
+
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:10
 msgid "Changes since"
 msgstr "Cambios desde"
@@ -4965,11 +4996,11 @@ msgstr "Compruebe y posiblemente restaure una versión anterior para su pagina."
 msgid "Click on <b>List and restore an earlier version</b> to get an overview of earlier saved versions of this page.<br/>You can also save the complete contents of a page to a file. Later you can reload this file, replacing the current page contents. Note that the file does not contain your unsaved changes. Connections and media are not saved as well."
 msgstr "Haga click en <b>Lista y restaure a una versión anterior</b> para ver un resumen de las versiones anteriores guardadas en esta página.<br/>También puede guardar todos los contenidos de una página a un archivo. Después puede subir este archivo, reemplazando la página de contenidos actual. Recuerde que el archivo no contiene sus cambios no guardados. Las conexiones y los videos/imágenes tampoco están guardados."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:72
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:23
 msgid "Cloud file store is enabled. Backups of the database are uploaded to the cloud file store. Local files are copied to the cloud and not backed up locally."
 msgstr "El almacén de archivos en la nube está habilitado. Las copias de seguridad de la base de datos se cargan en el almacén de archivos en la nube. Los archivos locales se copian en la nube y no se realizan copias de seguridad localmente."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:136
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:47
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
 msgstr "El almacén de archivos en la nube está habilitado. No se realizará una copia de seguridad de los archivos locales. Asegúrese de que su sistema de almacenamiento de archivos en la nube tenga una copia de seguridad adecuada."
 
@@ -4989,7 +5020,7 @@ msgstr "Eliminado por"
 msgid "Deleted on"
 msgstr "Eliminado el"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:105
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:107
 msgid "Deleted pages"
 msgstr "Páginas eliminadas"
 
@@ -4997,7 +5028,7 @@ msgstr "Páginas eliminadas"
 msgid "Directory"
 msgstr "Directorio"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:57./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:78
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:8./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:29
 msgid "Do not make a daily backup."
 msgstr "No hagas una copia de seguridad diaria."
 
@@ -5009,9 +5040,26 @@ msgstr "Descargar un archivo de respaldo"
 msgid "Enable <tt>mod_export</tt> to download backup files."
 msgstr "Habilite <tt>mod_export</tt> para descargar archivos de respaldo."
 
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:8
+msgid "Encrypt Backups"
+msgstr ""
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:18
+msgid "Encrypted"
+msgstr ""
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:40
+msgid "Encryption is enabled, but there is no encryption password. Please\n"
+"      make sure there is an encryption password in the settings."
+msgstr ""
+
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:13
 msgid "Help about backup &amp; restore"
 msgstr "Ayuda acerca de la copia de seguridad &amp; y restauración"
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:14
+msgid "It can be found in the"
+msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:24
 msgid "List and restore an earlier version"
@@ -5021,25 +5069,33 @@ msgstr "Lista y restauración en la versión anterior"
 msgid "List of recently deleted pages and recover options via the resource revisions log."
 msgstr "Lista de páginas eliminadas recientemente y opciones de recuperación a través del registro de revisiones de recursos."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:65./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:86
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:16./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:37
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "Hacer un respaldo diario de la base de datos y de la carga de archivos."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:61./apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:82
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:12./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:33
 msgid "Make a daily backup of the database."
 msgstr "Realice una copia de seguridad diaria de la base de datos."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:45
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:60
 msgid "No backups present."
 msgstr "No hay copias de seguridad presente."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:36
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:51
 msgid "Not uploaded to filestore"
 msgstr "No subido a la tienda de archivos"
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:13
+msgid "Note:"
+msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:13
 msgid "Only the texts and other properties of pages are backed up."
 msgstr "Solo se respaldan los textos y otras propiedades de las páginas."
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:14
+msgid "Please make sure you store the backup encryption password in a safe <u>external</u> location."
+msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:79
 msgid "Previous"
@@ -5057,7 +5113,7 @@ msgstr "Restaurar la copia de seguridad"
 msgid "Revert to this version..."
 msgstr "Volver a esta versión..."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:45./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:58
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:14./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:58
 msgid "Revisions are kept for {n} months."
 msgstr "Las revisiones se conservan durante {n} meses."
 
@@ -5069,15 +5125,15 @@ msgstr "Revisiones para"
 msgid "Select the backup file you want to upload. The file must be a .bert file."
 msgstr "Seleccione el archivo de respaldo que desea cargar. El archivo debe ser un archivo .bert."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:39
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:8
 msgid "Show import/export panel on the edit pages in the admin."
 msgstr "Mostrar el panel de importación/exportación en las páginas de edición en el administrador."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:79
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:81
 msgid "Sorry, there is no module that can import this."
 msgstr "Lo sentimos, no hay ningún módulo que pueda importar esto."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:86./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:107
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:88./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:107
 msgid "Sorry, there was an error replacing your page."
 msgstr "Lo sentimos, hubo un error al reemplazar su página."
 
@@ -5089,37 +5145,38 @@ msgstr "Lo sentimos, esta copia de seguridad ha sido eliminada."
 msgid "Sorry, this backup is not valid."
 msgstr "Lo sentimos, esta copia de seguridad no es válida."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:81
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:83
 msgid "Sorry, this is not a backup file or it is corrupted."
 msgstr "Lo sentimos, este no es un archivo de copia de seguridad o el archivo está dañado."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:89
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:91
 msgid "Sorry, you don't have permission to change this page."
 msgstr "Lo sentimos, no tiene permitido cambiar esta página."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:122
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:124
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "Lo sentimos, no tiene permitido cambiar la configuración."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:109
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:13
 msgid "Start backup now"
 msgstr "Iniciar copia de seguridad ahora"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:112
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:16
 msgid "Start database-only backup now"
 msgstr "Iniciar ahora solo copia de seguridad de la base de datos"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:123
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:27
 msgid "The \"pg_dump\" command was not found in the path. Set in zotonic.config the \"pg_dump\" config key to the path to <tt>pg_dump</tt> and return to this page."
 msgstr "El comando \"pg_dump\" no se encontró en la ruta. Establezca en zotonic.config la clave de configuración \"pg_dump\" en la ruta a <tt>pg_dump</tt> y regrese a esta página."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:126
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:30
 msgid "The \"tar\" command was not found in the path. Set in zotonic.config the \"tar\" config key to the path to <tt>tar</tt> and return to this page."
 msgstr "El comando \"tar\" no se encontró en la ruta. Configure en zotonic.config la clave de configuración \"tar\" para la ruta a <tt>tar</tt> y regrese a esta página."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:102
-msgid "The backup comprises two parts, the database and the uploaded files."
-msgstr "La copia de seguridad se compone de dos partes, la base de datos y los archivos subidos."
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:6
+msgid "The backup comprises three parts, the database, the configuration,\n"
+"      and the uploaded files."
+msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5./apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:15
 msgid "This is the version saved on"
@@ -5129,21 +5186,21 @@ msgstr "Esta es la versión guardada en"
 msgid "This will overwrite your page with the contents of the backup file."
 msgstr "Esto sobrescribirá su página con el contenido del archivo de la copia de seguridad."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:32
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:47
 msgid "Uploaded to filestore"
 msgstr "Subido a la tienda de archivos"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:119
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:23
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:124
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Warning"
 msgstr "Advertencia"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:35
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:4
 msgid "With the import/export panel you can download a page as a file, see page revisions and restore a previous version."
 msgstr "Con el panel de importación/exportación puede descargar una página como un archivo, ver las revisiones de la página y restaurar una versión anterior."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:26
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:41
 msgid "Y-m-d H:i – l"
 msgstr "Ymd H:i – l"
 
@@ -5155,7 +5212,7 @@ msgstr "No tienes permiso para recuperar esta página."
 msgid "You are not allowed to see the revisions"
 msgstr "No tiene permitido ver las revisiones"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:104
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:8
 msgid "You can have one backup per day of the week, older ones will be overwritten."
 msgstr "Puede tener una copia de seguridad por día de la semana, las más antiguas se sobrescribirán."
 
@@ -5163,15 +5220,15 @@ msgstr "Puede tener una copia de seguridad por día de la semana, las más antig
 msgid "You need to have access rights to the backup module."
 msgstr "Debe tener derechos de acceso al módulo de copia de seguridad."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup.tpl:119
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:23
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "La copia de seguridad no está correctamente configurada. El módulo de copias de seguridad no funcionará hasta que los problemas a continuación hayan sido resueltos:"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:21
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:36
 msgid "download database"
 msgstr "descargar base de datos"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:18
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:27
 msgid "download files"
 msgstr "descargar archivos"
 
@@ -5779,7 +5836,7 @@ msgstr "Todas las declaraciones <tt>{optional}</tt> se refieren a plantillas exi
 msgid "All non-optional <tt>{include}</tt> statements are referring to existing templates."
 msgstr "Todas las declaraciones <tt>{include}</tt> no opcionales se refieren a plantillas existentes."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:122
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:160
 msgid "All templates are checked for missing includes or missing <tt>{ext}</tt> template references."
 msgstr "Todas las plantillas se verifican para ver si faltan inclusiones o <tt>{ext}</tt> referencias de plantilla."
 
@@ -5787,7 +5844,7 @@ msgstr "Todas las plantillas se verifican para ver si faltan inclusiones o <tt>{
 msgid "All templates are compiling."
 msgstr "Todas las plantillas se están compilando."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:125./apps/zotonic_mod_development/priv/templates/admin_development.tpl:141
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:163./apps/zotonic_mod_development/priv/templates/admin_development.tpl:179
 msgid "All templates will be compiled."
 msgstr "Se compilarán todas las plantillas."
 
@@ -5799,11 +5856,11 @@ msgstr "A continuación figura la lista de todas las notificaciones y los observ
 msgid "Bindings"
 msgstr "Enlaces"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:140
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:178
 msgid "Calculate and visualize a dependency graph of all templates."
 msgstr "Calcule y visualice un gráfico de dependencia de todas las plantillas."
 
-#: apps/zotonic_mod_development/src/mod_development.erl:88./apps/zotonic_mod_development/src/mod_development.erl:105
+#: apps/zotonic_mod_development/src/mod_development.erl:86./apps/zotonic_mod_development/src/mod_development.erl:101
 msgid "Checking all templates..."
 msgstr "Comprobando todas las plantillas..."
 
@@ -5843,7 +5900,7 @@ msgstr "No se pudo obtener el resultado del rastreador. Vuelva a intentarlo."
 msgid "Cross-reference check of all templates"
 msgstr "Verificación de referencias cruzadas de todas las plantillas."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:119
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:157
 msgid "Cross-reference check of templates"
 msgstr "Verificación cruzada de plantillas."
 
@@ -5855,7 +5912,7 @@ msgstr "Resultados de la verificación de referencias cruzadas"
 msgid "Dependency graph"
 msgstr "Gráfico de dependencia"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:138
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:176
 msgid "Dependency graph of all available templates"
 msgstr "Gráfico de dependencia de todas las plantillas disponibles."
 
@@ -5871,7 +5928,7 @@ msgstr "Gráfico de dependencia de todas las plantillas. Solo se muestra el uso 
 msgid "Dependency graph of all traced templates. All includes are shown."
 msgstr "Gráfico de dependencia de todas las plantillas rastreadas. Se muestran todos los incluidos."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:537
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:3./apps/zotonic_mod_development/src/mod_development.erl:552
 msgid "Development"
 msgstr "Desarrollo"
 
@@ -5891,7 +5948,7 @@ msgstr "Seguimiento de consultas de base de datos deshabilitado"
 msgid "Dispatch Name"
 msgstr "Nombre de envío"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:162
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:200
 msgid "Dispatch rule debugging"
 msgstr "Depuración de las reglas de envió"
 
@@ -5915,6 +5972,10 @@ msgstr "Habilite el seguimiento de todas las representaciones de plantillas."
 msgid "Enabled database query tracing"
 msgstr "Seguimiento de consultas de base de datos habilitado"
 
+#: apps/zotonic_mod_development/src/mod_development.erl:175
+msgid "Error changing the console logs."
+msgstr ""
+
 #: apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:18
 msgid "Event"
 msgstr "Evento"
@@ -5923,7 +5984,7 @@ msgstr "Evento"
 msgid "Every URL which is reachable in the site is defined with dispatch rules. This page shows all available dispatch rules in this site."
 msgstr "Cada URL a la que se puede acceder en el sitio se define con reglas de envío. Esta página muestra todas las reglas de envío disponibles en este sitio."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:188
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:226
 msgid "Explain"
 msgstr "Explicar"
 
@@ -5935,11 +5996,11 @@ msgstr "Se extiende"
 msgid "Final dispatch"
 msgstr "Envío final"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:111
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:149
 msgid "Find"
 msgstr "Encontrar"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:92
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:130
 msgid "Find a template, check which template will be selected"
 msgstr "Encontrar una plantilla. Comprobar cual plantilla será seleccionada"
 
@@ -5947,7 +6008,7 @@ msgstr "Encontrar una plantilla. Comprobar cual plantilla será seleccionada"
 msgid "For more information see: { url }"
 msgstr "Para más información ver: { url }"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:153
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:191
 msgid "Force a recompilation of all templates. This fixes any issues where the compiled templates might be out of sync with the template index."
 msgstr "Fuerce una recompilación de todas las plantillas. Esto soluciona cualquier problema por el cual las plantillas compiladas puedan no estar sincronizadas con el índice de la plantilla."
 
@@ -5975,7 +6036,7 @@ msgstr "Plantilla incluida"
 msgid "Includes using variable names or expressions are not shown."
 msgstr "Incluye el uso de nombres de variables o expresiones que no se muestran."
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:199
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:237
 msgid "Introspection"
 msgstr "Introspección"
 
@@ -5983,7 +6044,7 @@ msgstr "Introspección"
 msgid "Line"
 msgstr "Línea"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:131
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:169
 msgid "Live dependency graph of templates"
 msgstr "Gráfico de dependencia en vivo de plantillas"
 
@@ -6003,7 +6064,11 @@ msgstr "Cargando..."
 msgid "Location"
 msgstr "Ubicación"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:172
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:118
+msgid "Log in as the admin to enable logging to the javascript console."
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:210
 msgid "Match a request URL, display matched dispatch rule."
 msgstr "Relacione a una petición de URL, mostrar la relaciones de las reglas de envió."
 
@@ -6035,7 +6100,11 @@ msgstr "Sin datos."
 msgid "No matching dispatch rule found"
 msgstr "No se encuentra ninguna relación a las reglas de envió"
 
-#: apps/zotonic_mod_development/src/mod_development.erl:93./apps/zotonic_mod_development/src/mod_development.erl:110./apps/zotonic_mod_development/src/mod_development.erl:125./apps/zotonic_mod_development/src/mod_development.erl:133./apps/zotonic_mod_development/src/mod_development.erl:160
+#: apps/zotonic_mod_development/src/mod_development.erl:173
+msgid "No permission to access the console logs."
+msgstr ""
+
+#: apps/zotonic_mod_development/src/mod_development.erl:91./apps/zotonic_mod_development/src/mod_development.erl:106./apps/zotonic_mod_development/src/mod_development.erl:121./apps/zotonic_mod_development/src/mod_development.erl:129./apps/zotonic_mod_development/src/mod_development.erl:156
 msgid "No permission to use mod_development."
 msgstr "No hay permiso para usar mod_development."
 
@@ -6047,7 +6116,7 @@ msgstr "No encontrado"
 msgid "Observers"
 msgstr "Observadores"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:101
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:139
 msgid "Optional category for catinclude"
 msgstr "Categoría opcional para catinclude"
 
@@ -6055,7 +6124,7 @@ msgstr "Categoría opcional para catinclude"
 msgid "Permanent redirect"
 msgstr "Redirección permanente"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:146
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:184
 msgid "Recompile templates"
 msgstr "Recompilar plantillas"
 
@@ -6071,7 +6140,11 @@ msgstr "Actualizar"
 msgid "Rerun graph"
 msgstr "Volver a ejecutar el gráfico"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:205
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:88
+msgid "Set the class <tt>environment-development</tt> on the <tt>&lt;html&gt;</tt> element of your pages to see the server log in the browser console.<br>In development, admin pages always show the server log in the javascript console."
+msgstr ""
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:243
 msgid "Show an overview of all observers"
 msgstr "Mostrar una descripción general de todos los observadores."
 
@@ -6079,13 +6152,17 @@ msgstr "Mostrar una descripción general de todos los observadores."
 msgid "Show defined blocks in generated templates"
 msgstr "Mostrar bloques definidos en plantillas generadas"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:202
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:240
 msgid "Show internals of Zotonic and the modules"
 msgstr "Mostrar los interiores de Zotonic y los módulos"
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:24
 msgid "Show paths to included template files in generated templates"
 msgstr "Mostrar rutas a archivos de plantilla incluidos en las plantillas generadas"
+
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:93
+msgid "Show server log in the browser console"
+msgstr ""
 
 #: apps/zotonic_mod_development/priv/templates/admin_development.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_observers.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:7./apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:31./apps/zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:7
 msgid "Site Development"
@@ -6103,11 +6180,15 @@ msgstr "Nombre del sitio"
 msgid "Start matching dispatch rules"
 msgstr "Empieza a emparejar las reglas de envío"
 
-#: apps/zotonic_mod_development/src/mod_development.erl:122
+#: apps/zotonic_mod_development/src/mod_development.erl:169
+msgid "Started logging to the console of your browser tab."
+msgstr ""
+
+#: apps/zotonic_mod_development/src/mod_development.erl:118
 msgid "Started tracing all template inclusions."
 msgstr "Comenzó a rastrear todas las inclusiones de plantillas."
 
-#: apps/zotonic_mod_development/src/mod_development.erl:119
+#: apps/zotonic_mod_development/src/mod_development.erl:115
 msgid "Started tracing template inclusions for your session."
 msgstr "Comenzó a rastrear las inclusiones de plantillas para su sesión."
 
@@ -6116,7 +6197,11 @@ msgstr "Comenzó a rastrear las inclusiones de plantillas para su sesión."
 msgid "Stop"
 msgstr "Alto"
 
-#: apps/zotonic_mod_development/src/mod_development.erl:131
+#: apps/zotonic_mod_development/src/mod_development.erl:171
+msgid "Stopped logging to the console of all browser tabs."
+msgstr ""
+
+#: apps/zotonic_mod_development/src/mod_development.erl:127
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr "Se detuvieron las inclusiones de plantillas de seguimiento para todas las sesiones."
 
@@ -6141,7 +6226,7 @@ msgstr "Errores de sintaxis"
 msgid "Template"
 msgstr "Modelo"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:89
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:127
 msgid "Template debugging"
 msgstr "Depuración de plantilla"
 
@@ -6185,7 +6270,7 @@ msgstr "Las herramientas y opciones que son útiles para el desarrollo del sitio
 msgid "Trace all database queries for the current session"
 msgstr "Rastrear todas las consultas a la base de datos del actual período de sesiones"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:133
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:171
 msgid "Traces all templates for the current session-id, or all sessions, and renders them as a graph."
 msgstr "Rastrea todas las plantillas para el ID de sesión actual, o todas las sesiones, y las representa como un gráfico."
 
@@ -6217,11 +6302,11 @@ msgstr "Tipo de {include}"
 msgid "URI Pattern"
 msgstr "Patrón URI"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:166./apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:8
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:204./apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:8
 msgid "View all dispatch rules"
 msgstr "Ver todas las reglas de envío"
 
-#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:168
+#: apps/zotonic_mod_development/priv/templates/admin_development.tpl:206
 msgid "View all dispatch rules and hostnames usable in the site."
 msgstr "Vea todas las reglas de envío y nombres de host que se pueden utilizar en el sitio."
 
@@ -7225,7 +7310,7 @@ msgstr "Reiniciar"
 msgid "Debug"
 msgstr "Depurar"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log_base.tpl:12./apps/zotonic_mod_logging/src/mod_logging.erl:107
+#: apps/zotonic_mod_logging/priv/templates/admin_log_base.tpl:12./apps/zotonic_mod_logging/src/mod_logging.erl:135
 msgid "Email log"
 msgstr "Registro de correo electrónico"
 
@@ -7248,7 +7333,7 @@ msgstr "Grave"
 msgid "Identities"
 msgstr "Identidades"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log_base.tpl:3./apps/zotonic_mod_logging/src/mod_logging.erl:102
+#: apps/zotonic_mod_logging/priv/templates/admin_log_base.tpl:3./apps/zotonic_mod_logging/src/mod_logging.erl:130
 msgid "Log"
 msgstr "Registro"
 
@@ -7351,7 +7436,7 @@ msgstr "Usuario"
 msgid "User Id"
 msgstr "Id del usuario"
 
-#: apps/zotonic_mod_logging/priv/templates/admin_log_base.tpl:13./apps/zotonic_mod_logging/src/mod_logging.erl:112
+#: apps/zotonic_mod_logging/priv/templates/admin_log_base.tpl:13./apps/zotonic_mod_logging/src/mod_logging.erl:140
 msgid "User interface log"
 msgstr "Registro de la interfaz de usuario"
 
@@ -7620,7 +7705,7 @@ msgstr "Listas de correo"
 msgid "Mailing list"
 msgstr "Lista de correo"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:610
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:5./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:7./apps/zotonic_mod_mailinglist/src/mod_mailinglist.erl:607
 msgid "Mailing lists"
 msgstr "Listas de correo"
 
@@ -9627,10 +9712,6 @@ msgstr "Peligro"
 msgid "Deactivated"
 msgstr "Desactivado"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:36
-msgid "Dead end. Remove Next button. No questions will be submitted unless you add a button jump to a next page."
-msgstr "Callejón sin salida. Eliminar el botón Siguiente. No se enviarán preguntas a menos que agregue un botón para saltar a la página siguiente."
-
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:37
 msgid "Default"
 msgstr "Por defecto"
@@ -10018,6 +10099,10 @@ msgstr "Aleatorizar las respuestas"
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:86
 msgid "Red"
 msgstr "Rojo"
+
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:36
+msgid "Remove \"Next\" button. No answers will be submitted unless you add a button jump to a next page."
+msgstr ""
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:40./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:52./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:167./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:55./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:41./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:57
 msgid "Required, this question must be answered."
