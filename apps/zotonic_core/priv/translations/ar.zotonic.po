@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-07-16 14:32\n"
+"PO-Revision-Date: 2024-07-16 15:38\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -195,7 +195,7 @@ msgid "Are you sure you want to restore all ACL rules to their currently publish
 msgstr "هل أنت متأكد أنك تريد استعادة كل قواعد ACL إلى إصدارهم المنشور حالياً؟"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:160./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:78
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:41./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:173./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:77./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:71./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:259./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:301./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:85./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:41./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:174./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:77./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:71./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:259./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:301./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:85./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38./apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:52
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:21
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:92
@@ -242,7 +242,7 @@ msgid "Changed configuration."
 msgstr "التكوين المتغير."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_try.tpl:22
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:41./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:173
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:41./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:174
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:67./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:69
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:76./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:43
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:30
@@ -264,7 +264,7 @@ msgid "Collaboration group members"
 msgstr "أعضاء مجموعات التعاون"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:546
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:122
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:123
 msgid "Collaboration groups"
 msgstr "مجموعات التعاون"
 
@@ -293,7 +293,7 @@ msgid "Content group"
 msgstr "مجموعة محتوى"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_collab_select.tpl:16
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:130
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:131
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:197
 msgid "Content groups"
 msgstr "مجموعات المحتوى"
@@ -908,12 +908,12 @@ msgstr "و يمكن أيضا عرض الوسائط على صفحتهم الخا�
 msgid "And {n} more."
 msgstr "و {n} المزيد."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:95
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:96
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:14
 msgid "Any category"
 msgstr "أي فئة"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:119
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:120
 msgid "Anybody’s"
 msgstr "أي شخص"
 
@@ -1686,7 +1686,7 @@ msgstr "ذاكرة"
 msgid "Middle"
 msgstr "الأوسط"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:120
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:121
 msgid "Mine"
 msgstr "الخاص بي"
 
@@ -1808,7 +1808,7 @@ msgstr "لا يوجد وسط"
 msgid "No other pages found"
 msgstr "لم يتم العثور على صفحات أخرى"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_loop.tpl:16./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_loop.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:153./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:48
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_loop.tpl:20./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_loop.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:153./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:48
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find_results_loop.tpl:10
 msgid "No pages found."
 msgstr "لم يتم العثور على صفحات."
@@ -2107,7 +2107,7 @@ msgstr "ابحث في الوسائط الأخرى"
 msgid "Search query"
 msgstr "استعلام بحث"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:77
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:77
 msgid "Search results"
 msgstr "نتائج البحث"
 
@@ -2171,6 +2171,10 @@ msgstr "عرض الصفحة على مسارات متعددة"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:18
 msgid "Showing dates in"
 msgstr "عرض التواريخ في"
+
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:4
+msgid "Showing pages you can connect to using <b>{predicate}</b>."
+msgstr "عرض الصفحات التي يمكنك الاتصال بها باستخدام <b>{predicate}</b>."
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:36
 msgid "Site Files Directory"
@@ -2481,7 +2485,7 @@ msgstr "تبديل التصفح"
 msgid "Too many connections, only the first and last are shown."
 msgstr "عدد كبير جدًا من الاتصالات ، يتم عرض الأول والأخير فقط."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:83
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:84
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
 msgid "Type text to search"
 msgstr "اكتب نص للبحث"
@@ -2498,7 +2502,7 @@ msgstr "صفحة فريدة"
 msgid "Unique name"
 msgstr "اسم فريد"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:12
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:20
 msgid "Unique page"
 msgstr "صفحة فريدة من نوعها"
 
@@ -2588,7 +2592,7 @@ msgstr "مستخدم"
 msgid "User page"
 msgstr "مستخدم الصفحة"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:93
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:94
 msgid "Valid for:"
 msgstr "صالح لـ:"
 
@@ -8830,16 +8834,16 @@ msgid "your Embedly app dashboard"
 msgstr "لوحة تحكم تطبيق Embedly"
 
 #: apps/zotonic_mod_ratelimit/priv/templates/_admin_status.tpl:4
-msgid "Reset ratelimit"
-msgstr "إعادة تعيين حد المعدل"
+msgid "Reset rate limit counters"
+msgstr "إعادة ضبط عدادات حد المعدل"
 
 #: apps/zotonic_mod_ratelimit/priv/templates/_admin_status.tpl:8
-msgid "Reset the rate limit administration. Useful when encountering rate limit errors during testing. Be careful to use on production as this enables more password tries."
-msgstr "إعادة ضبط إدارة حد المعدل. مفيد عند مواجهة أخطاء حدود المعدل أثناء الاختبار. كن حذرًا عند الاستخدام في الإنتاج لأن ذلك يتيح المزيد من محاولات كلمة المرور."
+msgid "Reset the authentication attempts counters. Useful when encountering rate limit errors during testing. Be careful as this enables more password tries."
+msgstr "إعادة ضبط عدادات محاولات المصادقة. مفيد عند مواجهة أخطاء حدود المعدل أثناء الاختبار. كن حذرًا لأن هذا يتيح المزيد من محاولات كلمة المرور."
 
 #: apps/zotonic_mod_ratelimit/src/mod_ratelimit.erl:62
-msgid "The rate limit adminstration has been reset."
-msgstr "تمت إعادة تعيين إدارة الحد الأقصى للسعر."
+msgid "The counters have been reset."
+msgstr "تمت إعادة ضبط العدادات."
 
 #: apps/zotonic_mod_ratelimit/src/mod_ratelimit.erl:64
 msgid "You are not allowed to do this."
