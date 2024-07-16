@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-07-16 12:36\n"
+"PO-Revision-Date: 2024-07-16 14:32\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -2921,7 +2921,7 @@ msgstr "Tous les e-mails sont envoyés à"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:116
 msgid "All email is sent to <b>{email}</b>, except for the email addresses and domains defined here."
-msgstr ""
+msgstr "Tous les e-mails sont envoyés à <b>{email}</b>, à l'exception des adresses e-mail et des domaines définis ici."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:8
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:29
@@ -2967,7 +2967,7 @@ msgstr "Remplacement d'e-mail"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:112./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:113
 msgid "E-mail override &ndash; exceptions"
-msgstr ""
+msgstr "Remplacement des e-mails &ndash; exceptions"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:135./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:136
 msgid "Email FROM"
@@ -8828,6 +8828,22 @@ msgstr "Vous n'avez pas la permission de modifier les paramètres d'Intégration
 #: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:9
 msgid "your Embedly app dashboard"
 msgstr "votre tableau de bord intégré de l'application"
+
+#: apps/zotonic_mod_ratelimit/priv/templates/_admin_status.tpl:4
+msgid "Reset ratelimit"
+msgstr ""
+
+#: apps/zotonic_mod_ratelimit/priv/templates/_admin_status.tpl:8
+msgid "Reset the rate limit administration. Useful when encountering rate limit errors during testing. Be careful to use on production as this enables more password tries."
+msgstr ""
+
+#: apps/zotonic_mod_ratelimit/src/mod_ratelimit.erl:62
+msgid "The rate limit adminstration has been reset."
+msgstr ""
+
+#: apps/zotonic_mod_ratelimit/src/mod_ratelimit.erl:64
+msgid "You are not allowed to do this."
+msgstr ""
 
 #: apps/zotonic_mod_search/priv/templates/_admin_status.tpl:8
 msgid "Check the table for the faceted search and fill it by reindexing all pages."
