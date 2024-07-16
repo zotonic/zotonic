@@ -109,6 +109,19 @@
                         {% endif %}
 
                         <div class="form-group label-floating">
+                            <textarea class="form-control" name="site.email_override_exceptions" placeholder="{_ E-mail override exceptions _}">{{ m.config.site.email_override_exceptions.value|escape }}</textarea>
+                            <label class="control-label">{_ E-mail override exceptions _}</label>
+                            <p class="help-block">
+                                {% if m.sysconfig.email_override as email %}
+                                    {% trans "All email is sent to <b>{email}</b> except for the email addresses and domains defined here." email=email %}
+                                {% else %}
+                                    {_ If (and only if) there is an e-mail override address defined above, then all e-mail is sent to that address <em>except</em> for the e-mail addresses and domains defined here. _}
+                                {% endif %}
+                                {_ Add email domains using <tt>@example.com</tt> and complete email addresses. Separate multiple entries using whitespace, semicolons or commas. _}
+                            </p>
+                        </div>
+
+                        <div class="form-group label-floating">
                             <input type="text" class="form-control" name="site.smtphost" value="{{ m.config.site.smtphost.value|escape }}" placeholder="{_ SMTP Hostname _}">
                             <label class="control-label">{_ SMTP Hostname _}</label>
                             <p class="help-block">
