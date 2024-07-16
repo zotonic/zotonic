@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-07-16 10:35\n"
+"PO-Revision-Date: 2024-07-16 12:36\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -2920,8 +2920,8 @@ msgid "All email is sent to"
 msgstr "อีเมลทั้งหมดจะถูกส่งไปที่"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:116
-msgid "All email is sent to <b>{email}</b> except for the email addresses and domains defined here."
-msgstr "อีเมลทั้งหมดจะถูกส่งไปยัง <b>{email}</b> ยกเว้นที่อยู่อีเมลและโดเมนที่กำหนดไว้ที่นี่"
+msgid "All email is sent to <b>{email}</b>, except for the email addresses and domains defined here."
+msgstr "อีเมลทั้งหมดจะถูกส่งไปยัง <b>{email}</b>ยกเว้นที่อยู่อีเมลและโดเมนที่กำหนดไว้ที่นี่"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:8
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:29
@@ -2966,8 +2966,8 @@ msgid "E-mail override"
 msgstr "ลบล้างอีเมล"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:112./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:113
-msgid "E-mail override exceptions"
-msgstr "ข้อยกเว้นการแทนที่อีเมล"
+msgid "E-mail override &ndash; exceptions"
+msgstr "ข้อยกเว้นอีเมลแทนที่ &ndash;"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:135./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:136
 msgid "Email FROM"
