@@ -3,6 +3,8 @@
     This template is rendered by the zotonic.auth-ui.worker.js
 #}
 
+{% block logon_box %}
+
 {% with q.error == 'passcode' or q.error == 'need_passcode' as is_show_passcode %}
 {% with q.error == 'set_passcode' or q.error == 'set_passcode_error' as is_set_passcode %}
 
@@ -147,4 +149,6 @@
 
 {% endwith %}
 {% endwith %}
+
+{% endblock %}
 
