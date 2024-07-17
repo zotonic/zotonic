@@ -253,11 +253,16 @@ m_get(_Vs, _Msg, _Context) ->
 filter_idn(undefined) ->
     undefined;
 filter_idn(Idn) ->
+    Type = proplists:get_value(type, Idn),
+    Key = case binary:match(Type, <<"_secret">>) of
+        nomatch -> proplists:get_value(key, Idn);
+        _ -> undefined
+    end,
     [
         {id, proplists:get_value(id, Idn)},
         {rsc_id, proplists:get_value(rsc_id, Idn)},
-        {type, proplists:get_value(type, Idn)},
-        {key, proplists:get_value(key, Idn)},
+        {type, Type},
+        {key, Key},
         {is_verified, proplists:get_value(is_verified, Idn)},
         {is_unique, proplists:get_value(is_unique, Idn)},
         {modified, proplists:get_value(modified, Idn)},
