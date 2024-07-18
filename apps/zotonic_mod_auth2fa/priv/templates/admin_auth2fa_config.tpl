@@ -73,7 +73,7 @@
                 <h3>{_ User group configuration _}</h3>
 
                 <p>{_ It is possible to force two-factor authentication for a specific user group, regardless of the setting above. _}</p>
-                <p>{_ Check the user groups for which two-factor authentication should be forced. _} {_ This is done by showing the two-factor setup dialog on every page load. _}</p>
+                <p>{_ Check the user groups for which two-factor authentication should be forced. _}</p>
 
                 <ul class="list-unstyled">
                     {% for cg in m.hierarchy.acl_user_group.tree_flat %}
@@ -81,7 +81,7 @@
                         <li>
                             <label class="checkbox-inline">
                                 {{ cg.indent }}
-                                <input type="checkbox" id="{{ #cg.cg_id }}" {% if cg_id.acl_2fa %}checked{% endif %} value="2" {% if not cg_id.is_editable %}disabled{% endif %}>
+                                <input type="checkbox" id="{{ #cg.cg_id }}" {% if cg_id.acl_2fa %}checked{% endif %} value="3" {% if not cg_id.is_editable %}disabled{% endif %}>
                                 {{ cg_id.title }}
                             </label>
                             {% wire id=#cg.cg_id

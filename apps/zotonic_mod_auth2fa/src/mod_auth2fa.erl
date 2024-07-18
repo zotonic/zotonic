@@ -36,11 +36,13 @@
 
 %% @doc Change the 2FA setting for the user group
 event(#postback{ message={auth2fa_ug, Args} }, Context) ->
-    case z_acl:is_allowed(use, mod_admin_config, Context) of
+    {id, Id} = proplists:lookup(id, Args),
+    case z_acl:is_allowed(use, mod_admin_config, Context)
+        andalso z_acl:rsc_editable(Id, Context)
+    of
         true ->
-            {id, Id} = proplists:lookup(id, Args),
-            TV = z_convert:to_binary( z_context:get_q(triggervalue, Context) ),
-            {ok, _} = m_rsc:update(Id, [ {acl_2fa, TV} ], Context),
+            TV = z_convert:to_binary( z_context:get_q(<<"triggervalue">>, Context) ),
+            {ok, _} = m_rsc:update(Id, #{ <<"acl_2fa">> => TV }, Context),
             z_render:growl(?__("Changed the 2FA setting.", Context), Context);
         false ->
             z_render:growl(?__("Sorry, you are not allowed to change the 2FA settings.", Context), Context)
