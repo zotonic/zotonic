@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-07-16 15:39\n"
+"PO-Revision-Date: 2024-07-18 07:35\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -204,7 +204,7 @@ msgstr "Sind Sie sicher, dass Sie alle ACL-Regeln in ihrer aktuell veröffentlic
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:31./apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:14
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:15
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:65./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:33
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:118./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:28./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:66./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:137./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:120./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:28./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:66./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:137./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:36./apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
@@ -4176,7 +4176,7 @@ msgstr "Spur"
 msgid "2FA"
 msgstr "2FA"
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:107./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:149
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:109./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:151
 msgid "Add two-factor authentication"
 msgstr "Zwei-Faktor-Authentifizierung hinzufügen"
 
@@ -4196,7 +4196,7 @@ msgstr "Fragen Sie nach der Anmeldung"
 msgid "Ask on every page"
 msgstr "Auf jeder Seite fragen"
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:44
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:46
 msgid "Changed the 2FA setting."
 msgstr "Die 2FA-Einstellung wurde geändert."
 
@@ -4253,7 +4253,7 @@ msgstr "Bei jedem Seitenaufruf erscheint ein Dialog zum Einstellen der Zwei-Fakt
 msgid "On the first page load a dialog appears for setting the two-factor authentication."
 msgstr "Beim ersten Seitenaufruf erscheint ein Dialog zum Einrichten der Zwei-Faktor-Authentifizierung."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:31./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:53./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:68
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:31./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:55./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:70
 msgid "Only the admin can change the two-factor authentication of the admin."
 msgstr "Nur der Admin kann die Zwei-Faktor-Authentifizierung des Admins ändern."
 
@@ -4277,7 +4277,7 @@ msgstr "Von Ihrer App generierter Passcode"
 msgid "Please enter the current two-factor authentication code to remove the two-factor authentication from this account."
 msgstr "Bitte geben Sie den aktuellen Zwei-Faktor-Authentifizierungscode ein, um die Zwei-Faktor-Authentifizierung von diesem Konto zu entfernen."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:34./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:56
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:34./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:58
 msgid "Remove two-factor authentication"
 msgstr "Zwei-Faktor-Authentifizierung entfernen"
 
@@ -4297,19 +4297,19 @@ msgstr "Scannen Sie den QR-Code der Zwei-Faktor-Authentifizierung mit einer App 
 msgid "Set passcode"
 msgstr "Passcode festlegen"
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:46
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:48
 msgid "Sorry, you are not allowed to change the 2FA settings."
 msgstr "Sorry, Sie dürfen die 2FA-Einstellungen nicht ändern."
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:61./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:89
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:63./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:91
 msgid "Sorry, you are not allowed to remove the 2FA."
 msgstr "Sorry, Sie dürfen die 2FA-Einstellungen nicht ändern."
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:135
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:137
 msgid "Sorry, you are not allowed to set the 2FA."
 msgstr "Es ist Ihnen leider nicht gestattet, die 2FA einzurichten."
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:128
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:130
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:170
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:40
 msgid "Success"
@@ -4332,11 +4332,7 @@ msgstr "Der Passcode für die Zwei-Faktor-Authentifizierung ist nicht korrekt. B
 msgid "The user will be prompted to set the two-factor authentication before being allowed to log in."
 msgstr "Der Benutzer wird aufgefordert, die Zwei-Faktor-Authentifizierung einzurichten, bevor er sich anmelden darf."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:76
-msgid "This is done by showing the two-factor setup dialog on every page load."
-msgstr "Dies geschieht dadurch, dass bei jedem Seitenaufruf der Dialog zur Zwei-Faktor-Einrichtung angezeigt wird."
-
-#: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:6./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:161
+#: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:6./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:163
 msgid "Two-factor authentication"
 msgstr "Zwei-Faktor-Authentifizierung"
 
@@ -4348,7 +4344,7 @@ msgstr "Die Zwei-Faktor-Authentifizierung fügt eine zusätzliche Überprüfung 
 msgid "Two-factor authentication configuration"
 msgstr "Konfiguration der Zwei-Faktor-Authentifizierung"
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:129
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:131
 msgid "Two-factor authentication has been enabled for your account."
 msgstr "Für Ihr Konto wurde die Zwei-Faktor-Authentifizierung aktiviert."
 
@@ -4422,7 +4418,7 @@ msgstr "Die Authentifizierung erfolgte mit"
 msgid "Authorizing..."
 msgstr "Autorisierend..."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:94./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:116./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/_logon_reset_support.tpl:3
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:96./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:118./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/_logon_reset_support.tpl:3
 msgid "Back to login"
 msgstr "Zurück zur Anmeldung"
 
@@ -4443,11 +4439,11 @@ msgstr "Ändern Sie Ihr Passwort"
 msgid "Change your permissions"
 msgstr "Ändern Sie Ihre Berechtigungen"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:91./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:107
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:93./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:109
 msgid "Check your email"
 msgstr "Prüfen Sie Ihre E-Mail"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:54
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:56
 msgid "Checking the reset code…"
 msgstr "Prüfen des Reset-Codes…"
 
@@ -4465,7 +4461,7 @@ msgstr "Schließen Sie dieses Fenster und melden Sie sich an, wenn Sie bereits B
 msgid "Confirm"
 msgstr "Bestätigen"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:124
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:126
 msgid "Confirm to connect"
 msgstr "Bestätigen Sie, um eine Verbindung herzustellen"
 
@@ -4558,15 +4554,15 @@ msgstr "Zurückgehen"
 msgid "Go to Modules"
 msgstr "Zu den Modulen gehen"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:44./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:84./apps/zotonic_mod_authentication/priv/templates/logon.tpl:49
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:46./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:86./apps/zotonic_mod_authentication/priv/templates/logon.tpl:49
 msgid "Go to the admin"
 msgstr "Gehen Sie zum Admin"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:35./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:75./apps/zotonic_mod_authentication/priv/templates/logon.tpl:40
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:77./apps/zotonic_mod_authentication/priv/templates/logon.tpl:40
 msgid "Go to the home page"
 msgstr "Zur Startseite"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:39./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:79./apps/zotonic_mod_authentication/priv/templates/logon.tpl:44
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:41./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:81./apps/zotonic_mod_authentication/priv/templates/logon.tpl:44
 msgid "Go to the your profile page"
 msgstr "Gehen Sie auf die Seite Ihres Profils"
 
@@ -4594,7 +4590,7 @@ msgstr "Ich möchte ein neues Konto erstellen"
 msgid "If you are already a user of {site} then <a href=\"{logon_url}\">log on</a>."
 msgstr "Wenn Sie bereits Benutzer von {site} sind, dann <a href=\"{logon_url}\">melden Sie sich an</a>."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:93./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:109
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:95./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:111
 msgid "If you do not receive the email within a few minutes, please check your spam folder."
 msgstr "Wenn Sie die E-Mail nicht innerhalb weniger Minuten erhalten, überprüfen Sie bitte Ihren Spam-Ordner."
 
@@ -4606,7 +4602,7 @@ msgstr "Wenn Sie Ihr Passwort nicht zurücksetzen möchten, können Sie diese E-
 msgid "If you think you do have an account, please try again using the correct email address."
 msgstr "Wenn Sie glauben, dass Sie über ein Konto verfügen, versuchen Sie es bitte erneut mit der richtigen E-Mail-Adresse."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:108
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:110
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr "In der E-Mail finden Sie Anweisungen, wie Sie Ihr Konto bestätigen können."
 
@@ -4622,7 +4618,7 @@ msgstr "Anmeldung"
 msgid "Log in to"
 msgstr "Einloggen in"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:125
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:127
 msgid "Log in with your existing {site} account to connect the accounts. You only have to do this once."
 msgstr "Melden Sie sich mit Ihrem bestehenden {site} Konto an, um die Konten zu verbinden. Sie müssen dies nur einmal tun."
 
@@ -4723,11 +4719,11 @@ msgstr "Passwort wiederholen"
 msgid "Reset password and log in"
 msgstr "Passwort zurücksetzen und anmelden"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:51./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:1./apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:11
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:53./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:1./apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:11
 msgid "Reset your password"
 msgstr "Ihr Passwort zurücksetzen"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:102
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:104
 msgid "Send Verification Message"
 msgstr "Verifizierungsnachricht senden"
 
@@ -4743,7 +4739,7 @@ msgstr "Jemand anderes ist bereits mit diesem Konto auf {service}verbunden."
 msgid "Something went wrong, please try again later."
 msgstr "Da ist wohl etwas schiefgegangen!. Bitte versuchen Sie es später erneut."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:113
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:115
 msgid "Sorry, could not send the verification message."
 msgstr "Sorry, konnte die Bestätigungsnachricht nicht senden."
 
@@ -4817,7 +4813,7 @@ msgstr "Verwenden Sie: Großbuchstaben, Kleinbuchstaben, Zahlen und Symbole."
 msgid "Use non alphabetical characters, digits and upper/lower case letters to make it harder to guess."
 msgstr "Verwenden Sie nicht alphabetische Zeichen, Ziffern und Groß-/Kleinbuchstaben, um das Erraten zu erschweren."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:98
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:100
 msgid "Verify your account"
 msgstr "Bestätigen Sie Ihr Konto"
 
@@ -4825,11 +4821,11 @@ msgstr "Bestätigen Sie Ihr Konto"
 msgid "We cannot connect you to the right account. Contact support of {site} to help you merge the accounts and then try again."
 msgstr "Wir können Sie nicht mit dem richtigen Konto verbinden. Wenden Sie sich an den Support von {site} , um Ihnen beim Zusammenführen der Konten zu helfen, und versuchen Sie es dann erneut."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:114
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:116
 msgid "We don’t seem to have any valid email address or other electronic communication address of you."
 msgstr "Wir scheinen keine gültige E-Mail Adresse oder andere elektronische Kommunikationsadresse von Ihnen zu haben."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:92
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:94
 msgid "We have sent an email with a link to reset your password to"
 msgstr "Wir haben eine E-Mail mit einem Link zum Zurücksetzen Ihres Kennworts gesendet an"
 
@@ -4845,7 +4841,7 @@ msgstr "Sie sind dabei, sich anzumelden."
 msgid "You are logged in"
 msgstr "Du bist eingeloggt"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:71
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:73
 msgid "You are now logged in."
 msgstr "Sie sind jetzt eingeloggt."
 
@@ -4881,7 +4877,7 @@ msgstr "Sie haben diese E-Mail erhalten, als Sie Ihren Benutzernamen oder Ihre E
 msgid "You used another account on {service} than was expected."
 msgstr "Sie haben ein anderes Konto auf {service} als erwartet verwendet."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:99
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:101
 msgid "You're almost done! To make sure you are really you, we ask you to confirm your account from your email address."
 msgstr "Sie sind fast fertig! Um sicherzustellen, dass Sie wirklich Sie sind, bitten wir Sie, Ihr Konto von Ihrer E-Mail-Adresse zu bestätigen."
 
@@ -4905,11 +4901,11 @@ msgstr "Ihre E-Mail"
 msgid "Your email or username"
 msgstr "Ihre E-Mail oder Ihr Benutzername"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:31
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:33
 msgid "Your password has been changed"
 msgstr "Ihr Passwort wurde geändert"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:69
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:71
 msgid "Your password has been reset"
 msgstr "Ihr Passwort wurde zurückgesetzt"
 
@@ -9396,13 +9392,21 @@ msgstr "aktualisieren"
 msgid "Certificate Authority"
 msgstr "Zertifizierungsstelle"
 
-#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:15
+#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:24
+msgid "The certificate files should be in a subdirectory with the name of the current site and have specific names or extensions:"
+msgstr "Die Zertifikatsdateien sollten sich in einem Unterverzeichnis mit dem Namen der aktuellen Site befinden und bestimmte Namen oder Erweiterungen haben:"
+
+#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:16
 msgid "This certificate is located in"
 msgstr "Dieses Zertifikat befindet sich in"
 
 #: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:9
 msgid "This certificate is provided by a certificate authority."
 msgstr "Dieses Zertifikat wird von einer Zertifizierungsstelle bereitgestellt."
+
+#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:20
+msgid "You can add certificates to your security directory:"
+msgstr "Sie können Ihrem Sicherheitsverzeichnis Zertifikate hinzufügen:"
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:46
 msgid "Certificates are automatically renewed before they expire."

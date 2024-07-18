@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-07-16 15:39\n"
+"PO-Revision-Date: 2024-07-18 07:35\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -204,7 +204,7 @@ msgstr "Ви впевнені, що хочете відновити всі пр�
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:31./apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:14
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:15
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:65./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:33
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:118./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:28./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:66./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:137./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:120./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:28./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:66./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:137./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:36./apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
@@ -4176,7 +4176,7 @@ msgstr "Трек"
 msgid "2FA"
 msgstr "2FA"
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:107./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:149
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:109./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:151
 msgid "Add two-factor authentication"
 msgstr "Додайте двофакторну аутентифікацію"
 
@@ -4196,7 +4196,7 @@ msgstr "Запитувати після входу"
 msgid "Ask on every page"
 msgstr "Запитуйте на кожній сторінці"
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:44
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:46
 msgid "Changed the 2FA setting."
 msgstr "Змінено налаштування 2FA."
 
@@ -4253,7 +4253,7 @@ msgstr "Під час кожного завантаження сторінки �
 msgid "On the first page load a dialog appears for setting the two-factor authentication."
 msgstr "Під час завантаження першої сторінки з'являється діалогове вікно для налаштування двофакторної аутентифікації."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:31./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:53./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:68
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:31./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:55./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:70
 msgid "Only the admin can change the two-factor authentication of the admin."
 msgstr "Тільки адміністратор може змінити двофакторну автентифікацію адміністратора."
 
@@ -4277,7 +4277,7 @@ msgstr "Пароль, створений вашим додатком"
 msgid "Please enter the current two-factor authentication code to remove the two-factor authentication from this account."
 msgstr "Введіть поточний код двофакторної автентифікації, щоб видалити двофакторну автентифікацію з цього облікового запису."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:34./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:56
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:34./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:58
 msgid "Remove two-factor authentication"
 msgstr "Видалити двофакторну аутентифікацію"
 
@@ -4297,19 +4297,19 @@ msgstr "Відскануйте QR-код двофакторної автенти
 msgid "Set passcode"
 msgstr "Встановіть пароль"
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:46
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:48
 msgid "Sorry, you are not allowed to change the 2FA settings."
 msgstr "На жаль, вам заборонено змінювати налаштування 2FA."
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:61./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:89
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:63./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:91
 msgid "Sorry, you are not allowed to remove the 2FA."
 msgstr "На жаль, Вам заборонено видалити 2FA."
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:135
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:137
 msgid "Sorry, you are not allowed to set the 2FA."
 msgstr "На жаль, вам не дозволено налаштовувати 2FA."
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:128
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:130
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:170
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:40
 msgid "Success"
@@ -4332,11 +4332,7 @@ msgstr "Пароль двофакторної автентифікації не�
 msgid "The user will be prompted to set the two-factor authentication before being allowed to log in."
 msgstr "Користувачеві буде запропоновано встановити двофакторну автентифікацію, перш ніж отримати дозвіл на вхід."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:76
-msgid "This is done by showing the two-factor setup dialog on every page load."
-msgstr "Це робиться шляхом показу діалогового вікна двофакторного налаштування під час кожного завантаження сторінки."
-
-#: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:6./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:161
+#: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:6./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:163
 msgid "Two-factor authentication"
 msgstr "Двофакторна аутентифікація"
 
@@ -4348,7 +4344,7 @@ msgstr "Двофакторна автентифікація додає дода�
 msgid "Two-factor authentication configuration"
 msgstr "Конфігурація двофакторної аутентифікації"
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:129
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:131
 msgid "Two-factor authentication has been enabled for your account."
 msgstr "Для вашого облікового запису ввімкнено двофакторну автентифікацію."
 
@@ -4422,7 +4418,7 @@ msgstr "Аутентифікацію виконано з"
 msgid "Authorizing..."
 msgstr "Авторизація..."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:94./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:116./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/_logon_reset_support.tpl:3
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:96./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:118./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/_logon_reset_support.tpl:3
 msgid "Back to login"
 msgstr "Назад до входу"
 
@@ -4443,11 +4439,11 @@ msgstr "Змінити пароль"
 msgid "Change your permissions"
 msgstr "Змініть свої дозволи"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:91./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:107
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:93./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:109
 msgid "Check your email"
 msgstr "Перевірити свою електронну пошту"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:54
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:56
 msgid "Checking the reset code…"
 msgstr "Перевірка коду скидання…"
 
@@ -4465,7 +4461,7 @@ msgstr "Закрийте це вікно та увійдіть, якщо ви в
 msgid "Confirm"
 msgstr "Підтвердьте"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:124
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:126
 msgid "Confirm to connect"
 msgstr "Підтвердьте підключення"
 
@@ -4558,15 +4554,15 @@ msgstr "Перейдіть назад"
 msgid "Go to Modules"
 msgstr "Перейдіть до модулів"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:44./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:84./apps/zotonic_mod_authentication/priv/templates/logon.tpl:49
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:46./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:86./apps/zotonic_mod_authentication/priv/templates/logon.tpl:49
 msgid "Go to the admin"
 msgstr "Перейдіть до адміністратора"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:35./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:75./apps/zotonic_mod_authentication/priv/templates/logon.tpl:40
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:77./apps/zotonic_mod_authentication/priv/templates/logon.tpl:40
 msgid "Go to the home page"
 msgstr "Перейдіть на домашню сторінку"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:39./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:79./apps/zotonic_mod_authentication/priv/templates/logon.tpl:44
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:41./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:81./apps/zotonic_mod_authentication/priv/templates/logon.tpl:44
 msgid "Go to the your profile page"
 msgstr "Перейдіть на сторінку вашого профілю"
 
@@ -4594,7 +4590,7 @@ msgstr "Я хочу створити новий обліковий запис"
 msgid "If you are already a user of {site} then <a href=\"{logon_url}\">log on</a>."
 msgstr "Якщо ви вже є користувачем {site} , тоді <a href=\"{logon_url}\">увійдіть</a>."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:93./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:109
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:95./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:111
 msgid "If you do not receive the email within a few minutes, please check your spam folder."
 msgstr "Якщо Ви не отримаєте листа протягом кількох хвилин, перевірте папку зі спамом."
 
@@ -4606,7 +4602,7 @@ msgstr "Якщо ви не хочете скидати свій пароль, в
 msgid "If you think you do have an account, please try again using the correct email address."
 msgstr "Якщо ви вважаєте, що у вас є обліковий запис, спробуйте ще раз, використовуючи правильну адресу електронної пошти."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:108
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:110
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr "У електронному листі Ви знайдете інструкції щодо підтвердження облікового запису."
 
@@ -4622,7 +4618,7 @@ msgstr "авторизуватися"
 msgid "Log in to"
 msgstr "Увійти в"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:125
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:127
 msgid "Log in with your existing {site} account to connect the accounts. You only have to do this once."
 msgstr "Увійдіть за допомогою наявного облікового запису {site} , щоб підключити облікові записи. Ви повинні зробити це лише один раз."
 
@@ -4723,11 +4719,11 @@ msgstr "Повторіть пароль"
 msgid "Reset password and log in"
 msgstr "Скинути пароль і увійти"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:51./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:1./apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:11
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:53./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:1./apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:11
 msgid "Reset your password"
 msgstr "Скинути пароль"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:102
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:104
 msgid "Send Verification Message"
 msgstr "Надіслати повідомлення про підтвердження"
 
@@ -4743,7 +4739,7 @@ msgstr "Хтось інший уже підключений до цього об
 msgid "Something went wrong, please try again later."
 msgstr "Сталася помилка. Спробуйте пізніше."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:113
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:115
 msgid "Sorry, could not send the verification message."
 msgstr "На жаль, не вдалося надіслати повідомлення для підтвердження."
 
@@ -4817,7 +4813,7 @@ msgstr "Використовуйте: велику літеру, малу літ
 msgid "Use non alphabetical characters, digits and upper/lower case letters to make it harder to guess."
 msgstr "Використовуйте неалфавітні символи, цифри та великі/малі літери, щоб важче було вгадати."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:98
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:100
 msgid "Verify your account"
 msgstr "Підтвердіть ваш аккаунт"
 
@@ -4825,11 +4821,11 @@ msgstr "Підтвердіть ваш аккаунт"
 msgid "We cannot connect you to the right account. Contact support of {site} to help you merge the accounts and then try again."
 msgstr "Ми не можемо підключити вас до потрібного облікового запису. Зверніться до служби підтримки {site} , щоб допомогти вам об’єднати облікові записи, а потім повторіть спробу."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:114
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:116
 msgid "We don’t seem to have any valid email address or other electronic communication address of you."
 msgstr "Здається, у нас немає дійсної адреси електронної пошти чи іншої електронної адреси для зв’язку з Вами."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:92
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:94
 msgid "We have sent an email with a link to reset your password to"
 msgstr "Ми надіслали електронний лист із посиланням для відновлення пароля"
 
@@ -4845,7 +4841,7 @@ msgstr "Ви збираєтесь увійти."
 msgid "You are logged in"
 msgstr "Ви увійшли в систему"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:71
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:73
 msgid "You are now logged in."
 msgstr "Ви увійшли в систему."
 
@@ -4881,7 +4877,7 @@ msgstr "Ви отримали цей електронний лист, коли �
 msgid "You used another account on {service} than was expected."
 msgstr "Ви використовували інший обліковий запис на {service} , ніж очікувалося."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:99
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:101
 msgid "You're almost done! To make sure you are really you, we ask you to confirm your account from your email address."
 msgstr "Ви майже закінчили! Щоб переконатися, що Ви справді Ви, ми просимо вас підтвердити свій обліковий запис зі своєї електронної адреси."
 
@@ -4905,11 +4901,11 @@ msgstr "Ваша електронна адреса"
 msgid "Your email or username"
 msgstr "Ваша електронна адреса або ім’я користувача"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:31
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:33
 msgid "Your password has been changed"
 msgstr "Ваш пароль був змінений"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:69
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:71
 msgid "Your password has been reset"
 msgstr "Ваш пароль скинуто"
 
@@ -9400,13 +9396,21 @@ msgstr "оновлення"
 msgid "Certificate Authority"
 msgstr "Центр сертифікації"
 
-#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:15
+#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:24
+msgid "The certificate files should be in a subdirectory with the name of the current site and have specific names or extensions:"
+msgstr "Файли сертифікатів мають бути у підкаталозі з назвою поточного сайту та мати певні назви чи розширення:"
+
+#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:16
 msgid "This certificate is located in"
 msgstr "Цей сертифікат знаходиться в"
 
 #: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:9
 msgid "This certificate is provided by a certificate authority."
 msgstr "Цей сертифікат надається центром сертифікації."
+
+#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:20
+msgid "You can add certificates to your security directory:"
+msgstr "Ви можете додати сертифікати до свого каталогу безпеки:"
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:46
 msgid "Certificates are automatically renewed before they expire."

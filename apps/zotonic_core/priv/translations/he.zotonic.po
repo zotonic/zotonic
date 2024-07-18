@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-07-16 15:39\n"
+"PO-Revision-Date: 2024-07-18 07:35\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -204,7 +204,7 @@ msgstr "האם אתה בטוח שברצונך להחזיר את כל כללי ה
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:31./apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:14
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:15
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:65./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:33
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:118./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:28./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:66./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:137./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:120./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:28./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:66./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:137./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:36./apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
@@ -4176,7 +4176,7 @@ msgstr "מַסלוּל"
 msgid "2FA"
 msgstr "2FA"
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:107./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:149
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:109./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:151
 msgid "Add two-factor authentication"
 msgstr "הוסף אימות דו-גורמי"
 
@@ -4196,7 +4196,7 @@ msgstr "שאל לאחר התחברות"
 msgid "Ask on every page"
 msgstr "שאל בכל עמוד"
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:44
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:46
 msgid "Changed the 2FA setting."
 msgstr "שינתה את הגדרת 2FA."
 
@@ -4253,7 +4253,7 @@ msgstr "בכל טעינת עמוד מופיעה תיבת דו-שיח להגדר�
 msgid "On the first page load a dialog appears for setting the two-factor authentication."
 msgstr "בטעינת העמוד הראשון מופיעה תיבת דו-שיח להגדרת אימות דו-גורמי."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:31./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:53./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:68
+#: apps/zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:31./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:55./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:70
 msgid "Only the admin can change the two-factor authentication of the admin."
 msgstr "רק מנהל המערכת יכול לשנות את האימות הדו-גורמי של מנהל המערכת."
 
@@ -4277,7 +4277,7 @@ msgstr "קוד גישה שנוצר על ידי האפליקציה שלך"
 msgid "Please enter the current two-factor authentication code to remove the two-factor authentication from this account."
 msgstr "אנא הזן את קוד האימות הדו-גורמי הנוכחי כדי להסיר את האימות הדו-גורמי מחשבון זה."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:34./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:56
+#: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:34./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:58
 msgid "Remove two-factor authentication"
 msgstr "הסר אימות דו-גורמי"
 
@@ -4297,19 +4297,19 @@ msgstr "סרוק את קוד ה- QR לאימות דו-גורמי באמצעות 
 msgid "Set passcode"
 msgstr "הגדר קוד גישה"
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:46
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:48
 msgid "Sorry, you are not allowed to change the 2FA settings."
 msgstr "מצטערים, אינך רשאי לשנות את הגדרות 2FA."
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:61./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:89
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:63./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:91
 msgid "Sorry, you are not allowed to remove the 2FA."
 msgstr "מצטערים, אינך מורשה להסיר את ה- 2FA."
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:135
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:137
 msgid "Sorry, you are not allowed to set the 2FA."
 msgstr "מצטערים, אינך רשאי להגדיר את 2FA."
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:128
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:130
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:170
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:40
 msgid "Success"
@@ -4332,11 +4332,7 @@ msgstr "קוד האימות דו-גורמי אינו נכון. בבקשה נסה
 msgid "The user will be prompted to set the two-factor authentication before being allowed to log in."
 msgstr "המשתמש יתבקש להגדיר את האימות הדו-שלבי לפני שיורשה להתחבר."
 
-#: apps/zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:76
-msgid "This is done by showing the two-factor setup dialog on every page load."
-msgstr "זה נעשה על ידי הצגת תיבת הדו-גורמי ההגדרה בכל טעינת עמוד."
-
-#: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:6./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:161
+#: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:6./apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:163
 msgid "Two-factor authentication"
 msgstr "אימות דו-גורמי"
 
@@ -4348,7 +4344,7 @@ msgstr "אימות דו-שלבי מוסיף בדיקה נוספת בכניסה. 
 msgid "Two-factor authentication configuration"
 msgstr "תצורת אימות דו-גורמית"
 
-#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:129
+#: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:131
 msgid "Two-factor authentication has been enabled for your account."
 msgstr "אימות דו-שלבי הופעל עבור חשבונך."
 
@@ -4422,7 +4418,7 @@ msgstr "אימות נעשה עם"
 msgid "Authorizing..."
 msgstr "מאשר ..."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:94./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:116./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/_logon_reset_support.tpl:3
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:96./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:118./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_support.tpl:3./apps/zotonic_mod_authentication/priv/templates/_logon_reset_support.tpl:3
 msgid "Back to login"
 msgstr "חזרה לכניסה"
 
@@ -4443,11 +4439,11 @@ msgstr "שנה את סיסמתך"
 msgid "Change your permissions"
 msgstr "שנה את ההרשאות שלך"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:91./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:107
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:93./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:109
 msgid "Check your email"
 msgstr "לבדוק את הדואר האלקטרוני שלך"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:54
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:56
 msgid "Checking the reset code…"
 msgstr "בודק את קוד האיפוס…"
 
@@ -4465,7 +4461,7 @@ msgstr "סגור חלון זה והיכנס אם אתה כבר משתמש של {
 msgid "Confirm"
 msgstr "לְאַשֵׁר"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:124
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:126
 msgid "Confirm to connect"
 msgstr "אשר כדי להתחבר"
 
@@ -4558,15 +4554,15 @@ msgstr "תחזור"
 msgid "Go to Modules"
 msgstr "עבור אל מודולים"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:44./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:84./apps/zotonic_mod_authentication/priv/templates/logon.tpl:49
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:46./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:86./apps/zotonic_mod_authentication/priv/templates/logon.tpl:49
 msgid "Go to the admin"
 msgstr "עבור למנהל"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:35./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:75./apps/zotonic_mod_authentication/priv/templates/logon.tpl:40
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:77./apps/zotonic_mod_authentication/priv/templates/logon.tpl:40
 msgid "Go to the home page"
 msgstr "עבור לדף הבית"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:39./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:79./apps/zotonic_mod_authentication/priv/templates/logon.tpl:44
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:41./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:81./apps/zotonic_mod_authentication/priv/templates/logon.tpl:44
 msgid "Go to the your profile page"
 msgstr "עבור לדף הפרופיל שלך"
 
@@ -4594,7 +4590,7 @@ msgstr "אני רוצה ליצור חשבון חדש"
 msgid "If you are already a user of {site} then <a href=\"{logon_url}\">log on</a>."
 msgstr "אם אתה כבר משתמש של {site} אז <a href=\"{logon_url}\">התחבר</a>."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:93./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:109
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:95./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:111
 msgid "If you do not receive the email within a few minutes, please check your spam folder."
 msgstr "אם אינך מקבל את הדוא\"ל תוך מספר דקות, אנא בדוק את תיקיית הספאם שלך."
 
@@ -4606,7 +4602,7 @@ msgstr "אם אינך רוצה לאפס את הסיסמה שלך, תוכל לה�
 msgid "If you think you do have an account, please try again using the correct email address."
 msgstr "אם אתה חושב שיש לך חשבון, אנא נסה שוב באמצעות כתובת הדוא\"ל הנכונה."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:108
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:110
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr "בהודעת הדוא\"ל תמצאו הוראות כיצד לאשר את חשבונכם."
 
@@ -4622,7 +4618,7 @@ msgstr "התחברות"
 msgid "Log in to"
 msgstr "היכנס ל"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:125
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:127
 msgid "Log in with your existing {site} account to connect the accounts. You only have to do this once."
 msgstr "התחבר עם חשבון {site} הקיים שלך כדי לחבר את החשבונות. אתה צריך לעשות זאת רק פעם אחת."
 
@@ -4723,11 +4719,11 @@ msgstr "חזור על הסיסמה"
 msgid "Reset password and log in"
 msgstr "אפס את הסיסמה והיכנס"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:51./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:1./apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:11
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:53./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_title.tpl:1./apps/zotonic_mod_authentication/priv/templates/_logon_reset_title.tpl:11
 msgid "Reset your password"
 msgstr "לאפס את הסיסמה שלך"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:102
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:104
 msgid "Send Verification Message"
 msgstr "שלח הודעת אימות"
 
@@ -4743,7 +4739,7 @@ msgstr "מישהו אחר כבר מחובר לחשבון הזה ב {service}."
 msgid "Something went wrong, please try again later."
 msgstr "משהו השתבש, נסה שוב מאוחר יותר."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:113
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:115
 msgid "Sorry, could not send the verification message."
 msgstr "מצטערים, לא הצלחנו לשלוח את הודעת האימות."
 
@@ -4817,7 +4813,7 @@ msgstr "השתמש ב: אות גדולה, אות קטנה, מספר וסמל."
 msgid "Use non alphabetical characters, digits and upper/lower case letters to make it harder to guess."
 msgstr "השתמש בתווים שאינם אלפביתיים, ספרות ואותיות גדולות/קטנות כדי להקשות על הניחוש."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:98
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:100
 msgid "Verify your account"
 msgstr "אמת את חשבונך"
 
@@ -4825,11 +4821,11 @@ msgstr "אמת את חשבונך"
 msgid "We cannot connect you to the right account. Contact support of {site} to help you merge the accounts and then try again."
 msgstr "אנחנו לא יכולים לחבר אותך לחשבון הנכון. צור קשר עם התמיכה של {site} כדי לעזור לך למזג את החשבונות ולאחר מכן נסה שוב."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:114
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:116
 msgid "We don’t seem to have any valid email address or other electronic communication address of you."
 msgstr "נראה שאין לנו כתובת דוא\"ל תקפה או כתובת תקשורת אלקטרונית אחרת שלך."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:92
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:94
 msgid "We have sent an email with a link to reset your password to"
 msgstr "שלחנו אימייל עם קישור לאיפוס הסיסמה שלך"
 
@@ -4845,7 +4841,7 @@ msgstr "אתה עומד להיכנס."
 msgid "You are logged in"
 msgstr "אתה מחובר"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:71
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:73
 msgid "You are now logged in."
 msgstr "אתה מחובר כעת."
 
@@ -4881,7 +4877,7 @@ msgstr "קיבלת דוא\"ל זה כשהזנת את שם המשתמש או כת
 msgid "You used another account on {service} than was expected."
 msgstr "השתמשת בחשבון אחר ב {service} מהצפוי."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:99
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:101
 msgid "You're almost done! To make sure you are really you, we ask you to confirm your account from your email address."
 msgstr "כמעט סיימת! כדי לוודא שאתה באמת אתה, אנו מבקשים ממך לאשר את חשבונך מכתובת הדוא\"ל שלך."
 
@@ -4905,11 +4901,11 @@ msgstr "האימייל שלך"
 msgid "Your email or username"
 msgstr "הדוא\"ל או שם המשתמש שלך"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:31
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:33
 msgid "Your password has been changed"
 msgstr "סיסמתך שונתה"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:69
+#: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:71
 msgid "Your password has been reset"
 msgstr "הסיסמה שלך אופסה"
 
@@ -9400,13 +9396,21 @@ msgstr "עדכון"
 msgid "Certificate Authority"
 msgstr "רשות האישורים"
 
-#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:15
+#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:24
+msgid "The certificate files should be in a subdirectory with the name of the current site and have specific names or extensions:"
+msgstr "קבצי האישור צריכים להיות בתיקיית משנה עם שם האתר הנוכחי ובעלי שמות או הרחבות ספציפיים:"
+
+#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:16
 msgid "This certificate is located in"
 msgstr "אישור זה נמצא ב"
 
 #: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:9
 msgid "This certificate is provided by a certificate authority."
 msgstr "אישור זה ניתן על ידי רשות אישורים."
+
+#: apps/zotonic_mod_ssl_ca/priv/templates/_admin_config_ssl_panel.mod_ssl_ca.tpl:20
+msgid "You can add certificates to your security directory:"
+msgstr "אתה יכול להוסיף אישורים לספריית האבטחה שלך:"
 
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:46
 msgid "Certificates are automatically renewed before they expire."
