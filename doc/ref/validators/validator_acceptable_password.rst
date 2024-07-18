@@ -18,9 +18,9 @@ The password will be sent to the server when the user leaves the password field.
 
 The server will then check for:
 
- * minimum password length, as configured in ``mod_admin_identity.password_min_length`` (defaults to 8)
- * matching a regular expression with criteria, as configured in ``mod_admin_identity.password_min_length``
- * check if the password does not appear in a leak, unless ``mod_admin_identity.password_disable_leak_check`` is set (this uses the service at `Have I Been Pwned <https://haveibeenpwned.com/Passwords>`_)
+ * minimum password length, as configured in ``mod_authentication.password_min_length`` (defaults to 8)
+ * matching a regular expression with criteria, as configured in ``mod_authentication.password_min_length``
+ * check if the password does not appear in a leak, unless ``mod_authentication.password_disable_leak_check`` is set (this uses the service at `Have I Been Pwned <https://haveibeenpwned.com/Passwords>`_)
 
 You can pass a ``failure_message``::
 
