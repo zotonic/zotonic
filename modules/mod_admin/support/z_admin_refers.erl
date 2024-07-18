@@ -85,9 +85,30 @@ ensure_refers(Id, Context) ->
 
 find_ids(undefined, _RscCols, _Context) ->
     [];
-find_ids(Rsc, RscCols, Context) ->
+find_ids(Rsc, RscCols, Context) when is_list(Rsc) ->
     Ids = lists:foldl(
-        fun({K, V}, Acc) ->
+        fun
+            ({K, V}, Acc) ->
+                case lists:member(K, RscCols) of
+                    true ->
+                        % Table level references, ignore for programmatic
+                        % reference tracking.
+                        Acc;
+                    false ->
+                        case ids(K, V, Context) of
+                            [] -> Acc;
+                            VIds -> [ VIds | Acc ]
+                        end
+                end;
+            (_, Acc) ->
+                Acc
+        end,
+        [],
+        Rsc),
+    lists:usort(lists:flatten(Ids));
+find_ids(Rsc, RscCols, Context) when is_map(Rsc) ->
+    Ids = maps:foldl(
+        fun(K, V, Acc) ->
             case lists:member(K, RscCols) of
                 true ->
                     % Table level references, ignore for programmatic
