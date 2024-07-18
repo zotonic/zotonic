@@ -220,15 +220,16 @@ video_convert_1(QueuePath, Orientation, Mime) ->
                                          " ",
                                          z_filelib:os_filename(TmpFile)
                                         ]),
-
-                        ?LOG_DEBUG(#{
-                            text => <<"Video convert">>,
+                        ?LOG_INFO(#{
                             in => zotonic_mod_video,
-                            command => FfmpegCmd
+                            text => <<"Video convert starting">>,
+                            command => FfmpegCmd,
+                            filename => unicode:characters_to_binary(QueuePath)
                         }),
                         RunOptions = #{
                             timeout => ?FFMPEG_TIMEOUT
                         },
+                        StartTimestamp = z_datetime:timestamp(),
                         case z_exec:run(FfmpegCmd, RunOptions) of
                             {ok, Stdout} ->
                                 case filelib:file_size(TmpFile) of
@@ -244,6 +245,12 @@ video_convert_1(QueuePath, Orientation, Mime) ->
                                         }),
                                         {error, convert};
                                     _ ->
+                                        ?LOG_INFO(#{
+                                            in => zotonic_mod_video,
+                                            text => <<"Video convert done">>,
+                                            filename => unicode:characters_to_binary(QueuePath),
+                                            duration => z_datetime:timestamp() - StartTimestamp
+                                        }),
                                         {ok, TmpFile}
                                 end;
                             {error, Reason} ->
