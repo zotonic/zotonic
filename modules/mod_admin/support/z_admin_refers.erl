@@ -107,7 +107,7 @@ find_ids(Rsc, RscCols, Context) when is_list(Rsc) ->
         Rsc),
     lists:usort(lists:flatten(Ids));
 find_ids(Rsc, RscCols, Context) when is_map(Rsc) ->
-    Ids = maps:foldl(
+    Ids = maps:fold(
         fun(K, V, Acc) ->
             case lists:member(K, RscCols) of
                 true ->
