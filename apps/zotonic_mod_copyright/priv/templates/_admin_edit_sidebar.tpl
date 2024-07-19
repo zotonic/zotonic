@@ -12,7 +12,10 @@
 
 {% block widget_content %}
 
-<p>{_ The license and the attribution of this page. _}<br>{_ <b>NB</b> connected pages and images have their own rights. _}</p>
+<p>
+    {_ The license and the attribution of this page. _}<br>
+    {_ <b>NB</b> connected pages and images have their own rights. _}
+</p>
 
 <div class="form-group">
     <label class="control-label">{_ License _}</label>
@@ -22,14 +25,14 @@
         <option value="PD">{_ Public Domain _}</option>
         <optgroup label="Creative Commons">
             {% for lic in m.copyright.list.creative_commons %}
-                <option value="{{ lic.url }}" {% if lic.name == id.rights %}selected{% endif %}>
+                <option value="{{ lic.name }}" {% if lic.name == id.rights %}selected{% endif %}>
                     {{ lic.title }}
                 </option>
             {% endfor %}
         </optgroup>
         <optgroup label="Rights Statements">
             {% for lic in m.copyright.list.rights_statements %}
-                <option value="{{ lic.url }}" {% if lic.name == id.rights %}selected{% endif %}>
+                <option value="{{ lic.name }}" {% if lic.name == id.rights %}selected{% endif %}>
                     {{ lic.title }}
                 </option>
             {% endfor %}

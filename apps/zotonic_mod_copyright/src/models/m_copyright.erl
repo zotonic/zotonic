@@ -16,7 +16,6 @@
 
 -define(DEFAULT_RIGHTS, <<"CR">>).
 
-
 m_get([ <<"list">>, <<"creative_commons">> | Rest ], _Msg, _Context) ->
     {ok, {list_creative_commons(), Rest}};
 m_get([ <<"list">>, <<"rights_statements">> | Rest ], _Msg, _Context) ->
@@ -60,6 +59,10 @@ lookup_1(Name, [ H | T ]) ->
 lookup_2(_Name, []) ->
     undefined;
 lookup_2(Name, [ #{ <<"name">> := N } = H | _T ]) when Name =:= N ->
+    H;
+lookup_2(<<"http:", _/binary>> = Name, [ #{ <<"url">> := Url } = H | _T ]) when Name =:= Url ->
+    H;
+lookup_2(<<"https:", _/binary>> = Name, [ #{ <<"url">> := Url } = H | _T ]) when Name =:= Url ->
     H;
 lookup_2(Name, [ _ | T ]) ->
     lookup_2(Name, T).
