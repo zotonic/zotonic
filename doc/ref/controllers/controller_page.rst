@@ -68,7 +68,7 @@ The following options can be given to the dispatch rule:
 |is_canonical         |Whether this URL should be considered|{is_canonical, false}   |
 |                     |the caninical URL of the page. If so,|                        |
 |                     |the controller will redirect to the  |                        |
-|                     |sc's page path if set. Defaults to   |                        |
+|                     |rsc's page path if set. Defaults to  |                        |
 |                     |true.                                |                        |
 +---------------------+-------------------------------------+------------------------+
 |seo_noindex          |Ask crawlers to not index this page. |seo_noindex             |

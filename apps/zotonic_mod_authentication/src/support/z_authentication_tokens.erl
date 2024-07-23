@@ -278,7 +278,10 @@ req_autologon_cookie(Context) ->
                     case z_auth:logon(UserId, Context) of
                         {ok, Context1} ->
                             ReplayToken = z_replay_token:new_token(),
-                            Context2 = set_auth_cookie(UserId, #{}, ReplayToken, Context1),
+                            Options = #{
+                                auth_method => <<"autologon_cookie">>
+                            },
+                            Context2 = set_auth_cookie(UserId, Options, ReplayToken, Context1),
                             z_context:set(auth_is_autologon, true, Context2);
                         {error, _} ->
                             reset_autologon_cookie(Context)

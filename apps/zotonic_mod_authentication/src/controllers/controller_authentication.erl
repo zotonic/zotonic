@@ -124,7 +124,10 @@ logon_1({ok, UserId}, Payload, Context) when is_integer(UserId) ->
             log_logon(UserId, Payload, Context),
             % - (set cookie in handlers - like device-id) --> needs notification
             Options = z_context:get(auth_options, Context, #{}),
-            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options, Context1),
+            Options1 = Options#{
+                auth_method => <<"username_pw">>
+            },
+            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options1, Context1),
             Context3 = maybe_setautologon(Payload, Context2),
             maybe_auth_connect(maps:get(<<"authuser">>, Payload, undefined), Context3),
             return_status(Payload, Context3);
@@ -312,7 +315,9 @@ switch_user(#{ <<"user_id">> := UserId } = Payload, Context) when is_integer(Use
                 ],
                 Context),
             Options2 = AuthOptions#{
-                sudo_user_id => SudoUserId
+                sudo_user_id => SudoUserId,
+                sudo_auth_method => maps:get(AuthOptions, auth_method, undefined),
+                auth_method => <<"sudo">>
             },
             Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options2, undefined, Context1),
             return_status(Payload, Context2);
@@ -421,8 +426,11 @@ change_1(UserId, Username, Password, NewPassword, Passcode, Context) ->
                         ok ->
                             delete_reminder_secret(UserId, Context),
                             Options = z_context:get(auth_options, Context, #{}),
+                            Options1 = Options#{
+                                auth_method => <<"username_pw">>
+                            },
                             Context1 = z_acl:logon(UserId, Context),
-                            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options, Context1),
+                            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options1, Context1),
                             { #{ status => ok }, Context2 };
                         {error, Reason} ->
                             { #{ status => error, error => Reason }, Context }

@@ -37,6 +37,7 @@
 
     mode/1,
     user_mode/1,
+    session_mode/1,
 
     new_totp_image_url/1,
     new_totp_image_url/2,
@@ -94,6 +95,8 @@ m_get([ <<"mode">> | Rest ], _Msg, Context) ->
     {ok, {mode(Context), Rest}};
 m_get([ <<"user_mode">> | Rest ], _Msg, Context) ->
     {ok, {user_mode(Context), Rest}};
+m_get([ <<"session_mode">> | Rest ], _Msg, Context) ->
+    {ok, {session_mode(Context), Rest}};
 m_get([ <<"clock_check">> ], #{ payload := #{ <<"timestamp">> := Timestamp } }, _Context) ->
     {ok, {clock_check(z_convert:to_integer(Timestamp)), []}};
 m_get([ <<"clock_check">>, Timestamp | Rest ], _Msg, _Context) ->
@@ -166,6 +169,25 @@ mode(Context) ->
         2 -> 2;
         1 -> 1;
         _ -> 0
+    end.
+
+%% @doc Check the totp mode for the current session of the user. Only if the
+%% session is authenticated using username_pw we will enforce the 2FA code.
+%% 0 = optional, 1 = ask, 2 = required, 3 = forced
+-spec session_mode( z:context() ) -> 0 | 1 | 2 | 3.
+session_mode(Context) ->
+    case auth_method(Context) of
+        <<"username_pw">> -> user_mode(Context);
+        <<"autologon_cookie">> -> user_mode(Context);
+        _ -> 0
+    end.
+
+auth_method(Context) ->
+    case z_context:get(auth_options, Context, #{}) of
+        Options when is_map(Options) ->
+            maps:get(auth_method, Options, undefined);
+        _ ->
+            undefined
     end.
 
 %% @doc Check the totp mode for the current user:
