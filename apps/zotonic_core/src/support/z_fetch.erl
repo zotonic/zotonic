@@ -249,7 +249,7 @@ add_options(Method, Url, Options, Context) ->
                     options = Options2
                 }, Context)
             of
-                undefined -> Options1;
+                undefined -> Options2;
                 ExtOptions when is_list(ExtOptions) -> ExtOptions
             end;
         _ ->
