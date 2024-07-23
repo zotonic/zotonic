@@ -316,7 +316,7 @@ switch_user(#{ <<"user_id">> := UserId } = Payload, Context) when is_integer(Use
                 Context),
             Options2 = AuthOptions#{
                 sudo_user_id => SudoUserId,
-                sudo_auth_method => maps:get(AuthOptions, auth_method, undefined),
+                sudo_auth_method => maps:get(auth_method, AuthOptions, undefined),
                 auth_method => <<"sudo">>
             },
             Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options2, undefined, Context1),
