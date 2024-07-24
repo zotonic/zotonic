@@ -38,34 +38,36 @@
                 <label class="control-label" for="{{ #upload_file }}">{_ Media file _}</label>
             </div>
 
-            {% if intent != 'update' %}
-                {% if subject_id or is_zmedia or is_zlink %}
-                    {% if m.admin.rsc_dialog_hide_dependent and not m.acl.is_admin %}
-                        <input type="hidden" name="is_dependent" value="{% if dependent %}1{% endif %}">
-                    {% else %}
-                        <div class="form-group form__is_dependent">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" id="{{ #dependent }}" name="is_dependent" value="1" {% if dependent %}checked{% endif %}>
-                                    {_ Delete if not connected anymore _}
-                                </label>
+            {% block rsc_props %}
+                {% if intent != 'update' %}
+                    {% if subject_id or is_zmedia or is_zlink %}
+                        {% if m.admin.rsc_dialog_hide_dependent and not m.acl.is_admin %}
+                            <input type="hidden" name="is_dependent" value="{% if dependent %}1{% endif %}">
+                        {% else %}
+                            <div class="form-group form__is_dependent">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="{{ #dependent }}" name="is_dependent" value="1" {% if dependent %}checked{% endif %}>
+                                        {_ Delete if not connected anymore _}
+                                    </label>
+                                </div>
                             </div>
-                        </div>
+                        {% endif %}
                     {% endif %}
+
+                    <div class="form-group form__is_published">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" id="{{ #published }}" name="is_published" value="1"
+                                    {% if subject_id or m.admin.rsc_dialog_is_published %}checked{% endif %}>
+                                {_ Published _}
+                            </label>
+                        </div>
+                    </div>
                 {% endif %}
 
-                <div class="form-group form__is_published">
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" id="{{ #published }}" name="is_published" value="1"
-                                {% if subject_id or m.admin.rsc_dialog_is_published %}checked{% endif %}>
-                            {_ Published _}
-                        </label>
-                    </div>
-                </div>
-            {% endif %}
-
-            {% include "_edit_medium_language.tpl" %}
+                {% include "_edit_medium_language.tpl" %}
+            {% endblock %}
 
             <div class="modal-footer">
                 {% button class="btn btn-default" action={dialog_close} text=_"Cancel" %}
