@@ -1807,10 +1807,10 @@ lookup_users_by_type_and_key(Type, Key, Context) ->
         "select usr.*
          from identity tp, identity usr
          where tp.rsc_id = usr.rsc_id
-           and usr.type in ('username_pw', 'openid')
+           and usr.type = any($3)
            and tp.type = $1
            and tp.key = $2",
-        [Type, Key1],
+        [Type, Key1, user_types(Context)],
         Context).
 
 -spec lookup_users_by_verified_type_and_key(type(), key(), z:context()) -> list( identity() ).
@@ -1820,11 +1820,11 @@ lookup_users_by_verified_type_and_key(Type, Key, Context) ->
         "select usr.*
          from identity tp, identity usr
          where tp.rsc_id = usr.rsc_id
-           and usr.type in ('username_pw', 'openid')
+           and usr.type = any($3)
            and tp.type = $1
            and tp.key = $2
-           and tp.is_verified",
-        [Type, Key1],
+           and tp.is_verified = true",
+        [Type, Key1, user_types(Context)],
         Context).
 
 -spec lookup_by_verify_key(key(), z:context()) -> identity() | undefined.
