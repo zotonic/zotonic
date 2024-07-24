@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-07-24 17:33\n"
+"PO-Revision-Date: 2024-07-24 18:28\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -2967,11 +2967,11 @@ msgstr "Télécharger des images dans les e-mails après avoir ouvert le message
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:103./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:104
 msgid "E-mail intercept"
-msgstr ""
+msgstr "Interception d'e-mails"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:112./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:113
 msgid "E-mail intercept &ndash; exceptions"
-msgstr ""
+msgstr "Interception des e-mails &ndash; exceptions"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:135./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:136
 msgid "Email FROM"
@@ -3001,7 +3001,7 @@ msgstr "Nom d'hôte"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:118
 msgid "If (and only if) there is an e-mail intercept address defined above, then all e-mail is sent to that address <em>except</em> for the e-mail addresses and domains defined here."
-msgstr ""
+msgstr "Si (et seulement si) il existe une adresse d'interception d'e-mail définie ci-dessus, alors tous les e-mails sont envoyés à cette adresse <em>à l'exception de</em> pour les adresses e-mail et les domaines définis ici."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:130
 msgid "If you change this then you might need to request a new SSL certificate that includes this hostname."
@@ -9650,7 +9650,7 @@ msgstr "Bouton"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:51
 msgid "Button preview"
-msgstr ""
+msgstr "Aperçu du bouton"
 
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:35
 msgid "Button style"
