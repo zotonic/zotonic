@@ -43,6 +43,7 @@
 
     encode_onetime_token/2,
     encode_onetime_token/3,
+    encode_onetime_token/4,
     decode_onetime_token/2,
 
     session_expires/1,
@@ -352,25 +353,39 @@ encode_onetime_token(UserId, Context) ->
     end.
 
 -spec encode_onetime_token( m_rsc:resource_id(), binary() | undefined, z:context() ) -> {ok, binary()} | {error, no_session}.
-encode_onetime_token(_UserId, undefined, _Context) ->
-    {error, no_session};
 encode_onetime_token(UserId, SId, Context) ->
-    Term = {onetime, UserId, user_secret(UserId, Context), user_autologon_secret(UserId, Context), SId},
+    encode_onetime_token(UserId, SId, #{}, Context).
+
+-spec encode_onetime_token(UserId, SId, AuthOptions, Context) -> {ok, OnetimeToken} | {error, no_session} when
+    UserId :: m_rsc:resource_id(),
+    SId :: binary() | undefined,
+    AuthOptions :: map(),
+    Context :: z:context(),
+    OnetimeToken :: binary().
+encode_onetime_token(_UserId, undefined, _AuthOptions, _Context) ->
+    {error, no_session};
+encode_onetime_token(UserId, SId, AuthOptions, Context) ->
+    Term = {onetime, UserId, user_secret(UserId, Context), user_autologon_secret(UserId, Context), SId, AuthOptions},
     ExpTerm = termit:expiring(Term, ?ONETIME_TOKEN_EXPIRE),
     {ok, termit:encode_base64(ExpTerm, autologon_secret(Context))}.
 
--spec decode_onetime_token( binary(), z:context() ) -> {ok, m_rsc:resource_id()} | {error, term()}.
+-spec decode_onetime_token(OnetimeToken, Context) -> {ok, {UserId, AuthOptions}} | {error, Reason} when
+    OnetimeToken :: binary(),
+    Context :: z:context(),
+    UserId :: m_rsc:resource_id(),
+    AuthOptions :: map(),
+    Reason :: term().
 decode_onetime_token(OnetimeToken, Context) ->
     case termit:decode_base64(OnetimeToken, autologon_secret(Context)) of
         {ok, ExpTerm} ->
             {ok, SId} = z_context:session_id(Context),
             case termit:check_expired(ExpTerm) of
-                {ok, {onetime, UserId, UserSecret, AutoLogonSecret, SId}} ->
+                {ok, {onetime, UserId, UserSecret, AutoLogonSecret, SId, AuthOptions}} ->
                     US = user_secret(UserId, Context),
                     AS = user_autologon_secret(UserId, Context),
                     case {US, AS} of
                         {UserSecret, AutoLogonSecret} when is_binary(UserSecret), is_binary(AutoLogonSecret) ->
-                            {ok, UserId};
+                            {ok, {UserId, AuthOptions}};
                         _ ->
                             {error, user_secret}
                     end;

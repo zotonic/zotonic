@@ -167,7 +167,10 @@ user_data({ok, Auth}, InitialQArgs, SId, Context) ->
             case m_rsc:is_published_date(UserId, Context) of
                 true ->
                     % Generate one time token to login for this user
-                    case z_authentication_tokens:encode_onetime_token(UserId, SId, Context) of
+                    LogonOptions = #{
+                        auth_method => z_convert:to_binary(Auth#auth_validated.service)
+                    },
+                    case z_authentication_tokens:encode_onetime_token(UserId, SId, LogonOptions, Context) of
                         {ok, Token} ->
                             {ok, #{
                                 result => token,

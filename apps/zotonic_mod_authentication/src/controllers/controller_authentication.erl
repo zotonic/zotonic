@@ -115,19 +115,21 @@ handle_cmd(Cmd, _Payload, Context) ->
 
 -spec logon( map(), z:context() ) -> { map(), z:context() }.
 logon(Payload, Context) ->
-    {Result, Context1} = logon_1(z_notifier:first(#logon_submit{ payload = Payload }, Context), Payload, Context),
+    {Result, Context1} = logon_1(z_notifier:first(#logon_submit{ payload = Payload }, Context), Payload, #{}, Context),
     maybe_add_logon_options(Result, Payload, Context1).
 
-logon_1({ok, UserId}, Payload, Context) when is_integer(UserId) ->
+logon_1({ok, UserId}, Payload, AuthOptions, Context) when is_integer(UserId) ->
     case z_auth:logon(UserId, Context) of
         {ok, Context1} ->
             log_logon(UserId, Payload, Context),
             % - (set cookie in handlers - like device-id) --> needs notification
             Options = z_context:get(auth_options, Context, #{}),
-            Options1 = Options#{
-                auth_method => <<"username_pw">>
-            },
-            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options1, Context1),
+            Options1 = maps:merge(Options, AuthOptions),
+            Options2 = case Options1 of
+                #{ auth_method := _ } -> Options1;
+                _ -> Options1#{ auth_method => <<"username_pw">> }
+            end,
+            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options2, Context1),
             Context3 = maybe_setautologon(Payload, Context2),
             maybe_auth_connect(maps:get(<<"authuser">>, Payload, undefined), Context3),
             return_status(Payload, Context3);
@@ -154,7 +156,7 @@ logon_1({ok, UserId}, Payload, Context) when is_integer(UserId) ->
         %     % Hide other error codes, map to generic 'pw' error
         %     { #{ status => error, error => pw }, Context }
     end;
-logon_1({expired, UserId}, _Payload, Context) when is_integer(UserId) ->
+logon_1({expired, UserId}, _Payload, _AuthOptions, Context) when is_integer(UserId) ->
     % The password is expired and needs a reset - this is similar to password reset
     case m_identity:get_username(UserId, Context) of
         undefined ->
@@ -177,19 +179,19 @@ logon_1({expired, UserId}, _Payload, Context) when is_integer(UserId) ->
             Code = m_authentication:set_reminder_secret(UserId, Context),
             { #{ status => error, error => password_expired, username => Username, secret => Code }, Context }
     end;
-logon_1({error, ratelimit}, _Payload, Context) ->
+logon_1({error, ratelimit}, _Payload, _AuthOptions, Context) ->
     { #{ status => error, error => ratelimit }, Context };
-logon_1({error, need_passcode}, _Payload, Context) ->
+logon_1({error, need_passcode}, _Payload, _AuthOptions, Context) ->
     { #{ status => error, error => need_passcode }, Context };
-logon_1({error, set_passcode}, _Payload, Context) ->
+logon_1({error, set_passcode}, _Payload, _AuthOptions, Context) ->
     { #{ status => error, error => set_passcode }, Context };
-logon_1({error, set_passcode_error}, _Payload, Context) ->
+logon_1({error, set_passcode_error}, _Payload, _AuthOptions, Context) ->
     { #{ status => error, error => set_passcode_error }, Context };
-logon_1({error, passcode}, _Payload, Context) ->
+logon_1({error, passcode}, _Payload, _AuthOptions, Context) ->
     { #{ status => error, error => passcode }, Context };
-logon_1({error, user_external}, _Payload, Context) ->
+logon_1({error, user_external}, _Payload, _AuthOptions, Context) ->
     { #{ status => error, error => user_external }, Context };
-logon_1({error, Reason}, _Payload, Context) ->
+logon_1({error, Reason}, _Payload, _AuthOptions, Context) ->
     % Hide other error codes, map to generic 'pw' error
     ?LOG_INFO(#{
         text => <<"Logon attempt of user">>,
@@ -198,7 +200,7 @@ logon_1({error, Reason}, _Payload, Context) ->
         reason => Reason
     }),
     { #{ status => error, error => pw }, Context };
-logon_1(undefined, _Payload, Context) ->
+logon_1(undefined, _Payload, _AuthOptions, Context) ->
     { #{ status => error, error => pw }, Context }.
 
 
@@ -290,8 +292,8 @@ maybe_add_logon_options(#{ status := ok } = Result, _Payload, Context) ->
 -spec onetime_token( map(), z:context() ) -> { map(), z:context() }.
 onetime_token(#{ <<"token">> := Token } = Payload, Context) ->
     case z_authentication_tokens:decode_onetime_token(Token, Context) of
-        {ok, UserId} ->
-            logon_1({ok, UserId}, Payload, Context);
+        {ok, {UserId, AuthOptions}} ->
+            logon_1({ok, UserId}, Payload, AuthOptions, Context);
         {error, _} ->
             { #{ status => error, error => token }, Context }
     end;
@@ -495,7 +497,7 @@ reset(#{
                                         Username ->
                                             case reset_1(UserId, Username, NewPassword, Payload, Context) of
                                                 ok ->
-                                                    logon_1({ok, UserId}, Payload, Context);
+                                                    logon_1({ok, UserId}, Payload, #{}, Context);
                                                 {error, Reason} ->
                                                     { #{ status => error, error => Reason }, Context }
                                             end
