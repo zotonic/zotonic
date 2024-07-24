@@ -176,7 +176,7 @@ mode(Context) ->
 %% 0 = optional, 1 = ask, 2 = required, 3 = forced
 -spec session_mode( z:context() ) -> 0 | 1 | 2 | 3.
 session_mode(Context) ->
-    case auth_method(Context) of
+    case ?DEBUG(auth_method(Context)) of
         <<"username_pw">> -> user_mode(Context);
         <<"autologon_cookie">> -> user_mode(Context);
         _ -> 0
