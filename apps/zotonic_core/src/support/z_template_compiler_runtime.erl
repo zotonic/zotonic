@@ -345,6 +345,7 @@ find_value(Key, #search_result{} = S, _TplVars, _Context) ->
         pages -> S#search_result.pages;
         next -> S#search_result.next;
         prev -> S#search_result.prev;
+        facets -> S#search_result.facets;
         <<"search">> -> {S#search_result.search_name, S#search_result.search_args};
         <<"search_name">> -> S#search_result.search_name;
         <<"search_args">> -> S#search_result.search_args;
@@ -357,6 +358,7 @@ find_value(Key, #search_result{} = S, _TplVars, _Context) ->
         <<"pages">> -> S#search_result.pages;
         <<"next">> -> S#search_result.next;
         <<"prev">> -> S#search_result.prev;
+        <<"facets">> -> S#search_result.facets;
         Nth when is_integer(Nth) ->
             nth(Nth, S#search_result.result);
         Nth when is_binary(Nth) ->
