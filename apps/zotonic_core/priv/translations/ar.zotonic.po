@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-07-18 07:35\n"
+"PO-Revision-Date: 2024-07-24 17:33\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -195,7 +195,7 @@ msgid "Are you sure you want to restore all ACL rules to their currently publish
 msgstr "هل أنت متأكد أنك تريد استعادة كل قواعد ACL إلى إصدارهم المنشور حالياً؟"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:36./apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:50./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:160./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_upload.tpl:78
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:41./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:174./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:77./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:71./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:259./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:301./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:85./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:41./apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:174./apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6./apps/zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:77./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:73./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:259./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:301./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:85./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:28
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:38./apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:52
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:21
 #: apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:88./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:90./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:92
@@ -1179,7 +1179,7 @@ msgstr "تاريخ البدء / الانتهاء"
 msgid "Delete if no other page is connected to this page."
 msgstr "تحذف إذا لم يكن هناك صفحات متصلة بهذه الصفحة."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:50./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:239./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:90
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:51./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:239./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:90
 msgid "Delete if not connected anymore"
 msgstr "احذف إذا لم يعد متصلاً"
 
@@ -1944,7 +1944,7 @@ msgstr "فترة النشر"
 msgid "Publish this page"
 msgstr "انشر هذه الصفحة"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:51./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:62./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:248./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:47./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:102./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:48./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:52./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:21
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:51./apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:63./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:248./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:47./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:102./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:48./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:52./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:17./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:21
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:50
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:44
 msgid "Published"
@@ -2558,7 +2558,7 @@ msgstr "تحميل الملف من جهازك."
 msgid "Upload a file to the drop folder. This file will be handled in the background by the mailinglists for recipient import and other modules."
 msgstr "تحميل ملف إلى مجلد الإسقاط. ستتم معالجة هذا الملف في الخلفية بواسطة القوائم البريدية لاستيراد المستلمين والوحدات النمطية الأخرى."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:72./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:137
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:74./apps/zotonic_mod_admin/priv/templates/admin_status.tpl:137
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:27./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:26
 msgid "Upload file"
 msgstr "تحميل الملف"
@@ -2966,12 +2966,12 @@ msgid "Download images in emails after opening the message"
 msgstr "تنزيل الصور في رسائل البريد الإلكتروني بعد فتح الرسالة"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:103./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:104
-msgid "E-mail override"
-msgstr "تجاوز البريد الإلكتروني"
+msgid "E-mail intercept"
+msgstr "اعتراض البريد الإلكتروني"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:112./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:113
-msgid "E-mail override &ndash; exceptions"
-msgstr "تجاوز البريد الإلكتروني &ndash; الاستثناءات"
+msgid "E-mail intercept &ndash; exceptions"
+msgstr "اعتراض البريد الإلكتروني &ndash; الاستثناءات"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:135./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:136
 msgid "Email FROM"
@@ -3000,8 +3000,8 @@ msgid "Hostname"
 msgstr "اسم المضيف"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:118
-msgid "If (and only if) there is an e-mail override address defined above, then all e-mail is sent to that address <em>except</em> for the e-mail addresses and domains defined here."
-msgstr "إذا (وفقط إذا) كان هناك عنوان تجاوز البريد الإلكتروني المحدد أعلاه، فسيتم إرسال كل رسائل البريد الإلكتروني إلى هذا العنوان <em>باستثناء</em> لعناوين البريد الإلكتروني والمجالات المحددة هنا."
+msgid "If (and only if) there is an e-mail intercept address defined above, then all e-mail is sent to that address <em>except</em> for the e-mail addresses and domains defined here."
+msgstr "إذا (وفقط إذا) كان هناك عنوان اعتراض بريد إلكتروني محدد أعلاه، فسيتم إرسال كل رسائل البريد الإلكتروني إلى هذا العنوان <em>باستثناء</em> لعناوين البريد الإلكتروني والمجالات المحددة هنا."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:130
 msgid "If you change this then you might need to request a new SSL certificate that includes this hostname."
@@ -4311,7 +4311,7 @@ msgstr "عذرًا، غير مسموح لك بتعيين المصادقة الث
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:130
 #: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:170
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:40
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Success"
 msgstr "نجاح"
 
@@ -5196,7 +5196,7 @@ msgstr "تم الرفع إلى مخزن الملفات"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:23
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:124
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:42
 msgid "Warning"
 msgstr "تحذير"
 
@@ -5740,19 +5740,19 @@ msgstr "هذا الموقع يستخدم الكوكيز"
 msgid "To add more information about the use of cookies, either use the content field below or add a 'relation' in the page connections."
 msgstr "لإضافة المزيد من المعلومات حول استخدام ملفات تعريف الارتباط ، استخدم حقل المحتوى أدناه أو أضف \"علاقة\" في روابط الصفحة."
 
-#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:15
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:17
 msgid "<b>NB</b> connected pages and images have their own rights."
 msgstr "<b>ملاحظة</b> الصفحات والصور المتصلة لها حقوقها الخاصة."
 
-#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:21
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:24
 msgid "All Rights Reserved"
 msgstr "كل الحقوق محفوظة"
 
-#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:41./apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:42
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:44./apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:45
 msgid "Attribution"
 msgstr "الإسناد"
 
-#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:18
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:21
 msgid "License"
 msgstr "رخصة"
 
@@ -5760,19 +5760,19 @@ msgstr "رخصة"
 msgid "License and attribution"
 msgstr "الترخيص والإسناد"
 
-#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:52
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:55
 msgid "More about licenses:"
 msgstr "المزيد عن التراخيص:"
 
-#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:22
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:25
 msgid "Public Domain"
 msgstr "المجال العام"
 
-#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:15
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:16
 msgid "The license and the attribution of this page."
 msgstr "الترخيص وإسناد هذه الصفحة."
 
-#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:47./apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:48
+#: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:50./apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:51
 msgid "Year"
 msgstr "سنة"
 
@@ -9648,7 +9648,11 @@ msgstr "نظرًا لأنه يمكنك التعديل ، يمكنك المتاب
 msgid "Button"
 msgstr "زر"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:34
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:51
+msgid "Button preview"
+msgstr "معاينة الزر"
+
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:35
 msgid "Button style"
 msgstr "نمط الزر"
 
@@ -9732,7 +9736,7 @@ msgstr "قم بإنشاء شخص جديد"
 msgid "Created"
 msgstr "خلقت"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:42
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:43
 msgid "Danger"
 msgstr "خطر"
 
@@ -9740,7 +9744,7 @@ msgstr "خطر"
 msgid "Deactivated"
 msgstr "معطل"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:37
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:38
 msgid "Default"
 msgstr "إفتراضي"
 
@@ -9856,7 +9860,7 @@ msgstr "المدخلات المخفية"
 msgid "Hidden value, saved with the form but not shown to the person filling in the form."
 msgstr "القيمة المخفية ، يتم حفظها مع النموذج ولكن لا تظهر للشخص الذي يملأ النموذج."
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:65./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:64./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:47./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:174./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:62./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:64
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:77./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:65./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:64./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:47./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:174./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:62./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:64
 msgid "Hide from results"
 msgstr "إخفاء من النتائج"
 
@@ -9880,7 +9884,7 @@ msgstr "عمري [age] سنة. أحب الآيس كريم [الآيس كريم =
 msgid "Immediately start with the questions, no “Start” button"
 msgstr "ابدأ فورًا بالأسئلة ، بدون زر \"ابدأ\""
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:39
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:40
 msgid "Informational"
 msgstr "معلوماتية"
 
@@ -9904,15 +9908,15 @@ msgstr "ردود الفعل الفورية (وضع التعلم)"
 msgid "Introduction for confirmation email"
 msgstr "مقدمة عن البريد الإلكتروني للتأكيد"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:43
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:44
 msgid "Inverse"
 msgstr "معكوس"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:51
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:70
 msgid "Jump to a question on a next page."
 msgstr "القفز إلى سؤال في الصفحة التالية."
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:50
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:69
 msgid "Jump to this question label (must be on an other page below)"
 msgstr "انتقل إلى تسمية السؤال هذه (يجب أن تكون في صفحة أخرى أدناه)"
 
@@ -10072,7 +10076,7 @@ msgstr "يرجى تحميل صورتك."
 msgid "Points"
 msgstr "نقاط"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:38
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:39
 msgid "Primary"
 msgstr "ابتدائي"
 
@@ -10092,7 +10096,7 @@ msgstr "مستعجل"
 msgid "Question"
 msgstr "سؤال"
 
-#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:49./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:28
+#: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:21./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:68./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:28
 msgid "Question label"
 msgstr "تسمية السؤال"
 
@@ -10381,7 +10385,7 @@ msgstr "سؤال صحيح أم خطأ"
 msgid "True/False"
 msgstr "خطأ صحيح"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:51
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:70
 msgid "Use “{submit}” to create a submit button, or “{stop}” to create a stop button."
 msgstr "استخدم \"{submit}\" لإنشاء زر إرسال ، أو \"{stop}\" لإنشاء زر إيقاف."
 
