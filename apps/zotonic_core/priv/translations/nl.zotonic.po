@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-07-24 17:33\n"
+"PO-Revision-Date: 2024-07-25 11:13\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -2857,7 +2857,7 @@ msgstr "Categorieën"
 
 #: apps/zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:12
 msgid "Categories are used to categorize all pages. Every page belongs to exactly one category.<br/>The categories are defined in a hierarchy. Here you can change that hierarchy."
-msgstr "Categoriëen worden gebruikt om pagina's op een logische manier van\\nelkaar te onderscheiden. Elke pagina in het systeem zit in precies één\\ncategorie. De categoriëen zijn hiërarchisch onderverdeeld. Op deze\\npagina kan je deze hiërarchie bewerken."
+msgstr "Categoriëen worden gebruikt om pagina's op een logische manier van elkaar te onderscheiden. Elke pagina in het systeem zit in precies één categorie.<br/>De categoriëen zijn hiërarchisch onderverdeeld. Op deze pagina kan je deze hiërarchie bewerken."
 
 #: apps/zotonic_mod_admin_category/priv/templates/admin_category_sorter.tpl:3
 msgid "Category Hierarchy"
