@@ -87,13 +87,16 @@ url2service(<<"ftp:", _/binary>>) -> <<"ftp">>;
 url2service(<<"webdavs:", _/binary>>) -> <<"webdav">>;
 url2service(<<"webdav:", _/binary>>) -> <<"webdav">>;
 url2service(<<"davs:", _/binary>>) -> <<"webdav">>;
-url2service(<<"dav:", _/binary>>) -> <<"webdav">>.
+url2service(<<"dav:", _/binary>>) -> <<"webdav">>;
+url2service(<<>>) -> <<>>.
 
 service2mod(<<"s3">>) -> s3filez;
 service2mod(<<"ftp">>) -> ftpfilez;
 service2mod(<<"webdav">>) -> webdavfilez.
 
 % Try a put, get, and delete sequence
+testcred(<<>>, _, _, _, _) ->
+    ok;
 testcred(Service, S3Url, S3Key, S3Secret, IsCreateBucket)
     when is_binary(S3Url), is_binary(S3Key), is_binary(S3Secret) ->
     case testcred_file(Service, S3Url, S3Key, S3Secret) of
