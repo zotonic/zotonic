@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019 Marc Worrell
+%% @copyright 2019-2024 Marc Worrell
 %% @doc Nodename and netadmin management for the the zotonic command modules.
+%% @end
 
-%% Copyright 2019 Marc Worrell
+%% Copyright 2019-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -129,12 +130,7 @@ create_hostpart(Name, LongOrShortNames) ->
                     {ok, Host}
             end;
         {_, shortnames} ->
-            case inet_db:gethostname() of
-                H when is_list(H), length(H)>0 ->
-                    {ok, "@" ++ H};
-                _ ->
-                    {error, short}
-            end;
+            {ok, "@localhost"};
         {_, longnames} ->
             case {inet_db:gethostname(),inet_db:res_option(domain)} of
                 {H, D} when is_list(D), is_list(H), length(D) > 0, length(H) > 0 ->
