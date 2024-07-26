@@ -1120,7 +1120,7 @@ send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context) 
         {error, Failure, {_FailureType, _Host, {error, Reason}}}
             when IsFallbackPlainText,
                  (Failure =:= send orelse Failure =:= retries_exceeded),
-                 (Reason =:= closed orelse Reason =:= timeout) ->
+                 (Reason =:= closed orelse Reason =:= timeout orelse Reason =:= einval) ->
             send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts, Context);
         {error, _Failure, {_FailureType, _Host, <<"554 TLS handshake failure", _/binary>>}}
             when IsFallbackPlainText ->
