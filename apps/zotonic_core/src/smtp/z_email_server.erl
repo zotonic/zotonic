@@ -790,28 +790,13 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
     case is_recipient_blocked(RecipientEmail, Context) of
         false ->
             [_RcptLocalName, RecipientDomain] = binary:split(RecipientEmail, <<"@">>),
-            SmtpOpts = [
-                {no_mx_lookups, State#state.smtp_no_mx_lookups},
-                {hostname, z_convert:to_list(z_email:email_domain(Context))},
-                {timeout, ?SMTP_CONNECT_TIMEOUT}
-            ] ++ case relay_site_options(State, Context) of
-                {true, RelayOpts} -> RelayOpts;
-                false -> [{relay, z_convert:to_list(RecipientDomain)}]
-            end,
+            SmtpOpts = smtp_options(RecipientEmail, State, Context),
             BccSmtpOpts = case z_utils:is_empty(State#state.smtp_bcc) of
                 true ->
                     [];
                 false ->
                     {_BccName, BccEmail} = z_email:split_name_email(State#state.smtp_bcc),
-                    [_BccLocalName, BccDomain] = binary:split(BccEmail, <<"@">>),
-                    [
-                        {no_mx_lookups, State#state.smtp_no_mx_lookups},
-                        {hostname, z_convert:to_list(z_email:email_domain(Context))},
-                        {timeout, ?SMTP_CONNECT_TIMEOUT}
-                    ] ++ case relay_site_options(State, Context) of
-                        {true, BccRelayOpts} -> BccRelayOpts;
-                        false -> [{relay, z_convert:to_list(BccDomain)}]
-                    end
+                    smtp_options(BccEmail, State, Context)
             end,
             MessageId = message_id(Id, Context),
             VERP = bounce_email(MessageId, Context),
@@ -838,6 +823,29 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
             }),
             drop_blocked_email(Id, RecipientEmail, Email, Context),
             State
+    end.
+
+smtp_options(RecipientEmail, State, Context) -> 
+    [_RcptLocalName, RecipientDomain] = binary:split(RecipientEmail, <<"@">>),
+    RelayOptions = case relay_site_options(State, Context) of
+                       {true, RelayOpts} ->
+                           RelayOpts;
+                       false ->
+                           [{relay, z_convert:to_list(RecipientDomain)}]
+                   end,
+    Options = [ {no_mx_lookups, State#state.smtp_no_mx_lookups},
+                {hostname, z_convert:to_list(z_email:email_domain(Context))},
+                {timeout, ?SMTP_CONNECT_TIMEOUT} | RelayOptions ],
+    case proplists:is_defined(tls_options, Options) of
+        true ->
+            Options;
+        false ->
+            %% It is needed to have access to the mx-record to do the name
+            %% verification. This option is not yet available in gen_smtp.
+            [ {tls_options, [
+                             {versions, ['tlsv1.2', 'tlsv1.3']},
+                             {verify, verify_none}
+                            ]} | Options ]
     end.
 
 %% @doc Fetch the SMTP relay options, if the Zotonic system is configured to use a relay
