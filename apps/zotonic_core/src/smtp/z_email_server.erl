@@ -841,11 +841,9 @@ smtp_options(RecipientEmail, State, Context) ->
             Options;
         false ->
             %% It is needed to have access to the mx-record to do the name
-            %% verification. This option is not yet available in gen_smtp.
-            [ {tls_options, [
-                             {versions, ['tlsv1.2', 'tlsv1.3']},
-                             {verify, verify_none}
-                            ]} | Options ]
+            %% verification. It looks like this validation can be done inside
+            %% gen_smtp only.
+            [ {tls_options, [ tls_versions(), {verify, verify_none} ]} | Options ]
     end.
 
 %% @doc Fetch the SMTP relay options, if the Zotonic system is configured to use a relay
@@ -853,10 +851,7 @@ smtp_options(RecipientEmail, State, Context) ->
 relay_site_options(#state{ smtp_relay = true } = State, _Context) ->
     Relay = proplists:get_value(relay, State#state.smtp_relay_opts),
     RelayOpts = [
-        {tls_options, [
-            {versions, ['tlsv1.2']}
-            | tls_certificate_check:options(Relay)
-        ]}
+        {tls_options, [ tls_versions() | tls_certificate_check:options(Relay) ]}
         | State#state.smtp_relay_opts
     ],
     {true, RelayOpts};
@@ -903,14 +898,14 @@ relay_site_options(_State, Context) ->
             {true, [
                 {relay, SmtpHost},
                 {port, Port},
-                {tls_options, [
-                    {versions, ['tlsv1.2']}
-                    | tls_certificate_check:options(SmtpHost)
-                ]}
+                {tls_options, [ tls_versions() | tls_certificate_check:options(SmtpHost) ]}
             ] ++ Creds ++ TLS};
         false ->
             false
     end.
+
+tls_versions() ->
+    {versions, ['tlsv1.2', 'tlsv1.3']}.
 
 spawned_email_sender(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                      Bcc, Email, SmtpOpts, BccSmtpOpts, RetryCt, Context) ->
