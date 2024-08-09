@@ -132,16 +132,6 @@
                         </div>
 
                         <div class="form-group label-floating">
-                            <input type="text" class="form-control" name="site.smtp_bounce_domain" value="{{ m.config.site.smtp_bounce_domain.value|escape }}" placeholder="{_ SMTP Bounce Domain _}">
-                            <label class="control-label">{_ SMTP Bounce Domain _}</label>
-                            <p class="help-block">
-                                {_ Domain where email bounce messages must be sent to.  _}
-                                {_ Defaults to the SMTP Hostname of the site. _}<br>
-                                {_ This can be setup so bounce messages are sent to a different domain. _}
-                            </p>
-                        </div>
-
-                        <div class="form-group label-floating">
                             <input type="text" class="form-control" name="site.email_from" value="{{ m.config.site.email_from.value|escape }}" placeholder="{_ Email FROM _}">
                             <label class="control-label">{_ Email FROM _}</label>
                             <p class="help-block">
