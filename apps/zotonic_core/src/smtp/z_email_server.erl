@@ -789,7 +789,6 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
     RecipientEmail = recipient_email_address(Recipient1),
     case is_recipient_blocked(RecipientEmail, Context) of
         false ->
-            [_RcptLocalName, RecipientDomain] = binary:split(RecipientEmail, <<"@">>),
             SmtpOpts = smtp_options(RecipientEmail, State, Context),
             BccSmtpOpts = case z_utils:is_empty(State#state.smtp_bcc) of
                 true ->
@@ -833,9 +832,11 @@ smtp_options(RecipientEmail, State, Context) ->
                        false ->
                            [{relay, z_convert:to_list(RecipientDomain)}]
                    end,
+
     Options = [ {no_mx_lookups, State#state.smtp_no_mx_lookups},
-                {hostname, z_convert:to_list(z_email:email_domain(Context))},
+                {hostname, sending_smtphost(Context)}, 
                 {timeout, ?SMTP_CONNECT_TIMEOUT} | RelayOptions ],
+
     case proplists:is_defined(tls_options, Options) of
         true ->
             Options;
@@ -844,6 +845,14 @@ smtp_options(RecipientEmail, State, Context) ->
             %% verification. It looks like this validation can be done inside
             %% gen_smtp only.
             [ {tls_options, [ tls_versions(), {verify, verify_none} ]} | Options ]
+    end.
+
+sending_smtphost(Context) ->
+    case z_convert:to_binary(m_config:get_value(site, sending_smtphost, Context)) of
+        <<>> ->
+            z_email:email_domain(Context);
+        SmtpHost ->
+            SmtpHost
     end.
 
 %% @doc Fetch the SMTP relay options, if the Zotonic system is configured to use a relay
