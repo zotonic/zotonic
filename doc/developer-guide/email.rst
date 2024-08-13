@@ -33,6 +33,12 @@ Site-specific configuration
 |          |                      |handshake. Defaults to the site’s        |
 |          |                      |hostname, but can be overriden           |
 +----------+----------------------+-----------------------------------------+
+|site      |client_smtphost       |The hostname the SMTP client will use    |
+|          |                      |use to contact external SMTP servers.    |
+|          |                      |Defaults to the sites smtphost. Usually  |
+|          |                      |set to the reverse DNS name of the       |
+|          |                      |server.                                  |
++----------+----------------------+-----------------------------------------+
 |site      |admin_email           |E-mail address of the admin user, the    |
 |          |                      |address where admin log/debug messages   |
 |          |                      |get sent to when using                   |
