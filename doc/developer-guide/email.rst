@@ -35,9 +35,10 @@ Site-specific configuration
 +----------+----------------------+-----------------------------------------+
 |site      |client_smtphost       |The hostname the SMTP client will use    |
 |          |                      |use to contact external SMTP servers.    |
-|          |                      |Defaults to the sites smtphost. Usually  |
+|          |                      |Defaults to the site's smtphost. Usually |
 |          |                      |set to the reverse DNS name of the       |
-|          |                      |server.                                  |
+|          |                      |server when the system delivers e-mail   |
+|          |                      |directly.                                |
 +----------+----------------------+-----------------------------------------+
 |site      |admin_email           |E-mail address of the admin user, the    |
 |          |                      |address where admin log/debug messages   |
