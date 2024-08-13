@@ -393,7 +393,7 @@ handle_info(poll, State) ->
     Time = case IsSending of
         false -> 10000;
         true -> 2000
-    end, 
+    end,
     State2 = State1#state{
         poll_ref = timer:send_after(Time, poll)
     },
@@ -824,7 +824,7 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
             State
     end.
 
-smtp_options(RecipientEmail, State, Context) -> 
+smtp_options(RecipientEmail, State, Context) ->
     [_RcptLocalName, RecipientDomain] = binary:split(RecipientEmail, <<"@">>),
     RelayOptions = case relay_site_options(State, Context) of
                        {true, RelayOpts} ->
@@ -834,7 +834,7 @@ smtp_options(RecipientEmail, State, Context) ->
                    end,
 
     Options = [ {no_mx_lookups, State#state.smtp_no_mx_lookups},
-                {hostname, sending_smtphost(Context)}, 
+                {hostname, client_smtphost(Context)},
                 {timeout, ?SMTP_CONNECT_TIMEOUT} | RelayOptions ],
 
     case proplists:is_defined(tls_options, Options) of
@@ -847,8 +847,8 @@ smtp_options(RecipientEmail, State, Context) ->
             [ {tls_options, [ tls_versions(), {verify, verify_none} ]} | Options ]
     end.
 
-sending_smtphost(Context) ->
-    case z_convert:to_binary(m_config:get_value(site, sending_smtphost, Context)) of
+client_smtphost(Context) ->
+    case z_convert:to_binary(m_config:get_value(site, client_smtphost, Context)) of
         <<>> ->
             z_email:email_domain(Context);
         SmtpHost ->
