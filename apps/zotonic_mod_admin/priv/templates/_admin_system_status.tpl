@@ -35,7 +35,6 @@
                     <th>{_ Free _}</th>
                     {% ifnotequal os.buffered_memory `undefined` %}<th>{_ Buffered _}</th>{% endifnotequal %}
                     {% ifnotequal os.cached_memory `undefined` %}<th>{_ Cached _}</th>{% endifnotequal %}
-                    {% ifnotequal os.available_memory `undefined` %}<th>{_ Available _}</th>{% endifnotequal %}
                 </tr>
             </thead>
             <tbody>
