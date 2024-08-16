@@ -49,7 +49,7 @@
                         <td>{{ (os_memory.total_swap - os_memory.free_swap ) | filesizeformat }}</td>
                         <td>{{ os_memory.free_swap | filesizeformat }}</td>
                     </tr>
-                {% endif %}
+                {% endifnotequal %}
             </tbody>
             {% endwith %}
         </table>
