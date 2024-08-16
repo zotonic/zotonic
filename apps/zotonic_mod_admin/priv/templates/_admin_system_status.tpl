@@ -46,7 +46,6 @@
                     <td>{{ os.free_memory| filesizeformat }}</td>
                     {% ifnotequal os.buffered_memory `undefined` %}<td>{{ os.buffered_memory | filesizeformat }}</td>{% endifnotequal %}
                     {% ifnotequal os.cached_memory `undefined` %}<td>{{ os.cached_memory | filesizeformat }}</td>{% endifnotequal %}
-                    {% ifnotequal os.available_memory `undefined` %}<td>{{ os.available_memory | filesizeformat }}</td>{% endifnotequal %}
                 </tr>
                 {% ifnotequal os.total_swap `undefined` %}
                     <tr>
@@ -56,7 +55,6 @@
                         <td>{{ os.free_swap | filesizeformat }}</td>
                         {% ifnotequal os.buffered_memory `undefined` %}<td></td>{% endifnotequal %}
                         {% ifnotequal os.cached_memory `undefined` %}<td></td>{% endifnotequal %}
-                        {% ifnotequal os.available_memory `undefined` %}<td></td>{% endifnotequal %}
                     </tr>
                 {% endifnotequal %}
             </tbody>
