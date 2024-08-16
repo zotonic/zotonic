@@ -23,6 +23,40 @@
 </div>
 
 <div class="widget">
+    <div class="widget-header">{_ OS Memory _}</div>
+    <div class="widget-content">
+        <table class="table table-sm">
+            {% with m.admin_status.os_memory as os_memory %}
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>{_ Total _}</th>
+                    <th>{_ Used _}</th>
+                    <th>{_ Free _}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>{_ Memory _}</th>
+                    <td>{{ os_memory.total_memory | filesizeformat }}</td>
+                    <td>{{ (os_memory.total_memory - os_memory.free_memory) | filesizeformat }}</td>
+                    <td>{{ os_memory.free_memory| filesizeformat }}</td>
+                </tr>
+                {% if os_memory.total_swap %}
+                    <tr>
+                        <th>{_ Swap _}</th>
+                        <td>{{ os_memory.total_swap | filesizeformat }}</td>
+                        <td>{{ (os_memory.total_swap - os_memory.free_swap ) | filesizeformat }}</td>
+                        <td>{{ os_memory.free_swap | filesizeformat }}</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+            {% endwith %}
+        </table>
+    </div>
+</div>
+
+<div class="widget">
     <div class="widget-header">{_ Disks _}</div>
     <div class="widget-content">
         <div {% if m.admin_status.disks.alert %}class="border-danger"{% endif %}>
