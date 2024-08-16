@@ -33,9 +33,9 @@
                     <th>{_ Total _}</th>
                     <th>{_ Used _}</th>
                     <th>{_ Free _}</th>
-                    {% ifnotequal os.buffered_memory `undefined` %} <th>{_ Buffered _}</th>{% endifnotequal %}
-                    {% ifnotequal os.cached_memory `undefined` %} <th>{_ Cached _}</th>{% endifnotequal %}
-                    {% ifnotequal os.available_memory `undefined` %} <th>{_ Available _}</th>{% endifnotequal %}
+                    {% ifnotequal os.buffered_memory `undefined` %}<th>{_ Buffered _}</th>{% endifnotequal %}
+                    {% ifnotequal os.cached_memory `undefined` %}<th>{_ Cached _}</th>{% endifnotequal %}
+                    {% ifnotequal os.available_memory `undefined` %}<th>{_ Available _}</th>{% endifnotequal %}
                 </tr>
             </thead>
             <tbody>
@@ -44,7 +44,7 @@
                     <td>{{ os.total_memory | filesizeformat }}</td>
                     <td>{{ (os.total_memory - os.free_memory) | filesizeformat }}</td>
                     <td>{{ os.free_memory| filesizeformat }}</td>
-                    {% ifnotequal os.buffered_memory `undefined` %}<td>{{ os_.buffered_memory | filesizeformat }}</td>{% endifnotequal %}
+                    {% ifnotequal os.buffered_memory `undefined` %}<td>{{ os.buffered_memory | filesizeformat }}</td>{% endifnotequal %}
                     {% ifnotequal os.cached_memory `undefined` %}<td>{{ os.cached_memory | filesizeformat }}</td>{% endifnotequal %}
                     {% ifnotequal os.available_memory `undefined` %}<td>{{ os.available_memory | filesizeformat }}</td>{% endifnotequal %}
                 </tr>
