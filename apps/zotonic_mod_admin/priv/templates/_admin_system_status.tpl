@@ -22,7 +22,7 @@
     </div>
 </div>
 
-<div class="widget">
+<div id="os_memory_status" class="widget">
     <div class="widget-header">{_ OS Memory _}</div>
     <div class="widget-content">
         <table class="table table-sm">
@@ -65,7 +65,7 @@
     </div>
 </div>
 
-<div class="widget">
+<div id="disk_status" class="widget">
     <div class="widget-header">{_ Disks _}</div>
     <div class="widget-content">
         <div {% if m.admin_status.disks.alert %}class="border-danger"{% endif %}>

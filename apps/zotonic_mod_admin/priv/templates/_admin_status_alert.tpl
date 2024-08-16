@@ -13,7 +13,7 @@
         <b>{_ Warning! _}</b>
         {_ Some disks are almost full. _}
         {% if zotonic_dispatch != `admin_status` %}
-            &nbsp; <a class="btn btn-danger btn-xs" href="{% url admin_status %}">{_ View status _}</a>
+            &nbsp; <a class="btn btn-danger btn-xs" href="{% url admin_status %}#disk_status">{_ View status _}</a>
         {% endif %}
     </div>
 {% endif %}
@@ -24,7 +24,7 @@
         <b>{_ Warning! _}</b>
         {_ The system has allocated more than the specified threshold of available memory, as reported by the underlying operating system. _}
         {% if zotonic_dispatch != `admin_status` %}
-            &nbsp; <a class="btn btn-danger btn-xs" href="{% url admin_status %}">{_ View status _}</a>
+            &nbsp; <a class="btn btn-danger btn-xs" href="{% url admin_status %}#os_memory_status">{_ View status _}</a>
         {% endif %}
     </div>
 {% endif %}
