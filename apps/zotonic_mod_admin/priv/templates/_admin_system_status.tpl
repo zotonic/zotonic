@@ -42,7 +42,7 @@
                     <td>{{ (os_memory.total_memory - os_memory.free_memory) | filesizeformat }}</td>
                     <td>{{ os_memory.free_memory| filesizeformat }}</td>
                 </tr>
-                {% if os_memory.total_swap %}
+                {% ifnotequal os_memory.total_swap `undefined` %}
                     <tr>
                         <th>{_ Swap _}</th>
                         <td>{{ os_memory.total_swap | filesizeformat }}</td>
