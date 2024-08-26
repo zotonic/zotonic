@@ -5,7 +5,7 @@
   {registered, []},
   {mod, {zotonic_launcher_app, []}},
   {applications, [
-      kernel, stdlib, crypto, public_key, ssl, inets,
+      kernel, stdlib, sasl, crypto, public_key, ssl, inets,
       zotonic_core,
       zotonic_filewatcher, zotonic_fileindexer, zotonic_filehandler,
       zotonic_listen_http, zotonic_listen_smtp, jsxrecord,

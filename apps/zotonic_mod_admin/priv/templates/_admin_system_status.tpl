@@ -22,7 +22,50 @@
     </div>
 </div>
 
-<div class="widget">
+<div id="os_memory_status" class="widget">
+    <div class="widget-header">{_ OS Memory _}</div>
+    <div class="widget-content">
+        <table class="table table-sm">
+            {% with m.admin_status.os_memory as os %}
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>{_ Total _}</th>
+                    <th>{_ Used _}</th>
+                    <th>{_ Free _}</th>
+                    {% ifnotequal os.buffered_memory `undefined` %}<th>{_ Buffered _}</th>{% endifnotequal %}
+                    {% ifnotequal os.cached_memory `undefined` %}<th>{_ Cached _}</th>{% endifnotequal %}
+                    {% ifnotequal os.available_memory `undefined` %}<th>{_ Available _}</th>{% endifnotequal %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>{_ Memory _}</th>
+                    <td>{{ os.total_memory | filesizeformat }}</td>
+                    <td>{{ (os.total_memory - os.free_memory) | filesizeformat }}</td>
+                    <td>{{ os.free_memory| filesizeformat }}</td>
+                    {% ifnotequal os.buffered_memory `undefined` %}<td>{{ os.buffered_memory | filesizeformat }}</td>{% endifnotequal %}
+                    {% ifnotequal os.cached_memory `undefined` %}<td>{{ os.cached_memory | filesizeformat }}</td>{% endifnotequal %}
+                    {% ifnotequal os.available_memory `undefined` %}<td>{{ os.available_memory | filesizeformat }}</td>{% endifnotequal %}
+                </tr>
+                {% ifnotequal os.total_swap `undefined` %}
+                    <tr>
+                        <th>{_ Swap _}</th>
+                        <td>{{ os.total_swap | filesizeformat }}</td>
+                        <td>{{ (os.total_swap - os.free_swap ) | filesizeformat }}</td>
+                        <td>{{ os.free_swap | filesizeformat }}</td>
+                        {% ifnotequal os.buffered_memory `undefined` %}<td></td>{% endifnotequal %}
+                        {% ifnotequal os.cached_memory `undefined` %}<td></td>{% endifnotequal %}
+                        {% ifnotequal os.available_memory `undefined` %}<td></td>{% endifnotequal %}
+                    </tr>
+                {% endifnotequal %}
+            </tbody>
+            {% endwith %}
+        </table>
+    </div>
+</div>
+
+<div id="disk_status" class="widget">
     <div class="widget-header">{_ Disks _}</div>
     <div class="widget-content">
         <div {% if m.admin_status.disks.alert %}class="border-danger"{% endif %}>

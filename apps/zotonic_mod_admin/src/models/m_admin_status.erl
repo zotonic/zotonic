@@ -106,6 +106,11 @@ m_get_1([ <<"disks">>, <<"alert">> | Rest ], _Msg, _Context) ->
 m_get_1([ <<"disks">> | Rest ], _Msg, _Context) ->
     {ok, {disks(), Rest}};
 
+m_get_1([ <<"os_memory">>, <<"alert">> | Rest ], _Msg, _Context) ->
+    {ok, {os_memory_alert(), Rest}};
+m_get_1([ <<"os_memory">> | Rest ], _Msg, _Context) ->
+    {ok, {os_memory(), Rest}};
+
 m_get_1([ <<"task_queue">> | Rest ], _Msg, Context) ->
     case z_pivot_rsc:count_tasks(Context) of
         {ok, Ts} ->
@@ -244,3 +249,20 @@ disks_alert() ->
 %% @doc Return the percentage to be used as threshold.
 disks_threshold() ->
     disksup:get_almost_full_threshold().
+
+
+%% @doc Return true iff the system_memory alert is set.
+-spec os_memory_alert() -> boolean().
+os_memory_alert() ->
+    Alarms = alarm_handler:get_alarms(),
+    lists:any(
+      fun
+          ({system_memory_high_watermark, _}) -> true;
+          (_) -> false
+      end,
+      Alarms).
+
+%% @doc Return a list with os memory statistics.
+os_memory() ->
+    memsup:get_system_memory_data().
+
