@@ -393,7 +393,7 @@ handle_info(poll, State) ->
     Time = case IsSending of
         false -> 10000;
         true -> 2000
-    end, 
+    end,
     State2 = State1#state{
         poll_ref = timer:send_after(Time, poll)
     },
@@ -789,29 +789,13 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
     RecipientEmail = recipient_email_address(Recipient1),
     case is_recipient_blocked(RecipientEmail, Context) of
         false ->
-            [_RcptLocalName, RecipientDomain] = binary:split(RecipientEmail, <<"@">>),
-            SmtpOpts = [
-                {no_mx_lookups, State#state.smtp_no_mx_lookups},
-                {hostname, z_convert:to_list(z_email:email_domain(Context))},
-                {timeout, ?SMTP_CONNECT_TIMEOUT}
-            ] ++ case relay_site_options(State, Context) of
-                {true, RelayOpts} -> RelayOpts;
-                false -> [{relay, z_convert:to_list(RecipientDomain)}]
-            end,
+            SmtpOpts = smtp_options(RecipientEmail, State, Context),
             BccSmtpOpts = case z_utils:is_empty(State#state.smtp_bcc) of
                 true ->
                     [];
                 false ->
                     {_BccName, BccEmail} = z_email:split_name_email(State#state.smtp_bcc),
-                    [_BccLocalName, BccDomain] = binary:split(BccEmail, <<"@">>),
-                    [
-                        {no_mx_lookups, State#state.smtp_no_mx_lookups},
-                        {hostname, z_convert:to_list(z_email:email_domain(Context))},
-                        {timeout, ?SMTP_CONNECT_TIMEOUT}
-                    ] ++ case relay_site_options(State, Context) of
-                        {true, BccRelayOpts} -> BccRelayOpts;
-                        false -> [{relay, z_convert:to_list(BccDomain)}]
-                    end
+                    smtp_options(BccEmail, State, Context)
             end,
             MessageId = message_id(Id, Context),
             VERP = bounce_email(MessageId, Context),
@@ -840,15 +824,43 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
             State
     end.
 
+smtp_options(RecipientEmail, State, Context) ->
+    [_RcptLocalName, RecipientDomain] = binary:split(RecipientEmail, <<"@">>),
+    RelayOptions = case relay_site_options(State, Context) of
+                       {true, RelayOpts} ->
+                           RelayOpts;
+                       false ->
+                           [{relay, z_convert:to_list(RecipientDomain)}]
+                   end,
+
+    Options = [ {no_mx_lookups, State#state.smtp_no_mx_lookups},
+                {hostname, client_smtphost(Context)},
+                {timeout, ?SMTP_CONNECT_TIMEOUT} | RelayOptions ],
+
+    case proplists:is_defined(tls_options, Options) of
+        true ->
+            Options;
+        false ->
+            %% It is needed to have access to the mx-record to do the name
+            %% verification. It looks like this validation can be done inside
+            %% gen_smtp only.
+            [ {tls_options, [ tls_versions(), {verify, verify_none} ]} | Options ]
+    end.
+
+client_smtphost(Context) ->
+    case z_convert:to_binary(m_config:get_value(site, client_smtphost, Context)) of
+        <<>> ->
+            z_email:email_domain(Context);
+        SmtpHost ->
+            SmtpHost
+    end.
+
 %% @doc Fetch the SMTP relay options, if the Zotonic system is configured to use a relay
 %% then that relay is always used. Otherwise the relay configuration of the site is used.
 relay_site_options(#state{ smtp_relay = true } = State, _Context) ->
     Relay = proplists:get_value(relay, State#state.smtp_relay_opts),
     RelayOpts = [
-        {tls_options, [
-            {versions, ['tlsv1.2']}
-            | tls_certificate_check:options(Relay)
-        ]}
+        {tls_options, [ tls_versions() | tls_certificate_check:options(Relay) ]}
         | State#state.smtp_relay_opts
     ],
     {true, RelayOpts};
@@ -895,14 +907,14 @@ relay_site_options(_State, Context) ->
             {true, [
                 {relay, SmtpHost},
                 {port, Port},
-                {tls_options, [
-                    {versions, ['tlsv1.2']}
-                    | tls_certificate_check:options(SmtpHost)
-                ]}
+                {tls_options, [ tls_versions() | tls_certificate_check:options(SmtpHost) ]}
             ] ++ Creds ++ TLS};
         false ->
             false
     end.
+
+tls_versions() ->
+    {versions, ['tlsv1.2', 'tlsv1.3']}.
 
 spawned_email_sender(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                      Bcc, Email, SmtpOpts, BccSmtpOpts, RetryCt, Context) ->

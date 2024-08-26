@@ -132,6 +132,16 @@
                         </div>
 
                         <div class="form-group label-floating">
+                            <input type="text" class="form-control" name="site.client_smtphost" value="{{ m.config.site.client_smtphost.value|escape }}" placeholder="{_ Hostname SMTP Client _}">
+                            <label class="control-label">{_ Hostname SMTP Client _}</label>
+                            <p class="help-block">
+                                {_ The hostname to use as client when delivering e-mail to external SMTP servers.  _}
+                                {_ Defaults to the SMTP hostname of the site. _}<br>
+                                {_ It is usually set to the reverse DNS name of the machine. _}
+                            </p>
+                        </div>
+
+                        <div class="form-group label-floating">
                             <input type="text" class="form-control" name="site.email_from" value="{{ m.config.site.email_from.value|escape }}" placeholder="{_ Email FROM _}">
                             <label class="control-label">{_ Email FROM _}</label>
                             <p class="help-block">
