@@ -1270,7 +1270,7 @@ parse_edges(hassubject, [Id, Predicate, JoinAlias], true, Context) ->
 parse_edges(hassubject, [Id, Predicate, JoinAlias], false, Context) ->
     % For top-level terms we use a join to allow sort by the edge order.
     JoinAlias1 = sql_safe(JoinAlias),
-    EdgeAlias = z_ids:id(),
+    EdgeAlias = z_ids:identifier(),
     #search_sql_term{
         tables = #{
             EdgeAlias => <<"edge">>
@@ -1311,7 +1311,7 @@ parse_edges(hasobject, [Id, Predicate, JoinAlias], true, Context) ->
 parse_edges(hasobject, [Id, Predicate, JoinAlias], false, Context) ->
     % For top-level terms we use a join to allow sort by the edge order.
     JoinAlias1 = sql_safe(JoinAlias),
-    EdgeAlias = z_ids:id(),
+    EdgeAlias = z_ids:identifier(),
     #search_sql_term{
         tables = #{
             EdgeAlias => <<"edge">>
