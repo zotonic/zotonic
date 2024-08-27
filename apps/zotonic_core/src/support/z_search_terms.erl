@@ -76,12 +76,13 @@ combine(Terms) when is_list(Terms) ->
 
 make_join(Joins, JoinType) ->
     maps:fold(
-        fun(Alias, {Table, OnClause}, Acc) ->
-            [
-                Acc, " ", JoinType,
-                " ", Table, " ", Alias, " on ",
-                OnClause
-            ]
+        fun
+            (Alias, {Table, OnClause}, Acc) ->
+                [
+                    Acc, " ", JoinType,
+                    " ", Table, " ", Alias, " on ",
+                    OnClause
+                ]
         end,
         <<>>,
         Joins).
