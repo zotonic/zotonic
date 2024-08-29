@@ -12,11 +12,11 @@ Commits since 0.83.0
 
 Marc Worrell (3):
 
-    *  mod_admin: fix a problem with refers tracking and embedded maps (#3821)
-    *  Fix wrong func ref
-    *  mod_base: fix an issue where for file requests the x-robots-tag was not returned in the response headers (#3840)
+ *  mod_admin: fix a problem with refers tracking and embedded maps (#3821)
+ *  Fix wrong func ref
+ *  mod_base: fix an issue where for file requests the x-robots-tag was not returned in the response headers (#3840)
 
 Rob van den Bogaard (1):
 
-    * Set version to 0.83.1 (#3833)
+ * Set version to 0.83.1 (#3833)
 
