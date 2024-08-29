@@ -53,18 +53,20 @@ service_available(ReqData, ConfigProps) ->
     Context = z_context:new_request(ReqData, ConfigProps, ?MODULE),
     Context1 = z_context:continue_session(z_context:ensure_qs(Context)),
     Context2 = z_context:set_cors_headers([{"Access-Control-Allow-Origin", "*"}], Context1),
-    ReqData1 = z_context:get_reqdata(Context2),
     z_context:lager_md(Context2),
     case get_file_info(ConfigProps, Context2) of
         {ok, Info} ->
             IsNoIndex = is_noindex(Info, Context),
             Context3 = z_context:set_noindex_header(IsNoIndex, Context2),
+            ReqData1 = z_context:get_reqdata(Context3),
             {true, ReqData1, {Info, Context3}};
         {error, enoent} = Error ->
             Context3 = z_context:set_noindex_header(Context2),
+            ReqData1 = z_context:get_reqdata(Context3),
             {true, ReqData1, {Error, Context3}};
         {error, _} = Error ->
             Context3 = z_context:set_noindex_header(Context2),
+            ReqData1 = z_context:get_reqdata(Context3),
             {false, ReqData1, {Error, Context3}}
     end.
 
