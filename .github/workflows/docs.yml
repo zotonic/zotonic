@@ -29,13 +29,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: 3.8
-      # - name: Install pip
-      #   run: |
-      #     curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-      #     python get-pip.py
+      - name: Install pip
+        run: |
+          curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+          python get-pip.py
       # - run: which pip
       # - run: which pip3
-      - run: pip3 install -r doc/requirements.txt --break-system-packages
+      - run: pip install -r doc/requirements.txt --break-system-packages
       - name: Compile
         run: make
       - name: EDocs
