@@ -33,7 +33,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: 3.7
-          cache: pip
       - run: pip install -r doc/requirements.txt --break-system-packages
       - name: Compile
         run: make
