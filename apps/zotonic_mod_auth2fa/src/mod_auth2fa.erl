@@ -183,7 +183,7 @@ observe_auth_postcheck(#auth_postcheck{ id = UserId, query_args = QueryArgs }, C
             % Could also have a POST of the new passcode secret to be set.
             % In that case the passcode can be set for the user and 'undefined'
             % returned
-            case z_convert:to_integer(m_config:get_value(mod_auth2fa, mode, Context)) of
+            case mode(UserId, Context) of
                 3 ->
                     case maps:get(<<"code-new">>, QueryArgs, undefined) of
                         CodeNew when is_binary(CodeNew), CodeNew =/= <<>> ->
@@ -203,4 +203,10 @@ observe_auth_postcheck(#auth_postcheck{ id = UserId, query_args = QueryArgs }, C
                 _ ->
                     undefined
             end
+    end.
+
+mode(UserId, Context) ->
+    case z_convert:to_integer(m_config:get_value(mod_auth2fa, mode, Context)) of
+        3 -> 3;
+        _ -> m_auth2fa:user_mode(z_acl:logon(UserId, Context))
     end.
