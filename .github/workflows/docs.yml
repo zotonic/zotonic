@@ -25,18 +25,16 @@ jobs:
       image: erlang:${{ matrix.otp_version }}
 
     steps:
-      - name: Change ownership of /github/home
-        run: |
-          apt-get -y install sudo
-          sudo chown -R $(whoami) /github/home
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
           python-version: '3.7'
-      - name: Install PIP
+      - name: Install packages
         run: |
           apt-get update
-          apt-get -y install python3-pip
+          apt-get -y install sudo python3-pip
+      - name: Change ownership of /github/home
+        run: sudo chown -R $(whoami) /github/home
       - run: pip3 install -r doc/requirements.txt
       - name: Compile
         run: make
