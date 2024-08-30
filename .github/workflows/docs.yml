@@ -35,7 +35,7 @@ jobs:
           apt-get -y install sudo python3-pip
       - name: Change ownership of /github/home
         run: sudo chown -R $(whoami) /github/home
-      - run: pip3 install -r doc/requirements.txt
+      - run: pip3 install -r doc/requirements.txt --break-system-packages
       - name: Compile
         run: make
       - name: EDocs
