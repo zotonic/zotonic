@@ -25,14 +25,10 @@ jobs:
       image: erlang:${{ matrix.otp_version }}
 
     steps:
-      - name: Install packages
-        run: |
-          apt-get update
-          apt-get -y install sudo lsb-release
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v5
         with:
-          python-version: 3.7
+          python-version: 3.8
       - run: pip install -r doc/requirements.txt --break-system-packages
       - name: Compile
         run: make
