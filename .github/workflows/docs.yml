@@ -18,22 +18,24 @@ jobs:
 
     strategy:
       matrix:
-        otp_version: [24]
-        os: [ubuntu-20.04]
+        otp_version: [26]
+        os: [ubuntu-22.04]
 
     container:
       image: erlang:${{ matrix.otp_version }}
 
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
-          python-version: '3.7'
-      - name: Install PIP
+          python-version: 3.8
+      - name: Install pip
         run: |
-          apt-get update
-          apt-get -y install python3-pip
-      - run: pip3 install -r doc/requirements.txt
+          curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+          python get-pip.py
+      # - run: which pip
+      # - run: which pip3
+      - run: pip install -r doc/requirements.txt --break-system-packages
       - name: Compile
         run: make
       - name: EDocs
