@@ -26,7 +26,9 @@ jobs:
 
     steps:
       - name: Change ownership of /github/home
-        run: sudo chown -R $(whoami) /github/home
+        run: |
+          apt-get -y install sudo
+          sudo chown -R $(whoami) /github/home
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
