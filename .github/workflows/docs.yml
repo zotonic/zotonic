@@ -25,17 +25,14 @@ jobs:
       image: erlang:${{ matrix.otp_version }}
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.7'
-          cache: 'pip'
       - name: Install packages
         run: |
           apt-get update
           apt-get -y install sudo
-      - name: Change ownership of /github/home
-        run: sudo chown -R $(whoami) /github/home
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.7'
       - run: pip install -r doc/requirements.txt --break-system-packages
       - name: Compile
         run: make
