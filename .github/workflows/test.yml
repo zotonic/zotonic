@@ -18,8 +18,8 @@ jobs:
 
     strategy:
       matrix:
-        # 26 can be added if a new epgsql package has been released
-        otp_version: [25, 26, 27]
+        # 27 can be added if a new qdate package has been released
+        otp_version: [25, 26]
         os: [ubuntu-latest]
 
     container:
