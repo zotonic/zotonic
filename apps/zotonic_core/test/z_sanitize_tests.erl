@@ -50,7 +50,7 @@ mso4_test() ->
 zmedia_test() ->
     Context = z_context:new(zotonic_site_testsandbox),
     In = <<"<!-- z-media 123 { \"align\":\"leftx\", \"caption\":\"&--\\u003e\" } -->">>,
-    Out = <<"<!-- z-media 123 {\"align\":\"block\",\"caption\":\"&→\"} -->"/utf8>>,
+    Out = <<"<!-- z-media 123 {\"caption\":\"&→\",\"align\":\"block\"} -->"/utf8>>,
     ?assertEqual(Out, z_sanitize:html(In, Context)).
 
 csv_test() ->
