@@ -28,14 +28,15 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.7'
+          python-version: '3.7'\
+          cache: 'pip'
       - name: Install packages
         run: |
           apt-get update
-          apt-get -y install sudo python3-pip
+          apt-get -y install sudo
       - name: Change ownership of /github/home
         run: sudo chown -R $(whoami) /github/home
-      - run: pip3 install -r doc/requirements.txt --break-system-packages
+      - run: pip install -r doc/requirements.txt --break-system-packages
       - name: Compile
         run: make
       - name: EDocs
