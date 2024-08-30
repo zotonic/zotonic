@@ -19,7 +19,7 @@ jobs:
     strategy:
       matrix:
         otp_version: [26]
-        os: [ubuntu-20.04]
+        os: [ubuntu-22.04]
 
     container:
       image: erlang:${{ matrix.otp_version }}
@@ -30,9 +30,10 @@ jobs:
           apt-get update
           apt-get -y install sudo
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.7'
+          cache: 'pip'
       - run: pip install -r doc/requirements.txt --break-system-packages
       - name: Compile
         run: make
