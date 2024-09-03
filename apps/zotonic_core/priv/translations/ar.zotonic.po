@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-09-03 13:52\n"
+"PO-Revision-Date: 2024-09-03 15:04\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -2321,7 +2321,7 @@ msgstr "اللقب"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:53
 msgid "Swap"
-msgstr ""
+msgstr "تبديل"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:131
 msgid "System"
@@ -2395,7 +2395,7 @@ msgstr "لقد تم إعادة تثبيت بيانات الموقع. شاهد و
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:25
 msgid "The system has allocated more than the specified threshold of available memory, as reported by the underlying operating system."
-msgstr ""
+msgstr "لقد خصص النظام مساحة أكبر من الحد المحدد للذاكرة المتاحة، كما ورد في تقرير نظام التشغيل الأساسي."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:44
 msgid "There are no incoming connections."
@@ -2515,7 +2515,7 @@ msgstr "عدد كبير جدًا من الاتصالات ، يتم عرض الأ
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
 msgid "Total"
-msgstr ""
+msgstr "المجموع"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:84
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
@@ -2987,7 +2987,7 @@ msgstr "ترتيب"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
 msgid "Defaults to the SMTP hostname of the site."
-msgstr ""
+msgstr "افتراضيًا، يتم تعيين اسم مضيف SMTP للموقع."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:129
 msgid "Defaults to the hostname of the site."
@@ -3037,7 +3037,7 @@ msgstr "اسم المضيف"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:135./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:136
 msgid "Hostname SMTP Client"
-msgstr ""
+msgstr "اسم المضيف لعميل SMTP"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:118
 msgid "If (and only if) there is an e-mail intercept address defined above, then all e-mail is sent to that address <em>except</em> for the e-mail addresses and domains defined here."
@@ -3053,7 +3053,7 @@ msgstr "من الممكن اعتراض جميع رسائل البريد الإل
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:140
 msgid "It is usually set to the reverse DNS name of the machine."
-msgstr ""
+msgstr "يتم تعيينه عادة على اسم DNS العكسي للجهاز."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:10./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:11./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:13./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:14./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:20
 msgid "Key"
@@ -3170,7 +3170,7 @@ msgstr "الدليل الافتراضي لجميع شهادات الموقع ه�
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:138
 msgid "The hostname to use as client when delivering e-mail to external SMTP servers."
-msgstr ""
+msgstr "اسم المضيف الذي سيتم استخدامه كعميل عند تسليم البريد الإلكتروني إلى خوادم SMTP الخارجية."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:4
 msgid "This can't be undone. The configuration key will be lost forever."
