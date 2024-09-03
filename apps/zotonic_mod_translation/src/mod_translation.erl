@@ -152,7 +152,8 @@ maybe_set_cookie(CookieLangs, Context) ->
                 [
                     {max_age, ?LANGUAGE_COOKIE_MAX_AGE},
                     {path, <<"/">>},
-                    {secure, true}
+                    {secure, true},
+                    {same_site, lax}
                 ],
                 Context)
     end.

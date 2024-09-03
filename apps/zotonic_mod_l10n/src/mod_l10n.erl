@@ -128,7 +128,8 @@ set_cookie(Tz, Context) ->
         [
             {max_age, ?TZ_COOKIE_MAX_AGE},
             {path, <<"/">>},
-            {secure, true}
+            {secure, true},
+            {same_site, lax}
         ],
         Context).
 
