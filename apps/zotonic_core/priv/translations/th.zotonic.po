@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-07-24 17:34\n"
+"PO-Revision-Date: 2024-09-03 13:53\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -545,7 +545,7 @@ msgstr "กฎที่เปลี่ยนกลับ"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:161./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:64
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:78./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:17./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:29
-#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:152
+#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:162
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:138./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:26
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:102
@@ -896,7 +896,7 @@ msgstr "จัดสรรแล้ว"
 msgid "Alternative telephone"
 msgstr "โทรศัพท์ทางเลือก"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:72
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:115
 msgid "Amount"
 msgstr "จำนวน"
 
@@ -958,6 +958,10 @@ msgstr "Auth"
 msgid "Authoritative"
 msgstr "มีอำนาจ"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:38
+msgid "Available"
+msgstr "มีอยู่"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:170
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:28./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:23./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:62./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:38
 msgid "Back"
@@ -984,6 +988,14 @@ msgstr "ชื่อบล็อก"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:10
 msgid "Block quote"
 msgstr "บล็อกคำพูด"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:36
+msgid "Buffered"
+msgstr "บัฟเฟอร์"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:37
+msgid "Cached"
+msgstr "แคช"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:34
 msgid "Caches have been flushed."
@@ -1034,11 +1046,11 @@ msgstr "คลิกที่นี่เพื่อดูข้อมูลเ
 msgid "Click to preview."
 msgstr "คลิกเพื่อดูตัวอย่าง"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:90
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:133
 msgid "Close Sockets"
 msgstr "ปิดซ็อกเก็ต"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:91
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:134
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
 msgstr "ปิดซ็อกเก็ตทั้งหมดจากที่อยู่ IP ซึ่งมีมากกว่า &gt; 250 ซ็อกเก็ตเปิด"
 
@@ -1079,7 +1091,7 @@ msgstr "เชื่อมต่อจาก"
 msgid "Connected to"
 msgstr "เชื่อมต่อกับ"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:134./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:57
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:134./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:100
 msgid "Connections"
 msgstr "การเชื่อมต่อ"
 
@@ -1107,7 +1119,7 @@ msgstr "ไม่พบสิ่งที่จะนำเข้าใน URL �
 msgid "Count"
 msgstr "นับ"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:78./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:80./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:128./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:195./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:70
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:78./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:80./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:128./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:195./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:113
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:106./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:45./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:47
 msgid "Country"
 msgstr "ประเทศ"
@@ -1221,7 +1233,7 @@ msgstr "ยกเลิกการเชื่อมต่อ"
 msgid "Discover media"
 msgstr "ค้นพบสื่อ"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:26
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:69
 msgid "Disks"
 msgstr "ดิสก์"
 
@@ -1478,6 +1490,10 @@ msgstr "แคชระบบล้าง"
 msgid "Follow connections and import all (deep copy)."
 msgstr "ติดตามการเชื่อมต่อและนำเข้าทั้งหมด (สำเนาลึก)"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:35
+msgid "Free"
+msgstr "ฟรี"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:54
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:112
 msgid "From"
@@ -1521,7 +1537,7 @@ msgstr "ซ่อนหน้าจากการค้นหา (ขึ้น�
 msgid "Home Directory"
 msgstr "โฮมไดเร็กทอรี"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:68
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:111
 msgid "IP Address"
 msgstr "ที่อยู่ IP"
 
@@ -1678,7 +1694,7 @@ msgstr "ชื่อสื่อ"
 msgid "Media updated."
 msgstr "อัพเดตสื่อแล้ว"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:2
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:2./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:43
 msgid "Memory"
 msgstr "หน่วยความจำ"
 
@@ -1756,7 +1772,7 @@ msgstr "ชื่อสำหรับใบแจ้งหนี้"
 msgid "Need more help?"
 msgstr "ต้องการความช่วยเหลือเพิ่มเติมหรือไม่?"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:62
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:105
 msgid "Network Connections"
 msgstr "เชื่อมต่อเครือข่าย"
 
@@ -1842,6 +1858,10 @@ msgstr "ไม่ได้ทำดัชนีโดยเครื่องม
 msgid "Not protected"
 msgstr "ไม่ได้รับการคุ้มครอง"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:26
+msgid "OS Memory"
+msgstr "หน่วยความจำระบบปฏิบัติการ"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:171
 msgid "Ongoing"
 msgstr "กำลังดำเนินการ"
@@ -1875,7 +1895,7 @@ msgstr "เพจสำหรับ"
 msgid "Pages overview"
 msgstr "ภาพรวมของเพจ"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:32
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:75
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:4
 msgid "Path"
@@ -2009,7 +2029,7 @@ msgstr "เปลี่ยนเส้นทางไปยังเว็บไ
 msgid "Referrers to"
 msgstr "ผู้อ้างอิงถึง"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:51
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:94
 msgid "Refreshed every 30 minutes."
 msgstr "รีเฟรชทุกๆ 30 นาที"
 
@@ -2180,13 +2200,13 @@ msgstr "การแสดงหน้าเว็บที่คุณสาม
 msgid "Site Files Directory"
 msgstr "ไดเรกทอรีไฟล์ไซต์"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:76
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:17
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:67
 msgid "Size"
 msgstr "ขนาด"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:14./apps/zotonic_mod_admin/priv/templates/admin.tpl:15
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:14
 msgid "Some disks are almost full."
 msgstr "ดิสก์บางแผ่นใกล้เต็มแล้ว"
 
@@ -2299,6 +2319,10 @@ msgstr "สุร. คำนำหน้า"
 msgid "Surname"
 msgstr "นามสกุล"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:53
+msgid "Swap"
+msgstr "แลกเปลี่ยน"
+
 #: apps/zotonic_mod_admin/src/mod_admin.erl:131
 msgid "System"
 msgstr "ระบบ"
@@ -2368,6 +2392,10 @@ msgstr "ดัชนีการค้นหากำลังสร้างใ
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:52
 msgid "The site’s data is being reinstalled. Watch the console for messages"
 msgstr "กำลังติดตั้งข้อมูลของไซต์ใหม่ ดูคอนโซลสำหรับข้อความ"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:25
+msgid "The system has allocated more than the specified threshold of available memory, as reported by the underlying operating system."
+msgstr "ระบบได้จัดสรรหน่วยความจำที่มีอยู่เกินขีดจำกัดที่ระบุไว้ ตามที่ระบบปฏิบัติการพื้นฐานรายงานไว้"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:44
 msgid "There are no incoming connections."
@@ -2485,6 +2513,10 @@ msgstr "ไม่ต้องสลับช่องทาง"
 msgid "Too many connections, only the first and last are shown."
 msgstr "การเชื่อมต่อมากเกินไประบบจะแสดงเฉพาะรายการแรกและรายการสุดท้ายเท่านั้น"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
+msgid "Total"
+msgstr "ทั้งหมด"
+
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:84
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
 msgid "Type text to search"
@@ -2572,7 +2604,7 @@ msgstr "อัปโหลดแล้ว"
 msgid "Uploaded on"
 msgstr "อัพโหลดเมื่อ"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:10./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:10./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:77
 msgid "Usage"
 msgstr "การใช้งาน"
 
@@ -2584,7 +2616,7 @@ msgstr "ใช้ตัวเติมข้อความอัตโนมั
 msgid "Use the title of the base content for the display name of this person."
 msgstr "ใช้ชื่อของเนื้อหาพื้นฐานสำหรับชื่อที่แสดงของบุคคลนี้"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:8
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:34
 msgid "Used"
 msgstr "ใช้แล้ว"
 
@@ -2616,7 +2648,7 @@ msgstr "ดูหน้าทั้งหมดจากหมวดหมู่
 msgid "View all referrers"
 msgstr "ดูผู้อ้างอิงทั้งหมด"
 
-#: apps/zotonic_mod_admin/priv/templates/admin.tpl:17
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:16./apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:27
 msgid "View status"
 msgstr "ดูสถานะ"
 
@@ -2641,7 +2673,7 @@ msgstr "ไปที่หน้าแก้ไขแบบเต็ม"
 msgid "Visiting address"
 msgstr "ที่อยู่เยี่ยม"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:3./apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:13./apps/zotonic_mod_admin/priv/templates/admin.tpl:14
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:3./apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:13./apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:24
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:10
 msgid "Warning!"
 msgstr "คำเตือน!"
@@ -2953,6 +2985,10 @@ msgstr "Config"
 msgid "Configuration"
 msgstr "การกำหนดค่า"
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
+msgid "Defaults to the SMTP hostname of the site."
+msgstr "ค่าเริ่มต้นเป็นชื่อโฮสต์ SMTP ของไซต์"
+
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:129
 msgid "Defaults to the hostname of the site."
 msgstr "ค่าเริ่มต้นเป็นชื่อโฮสต์ของไซต์"
@@ -2961,7 +2997,7 @@ msgstr "ค่าเริ่มต้นเป็นชื่อโฮสต์
 msgid "Domain for all generated from- and envelop-addresses."
 msgstr "โดเมนสำหรับทั้งหมดที่สร้างจากที่อยู่และซองจดหมาย"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:144
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:154
 msgid "Download images in emails after opening the message"
 msgstr "ดาวน์โหลดภาพในอีเมลหลังจากเปิดข้อความ"
 
@@ -2973,7 +3009,7 @@ msgstr "การสกัดกั้นอีเมล"
 msgid "E-mail intercept &ndash; exceptions"
 msgstr "การสกัดกั้นอีเมล &ndash; ข้อยกเว้น"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:135./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:136
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:145./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:146
 msgid "Email FROM"
 msgstr "อีเมลจาก"
 
@@ -2999,6 +3035,10 @@ msgstr "คุณสามารถดูการกำหนดค่าอี
 msgid "Hostname"
 msgstr "ชื่อโฮสต์"
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:135./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:136
+msgid "Hostname SMTP Client"
+msgstr "ชื่อโฮสต์ไคลเอนต์ SMTP"
+
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:118
 msgid "If (and only if) there is an e-mail intercept address defined above, then all e-mail is sent to that address <em>except</em> for the e-mail addresses and domains defined here."
 msgstr "หาก (และเฉพาะในกรณีที่) มีที่อยู่สกัดกั้นอีเมลที่กำหนดไว้ข้างต้น อีเมลทั้งหมดจะถูกส่งไปยังที่อยู่นั้น <em>ยกเว้น</em> สำหรับที่อยู่อีเมลและโดเมนที่กำหนดไว้ที่นี่"
@@ -3010,6 +3050,10 @@ msgstr "หากคุณเปลี่ยนแปลงสิ่งนี้
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:106
 msgid "It is possible to intercept all email and send it to a single address. Configure this address here."
 msgstr "เป็นไปได้ที่จะดักฟังอีเมลทั้งหมดและส่งไปยังที่อยู่เดียว กำหนดค่าที่อยู่นี้ที่นี่"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:140
+msgid "It is usually set to the reverse DNS name of the machine."
+msgstr "โดยปกติจะตั้งค่าเป็นชื่อ DNS ย้อนกลับของเครื่อง"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:10./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:11./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:13./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:14./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:20
 msgid "Key"
@@ -3043,7 +3087,7 @@ msgstr "มีเพียงผู้ดูแลระบบเท่านั
 msgid "Password"
 msgstr "รหัสผ่าน"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:147
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:157
 msgid "Per default images smaller than 1MB are embedded in email messages. Using a separate download for images results in a smaller message size but non-public images will not be visible. Leave this disabled if you are sending non-public images."
 msgstr "ต่อรูปภาพเริ่มต้นที่มีขนาดเล็กกว่า 1MB จะถูกฝังในข้อความอีเมล การใช้การดาวน์โหลดรูปภาพแยกต่างหากจะทำให้ข้อความมีขนาดเล็กลง แต่รูปภาพที่ไม่ใช่แบบสาธารณะจะไม่ปรากฏให้เห็น ปล่อยให้สิ่งนี้ปิดการใช้งานหากคุณกำลังส่งรูปภาพที่ไม่เปิดเผยต่อสาธารณะ"
 
@@ -3071,7 +3115,7 @@ msgstr "ใบรับรอง SSL"
 msgid "Self signed certificate"
 msgstr "ใบรับรองที่ลงนามด้วยตนเอง"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:183
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:193
 #: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:111
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:21./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_form_fields.tpl:17
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:49
@@ -3079,11 +3123,11 @@ msgstr "ใบรับรองที่ลงนามด้วยตนเอ
 msgid "Send"
 msgstr "ส่ง"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:170
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:180
 msgid "Send a test email"
 msgstr "ส่งอีเมลทดสอบ"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:174
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:184
 msgid "Send a test email or check the status of an email address."
 msgstr "ส่งอีเมลทดสอบหรือตรวจสอบสถานะของที่อยู่อีเมล"
 
@@ -3116,13 +3160,17 @@ msgstr "การกำหนดค่าระบบ Zotonic ถูกตั้
 msgid "The config key already exists, please choose another key name."
 msgstr "มีคีย์การกำหนดค่าอยู่แล้วโปรดเลือกชื่อคีย์อื่น"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:138
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:148
 msgid "The default FROM address for emails. Defaults to"
 msgstr "ที่อยู่เริ่มต้นสำหรับอีเมล ค่าเริ่มต้นเป็น"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:20
 msgid "The default directory for all site-certificates is"
 msgstr "ไดเรกทอรีเริ่มต้นสำหรับใบรับรองไซต์ทั้งหมดคือ"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:138
+msgid "The hostname to use as client when delivering e-mail to external SMTP servers."
+msgstr "ชื่อโฮสต์ที่จะใช้เป็นไคลเอนต์เมื่อส่งอีเมลไปยังเซิร์ฟเวอร์ SMTP ภายนอก"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:4
 msgid "This can't be undone. The configuration key will be lost forever."
@@ -3169,12 +3217,12 @@ msgstr "ใช้ได้ถึง"
 msgid "Value"
 msgstr "มูลค่า"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:185./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:100
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:195./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:100
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 msgid "View email status"
 msgstr "ดูสถานะอีเมล"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:160
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:170
 msgid "You must be an administrator to view or change the email configuration."
 msgstr "คุณต้องเป็นผู้ดูแลระบบเพื่อดูหรือเปลี่ยนการกำหนดค่าอีเมล"
 
@@ -3182,7 +3230,7 @@ msgstr "คุณต้องเป็นผู้ดูแลระบบเพ
 msgid "Zotonic sends email using a built-in email server. You can send the email via an external relay."
 msgstr "Zotonic ส่งอีเมลโดยใช้เซิร์ฟเวอร์อีเมลในตัว คุณสามารถส่งอีเมลผ่านรีเลย์ภายนอก"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:182
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:192
 msgid "test@example.com"
 msgstr "test@example.com"
 
