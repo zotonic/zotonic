@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-09-03 13:52\n"
+"PO-Revision-Date: 2024-09-03 15:04\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -2321,7 +2321,7 @@ msgstr "שֵׁם מִשׁפָּחָה"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:53
 msgid "Swap"
-msgstr ""
+msgstr "לְהַחלִיף"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:131
 msgid "System"
@@ -2395,7 +2395,7 @@ msgstr "נתוני האתר מתקינים מחדש. צפה במסוף אחר ה
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:25
 msgid "The system has allocated more than the specified threshold of available memory, as reported by the underlying operating system."
-msgstr ""
+msgstr "המערכת הקצתה יותר מהסף שצוין של זיכרון זמין, כפי שדווח על ידי מערכת ההפעלה הבסיסית."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:44
 msgid "There are no incoming connections."
@@ -2515,7 +2515,7 @@ msgstr "יותר מדי חיבורים, רק הראשון והאחרון מוצ�
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
 msgid "Total"
-msgstr ""
+msgstr "סַך הַכֹּל"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:84
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
@@ -2987,7 +2987,7 @@ msgstr "תְצוּרָה"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
 msgid "Defaults to the SMTP hostname of the site."
-msgstr ""
+msgstr "ברירת המחדל של שם המארח SMTP של האתר."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:129
 msgid "Defaults to the hostname of the site."
@@ -3037,7 +3037,7 @@ msgstr "שם מארח"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:135./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:136
 msgid "Hostname SMTP Client"
-msgstr ""
+msgstr "שם מארח SMTP Client"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:118
 msgid "If (and only if) there is an e-mail intercept address defined above, then all e-mail is sent to that address <em>except</em> for the e-mail addresses and domains defined here."
@@ -3053,7 +3053,7 @@ msgstr "אפשר ליירט את כל הדוא\"ל ולשלוח אותו לכת�
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:140
 msgid "It is usually set to the reverse DNS name of the machine."
-msgstr ""
+msgstr "בדרך כלל הוא מוגדר לשם ה-DNS ההפוך של המחשב."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:10./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:11./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:13./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:14./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:20
 msgid "Key"
@@ -3170,7 +3170,7 @@ msgstr "ספריית ברירת המחדל עבור כל אישורי האתר �
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:138
 msgid "The hostname to use as client when delivering e-mail to external SMTP servers."
-msgstr ""
+msgstr "שם המארח לשימוש כלקוח בעת שליחת דואר אלקטרוני לשרתי SMTP חיצוניים."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:4
 msgid "This can't be undone. The configuration key will be lost forever."
