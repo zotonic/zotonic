@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-07-24 17:33\n"
+"PO-Revision-Date: 2024-09-03 15:04\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -545,7 +545,7 @@ msgstr "Regole ripristinate"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:161./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:64
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:78./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:17./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:29
-#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:152
+#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:162
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:138./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:26
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:102
@@ -896,7 +896,7 @@ msgstr "Assegnato"
 msgid "Alternative telephone"
 msgstr "Telefono alternativo"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:72
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:115
 msgid "Amount"
 msgstr "Quantità"
 
@@ -958,6 +958,10 @@ msgstr "Autorizzazione"
 msgid "Authoritative"
 msgstr "Autorevole"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:38
+msgid "Available"
+msgstr "Disponibile"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:170
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:28./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:23./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:62./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:38
 msgid "Back"
@@ -984,6 +988,14 @@ msgstr "Nome del blocco"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:10
 msgid "Block quote"
 msgstr "Citazione"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:36
+msgid "Buffered"
+msgstr "Tamponato"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:37
+msgid "Cached"
+msgstr "Memorizzato nella cache"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:34
 msgid "Caches have been flushed."
@@ -1034,11 +1046,11 @@ msgstr "Clicca qui per maggiori informazioni"
 msgid "Click to preview."
 msgstr "Clicca per vedere l'anteprima."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:90
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:133
 msgid "Close Sockets"
 msgstr "Chiudere le prese"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:91
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:134
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
 msgstr "Chiudere tutti i socket da indirizzi ip che hanno più di &gt; 250 socket aperti."
 
@@ -1079,7 +1091,7 @@ msgstr "Connesso da"
 msgid "Connected to"
 msgstr "Collegato a"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:134./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:57
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:134./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:100
 msgid "Connections"
 msgstr "Connessioni"
 
@@ -1107,7 +1119,7 @@ msgstr "Non è stato possibile rilevare nulla da importare su quell'URL o codice
 msgid "Count"
 msgstr "Contare"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:78./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:80./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:128./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:195./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:70
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:78./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:80./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:128./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:195./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:113
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:106./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:45./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:47
 msgid "Country"
 msgstr "Nazione"
@@ -1221,7 +1233,7 @@ msgstr "Scollegare"
 msgid "Discover media"
 msgstr "Scopri il contenuto"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:26
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:69
 msgid "Disks"
 msgstr "Dischi"
 
@@ -1478,6 +1490,10 @@ msgstr "Sciacquare le cache di sistema"
 msgid "Follow connections and import all (deep copy)."
 msgstr "Segui le connessioni e importa tutto (copia completa)."
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:35
+msgid "Free"
+msgstr "Gratuito"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:54
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:112
 msgid "From"
@@ -1521,7 +1537,7 @@ msgstr "Nascondi la pagina dalle ricerche (dipende dalla query di ricerca)"
 msgid "Home Directory"
 msgstr "Indice della casa"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:68
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:111
 msgid "IP Address"
 msgstr "Indirizzo IP"
 
@@ -1678,7 +1694,7 @@ msgstr "Titolo dei media"
 msgid "Media updated."
 msgstr "Supporto aggiornato."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:2
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:2./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:43
 msgid "Memory"
 msgstr "Memoria"
 
@@ -1756,7 +1772,7 @@ msgstr "Nome per le fatture"
 msgid "Need more help?"
 msgstr "Hai bisogno di altro aiuto?"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:62
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:105
 msgid "Network Connections"
 msgstr "Connessioni di rete"
 
@@ -1842,6 +1858,10 @@ msgstr "Non indicizzato dai motori di ricerca"
 msgid "Not protected"
 msgstr "Non protetto"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:26
+msgid "OS Memory"
+msgstr "Memoria del sistema operativo"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:171
 msgid "Ongoing"
 msgstr "In corso"
@@ -1875,7 +1895,7 @@ msgstr "Pagine per"
 msgid "Pages overview"
 msgstr "Panoramica delle pagine"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:32
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:75
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:4
 msgid "Path"
@@ -2009,7 +2029,7 @@ msgstr "Reindirizzamento al sito web alla visualizzazione della pagina"
 msgid "Referrers to"
 msgstr "Riferimenti a"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:51
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:94
 msgid "Refreshed every 30 minutes."
 msgstr "Aggiornato ogni 30 minuti."
 
@@ -2180,13 +2200,13 @@ msgstr "Visualizzazione delle pagine a cui puoi connetterti utilizzando <b>{pred
 msgid "Site Files Directory"
 msgstr "Directory dei file del sito"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:76
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:17
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:67
 msgid "Size"
 msgstr "Dimensione"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:14./apps/zotonic_mod_admin/priv/templates/admin.tpl:15
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:14
 msgid "Some disks are almost full."
 msgstr "Alcuni dischi sono quasi pieni."
 
@@ -2299,6 +2319,10 @@ msgstr "Prefisso (es. Van, Der)"
 msgid "Surname"
 msgstr "Cognome"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:53
+msgid "Swap"
+msgstr "Scambio"
+
 #: apps/zotonic_mod_admin/src/mod_admin.erl:131
 msgid "System"
 msgstr "Sistema"
@@ -2368,6 +2392,10 @@ msgstr "L'indice di ricerca si sta ricostruendo. A seconda della dimensione del 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:52
 msgid "The site’s data is being reinstalled. Watch the console for messages"
 msgstr "I dati del sito vengono reinstallati. Guarda la console per i messaggi"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:25
+msgid "The system has allocated more than the specified threshold of available memory, as reported by the underlying operating system."
+msgstr "Il sistema ha allocato una quantità di memoria disponibile superiore alla soglia specificata, come segnalato dal sistema operativo sottostante."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:44
 msgid "There are no incoming connections."
@@ -2485,6 +2513,10 @@ msgstr "Allineare la navigazione"
 msgid "Too many connections, only the first and last are shown."
 msgstr "Troppi collegamenti, solo il primo e l'ultimo sono mostrati."
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
+msgid "Total"
+msgstr "Totale"
+
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:84
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
 msgid "Type text to search"
@@ -2572,7 +2604,7 @@ msgstr "Caricato"
 msgid "Uploaded on"
 msgstr "Caricato su"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:10./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:10./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:77
 msgid "Usage"
 msgstr "Uso"
 
@@ -2584,7 +2616,7 @@ msgstr "Usa l'autocompletatore per cercare i media in questo sito."
 msgid "Use the title of the base content for the display name of this person."
 msgstr "Usa il titolo del contenuto di base per il nome visualizzato di questa persona."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:8
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:34
 msgid "Used"
 msgstr "Usato"
 
@@ -2616,7 +2648,7 @@ msgstr "Visualizza tutte le pagine di questa categoria"
 msgid "View all referrers"
 msgstr "Visualizza tutti i referenti"
 
-#: apps/zotonic_mod_admin/priv/templates/admin.tpl:17
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:16./apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:27
 msgid "View status"
 msgstr "Visualizza lo stato"
 
@@ -2641,7 +2673,7 @@ msgstr "Visita la pagina di modifica completa"
 msgid "Visiting address"
 msgstr "Indirizzo per il pubblico"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:3./apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:13./apps/zotonic_mod_admin/priv/templates/admin.tpl:14
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:3./apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:13./apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:24
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:10
 msgid "Warning!"
 msgstr "Attenzione!"
@@ -2953,6 +2985,10 @@ msgstr "Configurazioni"
 msgid "Configuration"
 msgstr "Configurazione"
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
+msgid "Defaults to the SMTP hostname of the site."
+msgstr "Per impostazione predefinita, il nome host SMTP del sito."
+
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:129
 msgid "Defaults to the hostname of the site."
 msgstr "Il valore predefinito è l'hostname del sito."
@@ -2961,7 +2997,7 @@ msgstr "Il valore predefinito è l'hostname del sito."
 msgid "Domain for all generated from- and envelop-addresses."
 msgstr "Dominio per tutti gli indirizzi generati da e per gli indirizzi di busta."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:144
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:154
 msgid "Download images in emails after opening the message"
 msgstr "Scarica le immagini nelle e-mail dopo aver aperto il messaggio"
 
@@ -2973,7 +3009,7 @@ msgstr "Intercettazione di posta elettronica"
 msgid "E-mail intercept &ndash; exceptions"
 msgstr "Intercettazione e-mail &ndash; eccezioni"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:135./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:136
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:145./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:146
 msgid "Email FROM"
 msgstr "Email da"
 
@@ -2999,6 +3035,10 @@ msgstr "Qui puoi vedere tutte le configurazioni di email e inviare email di prov
 msgid "Hostname"
 msgstr "Hostname"
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:135./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:136
+msgid "Hostname SMTP Client"
+msgstr "Nome host Client SMTP"
+
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:118
 msgid "If (and only if) there is an e-mail intercept address defined above, then all e-mail is sent to that address <em>except</em> for the e-mail addresses and domains defined here."
 msgstr "Se (e solo se) esiste un indirizzo di intercettazione e-mail definito sopra, tutta la posta elettronica viene inviata a quell'indirizzo <em>tranne</em> per gli indirizzi e-mail e i domini definiti qui."
@@ -3010,6 +3050,10 @@ msgstr "Se lo cambiate, potreste aver bisogno di richiedere un nuovo certificato
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:106
 msgid "It is possible to intercept all email and send it to a single address. Configure this address here."
 msgstr "È possibile intercettare tutte le e-mail e inviarle a un solo indirizzo. Configura questo indirizzo qui."
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:140
+msgid "It is usually set to the reverse DNS name of the machine."
+msgstr "Di solito è impostato sul nome DNS inverso della macchina."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:10./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:11./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:13./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:14./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:20
 msgid "Key"
@@ -3043,7 +3087,7 @@ msgstr "Solo un amministratore può aggiungere chiavi di configurazione."
 msgid "Password"
 msgstr "Password"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:147
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:157
 msgid "Per default images smaller than 1MB are embedded in email messages. Using a separate download for images results in a smaller message size but non-public images will not be visible. Leave this disabled if you are sending non-public images."
 msgstr "Per impostazione predefinita, le immagini di dimensioni inferiori a 1 MB sono incorporate nei messaggi di posta elettronica. L'utilizzo di un download separato per le immagini comporta una dimensione del messaggio inferiore, ma le immagini non pubbliche non saranno visibili. Lascia questo disabilitato se stai inviando immagini non pubbliche."
 
@@ -3071,7 +3115,7 @@ msgstr "Certificati SSL"
 msgid "Self signed certificate"
 msgstr "Certificato autofirmato"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:183
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:193
 #: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:111
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:21./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_form_fields.tpl:17
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:49
@@ -3079,11 +3123,11 @@ msgstr "Certificato autofirmato"
 msgid "Send"
 msgstr "Invia"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:170
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:180
 msgid "Send a test email"
 msgstr "Invia un'email di prova"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:174
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:184
 msgid "Send a test email or check the status of an email address."
 msgstr "Invia un'email di prova o controlla lo stato di un indirizzo email."
 
@@ -3116,13 +3160,17 @@ msgstr "La configurazione del sistema Zotonic è impostata per utilizzare un rel
 msgid "The config key already exists, please choose another key name."
 msgstr "La chiave di configurazione esiste già, scegli un altro nome di chiave."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:138
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:148
 msgid "The default FROM address for emails. Defaults to"
 msgstr "L'indirizzo FROM predefinito per le email. Il valore predefinito è"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:20
 msgid "The default directory for all site-certificates is"
 msgstr "La directory predefinita per tutti i certificati del sito è"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:138
+msgid "The hostname to use as client when delivering e-mail to external SMTP servers."
+msgstr "Nome host da utilizzare come client per l'invio di e-mail a server SMTP esterni."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:4
 msgid "This can't be undone. The configuration key will be lost forever."
@@ -3169,12 +3217,12 @@ msgstr "Valido fino a"
 msgid "Value"
 msgstr "Valore"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:185./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:100
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:195./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:100
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 msgid "View email status"
 msgstr "Visualizza lo stato delle e-mail"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:160
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:170
 msgid "You must be an administrator to view or change the email configuration."
 msgstr "Devi essere un amministratore per visualizzare o modificare la configurazione delle e-mail."
 
@@ -3182,7 +3230,7 @@ msgstr "Devi essere un amministratore per visualizzare o modificare la configura
 msgid "Zotonic sends email using a built-in email server. You can send the email via an external relay."
 msgstr "Zotonic invia le e-mail utilizzando un server e-mail integrato. Puoi inviare l'email tramite un relay esterno."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:182
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:192
 msgid "test@example.com"
 msgstr "test@example.com"
 

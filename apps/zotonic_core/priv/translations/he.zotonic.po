@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-07-24 17:33\n"
+"PO-Revision-Date: 2024-09-03 15:04\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -545,7 +545,7 @@ msgstr "חוקים שהוחזרו"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:161./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:64
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:78./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:17./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:29
-#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:152
+#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:162
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:138./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:26
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:102
@@ -896,7 +896,7 @@ msgstr "מוּקצֶה"
 msgid "Alternative telephone"
 msgstr "טלפון חלופי"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:72
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:115
 msgid "Amount"
 msgstr "כמות"
 
@@ -958,6 +958,10 @@ msgstr "תודה"
 msgid "Authoritative"
 msgstr "מוּסמָך"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:38
+msgid "Available"
+msgstr "זָמִין"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:170
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:28./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:23./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:62./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:38
 msgid "Back"
@@ -984,6 +988,14 @@ msgstr "שם חסום"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:10
 msgid "Block quote"
 msgstr "חסום הצעת מחיר"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:36
+msgid "Buffered"
+msgstr "מאופשרת"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:37
+msgid "Cached"
+msgstr "שמור במטמון"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:34
 msgid "Caches have been flushed."
@@ -1034,11 +1046,11 @@ msgstr "לחץ כאן למידע נוסף"
 msgid "Click to preview."
 msgstr "לחץ לתצוגה מקדימה."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:90
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:133
 msgid "Close Sockets"
 msgstr "סגור שקעים"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:91
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:134
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
 msgstr "סגור את כל השקעים מכתובות ip שיש להם מעל &gt; 250 שקעים פתוחים."
 
@@ -1079,7 +1091,7 @@ msgstr "מחובר מ"
 msgid "Connected to"
 msgstr "מחובר ל"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:134./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:57
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:134./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:100
 msgid "Connections"
 msgstr "חיבורים"
 
@@ -1107,7 +1119,7 @@ msgstr "לא ניתן היה לזהות שום דבר לייבא בכתובת א
 msgid "Count"
 msgstr "לספור"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:78./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:80./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:128./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:195./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:70
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:78./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:80./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:128./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:195./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:113
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:106./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:45./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:47
 msgid "Country"
 msgstr "מדינה"
@@ -1221,7 +1233,7 @@ msgstr "לְנַתֵק"
 msgid "Discover media"
 msgstr "גלה מדיה"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:26
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:69
 msgid "Disks"
 msgstr "דיסקים"
 
@@ -1478,6 +1490,10 @@ msgstr "מטמני מערכת שטיפה"
 msgid "Follow connections and import all (deep copy)."
 msgstr "עקוב אחר חיבורים וייבא הכל (העתקה עמוקה)."
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:35
+msgid "Free"
+msgstr "לְשַׁחְרֵר"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:54
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:112
 msgid "From"
@@ -1521,7 +1537,7 @@ msgstr "הסתר דף מחיפושים (תלוי בשאילתת החיפוש)"
 msgid "Home Directory"
 msgstr "מדריך הבית"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:68
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:111
 msgid "IP Address"
 msgstr "כתובת ה - IP"
 
@@ -1678,7 +1694,7 @@ msgstr "כותרת מדיה"
 msgid "Media updated."
 msgstr "התקשורת עודכנה."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:2
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:2./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:43
 msgid "Memory"
 msgstr "זיכרון"
 
@@ -1756,7 +1772,7 @@ msgstr "שם לחשבוניות"
 msgid "Need more help?"
 msgstr "צריך עוד עזרה?"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:62
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:105
 msgid "Network Connections"
 msgstr "חיבורי רשת"
 
@@ -1842,6 +1858,10 @@ msgstr "לא באינדקס על ידי מנועי החיפוש"
 msgid "Not protected"
 msgstr "לא מוגן"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:26
+msgid "OS Memory"
+msgstr "זיכרון מערכת הפעלה"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:171
 msgid "Ongoing"
 msgstr "מתמשך"
@@ -1875,7 +1895,7 @@ msgstr "דפים עבור"
 msgid "Pages overview"
 msgstr "סקירת דפים"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:32
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:75
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:4
 msgid "Path"
@@ -2009,7 +2029,7 @@ msgstr "הפניה לאתר בתצוגת עמוד"
 msgid "Referrers to"
 msgstr "מפנים ל"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:51
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:94
 msgid "Refreshed every 30 minutes."
 msgstr "מתרענן כל 30 דקות."
 
@@ -2180,13 +2200,13 @@ msgstr "הצגת דפים שאליהם אתה יכול להתחבר באמצעו
 msgid "Site Files Directory"
 msgstr "מדריך קבצי אתרים"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:76
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:17
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:67
 msgid "Size"
 msgstr "גודל"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:14./apps/zotonic_mod_admin/priv/templates/admin.tpl:15
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:14
 msgid "Some disks are almost full."
 msgstr "חלק מהדיסקים כמעט מלאים."
 
@@ -2299,6 +2319,10 @@ msgstr "סור. קידומת"
 msgid "Surname"
 msgstr "שֵׁם מִשׁפָּחָה"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:53
+msgid "Swap"
+msgstr "לְהַחלִיף"
+
 #: apps/zotonic_mod_admin/src/mod_admin.erl:131
 msgid "System"
 msgstr "מערכת"
@@ -2368,6 +2392,10 @@ msgstr "אינדקס החיפוש נבנה מחדש. בהתאם לגודל מס�
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:52
 msgid "The site’s data is being reinstalled. Watch the console for messages"
 msgstr "נתוני האתר מתקינים מחדש. צפה במסוף אחר הודעות"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:25
+msgid "The system has allocated more than the specified threshold of available memory, as reported by the underlying operating system."
+msgstr "המערכת הקצתה יותר מהסף שצוין של זיכרון זמין, כפי שדווח על ידי מערכת ההפעלה הבסיסית."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:44
 msgid "There are no incoming connections."
@@ -2485,6 +2513,10 @@ msgstr "החלף ניווט"
 msgid "Too many connections, only the first and last are shown."
 msgstr "יותר מדי חיבורים, רק הראשון והאחרון מוצג."
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
+msgid "Total"
+msgstr "סַך הַכֹּל"
+
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:84
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
 msgid "Type text to search"
@@ -2572,7 +2604,7 @@ msgstr "הועלה"
 msgid "Uploaded on"
 msgstr "הועלה ב"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:10./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:10./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:77
 msgid "Usage"
 msgstr "נוֹהָג"
 
@@ -2584,7 +2616,7 @@ msgstr "השתמש במשלים האוטומטי כדי לחפש במדיה בא
 msgid "Use the title of the base content for the display name of this person."
 msgstr "השתמש בכותרת תוכן הבסיס לשם התצוגה של אדם זה."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:8
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:34
 msgid "Used"
 msgstr "בשימוש"
 
@@ -2616,7 +2648,7 @@ msgstr "צפה בכל הדפים מקטגוריה זו"
 msgid "View all referrers"
 msgstr "צפה בכל המפנים"
 
-#: apps/zotonic_mod_admin/priv/templates/admin.tpl:17
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:16./apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:27
 msgid "View status"
 msgstr "צפה בסטטוס"
 
@@ -2641,7 +2673,7 @@ msgstr "בקר בדף העריכה המלא"
 msgid "Visiting address"
 msgstr "כתובת ביקור"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:3./apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:13./apps/zotonic_mod_admin/priv/templates/admin.tpl:14
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:3./apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:13./apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:24
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:10
 msgid "Warning!"
 msgstr "אַזהָרָה!"
@@ -2953,6 +2985,10 @@ msgstr "תצורה"
 msgid "Configuration"
 msgstr "תְצוּרָה"
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
+msgid "Defaults to the SMTP hostname of the site."
+msgstr "ברירת המחדל של שם המארח SMTP של האתר."
+
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:129
 msgid "Defaults to the hostname of the site."
 msgstr "ברירת מחדל לשם המארח של האתר."
@@ -2961,7 +2997,7 @@ msgstr "ברירת מחדל לשם המארח של האתר."
 msgid "Domain for all generated from- and envelop-addresses."
 msgstr "דומיין לכל כתובות שנוצרו מכתובות ומעטפות."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:144
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:154
 msgid "Download images in emails after opening the message"
 msgstr "הורד תמונות במיילים לאחר פתיחת ההודעה"
 
@@ -2973,7 +3009,7 @@ msgstr "יירוט דואר אלקטרוני"
 msgid "E-mail intercept &ndash; exceptions"
 msgstr "יירוט דואר אלקטרוני &ndash; חריגים"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:135./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:136
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:145./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:146
 msgid "Email FROM"
 msgstr "אי מייל מ"
 
@@ -2999,6 +3035,10 @@ msgstr "כאן תוכלו לראות את כל תצורות הדוא\"ל ולש�
 msgid "Hostname"
 msgstr "שם מארח"
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:135./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:136
+msgid "Hostname SMTP Client"
+msgstr "שם מארח SMTP Client"
+
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:118
 msgid "If (and only if) there is an e-mail intercept address defined above, then all e-mail is sent to that address <em>except</em> for the e-mail addresses and domains defined here."
 msgstr "אם (ורק אם) קיימת כתובת יירוט דואר אלקטרוני שהוגדרה למעלה, אזי כל הדואר האלקטרוני נשלח לכתובת זו <em>מלבד</em> לכתובות הדואר האלקטרוני והדומיינים המוגדרים כאן."
@@ -3010,6 +3050,10 @@ msgstr "אם תשנה זאת, ייתכן שתצטרך לבקש אישור SSL ח
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:106
 msgid "It is possible to intercept all email and send it to a single address. Configure this address here."
 msgstr "אפשר ליירט את כל הדוא\"ל ולשלוח אותו לכתובת אחת. הגדר כתובת זו כאן."
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:140
+msgid "It is usually set to the reverse DNS name of the machine."
+msgstr "בדרך כלל הוא מוגדר לשם ה-DNS ההפוך של המחשב."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:10./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:11./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:13./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:14./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:20
 msgid "Key"
@@ -3043,7 +3087,7 @@ msgstr "רק מנהל מערכת יכול להוסיף מפתחות תצורה."
 msgid "Password"
 msgstr "סיסמה"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:147
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:157
 msgid "Per default images smaller than 1MB are embedded in email messages. Using a separate download for images results in a smaller message size but non-public images will not be visible. Leave this disabled if you are sending non-public images."
 msgstr "כברירת מחדל, תמונות קטנות מ-1MB מוטמעות בהודעות דואר אלקטרוני. שימוש בהורדה נפרדת לתמונות מביאה לגודל הודעה קטן יותר, אך תמונות שאינן ציבוריות לא יהיו גלויות. השאר את זה מושבת אם אתה שולח תמונות לא ציבוריות."
 
@@ -3071,7 +3115,7 @@ msgstr "אישורי SSL"
 msgid "Self signed certificate"
 msgstr "תעודה חתומה עצמית"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:183
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:193
 #: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:111
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:21./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_form_fields.tpl:17
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:49
@@ -3079,11 +3123,11 @@ msgstr "תעודה חתומה עצמית"
 msgid "Send"
 msgstr "לִשְׁלוֹחַ"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:170
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:180
 msgid "Send a test email"
 msgstr "שלח אימייל למבחן"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:174
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:184
 msgid "Send a test email or check the status of an email address."
 msgstr "שלח דוא\"ל למבחן או בדוק את מצב כתובת הדוא\"ל."
 
@@ -3116,13 +3160,17 @@ msgstr "תצורת המערכת הזוטונית מוגדרת לשימוש במ�
 msgid "The config key already exists, please choose another key name."
 msgstr "מפתח התצורה כבר קיים, אנא בחר שם מפתח אחר."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:138
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:148
 msgid "The default FROM address for emails. Defaults to"
 msgstr "כתובת ה- FROM המוגדרת כברירת מחדל עבור הודעות דוא\"ל. ברירת המחדל היא"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:20
 msgid "The default directory for all site-certificates is"
 msgstr "ספריית ברירת המחדל עבור כל אישורי האתר היא"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:138
+msgid "The hostname to use as client when delivering e-mail to external SMTP servers."
+msgstr "שם המארח לשימוש כלקוח בעת שליחת דואר אלקטרוני לשרתי SMTP חיצוניים."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:4
 msgid "This can't be undone. The configuration key will be lost forever."
@@ -3169,12 +3217,12 @@ msgstr "בתוקף עד"
 msgid "Value"
 msgstr "ערך"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:185./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:100
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:195./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:100
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 msgid "View email status"
 msgstr "צפה בסטטוס הדוא\"ל"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:160
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:170
 msgid "You must be an administrator to view or change the email configuration."
 msgstr "עליך להיות מנהל כדי להציג או לשנות את תצורת הדוא\"ל."
 
@@ -3182,7 +3230,7 @@ msgstr "עליך להיות מנהל כדי להציג או לשנות את תצ
 msgid "Zotonic sends email using a built-in email server. You can send the email via an external relay."
 msgstr "זוטוניק שולחת דוא\"ל באמצעות שרת דואר אלקטרוני מובנה. אתה יכול לשלוח את הדוא\"ל באמצעות ממסר חיצוני."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:182
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:192
 msgid "test@example.com"
 msgstr "test@example.com"
 

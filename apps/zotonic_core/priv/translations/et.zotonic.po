@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-07-24 17:34\n"
+"PO-Revision-Date: 2024-09-03 13:53\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -545,7 +545,7 @@ msgstr "Tagasireeglid"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_change_category.tpl:17./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:161./apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:64
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:78./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:17./apps/zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:29
-#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:152
+#: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:22./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:162
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:138./apps/zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:79
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:26
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:102
@@ -896,7 +896,7 @@ msgstr "Eraldatud"
 msgid "Alternative telephone"
 msgstr "Teine telefon"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:72
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:115
 msgid "Amount"
 msgstr "Summa"
 
@@ -958,6 +958,10 @@ msgstr "Auth"
 msgid "Authoritative"
 msgstr "Autoriteetne"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:38
+msgid "Available"
+msgstr "Saadaval"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:170
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:28./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:23./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:62./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:38
 msgid "Back"
@@ -984,6 +988,14 @@ msgstr "Blokeeri nimi"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_show_as.tpl:10
 msgid "Block quote"
 msgstr "Blokeeri tsitaat"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:36
+msgid "Buffered"
+msgstr "Puhverdatud"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:37
+msgid "Cached"
+msgstr "Vahemällu salvestatud"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:34
 msgid "Caches have been flushed."
@@ -1034,11 +1046,11 @@ msgstr "Lisateabe saamiseks klõpsake siin"
 msgid "Click to preview."
 msgstr "Klõpsake eelvaate kuvamiseks."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:90
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:133
 msgid "Close Sockets"
 msgstr "Sulgege pistikupesad"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:91
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:134
 msgid "Close all sockets from ip addresses which have over &gt; 250 open sockets."
 msgstr "Sulgege kõik pistikupesad ip-aadressidelt, millel on üle &gt; 250 avatud pesa."
 
@@ -1079,7 +1091,7 @@ msgstr "Ühendatud aadressilt"
 msgid "Connected to"
 msgstr "Ühendatud:"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:134./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:57
+#: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:134./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:100
 msgid "Connections"
 msgstr "Ühendused"
 
@@ -1107,7 +1119,7 @@ msgstr "Sellel URL-il ei õnnestunud midagi importida ega manustada koodi."
 msgid "Count"
 msgstr "Count"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:78./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:80./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:128./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:195./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:70
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:78./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:80./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:128./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:195./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:113
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:106./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:45./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:47
 msgid "Country"
 msgstr "Riik"
@@ -1221,7 +1233,7 @@ msgstr "Katkesta √ºhendus"
 msgid "Discover media"
 msgstr "Avastage meediat"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:26
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:69
 msgid "Disks"
 msgstr "Kettad"
 
@@ -1478,6 +1490,10 @@ msgstr "T√ºhjendas√ºsteemne vahem√§lu"
 msgid "Follow connections and import all (deep copy)."
 msgstr "Järgige ühendusi ja importige kõik (sügav koopia)."
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:35
+msgid "Free"
+msgstr "Tasuta"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:54
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:112
 msgid "From"
@@ -1521,7 +1537,7 @@ msgstr "Peida leht otsingute eest (sõltub otsingupäringust)"
 msgid "Home Directory"
 msgstr "Kodukataloog"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:68
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:111
 msgid "IP Address"
 msgstr "IP-aadress"
 
@@ -1678,7 +1694,7 @@ msgstr "Meedia pealkiri"
 msgid "Media updated."
 msgstr "Meediat värskendati."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:2
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:2./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:43
 msgid "Memory"
 msgstr "Mälu"
 
@@ -1756,7 +1772,7 @@ msgstr "Arvete nimi"
 msgid "Need more help?"
 msgstr "Veel abi?"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:62
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:105
 msgid "Network Connections"
 msgstr "Võrguühendused"
 
@@ -1842,6 +1858,10 @@ msgstr "Otsingumootorid pole indekseerinud"
 msgid "Not protected"
 msgstr "Pole kaitstud"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:26
+msgid "OS Memory"
+msgstr "OS-i mälu"
+
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:171
 msgid "Ongoing"
 msgstr "Jätkuv"
@@ -1875,7 +1895,7 @@ msgstr "Lehed"
 msgid "Pages overview"
 msgstr "Lehtede √ºlevaade"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:32
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:75
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
 #: apps/zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:4
 msgid "Path"
@@ -2009,7 +2029,7 @@ msgstr "Suunake veebisaidile lehevaatel"
 msgid "Referrers to"
 msgstr "Viitajad sinna"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:51
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:94
 msgid "Refreshed every 30 minutes."
 msgstr "Värskendatakse iga 30 minuti järel."
 
@@ -2180,13 +2200,13 @@ msgstr "Kuvatakse lehed, millega saate ühenduse luua kasutades <b>{predicate}</
 msgid "Site Files Directory"
 msgstr "Saidifailide kataloog"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:76
 #: apps/zotonic_mod_base/priv/templates/directory_index.tpl:17
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:67
 msgid "Size"
 msgstr "Grootte"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:14./apps/zotonic_mod_admin/priv/templates/admin.tpl:15
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:14
 msgid "Some disks are almost full."
 msgstr "Mõni ketas on peaaegu täis."
 
@@ -2299,6 +2319,10 @@ msgstr "Eesliidend"
 msgid "Surname"
 msgstr "Perenimi"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:53
+msgid "Swap"
+msgstr "Vahetada"
+
 #: apps/zotonic_mod_admin/src/mod_admin.erl:131
 msgid "System"
 msgstr "S√ºsteem"
@@ -2368,6 +2392,10 @@ msgstr "Otsingu register on ülesehitamisel. Sõltuvalt andmebaasi suurusest võ
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:52
 msgid "The site’s data is being reinstalled. Watch the console for messages"
 msgstr "Saidi andmeid installitakse uuesti. Vaadake konsooli sõnumite kohta"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:25
+msgid "The system has allocated more than the specified threshold of available memory, as reported by the underlying operating system."
+msgstr "Süsteem on eraldanud rohkem kui määratud lävi vaba mälu, nagu teatas aluseks olev operatsioonisüsteem."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:44
 msgid "There are no incoming connections."
@@ -2485,6 +2513,10 @@ msgstr "Lülita navigeerimine sisse"
 msgid "Too many connections, only the first and last are shown."
 msgstr "Liiga palju ühendusi, kuvatakse ainult esimene ja viimane."
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:33
+msgid "Total"
+msgstr "Kokku"
+
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:84
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:9
 msgid "Type text to search"
@@ -2572,7 +2604,7 @@ msgstr "√úles laetud"
 msgid "Uploaded on"
 msgstr "Laaditi üles"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:10./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:34
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:10./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:77
 msgid "Usage"
 msgstr "Kasutamine"
 
@@ -2584,7 +2616,7 @@ msgstr "Kasuta automaatset nimelahendust meedia otsimiseks saidilt."
 msgid "Use the title of the base content for the display name of this person."
 msgstr "Kasuta baassisu pealkirja kuvatavaks isiku nimeks."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:8
+#: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:34
 msgid "Used"
 msgstr "Kasutatud"
 
@@ -2616,7 +2648,7 @@ msgstr "Kuva kõik selle kategooria lehed"
 msgid "View all referrers"
 msgstr "Vaata k√µiki viitajaid"
 
-#: apps/zotonic_mod_admin/priv/templates/admin.tpl:17
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:16./apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:27
 msgid "View status"
 msgstr "Kuva olek"
 
@@ -2641,7 +2673,7 @@ msgstr "Mine redigeerimisse"
 msgid "Visiting address"
 msgstr "K√ºlastusaadress"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:3./apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:13./apps/zotonic_mod_admin/priv/templates/admin.tpl:14
+#: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:3./apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:13./apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:24
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:10
 msgid "Warning!"
 msgstr "Hoiatus!"
@@ -2953,6 +2985,10 @@ msgstr "Konfiguratsioon"
 msgid "Configuration"
 msgstr "Konfiguratsioon"
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
+msgid "Defaults to the SMTP hostname of the site."
+msgstr "Vaikimisi on saidi SMTP hostinimi."
+
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:129
 msgid "Defaults to the hostname of the site."
 msgstr "Vaikimisi on saidi hosti nimi."
@@ -2961,7 +2997,7 @@ msgstr "Vaikimisi on saidi hosti nimi."
 msgid "Domain for all generated from- and envelop-addresses."
 msgstr "Domeen kõigi loodud ja ümbriku-aadresside jaoks."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:144
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:154
 msgid "Download images in emails after opening the message"
 msgstr "Pärast sõnumi avamist laadige pildid e-kirjadesse alla"
 
@@ -2973,7 +3009,7 @@ msgstr "E-posti pealtkuulamine"
 msgid "E-mail intercept &ndash; exceptions"
 msgstr "E-kirjade pealtkuulamine &ndash; erandid"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:135./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:136
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:145./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:146
 msgid "Email FROM"
 msgstr "E-post FROM"
 
@@ -2999,6 +3035,10 @@ msgstr "Siin näete kõiki e-posti konfiguratsioone ja saate testimeile."
 msgid "Hostname"
 msgstr "Hostinimi"
 
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:135./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:136
+msgid "Hostname SMTP Client"
+msgstr "Hostinimi SMTP klient"
+
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:118
 msgid "If (and only if) there is an e-mail intercept address defined above, then all e-mail is sent to that address <em>except</em> for the e-mail addresses and domains defined here."
 msgstr "Kui (ja ainult siis), kui on olemas ülaltoodud e-posti pealtkuulamisaadress, saadetakse kõik e-kirjad sellele aadressile <em>, välja arvatud</em> siin määratletud e-posti aadresside ja domeenide puhul."
@@ -3010,6 +3050,10 @@ msgstr "Selle muutmisel peate võib-olla taotlema uut SSL-sertifikaati, mis sisa
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:106
 msgid "It is possible to intercept all email and send it to a single address. Configure this address here."
 msgstr "Kõiki e-kirju on võimalik pealt kuulata ja saata ühele aadressile. Konfigureerige see aadress siin."
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:140
+msgid "It is usually set to the reverse DNS name of the machine."
+msgstr "Tavaliselt määratakse see masina vastupidisele DNS-nimele."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:10./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:11./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:13./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:14./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:20
 msgid "Key"
@@ -3043,7 +3087,7 @@ msgstr "Konfiguratsioonivõtmeid saab lisada ainult administraator."
 msgid "Password"
 msgstr "Parool"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:147
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:157
 msgid "Per default images smaller than 1MB are embedded in email messages. Using a separate download for images results in a smaller message size but non-public images will not be visible. Leave this disabled if you are sending non-public images."
 msgstr "Vaikimisi on meilisõnumitesse manustatud alla 1 MB suurused pildid. Kui kasutate piltide jaoks eraldi allalaadimist, on sõnumi suurus väiksem, kuid mitteavalikke pilte ei kuvata. Kui saadate mitteavalikke pilte, jätke see keelatuks."
 
@@ -3071,7 +3115,7 @@ msgstr "SSL-sertifikaadid"
 msgid "Self signed certificate"
 msgstr "Ise allkirjastatud tunnistus"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:183
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:193
 #: apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:111
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reminder_admin_form_fields.tpl:21./apps/zotonic_mod_authentication/priv/templates/_logon_reminder_form_fields.tpl:17
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:49
@@ -3079,11 +3123,11 @@ msgstr "Ise allkirjastatud tunnistus"
 msgid "Send"
 msgstr "Saada"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:170
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:180
 msgid "Send a test email"
 msgstr "Saatke testmeil"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:174
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:184
 msgid "Send a test email or check the status of an email address."
 msgstr "Saatke testmeil või kontrollige e-posti aadressi olekut."
 
@@ -3116,13 +3160,17 @@ msgstr "Zotonicu süsteemi konfiguratsioon on seatud kasutama SMTP relee."
 msgid "The config key already exists, please choose another key name."
 msgstr "Konfiguratsioonivõti on juba olemas, palun valige teine võtme nimi."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:138
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:148
 msgid "The default FROM address for emails. Defaults to"
 msgstr "E-kirjade vaikeaadress FROM. Vaikimisi"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_ssl.tpl:20
 msgid "The default directory for all site-certificates is"
 msgstr "Kõigi saidisertifikaatide vaikekataloog on"
+
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:138
+msgid "The hostname to use as client when delivering e-mail to external SMTP servers."
+msgstr "Hostinimi, mida kasutatakse kliendina e-kirjade edastamisel välistele SMTP-serveritele."
 
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:4
 msgid "This can't be undone. The configuration key will be lost forever."
@@ -3169,12 +3217,12 @@ msgstr "Kehtiv kuni"
 msgid "Value"
 msgstr "Väärtus"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:185./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:100
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:195./apps/zotonic_mod_admin_config/src/mod_admin_config.erl:100
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 msgid "View email status"
 msgstr "Kuva e-posti olek"
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:160
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:170
 msgid "You must be an administrator to view or change the email configuration."
 msgstr "E-posti konfiguratsiooni vaatamiseks või muutmiseks peate olema administraator."
 
@@ -3182,7 +3230,7 @@ msgstr "E-posti konfiguratsiooni vaatamiseks või muutmiseks peate olema adminis
 msgid "Zotonic sends email using a built-in email server. You can send the email via an external relay."
 msgstr "Zotonic saadab e-kirju sisseehitatud e-posti serveri abil. E-kirja saate saata välise relee kaudu."
 
-#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:182
+#: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:192
 msgid "test@example.com"
 msgstr "test@example.com"
 
