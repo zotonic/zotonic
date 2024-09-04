@@ -567,8 +567,8 @@ update_config(State) ->
         case SmtpRelay of
             true ->
                 [{relay, z_config:get(smtp_host, "localhost")},
-                 {port, z_config:get(smtp_port, ?SMTP_PORT_PLAIN_TEXT)},
-                 {ssl, z_config:get(smtp_ssl, false)}]
+                 {port, z_config:get(smtp_port, ?SMTP_PORT_PLAIN_TEXT)}
+                ]
                 ++ case {z_config:get(smtp_username),
                          z_config:get(smtp_password)} of
                         {undefined, undefined} ->
@@ -577,7 +577,11 @@ update_config(State) ->
                             [{auth, always},
                              {username, User},
                              {password, Pass}]
-                   end;
+                   end
+                ++ case z_config:get(smtp_ssl, false) of
+                    true -> [ {tls, always} ];
+                    false -> []
+                end;
             false ->
                 []
         end,
