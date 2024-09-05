@@ -62,8 +62,6 @@
     }); 
 {% endjavascript %}
 
-{% include "_admin_edit_block_li_survey_button_live.tpl" %}
-
 <div class="form-group view-expanded question-options label-floating">
     <input class="form-control" type="text" id="block-{{name}}-target" name="blocks[].target" value="{{ blk.target }}" placeholder="{_ Question label _}" />
     <label class="control-label" for="block-{{name}}-target">{_ Jump to this question label (must be on an other page below) _}</label>
