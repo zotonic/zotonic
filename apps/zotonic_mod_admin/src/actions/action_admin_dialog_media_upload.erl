@@ -158,6 +158,7 @@ content_group_id(ContentGroupId, _SubjectId, _Context) ->
 
 %% Handling the media upload.
 handle_media_upload(<<"update">>, EventProps, Context, _InsertFun, ReplaceFun) ->
+    % Note: the 'stay' event argument is ignored here because we never redirect
     Actions = proplists:get_value(actions, EventProps, []),
     Id = proplists:get_value(id, EventProps),
     case ReplaceFun(Id, Context) of
@@ -172,7 +173,15 @@ handle_media_upload(<<"update">>, EventProps, Context, _InsertFun, ReplaceFun) -
 handle_media_upload(_Intent, EventProps, Context, InsertFun, _ReplaceFun) ->
     case InsertFun(Context) of
         {ok, MediaId} ->
-            action_admin_dialog_new_rsc:do_new_page_actions(MediaId, EventProps, Context);
+        % Note: the 'stay' event argument is "converted" to "redirect" here and
+        % handled by 'action_admin_dialog_new_rsc:do_new_page_actions/3'
+            Stay = z_convert:to_bool(proplists:get_value(stay, EventProps, false)),
+            NewEventProps =
+                case proplists:is_defined(redirect, EventProps) of
+                    true -> EventProps;
+                    false -> [ {redirect, not Stay} | EventProps]
+                end,
+            action_admin_dialog_new_rsc:do_new_page_actions(MediaId, NewEventProps, Context);
         {error, R} ->
             z_render:growl_error(error_message(R, Context), Context)
     end.
