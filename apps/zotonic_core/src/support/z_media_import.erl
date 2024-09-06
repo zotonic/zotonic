@@ -243,7 +243,7 @@ url_import_props_retry({_Code, FinalUrl, Hs, _Sz, _Body} = Reason, Context) ->
         content_length = 0,
         is_index_page = false,
         headers = Hs,
-        partial_data = [],
+        partial_data = <<>>,
         metadata = []
     },
     Url = z_url_metadata:p(url, MD),
