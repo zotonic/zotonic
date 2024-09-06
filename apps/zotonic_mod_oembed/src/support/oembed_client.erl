@@ -1,8 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2011-2013 Arjan Scherpenisse
-%% @doc OEmbed client
+%% @copyright 2011-2024 Arjan Scherpenisse
+%% @doc OEmbed client - discover embed information for URLs.
+%% @end
 
-%% Copyright 2011-2013 Arjan Scherpenisse <arjan@scherpenisse.net>
+%% Copyright 2011-2024 Arjan Scherpenisse <arjan@scherpenisse.net>
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,8 +29,9 @@
 
 %% Endpoint for embed.ly oembed service
 -define(EMBEDLY_ENDPOINT, "https://api.embed.ly/1/oembed?format=json&url=").
-
 -define(HTTP_GET_TIMEOUT, 20000).
+-define(DEFAULT_MAXWIDTH, 1200).
+-define(MAX_CONTENT_LENGTH, 1024*1024).
 
 %%====================================================================
 %% API
@@ -93,7 +95,7 @@ discover_per_provider(Url, UrlExtra, [], Context) ->
 oembed_request(RequestUrl) ->
     FetchOptions = [
         {timeout, ?HTTP_GET_TIMEOUT},
-        {max_length, 1024*1024}
+        {max_length, ?MAX_CONTENT_LENGTH}
     ],
     case z_url_fetch:fetch(RequestUrl, FetchOptions) of
         {ok, {_Final, _Hs, _Size, Body}} ->
@@ -115,7 +117,7 @@ oembed_request(RequestUrl) ->
 
 %% @doc Construct extra URL arguments to the OEmbed client request from the oembed module config.
 oembed_url_extra(Context) ->
-    X1 = ["&maxwidth=", z_url:url_encode(get_config(maxwidth, 640, Context))],
+    X1 = ["&maxwidth=", z_url:url_encode(get_config(maxwidth, ?DEFAULT_MAXWIDTH, Context))],
     X2 = case get_config(maxheight, undefined, Context) of
              undefined -> X1;
              <<>> -> X1;

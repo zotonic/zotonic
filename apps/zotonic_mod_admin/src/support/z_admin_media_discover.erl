@@ -259,14 +259,9 @@ try_url(_, _Context) ->
     MediaImport :: #media_import_props{},
     Reason :: term().
 try_url_http(Url, Context) ->
-    case z_fetch:metadata(normalize_url(Url), [], Context) of
-        {ok, MD} ->
-            case z_media_import:url_import_props(MD, Context) of
-                {ok, List} ->
-                    {ok, List};
-                {error, _} = Error ->
-                    Error
-            end;
+    case z_media_import:url_import_props(normalize_url(Url), Context) of
+        {ok, List} ->
+            {ok, List};
         {error, _} = Error ->
             Error
     end.
