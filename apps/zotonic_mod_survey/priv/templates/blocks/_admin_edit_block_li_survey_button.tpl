@@ -55,7 +55,7 @@
 {% javascript %}
     document.getElementById('block-{{name}}-style')
             .addEventListener('change', function(){
-                document.getElementById('#{{ #livebutton }}').className = 'btn '+ this.value;
+                document.getElementById('{{ #livebutton }}').className = 'btn '+ this.value;
             });
 {% endjavascript %}
 
