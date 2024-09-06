@@ -126,7 +126,7 @@ full(Id, Context) when is_integer(Id) ->
                 %% Essential fields
                 <<"id">> => Id,
                 <<"name">> => m_rsc:p(Id, <<"name">>, Context),
-                <<"is_a">> => [ z_convert:to_binary(A) || A <- m_rsc:is_a(Id, Context) ],
+                <<"is_a">> => m_rsc:is_a(Id, Context),
                 <<"uri">> => m_rsc:uri(Id, ContextNoLang),
                 <<"uri_template">> => BaseUri,
                 <<"page_url">> => PageUrls,
@@ -286,7 +286,6 @@ related_rsc(Id, Context) when is_integer(Id) ->
     };
 related_rsc(Id, Context) ->
     related_rsc(m_rsc:rid(Id, Context), Context).
-
 
 % If there is a medium record, then also include a preview url
 preview_url(#{ <<"id">> := Id }, Context) ->
