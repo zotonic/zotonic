@@ -1015,7 +1015,6 @@ mime_to_category(Mime, Opts, Context) ->
             end
     end.
 
-
 %% @doc Download a file from a http or data url.
 download_file(Url, Context) ->
     download_file(Url, [], Context).
@@ -1036,7 +1035,8 @@ download_file(Url, Options, Context) ->
             proplists:delete(timeout,
                 proplists:delete(device, FetchOptions)))
     ],
-    case z_fetch:fetch_partial(Url, FetchOptions1, Context) of
+    Url1 = z_sanitize:uri(Url),
+    case z_fetch:fetch_partial(Url1, FetchOptions1, Context) of
         {ok, {_FinalUrl, Hs, Length, _Data}} when Length < MaxLength ->
             file:close(Device),
             case proplists:get_value("content-length", Hs) of
