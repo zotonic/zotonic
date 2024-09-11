@@ -66,11 +66,16 @@
     function fill_texts(src, dst, mapping, overwrite) {
         let is_complete = true;
 
-        $('.tab-pane.edit-language-' + dst).each(function() {
-            const $form = $(this).closest("form");
+        $('.tab-pane.edit-language-' + dst + ', .widget-content-lang-' + dst).each(function() {
+            let $form;
+
+            if ($(this).hasClass('widget-content-lang-' + dst)) {
+                $form = $(this).parent();
+            } else {
+                $form = $(this).closest(".widget-content, .translations, form");
+            }
             $("input,textarea", this).each(function() {
-                if ((overwrite || $.trim($(this).val()) == '')
-                    && $(this).attr('name').includes("$")) {
+                if ((overwrite || $.trim($(this).val()) == '') && $(this).attr('name').includes("$")) {
                     const from_name = $(this).attr('name').split('$')[0] + '$' + src;
                     if (!from_name.endsWith("_json")) {
                         const from_val = $form.find('[name="' + from_name + '"]').val().trim();
@@ -99,11 +104,16 @@
 
     function collect_texts(src, dst, overwrite) {
         const texts = [];
-        $('.tab-pane.edit-language-' + dst).each(function() {
-            const $form = $(this).closest("form");
+        $('.tab-pane.edit-language-' + dst + ', .widget-content-lang-' + dst).each(function() {
+            let $form;
+
+            if ($(this).hasClass('widget-content-lang-' + dst)) {
+                $form = $(this).parent();
+            } else {
+                $form = $(this).closest(".widget-content, .translations, form");
+            }
             $("input,textarea", this).each(function() {
-                if ((overwrite || $.trim($(this).val()) == '')
-                    && $(this).attr('name').includes("$")) {
+                if ((overwrite || $.trim($(this).val()) == '') && $(this).attr('name').includes("$")) {
                     const from_name = $(this).attr('name').split('$')[0] + '$' + src;
                     if (!from_name.endsWith("_json")) {
                         const from_val = $form.find('[name="' + from_name + '"]').val().trim();
