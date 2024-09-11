@@ -259,29 +259,12 @@ try_url(_, _Context) ->
     MediaImport :: #media_import_props{},
     Reason :: term().
 try_url_http(Url, Context) ->
-    case z_media_import:url_import_props(normalize_url(Url), Context) of
+    case z_media_import:url_import_props(z_sanitize:uri(Url), Context) of
         {ok, List} ->
             {ok, List};
         {error, _} = Error ->
             Error
     end.
-
-%% @doc Ensure that some characters are escaped, URLs copied from the browser can contain
-%% UTF-8 characters that need to be percent-encoded befor further processing is possible.
--spec normalize_url(Url) -> EncodedUrl when
-    Url :: binary(),
-    EncodedUrl :: binary().
-normalize_url(Url) ->
-    normalize_url(Url, <<>>).
-
-normalize_url(<<>>, Acc) ->
-    Acc;
-normalize_url(<<C/utf8, R/binary>>, Acc) when C >= 127; C =< 32 ->
-    C1 = z_url:hex_encode(<<C/utf8>>),
-    normalize_url(R, <<Acc/binary, C1/binary>>);
-normalize_url(<<C/utf8, R/binary>>, Acc) ->
-    normalize_url(R, <<Acc/binary, C/utf8>>).
-
 
 url(<<"www.", _/binary>> = Url) -> {ok, <<"http://", Url/binary>>};
 url(<<"//", _/binary>> = Url) -> {ok, <<"http:", Url/binary>>};

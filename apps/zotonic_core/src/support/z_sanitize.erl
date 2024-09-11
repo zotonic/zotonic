@@ -43,6 +43,15 @@
 -define(IFRAME_SANDBOX, <<"allow-popups allow-scripts allow-same-origin">>).
 
 
+%% @doc Ensure that some characters are escaped, URLs copied from the browser can contain
+%% UTF-8 characters that need to be percent-encoded befor further processing is possible.
+-spec uri(Url) -> EncodedUrl when
+    Url :: binary() | string() | undefined,
+    EncodedUrl :: binary().
+uri(undefined) ->
+    undefined;
+uri(Url) when is_list(Url) ->
+    uri(unicode:characters_to_binary(Url, utf8));
 uri(Uri) ->
     z_html:sanitize_uri(Uri).
 

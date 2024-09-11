@@ -208,7 +208,8 @@ update_1(_, RscId, #media_import_props{medium_props=MP, medium_url=MediumUrl} = 
 -spec url_import_props(z_url_metadata:metadata() | string() | binary(), z:context()) ->
     {ok, list(#media_import_props{})} | {error, term()}.
 url_import_props(Url, Context) when is_list(Url); is_binary(Url) ->
-    case z_fetch:metadata(Url, [], Context) of
+    Url1 = z_sanitize:uri(Url),
+    case z_fetch:metadata(Url1, [], Context) of
         {ok, MD} ->
             url_import_props(MD, Context);
         {error, {Code, _FinalUrl, _Hs, _Sz, _Body} = Reason} when Code =:= 429 ->
