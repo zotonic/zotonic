@@ -200,23 +200,11 @@ limitations under the License.
             data = elem.getAttribute("data-"+functionName);
             if (data)
             {
-                if (data.substr(0,1) == "{")
-                {
-                    try {
-                        data = JSON.parse(data);
-                    } catch (e) {
-                        console.error("Error parsing JSON in widget data attribute:", data);
-                        data = {};
-                    }
-                }
-                else
-                {
-                    try {
-                        data = eval("({" + data.replace(/[\n\r]/g,' ') + "})");
-                    } catch (e) {
-                        console.error("Error evaluating widget data attribute:", data);
-                        data = {};
-                    }
+                try {
+                    data = JSON.parse(data);
+                } catch (e) {
+                    console.error("Error parsing JSON in widget data attribute:", data);
+                    data = {};
                 }
             }
             else

@@ -5,7 +5,12 @@
 {% block widget_title %}
 {_ Recent referrers _}
 <div class="widget-header-tools">
-    <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{{ _"Page referrers"|escapejs }}', text: '{{ _"This page can be connected from other pages. For example it could be an author of an article."|escapejs }}'" title="{_ Need more help? _}"></a>
+    <a href="#" class="z-btn-help do_dialog" data-dialog="{{
+            %{
+                title: _"Page referrers",
+                text: _"This page can be connected from other pages. For example it could be an author of an article."
+            }|escape
+        }}" title="{_ Need more help? _}"></a>
 </div>
 {% endblock %}
 

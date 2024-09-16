@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023  Marc Worrell
+%% @copyright 2009-2024  Marc Worrell
 %% @doc Request context for Zotonic request evaluation.
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -1231,10 +1231,16 @@ set_csp_nonce(Context) ->
 csp_nonce(Context) ->
     case get(csp_nonce, Context) of
         undefined ->
-            ?LOG_WARNING(#{
-                text => <<"csp_nonce requested but not set">>,
-                in => zotonic_core
-            }),
+            try
+                x = 1
+            catch
+                _:_:S ->
+                    ?LOG_WARNING(#{
+                        text => <<"csp_nonce requested but not set">>,
+                        in => zotonic_core,
+                        stack => S
+                    })
+            end,
             <<>>;
         Nonce when is_binary(Nonce) ->
             Nonce
@@ -1346,7 +1352,7 @@ set_nocache_headers(Context = #context{cowreq=Req}) when is_map(Req) ->
 -spec set_security_headers( z:context() ) -> z:context().
 set_security_headers(Context) ->
     Default = [
-        % {<<"content-security-policy">>, <<"script-src 'self' 'nonce-'">>}
+        % {<<"content-security-policy">>, <<"script-src 'self' 'nonce-'">>},
         {<<"x-content-type-options">>, <<"nosniff">>},
         {<<"x-permitted-cross-domain-policies">>, <<"none">>},
         {<<"referrer-policy">>, <<"origin-when-cross-origin">>}

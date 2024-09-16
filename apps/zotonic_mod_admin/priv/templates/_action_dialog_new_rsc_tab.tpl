@@ -322,7 +322,7 @@
 		</div>
 
 		<div id="dialog-rsc-new-found" class="do_feedback"
-			data-feedback="trigger: 'dialog-new-rsc-tab', delegate: 'mod_admin'">
+			data-feedback='{ "trigger": "dialog-new-rsc-tab", "delegate": "mod_admin" }'>
 		</div>
 
 		{% wire name="dialog_new_rsc_preview"
@@ -469,4 +469,3 @@
 
 {% endwith %}
 {% endwith %}
-

@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010,2016 Marc Worrell
+%% @copyright 2010-2024 Marc Worrell
 %% @doc 'escapejs' filter, escape a value for output in javascript
+%% @end
 
-%% Copyright 2010,2016 Marc Worrell
+%% Copyright 2010-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,5 +20,8 @@
 -module(filter_escapejs).
 -export([escapejs/2]).
 
+escapejs(Input, Context) when is_map(Input) ->
+    JSON = z_json:encode(Input),
+    escapejs(JSON, Context);
 escapejs(Input, Context) ->
     z_convert:to_binary(z_utils:js_escape(Input, Context)).

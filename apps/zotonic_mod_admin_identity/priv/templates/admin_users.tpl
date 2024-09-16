@@ -32,13 +32,16 @@
 
     {% with m.acl.user as me %}
 
-        <form method="GET" action="{% url admin_users %}">
+        <form method="GET" id="admin-users-filter" action="{% url admin_users %}">
             <label style="font-weight: normal; margin: 0; margin: 0 0 20px 0">
                 <input type="hidden" name="qs" value="{{ q.qs|escape }}" />
-                <input type="checkbox" name="persons" value="1" {% if q.persons %}checked="checked"{% endif %}
-                    onchange="this.form.submit()" />
+                <input type="checkbox" name="persons" value="1" {% if q.persons %}checked="checked"{% endif %}>
                 {_ Also show persons without user account _}
             </label>
+
+            {% javascript %}
+                $('#admin-users-filter').on('change', function(e) { $(this).submit(); });
+            {% endjavascript %}
         </form>
 
         {% with m.search.paged[{users text=q.qs page=q.page users_only=not(q.persons)}] as result %}

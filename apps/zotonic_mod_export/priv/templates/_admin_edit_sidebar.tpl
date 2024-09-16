@@ -3,7 +3,12 @@
 {% block widget_title %}
 {_ Export _}
 <div class="widget-header-tools">
-    <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{{ _"Help about export"|escapejs }}', text: '{{ _"Download this page or the query as a spreadsheet or in another format."|escapejs }}'" title="{_ Need more help? _}"></a>
+    <a href="#" class="z-btn-help do_dialog" data-dialog="{{
+        %{
+            title: _"Help about export",
+            text: _"Download this page or the query as a spreadsheet or in another format."
+        }|escape
+    }}"></a>
 </div>
 {% endblock %}
 

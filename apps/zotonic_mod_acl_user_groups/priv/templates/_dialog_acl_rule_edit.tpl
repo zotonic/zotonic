@@ -70,7 +70,7 @@
                                placeholder="{_ Find collaboration group _}" value="" />
                     </div>
                     <ul id="dialog-collab-found" class="do_feedback list-unstyled"
-                        data-feedback="trigger: 'dialog-collab-search', delegate: 'admin_acl_rules'">
+                        data-feedback='{ "trigger": "dialog-collab-search", "delegate": "admin_acl_rules" }'>
                     </ul>
                     {% javascript %}
                     {% endjavascript %}

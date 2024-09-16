@@ -7,7 +7,12 @@
 {% block widget_title %}
 {_ Username / password _}
 <div class="widget-header-tools">
-    <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{_ Help about user credentials _}', text: '{_ When you add credentials to a person then the person becomes a user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What a user can do depends on the groups the user is member of. _}'" title="{_ Need more help? _}"></a>
+    <a href="#" class="z-btn-help do_dialog" data-dialog="{{
+            %{
+                title: _"Help about user credentials",
+                text: _"When you add credentials to a person then the person becomes a user. A person or machine can log on with those credentials and perform actions on your Zotonic system.<br/><br/>What a user can do depends on the groups the user is member of."
+            }|escape
+        }}" title="{_ Need more help? _}"></a>
 </div>
 {% endblock %}
 

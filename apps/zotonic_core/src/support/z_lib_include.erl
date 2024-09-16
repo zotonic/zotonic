@@ -151,8 +151,6 @@ link_element(CssFiles, Args, Context) ->
                    TitleAttr,
                    <<" media=\"none\"">>,
                    <<" media-onload=\"">>, Media ,<<"\"">>,
-                   % This is run by the script tag
-                   % <<" onload=\"if(media!='">>, Media, <<"')media='">>, Media, <<"'\"">>,
                    <<" rel=\"">>, Rel, $",
                 <<">">>,
                 <<"<noscript>">>,

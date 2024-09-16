@@ -97,10 +97,18 @@
                     {% if id.custom_slug %}checked="checked"{% endif %}
                     {% if not id.is_editable %}disabled{% endif %}
                     value="1"
-                    onclick="$('#custom-slug:checked').val() ? $('.input-slug').removeAttr('disabled') : $('.input-slug').attr('disabled', 'disabled');"
                 >
                 {_ Customize page slug _}
             </label>
+            {% javascript %}
+                $('#custom-slug').click(function(e) {
+                    if ($(this).is(":checked")) {
+                        $('.input-slug').removeAttr('disabled');
+                    } else {
+                        $('.input-slug').attr('disabled', 'disabled');
+                    }
+                });
+            {% endjavascript %}
         </div>
 
         <div class="form-group">

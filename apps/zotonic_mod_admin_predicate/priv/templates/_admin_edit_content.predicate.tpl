@@ -3,7 +3,12 @@
 {% block widget_title %}
 {_ Valid between _}
 <div class="widget-header-tools">
-    <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{{ _"Help about predicates"|escapejs }}', text: '{{ _"You can define for which categories the predicate is shown on the edit page.  You can also define which categories of objects will be found when searching for a page to connect to. When you don't check anything then all categories are valid."|escapejs }}'" title="{_ Need more help? _}"></a>
+    <a href="#" class="z-btn-help do_dialog" data-dialog="{{
+            %{
+                title: _"Help about predicates",
+                text: _"You can define for which categories the predicate is shown on the edit page.  You can also define which categories of objects will be found when searching for a page to connect to. When you don’t check anything then all categories are valid."
+            }|escape
+        }}, " title="{_ Need more help? _}"></a>
 </div>
 {% endblock %}
 

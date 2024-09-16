@@ -13,5 +13,5 @@
 	%}
 
 {% empty %}
-	<li class="suggestions-result"><a href="javascript:void(0);">Nothing found.</a></li>
+	<li class="suggestions-result"><a href="#">Nothing found.</a></li>
 {% endfor %}

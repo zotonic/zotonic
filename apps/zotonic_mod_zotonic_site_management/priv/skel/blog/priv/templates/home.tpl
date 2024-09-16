@@ -25,7 +25,7 @@
 
 		{% ifequal m.site.pagelen result|length %}
 			{% wire id="more-results" action={moreresults result=result target="list-articles" template="_article_summary.tpl"} %}
-			<p><a href="javascript:void(0);" id="more-results">More results...</a></p>
+			<p><a href="#" id="more-results">More results...</a></p>
 		{% endifequal %}
 	{% endwith %}
 
