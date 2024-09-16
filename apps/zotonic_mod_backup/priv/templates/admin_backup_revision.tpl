@@ -3,7 +3,7 @@
 {% block title %}{_ Revisions for _} {{ id.title }}{% endblock %}
 
 {% block head_extra %}
-	<style type="text/css">
+	<style type="text/css" nonce="{{ m.req.csp_nonce }}">
 		#revisions label {
 			display: inline-block;
 			height: 20px;

@@ -118,6 +118,7 @@
     set_tz/2,
 
     set_csp_nonce/1,
+    set_csp_nonce/2,
     csp_nonce/1,
 
     set_resp_header/3,
@@ -1226,13 +1227,21 @@ set_csp_nonce(Context) ->
             Context
     end.
 
+%% @doc Set the Content-Security-Policy nonce for the request.
+-spec set_csp_nonce( Nonce, Context ) -> Context1 when
+    Nonce :: binary(),
+    Context :: z:context(),
+    Context1 :: z:context().
+set_csp_nonce(Nonce, Context) ->
+    set(csp_nonce, Nonce, Context).
+
 %% @doc Return the Content-Security-Policy nonce for the request.
 -spec csp_nonce( z:context() ) -> binary().
 csp_nonce(Context) ->
     case get(csp_nonce, Context) of
         undefined ->
             try
-                x = 1
+                throw(x)
             catch
                 _:_:S ->
                     ?LOG_WARNING(#{
@@ -1352,7 +1361,18 @@ set_nocache_headers(Context = #context{cowreq=Req}) when is_map(Req) ->
 -spec set_security_headers( z:context() ) -> z:context().
 set_security_headers(Context) ->
     Default = [
-        % {<<"content-security-policy">>, <<"script-src 'self' 'nonce-'">>},
+        {<<"content-security-policy">>, <<
+            "default-src 'self'; "
+            "script-src 'self' 'nonce-' https:; "
+            "style-src 'self' 'nonce-'; "
+            "style-src-attr 'self' 'unsafe-inline'; "
+            "img-src 'self' data: https:; "
+            "media-src 'self' data: https:; "
+            "font-src 'self' https:; "
+            "frame-src 'self' https:; "
+            "object-src 'none'; "
+            "form-action 'self'"
+         >>},
         {<<"x-content-type-options">>, <<"nosniff">>},
         {<<"x-permitted-cross-domain-policies">>, <<"none">>},
         {<<"referrer-policy">>, <<"origin-when-cross-origin">>}
@@ -1377,7 +1397,8 @@ set_security_headers(Context) ->
             CSPHdr1 = binary:replace(
                         CSPHdr,
                         <<"'nonce-'">>,
-                        <<"'nonce-", Nonce/binary, $'>>),
+                        <<"'nonce-", Nonce/binary, $'>>,
+                        [ global ]),
             [
                 {<<"content-security-policy">>, CSPHdr1}
                 | proplists:delete(<<"content-security-policy">>, SecurityHeaders)

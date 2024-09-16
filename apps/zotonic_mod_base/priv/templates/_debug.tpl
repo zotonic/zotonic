@@ -1,4 +1,4 @@
-<style>
+<style type="text/css" nonce="{{ m.req.csp_nonce }}">
     .z-debug-holder {
         overflow: hidden;
         border-radius: 0.5rem;

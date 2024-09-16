@@ -5,7 +5,7 @@
 @Author:    Tim Benniks <tim@timbenniks.nl>
 @Author:    Marc Worrell <marc@worrell.nl>
 
-Copyright 2009-2023 Tim Benniks, Marc Worrell
+Copyright 2009-2024 Tim Benniks, Marc Worrell
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -514,6 +514,7 @@ function z_notify(message, extraParams) {
     target: target_id,
     data: {
       q: params,
+      csp_nonce: z_script_nonce
     },
   };
   var options = {
@@ -558,7 +559,7 @@ function z_transport(delegate, content_type, data, options) {
       progress_topic: "zotonic-transport/progress",
       progress_msg: { form_id: data.trigger },
       failure_topic: "model/alert/post",
-      failure_msg: { text: "Error during upload" },
+      failure_msg: { text: "Error during upload" }
     };
     cotonic.broker.publish("model/fileuploader/post/new", msg);
   } else if (
@@ -593,13 +594,13 @@ function z_transport(delegate, content_type, data, options) {
     cotonic.broker.publish(
       "model/dedup/post/message/" + btoa(options.dedup_key),
       message,
-      { qos: 1 },
+      { qos: 1 }
     );
   } else {
     cotonic.broker.publish(
       "$promised/bridge/origin/zotonic-transport/" + delegate,
       data,
-      { qos: 1 },
+      { qos: 1 }
     );
   }
 }
@@ -691,6 +692,7 @@ function z_queue_postback(
     triggervalue: triggervalue,
     data: {
       q: params,
+      csp_nonce: z_script_nonce
     },
   };
 

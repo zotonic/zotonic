@@ -10,7 +10,7 @@
 </div>
 
 
-<style>
+<style type="text/css" nonce="{{ m.req.csp_nonce }}">
 .meta {
     font-weight: bold;
     color: #888;

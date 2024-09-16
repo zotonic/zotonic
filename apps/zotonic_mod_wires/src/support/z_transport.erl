@@ -85,11 +85,12 @@ transport(<<"postback">>, #postback_event{ postback = Postback } = Event, Contex
                     undefined -> Event#postback_event.target;
                     _         -> TargetId
                  end,
-    case maybe_set_q(Event#postback_event.data, Context) of
-        {ok, Context1} ->
+    Context1 = maybe_set_csp(Event#postback_event.data, Context),
+    case maybe_set_q(Event#postback_event.data, Context1) of
+        {ok, Context2} ->
             TriggerValue = Event#postback_event.triggervalue,
-            Context2 = z_context:set_q(<<"triggervalue">>, TriggerValue, Context1),
-            ContextRsc = z_context:set_controller_module(Module, Context2),
+            Context3 = z_context:set_q(<<"triggervalue">>, TriggerValue, Context2),
+            ContextRsc = z_context:set_controller_module(Module, Context3),
             ContextRes = incoming_postback_event(is_submit_event(EventType), Module, Tag, TriggerId1, TargetId1, ContextRsc),
             incoming_context_result(ContextRes);
         {error, ContextValidation} ->
@@ -97,23 +98,25 @@ transport(<<"postback">>, #postback_event{ postback = Postback } = Event, Contex
     end;
 transport(<<"notify">>, #postback_notify{ data = Data } = Notify, Context) ->
     % Notify for observer
-    case maybe_set_q(Data, Context) of
-        {ok, Context1} ->
-            Context2 = case z_notifier:first(Notify, Context1) of
-                            undefined -> Context1;
+    Context1 = maybe_set_csp(Data, Context),
+    case maybe_set_q(Data, Context1) of
+        {ok, Context2} ->
+            Context3 = case z_notifier:first(Notify, Context2) of
+                            undefined -> Context2;
                             #context{} = ContextNotify -> ContextNotify
                        end,
-            incoming_context_result(Context2);
+            incoming_context_result(Context3);
         {error, ContextValidation} ->
             incoming_context_result(ContextValidation)
     end;
 transport(Delegate, #postback_notify{ data = Data } = Notify, Context) ->
     % Notify for delegate
-    case maybe_set_q(Data, Context) of
-        {ok, Context1} ->
+    Context1 = maybe_set_csp(Data, Context),
+    case maybe_set_q(Data, Context1) of
+        {ok, Context2} ->
             case z_utils:ensure_existing_module(Delegate) of
                 {ok, Module} ->
-                    incoming_context_result(Module:event(Notify, Context1));
+                    incoming_context_result(Module:event(Notify, Context2));
                 {error, Reason} ->
                     ?LOG_ERROR(#{
                         in => zotonc_core,
@@ -186,6 +189,11 @@ is_submit_event(<<"submit">>) -> true;
 is_submit_event("submit") -> true;
 is_submit_event(submit) -> true;
 is_submit_event(_Type) -> false.
+
+maybe_set_csp(#{ <<"csp_nonce">> := Nonce }, Context) when is_binary(Nonce), Nonce =/= <<>> ->
+    z_context:set_csp_nonce(Nonce, Context);
+maybe_set_csp(_, Context) ->
+    Context.
 
 maybe_set_q(#{ <<"q">> := Qs }, Context) when is_list(Qs) ->
     Qs1 = lists:foldr(
