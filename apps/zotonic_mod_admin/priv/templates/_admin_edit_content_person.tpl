@@ -8,7 +8,11 @@
     <a href="#" class="z-btn-help do_dialog" data-dialog="{{
             %{
                 title: _"Personal name",
-                text: _"Use the title of the base content for the display name of this person."|escapejs }}<br/><br/>{{ _"<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name."
+                text: [
+                    _"Use the title of the base content for the display name of this person.",
+                    "<br/><br/>",
+                    _"<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name."
+                ]
             }|escape
         }}" title="{_ Need more help? _}"></a>
 </div>
