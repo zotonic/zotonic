@@ -46,20 +46,19 @@
         </div>
     </div>
     <div class="col-md-4 form-group">
-        
-        <button type="button" id="live-button" style="margin-top: 3rem;" class="btn {{ blk.style|default:"btn-default" }}">
+        <button type="button" id="live-button-{{ name }}" style="margin-top: 3rem;" class="btn {{ blk.style|default:"btn-default" }}">
             {_ Button preview _}
         </button>
     </div>
 </div>
 
 {% javascript %}
-    const btn = document.getElementById('live-button');
-    const select = document.getElementById('block-{{name}}-style');
+    const btn{{name|truncate:3:""}} = document.getElementById('live-button-{{name}}');
+    const select{{name|truncate:3:""}} = document.getElementById('block-{{name}}-style');
 
-    select.addEventListener('change', function(){
-        btn.className = 'btn '+ this.value;
-    }); 
+    select{{name|truncate:3:""}}.addEventListener('change', function(){
+        btn{{name|truncate:3:""}}.className = 'btn '+ this.value;
+    });
 {% endjavascript %}
 
 <div class="form-group view-expanded question-options label-floating">
