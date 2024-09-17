@@ -254,13 +254,18 @@ disks_threshold() ->
 %% @doc Return true iff the system_memory alert is set.
 -spec os_memory_alert() -> boolean().
 os_memory_alert() ->
-    Alarms = alarm_handler:get_alarms(),
-    lists:any(
-      fun
-          ({system_memory_high_watermark, _}) -> true;
-          (_) -> false
-      end,
-      Alarms).
+    false.
+    % FIXME
+    % This can be enabled again after the following fix has been merged to OTP:
+    % https://github.com/erlang/otp/pull/8776
+    %
+    % Alarms = alarm_handler:get_alarms(),
+    % lists:any(
+    %   fun
+    %       ({system_memory_high_watermark, _}) -> true;
+    %       (_) -> false
+    %   end,
+    %   Alarms).
 
 %% @doc Return a list with os memory statistics.
 os_memory() ->
