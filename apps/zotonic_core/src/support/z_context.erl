@@ -1364,8 +1364,9 @@ set_security_headers(Context) ->
         {<<"content-security-policy">>, <<
             "default-src 'self'; "
             "script-src 'self' 'nonce-' https:; "
-            "style-src 'self' 'nonce-' https:; "
-            "style-src-attr 'self' 'unsafe-inline'; "
+            "style-src 'self' https: 'unsafe-inline'; " % Unsafe-inline is needed for OpenLayers
+            % "style-src 'self' 'nonce-' https:; "
+            % "style-src-attr 'self' 'unsafe-inline'; "
             "img-src 'self' data: https:; "
             "media-src 'self' data: https:; "
             "font-src 'self' https:; "

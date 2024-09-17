@@ -239,8 +239,8 @@ render_script(Args, Context) ->
             CspNonce = z_context:csp_nonce(Context),
             [
                 <<"\n\n<script type='text/javascript' nonce='">>, CspNonce, <<"'>\n">>,
+                <<"z_script_nonce = \'">>, z_utils:js_escape(CspNonce), "';\n",
                 <<"window.zotonicPageInit = function() {\n">>,
-                        <<"z_script_nonce = \'">>, z_utils:js_escape(CspNonce), "';\n",
                         Script,
                 <<"\n};\n</script>\n">>
             ];
