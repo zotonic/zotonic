@@ -804,12 +804,13 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
             MessageId = message_id(Id, Context),
             VERP = bounce_email(MessageId, Context),
             From = get_email_from(Email#email.from, VERP, State, Context),
+            ContextCsp = z_context:set_csp_nonce(Context),
             SenderPid = erlang:spawn_link(
                 fun() ->
                     spawned_email_sender(
                             Id, MessageId, Recipient, RecipientEmail, <<"<", VERP/binary, ">">>,
                             From, State#state.smtp_bcc, Email, SmtpOpts, BccSmtpOpts,
-                            RetryCt, Context)
+                            RetryCt, ContextCsp)
                 end),
             {relay, Relay} = proplists:lookup(relay, SmtpOpts),
             State#state{
