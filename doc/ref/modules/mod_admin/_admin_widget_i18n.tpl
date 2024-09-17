@@ -52,7 +52,7 @@
 
 {# See doc/admin/tpl/_admin_widget_std.tpl for block description. #}
 {% block widget_after %}
-    <script language="text/javascript">
+    <script language="text/javascript" nonce="{{ m.req.csp_nonce }}">
 	alert("Hello World!");
     </script>
 {% endblock %}

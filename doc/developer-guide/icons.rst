@@ -87,7 +87,7 @@ NOTE: the full syntax that opens a new login window::
 
     <a href="{% url logon_service service='facebook' is_connect=is_connect %}"
        class="btn z-btn-social do_popupwindow"
-       data-popupwindow="height:300"
+       data-popupwindow='{ "height": 300 }'
        style="color: white; background-color: #44609d">
           <span class="z-icon z-icon-facebook"></span>
           {% if is_connect %}

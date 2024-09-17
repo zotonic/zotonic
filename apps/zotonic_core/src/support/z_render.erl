@@ -8,7 +8,7 @@
 %% This is the MIT license.
 %%
 %% Copyright (c) 2008-2009 Rusty Klophaus
-%% Copyright (c) 2009-2023 Marc Worrell
+%% Copyright (c) 2009-2024 Marc Worrell
 %%
 %% Permission is hereby granted, free of charge, to any person obtaining a copy
 %% of this software and associated documentation files (the "Software"), to deal
@@ -218,7 +218,10 @@ output1([C|Rest], RenderState, Context, Acc) ->
 
 
 %% @doc Make the script that is included in the page and initializes all wires
--spec render_script( list(), z:context() ) -> iolist().
+-spec render_script(TagArgs, Context) -> Script when
+    TagArgs :: proplists:proplist(),
+    Context :: z:context(),
+    Script :: iodata().
 render_script(Args, Context) ->
     NoStartup = z_convert:to_bool(z_utils:get_value(nostartup, Args, false)),
     % NoStream = z_convert:to_bool(z_utils:get_value(nostream, Args, false)),
@@ -237,6 +240,7 @@ render_script(Args, Context) ->
             [
                 <<"\n\n<script type='text/javascript' nonce='">>, CspNonce, <<"'>\n">>,
                 <<"window.zotonicPageInit = function() {\n">>,
+                        <<"z_script_nonce = \'">>, z_utils:js_escape(CspNonce), "';\n",
                         Script,
                 <<"\n};\n</script>\n">>
             ];

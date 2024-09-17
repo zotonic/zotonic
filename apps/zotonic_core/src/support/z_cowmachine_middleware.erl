@@ -39,7 +39,7 @@ execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_optio
     Req1 = maybe_overrule_req_headers(Req),
     Context = maps:get(cowmachine_context, Env),
     exometer:update([zotonic, z_context:site(Context), http, requests], 1),
-    Context1 = z_context:set(ControllerOpts, Context),
+    Context1 = z_context:set([ {is_http_request, true} | ControllerOpts ], Context),
     Context2 = z_context:set_controller_module(Controller, Context1),
     Context3 = z_context:init_cowdata(Req1, Env, Context2),
     Context4 = z_context:set_csp_nonce(Context3),

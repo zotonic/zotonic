@@ -4,7 +4,7 @@
 
 {% block head_extra %}
     {% inherit %}
-    <style>
+    <style type="text/css" nonce="{{ m.req.csp_nonce }}">
         #trace-status span {
             display: none;
         }

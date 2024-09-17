@@ -9,7 +9,7 @@
                    autofocus
                    class="form-control do_listfilter do_autofocus"
                    placeholder="{_ Type to filter the list below. _}"
-                   data-listfilter="method: 'words', list: '#find-connect-objects .checkbox'"
+                   data-listfilter='{ "method": "words", "list": "#find-connect-objects .checkbox" }'
             >
         </form>
 
@@ -166,7 +166,7 @@
     	</form>
 
     	<div id="dialog-connect-found" class="do_feedback"
-    		data-feedback="trigger: 'dialog-connect-find', delegate: 'mod_admin'">
+    		data-feedback='{ "trigger": "dialog-connect-find", "delegate": "mod_admin" }'>
     	</div>
 
         <div class="modal-footer">

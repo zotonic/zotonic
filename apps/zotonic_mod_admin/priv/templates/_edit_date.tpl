@@ -17,7 +17,11 @@
         {% if date_is_all_day %}
             style="display: none;"
         {% endif %}
-        data-timepicker="timeFormat:'H:i',step:15,scrollDefaultTime:{% if is_end %}'18:00'{%else%}'08:30'{% endif %}"
+        data-timepicker='{
+            "timeFormat": "H:i",
+            "step": 15,
+            "scrollDefaultTime": {% if is_end %} "18:00" {% else %} "08:30" {% endif %}
+        }'
         class="input-mini {{ class }} {{ time_class }} form-control"
     />
     {% endwith %}

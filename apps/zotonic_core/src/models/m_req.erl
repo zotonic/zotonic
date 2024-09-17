@@ -56,6 +56,7 @@ get(timezone, #context{} = Context) -> z_context:tz(Context);
 get(language, #context{} = Context) -> z_context:language(Context);
 get(csp_nonce, Context) -> z_context:csp_nonce(Context);
 get(is_crawler, #context{} = Context) -> z_user_agent:is_crawler(Context);
+get(is_http_request, #context{} = Context) -> z_context:get(is_http_request, Context);
 get(peer_ip, #context{} = Context) ->
     case z_context:get(peer_ip, Context) of
         undefined -> get_req(peer_ip, Context);
@@ -101,5 +102,3 @@ values(Context) ->
             headers, timezone, language
         ]
     ].
-
-

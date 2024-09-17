@@ -5,7 +5,12 @@
 {% block widget_title %}
 {_ Page connections _}
 <div class="widget-header-tools">
-    <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{{ _"Page connections"|escapejs }}', text: '{{ _"This page is able to connect to others. For example you can connect it to an actor or a brand."|escapejs }}'" title="{_ Need more help? _}"></a>
+    <a href="#" class="z-btn-help do_dialog" data-dialog="{{
+            %{
+                title: _"Page connections",
+                text: _"This page is able to connect to others. For example you can connect it to an actor or a brand."
+            }|escape
+        }}" title="{_ Need more help? _}"></a>
 </div>
 {% endblock %}
 

@@ -6,7 +6,7 @@
 <head>
     <title>{{ id.title }}</title>
 
-    <style type="text/css">
+    <style type="text/css" nonce="{{ m.req.csp_nonce }}">
     body {
         font-family: Arial, Helvetica, Sans-Serif;
         font-size: 12px;

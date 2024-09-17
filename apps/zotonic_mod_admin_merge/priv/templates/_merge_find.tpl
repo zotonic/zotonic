@@ -27,7 +27,7 @@
 
 <div id="dialog-merge-found"
      class="do_feedback"
-     data-feedback="trigger: 'dialog-merge-find', delegate: 'mod_admin_merge'">
+     data-feedback='{ "trigger": "dialog-merge-find", "delegate": "mod_admin_merge" }'>
 </div>
 
 {% wire name="dialog_merge_find"

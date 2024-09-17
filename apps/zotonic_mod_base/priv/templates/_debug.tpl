@@ -1,4 +1,4 @@
-<style>
+<style type="text/css" nonce="{{ m.req.csp_nonce }}">
     .z-debug-holder {
         overflow: hidden;
         border-radius: 0.5rem;
@@ -94,27 +94,13 @@
         <summary class="z-debug-summary">
             <span>DEBUG</span>
             <div class="z-debug-btns-holder">
-                <button
-                    type="button"
-                    class="z-debug-btn-collapse"
-                    onclick='document.querySelectorAll("#{{ #z_debug_holder }} .z-debug details")
-                                     .forEach(d => d.removeAttribute("open"))'
-                >
+                <button type="button" class="z-debug-btn-collapse" id="{{ #debug_details }}">
                     &lowbar;
                 </button>
-                <button
-                    type="button"
-                    class="z-debug-btn-expand"
-                    onclick='document.querySelectorAll("#{{ #z_debug_holder }} .z-debug details")
-                                     .forEach(d => d.setAttribute("open", true))'
-                >
+                <button type="button" class="z-debug-btn-expand">
                     &square;
                 </button>
-                <button
-                    type="button"
-                    class="z-debug-btn-times"
-                    onclick='document.getElementById("{{ #z_debug_holder }}").remove()'
-                >
+                <button type="button" class="z-debug-btn-times">
                     &times;
                 </button>
             </div>
@@ -128,4 +114,45 @@
             {% endfor %}
         </div>
     </details>
+
+    {% if m.req.is_http_request %}
+        {# Inline, so that pages without a script-scomp work as well #}
+        <script type="text/javascript" nonce="{{ m.req.csp_nonce }}">
+          document.querySelector("#{{ #z_debug_holder }} .z-debug-btn-collapse")
+              .addEventListener(
+                  "click",
+                  (e) => document.querySelectorAll("#{{ #z_debug_holder }} .z-debug details")
+                          .forEach(d => d.removeAttribute("open")) );
+
+          document.querySelector("#{{ #z_debug_holder }} .z-debug-btn-expand")
+              .addEventListener(
+                  "click",
+                  (e) => document.querySelectorAll("#{{ #z_debug_holder }} .z-debug details")
+                            .forEach(d => d.setAttribute("open", true)) );
+
+          document.querySelector("#{{ #z_debug_holder }} .z-debug-btn-times")
+              .addEventListener(
+                  "click",
+                  (e) => document.getElementById("{{ #z_debug_holder }}").remove() );
+        </script>
+    {% else %}
+        {% javascript %}
+            document.querySelector("#{{ #z_debug_holder }} .z-debug-btn-collapse")
+                .addEventListener(
+                    "click",
+                    (e) => document.querySelectorAll("#{{ #z_debug_holder }} .z-debug details")
+                            .forEach(d => d.removeAttribute("open")) );
+
+            document.querySelector("#{{ #z_debug_holder }} .z-debug-btn-expand")
+                .addEventListener(
+                    "click",
+                    (e) => document.querySelectorAll("#{{ #z_debug_holder }} .z-debug details")
+                            .forEach(d => d.setAttribute("open", true)) );
+
+            document.querySelector("#{{ #z_debug_holder }} .z-debug-btn-times")
+                .addEventListener(
+                    "click",
+                    (e) => document.getElementById("{{ #z_debug_holder }}").remove() );
+        {% endjavascript %}
+    {% endif %}
 </div>

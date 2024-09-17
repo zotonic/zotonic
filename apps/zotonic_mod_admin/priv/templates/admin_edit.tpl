@@ -4,7 +4,7 @@
 
 {% block bodyclass %}edit-page cg-{{ id.content_group_id.name }} {% for cat,_ in id.is_a %}cat-{{ cat }} {% endfor %} name-{{ id.name }}{% endblock %}
 
-{% block bodyattr %} data-rsc-id="{{ id.id }}" data-fileuploader="{{ %{ subject_id: id.id, predicate: "depiction" }|to_json|escape }}"{% endblock %}
+{% block bodyattr %} data-rsc-id="{{ id.id }}" data-fileuploader="{{ %{ subject_id: id.id, predicate: "depiction" }|escape }}"{% endblock %}
 
 {% block content %}
 

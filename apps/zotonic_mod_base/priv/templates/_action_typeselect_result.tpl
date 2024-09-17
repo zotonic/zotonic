@@ -10,5 +10,5 @@
     {% wire_args id=#connect.id action=action_with_id select_id=id %}
     {% wire id=#connect.id action=action %}
 {% empty %}
-    <li class="suggestions-result"><a href="javascript:void(0);">Nothing found.</a></li>
+    <li class="suggestions-result"><a href="#">Nothing found.</a></li>
 {% endfor %}
