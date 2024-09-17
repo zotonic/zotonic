@@ -1373,7 +1373,8 @@ set_security_headers(Context) ->
             "frame-src 'self' https:; "
             "object-src 'none'; "
             "form-action 'self'; "
-            "worker-src 'self' blob: "
+            "worker-src 'self' blob:; "
+            "connect-src 'self' https:"
          >>},
         {<<"x-content-type-options">>, <<"nosniff">>},
         {<<"x-permitted-cross-domain-policies">>, <<"none">>},
