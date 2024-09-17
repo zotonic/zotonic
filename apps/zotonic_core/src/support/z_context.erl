@@ -1368,11 +1368,13 @@ set_security_headers(Context) ->
             % "style-src 'self' 'nonce-' https:; "
             % "style-src-attr 'self' 'unsafe-inline'; "
             "img-src 'self' data: https:; "
-            "media-src 'self' data: https:; "
+            "media-src 'self' data: https: mediastream:; "
             "font-src 'self' https:; "
             "frame-src 'self' https:; "
             "object-src 'none'; "
-            "form-action 'self'"
+            "form-action 'self'; "
+            "worker-src 'self' blob:; "
+            "connect-src 'self' https:"
          >>},
         {<<"x-content-type-options">>, <<"nosniff">>},
         {<<"x-permitted-cross-domain-policies">>, <<"none">>},
