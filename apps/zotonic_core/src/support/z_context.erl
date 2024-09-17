@@ -1364,7 +1364,7 @@ set_security_headers(Context) ->
         {<<"content-security-policy">>, <<
             "default-src 'self'; "
             "script-src 'self' 'nonce-' https:; "
-            "style-src 'self' 'nonce-'; "
+            "style-src 'self' 'nonce-' https:; "
             "style-src-attr 'self' 'unsafe-inline'; "
             "img-src 'self' data: https:; "
             "media-src 'self' data: https:; "
