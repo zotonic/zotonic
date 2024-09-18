@@ -239,6 +239,7 @@ observe_media_import(#media_import{url=Url, metadata=MD}, Context) ->
                 prio = case Category of
                             website -> 11; % Prefer our own 'website' extraction
                             video -> 3;
+                            document -> 4;
                             _ -> 6
                        end,
                 category = Category,
@@ -545,6 +546,7 @@ preview_url_from_json(_Type, Json) ->
 type_to_category(<<"photo">>) -> image;
 type_to_category(<<"video">>) -> video;
 type_to_category(<<"link">>) -> website;
+type_to_category(<<"rich">>) -> document;
 type_to_category(_Type) -> document.
 
 
