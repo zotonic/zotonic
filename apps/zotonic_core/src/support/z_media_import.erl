@@ -396,7 +396,7 @@ import_as_referred_image(MD, Context) ->
                 <<>> -> undefined;
                 ImageUrl ->
                     #media_import_props{
-                        prio = 4,
+                        prio = 5,
                         category = image,
                         description = m_rsc:p_no_acl(image, title, Context),
                         rsc_props = #{
