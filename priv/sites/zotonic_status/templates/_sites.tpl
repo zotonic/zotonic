@@ -3,6 +3,7 @@
         <th>{_ Status _}</th>
         <th>{_ URL _}</th>
         <th>{_ Actions _}</th>
+        <th>{_ Health _}</th>
     </tr>
 </thead>
 <tbody>
@@ -22,8 +23,8 @@
                 <small>({{ name }})</small>
             </td>
 
-            {% if has_user %}
             <td>
+                {% if has_user %}
                 {% button
                 text=_"start"
                 class="start btn btn-default btn-xs"
@@ -49,14 +50,21 @@
                 postback={site_flush site=name} %}
 
                 {% button
-                    text=_"admin"
-                    class="admin btn btn-default btn-xs"
-                    title=_"Visit the admin page for this site."
-                    postback={site_admin site=name} %}
+                text=_"admin"
+                class="admin btn btn-default btn-xs"
+                title=_"Visit the admin page for this site."
+                postback={site_admin site=name} %}
 
                 {% all include "_z_status_button.tpl" %}
+                {% endif %}
             </td>
-        {% endif %}
+            <td>
+                {% if m.sitemodule[name].running|make_value %}
+                    Ok
+                {% else %}
+                    Site module not running
+                {% endif %}
+            </td>
         </tr>
         {% endif %}
     {% endfor %}
