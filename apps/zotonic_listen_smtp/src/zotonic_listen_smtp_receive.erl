@@ -84,7 +84,10 @@ received_1(Recipient, ParsedEmail,
                     }
                 },
                 Context),
-            case is_blocked(ParsedEmail#email.from, Context) of
+            LHeaders = lowercase_headers(Headers),
+            case is_blocked(ParsedEmail#email.from, Context)
+                orelse is_blocked(proplists:get_value(<<"from">>, LHeaders), Context)
+            of
                 false ->
                     Email = #email_received{
                         localpart = LocalPart,
@@ -94,7 +97,7 @@ received_1(Recipient, ParsedEmail,
                         from = ParsedEmail#email.from,
                         reference = Reference,
                         email = ParsedEmail,
-                        headers = lowercase_headers(Headers),
+                        headers = LHeaders,
                         decoded = {Type, Subtype, Headers, Params, Body},
                         raw = Data
                     },
@@ -207,8 +210,10 @@ received_1(Recipient, ParsedEmail,
 % @doc Check if we can receive an email from this address. If an email address is blocked
 % for sending, then we also block it for receiving email.
 -spec is_blocked(EmailAddress, Context) -> boolean() when
-    EmailAddress :: binary(),
+    EmailAddress :: binary() | undefined,
     Context :: z:context().
+is_blocked(undefined, _Context) ->
+    false;
 is_blocked(EmailAddress, Context) ->
     {_Name, Email} = z_email:split_name_email(EmailAddress),
     case z_notifier:first(#email_is_blocked{ recipient = Email }, Context) of
