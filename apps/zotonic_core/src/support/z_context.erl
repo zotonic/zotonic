@@ -1382,7 +1382,7 @@ set_security_headers(Context) ->
     ],
     Default1 = case z_context:get(allow_frame, Context, false) of
         true -> Default;
-        false -> [ {<<"x-frame-options">>, <<"sameorigin">>} | Default ]
+        false -> [ {<<"x-frame-options">>, <<"SAMEORIGIN">>} | Default ]
     end,
     HSTSHeaders = case hsts_header(Context) of
         {_,_} = H -> [ H | Default1 ];

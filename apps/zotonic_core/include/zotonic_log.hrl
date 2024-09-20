@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2020 Marc Worrell
+%% @copyright 2011-2024 Marc Worrell
 %% @doc Log record definitions for zotonic
+%% @end
 
-%% Copyright 2011-2020 Marc Worrell
+%% Copyright 2011-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -36,7 +37,7 @@
 -record(log_email, {
     severity = ?LOG_LEVEL_ERROR,
     message_nr,
-    mailer_status,      % sending, sent, error, retry, warning, bounce, received
+    mailer_status,      % sending, sent, error, retry, warning, bounce, received, blocked
     mailer_message,     % any text, to clarify the mailer_status
     mailer_host,        % SMTP server or client we are talking with
     envelop_to,         % the 'to' on the envelop

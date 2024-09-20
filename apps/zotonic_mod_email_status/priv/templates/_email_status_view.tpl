@@ -1,9 +1,10 @@
 {% with email|default:(id.email_raw) as email %}
 {% with m.email_status[email] as status %}
-	{% if m.acl.is_admin %}
+	{% if m.acl.is_admin or m.acl.is_allowed.use.mod_email_status %}
 		{% if not status.is_blocked %}
-			<a href="#" class="btn btn-danger btn-small pull-right" id="{{ #doblock }}">
-				{_ [ADMIN] _} {_ Block _}
+			<a href="#" class="btn btn-danger btn-small pull-right" id="{{ #doblock }}"
+			   title="{_ Prevent sending email to, and receiving email from this address. _}">
+				{_ Block _}
 			</a>
 			{% if panel_id %}
 				{% wire id=#doblock
@@ -35,12 +36,12 @@
 				<strong>
 					{_ Blocked _}
 				</strong>
-				{_ This email address has been blocked, no emails will be sent. _}
+				{_ This email address has been blocked, no emails will be sent or received from this address. _}
 			</p>
 		{% else %}
 			<p>
 				<a href="#" class="btn btn-success btn-small pull-right" id="{{ #doreset }}">
-					{_ [ADMIN] _} {_ Unblock _}
+					{_ Unblock _}
 				</a>
 			</p>
 			{% if panel_id %}
@@ -67,7 +68,7 @@
 						delegate=`mod_email_status`
 				%}
 				<p class="alert alert-success" id="{{ #didreset }}" style="display:none">
-					{_ The error message has been cleared and emails are being sent. _}
+					{_ The block has been cleared and emails are being sent and received. _}
 				</p>
 			{% endif %}
 		{% endif %}

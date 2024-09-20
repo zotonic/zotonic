@@ -740,10 +740,10 @@ check_templates_1([ T | Ts ], Context) ->
 drop_blocked_email(Id, Recipient, Email, Context) ->
     delete_emailq(Id),
     LogEmail = #log_email{
-        severity = ?LOG_LEVEL_ERROR,
-        mailer_status = error,
+        severity = ?LOG_LEVEL_WARNING,
+        mailer_status = blocked,
         mailer_message = <<"Recipient blocked by Zotonic module (#email_is_blocked)">>,
-        props = [{reason, recipient_blocked}],
+        props = [ {reason, recipient_blocked} ],
         message_nr = Id,
         envelop_to = Recipient,
         envelop_from = <<>>,
@@ -753,7 +753,10 @@ drop_blocked_email(Id, Recipient, Email, Context) ->
         other_id = proplists:get_value(list_id, Email#email.vars),
         message_template = Email#email.html_tpl
     },
-    z_notifier:notify(#zlog{user_id=z_acl:user(Context), props=LogEmail}, Context).
+    z_notifier:notify(#zlog{
+            user_id = z_acl:user(Context),
+            props = LogEmail
+        }, Context).
 
 delete_email(Error, Id, Recipient, Email, Context) ->
     delete_emailq(Id),
