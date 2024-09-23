@@ -37,7 +37,7 @@
 -record(log_email, {
     severity = ?LOG_LEVEL_ERROR :: ?LOG_LEVEL_FATAL..?LOG_LEVEL_DEBUG,
     message_nr :: binary() | undefined,
-    mailer_status :: sending, sent, error, retry, warning, bounce, received, blocked,
+    mailer_status :: sending | sent | error | retry | warning | bounce | received | blocked,
     mailer_message :: binary() | undefined,                % any text, to clarify the mailer_status
     mailer_host :: undefined | binary() | string(),        % SMTP server or client we are talking with
     envelop_to :: undefined | binary() | string(),         % the 'to' on the envelop
