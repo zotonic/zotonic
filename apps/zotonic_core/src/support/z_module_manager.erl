@@ -66,7 +66,6 @@
     mod_author/1,
     mod_schema/1,
     reinstall/2,
-
     sidejob_finish_start/1
 ]).
 
