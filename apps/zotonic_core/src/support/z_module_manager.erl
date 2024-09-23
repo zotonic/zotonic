@@ -65,7 +65,8 @@
     mod_description/1,
     mod_author/1,
     mod_schema/1,
-    reinstall/2
+    reinstall/2,
+    sidejob_finish_start/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -484,7 +485,10 @@ scan_depending(Context) ->
         scan(Context)).
 
 
-%% @doc Return the status of all running modules.
+%% @doc Return the status of all enabled modules.
+-spec get_modules_status( Context ) -> ModulesStatus when
+    Context :: z:context(),
+    ModulesStatus :: [ {atom(), module_status()} ].
 get_modules_status(Context) ->
     gen_server:call(name(Context), get_modules_status).
 
@@ -817,23 +821,12 @@ bin(A) when is_binary(A) ->
 %%====================================================================
 
 
-%% @spec init(Args) -> {ok, State} |
-%%                     {ok, State, Timeout} |
-%%                     ignore               |
-%%                     {stop, Reason}
 %% @doc Initiates the server.
 init(Site) ->
     timer:send_interval(?GC_INTERVAL, force_gc),
     z_context:logger_md(Site),
     {ok, #state{ site = Site }}.
 
-
-%% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
-%%                                      {reply, Reply, State, Timeout} |
-%%                                      {noreply, State} |
-%%                                      {noreply, State, Timeout} |
-%%                                      {stop, Reason, Reply, State} |
-%%                                      {stop, Reason, State}
 %% @doc Return a list of all modules
 handle_call(get_modules, _From, #state{ modules = Modules } = State) ->
     {reply, maps:keys(Modules), State};
@@ -889,9 +882,6 @@ handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
 
-%% @spec handle_cast(Msg, State) -> {noreply, State} |
-%%                                  {noreply, State, Timeout} |
-%%                                  {stop, Reason, State}
 %% @doc Sync enabled modules with loaded modules
 handle_cast(upgrade, State) ->
     State1 = handle_upgrade(State),
@@ -958,9 +948,7 @@ handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
 
-%% @spec handle_info(Info, State) -> {noreply, State} |
-%%                                       {noreply, State, Timeout} |
-%%                                       {stop, Reason, State}
+%% @doc Handle down messages from modules.
 handle_info({'DOWN', _MRef, process, Pid, Reason}, #state{ start_wait = {Module, Pid, _}, site = Site } = State) ->
     ?zDebug(
         "Module ~p start result ~p",
@@ -1025,7 +1013,6 @@ handle_info(_Info, State) ->
     {noreply, State}.
 
 
-%% @spec terminate(Reason, State) -> void()
 %% @doc This function is called by a gen_server when it is about to
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
@@ -1033,7 +1020,6 @@ handle_info(_Info, State) ->
 terminate(_Reason, _State) ->
     ok.
 
-%% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
 %% @doc Convert process state when code is changed
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
@@ -1290,15 +1276,20 @@ signal_upgrade_waiters(#state{upgrade_waiters = Waiters} = State) ->
         Waiters),
     State#state{ upgrade_waiters = [] }.
 
+%% @doc Run after a site has been started up. Notify to the site that all modules
+%% are ready and load the translations.
+-spec sidejob_finish_start(Site) -> ok when
+    Site :: atom().
+sidejob_finish_start(Site) ->
+    Context = z_context:new(Site),
+    ?zDebug("Finished starting modules", [], Context),
+    z_notifier:notify_sync(module_ready, Context),
+    z_trans_server:load_translations(Context).
+
 
 handle_start_next(#state{site=Site, start_queue=[]} = State) ->
     % Signal modules are loaded, and load all translations.
-    Context = z_context:new(Site),
-    z_notifier:notify(module_ready, Context),
-    ?zDebug("Finished starting modules", [], z_context:new(Site)),
-    spawn(fun() ->
-        z_trans_server:load_translations(Context)
-    end),
+    {ok, _} = z_sidejob:start({?MODULE, sidejob_finish_start, [Site]}),
     signal_upgrade_waiters(State);
 handle_start_next(#state{site=Site, start_queue=Starting, modules=Modules} = State) ->
     % Filter all children on the capabilities of the loaded modules.
@@ -1414,7 +1405,6 @@ start_child(ManagerPid, Module, App, ChildSpec, Site) ->
     StartPid = spawn(
         fun() ->
             Context = z_acl:sudo(z_context:new(Site)),
-            z_context:logger_md(Context),
             ?LOG_DEBUG(#{
                 text => <<"Starting module">>,
                 in => zotonic_core,
