@@ -215,7 +215,8 @@ init(Site) ->
         site => Site,
         module => ?MODULE
     }),
-    Context = z_context:new(Site),
+    Context = z_acl:sudo(z_context:new(Site)),
+    z_context:logger_md(Context),
     z_notifier:observe(module_ready, self(), Context),
     {ok, #state{context=Context}}.
 

@@ -47,7 +47,9 @@
 
 
 start_link(Site) ->
-    z_notifier:observe(module_reindexed, {?MODULE, module_reindexed}, z_context:new(Site)),
+    Context = z_context:new(Site),
+    z_context:logger_md(Context),
+    z_notifier:observe(module_reindexed, {?MODULE, module_reindexed}, Context),
     ignore.
 
 
