@@ -44,7 +44,7 @@ overrides_tpl: (optional) template location that contains JavaScript overrides f
     config
 %}
 {% with
-    (config == "newest" or config|is_undefined)|if:newest:config
+    (config == "newest" or config|is_undefined or not config|is_supported_version)|if:newest:config
     as
     version
 %}
