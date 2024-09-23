@@ -1,8 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2014-2020 Arjan Scherpenisse
+%% @copyright 2014-2024 Arjan Scherpenisse
 %% @doc Postgresql pool worker
+%% @end
 
-%% Copyright 2014-2020 Arjan Scherpenisse
+%% Copyright 2014-2024 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -65,14 +66,14 @@
  -define(DBTRACE_EXPLAIN_MSEC, 100).
 
 -record(state, {
-    conn,
+    conn = undefined :: undefined | pid(),
     conn_args = undefined :: undefined | list(),
     busy_monitor = undefined :: undefined | reference(),
     busy_pid = undefined :: undefined | pid(),
     busy_ref = undefined :: undefined | reference(),
     busy_timeout = undefined :: undefined | integer(),
     busy_start = undefined :: undefined | pos_integer(),
-    busy_sql = undefined :: undefined | string(),
+    busy_sql = undefined :: undefined | string() | binary(),
     busy_params = [] :: list(),
     busy_tracing = false :: boolean()
 }).
@@ -118,15 +119,22 @@ test_connection_1(Args) ->
             E
     end.
 
--spec is_connection_alive( pid() ) -> boolean().
+-spec is_connection_alive(Worker) -> boolean() when
+    Worker :: pid().
 is_connection_alive(Worker) ->
     erlang:is_process_alive(Worker).
 
--spec pool_get_connection( z:context() ) -> {ok, pid()} | {error, term()}.
+-spec pool_get_connection(Context) -> {ok, Conn} | {error, Reason} when
+    Context :: z:context(),
+    Conn :: pid(),
+    Reason :: term().
 pool_get_connection(Context) ->
     z_db_pool:get_connection(Context).
 
--spec pool_return_connection( pid(), z:context() ) -> ok | {error, term()}.
+-spec pool_return_connection(Worker, Context) -> ok | {error, Reason} when
+    Worker :: pid(),
+    Context :: z:context(),
+    Reason :: term().
 pool_return_connection(Worker, Context) ->
     case is_connection_alive(Worker) of
         true ->
@@ -156,7 +164,11 @@ pool_return_connection(Worker, Context) ->
 
 %% @doc Simple query without parameters, the query is interrupted if it takes
 %%      longer than Timeout msec.
--spec squery( pid(), string() | binary(), pos_integer() ) -> query_result().
+-spec squery(Worker, Sql, Timeout) -> Result when
+    Worker :: pid(),
+    Sql :: string() | binary(),
+    Timeout :: pos_integer(),
+    Result :: query_result().
 squery(Worker, Sql, Timeout) ->
     case is_connection_alive(Worker) of
         true ->
@@ -174,7 +186,12 @@ squery(Worker, Sql, Timeout) ->
 
 %% @doc Query with parameters, the query is interrupted if it takes
 %%      longer than Timeout msec.
--spec equery( pid(), string() | binary(), list(), pos_integer() ) -> query_result().
+-spec equery(Worker, Sql, Parameters, Timeout) -> Result when
+    Worker :: pid(),
+    Sql :: string() | binary(),
+    Parameters :: list(),
+    Timeout :: pos_integer(),
+    Result :: query_result().
 equery(Worker, Sql, Parameters, Timeout) ->
     case is_connection_alive(Worker) of
         true ->
@@ -192,7 +209,12 @@ equery(Worker, Sql, Parameters, Timeout) ->
 
 %% @doc Batch Query, the query is interrupted if it takes
 %%      longer than Timeout msec.
--spec execute_batch( pid(), string() | binary(), list(), pos_integer() ) -> query_result().
+-spec execute_batch(Worker, Sql, Batch, Timeout) -> Result when
+    Worker :: pid(),
+    Sql :: string() | binary(),
+    Batch :: list( list() ),
+    Timeout :: pos_integer(),
+    Result :: query_result().
 execute_batch(Worker, Sql, Batch, Timeout) ->
     case is_connection_alive(Worker) of
         true ->
@@ -211,7 +233,14 @@ execute_batch(Worker, Sql, Batch, Timeout) ->
 
 %% @doc Request the SQL connection from the worker. The query is passed for logging
 % purposes. This caller will do the query using the returned connection.
--spec fetch_conn( pid(), string() | binary(), list(), pos_integer() ) -> {ok, {pid(), reference()}} | {error, term()}.
+-spec fetch_conn(Worker, Sql, Parameters, Timeout) -> {ok, {Conn, Ref}} | {error, Reason} when
+    Worker :: pid(),
+    Sql :: string() | binary(),
+    Parameters :: list(),
+    Timeout :: pos_integer(),
+    Conn :: pid(),
+    Ref :: reference(),
+    Reason :: term().
 fetch_conn(Worker, Sql, Parameters, Timeout) ->
     case is_connection_alive(Worker) of
         true ->
@@ -238,7 +267,10 @@ fetch_conn(Worker, Sql, Parameters, Timeout) ->
 
 %% @doc Return the SQL connection to the worker, must be done within the timeout
 %%      specified in the fetch_conn/4 call.
--spec return_conn(pid(), reference()) -> ok | {error, term()}.
+-spec return_conn(Worker, Ref) -> ok | {error, Reason} when
+    Worker :: pid(),
+    Ref :: reference(),
+    Reason :: term().
 return_conn(Worker, Ref) ->
     case is_connection_alive(Worker) of
         true ->
@@ -291,7 +323,7 @@ handle_call({pool_return_connection_check, CallerPid}, From, #state{
         worker_pid => self()
     }),
     gen_server:reply(From, {error, checkin_busy}),
-    State1 = disconnect(State, checkin_busy),
+    State1 = disconnect(State),
     {stop, normal, State1};
 
 handle_call({fetch_conn, _Ref, _CallerPid, _Sql, _Params, _Timeout, _IsTracing} = Cmd, From,
@@ -335,7 +367,7 @@ handle_call({fetch_conn, _Ref, CallerPid, Sql, Params, _Timeout, _IsTracing}, Fr
         worker_pid => self()
     }),
     gen_server:reply(From, {error, busy}),
-    State1 = disconnect(State, busy),
+    State1 = disconnect(State),
     {stop, normal, State1};
 
 handle_call({fetch_conn, _Ref, CallerPid, Sql, Params, _Timeout, _IsTracing}, _From, #state{ busy_pid = OtherPid } = State) ->
@@ -428,7 +460,7 @@ handle_info(disconnect, #state{ busy_pid = undefined } = State) ->
         schema => Schema,
         worker_pid => self()
     }),
-    {noreply, disconnect(State, disconnect), hibernate};
+    {noreply, disconnect(State), hibernate};
 
 handle_info(disconnect, State) ->
     Database = get_arg(dbdatabase, State#state.conn_args),
@@ -444,11 +476,11 @@ handle_info(disconnect, State) ->
         args => State#state.busy_params,
         worker_pid => self()
     }),
-    {noreply, State, disconnect(State, disconnect), hibernate};
+    {noreply, State, disconnect(State), hibernate};
 
 handle_info(timeout, #state{ busy_pid = undefined } = State) ->
     % Idle timeout - no SQL query is running
-    {noreply, disconnect(State, idle), hibernate};
+    {noreply, disconnect(State), hibernate};
 
 handle_info(timeout, #state{
         busy_pid = Pid,
@@ -475,7 +507,7 @@ handle_info(timeout, #state{
         args => Params,
         worker_pid => self()
     }),
-    State1 = disconnect(State, sql_timeout),
+    State1 = disconnect(State),
     {stop, normal, State1};
 
 handle_info({'DOWN', _Ref, process, BusyPid, Reason}, #state{
@@ -500,7 +532,7 @@ handle_info({'DOWN', _Ref, process, BusyPid, Reason}, #state{
         args => Params,
         worker_pid => self()
     }),
-    {noreply, disconnect(State, sql_timeout), hibernate};
+    {noreply, disconnect(State), hibernate};
 
 handle_info({'DOWN', _Ref, process, ConnPid, Reason}, #state{
         conn = ConnPid,
@@ -524,12 +556,12 @@ handle_info({'DOWN', _Ref, process, ConnPid, Reason}, #state{
         worker_pid => self()
     }),
     State1 = State#state{ conn = undefined },
-    {noreply, disconnect(State1, sql_conn_down), hibernate};
+    {noreply, disconnect(State1), hibernate};
 
 handle_info({'DOWN', _Ref, process, Pid, _Reason}, #state{ conn = Pid } = State) ->
     % Connection down, no processes running, ok to hibernate
     State1 = State#state{ conn = undefined },
-    {noreply, disconnect(State1, sql_conn_down), hibernate};
+    {noreply, disconnect(State1), hibernate};
 
 handle_info({'DOWN', _Ref, process, _Pid, _Reason}, #state{ busy_pid = undefined } = State) ->
     % Might be a late down message from the busy pid, ignore.
@@ -562,7 +594,7 @@ handle_info(Info, State) ->
     {noreply, State, timeout(State)}.
 
 terminate(_Reason, #state{} = State) ->
-    disconnect(State, sql_conn_terminate),
+    disconnect(State),
     ok.
 
 code_change(_OldVsn, State, _Extra) ->
@@ -574,9 +606,9 @@ code_change(_OldVsn, State, _Extra) ->
 %%
 
 %% @doc Close the connection to the SQL server
-disconnect(#state{ conn = undefined } = State, Reason) ->
-    kill_busy(State, Reason);
-disconnect(#state{ conn = Conn } = State, Reason) ->
+disconnect(#state{ conn = undefined } = State) ->
+    demonitor_busy(State);
+disconnect(#state{ conn = Conn } = State) ->
     ok = epgsql:close(Conn),
     State1 = receive
         {'DOWN', _Ref, process, Conn, _Reason} ->
@@ -584,12 +616,14 @@ disconnect(#state{ conn = Conn } = State, Reason) ->
             reset_busy_state(State)
         after 500 ->
             % Assume busy pid did not receive the error, kill it
-            kill_busy(State, Reason)
+            erlang:exit(Conn, kill),
+            demonitor_busy(State)
     end,
     State1#state{ conn = undefined }.
 
-%% @doc Kill the busy process.
-kill_busy(#state{ busy_pid = Pid } = State, Reason) when is_pid(Pid) ->
+%% @doc Demonitor the busy process - it will kill itself by using the
+%% now defunct connection process.
+demonitor_busy(#state{ busy_pid = Pid } = State) when is_pid(Pid) ->
     #state{
         busy_monitor = Monitor,
         busy_sql = Sql,
@@ -599,10 +633,9 @@ kill_busy(#state{ busy_pid = Pid } = State, Reason) when is_pid(Pid) ->
         conn = Conn
     } = State,
     erlang:demonitor(Monitor),
-    erlang:exit(Pid, Reason),
     trace_end(IsTracing, Start, Sql, Params, Conn),
     reset_busy_state(State);
-kill_busy(State, _Reason) ->
+demonitor_busy(State) ->
     reset_busy_state(State).
 
 
