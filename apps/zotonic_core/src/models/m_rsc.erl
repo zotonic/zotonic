@@ -114,6 +114,9 @@
                           | medium
                           | {medium, boolean()}.
 
+-define(MIN_RSC_ID, 1).
+-define(MAX_RSC_ID, 2147483647).
+
 -export_type([
     resource/0,
     resource_id/0,
@@ -398,6 +401,10 @@ get_raw_lock(Id, Context) ->
     get_raw(Id, true, Context).
 
 -spec get_raw(resource(), boolean(), z:context()) -> {ok, map()} | {error, term()}.
+get_raw(Id, _IsLock, _Context) when is_integer(Id), Id > ?MAX_RSC_ID ->
+    {error, enoent};
+get_raw(Id, _IsLock, _Context) when is_integer(Id), Id < ?MIN_RSC_ID ->
+    {error, enoent};
 get_raw(Id, IsLock, Context) when is_integer(Id) ->
     SQL = case z_memo:get(rsc_raw_sql) of
         undefined ->
@@ -732,6 +739,10 @@ p(Id, Property, Context) when is_binary(Property) ->
 p1(Id, Property, Context) ->
     case rid(Id, Context) of
         undefined ->
+            undefined;
+        RId when RId > ?MAX_RSC_ID ->
+            undefined;
+        RId when RId < ?MIN_RSC_ID ->
             undefined;
         RId ->
             case z_acl:rsc_visible(RId, Context) of
