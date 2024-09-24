@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col-md-6"><span class="meta">Pool Usage: </span><strong id="db-pool-usage">#</strong><span class="meta">%</span></div>
     <div class="col-md-6 text-right">
-        <span id="db-pool-workers">#</span>/<span id="db-pool-working">#</span> 
+        <span id="db-pool-workers">…</span>/<span id="db-pool-working">#</span>
     </div>
 </div>
 <div class="progress">
@@ -17,12 +17,13 @@
     <thead></thead>
     <tbody>
         {% for title, id in [
-            ["Requests/min", "db-requests"],
-            ["Checkouts/min", "db-checkouts"],
-            ["Pool High Usage/min", "db-pool-high-usage"],
-            ["Pool Full/min", "db-pool-full"]
-            ] %}
-        {% include "_stat_row.tpl" %}
+                ["Requests/min", "db-requests"],
+                ["Checkouts/min", "db-checkouts"],
+                ["Pool High Usage/min", "db-pool-high-usage"],
+                ["Pool Full/min", "db-pool-full"]
+            ]
+        %}
+            {% include "_stat_row.tpl" %}
         {% endfor %}
     </tbody>
 </table>
