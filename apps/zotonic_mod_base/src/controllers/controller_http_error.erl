@@ -279,6 +279,17 @@ bt_simplify({error, {throw, {error, {template_compile_error, Template, {Line,Col
                 io_lib:format("Error compiling template: ~s:~p (~p) ~s", [Template, Line, Col, Error])
           end,
     {reason, iolist_to_binary(Msg), bt_table(BT)};
+bt_simplify(
+    {throw,
+        {
+            {
+                {Error, [ {M, F, Arity, Loc} | _ ] = BT0},
+                {gen_server, call, _}
+            },
+            BT
+        }
+    }) when is_atom(M), is_atom(F), is_integer(Arity), is_list(Loc), is_list(BT) ->
+    {reason, stringify(Error), bt_table(BT0 ++ BT)};
 bt_simplify({error, {throw, {error, {template_compile_error, _Template, Error}}, BT}}) ->
     {reason, Error, bt_table(BT)};
 bt_simplify({_E1, {throw, Reason, BT}}) when is_list(BT) ->
