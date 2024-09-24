@@ -534,14 +534,15 @@ strlen(B) when is_binary(B) -> erlang:size(B);
 strlen(L) when is_list(L) -> erlang:length(L);
 strlen(A) when is_atom(A) -> erlang:length(atom_to_list(A)).
 
-map_one(F, _Row, _State) when is_binary(F) -> F;
 map_one(undefined, _Row, _State) -> undefined;
 map_one(true, _Row, _State) -> true;
 map_one(false, _Row, _State) -> false;
-map_one(F, Row, _State) when is_atom(F) ->
-    concat_spaces(proplists:get_all_values(z_convert:to_list(F), Row));
-map_one(F, Row, _State) when is_list(F) ->
+map_one(F, Row, _State) when is_binary(F) ->
     concat_spaces(proplists:get_all_values(F, Row));
+map_one(F, Row, _State) when is_atom(F) ->
+    concat_spaces(proplists:get_all_values(z_convert:to_binary(F), Row));
+map_one(F, Row, _State) when is_list(F) ->
+    concat_spaces(proplists:get_all_values(z_convert:to_binary(F), Row));
 map_one(F, Row, _State) when is_function(F) ->
     F(Row);
 map_one({prefer, Fields}, Row, State) ->
