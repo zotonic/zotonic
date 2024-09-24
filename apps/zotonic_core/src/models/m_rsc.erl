@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Model for resource data. Interfaces between zotonic, templates and the database.
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -114,8 +114,13 @@
                           | medium
                           | {medium, boolean()}.
 
+% Range of resource id values in PostgreSQL.
+% Make larger if moving to bigint resource ids.
 -define(MIN_RSC_ID, 1).
 -define(MAX_RSC_ID, 2147483647).
+
+-define(is_valid_rsc_id(N), (is_integer(N) andalso N >= ?MIN_RSC_ID andalso N =< ?MAX_RSC_ID)).
+-define(is_invalid_rsc_id(N), (not is_integer(N) orelse N < ?MIN_RSC_ID orelse N > ?MAX_RSC_ID)).
 
 -export_type([
     resource/0,
@@ -401,11 +406,7 @@ get_raw_lock(Id, Context) ->
     get_raw(Id, true, Context).
 
 -spec get_raw(resource(), boolean(), z:context()) -> {ok, map()} | {error, term()}.
-get_raw(Id, _IsLock, _Context) when is_integer(Id), Id > ?MAX_RSC_ID ->
-    {error, enoent};
-get_raw(Id, _IsLock, _Context) when is_integer(Id), Id < ?MIN_RSC_ID ->
-    {error, enoent};
-get_raw(Id, IsLock, Context) when is_integer(Id) ->
+get_raw(Id, IsLock, Context) when ?is_valid_rsc_id(Id) ->
     SQL = case z_memo:get(rsc_raw_sql) of
         undefined ->
             AllCols = [ z_convert:to_binary(C) || C <- z_db:column_names(rsc, Context) ],
@@ -437,6 +438,8 @@ get_raw(Id, IsLock, Context) when is_integer(Id) ->
         {error, _} = Error ->
             Error
     end;
+get_raw(Id, _IsLock, _Context) when ?is_invalid_rsc_id(Id) ->
+    {error, enoent};
 get_raw(undefined, _IsLock, _Context) ->
     {error, enoent};
 get_raw(Id, IsLock, Context) ->
@@ -501,8 +504,11 @@ ensure_utc_date_1(_K, P, _IsAllDay) ->
 
 %% @doc Get the ACL fields for the resource with the id.
 %% Will always return a valid record, even if the resource does not exist.
--spec get_acl_props(Id :: resource(), z:context()) -> #acl_props{}.
-get_acl_props(Id, Context) when is_integer(Id) ->
+-spec get_acl_props(Id , Context) -> AclProps when
+    Id :: resource(),
+    Context :: z:context(),
+    AclProps :: #acl_props{}.
+get_acl_props(Id, Context) when ?is_valid_rsc_id(Id) ->
     F = fun() ->
         Result =
             z_db:q_row(
@@ -529,6 +535,10 @@ get_acl_props(Id, Context) when is_integer(Id) ->
         end
     end,
     z_depcache:memo(F, {rsc_acl_fields, Id}, ?DAY, [Id], Context);
+get_acl_props(Id, _Context) when ?is_invalid_rsc_id(Id) ->
+    #acl_props{
+        is_published = false
+    };
 get_acl_props(Name, Context) ->
     case rid(Name, Context) of
         undefined ->
@@ -656,30 +666,40 @@ make_authoritative(RscId, Context)  ->
 -spec exists(resource(), z:context()) -> boolean().
 exists(Id, Context) ->
     case rid(Id, Context) of
-        Rid when is_integer(Rid) ->
+        Rid when ?is_valid_rsc_id(Rid) ->
             case p_no_acl(Rid, <<"id">>, Context) of
                 Rid -> true;
                 undefined -> false
             end;
-        undefined -> false
+        _ ->
+            false
     end.
 
+%% @doc Check if a resource is visible for the current user. Non existing
+%% resources are visible.
 -spec is_visible(resource(), z:context()) -> boolean().
 is_visible(Id, Context) ->
     z_acl:rsc_visible(Id, Context).
 
+%% @doc Check if a resource can be edited by the current user. Non existing
+%% resources are not editable.
 -spec is_editable(resource(), z:context()) -> boolean().
 is_editable(Id, Context) ->
     z_acl:rsc_editable(Id, Context).
 
+%% @doc Check if a resource can be deleted by the current user. Non existing
+%% resources are not deletable.
 -spec is_deletable(resource(), z:context()) -> boolean().
 is_deletable(Id, Context) ->
     z_acl:rsc_deletable(Id, Context).
 
+%% @doc Check if an connection can be added to the resource. Returns true if
+%% the ACL allows adding a 'relation' edge from the resource to itself.
 -spec is_linkable(resource(), z:context()) -> boolean().
 is_linkable(Id, Context) ->
     z_acl:rsc_linkable(Id, Context).
 
+%% @doc Check if the resource is the current user.
 -spec is_me(resource(), z:context()) -> boolean().
 is_me(Id, Context) ->
     case rid(Id, Context) of
@@ -689,6 +709,13 @@ is_me(Id, Context) ->
             false
     end.
 
+%% @doc Check if a resource is published and within its publication start/end
+%% range. If a resource does not exist then false is returned. The checks are
+%% done without checking access permissions.
+-spec is_published_date(Id, Context) -> IsPublished when
+    Id :: resource(),
+    Context :: z:context(),
+    IsPublished :: boolean().
 is_published_date(Id, Context) ->
     case rid(Id, Context) of
         RscId when is_integer(RscId) ->
@@ -709,7 +736,11 @@ is_published_date(Id, Context) ->
 
 %% @doc Fetch a property from a resource. When the rsc does not exist, the property does not
 %% exist or the user does not have access rights to the property then return 'undefined'.
--spec p(resource(), atom() | binary() | string(), z:context()) -> term() | undefined.
+-spec p(Resource, Property, Context) -> Value when
+    Resource :: resource(),
+    Property :: atom() | binary() | string(),
+    Context :: z:context(),
+    Value :: term() | undefined.
 p(_Id, undefined, _Context) ->
     undefined;
 p(undefined, _Property, _Context) ->
@@ -739,10 +770,6 @@ p(Id, Property, Context) when is_binary(Property) ->
 p1(Id, Property, Context) ->
     case rid(Id, Context) of
         undefined ->
-            undefined;
-        RId when RId > ?MAX_RSC_ID ->
-            undefined;
-        RId when RId < ?MIN_RSC_ID ->
             undefined;
         RId ->
             case z_acl:rsc_visible(RId, Context) of
@@ -925,7 +952,7 @@ image_url(Id, Mediaclass, Context) ->
     end.
 
 
-%% Return a list of all edge predicates of this resource
+%% @doc Return a list of all edge predicates of this resource
 -spec op(resource(), z:context()) -> list().
 op(Id, Context) when is_integer(Id) ->
     m_edge:object_predicates(Id, Context);
@@ -951,7 +978,7 @@ o(Id, Predicate, Context) ->
     o(rid(Id, Context), Predicate, Context).
 
 
-%% Return the nth object in the predicate list
+%% @doc Return the nth object in the predicate list
 -spec o(resource(), atom(), pos_integer(), z:context()) -> resource_id() | undefined.
 o(_Id, undefined, _N, _Context) ->
     undefined;
@@ -966,7 +993,7 @@ o(Id, Predicate, N, Context) ->
     o(rid(Id, Context), Predicate, N, Context).
 
 
-%% Return a list of all edge predicates to this resource
+%% @doc Return a list of all edge predicates to this resource
 -spec sp(resource(), z:context()) -> list().
 sp(undefined, _Context) ->
     [];
@@ -975,12 +1002,12 @@ sp(Id, Context) when is_integer(Id) ->
 sp(Id, Context) ->
     sp(rid(Id, Context), Context).
 
-%% Used for dereferencing subject edges inside template expressions
+%% @doc Used for dereferencing subject edges inside template expressions
 -spec s(resource(), z:context()) -> fun().
 s(Id, _Context) ->
     fun(P, Context) -> s(Id, P, Context) end.
 
-%% Return the list of subjects with a certain predicate
+%% @doc Return the list of subjects with a certain predicate
 -spec s(resource(), atom(), z:context()) -> list().
 s(undefined, _Predicate, _Context) ->
     [];
@@ -991,7 +1018,7 @@ s(Id, Predicate, Context) when is_integer(Id) ->
 s(Id, Predicate, Context) ->
     s(rid(Id, Context), Predicate, Context).
 
-%% Return the nth object in the predicate list
+%% @doc Return the nth object in the predicate list.
 -spec s(resource(), atom(), pos_integer(), z:context()) -> resource_id() | undefined.
 s(undefined, _Predicate, _N, _Context) ->
     undefined;
@@ -1006,8 +1033,12 @@ s(Id, Predicate, N, Context) ->
     s(rid(Id, Context), Predicate, N, Context).
 
 
-%% Return the list of all media attached to the resource
--spec media(resource(), z:context()) -> list().
+%% @doc Return the list of all media attached to the resource with the depiction
+%% predicate.
+-spec media(Id, Context) -> MediaIds when
+    Id :: resource(),
+    Context :: z:context(),
+    MediaIds :: list( resource_id() ).
 media(Id, Context) when is_integer(Id) ->
     m_edge:objects(Id, depiction, Context);
 media(undefined, _Context) ->
@@ -1017,11 +1048,18 @@ media(Id, Context) ->
 
 
 %% @doc Fetch a resource id from any input
--spec rid(resource()|#trans{}, z:context()) -> resource_id() | undefined.
-rid(Id, _Context) when is_integer(Id) ->
+-spec rid(ResourceReference, Context) -> Id | undefined when
+    ResourceReference :: resource() | #trans{},
+    Context :: z:context(),
+    Id :: resource_id().
+rid(Id, _Context) when ?is_valid_rsc_id(Id) ->
     Id;
-rid({Id}, _Context) when is_integer(Id) ->
+rid(Id, _Context) when ?is_invalid_rsc_id(Id) ->
+    undefined;
+rid({Id}, _Context) when ?is_valid_rsc_id(Id) ->
     Id;
+rid({Id}, _Context) when ?is_invalid_rsc_id(Id) ->
+    undefined;
 rid(#rsc_list{list = [R | _]}, _Context) ->
     R;
 rid(#rsc_list{list = []}, _Context) ->
@@ -1073,7 +1111,11 @@ rid(#{ <<"@id">> := Uri }, Context) ->
 rid(MaybeName, Context) when is_binary(MaybeName) ->
     case z_utils:only_digits(MaybeName) of
         true ->
-            z_convert:to_integer(MaybeName);
+            Id = z_convert:to_integer(MaybeName),
+            if
+                ?is_valid_rsc_id(Id) -> Id;
+                true -> false
+            end;
         false ->
             case binary:match(MaybeName, <<":">>) of
                 nomatch -> name_lookup(MaybeName, Context);
@@ -1083,7 +1125,11 @@ rid(MaybeName, Context) when is_binary(MaybeName) ->
 rid(MaybeName, Context) when is_list(MaybeName) ->
     case z_utils:only_digits(MaybeName) of
         true ->
-            z_convert:to_integer(MaybeName);
+            Id = z_convert:to_integer(MaybeName),
+            if
+                ?is_valid_rsc_id(Id) -> Id;
+                true -> false
+            end;
         false ->
             case lists:any(fun(C) -> C =:= $: end, MaybeName) of
                 false -> name_lookup(MaybeName, Context);
