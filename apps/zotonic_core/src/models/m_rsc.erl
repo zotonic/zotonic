@@ -120,7 +120,7 @@
 -define(MAX_RSC_ID, 2147483647).
 
 -define(is_valid_rsc_id(N), (is_integer(N) andalso N >= ?MIN_RSC_ID andalso N =< ?MAX_RSC_ID)).
--define(is_invalid_rsc_id(N), (not is_integer(N) orelse N < ?MIN_RSC_ID orelse N > ?MAX_RSC_ID)).
+-define(is_invalid_rsc_id(N), (is_integer(N) andalso (N < ?MIN_RSC_ID orelse N > ?MAX_RSC_ID))).
 
 -export_type([
     resource/0,
@@ -156,14 +156,14 @@ m_get([ <<"-">>, <<"lookup">>, <<"page_path">> | Path ], _Msg, Context) ->
             Error
     end;
 m_get([ <<"-">>, <<"lookup">>, <<"rid">>, Id | Rest ], _Msg, Context) ->
-    case m_rsc:rid(Id, Context) of
+    case rid(Id, Context) of
         undefined ->
             {error, enoent};
         RscId ->
             {ok, {RscId, Rest}}
     end;
 m_get([ <<"-">>, <<"lookup">>, <<"name">>, Name | Rest ], _Msg, Context) ->
-    Result = m_rsc:name_to_id(Name, Context),
+    Result = name_to_id(Name, Context),
     {ok, {Result, Rest}};
 m_get([ Id, <<"is_cat">>, Key | Rest ], _Msg, Context) ->
     {ok, {is_cat(Id, Key, Context), Rest}};
