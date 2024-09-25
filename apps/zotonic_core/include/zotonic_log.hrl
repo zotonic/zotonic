@@ -52,7 +52,7 @@
 
 % NOTE: Make sure to extend record_to_proplist/1 in mod_logging.erl when adding log types.
 -record(zlog, {
-    type = debug :: z:severity(),
+    type = debug :: z:severity() | atom(),
     user_id = undefined :: m_rsc:resource_id() | undefined,
     timestamp = undefined :: erlang:timestamp() | undefined,
     props = [] :: proplists:proplist() | #log_message{} | #log_email{}
