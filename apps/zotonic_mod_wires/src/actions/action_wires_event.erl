@@ -94,7 +94,7 @@ script(submit, TriggerId, _Trigger, _PostbackMsgJS, PickledPostback, ActionsJS, 
     ],
     {case ActionsJS of
         [] -> [SubmitPostback, $;, $\n];
-        _  -> [SubmitPostback, <<".data('z_submit_action', \"">>, z_utils:js_escape(ActionsJS), <<"\");\n">>]
+        _  -> [SubmitPostback, <<".data('z_submit_action', function() { ">>, ActionsJS, <<"});\n">>]
      end, Context};
 
 %%% Named - register for later trigger
