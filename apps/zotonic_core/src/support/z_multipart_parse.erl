@@ -140,7 +140,7 @@ feed_mp(body, #mp{boundary=Prefix, buffer=Buffer, form=Form} = State) ->
             State1 = State#mp{form=Form2, buffer=Rest},
             % State2 = maybe_z_msg_context(State1),
             feed_mp(headers, State1);
-        {maybe, 0} ->
+        {'maybe', 0} ->
             % Found a boundary, without an ending newline
             case read_more(State) of
                 State ->
@@ -153,7 +153,7 @@ feed_mp(body, #mp{boundary=Prefix, buffer=Buffer, form=Form} = State) ->
                 S1 ->
                     feed_mp(body, S1)
             end;
-        {maybe, Start} ->
+        {'maybe', Start} ->
             <<Data:Start/binary, Rest/binary>> = Buffer,
             Form1 = handle_data({body, Data}, Form),
             feed_mp(body, read_more(State#mp{form=Form1, buffer=Rest}));
@@ -355,14 +355,14 @@ find_boundary(Prefix, Data) ->
                     {end_boundary, Skip, size(Prefix) + 2};
                 _ when size(Data) < PrefixSkip + 4 ->
                     %% Underflow
-                    {maybe, Skip};
+                    {'maybe', Skip};
                 _ ->
                     %% False positive
                     not_found
             end;
         {partial, Skip, Length} when (Skip + Length) =:= size(Data) ->
             %% Underflow
-            {maybe, Skip};
+            {'maybe', Skip};
         _ ->
             not_found
     end.
