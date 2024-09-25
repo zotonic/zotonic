@@ -1255,7 +1255,7 @@ function z_init_postback_forms() {
         if (!postback) {
           postback = z_default_form_postback;
         }
-        if (action) {
+        if (typeof action == "function") {
           setTimeout(action, 10);
         }
 
