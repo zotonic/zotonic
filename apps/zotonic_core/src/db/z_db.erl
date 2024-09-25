@@ -150,6 +150,7 @@
 -type prop_key() :: binary() | atom().
 
 -type id() :: pos_integer().
+-type id_key() :: binary().
 
 -type query_result() :: {ok, Columns :: list(), Rows :: list()}
                       | {ok, Count :: non_neg_integer(), Columns :: list(), Rows :: list()}
@@ -894,8 +895,8 @@ execute_batch(Sql, Batch, Context, Timeout) ->
 
 %% @doc Insert a new row in a table, use only default values and return the new record id.
 %% If the table has an 'id' column then the new id is returned. The 'id' column shoud be
-%% the primary key column and have type 'serial' (or bigserial). All columns must
-%% have a default value or be nullable.
+%% the primary key column and have type 'serial' (or bigserial) if it is not given in the
+%% insert statement. All columns must have a default value or be nullable.
 -spec insert(Table, Context) -> {ok, NewId | undefined} | {error, Reason} when
     Table :: table_name(),
     Context :: z:context(),
@@ -914,7 +915,7 @@ insert(Table, Context) ->
 %% @doc Insert a new row in a table and return the new record id.
 %% Unknown columns are serialized in the props or props_json column. If the table has an 'id'
 %% column then the new id is returned. The 'id' column shoud be the primary key column
-%% and have type 'serial' (or bigserial).
+%% and have type 'serial' (or bigserial) if it is not given in the passed parameters.
 -spec insert(Table, Parameters, Context) -> {ok, NewId | undefined} | {error, Reason} when
     Table :: table_name(),
     Parameters :: props(),
@@ -1030,7 +1031,7 @@ insert(Table, Parameters, Context) ->
 %% are read and then merged with the new values.
 -spec update(Table, Id, Props, Context) -> {ok, RowsUpdated} | {error, Reason} when
     Table :: table_name(),
-    Id :: id(),
+    Id :: id() | id_key(),
     Props :: props(),
     Context :: z:context(),
     RowsUpdated :: non_neg_integer(),
@@ -1271,7 +1272,12 @@ filter_empty_props(Map) ->
 
 
 %% @doc Delete a row from a table, the row must have a column with the name 'id'
--spec delete(Table::table_name(), Id::integer(), z:context()) -> {ok, RowsDeleted::non_neg_integer()} | {error, term()}.
+-spec delete(Table, Id, Context) -> {ok, RowsDeleted} | {error, Reason} when
+    Table :: table_name(),
+    Id :: id() | id_key(),
+    Context :: z:context(),
+    RowsDeleted :: non_neg_integer(),
+    Reason :: term().
 delete(Table, Id, Context) ->
     {_Schema, _Tab, QTab} = quoted_table_name(Table),
     Sql = "delete from "++QTab++" where id = $1",
@@ -1284,12 +1290,23 @@ delete(Table, Id, Context) ->
 
 %% @doc Read a row from a table, the row must have a column with the name 'id'.
 %% The props column contents is merged with the other properties returned.
--spec select(table_name(), any(), z:context()) -> {ok, Row :: map()} | {error, term()}.
+-spec select(Table, Id, Context) -> {ok, Row} | {error, Reason} when
+    Table :: table_name(),
+    Id :: id() | id_key(),
+    Context :: z:context(),
+    Row :: map(),
+    Reason :: term().
 select(Table, Id, Context) ->
     select(Table, Id, [], Context).
 
 
--spec select(table_name(), any(), qmap_options(), z:context()) -> {ok, Row :: map()} | {error, term()}.
+-spec select(Table, Id, Options, Context) -> {ok, Row} | {error, Reason} when
+    Table :: table_name(),
+    Id :: id() | id_key(),
+    Options :: qmap_options(),
+    Context :: z:context(),
+    Row :: map(),
+    Reason :: term().
 select(Table, Id, Options, Context) ->
     {_Schema, _Tab, QTab} = quoted_table_name(Table),
     Sql = "select * from "++QTab++" where id = $1 limit 1",
