@@ -43,8 +43,11 @@
                 break;
             case 'SCRIPT':
                 // Javascript
-                $elt.attr('type', 'text/javascript');
-                $elt.replaceWith($elt[0].outerHTML);
+                replacement = $elt[0].cloneNode(true);
+                replacement.nonce = z_script_nonce;
+                replacement.setAttribute('type', 'text/javascript');
+                replacement.removeAttribute('data-cookie-consent');
+                $elt.replaceWith(replacement);
                 break;
             case 'IFRAME':
                 // Use src-cookie-consent
