@@ -19,7 +19,7 @@ jobs:
     strategy:
       matrix:
         # 27 can be added if a new qdate package has been released
-        otp_version: [25, 26]
+        otp_version: [25, 26, 27]
         os: [ubuntu-latest]
 
     container:
