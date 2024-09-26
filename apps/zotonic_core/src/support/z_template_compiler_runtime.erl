@@ -649,7 +649,20 @@ to_render_result(undefined, _TplVars, _Context) ->
 to_render_result({{Y,M,D},{H,I,S}} = Date, TplVars, Context)
     when is_integer(Y), is_integer(M), is_integer(D),
          is_integer(H), is_integer(I), is_integer(S) ->
-    z_datetime:format(Date, "Y-m-d H:i:s", set_context_vars(TplVars, Context));
+    try
+        z_datetime:format(Date, "Y-m-d H:i:s", set_context_vars(TplVars, Context))
+    catch
+        _:Error:Stack ->
+            ?LOG_WARNING(#{
+                in => zotonic_core,
+                text => <<"Error formatting datetime tuple">>,
+                result => error,
+                reason => Error,
+                stack => Stack,
+                datetime => Date
+            }),
+            <<>>
+    end;
 to_render_result(#search_result{result=Result}, _TplVars, _Context) ->
     io_lib:format("~p", [Result]);
 to_render_result(#rsc_list{list=L}, _TplVars, _Context) ->
