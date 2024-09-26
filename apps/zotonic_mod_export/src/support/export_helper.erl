@@ -99,7 +99,7 @@ get_content_type_extension(Type, Context) ->
 %% @doc Determine the filename for the export and set the content-disposition header.
 set_filename(Id, ProvidedCT, Dispatch, Context) ->
     Mime = cowmachine_util:format_content_type(ProvidedCT),
-    Extension = z_media_identify:extension(Mime),
+    Extension = maybe_add_dot(z_media_identify:extension(Mime)),
     Disposition = case call(
             #export_resource_content_disposition{
                 id = Id,
@@ -125,18 +125,20 @@ set_filename(Id, ProvidedCT, Dispatch, Context) ->
                         z_convert:to_binary(m_rsc:p_no_acl(CatId, name, Context)),
                         "-",
                         z_convert:to_binary(Id),
-                        ".",
                         Extension
                     ]);
         {ok, FN} ->
             FN1 = z_convert:to_binary(FN),
             case filename:extension(FN1) of
-                <<".", FE/binary>> when FE =:= Extension -> FN1;
-                <<>> -> <<FN1/binary, $., Extension/binary>>;
-                _Ext -> <<(filename:rootname(FN1))/binary, $., Extension/binary>>
+                FE when FE =:= Extension -> FN1;
+                <<>> -> <<FN1/binary, Extension/binary>>;
+                _Ext -> <<(filename:rootname(FN1))/binary, Extension/binary>>
             end
     end,
     z_context:set_resp_header(
         <<"content-disposition">>,
         <<(z_convert:to_binary(Disposition))/binary, "; filename=", Filename/binary>>,
         Context).
+
+maybe_add_dot(<<".", _/binary>> = Ext) -> Ext;
+maybe_add_dot(Ext) -> <<".", Ext/binary>>.
