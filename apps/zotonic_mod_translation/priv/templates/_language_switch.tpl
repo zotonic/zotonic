@@ -1,10 +1,11 @@
+{% with icon_after|default:'<i class="caret"><span class="sr-only">{_ Open language menu _}</span></i>' as icon_after %}
 {% if m.translation.language_list_enabled as list %}
 {% if list|length > 1 %}
     {% if is_nav %}
         {# Bootstrap nav item #}
         <li class="dropdown" id="languages">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#languages">
-                {{ z_language|upper }} <b class="caret"></b>
+                {{ icon_before }} {{ z_language|upper }} {{ icon_after }}
             </a>
             <ul class="dropdown-menu mod_translation_menu-has-icons">
                 {% if id %}
@@ -40,3 +41,4 @@
     {% endif %}
 {% endif %}
 {% endif %}
+{% endwith %}
