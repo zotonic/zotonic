@@ -12,7 +12,8 @@
                 ["Garbage Collection", ""],
                 ["Total GCs", "gc-total_coll"],
                 ["Words Reclaimed", "gc-rec_wrd"]
-            ] %}
+            ]
+        %}
             {% include "_stat_row.tpl" %}
         {% endfor %}
     </tbody>

@@ -14,46 +14,37 @@
 <div class="row">
     <div class="col-md-1"><span style="color: gold">&#9607;</span></div>
     <div class="col-md-2 meta">process</div>
-    <div id="memory-processes" class="col-md-3 text-right">#</div>
+    <div id="memory-processes" data-format="filesize" class="col-md-3 text-right">…</div>
 
     <div class="col-md-1"><span style="color: dodgerblue">&#9607;</span></div>
     <div class="col-md-2 meta">ets</div>
-    <div id="memory-atom" class="col-md-3 text-right">#</div>
+    <div id="memory-atom" data-format="filesize" class="col-md-3 text-right">…</div>
 </div>
-            
+
 <div class="row">
     <div class="col-md-1"><span style="color: lightgreen">&#9607;</span></div>
     <div class="col-md-2 meta">atom</div>
-    <div id="memory-ets" class="col-md-3 text-right">#</div>
+    <div id="memory-ets" data-format="filesize" class="col-md-3 text-right">…</div>
 
     <div class="col-md-1"><span style="color: tomato">&#9607;</span></div>
     <div class="col-md-2 meta">binary</div>
-    <div id="memory-binary" class="col-md-3 text-right">#</div>
+    <div id="memory-binary" data-format="filesize" class="col-md-3 text-right">…</div>
 </div>
 
 <div class="row">
     <div class="col-md-1"><span style="color: orchid">&#9607;</span></div>
     <div class="col-md-2 meta">code</div>
-    <div id="memory-code" class="col-md-3 text-right">#</div>
+    <div id="memory-code" data-format="filesize" class="col-md-3 text-right">…</div>
 
     <div class="col-md-1" style="color: lightgray">&#9607;</div>
     <div class="col-md-2 meta">other</div>
-    <div id="memory-other" class="col-md-3 text-right">#</div>
+    <div id="memory-other" data-format="filesize" class="col-md-3 text-right">…</div>
 </div>
 
 <div class="row">
     <div class="col-md-12 text-right">
-        <span class="meta">Total </span><span id="memory-total"></span>
+        <span class="meta">Total </span><span id="memory-total" data-format="filesize" ></span>
     </div>
-
-    {% javascript %}
-    $("#memory-binary").data("render", to_human);
-    $("#memory-atom").data("render", to_human);
-    $("#memory-code").data("render", to_human);
-    $("#memory-ets").data("render", to_human);
-    $("#memory-processes").data("render", to_human);
-    $("#memory-total").data("render", to_human);
-    {% endjavascript %}
 </div>
 
 {% endblock %}

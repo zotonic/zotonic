@@ -1,8 +1,9 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
-%% @copyright 2013-2021 Maas-Maarten Zeeman
+%% @copyright 2013-2024 Maas-Maarten Zeeman
 %% @doc Module for handling request statistics.
+%% @end
 
-%% Copyright 2013-2021 Maas-Maarten Zeeman
+%% Copyright 2013-2024 Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,7 +19,7 @@
 
 -module(z_stats).
 
--include_lib("zotonic.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 -behaviour(gen_server).
 
@@ -38,7 +39,8 @@
     record_event/3,
     record_count/4,
     record_duration/4,
-    system_usage/1
+    system_usage/1,
+    filezcache_stats/0
 ]).
 
 -record(state, {
@@ -71,7 +73,7 @@ start_link(Buffers) ->
 
 %% @doc Initialize the statistics collection machinery.
 init_system() ->
-    create_vm_metrics(),
+    create_system_metrics(),
     setup_system_reporter(),
     ok.
 
@@ -91,7 +93,7 @@ site_stats( Site ) ->
             {function, z_db_pool, status, [ z_context:new(Site) ], match, {'_', {workers, working}}},
             []
         },
-     
+
         % Keep track of the size of the depcache
         {
             [site, Site, depcache, size],
@@ -276,21 +278,29 @@ system_usage(atom_memory) -> system_memory_usage_helper(atom).
 
 %% Returns the usage in percentage
 system_usage_helper(Count, Limit) ->
-    z_convert:to_integer((erlang:system_info(Count) / erlang:system_info(Limit)) * 100).
+    erlang:round((erlang:system_info(Count) / erlang:system_info(Limit)) * 100).
 
 %% Returns the memory usage in percentage
 system_memory_usage_helper(Type) ->
-    z_convert:to_integer((erlang:memory(Type) / erlang:memory(total)) * 100).
+    erlang:round((erlang:memory(Type) / erlang:memory(total)) * 100).
 
-% @private vm_stats
-create_vm_metrics() ->
+filezcache_stats() ->
+    Stats = maps:with([
+            bytes, max_bytes, entries,
+            insert_count, delete_count,
+            hit_count, miss_count, evict_count
+        ], filezcache:stats()),
+    maps:to_list(Stats).
+
+% @private system_stats
+create_system_metrics() ->
     lists:foreach(
         fun({Path, Stat, Options}) ->
             ok = exometer:re_register(Path, Stat, Options)
         end,
-        vm_stats()).
+        system_stats()).
 
-vm_stats() ->
+system_stats() ->
     [
         {
             [erlang, memory],
@@ -331,9 +341,13 @@ vm_stats() ->
             [erlang, io],
             {function, erlang, statistics, [io], match, {{'_', input}, {'_', output}}},
             []
+        },
+        {
+            [statistics, filezcache],
+            {function, z_stats, filezcache_stats, [], value, []},
+            []
         }
     ].
-
 
 % @private Setup mqtt reporter
 setup_system_reporter() ->
@@ -346,6 +360,11 @@ setup_system_reporter() ->
     ok = exometer_report:subscribe(system_reporter,
                                    {select,
                                     [{ {[erlang | '_'], '_', enabled}, [], ['$_'] }]},
+                                   default,
+                                   10000),
+    ok = exometer_report:subscribe(system_reporter,
+                                   {select,
+                                    [{ {[statistics | '_'], '_', enabled}, [], ['$_'] }]},
                                    default,
                                    10000),
     ok.

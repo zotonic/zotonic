@@ -6,16 +6,19 @@
 <table class="table table-condensed">
     <thead></thead>
     <tbody>
-        {% for title, id in [ ["Sessions", "broker-session_count"],
-        ["Subscribes/min", "broker-subscribe_one"],
-        ["Publishes/min", "broker-publish_one"],
-        ["Subscribers", "broker-destinations"],
-        ["Details", ""],
-        ["Nodes", "broker-nodes"],
-        ["Edges", "broker-edges"],
-        ["Wildcards", "broker-wildcards"],
-        ["Paths", "broker-paths"] ] %}
-        {% include "_stat_row.tpl" %}
+        {% for title, id in [
+                ["Sessions", "broker-session_count"],
+                ["Subscribes/min", "broker-subscribe_one"],
+                ["Publishes/min", "broker-publish_one"],
+                ["Subscribers", "broker-destinations"],
+                ["Details", ""],
+                ["Nodes", "broker-nodes"],
+                ["Edges", "broker-edges"],
+                ["Wildcards", "broker-wildcards"],
+                ["Paths", "broker-paths"]
+            ]
+        %}
+            {% include "_stat_row.tpl" %}
         {% endfor %}
     </tbody>
 </table>
