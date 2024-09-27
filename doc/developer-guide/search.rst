@@ -113,7 +113,7 @@ It is possible to define an OR query for multiple terms::
 
 All postal codes starting with ``10``::
 
-    filter=[ ['pivot.postcode ']]
+    filter=[ ['pivot.postcode', `~`, "10" ] ]
 
 hassubject
 ^^^^^^^^^^
