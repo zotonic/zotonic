@@ -73,7 +73,7 @@
     search_query_facets/3,
     search_query_subfacets/3,
 
-    qterm/3,
+    qterm/4,
 
     pivot_rsc/2,
     pivot_all/1,
@@ -452,16 +452,17 @@ facet_union(#facet_def{ name = Name }) ->
 
 %% @doc Add an extra search argument to the given query. Called by the query
 %% builder in search_query.erl
--spec qterm(Field, Value, Context) -> {ok, Term} | {error, term()}
+-spec qterm(Field, Op, Value, Context) -> {ok, Term} | {error, term()}
     when Field :: binary(),
+         Op :: binary() | undefined,
          Value :: term(),
          Term :: #search_sql_term{},
          Context :: z:context().
-qterm(_Field, [], _Context) ->
+qterm(_Field, _Op, [], _Context) ->
     {ok, []};
-qterm(Field, [Value], Context) ->
-    qterm(Field, Value, Context);
-qterm(Field, Vs, Context) when is_list(Vs) ->
+qterm(Field, Op, [Value], Context) ->
+    qterm(Field, Op, Value, Context);
+qterm(Field, Op, Vs, Context) when is_list(Vs) ->
     % 'OR' query for all values
     Q = #search_sql_term{
         label = {facet, Field},
@@ -471,7 +472,7 @@ qterm(Field, Vs, Context) when is_list(Vs) ->
     },
     Q2 = lists:foldl(
         fun(V, QAcc) ->
-            case qterm_1(Field, V, QAcc, Context) of
+            case qterm_1(Field, Op, V, QAcc, Context) of
                 {ok, QAcc1} ->
                     QAcc1;
                 {error, _} ->
@@ -488,13 +489,13 @@ qterm(Field, Vs, Context) when is_list(Vs) ->
         ]
     },
     {ok, Q3};
-qterm(Field, Value, Context) ->
+qterm(Field, Op, Value, Context) ->
     Q = #search_sql_term{
         join_inner = #{
             <<"facet">> => {<<"search_facet">>, <<"facet.id = rsc.id">>}
         }
     },
-    case qterm_1(Field, Value, Q, Context) of
+    case qterm_1(Field, Op, Value, Q, Context) of
         {ok, #search_sql_term{ where = Where} = Q2} when is_list(Where), length(Where) > 1 ->
             Q3 = Q2#search_sql_term{
                 where = [
@@ -510,13 +511,13 @@ qterm(Field, Value, Context) ->
             Error
     end.
 
-qterm_1(Field, Value, Query, Context) ->
+qterm_1(Field, OpTerm, Value, Query, Context) ->
     case facet_def(Field, Context) of
         {ok, Def} ->
-            {Op, Value1} = extract_op(Value),
+            {Op, Value1} = search_query:extract_value_op(Value, OpTerm),
             Value2 = convert_type(Def#facet_def.type, Value1, Context),
             Final = case Def#facet_def.type of
-                fulltext when Op =:= "=" ->
+                fulltext when Op =:= <<"=">> ->
                     NormV = z_string:normalize(Value2),
                     Words = words(NormV),
                     lists:foldl(
@@ -532,7 +533,7 @@ qterm_1(Field, Value, Query, Context) ->
                         end,
                         Query,
                         Words);
-                fts when Op =:= "=" ->
+                fts when Op =:= <<"=">> ->
                     NormV = z_string:normalize(Value2),
                     TsQuery = mod_search:to_tsquery(NormV, Context),
                     {ArgN, Query2} = add_term_arg(TsQuery, Query),
@@ -554,9 +555,7 @@ qterm_1(Field, Value, Query, Context) ->
                     };
                 _ ->
                     {ArgN, Query2} = add_term_arg(Value2, Query),
-                    W = [
-                        <<"facet.f_">>, Field, Op, ArgN
-                    ],
+                    W = search_query:term_op_expr([<<"facet.f_">>, Field], Op, ArgN, text),
                     Query2#search_sql_term{
                         label = {facet, Field},
                         where = Query2#search_sql_term.where ++ [ W ]
@@ -578,23 +577,6 @@ words(Text) ->
 add_term_arg(ArgValue, #search_sql_term{ args = Args } = Q) ->
     Arg = [$$] ++ integer_to_list(length(Args) + 1),
     {list_to_atom(Arg), Q#search_sql_term{args = Args ++ [ ArgValue ]}}.
-
-extract_op(<<"!=", V/binary>>) ->
-    {"<>", V};
-extract_op(<<"<>", V/binary>>) ->
-    {"<>", V};
-extract_op(<<"<=", V/binary>>) ->
-    {"<=", V};
-extract_op(<<">=", V/binary>>) ->
-    {">=", V};
-extract_op(<<"=", V/binary>>) ->
-    {"=", V};
-extract_op(<<">", V/binary>>) ->
-    {">", V};
-extract_op(<<"<", V/binary>>) ->
-    {"<", V};
-extract_op(V) ->
-    {"=", V}.
 
 
 % %% Append an argument to a #search_sql

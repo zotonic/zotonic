@@ -24,7 +24,9 @@
 -export([
          search/2,
          parse_request_args/1,
-         build_query/2
+         build_query/2,
+         term_op_expr/4,
+         extract_value_op/2
         ]).
 
 %% For testing
@@ -255,7 +257,7 @@ qterm(#{ <<"term">> := <<"visible_for">>, <<"value">> := VisFor} = T, _IsNested,
             VisFor1 ->
                 Op = extract_term_op(T, <<"=">>),
                 #search_sql_term{
-                    where = [ <<"rsc.visible_for">>, Op, '$1'],
+                    where = term_op_expr(<<"rsc.visible_for">>, Op, '$1', number),
                     args = [ VisFor1 ]
                 }
         end
@@ -321,7 +323,7 @@ qterm(#{ <<"term">> := <<"id">>, <<"value">> := Id} = T, _IsNested, Context) ->
         RscId ->
             Op = extract_term_op(T, <<"=">>),
             #search_sql_term{
-                where = [ <<"rsc.id">>, Op, '$1' ],
+                where = term_op_expr(<<"rsc.id">>, Op, '$1', number),
                 args = [ RscId ]
             }
     end;
@@ -777,9 +779,7 @@ qterm(#{ <<"term">> := <<"rsc_id">>, <<"value">> := Id} = T, _IsNested, Context)
     %% Filter to *only* include the given rsc id. Can be used for resource existence check.
     Op = extract_term_op(T, <<"=">>),
     #search_sql_term{
-        where = [
-            <<"rsc.id">>, Op, '$1'
-        ],
+        where = term_op_expr(<<"rsc.id">>, Op, '$1', number),
         args = [
             m_rsc:rid(Id, Context)
         ]
@@ -800,9 +800,7 @@ qterm(#{ <<"term">> := <<"name">>, <<"value">> := Name} = T, _IsNested, Context)
                 nomatch ->
                     Op = extract_term_op(T, <<"=">>),
                     #search_sql_term{
-                        where = [
-                            <<"rsc.name">>, Op, '$1'
-                        ],
+                        where = term_op_expr(<<"rsc.name">>, Op, '$1', text),
                         args = [
                             Name2
                         ]
@@ -921,8 +919,9 @@ qterm(#{ <<"term">> := <<"facet">>, <<"value">> := V }, IsNested, Context) when 
         end,
         [],
         V);
-qterm(#{ <<"term">> := <<"facet:", Field/binary>>, <<"value">> := V}, _IsNested, Context) ->
-    case search_facet:qterm(sql_safe(Field), V, Context) of
+qterm(#{ <<"term">> := <<"facet:", Field/binary>>, <<"value">> := V} = T, _IsNested, Context) ->
+    Op = extract_term_op(T, undefined),
+    case search_facet:qterm(sql_safe(Field), Op, V, Context) of
         {ok, Res1} ->
             Res1;
         {error, _} ->
@@ -1079,9 +1078,7 @@ qterm(#{ <<"term">> := <<"date_start_year">>, <<"value">> := Year} = T, _IsNeste
     %% Filter on year of start date
     Op = extract_term_op(T, <<"=">>),
     #search_sql_term{
-        where = [
-            <<"date_part('year', rsc.pivot_date_start) ">>, Op, '$1'
-        ],
+        where = term_op_expr(<<"date_part('year', rsc.pivot_date_start) ">>, Op, '$1', number),
         args = [
             z_convert:to_integer(Year)
         ]
@@ -1113,9 +1110,7 @@ qterm(#{ <<"term">> := <<"date_end_year">>, <<"value">> := Year} = T, _IsNested,
     %% Filter on year of end date
     Op = extract_term_op(T, <<"=">>),
     #search_sql_term{
-        where = [
-            <<"date_part('year', rsc.pivot_date_end)">>, Op, '$1'
-        ],
+        where = term_op_expr(<<"date_part('year', rsc.pivot_date_end)">>, Op, '$1', number),
         args = [
             z_convert:to_integer(Year)
         ]
@@ -1125,9 +1120,7 @@ qterm(#{ <<"term">> := <<"publication_year">>, <<"value">> := Year} = T, _IsNest
     %% Filter on year of publication
     Op = extract_term_op(T, <<"=">>),
     #search_sql_term{
-        where = [
-            <<"date_part('year', rsc.publication_start)">>, Op, '$1'
-        ],
+        where = term_op_expr(<<"date_part('year', rsc.publication_start)">>, Op, '$1', number),
         args = [
             z_convert:to_integer(Year)
         ]
@@ -1137,9 +1130,7 @@ qterm(#{ <<"term">> := <<"publication_month">>, <<"value">> := Month} = T, _IsNe
     %% Filter on month of publication
     Op = extract_term_op(T, <<"=">>),
     #search_sql_term{
-        where = [
-            <<"date_part('month', rsc.publication_start)">>, Op, '$1'
-        ],
+        where = term_op_expr(<<"date_part('month', rsc.publication_start)">>, Op, '$1', number),
         args = [
             z_convert:to_integer(Month)
         ]
@@ -1223,6 +1214,22 @@ qterm(#{ <<"term">> := Term, <<"value">> := Arg}, IsNested, Context) ->
 %%
 %% Helper functions
 %%
+
+-spec term_op_expr(Ref, Op, Value, Type) -> list() when
+    Ref :: iodata(),
+    Op :: binary(),
+    Value :: iodata() | atom(),
+    Type :: text | number.
+term_op_expr(Ref, Op, Value, Type) ->
+    [ Ref | map_op_for_type(Op, Value, Type) ].
+
+map_op_for_type(<<"~">>, Value, text) ->
+    [ <<" like (">>, Value, <<"::character varying || '%')">> ];
+map_op_for_type(<<"~">>, Value, _) ->
+    map_op_for_type(<<"=">>, Value, number);
+map_op_for_type(Op, Value, _Type) ->
+    [" ", Op, " ", Value].
+
 
 none() ->
     #search_sql_term{
@@ -1598,9 +1605,7 @@ pivot_qterm_op(Tab, Alias, Col, Op, Value, Query, Context) ->
     case z_db:to_column_value(Tab, Col, Value, Context) of
         {ok, Value2} ->
             {ArgN, Query2} = add_term_arg(Value2, Query),
-            W = [
-                <<Alias/binary, $., Col/binary>>, Op, ArgN
-            ],
+            W = term_op_expr(<<Alias/binary, $., Col/binary>>, Op, ArgN, text),
             Query3 = Query2#search_sql_term{
                 where = Query2#search_sql_term.where ++ [ W ]
             },
@@ -1640,12 +1645,16 @@ extract_value_op(<<">=", V/binary>>, _Op) ->
     {<<">=">>, V};
 extract_value_op(<<"!=", V/binary>>, _Op) ->
     {<<"<>">>, V};
+extract_value_op(<<"~", V/binary>>, _Op) ->
+    {<<"~">>, V};
 extract_value_op(<<"=", V/binary>>, _Op) ->
     {<<"=">>, V};
 extract_value_op(<<">", V/binary>>, _Op) ->
     {<<">">>, V};
 extract_value_op(<<"<", V/binary>>, _Op) ->
     {<<"<">>, V};
+extract_value_op(V, undefined) ->
+    {<<"=">>, V};
 extract_value_op(V, Op) ->
     {Op, V}.
 
@@ -1661,6 +1670,7 @@ sanitize_op(<<"<=">>) -> <<"<=">>;
 sanitize_op(<<"=">>) -> <<"=">>;
 sanitize_op(<<">">>) -> <<">">>;
 sanitize_op(<<"<">>) -> <<"<">>;
+sanitize_op(<<"~">>) -> <<"~">>;
 sanitize_op(_) -> <<"=">>.
 
 
@@ -1728,7 +1738,8 @@ create_filter(_Tab, Alias, Col, Operator, undefined, Q) ->
 create_filter(_Tab, Alias, Col, Operator, Value, Q) ->
     {Arg, Q1} = add_filter_arg(Value, Q),
     Operator1 = map_filter_operator(Operator),
-    {[Alias, $., Col, <<" ">>, Operator1, <<" ">>, Arg], Q1}.
+    W = term_op_expr([Alias, $., Col], Operator1, Arg, text),
+    {W, Q1}.
 
 
 map_filter_column(<<"pivot.", _/binary>> = P, Q) ->
@@ -1775,37 +1786,42 @@ add_filter_arg(ArgValue, #search_sql_term{ args = Args } = Q) ->
     Arg = [$$] ++ integer_to_list(length(Args) + 1),
     {list_to_atom(Arg), Q#search_sql_term{args = Args ++ [ ArgValue ]}}.
 
-create_filter_null(Alias, Col, "=") ->
+create_filter_null(Alias, Col, <<"=">>) ->
     [ Alias, $., Col, <<" is null">> ];
-create_filter_null(Alias, Col, "<>") ->
+create_filter_null(Alias, Col, <<"~">>) ->
+    [ Alias, $., Col, <<" is null">> ];
+create_filter_null(Alias, Col, <<"<>">>) ->
     [ Alias, $., Col, <<" is not null">> ];
 create_filter_null(_Tab, _Col, _Op) ->
-    "false".
+    <<"false">>.
 
-map_filter_operator(eq) -> "=";
-map_filter_operator('=') -> "=";
-map_filter_operator(ne) -> "<>";
-map_filter_operator('<>') -> "<>";
-map_filter_operator(gt) -> ">";
-map_filter_operator('>') -> ">";
-map_filter_operator(lt) -> "<";
-map_filter_operator('<') -> "<";
-map_filter_operator(gte) -> ">=";
-map_filter_operator('>=') -> ">=";
-map_filter_operator(lte) -> "<=";
-map_filter_operator('<=') -> "<=";
-map_filter_operator("=") -> "=";
-map_filter_operator("<>") -> "<>";
-map_filter_operator(">") -> ">";
-map_filter_operator("<") -> "<";
-map_filter_operator(">=") -> ">=";
-map_filter_operator("<=") -> "<=";
-map_filter_operator(<<"=">>) -> "=";
-map_filter_operator(<<"<>">>) -> "<>";
-map_filter_operator(<<">">>) -> ">";
-map_filter_operator(<<"<">>) -> "<";
-map_filter_operator(<<">=">>) -> ">=";
-map_filter_operator(<<"<=">>) -> "<=";
+map_filter_operator(eq) -> <<"=">>;
+map_filter_operator('=') -> <<"=">>;
+map_filter_operator(ne) -> <<"<>">>;
+map_filter_operator('<>') -> <<"<>">>;
+map_filter_operator(gt) -> <<">">>;
+map_filter_operator('>') -> <<">">>;
+map_filter_operator(lt) -> <<"<">>;
+map_filter_operator('<') -> <<"<">>;
+map_filter_operator(gte) -> <<">=">>;
+map_filter_operator('>=') -> <<">=">>;
+map_filter_operator(lte) -> <<"<=">>;
+map_filter_operator('<=') -> <<"<=">>;
+map_filter_operator('~') -> <<"~">>;
+map_filter_operator("=") -> <<"=">>;
+map_filter_operator("<>") -> <<"<>">>;
+map_filter_operator(">") -> <<">">>;
+map_filter_operator("<") -> <<"<">>;
+map_filter_operator(">=") -> <<">=">>;
+map_filter_operator("<=") -> <<"<=">>;
+map_filter_operator("~") -> <<"~">>;
+map_filter_operator(<<"=">>) -> <<"=">>;
+map_filter_operator(<<"<>">>) -> <<"<>">>;
+map_filter_operator(<<">">>) -> <<">">>;
+map_filter_operator(<<"<">>) -> <<"<">>;
+map_filter_operator(<<">=">>) -> <<">=">>;
+map_filter_operator(<<"<=">>) -> <<"<=">>;
+map_filter_operator(<<"~">>) -> <<"~">>;
 map_filter_operator(Op) -> throw({error, {unknown_filter_operator, Op}}).
 
 
