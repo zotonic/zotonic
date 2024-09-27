@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015-2017 Marc Worrell
+%% @copyright 2015-2024 Marc Worrell
 %% @doc Track email bounces and other status of email recipients.
+%% @end
 
-%% Copyright 2015-2017 Marc Worrell
+%% Copyright 2015-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -41,9 +42,9 @@
 
 event(#postback{message={email_status_reset, Args}}, Context) ->
     Id = proplists:get_value(id, Args),
-    Email = proplists:get_value(email, Args),
     case is_allowed(Id, Context) of
         true ->
+            Email = proplists:get_value(email, Args),
             ok = m_email_status:clear_status(Id, Email, Context),
             case proplists:get_all_values(on_success, Args) of
                 [] ->
@@ -55,9 +56,9 @@ event(#postback{message={email_status_reset, Args}}, Context) ->
             z_render:growl(?__("Sorry, you are not allowed to reset this email address.", Context), Context)
     end;
 event(#postback{message={email_status_block, Args}}, Context) ->
-    Email = proplists:get_value(email, Args),
-    case z_acl:is_admin(Context) of
+    case is_allowed(Context) of
         true ->
+            Email = proplists:get_value(email, Args),
             ok = m_email_status:block(Email, Context),
             case proplists:get_all_values(on_success, Args) of
                 [] ->
