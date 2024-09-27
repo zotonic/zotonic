@@ -650,7 +650,11 @@ to_render_result({{Y,M,D},{H,I,S}} = Date, TplVars, Context)
     when is_integer(Y), is_integer(M), is_integer(D),
          is_integer(H), is_integer(I), is_integer(S) ->
     try
-        z_datetime:format(Date, "Y-m-d H:i:s", set_context_vars(TplVars, Context))
+        if
+            M =:= 0 -> <<>>;
+            D =:= 0 -> <<>>;
+            true -> z_datetime:format(Date, "Y-m-d H:i:s", set_context_vars(TplVars, Context))
+        end
     catch
         _:Error:Stack ->
             ?LOG_WARNING(#{
