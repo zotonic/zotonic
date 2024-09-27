@@ -60,29 +60,67 @@ received(Recipients, From, Peer, Reference, {Type, Subtype}, Headers, Params, Bo
                                   }
                               },
                               Context),
-             Email = #email_received{
-                         localpart=LocalPart,
-                         localtags=LocalTags,
-                         domain=Domain,
-                         to=Recipient,
-                         from=From,
-                         reference=Reference,
-                         email=ParsedEmail2,
-                         headers=lowercase_headers(Headers),
-                         decoded={Type, Subtype, Headers, Params, Body},
-                         raw=Data
-                     },
-             Email1 = Email#email_received{
-                        is_bulk=z_email_receive_check:is_bulk(Email),
-                        is_auto=z_email_receive_check:is_auto(Email)
-                      },
-             z_notifier:first(Email1, Context);
+            LHeaders = lowercase_headers(Headers),
+            case is_blocked(ParsedEmail#email.from, Context)
+                orelse is_blocked(proplists:get_value(<<"from">>, LHeaders), Context)
+            of
+                false ->
+                     Email = #email_received{
+                                 localpart=LocalPart,
+                                 localtags=LocalTags,
+                                 domain=Domain,
+                                 to=Recipient,
+                                 from=From,
+                                 reference=Reference,
+                                 email=ParsedEmail2,
+                                 headers=lowercase_headers(LHeaders),
+                                 decoded={Type, Subtype, Headers, Params, Body},
+                                 raw=Data
+                             },
+                     Email1 = Email#email_received{
+                                is_bulk=z_email_receive_check:is_bulk(Email),
+                                is_auto=z_email_receive_check:is_auto(Email)
+                              },
+                     z_notifier:first(Email1, Context);
+                true ->
+                    LogEmail = #log_email{
+                        severity = ?LOG_WARNING,
+                        mailer_status = blocked,
+                        mailer_message = <<"Sender blocked by Zotonic module (#email_is_blocked)">>,
+                        props = [
+                            {reason, sender_blocked},
+                            {headers, Headers}
+                        ],
+                        mailer_host = z_convert:ip_to_list(Peer),
+                        message_nr = Reference,
+                        envelop_to = Recipient,
+                        envelop_from = ParsedEmail#email.from
+                    },
+                    z_notifier:notify(#zlog{ props = LogEmail }, Context),
+                    {ok, undefined}
+            end;
          undefined ->
              lager:info("SMTP refusing message, unknown host for recipient: ~p", [Recipient]),
              {error, unknown_host}
      end
      || Recipient <- Recipients
     ].
+
+% @doc Check if we can receive an email from this address. If an email address is blocked
+% for sending, then we also block it for receiving email.
+-spec is_blocked(EmailAddress, Context) -> boolean() when
+    EmailAddress :: binary() | undefined,
+    Context :: z:context().
+is_blocked(undefined, _Context) ->
+    false;
+is_blocked(EmailAddress, Context) ->
+    {_Name, Email} = z_email:split_name_email(EmailAddress),
+    Email1 = z_convert:to_binary(Email),
+    case z_notifier:first(#email_is_blocked{ recipient = Email1 }, Context) of
+        undefined -> false;
+        true -> true;
+        false -> false
+    end.
 
 get_host(Recipient) ->
     [Username, Domain] = binstr:split(Recipient, <<"@">>, 2),

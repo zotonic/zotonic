@@ -57,7 +57,7 @@ event(#postback{message={email_status_reset, Args}}, Context) ->
     end;
 event(#postback{message={email_status_block, Args}}, Context) ->
     Email = proplists:get_value(email, Args),
-    case z_acl:is_admin(Context) of
+    case is_allowed(Context) of
         true ->
             ok = m_email_status:block(Email, Context),
             case proplists:get_all_values(on_success, Args) of
