@@ -1,9 +1,9 @@
 {% with email|default:(id.email_raw) as email %}
 {% with m.email_status[email] as status %}
-	{% if m.acl.is_admin %}
+	{% if m.acl.is_admin or m.acl.is_allowed.use.mod_email_status %}
 		{% if not status.is_blocked %}
 			<button class="btn btn-danger btn-xs pull-right" id="{{ #doblock }}">
-				{_ [ADMIN] _} {_ Block _}
+				{_ Block _}
 			</button>
 			{% if panel_id %}
 				{% wire id=#doblock
@@ -40,7 +40,7 @@
 		{% else %}
 			<p>
 				<button class="btn btn-success btn-xs pull-right" id="{{ #doreset }}">
-					{_ [ADMIN] _} {_ Unblock _}
+					{_ Unblock _}
 				</button>
 			</p>
 			{% if panel_id %}
