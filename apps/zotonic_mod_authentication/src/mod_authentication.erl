@@ -38,7 +38,8 @@
     observe_admin_menu/3,
     observe_auth_validated/2,
     observe_auth_client_logon_user/2,
-    observe_auth_client_switch_user/2
+    observe_auth_client_switch_user/2,
+    observe_tick_1h/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -486,3 +487,6 @@ insert_identity(UserId, Auth, Context) ->
 
 auth_identity(#auth_validated{service=Service, service_uid=Uid}, Context) ->
     m_identity:lookup_by_type_and_key(Service, Uid, Context).
+
+observe_tick_1h(tick_1h, Context) ->
+    m_identity:cleanup_logon_history(Context).

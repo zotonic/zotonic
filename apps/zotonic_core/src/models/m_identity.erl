@@ -38,6 +38,8 @@
     set_expired/3,
     set_identity_expired/3,
     set_visited/2,
+    logon_history/2,
+    cleanup_logon_history/1,
     ensure_username_pw/2,
     ensure_username_pw/3,
     check_username_pw/3,
@@ -118,6 +120,7 @@
 -include_lib("zotonic.hrl").
 
 -define(IDN_CACHE_TIME, 3600*12).
+-define(IDN_LOG_TTL, 3600*24*30).
 
 %% Default duration and random variance interval for password checks.
 %% This prevents a timing difference between checks for existing and
@@ -174,6 +177,11 @@ m_get([ Id, <<"user_info">> | Rest ], _Msg, Context) ->
             {ok, {Info, Rest}};
         false ->
             {error, eacces}
+    end;
+m_get([ Id, <<"logon_history">> | Rest ], _Msg, Context) ->
+    case logon_history(Id, Context) of
+        {error, Error} -> {error, Error};
+        {ok, LogonHistory} -> {ok, {LogonHistory, Rest}}
     end;
 m_get([ Id, <<"all_types">> | Rest ], _Msg, Context) ->
     Idns = case z_acl:rsc_editable(Id, Context) of
@@ -1059,11 +1067,7 @@ check_username_pw_1(<<"admin">>, Password, Context) ->
             % Only allow default password from allowed ip addresses
             case is_peer_allowed(Context) of
                 true ->
-                    z_db:q("
-                        update identity
-                        set visited = now()
-                        where id = 1", Context),
-                    flush(?ACL_ADMIN_USER_ID, Context),
+                    set_visited(?ACL_ADMIN_USER_ID, Context),
                     {ok, 1};
                 false ->
                     ?LOG_ERROR(#{
@@ -1079,11 +1083,7 @@ check_username_pw_1(<<"admin">>, Password, Context) ->
         AdminPassword ->
             case is_equal(Password1, AdminPassword) of
                 true ->
-                    z_db:q("
-                        update identity
-                        set visited = now()
-                        where id = 1", Context),
-                    flush(?ACL_ADMIN_USER_ID, Context),
+                    set_visited(?ACL_ADMIN_USER_ID, Context),
                     {ok, 1};
                 false ->
                     {error, password}
@@ -1477,26 +1477,67 @@ insert_unique(RscId, Type, Key, Props, Context) ->
 
 
 %% @doc Set the visited timestamp for the given user.
-%% @todo Make this a log - so that we can see the last visits and check if this
-%% is from a new browser/ip address.
 -spec set_visited(m_rsc:resource_id(), z:context()) -> ok | {error, enoent}.
-set_visited(undefined, _Context) ->
-    ok;
+set_visited(undefined, _Context) -> ok;
 set_visited(UserId, Context) when is_integer(UserId) ->
-    case z_db:q(
-        "update identity
-         set visited = now()
-         where rsc_id = $1
-           and type = 'username_pw'",
-        [m_rsc:rid(UserId, Context)],
-        Context)
-    of
-        0 ->
-            {error, enoent};
-        N when N >= 1 ->
-            flush(UserId, Context),
-            ok
+    z_db:transaction(fun(Ctx) -> set_visited_trans(UserId, Ctx) end, Context);
+set_visited(User, Context) ->
+    set_visited(m_rsc:rid(User, Context), Context).
+
+% Part of 'set_visited' to execute in one DB transaction
+set_visited_trans(UserId, Context) when is_integer(UserId) ->
+    case z_db:q1("select id from identity where rsc_id = $1 and type = 'username_pw'", [UserId], Context) of
+        undefined -> {error, enoent};
+        EntryId ->
+            UserAgent = z_convert:to_binary(m_req:get(user_agent, Context)),
+            IpAddress = z_convert:to_binary(m_req:get(peer, Context)),
+            % Note: it may seem unnecessary to set both the 'visited' field of
+            % the 'identity' table as well as adding a row to 'identity_log',
+            % but the latter is periodically pruned and we still want to be able
+            % to tell when was the last login of a user (if any).
+            1 = z_db:q("update identity set visited = now() where id = $1", [EntryId], Context),
+            1 = z_db:q(
+                "insert into identity_log (identity_id, rsc_id, user_agent, ip_address)
+                 values ($1,$2,$3, $4)",
+                [EntryId, UserId, UserAgent, IpAddress],
+                Context
+            ),
+            flush(UserId, Context)
     end.
+
+-spec logon_history(m_rsc:resource_id(), z:context()) ->
+        {ok, list({UserAgent, IpAddress, Created})} | {error, eacces} when
+    UserAgent :: binary(),
+    IpAddress :: binary(),
+    Created :: calendar:datetime().
+logon_history(undefined, _Context) -> [];
+logon_history(UserId, Context) when is_integer(UserId) ->
+    case UserId =:= z_acl:user(Context) orelse z_acl:is_admin(Context) of
+        true ->
+            Res = z_db:q(
+                "SELECT user_agent, ip_address, created
+                FROM identity_log
+                WHERE rsc_id = $1
+                ORDER BY created DESC",
+                [UserId],
+                Context
+            ),
+            {ok, Res};
+        false ->
+            {error, eacces}
+    end;
+logon_history(User, Context) ->
+    logon_history(m_rsc:rid(User, Context), Context).
+
+% Remove all logons from the 'identity_log' table older than 'IDN_LOG_TTL' seconds.
+cleanup_logon_history(Context) ->
+    z_db:q(
+        "DELETE FROM identity_log WHERE created < (now() - INTERVAL '" ++
+        z_convert:to_list(?IDN_LOG_TTL) ++
+        " second')",
+        Context
+    ).
+
 
 %% @doc Set the verified flag on a record by identity id.
 -spec set_verified(IdnId, Context) -> ok | {error, notfound} when

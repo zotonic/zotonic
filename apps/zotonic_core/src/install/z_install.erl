@@ -389,6 +389,30 @@ model_pgsql() ->
     "CREATE UNIQUE INDEX IF NOT EXISTS identity_type_key_unique ON identity (type, key) WHERE (is_unique)",
     "CREATE INDEX IF NOT EXISTS identity_type_key_key ON identity using btree (type, key collate ucs_basic text_pattern_ops)",
 
+    % Table identity log
+    % Keeps track of all successful logons of a user (for some time)
+
+    "CREATE TABLE IF NOT EXISTS identity_log
+    (
+      id serial NOT NULL,
+      identity_id int NOT NULL,
+      rsc_id int NOT NULL,
+      created timestamp with time zone NOT NULL DEFAULT now(),
+      user_agent character varying (240),
+      ip_address character varying (40),
+
+      CONSTRAINT id_log_pkey PRIMARY KEY (id),
+      CONSTRAINT pk_id_log_rsc_id FOREIGN KEY (rsc_id)
+        REFERENCES rsc (id)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+      CONSTRAINT pk_id_log_identity_id FOREIGN KEY (identity_id)
+        REFERENCES identity (id)
+        ON UPDATE CASCADE ON DELETE CASCADE
+    )",
+
+    "CREATE INDEX IF NOT EXISTS fki_identity_log_rsc_id ON identity (rsc_id)",
+    "CREATE INDEX IF NOT EXISTS identity_log_created_key ON identity (created)",
+
     % Email send queue and log
     "CREATE TABLE IF NOT EXISTS emailq
     (
