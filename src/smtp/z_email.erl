@@ -198,5 +198,6 @@ split_name_email(Email) ->
     case smtp_util:parse_rfc822_addresses(Email1) of
         {ok, [{undefined, E}|_]} -> {"", E};
         {ok, [{N,E}|_]} -> {z_string:trim(N), E};
+        {ok, []} -> {"", ""};
         {error, _} -> {z_string:trim(Email1), ""}
     end.
