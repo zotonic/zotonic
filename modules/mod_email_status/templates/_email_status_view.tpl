@@ -1,5 +1,11 @@
 {% with email|default:(id.email_raw) as email %}
 {% with m.email_status[email] as status %}
+
+	<h3>
+		{_ Information about _}
+		&lt;{{ email|escape }}&gt;
+	</h3>
+
 	{% if m.acl.is_admin or m.acl.is_allowed.use.mod_email_status %}
 		{% if not status.is_blocked %}
 			<button class="btn btn-danger btn-xs pull-right" id="{{ #doblock }}">
@@ -72,11 +78,6 @@
 			{% endif %}
 		{% endif %}
 	{% endif %}
-
-	<h3>
-		{_ Information about _}
-		&lt;{{ email|escape }}&gt;
-	</h3>
 
 	{% if status or email|is_valid_email %}
 		{% if status.is_blocked %}
