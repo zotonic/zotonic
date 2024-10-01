@@ -78,6 +78,24 @@ event(#submit{ message={signup_confirm, Props} }, Context) ->
             z_render:wire({show, [{target, "signup_error"}]}, Context);
         {ok, Context1} ->
             z_render:wire({script, [{script, "window.close()"}]}, Context1)
+    end;
+event(#postback{message={close_all_sessions, _Args}}, Context) ->
+    case z_acl:user(Context) of
+        undefined ->
+            Context;
+        UserId ->
+            % Logoff and remove cookies
+            Context1 = z_auth:logoff(Context),
+            Context2 = z_authentication_tokens:reset_cookies(Context1),
+            % Change secrets
+            z_authentication_tokens:regenerate_user_secret(UserId, Context2),
+            z_authentication_tokens:regenerate_user_autologon_secret(UserId, Context2),
+            % Set fresh auth cookies
+            AuthOptions = z_context:get(auth_options, Context, #{}),
+            Context3 = z_authentication_tokens:set_auth_cookie(UserId, AuthOptions, Context2),
+            Context4 = z_authentication_tokens:set_autologon_cookie(UserId, Context3),
+            % reload the page (without auth, the user will have to log in again)
+            z_render:wire({reload, []}, Context4)
     end.
 
 %% @doc Check for authentication cookies in the request.

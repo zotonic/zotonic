@@ -50,6 +50,13 @@
                     <tbody id="active_sessions_rows">
                     </tbody>
                 </table>
+                {% button class="btn btn-danger" text=_"Interrupt all active sessions"
+                    action={
+                        dialog_open
+                        title=_"Are you sure?"
+                        template="_dialog_session_close.tpl"
+                    }
+                %}
             </div>
         </div>
     </div>
