@@ -91,7 +91,7 @@ $.widget("ui.forminit",
 
             if (typeof args[name] === 'object' && args[name].length > 0) {
                 if (control.nodeName === "INPUT") {
-                    switch (controls[i].type) {
+                    switch (control.type) {
                         case 'file':
                         case 'submit':
                         case 'reset':
@@ -105,8 +105,14 @@ $.widget("ui.forminit",
                                 control.checked = false;
                             }
                             break;
+                        case "hidden":
+                            const new_value = args[name].shift() ?? "";
+                            if (new_value != "") {
+                                control.value = new_value;
+                            }
+                            break;
                         default:
-                            control.value = args[name].shift() ?? "";
+                            control.value = new_value = args[name].shift() ?? "";
                             break;
                     }
                 } else if (control.nodeName === "TEXTAREA") {
