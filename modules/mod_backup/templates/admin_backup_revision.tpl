@@ -38,11 +38,23 @@
         <h2>{_ Revisions for _} <em>{_ Deleted _}</em></h2>
     {% endif %}
 
+    {% if id.exists %}
+        <p>
+            <a href="{% url admin_edit_rsc id=id %}">{_ Back to the edit page _}</a>
+        </p>
+    {% endif %}
+
     <p>
-    	{_ Check and possibly restore an earlier version of your page. _}
-    	{% if id.exists %}
-    		<a href="{% url admin_edit_rsc id=id %}">{_ Back to the edit page _}</a>
-    	{% endif %}
+        {_ Check and possibly restore an earlier version of your page. _}
+        {_ Revisions are kept for _}
+        {{ m.backup_revision.retention_months }}
+        {_ months. _}<br>
+        {_ Revisions of active users are kept for _}
+        {{ m.backup_revision.user_retention_days }}
+        {_ days. _}<br>
+        {_ Revisions of deleted users are kept for _}
+        {{ m.backup_revision.deleted_user_retention_days }}
+        {_ days. _}
     </p>
 </div>
 

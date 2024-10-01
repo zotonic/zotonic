@@ -34,6 +34,21 @@
                             </label>
                         </div>
                         {% wire id="backup_daily" postback=`config_backup_daily` %}
+
+                        <p class="help-block">
+                            <i class="fa fa-info-circle"></i>
+                                {_ Revisions are kept for _}
+                                {{ m.backup_revision.retention_months }}
+                                {_ months. _}<br>
+                            <i class="fa fa-info-circle"></i>
+                                {_ Revisions of active users are kept for _}
+                                {{ m.backup_revision.user_retention_days }}
+                                {_ days. _}<br>
+                            <i class="fa fa-info-circle"></i>
+                                {_ Revisions of deleted users are kept for _}
+                                {{ m.backup_revision.deleted_user_retention_days }}
+                                {_ days. _}
+                        </p>
                     </div>
                 {% endif %}
 

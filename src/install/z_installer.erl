@@ -231,6 +231,8 @@ upgrade(C, Database, Schema) ->
     ok = publication_start_nullable(C, Database, Schema),
     % 0.82
     ok = check_category_id_key(C, Database, Schema),
+    % 0.84
+    ok = install_rsc_gone_has_identity(C, Database, Schema),
     ok.
 
 upgrade_config_schema(C, Database, Schema) ->
@@ -597,3 +599,15 @@ check_category_id_key(C, _Database, _Schema) ->
         "CREATE INDEX IF NOT EXISTS fki_rsc_category_id ON rsc (category_id)"
     ),
     ok.
+
+install_rsc_gone_has_identity(C, Database, Schema) ->
+    case has_column(C, "rsc_gone", "has_identity", Database, Schema) of
+        true ->
+            ok;
+        false ->
+            lager:info("[database: ~p ~p] Adding rsc_gone.has_identity", [Database, Schema]),
+            {ok, [], []} = epgsql:squery(C,
+                              "ALTER TABLE rsc_gone "
+                              "ADD COLUMN has_identity boolean NOT NULL DEFAULT false"),
+            ok
+    end.

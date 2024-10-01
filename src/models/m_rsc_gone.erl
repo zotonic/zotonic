@@ -123,9 +123,9 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
             case z_db:equery(
                 "insert into rsc_gone
                     (id, new_id, new_uri, version, uri, name, page_path,
-                     is_authoritative, creator_id, modifier_id, created, modified)
+                     is_authoritative, creator_id, modifier_id, has_identity, created, modified)
                  values
-                     ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, now())
+                     ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, now())
                 ",
                 [
                     Id,
@@ -138,6 +138,7 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
                     proplists:get_value(is_authoritative, Props),
                     proplists:get_value(creator_id, Props),
                     z_acl:user(Context),
+                    m_identity:is_user(Id, Context),
                     proplists:get_value(created, Props)
                 ],
                 Context)
@@ -166,7 +167,8 @@ gone_update(Id, NewId, Props, Context) ->
             is_authoritative = $8,
             creator_id = $9,
             modifier_id = $10,
-            created = $11,
+            has_identity = $11
+            created = $12,
             modified = now()
         where id = $1",
         [
@@ -180,6 +182,7 @@ gone_update(Id, NewId, Props, Context) ->
             proplists:get_value(is_authoritative, Props),
             proplists:get_value(creator_id, Props),
             z_acl:user(Context),
+            m_identity:is_user(Id, Context),
             proplists:get_value(created, Props)
         ],
         Context).

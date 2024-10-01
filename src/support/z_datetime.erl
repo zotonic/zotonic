@@ -44,6 +44,7 @@
     prev_month/1,
     prev_month/2,
     prev_day/1,
+    prev_day/2,
     prev_hour/1,
     prev_minute/1,
     prev_second/1,
@@ -347,6 +348,8 @@ prev_day({{Y,M,D},T}) ->
 prev_day({_,_,_} = Date) ->
     prev_day({Date, {0,0,0}}).
 
+prev_day(Date, N) ->
+    nth(Date, -N, fun next_day/1, fun prev_day/1).
 
 %% @doc Return the date one hour earlier.
 prev_hour({_,{0,_,_}} = Date) ->
@@ -422,6 +425,13 @@ next_second({_,{_,_,59}} = Date) ->
     {YMD,{H,I,0}};
 next_second({YMD,{H,I,S}}) ->
     {YMD, {H,I,S+1}}.
+
+nth(Date, 0, _Next, _Prev) ->
+    Date;
+nth(Date, N, Next, Prev) when is_integer(N), N > 0 ->
+    nth(Next(Date), N-1, Next, Prev);
+nth(Date, N, Next, Prev) when is_integer(N), N < 0 ->
+    nth(Prev(Date), N+1, Next, Prev).
 
 %% @doc Return the number of days in a certain year.
 days_in_year(Y) ->
