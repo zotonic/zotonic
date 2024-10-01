@@ -55,8 +55,15 @@ is saved to a revision log.
 Using the revision log a resource can be rolled back to an older revision
 or, when deleted, recovered.
 
-Revisions older than 18 months are daily pruned. This can be changed by
-setting the configuration ``mod_backup.revision_retention_months`` to another
-number of months.
+Revisions are pruned daily and deleted if:
+1. older than 18 months;
+   This can be changed by setting the configuration ``mod_backup.revision_retention_months``
+   to another number of months.
+2. of user resources and older than 90 days;
+   This can be changed by setting the configuration ``mod_backup.user_revision_retention_days``
+   to another number of days.
+3. of users resources and the users was deleted for at least 30 days;
+   This can be changed by setting the configuration ``mod_backup.user_deletion_retention_days``
+   to another number of days (maximum 30).
 
 Currently edges (connections) and medium files are not kept in the revision log.
