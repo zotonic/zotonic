@@ -112,7 +112,7 @@ $.widget("ui.forminit",
                             }
                             break;
                         default:
-                            control.value = new_value = args[name].shift() ?? "";
+                            control.value = args[name].shift() ?? "";
                             break;
                     }
                 } else if (control.nodeName === "TEXTAREA") {
