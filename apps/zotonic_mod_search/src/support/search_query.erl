@@ -1360,13 +1360,15 @@ parse_edges(hasobject, [Id], _IsNested, Context) ->
 
 zsort_term(Sort) ->
     T = add_order(Sort, #search_sql_term{}),
-    #search_sql_term{
+    T#search_sql_term{
+        sort = [],
         zsort = T#search_sql_term.sort
     }.
 
 asort_term(Sort) ->
     T = add_order(Sort, #search_sql_term{}),
-    #search_sql_term{
+    T#search_sql_term{
+        sort = [],
         asort = T#search_sql_term.sort
     }.
 
