@@ -148,6 +148,8 @@ $.widget("ui.forminit",
                         case 'checkbox':
                             control.checked = false;
                             break;
+                        case "hidden":
+                            break;
                         default:
                             control.value = "";
                             break;
