@@ -17,8 +17,13 @@
 -module(filter_is_supported_version).
 -author("Driebit <info@driebit.nl>").
 -export([is_supported_version/2]).
--include("zotonic.hrl").
 
+is_supported_version(undefined, _Context) ->
+    true;
+is_supported_version(<<"newest">>, _Context) ->
+    true;
+is_supported_version("newest", _Context) ->
+    true;
 is_supported_version(VersionString, Context) ->
     VersionBinary = z_convert:to_binary(VersionString),
     EditorTemplate = <<"tinymce-", VersionBinary/binary, "/_editor.tpl">>,
