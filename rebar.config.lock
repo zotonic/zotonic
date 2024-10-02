@@ -91,7 +91,7 @@
                            "547f28bc93c7cb3d3f1174fb4c510667a4ebb645"}},
        {filezcache,".*",
                    {git,"https://github.com/mworrell/filezcache.git",
-                        "1439867037da72324368d6aa222028308eee5707"}},
+                        "dbd16208e7353f6ff83e02ebb136370eefa96c1f"}},
        {jobs,".*",
              {git,"https://github.com/uwiger/jobs.git",
                   "fe5bf9a252ee68f644bdee7db919cc522ff4ad03"}},
