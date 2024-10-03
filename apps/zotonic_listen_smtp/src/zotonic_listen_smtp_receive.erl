@@ -87,6 +87,7 @@ received_1(Recipient, ParsedEmail,
             LHeaders = lowercase_headers(Headers),
             case is_blocked(ParsedEmail#email.from, Context)
                 orelse is_blocked(proplists:get_value(<<"from">>, LHeaders), Context)
+                orelse is_blocked(proplists:get_value(<<"to">>, LHeaders), Context)
             of
                 false ->
                     Email = #email_received{
