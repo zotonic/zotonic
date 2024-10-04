@@ -795,7 +795,7 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
         State),
     RecipientEmail = recipient_email_address(Recipient1),
     case is_recipient_ok(RecipientEmail, Context) of
-        false ->
+        true ->
             SmtpOpts = smtp_options(RecipientEmail, State, Context),
             BccSmtpOpts = case z_utils:is_empty(State#state.smtp_bcc) of
                 true ->
@@ -820,7 +820,7 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
                     sending=[
                         #email_sender{id=Id, sender_pid=SenderPid, domain=Relay} | State#state.sending
                     ]};
-        true ->
+        false ->
             ?LOG_NOTICE(#{
                 text => <<"[smtp] Dropping email to address blocked by Zotonic module (#is_recipient_ok)">>,
                 in => zotonic_core,
