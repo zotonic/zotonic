@@ -237,7 +237,7 @@ get(Email0, Context) ->
     Context :: z:context().
 mark_received(Email0, Context) ->
     Email = normalize(Email0),
-    {IsValid, _} = is_valid_nocache(Email, Context),
+    {IsValid, _IsOkToSend, _IsBlocked} = is_valid_nocache(Email, Context),
     case z_db:q("
             update email_status
             set is_valid = true,
@@ -267,7 +267,7 @@ mark_received(Email0, Context) ->
     Context :: z:context().
 mark_read(Email0, Context) ->
     Email = normalize(Email0),
-    {IsValid, _} = is_valid_nocache(Email, Context),
+    {IsValid, _IsOkToSend, _IsBlocked} = is_valid_nocache(Email, Context),
     case z_db:q("
             update email_status
             set is_valid = not is_blocked,
@@ -300,7 +300,7 @@ mark_read(Email0, Context) ->
     Context :: z:context().
 mark_sent(Email0, false, Context) ->
     Email = normalize(Email0),
-    {IsValid, _} = is_valid_nocache(Email, Context),
+    {IsValid, _IsOkToSend, _IsBlocked} = is_valid_nocache(Email, Context),
     case z_db:q("
             update email_status
             set sent = now(),
@@ -324,7 +324,7 @@ mark_sent(Email0, false, Context) ->
     end;
 mark_sent(Email0, true, Context) ->
     Email = normalize(Email0),
-    {IsValid, _} = is_valid_nocache(Email, Context),
+    {IsValid, _IsOkToSend, _IsBlocked} = is_valid_nocache(Email, Context),
     case z_db:q("
         update email_status
         set is_valid = not is_blocked,
@@ -354,7 +354,7 @@ mark_sent(Email0, true, Context) ->
     Context :: z:context().
 mark_failed(Email0, IsFinal, Status, Context) ->
     Email = normalize(Email0),
-    {IsValid, _} = is_valid_nocache(Email, Context),
+    {IsValid, _IsOkToSend, _IsBlocked} = is_valid_nocache(Email, Context),
     Status1 = z_string:truncatechars(to_binary(Status), 490),
     z_db:transaction(
                 fun(Ctx) ->
