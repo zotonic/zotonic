@@ -80,7 +80,7 @@ is_allowed(Context) ->
 
 
 observe_email_is_blocked(#email_is_blocked{recipient = Recipient}, Context) ->
-    not m_email_status:is_ok_to_send(Recipient, Context).
+    m_email_status:is_blocked(Recipient, Context).
 
 observe_email_sent(#email_sent{recipient=Recipient, is_final=IsFinal}, Context) ->
     m_email_status:mark_sent(Recipient, IsFinal, Context).
