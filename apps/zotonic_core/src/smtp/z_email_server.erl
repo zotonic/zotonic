@@ -197,7 +197,7 @@ recipient_is_user_or_admin(Id, RecipientEmail, Context) ->
 is_recipient_ok(Recipient, Context) ->
     RecipientEmail = recipient_email_address(Recipient),
     case z_notifier:first( #email_is_recipient_ok{ recipient = RecipientEmail }, Context) of
-        undefined -> false;
+        undefined -> true;
         true -> true;
         false -> false
     end.
