@@ -40,7 +40,7 @@
 
     is_sender_enabled/2,
     is_sender_enabled/3,
-    is_recipient_blocked/2
+    is_recipient_ok/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -174,11 +174,11 @@ recipient_is_user_or_admin(Id, RecipientEmail, Context) ->
 
 
 %% @doc Check if a recipient is blocked
--spec is_recipient_blocked( string() | binary(), z:context() ) -> boolean().
-is_recipient_blocked(Recipient, Context) ->
+-spec is_recipient_ok( string() | binary(), z:context() ) -> boolean().
+is_recipient_ok(Recipient, Context) ->
     RecipientEmail = recipient_email_address(Recipient),
-    case z_notifier:first( #email_is_blocked{ recipient = RecipientEmail }, Context) of
-        undefined -> false;
+    case z_notifier:first( #email_is_recipient_ok{ recipient = RecipientEmail }, Context) of
+        undefined -> true;
         true -> true;
         false -> false
     end.
@@ -555,8 +555,8 @@ delete_email(Error, Id, Recipient, Email, Context) ->
 spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
     Recipient1 = check_override(Recipient, m_config:get_value(site, email_override, Context), State),
     RecipientEmail = recipient_email_address(Recipient1),
-    case is_recipient_blocked(RecipientEmail, Context) of
-        false ->
+    case is_recipient_ok(RecipientEmail, Context) of
+        true ->
             [_RcptLocalName, RecipientDomain] = binary:split(RecipientEmail, <<"@">>),
             SmtpOpts = [
                 {no_mx_lookups, State#state.smtp_no_mx_lookups},
@@ -596,7 +596,7 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
                     sending=[
                         #email_sender{id=Id, sender_pid=SenderPid, domain=Relay} | State#state.sending
                     ]};
-        true ->
+        false ->
             drop_blocked_email(Id, RecipientEmail, Email, Context),
             State
     end.
