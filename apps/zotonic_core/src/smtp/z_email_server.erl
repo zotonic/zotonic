@@ -42,7 +42,7 @@
 
     is_sender_enabled/2,
     is_sender_enabled/3,
-    is_recipient_blocked/2,
+    is_recipient_ok/2,
 
     get_email_from/1
 ]).
@@ -194,9 +194,9 @@ recipient_is_user_or_admin(Id, RecipientEmail, Context) ->
                      end,
                      m_identity:get_rsc_by_type(Id, email, Context)).
 
-is_recipient_blocked(Recipient, Context) ->
+is_recipient_ok(Recipient, Context) ->
     RecipientEmail = recipient_email_address(Recipient),
-    case z_notifier:first( #email_is_blocked{ recipient = RecipientEmail }, Context) of
+    case z_notifier:first( #email_is_recipient_ok{ recipient = RecipientEmail }, Context) of
         undefined -> false;
         true -> true;
         false -> false
@@ -742,7 +742,7 @@ drop_blocked_email(Id, Recipient, Email, Context) ->
     LogEmail = #log_email{
         severity = ?LOG_LEVEL_WARNING,
         mailer_status = blocked,
-        mailer_message = <<"Recipient blocked by Zotonic module (#email_is_blocked)">>,
+        mailer_message = <<"Recipient blocked by Zotonic module (#is_recipient_ok)">>,
         props = [ {reason, recipient_blocked} ],
         message_nr = Id,
         envelop_to = Recipient,
@@ -794,7 +794,7 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
         m_config:get_value(site, email_override_exceptions, Context),
         State),
     RecipientEmail = recipient_email_address(Recipient1),
-    case is_recipient_blocked(RecipientEmail, Context) of
+    case is_recipient_ok(RecipientEmail, Context) of
         false ->
             SmtpOpts = smtp_options(RecipientEmail, State, Context),
             BccSmtpOpts = case z_utils:is_empty(State#state.smtp_bcc) of
@@ -822,7 +822,7 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
                     ]};
         true ->
             ?LOG_NOTICE(#{
-                text => <<"[smtp] Dropping email to blocked address">>,
+                text => <<"[smtp] Dropping email to address blocked by Zotonic module (#is_recipient_ok)">>,
                 in => zotonic_core,
                 result => error,
                 reason => blocked,
