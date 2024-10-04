@@ -56,6 +56,7 @@ Using the revision log a resource can be rolled back to an older revision
 or, when deleted, recovered.
 
 Revisions are pruned daily and deleted if:
+
 1. older than 18 months;
    This can be changed by setting the configuration ``mod_backup.revision_retention_months``
    to another number of months.
