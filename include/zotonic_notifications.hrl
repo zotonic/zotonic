@@ -192,6 +192,13 @@
         recipient :: binary()
     }).
 
+%% @doc Check if an email address is safe to send email to. The email address is not blocked
+%% and is not marked as bouncing.
+%% Type: first
+-record(email_is_recipient_ok, {
+    recipient :: binary()
+}).
+
 %% @doc Email status notification, sent when the validity of an email recipient changes (notify)
 -record(email_status, {
         recipient :: binary(),

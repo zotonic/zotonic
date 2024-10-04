@@ -26,7 +26,8 @@
 
 -export([
       parse_file/1,
-      parse_email/4
+      parse_email/4,
+      lowercase_headers/1
     ]).
 
 -include_lib("zotonic.hrl").
@@ -63,6 +64,7 @@ received(Recipients, From, Peer, Reference, {Type, Subtype}, Headers, Params, Bo
             LHeaders = lowercase_headers(Headers),
             case is_blocked(ParsedEmail#email.from, Context)
                 orelse is_blocked(proplists:get_value(<<"from">>, LHeaders), Context)
+                orelse is_blocked(proplists:get_value(<<"to">>, LHeaders), Context)
             of
                 false ->
                      Email = #email_received{
@@ -144,8 +146,11 @@ sanitize_utf8(S) ->
 parse_file(Filename) ->
     {ok, Data} = file:read_file(Filename),
     {Type, Subtype, Headers, Params, Body} = mimemail:decode(Data),
-    parse_email({Type,Subtype}, Headers, Params, Body).
-
+    E = parse_email({Type,Subtype}, Headers, Params, Body),
+    E#email{
+        headers = Headers,
+        raw = Data
+    }.
 
 %% @doc Parse an #email_received to a sanitized #email try to make
 %% sense of all parts.

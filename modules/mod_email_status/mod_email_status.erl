@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015 Marc Worrell
+%% @copyright 2015-2024 Marc Worrell
 %% @doc Track email bounces and other status of email recipients.
+%% @end
 
-%% Copyright 2015 Marc Worrell
+%% Copyright 2015-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -27,6 +28,7 @@
 -export([
     event/2,
 
+    observe_email_is_blocked/2,
     observe_email_sent/2,
     observe_email_failed/2,
     observe_email_bounced/2,
@@ -78,6 +80,12 @@ is_allowed(Id, Context) ->
 is_allowed(Context) ->
     z_acl:is_allowed(use, mod_email_status, Context).
 
+
+observe_email_is_blocked(#email_is_blocked{recipient = Recipient}, Context) ->
+    m_email_status:is_blocked(Recipient, Context).
+
+observe_email_is_recipient_ok(#email_is_blocked{recipient = Recipient}, Context) ->
+    m_email_status:is_recipient_ok(Recipient, Context).
 
 observe_email_sent(#email_sent{recipient=Recipient, is_final=IsFinal}, Context) ->
     m_email_status:mark_sent(Recipient, IsFinal, Context).
