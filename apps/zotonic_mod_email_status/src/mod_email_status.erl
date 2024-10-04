@@ -34,6 +34,8 @@
     observe_email_bounced/2,
     observe_email_received/2,
 
+    observe_tick_24h/2,
+
     manage_schema/2
 ]).
 
@@ -80,7 +82,7 @@ is_allowed(Context) ->
 
 
 observe_email_is_blocked(#email_is_blocked{recipient = Recipient}, Context) ->
-    not m_email_status:is_ok_to_send(Recipient, Context).
+    m_email_status:is_blocked(Recipient, Context).
 
 observe_email_sent(#email_sent{recipient=Recipient, is_final=IsFinal}, Context) ->
     m_email_status:mark_sent(Recipient, IsFinal, Context).
@@ -103,6 +105,9 @@ observe_email_bounced(#email_bounced{recipient=Recipient}, Context) ->
 observe_email_received(#email_received{from=From}, Context) when is_binary(From) ->
     m_email_status:mark_received(From, Context),
     undefined.
+
+observe_tick_24h(tick_24h, Context) ->
+    m_email_status:periodic_cleanup(Context).
 
 manage_schema(_InstallOrUpgrade, Context) ->
     m_email_status:install(Context).

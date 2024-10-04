@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015-2018 Marc Worrell
+%% @copyright 2015-2024 Marc Worrell
 %% @doc Model for registering the status per email recipient.
+%% @end
 
-%% Copyright 2015-2018 Marc Worrell
+%% Copyright 2015-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -26,6 +27,7 @@
 
     is_valid/2,
     is_ok_to_send/2,
+    is_blocked/2,
     get/2,
 
     clear_status/3,
@@ -39,6 +41,8 @@
     mark_sent/3,
     mark_failed/4,
     mark_bounced/2,
+
+    periodic_cleanup/1,
 
     install/1
     ]).
@@ -65,6 +69,8 @@ is_allowed(Email, Context) ->
     orelse z_acl:is_admin(Context)
     orelse is_user_email(Email, Context).
 
+%% @doc Check if an email address is an email address of the current user. Must
+%% match the primary email address or one of the email identities.
 is_user_email(Email, Context) ->
     case z_acl:user(Context) of
         undefined -> false;
@@ -84,7 +90,11 @@ is_visible_email(Email, Context) ->
         Idns).
 
 
--spec block(binary(), #context{}) -> ok.
+%% @doc Block an email address. No email will be sent to this address and no
+%% email will be received from this address.
+-spec block(Email, Context) -> ok when
+    Email :: binary(),
+    Context :: z:context().
 block(Email0, Context) ->
     Email = normalize(Email0),
     case z_db:q("
@@ -110,7 +120,12 @@ block(Email0, Context) ->
             ok
     end.
 
-%% @doc Clear the status of the email address
+%% @doc Clear the status of the email address. Returns an error if the
+%% the given email address is not an identity of the resource.
+-spec clear_status(Id, Email, Context) -> ok | {error, notfound} when
+    Id :: m_rsc:resource() | undefined,
+    Email :: binary(),
+    Context :: z:context().
 clear_status(undefined, Email0, Context) ->
     clear_status(normalize(Email0), Context);
 clear_status(Id, Email0, Context) ->
@@ -142,45 +157,73 @@ clear_status(Email, Context) ->
         0 -> ok
     end.
 
+%% @doc Check if an email address is blocked.
+-spec is_blocked(Email, Context) -> IsBlocked when
+    Email :: binary(),
+    Context :: z:context(),
+    IsBlocked :: boolean().
+is_blocked(Email, Context) ->
+    {_IsValid, _IsOkToSend, IsBlocked} = is_valid_cached(Email, Context),
+    IsBlocked.
+
 
 %% @doc Check if an email address is known to be valid, if nothing known then assume it is valid.
--spec is_ok_to_send(binary(), #context{}) -> boolean().
+-spec is_ok_to_send(Email, Context) -> IsOkToSend when
+    Email :: binary(),
+    Context :: z:context(),
+    IsOkToSend :: boolean().
 is_ok_to_send(Email, Context) ->
-    {_IsValid, IsOkToSend} = is_valid_cached(Email, Context),
+    {_IsValid, IsOkToSend, _IsBlocked} = is_valid_cached(Email, Context),
     IsOkToSend.
 
 %% @doc Check if an email address is known to be valid, if nothing known then assume it is valid.
--spec is_valid(binary(), #context{}) -> boolean().
+-spec is_valid(Email, Context) -> IsValid when
+    Email :: binary(),
+    Context :: z:context(),
+    IsValid :: boolean().
 is_valid(Email, Context) ->
-    {IsValid, _IsOkToSend} = is_valid_cached(Email, Context),
+    {IsValid, _IsOkToSend, _IsBlocked} = is_valid_cached(Email, Context),
     IsValid.
 
--spec is_valid_cached(Email::binary(), #context{}) -> {IsValid::boolean(), IsOkToSend::boolean()}.
+-spec is_valid_cached(Email, Context) -> {IsValid, IsOkToSend, IsBlocked} when
+    Email :: binary(),
+    Context :: z:context(),
+    IsValid :: boolean(),
+    IsOkToSend :: boolean(),
+    IsBlocked :: boolean().
 is_valid_cached(Email0, Context) ->
     Email = normalize(Email0),
     z_depcache:memo(fun() -> is_valid_nocache(Email, Context) end,
-                    {email_valid, Email},
+                    {email_is_valid, Email},
                     ?DAY,
                     Context).
 
--spec is_valid_nocache(Email::binary(), #context{}) -> {IsValid::boolean(), IsOkToSend::boolean()}.
+-spec is_valid_nocache(Email, Context) -> {IsValid, IsOkToSend, IsBlocked} when
+    Email :: binary(),
+    Context :: z:context(),
+    IsValid :: boolean(),
+    IsOkToSend :: boolean(),
+    IsBlocked :: boolean().
 is_valid_nocache(Email, Context) ->
     case z_db:q("select is_valid, is_blocked, recent_error, recent_error_ct, error_is_final
                  from email_status where email = $1",
                 [Email],
                 Context)
     of
-        [] -> {true, true};
-        [{_IsValid, true, _RecentError, _RecentErrorCt, _ErrorIsFinal}] -> {false, false};
-        [{true, _IsBlocked, _RecentError, _RecentErrorCt, _ErrorIsFinal}] -> {true, true};
-        [{false, _IsBlocked, undefined, _RecentErrorCt, _ErrorIsFinal}] -> {false, true};
-        [{false, _IsBlocked, _RecentError, _RecentErrorCt, false}] -> {false, true};
-        [{false, _IsBlocked, _RecentError, RecentErrorCt, true}] -> {false, RecentErrorCt < 5}
+        [] -> {true, true, false};
+        [{_IsValid, true, _RecentError, _RecentErrorCt, _ErrorIsFinal}] -> {false, false, true};
+        [{true, _IsBlocked, _RecentError, _RecentErrorCt, _ErrorIsFinal}] -> {true, true, false};
+        [{false, _IsBlocked, undefined, _RecentErrorCt, _ErrorIsFinal}] -> {false, true, false};
+        [{false, _IsBlocked, _RecentError, _RecentErrorCt, false}] -> {false, true, false};
+        [{false, _IsBlocked, _RecentError, RecentErrorCt, true}] -> {false, RecentErrorCt < 5, false}
     end.
 
 
 %% @doc Fetch the stats from an email address
--spec get(binary(), #context{}) -> list() | undefined.
+-spec get(Email, Context) -> EmailStatus | undefined when
+    Email :: binary(),
+    Context :: z:context(),
+    EmailStatus :: proplists:proplist().
 get(Email0, Context) ->
     z_db:assoc_row("select * from email_status where email = $1",
                    [normalize(Email0)],
@@ -189,10 +232,12 @@ get(Email0, Context) ->
 
 %% @doc Increment the email receive counter. This doesn't say anything about the validity
 %%      of the email address, only that we received an email with this envelope address.
--spec mark_received(binary(), #context{}) -> ok.
+-spec mark_received(Email, Context) -> ok when
+    Email :: binary(),
+    Context :: z:context().
 mark_received(Email0, Context) ->
     Email = normalize(Email0),
-    {IsValid, _} = is_valid_nocache(Email, Context),
+    {IsValid, _IsOkToSend, _IsBlocked} = is_valid_nocache(Email, Context),
     case z_db:q("
             update email_status
             set is_valid = true,
@@ -217,10 +262,12 @@ mark_received(Email0, Context) ->
     end.
 
 %% @doc Mark an email read, typically because a link in the email is followed.
--spec mark_read(binary(), #context{}) -> ok.
+-spec mark_read(Email, Context) -> ok when
+    Email :: binary(),
+    Context :: z:context().
 mark_read(Email0, Context) ->
     Email = normalize(Email0),
-    {IsValid, _} = is_valid_nocache(Email, Context),
+    {IsValid, _IsOkToSend, _IsBlocked} = is_valid_nocache(Email, Context),
     case z_db:q("
             update email_status
             set is_valid = not is_blocked,
@@ -247,10 +294,13 @@ mark_read(Email0, Context) ->
     end.
 
 %% @doc Track email sending, a sent is marked 'final' if there wasn't a bounce within 4 hours.
--spec mark_sent(binary(), boolean(), #context{}) -> ok.
+-spec mark_sent(Email, IsFinal, Context) -> ok when
+    Email :: binary(),
+    IsFinal :: boolean(),
+    Context :: z:context().
 mark_sent(Email0, false, Context) ->
     Email = normalize(Email0),
-    {IsValid, _} = is_valid_nocache(Email, Context),
+    {IsValid, _IsOkToSend, _IsBlocked} = is_valid_nocache(Email, Context),
     case z_db:q("
             update email_status
             set sent = now(),
@@ -274,7 +324,7 @@ mark_sent(Email0, false, Context) ->
     end;
 mark_sent(Email0, true, Context) ->
     Email = normalize(Email0),
-    {IsValid, _} = is_valid_nocache(Email, Context),
+    {IsValid, _IsOkToSend, _IsBlocked} = is_valid_nocache(Email, Context),
     case z_db:q("
         update email_status
         set is_valid = not is_blocked,
@@ -297,10 +347,14 @@ mark_sent(Email0, true, Context) ->
 %% @doc Mark as failed, happens on connection errors or on errors returned by the receiving smtp server.
 %% The final flag is set if our smtp server received a permanent error or gave up sending the email.
 %% Keep a counter (recent_error_ct) and date (recent_error) which are updated at most once a day.
--spec mark_failed(binary(), boolean(), binary()|{error,term()}|undefined, #context{}) -> ok.
+-spec mark_failed(Email, IsFinal, Status, Context) -> ok when
+    Email :: binary(),
+    IsFinal :: boolean(),
+    Status :: binary() | {error, term()} | undefined,
+    Context :: z:context().
 mark_failed(Email0, IsFinal, Status, Context) ->
     Email = normalize(Email0),
-    {IsValid, _} = is_valid_nocache(Email, Context),
+    {IsValid, _IsOkToSend, _IsBlocked} = is_valid_nocache(Email, Context),
     Status1 = z_string:truncatechars(to_binary(Status), 490),
     z_db:transaction(
                 fun(Ctx) ->
@@ -384,10 +438,12 @@ to_binary(V) ->
 
 %% @doc Mark as bounced, this is handled as permanent error, though it could be temporary if
 %% the bounce happened due to some temporary problem on the receiver's end.
--spec mark_bounced(binary(), #context{}) -> ok.
+-spec mark_bounced(Email, Context) -> ok when
+    Email :: binary(),
+    Context :: z:context().
 mark_bounced(Email0, Context) ->
     Email = normalize(Email0),
-    {IsValid, _} = is_valid_nocache(Email, Context),
+    {IsValid, _IsOkToSend, _IsBlocked} = is_valid_nocache(Email, Context),
     z_db:transaction(
         fun(Ctx)->
             case z_db:q("
@@ -429,7 +485,7 @@ mark_bounced(Email0, Context) ->
 maybe_notify(_Email, IsValid, IsValid, false, _IsManual, _Context) ->
     ok;
 maybe_notify(Email, _OldIsValid, IsValid, IsFinal, IsManual, Context) ->
-    z_depcache:flush({email_valid, Email}, Context),
+    z_depcache:flush({email_is_valid, Email}, Context),
     z_notifier:notify(#email_status{
                         recipient = Email,
                         is_valid = IsValid,
@@ -442,6 +498,22 @@ maybe_notify(Email, _OldIsValid, IsValid, IsFinal, IsManual, Context) ->
 %% @doc Normalize an email address, makes it compatible with the email addresses in m_identity.
 normalize(Email) ->
     z_convert:to_binary(m_identity:normalize_key(email, Email)).
+
+%% @doc Periodically delete inactive addresses older than 2 years.
+%%      Keep blocked and bouncing entries, to prevent spamming or bad reputation.
+-spec periodic_cleanup(Context) -> RowsDeleted when
+    Context :: z:context(),
+    RowsDeleted :: non_neg_integer().
+periodic_cleanup(Context) ->
+    z_db:q("
+        delete from email_status
+        where modified < now() - interval '2 years'
+          and not is_blocked
+          and (    bounce is null
+                or sent is null
+                or bounce < sent)
+        ",
+        Context).
 
 %% @doc Install the email tracking table
 install(Context) ->
