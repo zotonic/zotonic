@@ -254,7 +254,7 @@ periodic_cleanup(Context) ->
         DELETE FROM backup_revision
         WHERE rsc_id IN (
             SELECT id FROM rsc_gone
-            WHERE has_identity = true
+            WHERE is_personal_data = true
             AND modified < $1
         )",
         [UserDelThreshold],

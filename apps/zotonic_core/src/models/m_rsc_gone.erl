@@ -144,7 +144,7 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
                             {new_id, NewId},
                             {new_uri, undefined},
                             {modifier_id, z_acl:user(Ctx)},
-                            {has_identity, m_identity:is_user(Id, Context)}
+                            {is_personal_data, m_identity:is_user(Id, Context)}
                             | Props
                         ],
                         case z_db:q1("select count(*) from rsc_gone where id = $1", [Id], Ctx) of
@@ -206,7 +206,7 @@ install(Context) ->
                     modifier_id bigint,
                     created timestamp with time zone NOT NULL DEFAULT now(),
                     modified timestamp with time zone NOT NULL DEFAULT now(),
-                    has_identity boolean NOT NULL DEFAULT false,
+                    is_personal_data boolean NOT NULL DEFAULT false,
                     CONSTRAINT rsc_gone_pkey PRIMARY KEY (id)
                 )",
                 Context),
@@ -226,10 +226,10 @@ install(Context) ->
                 true ->
                     ok
             end,
-            % Check for has_identity column
-            case z_db:column_exists(rsc_gone, has_identity, Context) of
+            % Check for is_personal_data column
+            case z_db:column_exists(rsc_gone, is_personal_data, Context) of
                 false ->
-                    [] = z_db:q("ALTER TABLE rsc_gone ADD COLUMN has_identity boolean NOT NULL DEFAULT false", Context),
+                    [] = z_db:q("ALTER TABLE rsc_gone ADD COLUMN is_personal_data boolean NOT NULL DEFAULT false", Context),
                     z_db:flush(Context);
                 true ->
                     ok
