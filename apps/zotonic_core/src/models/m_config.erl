@@ -259,7 +259,15 @@ get_boolean(Module, Key, Default, Context) ->
 set_default_value(Module, Key, Value, Context) ->
     case get_value(Module, Key, Context) of
         undefined ->
-            set_value(Module, Key, Value, Context);
+            case z_db:has_connection(Context) of
+                true ->
+                    set_value_db(Module, Key, Value, false, Context);
+                false ->
+                    m_site:put(Module, Key, Value, Context),
+                    z_depcache:flush(config, Context),
+                    z_notifier:notify(#m_config_update{module = Module, key = Key, value = Value}, Context),
+                    ok
+            end;
         _Value ->
             ok
     end.
@@ -274,7 +282,7 @@ set_default_value(Module, Key, Value, Context) ->
 set_value(Module, Key, Value, Context) ->
     case z_db:has_connection(Context) of
         true ->
-            set_value_db(Module, Key, Value, Context);
+            set_value_db(Module, Key, Value, true, Context);
         false ->
             m_site:put(Module, Key, Value, Context),
             z_depcache:flush(config, Context),
@@ -282,8 +290,14 @@ set_value(Module, Key, Value, Context) ->
             ok
     end.
 
--spec set_value_db( atom() | binary(), atom() | binary(), string() | binary() | atom(), z:context() ) -> ok | {error, term()}.
-set_value_db(Module, Key, Value0, Context) ->
+-spec set_value_db(Module, Key, Value, IsAllowUpdate, Context) -> ok | {error, Reason} when
+    Module :: atom() | binary(),
+    Key :: atom() | binary(),
+    Value :: string() | binary() | atom(),
+    IsAllowUpdate :: boolean(),
+    Context :: z:context(),
+    Reason :: no_database_connection | term().
+set_value_db(Module, Key, Value0, IsAllowUpdate, Context) ->
     ModuleAtom = z_convert:to_atom(Module),
     KeyAtom = z_convert:to_atom(Key),
     KeyBin = z_convert:to_binary(KeyAtom),
@@ -309,7 +323,7 @@ set_value_db(Module, Key, Value0, Context) ->
                     },
                     {ok, _} = z_db:insert(config, Props, Ctx),
                     insert;
-                OldValue ->
+                OldValue when IsAllowUpdate ->
                     1 = z_db:q("
                         update config
                         set value = $1,
@@ -318,7 +332,10 @@ set_value_db(Module, Key, Value0, Context) ->
                           and key = $3",
                         [ Value, ModuleAtom, KeyAtom ],
                         Ctx),
-                    {update, OldValue}
+                    {update, OldValue};
+                _ ->
+                    % Ignore
+                    no_change
             end
         end,
         Context),
