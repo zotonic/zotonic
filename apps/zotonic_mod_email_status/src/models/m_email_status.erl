@@ -443,7 +443,7 @@ to_binary(V) ->
     Context :: z:context().
 mark_bounced(Email0, Context) ->
     Email = normalize(Email0),
-    {IsValid, _} = is_valid_nocache(Email, Context),
+    {IsValid, _IsOkToSend, _IsBlocked} = is_valid_nocache(Email, Context),
     z_db:transaction(
         fun(Ctx)->
             case z_db:q("
