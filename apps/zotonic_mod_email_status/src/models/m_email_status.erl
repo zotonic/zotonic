@@ -42,6 +42,8 @@
     mark_failed/4,
     mark_bounced/2,
 
+    periodic_cleanup/1,
+
     install/1
     ]).
 
@@ -496,6 +498,22 @@ maybe_notify(Email, _OldIsValid, IsValid, IsFinal, IsManual, Context) ->
 %% @doc Normalize an email address, makes it compatible with the email addresses in m_identity.
 normalize(Email) ->
     z_convert:to_binary(m_identity:normalize_key(email, Email)).
+
+%% @doc Periodically delete inactive addresses older than 2 years.
+%%      Keep blocked and bouncing entries, to prevent spamming or bad reputation.
+-spec periodic_cleanup(Context) -> RowsDeleted when
+    Context :: z:context(),
+    RowsDeleted :: non_neg_integer().
+periodic_cleanup(Context) ->
+    z_db:q("
+        delete from email_status
+        where modified < now() - interval '2 years'
+          and not is_blocked
+          and (    bounce is null
+                or sent is null
+                or bounce < sent)
+        ",
+        Context).
 
 %% @doc Install the email tracking table
 install(Context) ->
