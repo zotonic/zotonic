@@ -216,12 +216,78 @@ search_query_facets(Result, #search_sql{ search_sql_terms = Terms }, Context) ->
     FinalSQL = iolist_to_binary(SQL3),
     {ok, Facets} = z_db:qmap(FinalSQL, Args2, Context),
     Fs = group_facets(Defs, Facets, Context),
+    Fs1 = ensure_facet_qterms(Result#search_result.search_args, Fs, Context),
     Result#search_result{
-        facets = Fs
+        facets = Fs1
     }.
 
 is_facet_term(#search_sql_term{ label = {facet, _} }) -> true;
 is_facet_term(#search_sql_term{}) -> false.
+
+%% @doc Check the found facets, ensure that on facet filtering query terms
+%% are present in the returned facet values. This ensures that select boxes
+%% with filter terms can still be populated with the selected facet filter.
+ensure_facet_qterms(#{ <<"q">> := Args }, Fs, Context) ->
+    FacetTerms = lists:flatten(find_facet_qterms(Args)),
+    lists:foldl(
+        fun({Facet, Value}, Acc) ->
+            ensure_facet_value(Facet, Value, Acc, Context)
+        end,
+        Fs,
+        FacetTerms);
+ensure_facet_qterms(_SearchArgs, Fs, _Context) ->
+    Fs.
+
+ensure_facet_value(Facet, Value, Fs, Context) ->
+    case maps:get(Facet, Fs, undefined) of
+        #{
+            <<"counts">> := Counts,
+            <<"facet_type">> := Type,
+            <<"type">> := <<"count">>
+        } = F ->
+            TypeAtom = binary_to_existing_atom(Type),
+            Value1 = convert_single_type(TypeAtom, Value, Context),
+            case is_facet_value_present(Value1, Counts) of
+                true ->
+                    Fs;
+                false ->
+                    Counts1 = Counts ++ [
+                        #{
+                            <<"count">> => 0,
+                            <<"facet">> => Facet,
+                            <<"value">> => Value1,
+                            <<"label">> => label(Facet, Value, Context)
+                        }
+                    ],
+                    Fs#{
+                        Facet => F#{ <<"counts">> => Counts1 }
+                    }
+            end;
+        _ ->
+            Fs
+    end.
+
+is_facet_value_present(Value, Counts) ->
+    lists:any(fun(#{ <<"value">> := V }) -> V == Value end, Counts).
+
+find_facet_qterms(Args) when is_list(Args) ->
+    lists:filtermap(fun find_facet_qterm/1, Args);
+find_facet_qterms(_) ->
+    [].
+
+find_facet_qterm(#{ <<"term">> := <<"facet:", Facet/binary>>, <<"value">> := V } = T) ->
+    Op = maps:get(<<"operator">>, T, <<"=">>),
+    {Op1, V1} = search_query:extract_value_op(V, Op),
+    case Op1 of
+        <<"=">> -> {true, {Facet, V1}};
+        <<"<>">> -> {true, {Facet, V1}};
+        _ -> false
+    end;
+find_facet_qterm(#{ <<"operator">> := _, <<"terms">> := NestedTerms }) ->
+    {true, find_facet_qterms(NestedTerms)};
+find_facet_qterm(_) ->
+    false.
+
 
 %% @doc Add facets to the result set using the query. The facets are calculated
 %% using the result ids. Facets can be used for a "drill down".
@@ -823,6 +889,32 @@ is_type([ _ | Cols ], Name, Type, IsArray) ->
     is_type(Cols, Name, Type, IsArray).
 
 
+%% @doc Return a label values to a specific facet
+label(FacetField, Value, Context) when is_binary(FacetField) ->
+    case facet_def(FacetField, Context) of
+        {ok, FacetDef} ->
+            case has_label_block(FacetDef, Context) of
+            {true, LabelBlock} ->
+                case render_block(LabelBlock, {cat, <<"pivot/facet.tpl">>}, #{ <<"id">> => Value }, Context) of
+                    <<>> ->
+                        escape(Value);
+                    T ->
+                        escape_check(T)
+                end;
+            false ->
+                case FacetDef#facet_def.type of
+                    id ->
+                        id_label(Value, Context);
+                    ids ->
+                        id_label(Value, Context);
+                    _ ->
+                        escape(Value)
+                end
+            end;
+        {error, _} ->
+            escape(Value)
+    end.
+
 %% @doc Add label values to the fetched facets for faceted search
 labels(_, [], _Context) ->
     [];
@@ -846,41 +938,57 @@ value_via_block(LabelBlock, Vs, Context) ->
     lists:map(
         fun
             (#{ <<"value">> := V, <<"facet_id">> := 0 } = F) ->
-                F#{ <<"label">> => V };
+                F#{ <<"label">> => escape(V) };
             (#{ <<"value">> := V, <<"facet_id">> := Id } = F) ->
                 % NOTA BENE:
                 % The found id might not be visible.
                 case render_block(LabelBlock, {cat, <<"pivot/facet.tpl">>}, #{ <<"id">> => Id }, Context) of
                     <<>> ->
-                        F#{ <<"label">> => V };
+                        F#{ <<"label">> => escape(V) };
                     T ->
-                        F#{ <<"label">> => T }
+                        F#{ <<"label">> => escape_check(T) }
                 end
         end,
         Vs).
 
+escape(V) when is_binary(V) ->
+    z_html:escape(V);
+escape(V) ->
+    V.
+
+escape_check(V) when is_binary(V) ->
+    z_html:escape_check(V).
+
 ids_as_labels(Vs, Context) ->
     lists:map(
         fun(#{ <<"value">> := Id } = F) ->
-            T = case m_rsc:is_a(Id, person, Context) of
+            F#{ <<"label">> => id_label(Id, Context) }
+        end,
+        Vs).
+
+id_label(Id, Context) ->
+    case m_rsc:rid(Id, Context) of
+        undefined ->
+            escape(z_convert:to_binary(Id));
+        RscId ->
+            T = case m_rsc:is_a(RscId, person, Context) of
                 true ->
                     {Name, _} = z_template:render_to_iolist("_name.tpl", #{ <<"id">> => Id }, Context),
                     iolist_to_binary(Name);
                 false ->
-                    m_rsc:p(Id, <<"title">>, Context)
+                    m_rsc:p(RscId, <<"title">>, Context)
             end,
             T1 = case z_utils:is_empty(T) of
-                true -> m_rsc:p(Id, <<"short_title">>, Context);
+                true -> m_rsc:p(RscId, <<"short_title">>, Context);
                 false -> T
             end,
-            F#{ <<"label">> => z_trans:lookup_fallback(T1, Context) }
-        end,
-        Vs).
+            z_convert:to_binary(z_trans:lookup_fallback(T1, Context))
+    end.
 
 values_as_labels(Vs) ->
     lists:map(
         fun(#{ <<"value">> := V } = F) ->
-            F#{ <<"label">> => V }
+            F#{ <<"label">> => escape(V) }
         end,
         Vs).
 
