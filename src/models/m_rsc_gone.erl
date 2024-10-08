@@ -123,7 +123,7 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
             case z_db:equery(
                 "insert into rsc_gone
                     (id, new_id, new_uri, version, uri, name, page_path,
-                     is_authoritative, creator_id, modifier_id, has_identity, created, modified)
+                     is_authoritative, creator_id, modifier_id, is_personal_data, created, modified)
                  values
                      ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, now())
                 ",
@@ -167,7 +167,7 @@ gone_update(Id, NewId, Props, Context) ->
             is_authoritative = $8,
             creator_id = $9,
             modifier_id = $10,
-            has_identity = $11
+            is_personal_data = $11
             created = $12,
             modified = now()
         where id = $1",
