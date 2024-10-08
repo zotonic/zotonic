@@ -1639,6 +1639,13 @@ add_term_arg(ArgValue, #search_sql_term{ args = Args } = Q) ->
 %         <<"value">> := V
 %     }) ->
 %     {<<"=">>, V};
+
+%% @doc Extract the operator from the value.
+-spec extract_value_op(Value, DefaultOperator) -> {Operator, Value1} when
+    Value :: binary() | term(),
+    DefaultOperator :: binary(),
+    Operator :: binary(),
+    Value1 :: term().
 extract_value_op(<<"<>", V/binary>>, _Op) ->
     {<<"<>">>, V};
 extract_value_op(<<"<=", V/binary>>, _Op) ->
