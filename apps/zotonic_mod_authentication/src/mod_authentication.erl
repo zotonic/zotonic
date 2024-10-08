@@ -38,7 +38,8 @@
     observe_admin_menu/3,
     observe_auth_validated/2,
     observe_auth_client_logon_user/2,
-    observe_auth_client_switch_user/2
+    observe_auth_client_switch_user/2,
+    observe_tick_1h/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -77,6 +78,24 @@ event(#submit{ message={signup_confirm, Props} }, Context) ->
             z_render:wire({show, [{target, "signup_error"}]}, Context);
         {ok, Context1} ->
             z_render:wire({script, [{script, "window.close()"}]}, Context1)
+    end;
+event(#postback{message={close_all_sessions, _Args}}, Context) ->
+    case z_acl:user(Context) of
+        undefined ->
+            Context;
+        UserId ->
+            % Logoff and remove cookies
+            Context1 = z_auth:logoff(Context),
+            Context2 = z_authentication_tokens:reset_cookies(Context1),
+            % Change secrets
+            z_authentication_tokens:regenerate_user_secret(UserId, Context2),
+            z_authentication_tokens:regenerate_user_autologon_secret(UserId, Context2),
+            % Set fresh auth cookies
+            AuthOptions = z_context:get(auth_options, Context, #{}),
+            Context3 = z_authentication_tokens:set_auth_cookie(UserId, AuthOptions, Context2),
+            Context4 = z_authentication_tokens:set_autologon_cookie(UserId, Context3),
+            % reload the page (without auth, the user will have to log in again)
+            z_render:wire({reload, []}, Context4)
     end.
 
 %% @doc Check for authentication cookies in the request.
@@ -94,6 +113,26 @@ observe_request_context(#request_context{ phase = init }, Context, _Context) ->
                     Context1
             end,
             z_notifier:foldl(#session_context{ request_type = http, payload = undefined }, Context2, Context2)
+    end;
+observe_request_context(#request_context{ phase = Phase }, Context, _Context)
+  when Phase =:= auth_status orelse Phase =:= refresh ->
+    % Notify that a client session for a user is still active
+    % (it has been extended with a status/refresh ping)
+    case z_acl:user(Context) of
+        undefined ->
+            Context;
+        UserId ->
+            case z_context:client_id(Context) of
+                {ok, ClientId} ->
+                    z_mqtt:publish(
+                        [<<"user">>, z_convert:to_binary(UserId), <<"session_extended">>],
+                        ClientId,
+                        Context
+                    );
+                _ ->
+                    ok
+            end,
+            Context
     end;
 observe_request_context(#request_context{}, Context, _Context) ->
     Context.
@@ -486,3 +525,6 @@ insert_identity(UserId, Auth, Context) ->
 
 auth_identity(#auth_validated{service=Service, service_uid=Uid}, Context) ->
     m_identity:lookup_by_type_and_key(Service, Uid, Context).
+
+observe_tick_1h(tick_1h, Context) ->
+    m_identity:cleanup_logon_history(Context).

@@ -47,7 +47,10 @@
     decode_onetime_token/2,
 
     session_expires/1,
-    autologon_expires/1
+    autologon_expires/1,
+
+    regenerate_user_secret/2,
+    regenerate_user_autologon_secret/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -508,6 +511,40 @@ generate_user_autologon_secret(UserId, Context) ->
     Secret = z_ids:id(?AUTOLOGON_SECRET_LENGTH),
     {ok, _} = m_identity:insert_single(UserId, auth_autologon_secret, <<>>, [{prop1, Secret}], Context),
     Secret.
+
+% @doc Generate a new user secret and replace the old one (if any).
+-spec regenerate_user_secret( m_rsc:resource_id(), z:context() ) -> ok | {error, enoent}.
+regenerate_user_secret(undefined, _Context) -> ok;
+regenerate_user_secret(UserId, Context) when is_integer(UserId) ->
+    case z_db:has_connection(Context) of
+        false ->
+            ok;
+        true ->
+            case m_rsc:exists(UserId, Context) of
+                true ->
+                    generate_user_secret(UserId, Context),
+                    ok;
+                false ->
+                    {error, enoent}
+            end
+    end.
+
+% @doc Generate a new user autologon secret and replace the old one (if any).
+-spec regenerate_user_autologon_secret( m_rsc:resource_id(), z:context() ) -> ok | {error, enoent}.
+regenerate_user_autologon_secret(undefined, _Context) -> ok;
+regenerate_user_autologon_secret(UserId, Context) when is_integer(UserId) ->
+    case z_db:has_connection(Context) of
+        false ->
+            ok;
+        true ->
+            case m_rsc:exists(UserId, Context) of
+                true ->
+                    generate_user_autologon_secret(UserId, Context),
+                    ok;
+                false ->
+                    {error, enoent}
+            end
+    end.
 
 %% ---- Expirations
 

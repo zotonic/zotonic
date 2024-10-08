@@ -19,6 +19,9 @@
  {logon_reminder,   ["logon", "reminder"],                controller_template, [ {template, "logon.tpl"}, seo_noindex, is_logon ]},
  {logon_confirm,    ["logon", "confirm"],                 controller_template, [ {template, "logon.tpl"}, seo_noindex, is_logon ]},
 
+ % Simple session overview
+ {sessions_user, ["logon", "sessions"], controller_template, [ {template, "sessions.tpl"}, seo_noindex, {acl, is_auth} ]},
+
  % Authentication API used by zotonic.auth.worker.js
  {logon_auth,       [ "zotonic-auth" ],     controller_authentication, []},
 
