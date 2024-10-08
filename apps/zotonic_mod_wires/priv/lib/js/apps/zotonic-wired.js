@@ -87,7 +87,8 @@ function zotonic_eval(script) {
       head.appendChild(s);
     } else {
       // No nonce - assume no CSP headers set
-      eval(text);
+      console.log("z_script_nonce is not set - fallback to eval.");
+      eval(script);
     }
   }
 }
