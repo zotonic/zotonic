@@ -891,24 +891,28 @@ is_type([ _ | Cols ], Name, Type, IsArray) ->
 
 %% @doc Return a label values to a specific facet
 label(FacetField, Value, Context) when is_binary(FacetField) ->
-    {ok, FacetDef} = facet_def(FacetField, Context),
-    case has_label_block(FacetDef, Context) of
-        {true, LabelBlock} ->
-            case render_block(LabelBlock, {cat, <<"pivot/facet.tpl">>}, #{ <<"id">> => Value }, Context) of
-                <<>> ->
-                    escape(Value);
-                T ->
-                    escape_check(T)
+    case facet_def(FacetField, Context) of
+        {ok, FacetDef} ->
+            case has_label_block(FacetDef, Context) of
+            {true, LabelBlock} ->
+                case render_block(LabelBlock, {cat, <<"pivot/facet.tpl">>}, #{ <<"id">> => Value }, Context) of
+                    <<>> ->
+                        escape(Value);
+                    T ->
+                        escape_check(T)
+                end;
+            false ->
+                case FacetDef#facet_def.type of
+                    id ->
+                        id_label(Value, Context);
+                    ids ->
+                        id_label(Value, Context);
+                    _ ->
+                        escape(Value)
+                end
             end;
-        false ->
-            case FacetDef#facet_def.type of
-                id ->
-                    id_label(Value, Context);
-                ids ->
-                    id_label(Value, Context);
-                _ ->
-                    escape(Value)
-            end
+        {error, _} ->
+            escape(Value)
     end.
 
 %% @doc Add label values to the fetched facets for faceted search
