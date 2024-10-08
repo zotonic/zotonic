@@ -87,7 +87,7 @@ function zotonic_eval(script) {
       head.appendChild(s);
     } else {
       // No nonce - assume no CSP headers set
-      eval(text);
+      eval(script);
     }
   }
 }
