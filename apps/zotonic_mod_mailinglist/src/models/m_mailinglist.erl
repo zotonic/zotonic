@@ -78,6 +78,16 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ <<"count_recipients">>, MailingId | Rest ], _Msg, Context) ->
+    case z_acl:is_allowed(view, MailingId, Context) of
+        true ->
+            Count = m_mailinglist:count_recipients(MailingId, Context),
+            SubIdCount = length(m_edge:subjects(MailingId, subscriberof, Context)),
+            {ok, {Count + SubIdCount, Rest}};
+        false ->
+            {error, eacces}
+    end;
+
 m_get([ <<"stats">>, MailingId | Rest ], _Msg, Context) ->
     case z_acl:rsc_editable(MailingId, Context) of
         true -> {ok, {get_stats(MailingId, Context), Rest}};
