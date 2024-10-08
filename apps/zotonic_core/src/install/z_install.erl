@@ -402,16 +402,17 @@ model_pgsql() ->
       ip_address character varying (40),
 
       CONSTRAINT id_log_pkey PRIMARY KEY (id),
-      CONSTRAINT pk_id_log_rsc_id FOREIGN KEY (rsc_id)
+      CONSTRAINT fk_id_log_rsc_id FOREIGN KEY (rsc_id)
         REFERENCES rsc (id)
         ON UPDATE CASCADE ON DELETE CASCADE,
-      CONSTRAINT pk_id_log_identity_id FOREIGN KEY (identity_id)
+      CONSTRAINT fk_id_log_identity_id FOREIGN KEY (identity_id)
         REFERENCES identity (id)
         ON UPDATE CASCADE ON DELETE CASCADE
     )",
 
-    "CREATE INDEX IF NOT EXISTS fki_identity_log_rsc_id ON identity (rsc_id)",
-    "CREATE INDEX IF NOT EXISTS identity_log_created_key ON identity (created)",
+    "CREATE INDEX IF NOT EXISTS fki_identity_log_rsc_id ON identity_log (rsc_id)",
+    "CREATE INDEX IF NOT EXISTS fki_identity_log_identity_id ON identity_log (identity_id)",
+    "CREATE INDEX IF NOT EXISTS identity_log_created_key ON identity_log (created)",
 
     % Email send queue and log
     "CREATE TABLE IF NOT EXISTS emailq
