@@ -234,7 +234,9 @@ ensure_facet_qterms(#{ <<"q">> := Args }, Fs, Context) ->
             ensure_facet_value(Facet, Value, Acc, Context)
         end,
         Fs,
-        FacetTerms).
+        FacetTerms);
+ensure_facet_qterms(_SearchArgs, Fs, _Context) ->
+    Fs.
 
 ensure_facet_value(Facet, Value, Fs, Context) ->
     case maps:get(Facet, Fs, undefined) of
@@ -894,9 +896,9 @@ label(FacetField, Value, Context) when is_binary(FacetField) ->
         {true, LabelBlock} ->
             case render_block(LabelBlock, {cat, <<"pivot/facet.tpl">>}, #{ <<"id">> => Value }, Context) of
                 <<>> ->
-                    Value;
+                    escape(Value);
                 T ->
-                    T
+                    escape_check(T)
             end;
         false ->
             case FacetDef#facet_def.type of
@@ -905,7 +907,7 @@ label(FacetField, Value, Context) when is_binary(FacetField) ->
                 ids ->
                     id_label(Value, Context);
                 _ ->
-                    Value
+                    escape(Value)
             end
     end.
 
@@ -932,18 +934,28 @@ value_via_block(LabelBlock, Vs, Context) ->
     lists:map(
         fun
             (#{ <<"value">> := V, <<"facet_id">> := 0 } = F) ->
-                F#{ <<"label">> => V };
+                F#{ <<"label">> => escape(V) };
             (#{ <<"value">> := V, <<"facet_id">> := Id } = F) ->
                 % NOTA BENE:
                 % The found id might not be visible.
                 case render_block(LabelBlock, {cat, <<"pivot/facet.tpl">>}, #{ <<"id">> => Id }, Context) of
                     <<>> ->
-                        F#{ <<"label">> => V };
+                        F#{ <<"label">> => escape(V) };
                     T ->
-                        F#{ <<"label">> => T }
+                        F#{ <<"label">> => escape_check(T) }
                 end
         end,
         Vs).
+
+escape(V) when is_binary(V) ->
+    z_html:escape(V);
+escape(V) ->
+    V.
+
+escape_check(V) when is_binary(V) ->
+    z_html:escape_check(V);
+escape_check(V) ->
+    V.
 
 ids_as_labels(Vs, Context) ->
     lists:map(
@@ -955,7 +967,7 @@ ids_as_labels(Vs, Context) ->
 id_label(Id, Context) ->
     case m_rsc:rid(Id, Context) of
         undefined ->
-            z_convert:to_binary(Id);
+            escape(z_convert:to_binary(Id));
         RscId ->
             T = case m_rsc:is_a(RscId, person, Context) of
                 true ->
@@ -974,7 +986,7 @@ id_label(Id, Context) ->
 values_as_labels(Vs) ->
     lists:map(
         fun(#{ <<"value">> := V } = F) ->
-            F#{ <<"label">> => V }
+            F#{ <<"label">> => escape(V) }
         end,
         Vs).
 
