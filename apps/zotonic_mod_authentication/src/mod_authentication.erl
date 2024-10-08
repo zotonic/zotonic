@@ -125,7 +125,7 @@ observe_request_context(#request_context{ phase = Phase }, Context, _Context)
             case z_context:client_id(Context) of
                 {ok, ClientId} ->
                     z_mqtt:publish(
-                        [<<"test">>, z_convert:to_binary(UserId), <<"session_extended">>],
+                        [<<"user">>, z_convert:to_binary(UserId), <<"session_extended">>],
                         ClientId,
                         Context
                     );

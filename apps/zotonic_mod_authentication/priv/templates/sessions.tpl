@@ -109,7 +109,7 @@
 </div>
 
 {% javascript %}
-cotonic.broker.subscribe("bridge/origin/test/{{ m.acl.user.id }}/session_extended", function(msg) {
+cotonic.broker.subscribe("bridge/origin/user/{{ m.acl.user.id }}/session_extended", function(msg) {
     reported_client_id = msg.payload;
     this_client_id = cotonic.mqtt_session.findSession().clientId;
 

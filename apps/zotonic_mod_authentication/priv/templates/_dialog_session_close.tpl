@@ -1,6 +1,6 @@
 
 <p>
-	{_ Every sessions will be interrupted and logged out of your account. _}<br>
+	{_ Every session will be interrupted and you will be logged out. _}<br>
 	{_ Afterwards, you'll be asked to log in again. _}
 </p>
 
