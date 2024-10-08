@@ -114,26 +114,6 @@ observe_request_context(#request_context{ phase = init }, Context, _Context) ->
             end,
             z_notifier:foldl(#session_context{ request_type = http, payload = undefined }, Context2, Context2)
     end;
-observe_request_context(#request_context{ phase = Phase }, Context, _Context)
-  when Phase =:= auth_status orelse Phase =:= refresh ->
-    % Notify that a client session for a user is still active
-    % (it has been extended with a status/refresh ping)
-    case z_acl:user(Context) of
-        undefined ->
-            Context;
-        UserId ->
-            case z_context:client_id(Context) of
-                {ok, ClientId} ->
-                    z_mqtt:publish(
-                        [<<"user">>, z_convert:to_binary(UserId), <<"session_extended">>],
-                        ClientId,
-                        Context
-                    );
-                _ ->
-                    ok
-            end,
-            Context
-    end;
 observe_request_context(#request_context{}, Context, _Context) ->
     Context.
 

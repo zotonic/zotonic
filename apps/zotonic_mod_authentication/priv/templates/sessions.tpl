@@ -31,7 +31,7 @@
     <div class="col-md-12 col-lg-12 col-sm-12">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h3 class="panel-title">{_ Active sessions _}</h3>
+                <h3 class="panel-title">{_ Active sessions in the last hour _}</h3>
             </div>
             <div class="panel-body">
                 <p class="text-muted">
@@ -44,6 +44,9 @@
                     <thead>
                         <tr>
                             <th scope="col">{_ Session ID _}</th>
+                            <th scope="col">{_ IP Address_}</th>
+                            <th scope="col">{_ Last seen _}</th>
+                            <th scope="col" width="50%">{_ User Agent _}</th>
                         </tr>
                     </thead>
 
@@ -79,23 +82,23 @@
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">{_ User Agent _}</th>
                             <th scope="col">{_ IP Address _}</th>
                             <th scope="col">{_ Logon time _}</th>
+                            <th scope="col" width="50%">{_ User Agent _}</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         {% for user_agent, ip_address, logon_time in m.identity[m.acl.user.id].logon_history %}
                             <tr>
-                                <th scope="row">{{ forloop.counter }}</th>
-                                <td>{{ user_agent }}</td>
+                                <td scope="row">{{ forloop.counter }}</td>
                                 <td>{{ ip_address }}</td>
-                                <td>{{ logon_time|date:_"d M Y, H:i" }}</td>
+                                <td>{{ logon_time|date:_"Y-m-d H:i" }}</td>
+                                <td class="text-muted">{{ user_agent|escape }}</td>
                             </tr>
                         {% empty %}
                             <tr>
-                                <th scope="row">{_ No recent known logons _}</th>
+                                <td scope="row">{_ No recent known logons _}</td>
                                 <td>-</td>
                                 <td>-</td>
                                 <td>-</td>
@@ -109,30 +112,56 @@
 </div>
 
 {% javascript %}
-cotonic.broker.subscribe("bridge/origin/user/{{ m.acl.user.id }}/session_extended", function(msg) {
-    reported_client_id = msg.payload;
-    this_client_id = cotonic.mqtt_session.findSession().clientId;
+cotonic.broker.subscribe("bridge/origin/user/{{ m.acl.user.id }}/sessions/+sessionId", function(msg, bindings) {
+    cotonic.broker.call("model/sessionId/get").then((sessionMsg) => {
+            const reported_session_id = bindings.sessionId;
+            const this_session_id = sessionMsg.payload;
 
-    clientRow = document.getElementById(reported_client_id);
-    if (clientRow) {
-        // do nothing if the client is already listed
-    } else {
-        newRowTr = document.createElement("tr");
-        newRowTr.id = reported_client_id;
-        newRowTh = document.createElement("th");
-        if (reported_client_id == this_client_id) {
-            rowContent = document.createTextNode(this_client_id + " (this is you)")
-        } else {
-            rowContent = document.createTextNode(reported_client_id)
-        };
-        newRowTh.appendChild(rowContent);
-        newRowTr.appendChild(newRowTh);
-        document.getElementById("active_sessions_rows").appendChild(newRowTr);
-    };
+            let tr = document.getElementById(reported_session_id);
+            if (tr) {
+                tr.remove();
+            }
+
+            tr = document.createElement("tr");
+            tr.id = reported_session_id;
+
+            let td = document.createElement("td");
+            if (reported_session_id == this_session_id) {
+                let span = document.createElement('span');
+                span.className = 'text-muted';
+                span.textContent = reported_session_id;
+                td.append(span);
+                td.append(document.createElement('br'));
+                let you = document.createElement('b');
+                you.textContent = ' {{ _"(this is you)" }}';
+                td.append(you);
+            } else {
+                let span = document.createElement('span');
+                span.className = 'text-muted';
+                span.textContent = reported_session_id;
+                td.append(span);
+            }
+            tr.append(td);
+
+            td = document.createElement("td");
+            td.textContent = msg.payload.ip_address ?? '';
+            tr.append(td);
+
+            td = document.createElement("td");
+            let date = new Date(msg.payload.timestamp);
+            td.textContent = date.toLocaleTimeString();
+            tr.append(td);
+
+            td = document.createElement("td");
+            td.className = 'text-muted';
+            td.textContent = msg.payload.user_agent ?? '';
+            tr.append(td);
+
+            document.getElementById("active_sessions_rows").prepend(tr);
+        });
 });
 
-// trigger an auth refresh on page load, so we get our client to appear right away
-cotonic.broker.publish("model/auth/post/refresh", {});
+setTimeout(() => cotonic.broker.publish("model/auth/post/check"), 500);
 {% endjavascript %}
 
 {% endblock %}
