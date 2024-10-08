@@ -319,6 +319,7 @@ upgrade(C, Database, Schema) ->
     ok = rsc_pivot_log(C, Database, Schema),
     ok = medium_size_bigint(C, Database, Schema),
     ok = media_frame_count(C, Database, Schema),
+    ok = identity_log(C, Database, Schema),
     ok.
 
 
@@ -967,6 +968,18 @@ rsc_pivot_log(C, Database, Schema) ->
             ok
     end.
 
+identity_log(C, Database, Schema) ->
+    case has_table(C, "identity_log", Database, Schema) of
+        false ->
+            SqlList = z_install:identity_log_table(),
+            lists:foreach(
+                fun(Sql) ->
+                    {ok, [], []} = epgsql:squery(C, Sql)
+                end,
+                SqlList);
+        true ->
+            ok
+    end.
 
 check_category_id_key(C, _Database, _Schema) ->
     {ok, [], []} = epgsql:squery(
