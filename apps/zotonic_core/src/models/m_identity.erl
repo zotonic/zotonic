@@ -1489,8 +1489,11 @@ set_visited_trans(UserId, Context) when is_integer(UserId) ->
     case z_db:q1("select id from identity where rsc_id = $1 and type = 'username_pw'", [UserId], Context) of
         undefined -> {error, enoent};
         EntryId ->
-            UserAgent = z_convert:to_binary(m_req:get(user_agent, Context)),
-            IpAddress = z_convert:to_binary(m_req:get(peer, Context)),
+            UserAgent = z_string:truncatechars(m_req:get(user_agent, Context), 240),
+            IpAddress = case inet:ntoa(m_req:get(peer_ip, Context)) of
+                {error, einval} -> undefined;
+                IpAddressString -> z_convert:to_binary(IpAddressString)
+            end,
             % Note: it may seem unnecessary to set both the 'visited' field of
             % the 'identity' table as well as adding a row to 'identity_log',
             % but the latter is periodically pruned and we still want to be able
