@@ -230,6 +230,7 @@ model_pgsql() ->
      modifier_id bigint,
      created timestamp with time zone NOT NULL DEFAULT now(),
      modified timestamp with time zone NOT NULL DEFAULT now(),
+     is_personal_data boolean NOT NULL DEFAULT false,
      CONSTRAINT rsc_gone_pkey PRIMARY KEY (id)
     )",
     "CREATE INDEX rsc_gone_name ON rsc_gone(name)",

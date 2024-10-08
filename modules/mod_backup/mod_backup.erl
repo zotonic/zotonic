@@ -37,6 +37,7 @@
 -export([
     observe_admin_menu/3,
     observe_rsc_update/3,
+    observe_tick_24h/2,
     start_backup/1,
     start_backup/2,
     list_backups/1,
@@ -74,6 +75,10 @@ observe_rsc_update(#rsc_update{action=update, id=Id, props=Props}, Acc, Context)
     Acc;
 observe_rsc_update(_, Acc, _Context) ->
     Acc.
+
+
+observe_tick_24h(tick_24h, Context) ->
+    m_backup_revision:periodic_cleanup(Context).
 
 
 %% @doc Callback for controller_file_readonly.  Check if the file exists.
