@@ -49,7 +49,9 @@
          rsc_pivot_log_trigger/0,
 
          rsc_page_path_log/0,
-         rsc_page_path_log_fki/0
+         rsc_page_path_log_fki/0,
+
+         identity_log_table/0
         ]).
 
 -include_lib("zotonic.hrl").
@@ -90,12 +92,21 @@ install_models(Context) ->
     m_rsc_import:install(Context).
 
 
--spec install_sql_list(#context{}, list()) -> ok.
+-spec install_sql_list(Context, Sql) -> ok when
+    Context :: z:context(),
+    Sql :: [ string() | [ string() ] ].
 install_sql_list(Context, Model) ->
     C = z_db_pgsql:get_raw_connection(Context),
     lists:foreach(
-        fun(Sql) ->
-            {ok, [], []} = epgsql:squery(C, Sql)
+        fun
+            ([ Q | _ ] = SqlList) when is_list(Q) ->
+                lists:foreach(
+                  fun(Sql) ->
+                      {ok, [], []} = epgsql:squery(C, Sql)
+                  end,
+                  SqlList);
+            (Sql) ->
+                {ok, [], []} = epgsql:squery(C, Sql)
         end,
         Model).
 
@@ -391,28 +402,7 @@ model_pgsql() ->
 
     % Table identity log
     % Keeps track of all successful logons of a user (for some time)
-
-    "CREATE TABLE IF NOT EXISTS identity_log
-    (
-      id serial NOT NULL,
-      identity_id int NOT NULL,
-      rsc_id int NOT NULL,
-      created timestamp with time zone NOT NULL DEFAULT now(),
-      user_agent character varying (240),
-      ip_address character varying (40),
-
-      CONSTRAINT id_log_pkey PRIMARY KEY (id),
-      CONSTRAINT fk_id_log_rsc_id FOREIGN KEY (rsc_id)
-        REFERENCES rsc (id)
-        ON UPDATE CASCADE ON DELETE CASCADE,
-      CONSTRAINT fk_id_log_identity_id FOREIGN KEY (identity_id)
-        REFERENCES identity (id)
-        ON UPDATE CASCADE ON DELETE CASCADE
-    )",
-
-    "CREATE INDEX IF NOT EXISTS fki_identity_log_rsc_id ON identity_log (rsc_id)",
-    "CREATE INDEX IF NOT EXISTS fki_identity_log_identity_id ON identity_log (identity_id)",
-    "CREATE INDEX IF NOT EXISTS identity_log_created_key ON identity_log (created)",
+    identity_log_table(),
 
     % Email send queue and log
     "CREATE TABLE IF NOT EXISTS emailq
@@ -730,4 +720,29 @@ rsc_page_path_log() ->
 
 rsc_page_path_log_fki() ->
     "CREATE INDEX IF NOT EXISTS fki_rsc_page_path_log_id ON rsc_page_path_log (id)".
+
+identity_log_table() ->
+  [
+    "CREATE TABLE IF NOT EXISTS identity_log
+    (
+      id serial NOT NULL,
+      identity_id int NOT NULL,
+      rsc_id int NOT NULL,
+      created timestamp with time zone NOT NULL DEFAULT now(),
+      user_agent character varying (240),
+      ip_address character varying (40),
+
+      CONSTRAINT id_log_pkey PRIMARY KEY (id),
+      CONSTRAINT fk_id_log_rsc_id FOREIGN KEY (rsc_id)
+        REFERENCES rsc (id)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+      CONSTRAINT fk_id_log_identity_id FOREIGN KEY (identity_id)
+        REFERENCES identity (id)
+        ON UPDATE CASCADE ON DELETE CASCADE
+    )",
+
+    "CREATE INDEX IF NOT EXISTS fki_identity_log_rsc_id ON identity_log (rsc_id)",
+    "CREATE INDEX IF NOT EXISTS fki_identity_log_identity_id ON identity_log (identity_id)",
+    "CREATE INDEX IF NOT EXISTS identity_log_created_key ON identity_log (created)"
+  ].
 
