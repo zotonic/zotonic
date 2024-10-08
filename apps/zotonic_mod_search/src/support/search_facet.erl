@@ -953,9 +953,7 @@ escape(V) ->
     V.
 
 escape_check(V) when is_binary(V) ->
-    z_html:escape_check(V);
-escape_check(V) ->
-    V.
+    z_html:escape_check(V).
 
 ids_as_labels(Vs, Context) ->
     lists:map(
