@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-10-09 15:32\n"
+"PO-Revision-Date: 2024-10-09 21:19\n"
 "Last-Translator: \n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
@@ -204,7 +204,7 @@ msgstr "Are you sure you want to restore all ACL rules to their currently publis
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:31./apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:14
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:15
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:65./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:33
-#: apps/zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:12./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:120./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:28./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:66./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:137./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
+#: apps/zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:16./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:120./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:28./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:66./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:137./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:36./apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
@@ -1538,7 +1538,7 @@ msgid "Home Directory"
 msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:111
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:47./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:85
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:47./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:92
 msgid "IP Address"
 msgstr ""
 
@@ -4441,7 +4441,7 @@ msgstr ""
 msgid "You need to be allowed to edit the system configuration to view or change the two-factor authentication configuration."
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:136
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:143
 msgid "(this is you)"
 msgstr ""
 
@@ -4449,7 +4449,7 @@ msgstr ""
 msgid "Access denied"
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:34
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:35
 msgid "Active sessions in the last hour"
 msgstr ""
 
@@ -4465,7 +4465,7 @@ msgstr ""
 msgid "Are you sure you have created an account? If not, you can create one here:"
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:59
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:61
 msgid "Are you sure?"
 msgstr ""
 
@@ -4486,8 +4486,8 @@ msgstr ""
 msgid "Back to login"
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:77
-msgid "Below are the last known logons from your user account."
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:84
+msgid "Below are the last known logins to your account."
 msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:78
@@ -4613,7 +4613,7 @@ msgstr ""
 msgid "For security reasons, password reset codes are only kept for a limited amount of time and can only be used once."
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:7
+#: apps/zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:12
 msgid "Force-close all active sessions"
 msgstr ""
 
@@ -4682,16 +4682,24 @@ msgstr ""
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:56
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:58
 msgid "Interrupt all active sessions"
+msgstr ""
+
+#: apps/zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:8
+msgid "Interrupted sessions are still visible in the sessions overview, but will not be updated anymore."
+msgstr ""
+
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:68
+msgid "Interrupted sessions might still be visible in the sessions overview, but will not be updated anymore."
 msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:51./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:174./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:37
 msgid "Keep me logged in"
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:72
-msgid "Last known logons"
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:79
+msgid "Last known logins"
 msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:48
@@ -4718,7 +4726,7 @@ msgstr ""
 msgid "Log out"
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:86
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:93
 msgid "Logon time"
 msgstr ""
 
@@ -4740,7 +4748,7 @@ msgstr ""
 msgid "No Access"
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:101
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:108
 msgid "No recent known logons"
 msgstr ""
 
@@ -4748,12 +4756,12 @@ msgstr ""
 msgid "Note: sessions will appear here only when actively used by a browser tab, it’s recommended to keep this page open for a while."
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:78
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:85
 msgid "Note: these are periodically deleted."
 msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:27
-msgid "On this page you can see the recent logins and the active sessions for your user."
+msgid "On this page you can see the recent logins and the active sessions for your account:"
 msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service.tpl:10
@@ -4843,6 +4851,10 @@ msgstr ""
 msgid "Sessions overview"
 msgstr ""
 
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:39
+msgid "Sessions that have been used by a browser in the last hour."
+msgstr ""
+
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:27
 msgid "Simply try again:"
 msgstr ""
@@ -4903,10 +4915,6 @@ msgstr ""
 msgid "There was a problem authenticating with {service}."
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:38
-msgid "These sessions are currenly being used in a browser, logged in with your account:"
-msgstr ""
-
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.set_passcode.tpl:2
 msgid "To sign in you must have two-factor authentication enabled."
 msgstr ""
@@ -4933,7 +4941,7 @@ msgstr ""
 msgid "Use non alphabetical characters, digits and upper/lower case letters to make it harder to guess."
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:49./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:87
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:49./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:94
 msgid "User Agent"
 msgstr ""
 
@@ -4953,7 +4961,7 @@ msgstr ""
 msgid "We have sent an email with a link to reset your password to"
 msgstr ""
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:96
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:103
 msgid "Y-m-d H:i:s"
 msgstr ""
 
