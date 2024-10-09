@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-10-09 15:27\n"
+"PO-Revision-Date: 2024-10-09 15:32\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -4842,7 +4842,7 @@ msgid "Session ID"
 msgstr "Sitzungs-ID"
 
 #: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:3./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:24
-msgid "Session overview"
+msgid "Sessions overview"
 msgstr "Sitzungsübersicht"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:27
