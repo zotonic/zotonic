@@ -35,9 +35,9 @@
             </div>
             <div class="panel-body">
                 <p class="text-muted">
-                    {_ These sessions are currenly being used in a browser, logged in as your user, _}
-                    <strong>#{{ m.acl.user.id }} ({{ m.acl.user.id.title }})</strong><br>
-                    {_ Note: sessions will appear here only when actively used by a browser tab, it's recommended to keep this page open for a while. _}
+                    {_ These sessions are currenly being used in a browser, logged in with your account: _}
+                    <strong>{{ m.acl.user.id.title }}</strong> (#{{ m.acl.user }})<br>
+                    {_ Note: sessions will appear here only when actively used by a browser tab, it’s recommended to keep this page open for a while. _}
                 </p>
 
                 <table id="active_sessions" class="table">
