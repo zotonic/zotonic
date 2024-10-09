@@ -295,6 +295,7 @@ req_autologon_cookie(Context) ->
             end
     end.
 
+%% @doc Set a cookie for automatic logon of the user-agent.
 -spec set_autologon_cookie( m_rsc:resource_id(), z:context() ) -> z:context().
 set_autologon_cookie(UserId, Context) ->
     Cookie = encode_autologon_token(UserId, Context),

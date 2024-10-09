@@ -59,10 +59,18 @@ get(is_crawler, #context{} = Context) -> z_user_agent:is_crawler(Context);
 get(is_http_request, #context{} = Context) -> z_context:get(is_http_request, Context);
 get(peer_ip, #context{} = Context) ->
     case z_context:get(peer_ip, Context) of
-        undefined -> get_req(peer_ip, Context);
+        undefined -> maybe_get_req(peer_ip, Context);
+        PeerIP -> PeerIP
+    end;
+get(user_agent, #context{} = Context) ->
+    case z_context:get(user_agent, Context) of
+        undefined -> maybe_get_req(user_agent, Context);
         PeerIP -> PeerIP
     end;
 get(What, #context{} = Context) ->
+    maybe_get_req(What, Context).
+
+maybe_get_req(What, Context) ->
     case z_context:is_request(Context) of
         true ->  get_req(What, Context);
         false -> undefined

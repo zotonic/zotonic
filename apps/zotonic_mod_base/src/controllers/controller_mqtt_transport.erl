@@ -155,8 +155,9 @@ websocket_send_data(WsControllerPid, Data) ->
 websocket_init(Context) ->
     PrunedContext = z_context:prune_for_scomp(Context),
     PrunedContext1 = z_context:set(wsdata, <<>>, PrunedContext),
+    PrunedContext2 = z_context:set(user_agent, m_req:get(user_agent, Context), PrunedContext1),
     timer:send_after(?MQTT_CONNECT_TIMEOUT, connect_check),
-    {ok, PrunedContext1}.
+    {ok, PrunedContext2}.
 
 %% @doc Handle a MQTT message from the browser
 websocket_handle({binary, <<255, 254, 42, _, _>> = Ping}, Context) ->
@@ -257,6 +258,7 @@ handle_connect_data_1(NewData, Context) ->
         peer_ip => m_req:get(peer_ip, Context),
         context_prefs => #{
             user_id => z_acl:user(Context),
+            user_agent => m_req:get(user_agent, Context),
             language => z_context:language(Context),
             timezone => z_context:tz(Context),
             auth_options => z_context:get(auth_options, Context, #{}),

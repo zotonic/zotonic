@@ -87,15 +87,16 @@ event(#postback{message={close_all_sessions, _Args}}, Context) ->
             % Logoff and remove cookies
             Context1 = z_auth:logoff(Context),
             Context2 = z_authentication_tokens:reset_cookies(Context1),
-            % Change secrets
+            % Change secrets - invalidates all existing sessions and autologon cookies.
             z_authentication_tokens:regenerate_user_secret(UserId, Context2),
             z_authentication_tokens:regenerate_user_autologon_secret(UserId, Context2),
-            % Set fresh auth cookies
-            AuthOptions = z_context:get(auth_options, Context, #{}),
-            Context3 = z_authentication_tokens:set_auth_cookie(UserId, AuthOptions, Context2),
-            Context4 = z_authentication_tokens:set_autologon_cookie(UserId, Context3),
-            % reload the page (without auth, the user will have to log in again)
-            z_render:wire({reload, []}, Context4)
+            % Force all user-agents connected via MQTT to logoff
+            z_mqtt:publish(
+                [ <<"user">>, z_convert:to_binary(UserId), <<"session">>, <<"logoff">> ],
+                #{},
+                Context),
+            % Force a reload of the page (the user will have to log in again)
+            z_render:wire({reload, []}, Context2)
     end.
 
 %% @doc Check for authentication cookies in the request.

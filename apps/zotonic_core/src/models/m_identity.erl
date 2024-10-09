@@ -1067,7 +1067,6 @@ check_username_pw_1(<<"admin">>, Password, Context) ->
             % Only allow default password from allowed ip addresses
             case is_peer_allowed(Context) of
                 true ->
-                    set_visited(?ACL_ADMIN_USER_ID, Context),
                     {ok, 1};
                 false ->
                     ?LOG_ERROR(#{
@@ -1083,7 +1082,6 @@ check_username_pw_1(<<"admin">>, Password, Context) ->
         AdminPassword ->
             case is_equal(Password1, AdminPassword) of
                 true ->
-                    set_visited(?ACL_ADMIN_USER_ID, Context),
                     {ok, 1};
                 false ->
                     {error, password}
