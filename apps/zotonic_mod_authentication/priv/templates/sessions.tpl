@@ -1,6 +1,6 @@
 {% extends "base_simple.tpl" %}
 
-{% block title %}{_ Session overview _}{% endblock %}
+{% block title %}{_ Sessions overview _}{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -21,7 +21,7 @@
     </div>
 </nav>
 
-<h1>{_ Session overview _}</h1>
+<h1>{_ Sessions overview _}</h1>
 
 <p>
     {_ On this page you can see the recent logins and the active sessions for your user. _}<br>

@@ -5112,7 +5112,7 @@ msgid "Session ID"
 msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:3./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:24
-msgid "Session overview"
+msgid "Sessions overview"
 msgstr ""
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:27
