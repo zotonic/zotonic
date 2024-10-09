@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-10-09 15:33\n"
+"PO-Revision-Date: 2024-10-09 21:19\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -204,7 +204,7 @@ msgstr "Kas olete kindel, et soovite taastada kõik ACL-reeglid nende praegu ava
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:31./apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:14
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:15
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:65./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:33
-#: apps/zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:12./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:120./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:28./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:66./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:137./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
+#: apps/zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:16./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:120./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:28./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:66./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:137./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:36./apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
@@ -1538,7 +1538,7 @@ msgid "Home Directory"
 msgstr "Kodukataloog"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:111
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:47./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:85
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:47./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:92
 msgid "IP Address"
 msgstr "IP-aadress"
 
@@ -4443,7 +4443,7 @@ msgstr "Peate kohe määrama oma kahefaktorilise autentimise pääsukoodi. Järg
 msgid "You need to be allowed to edit the system configuration to view or change the two-factor authentication configuration."
 msgstr "Kaheastmelise autentimise konfiguratsiooni kuvamiseks või muutmiseks peate lubama süsteemi konfiguratsiooni muuta."
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:136
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:143
 msgid "(this is you)"
 msgstr "(see oled sina)"
 
@@ -4451,7 +4451,7 @@ msgstr "(see oled sina)"
 msgid "Access denied"
 msgstr "Ligipääs keelatud"
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:34
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:35
 msgid "Active sessions in the last hour"
 msgstr "Viimase tunni aktiivsed seansid"
 
@@ -4467,7 +4467,7 @@ msgstr "Juba ühendatud"
 msgid "Are you sure you have created an account? If not, you can create one here:"
 msgstr "Kas olete kindel, et olete konto loonud? Kui ei, saate selle luua siin:"
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:59
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:61
 msgid "Are you sure?"
 msgstr "Oled sa kindel?"
 
@@ -4488,9 +4488,9 @@ msgstr "Autoriseerimine ..."
 msgid "Back to login"
 msgstr "Tagasi sisselogimise juurde"
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:77
-msgid "Below are the last known logons from your user account."
-msgstr "Allpool on viimased teadaolevad sisselogimised teie kasutajakontolt."
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:84
+msgid "Below are the last known logins to your account."
+msgstr "Allpool on viimased teadaolevad sisselogimised teie kontole."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:78
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:42
@@ -4615,7 +4615,7 @@ msgstr "Lisateabe saamiseks külastage <a target=\"_blank\" rel=\"noreferrer noo
 msgid "For security reasons, password reset codes are only kept for a limited amount of time and can only be used once."
 msgstr "Turvalisuse huvides hoitakse parooli lähtestamise koode ainult piiratud aja jooksul ja neid saab kasutada ainult üks kord."
 
-#: apps/zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:7
+#: apps/zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:12
 msgid "Force-close all active sessions"
 msgstr "Sundsulge kõik aktiivsed seansid"
 
@@ -4684,16 +4684,24 @@ msgstr "Kui arvate, et teil on konto, proovige uuesti, kasutades õiget e-posti 
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr "Sealt leiad juhendid oma kasutajakonto kinnitamiseks."
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:56
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:58
 msgid "Interrupt all active sessions"
 msgstr "Katkesta kõik aktiivsed seansid"
+
+#: apps/zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:8
+msgid "Interrupted sessions are still visible in the sessions overview, but will not be updated anymore."
+msgstr "Katkestatud seansid on endiselt nähtavad seansside ülevaates, kuid neid enam ei värskendata."
+
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:68
+msgid "Interrupted sessions might still be visible in the sessions overview, but will not be updated anymore."
+msgstr "Katkestatud seansid võivad olla endiselt nähtavad seansside ülevaates, kuid neid enam ei värskendata."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:51./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:174./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:37
 msgid "Keep me logged in"
 msgstr "Hoia mind sisse logituna"
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:72
-msgid "Last known logons"
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:79
+msgid "Last known logins"
 msgstr "Viimased teadaolevad sisselogimised"
 
 #: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:48
@@ -4720,7 +4728,7 @@ msgstr "Logige sisse"
 msgid "Log out"
 msgstr "Logi välja"
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:86
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:93
 msgid "Logon time"
 msgstr "Sisselogimise aeg"
 
@@ -4742,7 +4750,7 @@ msgstr "Järgmine"
 msgid "No Access"
 msgstr "Geen toegang"
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:101
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:108
 msgid "No recent known logons"
 msgstr "Hiljutisi teadaolevaid sisselogimisi pole"
 
@@ -4750,13 +4758,13 @@ msgstr "Hiljutisi teadaolevaid sisselogimisi pole"
 msgid "Note: sessions will appear here only when actively used by a browser tab, it’s recommended to keep this page open for a while."
 msgstr "Märkus: seansid kuvatakse siin ainult siis, kui brauseri vahekaart neid aktiivselt kasutab. Soovitatav on see leht mõnda aega avatuna hoida."
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:78
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:85
 msgid "Note: these are periodically deleted."
 msgstr "Märkus: need kustutatakse perioodiliselt."
 
 #: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:27
-msgid "On this page you can see the recent logins and the active sessions for your user."
-msgstr "Sellel lehel näete oma kasutaja hiljutisi sisselogimisi ja aktiivseid seansse."
+msgid "On this page you can see the recent logins and the active sessions for your account:"
+msgstr "Sellel lehel näete oma konto hiljutisi sisselogimisi ja aktiivseid seansse:"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service.tpl:10
 #: apps/zotonic_mod_facebook/priv/templates/_logon_service.facebook.tpl:1
@@ -4845,6 +4853,10 @@ msgstr "Seansi ID"
 msgid "Sessions overview"
 msgstr "Seansside ülevaade"
 
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:39
+msgid "Sessions that have been used by a browser in the last hour."
+msgstr "Seansid, mida brauser on viimase tunni jooksul kasutanud."
+
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:27
 msgid "Simply try again:"
 msgstr "Lihtsalt proovige uuesti:"
@@ -4905,10 +4917,6 @@ msgstr "Teie e-posti aadressiga {site}on rohkem kui üks konto."
 msgid "There was a problem authenticating with {service}."
 msgstr "{service}-ga autentimisel ilmnes probleem."
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:38
-msgid "These sessions are currenly being used in a browser, logged in with your account:"
-msgstr "Neid seansse kasutatakse praegu teie kontoga sisse logitud brauseris:"
-
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.set_passcode.tpl:2
 msgid "To sign in you must have two-factor authentication enabled."
 msgstr "Sisselogimiseks peab teil olema lubatud kahefaktoriline autentimine."
@@ -4935,7 +4943,7 @@ msgstr "Kasutage a: suurtähti, väiketähti, numbrit ja sümbolit."
 msgid "Use non alphabetical characters, digits and upper/lower case letters to make it harder to guess."
 msgstr "Kasutage mittetähestikulisi märke, numbreid ja suuri/väiketähti, et seda oleks raskem ära arvata."
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:49./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:87
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:49./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:94
 msgid "User Agent"
 msgstr "Kasutajaagent"
 
@@ -4955,7 +4963,7 @@ msgstr "Tundub, et meil pole teie kohta ühtegi kehtivat e-posti aadressi ega mu
 msgid "We have sent an email with a link to reset your password to"
 msgstr "Saatsime e-kirja koos lingiga, kuhu saate oma parooli lähtestada"
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:96
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:103
 msgid "Y-m-d H:i:s"
 msgstr "Ymd H:i:s"
 
