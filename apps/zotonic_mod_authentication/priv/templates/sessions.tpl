@@ -24,7 +24,8 @@
 <h1>{_ Sessions overview _}</h1>
 
 <p>
-    {_ On this page you can see the recent logins and the active sessions for your user. _}<br>
+    {_ On this page you can see the recent logins and the active sessions for your account: _}
+    <a href="{{ m.acl.user.page_url }}"><strong>{{ m.acl.user.id.title }}</strong> (#{{ m.acl.user }})</a>
 </p>
 
 <div class="row">
@@ -34,9 +35,8 @@
                 <h3 class="panel-title">{_ Active sessions in the last hour _}</h3>
             </div>
             <div class="panel-body">
-                <p class="text-muted">
-                    {_ These sessions are currenly being used in a browser, logged in with your account: _}
-                    <strong>{{ m.acl.user.id.title }}</strong> (#{{ m.acl.user }})<br>
+                <p>
+                    {_ Sessions that have been used by a browser in the last hour. _}<br>
                     {_ Note: sessions will appear here only when actively used by a browser tab, it’s recommended to keep this page open for a while. _}
                 </p>
 
@@ -53,13 +53,20 @@
                     <tbody id="active_sessions_rows">
                     </tbody>
                 </table>
-                {% button class="btn btn-danger" text=_"Interrupt all active sessions"
-                    action={
-                        dialog_open
-                        title=_"Are you sure?"
-                        template="_dialog_session_close.tpl"
-                    }
-                %}
+
+                <p>
+                    {% button class="btn btn-danger" text=_"Interrupt all active sessions"
+                        action={
+                            dialog_open
+                            title=_"Are you sure?"
+                            template="_dialog_session_close.tpl"
+                        }
+                    %}
+                </p>
+
+                <p class="help-block">
+                   <span class="glyphicon glyphicon-info-sign"></span> {_ Interrupted sessions might still be visible in the sessions overview, but will not be updated anymore. _}
+                </p>
             </div>
         </div>
     </div>
@@ -69,12 +76,12 @@
     <div class="col-md-12 col-lg-12 col-sm-12">
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h3 class="panel-title">{_ Last known logons _}</h3>
+                <h3 class="panel-title">{_ Last known logins _}</h3>
             </div>
             <div class="panel-body">
 
-                <p class="text-muted">
-                    {_ Below are the last known logons from your user account. _}<br>
+                <p class="help-block">
+                    {_ Below are the last known logins to your account. _}<br>
                     {_ Note: these are periodically deleted. _}
                 </p>
 

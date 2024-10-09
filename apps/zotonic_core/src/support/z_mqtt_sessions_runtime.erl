@@ -83,7 +83,9 @@ new_user_context( Site, ClientId, SessionOptions ) ->
     Context4 = maybe_set_peer_ip(SessionOptions, Context3),
     Context5 = maybe_set_user_agent(Prefs, Context4),
     SessionId = maps:get(cotonic_sid, Prefs, undefined),
-    z_context:set_session_id(SessionId, Context5).
+    Context6 = z_context:set_session_id(SessionId, Context5),
+    z_context:logger_md(Context6),
+    Context6.
 
 -spec control_message(SubTopic, Message, Context) -> {ok, Context1} when
     SubTopic :: list( binary() ),
@@ -91,15 +93,23 @@ new_user_context( Site, ClientId, SessionOptions ) ->
     Context :: z:context(),
     Context1 :: z:context().
 control_message([ <<"auth">> ], #{ payload := Payload }, Context) ->
-    Context1 = maybe_set_language(Payload, Context),
-    Context2 = maybe_set_timezone(Payload, Context1),
-    Context3 = z_notifier:foldl(#request_context{ phase = refresh }, Context2, Context2),
-    z_auth:publish_user_session(Context3),
-    {ok, Context3};
+    ContextUserId = z_acl:user(Context),
+    AuthUserId = maps:get(<<"user_id">>, Payload, undefined),
+    if
+        ContextUserId =:= AuthUserId ->
+            Context1 = maybe_set_language(Payload, Context),
+            Context2 = maybe_set_timezone(Payload, Context1),
+            Context3 = z_notifier:foldl(#request_context{ phase = refresh }, Context2, Context2),
+            z_auth:publish_user_session(Context3),
+            {ok, Context3};
+        true ->
+            % Kill and force reconnect - switching users
+            timer:apply_after(100, mqtt_sessions_process, kill, [self()]),
+            {ok, Context}
+    end;
 control_message([ <<"sid">> ], #{ payload := Payload }, Context) ->
     Context1 = maybe_set_sid(Payload, Context),
     Context2 = z_notifier:foldl(#request_context{ phase = refresh }, Context1, Context1),
-    z_auth:publish_user_session(Context2),
     {ok, Context2};
 control_message(_Topic, _Packet, Context) ->
     {ok, Context}.
@@ -186,6 +196,7 @@ subscribe_forced_logoff(Context) ->
             {ok, ClientId} = z_context:client_id(Context),
             erlang:spawn_link(
                 fun() ->
+                    z_context:logger_md(Context),
                     ok = z_mqtt:subscribe(
                         [ <<"~user">>, <<"session">>, <<"logoff">> ],
                         Context),
@@ -236,6 +247,7 @@ connect(#{ type := connect, username := U, password := P, properties := Props },
         type => connack,
         reason_code => ?MQTT_RC_SUCCESS
     },
+    z_context:logger_md(Context3),
     {ok, ConnAck, Context3};
 connect(#{ type := connect, username := U, password := P }, true,
         #{ context_prefs := #{ user_id := UserId } } = Options,

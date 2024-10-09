@@ -333,8 +333,8 @@ switch_user(_Payload, Context) ->
 %% @doc Remove authentication cookie(s), signal user logoff
 -spec logoff( map(), z:context() ) -> { map(), z:context() }.
 logoff(Payload, Context) ->
-    Context1 = z_auth:logoff(Context),
-    Context2 = z_authentication_tokens:reset_cookies(Context1),
+    Context1 = z_authentication_tokens:reset_cookies(Context),
+    Context2 = z_auth:logoff(Context1),
     return_status(Payload, Context2).
 
 %% @doc Refresh the current authentication cookie

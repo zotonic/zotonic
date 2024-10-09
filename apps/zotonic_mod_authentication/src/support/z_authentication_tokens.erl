@@ -68,6 +68,7 @@
 
 -spec reset_cookies( z:context() ) -> z:context().
 reset_cookies(Context) ->
+    z_auth:unpublish_user_session(Context),
     Context1 = reset_auth_cookie(Context),
     reset_autologon_cookie(Context1).
 

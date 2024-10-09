@@ -34,6 +34,7 @@
 
     switch_user/2,
     publish_user_session/1,
+    unpublish_user_session/1,
 
     is_enabled/2
 ]).
@@ -179,6 +180,28 @@ publish_user_session(Context) ->
         false ->
             {error, no_user}
     end.
+
+%% @doc Remove the retained user session value, this removes the session from the overview
+%% of active sessions. Called when resetting the authentication cookies.
+-spec unpublish_user_session(Context) -> ok when
+    Context :: z:context().
+unpublish_user_session(Context) ->
+    case is_auth(Context) of
+        true ->
+            case z_context:session_id(Context) of
+                {ok, SessionId} ->
+                    z_mqtt:publish(
+                        [ <<"~user">>, <<"sessions">>, SessionId ],
+                        undefined,
+                        #{ retain => true },
+                        Context);
+                {error, _} = Error ->
+                    Error
+            end;
+        false ->
+            {error, no_user}
+    end.
+
 
 %% @doc Check if the user is enabled, a user is enabled when the rsc is published and within its publication date range.
 -spec is_enabled( m_rsc:resource_id(), z:context() ) -> boolean().
