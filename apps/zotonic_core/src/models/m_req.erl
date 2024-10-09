@@ -99,8 +99,8 @@ get_req(qs, Context) -> cowmachine_req:req_qs(Context);
 get_req(headers, Context) -> cowmachine_req:get_req_headers(Context);
 get_req(user_agent, Context) ->
     case cowmachine_req:get_req_header(<<"user-agent">>, Context) of
-        UA when is_binary(UA) -> z_string:truncatechars(UA, 500);
-        undefined -> undefined
+        UA when is_binary(UA), size(UA) > 500 -> z_string:truncatechars(UA, 500);
+        UA -> UA
     end;
 get_req(referer, Context) -> cowmachine_req:get_req_header(<<"referer">>, Context);
 get_req(referrer, Context) -> get_req(referer, Context);
