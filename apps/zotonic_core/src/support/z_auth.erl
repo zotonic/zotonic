@@ -1,10 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell
-%% Date: 2009-04-24
-%%
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Handle authentication of zotonic users.  Also shows the logon screen when authentication is required.
+%% @end
 
-%% Copyright 2009-2021 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,6 +33,7 @@
     logoff/1,
 
     switch_user/2,
+    publish_user_session/1,
 
     is_enabled/2
 ]).
@@ -144,6 +144,41 @@ logoff(Context) ->
     Context1 = z_notifier:foldl(Logoff, Context, Context),
     z_acl:logoff(Context1).
 
+
+%% @doc Publish the current IP address and session-id to the sessions topic
+%% of the user. This enables tracking where users are active. This _must_ be
+%% a session initiated from a remote IP address. If no remote IP address is
+%% known then the user session is not logged.
+-spec publish_user_session(Context) -> ok when
+    Context :: z:context().
+publish_user_session(Context) ->
+    case is_auth(Context) of
+        true ->
+            case z_context:session_id(Context) of
+                {ok, SessionId} ->
+                    case m_req:get(peer_ip, Context) of
+                        undefined ->
+                            {error, no_peer_ip};
+                        PeerIP ->
+                            Peer = z_convert:to_binary(inet:ntoa(PeerIP)),
+                            Payload = #{
+                                <<"session_id">> => SessionId,
+                                <<"user_agent">> => m_req:get(user_agent, Context),
+                                <<"ip_address">> => Peer,
+                                <<"timestamp">> => calendar:universal_time()
+                            },
+                            z_mqtt:publish(
+                                [ <<"~user">>, <<"sessions">>, SessionId ],
+                                Payload,
+                                #{ retain => true },
+                                Context)
+                    end;
+                {error, _} = Error ->
+                    Error
+            end;
+        false ->
+            {error, no_user}
+    end.
 
 %% @doc Check if the user is enabled, a user is enabled when the rsc is published and within its publication date range.
 -spec is_enabled( m_rsc:resource_id(), z:context() ) -> boolean().

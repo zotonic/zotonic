@@ -77,6 +77,7 @@ recv_connect_data(ConnectData, Socket, Transport, State) ->
         connection_pid => self(),
         peer_ip => PeerIP,
         context_prefs => #{
+            user_agent => <<"MQTT">>
         }
     },
     case mqtt_sessions:incoming_connect(ConnectData, Options) of

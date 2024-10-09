@@ -345,7 +345,7 @@ refresh(Payload, Context) ->
         _ -> #{}
     end,
     Context1 = z_authentication_tokens:refresh_auth_cookie(Options, Context),
-    maybe_publish_session(Context1),
+    z_auth:publish_user_session(Context1),
     return_status(Payload, Context1).
 
 %% @doc Set an autologon cookie for the current user
@@ -569,7 +569,7 @@ reset_1(UserId, Username, Password, Payload, Context) ->
     Context1 :: z:context().
 status(Payload, Context) ->
     Context1 = z_authentication_tokens:ensure_auth_cookie(Context),
-    maybe_publish_session(Context1),
+    z_auth:publish_user_session(Context1),
     return_status(Payload, Context1).
 
 return_status(Payload, Context) ->
@@ -600,33 +600,6 @@ return_status(Payload, Context) ->
             Status
     end,
     { Status1, Context1 }.
-
-%% @doc Notify that a client session for a user is still active.
-maybe_publish_session(Context) ->
-    case z_acl:user(Context) of
-        undefined ->
-            Context;
-        UserId ->
-            case z_context:session_id(Context) of
-                {ok, SessionId} ->
-                    Peer = z_convert:to_binary(inet:ntoa(m_req:get(peer_ip, Context))),
-                    Payload = #{
-                        <<"session_id">> => SessionId,
-                        <<"user_agent">> => m_req:get(user_agent, Context),
-                        <<"ip_address">> => Peer,
-                        <<"timestamp">> => calendar:universal_time()
-                    },
-                    z_mqtt:publish(
-                        [ <<"user">>, z_convert:to_binary(UserId), <<"sessions">>, SessionId ],
-                        Payload,
-                        #{ retain => true },
-                        Context
-                    );
-                {error, no_session} ->
-                    ok
-            end,
-            Context
-    end.
 
 -spec check_reminder_secret( map(), z:context() ) -> map().
 check_reminder_secret(#{ <<"secret">> := Secret, <<"username">> := Username }, Context) when is_binary(Secret), is_binary(Username) ->

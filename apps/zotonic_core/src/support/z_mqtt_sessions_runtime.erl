@@ -25,6 +25,7 @@
 
     new_user_context/3,
     control_message/3,
+    ping/1,
     connect/4,
     reauth/2,
     is_allowed/4,
@@ -63,35 +64,51 @@ pool_default() ->
 
 % TODO: differentiate publish and subscribe on bridged reply/public topics
 
--spec new_user_context( atom(), binary(), mqtt_sessions:session_options() ) -> z:context().
+-spec new_user_context(Site, ClientId, SessionOptions) -> Context when
+    Site :: atom(),
+    ClientId :: binary(),
+    SessionOptions :: mqtt_sessions:session_options(),
+    Context :: z:context().
 new_user_context( Site, ClientId, SessionOptions ) ->
     exometer:update([zotonic, Site, mqtt, connects], 1),
+    Prefs = maps:get(context_prefs, SessionOptions, #{}),
     Context = z_context:new(Site),
     Context1 = Context#context{
         client_topic = [ <<"bridge">>, ClientId ],
         client_id = ClientId,
         routing_id = maps:get(routing_id, SessionOptions, <<>>)
     },
-
-    Context2 = maybe_set_language(SessionOptions, Context1),
-    Context3 = maybe_set_timezone(SessionOptions, Context2),
+    Context2 = maybe_set_language(Prefs, Context1),
+    Context3 = maybe_set_timezone(Prefs, Context2),
     Context4 = maybe_set_peer_ip(SessionOptions, Context3),
-
-    Prefs = maps:get(context_prefs, SessionOptions, #{}),
+    Context5 = maybe_set_user_agent(Prefs, Context4),
     SessionId = maps:get(cotonic_sid, Prefs, undefined),
-    z_context:set_session_id(SessionId, Context4).
+    z_context:set_session_id(SessionId, Context5).
 
--spec control_message( list(), mqtt_packet_map:mqtt_packet(), z:context() ) -> {ok, z:context()}.
+-spec control_message(SubTopic, Message, Context) -> {ok, Context1} when
+    SubTopic :: list( binary() ),
+    Message :: mqtt_packet_map:mqtt_packet(),
+    Context :: z:context(),
+    Context1 :: z:context().
 control_message([ <<"auth">> ], #{ payload := Payload }, Context) ->
     Context1 = maybe_set_language(Payload, Context),
     Context2 = maybe_set_timezone(Payload, Context1),
     Context3 = z_notifier:foldl(#request_context{ phase = refresh }, Context2, Context2),
+    z_auth:publish_user_session(Context3),
     {ok, Context3};
 control_message([ <<"sid">> ], #{ payload := Payload }, Context) ->
     Context1 = maybe_set_sid(Payload, Context),
     Context2 = z_notifier:foldl(#request_context{ phase = refresh }, Context1, Context1),
+    z_auth:publish_user_session(Context2),
     {ok, Context2};
 control_message(_Topic, _Packet, Context) ->
+    {ok, Context}.
+
+-spec ping(Context) -> {ok, Context1} when
+    Context :: z:context(),
+    Context1 :: z:context().
+ping(Context) ->
+    z_auth:publish_user_session(Context),
     {ok, Context}.
 
 maybe_set_peer_ip(#{ peer_ip := PeerIp }, Context) ->
@@ -128,6 +145,12 @@ maybe_set_sid(#{ <<"options">> := #{ <<"sid">> := Sid } }, Context) when is_bina
 maybe_set_sid(_Payload, Context) ->
     Context.
 
+maybe_set_user_agent(#{ user_agent := UserAgent }, Context) when is_binary(UserAgent) ->
+    UserAgent1 = z_string:truncatechars(UserAgent, 300),
+    z_context:set(user_agent, UserAgent1, Context);
+maybe_set_user_agent(_Payload, Context) ->
+    Context.
+
 set_language(Lang, Context) ->
     case z_module_manager:is_provided(mod_translation, Context) of
         true ->
@@ -146,7 +169,48 @@ set_connect_context_options(Options, Context) ->
         undefined -> Context4;
         Sid -> z_context:set_session_id(Sid, Context4)
     end,
-    z_acl:logon_refresh(Context5).
+    Context6 = maybe_set_user_agent(Prefs, Context5),
+    z_acl:logon_refresh(Context6).
+
+%% @doc Force reauthentication of the user-agent with the server. Kills the current
+%% MQTT session after requesting the client to refresh by calling the auth model.
+%% This function is triggered for websocket connections by publishing to the topic:
+%% user/+UserId/session/logoff.
+subscribe_forced_logoff(Context) ->
+    case z_acl:user(Context) of
+        undefined ->
+            {error, no_user};
+        UserId ->
+            % Start process to prevent unsubscribe on clean session start.
+            SessionPid = self(),
+            {ok, ClientId} = z_context:client_id(Context),
+            erlang:spawn_link(
+                fun() ->
+                    ok = z_mqtt:subscribe(
+                        [ <<"~user">>, <<"session">>, <<"logoff">> ],
+                        Context),
+                    MRef = erlang:monitor(process, SessionPid),
+                    garbage_collect(),
+                    receive
+                        {'DOWN', MRef, process, _Pid, _Reason} ->
+                            ok;
+                        {mqtt_msg, _Msg} ->
+                            ?LOG_INFO(#{
+                                in => zotonic_core,
+                                text => <<"Forced logoff of MQTT session">>,
+                                client_id => ClientId,
+                                user_id => UserId
+                            }),
+                            ok = z_mqtt:publish(
+                                [ <<"bridge">>, ClientId, <<"model">>, <<"auth">>, <<"post">>, <<"logoff">> ],
+                                #{},
+                                Context),
+                            % Give the connection a bit of time to send the message to the client
+                            % and then kill this MQTT session.
+                            timer:apply_after(1000, mqtt_sessions_process, kill, [SessionPid])
+                    end
+                end)
+    end.
 
 -spec connect( mqtt_packet_map:mqtt_packet(), boolean(), mqtt_sessions:msg_options(), z:context()) -> {ok, mqtt_packet_map:mqtt_packet(), z:context()} | {error, term()}.
 connect(#{ type := connect, username := U, password := P, properties := Props }, false,
@@ -159,10 +223,15 @@ connect(#{ type := connect, username := U, password := P, properties := Props },
         undefined -> Context1;
         Sid when Sid =/= <<>> -> z_context:set_session_id(Sid, Context1)
     end,
-    Context3 = case UserId of
-        undefined -> Context2;
-        _ -> z_acl:logon(UserId, AuthOptions, Context2)
+    Context3 = if
+        UserId =:= undefined ->
+            Context2;
+        true ->
+            CtxUser = z_acl:logon(UserId, AuthOptions, Context2),
+            subscribe_forced_logoff(CtxUser),
+            CtxUser
     end,
+    z_auth:publish_user_session(Context3),
     ConnAck = #{
         type => connack,
         reason_code => ?MQTT_RC_SUCCESS
@@ -171,7 +240,7 @@ connect(#{ type := connect, username := U, password := P, properties := Props },
 connect(#{ type := connect, username := U, password := P }, true,
         #{ context_prefs := #{ user_id := UserId } } = Options,
         Context) when ?none(U), ?none(P) ->
-    % Existing session, user from the mqtt controller must be the user in the mqtt sessoion
+    % Existing session, user from the mqtt controller must be the user in the mqtt session
     case z_acl:user(Context) of
         UserId ->
             ConnAck = #{
@@ -238,6 +307,8 @@ connect(#{ type := connect, username := U, password := P, properties := Props },
                                     % ... token ...
                                 }
                             },
+                            z_auth:publish_user_session(ContextAuth),
+                            subscribe_forced_logoff(ContextAuth),
                             {ok, ConnAck, ContextAuth};
                         {error, user_not_enabled} ->
                             ?LOG_INFO(#{
@@ -314,10 +385,11 @@ reauth(#{ type := _auth }, _Context) ->
 
 -spec is_allowed( publish | subscribe, mqtt_sessions_runtime:topic(), mqtt_packet_map:mqtt_packet(), z:context()) -> boolean().
 is_allowed(Action, Topic, Packet, Context) when Action =:= subscribe; Action =:= publish ->
-    z_stats:record_event(broker, Action, Context), 
+    z_stats:record_event(broker, Action, Context),
     is_allowed(z_acl:is_admin(Context), Action, Topic, Packet, Context).
 
-is_allowed(true, publish, _Topic, _Packet, _Context) -> true;
+is_allowed(true, publish, _Topic, _Packet, _Context) ->
+    true;
 is_allowed(true, subscribe, Topic, _Packet, Context) ->
     is_allowed_admin_subscribe(Topic, Context);
 is_allowed(false, Action, Topic, Packet, Context) ->
@@ -445,7 +517,6 @@ is_wildcard(<<"+">>) -> true;
 is_wildcard(<<"#">>) -> true;
 is_wildcard(B) when is_binary(B) -> false;
 is_wildcard(B) when is_integer(B) -> false.
-
 
 %% @doc If the connection is authenticated, then the connection user MUST be the session user.
 -spec is_valid_message( mqtt_packet_map:mqtt_packet(), mqtt_sessions:msg_options(), z:context() ) -> boolean().

@@ -87,6 +87,7 @@ req_auth_cookie(Context) ->
                     Context1 = z_acl:logon(UserId, AuthOptions, Context),
                     Context2 = z_context:set(auth_expires, Expires, Context1),
                     Context3 = z_context:set(auth_replay_token, ReplayToken, Context2),
+                    z_auth:publish_user_session(Context3),
                     z_context:set(auth_options, AuthOptions, Context3);
                 {error, _Reason} ->
                     reset_auth_cookie(Context)
@@ -295,6 +296,7 @@ req_autologon_cookie(Context) ->
             end
     end.
 
+%% @doc Set a cookie for automatic logon of the user-agent.
 -spec set_autologon_cookie( m_rsc:resource_id(), z:context() ) -> z:context().
 set_autologon_cookie(UserId, Context) ->
     Cookie = encode_autologon_token(UserId, Context),
