@@ -92,7 +92,7 @@ event(#postback{message={close_all_sessions, _Args}}, Context) ->
             z_authentication_tokens:regenerate_user_autologon_secret(UserId, Context2),
             % Force all user-agents connected via MQTT to logoff
             z_mqtt:publish(
-                [ <<"user">>, z_convert:to_binary(UserId), <<"session">>, <<"logoff">> ],
+                [ <<"~user">>, <<"session">>, <<"logoff">> ],
                 #{},
                 Context),
             % Force a reload of the page (the user will have to log in again)

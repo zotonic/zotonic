@@ -93,7 +93,7 @@
                             <tr>
                                 <td scope="row">{{ forloop.counter }}</td>
                                 <td>{{ ip_address }}</td>
-                                <td>{{ logon_time|date:_"Y-m-d H:i" }}</td>
+                                <td>{{ logon_time|date:_"Y-m-d H:i:s" }}</td>
                                 <td class="text-muted">{{ user_agent|escape }}</td>
                             </tr>
                         {% empty %}

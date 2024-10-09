@@ -97,7 +97,11 @@ get_req(raw_path, Context) -> cowmachine_req:raw_path(Context);
 get_req(path, Context) -> cowmachine_req:path(Context);
 get_req(qs, Context) -> cowmachine_req:req_qs(Context);
 get_req(headers, Context) -> cowmachine_req:get_req_headers(Context);
-get_req(user_agent, Context) -> cowmachine_req:get_req_header(<<"user-agent">>, Context);
+get_req(user_agent, Context) ->
+    case cowmachine_req:get_req_header(<<"user-agent">>, Context) of
+        UA when is_binary(UA) -> z_string:truncatechars(UA, 500);
+        undefined -> undefined
+    end;
 get_req(referer, Context) -> cowmachine_req:get_req_header(<<"referer">>, Context);
 get_req(referrer, Context) -> get_req(referer, Context);
 get_req(_Key, _Context) -> undefined.
