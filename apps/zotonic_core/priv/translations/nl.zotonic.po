@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-10-09 15:41\n"
+"PO-Revision-Date: 2024-10-09 21:19\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -204,7 +204,7 @@ msgstr "Weet je zeker dat je alle regels wilt terugzetten vanaf de gepubliceerde
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:31./apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:14
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:15
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:65./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:33
-#: apps/zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:12./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:120./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:28./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:66./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:137./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
+#: apps/zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:16./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:120./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:28./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:66./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:137./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:36./apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
@@ -998,7 +998,7 @@ msgstr "Gebufferd"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:37
 msgid "Cached"
-msgstr "Gecacheerd"
+msgstr "Gecached"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:34
 msgid "Caches have been flushed."
@@ -1541,7 +1541,7 @@ msgid "Home Directory"
 msgstr "Home Directory"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:111
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:47./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:85
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:47./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:92
 msgid "IP Address"
 msgstr "IP-adres"
 
@@ -2399,7 +2399,7 @@ msgstr "De sitedata wordt opnieuw geïnstalleerd. Houd de console in de gaten vo
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:25
 msgid "The system has allocated more than the specified threshold of available memory, as reported by the underlying operating system."
-msgstr "Het systeem heeft meer dan de opgegeven drempel van beschikbaar geheugen toegewezen, zoals gerapporteerd door het onderliggende besturingssysteem."
+msgstr "Het systeem heeft meer geheugen toegewezen dan de opgegeven drempelwaarde, zoals gerapporteerd door het onderliggende besturingssysteem."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:49
 msgid "There are no incoming connections."
@@ -2992,7 +2992,7 @@ msgstr "Configuratie"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:139
 msgid "Defaults to the SMTP hostname of the site."
-msgstr "Standaard de SMTP hostnaam van de site."
+msgstr "Standaard wordt de SMTP-hostnaam van de site gebruikt."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:129
 msgid "Defaults to the hostname of the site."
@@ -4445,7 +4445,7 @@ msgstr "Je kunt nu de twee-factor-authenticatie instellen. De volgende keer dat 
 msgid "You need to be allowed to edit the system configuration to view or change the two-factor authentication configuration."
 msgstr "Je moet de systeemconfiguratie mogen bewerken om de twee-factor-authenticatieconfiguratie te kunnen bekijken of wijzigen."
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:136
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:143
 msgid "(this is you)"
 msgstr "(dit ben jij)"
 
@@ -4453,13 +4453,13 @@ msgstr "(dit ben jij)"
 msgid "Access denied"
 msgstr "Toegang geweigerd"
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:34
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:35
 msgid "Active sessions in the last hour"
 msgstr "Actieve sessies in het laatste uur"
 
 #: apps/zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:4
 msgid "Afterwards, you'll be asked to log in again."
-msgstr "Daarna wordt u gevraagd om opnieuw in te loggen."
+msgstr "Daarna wordt je gevraagd om opnieuw in te loggen."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:83
 msgid "Already connected"
@@ -4469,7 +4469,7 @@ msgstr "Al verbonden"
 msgid "Are you sure you have created an account? If not, you can create one here:"
 msgstr "Weet je zeker dat je een account hebt aangemaakt? Zo niet, dan kun je er hier één aanmaken:"
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:59
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:61
 msgid "Are you sure?"
 msgstr "Weet je het zeker?"
 
@@ -4490,9 +4490,9 @@ msgstr "Autoriseren..."
 msgid "Back to login"
 msgstr "Terug naar Inloggen"
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:77
-msgid "Below are the last known logons from your user account."
-msgstr "Hieronder staan de laatst bekende aanmeldingen van uw gebruikersaccount."
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:84
+msgid "Below are the last known logins to your account."
+msgstr "Hieronder staan de laatst bekende aanmeldingen voor je account."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:78
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:42
@@ -4599,7 +4599,7 @@ msgstr "Fout"
 
 #: apps/zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:3
 msgid "Every session will be interrupted and you will be logged out."
-msgstr "Elke sessie wordt onderbroken en je wordt uitgelogd."
+msgstr "Alle sessies worden onderbroken en je wordt uitgelogd."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:108
 msgid "Expected another account"
@@ -4617,7 +4617,7 @@ msgstr "Ga voor meer informatie naar <a target=\"_blank\" rel=\"noreferrer noope
 msgid "For security reasons, password reset codes are only kept for a limited amount of time and can only be used once."
 msgstr "Om veiligheidsredenen zijn codes om het wachtwoord opnieuw in te stellen beperkt geldig en kunnen zij slechts één keer gebruikt worden."
 
-#: apps/zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:7
+#: apps/zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:12
 msgid "Force-close all active sessions"
 msgstr "Alle actieve sessies geforceerd sluiten"
 
@@ -4686,17 +4686,25 @@ msgstr "Als je denkt dat je een account hebt, probeer het dan opnieuw met het ju
 msgid "In the email you will find instructions on how to confirm your account."
 msgstr "In de e-mail staan instructies om je account te bevestigen."
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:56
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:58
 msgid "Interrupt all active sessions"
 msgstr "Alle actieve sessies onderbreken"
+
+#: apps/zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:8
+msgid "Interrupted sessions are still visible in the sessions overview, but will not be updated anymore."
+msgstr "Onderbroken sessies zijn nog steeds zichtbaar in het sessiesoverzicht, maar worden niet meer bijgewerkt."
+
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:68
+msgid "Interrupted sessions might still be visible in the sessions overview, but will not be updated anymore."
+msgstr "Onderbroken sessies kunnen nog steeds zichtbaar zijn in het sessiesoverzicht, maar worden niet meer bijgewerkt."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:51./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:174./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:37
 msgid "Keep me logged in"
 msgstr "Ik wil ingelogd blijven"
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:72
-msgid "Last known logons"
-msgstr "Laatst bekende aanmeldingen"
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:79
+msgid "Last known logins"
+msgstr "Laatste bekende logins"
 
 #: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:48
 msgid "Last seen"
@@ -4722,7 +4730,7 @@ msgstr "Log in met"
 msgid "Log out"
 msgstr "Uitloggen"
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:86
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:93
 msgid "Logon time"
 msgstr "Inlogtijd"
 
@@ -4744,7 +4752,7 @@ msgstr "Volgende"
 msgid "No Access"
 msgstr "Geen toegang"
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:101
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:108
 msgid "No recent known logons"
 msgstr "Geen bekende recente aanmeldingen"
 
@@ -4752,13 +4760,13 @@ msgstr "Geen bekende recente aanmeldingen"
 msgid "Note: sessions will appear here only when actively used by a browser tab, it’s recommended to keep this page open for a while."
 msgstr "Opmerking: sessies verschijnen hier alleen als ze actief worden gebruikt door een browsertabblad, het is aan te raden om deze pagina een tijdje open te houden."
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:78
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:85
 msgid "Note: these are periodically deleted."
 msgstr "Opmerking: deze worden regelmatig verwijderd."
 
 #: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:27
-msgid "On this page you can see the recent logins and the active sessions for your user."
-msgstr "Op deze pagina kunt u de recente aanmeldingen en de actieve sessies voor uw gebruiker bekijken."
+msgid "On this page you can see the recent logins and the active sessions for your account:"
+msgstr "Op deze pagina zie je de recente aanmeldingen en de actieve sessies voor je account:"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service.tpl:10
 #: apps/zotonic_mod_facebook/priv/templates/_logon_service.facebook.tpl:1
@@ -4812,7 +4820,7 @@ msgstr "Probeer het straks nog eens"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.user_external.tpl:2
 msgid "Please use a different method to sign in. You can’t sign in using a username and password."
-msgstr "Gebruik een andere methode om je aan te melden. Je kunt je niet aanmelden met een gebruikersnaam en wachtwoord."
+msgstr "Gebruik een andere methode om in te loggen. U kunt niet inloggen met een gebruikersnaam en wachtwoord."
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_service.tpl:13
 msgid "Redirecting to"
@@ -4846,6 +4854,10 @@ msgstr "Sessie-ID"
 #: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:3./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:24
 msgid "Sessions overview"
 msgstr "Overzicht sessies"
+
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:39
+msgid "Sessions that have been used by a browser in the last hour."
+msgstr "Sessies die het afgelopen uur door een browser zijn gebruikt."
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:27
 msgid "Simply try again:"
@@ -4907,10 +4919,6 @@ msgstr "Er is meer dan één account met jouw e-mailadres op {site}."
 msgid "There was a problem authenticating with {service}."
 msgstr "Er is een probleem opgetreden bij het verifiëren met {service}."
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:38
-msgid "These sessions are currenly being used in a browser, logged in with your account:"
-msgstr "Deze sessies worden momenteel gebruikt in een browser, ingelogd met je account:"
-
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.set_passcode.tpl:2
 msgid "To sign in you must have two-factor authentication enabled."
 msgstr "Om in te loggen dient twee-factor-authenticatie te zijn ingeschakeld."
@@ -4937,7 +4945,7 @@ msgstr "Gebruik een: hoofdletter, kleine letter, cijfer en symbool."
 msgid "Use non alphabetical characters, digits and upper/lower case letters to make it harder to guess."
 msgstr "Gebruik niet-alfabetische tekens, cijfers en hoofdletters/kleine letters om het raden moeilijker te maken."
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:49./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:87
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:49./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:94
 msgid "User Agent"
 msgstr "Gebruikersagent"
 
@@ -4957,7 +4965,7 @@ msgstr "Het lijkt erop dat we geen geldig e-mailadres van je hebben."
 msgid "We have sent an email with a link to reset your password to"
 msgstr "We hebben een e-mail gestuurd met een link om je wachtwoord te resetten naar"
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:96
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:103
 msgid "Y-m-d H:i:s"
 msgstr "Y-m-d H:i:s"
 
@@ -5258,7 +5266,7 @@ msgstr "Versies voor"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:15./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:59
 msgid "Revisions of active users are kept for {n} days."
-msgstr ""
+msgstr "Revisies van actieve gebruikers worden {n} dagen bewaard."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:16./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:60
 msgid "Revisions of deleted users are kept for {n} days."
