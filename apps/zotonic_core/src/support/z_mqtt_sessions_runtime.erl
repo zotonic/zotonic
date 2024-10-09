@@ -187,19 +187,19 @@ subscribe_forced_logoff(Context) ->
             erlang:spawn_link(
                 fun() ->
                     ok = z_mqtt:subscribe(
-                        [ <<"user">>, z_convert:to_binary(UserId), <<"session">>, <<"logoff">> ],
+                        [ <<"~user">>, <<"session">>, <<"logoff">> ],
                         Context),
-                    erlang:monitor(process, SessionPid),
+                    MRef = erlang:monitor(process, SessionPid),
                     garbage_collect(),
                     receive
-                        {'DOWN', _Ref, process, SessionPid, _Reason} ->
+                        {'DOWN', MRef, process, _Pid, _Reason} ->
                             ok;
                         {mqtt_msg, _Msg} ->
                             ?LOG_INFO(#{
                                 in => zotonic_core,
                                 text => <<"Forced logoff of MQTT session">>,
                                 client_id => ClientId,
-                                user_id => z_acl:user(Context)
+                                user_id => UserId
                             }),
                             ok = z_mqtt:publish(
                                 [ <<"bridge">>, ClientId, <<"model">>, <<"auth">>, <<"post">>, <<"logoff">> ],

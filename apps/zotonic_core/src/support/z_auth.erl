@@ -1,10 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell
-%% Date: 2009-04-24
-%%
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Handle authentication of zotonic users.  Also shows the logon screen when authentication is required.
+%% @end
 
-%% Copyright 2009-2021 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -162,7 +161,6 @@ publish_user_session(Context) ->
                             {error, no_peer_ip};
                         PeerIP ->
                             Peer = z_convert:to_binary(inet:ntoa(PeerIP)),
-                            UserId = z_acl:user(Context),
                             Payload = #{
                                 <<"session_id">> => SessionId,
                                 <<"user_agent">> => m_req:get(user_agent, Context),
@@ -170,11 +168,10 @@ publish_user_session(Context) ->
                                 <<"timestamp">> => calendar:universal_time()
                             },
                             z_mqtt:publish(
-                                [ <<"user">>, z_convert:to_binary(UserId), <<"sessions">>, SessionId ],
+                                [ <<"~user">>, <<"sessions">>, SessionId ],
                                 Payload,
                                 #{ retain => true },
-                                Context
-                            )
+                                Context)
                     end;
                 {error, _} = Error ->
                     Error
