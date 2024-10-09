@@ -81,9 +81,14 @@
 m_get([ <<"count_recipients">>, MailingId | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(view, MailingId, Context) of
         true ->
-            Count = m_mailinglist:count_recipients(MailingId, Context),
-            SubIdCount = length(m_edge:subjects(MailingId, subscriberof, Context)),
-            {ok, {Count + SubIdCount, Rest}};
+            F = fun() ->
+                        Count = count_recipients(MailingId, Context),
+                        SubIdCount = length(m_edge:subjects(MailingId, subscriberof, Context)),
+                        Count + SubIdCount
+                end,
+            %% Cache the value for 10 minutes.
+            Total = z_depcache:memo(F, {mailinglist_count_recipients, MailingId}, 600, [MailingId], Context),
+            {ok, {Total, Rest}};
         false ->
             {error, eacces}
     end;
