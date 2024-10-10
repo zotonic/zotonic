@@ -43,10 +43,10 @@
                 <table id="active_sessions" class="table">
                     <thead>
                         <tr>
-                            <th scope="col">{_ Session ID _}</th>
-                            <th scope="col">{_ IP Address_}</th>
+                            <th scope="col"></th>
                             <th scope="col">{_ Last seen _}</th>
-                            <th scope="col" width="50%">{_ User Agent _}</th>
+                            <th scope="col">{_ IP Address_}</th>
+                            <th scope="col">{_ Browser info _}</th>
                         </tr>
                     </thead>
 
@@ -89,9 +89,9 @@
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">{_ IP Address _}</th>
                             <th scope="col">{_ Logon time _}</th>
-                            <th scope="col" width="50%">{_ User Agent _}</th>
+                            <th scope="col">{_ IP Address _}</th>
+                            <th scope="col" width="60%">{_ Browser info _}</th>
                         </tr>
                     </thead>
 
@@ -99,8 +99,11 @@
                         {% for user_agent, ip_address, logon_time in m.identity[m.acl.user.id].logon_history %}
                             <tr>
                                 <td scope="row">{{ forloop.counter }}</td>
+                                <td>
+                                    {{ logon_time|date:_"Y-m-d" }}
+                                    <span class="text-muted">{{ logon_time|date:_"H:i:s" }}</span>
+                                </td>
                                 <td>{{ ip_address }}</td>
-                                <td>{{ logon_time|date:_"Y-m-d H:i:s" }}</td>
                                 <td class="text-muted">{{ user_agent|escape }}</td>
                             </tr>
                         {% empty %}
@@ -123,40 +126,32 @@ cotonic.broker.subscribe("bridge/origin/user/{{ m.acl.user.id }}/sessions/+sessi
     cotonic.broker.call("model/sessionId/get").then((sessionMsg) => {
             const reported_session_id = bindings.sessionId;
             const this_session_id = sessionMsg.payload;
+            const date = new Date(msg.payload.timestamp);
 
-            let tr = document.getElementById(reported_session_id);
+            let tr = document.getElementById("session-" + reported_session_id);
             if (tr) {
                 tr.remove();
             }
 
             tr = document.createElement("tr");
-            tr.id = reported_session_id;
+            tr.id = "session-" + reported_session_id;
+            tr.setAttribute('timestamp', msg.payload.timestamp);
 
             let td = document.createElement("td");
             if (reported_session_id == this_session_id) {
                 let span = document.createElement('span');
-                span.className = 'text-muted';
-                span.textContent = reported_session_id;
-                td.append(span);
-                td.append(document.createElement('br'));
-                let you = document.createElement('b');
-                you.textContent = ' {{ _"(this is you)" }}';
-                td.append(you);
-            } else {
-                let span = document.createElement('span');
-                span.className = 'text-muted';
-                span.textContent = reported_session_id;
+                span.className = 'glyphicon glyphicon-user';
+                span.title = '{_ This is you _}';
                 td.append(span);
             }
             tr.append(td);
 
             td = document.createElement("td");
-            td.textContent = msg.payload.ip_address ?? '';
+            td.textContent = date.toLocaleTimeString();
             tr.append(td);
 
             td = document.createElement("td");
-            let date = new Date(msg.payload.timestamp);
-            td.textContent = date.toLocaleTimeString();
+            td.textContent = msg.payload.ip_address ?? '';
             tr.append(td);
 
             td = document.createElement("td");
@@ -165,6 +160,15 @@ cotonic.broker.subscribe("bridge/origin/user/{{ m.acl.user.id }}/sessions/+sessi
             tr.append(td);
 
             document.getElementById("active_sessions_rows").prepend(tr);
+
+            // Sort table
+            let rows = document.querySelectorAll("#active_sessions_rows tr");
+            let rowsArray = Array.from(rows);
+            let sorted = rowsArray.sort(sorter);
+            function sorter(a,b) {
+                return b.getAttribute('timestamp').localeCompare(a.getAttribute("timestamp"));
+            }
+            sorted.forEach(e => document.querySelector("#active_sessions_rows").appendChild(e));
         });
 });
 

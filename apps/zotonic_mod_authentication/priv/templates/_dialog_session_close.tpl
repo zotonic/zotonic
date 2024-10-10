@@ -5,7 +5,7 @@
 </p>
 
 <p class="help-block">
-    <span class="glyphicon glyphicon-info-sign"></span> {_ Interrupted sessions are still visible in the sessions overview, but will not be updated anymore. _}
+    <span class="glyphicon glyphicon-info-sign"></span> {_ Interrupted sessions might still be visible in the sessions overview, but will not be updated anymore. _}
 </p>
 
 <div class="modal-footer">
