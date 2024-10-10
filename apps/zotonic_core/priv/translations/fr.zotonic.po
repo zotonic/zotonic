@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-10-10 08:29\n"
+"PO-Revision-Date: 2024-10-10 10:26\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -4490,7 +4490,7 @@ msgstr "Vous trouverez ci-dessous les dernières connexions connues à votre com
 
 #: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:49./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:94
 msgid "Browser info"
-msgstr ""
+msgstr "Informations sur le navigateur"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:78
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:42
@@ -4646,7 +4646,7 @@ msgstr "Aller à la page de votre profil"
 
 #: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:104
 msgid "H:i:s"
-msgstr ""
+msgstr "Son"
 
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:14
 msgid "Here you can set all the application keys, secrets and other configurations to integrate with external services like Facebook and Twitter."
@@ -4915,7 +4915,7 @@ msgstr "Il y a eu un problème d'authentification avec {service}."
 
 #: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:144
 msgid "This is you"
-msgstr ""
+msgstr "C'est toi"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.set_passcode.tpl:2
 msgid "To sign in you must have two-factor authentication enabled."
