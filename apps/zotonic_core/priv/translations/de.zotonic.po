@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-10-09 21:19\n"
+"PO-Revision-Date: 2024-10-10 08:29\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -1538,7 +1538,7 @@ msgid "Home Directory"
 msgstr "Home-Verzeichnis"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:111
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:47./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:92
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:48./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:93
 msgid "IP Address"
 msgstr "IP-Adresse"
 
@@ -4443,10 +4443,6 @@ msgstr "Sie müssen jetzt Ihren Passcode für die Zwei-Faktor-Authentifizierung 
 msgid "You need to be allowed to edit the system configuration to view or change the two-factor authentication configuration."
 msgstr "Sie müssen berechtigt sein, die Systemkonfiguration zu bearbeiten, um die Konfiguration der Zwei-Faktor-Authentifizierung anzuzeigen oder zu ändern."
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:143
-msgid "(this is you)"
-msgstr "(das bist du)"
-
 #: apps/zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:51./apps/zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:59
 msgid "Access denied"
 msgstr "Zugriff verweigert"
@@ -4491,6 +4487,10 @@ msgstr "Zurück zur Anmeldung"
 #: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:84
 msgid "Below are the last known logins to your account."
 msgstr "Unten sind die letzten bekannten Anmeldungen bei Ihrem Konto aufgeführt."
+
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:49./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:94
+msgid "Browser info"
+msgstr "Browserinformationen"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:78
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:42
@@ -4644,6 +4644,10 @@ msgstr "Zur Startseite"
 msgid "Go to the your profile page"
 msgstr "Gehen Sie auf die Seite Ihres Profils"
 
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:104
+msgid "H:i:s"
+msgstr "Sein"
+
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:14
 msgid "Here you can set all the application keys, secrets and other configurations to integrate with external services like Facebook and Twitter."
 msgstr "Hier können Sie alle Anwendungsschlüssel, Geheimnisse und andere Konfigurationen für die Integration mit externen Diensten wie Facebook und Twitter festlegen."
@@ -4688,11 +4692,7 @@ msgstr "In der E-Mail finden Sie Anweisungen, wie Sie Ihr Konto bestätigen kön
 msgid "Interrupt all active sessions"
 msgstr "Unterbrechen Sie alle aktiven Sitzungen"
 
-#: apps/zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:8
-msgid "Interrupted sessions are still visible in the sessions overview, but will not be updated anymore."
-msgstr "Unterbrochene Sitzungen sind in der Sitzungsübersicht weiterhin sichtbar, werden aber nicht mehr aktualisiert."
-
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:68
+#: apps/zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:8./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:68
 msgid "Interrupted sessions might still be visible in the sessions overview, but will not be updated anymore."
 msgstr "Unterbrochene Sitzungen sind möglicherweise noch in der Sitzungsübersicht sichtbar, werden aber nicht mehr aktualisiert."
 
@@ -4704,7 +4704,7 @@ msgstr "Eingeloggt bleiben"
 msgid "Last known logins"
 msgstr "Letzte bekannte Anmeldungen"
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:48
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:47
 msgid "Last seen"
 msgstr "Zuletzt angesehen"
 
@@ -4728,7 +4728,7 @@ msgstr "Melden Sie sich mit an"
 msgid "Log out"
 msgstr "Ausloggen"
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:93
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:92
 msgid "Logon time"
 msgstr "Anmeldezeit"
 
@@ -4750,7 +4750,7 @@ msgstr "Weiter"
 msgid "No Access"
 msgstr "Kein Zugriff"
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:108
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:111
 msgid "No recent known logons"
 msgstr "Keine aktuellen bekannten Anmeldungen"
 
@@ -4845,10 +4845,6 @@ msgstr "Ihr Passwort zurücksetzen"
 msgid "Send Verification Message"
 msgstr "Verifizierungsnachricht senden"
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:46
-msgid "Session ID"
-msgstr "Sitzungs-ID"
-
 #: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:3./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:24
 msgid "Sessions overview"
 msgstr "Sitzungsübersicht"
@@ -4917,6 +4913,10 @@ msgstr "Es gibt mehr als ein Konto mit Ihrer E-Mail-Adresse auf {site}."
 msgid "There was a problem authenticating with {service}."
 msgstr "Bei der Authentifizierung mit {service}ist ein Problem aufgetreten."
 
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:144
+msgid "This is you"
+msgstr "Das bist du"
+
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.set_passcode.tpl:2
 msgid "To sign in you must have two-factor authentication enabled."
 msgstr "Zur Anmeldung muss die Zwei-Faktor-Authentifizierung aktiviert sein."
@@ -4943,10 +4943,6 @@ msgstr "Verwenden Sie: Großbuchstaben, Kleinbuchstaben, Zahlen und Symbole."
 msgid "Use non alphabetical characters, digits and upper/lower case letters to make it harder to guess."
 msgstr "Verwenden Sie nicht alphabetische Zeichen, Ziffern und Groß-/Kleinbuchstaben, um das Erraten zu erschweren."
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:49./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:94
-msgid "User Agent"
-msgstr "Benutzeragent"
-
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:100
 msgid "Verify your account"
 msgstr "Bestätigen Sie Ihr Konto"
@@ -4964,8 +4960,9 @@ msgid "We have sent an email with a link to reset your password to"
 msgstr "Wir haben eine E-Mail mit einem Link zum Zurücksetzen Ihres Kennworts gesendet an"
 
 #: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:103
-msgid "Y-m-d H:i:s"
-msgstr "Ymd H:i:s"
+#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:32./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:88
+msgid "Y-m-d"
+msgstr "Ymd"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:5
 msgid "You are about to create a new account."
@@ -10558,10 +10555,6 @@ msgstr "Weiß"
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:98./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:132
 msgid "Wrong"
 msgstr "Falsch"
-
-#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:32./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:88
-msgid "Y-m-d"
-msgstr "Ymd"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:16
 msgid "Yes or no question"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-10-09 21:19\n"
+"PO-Revision-Date: 2024-10-10 08:29\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -1538,7 +1538,7 @@ msgid "Home Directory"
 msgstr "الدليل الرئيسي"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:111
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:47./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:92
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:48./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:93
 msgid "IP Address"
 msgstr "عنوان IP"
 
@@ -4443,10 +4443,6 @@ msgstr "يجب عليك تعيين رمز مرور المصادقة الثنائ
 msgid "You need to be allowed to edit the system configuration to view or change the two-factor authentication configuration."
 msgstr "يجب أن يُسمح لك بتحرير تكوين النظام لعرض أو تغيير تكوين المصادقة الثنائية."
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:143
-msgid "(this is you)"
-msgstr "(هذا انت)"
-
 #: apps/zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:51./apps/zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:59
 msgid "Access denied"
 msgstr "تم الرفض"
@@ -4491,6 +4487,10 @@ msgstr "العودة لتسجيل الدخول"
 #: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:84
 msgid "Below are the last known logins to your account."
 msgstr "فيما يلي آخر عمليات تسجيل الدخول المعروفة إلى حسابك."
+
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:49./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:94
+msgid "Browser info"
+msgstr "معلومات المتصفح"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:78
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:42
@@ -4644,6 +4644,10 @@ msgstr "اذهب الى الصفحة الرئيسية"
 msgid "Go to the your profile page"
 msgstr "اذهب إلى صفحة ملفك الشخصي"
 
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:104
+msgid "H:i:s"
+msgstr "له"
+
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:14
 msgid "Here you can set all the application keys, secrets and other configurations to integrate with external services like Facebook and Twitter."
 msgstr "هنا يمكنك ظبط كل مفاتيح و كلمات السر الخاصة بالتطبيقات، و أيضا التهيئة للدمج مع الخدمات الخارجية مثل الفايسبوك و التويتر."
@@ -4688,11 +4692,7 @@ msgstr "في الرسالة سوف تجد تعليمات حول كيفية تأ�
 msgid "Interrupt all active sessions"
 msgstr "مقاطعة جميع الجلسات النشطة"
 
-#: apps/zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:8
-msgid "Interrupted sessions are still visible in the sessions overview, but will not be updated anymore."
-msgstr "تظل الجلسات المتقطعة مرئية في نظرة عامة على الجلسات، ولكن لن يتم تحديثها بعد الآن."
-
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:68
+#: apps/zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:8./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:68
 msgid "Interrupted sessions might still be visible in the sessions overview, but will not be updated anymore."
 msgstr "قد تظل الجلسات المتقطعة مرئية في نظرة عامة على الجلسات، ولكن لن يتم تحديثها بعد الآن."
 
@@ -4704,7 +4704,7 @@ msgstr "أبق تسجيل دخولي"
 msgid "Last known logins"
 msgstr "آخر عمليات تسجيل الدخول المعروفة"
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:48
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:47
 msgid "Last seen"
 msgstr "آخر ظهور"
 
@@ -4728,7 +4728,7 @@ msgstr "تسجيل الدخول باستخدام"
 msgid "Log out"
 msgstr "تسجيل خروج"
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:93
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:92
 msgid "Logon time"
 msgstr "وقت تسجيل الدخول"
 
@@ -4750,7 +4750,7 @@ msgstr "التالى"
 msgid "No Access"
 msgstr "عدم الوصول"
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:108
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:111
 msgid "No recent known logons"
 msgstr "لا توجد عمليات تسجيل دخول معروفة مؤخرًا"
 
@@ -4845,10 +4845,6 @@ msgstr "اعد ضبط كلمه السر"
 msgid "Send Verification Message"
 msgstr "إرسال رسالة تحقق"
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:46
-msgid "Session ID"
-msgstr "معرف الجلسة"
-
 #: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:3./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:24
 msgid "Sessions overview"
 msgstr "نظرة عامة على الجلسات"
@@ -4917,6 +4913,10 @@ msgstr "يوجد أكثر من حساب بعنوان بريدك الإلكترو
 msgid "There was a problem authenticating with {service}."
 msgstr "حدثت مشكلة أثناء المصادقة بـ {service}."
 
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:144
+msgid "This is you"
+msgstr "هذا انت"
+
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.set_passcode.tpl:2
 msgid "To sign in you must have two-factor authentication enabled."
 msgstr "لتسجيل الدخول، يجب عليك تمكين المصادقة الثنائية."
@@ -4943,10 +4943,6 @@ msgstr "استخدم: حرفًا كبيرًا وحرفًا صغيرًا ورقم
 msgid "Use non alphabetical characters, digits and upper/lower case letters to make it harder to guess."
 msgstr "استخدم أحرفًا غير أبجدية وأرقامًا وأحرفًا كبيرة/صغيرة لتجعل من الصعب تخمينها."
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:49./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:94
-msgid "User Agent"
-msgstr "وكيل المستخدم"
-
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:100
 msgid "Verify your account"
 msgstr "تحقق من حسابك"
@@ -4964,8 +4960,9 @@ msgid "We have sent an email with a link to reset your password to"
 msgstr "لقد أرسلنا بريدًا إلكترونيًا يحتوي على رابط لإعادة تعيين كلمة المرور الخاصة بك إلى"
 
 #: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:103
-msgid "Y-m-d H:i:s"
-msgstr "يمد ح:ي:ث"
+#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:32./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:88
+msgid "Y-m-d"
+msgstr "يمد"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:5
 msgid "You are about to create a new account."
@@ -10562,10 +10559,6 @@ msgstr "أبيض"
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:98./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:132
 msgid "Wrong"
 msgstr "خاطئ"
-
-#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:32./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:88
-msgid "Y-m-d"
-msgstr "يمد"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:16
 msgid "Yes or no question"
