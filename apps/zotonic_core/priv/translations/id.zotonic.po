@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-10-09 21:19\n"
+"PO-Revision-Date: 2024-10-10 08:30\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -1538,7 +1538,7 @@ msgid "Home Directory"
 msgstr "Direktori Rumah"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:111
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:47./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:92
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:48./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:93
 msgid "IP Address"
 msgstr "Alamat IP"
 
@@ -4442,10 +4442,6 @@ msgstr "Anda harus menyetel kode sandi autentikasi dua faktor sekarang. Saat ber
 msgid "You need to be allowed to edit the system configuration to view or change the two-factor authentication configuration."
 msgstr "Anda harus diizinkan untuk mengedit konfigurasi sistem untuk melihat atau mengubah konfigurasi otentikasi dua faktor."
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:143
-msgid "(this is you)"
-msgstr "(ini kamu)"
-
 #: apps/zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:51./apps/zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:59
 msgid "Access denied"
 msgstr "Akses ditolak"
@@ -4490,6 +4486,10 @@ msgstr "Kembali untuk masuk"
 #: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:84
 msgid "Below are the last known logins to your account."
 msgstr "Berikut ini adalah login terakhir yang diketahui ke akun Anda."
+
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:49./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:94
+msgid "Browser info"
+msgstr "Informasi peramban"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:78
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:42
@@ -4643,6 +4643,10 @@ msgstr "Pergi ke halaman muka"
 msgid "Go to the your profile page"
 msgstr "Buka halaman profil Anda"
 
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:104
+msgid "H:i:s"
+msgstr "Miliknya"
+
 #: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:14
 msgid "Here you can set all the application keys, secrets and other configurations to integrate with external services like Facebook and Twitter."
 msgstr "Disini anda bisa mengatur semua tombol aplikasi, rahasia dan konfigurasi lainnya untuk berintegrasi dengan layanan eksternal seperti Facebook dan Twitter."
@@ -4687,11 +4691,7 @@ msgstr "Di email anda akan menemukan petunjuk cara mengonfirmasi akun anda."
 msgid "Interrupt all active sessions"
 msgstr "Menghentikan semua sesi aktif"
 
-#: apps/zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:8
-msgid "Interrupted sessions are still visible in the sessions overview, but will not be updated anymore."
-msgstr "Sesi yang terputus masih terlihat dalam ikhtisar sesi, tetapi tidak akan diperbarui lagi."
-
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:68
+#: apps/zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:8./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:68
 msgid "Interrupted sessions might still be visible in the sessions overview, but will not be updated anymore."
 msgstr "Sesi yang terputus mungkin masih terlihat dalam ikhtisar sesi, tetapi tidak akan diperbarui lagi."
 
@@ -4703,7 +4703,7 @@ msgstr "buat saya tetap masuk"
 msgid "Last known logins"
 msgstr "Login terakhir yang diketahui"
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:48
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:47
 msgid "Last seen"
 msgstr "Terakhir terlihat"
 
@@ -4727,7 +4727,7 @@ msgstr "Masuk dengan"
 msgid "Log out"
 msgstr "Keluar"
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:93
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:92
 msgid "Logon time"
 msgstr "Waktu masuk"
 
@@ -4749,7 +4749,7 @@ msgstr "Selanjutnya"
 msgid "No Access"
 msgstr "Tidak ada Akses"
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:108
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:111
 msgid "No recent known logons"
 msgstr "Tidak ada logon terbaru yang diketahui"
 
@@ -4844,10 +4844,6 @@ msgstr "Atur ulang kata sandi anda"
 msgid "Send Verification Message"
 msgstr "Kirim pesan verifikasi"
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:46
-msgid "Session ID"
-msgstr "ID Sesi"
-
 #: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:3./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:24
 msgid "Sessions overview"
 msgstr "Ikhtisar sesi"
@@ -4916,6 +4912,10 @@ msgstr "Ada lebih dari satu akun dengan alamat email Anda di {site}."
 msgid "There was a problem authenticating with {service}."
 msgstr "Ada masalah saat mengautentikasi dengan {service}."
 
+#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:144
+msgid "This is you"
+msgstr "ini kamu"
+
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.set_passcode.tpl:2
 msgid "To sign in you must have two-factor authentication enabled."
 msgstr "Untuk masuk, Anda harus mengaktifkan autentikasi dua faktor."
@@ -4942,10 +4942,6 @@ msgstr "Gunakan a: huruf besar, huruf kecil, angka, dan simbol."
 msgid "Use non alphabetical characters, digits and upper/lower case letters to make it harder to guess."
 msgstr "Gunakan karakter non-abjad, angka, dan huruf besar/kecil agar lebih sulit ditebak."
 
-#: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:49./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:94
-msgid "User Agent"
-msgstr "Agen Pengguna"
-
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:100
 msgid "Verify your account"
 msgstr "Memverifikasi akun anda"
@@ -4963,8 +4959,9 @@ msgid "We have sent an email with a link to reset your password to"
 msgstr "Kami telah mengirimkan email dengan tautan untuk mengatur ulang kata sandi Anda"
 
 #: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:103
-msgid "Y-m-d H:i:s"
-msgstr "Ymd H:i:s"
+#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:32./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:88
+msgid "Y-m-d"
+msgstr "Ymd"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:5
 msgid "You are about to create a new account."
@@ -10562,10 +10559,6 @@ msgstr "Putih"
 #: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:98./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:132
 msgid "Wrong"
 msgstr "Salah"
-
-#: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:32./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:88
-msgid "Y-m-d"
-msgstr "Ymd"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:16
 msgid "Yes or no question"
