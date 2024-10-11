@@ -50,7 +50,10 @@
     put_site_config_overrides/2,
 
     % Export this, in master this is moved to zotonic_core.erl
-    is_testsandbox/0
+    is_testsandbox/0,
+
+    % For periodically restarting crashed site modules
+    observe_tick_1m/2
 ]).
 
 
@@ -62,6 +65,25 @@
 -define(SITES_SUPERVISOR, 'z_sites_manager$supervisor').
 
 -type site_status() :: waiting | running | retrying | failed | stopped.
+
+%%====================================================================
+%% PERIODIC TASKS
+%%====================================================================
+
+%% @doc For all running sites, check every minute if each site module
+%% is active and if not (it stopped unexpectedly), restart them.
+observe_tick_1m(tick_1m, Context) ->
+    foreach(restart_site_module_if_not_running/1).
+
+%% @doc Try to restart the site module if it is not running.
+-spec restart_site_module_if_not_running(Module::atom()) -> noop | ok | {error, not_found}.
+restart_site_module_if_not_running(Site) ->
+    case z_module_manager:active(Site, z:c(Site)) of
+        true ->
+            noop;
+        false ->
+            z_module_manager:restart(Site, z:c(Site))
+    end.
 
 %%====================================================================
 %% API
