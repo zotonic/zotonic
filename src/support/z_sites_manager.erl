@@ -53,7 +53,7 @@
     is_testsandbox/0,
 
     % For periodically restarting crashed site modules
-    observe_tick_1m/2
+    observe_tick_10m/2
 ]).
 
 
@@ -70,18 +70,28 @@
 %% PERIODIC TASKS
 %%====================================================================
 
-%% @doc For all running sites, check every minute if each site module
-%% is active and if not (it stopped unexpectedly), restart them.
-observe_tick_1m(tick_1m, Context) ->
-    foreach(restart_site_module_if_not_running/1).
+%% @doc For all running sites, check every 10 minutes if each site
+%% module is active and if not (it stopped unexpectedly), restart them.
+observe_tick_10m(tick_10m, Context) ->
+    ?zDebug("Checking for crashed site modules..", Context),
+    lists:foreach(
+      fun ([Site, running|_]) -> restart_site_module_if_not_running(Site);
+          (_) -> noop
+      end,
+      get_sites_status()
+     ).
 
 %% @doc Try to restart the site module if it is not running.
 -spec restart_site_module_if_not_running(Module::atom()) -> noop | ok | {error, not_found}.
 restart_site_module_if_not_running(Site) ->
-    case z_module_manager:active(Site, z:c(Site)) of
+    %% An z_module_manager:active/2 also exists, but it turns out
+    %% that is not reliable for querying the actual site module
+    %% status (due to caching?).
+    case lists:member(Site, z_module_manager:active(z:c(Site))) of
         true ->
             noop;
         false ->
+            ?zWarning("Restarting site module ~s because it was off while the site is active", [ Site ], z:c(Site)),
             z_module_manager:restart(Site, z:c(Site))
     end.
 
