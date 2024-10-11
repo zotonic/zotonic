@@ -29,7 +29,8 @@
 -export([
     observe_user_is_enabled/2,
     observe_acl_logon/2,
-    observe_acl_logoff/2
+    observe_acl_logoff/2,
+    observe_tick_10m/2
 ]).
 
 -include_lib("zotonic.hrl").
@@ -45,3 +46,32 @@ observe_acl_logon(#acl_logon{id=UserId}, Context) ->
 %% @doc Let the user log off, clean up any cached information.
 observe_acl_logoff(#acl_logoff{}, Context) ->
     Context#context{acl=undefined, user_id=undefined}.
+
+%%====================================================================
+%% PERIODIC TASKS
+%%====================================================================
+
+%% @doc For all running sites, check every 10 minutes if each site
+%% module is active and if not (it stopped unexpectedly), restart them.
+observe_tick_10m(tick_10m, Context) ->
+    ?zDebug("Checking for crashed site modules..", Context),
+    lists:foreach(
+      fun ([Site, running|_]) -> restart_site_module_if_not_running(Site);
+          (_) -> noop
+      end,
+      z_sites_manager:get_sites_status()
+     ).
+
+%% @doc Try to restart the site module if it is not running.
+-spec restart_site_module_if_not_running(Module::atom()) -> noop | ok | {error, not_found}.
+restart_site_module_if_not_running(Site) ->
+    %% An z_module_manager:active/2 also exists, but it turns out
+    %% that is not reliable for querying the actual site module
+    %% status (due to caching?).
+    case lists:member(Site, z_module_manager:active(z:c(Site))) of
+        true ->
+            noop;
+        false ->
+            ?zWarning("Restarting site module ~s because it was off while the site is active", [ Site ], z:c(Site)),
+            z_module_manager:restart(Site, z:c(Site))
+    end.

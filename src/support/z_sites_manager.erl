@@ -50,10 +50,7 @@
     put_site_config_overrides/2,
 
     % Export this, in master this is moved to zotonic_core.erl
-    is_testsandbox/0,
-
-    % For periodically restarting crashed site modules
-    observe_tick_10m/2
+    is_testsandbox/0
 ]).
 
 
@@ -65,35 +62,6 @@
 -define(SITES_SUPERVISOR, 'z_sites_manager$supervisor').
 
 -type site_status() :: waiting | running | retrying | failed | stopped.
-
-%%====================================================================
-%% PERIODIC TASKS
-%%====================================================================
-
-%% @doc For all running sites, check every 10 minutes if each site
-%% module is active and if not (it stopped unexpectedly), restart them.
-observe_tick_10m(tick_10m, Context) ->
-    ?zDebug("Checking for crashed site modules..", Context),
-    lists:foreach(
-      fun ([Site, running|_]) -> restart_site_module_if_not_running(Site);
-          (_) -> noop
-      end,
-      get_sites_status()
-     ).
-
-%% @doc Try to restart the site module if it is not running.
--spec restart_site_module_if_not_running(Module::atom()) -> noop | ok | {error, not_found}.
-restart_site_module_if_not_running(Site) ->
-    %% An z_module_manager:active/2 also exists, but it turns out
-    %% that is not reliable for querying the actual site module
-    %% status (due to caching?).
-    case lists:member(Site, z_module_manager:active(z:c(Site))) of
-        true ->
-            noop;
-        false ->
-            ?zWarning("Restarting site module ~s because it was off while the site is active", [ Site ], z:c(Site)),
-            z_module_manager:restart(Site, z:c(Site))
-    end.
 
 %%====================================================================
 %% API
