@@ -33,6 +33,21 @@ can be found in the template “_mailinglist_subscribe_form.tpl”.  You
 should overrule the latter template when you want to add or remove
 fields from the subscription form.
 
+It is possible to simplify the subscribe form by using the
+option ``is_email_only``. When this parameter is used the users only
+have to supply their email address to be added to the mailing list.
+Example::
+
+  {% mailinglist_subscribe id=mailing_id is_email_only %}
+
+
+Displaying the number of subscribers
+------------------------------------
+
+It is possible to show the number of subscribers to a mailinglist by
+retrieving this number from the mailinglist model. Example::
+
+   {{ m.mailinglist.count_recipients[mailinglist_id] }} of subscribers
 
 Pages for the mailing list category
 -----------------------------------
