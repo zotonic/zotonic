@@ -10,4 +10,4 @@
 #
 # You can start Zotonic in the Zotonic container using: "./start.sh"
 
-NO_PROXY=* docker-compose -f ./docker-compose.yml run --service-ports zotonic sh
+NO_PROXY=* docker compose -f ./docker-compose.yml run --service-ports zotonic sh
