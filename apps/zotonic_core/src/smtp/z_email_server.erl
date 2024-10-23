@@ -808,7 +808,7 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
             VERP = bounce_email(MessageId, Context),
             From = get_email_from(Email#email.from, VERP, State, Context),
             ContextCsp = z_context:set_csp_nonce(Context),
-            SenderPid = erlang:spawn_link(
+            SenderPid = proc_lib:spawn_link(
                 fun() ->
                     spawned_email_sender(
                             Id, MessageId, Recipient, RecipientEmail, <<"<", VERP/binary, ">">>,

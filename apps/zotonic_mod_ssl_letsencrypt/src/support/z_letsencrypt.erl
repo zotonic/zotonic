@@ -171,7 +171,7 @@ make_cert(Domain, Opts=#{async := false}) ->
     make_cert_bg(Domain, Opts);
 % default to async = true
 make_cert(Domain, Opts) ->
-    _Pid = erlang:spawn(?MODULE, make_cert_bg, [Domain, Opts#{async => true}]),
+    _Pid = proc_lib:spawn(?MODULE, make_cert_bg, [Domain, Opts#{async => true}]),
     async.
 
 -spec make_cert_bg(string()|binary(), map()) -> {'ok', map()}|{'error', 'invalid'}.

@@ -1172,7 +1172,7 @@ do_cleanup_removed_modules(#state{ start_queue = Queue, modules = Ms } = State) 
 handle_restart_module(Module, #state{ site = Site, modules = Modules } = State) ->
     case maps:find(Module, Modules) of
         {ok, #module_status{ status = running } = ModuleStatus} ->
-            erlang:spawn(
+            z_proc:spawn_md(
                 fun() ->
                     z_module_sup:stop_module(Module, Site)
                 end),

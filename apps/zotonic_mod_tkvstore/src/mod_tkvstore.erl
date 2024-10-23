@@ -85,7 +85,7 @@ init(Args) ->
         module => ?MODULE
     }),
     m_tkvstore:init(Context),
-    WriterPid = erlang:spawn_link(?MODULE, writer_loop, [self(), Context]),
+    WriterPid = proc_lib:spawn_link(?MODULE, writer_loop, [self(), Context]),
     {ok, #state{
             context=z_context:new(Context),
             data=dict:new(),
@@ -169,6 +169,7 @@ code_change(_OldVsn, State, _Extra) ->
 
 %% @doc Simple writer loop, started as a process
 writer_loop(KVStorePid, Context) ->
+    z_context:logger_md(Context),
     receive
         {delete, Type, Key} ->
             m_tkvstore:delete(Type, Key, Context),

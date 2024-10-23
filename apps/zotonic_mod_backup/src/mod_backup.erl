@@ -289,6 +289,7 @@ start_link(Args) when is_list(Args) ->
 init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
+    z_context:logger_md(Context),
     {ok, TimerRef} = timer:send_interval(?BCK_POLL_INTERVAL, periodic_backup),
     {ok, #state{
         context = z_acl:sudo(z_context:new(Context)),
@@ -852,7 +853,7 @@ pg_dump(Name, DbDump, Context) ->
         end,
         Database
     ]),
-    erlang:spawn(
+    z_proc:spawn_md(
             fun() ->
                 timer:sleep(1000),
                 z_mqtt:publish(
@@ -892,7 +893,7 @@ archive(Name, Tar, Context) ->
                 "-C ", z_filelib:os_filename(ArchiveDir), " ",
                 " ."
             ]),
-            erlang:spawn(
+            z_proc:spawn_md(
                     fun() ->
                         timer:sleep(1000),
                         z_mqtt:publish(<<"model/backup/event/backup">>, #{ status => <<"archive_backup_started">> }, Context)

@@ -154,7 +154,7 @@ pivot_resource_update(Id, UpdateProps, RawProps, Context) ->
 
 %% @doc Rebuild the search index by queueing all resources for pivot.
 queue_all(Context) ->
-    erlang:spawn(fun() ->
+    z_proc:spawn_md(fun() ->
                     queue_all_1(0, Context)
                  end).
 
@@ -217,7 +217,8 @@ insert_queue(Ids, DueDate, Context) when is_list(Ids), is_tuple(DueDate) ->
 insert_task(Module, Function, Context) ->
     insert_task_after(undefined, Module, Function, undefined, [], Context).
 
-%% @doc Insert a slow running pivot task. Use the UniqueKey to prevent double queued tasks.
+%% @doc Insert a slow running pivot task. Use the UniqueKey to prevent double queued tasks for
+%% the same module:function.
 -spec insert_task(Module, Function, UniqueKey, Context) -> {ok, TaskId} | {error, term()}
     when Module :: atom(),
          Function :: atom(),
@@ -227,7 +228,8 @@ insert_task(Module, Function, Context) ->
 insert_task(Module, Function, UniqueKey, Context) ->
     insert_task_after(undefined, Module, Function, UniqueKey, [], Context).
 
-%% @doc Insert a slow running pivot task with unique key and arguments.
+%% @doc Insert a slow running pivot task with unique key and arguments. The key is unique
+%% for the module:function.
 -spec insert_task(Module, Function, UniqueKey, Args, Context) -> {ok, TaskId} | {error, term()}
     when Module :: atom(),
          Function :: atom(),

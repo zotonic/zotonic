@@ -83,7 +83,7 @@ recv_connect_data(ConnectData, Socket, Transport, State) ->
     case mqtt_sessions:incoming_connect(ConnectData, Options) of
         {ok, {SessionRef, Rest}} ->
             Self = self(),
-            SessionMonitorPid = erlang:spawn_link(fun() -> session_monitor(Self, Socket, Transport, SessionRef) end),
+            SessionMonitorPid = proc_lib:spawn_link(fun() -> session_monitor(Self, Socket, Transport, SessionRef) end),
             State1 = State#{
                 data => undefined,
                 session_ref => SessionRef,

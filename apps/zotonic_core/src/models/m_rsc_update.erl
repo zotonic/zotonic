@@ -453,6 +453,16 @@ update(Id, Props, false, Context) ->
     update(Id, Props, [{is_escape_texts, false}], Context);
 update(Id, Props, true, Context) ->
     update(Id, Props, [{is_escape_texts, true}], Context);
+update(Name, PropsOrFun, Options, Context) when not is_integer(Name), Name =/= insert_rsc ->
+    case m_rsc:name_to_id(Name, Context) of
+        {ok, Id} ->
+            update(Id, PropsOrFun, Options, Context);
+        {error, _} ->
+            case m_rsc:rid(Name, Context) of
+                undefined -> {error, enoent};
+                Id -> update(Id, PropsOrFun, Options, Context)
+            end
+    end;
 update(Id, Props, Options, Context) when is_list(Props) ->
     {ok, Props1} = z_props:from_list(Props),
     OptionsTz = case proplists:lookup(tz, Options) of
@@ -476,8 +486,12 @@ update(Id, Props, Options, Context) when is_list(Props) ->
                     end
             end
     end,
-    update(Id, Props1, OptionsTz, Context);
-update(Id, PropsOrFun, Options, Context) when is_integer(Id); Id =:= insert_rsc ->
+    update_1(Id, Props1, OptionsTz, Context);
+update(Id, PropsOrFun0, Options, Context) when is_integer(Id); Id =:= insert_rsc ->
+    PropsOrFun = binary_keys(PropsOrFun0),
+    update_1(Id, PropsOrFun, Options, Context).
+
+update_1(Id, PropsOrFun, Options, Context) when is_integer(Id); Id =:= insert_rsc ->
     IsImport = proplists:get_value(is_import, Options, false),
     Tz0 = case is_map(PropsOrFun) of
         true when not IsImport ->
@@ -509,17 +523,12 @@ update(Id, PropsOrFun, Options, Context) when is_integer(Id); Id =:= insert_rsc 
         tz = Tz,
         expected = proplists:get_value(expected, Options, [])
     },
-    update_imported_check(RscUpd, PropsOrFun, Context);
-update(Name, PropsOrFun, Options, Context) ->
-    case m_rsc:name_to_id(Name, Context) of
-        {ok, Id} ->
-            update(Id, PropsOrFun, Options, Context);
-        {error, _} ->
-            case m_rsc:rid(Name, Context) of
-                undefined -> {error, enoent};
-                Id -> update(Id, PropsOrFun, Options, Context)
-            end
-    end.
+    update_imported_check(RscUpd, PropsOrFun, Context).
+
+binary_keys(Map) when is_map(Map) ->
+    z_props:from_map(Map);
+binary_keys(Fun) ->
+    Fun.
 
 update_imported_check(#rscupd{is_import = true, id = Id} = RscUpd, PropsOrFun, Context) when is_integer(Id) ->
     case m_rsc:exists(Id, Context) of

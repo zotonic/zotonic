@@ -81,7 +81,7 @@ await_startup_1(Site, N) ->
 %% @doc Called by the 'make test' commands.
 -spec runtests( list(atom()) ) -> ok.
 runtests(Tests) ->
-    erlang:spawn(
+    z_proc:spawn_md(
         fun() ->
             io:format("~nRunning tests:"),
             lists:foreach(

@@ -23,6 +23,7 @@
 -include_lib("../../include/zotonic.hrl").
 
 -export([
+    from_map/1,
     from_props/1,
 
     from_list/1,
@@ -52,6 +53,23 @@
 -define(EPOCH_START_YEAR, -4700).
 -define(EPOCH_END_YEAR, 9999).
 
+
+%% @doc Transform a map to a nested map with binary keys.
+-spec from_map( map() | undefined ) -> map().
+from_map(undefined) ->
+    #{};
+from_map(Map) ->
+    maps:fold(
+        fun(K, V, Acc) ->
+            K1 = to_binary(K),
+            Acc#{ K1 => from_any(V) }
+        end,
+        #{},
+        Map).
+
+from_any(M) when is_map(M) -> from_map(M);
+from_any([ {_, _} | _ ] = L) -> from_props(L);
+from_any(V) -> V.
 
 %% @doc Transform a proplist from older resources and/or code to a (nested) map.
 %%      This knows how to handle nestes lists like the 'blocks' list of lists.

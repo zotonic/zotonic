@@ -186,14 +186,18 @@
 	    <p class="help-block">{_ The billing address is only visible for people who can edit this page. _}</p>
 
 		<div class="row">
-			<div class="form-group col-lg-6 col-md-6 label-floating">
+			<div class="form-group col-lg-4 col-md-6 label-floating">
 				<input class="form-control" id="billing_name" type="text" name="billing_name" value="{{ id.billing_name }}" placeholder="{_ Name for invoices _}">
 				<label class="control-label" for="billing_name">{_ Name for invoices _}</label>
 			</div>
-			<div class="form-group col-lg-6 col-md-6 label-floating">
+			<div class="form-group col-lg-4 col-md-6 label-floating">
 				<input class="form-control" id="billing_email" type="text" name="billing_email" value="{{ id.billing_email }}" placeholder="{_ Email address for invoices _}">
 				{% validate id="billing_email" type={email} %}
 				<label class="control-label" for="billing_email">{_ Email address for invoices _}</label>
+			</div>
+			<div class="form-group col-lg-4 col-md-6 label-floating">
+				<input class="form-control" id="billing_phone" type="text" name="billing_phone" value="{{ id.billing_phone }}" placeholder="{_ Phone number for invoices _}">
+				<label class="control-label" for="billing_phone">{_ Phone number for invoices _}</label>
 			</div>
 		</div>
 
