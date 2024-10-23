@@ -552,7 +552,7 @@ format_to_binary(Format, Terms) ->
         string_to_binary(String)
     catch
         _:_ ->
-            String1 = io_lib:format("~tp", {Format, Terms}),
+            String1 = io_lib:format("~tp", [ {Format, Terms} ]),
             string_to_binary(String1)
     end.
 
