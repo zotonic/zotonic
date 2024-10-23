@@ -66,7 +66,7 @@ code_change(_OldVsn, State, _Extra) ->
 
 
 do_startup(Context) ->
-    erlang:spawn_link(
+    z_proc:spawn_link_md(
         fun() ->
             z_notifier:await(module_ready, 60000, Context),
             ?zInfo("Site started, modules loaded", Context),

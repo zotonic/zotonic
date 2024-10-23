@@ -705,7 +705,7 @@ maybe_rebuild(#state{} = State) ->
 
 start_rebuilder(EditState, Site) ->
     Self = self(),
-    Pid = erlang:spawn_link(fun() ->
+    Pid = z_proc:spawn_link_md(fun() ->
                                 Context = z_acl:sudo(z_context:new(Site)),
                                 acl_user_group_rebuilder:rebuild(Self, EditState, Context)
                             end),

@@ -155,7 +155,7 @@ notify_async(Notifier, Event, Msg, ContextArg) ->
                         Observers);
                 false ->
                     MD = logger:get_process_metadata(),
-                    erlang:spawn(
+                    proc_lib:spawn(
                         fun() ->
                             set_process_metadata(MD),
                             lists:foreach(
@@ -176,7 +176,7 @@ notify1(Notifier, Event, Msg, ContextArg) ->
             notify_observer(Msg, Obs, false, ContextArg);
         [ Obs | _ ] ->
             MD = logger:get_process_metadata(),
-            erlang:spawn(
+            proc_lib:spawn(
                 fun() ->
                     set_process_metadata(MD),
                     notify_observer(Msg, Obs, false, ContextArg)

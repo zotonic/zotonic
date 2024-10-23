@@ -1,8 +1,10 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
-%% @copyright 2014 Maas-Maarten Zeeman
-%% @doc Process registry interface for a site.
+%% @copyright 2014-2024 Maas-Maarten Zeeman
+%% @doc Process registry interface for a site and proc_lib routines
+%% to spawn new processes whilst keeping the logger metadata.
+%% @end
 
-%% Copyright 2014 Maas-Maarten Zeeman
+%% Copyright 2014-2024 Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,6 +20,11 @@
 
 -module(z_proc).
 -author("Maas-Maarten Zeeman <mmzeeman@xs4all.nl").
+
+-export([
+    spawn_link_md/1,
+    spawn_md/1
+]).
 
 -export([
     whereis/2,
@@ -39,6 +46,37 @@
 %%
 %% Api
 %%
+
+
+%% @doc Spawn a new process using proc_lib and copy the logger metadata
+%% from the calling process to the new process.
+-spec spawn_link_md( Fun ) -> Pid when
+    Fun :: function(),
+    Pid :: pid().
+spawn_link_md(Fun) ->
+    MD = logger:get_process_metadata(),
+    proc_lib:spawn_link(
+        fun() ->
+            set_process_metadata(MD),
+            Fun()
+        end).
+
+%% @doc Spawn a new process using proc_lib and copy the logger metadata
+%% from the calling process to the new process.
+-spec spawn_md( Fun ) -> Pid when
+    Fun :: function(),
+    Pid :: pid().
+spawn_md(Fun) ->
+    MD = logger:get_process_metadata(),
+    proc_lib:spawn(
+        fun() ->
+            set_process_metadata(MD),
+            Fun()
+        end).
+
+set_process_metadata(undefined) -> ok;
+set_process_metadata(MD) -> logger:set_process_metadata(MD).
+
 
 % @doc Lookup the pid of the process.
 %

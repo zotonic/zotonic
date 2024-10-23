@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017 Marc Worrell
+%% @copyright 2017-2024 Marc Worrell
 %% @doc Define records for JSON encoding
+%% @end
 
-%% Copyright 2017 Marc Worrell
+%% Copyright 2017-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -22,11 +23,12 @@
     init/0
 ]).
 
--include("zotonic.hrl").
-
 -compile(nowarn_unused_record).
 
-%% Used in EXIF
+%% Include zotonic.hrl for all the record definitions.
+-include_lib("zotonic_core/include/zotonic.hrl").
+
+%% Used in EXIF - defined here for ensuring that this record is known.
 -record(ratio, {
         numerator :: integer(),
         denominator :: integer()
@@ -34,5 +36,5 @@
 
 %% @doc Let jsxrecord load the Zotonic record definitions from this module
 init() ->
-    erlang:spawn( fun() -> jsxrecord:load_records([ ?MODULE ]) end),
+    proc_lib:spawn( fun() -> jsxrecord:load_records([ ?MODULE ]) end),
     application:set_env(mqtt_sessions, json_encoder, jsxrecord).

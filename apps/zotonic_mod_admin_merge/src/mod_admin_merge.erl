@@ -107,7 +107,7 @@ merge(WinnerId, LoserId, <<"merge_delete">>, IsMergeTrans, Context) ->
             z_render:wire({alert, [{text,?__("You do not have permission to edit the winner.", Context)}]}, Context);
         {false, true, true} ->
             ContextSpawn = z_context:prune_for_spawn(Context),
-            erlang:spawn(
+            z_proc:spawn_md(
                 fun() ->
                     ok = m_rsc:merge_delete(WinnerId, LoserId, [ {is_merge_trans, IsMergeTrans} ], ContextSpawn),
                     z_notifier:first(#page_actions{

@@ -194,9 +194,8 @@ subscribe_forced_logoff(Context) ->
             % Start process to prevent unsubscribe on clean session start.
             SessionPid = self(),
             {ok, ClientId} = z_context:client_id(Context),
-            erlang:spawn_link(
+            z_proc:spawn_link_md(
                 fun() ->
-                    z_context:logger_md(Context),
                     ok = z_mqtt:subscribe(
                         [ <<"~user">>, <<"session">>, <<"logoff">> ],
                         Context),
@@ -260,6 +259,7 @@ connect(#{ type := connect, username := U, password := P }, true,
                 reason_code => ?MQTT_RC_SUCCESS
             },
             Context1 = set_connect_context_options(Options, Context),
+            z_context:logger_md(Context1),
             {ok, ConnAck, Context1};
         _SomeOtherUser ->
             ConnAck = #{
@@ -277,6 +277,7 @@ connect(#{ type := connect, username := U, password := P }, _IsSessionPresent, O
                 reason_code => ?MQTT_RC_SUCCESS
             },
             Context1 = set_connect_context_options(Options, Context),
+            z_context:logger_md(Context1),
             {ok, ConnAck, Context1};
         _SomeUser ->
             ConnAck = #{
@@ -321,6 +322,7 @@ connect(#{ type := connect, username := U, password := P, properties := Props },
                             },
                             z_auth:publish_user_session(ContextAuth),
                             subscribe_forced_logoff(ContextAuth),
+                            z_context:logger_md(ContextAuth),
                             {ok, ConnAck, ContextAuth};
                         {error, user_not_enabled} ->
                             ?LOG_INFO(#{

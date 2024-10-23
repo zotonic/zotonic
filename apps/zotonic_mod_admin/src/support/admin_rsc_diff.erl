@@ -87,6 +87,8 @@
     <<"mail_postcode">>,
     <<"mail_country">>,
 
+    <<"billing_name">>,
+    <<"billing_phone">>,
     <<"billing_email">>,
     <<"billing_street_1">>,
     <<"billing_street_2">>,

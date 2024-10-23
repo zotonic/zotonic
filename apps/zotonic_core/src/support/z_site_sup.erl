@@ -55,11 +55,11 @@ init(Site) ->
     % that this module is called by z_sites_manager. So blocking the
     % call. A solution is to decouple the config scanning from
     % the sites supervisor.
-    erlang:spawn_link(fun() -> install_phase1(Site) end),
     logger:set_process_metadata(#{
         site => Site,
         module => ?MODULE
     }),
+    z_proc:spawn_link_md(fun() -> install_phase1(Site) end),
     z_sites_manager:set_site_status(Site, starting),
     {ok, {{one_for_all, 2, 1}, [
         {z_trans_server,

@@ -45,7 +45,7 @@ manage_schema({upgrade, 3}, Context) ->
 manage_schema({upgrade, 4}, Context) ->
     install_schema_v2(Context),
     ContextAsync = z_context:prune_for_spawn(Context),
-    erlang:spawn(
+    z_proc:spawn_md(
         fun() ->
             ok = upgrade_results_v2(ContextAsync),
             % z_db:q("drop table survey_answer", ContextAsync)

@@ -37,7 +37,7 @@ event(#submit{message={wxr_upload, []}}, Context) ->
     #upload{filename=OriginalFilename, tmpfile=TmpFile} = z_context:get_q_validated(<<"upload_file">>, Context),
     Reset = z_convert:to_bool(z_context:get_q(<<"reset">>, Context)),
     % z_session_page:spawn_link(?MODULE, do_import, [TmpFile, Reset, OriginalFilename, Context], Context),
-    erlang:spawn(fun() ->
+    z_proc:spawn_md(fun() ->
         ?MODULE:do_import(TmpFile, Reset, OriginalFilename, Context)
     end),
     Context2 = z_render:growl("Please hold on while the file is importing. You will get a notification when it is ready.", Context),

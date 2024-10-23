@@ -342,7 +342,7 @@ dispatch_trace(Path, Context) ->
 
 -spec dispatch_trace( http | https, binary(), z:context() ) -> {ok, [ trace() ]} | {error, timeout}.
 dispatch_trace(Protocol, Path, Context) ->
-    TracerPid = erlang:spawn_link(fun tracer/0),
+    TracerPid = z_proc:spawn_link_md(fun tracer/0),
     AbsPath = ensure_abs(Path),
     dispatch(<<"GET">>, z_context:hostname(Context), AbsPath, Protocol =:= https, TracerPid),
     TracerPid ! {fetch, self()},
