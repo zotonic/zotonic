@@ -108,7 +108,7 @@
     {% with script_type|default:"text/javascript" as script_type %}
     {% if not m.acl.is_admin and not notrack %}
         {% if m.seo.google.analytics as ga %}
-            <script type="{{ script_type }}" async src="https://www.googletagmanager.com/gtag/js?id={{ ga|urlencode }}"></script>
+            <script type="{{ script_type }}" async src="https://www.googletagmanager.com/gtag/js?id={{ ga|urlencode }}" nonce="{{ m.req.csp_nonce }}"></script>
             <script type="text/javascript" nonce="{{ m.req.csp_nonce }}">
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
