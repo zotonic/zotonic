@@ -24,8 +24,8 @@ find params:
 - content_group (optional) can also be the string "me" to search on user created content
 #}
 
-{% block dialog %}
 
+{% block dialog %}
 {% if not intent|member:[ 'select', 'create', 'connect' ] %}
     <p class="alert alert-danger">
         Please specify the <b>intent</b> argument when using the <b>_action_dialog_connect.tpl</b>.<br>
@@ -38,7 +38,7 @@ find params:
     language|default:(q.language|escape)|default:z_language,
     actions|default:[],
     tab|default:q.tab|default:(tabs_enabled|first)|default:"find",
-    m.rsc[q.category|default:category].id|default:(m.predicate.object_category[predicate]|first|element:1),
+    cat|default:m.rsc[q.category|default:category].id|default:(m.predicate.object_category[predicate]|first|element:1),
     dependent|if_undefined:m.admin.rsc_dialog_is_dependent,
     m.rsc[q.rsc_id].id|default:subject_id
 

@@ -17,6 +17,7 @@ Params:
 Config key:
 - mod_admin.edge_list_max_length -- max number of items shown per predicate
 #}
+
 {% with m.admin.edge_list_max_length|default:100 as edge_list_max_length %}
 {% with list_id|default:#list_id as list_id %}
 <div class="unlink-wrapper">
@@ -44,6 +45,7 @@ Config key:
 
 {% if m.acl.is_allowed.link[id] %}
   <a id="{{ #connect.predicate }}" href="#connect" class="{{ button_class|default:"" }}">{{ button_label|default:_"+ add" }}</a>
+
     {% wire
        id=#connect.predicate
        action={
@@ -56,6 +58,7 @@ Config key:
           tabs_enabled=tabs_enabled
           callback=callback
           nocatselect=nocatselect
+          cat=cat
           content_group=content_group
           action=action
           unlink_action=unlink_action
