@@ -50,13 +50,13 @@ case "$1" in
                 # TODO: Completion for options
                 printf "#/usr/bin/env bash\n\n_zotonic_completions()\n{\n\tif [ \"\${#COMP_WORDS[@]}\" != \"2\" ]; then\n\t\treturn\n\tfi\n\n\tlocal suggestions=(\$(compgen -W %s \"\${COMP_WORDS[1]}\"))\n\tCOMPREPLY=(\"\${suggestions[@]}\")\n}\n\ncomplete -F _zotonic_completions zotonic" "$COMMAND_NAMES" >| "$OUTPUT"
                 if grep -q "source $OUTPUT" $BASH_FILE; then
-                    echo "'bin/zotonic' already appended to $BASH_FILE."
+                    echo "Completion for command 'bin/zotonic' was already appended to $BASH_FILE."
                 else
                     echo "source $OUTPUT" >> $BASH_FILE
                     bash -c "source $BASH_FILE"
                     echo "Completion for command 'bin/zotonic' appended to $BASH_FILE."
-                    echo "If the completion doesn't work, try restarting the current terminal."
                 fi
+                echo "If the completion doesn't work, try restarting the current terminal."
             else
                 echo "$BASH_FILE does not exist."
                 echo "The completion for 'bin/zotonic' was not created."
