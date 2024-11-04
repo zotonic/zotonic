@@ -53,7 +53,7 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
 	Recipients = z_mailinglist_recipients:list_recipients(Id, Context),
     Lines = maps:fold(
         fun
-            (_Email, RcptId, Acc) when is_integer(Id) ->
+            (_Email, RcptId, Acc) when is_integer(RcptId) ->
                 case recipient_line(RcptId, Context) of
                     {true, Line} ->
                         [ Line | Acc ];
@@ -66,6 +66,7 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
                     maps:get(<<"name_first">>, R, <<>>),
                     maps:get(<<"name_surname">>, R, <<>>),
                     maps:get(<<"name_surname_prefix">>, R, <<>>),
+                    maps:get(<<"pref_language">>, R, <<>>),
                     undefined
                 ],
                 [ Line | Acc ];
@@ -81,6 +82,7 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
             <<"First">>,
             <<"Surname">>,
             <<"Prefix">>,
+            <<"Language">>,
             <<"Id">>
         ]
         | Lines
@@ -107,6 +109,7 @@ recipient_line(Id, Context) ->
                 unesc(m_rsc:p(Id, <<"name_first">>, Context)),
                 unesc(m_rsc:p(Id, <<"name_surname">>, Context)),
                 unesc(m_rsc:p(Id, <<"name_surname_prefix">>, Context)),
+                m_rsc:p(Id, <<"pref_language">>, Context),
                 integer_to_binary(Id)
             ]};
         _ ->
