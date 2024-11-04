@@ -53,7 +53,7 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
 	Recipients = z_mailinglist_recipients:list_recipients(Id, Context),
     Lines = maps:fold(
         fun
-            (_Email, RcptId, Acc) when is_integer(Id) ->
+            (_Email, RcptId, Acc) when is_integer(RcptId) ->
                 case recipient_line(RcptId, Context) of
                     {true, Line} ->
                         [ Line | Acc ];
