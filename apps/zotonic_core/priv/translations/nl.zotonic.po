@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-10-10 08:29\n"
+"PO-Revision-Date: 2024-11-04 15:25\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -1495,7 +1495,7 @@ msgstr "Volg verbindingen en importeer alles (diepe kopie)."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:35
 msgid "Free"
-msgstr "Gratis"
+msgstr "Vrij"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:59
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:112
