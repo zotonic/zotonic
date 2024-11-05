@@ -44,6 +44,9 @@ qcat
                                 </span>
                             {% endif %}
                             <span {% include "_language_attrs.tpl" %}>{{ id.title|striptags|default:_"<em>Untitled</em>" }}</span>
+                            {% if id.is_protected %}
+                                &nbsp; <span class="fa fa-lock text-muted" title="{_ Protected, not deletable _}"></span>
+                            {% endif %}
                         </td>
                         <td>
                             {% if qcat %}
@@ -128,6 +131,9 @@ qcat
                     </span>
                 {% endif %}
                 <span {% include "_language_attrs.tpl" %}>{{ id.title|default:id.short_title|striptags|default:_"<em>Untitled</em>" }}</span>
+                {% if id.is_protected %}
+                    &nbsp; <span class="fa fa-lock text-muted" title="{_ Protected, not deletable _}"></span>
+                {% endif %}
             </td>
             <td>
                 {% if qcat %}

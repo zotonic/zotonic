@@ -7,7 +7,7 @@
     {% endif %}
     {_ This is system content. _}
 
-    <a href="http://docs.zotonic.com/en/latest/user-guide/datamodel.html" target="_blank">
+    <a href="https://zotonic.com/en/latest/user-guide/datamodel.html" target="_blank">
         [{_ Click here for more information _}]
     </a>
 </div>
