@@ -32,6 +32,11 @@
             <div class="{% if depict %}admin-header-has-image{% endif %}">
                 <h2 {% include "_language_attrs.tpl" %}>
                     {{ id.title|default:id.short_title|default:("<em>" ++ _"untitled" ++ "</em>")}}
+
+                {% if id.is_protected %}
+                    &nbsp; <small class="fa fa-lock text-muted small" title="{_ Protected, not deletable _}"></small>
+                {% endif %}
+
                 </h2>
                 <a class='btn btn-default btn-xs admin-btn-category' href="javascript:;" id="changecategory" title="{_ Change category _}">
                     <span class="text-muted">{_ Category: _}</span>
