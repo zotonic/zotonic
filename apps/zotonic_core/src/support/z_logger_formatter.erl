@@ -59,6 +59,7 @@
 
 -define(TRUNCATE_DEPTH, 5).
 -define(TRUNCATE_LIST, 6).
+-define(TRUNCATE_STRING, 1000).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -556,10 +557,10 @@ format_to_binary(Format, Terms) ->
             string_to_binary(String1)
     end.
 
-maybe_truncate(L) when is_list(L), length(L) > 1000 ->
-    z_string:truncatechars(unicode:characters_to_binary(L), 1000, <<"...">>);
-maybe_truncate(B) when size(B) > 1000 ->
-    z_string:truncatechars(B, 1000, <<"...">>);
+maybe_truncate(L) when is_list(L), length(L) > ?TRUNCATE_STRING ->
+    z_string:truncatechars(unicode:characters_to_binary(L), ?TRUNCATE_STRING, <<"...">>);
+maybe_truncate(B) when size(B) > ?TRUNCATE_STRING ->
+    z_string:truncatechars(B, ?TRUNCATE_STRING, <<"...">>);
 maybe_truncate(B) ->
     B.
 
