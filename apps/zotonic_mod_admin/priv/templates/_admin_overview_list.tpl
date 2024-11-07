@@ -38,10 +38,17 @@ qcat
                                 <span class="label label-warning pull-right" title="{_ This is system content. _}">
                                     {{ id.name|default:_"system content" }}
                                 </span>
-                            {% elseif id.name %}
+                            {% elif id.name %}
                                 <span class="label label-default pull-right">
                                     {{ id.name }}
                                 </span>
+                            {% endif %}
+                            {% if id | is_a:"person" %}
+                                {% if m.identity[id].username as username %}
+                                    <span class="label label-default pull-right">
+                                        {{ username | escape }}
+                                    </span>
+                                {% endif %}
                             {% endif %}
                             <span {% include "_language_attrs.tpl" %}>{{ id.title|striptags|default:_"<em>Untitled</em>" }}</span>
                         </td>
@@ -118,16 +125,21 @@ qcat
                 <input type="checkbox" value="{{ id }}" name="csel">
             </td>
             <td>
+                <span {% include "_language_attrs.tpl" %}>{{ id.title|default:id.short_title|striptags|default:_"<em>Untitled</em>" }}</span>
                 {% if id == 1 or id.is_a.meta or id.content_group_id.name == 'system_content_group' %}
-                    <span class="label label-warning pull-right" title="{_ This is system content. _}">
+                    <span class="label label-warning pull-right hidden-xs" title="{_ This is system content. _}">
                         {{ id.name|default:_"system content" }}
                     </span>
                 {% elseif id.name %}
-                    <span class="label label-default pull-right">
+                    <span class="label label-default pull-right hidden-xs">
                         {{ id.name }}
                     </span>
                 {% endif %}
-                <span {% include "_language_attrs.tpl" %}>{{ id.title|default:id.short_title|striptags|default:_"<em>Untitled</em>" }}</span>
+                {% if id | is_a:"person" %}
+                    {% if m.identity[id].username as username %}
+                        <span class="label label-info pull-right hidden-xs">{{ username | escape }}</span>
+                    {% endif %}
+                {% endif %}
             </td>
             <td>
                 {% if qcat %}
