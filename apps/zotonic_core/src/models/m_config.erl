@@ -321,11 +321,10 @@ set_value_db(Module, Key, Value0, IsAllowUpdate, Context) ->
                     1 = z_db:q("
                         update config
                         set value = $1,
-                            is_secret = is_secret or $2
                             modified = now()
-                        where module = $3
-                          and key = $4",
-                        [ Value, is_secret_key(KeyBin), ModuleAtom, KeyAtom ],
+                        where module = $2
+                          and key = $3",
+                        [ Value, ModuleAtom, KeyAtom ],
                         Ctx),
                     {update, OldValue};
                 _ ->
