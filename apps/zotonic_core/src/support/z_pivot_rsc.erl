@@ -138,7 +138,9 @@ status(Context) ->
     gen_server:call(Context#context.pivot_server, status).
 
 %% @doc An immediate pivot request for a resource
--spec pivot(integer(), z:context()) -> ok.
+-spec pivot(Id, Context) -> ok when
+    Id :: m_rsc:resource_id(),
+    Context :: z:context().
 pivot(Id, Context) ->
     gen_server:cast(Context#context.pivot_server, {pivot, Id}).
 
@@ -149,42 +151,64 @@ pivot_delay(Context) ->
 
 
 %% @doc Return a modified property list with fields that need immediate pivoting on an update.
+-spec pivot_resource_update(Id, UpdateProps, RawProps, Context) -> UpdateProps1 when
+    Id :: m_rsc:resource_id(),
+    UpdateProps :: m_rsc:props(),
+    RawProps :: m_rsc:props(),
+    Context :: z:context(),
+    UpdateProps1 :: m_rsc:props().
 pivot_resource_update(Id, UpdateProps, RawProps, Context) ->
     z_pivot_rsc_job:pivot_resource_update(Id, UpdateProps, RawProps, Context).
 
 %% @doc Rebuild the search index by queueing all resources for pivot.
+-spec queue_all(Context) -> ok when
+    Context :: z:context().
 queue_all(Context) ->
+    ?LOG_INFO(#{
+        in => zotonic_mod_search,
+        text => <<"Pivot: queueing all resources for repivot - start">>
+    }),
+    Max = z_db:q1("select max(id) from rsc", Context),
     z_proc:spawn_md(fun() ->
-                    queue_all_1(0, Context)
-                 end).
+                    queue_all_1(Max+1, Context)
+                 end),
+    ok.
 
-queue_all_1(FromId, Context) ->
+queue_all_1(ToId, Context) ->
     case z_db:q("
         insert into rsc_pivot_log (rsc_id)
         select id
         from rsc
-        where id > $1
-        order by id
+        where id < $1
+        order by id desc
         limit 10000
         returning rsc_id",
-        [ FromId ],
+        [ ToId ],
         Context)
     of
         [] ->
+            ?LOG_INFO(#{
+                in => zotonic_mod_search,
+                text => <<"Pivot: queueing all resources for repivot - queued">>
+            }),
             done;
         Rs ->
             Ids = [ Id || {Id} <- Rs ],
-            queue_all_1(lists:max(Ids), Context)
+            queue_all_1(lists:min(Ids), Context)
     end.
 
 
 %% @doc Return the length of the pivot queue.
--spec queue_count(z:context()) -> non_neg_integer().
+-spec queue_count(Context) -> QueueLength when
+    Context :: z:context(),
+    QueueLength :: non_neg_integer().
 queue_count(Context) ->
     z_db:q1("SELECT COUNT(distinct rsc_id) FROM rsc_pivot_log", Context).
 
 %% @doc Return the number of pivot queue items scheduled for direct pivot.
--spec queue_count_backlog(z:context()) -> non_neg_integer().
+-spec queue_count_backlog(Context) -> BacklogLength when
+    Context :: z:context(),
+    BacklogLength :: non_neg_integer().
 queue_count_backlog(Context) ->
     z_db:q1("
         select count(distinct rsc_id)
