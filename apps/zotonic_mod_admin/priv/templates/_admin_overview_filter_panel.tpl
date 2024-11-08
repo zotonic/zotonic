@@ -49,8 +49,8 @@
             <div class="col-sm-4">
                 <select name="qis_published" class="form-control col-md-8">
                     <option value=""></option>
-                    <option value="1">{_ Published _}</option>
-                    <option value="0">{_ Unpublished _}</option>
+                    <option value="1" {% if q.qis_published %}selected{% endif %}>{_ Published _}</option>
+                    <option value="0" {% if q.qis_published == "0" %}selected{% endif %}>{_ Unpublished _}</option>
                 </select>
             </div>
         </div>

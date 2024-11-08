@@ -148,9 +148,7 @@ get(Module, Context) when is_binary(Module) ->
     Context :: z:context(),
     Config :: proplists:proplist() | undefined.
 get(zotonic, Key, _Context) when is_atom(Key) ->
-    [
-        {value, z_config:get(Key)}
-    ];
+    [ {value, z_config:get(Key)} ];
 get(Module, Key, Context) when is_atom(Module), is_atom(Key) ->
     Value = case z_depcache:get_subkey(config, Module, Context) of
         {ok, undefined} ->
@@ -168,8 +166,8 @@ get(Module, Key, Context) when is_atom(Module), is_atom(Key) ->
         undefined ->
             case m_site:get(Module, Key, Context) of
                 undefined -> undefined;
-                [H|_] = V when is_tuple(H) -> [{list, V}];
-                V -> [{value, V}]
+                [H|_] = V when not is_integer(H) -> [ {list, V} ];
+                V -> [ {value, maybe_convert_to_binary(V)} ]
             end;
         _ ->
             Value
@@ -196,13 +194,9 @@ get(Module, Key, Context) when is_binary(Key) ->
     Key :: atom() | binary(),
     Context :: z:context().
 get_value(Module, Key, Context) when is_atom(Module), is_atom(Key) ->
-    Value = case get(Module, Key, Context) of
+    case get(Module, Key, Context) of
         undefined -> undefined;
         Cfg -> proplists:get_value(value, Cfg)
-    end,
-    case Value of
-        undefined -> m_site:get(Module, Key, Context);
-        _ -> Value
     end;
 get_value(Module, Key, Context) when is_binary(Module) ->
     try
@@ -327,10 +321,11 @@ set_value_db(Module, Key, Value0, IsAllowUpdate, Context) ->
                     1 = z_db:q("
                         update config
                         set value = $1,
+                            is_secret = is_secret or $2
                             modified = now()
-                        where module = $2
-                          and key = $3",
-                        [ Value, ModuleAtom, KeyAtom ],
+                        where module = $3
+                          and key = $4",
+                        [ Value, is_secret_key(KeyBin), ModuleAtom, KeyAtom ],
                         Ctx),
                     {update, OldValue};
                 _ ->
@@ -522,3 +517,8 @@ safe_log_value(Value) when is_binary(Value) andalso size(Value) > 6 ->
     <<First/binary, "****">>;
 safe_log_value(_) ->
     <<"****">>.
+
+maybe_convert_to_binary(V) when is_list(V) ->
+    unicode:characters_to_binary(V);
+maybe_convert_to_binary(V) ->
+    V.
