@@ -657,17 +657,22 @@ add_term_arg(ArgValue, #search_sql_term{ args = Args } = Q) ->
 pivot_all(Context) ->
     ?LOG_INFO(#{
         in => zotonic_mod_search,
-        text => <<"Faceted search: repivoting facet for all resources">>
+        text => <<"Faceted search: repivoting facet for all resources - queued">>
     }),
-    {ok, _} = z_pivot_rsc:insert_task_after(1, ?MODULE, pivot_batch, facet_pivot_batch, [0], Context),
+    MaxId = z_db:q1("select max(id) from rsc", Context),
+    {ok, _} = z_pivot_rsc:insert_task_after(0, ?MODULE, pivot_batch, facet_pivot_batch, [MaxId+1], Context),
     ok.
 
-%% @doc Batch for running the facet table updates. This updates the table with 1000 resources
+%% @doc Batch for running the facet table updates. This updates the table with 5000 resources
 %% at a time.
-pivot_batch(FromId, Context0) ->
+pivot_batch(ToId, Context0) ->
     Context = z_acl:sudo(Context0),
-    case z_db:q("select id from rsc where id > $1 order by id limit 5000", [FromId], Context) of
+    case z_db:q("select id from rsc where id < $1 order by id desc limit 5000", [ToId], Context) of
         [] ->
+            ?LOG_INFO(#{
+                in => zotonic_mod_search,
+                text => <<"Faceted search: repivoting facet for all resources - ready">>
+            }),
             done;
         Rs ->
             lists:foreach(
@@ -675,8 +680,8 @@ pivot_batch(FromId, Context0) ->
                     pivot_rsc(Id, Context)
                 end,
                 Rs),
-            {Max} = lists:last(Rs),
-            {delay, 1, [Max]}
+            {Min} = lists:last(Rs),
+            {delay, 0, [Min]}
     end.
 
 %% @doc Pivot a resource, fill the facet table.
