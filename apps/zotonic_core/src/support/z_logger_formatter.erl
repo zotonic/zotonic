@@ -59,6 +59,7 @@
 
 -define(TRUNCATE_DEPTH, 5).
 -define(TRUNCATE_LIST, 6).
+-define(TRUNCATE_STRING, 1000).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -508,11 +509,11 @@ escape(Str) ->
     case needs_escape(Str) of
         false ->
             case needs_quoting(Str) of
-                true -> [$", Str, $"];
+                true -> [$", maybe_truncate(Str), $"];
                 false -> Str
             end;
         true ->
-            [$", do_escape(Str), $"]
+            [$", maybe_truncate(do_escape(Str)), $"]
     end.
 
 needs_quoting(Str) ->
@@ -544,7 +545,7 @@ string_to_binary(String) ->
     %% Remove any ANSI colors; this is intended for inputs that have ANSI
     %% colors added to them, e.g., by another logging library/framework.
     T1 = re:replace(String, "\e\[[0-9;]*m", ""),
-    unicode:characters_to_binary(T1).
+    maybe_truncate(unicode:characters_to_binary(T1)).
 
 format_to_binary(Format, Terms) ->
     try
@@ -555,6 +556,13 @@ format_to_binary(Format, Terms) ->
             String1 = io_lib:format("~tp", [ {Format, Terms} ]),
             string_to_binary(String1)
     end.
+
+maybe_truncate(L) when is_list(L), length(L) > ?TRUNCATE_STRING ->
+    z_string:truncatechars(unicode:characters_to_binary(L), ?TRUNCATE_STRING, <<"...">>);
+maybe_truncate(B) when size(B) > ?TRUNCATE_STRING ->
+    z_string:truncatechars(B, ?TRUNCATE_STRING, <<"...">>);
+maybe_truncate(B) ->
+    B.
 
 
 %% ================ pretty print gen_server reason ==================
