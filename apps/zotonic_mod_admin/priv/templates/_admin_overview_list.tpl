@@ -48,12 +48,10 @@ qcat
                                     {{ id.name }}
                                 </span>
                             {% endif %}
-                            {% if id | is_a:"person" %}
-                                {% if m.identity[id].username as username %}
-                                    <span class="label label-info pull-right hidden-xs">
-                                        {{ username | escape }}
-                                    </span>
-                                {% endif %}
+                            {% if m.identity[id].username as username %}
+                                <span class="label label-info pull-right hidden-xs">
+                                    {{ username | escape }}
+                                </span>
                             {% endif %}
                         </td>
                         <td>
@@ -143,10 +141,8 @@ qcat
                         {{ id.name }}
                     </span>
                 {% endif %}
-                {% if id | is_a:"person" %}
-                    {% if m.identity[id].username as username %}
-                        <span class="label label-info pull-right hidden-xs">{{ username | escape }}</span>
-                    {% endif %}
+                {% if m.identity[id].username as username %}
+                    <span class="label label-info pull-right hidden-xs">{{ username | escape }}</span>
                 {% endif %}
             </td>
             <td>
