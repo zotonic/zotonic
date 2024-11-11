@@ -182,6 +182,14 @@ set_connect_context_options(Options, Context) ->
     Context6 = maybe_set_user_agent(Prefs, Context5),
     z_acl:logon_refresh(Context6).
 
+set_connect_properties(#{ <<"cotonic_sid">> := Sid }, Context) when not ?none(Sid) ->
+    RoutingId = Context#context.routing_id,
+    Context1 = z_context:set_session_id(Sid, Context),
+    { #{ <<"cotonic-routing-id">> => RoutingId }, Context1 };
+set_connect_properties(_Properties, Context) ->
+    { #{}, Context }.
+
+
 %% @doc Force reauthentication of the user-agent with the server. Kills the current
 %% MQTT session after requesting the client to refresh by calling the auth model.
 %% This function is triggered for websocket connections by publishing to the topic:
@@ -229,10 +237,7 @@ connect(#{ type := connect, username := U, password := P, properties := Props },
     % No session, accept user from the mqtt controller
     AuthOptions = maps:get(auth_options, Prefs, #{}),
     Context1 = set_connect_context_options(Options, Context),
-    Context2 = case maps:get(<<"cotonic_sid">>, Props, undefined) of
-        undefined -> Context1;
-        Sid when Sid =/= <<>> -> z_context:set_session_id(Sid, Context1)
-    end,
+    {ConnAckProps, Context2} = set_connect_properties(Props, Context1),
     Context3 = if
         UserId =:= undefined ->
             Context2;
@@ -244,7 +249,8 @@ connect(#{ type := connect, username := U, password := P, properties := Props },
     z_auth:publish_user_session(Context3),
     ConnAck = #{
         type => connack,
-        reason_code => ?MQTT_RC_SUCCESS
+        reason_code => ?MQTT_RC_SUCCESS,
+        properties => ConnAckProps
     },
     z_context:logger_md(Context3),
     {ok, ConnAck, Context3};
@@ -306,19 +312,13 @@ connect(#{ type := connect, username := U, password := P, properties := Props },
             case IsAuthOk of
                 true ->
                     Context1 = set_connect_context_options(Options, Context),
-                    Context2 = case maps:get(<<"cotonic_sid">>, Props, undefined) of
-                        undefined -> Context1;
-                        Sid when Sid =/= <<>> -> z_context:set_session_id(Sid, Context1)
-                    end,
+                    {ConnAckProps, Context2} = set_connect_properties(Props, Context1),
                     case z_auth:logon(UserId, Context2) of
                         {ok, ContextAuth} ->
                             ConnAck = #{
                                 type => connack,
                                 reason_code => ?MQTT_RC_SUCCESS,
-                                properties => #{
-                                    % TODO: also return a token that can be exchanged for a cookie
-                                    % ... token ...
-                                }
+                                properties => ConnAckProps
                             },
                             z_auth:publish_user_session(ContextAuth),
                             subscribe_forced_logoff(ContextAuth),
