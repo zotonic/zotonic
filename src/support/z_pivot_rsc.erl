@@ -408,24 +408,15 @@ code_change(_OldVsn, State, _Extra) ->
 %% @doc Insert a list of ids into the pivot queue.
 do_insert_queue(Ids, Context) when is_list(Ids) ->
     F = fun(Ctx) ->
-        z_db:q("lock table rsc_pivot_queue in share row exclusive mode", Ctx),
-        lists:foreach(
-            fun(Id) ->
-                case z_db:q1("select id from rsc where id = $1", [Id], Ctx) of
-                    Id ->
-                        case z_db:q("update rsc_pivot_queue set serial = serial + 1 where rsc_id = $1", [Id], Ctx) of
-                            1 -> ok;
-                            0 ->
-                                z_db:q("
-                                    insert into rsc_pivot_queue (rsc_id, due, is_update)
-                                    select id, current_timestamp, true from rsc where id = $1",
-                                    [Id], Ctx)
-                        end;
-                    undefined ->
-                        ok
-                end
-            end,
-            Ids)
+        z_db:q("
+            insert into rsc_pivot_queue (rsc_id, due, is_update)
+            select id, current_timestamp, true from rsc where id = any($1)
+            on conflict (rsc_id)
+            do update
+            set serial = rsc_pivot_queue.serial + 1
+            ",
+            [Ids], Ctx),
+        ok
     end,
     case z_db:transaction(F, Context) of
         ok ->
