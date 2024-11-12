@@ -69,6 +69,8 @@
 
 observe_media_update_done(#media_update_done{action=insert, post_props=Props}, Context) ->
     queue_medium(Props, Context);
+observe_media_update_done(#media_update_done{action=update, post_props=Props}, Context) ->
+    queue_medium(Props, Context);
 observe_media_update_done(#media_update_done{}, _Context) ->
     ok.
 
