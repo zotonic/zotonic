@@ -1,11 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Standard controller for HTML representation of resources. Redirects
 %% to the canonical page_url and handles "gone" resources that are merged
 %% into other resources.
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@
     previously_existed/1,
     moved_permanently/1,
     is_authorized/1,
+    last_modified/1,
     process/4
 ]).
 
@@ -103,6 +104,10 @@ redirect(undefined, Context) ->
 redirect(Location, Context) ->
     {{true, Location}, Context}.
 
+%% @doc Return the modification date of the resource.
+last_modified(Context) ->
+    Id = z_controller_helper:get_id(Context),
+    {m_rsc:p(Id, <<"modified">>, Context), Context}.
 
 %% @doc Show the page. Add a noindex header when requested by the editor.
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
