@@ -381,6 +381,13 @@ update_imported_check(#rscupd{is_import=true, id=Id} = RscUpd, Props, Context) w
             ok
     end,
     update_editable_check(RscUpd, Props, Context);
+update_imported_check(#rscupd{id=Id} = RscUpd, Props, Context) when is_integer(Id) ->
+    case m_rsc:exists(Id, Context) of
+        true ->
+            update_editable_check(RscUpd, Props, Context);
+        false ->
+            throw({error, enoent})
+    end;
 update_imported_check(RscUpd, Props, Context) ->
     update_editable_check(RscUpd, Props, Context).
 
