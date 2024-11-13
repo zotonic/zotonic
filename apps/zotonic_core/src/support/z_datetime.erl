@@ -80,6 +80,7 @@
     week_boundaries/2,
 
     timestamp/0,
+    msec/0,
 
     timestamp_to_datetime/1,
     datetime_to_timestamp/1,
@@ -638,6 +639,10 @@ day_add(Date, Num) when Num > 0 ->
     day_add(next_day(Date), Num - 1).
 
 
+%% @doc Return the millisec value of the current clock.
+-spec msec() -> integer().
+msec() ->
+    erlang:system_time(millisecond).
 
 % Constant value of calendar:datetime_to_gregorian_seconds({{1970,1,1},{0,0,0}})
 -define(SECS_1970, 62167219200).
