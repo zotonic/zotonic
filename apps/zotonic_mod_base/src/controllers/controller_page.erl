@@ -29,7 +29,7 @@
     previously_existed/1,
     moved_permanently/1,
     is_authorized/1,
-    last_modified/1,
+    % last_modified/1,
     process/4
 ]).
 
@@ -105,9 +105,12 @@ redirect(Location, Context) ->
     {{true, Location}, Context}.
 
 %% @doc Return the modification date of the resource.
-last_modified(Context) ->
-    Id = z_controller_helper:get_id(Context),
-    {m_rsc:p(Id, <<"modified">>, Context), Context}.
+%% There is a problem with the CSP nonce being different on the 304
+%% than on the original page. Prevent caching by not setting the
+%% modified date till we have a fix/workaround.
+% last_modified(Context) ->
+%     Id = z_controller_helper:get_id(Context),
+%     {m_rsc:p(Id, <<"modified">>, Context), Context}.
 
 %% @doc Show the page. Add a noindex header when requested by the editor.
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
