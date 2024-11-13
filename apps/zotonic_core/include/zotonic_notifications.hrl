@@ -690,6 +690,7 @@
 %% @doc First for logon of user with username, called after successful password check.
 %% Return: 'undefined' | ok | {error, Reason}
 -record(auth_postcheck, {
+        service = username_pw :: atom(),
         id :: m_rsc:resource_id(),
         query_args = #{} :: map()
     }).

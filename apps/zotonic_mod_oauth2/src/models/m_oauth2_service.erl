@@ -331,7 +331,8 @@ user_data({ok, Auth}, InitialQArgs, SId, ServiceMod, MSec, Context) ->
             ?LOG_INFO(#{
                 text => <<"OAuth user needs passcode">>,
                 in => zotonic_mod_oauth2,
-                result => ok,
+                result => error,
+                reason => need_passcode,
                 user_id => UserId,
                 sid => SId,
                 service => ServiceMod,
@@ -339,6 +340,31 @@ user_data({ok, Auth}, InitialQArgs, SId, ServiceMod, MSec, Context) ->
             }),
             {ok, #{
                 result => need_passcode,
+                authuser => Encoded,
+                url => url(<<"p">>, InitialQArgs)
+            }};
+       {error, {set_passcode, UserId}} ->
+            % There is an existing account with matching confirmed identities.
+            % The user is required to set an additional 2FA on this site.
+            AuthUser = #{
+                auth => Auth,
+                user_id => UserId
+            },
+            Secret = z_context:state_cookie_secret(Context),
+            Expires = termit:expiring(AuthUser, ?SESSION_AUTH_TTL),
+            Encoded = termit:encode_base64(Expires, Secret),
+            ?LOG_INFO(#{
+                text => <<"OAuth user needs to set passcode">>,
+                in => zotonic_mod_oauth2,
+                result => error,
+                reason => set_passcode,
+                user_id => UserId,
+                sid => SId,
+                service => ServiceMod,
+                time => z_datetime:msec() - MSec
+            }),
+            {ok, #{
+                result => set_passcode,
                 authuser => Encoded,
                 url => url(<<"p">>, InitialQArgs)
             }};

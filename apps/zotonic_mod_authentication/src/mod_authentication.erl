@@ -298,10 +298,17 @@ maybe_add_identity_logon(Auth, Context) ->
                     {ok, UserId};
                 {[UserId], _} when not Auth#auth_validated.is_signup_confirmed ->
                     % Local user with matching verified email identity.
-                    case z_notifier:first(#auth_postcheck{ id = UserId, query_args = #{} }, Context) of
+                    case z_notifier:first(#auth_postcheck{
+                            service = Auth#auth_validated.service,
+                            id = UserId,
+                            query_args = #{}
+                        }, Context) of
                         {error, need_passcode} ->
                             % Local 2FA enabled - let the user enter their code
                             {error, {need_passcode, UserId}};
+                        {error, set_passcode} ->
+                            % Local 2FA enabled - the user needs to set their passcode
+                            {error, {set_passcode, UserId}};
                         undefined ->
                             % As both SSO and local email addresses are confirmed AND there
                             % is no local 2FA enabled, add SSO identities and allow direct logon.
