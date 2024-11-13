@@ -104,7 +104,7 @@ redirect(undefined, Context) ->
 redirect(Location, Context) ->
     {{true, Location}, Context}.
 
-%% @doc Return the modification date of the resource.
+%% Return the modification date of the resource.
 %% There is a problem with the CSP nonce being different on the 304
 %% than on the original page. Prevent caching by not setting the
 %% modified date till we have a fix/workaround.

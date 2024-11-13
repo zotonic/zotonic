@@ -230,6 +230,22 @@ model.present = function(data) {
                     model.passcode_data = data.payload.result;
                     model.status = "confirming";
                     break;
+                case "set_passcode":
+                    // Auth ok, but matching account needs to add a 2FA code
+                    self.publish(
+                        "model/ui/render-template/oauth-status",
+                        {
+                            topic: "bridge/origin/model/template/get/render/_logon_service_error.tpl",
+                            dedup: true,
+                            data: {
+                                error: "set_passcode",
+                                authuser: data.payload.result.authuser,
+                                url: data.payload.result.url || undefined
+                            }
+                        });
+                    model.passcode_data = data.payload.result;
+                    model.status = "confirming";
+                    break;
             }
         } else if (error_message == 'passcode') {
             // Auth ok, wrong 2FA passcode entered for matching account

@@ -167,7 +167,7 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
      | Acc ].
 
 %% @doc Check the 2FA code, called after password check passed.
-observe_auth_postcheck(#auth_postcheck{ id = UserId, query_args = QueryArgs }, Context) ->
+observe_auth_postcheck(#auth_postcheck{ service = Service, id = UserId, query_args = QueryArgs }, Context) ->
     case m_auth2fa:is_totp_enabled(UserId, Context) of
         true ->
             case z_string:trim( z_convert:to_binary( maps:get(<<"passcode">>, QueryArgs, <<>>) ) ) of
@@ -179,7 +179,7 @@ observe_auth_postcheck(#auth_postcheck{ id = UserId, query_args = QueryArgs }, C
                         false -> {error, passcode}
                     end
             end;
-        false ->
+        false when Service =:= username_pw ->
             % Could also have a POST of the new passcode secret to be set.
             % In that case the passcode can be set for the user and 'undefined'
             % returned
@@ -202,7 +202,9 @@ observe_auth_postcheck(#auth_postcheck{ id = UserId, query_args = QueryArgs }, C
                     end;
                 _ ->
                     undefined
-            end
+            end;
+        false ->
+            undefined
     end.
 
 mode(UserId, Context) ->
