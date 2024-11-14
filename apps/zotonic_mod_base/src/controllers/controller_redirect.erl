@@ -70,7 +70,11 @@ do_redirect(Context) ->
                             proplists:delete(A, Acc)
                         end,
                         Args1,
-                        [ is_permanent, url, dispatch, qargs, acl, csp_nonce ]),
+                        [
+                            is_permanent, url, dispatch, qargs, acl, csp_nonce,
+                            auth_expires, auth_replay_token, auth_options,
+                            is_http_request
+                        ]),
                     QArgs = case z_context:get(qargs, Context) of
                                 undefined ->
                                     [];
