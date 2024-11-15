@@ -759,6 +759,12 @@ p(Id, Property, Context)
     orelse Property =:= <<"uri_raw">>
     orelse Property =:= <<"is_authoritative">>
     orelse Property =:= <<"is_published">>
+    orelse Property =:= <<"is_published_date">>
+    orelse Property =:= <<"is_visible">>
+    orelse Property =:= <<"is_editable">>
+    orelse Property =:= <<"is_deletable">>
+    orelse Property =:= <<"is_linkable">>
+    orelse Property =:= <<"is_me">>
     orelse Property =:= <<"exists">>
     orelse Property =:= <<"id">>
     orelse Property =:= <<"privacy">>
@@ -774,7 +780,7 @@ p1(Id, Property, Context) ->
         RId ->
             case z_acl:rsc_visible(RId, Context) of
                 true ->
-                    case z_acl:rsc_prop_visible(RId, Property, Context) of
+                    case z_acl:rsc_prop_visible(RId, prop_for_acl(Property), Context) of
                         true -> p_no_acl(RId, Property, Context);
                         false -> undefined
                     end;
@@ -782,6 +788,11 @@ p1(Id, Property, Context) ->
                     undefined
             end
     end.
+
+prop_for_acl(<<"email_raw">>) -> <<"email">>;
+prop_for_acl(<<"day_start">>) -> <<"date_start">>;
+prop_for_acl(<<"day_end">>) -> <<"date_end">>;
+prop_for_acl(P) -> P.
 
 %% Fetch property from a resource; but return a default value if not found.
 p(Id, Property, DefaultValue, Context) ->
