@@ -84,19 +84,9 @@ model.present = function(data) {
                 // This because on initial load the SameSite=Strict session
                 // cookie is not passed to the page controller.
                 model.state_change('auth_unknown');
-
-                self.call("model/sessionStorage/get/auth-user-id")
-                    .then((msg) => {
-                        model.auth.user_id = msg.payload;
-                    });
             }
         } else {
             model.state_change('auth_unknown');
-
-            self.call("model/sessionStorage/get/auth-user-id")
-                .then((msg) => {
-                    model.auth.user_id = msg.payload;
-                });
         }
 
         // Handle auth changes forced by changes of the session storage
