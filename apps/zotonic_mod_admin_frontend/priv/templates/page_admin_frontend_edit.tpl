@@ -118,7 +118,11 @@
 	    "js/jquery.ui.nestedSortable.js"
 	%}
 	{% all include "_admin_lib_js.tpl" %}
-	{% include "_admin_frontend_editor.tpl" is_editor_include %}
+
+	{% include "_admin_frontend_editor.tpl"
+			  is_editor_include
+			  overrides_tpl="_admin_frontend_tinymce_overrides_js.tpl"
+	%}
 
 	{% optional include "_fileuploader_worker.tpl" %}
 
