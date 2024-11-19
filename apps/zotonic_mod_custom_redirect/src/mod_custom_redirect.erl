@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2013-2024 Marc Worrell
 %% @doc Redirect custom domains/paths to other domains/paths.
-%%      This module is notified when the dispatcher found an unknown host name.
+%% This module is notified when the dispatcher found an unknown host name.
 %% @end
 
 %% Copyright 2013-2024 Marc Worrell
@@ -24,7 +24,7 @@
 -mod_title("Custom Redirects").
 -mod_description("Redirect custom domains and paths to any location.").
 -mod_prio(10000).
--mod_schema(1).
+-mod_schema(2).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
@@ -39,14 +39,14 @@
 
 
 %% @doc Called when the host didn't match any site config
-observe_dispatch_host(#dispatch_host{host=Host, path=Path}, Context) ->
+observe_dispatch_host(#dispatch_host{ host = Host, path = Path }, Context) ->
     case m_custom_redirect:list_dispatch_host(Host, Path, Context) of
         [{BestPath,_,_}=Best|Rest] -> select_best(Rest, size(BestPath), Best);
         [] -> undefined
     end.
 
 %% @doc Called when the path didn't match any dispatch rule
-observe_dispatch(#dispatch{path=Path}, Context) ->
+observe_dispatch(#dispatch{ path = Path }, Context) ->
     case m_custom_redirect:get_dispatch(Path, Context) of
         {Redirect,IsPermanent} -> {ok, #dispatch_redirect{location=Redirect, is_permanent=IsPermanent}};
         undefined -> undefined
