@@ -120,9 +120,11 @@ split_arg(B) ->
     Query :: map().
 from_list(Args0) when is_list(Args0) ->
     Args = maybe_map_keys(Args0),
+    Args1 = z_utils:prop_delete(<<"pagelen">>,
+                                z_utils:prop_delete(<<"page">>, Args)),
     TermArgs = lists:filter(
             fun({K, _V}) -> not z_context:is_zotonic_arg(K) end,
-            Args),
+            Args1),
     TermArgs1 = lists:filter(
             fun
                 ({_, <<>>}) -> false;
