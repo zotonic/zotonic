@@ -118,7 +118,10 @@ list_ids(Context) ->
     Host :: binary() | string(),
     Path :: iodata(),
     Context :: z:context(),
-    Redirects :: [ proplists:proplist() ].
+    Redirects :: [ {Path, Redirect, IsPermanent} ],
+    Path :: binary(),
+    Redirect :: binary(),
+    IsPermanent :: boolean().
 list_dispatch_host(Host, Path, Context) ->
     case z_string:is_string(Path) of
         true ->
