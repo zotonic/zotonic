@@ -72,7 +72,7 @@
 -include_lib("zotonic.hrl").
 
 -type manage_schema() :: install
-                       | {upgrade, integer()}.
+                       | {upgrade, ToVersion:: integer()}.
 
 -type module_status() :: new
                        | starting

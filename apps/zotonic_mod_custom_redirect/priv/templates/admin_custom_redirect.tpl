@@ -23,8 +23,8 @@
                         <th>{_ Domain _}</th>
                         <th>{_ Path _}</th>
                         <th>{_ Redirect to _}</th>
-                        <th width="5%">{_ Permanent _}</th>
-                        <th width="5%">{_ Actions _}</th>
+                        <th>{_ Permanent _}</th>
+                        <th>{_ Actions _}</th>
                     </tr>
                 </thead>
 
@@ -32,20 +32,21 @@
                     {% for r in m.custom_redirect.list %}
                     <tr>
                         <td>
-                            <input type="hidden" name="id" value="{{ r.id }}" />
-                            <input type="text" class="input form-control" name="host" value="{{ r.host|escape }}" />
+                            <input type="hidden" name="id" value="{{ r.id }}">
+                            <input type="text" class="input form-control" name="host" value="{{ r.host|escape }}" maxlength="250">
                         </td>
                         <td>
-                            <input type="text" class="input form-control" name="path" value="{{ r.path|escape }}" />
+                            <input type="text" class="input form-control" name="path" value="{{ r.path|escape }}" maxlength="1000">
                         </td>
                         <td>
-                            <input type="text" class="input col-lg-5 col-md-5 form-control" name="redirect" value="{{ r.redirect|escape }}" />
+                            <input type="text" class="input col-lg-5 col-md-5 form-control" name="redirect" value="{{ r.redirect|escape }}" maxlength="1000">
                         </td>
                         <td>
-                            <div class="checkbox"><label>
-                                <input type="checkbox" name="is_permanent" value="1" {% if r.is_permanent %}checked{% endif %} />
-                                {_ Permanent _}
-                            </label></div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="is_permanent" value="1" {% if r.is_permanent %}checked{% endif %}> {_ Permanent _}
+                                </label>
+                            </div>
                         </td>
                         <td>
                             <a href="#delete" class="btn btn-default delete">{_ Delete _}</a>
@@ -54,20 +55,21 @@
                     {% endfor %}
                     <tr>
                         <td>
-                            <input type="hidden" name="id" value="" />
-                            <input type="text" class="input form-control" name="host" placeholder="www.example.com" value="" />
+                            <input type="hidden" name="id" value="">
+                            <input type="text" class="input form-control" name="host" placeholder="www.example.com" value="" maxlength="250">
                         </td>
                         <td>
-                            <input type="text" class="input form-control" name="path" value="" />
+                            <input type="text" class="input form-control" name="path" value="" maxlength="1000">
                         </td>
                         <td>
-                            <input type="text" class="input col-lg-5 col-md-5 form-control" name="redirect" value="" />
+                            <input type="text" class="input col-lg-5 col-md-5 form-control" name="redirect" value="" maxlength="1000">
                         </td>
                         <td>
-                            <div class="checkbox"><label>
-                                <input type="checkbox" name="is_permanent" value="1" />
-                                {_ Permanent _}
-                            </label></div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="is_permanent" value="1" > {_ Permanent _}
+                                </label>
+                            </div>
                        </td>
                         <td>
                             <a href="#delete" class="btn btn-default delete">{_ Delete _}</a>
@@ -75,20 +77,21 @@
                     </tr>
                     <tr id="template" style="display: none">
                         <td>
-                            <input type="hidden" name="id" value="" />
-                            <input type="text" class="input form-control" name="host" placeholder="www.example.com" value="" />
+                            <input type="hidden" name="id" value="">
+                            <input type="text" class="input form-control" name="host" placeholder="www.example.com" value="" maxlength="250">
                         </td>
                         <td>
-                            <input type="text" class="input form-control" name="path" value="" />
+                            <input type="text" class="input form-control" name="path" value="" maxlength="1000">
                         </td>
                         <td>
-                            <input type="text" class="input col-lg-5 col-md-5 form-control" name="redirect" value="" />
+                            <input type="text" class="input col-lg-5 col-md-5 form-control" name="redirect" value="" maxlength="1000">
                         </td>
                         <td>
-                            <div class="checkbox"><label>
-                                <input type="checkbox" name="is_permanent" value="1" />
-                                {_ Permanent _}
-                            </label></div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="is_permanent" value="1" > {_ Permanent _}
+                                </label>
+                            </div>
                        </td>
                         <td>
                             <a href="#delete" class="btn btn-default delete">{_ Delete _}</a>
