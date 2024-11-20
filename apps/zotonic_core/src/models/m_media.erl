@@ -1180,8 +1180,20 @@ save_preview_url(RscId, Url, Context) ->
                             <<"preview_height">> => Height,
                             <<"is_deletable_preview">> => true
                         },
+                        PreProps = m_media:get(RscId, Context),
+                        PostProps = maps:merge(PreProps, UpdateProps),
                         {ok, 1} = z_db:update(medium, RscId, UpdateProps, Context),
                         z_depcache:flush({medium, RscId}, Context),
+                        IsA = m_rsc:is_a(RscId, Context),
+                        z_notifier:notify(
+                            #media_update_done{
+                                action = update,
+                                id = RscId,
+                                pre_is_a = IsA,
+                                post_is_a = IsA,
+                                pre_props = PreProps,
+                                post_props= PostProps
+                            }, Context),
                         {ok, FileUnique}
                     catch
                         Type:Error ->
@@ -1238,8 +1250,20 @@ save_preview(RscId, Data, Mime, Context) ->
                     <<"preview_height">> => Height,
                     <<"is_deletable_preview">> => true
                 },
+                PreProps = m_media:get(RscId, Context),
+                PostProps = maps:merge(PreProps, UpdateProps),
                 {ok, 1} = z_db:update(medium, RscId, UpdateProps, Context),
                 z_depcache:flush({medium, RscId}, Context),
+                IsA = m_rsc:is_a(RscId, Context),
+                z_notifier:notify(
+                    #media_update_done{
+                        action = update,
+                        id = RscId,
+                        pre_is_a = IsA,
+                        post_is_a = IsA,
+                        pre_props = PreProps,
+                        post_props= PostProps
+                    }, Context),
                 {ok, FileUnique}
             catch
                 throw:{error, _} = Error ->
@@ -1276,7 +1300,15 @@ medium_insert(Id, Props, Context) ->
     Props1 = check_medium_props(Props),
     case z_db:insert(medium, Props1#{ <<"id">> => Id }, Context) of
         {ok, _} = OK ->
-            z_notifier:notify(#media_update_done{action=insert, id=Id, post_is_a=IsA, pre_is_a=[], pre_props=#{}, post_props=Props1}, Context),
+            z_notifier:notify(
+                #media_update_done{
+                    action = insert,
+                    id = Id,
+                    post_is_a = IsA,
+                    pre_is_a = [],
+                    pre_props= #{},
+                    post_props = Props1
+                }, Context),
             OK;
         {error, _} = Error ->
             Error
@@ -1291,7 +1323,15 @@ medium_delete(Id, Props, Context) ->
     IsA = m_rsc:is_a(Id, Context),
     case z_db:delete(medium, Id, Context) of
         {ok, _} = OK ->
-            z_notifier:notify(#media_update_done{action=delete, id=Id, pre_is_a=IsA, post_is_a=[], pre_props=Props, post_props=#{}}, Context),
+            z_notifier:notify(
+                #media_update_done{
+                    action = delete,
+                    id = Id,
+                    pre_is_a = IsA,
+                    post_is_a = [],
+                    pre_props = Props,
+                    post_props= #{}
+                }, Context),
             OK;
         {error, _} = Error ->
             Error
