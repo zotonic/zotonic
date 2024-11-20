@@ -927,9 +927,13 @@ tls_versions() ->
 spawned_email_sender(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                      Bcc, Email, SmtpOpts, BccSmtpOpts, RetryCt, Context) ->
     z_context:logger_md(Context),
-    EncodedMail = encode_email(Id, Email, <<"<", MessageId/binary, ">">>, From, Context),
-    spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
-                              Bcc, Email, EncodedMail, SmtpOpts, BccSmtpOpts, RetryCt, Context).
+    case encode_email(Id, Email, <<"<", MessageId/binary, ">">>, From, Context) of
+        {ok, EncodedMail} ->
+            spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
+                                      Bcc, Email, EncodedMail, SmtpOpts, BccSmtpOpts, RetryCt, Context);
+        {error, _Reason} = Error ->
+            Error
+    end.
 
 spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                           Bcc, Email, EncodedMail, SmtpOpts, BccSmtpOpts, RetryCt, Context) ->
@@ -1226,7 +1230,7 @@ is_retry_possible(_Reason, __FailureType, _Message) ->
     true.
 
 encode_email(_Id, #email{raw=Raw}, _MessageId, _From, _Context) when is_list(Raw); is_binary(Raw) ->
-    z_convert:to_binary(Raw);
+    {ok, z_convert:to_binary(Raw)};
 encode_email(Id, #email{body=undefined} = Email, MessageId, From, Context) ->
     %% Optionally render the text and html body
     Vars = [{email_to, Email#email.to}, {email_from, From} | Email#email.vars],
@@ -1252,7 +1256,21 @@ encode_email(Id, #email{body=undefined} = Email, MessageId, From, Context) ->
                {<<"Message-Id">>, MessageId}
                 | Email#email.headers ],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
-    build_and_encode_mail(Headers2, Text, Html, Email#email.attachments, Context);
+    try
+        Encoded = build_and_encode_mail(Headers2, Text, Html, Email#email.attachments, Context),
+        {ok, Encoded}
+    catch
+        E:R:S ->
+            ?LOG_ERROR(#{
+                in => zotonic_core,
+                text => <<"Error encoding email">>,
+                result => E,
+                reason => R,
+                stack => S,
+                headers => Headers2
+            }),
+            {error, R}
+    end;
 encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_tuple(Body) ->
     Headers = [{<<"From">>, From},
                {<<"To">>, ensure_brackets(Email#email.to)},
@@ -1263,14 +1281,42 @@ encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_tu
     MailHeaders = [
         {z_convert:to_binary(H), z_convert:to_binary(V)} || {H,V} <- (Headers2 ++ BodyHeaders)
     ],
-    mimemail:encode({BodyType, BodySubtype, MailHeaders, BodyParams, BodyParts}, opt_dkim(Context));
+    try
+        Encoded = mimemail:encode({BodyType, BodySubtype, MailHeaders, BodyParams, BodyParts}, opt_dkim(Context)),
+        {ok, Encoded}
+    catch
+        E:R:S ->
+            ?LOG_ERROR(#{
+                in => zotonic_core,
+                text => <<"Error encoding email">>,
+                result => E,
+                reason => R,
+                stack => S,
+                headers => MailHeaders
+            }),
+            {error, R}
+    end;
 encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_list(Body); is_binary(Body) ->
     Headers = [{<<"From">>, From},
                {<<"To">>, ensure_brackets(Email#email.to)},
                {<<"Message-Id">>, MessageId}
                 | Email#email.headers ],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
-    iolist_to_binary([ encode_headers(Headers2), "\r\n\r\n", Body ]).
+    try
+        Encoded = iolist_to_binary([ encode_headers(Headers2), "\r\n\r\n", Body ]),
+        {ok, Encoded}
+    catch
+        E:R:S ->
+            ?LOG_ERROR(#{
+                in => zotonic_core,
+                text => <<"Error encoding email">>,
+                result => E,
+                reason => R,
+                stack => S,
+                headers => Headers2
+            }),
+            {error, R}
+    end.
 
 ensure_brackets(Email) when is_binary(Email) ->
     case binary:match(Email, <<"<">>) of
