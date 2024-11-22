@@ -100,6 +100,8 @@
     update_sequence/3,
     prepare_database/1,
     constraint_exists/3,
+    foreign_keys/2,
+    foreign_key/3,
     key_exists/3,
     table_exists/2,
     create_table/3,
@@ -1814,6 +1816,71 @@ constraint_exists(Table, Constraint, Context) ->
             Context),
     HasConstraint >= 1.
 
+-spec foreign_keys( table_name(), z:context() ) -> {ok, [ map() ]} | {error, Reason} when
+    Reason :: enoent | term().
+foreign_keys(Table, Context) ->
+    Options = z_db_pool:get_database_options(Context),
+    Db = proplists:get_value(dbdatabase, Options),
+    Schema = proplists:get_value(dbschema, Options),
+    z_db:qmap("
+        SELECT
+            tc.table_schema,
+            tc.constraint_name,
+            tc.table_name,
+            kcu.column_name,
+            ccu.table_schema AS foreign_table_schema,
+            ccu.table_name AS foreign_table_name,
+            ccu.column_name AS foreign_column_name
+        FROM information_schema.table_constraints AS tc
+        JOIN information_schema.key_column_usage AS kcu
+            ON tc.constraint_name = kcu.constraint_name
+            AND tc.table_catalog = kcu.table_catalog
+            AND tc.table_schema = kcu.table_schema
+        JOIN information_schema.constraint_column_usage AS ccu
+            ON ccu.constraint_name = tc.constraint_name
+            AND ccu.table_catalog = tc.table_catalog
+            AND ccu.table_schema = tc.table_schema
+        WHERE tc.constraint_type = 'FOREIGN KEY'
+          AND tc.constraint_catalog = $1
+          AND tc.table_schema = $2
+          AND tc.table_name = $3",
+        [Db, Schema, Table],
+        [ {keys, atom} ],
+        Context).
+
+-spec foreign_key( table_name(), Name, z:context() ) -> {ok, map()} | {error, Reason} when
+    Name :: atom() | string() | binary(),
+    Reason :: enoent | term().
+foreign_key(Table, Name, Context) ->
+    Options = z_db_pool:get_database_options(Context),
+    Db = proplists:get_value(dbdatabase, Options),
+    Schema = proplists:get_value(dbschema, Options),
+    z_db:qmap_row("
+        SELECT
+            tc.table_schema,
+            tc.constraint_name,
+            tc.table_name,
+            kcu.column_name,
+            ccu.table_schema AS foreign_table_schema,
+            ccu.table_name AS foreign_table_name,
+            ccu.column_name AS foreign_column_name
+        FROM information_schema.table_constraints AS tc
+        JOIN information_schema.key_column_usage AS kcu
+            ON tc.constraint_name = kcu.constraint_name
+            AND tc.table_catalog = kcu.table_catalog
+            AND tc.table_schema = kcu.table_schema
+        JOIN information_schema.constraint_column_usage AS ccu
+            ON ccu.constraint_name = tc.constraint_name
+            AND ccu.table_catalog = tc.table_catalog
+            AND ccu.table_schema = tc.table_schema
+        WHERE tc.constraint_type = 'FOREIGN KEY'
+          AND tc.constraint_catalog = $1
+          AND tc.table_schema = $2
+          AND tc.table_name = $3
+          AND tc.constraint_name = $4",
+        [Db, Schema, Table, Name],
+        [ {keys, atom} ],
+        Context).
 
 -spec key_exists( table_name(), binary() | string() | atom(), z:context() ) -> boolean().
 key_exists(Table, Key, Context) ->
