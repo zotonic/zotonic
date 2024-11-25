@@ -10,8 +10,6 @@
 #
 # You can start Zotonic in the Zotonic container using: "./start.sh"
 
-version: '3.1'
-
 services:
     postgres:
         image: postgres:16.2-alpine
