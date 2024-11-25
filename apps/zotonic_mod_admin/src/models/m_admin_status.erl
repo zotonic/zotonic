@@ -51,6 +51,8 @@ m_get(Path, Msg, Context) ->
         true -> m_get_1(Path, Msg, Context);
         false -> {error, eacces}
     end.
+
+
 m_get_1([ <<"database_version">> | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true -> {ok, {database_version(Context), Rest}};
