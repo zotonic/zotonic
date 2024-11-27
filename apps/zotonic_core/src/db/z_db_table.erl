@@ -133,7 +133,8 @@ columns(Schema, Table, Context) when is_list(Table) ->
         {ok, Cols} ->
             Cols;
         _ ->
-            Cols = z_db:q("  select column_name, data_type, character_maximum_length,
+            Cols = z_db:q("
+                        select column_name, data_type, character_maximum_length,
                                is_nullable, column_default, udt_name
                         from information_schema.columns
                         where table_catalog = $1
@@ -295,12 +296,17 @@ alter_col_statements(AlterCols, NewCols) ->
 alter_col_statement(
         #column_def{ type = OldT, length = OldLen, is_nullable = OldNull, default = OldDefault },
         #column_def{ type = NewT, length = NewLen, is_nullable = NewNull, is_array = NewArray, default = NewDefault, name = Name }) ->
+    NewT1 = case NewT of
+        <<"serial">> -> <<"integer">>;
+        <<"bigserial">> -> <<"bigint">>;
+        T -> T
+    end,
     Qs = [
         if
             NewT =/= OldT orelse NewLen =/= OldLen ->
                 [
                     "ALTER COLUMN \"", atom_to_list(Name), "\" TYPE ",
-                    NewT,
+                    NewT1,
                     if
                         is_integer(NewLen)  -> [ "(", integer_to_list(NewLen), ")" ];
                         true -> []
@@ -314,7 +320,7 @@ alter_col_statement(
             not NewNull, OldNull ->
                 [ "ALTER COLUMN \"", atom_to_list(Name), "\" DROP NULL" ];
             NewNull, not OldNull ->
-                [ "ALTER COLUMN \"", atom_to_list(Name), "\" SET NULL" ];
+                [ "ALTER COLUMN \"", atom_to_list(Name), "\" DROP NOT NULL" ];
             true ->
                 []
         end,
@@ -371,6 +377,7 @@ base_type(<<"serial">>) -> serial;
 base_type(<<"bigserial">>) -> serial;
 base_type(<<"smallserial">>) -> serial;
 base_type(<<"float">>) -> numeric;
+base_type(<<"real">>) -> numeric;
 base_type(<<"double", _/binary>>) -> numeric;
 base_type(<<"decimal">>) -> numeric;
 base_type(<<"money">>) -> numeric;
@@ -379,12 +386,11 @@ base_type(<<"date", _/binary>>) -> date;
 base_type(T) -> T.
 
 
-norm(#column_def{ type = Type } = Col) when is_list(Type) ->
-    norm(Col#column_def{ type = norm_type(z_string:to_lower(list_to_binary(Type))) });
-norm(#column_def{ default = Default } = Col) when Default =/= undefined, not is_binary(Default) ->
-    norm(Col#column_def{ default = z_convert:to_binary(Default) });
-norm(Col) ->
-    Col.
+norm(#column_def{ type = Type, default = Default } = Col) ->
+    Col#column_def{
+        type = norm_type(z_string:to_lower(z_convert:to_binary(Type))),
+        default = maybe_binary(Default)
+    }.
 
 norm_type(<<"varchar">>) -> <<"character varying">>;
 norm_type(<<"char">>) -> <<"character">>;
@@ -394,10 +400,21 @@ norm_type(<<"float">>) -> <<"real">>;
 norm_type(<<"double">>) -> <<"double precision">>;
 norm_type(T) -> T.
 
+maybe_binary(undefined) -> undefined;
+maybe_binary(V) -> z_convert:to_binary(V).
+
 columns1({<<"id">>, <<"integer">>, undefined, Nullable, <<"nextval(", _/binary>>, _UdtName}) ->
     #column_def{
         name = id,
-        type = "serial",
+        type = <<"serial">>,
+        length = undefined,
+        is_nullable = z_convert:to_bool(Nullable),
+        default = undefined
+    };
+columns1({<<"id">>, <<"bigint">>, undefined, Nullable, <<"nextval(", _/binary>>, _UdtName}) ->
+    #column_def{
+        name = id,
+        type = <<"bigserial">>,
         length = undefined,
         is_nullable = z_convert:to_bool(Nullable),
         default = undefined
@@ -417,7 +434,7 @@ columns1({Name, <<"ARRAY">>, _MaxLength, Nullable, Default, UdtName}) ->
         is_nullable = z_convert:to_bool(Nullable),
         default = column_default(Default)
     };
-columns1({Name,Type,MaxLength,Nullable,Default,_UdtName}) ->
+columns1({Name, Type, MaxLength, Nullable, Default, _UdtName}) ->
     #column_def{
         name = z_convert:to_atom(Name),
         type = z_convert:to_binary(Type),

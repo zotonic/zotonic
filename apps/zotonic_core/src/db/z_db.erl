@@ -1436,48 +1436,29 @@ to_column_value(Table, Column, Value, Context) ->
             Error
     end.
 
-convert_value("text", _, V) ->
-    z_convert:to_binary(V);
-convert_value("character varying", Len, V) ->
-    V1 = z_convert:to_binary(V),
-    z_string:truncatechars(V1, Len);
-convert_value("integer", _, V) ->
-    z_convert:to_integer(V);
-convert_value("bigint", _, V) ->
-    z_convert:to_integer(V);
-convert_value("smallint", _, V) ->
-    z_convert:to_integer(V);
-convert_value("serial", _, V) ->
-    z_convert:to_integer(V);
-convert_value("bigserial", _, V) ->
-    z_convert:to_integer(V);
-convert_value("smallserial", _, V) ->
-    z_convert:to_integer(V);
-convert_value("numeric", _, V) ->
-    z_convert:to_float(V);
-convert_value("decimal", _, V) ->
-    z_convert:to_float(V);
-convert_value("float", _, V) ->
-    z_convert:to_float(V);
-convert_value("double", _, V) ->
-    z_convert:to_float(V);
-convert_value("boolean", _, V) ->
-    z_convert:to_bool_strict(V);
-convert_value("timestamp" ++ _, _, V) ->
-    z_datetime:to_datetime(V);
-convert_value("datetime" ++ _, _, V) ->
-    z_datetime:to_datetime(V);
-convert_value("date" ++ _, _, V) ->
-    z_datetime:to_datetime(V);
-convert_value("bytea", _, V) ->
-    ?DB_PROPS(V);
-convert_value("tsvector", _, V) ->
-    z_convert:to_binary(V);
-convert_value("ARRAY", _, V) when is_list(V) ->
-    V;
-convert_value("ARRAY", _, V) ->
-    [ V ];
-convert_value(Type, _, V) when is_list(Type) ->
+convert_value(<<"text">>, _, V) -> z_convert:to_binary(V);
+convert_value(<<"character varying">>, Len, V) -> V1 = z_convert:to_binary(V), z_string:truncatechars(V1, Len);
+convert_value(<<"integer">>, _, V) -> z_convert:to_integer(V);
+convert_value(<<"bigint">>, _, V) -> z_convert:to_integer(V);
+convert_value(<<"smallint">>, _, V) -> z_convert:to_integer(V);
+convert_value(<<"serial">>, _, V) -> z_convert:to_integer(V);
+convert_value(<<"bigserial">>, _, V) -> z_convert:to_integer(V);
+convert_value(<<"smallserial">>, _, V) -> z_convert:to_integer(V);
+convert_value(<<"numeric">>, _, V) -> z_convert:to_float(V);
+convert_value(<<"decimal">>, _, V) -> z_convert:to_float(V);
+convert_value(<<"float">>, _, V) -> z_convert:to_float(V);
+convert_value(<<"double">>, _, V) -> z_convert:to_float(V);
+convert_value(<<"boolean">>, _, V) -> z_convert:to_bool_strict(V);
+convert_value(<<"timestamp", _/binary>>, _, V) -> z_datetime:to_datetime(V);
+convert_value(<<"datetime", _/binary>>, _, V) -> z_datetime:to_datetime(V);
+convert_value(<<"date", _/binary>>, _, V) -> z_datetime:to_datetime(V);
+convert_value(<<"bytea">>, _, V) -> ?DB_PROPS(V);
+convert_value(<<"tsvector">>, _, V) -> z_convert:to_binary(V);
+convert_value(<<"ARRAY">>, _, V) when is_list(V) -> V;
+convert_value(<<"ARRAY">>, _, V) -> [ V ];
+convert_value(<<"array">>, _, V) when is_list(V) -> V;
+convert_value(<<"array">>, _, V) -> [ V ];
+convert_value(Type, _, V) when is_binary(Type) ->
     ?LOG_WARNING(#{
         in => zotonic_core,
         text => <<"No type conversion for column type">>,
