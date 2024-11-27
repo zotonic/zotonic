@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Server for matching the request path to correct site and dispatch rule.
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -88,15 +88,32 @@
     context :: z:context()
 }).
 
+-record(redirect, {
+    site :: atom(),
+    location :: binary() | undefined,
+    is_permanent :: boolean()
+}).
+
+-record(redirect_protocol, {
+    site :: atom(),
+    protocol :: http | https,
+    host :: binary(),
+    is_permanent :: boolean()
+}).
+
+-record(stop_request, {
+    status :: pos_integer()
+}).
+
+-type redirect() :: #redirect{}.
+-type redirect_protocol() :: #redirect_protocol{}.
+-type stop_request() :: #stop_request{}.
+
 -type dispatch() :: #dispatch_controller{}
                   | #dispatch_nomatch{}
                   | redirect()
                   | redirect_protocol()
                   | stop_request().
-
--type redirect() :: {redirect, Site :: atom(), NewPathOrURI :: binary() | undefined, IsPermanent :: boolean()}.
--type redirect_protocol() :: {redirect_protocol, http|https, Host :: binary(), IsPermanent :: boolean()}.
--type stop_request() :: {stop_request, pos_integer()}.
 
 -type trace_step() :: undefined
                     | match
@@ -190,7 +207,7 @@ execute(Req, Env) ->
             },
             cast_metrics_data(Metrics, Req),
             handle_error(404, cowboy_req:method(Req), Site, Req, Env, Bindings, Context);
-        {redirect, Site, undefined, IsPermanent} ->
+        #redirect{ site = Site, location = undefined, is_permanent = IsPermanent } ->
             Metrics = #{
                 site => Site
             },
@@ -200,9 +217,9 @@ execute(Req, Env) ->
                     Uri = z_context:abs_url(raw_path(Req), z_context:new(Site)),
                     redirect(Uri, IsPermanent, Req);
                 {error, _} ->
-                    {stop_request, 503}
+                    #stop_request{ status = 503 }
             end;
-        {redirect, Site, NewPathOrURI, IsPermanent} ->
+        #redirect{ site = Site, location = NewPathOrURI, is_permanent = IsPermanent} ->
             Metrics = #{
                 site => Site,
                 peer_ip => maps:get(cowmachine_remote_ip, Env)
@@ -213,16 +230,16 @@ execute(Req, Env) ->
                     Uri = z_context:abs_url(NewPathOrURI, z_context:new(Site)),
                     redirect(Uri, IsPermanent, Req);
                 {error, _} ->
-                    {stop_request, 503}
+                    #stop_request{ status = 503 }
             end;
-        {redirect_protocol, Protocol, Host, IsPermanent} ->
+        #redirect_protocol{ protocol = Protocol, host = Host, is_permanent = IsPermanent } ->
             Uri = iolist_to_binary([
                         z_convert:to_binary(Protocol),
                         <<"://">>,
                         Host,
                         raw_path(Req)]),
             redirect(Uri, IsPermanent, Req);
-        {stop_request, RespCode} ->
+        #stop_request{ status = RespCode } ->
             stop_request(RespCode, Req, Env)
     end.
 
@@ -303,19 +320,19 @@ dispatch_dispreq(DispReq) ->
             }};
         #dispatch_nomatch{} ->
             {error, nomatch};
-        {redirect, Site, NewPathOrURI, IsPermanent} ->
+        #redirect{ site = Site, location = NewPathOrURI, is_permanent = IsPermanent } ->
             {ok, #{
                 site => Site,
                 redirect => NewPathOrURI,
                 is_permanent => IsPermanent
             }};
-        {redirect_protocol, Protocol, Host, IsPermanent} ->
+        #redirect_protocol{ protocol = Protocol, host = Host, is_permanent = IsPermanent } ->
             {ok, #{
                 redirect_protocol => Protocol,
                 redirect_host => Host,
                 is_permanent => IsPermanent
             }};
-        {stop_request, RespCode} ->
+        #stop_request{ status = RespCode } ->
             {error, RespCode}
     end.
 
@@ -498,13 +515,13 @@ dispatch_1(#dispatch{ protocol = http, host = Hostname } = DispReq, OptReq, OptE
     case ets:lookup(?MODULE, DispReq#dispatch.host) of
         [] ->
             case find_no_host_match(DispReq, OptReq, OptEnv) of
-                {fallback, _Site} ->
-                    redirect_protocol(Hostname, DispReq#dispatch.tracer_pid, []);
+                {fallback, FallbackSite} ->
+                    redirect_protocol(FallbackSite, Hostname, DispReq#dispatch.tracer_pid, []);
                 Other ->
                     Other
             end;
-        _ ->
-            redirect_protocol(Hostname, DispReq#dispatch.tracer_pid, [])
+        [{_, Site, _}] ->
+            redirect_protocol(Site, Hostname, DispReq#dispatch.tracer_pid, [])
     end;
 dispatch_1(DispReq, OptReq, OptEnv) ->
     case ets:lookup(?MODULE, DispReq#dispatch.host) of
@@ -523,37 +540,87 @@ dispatch_1(DispReq, OptReq, OptEnv) ->
                 <<"/.well-known/", _/binary>> ->
                     dispatch_site_if_running(DispReq, OptReq, OptEnv, Site, []);
                 _ ->
-                    {redirect, Site, undefined, true}
+                    redirect_to_site_if_running(DispReq, OptReq, OptEnv, Site, [])
             end
     end.
 
--spec dispatch_site_if_running( #dispatch{}, undefined | cowboy_req:req(), undefined | cowboy_middleware:env(),
-            atom(), proplists:proplist() ) -> dispatch().
+-spec redirect_to_site_if_running(Dispatch, Req, Env, Site, ExtraBindings) -> dispatch() when
+    Dispatch :: #dispatch{},
+    Req :: undefined | cowboy_req:req(),
+    Env :: undefined | cowboy_middleware:env(),
+    Site :: atom(),
+    ExtraBindings :: proplists:proplist().
+redirect_to_site_if_running(DispReq, OptReq, OptEnv, Site, ExtraBindings) ->
+    case z_sites_manager:wait_for_running(Site) of
+        ok ->
+            Context = z_context:init_cowdata(OptReq, OptEnv, z_context:new(Site)),
+            case z_notifier:first(#dispatch_host{
+                    host = DispReq#dispatch.host,
+                    path = DispReq#dispatch.path,
+                    method = DispReq#dispatch.method,
+                    protocol = DispReq#dispatch.protocol
+                }, Context)
+            of
+                undefined ->
+                    #redirect{
+                        site = Site,
+                        location = undefined,
+                        is_permanent = true
+                    };
+                {ok, #dispatch_redirect{ location = Location, is_permanent = IsPermanent }} ->
+                    #redirect{
+                        site = Site,
+                        location = Location,
+                        is_permanent = IsPermanent
+                    }
+            end;
+        {error, timeout} ->
+            #stop_request{ status = 503 };
+        {error, _} ->
+            redirect_fallback(DispReq, OptReq, OptEnv, ExtraBindings)
+    end.
+
+-spec dispatch_site_if_running(Dispatch, Req, Env, Site, ExtraBindings) -> dispatch() when
+    Dispatch :: #dispatch{},
+    Req :: undefined | cowboy_req:req(),
+    Env :: undefined | cowboy_middleware:env(),
+    Site :: atom(),
+    ExtraBindings :: proplists:proplist().
 dispatch_site_if_running(DispReq, OptReq, OptEnv, Site, ExtraBindings) ->
     case z_sites_manager:wait_for_running(Site) of
         ok ->
             Context = z_context:init_cowdata(OptReq, OptEnv, z_context:new(Site)),
             dispatch_site(DispReq, Context, ExtraBindings);
         {error, timeout} ->
-            {stop_request, 503};
+            #stop_request{ status = 503 };
         {error, _} ->
-            case ets:lookup(?MODULE, '*') of
-                [] ->
-                    {stop_request, 400};
-                [{_Host, Site, _Redirect}] ->
-                    {stop_request, 503};
-                [{_Host, FallbackSite, undefined}] ->
-                    ExtraBindings1 = [
-                        {http_status_code, 400}
-                        | proplists:delete(http_status_code, ExtraBindings)
-                    ],
-                    dispatch_site_if_running(DispReq, OptReq, OptEnv, FallbackSite, ExtraBindings1);
-                [{_Host, FallbackSite, _Redirect}] ->
-                    {redirect, FallbackSite, undefined, true}
-            end
+            redirect_fallback(DispReq, OptReq, OptEnv, ExtraBindings)
     end.
 
--spec dispatch_site(#dispatch{}, z:context(), list()) -> dispatch().
+redirect_fallback(DispReq, OptReq, OptEnv, ExtraBindings) ->
+    case ets:lookup(?MODULE, '*') of
+        [] ->
+            #stop_request{ status = 400 };
+        [{_Host, _Site, _Redirect}] ->
+            #stop_request{ status = 503 };
+        [{_Host, FallbackSite, undefined}] ->
+            ExtraBindings1 = [
+                {http_status_code, 400}
+                | proplists:delete(http_status_code, ExtraBindings)
+            ],
+            dispatch_site_if_running(DispReq, OptReq, OptEnv, FallbackSite, ExtraBindings1);
+        [{_Host, FallbackSite, _Redirect}] ->
+            #redirect{
+                site = FallbackSite,
+                location = undefined,
+                is_permanent = true
+            }
+    end.
+
+-spec dispatch_site(Dispatch, Context, ExtraBindings) -> dispatch() when
+    Dispatch :: #dispatch{},
+    Context :: z:context(),
+    ExtraBindings :: list().
 dispatch_site(#dispatch{tracer_pid = TracerPid, path = Path, host = Hostname} = DispReq, Context, ExtraBindings) ->
     try
         {Tokens, IsDir} = split_path(Path),
@@ -578,10 +645,14 @@ dispatch_site(#dispatch{tracer_pid = TracerPid, path = Path, host = Hostname} = 
         end
     catch
         throw:{stop_request, RespCode} ->
-            {stop_request, RespCode}
+            #stop_request{ status = RespCode }
     end.
 
--spec dispatch_match( list( binary() ), z:context() ) -> {ok, {dispatch_rule(), proplists:proplist()}} | fail.
+-spec dispatch_match(Tokens, Context) -> {ok, {DispatchRule, Bindings}} | fail when
+    Tokens :: list( binary() ),
+    Context :: z:context(),
+    DispatchRule :: dispatch_rule(),
+    Bindings :: proplists:proplist().
 dispatch_match(Tokens, Context) ->
     Module = z_utils:name_for_site(dispatch, z_context:site(Context)),
     try
@@ -825,11 +896,20 @@ do_dispatch_rule({DispatchName, _, Mod, Props}, Bindings, Tokens, _IsDir, DispRe
         context = maybe_set_language(Bindings1, Context)
     }.
 
--spec redirect_protocol(binary()|undefined, pid()|undefined, list()) -> redirect_protocol().
-redirect_protocol(Hostname, TracerPid, Tokens) ->
+-spec redirect_protocol(Site, Hostname, TracerPid, Tokens) -> redirect_protocol() when
+    Site :: atom(),
+    Hostname :: binary() | undefined,
+    TracerPid :: pid() | undefined,
+    Tokens :: list().
+redirect_protocol(Site, Hostname, TracerPid, Tokens) ->
     NewHostname = add_port(https, Hostname, z_config:get(ssl_port)),
     trace(TracerPid, Tokens, forced_protocol_switch, [{protocol, https}, {host, NewHostname}]),
-    {redirect_protocol, https, NewHostname, true}.
+    #redirect_protocol{
+        site = Site,
+        protocol = https,
+        host = NewHostname,
+        is_permanent = true
+    }.
 
 -spec do_dispatch_fail(bindings(), list( binary() ), boolean(), #dispatch{}, z:context()) -> dispatch().
 do_dispatch_fail(Bindings, Tokens, _IsDir, DispReq, Context0) ->
@@ -929,7 +1009,11 @@ handle_rewrite({ok, #dispatch_match{
     };
 handle_rewrite({ok, #dispatch_redirect{location=Location, is_permanent=IsPermanent}},
                _DispReq, _MatchedHost, _NonMatchedPathTokens, _Bindings, Context) ->
-    {redirect, z_context:site(Context), Location, IsPermanent};
+    #redirect{
+        site = z_context:site(Context),
+        location = Location,
+        is_permanent = IsPermanent
+    };
 handle_rewrite(undefined, DispReq, MatchedHost, NonMatchedPathTokens, Bindings, Context) ->
     trace(DispReq#dispatch.tracer_pid, undefined, rewrite_nomatch, []),
     #dispatch_nomatch{
@@ -981,11 +1065,15 @@ find_no_host_match(DispReq, OptReq, OptEnv) ->
             % See if there is a site handling wildcard domains
             case ets:lookup(?MODULE, '*') of
                 [] ->
-                    {stop_request, 400};
+                    #stop_request{ status = 400 };
                 [{_, FallbackSite, undefined}] ->
                     {fallback, FallbackSite};
                 [{_, FallbackSite, _Redirect}] ->
-                    {redirect, FallbackSite, undefined, true}
+                    #redirect{
+                        site = FallbackSite,
+                        location = undefined,
+                        is_permanent = true
+                    }
             end;
         Redirect->
             Redirect
@@ -997,7 +1085,11 @@ first_site_match(Sites, DispHost, OptReq, OptEnv) ->
             (Site, running, no_host_match) ->
                 case catch z_notifier:first(DispHost, z_context:init_cowdata(OptReq, OptEnv, z_context:new(Site))) of
                     {ok, #dispatch_redirect{location=PathOrURI, is_permanent=IsPermanent}} ->
-                        {redirect, Site, PathOrURI, IsPermanent};
+                        #redirect{
+                            site = Site,
+                            location = PathOrURI,
+                            is_permanent = IsPermanent
+                        };
                     undefined ->
                         no_host_match;
                     Unexpected ->
