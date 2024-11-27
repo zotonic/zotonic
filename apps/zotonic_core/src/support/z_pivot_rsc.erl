@@ -1107,87 +1107,124 @@ delete_queue(Ids, DueDate, Context) ->
         [ Ids, DueDate ],
         Context).
 
-
-%% @doc Let a module define a custom pivot
-%% columns() -> [column()]
-%% column()  -> {ColumName::atom(), ColSpec::string()} | {atom(), string(), options::list()}
+%% @doc Let a module define a custom pivot. The custom pivot table is created or
+%% changed to reflect the given columns. Per default an index is created for each
+%% column.
+%% Be careful when adding columns that are not nullable, if the table contains data then
+%% adding those columns will fail.
+-spec define_custom_pivot(Module, Columns, Context) -> ok when
+    Module :: atom(),
+    Columns :: [ Column ],
+    Column :: #column_def{}
+            | {#column_def{}, Options}
+            | {Colname, Colspec}
+            | {Colname, Colspec, Options},
+    Colname :: string() | binary() | atom(),
+    Colspec :: string() | binary(),
+    Options :: [ Option ],
+    Option :: noindex,
+    Context :: z:context().
 define_custom_pivot(Module, Columns, Context) ->
-    TableName = "pivot_" ++ z_convert:to_list(Module),
+    TableName = list_to_atom("pivot_" ++ z_convert:to_list(Module)),
+    ColDefs = to_column_defs(Columns),
     case z_db:table_exists(TableName, Context) of
         true ->
-            % Compare column names to see if table needs an update
-            DbColumns = [ Name || #column_def{name=Name} <- z_db:columns(TableName, Context), not(Name == id)],
-            SpecColumns = lists:map(
-                fun(ColumnDef) ->
-                    [Name|_] = tuple_to_list(ColumnDef),
-                    Name
-                end,
-                Columns
-            ),
-            case lists:usort(SpecColumns) == lists:usort(DbColumns) of
+            DbColumns = z_db:column_names(TableName, Context) -- [ id ],
+            DefColumns = [ Name || {#column_def{ name = Name }, _} <- ColDefs ],
+            case lists:usort(DefColumns) =:= lists:usort(DbColumns) of
                 false ->
-                    z_db:drop_table(TableName, Context),
-                    define_custom_pivot(Module, Columns, Context);
+                    update_custom_pivot(TableName, ColDefs, Context);
                 true ->
                     ok
             end;
         false ->
-            ok = z_db:transaction(
-                    fun(Ctx) ->
-                        Fields = custom_columns(Columns),
-                        Sql = "CREATE TABLE " ++ TableName ++ "(" ++
-                              "id int NOT NULL," ++ Fields ++ " primary key(id))",
+            update_custom_pivot(TableName, ColDefs, Context)
+    end.
 
-                        [] = z_db:q(lists:flatten(Sql), Ctx),
+update_custom_pivot(TableName, DefColumns, Context) ->
+    Cols = [ Col || {Col, _} <- DefColumns ],
+    Cols1 = [
+        #column_def{
+            name = id,
+            type = "integer",
+            primary_key = true,
+            is_nullable = false
+        }
+        | Cols
+    ],
+    ok = z_db:transaction(
+        fun(Ctx) ->
+            ok = z_db:alter_table(TableName, Cols1, Ctx),
+            Constraint = "fk_" ++ z_convert:to_list(TableName) ++ "_id",
+            case z_db:constraint_exists(TableName, Constraint, Ctx) of
+                true ->
+                    ok;
+                false ->
+                    [] = z_db:q("ALTER TABLE " ++ TableName ++
+                                " ADD CONSTRAINT " ++ Constraint ++
+                                " FOREIGN KEY (id) REFERENCES rsc(id) ON UPDATE CASCADE ON DELETE CASCADE", Ctx)
+            end,
+            lists:foreach(
+                fun({#column_def{ name = ColName }, Opts}) ->
+                    case proplists:get_bool(noindex, Opts) of
+                        true ->
+                            ok;
+                        false ->
+                            Sql = iolist_to_binary([
+                                "CREATE INDEX IF NOT EXISTS ",
+                                z_convert:to_list(TableName), "_", z_convert:to_list(ColName), "_key ON ",
+                                z_convert:to_list(TableName), "(", z_convert:to_list(ColName), ")"
+                            ]),
+                            [] = z_db:q(Sql, Ctx)
+                    end
+                end,
+                DefColumns)
+        end,
+        Context),
+    z_db:flush(Context),
+    ok.
 
-                        [] = z_db:q("ALTER TABLE " ++ TableName ++
-                                    " ADD CONSTRAINT fk_" ++ TableName ++ "_id " ++
-                                    " FOREIGN KEY (id) REFERENCES rsc(id) ON UPDATE CASCADE ON DELETE CASCADE", Ctx),
+to_column_defs(List) ->
+    lists:map(
+        fun
+            (#column_def{} = Def) -> {Def, []};
+            ({#column_def{}, _Opts} = Def) -> Def;
+            ({Name, Spec}) -> {to_column_def(Name, Spec), []};
+            ({Name, Spec, Opts}) -> {to_column_def(Name, Spec), Opts}
+        end,
+        List).
 
-                        Indexable = lists:filter(fun({_,_}) -> true;
-                                                    ({_,_,Opts}) -> not lists:member(noindex, Opts)
-                                                 end,
-                                                 Columns),
-                        Idx = [
-                                begin
-                                    K = element(1,Col),
-                                    "CREATE INDEX " ++ TableName ++ "_" ++ z_convert:to_list(K) ++ "_key ON "
-                                    ++ TableName ++ "(" ++ z_convert:to_list(K) ++ ")"
-                                end
-                                || Col <- Indexable
-                            ],
-                        lists:foreach(
-                            fun(Sql1) ->
-                                [] = z_db:q(Sql1, Ctx)
-                            end,
-                            Idx),
-                        ok
-                    end,
-                    Context),
-            z_db:flush(Context),
-            ok
+to_column_def(Name, Spec) ->
+    C = #column_def{ name = z_convert:to_atom(Name) },
+    {C1, SpecRest} = case binary:split(z_convert:to_binary(Spec), <<"(">>) of
+        [Type, LenRest] ->
+            [Len, Rest] = binary:split(LenRest, <<")">>),
+            Len1 = binary_to_integer(z_string:trim(Len)),
+            {C#column_def{ length = Len1 }, <<Type/binary, " ", Rest/binary>>};
+        [Rest] ->
+            {C, Rest}
+    end,
+    case binary:split(z_string:to_lower(SpecRest), <<"not null">>) of
+        [Type1, NullRest] ->
+            case binary:split(NullRest, <<"default ">>) of
+                [_, Default] ->
+                    C1#column_def{ type = z_string:trim(Type1), is_nullable = false, default = z_string:trim(Default) };
+                [_] ->
+                    C1#column_def{ type = z_string:trim(Type1), is_nullable = false }
+            end;
+        [NullRest] ->
+            case binary:split(NullRest, <<"default ">>) of
+                [Type1, Default] ->
+                    C1#column_def{ type = z_string:trim(Type1), default = z_string:trim(Default) };
+                [Type1] ->
+                    C1#column_def{ type = z_string:trim(Type1) }
+            end
     end.
 
 
-custom_columns(Cols) ->
-    custom_columns(Cols, []).
-
-custom_columns([], Acc) ->
-    lists:reverse(Acc);
-custom_columns([{Name, Spec}|Rest], Acc) ->
-    custom_columns(Rest, [ [z_convert:to_list(Name), " ", Spec, ","] |  Acc]);
-custom_columns([{Name, Spec, _Opts}|Rest], Acc) ->
-    custom_columns(Rest, [ [z_convert:to_list(Name), " ", Spec, ","] |  Acc]).
-
-
-
 %% @doc Lookup a custom pivot; give back the Id based on a column. Will always return the first Id found.
-%% @spec lookup_custom_pivot(Module, Column, Value, Context) -> Id | undefined
 lookup_custom_pivot(Module, Column, Value, Context) ->
     TableName = "pivot_" ++ z_convert:to_list(Module),
     Column1 = z_convert:to_list(Column),
     Query = "SELECT id FROM " ++ TableName ++ " WHERE " ++ Column1 ++ " = $1",
-    case z_db:q(Query, [Value], Context) of
-        [] -> undefined;
-        [{Id}|_] -> Id
-    end.
+    z_db:q1(Query, [Value], Context).

@@ -485,7 +485,7 @@ manage_schema(_Version,  Context) ->
                     ok
             end,
             case z_db:column(oauth2_consumer_app, grant_type, Context) of
-                {ok, #column_def{ default = "'code'::" ++ _ }} ->
+                {ok, #column_def{ default = <<"'code'::", _/binary>> }} ->
                     [] = z_db:q("
                         alter table oauth2_consumer_app
                         alter column grant_type set default 'authorization_code'",

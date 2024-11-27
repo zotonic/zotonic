@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2024 Marc Worrell
-%% @doc Interface to database, uses database definition from Context
+%% @doc Interface to database, uses database definition from Context.
 %% @end
 
 %% Copyright 2009-2024 Marc Worrell
@@ -104,7 +104,9 @@
     foreign_key/3,
     key_exists/3,
     table_exists/2,
+    table_keys/2,
     create_table/3,
+    alter_table/3,
     drop_table/2,
     flush/1,
 
@@ -1372,132 +1374,40 @@ split_props(Props, Cols) ->
     end.
 
 
-%% @doc Return a property list with all columns of the table. (example: [{id,int4,modifier},...])
+%% @doc Return a list of column definitions for all columns of the table.
 -spec columns(table_name(), z:context()) -> list( #column_def{} ).
 columns(Table, Context) ->
-    {Schema, Table1, _QTab} = quoted_table_name(Table),
-    columns(Schema, Table1, Context).
+    z_db_table:columns(Table, Context).
 
+%% @doc Return a property list with all columns of the table. (example: [{id,int4,modifier},...])
 -spec columns(schema_name(), table_name(), z:context()) -> list( #column_def{} ).
-columns(Schema, Table, Context) when is_binary(Table) ->
-    columns(Schema, binary_to_list(Table), Context);
-columns(Schema, Table, Context) when is_atom(Table) ->
-    columns(Schema, atom_to_list(Table), Context);
-columns(Schema, Table, Context) when is_list(Table) ->
-    assert_table_name(Table),
-    Options = z_db_pool:get_database_options(Context),
-    Db = proplists:get_value(dbdatabase, Options),
-    Schema1 = case Schema of
-        default -> proplists:get_value(dbschema, Options);
-        S when is_list(S) -> S;
-        S when is_binary(S) -> S
-    end,
-    case z_depcache:get({columns, Db, Schema1, Table}, Context) of
-        {ok, Cols} ->
-            Cols;
-        _ ->
-            Cols = q("  select column_name, data_type, character_maximum_length,
-                               is_nullable, column_default, udt_name
-                        from information_schema.columns
-                        where table_catalog = $1
-                          and table_schema = $2
-                          and table_name = $3
-                        order by ordinal_position", [Db, Schema1, Table], Context),
-            Cols1 = [ columns1(Col) || Col <- Cols ],
-            z_depcache:set({columns, Db, Schema1, Table}, Cols1, ?YEAR, [{database, Db}], Context),
-            Cols1
-    end.
+columns(Schema, Table, Context) ->
+    z_db_table:columns(Schema, Table, Context).
 
-
-columns1({<<"id">>, <<"integer">>, undefined, Nullable, <<"nextval(", _/binary>>, _UdtName}) ->
-    #column_def{
-        name = id,
-        type = "serial",
-        length = undefined,
-        is_nullable = z_convert:to_bool(Nullable),
-        default = undefined
-    };
-columns1({Name, <<"ARRAY">>, _MaxLength, Nullable, Default, UdtName}) ->
-    % @todo derive the type of the array elements.
-    #column_def{
-        name = z_convert:to_atom(Name),
-        type = case UdtName of
-            <<"_text">> -> "text";
-            <<"_varchar">> -> "character varying";
-            <<"_int", _/binary>> -> "integer";
-            _ -> UdtName
-        end,
-        length = undefined,
-        is_array = true,
-        is_nullable = z_convert:to_bool(Nullable),
-        default = column_default(Default)
-    };
-columns1({Name,Type,MaxLength,Nullable,Default,_UdtName}) ->
-    #column_def{
-        name = z_convert:to_atom(Name),
-        type = z_convert:to_list(Type),
-        length = MaxLength,
-        is_nullable = z_convert:to_bool(Nullable),
-        default = column_default(Default)
-    }.
-
-column_default(undefined) -> undefined;
-column_default(<<"nextval(", _/binary>>) -> undefined;
-column_default(Default) -> binary_to_list(Default).
-
-
+%% @doc Return the column definition of the given column.
 -spec column( table_name(), column_name(), z:context()) ->
         {ok, #column_def{}} | {error, enoent}.
 column(Table, Column, Context) ->
-    {Schema, Table1, _QTab} = quoted_table_name(Table),
-    column(Schema, Table1, Column, Context).
+    z_db_table:column(Table, Column, Context).
 
--spec column( schema_name(), table_name(), column_name(), z:context()) ->
-        {ok, #column_def{}} | {error, enoent}.
-column(Schema, Table, Column0, Context) ->
-    Columns = columns(Schema, Table, Context),
-    Column = to_existing_atom(Column0),
-    case lists:filter(
-        fun
-            (#column_def{ name = Name }) when Name =:= Column -> true;
-            (_) -> false
-        end,
-        Columns)
-    of
-        [] -> {error, enoent};
-        [ #column_def{} = Col ] -> {ok, Col}
-    end.
-
-to_existing_atom(C) ->
-    try
-        to_existing_atom_1(C)
-    catch
-        error:badarg ->
-            'ERROR'
-    end.
-
-to_existing_atom_1(C) when is_binary(C) ->
-    binary_to_existing_atom(C, utf8);
-to_existing_atom_1(C) when is_list(C) ->
-    list_to_existing_atom(C);
-to_existing_atom_1(C) when is_atom(C) ->
-    C.
-
-%% @doc Return a list with the column names of a table.  The names are sorted.
+%% @doc Return a list with the column (atom) names of a table.  The names are sorted.
 -spec column_names(table_name(), z:context()) -> list( atom() ).
 column_names(Table, Context) ->
     {Schema, Table1, _QTab} = quoted_table_name(Table),
     column_names(Schema, Table1, Context).
 
+%% @doc Return a list with all (atom) columns names of a table.  The names are sorted.
 -spec column_names(schema_name(), table_name(), z:context()) -> list( atom() ).
 column_names(Schema, Table, Context) ->
-    Names = [ C#column_def.name || C <- columns(Schema, Table, Context)],
+    Names = [ C#column_def.name || C <- z_db_table:columns(Schema, Table, Context)],
     lists:sort(Names).
 
+%% @doc Return a list with all (binary) columns names of a table.  The names are not sorted.
 -spec column_names_bin(table_name(), z:context()) -> list( binary() ).
 column_names_bin(Table, Context) ->
     [ atom_to_binary(Col, utf8) || Col <- column_names(Table, Context) ].
 
+%% @doc Return a list with all (binary) columns names of a table.  The names are not sorted.
 -spec column_names_bin(schema_name(), table_name(), z:context()) -> list( binary() ).
 column_names_bin(Schema, Table, Context) ->
     [ atom_to_binary(Col, utf8) || Col <- column_names(Schema, Table, Context) ].
@@ -1567,9 +1477,11 @@ convert_value("ARRAY", _, V) when is_list(V) ->
     V;
 convert_value("ARRAY", _, V) ->
     [ V ];
-convert_value(Type, _, V) ->
+convert_value(Type, _, V) when is_list(Type) ->
     ?LOG_WARNING(#{
+        in => zotonic_core,
         text => <<"No type conversion for column type">>,
+        result => error,
         type => Type,
         value => V
     }),
@@ -1746,7 +1658,7 @@ database_exists(Connection, Database) ->
 create_database(_Site, Connection, Database) ->
     %% Use template0 to prevent ERROR: new encoding (UTF8) is incompatible with
     %% the encoding of the template database (SQL_ASCII)
-    assert_database_name(Database),
+    z_db_table:assert_database_name(Database),
     case epgsql:equery(
         Connection,
         "CREATE DATABASE \"" ++ Database ++ "\" ENCODING = 'UTF8' TEMPLATE template0"
@@ -1774,7 +1686,7 @@ schema_exists_conn(Connection, Schema) ->
 %% @doc Create a schema
 -spec create_schema(atom(), epgsql:connection(), string()) -> ok | {error, term()}.
 create_schema(_Site, Connection, Schema) ->
-    assert_schema_name(Schema),
+    z_db_table:assert_schema_name(Schema),
     case epgsql:equery(
         Connection,
         "CREATE SCHEMA \"" ++ Schema ++ "\""
@@ -1896,150 +1808,67 @@ key_exists(Table, Key, Context) ->
         Context),
     HasKey >= 1.
 
+%% @doc Return a map of all indices of a table. The key is the name of
+%% the index, the value is the definition of the index.
+-spec table_keys( table_name(), z:context() ) -> {ok, Indices} when
+    Indices :: #{ IndexName := IndexDef },
+    IndexName :: binary(),
+    IndexDef :: binary().
+table_keys(Table, Context) ->
+    Options = z_db_pool:get_database_options(Context),
+    Schema = proplists:get_value(dbschema, Options),
+    z_db:qmap("
+        select indexname, indexdef
+        from pg_indexes
+        where schemaname = $1
+          and tablename = $2",
+        [ Schema, Table ],
+        Context).
 
 %% @doc Check the information schema if a certain table exists in the context database.
 -spec table_exists(table_name(), z:context()) -> boolean().
 table_exists(Table, Context) ->
-    {Schema, Tab, _QTab} = quoted_table_name(Table),
-    table_exists(Schema, Tab, Context).
+    z_db_table:table_exists(Table, Context).
 
--spec table_exists( schema_name(), table_name(), z:context() ) -> boolean().
-table_exists(Schema, Table, Context) ->
-    Options = z_db_pool:get_database_options(Context),
-    Db = proplists:get_value(dbdatabase, Options),
-    Schema1 = case Schema of
-        default -> proplists:get_value(dbschema, Options);
-        S -> S
-    end,
-    case q1("   select count(*)
-                from information_schema.tables
-                where table_catalog = $1
-                  and table_name = $2
-                  and table_schema = $3
-                  and table_type = 'BASE TABLE'", [Db, Table, Schema1], Context) of
-        1 -> true;
-        0 -> false
-    end.
+%% @doc Ensure that a table with the given columns exists, if the table exists then
+%% add, modify or drop columns.  The 'id' (with type serial) column _must_ be defined
+%% when creating the table.
+-spec create_table(Table, Columns, Context) -> ok | {error, Reason} when
+    Table :: table_name(),
+    Columns :: list( #column_def{} ),
+    Context :: z:context(),
+    Reason :: term().
+create_table(Table, Cols, Context) ->
+    z_db_table:create_table(Table, Cols, Context).
 
+%% @doc Alter a table so that it matches the given column definitions. If the table doesn't
+%% exist then it is created. RESTRICTIONS: does NOT change the primary key and unique
+%% constraint of existing columns. If the table doesn't exist then it is created.
+%% Be careful when adding columns that are not nullable, if the table contains data then
+%% adding those columns will fail.
+-spec alter_table(Table, Columns, Context) -> ok | {error, Reason} when
+    Table :: table_name(),
+    Columns :: list( #column_def{} ),
+    Context :: z:context(),
+    Reason :: term().
+alter_table(Table, Cols, Context) ->
+    z_db_table:alter_table(Table, Cols, Context).
 
-%% @doc Make sure that a table is dropped, only when the table exists
+%% @doc Make sure that a table is dropped, only if the table exists
 -spec drop_table(table_name(), z:context()) -> ok.
 drop_table(Table, Context) ->
-    {_Schema, _Tab, QTab} = quoted_table_name(Table),
-    case table_exists(Table, Context) of
-        true -> q("drop table " ++ QTab, Context), ok;
-        false -> ok
-    end.
+    z_db_table:drop_table(Table, Context).
 
+%% @doc Assert that the table name is safe to use. Crashes if the table name is not safe.
+-spec assert_table_name(table_name()) -> true.
+assert_table_name(Table) ->
+    z_db_table:assert_table_name(Table).
 
-%% @doc Ensure that a table with the given columns exists, alter any existing table
-%% to add, modify or drop columns.  The 'id' (with type serial) column _must_ be defined
-%% when creating the table.
--spec create_table(table_name(), list(), z:context()) -> ok.
-create_table(Table, Cols, Context) ->
-    {_Schema, _Tab, QTab} = quoted_table_name(Table),
-    ColsSQL = ensure_table_create_cols(Cols, []),
-    z_db:q("CREATE TABLE "++QTab++" ("++string:join(ColsSQL, ",")
-        ++ table_create_primary_key(Cols) ++ ")", Context),
-    ok.
+%% @doc Quote a table name so that it is safe to use in SQL queries.
+-spec quoted_table_name(table_name()) -> {default | string(), string(), string()}.
+quoted_table_name(Table) ->
+    z_db_table:quoted_table_name(Table).
 
-
-table_create_primary_key([]) -> [];
-table_create_primary_key([#column_def{name=id, type="serial"}|_]) -> ", primary key(id)";
-table_create_primary_key([#column_def{name=N, primary_key=true}|_]) -> ", primary key(" ++ z_convert:to_list(N) ++ ")";
-table_create_primary_key([_|Cols]) -> table_create_primary_key(Cols).
-
-ensure_table_create_cols([], Acc) ->
-    lists:reverse(Acc);
-ensure_table_create_cols([C|Cols], Acc) ->
-    M = lists:flatten([$", atom_to_list(C#column_def.name), $", 32, column_spec(C)]),
-    ensure_table_create_cols(Cols, [M|Acc]).
-
-column_spec(#column_def{type=Type, length=Length, is_nullable=Nullable, is_array = IsArray, default=Default, unique=Unique}) ->
-    L = case Length of
-            undefined -> [];
-            _ -> [$(, integer_to_list(Length), $)]
-        end,
-    A = column_spec_array(IsArray),
-    N = column_spec_nullable(Nullable),
-    D = column_spec_default(Default),
-    U = column_spec_unique(Unique),
-    lists:flatten([Type, L, A, N, D, U]).
-
-column_spec_array(true) -> "[]";
-column_spec_array(false) -> "".
-
-column_spec_nullable(true) -> "";
-column_spec_nullable(false) -> " not null".
-
-column_spec_default(undefined) -> "";
-column_spec_default(Default) -> [" DEFAULT ", Default].
-
-column_spec_unique(false) -> "";
-column_spec_unique(true) -> " UNIQUE".
-
-%% @doc Check if a name is a valid SQL table name. Crashes when invalid
--spec assert_table_name( table_name() ) -> true.
-assert_table_name(A) when is_atom(A) ->
-    assert_table_name1(atom_to_list(A));
-assert_table_name([ C | _ ] = Table) when C =/= $. ->
-    assert_table_name1(Table);
-assert_table_name(<< C,  _/binary>> = Table) when C =/= $. ->
-    assert_table_name1b(Table).
-
-assert_table_name1([]) -> true;
-assert_table_name1([$_|T]) -> assert_table_name1(T);
-assert_table_name1([$.|T]) -> assert_table_name1(T);
-assert_table_name1([H|T]) when (H >= $a andalso H =< $z) ->
-    assert_table_name1(T);
-assert_table_name1([H|T]) when (H >= $0 andalso H =< $9) ->
-    assert_table_name1(T).
-
-assert_table_name1b(<<>>) -> true;
-assert_table_name1b(<<$_, T/binary>>) -> assert_table_name1b(T);
-assert_table_name1b(<<$., T/binary>>) -> assert_table_name1b(T);
-assert_table_name1b(<<H, T/binary>>) when (H >= $a andalso H =< $z) ->
-    assert_table_name1b(T);
-assert_table_name1b(<<H, T/binary>>) when (H >= $0 andalso H =< $9) ->
-    assert_table_name1b(T).
-
-%% @doc Check if a name is a valid SQL database name. Crashes when invalid
--spec assert_database_name( string() ) -> true.
-assert_database_name([]) -> true;
-assert_database_name([$.|T]) -> assert_database_name(T);
-assert_database_name([$_|T]) -> assert_database_name(T);
-assert_database_name([H|T]) when (H >= $a andalso H =< $z) ->
-    assert_database_name(T);
-assert_database_name([H|T]) when (H >= $0 andalso H =< $9) ->
-    assert_database_name(T).
-
-%% @doc Check if a name is a valid SQL schema name. Crashes when invalid
--spec assert_schema_name( string() ) -> true.
-assert_schema_name([]) -> true;
-assert_schema_name([$_|T]) -> assert_schema_name(T);
-assert_schema_name([H|T]) when (H >= $a andalso H =< $z) ->
-    assert_schema_name(T);
-assert_schema_name([H|T]) when (H >= $0 andalso H =< $9) ->
-    assert_schema_name(T).
-
-
--spec quoted_table_name( table_name() ) -> {default | string(), string(), string()}.
-quoted_table_name(TableName) ->
-    assert_table_name(TableName),
-    case binary:split(z_convert:to_binary(TableName), <<".">>, [ global ]) of
-        [ Schema, Table ] ->
-            QTab = binary_to_list(
-                iolist_to_binary([
-                    $", Schema, $", $., $", Table, $"
-                ])),
-            {binary_to_list(Schema), binary_to_list(Table), QTab};
-        [ Table ] ->
-            QTab = binary_to_list(
-                iolist_to_binary([
-                    $", Table, $"
-                ])),
-            {default, binary_to_list(Table), QTab}
-    end.
 
 %% @doc Merge the contents of the props column into the result rows
 -spec merge_props([proplists:proplist() | map()]) -> list() | undefined.
