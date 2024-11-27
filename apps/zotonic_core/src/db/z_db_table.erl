@@ -29,7 +29,7 @@
     Context :: z:context(),
     Reason :: term().
 create_table(Table, Cols, Context) ->
-    Cols1 = norm(Cols),
+    Cols1 = lists:map(fun norm/1, Cols),
     {_Schema, _Tab, QTab} = quoted_table_name(Table),
     ColsSQL = ensure_table_create_cols(Cols1, []),
     case z_db:squery(iolist_to_binary([
