@@ -88,8 +88,7 @@
     recreate_table/1
     ]).
 
--define(FULLTEXT_LENGTH, 80).
--define(FTS_LENGTH, 500).
+-define(FULLTEXT_LENGTH, 500).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -735,7 +734,7 @@ render_facet(Id, #facet_def{ name = Name, type = fts } = F, Context) ->
                     [V2],
                     Context),
             [
-                {<<"f_", Name/binary>>, z_string:truncatechars(V1, ?FTS_LENGTH)},
+                {<<"f_", Name/binary>>, z_string:truncatechars(V1, ?FULLTEXT_LENGTH)},
                 {<<"fts_", Name/binary>>, Tsv}
             ]
     end;
@@ -811,7 +810,7 @@ convert_type_1(ids, V, Context) when is_binary(V) ->
 convert_type_1(fulltext, V, _Context) ->
     z_string:truncatechars(z_convert:to_binary(V), ?FULLTEXT_LENGTH);
 convert_type_1(fts, V, _Context) ->
-    z_string:truncatechars(z_convert:to_binary(V), ?FTS_LENGTH);
+    z_string:truncatechars(z_convert:to_binary(V), ?FULLTEXT_LENGTH);
 convert_type_1(text, V, _Context) ->
     V1 = z_string:trim(z_html:unescape(z_html:strip(z_convert:to_binary(V)))),
     z_string:truncatechars(V1, ?FULLTEXT_LENGTH).
@@ -1180,7 +1179,7 @@ col_type(datetime) -> <<"timestamp with time zone">>;
 col_type(id) -> <<"integer">>.
 
 col_length(text) -> ?FULLTEXT_LENGTH;
-col_length(fts) -> ?FTS_LENGTH;
+col_length(fts) -> ?FULLTEXT_LENGTH;
 col_length(integer) -> undefined;
 col_length(float) -> undefined;
 col_length(boolean) -> undefined;
