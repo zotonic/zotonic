@@ -1160,7 +1160,7 @@ update_custom_pivot(TableName, DefColumns, Context) ->
                 true ->
                     ok;
                 false ->
-                    [] = z_db:q("ALTER TABLE " ++ TableName ++
+                    [] = z_db:q("ALTER TABLE " ++ z_convert:to_list(TableName) ++
                                 " ADD CONSTRAINT " ++ Constraint ++
                                 " FOREIGN KEY (id) REFERENCES rsc(id) ON UPDATE CASCADE ON DELETE CASCADE", Ctx)
             end,
@@ -1195,7 +1195,7 @@ to_column_defs(List) ->
         List).
 
 to_column_def(Name, Spec) ->
-    C = #column_def{ name = z_convert:to_atom(Name) },
+    C = #column_def{ name = z_convert:to_atom(Name), type = <<>> },
     {C1, SpecRest} = case binary:split(z_convert:to_binary(Spec), <<"(">>) of
         [Type, LenRest] ->
             [Len, Rest] = binary:split(LenRest, <<")">>),

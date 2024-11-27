@@ -1798,13 +1798,20 @@ key_exists(Table, Key, Context) ->
 table_keys(Table, Context) ->
     Options = z_db_pool:get_database_options(Context),
     Schema = proplists:get_value(dbschema, Options),
-    z_db:qmap("
+    Rs = z_db:q("
         select indexname, indexdef
         from pg_indexes
         where schemaname = $1
           and tablename = $2",
         [ Schema, Table ],
-        Context).
+        Context),
+    Map = lists:foldl(
+        fun({N, D}, Acc) ->
+            Acc#{ N => D }
+        end,
+        #{},
+        Rs),
+    {ok, Map}.
 
 %% @doc Check the information schema if a certain table exists in the context database.
 -spec table_exists(table_name(), z:context()) -> boolean().
