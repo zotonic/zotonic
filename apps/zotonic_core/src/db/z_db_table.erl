@@ -416,6 +416,7 @@ norm_type(<<"bpchar">>) -> <<"character">>;
 norm_type(<<"int">>) -> <<"integer">>;
 norm_type(<<"float">>) -> <<"real">>;
 norm_type(<<"double">>) -> <<"double precision">>;
+norm_type(<<"timestamp">>) -> <<"timestamp with time zone">>;
 norm_type(T) -> T.
 
 maybe_binary(undefined) -> undefined;

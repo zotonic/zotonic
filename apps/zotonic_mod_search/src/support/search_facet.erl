@@ -1039,11 +1039,16 @@ create_table(Context) ->
                 | Cols
             ],
             ok = z_db:alter_table(search_facet, Cols1, Context),
-            [] = z_db:q(
-                "ALTER TABLE search_facet ADD CONSTRAINT fk_facet_id FOREIGN KEY (id)
-                 REFERENCES rsc (id)
-                 ON UPDATE CASCADE ON DELETE CASCADE",
-                Context),
+            case z_db:constraint_exists(search_facet, fk_facet_id, Context) of
+                true ->
+                    ok;
+                false ->
+                    [] = z_db:q(
+                        "ALTER TABLE search_facet ADD CONSTRAINT fk_facet_id FOREIGN KEY (id)
+                         REFERENCES rsc (id)
+                         ON UPDATE CASCADE ON DELETE CASCADE",
+                        Context)
+            end,
             lists:foreach(
                 fun(Idx) ->
                     [] = z_db:q(Idx, Context)
