@@ -6,7 +6,8 @@
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic.hrl").
 
-alter_table_test(Context) ->
+alter_table_test() ->
+    Context = z_context:new(zotonic_site_testsandbox),
     ok = z_db:drop_table(dbtests, Context),
     A = [
         #column_def{
