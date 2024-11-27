@@ -294,8 +294,8 @@ alter_col_statements(AlterCols, NewCols) ->
     lists:map(fun(C) -> alter_col_statement(C, find_column(C#column_def.name, NewCols)) end, AlterCols).
 
 alter_col_statement(
-        #column_def{ type = OldT, length = OldLen, is_nullable = OldNull, default = OldDefault },
-        #column_def{ type = NewT, length = NewLen, is_nullable = NewNull, is_array = NewArray, default = NewDefault, name = Name }) ->
+        #column_def{ type = OldT, length = OldLen, is_nullable = OldNullable, default = OldDefault },
+        #column_def{ type = NewT, length = NewLen, is_nullable = NewNullable, is_array = NewArray, default = NewDefault, name = Name }) ->
     NewT1 = case NewT of
         <<"serial">> -> <<"integer">>;
         <<"bigserial">> -> <<"bigint">>;
@@ -317,9 +317,9 @@ alter_col_statement(
                 []
         end,
         if
-            not NewNull, OldNull ->
-                [ "ALTER COLUMN \"", atom_to_list(Name), "\" DROP NULL" ];
-            NewNull, not OldNull ->
+            not NewNullable, OldNullable ->
+                [ "ALTER COLUMN \"", atom_to_list(Name), "\" SET NOT NULL" ];
+            NewNullable, not OldNullable ->
                 [ "ALTER COLUMN \"", atom_to_list(Name), "\" DROP NOT NULL" ];
             true ->
                 []
