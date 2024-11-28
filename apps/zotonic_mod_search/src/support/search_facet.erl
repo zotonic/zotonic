@@ -88,8 +88,7 @@
     recreate_table/1
     ]).
 
--define(FULLTEXT_LENGTH, 80).
--define(FTS_LENGTH, 500).
+-define(FULLTEXT_LENGTH, 500).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -735,7 +734,7 @@ render_facet(Id, #facet_def{ name = Name, type = fts } = F, Context) ->
                     [V2],
                     Context),
             [
-                {<<"f_", Name/binary>>, z_string:truncatechars(V1, ?FTS_LENGTH)},
+                {<<"f_", Name/binary>>, z_string:truncatechars(V1, ?FULLTEXT_LENGTH)},
                 {<<"fts_", Name/binary>>, Tsv}
             ]
     end;
@@ -811,7 +810,7 @@ convert_type_1(ids, V, Context) when is_binary(V) ->
 convert_type_1(fulltext, V, _Context) ->
     z_string:truncatechars(z_convert:to_binary(V), ?FULLTEXT_LENGTH);
 convert_type_1(fts, V, _Context) ->
-    z_string:truncatechars(z_convert:to_binary(V), ?FTS_LENGTH);
+    z_string:truncatechars(z_convert:to_binary(V), ?FULLTEXT_LENGTH);
 convert_type_1(text, V, _Context) ->
     V1 = z_string:trim(z_html:unescape(z_html:strip(z_convert:to_binary(V)))),
     z_string:truncatechars(V1, ?FULLTEXT_LENGTH).
@@ -1015,8 +1014,8 @@ recreate_table(Context) ->
         in => zotonic_mod_search,
         text => <<"Faceted search: recreating facet table">>
     }),
-    z_db:q("drop table if exists search_facet cascade", Context),
-    z_db:flush(Context),
+    % z_db:q("drop table if exists search_facet cascade", Context),
+    % z_db:flush(Context),
     create_table(Context).
 
 
@@ -1038,12 +1037,17 @@ create_table(Context) ->
                 }
                 | Cols
             ],
-            ok = z_db:create_table(search_facet, Cols1, Context),
-            [] = z_db:q(
-                "ALTER TABLE search_facet ADD CONSTRAINT fk_facet_id FOREIGN KEY (id)
-                 REFERENCES rsc (id)
-                 ON UPDATE CASCADE ON DELETE CASCADE",
-                Context),
+            ok = z_db:alter_table(search_facet, Cols1, Context),
+            case z_db:constraint_exists(search_facet, fk_facet_id, Context) of
+                true ->
+                    ok;
+                false ->
+                    [] = z_db:q(
+                        "ALTER TABLE search_facet ADD CONSTRAINT fk_facet_id FOREIGN KEY (id)
+                         REFERENCES rsc (id)
+                         ON UPDATE CASCADE ON DELETE CASCADE",
+                        Context)
+            end,
             lists:foreach(
                 fun(Idx) ->
                     [] = z_db:q(Idx, Context)
@@ -1175,7 +1179,7 @@ col_type(datetime) -> <<"timestamp with time zone">>;
 col_type(id) -> <<"integer">>.
 
 col_length(text) -> ?FULLTEXT_LENGTH;
-col_length(fts) -> ?FTS_LENGTH;
+col_length(fts) -> ?FULLTEXT_LENGTH;
 col_length(integer) -> undefined;
 col_length(float) -> undefined;
 col_length(boolean) -> undefined;
@@ -1188,12 +1192,12 @@ facet_to_index(#facet_def{
         type = fulltext
     }) ->
     [
-        <<"CREATE INDEX search_facet_f_", Name/binary, "_key ",
+        <<"CREATE INDEX IF NOT EXISTS search_facet_f_", Name/binary, "_key ",
           "ON search_facet(f_", Name/binary, ")">>,
 
         <<"CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA public">>,
 
-        <<"CREATE INDEX search_facet_ft_", Name/binary, "_key ",
+        <<"CREATE INDEX IF NOT EXISTS search_facet_ft_", Name/binary, "_key ",
            "ON search_facet USING gin (ft_", Name/binary, " public.gin_trgm_ops)">>
     ];
 facet_to_index(#facet_def{
@@ -1201,7 +1205,7 @@ facet_to_index(#facet_def{
         type = fts
     }) ->
     [
-        <<"CREATE INDEX search_facet_fts_", Name/binary, "_key ",
+        <<"CREATE INDEX IF NOT EXISTS search_facet_fts_", Name/binary, "_key ",
            "ON search_facet USING gin (fts_", Name/binary, ")">>
     ];
 facet_to_index(#facet_def{
@@ -1209,12 +1213,12 @@ facet_to_index(#facet_def{
         type = Type
     }) when Type =:= ids;
             Type =:= list ->
-    <<"CREATE INDEX search_facet_f_", Name/binary, "_key ",
+    <<"CREATE INDEX IF NOT EXISTS search_facet_f_", Name/binary, "_key ",
        "ON search_facet USING gin (f_", Name/binary, ")">>;
 facet_to_index(#facet_def{
         name = Name
     }) ->
-    <<"CREATE INDEX search_facet_f_", Name/binary, "_key ",
+    <<"CREATE INDEX IF NOT EXISTS search_facet_f_", Name/binary, "_key ",
       "ON search_facet(f_", Name/binary, ")">>.
 
 

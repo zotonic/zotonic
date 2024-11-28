@@ -646,7 +646,7 @@ ensure_column_is_local(Context) ->
 
 ensure_size_bigint(Context) ->
     case z_db:column(filestore, size, Context) of
-        {ok, #column_def{ type = "integer" }} ->
+        {ok, #column_def{ type = <<"integer">> }} ->
             z_db:q("alter table filestore alter column size type bigint", Context),
             z_db:flush(Context);
         {ok, _} ->
