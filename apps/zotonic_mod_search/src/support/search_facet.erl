@@ -227,7 +227,8 @@ is_facet_term(#search_sql_term{}) -> false.
 %% are present in the returned facet values. This ensures that select boxes
 %% with filter terms can still be populated with the selected facet filter.
 ensure_facet_qterms(#{ <<"q">> := Args }, Fs, Context) ->
-    FacetTerms = lists:flatten(find_facet_qterms(Args)),
+    Args1 = expand_qargs(Args, Context),
+    FacetTerms = lists:flatten(find_facet_qterms(Args1)),
     lists:foldl(
         fun({Facet, Value}, Acc) ->
             ensure_facet_value(Facet, Value, Acc, Context)
@@ -236,6 +237,18 @@ ensure_facet_qterms(#{ <<"q">> := Args }, Fs, Context) ->
         FacetTerms);
 ensure_facet_qterms(_SearchArgs, Fs, _Context) ->
     Fs.
+
+expand_qargs(Args, Context) ->
+    lists:flatten(
+        lists:map(
+            fun
+                (#{ <<"term">> := <<"qargs">> }) ->
+                    #{ <<"q">> := Terms } = z_search_props:from_qargs(Context),
+                    Terms;
+                (T) ->
+                    T
+            end,
+            Args)).
 
 ensure_facet_value(Facet, Value, Fs, Context) ->
     case maps:get(Facet, Fs, undefined) of

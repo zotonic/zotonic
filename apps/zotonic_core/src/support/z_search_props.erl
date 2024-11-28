@@ -396,6 +396,14 @@ map_term({K, V}) ->
                 <<"value">> => map_value(K1, Vx),
                 <<"operator">> => Op
             }};
+        #{
+            <<"operator">> := Op
+        } ->
+            {true, #{
+                <<"term">> => K1,
+                <<"value">> => map_value(K1, <<>>),
+                <<"operator">> => Op
+            }};
         _ ->
             {true, #{
                 <<"term">> => K1,
