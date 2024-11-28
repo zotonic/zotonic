@@ -424,6 +424,9 @@ is_allowed_admin_subscribe([<<"$SYS">>, <<"site">>, Site | _], Context) ->
 is_allowed_admin_subscribe([<<"$SYS">>, <<"erlang">> | _], _Context) ->
     % and to zotonic node wide erlang topics
     true;
+is_allowed_admin_subscribe([<<"$SYS">>, <<"statistics">> | _], _Context) ->
+    % and to zotonic node wide stats topics
+    true;
 is_allowed_admin_subscribe([<<"$SYS">> | _], _Context) ->
     % other sys topics are disallowed
     false;

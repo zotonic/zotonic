@@ -256,6 +256,14 @@ pid_observe_tick_1m(Pid, tick_1m, Context) ->
 manage_schema(What, Context) ->
     m_filestore:install(What, Context).
 
+-spec lookup(Path, Context) -> Found | undefined when
+    Path :: binary(),
+    Context :: z:context(),
+    Found :: {ok, {filename, Filename, StoreEntry}}
+           | {ok, {filezcache, Pid, StoreEntry}},
+    Filename :: binary(),
+    Pid :: pid(),
+    StoreEntry :: map().
 lookup(Path, Context) ->
     case m_filestore:lookup(Path, Context) of
         {ok, #{ location := Location } = StoreEntry} ->
