@@ -135,6 +135,8 @@ filter_empty(Q) when is_list(Q) ->
             (#{ <<"value">> := null }) -> false;
             (#{ <<"value">> := [] }) -> false;
             (#{ <<"value">> := <<>> }) -> false;
+            (#{ <<"term">> := _, <<"value">> := _ }) -> true;
+            (#{ <<"term">> := _ }) -> false;
             (#{}) -> true
         end,
         Q).
@@ -749,7 +751,7 @@ qterm(#{ <<"term">> := <<"qargs">>, <<"value">> := Boolean}, IsNested, Context) 
     case z_convert:to_bool(Boolean) of
         true ->
             #{ <<"q">> := Terms } = z_search_props:from_qargs(Context),
-            qterm(Terms, IsNested, Context);
+            qterm(filter_empty(Terms), IsNested, Context);
         false ->
             []
     end;
@@ -759,7 +761,7 @@ qterm(#{ <<"term">> := <<"query_id">>, <<"value">> := Id}, IsNested, Context) ->
     QueryText = z_html:unescape(m_rsc:p(Id, <<"query">>, Context)),
     QueryTerms = try
         #{ <<"q">> := Terms } = z_search_props:from_text(QueryText),
-        Terms
+        filter_empty(Terms)
     catch
         throw:{error,{unknown_query_term,Term}}:S ->
             ?LOG_ERROR(#{
