@@ -5,7 +5,13 @@
 // MW: 20100316: Adapted for async usage with Zotonic.
 // MW: 20100629: Added support for presence check on radio buttons
 // MW: 20110329: Dynamically fetch the validation fields from the DOM, this makes it possible to add/remove fields dynamically.
-// AC: 20150129: Removed unused class names. Changed messageClass to Bootstrap 3 conform "help-block". Replaced hardcoded "control-group" to fieldGroupClass, using Bootstrap 3 "form-group". Replaced hardcoded class "success" in favor of fieldGroupSuccessClass (Bootstrap 3 "has-success"); replaced hardcoded class "error" in favor of fieldGroupErrorClass (Bootstrap 3 "has-error").
+// AC: 20150129: Removed unused class names. Changed messageClass to Bootstrap 3 conform "help-block". Replaced hardcoded
+//               "control-group" to fieldGroupClass, using Bootstrap 3 "form-group". Replaced hardcoded class "success" in favor
+//               of fieldGroupSuccessClass (Bootstrap 3 "has-success"); replaced hardcoded class "error" in favor of
+//               fieldGroupErrorClass (Bootstrap 3 "has-error").
+// MW: 20241129: Fixed async submit in combination with Zotonic postbacks. Added extra classes: 'if-field-valid', 'if-field-invalid',
+//               'if-form-valid' and 'if-form-invalid'. They are used to hide/show messages on field (with a form-group) or the
+//               form level (within a 'form').
 
 
 /*********************************************** LiveValidation class ***********************************/
