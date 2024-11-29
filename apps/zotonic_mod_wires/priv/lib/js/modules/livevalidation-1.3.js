@@ -9,8 +9,8 @@
 //               "control-group" to fieldGroupClass, using Bootstrap 3 "form-group". Replaced hardcoded class "success" in favor
 //               of fieldGroupSuccessClass (Bootstrap 3 "has-success"); replaced hardcoded class "error" in favor of
 //               fieldGroupErrorClass (Bootstrap 3 "has-error").
-// MW: 20241129: Fixed async submit in combination with Zotonic postbacks. Added extra classes: 'if-has-success', 'if-has-error',
-//               'if-form-success' and 'if-form-error'. They are used to hide/show messages on field (with a form-group) or the
+// MW: 20241129: Fixed async submit in combination with Zotonic postbacks. Added extra classes: 'if-has-validated', 'if-has-error',
+//               'if-form-validated' and 'if-form-error'. They are used to hide/show messages on field (with a form-group) or the
 //               form level (within a 'form').
 
 
@@ -83,7 +83,7 @@ LiveValidation.prototype = {
     fieldGroupClass: 'form-group',
     fieldGroupErrorClass: 'has-error',
     fieldGroupSuccessClass: 'has-validated',
-    fieldValidElementClass: 'if-has-success',
+    fieldValidElementClass: 'if-has-validated',
     fieldInValidElementClass: 'if-has-error',
 
     /**
@@ -737,7 +737,7 @@ LiveValidationForm.prototype = {
   validFormClass: 'z_form_valid',
   invalidFormClass: 'z_form_invalid',
 
-  ifValidFormClass: 'if-form-success',
+  ifValidFormClass: 'if-form-validated',
   ifInvalidFormClass: 'if-form-error',
 
   /**
