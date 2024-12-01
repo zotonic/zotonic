@@ -6,6 +6,7 @@ params:
 - actions (optional)
 - stay (optional)
 - subject_id or object_id
+- category (optional) (string/id) preselect the category dropdown
 - tabs_enabled (optional): list of tab names: ["new", "depiction", "find",  "upload", "url"]
 - tabs_disabled (optional): list of tab names that should be hidden
 - tab (optional)
@@ -20,7 +21,6 @@ find params:
 - rsc_id (optional) the resource for any connections
 - predicate (optional) (atom)
 - delegate (optional) (atom)
-- category (optional) (string/id) preselect the category dropdown
 - content_group (optional) can also be the string "me" to search on user created content
 #}
 
