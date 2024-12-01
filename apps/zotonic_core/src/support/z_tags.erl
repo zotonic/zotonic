@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2009-2024 Marc Worrell <marc@worrell.nl>
-%% @doc Generate a XHTML element with attributes, correctly escape all attributes.
+%% @doc Generate a HTML element with attributes, correctly escape all attributes.
 %% Based on code Copyright (c) 2008-2009 Rusty Klophaus
 %% Original author Tom McNulty <tom.mcnulty@cetiforge.com>
 %% @end
