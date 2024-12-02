@@ -1,4 +1,8 @@
-{% with icon_after|default:'<i class="caret"><span class="sr-only">{_ Open language menu _}</span></i>' as icon_after %}
+{% with icon_after|default:[
+        '<i class="caret"><span class="sr-only">',
+            _"Open language menu",
+        '</span></i>'
+    ] as icon_after %}
 {% if m.translation.language_list_enabled as list %}
 {% if list|length > 1 %}
     {% if is_nav %}
