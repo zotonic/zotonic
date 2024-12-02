@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016 Marc Worrell <marc@worrell.nl>
-%% @doc Format exports for vevent format
+%% @copyright 2016-2024 Marc Worrell <marc@worrell.nl>
+%% @doc Format exports for JSON format
+%% @end
 
-%% Copyright 2016 Marc Worrell
+%% Copyright 2016-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,7 +21,8 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -record(state, {
-    id
+    id :: integer() | undefined,
+    is_first_row = true
 }).
 
 -export([
@@ -32,8 +34,6 @@
     footer/3
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
-
 extension() ->
     [ <<"json">> ].
 
@@ -42,21 +42,29 @@ mime() ->
 
 init(Options, _Context) ->
     {ok, #state{
-        id = proplists:get_value(id, Options)
+        id = proplists:get_value(id, Options),
+        is_first_row = true
     }}.
 
 header(_Header, #state{ id = _Id } = State, _Context) ->
-    {ok, <<"{">>, State}.
+    {ok, <<"[">>, State}.
 
-row(Row, #state{} = State, Context) when is_integer(Row) ->
-    Rsc = m_rsc:get(Row, Context),
-    Data = [
-        $", integer_to_binary(Row), $", $:,
-        jsxrecord:encode(Rsc)
-    ],
-    {ok, Data, State};
+row(Row, #state{ is_first_row = IsFirstRow } = State, Context) when is_integer(Row) ->
+    case m_rsc_export:full(Row, Context) of
+        {ok, JSON} ->
+            Data = [
+                case IsFirstRow of
+                    true -> <<>>;
+                    false -> $,
+                end,
+                jsxrecord:encode(JSON)
+            ],
+            {ok, Data, State#state{ is_first_row = false }};
+        {error, _} ->
+            {ok, <<>>, State}
+    end;
 row(_Row, #state{} = State, _Context) ->
     {ok, <<>>, State}.
 
 footer(_Data, #state{}, _Context) ->
-    {ok, <<"}">>}.
+    {ok, <<"]">>}.
