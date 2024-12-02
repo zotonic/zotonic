@@ -12,7 +12,7 @@
 -export([conv/1]).
 
 -include_lib("eunit/include/eunit.hrl").
--include("../../include/zotonic.hrl").
+% -include("../../include/zotonic.hrl").
 
 
 -define(SPACE, 32).
@@ -45,9 +45,9 @@
 conv(Input) ->
     String = unicode:characters_to_list(Input),
     Lex = lex(String),
-    io:format("Lex is ~p~n", [Lex]),
+    % io:format("Lex is ~p~n", [Lex]),
     UntypedLines = make_lines(Lex),
-    io:format("UntypedLines are ~p~n", [UntypedLines]),
+    % io:format("UntypedLines are ~p~n", [UntypedLines]),
     {TypedLines, Refs} = type_lines(UntypedLines),
     % io:format("TypedLines are ~p~nRefs is ~p~n",
     %           [TypedLines, Refs]),
