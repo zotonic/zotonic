@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-12-02 10:58\n"
+"PO-Revision-Date: 2024-12-02 12:05\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -1953,7 +1953,7 @@ msgstr "Geschützt"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:37./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:39./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:132./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:143
 msgid "Protected, not deletable"
-msgstr ""
+msgstr "Geschützt, nicht löschbar"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:46
 msgid "Publication date of original article"
@@ -2148,7 +2148,7 @@ msgstr "Sicherheitsverzeichnis"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:7
 msgid "See also: <a href=\"https://zotonic.com/en/stable/ref/configuration/zotonic-configuration.html#the-erlang-config-file\">The erlang.config file</a>"
-msgstr ""
+msgstr "Siehe auch: <a href=\"https://zotonic.com/en/stable/ref/configuration/zotonic-configuration.html#the-erlang-config-file\">Die erlang.config-Datei</a>"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:263./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:45
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:47./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:103
@@ -4176,7 +4176,7 @@ msgstr "Erlang VM"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/filezcache.tpl:3
 msgid "Files Cache"
-msgstr ""
+msgstr "Dateicache"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/memory_usage.tpl:3
 msgid "Memory Usage"
@@ -10905,7 +10905,7 @@ msgstr "Aus"
 
 #: apps/zotonic_mod_translation/priv/templates/_language_switch.tpl:3
 msgid "Open language menu"
-msgstr ""
+msgstr "Sprachenmenü öffnen"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:99
 msgid "Overwrite existing texts with new translations"
