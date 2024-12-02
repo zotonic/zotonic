@@ -17,8 +17,8 @@ An example to check the number of keywords attached to a resource::
                     type={hasedge id=id minimum=1}
                     only_on_submit
         %}
-        <p class="if-field-invalid" style="display: none">{_ You must have at least one author. _}</p>
-        <p class="if-field-valid" style="display: none">{_ Great, you added at least one author. _}</p>
+        <p class="if-has-error" style="display: none">{_ You must have at least one author. _}</p>
+        <p class="if-has-validated" style="display: none">{_ Great, you added at least one author. _}</p>
     </div>
 
 On form submit the check will be done. And either of the two messages will be shown.
