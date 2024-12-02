@@ -83,7 +83,7 @@ function zotonic_eval(script) {
       s.type = "text/javascript";
       s.id = z_script_eval_id;
       s.nonce = z_script_nonce;
-      s.textContent = script;
+      s.textContent = "{ " + script + " }";
       head.appendChild(s);
     } else {
       // No nonce - assume no CSP headers set
