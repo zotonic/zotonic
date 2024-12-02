@@ -1,6 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2011-2024 Marc Worrell
-
 %% @doc Convert a html text to markdown syntax.
 %% This is used when editing TinyMCE texts with the markdown editor.
 %% @end
@@ -119,14 +118,31 @@ to_md({<<"a">>, Args, Enclosed}, M, S) ->
 to_md({<<"code">>, _Args, Enclosed}, M, S) ->
     {EncText, M1} = to_md(Enclosed, M, S),
     {[$`, z_string:trim(EncText), $`], M1};
-to_md({<<"pre">>, _Args, [{<<"code">>, _, Enclosed}]}, M, S) ->
-    S1 = S#ms{indent=[code|S#ms.indent]},
-    {EncText, M1} = to_md(Enclosed, M, S1),
-    {[nl(S1), trl(EncText), nl(S)], M1};
-to_md({<<"pre">>, _Args, Enclosed}, M, S) ->
-    S1 = S#ms{indent=[code|S#ms.indent]},
-    {EncText, M1} = to_md(Enclosed, M, S1),
-    {[nl(S1), trl(EncText), nl(S)], M1};
+to_md({<<"pre">>, Args, Enclosed}, M, S) ->
+    case drop_ws(Enclosed) of
+        [{<<"code">>, _, EnclosedCode}] ->
+            Lang = proplists:get_value(<<"lang">>, Args, <<>>),
+            EncText = z_html:unescape(iolist_to_binary(flatten_html(EnclosedCode))),
+            EncText1 = case z_string:trim_right(EncText) of
+                <<"\n", E/binary>> -> E;
+                E -> E
+            end,
+            Quote = case binary:match(EncText, <<"```">>) of
+                nomatch -> <<"```">>;
+                _ -> <<"````">>
+            end,
+            {[
+                nl(S),
+                Quote, " ", Lang, "\n",
+                EncText1, "\n",
+                nl(S), Quote,
+                nl(S)
+            ], M};
+        _ ->
+            S1 = S#ms{indent=[code|S#ms.indent]},
+            {EncText, M1} = to_md(Enclosed, M, S1),
+            {[nl(S1), trl(EncText), nl(S)], M1}
+    end;
 
 to_md({<<"blockquote">>, _Args, Enclosed}, M, S) ->
     S1 = S#ms{indent=[quote|S#ms.indent]},
@@ -186,17 +202,20 @@ nl(#ms{indent=[]}) ->
 nl(#ms{indent=Indent}) ->
     nl1(Indent, []).
 
-    nl1([], Acc) ->
-        [$\n|Acc];
-    nl1([ul|Rest], Acc) ->
-        nl1(Rest, ["   "|Acc]);
-    nl1([ol|Rest], Acc) ->
-        nl1(Rest, ["    "|Acc]);
-    nl1([code|Rest], Acc) ->
-        nl1(Rest, ["    "|Acc]);
-    nl1([quote|Rest], Acc) ->
-        nl1(Rest, ["> "|Acc]).
+nl1([], Acc) ->
+    [$\n|Acc];
+nl1([ul|Rest], Acc) ->
+    nl1(Rest, ["   "|Acc]);
+nl1([ol|Rest], Acc) ->
+    nl1(Rest, ["    "|Acc]);
+nl1([code|Rest], Acc) ->
+    nl1(Rest, ["    "|Acc]);
+nl1([quote|Rest], Acc) ->
+    nl1(Rest, ["> "|Acc]).
 
+drop_ws([]) -> [];
+drop_ws([B|T]) when is_binary(B) -> drop_ws(T);
+drop_ws(L) -> L.
 
 %% @doc Simple recursive length of an iolist
 len(EncText) when is_binary(EncText) ->
@@ -279,7 +298,6 @@ expand_anchors(#md{a = As}) ->
         expand_anchor(As, N+1, [Link|Acc]).
 
 
-
 flatten_html(Text) when is_binary(Text) ->
     z_html:escape(Text);
 flatten_html({comment, _Text}) ->
@@ -294,15 +312,17 @@ flatten_html({Tag, Args, Enclosed}) ->
                 [ flatten_html(Enc) || Enc <- Enclosed ],
                 $<, $/, Tag, $>
             ]
-    end.
+    end;
+flatten_html(L) when is_list(L) ->
+    lists:map(fun flatten_html/1, L).
 
-    is_self_closing(<<"img">>) -> true;
-    is_self_closing(<<"br">>) -> true;
-    is_self_closing(<<"hr">>) -> true;
-    is_self_closing(_) -> false.
+is_self_closing(<<"img">>) -> true;
+is_self_closing(<<"br">>) -> true;
+is_self_closing(<<"hr">>) -> true;
+is_self_closing(_) -> false.
 
-    flatten_args(Args) ->
-        [ flatten_arg(Arg) || Arg <- Args ].
+flatten_args(Args) ->
+    [ flatten_arg(Arg) || Arg <- Args ].
 
-    flatten_arg({Name, Value}) ->
-        [ 32, Name, $=, $", z_html:escape(Value), $" ].
+flatten_arg({Name, Value}) ->
+    [ 32, Name, $=, $", z_html:escape(Value), $" ].
