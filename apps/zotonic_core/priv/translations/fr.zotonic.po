@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-12-02 10:58\n"
+"PO-Revision-Date: 2024-12-02 12:05\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -1522,7 +1522,7 @@ msgstr "Aide"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:17
 msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://zotonic.com/en/latest/developer-guide/search.html#query-arguments\">documentation on the query arguments</a> on the Zotonic website."
-msgstr ""
+msgstr "Ici, vous pouvez modifier les arguments de la requête de recherche. Chaque argument est placé sur sa propre ligne. Pour plus d'informations, consultez la documentation <a href=\"https://zotonic.com/en/latest/developer-guide/search.html#query-arguments\">sur les arguments de requête</a> sur le site Web de Zotonic."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:41
 msgid "Hide page from searches (depends on the search query)"
@@ -1898,7 +1898,7 @@ msgstr "Chemin"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_system_status.tpl:10
 msgid "Percent in use"
-msgstr ""
+msgstr "Pourcentage d'utilisation"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:10
 msgid "Personal name"
@@ -1906,7 +1906,7 @@ msgstr "Nom personnel"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:193./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:194
 msgid "Phone number for invoices"
-msgstr ""
+msgstr "Numéro de téléphone pour les factures"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_update_pivot_count.tpl:8
 msgid "Pivot queue count size:"
@@ -1953,7 +1953,7 @@ msgstr "Protégé"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:37./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:39./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:132./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:143
 msgid "Protected, not deletable"
-msgstr ""
+msgstr "Protégé, non supprimable"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:46
 msgid "Publication date of original article"
@@ -2148,7 +2148,7 @@ msgstr "Répertoire de Sécurité"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:7
 msgid "See also: <a href=\"https://zotonic.com/en/stable/ref/configuration/zotonic-configuration.html#the-erlang-config-file\">The erlang.config file</a>"
-msgstr ""
+msgstr "Voir aussi : <a href=\"https://zotonic.com/en/stable/ref/configuration/zotonic-configuration.html#the-erlang-config-file\">Le fichier erlang.config</a>"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:263./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:45
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:47./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:103
@@ -4176,7 +4176,7 @@ msgstr "VM Erlang"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/filezcache.tpl:3
 msgid "Files Cache"
-msgstr ""
+msgstr "Cache de fichiers"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/memory_usage.tpl:3
 msgid "Memory Usage"
@@ -10909,7 +10909,7 @@ msgstr "Off"
 
 #: apps/zotonic_mod_translation/priv/templates/_language_switch.tpl:3
 msgid "Open language menu"
-msgstr ""
+msgstr "Ouvrir le menu des langues"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:99
 msgid "Overwrite existing texts with new translations"
