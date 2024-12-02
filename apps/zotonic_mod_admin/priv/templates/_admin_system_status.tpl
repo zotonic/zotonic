@@ -7,7 +7,7 @@
                     <th>{_ Allocated _}</th>
                     <th>{_ Used _}</th>
                     <th>{_ Unused _}</th>
-                    <th>{_ Usage _}</th>
+                    <th>{_ Percent in use _}</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,7 +32,7 @@
                     <th></th>
                     <th>{_ Total _}</th>
                     <th>{_ Used _}</th>
-                    <th>{_ Free _}</th>
+                    <th>{_ Available _}</th>
                     {% ifnotequal os.buffered_memory `undefined` %}<th>{_ Buffered _}</th>{% endifnotequal %}
                     {% ifnotequal os.cached_memory `undefined` %}<th>{_ Cached _}</th>{% endifnotequal %}
                     {% ifnotequal os.available_memory `undefined` %}<th>{_ Available _}</th>{% endifnotequal %}
