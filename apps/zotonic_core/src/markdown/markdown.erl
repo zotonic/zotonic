@@ -146,21 +146,28 @@ p1([{codequoted, Type, Code} | T], R, I, Acc) ->
           "</pre>\n" ] | Acc]);
 
 %% Tables
-p1([{table, Headers, Rows} | T], R, I, Acc) ->
+p1([{table, Headers, Align, Rows} | T], R, I, Acc) ->
     ?DEBUG({table, Headers, Rows}),
     Html = [
-        "\n<table>",
+        "\n<table role=\"table\" class=\"table\">",
             "<thead>",
                 "<tr>",
                     lists:map(
-                        fun(Col) ->
+                        fun({Col, A}) ->
                             [
-                                "<th>",
+                                "<th",
+                                    case A of
+                                        none -> "";
+                                        center -> " align=\"center\"";
+                                        left -> " align=\"left\"";
+                                        right -> " align=\"right\""
+                                    end,
+                                ">",
                                 string:trim(make_str(snip(Col), R), both, [?SPACE]),
                                 "</th>"
                             ]
                         end,
-                        Headers),
+                        table_zip_align(Headers, Align)),
                 "</tr>",
             "</thead>",
             "<tbody>",
@@ -168,14 +175,21 @@ p1([{table, Headers, Rows} | T], R, I, Acc) ->
                 fun(Row) ->
                     [ "<tr>",
                     lists:map(
-                        fun(Col) ->
+                        fun({Col, A}) ->
                             [
-                                "<td>",
+                                "<td",
+                                    case A of
+                                        none -> "";
+                                        center -> " align=\"center\"";
+                                        left -> " align=\"left\"";
+                                        right -> " align=\"right\""
+                                    end,
+                                ">",
                                 string:trim(make_str(snip(Col), R), both, [?SPACE]),
                                 "</td>"
                             ]
                         end,
-                        Row),
+                        table_zip_align(Row, Align)),
                     "</tr>"]
                 end,
                 Rows),
@@ -575,10 +589,14 @@ t_l1([
         [{{punc, vbar}, _} | _ ] = H2
         | T
     ], A1, A2) ->
-    N1 = length(split_in_cols(H1)),
-    N2 = length(split_in_cols(H2)),  % TODO: check if cols are like ---
+    N1 = length(table_split_in_cols(H1)),
+    Hs = lists:map(
+        fun(Col) -> string:trim(unicode:characters_to_binary(make_plain_str(Col))) end,
+        table_split_in_cols(H2)),
+    N2 = length(Hs),
+    IsHeaderCols = is_table_header_cols(Hs),
     if
-        N1 >= 1, N1 =:= N2 ->
+        N1 >= 1, N1 =:= N2, IsHeaderCols ->
             % Table - fetch next rows starting with '|'
             {Rows, TRest} = lists:splitwith(
                 fun
@@ -587,12 +605,13 @@ t_l1([
                 end,
                 T),
             % Split H1 in cols
-            HeaderCols = split_in_cols(H1),
+            HeaderCols = table_split_in_cols(H1),
             % Fetch alignment from H2
+            Align = lists:map(fun table_align/1, Hs),
             % Split all in Rows in cols
-            RowsCols = lists:map(fun split_in_cols/1, Rows),
+            RowsCols = lists:map(fun table_split_in_cols/1, Rows),
             % ...
-            Table = {table, HeaderCols, RowsCols},
+            Table = {table, HeaderCols, Align, RowsCols},
             t_l1(TRest, A1, [ Table | A2 ]);
         true ->
             t_l1([H2|T], A1, [{normal, H1} | A2])
@@ -616,7 +635,7 @@ t_inline(H, T1, T2, A1, A2) ->
     end.
 
 %% Table helper functions
-split_in_cols([ {{punc, vbar}, _} | Ts ]) ->
+table_split_in_cols([ {{punc, vbar}, _} | Ts ]) ->
     lists:reverse(split_in_cols_1(Ts, [], [])).
 
 split_in_cols_1([{{lf, _}, _}], ColAcc, Acc) ->
@@ -634,6 +653,34 @@ split_in_cols_1([ {{punc, vbar}, _} | Ts ], ColAcc, Acc) ->
 split_in_cols_1([ H | Ts ], ColAcc, Acc) ->
     split_in_cols_1(Ts, [H | ColAcc], Acc).
 
+is_table_header_cols(Cols) ->
+    lists:all(fun is_table_header_col/1, Cols).
+
+is_table_header_col(Col) ->
+    re:run(Col, <<"^:?---+:?$">>) =/= nomatch.
+
+table_align(<<":", R/binary>>) ->
+    case binary:last(R) of
+        $: -> center;
+        $- -> left
+    end;
+table_align(R) ->
+    case binary:last(R) of
+        $: -> right;
+        $- -> none
+    end.
+
+table_zip_align(Cs, As) ->
+    lists:reverse(table_zip_align_1(Cs, As, [])).
+
+table_zip_align_1([], [], Acc) ->
+    lists:reverse(Acc);
+table_zip_align_1([C|Cs], [], Acc) ->
+    table_zip_align_1(Cs, [], [ {C, none} | Acc ]);
+table_zip_align_1([], [A|As], Acc) ->
+    table_zip_align_1([], As, [ {[], A} | Acc ]);
+table_zip_align_1([C|Cs], [A|As], Acc) ->
+    table_zip_align_1(Cs, As, [ {C, A} | Acc ]).
 
 %% strips blanks from the beginning and end
 strip_lines(List) -> lists:reverse(strip_l1(lists:reverse(strip_l1(List)))).
