@@ -17,7 +17,7 @@ Dag
         <<"<p>Hello</p>
 
 
-<pre lang=\"html\" class=\"notranslate\"><code class=\"notranslate language-html\">This is &lt;code&gt;foo&lt;/code&gt!</code></pre>
+<pre lang=\"html\" class=\"notranslate\"><code class=\"notranslate language-html\">This is &lt;code&gt;foo&lt;/code&gt;!</code></pre>
 
 <p>Dag</p>">>, Html).
 
@@ -37,7 +37,7 @@ Dag
         <<"<p>Hello</p>
 
 
-<pre lang=\"html\" class=\"notranslate\"><code class=\"notranslate language-html\">```\nThis is &lt;code&gt;foo&lt;/code&gt!</code></pre>
+<pre lang=\"html\" class=\"notranslate\"><code class=\"notranslate language-html\">```\nThis is &lt;code&gt;foo&lt;/code&gt;!</code></pre>
 
 <p>Dag</p>">>, Html).
 
