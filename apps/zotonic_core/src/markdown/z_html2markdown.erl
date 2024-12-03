@@ -1,6 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2011-2024 Marc Worrell
-
 %% @doc Convert a html text to markdown syntax.
 %% This is used when editing TinyMCE texts with the markdown editor.
 %% @end
@@ -34,7 +33,12 @@
 -record(md, {a=[]}).
 
 % Recursive context dependent markdown state (context)
--record(ms, {li=none, indent=[], allow_html=true}).
+-record(ms, {
+    li = none,
+    indent = [],
+    allow_html=true,
+    level = -1
+}).
 
 -compile({no_auto_import,[max/2]}).
 
@@ -49,7 +53,7 @@ convert(Html, Options) when is_list(Html) ->
 
 convert1(Html, Options) ->
     case z_html_parse:parse(Html) of
-        {ok, Parsed} ->
+        {ok, {<<"sanitize">>, _, Parsed}} ->
             {Text, M} = to_md(Parsed, #md{}, set_options(Options, #ms{})),
             iolist_to_binary([trimnl(unicode:characters_to_binary(Text, utf8)), expand_anchors(M)]);
         {error, _} ->
@@ -61,8 +65,12 @@ set_options([], S) ->
 set_options([no_html|T], S) ->
     set_options(T, S#ms{allow_html=false}).
 
-to_md(B, M, _S) when is_binary(B) ->
+to_md(B, M, #ms{ level = 0 }) when is_binary(B) ->
     {escape_html_text(B, <<>>), M};
+to_md(B, M, _S) when is_binary(B) ->
+    ?DEBUG(B),
+    B1 = binary:replace(B, <<"\n">>, <<" ">>, [ global ]),
+    {escape_html_text(B1, <<>>), M};
 to_md({comment, _Text}, M, _S) ->
     {<<>>, M};
 
@@ -119,15 +127,68 @@ to_md({<<"a">>, Args, Enclosed}, M, S) ->
 to_md({<<"code">>, _Args, Enclosed}, M, S) ->
     {EncText, M1} = to_md(Enclosed, M, S),
     {[$`, z_string:trim(EncText), $`], M1};
-to_md({<<"pre">>, _Args, [{<<"code">>, _, Enclosed}]}, M, S) ->
-    S1 = S#ms{indent=[code|S#ms.indent]},
-    {EncText, M1} = to_md(Enclosed, M, S1),
-    {[nl(S1), trl(EncText), nl(S)], M1};
-to_md({<<"pre">>, _Args, Enclosed}, M, S) ->
-    S1 = S#ms{indent=[code|S#ms.indent]},
-    {EncText, M1} = to_md(Enclosed, M, S1),
-    {[nl(S1), trl(EncText), nl(S)], M1};
-
+to_md({<<"pre">>, Args, Enclosed}, M, S) ->
+    case drop_ws(Enclosed) of
+        [{<<"code">>, _, EnclosedCode}] ->
+            Lang = proplists:get_value(<<"lang">>, Args, <<>>),
+            EncText = z_html:unescape(iolist_to_binary(flatten_html(EnclosedCode))),
+            EncText1 = case z_string:trim_right(EncText) of
+                <<"\n", E/binary>> -> E;
+                E -> E
+            end,
+            Quote = case binary:match(EncText, <<"```">>) of
+                nomatch -> <<"```">>;
+                _ -> <<"````">>
+            end,
+            {[
+                nl(S),
+                Quote, " ", Lang, "\n",
+                EncText1, "\n",
+                nl(S), Quote,
+                nl(S),
+                nl(S)
+            ], M};
+        _ ->
+            S1 = S#ms{indent=[code|S#ms.indent]},
+            {EncText, M1} = to_md(Enclosed, M, S1),
+            {[nl(S1), trl(EncText), nl(S)], M1}
+    end;
+to_md({<<"div">>, Args, Enclosed}, M, S) ->
+    % Check for RST generated texts
+    % <div class="highlight-django notranslate"><div class="highlight"><pre>
+    %    ...
+    % </pre></div></div>
+    case proplists:get_value(<<"class">>, Args) of
+        <<"highlight-", Class/binary>> ->
+            [Lang|_] = binary:split(Class, <<" ">>),
+            case drop_ws(Enclosed) of
+                [{<<"div">>, [{<<"class">>, <<"highlight">>}|_], Enclosed2}|_] ->
+                    case drop_ws(Enclosed2) of
+                        [{<<"pre">>, _, EnclosedCode}|_] ->
+                            EncText = iolist_to_binary(flatten_text(EnclosedCode)),
+                            EncText1 = case z_string:trim_right(EncText) of
+                                <<"\n", E/binary>> -> E;
+                                E -> E
+                            end,
+                            Quote = case binary:match(EncText, <<"```">>) of
+                                nomatch -> <<"```">>;
+                                _ -> <<"````">>
+                            end,
+                            {[
+                                nl(S), Quote, " ", Lang,
+                                nl(S), EncText1,
+                                nl(S), Quote,
+                                nl(S)
+                            ], M};
+                        _ ->
+                            to_md(Enclosed2, M, S)
+                    end;
+                _ ->
+                    to_md(Enclosed, M, S)
+            end;
+        _ ->
+            to_md(Enclosed, M, S)
+    end;
 to_md({<<"blockquote">>, _Args, Enclosed}, M, S) ->
     S1 = S#ms{indent=[quote|S#ms.indent]},
     {EncText, M1} = to_md(Enclosed, M, S1),
@@ -158,8 +219,9 @@ to_md({<<"script">>, _Args, _Enclosed}, M, _S) ->
 to_md({_, _, Enclosed}, M, S) ->
     to_md(Enclosed, M, S);
 to_md(L, M, S) when is_list(L) ->
+    S1 = lev(S),
     lists:foldl(fun(Elt,{AT,AM}) ->
-                    {AT1,AM1} = to_md(Elt, AM, S),
+                    {AT1, AM1} = to_md(Elt, AM, S1),
                     {AT++[AT1], AM1}
                 end, {[], M}, L).
 
@@ -176,6 +238,8 @@ header(Char, Enclosed, M, S) ->
             {[nl(S), nl(S), Trimmed, nl(S), lists:duplicate(max(len(Trimmed), 3), [Char]), nl(S), nl(S)], M1}
     end.
 
+lev(#ms{ level = Level } = S) ->
+    S#ms{ level = Level + 1}.
 
 max(A,B) when A > B -> A;
 max(_A,B) -> B.
@@ -186,17 +250,20 @@ nl(#ms{indent=[]}) ->
 nl(#ms{indent=Indent}) ->
     nl1(Indent, []).
 
-    nl1([], Acc) ->
-        [$\n|Acc];
-    nl1([ul|Rest], Acc) ->
-        nl1(Rest, ["   "|Acc]);
-    nl1([ol|Rest], Acc) ->
-        nl1(Rest, ["    "|Acc]);
-    nl1([code|Rest], Acc) ->
-        nl1(Rest, ["    "|Acc]);
-    nl1([quote|Rest], Acc) ->
-        nl1(Rest, ["> "|Acc]).
+nl1([], Acc) ->
+    [$\n|Acc];
+nl1([ul|Rest], Acc) ->
+    nl1(Rest, ["   "|Acc]);
+nl1([ol|Rest], Acc) ->
+    nl1(Rest, ["    "|Acc]);
+nl1([code|Rest], Acc) ->
+    nl1(Rest, ["    "|Acc]);
+nl1([quote|Rest], Acc) ->
+    nl1(Rest, ["> "|Acc]).
 
+drop_ws([]) -> [];
+drop_ws([B|T]) when is_binary(B) -> drop_ws(T);
+drop_ws(L) -> L.
 
 %% @doc Simple recursive length of an iolist
 len(EncText) when is_binary(EncText) ->
@@ -240,7 +307,7 @@ escape_html_text(<<32, T/binary>>, Acc) ->
 escape_html_text(<<9, T/binary>>, Acc) ->
     escape_html_text(trl(T), <<Acc/binary, 32>>);
 escape_html_text(<<$\n, T/binary>>, Acc) ->
-    escape_html_text(trl(T), <<Acc/binary, 32>>);
+    escape_html_text(trl(T), <<Acc/binary, $\n>>);
 escape_html_text(<<C, T/binary>>, Acc) ->
     escape_html_text(T, <<Acc/binary, C>>).
 
@@ -279,7 +346,6 @@ expand_anchors(#md{a = As}) ->
         expand_anchor(As, N+1, [Link|Acc]).
 
 
-
 flatten_html(Text) when is_binary(Text) ->
     z_html:escape(Text);
 flatten_html({comment, _Text}) ->
@@ -294,15 +360,26 @@ flatten_html({Tag, Args, Enclosed}) ->
                 [ flatten_html(Enc) || Enc <- Enclosed ],
                 $<, $/, Tag, $>
             ]
-    end.
+    end;
+flatten_html(L) when is_list(L) ->
+    lists:map(fun flatten_html/1, L).
 
-    is_self_closing(<<"img">>) -> true;
-    is_self_closing(<<"br">>) -> true;
-    is_self_closing(<<"hr">>) -> true;
-    is_self_closing(_) -> false.
+flatten_text(Text) when is_binary(Text) ->
+    Text;
+flatten_text({comment, _Text}) ->
+    [];
+flatten_text({_Tag, _Args, Enclosed}) ->
+    flatten_text(Enclosed);
+flatten_text(L) when is_list(L) ->
+    lists:map(fun flatten_text/1, L).
 
-    flatten_args(Args) ->
-        [ flatten_arg(Arg) || Arg <- Args ].
+is_self_closing(<<"img">>) -> true;
+is_self_closing(<<"br">>) -> true;
+is_self_closing(<<"hr">>) -> true;
+is_self_closing(_) -> false.
 
-    flatten_arg({Name, Value}) ->
-        [ 32, Name, $=, $", z_html:escape(Value), $" ].
+flatten_args(Args) ->
+    [ flatten_arg(Arg) || Arg <- Args ].
+
+flatten_arg({Name, Value}) ->
+    [ 32, Name, $=, $", z_html:escape(Value), $" ].

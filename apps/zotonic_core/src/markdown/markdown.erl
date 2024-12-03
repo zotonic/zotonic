@@ -12,6 +12,8 @@
 -export([conv/1]).
 
 -include_lib("eunit/include/eunit.hrl").
+% -include("../../include/zotonic.hrl").
+
 
 -define(SPACE, 32).
 -define(TAB,    9).
@@ -48,7 +50,7 @@ conv(Input) ->
     % io:format("UntypedLines are ~p~n", [UntypedLines]),
     {TypedLines, Refs} = type_lines(UntypedLines),
     % io:format("TypedLines are ~p~nRefs is ~p~n",
-    %          [TypedLines, Refs]),
+    %           [TypedLines, Refs]),
     unicode:characters_to_binary(parse(TypedLines, Refs)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -134,6 +136,14 @@ p1([{blockquote, P} | T], R, I, Acc) ->
     T2 = string:trim(make_str(T1, R)),
     p1(T, R, I,
        ["\n<blockquote>\n" ++ pad(I + 1) ++ "<p>" ++ T2 ++ "</p>\n</blockquote>" | Acc]);
+%% triple or quadruple code block
+p1([{codequoted, Type, Code} | T], R, I, Acc) ->
+    Type1 = htmlencode(string:trim(m_plain(lists:flatten(Type), []))),
+    Code1 = htmlencode(string:trim(m_plain(lists:flatten(Code), []))),
+    p1(T, R, I,
+       [[ "\n<pre lang=\"", Type1, "\" class=\"notranslate\">",
+          "<code class=\"notranslate language-", Type1,"\">", Code1, "</code>",
+          "</pre>\n" ] | Acc]);
 
 %% one normal is just normal...
 p1([{normal, P} | T], R, I, Acc) ->
@@ -496,6 +506,30 @@ t_l1([[{{{tag, _Type}, Tag}, _ } = H | T1] = List | T], A1, A2) ->
                  end
     end;
 
+%% Block level code ``` or ````
+t_l1([[{{punc, backtick}, _},
+       {{punc, backtick}, _},
+       {{punc, backtick}, _},
+       {{punc, backtick}, _} | T1 ] = H | T], A1, A2) ->
+    case has_backtick(T1) of
+        true ->
+            t_l1(T, A1, [{normal, H} | A2]);
+        false ->
+            {CodeLines, LinesAfterCode} = split_quadruple_quote(T, []),
+            t_l1(LinesAfterCode, A1, [{codequoted, T1, CodeLines} | A2])
+    end;
+
+t_l1([[{{punc, backtick}, _},
+       {{punc, backtick}, _},
+       {{punc, backtick}, _} | T1 ] = H | T], A1, A2) ->
+    case has_backtick(T1) of
+        true ->
+            t_l1(T, A1, [{normal, H} | A2]);
+        false ->
+            {CodeLines, LinesAfterCode} = split_triple_quote(T, []),
+            t_l1(LinesAfterCode, A1, [{codequoted, T1, CodeLines} | A2])
+    end;
+
 %% types a blank line or a code block
 t_l1([[{{lf, _}, _}| []]  = H | T], A1, A2) ->
     t_l1(T, A1, [{linefeed, H} | A2]);
@@ -504,7 +538,7 @@ t_l1([[{{ws, _}, _} | _T1] = H | T], A1, A2) ->
 
 %% Final clause...
 t_l1([H | T], A1, A2) ->
-    t_l1(T, A1, [{normal , H} | A2]).
+    t_l1(T, A1, [{normal, H} | A2]).
 
 t_inline(H, T1, T2, A1, A2) ->
     case snip_ref(T1) of
@@ -519,6 +553,43 @@ strip_lines(List) -> lists:reverse(strip_l1(lists:reverse(strip_l1(List)))).
 strip_l1([{linefeed, _} | T]) -> strip_l1(T);
 strip_l1([{blank, _} | T])    -> strip_l1(T);
 strip_l1(List)                -> List.
+
+%% split lines till the next triple backqouted line
+split_triple_quote([], Acc) ->
+    {lists:reverse(Acc), []};
+split_triple_quote([
+        [{{punc, backtick}, _},
+         {{punc, backtick}, _},
+         {{punc, backtick}, _} | T] = Line
+        | Lines
+    ], Acc) ->
+    case is_blank(T) of
+        true -> {lists:reverse(Acc), Lines};
+        false -> split_triple_quote(Lines, [ Line | Acc ])
+    end;
+split_triple_quote([ Line | Lines ], Acc) ->
+    split_triple_quote(Lines, [ Line | Acc ]).
+
+%% split lines till the next quadruple backqouted line
+split_quadruple_quote([], Acc) ->
+    {lists:reverse(Acc), []};
+split_quadruple_quote([
+        [{{punc, backtick}, _},
+         {{punc, backtick}, _},
+         {{punc, backtick}, _},
+         {{punc, backtick}, _} | T] = Line
+        | Lines
+    ], Acc) ->
+    case is_blank(T) of
+        true -> {lists:reverse(Acc), Lines};
+        false -> split_quadruple_quote(Lines, [ Line | Acc ])
+    end;
+split_quadruple_quote([ Line | Lines ], Acc) ->
+    split_quadruple_quote(Lines, [ Line | Acc ]).
+
+has_backtick([]) -> false;
+has_backtick([{{punc, backtick}, _} | _]) -> true;
+has_backtick([_ | T]) -> has_backtick(T).
 
 %%
 %% Loads of type rules...
@@ -1225,7 +1296,7 @@ interpolate2([Delim, Delim | T], Delim, Tag, X, Acc) ->
 interpolate2([H | T], Delim, Tag, X, Acc) ->
     interpolate2(T, Delim, Tag, X, [H | Acc]).
 
-%% interpolate three is for double delimiters...
+%% interpolate three is for triple delimiters...
 interpolate3([], D, _Tag1, Tag2, _X, Acc)           ->
     {[], "<" ++ Tag2 ++ ">" ++ [D] ++ "</" ++ Tag2 ++ ">"
      ++ htmlchars(lists:reverse(Acc))};
