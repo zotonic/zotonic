@@ -139,10 +139,10 @@ p1([{blockquote, P} | T], R, I, Acc) ->
 %% triple or quadruple code block
 p1([{codequoted, Type, Code} | T], R, I, Acc) ->
     Type1 = htmlencode(string:trim(m_plain(lists:flatten(Type), []))),
-    Code1 = htmlencode(m_plain(lists:flatten(Code), [])),
+    Code1 = htmlencode(string:trim(m_plain(lists:flatten(Code), []))),
     p1(T, R, I,
        [[ "\n<pre lang=\"", Type1, "\" class=\"notranslate\">",
-          "<code class=\"notranslate language-", Type1,"\">\n", Code1, "\n</code>",
+          "<code class=\"notranslate language-", Type1,"\">", Code1, "</code>",
           "</pre>\n" ] | Acc]);
 
 %% one normal is just normal...
