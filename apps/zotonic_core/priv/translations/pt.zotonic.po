@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-12-02 10:58\n"
+"PO-Revision-Date: 2024-12-05 15:06\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -216,7 +216,7 @@ msgstr "Você tem certeza de que quer restaurar todas as regras do LCA à sua ve
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:141./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:149
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:158./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:113./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:85./apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:49./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:81./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6./apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:114
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:189
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:218
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -3091,7 +3091,7 @@ msgstr "Apenas um administrador pode adicionar chaves de configuração."
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:10./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:11
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:22./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:25./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:130./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:137./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:157./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:159./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:30
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:175
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:202
 msgid "Password"
 msgstr "Senha"
 
@@ -4162,7 +4162,7 @@ msgid "subject"
 msgstr "assunto"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/database.tpl:3
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:120
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:147
 msgid "Database"
 msgstr "Base de dados"
 
@@ -7589,7 +7589,7 @@ msgstr "Alternar não pessoas"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:23./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:23
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:49
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:164
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:191
 msgid "User"
 msgstr "Utilizador"
 
@@ -11083,11 +11083,15 @@ msgstr "Vídeo do Youtube"
 msgid "Alert"
 msgstr "Alerta"
 
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:95
+msgid "<b>Note that Zotonic only handles initial check out</b>, after which it is expected that you will handle further git interactions yourself.)"
+msgstr "<b>Observe que o Zotonic lida apenas com a verificação inicial</b>, depois disso é esperado que você mesmo lide com as interações futuras do git.)"
+
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:563
 msgid "A component of the path is not a directory:"
 msgstr "Um componente do caminho não é um diretório:"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/_z_system_button.tpl:2./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:3./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:188
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/_z_system_button.tpl:2./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:3./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:217
 msgid "Add Site"
 msgstr "Adicionar site"
 
@@ -11107,7 +11111,15 @@ msgstr "Site básico de blogging"
 msgid "Checking database ..."
 msgstr "Verificação da base de dados ..."
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:111
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:86
+msgid "Checkout an existing site from Git"
+msgstr "Faça checkout de um site existente no Git"
+
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:74
+msgid "Checkout existing site from Git"
+msgstr "Faça check-out do site existente no Git"
+
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:138
 msgid "Configure PostgreSQL Database Connection"
 msgstr "Configurar a conexão de banco de dados PostgreSQL"
 
@@ -11167,11 +11179,7 @@ msgstr "Insira um hostname válido como \"www.example.com\" ou \"test.local\"."
 msgid "Force compile all Erlang files ..."
 msgstr "Forçar a compilação de todos os ficheiros Erlang ..."
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:74
-msgid "Git"
-msgstr "Git"
-
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:87
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:106
 msgid "Git URL"
 msgstr "URL do Git"
 
@@ -11183,13 +11191,17 @@ msgstr "Git checkout ..."
 msgid "Go to the admin interface at"
 msgstr "Vá para a interface de administração em"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:131
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:158
 msgid "Host"
 msgstr "Anfitrião"
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:39
 msgid "Host name"
 msgstr "Nome do anfitrião"
+
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:79
+msgid "If you are creating a new site, ignore this section. If you have an existing Zotonic site on a git repo, you can optionally specify it here. in which case Zotonic will check that out instead of creating a new site."
+msgstr "Se você estiver criando um novo site, ignore esta seção. Se você tiver um site Zotonic existente em um repositório git, você pode opcionalmente especificá-lo aqui. Nesse caso, o Zotonic verificará isso em vez de criar um novo site."
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/_addsite_success.tpl:14
 msgid "Log on with username <b>admin</b> and password"
@@ -11207,19 +11219,15 @@ msgstr "Não há permissão para criar o diretório do site em:"
 msgid "Not allowed to create the site directory"
 msgstr "Não é permitido criar o diretório do site"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:79
-msgid "Optional Git url to checkout the site. An existing <tt>config</tt> file will be overwritten."
-msgstr "Opcional Git url para verificar o site. Um arquivo existente <tt>config</tt> será sobregravado."
-
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:196
 msgid "Please only use: a…z, 0…9, and . (period)."
 msgstr "Use apenas: a…z, 0…9 e . (período)."
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:136
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:163
 msgid "Please use a valid hostname."
 msgstr "Por favor, use um nome de anfitrião válido."
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:125./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:158
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:152./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:185
 msgid "Please use only a…z and 0…9 characters."
 msgstr "Por favor use apenas um…z e 0…9 caracteres."
 
@@ -11227,23 +11235,23 @@ msgstr "Por favor use apenas um…z e 0…9 caracteres."
 msgid "Please use only lowercase a…z and 0…9 characters."
 msgstr "Por favor use apenas minúsculas a…z e 0…9 caracteres."
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:142
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
 msgid "Port"
 msgstr "Porto"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:98
-msgid "PostgreSQL"
-msgstr "PostgreSQL"
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:118
+msgid "PostgreSQL database connection"
+msgstr "Conexão com o banco de dados PostgreSQL"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:103
-msgid "PostgreSQL database connection. The schema defaults to the site name filled in above."
-msgstr "Conexão de banco de dados PostgreSQL. O esquema padrão é o nome do site preenchido acima."
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:123
+msgid "PostgreSQL database, username and password. The schema defaults to the site name filled in above."
+msgstr "Banco de dados PostgreSQL, nome de usuário e senha. O esquema padrão é o nome do site preenchido acima."
 
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:49
 msgid "Resolving the hostname ..."
 msgstr "Resolver o nome da hostname ..."
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:153
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:180
 msgid "Schema"
 msgstr "Esquema"
 
@@ -11267,6 +11275,14 @@ msgstr "Iniciando o novo site ..."
 msgid "Succesfully created the site."
 msgstr "Criou com sucesso o site."
 
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:98
+msgid "The config file in <tt>priv/zotonic_site.config</tt> will be overwritten with the database settings from above."
+msgstr "O arquivo de configuração em <tt>priv/zotonic_site.config</tt> será substituído pelas configurações do banco de dados acima."
+
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:126
+msgid "The default database for the schema is <b>{db}</b>."
+msgstr "O banco de dados padrão para o esquema é <b>{db}</b>."
+
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:548
 msgid "The file or directory already exists:"
 msgstr "O arquivo ou diretório já existe:"
@@ -11279,7 +11295,7 @@ msgstr "O hostname é desconhecido, verifique o seu ficheiro DNS ou /etc/hosts"
 msgid "The parent directory does not exist:"
 msgstr "O diretório pai não existe:"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:147
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:174
 msgid "The port must be numerical."
 msgstr "A porta deve ser numérica."
 
@@ -11299,9 +11315,9 @@ msgstr "Este nome é reservado"
 msgid "This name is taken by another Erlang module"
 msgstr "Este nome é tomado por outro módulo Erlang"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:80
-msgid "To add config files to your Git repo, place them in the <tt>config.d</tt> directory of your site."
-msgstr "Para adicionar arquivos de configuração ao seu repo Git, coloque-os no diretório <tt>config.d</tt> do seu site."
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:98
+msgid "To add config files to your git repo, add them to <tt>priv/config.d/</tt> directory of your site."
+msgstr "Para adicionar arquivos de configuração ao seu repositório git, adicione-os ao diretório <tt>priv/config.d/</tt> do seu site."
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/_addsite_success.tpl:8
 msgid "To manage your site:"

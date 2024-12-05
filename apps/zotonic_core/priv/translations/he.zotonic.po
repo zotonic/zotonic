@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-12-02 10:58\n"
+"PO-Revision-Date: 2024-12-05 15:05\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -216,7 +216,7 @@ msgstr "האם אתה בטוח שברצונך להחזיר את כל כללי ה
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:141./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:149
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:158./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:113./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:85./apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:49./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:81./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6./apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:114
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:189
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:218
 msgid "Cancel"
 msgstr "לְבַטֵל"
 
@@ -3091,7 +3091,7 @@ msgstr "רק מנהל מערכת יכול להוסיף מפתחות תצורה."
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:10./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:11
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:22./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:25./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:130./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:137./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:157./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:159./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:30
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:175
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:202
 msgid "Password"
 msgstr "סיסמה"
 
@@ -4162,7 +4162,7 @@ msgid "subject"
 msgstr "נושא"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/database.tpl:3
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:120
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:147
 msgid "Database"
 msgstr "מאגר מידע"
 
@@ -7589,7 +7589,7 @@ msgstr "החלף אנשים שאינם"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:23./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:23
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:49
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:164
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:191
 msgid "User"
 msgstr "מִשׁתַמֵשׁ"
 
@@ -11083,11 +11083,15 @@ msgstr "סרטון יוטיוב"
 msgid "Alert"
 msgstr "עֵרָנִי"
 
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:95
+msgid "<b>Note that Zotonic only handles initial check out</b>, after which it is expected that you will handle further git interactions yourself.)"
+msgstr "<b>שימו לב ש-Zotonic מטפל רק ביציאה ראשונית של</b>, ולאחר מכן צפוי שתטפלו באינטראקציות נוספות של Git בעצמכם.)"
+
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:563
 msgid "A component of the path is not a directory:"
 msgstr "רכיב הנתיב אינו ספרייה:"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/_z_system_button.tpl:2./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:3./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:188
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/_z_system_button.tpl:2./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:3./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:217
 msgid "Add Site"
 msgstr "הוסף אתר"
 
@@ -11107,7 +11111,15 @@ msgstr "אתר בלוגים בסיסי"
 msgid "Checking database ..."
 msgstr "בודק מסד נתונים ..."
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:111
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:86
+msgid "Checkout an existing site from Git"
+msgstr "בדוק אתר קיים מ-Git"
+
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:74
+msgid "Checkout existing site from Git"
+msgstr "בדוק את האתר הקיים מ-Git"
+
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:138
 msgid "Configure PostgreSQL Database Connection"
 msgstr "הגדר את חיבור מסד הנתונים PostgreSQL"
 
@@ -11167,11 +11179,7 @@ msgstr "הזן שם מארח חוקי כמו \"www.example.com\" או \"test.loc
 msgid "Force compile all Erlang files ..."
 msgstr "כפה לאסוף את כל קבצי Erlang ..."
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:74
-msgid "Git"
-msgstr "גיט"
-
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:87
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:106
 msgid "Git URL"
 msgstr "כתובת אתר של Git"
 
@@ -11183,13 +11191,17 @@ msgstr "קופת Git ..."
 msgid "Go to the admin interface at"
 msgstr "עבור אל ממשק הניהול בכתובת"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:131
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:158
 msgid "Host"
 msgstr "מנחה"
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:39
 msgid "Host name"
 msgstr "שם מארח"
+
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:79
+msgid "If you are creating a new site, ignore this section. If you have an existing Zotonic site on a git repo, you can optionally specify it here. in which case Zotonic will check that out instead of creating a new site."
+msgstr "אם אתה יוצר אתר חדש, התעלם מקטע זה. אם יש לך אתר Zotonic קיים ב-git repo, אתה יכול לציין אותו כאן. במקרה זה Zotonic תבדוק זאת במקום ליצור אתר חדש."
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/_addsite_success.tpl:14
 msgid "Log on with username <b>admin</b> and password"
@@ -11207,19 +11219,15 @@ msgstr "אין הרשאה ליצור את ספריית האתרים בכתובת
 msgid "Not allowed to create the site directory"
 msgstr "אסור ליצור את ספריית האתרים"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:79
-msgid "Optional Git url to checkout the site. An existing <tt>config</tt> file will be overwritten."
-msgstr "כתובת אתר Git אופציונלית לבדיקת האתר. קובץ <tt>קונפיג '</tt> קיים יוחלף."
-
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:196
 msgid "Please only use: a…z, 0…9, and . (period)."
 msgstr "אנא השתמש רק: a…z, 0…9, ו- . (פרק זמן)."
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:136
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:163
 msgid "Please use a valid hostname."
 msgstr "אנא השתמש בשם מארח חוקי."
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:125./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:158
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:152./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:185
 msgid "Please use only a…z and 0…9 characters."
 msgstr "אנא השתמש רק ב-…z ו- 0…9 תווים."
 
@@ -11227,23 +11235,23 @@ msgstr "אנא השתמש רק ב-…z ו- 0…9 תווים."
 msgid "Please use only lowercase a…z and 0…9 characters."
 msgstr "השתמש רק באותיות קטנות a…z ו- 0…9 תווים."
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:142
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
 msgid "Port"
 msgstr "נמל"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:98
-msgid "PostgreSQL"
-msgstr "PostgreSQL"
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:118
+msgid "PostgreSQL database connection"
+msgstr "חיבור למסד נתונים PostgreSQL"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:103
-msgid "PostgreSQL database connection. The schema defaults to the site name filled in above."
-msgstr "חיבור מסד נתונים PostgreSQL. הסכמה מוגדרת כברירת מחדל לשם האתר שמולא למעלה."
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:123
+msgid "PostgreSQL database, username and password. The schema defaults to the site name filled in above."
+msgstr "מסד נתונים PostgreSQL, שם משתמש וסיסמה. ברירת המחדל של הסכימה הוא שם האתר שמולא למעלה."
 
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:49
 msgid "Resolving the hostname ..."
 msgstr "פותר את שם המארח ..."
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:153
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:180
 msgid "Schema"
 msgstr "סכֵימָה"
 
@@ -11267,6 +11275,14 @@ msgstr "מתחיל את האתר החדש ..."
 msgid "Succesfully created the site."
 msgstr "יצר את האתר בהצלחה."
 
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:98
+msgid "The config file in <tt>priv/zotonic_site.config</tt> will be overwritten with the database settings from above."
+msgstr "קובץ התצורה ב- <tt>priv/zotonic_site.config</tt> יוחלף עם הגדרות מסד הנתונים מלמעלה."
+
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:126
+msgid "The default database for the schema is <b>{db}</b>."
+msgstr "מסד הנתונים המוגדר כברירת מחדל עבור הסכימה הוא <b>{db}</b>."
+
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:548
 msgid "The file or directory already exists:"
 msgstr "הקובץ או הספריה כבר קיימים:"
@@ -11279,7 +11295,7 @@ msgstr "שם המארח אינו ידוע, בדוק את קובץ ה- DNS שלך
 msgid "The parent directory does not exist:"
 msgstr "ספריית האב אינה קיימת:"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:147
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:174
 msgid "The port must be numerical."
 msgstr "היציאה חייבת להיות מספרית."
 
@@ -11299,9 +11315,9 @@ msgstr "שם זה שמור"
 msgid "This name is taken by another Erlang module"
 msgstr "שם זה נלקח על ידי מודול אחר של Erlang"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:80
-msgid "To add config files to your Git repo, place them in the <tt>config.d</tt> directory of your site."
-msgstr "כדי להוסיף קבצי תצורה ל- Git repo שלך, הצב אותם בספריה <tt>config.d</tt> של האתר שלך."
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:98
+msgid "To add config files to your git repo, add them to <tt>priv/config.d/</tt> directory of your site."
+msgstr "כדי להוסיף קבצי תצורה ל-git repo שלך, הוסף אותם לספריית <tt>priv/config.d/</tt> של האתר שלך."
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/_addsite_success.tpl:8
 msgid "To manage your site:"

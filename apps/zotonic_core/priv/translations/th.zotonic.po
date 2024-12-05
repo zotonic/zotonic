@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-12-02 10:59\n"
+"PO-Revision-Date: 2024-12-05 15:06\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -216,7 +216,7 @@ msgstr "คุณแน่ใจหรือไม่ว่าต้องกา
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:141./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:149
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:158./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:113./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:85./apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:49./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:81./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6./apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:114
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:189
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:218
 msgid "Cancel"
 msgstr "ยกเลิก"
 
@@ -3091,7 +3091,7 @@ msgstr "มีเพียงผู้ดูแลระบบเท่านั
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:10./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:11
 #: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:22./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:25./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:130./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:137./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:157./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:159./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:30
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:175
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:202
 msgid "Password"
 msgstr "รหัสผ่าน"
 
@@ -4162,7 +4162,7 @@ msgid "subject"
 msgstr "เรื่อง"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/stat_panel/database.tpl:3
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:120
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:147
 msgid "Database"
 msgstr "ฐานข้อมูล"
 
@@ -7587,7 +7587,7 @@ msgstr "สลับคนที่ไม่ใช่"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:23./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:23
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:49
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:164
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:191
 msgid "User"
 msgstr "ผู้ใช้"
 
@@ -11081,11 +11081,15 @@ msgstr "วิดีโอ Youtube"
 msgid "Alert"
 msgstr "การแจ้งเตือน"
 
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:95
+msgid "<b>Note that Zotonic only handles initial check out</b>, after which it is expected that you will handle further git interactions yourself.)"
+msgstr "<b>โปรดทราบว่า Zotonic จัดการการตรวจสอบเบื้องต้นเท่านั้น</b>หลังจากนั้นคาดว่าคุณจะจัดการการโต้ตอบกับ git เพิ่มเติมด้วยตนเอง)"
+
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:563
 msgid "A component of the path is not a directory:"
 msgstr "ส่วนประกอบของเส้นทางไม่ใช่ไดเร็กทอรี:"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/_z_system_button.tpl:2./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:3./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:188
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/_z_system_button.tpl:2./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:3./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:217
 msgid "Add Site"
 msgstr "เพิ่มไซต์"
 
@@ -11105,7 +11109,15 @@ msgstr "ไซต์บล็อกพื้นฐาน"
 msgid "Checking database ..."
 msgstr "กำลังตรวจสอบฐานข้อมูล ..."
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:111
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:86
+msgid "Checkout an existing site from Git"
+msgstr "ตรวจสอบไซต์ที่มีอยู่จาก Git"
+
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:74
+msgid "Checkout existing site from Git"
+msgstr "ตรวจสอบไซต์ที่มีอยู่จาก Git"
+
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:138
 msgid "Configure PostgreSQL Database Connection"
 msgstr "กำหนดค่าการเชื่อมต่อฐานข้อมูล PostgreSQL"
 
@@ -11165,11 +11177,7 @@ msgstr "ป้อนชื่อโฮสต์ที่ถูกต้องเ
 msgid "Force compile all Erlang files ..."
 msgstr "บังคับให้คอมไพล์ไฟล์ Erlang ทั้งหมด ..."
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:74
-msgid "Git"
-msgstr "Git"
-
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:87
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:106
 msgid "Git URL"
 msgstr "Git URL"
 
@@ -11181,13 +11189,17 @@ msgstr "เช็คเอาต์ Git ..."
 msgid "Go to the admin interface at"
 msgstr "ไปที่อินเทอร์เฟซผู้ดูแลระบบที่"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:131
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:158
 msgid "Host"
 msgstr "โฮสต์"
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:39
 msgid "Host name"
 msgstr "ชื่อโฮสต์"
+
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:79
+msgid "If you are creating a new site, ignore this section. If you have an existing Zotonic site on a git repo, you can optionally specify it here. in which case Zotonic will check that out instead of creating a new site."
+msgstr "หากคุณกำลังสร้างไซต์ใหม่ ให้ละเว้นส่วนนี้ไป หากคุณมีไซต์ Zotonic อยู่แล้วในรีโพอ Git คุณสามารถระบุไซต์ดังกล่าวที่นี่ได้ ในกรณีนี้ Zotonic จะตรวจสอบไซต์ดังกล่าวแทนการสร้างไซต์ใหม่"
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/_addsite_success.tpl:14
 msgid "Log on with username <b>admin</b> and password"
@@ -11205,19 +11217,15 @@ msgstr "ไม่มีสิทธิ์สร้างไดเร็กทอ
 msgid "Not allowed to create the site directory"
 msgstr "ไม่อนุญาตให้สร้างไดเร็กทอรีไซต์"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:79
-msgid "Optional Git url to checkout the site. An existing <tt>config</tt> file will be overwritten."
-msgstr "Git url ที่เป็นทางเลือกในการชำระเงินเว็บไซต์ ไฟล์ <tt>config</tt> ที่มีอยู่จะถูกเขียนทับ"
-
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:196
 msgid "Please only use: a…z, 0…9, and . (period)."
 msgstr "โปรดใช้เฉพาะ: a…z, 0…9 และ . (ระยะเวลา)."
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:136
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:163
 msgid "Please use a valid hostname."
 msgstr "โปรดใช้ชื่อโฮสต์ที่ถูกต้อง"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:125./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:158
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:152./apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:185
 msgid "Please use only a…z and 0…9 characters."
 msgstr "โปรดใช้อักขระ…z และ 0…9 เท่านั้น"
 
@@ -11225,23 +11233,23 @@ msgstr "โปรดใช้อักขระ…z และ 0…9 เท่า
 msgid "Please use only lowercase a…z and 0…9 characters."
 msgstr "โปรดใช้เฉพาะตัวพิมพ์เล็ก a…z และ 0…9 อักขระ"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:142
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:169
 msgid "Port"
 msgstr "ท่าเรือ"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:98
-msgid "PostgreSQL"
-msgstr "PostgreSQL"
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:118
+msgid "PostgreSQL database connection"
+msgstr "การเชื่อมต่อฐานข้อมูล PostgreSQL"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:103
-msgid "PostgreSQL database connection. The schema defaults to the site name filled in above."
-msgstr "การเชื่อมต่อฐานข้อมูล PostgreSQL สคีมามีค่าเริ่มต้นเป็นชื่อไซต์ที่กรอกไว้ด้านบน"
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:123
+msgid "PostgreSQL database, username and password. The schema defaults to the site name filled in above."
+msgstr "ฐานข้อมูล PostgreSQL ชื่อผู้ใช้และรหัสผ่าน รูปแบบเริ่มต้นคือชื่อไซต์ที่กรอกไว้ด้านบน"
 
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:49
 msgid "Resolving the hostname ..."
 msgstr "การแก้ไขชื่อโฮสต์ ..."
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:153
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:180
 msgid "Schema"
 msgstr "สคีมา"
 
@@ -11265,6 +11273,14 @@ msgstr "กำลังเริ่มไซต์ใหม่ ..."
 msgid "Succesfully created the site."
 msgstr "สร้างไซต์สำเร็จ"
 
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:98
+msgid "The config file in <tt>priv/zotonic_site.config</tt> will be overwritten with the database settings from above."
+msgstr "ไฟล์ config ใน <tt>priv/zotonic_site.config</tt> จะถูกเขียนทับด้วยการตั้งค่าฐานข้อมูลจากด้านบน"
+
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:126
+msgid "The default database for the schema is <b>{db}</b>."
+msgstr "ฐานข้อมูลเริ่มต้นสำหรับรูปแบบคือ <b>{db}</b>"
+
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:548
 msgid "The file or directory already exists:"
 msgstr "มีไฟล์หรือไดเร็กทอรีอยู่แล้ว:"
@@ -11277,7 +11293,7 @@ msgstr "ไม่ทราบชื่อโฮสต์ตรวจสอบไ
 msgid "The parent directory does not exist:"
 msgstr "ไม่มีไดเร็กทอรีหลัก:"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:147
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:174
 msgid "The port must be numerical."
 msgstr "พอร์ตต้องเป็นตัวเลข"
 
@@ -11297,9 +11313,9 @@ msgstr "ชื่อนี้สงวนไว้"
 msgid "This name is taken by another Erlang module"
 msgstr "ชื่อนี้ใช้โดยโมดูล Erlang อื่น"
 
-#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:80
-msgid "To add config files to your Git repo, place them in the <tt>config.d</tt> directory of your site."
-msgstr "ในการเพิ่มไฟล์กำหนดค่าลงใน Git repo ของคุณให้วางไว้ในไดเร็กทอรี <tt>config.d</tt> ของไซต์"
+#: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:98
+msgid "To add config files to your git repo, add them to <tt>priv/config.d/</tt> directory of your site."
+msgstr "หากต้องการเพิ่มไฟล์ config ลงในที่เก็บ git ของคุณ ให้เพิ่มไฟล์เหล่านี้ลงในไดเร็กทอรี <tt>priv/config.d/</tt> ของไซต์ของคุณ"
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/_addsite_success.tpl:8
 msgid "To manage your site:"
