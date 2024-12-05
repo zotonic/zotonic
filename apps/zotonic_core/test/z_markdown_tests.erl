@@ -51,6 +51,15 @@ rst_code_to_markdown_test() ->
     ?assertEqual(<<"``` django\n<div class=\"form-group\"> <!-- form-group has class \"has-error\" if validation fails -->\n```\n">>, MD).
 
 
+lines_test() ->
+    Text = <<"A sentence
+
+Another sentence">>,
+    Html = <<"<p>A sentence</p>\n\n<p>Another sentence</p>">>,
+    ?assertEqual(Html, z_markdown:to_html(Text)),
+    ?assertEqual(Text, z_string:trim(z_markdown:to_markdown(Html))),
+    ok.
+
 table_test() ->
     Text = <<"A sentence
 
@@ -75,7 +84,6 @@ Another sentence
 
 <p>Another sentence</p>">>,
 
-io:format("[~s]~n", [ z_string:trim(z_markdown:to_html(Text)) ]),
     ?assertEqual(Html, z_string:trim(z_markdown:to_html(Text))),
 
     Text2 = <<"A sentence
@@ -86,8 +94,6 @@ io:format("[~s]~n", [ z_string:trim(z_markdown:to_html(Text)) ]),
 |  A\\|a | *Bbb* | CcC     |
 
 Another sentence">>,
-
-io:format("[~s]~n", [ z_string:trim(z_markdown:to_markdown(Html)) ]),
 
     ?assertEqual(Text2, z_string:trim(z_markdown:to_markdown(Html))),
     ok.
