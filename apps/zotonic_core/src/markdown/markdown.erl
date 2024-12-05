@@ -147,11 +147,10 @@ p1([{codequoted, Type, Code} | T], R, I, Acc) ->
 
 %% Tables
 p1([{table, Headers, Align, Rows} | T], R, I, Acc) ->
-    ?DEBUG({table, Headers, Rows}),
     Html = [
-        "\n<table role=\"table\" class=\"table\">",
-            "<thead>",
-                "<tr>",
+        "\n<table role=\"table\" class=\"table\">\n",
+            "  <thead>\n",
+                "    <tr>",
                     lists:map(
                         fun({Col, A}) ->
                             [
@@ -168,12 +167,12 @@ p1([{table, Headers, Align, Rows} | T], R, I, Acc) ->
                             ]
                         end,
                         table_zip_align(Headers, Align)),
-                "</tr>",
-            "</thead>",
-            "<tbody>",
+                "</tr>\n",
+            "  </thead>\n",
+            "  <tbody>\n",
             lists:map(
                 fun(Row) ->
-                    [ "<tr>",
+                    [ "    <tr>",
                     lists:map(
                         fun({Col, A}) ->
                             [
@@ -190,10 +189,10 @@ p1([{table, Headers, Align, Rows} | T], R, I, Acc) ->
                             ]
                         end,
                         table_zip_align(Row, Align)),
-                    "</tr>"]
+                    "</tr>\n"]
                 end,
                 Rows),
-            "</tbody>"
+            "  </tbody>\n"
         "</table>\n"
     ],
     p1(T, R, I, [ Html | Acc ]);
@@ -610,7 +609,6 @@ t_l1([
             Align = lists:map(fun table_align/1, Hs),
             % Split all in Rows in cols
             RowsCols = lists:map(fun table_split_in_cols/1, Rows),
-            % ...
             Table = {table, HeaderCols, Align, RowsCols},
             t_l1(TRest, A1, [ Table | A2 ]);
         true ->
@@ -641,15 +639,19 @@ table_split_in_cols([ {{punc, vbar}, _} | Ts ]) ->
 split_in_cols_1([{{lf, _}, _}], ColAcc, Acc) ->
     case is_blank(ColAcc) of
         true -> Acc;
-        false -> [ ColAcc | Acc ]
+        false -> [ lists:reverse(ColAcc) | Acc ]
     end;
 split_in_cols_1([], ColAcc, Acc) ->
     case is_blank(ColAcc) of
         true -> Acc;
-        false -> [ ColAcc | Acc ]
+        false -> [ lists:reverse(ColAcc) | Acc ]
     end;
+split_in_cols_1([ {{punc, bslash}, _}, {{punc, bslash}, _} = H | Ts ], ColAcc, Acc) ->
+    split_in_cols_1(Ts, [H | ColAcc], Acc);
+split_in_cols_1([ {{punc, bslash}, _}, {{punc, vbar}, _} = H | Ts ], ColAcc, Acc) ->
+    split_in_cols_1(Ts, [H | ColAcc], Acc);
 split_in_cols_1([ {{punc, vbar}, _} | Ts ], ColAcc, Acc) ->
-    split_in_cols_1(Ts, [], [ ColAcc | Acc ]);
+    split_in_cols_1(Ts, [], [ lists:reverse(ColAcc) | Acc ]);
 split_in_cols_1([ H | Ts ], ColAcc, Acc) ->
     split_in_cols_1(Ts, [H | ColAcc], Acc).
 
@@ -671,7 +673,7 @@ table_align(R) ->
     end.
 
 table_zip_align(Cs, As) ->
-    lists:reverse(table_zip_align_1(Cs, As, [])).
+    table_zip_align_1(Cs, As, []).
 
 table_zip_align_1([], [], Acc) ->
     lists:reverse(Acc);
