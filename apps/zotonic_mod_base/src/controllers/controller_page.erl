@@ -71,6 +71,7 @@ resource_exists(Context) ->
         Id = z_controller_helper:get_id(ContextQs),
         case exists(Id, ContextQs) of
             true ->
+                ok = z_context:set_req_metrics( #{ rsc_id => Id }, ContextQs),
                 maybe_redirect(Id, ContextQs);
             false ->
                 {false, ContextQs}
