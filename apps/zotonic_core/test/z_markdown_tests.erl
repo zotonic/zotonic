@@ -52,15 +52,18 @@ rst_code_to_markdown_test() ->
 
 
 table_test() ->
-    Text = <<"
+    Text = <<"A sentence
 
 | Hallo | Daar | Enzo |
 | -----: | :---: | :--- |
 | Foo | *Bar* | **Baz** |
 | A\\|a | *Bbb* | CcC |
 
+Another sentence
 ">>,
-    Html = <<"<table role=\"table\" class=\"table\">
+    Html = <<"<p>A sentence</p>
+
+<table role=\"table\" class=\"table\">
   <thead>
     <tr><th align=\"right\">Hallo</th><th align=\"center\">Daar</th><th align=\"left\">Enzo</th></tr>
   </thead>
@@ -68,14 +71,23 @@ table_test() ->
     <tr><td align=\"right\">Foo</td><td align=\"center\"><em>Bar</em></td><td align=\"left\"><strong>Baz</strong></td></tr>
     <tr><td align=\"right\">A|a</td><td align=\"center\"><em>Bbb</em></td><td align=\"left\">CcC</td></tr>
   </tbody>
-</table>">>,
-    ?assertEqual(Html, z_markdown:to_html(Text)),
+</table>
 
-    Text2 = <<"
+<p>Another sentence</p>">>,
+
+io:format("[~s]~n", [ z_string:trim(z_markdown:to_html(Text)) ]),
+    ?assertEqual(Html, z_string:trim(z_markdown:to_html(Text))),
+
+    Text2 = <<"A sentence
+
 | Hallo | Daar  | Enzo    |
 | ----: | :---: | :------ |
 |   Foo | *Bar* | **Baz** |
 |  A\\|a | *Bbb* | CcC     |
-">>,
-    ?assertEqual(Text2, z_markdown:to_markdown(Html)),
+
+Another sentence">>,
+
+io:format("[~s]~n", [ z_string:trim(z_markdown:to_markdown(Html)) ]),
+
+    ?assertEqual(Text2, z_string:trim(z_markdown:to_markdown(Html))),
     ok.

@@ -148,7 +148,7 @@ p1([{codequoted, Type, Code} | T], R, I, Acc) ->
 %% Tables
 p1([{table, Headers, Align, Rows} | T], R, I, Acc) ->
     Html = [
-        "\n<table role=\"table\" class=\"table\">\n",
+        "<table role=\"table\" class=\"table\">\n",
             "  <thead>\n",
                 "    <tr>",
                     lists:map(

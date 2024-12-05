@@ -68,7 +68,8 @@ set_options([no_html|T], S) ->
     set_options(T, S#ms{allow_html=false}).
 
 to_md(B, M, #ms{ level = 0 }) when is_binary(B) ->
-    {escape_html_text(B, <<>>), M};
+    B1 = z_string:trim(binary:replace(B, <<"\n">>, <<" ">>, [ global ])),
+    {escape_html_text(B1, <<>>), M};
 to_md(B, M, _S) when is_binary(B) ->
     B1 = binary:replace(B, <<"\n">>, <<" ">>, [ global ]),
     {escape_html_text(B1, <<>>), M};
@@ -285,10 +286,9 @@ to_md({<<"table">>, _Args, Enclosed}, M, S) ->
         end,
         column_zip(Aligns, Widths)),
 
-    {["\n",
-        HeadMDCells1,
-        row(Dashes),
-        DataMDRows1,
+    {[HeadMDCells1,
+      row(Dashes),
+      DataMDRows1,
       "\n"], M};
 
 to_md({<<"ul">>, _Args, Enclosed}, M, S) ->
