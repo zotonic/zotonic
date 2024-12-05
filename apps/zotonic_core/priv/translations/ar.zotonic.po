@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-12-05 15:05\n"
+"PO-Revision-Date: 2024-12-05 17:03\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -11281,7 +11281,7 @@ msgstr "سيتم استبدال ملف التكوين الموجود في <tt>pr
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:126
 msgid "The default database for the schema is <b>{db}</b>."
-msgstr ""
+msgstr "قاعدة البيانات الافتراضية للمخطط هي <b>{db}</b>."
 
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:548
 msgid "The file or directory already exists:"
@@ -11317,7 +11317,7 @@ msgstr "هذا الاسم مأخوذ من وحدة إرلانج أخرى"
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:98
 msgid "To add config files to your git repo, add them to <tt>priv/config.d/</tt> directory of your site."
-msgstr ""
+msgstr "لإضافة ملفات التكوين إلى مستودع git الخاص بك، أضفها إلى دليل <tt>priv/config.d/</tt> الخاص بموقعك."
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/_addsite_success.tpl:8
 msgid "To manage your site:"

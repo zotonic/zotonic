@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-12-05 15:05\n"
+"PO-Revision-Date: 2024-12-05 17:03\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -11282,7 +11282,7 @@ msgstr "El archivo de configuración en <tt>priv/zotonic_site.config</tt> se sob
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:126
 msgid "The default database for the schema is <b>{db}</b>."
-msgstr ""
+msgstr "La base de datos predeterminada para el esquema es <b>{db}</b>."
 
 #: apps/zotonic_mod_zotonic_site_management/src/zotonic_status_addsite.erl:548
 msgid "The file or directory already exists:"
@@ -11318,7 +11318,7 @@ msgstr "Este nombre es tomado por otro módulo de Erlang"
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:98
 msgid "To add config files to your git repo, add them to <tt>priv/config.d/</tt> directory of your site."
-msgstr ""
+msgstr "Para agregar archivos de configuración a su repositorio git, agréguelos al directorio <tt>priv/config.d/</tt> de su sitio."
 
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/_addsite_success.tpl:8
 msgid "To manage your site:"
