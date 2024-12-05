@@ -47,7 +47,12 @@
 
 
 %% @doc Convert the Infile to an outfile with a still image using the filters.
--spec convert(file:filename_all(), file:filename_all(), list(), #context{}) -> ok | {error, term()}.
+-spec convert(InFile, OutFile, Filters, Context) -> ok | {error, Reason} when
+    InFile :: file:filename_all(),
+    OutFile :: file:filename_all(),
+    Filters :: list(),
+    Context :: z:context(),
+    Reason :: will_overwrite_infile | term().
 convert(InFile, InFile, _, _Context) ->
     ?LOG_ERROR(#{
         text => <<"Image convert will overwrite input file">>,
@@ -68,6 +73,8 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
                 true ->
                     case z_mediaclass:expand_mediaclass_checksum(Filters) of
                         {ok, FiltersExpanded} ->
+                            % TODO: add the notification here to let a module pick up the resize
+                            % A remote server can then handle the resize request.
                             SiteDir = z_path:site_dir(Context),
                             convert_1(os:find_executable("convert"), InFile, OutFile, Mime, FileProps, FiltersExpanded, SiteDir);
                         {error, Reason} = Error ->
