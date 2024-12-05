@@ -12,7 +12,7 @@
 -export([conv/1]).
 
 -include_lib("eunit/include/eunit.hrl").
-% -include("../../include/zotonic.hrl").
+-include("../../include/zotonic.hrl").
 
 
 -define(SPACE, 32).
@@ -144,6 +144,58 @@ p1([{codequoted, Type, Code} | T], R, I, Acc) ->
        [[ "\n<pre lang=\"", Type1, "\" class=\"notranslate\">",
           "<code class=\"notranslate language-", Type1,"\">", Code1, "</code>",
           "</pre>\n" ] | Acc]);
+
+%% Tables
+p1([{table, Headers, Align, Rows} | T], R, I, Acc) ->
+    Html = [
+        "<table role=\"table\" class=\"table\">\n",
+            "  <thead>\n",
+                "    <tr>",
+                    lists:map(
+                        fun({Col, A}) ->
+                            [
+                                "<th",
+                                    case A of
+                                        none -> "";
+                                        center -> " align=\"center\"";
+                                        left -> " align=\"left\"";
+                                        right -> " align=\"right\""
+                                    end,
+                                ">",
+                                string:trim(make_str(snip(Col), R), both, [?SPACE]),
+                                "</th>"
+                            ]
+                        end,
+                        table_zip_align(Headers, Align)),
+                "</tr>\n",
+            "  </thead>\n",
+            "  <tbody>\n",
+            lists:map(
+                fun(Row) ->
+                    [ "    <tr>",
+                    lists:map(
+                        fun({Col, A}) ->
+                            [
+                                "<td",
+                                    case A of
+                                        none -> "";
+                                        center -> " align=\"center\"";
+                                        left -> " align=\"left\"";
+                                        right -> " align=\"right\""
+                                    end,
+                                ">",
+                                string:trim(make_str(snip(Col), R), both, [?SPACE]),
+                                "</td>"
+                            ]
+                        end,
+                        table_zip_align(Row, Align)),
+                    "</tr>\n"]
+                end,
+                Rows),
+            "  </tbody>\n"
+        "</table>\n"
+    ],
+    p1(T, R, I, [ Html | Acc ]);
 
 %% one normal is just normal...
 p1([{normal, P} | T], R, I, Acc) ->
@@ -530,6 +582,39 @@ t_l1([[{{punc, backtick}, _},
             t_l1(LinesAfterCode, A1, [{codequoted, T1, CodeLines} | A2])
     end;
 
+% Tables
+t_l1([
+        [{{punc, vbar}, _} | _ ] = H1,
+        [{{punc, vbar}, _} | _ ] = H2
+        | T
+    ], A1, A2) ->
+    N1 = length(table_split_in_cols(H1)),
+    Hs = lists:map(
+        fun(Col) -> string:trim(unicode:characters_to_binary(make_plain_str(Col))) end,
+        table_split_in_cols(H2)),
+    N2 = length(Hs),
+    IsHeaderCols = is_table_header_cols(Hs),
+    if
+        N1 >= 1, N1 =:= N2, IsHeaderCols ->
+            % Table - fetch next rows starting with '|'
+            {Rows, TRest} = lists:splitwith(
+                fun
+                    ([{{punc, vbar}, _} | _]) -> true;
+                    (_) -> false
+                end,
+                T),
+            % Split H1 in cols
+            HeaderCols = table_split_in_cols(H1),
+            % Fetch alignment from H2
+            Align = lists:map(fun table_align/1, Hs),
+            % Split all in Rows in cols
+            RowsCols = lists:map(fun table_split_in_cols/1, Rows),
+            Table = {table, HeaderCols, Align, RowsCols},
+            t_l1(TRest, A1, [ Table | A2 ]);
+        true ->
+            t_l1([H2|T], A1, [{normal, H1} | A2])
+    end;
+
 %% types a blank line or a code block
 t_l1([[{{lf, _}, _}| []]  = H | T], A1, A2) ->
     t_l1(T, A1, [{linefeed, H} | A2]);
@@ -546,6 +631,58 @@ t_inline(H, T1, T2, A1, A2) ->
                                            [{Type, H} | A2]);
         normal                     -> t_l1(T2, A1, [{normal, H} | A2])
     end.
+
+%% Table helper functions
+table_split_in_cols([ {{punc, vbar}, _} | Ts ]) ->
+    lists:reverse(split_in_cols_1(Ts, [], [])).
+
+split_in_cols_1([{{lf, _}, _}], ColAcc, Acc) ->
+    case is_blank(ColAcc) of
+        true -> Acc;
+        false -> [ lists:reverse(ColAcc) | Acc ]
+    end;
+split_in_cols_1([], ColAcc, Acc) ->
+    case is_blank(ColAcc) of
+        true -> Acc;
+        false -> [ lists:reverse(ColAcc) | Acc ]
+    end;
+split_in_cols_1([ {{punc, bslash}, _}, {{punc, bslash}, _} = H | Ts ], ColAcc, Acc) ->
+    split_in_cols_1(Ts, [H | ColAcc], Acc);
+split_in_cols_1([ {{punc, bslash}, _}, {{punc, vbar}, _} = H | Ts ], ColAcc, Acc) ->
+    split_in_cols_1(Ts, [H | ColAcc], Acc);
+split_in_cols_1([ {{punc, vbar}, _} | Ts ], ColAcc, Acc) ->
+    split_in_cols_1(Ts, [], [ lists:reverse(ColAcc) | Acc ]);
+split_in_cols_1([ H | Ts ], ColAcc, Acc) ->
+    split_in_cols_1(Ts, [H | ColAcc], Acc).
+
+is_table_header_cols(Cols) ->
+    lists:all(fun is_table_header_col/1, Cols).
+
+is_table_header_col(Col) ->
+    re:run(Col, <<"^:?---+:?$">>) =/= nomatch.
+
+table_align(<<":", R/binary>>) ->
+    case binary:last(R) of
+        $: -> center;
+        $- -> left
+    end;
+table_align(R) ->
+    case binary:last(R) of
+        $: -> right;
+        $- -> none
+    end.
+
+table_zip_align(Cs, As) ->
+    table_zip_align_1(Cs, As, []).
+
+table_zip_align_1([], [], Acc) ->
+    lists:reverse(Acc);
+table_zip_align_1([C|Cs], [], Acc) ->
+    table_zip_align_1(Cs, [], [ {C, none} | Acc ]);
+table_zip_align_1([], [A|As], Acc) ->
+    table_zip_align_1([], As, [ {[], A} | Acc ]);
+table_zip_align_1([C|Cs], [A|As], Acc) ->
+    table_zip_align_1(Cs, As, [ {C, A} | Acc ]).
 
 %% strips blanks from the beginning and end
 strip_lines(List) -> lists:reverse(strip_l1(lists:reverse(strip_l1(List)))).
@@ -976,10 +1113,11 @@ l1([$. | T], A1, A2)       -> l1(T, [], [{{punc, fullstop}, "."}, l2(A1) | A2]);
 l1([$: | T], A1, A2)       -> l1(T, [], [{{punc, colon}, ":"}, l2(A1) | A2]);
 l1([$' | T], A1, A2)       -> l1(T, [], [{{punc, singleq}, "'"}, l2(A1) | A2]); %'
 l1([$" | T], A1, A2)       -> l1(T, [], [{{punc, doubleq}, "\""}, l2(A1) | A2]); %"
-l1([$` | T], A1, A2)       -> l1(T, [], [{{punc, backtick}, "`"}, l2(A1) | A2]); %"
-l1([$! | T], A1, A2)       -> l1(T, [], [{{punc, bang}, "!"}, l2(A1) | A2]); %"
-l1([$\\ | T], A1, A2)      -> l1(T, [], [{{punc, bslash}, "\\"}, l2(A1) | A2]); %"
-l1([$/ | T], A1, A2)       -> l1(T, [], [{{punc, fslash}, "/"}, l2(A1) | A2]); %"
+l1([$` | T], A1, A2)       -> l1(T, [], [{{punc, backtick}, "`"}, l2(A1) | A2]); %`
+l1([$! | T], A1, A2)       -> l1(T, [], [{{punc, bang}, "!"}, l2(A1) | A2]); %!
+l1([$\\ | T], A1, A2)      -> l1(T, [], [{{punc, bslash}, "\\"}, l2(A1) | A2]); %\\
+l1([$/ | T], A1, A2)       -> l1(T, [], [{{punc, fslash}, "/"}, l2(A1) | A2]); %/
+l1([$| | T], A1, A2)       -> l1(T, [], [{{punc, vbar}, "|"}, l2(A1) | A2]); %"
 l1([$( | T], A1, A2)       -> l1(T, [], [{bra, "("}, l2(A1) | A2]);
 l1([$) | T], A1, A2)       -> l1(T, [], [{ket, ")"}, l2(A1) | A2]);
 l1([$[ | T], A1, A2)       -> l1(T, [], [{{inline, open}, "["}, l2(A1) | A2]);

@@ -40,6 +40,8 @@
     level = -1
 }).
 
+-define(MAX_TABLE_CELL_WIDTH, 80).
+
 -compile({no_auto_import,[max/2]}).
 
 convert(Html) ->
@@ -66,9 +68,9 @@ set_options([no_html|T], S) ->
     set_options(T, S#ms{allow_html=false}).
 
 to_md(B, M, #ms{ level = 0 }) when is_binary(B) ->
-    {escape_html_text(B, <<>>), M};
+    B1 = z_string:trim(binary:replace(B, <<"\n">>, <<" ">>, [ global ])),
+    {escape_html_text(B1, <<>>), M};
 to_md(B, M, _S) when is_binary(B) ->
-    ?DEBUG(B),
     B1 = binary:replace(B, <<"\n">>, <<" ">>, [ global ]),
     {escape_html_text(B1, <<>>), M};
 to_md({comment, _Text}, M, _S) ->
@@ -194,6 +196,101 @@ to_md({<<"blockquote">>, _Args, Enclosed}, M, S) ->
     {EncText, M1} = to_md(Enclosed, M, S1),
     {[nl(S1), EncText, nl(S)], M1};
 
+to_md({<<"table">>, _Args, Enclosed}, M, S) ->
+    THeads = filter_tags(<<"thead">>, Enclosed),
+    TBody = filter_tags(<<"tbody">>, Enclosed),
+    BodyRows = case TBody of
+        [{_, _, TBs}|_] -> filter_tags(<<"tr">>, TBs);
+        [] -> filter_tags(<<"tr">>, Enclosed)
+    end,
+    HeadRows = case THeads of
+        [{_, _, THs}|_] -> filter_tags(<<"tr">>, THs);
+        [] -> []
+    end,
+    {HeadRow, TableRows} = if
+        HeadRows =:= [] ->
+            case BodyRows of
+                [B|Bs] -> {B, Bs};
+                [] -> {[], []}
+            end;
+        true ->
+            {hd(HeadRows), BodyRows}
+    end,
+    HeadCells = case HeadRow of
+        [] -> [];
+        {_, _, HCs} -> HCs
+    end,
+
+    % Make MD of all header cells
+    {HeadMDCells0, M1} = lists:foldl(
+        fun({_, _, CellEnclosed}, {HAcc, MAcc}) ->
+            {CellHtml, MAcc1} = to_md(CellEnclosed, MAcc, S),
+            {[cell(CellHtml) | HAcc], MAcc1}
+        end,
+        {[], M},
+        filter_tags([ <<"td">>, <<"th">> ], HeadCells)),
+    HeadMDCells = lists:reverse(HeadMDCells0),
+
+    % Make MD of all body rows
+    {DataMDRows0, M1} = lists:foldl(
+        fun({<<"tr">>, _, DataRow}, {RowAcc, M1Acc}) ->
+            {RM1Acc1, M1Acc1} = lists:foldl(
+                fun({_, _, CellEnclosed}, {H2Acc, M2Acc}) ->
+                    {DataCellHtml, M2Acc1} = to_md(CellEnclosed, M2Acc, S),
+                    {[cell(DataCellHtml) | H2Acc], M2Acc1}
+                end,
+                {[], M1Acc},
+                filter_tags(<<"td">>, DataRow)),
+            {[ lists:reverse(RM1Acc1) | RowAcc ], M1Acc1}
+        end,
+        {[], M1},
+        TableRows),
+    DataMDRows = lists:reverse(DataMDRows0),
+
+    % Remove newlines and trim cells MD
+    Widths0 = lists:map(
+        fun({_, Args, _}) ->
+            case proplists:get_value(<<"align">>, Args) of
+                <<"left">> -> 4;
+                <<"right">> -> 4;
+                <<"center">> -> 5;
+                _ -> 3
+            end
+        end,
+        lists:reverse(HeadCells)),
+    Widths = column_widths([ HeadMDCells | DataMDRows ], Widths0),
+    Aligns = lists:map(
+        fun({_, Args, _}) ->
+            case proplists:get_value(<<"align">>, Args) of
+                <<"left">> -> left;
+                <<"right">> -> right;
+                <<"center">> -> center;
+                _ -> none
+            end
+        end,
+        HeadCells),
+
+    HeadMDCells1 = row(column_pad(HeadMDCells, Widths, Aligns)),
+    DataMDRows1 = lists:map(
+        fun(Row) ->
+            row(column_pad(Row, Widths, Aligns))
+        end, DataMDRows),
+
+    % Make alignment dashes from the header classes
+    Dashes = lists:map(
+        fun
+            ({left, W}) -> <<":---", (dashes(W - 4))/binary>>;
+            ({right, W}) -> << (dashes(W - 4))/binary, "---:">>;
+            ({center, W}) -> <<":---", (dashes(W-5))/binary, ":">>;
+            ({_, W}) -> <<"---", (dashes(W-3))/binary>>
+        end,
+        column_zip(Aligns, Widths)),
+
+    {[HeadMDCells1,
+      row(Dashes),
+      DataMDRows1,
+      "\n"], M};
+
 to_md({<<"ul">>, _Args, Enclosed}, M, S) ->
     {EncText, M1} = to_md(Enclosed, M, S#ms{li=ul}),
     {[nl(S), EncText, nl(S)], M1};
@@ -207,9 +304,6 @@ to_md({<<"li">>, _Args, Enclosed}, M, S) ->
              end,
     {EncText, M1} = to_md(Enclosed, M, S#ms{li=none, indent=[S#ms.li|S#ms.indent]}),
     {[nl(S), Bullet, 32, trl(EncText)], M1};
-
-to_md({<<"table">>, _Args, _Enclosed} = Html, M, S) when S#ms.allow_html ->
-    {flatten_html(Html), M};
 
 to_md({<<"head">>, _Args, _Enclosed}, M, _S) ->
     {[], M};
@@ -226,9 +320,18 @@ to_md(L, M, S) when is_list(L) ->
                 end, {[], M}, L).
 
 
+filter_tags(Tag, Elts) when is_binary(Tag) ->
+    filter_tags([Tag], Elts);
+filter_tags(Tags, Elts) when is_list(Elts) ->
+    lists:filter(
+        fun
+            ({Elt, _, _}) -> lists:member(Elt, Tags);
+            (_) -> false
+        end,
+        Elts).
+
 header(Char, Enclosed, M, S) ->
     {EncText, M1} = to_md(Enclosed, M, S),
-    Trimmed = trl(EncText),
     case trl(EncText) of
         [] ->
             {[], M1};
@@ -237,6 +340,88 @@ header(Char, Enclosed, M, S) ->
         Trimmed ->
             {[nl(S), nl(S), Trimmed, nl(S), lists:duplicate(max(len(Trimmed), 3), [Char]), nl(S), nl(S)], M1}
     end.
+
+row(Cells) ->
+    iolist_to_binary([
+        "| ",
+        lists:join(" | ", Cells),
+        " |\n"
+    ]).
+
+cell(Text) ->
+    Text1 = binary:replace(
+        unicode:characters_to_binary(Text),
+        [ <<"\n">>, <<"\r">> ],
+        <<" ">>,
+        [ global ]),
+    Text2 = z_string:trim(Text1),
+    Text3 = binary:replace(Text2, <<"\\">>, <<"\\\\">>, [ global ]),
+    binary:replace(Text3, <<"|">>, <<"\\|">>, [ global ]).
+
+column_widths([], Acc) ->
+    Acc;
+column_widths([ Row | Rows ], Acc) ->
+    Acc1 = column_widths_1(Row, Acc, []),
+    column_widths(Rows, Acc1).
+
+column_widths_1([], [], Acc) ->
+    Acc1 = lists:map(fun(W) -> min(W, ?MAX_TABLE_CELL_WIDTH) end, Acc),
+    lists:reverse(Acc1);
+column_widths_1([C|Cs], [], Acc) ->
+    column_widths_1(Cs, [], [ z_string:len(C) | Acc ]);
+column_widths_1([], [W|Ws], Acc) ->
+    column_widths_1([], Ws, [ W | Acc ]);
+column_widths_1([C|Cs], [W|Ws], Acc) ->
+    column_widths_1(Cs, Ws, [ max(z_string:len(C), W) | Acc ]).
+
+column_zip(Cs, As) ->
+    column_zip_1(Cs, As, []).
+
+column_zip_1([], [], Acc) ->
+    lists:reverse(Acc);
+column_zip_1([C|Cs], [], Acc) ->
+    column_zip_1(Cs, [], [ {C, 3} | Acc ]);
+column_zip_1([], [A|As], Acc) ->
+    column_zip_1([], As, [ {[], A} | Acc ]);
+column_zip_1([C|Cs], [A|As], Acc) ->
+    column_zip_1(Cs, As, [ {C, A} | Acc ]).
+
+column_pad(Cs, Ws, Align) ->
+    Zipped = column_zip(column_zip(Cs, Ws), Align),
+    lists:map(
+        fun({{C, W}, A}) -> pad(C, W, A) end,
+        Zipped).
+
+pad(C, W, right) ->
+    case z_string:len(C) of
+        N when N < W -> <<(spaces(W-N))/binary, C/binary>>;
+        _ -> C
+    end;
+pad(C, W, center) ->
+    case z_string:len(C) of
+        N when N < W ->
+            N1 = (W - N) div 2,
+            N2 = W - N - N1,
+            <<(spaces(N1))/binary, C/binary, (spaces(N2))/binary>>;
+        _ -> C
+    end;
+pad(C, W, _) ->
+    case z_string:len(C) of
+        N when N < W -> <<C/binary, (spaces(W-N))/binary>>;
+        _ -> C
+    end.
+
+spaces(W) ->
+    spaces(W, <<>>).
+
+spaces(N, Acc) when N =< 0 -> Acc;
+spaces(N, Acc) -> spaces(N-1, <<Acc/binary, " ">>).
+
+dashes(W) ->
+    dashes(W, <<>>).
+
+dashes(N, Acc) when N =< 0 -> Acc;
+dashes(N, Acc) -> dashes(N-1, <<Acc/binary, "-">>).
 
 lev(#ms{ level = Level } = S) ->
     S#ms{ level = Level + 1}.
@@ -267,7 +452,7 @@ drop_ws(L) -> L.
 
 %% @doc Simple recursive length of an iolist
 len(EncText) when is_binary(EncText) ->
-    size(EncText);
+    z_string:len(EncText);
 len(N) when is_integer(N) ->
     1;
 len([H|L]) ->
