@@ -21,7 +21,7 @@
                    autocomplete="off"
             >
             &nbsp;
-            {{ blk.type|to_binary|capfirst|replace:"_":" " }} {_ block _}
+            {{ blk.type|to_binary|capfirst|replace:"_":" " }} {_ section _}
 
             <a title="{_ Disconnect _}" class="z-btn-remove block-remove"></a>
         </div>

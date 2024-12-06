@@ -2,7 +2,7 @@
     <div class="clearfix">
         <div class="block-add-block">
             <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
-                {_ + add block _}
+                {_ + add page section _}
                 <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
@@ -11,7 +11,17 @@
                         <li class="dropdown-header">{{ title }}</li>
                     {% endif %}
                     {% for type, title in items %}
-                        <li><a href="#" data-block-type="{{ type }}">{{ title }}</li></a>
+                        <li>
+                            <a href="#" data-block-type="{{ type }}">
+                            {% with title|split:"|" as ts %}
+                                {% if ts[2] %}
+                                    {{ ts[1] }} <span class="text-muted">{{ ts[2 ]}}</span>
+                                {% else %}
+                                    {{ ts[1] }}
+                                {% endif %}
+                            {% endwith %}
+                            </a>
+                        </li>
                     {% endfor %}
                 {% endfor %}
             </ul>
