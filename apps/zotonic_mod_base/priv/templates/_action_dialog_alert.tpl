@@ -1,4 +1,4 @@
-<p class="text-warning">{{ text }}</p>
+<p>{{ text }}</p>
 
 {% if not only_text %}
 <div class="modal-footer">

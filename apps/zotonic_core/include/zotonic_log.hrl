@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2020 Marc Worrell
+%% @copyright 2011-2024 Marc Worrell
 %% @doc Log record definitions for zotonic
+%% @end
 
-%% Copyright 2011-2020 Marc Worrell
+%% Copyright 2011-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,24 +35,24 @@
 
 
 -record(log_email, {
-    severity = ?LOG_LEVEL_ERROR,
-    message_nr,
-    mailer_status,      % sending, sent, error, retry, warning, bounce, received
-    mailer_message,     % any text, to clarify the mailer_status
-    mailer_host,        % SMTP server or client we are talking with
-    envelop_to,         % the 'to' on the envelop
-    envelop_from,       % the 'from' on the envelop
-    to_id,              % who is receiving the e-mail
-    from_id,            % who is sending (user in the #context)
-    content_id,         % The page being sent (if any)
-    other_id,           % In case of a mailinglist the mailinglist id
-    message_template,   % template used for rendering the e-mail (if any)
-    props = []          % optional extra properties to be logged
+    severity = ?LOG_LEVEL_ERROR :: ?LOG_LEVEL_FATAL..?LOG_LEVEL_DEBUG,
+    message_nr :: binary() | undefined,
+    mailer_status :: sending | sent | error | retry | warning | bounce | received | blocked,
+    mailer_message :: binary() | undefined | tuple(),      % any text, to clarify the mailer_status
+    mailer_host :: undefined | binary() | string(),        % SMTP server or client we are talking with
+    envelop_to :: undefined | binary() | string(),         % the 'to' on the envelop
+    envelop_from :: undefined | binary() | string(),       % the 'from' on the envelop
+    to_id :: undefined | m_rsc:resource_id(),              % who is receiving the e-mail
+    from_id :: undefined | m_rsc:resource_id(),            % who is sending (user in the #context)
+    content_id :: undefined | m_rsc:resource_id(),         % The page being sent (if any)
+    other_id :: undefined | m_rsc:resource_id(),           % In case of a mailinglist the mailinglist id
+    message_template :: undefined | template_compiler:template(),  % template used for rendering the e-mail (if any)
+    props = [] :: proplists:proplist()                     % optional extra properties to be logged
 }).
 
 % NOTE: Make sure to extend record_to_proplist/1 in mod_logging.erl when adding log types.
 -record(zlog, {
-    type = debug :: z:severity(),
+    type = debug :: z:severity() | atom(),
     user_id = undefined :: m_rsc:resource_id() | undefined,
     timestamp = undefined :: erlang:timestamp() | undefined,
     props = [] :: proplists:proplist() | #log_message{} | #log_email{}

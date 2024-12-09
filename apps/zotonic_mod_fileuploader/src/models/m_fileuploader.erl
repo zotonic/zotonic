@@ -49,7 +49,8 @@ m_post([ <<"new">> ], #{ payload := Payload }, Context) when is_map(Payload) ->
             <<"filename">> := Filename,
             <<"size">> := Size
         } when is_binary(Filename), Size >= 0 ->
-            case start_upload(Filename, Size, Context) of
+            Name = maps:get(<<"name">>, Payload, z_ids:id()),
+            case start_upload(Name, Filename, Size, Context) of
                 {ok, Status} ->
                     {ok, cleanup_status(Status, Context)};
                 {error, _} = Error ->
@@ -84,11 +85,30 @@ status(Name, Context) ->
     end.
 
 %% @doc Start the upload of a file. Check the mime type and size.
-start_upload(Filename, Size, Context) ->
+start_upload(Name, Filename, Size, Context) ->
     Mime = z_media_identify:guess_mime(Filename),
     case z_acl:is_allowed(insert, #acl_media{ mime = Mime, size = Size }, Context) of
         true ->
-            mod_fileuploader:start_child(Filename, Size, Context);
+            case z_fileuploader:exists(Name) of
+                true ->
+                    Status = status(Name, Context),
+                    ?LOG_INFO(#{
+                        in => zotonic_mod_fileuploader,
+                        text => <<"New request for existing file uploader - reusing existing one">>,
+                        name => Name,
+                        status => Status
+                    }),
+                    Status;
+                false ->
+                    ?LOG_INFO(#{
+                        in => zotonic_mod_fileuploader,
+                        text => <<"New file uploader">>,
+                        name => Name,
+                        filename => Filename,
+                        size => Size
+                    }),
+                    mod_fileuploader:start_child(Name, Filename, Size, Context)
+            end;
         false ->
             {error, eacces}
     end.

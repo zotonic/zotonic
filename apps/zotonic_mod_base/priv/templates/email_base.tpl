@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<html lang="{{ z_language }}" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 {% block email %}
 <head>
     {% comment %} Email template from https://tedgoas.github.io/Cerberus/ {% endcomment %}
@@ -27,7 +27,7 @@
     <![endif]-->
 
     <!-- CSS Reset : BEGIN -->
-    <style>
+    <style type="text/css" nonce="{{ m.req.csp_nonce }}">
 
         /* What it does: Tells the email client that only light styles are provided but the client can transform them to dark. A duplicate of meta color-scheme meta tag above. */
         :root {
@@ -144,7 +144,7 @@
     <!-- CSS Reset : END -->
 
     <!-- Progressive Enhancements : BEGIN -->
-    <style>
+    <style type="text/css" nonce="{{ m.req.csp_nonce }}">
 
         /* What it does: Hover styles for buttons */
         .button-td,
@@ -172,12 +172,12 @@
 
 </head>
 {% comment %}
-    The email background color (#222222) is defined in three places:
+    The email background color (#ffffff) is defined in three places:
     1. body tag: for most email clients
     2. center tag: for Gmail and Inbox mobile apps and web versions of Gmail, GSuite, Inbox, Yahoo, AOL, Libero, Comcast, freenet, Mail.ru, Orange.fr
     3. mso conditional: For Windows 10 Mail
 {% endcomment %}
-{% with bgcolor|default:"#222222" as bgcolor %}
+{% with bgcolor|default:"#ffffff" as bgcolor %}
 <body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: {{ bgcolor }};">
     <center role="article" aria-roledescription="email" lang="en" style="width: 100%; background-color: {{ bgcolor }};">
     <!--[if mso | IE]>

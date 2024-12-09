@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell
-%%
+%% @copyright 2009-2024 Marc Worrell
 %% @doc This server will install the database when started. It will always return ignore to the supervisor.
 %% This server should be started after the database pool but before any database queries will be done.
+%% @end
 
-%% Copyright 2009-2021 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -67,7 +67,13 @@ handle_info(install_check, State) ->
         ok ->
             ok = z_site_sup:install_done(State#state.site),
             {noreply, State, hibernate};
-        {error, _} ->
+        {error, Reason} ->
+            ?LOG_EMERGENCY(#{
+                in => zotonic_core,
+                text => <<"Site install check failed">>,
+                result => error,
+                reason => Reason
+            }),
             {stop, installfail, State}
     end.
 
@@ -83,7 +89,7 @@ terminate(_Reason, _State) ->
 %%====================================================================
 
 %% Check if the config table exists, if so then assume that all is ok
--spec install_check( proplists:list() ) -> ok | {error, nodbinstall | database | term()}.
+-spec install_check( proplists:proplist() ) -> ok | {error, nodbinstall | database | term()}.
 install_check(SiteProps) ->
     {site, Site} = proplists:lookup(site, SiteProps),
     logger:set_process_metadata(#{
@@ -299,6 +305,9 @@ upgrade(C, Database, Schema) ->
     % 0.22.0
     ok = add_edge_log_details(C, Database, Schema),
 
+    % 0.82
+    ok = check_category_id_key(C, Database, Schema),
+
     % 1.0
     ok = set_default_visible_for(C, Database, Schema),
     ok = drop_persist(C, Database, Schema),
@@ -309,6 +318,10 @@ upgrade(C, Database, Schema) ->
     ok = identity_expires(C, Database, Schema),
     ok = rsc_unfindable(C, Database, Schema),
     ok = identity_rsc_id_type_key_constraint(C, Database, Schema),
+    ok = rsc_pivot_log(C, Database, Schema),
+    ok = medium_size_bigint(C, Database, Schema),
+    ok = media_frame_count(C, Database, Schema),
+    ok = identity_log(C, Database, Schema),
     ok.
 
 
@@ -351,7 +364,7 @@ drop_persist(C, Database, Schema) ->
             case has_table(C, "comment", Database, Schema) of
                 true ->
                     {ok, _, _} = epgsql:squery(C, "alter table comment drop constraint if exists fk_comment_persistent_id"),
-                    {ok, _, _} = epgsql:squery(C, "alter index fki_comment_persistent_id rename to comment_persistent_id_key"),
+                    {ok, _, _} = epgsql:squery(C, "alter index if exists fki_comment_persistent_id rename to comment_persistent_id_key"),
                     ok;
                 false ->
                     ok
@@ -785,13 +798,13 @@ key_changes_v1_0(C, Database, Schema) ->
                     ON UPDATE CASCADE ON DELETE RESTRICT
             "),
 
-            {ok, [], []} = epgsql:squery(C, "CREATE INDEX fki_rsc_category_id ON rsc (category_id)"),
-            {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_modified_category_nr_key ON rsc (modified, pivot_category_nr)"),
-            {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_created_category_nr_key ON rsc (created, pivot_category_nr)"),
-            {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_pivot_date_start_category_nr_key ON rsc (pivot_date_start, pivot_category_nr)"),
-            {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_pivot_date_end_category_nr_key ON rsc (pivot_date_end, pivot_category_nr)"),
-            {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_publication_start_category_nr_key ON rsc (publication_start, pivot_category_nr)"),
-            {ok, [], []} = epgsql:squery(C, "CREATE INDEX rsc_publication_end_category_nr_key ON rsc (publication_end, pivot_category_nr)")
+            {ok, [], []} = epgsql:squery(C, "CREATE INDEX IF NOT EXISTS fki_rsc_category_id ON rsc (category_id)"),
+            {ok, [], []} = epgsql:squery(C, "CREATE INDEX IF NOT EXISTS rsc_modified_category_nr_key ON rsc (modified, pivot_category_nr)"),
+            {ok, [], []} = epgsql:squery(C, "CREATE INDEX IF NOT EXISTS rsc_created_category_nr_key ON rsc (created, pivot_category_nr)"),
+            {ok, [], []} = epgsql:squery(C, "CREATE INDEX IF NOT EXISTS rsc_pivot_date_start_category_nr_key ON rsc (pivot_date_start, pivot_category_nr)"),
+            {ok, [], []} = epgsql:squery(C, "CREATE INDEX IF NOT EXISTS rsc_pivot_date_end_category_nr_key ON rsc (pivot_date_end, pivot_category_nr)"),
+            {ok, [], []} = epgsql:squery(C, "CREATE INDEX IF NOT EXISTS rsc_publication_start_category_nr_key ON rsc (publication_start, pivot_category_nr)"),
+            {ok, [], []} = epgsql:squery(C, "CREATE INDEX IF NOT EXISTS rsc_publication_end_category_nr_key ON rsc (publication_end, pivot_category_nr)")
     end,
     ok.
 
@@ -916,11 +929,12 @@ rsc_unfindable(C, Database, Schema) ->
             ok
     end.
 
+
 identity_rsc_id_type_key_constraint(C, Database, Schema) ->
     case has_constraint(C, "identity", "identity_rsc_id_type_key_unique", Database, Schema) of
         true ->
             ok;
-        false ->
+        false
             ?LOG_NOTICE(#{
                 text => <<"Upgrade: adding rsc_id, type and key unique constraint">>,
                 in => zotonic_core,
@@ -938,4 +952,72 @@ identity_rsc_id_type_key_constraint(C, Database, Schema) ->
                                              UNIQUE (rsc_id, type, key)"),
             ok
     end.
+                                                           
+media_frame_count(C, Database, Schema) ->
+    case has_column(C, "medium", "frame_count", Database, Schema) of
+        true ->
+            ok;
+        false ->
+            ?LOG_NOTICE(#{
+                text => <<"Upgrade: adding frame_count column to medium">>,
+                in => zotonic_core,
+                database => Database,
+                schema => Schema,
+                table => rsc
+            }),
+            {ok, [], []} = epgsql:squery(C,
+                                    "alter table medium "
+                                    "add column frame_count int"),
+            ok
+    end.
 
+rsc_pivot_log(C, Database, Schema) ->
+    case has_table(C, "rsc_pivot_log", Database, Schema) of
+        false ->
+            {ok,[],[]} = epgsql:squery(C, z_install:rsc_pivot_log_table()),
+            {ok,[],[]} = epgsql:squery(C, z_install:rsc_pivot_log_index_1()),
+            {ok,[],[]} = epgsql:squery(C, z_install:rsc_pivot_log_index_2()),
+            {ok,[],[]} = epgsql:squery(C, z_install:rsc_pivot_log_function()),
+            {ok,[],[]} = epgsql:squery(C, z_install:rsc_pivot_log_trigger()),
+
+            {ok, _} = epgsql:squery(C, "
+                            insert into rsc_pivot_log (rsc_id, due, is_update)
+                            select rsc_id, coalesce(due, now()), is_update
+                            from rsc_pivot_queue
+                            "),
+            epgsql:squery(C, "drop trigger if exists rsc_update_queue_trigger on rsc cascade"),
+            epgsql:squery(C, "drop function if exists rsc_pivot_update"),
+            epgsql:squery(C, "drop table if exists rsc_pivot_queue cascade"),
+            ok;
+        true ->
+            ok
+    end.
+
+identity_log(C, Database, Schema) ->
+    case has_table(C, "identity_log", Database, Schema) of
+        false ->
+            SqlList = z_install:identity_log_table(),
+            lists:foreach(
+                fun(Sql) ->
+                    {ok, [], []} = epgsql:squery(C, Sql)
+                end,
+                SqlList);
+        true ->
+            ok
+    end.
+
+check_category_id_key(C, _Database, _Schema) ->
+    {ok, [], []} = epgsql:squery(
+        C,
+        "CREATE INDEX IF NOT EXISTS fki_rsc_category_id ON rsc (category_id)"
+    ),
+    ok.
+
+medium_size_bigint(C, Database, Schema) ->
+    case get_column_type(C, "medium", "size", Database, Schema) of
+        <<"bigint">> ->
+            ok;
+        _ ->
+            {ok,[],[]} = epgsql:squery(C, "alter table medium alter column size type bigint"),
+            ok
+    end.

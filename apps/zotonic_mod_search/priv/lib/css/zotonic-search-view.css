@@ -36,6 +36,11 @@ limitations under the License.
   border-top: none;
   cursor: pointer;
 }
+.search-view-results li.list-header {
+  padding: 10px;
+  font-weight: bold;
+  color: #ccc;
+}
 .search-view-results li .list-item {
   display: grid;
   grid-template-columns: 3.8rem 1fr minmax(2rem, auto);

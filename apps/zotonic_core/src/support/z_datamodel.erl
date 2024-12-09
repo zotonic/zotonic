@@ -1,9 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2009-2022 Arjan Scherpenisse
+%% @copyright 2009-2023 Arjan Scherpenisse
 %% @doc Installing parts of the zotonic datamodel. Installs
 %% predicates, categories and default resources.
 
-%% Copyright 2009-2022 Arjan Scherpenisse
+%% Copyright 2009-2023 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -96,16 +96,26 @@ manage_medium(Module, {Name, Filename, Props}, Options, Context) when is_list(Pr
 manage_medium(Module, {Name, Filename, Props}, Options, Context) ->
     case manage_resource(Module, {Name, media, Props}, Options, Context) of
         ok ->
-            ok;
+            Id = m_rsc:rid(Name, Context),
+            case m_media:get(Id, Context) of
+                undefined ->
+                    insert_medium(Id, Filename, Context);
+                _Medium ->
+                    ok
+            end;
         {ok, Id} ->
-            case is_http_url(Filename) of
-                true ->
-                    z_media_import:update(Id, Filename, Context);
-                false ->
-                    m_media:replace_file(path(Filename, Context), Id, Context)
-            end,
-            {ok, Id}
+            insert_medium(Id, Filename, Context)
     end.
+
+insert_medium(Id, Filename, Context) ->
+    case is_http_url(Filename) of
+        true ->
+            z_media_import:update(Id, Filename, Context);
+        false ->
+            m_media:replace_file(path(Filename, Context), Id, Context)
+    end,
+    {ok, Id}.
+
 
 manage_category(Module, {Name, ParentCategory, Props}, Options, Context) when is_list(Props) ->
     manage_category(Module, {Name, ParentCategory, z_props:from_props(Props)}, Options, Context);
@@ -124,7 +134,9 @@ manage_category(Module, {Name, ParentCategory, Props}, Options, Context) ->
                         _ ->
                             throw({error, {nonexisting_parent_category, ParentCategory}})
                     end
-            end
+            end;
+        {error, _} = Error ->
+            Error
     end.
 
 manage_predicate(Module, {Name, Uri, Props, ValidFor}, Options, Context) when is_list(Props) ->
@@ -141,7 +153,9 @@ manage_predicate(Module, {Name, Props, ValidFor}, Options, Context) ->
             ok;
         {ok, Id} ->
             ok = manage_predicate_validfor(Id, ValidFor, Options, Context),
-            {ok, Id}
+            {ok, Id};
+        {error, _} = Error ->
+            Error
     end.
 
 
@@ -202,20 +216,34 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
                         category => Category,
                         name => Name
                     }),
-                    {ok, Id} = m_rsc_update:update(insert_rsc, Props5, [{is_import, true}], Context),
-                    case maps:get(<<"media_url">>, Props5, undefined) of
-                        undefined -> nop;
-                        <<>> -> nop;
-                        Url ->
-                            m_media:replace_url(Url, Id, [], Context)
-                    end,
-                    case maps:get(<<"media_file">>, Props5, undefined) of
-                        undefined -> nop;
-                        <<>> -> nop;
-                        File ->
-                            m_media:replace_file(path(File, Context), Id, Context)
-                    end,
-                    {ok, Id}
+                    case m_rsc_update:update(insert_rsc, Props5, [{is_import, true}], Context) of
+                        {ok, Id} ->
+                            case maps:get(<<"media_url">>, Props5, undefined) of
+                                undefined -> nop;
+                                <<>> -> nop;
+                                Url ->
+                                    m_media:replace_url(Url, Id, [], Context)
+                            end,
+                            case maps:get(<<"media_file">>, Props5, undefined) of
+                                undefined -> nop;
+                                <<>> -> nop;
+                                File ->
+                                    m_media:replace_file(path(File, Context), Id, Context)
+                            end,
+                            {ok, Id};
+                        {error, Reason} = Error ->
+                            ?LOG_ERROR(#{
+                                in => zotonic_core,
+                                text => <<"Error creating new managed resource. Not installing.">>,
+                                result => error,
+                                reason => Reason,
+                                module => Module,
+                                category => Category,
+                                name => Name,
+                                page_path => maps:get(<<"page_path">>, Props5, undefined)
+                            }),
+                            Error
+                    end
             end;
         {error, _} ->
             ?LOG_WARNING(#{

@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2021 Marc Worrell
+%% @copyright 2021-2024 Marc Worrell
 %% @doc Process buffering uploaded files till they are complete.
+%% @end
 
-%% Copyright 2021 Marc Worrell
+%% Copyright 2021-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,6 +26,7 @@
 
 -export([
     start_link/3,
+    start_link/4,
     stop/1,
     status/1,
     exists/1,
@@ -46,6 +48,7 @@
 -record(state, {
     name :: binary(),
     user_id :: m_rsc:resource_id() | undefined,
+    start_msec :: non_neg_integer(),
 
     filename :: binary(),
     size :: non_neg_integer(),
@@ -65,9 +68,64 @@
 %% ------------------------------------------------------------------
 
 %% @doc Create a new process managing a file upload.
--spec start_link( file:filename_all(), pos_integer(), z:context() ) -> {ok, pid()} | {error, term()}.
+-spec start_link(Filename, Size, Context) -> {ok, Uploader} | {error, Reason} when
+    Filename :: file:filename_all(),
+    Size :: non_neg_integer(),
+    Context :: z:context(),
+    Uploader :: pid(),
+    Reason :: term().
 start_link(Filename, Size, Context) ->
-    gen_server:start_link(?MODULE, [Filename, Size, Context], []).
+    start_link(z_ids:id(), Filename, Size, Context).
+
+%% @doc Create a new process managing a file upload.
+-spec start_link(Name, Filename, Size, Context) -> {ok, Uploader} | {error, Reason} when
+    Name :: binary(),
+    Filename :: file:filename_all(),
+    Size :: non_neg_integer(),
+    Context :: z:context(),
+    Uploader :: pid(),
+    Reason :: term().
+start_link(_Name, _Filename, Size, _Context) when Size =< 0 ->
+    {error, empty};
+start_link(Name, Filename, Size, Context) ->
+    case gen_server:start_link(?MODULE, [Name, Filename, Size, Context], []) of
+        {ok, Pid} ->
+            case gen_server:call(Pid, pre_alloc, ?TIMEOUT) of
+                ok ->
+                    ?LOG_INFO(#{
+                        in => zotonic_mod_fileuploader,
+                        text => <<"Fileuploader started">>,
+                        result => ok,
+                        filename => Filename,
+                        size => Size,
+                        name => Name
+                    }),
+                    {ok, Pid};
+                {error, Reason} = Error ->
+                    ?LOG_ERROR(#{
+                        in => zotonic_mod_fileuploader,
+                        text => <<"Fileuploader error pre-allocating file">>,
+                        result => error,
+                        reason => Reason,
+                        filename => Filename,
+                        size => Size,
+                        name => Name
+                    }),
+                    gen_server:cast(Pid, stop),
+                    Error
+            end;
+        {error, Reason} = Error ->
+            ?LOG_ERROR(#{
+                in => zotonic_mod_fileuploader,
+                text => <<"Fileuploader error starting process">>,
+                result => error,
+                reason => Reason,
+                filename => Filename,
+                size => Size,
+                name => Name
+            }),
+            Error
+    end.
 
 
 %% @doc Return the topics and status for the file upload.
@@ -113,13 +171,13 @@ upload(Name, Offset, Data) when is_binary(Name) ->
 %% gen_server Function Definitions
 %% ------------------------------------------------------------------
 
-init([Filename, Size, Context]) ->
-    Name = z_ids:id(),
+init([Name, Filename, Size, Context]) ->
     gproc:add_local_name({?MODULE, Name}),
     {ok, {_TmpPid, TmpFile}} = z_tempfile:monitored_new(),
     {ok, Fd} = file:open(TmpFile, [ write, binary ]),
     {ok, #state{
         name = Name,
+        start_msec = os:system_time(millisecond),
         user_id = z_acl:user(Context),
         filename = Filename,
         size = Size,
@@ -129,6 +187,16 @@ init([Filename, Size, Context]) ->
         blocks = []
     }, ?TIMEOUT}.
 
+
+handle_call(pre_alloc, _From, #state{ fd = Fd, size = Size } = State) ->
+    case pre_alloc(Fd, Size) of
+        ok ->
+            {reply, ok, State, ?TIMEOUT};
+        {error, _} = Error ->
+            file:position(Fd, 0),
+            file:truncate(Fd),
+            {reply, Error, State, ?TIMEOUT}
+    end;
 handle_call(status, _From, State) ->
     {reply, {ok, state_status(State)}, State, ?TIMEOUT};
 handle_call({upload, Offset, _Data}, _From, State) when Offset < 0 ->
@@ -148,11 +216,24 @@ handle_call({upload, Offset, Data}, _From, State) ->
             blocks = Blocks1,
             received = count_size(Blocks1, 0)
         },
+        if
+            State1#state.size =:= State1#state.received ->
+                ?LOG_INFO(#{
+                    in => zotonic_mod_fileuploader,
+                    text => <<"Upload complete">>,
+                    result => ok,
+                    filename => State1#state.filename,
+                    size => State1#state.size,
+                    speed_kbs => speed_kbs(State1#state.start_msec, State1#state.size)
+                });
+            true ->
+                ok
+        end,
         {reply, {ok, state_status(State1)}, State1, ?TIMEOUT}
     catch Type:Error ->
         ?LOG_ERROR(#{
-            text => <<"fileuploader: error uploading to file">>,
             in => zotonic_mod_fileuploader,
+            text => <<"fileuploader: error uploading to file">>,
             bytes => size(Data),
             filename => State#state.filename,
             size => State#state.size,
@@ -174,6 +255,33 @@ handle_info(timeout, State) ->
 %% ------------------------------------------------------------------
 %% Support functions
 %% ------------------------------------------------------------------
+
+speed_kbs(Start, Bytes) ->
+    case os:system_time(millisecond) - Start of
+        0 -> 0;
+        Delta -> erlang:round((Bytes / Delta) / 1024 * 1000)
+    end.
+
+-define(PRE_ALLOC_CHUNK, 1024*1024).
+
+%% @doc Fill the temporary file so that the needed space is allocated and we
+%% are sure that the file system has enough space for the upload.
+pre_alloc(_Fd, 0) ->
+    ok;
+pre_alloc(Fd, Size) when Size =< ?PRE_ALLOC_CHUNK ->
+    Bytes = bytes(Size),
+    file:write(Fd, Bytes);
+pre_alloc(Fd, Size) ->
+    Bytes = bytes(?PRE_ALLOC_CHUNK),
+    case file:write(Fd, Bytes) of
+        ok -> pre_alloc(Fd, Size - ?PRE_ALLOC_CHUNK);
+        {error, _} = Error -> Error
+    end.
+
+bytes(Size) ->
+    Bits = Size * 8,
+    <<0:Bits/unsigned>>.
+
 
 %% @doc Return the status of this uploader.
 state_status(State) ->

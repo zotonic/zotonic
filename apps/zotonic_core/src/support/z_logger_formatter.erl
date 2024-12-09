@@ -2,14 +2,11 @@
 %%% This is the main module that exposes custom formatting to the OTP
 %%% logger library (part of the `kernel' application since OTP-21).
 %%%
-%%% The module honors the standard configuration of the kernel's default
-%%% logger formatter regarding: max depth, templates.
-%%%
 %%% Adapted from logjam, added pretty print of reports and stack traces.
 %%% @end
 
 %% Copyright 2019-2021 LFE Exchange https://github.com/lfex/logjam/
-%% Copyright 2022 Marc Worrell
+%% Copyright 2022-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,7 +28,7 @@
     apply_defaults/1, format_log/4, format_to_binary/2, string_to_binary/1
     ]).
 
--export([format_msg/2, to_string/2, pretty_stack/2]).
+-export([format_msg/2, to_string/2, pretty_stack/2, truncate_value/1]).
 
 -ifdef(TEST).
 -endif.
@@ -60,6 +57,11 @@
 -type template() :: [metakey() | {metakey(), template(), template()} | {atom()} | string()].
 -type metakey() :: atom() | [atom()].
 
+-define(TRUNCATE_DEPTH, 5).
+-define(TRUNCATE_LIST, 6).
+-define(TRUNCATE_STRING, 1000).
+
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 
 %%====================================================================
@@ -70,12 +72,45 @@
       Config :: logger:formatter_config().
 format(Map = #{msg := {report, #{label := {error_logger, _}, format := Format, args := Terms}}}, UsrConfig) ->
     Map1 = Map#{
-        msg := {
-            report,
-            #{ text => format_to_binary(Format, Terms) }
-        }
+        msg := {report, #{ text => format_to_binary(Format, Terms) }}
     },
     format(Map1, UsrConfig);
+format(Map = #{msg := {report, #{label := {proc_lib, crash}, report := [Info, Linked] }}}, UsrConfig) ->
+    Report = case maps:from_list(Info) of
+        #{
+            error_info := {Class, {badmatch, Value}, Stack}
+        } = InfoMap ->
+            #{
+                text => <<"Badmatch">>,
+                linked => Linked,
+                result => Class,
+                reason => badmatch,
+                match => truncate_value(Value),
+                stack => Stack,
+                proc => maps:without([ error_info, dictionary ], InfoMap)
+            };
+        #{
+            error_info := {Class, Reason, Stack}
+        } = InfoMap ->
+            #{
+                text => case Reason of
+                    undef -> <<"Undefined function">>;
+                    _ -> <<"Error in process">>
+                end,
+                linked => Linked,
+                result => Class,
+                reason => truncate_value(Reason),
+                stack => Stack,
+                proc => maps:without([ error_info, dictionary ], InfoMap)
+            };
+        InfoMap ->
+            #{
+                text => <<"Error in process">>,
+                linked => Linked,
+                proc => truncate_value(InfoMap)
+            }
+    end,
+    format(Map#{ msg => {report, Report} }, UsrConfig);
 format(#{level:=Level, msg:={report, Msg}, meta:=Meta}, UsrConfig) when is_map(Msg) ->
     Config = apply_defaults(UsrConfig),
     NewMeta = maps:merge(Meta, #{level => Level
@@ -87,24 +122,78 @@ format(Map = #{msg := {report, KeyVal}}, UsrConfig) when is_list(KeyVal) ->
     format(Map#{msg := {report, maps:from_list(KeyVal)}}, UsrConfig);
 format(Map = #{msg := {string, String}}, UsrConfig) ->
     Map1 = Map#{
-        msg => {
-            report,
-            #{ text => string_to_binary(String) }
-        }
+        msg => {report, #{ text => string_to_binary(String) }}
     },
     format(Map1, UsrConfig);
-format(Map = #{msg := {Format, Terms}}, UsrConfig) ->
+format(Map = #{msg := {"Error in process ~p on node ~p with exit value:~n~p~n", Terms}}, UsrConfig) ->
+    [ Pid, Node, ExitValue ] = Terms,
+    Map1 = case ExitValue of
+        {undef, [ {M, F, Args, _Pos} | _ ] = Stack} when is_list(Args) ->
+            Map#{
+                msg => {report, #{
+                    text => <<"Undefined function">>,
+                    pid => Pid,
+                    node => Node,
+                    result => error,
+                    reason => undef,
+                    module => M,
+                    function => F,
+                    arity => length(Args),
+                    stack => Stack
+                }}
+            };
+        {{Reason, Value}, [ {M, F, _Arity, Pos} | _ ] = Stack}  when is_atom(M), is_atom(F), is_list(Pos) ->
+            Map#{
+                msg => {report, #{
+                    text => <<"Error in process, exit">>,
+                    pid => Pid,
+                    node => Node,
+                    result => error,
+                    reason => Reason,
+                    value => truncate_value(Value),
+                    stack => Stack
+                }}
+            };
+        {Term, [ {M, F, _Arity, Pos} | _ ] = Stack} when is_atom(M), is_atom(F), is_list(Pos) ->
+            Map#{
+                msg => {report, #{
+                    text => <<"Error in process, exit">>,
+                    pid => Pid,
+                    node => Node,
+                    result => error,
+                    reason => undef,
+                    exit_value => truncate_value(Term),
+                    stack => Stack
+                }}
+            };
+        _ ->
+            Map#{
+                msg => {report, #{
+                    text => <<"Error in process, exit">>,
+                    pid => Pid,
+                    node => Node,
+                    result => error,
+                    reason => undef,
+                    exit_value => truncate_value(ExitValue)
+                }}
+            }
+    end,
+    format(Map1, UsrConfig);
+format(Map = #{msg := {Format, Terms}}, UsrConfig) when is_list(Format), is_list(Terms) ->
     Map1 = Map#{
-        msg := {
-            report,
-            #{ text => format_to_binary(Format, Terms) }
-        }
+        msg := {report, #{ text => format_to_binary(Format, Terms) }}
+    },
+    format(Map1, UsrConfig);
+format(Map = #{msg := Msg}, UsrConfig) ->
+    Map1 = Map#{
+        msg := {report, #{ msg => Msg }}
     },
     format(Map1, UsrConfig).
 
 %%====================================================================
 %% Internal functions
 %%====================================================================
+
 apply_defaults(UserConfig) ->
     DefaultConfig = #{
         prettify => true,
@@ -420,11 +509,11 @@ escape(Str) ->
     case needs_escape(Str) of
         false ->
             case needs_quoting(Str) of
-                true -> [$", Str, $"];
+                true -> [$", maybe_truncate(Str), $"];
                 false -> Str
             end;
         true ->
-            [$", do_escape(Str), $"]
+            [$", maybe_truncate(do_escape(Str)), $"]
     end.
 
 needs_quoting(Str) ->
@@ -456,11 +545,24 @@ string_to_binary(String) ->
     %% Remove any ANSI colors; this is intended for inputs that have ANSI
     %% colors added to them, e.g., by another logging library/framework.
     T1 = re:replace(String, "\e\[[0-9;]*m", ""),
-    unicode:characters_to_binary(T1).
+    maybe_truncate(unicode:characters_to_binary(T1)).
 
 format_to_binary(Format, Terms) ->
-    String = io_lib:format(Format, Terms),
-    string_to_binary(String).
+    try
+        String = io_lib:format(Format, Terms),
+        string_to_binary(String)
+    catch
+        _:_ ->
+            String1 = io_lib:format("~tp", [ {Format, Terms} ]),
+            string_to_binary(String1)
+    end.
+
+maybe_truncate(L) when is_list(L), length(L) > ?TRUNCATE_STRING ->
+    z_string:truncatechars(unicode:characters_to_binary(L), ?TRUNCATE_STRING, <<"...">>);
+maybe_truncate(B) when size(B) > ?TRUNCATE_STRING ->
+    z_string:truncatechars(B, ?TRUNCATE_STRING, <<"...">>);
+maybe_truncate(B) ->
+    B.
 
 
 %% ================ pretty print gen_server reason ==================
@@ -493,17 +595,126 @@ pretty_error(Error, Config) ->
 
 pretty_stack(Stack, Config) ->
     lists:map(
-        fun({M, F, Arity, Pos}) ->
-            [
-                "\n     ",
-                maybe_color(colored_mfa, Config),
-                io_lib:format("~ts:~ts/~p", [ bin(M), bin(F), Arity ]),
-                maybe_color(?COLOR_END, Config),
-                " @ ",
-                pretty_pos(Pos, Config)
-            ]
+        fun
+            ({M, F, Args, Pos}) when is_list(Args) ->
+                [
+                    "\n     ",
+                    maybe_color(colored_mfa, Config),
+                    io_lib:format("~ts:~ts(", [ bin(M), bin(F) ]),
+                    case truncate_value(Args) of
+                        [ A | As ] ->
+                            [
+                                io_lib:format("~tp", [ A ]),
+                                lists:map(
+                                    fun(V) ->
+                                        io_lib:format(", ~tp", [ V ])
+                                    end,
+                                    As)
+                            ];
+                        [] ->
+                            ""
+                    end,
+                    ")",
+                    maybe_color(?COLOR_END, Config),
+                    " @ ",
+                    pretty_pos(Pos, Config)
+                ];
+            ({M, F, Arity, Pos}) ->
+                [
+                    "\n     ",
+                    maybe_color(colored_mfa, Config),
+                    io_lib:format("~ts:~ts/~p", [ bin(M), bin(F), Arity ]),
+                    maybe_color(?COLOR_END, Config),
+                    " @ ",
+                    pretty_pos(Pos, Config)
+                ]
         end,
         Stack).
+
+%% todo: check to see if io_lib:limit_term/2 can be used.
+truncate_value(V) ->
+    truncate_value(V, 0).
+
+truncate_value(Args, 0) when is_list(Args) ->
+    lists:map(fun(A) -> truncate_value(A, 1) end, Args);
+truncate_value(Args, Level) when is_list(Args) ->
+    L1 = truncate_list(Args, Level),
+    lists:map(fun(A) -> truncate_value(A, Level+1) end, L1);
+truncate_value(Args, Level) when is_map(Args), Level > ?TRUNCATE_DEPTH ->
+    #{ '...' => '...' };
+truncate_value(Args, Level) when is_map(Args) ->
+    maps:fold(
+        fun(K, V, Acc) ->
+            Acc#{ K => truncate_value(V, Level+1) }
+        end,
+        #{},
+        Args);
+truncate_value(#context{} = Context, Level) ->
+    truncate_context(Context, Level);
+truncate_value(T, Level) when is_tuple(T) ->
+    L = tuple_to_list(T),
+    L1 = lists:map(fun(V) -> truncate_value(V, Level+1) end, L),
+    list_to_tuple(L1);
+truncate_value(L, Level) when is_list(L) ->
+    L1 = truncate_list(L, Level),
+    lists:map(fun(V) -> truncate_value(V, Level+1) end, L1);
+truncate_value(V, _Level) ->
+    V.
+
+truncate_list(_L, Level) when Level > ?TRUNCATE_DEPTH ->
+    [ '...' ];
+truncate_list(L, _Level) ->
+    case length(L) > ?TRUNCATE_LIST of
+        true ->
+            {L1, _} = lists:split(?TRUNCATE_LIST, L),
+            L1 ++ [ '...' ];
+        false ->
+            L
+    end.
+
+truncate_context(#context{ site = Site }, Level) when Level > 2 ->
+    {context, #{ site => Site }};
+truncate_context(#context{} = Context, Level) ->
+    #context{
+        site = Site,
+        client_id = ClientId,
+        routing_id = RoutingId,
+        user_id = UserId,
+        acl = Acl,
+        acl_is_read_only = AclIsReadOnly,
+        language = Language,
+        tz = Tz,
+        controller_module = ControllerModule,
+        props = Props,
+        cowreq = Req
+    } = Context,
+    SessionId = case z_context:session_id(Context) of
+        {ok, SId} -> SId;
+        {error, _} -> undefined
+    end,
+    Map = #{
+        site => Site,
+        client_id => ClientId,
+        routing_id => RoutingId,
+        session_id => SessionId,
+        user_id => UserId,
+        acl => Acl,
+        acl_is_read_only => AclIsReadOnly,
+        language => Language,
+        tz => Tz,
+        controller_module => ControllerModule,
+        props => Props,
+        cowreq => truncate_cowreq(Req)
+    },
+    {context, truncate_value(Map, Level+1)}.
+
+truncate_cowreq(Req) when is_map(Req) ->
+    maps:with([
+            pid, port, scheme, version, path, host, peer, bindings, headers,
+            ref, method, qs, body_length, has_body, sock, resp_headers
+        ], Req);
+truncate_cowreq(Req) ->
+    Req.
 
 pretty_pos(Pos, Config) ->
     [

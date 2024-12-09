@@ -19,7 +19,7 @@ Maas-Maarten Zeeman (1):
 Marc Worrell (9):
 
  * mod_seo: Fix a problem with Google Analytics settings.
- * mod_authentication: check if user has an username on expired status.
+ * mod_authentication: check if user has a username on expired status.
  * mod_base: better activity tracking
  * mod_editor_tinymce: fix problem with tinymce init in dialog on firefox
  * mod_acl_user_groups: fix a problem where the ACL settings for file-types were not visible.

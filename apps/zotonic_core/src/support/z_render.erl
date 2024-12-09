@@ -1,14 +1,14 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @author Rusty Klophaus
-%% @copyright 2009-2021 Marc Worrell
-%%
+%% @copyright 2008-2009 Rusty Klophaus, 2009-2023 Marc Worrell
 %% @doc Render routines using wires and actions.
 %%      Based on Nitrogen, which is copyright (c) 2008-2009 Rusty Klophaus
+%% @end
 
 %% This is the MIT license.
 %%
 %% Copyright (c) 2008-2009 Rusty Klophaus
-%% Copyright (c) 2009-2021 Marc Worrell
+%% Copyright (c) 2009-2024 Marc Worrell
 %%
 %% Permission is hereby granted, free of charge, to any person obtaining a copy
 %% of this software and associated documentation files (the "Software"), to deal
@@ -98,6 +98,7 @@
 
     dialog/4,
     dialog_close/1,
+    dialog_close/2,
 
     overlay/3,
     overlay_close/1,
@@ -146,14 +147,14 @@
 -type html_element_id() :: binary() | string() | undefined.
 -type render_state() :: #render_state{}.
 -type ctx_rs() :: render_state() | z:context().
+-type action() :: {atom(), proplists:proplist()}.
 
 -export_type([
     render_state/0,
     html_element_id/0,
-    ctx_rs/0
+    ctx_rs/0,
+    action/0
 ]).
-
-
 
 
 %% @doc Replace the placeholders with their rendered content and collect all scripts from the mixed html and context.
@@ -217,7 +218,10 @@ output1([C|Rest], RenderState, Context, Acc) ->
 
 
 %% @doc Make the script that is included in the page and initializes all wires
--spec render_script( list(), z:context() ) -> iolist().
+-spec render_script(TagArgs, Context) -> Script when
+    TagArgs :: proplists:proplist(),
+    Context :: z:context(),
+    Script :: iodata().
 render_script(Args, Context) ->
     NoStartup = z_convert:to_bool(z_utils:get_value(nostartup, Args, false)),
     % NoStream = z_convert:to_bool(z_utils:get_value(nostream, Args, false)),
@@ -235,6 +239,7 @@ render_script(Args, Context) ->
             CspNonce = z_context:csp_nonce(Context),
             [
                 <<"\n\n<script type='text/javascript' nonce='">>, CspNonce, <<"'>\n">>,
+                <<"z_script_nonce = \'">>, z_utils:js_escape(CspNonce), "';\n",
                 <<"window.zotonicPageInit = function() {\n">>,
                         Script,
                 <<"\n};\n</script>\n">>
@@ -670,7 +675,11 @@ dialog(Title, Template, Vars, Context) ->
                 undefined -> Args3;
                 Center -> [{center, Center} | Args3]
             end,
-    wire({dialog, Args4}, Context1).
+    Args5 = case get_value(level, Vars) of
+                undefined -> Args4;
+                Level -> [{level, Level} | Args4]
+            end,
+    wire({dialog, Args5}, Context1).
 
 get_value(K, Map) when is_map(Map) ->
     maps:get(K, Map, undefined);
@@ -679,6 +688,9 @@ get_value(K, List) when is_list(List) ->
 
 dialog_close(Context) ->
     wire({dialog_close, []}, Context).
+
+dialog_close(Level, Context) ->
+    wire({dialog_close, [{level, Level}]}, Context).
 
 overlay(Template, Vars, Context) ->
     MixedHtml = z_template:render(Template, Vars, Context),
@@ -770,7 +782,7 @@ make_validation_postback(Validator, Args, Context) ->
 
 %% Add to the queue of wired actions. These will be rendered in get_script().
 
--spec wire(tuple() | [tuple()], ctx_rs()) -> ctx_rs().
+-spec wire(action() | [action()], ctx_rs()) -> ctx_rs().
 wire(Actions, Context) ->
     wire(<<>>, <<>>, Actions, Context).
 
@@ -882,6 +894,10 @@ merge_scripts(RS, Acc) ->
         render= combine1(Acc#render_state.render, RS#render_state.render)
     }.
 
+-spec add_content_script(Script, RenderState) -> NewRenderState when
+    Script :: iodata() | undefined,
+    RenderState :: #render_state{} | z:context(),
+    NewRenderState :: #render_state{} | z:context().
 add_content_script([], Context) -> Context;
 add_content_script(<<>>, Context) -> Context;
 add_content_script(undefined, Context) -> Context;
@@ -892,6 +908,10 @@ add_content_script(Script, Context) ->
     },
     set_render_state(RS1, Context).
 
+-spec add_script(Script, Context) -> NewContext when
+    Script :: iodata() | undefined,
+    Context :: z:context(),
+    NewContext :: z:context().
 add_script([], Context) -> Context;
 add_script(<<>>, Context) -> Context;
 add_script(undefined, Context) -> Context;

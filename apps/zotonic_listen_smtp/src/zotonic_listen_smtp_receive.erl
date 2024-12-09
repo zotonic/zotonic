@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2021 Marc Worrell
+%% @copyright 2011-2024 Marc Worrell
 %% @doc Handle received e-mail.
+%% @end
 
-%% Copyright 2011-2021 Marc Worrell
+%% Copyright 2011-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,34 +26,35 @@
 ]).
 
 -export([
+    parse_email/4,
     parse_file/1
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 %% @doc Handle a received e-mail
-received(Recipients, From, Peer, Reference, {Type, Subtype}, Headers, Params, Body, Data) ->
+received(Recipients, EnvelopFrom, Peer, Reference, {Type, Subtype}, Headers, Params, Body, Data) ->
     ParsedEmail = parse_email({Type, Subtype}, Headers, Params, Body),
     ParsedEmail1 = generate_text(generate_html(ParsedEmail)),
     ParsedEmail2 = ParsedEmail1#email{
         subject = sanitize_utf8(proplists:get_value(<<"Subject">>, Headers)),
         to = Recipients,
-        from = sanitize_utf8(From),
+        from = sanitize_utf8(EnvelopFrom),
         html = sanitize_utf8(ParsedEmail1#email.html),
         text = sanitize_utf8(ParsedEmail1#email.text)
     },
     lists:map(
         fun(Recipient) ->
-            received(
+            received_1(
                 Recipient, ParsedEmail2,
-                From, Peer, Reference,
+                Peer, Reference,
                 {Type, Subtype}, Headers, Params,
                 Body, Data)
         end,
         Recipients).
 
-received(Recipient, ParsedEmail,
-         From, Peer, Reference,
+received_1(Recipient, ParsedEmail,
+         Peer, Reference,
          {Type, Subtype}, Headers, Params,
          Body, Data) ->
     case get_site(Recipient) of
@@ -75,84 +77,116 @@ received(Recipient, ParsedEmail,
                         mailer_host = z_convert:ip_to_list(Peer),
                         message_nr = Reference,
                         envelop_to = Recipient,
-                        envelop_from = From,
+                        envelop_from = ParsedEmail#email.from,
                         props = [
                             {headers, Headers}
                         ]
                     }
                 },
                 Context),
-            Email = #email_received{
-                localpart = LocalPart,
-                localtags = LocalTags,
-                domain = Domain,
-                to = Recipient,
-                from = From,
-                reference = Reference,
-                email = ParsedEmail,
-                headers = lowercase_headers(Headers),
-                decoded = {Type, Subtype, Headers, Params, Body},
-                raw = Data
-            },
-            Email1 = Email#email_received{
-                    is_bulk = zotonic_listen_smtp_check:is_bulk(Email),
-                    is_auto = zotonic_listen_smtp_check:is_auto(Email)
-                  },
-            case z_notifier:first(Email1, Context) of
-                {ok, MsgId} when is_binary(MsgId) ->
-                    ?LOG_INFO(#{
-                        text => <<"SMTP received email handled">>,
-                        in => zotonic_listen_smtp,
-                        result => ok,
-                        recipient => Recipient,
-                        message_id => MsgId
-                    }),
-                    {ok, MsgId};
-                {ok, Other} ->
-                    ?LOG_INFO(#{
-                        text => <<"SMTP received email handled">>,
-                        in => zotonic_listen_smtp,
-                        result => ok,
-                        recipient => Recipient,
-                        message_id => Other
-                    }),
-                    {ok, undefined};
-                ok ->
-                    ?LOG_INFO(#{
-                        text => <<"SMTP received email handled">>,
-                        in => zotonic_listen_smtp,
-                        result => ok,
-                        recipient => Recipient,
-                        message_id => undefined
-                    }),
-                    {ok, undefined};
-                {error, Reason} = Error ->
-                    ?LOG_WARNING(#{
-                        text => <<"SMTP received email, handler error">>,
-                        in => zotonic_listen_smtp,
+            LHeaders = lowercase_headers(Headers),
+            case is_blocked(ParsedEmail#email.from, Context)
+                orelse is_blocked(proplists:get_value(<<"from">>, LHeaders), Context)
+                orelse is_blocked(proplists:get_value(<<"to">>, LHeaders), Context)
+            of
+                false ->
+                    Email = #email_received{
+                        localpart = LocalPart,
+                        localtags = LocalTags,
+                        domain = Domain,
+                        to = Recipient,
+                        from = ParsedEmail#email.from,
+                        reference = Reference,
+                        email = ParsedEmail,
+                        headers = LHeaders,
+                        decoded = {Type, Subtype, Headers, Params, Body},
+                        raw = Data
+                    },
+                    Email1 = Email#email_received{
+                            is_bulk = zotonic_listen_smtp_check:is_bulk(Email),
+                            is_auto = zotonic_listen_smtp_check:is_auto(Email)
+                          },
+                    case z_notifier:first(Email1, Context) of
+                        {ok, MsgId} when is_binary(MsgId) ->
+                            ?LOG_INFO(#{
+                                text => <<"SMTP received email handled">>,
+                                in => zotonic_listen_smtp,
+                                result => ok,
+                                recipient => Recipient,
+                                message_id => MsgId
+                            }),
+                            {ok, MsgId};
+                        {ok, Other} ->
+                            ?LOG_INFO(#{
+                                text => <<"SMTP received email handled">>,
+                                in => zotonic_listen_smtp,
+                                result => ok,
+                                recipient => Recipient,
+                                message_id => Other
+                            }),
+                            {ok, undefined};
+                        ok ->
+                            ?LOG_INFO(#{
+                                text => <<"SMTP received email handled">>,
+                                in => zotonic_listen_smtp,
+                                result => ok,
+                                recipient => Recipient,
+                                message_id => undefined
+                            }),
+                            {ok, undefined};
+                        {error, Reason} = Error ->
+                            ?LOG_WARNING(#{
+                                text => <<"SMTP received email, handler error">>,
+                                in => zotonic_listen_smtp,
+                                result => error,
+                                reason => Reason,
+                                recipient => Recipient
+                            }),
+                            Error;
+                        undefined ->
+                            ?LOG_WARNING(#{
+                                text => <<"SMTP received email, unhandled assuming unknown recipient">>,
+                                in => zotonic_listen_smtp,
+                                result => error,
+                                reason => unknown_recipient,
+                                recipient => Recipient
+                            }),
+                            {error, unknown_recipient};
+                        Other ->
+                            ?LOG_WARNING(#{
+                                text => <<"SMTP received email, unexpected return value">>,
+                                in => zotonic_listen_smtp,
+                                result => error,
+                                reason => Other,
+                                recipient => Recipient
+                            }),
+                            {ok, Other}
+                    end;
+                true ->
+                    ?LOG_NOTICE(#{
+                        text => <<"[smtp] Dropping email from blocked address">>,
+                        in => zotonic_core,
                         result => error,
-                        reason => Reason,
+                        reason => blocked,
+                        email => ParsedEmail#email.from,
                         recipient => Recipient
                     }),
-                    Error;
-                undefined ->
-                    ?LOG_WARNING(#{
-                        text => <<"SMTP received email, unhandled assuming unknown recipient">>,
-                        in => zotonic_listen_smtp,
-                        result => error,
-                        reason => unknown_recipient,
-                        recipient => Recipient
-                    }),
-                    {error, unknown_recipient};
-                Other ->
-                    ?LOG_WARNING(#{
-                        text => <<"SMTP received email, unexpected return value">>,
-                        in => zotonic_listen_smtp,
-                        result => error,
-                        reason => Other,
-                        recipient => Recipient
-                    }),
-                    {ok, Other}
+                    LogEmail = #log_email{
+                        severity = ?LOG_LEVEL_WARNING,
+                        mailer_status = blocked,
+                        mailer_message = <<"Sender blocked by Zotonic module (#email_is_blocked)">>,
+                        props = [
+                            {reason, sender_blocked},
+                            {headers, Headers}
+                        ],
+                        mailer_host = z_convert:ip_to_list(Peer),
+                        message_nr = Reference,
+                        envelop_to = Recipient,
+                        envelop_from = ParsedEmail#email.from
+                    },
+                    z_notifier:notify(#zlog{ props = LogEmail }, Context),
+                    % Silently ignore - do now warn sender
+                    {ok, undefined}
             end;
         {error, unknown_host} ->
             ?LOG_WARNING(#{
@@ -173,6 +207,22 @@ received(Recipient, ParsedEmail,
             }),
             {error, not_running}
     end.
+
+% @doc Check if we can receive an email from this address. If an email address is blocked
+% for sending, then we also block it for receiving email.
+-spec is_blocked(EmailAddress, Context) -> boolean() when
+    EmailAddress :: binary() | undefined,
+    Context :: z:context().
+is_blocked(undefined, _Context) ->
+    false;
+is_blocked(EmailAddress, Context) ->
+    {_Name, Email} = z_email:split_name_email(EmailAddress),
+    case z_notifier:first(#email_is_blocked{ recipient = Email }, Context) of
+        undefined -> false;
+        true -> true;
+        false -> false
+    end.
+
 
 -spec get_site( binary() ) ->
         {ok, {binary(), [ binary() ], binary(), atom()}}
@@ -204,10 +254,48 @@ sanitize_utf8(S) ->
 
 %% @doc Parse a file using the html/text parse routines. This is used for testing
 parse_file(Filename) ->
-    {ok, Data} = file:read_file(Filename),
-    {Type, Subtype, Headers, Params, Body} = mimemail:decode(Data),
-    parse_email({Type,Subtype}, Headers, Params, Body).
+    case file:read_file(Filename) of
+        {ok, Data} ->
+            case decode(Data) of
+                {ok, {Type, Subtype, Headers, Params, Body}} ->
+                    LHeaders = lowercase_headers(Headers),
+                    ParsedEmail = parse_email({Type,Subtype}, Headers, Params, Body),
+                    From = fix_email(proplists:get_value(<<"from">>, LHeaders)),
+                    To = fix_email(proplists:get_value(<<"to">>, LHeaders)),
+                    ParsedEmail1 = generate_text(generate_html(ParsedEmail)),
+                    ParsedEmail2 = ParsedEmail1#email{
+                         subject = sanitize_utf8(proplists:get_value(<<"Subject">>, Headers)),
+                         headers = LHeaders,
+                         to = To,
+                         body = Body,
+                         from = sanitize_utf8(From),
+                         html = sanitize_utf8(ParsedEmail1#email.html),
+                         text = sanitize_utf8(ParsedEmail1#email.text)
+                    },
+                    {ok, ParsedEmail2};
+                {error, _} = Error ->
+                    Error
+            end;
+        {error, _} = Error ->
+            Error
+    end.
 
+decode(Data) ->
+    try
+        {ok, mimemail:decode(Data)}
+    catch
+        Type:Reason ->
+            {error, {Type,Reason}}
+    end.
+
+fix_email(undefined) ->
+    <<"nobody@example.com">>;
+fix_email(Email) ->
+    % Fix illegal addresses like "k..allen@enron.com"
+    case binary:replace(Email, <<"..">>, <<".">>, [ global ]) of
+        Email -> Email;
+        E1 -> fix_email(E1)
+    end.
 
 %% @doc Parse an #email_received to a sanitized #email try to make
 %% sense of all parts.

@@ -1,0 +1,14 @@
+{application, zotonic_mod_copyright, [
+    {description, "Add copyrights and attribution to resources."},
+    {vsn, {file, "../../VERSION"}},
+    {registered, []},
+    {applications, [kernel, stdlib, zotonic_core]},
+    {env, []},
+    {modules, []},
+    {doc, "doc"},
+    {licenses, ["Apache-2.0"]},
+    {links, [
+        {"Website", "https://zotonic.com/"},
+        {"GitHub", "https://github.com/zotonic/zotonic"}
+    ]}
+]}.

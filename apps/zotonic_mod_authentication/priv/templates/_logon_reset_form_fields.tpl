@@ -23,6 +23,10 @@
                    placeholder="{_ Two-factor passcode _}" />
         </div>
     {% endblock %}
+{% elseif is_set_passcode %}
+    <div class="form-group set-passcode">
+        {% include "_logon_reset_set_passcode.tpl" %}
+    </div>
 {% endif %}
 
 {% if m.authentication.is_supported.rememberme %}
@@ -30,7 +34,7 @@
         <div class="checkbox">
             <label>
                 <input type="checkbox" name="rememberme" value="1" />
-                {_ Keep me signed in _}
+                {_ Keep me logged in _}
             </label>
         </div>
     </div>
@@ -38,6 +42,6 @@
 
 <div class="form-group">
     <div>
-        <button class="btn btn-primary" type="submit">{_ Reset password and Sign in _}</button>
+        <button class="btn btn-primary" type="submit">{_ Reset password and log in _}</button>
     </div>
 </div>

@@ -476,7 +476,7 @@ is_compressable(_Mime) -> false.
 start_link_gzip(Minify, Sources) ->
     Self = self(),
     Ref = erlang:make_ref(),
-    Pid = erlang:spawn_link(fun() ->
+    Pid = proc_lib:spawn_link(fun() ->
                           Bin = gzip_compress(Minify, Sources),
                           Self ! {gzip, {Ref, self()}, Bin}
                       end),

@@ -1,9 +1,10 @@
 {% with email|default:(id.email_raw) as email %}
 {% with m.email_status[email] as status %}
-	{% if m.acl.is_admin %}
+	{% if m.acl.is_admin or m.acl.is_allowed.use.mod_email_status %}
 		{% if not status.is_blocked %}
-			<a href="#" class="btn btn-danger btn-small pull-right" id="{{ #doblock }}">
-				{_ [ADMIN] _} {_ Block _}
+			<a href="#" class="btn btn-danger btn-small pull-right" id="{{ #doblock }}"
+			   title="{_ Prevent sending email to, and receiving email from this address. _}">
+				{_ Block _}
 			</a>
 			{% if panel_id %}
 				{% wire id=#doblock
@@ -35,12 +36,12 @@
 				<strong>
 					{_ Blocked _}
 				</strong>
-				{_ This email address has been blocked, no emails will be sent. _}
+				{_ This email address has been blocked, no emails will be sent or received from this address. _}
 			</p>
 		{% else %}
 			<p>
 				<a href="#" class="btn btn-success btn-small pull-right" id="{{ #doreset }}">
-					{_ [ADMIN] _} {_ Unblock _}
+					{_ Unblock _}
 				</a>
 			</p>
 			{% if panel_id %}
@@ -67,7 +68,7 @@
 						delegate=`mod_email_status`
 				%}
 				<p class="alert alert-success" id="{{ #didreset }}" style="display:none">
-					{_ The email address has been cleared, new emails will be sent. _}
+					{_ The block has been cleared and emails are being sent and received. _}
 				</p>
 			{% endif %}
 		{% endif %}
@@ -107,7 +108,7 @@
 				<strong>
 					{_ There are problems with this email address. _}
 					{% if not status.error_is_final or status.recent_error_ct < 5  %}
-						{_ We are retrying email delivery. _}
+						{_ We are retrying email delivery. _} {_ If you are sure this email address is correct, the problem was probably temporary so you can clear the error message. _}
 					{% else %}
 						{_ We stopped email delivery. _}
 					{% endif %}
@@ -117,7 +118,7 @@
 			{% if (id and id.is_editable) or m.acl.use.mod_email_status %}
 				<p>
 					<a href="#" class="btn btn-success" id="{{ #doclear }}">
-						{_ Clear error flag for this email address. _}
+						{_ Clear error for this email address. _}
 					</a>
 				</p>
 				{% if panel_id %}
@@ -141,7 +142,7 @@
 							delegate=`mod_email_status`
 					%}
 					<p class="alert alert-success" id="{{ #didclear }}" style="display:none">
-						{_ The email address has been cleared, new emails will be sent. _}
+						{_ The error message has been cleared and emails are being sent. _}
 					</p>
 				{% endif %}
 			{% endif %}

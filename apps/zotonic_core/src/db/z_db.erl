@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell
-%% @doc Interface to database, uses database definition from Context
+%% @copyright 2009-2024 Marc Worrell
+%% @doc Interface to database, uses database definition from Context.
+%% @end
 
-%% Copyright 2009-2021 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,6 +29,10 @@
     has_connection/1,
     database_version_string/1,
     database_version/1,
+
+    dbschema/1,
+    dbdatabase/1,
+    dbusername/1,
 
     transaction/2,
     transaction/3,
@@ -72,6 +77,9 @@
     equery/3,
     equery/4,
 
+    execute_batch/3,
+    execute_batch/4,
+
     insert/2,
     insert/3,
     update/4,
@@ -92,9 +100,13 @@
     update_sequence/3,
     prepare_database/1,
     constraint_exists/3,
+    foreign_keys/2,
+    foreign_key/3,
     key_exists/3,
     table_exists/2,
+    table_keys/2,
     create_table/3,
+    alter_table/3,
     drop_table/2,
     flush/1,
 
@@ -142,6 +154,7 @@
 -type prop_key() :: binary() | atom().
 
 -type id() :: pos_integer().
+-type id_key() :: binary().
 
 -type query_result() :: {ok, Columns :: list(), Rows :: list()}
                       | {ok, Count :: non_neg_integer(), Columns :: list(), Rows :: list()}
@@ -183,12 +196,16 @@ transaction(Function, Context) ->
 transaction(Function, Options, Context) ->
     z_context:logger_md(Context),
     Result = case transaction1(Function, Context) of
+                {rollback, {error, #error{ codename = deadlock_detected }}} ->
+                    {rollback, {deadlock, []}};
                 {rollback, {{error, #error{ codename = deadlock_detected }}, Trace1}} ->
                     {rollback, {deadlock, Trace1}};
                 {rollback, {{case_clause, {error, #error{ codename = deadlock_detected }}}, Trace1}} ->
                     {rollback, {deadlock, Trace1}};
                 {rollback, {{badmatch, {error, #error{ codename = deadlock_detected }}}, Trace1}} ->
                     {rollback, {deadlock, Trace1}};
+                {error, #error{ codename = deadlock_detected }} ->
+                    {rollback, {deadlock, []}};
                 Other ->
                     Other
             end,
@@ -326,6 +343,31 @@ database_version(Context) ->
         false ->
             {error, no_database_connection}
     end.
+
+%% @doc Return the schema name used for the current site.
+-spec dbschema(Context) -> Schema when
+    Context :: z:context(),
+    Schema :: string() | undefined.
+dbschema(Context) ->
+    Options = z_db_pool:get_database_options(Context),
+    proplists:get_value(dbschema, Options).
+
+%% @doc Return the database name used for the current site.
+-spec dbdatabase(Context) -> Database when
+    Context :: z:context(),
+    Database :: string() | undefined.
+dbdatabase(Context) ->
+    Options = z_db_pool:get_database_options(Context),
+    proplists:get_value(dbdatabase, Options).
+
+%% @doc Return the user name used for the current site.
+-spec dbusername(Context) -> Username when
+    Context :: z:context(),
+    Username :: string() | undefined.
+dbusername(Context) ->
+    Options = z_db_pool:get_database_options(Context),
+    proplists:get_value(dbusername, Options).
+
 
 %% @doc Transaction handler safe function for fetching a db connection
 -spec get_connection( z:context() ) -> {ok, pid()} | {error, nodatabase | none | full}.
@@ -624,14 +666,42 @@ map_merge_props(_, Acc) ->
 %% Simple queries - return tuples or number of rows updated.
 %% ----------------------------------------------------------------
 
+%% @doc Do an SQL query, return its results. Throws if the query errors.
+%% There is a query timeout of 30 seconds.
+-spec q(SQL, Context) -> Result when
+    SQL :: sql(),
+    Context :: z:context(),
+    Result :: list() | integer().
 q(Sql, Context) ->
     q(Sql, [], Context, ?TIMEOUT).
 
+%% @doc Do an SQL query, return its results. Throws if the query errors.
+%% The parameters are used for argument $1 etc. in the query. Query timeout
+%% of 30 seconds.
+-spec q(SQL, Parameters, Context) -> Result when
+        SQL :: sql(),
+        Parameters :: parameters(),
+        Context :: z:context(),
+        Result :: term()
+    ; (SQL, Context, Timeout) -> Result when
+        SQL :: sql(),
+        Context :: z:context(),
+        Timeout :: pos_integer(),
+        Result :: list() | integer().
 q(Sql, Parameters, #context{} = Context) ->
     q(Sql, Parameters, Context, ?TIMEOUT);
 q(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
     q(Sql, [], Context, Timeout).
 
+%% @doc Do an SQL query, return its results. Throws if the query errors.
+%% The parameters are used for argument $1 etc. in the query. Supply a
+%% timeout in milliseconds after which the query is canceled.
+-spec q(SQL, Parameters, Context, Timeout) -> Result when
+    SQL :: sql(),
+    Parameters :: parameters(),
+    Context :: z:context(),
+    Timeout :: pos_integer(),
+    Result :: list() | integer().
 q(Sql, Parameters, Context, Timeout) ->
     F = fun
         (none) -> [];
@@ -655,15 +725,45 @@ q(Sql, Parameters, Context, Timeout) ->
     end,
     with_connection(F, Context).
 
+%% @doc Do an SQL query, returns the first result of
+%% the first row or undefined if there are no returned rows. Crash if the
+%% query errors. There is a query timeout of 30 seconds.
+-spec q1(SQL, Context) -> Result when
+    SQL :: sql(),
+    Context :: z:context(),
+    Result :: term() | undefined.
 q1(Sql, Context) ->
     q1(Sql, [], Context).
 
+%% @doc Do an SQL query, returns the first result of
+%% the first row or undefined if there are no returned rows. The parameters
+%% are used for argument $1 etc. Crash if the query errors. There is a query
+%% timeout of 30 seconds.
+-spec q1(SQL, Parameters, Context) -> Result when
+        SQL :: sql(),
+        Parameters :: parameters(),
+        Context :: z:context(),
+        Result :: term() | undefined
+    ; (SQL, Context, Timeout) -> Result when
+        SQL :: sql(),
+        Context :: z:context(),
+        Timeout :: pos_integer(),
+        Result :: term() | undefined.
 q1(Sql, Parameters, #context{} = Context) ->
     q1(Sql, Parameters, Context, ?TIMEOUT);
 q1(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
     q1(Sql, [], Context, Timeout).
 
--spec q1(sql(), parameters(), #context{}, pos_integer()) -> term() | undefined.
+%% @doc Do an SQL query, returns the first result of
+%% the first row or undefined if there are no returned rows. Crash if
+%% the query errors. The parameters are used for argument $1 etc. in the query.
+%% Supply a timeout in milliseconds after which the query is canceled.
+-spec q1(SQL, Parameters, Context, Timeout) -> Result when
+    SQL :: sql(),
+    Parameters :: parameters(),
+    Context :: z:context(),
+    Timeout :: pos_integer(),
+    Result :: term() | undefined.
 q1(Sql, Parameters, Context, Timeout) ->
     F = fun
         (none) -> undefined;
@@ -687,9 +787,22 @@ q1(Sql, Parameters, Context, Timeout) ->
     with_connection(F, Context).
 
 
+%% @doc Do an SQL query, return the first row or undefined if no rows are
+%% returned. Crash if the query errors. There is a query timeout of 30 seconds.
+-spec q_row(SQL, Context) -> Row | undefined when
+    SQL :: sql(),
+    Context :: z:context(),
+    Row :: tuple() | undefined.
 q_row(Sql, Context) ->
     q_row(Sql, [], Context).
 
+%% @doc Do an SQL query, return the first row or undefined if no rows are
+%% returned. Crash if the query errors. There is a query timeout of 30 seconds.
+-spec q_row(SQL, Parameters, Context) -> Row | undefined when
+    SQL :: sql(),
+    Parameters :: parameter(),
+    Context :: z:context(),
+    Row :: tuple() | undefined.
 q_row(Sql, Args, Context) ->
     case q(Sql, Args, Context) of
         [Row|_] -> Row;
@@ -697,9 +810,22 @@ q_row(Sql, Args, Context) ->
     end.
 
 
+%% @doc Do an SQL query without parameters, returns the result without mapping
+%% from the database driver. There is a query timeout of 30 seconds.
+-spec squery(SQL, Context) -> Result when
+    SQL :: sql(),
+    Context :: z:context(),
+    Result :: query_result().
 squery(Sql, Context) ->
     squery(Sql, Context, ?TIMEOUT).
 
+%% @doc Do an SQL query without parameters, returns the result without mapping
+%% from the database driver. There is a query timeout of 30 seconds.
+-spec squery(SQL, Context, Timeout) -> Result when
+    SQL :: sql(),
+    Context :: z:context(),
+    Timeout :: pos_integer(),
+    Result :: query_result().
 squery(Sql, Context, Timeout) when is_integer(Timeout) ->
     F = fun(C) when C =:= none -> {error, noresult};
            (C) ->
@@ -709,15 +835,35 @@ squery(Sql, Context, Timeout) when is_integer(Timeout) ->
     with_connection(F, Context).
 
 
+%% @doc Do an SQL query with empty parameters, returns the result without mapping
+%% from the database driver. There is a query timeout of 30 seconds.
+-spec equery(SQL, Context) -> Result when
+    SQL :: sql(),
+    Context :: z:context(),
+    Result :: query_result().
 equery(Sql, Context) ->
     equery(Sql, [], Context).
 
+%% @doc Do an SQL query with parameters, returns the result without mapping
+%% from the database driver. There is a query timeout of 30 seconds.
+-spec equery(SQL, Parameters, Context) -> Result when
+    SQL :: sql(),
+    Parameters :: parameters(),
+    Context :: z:context(),
+    Result :: query_result().
 equery(Sql, Parameters, #context{} = Context) ->
     equery(Sql, Parameters, Context, ?TIMEOUT);
 equery(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
     equery(Sql, [], Context, Timeout).
 
--spec equery(sql(), parameters(), z:context(), integer()) -> query_result().
+%% @doc Do an SQL query empty parameters, returns the result without mapping
+%% from the database driver. The given timeout is in milliseconds.
+-spec equery(SQL, Parameters, Context, Timeout) -> Result when
+    SQL :: sql(),
+    Parameters :: parameters(),
+    Context :: z:context(),
+    Timeout :: pos_integer(),
+    Result :: query_result().
 equery(Sql, Parameters, Context, Timeout) ->
     F = fun(C) when C =:= none -> {error, noresult};
            (C) ->
@@ -726,9 +872,40 @@ equery(Sql, Parameters, Context, Timeout) ->
         end,
     with_connection(F, Context).
 
+%% @doc Execute the same SQL statement for a list of parameters. Default timeout
+%% of 30 seconds.
+-spec execute_batch(SQL, ParametersList, Context) -> query_result() when
+    SQL :: sql(),
+    ParametersList :: list( parameters() ),
+    Context :: z:context().
+execute_batch(Sql, Batch, Context) ->
+    execute_batch(Sql, Batch, Context, ?TIMEOUT).
 
-%% @doc Insert a new row in a table, use only default values.
--spec insert(table_name(), z:context()) -> {ok, pos_integer()|undefined} | {error, term()}.
+
+%% @doc Execute the same SQL statement for a list of parameters.
+-spec execute_batch(SQL, ParametersList, Context, Timeout) -> query_result() when
+    SQL :: sql(),
+    ParametersList :: list( parameters() ),
+    Context :: z:context(),
+    Timeout :: pos_integer().
+execute_batch(Sql, Batch, Context, Timeout) ->
+    F = fun(none) ->
+                {error, noresult};
+           (C) ->
+                DbDriver = z_context:db_driver(Context),
+                DbDriver:execute_batch(C, Sql, Batch, Timeout)
+        end,
+    with_connection(F, Context).
+
+%% @doc Insert a new row in a table, use only default values and return the new record id.
+%% If the table has an 'id' column then the new id is returned. The 'id' column shoud be
+%% the primary key column and have type 'serial' (or bigserial) if it is not given in the
+%% insert statement. All columns must have a default value or be nullable.
+-spec insert(Table, Context) -> {ok, NewId | undefined} | {error, Reason} when
+    Table :: table_name(),
+    Context :: z:context(),
+    NewId :: id(),
+    Reason :: term().
 insert(Table, Context) ->
     {_Schema, _Tab, QTab} = quoted_table_name(Table),
     with_connection(
@@ -739,10 +916,16 @@ insert(Table, Context) ->
         Context).
 
 
-%% @doc Insert a row, setting the fields to the props. Unknown columns are
-%% serialized in the props column. When the table has an 'id' column then the
-%% new id is returned.
--spec insert(table_name(), props(), z:context()) -> {ok, integer()|undefined} | {error, term()}.
+%% @doc Insert a new row in a table and return the new record id.
+%% Unknown columns are serialized in the props or props_json column. If the table has an 'id'
+%% column then the new id is returned. The 'id' column shoud be the primary key column
+%% and have type 'serial' (or bigserial) if it is not given in the passed parameters.
+-spec insert(Table, Parameters, Context) -> {ok, NewId | undefined} | {error, Reason} when
+    Table :: table_name(),
+    Parameters :: props(),
+    Context :: z:context(),
+    NewId :: id(),
+    Reason :: term().
 insert(Table, Parameters, Context) when is_list(Parameters) ->
     insert(Table, z_props:from_props(Parameters), Context);
 insert(Table, Parameters, Context) ->
@@ -751,8 +934,8 @@ insert(Table, Parameters, Context) ->
     BinParams = ensure_binary_keys(Parameters),
     case prepare_cols(Cols, BinParams) of
         {ok, InsertProps} ->
-            HasProps = maps:is_key(<<"props">>, InsertProps), 
-            HasPropsJSON = maps:is_key(<<"props_json">>, InsertProps), 
+            HasProps = maps:is_key(<<"props">>, InsertProps),
+            HasPropsJSON = maps:is_key(<<"props_json">>, InsertProps),
 
             InsertProps1 = if HasPropsJSON ->
                                   #{<<"props_json">> := PropsJSONCol} = InsertProps,
@@ -804,16 +987,39 @@ insert(Table, Parameters, Context) ->
                         {ok, Id};
                      {error, noresult} ->
                         {ok, undefined};
-                     {error, #error{ codename = unique_violation }} = Error ->
-                        ?LOG_NOTICE(#{ text => "z_db unique_violation in insert",
-                                       table => Table,
-                                       parameters => Parameters}),
+                     {error, #error{ codename = unique_violation, message = Message }} = Error ->
+                        ?LOG_NOTICE(#{
+                            in => zotonic_core,
+                            text => <<"z_db unique_violation in insert">>,
+                            result => error,
+                            reason => unique_violation,
+                            message => Message,
+                            table => Table,
+                            parameters => Parameters
+                        }),
+                        Error;
+                     {error, #error{ codename = ErrCode, message = Message }} = Error ->
+                        ?LOG_ERROR(#{
+                            in => zotonic_core,
+                            text => <<"z_db error in insert">>,
+                            result => error,
+                            reason => ErrCode,
+                            message => Message,
+                            table => Table,
+                            query => FinalSql,
+                            parameters => Parameters
+                        }),
                         Error;
                      {error, Reason} = Error ->
-                        ?LOG_ERROR(#{ text => "z_db error in query",
-                                      reason => Reason,
-                                      query => FinalSql, 
-                                      parameters => ColParams }),
+                        ?LOG_ERROR(#{
+                            in => zotonic_core,
+                            text => <<"z_db error in query">>,
+                            result => error,
+                            reason => Reason,
+                            table => Table,
+                            query => FinalSql,
+                            parameters => ColParams
+                        }),
                         Error
                  end
             end,
@@ -823,8 +1029,17 @@ insert(Table, Parameters, Context) ->
     end.
 
 
-%% @doc Update a row in a table, merging the props list with any new props values
--spec update(table_name(), id(), props(), z:context()) -> {ok, RowsUpdated::integer()} | {error, term()}.
+%% @doc Update a row in a table, merging the properties with any new property values. The table
+%% must have a column id of some integer type. If there is no matching column then 0 is returned
+%% for the number of updated columns. The update is done within a transaction, first the old values
+%% are read and then merged with the new values.
+-spec update(Table, Id, Props, Context) -> {ok, RowsUpdated} | {error, Reason} when
+    Table :: table_name(),
+    Id :: id() | id_key(),
+    Props :: props(),
+    Context :: z:context(),
+    RowsUpdated :: non_neg_integer(),
+    Reason :: term().
 update(Table, Id, Parameters, Context) when is_list(Parameters) ->
     update(Table, Id, z_props:from_props(Parameters), Context);
 update(Table, Id, Parameters, Context) when is_map(Parameters) ->
@@ -848,15 +1063,42 @@ update(Table, Id, Parameters, Context) when is_map(Parameters) ->
                     lists:join(", ", ColAssigns),
                     " where id = $1"
                 ]),
-                case equery1(DbDriver, C, Sql, [Id | Params]) of
-                    {ok, _RowsUpdated} = Ok -> Ok;
+                SqlParams = [ Id | Params ],
+                case equery1(DbDriver, C, Sql, SqlParams) of
+                    {ok, _RowsUpdated} = Ok ->
+                        Ok;
+                    {error, #error{ codename = unique_violation, message = Message }} = Error ->
+                        ?LOG_NOTICE(#{
+                            in => zotonic_core,
+                            text => <<"z_db unique_violation in update">>,
+                            message => Message,
+                            result => error,
+                            reason => unique_violation,
+                            table => Table,
+                            parameters => SqlParams
+                        }),
+                        Error;
+                    {error, #error{ codename = ErrCode, message = Message }} = Error ->
+                        ?LOG_ERROR(#{
+                            in => zotonic_core,
+                            text => <<"z_db error in update">>,
+                            result => error,
+                            reason => ErrCode,
+                            message => Message,
+                            table => Table,
+                            query => Sql,
+                            parameters => SqlParams
+                        }),
+                        Error;
                     {error, Reason} = Error ->
                         ?LOG_ERROR(#{
+                            in => zotonic_core,
                             text => <<"z_db error in query">>,
                             result => error,
                             reason => Reason,
+                            table => Table,
                             query => Sql,
-                            args => [Id | Params]
+                            parameters => SqlParams
                         }),
                         Error
                 end
@@ -901,11 +1143,11 @@ get_current_props(Table, Id, Context) ->
 get_current_props(DBDriver, Connection, Table, Id, Context) when is_atom(Table) ->
     get_current_props(DBDriver, Connection, atom_to_list(Table), Id, Context);
 get_current_props(DBDriver, Connection, Table, Id, Context) ->
-    ColNames = column_names(Table, Context), 
+    ColNames = column_names(Table, Context),
     get_current_props(DBDriver, Connection,
                       lists:member(props_json, ColNames), lists:member(props, ColNames), Table, Id, Context).
 
-   
+
 get_current_props(_DBDriver, _Connection, false, false, _Table, _Id, _Context) ->
     %% There is no props column
     {error, no_properties};
@@ -970,7 +1212,6 @@ update_merge_props(DbDriver, Connection, Table, Cols, Id, #{ <<"props_json">> :=
             _ ->
                 UpdateProps#{<<"props_json">> => ?DB_PROPS_JSON( drop_undefined(NewProps) )}
         end,
-
     %% Clear the existing props column
     case lists:member(<<"props">>, Cols) of
         true -> P#{ <<"props">> => null };
@@ -1035,7 +1276,12 @@ filter_empty_props(Map) ->
 
 
 %% @doc Delete a row from a table, the row must have a column with the name 'id'
--spec delete(Table::table_name(), Id::integer(), z:context()) -> {ok, RowsDeleted::non_neg_integer()} | {error, term()}.
+-spec delete(Table, Id, Context) -> {ok, RowsDeleted} | {error, Reason} when
+    Table :: table_name(),
+    Id :: id() | id_key(),
+    Context :: z:context(),
+    RowsDeleted :: non_neg_integer(),
+    Reason :: term().
 delete(Table, Id, Context) ->
     {_Schema, _Tab, QTab} = quoted_table_name(Table),
     Sql = "delete from "++QTab++" where id = $1",
@@ -1048,12 +1294,23 @@ delete(Table, Id, Context) ->
 
 %% @doc Read a row from a table, the row must have a column with the name 'id'.
 %% The props column contents is merged with the other properties returned.
--spec select(table_name(), any(), z:context()) -> {ok, Row :: map()} | {error, term()}.
+-spec select(Table, Id, Context) -> {ok, Row} | {error, Reason} when
+    Table :: table_name(),
+    Id :: id() | id_key(),
+    Context :: z:context(),
+    Row :: map(),
+    Reason :: term().
 select(Table, Id, Context) ->
     select(Table, Id, [], Context).
 
 
--spec select(table_name(), any(), qmap_options(), z:context()) -> {ok, Row :: map()} | {error, term()}.
+-spec select(Table, Id, Options, Context) -> {ok, Row} | {error, Reason} when
+    Table :: table_name(),
+    Id :: id() | id_key(),
+    Options :: qmap_options(),
+    Context :: z:context(),
+    Row :: map(),
+    Reason :: term().
 select(Table, Id, Options, Context) ->
     {_Schema, _Tab, QTab} = quoted_table_name(Table),
     Sql = "select * from "++QTab++" where id = $1 limit 1",
@@ -1117,132 +1374,40 @@ split_props(Props, Cols) ->
     end.
 
 
-%% @doc Return a property list with all columns of the table. (example: [{id,int4,modifier},...])
+%% @doc Return a list of column definitions for all columns of the table.
 -spec columns(table_name(), z:context()) -> list( #column_def{} ).
 columns(Table, Context) ->
-    {Schema, Table1, _QTab} = quoted_table_name(Table),
-    columns(Schema, Table1, Context).
+    z_db_table:columns(Table, Context).
 
+%% @doc Return a property list with all columns of the table. (example: [{id,int4,modifier},...])
 -spec columns(schema_name(), table_name(), z:context()) -> list( #column_def{} ).
-columns(Schema, Table, Context) when is_binary(Table) ->
-    columns(Schema, binary_to_list(Table), Context);
-columns(Schema, Table, Context) when is_atom(Table) ->
-    columns(Schema, atom_to_list(Table), Context);
-columns(Schema, Table, Context) when is_list(Table) ->
-    assert_table_name(Table),
-    Options = z_db_pool:get_database_options(Context),
-    Db = proplists:get_value(dbdatabase, Options),
-    Schema1 = case Schema of
-        default -> proplists:get_value(dbschema, Options);
-        S when is_list(S) -> S;
-        S when is_binary(S) -> S
-    end,
-    case z_depcache:get({columns, Db, Schema1, Table}, Context) of
-        {ok, Cols} ->
-            Cols;
-        _ ->
-            Cols = q("  select column_name, data_type, character_maximum_length,
-                               is_nullable, column_default, udt_name
-                        from information_schema.columns
-                        where table_catalog = $1
-                          and table_schema = $2
-                          and table_name = $3
-                        order by ordinal_position", [Db, Schema1, Table], Context),
-            Cols1 = [ columns1(Col) || Col <- Cols ],
-            z_depcache:set({columns, Db, Schema1, Table}, Cols1, ?YEAR, [{database, Db}], Context),
-            Cols1
-    end.
+columns(Schema, Table, Context) ->
+    z_db_table:columns(Schema, Table, Context).
 
-
-columns1({<<"id">>, <<"integer">>, undefined, Nullable, <<"nextval(", _/binary>>, _UdtName}) ->
-    #column_def{
-        name = id,
-        type = "serial",
-        length = undefined,
-        is_nullable = z_convert:to_bool(Nullable),
-        default = undefined
-    };
-columns1({Name, <<"ARRAY">>, _MaxLength, Nullable, Default, UdtName}) ->
-    % @todo derive the type of the array elements.
-    #column_def{
-        name = z_convert:to_atom(Name),
-        type = case UdtName of
-            <<"_text">> -> "text";
-            <<"_varchar">> -> "character varying";
-            <<"_int", _/binary>> -> "integer";
-            _ -> UdtName
-        end,
-        length = undefined,
-        is_array = true,
-        is_nullable = z_convert:to_bool(Nullable),
-        default = column_default(Default)
-    };
-columns1({Name,Type,MaxLength,Nullable,Default,_UdtName}) ->
-    #column_def{
-        name = z_convert:to_atom(Name),
-        type = z_convert:to_list(Type),
-        length = MaxLength,
-        is_nullable = z_convert:to_bool(Nullable),
-        default = column_default(Default)
-    }.
-
-column_default(undefined) -> undefined;
-column_default(<<"nextval(", _/binary>>) -> undefined;
-column_default(Default) -> binary_to_list(Default).
-
-
+%% @doc Return the column definition of the given column.
 -spec column( table_name(), column_name(), z:context()) ->
         {ok, #column_def{}} | {error, enoent}.
 column(Table, Column, Context) ->
-    {Schema, Table1, _QTab} = quoted_table_name(Table),
-    column(Schema, Table1, Column, Context).
+    z_db_table:column(Table, Column, Context).
 
--spec column( schema_name(), table_name(), column_name(), z:context()) ->
-        {ok, #column_def{}} | {error, enoent}.
-column(Schema, Table, Column0, Context) ->
-    Columns = columns(Schema, Table, Context),
-    Column = to_existing_atom(Column0),
-    case lists:filter(
-        fun
-            (#column_def{ name = Name }) when Name =:= Column -> true;
-            (_) -> false
-        end,
-        Columns)
-    of
-        [] -> {error, enoent};
-        [ #column_def{} = Col ] -> {ok, Col}
-    end.
-
-to_existing_atom(C) ->
-    try
-        to_existing_atom_1(C)
-    catch
-        error:badarg ->
-            'ERROR'
-    end.
-
-to_existing_atom_1(C) when is_binary(C) ->
-    binary_to_existing_atom(C, utf8);
-to_existing_atom_1(C) when is_list(C) ->
-    list_to_existing_atom(C);
-to_existing_atom_1(C) when is_atom(C) ->
-    C.
-
-%% @doc Return a list with the column names of a table.  The names are sorted.
+%% @doc Return a list with the column (atom) names of a table.  The names are sorted.
 -spec column_names(table_name(), z:context()) -> list( atom() ).
 column_names(Table, Context) ->
     {Schema, Table1, _QTab} = quoted_table_name(Table),
     column_names(Schema, Table1, Context).
 
+%% @doc Return a list with all (atom) columns names of a table.  The names are sorted.
 -spec column_names(schema_name(), table_name(), z:context()) -> list( atom() ).
 column_names(Schema, Table, Context) ->
-    Names = [ C#column_def.name || C <- columns(Schema, Table, Context)],
+    Names = [ C#column_def.name || C <- z_db_table:columns(Schema, Table, Context)],
     lists:sort(Names).
 
+%% @doc Return a list with all (binary) columns names of a table.  The names are not sorted.
 -spec column_names_bin(table_name(), z:context()) -> list( binary() ).
 column_names_bin(Table, Context) ->
     [ atom_to_binary(Col, utf8) || Col <- column_names(Table, Context) ].
 
+%% @doc Return a list with all (binary) columns names of a table.  The names are not sorted.
 -spec column_names_bin(schema_name(), table_name(), z:context()) -> list( binary() ).
 column_names_bin(Schema, Table, Context) ->
     [ atom_to_binary(Col, utf8) || Col <- column_names(Schema, Table, Context) ].
@@ -1271,50 +1436,33 @@ to_column_value(Table, Column, Value, Context) ->
             Error
     end.
 
-convert_value("text", _, V) ->
-    z_convert:to_binary(V);
-convert_value("character varying", Len, V) ->
-    V1 = z_convert:to_binary(V),
-    z_string:truncatechars(V1, Len);
-convert_value("integer", _, V) ->
-    z_convert:to_integer(V);
-convert_value("bigint", _, V) ->
-    z_convert:to_integer(V);
-convert_value("smallint", _, V) ->
-    z_convert:to_integer(V);
-convert_value("serial", _, V) ->
-    z_convert:to_integer(V);
-convert_value("bigserial", _, V) ->
-    z_convert:to_integer(V);
-convert_value("smallserial", _, V) ->
-    z_convert:to_integer(V);
-convert_value("numeric", _, V) ->
-    z_convert:to_float(V);
-convert_value("decimal", _, V) ->
-    z_convert:to_float(V);
-convert_value("float", _, V) ->
-    z_convert:to_float(V);
-convert_value("double", _, V) ->
-    z_convert:to_float(V);
-convert_value("boolean", _, V) ->
-    z_convert:to_bool_strict(V);
-convert_value("timestamp" ++ _, _, V) ->
-    z_datetime:to_datetime(V);
-convert_value("datetime" ++ _, _, V) ->
-    z_datetime:to_datetime(V);
-convert_value("date" ++ _, _, V) ->
-    z_datetime:to_datetime(V);
-convert_value("bytea", _, V) ->
-    ?DB_PROPS(V);
-convert_value("tsvector", _, V) ->
-    z_convert:to_binary(V);
-convert_value("ARRAY", _, V) when is_list(V) ->
-    V;
-convert_value("ARRAY", _, V) ->
-    [ V ];
-convert_value(Type, _, V) ->
+convert_value(<<"text">>, _, V) -> z_convert:to_binary(V);
+convert_value(<<"character varying">>, Len, V) -> V1 = z_convert:to_binary(V), z_string:truncatechars(V1, Len);
+convert_value(<<"integer">>, _, V) -> z_convert:to_integer(V);
+convert_value(<<"bigint">>, _, V) -> z_convert:to_integer(V);
+convert_value(<<"smallint">>, _, V) -> z_convert:to_integer(V);
+convert_value(<<"serial">>, _, V) -> z_convert:to_integer(V);
+convert_value(<<"bigserial">>, _, V) -> z_convert:to_integer(V);
+convert_value(<<"smallserial">>, _, V) -> z_convert:to_integer(V);
+convert_value(<<"numeric">>, _, V) -> z_convert:to_float(V);
+convert_value(<<"decimal">>, _, V) -> z_convert:to_float(V);
+convert_value(<<"float">>, _, V) -> z_convert:to_float(V);
+convert_value(<<"double">>, _, V) -> z_convert:to_float(V);
+convert_value(<<"boolean">>, _, V) -> z_convert:to_bool_strict(V);
+convert_value(<<"timestamp", _/binary>>, _, V) -> z_datetime:to_datetime(V);
+convert_value(<<"datetime", _/binary>>, _, V) -> z_datetime:to_datetime(V);
+convert_value(<<"date", _/binary>>, _, V) -> z_datetime:to_datetime(V);
+convert_value(<<"bytea">>, _, V) -> ?DB_PROPS(V);
+convert_value(<<"tsvector">>, _, V) -> z_convert:to_binary(V);
+convert_value(<<"ARRAY">>, _, V) when is_list(V) -> V;
+convert_value(<<"ARRAY">>, _, V) -> [ V ];
+convert_value(<<"array">>, _, V) when is_list(V) -> V;
+convert_value(<<"array">>, _, V) -> [ V ];
+convert_value(Type, _, V) when is_binary(Type) ->
     ?LOG_WARNING(#{
+        in => zotonic_core,
         text => <<"No type conversion for column type">>,
+        result => error,
         type => Type,
         value => V
     }),
@@ -1322,6 +1470,8 @@ convert_value(Type, _, V) ->
 
 
 %% @doc Flush all cached information about the database.
+-spec flush(Context) -> ok when
+    Context :: z:context().
 flush(Context) ->
     Options = z_db_pool:get_database_options(Context),
     Db = proplists:get_value(dbdatabase, Options),
@@ -1402,8 +1552,9 @@ ensure_schema(Site, Options) ->
     close_connection(DbConnection),
     Result.
 
-drop_schema(Context) ->
-    Options = z_db_pool:get_database_options(Context),
+drop_schema(#context{} = Context) ->
+    drop_schema(z_db_pool:get_database_options(Context));
+drop_schema(Options) when is_list(Options) ->
     Schema = proplists:get_value(dbschema, Options),
     Database = proplists:get_value(dbdatabase, Options),
     case open_connection(Database, Options) of
@@ -1488,7 +1639,7 @@ database_exists(Connection, Database) ->
 create_database(_Site, Connection, Database) ->
     %% Use template0 to prevent ERROR: new encoding (UTF8) is incompatible with
     %% the encoding of the template database (SQL_ASCII)
-    assert_database_name(Database),
+    z_db_table:assert_database_name(Database),
     case epgsql:equery(
         Connection,
         "CREATE DATABASE \"" ++ Database ++ "\" ENCODING = 'UTF8' TEMPLATE template0"
@@ -1516,7 +1667,7 @@ schema_exists_conn(Connection, Schema) ->
 %% @doc Create a schema
 -spec create_schema(atom(), epgsql:connection(), string()) -> ok | {error, term()}.
 create_schema(_Site, Connection, Schema) ->
-    assert_schema_name(Schema),
+    z_db_table:assert_schema_name(Schema),
     case epgsql:equery(
         Connection,
         "CREATE SCHEMA \"" ++ Schema ++ "\""
@@ -1558,6 +1709,71 @@ constraint_exists(Table, Constraint, Context) ->
             Context),
     HasConstraint >= 1.
 
+-spec foreign_keys( table_name(), z:context() ) -> {ok, [ map() ]} | {error, Reason} when
+    Reason :: enoent | term().
+foreign_keys(Table, Context) ->
+    Options = z_db_pool:get_database_options(Context),
+    Db = proplists:get_value(dbdatabase, Options),
+    Schema = proplists:get_value(dbschema, Options),
+    z_db:qmap("
+        SELECT
+            tc.table_schema,
+            tc.constraint_name,
+            tc.table_name,
+            kcu.column_name,
+            ccu.table_schema AS foreign_table_schema,
+            ccu.table_name AS foreign_table_name,
+            ccu.column_name AS foreign_column_name
+        FROM information_schema.table_constraints AS tc
+        JOIN information_schema.key_column_usage AS kcu
+            ON tc.constraint_name = kcu.constraint_name
+            AND tc.table_catalog = kcu.table_catalog
+            AND tc.table_schema = kcu.table_schema
+        JOIN information_schema.constraint_column_usage AS ccu
+            ON ccu.constraint_name = tc.constraint_name
+            AND ccu.table_catalog = tc.table_catalog
+            AND ccu.table_schema = tc.table_schema
+        WHERE tc.constraint_type = 'FOREIGN KEY'
+          AND tc.constraint_catalog = $1
+          AND tc.table_schema = $2
+          AND tc.table_name = $3",
+        [Db, Schema, Table],
+        [ {keys, atom} ],
+        Context).
+
+-spec foreign_key( table_name(), Name, z:context() ) -> {ok, map()} | {error, Reason} when
+    Name :: atom() | string() | binary(),
+    Reason :: enoent | term().
+foreign_key(Table, Name, Context) ->
+    Options = z_db_pool:get_database_options(Context),
+    Db = proplists:get_value(dbdatabase, Options),
+    Schema = proplists:get_value(dbschema, Options),
+    z_db:qmap_row("
+        SELECT
+            tc.table_schema,
+            tc.constraint_name,
+            tc.table_name,
+            kcu.column_name,
+            ccu.table_schema AS foreign_table_schema,
+            ccu.table_name AS foreign_table_name,
+            ccu.column_name AS foreign_column_name
+        FROM information_schema.table_constraints AS tc
+        JOIN information_schema.key_column_usage AS kcu
+            ON tc.constraint_name = kcu.constraint_name
+            AND tc.table_catalog = kcu.table_catalog
+            AND tc.table_schema = kcu.table_schema
+        JOIN information_schema.constraint_column_usage AS ccu
+            ON ccu.constraint_name = tc.constraint_name
+            AND ccu.table_catalog = tc.table_catalog
+            AND ccu.table_schema = tc.table_schema
+        WHERE tc.constraint_type = 'FOREIGN KEY'
+          AND tc.constraint_catalog = $1
+          AND tc.table_schema = $2
+          AND tc.table_name = $3
+          AND tc.constraint_name = $4",
+        [Db, Schema, Table, Name],
+        [ {keys, atom} ],
+        Context).
 
 -spec key_exists( table_name(), binary() | string() | atom(), z:context() ) -> boolean().
 key_exists(Table, Key, Context) ->
@@ -1573,150 +1789,74 @@ key_exists(Table, Key, Context) ->
         Context),
     HasKey >= 1.
 
+%% @doc Return a map of all indices of a table. The key is the name of
+%% the index, the value is the definition of the index.
+-spec table_keys( table_name(), z:context() ) -> {ok, Indices} when
+    Indices :: #{ IndexName := IndexDef },
+    IndexName :: binary(),
+    IndexDef :: binary().
+table_keys(Table, Context) ->
+    Options = z_db_pool:get_database_options(Context),
+    Schema = proplists:get_value(dbschema, Options),
+    Rs = z_db:q("
+        select indexname, indexdef
+        from pg_indexes
+        where schemaname = $1
+          and tablename = $2",
+        [ Schema, Table ],
+        Context),
+    Map = lists:foldl(
+        fun({N, D}, Acc) ->
+            Acc#{ N => D }
+        end,
+        #{},
+        Rs),
+    {ok, Map}.
 
 %% @doc Check the information schema if a certain table exists in the context database.
 -spec table_exists(table_name(), z:context()) -> boolean().
 table_exists(Table, Context) ->
-    {Schema, Tab, _QTab} = quoted_table_name(Table),
-    table_exists(Schema, Tab, Context).
+    z_db_table:table_exists(Table, Context).
 
--spec table_exists( schema_name(), table_name(), z:context() ) -> boolean().
-table_exists(Schema, Table, Context) ->
-    Options = z_db_pool:get_database_options(Context),
-    Db = proplists:get_value(dbdatabase, Options),
-    Schema1 = case Schema of
-        default -> proplists:get_value(dbschema, Options);
-        S -> S
-    end,
-    case q1("   select count(*)
-                from information_schema.tables
-                where table_catalog = $1
-                  and table_name = $2
-                  and table_schema = $3
-                  and table_type = 'BASE TABLE'", [Db, Table, Schema1], Context) of
-        1 -> true;
-        0 -> false
-    end.
+%% @doc Ensure that a table with the given columns exists, if the table exists then
+%% add, modify or drop columns.  The 'id' (with type serial) column _must_ be defined
+%% when creating the table.
+-spec create_table(Table, Columns, Context) -> ok | {error, Reason} when
+    Table :: table_name(),
+    Columns :: list( #column_def{} ),
+    Context :: z:context(),
+    Reason :: term().
+create_table(Table, Cols, Context) ->
+    z_db_table:create_table(Table, Cols, Context).
 
+%% @doc Alter a table so that it matches the given column definitions. If the table doesn't
+%% exist then it is created. RESTRICTIONS: does NOT change the primary key and unique
+%% constraint of existing columns. If the table doesn't exist then it is created.
+%% Be careful when adding columns that are not nullable, if the table contains data then
+%% adding those columns will fail.
+-spec alter_table(Table, Columns, Context) -> ok | {error, Reason} when
+    Table :: table_name(),
+    Columns :: list( #column_def{} ),
+    Context :: z:context(),
+    Reason :: term().
+alter_table(Table, Cols, Context) ->
+    z_db_table:alter_table(Table, Cols, Context).
 
-%% @doc Make sure that a table is dropped, only when the table exists
+%% @doc Make sure that a table is dropped, only if the table exists
 -spec drop_table(table_name(), z:context()) -> ok.
 drop_table(Table, Context) ->
-    {_Schema, _Tab, QTab} = quoted_table_name(Table),
-    case table_exists(Table, Context) of
-        true -> q("drop table " ++ QTab, Context), ok;
-        false -> ok
-    end.
+    z_db_table:drop_table(Table, Context).
 
+%% @doc Assert that the table name is safe to use. Crashes if the table name is not safe.
+-spec assert_table_name(table_name()) -> true.
+assert_table_name(Table) ->
+    z_db_table:assert_table_name(Table).
 
-%% @doc Ensure that a table with the given columns exists, alter any existing table
-%% to add, modify or drop columns.  The 'id' (with type serial) column _must_ be defined
-%% when creating the table.
--spec create_table(table_name(), list(), z:context()) -> ok.
-create_table(Table, Cols, Context) ->
-    {_Schema, _Tab, QTab} = quoted_table_name(Table),
-    ColsSQL = ensure_table_create_cols(Cols, []),
-    z_db:q("CREATE TABLE "++QTab++" ("++string:join(ColsSQL, ",")
-        ++ table_create_primary_key(Cols) ++ ")", Context),
-    ok.
+%% @doc Quote a table name so that it is safe to use in SQL queries.
+-spec quoted_table_name(table_name()) -> {default | string(), string(), string()}.
+quoted_table_name(Table) ->
+    z_db_table:quoted_table_name(Table).
 
-
-table_create_primary_key([]) -> [];
-table_create_primary_key([#column_def{name=id, type="serial"}|_]) -> ", primary key(id)";
-table_create_primary_key([#column_def{name=N, primary_key=true}|_]) -> ", primary key(" ++ z_convert:to_list(N) ++ ")";
-table_create_primary_key([_|Cols]) -> table_create_primary_key(Cols).
-
-ensure_table_create_cols([], Acc) ->
-    lists:reverse(Acc);
-ensure_table_create_cols([C|Cols], Acc) ->
-    M = lists:flatten([$", atom_to_list(C#column_def.name), $", 32, column_spec(C)]),
-    ensure_table_create_cols(Cols, [M|Acc]).
-
-column_spec(#column_def{type=Type, length=Length, is_nullable=Nullable, is_array = IsArray, default=Default, unique=Unique}) ->
-    L = case Length of
-            undefined -> [];
-            _ -> [$(, integer_to_list(Length), $)]
-        end,
-    A = column_spec_array(IsArray),
-    N = column_spec_nullable(Nullable),
-    D = column_spec_default(Default),
-    U = column_spec_unique(Unique),
-    lists:flatten([Type, L, A, N, D, U]).
-
-column_spec_array(true) -> "[]";
-column_spec_array(false) -> "".
-
-column_spec_nullable(true) -> "";
-column_spec_nullable(false) -> " not null".
-
-column_spec_default(undefined) -> "";
-column_spec_default(Default) -> [" DEFAULT ", Default].
-
-column_spec_unique(false) -> "";
-column_spec_unique(true) -> " UNIQUE".
-
-%% @doc Check if a name is a valid SQL table name. Crashes when invalid
--spec assert_table_name( table_name() ) -> true.
-assert_table_name(A) when is_atom(A) ->
-    assert_table_name1(atom_to_list(A));
-assert_table_name([ C | _ ] = Table) when C =/= $. ->
-    assert_table_name1(Table);
-assert_table_name(<< C,  _/binary>> = Table) when C =/= $. ->
-    assert_table_name1b(Table).
-
-assert_table_name1([]) -> true;
-assert_table_name1([$_|T]) -> assert_table_name1(T);
-assert_table_name1([$.|T]) -> assert_table_name1(T);
-assert_table_name1([H|T]) when (H >= $a andalso H =< $z) ->
-    assert_table_name1(T);
-assert_table_name1([H|T]) when (H >= $0 andalso H =< $9) ->
-    assert_table_name1(T).
-
-assert_table_name1b(<<>>) -> true;
-assert_table_name1b(<<$_, T/binary>>) -> assert_table_name1b(T);
-assert_table_name1b(<<$., T/binary>>) -> assert_table_name1b(T);
-assert_table_name1b(<<H, T/binary>>) when (H >= $a andalso H =< $z) ->
-    assert_table_name1b(T);
-assert_table_name1b(<<H, T/binary>>) when (H >= $0 andalso H =< $9) ->
-    assert_table_name1b(T).
-
-%% @doc Check if a name is a valid SQL database name. Crashes when invalid
--spec assert_database_name( string() ) -> true.
-assert_database_name([]) -> true;
-assert_database_name([$.|T]) -> assert_database_name(T);
-assert_database_name([$_|T]) -> assert_database_name(T);
-assert_database_name([H|T]) when (H >= $a andalso H =< $z) ->
-    assert_database_name(T);
-assert_database_name([H|T]) when (H >= $0 andalso H =< $9) ->
-    assert_database_name(T).
-
-%% @doc Check if a name is a valid SQL schema name. Crashes when invalid
--spec assert_schema_name( string() ) -> true.
-assert_schema_name([]) -> true;
-assert_schema_name([$_|T]) -> assert_schema_name(T);
-assert_schema_name([H|T]) when (H >= $a andalso H =< $z) ->
-    assert_schema_name(T);
-assert_schema_name([H|T]) when (H >= $0 andalso H =< $9) ->
-    assert_schema_name(T).
-
-
--spec quoted_table_name( table_name() ) -> {default | string(), string(), string()}.
-quoted_table_name(TableName) ->
-    assert_table_name(TableName),
-    case binary:split(z_convert:to_binary(TableName), <<".">>, [ global ]) of
-        [ Schema, Table ] ->
-            QTab = binary_to_list(
-                iolist_to_binary([
-                    $", Schema, $", $., $", Table, $"
-                ])),
-            {binary_to_list(Schema), binary_to_list(Table), QTab};
-        [ Table ] ->
-            QTab = binary_to_list(
-                iolist_to_binary([
-                    $", Table, $"
-                ])),
-            {default, binary_to_list(Table), QTab}
-    end.
 
 %% @doc Merge the contents of the props column into the result rows
 -spec merge_props([proplists:proplist() | map()]) -> list() | undefined.
@@ -1914,7 +2054,7 @@ merge_props_test() ->
                       {props, [{message,  <<"test test">>}, {extra, <<"hello">>} ]},
                       {created,{{2020,6,25},{11,54,55}}},
                       {props_json,<<"{\"message\": \"123\"}">>}] ]),
-    
+
     ?assertEqual([[{id,1},
                    {is_visible,true},
                    {rsc_id,330},

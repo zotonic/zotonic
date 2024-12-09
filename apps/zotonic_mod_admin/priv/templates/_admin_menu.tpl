@@ -20,7 +20,7 @@
                         <li class="dropdown" id="nav-{{ id }}">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#nav-{{ id }}">
                                 {% if item.icon %}<i class="glyphicon glyphicon-{{ item.icon }}"></i>{% endif %}
-                                {{ item.label|escape }}
+                                {{ item.label|escape_check }}
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
@@ -30,7 +30,7 @@
                                     {% else %}
                                         <li><a href="{{ item.url }}">
                                                 {% if item.icon %}<i class="glyphicon glyphicon-{{ item.icon }}"></i>{% endif %}
-                                                {{ item.label|escape }}</a>
+                                                {{ item.label|escape_check }}</a>
                                         </li>
                                     {% endif %}
                                 {% endfor %}
@@ -38,7 +38,7 @@
                         </li>
                     {% else %}
                         <li>
-                            <a href="{{ item.url }}">{{ item.label|escape }}</a>
+                            <a href="{{ item.url }}">{{ item.label|escape_check }}</a>
                         </li>
                     {% endif %}
                 {% endfor %}

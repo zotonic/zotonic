@@ -1,6 +1,6 @@
 .. highlight:: django
 .. include:: meta-mod_facebook.rst
-.. seealso:: :ref:`mod_linkedin`, :ref:`mod_twitter`
+.. seealso:: :ref:`mod_linkedin`
 
 The mod_facebook module plugs into the
 :ref:`authentication systen <guide-authentication>` to enable `Facebook login`_

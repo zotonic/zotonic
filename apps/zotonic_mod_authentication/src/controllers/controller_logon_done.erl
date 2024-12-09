@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2020-2021 Marc Worrell
-%% @doc Redirects to the correct location after an user authenticated.
+%% @doc Redirects to the correct location after a user authenticated.
 
 %% Copyright 2020-2021 Marc Worrell
 %%

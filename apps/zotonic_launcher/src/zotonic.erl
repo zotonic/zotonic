@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell
-
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Start/stop functions for Zotonic
+%% @enddoc
 
-%% Copyright 2009-2022 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
--define(MIN_OTP_VERSION, "23").
+-define(MIN_OTP_VERSION, 23).
 
 %% @doc Start the zotonic server.
 -spec start() -> ok.
@@ -81,7 +81,7 @@ await_startup_1(Site, N) ->
 %% @doc Called by the 'make test' commands.
 -spec runtests( list(atom()) ) -> ok.
 runtests(Tests) ->
-    erlang:spawn(
+    z_proc:spawn_md(
         fun() ->
             io:format("~nRunning tests:"),
             lists:foreach(
@@ -108,6 +108,9 @@ runtests(Tests) ->
 %% @doc Stop all sites, the zotonic server and the beam.
 -spec stop() -> ok.
 stop() ->
+    ?LOG_INFO(#{ text => <<"Stopping Zotonic">> }),
+    logger:set_primary_config(level, error),
+
     Sites = z_sites_manager:get_sites(),
     maps:fold(
         fun
@@ -117,16 +120,57 @@ stop() ->
         end,
         ok,
         Sites),
+
     % Wait a bit till all sites are stopped (max 5 secs)
     await_sites_stopping(50),
+
+    % Tell heart we are stopping, otherwise it will restart the node.
+    case whereis(heart) of
+        undefined -> ok;
+        HeartPid when is_pid(HeartPid) -> heart:set_cmd("echo ok")
+    end,
+
+    % Stop all other running applications -- keep an order here so that
+    % eg the filezcache, which depends on mnesia is stopped before mnesia.
     application:stop(zotonic_launcher),
+    application:stop(zotonic_filewatcher),
+    application:stop(zotonic_fileindexer),
+    application:stop(filezcache),
     application:stop(exometer),
     application:stop(jobs),
     application:stop(mnesia),
     application:stop(epgsql),
-    heart:set_cmd("echo ok"),
-    erlang:halt(0).
+    %% Using init:stop() would do a clean shutdown, but also makes us wait
+    %% for erlexec to shutdown, which takes an additional 10 seconds.
+    %% For a kind-of-clean shutdown we stop all non-kernel-like and non-erlexec
+    %% apps by hand and then do a hard halt of the system.
+    stop_exec(),
+    stop_apps(),
+    halt().
 
+stop_apps() ->
+    lists:foreach(
+        fun({App, _Desc, _Version}) -> stop_app(App) end,
+        application:which_applications()).
+
+stop_app(erlexec) -> ok;
+stop_app(init) -> ok;
+stop_app(kernel) -> ok;
+stop_app(stdlib) -> ok;
+stop_app(syslog) -> ok;
+stop_app(logger) -> ok;
+stop_app(sasl) -> ok;
+stop_app(inets) -> ok;
+stop_app(os_mon) -> ok;
+stop_app(gproc) -> ok;
+stop_app(App) -> application:stop(App).
+
+stop_exec() ->
+    lists:foreach(
+        fun(ChildId) ->
+            exec:stop(ChildId)
+        end,
+        exec:which_children()).
 
 await_sites_stopping(0) -> ok;
 await_sites_stopping(N) ->
@@ -187,21 +231,13 @@ update([Node]) ->
 -spec test_erlang_version() -> ok.
 test_erlang_version() ->
     % Check for minimal OTP version
-    case otp_release() of
+    case z_utils:otp_release() of
         Version when Version < ?MIN_OTP_VERSION ->
             io:format(
-                "Zotonic needs at least Erlang release ~p; this is ~p~n",
+                "Zotonic needs at least Erlang release ~p; this is ~s~n",
                 [?MIN_OTP_VERSION, erlang:system_info(otp_release)]
             ),
             erlang:exit({minimal_otp_version, ?MIN_OTP_VERSION});
         _ ->
             ok
-    end.
-
-%% @doc Strip the optional "R" from the OTP release because from 17.0 onwards it is unused
--spec otp_release() -> string().
-otp_release() ->
-    case erlang:system_info(otp_release) of
-        [$R | V] -> V;
-        V -> V
     end.

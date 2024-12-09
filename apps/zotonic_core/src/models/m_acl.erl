@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Template access for access control functions and state
+%% @end
 
-%% Copyright 2009-2022 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -36,6 +37,8 @@ m_get([ <<"is_admin_editable">> | Rest ], _Msg, Context) -> {ok, {z_acl:is_admin
 m_get([ <<"is_read_only">> | Rest ], _Msg, Context) -> {ok, {z_acl:is_read_only(Context), Rest}};
 
 % Check if current user is allowed to perform an action on some object
+m_get([ <<"is_allowed">>, <<"link">>, Subject, Predicate, Object | Rest ], _Msg, Context) ->
+    {ok, {z_acl:is_allowed_link(Subject, Predicate, Object, Context), Rest}};
 m_get([ <<"is_allowed">>, Action, Object | Rest ], _Msg, Context) ->
     {ok, {is_allowed(Action, Object, Context), Rest}};
 
@@ -46,6 +49,8 @@ m_get([ <<"authenticated">>, <<"is_allowed">>, Action, Object | Rest ], _Msg, Co
     {ok, {is_allowed_authenticated(Action, Object, Context), Rest}};
 
 % Shortcut, should use is_allowed/action/object
+m_get([ <<"link">>, Subject, Predicate, Object | Rest ], _Msg, Context) ->
+    {ok, {z_acl:is_allowed_link(Subject, Predicate, Object, Context), Rest}};
 m_get([ Action, Object | Rest ], _Msg, Context) ->
     {ok, {is_allowed(Action, Object, Context), Rest}};
 

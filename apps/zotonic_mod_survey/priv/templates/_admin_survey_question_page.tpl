@@ -33,7 +33,7 @@
 		<div class="form-group" style="padding-left: 15px">
 			<label class="checkbox">
 				<input type="checkbox" class="is_stop_page {% if nosubmit %}nosubmit{% endif %}" name="is_stop_page" {% if is_stop %}checked{% endif %} />
-				{_ Dead end. Remove Next button. No questions will be submitted unless you add a button jump to a next page. _}
+				{_ Remove "Next" button. No answers will be submitted unless you add a button jump to a next page. _}
 			</label>
 		</div>
 

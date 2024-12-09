@@ -32,13 +32,16 @@
 
     {% with m.acl.user as me %}
 
-        <form method="GET" action="{% url admin_users %}">
+        <form method="GET" id="admin-users-filter" action="{% url admin_users %}">
             <label style="font-weight: normal; margin: 0; margin: 0 0 20px 0">
                 <input type="hidden" name="qs" value="{{ q.qs|escape }}" />
-                <input type="checkbox" name="persons" value="1" {% if q.persons %}checked="checked"{% endif %}
-                    onchange="this.form.submit()" />
+                <input type="checkbox" name="persons" value="1" {% if q.persons %}checked="checked"{% endif %}>
                 {_ Also show persons without user account _}
             </label>
+
+            {% javascript %}
+                $('#admin-users-filter').on('change', function(e) { $(this).submit(); });
+            {% endjavascript %}
         </form>
 
         {% with m.search.paged[{users text=q.qs page=q.page users_only=not(q.persons)}] as result %}
@@ -48,9 +51,11 @@
                     <tr>
                         <th width="20%">{_ Name _}</th>
                         <th width="20%">{_ Username _}</th>
-                        <th width="15%">{_ Last logon _}</th>
-                        <th width="15%">{_ Created on _}</th>
-                        <th width="25%">{_ Modified on _}</th>
+                        <th></th>
+                        <th>{_ Last logon _}</th>
+                        <th>{_ Created on _}</th>
+                        <th>{_ Modified on _}</th>
+                        <th></th>
                     </tr>
                 </thead>
 
@@ -67,18 +72,19 @@
                                     {% if id == me %}  <strong>{_ (that's you) _}</strong>{% endif %}
                                 {% endif %}
                             </td>
+                            <td>{% all include "_admin_user_info.tpl" id=id %}</td>
                             <td>{{ user_info.visited|date:_"d M Y, H:i" }}</td>
                             <td>{{ id.created|date:_"d M Y, H:i" }}</td>
+                            <td>{{ id.modified|date:_"d M Y, H:i" }}</td>
                             <td>
-                                {{ id.modified|date:_"d M Y, H:i" }}
                                 <div class="pull-right buttons">
-                                    {% if is_users_editable %}
+                                    {% if is_users_editable and id != 1 %}
                                         {% button class="btn btn-default btn-xs"
                                                   action={dialog_set_username_password id=id on_delete={slide_fade_out target=#tr.id}}
                                                   text=_"set username / password"
                                         %}
                                     {% endif %}
-                                    {% button class="btn btn-default btn-xs" text=_"edit" action={redirect dispatch="admin_edit_rsc" id=id} %}
+                                    <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default btn-xs">{_ edit _}</a>
                                 </div>
                             </td>
                         </tr>

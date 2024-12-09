@@ -1,11 +1,11 @@
 /* adminwidget js
 ----------------------------------------------------------
 
-@package:   Zotonic 2009, 2012
+@package:   Zotonic 2009 - 2023
 @Author:    Tim Benniks <tim@timbenniks.nl>
 
-Copyright 2009 Tim Benniks
-Copyright 2012 Arjan Scherpenisse
+Copyright 2009-2023 Tim Benniks
+Copyright 2012-2023 Arjan Scherpenisse
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -85,9 +85,6 @@ $.widget("z.adminwidget",
         } else {
             self.item.slideUp(200);
         }
-        if (self.tabs) {
-            self.tabs.hide();
-        }
         self.icon.attr("class", "z-icon z-icon-plus");
         self.element.removeClass("widget-expanded");
         self.showing = false;
@@ -106,10 +103,6 @@ $.widget("z.adminwidget",
                 }
             }
         });
-        
-        if (self.tabs) {
-            self.tabs.show();
-        }
         if (self.icon) {
             self.icon.attr("class", "z-icon z-icon-minus");
         }
@@ -121,7 +114,7 @@ $.widget("z.adminwidget",
         }
 
     },
-    
+
     itemIsEmpty: function(el) {
         return !$.trim(el.html());
     }

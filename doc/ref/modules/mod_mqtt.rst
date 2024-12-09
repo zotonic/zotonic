@@ -314,7 +314,7 @@ Per default it listens on MQTT port 1883 and MQTT with TLS on port 8883::
 Authentication
 ^^^^^^^^^^^^^^
 
-All connections must authenticate using an username and password.
+All connections must authenticate using a username and password.
 The username is prefixed with the hostname of the user’s site, for example: ``foobar.com:myusername``.
 In this way Zotonic knows which site the user belongs to.
 

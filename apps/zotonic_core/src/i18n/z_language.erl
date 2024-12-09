@@ -1,37 +1,48 @@
-%% @doc Mandatory background read on language tags: [1].
+%% @doc Language code handling functions.
 %%
-%%      Some quotes from [1]:
+%% Mandatory background read on language tags: [1].
 %%
-%%          The golden rule when creating language tags is to keep the tag as short as
-%%          possible. Avoid region, script or other subtags except where they add useful
-%%          distinguishing information. For instance, use 'ja' for Japanese and not
-%%          'ja-JP', unless there is a particular reason that you need to say that this is
-%%          Japanese as spoken in Japan, rather than elsewhere.
+%% Some quotes from [1]:
 %%
-%%          The entries in the registry follow certain conventions with regard to upper
-%%          and lower letter-casing. For example, language tags are lower case, alphabetic
-%%          region subtags are upper case, and script tags begin with an initial capital.
-%%          This is only a convention!
+%%      The golden rule when creating language tags is to keep the tag as short as
+%%      possible. Avoid region, script or other subtags except where they add useful
+%%      distinguishing information. For instance, use 'ja' for Japanese and not
+%%      'ja-JP', unless there is a particular reason that you need to say that this is
+%%      Japanese as spoken in Japan, rather than elsewhere.
 %%
-%%      Note that we use lower case subtags in subtag identifiers and URLs.
+%%      The entries in the registry follow certain conventions with regard to upper
+%%      and lower letter-casing. For example, language tags are lower case, alphabetic
+%%      region subtags are upper case, and script tags begin with an initial capital.
+%%      This is only a convention!
 %%
-%%          Language+extlang combinations are provided to accommodate legacy language tag
-%%          forms, however, there is a single language subtag available for every
-%%          language+extlang combination. That language subtag should be used rather than
-%%          the language+extlang combination, where possible. For example, use 'yue'
-%%          rather than 'zh-yue' for Cantonese, and 'afb' rather than 'ar-afb' for Gulf
-%%          Arabic, if you can.
+%% Note that we use lower case subtags in subtag identifiers and URLs.
+%%
+%%  Language identifiers can have the following forms:
+%%  - language;
+%%  - language-extlang;
+%%  - language-region;
+%%  - language-script;
+%%  It is discouraged to use language-script-region, but it is possible if
+%%  required.
+%%  For a list of language, region and script codes, see [2].
+%%  [1] http://www.w3.org/International/articles/language-tags/
+%%  [2] http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry
+%% @end
 
-%%      Language identifiers can have the following forms:
-%%      - language;
-%%      - language-extlang;
-%%      - language-region;
-%%      - language-script;
-%%      It is discouraged to use language-script-region, but it is possible if
-%%      required.
-%%      For a list of language, region and script codes, see [2].
-%%      [1] http://www.w3.org/International/articles/language-tags/
-%%      [2] http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry
+%% Copyright 2016-2023 Arthur Clemens
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+
 -module(z_language).
 
 -export([
@@ -40,7 +51,7 @@
     default_language/1,
     enabled_languages/1,
     editable_languages/1,
-    acceptable_languages/1,
+    acceptable_languages_map/1,
     language_config/1,
     set_language_config/2,
     is_valid/1,
@@ -66,8 +77,9 @@
 
 -type language_code() :: atom().
 -type language() :: language_code() | binary() | string().
+-type language_status() :: true | editable | false.
 
--export_type([ language/0, language_code/0 ]).
+-export_type([ language/0, language_code/0, language_status/0 ]).
 
 
 
@@ -82,10 +94,29 @@ initialize_config(Context) ->
                 _ -> ok
             end,
             % Set list of enabled languages
-            case m_config:get(i18n, languages, Context) of
+            case m_config:get_prop(i18n, languages, list, Context) of
                 undefined ->
                     init_config_languages(Context);
-                _Existing ->
+                [] ->
+                    Default = [ {default_language(Context), true} ],
+                    m_config:set_prop(i18n, languages, list, Default, Context);
+                [{FirstCode, _} | _ ] = Config ->
+                    % Ensure that the default language is the first enabled language
+                    Default = default_language(Context),
+                    if
+                        FirstCode =:= Default ->
+                            ok;
+                        true ->
+                            {Enabled, Disabled} = lists:partition(
+                                fun({_,Status}) -> Status =:= true end,
+                                Config),
+                            {Editable, Off} = lists:partition(
+                                fun({_,Status}) -> Status =:= editable end,
+                                Disabled),
+                            Config1 = Enabled ++ Editable ++ Off,
+                            Default1 = [ {Default, true} | proplists:delete(Default, Config1) ],
+                            m_config:set_prop(i18n, languages, list, Default1, Context)
+                    end,
                     ok
             end;
         false ->
@@ -105,13 +136,8 @@ init_config_languages(Context) ->
 default_languages(Context) ->
     Codes = available_translations(Context),
     List = [ {C, editable} || C <- Codes ],
-    EnabledLang = case m_config:get_value(i18n, language, Context) of
-        undefined -> en;
-        <<>> -> en;
-        Code -> z_convert:to_atom(Code)
-    end,
-    List1 = proplists:delete(EnabledLang, List),
-    lists:sort( [ {EnabledLang, true} | List1 ]).
+    DefaultLang = default_language(Context),
+    [ {DefaultLang, true} | proplists:delete(DefaultLang, List) ].
 
 
 %% @doc Fetch the available translations by checking for all .po files in zotonic_core
@@ -123,40 +149,58 @@ available_translations(Context) ->
         fun z_language:is_valid/1, lists:usort([ C || {C, _File} <- PoFiles ])
     ).
 
-% Fetch the list of acceptable languages and their fallback languages.
-% Store this in the depcache (and memo) for quick(er) lookups.
--spec acceptable_languages( z:context() ) -> list( {binary(), [ binary() ]} ).
-acceptable_languages(Context) ->
+
+% Fetch the map of acceptable languages and their fallback languages.
+% Store this in the depcache for quick(er) lookups.
+-spec acceptable_languages_map( z:context() ) -> #{ binary() => binary() }.
+acceptable_languages_map(Context) ->
     z_depcache:memo(
-        fun() ->
-            Enabled = enabled_languages(Context),
-            lists:foldl(
-                fun(Code, Acc) ->
-                    LangProps = z_language:properties(Code),
-                    Lang = atom_to_binary(Code, utf8),
-                    Fs = z_language:fallback_language(Code),
-                    FsAsBin = [ z_convert:to_binary(F) || F <- Fs ],
-                    Acc1 = [ {Lang, FsAsBin} | Acc ],
-                    lists:foldl(
-                        fun(Alias, AliasAcc) ->
-                            AliasBin = z_convert:to_binary(Alias),
-                            [ {AliasBin, FsAsBin} | AliasAcc ]
-                        end,
-                        Acc1,
-                        maps:get(alias, LangProps, []))
-                end,
-                [],
-                Enabled)
-        end,
-        acceptable_languages,
+        fun() -> acceptable_languages_map_1(Context) end,
+        acceptable_languages_map,
         3600,
         [config],
         Context).
 
-%% @doc Get the list of configured languages that are enabled.
--spec enabled_languages(z:context()) -> list( atom() ).
+acceptable_languages_map_1(Context) ->
+    lists:foldl(
+        fun(Code, Acc) ->
+            Props = #{
+                code_bin := CodeBin,
+                fallback := FallbackList
+            } = z_language:properties(Code),
+            AliasList = maps:get(alias, Props, []),
+            Acc1 = Acc#{ CodeBin => CodeBin },
+            Acc2 = lists:foldl(
+                fun(Alias, FAcc) ->
+                    maybe_set(Alias, CodeBin, FAcc)
+                end,
+                Acc1,
+                AliasList),
+            lists:foldl(
+                fun(Fallback, FAcc) ->
+                    maybe_set(atom_to_binary(Fallback), CodeBin, FAcc)
+                end,
+                Acc2,
+                FallbackList)
+        end,
+        #{},
+        enabled_languages(Context)).
+
+maybe_set(K, V, Map) ->
+    case maps:find(K, Map) of
+        error -> Map#{ K => V };
+        _ -> Map
+    end.
+
+
+%% @doc Get the list of configured languages that are enabled. The list is
+%% in the order of configured priority.
+-spec enabled_languages(Context) -> LanguageCodes when
+    Context :: z:context(),
+    LanguageCodes :: [ language_code() ].
 enabled_languages(Context) ->
-    case z_memo:get('z_language$enabled_languages') of
+    MemoKey = {'z_language$enabled_languages', z_context:site(Context)},
+    case z_memo:get(MemoKey) of
         V when is_list(V) ->
             V;
         _ ->
@@ -166,13 +210,17 @@ enabled_languages(Context) ->
                     ({_, _}) -> false
                 end,
                 language_config(Context)),
-            z_memo:set('z_language$enabled_languages', ConfigLanguages)
+            z_memo:set(MemoKey, ConfigLanguages)
     end.
 
-%% @doc Get the list of configured languages that are editable.
--spec editable_languages(z:context()) -> list( atom() ).
+%% @doc Get the list of configured languages that are editable. The list is
+%% in the order of configured priority.
+-spec editable_languages(Context) -> LanguageCodes when
+    Context :: z:context(),
+    LanguageCodes :: [ language_code() ].
 editable_languages(Context) ->
-    case z_memo:get('z_language$editable_languages') of
+    MemoKey = {'z_language$editable_languages', z_context:site(Context)},
+    case z_memo:get(MemoKey) of
         V when is_list(V) ->
             V;
         _ ->
@@ -183,37 +231,65 @@ editable_languages(Context) ->
                     ({_, _}) -> false
                 end,
                 language_config(Context)),
-            z_memo:set('z_language$editable_languages', ConfigLanguages)
+            z_memo:set(MemoKey, ConfigLanguages)
     end.
 
 %% @doc Get the list of configured languages.
--spec language_config(z:context()) -> list( {atom(), boolean()} ).
+-spec language_config(Context) -> LanguageConfigList when
+    Context :: z:context(),
+    LanguageConfigList :: [ {language_code(), language_status()} ].
 language_config(Context) ->
     case m_config:get(i18n, languages, Context) of
         undefined -> [];
         LanguageConfig -> proplists:get_value(list, LanguageConfig, [])
     end.
 
-%% @doc Save a new language config list
--spec set_language_config( list(), z:context() ) -> ok.
-set_language_config(NewConfig, Context) ->
+%% @doc Save a new language config list. If the empty list is saved then the
+%% default language (en) is enabled. There must be a language enabled. The list
+%% is in the order of preference. The default system language is the first
+%% enabled (true) language in the list.
+-spec set_language_config( LanguageStatusList, Context ) -> ok when
+    Context :: z:context(),
+    LanguageStatusList :: [ {language_code(), language_status()} ].
+set_language_config([], Context) ->
+    set_language_config([ {?DEFAULT_LANGUAGE, true} ], Context);
+set_language_config(LanguageStatusList, Context) ->
     case language_config(Context) of
-        NewConfig -> ok;
-        _ ->
-            SortedConfig = lists:sort(NewConfig),
-            m_config:set_prop(i18n, languages, list, SortedConfig, Context)
+        LanguageStatusList -> ok;
+        _ -> m_config:set_prop(i18n, languages, list, LanguageStatusList, Context)
     end,
-    z_memo:delete('z_language$enabled_languages'),
-    z_memo:delete('z_language$editable_languages'),
+    % Store the first enabled language as the default language
+    Default = first_enabled(LanguageStatusList),
+    DefaultB = z_convert:to_binary(Default),
+    case m_config:get_value(i18n, language, Context) of
+        DefaultB -> ok;
+        _ -> m_config:set_value(i18n, language, Default, Context)
+    end,
+    z_memo:delete({'z_language$enabled_languages', z_context:site(Context)}),
+    z_memo:delete({'z_language$editable_languages', z_context:site(Context)}),
     ok.
+
+first_enabled([]) ->
+    ?DEFAULT_LANGUAGE;
+first_enabled([{Code, true}|_]) ->
+    Code;
+first_enabled([_|Cs]) ->
+    first_enabled(Cs).
+
 
 %% @doc Returns the configured default language for this server; if not set, 'en'
 %%      (English).
--spec default_language( z:context() | undefined ) -> language_code().
+-spec default_language(OptContext) -> language_code() when
+    OptContext :: z:context() | undefined.
 default_language(undefined) ->
     ?DEFAULT_LANGUAGE;
 default_language(Context) ->
-    z_convert:to_atom(m_config:get_value(i18n, language, ?DEFAULT_LANGUAGE, Context)).
+    case m_config:get_value(i18n, language, Context) of
+        undefined -> ?DEFAULT_LANGUAGE;
+        <<>> -> ?DEFAULT_LANGUAGE;
+        "" -> ?DEFAULT_LANGUAGE;
+        Lang -> z_convert:to_atom(Lang)
+    end.
 
 %% @doc Check if the language code code is a valid language.
 -spec is_valid( language() ) -> boolean().
@@ -222,7 +298,7 @@ is_valid(Code) ->
 
 %% @doc Translate a language-code to an atom; only return known codes.
 %% Also map aliased language codes to their preferred format. Eg. 'zh-tw' to 'zh-hant'
--spec to_language_atom( language() ) -> {ok, language()} | {error, not_a_language}.
+-spec to_language_atom( language() ) -> {ok, language_code()} | {error, not_a_language}.
 to_language_atom(Code) when is_binary(Code); is_atom(Code) ->
     z_language_data:to_language_atom(Code);
 to_language_atom(Code) ->
@@ -269,8 +345,12 @@ is_rtl(Code) ->
     get_property(Code, direction) =:= <<"RTL">>.
 
 
-%% @doc Check if a language code is allowed to be used as an user
-%%      selectable language for the interface.
+%% @doc Check if a language code is allowed to be used as a user
+%% selectable language for the interface. Returns false for
+%% unknown languages.
+-spec is_language_enabled(Language, Context) -> boolean() when
+    Language :: language(),
+    Context :: z:context().
 is_language_enabled(Code, Context) when is_atom(Code) ->
     lists:member(Code, enabled_language_codes(Context));
 is_language_enabled(Code, Context) ->
@@ -282,7 +362,8 @@ is_language_enabled(Code, Context) ->
     end.
 
 %% @doc Check if a language code is allowed to be edited.
-%%      This is a superset of the enabled languages.
+%% This is a superset of the enabled languages. Returns false for
+%% unknown languages.
 -spec is_language_editable( language(), z:context() ) -> boolean().
 is_language_editable(Code, Context) when is_atom(Code) ->
     lists:member(Code, editable_language_codes(Context));
@@ -313,9 +394,10 @@ properties(Code) when is_list(Code) ->
     properties(z_convert:to_binary(Code)).
 
 %% @doc List of language data.
-%%      Returns a flattened list of property lists; sub-languages are added to the list of
-%%      main languages.
-%%      For each language a property list is returned - see properties/1.
+%% Returns a maps of language maps; sub-languages are added to the map of main languages.
+%% For each language a map with properties is returned - see properties/1.
+%% Each language is present with its iso code as an atom and binary key. This for
+%% easier lookups.
 -spec all_languages() -> map().
 all_languages() ->
     z_language_data:languages_map_flat().
@@ -326,14 +408,14 @@ main_languages() ->
     z_language_data:languages_map_main().
 
 %% @doc Return the currently configured list of languages
--spec language_list(z:context()) -> list( {language_code(), list()} ).
+-spec language_list(z:context()) -> list( {language_code(), language_status()} ).
 language_list(Context) ->
     case m_config:get(i18n, languages, Context) of
         undefined ->
-            [ {default_language(Context), []} ];
+            [ {default_language(Context), true} ];
         Cfg ->
             case proplists:get_value(list, Cfg, []) of
-                [] -> [ {default_language(Context), []} ];
+                [] -> [ {default_language(Context), true} ];
                 L when is_list(L) -> L
             end
     end.
@@ -420,7 +502,10 @@ maybe_update_config_list(I18NLanguageList, Context) ->
                 end,
                 [],
                 List),
-            m_config:set_prop(i18n, languages, list, NewList, Context),
+            % Ensure the default language is the first enabled language
+            Default = default_language(Context),
+            NewList1 = [ {Default, true} | proplists:delete(Default, NewList) ],
+            m_config:set_prop(i18n, languages, list, NewList1, Context),
             m_config:delete(i18n, language_list, Context);
         _ ->
             ?LOG_WARNING(#{

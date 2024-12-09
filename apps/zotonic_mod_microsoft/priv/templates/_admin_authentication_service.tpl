@@ -33,7 +33,7 @@
                         <input type="text" id="microsoft_scope" name="tenant" value="{{ m.config.mod_microsoft.tenant.value|default:'common'|escape }}" class="form-control" placeholder="{_ Tenant _}">
                         <label class="control-label" for="microsoft_tenant">{_ Tenant _}</label>
                         <p class="help-block">
-                            {_ Control who can sign in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers. _}
+                            {_ Control who can log in. Allowed values are: <tt>common</tt>, <tt>organizations</tt>, <tt>consumers</tt>, and tenant identifiers. _}
                             <a href="https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-v2-protocols#endpoints" target="_blank" rel="noopener noreferrer">{_ More information about tenant identifiers _}</a>
                         </p>
                     </div>

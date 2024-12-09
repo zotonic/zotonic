@@ -30,7 +30,7 @@
                 <label>
                     <input type="checkbox" id="{{ #is_block }}" name="is_block" value="on"
                         {% if rule.is_block %}checked="checked"{% endif %} />
-                    {_ deny _}
+                    {_ Deny _}
                 </label>
             </div>
         </div>
@@ -70,7 +70,7 @@
                                placeholder="{_ Find collaboration group _}" value="" />
                     </div>
                     <ul id="dialog-collab-found" class="do_feedback list-unstyled"
-                        data-feedback="trigger: 'dialog-collab-search', delegate: 'admin_acl_rules'">
+                        data-feedback='{ "trigger": "dialog-collab-search", "delegate": "admin_acl_rules" }'>
                     </ul>
                     {% javascript %}
                     {% endjavascript %}
@@ -95,6 +95,16 @@
                             </option>
                         {% endfor %}
                     </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3">
+                </label>
+                <div class="col-sm-7 checkbox">
+                    <label>
+                        <input type="checkbox" name="is_category_exact" value="1" {% if rule.is_category_exact %}checked{% endif %}>
+                        {_ Exactly this category, no sub-categories _}
+                    </label>
                 </div>
             </div>
         {% endif %}
@@ -124,7 +134,7 @@
                 <div class="col-sm-7 checkbox">
                     <label>
                         <input type="checkbox" id="{{ #is_owner }}" name="is_owner" value="on"
-                            {% if rule.is_owner %}checked="checked"{% endif %} /> {_ manage own _}
+                            {% if rule.is_owner %}checked="checked"{% endif %} /> {_ Manage own _}
                     </label>
                 </div>
             </div>

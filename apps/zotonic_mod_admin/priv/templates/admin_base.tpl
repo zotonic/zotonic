@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html {% include "_language_attrs.tpl" class=false %} class="zotonic-admin environment-{{ m.site.environment }}">
+<html {% include "_language_attrs.tpl" class=false language=z_language %} class="zotonic-admin environment-{{ m.site.environment }}">
     <head>
         <meta charset="utf-8">
         <title>{% block title %}{_ Admin _}{% endblock %} &mdash; {{ m.site.title|default:"Zotonic" }} Admin</title>
 
-        <link rel="icon" href="/favicon.ico" type="image/x-icon">
-        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel="manifest" href="{% url manifest_json %}" />
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
+        <meta name="robots" content="noindex,nofollow">
 
         {% lib
             "css/admin-bootstrap3.css"
@@ -24,16 +26,11 @@
             "css/jquery.loadmask.css"
             "css/zotonic-admin.css"
             "css/zotonic-search-view-admin.css"
+            "css/prism.css"
             minify
         %}
 
-        {% all include "_html_head.tpl" %}
-        {% all include "_html_head_admin.tpl" %}
-
-        <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-        <!--[if lt IE 9]>
-            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
+        {% all include "_html_head_admin.tpl" no_prism %}
 
         {% block head_extra %}
         {% endblock %}

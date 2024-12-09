@@ -447,11 +447,7 @@ ranges([], _Context) ->
     [];
 ranges(Cat, Context) when not is_list(Cat) ->
     ranges([Cat], Context);
-ranges(CatList0, Context) ->
-    CatList = case length(CatList0) > 1 andalso z_string:is_string(CatList0) of
-                  true -> [CatList0];
-                  false -> CatList0
-              end,
+ranges(CatList, Context) ->
     F = fun
             (undefined, Acc) ->
                 Acc;
@@ -463,7 +459,7 @@ ranges(CatList0, Context) ->
                     Props -> [{proplists:get_value(left, Props), proplists:get_value(right, Props)} | Acc]
                 end
         end,
-    Ranges = lists:sort(lists:foldl(F, [], flatten_string(CatList, []))),
+    Ranges = lists:sort(lists:foldl(F, [], lists:flatten(CatList))),
     maybe_drop_empty_range(merge_ranges(Ranges, [])).
 
 maybe_drop_empty_range([]) ->
@@ -475,15 +471,6 @@ maybe_drop_empty_range(Ranges) ->
         [] -> [{-1, -1}];
         Ranges1 -> Ranges1
     end.
-
-%% Flatten the list of cats, but do not flatten strings
-flatten_string([], Acc) ->
-    Acc;
-flatten_string([[A | _] = L | T], Acc) when is_list(A); is_atom(A); is_binary(A); is_tuple(A) ->
-    Acc1 = flatten_string(L, Acc),
-    flatten_string(T, Acc1);
-flatten_string([H | T], Acc) ->
-    flatten_string(T, [H | Acc]).
 
 
 merge_ranges([], Acc) ->
@@ -506,7 +493,8 @@ get_path(Id, Context) ->
     end.
 
 %% @doc Return the categories (as atoms) the category is part of, including the
-%% category itself (as last member).
+%% category itself. The first atom is the most generic category, the last is the
+%% most specific.
 -spec is_a(m_rsc:resource(), z:context()) -> list(atom()).
 is_a(Id, Context) ->
     case get(Id, Context) of
@@ -737,7 +725,10 @@ ensure_hierarchy(Context) ->
 
 
 %% @doc Move a category below another category (or the root set if undefined)
--spec move_below(integer(), integer(), z:context()) -> ok | {error, notfound}.
+-spec move_below(Cat, Parent, Context) -> ok | {error, notfound} when
+    Cat :: category(),
+    Parent :: category(),
+    Context :: z:context().
 move_below(Cat, Parent, Context) ->
     {ok, Id} = name_to_id(Cat, Context),
     ParentId = maybe_name_to_id(Parent, Context),
@@ -766,7 +757,10 @@ move_below(Cat, Parent, Context) ->
     end.
 
 %% @doc Move a category after another category (on the same level).
--spec move_after( category(), category() | undefined, z:context() ) -> ok | {error, notfound}.
+-spec move_after(Cat, After, Context) -> ok | {error, notfound} when
+    Cat :: category(),
+    After :: category(),
+    Context :: z:context().
 move_after(Cat, After, Context) ->
     {ok, Id} = name_to_id(Cat, Context),
     AfterId = maybe_name_to_id(After, Context),

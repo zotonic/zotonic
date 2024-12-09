@@ -6,40 +6,26 @@ scope::
 
   {% debug %}
 
-This displays a HTML table with columns for the variable's name and its
-value, and displays one variable per row::
+.. image:: /img/scomp_base_debug.png
 
-  <table>
-  <tbody>
-    <tr>
-        <td>session_id</td>
-        <td>
-            <tt>"qUHoeKodUHXbpwrcl6Vj"</tt>
-        </td>
-    </tr>
-    
-    <tr>
-        <td>q</td>
-        <td>
-            <tt>[{"zotonic_host","examplesite"},{"zotonic_dispatch","home"}]</tt>
-        </td>
-    </tr>
-    
-    <tr>
-        <td>template</td>
-        <td>
-            <tt>"home.tpl"</tt>
-        </td>
-    </tr>
-    
-    <tr>
-        <td>zotonic_dispatch</td>
-        <td>
-            <tt>home</tt>
-        </td>
-    </tr>
-  </tbody>
-  </table>
-    
+Optionally, variable names can be provided to be debugged::
+
+  {% debug session_id q template zotonic_dispatch %}
+
+.. image:: /img/scomp_base_debug_vars.png
+
+By default, all key nodes are collapsed.
+Expanded, each node contains the value associated and highlighted as Erlang code::
+
+.. image:: /img/scomp_base_debug_expanded.png
+
+The debug scomp contains three buttons at the top right:
+
+* ``_``: Collapse all key nodes;
+* ``□``: Expand all key nodes;
+* ``×``: Removes the debug element from the HTML document.
+
+There is also a resizer at the bottom right corner to resize the ``debug`` element horizontally.
+
 .. seealso:: :ref:`tag-print`
 

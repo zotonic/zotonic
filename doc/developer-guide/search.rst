@@ -103,13 +103,17 @@ database table, and the second column name to be the filter value::
 If the filter is a three-column list, the second column is the
 operator. This must be an atom (surround it in backquotes!) and must
 be one of the following: ``eq``, ``ne``, ``gt``, ``gte``, ``lt``,
-``lte``; or one of ``=``, ``<>``, ``>``, ``>=``, ``<``, ``<=``::
+``lte``; or one of ``=``, ``<>``, ``>``, ``>=``, ``<``, ``<=``, ``~``::
 
     filter=['facet.numeric_value', `>`, 10]
 
 It is possible to define an OR query for multiple terms::
 
     filter=[ ['facet.numeric_value', `>`, 10], ['facet.numeric_value', `<=`, 0] ]
+
+All postal codes starting with ``10``::
+
+    filter=[ ['pivot.postcode', `~`, "10" ] ]
 
 hassubject
 ^^^^^^^^^^
@@ -171,12 +175,19 @@ object with id 456::
 Substitute ``'*'`` for the object id to match *any* object. So, to select all
 resources that have any author or editor edge::
 
-    hasanyobject[['*', 'author'], ['*', 'editor']]
+    hasanyobject=[['*', 'author'], ['*', 'editor']]
 
 You can also mix the two types of elements. To select all resources that have an
 author or a connection (with any predicate) to resource 2 or 3::
 
-    hasanyobject[['*', 'author'], 2, 3]
+    hasanyobject=[['*', 'author'], 2, 3]
+
+
+hasanysubject
+^^^^^^^^^^^^^
+
+Like ``hasanyobject`` but then searching for subjects (resources referring to) of
+the found resource id.
 
 
 hasmedium
@@ -211,6 +222,22 @@ objects ids will be returned first::
     match_objects=1234
 
 An ``id_exlude=...`` is automatically added for the resource in the argument.
+
+Optionally accepts a ``predicate`` option to only match using the object-ids
+that are connected to the id using the given predicate or predicates.
+
+Example::
+
+    %{
+       term: "match_objects",
+       value: id,
+       predicate: [ "subject", "author" ]
+    }
+
+This returns a list of resource ids that have similar objects as the authors and
+subjects of the resource ``id``. The objects can be connected to the resulting
+ids using any predicate.
+
 
 match_object_ids
 ^^^^^^^^^^^^^^^^
@@ -272,6 +299,24 @@ useful to select upcoming events::
 
     upcoming
 
+upcoming_on
+^^^^^^^^^^^
+
+Specifying 'upcoming' means that you only want to select things that
+have a start date after the given date. Like the name says,
+useful to select upcoming events::
+
+    upcoming_on='+1 week'
+
+upcoming_date
+^^^^^^^^^^^^^
+
+Specifying 'upcoming' means that you only want to select things that
+have a start date after the start of the given date. Like the name says,
+useful to select upcoming events::
+
+    upcoming_date='+1 week'
+
 ongoing
 ^^^^^^^
 
@@ -281,6 +326,24 @@ and an end date which lies in the future::
 
     ongoing
 
+ongoing_on
+^^^^^^^^^^
+
+Specifying 'ongoing' means that you only want to select things that
+are happening on the given moment: that have a start datetime which lies before
+the given datetime and an end date which lies after the given datetime::
+
+    ongoing_on='yesterday'
+
+ongoing_date
+^^^^^^^^^^^^
+
+Specifying 'ongoing' means that you only want to select things that
+are happening on the given day: that have a start date which lies before
+the given day and an end date which lies after the start of the given day::
+
+    ongoing_date='yesterday'
+
 finished
 ^^^^^^^^
 
@@ -289,6 +352,22 @@ have a start date which lies in the past::
 
     finished
 
+finished_on
+^^^^^^^^^^^
+
+Specifying 'finished' means that you only want to select things that
+have a start datetime which lies before the given moment::
+
+    finished_on='tomorrow'
+
+finished_date
+^^^^^^^^^^^^^
+
+Specifying 'finished' means that you only want to select things that
+have a start day which lies before the start of the given day::
+
+    finished_date='tomorrow'
+
 unfinished
 ^^^^^^^^^^
 
@@ -296,6 +375,22 @@ Specifying 'unfinished' means that you only want to select things that
 have an end date which lies in the future::
 
     unfinished
+
+unfinished_on
+^^^^^^^^^^^^^
+
+Specifying 'unfinished' means that you only want to select things that
+have an end date which after the given date::
+
+    unfinished_on='+3 days'
+
+unfinished_date
+^^^^^^^^^^^^^^^
+
+Specifying 'unfinished' means that you only want to select things that
+have an end date which after the end of the given day::
+
+    unfinished_date='+3 days'
 
 unfinished_or_nodate
 ^^^^^^^^^^^^^^^^^^^^
@@ -571,6 +666,14 @@ code. Search terms with invalid language codes are ignored.
 Find all resources with a German translation::
 
     language=de
+
+Use the special language ``z_language`` to search in the current request language::
+
+    language=z_language
+
+Example, search in English or the current request language::
+
+    language=[en,z_language]
 
 
 visible_for

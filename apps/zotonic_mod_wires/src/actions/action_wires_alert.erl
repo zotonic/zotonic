@@ -1,9 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%%
+%% @copyright 2009-2023 Marc Worrell
+%% @doc Show an alert dialog. Uses the template '_action_dialog_alert.tpl' to
+%% render the contents of the alert.
 %% Based on code copyright (c) 2008-2009 Rusty Klophaus
+%% @end
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,9 +30,10 @@ render_action(TriggerId, TargetId, Args, Context) ->
     {PostbackMsgJS, _PickledPostback} = z_render:make_postback({alert, Args}, click, TriggerId, TargetId, ?MODULE, Context),
     {PostbackMsgJS, Context}.
 
-
-%% @doc Fill the dialog with the delete confirmation template. The next step will ask to delete the resource
-%% @spec event(Event, Context1) -> Context2
+-spec event(Event, Context) -> Context2 when
+    Event :: #postback{},
+    Context :: z:context(),
+    Context2 :: z:context().
 event(#postback{message={alert, Args}}, Context) ->
     Title = proplists:get_value(title, Args, ?__(<<"Alert">>, Context)),
     Vars = [

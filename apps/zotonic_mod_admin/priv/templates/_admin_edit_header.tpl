@@ -1,9 +1,13 @@
-{#
-Params:
-id
-#}
+{# Showed on top of the resource edit page #}
 <div class="admin-header">
     <div class="admin-header-meta">
+        <a class="btn btn-default btn-xs"
+           data-onclick-topic="model/location/post/redirect/back"
+           href="{% url admin %}"
+        >
+            &lt; {_ Back _}
+        </a>
+        &nbsp;
         <span class='admin-edit-dates'>
             {_ Created: _} {{ id.created|date:"Y-m-d H:i" }}
             {% if id.creator_id %}
@@ -15,6 +19,8 @@ id
                 {_ by _} <a href="{% url admin_edit_rsc id=id.modifier_id %}">{% include "_name.tpl" id=id.modifier_id %}</a>
             {% endif %}
         </span>
+        &middot;
+        <span class="text-muted">{_ id: _} {{ id }}</span>
     </div>
 
     {% with id.depiction as depict %}
@@ -25,7 +31,12 @@ id
         {% with id.category_id as cat_id %}
             <div class="{% if depict %}admin-header-has-image{% endif %}">
                 <h2 {% include "_language_attrs.tpl" %}>
-                    {{ id.title|striptags|default:("<em>" ++ _"untitled" ++ "</em>")}}
+                    {{ id.title|default:id.short_title|default:("<em>" ++ _"untitled" ++ "</em>")}}
+
+                {% if id.is_protected %}
+                    &nbsp; <small class="fa fa-lock text-muted small" title="{_ Protected, not deletable _}"></small>
+                {% endif %}
+
                 </h2>
                 <a class='btn btn-default btn-xs admin-btn-category' href="javascript:;" id="changecategory" title="{_ Change category _}">
                     <span class="text-muted">{_ Category: _}</span>
@@ -42,6 +53,10 @@ id
                         cat_id=cat_id
                     }
                 %}
+
+                <a class="btn btn-default btn-xs" href="{% url admin_overview_rsc qcat=cat_id %}">
+                    {% trans "Show all {title} pages" title=cat_id.title %}
+                </a>
             </div>
         {% endwith %}
     {% endwith %}

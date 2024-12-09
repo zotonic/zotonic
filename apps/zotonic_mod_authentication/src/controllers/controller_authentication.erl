@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019-2021 Marc Worrell
+%% @copyright 2019-2024 Marc Worrell
 %% @doc Handle HTTP authentication of users.
+%% @end
 
-%% Copyright 2019-2021 Marc Worrell
+%% Copyright 2019-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -114,17 +115,23 @@ handle_cmd(Cmd, _Payload, Context) ->
 
 -spec logon( map(), z:context() ) -> { map(), z:context() }.
 logon(Payload, Context) ->
-    {Result, Context1} = logon_1(z_notifier:first(#logon_submit{ payload = Payload }, Context), Payload, Context),
+    {Result, Context1} = logon_1(z_notifier:first(#logon_submit{ payload = Payload }, Context), Payload, #{}, Context),
     maybe_add_logon_options(Result, Payload, Context1).
 
-logon_1({ok, UserId}, Payload, Context) when is_integer(UserId) ->
+logon_1({ok, UserId}, Payload, AuthOptions, Context) when is_integer(UserId) ->
     case z_auth:logon(UserId, Context) of
         {ok, Context1} ->
             log_logon(UserId, Payload, Context),
             % - (set cookie in handlers - like device-id) --> needs notification
             Options = z_context:get(auth_options, Context, #{}),
-            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options, Context1),
+            Options1 = maps:merge(Options, AuthOptions),
+            Options2 = case Options1 of
+                #{ auth_method := _ } -> Options1;
+                _ -> Options1#{ auth_method => <<"username_pw">> }
+            end,
+            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options2, Context1),
             Context3 = maybe_setautologon(Payload, Context2),
+            maybe_auth_connect(maps:get(<<"authuser">>, Payload, undefined), Context3),
             return_status(Payload, Context3);
         {error, user_not_enabled} ->
             ?LOG_INFO(#{
@@ -149,7 +156,7 @@ logon_1({ok, UserId}, Payload, Context) when is_integer(UserId) ->
         %     % Hide other error codes, map to generic 'pw' error
         %     { #{ status => error, error => pw }, Context }
     end;
-logon_1({expired, UserId}, _Payload, Context) when is_integer(UserId) ->
+logon_1({expired, UserId}, _Payload, _AuthOptions, Context) when is_integer(UserId) ->
     % The password is expired and needs a reset - this is similar to password reset
     case m_identity:get_username(UserId, Context) of
         undefined ->
@@ -172,13 +179,19 @@ logon_1({expired, UserId}, _Payload, Context) when is_integer(UserId) ->
             Code = m_authentication:set_reminder_secret(UserId, Context),
             { #{ status => error, error => password_expired, username => Username, secret => Code }, Context }
     end;
-logon_1({error, ratelimit}, _Payload, Context) ->
+logon_1({error, ratelimit}, _Payload, _AuthOptions, Context) ->
     { #{ status => error, error => ratelimit }, Context };
-logon_1({error, need_passcode}, _Payload, Context) ->
+logon_1({error, need_passcode}, _Payload, _AuthOptions, Context) ->
     { #{ status => error, error => need_passcode }, Context };
-logon_1({error, passcode}, _Payload, Context) ->
+logon_1({error, set_passcode}, _Payload, _AuthOptions, Context) ->
+    { #{ status => error, error => set_passcode }, Context };
+logon_1({error, set_passcode_error}, _Payload, _AuthOptions, Context) ->
+    { #{ status => error, error => set_passcode_error }, Context };
+logon_1({error, passcode}, _Payload, _AuthOptions, Context) ->
     { #{ status => error, error => passcode }, Context };
-logon_1({error, Reason}, _Payload, Context) ->
+logon_1({error, user_external}, _Payload, _AuthOptions, Context) ->
+    { #{ status => error, error => user_external }, Context };
+logon_1({error, Reason}, _Payload, _AuthOptions, Context) ->
     % Hide other error codes, map to generic 'pw' error
     ?LOG_INFO(#{
         text => <<"Logon attempt of user">>,
@@ -187,7 +200,7 @@ logon_1({error, Reason}, _Payload, Context) ->
         reason => Reason
     }),
     { #{ status => error, error => pw }, Context };
-logon_1(undefined, _Payload, Context) ->
+logon_1(undefined, _Payload, _AuthOptions, Context) ->
     { #{ status => error, error => pw }, Context }.
 
 
@@ -223,6 +236,25 @@ username(UserId, Context) ->
         undefined -> <<>>
     end.
 
+maybe_auth_connect(AuthUserEncoded, Context) when is_binary(AuthUserEncoded) ->
+    Secret = z_context:state_cookie_secret(Context),
+    case termit:decode_base64(AuthUserEncoded, Secret) of
+        {ok, AuthExp} ->
+            UserId = z_acl:user(Context),
+            case termit:check_expired(AuthExp) of
+                {ok, #{ auth := Auth, user_id := AuthUserId }} when UserId =:= AuthUserId ->
+                    m_authentication:handle_auth_confirm(Auth, undefined, Context);
+                {ok, _} ->
+                    {error, user_id};
+                {error, _} = Error ->
+                    Error
+            end;
+        {error, _} ->
+            {error, illegal_auth}
+    end;
+maybe_auth_connect(_Auth, _Context) ->
+    ok.
+
 
 -spec maybe_add_logon_options( map(), map(), z:context() ) -> { map(), z:context() }.
 maybe_add_logon_options(#{ error := ratelimit } = Result, _Payload, Context) ->
@@ -237,14 +269,14 @@ maybe_add_logon_options(#{ status := error } = Result, Payload, Context) ->
         page => maps:get(<<"page">>, Payload, undefined),
         is_password_entered => not z_utils:is_empty(maps:get(<<"password">>, Payload, <<>>))
     },
-    Options1 = case Result of #{ token := Token } -> Options#{ token => Token}; _ -> Options end, 
+    Options1 = case Result of #{ token := Token } -> Options#{ token => Token}; _ -> Options end,
     Options2 = z_notifier:foldr(#logon_options{ payload = Payload }, Options1, Context),
     Result1 = Result#{ options => Options2 },
     case Options2 of
         #{ is_user_external := true } -> {Result1, Context};
         #{ is_user_local := true } -> {Result1, Context};
         #{ is_user_local := false, is_user_external := false, username := Username } when is_binary(Username), Username =/= <<>> ->
-            % Hide the fact an user is unknown, this prevents fishing for known usernames.
+            % Hide the fact a user is unknown, this prevents fishing for known usernames.
             Options3 = Options2#{
                 is_user_local => true,
                 is_username_checked => true
@@ -260,8 +292,8 @@ maybe_add_logon_options(#{ status := ok } = Result, _Payload, Context) ->
 -spec onetime_token( map(), z:context() ) -> { map(), z:context() }.
 onetime_token(#{ <<"token">> := Token } = Payload, Context) ->
     case z_authentication_tokens:decode_onetime_token(Token, Context) of
-        {ok, UserId} ->
-            logon_1({ok, UserId}, Payload, Context);
+        {ok, {UserId, AuthOptions}} ->
+            logon_1({ok, UserId}, Payload, AuthOptions, Context);
         {error, _} ->
             { #{ status => error, error => token }, Context }
     end;
@@ -285,9 +317,11 @@ switch_user(#{ <<"user_id">> := UserId } = Payload, Context) when is_integer(Use
                 ],
                 Context),
             Options2 = AuthOptions#{
-                sudo_user_id => SudoUserId
+                sudo_user_id => SudoUserId,
+                sudo_auth_method => maps:get(auth_method, AuthOptions, undefined),
+                auth_method => <<"sudo">>
             },
-            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options2, Context1),
+            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options2, undefined, Context1),
             return_status(Payload, Context2);
         {error, _Reason} ->
             { #{ status => error, error => eacces }, Context }
@@ -299,8 +333,8 @@ switch_user(_Payload, Context) ->
 %% @doc Remove authentication cookie(s), signal user logoff
 -spec logoff( map(), z:context() ) -> { map(), z:context() }.
 logoff(Payload, Context) ->
-    Context1 = z_auth:logoff(Context),
-    Context2 = z_authentication_tokens:reset_cookies(Context1),
+    Context1 = z_authentication_tokens:reset_cookies(Context),
+    Context2 = z_auth:logoff(Context1),
     return_status(Payload, Context2).
 
 %% @doc Refresh the current authentication cookie
@@ -311,6 +345,7 @@ refresh(Payload, Context) ->
         _ -> #{}
     end,
     Context1 = z_authentication_tokens:refresh_auth_cookie(Options, Context),
+    z_auth:publish_user_session(Context1),
     return_status(Payload, Context1).
 
 %% @doc Set an autologon cookie for the current user
@@ -338,7 +373,11 @@ maybe_setautologon(_Payload, Context) ->
 
 
 %% @doc Change the password for the current user, use the (optional) 2FA code
--spec change( map(), z:context() ) -> { map(), z:context() }.
+-spec change(Payload, Context) -> {Status, Context1} when
+    Payload :: map(),
+    Context :: z:context(),
+    Status :: map(),
+    Context1 :: z:context().
 change(#{
         <<"password">> := Password,
         <<"password_reset">> := NewPassword,
@@ -361,14 +400,7 @@ change(#{
                 Username ->
                     case auth_precheck(Username, Context) of
                         ok ->
-                            PasswordMinLength = z_convert:to_integer(m_config:get_value(mod_authentication, password_min_length, 8, Context)),
-
-                            case size(Password) of
-                                N when N < PasswordMinLength ->
-                                    { #{ status => error, error => tooshort }, Context };
-                                _ ->
-                                    change_1(UserId, Username, Password, NewPassword, Passcode, Context)
-                            end;
+                            change_1(UserId, Username, Password, NewPassword, Passcode, Context);
                         {error, ratelimit} ->
                             { #{ status => error, error => ratelimit }, Context };
                         _ ->
@@ -383,75 +415,107 @@ change(_Payload, Context) ->
         message => <<"Missing one of: password, password_reset, passcode">>
     }, Context }.
 
-
 change_1(UserId, Username, Password, NewPassword, Passcode, Context) ->
-    Payload = #{
+    LogonPayload = #{
         <<"username">> => Username,
         <<"password">> => Password,
         <<"passcode">> => Passcode
     },
-    case z_notifier:first(#logon_submit{ payload = Payload }, Context) of
-        {ok, UserId} ->
-            case reset_1(UserId, Username, NewPassword, Passcode, Context) of
-                ok ->
-                    logon_1({ok, UserId}, Payload, Context);
+    case m_authentication:acceptable_password(NewPassword, Context) of
+        ok ->
+            case z_notifier:first(#logon_submit{ payload = LogonPayload }, Context) of
+                {OK, UserId} when OK =:= ok; OK =:= expired ->
+                    case reset_1(UserId, Username, NewPassword, LogonPayload, Context) of
+                        ok ->
+                            delete_reminder_secret(UserId, Context),
+                            Options = z_context:get(auth_options, Context, #{}),
+                            Options1 = Options#{
+                                auth_method => <<"username_pw">>
+                            },
+                            Context1 = z_acl:logon(UserId, Context),
+                            Context2 = z_authentication_tokens:set_auth_cookie(UserId, Options1, Context1),
+                            { #{ status => ok }, Context2 };
+                        {error, Reason} ->
+                            { #{ status => error, error => Reason }, Context }
+                    end;
+                {error, ratelimit} ->
+                    { #{ status => error, error => ratelimit }, Context };
+                {error, need_passcode} ->
+                    { #{ status => error, error => need_passcode }, Context };
+                {error, set_passcode} ->
+                    { #{ status => error, error => set_passcode }, Context };
+                {error, set_passcode_error} ->
+                    { #{ status => error, error => set_passcode_error }, Context };
+                {error, passcode} ->
+                    { #{ status => error, error => passcode }, Context };
+                {error, use_provider} ->
+                    { #{ status => error, error => use_provider }, Context };
                 {error, Reason} ->
-                    { #{ status => error, error => Reason }, Context }
+                    ?LOG_WARNING(#{
+                        in => zotonic_mod_authentication,
+                        text => <<"Password change request with password mismatch">>,
+                        result => error,
+                        reason => Reason,
+                        user_id => UserId,
+                        username => Username
+                    }),
+                    { #{ status => error, error => pw }, Context }
             end;
-        {error, ratelimit} ->
-            { #{ status => error, error => ratelimit }, Context };
-        {error, need_passcode} ->
-            { #{ status => error, error => need_passcode }, Context };
-        {error, passcode} ->
-            { #{ status => error, error => passcode }, Context };
-        {ok, _} ->
-            { #{ status => error, error => pw }, Context }
+        {error, Reason} ->
+            { #{ status => error, error => Reason }, Context }
     end.
 
-%% @doc Reset the password for an user, using the mailed reset secret and (optional) 2FA code.
--spec reset( map(), z:context() ) -> { map(), z:context() }.
+%% @doc Reset the password for a user, using the mailed reset secret and (optional) 2FA code.
+-spec reset(Payload, Context) -> {Status, Context1} when
+    Payload :: map(),
+    Context :: z:context(),
+    Status :: map(),
+    Context1 :: z:context().
 reset(#{
         <<"secret">> := Secret,
         <<"username">> := Username,
-        <<"password">> := Password,
+        <<"password">> := NewPassword,
         <<"passcode">> := Passcode
-    } = Payload, Context) when is_binary(Secret), is_binary(Username), is_binary(Password), is_binary(Passcode) ->
-    case auth_precheck(Username, Context) of
+    } = Payload, Context) when is_binary(Secret), is_binary(Username), is_binary(NewPassword), is_binary(Passcode) ->
+    case m_authentication:acceptable_password(NewPassword, Context) of
         ok ->
-            PasswordMinLength = z_convert:to_integer(m_config:get_value(mod_authentication, password_min_length, 8, Context)),
-
-            case size(Password) of
-                N when N < PasswordMinLength ->
-                    { #{ status => error, error => tooshort }, Context };
-                _ ->
+            case auth_precheck(Username, Context) of
+                ok ->
                     case get_by_reminder_secret(Secret, Context) of
                         {ok, UserId} ->
-                            case m_identity:get_username(UserId, Context) of
-                                undefined ->
-                                    ?LOG_ERROR(#{
-                                        text => <<"Password reset for user without username">>,
-                                        in => zotonic_mod_authentication,
-                                        result => error,
-                                        reason => no_username,
-                                        user_id => UserId
-                                    }),
-                                    { #{ status => error, error => username }, Context };
-                                Username ->
-                                    case reset_1(UserId, Username, Password, Passcode, Context) of
-                                        ok ->
-                                            logon_1({ok, UserId}, Payload, Context);
-                                        {error, Reason} ->
-                                            { #{ status => error, error => Reason }, Context }
-                                    end
+                            case m_rsc:p_no_acl(UserId, <<"is_published">>, Context) of
+                                true ->
+                                    case m_identity:get_username(UserId, Context) of
+                                        undefined ->
+                                            ?LOG_ERROR(#{
+                                                text => <<"Password reset for user without username">>,
+                                                in => zotonic_mod_authentication,
+                                                result => error,
+                                                reason => no_username,
+                                                user_id => UserId
+                                            }),
+                                            { #{ status => error, error => username }, Context };
+                                        Username ->
+                                            case reset_1(UserId, Username, NewPassword, Payload, Context) of
+                                                ok ->
+                                                    logon_1({ok, UserId}, Payload, #{}, Context);
+                                                {error, Reason} ->
+                                                    { #{ status => error, error => Reason }, Context }
+                                            end
+                                    end;
+                                false ->
+                                    { #{ status => error, error => user_not_enabled }, Context }
                             end;
                         undefined ->
                             { #{ status => error, error => unknown_code }, Context }
-                    end
+                    end;
+                {error, ratelimit} ->
+                    { #{ status => error, error => ratelimit }, Context };
+                _ ->
+                    { #{ status => error, error => error }, Context }
             end;
-        {error, ratelimit} ->
-            { #{ status => error, error => ratelimit }, Context };
-        _ ->
-            { #{ status => error, error => error }, Context }
+        {error, Reason} ->
+            { #{ status => error, error => Reason }, Context }
     end;
 reset(_Payload, Context) ->
     { #{
@@ -461,12 +525,8 @@ reset(_Payload, Context) ->
     }, Context }.
 
 
-reset_1(UserId, Username, Password, Passcode, Context) ->
-    QArgs = #{
-        <<"username">> => Username,
-        <<"passcode">> => Passcode
-    },
-    case auth_postcheck(UserId, QArgs, Context) of
+reset_1(UserId, Username, Password, Payload, Context) ->
+    case auth_postcheck(UserId, Payload, Context) of
         ok ->
             case m_identity:set_username_pw(UserId, Username, Password, z_acl:sudo(Context)) of
                 ok ->
@@ -478,8 +538,12 @@ reset_1(UserId, Username, Password, Passcode, Context) ->
                 {error, _} ->
                     {error, error}
             end;
-        {error, need_passcode} ->
-            {error, need_passcode};
+        {error, need_passcode} = Error ->
+            Error;
+        {error, set_passcode} = Error ->
+            Error;
+        {error, set_passcode_error} = Error ->
+            Error;
         {error, passcode} ->
             z_notifier:notify_sync(
                 #auth_checked{
@@ -489,14 +553,23 @@ reset_1(UserId, Username, Password, Passcode, Context) ->
                 },
                 Context),
             {error, passcode};
+        {error, user_external} = Error ->
+            Error;
+        {error, user_not_enabled} = Error ->
+            Error;
         _Error ->
             {error, error}
     end.
 
 %% @doc Return information about the current user and request language/timezone
--spec status( map(), z:context() ) -> { map(), z:context() }.
+-spec status(Payload, Context) -> {Status, Context1} when
+    Payload :: map(),
+    Context :: z:context(),
+    Status :: map(),
+    Context1 :: z:context().
 status(Payload, Context) ->
     Context1 = z_authentication_tokens:ensure_auth_cookie(Context),
+    z_auth:publish_user_session(Context1),
     return_status(Payload, Context1).
 
 return_status(Payload, Context) ->
@@ -514,6 +587,7 @@ return_status(Payload, Context) ->
         username => m_identity:get_username(Context1),
         preferences => #{
             language => z_context:language(Context1),
+            languages => z_context:languages(Context1),
             timezone => z_context:tz(Context1)
         },
         options => z_context:get(auth_options, Context1, #{}),
@@ -526,7 +600,6 @@ return_status(Payload, Context) ->
             Status
     end,
     { Status1, Context1 }.
-
 
 -spec check_reminder_secret( map(), z:context() ) -> map().
 check_reminder_secret(#{ <<"secret">> := Secret, <<"username">> := Username }, Context) when is_binary(Secret), is_binary(Username) ->
@@ -555,7 +628,8 @@ check_reminder_secret(#{ <<"secret">> := Secret, <<"username">> := Username }, C
                                 result => error,
                                 reason => username_mismatch,
                                 username_given => Username,
-                                username => OtherUsername
+                                username => OtherUsername,
+                                user_id => UserId
                             }),
                             #{
                                 status => error,

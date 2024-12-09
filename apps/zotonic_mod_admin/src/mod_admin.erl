@@ -24,7 +24,7 @@
 -mod_description("Provides administrative interface for editing pages, media, users etc.").
 -mod_depends([ base, authentication, mod_search, mod_mqtt, mod_wires ]).
 -mod_provides([ admin ]).
--mod_schema(2).
+-mod_schema(3).
 -mod_prio(1000).
 
 -export([
@@ -32,6 +32,7 @@
      observe_admin_menu/3,
      observe_admin_edit_blocks/3,
      observe_module_ready/2,
+     observe_rsc_update_done/2,
      event/2,
 
      do_link/5,
@@ -182,26 +183,32 @@ observe_admin_edit_blocks(#admin_edit_blocks{}, Menu, Context) ->
 observe_module_ready(module_ready, Context) ->
     z_depcache:flush(admin_menu, Context).
 
+observe_rsc_update_done(#rsc_update_done{ action = Action, id = Id }, Context) when
+    Action =:= insert;
+    Action =:= update ->
+    case m_config:get_boolean(?MODULE, is_notrack_refers, Context) of
+        true ->
+            ok;
+        false ->
+            z_admin_refers:ensure_refers(Id, z_acl:sudo(Context))
+    end;
+observe_rsc_update_done(#rsc_update_done{}, _Context) ->
+    ok.
+
 
 event(#postback_notify{message= <<"admin-insert-block">>}, Context) ->
-    Language = case z_context:get_q("language", Context) of
-                    undefined ->
-                        [];
-                    Ls ->
-                        Ls1 = string:tokens(Ls, ","),
-                        [ list_to_atom(L) || L <- lists:filter(fun z_language:is_valid/1, Ls1) ]
-               end,
-    EditLanguage = case z_context:get_q("edit_language", Context) of
+    Language = language_list(z_context:get_q(<<"language">>, Context)),
+    EditLanguage = case z_context:get_q(<<"edit_language">>, Context) of
                     undefined ->
                         z_context:language(Context);
                     EL ->
-                        case z_language:is_valid(EL) of
-                            true -> list_to_atom(EL);
-                            false -> z_context:language(Context)
+                        case z_language:to_language_atom(EL) of
+                            {ok, ELA} -> ELA;
+                            {error, _} -> z_context:language(Context)
                         end
                    end,
-    Type = z_string:to_name(z_context:get_q("type", Context)),
-    RscId = z_convert:to_integer(z_context:get_q("rsc_id", Context)),
+    Type = z_string:to_name(z_context:get_q(<<"type">>, Context)),
+    RscId = z_convert:to_integer(z_context:get_q(<<"rsc_id">>, Context)),
     Render = #render{
                 template="_admin_edit_block_li.tpl",
                 vars=[
@@ -216,7 +223,7 @@ event(#postback_notify{message= <<"admin-insert-block">>}, Context) ->
                     {blocks, lists:sort(z_notifier:foldl(#admin_edit_blocks{id=RscId}, [], Context))}
                 ]
             },
-    case z_html:escape(z_context:get_q("after", Context)) of
+    case z_html:escape(z_context:get_q(<<"after">>, Context)) of
         undefined -> z_render:insert_top("edit-blocks", Render, Context);
         AfterId -> z_render:insert_after(AfterId, Render, Context)
     end;
@@ -233,8 +240,8 @@ event(#postback_notify{message = <<"feedback">>, trigger = Trigger, target=Targe
         CrId ->
             CrId
     end,
-    SubjectId = z_convert:to_integer(z_context:get_q(<<"subject_id">>, Context)),
-    ObjectId = z_convert:to_integer(z_context:get_q(<<"object_id">>, Context)),
+    SubjectId = m_rsc:rid(z_context:get_q(<<"subject_id">>, Context), Context),
+    ObjectId = m_rsc:rid(z_context:get_q(<<"object_id">>, Context), Context),
     Predicate = z_convert:to_binary(z_context:get_q(<<"predicate">>, Context, <<>>)),
     PredicateId = m_rsc:rid(Predicate, Context),
     TextL = lists:foldl(
@@ -260,15 +267,15 @@ event(#postback_notify{message = <<"feedback">>, trigger = Trigger, target=Targe
         Cat -> Cat
     end,
     Cats = case z_convert:to_binary(Category) of
-                <<"p:", Predicate/binary>> ->
-                    feedback_categories(SubjectId, Predicate, ObjectId, Context);
+                <<"p:", PredicateName/binary>> ->
+                    feedback_categories(SubjectId, PredicateName, ObjectId, Context);
                 <<>> when PredicateId =/= undefined ->
                     feedback_categories(SubjectId, Predicate, ObjectId, Context);
                 <<>> -> [];
                 <<"*">> -> [];
                 CIds ->
                     CatIds = binary:split(CIds, <<",">>, [ global ]),
-                    [ {m_rsc:rid(CatId, Context)} || CatId <- CatIds, CatId =/= <<>> ]
+                    [ m_rsc:rid(CatId, Context) || CatId <- CatIds, CatId =/= <<>> ]
            end,
     Vars = [
         {intent, z_context:get_q(<<"intent">>, Context)},
@@ -280,7 +287,7 @@ event(#postback_notify{message = <<"feedback">>, trigger = Trigger, target=Targe
         {text, Text},
         {is_multi_cat, length(Cats) > 1},
         {category_id, case Cats of
-            [{CId}] -> CId;
+            [CId] -> CId;
             _ -> undefined
         end},
         {is_zlink, z_convert:to_bool( z_context:get_q(<<"is_zlink">>, Context) )}
@@ -310,6 +317,7 @@ event(#postback{message={admin_connect_select, Args}}, Context) ->
     ObjectId0 = proplists:get_value(object_id, Args),
     Predicate = proplists:get_value(predicate, Args),
     Callback = proplists:get_value(callback, Args),
+    Intent = proplists:get_value(intent, Args),
     IsConnectToggle = z_convert:to_bool( proplists:get_value(is_connect_toggle, Args) ),
 
     QAction = proplists:get_all_values(action, Args),
@@ -339,7 +347,12 @@ event(#postback{message={admin_connect_select, Args}}, Context) ->
         false -> false;
         true -> IsConnected
     end,
-    case do_link_unlink(IsUnlink, SubjectId, Predicate, ObjectId, Callback, Context) of
+    OptPredicate = case Intent of
+        <<"select">> when is_integer(SubjectId) -> refers;
+        <<"select">> -> undefined;
+        _ -> Predicate
+    end,
+    case do_link_unlink(IsUnlink, SubjectId, OptPredicate, ObjectId, Callback, Context) of
         {ok, Context1} ->
             Context2 = case z_convert:to_bool(proplists:get_value(autoclose, Args)) of
                             true -> z_render:dialog_close(Context1);
@@ -424,18 +437,18 @@ event(#submit{ message = {dropbox_upload, _Args} }, Context) ->
                         ok ->
                             ?LOG_INFO(#{
                                 in => zotonic_mod_admin,
-                                text => <<"Dropbox file upload accepted">>,
+                                text => <<"DFile upload accepted">>,
                                 result => ok,
                                 filename => Filename,
                                 dropbox_filename => Filename1,
                                 path => Filepath,
                                 size => Size
                             }),
-                            z_render:growl(?__("File uploaded to the dropbox, will be handled shortly.", Context), Context);
+                            z_render:growl(?__("File uploaded to the drop folder, will be handled shortly.", Context), Context);
                         {error, Reason} ->
                             ?LOG_INFO(#{
                                 in => zotonic_mod_admin,
-                                text => <<"Dropbox file upload error">>,
+                                text => <<"File upload error">>,
                                 result => error,
                                 reason => Reason,
                                 filename => Filename,
@@ -443,17 +456,113 @@ event(#submit{ message = {dropbox_upload, _Args} }, Context) ->
                                 path => Filepath,
                                 size => Size
                             }),
-                            z_render:growl_error(?__("Sorry, could not move the file to the dropbox.", Context), Context)
+                            z_render:growl_error(?__("Sorry, could not move the file to the drop folder.", Context), Context)
                     end
             end;
         false ->
-            z_render:growl_error(?__("Sorry, you are not allowed to upload dropbox files.", Context), Context)
+            z_render:growl_error(?__("Sorry, you are not allowed to upload drop folder files.", Context), Context)
+    end;
+
+event(#submit{ message = {delete_all, Args}}, Context) ->
+    case proplists:get_value(ids, Args) of
+        Ids when is_list(Ids) ->
+            lists:foreach(
+                fun(Id) ->
+                    case m_rsc:delete(Id, Context) of
+                        ok ->
+                            ok;
+                        {error, Reason} ->
+                            ?LOG_WARNING(#{
+                                in => zotonic_mod_admin,
+                                text => <<"Error during bulk delete of resources">>,
+                                id => Id,
+                                result => error,
+                                reason => Reason
+                            })
+                    end
+                end,
+                Ids),
+            z_render:wire(proplists:get_all_values(on_success, Args), Context);
+        _ ->
+            Context
+    end;
+
+event(#submit{ message = {update_all, Args}}, Context) ->
+    case proplists:get_value(ids, Args) of
+        Ids when is_list(Ids) ->
+            Props = z_context:get_q_all_noz(Context),
+            Update = lists:foldl(
+                fun
+                    ({_P, <<>>}, Acc) ->
+                        Acc;
+                    ({P, V}, Acc) ->
+                        Acc#{
+                            P => V
+                        }
+                end,
+                #{},
+                Props),
+            lists:foreach(
+                fun(Id) ->
+                    case m_rsc:update(Id, Update, Context) of
+                        {ok, _} ->
+                            ok;
+                        {error, Reason} ->
+                            ?LOG_WARNING(#{
+                                in => zotonic_mod_admin,
+                                text => <<"Error during bulk update of resources">>,
+                                id => Id,
+                                update => Update,
+                                result => error,
+                                reason => Reason
+                            })
+                    end
+                end,
+                Ids),
+            z_render:wire(proplists:get_all_values(on_success, Args), Context);
+        _ ->
+            Context
+    end;
+
+event(#postback{ message = {ensure_refers, _} }, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            z_admin_refers:insert_ensure_refers_all_task(Context),
+            z_render:growl(?__("Scheduled background task to check all refers connections.", Context), Context);
+        false ->
+            z_render:growl_error(?__("Sorry, only an admin is allowed to do this", Context), Context)
+    end;
+
+event(#postback{ message = {delete_tasks, Args} }, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            {module, Module} = proplists:lookup(module, Args),
+            {function, Function} = proplists:lookup(function, Args),
+            z_pivot_rsc:delete_task(Module, Function, Context),
+            z_render:growl(?__("Deleted tasks.", Context), Context);
+        false ->
+            z_render:growl_error(?__("Sorry, only an admin is allowed to do this", Context), Context)
     end;
 
 event(_E, Context) ->
     ?DEBUG(_E),
     Context.
 
+language_list(undefined) ->
+    [];
+language_list(<<>>) ->
+    [];
+language_list(B) when is_binary(B) ->
+    language_list(binary:split(B, <<",">>, [global, trim_all]));
+language_list(L) ->
+    lists:filtermap(
+        fun(Lang) ->
+            case z_language:to_language_atom(Lang) of
+                {ok, Code} -> {true, Code};
+                {error, _} -> false
+            end
+        end,
+        L).
 
 sanitize_filename(<<>>, Acc) ->
     Acc;
@@ -639,28 +748,37 @@ do_link_unlink_feedback(IsNew, IsDelete, EdgeId, SubjectId, Predicate, ObjectId,
     end.
 
 context_language(Context) ->
-    case z_context:get_q("language", Context) of
+    case z_context:get_q(<<"language">>, Context) of
         undefined -> Context;
-        [] -> Context;
+        <<>> -> Context;
         Lang ->
             case z_language:to_language_atom(Lang) of
                 {ok, LanguageCode} -> z_context:set_language(LanguageCode, Context);
-                _ -> Context
+                {error, _} -> Context
             end
     end.
-
 
 manage_schema(_Version, Context) ->
     m_admin_note:install(Context),
     #datamodel{
-        categories=[
-            {admin_content_query,
-             'query',
-             [
-                {title, {trans, [
-                            {en, <<"Admin content query">>},
-                            {nl, <<"Admin inhoud zoekopdracht">>}
-                    ]}}
-             ]}
+        categories = [
+            {admin_content_query, 'query', #{
+                <<"title">> => #trans{ tr = [
+                    {en, <<"Admin content query">>},
+                    {nl, <<"Admin inhoud zoekopdracht">>}
+                ]}
+            }}
+        ],
+        predicates = [
+            {refers, #{
+                <<"title">> => #trans{
+                    tr = [
+                        {en, <<"Refers">>},
+                        {nl, <<"Refereert">>}
+                    ]
+                },
+                <<"is_object_noindex">> => true,
+                <<"is_connections_hide">> => true
+            }, []}
         ]
     }.

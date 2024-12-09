@@ -30,20 +30,34 @@
 {% endblock %}
 
 {% block widget_content_nolang %}
-<div class="form-group view-expanded">
-    <label class="control-label" for="block-{{name}}-style">{_ Button style _}</label>
-    <div>
-      <select class="form-control" id="block-{{name}}-style" name="blocks[].style">
-           <option value="">{_ Default _}</option>
-           <option value="btn-primary" {% if blk.style == "btn-primary" %}selected="selected"{% endif %}>{_ Primary _}</option>
-           <option value="btn-info" {% if blk.style == "btn-info" %}selected="selected"{% endif %}>{_ Informational _}</option>
-           <option value="btn-success" {% if blk.style == "btn-success" %}selected="selected"{% endif %}>{_ Success _}</option>
-           <option value="btn-warning" {% if blk.style == "btn-warning" %}selected="selected"{% endif %}>{_ Warning _}</option>
-           <option value="btn-danger" {% if blk.style == "btn-danger" %}selected="selected"{% endif %}>{_ Danger _}</option>
-           <option value="btn-inverse" {% if blk.style == "btn-inverse" %}selected="selected"{% endif %}>{_ Inverse _}</option>
-      </select>
+<div class="row">
+    <div class="col-md-5 form-group view-expanded">
+        <label class="control-label" for="block-{{name}}-style">{_ Button style _}</label>
+        <div>
+          <select class="form-control" id="block-{{name}}-style" name="blocks[].style">
+               <option value="btn-default">{_ Default _}</option>
+               <option value="btn-primary" {% if blk.style == "btn-primary" %}selected="selected"{% endif %}>{_ Primary _}</option>
+               <option value="btn-info" {% if blk.style == "btn-info" %}selected="selected"{% endif %}>{_ Informational _}</option>
+               <option value="btn-success" {% if blk.style == "btn-success" %}selected="selected"{% endif %}>{_ Success _}</option>
+               <option value="btn-warning" {% if blk.style == "btn-warning" %}selected="selected"{% endif %}>{_ Warning _}</option>
+               <option value="btn-danger" {% if blk.style == "btn-danger" %}selected="selected"{% endif %}>{_ Danger _}</option>
+               <option value="btn-inverse" {% if blk.style == "btn-inverse" %}selected="selected"{% endif %}>{_ Inverse _}</option>
+          </select>
+        </div>
+    </div>
+    <div class="col-md-4 form-group">
+        <button type="button" id="{{ #livebutton }}" style="margin-top: 3rem;" class="btn {{ blk.style|default:"btn-default" }}">
+            {_ Button preview _}
+        </button>
     </div>
 </div>
+
+{% javascript %}
+    document.getElementById('block-{{name}}-style')
+            .addEventListener('change', function(){
+                document.getElementById('{{ #livebutton }}').className = 'btn '+ this.value;
+            });
+{% endjavascript %}
 
 <div class="form-group view-expanded question-options label-floating">
     <input class="form-control" type="text" id="block-{{name}}-target" name="blocks[].target" value="{{ blk.target }}" placeholder="{_ Question label _}" />

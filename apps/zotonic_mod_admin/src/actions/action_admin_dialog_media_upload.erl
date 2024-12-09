@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Open a dialog with some fields to upload a new media.
+%% @end
 
-%% Copyright 2009-2021 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -71,40 +72,48 @@ event(#postback{message={media_upload_dialog, Title, Intent, Id, SubjectId, Pred
 event(#submit{message={media_upload, EventProps}}, Context) ->
     case z_context:get_q(<<"upload_file">>, Context) of
         #upload{ filename = OriginalFilename } = Upload ->
+            Category = proplists:get_value(category, EventProps),
             Intent = proplists:get_value(intent, EventProps),
             Props = case Intent of
                 <<"update">> ->
-                    #{
+                    R = #{
                         <<"original_filename">> => OriginalFilename
-                    };
+                    },
+                    case z_context:get_q(<<"medium_language">>, Context) of
+                        undefined ->
+                            R;
+                        Language when is_binary(Language) ->
+                            R#{
+                                <<"medium_language">> => Language
+                            }
+                    end;
                 _ ->
-                    Lang = z_context:language(Context),
-                    Title = z_context:get_q(<<"new_media_title">>, Context),
-                    NewTitle = case z_utils:is_empty(Title) of
-                                   true -> OriginalFilename;
-                                   false -> Title
-                               end,
+                    NewTitle = z_string:trim(z_convert:to_binary(z_context:get_q(<<"new_media_title">>, Context))),
                     IsDependent = z_convert:to_bool( z_context:get_q(<<"is_dependent">>, Context, false) ),
                     IsPublished = z_convert:to_bool( z_context:get_q(<<"is_published">>, Context, true) ),
                     Props0 = #{
                         <<"is_published">> => IsPublished,
                         <<"is_dependent">> => IsDependent,
-                        <<"title">> =>  #trans{ tr = [{Lang,NewTitle}] },
-                        <<"language">> => [Lang],
-                        <<"original_filename">> => OriginalFilename
+                        <<"title">> =>  NewTitle,
+                        <<"original_filename">> => OriginalFilename,
+                        <<"medium_language">> => z_context:get_q(<<"medium_language">>, Context)
                     },
                     add_content_group(EventProps, Props0, Context)
             end,
+            Opts = [
+                {preferred_category, Category}
+            ],
             handle_media_upload(Intent, EventProps, Context,
                                 %% insert fun
-                                fun(Ctx) -> m_media:insert_file(Upload, Props, Ctx) end,
+                                fun(Ctx) -> m_media:insert_file(Upload, Props, Opts, Ctx) end,
                                 %% replace fun
-                                fun(Id, Ctx) -> m_media:replace_file(Upload, Id, Props, Ctx) end);
+                                fun(Id, Ctx) -> m_media:replace_file(Upload, Id, Props, Opts, Ctx) end);
         _ ->
             z_render:growl(?__("Add a new media file", Context), Context)
     end;
 
 event(#submit{message={media_url, EventProps}}, Context) ->
+    Category = proplists:get_value(category, EventProps),
     Url = z_context:get_q(<<"url">>, Context),
     Intent = proplists:get_value(intent, EventProps),
     Props = case Intent of
@@ -120,11 +129,14 @@ event(#submit{message={media_url, EventProps}}, Context) ->
             },
             add_content_group(EventProps, Props0, Context)
     end,
+    Opts = [
+        {preferred_category, Category}
+    ],
     handle_media_upload(Intent, EventProps, Context,
                         %% insert fun
-                        fun(Ctx) -> m_media:insert_url(Url, Props, Ctx) end,
+                        fun(Ctx) -> m_media:insert_url(Url, Props, Opts, Ctx) end,
                         %% replace fun
-                        fun(Id, Ctx) -> m_media:replace_url(Url, Id, Props, Ctx) end).
+                        fun(Id, Ctx) -> m_media:replace_url(Url, Id, Props, Opts, Ctx) end).
 
 
 add_content_group(EventProps, Props, Context) ->
@@ -146,6 +158,7 @@ content_group_id(ContentGroupId, _SubjectId, _Context) ->
 
 %% Handling the media upload.
 handle_media_upload(<<"update">>, EventProps, Context, _InsertFun, ReplaceFun) ->
+    % Note: the 'stay' event argument is ignored here because we never redirect
     Actions = proplists:get_value(actions, EventProps, []),
     Id = proplists:get_value(id, EventProps),
     case ReplaceFun(Id, Context) of
@@ -160,7 +173,15 @@ handle_media_upload(<<"update">>, EventProps, Context, _InsertFun, ReplaceFun) -
 handle_media_upload(_Intent, EventProps, Context, InsertFun, _ReplaceFun) ->
     case InsertFun(Context) of
         {ok, MediaId} ->
-            action_admin_dialog_new_rsc:do_new_page_actions(MediaId, EventProps, Context);
+        % Note: the 'stay' event argument is "converted" to "redirect" here and
+        % handled by 'action_admin_dialog_new_rsc:do_new_page_actions/3'
+            Stay = z_convert:to_bool(proplists:get_value(stay, EventProps, false)),
+            NewEventProps =
+                case proplists:is_defined(redirect, EventProps) of
+                    true -> EventProps;
+                    false -> [ {redirect, not Stay} | EventProps]
+                end,
+            action_admin_dialog_new_rsc:do_new_page_actions(MediaId, NewEventProps, Context);
         {error, R} ->
             z_render:growl_error(error_message(R, Context), Context)
     end.

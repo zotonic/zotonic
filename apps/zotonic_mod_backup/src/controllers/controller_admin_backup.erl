@@ -57,6 +57,8 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
 
 
 
+event(#postback{message='config_encrypt_backups'}, Context) ->
+    set_config(encrypt_backups, Context);
 event(#postback{message='config_backup_panel'}, Context) ->
     set_config(admin_panel, Context);
 event(#postback{message='config_backup_daily'}, Context) ->
@@ -65,9 +67,13 @@ event(#submit{message={restore, Args}}, Context) ->
     {id, Id} = proplists:lookup(id, Args),
     case z_acl:rsc_editable(Id, Context) of
         true ->
-            #upload{filename=_Filename, tmpfile=Tmpfile} = z_context:get_q_validated(<<"file">>, Context),
+            #upload{filename=Filename, tmpfile=Tmpfile} = z_context:get_q_validated(<<"file">>, Context),
             {ok, Data} = file:read_file(Tmpfile),
-            case catch z_notifier:first(#rsc_upload{id=Id, format=bert, data=Data}, Context) of
+            Format = case filename:extension(Filename) of
+                <<".json">> -> json;
+                _ -> bert
+            end,
+            case catch z_notifier:first(#rsc_upload{id=Id, format=Format, data=Data}, Context) of
                 {ok, NewId} ->
                     z_render:wire([{dialog_close, []},
                                    {redirect, [{dispatch, admin_edit_rsc}, {id,NewId}]}], Context);

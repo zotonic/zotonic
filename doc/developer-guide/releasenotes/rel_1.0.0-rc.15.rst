@@ -76,7 +76,7 @@ Marc Worrell (34):
  * mod_translation: remove title attribute from hreflang link tags (#3260)
  * core: after module schema error, flush caches (#3258)
  * core: in z_csv_writer, do not escape all fields starting with a digit (#3263)
- * core: use type file:filename_all in z_csv_writer (#3266)
+ * core: use type ``file:filename_all`` in z_csv_writer (#3266)
  * core: in m_search only add qargs if the payload is empty (#3265)
  * mod_survey: in survey results editor show user and allow to link or create new person (#3264)
  * mod_admin: misc fixes for the connect/disconnect dialog (#3268)

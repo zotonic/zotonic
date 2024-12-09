@@ -1,4 +1,4 @@
-#cloud-config for Ubuntu 20
+#cloud-config for Ubuntu 24
 #
 # Example configs here:
 # https://cloudinit.readthedocs.io/en/latest/topics/examples.html
@@ -12,7 +12,7 @@ users:
   - default
   - name: zotonic
     gecos: Zotonic
-    sudo: false
+    sudo: null
     lock_passwd: true
     shell: /bin/bash
     # ssh_authorized_keys:
@@ -21,11 +21,12 @@ users:
 
 packages:
   - build-essential
-  - iptables-persistent
+  - libcap2-bin
   - libssl-dev
   - automake
   - autoconf
-  - libncurses5-dev
+  - ncurses-dev
+  - zlib1g-dev
   - git
   - postgresql
   - postgresql-client
@@ -39,38 +40,34 @@ packages:
   - file
   - imagemagick
   - ffmpeg
+  - xvfb
+  - wkhtmltopdf
 
 runcmd:
-  # Fetch erlang from erlang solutions
-  - wget -O- https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | apt-key add -
-  - echo "deb https://packages.erlang-solutions.com/ubuntu `lsb_release -c | sed -E 's/^.*\s([a-z]+)$/\1/g'` contrib" | tee /etc/apt/sources.list.d/erlang-solutions.list
   - apt update
-  - apt-get -y install erlang
-  # IP4 port mapping
-  - iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to 8000
-  - iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to 8443
-  - iptables -t nat -A PREROUTING -p tcp --dport 25 -j REDIRECT --to 2525
-  - iptables -t nat -A OUTPUT -p tcp -d `/sbin/ip route get 8.8.8.8 | grep -oP 'src \K[^ ]+'` --dport 80 -j REDIRECT --to 8000
-  - iptables -t nat -A OUTPUT -p tcp -d `/sbin/ip route get 8.8.8.8 | grep -oP 'src \K[^ ]+'` --dport 443 -j REDIRECT --to 8443
-  - iptables -t nat -A OUTPUT -p tcp -d `/sbin/ip route get 8.8.8.8 | grep -oP 'src \K[^ ]+'` --dport 25 -j REDIRECT --to 2525
-  - iptables-save > /etc/iptables/rules.v4
-  # IP6 port mapping
-  - ip6tables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to 8000
-  - ip6tables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to 8443
-  - ip6tables -t nat -A PREROUTING -p tcp --dport 25 -j REDIRECT --to 2525
-  - ip6tables -t nat -A OUTPUT -p tcp -d `/sbin/ip route get 2001:4860:4860::8888 | grep -oP 'src \K[^ ]+'` --dport 80 -j REDIRECT --to 8000
-  - ip6tables -t nat -A OUTPUT -p tcp -d `/sbin/ip route get 2001:4860:4860::8888 | grep -oP 'src \K[^ ]+'` --dport 443 -j REDIRECT --to 8443
-  - ip6tables -t nat -A OUTPUT -p tcp -d `/sbin/ip route get 2001:4860:4860::8888 | grep -oP 'src \K[^ ]+'` --dport 25 -j REDIRECT --to 2525
-  - ip6tables-save > /etc/iptables/rules.v6
+  # Use kerl to install a good and recent version of Erlang
+  - curl -O https://raw.githubusercontent.com/kerl/kerl/master/kerl
+  - chmod a+x kerl
+  - mv kerl /usr/local/bin/kerl
+  - mkdir -p /usr/local/lib/erlang
+  - /usr/local/bin/kerl update releases
+  - /usr/local/bin/kerl build 26.2
+  - /usr/local/bin/kerl install 26.2 /usr/local/lib/erlang/26.2
+  - echo ". /usr/local/lib/erlang/26.2/activate" >> /etc/profile
+  - echo "export REBAR_CACHE_DIR=~/.cache/rebar3" >> /etc/profile
+  # Allow Erlang (beam.smp) to listen on restricted ports (below 1024)
+  - setcap 'cap_net_bind_service=+ep' /usr/local/lib/erlang/26.2/erts-*/bin/beam.smp
+  # Restrict epmd listen IP addresses
+  - echo "ERL_EPMD_ADDRESS=127.0.0.1,127.0.1.1" >> /etc/environment
   # Postgres installation
   - sudo --user=postgres -- psql -c "CREATE USER zotonic WITH PASSWORD 'zotonic';"
   - sudo --user=postgres -- psql -c "CREATE DATABASE zotonic WITH OWNER = zotonic ENCODING = 'UTF8';"
   - sudo --user=postgres -- psql -c "GRANT ALL ON DATABASE zotonic TO zotonic;"
   # Set ulimit file handles
-  - echo "zotonic   soft   nofile   20000" > /etc/security/limits.d/zotonic.conf
-  - echo "zotonic   hard   nofile   20000" >> /etc/security/limits.d/zotonic.conf
-  # Fix openssl config
-  - sed -i 's/^.*RANDFILE.*$/# &1/g' /etc/ssl/openssl.cnf
+  - echo "zotonic   soft   nofile   60000" > /etc/security/limits.d/zotonic.conf
+  - echo "zotonic   hard   nofile   60000" >> /etc/security/limits.d/zotonic.conf
+  # Max inotify files setting
+  - sudo echo "fs.inotify.max_user_watches=10000" > /etc/sysctl.d/40-max-user-watches.conf
   # Enable ImageMagick PDF rendering
   - sed -i 's/^.*pattern="PDF".*$/<!-- &1 -->/g' /etc/ImageMagick-6/policy.xml
   # Let clamav listen on localhost and update definitions
@@ -89,3 +86,4 @@ runcmd:
   - sudo su zotonic -l -c "cp zotonic/cloud-init/config.d/* .config/zotonic/config/1/config.d/."
   - sudo su zotonic -l -c "cd zotonic; make"
   - sudo su zotonic -l -c "cd zotonic; bin/zotonic start"
+

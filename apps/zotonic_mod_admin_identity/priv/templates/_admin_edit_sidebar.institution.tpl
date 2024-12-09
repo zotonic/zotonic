@@ -1,1 +1,1 @@
-{% include "_admin_edit_sidebar.person.tpl" %}
+{% include "_admin_edit_sidebar_identity.tpl" %}

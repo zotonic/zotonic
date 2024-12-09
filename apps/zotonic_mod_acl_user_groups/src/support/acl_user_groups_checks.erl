@@ -702,10 +702,21 @@ has_collab_groups(_Context) ->
     [].
 
 % Fetch all collaboration groups the user is member of.
--spec has_collab_groups(m_rsc:resource_id()|undefined, #context{}) -> list(m_rsc:resource_id()).
-has_collab_groups(undefined, _Context) ->
-    [];
+-spec has_collab_groups(UserId, Context) -> CollabGroups when
+    UserId :: m_rsc:resource_id() | undefined,
+    Context :: z:context(),
+    CollabGroups :: [ m_rsc:resource_id() ].
 has_collab_groups(UserId, Context) ->
+    CollabGroups = has_collab_groups_1(UserId, Context),
+    z_notifier:foldl(
+        #acl_collab_groups_modify{
+            id = UserId,
+            groups = CollabGroups
+        }, CollabGroups, Context).
+
+has_collab_groups_1(undefined, _Context) ->
+    [];
+has_collab_groups_1(UserId, Context) ->
     m_edge:subjects(UserId, hascollabmanager, Context)
     ++ m_edge:subjects(UserId, hascollabmember, Context).
 
@@ -714,7 +725,9 @@ is_collab_group_manager(_GroupId, #context{ acl = #aclug{ collab_groups = [] }})
     false;
 is_collab_group_manager(GroupId, #context{ user_id = UserId, acl = #aclug{ collab_groups = CollabGroups}} = Context) ->
     lists:member(GroupId, CollabGroups)
-    andalso lists:member(GroupId, m_edge:subjects(UserId, hascollabmanager, Context)).
+    andalso lists:member(GroupId, m_edge:subjects(UserId, hascollabmanager, Context));
+is_collab_group_manager(_GroupId, _Context) ->
+    false.
 
 %% @doc Check if the user is a member of the collaboration group
 is_collab_group_member(CGId, #context{ acl = #aclug{ collab_groups = CollabGroups }}) ->
@@ -882,9 +895,9 @@ is_owner(insert_rsc, _Context) ->
     true;
 is_owner(Id, #context{ user_id = UserId } = Context) ->
     case z_notifier:first(#acl_is_owner{
-            id=Id,
-            creator_id=m_rsc:p_no_acl(Id, creator_id, Context),
-            user_id=UserId
+            id = Id,
+            creator_id = m_rsc:p_no_acl(Id, creator_id, Context),
+            user_id = UserId
         },
         Context)
     of

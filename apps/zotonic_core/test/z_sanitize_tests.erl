@@ -50,8 +50,12 @@ mso4_test() ->
 zmedia_test() ->
     Context = z_context:new(zotonic_site_testsandbox),
     In = <<"<!-- z-media 123 { \"align\":\"leftx\", \"caption\":\"&--\\u003e\" } -->">>,
-    Out = <<"<!-- z-media 123 {\"align\":\"block\",\"caption\":\"&→\"} -->"/utf8>>,
-    ?assertEqual(Out, z_sanitize:html(In, Context)).
+    Result = z_sanitize:html(In, Context),
+    [ <<"<!-- z-media 123 ">>, JSON, <<" -->">> ] = binary:split(Result, [ <<"{">>, <<"}">> ], [ global ]),
+    #{
+        <<"caption">> := <<"&→"/utf8>>,
+        <<"align">> := <<"block">>
+    } = jsxrecord:decode(<<"{", JSON/binary, "}">>).
 
 csv_test() ->
     sanitize_csv(<<"1.0,2,3,\"4\",-1,-1+3\n">>, <<"\"1.0\",\"2\",\"3\",\"4\",\"-1\",\"'-1+3\"\r\n">>),

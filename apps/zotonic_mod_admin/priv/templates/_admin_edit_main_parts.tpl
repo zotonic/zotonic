@@ -1,7 +1,8 @@
 
 {% optional include "_translation_init_languages.tpl" %}
 
-{% catinclude "_admin_edit_basics.tpl" id show_header %}
+{% catinclude "_admin_edit_basics.tpl" id show_header=false %}
+
 {% all catinclude "_admin_edit_content.tpl" id %}
 
 {% if id.category_id.is_feature_show_address|if_undefined:true %}
@@ -24,5 +25,7 @@
 {% catinclude "_admin_edit_blocks.tpl" id %}
 {% catinclude "_admin_edit_depiction.tpl" id %}
 
-{% include "_admin_edit_content_advanced.tpl" %}
-{% include "_admin_edit_content_seo.tpl" show_header %}
+{% all catinclude "_admin_edit_content_extra.tpl" id %}
+
+{% catinclude "_admin_edit_content_advanced.tpl" id %}
+{% optional include "_admin_edit_content_seo.tpl" show_header %}

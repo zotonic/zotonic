@@ -90,6 +90,15 @@ Currently, the following subcommands are implemented:
 ``zotonic siteconfigfiles <site_name>``
   List all configuration files for of site [site_name]
 
+``zotonic open [sitename]``
+  Open the site in Chrome, or when on macOS, in the default browser.
+
+``zotonic chrome [options] [switches] [sitename]``
+  Open the site in Chrome. The switches are options to Chrome.
+
+``zotonic chromium [options] [switches] [sitename]``
+  Open the site in Chromium. The switches are options to Chromium.
+
 ``zotonic dispatch <url>``
   Dispatch an URL. Finds the site matching the hostname and shows the dispatch information for the path.
   Example::

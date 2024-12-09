@@ -32,8 +32,8 @@ mod_authentication.reset_token_maxage
   (172800 seconds). This must be an integer value.
 
 mod_authentication.email_reminder_if_nomatch
-  On the password reset form, an user can enter their email address for receiving
-  an email to reset their password. If an user enters an email address that is not
+  On the password reset form, a user can enter their email address for receiving
+  an email to reset their password. If a user enters an email address that is not
   connected to an active account then we do not send an email.
   If this option is set to ``1`` then an email is sent. This prevents the user waiting
   for an email, but enables sending emails to arbitrary addresses.
@@ -58,7 +58,7 @@ mod_authentication.auth_autologon_secret
 Related configurations:
 
 site.password_force_different
-  Set to ``1`` to force an user picking a different password if they reset their password.
+  Set to ``1`` to force a user picking a different password if they reset their password.
 
 site.ip_allowlist
   If the admin password is set to ``admin`` then logon is only allowed from local IP addresses.

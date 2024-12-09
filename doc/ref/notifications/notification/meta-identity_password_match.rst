@@ -3,16 +3,16 @@
 identity_password_match
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-Notification that a user's identity has been verified. 
+Check if passwords are matching. Uses the password hashing algorithms. 
 
 
 Type: 
-    :ref:`notification-notify`
+    :ref:`notification-first`
 
 Return: 
     
 
 ``#identity_password_match{}`` properties:
-    - rsc_id: ``unknown``
-    - password: ``unknown``
-    - hash: ``unknown``
+    - rsc_id: ``m_rsc:resource_id()|undefined``
+    - password: ``binary``
+    - hash: ``m_identity:hash()|tuple``

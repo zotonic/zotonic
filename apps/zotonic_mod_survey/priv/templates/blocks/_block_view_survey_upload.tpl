@@ -9,7 +9,7 @@
 		<img id="{{ #preview }}" class="picture-preview" width="256" src="/lib/images/noun/photo-camera.png" />
 		<input type="file"
 			   class="picture-file do_filepreview form-control" name="{{ blk.name }}" id="{{ #upload }}"
-			   class="do_filepreview" data-filepreview="preview: '{{ #preview }}'"
+			   class="do_filepreview" data-filepreview='{ "preview": "{{ #preview }}" }'
 			   accept="image/*" />
 	{% else %}
 		<input class="form-control" type="file" name="{{ blk.name }}" id="{{ #upload }}" />

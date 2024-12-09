@@ -25,8 +25,8 @@
             >
                 <input type="hidden" name="auth" value="{{ q.auth|escape }}">
                 <input type="hidden" name="url" value="{{ q.url|escape }}">
-                <button class="btn btn-primary" type="submit">{_ I want to create a new account _}</button>
                 <a class="btn btn-default" href="/" data-onclick-topic="model/window/post/close">{_ Cancel _}</a>
+                <button class="btn btn-primary" type="submit">{_ I want to create a new account _}</button>
             </form>
         </div>
     {% elseif qerror == "need_passcode" or qerror == "passcode" %}
@@ -63,8 +63,8 @@
                     </div>
                 {% endblock %}
 
-                <button class="btn btn-primary" type="submit">{_ Continue _}</button>
                 <a class="btn btn-default" href="/" data-onclick-topic="model/window/post/close">{_ Cancel _}</a>
+                <button class="btn btn-primary" type="submit">{_ Continue _}</button>
             </form>
         </div>
     {% else %}
@@ -110,6 +110,16 @@
                 <p class="alert alert-warning">
                     {% trans "You used another account on {service} than was expected."
                              service=service|escape|default:_"the service"
+                    %}
+                </p>
+            </div>
+        {% elseif qerror == "disabled_user" %}
+            <div class="container">
+                <h1>{_ Disabled account _}</h1>
+
+                <p class="alert alert-warning">
+                    {% trans "Your account on {site} is disabled."
+                             site=m.site.title
                     %}
                 </p>
             </div>

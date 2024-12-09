@@ -18,7 +18,8 @@ jobs:
 
     strategy:
       matrix:
-        otp_version: [23, 24, 25]
+        # 27 can be added if a new qdate package has been released
+        otp_version: [25, 26, 27]
         os: [ubuntu-latest]
 
     container:
@@ -42,7 +43,7 @@ jobs:
           - 5432:5432
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Add user Zotonic
         run: |
           apt-get update

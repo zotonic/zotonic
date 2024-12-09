@@ -86,15 +86,33 @@ fetch(Method, Url, Args, Options, Context) ->
     Options1 = case proplists:is_defined(content_type, Options) of
         true ->
             Options;
+        false when Method =:= get; Method =:= delete ->
+            proplists:delete(content_type, Options);
         false ->
             [
                 {content_type, <<"application/x-www-form-urlencoded">>}
                 | Options
             ]
     end,
-    Payload = payload(Args, unicode:characters_to_list(proplists:get_value(content_type, Options1))),
-    Options2 = add_options(post, Url1, Options1, Context),
-    z_url_fetch:fetch(Method, Url1, Payload, Options2).
+    CT = case Method of
+        get -> <<"application/x-www-form-urlencoded">>;
+        delete -> <<"application/x-www-form-urlencoded">>;
+        _ -> proplists:get_value(content_type, Options1)
+    end,
+    Payload = payload(Args, unicode:characters_to_binary(CT)),
+    Url2 = if
+        Payload =:= undefined; Payload =:= <<>> ->
+            Url1;
+        Method =:= get; Method =:= delete ->
+            case binary:match(Url1, <<"?">>) of
+                nomatch -> <<Url1/binary, $?, Payload/binary>>;
+                {_, _} -> <<Url1/binary, $&, Payload/binary>>
+            end;
+        true ->
+            Url1
+    end,
+    Options2 = add_options(Method, Url2, Options1, Context),
+    z_url_fetch:fetch(Method, Url2, Payload, Options2).
 
 %% @doc Perform a request and fetch JSON data from an URL. Let modules change the fetch options. On success, the
 %% returned body is parsed with jsxrecord and returned.
@@ -114,15 +132,30 @@ fetch_json(Method, Url, Args, Options, Context) ->
         {ok, {_Final, _Hs, _Length, <<>>}} ->
             {ok, #{}};
         {ok, {_Final, _Hs, _Length, Body}} ->
-            {ok, jsxrecord:decode(Body)};
+            try
+                {ok, jsxrecord:decode(Body)}
+            catch
+                error:badarg:Stack ->
+                    ?LOG_ERROR(#{
+                        in => zotonic_core,
+                        text => <<"Expected JSON payload data, but could not decode">>,
+                        result => error,
+                        reason => json,
+                        url => Url,
+                        method => Method,
+                        payload => Body,
+                        stack => Stack
+                    }),
+                    {error, json}
+            end;
         {error, _} = Error ->
             Error
     end.
 
 payload(B, _CT) when is_binary(B) -> B;
-payload(M, "application/x-www-form-urlencoded") when is_map(M) -> cow_qs:qs(maps:to_list(M));
-payload(L, "application/x-www-form-urlencoded") when is_list(L) -> cow_qs:qs(L);
-payload(Data, "application/json") -> jsxrecord:encode(Data).
+payload(M, <<"application/x-www-form-urlencoded">>) when is_map(M) -> cow_qs:qs(maps:to_list(M));
+payload(L, <<"application/x-www-form-urlencoded">>) when is_list(L) -> cow_qs:qs(L);
+payload(Data, <<"application/json">>) -> jsxrecord:encode(Data).
 
 
 %% @doc Fetch the metadata from an URL. Let modules change the fetch options.
@@ -216,7 +249,7 @@ add_options(Method, Url, Options, Context) ->
                     options = Options2
                 }, Context)
             of
-                undefined -> Options1;
+                undefined -> Options2;
                 ExtOptions when is_list(ExtOptions) -> ExtOptions
             end;
         _ ->

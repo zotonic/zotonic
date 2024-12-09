@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2022 Marc Worrell
+%% @copyright 2022-2024 Marc Worrell
 %% @doc Run a resource pivot job.
+%% @end
 
-%% Copyright 2022 Marc Worrell
+%% Copyright 2022-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -46,14 +47,16 @@
 
 
 %% @doc Start a task queue sidejob.
--spec start_pivot( list(), z:context() ) -> {ok, pid()} | {error, overload}.
-start_pivot(PivotRscList, Context) ->
+-spec start_pivot(RscIds, Context) -> {ok, pid()} | {error, overload} when
+    RscIds :: list( m_rsc:resource_id() ),
+    Context :: z:context().
+start_pivot(RscIds, Context) ->
     sidejob_supervisor:spawn(
             zotonic_sidejobs,
-            {?MODULE, pivot_job, [ PivotRscList, Context ]}).
+            {?MODULE, pivot_job, [ RscIds, Context ]}).
 
 
-%% @doc Return a modified property list with fields that need immediate pivoting on an update.
+%% @doc Return a modified property map with fields that need immediate pivoting on an update.
 pivot_resource_update(Id, UpdateProps, RawProps, Context) ->
     Props = lists:foldl(
         fun(Key, Acc) ->
@@ -68,18 +71,41 @@ pivot_resource_update(Id, UpdateProps, RawProps, Context) ->
         [ <<"date_start">>, <<"date_end">>, <<"title">> ]),
     {DateStart, DateEnd} = pivot_date(Props),
     PivotTitle = truncate(get_pivot_title(Props), 100),
+    IsAllDay0 = case maps:find(<<"date_is_all_day">>, Props) of
+        {ok, V} -> V;
+        error -> maps:get(<<"date_is_all_day">>, RawProps, undefined)
+    end,
+    IsAllDay = z_convert:to_bool(IsAllDay0),
+    Tz = case maps:find(<<"tz">>, Props) of
+        {ok, Tz0} -> Tz0;
+        error -> maps:get(<<"tz">>, RawProps, undefined)
+    end,
+    ContextTz = z_context:set_tz(Tz, Context),
     Props1 = Props#{
-        <<"pivot_date_start">> => DateStart,
-        <<"pivot_date_end">> => DateEnd,
+        <<"pivot_date_start">> => tz_shift_all_day(IsAllDay, DateStart, ContextTz),
+        <<"pivot_date_end">> => tz_shift_all_day(IsAllDay, DateEnd, ContextTz),
         <<"pivot_date_start_month_day">> => month_day(DateStart),
         <<"pivot_date_end_month_day">> => month_day(DateEnd),
         <<"pivot_title">> => PivotTitle
     },
     z_notifier:foldr(#pivot_update{id=Id, raw_props=RawProps}, Props1, Context).
 
+tz_shift_all_day(true, ?EPOCH_START = Date, _Context) ->
+    Date;
+tz_shift_all_day(true, ?ST_JUTTEMIS = Date, _Context) ->
+    Date;
+tz_shift_all_day(true, Date, Tz) when is_tuple(Date) ->
+    % All-day dates are stored without timezone conversion.
+    % For indexing we store them as-if they were entered in the
+    % timezone of the resource.
+    z_datetime:to_utc(Date, Tz);
+tz_shift_all_day(_IsAllDay, Date, _Context) ->
+    Date.
 
 %% @doc Run the sidejob task queue task.
--spec pivot_job( list(), z:context() ) -> ok.
+-spec pivot_job(RscIds, Context) -> ok when
+    RscIds :: list( m_rsc:resource_id() ),
+    Context :: z:context().
 pivot_job(PivotRscList, Context) ->
     z_context:logger_md(Context),
     ?LOG_DEBUG(#{
@@ -88,7 +114,7 @@ pivot_job(PivotRscList, Context) ->
         rsc_list => PivotRscList
     }),
     F = fun(Ctx) ->
-            [ {Id, pivot_resource(Id, Ctx)} || {Id,_Serial} <- PivotRscList ]
+            [ {Id, pivot_resource(Id, Ctx)} || Id <- PivotRscList ]
     end,
     case z_db:transaction(F, Context) of
         {rollback, PivotError} ->
@@ -98,10 +124,11 @@ pivot_job(PivotRscList, Context) ->
                 rsc_list => PivotRscList,
                 error => rollback,
                 reason => PivotError
-            });
+            }),
+            z_pivot_rsc:pivot_job_done(error, Context);
         L when is_list(L) ->
             lists:map(
-                fun({Id, _Serial}) ->
+                fun(Id) ->
                     IsA = m_rsc:is_a(Id, Context),
                     z_notifier:notify(#rsc_pivot_done{id=Id, is_a=IsA}, Context),
                     % Flush the resource, as some synthesized attributes might depend on the pivoted fields.
@@ -126,32 +153,9 @@ pivot_job(PivotRscList, Context) ->
                             reason => Reason
                         })
                 end, L),
-            delete_queue(PivotRscList, Context)
-    end,
-    z_pivot_rsc:pivot_job_done(Context).
+            z_pivot_rsc:pivot_job_done(PivotRscList, Context)
+    end.
 
-
-%% @doc Delete the previously queued ids iff the queue entry has not been updated in the meanwhile
-delete_queue(Qs, Context) ->
-    F = fun(Ctx) ->
-        lists:foreach(
-            fun({Id, Serial}) ->
-                delete_queue(Id, Serial, Ctx)
-            end,
-            Qs)
-    end,
-    z_db:transaction(F, Context).
-
-%% @doc Delete a specific id/serial combination
-delete_queue(_Id, undefined, _Context) ->
-    ok;
-delete_queue(Id, Serial, Context) ->
-    z_db:q("
-        delete from rsc_pivot_queue
-        where rsc_id = $1
-          and serial = $2",
-        [ Id, Serial ],
-        Context).
 
 -spec pivot_resource(m_rsc:resource_id(), z:context()) -> ok | {error, enoent | term()}.
 pivot_resource(Id, Context0) ->
@@ -200,12 +204,20 @@ pivot_resource_1(Id, Lang, Context) ->
                     NameFirst = render_block(name_first, Template, Vars, Context),
                     NameSurname = render_block(name_surname, Template, Vars, Context),
                     Gender = render_block(gender, Template, Vars, Context),
-                    DateStart = to_datetime(render_block(date_start, Template, Vars, Context)),
-                    DateEnd = to_datetime(render_block(date_end, Template, Vars, Context)),
+                    DateStart0 = to_datetime(render_block(date_start, Template, Vars, Context)),
+                    DateEnd0 = to_datetime(render_block(date_end, Template, Vars, Context)),
+                    {DateStart1, DateEnd1} = pivot_date1(DateStart0, DateEnd0),
                     DateStartMonthDay = to_integer(render_block(date_start_month_day, Template, Vars, Context)),
                     DateEndMonthDay = to_integer(render_block(date_end_month_day, Template, Vars, Context)),
                     LocationLat = to_float(render_block(location_lat, Template, Vars, Context)),
                     LocationLng = to_float(render_block(location_lng, Template, Vars, Context)),
+
+                    % Shift the "date_is_all_day" dates to the timezone they were entered in.
+                    IsAllDay = z_convert:to_bool(maps:get(<<"date_is_all_day">>, RscProps, false)),
+                    Tz = maps:get(<<"tz">>, RscProps, undefined),
+                    ContextTz = z_context:set_tz(Tz, Context),
+                    DateStart = tz_shift_all_day(IsAllDay, DateStart1, ContextTz),
+                    DateEnd = tz_shift_all_day(IsAllDay, DateEnd1, ContextTz),
 
                     % Make psql tsv texts from the A..D blocks
                     StemmerLanguage = stemmer_language(Context),
@@ -325,7 +337,7 @@ pivot_resource_custom(Id, Context) ->
                 ({_Module, _Columns} = Res) ->
                     update_custom_pivot(Id, Res, Context)
             end,
-            CustomPivots),
+            lists:flatten(CustomPivots)),
     ok.
 
 update_custom_pivot(Id, {Module, Columns}, Context) ->
@@ -333,8 +345,10 @@ update_custom_pivot(Id, {Module, Columns}, Context) ->
     Result = case z_db:select(TableName, Id, Context) of
         {ok, _Row}  ->
             z_db:update(TableName, Id, Columns, Context);
-        {error, enoent} ->
-            z_db:insert(TableName, [ {id, Id} | Columns ], Context)
+        {error, enoent} when is_list(Columns) ->
+            z_db:insert(TableName, [ {id, Id} | Columns ], Context);
+        {error, enoent} when is_map(Columns) ->
+            z_db:insert(TableName, Columns#{ <<"id">> => Id }, Context)
     end,
     case Result of
         {ok, _} ->

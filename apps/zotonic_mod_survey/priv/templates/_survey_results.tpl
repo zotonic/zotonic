@@ -42,7 +42,7 @@
 	{% endfor %}
 
 {% else %}
-	<p>{_ You are not allowed to see the results of this survey. _}</p>
+	<p>{_ You are not allowed to see the results. _}</p>
 {% endif %}
 
 {% if viewer == 'overlay' %}

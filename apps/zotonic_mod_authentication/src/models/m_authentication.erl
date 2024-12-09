@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017-2023 Marc Worrell
+%% @copyright 2017-2024 Marc Worrell
 %% @doc Model for mod_authentication
 %% @end
 
-%% Copyright 2017-2023 Marc Worrell
+%% Copyright 2017-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,6 +25,10 @@
     m_get/3,
     m_post/3,
 
+    acceptable_password/2,
+    is_valid_password/2,
+    is_powned/1,
+
     send_reminder/2,
     set_reminder_secret/2,
 
@@ -37,10 +41,14 @@
     decode_token/2,
 
     auth_tokens/2,
-    cookie_url/1
+    cookie_url/1,
+
+    handle_auth_confirm/3
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+
+-define(DEFAULT_PASSWORD_MIN_LENGTH, 8).
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ <<"authenticate">>, <<"password">> | Rest ], #{ payload := Payload }, Context) when is_map(Payload) ->
@@ -50,8 +58,8 @@ m_get([ <<"authenticate">>, <<"password">> | Rest ], #{ payload := Payload }, Co
     end;
 m_get([ <<"password_min_length">> | Rest ], _Msg, Context) ->
     Len = case m_config:get_value(mod_authentication, password_min_length, Context) of
-        undefined -> 8;
-        <<>> -> 8;
+        undefined -> ?DEFAULT_PASSWORD_MIN_LENGTH;
+        <<>> -> ?DEFAULT_PASSWORD_MIN_LENGTH;
         N -> z_convert:to_integer(N)
     end,
     {ok, {Len, Rest}};
@@ -143,14 +151,79 @@ m_post([ <<"send-verification-message">> ], #{ payload := Payload }, Context) wh
             end;
         _ -> {error, missing_token}
     end;
-
+m_post([ <<"acceptable-password">> ], #{ payload := Payload }, Context) when is_map(Payload) ->
+    case Payload of
+        #{ <<"password">> := Password } when is_binary(Password) ->
+            acceptable_password(Password, Context);
+        _ ->
+            {error, missing_password}
+    end;
 m_post(Vs, _Msg, _Context) ->
     ?LOG_INFO("Unknown ~p post: ~p", [?MODULE, Vs]),
     {error, unknown_path}.
 
+%% @doc Check if the password matches the criteria of this site.
+-spec acceptable_password(Password, Context) -> ok | {error, Reason} when
+    Password :: binary(),
+    Context :: z:context(),
+    Reason :: tooshort | dataleak.
+acceptable_password(Password, Context) ->
+    case is_valid_password(Password, Context) of
+        true ->
+            case not m_config:get_boolean(mod_authentication, password_disable_leak_check, Context)
+                andalso m_authentication:is_powned(Password)
+            of
+                true ->
+                    {error, dataleak};
+                false ->
+                    ok
+            end;
+        false ->
+            {error, tooshort}
+    end.
+
+
+%% @doc Check if the password matches the criteria of the minimum length
+%% and the (optional) password regexp.
+is_valid_password(Password, Context) ->
+    PasswordMinLength = z_convert:to_integer(
+        m_config:get_value(mod_authentication, password_min_length, ?DEFAULT_PASSWORD_MIN_LENGTH, Context)),
+    if
+        size(Password) < PasswordMinLength ->
+            false;
+        true ->
+            case z_convert:to_binary(m_config:get_value(mod_admin_identity, password_regex, Context)) of
+                <<>> ->
+                    true;
+                RegExp ->
+                    case re:run(Password, RegExp) of
+                        nomatch -> false;
+                        {match, _} -> true
+                    end
+            end
+    end.
+
+%% @doc Check is a password has been registerd with the service at https://haveibeenpwned.com
+%% They keep a list of passwords, any match is reported.
+is_powned(Password) ->
+    <<Pre:5/binary, Post/binary>>  = z_string:to_upper(z_utils:hex_sha(Password)),
+    Url = <<"https://api.pwnedpasswords.com/range/", Pre/binary>>,
+    case z_url_fetch:fetch(Url, []) of
+        {ok, {_Url, _Hs, _Sz, Body}} ->
+            case binary:match(Body, <<Post/binary, ":">>) of
+                {_, _} -> true;
+                nomatch -> false
+            end;
+        {error, {404, _Url, _Hs, _Sz, _Body}} ->
+            false;
+        {error, {Code, _Url, _Hs, _Sz, _Body}} ->
+            {error, Code};
+        {error, _} = Error ->
+            Error
+    end.
 
 handle_auth_confirm(Auth, Url, Context) ->
-    Auth1 = Auth#auth_validated{ is_signup_confirm = true },
+    Auth1 = Auth#auth_validated{ is_signup_confirmed = true },
     case z_notifier:first(Auth1, Context) of
         undefined ->
             ?LOG_WARNING(#{
@@ -299,7 +372,7 @@ send_reminder(1, _Email, _Context) ->
     }),
     {error, admin};
 send_reminder(undefined, Email, Context) ->
-    z_email:send_render(Email, "email_password_reset.tpl", [], Context);
+    send_password_reset_email(Email, <<>>, undefined, [], Context);
 send_reminder(Id, Email, Context) ->
     PrefEmail = case m_rsc:p_no_acl(Id, email_raw, Context) of
         undefined -> Email;
@@ -318,12 +391,21 @@ send_reminder(Id, Email, Context) ->
                 {email, PrefEmail}
             ],
             ContextUser = z_acl:logon(Id, Context),
-            z_email:send_render(Email, "email_password_reset.tpl", Vars, ContextUser),
+            send_password_reset_email(Email, Username, Id, Vars, ContextUser),
             case Email of
                 PrefEmail -> ok;
-                _ -> z_email:send_render(PrefEmail, "email_password_reset.tpl", Vars, ContextUser)
+                _ ->
+                    send_password_reset_email(PrefEmail, Username, Id, Vars, ContextUser)
             end
     end.
+
+%% Send and log sending the password reset email
+send_password_reset_email(Email, Username, Id, Vars, Context) ->
+    z:info(
+      "Sending password reset email for user ~s(~p) to ~s", [Username, Id, Email],
+      [ {module, ?MODULE} ],
+      Context),
+    z_email:send_render(Email, "email_password_reset.tpl", Vars, Context).
 
 %% @doc Set the unique reminder code for the account.
 -spec set_reminder_secret( m_rsc:resource_id(), z:context() ) -> binary().
@@ -354,7 +436,7 @@ auth_tokens( #{ <<"username">> := Username, <<"password">> := Password } = QArgs
 
 
 %% @doc Fetch the secret user key. This key is used to add an extra hash of the tokens.
--spec user_auth_key( m_rsc:rid(), z:context() ) -> binary().
+-spec user_auth_key( m_rsc:resource_id(), z:context() ) -> binary().
 user_auth_key(UserId, Context) ->
     case m_identity:get_rsc(UserId, auth_key, Context) of
         undefined ->
@@ -383,7 +465,7 @@ site_auth_key(Context) ->
     end.
 
 %% @doc Decode a token, check the hashes.
--spec decode_token( binary(), z:context() ) -> {ok, {cookie|auth, UserId :: m_rsc:rid(), Timestamp::pos_integer()}} | {error, illegal}.
+-spec decode_token( binary(), z:context() ) -> {ok, {cookie|auth, UserId :: m_rsc:resource_id(), Timestamp::pos_integer()}} | {error, illegal}.
 decode_token(Token, Context) ->
     try
         <<1, Hash:32/binary, Payload/binary>> = base64:decode(Token),
@@ -431,7 +513,7 @@ cookie_url(Context) ->
         z_dispatcher:url_for(authentication_cookie, Context),
         Context).
 
-%% @doc Return a token that can be used to logon an user. The token is only valid
+%% @doc Return a token that can be used to logon a user. The token is only valid
 %%      for a short period and can be used for a MQTT authentication.
 cookie_token(UserId, Context) when is_integer(UserId) ->
     cookie_token(UserId, user_auth_key(UserId, Context), Context).
@@ -446,12 +528,12 @@ cookie_token(UserId, UserSecret, Context) when is_integer(UserId) ->
     Payload = <<"cookie", 1, UserId:32, Timestamp:64/big-unsigned-integer, Nonce1:64>>,
     encode_payload_v1(Payload, UserSecret, Context).
 
-%% @doc Return a token that can be used to logon an user. The token is only valid
+%% @doc Return a token that can be used to logon a user. The token is only valid
 %%      for a short period and can be used for a MQTT authentication.
 auth_token(UserId, Context) when is_integer(UserId) ->
     auth_token(UserId, user_auth_key(UserId, Context), Context).
 
-%% @doc Return a token that can be used to logon an user. The token is only valid
+%% @doc Return a token that can be used to logon a user. The token is only valid
 %%      for a short period and can be used for a MQTT authentication.
 auth_token(UserId, UserSecret, Context) when is_integer(UserId) ->
     Timestamp = z_datetime:timestamp(),

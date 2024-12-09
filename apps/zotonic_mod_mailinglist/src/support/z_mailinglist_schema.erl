@@ -78,13 +78,12 @@ datamodel() ->
 
 
 %% @doc Install the SQL tables to track recipients and scheduled mailings.
-manage_schema(_What, Context) ->
+manage_schema(_Upgrade, Context) ->
     case z_db:table_exists(mailinglist_recipient, Context) of
         false ->
             do_install(Context);
         true ->
-            CNs = z_db:column_names(mailinglist_recipient, Context),
-            case lists:member(is_bounced, CNs) of
+            case z_db:column_exists(mailinglist_recipient, is_bounced, Context) of
                 true ->
                     [] = z_db:q("
                         alter table mailinglist_recipient
@@ -92,6 +91,17 @@ manage_schema(_What, Context) ->
                         Context),
                     z_db:flush(Context);
                 false ->
+                    ok
+            end,
+            case z_db:column_exists(mailinglist_scheduled, props, Context) of
+                false ->
+                    [] = z_db:q("
+                        alter table mailinglist_scheduled
+                        add column props bytea,
+                        add column timestamp timestamp with time zone NOT NULL DEFAULT now()",
+                        Context),
+                    z_db:flush(Context);
+                true ->
                     ok
             end
     end,
@@ -121,6 +131,8 @@ do_install(Context) ->
 				CREATE TABLE mailinglist_scheduled (
 					page_id INT NOT NULL,
 					mailinglist_id INT NOT NULL,
+                    props bytea,
+                    timestamp timestamp with time zone NOT NULL DEFAULT now(),
 
 					CONSTRAINT mailinglist_scheduled_pkey PRIMARY KEY (page_id, mailinglist_id),
 					CONSTRAINT fk_mailinglist_id FOREIGN KEY (mailinglist_id)

@@ -174,7 +174,7 @@ update(RscId, Url, Context) when is_list(Url); is_binary(Url) ->
     end.
 
 update_1(_, RscId, #media_import_props{ rsc_props = #{ <<"uri">> := Uri }, importer = rsc_import }, Context) ->
-    m_rsc_import:update_medium_uri(RscId, Uri, [], Context);
+    m_rsc_import:update_medium_uri(RscId, Uri, [ {is_forced_update, true} ], Context);
 update_1(_, RscId, #media_import_props{ importer = Importer } = MI, Context)
     when is_atom(Importer), Importer =/= undefined ->
     Importer:media_import(RscId, MI, #{}, Context);
@@ -208,9 +208,12 @@ update_1(_, RscId, #media_import_props{medium_props=MP, medium_url=MediumUrl} = 
 -spec url_import_props(z_url_metadata:metadata() | string() | binary(), z:context()) ->
     {ok, list(#media_import_props{})} | {error, term()}.
 url_import_props(Url, Context) when is_list(Url); is_binary(Url) ->
-    case z_fetch:metadata(Url, [], Context) of
+    Url1 = z_sanitize:uri(Url),
+    case z_fetch:metadata(Url1, [], Context) of
         {ok, MD} ->
             url_import_props(MD, Context);
+        {error, {Code, _FinalUrl, _Hs, _Sz, _Body} = Reason} when Code =:= 429 ->
+            url_import_props_retry(Reason, Context);
         {error, _} = Error ->
             Error
     end;
@@ -230,6 +233,34 @@ url_import_props(#url_metadata{} = MD, Context) ->
     ]),
     Ms1 = [ M || M <- Ms, M =/= undefined ],
     {ok, lists:sort(Ms1)}.
+
+%% @doc We got a 4xx error, especially a 429 error on Vimeo.
+%% Give the import modules another chance to import this URL.
+url_import_props_retry({_Code, FinalUrl, Hs, _Sz, _Body} = Reason, Context) ->
+    MD = #url_metadata{
+        final_url = z_convert:to_binary(FinalUrl),
+        content_type = <<"text/html">>,
+        content_type_options = [],
+        content_length = 0,
+        is_index_page = false,
+        headers = Hs,
+        partial_data = <<>>,
+        metadata = []
+    },
+    Url = z_url_metadata:p(url, MD),
+    MI = #media_import{
+        url = Url,
+        host_rev = host_parts(Url),
+        mime = z_url_metadata:p(mime, MD),
+        metadata = MD
+    },
+    case lists:flatten( z_notifier:map(MI, Context) ) of
+        [] ->
+            {error, Reason};
+        Ms ->
+            Ms1 = [ M || M <- Ms, M =/= undefined ],
+            {ok, lists:sort(Ms1)}
+    end.
 
 %% @doc Return the reversed list of parts of the hostname in an url.
 host_parts(Url) ->
@@ -365,7 +396,7 @@ import_as_referred_image(MD, Context) ->
                 <<>> -> undefined;
                 ImageUrl ->
                     #media_import_props{
-                        prio = 4,
+                        prio = 5,
                         category = image,
                         description = m_rsc:p_no_acl(image, title, Context),
                         rsc_props = #{

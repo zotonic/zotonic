@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022  Marc Worrell
+%% @copyright 2009-2024  Marc Worrell
 %% @doc Request context for Zotonic request evaluation.
+%% @end
 
-%% Copyright 2009-2022 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -38,6 +39,7 @@
 
     is_request/1,
     is_session/1,
+    is_hostname_redirect_configured/1,
 
     prune_for_spawn/1,
     prune_for_async/1,
@@ -73,6 +75,7 @@
     set_q/2,
     add_q/3,
     add_q/2,
+    delete_q/2,
     get_q/2,
     get_q/3,
     get_qargs/1,
@@ -107,7 +110,7 @@
     get_all/1,
 
     language/1,
-    fallback_language/1,
+    languages/1,
     set_language/2,
 
     tz/1,
@@ -115,6 +118,7 @@
     set_tz/2,
 
     set_csp_nonce/1,
+    set_csp_nonce/2,
     csp_nonce/1,
 
     set_resp_header/3,
@@ -181,32 +185,26 @@ new(Site) when is_atom(Site) ->
         set_server_names(#context{ site = Site })).
 
 %% @doc Create a new context record for a site with a certain language
--spec new( Site :: atom(), Language :: atom() ) -> z:context().
-new(Site, Lang) when is_atom(Site), is_atom(Lang) ->
-    Context = set_server_names(#context{ site = Site }),
-    Context#context{
-        language = [ Lang ],
-        tz = tz_config(Context)
-    }.
+-spec new( Site :: atom(), Language :: atom() | [ atom() ] ) -> z:context().
+new(Site, Lang) when is_atom(Site) ->
+    Context = new(Site),
+    set_language(Lang, Context).
 
--spec new( Site :: atom(), Language :: atom(), Timezone :: binary() ) -> z:context().
-new(Site, Lang, Timezone) when is_atom(Site), is_atom(Lang), is_binary(Timezone) ->
-    Context = set_server_names(#context{ site = Site }),
-    Context#context{
-        language = [ Lang ],
-        tz = Timezone
-    }.
+-spec new( Site :: atom(), Language :: atom() | [ atom() ], Timezone :: binary() ) -> z:context().
+new(Site, Lang, Timezone) when is_atom(Site), is_binary(Timezone) ->
+    Context = new(Site, Lang),
+    Context#context{ tz = Timezone }.
 
 
 -spec set_default_language_tz(z:context()) -> z:context().
 set_default_language_tz(Context) ->
     try
         F = fun() ->
-            {z_language:default_language(Context), tz_config(Context)}
+            {z_language:enabled_languages(Context), tz_config(Context)}
         end,
-        {DefaultLang, TzConfig} = z_depcache:memo(F, default_language_tz, ?DAY, [config], Context),
+        {DefaultLangs, TzConfig} = z_depcache:memo(F, default_language_tz, ?DAY, [config], Context),
         Context#context{
-            language = [DefaultLang],
+            language = DefaultLangs,
             tz = TzConfig
         }
     catch
@@ -224,7 +222,7 @@ new_tests() ->
     Context = z_trans_server:set_context_table(
             #context{
                 site = test,
-                language = [en],
+                language = [ en ],
                 tz = <<"UTC">>
             }),
     case ets:info(Context#context.translation_table) of
@@ -325,6 +323,15 @@ is_session(#context{ client_topic = undefined }) ->
     false;
 is_session(#context{ client_topic = ClientTopic }) ->
     is_list(ClientTopic).
+
+%% @doc Return true if redirect to the preferred hostname is configured
+%%      for the current site.
+-spec is_hostname_redirect_configured( z:context() ) -> boolean().
+is_hostname_redirect_configured(Context) ->
+    case m_site:get(redirect, Context) of
+        undefined -> true;
+        R -> z_convert:to_bool(R)
+    end.
 
 %% @doc Minimal prune, for ensuring that the context can safely used in two processes
 -spec prune_for_spawn( z:context() ) -> z:context().
@@ -447,7 +454,10 @@ abs_url(<<"//", _/binary>> = Url, Context) ->
 abs_url(<<$/, _/binary>> = Url, Context) ->
     case z_notifier:first(#url_abs{ url = Url }, Context) of
         undefined ->
-            Hostname = hostname(Context),
+            Hostname = case not is_hostname_redirect_configured(Context) andalso is_request(Context) of
+                           true -> cowmachine_req:host(Context);
+                           false -> hostname(Context)
+                       end,
             case z_config:get(ssl_port) of
                 443 -> <<"https://", Hostname/binary, Url/binary>>;
                 Port -> <<"https://", Hostname/binary, $:, (integer_to_binary(Port))/binary, Url/binary>>
@@ -514,14 +524,13 @@ pickle(Context) ->
 %% @doc Depickle a context for restoring from a database
 -spec depickle( tuple() ) -> z:context().
 depickle({pickled_context, Site, UserId, Language, _VisitorId}) ->
-    Context = set_server_names(#context{ site = Site, language = Language }),
-    ContextTz = Context#context{ tz = tz_config(Context) },
+    Context = new(Site, Language),
     case UserId of
-        undefined -> ContextTz;
-        _ -> z_acl:logon(UserId, ContextTz)
+        undefined -> Context;
+        _ -> z_acl:logon(UserId, Context)
     end;
 depickle({pickled_context, Site, UserId, Language, Tz, _VisitorId}) ->
-    Context = set_server_names(#context{ site = Site, language = Language, tz = Tz }),
+    Context = new(Site, Language, Tz),
     case UserId of
         undefined -> Context;
         _ -> z_acl:logon(UserId, Context)
@@ -608,7 +617,7 @@ set_render_state(RS, Context) ->
     Context#context{ render_state = RS }.
 
 
-%% @doc Set the value of a request parameter argument
+%% @doc Replace the value of a request parameter argument
 %%      Always filter the #upload{} arguments to prevent upload of non-temp files.
 -spec set_q(binary()|string()|atom(), z:qvalue(), z:context()) -> z:context().
 set_q(Key, #upload{ tmpfile = TmpFile } = Upload, Context) when TmpFile =/= undefined ->
@@ -621,7 +630,13 @@ set_q(Key, Value, Context) ->
     set_q(z_convert:to_binary(Key), Value, Context).
 
 %% @doc Set the value of multiple request parameter arguments
--spec set_q( list( {binary()|string()|atom(), z:qvalue()} ) | map(), z:context() ) -> z:context().
+-spec set_q(Qs, Context) -> NewContext when
+    Qs :: [ {Key, z:qvalue()} | Key ]
+        | map()
+        | [ list() ],
+    Key :: binary() | string() | atom(),
+    Context :: z:context(),
+    NewContext :: z:context().
 set_q(KVs, Context) when is_map(KVs) ->
     maps:fold(
         fun(K, V, Ctx) ->
@@ -631,32 +646,85 @@ set_q(KVs, Context) when is_map(KVs) ->
         KVs);
 set_q(KVs, Context) when is_list(KVs) ->
     lists:foldl(
-        fun({K, V}, Ctx) ->
-            set_q(K, V, Ctx)
+        fun
+            ({K, V}, Ctx) ->
+                set_q(K, V, Ctx);
+            ([K, V], Ctx) ->
+                set_q(K, V, Ctx);
+            (K, Ctx) ->
+                set_q(K, true, Ctx)
         end,
         Context,
         KVs).
 
-%% @doc Add the value of a request parameter argument
+%% @doc Add the value of a request parameter argument. This allows for multiple
+%%      arguments with the same name. The new argument is pre-pended to the existing
+%%      arguments.
 %%      Always filter the #upload{} arguments to prevent upload of non-temp files.
--spec add_q(binary()|string()|atom(), z:qvalue(), z:context()) -> z:context().
+-spec add_q(Key, Value, Context) -> NewContext when
+    Key :: binary()|atom(),
+    Value :: z:qvalue(),
+    Context :: z:context(),
+    NewContext :: z:context().
 add_q(Key, #upload{ tmpfile = TmpFile } = Upload, Context) when TmpFile =/= undefined ->
     add_q(Key, Upload#upload{ tmpfile = undefined }, Context);
 add_q(Key, Value, Context) when is_binary(Key) ->
     Qs = get_q_all(Context),
     z_context:set('q', [{Key,Value}|Qs], Context);
-add_q(Key, Value, Context) ->
-    set_q(z_convert:to_binary(Key), Value, Context).
+add_q(Key, Value, Context) when is_atom(Key) ->
+    add_q(z_convert:to_binary(Key), Value, Context);
+add_q(_, _Value, Context) ->
+    Context.
 
-%% @doc Add the value of multiple request parameter arguments
--spec add_q( list(), z:context() ) -> z:context().
-add_q(KVs, Context) ->
-    lists:foldl(
-        fun({K, V}, Ctx) ->
+%% @doc Add the value of multiple request parameter arguments. This allows for the
+%% insertion of multiple keys with the same value. The new arguments are prepended
+%% before the existing arguments.
+-spec add_q(KeyValues, Context) -> NewContext when
+    KeyValues :: list() | map(),
+    Context :: z:context(),
+    NewContext :: z:context().
+add_q(KVs, Context) when is_list(KVs) ->
+    lists:foldr(
+        fun
+            ({K, V}, Ctx) ->
+                add_q(K, V, Ctx);
+            ([K, V], Ctx) ->
+                add_q(K, V, Ctx);
+            (K, Ctx) ->
+                add_q(K, true, Ctx)
+        end,
+        Context,
+        KVs);
+add_q(KVs, Context) when is_map(KVs) ->
+    maps:fold(
+        fun(K, V, Ctx) ->
             add_q(K, V, Ctx)
         end,
         Context,
         KVs).
+
+%% @doc Delete all values of one or more request parameter arguments.
+-spec delete_q(Keys, Context) -> NewContext when
+    Keys :: Key | [ Key ],
+    Key :: binary() | atom() | string(),
+    Context :: z:context(),
+    NewContext :: z:context().
+delete_q([C|_] = Key, Context) when is_integer(C) ->
+    delete_q(list_to_binary(Key), Context);
+delete_q(Key, Context) when is_binary(Key); is_atom(Key) ->
+    Key1 = z_convert:to_binary(Key),
+    Qs = get_q_all(Context),
+    z_context:set('q', proplists:delete(Key1, Qs), Context);
+delete_q(Keys, Context) when is_list(Keys) ->
+    Qs = get_q_all(Context),
+    Qs1 = lists:foldl(
+        fun(K, Acc) ->
+            K1 = z_convert:to_binary(K),
+            proplists:delete(K1, Acc)
+        end,
+        Qs,
+        Keys),
+    z_context:set('q', Qs1, Context).
 
 %% @doc Get a request parameter, either from the query string or the post body.  Post body has precedence over the query string.
 %%      Note that this can also be populated from a JSON MQTT call, and as such contain arbitrary data.
@@ -1030,55 +1098,74 @@ get_path_info(Key, Context, Default) ->
 
 
 %% @doc Return a proplist with all context variables.
--spec get_all( z:context() ) -> list().
+-spec get_all(Context) -> ContextVars when
+    Context :: z:context(),
+    ContextVars :: list( {Key, Value} ),
+    Key :: term(),
+    Value :: term().
 get_all(Context) ->
     maps:to_list(Context#context.props).
 
 
-%% @doc Return the selected language of the Context
--spec language(z:context()) -> atom().
-language(Context) ->
-    % A check on atom must exist because the language setting may be stored in mnesia and
-    % passed to the context when the site starts
-    case Context#context.language of
-        [Language|_] -> Language;
-        Language -> Language
-    end.
+%% @doc Return the primary selected language of the Context
+-spec language(Context) -> Language when
+    Context :: z:context(),
+    Language :: z_language:language_code().
+language(#context{ language = [] } = Context) ->
+    z_language:default_language(Context);
+language(#context{ language = [Lang|_] }) ->
+    Lang.
 
-%% @doc Return the first fallback language of the Context
--spec fallback_language(z:context()) -> atom().
-fallback_language(Context) ->
-    % Take the second item of the list, if it exists
-    case Context#context.language of
-        [_|[Fallback|_]] -> Fallback;
-        _ -> undefined
-    end.
+%% @doc Return the language preference list.
+-spec languages(Context) -> Languages when
+    Context :: z:context(),
+    Languages :: [ z_language:language_code() ].
+languages(#context{ language = [] } = Context) ->
+    z_language:enabled_languages(Context);
+languages(#context{ language = Languages }) when is_list(Languages) ->
+    Languages.
 
 %% @doc Set the language of the context, either an atom (language) or a list (language and fallback languages)
--spec set_language(atom()|binary()|string()|list(), z:context()) -> z:context().
+-spec set_language(Language, Context) -> LangContext when
+    Language :: undefined | z_language:language_code() | binary() | list( z_language:language() ),
+    Context :: z:context(),
+    LangContext :: z:context().
+set_language([], Context) ->
+    Context;
+set_language(undefined, Context) ->
+    set_language('x-default', Context);
 set_language('x-default', Context) ->
-    Lang = z_language:default_language(Context),
-    Context#context{language=[Lang,'x-default']};
+    Context#context{language=['x-default'|lists:delete('x-default', languages(Context))]};
 set_language(Lang, Context) when is_atom(Lang) ->
-    Context#context{language=[Lang]};
+    Context#context{language=[Lang|lists:delete(Lang, languages(Context))]};
 set_language(Langs, Context) when is_list(Langs) ->
-    Langs1 = lists:filter(fun z_language:is_valid/1, Langs),
-    Context#context{language=Langs1};
-set_language(Lang, Context) ->
-    case z_language:is_valid(Lang) of
-        true -> set_language(z_convert:to_atom(Lang), Context);
-        false -> Context
+    Langs1 = lists:filtermap(
+        fun(Lang) ->
+            case z_language:to_language_atom(Lang) of
+                {ok, Code} -> {true, Code};
+                {error, _} -> false
+            end
+        end, Langs),
+    Context#context{language= Langs1 ++ (Context#context.language -- Langs1)};
+set_language(Lang, Context) when is_binary(Lang) ->
+    case z_language:to_language_atom(Lang) of
+        {ok, Code} -> set_language(Code, Context);
+        {error, _} -> Context
     end.
 
 %% @doc Return the selected timezone of the Context; defaults to the site's timezone
--spec tz(z:context()) -> binary().
+-spec tz(Context) -> Timezone when
+    Context :: z:context(),
+    Timezone :: binary().
 tz(#context{ tz = TZ }) when TZ =/= undefined; TZ =/= <<>> ->
     TZ;
 tz(Context) ->
     tz_config(Context).
 
 %% @doc Return the site's configured timezone.
--spec tz_config(z:context()) -> binary().
+-spec tz_config(Context) -> Timezone when
+    Context :: z:context(),
+    Timezone :: binary().
 tz_config(Context) ->
     case m_config:get_value(mod_l10n, timezone, Context) of
         None when None =:= undefined; None =:= <<>> ->
@@ -1088,10 +1175,27 @@ tz_config(Context) ->
     end.
 
 %% @doc Set the timezone of the context.
--spec set_tz(string()|binary()|boolean(), z:context()) -> z:context().
+-spec set_tz(MaybeTimezone, Context) -> TzContext when
+    MaybeTimezone :: string() | binary() | boolean() | 1 | 0 | term(),
+    Context :: z:context(),
+    TzContext :: z:context().
+set_tz(undefined, Context) ->
+    Context;
+set_tz(<<>>, Context) ->
+    Context;
+set_tz("", Context) ->
+    Context;
+set_tz(true, Context) ->
+    Context#context{ tz = <<"UTC">> };
+set_tz(false, Context) ->
+    Context;
+set_tz(1, Context) ->
+    Context#context{ tz = <<"UTC">> };
+set_tz(0, Context) ->
+    Context;
 set_tz(Tz, Context) when is_list(Tz) ->
     set_tz(unicode:characters_to_binary(Tz, utf8), Context);
-set_tz(Tz, Context) when is_binary(Tz), Tz =/= <<>> ->
+set_tz(Tz, Context) when is_binary(Tz) ->
     case m_l10n:is_timezone(Tz) of
         true ->
             Context#context{ tz = Tz };
@@ -1103,12 +1207,6 @@ set_tz(Tz, Context) when is_binary(Tz), Tz =/= <<>> ->
             }),
             Context
     end;
-set_tz(true, Context) ->
-    Context#context{ tz = <<"UTC">> };
-set_tz(1, Context) ->
-    Context#context{ tz = <<"UTC">> };
-set_tz(0, Context) ->
-    Context;
 set_tz(Tz, Context) ->
     ?LOG_ERROR(#{
         text => <<"Ignoring unknown timezone">>,
@@ -1129,15 +1227,29 @@ set_csp_nonce(Context) ->
             Context
     end.
 
+%% @doc Set the Content-Security-Policy nonce for the request.
+-spec set_csp_nonce( Nonce, Context ) -> Context1 when
+    Nonce :: binary(),
+    Context :: z:context(),
+    Context1 :: z:context().
+set_csp_nonce(Nonce, Context) ->
+    set(csp_nonce, Nonce, Context).
+
 %% @doc Return the Content-Security-Policy nonce for the request.
 -spec csp_nonce( z:context() ) -> binary().
 csp_nonce(Context) ->
     case get(csp_nonce, Context) of
         undefined ->
-            ?LOG_WARNING(#{
-                text => <<"csp_nonce requested but not set">>,
-                in => zotonic_core
-            }),
+            try
+                throw(x)
+            catch
+                _:_:S ->
+                    ?LOG_WARNING(#{
+                        text => <<"csp_nonce requested but not set">>,
+                        in => zotonic_core,
+                        stack => S
+                    })
+            end,
             <<>>;
         Nonce when is_binary(Nonce) ->
             Nonce
@@ -1146,6 +1258,18 @@ csp_nonce(Context) ->
 
 %% @doc Set a response header for the request in the context.
 -spec set_resp_header(binary(), binary(), z:context()) -> z:context().
+set_resp_header(<<"vary">>, <<"*">>, #context{cowreq=Req} = Context) when is_map(Req) ->
+    cowmachine_req:set_resp_header(<<"vary">>, <<"*">>, Context);
+set_resp_header(<<"vary">>, Value, #context{cowreq=Req} = Context) when is_map(Req) ->
+    case cowmachine_req:get_resp_header(<<"vary">>, Context) of
+        undefined ->
+            cowmachine_req:set_resp_header(<<"vary">>, Value, Context);
+        <<"*">> ->
+            Context;
+        Curr ->
+            Value1 = <<Curr/binary, ", ", Value/binary>>,
+            cowmachine_req:set_resp_header(<<"vary">>, Value1, Context)
+    end;
 set_resp_header(Header, Value, #context{cowreq=Req} = Context) when is_map(Req) ->
     cowmachine_req:set_resp_header(Header, Value, Context).
 
@@ -1237,15 +1361,28 @@ set_nocache_headers(Context = #context{cowreq=Req}) when is_map(Req) ->
 -spec set_security_headers( z:context() ) -> z:context().
 set_security_headers(Context) ->
     Default = [
-        % {<<"content-security-policy">>, <<"script-src 'self' 'nonce-'">>}
-        {<<"x-xss-protection">>, <<"1">>},
+        {<<"content-security-policy">>, <<
+            "default-src 'self'; "
+            "script-src 'self' 'nonce-' https:; "
+            "style-src 'self' https: 'unsafe-inline'; " % Unsafe-inline is needed for OpenLayers
+            % "style-src 'self' 'nonce-' https:; "
+            % "style-src-attr 'self' 'unsafe-inline'; "
+            "img-src 'self' data: https:; "
+            "media-src 'self' data: https: mediastream:; "
+            "font-src 'self' https:; "
+            "frame-src 'self' https:; "
+            "object-src 'none'; "
+            "form-action 'self'; "
+            "worker-src 'self' blob:; "
+            "connect-src 'self' https:"
+         >>},
         {<<"x-content-type-options">>, <<"nosniff">>},
         {<<"x-permitted-cross-domain-policies">>, <<"none">>},
         {<<"referrer-policy">>, <<"origin-when-cross-origin">>}
     ],
     Default1 = case z_context:get(allow_frame, Context, false) of
         true -> Default;
-        false -> [ {<<"x-frame-options">>, <<"sameorigin">>} | Default ]
+        false -> [ {<<"x-frame-options">>, <<"SAMEORIGIN">>} | Default ]
     end,
     HSTSHeaders = case hsts_header(Context) of
         {_,_} = H -> [ H | Default1 ];
@@ -1263,7 +1400,8 @@ set_security_headers(Context) ->
             CSPHdr1 = binary:replace(
                         CSPHdr,
                         <<"'nonce-'">>,
-                        <<"'nonce-", Nonce/binary, $'>>),
+                        <<"'nonce-", Nonce/binary, $'>>,
+                        [ global ]),
             [
                 {<<"content-security-policy">>, CSPHdr1}
                 | proplists:delete(<<"content-security-policy">>, SecurityHeaders)
@@ -1315,12 +1453,14 @@ set_noindex_header(Context) ->
 %% @doc Set the noindex header if the config is set, the webmachine resource opt is set or Force is set.
 -spec set_noindex_header(Force::term(), z:context()) -> z:context().
 set_noindex_header(Force, Context) ->
-    case z_convert:to_bool(m_config:get_value(seo, noindex, Context))
+    case m_config:get_boolean(seo, noindex, Context)
          orelse get(seo_noindex, Context, false)
          orelse z_convert:to_bool(Force)
     of
-       true -> set_resp_header(<<"x-robots-tag">>, <<"noindex">>, Context);
-       _ -> Context
+       true ->
+            set_resp_header(<<"x-robots-tag">>, <<"noindex,nofollow">>, Context);
+       _ ->
+            Context
     end.
 
 %% @doc Set resource specific headers. Examples are the non-informational resource uri and WebSub headers.

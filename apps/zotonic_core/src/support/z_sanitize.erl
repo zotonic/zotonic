@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014 Marc Worrell
+%% @copyright 2014-2024 Marc Worrell
 %% @doc Interface to z_html sanitizers, sets options and adds embed sanitization.
+%% @end
 
-%% Copyright 2014 Marc Worrell
+%% Copyright 2014-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -32,7 +33,7 @@
     escape_link/2,
     html/1,
     html/2
-    ]).
+]).
 
 -include_lib("zotonic.hrl").
 
@@ -42,6 +43,15 @@
 -define(IFRAME_SANDBOX, <<"allow-popups allow-scripts allow-same-origin">>).
 
 
+%% @doc Ensure that some characters are escaped, URLs copied from the browser can contain
+%% UTF-8 characters that need to be percent-encoded befor further processing is possible.
+-spec uri(Url) -> EncodedUrl when
+    Url :: binary() | string() | undefined,
+    EncodedUrl :: binary().
+uri(undefined) ->
+    undefined;
+uri(Url) when is_list(Url) ->
+    uri(unicode:characters_to_binary(Url, utf8));
 uri(Uri) ->
     z_html:sanitize_uri(Uri).
 
@@ -119,11 +129,13 @@ sanitize_element_1({<<"object">>, _Props, Inner}, _Stack, _Opts, _Context) ->
     Inner;
 sanitize_element_1({<<"script">>, Props, _Inner}, _Stack, _Opts, Context) ->
     sanitize_script(Props, Context);
-sanitize_element_1(Element, Stack, Opts, _Context) ->
-    sanitize_element_opts(Element, Stack, Opts).
+sanitize_element_1(Element, Stack, Opts, Context) ->
+    sanitize_element_opts(Element, Stack, Opts, Context).
 
+sanitize_element_opts(Element, Stack, Opts) ->
+    sanitize_element_opts(Element, Stack, Opts, undefined).
 
-sanitize_element_opts({<<"a">>, Attrs, Inner} = Element, _Stack, _Opts) ->
+sanitize_element_opts({<<"a">>, Attrs, Inner} = Element, _Stack, _Opts, _Context) ->
     case proplists:is_defined(<<"target">>, Attrs) of
         true ->
             Attrs1 = [ Attr || Attr = {K,_} <- Attrs, K =/= <<"rel">> ],
@@ -132,25 +144,42 @@ sanitize_element_opts({<<"a">>, Attrs, Inner} = Element, _Stack, _Opts) ->
         false ->
             Element
     end;
-sanitize_element_opts({comment, <<" [", _/binary>> = Comment} = Element, _Stack, _Opts) ->
+sanitize_element_opts({comment, <<" [", _/binary>> = Comment} = Element, _Stack, _Opts, _Context) ->
     % Conditionals by Microsoft Word: <!-- [if (..)] (..) [endif]-->
     case binary:last(Comment) of
         $] -> <<>>;
         _ -> Element
     end;
-sanitize_element_opts({comment, <<"StartFragment">>}, _Stack, _Opts) ->
+sanitize_element_opts({comment, <<"[", _/binary>>}, _Stack, _Opts, _Context) ->
+    % Conditional comment, as used for Outlook <!--[if mso]>..<![endif]-->
+    <<>>;
+sanitize_element_opts({comment, <<"<![">>}, _Stack, _Opts, _Context) ->
+    % End of conditional comment, as used for Outlook <!--[if !mso]><!-->...<!--<![endif]-->
+    <<>>;
+sanitize_element_opts({comment, <<"StartFragment">>}, _Stack, _Opts, _Context) ->
     % Inserted by Microsoft Word: <!--StartFragment-->
     <<>>;
-sanitize_element_opts({comment, <<"EndFragment">>}, _Stack, _Opts) ->
+sanitize_element_opts({comment, <<"EndFragment">>}, _Stack, _Opts, _Context) ->
     % Inserted by Microsoft Word: <!--EndFragment-->
     <<>>;
-sanitize_element_opts({comment, <<" z-media ", ZMedia/binary>>}, _Stack, _Opts) ->
+sanitize_element_opts({comment, <<" z-media ", ZMedia/binary>>}, _Stack, _Opts, Context) ->
     % The z-media tag is very strict with spaces
     try
         [Id, Opts] = binary:split(ZMedia, <<" {">>),
         Opts1 = sanitize_z_media(<<${, Opts/binary>>),
         Id1 = z_string:to_name(z_string:trim(Id)),
-        {comment, <<" z-media ", Id1/binary, " ", Opts1/binary, " ">>}
+        case Context =:= undefined orelse z_acl:rsc_visible(Id1, Context) of
+            true ->
+                {comment, <<" z-media ", Id1/binary, " ", Opts1/binary, " ">>};
+            false ->
+                ?LOG_NOTICE(#{
+                    text => <<"Dropping invisibile media from z-media">>,
+                    in => zotonic_core,
+                    zmedia => ZMedia,
+                    rsc_id => Id1
+                }),
+                <<" ">>
+        end
     catch
         _:_ ->
             ?LOG_NOTICE(#{
@@ -158,12 +187,12 @@ sanitize_element_opts({comment, <<" z-media ", ZMedia/binary>>}, _Stack, _Opts) 
                 in => zotonic_core,
                 zmedia => ZMedia
             }),
-            {comment, <<" ">>}
+            <<" ">>
     end;
-sanitize_element_opts({Tag, Attrs, Inner}, _Stack, _Opts) ->
+sanitize_element_opts({Tag, Attrs, Inner}, _Stack, _Opts, _Context) ->
     Attrs1 = cleanup_element_attrs(Attrs),
     {Tag, Attrs1, Inner};
-sanitize_element_opts(Element, _Stack, _Opts) ->
+sanitize_element_opts(Element, _Stack, _Opts, _Context) ->
     Element.
 
 cleanup_element_attrs(Attrs) ->
@@ -228,6 +257,7 @@ sanitize_z_media_arg(<<"align">>, <<"right">>) -> #{<<"align">> => <<"right">>};
 sanitize_z_media_arg(<<"align">>, _) -> #{<<"align">> => <<"block">>};
 sanitize_z_media_arg(<<"crop">>, Crop) -> #{<<"crop">> => z_convert:to_bool(Crop)};
 sanitize_z_media_arg(<<"link">>, Link) -> #{<<"link">> => z_convert:to_bool(Link)};
+sanitize_z_media_arg(<<"link_new">>, LinkNew) -> #{<<"link_new">> => z_convert:to_bool(LinkNew)};
 sanitize_z_media_arg(<<"link_url">>, LinkUrl) ->
     #{<<"link_url">> => z_html:sanitize_uri(z_string:trim(LinkUrl))};
 sanitize_z_media_arg(<<"caption">>, Caption) ->
@@ -399,6 +429,7 @@ allowlist(<<"vk.com/video_ext",  _/binary>> = Url) -> {ok, Url};
 allowlist(<<"platform.twitter.com/",  _/binary>> = Url) -> {ok, Url};
 allowlist(<<"prezi.com/v/", _/binary>> = Url) -> {ok, Url};
 allowlist(<<"prezi.com/embed/", _/binary>> = Url) -> {ok, Url};
+allowlist(<<"open.spotify.com/embed/", _/binary>> = Url) -> {ok, Url};
 allowlist(Url) ->
     case lists:dropwhile(fun(Re) ->
                             re:run(Url, Re) =:= nomatch

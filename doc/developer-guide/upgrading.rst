@@ -433,6 +433,8 @@ Modules
 
 Moved ``mod_base_site`` to https://github.com/zotonic/zotonic_mod_base_site
 
+Removed ``mod_twitter`` due to API and other changes at Twitter.
+
 
 Menus
 ^^^^^

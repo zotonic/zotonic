@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2020-2022 Marc Worrell
+%% @copyright 2020-2024 Marc Worrell
 %% @doc Run a pivot task queue job.
+%% @end
 
-%% Copyright 2020-2022 Marc Worrell
+%% Copyright 2020-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -30,15 +31,13 @@
 -include_lib("zotonic.hrl").
 
 % Max number of times a task will retry on fatal exceptions
--define(MAX_TASK_ERROR_COUNT, 5).
+-define(MAX_TASK_ERROR_COUNT, 10).
 
 
 %% @doc Start a task queue sidejob.
 -spec start_task( map(), z:context() ) -> {ok, pid()} | {error, overload}.
 start_task(Task, Context) ->
-    sidejob_supervisor:spawn(
-            zotonic_sidejobs,
-            {?MODULE, task_job, [ Task, Context ]}).
+    z_sidejob:start(?MODULE, task_job, [ Task ], Context).
 
 %% @doc Run the sidejob task queue task.
 -spec task_job( map(), z:context() ) -> ok.
@@ -57,29 +56,20 @@ task_job(
         }),
         case call_function(Module, Function, Args1, Context) of
             {delay, Delay} ->
-                Due = if
-                        is_integer(Delay) ->
-                            calendar:gregorian_seconds_to_datetime(
-                                calendar:datetime_to_gregorian_seconds(calendar:universal_time()) + Delay);
-                        is_tuple(Delay) ->
-                            Delay
-                      end,
-                z_db:update(pivot_task_queue, TaskId, [ {due, Due} ], Context);
+                Due = delay_to_after(Delay),
+                z_db:update(pivot_task_queue, TaskId, [ {due, Due} ], Context),
+                z_pivot_rsc:publish_task_event(delay, Module, Function, Due, Context);
             {delay, Delay, NewArgs} ->
-                Due = if
-                        is_integer(Delay) ->
-                            calendar:gregorian_seconds_to_datetime(
-                                calendar:datetime_to_gregorian_seconds(calendar:universal_time()) + Delay);
-                        is_tuple(Delay) ->
-                            Delay
-                      end,
+                Due = delay_to_after(Delay),
                 Fields = #{
                     <<"due">> => Due,
                     <<"args">> => NewArgs
                 },
-                z_db:update(pivot_task_queue, TaskId, Fields, Context);
+                z_db:update(pivot_task_queue, TaskId, Fields, Context),
+                z_pivot_rsc:publish_task_event(delay, Module, Function, Due, Context);
             _OK ->
-                z_db:delete(pivot_task_queue, TaskId, Context)
+                z_db:delete(pivot_task_queue, TaskId, Context),
+                z_pivot_rsc:publish_task_event(delete, Module, Function, undefined, Context)
         end
     catch
         error:undef:Trace ->
@@ -92,13 +82,22 @@ task_job(
                 reason => undef,
                 stack => Trace
             }),
-            z_db:delete(pivot_task_queue, TaskId, Context);
+            z_db:delete(pivot_task_queue, TaskId, Context),
+            z_pivot_rsc:publish_task_event(delete, Module, Function, undefined, Context);
         Error:Reason:Trace ->
             maybe_schedule_retry(Task, Error, Reason, Trace, Context)
     after
         z_pivot_rsc:task_job_done(TaskId, Context)
     end,
     ok.
+
+delay_to_after(undefined) -> undefined;
+delay_to_after(0) -> undefined;
+delay_to_after(Delay) when is_integer(Delay) ->
+    calendar:gregorian_seconds_to_datetime(
+        calendar:datetime_to_gregorian_seconds(calendar:universal_time()) + Delay);
+delay_to_after(Due) when is_tuple(Due) ->
+    Due.
 
 -spec maybe_schedule_retry(map(), atom(), term(), list(), z:context()) -> ok.
 maybe_schedule_retry(#{ task_id := TaskId, error_count := ErrCt, mfa := MFA }, Error, Reason, Trace, Context) 
@@ -119,6 +118,8 @@ maybe_schedule_retry(#{ task_id := TaskId, error_count := ErrCt, mfa := MFA }, E
         <<"error_count">> => ErrCt+1
     },
     {ok, _} = z_db:update(pivot_task_queue, TaskId, RetryFields, Context),
+    {Module, Function, _} = MFA,
+    z_pivot_rsc:publish_task_event(retry, Module, Function, RetryDue, Context),
     ok;
 maybe_schedule_retry(#{ task_id := TaskId, mfa := MFA }, Error, Reason, Trace, Context) ->
     ?LOG_ERROR(#{
@@ -131,6 +132,8 @@ maybe_schedule_retry(#{ task_id := TaskId, mfa := MFA }, Error, Reason, Trace, C
         stack => Trace
     }),
     z_db:delete(pivot_task_queue, TaskId, Context),
+    {Module, Function, _} = MFA,
+    z_pivot_rsc:publish_task_event(delete, Module, Function, undefined, Context),
     {error, stopped}.
 
 call_function(Module, Function, As, Context) ->

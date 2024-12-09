@@ -17,7 +17,6 @@
                     on_error={update target="confirm" text=_"Sorry, something went wrong. Please try again later."}}
         %}
     </p>
-
 {% else %}
 	<h1>{_ Sorry, can’t find your subscription _}</h1>
 	<p>{_ The key in your link does not match any subscription. Either you already unsubscribed, or the mailing list has been deleted. _}</p>

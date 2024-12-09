@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block title %}
-{{ m.rsc.page_logon.title|default:[_"Sign in to", " ", m.site.title|default:"Zotonic"] }}
+{{ m.rsc.page_logon.title|default:[_"Log in to", " ", m.site.title|default:"Zotonic"] }}
 {% endblock %}
 
 {% block html_attr %}
@@ -16,7 +16,7 @@
         {% if qpage|is_site_url or qpage == `undefined` %}
             {% if page == "#reload" or error_code == 401 %}
                 data-onauth="#reload"
-            {% elseif {logon_done p=qpage}|url as logon_done_url %}
+            {% elseif {logon_done p=qpage auth=q.auth}|url as logon_done_url %}
                 data-onauth="{{ logon_done_url|escape }}"
             {% else %}
                 data-onauth="{{ qpage|default:"#reload"|escape }}"
@@ -29,12 +29,12 @@
 
 {% block content_area %}
     {% if q.zotonic_dispatch == 'logon' and m.acl.user %}
-        <h1>{_ You are signed in _}</h1>
+        <h1>{_ You are logged in _}</h1>
 
         <p>{_ Your username is _} <b>{{ m.identity[m.acl.user].username|escape }}</b></p>
         <ul class="list-unstyled">
             <li>
-                <a href="{% url logoff %}">{_ Sign out _}</a>
+                <a href="{% url logoff %}">{_ Log out _}</a>
             </li>
             <li>
                 <a href="{% url home %}">{_ Go to the home page _}</a>

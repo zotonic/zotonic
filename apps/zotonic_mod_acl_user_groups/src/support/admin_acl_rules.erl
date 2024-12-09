@@ -129,7 +129,7 @@ event1(#submit{message={acl_rule_import, []}}, Context) ->
     #upload{tmpfile=TmpFile} = z_context:get_q_validated(<<"upload_file">>, Context),
     {ok, Binary} = file:read_file(TmpFile),
     ContextAsync = z_context:prune_for_async(Context),
-    erlang:spawn(fun() ->
+    z_proc:spawn_md(fun() ->
                     Data = binary_to_term(Binary),
                     acl_user_groups_export:import(Data, ContextAsync)
                  end),

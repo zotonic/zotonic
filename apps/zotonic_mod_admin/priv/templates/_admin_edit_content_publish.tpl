@@ -14,9 +14,6 @@
 
 {% block widget_content %}
 <div class="form-group">
-    <div class="pull-right">
-        {% button class="btn btn-default" text=_"Cancel" action={redirect back} title=_"Go back." tag="a" %}
-    </div>
     {% button type="submit" id="save_stay" class="btn btn-primary" text=_"Save" title=_"Save this page." disabled=not id.is_editable %}
     {% if id.page_url as page_url %}
         {% if id.is_editable %}
@@ -25,31 +22,7 @@
 
         {% include "_admin_edit_content_publish_view.tpl" %}
     {% endif %}
-</div>
 
-<div class="form-group">
-    <label for="is_published" class="checkbox-inline">
-        <input type="checkbox" id="is_published" name="is_published" value="1" {% if id.is_published %}checked="checked"{% endif %}/>
-        {_ Published _}
-    </label>
-
-    <label for="is_featured" class="checkbox-inline">
-        <input type="checkbox" id="is_featured" name="is_featured" value="1" {% if id.is_featured %}checked="checked"{% endif %}/>
-        {_ Featured _}
-    </label>
-
-    <label for="is_protected" class="checkbox-inline" title="{_ Protect from deletion _}">
-        <input type="checkbox" id="is_protected" name="is_protected" value="1" {% if id.is_protected %}checked="checked"{% endif %} {% if id == 1 %}disabled="disabled"{% endif %} />
-        {_ Protect _}
-    </label>
-
-    <label for="is_dependent" class="checkbox-inline" title="{_ Delete if no other page is connected to this page. _}">
-        <input type="checkbox" id="is_dependent" name="is_dependent" value="1" {% if id.is_dependent %}checked="checked"{% endif %} {% if id == 1 or id.is_protected %}disabled="disabled"{% endif %} />
-        {_ Dependent _}
-    </label>
-</div>
-
-<div class="form-group">
     <div class="pull-right">
         <div class="btn-group">
             {% with m.rsc[q.qcat].id|default:id.category_id as cat_id %}
@@ -66,20 +39,17 @@
             {% endwith %}
         </div>
     </div>
+</div>
 
-    {% if id /= 1 %}
-        {% button class="btn btn-default btn-sm" disabled=(id.is_protected or not id.is_deletable) id="delete-button" text=_"Delete"
-                  action={dialog_delete_rsc id=id on_success={redirect back}} title=_"Delete this page." %}
-    {% endif %}
+<div class="form-group">
+    <label for="is_published" class="checkbox-inline" style="padding-left: 0">
+        <input type="checkbox" id="is_published" name="is_published" value="1" {% if id.is_published %}checked="checked"{% endif %}/>
+        {_ Published _}
+    </label>
 
-    {% if id.is_editable %}
-        {% button type="submit" id="save_duplicate" class="btn btn-default btn-sm" text=_"Duplicate" title=_"Duplicate this page." %}
-    {% else %}
-        {% button class="btn btn-default btn-sm"
-            text=_"Duplicate"
-            action={dialog_duplicate_rsc id=id}
-            title=_"Duplicate this page."
-            disabled=(not m.acl.insert[r.category.name]) %}
-    {% endif %}
+    <label for="is_featured" class="checkbox-inline">
+        <input type="checkbox" id="is_featured" name="is_featured" value="1" {% if id.is_featured %}checked="checked"{% endif %}/>
+        {_ Featured _}
+    </label>
 </div>
 {% endblock %}

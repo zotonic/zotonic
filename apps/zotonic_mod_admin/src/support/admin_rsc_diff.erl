@@ -87,6 +87,8 @@
     <<"mail_postcode">>,
     <<"mail_country">>,
 
+    <<"billing_name">>,
+    <<"billing_phone">>,
     <<"billing_email">>,
     <<"billing_street_1">>,
     <<"billing_street_2">>,
@@ -205,7 +207,7 @@ format_value(_K, A, _Context) ->
 
 by_id(Id, Context) when is_integer(Id) ->
     iolist_to_binary([
-        z_trans:lookup_fallback(m_rsc:p(Id, title, Context), Context),
+        z_convert:to_binary(z_trans:lookup_fallback(m_rsc:p(Id, title, Context), Context)),
         32,
         $(, integer_to_list(Id), $)
     ]).

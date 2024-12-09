@@ -1,7 +1,8 @@
-%% @copyright 2015 Marc Worrell
+%% @copyright 2015-2024 Marc Worrell
 %% @doc Support routines for editing/creating resources
+%% @end
 
-%% Copyright 2015 Marc Worrell
+%% Copyright 2015-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -91,7 +92,7 @@ allowed_content_groups(CatId, ExtraIds, CGMenu, Context) ->
             ++ ExtraIds,
     lists:filter(fun
                     (undefined) -> false;
-                    (CGId) -> acl_user_groups_checks:can_insert_category(CGId, CatId, Context)
+                    (CGId) -> can_insert_category(CGId, CatId, Context)
                  end,
                  CGIds).
 
@@ -110,7 +111,7 @@ update(Id, CatId, CGId, Context, ErrorContext) ->
     end.
 
 check_catcg(CGId, CatId, ErrorDiv, Context) ->
-    IsOk = acl_user_groups_checks:can_insert_category(CGId, CatId, Context),
+    IsOk = can_insert_category(CGId, CatId, Context),
     Context1 = case IsOk of
                     true -> z_render:wire({hide, [{target,ErrorDiv}]}, Context);
                     false -> z_render:wire({show, [{target,ErrorDiv}]}, Context)
@@ -118,3 +119,16 @@ check_catcg(CGId, CatId, ErrorDiv, Context) ->
     {IsOk, Context1}.
 
 
+% Check via notification if this insert is allowed, the notification allows extra observers to
+% hook into this check.
+can_insert_category(CGId, CatId, Context) ->
+    z_acl:is_allowed(
+        insert,
+        #acl_rsc{
+            id = undefined,
+            category = CatId,
+            props = #{
+                <<"content_group_id">> => CGId
+            }
+        },
+        Context).

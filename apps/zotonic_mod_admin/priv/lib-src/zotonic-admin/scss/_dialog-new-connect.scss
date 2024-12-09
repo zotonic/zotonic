@@ -1,0 +1,111 @@
+.modal #dialog-new-rsc-tab {
+    margin: -15px;
+}
+
+#dialog-new-rsc-tab {
+    .modal-footer {
+        border-top: 0;
+    }
+
+    .new-find-cols {
+        display: grid;
+        grid-template-columns: 3fr 2fr;
+        grid-template-rows: minmax(300px,70vh);
+
+        .modal-footer {
+            position: sticky;
+            bottom: 0;
+            background-color: rgba(255,255,255,0.8);
+        }
+
+        > .form-panel {
+            grid-column: 1;
+            grid-row: 1;
+
+            background-color: white;
+            padding: 10px 15px 0 15px;
+            max-height: 100%;
+            overflow-y: auto;
+        }
+
+        > .rsc-preview-panel-wrapper {
+            grid-column: 1;
+            grid-row: 1;
+
+            position: relative;
+            background-color: white;
+            z-index: 1051;
+
+            padding: 10px 15px 0 15px;
+            max-height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+
+            .rsc-preview {
+                h1 {
+                    font-size: $font-size-h3;
+                }
+                h2 {
+                    font-size: $font-size-h4;
+                }
+                h3 {
+                    font-size: $font-size-h4;
+                }
+
+                img {
+                    max-width: 100%;
+                    margin: 15px 0;
+                }
+            }
+
+        }
+
+        > .new-find-results {
+            grid-column: 2;
+            grid-row: 1;
+
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: auto 1fr;
+
+            max-height: 100%;
+            padding: 10px 0 0 14px;
+            margin-left: 0;
+            border-left: 1px solid $borderColorMediumTransparent;
+            background: linear-gradient(to right, #f8f8f8, white, white);
+
+            > .new-find-results-header {
+                grid-column: 1;
+                grid-row: 1;
+                padding-right: 15px;
+                padding-bottom: 10px;
+            }
+
+            > #dialog-rsc-new-found {
+                grid-column: 1;
+                grid-row: 2;
+
+                max-height: 100%;
+                padding-right: 15px;
+
+                overflow-x: hidden;
+                overflow-y: scroll;
+
+                // .item {
+                //     background-color: white;
+                // }
+            }
+
+            #dialog_new_rsc_results {
+                margin-top: 0;
+            }
+        }
+    }
+}
+
+#dialog_new_rsc_results {
+    margin-top: 10px;
+
+    // use smaller grid gutter
+    $_item_gutter: 6px;
+}

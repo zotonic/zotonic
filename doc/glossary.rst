@@ -25,7 +25,7 @@ Glossary
       The template systems provides tags which function as simple programming constructs. For instance, the if tag can be used for boolean tests and the for tag allows looping. The Zotonic templating system compiles the tags found in a template to Erlang byte code which will be called when the template is rendered. This is very efficient.
 
    Scomp
-      A scomp (from .Screen COMPonent.) is a custom template tag, implemented by an Erlang module named after the scomp name, prefixed with `scomp_`. Scomps usually generate HTML. Zotonic modules can implement their own scomp in the module.s scomps/ folder.
+      A scomp (from .Screen COMPonent.) is a custom template tag, implemented by an Erlang module named after the scomp name, prefixed with ``scomp_``. Scomps usually generate HTML. Zotonic modules can implement their own scomp in the module.s scomps/ folder.
 
    Wire
       Connects actions and events to a HTML element. The wire scomp is the basis for most Ajax interaction on web pages. It allows to connected actions to HTML elements. Examples of actions are showing/hiding elements or postbacks to the server.
@@ -35,7 +35,7 @@ Glossary
       An AJAX or Websocket request from the browser to the server. It is handled on the server by event/2 Erlang functions. A postback is normally sent to the controller that generated the page, but can be changed by specifying a delegate, which must be the name of an Erlang module.
 
    Model
-      An Erlang module which is the main accessor for retrieving data. The Erlang modules are prefixed with `m_`; in the templates they are accessible using .m... For instance, the model to access :term:`resources <resource>` is called ``m_rsc.erl``; in the template this model lets you access resources by id as ``{{ m.rsc[id] }}``.
+      An Erlang module which is the main accessor for retrieving data. The Erlang modules are prefixed with ``m_``; in the templates they are accessible using .m... For instance, the model to access :term:`resources <resource>` is called ``m_rsc.erl``; in the template this model lets you access resources by id as ``{{ m.rsc[id] }}``.
 
    Validator
       A validator is used to check input fields in a HTML form. A validator has two parts: the client side javascript and a server side check. You add validators to a form with the {% validate %} template tag. A validated query argument can be accessed on the server using z_context:get_q_validated/2.

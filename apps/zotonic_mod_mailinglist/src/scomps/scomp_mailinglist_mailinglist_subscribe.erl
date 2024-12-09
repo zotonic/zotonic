@@ -1,9 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2022 Marc Worrell
+%% @copyright 2010-2023 Marc Worrell
 %% @doc Show a form to subscribe to a mailinglist. Prefill the form with the account details
 %% of the current user (if any).
+%% @end
 
-%% Copyright 2010-2022 Marc Worrell
+%% Copyright 2010-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -36,22 +37,22 @@ render(Params, _Vars, Context) ->
     {ok, z_template:render(Template, Props, Context)}.
 
 
-event(#submit{message={recipient_add, Props}}, Context) ->
+event(#submit{message={recipient_add, Props}, form=FormId}, Context) ->
     ListId = proplists:get_value(id, Props),
     InAdmin = z_convert:to_bool(proplists:get_value(in_admin, Props)),
 	case z_acl:rsc_visible(ListId, Context) of
 		true ->
-			Email = z_context:get_q_validated(email, Context),
-			Notification = case not InAdmin orelse z_convert:to_bool(z_context:get_q(send_welcome, Context)) of
+			Email = z_context:get_q_validated(<<"email">>, Context),
+			Notification = case not InAdmin orelse z_convert:to_bool(z_context:get_q(<<"send_welcome">>, Context)) of
 				true -> send_welcome;
 				false -> silent
 			end,
 			RecipientProps = [
 			    {user_id, undefined},
 			    {in_admin, InAdmin},
-			    {name_first, sanitize(z_context:get_q(name_first, Context, <<>>))},
-			    {name_surname_prefix, sanitize(z_context:get_q(name_surname_prefix, Context, <<>>))},
-			    {name_surname, sanitize(z_context:get_q(name_surname, Context, <<>>))},
+			    {name_first, sanitize(z_context:get_q(<<"name_first">>, Context, <<>>))},
+			    {name_surname_prefix, sanitize(z_context:get_q(<<"name_surname_prefix">>, Context, <<>>))},
+			    {name_surname, sanitize(z_context:get_q(<<"name_surname">>, Context, <<>>))},
                 {pref_language, pref_language(Context)}
 			],
 			case m_mailinglist:insert_recipient(ListId, Email, RecipientProps, Notification, Context) of
@@ -62,15 +63,15 @@ event(#submit{message={recipient_add, Props}}, Context) ->
         									{dialog_close, []},
         									{reload, []}], Context);
         				false ->
-					        z_render:wire([ {slide_fade_in, [{target, "mailinglist_subscribe_done-" ++ integer_to_list(ListId)}]},
-					                        {slide_fade_out, [{target, "mailinglist_subscribe_form-" ++ integer_to_list(ListId)}]}], Context)
+					        z_render:wire([ {slide_fade_in, [{target, <<FormId/binary, "-done">>}]},
+					                        {slide_fade_out, [{target, <<FormId/binary, "-form">>}]}], Context)
         			end;
 				{error, _Reason} ->
 				    case InAdmin of
 				        true ->
 					        z_render:growl_error(?__("Could not add the recipient.", Context), Context);
 					    false ->
-					        z_render:wire([ {slide_fade_in, [{target, "mailinglist_subscribe_error-" ++ integer_to_list(ListId)}]}], Context)
+					        z_render:wire([ {slide_fade_in, [{target, <<FormId/binary, "-error">>}]}], Context)
 					end
 			end;
 		false ->
@@ -78,7 +79,7 @@ event(#submit{message={recipient_add, Props}}, Context) ->
 		        true ->
 			        z_render:growl_error(?__("You are not allowed to add or enable recipients.", Context), Context);
 			    false ->
-			        z_render:wire([ {slide_fade_in, [{target, "mailinglist_subscribe_error-" ++ integer_to_list(ListId)}]}], Context)
+			        z_render:wire([ {slide_fade_in, [{target, <<FormId/binary, "-error">>}]}], Context)
 			end
 	end;
 
@@ -89,12 +90,12 @@ event(#submit{message={recipient_edit, Props}}, Context) ->
 	case z_acl:rsc_visible(ListId, Context) of
 		true ->
 			RecipientProps = [
-                {email, z_context:get_q_validated(email, Context)},
+                {email, z_context:get_q_validated(<<"email">>, Context)},
 			    {user_id, undefined},
 			    {in_admin, InAdmin},
-			    {name_first, sanitize(z_context:get_q(name_first, Context, <<>>))},
-			    {name_surname_prefix, sanitize(z_context:get_q(name_surname_prefix, Context, <<>>))},
-			    {name_surname, sanitize(z_context:get_q(name_surname, Context, <<>>))},
+			    {name_first, sanitize(z_context:get_q(<<"name_first">>, Context, <<>>))},
+			    {name_surname_prefix, sanitize(z_context:get_q(<<"name_surname_prefix">>, Context, <<>>))},
+			    {name_surname, sanitize(z_context:get_q(<<"name_surname">>, Context, <<>>))},
                 {pref_language, pref_language(Context)}
 			],
             ok = m_mailinglist:update_recipient(RcptId, RecipientProps, Context),

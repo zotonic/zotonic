@@ -100,13 +100,26 @@
 
                         {% if not m.sysconfig.email_override %}
                             <div class="form-group label-floating">
-                                <input type="email" class="form-control" name="site.email_override" value="{{ m.config.site.email_override.value|escape }}" placeholder="{_ E-mail override _}">
-                                <label class="control-label">{_ E-mail override _}</label>
+                                <input type="email" class="form-control" name="site.email_override" value="{{ m.config.site.email_override.value|escape }}" placeholder="{_ E-mail intercept _}">
+                                <label class="control-label">{_ E-mail intercept _}</label>
                                 <p class="help-block">
                                     {_ It is possible to intercept all email and send it to a single address. Configure this address here. _}
                                 </p>
                             </div>
                         {% endif %}
+
+                        <div class="form-group label-floating">
+                            <textarea class="form-control" name="site.email_override_exceptions" placeholder="{_ E-mail intercept &ndash; exceptions _}">{{ m.config.site.email_override_exceptions.value|escape }}</textarea>
+                            <label class="control-label">{_ E-mail intercept &ndash; exceptions _}</label>
+                            <p class="help-block">
+                                {% if m.sysconfig.email_override as email %}
+                                    {% trans "All email is sent to <b>{email}</b>, except for the email addresses and domains defined here." email=email %}
+                                {% else %}
+                                    {_ If (and only if) there is an e-mail intercept address defined above, then all e-mail is sent to that address <em>except</em> for the e-mail addresses and domains defined here. _}
+                                {% endif %}
+                                {_ Add email domains using <tt>@example.com</tt> and complete email addresses. Separate multiple entries using whitespace, semicolons or commas. _}
+                            </p>
+                        </div>
 
                         <div class="form-group label-floating">
                             <input type="text" class="form-control" name="site.smtphost" value="{{ m.config.site.smtphost.value|escape }}" placeholder="{_ SMTP Hostname _}">
@@ -115,6 +128,16 @@
                                 {_ Domain for all generated from- and envelop-addresses. _}
                                 {_ Defaults to the hostname of the site. _}<br>
                                 {_ If you change this then you might need to request a new SSL certificate that includes this hostname. _}
+                            </p>
+                        </div>
+
+                        <div class="form-group label-floating">
+                            <input type="text" class="form-control" name="site.client_smtphost" value="{{ m.config.site.client_smtphost.value|escape }}" placeholder="{_ Hostname SMTP Client _}">
+                            <label class="control-label">{_ Hostname SMTP Client _}</label>
+                            <p class="help-block">
+                                {_ The hostname to use as client when delivering e-mail to external SMTP servers.  _}
+                                {_ Defaults to the SMTP hostname of the site. _}<br>
+                                {_ It is usually set to the reverse DNS name of the machine. _}
                             </p>
                         </div>
 

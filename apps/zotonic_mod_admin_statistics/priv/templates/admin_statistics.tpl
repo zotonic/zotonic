@@ -10,68 +10,68 @@
 </div>
 
 
-<style>
+<style type="text/css" nonce="{{ m.req.csp_nonce }}">
+.stats-panels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.stats-panels > * {
+    min-width: 220px;
+}
+
 .meta {
     font-weight: bold;
     color: #888;
 }
 </style>
 
-<div class="row">
+<div class="stats-panels">
 
-    <div class="col-md-4 col-lg-4 col-sm-4 col-xs-6">
-        {% include "stat_panel/system_usage.tpl" %}
-    </div>
+    {% include "stat_panel/memory_usage.tpl" %}
+    {% include "stat_panel/system_usage.tpl" %}
+    {% include "stat_panel/erlang.tpl" %}
 
-    <div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
-        {% include "stat_panel/erlang.tpl" %}
-    </div>
-
-    <div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">IO</div>
-            <div class="panel-body">
-                <table class="table table-condensed">
-                    <thead></thead>
-                    <tbody>
-                        {% for title, id in [ ["Input", "io-input"],
-                                              ["Output", "io-output"] ] %}
-                            {% include "_stat_row.tpl" %}
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">IO</div>
+        <div class="panel-body">
+            <table class="table table-condensed">
+                <thead></thead>
+                <tbody>
+                    {% for title, id, format in [
+                            ["Input", "io-input", "filesize"],
+                            ["Output", "io-output", "filesize"]
+                        ]
+                    %}
+                        {% include "_stat_row.tpl" %}
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 
-</div>
+    {% include "stat_panel/broker.tpl" %}
+    {% include "stat_panel/database.tpl" %}
+    {% include "stat_panel/filezcache.tpl" %}
 
-<div class="row">
-
-    <div class="col-md-5 col-lg-4 col-sm-6 col-xs-8">
-        {% include "stat_panel/memory_usage.tpl" %}
-    </div>
-
-    <div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
-        {% include "stat_panel/broker.tpl" %}
-    </div>
-
-    <div class="col-md-3 col-lg-3 col-sm-3 col-xs-6">
-        {% include "stat_panel/database.tpl" %}
-    </div>
-
-</div>
-
-<div class="row">
-
-    <div class="col-md-10 col-lg-8 col-sm-12">
-        {% include "stat_panel/dispatch.tpl" %}
-    </div>
+    {% include "stat_panel/dispatch.tpl" %}
 
 </div>
 
 {% javascript %}
-function to_human(value, per) {
+function format_view(format, value, per) {
+    switch (format) {
+        case "filesize":
+            return render_filesize(value, per);
+        case "msec":
+            return render_ms(value);
+        default:
+            return escape(render_value(value));
+    }
+}
+
+function render_filesize(value, per) {
     if(value === undefined)
         return "-";
 
@@ -96,12 +96,10 @@ function unit(u, per) {
     }
     return " <small class=\"meta\">" + u + "</small>";
 }
-{% endjavascript %}
 
-{% javascript %}
 function render_value(val) {
     if(!val) return "-";
-    return val;
+    return val.toString();
 }
 
 function render_ms(val) {
@@ -110,27 +108,21 @@ function render_ms(val) {
     return (val / 1000).toFixed(3) + "<small class=\"meta\">ms</small>"
 }
 
-cotonic.broker.subscribe("bridge/origin/$SYS/erlang/+entry",
-     function(msg, args) {
-        if(args.entry === "usage") {
-            update_usage(msg.payload);
-            return;
+function update_values(entry, payload) {
+    const datapoints = Object.keys(payload);
+
+    for(let i=0; i < datapoints.length; i++) {
+        const itemId = "#" + entry + "-" + datapoints[i];
+        const $item = $(itemId);
+
+        if($item.length > 0) {
+            const formatted = format_view($item.attr('data-format'), payload[datapoints[i]]);
+            $item.html(formatted);
+        } else {
+            console.log("No place for", itemId, payload[datapoints[i]]);
         }
-
-        const datapoints = Object.keys(msg.payload);
-
-        for(let i=0; i < datapoints.length; i++) {
-            const itemId = "#" + args.entry + "-" + datapoints[i];
-
-            let item = $(itemId);
-            if(item.length > 0) {
-                item.text(msg.payload[datapoints[i]] + '');
-                // item.html(item.data('render')(msg.payload[datapoints[i]]));
-            } else {
-                console.log("No place for", itemId, msg.payload[datapoints[i]]);
-            }
-        }
-});
+    }
+}
 
 function update_usage(dp) {
     const keys = Object.keys(dp);
@@ -141,6 +133,21 @@ function update_usage(dp) {
         $("#usage-" + key + "-progress").css({width: dp[key].toString() + "%"});
     }
 }
+
+cotonic.broker.subscribe("bridge/origin/$SYS/erlang/+entry",
+     function(msg, args) {
+        if(args.entry === "usage") {
+            update_usage(msg.payload);
+        } else {
+            update_values(args.entry, msg.payload);
+        }
+    });
+
+cotonic.broker.subscribe("bridge/origin/$SYS/statistics/+entry",
+     function(msg, args) {
+        update_values(args.entry, msg.payload);
+    });
+
 {% endjavascript %}
 
 {% endblock %}

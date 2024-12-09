@@ -5,7 +5,12 @@
 {% block widget_title %}
 {_ Date range _}
 <div class="widget-header-tools">
-    <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{{ _"Date ranges"|escapejs }}', text: '{{ _"Every page can have a date range. For example if the page is an event or description of someone's life."|escapejs }}'" title="{_ Need more help? _}"></a>
+    <a href="#" class="z-btn-help do_dialog" data-dialog="{{
+            %{
+                title: _"Date ranges",
+                text: _"Every page can have a date range. For example if the page is an event or description of someone’s life."
+            }|escape
+        }}" title="{_ Need more help? _}"></a>
 </div>
 {% endblock %}
 

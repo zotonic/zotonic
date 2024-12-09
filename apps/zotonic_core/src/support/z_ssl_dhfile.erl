@@ -32,7 +32,7 @@
 
 %% @doc Return the dh key to be used. Needed for better forward secrecy
 %%      with the DH key exchange
--spec dh_options() -> [ssl:ssl_option()].
+-spec dh_options() -> [ssl:tls_option()].
 dh_options() ->
     [ {dhfile, dhfile()} ].
 

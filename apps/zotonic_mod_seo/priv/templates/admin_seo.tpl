@@ -34,6 +34,25 @@
                             </p>
                         </div>
 
+                        <div class="form-group label-floating">
+                            <input type="url" id="seo-search_action_url" name="seo-search_action_url" value="{{ m.config.seo.search_action_url.value|escape }}" class="form-control" placeholder="{_ Site search _}">
+                            <label class="control-label" for="seo-search_action_url">{_ Site search _}</label>
+                            <p class="help-block">
+                                {_ Url for the search action on the site. Defaults to: _}
+                                <tt>{% url search qs="TEXT" absolute_url z_language=undefined %}</tt>
+                            </p>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox">
+                                <input type="checkbox" id="seo-noindex" name="seo-search_action_hide" value="1" {% if m.config.seo.search_action_hide.value %}checked="checked"{% endif %} />
+                                {_ Do not show site search action  _}
+                            </label>
+                            <p class="help-block">
+                                {_ If your site does not have a search page, check this box to prevent displaying a search box on Google et al. _}
+                            </p>
+                        </div>
+
                         {% if m.site.seo.noindex|is_defined %}
                             <p class="alert alert-info">
                                 {% if m.site.seo.noindex %}
@@ -63,8 +82,8 @@
                             <input type="text" id="seo_google-analytics" name="seo_google-analytics" value="{{ m.config.seo_google.analytics.value|escape }}" class="form-control" placeholder="{_ Google Analytics tracking id _}">
                             <label class="control-label" for="seo_google-analytics">{_ Google Analytics tracking id _}</label>
                             <p class="help-block">
-                                {_ You find this id in the tracking script, it has the format _} <strong>G-..........</strong> {_ or _} <strong>UA-123456-1</strong>.
-                                <a href="https://support.google.com/analytics/bin/answer.py?hl=en&amp;answer=1008080" title="Google Analytics Help" rel="noopener noreferrer" target="_blank">{_ Where can I find my tracking script? _}</a>
+                                {_ You find this id in the tracking script, it has the format _} <strong>G-..........</strong>.
+                                <a href="https://support.google.com/analytics/answer/9304153#add-tag&zippy=%2Cadd-the-tag-to-a-website-builder-or-cms-hosted-website-eg-hubspot-shopify-etc" title="Google Analytics Help" rel="noopener noreferrer" target="_blank">{_ Where can I find my tracking script? _}</a>
                             </p>
                         </div>
 

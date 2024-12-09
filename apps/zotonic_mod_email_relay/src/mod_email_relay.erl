@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2011 Marc Worrell
-%% @doc Relay received e-mails to an user's email address.
+%% @doc Relay received e-mails to a user's email address.
 
 %% Copyright 2011 Marc Worrell
 %%

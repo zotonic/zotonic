@@ -55,6 +55,7 @@
     				    			<option value="200" {% if sz == 200 %}selected{% endif %}>200 MB</option>
     				    			<option value="500" {% if sz == 500 %}selected{% endif %}>500 MB</option>
     				    			<option value="1024" {% if sz == 1024 %}selected{% endif %}>1 GB</option>
+                                    <option value="2048" {% if sz == 2048 %}selected{% endif %}>2 GB</option>
     				    		</select>
                                 {% endwith %}
     				    	</div>
@@ -74,8 +75,8 @@
     		    	</div>
 
     		    	<div class="col-md-7">
-    		    		<button type="submit" class="btn btn-primary">{_ Save Upload Permissions _}</button>
     		    		<button class="btn btn-default" id="{{ #cancel }}">{_ Cancel _}</button>
+                        <button type="submit" class="btn btn-primary">{_ Save Upload Permissions _}</button>
     		    		{% wire id=#cancel action={reload} %}
     		    	</div>
     		    </div>

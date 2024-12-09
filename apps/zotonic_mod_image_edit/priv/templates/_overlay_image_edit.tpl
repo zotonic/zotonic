@@ -482,7 +482,6 @@
                 window.image_edit_apply_css = undefined;
             } else if (typeof window.image_edit_apply_css == "function") {
                 window.image_edit_apply_css();
-                alert("window rezise");   
             }
         }
 

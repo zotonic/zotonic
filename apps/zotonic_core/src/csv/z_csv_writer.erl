@@ -68,7 +68,9 @@ encode_line([V|Xs], Sep) ->
 encode_value(<<>>) ->
     <<>>;
 encode_value(B) when is_binary(B) ->
-    quote( escape( field(B) ) ).
+    quote( escape( field(B) ) );
+encode_value(V) ->
+    encode_value(z_convert:to_binary(V)).
 
 quote(B) -> <<$", B/binary, $">>.
 

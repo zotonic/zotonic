@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2020 Marc Worrell, Maas-Maarten Zeeman
+%% @copyright 2020-2024 Marc Worrell, Maas-Maarten Zeeman
 %% @doc Interface to erlang-letsencrypt
+%% @end
 
-%% Copyright 2020 Marc Worrell, Maas-Maarten Zeeman
+%% Copyright 2020-2024 Marc Worrell, Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,10 +30,7 @@
 %% @doc Start a letsencrypt server for requesting this hostname
 -spec request( pid(), binary(), list( binary() ), list()) -> {ok, pid()} | {error, overload}.
 request(ModulePid, Hostname, SANs, LetsOpts) ->
-    sidejob_supervisor:spawn(
-            zotonic_sidejobs,
-            {?MODULE, request_process, [ ModulePid, Hostname, SANs, LetsOpts ]}).
-
+    z_sidejob:start(?MODULE, request_process, [ ModulePid, Hostname, SANs, LetsOpts ]).
 
 request_process(ModulePid, Hostname, SANs, LetsOpts) ->
     case global:trans(

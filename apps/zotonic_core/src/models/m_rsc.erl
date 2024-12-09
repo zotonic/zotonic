@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Model for resource data. Interfaces between zotonic, templates and the database.
 %% @end
 
-%% Copyright 2009-2022 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
 
 -export([
     m_get/3,
-    % m_post/3,
+    m_post/3,
     m_delete/3,
 
     name_to_id/2,
@@ -54,6 +54,7 @@
     exists/2,
 
     is_visible/2, is_editable/2, is_deletable/2, is_linkable/2,
+    is_published_date/2,
     is_me/2,
     is_cat/3,
     is_a/2,
@@ -113,6 +114,14 @@
                           | medium
                           | {medium, boolean()}.
 
+% Range of resource id values in PostgreSQL.
+% Make larger if moving to bigint resource ids.
+-define(MIN_RSC_ID, 1).
+-define(MAX_RSC_ID, 2147483647).
+
+-define(is_valid_rsc_id(N), (is_integer(N) andalso N >= ?MIN_RSC_ID andalso N =< ?MAX_RSC_ID)).
+-define(is_invalid_rsc_id(N), (is_integer(N) andalso (N < ?MIN_RSC_ID orelse N > ?MAX_RSC_ID))).
+
 -export_type([
     resource/0,
     resource_id/0,
@@ -121,12 +130,41 @@
     props/0,
     props_all/0,
     props_legacy/0,
-    update_function/0
+    update_function/0,
+    duplicate_option/0,
+    duplicate_options/0
 ]).
 
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ <<"-">>, <<"lookup">>, <<"page_path">> | Path ], _Msg, Context) ->
+    Path1 = iolist_to_binary(lists:join($/, Path)),
+    case page_path_to_id(Path1, Context) of
+        {ok, Id} ->
+            {#{
+                <<"id">> => Id,
+                <<"is_redirect">> => false
+            }, []};
+        {redirect, Id} ->
+            {#{
+                <<"id">> => Id,
+                <<"is_redirect">> => true,
+                <<"page_url">> => m_rsc:p(Id, <<"page_url">>, Context)
+            }, []};
+        {error, _} = Error ->
+            Error
+    end;
+m_get([ <<"-">>, <<"lookup">>, <<"rid">>, Id | Rest ], _Msg, Context) ->
+    case rid(Id, Context) of
+        undefined ->
+            {error, enoent};
+        RscId ->
+            {ok, {RscId, Rest}}
+    end;
+m_get([ <<"-">>, <<"lookup">>, <<"name">>, Name | Rest ], _Msg, Context) ->
+    Result = name_to_id(Name, Context),
+    {ok, {Result, Rest}};
 m_get([ Id, <<"is_cat">>, Key | Rest ], _Msg, Context) ->
     {ok, {is_cat(Id, Key, Context), Rest}};
 m_get([ Id, <<"is_a">>, Cat | Rest ], _Msg, Context) ->
@@ -147,7 +185,18 @@ m_get([ Id ], _Msg, Context) ->
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
+%% @doc API to update or insert resources.
+-spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | ok | {error, term()}.
+m_post([ Id ], #{ payload := Payload }, Context) when is_map(Payload) ->
+    case m_rsc:rid(Id, Context) of
+        undefined -> {error, enoent};
+        RId -> m_rsc:update(RId, Payload, Context)
+    end;
+m_post([], #{ payload := Payload }, Context) when is_map(Payload) ->
+    m_rsc:insert(Payload, Context).
 
+%% @doc API to delete a resource
+-spec m_delete( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | ok | {error, term()}.
 m_delete([ Id ], _Msg, Context) ->
     delete(Id, Context).
 
@@ -357,7 +406,7 @@ get_raw_lock(Id, Context) ->
     get_raw(Id, true, Context).
 
 -spec get_raw(resource(), boolean(), z:context()) -> {ok, map()} | {error, term()}.
-get_raw(Id, IsLock, Context) when is_integer(Id) ->
+get_raw(Id, IsLock, Context) when ?is_valid_rsc_id(Id) ->
     SQL = case z_memo:get(rsc_raw_sql) of
         undefined ->
             AllCols = [ z_convert:to_binary(C) || C <- z_db:column_names(rsc, Context) ],
@@ -389,6 +438,8 @@ get_raw(Id, IsLock, Context) when is_integer(Id) ->
         {error, _} = Error ->
             Error
     end;
+get_raw(Id, _IsLock, _Context) when ?is_invalid_rsc_id(Id) ->
+    {error, enoent};
 get_raw(undefined, _IsLock, _Context) ->
     {error, enoent};
 get_raw(Id, IsLock, Context) ->
@@ -453,8 +504,11 @@ ensure_utc_date_1(_K, P, _IsAllDay) ->
 
 %% @doc Get the ACL fields for the resource with the id.
 %% Will always return a valid record, even if the resource does not exist.
--spec get_acl_props(Id :: resource(), z:context()) -> #acl_props{}.
-get_acl_props(Id, Context) when is_integer(Id) ->
+-spec get_acl_props(Id , Context) -> AclProps when
+    Id :: resource(),
+    Context :: z:context(),
+    AclProps :: #acl_props{}.
+get_acl_props(Id, Context) when ?is_valid_rsc_id(Id) ->
     F = fun() ->
         Result =
             z_db:q_row(
@@ -481,6 +535,10 @@ get_acl_props(Id, Context) when is_integer(Id) ->
         end
     end,
     z_depcache:memo(F, {rsc_acl_fields, Id}, ?DAY, [Id], Context);
+get_acl_props(Id, _Context) when ?is_invalid_rsc_id(Id) ->
+    #acl_props{
+        is_published = false
+    };
 get_acl_props(Name, Context) ->
     case rid(Name, Context) of
         undefined ->
@@ -608,30 +666,40 @@ make_authoritative(RscId, Context)  ->
 -spec exists(resource(), z:context()) -> boolean().
 exists(Id, Context) ->
     case rid(Id, Context) of
-        Rid when is_integer(Rid) ->
+        Rid when ?is_valid_rsc_id(Rid) ->
             case p_no_acl(Rid, <<"id">>, Context) of
                 Rid -> true;
                 undefined -> false
             end;
-        undefined -> false
+        _ ->
+            false
     end.
 
+%% @doc Check if a resource is visible for the current user. Non existing
+%% resources are visible.
 -spec is_visible(resource(), z:context()) -> boolean().
 is_visible(Id, Context) ->
     z_acl:rsc_visible(Id, Context).
 
+%% @doc Check if a resource can be edited by the current user. Non existing
+%% resources are not editable.
 -spec is_editable(resource(), z:context()) -> boolean().
 is_editable(Id, Context) ->
     z_acl:rsc_editable(Id, Context).
 
+%% @doc Check if a resource can be deleted by the current user. Non existing
+%% resources are not deletable.
 -spec is_deletable(resource(), z:context()) -> boolean().
 is_deletable(Id, Context) ->
     z_acl:rsc_deletable(Id, Context).
 
+%% @doc Check if an connection can be added to the resource. Returns true if
+%% the ACL allows adding a 'relation' edge from the resource to itself.
 -spec is_linkable(resource(), z:context()) -> boolean().
 is_linkable(Id, Context) ->
     z_acl:rsc_linkable(Id, Context).
 
+%% @doc Check if the resource is the current user.
 -spec is_me(resource(), z:context()) -> boolean().
 is_me(Id, Context) ->
     case rid(Id, Context) of
@@ -641,6 +709,13 @@ is_me(Id, Context) ->
             false
     end.
 
+%% @doc Check if a resource is published and within its publication start/end
+%% range. If a resource does not exist then false is returned. The checks are
+%% done without checking access permissions.
+-spec is_published_date(Id, Context) -> IsPublished when
+    Id :: resource(),
+    Context :: z:context(),
+    IsPublished :: boolean().
 is_published_date(Id, Context) ->
     case rid(Id, Context) of
         RscId when is_integer(RscId) ->
@@ -661,7 +736,11 @@ is_published_date(Id, Context) ->
 
 %% @doc Fetch a property from a resource. When the rsc does not exist, the property does not
 %% exist or the user does not have access rights to the property then return 'undefined'.
--spec p(resource(), atom() | binary() | string(), z:context()) -> term() | undefined.
+-spec p(Resource, Property, Context) -> Value when
+    Resource :: resource(),
+    Property :: atom() | binary() | string(),
+    Context :: z:context(),
+    Value :: term() | undefined.
 p(_Id, undefined, _Context) ->
     undefined;
 p(undefined, _Property, _Context) ->
@@ -680,6 +759,12 @@ p(Id, Property, Context)
     orelse Property =:= <<"uri_raw">>
     orelse Property =:= <<"is_authoritative">>
     orelse Property =:= <<"is_published">>
+    orelse Property =:= <<"is_published_date">>
+    orelse Property =:= <<"is_visible">>
+    orelse Property =:= <<"is_editable">>
+    orelse Property =:= <<"is_deletable">>
+    orelse Property =:= <<"is_linkable">>
+    orelse Property =:= <<"is_me">>
     orelse Property =:= <<"exists">>
     orelse Property =:= <<"id">>
     orelse Property =:= <<"privacy">>
@@ -695,7 +780,7 @@ p1(Id, Property, Context) ->
         RId ->
             case z_acl:rsc_visible(RId, Context) of
                 true ->
-                    case z_acl:rsc_prop_visible(RId, Property, Context) of
+                    case z_acl:rsc_prop_visible(RId, prop_for_acl(Property), Context) of
                         true -> p_no_acl(RId, Property, Context);
                         false -> undefined
                     end;
@@ -703,6 +788,11 @@ p1(Id, Property, Context) ->
                     undefined
             end
     end.
+
+prop_for_acl(<<"email_raw">>) -> <<"email">>;
+prop_for_acl(<<"day_start">>) -> <<"date_start">>;
+prop_for_acl(<<"day_end">>) -> <<"date_end">>;
+prop_for_acl(P) -> P.
 
 %% Fetch property from a resource; but return a default value if not found.
 p(Id, Property, DefaultValue, Context) ->
@@ -842,7 +932,7 @@ uri_dispatch(Id, Context) ->
         {true, Name} -> Name;
         false -> Id
     end,
-    case z_dispatcher:url_for(id, [{id, DispatchId}], z_context:set_language(undefined, Context)) of
+    case z_dispatcher:url_for(id, [{id, DispatchId}], z_context:set_language('x-default', Context)) of
         undefined ->
             iolist_to_binary(z_context:abs_url(<<"/id/", (z_convert:to_binary(DispatchId))/binary>>, Context));
         Url ->
@@ -873,7 +963,7 @@ image_url(Id, Mediaclass, Context) ->
     end.
 
 
-%% Return a list of all edge predicates of this resource
+%% @doc Return a list of all edge predicates of this resource
 -spec op(resource(), z:context()) -> list().
 op(Id, Context) when is_integer(Id) ->
     m_edge:object_predicates(Id, Context);
@@ -899,7 +989,7 @@ o(Id, Predicate, Context) ->
     o(rid(Id, Context), Predicate, Context).
 
 
-%% Return the nth object in the predicate list
+%% @doc Return the nth object in the predicate list
 -spec o(resource(), atom(), pos_integer(), z:context()) -> resource_id() | undefined.
 o(_Id, undefined, _N, _Context) ->
     undefined;
@@ -914,7 +1004,7 @@ o(Id, Predicate, N, Context) ->
     o(rid(Id, Context), Predicate, N, Context).
 
 
-%% Return a list of all edge predicates to this resource
+%% @doc Return a list of all edge predicates to this resource
 -spec sp(resource(), z:context()) -> list().
 sp(undefined, _Context) ->
     [];
@@ -923,12 +1013,12 @@ sp(Id, Context) when is_integer(Id) ->
 sp(Id, Context) ->
     sp(rid(Id, Context), Context).
 
-%% Used for dereferencing subject edges inside template expressions
+%% @doc Used for dereferencing subject edges inside template expressions
 -spec s(resource(), z:context()) -> fun().
 s(Id, _Context) ->
     fun(P, Context) -> s(Id, P, Context) end.
 
-%% Return the list of subjects with a certain predicate
+%% @doc Return the list of subjects with a certain predicate
 -spec s(resource(), atom(), z:context()) -> list().
 s(undefined, _Predicate, _Context) ->
     [];
@@ -939,7 +1029,7 @@ s(Id, Predicate, Context) when is_integer(Id) ->
 s(Id, Predicate, Context) ->
     s(rid(Id, Context), Predicate, Context).
 
-%% Return the nth object in the predicate list
+%% @doc Return the nth object in the predicate list.
 -spec s(resource(), atom(), pos_integer(), z:context()) -> resource_id() | undefined.
 s(undefined, _Predicate, _N, _Context) ->
     undefined;
@@ -954,8 +1044,12 @@ s(Id, Predicate, N, Context) ->
     s(rid(Id, Context), Predicate, N, Context).
 
 
-%% Return the list of all media attached to the resource
--spec media(resource(), z:context()) -> list().
+%% @doc Return the list of all media attached to the resource with the depiction
+%% predicate.
+-spec media(Id, Context) -> MediaIds when
+    Id :: resource(),
+    Context :: z:context(),
+    MediaIds :: list( resource_id() ).
 media(Id, Context) when is_integer(Id) ->
     m_edge:objects(Id, depiction, Context);
 media(undefined, _Context) ->
@@ -965,11 +1059,18 @@ media(Id, Context) ->
 
 
 %% @doc Fetch a resource id from any input
--spec rid(resource()|#trans{}, z:context()) -> resource_id() | undefined.
-rid(Id, _Context) when is_integer(Id) ->
+-spec rid(ResourceReference, Context) -> Id | undefined when
+    ResourceReference :: resource() | #trans{},
+    Context :: z:context(),
+    Id :: resource_id().
+rid(Id, _Context) when ?is_valid_rsc_id(Id) ->
     Id;
-rid({Id}, _Context) when is_integer(Id) ->
+rid(Id, _Context) when ?is_invalid_rsc_id(Id) ->
+    undefined;
+rid({Id}, _Context) when ?is_valid_rsc_id(Id) ->
     Id;
+rid({Id}, _Context) when ?is_invalid_rsc_id(Id) ->
+    undefined;
 rid(#rsc_list{list = [R | _]}, _Context) ->
     R;
 rid(#rsc_list{list = []}, _Context) ->
@@ -1021,7 +1122,11 @@ rid(#{ <<"@id">> := Uri }, Context) ->
 rid(MaybeName, Context) when is_binary(MaybeName) ->
     case z_utils:only_digits(MaybeName) of
         true ->
-            z_convert:to_integer(MaybeName);
+            Id = z_convert:to_integer(MaybeName),
+            if
+                ?is_valid_rsc_id(Id) -> Id;
+                true -> false
+            end;
         false ->
             case binary:match(MaybeName, <<":">>) of
                 nomatch -> name_lookup(MaybeName, Context);
@@ -1031,7 +1136,11 @@ rid(MaybeName, Context) when is_binary(MaybeName) ->
 rid(MaybeName, Context) when is_list(MaybeName) ->
     case z_utils:only_digits(MaybeName) of
         true ->
-            z_convert:to_integer(MaybeName);
+            Id = z_convert:to_integer(MaybeName),
+            if
+                ?is_valid_rsc_id(Id) -> Id;
+                true -> false
+            end;
         false ->
             case lists:any(fun(C) -> C =:= $: end, MaybeName) of
                 false -> name_lookup(MaybeName, Context);
@@ -1184,18 +1293,20 @@ is_cat(Id, Cat, Context) ->
             false
     end.
 
-%% @doc Return the categories and the inherited categories of the resource. Returns a list with category atoms
+%% @doc Return the categories and the inherited categories of the resource. Returns a list with category atoms.
+%% The first atom is the most generic category, the last is the most specific. Example:
+%% [text, article, news, local_news]
 -spec is_a(resource(), z:context()) -> list(atom()).
 is_a(Id, Context) ->
     RscCatId = p(Id, category_id, Context),
     m_category:is_a(RscCatId, Context).
 
 %% @doc Return the categories and the inherited categories of the resource. Returns a list with
-%% category ids
--spec is_a_id(resource(), z:context()) -> list(pos_integer()).
+%% category ids. The first id is the most generic category, the last is the most specific.
+-spec is_a_id(resource(), z:context()) -> list(m_rsc:resource_id()).
 is_a_id(Id, Context) ->
     RscCatId = p(Id, <<"category_id">>, Context),
-    [RscCatId | m_category:get_path(RscCatId, Context)].
+    m_category:get_path(RscCatId, Context) ++ [RscCatId].
 
 %% @doc Check if the resource is in a category.
 -spec is_a(resource(), m_category:category(), z:context()) -> boolean().
@@ -1297,19 +1408,8 @@ ensure_name_maxlength(<<Name:70/binary, _/binary>>) -> Name;
 ensure_name_maxlength(Name) -> Name.
 
 english_title(Id, Context) ->
-    case p_no_acl(Id, <<"title">>, Context) of
-        Title when is_binary(Title) -> Title;
-        #trans{ tr=[] } -> <<>>;
-        undefined -> <<>>;
-        #trans{ tr=Tr } ->
-            case proplists:get_value(en, Tr) of
-                undefined ->
-                    {_, T} = hd(Tr),
-                    T;
-                T ->
-                    T
-            end
-    end.
+    Text = p_no_acl(Id, <<"title">>, Context),
+    z_convert:to_binary(z_trans:lookup_fallback(Text, [en, 'en-us', 'en-gb'], Context)).
 
 ensure_name_unique(BaseName, N, Context) ->
     Name = iolist_to_binary([BaseName, postfix(N)]),

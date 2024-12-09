@@ -3,7 +3,10 @@
     This template is rendered by the zotonic.auth-ui.worker.js
 #}
 
+{% block logon_box %}
+
 {% with q.error == 'passcode' or q.error == 'need_passcode' as is_show_passcode %}
+{% with q.error == 'set_passcode' or q.error == 'set_passcode_error' as is_set_passcode %}
 
 {% if q.logon_view == 'reminder' or (q.logon_view == 'change' and not m.acl.user) %}
 
@@ -67,7 +70,7 @@
 
     <h2 class="z-logon-title">{_ Your password has been reset _}</h2>
 
-    <p>{_ You are now signed in. _}</p>
+    <p>{_ You are now logged in. _}</p>
 
     <ul class="list-unstyled">
         <li>
@@ -90,7 +93,7 @@
     <h2 class="z-logon-title">{_ Check your email _}</h2>
     <p>{_ We have sent an email with a link to reset your password to _}: <b>{{ q.email|escape }}</b></p>
     <p>{_ If you do not receive the email within a few minutes, please check your spam folder. _}</p>
-    <p><a id="back_to_logon" class="btn btn-primary" href="{% url logon %}" data-onclick-topic="model/auth-ui/post/view/logon">{_ Back to sign in _}</a></p>
+    <p><a id="back_to_logon" class="btn btn-primary" href="{% url logon %}" data-onclick-topic="model/auth-ui/post/view/logon">{_ Back to login _}</a></p>
 
 {% elseif q.logon_view == "verification_pending" and q.options.token %}
 
@@ -112,11 +115,23 @@
     <h2 class="z-logon-title error">{_ Sorry, could not send the verification message. _}</h2>
     <p>{_ We don’t seem to have any valid email address or other electronic communication address of you. _}</p>
     {% if not m.acl.user %}
-        <p><a class="btn btn-default" href="{% url logon %}" data-onclick-topic="model/auth-ui/post/view/logon">{_ Back to sign in _}</a></p>
+        <p><a class="btn btn-default" href="{% url logon %}" data-onclick-topic="model/auth-ui/post/view/logon">{_ Back to login _}</a></p>
     {% else %}
         <p><a id="{{ #cancel }}" class="btn btn-default" href="#">{_ Cancel _}</a></p>
         {% wire id=#cancel action={redirect back} %}
     {% endif %}
+
+{% elseif q.logon_view == "confirm" %}
+
+    <h2>{_ Confirm to connect _}</h2>
+    <p>{% trans "Log in with your existing {site} account to connect the accounts. You only have to do this once." site=m.site.title %}</p>
+
+    {% include "_logon_box_view.tpl"
+        form_form_tpl="_logon_login_form.tpl"
+        form_fields_tpl="_logon_login_form_fields.tpl"
+        form_support_tpl="_logon_login_support.tpl"
+        style_boxed=style_boxed
+    %}
 
 {% else %}
 
@@ -133,4 +148,7 @@
 {% endif %}
 
 {% endwith %}
+{% endwith %}
+
+{% endblock %}
 

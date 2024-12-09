@@ -1,8 +1,9 @@
 %% @author Arjan Scherpenisse, Marc Worrell
-%% @copyright 2009-2022 Arjan Scherpenisse <arjan@scherpenisse.net>, Marc Worrell <marc@worrell.nl>
+%% @copyright 2009-2024 Arjan Scherpenisse <arjan@scherpenisse.net>, Marc Worrell <marc@worrell.nl>
 %% @doc Entrypoint for model requests via HTTP.
+%% @end
 
-%% Copyright 2009-2022 Arjan Scherpenisse, Marc Worrell
+%% Copyright 2009-2024 Arjan Scherpenisse, Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -75,7 +76,7 @@ is_method_topic_match(<<"OPTIONS">>, _) -> true.
 
 
 %% @doc Content types accepted for the post body
--spec content_types_accepted( z:context() ) -> {list( cowmachine_req:mime_type() ), z:context()}.
+-spec content_types_accepted( z:context() ) -> {list( cowmachine_req:media_type() ), z:context()}.
 content_types_accepted(Context) ->
     {[
         {<<"application">>, <<"json">>, []},
@@ -88,7 +89,7 @@ content_types_accepted(Context) ->
     ], Context}.
 
 %% @doc Content types provided for the resulting body
--spec content_types_provided( z:context() ) -> {list( cowmachine_req:mime_type() ), z:context()}.
+-spec content_types_provided( z:context() ) -> {list( cowmachine_req:media_type() ), z:context()}.
 content_types_provided(Context) ->
     {[
         {<<"application">>, <<"json">>, []},
@@ -166,10 +167,15 @@ process_done(ok, ProvidedCT, Context) ->
     {Body, Context};
 process_done({ok, #{
         <<"status">> := <<"error">>,
-        <<"error">> := _
-    } = Resp}, ProvidedCT, Context) ->
-    Body = z_controller_helper:encode_response(ProvidedCT, Resp),
-    {Body, Context};
+        <<"error">> := Reason,
+        <<"message">> := _
+    } = S}, ProvidedCT, Context) when is_binary(Reason); is_atom(Reason) ->
+    error_response({error, S}, ProvidedCT, Context);
+process_done({ok, #{
+        <<"status">> := <<"error">>,
+        <<"error">> := Reason
+    }}, ProvidedCT, Context) ->
+    error_response({error, Reason}, ProvidedCT, Context);
 process_done({ok, Resp}, ProvidedCT, Context) ->
     % z_mqtt:call response
     Body = z_controller_helper:encode_response(ProvidedCT, Resp),
@@ -180,7 +186,7 @@ process_done({error, _} = Error, ProvidedCT, Context) ->
 
 -spec error_response({error, term()}, cowmachine_req:media_type(), z:context()) ->
     {{halt, HttpCode :: pos_integer()}, z:context()}.
-error_response({error, payload}, CT, Context) ->
+error_response({error, Reason}, CT, Context) when Reason =:= payload; Reason =:= <<"payload">> ->
     RespBody = z_controller_helper:encode_response(CT, #{
             <<"status">> => <<"error">>,
             <<"error">> => <<"payload">>,
@@ -188,7 +194,7 @@ error_response({error, payload}, CT, Context) ->
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 400}, Context1};
-error_response({error, eacces}, CT, Context) ->
+error_response({error, Reason}, CT, Context) when Reason =:= eacces; Reason =:= <<"eacces">> ->
     RespBody = z_controller_helper:encode_response(CT, #{
             <<"status">> => <<"error">>,
             <<"error">> => <<"eacces">>,
@@ -196,7 +202,7 @@ error_response({error, eacces}, CT, Context) ->
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 403}, Context1};
-error_response({error, enoent}, CT, Context) ->
+error_response({error, Reason}, CT, Context) when Reason =:= enoent; Reason =:= <<"enoent">> ->
     RespBody = z_controller_helper:encode_response(CT, #{
             <<"status">> => <<"error">>,
             <<"error">> => <<"enoent">>,
@@ -204,7 +210,7 @@ error_response({error, enoent}, CT, Context) ->
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, 404}, Context1};
-error_response({error, unknown_path}, CT, Context) ->
+error_response({error, Reason}, CT, Context) when Reason =:= unknown_path; Reason =:= <<"unknown_path">> ->
     RespBody = z_controller_helper:encode_response(CT, #{
             <<"status">> => <<"error">>,
             <<"error">> => <<"unknown_path">>,
@@ -228,6 +234,14 @@ error_response({error, StatusCode}, CT, Context) when ?is_http_status(StatusCode
         }),
     Context1 = cowmachine_req:set_resp_body(RespBody, Context),
     {{halt, StatusCode}, Context1};
+error_response({error, #{
+        <<"status">> := Status,
+        <<"error">> := _
+    } = Reason}, CT, Context) when is_binary(Status); is_atom(Status) ->
+    Resp = maps:with([ <<"status">>, <<"error">>, <<"message">> ], Reason),
+    RespBody = z_controller_helper:encode_response(CT, Resp),
+    Context1 = cowmachine_req:set_resp_body(RespBody, Context),
+    {{halt, 500}, Context1};
 error_response({error, Reason}, CT, Context) ->
     RespBody = z_controller_helper:encode_response(CT, #{
             <<"status">> => <<"error">>,

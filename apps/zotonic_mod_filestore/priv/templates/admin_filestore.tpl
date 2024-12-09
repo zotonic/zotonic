@@ -54,7 +54,7 @@
 
                             <div class="form-group">
                                 <label class="control-label" for="s3secret">{_ S3 API Secret or FTP/WebDAV password _}</label>
-                                <input type="text" id="s3secret" name="s3secret" value="{{ m.filestore.s3secret|escape }}" class="form-control" />
+                                <input type="password" id="s3secret" name="s3secret" value="{{ m.filestore.s3secret|escape }}" class="form-control" />
                             </div>
 
                             <div class="form-group">

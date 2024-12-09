@@ -83,10 +83,15 @@
     </div>
 {% endif %}
 
+{% with (q.severity == '0')|if
+            :q.severity
+            :(q.severity|default:"1")
+        as qseverity
+%}
 {% with m.search[{log_email
     page=q.page
     pagelen=20
-    severity=q.severity
+    severity=qseverity
     status=q.status
     message_nr=q.message_nr
     to=q.to
@@ -114,11 +119,11 @@
             <tr>
             <td class="col-lg-1 col-md-1">
             <select class="form-control" id="log_severity" name="severity" style="width: 95%">
-                <option value="0" {% if q.severity == '0' %}selected="selected"{% endif %}>{_ Fatal _}</option>
-                <option value="1" {% if q.severity == '' or q.severity|is_undefined or q.severity == '1' %}selected="selected"{% endif %}>{_ Error _}</option>
-                <option value="2" {% if q.severity == '2' %}selected="selected"{% endif %}>{_ Warning _}</option>
-                <option value="3" {% if q.severity == '3' %}selected="selected"{% endif %}>{_ Info _}</option>
-                <option value="4" {% if q.severity == '4' %}selected="selected"{% endif %}>{_ Debug _}</option>
+                <option value="0" {% if qseverity == '0' %}selected="selected"{% endif %}>{_ Fatal _}</option>
+                <option value="1" {% if qseverity == '1' %}selected="selected"{% endif %}>{_ Error _}</option>
+                <option value="2" {% if qseverity == '2' %}selected="selected"{% endif %}>{_ Warning _}</option>
+                <option value="3" {% if qseverity == '3' %}selected="selected"{% endif %}>{_ Info _}</option>
+                <option value="4" {% if qseverity == '4' %}selected="selected"{% endif %}>{_ Debug _}</option>
             </select>
             {% wire id="log_severity" type="change" action={submit target="log_filter"} %}
                 </td>
@@ -132,6 +137,7 @@
                 <option value="received" {% if q.status == 'received' %}selected="selected"{% endif %}>{_ Received _}</option>
                 <option value="failed" {% if q.status == 'failed' %}selected="selected"{% endif %}>{_ Failed _}</option>
                 <option value="retry" {% if q.status == 'retry' %}selected="selected"{% endif %}>{_ Retry _}</option>
+                <option value="blocked" {% if q.status == 'blocked' %}selected="selected"{% endif %}>{_ Blocked _}</option>
             </select>
             {% wire id="log_status" type="change" action={submit target="log_filter"} %}
                 </td>
@@ -194,6 +200,7 @@
         </tfoot>
     </table>
 </form>
+{% endwith %}
 {% endwith %}
 
 {% endblock %}

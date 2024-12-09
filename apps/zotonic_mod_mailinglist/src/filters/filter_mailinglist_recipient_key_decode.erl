@@ -26,12 +26,35 @@
 -spec mailinglist_recipient_key_decode(Key, Context) -> Recipient | undefined when
     Key :: binary() | undefined,
     Context :: z:context(),
-    Recipient :: m_rsc:resource_id() | Email | undefined,
-    Email :: binary().
+    Recipient :: map() | undefined.
 mailinglist_recipient_key_decode(Key, Context) when is_binary(Key) ->
     case z_mailinglist_recipients:recipient_key_decode(Key, Context) of
-        {ok, Recipient} ->
-            Recipient;
+        {ok, #{
+            recipient := Id,
+            list_id := ListId
+        }} when is_integer(Id) ->
+            Subs = case m_mailinglist:list_subscriptions_by_rsc_id(Id, ListId, Context) of
+                {ok, L} ->
+                    L;
+                {error, _} ->
+                    []
+            end,
+            #{
+                <<"rsc_id">> => Id,
+                <<"email">> => m_rsc:p_no_acl(Id, <<"email_raw">>, Context),
+                <<"is_mailing_opt_out">> => z_convert:to_bool(m_rsc:p_no_acl(Id, <<"is_mailing_opt_out">>, Context)),
+                <<"subscriptions">> => Subs
+            };
+        {ok, #{
+            recipient := Email,
+            list_id := _ListId
+        }} when is_binary(Email) ->
+            {ok, Subs} = m_mailinglist:list_subscriptions_by_email(Email, Context),
+            #{
+                <<"email">> => Email,
+                <<"is_mailing_opt_out">> => false,
+                <<"subscriptions">> => Subs
+            };
         {error, _} ->
             undefined
     end;

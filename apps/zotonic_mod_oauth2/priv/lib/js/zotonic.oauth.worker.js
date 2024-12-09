@@ -162,6 +162,7 @@ model.present = function(data) {
     // - on 'denied' or 'cancel' status: silently close the window
     // - on error: display an error message (template)
     if (data.is_auth_confirm) {
+        const error_message = (data.payload.message ?? data.payload.error);
         if (data.payload.status == 'ok') {
             switch (data.payload.result.result) {
                 case "token":
@@ -195,6 +196,24 @@ model.present = function(data) {
                         });
                     model.status = "confirming";
                     break;
+                case "need_logon":
+                    // Found matching account - need confirmation before connecting
+                    // Reload the opener window with the logon confirm form. The external
+                    // logon buttons will be hidden.
+                    // TODO: check if there is an opener, otherwise we need to redirect to
+                    // the confirm form, keeping the url.
+                    self.publish(
+                        "bridge/opener/model/auth-ui/post/form/confirm",
+                        {
+                            // url: data.payload.result.url || undefined,
+                            authuser: data.payload.result.authuser,
+                            username: data.payload.result.username
+                        });
+                    setTimeout(
+                        () => self.publish("model/window/post/close", {}),
+                        10);
+                    model.status = "confirming";
+                    break;
                 case "need_passcode":
                     // Auth ok, but matching account is protected by 2FA
                     self.publish(
@@ -211,8 +230,24 @@ model.present = function(data) {
                     model.passcode_data = data.payload.result;
                     model.status = "confirming";
                     break;
+                case "set_passcode":
+                    // Auth ok, but matching account needs to add a 2FA code
+                    self.publish(
+                        "model/ui/render-template/oauth-status",
+                        {
+                            topic: "bridge/origin/model/template/get/render/_logon_service_error.tpl",
+                            dedup: true,
+                            data: {
+                                error: "set_passcode",
+                                authuser: data.payload.result.authuser,
+                                url: data.payload.result.url || undefined
+                            }
+                        });
+                    model.passcode_data = data.payload.result;
+                    model.status = "confirming";
+                    break;
             }
-        } else if (data.payload.message == 'passcode') {
+        } else if (error_message == 'passcode') {
             // Auth ok, wrong 2FA passcode entered for matching account
             self.publish(
                 "model/ui/render-template/oauth-status",
@@ -226,7 +261,7 @@ model.present = function(data) {
                     }
                 });
             model.status = "confirming";
-        } else if (data.payload.message == 'denied') {
+        } else if (error_message == 'denied') {
             // Auth failed, remote denied. Close the window or redirect.
             if (data.payload.url) {
                 self.publish("model/location/post/redirect", {
@@ -235,7 +270,7 @@ model.present = function(data) {
             } else {
                 self.publish("model/window/post/close", { url: "/" });
             }
-        } else if (data.payload.message == 'cancel') {
+        } else if (error_message == 'cancel') {
             // Auth failed, user canceled. Close the window or redirect.
             if (data.payload.url) {
                 self.publish("model/location/post/redirect", {
@@ -252,7 +287,7 @@ model.present = function(data) {
                     topic: "bridge/origin/model/template/get/render/_logon_service_error.tpl",
                     dedup: true,
                     data: {
-                        error: data.payload.message
+                        error: error_message
                     }
                 });
             model.status = "error";

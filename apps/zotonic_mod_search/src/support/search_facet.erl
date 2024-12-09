@@ -1,8 +1,9 @@
-%% @copyright 2021-2022 Driebit BV
+%% @copyright 2021-2024 Driebit BV
 %% @doc Faceted search using a facet.tpl for definition and a
 %% postgresql table for searches.
+%% @end
 
-%% Copyright 2021-2022 Driebit BV
+%% Copyright 2021-2024 Driebit BV
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -55,6 +56,7 @@
 
 -type facet_type() :: text
                     | fulltext
+                    | fts
                     | integer
                     | float
                     | boolean
@@ -71,7 +73,7 @@
     search_query_facets/3,
     search_query_subfacets/3,
 
-    qterm/3,
+    qterm/4,
 
     pivot_rsc/2,
     pivot_all/1,
@@ -80,12 +82,13 @@
     is_table_ok/1,
     facet_def/2,
     template_facets/1,
+    template_facets_map/1,
     facet_table/1,
     create_table/1,
     recreate_table/1
     ]).
 
--define(TEXT_LENGTH, 80).
+-define(FULLTEXT_LENGTH, 500).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
@@ -190,7 +193,7 @@ search_query_facets(Result, #search_sql{ search_sql_terms = Terms }, Context) ->
         limit = undefined
     },
     Q3 = move_unused_order_args_to_select(Q2),
-    Q4 = z_search:reformat_sql_query(Q3, Context),
+    Q4 = z_search:reformat_sql_query(Q3, #{}, Context),
     {SQL, Args} = z_search:concat_sql_query(Q4, undefined),
     SQL2 = [
         "with result as (", SQL, ")"
@@ -212,12 +215,91 @@ search_query_facets(Result, #search_sql{ search_sql_terms = Terms }, Context) ->
     FinalSQL = iolist_to_binary(SQL3),
     {ok, Facets} = z_db:qmap(FinalSQL, Args2, Context),
     Fs = group_facets(Defs, Facets, Context),
+    Fs1 = ensure_facet_qterms(Result#search_result.search_args, Fs, Context),
     Result#search_result{
-        facets = Fs
+        facets = Fs1
     }.
 
 is_facet_term(#search_sql_term{ label = {facet, _} }) -> true;
 is_facet_term(#search_sql_term{}) -> false.
+
+%% @doc Check the found facets, ensure that on facet filtering query terms
+%% are present in the returned facet values. This ensures that select boxes
+%% with filter terms can still be populated with the selected facet filter.
+ensure_facet_qterms(#{ <<"q">> := Args }, Fs, Context) ->
+    Args1 = expand_qargs(Args, Context),
+    FacetTerms = lists:flatten(find_facet_qterms(Args1)),
+    lists:foldl(
+        fun({Facet, Value}, Acc) ->
+            ensure_facet_value(Facet, Value, Acc, Context)
+        end,
+        Fs,
+        FacetTerms);
+ensure_facet_qterms(_SearchArgs, Fs, _Context) ->
+    Fs.
+
+expand_qargs(Args, Context) ->
+    lists:flatten(
+        lists:map(
+            fun
+                (#{ <<"term">> := <<"qargs">> }) ->
+                    #{ <<"q">> := Terms } = z_search_props:from_qargs(Context),
+                    Terms;
+                (T) ->
+                    T
+            end,
+            Args)).
+
+ensure_facet_value(Facet, Value, Fs, Context) ->
+    case maps:get(Facet, Fs, undefined) of
+        #{
+            <<"counts">> := Counts,
+            <<"facet_type">> := Type,
+            <<"type">> := <<"count">>
+        } = F ->
+            TypeAtom = binary_to_existing_atom(Type),
+            Value1 = convert_single_type(TypeAtom, Value, Context),
+            case is_facet_value_present(Value1, Counts) of
+                true ->
+                    Fs;
+                false ->
+                    Counts1 = Counts ++ [
+                        #{
+                            <<"count">> => 0,
+                            <<"facet">> => Facet,
+                            <<"value">> => Value1,
+                            <<"label">> => label(Facet, Value, Context)
+                        }
+                    ],
+                    Fs#{
+                        Facet => F#{ <<"counts">> => Counts1 }
+                    }
+            end;
+        _ ->
+            Fs
+    end.
+
+is_facet_value_present(Value, Counts) ->
+    lists:any(fun(#{ <<"value">> := V }) -> V == Value end, Counts).
+
+find_facet_qterms(Args) when is_list(Args) ->
+    lists:filtermap(fun find_facet_qterm/1, Args);
+find_facet_qterms(_) ->
+    [].
+
+find_facet_qterm(#{ <<"term">> := <<"facet:", Facet/binary>>, <<"value">> := V } = T) ->
+    Op = maps:get(<<"operator">>, T, <<"=">>),
+    {Op1, V1} = search_query:extract_value_op(V, Op),
+    case Op1 of
+        <<"=">> -> {true, {Facet, V1}};
+        <<"<>">> -> {true, {Facet, V1}};
+        _ -> false
+    end;
+find_facet_qterm(#{ <<"operator">> := _, <<"terms">> := NestedTerms }) ->
+    {true, find_facet_qterms(NestedTerms)};
+find_facet_qterm(_) ->
+    false.
+
 
 %% @doc Add facets to the result set using the query. The facets are calculated
 %% using the result ids. Facets can be used for a "drill down".
@@ -448,22 +530,17 @@ facet_union(#facet_def{ name = Name }) ->
 
 %% @doc Add an extra search argument to the given query. Called by the query
 %% builder in search_query.erl
--spec qterm(Field, Value, Context) -> {ok, Term} | {error, term()}
+-spec qterm(Field, Op, Value, Context) -> {ok, Term} | {error, term()}
     when Field :: binary(),
+         Op :: binary() | undefined,
          Value :: term(),
          Term :: #search_sql_term{},
          Context :: z:context().
-qterm(_Field, [], _Context) ->
+qterm(_Field, _Op, [], _Context) ->
     {ok, []};
-qterm(Field, [Value], Context) ->
-    Q = #search_sql_term{
-        label = {facet, Field},
-        join_inner = #{
-            <<"facet">> => {<<"search_facet">>, <<"facet.id = rsc.id">>}
-        }
-    },
-    qterm_1(Field, Value, Q, Context);
-qterm(Field, Vs, Context) when is_list(Vs) ->
+qterm(Field, Op, [Value], Context) ->
+    qterm(Field, Op, Value, Context);
+qterm(Field, Op, Vs, Context) when is_list(Vs) ->
     % 'OR' query for all values
     Q = #search_sql_term{
         label = {facet, Field},
@@ -473,7 +550,7 @@ qterm(Field, Vs, Context) when is_list(Vs) ->
     },
     Q2 = lists:foldl(
         fun(V, QAcc) ->
-            case qterm_1(Field, V, QAcc, Context) of
+            case qterm_1(Field, Op, V, QAcc, Context) of
                 {ok, QAcc1} ->
                     QAcc1;
                 {error, _} ->
@@ -490,28 +567,59 @@ qterm(Field, Vs, Context) when is_list(Vs) ->
         ]
     },
     {ok, Q3};
-qterm(Field, Value, Context) ->
+qterm(Field, Op, Value, Context) ->
     Q = #search_sql_term{
         join_inner = #{
             <<"facet">> => {<<"search_facet">>, <<"facet.id = rsc.id">>}
         }
     },
-    qterm_1(Field, Value, Q, Context).
+    case qterm_1(Field, Op, Value, Q, Context) of
+        {ok, #search_sql_term{ where = Where} = Q2} when is_list(Where), length(Where) > 1 ->
+            Q3 = Q2#search_sql_term{
+                where = [
+                    <<"(">>,
+                    lists:join(<<" AND ">>, Q2#search_sql_term.where),
+                    <<")">>
+                ]
+            },
+            {ok, Q3};
+        {ok, _} = Ok ->
+            Ok;
+        {error, _} = Error ->
+            Error
+    end.
 
-qterm_1(Field, Value, Query, Context) ->
+qterm_1(Field, OpTerm, Value, Query, Context) ->
     case facet_def(Field, Context) of
         {ok, Def} ->
-            {Op, Value1} = extract_op(Value),
+            {Op, Value1} = search_query:extract_value_op(Value, OpTerm),
             Value2 = convert_type(Def#facet_def.type, Value1, Context),
             Final = case Def#facet_def.type of
-                fulltext when Op =:= "=" ->
+                fulltext when Op =:= <<"=">> ->
                     NormV = z_string:normalize(Value2),
-                    {ArgN, Query2} = add_term_arg(<<"%", NormV/binary, "%">>, Query),
+                    Words = words(NormV),
+                    lists:foldl(
+                        fun(Word, AccQ) ->
+                            {ArgN, AccQ1} = add_term_arg(<<"%", Word/binary, "%">>, AccQ),
+                            W = [
+                                <<"facet.ft_">>, Field, <<" like ">>, ArgN
+                            ],
+                            AccQ1#search_sql_term{
+                                label = {facet_ft, Field},
+                                where = AccQ1#search_sql_term.where ++ [ W ]
+                            }
+                        end,
+                        Query,
+                        Words);
+                fts when Op =:= <<"=">> ->
+                    NormV = z_string:normalize(Value2),
+                    TsQuery = mod_search:to_tsquery(NormV, Context),
+                    {ArgN, Query2} = add_term_arg(TsQuery, Query),
                     W = [
-                        <<"facet.ft_">>, Field, <<" like ">>, ArgN
+                        <<"facet.fts_">>, Field, " @@ ", ArgN
                     ],
                     Query2#search_sql_term{
-                        label = {facet_ft, Field},
+                        label = {facet, Field},
                         where = Query2#search_sql_term.where ++ [ W ]
                     };
                 Array when Array =:= ids; Array =:= list ->
@@ -525,9 +633,7 @@ qterm_1(Field, Value, Query, Context) ->
                     };
                 _ ->
                     {ArgN, Query2} = add_term_arg(Value2, Query),
-                    W = [
-                        <<"facet.f_">>, Field, Op, ArgN
-                    ],
+                    W = search_query:term_op_expr([<<"facet.f_">>, Field], Op, ArgN, text),
                     Query2#search_sql_term{
                         label = {facet, Field},
                         where = Query2#search_sql_term.where ++ [ W ]
@@ -543,26 +649,12 @@ qterm_1(Field, Value, Query, Context) ->
             Error
     end.
 
+words(Text) ->
+    binary:split(Text, [ <<" ">>, <<"\n">>, <<"\r">>, <<"\t">> ], [ global, trim_all ]).
+
 add_term_arg(ArgValue, #search_sql_term{ args = Args } = Q) ->
     Arg = [$$] ++ integer_to_list(length(Args) + 1),
     {list_to_atom(Arg), Q#search_sql_term{args = Args ++ [ ArgValue ]}}.
-
-extract_op(<<"=", V/binary>>) ->
-    {"=", V};
-extract_op(<<">", V/binary>>) ->
-    {">", V};
-extract_op(<<"<", V/binary>>) ->
-    {"<", V};
-extract_op(<<"<=", V/binary>>) ->
-    {"<=", V};
-extract_op(<<">=", V/binary>>) ->
-    {">=", V};
-extract_op(<<"!=", V/binary>>) ->
-    {"<>", V};
-extract_op(<<"<>", V/binary>>) ->
-    {"<>", V};
-extract_op(V) ->
-    {"=", V}.
 
 
 % %% Append an argument to a #search_sql
@@ -577,17 +669,22 @@ extract_op(V) ->
 pivot_all(Context) ->
     ?LOG_INFO(#{
         in => zotonic_mod_search,
-        text => <<"Faceted search: repivoting facet for all resources">>
+        text => <<"Faceted search: repivoting facet for all resources - queued">>
     }),
-    {ok, _} = z_pivot_rsc:insert_task_after(1, ?MODULE, pivot_batch, facet_pivot_batch, [0], Context),
+    MaxId = z_db:q1("select max(id) from rsc", Context),
+    {ok, _} = z_pivot_rsc:insert_task_after(0, ?MODULE, pivot_batch, facet_pivot_batch, [MaxId+1], Context),
     ok.
 
-%% @doc Batch for running the facet table updates. This updates the table with 1000 resources
+%% @doc Batch for running the facet table updates. This updates the table with 5000 resources
 %% at a time.
-pivot_batch(FromId, Context0) ->
+pivot_batch(ToId, Context0) ->
     Context = z_acl:sudo(Context0),
-    case z_db:q("select id from rsc where id > $1 order by id limit 1000", [FromId], Context) of
+    case z_db:q("select id from rsc where id < $1 order by id desc limit 5000", [ToId], Context) of
         [] ->
+            ?LOG_INFO(#{
+                in => zotonic_mod_search,
+                text => <<"Faceted search: repivoting facet for all resources - ready">>
+            }),
             done;
         Rs ->
             lists:foreach(
@@ -595,8 +692,8 @@ pivot_batch(FromId, Context0) ->
                     pivot_rsc(Id, Context)
                 end,
                 Rs),
-            {Max} = lists:last(Rs),
-            {delay, 1, [Max]}
+            {Min} = lists:last(Rs),
+            {delay, 0, [Min]}
     end.
 
 %% @doc Pivot a resource, fill the facet table.
@@ -626,17 +723,36 @@ pivot_rsc(Id, Context) ->
     end.
 
 render_facet(Id, #facet_def{ name = Name, type = fulltext } = F, Context) ->
-    case render_block(F#facet_def.block, {cat, <<"pivot/facet.tpl">>}, #{ <<"id">> => Id }, Context) of
+    case render_block(F#facet_def.block, {cat, <<"pivot/facet.tpl">>}, #{ id => Id }, Context) of
         <<>> ->
             [];
         V ->
+            V1 = z_pivot_rsc:cleanup_tsv_text(V),
+            V2 = z_string:trim(z_string:normalize(V1)),
             [
-                {<<"f_", Name/binary>>, z_string:truncatechars(V, ?TEXT_LENGTH)},
-                {<<"ft_", Name/binary>>, z_string:truncatechars(z_string:normalize(V), ?TEXT_LENGTH)}
+                {<<"f_", Name/binary>>, z_string:truncatechars(V1, ?FULLTEXT_LENGTH)},
+                {<<"ft_", Name/binary>>, V2}
+            ]
+    end;
+render_facet(Id, #facet_def{ name = Name, type = fts } = F, Context) ->
+    case render_block(F#facet_def.block, {cat, <<"pivot/facet.tpl">>}, #{ id => Id }, Context) of
+        <<>> ->
+            [];
+        V ->
+            V1 = z_pivot_rsc:cleanup_tsv_text(V),
+            V2 = z_string:trim(z_string:normalize(V1)),
+            Stemmer = z_pivot_rsc:stemmer_language(Context),
+            Tsv = z_db:q1(
+                    "select to_tsvector('pg_catalog."++Stemmer++"', $1)",
+                    [V2],
+                    Context),
+            [
+                {<<"f_", Name/binary>>, z_string:truncatechars(V1, ?FULLTEXT_LENGTH)},
+                {<<"fts_", Name/binary>>, Tsv}
             ]
     end;
 render_facet(Id, #facet_def{ name = Name, type = Type } = F, Context) ->
-    V = render_block(F#facet_def.block, {cat, <<"pivot/facet.tpl">>}, #{ <<"id">> => Id }, Context),
+    V = render_block(F#facet_def.block, {cat, <<"pivot/facet.tpl">>}, #{ id => Id }, Context),
     {<<"f_", Name/binary>>, convert_type(Type, V, Context)}.
 
 
@@ -705,27 +821,60 @@ convert_type_1(ids, V, Context) when is_binary(V) ->
     L1 = lists:map(fun z_string:trim/1, L),
     convert_type_1(ids, lists:filter( fun(B) -> B =/= <<>> end, L1 ), Context);
 convert_type_1(fulltext, V, _Context) ->
-    z_string:truncatechars(z_convert:to_binary(V), ?TEXT_LENGTH);
+    z_string:truncatechars(z_convert:to_binary(V), ?FULLTEXT_LENGTH);
+convert_type_1(fts, V, _Context) ->
+    z_string:truncatechars(z_convert:to_binary(V), ?FULLTEXT_LENGTH);
 convert_type_1(text, V, _Context) ->
-    z_string:truncatechars(z_convert:to_binary(V), ?TEXT_LENGTH).
+    V1 = z_string:trim(z_html:unescape(z_html:strip(z_convert:to_binary(V)))),
+    z_string:truncatechars(V1, ?FULLTEXT_LENGTH).
 
 
 %% @doc Ensure that the facet table is correct, if not then drop the existing
 %% table and request a pivot of all resources to fill the table.
 -spec ensure_table(z:context()) -> ok | {error, term()}.
 ensure_table(Context) ->
-    case is_table_ok(Context) of
-        true ->
-            ok;
-        false ->
-            case recreate_table(Context) of
-                ok ->
-                    pivot_all(Context),
+    case modules_not_running(Context) of
+        [] ->
+            case is_table_ok(Context) of
+                true ->
                     ok;
-                {error, _} = Error ->
-                    Error
-            end
+                false ->
+                    case recreate_table(Context) of
+                        ok ->
+                            pivot_all(Context),
+                            ok;
+                        {error, _} = Error ->
+                            Error
+                    end
+            end;
+        NotRunning ->
+            ?LOG_INFO(#{
+                in => zotonic_mod_search,
+                text => <<"Delaying search facet check because not all modules are running.">>,
+                result => warning,
+                reason => not_running,
+                modules => NotRunning
+            })
     end.
+
+%% @doc Check if there are module not running. A not-running module might have a facet definition
+%% we need for building the facet table.
+-spec modules_not_running(z:context()) -> [ atom() ].
+modules_not_running(Context) ->
+    Status = z_module_manager:get_modules_status(Context),
+    NotRunning = [ M || {M, S} <- Status, S =/= running ],
+    if
+        NotRunning =:= [] ->
+            case proplists:get_value(z_context:site(Context), Status) of
+                running ->
+                    [];
+                _ ->
+                    [ z_context:site(Context) ]
+            end;
+        true ->
+            NotRunning
+    end.
+
 
 %% @doc Check if the current table is compatible with the facets in pivot.tpl
 -spec is_table_ok(z:context()) -> boolean().
@@ -757,6 +906,32 @@ is_type([ _ | Cols ], Name, Type, IsArray) ->
     is_type(Cols, Name, Type, IsArray).
 
 
+%% @doc Return a label values to a specific facet
+label(FacetField, Value, Context) when is_binary(FacetField) ->
+    case facet_def(FacetField, Context) of
+        {ok, FacetDef} ->
+            case has_label_block(FacetDef, Context) of
+            {true, LabelBlock} ->
+                case render_block(LabelBlock, {cat, <<"pivot/facet.tpl">>}, #{ <<"id">> => Value }, Context) of
+                    <<>> ->
+                        escape(Value);
+                    T ->
+                        escape_check(T)
+                end;
+            false ->
+                case FacetDef#facet_def.type of
+                    id ->
+                        id_label(Value, Context);
+                    ids ->
+                        id_label(Value, Context);
+                    _ ->
+                        escape(Value)
+                end
+            end;
+        {error, _} ->
+            escape(Value)
+    end.
+
 %% @doc Add label values to the fetched facets for faceted search
 labels(_, [], _Context) ->
     [];
@@ -780,41 +955,57 @@ value_via_block(LabelBlock, Vs, Context) ->
     lists:map(
         fun
             (#{ <<"value">> := V, <<"facet_id">> := 0 } = F) ->
-                F#{ <<"label">> => V };
+                F#{ <<"label">> => escape(V) };
             (#{ <<"value">> := V, <<"facet_id">> := Id } = F) ->
                 % NOTA BENE:
                 % The found id might not be visible.
                 case render_block(LabelBlock, {cat, <<"pivot/facet.tpl">>}, #{ <<"id">> => Id }, Context) of
                     <<>> ->
-                        F#{ <<"label">> => V };
+                        F#{ <<"label">> => escape(V) };
                     T ->
-                        F#{ <<"label">> => T }
+                        F#{ <<"label">> => escape_check(T) }
                 end
         end,
         Vs).
 
+escape(V) when is_binary(V) ->
+    z_html:escape(V);
+escape(V) ->
+    V.
+
+escape_check(V) when is_binary(V) ->
+    z_html:escape_check(V).
+
 ids_as_labels(Vs, Context) ->
     lists:map(
         fun(#{ <<"value">> := Id } = F) ->
-            T = case m_rsc:is_a(Id, person, Context) of
+            F#{ <<"label">> => id_label(Id, Context) }
+        end,
+        Vs).
+
+id_label(Id, Context) ->
+    case m_rsc:rid(Id, Context) of
+        undefined ->
+            escape(z_convert:to_binary(Id));
+        RscId ->
+            T = case m_rsc:is_a(RscId, person, Context) of
                 true ->
                     {Name, _} = z_template:render_to_iolist("_name.tpl", #{ <<"id">> => Id }, Context),
                     iolist_to_binary(Name);
                 false ->
-                    m_rsc:p(Id, <<"title">>, Context)
+                    m_rsc:p(RscId, <<"title">>, Context)
             end,
             T1 = case z_utils:is_empty(T) of
-                true -> m_rsc:p(Id, <<"short_title">>, Context);
+                true -> m_rsc:p(RscId, <<"short_title">>, Context);
                 false -> T
             end,
-            F#{ <<"label">> => z_trans:lookup_fallback(T1, Context) }
-        end,
-        Vs).
+            z_convert:to_binary(z_trans:lookup_fallback(T1, Context))
+    end.
 
 values_as_labels(Vs) ->
     lists:map(
         fun(#{ <<"value">> := V } = F) ->
-            F#{ <<"label">> => V }
+            F#{ <<"label">> => escape(V) }
         end,
         Vs).
 
@@ -836,8 +1027,8 @@ recreate_table(Context) ->
         in => zotonic_mod_search,
         text => <<"Faceted search: recreating facet table">>
     }),
-    z_db:q("drop table if exists search_facet cascade", Context),
-    z_db:flush(Context),
+    % z_db:q("drop table if exists search_facet cascade", Context),
+    % z_db:flush(Context),
     create_table(Context).
 
 
@@ -859,12 +1050,17 @@ create_table(Context) ->
                 }
                 | Cols
             ],
-            ok = z_db:create_table(search_facet, Cols1, Context),
-            [] = z_db:q(
-                "ALTER TABLE search_facet ADD CONSTRAINT fk_facet_id FOREIGN KEY (id)
-                 REFERENCES rsc (id)
-                 ON UPDATE CASCADE ON DELETE CASCADE",
-                Context),
+            ok = z_db:alter_table(search_facet, Cols1, Context),
+            case z_db:constraint_exists(search_facet, fk_facet_id, Context) of
+                true ->
+                    ok;
+                false ->
+                    [] = z_db:q(
+                        "ALTER TABLE search_facet ADD CONSTRAINT fk_facet_id FOREIGN KEY (id)
+                         REFERENCES rsc (id)
+                         ON UPDATE CASCADE ON DELETE CASCADE",
+                        Context)
+            end,
             lists:foreach(
                 fun(Idx) ->
                     [] = z_db:q(Idx, Context)
@@ -922,6 +1118,30 @@ facet_to_column(#facet_def{
     ];
 facet_to_column(#facet_def{
         name = Name,
+        type = fts
+    }) ->
+    [
+        #column_def{
+            name = binary_to_atom(<<"f_", Name/binary>>, utf8),
+            type = col_type(fts),
+            length = col_length(fts),
+            is_nullable = true,
+            default = undefined,
+            primary_key = false,
+            unique = false
+        },
+        #column_def{
+            name = binary_to_atom(<<"fts_", Name/binary>>, utf8),
+            type = <<"tsvector">>,
+            length = undefined,
+            is_nullable = true,
+            default = undefined,
+            primary_key = false,
+            unique = false
+        }
+    ];
+facet_to_column(#facet_def{
+        name = Name,
         type = list
     }) ->
     #column_def{
@@ -964,13 +1184,15 @@ facet_to_column(#facet_def{
 
 
 col_type(text) -> <<"character varying">>;
+col_type(fts) -> <<"character varying">>;
 col_type(integer) -> <<"integer">>;
-col_type(float) -> <<"float">>;
+col_type(float) -> <<"double precision">>;
 col_type(boolean) -> <<"boolean">>;
 col_type(datetime) -> <<"timestamp with time zone">>;
 col_type(id) -> <<"integer">>.
 
-col_length(text) -> ?TEXT_LENGTH;
+col_length(text) -> ?FULLTEXT_LENGTH;
+col_length(fts) -> ?FULLTEXT_LENGTH;
 col_length(integer) -> undefined;
 col_length(float) -> undefined;
 col_length(boolean) -> undefined;
@@ -983,23 +1205,33 @@ facet_to_index(#facet_def{
         type = fulltext
     }) ->
     [
-        <<"CREATE INDEX search_facet_f_", Name/binary, "_key ",
+        <<"CREATE INDEX IF NOT EXISTS search_facet_f_", Name/binary, "_key ",
           "ON search_facet(f_", Name/binary, ")">>,
 
-        <<"CREATE INDEX search_facet_ft_", Name/binary, "_key ",
+        <<"CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA public">>,
+
+        <<"CREATE INDEX IF NOT EXISTS search_facet_ft_", Name/binary, "_key ",
            "ON search_facet USING gin (ft_", Name/binary, " public.gin_trgm_ops)">>
+    ];
+facet_to_index(#facet_def{
+        name = Name,
+        type = fts
+    }) ->
+    [
+        <<"CREATE INDEX IF NOT EXISTS search_facet_fts_", Name/binary, "_key ",
+           "ON search_facet USING gin (fts_", Name/binary, ")">>
     ];
 facet_to_index(#facet_def{
         name = Name,
         type = Type
     }) when Type =:= ids;
             Type =:= list ->
-    <<"CREATE INDEX search_facet_f_", Name/binary, "_key ",
+    <<"CREATE INDEX IF NOT EXISTS search_facet_f_", Name/binary, "_key ",
        "ON search_facet USING gin (f_", Name/binary, ")">>;
 facet_to_index(#facet_def{
         name = Name
     }) ->
-    <<"CREATE INDEX search_facet_f_", Name/binary, "_key ",
+    <<"CREATE INDEX IF NOT EXISTS search_facet_f_", Name/binary, "_key ",
       "ON search_facet(f_", Name/binary, ")">>.
 
 
@@ -1016,6 +1248,26 @@ facet_def(F, Context) ->
                 [ D | _ ] -> {ok, D};
                 [] -> {error, enoent}
             end;
+        {error, _} = Error ->
+            Error
+    end.
+
+%% @doc Fetch all facet definitions from the current facet template as a map.
+-spec template_facets_map( z:context() ) -> {ok, [ map() ]} | {error, term()}.
+template_facets_map(Context) ->
+    case template_facets(Context) of
+        {ok, Fs} ->
+            Ms = lists:map(
+                fun(#facet_def{ name = Name, block = Block, type = Type, is_range = IsRange }) ->
+                    #{
+                        <<"name">> => Name,
+                        <<"block">> => Block,
+                        <<"type">> => Type,
+                        <<"is_range">> => IsRange
+                    }
+                end,
+                Fs),
+            {ok, Ms};
         {error, _} = Error ->
             Error
     end.
@@ -1102,6 +1354,9 @@ block_type(B) ->
 
         [ <<"ft">> | Rs ] when length(Rs) >= 1 ->
             {fulltext, n(Rs), false};
+
+        [ <<"fts">> | Rs ] when length(Rs) >= 1 ->
+            {fts, n(Rs), false};
 
         [ <<"list">> | Rs ] when length(Rs) >= 1 ->
             {list, n(Rs), false};

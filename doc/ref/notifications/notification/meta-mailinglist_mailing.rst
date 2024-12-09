@@ -14,5 +14,7 @@ Return:
     
 
 ``#mailinglist_mailing{}`` properties:
-    - list_id: ``unknown``
-    - page_id: ``unknown``
+    - list_id: ``union``
+    - email: ``union``
+    - page_id: ``m_rsc:resource()``
+    - options: ``list``

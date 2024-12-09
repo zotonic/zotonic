@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2020 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Model for medium database
+%% @end
 
-%% Copyright 2009-2020 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,6 +25,8 @@
 %% interface functions
 -export([
     m_get/3,
+    m_post/3,
+    m_delete/3,
 
     identify/2,
     get/2,
@@ -86,12 +89,52 @@ m_get([ Id | Rest ], _Msg, Context) ->
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
+%% @doc API to update or insert resources.
+-spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | ok | {error, term()}.
+m_post([ Id ], #{ payload := Payload }, Context) when is_map(Payload) ->
+    case m_rsc:rid(Id, Context) of
+        undefined ->
+            {error, enoent};
+        RscId ->
+            RscProps = maps:get(<<"rsc">>, Payload, #{}),
+            case Payload of
+                #{ <<"url">> := Url } ->
+                    replace_url(Url, RscId, RscProps, Context);
+                #{ <<"file">> := #upload{ tmpmonitor = Pid } = File } when is_pid(Pid) ->
+                    replace_file(File, RscId, RscProps, Context);
+                _ ->
+                    {error, unacceptable}
+            end
+    end;
+m_post([], #{ payload := Payload }, Context) when is_map(Payload) ->
+    RscProps = maps:get(<<"rsc">>, Payload, #{}),
+    case Payload of
+        #{ <<"url">> := Url } ->
+            insert_url(Url, RscProps, Context);
+        #{ <<"file">> := #upload{ tmpmonitor = Pid } = File } when is_pid(Pid) ->
+            insert_file(File, RscProps, Context);
+        _ ->
+            {error, unacceptable}
+    end.
+
+%% @doc API to delete the medium of a resource
+-spec m_delete( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | ok | {error, term()}.
+m_delete([ Id ], _Msg, Context) ->
+    case m_rsc:rid(Id, Context) of
+        undefined ->
+            {error, enoent};
+        RscId ->
+            delete(RscId, Context)
+    end.
+
 
 %% @doc Return the identification of a medium. Used by z_media_identify:identify()
 -spec identify( m_rsc:resource_id(), z:context() ) -> {ok, z_media_identify:media_info()} | {error, term()}.
 identify(Id, Context) when is_integer(Id) ->
-    z_db:qmap_props_row(
-        "select id, mime, width, height, orientation from medium where id = $1",
+    z_db:qmap_props_row("
+        select id, mime, width, height, orientation, frame_count
+        from medium
+        where id = $1",
         [ Id ],
         [ {keys, binary} ],
         Context);
@@ -106,7 +149,9 @@ identify(ImageFile, Context) ->
 
 identify_medium_filename(MediumFilename, Context) ->
     z_db:qmap_props_row("
-        select id, mime, width, height, orientation from medium where filename = $1",
+        select id, mime, width, height, orientation, frame_count
+        from medium
+        where filename = $1",
         [ MediumFilename ],
         [ {keys, binary} ],
         Context).
@@ -315,14 +360,15 @@ duplicate(FromId, ToId, Context) ->
     ToId1 = m_rsc:rid(ToId, Context),
     case z_db:qmap_props_row("select * from medium where id = $1", [FromId1], Context) of
         {ok, Ms} ->
-            {ok, Ms1} = maybe_duplicate_file(Ms, Context),
-            {ok, Ms2} = maybe_duplicate_preview(Ms1, Context),
-            Ms3 = Ms2#{
-                <<"id">> => ToId1
-            },
-            case medium_insert(ToId1, Ms3, Context) of
-                {ok, _} -> ok;
-                {error, _} = Error -> Error
+            case maybe_duplicate_file(Ms, Context) of
+                {ok, Ms1} ->
+                    {ok, Ms2} = maybe_duplicate_preview(Ms1, Context),
+                    case medium_insert(ToId1, Ms2, Context) of
+                        {ok, _} -> ok;
+                        {error, _} = Error -> Error
+                    end;
+                {error, _} = Error ->
+                    Error
             end;
         {error, _} = Error ->
             Error
@@ -335,16 +381,27 @@ maybe_duplicate_file(#{ <<"filename">> := undefined } = Ms, _Context) ->
 maybe_duplicate_file(#{ <<"filename">> := _, <<"is_deletable_file">> := false } = Ms, _Context) ->
     {ok, Ms};
 maybe_duplicate_file(#{ <<"filename">> := Filename, <<"is_deletable_file">> := true } = Ms, Context) ->
-    {ok, NewFile} = duplicate_file(archive, Filename, Context),
-    RootName = z_string:truncatechars(
-        filename:rootname(filename:basename(NewFile)),
-        ?MEDIA_MAX_ROOTNAME_LENGTH),
-    Ms2 = Ms#{
-        <<"filename">> => NewFile,
-        <<"rootname">> => RootName,
-        <<"is_deletable_file">> => true
-    },
-    {ok, Ms2}.
+    case duplicate_file(archive, Filename, Context) of
+        {ok, NewFile} ->
+            RootName = z_string:truncatechars(
+                filename:rootname(filename:basename(NewFile)),
+                ?MEDIA_MAX_ROOTNAME_LENGTH),
+            Ms2 = Ms#{
+                <<"filename">> => NewFile,
+                <<"rootname">> => RootName,
+                <<"is_deletable_file">> => true
+            },
+            {ok, Ms2};
+        {error, Reason} = Error ->
+            ?LOG_ERROR(#{
+                in => zotonic_core,
+                text => <<"Error duplicating medium archive file">>,
+                filename => Filename,
+                result => error,
+                reason => Reason
+            }),
+            Error
+    end.
 
 maybe_duplicate_preview(#{ <<"preview_filename">> := <<>> } = Ms, _Context) ->
     {ok, Ms};
@@ -440,7 +497,8 @@ insert_file(File, RscProps, Options, Context) ->
 
 insert_file(File, RscProps, MediaProps, Options, Context) ->
     Mime = maps:get(<<"mime">>, MediaProps, undefined),
-    case z_acl:is_allowed(insert, #acl_rsc{category = mime_to_category(Mime), props = RscProps}, Context) andalso
+    MimeCat = mime_to_category(Mime, Options, Context),
+    case z_acl:is_allowed(insert, #acl_rsc{category = MimeCat, props = RscProps}, Context) andalso
         z_acl:is_allowed(insert, #acl_media{mime = Mime, size = filelib:file_size(File)}, Context) of
         true ->
             insert_file_mime_ok(File, RscProps, MediaProps, Options, Context);
@@ -537,11 +595,15 @@ insert_file_mime_ok(File, RscProps, MediaProps, Options, Context) ->
     },
     replace_file_mime_ok(File, insert_rsc, RscProps1, MediaProps, Options, Context).
 
-filename_basename(undefined) -> <<>>;
-filename_basename(Filename) ->
+filename_to_title(undefined) -> <<>>;
+filename_to_title("") -> <<>>;
+filename_to_title(<<>>) -> <<>>;
+filename_to_title(Filename) ->
     F1 = z_convert:to_binary(Filename),
-    F2 = lists:last(binary:split(F1, <<"/">>, [global])),
-    lists:last(binary:split(F2, <<"\\">>, [global])).
+    F2 = filename:basename(F1),
+    F3 = lists:last(
+    binary:split(F2, [ <<"/">>, <<"\\">> ], [global,trim])),
+    filename:rootname(F3).
 
 %% @doc Replaces a medium file, when the file is not in archive then a copy is
 %% made in the archive. When the resource is in the media category, then the
@@ -615,7 +677,7 @@ replace_file_mime_ok(File, insert_rsc, RscProps, MediaProps, Opts, Context) ->
                     m_rsc:rid(CName, Context);
                 error ->
                     Mime = maps:get(<<"mime">>, MediaProps, undefined),
-                    m_rsc:rid(mime_to_category(Mime), Context)
+                    m_rsc:rid(mime_to_category(Mime, Opts, Context), Context)
             end
     end,
     case m_category:id_to_name(CatId, Context) of
@@ -741,7 +803,7 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
         true ->
             OriginalFilename = maps:get(<<"original_filename">>, Medium1, undefined),
             PropsM#{
-                <<"title">> => filename_basename(OriginalFilename)
+                <<"title">> => filename_to_title(OriginalFilename)
             };
         false ->
             PropsM
@@ -757,7 +819,7 @@ replace_file_db(RscId, PreProc, Props, Opts, Context) ->
                 PropsM1;
             false ->
                 PropsM1#{
-                    <<"category_id">> => mime_to_category(Mime)
+                    <<"category_id">> => mime_to_category(Mime, Opts, Context)
                 }
         end,
         {ok, Id} = case RscId of
@@ -907,7 +969,7 @@ reupload_2(_Id, _Medium, _Filename, {error, _} = Error, _Context) ->
     Error.
 
 
--spec rsc_is_media_cat( m_resource:id(), z:context() ) -> boolean().
+-spec rsc_is_media_cat( m_rsc:resource_id(), z:context() ) -> boolean().
 rsc_is_media_cat(Id, Context) ->
     case z_db:q1("select c.name from rsc c join rsc r on r.category_id = c.id where r.id = $1", [Id],
         Context) of
@@ -939,6 +1001,19 @@ mime_to_category(Mime) ->
         _ -> media
     end.
 
+mime_to_category(Mime, Opts, Context) ->
+    Cat = mime_to_category(Mime),
+    case proplists:get_value(preferred_category, Opts) of
+        undefined ->
+            Cat;
+        PrefCat ->
+            case m_category:is_a(PrefCat, Cat, Context) of
+                true ->
+                    PrefCat;
+                false ->
+                    Cat
+            end
+    end.
 
 %% @doc Download a file from a http or data url.
 download_file(Url, Context) ->
@@ -960,21 +1035,66 @@ download_file(Url, Options, Context) ->
             proplists:delete(timeout,
                 proplists:delete(device, FetchOptions)))
     ],
-    case z_fetch:fetch_partial(Url, FetchOptions1, Context) of
+    Url1 = z_sanitize:uri(Url),
+    case z_fetch:fetch_partial(Url1, FetchOptions1, Context) of
         {ok, {_FinalUrl, Hs, Length, _Data}} when Length < MaxLength ->
             file:close(Device),
-            {ok, File, filename(Url, Hs)};
+            case proplists:get_value("content-length", Hs) of
+                undefined ->
+                    {ok, File, filename(Url, Hs)};
+                "" ->
+                    {ok, File, filename(Url, Hs)};
+                CL ->
+                    ContentLength = z_convert:to_integer(CL),
+                    if
+                        ContentLength =< Length ->
+                            {ok, File, filename(Url, Hs)};
+                        true ->
+                            ?LOG_ERROR(#{
+                                in => zotonic_core,
+                                text => <<"File download was incomplete">>,
+                                result => error,
+                                reason => download_incomplete,
+                                content_length => ContentLength,
+                                download_length => Length,
+                                url => Url
+                            }),
+                            file:delete(File),
+                            {error, download_incomplete}
+                    end
+            end;
         {ok, {_FinalUrl, _Hs, Length, _Data}} when Length >= MaxLength ->
             file:close(Device),
             file:delete(File),
+            ?LOG_ERROR(#{
+                in => zotonic_core,
+                text => <<"File download was too large">>,
+                max_length => MaxLength,
+                url => Url
+            }),
             {error, file_too_large};
-        {ok, _Other} ->
+        {ok, Other} ->
             file:close(Device),
             file:delete(File),
+            ?LOG_ERROR(#{
+                in => zotonic_core,
+                text => <<"File download failed">>,
+                result => error,
+                reason => download_failed,
+                returned => Other,
+                url => Url
+            }),
             {error, download_failed};
-        {error, _} = Error ->
+        {error, Reason} = Error ->
             file:close(Device),
             file:delete(File),
+            ?LOG_ERROR(#{
+                in => zotonic_core,
+                text => <<"File download failed">>,
+                result => error,
+                reason => Reason,
+                url => Url
+            }),
             Error
     end.
 
@@ -1031,7 +1151,10 @@ add_medium_info(File, OriginalFilename, MediaProps, Context) ->
 
 %% @doc Save a new file from a preview_url as the preview of a medium
 save_preview_url(RscId, Url, Context) ->
-    case download_file(Url, [{max_length, ?MEDIA_MAX_LENGTH_PREVIEW}], Context) of
+    DownloadOptions = [
+        {fetch_options, [ {max_length, ?MEDIA_MAX_LENGTH_PREVIEW} ]}
+    ],
+    case download_file(Url, DownloadOptions, Context) of
         {ok, TmpFile, Filename} ->
             case z_media_identify:identify_file(TmpFile, Filename, Context) of
                 {ok, #{ <<"mime">> := <<"image/", _/binary>> } = MediaInfo} ->
@@ -1057,8 +1180,20 @@ save_preview_url(RscId, Url, Context) ->
                             <<"preview_height">> => Height,
                             <<"is_deletable_preview">> => true
                         },
+                        PreProps = m_media:get(RscId, Context),
+                        PostProps = maps:merge(PreProps, UpdateProps),
                         {ok, 1} = z_db:update(medium, RscId, UpdateProps, Context),
                         z_depcache:flush({medium, RscId}, Context),
+                        IsA = m_rsc:is_a(RscId, Context),
+                        z_notifier:notify(
+                            #media_update_done{
+                                action = update,
+                                id = RscId,
+                                pre_is_a = IsA,
+                                post_is_a = IsA,
+                                pre_props = PreProps,
+                                post_props= PostProps
+                            }, Context),
                         {ok, FileUnique}
                     catch
                         Type:Error ->
@@ -1115,8 +1250,20 @@ save_preview(RscId, Data, Mime, Context) ->
                     <<"preview_height">> => Height,
                     <<"is_deletable_preview">> => true
                 },
+                PreProps = m_media:get(RscId, Context),
+                PostProps = maps:merge(PreProps, UpdateProps),
                 {ok, 1} = z_db:update(medium, RscId, UpdateProps, Context),
                 z_depcache:flush({medium, RscId}, Context),
+                IsA = m_rsc:is_a(RscId, Context),
+                z_notifier:notify(
+                    #media_update_done{
+                        action = update,
+                        id = RscId,
+                        pre_is_a = IsA,
+                        post_is_a = IsA,
+                        pre_props = PreProps,
+                        post_props= PostProps
+                    }, Context),
                 {ok, FileUnique}
             catch
                 throw:{error, _} = Error ->
@@ -1151,9 +1298,17 @@ is_unique_file(Filename, Context) ->
 medium_insert(Id, Props, Context) ->
     IsA = m_rsc:is_a(Id, Context),
     Props1 = check_medium_props(Props),
-    case z_db:insert(medium, Props1, Context) of
+    case z_db:insert(medium, Props1#{ <<"id">> => Id }, Context) of
         {ok, _} = OK ->
-            z_notifier:notify(#media_update_done{action=insert, id=Id, post_is_a=IsA, pre_is_a=[], pre_props=#{}, post_props=Props1}, Context),
+            z_notifier:notify(
+                #media_update_done{
+                    action = insert,
+                    id = Id,
+                    post_is_a = IsA,
+                    pre_is_a = [],
+                    pre_props= #{},
+                    post_props = Props1
+                }, Context),
             OK;
         {error, _} = Error ->
             Error
@@ -1168,7 +1323,15 @@ medium_delete(Id, Props, Context) ->
     IsA = m_rsc:is_a(Id, Context),
     case z_db:delete(medium, Id, Context) of
         {ok, _} = OK ->
-            z_notifier:notify(#media_update_done{action=delete, id=Id, pre_is_a=IsA, post_is_a=[], pre_props=Props, post_props=#{}}, Context),
+            z_notifier:notify(
+                #media_update_done{
+                    action = delete,
+                    id = Id,
+                    pre_is_a = IsA,
+                    post_is_a = [],
+                    pre_props = Props,
+                    post_props= #{}
+                }, Context),
             OK;
         {error, _} = Error ->
             Error

@@ -1,11 +1,10 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2011-2015 Arjan Scherpenisse <arjan@scherpenisse.net>
-%% Date: 2011-10-12
-
+%% @copyright 2011-2024 Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @doc Watch for changed files using inotifywait.
 %%      https://github.com/rvoicilas/inotify-tools/wiki
+%% @end
 
-%% Copyright 2011-2015 Arjan Scherpenisse
+%% Copyright 2011-2024 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,12 +30,14 @@
 -record(state, {
     pid :: pid() | undefined,
     port :: integer() | undefined,
-    executable :: string()
+    executable :: string(),
+    tries = 0 :: non_neg_integer()
 }).
 
 %% interface functions
 -export([
     is_installed/0,
+    is_running/0,
     restart/0
 ]).
 
@@ -60,6 +61,15 @@ start_link() ->
 is_installed() ->
     os:find_executable("inotifywait") =/= false.
 
+-spec is_running() -> boolean().
+is_running() ->
+    case whereis(zotonic_filewatcher_fswatch) of
+        undefined ->
+            false;
+        Pid ->
+            gen_server:call(Pid, is_running)
+    end.
+
 -spec restart() -> ok.
 restart() ->
     gen_server:cast(?MODULE, restart).
@@ -78,26 +88,25 @@ init([Executable]) ->
     State = #state{
         executable = Executable,
         port = undefined,
-        pid = undefined
+        pid = undefined,
+        tries = 0
     },
     timer:send_after(100, start),
     {ok, State}.
 
 
-%% @doc Trap unknown calls
+handle_call(is_running, _From, #state{ pid = Pid } = State) ->
+    {reply, is_pid(Pid), State};
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
 
-%% @spec handle_cast(Msg, State) -> {noreply, State} |
-%%                                  {noreply, State, Timeout} |
-%%                                  {stop, Reason, State}
 handle_cast(restart, #state{ pid = undefined } = State) ->
     {noreply, State};
 handle_cast(restart, #state{ pid = Pid } = State) when is_pid(Pid) ->
     ?LOG_INFO("[inotify] Stopping inotify file monitor."),
     catch exec:stop(Pid),
-    {noreply, start_inotify(State#state{ port = undefined })};
+    {noreply, start_inotify(State#state{ port = undefined, tries = 0 })};
 
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
@@ -122,23 +131,24 @@ handle_info({stdout, _Port, Data}, #state{} = State) ->
             end
         end,
         Lines),
-    {noreply, State};
+    {noreply, State#state{ tries = 0 }};
 
-handle_info({'DOWN', _Port, process, Pid, Reason}, #state{pid = Pid} = State) ->
+handle_info({'EXIT', Pid, Reason}, #state{ pid = Pid, tries = Tries } = State) ->
+    Delay = backoff(Tries),
     ?LOG_ERROR(#{
-        text => <<"[inotify] inotify port closed, restarting in 5 seconds.">>,
+        text => <<"[inotify] inotify port closed, restarting in delay seconds.">>,
         result => error,
-        reason => Reason
+        reason => Reason,
+        delay => Delay,
+        tries => Tries
     }),
     State1 = State#state{
         pid = undefined,
-        port = undefined
+        port = undefined,
+        tries = Tries + 1
     },
-    timer:send_after(5000, start),
+    timer:send_after(Delay, start),
     {noreply, State1};
-
-handle_info({'EXIT', _Pid, _Reason}, State) ->
-    {noreply, State};
 
 handle_info(start, #state{ port = undefined } = State) ->
     {noreply, start_inotify(State)};
@@ -168,6 +178,9 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+backoff(0) -> 5000;
+backoff(N) -> max(900_000, N * 5000).
 
 start_inotify(#state{executable = Executable, port = undefined} = State) ->
     ?LOG_INFO("[inotify] Starting inotify file monitor."),

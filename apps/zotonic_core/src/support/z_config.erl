@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2021 Marc Worrell, 2014 Arjan Scherpenisse
+%% @copyright 2010-2024 Marc Worrell, 2014 Arjan Scherpenisse
 %% @doc Wrapper for Zotonic application environment configuration
+%% @end
 
-%% Copyright 2010-2021 Marc Worrell, 2014 Arjan Scherpenisse
+%% Copyright 2010-2024 Marc Worrell, 2014 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -269,6 +270,7 @@ default(smtp_relay) -> false;
 default(smtp_host) -> "localhost";
 default(smtp_port) -> 25;
 default(smtp_ssl) -> false;
+default(smtp_plaintext_fallback) -> true;
 default(smtp_listen_ip) -> {127,0,0,1};
 default(smtp_listen_port) -> 2525;
 default(smtp_spamd_ip) -> none;

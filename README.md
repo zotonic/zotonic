@@ -1,8 +1,6 @@
 [![Test](https://github.com/zotonic/zotonic/workflows/Test/badge.svg)](https://github.com/zotonic/zotonic/actions?query=workflow%3ATest)
 [![Dialyzer](https://github.com/zotonic/zotonic/workflows/Dialyzer/badge.svg)](https://github.com/zotonic/zotonic/actions?query=workflow%3ADialyzer)
-[![Docs](https://github.com/zotonic/zotonic/workflows/Docs/badge.svg)](https://github.com/zotonic/zotonic/actions?query=workflow%3ADocs)
-[![GitHub release](https://img.shields.io/github/release/zotonic/zotonic.svg?maxAge=3600?style=flat-square)](https://github.com/zotonic/zotonic/releases)
-[![Docs](https://readthedocs.org/projects/zotonic/badge/?version=latest)](http://docs.zotonic.com/en/latest/)
+[![Docs](https://github.com/zotonic/zotonic/workflows/Docs/badge.svg)](https://github.com/zotonic/zotonic/actions?query=workflow%3ADocs)[![GitHub release](https://img.shields.io/github/release/zotonic/zotonic.svg?maxAge=3600?style=flat-square)](https://github.com/zotonic/zotonic/releases)
 [![Crowdin](https://badges.crowdin.net/zotonic/localized.svg)](https://crowdin.com/project/zotonic)
 [![Join the chat at https://gitter.im/zotonic/zotonic](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/zotonic/zotonic?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 

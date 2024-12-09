@@ -30,19 +30,19 @@
       <div class="form-group">
           <div class="radio">
               <label>
-                  <input type="radio" id="block-{{name}}-input_type" name="blocks[].input_type" value="" {% if not blk.input_type %}checked="checked"{% endif %} />
+                  <input type="radio" id="block-{{name}}-input_type" name="blocks[].input_type~{{ name }}" value="" {% if not blk.input_type %}checked="checked"{% endif %} />
                   {_ Single answer possible _}
               </label>
           </div>
           <div class="radio">
               <label>
-                  <input type="radio" id="block-{{name}}-input_type" name="blocks[].input_type" value="multi" {% if blk.input_type == 'multi' %}checked="checked"{% endif %} />
+                  <input type="radio" id="block-{{name}}-input_type" name="blocks[].input_type~{{ name }}" value="multi" {% if blk.input_type == 'multi' %}checked="checked"{% endif %} />
                   {_ Multiple answers possible _}
               </label>
           </div>
           <div class="radio">
               <label>
-                  <input type="radio" id="block-{{name}}-input_type" name="blocks[].input_type" value="submit" {% if blk.input_type == 'submit' %}checked="checked"{% endif %} />
+                  <input type="radio" id="block-{{name}}-input_type" name="blocks[].input_type~{{ name }}" value="submit" {% if blk.input_type == 'submit' %}checked="checked"{% endif %} />
                   {_ Submit on clicking an option _}
               </label>
           </div>

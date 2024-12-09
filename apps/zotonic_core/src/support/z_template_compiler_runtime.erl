@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016-2021 Marc Worrell
-%% @doc Simple runtime for the compiled templates. Needs to be
-%%      copied and adapted for different environments.
+%% @copyright 2016-2024 Marc Worrell
+%% @doc Runtime for the compiled templates with Zotonic specific interfaces.
+%% @end
 
-%% Copyright 2016-2021 Marc Worrell
+%% Copyright 2016-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -64,6 +64,8 @@ map_template(#template_file{} = Tpl, _Vars, _Context) ->
 map_template({cat, Template}, #{ '$cat' := Cats }, Context) when is_list(Cats) ->
     map_template_cat(Template, Cats, Context);
 map_template({cat, Template}, #{ 'id' := Id } = Vars, Context) ->
+    map_template({cat, Template, Id}, Vars, Context);
+map_template({cat, Template}, #{ <<"id">> := Id } = Vars, Context) ->
     map_template({cat, Template, Id}, Vars, Context);
 map_template({cat, Template}, _Vars, Context) ->
     map_template_1(Template, Context);
@@ -240,6 +242,12 @@ compile_map_nested_value([{identifier, _, <<"q">>}, {identifier, _, QArg}|Rest],
                 erl_syntax:atom(get_q),
                 [ erl_syntax:abstract(QArg), erl_syntax:variable(ContextVar) ]),
     [{ast, Ast} | Rest];
+compile_map_nested_value([{identifier, _, <<"q">>}, {expr, {string_literal, _, QArg}}|Rest], ContextVar, _Context) ->
+    Ast = erl_syntax:application(
+                erl_syntax:atom(z_context),
+                erl_syntax:atom(get_q),
+                [ erl_syntax:abstract(QArg), erl_syntax:variable(ContextVar) ]),
+    [{ast, Ast} | Rest];
 compile_map_nested_value([{identifier, _, <<"z_language">>}], ContextVar, _Context) ->
     Ast = erl_syntax:application(
                 erl_syntax:atom(z_context),
@@ -337,6 +345,7 @@ find_value(Key, #search_result{} = S, _TplVars, _Context) ->
         pages -> S#search_result.pages;
         next -> S#search_result.next;
         prev -> S#search_result.prev;
+        facets -> S#search_result.facets;
         <<"search">> -> {S#search_result.search_name, S#search_result.search_args};
         <<"search_name">> -> S#search_result.search_name;
         <<"search_args">> -> S#search_result.search_args;
@@ -349,6 +358,7 @@ find_value(Key, #search_result{} = S, _TplVars, _Context) ->
         <<"pages">> -> S#search_result.pages;
         <<"next">> -> S#search_result.next;
         <<"prev">> -> S#search_result.prev;
+        <<"facets">> -> S#search_result.facets;
         Nth when is_integer(Nth) ->
             nth(Nth, S#search_result.result);
         Nth when is_binary(Nth) ->
@@ -639,7 +649,24 @@ to_render_result(undefined, _TplVars, _Context) ->
 to_render_result({{Y,M,D},{H,I,S}} = Date, TplVars, Context)
     when is_integer(Y), is_integer(M), is_integer(D),
          is_integer(H), is_integer(I), is_integer(S) ->
-    z_datetime:format(Date, "Y-m-d H:i:s", set_context_vars(TplVars, Context));
+    try
+        if
+            M =:= 0 -> <<>>;
+            D =:= 0 -> <<>>;
+            true -> z_datetime:format(Date, "Y-m-d H:i:s", set_context_vars(TplVars, Context))
+        end
+    catch
+        _:Error:Stack ->
+            ?LOG_WARNING(#{
+                in => zotonic_core,
+                text => <<"Error formatting datetime tuple">>,
+                result => error,
+                reason => Error,
+                stack => Stack,
+                datetime => Date
+            }),
+            <<>>
+    end;
 to_render_result(#search_result{result=Result}, _TplVars, _Context) ->
     io_lib:format("~p", [Result]);
 to_render_result(#rsc_list{list=L}, _TplVars, _Context) ->
@@ -688,8 +715,8 @@ trace_compile(Module, Filename, Options, Context) ->
     SrcPos = proplists:get_value(trace_position, Options),
     z_notifier:notify(
         #debug{
-            what=template,
-            arg={compile, Filename, SrcPos, Module}
+            what = template,
+            arg = {compile, Filename, SrcPos, Module}
         }, Context),
     case SrcPos of
         {File, Line, _Col} ->
@@ -709,13 +736,37 @@ trace_compile(Module, Filename, Options, Context) ->
     end,
     ok.
 
-%% @doc Called when a template is rendered (could be from an include)
--spec trace_render(binary(), template_compiler:options(), z:context()) -> ok | {ok, iodata(), iodata()}.
+%% @doc Called when a template is rendered (could be from an include). Optionally inserts
+%% text before and after the text inclusion into the output stream.
+-spec trace_render(TemplateFilename, Options, Context) -> ok | {ok, Before, After} when
+    TemplateFilename :: binary(),
+    Options :: template_compiler:options(),
+    Context :: z:context(),
+    Before :: iodata(),
+    After :: iodata().
 trace_render(Filename, Options, Context) ->
     SrcPos = proplists:get_value(trace_position, Options),
-    case z_convert:to_bool(m_config:get_value(mod_development, debug_includes, Context)) of
+    z_notifier:notify_sync(
+        #debug{
+            what = template,
+            arg = {render, Filename, SrcPos}
+        }, Context),
+    case m_config:get_boolean(mod_development, debug_includes, Context) of
         true ->
             case SrcPos of
+                {File, 0, _Col} ->
+                    ?LOG_NOTICE(#{
+                        text => <<"Template extends/overrules">>,
+                        in => zotonic_core,
+                        template => Filename,
+                        at => File
+                    }),
+                    {ok,
+                        [ <<"\n<!-- START ">>, relpath(Filename),
+                          <<" by ">>, relpath(File),
+                          <<" -->\n">> ],
+                        [ <<"\n<!-- END ">>, relpath(Filename),  <<" -->\n">> ]
+                    };
                 {File, Line, _Col} ->
                     ?LOG_NOTICE(#{
                         text => <<"Template include">>,

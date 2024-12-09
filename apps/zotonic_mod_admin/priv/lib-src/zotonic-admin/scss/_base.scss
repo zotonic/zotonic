@@ -1,0 +1,187 @@
+body,
+body.page-edit {
+    color: $textColorDark;
+    background-color: $body-bg;
+
+    &.wait {
+        cursor: wait;
+        .btn {
+            cursor: wait;
+        }
+    }
+}
+
+@media (max-width: $breakpointMediumMaxWidth) {
+    body > div.container-fluid {
+        margin-top: 0;
+    }
+}
+
+hr {
+    background-color: #ddd;
+    border: none;
+    height: 1px;
+    margin: 10px 0;
+}
+
+ul,
+ol,
+p {
+    margin: 0 0 $baseMargin 0;
+}
+
+table {
+    td, th {
+        vertical-align: top;
+    }
+}
+
+iframe,
+audio {
+    max-width: 100%;
+}
+
+video {
+    max-width: 100%;
+    height: auto;
+}
+
+details {
+    summary {
+        cursor: pointer;
+    }
+}
+
+// zotonic specific
+.drag-handle {
+    cursor: move;
+    background: repeat-y url("/lib/images/grippy2.png") 3px 0;
+    padding: 15px;
+    cursor: drag;
+}
+
+.unpublished {
+    &,
+    a:not(.btn),
+    .text-muted,
+    .help-block {
+        color: $textColorUnpublished;
+    }
+}
+
+.z-drag-drop-placeholder {
+    background: $backgroundDragPlaceholder;
+    border: none;
+    border-radius: $radiusBlockElement;
+    visibility: visible !important;
+}
+
+.z-text-light {
+    color: $textColorLight;
+}
+
+.z-button-row {
+    // see also bootstrap-overrides.less
+    @include clearfix;
+
+    > * {
+        float: left;
+    }
+}
+
+.admin-container {
+    margin: $baseMargin;
+    margin-top: $topbarHeight + $topbarBottomMargin;
+
+    > table,
+    > form > table,
+    .admin-table {
+        background-color: white;
+        border-radius: $radiusWidget;
+        border-bottom: 0;
+    }
+}
+
+.admin-padding {
+    padding: 15px;
+}
+
+footer {
+    margin: 20px 0;
+}
+
+body.noframe > .admin-container {
+    background: transparent;
+}
+
+// extensible
+
+.admin-image-border {
+    border: 1px solid #fff;
+}
+.admin-text-header {
+    font-size: 13px;
+    text-shadow: $darkOnLightTextShadow;
+    color: $textColorMedium;
+}
+
+.admin-word-break {
+    // word-break: break-all; --- This triggers a layout bug in Safari 17.4.1
+    word-break: auto-phrase;
+    hyphens: auto;
+}
+
+p .z-btn-help,
+label .z-btn-help {
+    display: inline;
+    vertical-align: text-bottom;
+}
+
+.admin-header {
+    margin-bottom: 24px;
+    @include clearfix;
+
+    > :last-child {
+        margin-bottom: 0;
+    }
+
+    h2 {
+        margin-top: 0;
+        margin-bottom: 0;
+        color: #333;
+        @extend .admin-word-break;
+    }
+    h2 + p {
+        margin-top: 1em;
+    }
+}
+
+h3 {
+    margin: 1.25em 0 .75em 0;
+}
+
+pre:empty {
+    display: none;
+}
+
+
+.border-danger {
+    border-left: 4px solid $brand-danger;
+    padding-left: 10px;
+}
+
+.ui-effects-transfer {
+    border: 1px dotted #333;
+    z-index: 10000;
+}
+
+.modal.in {
+    backdrop-filter: blur(2px) brightness(50%);
+}
+
+.modal-footer {
+    .btn + .btn,
+    .btn.pull-left + .btn.pull-left {
+        margin-left: 3px;
+    }
+}

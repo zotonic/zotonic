@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2012 Marc Worrell
-%%
+%% @copyright 2012-2023 Marc Worrell
 %% @doc Model for administration of deleted resources and their possible new location.
+%% @end
 
-%% Copyright 2012 Marc Worrell
+%% Copyright 2012-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -33,6 +33,8 @@
     is_gone_uri/2,
     gone/2,
     gone/3,
+
+    delete/2,
 
     install/1
 ]).
@@ -141,7 +143,8 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
                         Props1 = [
                             {new_id, NewId},
                             {new_uri, undefined},
-                            {modifier_id, z_acl:user(Ctx)}
+                            {modifier_id, z_acl:user(Ctx)},
+                            {is_personal_data, m_identity:is_user(Id, Context)}
                             | Props
                         ],
                         case z_db:q1("select count(*) from rsc_gone where id = $1", [Id], Ctx) of
@@ -169,7 +172,15 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
             end
     end.
 
-
+%% @doc Delete a gone entry for a resource, used after recovery of a resource.
+-spec delete(Id, Context) -> ok | {error, enoent} when
+    Id :: m_rsc:resource_id(),
+    Context :: z:context().
+delete(Id, Context) ->
+    case z_db:q("delete from rsc_gone where id = $1", [ Id ], Context) of
+        1 -> ok;
+        0 -> {error, enoent}
+    end.
 
 %% @doc Install or upgrade the rsc_gone table.
 -spec install( z:context() ) -> ok.
@@ -181,7 +192,7 @@ install(Context) ->
     case z_db:table_exists(rsc_gone, Context) of
         false ->
             [] = z_db:q("
-                CREATE TABLE rsc_gone
+                CREATE TABLE IF NOT EXISTS rsc_gone
                 (
                     id bigint not null,
                     new_id bigint,
@@ -195,22 +206,31 @@ install(Context) ->
                     modifier_id bigint,
                     created timestamp with time zone NOT NULL DEFAULT now(),
                     modified timestamp with time zone NOT NULL DEFAULT now(),
+                    is_personal_data boolean NOT NULL DEFAULT false,
                     CONSTRAINT rsc_gone_pkey PRIMARY KEY (id)
                 )",
                 Context),
 
-            [] = z_db:q("CREATE INDEX rsc_gone_name_key ON rsc_gone(name)", Context),
-            [] = z_db:q("CREATE INDEX rsc_gone_uri_key ON rsc_gone(uri)", Context),
-            [] = z_db:q("CREATE INDEX rsc_gone_page_path_key ON rsc_gone(page_path)", Context),
-            [] = z_db:q("CREATE INDEX rsc_gone_modified_key ON rsc_gone(modified)", Context),
+            [] = z_db:q("CREATE INDEX IF NOT EXISTS rsc_gone_name_key ON rsc_gone(name)", Context),
+            [] = z_db:q("CREATE INDEX IF NOT EXISTS rsc_gone_uri_key ON rsc_gone(uri)", Context),
+            [] = z_db:q("CREATE INDEX IF NOT EXISTS rsc_gone_page_path_key ON rsc_gone(page_path)", Context),
+            [] = z_db:q("CREATE INDEX IF NOT EXISTS rsc_gone_modified_key ON rsc_gone(modified)", Context),
             z_db:flush(Context),
             ok;
         true ->
             % Check for rsc_gone_uri_key
             case z_db:key_exists(rsc_gone, rsc_gone_uri_key, Context) of
                 false ->
-                    [] = z_db:q("CREATE INDEX rsc_gone_uri_key ON rsc_gone(uri)", Context),
+                    [] = z_db:q("CREATE INDEX IF NOT EXISTS rsc_gone_uri_key ON rsc_gone(uri)", Context),
                     ok;
+                true ->
+                    ok
+            end,
+            % Check for is_personal_data column
+            case z_db:column_exists(rsc_gone, is_personal_data, Context) of
+                false ->
+                    [] = z_db:q("ALTER TABLE rsc_gone ADD COLUMN is_personal_data boolean NOT NULL DEFAULT false", Context),
+                    z_db:flush(Context);
                 true ->
                     ok
             end

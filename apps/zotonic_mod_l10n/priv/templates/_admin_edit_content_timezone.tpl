@@ -5,7 +5,12 @@
 {% block widget_title %}
 {_ Time zone _}
 <div class="widget-header-tools">
-    <a href="javascript:void(0)" class="z-btn-help do_dialog" data-dialog="title: '{{ _"Time zone"|escapejs }}', text: '{{ _"This is the time zone in which the publication period and date range is entered. It defaults to your time zone. If you change the time zone then you will need to correct the publication period and date range manually."|escapejs }}'" title="{_ Need more help? _}"></a>
+    <a href="#" class="z-btn-help do_dialog" data-dialog="{{
+            %{
+                title: _"Time zone",
+                text: _"This is the time zone in which the publication period and date range is entered. It defaults to your time zone. If you change the time zone then you will need to correct the publication period and date range manually."
+            }|escape
+        }}" title="{_ Need more help? _}"></a>
 </div>
 {% endblock %}
 

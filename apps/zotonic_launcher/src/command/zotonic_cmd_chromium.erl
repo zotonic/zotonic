@@ -1,8 +1,9 @@
 %% @author William Fank Thomé <williamthome@hotmail.com>
-%% @copyright 2022 William Fank Thomé
+%% @copyright 2022-2023 William Fank Thomé
 %% @doc Chromium CLI command
+%% @end
 
-%% Copyright 2022 Marc Worrell
+%% Copyright 2022-2023 William Fank Thomé
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.

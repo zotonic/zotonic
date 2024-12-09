@@ -1,0 +1,84 @@
+.nav-tabs {
+    > li > a {
+        text-shadow: $darkOnLightTextShadow;
+    }
+}
+
+// use with ul elements
+// for example:
+// .widget > ul.nav-tabs {
+//    &:extend(.minimalTabs all);
+// }
+.minimalTabs ul.nav-tabs,
+.minimalTabs {
+	padding: 0;
+	border-color: $borderColorMediumTransparent;
+	margin: 0;
+
+	> li {
+	    margin-bottom: -1px;
+	}
+
+	> li > a,
+	li.active > a {
+	    border-radius: 0;
+	    margin-right: 0;
+	    border: none;
+	    background: none;
+	    padding-top: 8px;
+	    padding-bottom: 8px;
+	    border-style: none none solid none;
+	    border-width: 2px;
+	    border-color: transparent;
+	}
+
+    > li:not(.disabled) > a {
+	    color: $textColorButton;
+	}
+
+    > li.disabled > a {
+        &,
+        &:hover,
+        &:focus {
+           color: $textColorLight;
+       }
+	}
+
+	> li > a {
+	    background-color: transparent;
+
+	    &:hover {
+	    	color: black;
+		    border-bottom-color: $textColorLight;
+	    }
+	}
+	
+	li.active > a {
+		&,
+		&:focus,
+		&:hover {
+			border-style: none none solid none;
+		    border-width: 2px;
+		    border-bottom-color: #00C853;
+		    color: black;
+		    background: none;
+		}
+	}
+
+	li.tab-action {
+		> a {
+			&:hover {
+				color: black;
+				border-bottom-color: transparent;
+			}
+		}
+	}
+
+	&.nav-justified {
+		border-bottom: 1px solid $borderColorMedium;
+
+		> li > a {
+			margin-bottom: -1px;
+		}
+	}
+}

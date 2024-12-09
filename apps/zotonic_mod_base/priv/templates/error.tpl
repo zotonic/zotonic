@@ -22,7 +22,7 @@
   {% if (error_table and m.site.environment /= `production`) or m.acl.is_admin %}
       <h2>{_ Stack trace _}</h2>
 
-      <style type="text/css">
+      <style type="text/css" nonce="{{ m.req.csp_nonce }}">
           table {
               background-color: transparent;
               border-collapse: collapse;

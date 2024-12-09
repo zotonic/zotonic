@@ -7,11 +7,11 @@
     <thead>
         <tr>
             <th>Dispatch</th>
-            <th>Req/min</th>
-            <th>In</th>
-            <th>Out</th>
-            <th>Mean Latency</th>
-            <th>99 percentile</t>
+            <th style="text-align:right">Req/min</th>
+            <th style="text-align:right">In</th>
+            <th style="text-align:right">Out</th>
+            <th style="text-align:right">Mean Latency</th>
+            <th style="text-align:right">99 percentile</t>
         </tr>
     </thead>
     <tbody id="the-stats">
@@ -39,7 +39,7 @@ cotonic.broker.subscribe("bridge/origin/$SYS/site/{{ m.site.site }}/cowmachine/+
             c["data_out_total"] = msg.payload["count"];
             c["data_out_one"] = msg.payload["one"];
             break;
-        case "data_in": 
+        case "data_in":
             c["data_in_total"] = msg.payload["count"];
             c["data_in_one"] = msg.payload["one"];
             break;
@@ -81,15 +81,14 @@ function render() {
         rows.push("<tr><td>" +  keys[i] + "</td>" +
                  "<td style=\"text-align:right\">" + render_requests(collected[keys[i]]) + "</td>" +
 
-                 "<td style=\"text-align:right\">" + to_human(collected[keys[i]].data_in_one, "min") + "</td>" +
-                 "<td style=\"text-align:right\">" + to_human(collected[keys[i]].data_out_one, "min") + "</td>" +
+                 "<td style=\"text-align:right\">" + format_view("filesize", collected[keys[i]].data_in_one, "min") + "</td>" +
+                 "<td style=\"text-align:right\">" + format_view("filesize", collected[keys[i]].data_out_one, "min") + "</td>" +
 
-                 "<td style=\"text-align:right\">" + render_ms(collected[keys[i]].mean) + "</td>" +
-                 "<td style=\"text-align:right\">" + render_ms(collected[keys[i]]["99"]) + "</td>" +
+                 "<td style=\"text-align:right\">" + format_view("msec", collected[keys[i]].mean) + "</td>" +
+                 "<td style=\"text-align:right\">" + format_view("msec", collected[keys[i]]["99"]) + "</td>" +
              "</tr>");
     }
-
-    cotonic.broker.publish("model/ui/update/the-stats", rows.join("")); 
+    cotonic.broker.publish("model/ui/update/the-stats", rows.join(""));
 }
 
 function render_requests(found) {
@@ -98,7 +97,6 @@ function render_requests(found) {
     const _3xx_one = (found["3xx_one"]|0);
     const _4xx_one = (found["4xx_one"]|0);
     const _5xx_one = (found["5xx_one"]|0);
- 
     const summary = _1xx_one + _2xx_one + _3xx_one + _4xx_one + _5xx_one;
 
     return "<span>" + summary + "</span>";

@@ -1,13 +1,13 @@
 {% with m.mailinglist.recipient[recipient_id] as rcpt %}
-
+{% with form_id|default:#form as form_id %}
     {% if recipient_id %}
-        {% wire id=#form type="submit" postback={recipient_edit id=id in_admin=in_admin recipient_id=recipient_id} delegate=delegate %}
+        {% wire id=form_id type="submit" postback={recipient_edit id=id in_admin=in_admin recipient_id=recipient_id} delegate=delegate %}
     {% else %}
-        {% wire id=#form type="submit" postback={recipient_add id=id in_admin=in_admin} delegate=delegate %}
+        {% wire id=form_id type="submit" postback={recipient_add id=id in_admin=in_admin} delegate=delegate %}
     {% endif %}
 
     {% if is_email_only %}
-        <form id="{{ #form }}" method="post" action="postback" class="form-inline">
+        <form id="{{ form_id }}" method="post" action="postback" class="form-inline">
 	        <div class="form-group">
 		        <input class="form-control" type="text" id="{{ #email }}" name="email" value="{{ rcpt.email|default:id.email|default:q.email|escape }}" placeholder="you@example.com" />
 		        {% validate id=#email name="email" type={presence} type={email} %}
@@ -15,7 +15,7 @@
 	        </div>
         </form>
     {% else %}
-        <form id="{{ #form }}" method="post" action="postback" class="form">
+        <form id="{{ form_id }}" method="post" action="postback" class="form">
 	        <div class="form-group">
 		        <label class="control-label" for="{{ #email }}">{_ E-mail _}</label>
 				<input class="form-control" type="text" id="{{ #email }}" name="email" value="{{ rcpt.email|default:id.email|default:q.email|escape }}" />
@@ -86,4 +86,4 @@
 		</form>
 	{% endif %}
 {% endwith %}
-
+{% endwith %}

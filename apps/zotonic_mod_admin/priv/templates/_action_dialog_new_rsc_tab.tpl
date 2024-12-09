@@ -4,6 +4,7 @@
     id="dialog-new-rsc-tab"
     type="submit"
 	postback={new_page
+		intent=intent
 	    subject_id=subject_id
         object_id=object_id
 	    predicate=predicate
@@ -35,7 +36,7 @@
 
 			{% if (not nocatselect or m.category[cat].is_a.media)
 				and (not predicate
-						or (subject_id and m.predicate.is_valid_object_subcategory[predicate][`media`])
+						or (subject_id and m.predicate.is_valid_object_in_category[predicate][`media`])
 						or (object_id and m.predicate.is_valid_subject_subcategory[predicate][`media`]))
 			%}
 		        <div class="form-group" id="new-rsc-tab-upload">
@@ -119,6 +120,9 @@
 		            			}
 		            			let basename = files[0].name.replace(/^([^\\/]*[\\/])*/, '');
 		            			rootname = basename.replace(/\.[a-zA-Z0-9]{1,4}$/, '');
+		            			$('#{{ form }} .if-upload').show();
+		            		} else {
+		            			$('#{{ form }} .if-upload').hide();
 		            		}
 
 		            		if ($('#{{ form }} select[name=category_id] option[value='+new_cat+']').length > 0) {
@@ -244,6 +248,10 @@
 						{_ Published _}
 					</label>
 				</div>
+
+		        <div class="if-upload" style="display: none">
+			        {% include "_edit_medium_language.tpl" %}
+			    </div>
 			{% endblock %}
 
 			{% block new_rsc_footer %}
@@ -314,7 +322,7 @@
 		</div>
 
 		<div id="dialog-rsc-new-found" class="do_feedback"
-			data-feedback="trigger: 'dialog-new-rsc-tab', delegate: 'mod_admin'">
+			data-feedback='{ "trigger": "dialog-new-rsc-tab", "delegate": "mod_admin" }'>
 		</div>
 
 		{% wire name="dialog_new_rsc_preview"
@@ -461,4 +469,3 @@
 
 {% endwith %}
 {% endwith %}
-

@@ -48,14 +48,14 @@
             <div class="checkbox">
                 <label>
                     <input type="checkbox" name="rememberme" value="1" {% if q.rememberme or m.authentication.is_rememberme %}checked{% endif %}>
-                    {_ Keep me signed in _}
+                    {_ Keep me logged in _}
                 </label>
             </div>
         </div>
     {% endif %}
 
     <div class="form-group">
-        <button class="btn btn-primary" type="submit">{_ Sign in _}</button>
+        <button class="btn btn-primary" type="submit">{_ Log in _}</button>
     </div>
 {% else %}
     {% if q.options.is_username_checked %}
@@ -74,7 +74,7 @@
                    tabindex="-1">
         </div>
         <p class="clearfix">
-            <b>{{ q.options.username|escape }}</b>
+            <b>{{ q.options.username|default:q.username|escape }}</b>
             <a class="pull-right" href="{% url logon %}" data-onclick-topic="model/auth-ui/post/view/logon">{_ Change _}</a>
         </p>
     {% else %}
@@ -126,7 +126,7 @@
     {% endif %}
 
     {% if q.options.is_user_local %}
-        <div class="form-group">
+        <div class="form-group {% if is_show_passcode or is_set_passcode %}hidden{% endif %}">
             <label for="password" class="control-label">{_ Password _}</label>
             <input class="form-control" type="password" id="password" name="password" value="{{ q.password|escape }}"
                    required
@@ -147,6 +147,10 @@
                        autocapitalize="off"
                        autocorrect="off">
             </div>
+        {% elseif is_set_passcode %}
+            <div class="form-group set-passcode">
+                {% include "_logon_login_set_passcode.tpl" %}
+            </div>
         {% endif %}
     {% elseif not q.options.is_username_checked %}
         <div class="form-group hidden">
@@ -160,14 +164,14 @@
     {% endif %}
 
     {% if q.options.is_username_checked %}
-        {% if is_user_local or is_user_local|is_undefined %}
+        {% if q.options.is_user_local or q.options.is_user_local|is_undefined %}
             {% if m.authentication.is_supported.rememberme %}
                 <div class="form-group">
                     <div class="checkbox">
                         <label title="{_ Stay logged on unless I log off. _}">
                             <input type="checkbox" name="rememberme" value="1"
                                 {% if q.rememberme or m.authentication.is_rememberme %}checked{% endif %}>
-                            {_ Keep me signed in _}
+                            {_ Keep me logged in _}
                         </label>
                     </div>
                 </div>
@@ -182,7 +186,7 @@
             {% endif %}
             <div class="form-group">
                 <button class="btn btn-success" style="margin-right: 0px" type="submit">
-                    {_ Sign in _}
+                    {_ Log in _}
                 </button>
             </div>
         {% endif %}

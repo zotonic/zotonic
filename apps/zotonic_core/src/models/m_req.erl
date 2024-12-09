@@ -56,12 +56,21 @@ get(timezone, #context{} = Context) -> z_context:tz(Context);
 get(language, #context{} = Context) -> z_context:language(Context);
 get(csp_nonce, Context) -> z_context:csp_nonce(Context);
 get(is_crawler, #context{} = Context) -> z_user_agent:is_crawler(Context);
+get(is_http_request, #context{} = Context) -> z_context:get(is_http_request, Context);
 get(peer_ip, #context{} = Context) ->
     case z_context:get(peer_ip, Context) of
-        undefined -> get_req(peer_ip, Context);
+        undefined -> maybe_get_req(peer_ip, Context);
+        PeerIP -> PeerIP
+    end;
+get(user_agent, #context{} = Context) ->
+    case z_context:get(user_agent, Context) of
+        undefined -> maybe_get_req(user_agent, Context);
         PeerIP -> PeerIP
     end;
 get(What, #context{} = Context) ->
+    maybe_get_req(What, Context).
+
+maybe_get_req(What, Context) ->
     case z_context:is_request(Context) of
         true ->  get_req(What, Context);
         false -> undefined
@@ -88,7 +97,11 @@ get_req(raw_path, Context) -> cowmachine_req:raw_path(Context);
 get_req(path, Context) -> cowmachine_req:path(Context);
 get_req(qs, Context) -> cowmachine_req:req_qs(Context);
 get_req(headers, Context) -> cowmachine_req:get_req_headers(Context);
-get_req(user_agent, Context) -> cowmachine_req:get_req_header(<<"user-agent">>, Context);
+get_req(user_agent, Context) ->
+    case cowmachine_req:get_req_header(<<"user-agent">>, Context) of
+        UA when is_binary(UA), size(UA) > 500 -> z_string:truncatechars(UA, 500);
+        UA -> UA
+    end;
 get_req(referer, Context) -> cowmachine_req:get_req_header(<<"referer">>, Context);
 get_req(referrer, Context) -> get_req(referer, Context);
 get_req(_Key, _Context) -> undefined.
@@ -101,5 +114,3 @@ values(Context) ->
             headers, timezone, language
         ]
     ].
-
-

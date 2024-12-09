@@ -22,7 +22,7 @@
             </p>
 
             {% block menu_tree %}
-            <ul class="tree-list tree-list-menu{% if editable %} do_menuedit{% endif %}" id="menu-{{ id }}" data-menuedit="item_template: '_menu_edit_item.tpl'">
+            <ul class="tree-list tree-list-menu{% if editable %} do_menuedit{% endif %}" id="menu-{{ id }}" data-menuedit='{ "item_template": "_menu_edit_item.tpl" }'>
                 {% for mid, path, action in id.menu|menu_flat %}
                     {% include "_menu_edit_item.tpl" c=forloop.counter id=mid editable=editable %}
                 {% endfor %}

@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014-2021 Marc Worrell <marc@worrell.nl>
+%% @copyright 2014-2023 Marc Worrell <marc@worrell.nl>
 %% @doc Enables embedding media from their URL.
 
-%% Copyright 2014-2021 Marc Worrell <marc@worrell.nl>
+%% Copyright 2014-2023 Marc Worrell <marc@worrell.nl>
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,14 +20,16 @@
 
 -export([
     event/2,
-    try_embed/2
+    try_embed/2,
+
+    try_url_http/2
     ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 event(#submit{message={media_url_embed, Args}, form=Form}, Context) ->
     {discover_elt, DiscoverElt} = proplists:lookup(discover_elt, Args),
-    UrlData = z_convert:to_binary(z_string:trim(z_context:get_q(url, Context))),
+    UrlData = z_string:trim(z_context:get_q(<<"url">>, Context)),
     Vars = case try_embed(UrlData, Context) of
                 {ok, List} ->
                     ListAsProps = [ as_proplist(MI, Context) || MI <- List ],
@@ -58,6 +60,8 @@ event(#submit{message={media_url_import, Args}}, Context) ->
     Intent = proplists:get_value(intent, ArgsEmbed),
     Result = case Intent of
         <<"update">> when is_integer(Id) ->
+            RscProps = media_update_rsc_props(Context),
+            m_rsc:update(Id, RscProps, Context),
             z_media_import:update(Id, MediaImport, Context);
         _ ->
             RscProps = media_insert_rsc_props(ArgsEmbed, Context),
@@ -65,10 +69,21 @@ event(#submit{message={media_url_import, Args}}, Context) ->
     end,
     handle_media_upload_args(Intent, Id, Result, ArgsEmbed, Context).
 
+media_update_rsc_props(Context) ->
+    case z_context:get_q(<<"medium_language">>, Context) of
+        undefined ->
+            #{};
+        Language ->
+            #{
+                <<"medium_language">> => Language
+            }
+    end.
+
 media_insert_rsc_props(ArgsEmbed, Context) ->
     SubjectId = m_rsc:rid(proplists:get_value(subject_id, ArgsEmbed), Context),
     CGId = m_rsc:rid(proplists:get_value(content_group_id, ArgsEmbed), Context),
     add_qprops(SubjectId, CGId, Context).
+
 
 add_qprops(undefined, CGId, Context) ->
     Props = maps:remove(<<"is_dependent">>, qprops(Context)),
@@ -232,20 +247,21 @@ try_url({ok, <<"ftp:", _/binary>>}, _Context) ->
     % Use anonymous ftp
     {error, todo};
 try_url({ok, <<"email:", _/binary>>}, _Context) ->
-    % Make an user for this email address?
+    % Make a user for this email address?
     {error, todo};
 try_url(_, _Context) ->
     {error, unknown}.
 
+-spec try_url_http(Url, Context) -> {ok, MediaImports} | {error, Reason} when
+    Url :: binary(),
+    Context :: z:context(),
+    MediaImports :: [ MediaImport ],
+    MediaImport :: #media_import_props{},
+    Reason :: term().
 try_url_http(Url, Context) ->
-    case z_fetch:metadata(Url, [], Context) of
-        {ok, MD} ->
-            case z_media_import:url_import_props(MD, Context) of
-                {ok, List} ->
-                    {ok, List};
-                {error, _} = Error ->
-                    Error
-            end;
+    case z_media_import:url_import_props(z_sanitize:uri(Url), Context) of
+        {ok, List} ->
+            {ok, List};
         {error, _} = Error ->
             Error
     end.

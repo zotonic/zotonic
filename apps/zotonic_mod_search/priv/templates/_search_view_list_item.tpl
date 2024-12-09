@@ -11,7 +11,7 @@
         <a href="{{ id.page_url }}" class="btn btn-default btn-secondary">
             {_ view _}
         </a>
-        {% if m.acl.is_admin %}
+        {% if m.acl.use.mod_admin and id.is_editable %}
             <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default btn-secondary">
                 {_ edit _}
             </a>

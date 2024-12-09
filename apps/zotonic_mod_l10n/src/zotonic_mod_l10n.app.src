@@ -2,7 +2,7 @@
     {description, "Localization, timezones, translations for country names etc."},
     {vsn, {file, "../../VERSION"}},
     {registered, []},
-    {applications, [kernel, stdlib, zotonic_core]},
+    {applications, [kernel, stdlib, mochiweb, zotonic_core]},
     {env, []},
     {modules, []},
     {doc, "doc"},

@@ -33,6 +33,13 @@ Site-specific configuration
 |          |                      |handshake. Defaults to the site’s        |
 |          |                      |hostname, but can be overriden           |
 +----------+----------------------+-----------------------------------------+
+|site      |client_smtphost       |The hostname the SMTP client will use    |
+|          |                      |use to contact external SMTP servers.    |
+|          |                      |Defaults to the site's smtphost. Usually |
+|          |                      |set to the reverse DNS name of the       |
+|          |                      |server when the system delivers e-mail   |
+|          |                      |directly.                                |
++----------+----------------------+-----------------------------------------+
 |site      |admin_email           |E-mail address of the admin user, the    |
 |          |                      |address where admin log/debug messages   |
 |          |                      |get sent to when using                   |
@@ -101,6 +108,12 @@ Zotonic-wide configuration for sending email
 |smtp_bounce_email_override|The email address for bounce handling.|
 |                          |Only use if all else fails (see       |
 |                          |the paragraphs after the next one).   |
++--------------------------+--------------------------------------+
+|smtp_plaintext_fallback   |Retry using plain-text delivery if the|
+|                          |SSL delivery failed with timeout or   |
+|                          |closed error. Useful for servers with |
+|                          |self-signed certificates.             |
+|                          |(default: true)                       |
 +--------------------------+--------------------------------------+
 |smtp_is_blackhole         |Drop all outgoing email, the mail is  |
 |                          |still logged. Good for testing large  |

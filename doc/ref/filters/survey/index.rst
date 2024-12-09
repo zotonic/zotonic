@@ -16,3 +16,4 @@ Survey
    ../filter_survey_prepare_narrative
    ../filter_survey_prepare_thurstone
    ../filter_survey_test_max_points
+   ../filter_survey_result_column_values

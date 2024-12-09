@@ -83,15 +83,14 @@
                             class="btn btn-default"
                             text=_"Rebuild search indices"
                             action={admin_tasks task='pivot_all'}
-                            action={script script="queueCountInfo('#pivot-queue-count', '#btn-rebuild-indices')"}
+                            action={script script="queueCountInfo('#pivot-queue-count')"}
                         %}
-                        <span id="pivot-queue-count">
-                            {% javascript %}
-                                queueCountInfo('#pivot-queue-count', '#btn-rebuild-indices');
-                            {% endjavascript %}
-                        </span>
+                        <span id="pivot-queue-count"></span>
                         <p class="help-block">{_ Rebuild all search-indices by putting all pages and data from the database in the indexer queue. This can take a long time! _}
                         </p>
+                        {% javascript %}
+                            queueCountInfo('#pivot-queue-count');
+                        {% endjavascript %}
                     </div>
 
         	        <div class="form-group">
@@ -103,6 +102,11 @@
                         {% button class="btn btn-default" text=_"Reinstall site datamodel" action={admin_tasks task='site_reinstall'} %}
                         <p class="help-block">{_ Runs the schema install command from the site's module again. _}</p>
                     </div>
+
+                    <div class="form-group">
+                        {% button class="btn btn-default" text=_"Reinstall Zotonic datamodel" action={admin_tasks task='zotonic_reinstall'} %}
+                        <p class="help-block">{_ Runs the schema install for Zotonic core again. _}</p>
+                    </div>
                 </div>
             </div>
 
@@ -113,15 +117,27 @@
             <div class="widget">
                 <div class="widget-content">
         	        {% all include "_admin_status.tpl" %}
+
+                    {% if not m.admin.is_notrack_refers %}
+                        <div class="form-group">
+                            <div>
+                                {% button class="btn btn-default" text=_"Ensure <i>refers</i> connections"
+                                          postback={ensure_refers}
+                                          delegate=`mod_admin`
+                                %}
+                                <p class="help-block">{_ Check all pages for embedded page references and add a <i>refers</i> connection for all of those references. _}</p>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 
-            {% if m.acl.is_admin or m.acl.use.mod_mailinglist %}
+            {% if m.acl.is_admin or m.acl.use.mod_mailinglist or m.acl.use.mod_import %}
                 <div class="widget">
-                    <div class="widget-header">{_ Upload dropbox file _}</div>
+                    <div class="widget-header">{_ Upload file _}</div>
                     <div class="widget-content">
                         <p class="help-block">
-                            {_ Upload a file to the dropbox. This file will be handled in the background by the mailinglists for recipient import and other modules. _}
+                            {_ Upload a file to the drop folder. This file will be handled in the background by the mailinglists for recipient import and other modules. _}
                         </p>
 
                         {% wire id="dropupload"
@@ -141,49 +157,13 @@
             <div class="widget">
                 <div class="widget-header">{_ Task queue _}</div>
                 <div class="widget-content">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>{_ Module _}</th>
-                                <th>{_ Function _}</th>
-                                <th>{_ Amount _}</th>
-                                <th>{_ Next due _}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for t in m.admin_status.task_queue %}
-                                <tr>
-                                    <td>{{ t.module|escape }}</td>
-                                    <td>{{ t.function|escape }}</td>
-                                    <td>{{ t.count }}</td>
-                                    <td>
-                                        {{ t.due|date:"Y-m-d H:i:s" }}
-                                        {% if t.error_count_total %}
-                                            <br>
-                                            <span class="text-danger">
-                                                <span class="fa fa-warning"></span>
-                                                {% trans "Some tasks are retrying.<br>Total errors: {total}<br>Highest for single task: {max}"
-                                                        total=t.error_count_total
-                                                        max=t.error_count_max
-                                                %}
-                                            </span>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                            {% empty %}
-                                <tr>
-                                    <td colspan="3">
-                                        <p>
-                                            {_ There are no tasks in the task queue. _}
-                                        </p>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                    {% live topic="bridge/origin/$SYS/site/"++m.site.site++"/task-queue"
+                            template="_admin_status_task_queue.tpl"
+                    %}
+
                     <p class="help-block">
                         {_ Tasks are functions scheduled to run at a certain time. _}<br>
-                        {_ Tasks with errors will retry five times before being dropped. _}
+                        {_ Tasks with errors will retry 10 times before being dropped. _}
                     </p>
                 </div>
             </div>

@@ -196,8 +196,13 @@
     args = []
 }).
 
+-record(search_sql_nested, {
+    terms = [] :: [ #search_sql_term{} | #search_sql_nested{} ],
+    operator = <<"allof">> :: binary()
+}).
+
 -record(search_sql_terms, {
-    terms = [] :: [ #search_sql_term{} ],
+    terms = [] :: [ #search_sql_term{} | #search_sql_nested{} ],
     post_func :: fun( (#search_result{}, #search_sql{}, z:context()) -> #search_result{} ) | undefined
 }).
 
@@ -347,6 +352,9 @@
 %% @doc Call the translate function for a string
 -define(__(T,Context), z_trans:trans(T,Context)).
 
+%% @doc Return all translations function for a string
+-define(___(T,Context), z_trans:translations(T,Context)).
+
 %% @doc Extra trans record definition to ease JSON mapping of translatable strings
 -record(trans, { tr = [] :: list( {atom(), binary()} )}).
 
@@ -366,5 +374,6 @@
 
 -include("zotonic_notifications.hrl").
 -include("zotonic_log.hrl").
+-include("zotonic_wired.hrl").
 -include("zotonic_deprecated.hrl").
 

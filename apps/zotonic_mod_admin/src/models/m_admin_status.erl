@@ -1,8 +1,9 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
-%% @copyright 2019-2021 Maas-Maarten Zeeman 
+%% @copyright 2019-2024 Maas-Maarten Zeeman
 %% @doc Zotonic: admin status model
+%% @end
 
-%% Copyright 2019-2021 Maas-Maarten Zeeman
+%% Copyright 2019-2024 Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -30,6 +31,7 @@
     m_get/3,
 
     otp_version/0,
+    zotonic_version/0,
     database_version/1,
     tcp_connection_count/0,
     group_sockets/0,
@@ -39,13 +41,18 @@
 ]).
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
-m_get([ <<"zotonic_version">> | Rest ], _Msg, _Context) ->
-    {ok, {z_convert:to_binary(?ZOTONIC_VERSION), Rest}};
+m_get([ <<"zotonic_version">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> {ok, {zotonic_version(), Rest}};
+        false -> {error, eacces}
+    end;
 m_get(Path, Msg, Context) ->
     case z_acl:is_admin(Context) of
         true -> m_get_1(Path, Msg, Context);
         false -> {error, eacces}
     end.
+
+
 m_get_1([ <<"database_version">> | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true -> {ok, {database_version(Context), Rest}};
@@ -101,6 +108,11 @@ m_get_1([ <<"disks">>, <<"alert">> | Rest ], _Msg, _Context) ->
 m_get_1([ <<"disks">> | Rest ], _Msg, _Context) ->
     {ok, {disks(), Rest}};
 
+m_get_1([ <<"os_memory">>, <<"alert">> | Rest ], _Msg, _Context) ->
+    {ok, {os_memory_alert(), Rest}};
+m_get_1([ <<"os_memory">> | Rest ], _Msg, _Context) ->
+    {ok, {os_memory(), Rest}};
+
 m_get_1([ <<"task_queue">> | Rest ], _Msg, Context) ->
     case z_pivot_rsc:count_tasks(Context) of
         {ok, Ts} ->
@@ -147,6 +159,13 @@ otp_version() ->
     {ok, Version} = file:read_file(OtpVersionFile),
     z_string:trim(Version).
 
+
+%% @doc Return the zotonic version.
+-spec zotonic_version() -> binary().
+zotonic_version() ->
+    z_convert:to_binary(?ZOTONIC_VERSION).
+
+
 %% @doc Return the version string of the used database.
 -spec database_version( z:context() ) -> binary().
 database_version(Context) ->
@@ -191,16 +210,31 @@ socket_reaper([_|Rest], Max, Acc) ->
 disks() ->
     DiskData = disksup:get_disk_data(),
     Threshold = disks_threshold(),
-    lists:map(
+    lists:filtermap(
         fun({Disk, Size, Capacity}) ->
-            #{
-                disk => unicode:characters_to_binary(Disk),
-                size => Size,
-                percent_used => Capacity,
-                alert => Capacity > Threshold
-            }
+            DiskBin = unicode:characters_to_binary(Disk),
+            case is_hidden_disk(DiskBin) of
+                true ->
+                    false;
+                false ->
+                    {true, #{
+                        disk => DiskBin,
+                        size => Size,
+                        percent_used => Capacity,
+                        alert => Capacity > Threshold
+                    }}
+            end
         end,
         DiskData).
+
+%% @doc Hide macOS system disks from the overview and disk space checks.
+is_hidden_disk(<<"/Library/Developer/CoreSimulator/", _/binary>>) -> true;
+is_hidden_disk(<<"/System/Volumes/xarts">>) -> true;
+is_hidden_disk(<<"/System/Volumes/iSCPreboot">>) -> true;
+is_hidden_disk(<<"/System/Volumes/Hardware">>) -> true;
+is_hidden_disk(<<"/System/Volumes/Preboot">>) -> true;
+is_hidden_disk(<<"/System/Volumes/VM">>) -> true;
+is_hidden_disk(_) -> false.
 
 %% @doc Return disk space information
 -spec disks_alert() -> boolean().
@@ -208,11 +242,34 @@ disks_alert() ->
     DiskData = disksup:get_disk_data(),
     Threshold = disks_threshold(),
     lists:any(
-        fun({_Disk, _Size, Capacity}) ->
-            Capacity > Threshold
+        fun({Disk, _Size, Capacity}) ->
+            DiskBin = unicode:characters_to_binary(Disk),
+            not is_hidden_disk(DiskBin) andalso (Capacity > Threshold)
         end,
         DiskData).
 
 %% @doc Return the percentage to be used as threshold.
 disks_threshold() ->
     disksup:get_almost_full_threshold().
+
+
+%% @doc Return true iff the system_memory alert is set.
+-spec os_memory_alert() -> boolean().
+os_memory_alert() ->
+    false.
+    % FIXME
+    % This can be enabled again after the following fix has been merged to OTP:
+    % https://github.com/erlang/otp/pull/8776
+    %
+    % Alarms = alarm_handler:get_alarms(),
+    % lists:any(
+    %   fun
+    %       ({system_memory_high_watermark, _}) -> true;
+    %       (_) -> false
+    %   end,
+    %   Alarms).
+
+%% @doc Return a list with os memory statistics.
+os_memory() ->
+    memsup:get_system_memory_data().
+

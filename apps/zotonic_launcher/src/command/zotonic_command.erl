@@ -157,10 +157,17 @@ base_cmd(DefaultName, CodePaths) ->
                             1 -> " +S 2:2";
                             _ -> ""
                         end,
+                        KOpt = case binary:split(atom_to_binary(Nodename), <<"@">>) of
+                            [ _, <<"localhost">> ] ->
+                                " -kernel inet_dist_listen_options '[{ip, {127,0,0,1}}]' ";
+                            _ ->
+                                ""
+                        end,
                         {ok, lists:flatten([
                             "erl",
                             " -smp enable",
                             SOpt,
+                            KOpt,
                             " -env ERL_MAX_PORTS ", max_ports(),
                             " +P ", max_processes(),
                             " +t ", max_atoms(),

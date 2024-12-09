@@ -84,6 +84,44 @@
                 {_ Enable <tt>mod_server_storage</tt> to use database query tracing. _}
             </p>
         {% endif %}
+
+        {% if m.modules.provided.mod_logging %}
+            {% if m.site.environment == `development` and m.log.is_log_client_allowed %}
+                <p class="alert alert-info">
+                    {_ Set the class <tt>environment-development</tt> on the <tt>&lt;html&gt;</tt> element of your pages to see the server log in the browser console.<br>In development, admin pages always show the server log in the javascript console. _}
+                </p>
+            {% elseif m.log.is_log_client_allowed %}
+                <label class="checkbox">
+                    <input type="checkbox" id="logclient" value="1" disabled>
+                    {_ Show server log in the browser console _}
+                </label>
+                {% javascript %}
+                    cotonic.broker
+                        .call("bridge/origin/model/log/get/is_log_client_session")
+                        .then((msg) => {
+                            const elt = document.getElementById("logclient");
+                            elt.disabled = false;
+                            if (msg.payload.result) {
+                                elt.checked = true;
+                            } else {
+                                elt.checked = false;
+                            }
+                        });
+                    $('#logclient').on('input', function(e) {
+                        const is_enabled = $(this).is(":checked");
+                        z_event("log_client_enable", { is_enabled: is_enabled });
+                    });
+                {% endjavascript %}
+                {% wire name="log_client_enable"
+                        postback=`log_client_enable`
+                        delegate=`mod_development`
+                %}
+            {% elseif m.acl.is_admin %}
+                <p class="help-block">
+                    {_ Log in as the admin to enable logging to the javascript console. _}
+                </p>
+            {% endif %}
+        {% endif %}
     </div>
 </div>
 
@@ -118,17 +156,60 @@
 
         <hr/>
 
-        <p><a href="{% url admin_development_templates %}">{_ Show which files are included in a template compilation _}</a></p>
-        <p class="help-block">{_ At times it can be confusing which templates are actually used during a template compilation.  Here you can see which files are included whilst compiling a template. _}</p>
+        <p>
+            <a href="{% url admin_development_templates_xref %}">{_ Cross-reference check of templates _} &gt;</a>
+        </p>
+        <p class="help-block">
+            {% trans "All templates are checked for missing includes or missing <tt>{ext}</tt> template references."
+                ext="extends/overrules"
+            %}
+            {_ All templates will be compiled. _}
+        </p>
 
+        <hr/>
+
+        <p>
+            <a href="{% url admin_development_templates_trace %}">{_ Live dependency graph of templates _} &gt;</a>
+        </p>
+        <p class="help-block">{_ Traces all templates for the current session-id, or all sessions, and renders them as a graph. _}</p>
+
+        <hr/>
+
+        <p>
+            <a href="{% url admin_development_templates_graph %}">{_ Dependency graph of all available templates _} &gt;</a>
+        </p>
+        <p class="help-block">{_ Calculate and visualize a dependency graph of all templates. _}
+        {_ All templates will be compiled. _}</p>
+
+        <hr/>
+
+        <p>
+            {% button class="btn btn-primary" text=_"Recompile templates"
+                      action={admin_tasks task="templates_reset"}
+            %}
+            {% button class="btn btn-default" text=_"Rescan modules"
+                      action={module_rescan}
+            %}
+        </p>
+        <p class="help-block">{_ Force a recompilation of all templates. This fixes any issues where the compiled templates might be out of sync with the template index. _}</p>
+        </p>
     </div>
 </div>
 
 <div class="widget">
+
+
     <div class="widget-header">
         {_ Dispatch rule debugging _}
     </div>
     <div class="widget-content">
+        <p>
+            <a href="{% url admin_development_dispatch_details %}">{_ View all dispatch rules  _} &gt;</a>
+        </p>
+        <p class="help-block">{_ View all dispatch rules and hostnames usable in the site. _}</p>
+
+        <hr />
+
         <p>{_ Match a request URL, display matched dispatch rule. _}</p>
 
         {% wire id="explain-dispatch" type="submit"
@@ -162,7 +243,7 @@
         <p>{_ Show internals of Zotonic and the modules _}</p>
 
         <p>
-            <a href="{% url admin_development_observers %}">{_ Show an overview of all observers. _}</a>
+            <a href="{% url admin_development_observers %}">{_ Show an overview of all observers _} &gt;</a>
         </p>
     </div>
 </div>

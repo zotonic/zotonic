@@ -1,0 +1,10 @@
+@font-face {
+    font-family: 'Zotonic';
+    src: url('#{$zFontPath}/icomoon.eot?v=#{$zVersion}');
+    src: url('#{$zFontPath}/icomoon.eot?#iefix&v=#{$zVersion}') format('embedded-opentype'),
+    url('#{$zFontPath}/icomoon.woff?v=#{$zVersion}') format('woff'),
+    url('#{$zFontPath}/icomoon.ttf?v=#{$zVersion}') format('truetype'),
+    url('#{$zFontPath}/icomoon.svg?v=#{$zVersion}#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}

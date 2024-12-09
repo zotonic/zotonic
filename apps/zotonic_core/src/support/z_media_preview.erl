@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Make still previews of media, using image manipulation functions.  Resize, crop, grey, etc.
 %% This uses the command line imagemagick tools for all image manipulation.
-%% This code is adapted from PHP GD2 code, so the resize/crop could've been done more efficiently, but it works :-)
+%% @end
 
-%% Copyright 2009-2022 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,6 +34,8 @@
     calc_size/1
 ]).
 
+% Max pixels of the target image
+% Larger will be truncated to this size.
 -define(MAX_PIXSIZE,  20000).
 
 % Low and max image size (in total pixels) for quality 99 and 55.
@@ -45,7 +47,12 @@
 
 
 %% @doc Convert the Infile to an outfile with a still image using the filters.
--spec convert(file:filename_all(), file:filename_all(), list(), #context{}) -> ok | {error, term()}.
+-spec convert(InFile, OutFile, Filters, Context) -> ok | {error, Reason} when
+    InFile :: file:filename_all(),
+    OutFile :: file:filename_all(),
+    Filters :: list(),
+    Context :: z:context(),
+    Reason :: will_overwrite_infile | term().
 convert(InFile, InFile, _, _Context) ->
     ?LOG_ERROR(#{
         text => <<"Image convert will overwrite input file">>,
@@ -66,7 +73,10 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
                 true ->
                     case z_mediaclass:expand_mediaclass_checksum(Filters) of
                         {ok, FiltersExpanded} ->
-                            convert_1(os:find_executable("convert"), InFile, OutFile, Mime, FileProps, FiltersExpanded);
+                            % TODO: add the notification here to let a module pick up the resize
+                            % A remote server can then handle the resize request.
+                            SiteDir = z_path:site_dir(Context),
+                            convert_1(os:find_executable("convert"), InFile, OutFile, Mime, FileProps, FiltersExpanded, SiteDir);
                         {error, Reason} = Error ->
                             ?LOG_WARNING(#{
                                 text => <<"Cannot expand mediaclass">>,
@@ -92,27 +102,28 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
             {error, Reason}
     end.
 
-convert_1(false, _InFile, _OutFile, _InMime, _FileProps, _Filters) ->
+convert_1(false, _InFile, _OutFile, _InMime, _FileProps, _Filters, _SiteDir) ->
     ?LOG_ERROR(#{
         text => <<"Install ImageMagick 'convert' to generate previews of images.">>,
         in => zotonic_core
     }),
     {error, convert_missing};
-convert_1(ConvertCmd, InFile, OutFile, InMime, FileProps, Filters) ->
+convert_1(ConvertCmd, InFile, OutFile, InMime, FileProps, Filters, SiteDir) ->
     OutMime = z_media_identify:guess_mime(OutFile),
     case cmd_args(FileProps, Filters, OutMime) of
         {ok, {EndWidth, EndHeight, _CmdArgs}} when EndWidth > ?MAX_PIXSIZE; EndHeight > ?MAX_PIXSIZE ->
             {error, image_too_big};
         {ok, {_, _, CmdArgs}} ->
-            convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps);
+            convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps, SiteDir);
         {error, _} = Error ->
             Error
     end.
 
-convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps) ->
+convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps, SiteDir) ->
     file:delete(OutFile),
     ok = z_filelib:ensure_dir(OutFile),
     Cmd = lists:flatten([
+        "cd ", z_filelib:os_filename(SiteDir), "; ",
         z_filelib:os_filename(ConvertCmd), " ",
         opt_density(FileProps),
         z_filelib:os_filename( unicode:characters_to_list(InFile) ++ infile_suffix(InMime) ), " ",
@@ -157,24 +168,39 @@ run_cmd(Cmd, OutFile) ->
 
 once(Cmd, OutFile) ->
     Key = {n,l,Cmd},
+    CmdBin = unicode:characters_to_binary(Cmd),
     case gproc:reg_or_locate(Key) of
         {Pid, _} when Pid =:= self() ->
             ?LOG_DEBUG(#{
-                text => <<"Image convert">>,
                 in => zotonic_core,
-                command => unicode:characters_to_binary(Cmd)
+                text => <<"ImageMagick convert command started">>,
+                command => CmdBin
             }),
-            Result = os:cmd(Cmd),
+            Result = z_exec:run(CmdBin),
             gproc:unreg(Key),
-            case filelib:is_regular(OutFile) of
-                true ->
-                    ok;
-                false ->
+            case Result of
+                {ok, StdOut} ->
+                    case filelib:is_regular(OutFile) of
+                        true ->
+                            ok;
+                        false ->
+                            ?LOG_ERROR(#{
+                                in => zotonic_core,
+                                text => <<"ImageMagick convert command failed - no output file">>,
+                                result => error,
+                                reason => enoent,
+                                command => CmdBin,
+                                stdout => StdOut
+                            }),
+                            {error, convert_error}
+                    end;
+                {error, Reason} ->
                     ?LOG_ERROR(#{
-                        text => <<"convert cmd failed">>,
                         in => zotonic_core,
-                        command => unicode:characters_to_binary(Cmd),
-                        result => unicode:characters_to_binary(Result)
+                        text => <<"ImageMagick convert command failed">>,
+                        result => error,
+                        reason => Reason,
+                        command => CmdBin
                     }),
                     {error, convert_error}
             end;
@@ -182,7 +208,7 @@ once(Cmd, OutFile) ->
             ?LOG_DEBUG(#{
                 text => "Waiting for parallel resizer",
                 in => zotonic_core,
-                command => unicode:characters_to_binary(Cmd)
+                command => CmdBin
             }),
             Ref = gproc:monitor(Key),
             receive
@@ -190,7 +216,6 @@ once(Cmd, OutFile) ->
                     ok
             end
     end.
-
 
 
 %% Return the ImageMagick input-file suffix.
@@ -310,16 +335,21 @@ cmd_args(#{ <<"mime">> := Mime, <<"width">> := ImageWidth, <<"height">> := Image
     Filters6 = add_optional_quality(Filters5, is_lossless(OutMime), ResizeWidth, ResizeHeight),
     Filters7 = add_optional_interlace(Filters6, OutMime),
     Filters8 = move_pre_post_filters(Filters7),
+    Filters9 = case lists:member(coalesce, Filters8) of
+        true ->
+            Filters8 ++ [deconstruct];
+        false ->
+            Filters8
+    end,
     {EndWidth,EndHeight,Args} = lists:foldl(fun (Filter, {W,H,Acc}) ->
                                                 {NewW,NewH,Arg} = filter2arg(Filter, W, H, Filters7),
                                                 {NewW,NewH,[Arg|Acc]}
                                             end,
                                             {ImageWidth,ImageHeight,[]},
-                                            Filters8),
+                                            Filters9),
     {ok, {EndWidth, EndHeight, ["-strip" | lists:reverse(Args) ]}};
 cmd_args(_, _Filters, _OutMime) ->
     {error, no_size}.
-
 
 default_background(<<"image/gif">>) -> [coalesce];
 default_background(<<"image/png">>) -> [coalesce];
@@ -423,6 +453,8 @@ filter2arg({make_image, <<"application/pdf">>}, Width, Height, _AllFilters) ->
     {Width, Height, RArg};
 filter2arg(coalesce, Width, Height, _AllFilters) ->
     {Width, Height, "-coalesce"};
+filter2arg(deconstruct, Width, Height, _AllFilters) ->
+    {Width, Height, "-deconstruct"};
 filter2arg({make_image, Mime}, Width, Height, _AllFilters) when is_binary(Mime) ->
     {Width, Height, []};
 filter2arg({correct_orientation, Orientation}, Width, Height, _AllFilters) ->

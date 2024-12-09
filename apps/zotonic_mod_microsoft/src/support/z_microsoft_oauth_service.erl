@@ -147,7 +147,7 @@ auth_validated(#{
                     #{
                         type => <<"email">>,
                         key => Email,
-                        is_verified => true
+                        is_verified => false
                     }
                 ],
                 is_connect = z_convert:to_bool(proplists:get_value(<<"is_connect">>, Args))

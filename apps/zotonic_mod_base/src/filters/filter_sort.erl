@@ -1,8 +1,9 @@
 %% @author Andreas Stenius <git@astekk.se>
-%% @copyright 2012 Andreas Stenius
+%% @copyright 2012-2024 Andreas Stenius
 %% @doc 'sort' filter, sort a resource id list on property.
+%% @end
 
-%% Copyright 2012 Andreas Stenius
+%% Copyright 2012-2024 Andreas Stenius
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -55,6 +56,7 @@ make_args_list(Arg) -> [Arg].
 
 make_input_list(L, _Context) when is_list(L) -> L;
 make_input_list(#rsc_list{ list = L }, _Context) -> L;
+make_input_list(#rsc_tree{ tree = L }, _Context) -> L;
 make_input_list(Map, _Context) when is_map(Map) -> maps:to_list(Map);
 make_input_list(In, Context) -> z_template_compiler_runtime:to_list(In, Context).
 
@@ -70,8 +72,8 @@ fetch_props(Ps, List, Context) ->
         end,
         List).
 
-fetch_prop(A, P, Context) when is_integer(A); is_atom(A); is_binary(A) ->
-    case m_rsc:p(A, P, Context) of
+fetch_prop(Id, P, Context) when is_integer(Id); is_atom(Id); is_binary(Id) ->
+    case m_rsc:p(Id, P, Context) of
         #trans{} = Tr ->
             z_string:to_lower(z_trans:lookup_fallback(Tr, Context));
         B when is_binary(B) ->
@@ -79,8 +81,12 @@ fetch_prop(A, P, Context) when is_integer(A); is_atom(A); is_binary(A) ->
         V ->
             V
     end;
+fetch_prop(#rsc_tree{ id = Id }, P, Context) ->
+    fetch_prop(Id, P, Context);
 fetch_prop(L, P, _Context) when is_list(L) ->
     proplists:get_value(P, L);
+fetch_prop(M, P, _Context) when is_map(M) ->
+    maps:get(P, M, undefined);
 fetch_prop(_, _, _Context) ->
     undefined.
 
@@ -102,7 +108,7 @@ map_arg('-') -> desc;
 map_arg(A) when is_atom(A) -> A;
 map_arg(B) ->
     try
-        erlang:binary_to_existing_atom(B, utf8)
+        z_convert:to_binary(B, utf8)
     catch
         _:_ -> undefined
     end.

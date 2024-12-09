@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017-2019 Marc Worrell
+%% @copyright 2017-2024 Marc Worrell
 %% @doc Locate and read config files, especially the "zotonic.config"
+%% @end
 
-%% Copyright 2017-2019 Marc Worrell
+%% Copyright 2017-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -112,14 +113,7 @@ replace_placeholders(Data) ->
 %%      config directory and all files the 'config.d' subdirectory.
 -spec zotonic_config_files( node() ) -> list( file:filename() ).
 zotonic_config_files(Node) ->
-    case config_dir(Node) of
-        {ok, Dir} ->
-            Files = lists:filter(fun(F) -> not is_erlang_config(F) end, z_config_files:files(Dir)),
-            SubFiles= z_config_files:files( filename:join([ Dir, "config.d" ]) ),
-            Files ++ SubFiles;
-        {error, _} ->
-            []
-    end.
+    z_config_files:zotonic_config_files(Node).
 
 %% @doc List all erlang init files in the zotonic configuration directory.
 %%      Erlang config files must be in the root of the config directory.

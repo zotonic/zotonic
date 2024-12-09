@@ -1,6 +1,6 @@
 {% extends "admin_edit_widget_std.tpl" %}
 
-{# Admin controls for the survey #}
+{# Admin controls for the survey (form) #}
 
 {% block widget_title %}
 {_ Charts _}

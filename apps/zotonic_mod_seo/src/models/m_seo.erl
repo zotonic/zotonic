@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017-2021 Marc Worrell
-%% @doc Model for mod_seo
+%% @copyright 2017-2023 Marc Worrell
+%% @doc Model for mod_seo configuration access and JSON-LD generation.
+%% @end
 
-%% Copyright 2017-2021 Marc Worrell
+%% Copyright 2017-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -39,6 +40,12 @@ m_get([ <<"google">>, <<"gtm">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_value(seo_google, gtm, Context), Rest}};
 m_get([ <<"yandex">>, <<"webmaster_verify">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_value(seo_yandex, webmaster_verify, Context), Rest}};
+m_get([ <<"jsonld">>, Id | Rest ], _Msg, Context) ->
+    case seo_jsonld_webpage:generate(Id, z_acl:anondo(Context)) of
+        {ok, JSON} ->
+            {ok, {z_json:encode(JSON), Rest}};
+        {error, _} = Error ->
+            Error
+    end;
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
-

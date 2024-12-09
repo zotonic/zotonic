@@ -34,7 +34,8 @@
 
     event/2,
 
-    preview_create/2
+    preview_create/2,
+    oembed_request/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -238,6 +239,7 @@ observe_media_import(#media_import{url=Url, metadata=MD}, Context) ->
                 prio = case Category of
                             website -> 11; % Prefer our own 'website' extraction
                             video -> 3;
+                            document -> 4;
                             _ -> 6
                        end,
                 category = Category,
@@ -278,32 +280,49 @@ first([<<>>|Xs]) -> first(Xs);
 first([X|_]) -> X.
 
 
-%% @doc Import a embedded medium for a rsc_import. Sanitize the provided html.
+%% @doc Import a embedded medium for a rsc_import. Sanitize the provided html. Try to fetch
+%% a fresh embed copy, as sometimes the preview URLs are not valid anymore. If the fresh OEmbed
+%% request fails then use the JSON from the importer.
 -spec observe_media_import_medium(#media_import_medium{}, z:context()) -> undefined | ok.
 observe_media_import_medium(#media_import_medium{
         id = Id,
         medium = #{
             <<"mime">> := ?OEMBED_MIME,
             <<"oembed_url">> := Url,
-            <<"oembed">> := Json
-        } = Medium }, Context) when is_map(Json) ->
+            <<"oembed">> := ImportJson
+        } = Medium }, Context) when is_map(ImportJson) ->
     case m_media:get(Id, Context) of
-        #{ <<"oembed_url">> := Url } ->
+        #{ <<"oembed_url">> := CurrentUrl } when CurrentUrl =:= Url ->
             ok;
         _Other ->
-            Service = z_convert:to_binary(maps:get(<<"oembed_service">>, Medium, undefined)),
-            MediaProps = #{
-                <<"mime">> => ?OEMBED_MIME,
-                <<"oembed_service">> => Service,
-                <<"oembed_url">> => z_sanitize:uri(Url),
-                <<"oembed">> => sanitize_json(Json, Context),
-                <<"height">> => as_int(maps:get(<<"height">>, Medium, undefined)),
-                <<"width">> => as_int(maps:get(<<"width">>, Medium, undefined)),
-                <<"orientation">> => as_int(maps:get(<<"orientation">>, Medium, undefined)),
-                <<"media_import">> => z_sanitize:uri( maps:get(<<"media_import">>, Medium, undefined ))
-            },
+            SafeUrl = z_sanitize:uri(Url),
+            {MediaProps, MediaJson} = case oembed_request(SafeUrl, Context) of
+                {ok, EmbedJson} ->
+                    {#{
+                        <<"mime">> => ?OEMBED_MIME,
+                        <<"width">> => maps:get(<<"width">>, EmbedJson, undefined),
+                        <<"height">> => maps:get(<<"height">>, EmbedJson, undefined),
+                        <<"oembed_service">> => maps:get(<<"provider_name">>, EmbedJson, undefined),
+                        <<"oembed_url">> => SafeUrl,
+                        <<"oembed">> => EmbedJson,
+                        <<"media_import">> => SafeUrl
+                    }, EmbedJson};
+                {error, _} ->
+                    SafeJson = sanitize_json(ImportJson, Context),
+                    Service = z_convert:to_binary(maps:get(<<"oembed_service">>, Medium, undefined)),
+                    {#{
+                        <<"mime">> => ?OEMBED_MIME,
+                        <<"oembed_service">> => Service,
+                        <<"oembed_url">> => SafeUrl,
+                        <<"oembed">> => SafeJson,
+                        <<"height">> => as_int(maps:get(<<"height">>, Medium, undefined)),
+                        <<"width">> => as_int(maps:get(<<"width">>, Medium, undefined)),
+                        <<"orientation">> => as_int(maps:get(<<"orientation">>, Medium, undefined)),
+                        <<"media_import">> => z_sanitize:uri( maps:get(<<"media_import">>, Medium, undefined ))
+                    }, SafeJson}
+            end,
             ok = m_media:replace(Id, MediaProps, Context),
-            preview_create_from_json(Id, Json, Context),
+            preview_create_from_json(Id, MediaJson, Context),
             ok
     end;
 observe_media_import_medium(#media_import_medium{}, _Context) ->
@@ -527,6 +546,7 @@ preview_url_from_json(_Type, Json) ->
 type_to_category(<<"photo">>) -> image;
 type_to_category(<<"video">>) -> video;
 type_to_category(<<"link">>) -> website;
+type_to_category(<<"rich">>) -> document;
 type_to_category(_Type) -> document.
 
 

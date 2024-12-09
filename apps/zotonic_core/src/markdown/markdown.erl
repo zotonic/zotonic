@@ -12,6 +12,8 @@
 -export([conv/1]).
 
 -include_lib("eunit/include/eunit.hrl").
+-include("../../include/zotonic.hrl").
+
 
 -define(SPACE, 32).
 -define(TAB,    9).
@@ -48,7 +50,7 @@ conv(Input) ->
     % io:format("UntypedLines are ~p~n", [UntypedLines]),
     {TypedLines, Refs} = type_lines(UntypedLines),
     % io:format("TypedLines are ~p~nRefs is ~p~n",
-    %          [TypedLines, Refs]),
+    %           [TypedLines, Refs]),
     unicode:characters_to_binary(parse(TypedLines, Refs)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -134,6 +136,66 @@ p1([{blockquote, P} | T], R, I, Acc) ->
     T2 = string:trim(make_str(T1, R)),
     p1(T, R, I,
        ["\n<blockquote>\n" ++ pad(I + 1) ++ "<p>" ++ T2 ++ "</p>\n</blockquote>" | Acc]);
+%% triple or quadruple code block
+p1([{codequoted, Type, Code} | T], R, I, Acc) ->
+    Type1 = htmlencode(string:trim(m_plain(lists:flatten(Type), []))),
+    Code1 = htmlencode(string:trim(m_plain(lists:flatten(Code), []))),
+    p1(T, R, I,
+       [[ "\n<pre lang=\"", Type1, "\" class=\"notranslate\">",
+          "<code class=\"notranslate language-", Type1,"\">", Code1, "</code>",
+          "</pre>\n" ] | Acc]);
+
+%% Tables
+p1([{table, Headers, Align, Rows} | T], R, I, Acc) ->
+    Html = [
+        "<table role=\"table\" class=\"table\">\n",
+            "  <thead>\n",
+                "    <tr>",
+                    lists:map(
+                        fun({Col, A}) ->
+                            [
+                                "<th",
+                                    case A of
+                                        none -> "";
+                                        center -> " align=\"center\"";
+                                        left -> " align=\"left\"";
+                                        right -> " align=\"right\""
+                                    end,
+                                ">",
+                                string:trim(make_str(snip(Col), R), both, [?SPACE]),
+                                "</th>"
+                            ]
+                        end,
+                        table_zip_align(Headers, Align)),
+                "</tr>\n",
+            "  </thead>\n",
+            "  <tbody>\n",
+            lists:map(
+                fun(Row) ->
+                    [ "    <tr>",
+                    lists:map(
+                        fun({Col, A}) ->
+                            [
+                                "<td",
+                                    case A of
+                                        none -> "";
+                                        center -> " align=\"center\"";
+                                        left -> " align=\"left\"";
+                                        right -> " align=\"right\""
+                                    end,
+                                ">",
+                                string:trim(make_str(snip(Col), R), both, [?SPACE]),
+                                "</td>"
+                            ]
+                        end,
+                        table_zip_align(Row, Align)),
+                    "</tr>\n"]
+                end,
+                Rows),
+            "  </tbody>\n"
+        "</table>\n"
+    ],
+    p1(T, R, I, [ Html | Acc ]);
 
 %% one normal is just normal...
 p1([{normal, P} | T], R, I, Acc) ->
@@ -496,6 +558,63 @@ t_l1([[{{{tag, _Type}, Tag}, _ } = H | T1] = List | T], A1, A2) ->
                  end
     end;
 
+%% Block level code ``` or ````
+t_l1([[{{punc, backtick}, _},
+       {{punc, backtick}, _},
+       {{punc, backtick}, _},
+       {{punc, backtick}, _} | T1 ] = H | T], A1, A2) ->
+    case has_backtick(T1) of
+        true ->
+            t_l1(T, A1, [{normal, H} | A2]);
+        false ->
+            {CodeLines, LinesAfterCode} = split_quadruple_quote(T, []),
+            t_l1(LinesAfterCode, A1, [{codequoted, T1, CodeLines} | A2])
+    end;
+
+t_l1([[{{punc, backtick}, _},
+       {{punc, backtick}, _},
+       {{punc, backtick}, _} | T1 ] = H | T], A1, A2) ->
+    case has_backtick(T1) of
+        true ->
+            t_l1(T, A1, [{normal, H} | A2]);
+        false ->
+            {CodeLines, LinesAfterCode} = split_triple_quote(T, []),
+            t_l1(LinesAfterCode, A1, [{codequoted, T1, CodeLines} | A2])
+    end;
+
+% Tables
+t_l1([
+        [{{punc, vbar}, _} | _ ] = H1,
+        [{{punc, vbar}, _} | _ ] = H2
+        | T
+    ], A1, A2) ->
+    N1 = length(table_split_in_cols(H1)),
+    Hs = lists:map(
+        fun(Col) -> string:trim(unicode:characters_to_binary(make_plain_str(Col))) end,
+        table_split_in_cols(H2)),
+    N2 = length(Hs),
+    IsHeaderCols = is_table_header_cols(Hs),
+    if
+        N1 >= 1, N1 =:= N2, IsHeaderCols ->
+            % Table - fetch next rows starting with '|'
+            {Rows, TRest} = lists:splitwith(
+                fun
+                    ([{{punc, vbar}, _} | _]) -> true;
+                    (_) -> false
+                end,
+                T),
+            % Split H1 in cols
+            HeaderCols = table_split_in_cols(H1),
+            % Fetch alignment from H2
+            Align = lists:map(fun table_align/1, Hs),
+            % Split all in Rows in cols
+            RowsCols = lists:map(fun table_split_in_cols/1, Rows),
+            Table = {table, HeaderCols, Align, RowsCols},
+            t_l1(TRest, A1, [ Table | A2 ]);
+        true ->
+            t_l1([H2|T], A1, [{normal, H1} | A2])
+    end;
+
 %% types a blank line or a code block
 t_l1([[{{lf, _}, _}| []]  = H | T], A1, A2) ->
     t_l1(T, A1, [{linefeed, H} | A2]);
@@ -504,7 +623,7 @@ t_l1([[{{ws, _}, _} | _T1] = H | T], A1, A2) ->
 
 %% Final clause...
 t_l1([H | T], A1, A2) ->
-    t_l1(T, A1, [{normal , H} | A2]).
+    t_l1(T, A1, [{normal, H} | A2]).
 
 t_inline(H, T1, T2, A1, A2) ->
     case snip_ref(T1) of
@@ -513,12 +632,101 @@ t_inline(H, T1, T2, A1, A2) ->
         normal                     -> t_l1(T2, A1, [{normal, H} | A2])
     end.
 
+%% Table helper functions
+table_split_in_cols([ {{punc, vbar}, _} | Ts ]) ->
+    lists:reverse(split_in_cols_1(Ts, [], [])).
+
+split_in_cols_1([{{lf, _}, _}], ColAcc, Acc) ->
+    case is_blank(ColAcc) of
+        true -> Acc;
+        false -> [ lists:reverse(ColAcc) | Acc ]
+    end;
+split_in_cols_1([], ColAcc, Acc) ->
+    case is_blank(ColAcc) of
+        true -> Acc;
+        false -> [ lists:reverse(ColAcc) | Acc ]
+    end;
+split_in_cols_1([ {{punc, bslash}, _}, {{punc, bslash}, _} = H | Ts ], ColAcc, Acc) ->
+    split_in_cols_1(Ts, [H | ColAcc], Acc);
+split_in_cols_1([ {{punc, bslash}, _}, {{punc, vbar}, _} = H | Ts ], ColAcc, Acc) ->
+    split_in_cols_1(Ts, [H | ColAcc], Acc);
+split_in_cols_1([ {{punc, vbar}, _} | Ts ], ColAcc, Acc) ->
+    split_in_cols_1(Ts, [], [ lists:reverse(ColAcc) | Acc ]);
+split_in_cols_1([ H | Ts ], ColAcc, Acc) ->
+    split_in_cols_1(Ts, [H | ColAcc], Acc).
+
+is_table_header_cols(Cols) ->
+    lists:all(fun is_table_header_col/1, Cols).
+
+is_table_header_col(Col) ->
+    re:run(Col, <<"^:?---+:?$">>) =/= nomatch.
+
+table_align(<<":", R/binary>>) ->
+    case binary:last(R) of
+        $: -> center;
+        $- -> left
+    end;
+table_align(R) ->
+    case binary:last(R) of
+        $: -> right;
+        $- -> none
+    end.
+
+table_zip_align(Cs, As) ->
+    table_zip_align_1(Cs, As, []).
+
+table_zip_align_1([], [], Acc) ->
+    lists:reverse(Acc);
+table_zip_align_1([C|Cs], [], Acc) ->
+    table_zip_align_1(Cs, [], [ {C, none} | Acc ]);
+table_zip_align_1([], [A|As], Acc) ->
+    table_zip_align_1([], As, [ {[], A} | Acc ]);
+table_zip_align_1([C|Cs], [A|As], Acc) ->
+    table_zip_align_1(Cs, As, [ {C, A} | Acc ]).
+
 %% strips blanks from the beginning and end
 strip_lines(List) -> lists:reverse(strip_l1(lists:reverse(strip_l1(List)))).
 
 strip_l1([{linefeed, _} | T]) -> strip_l1(T);
 strip_l1([{blank, _} | T])    -> strip_l1(T);
 strip_l1(List)                -> List.
+
+%% split lines till the next triple backqouted line
+split_triple_quote([], Acc) ->
+    {lists:reverse(Acc), []};
+split_triple_quote([
+        [{{punc, backtick}, _},
+         {{punc, backtick}, _},
+         {{punc, backtick}, _} | T] = Line
+        | Lines
+    ], Acc) ->
+    case is_blank(T) of
+        true -> {lists:reverse(Acc), Lines};
+        false -> split_triple_quote(Lines, [ Line | Acc ])
+    end;
+split_triple_quote([ Line | Lines ], Acc) ->
+    split_triple_quote(Lines, [ Line | Acc ]).
+
+%% split lines till the next quadruple backqouted line
+split_quadruple_quote([], Acc) ->
+    {lists:reverse(Acc), []};
+split_quadruple_quote([
+        [{{punc, backtick}, _},
+         {{punc, backtick}, _},
+         {{punc, backtick}, _},
+         {{punc, backtick}, _} | T] = Line
+        | Lines
+    ], Acc) ->
+    case is_blank(T) of
+        true -> {lists:reverse(Acc), Lines};
+        false -> split_quadruple_quote(Lines, [ Line | Acc ])
+    end;
+split_quadruple_quote([ Line | Lines ], Acc) ->
+    split_quadruple_quote(Lines, [ Line | Acc ]).
+
+has_backtick([]) -> false;
+has_backtick([{{punc, backtick}, _} | _]) -> true;
+has_backtick([_ | T]) -> has_backtick(T).
 
 %%
 %% Loads of type rules...
@@ -561,13 +769,13 @@ is_block_tag(_Other)       -> false.
 
 type_underscore(List) ->
     case type_underscore1(trim_right(List)) of
-        hr    -> {hr, List};
-        maybe -> {type_underscore2(List), List}
+        hr      -> {hr, List};
+        'maybe' -> {type_underscore2(List), List}
     end.
 
 type_underscore1([])                          -> hr;
 type_underscore1([{{md, underscore}, _} | T]) -> type_underscore1(T);
-type_underscore1(_List)                       -> maybe.
+type_underscore1(_List)                       -> 'maybe'.
 
 type_underscore2(List) ->
     case trim_right(List) of % be permissive of trailing spaces
@@ -580,19 +788,19 @@ type_underscore2(List) ->
 type_star(List) ->
     Trim = trim_right(List),
     case type_star1(Trim) of % be permssive of trailing spaces
-        hr    -> {hr, trim_right(Trim)};
-        maybe -> Type = type_star2(List),
-                 % if it is a normal line we prepend it with a special
-                 % non-space filling white space character
-                 case Type of
-                     normal -> {normal, [{{ws, none}, none} | List]};
-                     _      -> {Type, List}
-                 end
+        hr      ->  {hr, trim_right(Trim)};
+        'maybe' ->  Type = type_star2(List),
+                    % if it is a normal line we prepend it with a special
+                    % non-space filling white space character
+                    case Type of
+                        normal -> {normal, [{{ws, none}, none} | List]};
+                        _      -> {Type, List}
+                    end
     end.
 
 type_star1([])                    -> hr;
 type_star1([{{md, star}, _} | T]) -> type_star1(T);
-type_star1(_List)                 -> maybe.
+type_star1(_List)                 -> 'maybe'.
 
 type_star2(List) ->
     case trim_right(List) of
@@ -905,10 +1113,11 @@ l1([$. | T], A1, A2)       -> l1(T, [], [{{punc, fullstop}, "."}, l2(A1) | A2]);
 l1([$: | T], A1, A2)       -> l1(T, [], [{{punc, colon}, ":"}, l2(A1) | A2]);
 l1([$' | T], A1, A2)       -> l1(T, [], [{{punc, singleq}, "'"}, l2(A1) | A2]); %'
 l1([$" | T], A1, A2)       -> l1(T, [], [{{punc, doubleq}, "\""}, l2(A1) | A2]); %"
-l1([$` | T], A1, A2)       -> l1(T, [], [{{punc, backtick}, "`"}, l2(A1) | A2]); %"
-l1([$! | T], A1, A2)       -> l1(T, [], [{{punc, bang}, "!"}, l2(A1) | A2]); %"
-l1([$\\ | T], A1, A2)      -> l1(T, [], [{{punc, bslash}, "\\"}, l2(A1) | A2]); %"
-l1([$/ | T], A1, A2)       -> l1(T, [], [{{punc, fslash}, "/"}, l2(A1) | A2]); %"
+l1([$` | T], A1, A2)       -> l1(T, [], [{{punc, backtick}, "`"}, l2(A1) | A2]); %`
+l1([$! | T], A1, A2)       -> l1(T, [], [{{punc, bang}, "!"}, l2(A1) | A2]); %!
+l1([$\\ | T], A1, A2)      -> l1(T, [], [{{punc, bslash}, "\\"}, l2(A1) | A2]); %\\
+l1([$/ | T], A1, A2)       -> l1(T, [], [{{punc, fslash}, "/"}, l2(A1) | A2]); %/
+l1([$| | T], A1, A2)       -> l1(T, [], [{{punc, vbar}, "|"}, l2(A1) | A2]); %"
 l1([$( | T], A1, A2)       -> l1(T, [], [{bra, "("}, l2(A1) | A2]);
 l1([$) | T], A1, A2)       -> l1(T, [], [{ket, ")"}, l2(A1) | A2]);
 l1([$[ | T], A1, A2)       -> l1(T, [], [{{inline, open}, "["}, l2(A1) | A2]);
@@ -984,11 +1193,10 @@ get_url1([$> | T], Acc)      -> URL = lists:flatten(lists:reverse(Acc)),
 get_url1([H | T], Acc)       -> get_url1(T, [H | Acc]).
 
 get_email_addie(String) ->
-    Snip_regex = ">",
-    case re:run(String, Snip_regex, [ unicode ]) of
-        nomatch                -> not_email;
-        {match, [{N, _} | _T]} ->
-            {Possible, [$> | T]} = lists:split(N, String),
+    case lists:splitwith(fun(C) -> C =/= $> end, String) of
+        {_, []} ->
+            not_email;
+        {Possible, [$> | T]} ->
             EMail_regex = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+"
                 ++ "(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*"
                 ++ "@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+"
@@ -1047,7 +1255,8 @@ m_str1([{{inline, open}, O} | T], R, A) ->
             m_str1(Rest, R, [Tag, O | A])
     end;
 m_str1([{email, Addie} | T], R, A) ->
-    m_str1(T, R, [{tags, "\" />"}, Addie, {tags, "<a href=\"mailto:"}| A]);
+    m_str1(T, R, [ {tags, "</a>"}, Addie, {tags, "\">"}, Addie,
+                   {tags, "<a href=\"mailto:"} | A]);
 m_str1([{url, Url} | T], R, A) ->
     m_str1(T, R, [ {tags, "</a>"}, Url, {tags, "\">"}, Url,
                    {tags, "<a href=\""} | A]);
@@ -1225,7 +1434,7 @@ interpolate2([Delim, Delim | T], Delim, Tag, X, Acc) ->
 interpolate2([H | T], Delim, Tag, X, Acc) ->
     interpolate2(T, Delim, Tag, X, [H | Acc]).
 
-%% interpolate three is for double delimiters...
+%% interpolate three is for triple delimiters...
 interpolate3([], D, _Tag1, Tag2, _X, Acc)           ->
     {[], "<" ++ Tag2 ++ ">" ++ [D] ++ "</" ++ Tag2 ++ ">"
      ++ htmlchars(lists:reverse(Acc))};

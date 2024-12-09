@@ -1,9 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2022 Marc Worrell
+%% @copyright 2010-2023 Marc Worrell
 %% @doc Backup module. Creates backup of the database and files.  Allows downloading of the backup.
 %% Support creation of periodic backups.
+%% @end
 
-%% Copyright 2010-2022 Marc Worrell
+%% Copyright 2010-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -26,7 +27,7 @@
 -mod_prio(600).
 -mod_provides([backup]).
 -mod_depends([admin]).
--mod_schema(1).
+-mod_schema(2).
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
@@ -35,8 +36,12 @@
 %% interface functions
 -export([
     observe_admin_menu/3,
-    observe_rsc_update/3,
+    observe_rsc_update_done/2,
     observe_rsc_upload/2,
+    observe_search_query/2,
+    observe_tick_24h/2,
+    observe_m_config_update/2,
+
     start_backup/1,
     start_backup/2,
     list_backups/1,
@@ -52,6 +57,7 @@
     read_admin_file/1
 ]).
 
+
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_core/include/zotonic_file.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
@@ -59,9 +65,9 @@
 
 -record(state, {
     context :: z:context(),
-    backup_start :: undefined | calendar:date_time(),
+    backup_start :: undefined | calendar:datetime(),
     backup_pid :: undefined | pid(),
-    upload_start :: undefined | calendar:date_time(),
+    upload_start :: undefined | calendar:datetime(),
     upload_pid :: undefined | pid(),
     upload_name :: undefined | binary(),
     timer_ref :: timer:tref()
@@ -70,34 +76,94 @@
 % Interval for checking for new and/or changed files.
 -define(BCK_POLL_INTERVAL, 3600 * 1000).
 
+% Config values for daily backup
+-define(BACKUP_NONE, 0).
+-define(BACKUP_DB, 2).
+-define(BACKUP_ALL, 1).
+
 
 observe_rsc_upload(#rsc_upload{} = Upload, Context) ->
     backup_rsc_upload:rsc_upload(Upload, Context).
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
-     #menu_item{id=admin_backup,
-                parent=admin_modules,
-                label=?__("Backup", Context),
-                url={admin_backup},
-                visiblecheck={acl, use, mod_backup}}
+        % Menu to access all backups and settings
+        #menu_item{
+            id=admin_backup,
+            parent=admin_modules,
+            label=?__("Backup", Context),
+            url={admin_backup},
+            visiblecheck={acl, use, mod_backup}
+        },
 
-     |Acc].
+        % Menu to view and recover deleted pages
+        #menu_separator{
+            parent = admin_content,
+            visiblecheck = {acl, use, mod_backup},
+            sort=2000000
+        },
+        #menu_item{id=admin_backup_deleted,
+            parent=admin_content,
+            label=?__("Deleted pages", Context),
+            url={admin_backup_deleted},
+            visiblecheck={acl, use, mod_backup},
+            sort=2000000
+        }
+        | Acc
+    ].
 
+observe_rsc_update_done(#rsc_update_done{ action = insert, id = Id, post_props = Props }, Context) ->
+    m_backup_revision:save_revision(Id, Props, Context);
+observe_rsc_update_done(#rsc_update_done{ action = update, id = Id, post_props = Props }, Context) ->
+    m_backup_revision:save_revision(Id, Props, Context);
+observe_rsc_update_done(#rsc_update_done{ action = delete, id = Id, pre_props = Props }, Context) ->
+    m_backup_revision:save_deleted(Id, Props, Context);
+observe_rsc_update_done(#rsc_update_done{}, _Context) ->
+    ok.
 
-observe_rsc_update(#rsc_update{action=update, id=Id, props=Props}, Acc, Context) ->
-    m_backup_revision:save_revision(Id, Props, Context),
-    Acc;
-observe_rsc_update(_, Acc, _Context) ->
-    Acc.
+observe_search_query(#search_query{ name = <<"backup_deleted">>, offsetlimit = OffsetLimit }, Context) ->
+    case z_acl:is_allowed(use, mod_backup, Context) of
+        true ->
+            m_backup_revision:list_deleted(OffsetLimit, Context);
+        false ->
+            []
+    end;
+observe_search_query(#search_query{}, _Context) ->
+    undefined.
+
+observe_tick_24h(tick_24h, Context) ->
+    m_backup_revision:periodic_cleanup(Context).
+
+observe_m_config_update(#m_config_update{module=ModBackup, key=EncryptBackups}, Context)
+  when (ModBackup == <<"mod_backup">> orelse ModBackup == ?MODULE)
+       andalso (EncryptBackups == encrypt_backups orelse EncryptBackups == <<"encrypt_backups">>) ->
+    % When the backup encryption is enabled, make sure there is an encryption password
+    % in the config. When there is no password, generate a new one.
+    case m_config:get_boolean(?MODULE, EncryptBackups, Context) of
+        true ->
+            case m_config:get_value(?MODULE, backup_encrypt_password, Context) of
+                Password when is_binary(Password) andalso size(Password) > 0 ->
+                    ok;
+                _ ->
+                    m_config:set_value(?MODULE, backup_encrypt_password, z_ids:password(), Context)
+            end;
+        false ->
+            ok
+    end;
+observe_m_config_update(#m_config_update{}, _Context) ->
+    ok.
 
 
 %% @doc Callback for controller_file. Check if the file exists and return
 %% the path to the file on disk.
--spec file_exists( File :: binary(), z:context() ) -> {true, file:filename_all()} | false.
+-spec file_exists(File, Context) -> {true, FilePath} | false when
+    File :: file:filename_all(),
+    Context :: z:context(),
+    FilePath :: file:filename_all().
 file_exists(File, Context) ->
-    Root = filename:rootname(filename:rootname(File)),
+    Root = without_extension(File),
     Admin = read_admin_file(Context),
+
     case maps:get(Root, Admin, undefined) of
         undefined ->
             ?LOG_WARNING(#{
@@ -113,8 +179,8 @@ file_exists(File, Context) ->
             <<"database">> := Database,
             <<"files">> := Files
         } ->
-            case filename:extension(filename:rootname(File)) of
-                <<".sql">> when Database =/= undefined ->
+            case File of
+                Database ->
                     ?LOG_INFO(#{
                         text => <<"Download of database backup requested">>,
                         in => zotonic_mod_backup,
@@ -123,7 +189,7 @@ file_exists(File, Context) ->
                         file => File
                     }),
                     {true, filename:join([dir(Context), Database])};
-                <<".tar">> when Files =/= undefined ->
+                Files ->
                     ?LOG_INFO(#{
                         text => <<"Download of files backup requested">>,
                         in => zotonic_mod_backup,
@@ -138,7 +204,10 @@ file_exists(File, Context) ->
     end.
 
 %% @doc Callback for controller_file. Check if access is allowed.
--spec file_forbidden( File :: binary(), z:context() ) -> boolean().
+-spec file_forbidden(File, Context) -> IsForbidden when
+    File :: file:filename_all(),
+    Context :: z:context(),
+    IsForbidden :: boolean().
 file_forbidden(_File, Context) ->
     IsAllowed = (z_acl:is_admin(Context) orelse z_acl:is_allowed(use, mod_backup, Context)),
     not IsAllowed.
@@ -220,6 +289,7 @@ start_link(Args) when is_list(Args) ->
 init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
+    z_context:logger_md(Context),
     {ok, TimerRef} = timer:send_interval(?BCK_POLL_INTERVAL, periodic_backup),
     {ok, #state{
         context = z_acl:sudo(z_context:new(Context)),
@@ -275,11 +345,10 @@ handle_info(periodic_backup, #state{ backup_pid = Pid } = State) when is_pid(Pid
 handle_info(periodic_backup, #state{ upload_pid = Pid } = State) when is_pid(Pid) ->
     {noreply, State};
 handle_info(periodic_backup, State) ->
-    State1 = case m_config:get_boolean(mod_backup, daily_dump, State#state.context) of
-        true ->
-            maybe_daily_dump(State);
-        false ->
-            State
+    State1 = case daily_dump_config(State#state.context) of
+        ?BACKUP_NONE -> State;
+        ?BACKUP_ALL -> maybe_daily_dump(true, State);
+        ?BACKUP_DB -> maybe_daily_dump(false, State)
     end,
     State2 = case State1#state.backup_pid of
         undefined ->
@@ -375,7 +444,20 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
-maybe_daily_dump(State) ->
+daily_dump_config(Context) ->
+    case m_config:get_value(mod_backup, daily_dump, Context) of
+        <<"1">> ->
+            case is_filestore_enabled(Context) of
+                true -> ?BACKUP_DB;
+                false -> ?BACKUP_ALL
+            end;
+        <<"2">> ->
+            ?BACKUP_DB;
+        _ ->
+            ?BACKUP_NONE
+    end.
+
+maybe_daily_dump(IsFullBackup, State) ->
     Context = State#state.context,
     Now = {Date, Time} = calendar:universal_time(),
     case Time >= {3,0,0} of
@@ -389,7 +471,7 @@ maybe_daily_dump(State) ->
             end,
             case DoStart of
                 true ->
-                    Pid = do_backup(Now, name(Context), true, Context),
+                    Pid = do_backup(Now, name(Context), IsFullBackup, Context),
                     State#state{
                         backup_pid = Pid,
                         backup_start = Now
@@ -401,8 +483,7 @@ maybe_daily_dump(State) ->
             State
     end.
 
-maybe_filestore_upload(State) ->
-    Context = State#state.context,
+maybe_filestore_upload(#state{ context = Context } = State) ->
     case is_filestore_enabled(Context) of
         true ->
             % Check the backup.json if any files are not yet uploaded
@@ -509,7 +590,8 @@ do_backup(DT, Name, IsFullBackup, Context) ->
         fun() ->
             % NEVER have an upload and backup in parallel
             Result = do_backup_process(Name, IsFullBackup, Context),
-            update_admin_file(DT, Name, Result, Context)
+            Result1 = maybe_encrypt_files(Result, Context),
+            update_admin_file(DT, Name, Result1, Context)
         end).
 
 
@@ -534,28 +616,33 @@ do_backup_process_1(Name, IsFullBackup, Context) ->
                 full_backup => IsFilesBackup,
                 name => Name
             }),
+
             case pg_dump(Name, maps:get(db_dump, Cmds), Context) of
                 {ok, DumpFile} ->
+                    {ok, ConfigTarFile} = archive_config(Name, Context),
                     case IsFilesBackup of
                         true ->
                             case archive(Name, maps:get(archive, Cmds), Context) of
                                 {ok, TarFile} ->
                                     ?LOG_INFO(#{
-                                        text => <<"Backup finished">>,
-                                        in => zotonic_mod_backup,
-                                        result => ok,
-                                        full_backup => IsFilesBackup,
-                                        name => Name,
-                                        database => DumpFile,
-                                        files => TarFile
-                                    }),
+                                                text => <<"Backup finished">>,
+                                                in => zotonic_mod_backup,
+                                                result => ok,
+                                                full_backup => IsFilesBackup,
+                                                name => Name,
+                                                database => DumpFile,
+                                                config_files => ConfigTarFile,
+                                                files => TarFile
+                                               }),
                                     {ok, #{
-                                        database => DumpFile,
-                                        files => TarFile
-                                    }};
+                                           database => DumpFile,
+                                           config_files => ConfigTarFile,
+                                           files => TarFile
+                                          }};
                                 {error, _} ->
                                     % Ignore failed tar, at least register the db dump
                                     {ok, #{
+                                        config_files => ConfigTarFile,
                                         database => DumpFile
                                     }}
                             end;
@@ -567,10 +654,12 @@ do_backup_process_1(Name, IsFullBackup, Context) ->
                                 full_backup => IsFilesBackup,
                                 name => Name,
                                 database => DumpFile,
+                                config_files => ConfigTarFile,
                                 files => none
                             }),
                             {ok, #{
-                                database => DumpFile
+                                database => DumpFile,
+                                config_files => ConfigTarFile
                             }}
                     end;
                 {error, _} = Error ->
@@ -588,16 +677,67 @@ do_backup_process_1(Name, IsFullBackup, Context) ->
             Error
     end.
 
+maybe_encrypt_files({ok, Files}, Context) ->
+    case m_config:get_boolean(?MODULE, encrypt_backups, Context) of
+        true ->
+            case m_config:get_value(?MODULE, backup_encrypt_password, Context) of
+                Password when is_binary(Password) andalso size(Password) > 0 ->
+                    ?LOG_INFO(#{
+                                text => <<"Encrypting backup">>,
+                                in => zotonic_mod_backup
+                               }),
+
+                    Dir = dir(Context),
+                    Files1 = maps:map(fun(_K, File) ->
+                                              FullName = filename:join(Dir, File),
+                                              {ok, FullNameEnc} = mod_backup_file_crypto:password_encrypt(FullName, Password),
+                                              ok = file:delete(FullName),
+                                              filename(FullNameEnc)
+                                      end,
+                                      Files),
+
+                    ?LOG_INFO(#{
+                                text => <<"Encryption done">>,
+                                in => zotonic_mod_backup,
+                                encrypted => Files1
+                               }),
+
+                    {ok, Files1};
+                _ ->
+                    ?LOG_WARNING(#{
+                                   text => <<"Could not encrypt backups. Encryption is enabled, but there is no backup password.">>,
+                                   in => zotonic_mod_backup
+                                  }),
+                    %% 
+                    {ok, Files}
+            end;
+        false ->
+            {ok, Files}
+    end;
+maybe_encrypt_files({error, _}=Error, _Context) ->
+    Error.
+
+filename(Fullname) ->
+    lists:last(filename:split(Fullname)).
+
 update_admin_file(DT, Name, {ok, Files}, Context) ->
     Data = read_admin_file(Context),
+
     Data1 = Data#{
         Name => #{
             timestamp => z_datetime:datetime_to_timestamp(DT),
+
             database => maps:get(database, Files),
+            config_files => maps:get(config_files, Files),
             files => maps:get(files, Files, undefined),
-            is_filestore_uploaded => false
+
+            is_filestore_uploaded => false,
+
+            is_encrypted => m_config:get_boolean(?MODULE, encrypt_backups, Context) 
+                andalso (size(m_config:get_value(?MODULE, backup_encrypt_password, <<>>,  Context)) > 0)
         }
     },
+
     write_admin_file(Data1, Context);
 update_admin_file(_DT, Name, {error, _}, Context) ->
     % Delete Name, backup failed
@@ -643,14 +783,18 @@ list_backup_files(Context) ->
     List = maps:fold(
         fun(Name, Dump, Acc) ->
             Timestamp = maps:get(<<"timestamp">>, Dump),
+            IsEncrypted = (maps:get(<<"is_encrypted">>, Dump, false) =:= true),
             IsDatabase = (maps:get(<<"database">>, Dump, undefined) =/= undefined),
             IsFiles = (maps:get(<<"files">>, Dump, undefined) =/= undefined),
+            IsConfigFiles = (maps:get(<<"config_files">>, Dump, undefined) =/= undefined),
             [
                 {Timestamp, #{
                     name => Name,
                     timestamp => z_datetime:timestamp_to_datetime(Timestamp),
+                    is_encrypted => IsEncrypted,
                     is_database_present => IsDatabase,
                     is_files_present => IsFiles,
+                    is_config_files_present => IsConfigFiles,
                     is_filestore_uploaded => maps:get(<<"is_filestore_uploaded">>, Dump, false)
                 }}
                 | Acc
@@ -709,7 +853,7 @@ pg_dump(Name, DbDump, Context) ->
         end,
         Database
     ]),
-    erlang:spawn(
+    z_proc:spawn_md(
             fun() ->
                 timer:sleep(1000),
                 z_mqtt:publish(
@@ -749,7 +893,7 @@ archive(Name, Tar, Context) ->
                 "-C ", z_filelib:os_filename(ArchiveDir), " ",
                 " ."
             ]),
-            erlang:spawn(
+            z_proc:spawn_md(
                     fun() ->
                         timer:sleep(1000),
                         z_mqtt:publish(<<"model/backup/event/backup">>, #{ status => <<"archive_backup_started">> }, Context)
@@ -773,6 +917,59 @@ archive(Name, Tar, Context) ->
             ok
     end.
 
+%% Make an archive of the configuraton and security files of a site.
+archive_config(Name, Context) ->
+    Site = z_context:site(Context),
+    ConfigDirName = "config-" ++ z_convert:to_list(Site),
+
+    %% Collect all config files.
+    ConfigFiles = z_sites_config:config_files(Site),
+    ConfigFileList = make_config_filelist(filename:join([ConfigDirName, config]), ConfigFiles, []),
+
+    %% Collect all the security files of the site.
+    {ok, SecurityDir} = z_sites_config:security_dir(Site),
+    SecurityFiles = filelib:wildcard("**", SecurityDir),
+    SecurityFileList = make_filelist(filename:join([ConfigDirName, security]),
+                                     SecurityDir, SecurityFiles, []),
+
+    %% Create the tarball.
+    ConfigName = <<"config-", Name/binary>>,
+    Dir = dir(Context),
+    ArchiveName = <<ConfigName/binary,  ".tar.gz">>,
+    filename:join([Dir, ArchiveName]),
+    FileList = ConfigFileList ++ SecurityFileList,
+
+    ConfigArchiveName = filename:join([Dir, ArchiveName]),
+    ok = erl_tar:create(ConfigArchiveName, FileList, [compressed]),
+
+    {ok, ArchiveName}.
+
+make_config_filelist(_Prefix, [], Acc) ->
+    lists:reverse(Acc);
+make_config_filelist(Prefix, [Filename|Rest], Acc) ->
+    SplitFilename = filename:split(Filename),
+    ArchiveName = filename:join([Prefix | lists:nthtail(length(SplitFilename)-2, SplitFilename)]),
+    make_config_filelist(Prefix, Rest, [{ArchiveName, Filename} | Acc]).
+
+
+make_filelist(_Prefix, _Dir, [], Acc) ->
+    lists:reverse(Acc);
+make_filelist(Prefix, Dir, [File|Rest], Acc) ->
+    ArchiveName = filename:join(Prefix, File),
+    FullName = filename:join(Dir, File),
+    make_filelist(Prefix, Dir, Rest, [{ArchiveName, FullName} | Acc]).
+
+
+%%
+%% Helpers
+%%
+
+%% Strip all extensions from a filename.
+without_extension(Filename) ->
+    case filename:rootname(Filename) of
+        Filename -> Filename;
+        Root -> without_extension(Root)
+    end.
 
 %% @doc Check if we can make backups, the configuration is ok
 check_configuration() ->

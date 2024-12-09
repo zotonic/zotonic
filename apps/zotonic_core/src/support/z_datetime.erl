@@ -80,6 +80,7 @@
     week_boundaries/2,
 
     timestamp/0,
+    msec/0,
 
     timestamp_to_datetime/1,
     datetime_to_timestamp/1,
@@ -108,7 +109,9 @@
                           | {integer(),integer(),integer()}
                           | {{integer(),integer(),integer()}, {integer()|undefined,integer()|undefined,integer()|undefined}}.
 
--export_type([ datetime/0, date/0, fixable_datetime/0 ]).
+-type timestamp() :: integer().
+
+-export_type([ datetime/0, date/0, fixable_datetime/0, timestamp/0 ]).
 
 
 %% @doc Format the current date according to the format and the timezone settings in the context.
@@ -135,7 +138,9 @@ format_opts(Date, Tz, Context) ->
     ].
 
 %% @doc Convert a time to the local context time using the current timezone.
--spec to_local(calendar:datetime()|undefined|time_not_exists, string()|binary()|z:context()) -> calendar:datetime() | undefined.
+-spec to_local(DateTime, TimeZone) -> calendar:datetime() | undefined when
+    DateTime :: calendar:datetime() | undefined | time_not_exists,
+    TimeZone :: string() | binary() | z:context().
 to_local(undefined, _Tz) ->
     undefined;
 to_local(time_not_exists, _Tz) ->
@@ -179,7 +184,9 @@ to_local(DT, Tz) ->
     end.
 
 %% @doc Convert a time to the local context time using the current timezone.
--spec to_utc(calendar:datetime()|undefined|time_not_exists, string()|binary()|z:context()) -> calendar:datetime() | undefined.
+-spec to_utc(DateTime, TimeZone) -> calendar:datetime() | undefined when
+    DateTime :: calendar:datetime() | undefined | time_not_exists,
+    TimeZone :: string() | binary() | z:context().
 to_utc(undefined, _Tz) ->
     undefined;
 to_utc(time_not_exists, _Tz) ->
@@ -227,13 +234,13 @@ to_utc(DT, Tz) ->
 %% to_time/1.  When the input is a string, it is expected to be in iso
 %% 8601 format, although it can also handle timestamps without time
 %% zones. The time component of the datetime is optional.
--spec to_datetime( Input ) -> calendar:datetime()
-    when Input :: undefined
-                | binary()
-                | string()
-                | integer()
-                | calendar:datetime()
-                | {Y::integer(), M::pos_integer(), D::pos_integer()}.
+-spec to_datetime( Input ) -> calendar:datetime() | undefined when
+    Input :: undefined
+            | binary()
+            | string()
+            | integer()
+            | calendar:datetime()
+            | {Y::integer(), M::pos_integer(), D::pos_integer()}.
 to_datetime(undefined) ->
     undefined;
 to_datetime(N) when is_integer(N) ->
@@ -254,51 +261,51 @@ to_datetime(DT, Tz) ->
 
 to_dt({{_,_,_},{_,_,_}} = DT, _Now) -> DT;
 to_dt({_,_,_} = D, _Now) -> {D, {0,0,0}};
-to_dt(B, Now) when is_binary(B) ->  to_dt(binary_to_list(B), Now);
 to_dt(<<"now">>, Now) -> Now;
 to_dt(<<"today">>, Now) -> Now;
-to_dt(<<"tomorrow">>, Now) ->    relative_time(1, '+', "day", Now);
-to_dt(<<"yesterday">>, Now) ->   relative_time(1, '+', "day", Now);
-to_dt(<<"+", Relative/binary>>, Now) -> to_relative_time('+', binary_to_list(Relative), Now);
-to_dt(<<"-", Relative/binary>>, Now) -> to_relative_time('-', binary_to_list(Relative), Now);
+to_dt(<<"tomorrow">>, Now) -> relative_time(1, '+', [<<"day">>], Now);
+to_dt(<<"yesterday">>, Now) -> relative_time(1, '+', [<<"day">>], Now);
+to_dt(<<"+", Relative/binary>>, Now) -> to_relative_time('+', Relative, Now);
+to_dt(<<"-", Relative/binary>>, Now) -> to_relative_time('-', Relative, Now);
 to_dt("now", Now) -> Now;
 to_dt("today", Now) -> Now;
-to_dt("tomorrow", Now) ->    relative_time(1, '+', "day", Now);
-to_dt("yesterday", Now) ->   relative_time(1, '+', "day", Now);
+to_dt("tomorrow", Now) -> relative_time(1, '+', [<<"day">>], Now);
+to_dt("yesterday", Now) -> relative_time(1, '+', [<<"day">>], Now);
 to_dt("+"++Relative, Now) -> to_relative_time('+', Relative, Now);
 to_dt("-"++Relative, Now) -> to_relative_time('-', Relative, Now);
 to_dt(DT, _Now) -> z_convert:to_datetime(DT).
 
-to_relative_time(Op, S, Now) ->
-    Ts = string:tokens(S, " "),
-    Ts1 = [ T || T <- Ts, T =/= [] ],
-    relative_time(1, Op, Ts1, Now).
+to_relative_time(Op, S, Now) when is_list(S) ->
+    to_relative_time(Op, z_convert:to_binary(S), Now);
+to_relative_time(Op, S, Now) when is_binary(S) ->
+    Ts = binary:split(S, <<" ">>, [ global, trim_all ]),
+    relative_time(1, Op, Ts, Now).
 
-relative_time(_N, Op, [[C|_]=N|Ts], Now) when C >= $0, C =< $9 ->
-    relative_time(list_to_integer(N), Op, Ts, Now);
-relative_time(N, '+', ["minute"|_], Now) ->    next_minute(Now, N);
-relative_time(N, '+', ["hour"|_], Now) ->      next_hour(Now, N);
-relative_time(N, '+', ["day"|_], Now) ->       next_day(Now, N);
-relative_time(N, '+', ["sunday"|_], Now) ->    next_day(week_start(7, Now), N*7);
-relative_time(N, '+', ["monday"|_], Now) ->    next_day(week_start(1, Now), N*7);
-relative_time(N, '+', ["tuesday"|_], Now) ->   next_day(week_start(2, Now), N*7);
-relative_time(N, '+', ["wednesday"|_], Now) -> next_day(week_start(3, Now), N*7);
-relative_time(N, '+', ["thursday"|_], Now) ->  next_day(week_start(4, Now), N*7);
-relative_time(N, '+', ["friday"|_], Now) ->    next_day(week_start(5, Now), N*7);
-relative_time(N, '+', ["saturday"|_], Now) ->  next_day(week_start(6, Now), N*7);
-relative_time(N, '+', ["week"|_], Now) ->      next_week(Now, N);
-relative_time(N, '+', ["month"|_], Now) ->     next_month(Now, N);
-relative_time(N, '+', ["year"|_], Now) ->      next_year(Now, N);
-relative_time(N, '-', ["day"|_], Now) ->       prev_day(Now, N);
-relative_time(N, '-', ["sunday"|_], Now) ->    prev_day(week_start(7, Now), N*7);
-relative_time(N, '-', ["monday"|_], Now) ->    prev_day(week_start(1, Now), N*7);
-relative_time(N, '-', ["tuesday"|_], Now) ->   prev_day(week_start(2, Now), N*7);
-relative_time(N, '-', ["wednesday"|_], Now) -> prev_day(week_start(3, Now), N*7);
-relative_time(N, '-', ["thursday"|_], Now) ->  prev_day(week_start(4, Now), N*7);
-relative_time(N, '-', ["friday"|_], Now) ->    prev_day(week_start(5, Now), N*7);
-relative_time(N, '-', ["week"|_], Now) ->      prev_week(Now, N);
-relative_time(N, '-', ["month"|_], Now) ->     prev_month(Now, N);
-relative_time(N, '-', ["year"|_], Now) ->      prev_year(Now, N);
+relative_time(_N, Op, [<<C, _/binary>>=N|Ts], Now) when C >= $0, C =< $9 ->
+    relative_time(binary_to_integer(N), Op, Ts, Now);
+relative_time(N, '+', [<<"minute", _/binary>>|_], Now) ->    next_minute(Now, N);
+relative_time(N, '+', [<<"hour", _/binary>>|_], Now) ->      next_hour(Now, N);
+relative_time(N, '+', [<<"day", _/binary>>|_], Now) ->       next_day(Now, N);
+relative_time(N, '+', [<<"sunday", _/binary>>|_], Now) ->    next_day(week_start(7, Now), N*7);
+relative_time(N, '+', [<<"monday", _/binary>>|_], Now) ->    next_day(week_start(1, Now), N*7);
+relative_time(N, '+', [<<"tuesday", _/binary>>|_], Now) ->   next_day(week_start(2, Now), N*7);
+relative_time(N, '+', [<<"wednesday", _/binary>>|_], Now) -> next_day(week_start(3, Now), N*7);
+relative_time(N, '+', [<<"thursday", _/binary>>|_], Now) ->  next_day(week_start(4, Now), N*7);
+relative_time(N, '+', [<<"friday", _/binary>>|_], Now) ->    next_day(week_start(5, Now), N*7);
+relative_time(N, '+', [<<"saturday", _/binary>>|_], Now) ->  next_day(week_start(6, Now), N*7);
+relative_time(N, '+', [<<"week", _/binary>>|_], Now) ->      next_week(Now, N);
+relative_time(N, '+', [<<"month", _/binary>>|_], Now) ->     next_month(Now, N);
+relative_time(N, '+', [<<"year", _/binary>>|_], Now) ->      next_year(Now, N);
+relative_time(N, '-', [<<"day", _/binary>>|_], Now) ->       prev_day(Now, N);
+relative_time(N, '-', [<<"sunday", _/binary>>|_], Now) ->    prev_day(week_start(7, Now), N*7);
+relative_time(N, '-', [<<"monday", _/binary>>|_], Now) ->    prev_day(week_start(1, Now), N*7);
+relative_time(N, '-', [<<"tuesday", _/binary>>|_], Now) ->   prev_day(week_start(2, Now), N*7);
+relative_time(N, '-', [<<"wednesday", _/binary>>|_], Now) -> prev_day(week_start(3, Now), N*7);
+relative_time(N, '-', [<<"thursday", _/binary>>|_], Now) ->  prev_day(week_start(4, Now), N*7);
+relative_time(N, '-', [<<"friday", _/binary>>|_], Now) ->    prev_day(week_start(5, Now), N*7);
+relative_time(N, '-', [<<"week", _/binary>>|_], Now) ->      prev_week(Now, N);
+relative_time(N, '-', [<<"month", _/binary>>|_], Now) ->     prev_month(Now, N);
+relative_time(N, '-', [<<"year", _/binary>>|_], Now) ->      prev_year(Now, N);
 relative_time(_N, _Op, _Unit, _Now) ->         undefined.
 
 %% @doc Show a humanized version of a relative datetime.  Like "4 months, 3 days ago".
@@ -632,11 +639,17 @@ day_add(Date, Num) when Num > 0 ->
     day_add(next_day(Date), Num - 1).
 
 
+%% @doc Return the millisec value of the current clock.
+-spec msec() -> integer().
+msec() ->
+    erlang:system_time(millisecond).
 
 % Constant value of calendar:datetime_to_gregorian_seconds({{1970,1,1},{0,0,0}})
 -define(SECS_1970, 62167219200).
 
 %% @doc Calculate the current UNIX timestamp (seconds since Jan 1, 1970)
+-spec timestamp() -> SecondsSince1970
+    when SecondsSince1970 :: integer().
 timestamp() ->
     calendar:datetime_to_gregorian_seconds(calendar:universal_time())-?SECS_1970.
 

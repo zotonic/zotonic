@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell
-%%
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Send e-mail to a recipient. Optionally queue low priority messages.
+%% @end
 
-%% Copyright 2009-2022 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -259,11 +259,11 @@ split_name_email(Email) ->
             {z_string:trim(unicode:characters_to_binary(b(N), utf8)), unicode:characters_to_binary(b(E), utf8)};
         {error,{1,smtp_rfc5322_parse,["syntax error before: ","'>'"]}} ->
             % Issue parsing emails without domain, add a domain before the final '>' and try again
-            Email2 = iolist_to_binary(re:replace(Email1, <<">$">>, <<"@example.com>">>)),
+            Email2 = iolist_to_binary(re:replace(Email1, <<">$">>, <<"x@example.com>">>)),
             case smtp_util:parse_rfc5322_addresses(Email2) of
                 {ok, [{N,E}|_]} ->
                     N1 = z_string:trim(unicode:characters_to_binary(b(N), utf8)),
-                    E1 = unicode:characters_to_binary(re:replace(b(E), <<"@example.com$">>, <<>>), utf8),
+                    E1 = unicode:characters_to_binary(re:replace(b(E), <<"x@example.com$">>, <<>>), utf8),
                     {N1, E1};
                 {error, _} ->
                     {z_string:trim(z_convert:to_binary(Email1)), <<>>}

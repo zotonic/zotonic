@@ -42,12 +42,7 @@ event(#postback{message={delete_rsc, Id, OnSuccess}}, Context) ->
     case z_acl:rsc_deletable(Id, Context) of
         true ->
             ok = m_rsc:delete(Id, Context),
-            lists:foldl(
-                fun (Act, Ctx) ->
-                    z_render:wire(Act, Ctx)
-                end,
-                Context,
-                lists:flatten(OnSuccess));
+            z_render:wire(OnSuccess, Context);
         false ->
-            z_render:growl_error("You are not allowed to delete this page.", Context)
+            z_render:growl_error(?__("You are not allowed to delete this page.", Context), Context)
     end.

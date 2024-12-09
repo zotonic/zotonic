@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2013 Marc Worrell
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Identity administration.  Adds overview of users to the admin and enables to add passwords on the edit page.
 
-%% Copyright 2009-2013 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -118,14 +118,32 @@ event(#postback{message={identity_verify_confirm, Args}}, Context) ->
     end;
 event(#postback{message={identity_verify, Args}}, Context) ->
     {id, RscId} = proplists:lookup(id, Args),
-    {idn_id, IdnId} = proplists:lookup(idn_id, Args),
-    case send_verification(RscId, IdnId, Context) of
-        {error, notfound} ->
-            z_render:growl_error("Sorry, can not find this identity.", Context);
-        {error, unsupported} ->
-            z_render:growl_error("Sorry, can not verify this identity.", Context);
-        ok ->
-            z_render:growl(?__("Sent verification e-mail.", Context), Context)
+    case proplists:lookup(idn_id, Args) of
+        {idn_id, IdnId} ->
+            case send_verification(RscId, IdnId, Context) of
+                ok ->
+                    z_render:growl(?__("Sent verification e-mail.", Context), Context);
+                {error, enoent} ->
+                    z_render:growl_error("Sorry, can not find this identity.", Context);
+                {error, unsupported} ->
+                    z_render:growl_error("Sorry, can not verify this identity.", Context)
+            end;
+        none ->
+            case z_acl:user(Context) =:= RscId orelse z_acl:rsc_editable(RscId, Context) of
+                true ->
+                    case m_identity:verify_primary_email(RscId, Context) of
+                        {ok, sent} ->
+                            z_render:growl(?__("Sent verification e-mail.", Context), Context);
+                        {ok, verified} ->
+                            z_render:growl(?__("The e-mail address has been verified.", Context), Context);
+                        {error, enoent} ->
+                            z_render:growl_error("Sorry, can not find this identity.", Context);
+                        {error, _} ->
+                            z_render:growl_error("Sorry, can not verify this identity.", Context)
+                    end;
+                false ->
+                    z_render:growl_error(?__("Sorry, you are not allowed to verify this email address.", Context), Context)
+            end
     end;
 event(#postback{message={identity_verify_check, Args}}, Context) ->
     {idn_id, IdnId} = proplists:lookup(idn_id, Args),
@@ -189,8 +207,9 @@ event(#postback{message={identity_delete, Args}}, Context) ->
     end;
 
 % Add an identity
-event(#postback{message={identity_add, Args}}, Context) ->
+event(#postback{message={identity_add, Args}}, Context0) ->
     {id, RscId} = proplists:lookup(id, Args),
+    Context = z_render:wire(proplists:get_all_values(on_submit, Args), Context0),
     case m_rsc:is_editable(RscId, Context) of
         true ->
             Type = z_convert:to_atom(proplists:get_value(type, Args, email)),
@@ -281,7 +300,7 @@ is_email_identity_category(IsA) when is_list(IsA) ->
 send_verification(RscId, IdnId, Context) ->
     case m_identity:get(IdnId, Context) of
         undefined ->
-            {error, notfound};
+            {error, enoent};
         Idn ->
             {rsc_id, RscId} = proplists:lookup(rsc_id, Idn),
             case proplists:get_value(type, Idn) of
@@ -310,7 +329,7 @@ verify(IdnId, VerifyKey, Context) ->
                 N when is_integer(N) ->
                     case m_identity:get(N, Context) of
                         undefined ->
-                            {error, notfound};
+                            {error, enoent};
                         Idn ->
                             case z_convert:to_bool(proplists:get_value(is_verified, Idn)) of
                                 true -> ok;
@@ -318,7 +337,7 @@ verify(IdnId, VerifyKey, Context) ->
                             end
                     end;
                 _ ->
-                    {error, notfound}
+                    {error, enoent}
             end;
         Idn ->
             % Set the identity to verified
@@ -332,27 +351,32 @@ verify(IdnId, VerifyKey, Context) ->
             end
     end.
 
-
-search({users, []}, OffsetLimit, Context) ->
-    search({user, [{text,undefined},{users_only,true}]}, OffsetLimit, Context);
-search({users, [{users_only,UsersOnly}]}, OffsetLimit, Context) ->
-    search({user, [{text,undefined},{users_only,UsersOnly}]}, OffsetLimit, Context);
-search({users, [{text,Text}]}, OffsetLimit, Context) ->
-    search({user, [{text,Text},{user_only,true}]}, OffsetLimit, Context);
-search({users, [{text,QueryText}, {users_only, UsersOnly0}]}, _OffsetLimit, Context) ->
-    UsersOnly = z_convert:to_bool(UsersOnly0),
+search({users, QArgs}, _OffsetLimit, Context) ->
+    QueryText = proplists:get_value(text, QArgs, undefined),
+    UsersOnly = z_convert:to_bool(proplists:get_value(users_only, QArgs, true)),
     {TSJoin, Where, Args, Order} = case z_utils:is_empty(QueryText) of
                         true ->
-                            {[], [], [], "r.pivot_title"};
+                            {"", "", [], "r.pivot_title"};
                         false ->
                             {", plainto_tsquery($2, $1) query",
                              "query @@ r.pivot_tsv",
                              [QueryText, z_pivot_rsc:stemmer_language(Context)],
                              "ts_rank_cd(pivot_tsv, query, 32)"}
                      end,
-    IdnJoin = case UsersOnly of
-                true -> " join identity i on (r.id = i.rsc_id and i.type = 'username_pw') ";
-                false -> ""
+    {Where1, Args1} = case UsersOnly of
+                true ->
+                    Idns = m_identity:user_types(Context),
+                    {[
+                        case Where of
+                            "" -> "";
+                            _ -> [ Where, " and " ]
+                        end,
+                        " r.id in (select i.rsc_id from identity i where i.type = any($",
+                        integer_to_list(length(Args)+1),
+                        ")) "
+                    ], Args ++ [ Idns ]};
+                false ->
+                    {Where, Args}
               end,
     Cats = case UsersOnly of
                 true -> [];
@@ -360,10 +384,10 @@ search({users, [{text,QueryText}, {users_only, UsersOnly0}]}, _OffsetLimit, Cont
            end,
     #search_sql{
        select="r.id",
-       from="rsc r " ++ IdnJoin ++ TSJoin,
-       where=Where,
+       from="rsc r " ++ TSJoin,
+       where=Where1,
        order=Order,
-       args=Args,
+       args=Args1,
        cats=Cats,
        tables=[{rsc,"r"}]
       };

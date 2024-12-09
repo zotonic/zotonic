@@ -3,12 +3,14 @@
 
 Show more results of the current search query inline on the page.
 
-The moreresults action is an alternative to using a next/previous pager to paginate through search results. Instead, moreresults lets you load more results from the current search, directly onto the same page. This feature is similar to Twitter’s *more* button, Slashdot’s *many more* button, and others.
+The moreresults action is an alternative to using a next/previous pager to paginate through search results.
+Instead, moreresults lets you load more results from the current search, directly onto the same page.
+This feature is similar to Twitter’s *more* button, Slashdot’s *many more* button, and others.
 
 Using it is quite simple. The only special thing you need is that every result item should go into its own template.
 The minimal example is something like the following::
 
-   {% with m.search[{query cat="media" pagelen=10 }] as result %}
+   {% with m.search.query::%{ cat: "media", pagelen: 10 } as result %}
      <div id="results">
        {% for id in result %}
          {% include "_item.tpl" %}
@@ -48,7 +50,7 @@ Arguments
 
 Example::
 
-   {% with m.search[{query cat="media" pagelen=16 }] as result %}
+   {% with m.search.query::%{ cat: "media", pagelen: 16 } as result %}
      <div id="results">
         {% include "_items.tpl" %}
      </div>
@@ -62,20 +64,21 @@ Example::
    {% endwith %}
 
 Note that here we use the ``lazy`` scomp, which will perform the action if it is scrolled into view.
-Because we are using the ``lazy`` scomp we have to add the ``visible`` argument so that the re-loaded ``moreresults`` action will be wired for visibility and not on for a click.
-In this way the page loads automatically more results if the user is scrolls down.
+Because we are using the ``lazy`` scomp we have to add the ``visible`` argument so that the re-loaded
+``moreresults`` action will be wired for visibility and not for a click. In this way the page loads
+automatically more results if the user scrolls down.
 
-Where ``_items.tpl`` displays the found pages in rows of four elements::
+The template ``_items.tpl`` displays the found pages in rows of four elements::
 
    {% for ids in result|chunk:4 %}
-      <div class="row-fluid">
+      <div class="row">
       {% for id in ids %}
-          <div class="span4">
+          <div class="col-md-3">
               <h3><a href="{{ id.page_url }}">{{ id.title }}</a></h3>
               <p>{{ id.summary }}</p>
           </div>
       {% endfor %}
       </div>
    {% empty %}
-      <div class="row-fluid"></div>
+      <div class="row"></div>
    {% endfor %}

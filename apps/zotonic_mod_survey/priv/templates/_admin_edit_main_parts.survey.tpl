@@ -32,8 +32,8 @@
 
         {% catinclude "_admin_edit_depiction.tpl" id %}
 
-        {% include "_admin_edit_content_advanced.tpl" %}
-        {% include "_admin_edit_content_seo.tpl" show_header %}
+        {% catinclude "_admin_edit_content_advanced.tpl" id %}
+        {% optional include "_admin_edit_content_seo.tpl" show_header %}
      </div>
 
      <div class="tab-pane" id="survey-settings">
@@ -73,10 +73,4 @@
     window.z_translations["Are you sure you want to delete this page?<br/>This also deletes all questions on this page."] = "{_ Are you sure you want to delete this page?<br/>This also deletes all questions on this page. _}";
     window.z_translations["Are you sure you want to delete this question?"] = "{_ Are you sure you want to delete this question? _}";
     window.z_translations["Are you sure you want to delete this page jump?"] = "{_ Are you sure you want to delete this page jump? _}";
-
-    $('.pages').on('click', '.block-page a.page-connect', function(event) {
-        window.zBlockConnectTrigger = this;
-        z_event("admin-block-connect", {});
-        event.preventDefault();
-    });
 {% endjavascript %}

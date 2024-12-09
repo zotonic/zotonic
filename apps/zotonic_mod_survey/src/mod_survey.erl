@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2022 Marc Worrell
-%% @doc Survey module. Define surveys and let people fill them in.
+%% @copyright 2010-2024 Marc Worrell
+%% @doc Survey module. Define surveys and generic forms and let people fill them in.
+%% @end
 
-%% Copyright 2010-2022 Marc Worrell
+%% Copyright 2010-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -40,16 +41,22 @@
     observe_export_resource_header/2,
     observe_export_resource_data/2,
 
+    observe_acl_is_allowed/2,
+
     get_page/3,
 
     do_submit/4,
-    collect_answers/3,
+
+    save_submit/2,
+
+    collect_answers/4,
     render_next_page/8,
     go_button_target/4,
     module_name/1
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+-include_lib("zotonic_mod_survey/include/survey.hrl").
 
 
 %% @doc Schema for mod_survey lives in separate module
@@ -112,8 +119,9 @@ event(#postback{message={survey_back, Args}}, Context) ->
 
 event(#postback{message={survey_remove_result_confirm, Args}}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
-    {answer_id, _AnswerId} = proplists:lookup(answer_id, Args),
-    case z_acl:rsc_editable(SurveyId, Context) of
+    {answer_id, AnswerId} = proplists:lookup(answer_id, Args),
+
+    case z_acl:is_allowed(delete_result, #acl_survey{id=SurveyId, answer_id=AnswerId}, Context) of
         true ->
             z_render:wire({confirm, [
                     {is_dangerous_action, true},
@@ -130,12 +138,13 @@ event(#postback{message={survey_remove_result_confirm, Args}}, Context) ->
 event(#postback{message={survey_remove_result, Args}}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
     {answer_id, AnswerId} = proplists:lookup(answer_id, Args),
-    case z_acl:rsc_editable(SurveyId, Context) of
+
+    case z_acl:is_allowed(delete_result, #acl_survey{id=SurveyId, answer_id=AnswerId}, Context) of
         true ->
             m_survey:delete_result(SurveyId, AnswerId, Context),
             Target = "survey-result-"++z_convert:to_list(AnswerId),
             z_render:wire([
-                    {growl, [{text, ?__("Survey result deleted.", Context)}]},
+                    {growl, [{text, ?__("Result deleted.", Context)}]},
                     {slide_fade_out, [{target, Target}]}
                 ], Context);
         false ->
@@ -147,7 +156,7 @@ observe_admin_edit_blocks(#admin_edit_blocks{id=Id}, Menu, Context) ->
     case m_rsc:is_a(Id, survey, Context) of
         true ->
             [
-                {100, ?__("Survey Questions", Context), [
+                {100, ?__("Questions", Context), [
                     {survey_truefalse, ?__("True/False", Context)},
                     {survey_yesno, ?__("Yes/No", Context)},
                     {survey_likert, ?__("Likert", Context)},
@@ -213,9 +222,9 @@ observe_export_resource_filename(#export_resource_filename{}, _Context) ->
 observe_export_resource_header(#export_resource_header{dispatch=survey_results_download, id=Id}, Context) ->
     case m_survey:is_allowed_results_download(Id, Context) of
         true ->
-            {Hs, Promps, Data} = m_survey:survey_results_prompts(Id, false, Context),
+            {Hs, Prompts, Data} = m_survey:survey_results_prompts(Id, false, Context),
             Data1 = [ Row || {_Id, Row} <- Data ],
-            {ok, Hs, [ Promps | Data1 ]};
+            {ok, Hs, [ Prompts | Data1 ]};
         false ->
             throw({stop_request, 403})
     end;
@@ -228,6 +237,43 @@ observe_export_resource_data(#export_resource_data{dispatch=survey_results_downl
 observe_export_resource_data(#export_resource_data{}, _Context) ->
     undefined.
 
+%% @doc Check access to the survey answers.
+observe_acl_is_allowed(#acl_is_allowed{
+        action = view_result,
+        object = #acl_survey{
+            id = SurveyId,
+            answer_id = AnswerId
+        }}, Context) ->
+    z_acl:rsc_editable(SurveyId, Context) orelse m_survey:is_answer_user(AnswerId, Context);
+observe_acl_is_allowed(#acl_is_allowed{
+        action = update_result,
+        object = #acl_survey{
+            id = SurveyId,
+            answer_id = AnswerId
+        }}, Context) ->
+    z_acl:rsc_editable(SurveyId, Context)
+    orelse (        z_convert:to_integer(m_rsc:p_no_acl(SurveyId, <<"survey_multiple">>, Context)) =:= 2
+            andalso m_survey:is_answer_user(AnswerId, Context));
+observe_acl_is_allowed(#acl_is_allowed{
+        action = delete_result,
+        object = #acl_survey{ id = SurveyId }}, Context) ->
+    z_acl:rsc_editable(SurveyId, Context);
+observe_acl_is_allowed(#acl_is_allowed{
+    action = Action,
+    object = #acl_mqtt{
+        topic = [ <<"user">>, UserId, <<"survey-submission">>, SurveyId | _ ]
+    }}, Context) when Action =:= subscribe; Action =:= publish ->
+    CurrentUser = z_acl:user(Context),
+    UserId1 = m_rsc:rid(UserId, Context),
+    SurveyId1 = m_rsc:rid(SurveyId, Context),
+    if
+        UserId1 =:= CurrentUser ->
+            z_acl:rsc_visible(SurveyId1, Context);
+        true ->
+            z_acl:rsc_editable(SurveyId1, Context)
+    end;
+observe_acl_is_allowed(#acl_is_allowed{}, _Context) ->
+    undefined.
 
 get_page(Id, Nr, #context{} = Context) when is_integer(Nr) ->
     case m_rsc:p(Id, <<"blocks">>, Context) of
@@ -280,9 +326,9 @@ render_update(#render{} = Render, Args, Context) ->
 render_next_page(Id, 0, _Direction, _Answers, _History, _Editing, Args, Context) when is_integer(Id) ->
     case z_convert:to_binary(proplists:get_value(viewer, Args)) of
         <<"overlay">> ->
-            z_render:dialog_close(Context);
-        <<"dialog">> ->
             z_render:overlay_close(Context);
+        <<"dialog">> ->
+            z_render:dialog_close(Context);
         _ ->
             z_render:wire({redirect, [{id, Id}]}, Context)
     end;
@@ -329,7 +375,8 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Args, Context
                         rsc_id => Id,
                         page_name => Name
                     }),
-                    z_render:growl_error("Error in survey, could not find page "++z_convert:to_list(Name), Context);
+                    NameSafe = z_html:escape(Name),
+                    z_render:growl_error(<<"Error in survey, could not find page ", NameSafe/binary>>, Context);
 
                 {error, Reason} ->
                     ?LOG_ERROR(#{
@@ -347,7 +394,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Args, Context
 
                 submit ->
                     %% That was the last page. Show a thank you and save the result.
-                    case do_submit(Id, Questions, Answers2, Editing, Context) of
+                    case do_submit(Id, Questions, Answers2, Editing, Args, Context) of
                         ok ->
                             IsShowResults = z_convert:to_bool(m_rsc:p(Id, survey_show_results, Context)),
                             render_result_page(Id, Editing, IsShowResults, History, As, Viewer, Args, Context);
@@ -674,7 +721,8 @@ is_page_end(#{ <<"type">> := <<"survey_stop">> }) -> true;
 is_page_end(_) -> false.
 
 
-%% @doc Collect all answers per question, save to the database.
+%% @doc Collect all answers per question, save to the database. External entry point
+%% in use by some websites. Keep this for backwards compatibility.
 -spec do_submit(m_rsc:resource_id(), Questions, Answers, z:context()) ->
           ok
         | {ok, z:context()}
@@ -682,53 +730,59 @@ is_page_end(_) -> false.
         when Questions :: list(map()),
              Answers :: list().
 do_submit(SurveyId, Questions, Answers, Context) ->
-    do_submit(SurveyId, Questions, Answers, undefined, Context).
+    do_submit(SurveyId, Questions, Answers, undefined, [], Context).
+
 
 %% @todo Check if we are missing any answers
--spec do_submit(m_rsc:resource_id(), Questions, Answers, Editing, z:context()) ->
+-spec do_submit(m_rsc:resource_id(), Questions, Answers, Editing, SubmitArgs, Context) ->
           ok
-        | {ok, z:context()}
+        | {ok, ContextOrRender}
         | {error, term()}
     when Questions :: list(map()),
          Answers :: list(),
          Editing :: undefined | {editing, AnswerId, Actions},
          AnswerId :: integer(),
-         Actions :: list() | tuple() | undefined.
-do_submit(SurveyId, Questions, Answers, undefined, Context) ->
-    {FoundAnswers, Missing} = collect_answers(Questions, Answers, Context),
+         Actions :: list() | tuple() | undefined,
+         SubmitArgs :: proplists:proplist(),
+         Context :: z:context(),
+         ContextOrRender :: z:context() | #render{}.
+do_submit(SurveyId, Questions, Answers, undefined, SubmitArgs, Context) ->
+    {FoundAnswers, Missing} = collect_answers(SurveyId, Questions, Answers, Context),
     case z_notifier:first(
         #survey_submit{
             id = SurveyId,
-            handler = m_rsc:p_no_acl(SurveyId, survey_handler, Context),
+            handler = m_rsc:p_no_acl(SurveyId, <<"survey_handler">>, Context),
             answers = FoundAnswers,
             missing = Missing,
-            answers_raw = Answers
+            answers_raw = Answers,
+            submit_args = SubmitArgs
         },
         Context)
     of
         undefined ->
-            StorageAnswers = survey_answers_to_storage(FoundAnswers),
-            {ok, ResultId} = insert_survey_submission(SurveyId, StorageAnswers, Context),
-            maybe_mail(SurveyId, Answers, ResultId, false, Context),
+            save_submit(SurveyId, FoundAnswers, Answers, Context),
             ok;
         ok ->
             maybe_mail(SurveyId, Answers, undefined, false, Context),
             ok;
-        {ok, _Context1} = Handled ->
+        {save, #context{}=Context1} ->
+            %% Use the passed context to save the answers.
+            save_submit(SurveyId, FoundAnswers, Answers, Context1),
+            {ok, Context1};
+        {save, #render{}=Render} ->
+            save_submit(SurveyId, FoundAnswers, Answers, Context),
+            {ok, Render};
+        {ok, _ContextOrRender} = Handled ->
             maybe_mail(SurveyId, Answers, undefined, false, Context),
             Handled;
         {error, _Reason} = Error ->
             Error
     end;
-do_submit(SurveyId, Questions, Answers, {editing, AnswerId, _Actions}, Context) ->
+do_submit(SurveyId, Questions, Answers, {editing, AnswerId, _Actions}, _SubmitArgs, Context) ->
     % Save the modified survey results
-    case z_acl:rsc_editable(SurveyId, Context)
-        orelse (
-            z_convert:to_integer(m_rsc:p(SurveyId,<<"survey_multiple">>, Context)) =:= 2
-            andalso is_answer_user(AnswerId, Context))
-    of
+    case z_acl:is_allowed(update_result, #acl_survey{id=SurveyId, answer_id=AnswerId}, Context) of
         true ->
-            {FoundAnswers, _Missing} = collect_answers(Questions, Answers, Context),
+            {FoundAnswers, _Missing} = collect_answers(SurveyId, Questions, Answers, Context),
             StorageAnswers = survey_answers_to_storage(FoundAnswers),
             m_survey:replace_survey_submission(SurveyId, AnswerId, StorageAnswers, Context),
             case z_context:get_q(<<"submit-email">>, Context) of
@@ -741,6 +795,33 @@ do_submit(SurveyId, Questions, Answers, {editing, AnswerId, _Actions}, Context) 
         false ->
             {ok, z_render:growl(?__("You are not allowed to change these results.", Context), Context)}
     end.
+
+
+%% @doc Save the form in the submit. Can be called from survey_submit observers if they
+%% need the answer id.
+-spec save_submit(SurveySubmit, Context) -> {ok, AnswerId} when
+    SurveySubmit :: #survey_submit{},
+    Context :: z:context(),
+    AnswerId :: integer().
+save_submit(#survey_submit{
+        id = SurveyId,
+        answers = FoundAnswers,
+        answers_raw = Answers
+    }, Context) ->
+    save_submit(SurveyId, FoundAnswers, Answers, Context).
+
+-spec save_submit(SurveyId, FoundAnswers, Answers, Context) -> {ok, AnswerId} when
+    SurveyId :: m_rsc:resource_id(),
+    FoundAnswers :: list(),
+    Answers :: list(),
+    Context :: z:context(),
+    AnswerId :: integer().
+save_submit(SurveyId, FoundAnswers, Answers, Context) ->
+    StorageAnswers = survey_answers_to_storage(FoundAnswers),
+    {ok, ResultId} = insert_survey_submission(SurveyId, StorageAnswers, Context),
+    maybe_mail(SurveyId, Answers, ResultId, false, Context),
+    {ok, ResultId}.
+
 
 insert_survey_submission(SurveyId, StorageAnswers, Context) ->
     {UserId, PersistentId, Context1} = case z_acl:user(Context) of
@@ -847,45 +928,40 @@ find_email_respondent([_Ans|As], Default) ->
 
 
 %% @doc Collect all answers, report any missing answers.
-%% @spec collect_answers(list(), proplist(), Context) -> {AnswerList, MissingNames}
-collect_answers(Qs, Answers, Context) ->
-    collect_answers(Qs, Answers, [], [], Context).
+-spec collect_answers(SurveyId, Qs, Answers, Context) -> {AnswerList, MissingNames} when
+    SurveyId :: m_rsc:resource_id(),
+    Qs :: [ map() ],
+    Answers :: list(),
+    Context :: z:context(),
+    AnswerList :: list(),
+    MissingNames :: [ binary() ].
+collect_answers(SurveyId, Qs, Answers, Context) ->
+    collect_answers(SurveyId, Qs, Answers, [], [], Context).
 
 
-collect_answers([], _Answers, FoundAnswers, Missing, _Context) ->
+collect_answers(_SurveyId, [], _Answers, FoundAnswers, Missing, _Context) ->
     {FoundAnswers, Missing};
-collect_answers([Q|Qs], Answers, FoundAnswers, Missing, Context) ->
+collect_answers(SurveyId, [Q|Qs], Answers, FoundAnswers, Missing, Context) ->
     case maps:get(<<"type">>, Q, undefined) of
         <<"survey_", _/binary>> = Type ->
             Module = module_name(Type),
             QName = maps:get(<<"name">>, Q, undefined),
-            case Module:answer(Q, Answers, Context) of
+            case Module:answer(SurveyId, Q, Answers, Context) of
                 {ok, none} ->
-                    collect_answers(Qs, Answers, FoundAnswers, Missing, Context);
+                    collect_answers(SurveyId, Qs, Answers, FoundAnswers, Missing, Context);
                 {ok, AnswerList} ->
-                    collect_answers(Qs, Answers, [{QName, AnswerList}|FoundAnswers], Missing, Context);
+                    collect_answers(SurveyId, Qs, Answers, [{QName, AnswerList}|FoundAnswers], Missing, Context);
                 {error, missing} ->
                     case z_convert:to_bool(maps:get(<<"is_required">>, Q, false)) of
                         true ->
-                            collect_answers(Qs, Answers, FoundAnswers, [QName|Missing], Context);
+                            collect_answers(SurveyId, Qs, Answers, FoundAnswers, [QName|Missing], Context);
                         false ->
-                            collect_answers(Qs, Answers, FoundAnswers, Missing, Context)
+                            collect_answers(SurveyId, Qs, Answers, FoundAnswers, Missing, Context)
                     end
             end;
         _ ->
-            collect_answers(Qs, Answers, FoundAnswers, Missing, Context)
+            collect_answers(SurveyId, Qs, Answers, FoundAnswers, Missing, Context)
     end.
-
-is_answer_user({user, UserId}, Context) when is_integer(UserId) ->
-    UserId =:= z_acl:user(Context);
-is_answer_user(AnswerId, Context) when is_integer(AnswerId) ->
-    case z_acl:user(Context) of
-        UserId when is_integer(UserId) ->
-            m_survey:is_answer_user(AnswerId, UserId, Context);
-        _ -> false
-    end;
-is_answer_user(_, _Context) ->
-    false.
 
 survey_answers_to_storage(AnsPerBlock) ->
     lists:flatten(

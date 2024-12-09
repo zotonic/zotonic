@@ -534,8 +534,8 @@ cert_dir(Context) ->
         true ->
             PrivSSLDir;
         false ->
-            {ok, SecurityDir} = z_config_files:security_dir(),
-            filename:join([ SecurityDir, z_context:site(Context), "letsencrypt" ])
+            {ok, SecurityDir} = z_sites_config:security_dir(z_context:site(Context)),
+            filename:join([ SecurityDir, "letsencrypt" ])
     end.
 
 cert_temp_dir(Context) ->

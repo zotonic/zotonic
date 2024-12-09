@@ -23,7 +23,7 @@
 		<td></td>
 		<td colspan="2">
 			{% button
-                text=[_"Revert to this version…"]
+                text=[_"Revert to this version..."]
                 class="btn btn-danger"
 				action={confirm text=_"Are you sure you want to revert to this version?"
 								ok=_"Revert"

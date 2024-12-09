@@ -111,7 +111,7 @@ event(#postback{message={admin_show_emails, Args}}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
     case m_survey:is_allowed_results_download(SurveyId, Context) of
         true ->
-            [ Headers | Data ] = m_survey:survey_results(SurveyId, true, Context),
+            {Headers, Data} = m_survey:survey_results(SurveyId, true, Context),
             All = [lists:zip(Headers, Row) || {_Id,Row} <- Data],
             z_render:dialog(?__("E-mail addresses", Context),
                             "_dialog_survey_email_addresses.tpl",

@@ -4,7 +4,7 @@
 div.modal-backdrop {
   opacity: 0.5;
 }
-div#zmodal form {
+div.modal form {
   margin-bottom: 0;
 }
 /* do not use scrolling inside modal body */

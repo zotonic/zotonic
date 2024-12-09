@@ -3,8 +3,8 @@
 acl_user_groups_modify
 ^^^^^^^^^^^^^^^^^^^^^^
 
-Modify the list of user groups of an user. Called internally 
-by the ACL modules when fetching the list of user groups an user 
+Modify the list of user groups of a user. Called internally 
+by the ACL modules when fetching the list of user groups a user 
 is member of. 
 
 

@@ -11,6 +11,11 @@
     %% git@github.com:zotonic/z_stdlib.git
     {lib_min, ["lib-min",'*'], controller_file, [ {root,[lib]}, {minify, true} ]},
 
+    %% No-cache variants let the browser cache the file max 1 second, useful for files
+    %% that change frequently.
+    {lib_nocache, ["lib-nocache",'*'], controller_file, [ {root,[lib]}, {max_age, 1} ]},
+    {lib_min_nocache, ["lib-min-nocache",'*'], controller_file, [ {root,[lib]}, {max_age, 1}, {minify, true} ]},
+
     {image, ["image",'*'], controller_file, []},
 
     {media_attachment, ["media","attachment","id",id], controller_file_id, [ {dispatch, media_attachment}]},
@@ -28,11 +33,21 @@
     %% Serves the favicon.ico from "lib/images/favicon.ico" in the modules.
     {favicon, ["favicon.ico"], controller_file, [ {path, "images/favicon.ico"}, {root,[lib]}, {content_disposition, inline}]},
 
+    %% Provide information about the site. Needed to install site on home-screens
+    {manifest_json, [ "manifest.json" ], controller_file, [ {root, [lib]}, {max_age, 1}, {path, "misc/manifest.json"} ]},
+
     %% Log client side javascript event. This is ignored by default `mod_logging` overrides this when enabled.
     {jslog, ["log-client-event"], controller_nocontent, []},
 
     %% robots.txt - simple allow all file
-    {robots_txt, ["robots.txt"], controller_file, [ {path, "misc/robots.txt"}, {root,[lib]}, {content_disposition, inline} ]},
+    {robots_txt, ["robots.txt"], controller_file, [
+            {path, "misc/robots.txt"}, {root,[lib]}, {content_disposition, inline}
+        ]},
+
+    %% security.txt - serve a template with the security settings - https://securitytxt.org
+    {security_txt, [".well-known", "security.txt"], controller_template, [
+            {template, "security.txt.tpl"}, {content_type, "text/plain"}, {anonymous, true}
+        ]},
 
     %% Ping/pong
     {zotonic_ping, [".zotonic", "ping"], controller_ping, []}

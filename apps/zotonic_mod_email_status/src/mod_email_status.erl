@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015-2017 Marc Worrell
+%% @copyright 2015-2024 Marc Worrell
 %% @doc Track email bounces and other status of email recipients.
+%% @end
 
-%% Copyright 2015-2017 Marc Worrell
+%% Copyright 2015-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,10 +29,13 @@
     event/2,
 
     observe_email_is_blocked/2,
+    observe_email_is_recipient_ok/2,
     observe_email_sent/2,
     observe_email_failed/2,
     observe_email_bounced/2,
     observe_email_received/2,
+
+    observe_tick_24h/2,
 
     manage_schema/2
 ]).
@@ -41,9 +45,9 @@
 
 event(#postback{message={email_status_reset, Args}}, Context) ->
     Id = proplists:get_value(id, Args),
-    Email = proplists:get_value(email, Args),
     case is_allowed(Id, Context) of
         true ->
+            Email = proplists:get_value(email, Args),
             ok = m_email_status:clear_status(Id, Email, Context),
             case proplists:get_all_values(on_success, Args) of
                 [] ->
@@ -55,9 +59,9 @@ event(#postback{message={email_status_reset, Args}}, Context) ->
             z_render:growl(?__("Sorry, you are not allowed to reset this email address.", Context), Context)
     end;
 event(#postback{message={email_status_block, Args}}, Context) ->
-    Email = proplists:get_value(email, Args),
-    case z_acl:is_admin(Context) of
+    case is_allowed(Context) of
         true ->
+            Email = proplists:get_value(email, Args),
             ok = m_email_status:block(Email, Context),
             case proplists:get_all_values(on_success, Args) of
                 [] ->
@@ -79,7 +83,10 @@ is_allowed(Context) ->
 
 
 observe_email_is_blocked(#email_is_blocked{recipient = Recipient}, Context) ->
-    not m_email_status:is_ok_to_send(Recipient, Context).
+    m_email_status:is_blocked(Recipient, Context).
+
+observe_email_is_recipient_ok(#email_is_recipient_ok{recipient = Recipient}, Context) ->
+    m_email_status:is_ok_to_send(Recipient, Context).
 
 observe_email_sent(#email_sent{recipient=Recipient, is_final=IsFinal}, Context) ->
     m_email_status:mark_sent(Recipient, IsFinal, Context).
@@ -102,6 +109,9 @@ observe_email_bounced(#email_bounced{recipient=Recipient}, Context) ->
 observe_email_received(#email_received{from=From}, Context) when is_binary(From) ->
     m_email_status:mark_received(From, Context),
     undefined.
+
+observe_tick_24h(tick_24h, Context) ->
+    m_email_status:periodic_cleanup(Context).
 
 manage_schema(_InstallOrUpgrade, Context) ->
     m_email_status:install(Context).

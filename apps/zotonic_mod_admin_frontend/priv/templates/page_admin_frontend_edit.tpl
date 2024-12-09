@@ -107,20 +107,22 @@
 	    "js/modules/z.formreplace.js"
 	    "js/modules/z.datepicker.js"
 	    "js/modules/z.menuedit.js"
-	    "js/modules/z.cropcenter.js"
 	    "js/modules/z.formdirty.js"
 	    "js/modules/jquery.shorten.js"
 	    "js/modules/jquery.timepicker.min.js"
 
 	    "js/apps/admin-common.js"
 	    "js/modules/admin-frontend.js"
-	    ""
 	%}
 	{% lib
 	    "js/jquery.ui.nestedSortable.js"
 	%}
 	{% all include "_admin_lib_js.tpl" %}
-	{% include "_admin_frontend_editor.tpl" is_editor_include %}
+
+	{% include "_admin_frontend_editor.tpl"
+			  is_editor_include
+			  overrides_tpl="_admin_frontend_tinymce_overrides_js.tpl"
+	%}
 
 	{% optional include "_fileuploader_worker.tpl" %}
 

@@ -9,7 +9,8 @@ values from the config table instead, you should use :ref:`model-config`.
 
    In general the site configurarion is only accessible via the ``m.site``
    template model for users with administrator rights. Exceptions are
-   ``{{ m.site.title }}``, hostname configurations and the *paglen*.
+   keys starting with ``public`` or ``{{ m.site.title }}``, hostname
+   configurations and the *paglen*.
 
 Fetch a site configuration key
 ------------------------------
@@ -76,20 +77,12 @@ Sites have the following default config settings:
 |                           | to undefined, which will equal the domain of    |                   |
 |                           | the current request.                            |                   |
 +---------------------------+-------------------------------------------------+-------------------+
-| session_expire_1          | The initial timemout after setting up a process | 10                |
-|                           | and waiting for the first ping from the page.   |                   |
-|                           | Default: 40 (seconds)                           |                   |
-+---------------------------+-------------------------------------------------+-------------------+
-| session_expire_n          | Session inactivity timeout after receicing some | 120 (2 minutes)   |
-|                           | communication from the page.                    |                   |
-|                           | Default: 3600 (1 hour)                          |                   |
-+---------------------------+-------------------------------------------------+-------------------+
 | session_expire_inactive   | User inactivity timeout after seeing that the   | 3600 (1 hour)     |
 |                           | user has not been active.                       |                   |
 |                           | Default: 14400 (4 hours)                        |                   |
 +---------------------------+-------------------------------------------------+-------------------+
 | autologon_expire          | Auto logon cookie timeout setting.              | 31536000          |
-|                           | Default: 15552000 (3 months)                    | (365 days)        | 
+|                           | Default: 15552000 (3 months)                    | (365 days)        |
 +---------------------------+-------------------------------------------------+-------------------+
 | site                      | The name of the site, an atom.                  | wwwzotonic.       |
 +---------------------------+-------------------------------------------------+-------------------+

@@ -2,21 +2,27 @@
      <div class="form-group row">
           <div class="col-md-6">
                <div class="form-group">
-                    <img style="width: 100%" src="{% url admin_media_preview id=id %}" class="z-tinymce-media-left" />
+                    {% live topic=id
+                            template="_tinymce_media_preview.tpl"
+                            id=id
+                    %}
                </div>
                <div class="form-group">
                     <label class="control-label">{_ Caption _}</label>
                     <div class="controls">
-                         <textarea class="form-control" name="caption" id="a-caption">{{ options.caption|escape }}</textarea>
-                         <p class="help-block">
-                              {_ Defaults to the summary of the media. Enter a single “-” to not display a caption. _}
-                         </p>
+                         <textarea class="form-control" name="caption" id="a-caption">{{ options.caption|escape_check }}</textarea>
+                         {% block caption_help %}
+                              <p class="help-block">
+                                   {_ Defaults to the summary of the media. Enter a single “-” to not display a caption. _}
+                              </p>
+                         {% endblock %}
                     </div>
                </div>
           </div>
           <div class="col-md-6">
                <div class="row">
                     <div class="col-md-6">
+                         {% block alignment %}
                          <div class="form-group">
                               <label class="control-label">{_ Alignment _}</label>
                               <div class="controls">
@@ -40,6 +46,8 @@
                                    </div>
                               </div>
                          </div>
+                         {% endblock %}
+                         {% block crop %}
                          <div class="form-group">
                               <label class="control-label">{_ Crop _}</label>
                               <div class="controls">
@@ -51,8 +59,10 @@
                                    </div>
                               </div>
                          </div>
+                         {% endblock %}
                     </div>
                     <div class="col-md-6">
+                         {% block size %}
                          <div class="form-group">
                               <label class="control-label">{_ Size _}</label>
                               <div class="controls">
@@ -75,10 +85,12 @@
                                    </div>
                               </div>
                          </div>
+                         {% endblock %}
                     </div>
                </div>
                <div class="row">
                     <div class="col-md-12">
+                         {% block link %}
                          <div class="form-group">
                               <label class="control-label">{_ Link _}</label>
                               <div class="checkbox">
@@ -88,17 +100,30 @@
                                    </label>
                               </div>
                               <div class="checkbox">
-                                   <input type="text" class="form-control" name="link_url" id="a-link_url" placeholder="{_ Website. Leave empty for media link _}" value="{{ options.link_url|escape }}">
+                                   <label>
+                                        <input type="checkbox" name="link_new" {% if options.link_new %}checked{% endif %} value="1" id="a-link_new">
+                                        {_ Open link in new window _}
+                                   </label>
+                              </div>
+                              <div>
+                                   <input type="text" class="form-control" name="link_url" id="a-link_url" placeholder="{_ Website. Leave empty for media link _}" value="{{ options.link_url|escape_check }}">
                               </div>
                          </div>
+                         {% endblock %}
                     </div>
                </div>
           </div>
      </div>
      <div class="modal-footer">
-          <button class="btn btn-danger pull-left" name="delete">{_ Delete _}</button>
+          <button class="btn btn-default pull-left" type="button" name="delete">{_ Remove from text _}</button>
+
+          {% block button_edit %}
+               <a class="btn btn-default pull-left" id="{{ #edit }}" href="{% url admin_edit_rsc id=id %}">{_ Edit _}</a>
+               {% wire id=#edit action={dialog_edit_basics id=id level=6} %}
+          {% endblock %}
+
+          <button class="btn btn-default" type="button" id="{{ #cancel }}">{_ Cancel _}</button>
           <button class="btn btn-primary" type="submit">{_ Save _}</button>
-          <button class="btn btn-default" id="{{ #cancel }}">{_ Cancel _}</button>
      </div>
 </form>
 

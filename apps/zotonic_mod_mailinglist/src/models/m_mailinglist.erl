@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %% @doc Mailinglist model.
+%% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -51,8 +52,10 @@
 
     list_subscriptions_by_email/2,
     list_subscriptions_by_rsc_id/2,
+    list_subscriptions_by_rsc_id/3,
 
     insert_scheduled/3,
+    insert_scheduled/4,
     delete_scheduled/3,
     get_scheduled/2,
     check_scheduled/1,
@@ -75,6 +78,21 @@
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
+m_get([ <<"count_recipients">>, MailingId | Rest ], _Msg, Context) ->
+    case z_acl:is_allowed(view, MailingId, Context) of
+        true ->
+            F = fun() ->
+                        Count = count_recipients(MailingId, Context),
+                        SubIdCount = length(m_edge:subjects(MailingId, subscriberof, Context)),
+                        Count + SubIdCount
+                end,
+            %% Cache the value for 10 minutes.
+            Total = z_depcache:memo(F, {mailinglist_count_recipients, MailingId}, 600, [MailingId], Context),
+            {ok, {Total, Rest}};
+        false ->
+            {error, eacces}
+    end;
+
 m_get([ <<"stats">>, MailingId | Rest ], _Msg, Context) ->
     case z_acl:rsc_editable(MailingId, Context) of
         true -> {ok, {get_stats(MailingId, Context), Rest}};
@@ -110,12 +128,22 @@ m_get([ <<"subscriptions">>, <<"key">>, undefined | Rest ], _Msg, Context) ->
     {ok, {L, Rest}};
 m_get([ <<"subscriptions">>, <<"key">>, Key | Rest ], _Msg, Context) when is_binary(Key) ->
     case z_mailinglist_recipients:recipient_key_decode(Key, Context) of
-        {ok, Email} when is_binary(Email) ->
+        {ok, #{
+            recipient := Email,
+            list_id := _ListId
+        }} when is_binary(Email) ->
             {ok, L} = list_subscriptions_by_email(Key, Context),
             {ok, {L, Rest}};
-        {ok, RscId} when is_integer(RscId) ->
-            {ok, L} = list_subscriptions_by_rsc_id(RscId, Context),
-            {ok, {L, Rest}};
+        {ok, #{
+            recipient := RscId,
+            list_id := ListId
+        }} when is_integer(RscId) ->
+            case list_subscriptions_by_rsc_id(RscId, ListId, Context) of
+                {ok, L} ->
+                    {ok, {L, Rest}};
+                {error, _} = Error ->
+                    Error
+            end;
         {error, _} = Error ->
             Error
     end;
@@ -130,14 +158,35 @@ m_get([ <<"subscriptions">>, RscId | Rest ], _Msg, Context) when is_integer(RscI
         false ->
             {error, eacces}
     end;
-m_get([ <<"subscriptions">>, Email | Rest ], _Msg, Context) ->
-    case z_acl:is_allowed(use, mod_mailinglist, Context) of
-        true ->
-            {ok, List} = list_subscriptions_by_email(Email, Context),
-            {ok, {List, Rest}};
-        false ->
-            {error, eacces}
+m_get([ <<"subscriptions">>, Key | Rest ], _Msg, Context) when is_binary(Key) ->
+    case binary:match(Key, <<"@">>) of
+        {_, _} ->
+            case z_acl:is_allowed(use, mod_mailinglist, Context) of
+                true ->
+                    {ok, List} = list_subscriptions_by_email(Key, Context),
+                    {ok, {List, Rest}};
+                false ->
+                    {error, eacces}
+            end;
+        nomatch ->
+            case m_rsc:rid(Key, Context) of
+                undefined ->
+                    {ok, {[], Rest}};
+                RscId ->
+                    case z_acl:is_allowed(use, mod_mailinglist, Context)
+                        orelse z_acl:user(Context) =:= RscId
+                        orelse z_acl:rsc_editable(RscId, Context)
+                    of
+                        true ->
+                            {ok, List} = list_subscriptions_by_rsc_id(RscId, Context),
+                            {ok, {List, Rest}};
+                        false ->
+                            {error, eacces}
+                    end
+            end
     end;
+m_get([ <<"subscriptions">>, _Key | Rest ], _Msg, _Context) ->
+    {ok, {[], Rest}};
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
@@ -239,6 +288,10 @@ recipient_is_enabled_toggle(RecipientId, Context) ->
     end.
 
 %% @doc Fetch the recipient record for the recipient id.
+-spec recipient_get(RecipientId, Context) -> undefined | RecipientProps when
+    RecipientId :: integer() | binary() | string(),
+    Context :: z:context(),
+    RecipientProps :: proplists:proplist().
 recipient_get(RecipientId, Context) ->
     z_db:assoc_row("
         select *
@@ -248,6 +301,11 @@ recipient_get(RecipientId, Context) ->
         Context).
 
 %% @doc Fetch the recipient record by e-mail address
+-spec recipient_get(ListId, Email, Context) -> undefined | RecipientProps when
+    ListId :: undefined | m_rsc:resource(),
+    Email :: binary() | string(),
+    Context :: z:context(),
+    RecipientProps :: proplists:proplist().
 recipient_get(undefined, _Email, _Context) ->
     undefined;
 recipient_get(<<>>, _Email, _Context) ->
@@ -282,14 +340,20 @@ recipient_delete(ListId, Email, Context) ->
         RecipientProps -> recipient_delete1(RecipientProps, false, Context)
     end.
 
-recipient_delete1(RecipientProps, Quiet, Context) ->
+recipient_delete1(RecipientProps, IsQuiet, Context) ->
     RecipientId = proplists:get_value(id, RecipientProps),
     z_db:delete(mailinglist_recipient, RecipientId, Context),
     ListId = proplists:get_value(mailinglist_id, RecipientProps),
-    case Quiet of
-        false ->
-            z_notifier:notify1(#mailinglist_message{what=send_goodbye, list_id=ListId, recipient=RecipientProps}, Context);
-        _ -> nop
+    if
+        IsQuiet == false ->
+            z_notifier:notify1(
+                #mailinglist_message{
+                    what = send_goodbye,
+                    list_id = ListId,
+                    recipient = RecipientProps
+                }, Context);
+        true ->
+            ok
     end,
     ok.
 
@@ -300,7 +364,11 @@ recipient_confirm(ConfirmKey, Context) ->
         {RecipientId, _IsEnabled, ListId} ->
             NewConfirmKey = z_ids:id(20),
             z_db:q("update mailinglist_recipient set confirm_key = $2, is_enabled = true where confirm_key = $1", [ConfirmKey, NewConfirmKey], Context),
-            z_notifier:notify(#mailinglist_message{what=send_welcome, list_id=ListId, recipient=RecipientId}, Context),
+            z_notifier:notify(#mailinglist_message{
+                    what = send_welcome,
+                    list_id = ListId,
+                    recipient = RecipientId
+                }, Context),
             {ok, RecipientId};
         undefined ->
             {error, enoent}
@@ -401,7 +469,7 @@ insert_recipient_1(ListId, Email, Props, WelcomeMessageType, Context) ->
                               from mailinglist_recipient
                               where mailinglist_id = $1
                                 and email = $2", [ListId, Email1], Context),
-            ConfirmKey = binary_to_list(z_ids:id(20)),
+            ConfirmKey = z_ids:id(20),
             {RecipientId, WelcomeMessageType1} = case Rec of
                 {RcptId, true, _OldConfirmKey} ->
                     %% Present and enabled
@@ -465,8 +533,13 @@ update_recipient(RcptId, Props, Context) ->
 
 
 %% @doc Replace all recipients of the mailinglist. Do not send welcome messages to the recipients.
--spec insert_recipients(ListId::m_rsc:resource_id(), Recipients::list( binary()|string() ) | binary(), IsTruncate::boolean(), z:context()) ->
-    ok | {error, term()}.
+-spec insert_recipients(ListId, Recipients, IsTruncate, Context) -> ok | {error, Reason} when
+    ListId :: m_rsc:resource_id(),
+    Recipients :: list( binary() | string() )
+                | binary(),
+    IsTruncate::boolean(),
+    Context :: z:context(),
+    Reason :: enoent | eacces | term().
 insert_recipients(ListId, Bin, IsTruncate, Context) when is_binary(Bin) ->
     Lines = z_string:split_lines(Bin),
     Rcpts = lines_to_recipients(Lines),
@@ -484,14 +557,14 @@ insert_recipients_1(ListId, Recipients, IsTruncate, Context) ->
         true ->
             ok = z_db:transaction(
                             fun(Ctx) ->
-                                {ok, Now} = insert_recipients1(ListId, Recipients, Ctx),
+                                {ok, Now} = insert_recipients_2(ListId, Recipients, Ctx),
                                 optional_truncate(ListId, IsTruncate, Now, Ctx)
                             end, Context);
         false ->
             {error, eacces}
     end.
 
-insert_recipients1(ListId, Recipients, Context) ->
+insert_recipients_2(ListId, Recipients, Context) ->
     Now = erlang:universaltime(),
     [ replace_recipient(ListId, R, Now, Context) || R <- Recipients ],
     {ok, Now}.
@@ -542,7 +615,9 @@ replace_recipient_1(ListId, Email, Props, Now, Context) ->
 
 lines_to_recipients(Lines) ->
     lines_to_recipients(Lines, []).
-lines_to_recipients([], Acc) -> Acc;
+
+lines_to_recipients([], Acc) ->
+    Acc;
 lines_to_recipients([Line|Lines], Acc) ->
     %% Split every line on tab
     Trimmed = z_string:trim( z_convert:to_binary(Line) ),
@@ -555,7 +630,9 @@ lines_to_recipients([Line|Lines], Acc) ->
     end.
 
 line_to_recipient([ Email ]) ->
-    [ {email, Email} ];
+    [
+        {email, Email}
+    ];
 line_to_recipient([ Email, NameFirst ]) ->
     [
         {email, Email},
@@ -575,6 +652,44 @@ line_to_recipient([ Email, NameFirst, NameLast, NamePrefix | _ ]) ->
         {name_surname_prefix, NamePrefix}
     ].
 
+
+%% @doc Get all mailingslists for this resource, checking both the recipients and the
+%% subscriberof edges. The found subscriptions must have the email address as the resource's primary email address.
+-spec list_subscriptions_by_rsc_id(RscId, ListId, Context ) -> {ok, Subscriptions} | {error, Reason} when
+    RscId :: m_rsc:resource_id(),
+    ListId :: m_rsc:resource_id() | undefined,
+    Context :: z:context(),
+    Subscriptions :: [ map() ],
+    Reason :: enoent.
+list_subscriptions_by_rsc_id(RscId, ListId, Context) ->
+    case list_subscriptions_by_rsc_id(RscId, Context) of
+        {ok, L} ->
+            % Optionally append the query-based list for which the user was selected.
+            case list_single_subscription(RscId, ListId, Context) of
+                {ok, #{
+                    <<"mailinglist_id">> := MId
+                } = Sub} ->
+                    case lists:any(
+                        fun
+                            (#{
+                                <<"rsc_id">> := RId1,
+                                <<"mailinglist_id">> := MId1
+                            }) ->
+                                RId1 =:= RscId andalso MId =:= MId1;
+                            (_) ->
+                                false
+                        end,
+                        L)
+                    of
+                        true -> {ok, L};
+                        false -> {ok, [ Sub | L ]}
+                    end;
+                {error, _} ->
+                    {ok, L}
+            end;
+        {error, _} = Error ->
+            Error
+    end.
 
 
 %% @doc Get all mailingslists for this resource, checking both the recipients and the
@@ -611,7 +726,7 @@ list_subscriptions_by_rsc_id(RscId0, Context) ->
                 fun(Idn) ->
                     case proplists:get_value(is_verified, Idn) of
                         true ->
-                            proplists:get_value(key, Idn);
+                            {true, proplists:get_value(key, Idn)};
                         false ->
                             false
                     end
@@ -620,7 +735,6 @@ list_subscriptions_by_rsc_id(RscId0, Context) ->
             ViaEmail = lists:flatten(lists:map(fun(E) -> subscriptions_by_email_1(E, Context) end, Emails)),
             {ok, subs_merge_sort(ViaEmail ++ ViaRsc)}
     end.
-
 
 %% @doc Get all mailingslists with this email address, checking both the recipients and the
 %% subscriberof edges. The found resources must have the email address as their primary email address.
@@ -643,25 +757,20 @@ list_subscriptions_by_email(Email, Context) ->
         Context),
     ViaRsc = lists:filtermap(
         fun({RscId, MId}) ->
-            case m_rsc:p_no_acl(RscId, <<"is_published_date">>, Context) of
-                true ->
-                    E = m_rsc:p_no_acl(RscId, <<"email_raw">>, Context),
-                    case normalize_email(E) of
-                        Email1 ->
-                            Recipient = #{
-                                <<"title">> => m_rsc:p_no_acl(MId, <<"title">>, Context),
-                                <<"summary">> => m_rsc:p_no_acl(MId, <<"summary">>, Context),
-                                <<"rsc_id">> => RscId,
-                                <<"mailinglist_id">> => MId,
-                                <<"email">> => Email1,
-                                <<"pref_language">> => m_rsc:p_no_acl(RscId, <<"pref_language">>, Context),
-                                <<"is_mailinglist_private">> => z_convert:to_bool(m_rsc:p_no_acl(MId, <<"mailinglist_private">>, Context))
-                            },
-                            {true, Recipient};
-                        _ ->
-                            false
-                    end;
-                false ->
+            E = m_rsc:p_no_acl(RscId, <<"email_raw">>, Context),
+            case normalize_email(E) of
+                Email1 ->
+                    Recipient = #{
+                        <<"title">> => m_rsc:p_no_acl(MId, <<"title">>, Context),
+                        <<"summary">> => m_rsc:p_no_acl(MId, <<"summary">>, Context),
+                        <<"rsc_id">> => RscId,
+                        <<"mailinglist_id">> => MId,
+                        <<"email">> => Email1,
+                        <<"pref_language">> => m_rsc:p_no_acl(RscId, <<"pref_language">>, Context),
+                        <<"is_mailinglist_private">> => z_convert:to_bool(m_rsc:p_no_acl(MId, <<"mailinglist_private">>, Context))
+                    },
+                    {true, Recipient};
+                _ ->
                     false
             end
         end,
@@ -714,8 +823,45 @@ cmp_title(A, B) ->
     maps:get(<<"title">>, A) =< maps:get(<<"title">>, B).
 
 
+-spec list_single_subscription(RscId, ListId, Context) -> {ok, Subscription} | {error, Reason} when
+    RscId :: m_rsc:resource_id() | undefined,
+    ListId :: m_rsc:resource_id() | undefined,
+    Context :: z:context(),
+    Subscription :: map(),
+    Reason :: enoent | nolist.
+list_single_subscription(_, undefined, _Context) ->
+    {error, enoent};
+list_single_subscription(undefined, _, _Context) ->
+    {error, enoent};
+list_single_subscription(RscId, ListId, Context) ->
+    case m_rsc:is_a(ListId, mailinglist, Context) of
+        true ->
+            case m_edge:get_id(RscId, exsubscriberof, ListId, Context) of
+                undefined ->
+                    E = m_rsc:p_no_acl(RscId, <<"email_raw">>, Context),
+                    Subscription = #{
+                        <<"title">> => m_rsc:p_no_acl(ListId, <<"title">>, Context),
+                        <<"summary">> => m_rsc:p_no_acl(ListId, <<"summary">>, Context),
+                        <<"rsc_id">> => RscId,
+                        <<"mailinglist_id">> => ListId,
+                        <<"email">> => E,
+                        <<"pref_language">> => m_rsc:p_no_acl(RscId, <<"pref_language">>, Context),
+                        <<"is_mailinglist_private">> => z_convert:to_bool(m_rsc:p_no_acl(ListId, <<"mailinglist_private">>, Context))
+                    },
+                    {ok, Subscription};
+                _EdgeId ->
+                    {error, exsubscriberof}
+            end;
+        false ->
+            {error, nolist}
+    end.
+
 %% @doc Insert a mailing to be send when the page becomes visible
 insert_scheduled(ListId, PageId, Context) ->
+    insert_scheduled(ListId, PageId, [], Context).
+
+%% @doc Insert a mailing to be send when the page becomes visible
+insert_scheduled(ListId, PageId, Options, Context) ->
     true = z_acl:rsc_editable(ListId, Context),
     Exists = z_db:q1("
                 select count(*)
@@ -726,12 +872,22 @@ insert_scheduled(ListId, PageId, Context) ->
            z_mqtt:publish(
                 [ <<"model">>, <<"mailinglist">>, <<"event">>, ListId, <<"scheduled">> ],
                 #{ id => ListId, page_id => PageId, action => <<"insert">> },
-                Context),
-            z_db:q("insert into mailinglist_scheduled (page_id, mailinglist_id) values ($1,$2)",
-                    [PageId, ListId], Context);
+                Context);
         1 ->
             nop
-    end.
+    end,
+    z_db:q("
+        insert into mailinglist_scheduled
+            (page_id, mailinglist_id, props)
+        values
+            ($1, $2, $3)
+        on conflict (page_id, mailinglist_id)
+        do update set props = $3
+        ",
+        [ PageId, ListId, ?DB_PROPS([ {options, Options} ]) ],
+        Context),
+    ok.
+
 
 %% @doc Delete a scheduled mailing
 delete_scheduled(ListId, PageId, Context) ->
@@ -755,18 +911,28 @@ delete_scheduled(ListId, PageId, Context) ->
 
 
 %% @doc Get the list of scheduled mailings for a page.
-get_scheduled(Id, Context) ->
+-spec get_scheduled(PageId, Context) -> [ ListId ] when
+    PageId :: m_rsc:resource_id(),
+    Context :: z:context(),
+    ListId :: m_rsc:resource_id().
+get_scheduled(PageId, Context) ->
     Lists = z_db:q("
         select mailinglist_id
         from mailinglist_scheduled
-        where page_id = $1", [Id], Context),
+        where page_id = $1", [PageId], Context),
     [ ListId || {ListId} <- Lists ].
 
 
 %% @doc Fetch the next scheduled mailing that are published and in the publication date range.
+-spec check_scheduled(Context) -> undefined | Mailing when
+    Context :: z:context(),
+    Mailing :: { ListId, PageId, Options },
+    ListId :: m_rsc:resource_id(),
+    PageId :: m_rsc:resource_id(),
+    Options :: mod_mailinglist:mailing_options().
 check_scheduled(Context) ->
-    z_db:q_row("
-        select m.mailinglist_id, m.page_id
+    case z_db:assoc_props_row("
+        select m.*
         from mailinglist_scheduled m
         where (
             select r.is_published
@@ -775,7 +941,17 @@ check_scheduled(Context) ->
             from rsc r
             where r.id = m.mailinglist_id
         )
-        limit 1", Context).
+        limit 1", Context)
+    of
+        undefined ->
+            undefined;
+        Row ->
+            {
+                proplists:get_value(mailinglist_id, Row),
+                proplists:get_value(page_id, Row),
+                proplists:get_value(options, Row, [])
+            }
+    end.
 
 
 %% @doc Reset the email log for given list/page combination, allowing one to send the same page again to the given list.
@@ -791,16 +967,16 @@ reset_log_email(ListId, PageId, Context) ->
 
 %% @doc Get the "from" address used for this mailing list. Looks first in the mailinglist rsc for a ' mailinglist_reply_to' field; falls back to site.email_from config variable.
 get_email_from(ListId, Context) ->
-    FromEmail = case m_rsc:p(ListId, mailinglist_reply_to, Context) of
+    FromEmail = case m_rsc:p(ListId, <<"mailinglist_reply_to">>, Context) of
                     Empty when Empty =:= undefined; Empty =:= <<>> ->
-                        z_convert:to_list(m_config:get_value(site, email_from, Context));
+                        z_convert:to_binary(m_config:get_value(site, email_from, Context));
                     RT ->
-                        z_convert:to_list(RT)
+                        z_convert:to_binary(RT)
                 end,
-    FromName = case m_rsc:p(ListId, mailinglist_sender_name, Context) of
-                  undefined -> [];
-                  <<>> -> [];
-                  SenderName -> z_convert:to_list(SenderName)
+    FromName = case m_rsc:p(ListId, <<"mailinglist_sender_name">>, Context) of
+                  undefined -> <<>>;
+                  <<>> -> <<>>;
+                  SenderName -> z_convert:to_binary(SenderName)
                end,
     z_email:combine_name_email(FromName, FromEmail).
 
@@ -814,7 +990,10 @@ get_recipients_by_email(Email, Context) ->
 
 %% @doc Perform a set operation on two lists. The result of the
 %% operation gets stored in the first list.
-recipient_set_operation(Op, IdA, IdB, Context) when Op =:= union; Op =:= subtract; Op =:= intersection ->
+recipient_set_operation(Op, IdA, IdB, Context) when
+        Op =:= union;
+        Op =:= subtract;
+        Op =:= intersection ->
     A = get_email_set(IdA, Context),
     B = get_email_set(IdB, Context),
     Emails = sets:to_list(sets:Op(A, B)),
@@ -825,19 +1004,24 @@ get_email_set(ListId, Context) ->
     Es = z_db:q("
         SELECT email
         FROM mailinglist_recipient
-        WHERE mailinglist_id = $1", [ListId], Context),
+        WHERE mailinglist_id = $1
+          AND is_enabled", [ListId], Context),
     Normalized = lists:map(
-        fun(E) -> normalize_email(E) end,
+        fun({E}) -> normalize_email(E) end,
         Es),
     sets:from_list(Normalized).
 
 normalize_email(undefined) ->
     undefined;
 normalize_email(Email) ->
-    m_identity:normalize_key(<<"email">>, Email).
+    Email1 = m_identity:normalize_key(<<"email">>, Email),
+    case z_email_utils:is_email(Email1) of
+        true -> Email1;
+        false -> undefined
+    end.
 
-
-%% @doc Periodically remove bouncing and disabled addresses from the mailinglist
+%% @doc Periodically remove bouncing and disabled addresses from the mailinglist.
+%% Due to the GDPR and privacy in general we delete unused email addresses.
 -spec periodic_cleanup(z:context()) -> ok.
 periodic_cleanup(Context) ->
     % Remove disabled entries that were not updated for more than 3 months
@@ -860,21 +1044,18 @@ periodic_cleanup(Context) ->
         ",
         Context,
         300000),
-    Invalid = lists:filter(
+    Invalid = lists:filtermap(
         fun({Email}) ->
-            m_email_status:is_ok_to_send(Email, Context)
+            case m_email_status:is_ok_to_send(Email, Context) of
+                true -> false;
+                false -> {true, Email}
+            end
         end,
         MaybeBouncing),
-    z_db:transaction(
-        fun(Ctx) ->
-            lists:foreach(
-                fun({Email}) ->
-                    z_db:q("
-                        delete from mailinglist_recipient
-                        where email = $1",
-                        [Email],
-                        Ctx)
-                end,
-                Invalid)
-        end,
-        Context).
+    z_db:q("
+        delete from mailinglist_recipient
+        where email = any($1)
+        ",
+        [ Invalid ],
+        Context),
+    ok.

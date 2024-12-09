@@ -123,9 +123,9 @@ list_consumers_all(Context) ->
         Context).
 
 %% @doc List all consumers, the secrets of these consumers are copied from the remote site.
-%% Tokens are coupled to a consumer. Consumers are coupled to an user, if the user
+%% Tokens are coupled to a consumer. Consumers are coupled to a user, if the user
 %% is deleted then all their consumers and tokens are deleted. Consumers should be registered by
-%% an user with config rights, as such all admin users can see all apps.
+%% a user with config rights, as such all admin users can see all apps.
 -spec list_consumers( z:context() ) -> {ok, list( map() )} | {error, eacces | term()}.
 list_consumers(Context) ->
     case z_acl:is_admin(Context) of
@@ -485,7 +485,7 @@ manage_schema(_Version,  Context) ->
                     ok
             end,
             case z_db:column(oauth2_consumer_app, grant_type, Context) of
-                {ok, #column_def{ default = "'code'::" ++ _ }} ->
+                {ok, #column_def{ default = <<"'code'::", _/binary>> }} ->
                     [] = z_db:q("
                         alter table oauth2_consumer_app
                         alter column grant_type set default 'authorization_code'",

@@ -32,6 +32,7 @@
                         <input name="2fa_mode" type="radio" id="opt2fa" value="0" {% if not m.auth2fa.mode %}checked="checked"{% endif %} />
                         {_ Optional _}
                     </label>
+                    <p class="help-block">{_ The two-factor authentication can be added per user in the admin or (if available on the site) on their profile page. _}</p>
                 </div>
 
                 <div>
@@ -39,9 +40,21 @@
                         action={config_toggle module="mod_auth2fa" key="mode"}
                     %}
                     <label class="radio-inline">
-                        <input name="2fa_mode" type="radio" id="ask2fa" value="1" {% if m.auth2fa.mode  == '1' %}checked="checked"{% endif %} />
-                        {_ Ask after signing in _}
+                        <input name="2fa_mode" type="radio" id="ask2fa" value="1" {% if m.auth2fa.mode  == 1 %}checked="checked"{% endif %} />
+                        {_ Ask after logging in _}
                     </label>
+                    <p class="help-block">{_ On the first page load a dialog appears for setting the two-factor authentication. _}</p>
+                </div>
+
+                <div>
+                    {% wire id="nag2fa"
+                        action={config_toggle module="mod_auth2fa" key="mode"}
+                    %}
+                    <label class="radio-inline">
+                        <input name="2fa_mode" type="radio" id="nag2fa" value="2" {% if m.auth2fa.mode == 2 %}checked="checked"{% endif %} />
+                        {_ Ask on every page _}
+                    </label>
+                    <p class="help-block">{_ On each page load a dialog appears for setting the two-factor authentication. _}</p>
                 </div>
 
                 <div>
@@ -49,9 +62,10 @@
                         action={config_toggle module="mod_auth2fa" key="mode"}
                     %}
                     <label class="radio-inline">
-                        <input name="2fa_mode" type="radio" id="force2fa" value="2" {% if m.auth2fa.mode == '2' %}checked="checked"{% endif %} />
+                        <input name="2fa_mode" type="radio" id="force2fa" value="3" {% if m.auth2fa.mode == 3 %}checked="checked"{% endif %} />
                         {_ Force two-factor authentication _}
                     </label>
+                    <p class="help-block">{_ The user will be prompted to set the two-factor authentication before being allowed to log in. _}</p>
                 </div>
             </div>
 
@@ -67,7 +81,7 @@
                         <li>
                             <label class="checkbox-inline">
                                 {{ cg.indent }}
-                                <input type="checkbox" id="{{ #cg.cg_id }}" {% if cg_id.acl_2fa %}checked{% endif %} value="2" {% if not cg_id.is_editable %}disabled{% endif %}>
+                                <input type="checkbox" id="{{ #cg.cg_id }}" {% if cg_id.acl_2fa %}checked{% endif %} value="3" {% if not cg_id.is_editable %}disabled{% endif %}>
                                 {{ cg_id.title }}
                             </label>
                             {% wire id=#cg.cg_id

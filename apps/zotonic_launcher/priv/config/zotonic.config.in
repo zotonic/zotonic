@@ -25,6 +25,12 @@
 %%% Default timezone (for example: <<"Europe/Berlin">>)
    %% {timezone, <<"UTC">>},
 
+%%% Global security.txt settings
+   %% {security_email, <<"security@example.com">>},
+   %% {security_url, <<"https://example.com/security">>},
+   %% {security_policy_url, <<"https://example.com/security-policy">>},
+   %% {security_hiring_url, <<"https://example.com/security-hiring">>},
+
 %%% PostgreSQL database defaults.
 %%% These are the defaults for the equally named options in your site's config file.
    %% {dbdatabase, "zotonic"},
@@ -141,6 +147,12 @@
    %% {smtp_ssl, false},
    %% {smtp_username, undefined},
    %% {smtp_password, undefined},
+
+%%% SMTP fallback to plaintext delivery if the TLS connection failed.
+%%% This defaults to 'true' because many SMTP servers use self-signed certificates, which will
+%%% fail on verification of the hostname. In those cases Zotonic will retry delivery without
+%%% TLS on port 25 (or the above configured smtp_port).
+   %% {smtp_plaintext_fallback, true},
 
 %%% SMTP send all email into a blackhole, ideal for testing large mailings
    %% {smtp_is_blackhole, false},

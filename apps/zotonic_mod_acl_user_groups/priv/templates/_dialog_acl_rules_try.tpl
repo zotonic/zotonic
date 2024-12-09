@@ -4,7 +4,7 @@
 	<p>{_ You can: _}</p>
 
 	<ul>
-		<li>{_ use <b>New Private Window</b> (check the <b>File</b> menu of your browser) _}</li>
+		<li>{_ use a private or incognito window in your browser _}</li>
 		<li>{_ use another browser (eg. Chrome if you are now using Firefox) _}</li>
 		<li>{_ send this URL to somebody else for testing _}</li>
 	</ul>

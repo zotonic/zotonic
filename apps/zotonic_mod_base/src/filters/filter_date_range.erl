@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2014 Marc Worrell
+%% @copyright 2010-2024 Marc Worrell
 %% @doc 'date_range' filter, display two dates
+%% @end
 
-%% Copyright 2010-2014 Marc Worrell
+%% Copyright 2010-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -22,18 +23,11 @@
 	date_range/4
 ]).
 
-date_range(Dates, Format, true, Context) ->
-    date_range(Dates, Format, z_context:set_tz(<<"UTC">>,Context));
-date_range(Dates, Format, false, Context) ->
-    date_range(Dates, Format, Context);
-date_range(Dates, Format, undefined, Context) ->
-    date_range(Dates, Format, Context);
-date_range(Dates, Format, [], Context) ->
-    date_range(Dates, Format, Context);
-date_range(Dates, Format, <<>>, Context) ->
-    date_range(Dates, Format, Context);
+date_range(Dates, Format, Id, Context) when is_integer(Id) ->
+    Tz = m_rsc:p(Id, <<"tz">>, Context),
+    date_range(Dates, Format, z_context:set_tz(Tz, Context));
 date_range(Dates, Format, Tz, Context) ->
-    date_range(Dates, Format, z_context:set_tz(Tz,Context)).
+    date_range(Dates, Format, z_context:set_tz(Tz, Context)).
 
 date_range([A, B], [WithDate, Sep, EqDate], Context) ->
 	ALocal = z_datetime:to_local(A, Context),

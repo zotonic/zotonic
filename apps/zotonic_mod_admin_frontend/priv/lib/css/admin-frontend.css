@@ -27,3 +27,7 @@ nav.navbar .btn {
 input.do_timepicker {
 	width: 40px;
 }
+
+.tox.tox-tinymce-aux {
+    height: 0;
+}

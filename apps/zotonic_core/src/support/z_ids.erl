@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2012 Marc Worrell
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Server supplying random strings and unique ids
 
-%% Copyright 2009-2012 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@
     id/1,
     identifier/0,
     identifier/1,
+    password/0,
     random_id/2,
     optid/1,
     sign_key/1,
@@ -38,7 +39,7 @@
     rand_bytes/1
 ]).
 
--type charset() :: 'az' | 'az09' | 'azAZ09'.
+-type charset() :: 'az' | 'az09' | 'azAZ09' | 'special' | '09'.
 
 %%%--------------------------------------------------------------------------
 %%% API
@@ -79,20 +80,35 @@ identifier() ->
 identifier(Len) ->
     random_id('az', Len).
 
+-spec password() -> binary().
+%% @doc Generate a password that matches most criteria of complexity and
+%% is still (kind of) readable.
+password() ->
+    iolist_to_binary([
+        id(5), $-, id(5), $-, id(5), $-, id(4), random_id('special', 2)
+    ]).
+
 -spec random_id(charset(), Length::integer()) -> binary().
 %% @doc Get a random identifier of the specified length, consisting of
 %% characters from the specified set:
-%% - 'az'     [a-z]      : lower case characters only.
-%% - 'az09'   [a-z0-9]   : lower case characters and numbers only.
-%% - 'azAZ09' [a-zA-Z0-9]: lower and upper case characters and numbers.
+%% - 'az'      ```[a-z]'''       : lower case characters only.
+%% - 'az09'    ```[a-z0-9]'''    : lower case characters and numbers only.
+%% - 'azAZ09'  ```[a-zA-Z0-9]''' : lower and upper case characters and numbers.
+%% - '09'      ```[0-9]'''       : numbers only.
+%% - 'special' ```[!#$%&()*+/;:<>=?@]''' : special characters for passwords.
 random_id('az', Len) ->
     make_lower_id(Len);
 random_id('az09', Len) ->
     make_no_upper_id(Len);
 random_id('azAZ09', Len) ->
-    make_any_char_id(Len).
+    make_any_char_id(Len);
+random_id('special', Len) ->
+    make_special_char_id(<<"!#$%&()*+/;:<>=?@">>, Len);
+random_id('09', Len) ->
+    make_special_char_id(<<"0123456789">>, Len).
 
 -spec optid(undefined | false | binary()) -> binary().
+%% @doc Generate an identifier if the identifier was not defined.
 optid(undefined) ->
     identifier(?OPTID_LENGTH);
 optid(false) ->
@@ -119,7 +135,7 @@ sign_key(Context) ->
 sign_key_simple(Context) ->
     case m_config:get_value(site, sign_key_simple, Context) of
         undefined ->
-            Key = random_id('azAZ09', 10),
+            Key = random_id('azAZ09', 21),
             m_config:set_value(site, sign_key_simple, Key, Context),
             Key;
         <<>> ->
@@ -129,7 +145,7 @@ sign_key_simple(Context) ->
     end.
 
 -spec application_key(atom()) -> binary().
-%% @doc Set/get a default sign key for the zotonic.
+%% @doc Set/get a default sign key for the zotonic core functions.
 %% Returns a binary of 50 random numbers and upper and lower case
 %% characters.
 application_key(Name) when is_atom(Name) ->
@@ -142,12 +158,12 @@ application_key(Name) when is_atom(Name) ->
             Key
     end.
 
--spec number() -> integer().
+-spec number() -> pos_integer().
 %% @doc Equivalent to `number(1000000000)'.
 number() ->
     number(1000000000).
 
--spec number(Max::integer()) -> integer().
+-spec number(Max::pos_integer()) -> pos_integer().
 %% @doc Return a random integer less than or equal to Max. Max defaults to a
 %% large number smaller than MaxInt.
 number(Max) ->
@@ -180,6 +196,11 @@ make_any_char_id(Len) ->
           end >>
       || N <- random_list(62, Len)
     >>.
+
+-spec make_special_char_id(Chars::binary(), Length::integer()) -> binary().
+%% @doc Generate a random key consisting of bytes from the given characters.
+make_special_char_id(Chars, Len) ->
+    << << (binary:at(Chars, N)) >> || N <- random_list(size(Chars), Len) >>.
 
 -spec make_lower_id(Length::integer()) -> binary().
 %% @doc Generate a random identifier, only lower case letters

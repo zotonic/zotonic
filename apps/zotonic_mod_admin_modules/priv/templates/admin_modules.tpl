@@ -16,7 +16,7 @@
                 <th>{_ Module _}</th>
                 <th>{_ Depends _}</th>
                 <th>{_ Provides _}</th>
-                {% comment %}<th>{_ Prio _}</th>{% endcomment %}
+                <th></th>
             </tr>
         </thead>
 
@@ -66,9 +66,17 @@
                                 {% endif %}
                             {% endfor %}
                         </td>
-                        {% comment %}<td>{{ prio }}</td>{% endcomment %}
                         <td>
-                            <div class="pull-right buttons">
+                            <div class="buttons" style="white-space: nowrap; text-align: right">
+                                {% if props.schema %}
+                                    {% button text=_"Reinstall"
+                                        title=_"Install the module’s model and data."
+                                        class="btn btn-xs btn-default"
+                                        postback={reinstall module=module}
+                                        delegate=`controller_admin_module_manager`
+                                    %}
+                                {% endif %}
+
                                 {% if props.is_active %}
                                     {% if config_template %}
                                         {% button text=_"Configure"
@@ -76,7 +84,7 @@
                                             action={dialog_open template=config_template title=props.mod_title|default:props.title} %}
                                     {% endif %}
                                     {% button text=_"Deactivate"
-                                        class="btn btn-default btn-xs"
+                                        class="btn btn-warning btn-xs"
                                         action={module_toggle is_deactivate module=module}
                                     %}
                                 {% else %}

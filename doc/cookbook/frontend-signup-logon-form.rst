@@ -199,7 +199,6 @@ Template tree:
     |   `-- _logon.tpl or _logon_modal.tpl       // logon module
     |       `-- _logon_box.tpl                   // form box components
     |           `-- _logon_stage.tpl             // feedback messages
-    |               `-- _logon_expired_form.tpl  // when pw is expired
     `-- logoff.tpl                               // log off page, redirects to q.p or homepage
 
 

@@ -14,6 +14,7 @@ Authentication notifications
    notification/auth_confirm_done
    notification/auth_client_logon_user
    notification/auth_client_switch_user
+   notification/auth_identity_types
    notification/auth_logon
    notification/auth_logoff
    notification/auth_options_update

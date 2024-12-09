@@ -107,14 +107,15 @@ is_valid_sitename(Sitename) ->
         nomatch -> false
     end.
 
-maybe_default_hostname(Sitename, #{ hostname := undefined } = Options) ->
-    Options#{ hostname => Sitename ++ ".test" };
-maybe_default_hostname(_Sitename, Options) ->
-    Options.
+maybe_default_hostname(Sitename, #{ hostname := None } = Options) when None =:= undefined; None =:= "" ->
+    Options#{ hostname => make_valid_hostname(Sitename ++ ".test") };
+maybe_default_hostname(_Sitename, #{ hostname := Hostname } = Options) ->
+    Options#{ hostname => make_valid_hostname(Hostname) }.
 
-addsite(_Target, Sitename, #{ hostname := undefined }) ->
-    io:format(standard_error, "Please specify the hostname, for example: -H ~s.test~n~n", [ Sitename ]),
-    halt(1);
+make_valid_hostname(Hostname) ->
+   H1 = z_string:to_lower( unicode:characters_to_binary(Hostname) ),
+   unicode:characters_to_list( binary:replace(H1, <<"_">>, <<"-">>, [ global ]) ).
+
 addsite(_Target, Sitename, Options0) ->
     Options = set_dbschema(Sitename, Options0),
     Context = z_context:new(zotonic_site_status),

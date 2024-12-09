@@ -1,0 +1,210 @@
+$logon_box_width: 400px;
+$horizontal_spacing: 20px;
+$button_spacing: 10px;
+$vertical_element_spacing: 15px; // Bootstrap default
+$border_color: #ddd;
+$background_color: #fff;
+$box_background_color: #f2f2f2;
+$error_color: #C21C3D;
+$error403_background_color: #e8e8e8;
+
+body.err403 {
+    background-color: $error403_background_color;
+
+    .z-logon-box {
+        background-color: white;
+        padding: 20px 10px;
+    }
+}
+
+.z-logon-prompt {
+    text-align: center;
+    max-width: $logon_box_width;
+    margin: 40px auto;
+}
+
+.z-logon-back {
+    float: left;
+    margin: 40px 20px;
+}
+
+.z-logon-box {
+    float: none;
+    margin: $vertical_element_spacing auto;
+
+    width: $logon_box_width;
+    max-width: 100%;
+
+    img.loading {
+        display: block;
+        margin: 0 auto;
+        opacity: 0.5;
+        height: 16px;
+    }
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    p {
+        margin-bottom: $button_spacing;
+    }
+
+    // full width submit button
+    button[type="submit"],
+    input[type="submit"] {
+        width: 100%;
+    }
+
+    .z-logon-title,
+    h2, h3, h4 {
+        &:first-of-type {
+            margin-top: 0;
+        }
+    }
+
+    .z-logon-form {
+        margin: $vertical_element_spacing auto 0 auto;
+    }
+
+    /* Extra login options */
+    .z-logon-extra {
+        li {
+            margin: 0 0 $button_spacing 0 ;
+        }
+
+        .z-btn-social {
+            display: block;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .z-logon-extra-separator {
+            $line_height: 16px;
+
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            line-height: $line_height;
+            margin: $vertical_element_spacing 0;
+
+            &:before {
+                // background behind "or"
+                $label_width: 40px;
+                $label_height: $line_height;
+
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                height: $label_height;
+                top: calc($line_height / 2);
+                width: $label_width;
+                background-color: $background_color;
+                content: "";
+                margin: calc(-#{$label_height} / 2) 0 0 calc(-#{$label_height} / 2);
+                z-index: -1;
+                
+            }
+
+            &:after {
+                // horizontal line
+                position: absolute;
+                left: 0;
+                top: calc($line_height / 2);
+                content: " ";
+                width: 100%;
+                border-bottom: 1px solid $border_color;
+                z-index: -2;
+            }
+        }
+        .z-logon-extra-separator:first-child {
+            display: none;
+        }
+    }
+
+    /* Supporting options */
+    .z-logon-support {
+        margin: $vertical_element_spacing 0 0 0;
+        padding: $vertical_element_spacing 0 0 0;
+
+        &:empty {
+            display: none;
+        }
+    }
+
+    .alert {
+
+        :first-child {
+            margin-top: 0;
+        }
+
+        :last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    // Overrides when the box is shown in a background-colored box
+    &.z-logon-box-boxed {
+        $background_color: $box_background_color;
+
+        .z-logon-form {
+            margin: $vertical_element_spacing 0;
+            padding: $vertical_element_spacing $horizontal_spacing;
+            background-color: $background_color;
+        }
+
+        .z-logon-extra {
+            .z-logon-extra-separator {
+                margin-left: -$horizontal_spacing;
+                margin-right: -$horizontal_spacing;
+
+                &:before {
+                    background-color: $background_color;
+                }
+            }
+        }
+
+        .z-logon-support {
+            margin-left: -$horizontal_spacing;
+            margin-right: -$horizontal_spacing;
+            padding-left: $horizontal_spacing;
+            padding-right: $horizontal_spacing;
+            border-top: 1px solid $border_color;
+
+            p:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    /* Sign up specific*/
+
+    #signup_verify {
+        display: none;
+    }
+
+    input#surprefix {
+        width: 50px;
+    }
+
+    #signup_error_tos_agree,
+    #signup_error_duplicate_username,
+    #signup_error_duplicate_identity {
+        display: none;
+    }
+
+    &.error_tos_agree #signup_error_tos_agree,
+    &.error_duplicate_username #signup_error_duplicate_username,
+    &.error_duplicate_identity #signup_error_duplicate_identity,
+    &.error_custom_1 #signup_error_custom_1,
+    &.error_custom_2 #signup_error_custom_2 {
+        display: block;
+    }
+
+    .z_validation_message {
+        display: block;
+        margin: 5px 0 0 0;
+    }
+}

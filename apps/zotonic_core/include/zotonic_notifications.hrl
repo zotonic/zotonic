@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2022 Marc Worrell
+%% @copyright 2011-2024 Marc Worrell
 %% @doc Notifications used in Zotonic core
+%% @end
 
-%% Copyright 2011-2022 Marc Worrell
+%% Copyright 2011-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -108,7 +109,7 @@
 %% Type: first
 %% Return:: ``{ok, UserId}`` or ``{error, Reason}``
 -record(logon_submit, {
-    payload = #{} :: map()
+    payload = #{} :: #{ binary() => term() }
 }).
 
 %% @doc Check for logon options, called if logon_submit returns `undefined`.
@@ -117,20 +118,46 @@
 %% Type: foldl
 %% Return:: ``map()``
 -record(logon_options, {
-    payload = #{} :: map()
+    payload = #{} :: #{ binary() => term() }
 }).
 
 
-%% @doc Request to send a verification to the user. Return ok or an error
+%% @doc Request to send a verification to the user. Return ok or an error.
+%% Handled by mod_signup to send out verification emails.
 %% Type: first
-%% Identity may be undefined, or is a identity used for the verification.
--record(identity_verification, {user_id, identity}).
+%% Identity may be undefined, or is an identity used for the verification.
+-record(identity_verification, {
+    user_id :: m_rsc:resource_id(),
+    identity :: undefined | m_identity:identity()
+}).
 
-%% @doc Notification that a user's identity has been verified.
+%% @doc Notify that a user's identity has been verified. Signals to modules
+%% handling identities to mark this identity as verified. Handled by mod_admin_identity
+%% to call the m_identity model for this type/key.
 %% Type: notify
--record(identity_verified, {user_id, type, key}).
+-record(identity_verified, {
+    user_id :: m_rsc:resource_id(),
+    type :: m_identity:type(),
+    key :: m_identity:key()
+}).
 
--record(identity_password_match, {rsc_id, password, hash}).
+%% @doc Check if passwords are matching. Uses the password hashing algorithms.
+%% Type: first
+-record(identity_password_match, {
+    rsc_id :: m_rsc:resource_id() | undefined,
+    password :: binary(),
+    hash :: m_identity:hash() | {hash, atom() | binary(), binary()}
+}).
+
+%% @doc Notify that a user's identity has been updated by the identity model.
+%% Type: notify
+-record(identity_update_done, {
+    action :: insert | update | delete | verify,
+    rsc_id :: m_rsc:resource_id(),
+    type :: binary(),
+    key :: m_identity:key() | undefined,
+    is_verified :: boolean() | undefined
+}).
 
 
 %% @doc Handle a signup of a user, return the follow on page for after the signup.
@@ -317,6 +344,13 @@
     recipient :: binary()
 }).
 
+%% @doc Check if an email address is safe to send email to. The email address is not blocked
+%% and is not marked as bouncing.
+%% Type: first
+-record(email_is_recipient_ok, {
+    recipient :: binary()
+}).
+
 %% @doc Email status notification, sent when the validity of an email recipient changes
 %% Type: notify
 -record(email_status, {
@@ -395,13 +429,22 @@
 
 %% @doc Send a page to a mailinglist (notify)
 %% Use {single_test_address, Email} when sending to a specific e-mail address.
--record(mailinglist_mailing, {list_id, page_id}).
+-record(mailinglist_mailing, {
+    list_id = undefined :: m_rsc:resource() | undefined,
+    email = undefined :: binary() | string() | undefined,
+    page_id :: m_rsc:resource(),
+    options = [] :: [ {is_match_language, boolean()} | {is_send_all, boolean()} ]
+}).
 
 %% @doc Send a welcome or goodbye message to the given recipient.
-%% The recipient is either an e-mail address or a resource id.
+%% The recipient is either a recipient-id or a recipient props.
 %% 'what' is send_welcome, send_confirm, send_goobye or silent.
 %% Type: notify
--record(mailinglist_message, {what, list_id, recipient}).
+-record(mailinglist_message, {
+    what :: send_welcome | send_confirm | send_goodbye | silent,
+    list_id :: m_rsc:resource(),
+    recipient :: proplists:proplist() | integer()
+}).
 
 %% @doc Save (and update) the complete category hierarchy
 %% Type: notify
@@ -482,13 +525,24 @@
 }).
 
 %% @doc Upload and replace the resource with the given data. The data is in the given format.
-%% Return {ok, Id} or {error, Reason}, return {error, badarg} when the data is corrupt.
--record(rsc_upload, {id, format :: json|bert, data}).
+%% Type: first
+%% Return: {ok, Id} or {error, Reason}, return {error, badarg} when the data is corrupt.
+-record(rsc_upload, {
+    id :: m_rsc:resource() | undefined,
+    format :: json | bert,
+    data :: binary() | map()
+}).
 
 %% @doc Add custom pivot fields to a resource's search index (map)
-%% Result is a list of {module, props} pairs.
-%% This will update a table "pivot_<module>".
-%% You must ensure that the table exists.
+%% Result is a single tuple or list of tuples ``{pivotname, props}``, where "pivotname"
+%% is the pivot defined in a call to ``z_pivot_rsc:define_custom_pivot/3`` or a table
+%% with created using a SQL command during (eg.) in a module ``manage_schema/2`` call.
+%% The name of the table is ``pivot_<pivotname>``.  The ``props`` is either a property
+%% list or a map with column/value pairs.
+%%
+%% The table MUST have an ``id`` column, with a foreign key constraint to the ``rsc``
+%% table. If you define the pivot table using ``z_pivot_rsc:define_custom_pivot/3`` then
+%% this column and foreign key constraint are automatically added.
 %% Type: map
 -record(custom_pivot, {
     id :: m_rsc:resource_id()
@@ -594,12 +648,22 @@
 %% Return: ``[ m_rsc:resource_id() ]`` or ``undefined``
 -record(acl_user_groups, {}).
 
-%% @doc Modify the list of user groups of an user. Called internally
-%% by the ACL modules when fetching the list of user groups an user
+%% @doc Modify the list of user groups of a user. Called internally
+%% by the ACL modules when fetching the list of user groups a user
 %% is member of.
 %% Type: foldl
 %% Return: ``[ m_rsc:resource_id() ]``
 -record(acl_user_groups_modify, {
+    id :: m_rsc:resource_id() | undefined,
+    groups :: list( m_rsc:resource_id() )
+}).
+
+%% @doc Modify the list of collaboration groups of a user. Called internally
+%% by the ACL modules when fetching the list of collaboration groups a user
+%% is member of.
+%% Type: foldl
+%% Return: ``[ m_rsc:resource_id() ]``
+-record(acl_collab_groups_modify, {
     id :: m_rsc:resource_id() | undefined,
     groups :: list( m_rsc:resource_id() )
 }).
@@ -626,6 +690,7 @@
 %% @doc First for logon of user with username, called after successful password check.
 %% Return: 'undefined' | ok | {error, Reason}
 -record(auth_postcheck, {
+        service = username_pw :: atom(),
         id :: m_rsc:resource_id(),
         query_args = #{} :: map()
     }).
@@ -669,8 +734,9 @@
     service_props = #{} :: map(),
     props = #{} :: m_rsc:props(),
     identities = [] :: list( map() ),
+    ensure_username_pw = true :: boolean(),
     is_connect = false :: boolean(),
-    is_signup_confirm = false :: boolean()
+    is_signup_confirmed = false :: boolean()
 }).
 
 %% @doc Update the given (accumulator) authentication options with the request options.
@@ -681,7 +747,7 @@
         request_options = #{} :: map()
     }).
 
-%% @doc Send a request to the client to login an user. The zotonic.auth.worker.js will
+%% @doc Send a request to the client to login a user. The zotonic.auth.worker.js will
 %%      send a request to controller_authentication to exchange the one time token with
 %%      a z.auth cookie for the given user. The client will redirect to the Url.
 %% Type: first
@@ -697,6 +763,15 @@
 %% Return: ``ok | {error, term()}``
 -record(auth_client_switch_user, {
         user_id :: m_rsc:resource_id()
+    }).
+
+%% @doc Return the list of identity types that allow somebody to logon and become an
+%% active user of the system. Defaults to [ username_pw ].  In the future more types
+%% can be requested, think of 'contact' - to be able to contact someone.
+%% Type: foldl
+%% Return: ``[ atom() ]``
+-record(auth_identity_types, {
+        type = user :: user
     }).
 
 %% @doc Called during different moments of the request.
@@ -759,6 +834,7 @@
         Offset :: pos_integer(),
         Limit :: pos_integer()
     },
+    options = #{} :: z_search:search_options(),
     % Deprecated {searchname, [..]} syntax.
     search = undefined :: {
         SearchName :: atom(),
@@ -826,9 +902,11 @@
 
 
 %% @doc Fetch the data for an import of a resource. Returns data in the format
-%% used by m_rsc_export and m_rsc_import.
+%% used by m_rsc_export and m_rsc_import. Either returns the JSON data, the
+%% imported resource id, or the resource id and a map with a mapping from URIs to
+%% resource ids.
 %% Type: first
-%% Return: {ok, map()} | {error, term()} | undefined
+%% Return: {ok, map()} | {ok, m_rsc:resource_id()} | {ok, {m_rsc:resource_id(), map()}} | {error, term()} | undefined
 -record(rsc_import_fetch, {
     uri :: binary()
 }).
@@ -936,6 +1014,26 @@
     width :: non_neg_integer(),
     height :: non_neg_integer(),
     options :: proplists:proplist()
+    }).
+
+%% @doc Request a translation of a list of strings. The resulting translations must
+%% be in the same order as the request. This notification is handled by modules
+%% that interface to external translation services like DeepL or Google Translate.
+%% Type: first
+%% Return {ok, List} | {error, Reason} | undefined.
+-record(translate, {
+    from :: atom(),
+    to :: atom(),
+    texts = [] :: list( binary() )
+    }).
+
+%% @doc Try to detect the language of a translation. Set is_editable_only to false
+%% to detect any language, even if the language is not enabled for the site.
+%% Type: first
+%% Return atom() | undefined.
+-record(language_detect, {
+    text = <<>> :: binary(),
+    is_editable_only = true :: boolean()
     }).
 
 %% @doc Send a notification that the resource 'id' is added to the query query_id.
@@ -1052,17 +1150,54 @@
 
 %% @doc A survey has been filled in and submitted.
 %% Type: first
--record(survey_submit, {id, handler, answers, missing, answers_raw}).
+%% Return: ``undefined``, ``ok``, ``{ok, Context | #render{}}``, ``{save, Context | #render{}`` or ``{error, term()}``
+-record(survey_submit, {
+    id :: m_rsc:resource_id(),
+    handler :: binary() | undefined,
+    answers :: list(),
+    missing :: list(),
+    answers_raw :: list(),
+    submit_args :: proplists:proplist()
+}).
 
 %% @doc Check if the current user is allowed to download a survey.
 %% Type: first
 %% Return: ``true``, ``false`` or ``undefined``
--record(survey_is_allowed_results_download, {id}).
+-record(survey_is_allowed_results_download, {
+    id :: m_rsc:resource_id()
+}).
 
 %% @doc Check if a question is a submitting question.
 %% Type: first
 %% Return: ``true``, ``false`` or ``undefined``
--record(survey_is_submit, {block = []}).
+-record(survey_is_submit, {
+    block = #{} :: map()
+}).
+
+%% @doc Add header columns for export. The values are the names of the answers and
+%% the text displayed above the column. The ``text`` format is for a complete export, the
+%% ``html`` format is for the limited result overview of the Survey Results Editor.
+%% Type: foldl
+%% Return: ``list( {binary(), binary() | #trans{}} )``
+-record(survey_result_columns, {
+    id :: m_rsc:resource_id(),
+    handler :: binary() | undefined,
+    format :: html | text
+}).
+
+%% @doc Modify row with answers for export. The header columns are given and the
+%% values that are known are set in the folded value. The user_id is the user who
+%% filled in the answers for this row.
+%% Type: foldl
+%% Return: ``#{ binary() => iodata() }``
+-record(survey_result_column_values, {
+    id :: m_rsc:resource_id(),
+    handler :: binary() | undefined,
+    format :: html | text,
+    user_id :: m_rsc:resource_id(),
+    answer :: proplists:proplist(),
+    columns :: list( {binary(), binary() | #trans{}} )
+}).
 
 %% @doc Put a value into the typed key/value store
 %% Type: notify

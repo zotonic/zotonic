@@ -102,9 +102,18 @@ lib(Args, Context) ->
     MinifyRequested = z_convert:to_bool( proplists:get_value(minify, Args, false))
                orelse m_config:get_boolean(site, minification_enabled, Context),
     IsLiveReload = m_config:get_boolean(mod_development, livereload, Context),
-    case MinifyRequested and not IsLiveReload of
-        true -> lib_min;
-        false -> lib
+    IsNoCache = z_convert:to_bool( proplists:get_value(nocache, Args, false) ),
+    IsMinify = MinifyRequested and not IsLiveReload,
+    case IsNoCache of
+        true when IsMinify ->
+            lib_min_nocache;
+        true ->
+            lib_nocache;
+        false ->
+            case IsMinify of
+                true -> lib_min;
+                false -> lib
+            end
     end.
 
 tag1(Files, Args, Context) ->
@@ -142,8 +151,6 @@ link_element(CssFiles, Args, Context) ->
                    TitleAttr,
                    <<" media=\"none\"">>,
                    <<" media-onload=\"">>, Media ,<<"\"">>,
-                   % This is run by the script tag
-                   % <<" onload=\"if(media!='">>, Media, <<"')media='">>, Media, <<"'\"">>,
                    <<" rel=\"">>, Rel, $",
                 <<">">>,
                 <<"<noscript>">>,

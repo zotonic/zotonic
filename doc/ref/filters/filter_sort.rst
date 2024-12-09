@@ -2,7 +2,8 @@
 .. include:: meta-sort.rst
 .. highlight:: django
 
-The `sort` filter takes a list of items to sort. Items can be a ordinary list of terms, or a list of resources to be filtered based on their properties. Sort order and properties to sort on are given as arguments to the filter.
+The `sort` filter takes a list of items to sort. Items can be an ordinary list of terms, property lists, or maps. It can also be
+a list of resource ids to be filtered based on their properties. Sort order and properties to sort on are given as arguments to the filter.
 
 By default it sorts the list in `ascending` order, and resource lists are sorted on their `id` if no property is specified.
 

@@ -29,12 +29,14 @@
             {% with c.id,
                     g|default:'',
                     k|default:'',
-                    c.value
+                    c.value,
+                    c.is_secret
                as
                     id,
                     module,
                     key,
-                    value
+                    value,
+                    is_secret
             %}
             {% with
                {dialog_config_edit module=module key=key value=value on_success={reload}},
@@ -46,7 +48,18 @@
             <tr id="{{ #tr.id }}" class="clickable" data-href="#" data-entry="{{module}}.{{key}}">
                 <td>{{ module|escape|default:"-" }}</td>
                 <td>{{ key|escape|default:"-" }}</td>
-                <td>{{ value|escape|default:"-"|truncate:65 }}</td>
+                <td>
+                    {% if value == '' %}
+                        <span class="text-muted">&mdash;</span>
+                    {% elseif is_secret %}
+                        {{ value|escape|truncatechars:3:" <span class='text-muted'>...</span> " }}
+                        <span class="text-muted">
+                            <i class="glyphicon glyphicon-eye-close"></i>
+                        </span>
+                    {% else %}
+                        {{ value|escape|truncatechars:65 }}
+                    {% endif %}
+                </td>
                 <td>
                     <div class="pull-right buttons">
                         {% button class="btn btn-default btn-xs" text=_"Delete" action=deleteAction %}

@@ -1,8 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013-2017 Marc Worrell <marc@worrell.nl>
-%% @doc Export a (list of) resource(s) in the given format, uses notifiers for fetching and encoding data.
+%% @copyright 2013-2024 Marc Worrell <marc@worrell.nl>
+%% @doc Export a (list of) resource(s) in the given format, uses notifiers or the
+%% export_module controller option for fetching and encoding data.
+%% @end
 
-%% Copyright 2013-2017 Marc Worrell
+%% Copyright 2013-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,11 +27,7 @@
     forbidden/1,
     content_types_provided/1,
 
-    process/4,
-
-    % Exports for controller_export
-    get_content_type/3,
-    set_filename/4
+    process/4
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -47,7 +45,7 @@ forbidden(Context) ->
     Dispatch = z_context:get(zotonic_dispatch, Context2),
     case z_acl:is_allowed(use, mod_export, Context2) of
         true ->
-            case z_notifier:first(#export_resource_visible{id=Id, dispatch=Dispatch}, Context2) of
+            case export_helper:call(#export_resource_visible{id=Id, dispatch=Dispatch}, Context2) of
                 undefined -> {not z_acl:rsc_visible(Id, Context2), Context2};
                 true -> {false, Context2};
                 false -> {true, Context2}
@@ -59,7 +57,7 @@ forbidden(Context) ->
 content_types_provided(Context) ->
     {Id, Context1} = get_id(Context),
     Dispatch = z_context:get(zotonic_dispatch, Context1),
-    case get_content_type(Id, Dispatch, Context1) of
+    case export_helper:get_content_type(Id, Dispatch, Context1) of
         {ok, ContentType} when is_binary(ContentType); is_tuple(ContentType) ->
             {[ ContentType ], Context};
         {error, no_content_type} ->
@@ -86,96 +84,8 @@ process(_Method, _AcceptedCT, ProvidedCT, Context) ->
         {is_raw, z_convert:to_bool(z_context:get_q(raw, Context))}
     ],
     Stream = export_encoder:stream(Id, ProvidedCT, StreamOpts, Context),
-    Context1 = set_filename(Id, ProvidedCT, Dispatch, Context),
+    Context1 = export_helper:set_filename(Id, ProvidedCT, Dispatch, Context),
     {Stream, Context1}.
-
-set_filename(Id, ProvidedCT, Dispatch, Context) ->
-    Mime = cowmachine_util:format_content_type(ProvidedCT),
-    Extension = z_media_identify:extension(Mime),
-    Disposition = case z_notifier:first(
-            #export_resource_content_disposition{
-                id = Id,
-                dispatch = Dispatch,
-                content_type = Mime
-            }, Context)
-    of
-        {ok, Disp} -> Disp;
-        undefined -> <<"attachment">>
-    end,
-    Filename = case z_notifier:first(
-            #export_resource_filename{
-                id = Id,
-                dispatch = Dispatch,
-                content_type = Mime
-            },
-            Context)
-    of
-        undefined ->
-            Cat = m_rsc:p_no_acl(Id, category, Context),
-            iolist_to_binary([
-                        "export-",
-                        z_convert:to_binary(proplists:get_value(name, Cat)),
-                        "-",
-                        z_convert:to_binary(Id),
-                        ".",
-                        Extension
-                    ]);
-        {ok, FN} ->
-            FN1 = z_convert:to_binary(FN),
-            case filename:extension(FN1) of
-                <<".", Extension/binary>> -> FN1;
-                <<>> -> <<FN1/binary, $., Extension/binary>>;
-                _Ext -> <<(filename:rootname(FN1))/binary, $., Extension/binary>>
-            end
-    end,
-    z_context:set_resp_header(
-        <<"content-disposition">>,
-        <<(z_convert:to_binary(Disposition))/binary, "; filename=", Filename/binary>>,
-        Context).
-
-
-%% @doc Fetch the content type being served
-get_content_type(Id, Dispatch, Context) ->
-    case z_context:get(content_type, Context) of
-        undefined ->
-            get_content_type_observer(Id, Dispatch, Context);
-        Type when is_atom(Type) ->
-            get_content_type_extension(z_convert:to_binary(Type), Context);
-        ContentType when is_binary(ContentType); is_list(ContentType) ->
-            {ok, z_convert:to_binary(ContentType)}
-    end.
-
-get_content_type_observer(Id, Dispatch, Context) ->
-    case z_notifier:first(#export_resource_content_type{id=Id, dispatch=Dispatch}, Context) of
-        undefined ->
-            get_content_type_extension(z_context:get_q(<<"type">>, Context), Context);
-        {error, _} = Error ->
-            Error;
-        {ok, _} = Ok ->
-            Ok
-    end.
-
-get_content_type_extension(undefined, _Context) ->
-    {error, no_content_type};
-get_content_type_extension(<<"bert">>, _Context) ->
-    {ok, {<<"application">>, <<"x-bert">>, []}};
-get_content_type_extension(<<"ubf">>, _Context) ->
-    {ok, {<<"text">>, <<"x-ubf">>, []}};
-get_content_type_extension(Type, Context) ->
-    [Mime|_] = mimetypes:ext_to_mimes(Type),
-    case Mime of
-        <<"application/octet-stream">> ->
-            {error, no_content_type};
-        _ ->
-            % Must have an exporter
-            Mime1 = cowmachine_util:normalize_content_type(Mime),
-            ContentTypes = export_encoder:content_types(Context),
-            case lists:member(Mime1, ContentTypes) of
-                true -> {ok, Mime1};
-                false -> {error, no_content_type}
-            end
-    end.
-
 
 get_id(Context) ->
     case z_context:get(id, Context) of
@@ -192,3 +102,4 @@ get_id(Context) ->
         {ok, Id} ->
             {Id, Context}
     end.
+

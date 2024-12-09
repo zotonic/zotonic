@@ -1,13 +1,14 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2021 Marc Worrell
+%% @copyright 2009-2024 Marc Worrell
 %%
 %% @doc Install Zotonic, loads the datamodel into the database
 %% Assumes the database has already been created (which normally needs superuser permissions anyway)
 %%
 %% CREATE DATABASE zotonic WITH OWNER = zotonic ENCODING = 'UTF8';
 %% CREATE LANGUAGE "plpgsql";
+%% @end
 
-%% Copyright 2009-2021 Marc Worrell
+%% Copyright 2009-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -26,6 +27,7 @@
 
 %% interface functions
 -export([
+         install_datamodel/1,
          install/1,
 
          hierarchy_table/0,
@@ -40,11 +42,39 @@
          edge_log_function/0,
          edge_log_trigger/0,
 
+         rsc_pivot_log_table/0,
+         rsc_pivot_log_index_1/0,
+         rsc_pivot_log_index_2/0,
+         rsc_pivot_log_function/0,
+         rsc_pivot_log_trigger/0,
+
          rsc_page_path_log/0,
-         rsc_page_path_log_fki/0
+         rsc_page_path_log_fki/0,
+
+         identity_log_table/0
         ]).
 
 -include_lib("zotonic.hrl").
+
+%% @doc Install only the SQL data model, do not install the data.
+-spec install_datamodel( z:context() ) -> ok.
+install_datamodel(Context) ->
+    ?LOG_INFO(#{
+        in => zotonic_core,
+        text => <<"Zotonic SQL datamodel is being reinstalled.">>
+    }),
+    ok = z_db:transaction(
+        fun(Context1) ->
+            ok = install_sql_list(Context1, model_pgsql()),
+            install_models(Context1)
+        end,
+        Context),
+    ?LOG_INFO(#{
+        in => zotonic_core,
+        text => <<"Zotonic SQL datamodel is reinstalled.">>,
+        result => ok
+    }),
+    ok.
 
 %% @doc Install the core database tables, triggers and data for the given site.
 -spec install( z:context() ) -> ok.
@@ -62,11 +92,23 @@ install_models(Context) ->
     m_rsc_import:install(Context).
 
 
--spec install_sql_list(#context{}, list()) -> ok.
+-spec install_sql_list(Context, Sql) -> ok when
+    Context :: z:context(),
+    Sql :: [ string() | [ string() ] ].
 install_sql_list(Context, Model) ->
     C = z_db_pgsql:get_raw_connection(Context),
-    [ {ok, [], []} = epgsql:squery(C, Sql) || Sql <- Model ],
-    ok.
+    lists:foreach(
+        fun
+            ([ Q | _ ] = SqlList) when is_list(Q) ->
+                lists:foreach(
+                  fun(Sql) ->
+                      {ok, [], []} = epgsql:squery(C, Sql)
+                  end,
+                  SqlList);
+            (Sql) ->
+                {ok, [], []} = epgsql:squery(C, Sql)
+        end,
+        Model).
 
 
 %% @doc Return a list containing the SQL statements to build the database model
@@ -75,7 +117,7 @@ model_pgsql() ->
 
     % Table config
     % Holds all configuration keys
-    "CREATE TABLE config
+    "CREATE TABLE IF NOT EXISTS config
     (
       id serial NOT NULL,
       module character varying(80) NOT NULL DEFAULT 'zotonic'::character varying,
@@ -93,7 +135,7 @@ model_pgsql() ->
     % Table module
     % Holds install state of all known modules
 
-    "CREATE TABLE module
+    "CREATE TABLE IF NOT EXISTS module
     (
       id serial NOT NULL,
       name character varying(80) NOT NULL DEFAULT ''::character varying,
@@ -110,7 +152,7 @@ model_pgsql() ->
 
     % Table: rsc
     % Holds all resources (posts, persons etc.)
-    "CREATE TABLE rsc
+    "CREATE TABLE IF NOT EXISTS rsc
     (
       id serial NOT NULL,
       uri character varying(2048),
@@ -165,55 +207,59 @@ model_pgsql() ->
       CONSTRAINT rsc_pkey PRIMARY KEY (id),
       CONSTRAINT rsc_uri_key UNIQUE (uri),
       CONSTRAINT rsc_name_key UNIQUE (name),
-      CONSTRAINT rsc_page_path_key UNIQUE (page_path)
+      CONSTRAINT rsc_page_path_key UNIQUE (page_path),
+
+      CONSTRAINT fk_rsc_content_group_id FOREIGN KEY (content_group_id)
+      REFERENCES rsc (id)
+      ON UPDATE CASCADE ON DELETE SET NULL,
+
+      CONSTRAINT fk_rsc_creator_id FOREIGN KEY (creator_id)
+      REFERENCES rsc (id)
+      ON UPDATE CASCADE ON DELETE SET NULL,
+
+      CONSTRAINT fk_rsc_modifier_id FOREIGN KEY (modifier_id)
+      REFERENCES rsc (id)
+      ON UPDATE CASCADE ON DELETE SET NULL,
+
+
+      CONSTRAINT fk_rsc_category_id FOREIGN KEY (category_id)
+      REFERENCES rsc (id)
+      ON UPDATE CASCADE ON DELETE RESTRICT
     )",
 
-     "ALTER TABLE rsc ADD CONSTRAINT fk_rsc_content_group_id FOREIGN KEY (content_group_id)
-      REFERENCES rsc (id)
-      ON UPDATE CASCADE ON DELETE SET NULL",
-     "ALTER TABLE rsc ADD CONSTRAINT fk_rsc_creator_id FOREIGN KEY (creator_id)
-      REFERENCES rsc (id)
-      ON UPDATE CASCADE ON DELETE SET NULL",
-     "ALTER TABLE rsc ADD CONSTRAINT fk_rsc_modifier_id FOREIGN KEY (modifier_id)
-      REFERENCES rsc (id)
-      ON UPDATE CASCADE ON DELETE SET NULL",
-     "ALTER TABLE rsc ADD CONSTRAINT fk_rsc_category_id FOREIGN KEY (category_id)
-      REFERENCES rsc (id)
-      ON UPDATE CASCADE ON DELETE RESTRICT",
+     "CREATE INDEX IF NOT EXISTS fki_rsc_content_group_id ON rsc (content_group_id)",
+     "CREATE INDEX IF NOT EXISTS fki_rsc_creator_id ON rsc (creator_id)",
+     "CREATE INDEX IF NOT EXISTS fki_rsc_modifier_id ON rsc (modifier_id)",
+     "CREATE INDEX IF NOT EXISTS fki_rsc_category_id ON rsc (category_id)",
 
-     "CREATE INDEX fki_rsc_content_group_id ON rsc (content_group_id)",
-     "CREATE INDEX fki_rsc_creator_id ON rsc (creator_id)",
-     "CREATE INDEX fki_rsc_modifier_id ON rsc (modifier_id)",
-     "CREATE INDEX fki_rsc_category_id ON rsc (category_id)",
+     "CREATE INDEX IF NOT EXISTS rsc_language_key ON rsc USING gin(language)",
+     "CREATE INDEX IF NOT EXISTS rsc_pivot_tsv_key ON rsc USING gin(pivot_tsv)",
+     "CREATE INDEX IF NOT EXISTS rsc_pivot_rtsv_key ON rsc USING gin(pivot_rtsv)",
 
-     "CREATE INDEX rsc_language_key ON rsc USING gin(language)",
-     "CREATE INDEX rsc_pivot_tsv_key ON rsc USING gin(pivot_tsv)",
-     "CREATE INDEX rsc_pivot_rtsv_key ON rsc USING gin(pivot_rtsv)",
-
-     "CREATE INDEX rsc_pivot_category_nr ON rsc (pivot_category_nr)",
-     "CREATE INDEX rsc_pivot_surname_key ON rsc (pivot_surname)",
-     "CREATE INDEX rsc_pivot_first_name_key ON rsc (pivot_first_name)",
-     "CREATE INDEX rsc_pivot_date_start_month_day_key ON rsc (pivot_date_start_month_day)",
-     "CREATE INDEX rsc_pivot_date_end_month_day_key ON rsc (pivot_date_end_month_day)",
-     "CREATE INDEX rsc_pivot_city_street_key ON rsc (pivot_city, pivot_street)",
-     "CREATE INDEX rsc_pivot_country_key ON rsc (pivot_country)",
-     "CREATE INDEX rsc_pivot_postcode_key ON rsc (pivot_postcode)",
-     "CREATE INDEX rsc_pivot_geocode_key ON rsc (pivot_geocode)",
-     "CREATE INDEX rsc_pivot_title_key ON rsc (pivot_title)",
-     "CREATE INDEX rsc_pivot_location_key ON rsc (pivot_location_lat, pivot_location_lng)",
-     "CREATE INDEX rsc_modified_category_nr_key ON rsc (modified, pivot_category_nr)",
-     "CREATE INDEX rsc_created_category_nr_key ON rsc (created, pivot_category_nr)",
-     "CREATE INDEX rsc_pivot_date_start_category_nr_key ON rsc (pivot_date_start, pivot_category_nr)",
-     "CREATE INDEX rsc_pivot_date_end_category_nr_key ON rsc (pivot_date_end, pivot_category_nr)",
-     "CREATE INDEX rsc_publication_start_category_nr_key ON rsc (publication_start, pivot_category_nr)",
-     "CREATE INDEX rsc_publication_end_category_nr_key ON rsc (publication_end, pivot_category_nr)",
+     "CREATE INDEX IF NOT EXISTS rsc_pivot_category_nr ON rsc (pivot_category_nr)",
+     "CREATE INDEX IF NOT EXISTS rsc_pivot_surname_key ON rsc (pivot_surname)",
+     "CREATE INDEX IF NOT EXISTS rsc_pivot_first_name_key ON rsc (pivot_first_name)",
+     "CREATE INDEX IF NOT EXISTS rsc_pivot_date_start_month_day_key ON rsc (pivot_date_start_month_day)",
+     "CREATE INDEX IF NOT EXISTS rsc_pivot_date_end_month_day_key ON rsc (pivot_date_end_month_day)",
+     "CREATE INDEX IF NOT EXISTS rsc_pivot_city_street_key ON rsc (pivot_city, pivot_street)",
+     "CREATE INDEX IF NOT EXISTS rsc_pivot_country_key ON rsc (pivot_country)",
+     "CREATE INDEX IF NOT EXISTS rsc_pivot_postcode_key ON rsc (pivot_postcode)",
+     "CREATE INDEX IF NOT EXISTS rsc_pivot_geocode_key ON rsc (pivot_geocode)",
+     "CREATE INDEX IF NOT EXISTS rsc_pivot_title_key ON rsc (pivot_title)",
+     "CREATE INDEX IF NOT EXISTS rsc_pivot_location_key ON rsc (pivot_location_lat, pivot_location_lng)",
+     "CREATE INDEX IF NOT EXISTS rsc_modified_category_nr_key ON rsc (modified, pivot_category_nr)",
+     "CREATE INDEX IF NOT EXISTS rsc_created_category_nr_key ON rsc (created, pivot_category_nr)",
+     "CREATE INDEX IF NOT EXISTS rsc_pivot_date_start_category_nr_key ON rsc (pivot_date_start, pivot_category_nr)",
+     "CREATE INDEX IF NOT EXISTS rsc_pivot_date_end_category_nr_key ON rsc (pivot_date_end, pivot_category_nr)",
+     "CREATE INDEX IF NOT EXISTS rsc_publication_start_category_nr_key ON rsc (publication_start, pivot_category_nr)",
+     "CREATE INDEX IF NOT EXISTS rsc_publication_end_category_nr_key ON rsc (publication_end, pivot_category_nr)",
 
 
     % Table: protect
     % By making an entry in this table we protect a rsc from being deleted.
     % This table is maintained by the update/insert trigger.
 
-    "CREATE TABLE protect
+    "CREATE TABLE IF NOT EXISTS protect
     (
         id int NOT NULL,
 
@@ -226,7 +272,7 @@ model_pgsql() ->
     % Table: edge
     % All relations between resources, forming a directed graph
 
-    "CREATE TABLE edge
+    "CREATE TABLE IF NOT EXISTS edge
     (
       id serial NOT NULL,
       subject_id int NOT NULL,
@@ -253,11 +299,11 @@ model_pgsql() ->
         ON UPDATE CASCADE ON DELETE SET NULL
     )",
 
-    "CREATE INDEX fki_edge_subject_id ON edge (subject_id)",
-    "CREATE INDEX fki_edge_predicate_id ON edge (predicate_id)",
-    "CREATE INDEX fki_edge_object_id ON edge (object_id)",
-    "CREATE INDEX fki_edge_creator_id ON edge (creator_id)",
-    "CREATE INDEX edge_sp_seq_key ON edge (subject_id, predicate_id, seq)",
+    "CREATE INDEX IF NOT EXISTS fki_edge_subject_id ON edge (subject_id)",
+    "CREATE INDEX IF NOT EXISTS fki_edge_predicate_id ON edge (predicate_id)",
+    "CREATE INDEX IF NOT EXISTS fki_edge_object_id ON edge (object_id)",
+    "CREATE INDEX IF NOT EXISTS fki_edge_creator_id ON edge (creator_id)",
+    "CREATE INDEX IF NOT EXISTS edge_sp_seq_key ON edge (subject_id, predicate_id, seq)",
 
 
     % Table medium
@@ -265,7 +311,7 @@ model_pgsql() ->
     % Every medium is a resource.
     % The preview might have been generated from the original file and is always a jpeg.
 
-    "CREATE TABLE medium
+    "CREATE TABLE IF NOT EXISTS medium
     (
       id int NOT NULL,
       filename character varying(400),
@@ -274,8 +320,9 @@ model_pgsql() ->
       width int NOT NULL DEFAULT 0,
       height int NOT NULL DEFAULT 0,
       orientation int NOT NULL DEFAULT 1,
+      frame_count int,
       sha1 character varying(40),
-      size int NOT NULL DEFAULT 0,
+      size bigint NOT NULL DEFAULT 0,
       preview_filename character varying(400),
       preview_width int NOT NULL DEFAULT 0,
       preview_height int NOT NULL DEFAULT 0,
@@ -291,12 +338,12 @@ model_pgsql() ->
         ON UPDATE CASCADE ON DELETE CASCADE
     )",
 
-    "CREATE INDEX medium_rootname_key ON medium (rootname)",
+    "CREATE INDEX IF NOT EXISTS medium_rootname_key ON medium (rootname)",
 
     % Table: predicate_category
     % Defines which categories are valid for a predicate as subject or object
 
-    "CREATE TABLE predicate_category
+    "CREATE TABLE IF NOT EXISTS predicate_category
     (
       id serial NOT NULL,
       is_subject boolean NOT NULL DEFAULT true,
@@ -315,13 +362,13 @@ model_pgsql() ->
         ON DELETE CASCADE
     )",
 
-    "CREATE INDEX fki_predicate_category_predicate_id ON predicate_category (predicate_id)",
-    "CREATE INDEX fki_predicate_category_category_id ON predicate_category (category_id)",
+    "CREATE INDEX IF NOT EXISTS fki_predicate_category_predicate_id ON predicate_category (predicate_id)",
+    "CREATE INDEX IF NOT EXISTS fki_predicate_category_category_id ON predicate_category (category_id)",
 
     % Table identity
-    % Identities of an user, used for authentication.  Examples are password, openid, msn, xmpp etc.
+    % Identities of a user, used for authentication.  Examples are password, openid, msn, xmpp etc.
 
-    "CREATE TABLE identity
+    "CREATE TABLE IF NOT EXISTS identity
     (
       id serial NOT NULL,
       rsc_id int NOT NULL,
@@ -347,15 +394,19 @@ model_pgsql() ->
       CONSTRAINT identity_rsc_id_type_key_unique UNIQUE (rsc_id, type, key)
     )",
 
-    "CREATE INDEX fki_identity_rsc_id ON identity (rsc_id)",
-    "CREATE INDEX identity_visited_key ON identity (visited)",
-    "CREATE INDEX identity_created_key ON identity (created)",
-    "CREATE INDEX identity_expires_type_key ON identity (expires, type)",
-    "CREATE UNIQUE INDEX identity_type_key_unique ON identity (type, key) WHERE (is_unique)",
-    "CREATE INDEX identity_type_key_key ON identity using btree (type, key collate ucs_basic text_pattern_ops)",
+    "CREATE INDEX IF NOT EXISTS fki_identity_rsc_id ON identity (rsc_id)",
+    "CREATE INDEX IF NOT EXISTS identity_visited_key ON identity (visited)",
+    "CREATE INDEX IF NOT EXISTS identity_created_key ON identity (created)",
+    "CREATE INDEX IF NOT EXISTS identity_expires_type_key ON identity (expires, type)",
+    "CREATE UNIQUE INDEX IF NOT EXISTS identity_type_key_unique ON identity (type, key) WHERE (is_unique)",
+    "CREATE INDEX IF NOT EXISTS identity_type_key_key ON identity using btree (type, key collate ucs_basic text_pattern_ops)",
+
+    % Table identity log
+    % Keeps track of all successful logons of a user (for some time)
+    identity_log_table(),
 
     % Email send queue and log
-    "CREATE TABLE emailq
+    "CREATE TABLE IF NOT EXISTS emailq
     (
         id serial NOT NULL,
         status character varying(10) not null default 'new', -- new, sent, fail
@@ -369,29 +420,21 @@ model_pgsql() ->
         CONSTRAINT email_pkey PRIMARY KEY (id)
     )",
 
-    "CREATE INDEX email_recipient_key ON emailq (recipient)",
-    "CREATE INDEX email_created_key ON emailq (created)",
-    "CREATE INDEX email_status_retry_key ON emailq (status, retry_on)",
+    "CREATE INDEX IF NOT EXISTS email_recipient_key ON emailq (recipient)",
+    "CREATE INDEX IF NOT EXISTS email_created_key ON emailq (created)",
+    "CREATE INDEX IF NOT EXISTS email_status_retry_key ON emailq (status, retry_on)",
 
-    % pivot queue for rsc, all things that are updated are queued here for later full text indexing
-    "CREATE TABLE rsc_pivot_queue
-    (
-        rsc_id int NOT NULL,
-        serial int NOT NULL DEFAULT 1,
-        due timestamp with time zone,
-        is_update boolean NOT NULL default true,
+    % Pivot queue for rsc, all things that are updated are queued here for later full text indexing.
+    rsc_pivot_log_table(),
+    rsc_pivot_log_index_1(),
+    rsc_pivot_log_index_2(),
+    rsc_pivot_log_function(),
+    rsc_pivot_log_trigger_drop(),
+    rsc_pivot_log_trigger(),
 
-        CONSTRAINT rsc_pivot_queue_pkey PRIMARY KEY (rsc_id),
-        CONSTRAINT fk_rsc_pivot_queue_rsc_id FOREIGN KEY (rsc_id)
-          REFERENCES rsc(id)
-          ON UPDATE CASCADE ON DELETE CASCADE
-    )",
-
-    "CREATE INDEX fki_rsc_pivot_queue_rsc_id ON rsc_pivot_queue (rsc_id)",
-    "CREATE INDEX fki_rsc_pivot_queue_due ON rsc_pivot_queue (is_update, due)",
-
-    % queue for slow pivoting queries, for example syncing category nrs after the categories are changed.
-    "CREATE TABLE pivot_task_queue
+    % Queue for scheduled functions, runs when there is time and the load is low enough.
+    % For example syncing category nrs after the categories are changed.
+    "CREATE TABLE IF NOT EXISTS pivot_task_queue
     (
         id serial NOT NULL,
         module character varying(80) NOT NULL,
@@ -406,64 +449,8 @@ model_pgsql() ->
     )
     ",
 
-    % Update/insert trigger on rsc to fill the update queue
-    % The text indexing is delayed until the updates are stable
-    % Also checks if the rsc is set to protected, if so makes an entry in the 'protect' table.
-    "
-    CREATE FUNCTION rsc_pivot_update() RETURNS trigger AS $$
-    declare
-        duetime timestamp;
-        do_queue boolean;
-    begin
-        if (tg_op = 'INSERT') then
-            do_queue := true;
-        elseif (new.version <> old.version or new.modified <> old.modified) then
-            do_queue := true;
-        else
-            do_queue := false;
-        end if;
-
-        if (do_queue) then
-            <<insert_update_queue>>
-            loop
-                update rsc_pivot_queue
-                set due = (case when now() < due then now() else due end),
-                    serial = serial + 1
-                where rsc_id = new.id;
-
-                exit insert_update_queue when found;
-
-                begin
-                    insert into rsc_pivot_queue (rsc_id, due, is_update) values (new.id, now(), tg_op = 'UPDATE');
-                    exit insert_update_queue;
-                exception
-                    when unique_violation then
-                        -- do nothing
-                end;
-            end loop insert_update_queue;
-        end if;
-
-        if (new.is_protected) then
-            begin
-                insert into protect (id) values (new.id);
-            exception
-                when unique_violation then
-                    -- do nothing
-            end;
-        else
-            delete from protect where id = new.id;
-        end if;
-        return null;
-    end;
-    $$ LANGUAGE plpgsql
-    ",
-    "
-    CREATE TRIGGER rsc_update_queue_trigger AFTER INSERT OR UPDATE
-    ON rsc FOR EACH ROW EXECUTE PROCEDURE rsc_pivot_update()
-    ",
-
     % Queue for deleted medium files, periodically checked for deleting files that are not referenced anymore
-    "CREATE TABLE medium_deleted
+    "CREATE TABLE IF NOT EXISTS medium_deleted
     (
         id serial NOT NULL,
         filename character varying (400) NOT NULL,
@@ -472,11 +459,11 @@ model_pgsql() ->
         CONSTRAINT medium_deleted_pkey PRIMARY KEY (id)
     )",
 
-    "CREATE INDEX medium_deleted_deleted_key ON medium_deleted (deleted)",
+    "CREATE INDEX IF NOT EXISTS medium_deleted_deleted_key ON medium_deleted (deleted)",
 
     % Update/insert trigger on medium to fill the deleted files queue
     "
-    CREATE FUNCTION medium_delete() RETURNS trigger AS $$
+    CREATE OR REPLACE FUNCTION medium_delete() RETURNS trigger AS $$
     begin
         if (tg_op = 'DELETE') then
             if (old.filename <> '' and old.filename is not null and old.is_deletable_file) then
@@ -490,6 +477,7 @@ model_pgsql() ->
     end;
     $$ LANGUAGE plpgsql
     ",
+    "DROP TRIGGER IF EXISTS medium_deleted_trigger ON medium",
     "
     CREATE TRIGGER medium_deleted_trigger AFTER DELETE
     ON medium FOR EACH ROW EXECUTE PROCEDURE medium_delete()
@@ -505,6 +493,7 @@ model_pgsql() ->
 
     % Update/insert trigger on medium to fill the deleted files queue
     medium_update_function(),
+    medium_update_trigger_drop(),
     medium_update_trigger(),
 
     %% Holds administration of previous page paths
@@ -514,12 +503,13 @@ model_pgsql() ->
     %% Track deletion/insert/changes of edges
     edge_log_table(),
     edge_log_function(),
+    edge_log_trigger_drop(),
     edge_log_trigger()
     ].
 
 
 hierarchy_table() ->
-    "CREATE TABLE hierarchy (
+    "CREATE TABLE IF NOT EXISTS hierarchy (
         name character varying (80),
         id int NOT NULL,
         parent_id int,
@@ -536,14 +526,78 @@ hierarchy_table() ->
     )".
 
 hierarchy_index_1() ->
-    "CREATE INDEX hierarchy_nr_key ON hierarchy (name, nr)".
+    "CREATE INDEX IF NOT EXISTS hierarchy_nr_key ON hierarchy (name, nr)".
 
 hierarchy_index_2() ->
-    "CREATE INDEX fki_hierarchy_id ON hierarchy (id)".
+    "CREATE INDEX IF NOT EXISTS fki_hierarchy_id ON hierarchy (id)".
 
+
+rsc_pivot_log_table() ->
+    "CREATE TABLE IF NOT EXISTS rsc_pivot_log
+    (
+        rsc_id int NOT NULL,
+        due timestamp with time zone NOT NULL DEFAULT now(),
+        is_update boolean NOT NULL default true,
+
+        CONSTRAINT fk_rsc_pivot_log_rsc_id FOREIGN KEY (rsc_id)
+          REFERENCES rsc(id)
+          ON UPDATE CASCADE ON DELETE CASCADE
+    )".
+
+rsc_pivot_log_index_1() ->
+    "CREATE INDEX IF NOT EXISTS fki_rsc_pivot_log_rsc_id ON rsc_pivot_log (rsc_id)".
+
+rsc_pivot_log_index_2() ->
+    "CREATE INDEX IF NOT EXISTS rsc_pivot_log_update_due_key ON rsc_pivot_log (is_update, due)".
+
+rsc_pivot_log_function() ->
+    % Update/insert trigger on rsc to fill the pivot log.
+    % Only queues if the rsc version or modification date is changed, otherwise it is
+    % assumed that the resource is not significantly changed for the indices.
+    % The text indexing is delayed until the updates are stable, quick successive updates
+    % will be grouped together by the consumer of the rsc pivot log.
+    % Also checks if the rsc is set to protected, if so makes an entry in the 'protect' table.
+    "
+    CREATE OR REPLACE FUNCTION rsc_pivot_log_insert() RETURNS trigger AS $$
+    declare
+        do_queue boolean;
+    begin
+        if (tg_op = 'INSERT') then
+            do_queue := true;
+        elseif (new.version <> old.version or new.modified <> old.modified) then
+            do_queue := true;
+        else
+            do_queue := false;
+        end if;
+
+        if (do_queue) then
+            insert into rsc_pivot_log (rsc_id, is_update)
+            values (new.id, tg_op = 'UPDATE');
+        end if;
+
+        if (new.is_protected) then
+            insert into protect (id) values (new.id)
+            on conflict (id) do nothing;
+        else
+            delete from protect where id = new.id;
+        end if;
+        return null;
+    end;
+    $$ LANGUAGE plpgsql
+    ".
+
+rsc_pivot_log_trigger_drop() ->
+    "DROP TRIGGER IF EXISTS rsc_update_log_trigger ON RSC".
+
+rsc_pivot_log_trigger() ->
+    % CREATE OR REPLACE was added in psql 14 - for now we first drop the trigger.
+    "
+    CREATE TRIGGER rsc_update_log_trigger AFTER INSERT OR UPDATE
+    ON rsc FOR EACH ROW EXECUTE PROCEDURE rsc_pivot_log_insert()
+    ".
 
 edge_log_table() ->
-    "CREATE TABLE edge_log
+    "CREATE TABLE IF NOT EXISTS edge_log
     (
         id bigserial NOT NULL,
         op character varying(6),
@@ -583,8 +637,11 @@ edge_log_function() ->
     $$ LANGUAGE plpgsql
     ".
 
+edge_log_trigger_drop() ->
+    "DROP TRIGGER IF EXISTS edge_update_trigger ON edge".
 
 edge_log_trigger() ->
+    % CREATE OR REPLACE was added in psql 14 - for now we first drop the trigger.
     "
     CREATE TRIGGER edge_update_trigger AFTER INSERT OR UPDATE OR DELETE
     ON edge FOR EACH ROW EXECUTE PROCEDURE edge_update()
@@ -592,7 +649,7 @@ edge_log_trigger() ->
 
 
 medium_log_table() ->
-    "CREATE TABLE medium_log
+    "CREATE TABLE IF NOT EXISTS medium_log
     (
         id serial NOT NULL,
         usr_id int,
@@ -606,7 +663,7 @@ medium_log_table() ->
 
 medium_update_function() ->
     "
-    CREATE FUNCTION medium_update() RETURNS trigger AS $$
+    CREATE OR REPLACE FUNCTION medium_update() RETURNS trigger AS $$
     declare
         user_id integer;
     begin
@@ -642,6 +699,9 @@ medium_update_function() ->
     $$ LANGUAGE plpgsql
     ".
 
+medium_update_trigger_drop() ->
+  "DROP TRIGGER IF EXISTS medium_update_trigger ON medium".
+
 medium_update_trigger() ->
     "
     CREATE TRIGGER medium_update_trigger AFTER INSERT OR UPDATE
@@ -649,7 +709,7 @@ medium_update_trigger() ->
     ".
 
 rsc_page_path_log() ->
-   "CREATE TABLE rsc_page_path_log (
+   "CREATE TABLE IF NOT EXISTS rsc_page_path_log (
       page_path character varying(80),
       id int not null,
       created timestamp with time zone NOT NULL DEFAULT now(),
@@ -660,5 +720,30 @@ rsc_page_path_log() ->
     )".
 
 rsc_page_path_log_fki() ->
-    "CREATE INDEX fki_rsc_page_path_log_id ON rsc_page_path_log (id)".
+    "CREATE INDEX IF NOT EXISTS fki_rsc_page_path_log_id ON rsc_page_path_log (id)".
+
+identity_log_table() ->
+  [
+    "CREATE TABLE IF NOT EXISTS identity_log
+    (
+      id serial NOT NULL,
+      identity_id int NOT NULL,
+      rsc_id int NOT NULL,
+      created timestamp with time zone NOT NULL DEFAULT now(),
+      user_agent character varying (240),
+      ip_address character varying (40),
+
+      CONSTRAINT id_log_pkey PRIMARY KEY (id),
+      CONSTRAINT fk_id_log_rsc_id FOREIGN KEY (rsc_id)
+        REFERENCES rsc (id)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+      CONSTRAINT fk_id_log_identity_id FOREIGN KEY (identity_id)
+        REFERENCES identity (id)
+        ON UPDATE CASCADE ON DELETE CASCADE
+    )",
+
+    "CREATE INDEX IF NOT EXISTS fki_identity_log_rsc_id ON identity_log (rsc_id)",
+    "CREATE INDEX IF NOT EXISTS fki_identity_log_identity_id ON identity_log (identity_id)",
+    "CREATE INDEX IF NOT EXISTS identity_log_created_key ON identity_log (created)"
+  ].
 

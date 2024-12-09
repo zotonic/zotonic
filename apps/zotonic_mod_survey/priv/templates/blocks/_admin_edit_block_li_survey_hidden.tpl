@@ -11,7 +11,7 @@
 
 {% block widget_content %}
     <p class="help-block">
-        {_ Hidden value, saved with the survey but not shown to the person filling in the form. _}
+        {_ Hidden value, saved with the form but not shown to the person filling in the form. _}
     </p>
     {% if id.is_editable %}
         <div class="form-group view-expanded">

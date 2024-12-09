@@ -12,5 +12,5 @@
 			action={fade_out target=#notice}
 		%}
 
-	{_ The page _} “{{m.rsc[object_id].title}}” {_ has been disconnected._}
+	{_ The page _} “{{ object_id.title|default:object_id.short_title }}” {_ has been disconnected._}
 </div>

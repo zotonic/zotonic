@@ -1,6 +1,7 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2010-2021 Arjan Scherpenisse, Marc Worrell
+%% @copyright 2010-2024 Arjan Scherpenisse, Marc Worrell
 %% @doc Importing non-authoritative things exported by m_rsc_export into the system.
+%% @end
 
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -35,6 +36,7 @@
 
     import/2,
     import/3,
+    import/4,
     import_uri/2,
     import_uri/3,
     import_uri_recursive/3,
@@ -67,7 +69,8 @@
                 | {deny_category, [ binary() ]}
                 | {deny_predicate, [ binary() ]}
                 | {fetch_options, z_url_fetch:options()}
-                | {uri_template, binary()}.
+                | {uri_template, binary()}
+                | {is_forced_update, boolean()}.               % Set to true on forced medium imports
 -type options() :: [ option() ].
 
 -type import_result() :: {ok, {m_rsc:resource_id(), import_map()}}
@@ -186,7 +189,7 @@ mark_imported(RscId, Status, Context) ->
 
 
 %% @doc Find or create a placeholder resource for later import of referred ids.
--spec maybe_create_empty( map(), map(), options(), z:context() ) -> {ok, {m_rsc:rescource_id(), map()}} | {error, term()}.
+-spec maybe_create_empty( map(), map(), options(), z:context() ) -> {ok, {m_rsc:resource_id(), map()}} | {error, term()}.
 maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
     case is_known_resource(Rsc, ImportedAcc, Options, Context) of
         false ->
@@ -345,11 +348,13 @@ reimport_recursive(Id, RefIds, Options, Context) ->
 reimport_recursive_async(Id, Context) ->
     case reimport(Id, Context) of
         {ok, {LocalId, RefIds}} ->
-            ContextAsync = z_context:prune_for_async(Context),
-            sidejob_supervisor:spawn(
-                    zotonic_sidejobs,
-                    {?MODULE, import_referred_ids_task, [ RefIds, #{ LocalId => true }, ContextAsync ]}),
-            {ok, {LocalId, RefIds}};
+            Args = [ RefIds, #{ LocalId => true } ],
+            case z_sidejob:start(?MODULE, import_referred_ids_task, Args, Context) of
+                {ok, _} ->
+                    {ok, {LocalId, RefIds}};
+                {error, _} = Error ->
+                    Error
+            end;
         {error, _} = Error ->
             Error
     end.
@@ -428,6 +433,8 @@ reimport_1(Id, ImportedAcc, IsForceImport, Context) ->
             of
                 true ->
                     case fetch_json(Uri, Context) of
+                        {ok, {RscId, ImportMap}} when is_integer(RscId) ->
+                            {ok, {RscId, maps:merge(ImportMap, ImportedAcc)}};
                         {ok, JSON} ->
                             import_data(Id, Uri, JSON, ImportedAcc, Options, Context);
                         {error, _} = Error ->
@@ -450,6 +457,8 @@ reimport_nonauth(Id, ImportedAcc, Context) ->
                     {error, uri};
                 Uri ->
                     case fetch_json(Uri, Context) of
+                        {ok, {RscId, ImportMap}} when is_integer(RscId) ->
+                            {ok, {RscId, maps:merge(ImportMap, ImportedAcc)}};
                         {ok, JSON} ->
                             import_data(Id, Uri, JSON, ImportedAcc, [], Context);
                         {error, _} = Error ->
@@ -477,6 +486,8 @@ reimport(Id, RefIds, Options, Context) ->
             m_rsc:p(Id, uri_raw, Context)
     end,
     case fetch_json(Uri, Context) of
+        {ok, {RscId, ImportMap}} when is_integer(RscId) ->
+            {ok, {RscId, maps:merge(ImportMap, RefIds)}};
         {ok, JSON} ->
             import_data(Id, Uri, JSON, RefIds, Options1, Context);
         {error, _} = Error ->
@@ -489,6 +500,10 @@ update_medium_uri(LocalId, Uri, Options, Context) ->
     case z_acl:rsc_editable(LocalId, Context) of
         true ->
             case fetch_json(Uri, Context) of
+                {ok, {RscId, ImportMap}} when is_integer(RscId) ->
+                    {ok, {RscId, ImportMap}};
+                {ok, #{ <<"result">> := JSON, <<"status">> := <<"ok">> }} ->
+                    maybe_import_medium(LocalId, JSON, Options, Context);
                 {ok, JSON} ->
                     maybe_import_medium(LocalId, JSON, Options, Context);
                 {error, _} = Error ->
@@ -517,7 +532,11 @@ fetch_json(Uri, Context) ->
                         <<"status">> => <<"ok">>,
                         <<"result">> => Data
                     }};
-                {ok, Data} ->
+                {ok, RscId} when is_integer(RscId) ->
+                    {ok, {RscId, #{ Uri => RscId }}};
+                {ok, {RscId, ImportMap}} when is_integer(RscId) ->
+                    {ok, {RscId, ImportMap#{ Uri => RscId }}};
+                {ok, Data} when is_map(Data); is_list(Data) ->
                     {ok, Data};
                 {error, Reason} = Error ->
                     ?LOG_WARNING(#{
@@ -716,11 +735,13 @@ import_uri_recursive(Uri, Options, Context) ->
 import_uri_recursive_async(Uri, Options, Context) ->
     case import_uri(Uri, Options, Context) of
         {ok, {LocalId, RefIds}} ->
-            ContextAsync = z_context:prune_for_async(Context),
-            sidejob_supervisor:spawn(
-                    zotonic_sidejobs,
-                    {?MODULE, import_referred_ids_task, [ RefIds, #{ LocalId => true }, ContextAsync ]}),
-            {ok, {LocalId, RefIds}};
+            Args = [ RefIds, #{ LocalId => true } ],
+            case z_sidejob:start(?MODULE, import_referred_ids_task, Args, Context) of
+                {ok, _} ->
+                    {ok, {LocalId, RefIds}};
+                {error, _} = Error ->
+                    Error
+            end;
         {error, _} = Error ->
             Error
     end.
@@ -738,6 +759,15 @@ import(JSON, Context) ->
 import(JSON, Options, Context) ->
     import(undefined, JSON, #{}, Options, Context).
 
+%% @doc Import a resource. Overwrites the given resource.
+-spec import( OptLocalId, JSON, options(), z:context() ) -> import_result() when
+    OptLocalId :: m_rsc:resource() | undefined,
+    JSON :: map().
+import(OptLocalId, JSON, Options, Context) ->
+    import(OptLocalId, JSON, #{}, Options, Context).
+
+import(OptLocalId, #{ <<"status">> := <<"ok">>, <<"result">> := JSON }, ImportedAcc, Options, Context) ->
+    import(OptLocalId, JSON, ImportedAcc, Options, Context);
 import(OptLocalId, #{
         <<"resource">> := Rsc,
         <<"uri">> := Uri
@@ -1194,7 +1224,7 @@ is_html_prop(K) ->
     binary:longest_common_suffix([ K, <<"_html">> ]) =:= 5.
 
 
-maybe_import_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := MediaUrl }, Options, Context)
+maybe_import_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := MediaUrl } = JSON, Options, Context)
     when is_binary(MediaUrl), MediaUrl =/= <<>>, is_map(Medium) ->
     % If medium is outdated (compare with created date in medium record)
     %    - download URL
@@ -1204,8 +1234,9 @@ maybe_import_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := Medi
     RemoteMedium = #{
         <<"created">> => Created
     },
+    IsForcedUpdate = z_convert:to_bool( proplists:get_value(is_forced_update, Options, Context) ),
     LocalMedium = m_media:get(LocalId, Context),
-    case is_newer_medium(RemoteMedium, LocalMedium) of
+    case IsForcedUpdate orelse is_newer_medium(RemoteMedium, LocalMedium) of
         true ->
             MediaOptions = [
                 {is_escape_texts, false},
@@ -1216,7 +1247,19 @@ maybe_import_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := Medi
             RscProps = #{
                 <<"original_filename">> => maps:get(<<"original_filename">>, Medium, undefined)
             },
-            _ = m_media:replace_url(MediaUrl, LocalId, RscProps, MediaOptions, Context);
+            RscProps1 = case JSON of
+                #{ <<"resource">> := Rsc } when is_map(Rsc) ->
+                    RscProps#{
+                        <<"medium_language">> => maps:get(<<"medium_language">>, Rsc, undefined),
+                        <<"medium_edit_settings">> => maps:get(<<"medium_edit_settings">>, Rsc, undefined)
+                    };
+                _ ->
+                    RscProps#{
+                        <<"medium_language">> => undefined,
+                        <<"medium_edit_settings">> => undefined
+                    }
+            end,
+            _ = m_media:replace_url(MediaUrl, LocalId, RscProps1, MediaOptions, Context);
         false ->
             ok
     end,
@@ -1576,7 +1619,7 @@ install(Context) ->
             ok;
         false ->
             [] = z_db:q("
-                create table rsc_import (
+                create table if not exists rsc_import (
                     id int not null,
                     user_id int,
                     host character varying(128) not null,
@@ -1605,7 +1648,7 @@ install(Context) ->
                 {"import_rsc_last_import_check_key", "last_import_check"},
                 {"import_rsc_next_import_check_key", "next_import_check"}
             ],
-            [ z_db:q("create index "++Name++" on rsc_import ("++Cols++")", Context) || {Name, Cols} <- Indices ],
+            [ z_db:q("create index if not exists "++Name++" on rsc_import ("++Cols++")", Context) || {Name, Cols} <- Indices ],
             z_db:flush(Context)
     end.
 

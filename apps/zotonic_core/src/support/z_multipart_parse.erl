@@ -1,5 +1,5 @@
 %% @author Bob Ippolito, Marc Worrell
-%% @copyright 2007 Mochi Media, Inc; 2009-2020 Marc Worrell
+%% @copyright 2007 Mochi Media, Inc; 2009-2023 Marc Worrell
 %% @doc Parse multipart/form-data request bodies. Uses a callback function to receive the next parts, can call
 %% a progress function to report back the progress on receiving the data.
 %%
@@ -8,7 +8,7 @@
 %% This is the MIT license.
 %%
 %% Copyright (c) 2007 Mochi Media, Inc.
-%% Copyright (c) 2009-2020 Marc Worrell
+%% Copyright (c) 2009-2023 Marc Worrell
 %%
 %% Permission is hereby granted, free of charge, to any person obtaining a copy
 %% of this software and associated documentation files (the "Software"), to deal
@@ -50,7 +50,6 @@
         buffer :: binary(),
         next_chunk :: more | ok,
         form = #multipart_form{},
-        % z_msg = undefined :: #z_msg_v1{},
         context :: #context{}
     }).
 
@@ -141,7 +140,7 @@ feed_mp(body, #mp{boundary=Prefix, buffer=Buffer, form=Form} = State) ->
             State1 = State#mp{form=Form2, buffer=Rest},
             % State2 = maybe_z_msg_context(State1),
             feed_mp(headers, State1);
-        {maybe, 0} ->
+        {'maybe', 0} ->
             % Found a boundary, without an ending newline
             case read_more(State) of
                 State ->
@@ -154,7 +153,7 @@ feed_mp(body, #mp{boundary=Prefix, buffer=Buffer, form=Form} = State) ->
                 S1 ->
                     feed_mp(body, S1)
             end;
-        {maybe, Start} ->
+        {'maybe', Start} ->
             <<Data:Start/binary, Rest/binary>> = Buffer,
             Form1 = handle_data({body, Data}, Form),
             feed_mp(body, read_more(State#mp{form=Form1, buffer=Rest}));
@@ -172,21 +171,6 @@ feed_maybe_eof(#mp{buffer= <<>>}) ->
     throw({stop_request, 400});
 feed_maybe_eof(#mp{} = State) ->
     feed_mp(body, State).
-
-
-% maybe_z_msg_context(#mp{
-%             z_msg=undefined,
-%             form=#multipart_form{args=[{<<"z_msg">>,Data}|RestArgs]} = Form,
-%             context=#context{page_pid=undefined} = Context
-%         } = State) ->
-%     {ok, #z_msg_v1{} = ZMsg, _Rest} = z_transport:data_decode(Data),
-%     #z_msg_v1{page_id=PageId, session_id=SessionId} = ZMsg,
-%     Context1 = z_transport:maybe_logon(
-%                     z_transport:maybe_set_sessions(SessionId, PageId, Context)),
-%     Form1 = Form#multipart_form{args=[{<<"z_msg">>, ZMsg}|RestArgs]},
-%     State#mp{z_msg=ZMsg, form=Form1, context=Context1};
-% maybe_z_msg_context(#mp{} = State) ->
-%     State.
 
 
 %% @doc Report progress back to the page.
@@ -208,10 +192,6 @@ progress(Percentage, ContentLength, Form, Context) when ContentLength > ?CHUNKSI
     end;
 progress(_Percentage, _ContentLength, _Form, _Context) ->
     ok.
-
-% is_push_attached(Context) ->
-%     z_session_page:get_attach_state(Context) =:= attached.
-
 
 
 %% @doc Callback function collecting all data found in the multipart/form-data body
@@ -375,14 +355,14 @@ find_boundary(Prefix, Data) ->
                     {end_boundary, Skip, size(Prefix) + 2};
                 _ when size(Data) < PrefixSkip + 4 ->
                     %% Underflow
-                    {maybe, Skip};
+                    {'maybe', Skip};
                 _ ->
                     %% False positive
                     not_found
             end;
         {partial, Skip, Length} when (Skip + Length) =:= size(Data) ->
             %% Underflow
-            {maybe, Skip};
+            {'maybe', Skip};
         _ ->
             not_found
     end.

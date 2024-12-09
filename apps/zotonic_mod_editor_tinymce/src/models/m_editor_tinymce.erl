@@ -48,11 +48,23 @@ version(Context) ->
     end.
 
 %% @doc Return the configured tinyMCE version. 'newest' is mapped to the actual version.
+%% If the configured version is not supported, the newest version will be returned.
 -spec version_current(z:context()) -> binary().
 version_current(Context) ->
     case version(Context) of
         <<"newest">> ->
             z_convert:to_binary(?TINYMCE_VERSION);
         Version ->
-            Version
+            EditorTemplate = <<"tinymce-", Version/binary, "/_editor.tpl">>,
+            case z_module_indexer:find(template, EditorTemplate, Context) of
+                {ok, _Found} ->
+                    Version;
+                {error, _Reason} ->
+                    z:warning(
+                        "tinymce: version from config (~s) is unsupported, defaulting to newest.",
+                        [ Version ],
+                        [ {module, ?MODULE}, {line, ?LINE} ],
+                        Context),
+                    z_convert:to_binary(?TINYMCE_VERSION)
+            end
     end.

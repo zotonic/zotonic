@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2020-2022 Marc Worrell
+%% @copyright 2020-2024 Marc Worrell
 %% @doc Supervisor for services for a site. These can be restarted without affecting other parts.
+%% @end
 
-%% Copyright 2020-2022 Marc Worrell
+%% Copyright 2020-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -54,6 +55,10 @@ init(Site) when is_atom(Site) ->
                 {z_mqtt_ticket, start_link, [Site]},
                 permanent, 5000, worker, dynamic},
 
+    ReplayToken = {replay_token,
+                {z_replay_token, start_link, [Site]},
+                permanent, 5000, worker, dynamic},
+
     Template = {z_template,
                 {z_template, start_link, [Site]},
                 permanent, 5000, worker, dynamic},
@@ -79,7 +84,7 @@ init(Site) when is_atom(Site) ->
                 permanent, 5000, worker, dynamic},
 
     Processes = [
-        KeyServer, MqttPool, MqttTicket, Template, MediaClass, Pivot, DropBox,
+        KeyServer, MqttPool, MqttTicket, ReplayToken, Template, MediaClass, Pivot, DropBox,
         MediaCleanup, EdgeLog
     ],
     {ok, {{one_for_one, 500, 10}, Processes}}.

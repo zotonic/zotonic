@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2012 Marc Worrell
+%% @copyright 2009-2023 Marc Worrell
 %% @doc Manage dispatch lists (aka definitions for url patterns). Constructs named urls from dispatch lists.
+%% @end
 
-%% Copyright 2009-2012 Marc Worrell
+%% Copyright 2009-2023 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -275,10 +276,7 @@ init(Site) ->
         end,
         HostAlias),
     process_flag(trap_exit, true),
-    IsRedirect = case m_site:get(redirect, Context) of
-        undefined -> true;
-        R -> z_convert:to_bool(R)
-    end,
+    IsRedirect = z_context:is_hostname_redirect_configured(Context),
     State  = #state{
                 dispatchlist = [],
                 lookup = dict:new(),
@@ -488,9 +486,18 @@ dispatch_for_uri_lookup1([IllegalDispatch|T], Dict) ->
     dispatch_for_uri_lookup1(T, Dict).
 
 
-
-
 %% @doc Make an uri for the named dispatch with the given parameters
+make_url_for(Name, Args, Escape, _UriLookup) when Name =:= none; Name =:= <<"none">> ->
+    QueryStringArgs = filter_empty_args(Args),
+    Sep = case Escape of
+            xml  -> "&amp;";
+            html -> "&amp;";
+            _    -> $&
+          end,
+    #dispatch_url{
+        url=z_convert:to_binary([$?, urlencode(QueryStringArgs, Sep)]),
+        dispatch_options=[]
+    };
 make_url_for(Name, Args, Escape, UriLookup) ->
     Name1 = z_convert:to_atom(Name),
     Args1 = filter_empty_args(Args),
