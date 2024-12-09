@@ -1440,16 +1440,15 @@ insert_1(RscId, Type, Key, IsVerified, Props, Context) ->
             ],
             {ok, IdnId} = z_db:insert(identity, Props1, Context),
             {ok, IdnId, insert};
-        IdnId ->
-            Props1 = IsVerified of
-                true ->
-                    [ {verify_key, undefined},
-                      {modified, calendar:universal_time()}
-                      | Props ];
-                false ->
-                    [ {modified, calendar:universal_time()}
-                      | Props ]
-            end,
+        IdnId when is_integer(IdnId), IsVerified ->
+            Props1 = [ {verify_key, undefined},
+                       {modified, calendar:universal_time()}
+                       | Props ],
+            _ = z_db:update(identity, IdnId, Props1, Context),
+            {ok, IdnId, update};
+        IdnId when is_integer(IdnId), not IsVerified ->
+            Props1 = [ {modified, calendar:universal_time()}
+                       | Props ],
             _ = z_db:update(identity, IdnId, Props1, Context),
             {ok, IdnId, update}
     end.
