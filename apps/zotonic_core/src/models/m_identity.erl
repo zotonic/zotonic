@@ -1438,8 +1438,12 @@ insert_1(RscId, Type, Key, IsVerified, Props, Context) ->
                 {key, Key}
                 | Props
             ],
-            {ok, IdnId} = z_db:insert(identity, Props1, Context),
-            {ok, IdnId, insert};
+            case z_db:insert(identity, Props1, Context) of
+                {ok, IdnId} ->
+                    {ok, IdnId, insert};
+                {error, _} = Error ->
+                    Error
+            end;
         IdnId when is_integer(IdnId), IsVerified ->
             Props1 = [
                 {verify_key, undefined},
