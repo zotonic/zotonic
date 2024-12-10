@@ -1,8 +1,9 @@
-%% @doc Fetch resource from remote Zotonic site, keep in sync.
-%% @copyright 2021 Marc Worrell
+%% @copyright 2021-2024 Marc Worrell
 %% @author Marc Worrell <marc@worrell.nl>
+%% @doc Fetch resource from remote Zotonic site, keep in sync.
+%% @end
 
-%% Copyright 2021 Marc Worrell
+%% Copyright 2021-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -47,22 +48,34 @@ fetch(Url, Options, Context) ->
 %
 fetch_json(Url) ->
     Options = [
-        {accept, "application/json"},
-        {user_agent, "Zotonic-WebSub"},
-        insecure
+        {accept, <<"application/json">>},
+        {user_agent, <<"Zotonic-WebSub">>}
     ],
     case z_url_fetch:fetch(Url, Options) of
         {ok, {_FinalUrl, _Hs, _Size, Body}} ->
             JSON = jsxrecord:decode(Body),
             {ok, JSON};
-        {error, _} = Error ->
-            lager:warning("WebSub: error fetching ~p: ~p", [Url, Error]),
+        {error, Reason} = Error ->
+            ?LOG_ERROR(#{
+                in => zotonic_mod_websub,
+                text => <<"WebSub: error fetching url">>,
+                result => error,
+                reason => Reason,
+                url => Url
+            }),
             Error
     end.
 
 import_json(_Url, #{<<"status">> := <<"ok">>, <<"result">> := JSON}, Options, Context) ->
     m_rsc_import:import(JSON, Options, Context);
 import_json(Url, JSON, _Options, _Context) ->
-    lager:warning("WebSub: JSON without status ok ~p: ~p", [Url, JSON]),
+    ?LOG_WARNING(#{
+        in => zotonic_mod_websub,
+        text => <<"WebSub: JSON without status ok">>,
+        result => error,
+        reason => status,
+        url => Url,
+        json => JSON
+    }),
     {error, status}.
 
