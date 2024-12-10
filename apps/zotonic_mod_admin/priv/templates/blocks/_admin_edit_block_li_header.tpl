@@ -1,7 +1,7 @@
 {% extends "admin_edit_widget_i18n.tpl" %}
 
 {% block widget_title %}
-{_ Block _}
+{_ Page block _}
 <div class="widget-header-tools"></div>
 {% endblock %}
 
