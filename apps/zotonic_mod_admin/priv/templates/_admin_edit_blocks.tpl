@@ -36,7 +36,7 @@ $('#edit-blocks').sortable({
     var $block = $(this).closest('li');
     z_dialog_confirm({
         title: '{_ Confirm removal _}',
-        text: '<p>{_ Do you want to remove this page section? _}</p>',
+        text: '<p>{_ Do you want to remove this page block? _}</p>',
         cancel: '{_ Cancel _}',
         ok: '{_ Delete _}',
         is_danger: true,

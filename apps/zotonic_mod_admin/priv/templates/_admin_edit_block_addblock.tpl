@@ -2,7 +2,7 @@
     <div class="clearfix">
         <div class="block-add-block">
             <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
-                {_ + add page section _}
+                {_ + add page block _}
                 <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">

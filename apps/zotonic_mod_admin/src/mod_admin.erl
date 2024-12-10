@@ -171,7 +171,7 @@ admin_menu_content_queries(Context) ->
 
 observe_admin_edit_blocks(#admin_edit_blocks{}, Menu, Context) ->
     [
-        {1, ?__("Standard section types", Context), [
+        {1, ?__("Standard page block types", Context), [
             {header, ?__("Header | a big header", Context)},
             {text, ?__("Text | a (rich) text block", Context)},
             {page, ?__("Embed page | a citation, popup, or link to another page", Context)}
