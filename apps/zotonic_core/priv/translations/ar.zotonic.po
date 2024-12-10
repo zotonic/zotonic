@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-12-10 14:39\n"
+"PO-Revision-Date: 2024-12-10 15:43\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -2376,7 +2376,7 @@ msgstr "النص"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:176
 msgid "Text | a (rich) text block"
-msgstr ""
+msgstr "نص | كتلة نص (غنية)"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:58
 msgid "The Zotonic datamodel is being reinstalled. Watch the console for messages"
@@ -2847,7 +2847,7 @@ msgstr "الصفحة"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:24
 msgid "page block"
-msgstr ""
+msgstr "كتلة الصفحة"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:28./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:17
 msgid "pixels"
