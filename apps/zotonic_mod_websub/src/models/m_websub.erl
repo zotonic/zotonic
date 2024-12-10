@@ -1,8 +1,9 @@
-%% @doc Model for administrating WebSub subscriptions for import and export.
-%% @copyright 2021 Marc Worrell
+%% @copyright 2021-2024 Marc Worrell
 %% @author Marc Worrell <marc@worrell.nl>
+%% @doc Model for administrating WebSub subscriptions for import and export.
+%% @end
 
-%% Copyright 2021 Marc Worrell
+%% Copyright 2021-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -37,7 +38,6 @@ update_export(Callback, Topic, RscId, LeaseSecs, OptSecret, Context) ->
 %% @doc Delete a topic subscriber.
 delete_export(Callback, Topic, Context) ->
     ok.
-
 
 
 install(Context) ->
