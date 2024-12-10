@@ -7,9 +7,9 @@ ifnotequal
 
 .. seealso:: :ref:`tag-if` and :ref:`tag-ifequal`.
 
-Show a block when two values are not equal.
+Show something if two values are not equal.
 
-The ``{% ifnotequal %}`` tag tests if its two arguments are unequal.  If so then the contents of the ``{% ifnotequal %}`` block are output, otherwise the contents of the optional ``{% else %}`` block are output.
+The ``{% ifnotequal %}`` tag tests if its two arguments are unequal.  If so then the contents of the ``{% ifnotequal %}`` tag are output, otherwise the contents of the optional ``{% else %}`` tag are output.
 
 For example::
 

@@ -22,7 +22,7 @@ Example, say a template "page.tpl" contains the following:
    {% overrules %}
    {% block title %} My new title {% endblock %}
 
-All named blocks in this template will replace the similar named blocks in the template `page.tpl` that is "next in line" to be used.
+All named template blocks will replace the similar named template blocks in the overruled `page.tpl` template that is "next in line" to be used.
 
 This is useful if you want to use a template from a module, and the template is mentioned in (for example) a dispatch rule. Now you can overrule and extend that template in your own modules without changing the dispatch rules or the original module.
 

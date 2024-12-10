@@ -7,14 +7,14 @@ if
 
 .. seealso:: :ref:`tag-ifequal` and :ref:`tag-ifnotequal`.
 
-Show a block if the condition is true.
+Show something if the condition is true.
 
-The ``{% if %}`` tag evaluates an expression and if the result is true (boolean true, number unequal to zero, non empty string or a non empty list) then the contents of the if-block are output.
+The ``{% if %}`` tag evaluates an expression and if the result is true (boolean true, number unequal to zero, non empty string or a non empty list) then the contents of the if-tag are output.
 
 .. note::
    Besides the ``{% elif %}`` tag we also support the alias ``{% elseif %}``.
 
-If the if-test fails then the optional ``{% elif %}`` blocks are evaluated. If both the if-test and all elif-tests fail, then the ``{% else %}`` block contents are output.
+If the if-test fails then the optional ``{% elif %}`` tags are evaluated. If both the if-test and all elif-tests fail, then the ``{% else %}`` tag contents are output.
 
 Example::
 
