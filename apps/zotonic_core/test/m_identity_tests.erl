@@ -34,6 +34,33 @@ hash_is_equal_old_hash_test() ->
 
     ok.
 
+insert_identity_test() ->
+    C = z_context:new(zotonic_site_testsandbox),
+    m_identity:insert(1, test_key, <<"1234">>, C),
+    ?assertEqual([{1}], z_db:q("select count(*) from identity where rsc_id = 1 and type = 'test_key' and key = '1234'", C)),
+    ok.
+
+parallel_insert_identity_test() ->
+    C = z_context:new(zotonic_site_testsandbox),
+    InsertFun = fun() ->
+                        receive
+                            {insert, Pid} ->
+                                m_identity:insert(1, test_key, <<"4321">>, C),
+                                Pid ! done
+                        end
+                end,
+    %% Trigger two parallel inserts
+    Insert1 = spawn(InsertFun),
+    Insert2 = spawn(InsertFun),
+    Insert1 ! {insert, self()},
+    Insert2 ! {insert, self()},
+    %% Wait until the inserts are done
+    receive done -> ok end,
+    receive done -> ok end,
+
+    ?assertEqual(1, z_db:q1("select count(*) from identity where rsc_id = 1 and type = 'test_key' and key = '4321'", C)),
+    ok.
+
 check_password_no_user_test_() ->
     {timeout, 20, fun() -> check_password_no_user() end}.
 

@@ -1402,50 +1402,63 @@ insert(Rsc, Type, Key, Context) ->
 insert(Rsc, Type, Key, Props, Context) ->
     KeyNorm = normalize_key(Type, Key),
     case is_valid_key(Type, KeyNorm, Context) of
-        true -> insert_1(Rsc, Type, KeyNorm, Props, Context);
-        false -> {error, invalid_key}
+        true ->
+            RscId = m_rsc:rid(Rsc, Context),
+            TypeB = z_convert:to_binary(Type),
+            KeyB = z_convert:to_binary(Key),
+            IsVerified = z_convert:to_bool(proplists:get_value(is_verified, Props, false)),
+            F = fun(Ctx) -> insert_1(RscId, TypeB, KeyB, IsVerified, Props, Ctx) end,
+            case z_db:transaction(F, Context) of
+                {ok, IdnId, Action} ->
+                    notify(RscId, Action, TypeB, KeyB, IsVerified, Context),
+                    {ok, IdnId};
+                {error, _} = Error ->
+                    Error
+            end;
+        false ->
+            {error, invalid_key}
     end.
 
-insert_1(Rsc, Type, Key, Props, Context) ->
-    RscId = m_rsc:rid(Rsc, Context),
-    TypeB = z_convert:to_binary(Type),
-    KeyB = z_convert:to_binary(Key),
-    IsVerified = z_convert:to_bool(proplists:get_value(is_verified, Props)),
+insert_1(undefined, _Type, _Key, _IsVerified, _Props, _Context) ->
+    {error, enoent};
+insert_1(RscId, Type, Key, IsVerified, Props, Context) ->
     case z_db:q1("select id
                   from identity
                   where rsc_id = $1
                     and type = $2
-                    and key = $3",
-        [RscId, TypeB, KeyB],
+                    and key = $3
+                  for update",
+        [RscId, Type, Key],
         Context)
     of
         undefined ->
             Props1 = [
                 {rsc_id, RscId},
-                {type, TypeB},
-                {key, KeyB}
+                {type, Type},
+                {key, Key}
                 | Props
             ],
-            Result = z_db:insert(identity, Props1, Context),
-            notify(RscId, insert, TypeB, KeyB, IsVerified, Context),
-            Result;
-        IdnId ->
-            Props1 = case proplists:get_value(is_verified, Props, false) of
-                true ->
-                    [
-                        {verify_key, undefined},
-                        {modified, calendar:universal_time()}
-                        | Props
-                    ];
-                false ->
-                    [
-                        {modified, calendar:universal_time()}
-                        | Props
-                    ]
-            end,
+            case z_db:insert(identity, Props1, Context) of
+                {ok, IdnId} ->
+                    {ok, IdnId, insert};
+                {error, _} = Error ->
+                    Error
+            end;
+        IdnId when is_integer(IdnId), IsVerified ->
+            Props1 = [
+                {verify_key, undefined},
+                {modified, calendar:universal_time()}
+                | Props
+            ],
             _ = z_db:update(identity, IdnId, Props1, Context),
-            notify(RscId, update, TypeB, KeyB, IsVerified, Context),
-            {ok, IdnId}
+            {ok, IdnId, update};
+        IdnId when is_integer(IdnId), not IsVerified ->
+            Props1 = [
+                {modified, calendar:universal_time()}
+                | Props
+            ],
+            _ = z_db:update(identity, IdnId, Props1, Context),
+            {ok, IdnId, update}
     end.
 
 -spec is_valid_key( type(),  undefined | key(), z:context() ) -> boolean().
