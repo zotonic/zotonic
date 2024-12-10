@@ -1,8 +1,9 @@
-%% @doc Controller for handling WebSub requests
-%% @copyright 2021 Marc Worrell
+%% @copyright 2021-2024 Marc Worrell
 %% @author Marc Worrell <marc@worrell.nl>
+%% @doc Controller for handling WebSub requests
+%% @end
 
-%% Copyright 2021 Marc Worrell
+%% Copyright 2021-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -53,7 +54,7 @@ malformed_request(Context) ->
             andalso is_valid_topic(HubTopic, Context1)
             andalso (OptHubLease =:= undefined orelse z_utils:only_digits(OptHubLease))
             andalso (OptHubSecret =:= undefined orelse size(OptHubSecret) =< 200),
-    {IsValid, Context1}.
+    {not IsValid, Context1}.
 
 content_types_accepted(Context) ->
     {[ {<<"application">>, <<"x-www-form-urlencoded">>, []} ], Context}.
@@ -110,12 +111,25 @@ subscribe(HubCallback, HubTopic, OptHubSecret, RscId, Context) ->
             % TODO
             ok;
         {ok, {Status, OtherChallenge}} when Status >= 200, Status =< 299 ->
-            lager:warning("WebSub Callback returned unexpected challenge ~p expected ~p (~s)",
-                        [ OtherChallenge, Challenge, HubCallback ]),
+            ?LOG_WARNING(#{
+                in => zotonic_mod_websub,
+                text => <<"WebSub subscribe Callback returned unexpected challenge">>,
+                result => error,
+                reason => denied,
+                challenge_expected => Challenge,
+                challenge_received => OtherChallenge,
+                callback => HubCallback
+            }),
             {error, denied};
         Other ->
-            lager:warning("WebSub Callback returned non 2xx ~p (~s)",
-                          [ Other, HubCallback ]),
+            ?LOG_WARNING(#{
+                in => zotonic_mod_websub,
+                text => <<"WebSub subsribe Callback returned non 2xx">>,
+                result => error,
+                reason => denied,
+                response => Other,
+                callback => HubCallback
+            }),
             {error, denied}
     end.
 
@@ -136,12 +150,25 @@ unsubscribe(HubCallback, HubTopic, OptHubSecret, Context) ->
             % TODO
             ok;
         {ok, {Status, OtherChallenge}} when Status >= 200, Status =< 299 ->
-            lager:warning("WebSub Callback returned unexpected challenge ~p expected ~p (~s)",
-                        [ OtherChallenge, Challenge, HubCallback ]),
+            ?LOG_WARNING(#{
+                in => zotonic_mod_websub,
+                text => <<"WebSub unsubscribe Callback returned unexpected challenge">>,
+                result => error,
+                reason => denied,
+                challenge_expected => Challenge,
+                challenge_received => OtherChallenge,
+                callback => HubCallback
+            }),
             {error, denied};
         Other ->
-            lager:warning("WebSub Callback returned non 2xx ~p (~s)",
-                          [ Other, HubCallback ]),
+            ?LOG_WARNING(#{
+                in => zotonic_mod_websub,
+                text => <<"WebSub unsubscribe Callback returned non 2xx">>,
+                result => error,
+                reason => denied,
+                response => Other,
+                callback => HubCallback
+            }),
             {error, denied}
     end.
 
@@ -187,7 +214,13 @@ post_callback(HubCallback, OptHubSecret, Payload) ->
         {ok, {Status, _Body}} ->
             {ok, {Status, Body}};
         {error, Reason} = Error ->
-            lager:error("WebSub error ~p posting to callback: ~s", [ Reason, HubCallback ]),
+            ?LOG_ERROR(#{
+                in => zotonic_mod_websub,
+                text => <<"WebSub error posting to callback">>,
+                result => error,
+                reason => Reason,
+                callback => HubCallback
+            }),
             Error
     end.
 
@@ -207,15 +240,21 @@ topic_id(Topic, Context) ->
     Site = z_context:site(Context),
     case z_sites_dispatcher:dispatch_url(Topic) of
         {ok, #{
-            site := Site,
+            site := DispatchSite,
             controller_options := Options,
             bindings := Bindings
-        }} ->
+        }} when DispatchSite =:= Site ->
             Id = maps:get(id, Bindings, proplists:get_value(id, Options)),
             m_rsc:rid(Id, Context);
         _ ->
             % Non matching sites and illegal urls are rejected
-            lager:info("WebSub for non matching URL: ~s", [ Topic ]),
+            ?LOG_INFO(#{
+                in => zotonic_mod_websub,
+                text => <<"WebSub for non matching topic URL">>,
+                result => error,
+                reason => unknown_url,
+                topic_url => Topic
+            }),
             undefined
     end.
 
