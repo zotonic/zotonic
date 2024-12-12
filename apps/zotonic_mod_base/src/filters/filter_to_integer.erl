@@ -23,6 +23,12 @@ to_integer(undefined, _Context) ->
     undefined;
 to_integer({trans, _} = Tr, Context) ->
     to_integer(z_trans:lookup_fallback(Tr, Context), Context);
+to_integer(B, _Context) when is_binary(B) ->
+	try
+	    z_convert:to_integer(z_string:trim(B))
+	catch
+		_:_ -> undefined
+	end;
 to_integer(N, _Context) ->
 	try
 	    z_convert:to_integer(N)
