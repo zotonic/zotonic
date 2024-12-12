@@ -248,14 +248,17 @@ to_md({<<"table">>, _Args, Enclosed}, M, S) ->
     DataMDRows = lists:reverse(DataMDRows0),
 
     % Remove newlines and trim cells MD
-    Widths0 = lists:map(
-        fun({_, Args, _}) ->
-            case proplists:get_value(<<"align">>, Args) of
-                <<"left">> -> 4;
-                <<"right">> -> 4;
-                <<"center">> -> 5;
-                _ -> 3
-            end
+    Widths0 = lists:filtermap(
+        fun
+            ({TD, Args, _}) when TD =:= <<"td">>; TD =:= <<"th">> ->
+                case proplists:get_value(<<"align">>, Args) of
+                    <<"left">> -> {true, 4};
+                    <<"right">> -> {true, 4};
+                    <<"center">> -> {true, 5};
+                    _ -> {true, 3}
+                end;
+            (_) ->
+                false
         end,
         lists:reverse(HeadCells)),
     Widths = column_widths([ HeadMDCells | DataMDRows ], Widths0),
