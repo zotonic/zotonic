@@ -218,7 +218,7 @@ to_md({<<"table">>, _Args, Enclosed}, M, S) ->
     end,
     HeadCells = case HeadRow of
         [] -> [];
-        {_, _, HCs} -> HCs
+        {_, _, HCs} -> filter_tags([ <<"td">>, <<"th">> ], HCs)
     end,
 
     % Make MD of all header cells
@@ -228,7 +228,7 @@ to_md({<<"table">>, _Args, Enclosed}, M, S) ->
             {[cell(CellHtml) | HAcc], MAcc1}
         end,
         {[], M},
-        filter_tags([ <<"td">>, <<"th">> ], HeadCells)),
+        HeadCells),
     HeadMDCells = lists:reverse(HeadMDCells0),
 
     % Make MD of all body rows
@@ -248,17 +248,14 @@ to_md({<<"table">>, _Args, Enclosed}, M, S) ->
     DataMDRows = lists:reverse(DataMDRows0),
 
     % Remove newlines and trim cells MD
-    Widths0 = lists:filtermap(
-        fun
-            ({TD, Args, _}) when TD =:= <<"td">>; TD =:= <<"th">> ->
-                case proplists:get_value(<<"align">>, Args) of
-                    <<"left">> -> {true, 4};
-                    <<"right">> -> {true, 4};
-                    <<"center">> -> {true, 5};
-                    _ -> {true, 3}
-                end;
-            (_) ->
-                false
+    Widths0 = lists:map(
+        fun({_, Args, _}) ->
+            case proplists:get_value(<<"align">>, Args) of
+                <<"left">> -> 4;
+                <<"right">> -> 4;
+                <<"center">> -> 5;
+                _ -> 3
+            end
         end,
         lists:reverse(HeadCells)),
     Widths = column_widths([ HeadMDCells | DataMDRows ], Widths0),
