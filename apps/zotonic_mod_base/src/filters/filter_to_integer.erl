@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2015 Marc Worrell
+%% @copyright 2010-2024 Marc Worrell
 %% @doc Convert a value to integer
+%% @end
 
-%% Copyright 2010-2015 Marc Worrell
+%% Copyright 2010-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,6 +24,12 @@ to_integer(undefined, _Context) ->
     undefined;
 to_integer({trans, _} = Tr, Context) ->
     to_integer(z_trans:lookup_fallback(Tr, Context), Context);
+to_integer(B, _Context) when is_binary(B) ->
+	try
+	    z_convert:to_integer(z_string:trim(B))
+	catch
+		_:_ -> undefined
+	end;
 to_integer(N, _Context) ->
 	try
 	    z_convert:to_integer(N)
