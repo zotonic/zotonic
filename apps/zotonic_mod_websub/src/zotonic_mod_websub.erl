@@ -1,6 +1,7 @@
 %% @copyright 2021-2024 Marc Worrell
 %% @author Marc Worrell <marc@worrell.nl>
-%% @doc Publish and subscribe to resources between sites using WebSub
+%% @doc Publish and subscribe to resources between sites using WebSub.
+%% WebSub specification is at https://www.w3.org/TR/websub/
 %% @end
 
 %% Copyright 2021-2024 Marc Worrell
@@ -20,7 +21,7 @@
 -module(zotonic_mod_websub).
 -author("Marc Worrell <marc@worrell.nl>").
 
--mod_title("Resource PubSub").
+-mod_title("Resource WebSub").
 -mod_description("Publish and subscribe to resources between sites using WebSub.").
 
 -include_lib("zotonic_core/include/zotonic.hrl").
