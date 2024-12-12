@@ -389,7 +389,10 @@ column_zip_1([C|Cs], [A|As], Acc) ->
 column_pad(Cs, Ws, Align) ->
     Zipped = column_zip(column_zip(Cs, Ws), Align),
     lists:map(
-        fun({{C, W}, A}) -> pad(C, W, A) end,
+        fun
+            ({{C, W}, A}) when is_binary(C) -> pad(C, W, A);
+            (_) -> <<>>
+        end,
         Zipped).
 
 pad(C, W, right) ->
