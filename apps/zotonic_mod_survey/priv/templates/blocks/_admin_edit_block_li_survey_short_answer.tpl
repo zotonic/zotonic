@@ -65,11 +65,11 @@
         <div {% if blk.validation != "numericality" and blk.validation != 'date' %}style="display: none"{% endif %} class="form-group" id="{{ #range }}">
             <div class="row">
                 <div class="col-sm-6">
-                    <label>{_ Minimal value _}</label>
+                    <label class="control-label">{_ Minimal value _}</label>
                     <input class="form-control" type="text" id="block-{{name}}-minval" name="blocks[].minval" value="{{ blk.minval }}">
                 </div>
                 <div class="col-sm-6">
-                    <label>{_ Maximal value _}</label>
+                    <label class="control-label">{_ Maximal value _}</label>
                     <input class="form-control" type="text" id="block-{{name}}-maxval" name="blocks[].maxval" value="{{ blk.maxval }}">
                 </div>
             </div>
