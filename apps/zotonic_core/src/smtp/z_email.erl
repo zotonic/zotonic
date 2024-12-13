@@ -247,7 +247,7 @@ combine_name_email(Name, Email) ->
     smtp_util:combine_rfc822_addresses([{Name1, Email1}]).
 
 
-%% @doc Split the name and email from the format `jan janssen <jan@example.com>'.
+%% @doc Split the name and email from the format `jan janssen <jan@example.com>`.
 %% If just `jan` is given then it is assumed that the name is empty and the address is `jan`.
 %% The email routines should add the default email domain to the returned email address if
 %% it is missing.
