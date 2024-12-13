@@ -1398,7 +1398,7 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
                         _ -> HtmlBin
                     end,
                     [{<<"text">>, <<"plain">>, [], Params,
-                     expand_cr(z_convert:to_binary(z_markdown:to_markdown(ContentHtml, [no_html])))}]
+                     expand_cr(z_convert:to_binary(z_markdown:to_markdown(ContentHtml, [no_html, no_tables])))}]
             end;
         false ->
             [{<<"text">>, <<"plain">>, [], Params,
