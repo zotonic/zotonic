@@ -36,7 +36,8 @@
 -record(ms, {
     li = none,
     indent = [],
-    allow_html=true,
+    allow_html = true,
+    format_tables = true,
     level = -1
 }).
 
@@ -65,7 +66,9 @@ convert1(Html, Options) ->
 set_options([], S) ->
     S;
 set_options([no_html|T], S) ->
-    set_options(T, S#ms{allow_html=false}).
+    set_options(T, S#ms{ allow_html = false });
+set_options([no_tables|T], S) ->
+    set_options(T, S#ms{ format_tables = false }).
 
 -spec to_md(Html, M, S) -> {iodata(), M1} when
     Html :: z_html_parse:html_element()
@@ -202,7 +205,7 @@ to_md({<<"blockquote">>, _Args, Enclosed}, M, S) ->
     {EncText, M1} = to_md(Enclosed, M, S1),
     {[nl(S1), EncText, nl(S)], M1};
 
-to_md({<<"table">>, _Args, Enclosed}, M, S) ->
+to_md({<<"table">>, _Args, Enclosed}, M, #ms{ format_tables = true } = S) ->
     THeads = filter_tags(<<"thead">>, Enclosed),
     TBody = filter_tags(<<"tbody">>, Enclosed),
     BodyRows = case TBody of

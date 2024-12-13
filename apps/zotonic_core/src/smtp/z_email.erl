@@ -247,7 +247,10 @@ combine_name_email(Name, Email) ->
     smtp_util:combine_rfc822_addresses([{Name1, Email1}]).
 
 
-%% @doc Split the name and email from the format `jan janssen <jan@example.com>'
+%% @doc Split the name and email from the format `jan janssen <jan@example.com>'.
+%% If just "jan" is given then it is assumed that the name is "" and the address is "jan".
+%% The email routines should add the default email domain to the returned email address if
+%% it is missing.
 -spec split_name_email(String) -> {Name, Email} when
     String :: string() | binary(),
     Name :: binary(),
@@ -269,7 +272,26 @@ split_name_email(Email) ->
                     {z_string:trim(z_convert:to_binary(Email1)), <<>>}
             end;
         {error, _} ->
-            {z_string:trim(z_convert:to_binary(Email1)), <<>>}
+            HasSpace = binary:match(Email1, <<" ">>) =/= nomatch,
+            HasAt = binary:match(Email1, <<"@">>) =/= nomatch,
+            if
+                HasAt ->
+                    % Looks like an email address but isn't one
+                    {Email1, <<>>};
+                HasSpace ->
+                    % Multiple words, probaly some name
+                    {Email1, <<>>};
+                true ->
+                    % Might be missing the domain
+                    % Try adding `@example.com` and see if we have now a valid email address
+                    Email2 = <<Email1/binary, "@example.com">>,
+                    case split_name_email(Email2) of
+                        {_, <<>>} ->
+                            {Email1, <<>>};
+                        {Name3, Email3} ->
+                            {Name3, binary:replace(Email3, <<"@example.com">>, <<>>)}
+                    end
+            end
     end.
 
 b(undefined) -> <<>>;
