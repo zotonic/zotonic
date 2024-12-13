@@ -773,7 +773,7 @@ do_submit(SurveyId, Questions, Answers, undefined, SubmitArgs, Context) ->
             save_submit(SurveyId, FoundAnswers, Answers, Context),
             {ok, Render};
         {ok, _ContextOrRender} = Handled ->
-            maybe_mail(SurveyId, Answers, undefined, false, Context),
+            % maybe_mail(SurveyId, Answers, undefined, false, Context),
             Handled;
         {error, _Reason} = Error ->
             Error
