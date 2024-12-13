@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-12-10 14:40\n"
+"PO-Revision-Date: 2024-12-13 15:17\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -5008,6 +5008,10 @@ msgstr "Anda dapat menemukan kode di Aplikasi otentikasi Anda."
 msgid "You can log in using the following external service"
 msgstr "Anda dapat masuk menggunakan layanan eksternal berikut"
 
+#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:9./apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:18
+msgid "You have requested a new password for"
+msgstr "Anda telah meminta kata sandi baru untuk"
+
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:75
 msgid "You have to share your email address to be able to log in."
 msgstr "Anda harus membagikan alamat email Anda untuk dapat masuk."
@@ -5031,10 +5035,6 @@ msgstr "Anda menggunakan akun lain pada {service} dari yang diharapkan."
 #: apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:101
 msgid "You're almost done! To make sure you are really you, we ask you to confirm your account from your email address."
 msgstr "Kamu hampir selesai! Untuk memastikan anda benar-benar anda, kami meminta anda untuk mengkonfirmasi akun anda dari alamat email anda."
-
-#: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:9./apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:18
-msgid "You've requested a new password for"
-msgstr "Anda sudah meminta kata sandi baru untuk"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:121
 msgid "Your account on {site} is disabled."
@@ -7230,7 +7230,6 @@ msgid "Apr"
 msgstr "Apr"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:42
-#: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:23
 msgid "April"
 msgstr "April"
 
@@ -7239,7 +7238,6 @@ msgid "Aug"
 msgstr "Agu"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:46
-#: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:27
 msgid "August"
 msgstr "Agustus"
 
@@ -7260,7 +7258,6 @@ msgid "Dec"
 msgstr "Des"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:50
-#: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:31
 msgid "December"
 msgstr "Desember"
 
@@ -7269,7 +7266,6 @@ msgid "Feb"
 msgstr "Feb"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:40
-#: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:21
 msgid "February"
 msgstr "Februari"
 
@@ -7290,7 +7286,6 @@ msgid "Jan"
 msgstr "Januari"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:39
-#: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:20
 msgid "January"
 msgstr "Januari"
 
@@ -7299,7 +7294,6 @@ msgid "Jul"
 msgstr "Jul"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:45
-#: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:26
 msgid "July"
 msgstr "Bulan Juli"
 
@@ -7308,7 +7302,6 @@ msgid "Jun"
 msgstr "Jun"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:44
-#: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:25
 msgid "June"
 msgstr "Bulan juni"
 
@@ -7325,12 +7318,10 @@ msgid "Mar"
 msgstr "Maret"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:41
-#: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:22
 msgid "March"
 msgstr "Maret"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:43./apps/zotonic_mod_l10n/src/support/l10n_date.erl:58
-#: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:24
 msgid "May"
 msgstr "Mei"
 
@@ -7343,7 +7334,6 @@ msgid "Nov"
 msgstr "November"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:49
-#: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:30
 msgid "November"
 msgstr "November"
 
@@ -7352,7 +7342,6 @@ msgid "Oct"
 msgstr "Oktober"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:48
-#: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:29
 msgid "October"
 msgstr "Oktober"
 
@@ -7365,7 +7354,6 @@ msgid "Sep"
 msgstr "September"
 
 #: apps/zotonic_mod_l10n/src/support/l10n_date.erl:47
-#: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer_date.tpl:28
 msgid "September"
 msgstr "September"
 
@@ -10013,6 +10001,10 @@ msgstr "Temukan seseorang untuk menautkan jawabannya. Jika Anda tidak menemukan 
 msgid "First page in category"
 msgstr "Halaman pertama di kategori"
 
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:76
+msgid "For date ranges you can also use relative dates, like <code>-5 year</code>."
+msgstr "Untuk rentang tanggal, Anda juga dapat menggunakan tanggal relatif, seperti <code>-5 tahun</code>."
+
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:29
 msgid "Go to question"
 msgstr "Pergi ke pertanyaan"
@@ -10033,7 +10025,7 @@ msgstr "Masukan tersembunyi"
 msgid "Hidden value, saved with the form but not shown to the person filling in the form."
 msgstr "Nilai tersembunyi, disimpan bersama formulir tetapi tidak diperlihatkan kepada orang yang mengisi formulir."
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:72./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:65./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:64./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:47./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:59./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:174./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:62./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:64
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:72./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:60./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:36./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:65./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:64./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:47./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:89./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:174./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:62./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:64
 msgid "Hide from results"
 msgstr "Sembunyikan dari hasil"
 
@@ -10125,9 +10117,17 @@ msgstr "Alamat email yang cocok"
 msgid "Matching question"
 msgstr "Pertanyaan yang cocok"
 
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:72
+msgid "Maximal value"
+msgstr "Nilai maksimal"
+
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
 msgid "Milk"
 msgstr "susu"
+
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:68
+msgid "Minimal value"
+msgstr "Nilai minimal"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_q.tpl:38
 msgid "Move question down"
@@ -10309,7 +10309,7 @@ msgstr "Merah"
 msgid "Remove \"Next\" button. No answers will be submitted unless you add a button jump to a next page."
 msgstr "Hapus tombol \"Berikutnya\". Tidak ada jawaban yang akan dikirimkan kecuali Anda menambahkan tombol lompat ke halaman berikutnya."
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:40./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:52./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:167./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:55./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:41./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:57
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:53./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:29./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:58./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:39./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:40./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:82./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:167./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:55./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:41./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:57
 msgid "Required, this question must be answered."
 msgstr "Diperlukan, pertanyaan ini harus dijawab."
 
@@ -10650,15 +10650,15 @@ msgstr "anggota"
 msgid "must be a date"
 msgstr "harus berupa sebuah tanggal"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:41./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:32./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:42
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:41./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:41./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:57
 msgid "must be a number"
 msgstr "harus sebuah nomor"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:44
+#: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:42./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:45./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:61
 msgid "must be a phone number"
 msgstr "harus berupa sebuah nomor telepon"
 
-#: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:30./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:40
+#: apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:34./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_short_answer.tpl:51
 msgid "must be an e-mail address"
 msgstr "harus berupa sebuah alamat e-mail"
 
