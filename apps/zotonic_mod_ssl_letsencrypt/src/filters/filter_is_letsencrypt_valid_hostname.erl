@@ -52,7 +52,8 @@ is_non_local(Hostname) ->
 
 %% Ping the url, should return our (random) secret
 is_this_site(Hostname, Context) ->
-    Url = z_dispatcher:url_for(letsencrypt_ping, Context),
+    ContextNoLang = z_context:set_language('x-default', Context),
+    Url = z_dispatcher:url_for(letsencrypt_ping, ContextNoLang),
     Url1 = "http://" ++ z_convert:to_list(Hostname) ++ z_convert:to_list(Url),
     case z_fetch:fetch(Url1, [ insecure ], Context) of
         {ok, {_FinalUrl, _Hs, _Len, Body}} ->
