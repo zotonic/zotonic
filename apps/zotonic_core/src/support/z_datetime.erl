@@ -120,7 +120,7 @@ format(Format, Context) ->
 
 %% @doc Format a date according to the format and the timezone settings in the context.
 format(Date, Format, #context{} = Context) ->
-    z_dateformat:format(z_datetime:to_local(Date, Context), Format, format_opts(Date, z_context:tz(Context), Context)).
+    z_dateformat:format(to_local(Date, Context), Format, format_opts(Date, z_context:tz(Context), Context)).
 
 %% @doc Format the current date in UTC.
 format_utc(Format, Context) ->
@@ -151,9 +151,6 @@ to_local({{9999, _, _}, _} = DT, _Tz) ->
     DT;
 to_local({{Y, _, _}, _}, _Tz) when Y > 9999 ->
     ?ST_JUTTEMIS;
-to_local({{Y, M, D}, T}, Tz) when Y =< 1 ->
-    {{Y1, M1, D1}, T1} = to_local({{10, M, D}, T}, Tz),
-    {{Y1 - 10 + Y, M1, D1}, T1};
 to_local(DT, <<"UTC">>) ->
     DT;
 to_local(DT, <<"GMT">>) ->
