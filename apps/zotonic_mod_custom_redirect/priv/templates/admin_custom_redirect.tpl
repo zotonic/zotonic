@@ -100,11 +100,12 @@
                 </tbody>
             </table>
 
-            <div class="form-actions">
+            <div class="form-actions sticky-bottom">
                 <a id="{{ #cancel }}" class="btn btn-default">{_ Cancel _}</a>
                 <button type="submit" class="btn btn-primary">{_ Save _}</button>
                 {% wire id=#cancel action={reload} %}
             </div>
+            <br>
         </form>
     </div>
 </div>
