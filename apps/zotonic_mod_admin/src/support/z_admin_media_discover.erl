@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014-2023 Marc Worrell <marc@worrell.nl>
+%% @copyright 2014-2024 Marc Worrell <marc@worrell.nl>
 %% @doc Enables embedding media from their URL.
+%% @end
 
-%% Copyright 2014-2023 Marc Worrell <marc@worrell.nl>
+%% Copyright 2014-2024 Marc Worrell <marc@worrell.nl>
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -240,9 +241,8 @@ try_url({ok, <<"http:", _/binary>> = Url}, Context) ->
     try_url_http(Url, Context);
 try_url({ok, <<"https:", _/binary>> = Url}, Context) ->
     try_url_http(Url, Context);
-try_url({ok, <<"data:", _/binary>>}, _Context) ->
-    % Use the z_url routines to decode, then save to tempfile and handle as file upload
-    {error, todo};
+try_url({ok, <<"data:", _/binary>> = Url}, Context) ->
+    try_url_http(Url, Context);
 try_url({ok, <<"ftp:", _/binary>>}, _Context) ->
     % Use anonymous ftp
     {error, todo};
@@ -259,7 +259,7 @@ try_url(_, _Context) ->
     MediaImport :: #media_import_props{},
     Reason :: term().
 try_url_http(Url, Context) ->
-    case z_media_import:url_import_props(z_sanitize:uri(Url), Context) of
+    case z_media_import:url_import_props(z_sanitize:uri(Url, true), Context) of
         {ok, List} ->
             {ok, List};
         {error, _} = Error ->
