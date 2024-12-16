@@ -81,7 +81,7 @@
         </div>
     </form>
 {% else %}
-    <p class="alert alert-error">
+    <p class="alert alert-danger">
         {_ App not found, or no view permission. _}
     </p>
     <div class="modal-footer">

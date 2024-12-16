@@ -69,7 +69,7 @@
 	{% else %}
 		{# some random hierarchy - later we could support creating any kind of hierarchy #}
 		{# hierarchies are more formal menu definitions, which is useful for database access #}
-		<div class="alert alert-error" role="alert">
+		<div class="alert alert-danger" role="alert">
 			<strong>{_ Unknown category _}: {{ q.name|escape }}</strong>
 			{_ Hierarchies can be defined for any existing category. _}
 		</div>

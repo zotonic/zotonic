@@ -177,7 +177,7 @@
                         {_ If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files. _}
                     </p>
 
-                    <p id="s3error-queue" class="alert alert-error" style="display:none">{_ Could not access the service, double check your settings and try again. _}</p>
+                    <p id="s3error-queue" class="alert alert-danger" style="display:none">{_ Could not access the service, double check your settings and try again. _}</p>
                     <p id="s3ok-queue" class="alert alert-success" style="display:none">{_ All files will be queued, uploads will start in the background within 10 minutes. _}</p>
                     <p id="s3ok-queue-local" class="alert alert-success" style="display:none">{_ All cloud files will be queued for download. _}</p>
 
