@@ -512,6 +512,8 @@ periodic_cleanup(Context) ->
           and (    bounce is null
                 or sent is null
                 or bounce < sent)
+          and (    recent_error is null
+               or  recent_error_ct < 5)
         ",
         Context).
 
