@@ -23,6 +23,7 @@
 
 -export([
     uri/1,
+    uri/2,
     default_sandbox_attr/1,
     ensure_safe_js_callback/1,
     escape_props/1,
@@ -45,15 +46,26 @@
 
 %% @doc Ensure that some characters are escaped, URLs copied from the browser can contain
 %% UTF-8 characters that need to be percent-encoded befor further processing is possible.
+%% Does NOT allow data: URLs.
 -spec uri(Url) -> EncodedUrl when
     Url :: binary() | string() | undefined,
     EncodedUrl :: binary().
-uri(undefined) ->
+uri(Url) ->
+    uri(Url, false).
+
+%% @doc Ensure that some characters are escaped, URLs copied from the browser can contain
+%% UTF-8 characters that need to be percent-encoded befor further processing is possible.
+%% Allows data: URLs.
+-spec uri(Url, IsAllowData) -> EncodedUrl when
+    Url :: binary() | string() | undefined,
+    IsAllowData :: boolean(),
+    EncodedUrl :: binary().
+uri(undefined, _IsAllowData) ->
     undefined;
-uri(Url) when is_list(Url) ->
-    uri(unicode:characters_to_binary(Url, utf8));
-uri(Uri) ->
-    z_html:sanitize_uri(Uri).
+uri(Url, IsAllowData) when is_list(Url) ->
+    uri(unicode:characters_to_binary(Url, utf8), IsAllowData);
+uri(Uri, IsAllowData) ->
+    z_html:sanitize_uri(Uri, IsAllowData).
 
 
 default_sandbox_attr(Context) ->
