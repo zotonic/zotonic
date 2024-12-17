@@ -363,7 +363,7 @@ parse_email({<<"message">>, <<"rfc822">>}, _Headers, _Params, Body) ->
               <<"<dt>Date:</dt><dd>">>, z_html:escape(proplists:get_value(<<"Date">>, FwdHeaders, <<>>)), <<"</dd>">>,
               <<"</dl>">>
              ]),
-    H = #email{html=Html, text=Text},
+    H = #email{ html = Html, text = Text },
     E = parse_email({FwdType, FwdSubType}, FwdHeaders, FwdParameters, FwdBody),
     append_email(H, E);
 
@@ -374,10 +374,10 @@ parse_email(Mime, _Headers, Params, Body) ->
 %% @doc Merge two email parts
 merge_email(A, B) ->
     A#email{
-      subject=take_defined(A#email.subject, B#email.subject),
-      text=take_defined(A#email.text, B#email.text),
-      html=take_defined(A#email.html, B#email.html),
-      attachments=A#email.attachments++B#email.attachments
+      subject = take_defined(A#email.subject, B#email.subject),
+      text = take_defined(A#email.text, B#email.text),
+      html = take_defined(A#email.html, B#email.html),
+      attachments = A#email.attachments++B#email.attachments
      }.
 
 %% @doc Append two e-mails (used in multipart/mixed messages)
@@ -385,10 +385,10 @@ append_email(A, B) ->
     A1 = generate_text(generate_html(A)),
     B1 = generate_text(generate_html(B)),
     #email{
-            subject=take_defined(A1#email.subject, B1#email.subject),
-            html=append(A1#email.html, B1#email.html),
-            text=append(A1#email.text, B1#email.text),
-            attachments=A1#email.attachments++B1#email.attachments
+            subject = take_defined(A1#email.subject, B1#email.subject),
+            html = append(A1#email.html, B1#email.html),
+            text = append(A1#email.text, B1#email.text),
+            attachments = A1#email.attachments++B1#email.attachments
           }.
 
 take_defined(undefined, B) -> B;
@@ -398,17 +398,17 @@ append(undefined, B) -> B;
 append(A, undefined) -> A;
 append(A, B) -> <<A/binary, B/binary>>.
 
-generate_text(#email{text=undefined, html=undefined} = E) ->
+generate_text(#email{ text = undefined, html = undefined } = E) ->
     E;
-generate_text(#email{text=undefined, html=Html} = E) ->
-    E#email{text=z_markdown:to_markdown(Html, [no_html])};
+generate_text(#email{ text = undefined, html = Html } = E) ->
+    E#email{ text = z_markdown:to_markdown(Html, [no_html, no_tables]) };
 generate_text(E) ->
     E.
 
-generate_html(#email{text=undefined, html=undefined} = E) ->
+generate_html(#email{ text = undefined, html = undefined } = E) ->
     E;
-generate_html(#email{text=Text, html=undefined} = E) ->
-    E#email{html=z_html:escape_link(Text)};
+generate_html(#email{ text = Text, html = undefined } = E) ->
+    E#email{ html = z_html:escape_link(Text) };
 generate_html(E) ->
     E.
 
@@ -424,9 +424,9 @@ attachment({Type, SubType}, Params, Body) ->
     #email{
             attachments=[
                          #upload{
-                            mime=append_mime(Type, SubType),
-                            data=Body,
-                            filename=proplists:get_value(<<"filename">>, DispParams)
+                            mime = append_mime(Type, SubType),
+                            data = Body,
+                            filename = proplists:get_value(<<"filename">>, DispParams)
                            }
                         ]
           }.
