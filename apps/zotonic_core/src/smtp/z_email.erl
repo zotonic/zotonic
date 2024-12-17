@@ -258,6 +258,8 @@ combine_name_email(Name, Email) ->
 split_name_email(Email) ->
     Email1 = z_string:trim(rfc2047:decode(unicode:characters_to_binary(Email, utf8))),
     case smtp_util:parse_rfc5322_addresses(Email1) of
+        {ok, []} ->
+            {<<>>, <<>>};
         {ok, [{N,E}|_]} ->
             {z_string:trim(unicode:characters_to_binary(b(N), utf8)), unicode:characters_to_binary(b(E), utf8)};
         {error,{1,smtp_rfc5322_parse,["syntax error before: ","'>'"]}} ->
