@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016 Marc Worrell, Maas-Maarten Zeeman
-%%
+%% @copyright 2016-2024 Marc Worrell, Maas-Maarten Zeeman
 %% @doc Certificate handling for Let's Encrypt
+%% @end
 
-%% Copyright 2016 Marc Worrell, Maas-Maarten Zeeman
+%% Copyright 2016-2024 Marc Worrell, Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -118,14 +118,7 @@ event(#submit{message = {request_cert, Args}}, Context) ->
             SANs1 = [ San || San <- SANs, San /= <<>> ],
             case gen_server:call(z_utils:name_for_site(?MODULE, Context), {cert_request, Hostname, SANs1}) of
                 ok ->
-                    z_render:update(Wrapper,
-                                    #render{
-                                        template="_admin_ssl_letsencrypt_running.tpl",
-                                        vars=[
-                                            {hostname, Hostname},
-                                            {san, SANs1}
-                                        ]},
-                                    Context);
+                    z_render:growl(?__("Requesting certificates", Context), Context);
                 {error, Reason} ->
                     ?LOG_ERROR(#{
                         text => <<"Could not start Letsencrypt cert request">>,

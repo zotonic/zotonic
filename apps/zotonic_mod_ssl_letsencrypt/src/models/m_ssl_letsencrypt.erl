@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016 Marc Worrell, Maas-Maarten Zeeman
-%%
+%% @copyright 2016-2024 Marc Worrell, Maas-Maarten Zeeman
 %% @doc Fetch information about the SSL certificates
+%% @end
 
-%% Copyright 2016 Marc Worrell, Maas-Maarten Zeeman
+%% Copyright 2016-2024 Marc Worrell, Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.

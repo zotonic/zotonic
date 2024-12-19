@@ -14,7 +14,7 @@
     <div id="{{ #form_wrapper }}" class="well">
         <p>{_ The checked hostnames will be added to the certificate. _}</p>
 
-        {% wire id=#letsencrypt_hosts type="submit" 
+        {% wire id=#letsencrypt_hosts type="submit"
             postback={request_cert hostname=m.site.hostname wrapper=#form_wrapper}
             delegate=`mod_ssl_letsencrypt`
         %}
@@ -22,7 +22,7 @@
             <ul class="list-unstyled">
                 <li>
                     <label>
-                        <input type="checkbox" checked disabled /> {{ m.site.hostname }}
+                        <input type="checkbox" checked disabled> {{ m.site.hostname }}
                     </label>
                     <span class="text-success">√ – primary</span>
                 </li>
@@ -35,14 +35,14 @@
                         {% if hostalias|is_letsencrypt_valid_hostname %}
                             <li>
                                 <label>
-                                    <input type="checkbox" name="san" value="{{ hostalias }}" checked /> {{ hostalias }}
+                                    <input type="checkbox" name="san" value="{{ hostalias }}" checked> {{ hostalias }}
                                 </label>
                                 <span class="text-success">√ – alias</span>
                             </li>
                         {% else %}
                             <li>
                                 <label class="text-muted">
-                                    <input type="checkbox" disabled /> {{ hostalias }}
+                                    <input type="checkbox" disabled> {{ hostalias }}
                                 </label>
                                 <em class="text-danger">&times; – {_ not reachable or local IP _}</em>
                             </li>
