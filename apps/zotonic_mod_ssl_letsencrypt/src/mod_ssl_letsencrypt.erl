@@ -113,7 +113,6 @@ event(#submit{message = {request_cert, Args}}, Context) ->
     case z_acl:is_admin_editable(Context) of
         true ->
             {hostname, Hostname} = proplists:lookup(hostname, Args),
-            {wrapper, Wrapper} = proplists:lookup(wrapper, Args),
             SANs = z_context:get_q_all(<<"san">>, Context),
             SANs1 = [ San || San <- SANs, San /= <<>> ],
             case gen_server:call(z_utils:name_for_site(?MODULE, Context), {cert_request, Hostname, SANs1}) of

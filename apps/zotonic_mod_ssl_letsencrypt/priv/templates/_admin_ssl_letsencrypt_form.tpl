@@ -11,11 +11,11 @@
     </div>
 {% else %}
 
-    <div id="{{ #form_wrapper }}" class="well">
+    <div class="well">
         <p>{_ The checked hostnames will be added to the certificate. _}</p>
 
         {% wire id=#letsencrypt_hosts type="submit"
-            postback={request_cert hostname=m.site.hostname wrapper=#form_wrapper}
+            postback={request_cert hostname=m.site.hostname}
             delegate=`mod_ssl_letsencrypt`
         %}
         <form id="{{ #letsencrypt_hosts }}" method="POST" action="postback">
