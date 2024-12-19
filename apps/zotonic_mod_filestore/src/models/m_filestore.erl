@@ -439,7 +439,7 @@ unmark_move_to_local_limit(Limit, Context) ->
 unmark_move_to_local_all(Context) ->
     z_db:q("update filestore
             set is_move_to_local = false
-            where is_move_to_local", Context).
+            where is_move_to_local = true", Context).
 
 
 %% @doc Remove the "move to local" mark from the given filestore entry.
@@ -460,7 +460,7 @@ fetch_move_to_local(Context) ->
     z_db:qmap("
             select *
             from filestore
-            where is_move_to_local
+            where is_move_to_local = true
               and is_deleted = false
               and error is null
             limit 200",
