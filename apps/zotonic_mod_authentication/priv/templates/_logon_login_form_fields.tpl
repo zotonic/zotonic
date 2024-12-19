@@ -47,7 +47,7 @@
         <div class="form-group">
             <div class="checkbox">
                 <label>
-                    <input type="checkbox" name="rememberme" value="1" {% if q.rememberme or m.authentication.is_rememberme %}checked{% endif %}>
+                    <input type="checkbox" name="rememberme" value="1" {% if q.rememberme or m.authentication.is_rememberme %}checked{% endif %} />
                     {_ Keep me logged in _}
                 </label>
             </div>
