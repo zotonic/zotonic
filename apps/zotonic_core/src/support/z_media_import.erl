@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014-2022 Marc Worrell
+%% @copyright 2014-2024 Marc Worrell
 %% @doc Import media from internet locations.
+%% @end
 
-%% Copyright 2014-2022 Marc Worrell
+%% Copyright 2014-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -208,14 +209,50 @@ update_1(_, RscId, #media_import_props{medium_props=MP, medium_url=MediumUrl} = 
 -spec url_import_props(z_url_metadata:metadata() | string() | binary(), z:context()) ->
     {ok, list(#media_import_props{})} | {error, term()}.
 url_import_props(Url, Context) when is_list(Url); is_binary(Url) ->
-    Url1 = z_sanitize:uri(Url),
-    case z_fetch:metadata(Url1, [], Context) of
-        {ok, MD} ->
-            url_import_props(MD, Context);
-        {error, {Code, _FinalUrl, _Hs, _Sz, _Body} = Reason} when Code =:= 429 ->
-            url_import_props_retry(Reason, Context);
-        {error, _} = Error ->
-            Error
+    case z_sanitize:uri(Url, true) of
+        <<"data:", _/binary>> = Url1 ->
+            try
+                case z_url:decode_data_url(Url1) of
+                    {ok, Mime, _Charset, _Data} ->
+                        case is_media_mime(Mime) of
+                            true ->
+                                Category = m_media:mime_to_category(Mime),
+                                case m_rsc:exists(Category, Context) of
+                                    true ->
+                                        {ok, [
+                                            #media_import_props{
+                                                prio = 3,
+                                                category = Category,
+                                                description = m_rsc:p_no_acl(Category, title, Context),
+                                                rsc_props = #{},
+                                                medium_props = #{
+                                                    <<"mime">> => Mime,
+                                                    <<"original_filename">> => <<>>
+                                                },
+                                                medium_url = Url1
+                                            }
+                                        ]};
+                                    false ->
+                                        {error, category}
+                                end;
+                            false ->
+                                {ok, []}
+                        end;
+                    {error, _} = Error ->
+                        Error
+                end
+            catch _:_ ->
+                {error, dataurl}
+            end;
+        Url1 ->
+            case z_fetch:metadata(Url1, [], Context) of
+                {ok, MD} ->
+                    url_import_props(MD, Context);
+                {error, {Code, _FinalUrl, _Hs, _Sz, _Body} = Reason} when Code =:= 429 ->
+                    url_import_props_retry(Reason, Context);
+                {error, _} = Error ->
+                    Error
+            end
     end;
 url_import_props(#url_metadata{} = MD, Context) ->
     Url = z_url_metadata:p(url, MD),
@@ -339,18 +376,27 @@ importable_resource_uri(MD, Context) ->
 
 %% @doc Import the url as a link to a website
 import_as_website(MD, Context) ->
-    #media_import_props{
-        prio = 10,
-        category = website,
-        description = ?__("Website", Context),
-        rsc_props = #{
-            <<"title">> => z_url_metadata:p(title, MD),
-            <<"summary">> => z_url_metadata:p(summary, MD),
-            <<"website">> => z_url_metadata:p(url, MD)
-        },
-        medium_props = #{},
-        preview_url = z_url_metadata:p(image, MD)
-    }.
+    case is_http_url(z_url_metadata:p(url, MD)) of
+        true ->
+            #media_import_props{
+                prio = 10,
+                category = website,
+                description = ?__("Website", Context),
+                rsc_props = #{
+                    <<"title">> => z_url_metadata:p(title, MD),
+                    <<"summary">> => z_url_metadata:p(summary, MD),
+                    <<"website">> => z_url_metadata:p(url, MD)
+                },
+                medium_props = #{},
+                preview_url = z_url_metadata:p(image, MD)
+            };
+        false ->
+            undefined
+    end.
+
+is_http_url(<<"http:", _/binary>>) -> true;
+is_http_url(<<"https:", _/binary>>) -> true;
+is_http_url(_) -> false.
 
 %% @doc The url refers to some (non-html) file, import it as-is.
 import_as_media(MD, Context) ->
@@ -435,6 +481,10 @@ to_integer(V) ->
             end
     end.
 
+is_media_mime(<<"image/", _/binary>>) -> true;
+is_media_mime(<<"audio/", _/binary>>) -> true;
+is_media_mime(<<"video/", _/binary>>) -> true;
+is_media_mime(_) -> false.
 
 is_html(<<"text/html">>) -> true;
 is_html(<<"application/xhtml">>) -> true;

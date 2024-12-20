@@ -45,7 +45,37 @@
         </div>
     </div>
 
+    {% javascript %}
+        $('#block-{{name}}-validation').on('input', function(e) {
+            switch ($(this).val()) {
+                case 'numericality':
+                case 'date':
+                    $('#{{ #range }}').fadeIn();
+                    $('#{{ #range }} input').removeClass('nosubmit');
+                    break;
+                default:
+                    $('#{{ #range }}').hide();
+                    $('#{{ #range }} input').addClass('nosubmit');
+                    break;
+            }
+        });
+    {% endjavascript %}
+
     <div class="form-group view-expanded question-options">
+        <div {% if blk.validation != "numericality" and blk.validation != 'date' %}style="display: none"{% endif %} class="form-group" id="{{ #range }}">
+            <div class="row">
+                <div class="col-sm-6">
+                    <label class="control-label">{_ Minimal value _}</label>
+                    <input class="form-control" type="text" id="block-{{name}}-minval" name="blocks[].minval" value="{{ blk.minval }}">
+                </div>
+                <div class="col-sm-6">
+                    <label class="control-label">{_ Maximal value _}</label>
+                    <input class="form-control" type="text" id="block-{{name}}-maxval" name="blocks[].maxval" value="{{ blk.maxval }}">
+                </div>
+            </div>
+            <p class="help-block">{_ For date ranges you can also use relative dates, like <code>-5 year</code>. _}</p>
+        </div>
+
         <div class="checkbox">
             <label>
                 <input type="checkbox" id="block-{{name}}-is_required" name="blocks[].is_required" value="1" {% if blk.is_required or is_new %}checked="checked"{% endif %} />

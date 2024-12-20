@@ -103,7 +103,7 @@
 				</p>
 			{% endif %}
 		{% else %}
-			<p class="alert {% if status.error_is_final %}alert-error{% else %}alert-warning{% endif %}" style="margin: 20px 0">
+			<p class="alert {% if status.error_is_final %}alert-danger{% else %}alert-warning{% endif %}" style="margin: 20px 0">
 				<span class="glyphicon glyphicon-envelope"></span>
 				<strong>
 					{_ There are problems with this email address. _}

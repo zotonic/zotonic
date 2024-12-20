@@ -997,9 +997,9 @@ update_sequence(Subject, Pred, ObjectIds, Context) ->
         undefined ->
             {error, enoent};
         SubjectId ->
+            {ok, PredId} = m_predicate:name_to_id(Pred, Context),
             case z_acl:rsc_editable(SubjectId, Context) of
                 true ->
-                    {ok, PredId} = m_predicate:name_to_id(Pred, Context),
                     F = fun(Ctx) ->
                         All = z_db:q("
                                     select object_id, id

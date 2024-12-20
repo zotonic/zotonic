@@ -15,7 +15,7 @@
         {_ You will not be able to see this token again, so copy it and save it in a secure place. _}
     </p>
 {% else %}
-    <p class="alert alert-error">
+    <p class="alert alert-danger">
         {_ App not found, or no view permission. _}
     </p>
 {% endif %}

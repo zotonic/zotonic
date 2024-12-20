@@ -36,7 +36,8 @@
 -record(ms, {
     li = none,
     indent = [],
-    allow_html=true,
+    allow_html = true,
+    format_tables = true,
     level = -1
 }).
 
@@ -65,8 +66,16 @@ convert1(Html, Options) ->
 set_options([], S) ->
     S;
 set_options([no_html|T], S) ->
-    set_options(T, S#ms{allow_html=false}).
+    set_options(T, S#ms{ allow_html = false });
+set_options([no_tables|T], S) ->
+    set_options(T, S#ms{ format_tables = false }).
 
+-spec to_md(Html, M, S) -> {iodata(), M1} when
+    Html :: z_html_parse:html_element()
+          | [ z_html_parse:html_element() ],
+    M :: #md{},
+    S :: #ms{},
+    M1 :: #md{}.
 to_md(B, M, #ms{ level = 0 }) when is_binary(B) ->
     B1 = z_string:trim(binary:replace(B, <<"\n">>, <<" ">>, [ global ])),
     {escape_html_text(B1, <<>>), M};
@@ -196,7 +205,7 @@ to_md({<<"blockquote">>, _Args, Enclosed}, M, S) ->
     {EncText, M1} = to_md(Enclosed, M, S1),
     {[nl(S1), EncText, nl(S)], M1};
 
-to_md({<<"table">>, _Args, Enclosed}, M, S) ->
+to_md({<<"table">>, _Args, Enclosed}, M, #ms{ format_tables = true } = S) ->
     THeads = filter_tags(<<"thead">>, Enclosed),
     TBody = filter_tags(<<"tbody">>, Enclosed),
     BodyRows = case TBody of
@@ -218,7 +227,7 @@ to_md({<<"table">>, _Args, Enclosed}, M, S) ->
     end,
     HeadCells = case HeadRow of
         [] -> [];
-        {_, _, HCs} -> HCs
+        {_, _, HCs} -> filter_tags([ <<"td">>, <<"th">> ], HCs)
     end,
 
     % Make MD of all header cells
@@ -228,7 +237,7 @@ to_md({<<"table">>, _Args, Enclosed}, M, S) ->
             {[cell(CellHtml) | HAcc], MAcc1}
         end,
         {[], M},
-        filter_tags([ <<"td">>, <<"th">> ], HeadCells)),
+        HeadCells),
     HeadMDCells = lists:reverse(HeadMDCells0),
 
     % Make MD of all body rows
@@ -317,7 +326,9 @@ to_md(L, M, S) when is_list(L) ->
     lists:foldl(fun(Elt,{AT,AM}) ->
                     {AT1, AM1} = to_md(Elt, AM, S1),
                     {AT++[AT1], AM1}
-                end, {[], M}, L).
+                end, {[], M}, L);
+to_md(_Other, M, _S) ->
+    {<<>>, M}.
 
 
 filter_tags(Tag, Elts) when is_binary(Tag) ->
@@ -341,6 +352,8 @@ header(Char, Enclosed, M, S) ->
             {[nl(S), nl(S), Trimmed, nl(S), lists:duplicate(max(len(Trimmed), 3), [Char]), nl(S), nl(S)], M1}
     end.
 
+-spec row(Cells) -> binary() when
+    Cells :: [ iodata() ].
 row(Cells) ->
     iolist_to_binary([
         "| ",
@@ -348,12 +361,10 @@ row(Cells) ->
         " |\n"
     ]).
 
+-spec cell(Text) -> binary() when
+    Text :: iodata().
 cell(Text) ->
-    Text1 = binary:replace(
-        unicode:characters_to_binary(Text),
-        [ <<"\n">>, <<"\r">> ],
-        <<" ">>,
-        [ global ]),
+    Text1 = binary:replace(iolist_to_binary(Text), [ <<"\n">>, <<"\r">> ], <<" ">>, [ global ]),
     Text2 = z_string:trim(Text1),
     Text3 = binary:replace(Text2, <<"\\">>, <<"\\\\">>, [ global ]),
     binary:replace(Text3, <<"|">>, <<"\\|">>, [ global ]).
@@ -386,12 +397,21 @@ column_zip_1([], [A|As], Acc) ->
 column_zip_1([C|Cs], [A|As], Acc) ->
     column_zip_1(Cs, As, [ {C, A} | Acc ]).
 
+-spec column_pad(Cs, Ws, Align) -> [ binary() ] when
+    Cs :: [ binary() ],
+    Ws :: [ integer() ],
+    Align :: [ Direction ],
+    Direction :: right | center | left | none.
 column_pad(Cs, Ws, Align) ->
     Zipped = column_zip(column_zip(Cs, Ws), Align),
     lists:map(
-        fun({{C, W}, A}) -> pad(C, W, A) end,
+        fun ({{C, W}, A}) -> pad(C, W, A) end,
         Zipped).
 
+-spec pad(C, W, Direction) -> binary() when
+    C :: binary(),
+    W :: integer(),
+    Direction :: right | center | left | none.
 pad(C, W, right) ->
     case z_string:len(C) of
         N when N < W -> <<(spaces(W-N))/binary, C/binary>>;

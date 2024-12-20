@@ -626,13 +626,28 @@ get_email_from(EmailFrom, VERP, State, Context) ->
         L -> L
     end,
     {FromName, FromEmail} = z_email:split_name_email(From),
-    case State#state.smtp_verp_as_from of
+    if
+        State#state.smtp_verp_as_from =:= true ->
+            combine_name_email(FromName, VERP, Context);
+        FromEmail =:= <<>> ->
+            combine_name_email(FromName, get_email_from(Context), Context);
         true ->
-            z_email:combine_name_email(FromName, VERP);
-        _ when FromEmail =:= <<>> ->
-            z_email:combine_name_email(FromName, get_email_from(Context));
-        _ ->
-            z_email:combine_name_email(FromName, FromEmail)
+            combine_name_email(FromName, FromEmail, Context)
+    end.
+
+combine_name_email(Name, <<>>, Context) ->
+    combine_name_email(Name, get_email_from(Context), Context);
+combine_name_email(Name, Email, Context) ->
+    Email1 = ensure_domain(Email, Context),
+    z_email:combine_name_email(Name, Email1).
+
+ensure_domain(Email, Context) ->
+    case binary:match(Email, <<"@">>) of
+        nomatch ->
+            Domain = z_email:email_domain(Context),
+            <<Email/binary, "@", Domain/binary>>;
+        {_, _} ->
+            Email
     end.
 
 % When the 'From' is not the VERP then the 'From' is derived from the site
@@ -1343,20 +1358,21 @@ drop_non_printable(<<C/utf8, Rest/binary>>, Acc) when C >= 32 ->
 drop_non_printable(<<_, Rest/binary>>, Acc) ->
     drop_non_printable(Rest, <<Acc/binary, " ">>).
 
-add_cc(#email{cc = undefined}, Headers) -> Headers;
-add_cc(#email{cc = []}, Headers) -> Headers;
-add_cc(#email{cc = <<>>}, Headers) -> Headers;
-add_cc(#email{cc = Cc}, Headers) ->
+add_cc(#email{ cc = undefined }, Headers) -> Headers;
+add_cc(#email{ cc = [] }, Headers) -> Headers;
+add_cc(#email{ cc = <<>> }, Headers) -> Headers;
+add_cc(#email{ cc = Cc }, Headers) ->
     Headers ++ [{<<"Cc">>, Cc}].
 
-add_reply_to(_Id, #email{reply_to=undefined}, Headers, _Context) -> Headers;
-add_reply_to(_Id, #email{reply_to = <<>>}, Headers, _Context) ->
+add_reply_to(_Id, #email{ reply_to = undefined }, Headers, _Context) ->
+    Headers;
+add_reply_to(_Id, #email{ reply_to = <<>> }, Headers, _Context) ->
     [{<<"Reply-To">>, <<"<>">>} | Headers];
-add_reply_to(Id, #email{reply_to = message_id}, Headers, Context) ->
+add_reply_to(Id, #email{ reply_to = message_id }, Headers, Context) ->
     [{<<"Reply-To">>, reply_email(Id, Context)} | Headers];
-add_reply_to(_Id, #email{reply_to=ReplyTo}, Headers, Context) ->
+add_reply_to(_Id, #email{ reply_to = ReplyTo }, Headers, Context) ->
     {Name, Email} = z_email:split_name_email(ReplyTo),
-    ReplyTo1 = z_email:combine_name_email(Name, z_email:ensure_domain(Email, Context)),
+    ReplyTo1 = combine_name_email(Name, Email, Context),
     [{<<"Reply-To">>, ReplyTo1} | Headers].
 
 
@@ -1382,7 +1398,7 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
                         _ -> HtmlBin
                     end,
                     [{<<"text">>, <<"plain">>, [], Params,
-                     expand_cr(z_convert:to_binary(z_markdown:to_markdown(ContentHtml, [no_html])))}]
+                     expand_cr(z_convert:to_binary(z_markdown:to_markdown(ContentHtml, [no_html, no_tables])))}]
             end;
         false ->
             [{<<"text">>, <<"plain">>, [], Params,

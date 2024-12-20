@@ -7,7 +7,7 @@
 
 {% block links %}
     {% if id and id.is_a.query and q.page %}
-        <link rel="canonical" href="{% block canonical %}{{ id.page_url_abs }}{% endblock %}?page={{ q.page|escape }}">
+        <link rel="canonical" href="{{ id.page_url_abs }}?page={{ q.page|escape }}">
     {% elseif id %}
         {% with z_seo_language as z_language %}
         <link rel="canonical" href="{% block canonical %}{{ id.page_url_abs }}{% endblock %}">

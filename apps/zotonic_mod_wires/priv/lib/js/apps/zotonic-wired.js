@@ -23,15 +23,20 @@ Based on nitrogen.js which is copyright 2008-2009 Rusty Klophaus
 
 ---------------------------------------------------------- */
 
+const AUTH_STARTUP_WARNING_DELAY = 10000;
+
 var zotonic = zotonic || {};
 
 // Client state
 var z_language = "en";
 var z_languages = ["en"];
-// var z_userid;
+
 var z_editor;
 var z_default_form_postback;
 var z_init_postback_forms_timeout = false;
+
+var z_is_auth_available = false;
+var z_is_auth_warn_shown = false;
 
 // Misc state
 var z_input_updater = false;
@@ -43,6 +48,8 @@ var z_unique_id_counter = 0;
 var z_transport_queue = [];
 var z_script_nonce = "";
 var z_script_eval_id = "";
+
+var z_startup_time = Date.now();
 
 /* Startup
 ---------------------------------------------------------- */
@@ -266,6 +273,14 @@ function zotonic_startup() {
       clean_start: true,
     });
   }
+
+  cotonic.broker.subscribe(
+    "model/auth/event/ping",
+    function(msg) {
+      if (msg.payload == "pong") {
+        z_is_auth_available = true;
+      }
+    });
 
   setInterval(function () {
     z_transport_queue_check();
@@ -640,16 +655,29 @@ function z_transport_queue_check() {
 
   const authState = html.dataset.uiStateAuthAuth;
 
-  // Make sure the auth worker is ready so the postbacks are
-  // either authenticated, or not... Not something in between
-  // when the auth worker is still starting.
-  if (
-    z_transport_queue.length > 0 &&
-    html.classList.contains("ui-state-bridge-connected") &&
-    (authState === "anonymous" || authState === "user")
-  ) {
-    let trans = z_transport_queue.shift();
-    z_transport(trans.delegate, trans.content_type, trans.data, trans.options);
+  if (z_is_auth_available) {
+    // Make sure the auth worker is ready so the postbacks are
+    // either authenticated, or not... Not something in between
+    // when the auth worker is still starting.
+    if (
+      z_transport_queue.length > 0 &&
+      html.classList.contains("ui-state-bridge-connected") &&
+      (authState === "anonymous" || authState === "user")
+    ) {
+      const trans = z_transport_queue.shift();
+      z_transport(trans.delegate, trans.content_type, trans.data, trans.options);
+    }
+  } else if (cotonic.whereis('auth')) {
+    // Auth worker started but no pong yet
+    if (Date.now() - z_startup_time > AUTH_STARTUP_WARNING_DELAY) {
+      if (!z_is_auth_warn_shown) {
+        z_is_auth_warn_shown = true;
+        z_growl_add(
+            'Waiting too long for authentication with the server. ' +
+            'This could be caused by a slow network, or by using an old browser.',
+            true);
+      }
+    }
   }
 }
 

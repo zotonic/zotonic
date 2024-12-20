@@ -125,12 +125,25 @@ list_ids(Context) ->
 list_dispatch_host(Host, Path, Context) ->
     case z_string:is_string(Path) of
         true ->
-            z_db:q("select path, redirect, is_permanent
+            Path1 = remove_slash(Path),
+            case z_db:q("
+                    select path, redirect, is_permanent
                     from custom_redirect
                     where host = lower($1)
                       and (path = lower($2) or path = '')",
-                   [Host, remove_slash(Path)],
-                   Context);
+                   [Host, Path1],
+                   Context)
+            of
+                [] ->
+                    [];
+                Matches ->
+                    case is_redirectable_path(Path1) of
+                        true ->
+                            Matches;
+                        false ->
+                            [ {Path1, <<"/", Path1/binary>>, false} ]
+                    end
+            end;
         false ->
             []
     end.
@@ -141,7 +154,9 @@ list_dispatch_host(Host, Path, Context) ->
     Redirect :: binary(),
     IsPermanent :: boolean().
 get_dispatch(Path, Context) ->
-    case z_string:is_string(Path) of
+    case is_redirectable_path(Path)
+        andalso z_string:is_string(Path)
+    of
         true ->
             z_db:q_row("select redirect, is_permanent
                         from custom_redirect
@@ -152,6 +167,12 @@ get_dispatch(Path, Context) ->
         false ->
             undefined
     end.
+
+is_redirectable_path(<<"/.well-known/", _/binary>>) -> false;
+is_redirectable_path(<<"/.zotonic/", _/binary>>) -> false;
+is_redirectable_path(<<".well-known/", _/binary>>) -> false;
+is_redirectable_path(<<".zotonic/", _/binary>>) -> false;
+is_redirectable_path(_) -> true.
 
 normalize_props(Props) ->
     [

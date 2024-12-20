@@ -65,11 +65,11 @@ table_test() ->
 
 | Hallo | Daar | Enzo |
 | -----: | :---: | :--- |
-| Foo | *Bar* | **Baz** |
+| Foo | *Bår* | **Baz** |
 | A\\|a | *Bbb* | CcC |
 
 Another sentence
-">>,
+"/utf8>>,
     Html = <<"<p>A sentence</p>
 
 <table role=\"table\" class=\"table\">
@@ -77,12 +77,12 @@ Another sentence
     <tr><th align=\"right\">Hallo</th><th align=\"center\">Daar</th><th align=\"left\">Enzo</th></tr>
   </thead>
   <tbody>
-    <tr><td align=\"right\">Foo</td><td align=\"center\"><em>Bar</em></td><td align=\"left\"><strong>Baz</strong></td></tr>
+    <tr><td align=\"right\">Foo</td><td align=\"center\"><em>Bår</em></td><td align=\"left\"><strong>Baz</strong></td></tr>
     <tr><td align=\"right\">A|a</td><td align=\"center\"><em>Bbb</em></td><td align=\"left\">CcC</td></tr>
   </tbody>
 </table>
 
-<p>Another sentence</p>">>,
+<p>Another sentence</p>"/utf8>>,
 
     ?assertEqual(Html, z_string:trim(z_markdown:to_html(Text))),
 
@@ -90,10 +90,10 @@ Another sentence
 
 | Hallo | Daar  | Enzo    |
 | ----: | :---: | :------ |
-|   Foo | *Bar* | **Baz** |
+|   Foo | *Bår* | **Baz** |
 |  A\\|a | *Bbb* | CcC     |
 
-Another sentence">>,
+Another sentence"/utf8>>,
 
     ?assertEqual(Text2, z_string:trim(z_markdown:to_markdown(Html))),
     ok.

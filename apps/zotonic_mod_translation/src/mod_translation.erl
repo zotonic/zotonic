@@ -303,6 +303,10 @@ observe_url_rewrite(#url_rewrite{}, <<"?", _/binary>> = Url, _Context) ->
     Url;
 observe_url_rewrite(#url_rewrite{}, <<"#", _/binary>> = Url, _Context) ->
     Url;
+observe_url_rewrite(#url_rewrite{}, <<"/.well-known/", _/binary>> = Url, _Context) ->
+    Url;
+observe_url_rewrite(#url_rewrite{}, <<"/.zotonic/", _/binary>> = Url, _Context) ->
+    Url;
 observe_url_rewrite(#url_rewrite{args=Args}, Url, Context) ->
     case z_context:language(Context) of
         undefined ->

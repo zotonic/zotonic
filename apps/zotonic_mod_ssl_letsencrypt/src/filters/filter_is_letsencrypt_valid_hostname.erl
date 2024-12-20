@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016-2022 Marc Worrell
+%% @copyright 2016-2024 Marc Worrell
 %% @doc Check if a hostname can be used for a letsencrypt certificate.
+%% @end
 
-%% Copyright 2016-2022 Marc Worrell
+%% Copyright 2016-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -52,7 +53,8 @@ is_non_local(Hostname) ->
 
 %% Ping the url, should return our (random) secret
 is_this_site(Hostname, Context) ->
-    Url = z_dispatcher:url_for(letsencrypt_ping, Context),
+    ContextNoLang = z_context:set_language('x-default', Context),
+    Url = z_dispatcher:url_for(letsencrypt_ping, ContextNoLang),
     Url1 = "http://" ++ z_convert:to_list(Hostname) ++ z_convert:to_list(Url),
     case z_fetch:fetch(Url1, [ insecure ], Context) of
         {ok, {_FinalUrl, _Hs, _Len, Body}} ->

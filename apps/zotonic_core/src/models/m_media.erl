@@ -1035,7 +1035,7 @@ download_file(Url, Options, Context) ->
             proplists:delete(timeout,
                 proplists:delete(device, FetchOptions)))
     ],
-    Url1 = z_sanitize:uri(Url),
+    Url1 = z_sanitize:uri(Url, true),
     case z_fetch:fetch_partial(Url1, FetchOptions1, Context) of
         {ok, {_FinalUrl, Hs, Length, _Data}} when Length < MaxLength ->
             file:close(Device),

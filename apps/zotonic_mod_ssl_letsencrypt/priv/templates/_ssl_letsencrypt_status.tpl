@@ -10,11 +10,13 @@
             <span class="text-muted">&mdash; {{ status.request_start|timesince }}</span>
         </p>
     {% elseif status.request_status == `requesting` %}
-        <p class="alert alert-info">
-            {_ Requesting a certificate from Let’s Encrypt for _}
-            <strong>{{ status.request_hostname|escape }}</strong>
-            ...
-        </p>
+        <div class="alert alert-info">
+            <p>{_ Requesting a certificate from Let’s Encrypt for _}
+                <strong>{{ status.request_hostname|escape }}</strong> ...
+            </p>
+            <p>{_ This might take a while, hang on! _}</p>
+            <p>{_ The certificate status will be updated when the request finishes. _}</p>
+        </div>
     {% endif %}
 
     {% if status.cert_is_valid %}
@@ -58,18 +60,35 @@
     {% else %}
         <p>{_ There is no certificate from Let’s Encrypt. You can request one with the form. _}</p>
     {% endif %}
+
+    {% if m.acl.use.mod_admin_config %}
+        {% if m.sysconfig.port /= 80 %}
+            <p class="alert alert-danger">
+                {_ The port for HTTP requests must be 80, it is now _} {{ m.sysconfig.port }}<br>
+                {_ You can change this by setting <tt>port</tt> in the <tt>zotonic.config</tt> configuration file. _}
+            </p>
+        {% endif %}
+
+        {% if m.sysconfig.ssl_port /= 443 %}
+            <p class="alert alert-danger">
+                {_ The port for HTTPS requests must be 443, it is now _} {{ m.sysconfig.ssl_port }}<br>
+                {_ You can change this by setting <tt>ssl_port</tt> in the <tt>zotonic.config</tt> configuration file. _}
+            </p>
+        {% endif %}
+
+        {% if m.sysconfig.port == 80 and m.sysconfig.ssl_port == 443 %}
+            {% if status.request_status != `requesting` %}
+                {% lazy template="_admin_ssl_letsencrypt_form.tpl" %}
+            {% endif %}
+        {% else %}
+            <p>{_ The errors above need to be corrected before a certificate can be requested. _}</p>
+        {% endif %}
+    {% else %}
+        <p class="alert alert-danger">
+            <strong>{_ Not allowed. _}</strong>
+            {_ Only admnistrators can request certificates. _}
+        </p>
+    {% endif %}
+
+
 {% endwith %}
-
-
-{#
-
-[{request_status,ok},
- {request_start,{{2016,12,1},{16,46,48}}},
- {request_hostname,<<"cvc.worrell.nl">>},
- {request_san,[]},
- {cert_is_valid,true},
- {cert_hostname,<<"cvc.worrell.nl">>},
- {cert_san,[]},
- {cert_valid_till,{{2017,3,1},{15,47,0}}}]
-
-#}
