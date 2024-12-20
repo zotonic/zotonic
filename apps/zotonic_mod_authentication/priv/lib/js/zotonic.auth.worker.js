@@ -332,7 +332,8 @@ model.present = function(data) {
             secret: data.secret,
             passcode: data.passcode,
             "code-new": data["code-new"],
-            test_passcode: data.test_passcode
+            test_passcode: data.test_passcode,
+            setautologon: !!data.setautologon
         })
         .then(function(resp) { return resp.json(); })
         .then(function(body) { actions.authLogonResponse(body); })
