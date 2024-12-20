@@ -808,7 +808,8 @@ get_q_all(Key, #context{ props = Props }) ->
     end.
 
 
-%% @doc Get all query/post args, filter the zotonic internal args.
+%% @doc Get all query/post args, filter the zotonic internal args. Leave the
+%% dispatcher '*' argument (as it is part of the dispatch path).
 -spec get_q_all_noz(z:context()) -> list({binary(), z:qvalue()}).
 get_q_all_noz(Context) ->
     lists:filter(fun({X,_}) -> not is_zotonic_arg(X) end, get_q_all(Context)).
