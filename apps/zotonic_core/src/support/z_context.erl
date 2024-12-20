@@ -808,8 +808,8 @@ get_q_all(Key, #context{ props = Props }) ->
     end.
 
 
-%% @doc Get all query/post args, filter the zotonic internal args. Leave the
-%% dispatcher '*' argument (as it is part of the dispatch path).
+%% @doc Get all query/post args, filter the zotonic internal args. The "*" dispatch argument
+%% is also removed, as it is not a named argument.
 -spec get_q_all_noz(z:context()) -> list({binary(), z:qvalue()}).
 get_q_all_noz(Context) ->
     lists:filter(fun({X,_}) -> not is_zotonic_arg(X) end, get_q_all(Context)).
@@ -819,7 +819,7 @@ get_q_all_noz(Context) ->
 get_q_map(Context) ->
     Qs = get_q_all(Context),
     {ok, Props} = z_props:from_qs(Qs),
-    maps:remove(<<"*">>, Props).
+    Props.
 
 %% @doc Get all query/post args, transformed into a map.
 %% Removes Zotonic vars and the dispatcher '*' variable.
@@ -827,7 +827,7 @@ get_q_map(Context) ->
 get_q_map_noz(Context) ->
     Qs = get_q_all_noz(Context),
     {ok, Props} = z_props:from_qs(Qs),
-    maps:remove(<<"*">>, Props).
+    Props.
 
 %% @doc Filter all Zotonic and dispatcher vars from a map.
 -spec without_zotonic_args(map()) -> map().
@@ -868,12 +868,14 @@ without_zotonic_args(Map) ->
 % - z_msg
 % - z_comet
 % - z_postback_data
+% - "*"
 
 -spec is_zotonic_arg(binary()) -> boolean().
 is_zotonic_arg(<<"postback">>) -> true;
 is_zotonic_arg(<<"triggervalue">>) -> true;
 is_zotonic_arg(<<"zotonic_", _/binary>>) -> true;
 is_zotonic_arg(<<"z_", _/binary>>) -> true;
+is_zotonic_arg(<<"*">>) -> true;
 is_zotonic_arg(_) -> false.
 
 
@@ -1375,7 +1377,7 @@ set_security_headers(Context) ->
             "object-src 'none'; "
             "form-action 'self'; "
             "worker-src 'self' blob:; "
-            "connect-src 'self' https:"
+            "connect-src 'self' https: wss:"
          >>},
         {<<"x-content-type-options">>, <<"nosniff">>},
         {<<"x-permitted-cross-domain-policies">>, <<"none">>},
