@@ -93,10 +93,13 @@ observe_email_sent(#email_sent{recipient=Recipient, is_final=IsFinal}, Context) 
 
 observe_email_failed(#email_failed{reason=sender_disabled}, _Context) ->
     undefined;
+observe_email_failed(#email_failed{reason=recipient_blocked}, _Context) ->
+    undefined;
 observe_email_failed(#email_failed{is_final=false, retry_ct=RetryCt}, _Context) when RetryCt < 2 ->
     undefined;
 observe_email_failed(#email_failed{recipient=Recipient, is_final=IsFinal, status=Status}, Context) ->
     m_email_status:mark_failed(Recipient, IsFinal, Status, Context).
+
 
 %% @doc Mark an email address as bouncing, only marks for messages which we know we have sent.
 observe_email_bounced(#email_bounced{recipient=undefined}, _Context) ->

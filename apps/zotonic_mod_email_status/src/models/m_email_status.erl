@@ -139,6 +139,12 @@ clear_status(Id, Email0, Context) ->
             {error, notfound}
     end.
 
+%% @doc Clear the error/block status of an address. If a recipient was blocked
+%% then this will re-enable sending email to this recipient. The email address
+%% must already be normalized.
+-spec clear_status(Email, Context) -> ok when
+    Email :: binary(),
+    Context :: z:context().
 clear_status(Email, Context) ->
     case z_db:q("update email_status
             set is_valid = true,
@@ -413,19 +419,37 @@ new_recent_error(LastRecent, IsFinal, Status) ->
 is_unrecoverable_error(<<"605", _/binary>>) ->
     % mailgun - not trying again as they blocked the email address
     true;
-is_unrecoverable_error(<<"550", _/binary>> = Status) ->
+is_unrecoverable_error(<<"5", _/binary>> = Status) ->
     S = z_string:to_lower(Status),
+    is_unknown_mailbox(S) orelse is_permanent_mailgun_error(Status);
+is_unrecoverable_error(S) when is_binary(S) ->
+    is_permanent_mailgun_error(S) orelse is_permanent_zotonic_relay_error(S);
+is_unrecoverable_error(_Status) ->
+    false.
+
+is_unknown_mailbox(S) ->
     binary:match(S, <<"mailbox unavailable">>) =/= nomatch          % hotmail
     orelse binary:match(S, <<"does not exist">>) =/= nomatch        % gmail / ziggo
+    orelse binary:match(S, <<"tried to reach is inactive">>) =/= nomatch  % gmail
     orelse binary:match(S, <<"access denied">>) =/= nomatch         % outlook
     orelse binary:match(S, <<"unknown user">>) =/= nomatch
     orelse binary:match(S, <<"user unknown">>) =/= nomatch
     orelse binary:match(S, <<"no such user">>) =/= nomatch
+    orelse binary:match(S, <<"not a known user">>) =/= nomatch
     orelse binary:match(S, <<"user invalid">>) =/= nomatch
-    orelse binary:match(S, <<"recipient rejected">>) =/= nomatch;
-is_unrecoverable_error(_) ->
-    false.
+    orelse binary:match(S, <<"mailbox unavailable">>) =/= nomatch
+    orelse binary:match(S, <<"recipient rejected">>) =/= nomatch
+    orelse binary:match(S, <<"failed to deliver due to bounce">>) =/= nomatch
+    orelse binary:match(S, <<"check email address">>) =/= nomatch.
 
+% Mailgun: unsure the status code of these messages, so match error text.
+is_permanent_mailgun_error(S) ->
+    binary:match(S, <<"Not delivering to a user who marked your messages as spam">>) =/= nomatch
+    orelse binary:match(S, <<"Not delivering to previously bounced address">>) =/= nomatch.
+
+is_permanent_zotonic_relay_error(S) ->
+    binary:match(S, <<"Sender blocked by Zotonic module">>) =/= nomatch
+    orelse binary:match(S, <<"Recipient blocked by Zotonic module">>) =/= nomatch.
 
 to_binary({error, nxdomain}) ->
     <<"Non-Existent Domain">>;

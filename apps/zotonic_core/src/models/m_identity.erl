@@ -47,6 +47,7 @@
     hash/1,
     needs_rehash/1,
     hash_is_equal/2,
+    is_equal/2,
     get/2,
     get_rsc/2,
     get_rsc_by_type/3,

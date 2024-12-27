@@ -66,7 +66,7 @@ prep_block(B, _Context) ->
 
 to_block(Q) ->
     #{
-        <<"type">> => <<"survey_truefalse">>,
+        <<"type">> => <<"survey_country">>,
         <<"is_required">> => Q#survey_question.is_required,
         <<"name">> => z_convert:to_binary(Q#survey_question.name),
         <<"prompt">> => z_convert:to_binary(Q#survey_question.question)
