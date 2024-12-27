@@ -160,19 +160,31 @@ set_recipient_block_status(Payload, _Context) ->
     Result :: map(),
     Reason :: term().
 relay(#{ <<"recipient">> := To, <<"email">> := Email } = Msg, Context) when is_binary(Email) ->
-    case decode(Email) of
-        {ok, {_MimeType, _MimeSubType, _Headers, _Parameters, _Parts} = Decoded} ->
-            MessageNr = maps:get(<<"message_nr">>, Msg, undefined),
-            WebhookUrl = maps:get(<<"webhook_url">>, Msg, undefined),
-            do_relay(To, MessageNr, WebhookUrl, Decoded, Context);
-        {error, _} = Error ->
-            Error
+    case m_config:get_boolean(?MODULE, is_email_relay, Context) of
+        true ->
+            ?LOG_ERROR(#{
+                in => zotonic_mod_email_relay,
+                text => <<"Not relaying email message, as this server is configured to relay to another server">>,
+                result => error,
+                reason => relaying,
+                recipient => To
+            }),
+            {error, relaying};
+        false ->
+            case decode(Email) of
+                {ok, {_MimeType, _MimeSubType, _Headers, _Parameters, _Parts} = Decoded} ->
+                    MessageNr = maps:get(<<"message_nr">>, Msg, undefined),
+                    WebhookUrl = maps:get(<<"webhook_url">>, Msg, undefined),
+                    relay_1(To, MessageNr, WebhookUrl, Decoded, Context);
+                {error, _} = Error ->
+                    Error
+            end
     end;
 relay(_Msg, _Context) ->
     {error, payload}.
 
 
-do_relay(To, MessageNr, WebhookUrl, {MimeType, MimeSubType, Headers, Parameters, Parts}, Context) ->
+relay_1(To, MessageNr, WebhookUrl, {MimeType, MimeSubType, Headers, Parameters, Parts}, Context) ->
     ExtMessageNr = if
         MessageNr =:= undefined orelse MessageNr =:= <<>> ->
             extract_message_id(proplists:get_value(<<"Message-Id">>, Headers));
