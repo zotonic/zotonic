@@ -32,6 +32,7 @@
     observe_email_failed/2,
     observe_email_sent/2,
     observe_email_bounced/2,
+    observe_tick_24h/2,
     task_set_email_block_status/4,
     task_webhook_status/6,
     manage_schema/2
@@ -362,6 +363,9 @@ host(RelayUrl) ->
 webhook_url(Context) ->
     Url = z_dispatcher:url_for(api, [ {star, <<"model/email_relay/post/status">>} ], Context),
     z_dispatcher:abs_url(Url, Context).
+
+observe_tick_24h(tick_24h, Context) ->
+    m_email_relay:periodic_cleanup(Context).
 
 
 manage_schema(_Version, Context) ->

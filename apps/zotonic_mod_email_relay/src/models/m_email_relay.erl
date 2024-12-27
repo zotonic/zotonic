@@ -23,6 +23,7 @@
     m_get/3,
     m_post/3,
     relay/2,
+    periodic_cleanup/1,
     install/1
 ]).
 
@@ -279,6 +280,14 @@ decode(Email) ->
         _:_ -> {error, email}
     end.
 
+%% @doc Delete all relayed email older than a week.
+-spec periodic_cleanup(z:context()) -> ok.
+periodic_cleanup(Context) ->
+    z_db:q("
+        delete from email_relay
+        where created < now() - interval '1 week'",
+        Context),
+    ok.
 
 install(Context) ->
     case z_db:table_exists(email_relay, Context) of
