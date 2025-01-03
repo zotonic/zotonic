@@ -76,6 +76,8 @@ observe_email_received(#email_received{localpart=Recipient} = Received, Context)
     end.
 
 %% @doc Forward blocking/unblocking of email addresses to the relaying Zotonic server.
+%% If the relay server blocked an address then we can unblock it in this way. The relay
+%% server will report its blocking status when receiving an email relay request.
 observe_email_status(#email_status{ is_manual = true, is_valid = false, recipient = Email }, Context) ->
     set_email_block_status(Email, true, Context);
 observe_email_status(#email_status{ is_manual = true, is_valid = true, recipient = Email }, Context) ->
@@ -83,7 +85,8 @@ observe_email_status(#email_status{ is_manual = true, is_valid = true, recipient
 observe_email_status(#email_status{}, _Context) ->
     ok.
 
-%% @doc Forward changes to the email block status to the relaying Zotonic server.
+%% @doc Forward changes to the email block status to the relaying Zotonic server. Any queued
+%% update is overwriting previous retrying status changes.
 set_email_block_status(Email, IsBlock, Context) ->
     case m_config:get_boolean(?MODULE, is_email_relay, Context) of
         true ->
@@ -91,8 +94,9 @@ set_email_block_status(Email, IsBlock, Context) ->
                 undefined -> ok;
                 <<>> -> ok;
                 _ ->
+                    Key = z_utils:hex_sha(Email),
                     z_pivot_rsc:insert_task(
-                        ?MODULE, task_set_email_block_status, Email,
+                        ?MODULE, task_set_email_block_status, Key,
                         [Email, IsBlock, 0],
                         Context),
                     ok
@@ -101,6 +105,8 @@ set_email_block_status(Email, IsBlock, Context) ->
             ok
     end.
 
+%% @doc Task to forward a manual change to the block status of an email address to the
+%% relay server. Incremental backoff if the relay server cannot be reached.
 task_set_email_block_status(Email, IsBlock, Retries, Context) ->
     case m_config:get_boolean(?MODULE, is_email_relay, Context) of
         true ->
@@ -148,7 +154,8 @@ task_set_email_block_status(Email, IsBlock, Retries, Context) ->
             ok
     end.
 
-
+%% @doc If the failed email is a relayed email, then forward a delivery report
+%% to the webhook of the relayed email.
 observe_email_failed(#email_failed{
         message_nr = MsgId,
         recipient = Recipient,
@@ -174,6 +181,8 @@ observe_email_failed(#email_failed{
     },
     queue_for_webhook(MsgId, Report, Context).
 
+%% @doc If the sent email is a relayed email, then forward a delivery report
+%% to the webhook of the relayed email.
 observe_email_sent(#email_sent{
             message_nr = MsgId,
             recipient = Recipient,
@@ -187,6 +196,8 @@ observe_email_sent(#email_sent{
 observe_email_sent(#email_sent{ is_final = true }, _Context) ->
     ok.
 
+%% @doc If the bounced email is a relayed email, then forward a delivery report
+%% to the webhook of the relayed email.
 observe_email_bounced(#email_bounced{
             message_nr = MsgId,
             recipient = Recipient
@@ -223,6 +234,9 @@ queue_for_webhook(MsgId, Report, Context) ->
 is_https_url(<<"https://", _/binary>>) -> true;
 is_https_url(_) -> false.
 
+%% @doc Task queue callback to send a delivery report to the webhook of a relayed
+%% email. If the report could not be sent then the delivery is retried with an
+%% incremental backoff.
 task_webhook_status(MsgId, SenderMsgId, HookUrl, Retries, Report, Context) ->
     Secret = z_convert:to_binary(m_config:get_value(?MODULE, email_relay_receive_secret, Context)),
     Url1 = iolist_to_binary([ HookUrl, "?s=", z_url:url_encode(Secret) ]),
@@ -267,7 +281,8 @@ backoff(N) when N < 10 -> 3600;
 backoff(N) -> (N-9) * 3600.
 
 
-%% @doc Relay an email via another Zotonic server.
+%% @doc Relay an email via another Zotonic server. This webhook is called by the
+%% z_email_server when sending the email.
 observe_email_send_encoded(#email_send_encoded{
             message_nr = MsgId,
             from = _VERP,

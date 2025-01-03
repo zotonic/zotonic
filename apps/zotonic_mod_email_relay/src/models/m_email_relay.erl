@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2024 Marc Worrell
-%% @doc Accept complete rendered emails for relay.
+%% @doc Accept complete rendered emails for relay, receive delivery reports
+%% and updates to manual changes of email block status.
 %% @end
 
 %% Copyright 2024 Marc Worrell
@@ -34,6 +35,7 @@ m_get(_Path, _Msg, _Context) ->
 
 %% @doc Relay an encoded email to some address.
 m_post([ <<"relay">> ], #{ payload := Msg }, Context) ->
+    % Relay a an email
     case is_allowed_relay(Context) of
         true ->
             relay(Msg, Context);
@@ -41,6 +43,7 @@ m_post([ <<"relay">> ], #{ payload := Msg }, Context) ->
             {error, eacces}
     end;
 m_post([ <<"relay">>, <<"recipient">> ], #{ payload := Msg }, Context) ->
+    % Set the block status of an email address.
     case is_allowed_relay(Context) of
         true ->
             set_recipient_block_status(Msg, Context);
@@ -51,6 +54,8 @@ m_post([ <<"status">> ], #{ payload := #{
         <<"type">> := <<"delivery_report">>,
         <<"report">> := Report
     } }, Context) ->
+    % Receive a delivery report from the server that relayed the email.
+    % This is the webhook that is sent along with the email relay request.
     case is_allowed_status(Context) of
         true ->
             update_status(Report);
