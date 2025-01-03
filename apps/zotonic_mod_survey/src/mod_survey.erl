@@ -505,7 +505,7 @@ viewer_close(_, Context) ->
 
 
 get_args(Context) ->
-    Args = [ {K,V} || {K,V} <- z_context:get_q_all_noz(Context), is_binary(V) ],
+    Args = [ {K,V} || {K,V} <- z_context:get_q_all_noz(Context), is_binary(V), K =/= <<"*">> ],
     Submitter = z_context:get_q(<<"z_submitter">>, Context),
     Buttons = proplists:get_all_values(<<"survey$button">>, Args),
     WithButtons = lists:foldl(

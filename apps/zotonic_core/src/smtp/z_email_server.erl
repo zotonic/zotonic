@@ -355,19 +355,25 @@ handle_cast({bounced, Peer, BounceEmail}, State) ->
     end,
     {noreply, State};
 
+handle_cast({delivery_report, What, OptRecipient, <<"<", MsgId/binary>>, OptStatusMessage}, State) ->
+    MsgId1 = binary:replace(MsgId, <<">">>, <<>>),
+    handle_cast({delivery_report, What, OptRecipient, MsgId1, OptStatusMessage}, State);
 handle_cast({delivery_report, What, OptRecipient, MsgIdHeader, OptStatusMessage}, State) ->
-    [ MsgId, Domain ] = binstr:split(z_convert:to_binary(MsgIdHeader), <<"@">>),
+    {MsgId, Domain} = case binstr:split(z_convert:to_binary(MsgIdHeader), <<"@">>) of
+        [MId, ED] -> {MId, ED};
+        [MId] -> {MId, undefined}
+    end,
     % Find the original message in our database of recent sent e-mail
     TrFun = fun()->
-                    [QEmail] = mnesia:read(email_queue, MsgId),
-                    {(QEmail#email_queue.email)#email.to, QEmail#email_queue.pickled_context}
+                [QEmail] = mnesia:read(email_queue, MsgId),
+                {(QEmail#email_queue.email)#email.to, QEmail#email_queue.pickled_context}
             end,
     case mnesia:transaction(TrFun) of
         {atomic, {Recipient, PickledContext}} ->
             Context = z_context:depickle(PickledContext),
             handle_delivery_report(What, MsgId, Recipient, OptStatusMessage, Context);
-        _ ->
-            % We got a bounce, but we don't have the message anymore.
+        _ when is_binary(Domain), Domain =/= <<>> ->
+            % We got a delivery report, but we don't have the message anymore.
             % Custom bounce domains make this difficult to process.
             case z_sites_dispatcher:get_site_for_hostname(Domain) of
                 {ok, Host} ->
@@ -375,7 +381,9 @@ handle_cast({delivery_report, What, OptRecipient, MsgIdHeader, OptStatusMessage}
                     handle_delivery_report(What, MsgId, OptRecipient, OptStatusMessage, Context);
                 undefined ->
                     ignore
-            end
+            end;
+        _ ->
+            ignore
     end,
     {noreply, State};
 
@@ -754,8 +762,15 @@ check_templates_1([ T | Ts ], Context) ->
 
 drop_blocked_email(Id, Recipient, Email, Context) ->
     delete_emailq(Id),
+    z_notifier:notify(#email_failed{
+            message_nr = Id,
+            recipient = Recipient,
+            is_final = true,
+            status = <<"Recipient blocked by Zotonic module (#is_recipient_ok)">>,
+            reason = bounce
+        }, Context),
     LogEmail = #log_email{
-        severity = ?LOG_LEVEL_WARNING,
+        severity = ?LOG_LEVEL_ERROR,
         mailer_status = blocked,
         mailer_message = <<"Recipient blocked by Zotonic module (#is_recipient_ok)">>,
         props = [ {reason, recipient_blocked} ],
@@ -775,7 +790,7 @@ drop_blocked_email(Id, Recipient, Email, Context) ->
 
 delete_email(Error, Id, Recipient, Email, Context) ->
     delete_emailq(Id),
-    z_notifier:first(#email_failed{
+    z_notifier:notify(#email_failed{
             message_nr = Id,
             recipient = Recipient,
             is_final = true,
@@ -1241,7 +1256,7 @@ is_retry_possible(_Reason, permanent_failure, Message) when is_binary(Message) -
     end;
 is_retry_possible(_Reason, permanent_failure, _Message) ->
     false;
-is_retry_possible(_Reason, __FailureType, _Message) ->
+is_retry_possible(_Reason, _FailureType, _Message) ->
     true.
 
 encode_email(_Id, #email{raw=Raw}, _MessageId, _From, _Context) when is_list(Raw); is_binary(Raw) ->
@@ -1711,7 +1726,7 @@ delete_failed_messages(StatusSites) ->
             lists:foreach(
                 fun
                     ({Id, Recipient, RetryCt, PickledContext}) ->
-                        z_notifier:first(#email_failed{
+                        z_notifier:notify(#email_failed{
                             message_nr=Id,
                             recipient=Recipient,
                             is_final=true,

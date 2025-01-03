@@ -914,7 +914,7 @@ archive(Name, Tar, Context) ->
             end;
         false ->
             %% No files uploaded
-            ok
+            {ok, undefined}
     end.
 
 %% Make an archive of the configuraton and security files of a site.
