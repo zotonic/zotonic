@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2024-12-13 15:16\n"
+"PO-Revision-Date: 2025-01-03 22:56\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -34,11 +34,11 @@ msgstr "Удаленный сервер не может обработать э�
 
 #: apps/zotonic_core/src/support/z_fetch.erl:213
 msgid "The remote server for the URL is having problems."
-msgstr "На удаленном сервере для URL-адреса возникли проблемы."
+msgstr "На удаленном сервере этого URL-адреса возникли проблемы."
 
 #: apps/zotonic_core/src/support/z_fetch.erl:211
 msgid "The remote server for the URL is having temporary problems."
-msgstr "На удаленном сервере для URL-адреса возникли временные проблемы."
+msgstr "На удаленном сервере этого URL-адреса возникли временные проблемы."
 
 #: apps/zotonic_core/src/support/z_fetch.erl:203
 msgid "The resource at the URL can not be found."
