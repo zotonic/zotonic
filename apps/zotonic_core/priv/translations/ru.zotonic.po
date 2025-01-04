@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-01-03 22:56\n"
+"PO-Revision-Date: 2025-01-04 00:00\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -5184,7 +5184,7 @@ msgstr "Каталог"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:8./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:29
 msgid "Do not make a daily backup."
-msgstr "Не делайте ежедневное резервное копирование."
+msgstr "Не делать ежедневное резервное копирование."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:35
 msgid "Download backup file"
@@ -5210,7 +5210,7 @@ msgstr "Шифрование включено, но пароль шифрова�
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:15
 msgid "Help about backup &amp; restore"
-msgstr "Справка о резервном копировании &amp; восстановление"
+msgstr "Справка о резервном копировании &amp; восстановлении"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:14
 msgid "It can be found in the"
