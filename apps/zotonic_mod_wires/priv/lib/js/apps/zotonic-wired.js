@@ -266,13 +266,16 @@ function zotonic_startup() {
       });
     });
 
-  // Start bridge to opener if opened from a window with a cotonic broker
-  if (window.opener && typeof window.opener.cotonic === "object") {
-    cotonic.mqtt_bridge.newBridge("opener", {
-      client_id: "",
-      clean_start: true,
-    });
-  }
+  // Start bridge to opener if opened from a window with a cotonic broker.
+  // Catch and ignore security errors.
+  try {
+    if (typeof window.opener?.cotonic === "object") {
+      cotonic.mqtt_bridge.newBridge("opener", {
+        client_id: "",
+        clean_start: true,
+      });
+    }
+  } catch (e) {};
 
   cotonic.broker.subscribe(
     "model/auth/event/ping",
