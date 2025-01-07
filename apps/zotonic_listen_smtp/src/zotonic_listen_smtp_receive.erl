@@ -33,6 +33,20 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 %% @doc Handle a received e-mail
+-spec received(Recipients, EnvelopFrom, Peer, Reference, Type, Headers, Params, Body, Data) -> Results when
+    Recipients :: [ RecipientEmail ],
+    RecipientEmail :: binary(),
+    EnvelopFrom :: binary(),
+    Peer :: tuple(),
+    Reference :: binary(),
+    Type :: {binary(), binary()},
+    Headers :: [ {binary(), binary()} ],
+    Params :: #{ atom() => term() },
+    Body :: term(),
+    Data :: term(),
+    Results :: [ Result ],
+    Result :: {ok, binary() | undefined}
+            | {error, term()}.
 received(Recipients, EnvelopFrom, Peer, Reference, {Type, Subtype}, Headers, Params, Body, Data) ->
     ParsedEmail = parse_email({Type, Subtype}, Headers, Params, Body),
     ParsedEmail1 = generate_text(generate_html(ParsedEmail)),
