@@ -320,14 +320,14 @@
 %% @doc Notification sent to a site when e-mail for that site is received
 %% Type: first
 -record(email_received, {
-    to,
-    from,
-    localpart,
-    localtags,
-    domain,
-    reference,
-    email,
-    headers,
+    to :: binary(),
+    from :: undefined | binary(),
+    localpart :: binary(),
+    localtags :: [ binary() ],
+    domain :: binary(),
+    reference :: binary(),
+    email :: #email{},
+    headers :: [ {binary(), binary()} ],
     is_bulk = false :: boolean(),
     is_auto = false :: boolean(),
     decoded,
