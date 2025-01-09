@@ -1,9 +1,9 @@
 %% @author Arjan Scherpenisse, Marc Worrell
-%% @copyright 2009-2024 Arjan Scherpenisse <arjan@scherpenisse.net>, Marc Worrell <marc@worrell.nl>
+%% @copyright 2009-2025 Arjan Scherpenisse <arjan@scherpenisse.net>, Marc Worrell <marc@worrell.nl>
 %% @doc Entrypoint for model requests via HTTP.
 %% @end
 
-%% Copyright 2009-2024 Arjan Scherpenisse, Marc Worrell
+%% Copyright 2009-2025 Arjan Scherpenisse, Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ options(Context) ->
 
 -spec allowed_methods( z:context() ) -> {[ binary() ], z:context()}.
 allowed_methods(Context) ->
-    {[ <<"GET">>, <<"POST">>, <<"DELETE">>, <<"OPTONS">> ], Context}.
+    {[ <<"GET">>, <<"POST">>, <<"DELETE">>, <<"OPTIONS">> ], Context}.
 
 -spec malformed_request( z:context() ) -> {boolean(), z:context()}.
 malformed_request(Context) ->

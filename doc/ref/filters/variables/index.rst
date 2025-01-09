@@ -17,3 +17,4 @@ Variables
    ../filter_to_binary
    ../filter_to_integer
    ../filter_to_json
+   ../filter_from_json

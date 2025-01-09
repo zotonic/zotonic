@@ -266,7 +266,11 @@ sanitize_utf8(undefined) ->
 sanitize_utf8(S) ->
     z_string:sanitize_utf8(S).
 
-%% @doc Parse a file using the html/text parse routines. This is used for testing
+%% @doc Parse a file using the html/text parse routines. This is useful for testing.
+-spec parse_file(Filename) -> {ok, Parsed} | {error, Reason} when
+    Filename :: file:filename_all(),
+    Parsed :: #email{},
+    Reason :: term().
 parse_file(Filename) ->
     case file:read_file(Filename) of
         {ok, Data} ->

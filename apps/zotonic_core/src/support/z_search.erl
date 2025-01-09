@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2024 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Search the database, interfaces to specific search routines.
 %% @end
 
-%% Copyright 2009-2024 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -53,7 +53,8 @@
                        | {Offset :: pos_integer(), Limit :: pos_integer()}.
 -type search_options() :: #{
         properties => list(binary()) | boolean(),
-        is_count_rows => boolean()
+        is_count_rows => boolean(),
+        is_single_page => boolean()
     }.
 
 -export_type([
@@ -423,6 +424,8 @@ handle_search_result(#search_sql{} = Q, Page, PageLen, {_, Limit} = OffsetLimit,
 %% planner to give an estimated number of rows.
 offset_limit(_Page, _PageLen, #{ is_count_rows := true }) ->
     {1, 1};
+offset_limit(N, PageLen, #{ is_single_page := true }) ->
+    {(N-1) * PageLen + 1, PageLen + 1};
 offset_limit(1, PageLen, _Options) ->
     % Take 6 pages + 1 or the MIN_LOOKAHEAD
     {1, erlang:max(6 * PageLen + 1, ?MIN_LOOKAHEAD)};
@@ -601,6 +604,10 @@ map_to_options(Map) ->
                 Acc#{ is_count_rows => z_convert:to_bool(V) };
             (<<"is_count_rows">>, V, Acc) ->
                 Acc#{ is_count_rows => z_convert:to_bool(V) };
+            (is_single_page, V, Acc) ->
+                Acc#{ is_single_page => z_convert:to_bool(V) };
+            (<<"is_single_page">>, V, Acc) ->
+                Acc#{ is_single_page => z_convert:to_bool(V) };
             (K, V, Acc) ->
                 ?LOG_INFO(#{
                     text => <<"Dropping unknown search option">>,
