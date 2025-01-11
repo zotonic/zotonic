@@ -990,7 +990,27 @@ rsc_pivot_log(C, Database, Schema) ->
             epgsql:squery(C, "drop table if exists rsc_pivot_queue cascade"),
             ok;
         true ->
-            ok
+            case has_column(C, "rsc_pivot_log", "priority", Database, Schema) of
+                true ->
+                    ok;
+                false ->
+                    ?LOG_NOTICE(#{
+                        text => <<"Upgrade: adding priority column rsc_pivot_log">>,
+                        in => zotonic_core,
+                        database => Database,
+                        schema => Schema,
+                        table => rsc_pivot_log
+                    }),
+                    {ok, [], []} = epgsql:squery(C,
+                                            "alter table rsc_pivot_log "
+                                            "add column priority int not null default 1"),
+                    {ok, [], []} = epgsql:squery(C, "
+                        DROP INDEX IF EXISTS rsc_pivot_log_update_due_key"),
+                    {ok, [], []} = epgsql:squery(C, "
+                        CREATE INDEX IF NOT EXISTS rsc_pivot_log_update_priority_due_key
+                        ON rsc_pivot_log (priority, is_update, due)"),
+                    ok
+            end
     end.
 
 identity_log(C, Database, Schema) ->

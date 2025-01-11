@@ -538,6 +538,7 @@ rsc_pivot_log_table() ->
         rsc_id int NOT NULL,
         due timestamp with time zone NOT NULL DEFAULT now(),
         is_update boolean NOT NULL default true,
+        priority int NOT NULL default 1,
 
         CONSTRAINT fk_rsc_pivot_log_rsc_id FOREIGN KEY (rsc_id)
           REFERENCES rsc(id)
@@ -548,7 +549,7 @@ rsc_pivot_log_index_1() ->
     "CREATE INDEX IF NOT EXISTS fki_rsc_pivot_log_rsc_id ON rsc_pivot_log (rsc_id)".
 
 rsc_pivot_log_index_2() ->
-    "CREATE INDEX IF NOT EXISTS rsc_pivot_log_update_due_key ON rsc_pivot_log (is_update, due)".
+    "CREATE INDEX IF NOT EXISTS rsc_pivot_log_update_priority_due_key ON rsc_pivot_log (priority, is_update, due)".
 
 rsc_pivot_log_function() ->
     % Update/insert trigger on rsc to fill the pivot log.

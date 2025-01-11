@@ -176,8 +176,8 @@ queue_all(Context) ->
 
 queue_all_1(ToId, Context) ->
     case z_db:q("
-        insert into rsc_pivot_log (rsc_id)
-        select id
+        insert into rsc_pivot_log (rsc_id, priority, is_update)
+        select id, 2, false
         from rsc
         where id < $1
         order by id desc
@@ -1056,7 +1056,7 @@ fetch_queue(Context) ->
         select rsc_id
         from rsc_pivot_log
         where due < $2
-        order by is_update, due
+        order by priority, is_update, due
         limit $1",
         [ ?POLL_BATCH, PivotDate ],
         Context),
