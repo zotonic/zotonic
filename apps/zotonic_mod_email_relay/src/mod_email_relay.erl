@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2024 Marc Worrell
+%% @copyright 2011-2025 Marc Worrell
 %% @doc Relay e-mails via other Zotonic servers.
 %% @end
 
-%% Copyright 2011-2024 Marc Worrell
+%% Copyright 2011-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -177,9 +177,17 @@ observe_email_failed(#email_failed{
     Report = #{
         <<"type">> => Severity,
         <<"recipient">> => Recipient,
-        <<"status">> => Status
+        <<"status">> => ensure_binary(Status)
     },
     queue_for_webhook(MsgId, Report, Context).
+
+ensure_binary(undefined) ->
+    <<>>;
+ensure_binary({error, Reason}) ->
+    z_string:sanitize_utf8(z_convert:to_binary(io_lib:format("error: ~p", [Reason])));
+ensure_binary(B) when is_binary(B) ->
+    z_string:sanitize_utf8(B).
+
 
 %% @doc If the sent email is a relayed email, then forward a delivery report
 %% to the webhook of the relayed email.
