@@ -8,8 +8,8 @@
  {survey_results, ["survey", "results", id],       controller_page, [ {is_canonical, false}, {template, "survey_results.tpl"}, {is_aggregated, true} ]},
  {survey_results, ["survey", "results", id, slug], controller_page, [ {is_canonical, false}, {template, "survey_results.tpl"}, {is_aggregated, true} ]},
   
- {survey, ["survey", id],       controller_page, [ {template, "survey.tpl"} ]},
- {survey, ["survey", id, slug], controller_page, [ {template, "survey.tpl"} ]},
+ {survey, ["survey", id],       controller_page, [ {template, {cat, "survey.tpl"}} ]},
+ {survey, ["survey", id, slug], controller_page, [ {template, {cat, "survey.tpl"}} ]},
  
  {admin_survey_editor, ["admin", "survey", id], controller_admin, [{acl, {use, mod_survey}}, {template, "admin_survey_editor.tpl"}, seo_noindex]}
 ].
