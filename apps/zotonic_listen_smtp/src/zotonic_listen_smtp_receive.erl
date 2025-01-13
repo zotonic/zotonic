@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2024 Marc Worrell
+%% @copyright 2011-2025 Marc Worrell
 %% @doc Handle received e-mail.
 %% @end
 
-%% Copyright 2011-2024 Marc Worrell
+%% Copyright 2011-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -242,8 +242,14 @@ is_blocked(EmailAddress, Context) ->
         {ok, {binary(), [ binary() ], binary(), atom()}}
       | {error, unknown_host | not_running}.
 get_site(Recipient) ->
-    [Username, Domain] = binstr:split(Recipient, <<"@">>, 2),
-    [LocalPart|LocalTags] = binstr:split(Username, <<"+">>),
+    [Username, Domain] = case binary:split(Recipient, <<"@">>) of
+        [_,_] = UD -> UD;
+        [U] -> [U, <<>>]
+    end,
+    [LocalPart|LocalTags] = case binary:split(Username, <<"+">>, [ global, trim_all ]) of
+        [] -> [<<>>];
+        Ps -> Ps
+    end,
     case z_sites_dispatcher:get_site_for_hostname(z_string:to_lower(Domain)) of
         {ok, Site} ->
             case z_sites_manager:wait_for_running(Site) of
