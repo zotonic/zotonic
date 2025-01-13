@@ -317,7 +317,7 @@ observe_email_send_encoded(#email_send_encoded{
                                 <<"receipt">> := Receipt
                             } = R
                         }} ->
-                            ?LOG_ERROR(#{
+                            ?LOG_INFO(#{
                                 in => zotonic_mod_relay,
                                 text => <<"Relayed email to remote server">>,
                                 result => ok,

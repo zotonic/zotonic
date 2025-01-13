@@ -101,7 +101,7 @@ update_status(#{
         <<"message_nr">> := MsgId,
         <<"recipient">> := Recipient
     } = Report) ->
-    StatusMessage = maps:get(<<"status">>, Report, undefined),
+    StatusMessage = ensure_binary_status(maps:get(<<"status">>, Report, undefined)),
     DeliveryType = delivery_type(Type),
     z_email_server:delivery_report(DeliveryType, Recipient, MsgId, StatusMessage);
 update_status(Report) ->
@@ -113,6 +113,13 @@ update_status(Report) ->
         report => Report
     }),
     {error, unknown_report}.
+
+ensure_binary_status(undefined) -> <<>>;
+ensure_binary_status(B) when is_binary(B) -> B;
+ensure_binary_status({<<"error">>, B}) when is_binary(B) -> B;
+ensure_binary_status({<<"error">>, V}) -> z_convert:to_binary(io_lib:format("~p", [ V ]));
+ensure_binary_status(V) -> z_convert:to_binary(io_lib:format("~p", [ V ])).
+
 
 % permanent_failure | temporary_failure | sent | received | relayed
 -spec delivery_type(binary()) -> z_email_server:delivery_type().
