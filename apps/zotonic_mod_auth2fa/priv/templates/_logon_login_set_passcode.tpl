@@ -17,7 +17,7 @@
            data-onclick-topic="model/clipboard/post/copy"
            data-text="{{ totp.secret }}"
         >
-            <span class="fa fa-copy"></span> {_ Copy _}
+            <span class="glyphicon glyphicon-copy"></span> {_ Copy _}
         </a>
     </p>
 {% endwith %}

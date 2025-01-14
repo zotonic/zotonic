@@ -12,7 +12,7 @@ initial_lang_code
             {% with lang_data.sublanguages as sublanguages %}
                 {% with sublanguages|element:1 as all %}
                     <a class="list-group-item" id="{{ #item.lang_code }}" data-name="{{ lang_data.name_en|lower }}" data-code="{{ lang_code }} {% for lang_code1 in all %}{{ lang_code1 }}{% endfor %}">
-                        <i class="fa fa-chevron-right pull-right"></i>
+                        <i class="glyphicon glyphicon-menu-right pull-right"></i>
                         <h3>{{ lang_data.name_en }}</h3>
                         <h4 class="mod_translation-codes text-muted">
                             <span class="mod_translation-code {% if  m.translation.language_list_configured[lang_code|as_atom] %}mod_translation-added{% endif %}">{{ lang_code }}</span>

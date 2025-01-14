@@ -5,7 +5,7 @@
         {% if ans == 'yes' %}
            <div class="form-group survey-button">
                 <label class="control-label">
-                    <span class="fa fa-check"></span> {{ blk.prompt }}
+                    <span class="glyphicon glyphicon-ok"></span> {{ blk.prompt }}
                 </label>
             </div>
         {% endif %}

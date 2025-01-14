@@ -46,7 +46,7 @@
     </p>
 
     {% if not m.modules.active.mod_export %}
-        <p class="text-warning"><i class="fa fa-info-circle"></i> {_ Enable <tt>mod_export</tt> to download backup files. _}</p>
+        <p class="text-warning"><i class="glyphicon glyphicon-info-sign"></i> {_ Enable <tt>mod_export</tt> to download backup files. _}</p>
     {% endif %}
 </div>
 
