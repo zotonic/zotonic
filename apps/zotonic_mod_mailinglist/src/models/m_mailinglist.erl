@@ -617,7 +617,7 @@ lines_to_recipients(Lines) ->
     lines_to_recipients(Lines, []).
 
 lines_to_recipients([], Acc) ->
-    Acc;
+    lists:reverse(Acc);
 lines_to_recipients([Line|Lines], Acc) ->
     %% Split every line on tab
     Trimmed = z_string:trim( z_convert:to_binary(Line) ),
@@ -626,7 +626,10 @@ lines_to_recipients([Line|Lines], Acc) ->
             lines_to_recipients(Lines, Acc);
         {ok, Row} ->
             R = line_to_recipient(Row),
-            lines_to_recipients(Lines, [R|Acc])
+            case z_email_utils:is_email(proplists:get_value(email, R)) of
+                true -> lines_to_recipients(Lines, [R|Acc]);
+                false -> lines_to_recipients(Lines, Acc)
+            end
     end.
 
 line_to_recipient([ Email ]) ->

@@ -191,9 +191,25 @@ event(#submit{message={mailinglist_upload,[{id,MailingId}]}}, Context) ->
             IsTruncate = z_convert:to_bool(z_context:get_q(<<"truncate">>, Context)),
             case import_file(TmpFile, IsTruncate, MailingId, Context) of
                 ok ->
+                    ?LOG_INFO(#{
+                        in => zotonic_mod_mailinglist,
+                        text => <<"Uploaded mailinglist recipients">>,
+                        result => ok,
+                        mailinglist_id => MailingId,
+                        is_truncate => IsTruncate
+                    }),
                     z_render:wire([{dialog_close, []}, {reload, []}], Context);
                 {error, Msg} ->
-                    z_render:growl(Msg, "error", true, Context)
+                    Msg1 = iolist_to_binary(Msg),
+                    ?LOG_ERROR(#{
+                        in => zotonic_mod_mailinglist,
+                        text => <<"Uploaded mailinglist recipients failed">>,
+                        result => error,
+                        reason => Msg1,
+                        mailinglist_id => MailingId,
+                        is_truncate => IsTruncate
+                    }),
+                    z_render:growl(Msg1, <<"error">>, true, Context)
             end;
         false ->
             z_render:growl_error(?__("You are not allowed to reset this mailing.", Context), Context)
