@@ -84,11 +84,22 @@ child_spec() ->
             }),
             Options = [
                 {port, Port},
-                {tls_options, z_ssl_certs:ssl_listener_options()}
+                {sessionoptions, [
+                    {tls_options, tls_options()}
+                ]}
                 | Args2
             ],
             gen_smtp_server:child_spec(?MODULE, ?MODULE, Options)
     end.
+
+tls_options() ->
+    Options = z_ssl_certs:ssl_listener_options(),
+    Options1 = lists:keydelete(session_tickets, 1, Options),
+    Options2 = lists:keydelete(reuse_sessions, 1, Options1),
+    [
+        {session_tickets, disabled}
+        | Options2
+    ].
 
 ip_to_string(any) -> "any";
 ip_to_string(IP) -> inet:ntoa(IP).
