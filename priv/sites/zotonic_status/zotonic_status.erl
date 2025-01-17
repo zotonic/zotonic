@@ -65,13 +65,10 @@ observe_tick_10m(tick_10m, Context) ->
 %% @doc Try to restart the site module if it is not running.
 -spec restart_site_module_if_not_running(Module::atom()) -> noop | ok | {error, not_found}.
 restart_site_module_if_not_running(Site) ->
-    %% An z_module_manager:active/2 also exists, but it turns out
-    %% that is not reliable for querying the actual site module
-    %% status (due to caching?).
-    case lists:member(Site, z_module_manager:active(z:c(Site))) of
-        true ->
+    case z_module_manager:whereis(Site, z:c(Site)) of
+        {ok, _} ->
             noop;
-        false ->
+        _ ->
             ?zWarning("Restarting site module ~s because it was off while the site is active", [ Site ], z:c(Site)),
             z_module_manager:restart(Site, z:c(Site))
     end.
