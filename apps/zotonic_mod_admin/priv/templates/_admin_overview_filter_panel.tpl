@@ -125,7 +125,7 @@
         {% block properties %}
         {% endblock %}
 
-        {% with m.search.all_bytitle::%{ cat: 'predicate' } as predicates %}
+        {% with m.search.all_bytitle::%{ cat: 'predicate', pagelen: 1000 } as predicates %}
             {% with qargs.qhasobjectpredicate as qpred %}
             <div class="form-group">
                 <label class="col-sm-3 control-label">{_ Has connections with predicate _}</label>

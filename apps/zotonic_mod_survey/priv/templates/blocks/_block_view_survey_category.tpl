@@ -6,7 +6,7 @@
                 <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
         {% endif %}
         {% with result.answers[blk.name].answer as ans %}
-        {% with m.search[{all_bytitle cat=blk.category}] as list %}
+        {% with m.search[{all_bytitle cat=blk.category pagelen=10000}] as list %}
             <ul>
                 {% for title,val in list %}
                     {% if val|member:ans %}
@@ -19,7 +19,7 @@
     </div>
 {% else %}
     {% with answers[blk.name]|survey_answer_split:blk as ans %}
-    {% with m.search[{all_bytitle cat=blk.category}] as list %}
+    {% with m.search[{all_bytitle cat=blk.category pagelen=10000}] as list %}
     <div class="form-group survey-category type-{{ blk.input_type|default:'single' }} question-{{ nr }} {% if not blk.prompt %}noprompt{% endif %}">
         <label class="control-label">{{ blk.prompt }}</label>
         <div>

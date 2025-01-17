@@ -13,7 +13,7 @@
 
 <h2>{_ All mailing lists _}</h2>
 
-{% for title, id in m.search[{all_bytitle cat="mailinglist"}] %}
+{% for title, id in m.search[{all_bytitle cat="mailinglist" pagelen=10000}] %}
 	{% ifnotequal m.rsc[id].name "mailinglist_test" %}
 		<h3><a href="{{ m.rsc[id].page_url }}">{{ m.rsc[id].title }}</a></h3>
 		<p>{{ m.rsc[id].summary }}</p>
