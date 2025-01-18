@@ -62,8 +62,21 @@ event(#postback{message={admin_tasks, [{task, <<"zotonic_reinstall">>}]}}, Conte
 event(#postback{message={admin_tasks, [{task, <<"renumber_categories">>}]}}, Context) ->
     do(fun() -> m_category:renumber(Context) end,
        ?__(<<"The category tree is rebuilding. This can take a long time."/utf8>>, Context),
-       Context).
+       Context);
 
+%% @doc Reload the site configuration.
+event(#postback{message={admin_tasks, [{task, <<"reload_config">>}]}}, Context) ->
+    case z_acl:is_allowed(use, mod_admin_config, Context) of
+        true ->
+            case m_site:reload_config(Context) of
+                ok ->
+                    z_render:growl(?__(<<"The site configuration has been reloaded.">>, Context), Context);
+                {error, _} ->
+                    z_render:growl_error(?__(<<"Could not reload the site configuration, check the logs.">>, Context), Context)
+            end;
+        false ->
+            z_render:growl_error(?__(<<"You don’t have permission to perform this action."/utf8>>, Context), Context)
+    end.
 
 do(Fun, OkMsg, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
