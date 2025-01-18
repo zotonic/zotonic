@@ -98,15 +98,21 @@
                         <p class="help-block">{_ Recalculate the numbering of the category tree. This can take a long time. _}</p>
                     </div>
 
+                    <div class="form-group">
+                        {% button class="btn btn-default" text=_"Reload site configuration" action={admin_tasks task='reload_config'} %}
+                        <p class="help-block">{_ Reload the configuration of a site. Note that not all site configurations can be done whilst the site is running. _}</p>
+                    </div>
+
         	        <div class="form-group">
                         {% button class="btn btn-default" text=_"Reinstall site datamodel" action={admin_tasks task='site_reinstall'} %}
-                        <p class="help-block">{_ Runs the schema install command from the site's module again. _}</p>
+                        <p class="help-block">{_ Runs the schema install command from the site's module again. _}<br>{_ <b>Warning:</b> the site will stop and restart. _}</p>
                     </div>
 
                     <div class="form-group">
                         {% button class="btn btn-default" text=_"Reinstall Zotonic datamodel" action={admin_tasks task='zotonic_reinstall'} %}
                         <p class="help-block">{_ Runs the schema install for Zotonic core again. _}</p>
                     </div>
+
                 </div>
             </div>
 

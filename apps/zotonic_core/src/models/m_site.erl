@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Model for the zotonic site configuration
+%% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,6 +29,7 @@
     security/1,
     load_config/1,
     load_config/2,
+    reload_config/1,
     all/1,
     get/2,
     get/3,
@@ -142,6 +144,44 @@ load_config(Site, Config) when is_atom(Site) ->
             application:set_env(Site, K, V)
         end,
         Config).
+
+-spec reload_config(SiteOrContext) -> ok | {error, Reason} when
+    SiteOrContext :: atom() | z:context(),
+    Reason :: term().
+reload_config(#context{} = Context) ->
+    reload_config(z_context:site(Context));
+reload_config(Site) when is_atom(Site) ->
+    case z_sites_manager:reload_site_config(Site) of
+        ok ->
+            case load_config(Site) of
+                ok ->
+                    ?LOG_INFO(#{
+                        in => zotonic_core,
+                        text => <<"Reloaded site configuration">>,
+                        result => ok,
+                        site => Site
+                    }),
+                    z_sites_dispatcher:update_dispatchinfo();
+                {error, Reason} = Error ->
+                    ?LOG_ERROR(#{
+                        in => zotonic_core,
+                        text => <<"Could not reload site configuration">>,
+                        result => error,
+                        reason => Reason,
+                        site => Site
+                    }),
+                    Error
+            end;
+        {error, Reason} = Error ->
+            ?LOG_ERROR(#{
+                in => zotonic_core,
+                text => <<"Could not reload site configuration">>,
+                result => error,
+                reason => Reason,
+                site => Site
+            }),
+            Error
+    end.
 
 %% @doc Return the complete site configuration
 -spec all(atom()|z:context()) -> list().

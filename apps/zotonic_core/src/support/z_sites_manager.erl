@@ -36,6 +36,7 @@
     is_sites_running/0,
     get_site_contexts/0,
     get_site_config/1,
+    reload_site_config/1,
     get_fallback_site/0,
     get_builtin_sites/0,
     get_sites_hosts/0,
@@ -221,6 +222,12 @@ get_site_contexts() ->
 -spec get_site_config(atom()) -> {ok, list()} | {error, bad_name|term()}.
 get_site_config(Site) ->
     gen_server:call(?MODULE, {get_site_config, Site}, infinity).
+
+%% @doc Let the sites manager reload the configurarion of a site.
+-spec reload_site_config(atom()) -> ok | {error, bad_name|term()}.
+reload_site_config(Site) ->
+    gen_server:call(?MODULE, {reload_site_config, Site}, infinity).
+
 
 %% @doc Return the name of the site to handle unknown Host requests
 -spec get_fallback_site() -> atom() | undefined.
@@ -469,6 +476,15 @@ handle_call({get_site_config, Site}, _From, #state{ sites = Sites } = State) ->
             {reply, {ok, z_utils:props_merge(Overrides, Config)}, State};
         error ->
             {reply, {error, bad_name}, State}
+    end;
+
+handle_call({reload_site_config, Site}, _From, #state{ sites = Sites } = State) ->
+    case do_reload_site_config(Site, Sites) of
+        {ok, Sites1} ->
+            State1 = State#state{ sites = Sites1 },
+            {reply, ok, State1};
+        {error, _} = Error ->
+            {reply, Error, State}
     end;
 
 handle_call({get_status_start, Site}, _From, #state{ sites = Sites } = State) ->
