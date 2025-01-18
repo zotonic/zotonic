@@ -2,8 +2,7 @@
 %% @copyright 2010-2025 Arjan Scherpenisse
 %% @doc Functions for admin tasks in the /admin/status panel. Flushing caches, reindexing,
 %% reloading configs and more.
-%%
-%% Example usage for in a wire: ``action={admin_tasks task="flush"}``
+%% Example usage for in a wire: ```action={admin_tasks task="flush"}'''
 %% @end
 
 -module(action_admin_admin_tasks).
