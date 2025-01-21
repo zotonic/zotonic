@@ -27,6 +27,8 @@
 -mod_depends([ admin, mod_wires ]).
 -mod_provides([ survey, poll ]).
 
+-behaviour(gen_server).
+
 %% interface functions
 -export([
     manage_schema/2,
@@ -45,8 +47,9 @@
 
     get_page/3,
 
+    register_submit/2,
+    unregister_submit/2,
     do_submit/4,
-
     save_submit/2,
 
     collect_answers/4,
@@ -54,6 +57,23 @@
     go_button_target/4,
     module_name/1
 ]).
+
+-export([
+    start_link/1,
+    init/1,
+    handle_call/3,
+    handle_cast/2,
+    handle_info/2,
+    code_change/3,
+    terminate/2
+]).
+
+-record(state, {
+    handled_sessions = #{} :: #{ binary() => integer() }
+}).
+
+-define(CLEANUP_TIMEOUT, 900).
+-define(HANDLED_SESSION_CACHE_TIME, 3600).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_survey/include/survey.hrl").
@@ -83,7 +103,8 @@ event(#postback{message={survey_start, Args}}, Context) ->
             end,
             Editing = {editing, AnswerId, undefined},
             Args1 = [
-                {answer_user_id, ResultUserId}
+                {answer_user_id, ResultUserId},
+                {survey_session_nr, z_ids:id()}
                 | proplists:delete(answer_user_id, Args)
             ],
             render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context), Args1, Context);
@@ -91,7 +112,8 @@ event(#postback{message={survey_start, Args}}, Context) ->
             Answers = normalize_answers(proplists:get_value(answers, Args)),
             Editing = proplists:get_value(editing, Args),
             Args1 = [
-                {answer_user_id, z_acl:user(Context)}
+                {answer_user_id, z_acl:user(Context)},
+                {survey_session_nr, z_ids:id()}
                 | proplists:delete(answer_user_id, Args)
             ],
             render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context), Args1, Context)
@@ -283,10 +305,101 @@ get_page(Id, Nr, #context{} = Context) when is_integer(Nr) ->
             []
     end.
 
+-spec register_submit(SessionNr, Context) -> ok | {error, duplicate} when
+    SessionNr :: binary() | undefined,
+    Context :: z:context().
+register_submit(undefined, _Context) ->
+    ok;
+register_submit(<<>>, _Context) ->
+    ok;
+register_submit(SessionNr, Context) when is_binary(SessionNr) ->
+    Name = z_utils:name_for_site(?MODULE, Context),
+    gen_server:call(Name, {register_submit, SessionNr}).
+
+-spec unregister_submit(SessionNr, Context) -> ok when
+    SessionNr :: binary() | undefined,
+    Context :: z:context().
+unregister_submit(undefined, _Context) ->
+    ok;
+unregister_submit(<<>>, _Context) ->
+    ok;
+unregister_submit(SessionNr, Context) when is_binary(SessionNr) ->
+    Name = z_utils:name_for_site(?MODULE, Context),
+    gen_server:cast(Name, {unregister_submit, SessionNr}).
+
+
+%%====================================================================
+%%  gen_server functions
+%%====================================================================
+
+start_link(Args) when is_list(Args) ->
+    {context, Context} = proplists:lookup(context, Args),
+    gen_server:start_link({local, z_utils:name_for_site(?MODULE, Context)}, ?MODULE, Args, []).
+
+
+%% @doc Initiates the server.
+init(Args) ->
+    process_flag(trap_exit, true),
+    {context, Context} = proplists:lookup(context, Args),
+    Site = z_context:site(Context),
+    logger:set_process_metadata(#{
+        site => Site,
+        module => ?MODULE
+    }),
+    {ok, #state{ handled_sessions = #{} }}.
+
+handle_call({register_submit, SessionNr}, _From, #state{ handled_sessions = Handled } = State) when is_binary(SessionNr)->
+    Handled1 = Handled#{
+        SessionNr => z_datetime:timestamp()
+    },
+    case maps:is_key(SessionNr, Handled) of
+        false ->
+            {reply, ok, cleanup_handled(State#state{ handled_sessions = Handled1 }), ?CLEANUP_TIMEOUT};
+        true ->
+            {reply, {error, duplicate}, cleanup_handled(State), ?CLEANUP_TIMEOUT}
+    end;
+handle_call({unregister_submit, SessionNr}, _From, #state{ handled_sessions = Handled } = State) when is_binary(SessionNr)->
+    Handled1 = maps:remove(SessionNr, Handled),
+    {reply, ok, cleanup_handled(State#state{ handled_sessions = Handled1 }), ?CLEANUP_TIMEOUT};
+handle_call(Message, _From, State) ->
+    {stop, {unknown_call, Message}, State, ?CLEANUP_TIMEOUT}.
+
+handle_cast(Message, State) ->
+    {stop, {unknown_cast, Message}, State, ?CLEANUP_TIMEOUT}.
+
+handle_info(timeout, State) ->
+    State1 = cleanup_handled(State),
+    case maps:size(State1#state.handled_sessions) of
+        0 -> {noreply, State1};
+        _ -> {noreply, State1, ?CLEANUP_TIMEOUT}
+    end;
+handle_info(Info, State) ->
+    ?LOG_WARNING(#{
+        text => <<"Survey unknown info message">>,
+        in => zotonic_mod_survey,
+        message => Info
+    }),
+    {noreply, State, ?CLEANUP_TIMEOUT}.
+
+%% @doc This function is called by a gen_server when it is about to
+%% terminate. It should be the opposite of Module:init/1 and do any necessary
+%% cleaning up. When it returns, the gen_server terminates with Reason.
+%% The return value is ignored.
+terminate(_Reason, _State) ->
+    ok.
+
+%% @doc Convert process state when code is changed
+code_change(_OldVsn, State, _Extra) ->
+    {ok, State, ?CLEANUP_TIMEOUT}.
 
 %%====================================================================
 %% support functions
 %%====================================================================
+
+cleanup_handled(#state{ handled_sessions = Handled } = State) ->
+    Old = z_datetime:timestamp() - ?HANDLED_SESSION_CACHE_TIME,
+    Handled1 = maps:filter(fun(_K, T) -> T > Old end, Handled),
+    State#state{ handled_sessions = Handled1 }.
 
 
 normalize_answers(undefined) -> [];
@@ -351,6 +464,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Args, Context
                 {L,NewPageNr} when is_list(L) ->
                     % A new list of questions, PageNr might be another than expected
                     TargetId = proplists:get_value(element_id, Args, <<"survey-question">>),
+                    SurveySessionNr = z_convert:to_binary(proplists:get_value(survey_session_nr, Args)),
                     Vars = [
                         {id, Id},
                         {element_id, TargetId},
@@ -362,7 +476,8 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Args, Context
                         {answer_user_id, proplists:get_value(answer_user_id, Args)},
                         {history, [NewPageNr|History]},
                         {editing, Editing},
-                        {viewer, Viewer}
+                        {viewer, Viewer},
+                        {survey_session_nr, SurveySessionNr}
                     ],
                     #render{template="_survey_question_page.tpl", vars=Vars};
 
@@ -746,7 +861,23 @@ do_submit(SurveyId, Questions, Answers, Context) ->
          SubmitArgs :: proplists:proplist(),
          Context :: z:context(),
          ContextOrRender :: z:context() | #render{}.
-do_submit(SurveyId, Questions, Answers, undefined, SubmitArgs, Context) ->
+do_submit(SurveyId, Questions, Answers, Editing, SubmitArgs, Context) ->
+    SessionNr = proplists:get_value(survey_session_nr, SubmitArgs),
+    case register_submit(SessionNr, Context) of
+        ok ->
+            do_submit_1(SurveyId, Questions, Answers, Editing, SubmitArgs, Context);
+        {error, duplicate} ->
+            Context1 = z_render:wire(
+                    {alert, [
+                        {title, ?__("Already submitted", Context)},
+                        {text, ?__(
+                            "Sorry, you already submitted your answers. Reload the page if "
+                            "you want to fill in the form again.", Context)}
+                    ]}, Context),
+            {ok, Context1}
+    end.
+
+do_submit_1(SurveyId, Questions, Answers, undefined, SubmitArgs, Context) ->
     {FoundAnswers, Missing} = collect_answers(SurveyId, Questions, Answers, Context),
     case z_notifier:first(
         #survey_submit{
@@ -776,9 +907,11 @@ do_submit(SurveyId, Questions, Answers, undefined, SubmitArgs, Context) ->
             % maybe_mail(SurveyId, Answers, undefined, false, Context),
             Handled;
         {error, _Reason} = Error ->
+            SessionNr = proplists:get_value(survey_session_nr, SubmitArgs),
+            unregister_submit(SessionNr, Context),
             Error
     end;
-do_submit(SurveyId, Questions, Answers, {editing, AnswerId, _Actions}, _SubmitArgs, Context) ->
+do_submit_1(SurveyId, Questions, Answers, {editing, AnswerId, _Actions}, _SubmitArgs, Context) ->
     % Save the modified survey results
     case z_acl:is_allowed(update_result, #acl_survey{id=SurveyId, answer_id=AnswerId}, Context) of
         true ->
