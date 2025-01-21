@@ -47,8 +47,8 @@
 
     get_page/3,
 
-    register_submit/2,
-    unregister_submit/2,
+    register_nonce/2,
+    unregister_nonce/2,
     do_submit/4,
     save_submit/2,
 
@@ -69,11 +69,11 @@
 ]).
 
 -record(state, {
-    handled_sessions = #{} :: #{ binary() => integer() }
+    handled_nonces = #{} :: #{ binary() => integer() }
 }).
 
 -define(CLEANUP_TIMEOUT, 900).
--define(HANDLED_SESSION_CACHE_TIME, 3600).
+-define(HANDLED_NONCE_CACHE_TIME, 3600).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_survey/include/survey.hrl").
@@ -104,7 +104,7 @@ event(#postback{message={survey_start, Args}}, Context) ->
             Editing = {editing, AnswerId, undefined},
             Args1 = [
                 {answer_user_id, ResultUserId},
-                {survey_session_nr, z_ids:id()}
+                {survey_session_nonce, z_ids:id()}
                 | proplists:delete(answer_user_id, Args)
             ],
             render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context), Args1, Context);
@@ -113,7 +113,7 @@ event(#postback{message={survey_start, Args}}, Context) ->
             Editing = proplists:get_value(editing, Args),
             Args1 = [
                 {answer_user_id, z_acl:user(Context)},
-                {survey_session_nr, z_ids:id()}
+                {survey_session_nonce, z_ids:id()}
                 | proplists:delete(answer_user_id, Args)
             ],
             render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context), Args1, Context)
@@ -305,27 +305,27 @@ get_page(Id, Nr, #context{} = Context) when is_integer(Nr) ->
             []
     end.
 
--spec register_submit(SessionNr, Context) -> ok | {error, duplicate} when
-    SessionNr :: binary() | undefined,
+-spec register_nonce(SessionNonce, Context) -> ok | {error, duplicate} when
+    SessionNonce :: binary() | undefined,
     Context :: z:context().
-register_submit(undefined, _Context) ->
+register_nonce(undefined, _Context) ->
     ok;
-register_submit(<<>>, _Context) ->
+register_nonce(<<>>, _Context) ->
     ok;
-register_submit(SessionNr, Context) when is_binary(SessionNr) ->
+register_nonce(SessionNonce, Context) when is_binary(SessionNonce) ->
     Name = z_utils:name_for_site(?MODULE, Context),
-    gen_server:call(Name, {register_submit, SessionNr}).
+    gen_server:call(Name, {register_nonce, SessionNonce}).
 
--spec unregister_submit(SessionNr, Context) -> ok when
-    SessionNr :: binary() | undefined,
+-spec unregister_nonce(SessionNonce, Context) -> ok when
+    SessionNonce :: binary() | undefined,
     Context :: z:context().
-unregister_submit(undefined, _Context) ->
+unregister_nonce(undefined, _Context) ->
     ok;
-unregister_submit(<<>>, _Context) ->
+unregister_nonce(<<>>, _Context) ->
     ok;
-unregister_submit(SessionNr, Context) when is_binary(SessionNr) ->
+unregister_nonce(SessionNonce, Context) when is_binary(SessionNonce) ->
     Name = z_utils:name_for_site(?MODULE, Context),
-    gen_server:cast(Name, {unregister_submit, SessionNr}).
+    gen_server:cast(Name, {unregister_nonce, SessionNonce}).
 
 
 %%====================================================================
@@ -346,30 +346,30 @@ init(Args) ->
         site => Site,
         module => ?MODULE
     }),
-    {ok, #state{ handled_sessions = #{} }}.
+    {ok, #state{ handled_nonces = #{} }}.
 
-handle_call({register_submit, SessionNr}, _From, #state{ handled_sessions = Handled } = State) when is_binary(SessionNr)->
+handle_call({register_nonce, Nonce}, _From, #state{ handled_nonces = Handled } = State) when is_binary(Nonce)->
     Handled1 = Handled#{
-        SessionNr => z_datetime:timestamp()
+        Nonce => z_datetime:timestamp()
     },
-    case maps:is_key(SessionNr, Handled) of
+    case maps:is_key(Once, Handled) of
         false ->
-            {reply, ok, cleanup_handled(State#state{ handled_sessions = Handled1 }), ?CLEANUP_TIMEOUT};
+            {reply, ok, cleanup_handled(State#state{ handled_nonces = Handled1 }), ?CLEANUP_TIMEOUT};
         true ->
             {reply, {error, duplicate}, cleanup_handled(State), ?CLEANUP_TIMEOUT}
     end;
-handle_call({unregister_submit, SessionNr}, _From, #state{ handled_sessions = Handled } = State) when is_binary(SessionNr)->
-    Handled1 = maps:remove(SessionNr, Handled),
-    {reply, ok, cleanup_handled(State#state{ handled_sessions = Handled1 }), ?CLEANUP_TIMEOUT};
 handle_call(Message, _From, State) ->
-    {stop, {unknown_call, Message}, State, ?CLEANUP_TIMEOUT}.
+    {stop, {unknown_call, Message}, State}.
 
+handle_cast({unregister_nonce, Nonce}, #state{ handled_nonces = Handled } = State) when is_binary(Nonce)->
+    Handled1 = maps:remove(Nonce, Handled),
+    {noreply, cleanup_handled(State#state{ handled_nonces = Handled1 }), ?CLEANUP_TIMEOUT};
 handle_cast(Message, State) ->
-    {stop, {unknown_cast, Message}, State, ?CLEANUP_TIMEOUT}.
+    {stop, {unknown_cast, Message}, State}.
 
 handle_info(timeout, State) ->
     State1 = cleanup_handled(State),
-    case maps:size(State1#state.handled_sessions) of
+    case maps:size(State1#state.handled_nonces) of
         0 -> {noreply, State1};
         _ -> {noreply, State1, ?CLEANUP_TIMEOUT}
     end;
@@ -396,10 +396,10 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
-cleanup_handled(#state{ handled_sessions = Handled } = State) ->
-    Old = z_datetime:timestamp() - ?HANDLED_SESSION_CACHE_TIME,
+cleanup_handled(#state{ handled_nonces = Handled } = State) ->
+    Old = z_datetime:timestamp() - ?HANDLED_NONCE_CACHE_TIME,
     Handled1 = maps:filter(fun(_K, T) -> T > Old end, Handled),
-    State#state{ handled_sessions = Handled1 }.
+    State#state{ handled_nonces = Handled1 }.
 
 
 normalize_answers(undefined) -> [];
@@ -464,7 +464,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Args, Context
                 {L,NewPageNr} when is_list(L) ->
                     % A new list of questions, PageNr might be another than expected
                     TargetId = proplists:get_value(element_id, Args, <<"survey-question">>),
-                    SurveySessionNr = z_convert:to_binary(proplists:get_value(survey_session_nr, Args)),
+                    SurveySessionNonce = proplists:get_value(survey_session_nonce, Args),
                     Vars = [
                         {id, Id},
                         {element_id, TargetId},
@@ -477,7 +477,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Args, Context
                         {history, [NewPageNr|History]},
                         {editing, Editing},
                         {viewer, Viewer},
-                        {survey_session_nr, SurveySessionNr}
+                        {survey_session_nonce, SurveySessionNonce}
                     ],
                     #render{template="_survey_question_page.tpl", vars=Vars};
 
@@ -862,8 +862,8 @@ do_submit(SurveyId, Questions, Answers, Context) ->
          Context :: z:context(),
          ContextOrRender :: z:context() | #render{}.
 do_submit(SurveyId, Questions, Answers, Editing, SubmitArgs, Context) ->
-    SessionNr = proplists:get_value(survey_session_nr, SubmitArgs),
-    case register_submit(SessionNr, Context) of
+    SurveySessionNonce = proplists:get_value(survey_session_nonce, SubmitArgs),
+    case register_nonce(SurveySessionNonce, Context) of
         ok ->
             do_submit_1(SurveyId, Questions, Answers, Editing, SubmitArgs, Context);
         {error, duplicate} ->
@@ -907,8 +907,8 @@ do_submit_1(SurveyId, Questions, Answers, undefined, SubmitArgs, Context) ->
             % maybe_mail(SurveyId, Answers, undefined, false, Context),
             Handled;
         {error, _Reason} = Error ->
-            SessionNr = proplists:get_value(survey_session_nr, SubmitArgs),
-            unregister_submit(SessionNr, Context),
+            SurveySessionNonce = proplists:get_value(survey_session_nonce, SubmitArgs),
+            unregister_nonce(SurveySessionNonce, Context),
             Error
     end;
 do_submit_1(SurveyId, Questions, Answers, {editing, AnswerId, _Actions}, _SubmitArgs, Context) ->
