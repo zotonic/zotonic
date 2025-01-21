@@ -109,6 +109,10 @@ function zotonic_startup() {
   //     }
   // }, { wid: 'zotonicjs'});
 
+  if (!document.querySelector('body')?.hasAttribute("data-cotonic-pathname-search")) {
+      console.warn('Missing cotonic data search path. In the body tag, add: data-cotonic-pathname-search="{% cotonic_pathname_search %}"')
+  }
+
   // Handle data sent by the server
   cotonic.broker.subscribe(
     "zotonic-transport/eval",
