@@ -352,7 +352,7 @@ handle_call({register_nonce, Nonce}, _From, #state{ handled_nonces = Handled } =
     Handled1 = Handled#{
         Nonce => z_datetime:timestamp()
     },
-    case maps:is_key(Once, Handled) of
+    case maps:is_key(Nonce, Handled) of
         false ->
             {reply, ok, cleanup_handled(State#state{ handled_nonces = Handled1 }), ?CLEANUP_TIMEOUT};
         true ->
