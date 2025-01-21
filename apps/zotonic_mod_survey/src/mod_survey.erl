@@ -782,6 +782,13 @@ do_submit(SurveyId, Questions, Answers, Editing, SubmitArgs, Context) ->
                             "Sorry, you already submitted your answers. Reload the page if "
                             "you want to fill in the form again.", Context)}
                     ]}, Context),
+            {ok, Context1};
+        {error, overload} ->
+            Context1 = z_render:wire(
+                    {alert, [
+                        {title, ?__("Sorry", Context)},
+                        {text, ?__("We are experiencing an overload, please try again in 10 minutes.", Context)}
+                    ]}, Context),
             {ok, Context1}
     end.
 
