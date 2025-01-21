@@ -28,9 +28,13 @@
 -export([
     init_nonce/0,
     nonce/0,
+    nonce/1,
     nonce_register/1,
     nonce_unregister/1,
     nonce_cleanup/0,
+    nonce_secret/0,
+    nonce_generation/1,
+    nonce_oldest_generation/0,
     unique/0,
     id/0,
     id/1,
@@ -56,9 +60,6 @@
         z_nonce_5, z_nonce_6, z_nonce_7, z_nonce_8, z_nonce_9
     ]).
 
-% Length of the generated nonce keys
--define(NONCE_KEY_SIZE, 20).
-
 % Number of seconds an nonce is valid. This can vary 10% due to the
 % periodic cleanup of the nonce tables.
 -define(NONCE_TIMEOUT, 600).
@@ -75,7 +76,7 @@
 %% @doc Initialize the nonce tables. Calles by zotonic_core_sup, which process
 %% will be the owner of these tables.
 init_nonce() ->
-    timer:apply_after((?NONCE_TIMEOUT div 2) * 1000, ?MODULE, nonce_cleanup, []),
+    nonce_next_cleanup(),
     lists:foreach(
         fun(N) ->
             ets:new(N, [ named_table, public ])
@@ -84,27 +85,56 @@ init_nonce() ->
 
 -spec nonce() -> Nonce when
     Nonce :: binary().
-%% @doc Return a new nonce value.
+%% @doc Return a new nonce value, strictly valid for the how long we keep the
+%% used nonce values. This gives maximum protection against replay attacks.
 nonce() ->
-    id(?NONCE_KEY_SIZE).
+    nonce(?NONCE_TIMEOUT).
+
+-spec nonce(Timeout) -> Nonce when
+    Timeout :: integer(),
+    Nonce :: binary().
+%% @doc Return a new nonce value, valid for about the given number of seconds.
+nonce(Timeout) ->
+    Number = nonce_generation(Timeout),
+    Random = z_ids:id(10),
+    Key = <<(integer_to_binary(Number))/binary, "-", Random/binary>>,
+    Hash = crypto:mac(hmac, sha256, Key, nonce_secret()),
+    HashHex = base64url:encode(Hash),
+    <<Key/binary, "-", HashHex/binary>>.
 
 -spec nonce_register(Nonce) -> ok | {error, Reason} when
     Nonce :: binary(),
-    Reason :: duplicate | overload | key.
+    Reason :: duplicate | overload | key | expired.
 %% @doc Register a nonce for use, will be remembered for the next ?NONCE_TIMEOUT
 %% seconds or until unregistered.
 nonce_register(<<>>) ->
     {error, key};
-nonce_register(Nonce) when size(Nonce) =< ?NONCE_KEY_SIZE ->
-    case is_nonce_registered(Nonce) of
+nonce_register(Nonce) ->
+    Oldest = nonce_oldest_generation(),
+    case split_nonce(Nonce) of
+        {Number, Random, Hash} when Number >= Oldest ->
+            CheckKey = <<(integer_to_binary(Number))/binary, "-", Random/binary>>,
+            CheckHash = crypto:mac(hmac, sha256, CheckKey, nonce_secret()),
+            if
+                CheckHash =:= Hash ->
+                    nonce_register_1(CheckKey);
+                true ->
+                    {error, key}
+            end;
+        {_Number, _Random, _Key} ->
+            {error, expired};
+        error ->
+            {error, key}
+    end.
+
+nonce_register_1(Key) ->
+    case is_nonce_registered(Key) of
         false ->
             Table = nonce_table(),
             Size = ets:info(Table, size),
             if
                 Size < ?NONCE_OVERLOAD ->
-                    {MSecs, Secs, _} = os:timestamp(),
-                    Time = (MSecs * 1_000_000 + Secs),
-                    ets:insert(nonce_table(), {Nonce, Time}),
+                    ets:insert(nonce_table(), {Key, secs()}),
                     ok;
                 true ->
                     ?LOG_ERROR(#{
@@ -119,9 +149,26 @@ nonce_register(Nonce) when size(Nonce) =< ?NONCE_KEY_SIZE ->
             end;
         true ->
             {error, duplicate}
-    end;
-nonce_register(_Nonce) ->
-    {error, key}.
+    end.
+
+split_nonce(Nonce) ->
+    case binary:split(Nonce, <<"-">>) of
+        [ Number, KeyHash ] ->
+            case binary:split(KeyHash, <<"-">>) of
+                [Key, Hash] ->
+                    try
+                        Hash1 = base64url:decode(Hash),
+                        {binary_to_integer(Number), Key, Hash1}
+                    catch _:_ ->
+                        error
+                    end;
+                _ ->
+                    error
+            end;
+        _ ->
+            error
+    end.
+
 
 -spec nonce_unregister(Nonce) -> ok when
     Nonce :: binary().
@@ -149,24 +196,55 @@ is_nonce_registered(Nonce) ->
 %% @doc Remove all keys from the "previous" nonce registration table,
 %% schedule a timer for the next removal.
 nonce_cleanup() ->
-    timer:apply_after((?NONCE_TIMEOUT div 2) * 1000, ?MODULE, nonce_cleanup, []),
+    nonce_next_cleanup(),
     ets:delete_all_objects(nonce_prev_table()),
     ok.
 
+nonce_next_cleanup() ->
+    SecsPerTable = ?NONCE_TIMEOUT div length(?NONCE_TABLES),
+    timer:apply_after((SecsPerTable div 2) * 1000, ?MODULE, nonce_cleanup, []).
+
 nonce_table() ->
-    N = secs() div ?NONCE_TIMEOUT,
+    N = nonce_generation(0),
     N1 = N rem length(?NONCE_TABLES),
     lists:nth(N1+1, ?NONCE_TABLES).
 
 nonce_prev_table() ->
-    N = secs() div ?NONCE_TIMEOUT,
+    N = nonce_generation(0),
     NTab = length(?NONCE_TABLES),
     N1 = (N + NTab - 1) rem NTab,
     lists:nth(N1+1, ?NONCE_TABLES).
 
+nonce_generation(DeltaSecs) ->
+    SecsPerTable = ?NONCE_TIMEOUT div length(?NONCE_TABLES),
+    (secs() + DeltaSecs) div SecsPerTable.
+
+nonce_oldest_generation() ->
+    nonce_generation(0) - length(?NONCE_TABLES) + 1.
+
 secs() ->
     {MSecs, Secs, _} = os:timestamp(),
     MSecs * 1_000_000 + Secs.
+
+-spec nonce_secret() -> binary().
+%% @doc Return the secret used for signing the nonce values.
+nonce_secret() ->
+    case application:get_env(zotonic_core, nonce_secret) of
+        {ok, Key} when size(Key) >= 50 ->
+            Key;
+        _ ->
+            SecFile = filename:join([ z_config:get(security_dir), "nonce-secret.bin" ]),
+            case file:read_file(SecFile) of
+                {ok, Key} when size(Key) >= 50 ->
+                    application:set_env(zotonic_core, nonce_secret, Key),
+                    Key;
+                _ ->
+                    Key = rand_bytes(50),
+                    file:write_file(SecFile, Key),
+                    application:set_env(zotonic_core, nonce_secret, Key),
+                    Key
+            end
+    end.
 
 -spec unique() -> binary().
 %% @doc Return an unique id to be used in javascript or html.  No randomness,

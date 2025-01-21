@@ -59,6 +59,11 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_survey/include/survey.hrl").
 
+% Used for the timeout of the nonce set when starting to fill in
+% a survey. After this the nonce is not valid anymore. As this nonce
+% is only used to catch quick successions of the submitting the same
+% form we can set it to a very long validity.
+-define(SURVEY_FILL_NONCE_TIMEOUT, ?WEEK).
 
 %% @doc Schema for mod_survey lives in separate module
 manage_schema(What, Context) ->
@@ -85,7 +90,7 @@ event(#postback{message={survey_start, Args}}, Context) ->
             Editing = {editing, AnswerId, undefined},
             Args1 = [
                 {answer_user_id, ResultUserId},
-                {survey_session_nonce, z_ids:nonce()}
+                {survey_session_nonce, z_ids:nonce(?SURVEY_FILL_NONCE_TIMEOUT)}
                 | proplists:delete(answer_user_id, Args)
             ],
             render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context), Args1, Context);
@@ -94,7 +99,7 @@ event(#postback{message={survey_start, Args}}, Context) ->
             Editing = proplists:get_value(editing, Args),
             Args1 = [
                 {answer_user_id, z_acl:user(Context)},
-                {survey_session_nonce, z_ids:nonce()}
+                {survey_session_nonce, z_ids:nonce(?SURVEY_FILL_NONCE_TIMEOUT)}
                 | proplists:delete(answer_user_id, Args)
             ],
             render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context), Args1, Context)
@@ -788,6 +793,14 @@ do_submit(SurveyId, Questions, Answers, Editing, SubmitArgs, Context) ->
                     {alert, [
                         {title, ?__("Sorry", Context)},
                         {text, ?__("We are experiencing an overload, please try again in 10 minutes.", Context)}
+                    ]}, Context),
+            {ok, Context1};
+        {error, _} ->
+            % Could be expired or an invalid nonce key
+            Context1 = z_render:wire(
+                    {alert, [
+                        {title, ?__("Sorry", Context)},
+                        {text, ?__("Your session was expired, please restart and try again.", Context)}
                     ]}, Context),
             {ok, Context1}
     end.
