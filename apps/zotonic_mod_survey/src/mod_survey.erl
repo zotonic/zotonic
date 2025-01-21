@@ -27,8 +27,6 @@
 -mod_depends([ admin, mod_wires ]).
 -mod_provides([ survey, poll ]).
 
--behaviour(gen_server).
-
 %% interface functions
 -export([
     manage_schema/2,
@@ -47,8 +45,8 @@
 
     get_page/3,
 
-    register_nonce/2,
-    unregister_nonce/2,
+    register_nonce/1,
+    unregister_nonce/1,
     do_submit/4,
     save_submit/2,
 
@@ -57,23 +55,6 @@
     go_button_target/4,
     module_name/1
 ]).
-
--export([
-    start_link/1,
-    init/1,
-    handle_call/3,
-    handle_cast/2,
-    handle_info/2,
-    code_change/3,
-    terminate/2
-]).
-
--record(state, {
-    handled_nonces = #{} :: #{ binary() => integer() }
-}).
-
--define(CLEANUP_TIMEOUT, 900).
--define(HANDLED_NONCE_CACHE_TIME, 3600).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_survey/include/survey.hrl").
@@ -104,7 +85,7 @@ event(#postback{message={survey_start, Args}}, Context) ->
             Editing = {editing, AnswerId, undefined},
             Args1 = [
                 {answer_user_id, ResultUserId},
-                {survey_session_nonce, z_ids:id()}
+                {survey_session_nonce, z_ids:nonce()}
                 | proplists:delete(answer_user_id, Args)
             ],
             render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context), Args1, Context);
@@ -113,7 +94,7 @@ event(#postback{message={survey_start, Args}}, Context) ->
             Editing = proplists:get_value(editing, Args),
             Args1 = [
                 {answer_user_id, z_acl:user(Context)},
-                {survey_session_nonce, z_ids:id()}
+                {survey_session_nonce, z_ids:nonce()}
                 | proplists:delete(answer_user_id, Args)
             ],
             render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context), Args1, Context)
@@ -305,102 +286,29 @@ get_page(Id, Nr, #context{} = Context) when is_integer(Nr) ->
             []
     end.
 
--spec register_nonce(SessionNonce, Context) -> ok | {error, duplicate} when
+-spec register_nonce(SessionNonce) -> ok | {error, Reason} when
     SessionNonce :: binary() | undefined,
-    Context :: z:context().
-register_nonce(undefined, _Context) ->
+    Reason :: duplicate | overload.
+register_nonce(undefined) ->
     ok;
-register_nonce(<<>>, _Context) ->
+register_nonce(<<>>) ->
     ok;
-register_nonce(SessionNonce, Context) when is_binary(SessionNonce) ->
-    Name = z_utils:name_for_site(?MODULE, Context),
-    gen_server:call(Name, {register_nonce, SessionNonce}).
+register_nonce(SessionNonce) when is_binary(SessionNonce) ->
+    z_ids:nonce_register(SessionNonce).
 
--spec unregister_nonce(SessionNonce, Context) -> ok when
-    SessionNonce :: binary() | undefined,
-    Context :: z:context().
-unregister_nonce(undefined, _Context) ->
+-spec unregister_nonce(SessionNonce) -> ok when
+    SessionNonce :: binary() | undefined.
+unregister_nonce(undefined) ->
     ok;
-unregister_nonce(<<>>, _Context) ->
+unregister_nonce(<<>>) ->
     ok;
-unregister_nonce(SessionNonce, Context) when is_binary(SessionNonce) ->
-    Name = z_utils:name_for_site(?MODULE, Context),
-    gen_server:cast(Name, {unregister_nonce, SessionNonce}).
+unregister_nonce(SessionNonce) when is_binary(SessionNonce) ->
+    z_ids:nonce_unregister(SessionNonce).
 
-
-%%====================================================================
-%%  gen_server functions
-%%====================================================================
-
-start_link(Args) when is_list(Args) ->
-    {context, Context} = proplists:lookup(context, Args),
-    gen_server:start_link({local, z_utils:name_for_site(?MODULE, Context)}, ?MODULE, Args, []).
-
-
-%% @doc Initiates the server.
-init(Args) ->
-    process_flag(trap_exit, true),
-    {context, Context} = proplists:lookup(context, Args),
-    Site = z_context:site(Context),
-    logger:set_process_metadata(#{
-        site => Site,
-        module => ?MODULE
-    }),
-    {ok, #state{ handled_nonces = #{} }}.
-
-handle_call({register_nonce, Nonce}, _From, #state{ handled_nonces = Handled } = State) when is_binary(Nonce)->
-    Handled1 = Handled#{
-        Nonce => z_datetime:timestamp()
-    },
-    case maps:is_key(Nonce, Handled) of
-        false ->
-            {reply, ok, cleanup_handled(State#state{ handled_nonces = Handled1 }), ?CLEANUP_TIMEOUT};
-        true ->
-            {reply, {error, duplicate}, cleanup_handled(State), ?CLEANUP_TIMEOUT}
-    end;
-handle_call(Message, _From, State) ->
-    {stop, {unknown_call, Message}, State}.
-
-handle_cast({unregister_nonce, Nonce}, #state{ handled_nonces = Handled } = State) when is_binary(Nonce)->
-    Handled1 = maps:remove(Nonce, Handled),
-    {noreply, cleanup_handled(State#state{ handled_nonces = Handled1 }), ?CLEANUP_TIMEOUT};
-handle_cast(Message, State) ->
-    {stop, {unknown_cast, Message}, State}.
-
-handle_info(timeout, State) ->
-    State1 = cleanup_handled(State),
-    case maps:size(State1#state.handled_nonces) of
-        0 -> {noreply, State1};
-        _ -> {noreply, State1, ?CLEANUP_TIMEOUT}
-    end;
-handle_info(Info, State) ->
-    ?LOG_WARNING(#{
-        text => <<"Survey unknown info message">>,
-        in => zotonic_mod_survey,
-        message => Info
-    }),
-    {noreply, State, ?CLEANUP_TIMEOUT}.
-
-%% @doc This function is called by a gen_server when it is about to
-%% terminate. It should be the opposite of Module:init/1 and do any necessary
-%% cleaning up. When it returns, the gen_server terminates with Reason.
-%% The return value is ignored.
-terminate(_Reason, _State) ->
-    ok.
-
-%% @doc Convert process state when code is changed
-code_change(_OldVsn, State, _Extra) ->
-    {ok, State}.
 
 %%====================================================================
 %% support functions
 %%====================================================================
-
-cleanup_handled(#state{ handled_nonces = Handled } = State) ->
-    Old = z_datetime:timestamp() - ?HANDLED_NONCE_CACHE_TIME,
-    Handled1 = maps:filter(fun(_K, T) -> T > Old end, Handled),
-    State#state{ handled_nonces = Handled1 }.
-
 
 normalize_answers(undefined) -> [];
 normalize_answers(L) -> lists:map(fun normalize_answer/1, L).
@@ -863,7 +771,7 @@ do_submit(SurveyId, Questions, Answers, Context) ->
          ContextOrRender :: z:context() | #render{}.
 do_submit(SurveyId, Questions, Answers, Editing, SubmitArgs, Context) ->
     SurveySessionNonce = proplists:get_value(survey_session_nonce, SubmitArgs),
-    case register_nonce(SurveySessionNonce, Context) of
+    case register_nonce(SurveySessionNonce) of
         ok ->
             do_submit_1(SurveyId, Questions, Answers, Editing, SubmitArgs, Context);
         {error, duplicate} ->
@@ -908,7 +816,7 @@ do_submit_1(SurveyId, Questions, Answers, undefined, SubmitArgs, Context) ->
             Handled;
         {error, _Reason} = Error ->
             SurveySessionNonce = proplists:get_value(survey_session_nonce, SubmitArgs),
-            unregister_nonce(SurveySessionNonce, Context),
+            unregister_nonce(SurveySessionNonce),
             Error
     end;
 do_submit_1(SurveyId, Questions, Answers, {editing, AnswerId, _Actions}, _SubmitArgs, Context) ->

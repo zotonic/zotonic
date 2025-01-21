@@ -1,8 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
-%% @doc Server supplying random strings and unique ids
+%% @copyright 2009-2025 Marc Worrell
+%% @doc Functions supplying random strings, unique ids and nonce
+%% support.
+%% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,6 +26,11 @@
 -define(OPTID_LENGTH,6).
 
 -export([
+    init_nonce/0,
+    nonce/0,
+    nonce_register/1,
+    nonce_unregister/1,
+    nonce_cleanup/0,
     unique/0,
     id/0,
     id/1,
@@ -41,9 +48,125 @@
 
 -type charset() :: 'az' | 'az09' | 'azAZ09' | 'special' | '09'.
 
+% Nonce tables, cycling through these, ensuring that after NONCE_TIMEOUT
+% they are all emptied. Generation garbage collection by periodically
+% emptying the oldest table.
+-define(NONCE_TABLES, [
+        z_nonce_0, z_nonce_1, z_nonce_2, z_nonce_3, z_nonce_4,
+        z_nonce_5, z_nonce_6, z_nonce_7, z_nonce_8, z_nonce_9
+    ]).
+
+% Length of the generated nonce keys
+-define(NONCE_KEY_SIZE, 20).
+
+% Number of seconds an nonce is valid. This can vary 10% due to the
+% periodic cleanup of the nonce tables.
+-define(NONCE_TIMEOUT, 600).
+
+% Maximum number of nonce tokens allowed in a single generational nonce
+% table. The routines will give an overload error if passed this.
+-define(NONCE_OVERLOAD, 10_000_000).
+
 %%%--------------------------------------------------------------------------
 %%% API
 %%%--------------------------------------------------------------------------
+
+-spec init_nonce() -> ok.
+%% @doc Initialize the nonce tables. Calles by zotonic_core_sup, which process
+%% will be the owner of these tables.
+init_nonce() ->
+    timer:apply_after((?NONCE_TIMEOUT div 2) * 1000, ?MODULE, nonce_cleanup, []),
+    lists:foreach(
+        fun(N) ->
+            ets:new(N, [ named_table, public ])
+        end,
+        ?NONCE_TABLES).
+
+-spec nonce() -> Nonce when
+    Nonce :: binary().
+%% @doc Return a new nonce value.
+nonce() ->
+    id(?NONCE_KEY_SIZE).
+
+-spec nonce_register(Nonce) -> ok | {error, Reason} when
+    Nonce :: binary(),
+    Reason :: duplicate | overload | key.
+%% @doc Register a nonce for use, will be remembered for the next ?NONCE_TIMEOUT
+%% seconds or until unregistered.
+nonce_register(<<>>) ->
+    {error, key};
+nonce_register(Nonce) when size(Nonce) =< ?NONCE_KEY_SIZE ->
+    case is_nonce_registered(Nonce) of
+        false ->
+            Table = nonce_table(),
+            Size = ets:info(Table, size),
+            if
+                Size < ?NONCE_OVERLOAD ->
+                    {MSecs, Secs, _} = os:timestamp(),
+                    Time = (MSecs * 1_000_000 + Secs),
+                    ets:insert(nonce_table(), {Nonce, Time}),
+                    ok;
+                true ->
+                    ?LOG_ERROR(#{
+                        in => zotonic_core,
+                        text => <<"Nonce table overload">>,
+                        result => error,
+                        reason => overload,
+                        table => Table,
+                        size => Size
+                    }),
+                    {error, overload}
+            end;
+        true ->
+            {error, duplicate}
+    end;
+nonce_register(_Nonce) ->
+    {error, key}.
+
+-spec nonce_unregister(Nonce) -> ok when
+    Nonce :: binary().
+%% @doc Forget about a nonce. Removes it from the registered nonce values.
+nonce_unregister(Nonce) ->
+    lists:foreach(fun(T) -> ets:delete(T, Nonce) end, ?NONCE_TABLES).
+
+-spec is_nonce_registered(Nonce) -> boolean() when
+    Nonce :: binary().
+%% @doc Check if the nonce has been registered in the last ?NONCE_TIMEOUT seconds
+is_nonce_registered(Nonce) ->
+    case lists:foldl(
+        fun
+            (T, []) -> ets:lookup(T, Nonce);
+            (_, Acc) -> Acc
+        end,
+        [],
+        ?NONCE_TABLES)
+    of
+        [] -> false;
+        _ -> true
+    end.
+
+-spec nonce_cleanup() -> ok.
+%% @doc Remove all keys from the "previous" nonce registration table,
+%% schedule a timer for the next removal.
+nonce_cleanup() ->
+    timer:apply_after((?NONCE_TIMEOUT div 2) * 1000, ?MODULE, nonce_cleanup, []),
+    ets:delete_all_objects(nonce_prev_table()),
+    ok.
+
+nonce_table() ->
+    N = secs() div ?NONCE_TIMEOUT,
+    N1 = N rem length(?NONCE_TABLES),
+    lists:nth(N1+1, ?NONCE_TABLES).
+
+nonce_prev_table() ->
+    N = secs() div ?NONCE_TIMEOUT,
+    NTab = length(?NONCE_TABLES),
+    N1 = (N + NTab - 1) rem NTab,
+    lists:nth(N1+1, ?NONCE_TABLES).
+
+secs() ->
+    {MSecs, Secs, _} = os:timestamp(),
+    MSecs * 1_000_000 + Secs.
 
 -spec unique() -> binary().
 %% @doc Return an unique id to be used in javascript or html.  No randomness,
