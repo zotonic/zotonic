@@ -45,8 +45,7 @@ ssl_listener_options() ->
     {ok, Hostname} = inet:gethostname(),
     {ok, CertOptions} = ensure_self_signed(Hostname),
     [
-        {sni_fun, fun ?MODULE:sni_fun/1},
-        {reuse_sessions, true}
+        {sni_fun, fun ?MODULE:sni_fun/1}
     ]
     ++ zotonic_ssl_option:get_safe_tls_server_options()
     ++ CertOptions

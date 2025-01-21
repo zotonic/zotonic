@@ -48,7 +48,7 @@ child_spec() ->
     case {z_config:get(smtp_listen_ip),z_config:get(smtp_listen_port)} of
         {none, Port} ->
             ?LOG_WARNING(#{
-                text => "SMTP server disabled: 'smtp_listen_ip' is set to 'none'",
+                text => <<"SMTP server disabled: 'smtp_listen_ip' is set to 'none'">>,
                 in => zotonic_listen_smtp,
                 ip => none,
                 port => Port,
@@ -57,7 +57,7 @@ child_spec() ->
             ignore;
         {IP, none} ->
             ?LOG_WARNING(#{
-                text => "SMTP server disabled: 'smtp_listen_port' is set to 'none'",
+                text => <<"SMTP server disabled: 'smtp_listen_port' is set to 'none'">>,
                 in => zotonic_listen_smtp,
                 ip => ip_to_string(IP),
                 port => none,
@@ -76,15 +76,30 @@ child_spec() ->
                     [{address, IP} | Args1]
             end,
             ?LOG_NOTICE(#{
-                text => "SMTP server listening",
+                text => <<"SMTP server listening">>,
                 in => zotonic_listen_smtp,
                 ip => ip_to_string(IP),
                 port => Port,
                 protocol => smtp
             }),
-            Options = [{port, Port} | Args2],
+            Options = [
+                {port, Port},
+                {sessionoptions, [
+                    {tls_options, tls_options()}
+                ]}
+                | Args2
+            ],
             gen_smtp_server:child_spec(?MODULE, ?MODULE, Options)
     end.
+
+tls_options() ->
+    Options = z_ssl_certs:ssl_listener_options(),
+    Options1 = lists:keydelete(session_tickets, 1, Options),
+    Options2 = lists:keydelete(reuse_sessions, 1, Options1),
+    [
+        {session_tickets, disabled}
+        | Options2
+    ].
 
 ip_to_string(any) -> "any";
 ip_to_string(IP) -> inet:ntoa(IP).
@@ -99,17 +114,17 @@ init(Hostname, SessionCount, Peer, Options) ->
                 options = Options,
                 peer = Peer,
                 hostname = HostnameB,
-                banner = iolist_to_binary( io_lib:format("~s ESMTP Zotonic", [HostnameB]) )
+                banner = <<HostnameB/binary, " ESMTP Zotonic">>
             },
             {ok, State#state.banner, State};
         true ->
             ?LOG_WARNING(#{
-                text => "SMTP Connection limit exceeded",
+                text => <<"SMTP Connection limit exceeded">>,
                 in => zotonic_listen_smtp,
                 limit => ?SESSION_LIMIT,
                 session_count => SessionCount,
                 src => inet:ntoa(Peer),
-                hostname => Hostname,
+                hostname => HostnameB,
                 protocol => smtp
             }),
             {stop, normal, io_lib:format("421 ~s is too busy to accept mail right now", [Hostname])}
@@ -131,7 +146,7 @@ handle_EHLO(Hostname, Extensions, State) ->
                            % auth is enabled, so advertise it
                            Extensions ++ [{"AUTH", "PLAIN LOGIN CRAM-MD5"}, {"STARTTLS", true}];
                        false ->
-                           Extensions
+                           Extensions ++ [{"STARTTLS", true}]
                    end,
     {ok, MyExtensions, State#state{helo=Hostname}}.
 
@@ -149,7 +164,7 @@ check_dnsbl(State) ->
             {ok, State};
         {ok, {blocked, Service}} ->
             ?LOG_NOTICE(#{
-                text => "SMTP DNSBL check: blocked -- closing connection with a 451",
+                text => <<"SMTP DNSBL check: blocked -- closing connection with a 451">>,
                 in => zotonic_listen_smtp,
                 src => inet:ntoa(State#state.peer),
                 dnsbl => Service,
@@ -175,7 +190,7 @@ handle_RCPT(To, State) ->
     case zotonic_listen_smtp_receive:get_site(To) of
         {ok, Site} ->
             ?LOG_INFO(#{
-                text => "SMTP accepting incoming email",
+                text => <<"SMTP accepting incoming email">>,
                 in => zotonic_listen_smtp,
                 recipient => To,
                 site => Site,
@@ -185,7 +200,7 @@ handle_RCPT(To, State) ->
             {ok, State};
         {error, unknown_host} ->
             ?LOG_WARNING(#{
-                text => "SMTP not accepting mail",
+                text => <<"SMTP not accepting mail">>,
                 in => zotonic_listen_smtp,
                 reason => unknown_host,
                 recipient => To,
@@ -195,7 +210,7 @@ handle_RCPT(To, State) ->
             {error, "551 User not local. Relay denied.", State};
         {error, not_running} ->
             ?LOG_WARNING(#{
-                text => "SMTP not accepting mail for site",
+                text => <<"SMTP not accepting mail for site">>,
                 in => zotonic_listen_smtp,
                 reason => not_running,
                 recipient => To,
@@ -254,7 +269,7 @@ decode_and_receive(MsgId, From, To, DataRcvd, State) ->
             case find_bounce_id({Type, Subtype}, To, Headers) of
                 {ok, MessageId} ->
                     ?LOG_NOTICE(#{
-                        text => "SMTP email is bounce of previous message id",
+                        text => <<"SMTP email is bounce of previous message id">>,
                         in => zotonic_listen_smtp,
                         recipient => To,
                         from => From,
@@ -272,7 +287,7 @@ decode_and_receive(MsgId, From, To, DataRcvd, State) ->
                 bounce ->
                     % Bounced, but without a message id (accept & silently drop the message)
                     ?LOG_NOTICE(#{
-                        text => "SMTP email is bounce of unknown message id",
+                        text => <<"SMTP email is bounce of unknown message id">>,
                         in => zotonic_listen_smtp,
                         recipient => To,
                         from => From,
@@ -283,7 +298,7 @@ decode_and_receive(MsgId, From, To, DataRcvd, State) ->
                 maybe_autoreply ->
                     % Sent to a bounce address, but not a bounce (accept & silently drop the message)
                     ?LOG_NOTICE(#{
-                        text => "SMTP email is an autoreply, ignored",
+                        text => <<"SMTP email is an autoreply, ignored">>,
                         in => zotonic_listen_smtp,
                         recipient => To,
                         from => From,
@@ -297,7 +312,7 @@ decode_and_receive(MsgId, From, To, DataRcvd, State) ->
             end;
         {error, Reason} ->
             ?LOG_ERROR(#{
-                text => "SMTP receive: Message decode FAILED",
+                text => <<"SMTP receive: Message decode FAILED">>,
                 in => zotonic_listen_smtp,
                 reason => Reason,
                 recipient => To,
@@ -310,7 +325,7 @@ decode_and_receive(MsgId, From, To, DataRcvd, State) ->
 
 receive_data({ok, {ham, SpamStatus, _SpamHeaders}}, {Type, Subtype, Headers, Params, Body}, MsgId, From, To, DataRcvd, State) ->
     ?LOG_NOTICE(#{
-        text => "SMTP email received",
+        text => <<"SMTP email received">>,
         in => zotonic_listen_smtp,
         recipient => To,
         from => From,
@@ -323,7 +338,7 @@ receive_data({ok, {ham, SpamStatus, _SpamHeaders}}, {Type, Subtype, Headers, Par
     reply_handled_status(Received, MsgId, reset_state(State));
 receive_data({ok, {spam, SpamStatus, _SpamHeaders}}, _Decoded, MsgId, From, To, _DataRcvd, State) ->
     ?LOG_NOTICE(#{
-        text => "SMTP Refusing spam",
+        text => <<"SMTP Refusing spam">>,
         in => zotonic_listen_smtp,
         recipient => To,
         from => From,
@@ -334,7 +349,7 @@ receive_data({ok, {spam, SpamStatus, _SpamHeaders}}, _Decoded, MsgId, From, To, 
     {error, zotonic_listen_smtp_spam:smtp_status(SpamStatus, From, To, State#state.peer), reset_state(State)};
 receive_data({error, Reason}, Decoded, MsgId, From, To, DataRcvd, State) ->
     ?LOG_WARNING(#{
-        text => "SMTP receive: passing erronous spam check as ham",
+        text => <<"SMTP receive: passing erronous spam check as ham">>,
         in => zotonic_listen_smtp,
         reason => Reason,
         recipient => To,
