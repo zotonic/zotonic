@@ -390,7 +390,7 @@ terminate(_Reason, _State) ->
 
 %% @doc Convert process state when code is changed
 code_change(_OldVsn, State, _Extra) ->
-    {ok, State, ?CLEANUP_TIMEOUT}.
+    {ok, State}.
 
 %%====================================================================
 %% support functions
