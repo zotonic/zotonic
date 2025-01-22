@@ -90,7 +90,7 @@ event(#postback{message={survey_start, Args}}, Context) ->
             Editing = {editing, AnswerId, undefined},
             Args1 = [
                 {answer_user_id, ResultUserId},
-                {survey_session_nonce, z_ids:nonce(?SURVEY_FILL_NONCE_TIMEOUT)}
+                {survey_session_nonce, z_nonce:nonce(?SURVEY_FILL_NONCE_TIMEOUT)}
                 | proplists:delete(answer_user_id, Args)
             ],
             render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context), Args1, Context);
@@ -99,7 +99,7 @@ event(#postback{message={survey_start, Args}}, Context) ->
             Editing = proplists:get_value(editing, Args),
             Args1 = [
                 {answer_user_id, z_acl:user(Context)},
-                {survey_session_nonce, z_ids:nonce(?SURVEY_FILL_NONCE_TIMEOUT)}
+                {survey_session_nonce, z_nonce:nonce(?SURVEY_FILL_NONCE_TIMEOUT)}
                 | proplists:delete(answer_user_id, Args)
             ],
             render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context), Args1, Context)
@@ -299,7 +299,7 @@ register_nonce(undefined) ->
 register_nonce(<<>>) ->
     ok;
 register_nonce(SessionNonce) when is_binary(SessionNonce) ->
-    z_ids:nonce_register(SessionNonce).
+    z_nonce:register(SessionNonce).
 
 -spec unregister_nonce(SessionNonce) -> ok when
     SessionNonce :: binary() | undefined.
@@ -308,7 +308,7 @@ unregister_nonce(undefined) ->
 unregister_nonce(<<>>) ->
     ok;
 unregister_nonce(SessionNonce) when is_binary(SessionNonce) ->
-    z_ids:nonce_unregister(SessionNonce).
+    z_nonce:unregister(SessionNonce).
 
 
 %%====================================================================
