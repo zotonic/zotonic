@@ -133,13 +133,13 @@ register_any(_Nonce) ->
 
 
 register_1(Key) ->
-    case is_registered(Key) of
+    case is_registered_any(Key) of
         false ->
             Table = nonce_table(),
             Size = ets:info(Table, size),
             if
                 Size < ?NONCE_OVERLOAD ->
-                    ets:insert(nonce_table(), {Key, secs()}),
+                    ets:insert(Table, {Key, secs()}),
                     ok;
                 true ->
                     ?LOG_ERROR(#{
