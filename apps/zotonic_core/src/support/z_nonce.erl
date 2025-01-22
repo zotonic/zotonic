@@ -1,6 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2025 Marc Worrell
-%% @doc Nonce support. Create nonces, and track nonce usage.
+%% @doc Nonce support. Create nonces, and track nonce usage. Used nonce
+%% values are tracked for 15 minutes. Nonce values themselves are also
+%% typically valid for 15 minutes, unless another period is requested.
 %% @end
 
 %% Copyright 2025 Marc Worrell
@@ -49,8 +51,15 @@
     ]).
 
 % Number of seconds an nonce is valid. This can vary 10% due to the
-% periodic cleanup of the nonce tables.
--define(NONCE_TIMEOUT, 600).
+% periodic cleanup of the nonce tables. The 1000 sec, with a variety
+% of 10% gives 15 minutes reuse checks.
+-define(NONCE_TIMEOUT, 1000).
+
+% Default validity of a generated nonce value, must be used within this
+% period otherwise the key will be expired. This period is shorter than
+% the max period we keep registered (used) keys in the generational ets
+% tables so that we can guarantee the unique use of these keys.
+-define(NONCE_VALIDITY, 900).
 
 % Maximum number of nonce tokens allowed in a single generational nonce
 % table. The routines will give an overload error if passed this.
@@ -80,7 +89,7 @@ init_nonce_tables() ->
 %% @doc Return a new nonce value, strictly valid for the how long we keep the
 %% used nonce values. This gives maximum protection against replay attacks.
 nonce() ->
-    nonce(?NONCE_TIMEOUT).
+    nonce(?NONCE_VALIDITY).
 
 -spec nonce(Timeout) -> Nonce when
     Timeout :: integer(),
@@ -248,6 +257,7 @@ nonce_prev_table() ->
     N1 = (N + NTab - 1) rem NTab,
     lists:nth(N1+1, ?NONCE_TABLES).
 
+% Return the current "generation" of the nonce values.
 nonce_generation(DeltaSecs) ->
     SecsPerTable = ?NONCE_TIMEOUT div length(?NONCE_TABLES),
     (secs() + DeltaSecs) div SecsPerTable.
