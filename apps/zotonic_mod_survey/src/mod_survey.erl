@@ -293,7 +293,7 @@ get_page(Id, Nr, #context{} = Context) when is_integer(Nr) ->
 
 -spec register_nonce(SessionNonce) -> ok | {error, Reason} when
     SessionNonce :: binary() | undefined,
-    Reason :: duplicate | overload.
+    Reason :: duplicate | overload | key | expired.
 register_nonce(undefined) ->
     ok;
 register_nonce(<<>>) ->
