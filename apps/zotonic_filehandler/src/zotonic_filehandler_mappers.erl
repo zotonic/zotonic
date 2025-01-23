@@ -1,9 +1,10 @@
 %% @author Arjan Scherpenisse <arjan@miraclethings.nl>
-%% @copyright 2014-2017 Arjan Scherpenisse
-%%
-%% @doc Handle changed files
+%% @copyright 2014-2025 Arjan Scherpenisse
+%% @doc Handle changed files, run commands and makefiles depending
+%% on the files.
+%% @end
 
-%% Copyright 2014-2017 Arjan Scherpenisse
+%% Copyright 2014-2025 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
