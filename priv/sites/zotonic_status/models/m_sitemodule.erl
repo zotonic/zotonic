@@ -25,9 +25,10 @@ m_to_list(_, _Context) ->
 m_value(#m{value=[site, Site, running]}, _Context) ->
     case z_sites_manager:get_site_status(Site) of
         {ok, running} ->
-            %% An active/2 also exists, but it turns out it is not reliable
-            %% for querying the actual site module status (due to caching?).
-            lists:member(Site, z_module_manager:active(z:c(Site)));
+            case z_module_manager:whereis(Site, z:c(Site)) of
+                {ok, _} -> true;
+                _ -> false
+            end;
         _ -> false
     end;
 m_value(_, _Context) ->
