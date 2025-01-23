@@ -52,7 +52,7 @@ init_app_env() ->
 -spec get(atom()) -> any().
 get(listen_ip) ->
     IPv4 = case os:getenv("ZOTONIC_IP") of
-        false -> ?MODULE:get(listen_ip, default(listen_ip));
+        false -> get(listen_ip, default(listen_ip));
         IP -> IP
     end,
     maybe_map_value(listen_ip, IPv4);
@@ -64,8 +64,8 @@ get(listen_ip6) ->
     maybe_map_value(listen_ip6, IPv6);
 get(listen_port) ->
     case os:getenv("ZOTONIC_LISTEN_PORT") of
-        false -> ?MODULE:get(listen_port, default(listen_port));
-        "" -> ?MODULE:get(listen_port, default(listen_port));
+        false -> get(listen_port, default(listen_port));
+        "" -> get(listen_port, default(listen_port));
         "none" -> none;
         Port -> list_to_integer(Port)
     end;
@@ -78,8 +78,8 @@ get(port) ->
     end;
 get(ssl_listen_port) ->
     case os:getenv("ZOTONIC_SSL_LISTEN_PORT") of
-        false -> ?MODULE:get(ssl_listen_port, default(ssl_listen_port));
-        "" -> ?MODULE:get(ssl_listen_port, default(ssl_listen_port));
+        false -> get(ssl_listen_port, default(ssl_listen_port));
+        "" -> get(ssl_listen_port, default(ssl_listen_port));
         "none" -> none;
         Port -> list_to_integer(Port)
     end;
@@ -97,39 +97,39 @@ get(smtp_listen_domain) ->
     end;
 get(smtp_listen_ip) ->
     SmtpIp = case os:getenv("ZOTONIC_SMTP_LISTEN_IP") of
-        false -> ?MODULE:get(smtp_listen_ip, default(smtp_listen_ip));
+        false -> get(smtp_listen_ip, default(smtp_listen_ip));
         "none" -> none;
         SmtpListenIp -> SmtpListenIp
     end,
     maybe_map_value(smtp_listen_ip, SmtpIp);
 get(smtp_listen_port) ->
     case os:getenv("ZOTONIC_SMTP_LISTEN_PORT") of
-        false -> ?MODULE:get(smtp_listen_port, default(smtp_listen_port));
+        false -> get(smtp_listen_port, default(smtp_listen_port));
         "none" -> none;
         SmtpListenPort_ -> list_to_integer(SmtpListenPort_)
     end;
 get(smtp_spamd_ip) ->
-    maybe_map_value(smtp_spamd_ip, ?MODULE:get(smtp_spamd_ip, default(smtp_spamd_ip)));
+    maybe_map_value(smtp_spamd_ip, get(smtp_spamd_ip, default(smtp_spamd_ip)));
 get(zotonic_apps) ->
     case os:getenv("ZOTONIC_APPS") of
-        false -> default(zotonic_apps);
-        "" -> default(zotonic_apps);
+        false -> get(zotonic_apps, default(zotonic_apps));
+        "" -> get(zotonic_apps, default(zotonic_apps));
         ZC -> ZC
     end;
 get(dbhost) ->
     case os:getenv("ZOTONIC_DBHOST") of
-        false -> default(dbhost);
-        "" -> default(dbhost);
+        false -> get(dbhost, default(dbhost));
+        "" -> get(dbhost, default(dbhost));
         DBHost -> DBHost
     end;
 get(dbport) ->
     case os:getenv("ZOTONIC_DBPORT") of
-        false -> default(dbport);
-        "" -> default(dbport);
+        false -> get(dbport, default(dbport));
+        "" -> get(dbport, default(dbport));
         DBPort -> list_to_integer(DBPort)
     end;
 get(Key) ->
-    ?MODULE:get(Key, default(Key)).
+    get(Key, default(Key)).
 
 %% @doc Get value from config file, returning default value when not set (cached).
 -spec get(atom(), any()) -> any().
@@ -366,6 +366,7 @@ all() ->
             smtp_ssl,
             smtp_listen_ip,
             smtp_listen_port,
+            smtp_starttls,
             smtp_spamd_ip,
             smtp_spamd_port,
             smtp_dns_blocklist,
