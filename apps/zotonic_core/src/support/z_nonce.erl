@@ -265,7 +265,8 @@ is_registered_any(Nonce) ->
 %% @doc Remove all keys from the "previous" nonce registration table,
 %% schedule a timer for the next removal.
 nonce_cleanup() ->
-    ets:delete_all_objects(nonce_oldest_table()).
+    ets:delete_all_objects(nonce_oldest_table()),
+    ok.
 
 nonce_table() ->
     N = nonce_generation(0),
