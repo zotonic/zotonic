@@ -82,7 +82,8 @@ init_nonce_tables() ->
     % Force reinit of secure secret, as the ets tables are emptied.
     application:set_env(zotonic_core, nonce_secure_secret, <<>>),
     % Start generational cleanup function.
-    nonce_next_cleanup(),
+    SecsPerTable = ?NONCE_TIMEOUT div length(?NONCE_TABLES),
+    timer:apply_interval((SecsPerTable div 2) * 1000, ?MODULE, nonce_cleanup, []),
     lists:foreach(
         fun(N) ->
             ets:new(N, [ named_table, public ])
@@ -264,13 +265,7 @@ is_registered_any(Nonce) ->
 %% @doc Remove all keys from the "previous" nonce registration table,
 %% schedule a timer for the next removal.
 nonce_cleanup() ->
-    nonce_next_cleanup(),
-    ets:delete_all_objects(nonce_oldest_table()),
-    ok.
-
-nonce_next_cleanup() ->
-    SecsPerTable = ?NONCE_TIMEOUT div length(?NONCE_TABLES),
-    timer:apply_after((SecsPerTable div 2) * 1000, ?MODULE, nonce_cleanup, []).
+    ets:delete_all_objects(nonce_oldest_table()).
 
 nonce_table() ->
     N = nonce_generation(0),
