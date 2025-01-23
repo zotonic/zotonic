@@ -556,6 +556,12 @@ search(<<"autocomplete">>, Args, _OffsetLimit, Context) ->
     QueryText = z_convert:to_binary(qarg(<<"text">>, Args, <<>>)),
     Cat = qarg(<<"cat">>, Args, undefined),
     IsEmptyCat = z_utils:is_empty(Cat),
+    Sort = case maps:get(<<"sort">>, Args, undefined) of
+        undefined -> <<"rank desc">>;
+        <<>> -> <<"rank desc">>;
+        <<"rank">> -> <<"rank desc">>;
+        SortArg -> sort_term(SortArg)
+    end,
     case trim(QueryText, Context) of
         <<"id:", S/binary>> ->
             find_by_id(S, true, Context);
@@ -570,7 +576,7 @@ search(<<"autocomplete">>, Args, _OffsetLimit, Context) ->
                         select=["r.id, ts_rank_cd(", rank_weight(Context), ", pivot_tsv, $1, $2) AS rank"],
                         from="rsc r",
                         where=" $1 @@ r.pivot_tsv and not r.is_unfindable",
-                        order="rank desc",
+                        order=Sort,
                         args=[TsQuery, rank_behaviour(Context)],
                         cats=[{"r", Cat}],
                         tables=[{rsc,"r"}]
@@ -582,7 +588,7 @@ search(<<"autocomplete">>, Args, _OffsetLimit, Context) ->
                 select=["r.id, ts_rank_cd(", rank_weight(Context), ", pivot_tsv, $1, $2) AS rank"],
                 from="rsc r",
                 where=" $1 @@ pivot_tsv",
-                order="rank desc",
+                order=Sort,
                 args=[TsQuery, rank_behaviour(Context)],
                 cats=[{"r", Cat}],
                 tables=[{rsc,"r"}]
@@ -759,6 +765,26 @@ fixup_tsquery(_Stemmer, TsQ) ->
 %% @doc Fetch the argument from the query.
 qarg(K, Terms, Default) ->
     z_search:lookup_qarg_value(K, Terms, Default).
+
+
+sort_term(<<C, Sort/binary>>) when C =:= $-; C =:= $+ ->
+    Sort1 = search_query:sql_safe(Sort),
+    ColRef = case binary:split(Sort1, <<".">>) of
+        [ Col ] ->
+            <<"r.", Col/binary>>;
+        [ <<"r">>, Col ] ->
+            <<"r.", Col/binary>>;
+        [ <<"rsc">>, Col ] ->
+            <<"r.", Col/binary>>;
+        [ _, _ ] ->
+            <<"r.id">>
+    end,
+    case C of
+        $+ -> ColRef;
+        $- -> <<ColRef/binary, " DESC">>
+    end;
+sort_term(Sort) ->
+    sort_term(<<"+", Sort/binary>>).
 
 
 %% @doc Find one more more resources by id or name, when the resources exists.
