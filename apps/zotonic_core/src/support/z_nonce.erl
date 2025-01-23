@@ -26,6 +26,7 @@
 
 -export([
     init_nonce_tables/0,
+    nonce_secure/0,
     nonce/0,
     nonce/1,
     register/1,
@@ -75,8 +76,12 @@
 
 -spec init_nonce_tables() -> ok.
 %% @doc Initialize the nonce tables. Calles by zotonic_core_sup, which process
-%% will be the owner of these tables.
+%% will be the owner of these tables. Force a reset of the secure nonce secret
+%% as the nonce tables are re-initialized.
 init_nonce_tables() ->
+    % Force reinit of secure secret, as the ets tables are emptied.
+    application:set_env(zotonic_core, nonce_secure_secret, <<>>),
+    % Start generational cleanup function.
     nonce_next_cleanup(),
     lists:foreach(
         fun(N) ->
@@ -84,17 +89,33 @@ init_nonce_tables() ->
         end,
         ?NONCE_TABLES).
 
+-spec nonce_secure() -> Nonce when
+    Nonce :: binary().
+%% @doc Return a new nonce value, strictly valid for the how long we keep the
+%% used nonce values. The keys are not valid between restarts, this gives maximum
+%% protection against replay attacks.
+nonce_secure() ->
+    Number = nonce_generation(?NONCE_VALIDITY),
+    Random = z_ids:id(10),
+    Key = <<"s", (integer_to_binary(Number))/binary, "-", Random/binary>>,
+    Hash = crypto:mac(hmac, sha256, Key, nonce_secure_secret()),
+    HashHex = base64url:encode(Hash),
+    <<Key/binary, "-", HashHex/binary>>.
+
+
 -spec nonce() -> Nonce when
     Nonce :: binary().
 %% @doc Return a new nonce value, strictly valid for the how long we keep the
-%% used nonce values. This gives maximum protection against replay attacks.
+%% used nonce values. The key is valid across restarts, registered keys could
+%% be re-used after a restart.
 nonce() ->
     nonce(?NONCE_VALIDITY).
 
 -spec nonce(Timeout) -> Nonce when
     Timeout :: integer(),
     Nonce :: binary().
-%% @doc Return a new nonce value, valid for about the given number of seconds.
+%% @doc Return a new nonce value, valid for about the given number of seconds. The key
+%% is valid across restarts, registered keys could be re-used after a restart.
 nonce(Timeout) ->
     Number = nonce_generation(Timeout),
     Random = z_ids:id(10),
@@ -114,16 +135,16 @@ register(<<>>) ->
 register(Nonce) ->
     Oldest = nonce_oldest_generation(),
     case split_nonce(Nonce) of
-        {Number, Random, Hash} when Number >= Oldest ->
-            CheckKey = <<(integer_to_binary(Number))/binary, "-", Random/binary>>,
-            CheckHash = crypto:mac(hmac, sha256, CheckKey, nonce_secret()),
+        {Prefix, Number, Random, Hash, Secret} when Number >= Oldest ->
+            CheckKey = <<Prefix/binary, (integer_to_binary(Number))/binary, "-", Random/binary>>,
+            CheckHash = crypto:mac(hmac, sha256, CheckKey, Secret),
             if
                 CheckHash =:= Hash ->
                     register_1(CheckKey);
                 true ->
                     {error, key}
             end;
-        {_Number, _Random, _Key} ->
+        {_Prefix, _Number, _Random, _Key, _Secret} ->
             {error, expired};
         error ->
             {error, key}
@@ -172,7 +193,12 @@ split_nonce(Nonce) ->
                 [Key, Hash] ->
                     try
                         Hash1 = base64url:decode(Hash),
-                        {binary_to_integer(Number), Key, Hash1}
+                        case Number of
+                            <<"s", Number1/binary>> ->
+                                {<<"s">>, binary_to_integer(Number1), Key, Hash1, nonce_secure_secret()};
+                            _ ->
+                                {<<>>, binary_to_integer(Number), Key, Hash1, nonce_secret()}
+                        end
                     catch _:_ ->
                         error
                     end;
@@ -190,8 +216,8 @@ split_nonce(Nonce) ->
 %% nonce must have been created by nonce/1
 unregister(Nonce) ->
     case split_nonce(Nonce) of
-        {Number, Random, _Hash} ->
-            CheckKey = <<(integer_to_binary(Number))/binary, "-", Random/binary>>,
+        {Prefix, Number, Random, _Hash, _Secret} ->
+            CheckKey = <<Prefix/binary, (integer_to_binary(Number))/binary, "-", Random/binary>>,
             unregister_any(CheckKey);
         _ ->
             {error, key}
@@ -210,8 +236,8 @@ unregister_any(Nonce) ->
 %% The nonce must have been created by nonce/1.
 is_registered(Nonce) ->
     case split_nonce(Nonce) of
-        {Number, Random, _Hash} ->
-            CheckKey = <<(integer_to_binary(Number))/binary, "-", Random/binary>>,
+        {Prefix, Number, Random, _Hash, _Key} ->
+            CheckKey = <<Prefix/binary, (integer_to_binary(Number))/binary, "-", Random/binary>>,
             is_registered_any(CheckKey);
         _ ->
             false
@@ -239,7 +265,8 @@ is_registered_any(Nonce) ->
 %% schedule a timer for the next removal.
 nonce_cleanup() ->
     nonce_next_cleanup(),
-    ets:delete_all_objects(nonce_prev_table()),
+    ?DEBUG({cleanup, nonce_oldest_table(), nonce_table()}),
+    ets:delete_all_objects(nonce_oldest_table()),
     ok.
 
 nonce_next_cleanup() ->
@@ -251,10 +278,10 @@ nonce_table() ->
     N1 = N rem length(?NONCE_TABLES),
     lists:nth(N1+1, ?NONCE_TABLES).
 
-nonce_prev_table() ->
-    N = nonce_generation(0),
+nonce_oldest_table() ->
     NTab = length(?NONCE_TABLES),
-    N1 = (N + NTab - 1) rem NTab,
+    N = nonce_generation(0) - NTab + 1,
+    N1 = N rem NTab,
     lists:nth(N1+1, ?NONCE_TABLES).
 
 % Return the current "generation" of the nonce values.
@@ -270,11 +297,20 @@ secs() ->
     MSecs * 1_000_000 + Secs.
 
 -spec nonce_secret() -> binary().
-%% @doc Return the secret used for signing the nonce values returned by nonce/1
+%% @doc Return the secret used for signing the nonce values returned by nonce/0 and nonce/1
 nonce_secret() ->
     case application:get_env(zotonic_core, nonce_secret) of
         {ok, Key} when size(Key) >= 50 ->
             Key;
+        _ ->
+            jobs:run(zotonic_singular_job, fun generate_nonce_secret/0),
+            nonce_secret()
+    end.
+
+generate_nonce_secret() ->
+    case application:get_env(zotonic_core, nonce_secret) of
+        {ok, Key} when size(Key) >= 50 ->
+            ok;
         _ ->
             SecFile = filename:join([ z_config:get(security_dir), "nonce-secret.bin" ]),
             case file:read_file(SecFile) of
@@ -289,3 +325,23 @@ nonce_secret() ->
             end
     end.
 
+-spec nonce_secure_secret() -> binary().
+%% @doc Return the secret used for signing the nonce values returned by nonce_secure/1
+%% This secret is regenerated on every restart of the server, as the server looses the
+%% nonce ets tables after restart.
+nonce_secure_secret() ->
+    case application:get_env(zotonic_core, nonce_secure_secret) of
+        {ok, Key} when size(Key) >= 50 ->
+            Key;
+        _ ->
+            jobs:run(zotonic_singular_job, fun generate_nonce_secure_secret/0),
+            nonce_secure_secret()
+    end.
+
+generate_nonce_secure_secret() ->
+    case application:get_env(zotonic_core, nonce_secure_secret) of
+        {ok, Key} when size(Key) >= 50 ->
+            ok;
+        _ ->
+            application:set_env(zotonic_core, nonce_secure_secret, z_ids:rand_bytes(50))
+    end.
