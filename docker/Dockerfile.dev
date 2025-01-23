@@ -1,4 +1,4 @@
-FROM erlang:25-alpine
+FROM erlang:27-alpine
 
 # Start this image using ./start-docker.sh
 
@@ -19,7 +19,7 @@ RUN apk add -X https://dl-cdn.alpinelinux.org/alpine/v3.18/main -u alpine-keys
 # Git is necessary because rebar3 compile requires git.
 RUN apk add --no-cache bsd-compat-headers ca-certificates wget curl \
         make gcc musl-dev g++ libstdc++ \
-        bash file gettext git openssl inotify-tools \
+        bash file gettext git openssl inotify-tools sassc \
         imagemagick ffmpeg \
         dumb-init
 
