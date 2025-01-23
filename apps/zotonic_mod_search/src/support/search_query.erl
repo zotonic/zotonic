@@ -26,7 +26,8 @@
          parse_request_args/1,
          build_query/2,
          term_op_expr/4,
-         extract_value_op/2
+         extract_value_op/2,
+         sql_safe/1
         ]).
 
 %% For testing
