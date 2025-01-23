@@ -181,6 +181,9 @@
    %% {smtp_listen_ip, "127.0.0.1"},
    %% {smtp_listen_port, 2525},
 
+%%% Enable STARTTLS extension on incoming SMTP connections
+   %% {smtp_starttls, true},
+
 %%% SMTP Spamassassin options
 %%% Enable SMTP incoming message filtering by setting the listening address of spamd
    %% {smtp_spamd_ip, {127,0,0,1}},

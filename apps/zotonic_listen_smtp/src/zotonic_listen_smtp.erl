@@ -3,9 +3,9 @@
 %%      with gen_smtp.
 %%      Original author: Andrew Thompson (andrew@hijacked.us)
 %% @author Atilla Erdodi <atilla@maximonster.com>
-%% @copyright 2010-2021 Maximonster Interactive Things
+%% @copyright 2010-2025 Maximonster Interactive Things
 
-%% Copyright 2010-2021 Maximonster Interactive Things
+%% Copyright 2010-2025 Maximonster Interactive Things
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -141,12 +141,15 @@ handle_HELO(Hostname, State) ->
 
 -spec handle_EHLO(Hostname :: binary(), Extensions :: list(), State :: #state{}) -> {'error', string(), #state{}} | {'ok', list(), #state{}}.
 handle_EHLO(Hostname, Extensions, State) ->
+    IsSTARTTLS = z_config:get(smtp_starttls),
     MyExtensions = case proplists:get_value(auth, State#state.options, false) of
                        true ->
                            % auth is enabled, so advertise it
                            Extensions ++ [{"AUTH", "PLAIN LOGIN CRAM-MD5"}, {"STARTTLS", true}];
+                       false when IsSTARTTLS ->
+                           Extensions ++ [{"STARTTLS", true}];
                        false ->
-                           Extensions ++ [{"STARTTLS", true}]
+                           Extensions
                    end,
     {ok, MyExtensions, State#state{helo=Hostname}}.
 
