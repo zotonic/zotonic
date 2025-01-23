@@ -265,7 +265,6 @@ is_registered_any(Nonce) ->
 %% schedule a timer for the next removal.
 nonce_cleanup() ->
     nonce_next_cleanup(),
-    ?DEBUG({cleanup, nonce_oldest_table(), nonce_table()}),
     ets:delete_all_objects(nonce_oldest_table()),
     ok.
 
