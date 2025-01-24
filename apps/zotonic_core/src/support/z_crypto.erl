@@ -154,7 +154,7 @@ pickle(Data, Context) ->
     base64url:encode(<<Hash:?PICKLE_HASH_BYTES/binary, SignedData/binary>>).
 
 %% @doc Decode pickled base64url data. If the data checksum is invalid then an exception
-%% of class error with reason {checksum_invalid, Data} is thrown. The site's sign_key is
+%% of class error with reason checksum_invalid is thrown. The site's sign_key is
 %% used as the secret.
 -spec depickle(Data, Context) -> Term | no_return() when
     Data :: binary(),
@@ -164,17 +164,22 @@ depickle(Data, Context) ->
     try
         <<Hash:?PICKLE_HASH_BYTES/binary, SignedData/binary>> = base64url:decode(Data),
         Key = z_ids:sign_key(Context),
-        Hash = crypto:mac(hmac, ?PICKLE_HASH_ALGORITHM, Key, SignedData),
-        <<_Nonce:4/binary, TermData/binary>> = SignedData,
-        erlang:binary_to_term(TermData)
+        DataHash = crypto:mac(hmac, ?PICKLE_HASH_ALGORITHM, Key, SignedData),
+        if
+            Hash =:= DataHash ->
+                <<_Nonce:4/binary, TermData/binary>> = SignedData,
+                erlang:binary_to_term(TermData);
+            true ->
+                erlang:error(checksum_invalid)
+        end
     catch
-        E:R ->
+        E:R:S ->
             ?LOG_ERROR(#{
                 in => zotonic_core,
                 text => <<"Postback data invalid, could not depickle">>,
                 result => E,
                 reason => R,
-                data => Data
+                stack => S
             }),
-            erlang:error({checksum_invalid, Data})
+            erlang:error(checksum_invalid)
     end.
