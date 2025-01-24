@@ -10,7 +10,7 @@ ZOTONIC_PIDFILE=/run/zotonic.pid
 ZOTONIC_DIR=/opt/zotonic
 
 ZOTONIC_CONFIG_DIR=$ZOTONIC_DIR/docker-data/config
-ZOTONIC_SECURIY_DIR=$ZOTONIC_DIR/docker-data/security
+ZOTONIC_SECURITY_DIR=$ZOTONIC_DIR/docker-data/security
 ZOTONIC_DATA_DIR=$ZOTONIC_DIR/docker-data/data
 ZOTONIC_LOG_DIR=$ZOTONIC_DIR/docker-data/logs
 
@@ -34,8 +34,11 @@ then
     echo "Found user zotonic"
 else
     echo "Create user zotonic"
-    addgroup -S -g $GROUP_ID zotonic
-    adduser -S -D -u $USER_ID -G zotonic zotonic
+    addgroup --gid $GROUP_ID zotonic
+    adduser --comment "Zotonic user" --disabled-password \
+            --uid $USER_ID --gid $GROUP_ID \
+            --shell /bin/bash \
+            zotonic
 fi
 
 # Ensure the data and log directories are present and owned by the zotonic user
@@ -46,7 +49,7 @@ mkdir -p $ZOTONIC_LOG_DIR && chown -R zotonic $ZOTONIC_LOG_DIR
 mkdir -p $ZOTONIC_CONFIG_DIR/config.d && chown -R zotonic $ZOTONIC_CONFIG_DIR/config.d
 
 # SSL certificates are generated here
-mkdir -p $ZOTONIC_SECURIY_DIR && chown -R zotonic $ZOTONIC_SECURIY_DIR
+mkdir -p $ZOTONIC_SECURITY_DIR && chown -R zotonic $ZOTONIC_SECURITY_DIR
 
 # Create the pid file and enable zotonic to write to it
 touch /run/zotonic.pid && chown zotonic /run/zotonic.pid
@@ -73,17 +76,18 @@ fi
 
 if [ ! -f "$ZOTONIC_DIR/_build/default/lib/zotonic_core/ebin/zotonic_core.app" ]
 then
-    /usr/bin/gosu zotonic make
+    /usr/sbin/gosu zotonic make
 fi
+
 
 # If the command given is a zotonic command, pass it to zotonic; otherwise exec it directly.
 # Also check the environment for "FORCE_ZOTONIC" to provide a workaround in case the scripts
 # are moved somewhere outside of the path below.
 if [ -e "$ZOTONIC_DIR/apps/zotonic_launcher/src/command/zotonic_cmd_$1.erl" ] || [ -n "$FORCE_ZOTONIC" ]; then
-    exec /usr/bin/gosu zotonic /opt/zotonic/bin/zotonic "$@"
+    exec /usr/sbin/gosu zotonic /opt/zotonic/bin/zotonic "$@"
 else
     # Start shell
     bin/zotonic
     printf '\n\n####\n#### Usage: bin/zotonic [options] [command]\n####\n#### To rebuild zotonic run: make\n####\n#### To start in foreground with Erlang terminal: ./start.sh\n####\n\n'
-    exec /usr/bin/gosu zotonic /bin/bash
+    exec /usr/sbin/gosu zotonic /bin/bash
 fi
