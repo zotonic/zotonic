@@ -53,6 +53,7 @@ start_link(Options) ->
 init([]) ->
     log_start_warnings(),
     z_filehandler:start_observers(),
+    z_nonce:init_nonce_tables(),
     LogBufferSize = z_config:get(log_http_buffer_size),
     Processes = [
         % Ring buffer for http request logs

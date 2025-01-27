@@ -19,6 +19,7 @@
 			editing=editing
 			element_id=element_id|default:"survey-question"
 			viewer=viewer
+			survey_session_nonce=survey_session_nonce
 		}
 		delegate="mod_survey"
 	%}

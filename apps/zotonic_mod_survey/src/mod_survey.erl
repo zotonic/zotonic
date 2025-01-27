@@ -45,8 +45,9 @@
 
     get_page/3,
 
+    register_nonce/1,
+    unregister_nonce/1,
     do_submit/4,
-
     save_submit/2,
 
     collect_answers/4,
@@ -58,6 +59,11 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_survey/include/survey.hrl").
 
+% Used for the timeout of the nonce set when starting to fill in
+% a survey. After this the nonce is not valid anymore. As this nonce
+% is only used to catch quick successions of the submitting the same
+% form we can set it to a very long validity.
+-define(SURVEY_FILL_NONCE_TIMEOUT, ?WEEK).
 
 %% @doc Schema for mod_survey lives in separate module
 manage_schema(What, Context) ->
@@ -83,7 +89,8 @@ event(#postback{message={survey_start, Args}}, Context) ->
             end,
             Editing = {editing, AnswerId, undefined},
             Args1 = [
-                {answer_user_id, ResultUserId}
+                {answer_user_id, ResultUserId},
+                {survey_session_nonce, z_nonce:nonce(?SURVEY_FILL_NONCE_TIMEOUT)}
                 | proplists:delete(answer_user_id, Args)
             ],
             render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context), Args1, Context);
@@ -91,7 +98,8 @@ event(#postback{message={survey_start, Args}}, Context) ->
             Answers = normalize_answers(proplists:get_value(answers, Args)),
             Editing = proplists:get_value(editing, Args),
             Args1 = [
-                {answer_user_id, z_acl:user(Context)}
+                {answer_user_id, z_acl:user(Context)},
+                {survey_session_nonce, z_nonce:nonce(?SURVEY_FILL_NONCE_TIMEOUT)}
                 | proplists:delete(answer_user_id, Args)
             ],
             render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context), Args1, Context)
@@ -283,11 +291,29 @@ get_page(Id, Nr, #context{} = Context) when is_integer(Nr) ->
             []
     end.
 
+-spec register_nonce(SessionNonce) -> ok | {error, Reason} when
+    SessionNonce :: binary() | undefined,
+    Reason :: duplicate | overload | key | expired.
+register_nonce(undefined) ->
+    ok;
+register_nonce(<<>>) ->
+    ok;
+register_nonce(SessionNonce) when is_binary(SessionNonce) ->
+    z_nonce:register(SessionNonce).
+
+-spec unregister_nonce(SessionNonce) -> ok when
+    SessionNonce :: binary() | undefined.
+unregister_nonce(undefined) ->
+    ok;
+unregister_nonce(<<>>) ->
+    ok;
+unregister_nonce(SessionNonce) when is_binary(SessionNonce) ->
+    z_nonce:unregister(SessionNonce).
+
 
 %%====================================================================
 %% support functions
 %%====================================================================
-
 
 normalize_answers(undefined) -> [];
 normalize_answers(L) -> lists:map(fun normalize_answer/1, L).
@@ -351,6 +377,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Args, Context
                 {L,NewPageNr} when is_list(L) ->
                     % A new list of questions, PageNr might be another than expected
                     TargetId = proplists:get_value(element_id, Args, <<"survey-question">>),
+                    SurveySessionNonce = proplists:get_value(survey_session_nonce, Args),
                     Vars = [
                         {id, Id},
                         {element_id, TargetId},
@@ -362,7 +389,8 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Args, Context
                         {answer_user_id, proplists:get_value(answer_user_id, Args)},
                         {history, [NewPageNr|History]},
                         {editing, Editing},
-                        {viewer, Viewer}
+                        {viewer, Viewer},
+                        {survey_session_nonce, SurveySessionNonce}
                     ],
                     #render{template="_survey_question_page.tpl", vars=Vars};
 
@@ -746,7 +774,38 @@ do_submit(SurveyId, Questions, Answers, Context) ->
          SubmitArgs :: proplists:proplist(),
          Context :: z:context(),
          ContextOrRender :: z:context() | #render{}.
-do_submit(SurveyId, Questions, Answers, undefined, SubmitArgs, Context) ->
+do_submit(SurveyId, Questions, Answers, Editing, SubmitArgs, Context) ->
+    SurveySessionNonce = proplists:get_value(survey_session_nonce, SubmitArgs),
+    case register_nonce(SurveySessionNonce) of
+        ok ->
+            do_submit_1(SurveyId, Questions, Answers, Editing, SubmitArgs, Context);
+        {error, duplicate} ->
+            Context1 = z_render:wire(
+                    {alert, [
+                        {title, ?__("Already submitted", Context)},
+                        {text, ?__(
+                            "Sorry, you already submitted your answers. Reload the page if "
+                            "you want to fill in the form again.", Context)}
+                    ]}, Context),
+            {ok, Context1};
+        {error, overload} ->
+            Context1 = z_render:wire(
+                    {alert, [
+                        {title, ?__("Sorry", Context)},
+                        {text, ?__("We are experiencing an overload, please try again in 10 minutes.", Context)}
+                    ]}, Context),
+            {ok, Context1};
+        {error, _} ->
+            % Could be expired or an invalid nonce key
+            Context1 = z_render:wire(
+                    {alert, [
+                        {title, ?__("Sorry", Context)},
+                        {text, ?__("Your session was expired, please restart and try again.", Context)}
+                    ]}, Context),
+            {ok, Context1}
+    end.
+
+do_submit_1(SurveyId, Questions, Answers, undefined, SubmitArgs, Context) ->
     {FoundAnswers, Missing} = collect_answers(SurveyId, Questions, Answers, Context),
     case z_notifier:first(
         #survey_submit{
@@ -776,9 +835,11 @@ do_submit(SurveyId, Questions, Answers, undefined, SubmitArgs, Context) ->
             % maybe_mail(SurveyId, Answers, undefined, false, Context),
             Handled;
         {error, _Reason} = Error ->
+            SurveySessionNonce = proplists:get_value(survey_session_nonce, SubmitArgs),
+            unregister_nonce(SurveySessionNonce),
             Error
     end;
-do_submit(SurveyId, Questions, Answers, {editing, AnswerId, _Actions}, _SubmitArgs, Context) ->
+do_submit_1(SurveyId, Questions, Answers, {editing, AnswerId, _Actions}, _SubmitArgs, Context) ->
     % Save the modified survey results
     case z_acl:is_allowed(update_result, #acl_survey{id=SurveyId, answer_id=AnswerId}, Context) of
         true ->

@@ -1,8 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
-%% @doc Server supplying random strings and unique ids
+%% @copyright 2009-2025 Marc Worrell
+%% @doc Functions supplying random strings, unique ids and nonce
+%% support.
+%% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -40,6 +42,7 @@
 ]).
 
 -type charset() :: 'az' | 'az09' | 'azAZ09' | 'special' | '09'.
+
 
 %%%--------------------------------------------------------------------------
 %%% API
