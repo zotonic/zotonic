@@ -491,7 +491,12 @@ event(#postback{message={translation_generate, _Args}}, Context) ->
         true ->
             case gettext_installed() of
                 true ->
-                    spawn(fun() -> generate(Context) end),
+                    Site = z_context:site(Context),
+                    z_proc:spawn_md(
+                        fun() ->
+                            generate_core(),
+                            generate(Site)
+                        end),
                     z_render:growl(?__(<<"Started building the .pot files. This may take a while...">>, Context), Context);
                 false ->
                     ?LOG_ERROR(#{
@@ -770,32 +775,56 @@ maybe_language_code(_) ->
 
 
 % @doc Generate all .po templates for the given site
+-spec generate(Site) -> ok | {error, Reason} when
+    Site :: atom() | z:context(),
+    Reason :: needs_core_zotonic | gettext_notfound | bad_name
+            | z_sites_manager:site_status().
 generate(Host) when is_atom(Host) ->
-    generate(z_context:new(Host));
+    case maps:get(Host, z_sites_manager:get_sites(), undefined) of
+        running ->
+            generate(z_context:new(Host));
+        undefined ->
+            {error, bad_name};
+        Status ->
+            {error, Status}
+    end;
 generate(Context) ->
-    ActiveModules = lists:foldl(
-        fun({App, _}, Acc) ->
-            lists:keydelete(core_app_to_module_name(App), 1, Acc)
-        end,
-        z_module_manager:active_dir(Context),
-        core_apps()),
-    Result = translation_po:generate(translation_scan:scan(ActiveModules)),
-    _ = generate_core(),
-    Result.
+    case gettext_installed() of
+        true ->
+            ActiveModules = lists:foldl(
+                fun({App, _}, Acc) ->
+                    lists:keydelete(core_app_to_module_name(App), 1, Acc)
+                end,
+                z_module_manager:active_dir(Context),
+                core_apps()),
+            ?LOG_NOTICE(#{
+                in => zotonic_mod_translation,
+                text => <<"Generating site .pot files...">>,
+                apps => ActiveModules
+            }),
+            translation_po:generate(translation_scan:scan(ActiveModules));
+        false ->
+            {error, gettext_notfound}
+    end.
 
 %% @doc Generate consolidated translation file zotonic.pot for all core modules.
 %%      Both active and inactive modules are indexed, so the generated
 %%      translation files are always complete.
--spec generate_core() -> ok | {error, needs_core_zotonic}.
+-spec generate_core() -> ok | {error, needs_core_zotonic | gettext_notfound}.
 generate_core() ->
     case zotonic_core:is_zotonic_project() of
         true ->
-            ?LOG_NOTICE(#{
-                in => zotonic_mod_translation,
-                text => <<"Generating .pot files...">>
-            }),
-            translation_po:generate(translation_scan:scan(core_apps())),
-            consolidate_core();
+            case gettext_installed() of
+                true ->
+                    ?LOG_NOTICE(#{
+                        in => zotonic_mod_translation,
+                        text => <<"Generating Zotonic core .pot files...">>
+                    }),
+                    translation_po:generate(translation_scan:scan(core_apps())),
+                    consolidate_core();
+                false ->
+                    {error, gettext_notfound}
+            end;
         false ->
             {error, needs_core_zotonic}
     end.
@@ -820,7 +849,7 @@ consolidate_core() ->
     ]),
     ?LOG_NOTICE(#{
         in => zotonic_mod_translation,
-        text => <<"Merging .pot files">>,
+        text => <<"Merging Zotonic core .pot files">>,
         path => ZotonicPot
     }),
     Command = lists:flatten([

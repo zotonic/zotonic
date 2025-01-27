@@ -37,17 +37,27 @@ run(_) ->
 pot(What) ->
     case zotonic_command:net_start() of
         ok ->
-            pot_rpc(What);
+            Res = pot_rpc(What),
+            case Res of
+                {error, bad_name} ->
+                    io:format("Unknown site '~s'~n", [ What ]);
+                {error, needs_core_zotonic} ->
+                    io:format("Zotonic core is not installed~n");
+                {error, gettext_notfound} ->
+                    io:format("Cannot find 'gettext' command line tools~n");
+                {error, Reason} ->
+                    io:format("Site should be running: ~p~n", [ Reason ]);
+                Other ->
+                    io:format("~p~n", [ Other ])
+            end;
         {error, _} = Error ->
             zotonic_command:format_error(Error)
     end.
 
 pot_rpc(zotonic) ->
     io:format("Generating Zotonic core modules pot file ..."),
-    Res = zotonic_command:rpc(mod_translation, generate_core, []),
-    io:format("~p~n", [ Res ]);
+    zotonic_command:rpc(mod_translation, generate_core, []);
 pot_rpc(Site) ->
     SiteName = list_to_atom(Site),
     io:format("Generating pot file for site ~p .. ", [ SiteName ]),
-    Res = zotonic_command:rpc(mod_translation, generate, [ SiteName ]),
-    io:format("~p~n", [ Res ]).
+    zotonic_command:rpc(mod_translation, generate, [ SiteName ]).
