@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-01-27 09:55\n"
+"PO-Revision-Date: 2025-01-27 11:43\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -9826,7 +9826,7 @@ msgstr "Accepter"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:785
 msgid "Already submitted"
-msgstr ""
+msgstr "Déjà soumis"
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:150
 msgid "Another page, video or image."
@@ -10478,7 +10478,7 @@ msgstr "Désolé, impossible d'insérer la nouvelle personne."
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:787
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
-msgstr ""
+msgstr "Désolé, vous avez déjà envoyé vos réponses. Rechargez la page si vous souhaitez remplir à nouveau le formulaire."
 
 #: apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:14
 msgid "Start"
@@ -10647,7 +10647,7 @@ msgstr "Afficher et modifier les résultats."
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:795
 msgid "We are experiencing an overload, please try again in 10 minutes."
-msgstr ""
+msgstr "Nous rencontrons une surcharge, veuillez réessayer dans 10 minutes."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:65
 msgid "When finished show"
@@ -10699,7 +10699,7 @@ msgstr "Votre résultat"
 
 #: apps/zotonic_mod_survey/src/mod_survey.erl:803
 msgid "Your session was expired, please restart and try again."
-msgstr ""
+msgstr "Votre session a expiré, veuillez redémarrer et réessayer."
 
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:98
 msgid "chocolate"
