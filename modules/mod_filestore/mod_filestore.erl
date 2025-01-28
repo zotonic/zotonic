@@ -98,9 +98,9 @@ observe_filestore_credentials_lookup(#filestore_credentials_lookup{path=Path}, C
 observe_filestore_credentials_revlookup(#filestore_credentials_revlookup{service= <<"s3">>, location=Location}, Context) ->
     S3Key = m_config:get_value(?MODULE, s3key, Context),
     S3Secret = m_config:get_value(?MODULE, s3secret, Context),
-    case is_defined(S3Key) andalso is_defined(S3Secret) of
+    S3Url = m_config:get_value(?MODULE, s3url, Context),
+    case is_defined(S3Key) andalso is_defined(S3Secret) andalso is_defined(S3Url) of
         true ->
-            S3Url = m_config:get_value(?MODULE, s3url, Context),
             {ok, #filestore_credentials{
                     service= <<"s3">>,
                     service_url = S3Url,
@@ -381,11 +381,8 @@ temp_path(F) when is_binary(F) ->
 %% used to prevent deletes of files on services that are not used to
 %% store new files. This could happen when a database with (production)
 %% data is copied to another system.
--spec is_matching_url(ServiceUrl, Location) -> boolean() when
-    ServiceUrl :: binary(),
-    Location :: binary().
 is_matching_url(ServiceUrl, Location) ->
-    case binary:match(Location, ServiceUrl) of
+    case binary:match(z_convert:to_binary(Location), z_convert:to_binary(ServiceUrl)) of
         {0, _} -> true;
         {_, _} -> false;
         nomatch -> false
