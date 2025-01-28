@@ -9,9 +9,11 @@
         <p>{_ Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service. _}</p>
 
         <p>{_ Currently Zotonic supports FTP and services that are compatible with the S3 file services API. These include: _}</p>
+
         <ul>
-            <li><a target="_blank" href="http://aws.amazon.com/s3/">Amazon Simple Storage Service (S3)</a></li>
-            <li><a target="_blank" href="https://developers.google.com/storage/">Google Cloud Storage</a></li>
+            <li><a target="_blank" href="https://european-alternatives.eu/alternative-to/amazon-s3">European Block Storage providers <span class="glyphicon glyphicon-new-window"></span></a></li>
+            <li><a target="_blank" href="https://aws.amazon.com/s3/">USA: Amazon Simple Storage Service (S3) <span class="glyphicon glyphicon-new-window"></span></a></li>
+            <li><a target="_blank" href="https://developers.google.com/storage/">USA: Google Cloud Storage <span class="glyphicon glyphicon-new-window"></span></a></li>
         </ul>
 
         <p>{_ If you use an FTP server then that server MUST support FTPS (secure ftp) _}</p>
