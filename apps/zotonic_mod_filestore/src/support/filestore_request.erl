@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2022 Marc Worrell
+%% @copyright 2022-2025 Marc Worrell
 %% @doc Synchronous low level routines for accessing the filestore.
 %% @end
 
-%% Copyright 2022 Marc Worrell
+%% Copyright 2022-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@
     do_delete/1,
 
     filezmod/1,
+    is_matching_url/2,
 
     download_cb/2
 ]).
@@ -120,9 +121,44 @@ do_download(#filestore_credentials{service=Service, location=Location, credentia
 -spec do_delete(CredLoc) -> Result when
     CredLoc :: #filestore_credentials{},
     Result :: ftpfilez:sync_reply().
-do_delete(#filestore_credentials{service=Service, location=Location, credentials=Cred}) ->
-    Mod = filezmod(Service),
-    Mod:delete(Cred, Location).
+do_delete(
+    #filestore_credentials{
+        service = Service,
+        service_url = ServiceUrl,
+        location = Location,
+        credentials = Cred
+    }) ->
+    case is_matching_url(ServiceUrl, Location) of
+        true ->
+            Mod = filezmod(Service),
+            Mod:delete(Cred, Location);
+        false ->
+            ?LOG_WARNING(#{
+                in => zotonic_mod_filestore,
+                text => <<"Not deleting file as it is not matching with service url">>,
+                result => error,
+                reason => service_url_mismatch,
+                service => Service,
+                service_url => ServiceUrl,
+                location => Location,
+                action => delete
+            }),
+            {error, service_url_mismatch}
+    end.
+
+%% @doc Check if the given location matches the service-url. This is
+%% used to prevent deletes of files on services that are not used to
+%% store new files. This could happen when a database with (production)
+%% data is copied to another system.
+-spec is_matching_url(ServiceUrl, Location) -> boolean() when
+    ServiceUrl :: binary(),
+    Location :: binary().
+is_matching_url(ServiceUrl, Location) ->
+    case binary:match(Location, ServiceUrl) of
+        {0, _} -> true;
+        {_, _} -> false;
+        nomatch -> false
+    end.
 
 -spec filezmod(binary()) -> module().
 filezmod(<<"s3">>) -> s3filez;

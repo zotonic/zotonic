@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2014-2022 Marc Worrell
 %% @doc Event handling for the filestore admin functions
+%% @end
 
 %% Copyright 2014-2022 Marc Worrell
 %%
