@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-01-27 11:43\n"
+"PO-Revision-Date: 2025-01-28 11:15\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -248,6 +248,7 @@ msgstr "Configuration changée."
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:30
 #: apps/zotonic_mod_email_status/priv/templates/_dialog_email_status.tpl:4
 #: apps/zotonic_mod_l10n/priv/templates/_admin_configure_module.tpl:8
+#: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:16
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:24
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:26
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_email_addresses.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:13./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:20./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:14./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:21./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:54./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:59./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:45./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:50./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:32./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:37
@@ -4210,7 +4211,7 @@ msgid "Memory Usage"
 msgstr "Utilisation de la mémoire"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:8./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:46
-#: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:26./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:31./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:48
+#: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:26./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:34./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:51
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:20
 #: apps/zotonic_site_status/priv/templates/stats.tpl:3./apps/zotonic_site_status/priv/templates/stats.tpl:8
 msgid "Statistics"
@@ -5865,11 +5866,11 @@ msgstr "Cette page fait partie du groupe:"
 msgid "Accept all"
 msgstr "Accepter tout"
 
-#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:61
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:64
 msgid "Accept selection"
 msgstr "Accepter la sélection"
 
-#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:37./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:54
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:40./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:57
 msgid "All cookies"
 msgstr "Tous les cookies"
 
@@ -5893,7 +5894,7 @@ msgstr "Paramètres de consentement aux cookies"
 msgid "Detailed explanation of cookie types. Leave a field empty if you don't want to show this type of cookie"
 msgstr "Explication détaillée des types de cookies. Laissez un champ vide si vous ne souhaitez pas afficher ce type de cookie"
 
-#: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:19./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:26./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:43
+#: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:19./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:29./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:46
 msgid "Functional"
 msgstr "Fonctionnel"
 
@@ -5912,6 +5913,10 @@ msgstr "Plus d'informations sur les cookies"
 #: apps/zotonic_mod_cookie_consent/priv/templates/_media_cookie_consent.tpl:13
 msgid "Please consent to cookies to display external content."
 msgstr "Veuillez accepter les cookies pour afficher du contenu externe."
+
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:20
+msgid "Reject all"
+msgstr ""
 
 #: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:5
 msgid "This website uses cookies"
@@ -5958,7 +5963,7 @@ msgid "Year"
 msgstr "Année"
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:168
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:170
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:17
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
@@ -6923,47 +6928,47 @@ msgstr "Vous avez associé votre compte <strong>Facebook</strong>."
 msgid "Your Facebook Developer Dashboard"
 msgstr "Votre tableau de bord du développeur Facebook"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:96
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:98
 msgid "After 1 month"
 msgstr "Après 1 mois"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:95
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:97
 msgid "After 1 week"
 msgstr "Après 1 semaine"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:97
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:99
 msgid "After 3 months"
 msgstr "Après 3 mois"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:204
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:206
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "Tous les fichiers du cloud peuvent être rappatriés sur le système de fichier du serveur."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:182
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:184
 msgid "All cloud files will be queued for download."
 msgstr "Tous les fichiers du cloud seront mis en file d'attente pour téléchargement."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:181
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:183
 msgid "All files will be queued, uploads will start in the background within 10 minutes."
 msgstr "Tous les fichiers seront mis en file d'attente, les téléchargements commenceront dans l'arrière-plan dans les 10 minutes"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:171
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:173
 msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "Tous les fichiers téléchargés et d'aperçu locaux peuvent être déplacés vers le cloud."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:191
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:193
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "Êtes-vous sûr de vouloir déplacer tous les fichiers vers le cloud ?"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:221
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "Voulez-vous vraiment déplacer tous les fichiers sur le disque du serveur ?"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:36
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:38
 msgid "Base URL"
 msgstr "URL de base"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:104
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:106
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "Avant que les paramètres ne soient enregistrés, ils seront vérifiés en téléchargeant (et supprimant après) un petit fichier"
 
@@ -6975,19 +6980,19 @@ msgstr "Magasin de fichier Cloud"
 msgid "Cloud File Store Configuration"
 msgstr "Configuration du magasin de fichiers cloud"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:121
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:123
 msgid "Cloud File Store Utilities and Statistics"
 msgstr "Utilitaires et statistiques du magasin de fichiers cloud"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:130
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:132
 msgid "Cloud Files"
 msgstr "fichiers Cloud"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:180
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:182
 msgid "Could not access the service, double check your settings and try again."
 msgstr "Impossible d'accéder au service, vérifiez à nouveau vos paramètres et réessayez."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:107
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:109
 msgid "Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file."
 msgstr "Impossible d'accéder au service, vérifiez à nouveau vos paramètres et réessayez. Assurez-vous que la clé API possède des droits d'accès pour créer et supprimer un fichier (temporaire) <code>-zotonic-filestore-test-file-</ code>."
 
@@ -6995,144 +7000,144 @@ msgstr "Impossible d'accéder au service, vérifiez à nouveau vos paramètres e
 msgid "Currently Zotonic supports FTP and services that are compatible with the S3 file services API. These include:"
 msgstr "Actuellement, Zotonic prend en charge le FTP et les services compatibles avec l'API des services de fichiers S3. Ceux-ci inclus:"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:153
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:155
 msgid "Delete Queue"
 msgstr "Supprimer la file d'attente"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:91
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:93
 msgid "Delete files from the cloud file store"
 msgstr "Supprimer les fichiers du magasin de fichiers cloud"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:152
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:154
 msgid "Download Queue"
 msgstr "File d'attente de téléchargement"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:76
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:78
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "Activez cette option pour permettre au magasin de fichiers d'agir comme une sauvegarde de vos fichiers multimédias locaux."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:205
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:207
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "Veuillez vous assurer qu'un espace disque est suffisant avant de démarrer le processus."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:135./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:158
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:137./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:160
 msgid "Files"
 msgstr "Fichier"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:45
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:47
 msgid "For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftp:</tt></b>"
 msgstr "Pour FTP, l'URL doit commencer par <b><tt>ftps :</tt></b> ou <b><tt>ftp :</tt></b>"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:46
 msgid "For S3 the URL must start with <b><tt>https:</tt></b> or <b><tt>http:</tt></b>"
 msgstr "Pour S3, l'URL doit commencer par <b><tt>https :</tt></b> ou <b><tt>http :</tt></b>"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:46
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:48
 msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
 msgstr "Pour WebDAV, l'URL doit commencer par <b><tt>webdavs :</tt></b> ou <b><tt>webdav :</tt></b>"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:177
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:179
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Si vous avez sélectionné \"Conserver les fichiers locaux après le téléchargement dans le magasin de fichiers cloud\", les fichiers locaux ne sont pas supprimés, car les fichiers distants sont considérés comme une sauvegarde des fichiers locaux."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:211
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Si vous avez sélectionné \"Conserver les fichiers locaux après le téléchargement dans le magasin de fichiers cloud\", les fichiers distants ne sont pas supprimés, car les fichiers distants sont considérés comme une sauvegarde des fichiers locaux."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:17
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:19
 msgid "If you use an FTP server then that server MUST support FTPS (secure ftp)"
 msgstr "Si vous utilisez un serveur FTP, ce serveur DOIT prendre en charge FTPS (ftp sécurisé)"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:94
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:96
 msgid "Immediately"
 msgstr "Immédiatement"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:74
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:76
 msgid "Keep local files after upload to the cloud file store"
 msgstr "Conserver les fichiers locaux après le téléchargement dans le magasin de fichiers cloud"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:129
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:131
 msgid "Local Files"
 msgstr "Fichiers locaux"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:128
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:130
 msgid "Media Resources"
 msgstr "Ressources pour les médias"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:187
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:189
 msgid "Move all local files to the remote storage"
 msgstr "Déplacer tous les fichiers locaux vers le stockage distant"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:215
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:217
 msgid "Move all remote files to local"
 msgstr "Déplacer tous les fichiers distants vers local"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:192
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:194
 msgid "Move files to cloud"
 msgstr "Déplacer des fichiers vers le cloud"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:220
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:222
 msgid "Move files to server disk"
 msgstr "Déplacer les fichiers vers le disque du serveur"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:98
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:100
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:62
 msgid "Never"
 msgstr "Jamais"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:51
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:53
 msgid "S3 API Key or FTP/WebDAV username"
 msgstr "Clé API S3 ou nom d'utilisateur FTP/WebDAV"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:56
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:58
 msgid "S3 API Secret or FTP/WebDAV password"
 msgstr "Clé secrète de l'API S3 ou mot de passe FTP/WebDAV"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:33
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:35
 msgid "S3 Cloud Location and Credentials"
 msgstr "Emplacement Cloud S3 et authentification"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:111
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:113
 msgid "Save Settings"
 msgstr "Enregistrer les paramètres"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:106
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:108
 msgid "Settings are working fine and are saved."
 msgstr "Les paramètres fonctionnent bien et sont enregistrés."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:141
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:143
 msgid "Storage"
 msgstr "Espace de stockage"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:173
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:175
 msgid "There is a 1 minute wait before files are uploaded."
 msgstr "Il y a 1 minute d'attente avant que les fichiers ne soient téléchargés."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:172
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:174
 msgid "This will queue the files for later asynchronous upload."
 msgstr "Cela mettra en queue les fichiers pour un téléchargement asynchrone ultérieur."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:83
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
 msgid "Try to create a private S3 bucket if the S3 bucket does not exist"
 msgstr "Essayez de créer un compartiment S3 privé si le compartiment S3 n'existe pas"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:151
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:153
 msgid "Upload Queue"
 msgstr "Queue de téléversement"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:65
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:67
 msgid "Upload new media files to the cloud file store"
 msgstr "Téléverser de nouveaux fichiers multimédias dans le magasin de fichiers cloud"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:87
 msgid "With FTP and WebDAV the directories are always created automatically."
 msgstr "Avec FTP et WebDAV, les répertoires sont toujours créés automatiquement."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:19
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:21
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
 msgstr "Avec WebDAV, le nom d'utilisateur et le mot de passe sont transférés en clair, alors assurez-vous d'utiliser <tt>webdavs :</tt> URL (qui utilise https)."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:235./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:63./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:70./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:77
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:63./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:70./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:77
 msgid "You are not allowed to change these settings."
 msgstr "Vous n’êtes pas autorisé à changer ces paramètres."
 
@@ -7821,7 +7826,7 @@ msgstr "Liste de diffusion supprimée."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:21
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:21./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:22./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:19./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:20./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:48./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:49
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:26./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:28
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:28./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:30
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:3./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:6
 msgid "Description"
 msgstr "Description"
@@ -8678,6 +8683,10 @@ msgstr "Vous n'êtes pas autorisé à modifier les paramètres Microsoft."
 msgid "You have coupled your <strong>Microsoft</strong> account."
 msgstr "Vous avez couplé votre <strong>compte Microsoft</strong>"
 
+#: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:9
+msgid "Debug MQTT publish and subscribe actions in the Zotonic console"
+msgstr "Déboguer la publication MQTT et souscrire des actions dans la console Zotonic"
+
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:91./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:92
 msgid "Access Token URL"
 msgstr "URL du jeton d'accès"
@@ -9096,7 +9105,7 @@ msgstr "Reconstruire les facettes de recherche"
 msgid "Rebuilding the faceted search table."
 msgstr "Reconstruire la table de recherche à facettes."
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:67
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:69
 msgid "Add a noindex, nofollow element to all pages."
 msgstr "Ajouter \"noindex\" et \"nofollow\" à toutes les pages."
 
@@ -9116,15 +9125,15 @@ msgstr "Demander à Google d'exclure toutes les pages «{cat}»"
 msgid "Ask Google to not index this page"
 msgstr "Demander à Google de ne pas indexer cette page"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:111
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:113
 msgid "Bing Webmaster"
 msgstr "Webmestre de Bing"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:108./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:109
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:110./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:111
 msgid "Bing Webmaster validation id"
 msgstr "ID de validation de Bing Webmaster"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:98
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:100
 msgid "Copy the value of the content attribute in the meta tag provided by Google."
 msgstr "Copiez la valeur de l'attribut de contenu dans le meta-tag fourni par Google."
 
@@ -9136,39 +9145,39 @@ msgstr "JSON-LD personnalisé"
 msgid "Customize page slug"
 msgstr "Personaliser le slug"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:29
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:31
 msgid "Description to include on every page"
 msgstr "Description à inclure sur toutes les pages"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:45
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:47
 msgid "Do not show site search action"
 msgstr "Ne pas afficher l'action de recherche sur le site"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:98./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:111./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:125
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:100./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:113./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:127
 msgid "Enter here the verification code for"
 msgstr "Entrez ici le code de vérification pour"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:64
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:66
 msgid "Exclude this site from search engines"
 msgstr "Exclure ce site des moteurs de recherche"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:15
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:17
 msgid "General SEO Optimization"
 msgstr "Optimisation globale du SEO"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:78./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:79
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:80./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:81
 msgid "Google Analytics tracking id"
 msgstr "Identifiant de suivi Google Analytics"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:95./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:96./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:98
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:97./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:98./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:100
 msgid "Google Search Console"
 msgstr "Google Search Console"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:90
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92
 msgid "Google Tag Manager account page"
 msgstr "Page de compte Google Tag Manager"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:87./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:88
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:89./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:90
 msgid "Google Tag Manager id"
 msgstr "Identifiant Google Tag Manager"
 
@@ -9176,15 +9185,15 @@ msgstr "Identifiant Google Tag Manager"
 msgid "Here you find settings to optimize the indexing of your site by search engines."
 msgstr "Vous trouverez ici des réglages pour optimiser l'indexation de votre site par les moteurs de recherche."
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:48
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:50
 msgid "If your site does not have a search page, check this box to prevent displaying a search box on Google et al."
 msgstr "Si votre site ne dispose pas de page de recherche, cochez cette case pour éviter l'affichage d'un champ de recherche sur Google et al."
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:18./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:19
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:20./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:21
 msgid "Keywords"
 msgstr "Mots clés de la page"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:21
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:23
 msgid "Keywords to include on every page. Separate keywords with a \",\""
 msgstr "Mots clés à inclure sur chaque page. Séparez les mots-clés avec un \", \""
 
@@ -9220,7 +9229,7 @@ msgstr "Contenu SEO"
 msgid "SEO indexing of this page is disabled because it is in the “{cat}” category."
 msgstr "L'indexation SEO de cette page est désactivée car elle est dans la catégorie \"{cat}\"."
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:135
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:137
 msgid "Save SEO settings"
 msgstr "Sauvegarder les réglages SEO"
 
@@ -9232,47 +9241,47 @@ msgstr "Optimisation du moteur de recherche"
 msgid "Show current JSON-LD (updates after save)"
 msgstr "Afficher le JSON-LD actuel (mises à jour après l'enregistrement)"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:34./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:35
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:36./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:37
 msgid "Site search"
 msgstr "Recherche du site"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:57
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:59
 msgid "The site configuration file allows this site to be indexed by search engines."
 msgstr "Le fichier de configuration du site permet à ce site d'être indexé par les moteurs de recherche."
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:55
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:57
 msgid "The site configuration file excludes this site from search engines."
 msgstr "Le fichier de configuration du site exclut ce site des moteurs de recherche."
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:37
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:39
 msgid "Url for the search action on the site. Defaults to:"
 msgstr "URL de l'action de recherche sur le site. La valeur par défaut est :"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:82
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:84
 msgid "Where can I find my tracking script?"
 msgstr "Où puis-je trouver mon script de suivi?"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:125
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:127
 msgid "Yandex Webmaster"
 msgstr "Webmaster de Yandex"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:122./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:123
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:124./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:125
 msgid "Yandex Webmaster validation id"
 msgstr "ID de validation du webmaster de Yandex"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:112./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:126
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:114./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:128
 msgid "You find this id in the content attribute of the meta tag, it has the format"
 msgstr "Vous trouvez cet identifiant dans l'attribut de contenu de la balise méta, il a le format"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:81
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83
 msgid "You find this id in the tracking script, it has the format"
 msgstr "Vous trouvez cet identifiant dans le script de suivi, il possède le format"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:90
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92
 msgid "You find this on your"
 msgstr "Vous trouvez cela sur votre"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:90
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92
 msgid "it has the format"
 msgstr "il a le format"
 
@@ -9287,6 +9296,10 @@ msgstr "Fréquence de changement définie pour la catégorie"
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:43
 msgid "Change frequency for sitemap"
 msgstr "Changer la fréquence pour le plan du site"
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:7
+msgid "Check the logs for progress."
+msgstr ""
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:54
 msgid "Daily"
@@ -9308,7 +9321,7 @@ msgstr "Priorité définie pour la catégorie"
 msgid "Priority in sitemap"
 msgstr "Priorité dans le plan du site"
 
-#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:2
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:11./apps/zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:2
 msgid "Rebuild sitemap"
 msgstr "Reconstruire le plan du site"
 
@@ -9316,9 +9329,13 @@ msgstr "Reconstruire le plan du site"
 msgid "Rebuild the sitemap index for all pages."
 msgstr "Reconstruisez l'index du plan de site pour toutes les pages."
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:70
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:71
 msgid "Rebuilding the sitemap in the background."
 msgstr "Reconstruction du plan du site en arrière-plan."
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:2
+msgid "Sitemap"
+msgstr ""
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:7
 msgid "Sitemap settings"
@@ -9331,6 +9348,14 @@ msgstr "Paramètres du sitemap pour toutes les pages de cette catégorie"
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:38
 msgid "The home page defaults to 1.0, pages with a page path default to 0.8."
 msgstr "La page d'accueil est par défaut à 1.0, les pages avec un chemin de page par défaut à 0.8."
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:21
+msgid "The location of the sitemap is:"
+msgstr ""
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:6
+msgid "The rebuild is done in the background and can take a while."
+msgstr ""
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:5
 msgid "These settings apply to all pages of this category. They define hints for search engines indexing the site."
@@ -9352,9 +9377,13 @@ msgstr "Hebdomadaire (défaut)"
 msgid "Yearly"
 msgstr "Annuel"
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:73
 msgid "You are not allowed to do this"
 msgstr "Vous n'êtes pas autorisé à faire cela"
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:5
+msgid "Zotonic maintains a sitemap of all pages. It is good to rebuild this sitemap after language or other structural content changes."
+msgstr ""
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:21
 msgid "not in sitemap"
@@ -9553,10 +9582,12 @@ msgid "Finished rebuilding Zotonic."
 msgstr "Fin de la reconstruction de Zotonic."
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
+#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_status_button.tpl:4
 msgid "Perform a version control (git/mercurial) update this site."
 msgstr "Effectuer un contrôle de version (git/mercurial) met à jour ce site."
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_system_button.tpl:5
+#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:5
 msgid "Perform a version update of Zotonic (through git)"
 msgstr "Effectuer une mise à jour de la version de Zotonic (via git)"
 
@@ -9565,10 +9596,12 @@ msgid "Ready with fetch from version control."
 msgstr "Prêt avec récupération à partir du contrôle de version."
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
+#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:12
 msgid "Rebuild Zotonic"
 msgstr "Reconstruire Zotonic"
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_system_button.tpl:14
+#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:14
 msgid "Recompile changed Erlang files in the background"
 msgstr "Recompiler les fichiers Erlang modifiés en arrière-plan"
 
@@ -9601,6 +9634,7 @@ msgid "Unknown site or no version control folder present."
 msgstr "Site inconnu ou aucun dossier de contrôle de version présent."
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_system_button.tpl:3
+#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:3
 msgid "Update Zotonic"
 msgstr "Mettre à jour Zotonic"
 
@@ -9617,6 +9651,7 @@ msgid "Zotonic has not been checked out using version control."
 msgstr "Zotonic n'a pas été extrait à l'aide du contrôle de version."
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_status_button.tpl:2
+#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_status_button.tpl:2
 msgid "update"
 msgstr "mise à jour"
 
