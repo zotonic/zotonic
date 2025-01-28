@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-01-28 11:15\n"
+"PO-Revision-Date: 2025-01-28 13:10\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -5916,7 +5916,7 @@ msgstr "الرجاء الموافقة على ملفات تعريف الارتب�
 
 #: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:20
 msgid "Reject all"
-msgstr ""
+msgstr "رفض الكل"
 
 #: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:5
 msgid "This website uses cookies"
@@ -9299,7 +9299,7 @@ msgstr "تغيير التردد لخريطة الموقع"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:7
 msgid "Check the logs for progress."
-msgstr ""
+msgstr "تحقق من السجلات لمعرفة التقدم."
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:54
 msgid "Daily"
@@ -9335,7 +9335,7 @@ msgstr "إعادة إنشاء خريطة الموقع في الخلفية."
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:2
 msgid "Sitemap"
-msgstr ""
+msgstr "خريطة الموقع"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:7
 msgid "Sitemap settings"
@@ -9351,11 +9351,11 @@ msgstr "الصفحة الرئيسية افتراضية 1.0 ، والصفحات �
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:21
 msgid "The location of the sitemap is:"
-msgstr ""
+msgstr "موقع خريطة الموقع هو:"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:6
 msgid "The rebuild is done in the background and can take a while."
-msgstr ""
+msgstr "يتم إجراء إعادة البناء في الخلفية وقد يستغرق بعض الوقت."
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:5
 msgid "These settings apply to all pages of this category. They define hints for search engines indexing the site."
@@ -9383,7 +9383,7 @@ msgstr "لا يسمح لك أن تفعل هذا"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:5
 msgid "Zotonic maintains a sitemap of all pages. It is good to rebuild this sitemap after language or other structural content changes."
-msgstr ""
+msgstr "تحتفظ Zotonic بخريطة موقع لجميع الصفحات. من الجيد إعادة بناء خريطة الموقع هذه بعد إجراء تغييرات على اللغة أو المحتوى الهيكلي الآخر."
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:21
 msgid "not in sitemap"
