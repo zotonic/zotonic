@@ -542,7 +542,7 @@ start_deleter(#{
                         path => Path,
                         action => delete
                     }),
-                    m_filestore:purge_deleted(Id, Context)
+                    m_filestore:clear_deleted(Id, Context)
             end;
         {ok, #filestore_credentials{ service = CredService }} ->
             ?LOG_DEBUG(#{
@@ -595,7 +595,7 @@ delete_ready(Id, Path, Context, _Ref, {error, forbidden}) ->
         id => Id,
         action => delete
     }),
-    m_filestore:purge_deleted(Id, Context);
+    m_filestore:clear_deleted(Id, Context);
 delete_ready(Id, Path, _Context, _Ref, {error, Reason}) ->
     ?LOG_ERROR(#{
         text => <<"Delete remote file failed, will retry">>,

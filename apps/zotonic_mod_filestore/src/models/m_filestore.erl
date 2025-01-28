@@ -31,6 +31,7 @@
     mark_deleted/2,
     fetch_deleted/2,
     purge_deleted/2,
+    clear_deleted/2,
 
     mark_move_to_local_all/1,
     mark_move_to_local_limit/2,
@@ -306,6 +307,7 @@ mark_deleted(Path, Context) when is_binary(Path) ->
         0 -> {error, enoent}
     end.
 
+
 %% @doc Fetch all deleted file entries where the entry was marked as deleted
 %% at least 'Interval' ago. The Interval comes from the mod_filestore.delete_interval
 %% configuration.
@@ -370,6 +372,26 @@ purge_deleted(Id, Context) ->
         1 -> ok;
         0 -> {error, enoent}
     end.
+
+%% @doc Unmark the file entry as deleted, used when the deletion could not be done
+%% due to an error or some other condition.
+-spec clear_deleted(Id, Context) -> ok | {error, enoent} when
+    Id :: integer(),
+    Context :: z:context().
+clear_deleted(Id, Context) when is_integer(Id) ->
+    case z_db:q("
+            update filestore
+            set is_deleted = false,
+                modified = now(),
+                deleted = undefined
+            where id = $1",
+            [Id],
+            Context)
+    of
+        1 -> ok;
+        0 -> {error, enoent}
+    end.
+
 
 %% @doc Mark at most Limit entries to be moved from the remote service
 %% to the local service. We mark all entries so that any missing files are
