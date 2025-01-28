@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-01-27 09:55\n"
+"PO-Revision-Date: 2025-01-28 11:15\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -248,6 +248,7 @@ msgstr "改变了配置。"
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_admin_configure_module.tpl:30
 #: apps/zotonic_mod_email_status/priv/templates/_dialog_email_status.tpl:4
 #: apps/zotonic_mod_l10n/priv/templates/_admin_configure_module.tpl:8
+#: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:16
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:24
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:26
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_email_addresses.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:13./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:20./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:14./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:21./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:54./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:59./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:45./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:50./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:32./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:37
@@ -4210,7 +4211,7 @@ msgid "Memory Usage"
 msgstr "內存使用情況"
 
 #: apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3./apps/zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:8./apps/zotonic_mod_admin_statistics/src/mod_admin_statistics.erl:46
-#: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:26./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:31./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:48
+#: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:26./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:34./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:51
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:20
 #: apps/zotonic_site_status/priv/templates/stats.tpl:3./apps/zotonic_site_status/priv/templates/stats.tpl:8
 msgid "Statistics"
@@ -5865,11 +5866,11 @@ msgstr "本页属于组。"
 msgid "Accept all"
 msgstr "接受所有的"
 
-#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:61
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:64
 msgid "Accept selection"
 msgstr "接受選擇"
 
-#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:37./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:54
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:40./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:57
 msgid "All cookies"
 msgstr "所有餅乾"
 
@@ -5893,7 +5894,7 @@ msgstr "Cookie 同意設置"
 msgid "Detailed explanation of cookie types. Leave a field empty if you don't want to show this type of cookie"
 msgstr "cookie 類型的詳細說明。如果您不想顯示此類 cookie，請將字段留空"
 
-#: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:19./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:26./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:43
+#: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:19./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:29./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:46
 msgid "Functional"
 msgstr "功能性"
 
@@ -5912,6 +5913,10 @@ msgstr "有關 cookie 的更多信息"
 #: apps/zotonic_mod_cookie_consent/priv/templates/_media_cookie_consent.tpl:13
 msgid "Please consent to cookies to display external content."
 msgstr "請同意 cookie 以顯示外部內容。"
+
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:20
+msgid "Reject all"
+msgstr "全部拒絕"
 
 #: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:5
 msgid "This website uses cookies"
@@ -5958,7 +5963,7 @@ msgid "Year"
 msgstr "年"
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:168
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:170
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:17
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
@@ -6923,47 +6928,47 @@ msgstr "您已将您的 <strong>Facebook</strong> 账户绑定。"
 msgid "Your Facebook Developer Dashboard"
 msgstr "您的Facebook开发者仪表板"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:96
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:98
 msgid "After 1 month"
 msgstr "1个月后"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:95
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:97
 msgid "After 1 week"
 msgstr "1周后"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:97
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:99
 msgid "After 3 months"
 msgstr "3个月后"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:204
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:206
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "所有的云文件都可以移回服务器上的文件系统。"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:182
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:184
 msgid "All cloud files will be queued for download."
 msgstr "所有的云文件都会排队下载。"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:181
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:183
 msgid "All files will be queued, uploads will start in the background within 10 minutes."
 msgstr "所有的文件将被排队，上传将在10分钟内开始在后台。"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:171
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:173
 msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "所有本地上传和预览的文件都可以移动到云端。"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:191
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:193
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "你确定要把所有文件都移到云端吗？"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:221
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "您確定要將所有文件移動到服務器的磁盤嗎？"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:36
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:38
 msgid "Base URL"
 msgstr "基础URL"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:104
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:106
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "在保存设置之前，将通过上传（和删除）一个小文件进行检查。"
 
@@ -6975,19 +6980,19 @@ msgstr "云端文件存储"
 msgid "Cloud File Store Configuration"
 msgstr "云文件存储配置"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:121
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:123
 msgid "Cloud File Store Utilities and Statistics"
 msgstr "雲文件存儲實用程序和統計信息"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:130
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:132
 msgid "Cloud Files"
 msgstr "云文件"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:180
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:182
 msgid "Could not access the service, double check your settings and try again."
 msgstr "无法访问服务，请仔细检查您的设置并再次尝试。"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:107
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:109
 msgid "Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file."
 msgstr "无法访问服务，请仔细检查您的设置并再次尝试。确保API密钥具有创建和删除（临时） <code>-zotonic-filetore-test-file-</code> 文件的访问权限。"
 
@@ -6995,144 +7000,144 @@ msgstr "无法访问服务，请仔细检查您的设置并再次尝试。确保
 msgid "Currently Zotonic supports FTP and services that are compatible with the S3 file services API. These include:"
 msgstr "目前 Zotonic 支持 FTP 和與 S3 文件服務 API 兼容的服務。這些包括："
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:153
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:155
 msgid "Delete Queue"
 msgstr "删除队列"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:91
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:93
 msgid "Delete files from the cloud file store"
 msgstr "从云文件存储中删除文件"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:152
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:154
 msgid "Download Queue"
 msgstr "下载队列"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:76
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:78
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "啟用此選項可讓文件存儲充當本地媒體文件的備份。"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:205
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:207
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "确保自己有足够的磁盘空间才开始这个过程。"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:135./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:158
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:137./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:160
 msgid "Files"
 msgstr "文件"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:45
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:47
 msgid "For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftp:</tt></b>"
 msgstr "對於 FTP，URL 必須以 <b><tt>ftps:</tt></b> 或 <b><tt>ftp:</tt></b>開頭"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:46
 msgid "For S3 the URL must start with <b><tt>https:</tt></b> or <b><tt>http:</tt></b>"
 msgstr "對於 S3，URL 必須以 <b><tt>https:</tt></b> 或 <b><tt>http:</tt></b>開頭"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:46
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:48
 msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
 msgstr "對於 WebDAV，URL 必須以 <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>開頭"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:177
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:179
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "如果您選擇了“上傳到雲文件存儲後保留本地文件”，則不會刪除本地文件，因為遠程文件被視為本地文件的備份。"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:211
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "如果您選擇了“上傳到雲文件存儲後保留本地文件”，則不會刪除遠程文件，因為遠程文件被視為本地文件的備份。"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:17
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:19
 msgid "If you use an FTP server then that server MUST support FTPS (secure ftp)"
 msgstr "如果您使用 FTP 服務器，那麼該服務器必須支持 FTPS（安全 ftp）"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:94
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:96
 msgid "Immediately"
 msgstr "立即"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:74
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:76
 msgid "Keep local files after upload to the cloud file store"
 msgstr "上傳到雲文件存儲後保留本地文件"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:129
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:131
 msgid "Local Files"
 msgstr "本地文件"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:128
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:130
 msgid "Media Resources"
 msgstr "媒体资源"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:187
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:189
 msgid "Move all local files to the remote storage"
 msgstr "將所有本地文件移動到遠程存儲"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:215
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:217
 msgid "Move all remote files to local"
 msgstr "將所有遠程文件移動到本地"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:192
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:194
 msgid "Move files to cloud"
 msgstr "移动文件到云端"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:220
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:222
 msgid "Move files to server disk"
 msgstr "將文件移動到服務器磁盤"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:98
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:100
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:62
 msgid "Never"
 msgstr "絶不"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:51
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:53
 msgid "S3 API Key or FTP/WebDAV username"
 msgstr "S3 API 密鑰或 FTP/WebDAV 用戶名"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:56
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:58
 msgid "S3 API Secret or FTP/WebDAV password"
 msgstr "S3 API 密碼或 FTP/WebDAV 密碼"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:33
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:35
 msgid "S3 Cloud Location and Credentials"
 msgstr "S3云的位置和证书"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:111
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:113
 msgid "Save Settings"
 msgstr "保存设置"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:106
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:108
 msgid "Settings are working fine and are saved."
 msgstr "设置工作正常并保存。"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:141
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:143
 msgid "Storage"
 msgstr "存储"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:173
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:175
 msgid "There is a 1 minute wait before files are uploaded."
 msgstr "上傳文件前需要等待 1 分鐘。"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:172
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:174
 msgid "This will queue the files for later asynchronous upload."
 msgstr "这将为以后的异步上传文件排队。"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:83
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
 msgid "Try to create a private S3 bucket if the S3 bucket does not exist"
 msgstr "如果 S3 存儲桶不存在，請嘗試創建私有 S3 存儲桶"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:151
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:153
 msgid "Upload Queue"
 msgstr "上传队列"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:65
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:67
 msgid "Upload new media files to the cloud file store"
 msgstr "将新媒体文件上传到云文件存储中"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:87
 msgid "With FTP and WebDAV the directories are always created automatically."
 msgstr "使用 FTP 和 WebDAV，目錄總是自動創建的。"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:19
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:21
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
 msgstr "使用 WebDAV，用戶名和密碼以明文形式傳輸，因此請確保您使用 <tt>個 webdav：</tt> URL（使用 https）。"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:235./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:63./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:70./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:77
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:63./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:70./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:77
 msgid "You are not allowed to change these settings."
 msgstr "您不允许更改这些设置。"
 
@@ -7821,7 +7826,7 @@ msgstr "删除了邮件列表。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:21
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:21./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:22./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:19./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:20./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:48./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:49
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:26./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:28
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:28./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:30
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:3./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:6
 msgid "Description"
 msgstr "描述"
@@ -8674,6 +8679,10 @@ msgstr "您無權更改Microsoft設置。"
 msgid "You have coupled your <strong>Microsoft</strong> account."
 msgstr "您已將您的 <strong>Microsoft</strong> 帳戶配對。"
 
+#: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:9
+msgid "Debug MQTT publish and subscribe actions in the Zotonic console"
+msgstr "调试Zotonic控制台中的MQTT发布和订阅操作。"
+
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:91./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:92
 msgid "Access Token URL"
 msgstr "訪問令牌 URL"
@@ -9092,7 +9101,7 @@ msgstr "重建搜索方面"
 msgid "Rebuilding the faceted search table."
 msgstr "重建分面搜索表。"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:67
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:69
 msgid "Add a noindex, nofollow element to all pages."
 msgstr "为所有页面加入 noindex，nofollow 元素。"
 
@@ -9112,15 +9121,15 @@ msgstr "要求 Google 排除所有“{cat}”頁面"
 msgid "Ask Google to not index this page"
 msgstr "要求 Google 不將此頁面編入索引"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:111
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:113
 msgid "Bing Webmaster"
 msgstr "必应网站管理员"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:108./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:109
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:110./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:111
 msgid "Bing Webmaster validation id"
 msgstr "Bing网站管理员验证ID"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:98
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:100
 msgid "Copy the value of the content attribute in the meta tag provided by Google."
 msgstr "复制谷歌提供的元标签中的内容属性值。"
 
@@ -9132,39 +9141,39 @@ msgstr "自定義 JSON-LD"
 msgid "Customize page slug"
 msgstr "制定页面 slug"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:29
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:31
 msgid "Description to include on every page"
 msgstr "每一个页面都会包含的描述"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:45
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:47
 msgid "Do not show site search action"
 msgstr "不顯示站點搜尋操作"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:98./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:111./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:125
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:100./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:113./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:127
 msgid "Enter here the verification code for"
 msgstr "请在此输入验证码"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:64
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:66
 msgid "Exclude this site from search engines"
 msgstr "从搜索引擎里排除本站点"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:15
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:17
 msgid "General SEO Optimization"
 msgstr "通用 SEO 优化"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:78./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:79
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:80./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:81
 msgid "Google Analytics tracking id"
 msgstr "Google Analytics 跟踪 id"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:95./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:96./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:98
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:97./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:98./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:100
 msgid "Google Search Console"
 msgstr "Google Search Console"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:90
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92
 msgid "Google Tag Manager account page"
 msgstr "Google跟踪代碼管理器帳戶頁面"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:87./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:88
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:89./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:90
 msgid "Google Tag Manager id"
 msgstr "Google跟踪代碼管理器ID"
 
@@ -9172,15 +9181,15 @@ msgstr "Google跟踪代碼管理器ID"
 msgid "Here you find settings to optimize the indexing of your site by search engines."
 msgstr "这里可以设置优化站点被搜索引擎收录相关内容。"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:48
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:50
 msgid "If your site does not have a search page, check this box to prevent displaying a search box on Google et al."
 msgstr "如果您的網站沒有搜尋頁面，請勾選此方塊以防止在 Google 等上顯示搜尋方塊。"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:18./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:19
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:20./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:21
 msgid "Keywords"
 msgstr "关键词"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:21
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:23
 msgid "Keywords to include on every page. Separate keywords with a \",\""
 msgstr "每个页面都会包含的关键字。使用半角逗号 \",\" 分割。"
 
@@ -9216,7 +9225,7 @@ msgstr "SEO 内容"
 msgid "SEO indexing of this page is disabled because it is in the “{cat}” category."
 msgstr "此頁面的 SEO 索引已禁用，因為它屬於“{cat}”類別。"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:135
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:137
 msgid "Save SEO settings"
 msgstr "保存 SEO 设置"
 
@@ -9228,47 +9237,47 @@ msgstr "搜索引擎优化"
 msgid "Show current JSON-LD (updates after save)"
 msgstr "顯示當前 JSON-LD（保存後更新）"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:34./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:35
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:36./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:37
 msgid "Site search"
 msgstr "站內搜索"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:57
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:59
 msgid "The site configuration file allows this site to be indexed by search engines."
 msgstr "网站配置文件可以让这个网站被搜索引擎收录。"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:55
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:57
 msgid "The site configuration file excludes this site from search engines."
 msgstr "网站配置文件将本网站排除在搜索引擎之外。"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:37
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:39
 msgid "Url for the search action on the site. Defaults to:"
 msgstr "網站上搜索操作的 URL。默認為："
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:82
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:84
 msgid "Where can I find my tracking script?"
 msgstr "我在哪里可以找到我的跟踪脚本？"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:125
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:127
 msgid "Yandex Webmaster"
 msgstr "Yandex网站管理员"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:122./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:123
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:124./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:125
 msgid "Yandex Webmaster validation id"
 msgstr "Yandex网站管理员验证id"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:112./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:126
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:114./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:128
 msgid "You find this id in the content attribute of the meta tag, it has the format"
 msgstr "你可以在元标签的内容属性中找到这个id，它的格式为"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:81
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:83
 msgid "You find this id in the tracking script, it has the format"
 msgstr "你可以在跟踪脚本中找到这个ID，它的格式是"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:90
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92
 msgid "You find this on your"
 msgstr "你在你的身上找到這個"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:90
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:92
 msgid "it has the format"
 msgstr "它具有格式"
 
@@ -9283,6 +9292,10 @@ msgstr "為類別定義的更改頻率"
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:43
 msgid "Change frequency for sitemap"
 msgstr "站点地图的修改频率"
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:7
+msgid "Check the logs for progress."
+msgstr "檢查日誌以了解進度。"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:54
 msgid "Daily"
@@ -9304,7 +9317,7 @@ msgstr "為類別定義的優先級"
 msgid "Priority in sitemap"
 msgstr "站点地图中优先级"
 
-#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:2
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:11./apps/zotonic_mod_seo_sitemap/priv/templates/_admin_status.tpl:2
 msgid "Rebuild sitemap"
 msgstr "重建站點地圖"
 
@@ -9312,9 +9325,13 @@ msgstr "重建站點地圖"
 msgid "Rebuild the sitemap index for all pages."
 msgstr "重建所有頁面的站點地圖索引。"
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:70
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:71
 msgid "Rebuilding the sitemap in the background."
 msgstr "在後台重建站點地圖。"
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:2
+msgid "Sitemap"
+msgstr "網站地圖"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:7
 msgid "Sitemap settings"
@@ -9327,6 +9344,14 @@ msgstr "此類別所有頁面的站點地圖設置"
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:38
 msgid "The home page defaults to 1.0, pages with a page path default to 0.8."
 msgstr "主頁默認為 1.0，頁面路徑默認為 0.8。"
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:21
+msgid "The location of the sitemap is:"
+msgstr "站點地圖的位置是："
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:6
+msgid "The rebuild is done in the background and can take a while."
+msgstr "重建是在後台完成的，可能需要一段時間。"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:5
 msgid "These settings apply to all pages of this category. They define hints for search engines indexing the site."
@@ -9348,9 +9373,13 @@ msgstr "每周（默认）"
 msgid "Yearly"
 msgstr "每年"
 
-#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:72
+#: apps/zotonic_mod_seo_sitemap/src/mod_seo_sitemap.erl:73
 msgid "You are not allowed to do this"
 msgstr "您不可以這樣做"
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:5
+msgid "Zotonic maintains a sitemap of all pages. It is good to rebuild this sitemap after language or other structural content changes."
+msgstr "Zotonic 維護所有頁面的網站地圖。最好在語言或其他結構內容變更後重建此網站地圖。"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:21
 msgid "not in sitemap"
@@ -9549,10 +9578,12 @@ msgid "Finished rebuilding Zotonic."
 msgstr "完成重建 Zotonic。"
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_status_button.tpl:4
+#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_status_button.tpl:4
 msgid "Perform a version control (git/mercurial) update this site."
 msgstr "执行版本控制(git/mercurial)更新本网站。"
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_system_button.tpl:5
+#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:5
 msgid "Perform a version update of Zotonic (through git)"
 msgstr "执行Zotonic的版本更新（通过git）。"
 
@@ -9561,10 +9592,12 @@ msgid "Ready with fetch from version control."
 msgstr "准备从版本控制中获取。"
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_system_button.tpl:12
+#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:12
 msgid "Rebuild Zotonic"
 msgstr "重建Zotonic"
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_system_button.tpl:14
+#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:14
 msgid "Recompile changed Erlang files in the background"
 msgstr "在后台重新编译修改过的Erlang文件。"
 
@@ -9597,6 +9630,7 @@ msgid "Unknown site or no version control folder present."
 msgstr "未知站点或不存在版本控制文件夹。"
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_system_button.tpl:3
+#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_system_button.tpl:3
 msgid "Update Zotonic"
 msgstr "更新Zotonic"
 
@@ -9613,6 +9647,7 @@ msgid "Zotonic has not been checked out using version control."
 msgstr "Zotonic尚未使用版本控制检出。"
 
 #: apps/zotonic_mod_site_update/priv/templates/_z_status_button.tpl:2
+#: apps/zotonic_mod_zotonic_status_vcs/priv/templates/_z_status_button.tpl:2
 msgid "update"
 msgstr "更新"
 
