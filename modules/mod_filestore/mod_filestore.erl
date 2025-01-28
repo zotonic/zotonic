@@ -86,9 +86,10 @@ observe_filestore_credentials_lookup(#filestore_credentials_lookup{path=Path}, C
         true ->
             Url = make_url(S3Url, Path),
             {ok, #filestore_credentials{
-                    service= <<"s3">>,
-                    location=Url,
-                    credentials={S3Key,S3Secret}
+                    service = <<"s3">>,
+                    service_url = S3Url,
+                    location = Url,
+                    credentials = {S3Key,S3Secret}
             }};
         false ->
             undefined
