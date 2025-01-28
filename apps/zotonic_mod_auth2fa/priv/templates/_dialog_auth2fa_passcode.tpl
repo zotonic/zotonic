@@ -14,7 +14,7 @@
                    id="{{ #secret }}"
                    style="text-align: center; border: none; margin-right: 10px; width: 35ch;">
             <button class="btn btn-xs btn-default" id="{{ #btn }}">
-                <span class="fa fa-copy"></span> {_ Copy _}
+                <span class="glyphicon glyphicon-copy"></span> {_ Copy _}
             </button>
             {% wire id=#btn
                     action={script
