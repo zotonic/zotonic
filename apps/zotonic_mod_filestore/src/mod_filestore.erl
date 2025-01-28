@@ -518,7 +518,7 @@ start_deleter(#{
                 CredService =:= <<"ftp">> ->
             case filestore_request:is_matching_url(CredServiceUrl, Location1) of
                 true ->
-                    ?LOG_INFO(#{
+                    ?LOG_DEBUG(#{
                         text => <<"Queue delete">>,
                         in => zotonic_mod_filestore,
                         path => Path,
