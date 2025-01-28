@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013-2014 Marc Worrell
+%% @copyright 2013-2025 Marc Worrell
 %% @doc File/media interface definitions. See also z_media_request.erl
+%% @end
 
-%% Copyright 2013-2014 Marc Worrell
+%% Copyright 2013-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -26,9 +27,9 @@
 
 -record(filestore, {
         action = upload :: lookup | upload | delete,
-        path :: file:filename(),
-        filename :: file:filename(),
-        mime :: binary() | string()
+        path :: file:filename_all() | {prefix, file:filename_all()},
+        filename :: file:filename_all() | undefined,
+        mime :: binary() | string() | undefined
     }).
 
 %%% @doc Notification to find the filestore credentials
@@ -45,6 +46,7 @@
 %%% @doc Filestore credentials, used for uploading a file to a storage service
 -record(filestore_credentials, {
         service :: binary(),
+        service_url :: binary(),
         location :: binary(),
         credentials :: any()
     }).
