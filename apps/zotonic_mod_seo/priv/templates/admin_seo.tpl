@@ -9,6 +9,8 @@
         <p>{_ Here you find settings to optimize the indexing of your site by search engines. _}</p>
     </div>
 
+    {% all include "_admin_seo.tpl" %}
+
     {% wire id="admin-seo" type="submit" postback="admin_seo" %}
     <form name="admin-seo" id="admin-seo" method="POST" action="postback">
         <div class="widget">

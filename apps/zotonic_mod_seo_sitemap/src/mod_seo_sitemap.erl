@@ -63,6 +63,7 @@ observe_rsc_pivot_done(#rsc_pivot_done{ id = Id }, Context) ->
 event(#postback{ message = sitemap_rebuild }, Context) ->
     case z_acl:is_admin(Context)
         orelse z_acl:is_allowed(use, mod_seo_sitemap, Context)
+        orelse z_acl:is_allowed(use, mod_seo, Context)
     of
         true ->
             m_seo_sitemap:rebuild_rsc(Context),
