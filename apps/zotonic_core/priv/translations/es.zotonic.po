@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-01-28 11:15\n"
+"PO-Revision-Date: 2025-01-28 13:10\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -5916,7 +5916,7 @@ msgstr "Consienta las cookies para mostrar contenido externo."
 
 #: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:20
 msgid "Reject all"
-msgstr ""
+msgstr "Rechazar todo"
 
 #: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:5
 msgid "This website uses cookies"
@@ -9299,7 +9299,7 @@ msgstr "Cambiar la frecuencia para el mapa del sitio"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:7
 msgid "Check the logs for progress."
-msgstr ""
+msgstr "Consulte los registros para ver el progreso."
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:54
 msgid "Daily"
@@ -9335,7 +9335,7 @@ msgstr "Reconstruyendo el mapa del sitio en segundo plano."
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:2
 msgid "Sitemap"
-msgstr ""
+msgstr "Mapa del sitio"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:7
 msgid "Sitemap settings"
@@ -9351,11 +9351,11 @@ msgstr "La página de inicio está predeterminada en 1.0, las páginas con una r
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:21
 msgid "The location of the sitemap is:"
-msgstr ""
+msgstr "La ubicación del mapa del sitio es:"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:6
 msgid "The rebuild is done in the background and can take a while."
-msgstr ""
+msgstr "La reconstrucción se realiza en segundo plano y puede llevar un tiempo."
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:5
 msgid "These settings apply to all pages of this category. They define hints for search engines indexing the site."
@@ -9383,7 +9383,7 @@ msgstr "No tienes permitido hacer esto"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:5
 msgid "Zotonic maintains a sitemap of all pages. It is good to rebuild this sitemap after language or other structural content changes."
-msgstr ""
+msgstr "Zotonic mantiene un mapa del sitio de todas las páginas. Es conveniente reconstruir este mapa del sitio después de realizar cambios en el idioma o en otros contenidos estructurales."
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:21
 msgid "not in sitemap"
