@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013-2022 Marc Worrell
+%% @copyright 2013-2025 Marc Worrell
 %% @doc File/media interface definitions. See also z_media_request.erl
+%% @end
 
-%% Copyright 2013-2022 Marc Worrell
+%% Copyright 2013-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -27,11 +28,14 @@
 -record(filestore, {
         action = upload :: lookup | upload | delete,
         path :: file:filename_all(),
-        filename :: file:filename_all() | undefined,
+        filename :: file:filename_all()
+                  | {prefix, file:filename_all()}
+                  | undefined,
         mime :: binary() | string() | undefined
     }).
 
-%% @doc Synchronous download, upload or delete a file on the filestore service.
+%% @doc Synchronous (first) notification to download, upload or delete
+%% a file for a filestore service.
 %% Report the result to the handler_pid.
 %% Where Result is ok or {error, Reason}.
 -record(filestore_request, {
@@ -42,20 +46,25 @@
         handler_pid :: pid() | undefined
     }).
 
-%%% @doc Notification to find the filestore credentials
+%%% @doc Notification to find the filestore credentials to upload a file to
+%%% a remote storage service. Should return filestore_credentials. 
 -record(filestore_credentials_lookup, {
         id :: undefined | integer(),
         path :: binary()
     }).
 
+%%% @doc Find the filestore_credentials for a given stored service and
+%%% remote location.
 -record(filestore_credentials_revlookup, {
         service :: binary(),
         location :: binary()
     }).
 
-%%% @doc Filestore credentials, used for uploading a file to a storage service
+%%% @doc Filestore credentials, used for uploading, reading and deleting files
+%%% on a remote storage service.
 -record(filestore_credentials, {
         service :: binary(),
+        service_url :: binary(),
         location :: binary(),
         credentials :: any()
     }).

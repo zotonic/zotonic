@@ -175,7 +175,16 @@ dequeue(Id, Context) ->
         0 -> {error, enoent}
     end.
 
--spec store( binary(), integer(), atom() | binary(), binary(), boolean(), z:context() ) -> {ok, integer()}.
+%% @doc Store a mapping of a local file at path to a file at the service location.
+%% The path must be unique and is used to identify the file.
+-spec store(Path, Size, Service, Location, IsLocal, Context) -> {ok, FileId} when
+    Path :: binary(),
+    Size :: non_neg_integer(),
+    Service :: atom() | binary(),
+    Location :: binary(),
+    IsLocal :: boolean(),
+    Context :: z:context(),
+    FileId :: integer().
 store(Path, Size, Service, Location, IsLocal, Context)
     when is_binary(Path), is_integer(Size), is_binary(Location) ->
     z_db:transaction(fun(Ctx) ->
@@ -268,7 +277,10 @@ mark_error(Id, Error, Context) ->
     end.
 
 %% @doc Mark the file entries as deleted for the path or having the path as a prefix.
--spec mark_deleted( binary() | {prefix, binary()}, z:context() ) -> ok | {error, enoent}.
+-spec mark_deleted(Path, Context) -> {ok, Count} | {error, enoent} when
+    Path :: binary() | {prefix, binary()},
+    Context :: z:context(),
+    Count :: pos_integer().
 mark_deleted({prefix, Path}, Context) when is_binary(Path) ->
     case z_db:q("update filestore
             set is_deleted = true,
@@ -278,7 +290,7 @@ mark_deleted({prefix, Path}, Context) when is_binary(Path) ->
             [<<Path/binary, $%>>],
             Context)
     of
-        N when N > 0 -> ok;
+        N when N > 0 -> {ok, N};
         0 -> {error, enoent}
     end;
 mark_deleted(Path, Context) when is_binary(Path) ->
@@ -290,7 +302,7 @@ mark_deleted(Path, Context) when is_binary(Path) ->
             [Path],
             Context)
     of
-        N when N > 0 -> ok;
+        N when N > 0 -> {ok, N};
         0 -> {error, enoent}
     end.
 

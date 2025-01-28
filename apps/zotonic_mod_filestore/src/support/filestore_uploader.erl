@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2014-2022 Marc Worrell
 %% @doc Process uploading a file to a remote storage.
+%% @end
 
 %% Copyright 2014-2022 Marc Worrell
 %%

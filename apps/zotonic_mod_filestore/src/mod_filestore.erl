@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014-2024 Marc Worrell
+%% @copyright 2014-2025 Marc Worrell
 %% @doc Module managing the storage of files on remote servers.
 %% @end
 
-%% Copyright 2014-2024 Marc Worrell
+%% Copyright 2014-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -85,16 +85,25 @@ observe_filestore(#filestore{action=upload, path=Path, mime=Mime}, Context) ->
     },
     maybe_queue_file(<<>>, Path, true, MediaProps, Context),
     ok;
-observe_filestore(#filestore{action=delete, path=Path}, Context) ->
-    case m_filestore:mark_deleted(Path, Context) of
-        ok ->
+observe_filestore(#filestore{action=delete, path=PathOrPrefix}, Context) ->
+    case m_filestore:mark_deleted(PathOrPrefix, Context) of
+        {ok, Count} ->
             ?LOG_INFO(#{
                 text => <<"Filestore marked entries as deleted.">>,
                 in => zotonic_mod_filestore,
-                path => Path
+                result => ok,
+                path => PathOrPrefix,
+                count => Count
             }),
             ok;
         {error, enoent} ->
+            ?LOG_INFO(#{
+                text => <<"Filestore no entries to delete.">>,
+                in => zotonic_mod_filestore,
+                result => ok,
+                path => PathOrPrefix,
+                count => 0
+            }),
             ok
     end.
 
@@ -130,6 +139,7 @@ observe_filestore_credentials_lookup(#filestore_credentials_lookup{path=Path}, C
             Url = make_url(S3Url, Path),
             {ok, #filestore_credentials{
                     service = Service,
+                    service_url = S3Url,
                     location = Url,
                     credentials = {S3Key,S3Secret}
             }};
@@ -138,16 +148,22 @@ observe_filestore_credentials_lookup(#filestore_credentials_lookup{path=Path}, C
     end.
 
 %% @doc Given the service, find the credentials to do a lookup of the remote file.
-observe_filestore_credentials_revlookup(#filestore_credentials_revlookup{service=Service, location=Location}, Context) ->
+observe_filestore_credentials_revlookup(
+        #filestore_credentials_revlookup{
+            service=Service,
+            location=Location
+        }, Context) ->
     ConfiguredService = m_config:get_value(?MODULE, service, <<"s3">>, Context),
     if
         Service =:= ConfiguredService ->
             S3Key = m_config:get_value(?MODULE, s3key, Context),
             S3Secret = m_config:get_value(?MODULE, s3secret, Context),
+            S3Url = m_config:get_value(?MODULE, s3url, Context),
             case is_defined(S3Key) andalso is_defined(S3Secret) of
                 true ->
                     {ok, #filestore_credentials{
                             service = Service,
+                            service_url = S3Url,
                             location = Location,
                             credentials = {S3Key,S3Secret}
                     }};
@@ -487,27 +503,53 @@ start_deleter(#{
             service := Service,
             location := Location
         }, Context) ->
-    case z_notifier:first(#filestore_credentials_revlookup{service=Service, location=Location}, Context) of
-        {ok, #filestore_credentials{service=CredService, location=Location1, credentials=Cred}}
-            when CredService =:= <<"s3">>;
-                 CredService =:= <<"webdav">>;
-                 CredService =:= <<"ftp">> ->
-            ?LOG_DEBUG(#{
-                text => <<"Queue delete.">>,
-                in => zotonic_mod_filestore,
-                path => Path,
-                service => CredService,
-                location => Location1,
-                id => Id
-            }),
-            ContextAsync = z_context:prune_for_async(Context),
-            Mod = filestore_request:filezmod(CredService),
-            _ = Mod:queue_delete_id({?MODULE, delete, Id}, Cred, Location1, {?MODULE, delete_ready, [Id, Path, ContextAsync]});
-        {ok, _} ->
+    case z_notifier:first(#filestore_credentials_revlookup{
+            service = Service,
+            location = Location
+        }, Context)
+    of
+        {ok, #filestore_credentials{
+                service = CredService,
+                service_url = CredServiceUrl,
+                location = Location1,
+                credentials = Cred
+        }} when CredService =:= <<"s3">>;
+                CredService =:= <<"webdav">>;
+                CredService =:= <<"ftp">> ->
+            case filestore_request:is_matching_url(CredServiceUrl, Location1) of
+                true ->
+                    ?LOG_INFO(#{
+                        text => <<"Queue delete">>,
+                        in => zotonic_mod_filestore,
+                        path => Path,
+                        service => CredService,
+                        location => Location1,
+                        id => Id
+                    }),
+                    ContextAsync = z_context:prune_for_async(Context),
+                    Mod = filestore_request:filezmod(CredService),
+                    _ = Mod:queue_delete_id({?MODULE, delete, Id}, Cred, Location1, {?MODULE, delete_ready, [Id, Path, ContextAsync]});
+                false ->
+                    ?LOG_WARNING(#{
+                        in => zotonic_mod_filestore,
+                        text => <<"Not deleting file as it is not matching with service url">>,
+                        result => error,
+                        reason => service_url_mismatch,
+                        service => CredService,
+                        service_url => CredServiceUrl,
+                        location => Location1,
+                        id => Id,
+                        path => Path,
+                        action => delete
+                    }),
+                    m_filestore:purge_deleted(Id, Context)
+            end;
+        {ok, #filestore_credentials{ service = CredService }} ->
             ?LOG_DEBUG(#{
                 text => <<"No credentials for queue delete -- service mismatch">>,
                 in => zotonic_mod_filestore,
                 service => Service,
+                service_cred => CredService,
                 location => Location,
                 path => Path,
                 id => Id
@@ -524,41 +566,45 @@ start_deleter(#{
     end.
 
 delete_ready(Id, Path, Context, _Ref, ok) ->
-    ?LOG_DEBUG(#{
-        text => <<"Delete remote file done.">>,
+    ?LOG_INFO(#{
+        text => <<"Delete remote file done">>,
         in => zotonic_mod_filestore,
         result => ok,
-        path => Path
+        path => Path,
+        action => delete
     }),
     m_filestore:purge_deleted(Id, Context);
 delete_ready(Id, Path, Context, _Ref, {error, Reason})
     when Reason =:= enoent; Reason =:= epath ->
-    ?LOG_DEBUG(#{
+    ?LOG_INFO(#{
         text => <<"Delete remote file was not found">>,
         in => zotonic_mod_filestore,
         result => error,
         reason => Reason,
-        path => Path
+        path => Path,
+        action => delete
     }),
     m_filestore:purge_deleted(Id, Context);
 delete_ready(Id, Path, Context, _Ref, {error, forbidden}) ->
-    ?LOG_INFO(#{
-        text => <<"Delete remote file was forbidden">>,
+    ?LOG_WARNING(#{
+        text => <<"Delete remote file was forbidden - ignoring delete">>,
         in => zotonic_mod_filestore,
         path => Path,
         result => error,
         reason => forbidden,
-        id => Id
+        id => Id,
+        action => delete
     }),
     m_filestore:purge_deleted(Id, Context);
 delete_ready(Id, Path, _Context, _Ref, {error, Reason}) ->
     ?LOG_ERROR(#{
-        text => <<"Delete remote file failed,">>,
+        text => <<"Delete remote file failed, will retry">>,
         in => zotonic_mod_filestore,
         path => Path,
         result => error,
         reason => Reason,
-        id => Id
+        id => Id,
+        action => delete
     }).
 
 
