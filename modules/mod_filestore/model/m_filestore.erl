@@ -28,6 +28,7 @@
     mark_deleted/2,
     fetch_deleted/2,
     purge_deleted/2,
+    clear_deleted/2,
 
     mark_move_to_local_all/1,
     mark_move_to_local_limit/2,
@@ -183,6 +184,25 @@ fetch_deleted(Interval, Context) when is_binary(Interval) ->
 
 purge_deleted(Id, Context) ->
     z_db:q("delete from filestore where id = $1 and is_deleted", [Id], Context).
+
+%% @doc Unmark the file entry as deleted, used when the deletion could not be done
+%% due to an error or some other condition.
+-spec clear_deleted(Id, Context) -> ok | {error, enoent} when
+    Id :: integer(),
+    Context :: z:context().
+clear_deleted(Id, Context) when is_integer(Id) ->
+    case z_db:q("
+            update filestore
+            set is_deleted = false,
+                modified = now(),
+                deleted = undefined
+            where id = $1",
+            [Id],
+            Context)
+    of
+        1 -> ok;
+        0 -> {error, enoent}
+    end.
 
 mark_move_to_local_limit(Limit, Context) ->
     z_db:transaction(fun(Ctx) ->
