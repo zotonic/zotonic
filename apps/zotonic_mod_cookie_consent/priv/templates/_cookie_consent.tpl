@@ -16,6 +16,9 @@
                 <button class="btn btn-primary" type="submit" id="cookie-consent__accept-all">
                     {_ Accept all _}
                 </button>
+                <button class="btn btn-primary" type="submit" id="cookie-consent__accept-none">
+                    {_ Reject all _}
+                </button>
             </div>
         </div>
 
@@ -88,6 +91,12 @@
         z_cookie_consent_store('all')
     });
 
+    $('#cookie-consent__accept-none').on('click', function(ev) {
+        ev.preventDefault();
+        $('#cookie-consent').remove();
+        z_cookie_consent_store('functional');
+    });
+
     $('.cookie-consent-toggle').on('click', function(ev) {
         ev.preventDefault();
         $(".cookie-consent__lower").slideToggle();
@@ -112,7 +121,7 @@
         } else if ($('#cookie_consent_statistics').is(":checked")) {
             z_cookie_consent_store('stats')
         } else {
-            z_cookie_consent_store('functional')
+            z_cookie_consent_store('functional');
         }
         $('#cookie-consent').remove();
     });
