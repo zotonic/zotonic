@@ -1363,7 +1363,7 @@ set_nocache_headers(Context = #context{cowreq=Req}) when is_map(Req) ->
 %%      'security_headers' notification.
 -spec set_security_headers( z:context() ) -> z:context().
 set_security_headers(Context) ->
-    CSP = #content_security_headers{
+    CSP = #content_security_header{
         default_src    = [ <<"'self'">> ],
         script_src     = [ <<"'self'">>, <<"'nonce-'">>, <<"https:">> ],
         % style-src: 'unsafe-inline' is needed for OpenLayers, replace with 'nonce-'
@@ -1429,30 +1429,30 @@ flatten_csp(CSP) ->
                 {true, D}
         end,
         [
-            {<<"child-src">>, CSP#content_security_headers.child_src},
-            {<<"connect-src">>, CSP#content_security_headers.connect_src},
-            {<<"default-src">>, CSP#content_security_headers.default_src},
-            {<<"font-src">>, CSP#content_security_headers.font_src},
-            {<<"frame-src">>, CSP#content_security_headers.frame_src},
-            {<<"img-src">>, CSP#content_security_headers.img_src},
-            {<<"manifest-src">>, CSP#content_security_headers.manifest_src},
-            {<<"media-src">>, CSP#content_security_headers.media_src},
-            {<<"object-src">>, CSP#content_security_headers.object_src},
-            {<<"script-src">>, CSP#content_security_headers.script_src},
-            {<<"script-src-elem">>, CSP#content_security_headers.script_src_elem},
-            {<<"script-src-attr">>, CSP#content_security_headers.script_src_attr},
-            {<<"style-src">>, CSP#content_security_headers.style_src},
-            {<<"style-src-elem">>, CSP#content_security_headers.style_src_elem},
-            {<<"style-src-attr">>, CSP#content_security_headers.style_src_attr},
-            {<<"worker-src">>, CSP#content_security_headers.worker_src},
+            {<<"child-src">>, CSP#content_security_header.child_src},
+            {<<"connect-src">>, CSP#content_security_header.connect_src},
+            {<<"default-src">>, CSP#content_security_header.default_src},
+            {<<"font-src">>, CSP#content_security_header.font_src},
+            {<<"frame-src">>, CSP#content_security_header.frame_src},
+            {<<"img-src">>, CSP#content_security_header.img_src},
+            {<<"manifest-src">>, CSP#content_security_header.manifest_src},
+            {<<"media-src">>, CSP#content_security_header.media_src},
+            {<<"object-src">>, CSP#content_security_header.object_src},
+            {<<"script-src">>, CSP#content_security_header.script_src},
+            {<<"script-src-elem">>, CSP#content_security_header.script_src_elem},
+            {<<"script-src-attr">>, CSP#content_security_header.script_src_attr},
+            {<<"style-src">>, CSP#content_security_header.style_src},
+            {<<"style-src-elem">>, CSP#content_security_header.style_src_elem},
+            {<<"style-src-attr">>, CSP#content_security_header.style_src_attr},
+            {<<"worker-src">>, CSP#content_security_header.worker_src},
             % Document directives
-            {<<"base-uri">>, CSP#content_security_headers.base_uri},
-            {<<"sandbox">>, CSP#content_security_headers.sandbox},
+            {<<"base-uri">>, CSP#content_security_header.base_uri},
+            {<<"sandbox">>, CSP#content_security_header.sandbox},
             % Navigation directives
-            {<<"frame-ancestors">>, CSP#content_security_headers.frame_ancestors},
-            {<<"form-action">>, CSP#content_security_headers.form_action},
+            {<<"frame-ancestors">>, CSP#content_security_header.frame_ancestors},
+            {<<"form-action">>, CSP#content_security_header.form_action},
             % Reporting directives
-            {<<"report-to">>, CSP#content_security_headers.report_to}
+            {<<"report-to">>, CSP#content_security_header.report_to}
         ]),
     iolist_to_binary(lists:join("; ", Directives)).
 

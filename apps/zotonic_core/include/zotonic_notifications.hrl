@@ -44,7 +44,7 @@
 %% Accumulator is the modified CSP headers, notification is the default
 %% set of CSP headers as provided by the Zotonic core routines.
 %% Type: foldl
--record(content_security_headers, {
+-record(content_security_header, {
     % Fetch directives
     child_src = [] :: [ binary() ],
     connect_src = [] :: [ binary() ],
