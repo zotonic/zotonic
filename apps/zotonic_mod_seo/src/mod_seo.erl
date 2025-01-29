@@ -28,11 +28,53 @@
 
 %% interface functions
 -export([
-         observe_admin_menu/3
-        ]).
+    observe_content_security_headers/3,
+    observe_admin_menu/3
+]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
+
+
+%% @doc Ensure that the Google Tag manager works correctly with our CSP.
+%% https://developers.google.com/tag-platform/security/guides/csp
+observe_content_security_headers(#content_security_headers{}, CSP, Context) ->
+    CSP1 = case m_config:get_value(seo_google, gtm, Context) of
+        undefined -> CSP;
+        <<>> -> CSP;
+        _ ->
+            CSP#content_security_headers{
+                img_src = [ <<"https://www.googletagmanager.com">> | CSP#content_security_headers.img_src ],
+                connect_src = [ <<"https://www.googletagmanager.com">> | CSP#content_security_headers.connect_src ]
+            }
+    end,
+    case m_config:get_value(seo_google, analytics, Context) of
+        undefined -> CSP1;
+        <<>> -> CSP1;
+        _ ->
+            ImgSrc = [
+                <<"https://*.googletagmanager.com">>,
+                <<"https://*.google-analytics.com">>
+                | CSP1#content_security_headers.img_src
+            ],
+            ImgSrc1 = lists:delete(<<"https://www.googletagmanager.com">>, ImgSrc),
+            ScriptSrc = [
+                <<"https://*.googletagmanager.com">>
+                | CSP1#content_security_headers.script_src
+            ],
+            ConnectSrc = [
+                <<"https://*.google-analytics.com">>,
+                <<"https://*.analytics.google.com">>,
+                <<"https://*.googletagmanager.com">>
+                | CSP1#content_security_headers.connect_src
+            ],
+            ConnectSrc1 = lists:delete(<<"https://www.googletagmanager.com">>, ConnectSrc),
+            CSP1#content_security_headers{
+                img_src = ImgSrc1,
+                script_src = ScriptSrc,
+                connect_src = ConnectSrc1
+            }
+    end.
 
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->

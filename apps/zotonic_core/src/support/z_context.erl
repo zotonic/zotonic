@@ -1363,22 +1363,25 @@ set_nocache_headers(Context = #context{cowreq=Req}) when is_map(Req) ->
 %%      'security_headers' notification.
 -spec set_security_headers( z:context() ) -> z:context().
 set_security_headers(Context) ->
+    CSP = #content_security_headers{
+        default_src    = [ <<"'self'">> ],
+        script_src     = [ <<"'self'">>, <<"'nonce-'">>, <<"https:">> ],
+        % style-src: 'unsafe-inline' is needed for OpenLayers, replace with 'nonce-'
+        % if no support is needed.
+        style_src      = [ <<"'self'">>, <<"https:">>, <<"'unsafe-inline'">> ],
+        style_src_attr = [ <<"'self'">>, <<"'unsafe-inline'">> ],
+        img_src        = [ <<"'self'">>, <<"https:">>, <<"data:">> ],
+        media_src      = [ <<"'self'">>, <<"https:">>, <<"data:">>, <<"mediastream:">> ],
+        font_src       = [ <<"'self'">>, <<"https:">> ],
+        frame_src      = [ <<"'self'">>, <<"https:">> ],
+        object_src     = [ <<"'none'">> ],
+        form_action    = [ <<"'self'">> ],
+        worker_src     = [ <<"'self'">>, <<"blob:">> ],
+        connect_src    = [ <<"'self'">>, <<"https:">>, <<"wss:">> ]
+    },
+    CSP1 = z_notifier:foldl(CSP, CSP, Context),
     Default = [
-        {<<"content-security-policy">>, <<
-            "default-src 'self'; "
-            "script-src 'self' 'nonce-' https:; "
-            "style-src 'self' https: 'unsafe-inline'; " % Unsafe-inline is needed for OpenLayers
-            % "style-src 'self' 'nonce-' https:; "
-            % "style-src-attr 'self' 'unsafe-inline'; "
-            "img-src 'self' data: https:; "
-            "media-src 'self' data: https: mediastream:; "
-            "font-src 'self' https:; "
-            "frame-src 'self' https:; "
-            "object-src 'none'; "
-            "form-action 'self'; "
-            "worker-src 'self' blob:; "
-            "connect-src 'self' https: wss:"
-         >>},
+        {<<"content-security-policy">>, flatten_csp(CSP1)},
         {<<"x-content-type-options">>, <<"nosniff">>},
         {<<"x-permitted-cross-domain-policies">>, <<"none">>},
         {<<"referrer-policy">>, <<"origin-when-cross-origin">>}
@@ -1411,6 +1414,47 @@ set_security_headers(Context) ->
             ]
     end,
     cowmachine_req:set_resp_headers(SecurityHeaders1, Context).
+
+flatten_csp(CSP) ->
+    Directives = lists:filtermap(
+        fun
+            ({_Directive, []}) -> false;
+            ({Directive, L}) ->
+                L1 = lists:usort(L),
+                L2 = case lists:member(<<"'unsafe-inline'">>, L1) of
+                    true -> lists:delete(<<"'nonce-'">>, L1);
+                    false -> L1
+                end,
+                D = [ Directive | [ [ " ", V ] || V <- L2 ] ],
+                {true, D}
+        end,
+        [
+            {<<"child-src">>, CSP#content_security_headers.child_src},
+            {<<"connect-src">>, CSP#content_security_headers.connect_src},
+            {<<"default-src">>, CSP#content_security_headers.default_src},
+            {<<"font-src">>, CSP#content_security_headers.font_src},
+            {<<"frame-src">>, CSP#content_security_headers.frame_src},
+            {<<"img-src">>, CSP#content_security_headers.img_src},
+            {<<"manifest-src">>, CSP#content_security_headers.manifest_src},
+            {<<"media-src">>, CSP#content_security_headers.media_src},
+            {<<"object-src">>, CSP#content_security_headers.object_src},
+            {<<"script-src">>, CSP#content_security_headers.script_src},
+            {<<"script-src-elem">>, CSP#content_security_headers.script_src_elem},
+            {<<"script-src-attr">>, CSP#content_security_headers.script_src_attr},
+            {<<"style-src">>, CSP#content_security_headers.style_src},
+            {<<"style-src-elem">>, CSP#content_security_headers.style_src_elem},
+            {<<"style-src-attr">>, CSP#content_security_headers.style_src_attr},
+            {<<"worker-src">>, CSP#content_security_headers.worker_src},
+            % Document directives
+            {<<"base-uri">>, CSP#content_security_headers.base_uri},
+            {<<"sandbox">>, CSP#content_security_headers.sandbox},
+            % Navigation directives
+            {<<"frame-ancestors">>, CSP#content_security_headers.frame_ancestors},
+            {<<"form-action">>, CSP#content_security_headers.form_action},
+            % Reporting directives
+            {<<"report-to">>, CSP#content_security_headers.report_to}
+        ]),
+    iolist_to_binary(lists:join("; ", Directives)).
 
 %% @doc Create a hsts header based on the current settings. The result is cached
 %%      for quick access.

@@ -40,6 +40,37 @@
     tracer_pid = undefined :: pid() | undefined
 }).
 
+%% @doc Check and possibly modify the CSP response security headers
+%% Accumulator is the modified CSP headers, notification is the default
+%% set of CSP headers as provided by the Zotonic core routines.
+%% Type: foldl
+-record(content_security_headers, {
+    % Fetch directives
+    child_src = [] :: [ binary() ],
+    connect_src = [] :: [ binary() ],
+    default_src = [] :: [ binary() ],
+    font_src = [] :: [ binary() ],
+    frame_src = [] :: [ binary() ],
+    img_src = [] :: [ binary() ],
+    manifest_src = [] :: [ binary() ],
+    media_src = [] :: [ binary() ],
+    object_src = [] :: [ binary() ],
+    script_src = [] :: [ binary() ],
+    script_src_elem = [] :: [ binary() ],
+    script_src_attr = [] :: [ binary() ],
+    style_src = [] :: [ binary() ],
+    style_src_elem = [] :: [ binary() ],
+    style_src_attr = [] :: [ binary() ],
+    worker_src = [] :: [ binary() ],
+    % Document directives
+    base_uri = [] :: [ binary() ],
+    sandbox = [] :: [ binary() ],
+    % Navigation directives
+    frame_ancestors = [] :: [ binary() ],
+    form_action = [] :: [ binary() ],
+    % Reporting directives
+    report_to = [] :: [ binary() ]
+}).
 
 %% @doc Check and possibly modify the http response security headers
 %% All headers are in lowercase.
