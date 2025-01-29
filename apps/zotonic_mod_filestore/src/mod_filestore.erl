@@ -129,7 +129,7 @@ observe_filestore_request(#filestore_request{
 
 %% @doc Map the local path to the URL of the remotely stored file. This depends on the
 %% service configured in the filestore config.
-observe_filestore_credentials_lookup(#filestore_credentials_lookup{path=Path}, Context) ->
+observe_filestore_credentials_lookup(#filestore_credentials_lookup{ path = Path }, Context) ->
     Service = m_config:get_value(?MODULE, service, <<"s3">>, Context),
     S3Key = m_config:get_value(?MODULE, s3key, Context),
     S3Secret = m_config:get_value(?MODULE, s3secret, Context),
@@ -150,8 +150,8 @@ observe_filestore_credentials_lookup(#filestore_credentials_lookup{path=Path}, C
 %% @doc Given the service, find the credentials to do a lookup of the remote file.
 observe_filestore_credentials_revlookup(
         #filestore_credentials_revlookup{
-            service=Service,
-            location=Location
+            service = Service,
+            location = Location
         }, Context) ->
     ConfiguredService = m_config:get_value(?MODULE, service, <<"s3">>, Context),
     if
@@ -532,7 +532,7 @@ start_deleter(#{
                 false ->
                     ?LOG_WARNING(#{
                         in => zotonic_mod_filestore,
-                        text => <<"Not deleting file as it is not matching with service url">>,
+                        text => <<"Not deleting remote file as it is not matching with service url - dropping local ref">>,
                         result => error,
                         reason => service_url_mismatch,
                         service => CredService,
@@ -542,7 +542,7 @@ start_deleter(#{
                         path => Path,
                         action => delete
                     }),
-                    m_filestore:clear_deleted(Id, Context)
+                    m_filestore:purge_deleted(Id, Context)
             end;
         {ok, #filestore_credentials{ service = CredService }} ->
             ?LOG_DEBUG(#{
@@ -587,7 +587,7 @@ delete_ready(Id, Path, Context, _Ref, {error, Reason})
     m_filestore:purge_deleted(Id, Context);
 delete_ready(Id, Path, Context, _Ref, {error, forbidden}) ->
     ?LOG_WARNING(#{
-        text => <<"Delete remote file was forbidden - ignoring delete">>,
+        text => <<"Delete remote file was forbidden - dropping local ref">>,
         in => zotonic_mod_filestore,
         path => Path,
         result => error,
@@ -595,7 +595,7 @@ delete_ready(Id, Path, Context, _Ref, {error, forbidden}) ->
         id => Id,
         action => delete
     }),
-    m_filestore:clear_deleted(Id, Context);
+    m_filestore:purge_deleted(Id, Context);
 delete_ready(Id, Path, _Context, _Ref, {error, Reason}) ->
     ?LOG_ERROR(#{
         text => <<"Delete remote file failed, will retry">>,
