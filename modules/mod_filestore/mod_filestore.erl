@@ -315,8 +315,8 @@ start_deleter(R, Context) ->
                     ContextAsync = z_context:prune_for_async(Context),
                     _ = s3filez:queue_delete_id({?MODULE, delete, Id}, Cred, Location1, {?MODULE, delete_ready, [Id, Path, ContextAsync]});
                 false ->
-                    lager:warning("Not deleting file as it is not matching with service url: ~p", [Location1]),
-                    m_filestore:clear_deleted(Id, Context)
+                    lager:warning("Not deleting remote file as it is not matching with service url: ~p", [Location1]),
+                    m_filestore:purge_deleted(Id, Context)
             end;
         undefined ->
             lager:debug("No credentials for ~p", [R])
@@ -329,8 +329,8 @@ delete_ready(Id, Path, Context, _Ref, {error, enoent}) ->
     lager:debug("Delete remote file for ~p was not found", [Path]),
     m_filestore:purge_deleted(Id, Context);
 delete_ready(Id, Path, Context, _Ref, {error, forbidden}) ->
-    lager:debug("Delete remote file for ~p was forbidden", [Path]),
-    m_filestore:clear_deleted(Id, Context);
+    lager:debug("Delete remote file for ~p was forbidden - only removed from tables", [Path]),
+    m_filestore:purge_deleted(Id, Context);
 delete_ready(_Id, Path, _Context, _Ref, {error, _} = Error) ->
     lager:error("Could not delete remote file. Path ~p error ~p", [Path, Error]).
 
