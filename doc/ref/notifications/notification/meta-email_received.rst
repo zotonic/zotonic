@@ -13,14 +13,14 @@ Return:
     
 
 ``#email_received{}`` properties:
-    - to: ``unknown``
-    - from: ``unknown``
-    - localpart: ``unknown``
-    - localtags: ``unknown``
-    - domain: ``unknown``
-    - reference: ``unknown``
-    - email: ``unknown``
-    - headers: ``unknown``
+    - to: ``binary``
+    - from: ``undefined|binary``
+    - localpart: ``binary``
+    - localtags: ``list``
+    - domain: ``binary``
+    - reference: ``binary``
+    - email: ``record``
+    - headers: ``list``
     - is_bulk: ``boolean``
     - is_auto: ``boolean``
     - decoded: ``unknown``

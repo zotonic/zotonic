@@ -13,5 +13,6 @@ Return:
     'undefined' | ok | {error, Reason}
 
 ``#auth_postcheck{}`` properties:
+    - service: ``atom``
     - id: ``m_rsc:resource_id()``
     - query_args: ``map``
