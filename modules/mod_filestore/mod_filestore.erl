@@ -86,9 +86,10 @@ observe_filestore_credentials_lookup(#filestore_credentials_lookup{path=Path}, C
         true ->
             Url = make_url(S3Url, Path),
             {ok, #filestore_credentials{
-                    service= <<"s3">>,
-                    location=Url,
-                    credentials={S3Key,S3Secret}
+                    service = <<"s3">>,
+                    service_url = S3Url,
+                    location = Url,
+                    credentials = {S3Key,S3Secret}
             }};
         false ->
             undefined
@@ -97,10 +98,12 @@ observe_filestore_credentials_lookup(#filestore_credentials_lookup{path=Path}, C
 observe_filestore_credentials_revlookup(#filestore_credentials_revlookup{service= <<"s3">>, location=Location}, Context) ->
     S3Key = m_config:get_value(?MODULE, s3key, Context),
     S3Secret = m_config:get_value(?MODULE, s3secret, Context),
-    case is_defined(S3Key) andalso is_defined(S3Secret) of
+    S3Url = m_config:get_value(?MODULE, s3url, Context),
+    case is_defined(S3Key) andalso is_defined(S3Secret) andalso is_defined(S3Url) of
         true ->
             {ok, #filestore_credentials{
                     service= <<"s3">>,
+                    service_url = S3Url,
                     location=Location,
                     credentials={S3Key,S3Secret}
             }};
@@ -300,10 +303,21 @@ start_deleter(R, Context) ->
     {service, Service} = proplists:lookup(service, R),
     {location, Location} = proplists:lookup(location, R),
     case z_notifier:first(#filestore_credentials_revlookup{service=Service, location=Location}, Context) of
-        {ok, #filestore_credentials{service= <<"s3">>, location=Location1, credentials=Cred}} ->
-            lager:debug("Queue delete for ~p", [Location1]),
-            ContextAsync = z_context:prune_for_async(Context),
-            _ = s3filez:queue_delete_id({?MODULE, delete, Id}, Cred, Location1, {?MODULE, delete_ready, [Id, Path, ContextAsync]});
+        {ok, #filestore_credentials{
+            service = <<"s3">>,
+            service_url =  CredServiceUrl,
+            location = Location1,
+            credentials = Cred
+        }} ->
+            case is_matching_url(CredServiceUrl, Location1) of
+                true ->
+                    lager:debug("Queue delete for ~p", [Location1]),
+                    ContextAsync = z_context:prune_for_async(Context),
+                    _ = s3filez:queue_delete_id({?MODULE, delete, Id}, Cred, Location1, {?MODULE, delete_ready, [Id, Path, ContextAsync]});
+                false ->
+                    lager:warning("Not deleting remote file as it is not matching with service url: ~p", [Location1]),
+                    m_filestore:purge_deleted(Id, Context)
+            end;
         undefined ->
             lager:debug("No credentials for ~p", [R])
     end.
@@ -315,7 +329,7 @@ delete_ready(Id, Path, Context, _Ref, {error, enoent}) ->
     lager:debug("Delete remote file for ~p was not found", [Path]),
     m_filestore:purge_deleted(Id, Context);
 delete_ready(Id, Path, Context, _Ref, {error, forbidden}) ->
-    lager:debug("Delete remote file for ~p was forbidden", [Path]),
+    lager:debug("Delete remote file for ~p was forbidden - only removed from tables", [Path]),
     m_filestore:purge_deleted(Id, Context);
 delete_ready(_Id, Path, _Context, _Ref, {error, _} = Error) ->
     lager:error("Could not delete remote file. Path ~p error ~p", [Path, Error]).
@@ -362,3 +376,14 @@ temp_path(F) when is_list(F) ->
     F ++ ".downloading";
 temp_path(F) when is_binary(F) ->
     <<F/binary, ".downloading">>.
+
+%% @doc Check if the given location matches the service-url. This is
+%% used to prevent deletes of files on services that are not used to
+%% store new files. This could happen when a database with (production)
+%% data is copied to another system.
+is_matching_url(ServiceUrl, Location) ->
+    case binary:match(z_convert:to_binary(Location), z_convert:to_binary(ServiceUrl)) of
+        {0, _} -> true;
+        {_, _} -> false;
+        nomatch -> false
+    end.
