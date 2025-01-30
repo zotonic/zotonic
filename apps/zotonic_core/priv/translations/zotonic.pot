@@ -6225,10 +6225,6 @@ msgstr ""
 msgid "Change cookie settings"
 msgstr ""
 
-#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:14
-msgid "Change settings"
-msgstr ""
-
 #: apps/zotonic_mod_cookie_consent/priv/templates/_media_cookie_consent.tpl:10
 msgid "Click to change cookie settings"
 msgstr ""
@@ -6237,13 +6233,21 @@ msgstr ""
 msgid "Cookie consent settings"
 msgstr ""
 
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:14
+msgid "Customize"
+msgstr ""
+
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:20
+msgid "Decline all"
+msgstr ""
+
 #: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:16
 msgid ""
 "Detailed explanation of cookie types. Leave a field empty if you don't want "
 "to show this type of cookie"
 msgstr ""
 
-#: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:19./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:29./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:46
+#: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:19
 msgid "Functional"
 msgstr ""
 
@@ -6263,8 +6267,8 @@ msgstr ""
 msgid "Please consent to cookies to display external content."
 msgstr ""
 
-#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:20
-msgid "Reject all"
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:29./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:46
+msgid "Strictly necessary"
 msgstr ""
 
 #: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:5
@@ -7387,7 +7391,7 @@ msgid ""
 "removing) a small file."
 msgstr ""
 
-#: apps/zotonic_mod_filestore/src/mod_filestore.erl:165
+#: apps/zotonic_mod_filestore/src/mod_filestore.erl:181
 msgid "Cloud File Store"
 msgstr ""
 
@@ -7573,7 +7577,7 @@ msgid ""
 "that you use <tt>webdavs:</tt> URLs (which makes use of https)."
 msgstr ""
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:63./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:70./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:77
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:64./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:71./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:78
 msgid "You are not allowed to change these settings."
 msgstr ""
 

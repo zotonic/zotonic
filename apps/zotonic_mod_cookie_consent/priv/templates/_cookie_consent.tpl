@@ -11,13 +11,13 @@
             {% endif %}
             <div class="cookie-consent__upper__controls">
                 <button class="cookie-consent-toggle">
-                    {_ Change settings _}
+                    {_ Customize _}
                 </button>
                 <button class="btn btn-primary" type="submit" id="cookie-consent__accept-all">
                     {_ Accept all _}
                 </button>
                 <button class="btn btn-primary" type="submit" id="cookie-consent__accept-none">
-                    {_ Reject all _}
+                    {_ Decline all _}
                 </button>
             </div>
         </div>
@@ -26,7 +26,7 @@
             <ul class="cookie-options">
                 <li>
                     <input id="cookie_consent_functional" name="cookie_consent_functional" type="checkbox" disabled="" checked>
-                    <label for="cookie_consent_functional">{_ Functional _}</label>
+                    <label for="cookie_consent_functional">{_ Strictly necessary _}</label>
                 </li>
                 {% if id.cookies_statistics %}
                     <li>
@@ -43,7 +43,7 @@
             </ul>
             <ul class="cookie-options-explanations">
                 <li>
-                    <h3>{_ Functional _}</h3>
+                    <h3>{_ Strictly necessary _}</h3>
                     <p>{{ id.cookies_functional }}</p>
                 </li>
                 {% if id.cookies_statistics %}
