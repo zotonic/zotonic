@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-01-30 10:33\n"
+"PO-Revision-Date: 2025-01-30 13:12\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -5888,11 +5888,11 @@ msgstr "Paramètres de consentement aux cookies"
 
 #: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:14
 msgid "Customize"
-msgstr ""
+msgstr "Personnaliser"
 
 #: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:20
 msgid "Decline all"
-msgstr ""
+msgstr "Refuser tout"
 
 #: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:16
 msgid "Detailed explanation of cookie types. Leave a field empty if you don't want to show this type of cookie"
@@ -5920,7 +5920,7 @@ msgstr "Veuillez accepter les cookies pour afficher du contenu externe."
 
 #: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:29./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:46
 msgid "Strictly necessary"
-msgstr ""
+msgstr "Strictement nécessaire"
 
 #: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:5
 msgid "This website uses cookies"
