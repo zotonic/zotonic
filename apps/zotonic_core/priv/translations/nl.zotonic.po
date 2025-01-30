@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-01-28 11:15\n"
+"PO-Revision-Date: 2025-01-30 10:33\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -5880,10 +5880,6 @@ msgstr "Alle cookies"
 msgid "Change cookie settings"
 msgstr "Cookie-instellingen wijzigen"
 
-#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:14
-msgid "Change settings"
-msgstr "Instellingen wijzigen"
-
 #: apps/zotonic_mod_cookie_consent/priv/templates/_media_cookie_consent.tpl:10
 msgid "Click to change cookie settings"
 msgstr "Klik om de cookie-instellingen te wijzigen"
@@ -5892,11 +5888,19 @@ msgstr "Klik om de cookie-instellingen te wijzigen"
 msgid "Cookie consent settings"
 msgstr "Instellingen voor toestemming voor cookies"
 
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:14
+msgid "Customize"
+msgstr "Pas  aan"
+
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:20
+msgid "Decline all"
+msgstr "Alle weigeren"
+
 #: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:16
 msgid "Detailed explanation of cookie types. Leave a field empty if you don't want to show this type of cookie"
 msgstr "Gedetailleerde uitleg van soorten cookies. Laat een veld leeg als je dit type cookie niet wilt tonen"
 
-#: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:19./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:29./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:46
+#: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:19
 msgid "Functional"
 msgstr "Functioneel"
 
@@ -5916,9 +5920,9 @@ msgstr "Meer informatie over cookies"
 msgid "Please consent to cookies to display external content."
 msgstr "Geef toestemming voor cookies om externe inhoud weer te geven."
 
-#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:20
-msgid "Reject all"
-msgstr "Alles afwijzen"
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:29./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:46
+msgid "Strictly necessary"
+msgstr "Strikt noodzakelijk"
 
 #: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:5
 msgid "This website uses cookies"
@@ -6974,7 +6978,7 @@ msgstr "Basis URL"
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "Voordat de instellingen worden opgeslagen, worden ze gecontroleerd door een klein bestand te uploaden (en te verwijderen)."
 
-#: apps/zotonic_mod_filestore/src/mod_filestore.erl:165
+#: apps/zotonic_mod_filestore/src/mod_filestore.erl:181
 msgid "Cloud File Store"
 msgstr "Cloud File Store"
 
@@ -7139,7 +7143,7 @@ msgstr "Bij FTP en WebDAV worden de mappen altijd automatisch aangemaakt."
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
 msgstr "Met WebDAV worden de gebruikersnaam en het wachtwoord onversleuteld overgedragen, dus zorg ervoor dat je <tt>webdavs:</tt> URL's gebruikt (die gebruik maakt van https)."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:63./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:70./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:77
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:64./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:71./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:78
 msgid "You are not allowed to change these settings."
 msgstr "Je hebt geen rechten om de instellingen te veranderen."
 
