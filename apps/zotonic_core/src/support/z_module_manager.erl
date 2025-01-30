@@ -400,9 +400,15 @@ active_not_running(Context) ->
         true -> Active;
         false -> [ {z_context:site(Context), undefined} | Active ]
     end,
-    lists:filter(
-        fun({M, _}) -> proplists:get_value(M, Status) =/= running end,
+    lists:filtermap(
+        fun({M, _Dir}) ->
+            case proplists:get_value(M, Status) of
+                running -> false;
+                _ -> {true, M}
+            end
+        end,
         Active1).
+
 
 %% @doc Return the list of all active modules and their directories. Exclude modules that
 %% are missing from the system.
