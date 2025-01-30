@@ -13,6 +13,7 @@ Other notifications
    notification/admin_rscform
    notification/category_hierarchy_save
    notification/comment_insert
+   notification/content_security_header
    notification/cors_headers
    notification/debug
    notification/debug_stream

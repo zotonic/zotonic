@@ -12,6 +12,7 @@ E-mail notifications
    notification/email_ensure_handler
    notification/email_failed
    notification/email_is_blocked
+   notification/email_is_recipient_ok
    notification/email_received
    notification/email_send_encoded
    notification/email_sent

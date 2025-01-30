@@ -19,4 +19,4 @@ Return:
     - is_final: ``boolean``
     - reason: ``bounce|retry|illegal_address|smtphost|sender_disabled|error``
     - retry_ct: ``non_neg_integer|undefined``
-    - status: ``binary|undefined``
+    - status: ``binary|tuple|undefined``
