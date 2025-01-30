@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-01-28 11:16\n"
+"PO-Revision-Date: 2025-01-30 10:34\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -5877,10 +5877,6 @@ msgstr "Semua cookie"
 msgid "Change cookie settings"
 msgstr "Ubah pengaturan cookie"
 
-#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:14
-msgid "Change settings"
-msgstr "Ubah pengaturan"
-
 #: apps/zotonic_mod_cookie_consent/priv/templates/_media_cookie_consent.tpl:10
 msgid "Click to change cookie settings"
 msgstr "Klik untuk mengubah pengaturan cookie"
@@ -5889,11 +5885,19 @@ msgstr "Klik untuk mengubah pengaturan cookie"
 msgid "Cookie consent settings"
 msgstr "Pengaturan persetujuan cookie"
 
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:14
+msgid "Customize"
+msgstr "Sesuaikan"
+
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:20
+msgid "Decline all"
+msgstr "Tolak semuanya"
+
 #: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:16
 msgid "Detailed explanation of cookie types. Leave a field empty if you don't want to show this type of cookie"
 msgstr "Penjelasan rinci tentang jenis cookie. Kosongkan kolom jika Anda tidak ingin menampilkan jenis cookie ini"
 
-#: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:19./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:29./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:46
+#: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:19
 msgid "Functional"
 msgstr "Fungsional"
 
@@ -5913,9 +5917,9 @@ msgstr "Informasi lebih lanjut tentang cookie"
 msgid "Please consent to cookies to display external content."
 msgstr "Harap izinkan cookie untuk menampilkan konten eksternal."
 
-#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:20
-msgid "Reject all"
-msgstr "Tolak semua"
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:29./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:46
+msgid "Strictly necessary"
+msgstr "Sangat diperlukan"
 
 #: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:5
 msgid "This website uses cookies"
@@ -6971,7 +6975,7 @@ msgstr "URL dasar"
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "Sebelum pengaturan disimpan mereka akan diperiksa dengan mengunggah (dan menghapus) berkas kecil."
 
-#: apps/zotonic_mod_filestore/src/mod_filestore.erl:165
+#: apps/zotonic_mod_filestore/src/mod_filestore.erl:181
 msgid "Cloud File Store"
 msgstr "Awan file toko"
 
@@ -7136,7 +7140,7 @@ msgstr "Dengan FTP dan WebDAV direktori selalu dibuat secara otomatis."
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
 msgstr "Dengan WebDAV, nama pengguna dan kata sandi ditransfer dengan jelas, jadi pastikan Anda menggunakan <tt>webdavs:</tt> URL (yang menggunakan https)."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:63./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:70./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:77
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:64./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:71./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:78
 msgid "You are not allowed to change these settings."
 msgstr "Anda tidak diizinkan untuk mengubah pengaturan ini."
 
