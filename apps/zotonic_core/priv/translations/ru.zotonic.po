@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-01-28 11:15\n"
+"PO-Revision-Date: 2025-01-30 10:34\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -5878,10 +5878,6 @@ msgstr "Все файлы cookie"
 msgid "Change cookie settings"
 msgstr "Изменить настройки файлов cookie"
 
-#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:14
-msgid "Change settings"
-msgstr "Изменить настройки"
-
 #: apps/zotonic_mod_cookie_consent/priv/templates/_media_cookie_consent.tpl:10
 msgid "Click to change cookie settings"
 msgstr "Нажмите, чтобы изменить настройки файлов cookie"
@@ -5890,11 +5886,19 @@ msgstr "Нажмите, чтобы изменить настройки файл�
 msgid "Cookie consent settings"
 msgstr "Настройки согласия на использование файлов cookie"
 
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:14
+msgid "Customize"
+msgstr "Настроить"
+
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:20
+msgid "Decline all"
+msgstr "Отклонить все"
+
 #: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:16
 msgid "Detailed explanation of cookie types. Leave a field empty if you don't want to show this type of cookie"
 msgstr "Подробное объяснение типов файлов cookie. Оставьте поле пустым, если вы не хотите показывать этот тип файлов cookie."
 
-#: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:19./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:29./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:46
+#: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:19
 msgid "Functional"
 msgstr "Функциональный"
 
@@ -5914,9 +5918,9 @@ msgstr "Дополнительная информация о файлах cookie
 msgid "Please consent to cookies to display external content."
 msgstr "Пожалуйста, дайте согласие на использование файлов cookie для отображения внешнего контента."
 
-#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:20
-msgid "Reject all"
-msgstr "Отклонить все"
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:29./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:46
+msgid "Strictly necessary"
+msgstr "Строго необходимо"
 
 #: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:5
 msgid "This website uses cookies"
@@ -6972,7 +6976,7 @@ msgstr "Базовый URL-адрес"
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "Перед сохранением настроек они будут проверены путем загрузки (и удаления) небольшого файла."
 
-#: apps/zotonic_mod_filestore/src/mod_filestore.erl:165
+#: apps/zotonic_mod_filestore/src/mod_filestore.erl:181
 msgid "Cloud File Store"
 msgstr "Облачный файловый магазин"
 
@@ -7137,7 +7141,7 @@ msgstr "При использовании FTP и WebDAV каталоги все�
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
 msgstr "При использовании WebDAV имя пользователя и пароль передаются в открытом виде, поэтому убедитесь, что вы используете URL-адреса <tt>webdavs:</tt> (которые используют https)."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:63./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:70./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:77
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:64./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:71./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:78
 msgid "You are not allowed to change these settings."
 msgstr "Вы не имеете права изменять эти настройки."
 
