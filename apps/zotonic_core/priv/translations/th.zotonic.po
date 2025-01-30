@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-01-28 11:16\n"
+"PO-Revision-Date: 2025-01-30 10:34\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -5876,10 +5876,6 @@ msgstr "คุกกี้ทั้งหมด"
 msgid "Change cookie settings"
 msgstr "เปลี่ยนการตั้งค่าคุกกี้"
 
-#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:14
-msgid "Change settings"
-msgstr "เปลี่ยนการตั้งค่า"
-
 #: apps/zotonic_mod_cookie_consent/priv/templates/_media_cookie_consent.tpl:10
 msgid "Click to change cookie settings"
 msgstr "คลิกเพื่อเปลี่ยนการตั้งค่าคุกกี้"
@@ -5888,11 +5884,19 @@ msgstr "คลิกเพื่อเปลี่ยนการตั้งค
 msgid "Cookie consent settings"
 msgstr "การตั้งค่าความยินยอมของคุกกี้"
 
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:14
+msgid "Customize"
+msgstr "ปรับแต่ง"
+
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:20
+msgid "Decline all"
+msgstr "ปฏิเสธทั้งหมด"
+
 #: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:16
 msgid "Detailed explanation of cookie types. Leave a field empty if you don't want to show this type of cookie"
 msgstr "คำอธิบายโดยละเอียดของประเภทคุกกี้ เว้นช่องว่างไว้หากคุณไม่ต้องการแสดงคุกกี้ประเภทนี้"
 
-#: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:19./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:29./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:46
+#: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:19
 msgid "Functional"
 msgstr "การทำงาน"
 
@@ -5912,9 +5916,9 @@ msgstr "ข้อมูลเพิ่มเติมเกี่ยวกับ
 msgid "Please consent to cookies to display external content."
 msgstr "โปรดยินยอมให้คุกกี้แสดงเนื้อหาภายนอก"
 
-#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:20
-msgid "Reject all"
-msgstr "ปฏิเสธทั้งหมด"
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:29./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:46
+msgid "Strictly necessary"
+msgstr "จำเป็นอย่างยิ่ง"
 
 #: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:5
 msgid "This website uses cookies"
@@ -6970,7 +6974,7 @@ msgstr "URL ฐาน"
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "ก่อนบันทึกการตั้งค่าระบบจะตรวจสอบโดยการอัปโหลด (และลบ) ไฟล์ขนาดเล็ก"
 
-#: apps/zotonic_mod_filestore/src/mod_filestore.erl:165
+#: apps/zotonic_mod_filestore/src/mod_filestore.erl:181
 msgid "Cloud File Store"
 msgstr "Cloud File Store"
 
@@ -7135,7 +7139,7 @@ msgstr "ด้วย FTP และ WebDAV ไดเร็กทอรีจะ�
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
 msgstr "ด้วย WebDAV ชื่อผู้ใช้และรหัสผ่านจะถูกโอนอย่างชัดเจน ดังนั้นให้แน่ใจว่าคุณใช้ <tt>webdavs:</tt> URL (ซึ่งใช้ https)"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:63./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:70./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:77
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:64./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:71./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:78
 msgid "You are not allowed to change these settings."
 msgstr "คุณไม่ได้รับอนุญาตให้เปลี่ยนการตั้งค่าเหล่านี้"
 
