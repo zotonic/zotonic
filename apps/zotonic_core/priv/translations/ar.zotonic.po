@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-01-28 13:10\n"
+"PO-Revision-Date: 2025-01-30 10:33\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -5878,10 +5878,6 @@ msgstr "جميع ملفات تعريف الارتباط"
 msgid "Change cookie settings"
 msgstr "تغيير إعدادات ملفات تعريف الارتباط"
 
-#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:14
-msgid "Change settings"
-msgstr "تغيير الاعدادات"
-
 #: apps/zotonic_mod_cookie_consent/priv/templates/_media_cookie_consent.tpl:10
 msgid "Click to change cookie settings"
 msgstr "انقر لتغيير إعدادات ملفات تعريف الارتباط"
@@ -5890,11 +5886,19 @@ msgstr "انقر لتغيير إعدادات ملفات تعريف الارتب�
 msgid "Cookie consent settings"
 msgstr "إعدادات الموافقة على ملفات تعريف الارتباط"
 
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:14
+msgid "Customize"
+msgstr "تخصيص"
+
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:20
+msgid "Decline all"
+msgstr "رفض الكل"
+
 #: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:16
 msgid "Detailed explanation of cookie types. Leave a field empty if you don't want to show this type of cookie"
 msgstr "شرح مفصل لأنواع ملفات تعريف الارتباط. اترك الحقل فارغًا إذا كنت لا تريد إظهار هذا النوع من ملفات تعريف الارتباط"
 
-#: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:19./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:29./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:46
+#: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:19
 msgid "Functional"
 msgstr "وظيفي"
 
@@ -5914,9 +5918,9 @@ msgstr "مزيد من المعلومات حول ملفات تعريف الارت
 msgid "Please consent to cookies to display external content."
 msgstr "الرجاء الموافقة على ملفات تعريف الارتباط لعرض المحتوى الخارجي."
 
-#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:20
-msgid "Reject all"
-msgstr "رفض الكل"
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:29./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:46
+msgid "Strictly necessary"
+msgstr "ضروري للغاية"
 
 #: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:5
 msgid "This website uses cookies"
@@ -6972,7 +6976,7 @@ msgstr "URL الأساسي"
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "قبل أن يتم حفظ الإعدادات ، سيتم التحقق منها عن طريق تحميل (وإزالة) ملف صغير."
 
-#: apps/zotonic_mod_filestore/src/mod_filestore.erl:165
+#: apps/zotonic_mod_filestore/src/mod_filestore.erl:181
 msgid "Cloud File Store"
 msgstr "مخزن الملفات السحابية"
 
@@ -7137,7 +7141,7 @@ msgstr "باستخدام FTP و WebDAV ، يتم دائمًا إنشاء الد�
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
 msgstr "باستخدام WebDAV ، يتم نقل اسم المستخدم وكلمة المرور بشكل واضح ، لذا تأكد من استخدام <tt>webdavs:</tt> URLs (التي تستخدم https)."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:63./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:70./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:77
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:64./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:71./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:78
 msgid "You are not allowed to change these settings."
 msgstr "لا يسمح لك بتغيير هذه الإعدادات."
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-01-28 13:10\n"
+"PO-Revision-Date: 2025-01-30 10:33\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -343,7 +343,7 @@ msgstr "Löschen..."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
 msgid "Deny"
-msgstr "Leugnen"
+msgstr "Verweigern"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:43
 msgid "Edit &amp; link rights on the collaboration groups"
@@ -5300,7 +5300,7 @@ msgstr "Revisionen für"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:15./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:59
 msgid "Revisions of active users are kept for {n} days."
-msgstr ""
+msgstr "Revisionen aktiver Nutzer werden für {n} Tage aufbewahrt."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:16./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:60
 msgid "Revisions of deleted users are kept for {n} days."
@@ -5872,15 +5872,11 @@ msgstr "Auswahl akzeptieren"
 
 #: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:40./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:57
 msgid "All cookies"
-msgstr "Alle Kekse"
+msgstr "Alle Cookies"
 
 #: apps/zotonic_mod_cookie_consent/priv/templates/_media_cookie_consent.tpl:14
 msgid "Change cookie settings"
 msgstr "Cookie-Einstellungen ändern"
-
-#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:14
-msgid "Change settings"
-msgstr "Einstellungen ändern"
 
 #: apps/zotonic_mod_cookie_consent/priv/templates/_media_cookie_consent.tpl:10
 msgid "Click to change cookie settings"
@@ -5890,11 +5886,19 @@ msgstr "Klicken Sie hier, um die Cookie-Einstellungen zu ändern"
 msgid "Cookie consent settings"
 msgstr "Cookie-Zustimmungseinstellungen"
 
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:14
+msgid "Customize"
+msgstr "Anpassen"
+
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:20
+msgid "Decline all"
+msgstr "Alle ablehnen"
+
 #: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:16
 msgid "Detailed explanation of cookie types. Leave a field empty if you don't want to show this type of cookie"
 msgstr "Ausführliche Erklärung der Cookie-Typen. Lassen Sie ein Feld leer, wenn Sie diese Art von Cookie nicht anzeigen möchten"
 
-#: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:19./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:29./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:46
+#: apps/zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:19
 msgid "Functional"
 msgstr "Funktionell"
 
@@ -5914,9 +5918,9 @@ msgstr "Weitere Informationen zu Cookies"
 msgid "Please consent to cookies to display external content."
 msgstr "Bitte stimmen Sie Cookies zu, um externe Inhalte anzuzeigen."
 
-#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:20
-msgid "Reject all"
-msgstr "Alle ablehnen"
+#: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:29./apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:46
+msgid "Strictly necessary"
+msgstr "Unbedingt erforderliche Cookies"
 
 #: apps/zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:5
 msgid "This website uses cookies"
@@ -6972,7 +6976,7 @@ msgstr "Basis-URL"
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "Bevor die Einstellungen gespeichert werden, werden sie durch Hochladen (und Entfernen) einer kleinen Datei überprüft."
 
-#: apps/zotonic_mod_filestore/src/mod_filestore.erl:165
+#: apps/zotonic_mod_filestore/src/mod_filestore.erl:181
 msgid "Cloud File Store"
 msgstr "Cloud-Dateispeicher"
 
@@ -7137,7 +7141,7 @@ msgstr "Bei FTP und WebDAV werden die Verzeichnisse immer automatisch angelegt."
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
 msgstr "Bei WebDAV werden Benutzername und Passwort im Klartext übertragen, stellen Sie also sicher, dass Sie <tt>webdavs:</tt> URLs (die https verwenden) verwenden."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:63./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:70./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:77
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:64./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:71./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:78
 msgid "You are not allowed to change these settings."
 msgstr "Diese Einstellungen dürfen Sie nicht ändern."
 
@@ -7930,7 +7934,11 @@ msgid "It appears you have sent\n"
 "        the recipients that did not yet receive the mail will get it. As a\n"
 "        safety-caution, it is impossible to send the same page twice to\n"
 "        the same e-mail address."
-msgstr ""
+msgstr "Es scheint, dass Sie\n"
+"        diese Seite bereits einmal an diese Liste gesendet haben. Wenn Sie sie erneut senden, erhalten sie nur\n"
+"        die Empfänger, die die E-Mail noch nicht erhalten haben. Aus Sicherheitsgründen\n"
+"        ist es nicht möglich, dieselbe Seite zweimal an dieselbe E-Mail-Adresse\n"
+"        zu senden."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_cancel_confirm.tpl:4
 msgid "Keep mailing"
