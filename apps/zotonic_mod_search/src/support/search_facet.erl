@@ -830,10 +830,12 @@ convert_type_1(text, V, _Context) ->
 
 
 %% @doc Ensure that the facet table is correct, if not then drop the existing
-%% table and request a pivot of all resources to fill the table.
+%% table and request a pivot of all resources to fill the table.  Check if there
+%% active modules that are modules not running. A not-running module might have a
+%% facet definition we need for building the facet table.
 -spec ensure_table(z:context()) -> ok | {error, term()}.
 ensure_table(Context) ->
-    case modules_not_running(Context) of
+    case z_module_manager:active_not_running(Context) of
         [] ->
             case is_table_ok(Context) of
                 true ->
@@ -856,25 +858,6 @@ ensure_table(Context) ->
                 modules => NotRunning
             })
     end.
-
-%% @doc Check if there are module not running. A not-running module might have a facet definition
-%% we need for building the facet table.
--spec modules_not_running(z:context()) -> [ atom() ].
-modules_not_running(Context) ->
-    Status = z_module_manager:get_modules_status(Context),
-    NotRunning = [ M || {M, S} <- Status, S =/= running ],
-    if
-        NotRunning =:= [] ->
-            case proplists:get_value(z_context:site(Context), Status) of
-                running ->
-                    [];
-                _ ->
-                    [ z_context:site(Context) ]
-            end;
-        true ->
-            NotRunning
-    end.
-
 
 %% @doc Check if the current table is compatible with the facets in pivot.tpl
 -spec is_table_ok(z:context()) -> boolean().

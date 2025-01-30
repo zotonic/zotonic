@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Module manager, starts/restarts a site's modules.
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -39,6 +39,7 @@
     module_reloaded/2,
     active/1,
     active/2,
+    active_not_running/1,
     active_dir/1,
     lib_dir/1,
     module_to_app/1,
@@ -386,8 +387,25 @@ active(Module, Context) ->
             lists:member(Module, active(Context))
     end.
 
+%% @doc Check which modules are active and installed but currently not in running state.
+%% The site is hardcoded as it must be part of the running list of modules, if not then
+%% it is added to the list of not running modules irrespective if it is activated or not.
+-spec active_not_running(Context) -> [ Module ] when
+    Context :: z:context(),
+    Module :: atom().
+active_not_running(Context) ->
+    Status = get_modules_status(Context),
+    Active = active_dir(Context),
+    Active1 = case lists:keymember(z_context:site(Context), 1, Active) of
+        true -> Active;
+        false -> [ {z_context:site(Context), undefined} | Active ]
+    end,
+    lists:filter(
+        fun({M, _}) -> proplists:get_value(M, Status) =/= running end,
+        Active1).
 
-%% @doc Return the list of all active modules and their directories
+%% @doc Return the list of all active modules and their directories. Exclude modules that
+%% are missing from the system.
 -spec active_dir(z:context()) -> [ {Module::atom(), Dir::file:filename_all()} ].
 active_dir(Context) ->
     lists:foldr(
