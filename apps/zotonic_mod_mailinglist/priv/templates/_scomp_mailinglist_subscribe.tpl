@@ -5,7 +5,9 @@
 		<p>{_ Subscribe to _} {{ id.title }}.</p>
 	{% else %}
 		<p>
-			{_ Give your e-mail address to subscribe to _} {{ id.title }}.
+			{% trans "Give your e-mail address to subscribe to {title}."
+					 title=id.title
+			%}
 			{_ You will receive a confirmation in your e-mail._}
 		</p>
 	{% endif %}
