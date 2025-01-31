@@ -45,6 +45,7 @@
     module_to_app/1,
     is_provided/2,
     get_provided/1,
+    get_uninstalled/1,
     scan_provided/1,
     scan_depending/1,
     get_modules/1,
@@ -137,7 +138,10 @@
 %%====================================================================
 %% API
 %%====================================================================
-%% @spec start_link(SiteProps::proplist()) -> {ok,Pid} | ignore | {error,Error}
+-spec start_link(SiteProps) -> {ok,Pid} | ignore | {error, Error} when
+    SiteProps :: proplists:proplist(),
+    Pid :: pid(),
+    Error :: term().
 %% @doc Starts the module manager
 start_link(Site) ->
     gen_server:start_link({local, name(Site)}, ?MODULE, Site, []).
@@ -414,14 +418,15 @@ active_not_running(Context) ->
 %% are missing from the system.
 -spec active_dir(z:context()) -> [ {Module::atom(), Dir::file:filename_all()} ].
 active_dir(Context) ->
-    lists:foldr(
-        fun(Module, Acc) ->
+    lists:filtermap(
+        fun(Module) ->
             case lib_dir(Module) of
-                {error, bad_name} -> Acc;
-                Dirname when is_list(Dirname) -> [ {Module, Dirname} | Acc ]
+                {error, bad_name} ->
+                    false;
+                Dirname when is_list(Dirname) ->
+                    {true, {Module, Dirname}}
             end
         end,
-        [],
         active(Context)).
 
 -spec lib_dir(atom()) -> {error, bad_name} | file:filename().
@@ -473,6 +478,18 @@ is_provided(Service, Context) ->
 get_provided(Context) ->
     gen_server:call(name(Context), get_provided).
 
+%% @doc Return the list of all modules that are activated but not present on
+%% the file system.
+-spec get_uninstalled( z:context() ) -> list( atom() ).
+get_uninstalled(Context) ->
+    lists:filtermap(
+        fun(Module) ->
+            case lib_dir(Module) of
+                {error, bad_name} -> {true, Module};
+                _Dirname -> false
+            end
+        end,
+        active(Context)).
 
 %% @doc Return a table with per provision which modules provide it.
 -spec scan_provided( z:context() ) -> #{ atom() := [ atom() ]}.

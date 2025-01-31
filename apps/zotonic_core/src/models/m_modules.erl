@@ -1,10 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%% Date: 2010-05-05
-%%
+%% @copyright 2010-2025 Marc Worrell
 %% @doc Model for the zotonic modules. List all modules, enabled or disabled.
+%% @end
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -57,6 +56,9 @@ m_get([ <<"info">>, Module | Rest ], _Msg, Context) ->
         false ->
             {error, eacces}
     end;
+m_get([ <<"uninstalled">> ], _Msg, Context) ->
+    Uninstalled = z_module_manager:get_uninstalled(Context),
+    {ok, {Uninstalled, []}};
 m_get([ <<"provided">>, Service | Rest ], _Msg, Context) ->
     M = safe_to_atom(Service),
     IsProvided = z_module_manager:is_provided(M, Context),

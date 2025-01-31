@@ -9,10 +9,43 @@
             while others are externally developed. This page shows an overview of all modules which are currently known to this Zotonic installation. _}</p>
     </div>
 
+    {% if m.modules.uninstalled as uninstalled %}
+        <div class="well">
+            <p>
+                <span class="glyphicon glyphicon-exclamation-sign"></span>
+                {_ The modules below are activated but could not be found. _}
+                {_ Either they are not installed, or they are not compiled. _}
+                <br>
+                {_ Deactivate these modules if you are not using them, or check the installation of the system. _}
+                <br>
+            </p>
+
+            <table class="table table-striped">
+                <tr>
+                    <th width="20"></th>
+                    <th>{_ Module _}</th>
+                    <th></th>
+                </tr>
+                {% for module in uninstalled %}
+                    <tr class="clickable">
+                        <td>{% include "_icon_status.tpl" status=undefined %}
+                        <td>{{ module|escape }}</td>
+                        <td>
+                            {% button text=_"Deactivate"
+                                class="btn btn-default btn-xs"
+                                action={module_toggle is_deactivate module=module}
+                            %}
+                        </td>
+                    </tr>
+                {% endfor%}
+            </table>
+        </div>
+    {% endif %}
+
     <table class="table table-striped do_adminLinkedTable">
         <thead>
             <tr>
-                <th></th>
+                <th width="20"></th>
                 <th>{_ Module _}</th>
                 <th>{_ Depends _}</th>
                 <th>{_ Provides _}</th>
