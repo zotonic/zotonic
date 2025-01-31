@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-01-31 12:31\n"
+"PO-Revision-Date: 2025-01-31 13:40\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -3911,7 +3911,7 @@ msgstr "Désactiver"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:18
 msgid "Deactivate these modules if you are not using them, or check the installation of the system."
-msgstr ""
+msgstr "Désactivez ces modules si vous ne les utilisez pas, ou vérifiez l'installation du système."
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:3
 msgid "Deactivating this module will stop the following modules:"
@@ -3935,7 +3935,7 @@ msgstr "Vous souhaitez toujours désactiver le module"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:16
 msgid "Either they are not installed, or they are not compiled."
-msgstr ""
+msgstr "Soit ils ne sont pas installés, soit ils ne sont pas compilés."
 
 #: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:105
 msgid "Install the module’s model and data."
@@ -3986,7 +3986,7 @@ msgstr "Les modules suivants ne démarreront pas parce qu'ils manquent de dépen
 
 #: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
 msgid "The modules below are activated but could not be found."
-msgstr ""
+msgstr "Les modules ci-dessous sont activés mais n'ont pas pu être trouvés."
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:1
 msgid "There are modules depending on"
@@ -7910,7 +7910,7 @@ msgstr "A partir de maintenant, vous recevrez un courrier de notre liste de diff
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:8
 msgid "Give your e-mail address to subscribe to {title}."
-msgstr ""
+msgstr "Donnez votre adresse e-mail pour vous abonner à {title}."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:15
 msgid "Go to mailinglist page"
