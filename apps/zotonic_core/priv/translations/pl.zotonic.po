@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-01-30 10:33\n"
+"PO-Revision-Date: 2025-01-31 12:32\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -445,7 +445,7 @@ msgstr "Członkowie tej samej grupy użytkowników"
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:11./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:115
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:4
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:4./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:5./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:25./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:48
 #: apps/zotonic_mod_base/priv/templates/error.tpl:78
 #: apps/zotonic_mod_development/priv/templates/_development_template.tpl:3./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:10./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:60./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:122./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:189./apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:49
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:24
@@ -2110,7 +2110,7 @@ msgid "Runs the schema install for Zotonic core again."
 msgstr "Ponownie uruchamia instalację schematu dla rdzenia Zotonic."
 
 #: apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:74
-#: apps/zotonic_mod_seo/src/mod_seo.erl:42
+#: apps/zotonic_mod_seo/src/mod_seo.erl:84
 msgid "SEO"
 msgstr "SEO"
 
@@ -3585,7 +3585,7 @@ msgid "Sorry, you can not remove your own username."
 msgstr "Przepraszamy, nie możesz usunąć własnej nazwy użytkownika."
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:16
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:22
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:24
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:5
 msgid "Thank you"
 msgstr "Dziękujemy"
@@ -3889,11 +3889,11 @@ msgstr "Nie masz uprawnień aby edytować zwycięzcę."
 msgid "not implemented yet"
 msgstr "jeszcze niezaimplementowane"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:90
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:123
 msgid "Activate"
 msgstr "Aktywuj"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:81
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:114
 msgid "Configure"
 msgstr "Skonfiguruj"
 
@@ -3905,9 +3905,13 @@ msgstr "Nie udało się znaleźć modułu."
 msgid "Cyclic dependencies"
 msgstr "Zależności cykliczne"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:85
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:33./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:118
 msgid "Deactivate"
 msgstr "Wyłącz"
+
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:18
+msgid "Deactivate these modules if you are not using them, or check the installation of the system."
+msgstr "Dezaktywuj te moduły jeśli z nich nie korzystasz lub sprawdź instalację systemu."
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:3
 msgid "Deactivating this module will stop the following modules:"
@@ -3917,7 +3921,7 @@ msgstr "Dezaktywacja tego modułu spowoduje zatrzymanie następujących modułó
 msgid "Dependencies"
 msgstr "Zależności"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:16
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:49
 msgid "Depends"
 msgstr "Zależy od"
 
@@ -3929,7 +3933,11 @@ msgstr "Czy nadal chcesz aktywować moduł"
 msgid "Do you still want to deactivate the module"
 msgstr "Czy nadal chcesz dezaktywować moduł"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:72
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:16
+msgid "Either they are not installed, or they are not compiled."
+msgstr "Albo nie są zainstalowane, albo nie są skompilowane."
+
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:105
 msgid "Install the module’s model and data."
 msgstr "Zainstaluj model i dane modułu."
 
@@ -3941,15 +3949,15 @@ msgstr "Zależności modułów"
 msgid "Modules are missing dependencies"
 msgstr "W modułach brakuje zależności"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:103
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:136
 msgid "No modules found"
 msgstr "Nie znaleziono modułów"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:17
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:50
 msgid "Provides"
 msgstr "Zapewnia"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:71
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:104
 msgid "Reinstall"
 msgstr "Zainstaluj ponownie"
 
@@ -3975,6 +3983,10 @@ msgstr "Przepraszamy, nie możesz tego zrobić."
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:3
 msgid "The following modules will not start because they miss dependencies:"
 msgstr "Następujące moduły nie uruchomią się, ponieważ brakuje im zależności:"
+
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
+msgid "The modules below are activated but could not be found."
+msgstr "Poniższe moduły zostały aktywowane, ale nie można ich znaleźć."
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:1
 msgid "There are modules depending on"
@@ -7897,8 +7909,8 @@ msgid "From now on you will receive mail from our mailing list."
 msgstr "Od teraz będziesz otrzymywać pocztę z naszej listy mailingowej."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:8
-msgid "Give your e-mail address to subscribe to"
-msgstr "Podaj swój adres e-mail, aby zapisać się na"
+msgid "Give your e-mail address to subscribe to {title}."
+msgstr "Podaj swój adres e-mail, aby subskrybować {title}."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:15
 msgid "Go to mailinglist page"
@@ -8185,7 +8197,7 @@ msgstr "Wysłano"
 msgid "Show all recipients &raquo;"
 msgstr "Pokaż wszystkich odbiorców &raquo;"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:29
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:31
 msgid "Sorry, I could not subscribe you to the mailing list. Please try again later or with another e-mail address."
 msgstr "Przepraszamy, nie mogliśmy zapisać Cię na listę mailingową. Spróbuj ponownie później lub z innym adresem e-mail."
 
@@ -8409,7 +8421,7 @@ msgstr "Otrzymałeś tę wiadomość, ponieważ ktoś chciał Ci wysłać te inf
 msgid "You received this mail because you are subscribed to the mailing list"
 msgstr "Otrzymałeś/aś tę wiadomość, ponieważ zapisałeś/aś się na listę mailingową"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:9
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:11
 msgid "You will receive a confirmation in your e-mail."
 msgstr "Otrzymasz potwierdzenie w e-mailu."
 
@@ -8417,7 +8429,7 @@ msgstr "Otrzymasz potwierdzenie w e-mailu."
 msgid "You, or someone else, added your e-mail address to our mailing list"
 msgstr "Ty lub ktoś inny dodałeś/aś swój adres e-mail do naszej listy mailingowej"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:24
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:26
 msgid "Your e-mail address is added to the mailing list. A confirmation mail is sent to your e-mail address and will arrive shortly. When you don’t receive it, then please check your spam folder."
 msgstr "Twój adres e-mail został dodany do listy mailingowej. Wiadomość potwierdzająca zostanie wysłana na Twój adres e-mail i niedługo dotrze. Jeśli jej nie otrzymasz, sprawdź folder spamu."
 

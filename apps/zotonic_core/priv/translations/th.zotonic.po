@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-01-30 10:34\n"
+"PO-Revision-Date: 2025-01-31 12:32\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -445,7 +445,7 @@ msgstr "สมาชิกของกลุ่มผู้ใช้เดีย
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:11./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:115
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:4
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:4./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:5./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:7./apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:19
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:8./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:25./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:48
 #: apps/zotonic_mod_base/priv/templates/error.tpl:78
 #: apps/zotonic_mod_development/priv/templates/_development_template.tpl:3./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:10./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:60./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:122./apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:189./apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:49
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:24
@@ -2110,7 +2110,7 @@ msgid "Runs the schema install for Zotonic core again."
 msgstr "รันการติดตั้งสคีมาสำหรับ Zotonic core อีกครั้ง"
 
 #: apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:74
-#: apps/zotonic_mod_seo/src/mod_seo.erl:42
+#: apps/zotonic_mod_seo/src/mod_seo.erl:84
 msgid "SEO"
 msgstr "SEO"
 
@@ -3585,7 +3585,7 @@ msgid "Sorry, you can not remove your own username."
 msgstr "ขออภัยคุณไม่สามารถลบชื่อผู้ใช้ของคุณเองได้"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:16
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:22
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:24
 #: apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:5
 msgid "Thank you"
 msgstr "ขอขอบคุณ"
@@ -3889,11 +3889,11 @@ msgstr "คุณไม่มีสิทธิ์แก้ไขผู้ชน
 msgid "not implemented yet"
 msgstr "ยังไม่ได้ใช้งาน"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:90
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:123
 msgid "Activate"
 msgstr "เปิดใช้งาน"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:81
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:114
 msgid "Configure"
 msgstr "กำหนดค่า"
 
@@ -3905,9 +3905,13 @@ msgstr "ไม่พบโมดูล"
 msgid "Cyclic dependencies"
 msgstr "การอ้างอิงวงจร"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:85
+#: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:17./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:33./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:118
 msgid "Deactivate"
 msgstr "ปิดใช้งาน"
+
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:18
+msgid "Deactivate these modules if you are not using them, or check the installation of the system."
+msgstr "ปิดใช้งานโมดูลเหล่านี้หากคุณไม่ได้ใช้งานหรือตรวจสอบการติดตั้งระบบ"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:3
 msgid "Deactivating this module will stop the following modules:"
@@ -3917,7 +3921,7 @@ msgstr "การปิดใช้งานโมดูลนี้จะหย
 msgid "Dependencies"
 msgstr "การพึ่งพา"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:16
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:49
 msgid "Depends"
 msgstr "ขึ้นอยู่กับ"
 
@@ -3929,7 +3933,11 @@ msgstr "คุณยังต้องการเปิดใช้งานโ
 msgid "Do you still want to deactivate the module"
 msgstr "คุณยังต้องการปิดใช้งานโมดูลหรือไม่"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:72
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:16
+msgid "Either they are not installed, or they are not compiled."
+msgstr "ทั้งไม่ได้ติดตั้ง หรือไม่ก็ไม่ได้คอมไพล์"
+
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:105
 msgid "Install the module’s model and data."
 msgstr "ติดตั้งโมเดลและข้อมูลของโมดูล"
 
@@ -3941,15 +3949,15 @@ msgstr "การขึ้นต่อกันของโมดูล"
 msgid "Modules are missing dependencies"
 msgstr "โมดูลไม่มีการอ้างอิง"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:103
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:136
 msgid "No modules found"
 msgstr "ไม่พบโมดูล"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:17
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:50
 msgid "Provides"
 msgstr "ให้"
 
-#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:71
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:104
 msgid "Reinstall"
 msgstr "ติดตั้งใหม่"
 
@@ -3975,6 +3983,10 @@ msgstr "ขออภัย คุณไม่ได้รับอนุญา�
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:3
 msgid "The following modules will not start because they miss dependencies:"
 msgstr "โมดูลต่อไปนี้จะไม่เริ่มทำงานเนื่องจากพลาดการอ้างอิง:"
+
+#: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
+msgid "The modules below are activated but could not be found."
+msgstr "โมดูลด้านล่างนี้ได้รับการเปิดใช้งานแล้ว แต่ไม่พบ"
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:1
 msgid "There are modules depending on"
@@ -7895,8 +7907,8 @@ msgid "From now on you will receive mail from our mailing list."
 msgstr "จากนี้ไปคุณจะได้รับอีเมลจากรายชื่ออีเมลของเรา"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:8
-msgid "Give your e-mail address to subscribe to"
-msgstr "ให้ที่อยู่อีเมลของคุณเพื่อสมัครสมาชิก"
+msgid "Give your e-mail address to subscribe to {title}."
+msgstr "ระบุอีเมลของคุณเพื่อสมัครสมาชิก {title}"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:15
 msgid "Go to mailinglist page"
@@ -8183,7 +8195,7 @@ msgstr "ส่งเมื่อ"
 msgid "Show all recipients &raquo;"
 msgstr "แสดงผู้รับทั้งหมด &raquo;"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:29
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:31
 msgid "Sorry, I could not subscribe you to the mailing list. Please try again later or with another e-mail address."
 msgstr "ขออภัยฉันสมัครรายชื่ออีเมลให้คุณไม่ได้ โปรดลองอีกครั้งในภายหลังหรือใช้ที่อยู่อีเมลอื่น"
 
@@ -8407,7 +8419,7 @@ msgstr "คุณได้รับอีเมลนี้เนื่องจ
 msgid "You received this mail because you are subscribed to the mailing list"
 msgstr "คุณได้รับอีเมลนี้เนื่องจากคุณสมัครรับรายชื่ออีเมล"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:9
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:11
 msgid "You will receive a confirmation in your e-mail."
 msgstr "คุณจะได้รับการยืนยันทางอีเมลของคุณ"
 
@@ -8415,7 +8427,7 @@ msgstr "คุณจะได้รับการยืนยันทางอ
 msgid "You, or someone else, added your e-mail address to our mailing list"
 msgstr "คุณหรือบุคคลอื่นได้เพิ่มที่อยู่อีเมลของคุณในรายชื่ออีเมลของเรา"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:24
+#: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:26
 msgid "Your e-mail address is added to the mailing list. A confirmation mail is sent to your e-mail address and will arrive shortly. When you don’t receive it, then please check your spam folder."
 msgstr "ที่อยู่อีเมลของคุณจะถูกเพิ่มลงในรายชื่อผู้รับจดหมาย อีเมลยืนยันจะถูกส่งไปยังที่อยู่อีเมลของคุณและจะมาถึงในไม่ช้า เมื่อคุณไม่ได้รับโปรดตรวจสอบโฟลเดอร์สแปมของคุณ"
 
