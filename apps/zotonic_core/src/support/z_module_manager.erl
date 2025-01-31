@@ -138,8 +138,8 @@
 %%====================================================================
 %% API
 %%====================================================================
--spec start_link(SiteProps) -> {ok,Pid} | ignore | {error, Error} when
-    SiteProps :: proplists:proplist(),
+-spec start_link(Site) -> {ok,Pid} | ignore | {error, Error} when
+    Site :: atom(),
     Pid :: pid(),
     Error :: term().
 %% @doc Starts the module manager
