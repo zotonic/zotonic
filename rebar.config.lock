@@ -64,7 +64,7 @@
                          "674211aa5ce8b320b914cd2787e442c851950830"}},
        {z_stdlib,".*",
                  {git,"https://github.com/zotonic/z_stdlib.git",
-                      "983527a5c1d5636e34b2bfd2e360dd34f0dd6024"}},
+                      "26369cbec03173d7e01db6e3303e87965dbac229"}},
        {jsx, ".*",
                  {git,"https://github.com/talentdeficit/jsx.git",
                       "a45c997cedc3bcc0bb014ac3faa7ec16bcd4f7b1"}},
