@@ -1012,82 +1012,126 @@
 
 -optional_callbacks([ observe_auth_validated/2, pid_observe_auth_validated/3 ]).
 
-% %% Update the given (accumulator) authentication options with the request options.
-% %%      Note that the request options are from the client and are unsafe.
-% %% Type: foldl
-% %% Return: ``map()``
-% -record(auth_options_update, {
-%         request_options = #{} :: map()
-%     }).
+%% Update the given (accumulator) authentication options with the request options.
+%%      Note that the request options are from the client and are unsafe.
+%% Type: foldl
+-callback observe_auth_options_update(#auth_options_update{}, Acc, z:context()) -> Result when
+    Acc :: map(),
+    Result :: map().
+-callback pid_observe_auth_options_update(pid(), #auth_options_update{}, Acc, z:context()) -> Result when
+    Acc :: map(),
+    Result :: map().
 
-% %% Send a request to the client to login a user. The zotonic.auth.worker.js will
-% %%      send a request to controller_authentication to exchange the one time token with
-% %%      a z.auth cookie for the given user. The client will redirect to the Url.
-% %% Type: first
-% %% Return: ``ok | {error, term()}``
-% -record(auth_client_logon_user, {
-%         user_id :: m_rsc:resource_id(),
-%         url = <<"#reload">> :: binary() | undefined
-%     }).
+-optional_callbacks([ observe_auth_options_update/3, pid_observe_auth_options_update/4 ]).
 
-% %% Send a request to the client to switch users. The zotonic.auth.worker.js will
-% %%      send a request to controller_authentication to perform the switch.
-% %% Type: first
-% %% Return: ``ok | {error, term()}``
-% -record(auth_client_switch_user, {
-%         user_id :: m_rsc:resource_id()
-%     }).
+%% Send a request to the client to login a user. The zotonic.auth.worker.js will
+%%      send a request to controller_authentication to exchange the one time token with
+%%      a z.auth cookie for the given user. The client will redirect to the Url.
+%% Type: first
+%% Return: ``ok | {error, term()}``
+-callback observe_auth_client_logon_user(#auth_client_logon_user{}, z:context()) -> Result when
+    Result :: ok
+            | {error, term()}
+            | undefined.
+-callback pid_observe_auth_client_logon_user(pid(), #auth_client_logon_user{}, z:context()) -> Result when
+    Result :: ok
+            | {error, term()}
+            | undefined.
 
-% %% Return the list of identity types that allow somebody to logon and become an
-% %% active user of the system. Defaults to [ username_pw ].  In the future more types
-% %% can be requested, think of 'contact' - to be able to contact someone.
-% %% Type: foldl
-% %% Return: ``[ atom() ]``
-% -record(auth_identity_types, {
-%         type = user :: user
-%     }).
+-optional_callbacks([ observe_auth_client_logon_user/2, pid_observe_auth_client_logon_user/3 ]).
 
-% %% Called during different moments of the request.
-% %%      * init - called on every http request
-% %%      * refresh - called after init and on mqtt context updates
-% %%      * auth_status - called on every authentication status poll
-% %% Type: foldl
-% %% Return: ``z:context()``
-% -record(request_context, {
-%         phase = init :: init | refresh | auth_status,
+%% Send a request to the client to switch users. The zotonic.auth.worker.js will
+%%      send a request to controller_authentication to perform the switch.
+%% Type: first
+-callback observe_auth_client_switch_user(#auth_client_switch_user{}, z:context()) -> Result when
+    Result :: ok
+            | {error, term()}
+            | undefined.
+-callback pid_observe_auth_client_switch_user(pid(), #auth_client_switch_user{}, z:context()) -> Result when
+    Result :: ok
+            | {error, term()}
+            | undefined.
 
-%         % Document properties from the auth_status call. The client adds
-%         % here properties like the client's preferred language and timezone.
-%         document = #{} :: map()
-%     }).
+-optional_callbacks([ observe_auth_client_switch_user/2, pid_observe_auth_client_switch_user/3 ]).
 
-% %% Refresh the context or request process for the given request or action
-% %%      Called for every request that is not anonymous and before every MQTT relay from
-% %%      the client.  Example: mod_development uses this to set flags in the process
-% %%      dictionary.
-% %% Type: foldl
-% %% Return: ``#context{}``
-% -record(session_context, {
-%         request_type :: http | mqtt,
-%         payload = undefined :: undefined | term()
-%     }).
 
-% %% Called just before validation of all query arguments by z_validation.
-% %%      This is the moment to filter any illegal arguments or change query
-% %%      arguments.
-% %% Type: foldl
-% %% Return: ``{ok, list( {binary(), z:qvalue()} )} | {error, term()}``
-% -record(validate_query_args, {}).
+%% Return the list of identity types that allow somebody to logon and become an
+%% active user of the system. Defaults to [ username_pw ].  In the future more types
+%% can be requested, think of 'contact' - to be able to contact someone.
+%% Type: foldl
+-callback observe_auth_identity_types(#auth_identity_types{}, Acc, z:context()) -> Result when
+    Acc :: [ atom() ],
+    Result :: [ atom() ].
+-callback pid_observe_auth_identity_types(pid(), #auth_identity_types{}, Acc, z:context()) -> Result when
+    Acc :: [ atom() ],
+    Result :: [ atom() ].
 
-% %% Check if a user is enabled. Enabled users are allowed to log in.
-% %% Type: first
-% %% Return ``true``, ``false`` or ``undefined``. If ``undefined`` is returned,
-% %% the user is considered enabled if the user resource is published.
-% -record(user_is_enabled, { id :: m_rsc:resource_id() }).
+-optional_callbacks([ observe_auth_identity_types/3, pid_observe_auth_identity_types/4 ]).
 
-% %% Set #context fields depending on the user and/or the preferences of the user.
-% %% Type: foldl
-% -record(user_context, { id :: m_rsc:resource_id() }).
+%% Called during different moments of the request.
+%%      * init - called on every http request
+%%      * refresh - called after init and on mqtt context updates
+%%      * auth_status - called on every authentication status poll
+%% Type: foldl
+-callback observe_request_context(#request_context{}, Acc, z:context()) -> Result when
+    Acc :: z:context(),
+    Result :: z:context().
+-callback pid_observe_request_context(pid(), #request_context{}, Acc, z:context()) -> Result when
+    Acc :: z:context(),
+    Result :: z:context().
+
+-optional_callbacks([ observe_request_context/3, pid_observe_request_context/4 ]).
+
+%% Refresh the context or request process for the given request or action
+%%      Called for every request that is not anonymous and before every MQTT relay from
+%%      the client.  Example: mod_development uses this to set flags in the process
+%%      dictionary.
+%% Type: foldl
+-callback observe_session_context(#session_context{}, Acc, z:context()) -> Result when
+    Acc :: z:context(),
+    Result :: z:context().
+-callback pid_observe_session_context(pid(), #session_context{}, Acc, z:context()) -> Result when
+    Acc :: z:context(),
+    Result :: z:context().
+
+-optional_callbacks([ observe_session_context/3, pid_observe_session_context/4 ]).
+
+
+%% Called just before validation of all query arguments by z_validation.
+%%      This is the moment to filter any illegal arguments or change query
+%%      arguments.
+%% Type: foldl
+-callback observe_validate_query_args(#validate_query_args{}, Acc, z:context()) -> Result when
+    Acc :: {ok, Args} | {error, term()},
+    Result :: {ok, Args} | {error, term()},
+    Args :: [ {binary(), z:qvalue()} ].
+-callback pid_observe_validate_query_args(pid(), #validate_query_args{}, Acc, z:context()) -> Result when
+    Acc :: {ok, Args} | {error, term()},
+    Result :: {ok, Args} | {error, term()},
+    Args :: [ {binary(), z:qvalue()} ].
+
+-optional_callbacks([ observe_validate_query_args/3, pid_observe_validate_query_args/4 ]).
+
+%% Check if a user is enabled. Enabled users are allowed to log in.
+%% Type: first
+%% Return ``true``, ``false`` or ``undefined``. If ``undefined`` is returned,
+%% the user is considered enabled if the user resource is published.
+-callback observe_user_is_enabled(#user_is_enabled{}, z:context()) -> boolean() | undefined.
+-callback pid_observe_user_is_enabled(pid(), #user_is_enabled{}, z:context()) -> boolean() | undefined.
+
+-optional_callbacks([ observe_user_is_enabled/2, pid_observe_user_is_enabled/3 ]).
+
+%% Set #context fields depending on the user and/or the preferences of the user.
+%% Type: foldl
+-callback observe_user_context(#user_context{}, Acc, z:context()) -> Result when
+    Acc :: z:context(),
+    Result :: z:context().
+-callback pid_observe_user_context(pid(), #user_context{}, Acc, z:context()) -> Result when
+    Acc :: z:context(),
+    Result :: z:context().
+
+-optional_callbacks([ observe_user_context/3, pid_observe_user_context/4 ]).
+
 
 % %% Request API logon
 % -record(service_authorize, { service_module }).
