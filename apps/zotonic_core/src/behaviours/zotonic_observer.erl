@@ -1,6 +1,6 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2025 Marc Worrell
-%% @doc Observer behaviour for all notifications. Include this behaviour
+%% @doc Observer behaviour for all notifications. Use this behaviour
 %% in your module file to allow type checking of your observers.
 %% @end
 
@@ -137,9 +137,9 @@
 -optional_callbacks([ observe_content_types_dispatch/3, pid_observe_content_types_dispatch/4 ]).
 
 
-% %% Check where to go after a user logs on.
-% %% Type: first
-% %% Return: a URL or ``undefined``
+%% Check where to go after a user logs on.
+%% Type: first
+%% Return: a URL or ``undefined``
 -callback observe_logon_ready_page(#logon_ready_page{}, z:context()) -> Result when
     Result :: binary() | undefined.
 -callback pid_observe_logon_ready_page(pid(), #logon_ready_page{}, z:context()) -> Result when
@@ -147,320 +147,431 @@
 
 -optional_callbacks([ observe_logon_ready_page/2, pid_observe_logon_ready_page/3 ]).
 
-% %% Handle a user logon. The posted query args are included.
-% %% Type: first
-% %% Return:: ``{ok, UserId}`` or ``{error, Reason}``
-% -record(logon_submit, {
-%     payload = #{} :: #{ binary() => term() }
-% }).
+%% Handle a user logon. The posted query args are included.
+%% Type: first
+-callback observe_logon_submit(#logon_submit{}, z:context()) -> Result when
+    Result :: {ok, UserId :: m_rsc:resource_id()}
+            | {error, term()}
+            | undefined.
+-callback pid_observe_logon_submit(pid(), #logon_submit{}, z:context()) -> Result when
+    Result :: {ok, UserId :: m_rsc:resource_id()}
+            | {error, term()}
+            | undefined.
 
-% %% Check for logon options, called if logon_submit returns `undefined`.
-% %% This is used to fetch external (or local) authentication links for an
-% %% username.
-% %% Type: foldl
-% %% Return:: ``map()``
-% -record(logon_options, {
-%     payload = #{} :: #{ binary() => term() }
-% }).
+-optional_callbacks([ observe_logon_submit/2, pid_observe_logon_submit/3 ]).
 
+%% Check for logon options, called if logon_submit returns `undefined`.
+%% This is used to fetch external (or local) authentication links for an
+%% username.
+%% Type: foldl
+-callback observe_logon_options(#logon_options{}, Acc, Context) -> Result when
+    Acc :: map(),
+    Context :: z:context(),
+    Result :: map().
+-callback pid_observe_logon_options(pid(), #logon_options{}, Acc, Context) -> Result when
+    Acc :: map(),
+    Context :: z:context(),
+    Result :: map().
 
-% %% Request to send a verification to the user. Return ok or an error.
-% %% Handled by mod_signup to send out verification emails.
-% %% Type: first
-% %% Identity may be undefined, or is an identity used for the verification.
-% -record(identity_verification, {
-%     user_id :: m_rsc:resource_id(),
-%     identity :: undefined | m_identity:identity()
-% }).
+-optional_callbacks([ observe_logon_options/3, pid_observe_logon_options/4 ]).
 
-% %% Notify that a user's identity has been verified. Signals to modules
-% %% handling identities to mark this identity as verified. Handled by mod_admin_identity
-% %% to call the m_identity model for this type/key.
-% %% Type: notify
-% -record(identity_verified, {
-%     user_id :: m_rsc:resource_id(),
-%     type :: m_identity:type(),
-%     key :: m_identity:key()
-% }).
+%% Request to send a verification to the user. Return ok or an error.
+%% Handled by mod_signup to send out verification emails.
+%% Type: first
+%% Identity may be undefined, or is an identity used for the verification.
+-callback observe_identity_verification(#identity_verification{}, z:context()) -> Result when
+    Result :: ok
+            | {error, term()}
+            | undefined.
+-callback pid_observe_identity_verification(pid(), #identity_verification{}, z:context()) -> Result when
+    Result :: ok
+            | {error, term()}
+            | undefined.
 
-% %% Check if passwords are matching. Uses the password hashing algorithms.
-% %% Type: first
-% -record(identity_password_match, {
-%     rsc_id :: m_rsc:resource_id() | undefined,
-%     password :: binary(),
-%     hash :: m_identity:hash() | {hash, atom() | binary(), binary()}
-% }).
+-optional_callbacks([ observe_identity_verification/2, pid_observe_identity_verification/3 ]).
 
-% %% Notify that a user's identity has been updated by the identity model.
-% %% Type: notify
-% -record(identity_update_done, {
-%     action :: insert | update | delete | verify,
-%     rsc_id :: m_rsc:resource_id(),
-%     type :: binary(),
-%     key :: m_identity:key() | undefined,
-%     is_verified :: boolean() | undefined
-% }).
+%% Notify that a user's identity has been verified. Signals to modules
+%% handling identities to mark this identity as verified. Handled by mod_admin_identity
+%% to call the m_identity model for this type/key.
+%% Type: notify
+-callback observe_identity_verified(#identity_verified{}, z:context()) -> any().
+-callback pid_observe_identity_verified(pid(), #identity_verified{}, z:context()) -> any().
 
+-optional_callbacks([ observe_identity_verified/2, pid_observe_identity_verified/3 ]).
 
-% %% Handle a signup of a user, return the follow on page for after the signup.
-% %% Type: first
-% %% Return ``{ok, Url}``
-% %% 'props' is a map with properties for the person resource (email, name, etc)
-% %% 'signup_props' is a proplist with 'identity' definitions and optional follow on url 'ready_page'
-% %% An identity definition is {Kind, Identifier, IsUnique, IsVerified}
-% -record(signup_url, {
-%     props = #{} :: map(),
-%     signup_props = [] :: list()
-% }).
+%% Check if passwords are matching. Uses the password hashing algorithms.
+%% Type: first
+-callback observe_identity_password_match(#identity_password_match{}, z:context()) -> undefined | boolean().
+-callback pid_observe_identity_password_match(pid(), #identity_password_match{}, z:context()) -> undefined | boolean().
 
-% %% Request a signup of a new or existing user. Arguments are similar to #signup_url{}
-% %% Returns {ok, UserId} or {error, Reason}
-% -record(signup, {
-%     id :: m_rsc:resource_id() | undefined,
-%     props = #{} :: map(),
-%     signup_props = [] :: list(),
-%     request_confirm = false :: boolean()
-% }).
+-optional_callbacks([ observe_identity_password_match/2, pid_observe_identity_password_match/3 ]).
 
-% %% Signup failed, give the error page URL. Return {ok, Url} or undefined.
-% %% Reason is returned by the signup handler for the particular signup method (username, facebook etc)
-% %% Type: first
-% -record(signup_failed_url, {
-%     reason
-% }).
+%% Notify that a user's identity has been updated by the identity model.
+%% Type: notify
+-callback observe_identity_update_done(#identity_update_done{}, z:context()) -> any().
+-callback pid_observe_identity_update_done(pid(), #identity_update_done{}, z:context()) -> any().
 
-% %% signup_check
-% %% Check if the signup can be handled, a fold over all modules.
-% %% Fold argument/result is {ok, Props, SignupProps} or {error, Reason}
-% %% Type: foldl
-% %% Return: ``{ok, Props, SignupProps}`` or ``{error, Reason}``
-% -record(signup_check, {
-%     props = #{} :: map(),
-%     signup_props = [] :: list()
-% }).
+-optional_callbacks([ observe_identity_update_done/2, pid_observe_identity_update_done/3 ]).
 
-% %% Signal that a user has been signed up (map, result is ignored)
-% %% Type: map
-% -record(signup_done, {
-%     id :: m_rsc:resource(),
-%     is_verified :: boolean(),
-%     props :: map(),
-%     signup_props :: list()
-% }).
+%% Handle a signup of a user, return the follow on page for after the signup.
+%% Type: first
+%% 'props' is a map with properties for the person resource (email, name, etc)
+%% 'signup_props' is a proplist with 'identity' definitions and optional follow on url 'ready_page'
+%% An identity definition is {Kind, Identifier, IsUnique, IsVerified}
+-callback observe_signup_url(#signup_url{}, z:context()) -> Result when
+    Result :: {ok, Url :: binary()}
+            | undefined.
+-callback pid_observe_signup_url(pid(), #signup_url{}, z:context()) -> Result when
+    Result :: {ok, Url :: binary()}
+            | undefined.
 
-% %% Signal that a user has been confirmed. (map, result is ignored)
-% %% Type: notify
-% -record(signup_confirm, {
-%     id :: m_rsc:resource()
-% }).
+-optional_callbacks([ observe_signup_url/2, pid_observe_signup_url/3 ]).
 
-% %% Fetch the page a user is redirected to after signing up with a confirmed identity
-% %% Type: first
-% %% Return: a URL or ``undefined``
-% -record(signup_confirm_redirect, {
-%     id :: m_rsc:resource()
-% }).
+%% Request a signup of a new or existing user. Arguments are similar to #signup_url{}
+%% Type: first
+%% Returns {ok, UserId} or {error, Reason}
+-callback observe_signup(#signup{}, z:context()) -> Result when
+    Result :: {ok, UserId :: m_rsc:resource_id()}
+            | {error, term()}
+            | undefined.
+-callback pid_observe_signup(pid(), #signup{}, z:context()) -> Result when
+    Result :: {ok, UserId :: m_rsc:resource_id()}
+            | {error, term()}
+            | undefined.
 
-% %% Notification to signal an inserted comment.
-% %% 'comment_id' is the id of the inserted comment, 'id' is the id of the resource commented on.
-% %% Type: notify
-% -record(comment_insert, {
-%     comment_id :: integer(),
-%     id :: m_rsc:resource_id()
-% }).
+-optional_callbacks([ observe_signup/2, pid_observe_signup/3 ]).
 
-% %% Notify that the session's language has been changed
-% %% Type: notify
-% -record(language, {
-%     language :: atom()
-% }).
+%% Signup failed, give the error page URL. Return {ok, Url} or undefined.
+%% Reason is returned by the signup handler for the particular signup method (username, facebook etc)
+%% Type: first
+-callback observe_signup_failed_url(#signup_failed_url{}, z:context()) -> Result when
+    Result :: {ok, Url :: binary()}
+            | undefined.
+-callback pid_observe_signup_failed_url(pid(), #signup_failed_url{}, z:context()) -> Result when
+    Result :: {ok, Url :: binary()}
+            | undefined.
 
-% %% Set the language of the context to a user's prefered language
-% %% Type: first
-% -record(set_user_language, {
-%     id :: m_rsc:resource_id()
-% }).
+-optional_callbacks([ observe_signup_failed_url/2, pid_observe_signup_failed_url/3 ]).
 
-% %% Make a generated URL absolute, optionally called after url_rewrite by z_dispatcher
-% %% Type: first
-% -record(url_abs, {url, dispatch, dispatch_options}).
+%% signup_check
+%% Check if the signup can be handled, a fold over all modules.
+%% Fold argument/result is {ok, Props, SignupProps} or {error, Reason}
+%% Type: foldl
+%% Return: ``{ok, Props, SignupProps}`` or ``{error, Reason}``
+-callback observe_signup_check(signup_check, Acc, Context) -> Result when
+    Acc :: {ok, Props, SignupProps} | {error, term()},
+    Context :: z:context(),
+    Result :: {ok, Props, SignupProps} | {error, term()},
+    Props :: map(),
+    SignupProps :: list().
+-callback pid_observe_signup_check(pid(), signup_check, Acc, Context) -> Result when
+    Acc :: {ok, Props, SignupProps} | {error, term()},
+    Context :: z:context(),
+    Result :: {ok, Props, SignupProps} | {error, term()},
+    Props :: map(),
+    SignupProps :: list().
 
-% %% Rewrite a URL after it has been generated using the z_dispatcher
-% %% Type: foldl
-% -record(url_rewrite, {
-%     dispatch :: atom(),
-%     args = [] :: list()
-% }).
-
-% %% Rewrite a URL before it will be dispatched using the z_sites_dispatcher
-% %% Type: foldl
-% -record(dispatch_rewrite, {
-%     is_dir = false :: boolean(),
-%     path = <<>> :: binary(),
-%     host
-% }).
-
-% %% Request the SSL certificates for this site. The server_name property contains the hostname used by the client. (first)
-% %% Returns either 'undefined' or a list of ssl options (type ssl:ssl_option())
-% -record(ssl_options, {server_name :: binary()}).
-
-% %% Used in the admin to fetch the possible blocks for display
-% %% Type: foldl
-% -record(admin_edit_blocks, {
-%     id :: m_rsc:resource_id()
-% }).
-
-% %% Used in the admin to process a submitted resource form
-% -record(admin_rscform, {
-%     id :: m_rsc:resource_id(),
-%     is_a :: list( atom() )
-% }).
-
-% %% Used for fetching the menu in the admin.
-% %% Type: foldl
-% %% Return: list of admin menu items
-% -record(admin_menu, {}).
-
-% %% Fetch the menu id belonging to a certain resource
-% %% Type: first
-% -record(menu_rsc, {
-%     id :: m_rsc:resource()
-% }).
-
-% %% Fold for mapping non-iolist output to iolist values.
-% %%      Used when outputting a rendered HTML tree.
-% %%      Folded accumulator is: { MixedHtml, Context }
-% %% Type: foldl
-% -record(output_html, {
-%     html :: term()
-% }).
+-optional_callbacks([ observe_signup_check/3, pid_observe_signup_check/4 ]).
 
 
-% %% An activity in Zotonic. When this is handled as a notification then return a list
-% %% of patterns matching this activity.  These patterns are then used to find interested
-% %% subscribers.
-% %% Type: map
-% -record(activity, {
-%     version = 1 :: pos_integer(),
-%     posted_time,
-%     actor,
-%     verb = post :: atom(),
-%     object, target
-% }).
+%% Signal that a user has been signed up (map, result is ignored)
+%% Type: notify_sync
+-callback observe_signup_done(#signup_done{}, z:context()) -> any().
+-callback pid_observe_signup_done(pid(), #signup_done{}, z:context()) -> any().
 
-% %% Push a list of activities via a 'channel' (eg 'email') to a recipient.
-% %% The activities are a list of #activity{} records.
-% %% Type: first
-% -record(activity_send, {
-%     recipient_id,
-%     channel,
-%     queue,
-%     activities = [] :: list()
-% }).
+-optional_callbacks([ observe_signup_done/2, pid_observe_signup_done/3 ]).
 
 
-% %% Notification sent to a site when e-mail for that site is received
-% %% Type: first
-% -record(email_received, {
-%     to :: binary(),
-%     from :: undefined | binary(),
-%     localpart :: binary(),
-%     localtags :: [ binary() ],
-%     domain :: binary(),
-%     reference :: binary(),
-%     email :: #email{},
-%     headers :: [ {binary(), binary()} ],
-%     is_bulk = false :: boolean(),
-%     is_auto = false :: boolean(),
-%     decoded,
-%     raw
-% }).
+%% Signal that a user has been confirmed. (map, result is ignored)
+%% Type: notify
+-callback observe_signup_confirm(#signup_confirm{}, z:context()) -> any().
+-callback pid_observe_signup_confirm(pid(), #signup_confirm{}, z:context()) -> any().
+
+-optional_callbacks([ observe_signup_confirm/2, pid_observe_signup_confirm/3 ]).
+
+%% Fetch the page a user is redirected to after signing up with a confirmed identity
+%% Type: first
+%% Return: a URL or ``undefined``
+-callback observe_signup_confirm_redirect(#signup_confirm_redirect{}, z:context()) -> Result when
+    Result :: URL
+            | undefined,
+    URL :: binary().
+-callback pid_observe_signup_confirm_redirect(pid(), #signup_confirm_redirect{}, z:context()) -> Result when
+    Result :: URL
+            | undefined,
+    URL :: binary().
+
+-optional_callbacks([ observe_signup_confirm_redirect/2, pid_observe_signup_confirm_redirect/3 ]).
+
+%% Notification to signal an inserted comment.
+%% 'comment_id' is the id of the inserted comment, 'id' is the id of the resource commented on.
+%% Type: notify
+-callback observe_comment_insert(#comment_insert{}, z:context()) -> any().
+-callback pid_observe_comment_insert(pid(), #comment_insert{}, z:context()) -> any().
+
+-optional_callbacks([ observe_comment_insert/2, pid_observe_comment_insert/3 ]).
+
+%% Notify that the session's language has been changed
+%% Type: notify
+-callback observe_language(#language{}, z:context()) -> any().
+-callback pid_observe_language(pid(), #language{}, z:context()) -> any().
+
+-optional_callbacks([ observe_language/2, pid_observe_language/3 ]).
+
+%% Set the language of the context to a user's prefered language
+%% Type: first
+-callback observe_set_user_language(#set_user_language{}, z:context()) -> z:context() | undefined.
+-callback pid_observe_set_user_language(pid(), #set_user_language{}, z:context()) -> z:context() | undefined.
+
+-optional_callbacks([ observe_set_user_language/2, pid_observe_set_user_language/3 ]).
+
+%% Make a generated URL absolute, optionally called after url_rewrite by z_dispatcher
+%% Type: first
+-callback observe_url_abs(#url_abs{}, z:context()) -> URL | undefined when
+    URL :: binary().
+-callback pid_observe_url_abs(pid(), #url_abs{}, z:context()) -> URL | undefined when
+    URL :: binary().
+
+-optional_callbacks([ observe_url_abs/2, pid_observe_url_abs/3 ]).
+
+%% Rewrite a URL after it has been generated using the z_dispatcher
+%% Type: foldl
+-callback observe_url_rewrite(#url_rewrite{}, Acc, z:context()) -> Result when
+    Acc :: binary(),
+    Result :: binary().
+-callback pid_observe_url_rewrite(pid(), #url_rewrite{}, Acc, z:context()) -> Result when
+    Acc :: binary(),
+    Result :: binary().
+
+-optional_callbacks([ observe_url_rewrite/3, pid_observe_url_rewrite/4 ]).
+
+%% Rewrite a URL before it will be dispatched using the z_sites_dispatcher
+%% Type: foldl
+-callback observe_dispatch_rewrite(#dispatch_rewrite{}, Acc, z:context()) -> Result when
+    Acc :: binary(),
+    Result :: binary().
+-callback pid_observe_dispatch_rewrite(pid(), #dispatch_rewrite{}, Acc, z:context()) -> Result when
+    Acc :: binary(),
+    Result :: binary().
+
+-optional_callbacks([ observe_dispatch_rewrite/3, pid_observe_dispatch_rewrite/4 ]).
+
+%% Request the SSL certificates for this site. The server_name property contains the hostname used by the client.
+%% Type: first
+%% Returns either 'undefined' or a list of ssl options (type ssl:ssl_option())
+-callback observe_ssl_options(#ssl_options{}, z:context()) -> SSLOptions | undefined when
+    SSLOptions :: {ok, list( ssl:tls_option() )}.
+-callback pid_observe_ssl_options(pid(), #ssl_options{}, z:context()) -> SSLOptions | undefined when
+    SSLOptions :: {ok, list( ssl:tls_option() )}.
+
+-optional_callbacks([ observe_ssl_options/2, pid_observe_ssl_options/3 ]).
+
+%% Used in the admin to fetch the possible blocks for display
+%% Type: foldl
+-callback observe_admin_edit_blocks(#admin_edit_blocks{}, Acc, z:context()) -> Result when
+    Acc :: BlockGroups,
+    Result :: BlockGroups,
+    BlockGroups :: [ {Prio, SectionTitle, BlockTypes} ],
+    Prio :: integer(),
+    SectionTitle :: binary() | string() | z:trans(),
+    BlockTypes :: [ {atom(), binary() | string() | z:trans()}].
+-callback pid_observe_admin_edit_blocks(pid(), #admin_edit_blocks{}, Acc, z:context()) -> Result when
+    Acc :: BlockGroups,
+    Result :: BlockGroups,
+    BlockGroups :: [ {Prio, SectionTitle, BlockTypes} ],
+    Prio :: integer(),
+    SectionTitle :: binary() | string() | z:trans(),
+    BlockTypes :: [ {atom(), binary() | string() | z:trans()}].
+
+-optional_callbacks([ observe_admin_edit_blocks/3, pid_observe_admin_edit_blocks/4 ]).
+
+%% Used in the admin to process a submitted resource form's query args.
+%% Type: foldl
+-callback observe_admin_rscform(#admin_rscform{}, Acc, z:context()) -> Result when
+    Acc :: Props,
+    Result :: Props,
+    Props :: [ {binary(), z:qvalue()} ].
+-callback pid_observe_admin_rscform(pid(), #admin_rscform{}, Acc, z:context()) -> Result when
+    Acc :: Props,
+    Result :: Props,
+    Props :: [ {binary(), z:qvalue()} ].
+
+-optional_callbacks([ observe_admin_rscform/3, pid_observe_admin_rscform/4 ]).
+
+%% Used for fetching the menu in the admin. The menu items are expected to be of the
+%% type #menu_item{}, as defined in mod_menu.hrl
+%% Type: foldl
+%% Return: list of admin menu items
+-callback observe_admin_menu(#admin_menu{}, Acc, z:context()) -> Result when
+    Acc :: MenuItems,
+    Result :: MenuItems,
+    MenuItems :: [ term() ].
+-callback pid_observe_admin_menu(pid(), #admin_menu{}, Acc, z:context()) -> Result when
+    Acc :: MenuItems,
+    Result :: MenuItems,
+    MenuItems :: [ term() ].
+
+-optional_callbacks([ observe_admin_menu/3, pid_observe_admin_menu/4 ]).
+
+%% Fetch the menu id belonging to a certain resource.
+%% Type: first
+-callback observe_menu_rsc(#menu_rsc{}, z:context()) -> m_rsc:resource() | undefined.
+-callback pid_observe_menu_rsc(pid(), #menu_rsc{}, z:context()) -> m_rsc:resource() | undefined.
+
+-optional_callbacks([ observe_menu_rsc/2, pid_observe_menu_rsc/3 ]).
+
+%% Fold for mapping non-iolist output to iolist values.
+%% Used when outputting a rendered HTML tree.
+%% Folded accumulator is: { MixedHtml, Context }
+%% Type: foldl
+-callback observe_output_html(#output_html{}, Acc, z:context()) -> Result when
+    Acc :: {MixedHtml, Context},
+    Result :: {MixedHtml, Context},
+    Context :: z:context(),
+    MixedHtml :: binary() | list().
+-callback pid_observe_output_html(pid(), #output_html{}, Acc, z:context()) -> Result when
+    Acc :: {MixedHtml, Context},
+    Result :: {MixedHtml, Context},
+    Context :: z:context(),
+    MixedHtml :: binary() | list().
+
+-optional_callbacks([ observe_output_html/3, pid_observe_output_html/4 ]).
+
+%% An activity in Zotonic. When this is handled as a notification then return a list
+%% of patterns matching this activity.  These patterns are then used to find interested
+%% subscribers.
+%% Type: map
+-callback observe_activity(#activity{}, z:context()) -> Patterns when
+    Patterns :: [ term() ].
+-callback pid_observe_activity(pid(), #activity{}, z:context()) -> Patterns when
+    Patterns :: [ term() ].
+
+-optional_callbacks([ observe_activity/2, pid_observe_activity/3 ]).
+
+%% Push a list of activities via a 'channel' (eg 'email') to a recipient.
+%% The activities are a list of #activity{} records.
+%% Type: first
+-callback observe_activity_send(#activity_send{}, z:context()) -> undefined | ok.
+-callback pid_observe_activity_send(pid(), #activity_send{}, z:context()) -> undefined | ok.
+
+-optional_callbacks([ observe_activity_send/2, pid_observe_activity_send/3 ]).
+
+%% Notification sent to a site when e-mail for that site is received
+%% Type: first
+-callback observe_email_received(#email_received{}, z:context()) -> Result when
+    Result :: undefined
+            | {ok, MsgId :: binary()}
+            | {ok, term()}
+            | ok
+            | {error, term()}
+            | undefined.
+-callback pid_observe_email_received(pid(), #email_received{}, z:context()) -> Result when
+    Result :: undefined
+            | {ok, MsgId :: binary()}
+            | {ok, term()}
+            | ok
+            | {error, term()}
+            | undefined.
+
+-optional_callbacks([ observe_email_received/2, pid_observe_email_received/3 ]).
 
 % % E-mail received notification:
 % % {z_convert:to_atom(Notification), received, UserId, ResourceId, Received}
 % % The {Notification, UserId, ResourceId} comes from m_email_receive_recipient:get_by_recipient/2.
 
-% %% Check if an email address is blocked
-% %% Type: first
-% -record(email_is_blocked, {
-%     recipient :: binary()
-% }).
 
-% %% Check if an email address is safe to send email to. The email address is not blocked
-% %% and is not marked as bouncing.
-% %% Type: first
-% -record(email_is_recipient_ok, {
-%     recipient :: binary()
-% }).
+%% Check if an email address is blocked
+%% Type: first
+-callback observe_email_is_blocked(#email_is_blocked{}, z:context()) -> boolean() | undefined.
+-callback pid_observe_email_is_blocked(pid(), #email_is_blocked{}, z:context()) -> boolean() | undefined.
 
-% %% Email status notification, sent when the validity of an email recipient changes
-% %% Type: notify
-% -record(email_status, {
-%     recipient :: binary(),
-%     is_valid :: boolean(),
-%     is_final :: boolean(),
-%     is_manual :: boolean()
-% }).
+-optional_callbacks([ observe_email_is_blocked/2, pid_observe_email_is_blocked/3 ]).
 
-% %% Bounced e-mail notification.  The recipient is the e-mail that is bouncing. When the
-% %% the message_nr is unknown the it is set to 'undefined'. This can happen if it is a "late bounce".
-% %% If the recipient is defined then the Context is the depickled z_email:send/2 context.
-% %% Type: notify
-% -record(email_bounced, {
-%     message_nr :: binary() | undefined,
-%     recipient :: binary() | undefined
-% }).
+%% Email status notification, sent when the validity of an email recipient changes
+%% Type: notify
+-callback observe_email_status(#email_status{}, z:context()) -> any().
+-callback pid_observe_email_status(pid(), #email_status{}, z:context()) -> any().
 
-% %% Notify that we could send an e-mail (there might be a bounce later...)
-% %% The Context is the depickled z_email:send/2 context.
-% %% Type: notify
-% -record(email_sent, {
-%     message_nr :: binary(),
-%     recipient :: binary(),
-%     is_final :: boolean()   % Set to true after waiting 4 hours for bounces
-% }).
+-optional_callbacks([ observe_email_status/2, pid_observe_email_status/3 ]).
 
-% %% Notify that we could NOT send an e-mail (there might be a bounce later...)
-% %% The Context is the depickled z_email:send/2 context.
-% %% Type: notify
-% -record(email_failed, {
-%     message_nr :: binary(),
-%     recipient :: binary(),
-%     is_final :: boolean(),
-%     reason :: bounce | retry | illegal_address | smtphost | sender_disabled | error,
-%     retry_ct :: non_neg_integer() | undefined,
-%     status :: binary() | {error, term()} | undefined
-% }).
+%% Bounced e-mail notification.  The recipient is the e-mail that is bouncing. When the
+%% the message_nr is unknown the it is set to 'undefined'. This can happen if it is a "late bounce".
+%% If the recipient is defined then the Context is the depickled z_email:send/2 context.
+%% Type: notify
+-callback observe_email_bounced(#email_bounced{}, z:context()) -> any().
+-callback pid_observe_email_bounced(pid(), #email_bounced{}, z:context()) -> any().
 
+-optional_callbacks([ observe_email_bounced/2, pid_observe_email_bounced/3 ]).
 
-% %% Return the options for the DKIM signature on outgoing emails. Called during
-% %% email encoding.
-% %% Type: first
-% %% Return: ``list()`` options for the DKIM signature
-% -record(email_dkim_options, {
-% }).
+%% Notify that we could send an e-mail (there might be a bounce later...)
+%% The Context is the depickled z_email:send/2 context.
+%% Type: notify
+-callback observe_email_sent(#email_sent{}, z:context()) -> any().
+-callback pid_observe_email_sent(pid(), #email_sent{}, z:context()) -> any().
 
-% %% Request to send an email using special email senders, for example using
-% %% proxy APIs. If no sender is found then the email is sent using the built-in smtp
-% %% server. The email is completely mime encoded.
-% %% The Context is the depickled z_email:send/2 context.
-% %% Type: first
-% %% Return: ``{ok, Status}`` where status is a binary; or
-% %%         ``smtp`` use the built-in smtp server; or
-% %%         ``{error, Reason::atom(), {FailureType, Host, Message}}`` when FailureType
-% %%         is one of ``permanent_failure`` or ``temporary_failure``.
-% -record(email_send_encoded, {
-%     message_nr :: binary(),
-%     from :: binary(),        % The envelop from
-%     to :: binary(),          % The envelop to
-%     encoded :: binary(),
-%     options :: gen_smtp_client:options()
-% }).
+-optional_callbacks([ observe_email_sent/2, pid_observe_email_sent/3 ]).
 
+%% Notify that we could NOT send an e-mail (there might be a bounce later...)
+%% The Context is the depickled z_email:send/2 context.
+%% Type: notify
+-callback observe_email_failed(#email_failed{}, z:context()) -> any().
+-callback pid_observe_email_failed(pid(), #email_failed{}, z:context()) -> any().
 
-% %% Add a handler for receiving e-mail notifications
-% %% Type: first
-% %% Return: ``{ok, LocalFrom}``, the unique localpart of an e-mail address on this server.
+-optional_callbacks([ observe_email_failed/2, pid_observe_email_failed/3 ]).
+
+%% Return the options for the DKIM signature on outgoing emails. Called during
+%% email encoding.
+%% Type: first
+%% Return: ``list()`` options for the DKIM signature
+-callback observe_email_dkim_options(#email_dkim_options{}, z:context()) -> Result when
+    Result :: DKIMOptions
+            | undefined,
+    DKIMOptions :: list( {atom(), term()} ).
+-callback pid_observe_email_dkim_options(pid(), #email_dkim_options{}, z:context()) -> Result when
+    Result :: DKIMOptions
+            | undefined,
+    DKIMOptions :: list( {atom(), term()} ).
+
+-optional_callbacks([ observe_email_dkim_options/2, pid_observe_email_dkim_options/3 ]).
+
+%% Request to send an email using special email senders, for example using
+%% proxy APIs. If no sender is found then the email is sent using the built-in smtp
+%% server. The email is completely mime encoded.
+%% The Context is the depickled z_email:send/2 context.
+%% Type: first
+%% Return: ``{ok, Status}`` where status is a binary; or
+%%         ``smtp`` use the built-in smtp server; or
+%%         ``{error, Reason::atom(), {FailureType, Host, Message}}`` when FailureType
+%%         is one of ``permanent_failure`` or ``temporary_failure``.
+-callback observe_email_send_encoded(#email_send_encoded{}, z:context()) -> Result when
+    Result :: {ok, binary()}
+            | {ok, term()}
+            | {error, Reason, {FailureType, Host, Message}}
+            | {error, term()}
+            | smtp
+            | undefined,
+    Reason :: term(),
+    FailureType :: permanent_failure | temporary_failure,
+    Host :: string() | binary(),
+    Message :: term().
+-callback pid_observe_email_send_encoded(pid(), #email_send_encoded{}, z:context()) -> Result when
+    Result :: {ok, binary()}
+            | {ok, term()}
+            | {error, Reason, {FailureType, Host, Message}}
+            | {error, term()}
+            | smtp
+            | undefined,
+    Reason :: term(),
+    FailureType :: permanent_failure | temporary_failure,
+    Host :: string() | binary(),
+    Message :: term().
+
+-optional_callbacks([ observe_email_send_encoded/2, pid_observe_email_send_encoded/3 ]).
+
+%% Add a handler for receiving e-mail notifications
+%% Type: first
+%% Return: ``{ok, LocalFrom}``, the unique localpart of an e-mail address on this server.
+
 % -record(email_add_handler, {notification, user_id, resource_id}).
 % -record(email_ensure_handler, {notification, user_id, resource_id}).
 

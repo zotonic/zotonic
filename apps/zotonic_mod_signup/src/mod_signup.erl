@@ -157,7 +157,7 @@ do_signup(UserId, Props, SignupProps, RequestConfirm, Context) ->
                 _ -> ContextLogon
             end,
             ensure_identities(NewUserId, SignupProps, ContextUser),
-            z_notifier:map(#signup_done{id=NewUserId, is_verified=IsVerified, props=Props, signup_props=SignupProps}, ContextUser),
+            z_notifier:notify_sync(#signup_done{id=NewUserId, is_verified=IsVerified, props=Props, signup_props=SignupProps}, ContextUser),
             case IsVerified of
                 true -> z_notifier:map(#signup_confirm{id=NewUserId}, ContextUser);
                 false -> nop

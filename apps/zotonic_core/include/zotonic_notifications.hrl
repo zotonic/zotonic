@@ -223,10 +223,7 @@
 %% Fold argument/result is {ok, Props, SignupProps} or {error, Reason}
 %% Type: foldl
 %% Return: ``{ok, Props, SignupProps}`` or ``{error, Reason}``
--record(signup_check, {
-    props = #{} :: map(),
-    signup_props = [] :: list()
-}).
+
 
 %% @doc Signal that a user has been signed up (map, result is ignored)
 %% Type: map
@@ -344,7 +341,7 @@
     recipient_id,
     channel,
     queue,
-    activities = [] :: list()
+    activities = [] :: list( #activity{} )
 }).
 
 
