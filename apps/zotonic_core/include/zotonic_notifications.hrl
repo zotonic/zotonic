@@ -518,7 +518,7 @@
 
 %% @doc Map to signal merging two resources. Move any information from the loser to the
 %% winner. The loser will be deleted.
-%% Type: map
+%% Type: notify_sync
 -record(rsc_merge, {
     winner_id :: m_rsc:resource_id(),
     loser_id :: m_rsc:resource_id(),

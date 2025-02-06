@@ -571,84 +571,110 @@
 %% Add a handler for receiving e-mail notifications
 %% Type: first
 %% Return: ``{ok, LocalFrom}``, the unique localpart of an e-mail address on this server.
+-callback observe_email_add_handler(#email_add_handler{}, z:context()) -> Result when
+    Result :: {ok, LocalForm :: binary()}
+            | undefined.
+-callback pid_observe_email_add_handler(pid(), #email_add_handler{}, z:context()) -> Result when
+    Result :: {ok, LocalForm :: binary()}
+            | undefined.
 
-% -record(email_add_handler, {notification, user_id, resource_id}).
-% -record(email_ensure_handler, {notification, user_id, resource_id}).
+-optional_callbacks([ observe_email_add_handler/2, pid_observe_email_add_handler/3 ]).
 
-% %% Drop an e-mail handler for a user/resource id. (notify).
-% %% The notification, user and resource should be the same as when the handler was registered.
-% -record(email_drop_handler, {notification, user_id, resource_id}).
+-callback observe_email_ensure_handler(#email_ensure_handler{}, z:context()) -> Result when
+    Result :: {ok, LocalForm :: binary()}
+            | undefined.
+-callback pid_observe_email_ensure_handler(pid(), #email_ensure_handler{}, z:context()) -> Result when
+    Result :: {ok, LocalForm :: binary()}
+            | undefined.
+
+-optional_callbacks([ observe_email_ensure_handler/2, pid_observe_email_ensure_handler/3 ]).
+
+%% Drop an e-mail handler for a user/resource id. (notify).
+%% The notification, user and resource should be the same as when the handler was registered.
+-callback observe_email_drop_handler(#email_drop_handler{}, z:context()) -> any().
+-callback pid_observe_email_drop_handler(pid(), #email_drop_handler{}, z:context()) -> any().
+
+-optional_callbacks([ observe_email_drop_handler/2, pid_observe_email_drop_handler/3 ]).
+
+%% Send a page to a mailinglist (notify)
+%% Use {single_test_address, Email} when sending to a specific e-mail address.
+-callback observe_mailinglist_mailing(#mailinglist_mailing{}, z:context()) -> any().
+-callback pid_observe_mailinglist_mailing(pid(), #mailinglist_mailing{}, z:context()) -> any().
+
+-optional_callbacks([ observe_mailinglist_mailing/2, pid_observe_mailinglist_mailing/3 ]).
 
 
-% %% Send a page to a mailinglist (notify)
-% %% Use {single_test_address, Email} when sending to a specific e-mail address.
-% -record(mailinglist_mailing, {
-%     list_id = undefined :: m_rsc:resource() | undefined,
-%     email = undefined :: binary() | string() | undefined,
-%     page_id :: m_rsc:resource(),
-%     options = [] :: [ {is_match_language, boolean()} | {is_send_all, boolean()} ]
-% }).
+%% Send a welcome or goodbye message to the given recipient.
+%% The recipient is either a recipient-id or a recipient props.
+%% 'what' is send_welcome, send_confirm, send_goobye or silent.
+%% Type: notify
+-callback observe_mailinglist_message(#mailinglist_message{}, z:context()) -> any().
+-callback pid_observe_mailinglist_message(pid(), #mailinglist_message{}, z:context()) -> any().
 
-% %% Send a welcome or goodbye message to the given recipient.
-% %% The recipient is either a recipient-id or a recipient props.
-% %% 'what' is send_welcome, send_confirm, send_goobye or silent.
-% %% Type: notify
-% -record(mailinglist_message, {
-%     what :: send_welcome | send_confirm | send_goodbye | silent,
-%     list_id :: m_rsc:resource(),
-%     recipient :: proplists:proplist() | integer()
-% }).
+-optional_callbacks([ observe_mailinglist_message/2, pid_observe_mailinglist_message/3 ]).
 
-% %% Save (and update) the complete category hierarchy
-% %% Type: notify
-% -record(category_hierarchy_save, {tree}).
+%% Save (and update) the complete category hierarchy
+%% Type: notify
+-callback observe_category_hierarchy_save(#category_hierarchy_save{}, z:context()) -> any().
+-callback pid_observe_category_hierarchy_save(pid(), #category_hierarchy_save{}, z:context()) -> any().
 
-% %% Save the menu tree of a menu resource
-% %% Type: notify
-% -record(menu_save, {id, tree}).
+-optional_callbacks([ observe_category_hierarchy_save/2, pid_observe_category_hierarchy_save/3 ]).
 
-% %% Signal that the hierarchy underneath a resource has been changed by mod_menu
-% %% Type: notify
-% -record(hierarchy_updated, {
-%     root_id :: binary() | integer(),
-%     predicate :: atom(),
-%     inserted_ids = [] :: list(integer()),
-%     deleted_ids = [] :: list(integer())
-% }).
+%% Save the menu tree of a menu resource
+%% Type: notify
+-callback observe_menu_save(#menu_save{}, z:context()) -> any().
+-callback pid_observe_menu_save(pid(), #menu_save{}, z:context()) -> any().
 
-% %% Resource is read, opportunity to add computed fields
-% %% Used in a foldr with the read properties as accumulator.
-% %% Type: foldr
-% -record(rsc_get, {
-%     id :: m_rsc:resource_id()
-% }).
+-optional_callbacks([ observe_menu_save/2, pid_observe_menu_save/3 ]).
 
-% %% Resource will be deleted.
-% %% This notification is part of the delete transaction, it's purpose is to clean up
-% %% associated data.
-% %% Type: notify
-% -record(rsc_delete, {
-%     id :: m_rsc:resource_id(),
-%     is_a :: list( atom() )
-% }).
+%% Signal that the hierarchy underneath a resource has been changed by mod_menu
+%% Type: notify
+-callback observe_hierarchy_updated(#hierarchy_updated{}, z:context()) -> any().
+-callback pid_observe_hierarchy_updated(pid(), #hierarchy_updated{}, z:context()) -> any().
 
-% %% Foldr for an resource insert, these are the initial properties and will overrule
-% %% the properties in the insert request. Use with care.  The props are the properties of
-% %% the later insert, after escaping/filtering but before the #rsc_update{} notification below.
-% %% Type: foldr
-% %% Return: proplist accumulator
-% -record(rsc_insert, {
-%     props :: m_rsc:props()
-% }).
+-optional_callbacks([ observe_hierarchy_updated/2, pid_observe_hierarchy_updated/3 ]).
 
-% %% Map to signal merging two resources. Move any information from the loser to the
-% %% winner. The loser will be deleted.
-% %% Type: map
-% -record(rsc_merge, {
-%     winner_id :: m_rsc:resource_id(),
-%     loser_id :: m_rsc:resource_id(),
-%     is_merge_trans :: boolean()
-% }).
+%% Resource is read, opportunity to add computed fields
+%% Used in a foldr with the read properties as accumulator.
+%% Type: foldr
+-callback observe_rsc_get(#rsc_get{}, Acc, z:context()) -> Result when
+    Acc :: m_rsc:props(),
+    Result :: map().
+-callback pid_observe_rsc_get(pid(), #rsc_delete{}, Acc, z:context()) -> Result when
+    Acc :: m_rsc:props(),
+    Result :: m_rsc:props().
+
+-optional_callbacks([ observe_rsc_get/3, pid_observe_rsc_get/4 ]).
+
+%% Resource will be deleted.
+%% This notification is part of the delete transaction, it's purpose is to clean up
+%% associated data.
+%% Type: notify
+-callback observe_rsc_delete(#rsc_delete{}, z:context()) -> any().
+-callback pid_observe_rsc_delete(pid(), #rsc_delete{}, z:context()) -> any().
+
+-optional_callbacks([ observe_rsc_delete/2, pid_observe_rsc_delete/3 ]).
+
+%% Foldr for an resource insert, these are the initial properties and will overrule
+%% the properties in the insert request. Use with care.  The props are the properties of
+%% the later insert, after escaping/filtering but before the #rsc_update{} notification below.
+%% Type: foldr
+-callback observe_rsc_insert(#rsc_insert{}, Acc, z:context()) -> Result when
+    Acc :: m_rsc:props(),
+    Result :: m_rsc:props().
+-callback pid_observe_rsc_insert(pid(), #rsc_insert{}, Acc, z:context()) -> Result when
+    Acc :: m_rsc:props(),
+    Result :: m_rsc:props().
+
+-optional_callbacks([ observe_rsc_insert/3, pid_observe_rsc_insert/4 ]).
+
+%% Map to signal merging two resources. Move any information from the loser to the
+%% winner. The loser will be deleted.
+%% Type: notify_sync
+-callback observe_rsc_merge(#rsc_merge{}, z:context()) -> any().
+-callback pid_observe_rsc_merge(pid(), #rsc_merge{}, z:context()) -> any().
+
+-optional_callbacks([ observe_rsc_merge/2, pid_observe_rsc_merge/3 ]).
 
 % %% An updated resource is about to be persisted.
 % %% Observe this notification to change the resource properties before they are
