@@ -339,7 +339,7 @@ to_utc_date({{Y,M,D},{H,I,S}} = Date) when is_integer(Y), is_integer(M), is_inte
 
 -spec delete_task( module(), atom(), z:context() ) -> non_neg_integer().
 delete_task(Module, Function, Context) ->
-    case z_db:q("delete from pivot_task_queue where module = $1 and function = $2",
+    case z_db:q1("delete from pivot_task_queue where module = $1 and function = $2",
            [Module, Function],
            Context)
     of
@@ -354,7 +354,7 @@ delete_task(Module, Function, Context) ->
 -spec delete_task( module(), atom(), task_key(), z:context() ) -> non_neg_integer().
 delete_task(Module, Function, UniqueKey, Context) ->
     UniqueKeyBin = z_convert:to_binary(UniqueKey),
-    case z_db:q("delete from pivot_task_queue where module = $1 and function = $2 and key = $3",
+    case z_db:q1("delete from pivot_task_queue where module = $1 and function = $2 and key = $3",
            [Module, Function, UniqueKeyBin],
            Context)
     of
@@ -381,7 +381,7 @@ count_tasks(Context) ->
 
 -spec delete_tasks( z:context() ) -> non_neg_integer().
 delete_tasks(Context) ->
-    case z_db:q("delete from pivot_task_queue", Context) of
+    case z_db:q1("delete from pivot_task_queue", Context) of
         0 ->
             0;
         N ->

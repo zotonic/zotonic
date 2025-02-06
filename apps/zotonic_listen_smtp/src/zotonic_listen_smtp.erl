@@ -4,6 +4,7 @@
 %%      Original author: Andrew Thompson (andrew@hijacked.us)
 %% @author Atilla Erdodi <atilla@maximonster.com>
 %% @copyright 2010-2025 Maximonster Interactive Things
+%% @end
 
 %% Copyright 2010-2025 Maximonster Interactive Things
 %%
@@ -226,11 +227,11 @@ handle_RCPT(To, State) ->
         %     {error, "451 Server error. Please try again later.", State}
     end.
 
--spec handle_RCPT_extension(Extension :: binary(), State :: #state{}) -> {'ok', #state{}} | 'error'.
+-spec handle_RCPT_extension(Extension :: binary(), State :: #state{}) -> {'ok', #state{}}.
 handle_RCPT_extension(_Extension, State) ->
     {ok, State}.
 
--spec handle_DATA(From :: binary(), To :: [binary(),...], Data :: binary(), State :: #state{}) -> {'ok', string(), #state{}} | {'error', string(), #state{}}.
+-spec handle_DATA(From :: binary(), To :: [binary(),...], Data :: binary(), State :: #state{}) -> {'ok', binary(), #state{}} | {'error', string(), #state{}}.
 handle_DATA(From, To, Data, State) ->
     MsgId = z_ids:id(32),
     DataRcvd = add_received_header(Data, MsgId, State),

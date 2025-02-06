@@ -309,8 +309,10 @@ cache_key(Context) ->
 
 %% @doc Return the id of the current user.
 -spec user(z:context()) -> m_rsc:resource_id() | undefined.
-user(#context{user_id = UserId}) ->
-    UserId.
+user(#context{user_id = UserId}) when is_integer(UserId) ->
+    UserId;
+user(#context{}) ->
+    undefined.
 
 %% @doc Return the list of user groups the current context is member of.
 -spec user_groups(z:context()) -> [ m_rsc:resource_id() ].

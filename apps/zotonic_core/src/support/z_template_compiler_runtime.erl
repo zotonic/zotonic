@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016-2024 Marc Worrell
+%% @copyright 2016-2025 Marc Worrell
 %% @doc Runtime for the compiled templates with Zotonic specific interfaces.
 %% @end
 
-%% Copyright 2016-2024 Marc Worrell
+%% Copyright 2016-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -205,7 +205,7 @@ map_template_all_cat_1(Template, Stack, Context) when is_binary(Template) ->
 
 %% @doc Map a template name to a template file.
 -spec map_template_1(binary(), z:context()) ->
-            {ok, file:filename_all()} | {error, enoent|term()}.
+            {ok, #template_file{}} | {error, enoent|term()}.
 map_template_1(Template, Context) when is_binary(Template) ->
     case z_module_indexer:find(template, Template, Context) of
         {ok, #module_index{filepath=Filename, key=Key}} ->
@@ -466,15 +466,13 @@ get(Prop, Args, Default) when is_list(Args) ->
 
 
 %% @doc Fetch the translations for the given text.
--spec get_translations(binary(), term()) -> binary() | z:trans().
+-spec get_translations(binary(), term()) -> z:trans().
 get_translations(Text, Context) ->
-    case z_trans:translations(Text, Context) of
-        #trans{ tr = Tr } -> #trans{ tr = lists:sort(Tr) };
-        Other -> Other
-    end.
+    #trans{ tr = Tr } = z_trans:translations(Text, Context),
+    #trans{ tr = lists:sort(Tr) }.
 
 %% @doc Find the best fitting translation.
--spec lookup_translation(z:trans(), TplVars :: map(), Context :: term()) -> binary().
+-spec lookup_translation(z:trans(), TplVars :: map(), Context :: term()) -> binary() | undefined.
 lookup_translation(#trans{} = Trans, _TplVars, Context) ->
     z_trans:lookup_fallback(Trans, Context).
 
@@ -707,7 +705,9 @@ to_render_result(V, TplVars, Context) ->
 escape(undefined, _Context) ->
     <<>>;
 escape(Value, _Context) ->
-    z_html:escape(iolist_to_binary(Value)).
+    case z_html:escape(iolist_to_binary(Value)) of
+        B when is_binary(B) -> B
+    end.
 
 %% @doc Called when compiling a module
 -spec trace_compile(atom(), binary(), template_compiler:options(), z:context()) -> ok.

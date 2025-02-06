@@ -1,9 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2022 Marc Worrell
+%% @copyright 2010-2025 Marc Worrell
 %% @doc This module is started after the complete site_sup has been booted.
 %% This is the moment for system wide initializations.
+%% @end
 
-%% Copyright 2010-2022 Marc Worrell
+%% Copyright 2010-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -32,7 +33,7 @@
 -record(state, { site :: atom() }).
 
 %% @doc Perform all site startup routines.
--spec start_link(Site :: atom()) -> {ok, pid()} | {error, term()}.
+-spec start_link(Site :: atom()) -> gen_server:start_ret().
 start_link(Site) ->
     Name = z_utils:name_for_site(?MODULE, Site),
     gen_server:start_link({local, Name}, ?MODULE, Site, []).

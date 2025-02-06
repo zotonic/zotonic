@@ -4,7 +4,7 @@
 -module(m_identity_tests).
 
 -include_lib("eunit/include/eunit.hrl").
--include_lib("zotonic.hrl").
+-include("../include/zotonic.hrl").
 
 hash_test() ->
     ?assertMatch({bcrypt, <<"$2a$12$", _/binary>>}, m_identity:hash("1234")),

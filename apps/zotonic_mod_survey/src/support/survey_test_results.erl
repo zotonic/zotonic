@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2022 Marc Worrell
+%% @copyright 2022-2025 Marc Worrell
 %% @doc Calculate the total test score for a survey.
+%% @end
 
-%% Copyright 2022 Marc Worrell
+%% Copyright 2022-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,11 +32,15 @@ max_points(Id, Context) ->
         [] ->
             0;
         Blocks when is_list(Blocks) ->
-            lists:sum(lists:map(fun max_points_block/1, Blocks));
+            Total = lists:sum(lists:map(fun max_points_block/1, Blocks)),
+            true = is_integer(Total),
+            Total;
         _ ->
             0
     end.
 
+-spec max_points_block(Block) -> integer() when
+    Block :: map().
 max_points_block(#{ <<"is_test">> := true } = Block) ->
     Module = mod_survey:module_name(maps:get(<<"type">>, Block, undefined)),
     Module:test_max_points(Block);

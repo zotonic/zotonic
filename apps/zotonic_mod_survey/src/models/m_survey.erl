@@ -914,7 +914,7 @@ single_result(SurveyId, UserId, PersistentId, Context) ->
 %% @doc Delete all survey results
 -spec delete_results( m_rsc:resource_id(), z:context() ) -> ResultsDeleted:: non_neg_integer().
 delete_results(SurveyId, Context) ->
-    z_db:q("
+    z_db:q1("
         DELETE FROM survey_answers
         WHERE survey_id = $1",
         [SurveyId],
@@ -925,7 +925,7 @@ delete_results(SurveyId, Context) ->
 delete_result(SurveyId, ResultId, Context) ->
     case z_db:q_row("select user_id, persistent from survey_answers where id = $1", [ResultId], Context) of
         {UserId, Persistent} ->
-            Result = z_db:q("
+            Result = z_db:q1("
                 DELETE FROM survey_answers
                 WHERE id = $2
                   AND survey_id = $1",
@@ -949,7 +949,7 @@ delete_result(SurveyId, UserId, PersistentId, Context) ->
                         true -> {"persistent = $2", PersistentId};
                         false -> {"user_id = $2", UserId}
                     end,
-    Result = z_db:q("
+    Result = z_db:q1("
         DELETE FROM survey_answers
         WHERE " ++ Clause ++ "
           AND survey_id = $1",
@@ -961,7 +961,7 @@ delete_result(SurveyId, UserId, PersistentId, Context) ->
 
 %% @doc Move all answers of a to-be-deleted user to another user.
 rsc_merge(WinnerId, LoserId, Context) ->
-    z_db:q("
+    z_db:q1("
         update survey_answers
         set user_id = $1
         where user_id = $2",

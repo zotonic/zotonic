@@ -48,19 +48,19 @@ hashdigest(sha256, Content) ->
 bin(X) when is_binary(X) ->
     X;
 bin(X) when is_list(X) ->
-    unicode:characters_to_binary(X);
-bin(X) when is_atom(X) ->
-    erlang:atom_to_binary(X, utf8);
-bin(_X) ->
-    throw(invalid).
+    case unicode:characters_to_binary(X) of
+        B when is_binary(B) -> B;
+        _ -> throw(invalid)
+    end;
+bin(X) ->
+    z_convert:to_binary(X).
 
 -spec str( binary() | string() | integer() ) -> string().
-str(X) when is_binary(X) ->
-    unicode:characters_to_list(X);
+str(X) when is_binary(X); is_list(X) ->
+    case unicode:characters_to_list(X) of
+        L when is_list(L) -> L;
+        _ -> throw(invalid)
+    end;
 str(X) when is_integer(X) ->
-    integer_to_list(X);
-str(X) when is_list(X) ->
-    X;
-str(_X) ->
-    throw(invalid).
+    z_convert:to_list(X).
 

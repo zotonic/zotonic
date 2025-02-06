@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014-2022 Marc Worrell
+%% @copyright 2014-2025 Marc Worrell
 %% @doc Models for file-storage administration
 %% @end
 
-%% Copyright 2014-2022 Marc Worrell
+%% Copyright 2014-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -315,7 +315,7 @@ mark_deleted(Path, Context) when is_binary(Path) ->
 fetch_deleted(Interval, Context) ->
     case map_interval(Interval) of
         <<"false">> ->
-            [];
+            {ok, []};
         <<"0">> ->
             z_db:qmap(
                 "select * from filestore where is_deleted = true limit 200",
@@ -399,7 +399,7 @@ clear_deleted(Id, Context) when is_integer(Id) ->
 -spec mark_move_to_local_limit( non_neg_integer(), z:context() ) -> {ok, non_neg_integer()}.
 mark_move_to_local_limit(Limit, Context) ->
     z_db:transaction(fun(Ctx) ->
-                        N = z_db:q("
+                        N = z_db:q1("
                                 update filestore f
                                 set is_move_to_local = true
                                 from (
@@ -423,17 +423,17 @@ mark_move_to_local_limit(Limit, Context) ->
 %% recovered.
 -spec mark_move_to_local_all( z:context() ) -> non_neg_integer().
 mark_move_to_local_all(Context) ->
-    z_db:q("update filestore
-            set is_move_to_local = true
-            where is_move_to_local = false
-              and is_deleted = false
-              and error is null", Context).
+    z_db:q1("update filestore
+             set is_move_to_local = true
+             where is_move_to_local = false
+               and is_deleted = false
+               and error is null", Context).
 
 %% @doc Mark the given filestore entry to be moved from the remote service
 %% to the local service.
 -spec mark_move_to_local( integer(), z:context() ) -> ok | {error, enoent}.
 mark_move_to_local(Id, Context) ->
-    case z_db:q("
+    case z_db:q1("
             update filestore
             set is_move_to_local = true
             where id = $1", [Id], Context)
@@ -471,15 +471,15 @@ unmark_move_to_local_limit(Limit, Context) ->
 %% @doc Remove the "move to local" mark from all filestore entries.
 -spec unmark_move_to_local_all( z:context() ) -> non_neg_integer().
 unmark_move_to_local_all(Context) ->
-    z_db:q("update filestore
-            set is_move_to_local = false
-            where is_move_to_local = true", Context).
+    z_db:q1("update filestore
+             set is_move_to_local = false
+             where is_move_to_local = true", Context).
 
 
 %% @doc Remove the "move to local" mark from the given filestore entry.
 -spec unmark_move_to_local( integer(), z:context() ) -> ok | {error, enoent}.
 unmark_move_to_local(Id, Context) ->
-    case z_db:q("
+    case z_db:q1("
             update filestore
             set is_move_to_local = false
             where id = $1", [Id], Context)
@@ -510,16 +510,16 @@ fetch_move_to_local(Context) ->
     Context :: z:context(),
     Count :: non_neg_integer().
 purge_move_to_local(Id, true, Context) ->
-    z_db:q("update filestore
-            set is_move_to_local = false,
-                is_local = true
-            where id = $1", [Id], Context);
+    z_db:q1("update filestore
+             set is_move_to_local = false,
+                 is_local = true
+             where id = $1", [Id], Context);
 purge_move_to_local(Id, false, Context) ->
-    z_db:q("update filestore
-            set is_move_to_local = false,
-                is_deleted = true,
-                deleted = now()
-            where id = $1", [Id], Context).
+    z_db:q1("update filestore
+             set is_move_to_local = false,
+                 is_deleted = true,
+                 deleted = now()
+             where id = $1", [Id], Context).
 
 %% @doc Return some basic stats about the filestore.
 -spec stats( z:context() ) -> map().

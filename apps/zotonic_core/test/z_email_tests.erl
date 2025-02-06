@@ -3,7 +3,7 @@
 -module(z_email_tests).
 
 -include_lib("eunit/include/eunit.hrl").
--include_lib("zotonic.hrl").
+-include("../include/zotonic.hrl").
 
 email_split_test() ->
     {<<"Jan Janssen">>, <<"jan@example.com">>} = z_email:split_name_email(<<"Jan Janssen <jan@example.com>">>),

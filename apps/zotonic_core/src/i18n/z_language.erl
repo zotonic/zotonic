@@ -84,7 +84,7 @@
 
 
 %% @doc Initialize the i18n language configurations
--spec initialize_config( z:context() ) -> ok.
+-spec initialize_config( z:context() ) -> ok | {error, term()}.
 initialize_config(Context) ->
     case z_db:has_connection(Context) of
         true ->

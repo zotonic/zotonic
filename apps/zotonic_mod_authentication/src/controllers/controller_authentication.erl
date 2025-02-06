@@ -608,9 +608,7 @@ check_reminder_secret(#{ <<"secret">> := Secret, <<"username">> := Username }, C
             case get_by_reminder_secret(Secret, Context) of
                 {ok, UserId} ->
                     case m_identity:get_username(UserId, Context) of
-                        undefined ->
-                            {[], Context};
-                        Username ->
+                        FoundUsername when FoundUsername =:= Username ->
                             NeedPasscode = case auth_postcheck(UserId, #{}, Context) of
                                 {error, need_passcode} -> true;
                                 _ -> false
@@ -618,7 +616,7 @@ check_reminder_secret(#{ <<"secret">> := Secret, <<"username">> := Username }, C
                             #{
                                 status => ok,
                                 user_id => UserId,
-                                username => Username,
+                                username => FoundUsername,
                                 need_passcode => NeedPasscode
                             };
                         OtherUsername ->

@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Simple implementation of an observer/notifier. Relays events to observers of that event.
 %% Also implements map and fold operations over the observers.
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -52,6 +52,8 @@
 
 %% Default priority for notifiers. Normal module priorities are 1..1000.
 -define(DEFAULT_PRIORITY, 500).
+
+-define(DEFAULT_TIMEOUT, 5000).
 
 
 %% @doc Subscribe to an event. Observer is a MFA or pid()
@@ -194,7 +196,7 @@ foldr(Msg, Acc0, Context) ->
 
 %% @doc Send all delayed notify or notify1 notifications. This is used to delay notifications
 %% during a database transaction. When the transaction finishes all notifications are sent.
--spec notify_queue(Context) -> ok | {eror, transaction} when
+-spec notify_queue(Context) -> ok | {error, transaction} when
     Context :: z:context().
 notify_queue(#context{dbc = undefined} = Context) ->
     case erlang:get(notify_queue) of
@@ -219,7 +221,7 @@ notify_queue(#context{dbc = _}) ->
 %% @doc Erase queued notifications. Useful if delayed notifications should not be sent, for
 %% example if the current database transaction rolled back. The queue is only flushed if there
 %% isn't a database transaction.
--spec notify_queue_flush(Context) -> ok | {eror, transaction} when
+-spec notify_queue_flush(Context) -> ok | {error, transaction} when
     Context :: z:context().
 notify_queue_flush(#context{dbc = undefined}) ->
     erlang:erase(notify_queue),
@@ -229,38 +231,47 @@ notify_queue_flush(#context{dbc = _}) ->
 
 %% @doc Subscribe once to a notification, detach after receiving the notification.
 %% After 5 seconds an error 'timeout' is returned.
--spec await(Notification, Context) -> {ok, Result} | {error, Reason} when
+-spec await(Notification, Context) ->
+          {ok, notification()}
+        | {ok, {pid(), reference()}, notification()}
+        | {error, Reason} when
     Notification :: notification(),
     Context :: z:context(),
-    Result :: notification()
-            | {pid(), reference(), notification()},
     Reason :: timeout.
 await(Msg, Context) ->
-    await(Msg, 5000, Context).
+    await(Msg, ?DEFAULT_TIMEOUT, Context).
 
 %% @doc Subscribe once to a notification, detach after receiving the notification.
 %% After the timeout (in msec) an error 'timeout' is returned.
--spec await(Notification, Timeout, Context) -> {ok, Result} | {error, Reason} when
+-spec await(Notification, Timeout, Context) ->
+          {ok, notification()}
+        | {ok, {pid(), reference()}, notification()}
+        | {error, Reason} when
     Notification :: notification(),
     Timeout :: pos_integer(),
     Context :: z:context(),
-    Result :: notification()
-            | {pid(), reference(), notification()},
     Reason :: timeout.
 await(Msg, Timeout, Context) ->
     zotonic_notifier:await({z_context:site(Context), msg_event(Msg)}, Msg, Timeout).
 
--spec await_exact(tuple()|atom(), #context{}) ->
-        {ok, tuple()|atom()} |
-        {ok, {pid(), reference()}, tuple()|atom()} |
-        {error, timeout}.
+-spec await_exact(Notification, Context) ->
+          {ok, notification()}
+        | {ok, {pid(), reference()}, notification()}
+        | {error, Reason} when
+    Notification :: notification(),
+    Context :: z:context(),
+    Reason :: timeout.
 await_exact(Msg, Context) ->
-    await_exact(Msg, 5000, Context).
+    await_exact(Msg, ?DEFAULT_TIMEOUT, Context).
 
--spec await_exact(tuple()|atom(), pos_integer(), z:context()) ->
-        {ok, tuple()|atom()} |
-        {ok, {pid(), reference()}, tuple()|atom()} |
-        {error, timeout}.
+-spec await_exact(Notification, Timeout, Context) ->
+          {ok, notification()}
+        | {ok, {pid(), reference()}, notification()}
+        | {error, Reason} when
+    Notification :: notification(),
+    Timeout :: pos_integer(),
+    Context :: z:context(),
+    Reason :: timeout.
 await_exact(Msg, Timeout, Context) ->
     zotonic_notifier:await_exact({z_context:site(Context), msg_event(Msg)}, Msg, Timeout).
 

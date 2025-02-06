@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2018 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Model behaviour
+%% @end
 
-%% Copyright 2009-2018 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -21,8 +22,10 @@
 
 -type opt_msg() :: mqtt_packet_map:mqtt_packet() | undefined.
 -type return() :: {ok, {term(), list()}} | {error, unknown_path | term()}.
+-type post_return() :: ok | {ok, term()} | {error, unknown_path | term()}.
+-type delete_return() :: ok | {ok, term()} | {error, unknown_path | term()}.
 
--export_type([ opt_msg/0, return/0 ]).
+-export_type([ opt_msg/0, return/0, post_return/0, delete_return/0 ]).
 
 %% Called from templates, MQTT and API
 -callback m_get( list(), opt_msg(), z:context() ) -> return().

@@ -1,9 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2024 Marc Worrell
-%% @doc Manage identities of users. An identity can be a username/password, openid, oauth credentials etc.
+%% @copyright 2009-2025 Marc Worrell
+%% @doc Manage identities of users. An identity can be a username/password, openid, oauth
+%% credentials etc.
 %% @end
 
-%% Copyright 2009-2024 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -1525,19 +1526,22 @@ set_visited_trans(UserId, Context) when is_integer(UserId) ->
     UserAgent :: binary(),
     IpAddress :: binary(),
     Created :: calendar:datetime().
-logon_history(undefined, _Context) -> [];
+logon_history(undefined, _Context) ->
+    {ok, []};
 logon_history(UserId, Context) when is_integer(UserId) ->
     case UserId =:= z_acl:user(Context) orelse z_acl:is_admin(Context) of
         true ->
-            Res = z_db:q(
-                "SELECT user_agent, ip_address, created
+            case z_db:q("
+                SELECT user_agent, ip_address, created
                 FROM identity_log
                 WHERE rsc_id = $1
                 ORDER BY created DESC",
                 [UserId],
-                Context
-            ),
-            {ok, Res};
+                Context)
+            of
+                Res when is_list(Res) ->
+                    {ok, Res}
+            end;
         false ->
             {error, eacces}
     end;
@@ -1546,12 +1550,11 @@ logon_history(User, Context) ->
 
 % Remove all logons from the 'identity_log' table older than 'IDN_LOG_TTL' seconds.
 cleanup_logon_history(Context) ->
-    z_db:q(
+    z_db:q1(
         "DELETE FROM identity_log WHERE created < (now() - INTERVAL '" ++
         z_convert:to_list(?IDN_LOG_TTL) ++
         " second')",
-        Context
-    ).
+        Context).
 
 
 %% @doc Set the verified flag on a record by identity id.
@@ -1561,7 +1564,7 @@ cleanup_logon_history(Context) ->
 set_verified(IdnId, Context) ->
     case z_db:q_row("select rsc_id, type from identity where id = $1", [IdnId], Context) of
         {RscId, Type} ->
-            case z_db:q("
+            case z_db:q1("
                     update identity
                     set is_verified = true,
                         verify_key = null,
@@ -1583,32 +1586,39 @@ set_verified(IdnId, Context) ->
 
 %% @doc Set the verified flag on a record by rescource id, identity type and
 %% value (eg a user's email address).
--spec set_verified( m_rsc:resource_id(), type(), key(), z:context()) -> ok | {error, badarg}.
+-spec set_verified( m_rsc:resource_id(), type(), key(), z:context()) -> ok | {error, term()}.
 set_verified(RscId, Type, Key, Context)
     when is_integer(RscId),
          Type =/= undefined,
          Key =/= undefined, Key =/= <<>>, Key =/= "" ->
     KeyNorm = normalize_key(Type, Key),
-    Action = z_db:transaction(fun(Ctx) -> set_verified_trans(RscId, Type, KeyNorm, Ctx) end, Context),
-    notify(RscId, Action, Type, Key, true, Context),
-    case Action of
-        insert -> ok;
-        update -> ok;
-        Error -> Error
+    Result = z_db:transaction(fun(Ctx) -> set_verified_trans(RscId, Type, KeyNorm, Ctx) end, Context),
+    case Result of
+        {error, _} = Error ->
+            Error;
+        Action when is_atom(Action) ->
+            notify(RscId, Action, Type, Key, true, Context),
+            ok
     end;
 set_verified(_RscId, _Type, _Key, _Context) ->
     {error, badarg}.
 
+-spec set_verified_trans(RscId, Type, Key, Context) -> insert | update | {error, term()} when
+    RscId :: m_rsc:resource_id(),
+    Type :: type(),
+    Key :: key(),
+    Context :: z:context().
 set_verified_trans(RscId, Type, Key, Context) ->
-    case z_db:q("update identity
-                 set is_verified = true,
-                     verify_key = null,
-                     modified = now()
-                 where rsc_id = $1
-                   and type = $2
-                   and key = $3",
-                [RscId, Type, Key],
-                Context)
+    case z_db:q1("
+            update identity
+            set is_verified = true,
+                verify_key = null,
+                modified = now()
+            where rsc_id = $1
+                and type = $2
+                and key = $3",
+            [RscId, Type, Key],
+            Context)
     of
         0 ->
             1 = z_db:q("insert into identity (rsc_id, type, key, is_verified)

@@ -309,7 +309,7 @@ chromium(SiteOrContext, ExtraArgs, Options) ->
         SiteOrContext :: atom() | z:context(),
         ExtraArgs     :: [string()],
         Options       :: map(),
-        RetType       :: {ok, term()} | {error, term()}.
+        RetType       :: ok | {error, term()}.
 exec_browser(Browser, SiteOrContext, ExtraArgs, Options) ->
     z_exec_browser:exec_browser(Browser, SiteOrContext, ExtraArgs, Options).
 

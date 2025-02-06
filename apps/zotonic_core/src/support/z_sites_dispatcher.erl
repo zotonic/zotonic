@@ -174,8 +174,13 @@ update_hosts() ->
 %% @doc Cowboy middleware, route the new request. Continue with the cowmachine,
 %%      requests a redirect or return a 400 on an unknown host.
 %%      The cowmachine_proxy middleware must have been called before this.
--spec execute(Req, Env) -> {ok, Req, Env} | {stop, Req}
-    when Req :: cowboy_req:req(), Env :: cowboy_middleware:env().
+-spec execute(Req, Env) -> Result when
+    Req :: cowboy_req:req(),
+    Env :: cowboy_middleware:env(),
+    Result :: {ok, Req1, Env1}
+            | {stop, Req1},
+    Req1 :: cowboy_req:req(),
+    Env1 :: cowboy_middleware:env().
 execute(Req, Env) ->
     case dispatch(Req, Env) of
         #dispatch_controller{} = Match ->
@@ -217,7 +222,7 @@ execute(Req, Env) ->
                     Uri = z_context:abs_url(raw_path(Req), z_context:new(Site)),
                     redirect(Uri, IsPermanent, Req);
                 {error, _} ->
-                    #stop_request{ status = 503 }
+                    stop_request(503, Req, Env)
             end;
         #redirect{ site = Site, location = NewPathOrURI, is_permanent = IsPermanent} ->
             Metrics = #{
@@ -230,7 +235,7 @@ execute(Req, Env) ->
                     Uri = z_context:abs_url(NewPathOrURI, z_context:new(Site)),
                     redirect(Uri, IsPermanent, Req);
                 {error, _} ->
-                    #stop_request{ status = 503 }
+                    stop_request(503, Req, Env)
             end;
         #redirect_protocol{ protocol = Protocol, host = Host, is_permanent = IsPermanent } ->
             Uri = iolist_to_binary([

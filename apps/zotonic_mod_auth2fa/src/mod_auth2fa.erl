@@ -71,7 +71,7 @@ event(#submit{ message={auth2fa_remove, Args} }, Context) ->
         true when Id =:= 1, UserId =:= 1 ->
             ok = m_auth2fa:totp_disable(Id, Context),
             z_render:dialog_close(Context);
-        true ->
+        true when is_integer(UserId) ->
             case z_acl:is_allowed(use, mod_admin_identity, Context) of
                 true ->
                     ok = m_auth2fa:totp_disable(Id, Context),
@@ -87,7 +87,7 @@ event(#submit{ message={auth2fa_remove, Args} }, Context) ->
                             z_render:wire(OnError, Context)
                     end
             end;
-        false ->
+        _ ->
             z_render:growl(?__("Sorry, you are not allowed to remove the 2FA.", Context), Context)
     end;
 event(#postback{ message={request_2fa, _Args} }, Context) ->

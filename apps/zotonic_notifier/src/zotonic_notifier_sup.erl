@@ -28,7 +28,7 @@
     init/1
 ]).
 
--include("zotonic_notifier.hrl").
+-include("../include/zotonic_notifier.hrl").
 
 %% @doc API for starting the site supervisor.
 start_link() ->

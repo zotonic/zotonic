@@ -41,7 +41,7 @@
 %% API
 %%====================================================================
 
--spec start_link(list()) -> ignore | {error, database|term()}.
+-spec start_link(list()) -> gen_server:start_ret().
 %% @doc Install zotonic on the databases in the PoolOpts, skips when already installed.
 start_link(SiteProps) when is_list(SiteProps) ->
     gen_server:start_link(?MODULE, SiteProps, []).

@@ -155,7 +155,7 @@ which_watcher([M|Ms]) ->
 %% @doc Return the list of all directories to watch
 %% @todo Add a non recursive watch on zotonic_apps, _checkouts and the lib dir.
 %%       To see if new applications are added (or removed).
--spec watch_dirs() -> list(string()).
+-spec watch_dirs() -> list( file:filename_all() ).
 watch_dirs() ->
     ZotonicDirs = [
         filename:join([ z_path:get_path(), "_checkouts" ]),
@@ -164,7 +164,7 @@ watch_dirs() ->
     lists:filter(fun(Dir) -> filelib:is_dir(Dir) end, ZotonicDirs).
 
 %% @doc We expand all watch dirs, so that symbolic links to src, include, and priv are followed
--spec watch_dirs_expanded() -> list(string()).
+-spec watch_dirs_expanded() -> list( file:filename_all() ).
 watch_dirs_expanded() ->
     lists:foldl(
         fun(Dir, Acc) ->
@@ -191,7 +191,7 @@ symlinks(Dir) ->
         All).
 
 %% @doc Return the _build/default/lib directory
--spec build_lib_dir() -> file:filename().
+-spec build_lib_dir() -> file:filename_all().
 build_lib_dir() ->
     filename:dirname(code:lib_dir(zotonic_filewatcher)).
 

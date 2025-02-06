@@ -1,9 +1,9 @@
 %% @author Arjan Scherpenisse <marc@worrell.nl>
-%% @copyright 2015-2023 Arjan Scherpenisse
+%% @copyright 2015-2025 Arjan Scherpenisse
 %% @doc Access to the ACL rules and configurations.
 %% @end
 
-%% Copyright 2015-2023 Arjan Scherpenisse
+%% Copyright 2015-2025 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -697,7 +697,7 @@ delete_managed(Module, Context) ->
         + delete_managed(Module, module, Context)
         + delete_managed(Module, collab, Context).
 
--spec delete_managed(atom(), atom(), #context{}) -> integer().
+-spec delete_managed(atom(), atom(), #context{}) -> non_neg_integer().
 delete_managed(Module, Kind, Context) ->
     T = z_convert:to_list(table(Kind)),
-    z_db:q("DELETE FROM " ++ T ++ " WHERE managed_by = $1", [Module], Context).
+    z_db:q1("DELETE FROM " ++ T ++ " WHERE managed_by = $1", [Module], Context).

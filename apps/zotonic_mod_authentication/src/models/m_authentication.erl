@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017-2024 Marc Worrell
+%% @copyright 2017-2025 Marc Worrell
 %% @doc Model for mod_authentication
 %% @end
 
-%% Copyright 2017-2024 Marc Worrell
+%% Copyright 2017-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -89,7 +89,7 @@ m_get([ <<"is_rememberme">> | Rest ], _Msg, Context) ->
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
--spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | {error, term()}.
+-spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> ok | {ok, term()} | {error, term()}.
 m_post([ <<"request-reminder">> ], #{ payload := Payload }, Context) when is_map(Payload) ->
     request_reminder(Payload, Context);
 m_post([ <<"service-confirm">> ], #{ payload := Payload }, Context) when is_map(Payload) ->

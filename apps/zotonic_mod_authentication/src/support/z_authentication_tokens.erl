@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019-2024 Marc Worrell
+%% @copyright 2019-2025 Marc Worrell
 %% @doc Authentication tokens and cookies.
 %% @end
 
-%% Copyright 2019-2024 Marc Worrell
+%% Copyright 2019-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -554,9 +554,15 @@ regenerate_user_autologon_secret(UserId, Context) when is_integer(UserId) ->
 %% @doc Return the number of seconds an inactive session cookie stays valid.
 -spec session_expires( z:context() ) -> integer().
 session_expires(Context) ->
-    z_convert:to_integer( m_config:get_value(site, session_expire_inactive, ?SESSION_EXPIRE_INACTIVE, Context) ).
+    case z_convert:to_integer( m_config:get_value(site, session_expire_inactive, Context) ) of
+        undefined -> ?SESSION_EXPIRE_INACTIVE;
+        Expire -> Expire
+    end.
 
 %% @doc Return the number of seconds an autologon cookie is valid for.
 -spec autologon_expires( z:context() ) -> integer().
 autologon_expires(Context) ->
-    z_convert:to_integer( m_config:get_value(site, autologon_expire, ?AUTOLOGON_EXPIRE, Context) ).
+    case z_convert:to_integer( m_config:get_value(site, autologon_expire, Context) ) of
+        undefined -> ?AUTOLOGON_EXPIRE;
+        Expire -> Expire
+    end.

@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017-2023 Marc Worrell
+%% @copyright 2017-2025 Marc Worrell
 %% @doc Supervisor for a site's modules
 %% @end
 
-%% Copyright 2017-2023 Marc Worrell
+%% Copyright 2017-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -36,13 +36,13 @@
 -include_lib("../../include/zotonic.hrl").
 
 %% @doc API for starting the sites dispatcher and manager
--spec start_link(atom()) -> {ok, pid()} | {error, term()}.
+-spec start_link(atom()) -> gen_server:start_ret().
 start_link(Site) ->
     Name = z_utils:name_for_site(z_module_sup, Site),
     supervisor:start_link({local, Name}, ?MODULE, []).
 
 -spec start_module(atom(), supervisor:child_spec(), Site::atom()) ->
-        {ok, pid()} | {error, {already_started, pid()}} | {error, term()}.
+        supervisor:startchild_ret() | {error, term()}.
 start_module(Application, ChildSpec, Site) ->
     case application:ensure_all_started(Application) of
         {ok, _Started} ->

@@ -48,8 +48,9 @@
 %% UTF-8 characters that need to be percent-encoded befor further processing is possible.
 %% Does NOT allow data: URLs.
 -spec uri(Url) -> EncodedUrl when
-    Url :: binary() | string() | undefined,
-    EncodedUrl :: binary().
+            Url :: binary() | string(),
+            EncodedUrl :: binary();
+         (undefined) -> undefined.
 uri(Url) ->
     uri(Url, false).
 
@@ -57,9 +58,11 @@ uri(Url) ->
 %% UTF-8 characters that need to be percent-encoded befor further processing is possible.
 %% Allows data: URLs.
 -spec uri(Url, IsAllowData) -> EncodedUrl when
-    Url :: binary() | string() | undefined,
-    IsAllowData :: boolean(),
-    EncodedUrl :: binary().
+            Url :: binary() | string() | undefined,
+            IsAllowData :: boolean(),
+            EncodedUrl :: binary();
+         (undefined, IsAllowData) -> undefined when
+            IsAllowData :: boolean().
 uri(undefined, _IsAllowData) ->
     undefined;
 uri(Url, IsAllowData) when is_list(Url) ->

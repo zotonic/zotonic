@@ -41,13 +41,13 @@
 %% API
 %%====================================================================
 
--spec start_tests() -> {ok, pid()} | {error, term()}.
+-spec start_tests() -> gen_server:start_ret().
 start_tests() ->
     io:format("Starting trans server.~n"),
     gen_server:start_link({local, 'z_trans_server$test'}, ?MODULE, test, []).
 
 %% @doc Starts the server
--spec start_link(Site :: atom()) -> {ok, pid()} | {error, term()}.
+-spec start_link(Site :: atom()) -> gen_server:start_ret().
 start_link(Site) ->
     Name = z_utils:name_for_site(?MODULE, Site),
     gen_server:start_link({local, Name}, ?MODULE, {Site, Name}, []).

@@ -57,21 +57,32 @@ m_get([ <<"timeout">> | Rest ], _Msg, Context) ->
     {ok, {ratelimit_t(Context), Rest}}.
 
 %% @doc Insert an event, use the context for extra properties.
--spec insert_event( atom(), binary(), device_id(), z:context() ) -> ok | {error, term()}.
-insert_event(Type, Key, Device, Context) ->
+-spec insert_event(Type, Key, DeviceID, Context) -> ok | {error, Reason} when
+    Type :: atom(),
+    Key :: binary(),
+    DeviceID :: device_id(),
+    Context :: z:context(),
+    Reason :: term().
+insert_event(Type, Key, DeviceID, Context) ->
     Props = [
         {peer, m_req:get(peer, Context)},
         {user_agent, m_req:get(user_agent, Context)}
     ],
-    insert_event(Type, Key, Device, Props, Context).
+    insert_event(Type, Key, DeviceID, Props, Context).
 
 
 %% @doc Insert an event, with extra properties.
--spec insert_event( atom(), binary(), device_id(), proplists:proplist(), z:context() ) -> ok.
-insert_event(Type, Key, Device, Props, Context) ->
+-spec insert_event(Type, Key, DeviceID, Props, Context) -> ok | {error, Reason} when
+    Type :: atom(),
+    Key :: binary(),
+    DeviceID :: device_id(),
+    Props :: proplists:proplist(),
+    Context :: z:context(),
+    Reason :: term().
+insert_event(Type, Key, DeviceID, Props, Context) ->
     Event = #ratelimit_event{
         key = {Type, Key},
-        device = Device,
+        device = DeviceID,
         timestamp = z_datetime:timestamp(),
         props = Props
     },
@@ -150,18 +161,16 @@ init(Context) ->
 
 -spec ratelimit_t( z:context() ) -> integer().
 ratelimit_t(Context) ->
-    case m_config:get_value(mod_ratelimit, event_period, Context) of
-        <<>> -> ?RATELIMIT_T;
+    case z_convert:to_integer(m_config:get_value(mod_ratelimit, event_period, Context)) of
         undefined -> ?RATELIMIT_T;
-        T -> z_convert:to_integer(T)
+        T -> T
     end.
 
 -spec ratelimit_n( z:context() ) -> integer().
 ratelimit_n(Context) ->
-    case m_config:get_value(mod_ratelimit, event_count, Context) of
-        <<>> -> ?RATELIMIT_N;
+    case z_convert:to_integer(m_config:get_value(mod_ratelimit, event_count, Context)) of
         undefined -> ?RATELIMIT_N;
-        N -> z_convert:to_integer(N)
+        N -> N
     end.
 
 -spec reset(z:context()) -> ok.

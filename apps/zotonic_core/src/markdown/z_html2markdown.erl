@@ -412,12 +412,12 @@ column_pad(Cs, Ws, Align) ->
     C :: binary(),
     W :: integer(),
     Direction :: right | center | left | none.
-pad(C, W, right) ->
+pad(C, W, right) when is_binary(C) ->
     case z_string:len(C) of
         N when N < W -> <<(spaces(W-N))/binary, C/binary>>;
         _ -> C
     end;
-pad(C, W, center) ->
+pad(C, W, center) when is_binary(C) ->
     case z_string:len(C) of
         N when N < W ->
             N1 = (W - N) div 2,
@@ -425,7 +425,7 @@ pad(C, W, center) ->
             <<(spaces(N1))/binary, C/binary, (spaces(N2))/binary>>;
         _ -> C
     end;
-pad(C, W, _) ->
+pad(C, W, _) when is_binary(C) ->
     case z_string:len(C) of
         N when N < W -> <<C/binary, (spaces(W-N))/binary>>;
         _ -> C

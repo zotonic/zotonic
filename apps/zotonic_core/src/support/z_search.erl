@@ -229,10 +229,10 @@ search(Search, {Offset, Limit} = OffsetLimit, Context) ->
 
 -spec default_pagelen( z:context() ) -> pos_integer().
 default_pagelen(Context) ->
-    case m_config:get_value(site, pagelen, Context) of
+    Len = m_config:get_value(site, pagelen, Context),
+    case z_convert:to_integer(Len) of
         undefined -> ?SEARCH_PAGELEN;
-        <<>> -> ?SEARCH_PAGELEN;
-        Len -> z_convert:to_integer(Len)
+        N -> N
     end.
 
 -spec default_offset_limit( z:context() ) -> search_offset().

@@ -1,5 +1,5 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2010-2024 Arjan Scherpenisse, Marc Worrell
+%% @copyright 2010-2025 Arjan Scherpenisse
 %% @doc Importing non-authoritative things exported by m_rsc_export into the system.
 %% @end
 
@@ -470,7 +470,11 @@ reimport_nonauth(Id, ImportedAcc, Context) ->
     end.
 
 %% @doc Reimport a non-authoritative resource or placeholder using new import options.
--spec reimport( m_rsc:resource_id(), map(), options() | saved, z:context() ) -> import_result().
+-spec reimport(Id, RefIds, Options, Context) -> import_result() when
+    Id :: m_rsc:resource_id(),
+    RefIds :: map(),
+    Options :: options() | saved,
+    Context :: z:context().
 reimport(Id, RefIds, Options, Context) ->
     {Uri, Options1} = case z_db:select(rsc_import, Id, Context) of
         {ok, #{
@@ -495,7 +499,11 @@ reimport(Id, RefIds, Options, Context) ->
     end.
 
 
--spec update_medium_uri( m_rsc:resource_id(), string() | binary(), options(), z:context() ) -> {ok, m_rsc:resource_id()}.
+-spec update_medium_uri(LocalId, Uri, Options, Context) -> {ok, m_rsc:resource_id()} | {error, term()} when
+    LocalId :: m_rsc:resource_id(),
+    Uri :: string() | binary(),
+    Options :: options(),
+    Context :: z:context().
 update_medium_uri(LocalId, Uri, Options, Context) ->
     case z_acl:rsc_editable(LocalId, Context) of
         true ->
@@ -1504,7 +1512,10 @@ matching_category(Name, Cats, Context) ->
 
 %% @doc Find the category to be imported. This tries to map the 'is_a'
 %% and the uri of the category.
--spec find_category( RId::map(),  Rsc::map(), z:context() ) -> m_rsc:resource_id().
+-spec find_category(RId, Rsc, Context) -> m_rsc:resource_id() | undefined when
+    RId :: map(),
+    Rsc :: map(),
+    Context :: z:context(). 
 find_category(RId, Rsc, Context) ->
     RscCatId = case maps:get(<<"category_id">>, Rsc, undefined) of
         #{ <<"name">> := Name, <<"uri">> := CatUri } ->
@@ -1551,7 +1562,7 @@ host(Uri) ->
     case uri_string:parse(Uri) of
         #{ host := Host } ->
             z_convert:to_binary(Host);
-        #{ scheme := Scheme } when Scheme =/= <<"http">>, Scheme =/= <<"https">> ->
+        #{ scheme := Scheme } when is_binary(Scheme), Scheme =/= <<"http">>, Scheme =/= <<"https">> ->
             Scheme
     end.
 

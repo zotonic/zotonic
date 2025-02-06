@@ -1,9 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2014-2024 Arjan Scherpenisse
+%% @copyright 2014-2025 Arjan Scherpenisse
 %% @doc Postgresql pool worker
 %% @end
 
-%% Copyright 2014-2024 Arjan Scherpenisse
+%% Copyright 2014-2025 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -78,10 +78,18 @@
     busy_tracing = false :: boolean()
 }).
 
--type query_result() :: epgsql:reply(epgsql:equery_row())
-                      | epgsql:reply(epgsql:squery_row()).
+-type query_result() :: squery_result()
+                      | equery_result().
 
--export_type([ query_result/0 ]).
+-type squery_result() :: epgsql_cmd_squery:response()
+                       | epgsql_sock:error()
+                       | {error, connection_down | term()}.
+
+-type equery_result() :: epgsql_cmd_equery:response()
+                       | epgsql_sock:error()
+                       | {error, connection_down | term()}.
+
+-export_type([ query_result/0, squery_result/0, equery_result/0 ]).
 
 
 %%
@@ -168,7 +176,7 @@ pool_return_connection(Worker, Context) ->
     Worker :: pid(),
     Sql :: string() | binary(),
     Timeout :: pos_integer(),
-    Result :: query_result().
+    Result :: squery_result().
 squery(Worker, Sql, Timeout) ->
     case is_connection_alive(Worker) of
         true ->
@@ -191,7 +199,7 @@ squery(Worker, Sql, Timeout) ->
     Sql :: string() | binary(),
     Parameters :: list(),
     Timeout :: pos_integer(),
-    Result :: query_result().
+    Result :: equery_result().
 equery(Worker, Sql, Parameters, Timeout) ->
     case is_connection_alive(Worker) of
         true ->
@@ -214,16 +222,27 @@ equery(Worker, Sql, Parameters, Timeout) ->
     Sql :: string() | binary(),
     Batch :: list( list() ),
     Timeout :: pos_integer(),
-    Result :: query_result().
+    Result :: {ok, [ equery_result() ]}
+            | {error, connection_down | term()}.
 execute_batch(Worker, Sql, Batch, Timeout) ->
     case is_connection_alive(Worker) of
         true ->
             case fetch_conn(Worker, Sql, Batch, Timeout) of
                 {ok, {Conn, Ref}} ->
                     EncodedBatch = [encode_values(P) || P <- Batch],
-                    Result = epgsql:execute_batch(Conn, Sql, EncodedBatch),
+                    {Columns, Result} = epgsql:execute_batch(Conn, Sql, EncodedBatch),
                     ok = return_conn(Worker, Ref),
-                    decode_reply(Result);
+                    Result1 = lists:map(
+                        fun
+                            ({ok, Count, Rows}) when is_list(Rows) ->
+                                {ok, Count, Columns, Rows};
+                            ({ok, Rows}) when is_list(Rows) ->
+                                {ok, Columns, Rows};
+                            ({ok, _} = Ok) -> Ok;
+                            ({error, _} = Error) -> Error
+                        end,
+                        Result),
+                    {ok, [ decode_reply(R) || R <- Result1 ]};
                 {error, _} = Error ->
                     Error
             end;
@@ -878,7 +897,9 @@ decode_reply({ok, Columns, Rows}) ->
     {ok, Columns, lists:map(fun decode_values/1, Rows)};
 decode_reply({ok, Nr, Columns, Rows}) ->
     {ok, Nr, Columns, lists:map(fun decode_values/1, Rows)};
-decode_reply(R) ->
+decode_reply({ok, _} = R) ->
+    R;
+decode_reply({error, _} = R) ->
     R.
 
 decode_values(T) when is_tuple(T) ->

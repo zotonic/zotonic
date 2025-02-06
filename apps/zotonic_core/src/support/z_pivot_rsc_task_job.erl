@@ -99,7 +99,7 @@ delay_to_after(Delay) when is_integer(Delay) ->
 delay_to_after(Due) when is_tuple(Due) ->
     Due.
 
--spec maybe_schedule_retry(map(), atom(), term(), list(), z:context()) -> ok.
+-spec maybe_schedule_retry(map(), atom(), term(), list(), z:context()) -> ok | {error, stopped}.
 maybe_schedule_retry(#{ task_id := TaskId, error_count := ErrCt, mfa := MFA }, Error, Reason, Trace, Context) 
     when ErrCt < ?MAX_TASK_ERROR_COUNT ->
     RetryDue = task_retry_due(ErrCt),

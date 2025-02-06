@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019 Marc Worrell
+%% @copyright 2019-2025 Marc Worrell
 %% @doc Store information in the localStorage on the client.
+%% @end
 
-%% Copyright 2019 Marc Worrell
+%% Copyright 2019-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -79,7 +80,7 @@ put_secure(Key, Value, TTL, Context) ->
     Encoded = termit:encode_base64(ExpTerm, secret(Context)),
     put(Key, Encoded, Context).
 
--spec get_secure( key(), z:context() ) -> ok | {error, error()}.
+-spec get_secure( key(), z:context() ) -> {ok, term()} | {error, error()}.
 get_secure(Key, Context) ->
     case get(Key, Context) of
         {ok, Encoded} ->

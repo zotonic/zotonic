@@ -56,13 +56,13 @@ m_get([ Key | Rest ], _Msg, Context) ->
             Error
     end.
 
--spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | {error, term()}.
+-spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> ok | {error, term()}.
 m_post([ Key ], #{ payload := Payload }, Context) ->
     store(Key, Payload, Context);
 m_post(_Path, _Msg, _Context) ->
     {error, unknown_path}.
 
--spec m_delete( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | {error, term()}.
+-spec m_delete( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> ok | {error, term()}.
 m_delete([ Key ], _Msg, Context) ->
     delete(Key, Context);
 m_delete([], _Msg, Context) ->
@@ -197,7 +197,7 @@ secure_lookup(Key, Context) ->
     end.
 
 %% @doc Delete a key from the session, without access via the model access functions.
--spec secure_delete( term(), z:context() ) -> {ok, term()} | {error, no_session | not_found | term()}.
+-spec secure_delete( term(), z:context() ) -> ok | {error, no_session | not_found | term()}.
 secure_delete(Key, Context) ->
     case z_context:session_id(Context) of
         {ok, Sid} ->

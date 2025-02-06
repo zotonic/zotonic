@@ -1,11 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Return a list of ids of a category, sorted by title.  This needs to fetch and sort all
 %% resources of that category, so use this with care for situations where you know that the number
 %% of returned resources is relatively low.
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -59,8 +59,8 @@ search1(Left, Right, Search, Context) ->
 
 
 add_title(Id, true, all_bytitle_featured, Context) ->
-    Title = ?__(m_rsc:p(Id, title, Context), Context),
+    Title = z_convert:to_binary(z_trans:lookup_fallback(m_rsc:p(Id, title, Context), Context)),
     {<<" ", (z_string:to_name(Title))/binary>>, Title, Id};
 add_title(Id, _Featured, _Search, Context) ->
-    Title = ?__(m_rsc:p(Id, title, Context), Context),
+    Title = z_convert:to_binary(z_trans:lookup_fallback(m_rsc:p(Id, title, Context), Context)),
     {z_string:to_name(Title), Title, Id}.

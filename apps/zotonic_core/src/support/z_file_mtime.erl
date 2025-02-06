@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015-2017 Marc Worrell <marc@worrell.nl>
+%% @copyright 2015-2015 Marc Worrell <marc@worrell.nl>
 %% @doc Keep a registration of file modification times, especially for z_template
+%% @end
 
-%% Copyright 2015-2017 Marc Worrell
+%% Copyright 2015-2015 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -110,10 +111,15 @@ is_template_modified(Module, Site) ->
     end.
 
 %% @doc Return the (universal) modification time of file, 0 on enoent
--spec file_mtime(file:filename_all()) -> calendar:datetime() | 0.
+-spec file_mtime(file:filename_all()) -> file:date_time() | 0.
 file_mtime(File) ->
     case file:read_file_info(File, [{time, universal}]) of
-        {ok, #file_info{mtime=MTime}} -> MTime;
+        {ok, #file_info{ mtime = undefined }} ->
+            0;
+        {ok, #file_info{ mtime = MTime }} when is_tuple(MTime) ->
+            MTime;
+        {ok, #file_info{ mtime = MTime }} when is_integer(MTime) ->
+            z_datetime:timestamp_to_datetime(MTime);
         {error, enoent} -> 0;
         {error, _} -> 0
     end.
@@ -126,13 +132,13 @@ insert_template(Module, CompileTime) ->
 %% API
 %%====================================================================
 
--spec start_link() -> {ok, pid()} | {error, term()}.
+-spec start_link() -> gen_server:start_ret().
 start_link() ->
     start_link(z_config:get(filewatcher_scanner_enabled)).
 
 %% @doc Starts the server. IsScannerEnabled is set if inotify, fswatch or the periodic
 %% directory scanner is enabled. If not then the cached mtimes are periodically flushed.
--spec start_link(boolean()) -> {ok, pid()} | {error, term()}.
+-spec start_link(boolean()) -> gen_server:start_ret().
 start_link(IsScannerEnabled) ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, [z_convert:to_bool(IsScannerEnabled)], []).
 

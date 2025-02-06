@@ -26,6 +26,7 @@
 -mod_provides([acl]).
 
 -behaviour(gen_server).
+-behaviour(zotonic_observer).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include("support/acl_user_groups.hrl").
@@ -252,8 +253,7 @@ deletable(Ids, Context) ->
 
 
 % @doc Per default users own their person record and creators own the created content.
-observe_acl_is_owner(#acl_is_owner{id=Id, user_id=Id}, _Context) ->
-    true;
+-spec observe_acl_is_owner(#acl_is_owner{}, z:context()) -> boolean() | undefined.
 observe_acl_is_owner(#acl_is_owner{user_id=UserId, creator_id=UserId}, _Context) ->
     true;
 observe_acl_is_owner(#acl_is_owner{id=Id, user_id=UserId}, Context) ->

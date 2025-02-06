@@ -737,7 +737,7 @@ mod_info(Module) ->
 
 -spec mod_version(Module) -> Version when
     Module :: atom() | binary() | string(),
-    Version :: binary().
+    Version :: binary() | undefined.
 mod_version(Module) ->
     App = module_to_app(Module),
     case application:get_key(App, vsn) of
@@ -746,7 +746,10 @@ mod_version(Module) ->
         {ok, "git"} ->
             app_git_version(App);
         {ok, Vsn} ->
-            unicode:characters_to_binary(Vsn, utf8);
+            case unicode:characters_to_binary(Vsn, utf8) of
+                B when is_binary(B) -> B;
+                _ -> <<>>
+            end;
         undefined ->
             app_git_version(App)
     end.
@@ -853,7 +856,10 @@ set_db_schema_version(M, V, Context) ->
 bin(A) when is_atom(A) ->
     atom_to_binary(A, utf8);
 bin(A) when is_list(A) ->
-    unicode:characters_to_binary(A);
+    case unicode:characters_to_binary(A) of
+        B when is_binary(B) -> B;
+        _ -> <<>>
+    end;
 bin(A) when is_binary(A) ->
     A.
 

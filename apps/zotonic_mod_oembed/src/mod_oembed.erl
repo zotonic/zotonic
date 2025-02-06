@@ -105,9 +105,9 @@ observe_rsc_update(#rsc_update{action=update, id=Id, props=CurrProps}, {ok, Upda
                     case OldMediaProps of
                         undefined ->
                             {true, preview_create_from_medium(Id, MediaProps, Context)};
-                        #{ <<"mime">> := ?OEMBED_MIME } ->
-                            case        z_utils:are_equal(maps:get(oembed_url, OldMediaProps, undefined), EmbedUrl)
-                                andalso maps:get(<<"oembed">>, OldMediaProps, undefined) =/= undefined
+                        #{ <<"mime">> := ?OEMBED_MIME } = OldMProps ->
+                            case        z_utils:are_equal(maps:get(oembed_url, OldMProps, undefined), EmbedUrl)
+                                andalso maps:get(<<"oembed">>, OldMProps, undefined) =/= undefined
                             of
                                 true ->
                                     %% Not changed
@@ -356,7 +356,7 @@ event(#postback{ message = fix_missing }, Context) ->
 event(#submit{ message = admin_oembed }, Context) ->
     case z_acl:is_allowed(use, mod_admin_config, Context) of
         true ->
-            EmbedlyKey = z_string:trim(z_context:get_q(<<"embedly_key">>, Context)),
+            EmbedlyKey = z_string:trim(z_convert:to_binary(z_context:get_q(<<"embedly_key">>, Context))),
             m_config:set_value(mod_oembed, embedly_key, EmbedlyKey, Context),
             z_render:growl(?__("Saved the Embedly settings.", Context), Context);
         false ->
@@ -502,7 +502,7 @@ sanitize_json1(_K, _V, _Context) ->
 
 %% @doc Given a thumbnail URL, download it and return the content type plus image data pair.
 thumbnail_request(ThumbUrl, _Context) ->
-    case httpc:request(get, {z_convert:to_list(ThumbUrl), []}, [], []) of
+    case httpc:request(get, {unicode:characters_to_list(ThumbUrl), []}, [], []) of
         {ok, {{_, 200, _}, Headers, ImageData}} ->
             CT = case proplists:lookup("content-type", Headers) of
                      {"content-type", C} -> z_convert:to_binary(C);

@@ -69,7 +69,7 @@ to_language_atom( Lang ) when is_atom(Lang); is_binary(Lang) ->
             end
     end;
 to_language_atom( Lang ) when is_list(Lang) ->
-    is_language(z_convert:to_binary(Lang)).
+    to_language_atom(z_convert:to_binary(Lang)).
 
 
 -spec fallback(  z_language:language() ) -> list( z_language:language_code() ).
@@ -220,9 +220,10 @@ as_atom_map_props(CodeAtom, Props, Fallback) ->
 
 -spec compile(atom(), list(), list(), map()) -> binary().
 compile(Module, Ls, LsA, Fallback) ->
-    {ok, Module, Bin} = compile:forms(forms(Module, Ls, LsA, Fallback),
-                                      [verbose, report_errors]),
-    Bin.
+    case compile:forms(forms(Module, Ls, LsA, Fallback), [verbose, report_errors]) of
+        {ok, _Module, Bin} when is_binary(Bin) ->
+            Bin
+    end.
 
 -spec forms(atom(), list(), list(), map()) -> [erl_syntax:syntaxTree()].
 forms(Module, Ls, LsA, Fallback) ->

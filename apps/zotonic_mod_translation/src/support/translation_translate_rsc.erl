@@ -152,8 +152,6 @@ keep_translation(Id, KeepLangs, Context) when is_list(KeepLangs) ->
     Language :: z_language:language_code() | [ z_language:language_code() ].
 keep_translation_map(Map, Language) when is_atom(Language) ->
     keep_translation_map(Map, [Language]);
-keep_translation_map(_Id, []) ->
-    {error, language};
 keep_translation_map(Map, KeepLangs) when is_list(KeepLangs) ->
     MapLangs = collect_langs(Map),
     RemoveLangs = MapLangs -- KeepLangs,

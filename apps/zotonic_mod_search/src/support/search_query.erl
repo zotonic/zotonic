@@ -1248,9 +1248,10 @@ to_language_atom(Code, _Context) ->
 
 
 %% @doc Parse hassubject and hasobject edges.
--spec parse_edges(hassubject | hasobject, list(), IsNested, Context) -> #search_sql_term{} when
+-spec parse_edges(hassubject | hasobject, list(), IsNested, Context) -> TermOrTerms when
     IsNested :: boolean(),
-    Context :: z:context().
+    Context :: z:context(),
+    TermOrTerms :: #search_sql_term{} | [ #search_sql_term{} ].
 parse_edges(Term, [H], IsNested, Context) when is_list(H) ->
     parse_edges(Term, H, IsNested, Context);
 parse_edges(Term, [H|_] = Es, _IsNested, Context) when is_list(H) ->

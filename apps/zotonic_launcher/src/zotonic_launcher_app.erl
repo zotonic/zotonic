@@ -141,7 +141,7 @@ ensure_started(App) ->
     end.
 
 
--spec get_pidfile() -> file:filename().
+-spec get_pidfile() -> file:filename_all().
 get_pidfile() ->
     case os:getenv("ZOTONIC_PIDFILE") of
         false ->
