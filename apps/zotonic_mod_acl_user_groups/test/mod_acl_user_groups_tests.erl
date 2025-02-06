@@ -7,7 +7,7 @@
 -export([is_allowed_always_true/2]).
 
 person_can_edit_own_resource_test() ->
-    Context = context(),
+    ContextAnon = context(),
 
     %% Person must be able to edit person category
     replace_managed(
@@ -19,16 +19,39 @@ person_can_edit_own_resource_test() ->
                 {category_id, person}
             ]}
         ],
-        Context
+        ContextAnon
     ),
 
-    {ok, Id} = m_rsc:insert([{category, person}], z_acl:sudo(Context)),
+    {ok, Id1} = m_rsc:insert(
+                #{
+                    <<"category_id">> => person
+                }, z_acl:sudo(ContextAnon)),
 
+    {ok, Id2} = m_rsc:insert(
+                #{
+                    <<"category_id">> => person,
+                    <<"creator_id">> => Id1
+                }, z_acl:sudo(ContextAnon)),
+
+    {ok, Id3} = m_rsc:insert(
+                #{
+                    <<"category_id">> => person,
+                    <<"creator_id">> => self
+                }, z_acl:sudo(ContextAnon)),
+
+    ContextUser1 = z_acl:logon(Id1, ContextAnon),
+    ContextUser3 = z_acl:logon(Id3, ContextAnon),
+
+    %% No access for anonymous
+    ?assertEqual({error, eacces}, m_rsc:update(Id1, [{title, <<"Test">>}], ContextAnon)),
     %% Must be owner
-    ?assertEqual({error, eacces}, m_rsc:update(Id, [{title, <<"Test">>}], Context)),
+    ?assertEqual({error, eacces}, m_rsc:update(Id1, [{title, <<"Test">>}], ContextUser3)),
+    %% Must be creator
+    ?assertEqual({error, eacces}, m_rsc:update(Id2, [{title, <<"Test">>}], ContextUser3)),
 
-    UserContext = z_acl:logon(Id, Context),
-    {ok, Id} = m_rsc:update(Id, [{title, "Test"}], UserContext).
+    {ok, _} = m_rsc:update(Id1, [{title, "Test"}], ContextUser1),
+    {ok, _} = m_rsc:update(Id2, [{title, "Test"}], ContextUser1),
+    {ok, _} = m_rsc:update(Id3, [{title, "Test"}], ContextUser3).
 
 
 person_can_insert_text_in_default_content_group_only_test() ->

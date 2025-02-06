@@ -254,6 +254,8 @@ deletable(Ids, Context) ->
 
 % @doc Per default users own their person record and creators own the created content.
 -spec observe_acl_is_owner(#acl_is_owner{}, z:context()) -> boolean() | undefined.
+observe_acl_is_owner(#acl_is_owner{user_id=UserId, id=UserId}, _Context) ->
+    true;
 observe_acl_is_owner(#acl_is_owner{user_id=UserId, creator_id=UserId}, _Context) ->
     true;
 observe_acl_is_owner(#acl_is_owner{id=Id, user_id=UserId}, Context) ->
