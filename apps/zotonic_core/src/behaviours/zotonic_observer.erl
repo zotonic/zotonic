@@ -676,101 +676,143 @@
 
 -optional_callbacks([ observe_rsc_merge/2, pid_observe_rsc_merge/3 ]).
 
-% %% An updated resource is about to be persisted.
-% %% Observe this notification to change the resource properties before they are
-% %% persisted.
-% %%
-% %% The props are the resource's props _before_ the update, but _after_ filtering
-% %% and sanitization. The folded value is ``{ok, UpdateProps}`` for the update itself.
-% %% Type: foldr
-% %% Return: ``{ok, UpdateProps}`` or ``{error, term()}``
-% -record(rsc_update, {
-%     action :: insert | update,
-%     id :: m_rsc:resource_id(),
-%     props :: m_rsc:props()
-% }).
+%% An updated resource is about to be persisted.
+%% Observe this notification to change the resource properties before they are
+%% persisted.
+%% The props are the resource's props _before_ the update, but _after_ filtering
+%% and sanitization. The folded value is ``{ok, UpdateProps}`` for the update itself.
+%% Type: foldr
+%% Return: ``{ok, UpdateProps}`` or ``{error, term()}``
+-callback observe_rsc_update(#rsc_update{}, Acc, z:context()) -> Result when
+    Acc :: {ok, map()} | {error, term()},
+    Result :: {ok, map()} | {error, term()}.
+-callback pid_observe_rsc_update(pid(), #rsc_update{}, Acc, z:context()) -> Result when
+    Acc :: {ok, map()} | {error, term()},
+    Result :: {ok, map()} | {error, term()}.
 
-% %% An updated resource has just been persisted. Observe this notification to
-% %% execute follow-up actions for a resource update.
-% %% Type: notify
-% %% Return: return value is ignored
-% -record(rsc_update_done, {
-%     action :: insert | update | delete,
-%     id :: m_rsc:resource_id(),
-%     pre_is_a :: list(),
-%     post_is_a :: list(),
-%     pre_props :: m_rsc:props(),
-%     post_props :: m_rsc:props()
-% }).
+-optional_callbacks([ observe_rsc_update/3, pid_observe_rsc_update/4 ]).
 
-% %% Upload and replace the resource with the given data. The data is in the given format.
-% %% Type: first
-% %% Return: {ok, Id} or {error, Reason}, return {error, badarg} when the data is corrupt.
-% -record(rsc_upload, {
-%     id :: m_rsc:resource() | undefined,
-%     format :: json | bert,
-%     data :: binary() | map()
-% }).
+%% An updated resource has just been persisted. Observe this notification to
+%% execute follow-up actions for a resource update.
+%% Type: notify
+%% Return: return value is ignored
+-callback observe_rsc_update_done(#rsc_update_done{}, z:context()) -> any().
+-callback pid_observe_rsc_update_done(pid(), #rsc_update_done{}, z:context()) -> any().
 
-% %% Add custom pivot fields to a resource's search index (map)
-% %% Result is a single tuple or list of tuples ``{pivotname, props}``, where "pivotname"
-% %% is the pivot defined in a call to ``z_pivot_rsc:define_custom_pivot/3`` or a table
-% %% with created using a SQL command during (eg.) in a module ``manage_schema/2`` call.
-% %% The name of the table is ``pivot_<pivotname>``.  The ``props`` is either a property
-% %% list or a map with column/value pairs.
-% %%
-% %% The table MUST have an ``id`` column, with a foreign key constraint to the ``rsc``
-% %% table. If you define the pivot table using ``z_pivot_rsc:define_custom_pivot/3`` then
-% %% this column and foreign key constraint are automatically added.
-% %% Type: map
-% -record(custom_pivot, {
-%     id :: m_rsc:resource_id()
-% }).
+-optional_callbacks([ observe_rsc_update_done/2, pid_observe_rsc_update_done/3 ]).
 
-% %% Fold over the resource props map to extend/remove data to be pivoted
-% %% Type: foldl
-% -record(pivot_rsc_data, {
-%     id :: m_rsc:resource_id()
-% }).
+%% Upload and replace the resource with the given data. The data is in the given format.
+%% Type: first
+%% Return: {ok, Id} or {error, Reason}, return {error, badarg} when the data is corrupt.
+-callback observe_rsc_upload(#rsc_upload{}, z:context()) -> Result when
+    Result :: {ok, m_rsc:resource_id()}
+            | {error, badarg | term()}
+            | undefined.
+-callback pid_observe_rsc_upload(pid(), #rsc_upload{}, z:context()) -> Result when
+    Result :: {ok, m_rsc:resource_id()}
+            | {error, badarg | term()}
+            | undefined.
 
-% %% Pivot just before a m_rsc_update update. Used to pivot fields before the pivot itself.
-% %% Type: foldr
-% -record(pivot_update, {
-%     id :: m_rsc:resource_id(),
-%     raw_props :: m_rsc:props()
-% }).
+-optional_callbacks([ observe_rsc_upload/2, pid_observe_rsc_upload/3 ]).
 
-% %% Foldr to change or add pivot fields for the main pivot table.
-% %% The rsc contains all rsc properties for this resource, including pivot properties.
-% %% Fold with a map containing the pivot fields.
-% %% Type: foldl
-% -record(pivot_fields, {
-%     id :: m_rsc:resource_id(),
-%     raw_props :: m_rsc:props()
-% }).
+%% Add custom pivot fields to a resource's search index (map)
+%% Result is a single tuple or list of tuples ``{pivotname, props}``, where "pivotname"
+%% is the pivot defined in a call to ``z_pivot_rsc:define_custom_pivot/3`` or a table
+%% with created using a SQL command during (eg.) in a module ``manage_schema/2`` call.
+%% The name of the table is ``pivot_<pivotname>``.  The ``props`` is either a property
+%% list or a map with column/value pairs.
+%%
+%% The table MUST have an ``id`` column, with a foreign key constraint to the ``rsc``
+%% table. If you define the pivot table using ``z_pivot_rsc:define_custom_pivot/3`` then
+%% this column and foreign key constraint are automatically added.
+%% Type: map
+-callback observe_custom_pivot(#custom_pivot{}, z:context()) -> Pivots when
+    Pivots :: [ Pivot ]
+            | Pivot
+            | ok
+            | none
+            | undefined,
+    Pivot :: {atom(), PivotFields},
+    PivotFields :: proplists:proplist()
+                 | map().
+-callback pid_observe_custom_pivot(pid(), #custom_pivot{}, z:context()) -> Pivots when
+    Pivots :: [ Pivot ]
+            | Pivot
+            | ok
+            | none
+            | undefined,
+    Pivot :: {atom(), PivotFields},
+    PivotFields :: proplists:proplist()
+                 | map().
 
-% %% Signal that a resource pivot has been done.
-% %% Type: notify
-% -record(rsc_pivot_done, {
-%     id :: m_rsc:resource_id(),
-%     is_a = [] :: list( atom() )
-% }).
+-optional_callbacks([ observe_custom_pivot/2, pid_observe_custom_pivot/3 ]).
 
+%% Fold over the resource props map to extend/remove data to be pivoted
+%% Type: foldl
+-callback observe_pivot_rsc_data(#pivot_rsc_data{}, Acc, z:context()) -> Result when
+    Acc :: m_rsc:props(),
+    Result :: m_rsc:props().
+-callback pid_observe_pivot_rsc_data(pid(), #pivot_rsc_data{}, Acc, z:context()) -> Result when
+    Acc :: m_rsc:props(),
+    Result :: m_rsc:props().
 
-% %% Sanitize an HTML element.
-% %% Type: foldl
-% -record(sanitize_element, {
-%     element :: {binary(), list( {binary(), binary()} ), list()},
-%     stack :: list()
-% }).
+-optional_callbacks([ observe_pivot_rsc_data/3, pid_observe_pivot_rsc_data/4 ]).
 
-% %% Sanitize an embed url. The hostpart is of the format: ``<<"youtube.com/v...">>``.
-% %% Type: first
-% %% Return: ``undefined``, ``false`` or a binary with a acceptable hostpath
-% -record(sanitize_embed_url, {
-%     hostpath :: binary()
-% }).
+%% Pivot just before a m_rsc_update update. Used to pivot fields before the pivot itself.
+%% Type: foldr
+-callback observe_pivot_update(#pivot_update{}, Acc, z:context()) -> Result when
+    Acc :: m_rsc:props(),
+    Result :: m_rsc:props().
+-callback pid_observe_pivot_update(pid(), #pivot_update{}, Acc, z:context()) -> Result when
+    Acc :: m_rsc:props(),
+    Result :: m_rsc:props().
 
+-optional_callbacks([ observe_pivot_update/3, pid_observe_pivot_update/4 ]).
+
+%% Foldr to change or add pivot fields for the main pivot table.
+%% The rsc contains all rsc properties for this resource, including pivot properties.
+%% Fold with a map containing the pivot fields.
+%% Type: foldl
+-callback observe_pivot_fields(#pivot_fields{}, Acc, z:context()) -> Result when
+    Acc :: #{ binary() => term() },
+    Result :: #{ binary() => term() }.
+-callback pid_observe_pivot_fields(pid(), #pivot_fields{}, Acc, z:context()) -> Result when
+    Acc :: #{ binary() => term() },
+    Result :: #{ binary() => term() }.
+
+-optional_callbacks([ observe_pivot_fields/3, pid_observe_pivot_fields/4 ]).
+
+%% Signal that a resource pivot has been done.
+%% Type: notify
+-callback observe_rsc_pivot_done(#rsc_pivot_done{}, z:context()) -> any().
+-callback pid_observe_rsc_pivot_done(pid(), #rsc_pivot_done{}, z:context()) -> any().
+
+-optional_callbacks([ observe_rsc_pivot_done/2, pid_observe_rsc_pivot_done/3 ]).
+
+%% Sanitize an HTML element.
+%% Type: foldl
+-callback observe_sanitize_element(#sanitize_element{}, Acc, z:context()) -> Result when
+    Acc :: Element,
+    Result :: Element,
+    Element :: {binary(), list( {binary(), binary()} ), list()}.
+-callback pid_observe_sanitize_element(pid(), #sanitize_element{}, Acc, z:context()) -> Result when
+    Acc :: Element,
+    Result :: Element,
+    Element :: {binary(), list( {binary(), binary()} ), list()}.
+
+-optional_callbacks([ observe_sanitize_element/3, pid_observe_sanitize_element/4 ]).
+
+%% Sanitize an embed url. The hostpart is of the format: ``<<"youtube.com/v...">>``.
+%% Type: first
+%% Return: ``undefined``, ``false`` or a binary with a acceptable hostpath
+-callback observe_sanitize_embed_url(#sanitize_embed_url{}, z:context()) -> URL when
+    URL :: undefined
+         | binary().
+-callback pid_observe_sanitize_embed_url(pid(), #sanitize_embed_url{}, z:context()) -> URL when
+    URL :: undefined
+         | binary().
+
+-optional_callbacks([ observe_sanitize_embed_url/2, pid_observe_sanitize_embed_url/3 ]).
 
 %% Check if a user is the owner of a resource.
 %% ``id`` is the resource id.
@@ -780,141 +822,195 @@
 
 -optional_callbacks([ observe_acl_is_owner/2, pid_observe_acl_is_owner/3 ]).
 
-% %% Check if a user is authorized to perform an operation on a an object
-% %% (some resource or module). Observe this notification to do complex or more
-% %% fine-grained authorization checks than you can do through the ACL rules admin
-% %% interface. Defaults to ``false``.
-% %% Type: first
-% %% Return: ``true`` to allow the operation, ``false`` to deny it or ``undefined`` to let the next observer decide
-% -record(acl_is_allowed, {
-%     action :: view | update | delete | insert | use | atom(),
-%     object :: term()
-% }).
+%% Check if a user is authorized to perform an operation on a an object
+%% (some resource or module). Observe this notification to do complex or more
+%% fine-grained authorization checks than you can do through the ACL rules admin
+%% interface. Defaults to ``false``.
+%% Type: first
+%% Return: ``true`` to allow the operation, ``false`` to deny it or ``undefined`` to let the next observer decide
+-callback observe_acl_is_allowed(#acl_is_allowed{}, z:context()) -> boolean() | undefined.
+-callback pid_observe_acl_is_allowed(pid(), #acl_is_allowed{}, z:context()) -> boolean() | undefined.
 
-% %% Check if a user is authorizded to perform an action on a property.
-% %% Defaults to ``true``.
-% %% Type: first
-% %% Return: ``true`` to grant access, ``false`` to deny it, ``undefined`` to let the next observer decide
-% -record(acl_is_allowed_prop, {
-%     action :: view | update | delete | insert | atom(),
-%     object :: term(),
-%     prop :: binary()
-% }).
+-optional_callbacks([ observe_acl_is_allowed/2, pid_observe_acl_is_allowed/3 ]).
 
-% %% Set the context to a typical authenticated user. Used by m_acl.erl
-% %% Type: first
-% %% Return: authenticated ``#context{}`` or ``undefined``
-% -record(acl_context_authenticated, {
-% }).
+%% Check if a user is authorized to perform an action on a property.
+%% Defaults to ``true``.
+%% Type: first
+%% Return: ``true`` to grant access, ``false`` to deny it, ``undefined`` to let the next observer decide
+-callback observe_acl_is_allowed_prop(#acl_is_allowed_prop{}, z:context()) -> boolean() | undefined.
+-callback pid_observe_acl_is_allowed_prop(pid(), #acl_is_allowed_prop{}, z:context()) -> boolean() | undefined.
 
-% %% Initialize context with the access policy for the user.
-% %% Type: first
-% %% Return: updated ``z:context()`` or ``undefined``
-% -record(acl_logon, {
-%     id :: m_rsc:resource_id(),
-%     options :: map()
-% }).
+-optional_callbacks([ observe_acl_is_allowed_prop/2, pid_observe_acl_is_allowed_prop/3 ]).
 
-% %% Clear the associated access policy for the context.
-% %% Type: first
-% %% Return: updated ``z:context()`` or ``undefined``
-% -record(acl_logoff, {}).
+%% Set the context to a typical authenticated user. Used by m_acl.erl
+%% Type: first
+-callback observe_acl_context_authenticated(#acl_context_authenticated{}, z:context()) -> z:context() | undefined.
+-callback pid_observe_acl_context_authenticated(pid(), #acl_context_authenticated{}, z:context()) -> z:context() | undefined.
 
-% %% Return the groups for the current user.
-% %% Type: first
-% %% Return: ``[ m_rsc:resource_id() ]`` or ``undefined``
-% -record(acl_user_groups, {}).
+-optional_callbacks([ observe_acl_context_authenticated/2, pid_observe_acl_context_authenticated/3 ]).
 
-% %% Modify the list of user groups of a user. Called internally
-% %% by the ACL modules when fetching the list of user groups a user
-% %% is member of.
-% %% Type: foldl
-% %% Return: ``[ m_rsc:resource_id() ]``
-% -record(acl_user_groups_modify, {
-%     id :: m_rsc:resource_id() | undefined,
-%     groups :: list( m_rsc:resource_id() )
-% }).
+%% Initialize context with the access policy for the user.
+%% Type: first
+-callback observe_acl_logon(#acl_logon{}, z:context()) -> z:context() | undefined.
+-callback pid_observe_acl_logon(pid(), #acl_logon{}, z:context()) -> z:context() | undefined.
 
-% %% Modify the list of collaboration groups of a user. Called internally
-% %% by the ACL modules when fetching the list of collaboration groups a user
-% %% is member of.
-% %% Type: foldl
-% %% Return: ``[ m_rsc:resource_id() ]``
-% -record(acl_collab_groups_modify, {
-%     id :: m_rsc:resource_id() | undefined,
-%     groups :: list( m_rsc:resource_id() )
-% }).
+-optional_callbacks([ observe_acl_logon/2, pid_observe_acl_logon/3 ]).
 
-% %% Confirm a user id.
-% %% Type: foldl
-% %% Return: ``z:context()``
-% -record(auth_confirm, {
-%     id :: m_rsc:resource_id()
-% }).
+%% Clear the associated access policy for the context.
+%% Type: first
+-callback observe_acl_logoff(#acl_logoff{}, z:context()) -> z:context() | undefined.
+-callback pid_observe_acl_logoff(pid(), #acl_logoff{}, z:context()) -> z:context() | undefined.
+
+-optional_callbacks([ observe_acl_logoff/2, pid_observe_acl_logoff/3 ]).
+
+%% Return the groups for the current user.
+%% Type: first
+-callback observe_acl_user_groups(#acl_user_groups{}, z:context()) -> Groups | undefined when
+    Groups :: [ m_rsc:resource_id() ].
+-callback pid_observe_acl_user_groups(pid(), #acl_user_groups{}, z:context()) -> Groups | undefined when
+    Groups :: [ m_rsc:resource_id() ].
+
+-optional_callbacks([ observe_acl_user_groups/2, pid_observe_acl_user_groups/3 ]).
+
+%% Modify the list of user groups of a user. Called internally
+%% by the ACL modules when fetching the list of user groups a user
+%% is member of.
+%% Type: foldl
+-callback observe_acl_user_groups_modify(#acl_user_groups_modify{}, Acc, z:context()) -> Groups when
+    Acc :: Groups,
+    Groups :: [ m_rsc:resource_id() ].
+-callback pid_observe_acl_user_groups_modify(pid(), #acl_user_groups_modify{}, Acc, z:context()) -> Groups when
+    Acc :: Groups,
+    Groups :: [ m_rsc:resource_id() ].
+
+-optional_callbacks([ observe_acl_user_groups_modify/3, pid_observe_acl_user_groups_modify/4 ]).
+
+%% Modify the list of collaboration groups of a user. Called internally
+%% by the ACL modules when fetching the list of collaboration groups a user
+%% is member of.
+%% Type: foldl
+-callback observe_acl_collab_groups_modify(#acl_collab_groups_modify{}, Acc, z:context()) -> Groups when
+    Acc :: Groups,
+    Groups :: [ m_rsc:resource_id() ].
+-callback pid_observe_acl_collab_groups_modify(pid(), #acl_collab_groups_modify{}, Acc, z:context()) -> Groups when
+    Acc :: Groups,
+    Groups :: [ m_rsc:resource_id() ].
+
+-optional_callbacks([ observe_acl_collab_groups_modify/3, pid_observe_acl_collab_groups_modify/4 ]).
+
+%% Confirm a user id.
+%% Type: foldl
+-callback observe_auth_confirm(#auth_confirm{}, Acc, z:context()) -> Result when
+    Acc :: z:context(),
+    Result :: z:context().
+-callback pid_observe_auth_confirm(pid(), #auth_confirm{}, Acc, z:context()) -> Result when
+    Acc :: z:context(),
+    Result :: z:context().
+
+-optional_callbacks([ observe_auth_confirm/3, pid_observe_auth_confirm/4 ]).
 
 % %% A user id has been confirmed.
 % %% Type: notify
-% -record(auth_confirm_done, {
-%     id :: m_rsc:resource_id()
-% }).
+-callback observe_auth_confirm_done(#auth_confirm_done{}, z:context()) -> any().
+-callback pid_observe_auth_confirm_done(pid(), #auth_confirm_done{}, z:context()) -> any().
 
-% %% First for logon of user with username, check for ratelimit, blocks etc.
-% %% Return: 'undefined' | ok | {error, Reason}
-% -record(auth_precheck, {
-%         username :: binary()
-%     }).
+-optional_callbacks([ observe_auth_confirm_done/2, pid_observe_auth_confirm_done/3 ]).
 
-% %% First for logon of user with username, called after successful password check.
-% %% Return: 'undefined' | ok | {error, Reason}
-% -record(auth_postcheck, {
-%         service = username_pw :: atom(),
-%         id :: m_rsc:resource_id(),
-%         query_args = #{} :: map()
-%     }).
+%% First for logon of user with username, check for ratelimit, blocks etc.
+%% Type: first
+-callback observe_auth_precheck(#auth_precheck{}, z:context()) -> Result when
+    Result :: ok
+            | {error, term()}
+            | undefined.
+-callback pid_observe_auth_precheck(pid(), #auth_precheck{}, z:context()) -> Result when
+    Result :: ok
+            | {error, term()}
+            | undefined.
 
-% %% Fold over the context after logon of user with username, communicates valid or invalid password
-% -record(auth_checked, {
-%         id :: undefined | m_rsc:resource_id(),
-%         username :: binary(),
-%         is_accepted :: boolean()
-%     }).
+-optional_callbacks([ observe_auth_precheck/2, pid_observe_auth_precheck/3 ]).
 
-% %% First to check for password reset forms, return undefined, ok, or {error, Reason}.
-% -record(auth_reset, {
-%         username :: undefined | binary()
-%     }).
+%% First for logon of user with username, called after successful password check.
+%% Type: first
+-callback observe_auth_postcheck(#auth_postcheck{}, z:context()) -> Result when
+    Result :: ok
+            | {error, term()}
+            | undefined.
+-callback pid_observe_auth_postcheck(pid(), #auth_postcheck{}, z:context()) -> Result when
+    Result :: ok
+            | {error, term()}
+            | undefined.
 
-% %% First to validate a password. Return {ok, RscId} or {error, Reason}.
-% -record(auth_validate, {
-%         username :: undefined | binary(),
-%         password :: undefined | binary()
-%     }).
+-optional_callbacks([ observe_auth_postcheck/2, pid_observe_auth_postcheck/3 ]).
 
+%% Notify after logon of user with username, communicates valid or invalid password
+%% Type: notify_sync
+-callback observe_auth_checked(#auth_checked{}, z:context()) -> any().
+-callback pid_observe_auth_checked(pid(), #auth_checked{}, z:context()) -> any().
 
-% %% User logs on. Add user-related properties to the logon request context.
-% %% Type: foldl
-% %% Return: ``z:context()``
-% -record(auth_logon, { id :: m_rsc:resource_id() }).
+-optional_callbacks([ observe_auth_checked/2, pid_observe_auth_checked/3 ]).
 
+%% First to check for password reset forms, return undefined, ok, or {error, Reason}.
+%% Type: first
+-callback observe_auth_reset(#auth_reset{}, z:context()) -> Result when
+    Result :: ok
+            | {error, term()}
+            | undefined.
+-callback pid_observe_auth_reset(pid(), #auth_reset{}, z:context()) -> Result when
+    Result :: ok
+            | {error, term()}
+            | undefined.
 
-% %% User is about to log off. Modify (if needed) the logoff request context.
-% %% Type: foldl
-% %% Return: ``z:context()``
-% -record(auth_logoff, { id :: m_rsc:resource_id() | undefined }).
+-optional_callbacks([ observe_auth_reset/2, pid_observe_auth_reset/3 ]).
 
+%% First to validate a password. Return {ok, RscId} or {error, Reason}.
+%% Type: first
+-callback observe_auth_validate(#auth_validate{}, z:context()) -> Result when
+    Result :: {ok, m_rsc:resource_id()}
+            | {error, term()}
+            | undefined.
+-callback pid_observe_auth_validate(pid(), #auth_validate{}, z:context()) -> Result when
+    Result :: {ok, m_rsc:resource_id()}
+            | {error, term()}
+            | undefined.
 
-% %% Authentication against some (external or internal) service was validated
-% %% Type: first
-% -record(auth_validated, {
-%     service :: atom(),
-%     service_uid :: binary(),
-%     service_props = #{} :: map(),
-%     props = #{} :: m_rsc:props(),
-%     identities = [] :: list( map() ),
-%     ensure_username_pw = true :: boolean(),
-%     is_connect = false :: boolean(),
-%     is_signup_confirmed = false :: boolean()
-% }).
+-optional_callbacks([ observe_auth_validate/2, pid_observe_auth_validate/3 ]).
+
+%% User logs on. Add user-related properties to the logon request context.
+%% Type: foldl
+-callback observe_auth_logon(#auth_logon{}, Acc, z:context()) -> Result when
+    Acc :: z:context(),
+    Result :: z:context().
+-callback pid_observe_auth_logon(pid(), #auth_logon{}, Acc, z:context()) -> Result when
+    Acc :: z:context(),
+    Result :: z:context().
+
+-optional_callbacks([ observe_auth_logon/3, pid_observe_auth_logon/4 ]).
+
+%% User is about to log off. Modify (if needed) the logoff request context.
+%% Type: foldl
+-callback observe_auth_logoff(#auth_logoff{}, Acc, z:context()) -> Result when
+    Acc :: z:context(),
+    Result :: z:context().
+-callback pid_observe_auth_logoff(pid(), #auth_logoff{}, Acc, z:context()) -> Result when
+    Acc :: z:context(),
+    Result :: z:context().
+
+-optional_callbacks([ observe_auth_logoff/3, pid_observe_auth_logoff/4 ]).
+
+%% Authentication against some (external or internal) service was validated
+%% Type: first
+-callback observe_auth_validated(#auth_validated{}, z:context()) -> Result when
+    Result :: {ok, m_rsc:resource_id()}
+            | {ok, z:context()}
+            | {error, term()}
+            | undefined.
+-callback pid_observe_auth_validated(pid(), #auth_validated{}, z:context()) -> Result when
+    Result :: {ok, m_rsc:resource_id()}
+            | {ok, z:context()}
+            | {error, term()}
+            | undefined.
+
+-optional_callbacks([ observe_auth_validated/2, pid_observe_auth_validated/3 ]).
 
 % %% Update the given (accumulator) authentication options with the request options.
 % %%      Note that the request options are from the client and are unsafe.

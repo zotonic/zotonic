@@ -723,7 +723,8 @@
         query_args = #{} :: map()
     }).
 
-%% @doc Fold over the context after logon of user with username, communicates valid or invalid password
+%% @doc Notify after logon of user with username, communicates valid or invalid password
+%% Type: notify_sync
 -record(auth_checked, {
         id :: undefined | m_rsc:resource_id(),
         username :: binary(),
