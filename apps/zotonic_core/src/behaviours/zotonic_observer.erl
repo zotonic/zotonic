@@ -999,6 +999,7 @@
 
 %% Authentication against some (external or internal) service was validated
 %% Type: first
+%% TODO: check when Context return is expected and when RscId
 -callback observe_auth_validated(#auth_validated{}, z:context()) -> Result when
     Result :: {ok, m_rsc:resource_id()}
             | {ok, z:context()}
@@ -1132,557 +1133,662 @@
 
 -optional_callbacks([ observe_user_context/3, pid_observe_user_context/4 ]).
 
+%% Fetch the url of a resource's html representation
+%% Type: first
+%% Return: ``{ok, Url}`` or ``undefined``
+-callback observe_page_url(#page_url{}, z:context()) -> {ok, binary()} | undefined.
+-callback pid_observe_page_url(pid(), #page_url{}, z:context()) -> {ok, binary()} | undefined.
 
-% %% Request API logon
-% -record(service_authorize, { service_module }).
+-optional_callbacks([ observe_page_url/2, pid_observe_page_url/3 ]).
 
-% %% Fetch the url of a resource's html representation
-% %% Type: first
-% %% Return: ``{ok, Url}`` or ``undefined``
-% -record(page_url, { id :: m_rsc:resource_id(), is_a :: list(atom()) }).
+%% Handle custom named search queries in your function.
+%% Type: first
+-callback observe_search_query(#search_query{}, z:context()) -> Result when
+    Result :: #search_sql{}
+            | #search_result{}
+            | list()
+            | undefined.
+-callback pid_observe_search_query(pid(), #search_query{}, z:context()) -> Result when
+    Result :: #search_sql{}
+            | #search_result{}
+            | list()
+            | undefined.
 
-% %% Handle custom named search queries in your function.
-% %% Type: first
-% %% Return: ``#search_sql{}``, ``#search_result{}`` or ``undefined``
-% -record(search_query, {
-%     name = undefined :: binary() | undefined,
-%     args = undefined :: map() | undefined,
-%     offsetlimit :: {
-%         Offset :: pos_integer(),
-%         Limit :: pos_integer()
-%     },
-%     options = #{} :: z_search:search_options(),
-%     % Deprecated {searchname, [..]} syntax.
-%     search = undefined :: {
-%         SearchName :: atom(),
-%         SearchProps :: list()
-%     } | undefined
-% }).
+-optional_callbacks([ observe_search_query/2, pid_observe_search_query/3 ]).
 
-% %% Map a custom search term to a ``#search_sql_term{}`` record.
-% %% Type: first
-% %% Return: ``#search_sql_term{}``, ``[]``, or ``undefined``
-% -record(search_query_term, {
-%     term :: binary(),
-%     arg :: any()
-% }).
+%% Map a custom search term to a ``#search_sql_term{}`` record.
+%% Type: first
+-callback observe_search_query_term(#search_query_term{}, z:context()) -> Result when
+    Result :: #search_sql_term{}
+            | QueryTerm
+            | [ QueryTerm ]
+            | undefined,
+    QueryTerm :: #{ binary() => term() }.
+-callback pid_observe_search_query_term(pid(), #search_query_term{}, z:context()) -> Result when
+    Result :: #search_sql_term{}
+            | QueryTerm
+            | [ QueryTerm ]
+            | undefined,
+    QueryTerm :: #{ binary() => term() }.
 
-% %% An edge has been inserted.
-% %% Note that the Context for this notification does not have the user who
-% %% created the edge.
-% %% Type: notify
-% %% Return: return value is ignored
-% -record(edge_insert, {
-%     subject_id :: m_rsc:resource(),
-%     predicate :: atom(),
-%     object_id :: m_rsc:resource(),
-%     edge_id :: pos_integer()
-% }).
+-optional_callbacks([ observe_search_query_term/2, pid_observe_search_query_term/3 ]).
 
-% %% An edge has been deleted
-% %% Note that the Context for this notification does not have the user who
-% %% deleted the edge.
-% %% Type: notify
-% %% Return: return value is ignored
-% -record(edge_delete, {
-%     subject_id :: m_rsc:resource(),
-%     predicate :: atom(),
-%     object_id :: m_rsc:resource(),
-%     edge_id :: pos_integer()
-% }).
+%% An edge has been inserted.
+%% Note that the Context for this notification does not have the user who
+%% created the edge.
+%% Type: notify
+-callback observe_edge_insert(#edge_insert{}, z:context()) -> any().
+-callback pid_observe_edge_insert(pid(), #edge_insert{}, z:context()) -> any().
 
-% %% An edge has been updated
-% %% Note that the Context for this notification does not have the user who
-% %% updated the edge.
-% %% Type: notify
-% %% Return: return value is ignored
-% -record(edge_update, {
-%     subject_id :: m_rsc:resource(),
-%     predicate :: atom(),
-%     object_id :: m_rsc:resource(),
-%     edge_id :: pos_integer()
-% }).
+-optional_callbacks([ observe_edge_insert/2, pid_observe_edge_insert/3 ]).
 
-% %% Site configuration parameter was changed
-% %% Type: notify
-% %% Return: return value is ignored
-% -record(m_config_update, {
-%     module :: atom(),
-%     key :: term(),
-%     value :: term()
-% }).
+%% An edge has been deleted
+%% Note that the Context for this notification does not have the user who
+%% deleted the edge.
+%% Type: notify
+-callback observe_edge_delete(#edge_delete{}, z:context()) -> any().
+-callback pid_observe_edge_delete(pid(), #edge_delete{}, z:context()) -> any().
+
+-optional_callbacks([ observe_edge_delete/2, pid_observe_edge_delete/3 ]).
+
+%% An edge has been updated
+%% Note that the Context for this notification does not have the user who
+%% updated the edge.
+%% Type: notify
+-callback observe_edge_update(#edge_update{}, z:context()) -> any().
+-callback pid_observe_edge_update(pid(), #edge_update{}, z:context()) -> any().
+
+-optional_callbacks([ observe_edge_update/2, pid_observe_edge_update/3 ]).
+
+%% Site configuration parameter was changed
+%% Type: notify
+-callback observe_m_config_update(#m_config_update{}, z:context()) -> any().
+-callback pid_observe_m_config_update(pid(), #m_config_update{}, z:context()) -> any().
+
+-optional_callbacks([ observe_m_config_update/2, pid_observe_m_config_update/3 ]).
 
 % %% Site configuration parameter was changed
 % %% Type: notify
-% %% Return: return value is ignored
-% -record(m_config_update_prop, {module, key, prop, value}).
+-callback observe_m_config_update_prop(#m_config_update_prop{}, z:context()) -> any().
+-callback pid_observe_m_config_update_prop(pid(), #m_config_update_prop{}, z:context()) -> any().
 
+-optional_callbacks([ observe_m_config_update_prop/2, pid_observe_m_config_update_prop/3 ]).
 
-% %% Fetch the data for an import of a resource. Returns data in the format
-% %% used by m_rsc_export and m_rsc_import. Either returns the JSON data, the
-% %% imported resource id, or the resource id and a map with a mapping from URIs to
-% %% resource ids.
-% %% Type: first
-% %% Return: {ok, map()} | {ok, m_rsc:resource_id()} | {ok, {m_rsc:resource_id(), map()}} | {error, term()} | undefined
-% -record(rsc_import_fetch, {
-%     uri :: binary()
-% }).
+%% Fetch the data for an import of a resource. Returns data in the format
+%% used by m_rsc_export and m_rsc_import. Either returns the JSON data, the
+%% imported resource id, or the resource id and a map with a mapping from URIs to
+%% resource ids.
+%% Type: first
+-callback observe_rsc_import_fetch(#rsc_import_fetch{}, z:context()) -> Result when
+    Result :: {ok, map()}
+            | {ok, m_rsc:resource_id()}
+            | {ok, {m_rsc:resource_id(), map()}}
+            | {error, term()}
+            | undefined.
+-callback pid_observe_rsc_import_fetch(pid(), #rsc_import_fetch{}, z:context()) -> Result when
+    Result :: {ok, map()}
+            | {ok, m_rsc:resource_id()}
+            | {ok, {m_rsc:resource_id(), map()}}
+            | {error, term()}
+            | undefined.
 
+-optional_callbacks([ observe_rsc_import_fetch/2, pid_observe_rsc_import_fetch/3 ]).
 
-% %% Notification for fetching #media_import_props{} from different modules.
-% %% This is used by z_media_import.erl for fetching properties and medium information (map)
-% %% about resources.  The metadata is the result returned by z_url_metadata.
-% %% Type: map
-% -record(media_import, {
-%     url :: binary(),
-%     host_rev :: list(binary()),
-%     mime :: binary(),
-%     metadata :: tuple() % z_url_metadata:url_metadata()
-% }).
+%% Notification for fetching #media_import_props{} from different modules.
+%% This is used by z_media_import.erl for fetching properties and medium information (map)
+%% about resources.  The metadata is the result returned by z_url_metadata.
+%% Type: map
+-callback observe_media_import(#media_import{}, z:context()) -> Result when
+    Result :: #media_import_props{}
+            | [ #media_import_props{} ]
+            | undefined.
+-callback pid_observe_media_import(pid(), #media_import{}, z:context()) -> Result when
+    Result :: #media_import_props{}
+            | [ #media_import_props{} ]
+            | undefined.
 
-% % Return value of the media_import notification
-% -record(media_import_props, {
-%     prio = 5 :: pos_integer(),      % 1 for perfect match (ie. host specific importer)
-%     category :: atom(),
-%     module :: atom(),
-%     description :: binary() | z:trans(),
-%     rsc_props :: map(),
-%     medium_props :: z_media_identify:media_info(),
-%     medium_url = <<>> :: binary(),
-%     preview_url :: binary() | undefined,
-%     importer :: atom()
-% }).
+-optional_callbacks([ observe_media_import/2, pid_observe_media_import/3 ]).
 
-% %% Notification to translate or map a file after upload, before insertion into the database
-% %% Used in mod_video to queue movies for conversion to mp4.
-% %% You can set the post_insert_fun to something like fun(Id, Medium, Context) to receive the
-% %% medium record as it is inserted.
-% %% Type: first
-% %% Return: modified ``#media_upload_preprocess{}``
-% -record(media_upload_preprocess, {
-%     id = insert_rsc :: m_rsc:resource_id() | insert_rsc,
-%     mime :: binary(),
-%     file :: file:filename_all() | undefined,
-%     original_filename :: file:filename_all() | undefined,
-%     medium :: z_media_identify:media_info(),
-%     post_insert_fun :: function() | undefined
-% }).
+%% Notification to translate or map a file after upload, before insertion into the database
+%% Used in mod_video to queue movies for conversion to mp4.
+%% You can set the post_insert_fun to something like fun(Id, Medium, Context) to receive the
+%% medium record as it is inserted.
+%% Type: first
+-callback observe_media_upload_preprocess(#media_upload_preprocess{}, z:context()) -> Result when
+    Result :: #media_upload_preprocess{}
+            | undefined.
+-callback pid_observe_media_upload_preprocess(pid(), #media_upload_preprocess{}, z:context()) -> Result when
+    Result :: #media_upload_preprocess{}
+            | undefined.
 
-% %% Notification that a medium file has been uploaded.
-% %% This is the moment to change properties, modify the file etc.
-% %% The folded accumulator is the map with updated medium properties.
-% %% Type: foldl
-% %% Return: modified medium properties map
-% -record(media_upload_props, {
-%     id :: m_rsc:resource_id() | insert_rsc,
-%     mime :: binary(),
-%     archive_file :: file:filename_all() | undefined,
-%     options :: list()
-% }).
+-optional_callbacks([ observe_media_upload_preprocess/2, pid_observe_media_upload_preprocess/3 ]).
 
-% %% Notification that a medium file has been uploaded.
-% %% This is the moment to change resource properties, modify the file etc.
-% %% The folded accumulator is the map with updated resource properties.
-% %% Type: foldl
-% %% Return: modified resource properties map
-% -record(media_upload_rsc_props, {
-%     id :: m_rsc:resource_id() | insert_rsc,
-%     mime :: binary(),
-%     archive_file,
-%     options :: list(),
-%     medium :: z_media_identify:media_info()
-% }).
+%% Notification that a medium file has been uploaded.
+%% This is the moment to change properties, modify the file etc.
+%% The folded accumulator is the map with updated medium properties.
+%% Type: foldl
+-callback observe_media_upload_props(#media_upload_props{}, Acc, z:context()) -> Result when
+    Acc :: MediumRecord,
+    Result :: MediumRecord,
+    MediumRecord :: #{ binary() => term() }.
+-callback pid_observe_media_upload_props(pid(), #media_upload_props{}, Acc, z:context()) -> Result when
+    Acc :: MediumRecord,
+    Result :: MediumRecord,
+    MediumRecord :: #{ binary() => term() }.
 
-% %% Notification to import a medium record from external source. This is called for non-file
-% %% medium records, for example embedded video.  If the medium record is not recognized then it
-% %% will not be imported. The handling module is responsible for sanitizing and inserting the medium
-% %% record.
-% %% Type: first
-% %% Return: ``ok | {error, term()}``.
-% -record(media_import_medium, {
-%     id :: m_rsc:resource_id(),
-%     medium :: map()
-% }).
+-optional_callbacks([ observe_media_upload_props/3, pid_observe_media_upload_props/4 ]).
 
-% %% Notification that a medium file has been changed (notify)
-% %% The id is the resource id, medium contains the medium's property list.
-% %% Type: notify
-% %% Return: return value is ignored
-% -record(media_replace_file, {id, medium}).
+%% Notification that a medium file has been uploaded.
+%% This is the moment to change resource properties, modify the file etc.
+%% The folded accumulator is the map with updated resource properties.
+%% Type: foldl
+-callback observe_media_upload_rsc_props(#media_upload_rsc_props{}, Acc, z:context()) -> Result when
+    Acc :: RscProps,
+    Result :: RscProps,
+    RscProps :: m_rsc:props().
+-callback pid_observe_media_upload_rsc_props(pid(), #media_upload_rsc_props{}, Acc, z:context()) -> Result when
+    Acc :: RscProps,
+    Result :: RscProps,
+    RscProps :: m_rsc:props().
 
-% %% Media update done notification. action is 'insert', 'update' or 'delete'
-% %% Type: notify
-% -record(media_update_done, {
-%     action :: insert | update | delete,
-%     id :: m_rsc:resource_id(),
-%     pre_is_a :: list( atom() ),
-%     post_is_a :: list( atom() ),
-%     pre_props :: map() | undefined,
-%     post_props :: map() | undefined
-% }).
+-optional_callbacks([ observe_media_upload_rsc_props/3, pid_observe_media_upload_rsc_props/4 ]).
 
-% %% Modify the options for an image preview url or tag. This is called for every
-% %% image url generation, except if the 'original' image option is passed. The mediaclass
-% %% in the options is not yet expanded.
-% %% Type: foldl
-% %% Return: modified property list of image options
-% -record(media_preview_options, {
-%     id :: m_rsc:resource_id() | undefined,
-%     width :: non_neg_integer(),
-%     height :: non_neg_integer(),
-%     options :: proplists:proplist()
-%     }).
+%% Notification to import a medium record from external source. This is called for non-file
+%% medium records, for example embedded video.  If the medium record is not recognized then it
+%% will not be imported. The handling module is responsible for sanitizing and inserting the medium
+%% record.
+%% Type: first
+-callback observe_media_import_medium(#media_import_medium{}, z:context()) -> Result when
+    Result :: ok
+            | {error, term()}
+            | undefined.
+-callback pid_observe_media_import_medium(pid(), #media_import_medium{}, z:context()) -> Result when
+    Result :: ok
+            | {error, term()}
+            | undefined.
 
-% %% Request a translation of a list of strings. The resulting translations must
-% %% be in the same order as the request. This notification is handled by modules
-% %% that interface to external translation services like DeepL or Google Translate.
-% %% Type: first
-% %% Return {ok, List} | {error, Reason} | undefined.
-% -record(translate, {
-%     from :: atom(),
-%     to :: atom(),
-%     texts = [] :: list( binary() )
-%     }).
+-optional_callbacks([ observe_media_import_medium/2, pid_observe_media_import_medium/3 ]).
 
-% %% Try to detect the language of a translation. Set is_editable_only to false
-% %% to detect any language, even if the language is not enabled for the site.
-% %% Type: first
-% %% Return atom() | undefined.
-% -record(language_detect, {
-%     text = <<>> :: binary(),
-%     is_editable_only = true :: boolean()
-%     }).
+%% Notification that a medium file has been changed (notify)
+%% The id is the resource id, medium contains the medium's property list.
+%% Type: notify
+-callback observe_media_replace_file(#media_replace_file{}, z:context()) -> any().
+-callback pid_observe_media_replace_file(pid(), #media_replace_file{}, z:context()) -> any().
+
+-optional_callbacks([ observe_media_replace_file/2, pid_observe_media_replace_file/3 ]).
+
+%% Media update done notification. action is 'insert', 'update' or 'delete'
+%% Type: notify
+-callback observe_media_update_done(#media_update_done{}, z:context()) -> any().
+-callback pid_observe_media_update_done(pid(), #media_update_done{}, z:context()) -> any().
+
+-optional_callbacks([ observe_media_update_done/2, pid_observe_media_update_done/3 ]).
+
+%% Modify the options for an image preview url or tag. This is called for every
+%% image url generation, except if the 'original' image option is passed. The mediaclass
+%% in the options is not yet expanded.
+%% Type: foldl
+-callback observe_media_preview_options(#media_preview_options{}, Acc, z:context()) -> Result when
+    Acc :: ImageOptions,
+    Result :: ImageOptions,
+    ImageOptions :: proplists:proplist().
+-callback pid_observe_media_preview_options(pid(), #media_preview_options{}, Acc, z:context()) -> Result when
+    Acc :: ImageOptions,
+    Result :: ImageOptions,
+    ImageOptions :: proplists:proplist().
+
+-optional_callbacks([ observe_media_preview_options/3, pid_observe_media_preview_options/4 ]).
+
+%% Request a translation of a list of strings. The resulting translations must
+%% be in the same order as the request. This notification is handled by modules
+%% that interface to external translation services like DeepL or Google Translate.
+%% Type: first
+-callback observe_translate(#translate{}, z:context()) -> Result when
+    Result :: {ok, Translations}
+            | {error, term()}
+            | undefined,
+    Translations :: [ {binary(), undefined | binary()} ].
+-callback pid_observe_translate(pid(), #translate{}, z:context()) -> Result when
+    Result :: {ok, Translations}
+            | {error, term()}
+            | undefined,
+    Translations :: [ {binary(), undefined | binary()} ].
+
+-optional_callbacks([ observe_translate/2, pid_observe_translate/3 ]).
+
+%% Try to detect the language of a translation. Set is_editable_only to false
+%% to detect any language, even if the language is not enabled for the site.
+%% Type: first
+-callback observe_language_detect(#language_detect{}, z:context()) -> Result when
+    Result :: z_language:language_code()
+            | undefined.
+-callback pid_observe_language_detect(pid(), #language_detect{}, z:context()) -> Result when
+    Result :: z_language:language_code()
+            | undefined.
+
+-optional_callbacks([ observe_language_detect/2, pid_observe_language_detect/3 ]).
 
 % %% Send a notification that the resource 'id' is added to the query query_id.
 % %% Type: notify
-% %% Return: return value is ignored
-% -record(rsc_query_item, {
-%     query_id :: m_rsc:resource_id(),
-%     match_id :: m_rsc:resource_id()
-% }).
+-callback observe_rsc_query_item(#rsc_query_item{}, z:context()) -> any().
+-callback pid_observe_rsc_query_item(pid(), #rsc_query_item{}, z:context()) -> any().
 
+-optional_callbacks([ observe_rsc_query_item/2, pid_observe_rsc_query_item/3 ]).
 
-% %% Add extra javascript with the {% script %} tag. (map)
-% %% Used to let modules inject extra javascript depending on the arguments of the {% script %} tag.
-% %% Must return an iolist()
-% %% Type: map
-% -record(scomp_script_render, {
-%     is_nostartup = false :: boolean(),
-%     args = [] :: list()
-% }).
+%% Add extra javascript with the {% script %} tag. (map)
+%% Used to let modules inject extra javascript depending on the arguments of the {% script %} tag.
+%% Type: map
+-callback observe_scomp_script_render(#scomp_script_render{}, z:context()) -> iodata().
+-callback pid_observe_scomp_script_render(pid(), #scomp_script_render{}, z:context()) -> iodata().
 
+-optional_callbacks([ observe_scomp_script_render/2, pid_observe_scomp_script_render/3 ]).
 
-% %% Render the javascript for a custom action event type.
-% %% The custom event type must be a tuple, for example:
-% %% ``{% wire type={live id=myid} action={...} %}</code>``
-% %% Must return {ok, Javascript, Context}
-% %% Type: first
-% -record(action_event_type, {
-%     event :: tuple(),
-%     trigger_id :: string(),
-%     trigger :: string(),
-%     postback_js :: iolist(),
-%     postback_pickled :: string()|binary(),
-%     action_js :: iolist()
-% }).
+%% Render the javascript for a custom action event type.
+%% The custom event type must be a tuple, for example:
+%% ``{% wire type={live id=myid} action={...} %}</code>``
+%% Type: first
+-callback observe_action_event_type(#action_event_type{}, z:context()) -> Result when
+    Result :: {ok, Javascript, z:context()}
+            | undefined,
+    Javascript :: iodata().
+-callback pid_observe_action_event_type(pid(), #action_event_type{}, z:context()) -> Result when
+    Result :: {ok, Javascript, z:context()}
+            | undefined,
+    Javascript :: iodata().
 
-% %% Find an import definition for a CSV file by checking the filename of the to be imported file.
-% %% Type: first
-% %% Return: ``#import_csv_definition{}`` or ``undefined`` (in which case the column headers are used as property names)
-% -record(import_csv_definition, {
-%     basename :: binary(),
-%     filename :: file:filename_all()
-% }).
+-optional_callbacks([ observe_action_event_type/2, pid_observe_action_event_type/3 ]).
 
+%% Find an import definition for a CSV file by checking the filename of the to be imported file.
+%% Type: first
+-callback observe_import_csv_definition(#import_csv_definition{}, z:context()) -> Result when
+    Result :: #import_csv_definition{}
+            | undefined.
+-callback pid_observe_import_csv_definition(pid(), #import_csv_definition{}, z:context()) -> Result when
+    Result :: #import_csv_definition{}
+            | undefined.
 
-% %% Handle an uploaded file which is part of a multiple file upload from a user-agent.
-% %% The upload is a #upload record or a filename on the server.
-% %% Type: first
-% %% Return: ``#context{}`` with the result or ``undefined``
-% -record(multiupload, {
-%     upload :: term() | string(),
-%     query_args = [] :: list()
-% }).
+-optional_callbacks([ observe_import_csv_definition/2, pid_observe_import_csv_definition/3 ]).
 
-% %% Handle a new file received in the 'files/dropbox' folder of a site.
-% %% Unhandled files are deleted after a hour.
-% %% Type: first
-% -record(dropbox_file, {
-%     filename :: file:filename_all(),
-%     basename :: binary()
-% }).
+%% Handle a new file received in the 'files/dropbox' folder of a site.
+%% Unhandled files are deleted after a hour.
+%% Type: first
+-callback observe_dropbox_file(#dropbox_file{}, z:context()) -> Result when
+    Result :: ok
+            | undefined.
+-callback pid_observe_dropbox_file(pid(), #dropbox_file{}, z:context()) -> Result when
+    Result :: ok
+            | undefined.
 
-% %% Try to identify a file, returning a map with file properties.
-% %% Type: first
-% %% Return: map with binary keys, especially ``<<"mime">>``, ``<<"width">>``, ``<<"height">>``, ``<<"orientation">>``
-% -record(media_identify_file, {
-%     filename :: file:filename_all(),
-%     original_filename :: binary(),
-%     extension :: binary()
-% }).
+-optional_callbacks([ observe_dropbox_file/2, pid_observe_dropbox_file/3 ]).
 
-% %% Try to find a filename extension for a mime type (example: ".jpg")
-% %% Type: first
-% %% Return: Extension (for example ``<<".png">>``) or ``undefined``
-% -record(media_identify_extension, {
-%     mime :: binary(),
-%     preferred :: undefined | binary()
-% }).
+%% Try to identify a file, returning a map with file properties.
+%% Most interesting keys for the returned map:
+%% ``<<"mime">>``, ``<<"width">>``, ``<<"height">>``, ``<<"orientation">>``
+%% Type: first
+-callback observe_media_identify_file(#media_identify_file{}, z:context()) -> Result when
+    Result :: MimeData
+            | undefined,
+    MimeData :: #{ binary() => term() }.
+-callback pid_observe_media_identify_file(pid(), #media_identify_file{}, z:context()) -> Result when
+    Result :: MimeData
+            | undefined,
+    MimeData :: #{ binary() => term() }.
 
-% %% Request to generate a HTML media viewer for a resource
-% %% Type: first
-% %% Return: ``{ok, Html}`` or ``undefined``
-% -record(media_viewer, {
-%     id,
-%     props :: z_media_identify:media_info(),
-%     filename = undefined :: file:filename_all() | undefined,
-%     options = [] :: list()
-% }).
+-optional_callbacks([ observe_media_identify_file/2, pid_observe_media_identify_file/3 ]).
 
-% %% See if there is a 'still' image preview of a media item. (eg posterframe of a movie)
-% %% Type: first
-% %% Return:: ``{ok, ResourceId}`` or ``undefined``
-% -record(media_stillimage, {
-%     id :: m_rsc:resource_id() | undefined,
-%     props :: z_media_identify:media_info()
-% }).
+%% Try to find a filename extension for a mime type (example: ``<<".jpg">>``)
+%% Type: first
+-callback observe_media_identify_extension(#media_identify_extension{}, z:context()) -> Result when
+    Result :: Extension
+            | undefined,
+    Extension ::binary().
+-callback pid_observe_media_identify_extension(pid(), #media_identify_extension{}, z:context()) -> Result when
+    Result :: Extension
+            | undefined,
+    Extension ::binary().
 
-% %% Optionally wrap HTML with external content so that it adheres to the cookie/privacy
-% %% settings of the current site visitor. Typically called with a 'first' by the code that
-% %% generated the media viewer HTML, as that code has the knowledge if viewing the generated code
-% %% has any privacy or cookie implications.
-% %% Return {ok, HTML} or undefined
-% -record(media_viewer_consent, {
-%     id :: m_rsc:resource_id() | undefined,
-%     consent = all :: functional | stats | all,
-%     html :: iodata(),
-%     viewer_props :: z_media_identify:media_info(),
-%     viewer_options = [] :: list()
-% }).
+-optional_callbacks([ observe_media_identify_extension/2, pid_observe_media_identify_extension/3 ]).
 
-% %% Fetch list of handlers for survey submits.
-% %% Type: foldr
-% %% Return: list with tuples: ``[ {handler_name, TitleForDisplay}, ... ]``
-% -record(survey_get_handlers, {}).
+%% Request to generate a HTML media viewer for a resource. The HTML data can not contain any
+%% Javascript, as it might be serialized. This could happen if the correct cookies are not yet
+%% set or if the media viewer is part of a direct DOM update.
+%% Type: first
+-callback observe_media_viewer(#media_viewer{}, z:context()) -> Result when
+    Result :: {ok, HTML}
+            | undefined,
+    HTML :: iodata().
+-callback pid_observe_media_viewer(pid(), #media_viewer{}, z:context()) -> Result when
+    Result :: {ok, HTML}
+            | undefined,
+    HTML :: iodata().
 
-% %% A survey has been filled in and submitted.
-% %% Type: first
-% %% Return: ``undefined``, ``ok``, ``{ok, Context | #render{}}``, ``{save, Context | #render{}`` or ``{error, term()}``
-% -record(survey_submit, {
-%     id :: m_rsc:resource_id(),
-%     handler :: binary() | undefined,
-%     answers :: list(),
-%     missing :: list(),
-%     answers_raw :: list(),
-%     submit_args :: proplists:proplist()
-% }).
+-optional_callbacks([ observe_media_viewer/2, pid_observe_media_viewer/3 ]).
 
-% %% Check if the current user is allowed to download a survey.
-% %% Type: first
-% %% Return: ``true``, ``false`` or ``undefined``
-% -record(survey_is_allowed_results_download, {
-%     id :: m_rsc:resource_id()
-% }).
+%% See if there is a 'still' image preview of a media item. (eg posterframe of a movie)
+%% Type: first
+-callback observe_media_stillimage(#media_stillimage{}, z:context()) -> Result when
+    Result :: {ok, m_rsc:resource_id()}
+            | undefined.
+-callback pid_observe_media_stillimage(pid(), #media_stillimage{}, z:context()) -> Result when
+    Result :: {ok, m_rsc:resource_id()}
+            | undefined.
 
-% %% Check if a question is a submitting question.
-% %% Type: first
-% %% Return: ``true``, ``false`` or ``undefined``
-% -record(survey_is_submit, {
-%     block = #{} :: map()
-% }).
+-optional_callbacks([ observe_media_stillimage/2, pid_observe_media_stillimage/3 ]).
 
-% %% Add header columns for export. The values are the names of the answers and
-% %% the text displayed above the column. The ``text`` format is for a complete export, the
-% %% ``html`` format is for the limited result overview of the Survey Results Editor.
-% %% Type: foldl
-% %% Return: ``list( {binary(), binary() | #trans{}} )``
-% -record(survey_result_columns, {
-%     id :: m_rsc:resource_id(),
-%     handler :: binary() | undefined,
-%     format :: html | text
-% }).
+%% Optionally wrap HTML with external content so that it adheres to the cookie/privacy
+%% settings of the current site visitor. Typically called with a 'first' by the code that
+%% generated the media viewer HTML, as that code has the knowledge if viewing the generated code
+%% has any privacy or cookie implications.
+%% Type: first
+-callback observe_media_viewer_consent(#media_viewer_consent{}, z:context()) -> Result when
+    Result :: {ok, HTML}
+            | undefined,
+    HTML :: iodata().
+-callback pid_observe_media_viewer_consent(pid(), #media_viewer_consent{}, z:context()) -> Result when
+    Result :: {ok, HTML}
+            | undefined,
+    HTML :: iodata().
 
-% %% Modify row with answers for export. The header columns are given and the
-% %% values that are known are set in the folded value. The user_id is the user who
-% %% filled in the answers for this row.
-% %% Type: foldl
-% %% Return: ``#{ binary() => iodata() }``
-% -record(survey_result_column_values, {
-%     id :: m_rsc:resource_id(),
-%     handler :: binary() | undefined,
-%     format :: html | text,
-%     user_id :: m_rsc:resource_id(),
-%     answer :: proplists:proplist(),
-%     columns :: list( {binary(), binary() | #trans{}} )
-% }).
+-optional_callbacks([ observe_media_viewer_consent/2, pid_observe_media_viewer_consent/3 ]).
 
-% %% Put a value into the typed key/value store
-% %% Type: notify
-% -record(tkvstore_put, {type, key, value}).
+%% Fetch list of handlers for survey submits.
+%% Type: foldr
+-callback observe_survey_get_handlers(#survey_get_handlers{}, Acc, z:context()) -> Result when
+    Acc :: Handlers,
+    Result :: Handlers,
+    Handlers :: [ {HandlerName, DisplayTitle} ],
+    HandlerName :: atom(),
+    DisplayTitle :: binary().
+-callback pid_observe_survey_get_handlers(pid(), #survey_get_handlers{}, Acc, z:context()) -> Result when
+    Acc :: Handlers,
+    Result :: Handlers,
+    Handlers :: [ {HandlerName, DisplayTitle} ],
+    HandlerName :: atom(),
+    DisplayTitle :: binary().
 
-% %% Get a value from the typed key/value store
-% %% Type: first
-% -record(tkvstore_get, {type, key}).
+-optional_callbacks([ observe_survey_get_handlers/3, pid_observe_survey_get_handlers/4 ]).
 
-% %% Delete a value from the typed key/value store
-% %% Type: notify
-% %% Return: return value is ignored
-% -record(tkvstore_delete, {type, key}).
+%% A survey has been filled in and submitted.
+%% Type: first
+-callback observe_survey_submit(#survey_submit{}, z:context()) -> Result when
+    Result :: ok
+            | {ok, z:context() | #render{}}
+            | {save, z:context() | #render{}}
+            | {error, term()}
+            | undefined.
+-callback pid_observe_survey_submit(pid(), #survey_submit{}, z:context()) -> Result when
+    Result :: ok
+            | {ok, z:context() | #render{}}
+            | {save, z:context() | #render{}}
+            | {error, term()}
+            | undefined.
 
-% %% Internal message of mod_development. Start a stream with debug information to the user agent.
-% %% 'target' is the id of the HTML element where the information is inserted.
-% %% 'what' is the kind of debug information being streamed to the user-agent.
-% -record(debug_stream, {target, what = template}).
+-optional_callbacks([ observe_survey_submit/2, pid_observe_survey_submit/3 ]).
 
-% %% Push some information to the debug page in the user-agent.
-% %% Will be displayed with io_lib:format("~p: ~p~n", [What, Arg]), be careful with escaping information!
-% -record(debug, {what, arg = []}).
+%% Check if the current user is allowed to download a survey.
+%% Type: first
+-callback observe_survey_is_allowed_results_download(#survey_is_allowed_results_download{}, z:context()) -> Result when
+    Result ::boolean()
+            | undefined.
+-callback pid_observe_survey_is_allowed_results_download(pid(), #survey_is_allowed_results_download{}, z:context()) -> Result when
+    Result :: boolean()
+            | undefined.
 
-% %% Broadcast some file changed, used for livereload by mod_development
-% %% Type: notify
-% %% Return: return value is ignored
-% -record(filewatcher, {
-%     verb :: modify | create | delete,
-%     file :: binary(),
-%     basename :: binary(),
-%     extension :: binary()
-% }).
+-optional_callbacks([ observe_survey_is_allowed_results_download/2, pid_observe_survey_is_allowed_results_download/3 ]).
 
-% %% An external feed delivered a resource. First handler can import it.
-% %% Type: first
-% %% Return:: ``{ok, m_rsc:resource_id()}``, ``{error, Reason}``, or ``undefined``
-% -record(import_resource, {
-%     source :: atom() | binary(),
-%     source_id :: integer() | binary(),
-%     source_url :: binary(),
-%     source_user_id :: binary() | integer(),
-%     user_id :: integer(),
-%     name :: binary(),
-%     props :: m_rsc:props_all(),
-%     urls :: list(),
-%     media_urls :: list(),
-%     data :: any()
-% }).
+%% Check if a question (page block) is a submitting question.
+%% Type: first
+-callback observe_survey_is_submit(#survey_is_submit{}, z:context()) -> Result when
+    Result ::boolean()
+            | undefined.
+-callback pid_observe_survey_is_submit(pid(), #survey_is_submit{}, z:context()) -> Result when
+    Result :: boolean()
+            | undefined.
 
-% %% mod_export - return the {ok, Disposition} for the content disposition.
-% %% Type: first
-% %% Return: {ok, <<"inline">>} or {ok, <<"attachment">>}
-% -record(export_resource_content_disposition, {
-%     dispatch :: atom(),
-%     id :: m_rsc:resource_id() | undefined,
-%     content_type :: binary()
-% }).
+-optional_callbacks([ observe_survey_is_submit/2, pid_observe_survey_is_submit/3 ]).
 
-% %% mod_export - Check if the resource or dispatch is visible for export.
-% %% Type: first
-% %% Return: ``true`` or ``false``
-% -record(export_resource_visible, {
-%     dispatch :: atom(),
-%     id :: m_rsc:resource_id() | undefined
-% }).
+%% Add header columns for export. The values are the names of the answers and
+%% the text displayed above the column. The ``text`` format is for a complete export, the
+%% ``html`` format is for the limited result overview of the Survey Results Editor.
+%% Type: foldl
+-callback observe_survey_result_columns(#survey_result_columns{}, Acc, z:context()) -> Result when
+    Acc :: Columns,
+    Result :: Columns,
+    Columns :: [ {QuestionName, Title} ],
+    QuestionName :: binary(),
+    Title :: binary() | z:trans().
+-callback pid_observe_survey_result_columns(pid(), #survey_result_columns{}, Acc, z:context()) -> Result when
+    Acc :: Columns,
+    Result :: Columns,
+    Columns :: [ {QuestionName, Title} ],
+    QuestionName :: binary(),
+    Title :: binary() | z:trans().
 
-% %% mod_export -
-% %% Type: first
-% %% Return: ``{ok, "text/csv"})`` for the dispatch rule/id export.
-% -record(export_resource_content_type, {
-%     dispatch :: atom(),
-%     id :: m_rsc:resource_id() | undefined
-% }).
+-optional_callbacks([ observe_survey_result_columns/3, pid_observe_survey_result_columns/4 ]).
 
-% %% mod_export - return the {ok, Filename} for the content disposition.
-% %% Type: first
-% %% Return: ``{ok, Filename}}`` or ``undefined``
-% -record(export_resource_filename, {
-%     dispatch :: atom(),
-%     id :: m_rsc:resource_id() | undefined,
-%     content_type :: binary()
-% }).
+%% Modify row with answers for export. The header columns are given and the
+%% values that are known are set in the folded value. The user_id is the user who
+%% filled in the answers for this row.
+%% Type: foldl
+-callback observe_survey_result_column_values(#survey_result_column_values{}, Acc, z:context()) -> Result when
+    Acc :: ColumnValues,
+    Result :: ColumnValues,
+    ColumnValues :: #{ QuestionName => Value },
+    QuestionName :: binary(),
+    Value :: iodata().
+-callback pid_observe_survey_result_column_values(pid(), #survey_result_column_values{}, Acc, z:context()) -> Result when
+    Acc :: ColumnValues,
+    Result :: ColumnValues,
+    ColumnValues :: #{ QuestionName => Value },
+    QuestionName :: binary(),
+    Value :: iodata().
 
-% %% mod_export - Fetch the header for the export.
-% %% Type: first
-% %% Return: ``{ok, list()|binary()}``, ``{ok, list()|binary(), ContinuationState}`` or ``{error, Reason}``
-% -record(export_resource_header, {
-%     dispatch :: atom(),
-%     id :: m_rsc:resource_id() | undefined,
-%     content_type :: binary()
-% }).
+-optional_callbacks([ observe_survey_result_column_values/3, pid_observe_survey_result_column_values/4 ]).
 
-% %% mod_export - fetch a row for the export, can return a list of rows, a binary, and optionally a continuation state.
-% %% Where Values is [ term() ], i.e. a list of opaque values, to be formatted with #export_resource_format.
-% %% Return the empty list of values to signify the end of the data stream.
-% %% Type: first
-% %% Return: ``{ok, Values|binary()}``, ``{ok, Values|binary(), ContinuationState}`` or ``{error, Reason}``
-% -record(export_resource_data, {
-%     dispatch :: atom(),
-%     id :: m_rsc:resource_id() | undefined,
-%     content_type :: binary(),
-%     state :: term()
-% }).
+%% Put a value into the typed key/value store
+%% Type: first
+-callback observe_tkvstore_put(#tkvstore_put{}, z:context()) -> ok | undefined.
+-callback pid_observe_tkvstore_put(pid(), #tkvstore_put{}, z:context()) -> ok | undefined.
 
-% %% mod_export - Encode a single data element.
-% %% Type: first
-% %% Return: ``{ok, binary()}``, ``{ok, binary(), ContinuationState}`` or ``{error, Reason}``
-% -record(export_resource_encode, {
-%     dispatch :: atom(),
-%     id :: m_rsc:resource_id() | undefined,
-%     content_type :: binary(),
-%     data :: term(),
-%     state :: term()
-% }).
+-optional_callbacks([ observe_tkvstore_put/2, pid_observe_tkvstore_put/3 ]).
 
-% %% mod_export - Fetch the footer for the export. Should cleanup the continuation state, if needed.
-% %% Type: first
-% %% Return: ``{ok, binary()}`` or ``{error, Reason}``
-% -record(export_resource_footer, {
-%     dispatch :: atom(),
-%     id :: m_rsc:resource_id() | undefined,
-%     content_type :: binary(),
-%     state :: term()
-% }).
+%% Get a value from the typed key/value store
+%% Type: first
+-callback observe_tkvstore_get(#tkvstore_get{}, z:context()) -> term() | undefined.
+-callback pid_observe_tkvstore_get(pid(), #tkvstore_get{}, z:context()) -> term() | undefined.
 
-% %% Handle a javascript notification from the postback handler. The ``message`` is the the request,
-% %% ``trigger`` the id of the element which triggered the postback, and ``target`` the
-% %% id of the element which should receive possible updates. ``#postback_notify`` is also used as an event.
-% %% Type: first
-% %% Return: ``undefined`` or ``#context{}`` with the result of the postback
-% -record(postback_notify, {
-%     message,
-%     trigger,
-%     target,
-%     data
-% }).
+-optional_callbacks([ observe_tkvstore_get/2, pid_observe_tkvstore_get/3 ]).
 
-% %% Message sent by a user-agent on a postback event. Encapsulates the encoded postback and any
-% %% additional data. This is handled by z_transport.erl, which will call the correct event/2 functions.
-% %% Type: first
-% -record(postback_event, {
-%     postback,
-%     trigger,
-%     target,
-%     triggervalue,
-%     data
-% }).
+%% Delete a value from the typed key/value store
+%% Type: notify
+-callback observe_tkvstore_delete(#tkvstore_delete{}, z:context()) -> any().
+-callback pid_observe_tkvstore_delete(pid(), #tkvstore_delete{}, z:context()) -> any().
 
+-optional_callbacks([ observe_tkvstore_delete/2, pid_observe_tkvstore_delete/3 ]).
 
-% %% Determine the URL fetch options for fetching the content of an URL. Used by z_fetch.erl.
-% %% Type: first
-% %% Return: ``z_url_fetch:options()``
-% -record(url_fetch_options, {
-%     method :: get | post | put | delete,
-%     host :: binary(),
-%     url :: binary(),
-%     options :: z_url_fetch:options()
-% }).
+%% Push some information to the debug page in the user-agent.
+%% Will be displayed with io_lib:format("~p: ~p~n", [What, Arg]), be careful with escaping information!
+-callback observe_debug(#debug{}, z:context()) -> any().
+-callback pid_observe_debug(pid(), #debug{}, z:context()) -> any().
 
+-optional_callbacks([ observe_debug/2, pid_observe_debug/3 ]).
 
-% %% Delegates the request processing.
-% %% Type: foldl
-% %% Return: updated ``z:context()``
-% -record(middleware, {
-%     on :: request | welformed | handled
-% }).
+%% Broadcast some file changed, used for livereload by mod_development
+%% Type: notify
+-callback observe_filewatcher(#filewatcher{}, z:context()) -> any().
+-callback pid_observe_filewatcher(pid(), #filewatcher{}, z:context()) -> any().
 
+-optional_callbacks([ observe_filewatcher/2, pid_observe_filewatcher/3 ]).
 
-% Simple mod_development notifications:
-% development_reload - Reload all template, modules etc
-% development_make - Perform a 'make' on Zotonic, reload all new beam files
+%% An external feed delivered a resource. First handler can import it.
+%% Type: first
+-callback observe_import_resource(#import_resource{}, z:context()) -> Result when
+    Result :: {ok, m_rsc:resource_id()}
+            | {error, term()}
+            | undefined.
+-callback pid_observe_import_resource(pid(), #import_resource{}, z:context()) -> Result when
+    Result :: {ok, m_rsc:resource_id()}
+            | {error, term()}
+            | undefined.
+
+-optional_callbacks([ observe_import_resource/2, pid_observe_import_resource/3 ]).
+
+%% mod_export - return the {ok, Disposition} for the content disposition.
+%% The content disposition is either ``<<"inline">>`` or ``<<"attachment">>``.
+%% Type: first
+-callback observe_export_resource_content_disposition(#export_resource_content_disposition{}, z:context()) -> Result when
+    Result :: {ok, Disposition}
+            | undefined,
+    Disposition :: binary().
+-callback pid_observe_export_resource_content_disposition(pid(), #export_resource_content_disposition{}, z:context()) -> Result when
+    Result :: {ok, Disposition}
+            | undefined,
+    Disposition :: binary().
+
+-optional_callbacks([ observe_export_resource_content_disposition/2, pid_observe_export_resource_content_disposition/3 ]).
+
+%% mod_export - Check if the resource or dispatch is visible for export.
+%% Type: first
+-callback observe_export_resource_visible(#export_resource_visible{}, z:context()) -> boolean() | undefined.
+-callback pid_observe_export_resource_visible(pid(), #export_resource_visible{}, z:context()) -> boolean() | undefined.
+
+-optional_callbacks([ observe_export_resource_visible/2, pid_observe_export_resource_visible/3 ]).
+
+%% mod_export - Determine the mime type for the export.
+%% Type: first
+-callback observe_export_resource_content_type(#export_resource_content_type{}, z:context()) -> Result when
+    Result :: {ok, binary() | string()}
+            | undefined.
+-callback pid_observe_export_resource_content_type(pid(), #export_resource_content_type{}, z:context()) -> Result when
+    Result :: {ok, binary() | string()}
+            | undefined.
+
+-optional_callbacks([ observe_export_resource_content_type/2, pid_observe_export_resource_content_type/3 ]).
+
+%% mod_export - return the {ok, Filename} for the content disposition.
+%% Type: first
+-callback observe_export_resource_filename(#export_resource_filename{}, z:context()) -> Result when
+    Result :: {ok, binary() | string()}
+            | undefined.
+-callback pid_observe_export_resource_filename(pid(), #export_resource_filename{}, z:context()) -> Result when
+    Result :: {ok, binary() | string()}
+            | undefined.
+
+-optional_callbacks([ observe_export_resource_filename/2, pid_observe_export_resource_filename/3 ]).
+
+%% mod_export - Fetch the header for the export.
+%% Type: first
+-callback observe_export_resource_header(#export_resource_header{}, z:context()) -> Result when
+    Result :: {ok, binary() | [ binary() ]}
+            | {ok, binary() | [ binary() ], State}
+            | {error, term()}
+            | undefined,
+    State :: term().
+-callback pid_observe_export_resource_header(pid(), #export_resource_header{}, z:context()) -> Result when
+    Result :: {ok, binary() | [ binary() ]}
+            | {ok, binary() | [ binary() ], State}
+            | {error, term()}
+            | undefined,
+    State :: term().
+
+-optional_callbacks([ observe_export_resource_header/2, pid_observe_export_resource_header/3 ]).
+
+%% mod_export - fetch a row for the export, can return a list of rows, a binary, and optionally a continuation state.
+%% Where Values is [ term() ], i.e. a list of opaque values, to be formatted with #export_resource_format.
+%% Return the empty list of values to signify the end of the data stream.
+%% Type: first
+-callback observe_export_resource_data(#export_resource_data{}, z:context()) -> Result when
+    Result :: {ok, binary() | Values}
+            | {ok, binary() | Values, State}
+            | {error, term()}
+            | undefined,
+    Values :: [ term() ],
+    State :: term().
+-callback pid_observe_export_resource_data(pid(), #export_resource_data{}, z:context()) -> Result when
+    Result :: {ok, binary() | Values}
+            | {ok, binary() | Values, State}
+            | {error, term()}
+            | undefined,
+    Values :: [ term() ],
+    State :: term().
+
+-optional_callbacks([ observe_export_resource_data/2, pid_observe_export_resource_data/3 ]).
+
+%% mod_export - Encode a single data element.
+%% Type: first
+-callback observe_export_resource_encode(#export_resource_encode{}, z:context()) -> Result when
+    Result :: {ok, binary()}
+            | {ok, binary(), State}
+            | {error, term()}
+            | undefined,
+    State :: term().
+-callback pid_observe_export_resource_encode(pid(), #export_resource_encode{}, z:context()) -> Result when
+    Result :: {ok, binary()}
+            | {ok, binary(), State}
+            | {error, term()}
+            | undefined,
+    State :: term().
+
+-optional_callbacks([ observe_export_resource_encode/2, pid_observe_export_resource_encode/3 ]).
+
+%% mod_export - Fetch the footer for the export. Should cleanup the continuation state, if needed.
+%% Type: first
+-callback observe_export_resource_footer(#export_resource_footer{}, z:context()) -> Result when
+    Result :: {ok, binary()}
+            | {error, term()}
+            | undefined.
+-callback pid_observe_export_resource_footer(pid(), #export_resource_footer{}, z:context()) -> Result when
+    Result :: {ok, binary()}
+            | {error, term()}
+            | undefined.
+
+-optional_callbacks([ observe_export_resource_footer/2, pid_observe_export_resource_footer/3 ]).
+
+%% Handle a javascript notification from the postback handler. The ``message`` is the the request,
+%% ``trigger`` the id of the element which triggered the postback, and ``target`` the
+%% id of the element which should receive possible updates. ``#postback_notify`` is also used as an event.
+%% Type: first
+-callback observe_postback_notify(#postback_notify{}, z:context()) -> Result when
+    Result :: z:context()
+            | undefined.
+-callback pid_observe_postback_notify(pid(), #postback_notify{}, z:context()) -> Result when
+    Result :: z:context()
+            | undefined.
+
+-optional_callbacks([ observe_postback_notify/2, pid_observe_postback_notify/3 ]).
+
+%% Determine the URL fetch options for fetching the content of an URL. Used by z_fetch.erl.
+%% Type: first
+-callback observe_url_fetch_options(#url_fetch_options{}, z:context()) -> Result when
+    Result :: z_url_fetch:options()
+            | undefined.
+-callback pid_observe_url_fetch_options(pid(), #url_fetch_options{}, z:context()) -> Result when
+    Result :: z_url_fetch:options()
+            | undefined.
+
+-optional_callbacks([ observe_url_fetch_options/2, pid_observe_url_fetch_options/3 ]).
+
+%% Delegates the request processing.
+%% Type: foldl
+-callback observe_middleware(#middleware{}, Acc, z:context()) -> Result when
+    Acc :: z:context(),
+    Result :: z:context().
+-callback pid_observe_middleware(pid(), #middleware{}, Acc, z:context()) -> Result when
+    Acc :: z:context(),
+    Result :: z:context().
+
+-optional_callbacks([ observe_middleware/3, pid_observe_middleware/4 ]).
+
+% Reload all template, modules etc. Triggered by manual request.
+% Type: notify
+-callback observe_development_reload(development_reload, z:context()) -> any().
+-callback pid_observe_development_reload(pid(), development_reload, z:context()) -> any().
+
+-optional_callbacks([ observe_development_reload/2, pid_observe_development_reload/3 ]).
+
+% Perform a 'make' on Zotonic, reload all new beam files. Triggered by manual request.
+% Type: notify
+-callback observe_development_make(development_make, z:context()) -> any().
+-callback pid_observe_development_make(pid(), development_make, z:context()) -> any().
+
+-optional_callbacks([ observe_development_make/2, pid_observe_development_make/3 ]).
