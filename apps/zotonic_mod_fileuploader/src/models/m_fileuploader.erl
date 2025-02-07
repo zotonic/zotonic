@@ -42,7 +42,7 @@ m_get(_Vs, _Msg, _Context) ->
 
 
 %% @doc Start a file upload or upload a block to a file uploader
--spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> {ok, term()} | ok | {error, term()}.
+-spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:post_return().
 m_post([ <<"new">> ], #{ payload := Payload }, Context) when is_map(Payload) ->
     case Payload of
         #{
