@@ -1,5 +1,5 @@
 {% if m.auth2fa[id].is_totp_enabled %}
-    <p><span class="fa fa-check-circle"></span> {_ Two-factor authentication is enabled for this account. _}</p>
+    <p><span class="glyphicon glyphicon-ok-sign"></span> {_ Two-factor authentication is enabled for this account. _}</p>
 
     <p>
       {% if m.auth2fa[id].is_allowed_reset %}
@@ -13,7 +13,7 @@
       {% endif %}
     </p>
 {% else %}
-    <p class="text-danger"><span class="fa fa-warning"></span> {_ Two-factor authentication is not enabled for this account. _}</p>
+    <p class="text-danger"><span class="glyphicon glyphicon-exclamation-sign"></span> {_ Two-factor authentication is not enabled for this account. _}</p>
 
     {% if id == m.acl.user %}
         <p>

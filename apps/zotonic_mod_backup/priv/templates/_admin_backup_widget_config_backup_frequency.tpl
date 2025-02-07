@@ -19,7 +19,7 @@
                 {% wire id="backup_daily2" postback=`config_backup_daily` %}
             </div>
             <p class="help-block">
-            <i class="fa fa-info-circle"></i>
+            <i class="glyphicon glyphicon-info-sign"></i>
             {_ Cloud file store is enabled. Backups of the database are uploaded to the cloud file store. Local files are copied to the cloud and not backed up locally. _}
             </p>
         {% else %}
