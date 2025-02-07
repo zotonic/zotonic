@@ -62,7 +62,7 @@ m_post([ Key ], #{ payload := Payload }, Context) ->
 m_post(_Path, _Msg, _Context) ->
     {error, unknown_path}.
 
--spec m_delete( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> ok | {error, term()}.
+-spec m_delete( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:delete_return().
 m_delete([ Key ], _Msg, Context) ->
     delete(Key, Context);
 m_delete([], _Msg, Context) ->
