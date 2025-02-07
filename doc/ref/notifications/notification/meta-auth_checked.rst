@@ -3,11 +3,11 @@
 auth_checked
 ^^^^^^^^^^^^
 
-Fold over the context after logon of user with username, communicates valid or invalid password 
+Notify after logon of user with username, communicates valid or invalid password 
 
 
 Type: 
-    :ref:`notification-first`
+    :ref:`notification-notify_sync`
 
 Return: 
     

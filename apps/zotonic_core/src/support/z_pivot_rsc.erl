@@ -281,7 +281,7 @@ insert_task(Module, Function, UniqueKey, Args, Context) ->
 %% @doc Insert a slow running pivot task with unique key and arguments that should start after Seconds seconds.
 %% Always delete any existing transaction, to prevent race conditions when the task is running
 %% during this insert. The UniqueKey is used to have multiple entries per module/function. If only
-%% a single module/function should be queued, then set the UniqueKey to ``<<>>``.
+%% a single module/function should be queued, then set the UniqueKey to ``<<>>''.
 -spec insert_task_after(Delay, Module, Function, UniqueKey, Args, Context) -> {ok, TaskId} | {error, term()}
     when Delay:: task_delay(),
          Module :: atom(),

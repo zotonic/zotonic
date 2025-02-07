@@ -3,7 +3,7 @@
 export_resource_content_type
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-mod_export - 
+mod_export - Determine the mime type for the export. 
 
 
 Type: 

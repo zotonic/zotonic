@@ -7,7 +7,7 @@ Put a value into the typed key/value store
 
 
 Type: 
-    :ref:`notification-notify`
+    :ref:`notification-first`
 
 Return: 
     

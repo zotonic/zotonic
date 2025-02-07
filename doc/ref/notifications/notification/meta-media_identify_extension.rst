@@ -3,7 +3,7 @@
 media_identify_extension
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-Try to find a filename extension for a mime type (example: ".jpg") 
+Try to find a filename extension for a mime type (example: ``<<".jpg">>``) 
 
 
 Type: 

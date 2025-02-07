@@ -3,7 +3,7 @@
 survey_is_submit
 ^^^^^^^^^^^^^^^^
 
-Check if a question is a submitting question. 
+Check if a question (page block) is a submitting question. 
 
 
 Type: 

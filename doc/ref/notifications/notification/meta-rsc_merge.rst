@@ -8,7 +8,7 @@ winner. The loser will be deleted.
 
 
 Type: 
-    :ref:`notification-map`
+    :ref:`notification-notify_sync`
 
 Return: 
     
