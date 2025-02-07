@@ -270,9 +270,11 @@ observe_acl_is_owner(#acl_is_owner{id=Id, user_id=UserId}, Context) ->
             undefined
     end.
 
+-spec observe_acl_is_allowed(#acl_is_allowed{}, z:context()) -> boolean() | undefined.
 observe_acl_is_allowed(AclIsAllowed, Context) ->
     acl_user_groups_checks:acl_is_allowed(AclIsAllowed, Context).
 
+-spec observe_acl_is_allowed_prop(#acl_is_allowed_prop{}, z:context()) -> boolean() | undefined.
 observe_acl_is_allowed_prop(#acl_is_allowed_prop{action=view, object=undefined}, _Context) ->
     true;
 observe_acl_is_allowed_prop(#acl_is_allowed_prop{action=view, object=Id, prop=Property}, #context{} = Context) when is_integer(Id) ->
@@ -280,21 +282,27 @@ observe_acl_is_allowed_prop(#acl_is_allowed_prop{action=view, object=Id, prop=Pr
 observe_acl_is_allowed_prop(#acl_is_allowed_prop{}, #context{user_id=undefined}) ->
     undefined.
 
+-spec observe_acl_logon(#acl_logon{}, z:context()) -> z:context() | undefined.
 observe_acl_logon(AclLogon, Context) ->
     acl_user_groups_checks:acl_logon(AclLogon, Context).
 
+-spec observe_acl_logoff(#acl_logoff{}, z:context()) -> z:context() | undefined.
 observe_acl_logoff(AclLogoff, Context) ->
     acl_user_groups_checks:acl_logoff(AclLogoff, Context).
 
+-spec observe_acl_context_authenticated(#acl_context_authenticated{}, z:context()) -> z:context() | undefined.
 observe_acl_context_authenticated(_AclAuthenticated, Context) ->
     acl_user_groups_checks:acl_context_authenticated(Context).
 
+-spec observe_acl_user_groups(#acl_user_groups{}, z:context()) -> Groups | undefined when
+    Groups :: [ m_rsc:resource_id() ].
 observe_acl_user_groups(_AclUserGroups, Context) ->
     acl_user_groups_checks:user_groups_all(Context).
 
 observe_acl_add_sql_check(AclAddSQLCheck, Context) ->
     acl_user_groups_checks:acl_add_sql_check(AclAddSQLCheck, Context).
 
+-spec observe_hierarchy_updated(#hierarchy_updated{}, z:context()) -> any().
 observe_hierarchy_updated(#hierarchy_updated{root_id= <<"$category">>, predicate=undefined}, Context) ->
     rebuild(Context);
 observe_hierarchy_updated(#hierarchy_updated{root_id= <<"content_group">>, predicate=undefined}, Context) ->
@@ -348,6 +356,7 @@ force_copy_prop(P, PrevProps, NewProps) ->
     end.
 
 
+-spec observe_rsc_update_done(#rsc_update_done{}, z:context()) -> any().
 observe_rsc_update_done(#rsc_update_done{
             pre_is_a = PreIsA,
             post_is_a = PostIsA
@@ -360,6 +369,7 @@ observe_rsc_update_done(#rsc_update_done{
     end.
 
 %% @doc Do now allow the deletion of a acl_user_group if that group is still used.
+-spec observe_rsc_delete(#rsc_delete{}, z:context()) -> any().
 observe_rsc_delete(#rsc_delete{id=Id, is_a=IsA}, Context) ->
     case lists:member('acl_user_group', IsA) of
         true ->
@@ -385,6 +395,7 @@ observe_rsc_delete(#rsc_delete{id=Id, is_a=IsA}, Context) ->
             ok
     end.
 
+-spec observe_edge_insert(#edge_insert{}, z:context()) -> any().
 observe_edge_insert(#edge_insert{ predicate = hasusergroup } = L, Context) ->
     log_membership(L, Context);
 observe_edge_insert(#edge_insert{ predicate = hascollabmember } = L, Context) ->
@@ -394,6 +405,7 @@ observe_edge_insert(#edge_insert{ predicate = hascollabmanager } = L, Context) -
 observe_edge_insert(_, _Context) ->
     ok.
 
+-spec observe_edge_delete(#edge_delete{}, z:context()) -> any().
 observe_edge_delete(#edge_delete{ predicate = hasusergroup } = L, Context) ->
     log_membership(L, Context);
 observe_edge_delete(#edge_delete{ predicate = hascollabmember } = L, Context) ->
@@ -454,6 +466,9 @@ email_bin(Id, Context) ->
     z_convert:to_binary( m_rsc:p_no_acl(Id, email_raw, Context) ).
 
 %% @doc Ensure that the privacy property is set.
+-spec observe_rsc_get(#rsc_get{}, Acc, z:context()) -> Result when
+    Acc :: m_rsc:props(),
+    Result :: map().
 observe_rsc_get(#rsc_get{}, #{ <<"category_id">> := CatId } = Map, Context) ->
     case maps:get(<<"privacy">>, Map, undefined) of
         undefined ->
@@ -536,6 +551,10 @@ lookup1(TId, Key) ->
     end.
 
 
+-spec observe_admin_menu(#admin_menu{}, Acc, z:context()) -> Result when
+    Acc :: MenuItems,
+    Result :: MenuItems,
+    MenuItems :: [ #menu_item{} ].
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
      #menu_item{id=admin_acl_user_groups,
