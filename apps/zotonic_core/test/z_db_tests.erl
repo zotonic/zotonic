@@ -4,7 +4,7 @@
 -module(z_db_tests).
 
 -include_lib("eunit/include/eunit.hrl").
--include_lib("zotonic.hrl").
+-include("../include/zotonic.hrl").
 
 alter_table_test() ->
     Context = z_context:new(zotonic_site_testsandbox),

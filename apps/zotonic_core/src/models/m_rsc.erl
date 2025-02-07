@@ -1125,7 +1125,7 @@ rid(MaybeName, Context) when is_binary(MaybeName) ->
             Id = z_convert:to_integer(MaybeName),
             if
                 ?is_valid_rsc_id(Id) -> Id;
-                true -> false
+                true -> undefined
             end;
         false ->
             case binary:match(MaybeName, <<":">>) of
@@ -1139,7 +1139,7 @@ rid(MaybeName, Context) when is_list(MaybeName) ->
             Id = z_convert:to_integer(MaybeName),
             if
                 ?is_valid_rsc_id(Id) -> Id;
-                true -> false
+                true -> undefined
             end;
         false ->
             case lists:any(fun(C) -> C =:= $: end, MaybeName) of

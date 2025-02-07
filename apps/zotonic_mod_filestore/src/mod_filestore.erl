@@ -208,7 +208,7 @@ shorten_filename(Path) ->
     Basename1 = shorten(CleanedBasename, Basename),
     case filename:dirname(Path) of
         <<".">> -> Basename1;
-        Dir -> filename:join(Dir, Basename1)
+        Dir -> z_convert:to_binary(filename:join(Dir, Basename1))
     end.
 
 shorten(Name, OrgName) when size(Name) > ?MAX_FILENAME_LENGTH; OrgName =/= Name ->

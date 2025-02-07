@@ -54,7 +54,7 @@ logon_pw(Username, Password, Context) ->
     case m_identity:check_username_pw(Username, Password, Context) of
         {ok, Id} ->
             case logon(Id, Context) of
-                {ok, Context1} -> Context1;
+                {ok, Context1} -> {true, Context1};
                 {error, _Reason} -> {false, Context}
             end;
         {error, _Reason} -> {false, Context}
@@ -150,8 +150,9 @@ logoff(Context) ->
 %% of the user. This enables tracking where users are active. This _must_ be
 %% a session initiated from a remote IP address. If no remote IP address is
 %% known then the user session is not logged.
--spec publish_user_session(Context) -> ok when
-    Context :: z:context().
+-spec publish_user_session(Context) -> ok | {error, Reason} when
+    Context :: z:context(),
+    Reason :: no_user | no_session | term().
 publish_user_session(Context) ->
     case is_auth(Context) of
         true ->
@@ -183,8 +184,9 @@ publish_user_session(Context) ->
 
 %% @doc Remove the retained user session value, this removes the session from the overview
 %% of active sessions. Called when resetting the authentication cookies.
--spec unpublish_user_session(Context) -> ok when
-    Context :: z:context().
+-spec unpublish_user_session(Context) -> ok | {error, Reason} when
+    Context :: z:context(),
+    Reason :: no_user | no_session | term().
 unpublish_user_session(Context) ->
     case is_auth(Context) of
         true ->

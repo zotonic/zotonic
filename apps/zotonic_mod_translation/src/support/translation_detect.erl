@@ -134,7 +134,7 @@ compute_distance(_Ngrams, _Profile, Best, Dist) when Best < Dist ->
 compute_distance([{K, Val}|R], Profile, Best, Dist) ->
     D = case maps:get(K, Profile, undefined) of
         undefined -> ?NOMATCH_SCORE;
-        Value -> abs(Val - Value)
+        Value when is_integer(Value), is_integer(Val) -> abs(Val - Value)
     end,
     compute_distance(R, Profile, Best, D + Dist).
 
@@ -270,7 +270,7 @@ train_from_file({Iso, File}) ->
     Text :: binary(),
     Ngrams :: profile().
 ngrams(<<>>) ->
-    [];
+    #{};
 ngrams(Text) ->
     Tokens = tokenize(Text),
     P1 = lists:reverse(

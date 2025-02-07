@@ -262,7 +262,7 @@ combine1(X,Y) -> [X,Y].
 render(Mixed, Context) ->
     RS = get_render_state(Context),
     RS1 = append_render_state(Mixed, RS, Context),
-    set_render_state(RS1, Context).
+    #context{} = set_render_state(RS1, Context).
 
 append_render_state(undefined, RenderState, _Context) ->
     RenderState;
@@ -494,40 +494,40 @@ update_iframe(IFrameId, Html, Context) ->
 
 %% @doc Set the contents of all elements matching the css selector to the the html fragment
 update_selector(CssSelector, Html, Context) ->
-    update_render_state(CssSelector, Html, <<"html">>, <<".widgetManager()">>, Context).
+    update_context_render_state(CssSelector, Html, <<"html">>, <<".widgetManager()">>, Context).
 
 insert_before_selector(CssSelector, Html, Context) ->
-    update_render_state(CssSelector, Html, <<"insertBefore">>, <<".widgetManager()">>, Context).
+    update_context_render_state(CssSelector, Html, <<"insertBefore">>, <<".widgetManager()">>, Context).
 
 insert_after_selector(CssSelector, Html, Context) ->
-    update_render_state(CssSelector, Html, <<"insertAfter">>, <<".widgetManager()">>, Context).
+    update_context_render_state(CssSelector, Html, <<"insertAfter">>, <<".widgetManager()">>, Context).
 
 replace_selector(CssSelector, Html, Context) ->
-    update_render_state(CssSelector, Html, <<"replaceWith">>, <<".widgetManager()">>, Context).
+    update_context_render_state(CssSelector, Html, <<"replaceWith">>, <<".widgetManager()">>, Context).
 
 insert_top_selector(CssSelector, Html, Context) ->
-    update_render_state(CssSelector, Html, <<"prependTo">>, <<".widgetManager()">>, Context).
+    update_context_render_state(CssSelector, Html, <<"prependTo">>, <<".widgetManager()">>, Context).
 
 insert_bottom_selector(CssSelector, Html, Context) ->
-    update_render_state(CssSelector, Html, <<"appendTo">>, <<".widgetManager()">>, Context).
+    update_context_render_state(CssSelector, Html, <<"appendTo">>, <<".widgetManager()">>, Context).
 
 appear_selector(CssSelector, Html, Context) ->
-    update_render_state(CssSelector, Html, <<"html">>, <<".fadeIn().widgetManager()">>, Context).
+    update_context_render_state(CssSelector, Html, <<"html">>, <<".fadeIn().widgetManager()">>, Context).
 
 appear_replace_selector(CssSelector, Html, Context) ->
-    update_render_state(CssSelector, Html, <<"replaceWith">>, <<".fadeIn().widgetManager()">>, Context).
+    update_context_render_state(CssSelector, Html, <<"replaceWith">>, <<".fadeIn().widgetManager()">>, Context).
 
 appear_top_selector(CssSelector, Html, Context) ->
-    update_render_state(CssSelector, Html, <<"prependTo">>, <<".fadeIn().widgetManager()">>, Context).
+    update_context_render_state(CssSelector, Html, <<"prependTo">>, <<".fadeIn().widgetManager()">>, Context).
 
 appear_bottom_selector(CssSelector, Html, Context) ->
-    update_render_state(CssSelector, Html, <<"appendTo">>, <<".fadeIn().widgetManager()">>, Context).
+    update_context_render_state(CssSelector, Html, <<"appendTo">>, <<".fadeIn().widgetManager()">>, Context).
 
 appear_before_selector(CssSelector, Html, Context) ->
-    update_render_state(CssSelector, Html, <<"insertBefore">>, <<".fadeIn().widgetManager()">>, Context).
+    update_context_render_state(CssSelector, Html, <<"insertBefore">>, <<".fadeIn().widgetManager()">>, Context).
 
 appear_after_selector(CssSelector, Html, Context) ->
-    update_render_state(CssSelector, Html, <<"insertAfter">>, <<".fadeIn().widgetManager()">>, Context).
+    update_context_render_state(CssSelector, Html, <<"insertAfter">>, <<".fadeIn().widgetManager()">>, Context).
 
 
 %% @doc Set the value of an input element.
@@ -537,16 +537,16 @@ set_value(TargetId, Value, Context) ->
 set_value_selector(CssSelector, undefined, Context) ->
     set_value_selector(CssSelector, "", Context);
 set_value_selector(CssSelector, Value, Context) ->
-    update_render_state(CssSelector, Value, <<"val">>, "", Context).
+    update_context_render_state(CssSelector, Value, <<"val">>, "", Context).
 
 
 %% @doc Render an update js as into the render state
-update_render_state(CssSelector, Html, Function, AfterEffects, Context) ->
+update_context_render_state(CssSelector, Html, Function, AfterEffects, Context) ->
     {Html1, Context1} = render_html(Html, Context),
     Update = update_js(CssSelector, Html1, Function, AfterEffects),
     RS = get_render_state(Context1),
     RS1 = RS#render_state{ updates = [ {Update} | RS#render_state.updates ] },
-    set_render_state(RS1, Context1).
+    #context{} = set_render_state(RS1, Context1).
 
 
 %% @doc Set the contents of all elements matching the css selector to the the html fragment
@@ -639,9 +639,15 @@ is_utf8(_) -> false.
 
 %%% SIMPLE FUNCTION TO SHOW DIALOG OR GROWL (uses the dialog and growl actions) %%%
 
+-spec dialog(Title, Template, Vars, Context) -> Context1 when
+    Title :: string() | binary() | z:trans() | undefined,
+    Template :: template_compiler:template() | #module_index{},
+    Vars :: list() | map(),
+    Context :: z:context(),
+    Context1 :: z:context().
 dialog(undefined, Template, Vars, Context) ->
     dialog(<<>>, Template, Vars, Context);
-dialog(Title, Template, Vars, Context) ->
+dialog(Title, Template, Vars, #context{} = Context) ->
     IsCatinclude = z_convert:to_bool(get_value(catinclude, Vars)),
     Template1 = case Template of
         {cat, _} -> Template;
@@ -686,13 +692,21 @@ get_value(K, Map) when is_map(Map) ->
 get_value(K, List) when is_list(List) ->
     proplists:get_value(K, List).
 
-dialog_close(Context) ->
+-spec dialog_close(z:context()) -> z:context().
+dialog_close(#context{} = Context) ->
     wire({dialog_close, []}, Context).
 
-dialog_close(Level, Context) ->
+-spec dialog_close(Level, z:context()) -> z:context() when
+    Level :: non_neg_integer().
+dialog_close(Level, #context{} = Context) ->
     wire({dialog_close, [{level, Level}]}, Context).
 
-overlay(Template, Vars, Context) ->
+-spec overlay(Template, Vars, Context) -> Context1 when
+    Template :: template_compiler:template() | #module_index{},
+    Vars :: list() | map(),
+    Context :: z:context(),
+    Context1 :: z:context().
+overlay(Template, Vars, #context{} = Context) ->
     MixedHtml = z_template:render(Template, Vars, Context),
     {Html, Context1} = render_to_iolist(MixedHtml, Context),
     OverlayArgs = [
@@ -703,16 +717,19 @@ overlay(Template, Vars, Context) ->
     Script = [<<"z_dialog_overlay_open(">>, z_utils:js_object(OverlayArgs, Context1), $), $; ],
     wire({script, [{script, Script}]}, Context1).
 
-overlay_close(Context) ->
+-spec overlay_close(z:context()) -> z:context().
+overlay_close(#context{} = Context) ->
     wire({overlay_close, []}, Context).
 
-growl(Text, Context) ->
+-spec growl(unicode:chardata(), z:context()) -> z:context().
+growl(Text, #context{} = Context) ->
     wire({growl, [{text, Text}]}, Context).
 
-growl_error(Text, Context) ->
+-spec growl_error(unicode:chardata(), z:context()) -> z:context().
+growl_error(Text, #context{} = Context) ->
     wire({growl, [{text, Text}, {type, "error"}]}, Context).
 
-growl(Text, Type, Stay, Context) ->
+growl(Text, Type, Stay, #context{} = Context) ->
     wire({growl, [{text, Text}, {type, Type}, {stay, Stay}]}, Context).
 
 
@@ -782,7 +799,7 @@ make_validation_postback(Validator, Args, Context) ->
 
 %% Add to the queue of wired actions. These will be rendered in get_script().
 
--spec wire(action() | [action()], ctx_rs()) -> ctx_rs().
+-spec wire(action() | [action()], z:context()) -> z:context().
 wire(Actions, Context) ->
     wire(<<>>, <<>>, Actions, Context).
 
@@ -869,6 +886,8 @@ get_render_state(Context) ->
         #render_state{} = RS -> RS
     end.
 
+-spec set_render_state(render_state(), undefined | render_state()) -> render_state();
+                      (render_state(), z:context()) -> z:context().
 set_render_state(RS, undefined) -> RS;
 set_render_state(RS, #render_state{})  -> RS;
 set_render_state(RS, Context)  ->

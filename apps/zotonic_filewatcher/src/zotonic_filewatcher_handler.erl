@@ -1,9 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@miraclethings.nl>
-%% @copyright 2014-2017 Arjan Scherpenisse
-%%
+%% @copyright 2014-2025 Arjan Scherpenisse
 %% @doc Handle changed files
+%% @end
 
-%% Copyright 2014-2017 Arjan Scherpenisse
+%% Copyright 2014-2025 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -80,7 +80,7 @@
 -define(DEADLINE_DELAY, 250).
 -define(MAX_DELAY, 5000).
 
--spec start_link() -> {ok, pid()} | {error, term()}.
+-spec start_link() -> gen_server:start_ret().
 start_link() ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 

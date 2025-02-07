@@ -120,7 +120,7 @@
 
 
 %% @doc Get available content types and their dispatch rules
-%% Example: {"text/html", page}
+%% Example: {{<<"text">>, <<"html">>, []}, page}
 %% A special dispatch rule is 'page_url', which refers to the page_url property of the resource.
 %% Type: foldr
 %% Return: ``[{ContentType, DispatchRule}]``
@@ -223,10 +223,7 @@
 %% Fold argument/result is {ok, Props, SignupProps} or {error, Reason}
 %% Type: foldl
 %% Return: ``{ok, Props, SignupProps}`` or ``{error, Reason}``
--record(signup_check, {
-    props = #{} :: map(),
-    signup_props = [] :: list()
-}).
+
 
 %% @doc Signal that a user has been signed up (map, result is ignored)
 %% Type: map
@@ -344,7 +341,7 @@
     recipient_id,
     channel,
     queue,
-    activities = [] :: list()
+    activities = [] :: list( #activity{} )
 }).
 
 
@@ -521,7 +518,7 @@
 
 %% @doc Map to signal merging two resources. Move any information from the loser to the
 %% winner. The loser will be deleted.
-%% Type: map
+%% Type: notify_sync
 -record(rsc_merge, {
     winner_id :: m_rsc:resource_id(),
     loser_id :: m_rsc:resource_id(),
@@ -726,7 +723,8 @@
         query_args = #{} :: map()
     }).
 
-%% @doc Fold over the context after logon of user with username, communicates valid or invalid password
+%% @doc Notify after logon of user with username, communicates valid or invalid password
+%% Type: notify_sync
 -record(auth_checked, {
         id :: undefined | m_rsc:resource_id(),
         username :: binary(),
@@ -847,9 +845,6 @@
 %% Type: foldl
 -record(user_context, { id :: m_rsc:resource_id() }).
 
-%% @doc Request API logon
--record(service_authorize, { service_module }).
-
 %% @doc Fetch the url of a resource's html representation
 %% Type: first
 %% Return: ``{ok, Url}`` or ``undefined``
@@ -857,7 +852,7 @@
 
 %% @doc Handle custom named search queries in your function.
 %% Type: first
-%% Return: ``#search_sql{}``, ``#search_result{}`` or ``undefined``
+%% Return: ``#search_sql{}``, ``#search_result{}``, ``list()`` or ``undefined``
 -record(search_query, {
     name = undefined :: binary() | undefined,
     args = undefined :: map() | undefined,
@@ -1108,16 +1103,6 @@
     filename :: file:filename_all()
 }).
 
-
-%% @doc Handle an uploaded file which is part of a multiple file upload from a user-agent.
-%% The upload is a #upload record or a filename on the server.
-%% Type: first
-%% Return: ``#context{}`` with the result or ``undefined``
--record(multiupload, {
-    upload :: term() | string(),
-    query_args = [] :: list()
-}).
-
 %% @doc Handle a new file received in the 'files/dropbox' folder of a site.
 %% Unhandled files are deleted after a hour.
 %% Type: first
@@ -1135,7 +1120,7 @@
     extension :: binary()
 }).
 
-%% @doc Try to find a filename extension for a mime type (example: ".jpg")
+%% @doc Try to find a filename extension for a mime type (example: ``<<".jpg">>``)
 %% Type: first
 %% Return: Extension (for example ``<<".png">>``) or ``undefined``
 -record(media_identify_extension, {
@@ -1143,7 +1128,9 @@
     preferred :: undefined | binary()
 }).
 
-%% @doc Request to generate a HTML media viewer for a resource
+%% @doc Request to generate a HTML media viewer for a resource. The HTML data can not contain any
+%% Javascript, as it might be serialized. This could happen if the correct cookies are not yet
+%% set or if the media viewer is part of a direct DOM update.
 %% Type: first
 %% Return: ``{ok, Html}`` or ``undefined``
 -record(media_viewer, {
@@ -1165,7 +1152,8 @@
 %% settings of the current site visitor. Typically called with a 'first' by the code that
 %% generated the media viewer HTML, as that code has the knowledge if viewing the generated code
 %% has any privacy or cookie implications.
-%% Return {ok, HTML} or undefined
+%% Type: first
+%% Return: {ok, HTML} or undefined
 -record(media_viewer_consent, {
     id :: m_rsc:resource_id() | undefined,
     consent = all :: functional | stats | all,
@@ -1198,7 +1186,7 @@
     id :: m_rsc:resource_id()
 }).
 
-%% @doc Check if a question is a submitting question.
+%% @doc Check if a question (page block) is a submitting question.
 %% Type: first
 %% Return: ``true``, ``false`` or ``undefined``
 -record(survey_is_submit, {
@@ -1231,7 +1219,7 @@
 }).
 
 %% @doc Put a value into the typed key/value store
-%% Type: notify
+%% Type: first
 -record(tkvstore_put, {type, key, value}).
 
 %% @doc Get a value from the typed key/value store
@@ -1242,11 +1230,6 @@
 %% Type: notify
 %% Return: return value is ignored
 -record(tkvstore_delete, {type, key}).
-
-%% @doc Internal message of mod_development. Start a stream with debug information to the user agent.
-%% 'target' is the id of the HTML element where the information is inserted.
-%% 'what' is the kind of debug information being streamed to the user-agent.
--record(debug_stream, {target, what = template}).
 
 %% @doc Push some information to the debug page in the user-agent.
 %% Will be displayed with io_lib:format("~p: ~p~n", [What, Arg]), be careful with escaping information!
@@ -1295,7 +1278,7 @@
     id :: m_rsc:resource_id() | undefined
 }).
 
-%% @doc mod_export -
+%% @doc mod_export - Determine the mime type for the export.
 %% Type: first
 %% Return: ``{ok, "text/csv"})`` for the dispatch rule/id export.
 -record(export_resource_content_type, {
@@ -1369,6 +1352,7 @@
 %% @doc Message sent by a user-agent on a postback event. Encapsulates the encoded postback and any
 %% additional data. This is handled by z_transport.erl, which will call the correct event/2 functions.
 %% Type: first
+%% Return: ``undefined`` or ``#context{}`` with the result of the postback
 -record(postback_event, {
     postback,
     trigger,

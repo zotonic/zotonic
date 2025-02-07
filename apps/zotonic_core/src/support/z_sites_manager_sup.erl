@@ -28,7 +28,7 @@
 -export([init/1]).
 
 %% @doc API for starting the sites dispatcher and manager
--spec start_link() -> {ok, pid()} | {error, term()}.
+-spec start_link() -> supervisor:startlink_ret().
 start_link() ->
     supervisor:start_link({local, ?MODULE}, ?MODULE, []).
 

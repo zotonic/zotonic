@@ -25,35 +25,35 @@
 
 -export([vary/2, render/3]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
-
 vary(_Params, _Context) -> default.
 
-render(Params, Vars, Context) ->
-    Data   = proplists:get_value(data, Params, []),
-    Colors = proplists:get_value(colors, Params),
-    ThreeD = proplists:get_value(threed, Params, false),
+render(_Params, _Vars, _Context) ->
+    {ok, <<>>}.
 
-    Params1 = proplists:delete(labels,
-                proplists:delete(data,
-                    proplists:delete(colors,
-                        proplists:delete(threed, Params)))),
+    % Data   = proplists:get_value(data, Params, []),
+    % Colors = proplists:get_value(colors, Params),
+    % ThreeD = proplists:get_value(threed, Params, false),
 
-    {Labels,Values} = case Data of
-        [] -> {[],[]};
-        [{_,_}|_] -> lists:unzip(Data);
-        [[_,_]|_] -> lists:foldr(fun([A,B],{Acc,Bcc}) -> {[A|Acc],[B|Bcc]} end, {[],[]}, Data)
-    end,
-    Axes  = [ {axis, [{position,"bottom"},{labels,Labels}]} ],
-    Type  = case z_template_compiler_runtime:to_bool(ThreeD, Context) of
-        true -> "pie3d";
-        false -> "pie"
-    end,
+    % Params1 = proplists:delete(labels,
+    %             proplists:delete(data,
+    %                 proplists:delete(colors,
+    %                     proplists:delete(threed, Params)))),
 
-    Data2 = case is_list(Colors) of
-        true ->  [{data, [{values, Values}, {color, Colors}]}];
-        false -> [{data, [{values, Values}]}]
-    end,
+    % {Labels,Values} = case Data of
+    %     [] -> {[],[]};
+    %     [{_,_}|_] -> lists:unzip(Data);
+    %     [[_,_]|_] -> lists:foldr(fun([A,B],{Acc,Bcc}) -> {[A|Acc],[B|Bcc]} end, {[],[]}, Data)
+    % end,
+    % Axes  = [ {axis, [{position,"bottom"},{labels,Labels}]} ],
+    % Type  = case z_template_compiler_runtime:to_bool(ThreeD, Context) of
+    %     true -> "pie3d";
+    %     false -> "pie"
+    % end,
 
-    Params2 = [{axis,Axes}, {type,Type}, {data,Data2} | Params1],
-    scomp_base_google_chart:render(Params2, Vars, Context).
+    % Data2 = case is_list(Colors) of
+    %     true ->  [{data, [{values, Values}, {color, Colors}]}];
+    %     false -> [{data, [{values, Values}]}]
+    % end,
+
+    % Params2 = [{axis,Axes}, {type,Type}, {data,Data2} | Params1],
+    % scomp_base_google_chart:render(Params2, Vars, Context).

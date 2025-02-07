@@ -92,7 +92,7 @@ observe_acl_is_allowed(#acl_is_allowed{
         true -> true;
         false -> undefined
     end;
-observe_acl_is_allowed(#acl_is_allowed{}, _Context) ->
+observe_acl_is_allowed(#acl_is_allowed{}, #context{} = _Context) ->
     undefined.
 
 

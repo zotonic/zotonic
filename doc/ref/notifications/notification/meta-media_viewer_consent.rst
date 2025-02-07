@@ -7,14 +7,13 @@ Optionally wrap HTML with external content so that it adheres to the cookie/priv
 settings of the current site visitor. Typically called with a 'first' by the code that 
 generated the media viewer HTML, as that code has the knowledge if viewing the generated code 
 has any privacy or cookie implications. 
-Return {ok, HTML} or undefined 
 
 
 Type: 
     :ref:`notification-first`
 
 Return: 
-    
+    {ok, HTML} or undefined
 
 ``#media_viewer_consent{}`` properties:
     - id: ``m_rsc:resource_id()|undefined``

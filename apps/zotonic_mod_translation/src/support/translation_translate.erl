@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2023 Driebit BV
+%% @copyright 2023-2025 Driebit BV
 %% @doc Translate strings from one language to another. Try to use the .po files and
 %% optional translation services provided by other modules.
 %% @end
 
-%% Copyright 2023 Driebit BV
+%% Copyright 2023-2025 Driebit BV
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -121,13 +121,11 @@ local_trans(_FromCode, _ToCode, Text, _Context) ->
     {Text, undefined}.
 
 trans(Text, Language, Context) ->
-    case z_trans:translations(Text, Context) of
-        #trans{ tr = Tr } ->
-            proplists:get_value(Language, Tr);
-        _ ->
-            undefined
+    #trans{ tr = Tr } = z_trans:translations(Text, Context),
+    case lists:keyfind(Language, 1, Tr) of
+        {_, T} -> T;
+        false -> undefined
     end.
-
 
 
 to_list(#trans{} = Tr) ->

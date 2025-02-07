@@ -226,8 +226,13 @@ safe_value(List) when is_list(List) ->
         true -> safe_value(map_from_proplist(List));
         false ->
             case is_ascii_list(List) of
-                true -> unicode:characters_to_binary(List);
-                false -> lists:map(fun safe_value/1, List)
+                true ->
+                    case unicode:characters_to_binary(List) of
+                        B when is_binary(B) -> B;
+                        _ -> lists:map(fun safe_value/1, List)
+                    end;
+                false ->
+                    lists:map(fun safe_value/1, List)
             end
     end;
 safe_value(Map) when is_map(Map) ->
@@ -239,7 +244,10 @@ safe_value(Val) when is_atom(Val); is_number(Val) ->
 safe_value(Val) when is_binary(Val) ->
     maybe_truncate(Val);
 safe_value(Val) ->
-    maybe_truncate(unicode:characters_to_binary(io_lib:format("~p", [Val]))).
+    case unicode:characters_to_binary(io_lib:format("~p", [Val])) of
+        B when is_binary(B) -> maybe_truncate(B);
+        _ -> <<>>
+    end.
 
 % Map a proplists to a map
 map_from_proplist(L) ->

@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019-2024 Marc Worrell
+%% @copyright 2019-2025 Marc Worrell
 %% @doc Generate TOTP image data: urls and manage TOTP user secrets.
 %% @end
 
-%% Copyright 2019-2024 Marc Worrell
+%% Copyright 2019-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -131,8 +131,10 @@ is_totp_requested(Context) ->
 
 %% @doc Check if the current user is allowed to reset the 2FA of the given user.
 -spec is_allowed_reset(UserId, Context) -> boolean() when
-    UserId :: m_rsc:resource_id() | undefined,
-    Context :: z:context().
+                        UserId :: m_rsc:resource_id(),
+                        Context :: z:context();
+                      (undefined, Context) -> false when
+                        Context :: z:context().
 is_allowed_reset(undefined, _Context) ->
     false;
 is_allowed_reset(1, Context) ->
@@ -209,17 +211,19 @@ user_mode(Context) ->
 user_group_mode(Context) ->
     case z_module_manager:active(mod_acl_user_groups, Context) of
         true ->
-            UGIds = m_acl_user_group:user_groups(Context),
-            Modes = lists:map(
-                fun(Id) ->
-                    case m_rsc:p_no_acl(Id, acl_2fa, Context) of
-                        undefined -> 0;
-                        <<>> -> 0;
-                        N -> z_convert:to_integer(N)
-                    end
-                end,
-                UGIds),
-            lists:max(Modes);
+            case m_acl_user_group:user_groups(Context) of
+                [] -> 0;
+                UGIds ->
+                    Modes = lists:map(
+                        fun(Id) ->
+                            case z_convert:to_integer(m_rsc:p_no_acl(Id, acl_2fa, Context)) of
+                                undefined -> 0;
+                                N -> N
+                            end
+                        end,
+                        UGIds),
+                    lists:max(Modes)
+            end;
         false ->
             0
     end.

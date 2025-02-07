@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013-2024 Marc Worrell
+%% @copyright 2013-2025 Marc Worrell
 %% @doc Model for configurable host/path redirects
 %% @end
 
-%% Copyright 2013-2024 Marc Worrell
+%% Copyright 2013-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -136,7 +136,7 @@ list_dispatch_host(Host, Path, Context) ->
             of
                 [] ->
                     [];
-                Matches ->
+                Matches when is_list(Matches) ->
                     case is_redirectable_path(Path1) of
                         true ->
                             Matches;

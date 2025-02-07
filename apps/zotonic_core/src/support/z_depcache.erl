@@ -1,10 +1,10 @@
-%% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2010  Marc Worrell, 2014 Arjan Scherpenisse
-%%
+%% @author Arjan Scherpenisse
+%% @copyright 2009-2025 Arjan Scherpenisse
 %% @doc z_depcache interface file for handing depcache functions from
 %% the Zotonic context.
+%% @end
 
-%% Copyright 2009-2010 Marc Worrell, 2014 Arjan Scherpenisse
+%% Copyright 2009-2025 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -61,75 +61,113 @@ memo(F, Key, MaxAge, #context{depcache=Server}) ->
 memo(F, Key, MaxAge, Dep, #context{depcache=Server}) ->
     depcache:memo(F, Key, MaxAge, Dep, Server).
 
-%% @spec set(Key, Data, Context) -> void()
 %% @doc Add the key to the depcache, hold it for 3600 seconds and no dependencies
+-spec set(Key, Data, Context) -> ok when
+    Key :: any(),
+    Data :: any(),
+    Context :: z:context().
 set(Key, Data, #context{depcache=Server}) ->
     depcache:set(Key, Data, 3600, [], Server).
 
-%% @spec set(Key, Data, MaxAge, Context) -> void()
 %% @doc Add the key to the depcache, hold it for MaxAge seconds and no dependencies
+-spec set(Key, Data, MaxAge, Context) -> ok when
+    Key :: any(),
+    Data :: any(),
+    MaxAge :: non_neg_integer(),
+    Context :: z:context().
 set(Key, Data, MaxAge, #context{depcache=Server}) ->
     depcache:set(Key, Data, MaxAge, [], Server).
 
-%% @spec set(Key, Data, MaxAge, Depend, Context) -> void()
 %% @doc Add the key to the depcache, hold it for MaxAge seconds and check the dependencies
+-spec set(Key, Data, MaxAge, Depend, Context) -> ok when
+    Key :: any(),
+    Data :: any(),
+    MaxAge :: non_neg_integer(),
+    Depend :: [ Key ],
+    Context :: z:context().
 set(Key, Data, MaxAge, Depend, #context{depcache=Server}) ->
     depcache:set(Key, Data, MaxAge, Depend, Server).
 
 
-%% @spec get_wait(Key, Context) -> {ok, Data} | undefined
 %% @doc Fetch the key from the cache, when the key does not exist then lock the entry and let
 %% the calling process insert the value. All other processes requesting the key will wait till
 %% the key is updated and receive the key's new value.
+-spec get_wait(Key, Context) -> Result when
+    Key :: any(),
+    Context :: z:context(),
+    Data :: any(),
+    Result :: {ok, Data}
+            | undefined
+            | {throw, term()}
+            | {error, term()}.
 get_wait(Key, #context{depcache=Server}) ->
     depcache:get_wait(Key, Server).
 
 
-%% @spec get(Key, Context) -> {ok, Data} | undefined
 %% @doc Fetch the key from the cache, return the data or an undefined if not found (or not valid)
+-spec get(Key, Context) -> {ok, Data} | undefined when
+    Key :: any(),
+    Context :: z:context(),
+    Data :: any().
 get(Key, #context{depcache=Server}) ->
     depcache:get(Key, Server).
 
 
-%% @spec get_subkey(Key, SubKey, Context) -> {ok, Data} | undefined
 %% @doc Fetch the key from the cache, return the data or an undefined if not found (or not valid)
+-spec get_subkey(Key, SubKey, Context) -> {ok, Data} | undefined when
+    Key :: any(),
+    SubKey :: any(),
+    Context :: z:context(),
+    Data :: any().
 get_subkey(Key, SubKey, #context{depcache=Server}) ->
     depcache:get_subkey(Key, SubKey, Server).
 
 
-%% @spec get(Key, SubKey, Context) -> {ok, Data} | undefined
 %% @doc Fetch the key from the cache, return the data or an undefined if not found (or not valid)
+-spec get(Key, SubKey, Context) -> {ok, Data} | undefined when
+    Key :: any(),
+    SubKey :: any(),
+    Context :: z:context(),
+    Data :: any().
 get(Key, SubKey, #context{depcache=Server}) ->
     depcache:get(Key, SubKey, Server).
 
 
-%% @spec flush(Key, #context{}) -> void()
 %% @doc Flush the key and all keys depending on the key
+-spec flush(Key, Context) -> ok when
+    Key :: any(),
+    Context :: z:context().
 flush(Key, #context{depcache=Server}) ->
     depcache:flush(Key, Server).
 
 
-%% @spec flush(#context{}) -> void()
 %% @doc Flush all keys from the caches
+-spec flush(Context) -> ok when
+    Context :: z:context().
 flush(#context{depcache=Server}) ->
     depcache:flush(Server).
 
 
-%% @spec size(#context{}) -> int()
 %% @doc Return the total memory size of all stored terms
+-spec size(Context) -> non_neg_integer() | undefined when
+    Context :: z:context().
 size(#context{depcache=Server}) ->
     depcache:size(Server).
 
 
 %% @doc Check if we use a local process dict cache
+-spec in_process_server(Server) -> boolean() when
+    Server :: pid() | atom().
 in_process_server(Server) ->
     depcache:in_process_server(Server).
 
 %% @doc Enable or disable the in-process caching using the process dictionary
+-spec in_process(boolean() | undefined) -> boolean() | undefined.
 in_process(Flag) ->
     depcache:in_process(Flag).
 
 %% @doc Flush all items memoized in the process dictionary.
+-spec flush_process_dict() -> ok.
 flush_process_dict() ->
     depcache:flush_process_dict().
 

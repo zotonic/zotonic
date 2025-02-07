@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2024 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Model for medium database
 %% @end
 
-%% Copyright 2009-2024 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -981,7 +981,8 @@ rsc_is_media_cat(Id, Context) ->
         _ -> false
     end.
 
--spec mime_to_category( string() | binary() ) -> image | video | audio | document.
+-spec mime_to_category(Mime) -> media | image | video | audio | document when
+    Mime ::  string() | binary().
 mime_to_category(Mime) ->
     case Mime of
         <<"image/", _/binary>> -> image;
@@ -1274,14 +1275,18 @@ save_preview(RscId, Data, Mime, Context) ->
             {error, eacces}
     end.
 
--spec make_preview_unique(integer()|insert_rsc, binary(), z:context()) -> file:filename().
+-spec make_preview_unique(RscId, Extension, Context) -> PreviewFilename when
+    RscId :: m_rsc:resource_id() | insert_rsc,
+    Extension :: binary(),
+    Context :: z:context(),
+    PreviewFilename :: file:filename_all().
 make_preview_unique(RscId, Extension, Context) ->
     Basename = iolist_to_binary([id_to_list(RscId), $-, z_ids:identifier(16), Extension]),
     Filename = filename:join([
-        "preview",
-        z_ids:identifier(2),
-        z_ids:identifier(2),
-        Basename]),
+            "preview",
+            z_ids:identifier(2),
+            z_ids:identifier(2),
+            Basename]),
     case is_unique_file(Filename, Context) of
         true ->
             Filename;

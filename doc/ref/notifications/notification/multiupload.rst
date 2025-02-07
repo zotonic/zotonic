@@ -1,2 +1,0 @@
-.. include:: meta-multiupload.rst
-

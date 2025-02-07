@@ -41,17 +41,26 @@
 %%%   - code blocks
 %%%   - horizontal rules
 %%% the parser then does its magic interpolating the references as appropriate
--spec conv( Markdown::binary() ) -> Html::binary().
-conv(Input) ->
-    String = unicode:characters_to_list(Input),
-    Lex = lex(String),
-    % io:format("Lex is ~p~n", [Lex]),
-    UntypedLines = make_lines(Lex),
-    % io:format("UntypedLines are ~p~n", [UntypedLines]),
-    {TypedLines, Refs} = type_lines(UntypedLines),
-    % io:format("TypedLines are ~p~nRefs is ~p~n",
-    %           [TypedLines, Refs]),
-    unicode:characters_to_binary(parse(TypedLines, Refs)).
+-spec conv( MarkdownText ) -> Html when
+    MarkdownText :: binary(),
+    Html :: binary().
+conv(MarkdownText) when is_binary(MarkdownText) ->
+    case unicode:characters_to_list(MarkdownText, utf8) of
+        String when is_list(String) ->
+            Lex = lex(String),
+            % io:format("Lex is ~p~n", [Lex]),
+            UntypedLines = make_lines(Lex),
+            % io:format("UntypedLines are ~p~n", [UntypedLines]),
+            {TypedLines, Refs} = type_lines(UntypedLines),
+            % io:format("TypedLines are ~p~nRefs is ~p~n",
+            %           [TypedLines, Refs]),
+            case unicode:characters_to_binary(parse(TypedLines, Refs)) of
+                B when is_binary(B) -> B;
+                _ -> z_convert:to_binary(z_html:escape_check(MarkdownText))
+            end;
+        _ ->
+            z_convert:to_binary(z_html:escape_check(MarkdownText))
+    end.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%

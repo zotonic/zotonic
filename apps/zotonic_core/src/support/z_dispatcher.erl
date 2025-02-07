@@ -303,7 +303,7 @@ drop_port(Hostname) when is_binary(Hostname) ->
 drop_port(Hostname) when is_list(Hostname) ->
     drop_port(z_convert:to_binary(Hostname)).
 
--spec add_port( binary() | undefined, http | https, pos_integer() ) -> binary().
+-spec add_port( binary() | undefined, http | https, pos_integer() ) -> binary() | undefined.
 add_port(undefined, _Protocol, _Port) -> undefined;
 add_port(_Hostname, _Protocol, none) -> undefined;
 add_port(Hostname, http, 80) -> Hostname;

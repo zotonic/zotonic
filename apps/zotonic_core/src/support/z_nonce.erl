@@ -295,7 +295,7 @@ secs() ->
 %% @doc Return the secret used for signing the nonce values returned by nonce/0 and nonce/1
 nonce_secret() ->
     case application:get_env(zotonic_core, nonce_secret) of
-        {ok, Key} when size(Key) >= 50 ->
+        {ok, Key} when is_binary(Key), size(Key) >= 50 ->
             Key;
         _ ->
             jobs:run(zotonic_singular_job, fun generate_nonce_secret/0),
@@ -304,7 +304,7 @@ nonce_secret() ->
 
 generate_nonce_secret() ->
     case application:get_env(zotonic_core, nonce_secret) of
-        {ok, Key} when size(Key) >= 50 ->
+        {ok, Key} when is_binary(Key), size(Key) >= 50 ->
             ok;
         _ ->
             SecFile = filename:join([ z_config:get(security_dir), "nonce-secret.bin" ]),
@@ -326,7 +326,7 @@ generate_nonce_secret() ->
 %% nonce ets tables after restart.
 nonce_secure_secret() ->
     case application:get_env(zotonic_core, nonce_secure_secret) of
-        {ok, Key} when size(Key) >= 50 ->
+        {ok, Key} when is_binary(Key), size(Key) >= 50 ->
             Key;
         _ ->
             jobs:run(zotonic_singular_job, fun generate_nonce_secure_secret/0),

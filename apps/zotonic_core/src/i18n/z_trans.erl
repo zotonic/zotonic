@@ -38,29 +38,26 @@
 -include_lib("../../include/zotonic.hrl").
 
 %% @doc Fetch all translations for the given string.
--spec translations(z:trans() | binary() | string(), z:context()) -> z:trans() | binary().
+-spec translations(z:trans() | binary() | string(), z:context()) -> z:trans().
 translations(#trans{ tr = Tr0 } = Trans0, Context) ->
-    case proplists:lookup(en, Tr0) of
+    case lists:keyfind(en, 1, Tr0) of
         {en, From} ->
-            case translations(From, Context) of
-                #trans{ tr = Tr1 } ->
-                    #trans{ tr = merge_trs(Tr0, lists:reverse(Tr1)) };
-                _ -> Trans0
-            end;
-        none ->
+            #trans{ tr = Tr1 } = translations(From, Context),
+            #trans{ tr = merge_trs(Tr0, lists:reverse(Tr1)) };
+        false ->
             Trans0
     end;
 translations(From, Context) when is_binary(From) ->
     try
         case ets:lookup(z_trans_server:table(Context), From) of
             [] ->
-    			From;
+    			#trans{ tr = [ {en, From} ] };
             [{_, Trans}] ->
     			#trans{ tr = Trans }
         end
     catch
         error:badarg ->
-            From
+            #trans{ tr = [ {en, From} ] }
     end;
 translations(From, Context) when is_list(From) ->
     translations(unicode:characters_to_binary(From), Context);
@@ -116,16 +113,28 @@ add_labels(Lang, [{Label,Trans}|Rest], Acc) when is_binary(Trans), is_binary(Lab
     end.
 
 %% @doc Strict translation lookup of a language version
--spec lookup(z:trans()|binary()|string(), z:context()) -> binary() | string() | undefined.
+-spec lookup(Text, Context) -> Translation | undefined when
+    Text :: z:trans() | binary() | string() | undefined,
+    Context :: z:context(),
+    Translation :: binary().
 lookup(Trans, Context) ->
     lookup(Trans, z_context:languages(Context), Context).
 
--spec lookup(z:trans()|binary()|string(), atom() | [atom()], z:context()) -> binary() | string() | undefined.
+-spec lookup(Text, Language, Context) -> Translation | undefined when
+    Text :: z:trans() | binary() | string() | undefined,
+    Language :: atom() | [ atom() ],
+    Context :: z:context(),
+    Translation :: binary().
+lookup(undefined, _Lang, _Context) ->
+    undefined;
 lookup(Text, Lang, Context) when is_list(Text) ->
-    lookup(unicode:characters_to_binary(Text), [Lang], Context);
+    lookup(unicode:characters_to_binary(Text), Lang, Context);
 lookup(#trans{ tr = Tr }, Lang, _Context) when is_atom(Lang) ->
-    proplists:get_value(Lang, Tr);
-lookup(Text, Lang, Context) when is_atom(Lang) ->
+    case lists:keyfind(Lang, 1, Tr) of
+        {_, T} -> T;
+        false -> undefined
+    end;
+lookup(Text, Lang, Context) when is_atom(Lang), is_binary(Text) ->
      case z_context:language(Context) of
         Lang -> Text;
         _ -> undefined
@@ -134,51 +143,64 @@ lookup(Text, Lang, Context) when is_atom(Lang) ->
     lookup(Text, [Lang], Context);
 lookup(#trans{ tr = Tr }, Langs, _Context) ->
     find_first(Langs, Tr);
-lookup(Text, Langs, Context) ->
+lookup(Text, Langs, Context) when is_binary(Text) ->
     ContextLangs = z_context:languages(Context),
     case lists:any(fun(Iso) -> lists:member(Iso, ContextLangs) end, Langs) of
         true -> Text;
         false -> undefined
-    end.
+    end;
+lookup(_Text, _Langs, _Context) ->
+    undefined.
 
 %% @doc Non strict translation lookup of a language version.
 %%      In order check: requested languages, default configured language, english, any
--spec lookup_fallback(z:trans()|binary()|string()|undefined, z:context()|undefined) -> binary() | string() | undefined.
-lookup_fallback(undefined, _Context) ->
+-spec lookup_fallback(Text, OptContext) -> Translation when
+    Text :: z:trans() | binary() | string() | undefined,
+    OptContext :: z:context() | undefined,
+    Translation :: binary() | undefined.
+lookup_fallback(undefined, _OptContext) ->
     undefined;
 lookup_fallback(Trans, undefined) ->
     lookup_fallback(Trans, [en], undefined);
 lookup_fallback(Trans, Context) ->
     lookup_fallback(Trans, z_context:languages(Context), Context).
 
-lookup_fallback(Text, Lang, Context) when is_atom(Lang) ->
-    lookup_fallback(Text, [Lang], Context);
-lookup_fallback(Text, Lang, Context) when is_binary(Lang) ->
+%% @doc Non strict translation lookup of a language version.
+%%      In order check: requested languages, default configured language, english, any
+-spec lookup_fallback(Text, Language, OptContext) -> Translation when
+    Text :: z:trans() | binary() | string() | undefined,
+    Language :: atom() | [ atom() ] | binary(),
+    OptContext :: z:context() | undefined,
+    Translation :: binary() | undefined.
+lookup_fallback(Text, Lang, OptContext) when is_list(Text) ->
+    Text1 = unicode:characters_to_binary(Text, utf8),
+    lookup_fallback(Text1, Lang, OptContext);
+lookup_fallback(Text, Lang, OptContext) when is_atom(Lang) ->
+    lookup_fallback(Text, [Lang], OptContext);
+lookup_fallback(Text, Lang, OptContext) when is_binary(Lang) ->
     case z_language:to_language_atom(Lang) of
         {ok, Code} ->
-            lookup_fallback(Text, [Code], Context);
+            lookup_fallback(Text, [Code], OptContext);
         {error, _} when is_binary(Text) ->
             Text;
         {error, _} ->
             undefined
     end;
-lookup_fallback(#trans{ tr = Tr }, Langs, Context) when is_list(Langs) ->
+lookup_fallback(#trans{ tr = Tr }, Langs, OptContext) when is_list(Langs) ->
     case find_first(Langs, Tr) of
         undefined ->
-            case z_language:default_language(Context) of
-                undefined ->
-                    take_english_or_first(Tr);
-                CfgLang ->
-                    case lists:keyfind(CfgLang, 1, Tr) of
-                        false -> take_english_or_first(Tr);
-                        {_, Text} -> Text
-                    end
+            CfgLang = z_language:default_language(OptContext),
+            case lists:keyfind(CfgLang, 1, Tr) of
+                {_, Text} -> Text;
+                false -> take_english_or_first(Tr)
             end;
         Text ->
             Text
     end;
-lookup_fallback(Text, _Lang, _Context) ->
-    Text.
+lookup_fallback(Text, _Lang, _Context) when is_binary(Text) ->
+    Text;
+lookup_fallback(_Text, _Lang, _Context) ->
+    undefined.
 
 
 find_first(_Langs, []) ->
@@ -274,36 +296,68 @@ lookup_fallback_language(Langs, Lang, Context) ->
     end.
 
 
-%% @doc translate a string or trans record into another language
--spec trans(z:trans() | binary() | string(), z:context() | atom()) -> binary() | undefined.
+%% @doc translate a string or trans record into another language. Prefer
+%% the language translations from the .po files over the translations in
+%% the trans record itself.
+-spec trans(Text, ContextOrLanguage) -> Translation when
+    Text :: z:trans() | binary() | string(),
+    ContextOrLanguage :: z:context() | [ atom() ] | atom(),
+    Translation :: binary().
 trans(Text, Lang) when is_list(Text) ->
     trans(unicode:characters_to_binary(Text), Lang);
-trans(#trans{ tr = Tr }, Lang) when is_atom(Lang) ->
-    proplists:get_value(Lang, Tr);
-trans(Text, Lang) when is_atom(Lang) ->
-    Text;
-trans(Text, Context) ->
-    trans(Text, z_context:language(Context), Context).
-
-trans(#trans{ tr = Tr0 }, Language, Context) ->
-    case proplists:lookup(en, Tr0) of
-        {en, Text} ->
-            case translations(Text, Context) of
-                #trans{ tr = Tr } ->
-                    case proplists:get_value(Language, Tr) of
-                        undefined -> proplists:get_value(Language, Tr0, Text);
-                        Translated -> Translated
-                    end;
-                _ ->
-                    proplists:get_value(Language, Tr0, Text)
+trans(Text, #context{} = Context) when is_binary(Text) ->
+    trans(Text, z_context:languages(Context), Context);
+trans(#trans{ tr = Tr }, Langs) ->
+    case find_first(Langs, Tr) of
+        undefined ->
+            case take_english_or_first(Tr) of
+                undefined -> <<>>;
+                T -> T
             end;
-        none ->
-            proplists:get_value(Language, Tr0)
+        T ->
+            T
     end;
-trans(Text, Language, Context) ->
-    case translations(Text, Context) of
-        #trans{ tr = Tr } ->
-            proplists:get_value(Language, Tr, Text);
-        _ ->
-            z_convert:to_binary(Text)
-    end.
+trans(Text, _Lang) when is_binary(Text) ->
+    Text;
+trans(_Text, _Lang) ->
+    <<>>.
+
+
+-spec trans(Text, Language, Context) -> Translation when
+    Text :: z:trans() | binary() | string(),
+    Language :: [ atom() ] | atom(),
+    Context :: z:context(),
+    Translation :: binary().
+trans(Text, Language, Context) when is_atom(Language) ->
+    trans(Text, [ Language ], Context);
+trans(Text, Languages, Context) when is_list(Text) ->
+    trans(unicode:characters_to_binary(Text), Languages, Context);
+trans(#trans{ tr = [] }, _Languages, _Context) ->
+    <<>>;
+trans(#trans{ tr = Tr0 }, Languages, Context) ->
+    case lists:keyfind(en, 1, Tr0) of
+        {en, EnText} ->
+            #trans{ tr = Tr } = translations(EnText, Context),
+            case find_first(Tr, Languages) of
+                undefined ->
+                    case find_first(Tr0, Languages) of
+                        undefined -> EnText;
+                        T -> T
+                    end;
+                T ->
+                    T
+            end;
+        false ->
+            case find_first(Tr0, Languages) of
+                undefined -> <<>>;
+                T -> T
+            end
+    end;
+trans(Text, Languages, Context) when is_binary(Text) ->
+    #trans{ tr = Tr } = translations(Text, Context),
+    case find_first(Tr, Languages) of
+        undefined -> Text;
+        T -> T
+    end;
+trans(_Text, _Languages, _Context) ->
+    <<>>.

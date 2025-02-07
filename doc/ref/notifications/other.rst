@@ -16,7 +16,6 @@ Other notifications
    notification/content_security_header
    notification/cors_headers
    notification/debug
-   notification/debug_stream
    notification/dropbox_file
    notification/filewatcher
    notification/hierarchy_updated
@@ -32,7 +31,6 @@ Other notifications
    notification/middleware
    notification/module_activate
    notification/module_deactivate
-   notification/multiupload
    notification/output_html
    notification/postback_event
    notification/postback_notify
@@ -43,7 +41,6 @@ Other notifications
    notification/search_query
    notification/search_query_term
    notification/security_headers
-   notification/service_authorize
    notification/ssl_options
    notification/translate
    notification/tkvstore_delete

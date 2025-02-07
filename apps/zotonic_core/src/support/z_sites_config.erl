@@ -43,7 +43,7 @@ site_config(Site) when is_atom(Site) ->
             case read_configs(ConfigFiles) of
                 {ok, SiteConfig} ->
                     case read_configs(ZotonicFiles) of
-                        {ok, GlobalConfig} ->
+                        {ok, GlobalConfig} when is_map(GlobalConfig) ->
                             SiteConfig1 = merge_global_configs(Site, SiteConfig, GlobalConfig),
                             {ok, SiteConfig1};
                         {error, _} = Error ->
@@ -178,16 +178,15 @@ apps_config(File, Data, Cfgs) when is_list(Data) ->
         Data).
 
 %% @doc Merge the global config options into the site's options, adding defaults.
--spec merge_global_configs( atom(), map(), map() ) -> map().
-merge_global_configs( Sitename, SiteConfig, GlobalConfig ) ->
+-spec merge_global_configs(Sitename, SiteConfig, GlobalConfig) -> MergedConfig when
+    Sitename :: atom(),
+    SiteConfig :: map(),
+    GlobalConfig :: map(),
+    MergedConfig :: map().
+merge_global_configs( Sitename, SiteConfig, GlobalConfig ) when is_map(SiteConfig), is_map(GlobalConfig) ->
     ZotonicConfig = case maps:get(zotonic, GlobalConfig, #{}) of
         L when is_list(L) -> L;
         M when is_map(M) -> maps:to_list(M)
     end,
     DbOptions = z_db_pool:database_options( Sitename, maps:to_list(SiteConfig), ZotonicConfig ),
-    lists:foldl(
-        fun({K, V}, Acc) ->
-            Acc#{ K => V }
-        end,
-        SiteConfig,
-        DbOptions).
+    maps:merge(SiteConfig, maps:from_list(DbOptions)).

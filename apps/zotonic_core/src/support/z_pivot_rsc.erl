@@ -120,9 +120,18 @@
 
 
 -type task_key() :: undefined | binary() | string() | atom() | integer().
+-type task_return() :: ok
+                     | {delay, task_delay()}
+                     | {delay, task_delay(), NewArgs :: list()}
+                     | any().
+-type task_delay() :: non_neg_integer()
+                    | calendar:datetime()
+                    | undefined.
 
 -export_type([
-    task_key/0
+    task_key/0,
+    task_return/0,
+    task_delay/0
 ]).
 
 
@@ -272,9 +281,9 @@ insert_task(Module, Function, UniqueKey, Args, Context) ->
 %% @doc Insert a slow running pivot task with unique key and arguments that should start after Seconds seconds.
 %% Always delete any existing transaction, to prevent race conditions when the task is running
 %% during this insert. The UniqueKey is used to have multiple entries per module/function. If only
-%% a single module/function should be queued, then set the UniqueKey to <tt>&lt;&lt;&gt;&gt;</tt>.
--spec insert_task_after(SecondsOrDate, Module, Function, UniqueKey, Args, Context) -> {ok, TaskId} | {error, term()}
-    when SecondsOrDate::undefined | integer() | calendar:datetime(),
+%% a single module/function should be queued, then set the UniqueKey to ``<<>>''.
+-spec insert_task_after(Delay, Module, Function, UniqueKey, Args, Context) -> {ok, TaskId} | {error, term()}
+    when Delay:: task_delay(),
          Module :: atom(),
          Function :: atom(),
          UniqueKey :: task_key(),
@@ -286,10 +295,10 @@ insert_task(Module, Function, UniqueKey, Args, Context) ->
                     ) -> {ok, {calendar:datetime(), list()}} | {error, term()} ),
          Context :: z:context(),
          TaskId :: integer().
-insert_task_after(SecondsOrDate, Module, Function, UniqueKey, ArgsFun, Context) ->
+insert_task_after(Delay, Module, Function, UniqueKey, ArgsFun, Context) ->
     gen_server:call(
         Context#context.pivot_server,
-        {insert_task_after, SecondsOrDate, Module, Function, UniqueKey, ArgsFun}).
+        {insert_task_after, Delay, Module, Function, UniqueKey, ArgsFun}).
 
 -spec get_task( z:context() ) -> {ok, [ map() ]} | {error, term()}.
 get_task(Context) ->
@@ -339,7 +348,7 @@ to_utc_date({{Y,M,D},{H,I,S}} = Date) when is_integer(Y), is_integer(M), is_inte
 
 -spec delete_task( module(), atom(), z:context() ) -> non_neg_integer().
 delete_task(Module, Function, Context) ->
-    case z_db:q("delete from pivot_task_queue where module = $1 and function = $2",
+    case z_db:q1("delete from pivot_task_queue where module = $1 and function = $2",
            [Module, Function],
            Context)
     of
@@ -354,7 +363,7 @@ delete_task(Module, Function, Context) ->
 -spec delete_task( module(), atom(), task_key(), z:context() ) -> non_neg_integer().
 delete_task(Module, Function, UniqueKey, Context) ->
     UniqueKeyBin = z_convert:to_binary(UniqueKey),
-    case z_db:q("delete from pivot_task_queue where module = $1 and function = $2 and key = $3",
+    case z_db:q1("delete from pivot_task_queue where module = $1 and function = $2 and key = $3",
            [Module, Function, UniqueKeyBin],
            Context)
     of
@@ -381,7 +390,7 @@ count_tasks(Context) ->
 
 -spec delete_tasks( z:context() ) -> non_neg_integer().
 delete_tasks(Context) ->
-    case z_db:q("delete from pivot_task_queue", Context) of
+    case z_db:q1("delete from pivot_task_queue", Context) of
         0 ->
             0;
         N ->

@@ -182,7 +182,7 @@ merge_delete(WinnerId, LoserId, Options, Context) ->
 -spec merge_delete_nocheck(integer(), integer(), list(), #context{}) -> ok.
 merge_delete_nocheck(WinnerId, LoserId, Opts, Context) ->
     IsMergeTrans = proplists:get_value(is_merge_trans, Opts, false),
-    z_notifier:map(#rsc_merge{
+    z_notifier:notify_sync(#rsc_merge{
             winner_id = WinnerId,
             loser_id = LoserId,
             is_merge_trans = IsMergeTrans

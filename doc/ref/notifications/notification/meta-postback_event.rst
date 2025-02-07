@@ -11,7 +11,7 @@ Type:
     :ref:`notification-first`
 
 Return: 
-    
+    ``undefined`` or ``#context{}`` with the result of the postback
 
 ``#postback_event{}`` properties:
     - postback: ``unknown``

@@ -96,7 +96,7 @@
 % returns:
 %   {ok, Pid}
 %
--spec start(list()) -> {'ok', pid()}|{'error', {'already_started',pid()}}.
+-spec start(list()) -> gen_statem:start_ret().
 start(Args) ->
     gen_statem:start_link({global, ?MODULE}, ?MODULE, Args, []).
 

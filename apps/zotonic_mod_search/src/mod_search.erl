@@ -838,9 +838,9 @@ find_by_id(S, Rank, Context) ->
     Context :: z:context(),
     Behaviour :: non_neg_integer().
 rank_behaviour(Context) ->
-    case m_config:get_value(mod_search, rank_behaviour, Context) of
-        Empty when Empty =:= undefined; Empty =:= <<>> -> ?RANK_BEHAVIOUR;
-        Rank -> z_convert:to_integer(Rank)
+    case z_convert:to_integer(m_config:get_value(mod_search, rank_behaviour, Context)) of
+        undefined -> ?RANK_BEHAVIOUR;
+        Rank -> Rank
     end.
 
 %% @doc The weights for the ranking of the ABCD indexing categories.

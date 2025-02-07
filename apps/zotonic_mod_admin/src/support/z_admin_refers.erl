@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2023 Maximonster Interactive Things BV
+%% @copyright 2023-2025 Maximonster Interactive Things BV
 %% @doc Ensure that alle embedded ids in a resource are connected using
 %% a 'refers' edge.
 %% @end
 
-%% Copyright 2023 Maximonster Interactive Things BV
+%% Copyright 2023-2025 Maximonster Interactive Things BV
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ insert_ensure_refers_all_task(Context) ->
 
 %% @doc Check all resource for embedded resource references and add a refers
 %% edge for all of them.
--spec task_ensure_refers_all(FromId, Context) -> ok when
+-spec task_ensure_refers_all(FromId, Context) -> z_pivot_rsc:task_return() when
     FromId :: pos_integer(),
     Context :: z:context().
 task_ensure_refers_all(FromId, Context) ->

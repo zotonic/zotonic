@@ -323,7 +323,7 @@ tree_flat_meta(Context) ->
     m_hierarchy:tree_flat('$category', Context).
 
 %% @doc Return the category tree from the category down, max children of children
--spec tree2(z:context()) -> list() | undefined.
+-spec tree2(z:context()) -> list().
 tree2(Context) ->
     prune(2, tree(Context)).
 
@@ -692,7 +692,7 @@ is_tree_dirty(Context) ->
     end.
 
 %% @doc Set the tree dirty flag
--spec set_tree_dirty( boolean(), z:context() ) -> ok.
+-spec set_tree_dirty( boolean(), z:context() ) -> ok | {error, term()}.
 set_tree_dirty(Flag, Context) when Flag =:= true; Flag =:= false ->
     m_config:set_prop(?MODULE, meta, tree_dirty, Flag, Context).
 

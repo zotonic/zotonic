@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2024 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Interface to database, uses database definition from Context.
 %% @end
 
-%% Copyright 2009-2024 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -131,7 +131,7 @@
 -type query_timeout() :: integer().
 
 -type transaction_fun() :: fun((z:context()) -> term()).
--type table_name() :: atom() | string() | binary().
+-type table_name() :: atom() | nonempty_string() | nonempty_binary().
 -type column_name() :: atom() | string() | binary().
 -type schema_name() :: default | atom() | string() | binary().
 -type parameters() :: list( parameter() ).
@@ -671,7 +671,7 @@ map_merge_props(_, Acc) ->
 -spec q(SQL, Context) -> Result when
     SQL :: sql(),
     Context :: z:context(),
-    Result :: list() | integer().
+    Result :: list() | non_neg_integer().
 q(Sql, Context) ->
     q(Sql, [], Context, ?TIMEOUT).
 
@@ -687,7 +687,7 @@ q(Sql, Context) ->
         SQL :: sql(),
         Context :: z:context(),
         Timeout :: pos_integer(),
-        Result :: list() | integer().
+        Result :: list() | non_neg_integer().
 q(Sql, Parameters, #context{} = Context) ->
     q(Sql, Parameters, Context, ?TIMEOUT);
 q(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
@@ -701,7 +701,7 @@ q(Sql, #context{} = Context, Timeout) when is_integer(Timeout) ->
     Parameters :: parameters(),
     Context :: z:context(),
     Timeout :: pos_integer(),
-    Result :: list() | integer().
+    Result :: list() | non_neg_integer().
 q(Sql, Parameters, Context, Timeout) ->
     F = fun
         (none) -> [];
@@ -874,20 +874,24 @@ equery(Sql, Parameters, Context, Timeout) ->
 
 %% @doc Execute the same SQL statement for a list of parameters. Default timeout
 %% of 30 seconds.
--spec execute_batch(SQL, ParametersList, Context) -> query_result() when
+-spec execute_batch(SQL, ParametersList, Context) -> Result when
     SQL :: sql(),
     ParametersList :: list( parameters() ),
-    Context :: z:context().
+    Context :: z:context(),
+    Result :: {ok, [ query_result() ]}
+            | {error, term()}.
 execute_batch(Sql, Batch, Context) ->
     execute_batch(Sql, Batch, Context, ?TIMEOUT).
 
 
 %% @doc Execute the same SQL statement for a list of parameters.
--spec execute_batch(SQL, ParametersList, Context, Timeout) -> query_result() when
+-spec execute_batch(SQL, ParametersList, Context, Timeout) -> Result when
     SQL :: sql(),
     ParametersList :: list( parameters() ),
     Context :: z:context(),
-    Timeout :: pos_integer().
+    Timeout :: pos_integer(),
+    Result :: {ok, [ query_result() ]}
+            | {error, term()}.
 execute_batch(Sql, Batch, Context, Timeout) ->
     F = fun(none) ->
                 {error, noresult};
@@ -1859,7 +1863,7 @@ quoted_table_name(Table) ->
 
 
 %% @doc Merge the contents of the props column into the result rows
--spec merge_props([proplists:proplist() | map()]) -> list() | undefined.
+-spec merge_props([proplists:proplist() | map()]) -> list().
 merge_props(List) ->
     merge_props(List, []).
 

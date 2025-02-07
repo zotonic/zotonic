@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015-2024 Marc Worrell
+%% @copyright 2015-2025 Marc Worrell
 %% @doc Model for registering the status per email recipient.
 %% @end
 
-%% Copyright 2015-2024 Marc Worrell
+%% Copyright 2015-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -244,7 +244,7 @@ get(Email0, Context) ->
 mark_received(Email0, Context) ->
     Email = normalize(Email0),
     {IsValid, _IsOkToSend, _IsBlocked} = is_valid_nocache(Email, Context),
-    case z_db:q("
+    case z_db:q1("
             update email_status
             set is_valid = true,
                 receive = now(),
@@ -274,7 +274,7 @@ mark_received(Email0, Context) ->
 mark_read(Email0, Context) ->
     Email = normalize(Email0),
     {IsValid, _IsOkToSend, _IsBlocked} = is_valid_nocache(Email, Context),
-    case z_db:q("
+    case z_db:q1("
             update email_status
             set is_valid = not is_blocked,
                 read = now(),
@@ -307,7 +307,7 @@ mark_read(Email0, Context) ->
 mark_sent(Email0, false, Context) ->
     Email = normalize(Email0),
     {IsValid, _IsOkToSend, _IsBlocked} = is_valid_nocache(Email, Context),
-    case z_db:q("
+    case z_db:q1("
             update email_status
             set sent = now(),
                 sent_ct = sent_ct + 1,
@@ -331,7 +331,7 @@ mark_sent(Email0, false, Context) ->
 mark_sent(Email0, true, Context) ->
     Email = normalize(Email0),
     {IsValid, _IsOkToSend, _IsBlocked} = is_valid_nocache(Email, Context),
-    case z_db:q("
+    case z_db:q1("
         update email_status
         set is_valid = not is_blocked,
             recent_error_ct = 0,
@@ -503,8 +503,7 @@ mark_bounced(Email0, Context) ->
             end
         end,
         Context),
-    maybe_notify(Email, IsValid, false, true, false, Context),
-    ok.
+    maybe_notify(Email, IsValid, false, true, false, Context).
 
 maybe_notify(_Email, IsValid, IsValid, false, _IsManual, _Context) ->
     ok;
@@ -516,7 +515,8 @@ maybe_notify(Email, _OldIsValid, IsValid, IsFinal, IsManual, Context) ->
                         is_final = IsFinal,
                         is_manual = IsManual
                     },
-                    Context).
+                    Context),
+    ok.
 
 
 %% @doc Normalize an email address, makes it compatible with the email addresses in m_identity.
@@ -529,7 +529,7 @@ normalize(Email) ->
     Context :: z:context(),
     RowsDeleted :: non_neg_integer().
 periodic_cleanup(Context) ->
-    z_db:q("
+    z_db:q1("
         delete from email_status
         where modified < now() - interval '2 years'
           and not is_blocked

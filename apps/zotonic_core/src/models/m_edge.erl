@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Model for accessing and manipulating edges between resources.
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -126,7 +126,7 @@ m_get([Id], _Msg, Context) ->
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
--spec m_post( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
+-spec m_post( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:post_return().
 m_post([<<"o">> | Path ], #{ payload := Payload }, Context) ->
     {Subject, Predicate, Object} = get_spo_o(Path, Payload, Context),
     do_post_insert(Subject, Predicate, Object, Context);
@@ -134,7 +134,7 @@ m_post([<<"s">> | Path ], #{ payload := Payload }, Context) ->
     {Subject, Predicate, Object} = get_spo_s(Path, Payload, Context),
     do_post_insert(Subject, Predicate, Object, Context).
 
--spec m_delete( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
+-spec m_delete( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:delete_return().
 m_delete([<<"o">> | Path], #{payload := Payload}, Context) ->
     {Subject, Predicate, Object} = get_spo_o(Path, Payload, Context),
     delete(Subject, Predicate, Object, Context);

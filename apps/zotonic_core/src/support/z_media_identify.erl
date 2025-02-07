@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2024 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Identify files, fetch metadata about an image
 %% @end
 
-%% Copyright 2009-2024 Marc Worrell, Konstantin Nikiforov
+%% Copyright 2009-2025 Marc Worrell, Konstantin Nikiforov
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -432,7 +432,7 @@ devnull(unix)  -> "/dev/null".
 %% - PBM which is a known problem of IM 6.8.9 (used on Ubuntu 16)
 %% - AI see https://github.com/ImageMagick/ImageMagick/discussions/6724
 -spec im_mime(binary(), mime_type()|undefined) -> mime_type().
-im_mime(<<"PBM">>, MimeFile) when MimeFile =/= undefined -> MimeFile;
+im_mime(<<"PBM">>, MimeFile) when is_binary(MimeFile) -> MimeFile;
 im_mime(<<"AI">>, <<"application/pdf">>) -> <<"application/pdf">>;
 im_mime(Type, _) -> mime(Type).
 
@@ -481,7 +481,7 @@ identify_magicnumber(File) ->
 -spec extension(Mime) -> filename_extension()
     when Mime :: string()
                | binary()
-               | {binary(), binary(), list()}.
+               | cow_http_hd:media_type().
 extension(Mime) ->
     extension(Mime, undefined).
 
@@ -492,7 +492,7 @@ extension(Mime) ->
 -spec extension(Mime, PreferExtension, z:context()) -> filename_extension()
     when Mime :: string()
                | binary()
-               | {binary(), binary(), list()},
+               | cow_http_hd:media_type(),
          PreferExtension :: string()
                           | binary()
                           | undefined.
@@ -518,7 +518,7 @@ maybe_binary(L) -> z_convert:to_binary(L).
 -spec extension(Mime, PreferExtension) -> filename_extension()
     when Mime :: string()
                | binary()
-               | {binary(), binary(), list()},
+               | cow_http_hd:media_type(),
          PreferExtension :: string()
                           | binary()
                           | undefined.

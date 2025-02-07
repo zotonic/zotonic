@@ -4,7 +4,7 @@
 -module(m_rsc_db_tests).
 
 -include_lib("eunit/include/eunit.hrl").
--include_lib("zotonic.hrl").
+-include("../include/zotonic.hrl").
 
 modify_rsc_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),

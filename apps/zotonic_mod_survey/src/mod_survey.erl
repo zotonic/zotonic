@@ -301,7 +301,7 @@ register_nonce(<<>>) ->
 register_nonce(SessionNonce) when is_binary(SessionNonce) ->
     z_nonce:register(SessionNonce).
 
--spec unregister_nonce(SessionNonce) -> ok when
+-spec unregister_nonce(SessionNonce) -> ok | {error, key} when
     SessionNonce :: binary() | undefined.
 unregister_nonce(undefined) ->
     ok;
@@ -404,7 +404,7 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Args, Context
                         page_name => Name
                     }),
                     NameSafe = z_html:escape(Name),
-                    z_render:growl_error(<<"Error in survey, could not find page ", NameSafe/binary>>, Context);
+                    #context{} = z_render:growl_error(<<"Error in survey, could not find page ", NameSafe/binary>>, Context);
 
                 {error, Reason} ->
                     ?LOG_ERROR(#{
@@ -426,8 +426,10 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Args, Context
                         ok ->
                             IsShowResults = z_convert:to_bool(m_rsc:p(Id, survey_show_results, Context)),
                             render_result_page(Id, Editing, IsShowResults, History, As, Viewer, Args, Context);
-                        {ok, ContextOrRender} ->
-                            ContextOrRender;
+                        {ok, #context{} = SubmitContext} ->
+                            SubmitContext;
+                        {ok, #render{} = SubmitRender} ->
+                            SubmitRender;
                         {error, _Reason} ->
                             #render{
                                 template="_survey_error.tpl",
@@ -450,6 +452,17 @@ render_next_page(Id, PageNr, Direction, Answers, History, Editing, Args, Context
                 ]}
     end.
 
+-spec render_result_page(Id, Editing, IsShowResults, History, As, Viewer, Args, Context) -> Result when
+    Id :: m_rsc:resource_id(),
+    Editing :: undefined | {editing, AnswerId, list()},
+    AnswerId :: integer(),
+    IsShowResults :: boolean(),
+    History :: list(),
+    As :: list(),
+    Viewer :: binary(),
+    Args :: list(),
+    Context :: z:context(),
+    Result :: z:context() | #render{}.
 render_result_page(Id, undefined, true, History, As, Viewer, _Args, _Context) ->
     #render{
         template="_survey_results.tpl",

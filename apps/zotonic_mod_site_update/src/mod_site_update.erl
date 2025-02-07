@@ -97,7 +97,7 @@ event(#postback{ message = make }, Context) ->
     case z_context:site(Context) of
         zotonic_site_status ->
             true = z_acl:is_admin(Context),
-            spawn(fun() ->
+            z_proc:spawn_md(fun() ->
                     z:m(),
                     async_notice('Zotonic', ?__("Finished rebuilding Zotonic.", Context), Context)
                   end),
@@ -108,11 +108,11 @@ event(#postback{ message = make }, Context) ->
 
 
 % @doc Wire a notice to the current context
-render_notice(Site, Notice, Context) ->
+render_notice(Site, Notice, #context{} = Context) ->
     z_render:wire( notice(Site, Notice), Context ).
 
 % @doc Send a notice to the current webpage.
--spec async_notice(atom(), iodata(), z:context()) -> ok.
+-spec async_notice(atom(), iodata(), z:context()) -> ok | {error, term()}.
 async_notice(Sitename, Text, Context) ->
     z_notifier:notify(
         #page_actions{ actions = notice(Sitename, Text) },

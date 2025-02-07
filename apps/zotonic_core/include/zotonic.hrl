@@ -68,7 +68,7 @@
         dropbox_server      :: pid() | atom(),
         pivot_server        :: pid() | atom(),
         module_indexer      :: pid() | atom(),
-        translation_table   :: pid() | atom()
+        translation_table   :: atom()
         %% End TODO
     }).
 

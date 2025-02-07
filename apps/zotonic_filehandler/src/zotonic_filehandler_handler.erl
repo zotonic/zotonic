@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017-2018 Marc Worrell
-%%
+%% @copyright 2017-2025 Marc Worrell
 %% @doc Server process to handle file changes. Serializes build events.
+%% @end
 
-%% Copyright 2017-2018 Marc Worrell
+%% Copyright 2017-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -88,7 +88,7 @@ ignore_dir(Dir, IsIgnore) ->
 ignore_action(Action, IsIgnore) ->
     gen_server:cast(?MODULE, {ignore_action, Action, IsIgnore}).
 
--spec start_link() -> {ok, pid()} | {error, term()}.
+-spec start_link() -> gen_server:start_ret().
 start_link() ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 

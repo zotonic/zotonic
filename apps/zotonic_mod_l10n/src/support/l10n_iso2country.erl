@@ -4,7 +4,22 @@
 
 %% @author Marc Worrell <marc@worrell.nl>
 %% @doc Mapping of iso code to country name in english
-%% @copyright 2011-2022 Marc Worrell
+%% @copyright 2011-2025 Marc Worrell
+%% @end
+
+%% Copyright 2011-2025 Marc Worrell
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
 
 -module(l10n_iso2country).
 
@@ -40,7 +55,7 @@ iso2country(Iso) ->
 iso2country(Iso, Context) ->
 	case iso2country(Iso) of
 		undefined -> undefined;
-		Country -> z_trans:lookup(Country, Context)
+		Country -> z_trans:trans(Country, Context)
 	end.
 
 %% @doc Return the list of all ISO-code / country associations.

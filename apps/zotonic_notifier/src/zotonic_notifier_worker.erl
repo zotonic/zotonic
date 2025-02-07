@@ -73,12 +73,12 @@
 %% API
 %%====================================================================
 %% @doc Starts the notification server
--spec start_link(Name :: atom()) -> {ok, pid()} | {error, term()}.
+-spec start_link(Name :: atom()) -> gen_server:start_ret().
 start_link(Name) ->
     gen_server:start_link({local, Name}, ?MODULE, Name, []).
 
 %% @doc Start a notifier server for unit testing
--spec start_tests() -> {ok, pid()} | {error, term()}.
+-spec start_tests() -> gen_server:start_ret().
 start_tests() ->
     io:format("Starting notifier server.~n"),
     start_link(test).
@@ -96,12 +96,12 @@ observe(Notifier, Event, Observer, OwnerPid, Prio) ->
 
 
 %% @doc Detach all observers for the owner
--spec detach_all(zotonic_notifier:notifier(), pid()) -> ok | {error, term()}.
+-spec detach_all(zotonic_notifier:notifier(), pid()) -> ok.
 detach_all(Notifier, OwnerPid) when is_pid(OwnerPid) ->
     gen_server:call(Notifier, {detach_all, OwnerPid}, infinity).
 
 %% @doc Unsubscribe an owner-pid from an event.
--spec detach(zotonic_notifier:notifier(), zotonic_notifier:event(), pid()) -> ok | {error, term()}.
+-spec detach(zotonic_notifier:notifier(), zotonic_notifier:event(), pid()) -> ok.
 detach(Notifier, Event, OwnerPid) ->
     gen_server:call(Notifier, {detach, Event, OwnerPid}, infinity).
 

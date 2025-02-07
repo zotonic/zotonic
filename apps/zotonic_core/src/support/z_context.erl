@@ -1262,24 +1262,24 @@ csp_nonce(Context) ->
 %% @doc Set a response header for the request in the context.
 -spec set_resp_header(binary(), binary(), z:context()) -> z:context().
 set_resp_header(<<"vary">>, <<"*">>, #context{cowreq=Req} = Context) when is_map(Req) ->
-    cowmachine_req:set_resp_header(<<"vary">>, <<"*">>, Context);
+    #context{} = cowmachine_req:set_resp_header(<<"vary">>, <<"*">>, Context);
 set_resp_header(<<"vary">>, Value, #context{cowreq=Req} = Context) when is_map(Req) ->
-    case cowmachine_req:get_resp_header(<<"vary">>, Context) of
+    #context{} = case cowmachine_req:get_resp_header(<<"vary">>, Context) of
         undefined ->
-            cowmachine_req:set_resp_header(<<"vary">>, Value, Context);
+            #context{} = cowmachine_req:set_resp_header(<<"vary">>, Value, Context);
         <<"*">> ->
             Context;
         Curr ->
             Value1 = <<Curr/binary, ", ", Value/binary>>,
-            cowmachine_req:set_resp_header(<<"vary">>, Value1, Context)
+            #context{} = cowmachine_req:set_resp_header(<<"vary">>, Value1, Context)
     end;
 set_resp_header(Header, Value, #context{cowreq=Req} = Context) when is_map(Req) ->
-    cowmachine_req:set_resp_header(Header, Value, Context).
+    #context{} = cowmachine_req:set_resp_header(Header, Value, Context).
 
 %% @doc Set multiple response headers for the request in the context.
 -spec set_resp_headers([ {binary(), binary()} ], z:context()) -> z:context().
 set_resp_headers(Headers, #context{cowreq=Req} = Context) when is_map(Req) ->
-    cowmachine_req:set_resp_headers(Headers, Context).
+    #context{} = cowmachine_req:set_resp_headers(Headers, Context).
 
 %% @doc Get a response header
 -spec get_resp_header(binary(), z:context()) -> binary() | undefined.
@@ -1351,13 +1351,14 @@ parse_post_body(Context) ->
 %% z_context:ensure_all/1.
 -spec set_nocache_headers(z:context()) -> z:context().
 set_nocache_headers(Context = #context{cowreq=Req}) when is_map(Req) ->
-    cowmachine_req:set_resp_headers([
+    Context1 = #context{} = cowmachine_req:set_resp_headers([
             {<<"cache-control">>, <<"no-store, no-cache, must-revalidate, private, post-check=0, pre-check=0">>},
             {<<"expires">>, <<"Wed, 10 Dec 2008 14:30:00 GMT">>},
             {<<"p3p">>, <<"CP=\"NOI ADM DEV PSAi COM NAV OUR OTRo STP IND DEM\"">>},
             {<<"pragma">>, <<"nocache">>}
         ],
-        Context).
+        Context),
+    Context1.
 
 %% @doc Set security related headers. This can be modified by observing the
 %%      'security_headers' notification.
@@ -1413,7 +1414,7 @@ set_security_headers(Context) ->
                 | proplists:delete(<<"content-security-policy">>, SecurityHeaders)
             ]
     end,
-    cowmachine_req:set_resp_headers(SecurityHeaders1, Context).
+    set_resp_headers(SecurityHeaders1, Context).
 
 flatten_csp(CSP) ->
     Directives = lists:filtermap(
@@ -1539,7 +1540,7 @@ set_cookie(Key, Value, Options, Context) ->
                    none -> [{domain, z_context:cookie_domain(Context)}|Options]
                end,
     Options2 = [ {secure, true} | proplists:delete(secure, Options1) ],
-    cowmachine_req:set_resp_cookie(Key, ValueBin, Options2, Context).
+    #context{} = cowmachine_req:set_resp_cookie(Key, ValueBin, Options2, Context).
 
 %% @doc Read a cookie value from the current request.
 -spec get_cookie(binary(), z:context()) -> binary() | undefined.

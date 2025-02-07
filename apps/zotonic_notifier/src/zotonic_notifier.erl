@@ -57,7 +57,7 @@
     notifier/0
 ]).
 
--include_lib("zotonic_notifier.hrl").
+-include("../include/zotonic_notifier.hrl").
 
 %%====================================================================
 %% API
@@ -77,12 +77,16 @@ stop(_State) ->
 start_notifier(Name) when is_atom(Name) ->
     case zotonic_notifier_sup:start_notifier(Name) of
         {error, {already_started, Pid}} -> {ok, Pid};
-        Other -> Other
+        {ok, Pid} = Ok when is_pid(Pid) -> Ok
     end.
 
--spec stop_notifier(atom()) -> ok.
+-spec stop_notifier(atom()) -> ok | {error, term()}.
 stop_notifier(Name) when is_atom(Name) ->
-    zotonic_notifier_sup:stop_notifier(Name).
+    case zotonic_notifier_sup:stop_notifier(Name) of
+        ok -> ok;
+        {error, not_found} -> ok;
+        {error, _} = Error -> Error
+    end.
 
 %% @doc Register an observer pid.
 -spec observe(event(), pid()) -> ok | {error, term()}.

@@ -1,5 +1,22 @@
 %% @author David de Boer <david@ddeboer.nl>
 %% @doc Get human-readable label for a content (MIME) type
+%% @copyright 2010-2025 David de Boer
+%% @end
+
+%% Copyright 2010-2025 David de Boer
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+
 -module(filter_content_type_label).
 -export([
     content_type_label/2
@@ -7,7 +24,10 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
--spec content_type_label(undefined | string() | binary() | tuple(), #context{}) -> binary().
+-spec content_type_label(ContentType, Context) -> binary() | undefined when
+    ContentType :: undefined | string() | binary() | Mime,
+    Mime :: cow_http_hd:media_type(),
+    Context :: z:context().
 content_type_label(undefined, _Context) ->
     undefined;
 content_type_label(ContentType, Context) when is_list(ContentType) ->

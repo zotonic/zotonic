@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2020 Marc Worrell
+%% @copyright 2020-2025 Marc Worrell
 %% @doc Simple data storage in processes.
+%% @end
 
-%% Copyright 2020 Marc Worrell
+%% Copyright 2020-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -45,7 +46,6 @@
     terminate/2
     ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
 
 % After this idle time the storage stops.
 -define(STORAGE_EXPIRE, 900).
@@ -62,12 +62,14 @@
         secure :: map()
     }).
 
--spec start_link( binary(), z:context()) -> {ok, pid()} | {error, {already_started, pid()}}.
-start_link(SessionId, Context) ->
+-spec start_link(SessionID, Context) -> gen_server:start_ret() when
+    SessionID :: binary(),
+    Context :: z:context().
+start_link(SessionID, Context) ->
     gen_server:start_link(
-        {via, z_proc, {{?MODULE, SessionId}, Context}},
+        {via, z_proc, {{?MODULE, SessionID}, Context}},
         ?MODULE,
-        [ SessionId, timeout(Context), maxsize(Context) ],
+        [ SessionID, timeout(Context), maxsize(Context) ],
         []).
 
 
