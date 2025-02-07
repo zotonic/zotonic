@@ -40,7 +40,7 @@ insert_ensure_refers_all_task(Context) ->
 
 %% @doc Check all resource for embedded resource references and add a refers
 %% edge for all of them.
--spec task_ensure_refers_all(FromId, Context) -> ok | {delay, integer(), list()} when
+-spec task_ensure_refers_all(FromId, Context) -> z_pivot_rsc:task_return() when
     FromId :: pos_integer(),
     Context :: z:context().
 task_ensure_refers_all(FromId, Context) ->
