@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Administrative interface.  Aka backend.
 %% @enddoc
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -48,6 +48,10 @@
 %% <img class="z-tinymce-media z-tinymce-media-align-block z-tinymce-media-size-small z-tinymce-media-crop- z-tinymce-media-link- "
 %%      src="/admin/media/preview/41113"
 %%      alt="" />
+-spec observe_sanitize_element(#sanitize_element{}, Acc, z:context()) -> Result when
+    Acc :: Element,
+    Result :: Element,
+    Element :: {binary(), list( {binary(), binary()} ), list()}.
 observe_sanitize_element(#sanitize_element{}, {<<"img">>, Attrs, _Enclosed} = Element, Context) ->
     case proplists:get_value(<<"src">>, Attrs) of
         <<"/admin/media/preview/", Number/binary>> ->
@@ -85,6 +89,10 @@ class_to_opts(Class) ->
     end.
 
 
+-spec observe_admin_menu(#admin_menu{}, Acc, z:context()) -> Result when
+    Acc :: MenuItems,
+    Result :: MenuItems,
+    MenuItems :: [ #menu_item{} ].
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
      #menu_item{id = admin_dashboard,
@@ -169,6 +177,13 @@ admin_menu_content_queries(Context) ->
     end.
 
 
+-spec observe_admin_edit_blocks(#admin_edit_blocks{}, Acc, z:context()) -> Result when
+    Acc :: BlockGroups,
+    Result :: BlockGroups,
+    BlockGroups :: [ {Prio, SectionTitle, BlockTypes} ],
+    Prio :: integer(),
+    SectionTitle :: binary() | string() | z:trans(),
+    BlockTypes :: [ {atom(), binary() | string() | z:trans()}].
 observe_admin_edit_blocks(#admin_edit_blocks{}, Menu, Context) ->
     [
         {1, ?__("Standard page block types", Context), [
@@ -180,9 +195,11 @@ observe_admin_edit_blocks(#admin_edit_blocks{}, Menu, Context) ->
     ].
 
 
+-spec observe_module_ready(module_ready, z:context()) -> any().
 observe_module_ready(module_ready, Context) ->
     z_depcache:flush(admin_menu, Context).
 
+-spec observe_rsc_update_done(#rsc_update_done{}, z:context()) -> any().
 observe_rsc_update_done(#rsc_update_done{ action = Action, id = Id }, Context) when
     Action =:= insert;
     Action =:= update ->
