@@ -92,10 +92,14 @@ set(Key, Data, MaxAge, Depend, #context{depcache=Server}) ->
 %% @doc Fetch the key from the cache, when the key does not exist then lock the entry and let
 %% the calling process insert the value. All other processes requesting the key will wait till
 %% the key is updated and receive the key's new value.
--spec get_wait(Key, Context) -> {ok, Data} | undefined when
+-spec get_wait(Key, Context) -> Result when
     Key :: any(),
     Context :: z:context(),
-    Data :: any().
+    Data :: any(),
+    Result :: {ok, Data}
+            | undefined
+            | {throw, term()}
+            | {error, term()}.
 get_wait(Key, #context{depcache=Server}) ->
     depcache:get_wait(Key, Server).
 
@@ -145,14 +149,14 @@ flush(#context{depcache=Server}) ->
 
 
 %% @doc Return the total memory size of all stored terms
--spec size(Context) -> non_neg_integer() when
+-spec size(Context) -> non_neg_integer() | undefined when
     Context :: z:context().
 size(#context{depcache=Server}) ->
     depcache:size(Server).
 
 
 %% @doc Check if we use a local process dict cache
--spec in_process_server(Server) -> non_neg_integer() when
+-spec in_process_server(Server) -> boolean() when
     Server :: pid() | atom().
 in_process_server(Server) ->
     depcache:in_process_server(Server).
