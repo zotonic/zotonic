@@ -44,8 +44,19 @@ observe_content_security_header(#content_security_header{}, CSP, Context) ->
         <<>> -> CSP;
         _ ->
             CSP#content_security_header{
-                img_src = [ <<"https://www.googletagmanager.com">> | CSP#content_security_header.img_src ],
-                connect_src = [ <<"https://www.googletagmanager.com">> | CSP#content_security_header.connect_src ]
+                script_src = [
+                    <<"https://www.googletagmanager.com">>,
+                    <<"strict-dynamic">>
+                    | CSP#content_security_header.script_src
+                ],
+                img_src = [
+                    <<"https://www.googletagmanager.com">>
+                    | CSP#content_security_header.img_src
+                ],
+                connect_src = [
+                    <<"https://www.googletagmanager.com">>
+                    | CSP#content_security_header.connect_src
+                ]
             }
     end,
     case m_config:get_value(seo_google, analytics, Context) of
@@ -62,6 +73,7 @@ observe_content_security_header(#content_security_header{}, CSP, Context) ->
                 <<"https://*.googletagmanager.com">>
                 | CSP1#content_security_header.script_src
             ],
+            ScriptSrc1 = lists:delete(<<"https://www.googletagmanager.com">>, ScriptSrc),
             ConnectSrc = [
                 <<"https://*.google-analytics.com">>,
                 <<"https://*.analytics.google.com">>,
@@ -71,7 +83,7 @@ observe_content_security_header(#content_security_header{}, CSP, Context) ->
             ConnectSrc1 = lists:delete(<<"https://www.googletagmanager.com">>, ConnectSrc),
             CSP1#content_security_header{
                 img_src = ImgSrc1,
-                script_src = ScriptSrc,
+                script_src = ScriptSrc1,
                 connect_src = ConnectSrc1
             }
     end.

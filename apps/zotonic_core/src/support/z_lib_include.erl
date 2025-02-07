@@ -191,6 +191,7 @@ script_element(JsFiles, Args, Context) ->
             <<"<script src=\"">>, JsUrl, <<"\"">>,
                 AsyncDeferAttr,
                 <<" type=\"text/javascript\"">>,
+                <<" nonce=\"">>, z_context:csp_nonce(Context), "\"",
             <<">">>,
             <<"</script>">>
         ]).
