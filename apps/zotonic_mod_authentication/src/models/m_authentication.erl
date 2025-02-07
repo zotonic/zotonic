@@ -89,7 +89,7 @@ m_get([ <<"is_rememberme">> | Rest ], _Msg, Context) ->
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
--spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> ok | {ok, term()} | {error, term()}.
+-spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:post_return().
 m_post([ <<"request-reminder">> ], #{ payload := Payload }, Context) when is_map(Payload) ->
     request_reminder(Payload, Context);
 m_post([ <<"service-confirm">> ], #{ payload := Payload }, Context) when is_map(Payload) ->
