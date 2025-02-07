@@ -56,7 +56,7 @@ m_get([ Key | Rest ], _Msg, Context) ->
             Error
     end.
 
--spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> ok | {error, term()}.
+-spec m_post( list( binary() ), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:post_return().
 m_post([ Key ], #{ payload := Payload }, Context) ->
     store(Key, Payload, Context);
 m_post(_Path, _Msg, _Context) ->
