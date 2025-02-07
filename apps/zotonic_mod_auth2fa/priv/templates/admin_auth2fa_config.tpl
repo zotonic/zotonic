@@ -17,11 +17,11 @@
     <p>{_ You can use two-factor authentication apps such as <a rel="noopener noreferrer" target="_blank" href="https://support.google.com/accounts/answer/1066447">Google Authenticator</a> or <a rel="noopener noreferrer" target="_blank" href="https://duo.com/product/trusted-users/two-factor-authentication/duo-mobile">Duo Mobile</a>. _}</p>
 </div>
 
-<div class="widget">
-    {% if m.acl.use.mod_admin_config %}
+{% if m.acl.use.mod_admin_config %}
+    <div class="widget">
         <h3 class="widget-header">{_ Default configuration _}</h3>
         <div class="widget-content">
-            <p>{_ Define who should use two-factor authentication, this is the default setting for all users. _}</p>
+            <p class="help-block">{_ Define who should use two-factor authentication, this is the default setting for all users. _}</p>
 
             <div class="form-group">
                 <div>
@@ -68,32 +68,56 @@
                     <p class="help-block">{_ The user will be prompted to set the two-factor authentication before being allowed to log in. _}</p>
                 </div>
             </div>
-
-            {% if m.modules.active.mod_acl_user_groups %}
-                <h3>{_ User group configuration _}</h3>
-
-                <p>{_ It is possible to force two-factor authentication for a specific user group, regardless of the setting above. _}</p>
-                <p>{_ Check the user groups for which two-factor authentication should be forced. _}</p>
-
-                <ul class="list-unstyled">
-                    {% for cg in m.hierarchy.acl_user_group.tree_flat %}
-                        {% with cg.id as cg_id %}
-                        <li>
-                            <label class="checkbox-inline">
-                                {{ cg.indent }}
-                                <input type="checkbox" id="{{ #cg.cg_id }}" {% if cg_id.acl_2fa %}checked{% endif %} value="3" {% if not cg_id.is_editable %}disabled{% endif %}>
-                                {{ cg_id.title }}
-                            </label>
-                            {% wire id=#cg.cg_id
-                                    postback={auth2fa_ug id=cg_id}
-                                    delegate=`mod_auth2fa`
-                            %}
-                        </li>
-                        {% endwith %}
-                    {% endfor %}
-                </ul>
-            {% endif %}
         </div>
-    {% endif %}
-</div>
+    </div>
+{% endif %}
+
+{% if m.modules.active.mod_acl_user_groups and m.acl.use.mod_admin_config %}
+    <div class="widget">
+        <h3 class="widget-header">{_ User group configuration _}</h3>
+        <div class="widget-content">
+            <p class="help-block">{_ It is possible to force two-factor authentication for a specific user group, regardless of the setting above. _}</p>
+
+            <table class="table table-hover widget-content">
+                <thead>
+                    <tr class="active">
+                        <th class="col-sm-4">{_ User group _}</th>
+                        <th class="col-sm-2 text-center">{_ Optional _}</th>
+                        <th class="col-sm-2 text-center">{_ Ask after logging in _}</th>
+                        <th class="col-sm-2 text-center">{_ Ask on every page _}</th>
+                        <th class="col-sm-2 text-center">{_ Force two-factor authentication _}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for cg in m.hierarchy.acl_user_group.tree_flat %}
+                    {% with cg.id as cg_id %}
+                        <tr>
+                            <td class="active">{{ cg.indent }}{{ cg_id.title }}</td>
+
+                            {% for option in [0, 1, 2, 3] %}
+                                {% with [#cg.cg_id, option]|join:"-" as radio_id %}
+                                    <td class="text-center">
+                                        <input
+                                            type="radio"
+                                            name="{{ #cg.cg_id }}"
+                                            id="{{ radio_id }}"
+                                            {% if cg_id.acl_2fa == option %}checked{% endif %}
+                                            value="{{ option }}"
+                                            {% if not cg_id.is_editable %}disabled{% endif %}
+                                        />
+                                    </td>
+                                    {% wire id=radio_id
+                                        postback={auth2fa_ug id=cg_id}
+                                        delegate=`mod_auth2fa`
+                                    %}
+                                {% endwith %}
+                            {% endfor %}
+                        </tr>
+                    {% endwith %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endif %}
 {% endblock %}
