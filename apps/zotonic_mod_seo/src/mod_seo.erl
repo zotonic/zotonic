@@ -59,8 +59,7 @@ observe_content_security_header(#content_security_header{}, CSP, Context) ->
             ],
             ImgSrc1 = lists:delete(<<"https://www.googletagmanager.com">>, ImgSrc),
             ScriptSrc = [
-                <<"https://*.googletagmanager.com">>,
-                <<"'strict-dynamic'">>
+                <<"https://*.googletagmanager.com">>
                 | CSP1#content_security_header.script_src
             ],
             ConnectSrc = [
