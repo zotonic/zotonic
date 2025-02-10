@@ -30,7 +30,7 @@
             <p class="help-block">
                 {_ Give the redirect URLs that are valid for the website performing the OAuth2 authorization. _}
                 {_ These must be complete URLs, but without the query (?..) or hash (#...) parts. _}<br>
-                {_ For Zotonic sites this you can enter the domain name(s) of the website. _}
+                {_ For Zotonic sites you can enter the domain name(s) of the website that wants to access the data. _}
             </p>
         </div>
     </div>
