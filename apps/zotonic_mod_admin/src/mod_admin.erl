@@ -545,7 +545,7 @@ event(#postback{ message = {ensure_refers, _} }, Context) ->
     case z_acl:is_admin(Context) of
         true ->
             z_admin_refers:insert_ensure_refers_all_task(Context),
-            z_render:growl(?__("Scheduled background task to check all refers connections.", Context), Context);
+            z_render:growl(?__("Scheduled a background task to check all refers connections.", Context), Context);
         false ->
             z_render:growl_error(?__("Sorry, only an admin is allowed to do this", Context), Context)
     end;

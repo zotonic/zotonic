@@ -2199,7 +2199,7 @@ msgid "Save this page."
 msgstr ""
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:548
-msgid "Scheduled background task to check all refers connections."
+msgid "Scheduled a background task to check all refers connections."
 msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:303
