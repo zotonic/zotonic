@@ -74,11 +74,11 @@ queue(Path, Props, Context) ->
             end
         end, Context).
 
-%% @doc Fetch the next batch of queued uploads, at least 10 minutes old.
+%% @doc Fetch the next batch of queued uploads, at least 1 minute old.
 fetch_queue(Context) ->
     z_db:assoc("select *
                 from filestore_queue
-                where created < now() - interval '10 min'
+                where created < now() - interval '1 min'
                 limit 200", Context).
 
 dequeue(Id, Context) ->
