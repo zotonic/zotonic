@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-02-11 11:16\n"
+"PO-Revision-Date: 2025-02-11 13:18\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -2133,8 +2133,8 @@ msgid "Save this page."
 msgstr "Enregistrer cette page"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:548
-msgid "Scheduled background task to check all refers connections."
-msgstr "Tâche en arrière-plan planifiée pour vérifier toutes les connexions de référence."
+msgid "Scheduled a background task to check all refers connections."
+msgstr "Une tâche d'arrière-plan a été planifiée pour vérifier toutes les connexions de référence."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:303
 msgid "Search"
@@ -9135,7 +9135,7 @@ msgstr "Toutes les pages de cette catégorie"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:98
 msgid "Allowing this is a security risk."
-msgstr ""
+msgstr "Autoriser cela constitue un risque pour la sécurité."
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:153
 msgid "Ask Google to exclude all “{cat}” pages"
@@ -9183,7 +9183,7 @@ msgstr "Exclure ce site des moteurs de recherche"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:97
 msgid "For some GTM options (like custom templates) to work, Google allows code to be added to your website.<br>Anyone with access to the Google Tag Manager settings can run arbitrary code on your website.<br>To make this possible we have to lower the overall security of your website."
-msgstr ""
+msgstr "Pour que certaines options GTM (comme les modèles personnalisés) fonctionnent, Google autorise l'ajout de code à votre site Web.<br>Toute personne ayant accès aux paramètres de Google Tag Manager peut exécuter du code arbitraire sur votre site Web.<br>Pour rendre cela possible, nous devons réduire la sécurité globale de votre site Web."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:17
 msgid "General SEO Optimization"
@@ -9211,7 +9211,7 @@ msgstr "Vous trouverez ici des réglages pour optimiser l'indexation de votre si
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:101
 msgid "I accept the security risk of adding custom code in Google Tag Manager"
-msgstr ""
+msgstr "J'accepte le risque de sécurité lié à l'ajout de code personnalisé dans Google Tag Manager"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:50
 msgid "If your site does not have a search page, check this box to prevent displaying a search box on Google et al."
