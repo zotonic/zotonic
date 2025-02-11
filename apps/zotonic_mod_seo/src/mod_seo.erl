@@ -46,7 +46,7 @@ observe_content_security_header(#content_security_header{}, CSP, Context) ->
             CSP#content_security_header{
                 script_src = [
                     <<"https://www.googletagmanager.com">>,
-                    <<"strict-dynamic">>
+                    <<"'strict-dynamic'">>
                     | CSP#content_security_header.script_src
                 ],
                 img_src = [
