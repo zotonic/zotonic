@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-02-11 11:17\n"
+"PO-Revision-Date: 2025-02-11 13:18\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -1119,7 +1119,7 @@ msgstr "Kon niets detecteren om te importeren van die URL of insluitcode."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:76
 msgid "Could not reload the site configuration, check the logs."
-msgstr "Kan de siteconfiguratie niet opnieuw laden, controleer de logboeken."
+msgstr "De siteconfiguratie kon niet opnieuw worden geladen. Controleer de logboeken."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:6
 msgid "Count"
@@ -1873,7 +1873,7 @@ msgstr "Doorlopend"
 
 #: apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:4./apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_text.tpl:4
 msgid "Page block"
-msgstr "Pagina blokkeren"
+msgstr "Paginablok"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:10
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:3./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:193
@@ -2068,7 +2068,7 @@ msgstr "Siteconfiguratie opnieuw laden"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:103
 msgid "Reload the configuration of a site. Note that not all site configurations can be done whilst the site is running."
-msgstr "De configuratie van een site opnieuw laden. Niet alle siteconfiguraties kunnen worden uitgevoerd terwijl de site actief is."
+msgstr "Laad de configuratie van een site opnieuw. Let op: niet alle siteconfiguraties kunnen worden uitgevoerd terwijl de site actief is."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:27./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:29
 msgid "Remarks"
@@ -2137,8 +2137,8 @@ msgid "Save this page."
 msgstr "Bewaar deze pagina."
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:548
-msgid "Scheduled background task to check all refers connections."
-msgstr "Geplande achtergrondtaak om alle verwijzingsverbindingen te controleren."
+msgid "Scheduled a background task to check all refers connections."
+msgstr "Een achtergrondtaak ingepland om alle verwijzingen te controleren."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:303
 msgid "Search"
@@ -3990,7 +3990,7 @@ msgstr "De volgende modules zullen niet starten omdat ze afhankelijkheden missen
 
 #: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
 msgid "The modules below are activated but could not be found."
-msgstr "De onderstaande modules zijn geactiveerd maar konden niet worden gevonden."
+msgstr "De onderstaande modules zijn geactiveerd, maar konden niet worden gevonden."
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:1
 msgid "There are modules depending on"
@@ -4900,7 +4900,7 @@ msgstr "Stuur bevestigingsmail"
 
 #: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:3./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:24
 msgid "Sessions overview"
-msgstr "Overzicht sessies"
+msgstr "Sessieoverzicht"
 
 #: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:39
 msgid "Sessions that have been used by a browser in the last hour."
@@ -5047,7 +5047,7 @@ msgstr "U kunt inloggen met de volgende externe dienst"
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:9./apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:18
 msgid "You have requested a new password for"
-msgstr "U hebt een nieuw wachtwoord aangevraagd voor"
+msgstr "U heeft een nieuw wachtwoord aangevraagd voor"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:75
 msgid "You have to share your email address to be able to log in."
@@ -5236,12 +5236,12 @@ msgstr "Back-ups versleutelen"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:18
 msgid "Encrypted"
-msgstr "Gecodeerd"
+msgstr "Versleuteld"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:40
 msgid "Encryption is enabled, but there is no encryption password. Please\n"
 "      make sure there is an encryption password in the settings."
-msgstr "Codering is ingeschakeld, maar er is geen coderingswachtwoord.\n"
+msgstr "Versleuteling is ingeschakeld, maar er is geen coderingswachtwoord.\n"
 "      controleer of er een coderingswachtwoord in de instellingen staat."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:15
@@ -5946,7 +5946,7 @@ msgstr "Om meer informatie over het gebruik van cookies toe te voegen, kan je he
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:17
 msgid "<b>NB</b> connected pages and images have their own rights."
-msgstr "<b>NB</b> Aangesloten pagina's en afbeeldingen hebben hun eigen rechten."
+msgstr "<b>NB</b> gekoppelde pagina's en afbeeldingen hebben hun eigen rechten."
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:24
 msgid "All Rights Reserved"
@@ -6034,11 +6034,11 @@ msgstr "Actie"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:213
 msgid "All <tt>{extends}</tt> and <tt>{overrules}</tt> statements are referring to existing templates."
-msgstr "Alle <tt>{extends}</tt> en <tt>{overrules}</tt> uitspraken verwijzen naar bestaande sjablonen."
+msgstr "Alle <tt>{extends}</tt> en <tt>{overrules}</tt> statements verwijzen naar bestaande sjablonen."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:163
 msgid "All <tt>{optional}</tt> statements are referring to existing templates."
-msgstr "Alle <tt>{optional}</tt> uitspraken verwijzen naar bestaande sjablonen."
+msgstr "Alle <tt>{optional}</tt> statements verwijzen naar bestaande sjablonen."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:101
 msgid "All non-optional <tt>{include}</tt> statements are referring to existing templates."
@@ -6496,7 +6496,7 @@ msgstr "Andere sessie traceren..."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:57
 msgid "Tracing this session..."
-msgstr "Deze sessie volgen..."
+msgstr "Deze sessie wordt gevolgd..."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:126
 msgid "Type of include"
@@ -6713,7 +6713,7 @@ msgstr "URL voor de e-mail relay API"
 
 #: apps/zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:6
 msgid "Zotonic Relay"
-msgstr "Zotonic relais"
+msgstr "Zotonic Relay"
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:7
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_hidden.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:4
@@ -7949,7 +7949,7 @@ msgid "It appears you have sent\n"
 "        safety-caution, it is impossible to send the same page twice to\n"
 "        the same e-mail address."
 msgstr "Het lijkt erop dat je\n"
-"        deze pagina al een keer naar deze lijst hebt gestuurd. Als u de pagina nogmaals verstuurt, krijgen alleen\n"
+"        deze pagina al een keer naar deze lijst hebt gestuurd. Als je de pagina nogmaals verstuurt, krijgen alleen\n"
 "        de ontvangers die de e-mail nog niet hebben ontvangen deze. Als veiligheidsmaatregel\n"
 "        is het onmogelijk om dezelfde pagina twee keer naar\n"
 "        hetzelfde e-mailadres te sturen."
@@ -9137,7 +9137,7 @@ msgstr "Alle pagina's van deze categorie"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:98
 msgid "Allowing this is a security risk."
-msgstr ""
+msgstr "Dit toestaan is een veiligheidsrisico."
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:153
 msgid "Ask Google to exclude all “{cat}” pages"
@@ -9185,7 +9185,7 @@ msgstr "Sluit deze site uit voor zoekmachines"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:97
 msgid "For some GTM options (like custom templates) to work, Google allows code to be added to your website.<br>Anyone with access to the Google Tag Manager settings can run arbitrary code on your website.<br>To make this possible we have to lower the overall security of your website."
-msgstr ""
+msgstr "Om sommige GTM-opties (zoals aangepaste sjablonen) te laten werken, staat Google toe dat code wordt toegevoegd aan je website.<br>Iedereen met toegang tot de instellingen van Google Tag Manager kan willekeurige code uitvoeren op je website.<br>Om dit mogelijk te maken, moeten we de algehele beveiliging van je website verlagen."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:17
 msgid "General SEO Optimization"
@@ -9213,7 +9213,7 @@ msgstr "Hier vindt je instellingen voor het optimaliseren van het indexeren van 
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:101
 msgid "I accept the security risk of adding custom code in Google Tag Manager"
-msgstr ""
+msgstr "Ik accepteer het veiligheidsrisico van het toevoegen van aangepaste code in Google Tag Manager"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:50
 msgid "If your site does not have a search page, check this box to prevent displaying a search box on Google et al."
