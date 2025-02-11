@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-02-07 15:02\n"
+"PO-Revision-Date: 2025-02-11 13:18\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -140,7 +140,7 @@ msgstr "Bestand met toegangsregels"
 msgid "ACL user group"
 msgstr "Gebruikersgroep"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:550
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:571
 msgid "Access control rules"
 msgstr "Toegangsregels"
 
@@ -236,7 +236,7 @@ msgstr "Categorie en paginagroep"
 msgid "Change category and/or content group..."
 msgstr "Verander categorie en/of paginagroep..."
 
-#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:144
+#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:145
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:122
 msgid "Changed configuration."
 msgstr "Configuratie veranderd."
@@ -263,7 +263,7 @@ msgstr "Samenwerkingsgroep beheerders"
 msgid "Collaboration group members"
 msgstr "Samenwerkingsgroep leden"
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:546
+#: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:567
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:123
 msgid "Collaboration groups"
 msgstr "Samenwerkingsgroepen"
@@ -281,7 +281,7 @@ msgid "Consider resource authors to be owner."
 msgstr "Beschouw de auteurs van resources als eigenaar."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:19
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4./apps/zotonic_mod_admin/src/mod_admin.erl:96
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4./apps/zotonic_mod_admin/src/mod_admin.erl:104
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:66
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:113
 msgid "Content"
@@ -326,7 +326,7 @@ msgstr "Verwijder"
 msgid "Delete all user groups"
 msgstr "Verwijder alle gebruikersgroepen"
 
-#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:132
+#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:133
 msgid "Delete is canceled, there are users in the user groups."
 msgstr "Het verwijderen is afgebroken: er zijn nog gebruikers in de gebruikersgroepen."
 
@@ -334,7 +334,7 @@ msgstr "Het verwijderen is afgebroken: er zijn nog gebruikers in de gebruikersgr
 msgid "Delete user group and move users"
 msgstr "Verwijder gebruikersgroep en verplaats gebruikers"
 
-#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:177
+#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:178
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:75./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:93
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:86./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:92
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:79./apps/zotonic_mod_content_groups/src/mod_content_groups.erl:107
@@ -453,7 +453,7 @@ msgid "Module"
 msgstr "Module"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:25
-#: apps/zotonic_mod_admin/src/mod_admin.erl:122
+#: apps/zotonic_mod_admin/src/mod_admin.erl:130
 #: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:3./apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:7./apps/zotonic_mod_admin_modules/src/mod_admin_modules.erl:103
 msgid "Modules"
 msgstr "Modules"
@@ -470,11 +470,11 @@ msgstr "Verplaats naar een andere"
 msgid "No ACL rules"
 msgstr "Geen toegangsregels gedefinieerd"
 
-#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:170
+#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:171
 msgid "Not all user groups could be deleted."
 msgstr "Niet alle gebruikersgroepen konden worden verwijderd."
 
-#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:150
+#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:151
 msgid "Not allowed to change ACL options."
 msgstr "Het is niet toegestaan om ACL-opties te wijzigen."
 
@@ -581,7 +581,7 @@ msgstr "Toon privégegevens aan"
 msgid "Show this ACL user group first:"
 msgstr "Toon deze gebruikersgroep eerst"
 
-#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:111./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:127
+#: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:112./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:128
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:52./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:68
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:61./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:76
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:56./apps/zotonic_mod_content_groups/src/mod_content_groups.erl:72
@@ -672,7 +672,7 @@ msgstr "Gebruik gepubliceerde regels"
 msgid "Use the following URL to test the access control rules before publishing them."
 msgstr "Gebruik de volgende URL om de regels uit te proberen voordat je ze publiceert."
 
-#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:541
+#: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3./apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:562
 msgid "User groups"
 msgstr "Gebruikersgroepen"
 
@@ -854,7 +854,7 @@ msgstr "Media toevoegen aan pagina"
 msgid "Add note"
 msgstr "Notitie toevoegen"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:709./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
+#: apps/zotonic_mod_admin/src/mod_admin.erl:726./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
 msgid "Added the connection to"
 msgstr "Connectie gemaakt naar"
 
@@ -957,7 +957,7 @@ msgstr "Terzijde"
 msgid "Attached media"
 msgstr "Gekoppelde media"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:127
+#: apps/zotonic_mod_admin/src/mod_admin.erl:135
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:50
 msgid "Auth"
 msgstr "Authenticatie"
@@ -1119,7 +1119,7 @@ msgstr "Kon niets detecteren om te importeren van die URL of insluitcode."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:76
 msgid "Could not reload the site configuration, check the logs."
-msgstr "Kan de siteconfiguratie niet opnieuw laden, controleer de logboeken."
+msgstr "De siteconfiguratie kon niet opnieuw worden geladen. Controleer de logboeken."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:6
 msgid "Count"
@@ -1161,7 +1161,7 @@ msgstr "Aanmaakdatum, nieuwste eerst"
 msgid "Creation date, oldest first"
 msgstr "Aanmaakdatum, oudste eerst"
 
-#: apps/zotonic_mod_admin/priv/templates/admin.tpl:4./apps/zotonic_mod_admin/priv/templates/admin.tpl:8./apps/zotonic_mod_admin/src/mod_admin.erl:91
+#: apps/zotonic_mod_admin/priv/templates/admin.tpl:4./apps/zotonic_mod_admin/priv/templates/admin.tpl:8./apps/zotonic_mod_admin/src/mod_admin.erl:99
 msgid "Dashboard"
 msgstr "Dashboard"
 
@@ -1209,7 +1209,7 @@ msgstr "Verwijder geselecteerde pagina's"
 msgid "Delete this page."
 msgstr "Verwijder deze pagina."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:542
+#: apps/zotonic_mod_admin/src/mod_admin.erl:559
 msgid "Deleted tasks."
 msgstr "Verwijderde taken."
 
@@ -1324,7 +1324,7 @@ msgstr "Insluiten"
 msgid "Embed code will be sanitized for allowed sites and html."
 msgstr "Insluitcode wordt opgeschoond voor toegestane sites en html."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:177
+#: apps/zotonic_mod_admin/src/mod_admin.erl:192
 msgid "Embed page | a citation, popup, or link to another page"
 msgstr "Pagina insluiten | een citaat, pop-up of link naar een andere pagina"
 
@@ -1435,7 +1435,7 @@ msgstr "Bestand / mediainhoud"
 msgid "File size"
 msgstr "Bestandsgrootte"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:447
+#: apps/zotonic_mod_admin/src/mod_admin.erl:464
 msgid "File uploaded to the drop folder, will be handled shortly."
 msgstr "Bestand dat is geüpload naar de drop-map, wordt binnenkort verwerkt."
 
@@ -1522,7 +1522,7 @@ msgstr "Heeft medium gekoppeld"
 msgid "Header"
 msgstr "Kopregel"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:175
+#: apps/zotonic_mod_admin/src/mod_admin.erl:190
 msgid "Header | a big header"
 msgstr "Koptekst | een grote koptekst"
 
@@ -1663,7 +1663,7 @@ msgstr "Maak een nieuwe pagina of media-item"
 msgid "Matching"
 msgstr "Voldoet aan"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:3./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:78./apps/zotonic_mod_admin/src/mod_admin.erl:105
+#: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:3./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:78./apps/zotonic_mod_admin/src/mod_admin.erl:113
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:100./apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:103./apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:113
 msgid "Media"
 msgstr "Media"
@@ -1873,7 +1873,7 @@ msgstr "Doorlopend"
 
 #: apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:4./apps/zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_text.tpl:4
 msgid "Page block"
-msgstr "Pagina blokkeren"
+msgstr "Paginablok"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:10
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:3./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:193
@@ -1892,7 +1892,7 @@ msgstr "Pagina-verwijzers"
 msgid "Page settings"
 msgstr "Pagina-instellingen"
 
-#: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:3./apps/zotonic_mod_admin/src/mod_admin.erl:100
+#: apps/zotonic_mod_admin/priv/templates/admin_overview.tpl:3./apps/zotonic_mod_admin/src/mod_admin.erl:108
 msgid "Pages"
 msgstr "Pagina's"
 
@@ -2068,7 +2068,7 @@ msgstr "Siteconfiguratie opnieuw laden"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_status.tpl:103
 msgid "Reload the configuration of a site. Note that not all site configurations can be done whilst the site is running."
-msgstr "De configuratie van een site opnieuw laden. Niet alle siteconfiguraties kunnen worden uitgevoerd terwijl de site actief is."
+msgstr "Laad de configuratie van een site opnieuw. Let op: niet alle siteconfiguraties kunnen worden uitgevoerd terwijl de site actief is."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:27./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_date_range.tpl:29
 msgid "Remarks"
@@ -2080,7 +2080,7 @@ msgstr "Opmerkingen"
 msgid "Remove"
 msgstr "Verwijder"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:713
+#: apps/zotonic_mod_admin/src/mod_admin.erl:730
 msgid "Removed the connection to"
 msgstr "Connectie verwijderd naar"
 
@@ -2114,7 +2114,7 @@ msgid "Runs the schema install for Zotonic core again."
 msgstr "Voert de schema-installatie voor de Zotonic core opnieuw uit."
 
 #: apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:74
-#: apps/zotonic_mod_seo/src/mod_seo.erl:84
+#: apps/zotonic_mod_seo/src/mod_seo.erl:105
 msgid "SEO"
 msgstr "SEO"
 
@@ -2136,9 +2136,9 @@ msgstr "Bewaar de pagina en bekijk aan de voorkant."
 msgid "Save this page."
 msgstr "Bewaar deze pagina."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:531
-msgid "Scheduled background task to check all refers connections."
-msgstr "Geplande achtergrondtaak om alle verwijzingsverbindingen te controleren."
+#: apps/zotonic_mod_admin/src/mod_admin.erl:548
+msgid "Scheduled a background task to check all refers connections."
+msgstr "Een achtergrondtaak ingepland om alle verwijzingen te controleren."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:303
 msgid "Search"
@@ -2252,28 +2252,28 @@ msgstr "Sommige taken worden opnieuw geprobeerd.<br>Totaal aantal fouten: {total
 msgid "Something went wrong. Sorry."
 msgstr "Er ging iets mis, onze excuses."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:420
+#: apps/zotonic_mod_admin/src/mod_admin.erl:437
 msgid "Sorry, could not handle this filename."
 msgstr "Deze bestandsnaam kon niet worden verwerkt."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:459
+#: apps/zotonic_mod_admin/src/mod_admin.erl:476
 msgid "Sorry, could not move the file to the drop folder."
 msgstr "Sorry, kon het bestand niet verplaatsen naar de drop-map."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:533./apps/zotonic_mod_admin/src/mod_admin.erl:544
+#: apps/zotonic_mod_admin/src/mod_admin.erl:550./apps/zotonic_mod_admin/src/mod_admin.erl:561
 #: apps/zotonic_mod_menu/src/mod_menu.erl:88
 msgid "Sorry, only an admin is allowed to do this"
 msgstr "Dit mag alleen worden gedaan door een admin"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:395./apps/zotonic_mod_admin/src/mod_admin.erl:406
+#: apps/zotonic_mod_admin/src/mod_admin.erl:412./apps/zotonic_mod_admin/src/mod_admin.erl:423
 msgid "Sorry, that page is unknown."
 msgstr "Deze pagina is onbekend."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:397./apps/zotonic_mod_admin/src/mod_admin.erl:408
+#: apps/zotonic_mod_admin/src/mod_admin.erl:414./apps/zotonic_mod_admin/src/mod_admin.erl:425
 msgid "Sorry, you are not allowed to edit notes."
 msgstr "Je mag geen notities bewerken."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:463
+#: apps/zotonic_mod_admin/src/mod_admin.erl:480
 msgid "Sorry, you are not allowed to upload drop folder files."
 msgstr "Sorry, het is niet toegestaan om drop-mapbestanden te uploaden."
 
@@ -2281,11 +2281,11 @@ msgstr "Sorry, het is niet toegestaan om drop-mapbestanden te uploaden."
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "Je hebt geen rechten om deze verbinding te maken."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:695
+#: apps/zotonic_mod_admin/src/mod_admin.erl:712
 msgid "Sorry, you have no permission to add the connection."
 msgstr "Je hebt geen rechten om deze verbinding te maken."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:697
+#: apps/zotonic_mod_admin/src/mod_admin.erl:714
 msgid "Sorry, you have no permission to delete the connection."
 msgstr "Je hebt geen rechten om deze verbinding te verwijderen."
 
@@ -2293,7 +2293,7 @@ msgstr "Je hebt geen rechten om deze verbinding te verwijderen."
 msgid "Sort by"
 msgstr "Sorteer op"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:174
+#: apps/zotonic_mod_admin/src/mod_admin.erl:189
 msgid "Standard page block types"
 msgstr "Standaard typen paginablokken"
 
@@ -2306,7 +2306,7 @@ msgstr "Begint"
 msgid "State"
 msgstr "Staat"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:136
+#: apps/zotonic_mod_admin/src/mod_admin.erl:144
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:12
 #: apps/zotonic_mod_logging/priv/templates/admin_log_email.tpl:109
@@ -2324,7 +2324,7 @@ msgstr "Adresregel 1"
 msgid "Street Line 2"
 msgstr "Adresregel 2"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:117
+#: apps/zotonic_mod_admin/src/mod_admin.erl:125
 msgid "Structure"
 msgstr "Structuur"
 
@@ -2353,7 +2353,7 @@ msgstr "Achternaam"
 msgid "Swap"
 msgstr "Wissel"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:131
+#: apps/zotonic_mod_admin/src/mod_admin.erl:139
 msgid "System"
 msgstr "Systeem"
 
@@ -2395,7 +2395,7 @@ msgstr "Test zoekvraag"
 msgid "Text"
 msgstr "Tekst"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:176
+#: apps/zotonic_mod_admin/src/mod_admin.erl:191
 msgid "Text | a (rich) text block"
 msgstr "Tekst | een (rijk) tekstblok"
 
@@ -2585,7 +2585,7 @@ msgstr "Unieke URI"
 msgid "Unpublished"
 msgstr "Ongepubliceerd"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_item.tpl:29./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:29./apps/zotonic_mod_admin/src/mod_admin.erl:703./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:71./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:127
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_item.tpl:29./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:29./apps/zotonic_mod_admin/src/mod_admin.erl:720./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:71./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:127
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58./apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:57
 #: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
@@ -2866,7 +2866,7 @@ msgid "name"
 msgstr "naam"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_view_types.tpl:2./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:62
-#: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:19
+#: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:39
 msgid "page"
 msgstr "pagina"
 
@@ -3571,7 +3571,7 @@ msgstr "Stel gebruikersnaam / wachtwoord in"
 
 #: apps/zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:73./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:128
-#: apps/zotonic_mod_survey/src/mod_survey.erl:794./apps/zotonic_mod_survey/src/mod_survey.erl:802
+#: apps/zotonic_mod_survey/src/mod_survey.erl:807./apps/zotonic_mod_survey/src/mod_survey.erl:815
 msgid "Sorry"
 msgstr "Excuses"
 
@@ -3990,7 +3990,7 @@ msgstr "De volgende modules zullen niet starten omdat ze afhankelijkheden missen
 
 #: apps/zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:15
 msgid "The modules below are activated but could not be found."
-msgstr "De onderstaande modules zijn geactiveerd maar konden niet worden gevonden."
+msgstr "De onderstaande modules zijn geactiveerd, maar konden niet worden gevonden."
 
 #: apps/zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_deactivate_depending.tpl:1
 msgid "There are modules depending on"
@@ -4900,7 +4900,7 @@ msgstr "Stuur bevestigingsmail"
 
 #: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:3./apps/zotonic_mod_authentication/priv/templates/sessions.tpl:24
 msgid "Sessions overview"
-msgstr "Overzicht sessies"
+msgstr "Sessieoverzicht"
 
 #: apps/zotonic_mod_authentication/priv/templates/sessions.tpl:39
 msgid "Sessions that have been used by a browser in the last hour."
@@ -5047,7 +5047,7 @@ msgstr "U kunt inloggen met de volgende externe dienst"
 
 #: apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:9./apps/zotonic_mod_authentication/priv/templates/email_password_reset.tpl:18
 msgid "You have requested a new password for"
-msgstr "U hebt een nieuw wachtwoord aangevraagd voor"
+msgstr "U heeft een nieuw wachtwoord aangevraagd voor"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:75
 msgid "You have to share your email address to be able to log in."
@@ -5236,12 +5236,12 @@ msgstr "Back-ups versleutelen"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:18
 msgid "Encrypted"
-msgstr "Gecodeerd"
+msgstr "Versleuteld"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:40
 msgid "Encryption is enabled, but there is no encryption password. Please\n"
 "      make sure there is an encryption password in the settings."
-msgstr "Codering is ingeschakeld, maar er is geen coderingswachtwoord.\n"
+msgstr "Versleuteling is ingeschakeld, maar er is geen coderingswachtwoord.\n"
 "      controleer of er een coderingswachtwoord in de instellingen staat."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:15
@@ -5468,7 +5468,7 @@ msgstr "Browser"
 msgid "Browser Connectivity"
 msgstr "Browserconnectiviteit"
 
-#: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:29
+#: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:49
 msgid "CSV"
 msgstr "CSV"
 
@@ -5488,7 +5488,7 @@ msgstr "Verbinden..."
 msgid "Connection Test"
 msgstr "Verbindingstest"
 
-#: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:25
+#: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:45
 msgid "Excel Workbook"
 msgstr "Excel Workbook"
 
@@ -5520,11 +5520,11 @@ msgstr "Of de authenticatie met de server werkt."
 msgid "Index of"
 msgstr "Index van"
 
-#: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:23
+#: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:43
 msgid "JSON"
 msgstr "JSON"
 
-#: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:21
+#: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:41
 msgid "JSON-LD"
 msgstr "JSON-LD"
 
@@ -5700,7 +5700,7 @@ msgstr "Jouw browser zoals deze zich identificeert aan onze server en jouw IP-ad
 msgid "error"
 msgstr "fout"
 
-#: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:27
+#: apps/zotonic_mod_base/src/filters/filter_content_type_label.erl:47
 msgid "iCalendar"
 msgstr "iCalendar"
 
@@ -5946,7 +5946,7 @@ msgstr "Om meer informatie over het gebruik van cookies toe te voegen, kan je he
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:17
 msgid "<b>NB</b> connected pages and images have their own rights."
-msgstr "<b>NB</b> Aangesloten pagina's en afbeeldingen hebben hun eigen rechten."
+msgstr "<b>NB</b> gekoppelde pagina's en afbeeldingen hebben hun eigen rechten."
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:24
 msgid "All Rights Reserved"
@@ -6034,11 +6034,11 @@ msgstr "Actie"
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:213
 msgid "All <tt>{extends}</tt> and <tt>{overrules}</tt> statements are referring to existing templates."
-msgstr "Alle <tt>{extends}</tt> en <tt>{overrules}</tt> uitspraken verwijzen naar bestaande sjablonen."
+msgstr "Alle <tt>{extends}</tt> en <tt>{overrules}</tt> statements verwijzen naar bestaande sjablonen."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:163
 msgid "All <tt>{optional}</tt> statements are referring to existing templates."
-msgstr "Alle <tt>{optional}</tt> uitspraken verwijzen naar bestaande sjablonen."
+msgstr "Alle <tt>{optional}</tt> statements verwijzen naar bestaande sjablonen."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:101
 msgid "All non-optional <tt>{include}</tt> statements are referring to existing templates."
@@ -6496,7 +6496,7 @@ msgstr "Andere sessie traceren..."
 
 #: apps/zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:57
 msgid "Tracing this session..."
-msgstr "Deze sessie volgen..."
+msgstr "Deze sessie wordt gevolgd..."
 
 #: apps/zotonic_mod_development/priv/templates/_development_template_xref.tpl:126
 msgid "Type of include"
@@ -6713,7 +6713,7 @@ msgstr "URL voor de e-mail relay API"
 
 #: apps/zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:6
 msgid "Zotonic Relay"
-msgstr "Zotonic relais"
+msgstr "Zotonic Relay"
 
 #: apps/zotonic_mod_email_status/priv/templates/_email_status_view.tpl:7
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_category.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_hidden.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_long_answer.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_multiple_choice.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:4./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:4
@@ -7949,7 +7949,7 @@ msgid "It appears you have sent\n"
 "        safety-caution, it is impossible to send the same page twice to\n"
 "        the same e-mail address."
 msgstr "Het lijkt erop dat je\n"
-"        deze pagina al een keer naar deze lijst hebt gestuurd. Als u de pagina nogmaals verstuurt, krijgen alleen\n"
+"        deze pagina al een keer naar deze lijst hebt gestuurd. Als je de pagina nogmaals verstuurt, krijgen alleen\n"
 "        de ontvangers die de e-mail nog niet hebben ontvangen deze. Als veiligheidsmaatregel\n"
 "        is het onmogelijk om dezelfde pagina twee keer naar\n"
 "        hetzelfde e-mailadres te sturen."
@@ -9135,6 +9135,10 @@ msgstr "Voeg je eigen JSON-LD toe voor gestructureerde metagegevens. Dit vervang
 msgid "All pages of this category"
 msgstr "Alle pagina's van deze categorie"
 
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:98
+msgid "Allowing this is a security risk."
+msgstr "Dit toestaan is een veiligheidsrisico."
+
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:153
 msgid "Ask Google to exclude all “{cat}” pages"
 msgstr "Vraag Google om alle \"{cat}\"-pagina's uit te sluiten"
@@ -9143,15 +9147,15 @@ msgstr "Vraag Google om alle \"{cat}\"-pagina's uit te sluiten"
 msgid "Ask Google to not index this page"
 msgstr "Vraag Google om deze pagina niet te indexeren"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:113
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:132
 msgid "Bing Webmaster"
 msgstr "Bing Webmaster"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:110./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:111
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:129./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:130
 msgid "Bing Webmaster validation id"
 msgstr "Bing Webmaster validatie-id"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:100
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:119
 msgid "Copy the value of the content attribute in the meta tag provided by Google."
 msgstr "Kopieer de waarde van het content-attribuut in de meta tag verschaft door Google."
 
@@ -9171,13 +9175,17 @@ msgstr "Beschrijving op te nemen op elke pagina"
 msgid "Do not show site search action"
 msgstr "Geen sitezoekactie weergeven"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:100./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:113./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:127
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:119./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:132./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:146
 msgid "Enter here the verification code for"
 msgstr "Voer hier de verificatiecode in voor"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:66
 msgid "Exclude this site from search engines"
 msgstr "Sluit deze site uit voor zoekmachines"
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:97
+msgid "For some GTM options (like custom templates) to work, Google allows code to be added to your website.<br>Anyone with access to the Google Tag Manager settings can run arbitrary code on your website.<br>To make this possible we have to lower the overall security of your website."
+msgstr "Om sommige GTM-opties (zoals aangepaste sjablonen) te laten werken, staat Google toe dat code wordt toegevoegd aan je website.<br>Iedereen met toegang tot de instellingen van Google Tag Manager kan willekeurige code uitvoeren op je website.<br>Om dit mogelijk te maken, moeten we de algehele beveiliging van je website verlagen."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:17
 msgid "General SEO Optimization"
@@ -9187,7 +9195,7 @@ msgstr "Algemene instellingen SEO optimalisatie"
 msgid "Google Analytics tracking id"
 msgstr "Google Analytics tracking code"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:97./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:98./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:100
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:116./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:117./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:119
 msgid "Google Search Console"
 msgstr "Google Search Console"
 
@@ -9202,6 +9210,10 @@ msgstr "Google Tag Manager-ID"
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:9
 msgid "Here you find settings to optimize the indexing of your site by search engines."
 msgstr "Hier vindt je instellingen voor het optimaliseren van het indexeren van je site door zoekmachines."
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:101
+msgid "I accept the security risk of adding custom code in Google Tag Manager"
+msgstr "Ik accepteer het veiligheidsrisico van het toevoegen van aangepaste code in Google Tag Manager"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:50
 msgid "If your site does not have a search page, check this box to prevent displaying a search box on Google et al."
@@ -9247,7 +9259,7 @@ msgstr "SEO inhoud"
 msgid "SEO indexing of this page is disabled because it is in the “{cat}” category."
 msgstr "SEO-indexering van deze pagina is uitgeschakeld omdat deze zich in de categorie \"{cat}\" bevindt."
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:137
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:156
 msgid "Save SEO settings"
 msgstr "Bewaar SEO instellingen"
 
@@ -9279,15 +9291,15 @@ msgstr "URL voor de zoekactie op de site. Standaard ingesteld op:"
 msgid "Where can I find my tracking script?"
 msgstr "Waar kan ik mijn tracking script vinden?"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:127
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:146
 msgid "Yandex Webmaster"
 msgstr "Yandex Webmaster"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:124./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:125
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:143./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:144
 msgid "Yandex Webmaster validation id"
 msgstr "Yandex Webmaster validatie id"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:114./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:128
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:133./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:147
 msgid "You find this id in the content attribute of the meta tag, it has the format"
 msgstr "Je vindt dit id in het content-attribuut van de meta tag. Het heeft het formaat"
 
@@ -9878,7 +9890,7 @@ msgstr "Geaggregeerde resultaten van alle respondenten"
 msgid "Agree"
 msgstr "Akkoord"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:785
+#: apps/zotonic_mod_survey/src/mod_survey.erl:798
 msgid "Already submitted"
 msgstr "Reeds ingediend"
 
@@ -10530,7 +10542,7 @@ msgstr "Er ging iets mis"
 msgid "Sorry, could not insert the new person."
 msgstr "De nieuwe persoon kon niet worden toegevoegd."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:787
+#: apps/zotonic_mod_survey/src/mod_survey.erl:800
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
 msgstr "Sorry, je hebt je antwoorden al ingediend. Herlaad de pagina als je het formulier opnieuw wilt invullen."
 
@@ -10699,7 +10711,7 @@ msgstr "Validatie"
 msgid "View and edit results."
 msgstr "Resultaten bekijken en bewerken."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:795
+#: apps/zotonic_mod_survey/src/mod_survey.erl:808
 msgid "We are experiencing an overload, please try again in 10 minutes."
 msgstr "Er is een overbelasting. Probeer het over 10 minuten nog eens."
 
@@ -10735,7 +10747,7 @@ msgstr "Je hebt dit al ingevuld, maar je kan je vorige antwoorden wijzigen."
 msgid "You already filled this in."
 msgstr "Je hebt dit al ingevuld."
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:143./apps/zotonic_mod_survey/src/mod_survey.erl:159./apps/zotonic_mod_survey/src/mod_survey.erl:857
+#: apps/zotonic_mod_survey/src/mod_survey.erl:143./apps/zotonic_mod_survey/src/mod_survey.erl:159./apps/zotonic_mod_survey/src/mod_survey.erl:870
 msgid "You are not allowed to change these results."
 msgstr "Je hebt geen rechten om de resultaten te veranderen."
 
@@ -10751,7 +10763,7 @@ msgstr "Je hebt toestemming nodig om het formulier te bewerken, om de resultaten
 msgid "Your result"
 msgstr "Jouw resultaat"
 
-#: apps/zotonic_mod_survey/src/mod_survey.erl:803
+#: apps/zotonic_mod_survey/src/mod_survey.erl:816
 msgid "Your session was expired, please restart and try again."
 msgstr "Uw sessie is verlopen, start opnieuw op en probeer het opnieuw."
 
