@@ -19,11 +19,16 @@
                               controller_oauth2_access_token,
                               []},
 
-    % Admin screens for apps and consumers
+    % Admin screens for apps
     {admin_oauth2_apps, [ "admin", "oauth", "apps" ],
                         controller_admin,
                         [ {template, "admin_oauth2_apps.tpl"} ]},
 
+    {admin_oauth2_apps_tokens, [ "admin", "oauth", "apps", appid ],
+                        controller_admin,
+                        [ {template, "admin_oauth2_apps_tokens.tpl"} ]},
+
+    % Admin screens for consumers
     {admin_oauth2_consumers, [ "admin", "oauth", "consumers" ],
                         controller_admin,
                         [ {template, "admin_oauth2_consumers.tpl"} ]}

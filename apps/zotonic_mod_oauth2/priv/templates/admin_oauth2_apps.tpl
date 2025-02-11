@@ -70,14 +70,22 @@
                         <td>{{ app.modified|date:_"d M Y, H:i" }}</td>
                         <td>{{ app.created|date:_"d M Y, H:i" }}</td>
                         <td>{{ app.token_count }}</td>
+                        <td>
+                            <button class="btn btn-default" id="{{ #edit.id }}">
+                                {_ Edit App _}
+                            </button>
+                            {% wire id=#edit.id
+                                    action={dialog_open
+                                        template="_dialog_oauth2_app.tpl"
+                                        title=_"Edit OAuth2 App"
+                                        app_id=app.id
+                                    }
+                            %}
+                            <a class="btn btn-default" href="{% url admin_oauth2_apps_tokens appid=app.id %}">
+                                {_ Access tokens _}
+                            </a>
+                        </td>
                     </tr>
-                    {% wire id=#app.id
-                            action={dialog_open
-                                template="_dialog_oauth2_app.tpl"
-                                title=_"Edit OAuth2 App"
-                                app_id=app.id
-                            }
-                    %}
                 {% endwith %}
             {% endfor %}
         </body>

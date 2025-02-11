@@ -26,9 +26,8 @@
 
         <div class="form-group">
             <div class="label-floating">
-                <textarea id="{{ #redirect_urls }}" class="form-control" name="redirect_urls" required placeholder="{_ Valid redirect URLs, one per line _}">{{ app.redirect_urls|escape }}</textarea>
+                <textarea id="{{ #redirect_urls }}" class="form-control" name="redirect_urls" placeholder="{_ Valid redirect URLs, one per line _}">{{ app.redirect_urls|escape }}</textarea>
                 <label class="control-label" for="redirect_urls">{_ Valid redirect URLs, one per line _}</label>
-                {% validate id=#redirect_urls name="redirect_urls" type={presence} %}
                 <p class="help-block">
                     {_ Give the redirect URLs that are valid for the website performing the OAuth2 authorization. _}
                     {_ These must be complete URLs, but without the query (?..) or hash (#...) parts. _}<br>
@@ -43,17 +42,6 @@
                     <p>
                         <label>{_ App ID _}</label><br>
                         <tt>{{ app.id|escape }}</tt>
-                    </p>
-                    <p>
-                        <button id="{{ #generate }}" class="btn btn-default">{_ Generate my access token _}</button>
-                        {% wire id=#generate
-                                action={confirm
-                                    text=_"If you have already a token then it will be replaces with the new one."
-                                    ok=_"Generate access token"
-                                    postback={oauth2_app_token_generate app_id=app.id}
-                                    delegate=`mod_oauth2`
-                                }
-                        %}
                     </p>
                 </div>
                 <div class="col-sm-6">

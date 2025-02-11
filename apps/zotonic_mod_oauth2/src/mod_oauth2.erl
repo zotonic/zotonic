@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019-2022 Marc Worrell
+%% @copyright 2019-2025 Marc Worrell
 %% @doc OAuth2 (https://tools.ietf.org/html/draft-ietf-oauth-v2-26)
+%% @end
 
-%% Copyright 2019-2022 Marc Worrell
+%% Copyright 2019-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -84,6 +85,40 @@ event(#postback{ message={oauth2_app_delete, [ {app_id, AppId} ]} }, Context) ->
         {error, _} ->
             z_render:growl_error(?__("Could not insert the App.", Context), Context)
     end;
+event(#submit{ message={oauth2_app_token_new, [ {app_id, AppId} ]} }, Context) ->
+    TPs = #{
+        <<"is_read_only">> => z_convert:to_bool(z_context:get_q(<<"is_read_only">>, Context) ),
+        <<"is_full_access">> => true,
+        <<"note">> => z_convert:to_binary(z_context:get_q(<<"note">>, Context))
+    },
+    case m_rsc:rid(z_context:get_q(<<"user_id">>, Context), Context) of
+        undefined ->
+            z_render:growl(?__("Please select a user.", Context), Context);
+        UserId ->
+            case m_oauth2:insert_token(AppId, UserId, TPs, Context) of
+                {ok, TId} ->
+                    {ok, Token} = m_oauth2:encode_bearer_token(TId, undefined, Context),
+                    z_render:dialog(
+                        ?__("New access token", Context),
+                        "_dialog_oauth2_app_token_view.tpl",
+                        [
+                            {app_id, AppId},
+                            {token, Token},
+                            {backdrop, static},
+                            {action, {reload, []}}
+                        ],
+                        Context);
+                {error, _} ->
+                    z_render:growl_error(?__("Could not generate the access token.", Context), Context)
+            end
+    end;
+event(#postback{ message={oauth2_app_token_delete, [ {token_id, TokenId} ]} }, Context) ->
+    case m_oauth2:delete_token(TokenId, Context) of
+        ok ->
+            z_render:wire({reload, []}, Context);
+        {error, _} ->
+            z_render:growl_error(?__("Could not delete the token.", Context), Context)
+    end;
 event(#postback{ message={oauth2_app_token_generate, [ {app_id, AppId} ]} }, Context) ->
     TPs = #{
         <<"is_read_only">> => false,
@@ -95,7 +130,7 @@ event(#postback{ message={oauth2_app_token_generate, [ {app_id, AppId} ]} }, Con
             {ok, Token} = m_oauth2:encode_bearer_token(TId, undefined, Context),
             z_render:dialog(
                 ?__("New access token", Context),
-                "_dialog_oauth2_app_token.tpl",
+                "_dialog_oauth2_app_token_view.tpl",
                 [
                     {app_id, AppId},
                     {token, Token}

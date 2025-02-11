@@ -40,6 +40,7 @@
 
     user_groups/1,
     list_tokens/2,
+    list_app_tokens/2,
     get_token/2,
 
     insert_token/4,
@@ -76,8 +77,15 @@ m_get([ <<"apps">> ], _Msg, Context) ->
         {error, _} = Error ->
             Error
     end;
-m_get([ <<"apps">>, AppId | Rest ], _Msg, Context) ->
+m_get([ <<"apps">>, AppId ], _Msg, Context) ->
     case get_app(z_convert:to_integer(AppId), Context) of
+        {ok, App} ->
+            {ok, {App, []}};
+        {error, _} = Error ->
+            Error
+    end;
+m_get([ <<"apps">>, AppId, <<"tokens">> | Rest ], _Msg, Context) ->
+    case list_app_tokens(z_convert:to_integer(AppId), Context) of
         {ok, App} ->
             {ok, {App, Rest}};
         {error, _} = Error ->
@@ -406,7 +414,7 @@ list_tokens(UserId, Context) when is_integer(UserId) ->
                 from oauth2_token t
                     left join oauth2_app a
                     on a.id = t.app_id
-                where user_id = $1
+                where t.user_id = $1
                 order by created desc",
                 [ UserId ],
                 [ {keys, binary} ],
@@ -417,6 +425,21 @@ list_tokens(UserId, Context) when is_integer(UserId) ->
 list_tokens(undefined, _Context) ->
     {ok, []}.
 
+%% @doc List all tokens for an app. The user must have access to the tokens.
+-spec list_app_tokens( AppId :: integer(), z:context() ) -> {ok, [ map() ]} | {error, term()}.
+list_app_tokens(AppId, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            z_db:qmap("
+                select id, user_id, is_read_only, ip_allowed,
+                       note, valid_till, created, modified
+                from oauth2_token
+                where app_id = $1",
+                [ AppId ],
+                Context);
+        false ->
+            {error, eacces}
+    end.
 
 %% @doc Insert a secret for a token into the token table. The token itself is encoded
 %% using the encode_bearer_token/3 function. This replaces the existing token for the
