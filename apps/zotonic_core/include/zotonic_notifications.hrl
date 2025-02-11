@@ -43,7 +43,7 @@
 %% @doc Check and possibly modify the CSP response security headers
 %% Accumulator is the modified CSP headers, notification is the default
 %% set of CSP headers as provided by the Zotonic core routines.
-%% Type: foldl
+%% Type: foldr
 -record(content_security_header, {
     % Fetch directives
     child_src = [] :: [ binary() ],

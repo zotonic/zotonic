@@ -1380,7 +1380,7 @@ set_security_headers(Context) ->
         worker_src     = [ <<"'self'">>, <<"blob:">> ],
         connect_src    = [ <<"'self'">>, <<"https:">>, <<"wss:">> ]
     },
-    CSP1 = z_notifier:foldl(CSP, CSP, Context),
+    CSP1 = z_notifier:foldr(CSP, CSP, Context),
     Default = [
         {<<"content-security-policy">>, flatten_csp(CSP1)},
         {<<"x-content-type-options">>, <<"nosniff">>},
