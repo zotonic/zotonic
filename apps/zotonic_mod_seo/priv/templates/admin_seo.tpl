@@ -94,10 +94,11 @@
                 </div>
 
                 <div class="alert alert-danger" id="seo_google-gtm_insecure-warning" {% if not m.config.seo_google.gtm.value %}style="display:none"{% endif %}>
-                    <p><span class="glyphicon glyphicon-exclamation-sign"></span> {_ For some tracking like custom templates to work, Google allows code to be added to your site.<br>This code can be added by anyone with access to the GTM settings.<br><b>Allowing this is a security risk.</b>  _}</p>
+                    <p><span class="glyphicon glyphicon-exclamation-sign"></span> {_ For some GTM options (like custom templates) to work, Google allows code to be added to your website.<br>Anyone with access to the Google Tag Manager settings can run arbitrary code on your website.<br>To make this possible we have to lower the overall security of your website._}</p>
+                    <p><b>{_ Allowing this is a security risk. _}</b></p>
                     <label class="checkbox">
                         <input type="checkbox" name="seo_google-gtm_insecure" value="1" {% if m.config.seo_google.gtm_insecure.value %}checked{% endif %}>
-                        {_ I accept the security risk of adding custom code to the GTM console _}
+                        {_ I accept the security risk of adding custom code in Google Tag Manager _}
                     </label>
                 </div>
 
