@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-02-07 11:00\n"
+"PO-Revision-Date: 2025-02-07 15:02\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -8719,7 +8719,7 @@ msgstr "Toegevoegd door"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:57
 msgid "Allow Access"
-msgstr "Toegang te verlenen"
+msgstr "Toegang verlenen"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:69
 msgid "Allow import of content from the remote website"
