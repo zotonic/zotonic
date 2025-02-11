@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-02-11 11:16\n"
+"PO-Revision-Date: 2025-02-11 13:18\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -2133,8 +2133,8 @@ msgid "Save this page."
 msgstr "احفظ هذه الصفحة."
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:548
-msgid "Scheduled background task to check all refers connections."
-msgstr "مهمة خلفية مجدولة للتحقق من جميع الاتصالات المرجعية."
+msgid "Scheduled a background task to check all refers connections."
+msgstr "تم جدولة مهمة خلفية للتحقق من جميع الاتصالات المرجعية."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:303
 msgid "Search"
@@ -9135,7 +9135,7 @@ msgstr "كل صفحات هذه الفئة"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:98
 msgid "Allowing this is a security risk."
-msgstr ""
+msgstr "إن السماح بهذا يشكل خطراً أمنياً."
 
 #: apps/zotonic_mod_seo/priv/templates/_admin_edit_content_seo.tpl:153
 msgid "Ask Google to exclude all “{cat}” pages"
@@ -9183,7 +9183,7 @@ msgstr "استبعاد هذا الموقع من محركات البحث"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:97
 msgid "For some GTM options (like custom templates) to work, Google allows code to be added to your website.<br>Anyone with access to the Google Tag Manager settings can run arbitrary code on your website.<br>To make this possible we have to lower the overall security of your website."
-msgstr ""
+msgstr "لكي تعمل بعض خيارات إدارة العلامات العالمية (مثل القوالب المخصصة)، تسمح Google بإضافة التعليمات البرمجية إلى موقع الويب الخاص بك.<br>يمكن لأي شخص لديه حق الوصول إلى إعدادات إدارة العلامات من Google تشغيل تعليمات برمجية عشوائية على موقع الويب الخاص بك.<br>لجعل هذا ممكنًا، يتعين علينا خفض مستوى الأمان العام لموقع الويب الخاص بك."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:17
 msgid "General SEO Optimization"
@@ -9211,7 +9211,7 @@ msgstr "تجد هنا إعدادات لتحسين فهرسة موقعك بواس
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:101
 msgid "I accept the security risk of adding custom code in Google Tag Manager"
-msgstr ""
+msgstr "أقبل المخاطر الأمنية المترتبة على إضافة كود مخصص في \"إدارة علامات Google\""
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:50
 msgid "If your site does not have a search page, check this box to prevent displaying a search box on Google et al."
