@@ -328,8 +328,8 @@ event(#postback_notify{message = <<"feedback">>, trigger = Trigger, target=Targe
     end;
 
 event(#postback{message={admin_connect_select, Args}}, Context) ->
-    SelectId = z_context:get_q(<<"select_id">>, Context),
     IsConnected = z_convert:to_bool(z_context:get_q(<<"is_connected">>, Context)),
+    SelectId0 = z_context:get_q(<<"select_id">>, Context),
     SubjectId0 = proplists:get_value(subject_id, Args),
     ObjectId0 = proplists:get_value(object_id, Args),
     Predicate = proplists:get_value(predicate, Args),
@@ -349,14 +349,15 @@ event(#postback{message={admin_connect_select, Args}}, Context) ->
     end,
     Actions = QAction1 ++ QActions1,
 
+    SelectId = m_rsc:rid(SelectId0, Context),
     {SubjectId, ObjectId} =
         case z_utils:is_empty(ObjectId0) of
             true ->
-                {z_convert:to_integer(SubjectId0),
-                 z_convert:to_integer(SelectId)};
+                {m_rsc:rid(SubjectId0, Context),
+                 SelectId};
             false ->
-                {z_convert:to_integer(SelectId),
-                 z_convert:to_integer(ObjectId0)}
+                {SelectId,
+                 m_rsc:rid(ObjectId0, Context)}
         end,
 
     % Only disconnect if connection is not made from tinymce
@@ -375,7 +376,12 @@ event(#postback{message={admin_connect_select, Args}}, Context) ->
                             true -> z_render:dialog_close(Context1);
                             false -> Context1
                        end,
-            z_render:wire(Actions, Context2);
+            Actions1 = lists:map(
+                fun(Action) ->
+                    z_render:action_with_args(Action, [ {select_id, ObjectId} ])
+                end,
+                [Actions]),
+            z_render:wire(Actions1, Context2);
         {error, Context1} ->
             Context1
     end;
