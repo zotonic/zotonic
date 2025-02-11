@@ -43,12 +43,21 @@ observe_content_security_header(#content_security_header{}, CSP, Context) ->
         undefined -> CSP;
         <<>> -> CSP;
         _ ->
+            ScriptSrcGTM = case m_config:get_boolean(seo_google, gtm_insecure, Context) of
+                true ->
+                    [
+                        <<"https://www.googletagmanager.com">>,
+                        <<"'strict-dynamic'">>
+                        | CSP#content_security_header.script_src
+                    ];
+                false ->
+                    [
+                        <<"https://www.googletagmanager.com">>
+                        | CSP#content_security_header.script_src
+                    ]
+            end,
             CSP#content_security_header{
-                script_src = [
-                    <<"https://www.googletagmanager.com">>,
-                    <<"'strict-dynamic'">>
-                    | CSP#content_security_header.script_src
-                ],
+                script_src = ScriptSrcGTM,
                 img_src = [
                     <<"https://www.googletagmanager.com">>
                     | CSP#content_security_header.img_src

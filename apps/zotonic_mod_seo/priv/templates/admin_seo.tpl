@@ -93,6 +93,24 @@
                     </p>
                 </div>
 
+                <div class="alert alert-danger" id="seo_google-gtm_insecure-warning" {% if not m.config.seo_google.gtm.value %}style="display:none"{% endif %}>
+                    <p><span class="glyphicon glyphicon-exclamation-sign"></span> {_ For some tracking like custom templates to work, Google allows code to be added to your site.<br>This code can be added by anyone with access to the GTM settings.<br><b>Allowing this is a security risk.</b>  _}</p>
+                    <label class="checkbox">
+                        <input type="checkbox" name="seo_google-gtm_insecure" value="1" {% if m.config.seo_google.gtm_insecure.value %}checked{% endif %}>
+                        {_ I accept the security risk of adding custom code to the GTM console _}
+                    </label>
+                </div>
+
+                {% javascript %}
+                    $('#seo_google-gtm').on('input', function() {
+                        if ($(this).val() == '') {
+                            $('#seo_google-gtm_insecure-warning').hide();
+                        } else {
+                            $('#seo_google-gtm_insecure-warning').fadeIn();
+                        }
+                    });
+                {% endjavascript %}
+
                 <div class="form-group label-floating">
                     <input type="text" id="seo_google-webmaster_verify" name="seo_google-webmaster_verify" value="{{ m.config.seo_google.webmaster_verify.value|escape }}" class="form-control" placeholder="{_ Google Search Console _}">
                     <label class="control-label col-md-4" for="seo_google-webmaster">{_ Google Search Console _}</label>
