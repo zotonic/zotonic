@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-02-11 11:17\n"
+"PO-Revision-Date: 2025-02-11 13:18\n"
 "Last-Translator: \n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -2133,8 +2133,8 @@ msgid "Save this page."
 msgstr "Salva questa pagina."
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:548
-msgid "Scheduled background task to check all refers connections."
-msgstr "Attività in background pianificata per controllare tutte le connessioni di riferimento."
+msgid "Scheduled a background task to check all refers connections."
+msgstr "È stata pianificata un'attività in background per controllare tutte le connessioni di riferimento."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:303
 msgid "Search"
