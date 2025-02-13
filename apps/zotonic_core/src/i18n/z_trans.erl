@@ -155,7 +155,7 @@ lookup(_Text, _Langs, _Context) ->
 %% @doc Non strict translation lookup of a language version.
 %%      In order check: requested languages, default configured language, english, any
 -spec lookup_fallback(Text, OptContext) -> Translation when
-    Text :: z:trans() | binary() | string() | undefined,
+    Text :: z:trans() | binary() | string() | list() | undefined,
     OptContext :: z:context() | undefined,
     Translation :: binary() | undefined.
 lookup_fallback(undefined, _OptContext) ->
@@ -173,8 +173,16 @@ lookup_fallback(Trans, Context) ->
     OptContext :: z:context() | undefined,
     Translation :: binary() | undefined.
 lookup_fallback(Text, Lang, OptContext) when is_list(Text) ->
-    Text1 = unicode:characters_to_binary(Text, utf8),
-    lookup_fallback(Text1, Lang, OptContext);
+    case is_string(Text) of
+        true ->
+            Text1 = unicode:characters_to_binary(Text, utf8),
+            lookup_fallback(Text1, Lang, OptContext);
+        false ->
+            T1 = lists:map(
+                fun(T) -> z_convert:to_binary(lookup_fallback(T, Lang, OptContext)) end,
+                Text),
+            unicode:characters_to_binary(T1, utf8)
+    end;
 lookup_fallback(Text, Lang, OptContext) when is_atom(Lang) ->
     lookup_fallback(Text, [Lang], OptContext);
 lookup_fallback(Text, Lang, OptContext) when is_binary(Lang) ->
@@ -202,6 +210,10 @@ lookup_fallback(Text, _Lang, _Context) when is_binary(Text) ->
 lookup_fallback(_Text, _Lang, _Context) ->
     undefined.
 
+
+is_string([H|T]) when is_integer(H), H >= 1 -> is_string(T);
+is_string([H|T]) when is_binary(H) -> is_string(T);
+is_string(_) -> false.
 
 find_first(_Langs, []) ->
     undefined;
