@@ -213,6 +213,7 @@ lookup_fallback(_Text, _Lang, _Context) ->
 
 is_string([H|T]) when is_integer(H), H >= 1 -> is_string(T);
 is_string([H|T]) when is_binary(H) -> is_string(T);
+is_string([]) -> true;
 is_string(_) -> false.
 
 find_first(_Langs, []) ->
