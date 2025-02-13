@@ -168,7 +168,7 @@ lookup_fallback(Trans, Context) ->
 %% @doc Non strict translation lookup of a language version.
 %%      In order check: requested languages, default configured language, english, any
 -spec lookup_fallback(Text, Language, OptContext) -> Translation when
-    Text :: z:trans() | binary() | string() | undefined,
+    Text :: z:trans() | binary() | string() | list() | undefined,
     Language :: atom() | [ atom() ] | binary(),
     OptContext :: z:context() | undefined,
     Translation :: binary() | undefined.

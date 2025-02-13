@@ -1,8 +1,9 @@
 %% @author Dmitrii Dimandt <dmitrii@dmitriid.com>
-%% @copyright 2010 Dmitrii Dimandt, Marc Worrell
+%% @copyright 2010-2025 Dmitrii Dimandt
 %% @doc 'unjoin' filter, "reverse" of join, split a string into a list.
+%% @end
 
-%% Copyright 2010 Dmitrii Dimandt, Marc Worrell
+%% Copyright 2010-2025 Dmitrii Dimandt
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,19 +20,22 @@
 -module(filter_split).
 -export([split/3]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 split(undefined, _Sep, _Context) ->
 	undefined;
+split(V, undefined, _Context) ->
+	V;
 split(<<>>, _Sep, _Context) ->
 	[];
 split([], _Sep, _Context) ->
 	[];
-split({trans, _} = Tr, Sep, Context) ->
+split(#trans{} = Tr, Sep, Context) ->
     split(z_trans:lookup_fallback(Tr, Context), Sep, Context);
-split(String, {trans, _} = Tr, Context) ->
+split(String, #trans{} = Tr, Context) ->
     split(String, z_trans:lookup_fallback(Tr, Context), Context);
-split(String, Sep, _Context) when is_binary(String), is_binary(Sep) ->
-	binary:split(String, Sep, [global]);
+split(String, Sep, _Context) when is_binary(String) ->
+	binary:split(String, z_convert:to_binary(Sep), [global]);
 split(String, Sep, _Context) ->
     z_string:split(z_convert:to_list(String), z_convert:to_list(Sep)).
 
