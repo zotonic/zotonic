@@ -10,7 +10,7 @@
 
     {% if m.admin_status.disks.alert %}
         <div class="alert alert-danger" role="alert">
-            <span class="fa fa-warning"></span>
+            <span class="glyphicon glyphicon-exclamation-sign"></span>
             <b>{_ Warning! _}</b>
             {_ Some disks are almost full. _}
             {% if zotonic_dispatch != `admin_status` %}
@@ -21,7 +21,7 @@
 
     {% if m.admin_status.os_memory.alert %}
         <div class="alert alert-danger" role="alert">
-            <span class="fa fa-warning"></span>
+            <span class="glyphicon glyphicon-exclamation-sign"></span>
             <b>{_ Warning! _}</b>
             {_ The system has allocated more than the specified threshold of available memory, as reported by the underlying operating system. _}
             {% if zotonic_dispatch != `admin_status` %}
