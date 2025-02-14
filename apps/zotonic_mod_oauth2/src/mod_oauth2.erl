@@ -95,7 +95,8 @@ event(#submit{ message={oauth2_app_token_new, [ {app_id, AppId} ]} }, Context) -
         undefined ->
             z_render:growl(?__("Please select a user.", Context), Context);
         UserId ->
-            case m_oauth2:insert_token(AppId, UserId, TPs, Context) of
+            Label = z_string:trim(z_convert:to_binary(z_context:get_q(<<"label">>, Context))),
+            case m_oauth2:insert_token(AppId, UserId, Label, TPs, Context) of
                 {ok, TId} ->
                     {ok, Token} = m_oauth2:encode_bearer_token(TId, undefined, Context),
                     z_render:dialog(
@@ -125,7 +126,7 @@ event(#postback{ message={oauth2_app_token_generate, [ {app_id, AppId} ]} }, Con
         <<"is_full_access">> => true,
         <<"note">> => ?__("Generated using the admin interface", Context)
     },
-    case m_oauth2:insert_token(AppId, z_acl:user(Context), TPs, Context) of
+    case m_oauth2:insert_token(AppId, z_acl:user(Context), undefined, TPs, Context) of
         {ok, TId} ->
             {ok, Token} = m_oauth2:encode_bearer_token(TId, undefined, Context),
             z_render:dialog(
@@ -145,8 +146,8 @@ event(#submit{ message={oauth2_consumer_insert, []} }, Context) ->
         <<"user_id">> => z_acl:user(Context),
         <<"description">> => z_string:trim(z_context:get_q_validated(<<"description">>, Context)),
         <<"domain">> => z_string:to_lower(z_string:trim(z_context:get_q_validated(<<"domain">>, Context))),
-        <<"app_code">> => z_string:trim(z_context:get_q_validated(<<"app_code">>, Context)),
-        <<"app_secret">> => z_string:trim(z_context:get_q_validated(<<"app_secret">>, Context)),
+        <<"app_code">> => z_string:trim(z_context:get_q(<<"app_code">>, Context)),
+        <<"app_secret">> => z_string:trim(z_context:get_q(<<"app_secret">>, Context)),
         <<"is_use_auth">> => z_convert:to_bool(z_context:get_q(<<"is_use_auth">>, Context)),
         <<"is_use_import">> => z_convert:to_bool(z_context:get_q(<<"is_use_import">>, Context)),
         <<"authorize_url">> => z_string:trim(z_context:get_q(<<"authorize_url">>, Context)),
@@ -166,8 +167,8 @@ event(#submit{ message={oauth2_consumer_update, [ {app_id, AppId} ]} }, Context)
     Consumer = #{
         <<"description">> => z_string:trim(z_context:get_q_validated(<<"description">>, Context)),
         <<"domain">> => z_string:to_lower(z_string:trim(z_context:get_q_validated(<<"domain">>, Context))),
-        <<"app_code">> => z_string:trim(z_context:get_q_validated(<<"app_code">>, Context)),
-        <<"app_secret">> => z_string:trim(z_context:get_q_validated(<<"app_secret">>, Context)),
+        <<"app_code">> => z_string:trim(z_context:get_q(<<"app_code">>, Context)),
+        <<"app_secret">> => z_string:trim(z_context:get_q(<<"app_secret">>, Context)),
         <<"is_use_auth">> => z_convert:to_bool(z_context:get_q(<<"is_use_auth">>, Context)),
         <<"is_use_import">> => z_convert:to_bool(z_context:get_q(<<"is_use_import">>, Context)),
         <<"authorize_url">> => z_string:trim(z_context:get_q(<<"authorize_url">>, Context)),
@@ -188,17 +189,61 @@ event(#postback{ message={oauth2_consumer_delete, [ {app_id, AppId} ]} }, Contex
         {error, _} ->
             z_render:growl_error(?__("Could not insert the Consumer.", Context), Context)
     end;
-event(#postback{ message={oauth2_fetch_consumer_token, [ {app_id, AppId} ]} }, Context) ->
+event(#submit{ message={oauth2_consumer_token_new, [ {app_id, AppId} ]} }, Context) ->
+    case m_rsc:rid(z_context:get_q(<<"user_id">>, Context), Context) of
+        undefined ->
+            z_render:growl(?__("Please select a user.", Context), Context);
+        UserId ->
+            case z_context:get_q(<<"z_submitter">>, Context) of
+                <<"fetch">> ->
+                    z_render:wire({confirm, [
+                        {text, iolist_to_binary([
+                            ?__("Fetch an access token to this site?", Context),
+                            "<br>",
+                            ?__("The token will be registered with the selected user account.", Context),
+                            "<br><br>",
+                            ?__("Fetching a token can take some time.", Context)
+                        ])},
+                        {ok, ?__("Fetch Token", Context)},
+                        {postback, {oauth2_fetch_consumer_token, [ {app_id, AppId}, {user_id, UserId} ]}},
+                        {delegate, mod_oauth2}
+                    ]}, Context);
+                _ ->
+                    case z_string:trim(z_convert:to_binary(z_context:get_q(<<"token">>, Context))) of
+                        <<>> ->
+                            Context;
+                        Token ->
+                            case m_oauth2_consumer:insert_token(AppId, UserId, Token, Context) of
+                                ok ->
+                                    z_render:wire({reload, []}, Context);
+                                {error, _} ->
+                                    z_render:growl_error(?__("Could not save the access token.", Context), Context)
+                            end
+                    end
+            end
+    end;
+event(#postback{ message={oauth2_consumer_token_delete, Args} }, Context) ->
+    {id, TokenId} = proplists:lookup(id, Args),
+    {app_id, AppId} = proplists:lookup(app_id, Args),
+    case m_oauth2_consumer:delete_token(AppId, TokenId, Context) of
+        ok ->
+            z_render:wire({reload, []}, Context);
+        {error, _} ->
+            z_render:growl_error(?__("Could not delete the token.", Context), Context)
+    end;
+event(#postback{ message={oauth2_fetch_consumer_token, Args} }, Context) ->
     case z_acl:is_admin(Context) of
         true ->
-            case m_oauth2_consumer:fetch_token(AppId, z_acl:user(Context), Context) of
+            {app_id, AppId} = proplists:lookup(app_id, Args),
+            {user_id, UserId} = proplists:lookup(user_id, Args),
+            case m_oauth2_consumer:fetch_token(AppId, UserId, Context) of
                 {ok, _AccessToken} ->
                     ?LOG_INFO(#{
                         text => <<"Fetched new consumer token">>,
                         in => mod_oauth2,
                         result => ok,
                         app_id => AppId,
-                        user_id => z_acl:user(Context)
+                        user_id => UserId
                     }),
                     z_render:wire([
                             {alert, [
@@ -214,7 +259,7 @@ event(#postback{ message={oauth2_fetch_consumer_token, [ {app_id, AppId} ]} }, C
                         result => error,
                         reason => Reason,
                         app_id => AppId,
-                        user_id => z_acl:user(Context)
+                        user_id => UserId
                     }),
                     ReasonText = iolist_to_binary(io_lib:format("~p", [ Reason ])),
                     z_render:wire([
@@ -381,7 +426,7 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
                 visiblecheck={acl, use, mod_admin_config}},
      #menu_item{id=admin_oauth2_consumers,
                 parent=admin_auth,
-                label=?__("OAuth2 Consumer Tokens", Context),
+                label=?__("OAuth2 Clients", Context),
                 url={admin_oauth2_consumers, []}}
     | Acc ].
 

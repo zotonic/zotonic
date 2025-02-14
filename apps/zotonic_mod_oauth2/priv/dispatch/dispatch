@@ -31,6 +31,10 @@
     % Admin screens for consumers
     {admin_oauth2_consumers, [ "admin", "oauth", "consumers" ],
                         controller_admin,
-                        [ {template, "admin_oauth2_consumers.tpl"} ]}
+                        [ {template, "admin_oauth2_consumers.tpl"} ]},
+
+    {admin_oauth2_consumers_tokens, [ "admin", "oauth", "consumers", appid ],
+                        controller_admin,
+                        [ {template, "admin_oauth2_consumers_tokens.tpl"} ]}
 
 ].

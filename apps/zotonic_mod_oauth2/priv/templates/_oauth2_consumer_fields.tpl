@@ -17,27 +17,26 @@
             </div>
         </div>
 
-        <div class="well">
+        <div class="form-group">
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
                         <div class="label-floating">
-                            <input id="{{ #app_code }}" type="text" value="{{ app.app_code|escape }}" class="form-control" name="app_code" required placeholder="{_ App Code _}">
+                            <input id="{{ #app_code }}" type="text" value="{{ app.app_code|escape }}" class="form-control" name="app_code" placeholder="{_ App ID _}">
                             <label class="control-label" for="app_code">{_ App ID _}</label>
-                            {% validate id=#app_code name="app_code" type={presence} %}
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <div class="label-floating">
-                            <input id="{{ #app_secret }}" type="text" value="{{ app.app_secret|escape }}" class="form-control" name="app_secret" required placeholder="{_ App Secret _}">
+                            <input id="{{ #app_secret }}" type="text" value="{{ app.app_secret|escape }}" class="form-control" name="app_secret" placeholder="{_ App Secret _}">
                             <label class="control-label" for="app_secret">{_ App Secret _}</label>
-                            {% validate id=#app_secret name="app_secret" type={presence} %}
                         </div>
                     </div>
                 </div>
             </div>
+            <p class="help-block">{_ The App ID and App Secret are needed if you want to use this website for authentication. If you only configure manually generated tokens then you can leave these fields empty._}</p>
         </div>
 
         <div class="form-group">

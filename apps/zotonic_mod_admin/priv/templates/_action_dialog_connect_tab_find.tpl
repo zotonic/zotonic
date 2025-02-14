@@ -117,7 +117,7 @@
                 {% with m.acl.user.s.hascollabmanager as cmgr %}
                 {% with m.acl.user.s.hascollabmember as cmbr %}
                     <select class="form-control" name="find_cg" id="{{ #find_cg }}">
-                        <option value="">{_ Anybody’s _}</option>
+                        <option value="" {% if content_group == 'any' %}selected{% endif %}>{_ Anybody’s _}</option>
                         <option value="me" {% if content_group == 'me' %}selected{% endif %}>{_ Mine _}</option>
                         {% if cmgr or cmbr %}
                             <optgroup label="{_ Collaboration groups _}">
