@@ -1,43 +1,34 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %}{_ OAuth2 Consumer Tokens _}{% endblock %}
+{% block title %}{_ OAuth2 Clients _}{% endblock %}
 
 {% block content %}
 <div class="admin-header">
-    <h2>{_ OAuth2 Consumer Tokens _}</h2>
+    <h2>{_ OAuth2 Clients _}</h2>
 
     <p>
-        {_ Registration of tokens to access remote websites. _}<br>
-        {_ With a consumer token this website can: _}
+        {_ OAuth2 clients are used to access other websites. _}<br>
+        {_ With a client token this website can: _}
     </p>
 
     <ul>
-        <li>{_ Import content from the remote website to this website. _}</li>
-        <li>{_ Allow users registered on the remote website to authenticate on this website. _}</li>
+        <li>{_ Import content from the other website to this website. _}</li>
+        <li>{_ Allow users registered on the other website to logon on this website. _}</li>
     </ul>
 </div>
 
 {% if m.acl.is_admin %}
     <div class="well z-button-row">
         <button id="app-new" class="btn btn-primary">
-            {_ Register a new website _}
+            {_ Register a new client _}
         </button>
         {% wire id="app-new"
                 action={dialog_open
-                    title=_"Register a new website"
+                    title=_"Register a new client"
                     template="_dialog_oauth2_consumer_new.tpl"
                 }
         %}
     </div>
-
-    {% if q.app_id %}
-        {% wire action={dialog_open
-                    title=_"Edit App"
-                    template="_dialog_oauth2_app.tpl"
-                    app_id=q.app_id|to_integer
-                }
-        %}
-    {% endif %}
 {% endif %}
 
 {% if m.acl.is_admin %}
@@ -46,7 +37,7 @@
             <tr>
                 <th>{_ Name _}</th>
                 <th>{_ Domain _}</th>
-                <th width="25%">{_ Description _}</th>
+                <th width="15%">{_ Description _}</th>
                 <th>{_ Auth _}</th>
                 <th>{_ Import _}</th>
                 <th>{_ Added by _}</th>
@@ -77,36 +68,21 @@
                         <td>{{ app.created|date:_"d M Y, H:i" }}</td>
                         <td>{{ app.token_count }}</td>
                         <td>
-                            {% if app.grant_type == 'client_credentials' %}
-                                <button class="btn btn-primary btn-xs" id="{{ #token.id }}">
-                                    {_ Fetch Token _}
-                                </button>
-                                {% wire id=#token.id
-                                        action={confirm
-                                            text=[
-                                                "<p>",
-                                                _"Fetch your access token to this site?",
-                                                "</p><p>",
-                                                _"The token will be registered with your account and only you (or routines acting on your behalf) will be able to use it.",
-                                                "</p><p>",
-                                                _"Fetching a token can take some time.",
-                                                "</p>"
-                                            ]
-                                            ok=_"Fetch Token"
-                                            postback={oauth2_fetch_consumer_token app_id=app.id}
-                                            delegate=`mod_oauth2`
-                                        }
-                                %}
-                            {% endif %}
+                            <button class="btn btn-default" id="{{ #edit.id }}">
+                                {_ Edit Client _}
+                            </button>
+                            {% wire id=#edit.id
+                                    action={dialog_open
+                                        template="_dialog_oauth2_consumer.tpl"
+                                        title=_"Edit OAuth2 Client"
+                                        app_id=app.id
+                                    }
+                            %}
+                            <a class="btn btn-default" href="{% url admin_oauth2_consumers_tokens appid=app.id %}">
+                                {_ Access tokens _}
+                            </a>
                         </td>
                     </tr>
-                    {% wire id=#app.id
-                            action={dialog_open
-                                template="_dialog_oauth2_consumer.tpl"
-                                title=_"Edit OAuth2 Consumer"
-                                app_id=app.id
-                            }
-                    %}
                 {% endwith %}
             {% endfor %}
         </body>

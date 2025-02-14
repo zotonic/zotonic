@@ -1,18 +1,18 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %}{_ OAuth2 Application - Tokens _}{% endblock %}
+{% block title %}{_ OAuth2 Clients - Tokens _}{% endblock %}
 
 {% block content %}
 
-{% with m.oauth2.apps[q.appid] as app %}
+{% with m.oauth2_consumer.consumers[q.appid] as app %}
 
 <div class="admin-header">
-    <h2>{_ OAuth2 Applications &gt; Tokens _}</h2>
+    <h2>{% trans "OAuth2 Clients &gt; Tokens to access {domain}" domain=app.domain|escape %}</h2>
 
-    <p>{_ Tokens to let other systems access this website of behalf of an user. _}</p>
+    <p>{% trans "Tokens to access or authenticate with <b>{domain}</b> of behalf of a user." domain=app.domain|escape %}</p>
 
     <p>
-        <a href="{% url admin_oauth2_apps %}">{_ OAuth2 Applications _}</a>
+        <a href="{% url admin_oauth2_consumers %}">{_ OAuth2 Clients _}</a>
         &gt; {{ app.description|escape }}
     </p>
 </div>
@@ -20,12 +20,12 @@
 {% if m.acl.is_admin %}
     <div class="well z-button-row">
         <button id="token-new" class="btn btn-primary">
-            {_ Make a new App token _}
+            {_ Add a new token _}
         </button>
         {% wire id="token-new"
                 action={dialog_open
                     title=_"Add a token"
-                    template="_dialog_oauth2_app_token_new.tpl"
+                    template="_dialog_oauth2_consumer_token_new.tpl"
                     app_id=app.id
                 }
         %}
@@ -36,29 +36,16 @@
     <table class="table table-striped do_adminLinkedTable">
         <thead>
             <tr>
-                <th>{_ Permission _}</th>
                 <th>{_ User _}</th>
-                <th>{_ Label _}</th>
                 <th>{_ Valid till _}</th>
-                <th width="30%">{_ Note _}</th>
                 <th>{_ Created on _}</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            {% for token in m.oauth2.apps[app.id].tokens %}
+            {% for token in m.oauth2_consumer.consumers[app.id].tokens %}
                 {% with token.id as id %}
                     <tr id="{{ #token.id }}" class="clickable">
-                        <td>
-                            {% if token.is_read_only %}
-                                <span class="glyphicon glyphicon-eye-open" title="{_ Read access _}"></span>
-                            {% else %}
-                                <span title="{_ Read &amp; write access _}">
-                                    <span class="glyphicon glyphicon-eye-open"></span>
-                                    <span class="glyphicon glyphicon-pencil"></span>
-                                </span>
-                            {% endif %}
-                        </td>
                         <td>
                             {% if token.user_id %}
                                 <a href="{% url admin_edit_rsc id=token.user_id %}">
@@ -67,9 +54,7 @@
                                 </a>
                             {% endif %}
                         </td>
-                        <td>{{ token.label|escape }}</td>
                         <td>{{ token.valid_till|date:_"d M Y, H:i" }}</td>
-                        <td>{{ token.note|escape }}</td>
                         <td>{{ token.created|date:_"d M Y, H:i" }}</td>
                         <td>
                             <button id="{{ #delete.id }}" class="btn btn-xs btn-default">
@@ -77,10 +62,10 @@
                             </button>
                             {% wire id=#delete.id
                                     action={confirm
-                                        text=_"Are you sure you want to delete this access token?"
+                                        text=_"Are you sure you want to delete this client token?"
                                         ok=_"Delete"
                                         is_danger
-                                        postback={oauth2_app_token_delete token_id=token.id}
+                                        postback={oauth2_consumer_token_delete app_id=app.id id=token.id}
                                         delegate=`mod_oauth2`
                                     }
                             %}

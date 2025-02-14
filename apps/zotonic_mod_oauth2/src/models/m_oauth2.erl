@@ -1,9 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019-2021 Marc Worrell
+%% @copyright 2019-2025 Marc Worrell
 %% @doc Registry for authentication tokens giving access to users/resources on
 %% the local site.
+%% @end
 
-%% Copyright 2019-2021 Marc Worrell
+%% Copyright 2019-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -43,7 +44,7 @@
     list_app_tokens/2,
     get_token/2,
 
-    insert_token/4,
+    insert_token/5,
     delete_token/2,
 
     encode_bearer_token/3,
@@ -62,6 +63,7 @@
 -define(ACCEPT_CODE_TTL, 12000).
 -define(BEARER_TOKEN_TTL, undefined).
 
+-define(AUTH_LABEL, <<"auth">>).
 
 m_get([ <<"client">>, ClientId, RedirectURL | Rest ], _Msg, Context) ->
     case client(ClientId, RedirectURL, Context) of
@@ -260,7 +262,7 @@ exchange_accept_code(ClientIdBin, ClientSecret, RedirectURL, Code, Context) ->
                                     }} when RedirectURL =:= ReqRedirectURL,
                                             ClientId =:= ReqClientId ->
                                     ContextSudo = z_acl:sudo(Context),
-                                    {ok, TokenId} = insert_token(ClientId, UserId, #{}, ContextSudo),
+                                    {ok, TokenId} = insert_token(ClientId, UserId, ?AUTH_LABEL, #{}, ContextSudo),
                                     case encode_bearer_token(TokenId, ?BEARER_TOKEN_TTL, ContextSudo) of
                                         {ok, Token} ->
                                             {ok, {Token, UserId}};
@@ -431,7 +433,7 @@ list_app_tokens(AppId, Context) ->
     case z_acl:is_admin(Context) of
         true ->
             z_db:qmap("
-                select id, user_id, is_read_only, ip_allowed,
+                select id, user_id, label, is_read_only, ip_allowed,
                        note, valid_till, created, modified
                 from oauth2_token
                 where app_id = $1",
@@ -444,57 +446,83 @@ list_app_tokens(AppId, Context) ->
 %% @doc Insert a secret for a token into the token table. The token itself is encoded
 %% using the encode_bearer_token/3 function. This replaces the existing token for the
 %% user/app combination.
--spec insert_token( AppId :: integer(), UserId :: m_rsc:resource_id(), TokenProps :: map(), z:context() ) ->
-    {ok, TokenId :: integer()} | {error, term()}.
-insert_token( AppId, UserId, Props, Context ) when is_map(Props), is_integer(AppId) ->
+-spec insert_token(AppId, UserId, Label, TokenProps, Context) -> {ok, TokenId} | {error, term()} when
+    AppId :: integer(),
+    UserId :: m_rsc:resource_id(),
+    Label :: binary() | undefined,
+    TokenProps :: map(),
+    Context :: z:context(),
+    TokenId :: integer().
+insert_token( AppId, UserId, <<>>, Props, Context ) ->
+    insert_token( AppId, UserId, undefined, Props, Context );
+insert_token( AppId, UserId, Label, Props, Context ) when is_map(Props), is_integer(AppId) ->
     case is_allowed(UserId, Context) and not z_acl:is_read_only(Context) of
         true ->
             z_db:transaction(
                 fun(Ctx) ->
-                    insert_trans(AppId, UserId, Props, Ctx)
+                    insert_trans(AppId, UserId, Label, Props, Ctx)
                 end,
                 Context);
         false ->
             {error, eacces}
     end.
 
-insert_trans(AppId, UserId, Props, Context) ->
-    z_db:q("
-        delete from oauth2_token
-        where user_id = $1
-          and app_id = $2
+insert_trans(AppId, UserId, Label, Props, Context) ->
+    NewSecret = z_ids:id(32),
+    TokenId = z_db:q1("
+        insert into oauth2_token
+            (app_id, user_id, label, is_read_only, is_full_access, ip_allowed, note, valid_till, secret)
+        values
+            ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        on conflict (app_id, user_id, label)
+        do update set
+            is_read_only = excluded.is_read_only,
+            is_full_access = excluded.is_full_access,
+            ip_allowed = excluded.ip_allowed,
+            note = excluded.note,
+            valid_till = excluded.valid_till,
+            secret = excluded.secret,
+            modified = now()
+        returning id
         ",
-        [ UserId, AppId ],
+        [
+            AppId, UserId, Label,
+            z_convert:to_bool( maps:get(<<"is_read_only">>, Props, true) ),
+            z_convert:to_bool( maps:get(<<"is_full_access">>, Props, false) ),
+            z_string:trim( z_convert:to_binary( maps:get(<<"ip_allowed">>, Props, <<"*">>) ) ),
+            z_html:escape( z_string:trim( maps:get(<<"note">>, Props, <<>>) ) ),
+            maps:get(<<"valid_till">>, Props, undefined),
+            NewSecret
+        ],
         Context),
-    Secret = z_ids:id(32),
-    Props1 = #{
-        <<"app_id">> => AppId,
-        <<"user_id">> => UserId,
-        <<"is_read_only">> => z_convert:to_bool( maps:get(<<"is_read_only">>, Props, true) ),
-        <<"is_full_access">> => z_convert:to_bool( maps:get(<<"is_full_access">>, Props, false) ),
-        <<"ip_allowed">> => z_string:trim( z_convert:to_binary( maps:get(<<"ip_allowed">>, Props, <<"*">>) ) ),
-        <<"note">> => z_html:escape( z_string:trim( maps:get(<<"note">>, Props, <<>>) ) ),
-        <<"valid_till">> => maps:get(<<"valid_till">>, Props, undefined),
-        <<"secret">> => Secret
-    },
-    case z_db:insert(oauth2_token, Props1, Context) of
-        {ok, TokenId} ->
-            Groups = maps:get(<<"user_groups">>, Props, []),
-            Groups1 = [ m_rsc:rid(GId, Context) || GId <- Groups ],
-            Groups2 = filter_groups(Groups1, Context),
-            lists:foreach(
-                fun(GId) ->
-                    z_db:q("
-                        insert into oauth2_token_group (token_id, group_id)
-                        values ($1, $2)",
-                        [ TokenId, GId ],
-                        Context)
-                end,
-                Groups2),
-            {ok, TokenId};
-        {error, _} = Error ->
-            Error
-    end.
+    Groups = maps:get(<<"user_groups">>, Props, []),
+    Groups1 = [ m_rsc:rid(GId, Context) || GId <- Groups ],
+    Groups2 = filter_groups(Groups1, Context),
+    Current = z_db:q("
+        select group_id from oauth2_token_group where token_id = $1",
+        [ TokenId ],
+        Context),
+    Current1 = [ GId || {GId} <- Current ],
+    lists:foreach(
+        fun(GId) ->
+            z_db:q("
+                insert into oauth2_token_group (token_id, group_id)
+                values ($1, $2)",
+                [ TokenId, GId ],
+                Context)
+        end,
+        Groups2 -- Current1),
+    lists:foreach(
+        fun(GId) ->
+            z_db:q("
+                delete from oauth2_token_group
+                where token_id = $1
+                  and group_id = $2",
+                [ TokenId, GId ],
+                Context)
+        end,
+        Current1 -- Groups2),
+    {ok, TokenId}.
 
 
 -spec delete_token( TokenId :: integer(), z:context() ) -> ok | {error, enoent | eacces}.
@@ -609,7 +637,7 @@ decode_bearer_token(_Token, _Context) ->
 -spec get_token( integer() | undefined, z:context() ) -> {ok, map()} | {error, enoent | eacces | term()}.
 get_token( TokenId, Context ) when is_integer(TokenId) ->
     case z_db:qmap_row("
-        select t.id, t.app_id, t.user_id, t.is_read_only, t.is_full_access,
+        select t.id, t.app_id, t.user_id, t.label, t.is_read_only, t.is_full_access,
                t.ip_allowed, t.note, t.created, t.modified,
                t.app_id, app.is_enabled as app_is_enabled, app.description as app_description
         from oauth2_token t
@@ -650,7 +678,7 @@ get_token( undefined, _Context ) ->
 -spec get_token_access( integer(), z:context() ) -> {ok, map()} | {error, enoent}.
 get_token_access(TokenId, Context) when is_integer(TokenId) ->
     case z_db:qmap_row("
-        select t.id, t.user_id, t.is_read_only, t.is_full_access, t.ip_allowed, t.secret,
+        select t.id, t.user_id, t.label, t.is_read_only, t.is_full_access, t.ip_allowed, t.secret,
                t.app_id, app.app_sign_secret
         from oauth2_token t
             join oauth2_app app on t.app_id = app.id
@@ -730,6 +758,7 @@ manage_schema(_Version,  Context) ->
                     id serial not null,
                     user_id int not null,
                     app_id int not null,
+                    label character varying(64),
                     is_read_only boolean not null default true,
                     is_full_access boolean not null default false,
                     secret character varying(64) not null,
@@ -740,7 +769,7 @@ manage_schema(_Version,  Context) ->
                     modified timestamp with time zone NOT NULL DEFAULT now(),
 
                     primary key (id),
-                    constraint oauth2_token_user_id_app_id_key UNIQUE (user_id, app_id),
+                    constraint oauth2_token_user_id_app_id_label_key UNIQUE (user_id, app_id, label),
 
                     constraint fk_oauth2_token_user_id foreign key (user_id)
                         references rsc(id)
@@ -788,7 +817,27 @@ manage_schema(_Version,  Context) ->
 
             z_db:flush(Context);
         true ->
-            ok = install_oauth2_app(Context)
+            ok = install_oauth2_app(Context),
+            case z_db:column_exists(oauth2_token, label, Context) of
+                false ->
+                    [] = z_db:q("
+                        alter table oauth2_token
+                        add column label character varying(64)",
+                        Context),
+                    z_db:q("
+                        update oauth2_token
+                        set label = $1",
+                        [ ?AUTH_LABEL ],
+                        Context),
+                    [] = z_db:q("
+                        alter table oauth2_token
+                        drop constraint oauth2_token_user_id_app_id_key,
+                        add constraint oauth2_token_user_id_app_id_label_key UNIQUE (user_id, app_id, label)",
+                        Context),
+                    z_db:flush(Context);
+                true ->
+                    ok
+            end
     end.
 
 install_oauth2_app(Context) ->

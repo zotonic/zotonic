@@ -25,9 +25,9 @@ oauth2_request_test() ->
         },
 
         % Should have permission to make a token for user 1
-        {error, eacces} = m_oauth2:insert_token(AppId, 1, TPs, Context),
+        {error, eacces} = m_oauth2:insert_token(AppId, 1, <<"test">>, TPs, Context),
 
-        {ok, TId_1} = m_oauth2:insert_token(AppId, 1, TPs, SudoContext),
+        {ok, TId_1} = m_oauth2:insert_token(AppId, 1, <<"test">>, TPs, SudoContext),
         {ok, Token_1} = m_oauth2:encode_bearer_token(TId_1, 60, SudoContext),
         {ok, #{ <<"id">> := TId_1}} = m_oauth2:decode_bearer_token(Token_1, Context),
 
