@@ -198,7 +198,7 @@ auth_validated(#{
             ServiceUidBin = z_convert:to_binary(ServiceUid),
             ServiceUidPrefixed = <<ConsumerName/binary, $:, ServiceUidBin/binary>>,
             % Ensure we don't overflow the identity key.
-            ServiceUidPrefixed1 = z_string:truncate_chars(ServiceUidPrefixed, 200, <<>>),
+            ServiceUidPrefixed1 = z_string:truncatechars(ServiceUidPrefixed, 200, <<>>),
             {ok, #auth_validated{
                 service = mod_oauth2,
                 service_uid = ServiceUidPrefixed1,
