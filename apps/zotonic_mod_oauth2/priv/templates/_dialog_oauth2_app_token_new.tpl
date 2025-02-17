@@ -9,7 +9,7 @@
     </p>
 
     <div class="form-group">
-        <p class="help-block">{_ Select the user this token is valid for. _} {_ It is good practice to use users with limited access permissions for access tokens. _}</p>
+        <p class="help-block">{_ Select the user for this. _} {_ It is good practice to have users with limited access permissions for access tokens. _}</p>
         <div class="block-page">
             <div class="well" id="{{ #wrap }}">
             </div>
@@ -48,7 +48,7 @@
 
     <div class="form-group">
         <label class="control-label">{_ Access permission _}</label>
-        <p class="help-block">{_ <b>Important:</b> write access is only disabled if the ACL module and accessed models support this. _}</p>
+        <p class="help-block">{_ <b>Important:</b> write access is only disabled if the used ACL module and models support this. _}</p>
 
         <label class="radio">
             <input type="radio" name="is_read_only" value="1" required> {_ Read only access _}

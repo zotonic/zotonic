@@ -23,7 +23,7 @@
 -mod_title("OAuth2").
 -mod_description("Provides authentication over OAuth2.").
 -mod_prio(900).
--mod_schema(11).
+-mod_schema(12).
 -mod_depends([ authentication ]).
 
 -export([
@@ -32,7 +32,8 @@
     observe_url_fetch_options/2,
     observe_admin_menu/3,
     observe_tick_3h/2,
-    manage_schema/2
+    manage_schema/2,
+    manage_data/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -510,3 +511,6 @@ manage_schema(Version, Context) ->
     m_oauth2:manage_schema(Version, Context),
     m_oauth2_consumer:manage_schema(Version, Context).
 
+-spec manage_data( z_module_manager:manage_schema(), z:context() ) -> ok.
+manage_data(Version, Context) ->
+    m_oauth2_consumer:manage_data(Version, Context).

@@ -196,9 +196,11 @@ auth_validated(#{
         }} ->
             ServiceUidBin = z_convert:to_binary(ServiceUid),
             ServiceUidPrefixed = <<ConsumerName/binary, $:, ServiceUidBin/binary>>,
+            % Ensure we don't overflow the identity key.
+            ServiceUidPrefixed1 = z_string:truncate_chars(ServiceUidPrefixed, 200, <<>>),
             {ok, #auth_validated{
                 service = mod_oauth2,
-                service_uid = ServiceUidPrefixed,
+                service_uid = ServiceUidPrefixed1,
                 service_props = #{ <<"access_token">> => AccessToken },
                 props = User1,
                 is_connect = z_convert:to_bool(proplists:get_value(<<"is_connect">>, Args))

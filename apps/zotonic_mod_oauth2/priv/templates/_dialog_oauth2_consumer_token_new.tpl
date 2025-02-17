@@ -11,7 +11,7 @@
 
     <div class="form-group">
         <p class="help-block">
-            {_ Select the user this token is valid for. _} {_ This user will be able to use the token. _}
+            {_ Select the user for this token. _} {_ This user will be able to use the token. _}
             <br>
             {_ If the user has already a token, then that token will be replaced with the new token. _}
         </p>
@@ -57,7 +57,7 @@
 
         <div class="form-group">
             <p class="help-block">
-                {% trans "As the application is configured to use Client Credentials, you can fetch an access token from {domain}." domain=app.domain|escape %}
+                {% trans "As the application is configured to use {client}, you can fetch an access token from {domain}." domain=app.domain|escape client="Client Credentials" %}
             </p>
 
             <p class="text-center">

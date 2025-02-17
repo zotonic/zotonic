@@ -1,9 +1,14 @@
 % @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2021-2022 Marc Worrell
-%% @doc OAuth2 model managing consumers for access to remote sites.
+%% @copyright 2021-2025 Marc Worrell
+%% @doc OAuth2 model managing consumers for access to remote sites. The user tokens
+%% are inserted into the identity table. The type of the token is 'mod_oauth2' and
+%% the key is a combination of the name of the consumer app and the remote user-id.
+%% For fetched tokens using 'Client Credentials' the remote user-id is replaced with
+%% the fixed CLIENT_CREDENTIALS_UID as there can only be a single token fetched in
+%% this way (per consumer application).
 %% @end
 
-%% Copyright 2021-2022 Marc Worrell
+%% Copyright 2021-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,6 +36,7 @@
     insert_consumer/2,
     delete_consumer/2,
     update_consumer/3,
+    delete_consumer_tokens/2,
 
     get_consumer_oauth_service/2,
 
@@ -44,13 +50,16 @@
 
     name_to_id/2,
 
-    manage_schema/2
+    manage_schema/2,
+    manage_data/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -type consumer_id() :: binary() | pos_integer() | undefined.
 -export_type([consumer_id/0]).
+
+-define(CLIENT_CREDENTIALS_UID, ":client credentials").
 
 m_get([ <<"consumers">> ], _Msg, Context) ->
     case list_consumers(Context) of
@@ -224,10 +233,15 @@ insert_consumer(Map, Context) ->
 delete_consumer(ConsumerId, Context) ->
     case z_acl:is_admin_editable(Context) of
         true ->
-            case z_db:delete(oauth2_consumer_app, name_to_id(ConsumerId, Context), Context) of
-                {ok, 1} -> ok;
-                {ok, 0} -> {error, enoent};
-                {error, _} = Error -> Error
+            AppId = name_to_id(ConsumerId, Context),
+            AppName = id_to_name(AppId, Context),
+            case z_db:delete(oauth2_consumer_app, AppId, Context) of
+                {ok, 1} ->
+                    delete_consumer_tokens_1(AppName, Context);
+                {ok, 0} ->
+                    {error, enoent};
+                {error, _} = Error ->
+                    Error
             end;
         false ->
             {error, eacces}
@@ -283,18 +297,16 @@ insert_token(ConsumerId, UserId, AccessToken, Expires, Context) ->
             of
                 {ok, #{
                     <<"name">> := AppName,
-                    <<"domain">> := Domain,
-                    <<"app_code">> := AppCode
+                    <<"domain">> := Domain
                 }} ->
                     Type = <<"mod_oauth2">>,
-                    Key = <<AppName/binary, $:, AppCode/binary>>,
                     Props = [
                         {is_verified, true},
                         {propb, {term, #{ <<"access_token">> => AccessToken }}},
                         {expires, Expires}
                     ],
                     delete_user_tokens(ConsumerId, UserId, Context),
-                    {ok, IdnId} = m_identity:insert(UserId, Type, Key, Props, Context),
+                    {ok, IdnId} = m_identity:insert(UserId, Type, AppName, Props, Context),
                     ?LOG_INFO(#{
                         text => <<"OAuth2 added new client_credentials token">>,
                         in => zotonic_mod_oauth2,
@@ -306,7 +318,6 @@ insert_token(ConsumerId, UserId, AccessToken, Expires, Context) ->
                         idn_user_id => UserId,
                         idn_id => IdnId,
                         idn_type => Type,
-                        idn_key => Key,
                         expires => Expires
                     }),
                     ok;
@@ -324,29 +335,47 @@ insert_token(ConsumerId, UserId, AccessToken, Expires, Context) ->
 list_consumer_tokens(ConsumerId, Context) ->
     case z_acl:is_admin(Context) of
         true ->
-            case z_db:q1("
-                select name
-                from oauth2_consumer_app
-                where id = $1
-                ",
-                [ name_to_id(ConsumerId, Context) ],
-                Context)
-            of
+            ConsumerId1 = name_to_id(ConsumerId, Context),
+            case id_to_name(ConsumerId1, Context) of
                 undefined ->
                     {error, enoent};
-                Name ->
+                ConsumerName ->
                     z_db:qmap("
                         select id, rsc_id as user_id, expires, created, modified
                         from identity
                         where type = 'mod_oauth2'
                           and key like $1 || ':%'
                         order by modified desc",
-                        [ Name ],
+                        [ ConsumerName ],
                         Context)
             end;
         false ->
             {error, eacces}
     end.
+
+%% @doc Delete a token connected with a consumer.
+-spec delete_consumer_tokens(ConsumerId, Context) -> ok | {error, term()} when
+    ConsumerId :: consumer_id(),
+    Context :: z:context().
+delete_consumer_tokens(ConsumerId, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            ConsumerId1 = name_to_id(ConsumerId, Context),
+            ConsumerName = id_to_name(ConsumerId1, Context),
+            delete_consumer_tokens_1(ConsumerName, Context);
+        false ->
+            {error, eacces}
+    end.
+
+delete_consumer_tokens_1(ConsumerName, Context) ->
+    z_db:q("
+        delete from identity
+        where type = 'mod_oauth2'
+          and key like $1 || ':%'",
+        [ ConsumerName ],
+        Context),
+    ok.
+
 
 %% @doc Delete a token connected with a consumer.
 -spec delete_token(ConsumerId, TokenId, Context) -> ok | {error, term()} when
@@ -356,24 +385,18 @@ list_consumer_tokens(ConsumerId, Context) ->
 delete_token(ConsumerId, TokenId, Context) ->
     case z_acl:is_admin(Context) of
         true ->
-            case z_db:q1("
-                select name
-                from oauth2_consumer_app
-                where id = $1
-                ",
-                [ name_to_id(ConsumerId, Context) ],
-                Context)
-            of
+            ConsumerId1 = name_to_id(ConsumerId, Context),
+            case id_to_name(ConsumerId1, Context) of
                 undefined ->
                     {error, enoent};
-                Name ->
+                ConsumerName ->
                     Idns = z_db:q("
                         select id
                         from identity
                         where type = 'mod_oauth2'
                           and key like $1 || ':%'
                           and id = $2",
-                        [ Name, TokenId ],
+                        [ ConsumerName, TokenId ],
                         Context),
                     lists:foreach(
                         fun({IdnId}) ->
@@ -393,24 +416,18 @@ delete_token(ConsumerId, TokenId, Context) ->
 delete_user_tokens(ConsumerId, UserId, Context) ->
     case z_acl:is_admin(Context) of
         true ->
-            case z_db:q1("
-                select name
-                from oauth2_consumer_app
-                where id = $1
-                ",
-                [ name_to_id(ConsumerId, Context) ],
-                Context)
-            of
+            ConsumerId1 = name_to_id(ConsumerId, Context),
+            case id_to_name(ConsumerId1, Context) of
                 undefined ->
                     {error, enoent};
-                Name ->
+                ConsumerName ->
                     Idns = z_db:q("
                         select id
                         from identity
                         where type = 'mod_oauth2'
                           and key like $1 || ':%'
                           and rsc_id = $2",
-                        [ Name, UserId ],
+                        [ ConsumerName, UserId ],
                         Context),
                     lists:foreach(
                         fun({IdnId}) ->
@@ -455,7 +472,7 @@ fetch_token(ConsumerId, UserId, Context) ->
                         {authorization, none}
                     ],
                     Type = <<"mod_oauth2">>,
-                    Key = <<AppName/binary, $:, AppCode/binary>>,
+                    Key = <<AppName/binary, $:, ?CLIENT_CREDENTIALS_UID>>,
                     case z_fetch:fetch_json(post, TokenUrl, Payload, Options, Context) of
                         {ok, #{
                             <<"access_token">> := AccessToken
@@ -469,8 +486,8 @@ fetch_token(ConsumerId, UserId, Context) ->
                                 {propb, {term, #{ <<"access_token">> => AccessToken }}},
                                 {expires, Expires}
                             ],
-                            delete_user_tokens(ConsumerId, UserId, Context),
-                            {ok, IdnId} = m_identity:insert(UserId, Type, Key, Props, Context),
+                            delete_consumer_tokens_1(AppName, Context),
+                            {ok, IdnId} = m_identity:insert_unique(UserId, Type, Key, Props, Context),
                             ?LOG_INFO(#{
                                 text => <<"OAuth2 fetched new client_credentials token">>,
                                 in => zotonic_mod_oauth2,
@@ -486,7 +503,7 @@ fetch_token(ConsumerId, UserId, Context) ->
                             }),
                             {ok, AccessToken};
                         {ok, Ret} ->
-                            delete_user_tokens(ConsumerId, UserId, Context),
+                            delete_consumer_tokens_1(AppName, Context),
                             ?LOG_ERROR(#{
                                 text => <<"OAuth2 could not fetch client_credentials token">>,
                                 in => zotonic_mod_oauth2,
@@ -503,7 +520,7 @@ fetch_token(ConsumerId, UserId, Context) ->
                         {error, Reason} = Error ->
                             case is_permanent_error(Reason) of
                                 true ->
-                                    delete_user_tokens(ConsumerId, UserId, Context);
+                                    delete_consumer_tokens_1(AppName, Context);
                                 false ->
                                     ok
                             end,
@@ -550,9 +567,21 @@ is_permanent_error(_) ->
 name_to_id(undefined, _Context) ->
     undefined;
 name_to_id(Name, Context) when is_binary(Name) ->
-    z_db:q1("select id from oauth2_consumer_app where name = $1", [ Name ], Context);
+    case z_db:q1("select id from oauth2_consumer_app where name = $1", [ Name ], Context) of
+        undefined ->
+            case z_utils:only_digits(Name) of
+                true -> binary_to_integer(Name);
+                false -> undefined
+            end;
+        AppId ->
+            AppId
+    end;
 name_to_id(Id, _Context) when is_integer(Id) ->
     Id.
+
+%% @doc Fetch name of consumer with the given id.
+id_to_name(Id, Context) ->
+    z_db:q1("select name from oauth2_consumer_app where id = $1", [ Id ], Context).
 
 %% @doc Find an access token for the given user / host combination. The corresponding consumer
 %% app must be marked for import usage. The identity property must be map with an access_token
@@ -704,3 +733,52 @@ manage_schema(_Version,  Context) ->
                     z_db:flush(Context)
             end
     end.
+
+manage_data({version, 12}, Context) ->
+    % Update the idn key for the client-credentials fetched keys.
+    Apps = z_db:q("
+        select name, app_code
+        from oauth2_consumer_app
+        where grant_type = 'client_credentials'",
+        Context),
+    lists:foreach(
+        fun({AppName, AppCode}) ->
+            OldKey = <<AppName/binary, $:, AppCode/binary>>,
+            NewKey = <<AppName/binary, $:, ?CLIENT_CREDENTIALS_UID>>,
+            AllKeysPrefix = <<AppName/binary, ":%">>,
+            IdnId = z_db:q1("
+                select id
+                from identity
+                where type = 'mod_oauth2'
+                  and key = any($1)",
+                [ [ OldKey, NewKey ] ],
+                Context),
+            if
+                is_integer(IdnId) ->
+                    z_db:q("
+                        delete from identity
+                        where type = 'mod_oauth2'
+                          and key like $1
+                          and id <> $2",
+                        [ AllKeysPrefix, IdnId ],
+                        Context),
+                    z_db:q("
+                        update identity
+                        set key = $1
+                        where id = $2",
+                        [ NewKey, IdnId ],
+                        Context);
+                true ->
+                    z_db:q("
+                        delete from identity
+                        where type = 'mod_oauth2'
+                          and key like $1",
+                        [ AllKeysPrefix ],
+                        Context),
+                    ok
+            end
+        end,
+        Apps);
+manage_data(_, _Context) ->
+    ok.
+
