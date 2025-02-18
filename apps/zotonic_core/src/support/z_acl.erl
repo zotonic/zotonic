@@ -34,6 +34,7 @@
          cache_key/1,
 
          user/1,
+         sudo_user/1,
          user_groups/1,
 
          is_read_only/1,
@@ -313,6 +314,16 @@ user(#context{user_id = UserId}) when is_integer(UserId) ->
     UserId;
 user(#context{}) ->
     undefined.
+
+%% @doc Return the id of the user that originally logged in, irrespective
+%% of the user that was switched to. If there is no sudo user id then the
+%% current user id is returned.
+-spec sudo_user(z:context()) -> m_rsc:resource_id() | undefined.
+sudo_user(Context) ->
+    case z_context:get(auth_options, Context) of
+        #{ sudo_user_id := SUid } when is_integer(SUid) -> SUid;
+        _ -> user(Context)
+    end.
 
 %% @doc Return the list of user groups the current context is member of.
 -spec user_groups(z:context()) -> [ m_rsc:resource_id() ].

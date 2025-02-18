@@ -89,27 +89,47 @@ logon(UserId, Context) ->
 
 %% @doc Allow an admin user to switch to another user account.
 -spec logon_switch( m_rsc:resource_id(), z:context() ) -> {ok, z:context()} | {error, eacces}.
-logon_switch(UserId, Context) ->
-    case m_rsc:exists(UserId, Context) andalso z_acl:is_admin(Context) of
+logon_switch(ToUserId, Context) ->
+    case is_allowed_switch_user(ToUserId, Context) of
         true ->
-            Context1 = z_acl:logon_prefs(UserId, Context),
-            Context2 = z_notifier:foldl(#auth_logon{ id = UserId }, Context1, Context1),
+            Context1 = z_acl:logon_prefs(ToUserId, Context),
+            Context2 = z_notifier:foldl(#auth_logon{ id = ToUserId }, Context1, Context1),
             {ok, Context2};
         false ->
             {error, eacces}
     end.
 
-%% @doc Allow an admin user to switch to another user account.
--spec logon_switch( m_rsc:resource_id(), m_rsc:resource_id(), z:context() ) -> {ok, z:context()} | {error, eacces}.
-logon_switch(UserId, SudoUserId, Context) ->
-    case m_rsc:exists(UserId, Context) andalso z_acl:is_admin( z_acl:logon(SudoUserId, Context) ) of
+%% @doc Allow an admin user to switch to another user account. The ActingUserId is
+%% typically the user_id of the user that initially logged on. This is stored in the
+%% auth_options as 'sudo_user_id' and is set when performing the switch.
+-spec logon_switch(ToUserId, ActingUserId, Context) -> {ok, Context1} | {error, eacces} when
+    ToUserId :: m_rsc:resource_id(),
+    ActingUserId :: m_rsc:resource_id(),
+    Context :: z:context(),
+    Context1 :: z:context().
+logon_switch(ToUserId, ActingUserId, Context) ->
+    OriginalSudoUserContext = z_acl:logon(ActingUserId, Context),
+    case is_allowed_switch_user(ToUserId, OriginalSudoUserContext) of
         true ->
-            Context1 = z_acl:logon_prefs(UserId, Context),
-            Context2 = z_notifier:foldl(#auth_logon{ id = UserId }, Context1, Context1),
+            Context1 = z_acl:logon_prefs(ToUserId, Context),
+            Context2 = z_notifier:foldl(#auth_logon{ id = ToUserId }, Context1, Context1),
             {ok, Context2};
         false ->
             {error, eacces}
     end.
+
+is_allowed_switch_user(?ACL_ADMIN_USER_ID, Context) ->
+    % Hard coded protection against logging in as the admin user from any account that
+    % is not the admin user.
+    z_acl:user(Context) =:= ?ACL_ADMIN_USER_ID;
+is_allowed_switch_user(ToUserId, Context) ->
+    m_rsc:exists(ToUserId, Context)
+    andalso (
+               z_acl:user(Context) =:= ToUserId
+        orelse z_acl:sudo_user(Context) =:= ToUserId
+        orelse z_acl:is_admin(Context)
+        orelse z_acl:is_allowed(sudo_user, ToUserId, Context)
+    ).
 
 %% @doc Logon a user and redirect the user agent. The MQTT websocket MUST be connected.
 -spec logon_redirect( m_rsc:resource_id(), binary() | undefined, z:context() ) -> ok | {error, term()}.
@@ -124,7 +144,9 @@ logon_redirect(UserId, Url, Context) ->
         {error, _} = Error -> Error
     end.
 
-%% @doc Request the client's auth worker to re-authenticate as a new user
+%% @doc Request the client's auth worker to re-authenticate as a new user. The ACL
+%% for this operation is checked by z_auth:logon_switch/3, which is called by the
+%% controller_authentication when asked to make the switch.
 -spec switch_user( m_rsc:resource_id(), z:context() ) -> ok | {error, eacces}.
 switch_user(UserId, Context) when is_integer(UserId) ->
     case z_notifier:first(#auth_client_switch_user{

@@ -211,13 +211,16 @@ observe_auth_client_logon_user(#auth_client_logon_user{ user_id = UserId, url = 
 %% @doc Send a request to the client to switch users. The zotonic.auth.worker.js will
 %% send a request to controller_authentication to perform the switch.
 observe_auth_client_switch_user(#auth_client_switch_user{ user_id = UserId }, Context) ->
-    CurrentUser = z_acl:user(Context),
+    CurrentUser = z_acl:sudo_user(Context),
     case UserId of
         1 when CurrentUser =/= 1 ->
             % Only the admin is allowed to switch back to admin
             {error, eacces};
         _ ->
-            case z_acl:is_admin(Context) of
+            case z_acl:is_admin(Context)
+                orelse z_acl:sudo_user(Context) =:= UserId
+                orelse z_acl:is_allowed(sudo_user, UserId, Context)
+            of
                 true ->
                     case z_context:client_topic(Context) of
                         {ok, ClientTopic} ->
