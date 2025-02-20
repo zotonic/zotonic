@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2021 Marc Worrell
+%% @copyright 2021-2025 Marc Worrell
 %% @doc Metrics for the http listener.
 
-%% Copyright 2021 Marc Worrell
+%% Copyright 2021-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@
 -spec req_filter(cowboy_req:req()) -> map().
 req_filter(#{ headers := Headers }=Req) ->
     Headers1 = maps:with([<<"referer">>, <<"user-agent">>], Headers),
-    Req1 = maps:with([method, scheme, path, version, peer], Req),
+    Req1 = maps:with([method, scheme, path, qs, version, peer], Req),
     Req1#{ headers => Headers1 }.
 
 
@@ -63,7 +63,7 @@ metrics_callback(#{
         resp_start := RespStart,
         resp_status := RespStatus,
         resp_body_length := RespBodyLength
-    } = _Metrics) ->
+    }) ->
     UnitsPerUsec = erlang:convert_time_unit(1, microsecond, native),
     ProcessStart = case ReqBodyEnd of
         undefined -> ReqStart;
@@ -88,7 +88,8 @@ metrics_callback(#{
         _ -> z_stats:record_count(http, data_out, RespBodyLength, Site)
     end,
     PeerIP = maps:get(peer_ip, UserData, src(Req)),
-    Log = #{
+    Log = maps:with([method, path, qs], Req),
+    Log1 = Log#{
         site => Site,
         reason => Reason,
         req_start => ReqStart,
@@ -99,13 +100,11 @@ metrics_callback(#{
         req_bytes => ReqBodyLength,
         resp_bytes => RespBodyLength,
         http_version => cowboy_req:version(Req),
-        method => cowboy_req:method(Req),
-        path => cowboy_req:path(Req),
         user_agent => cowboy_req:header(<<"user-agent">>, Req),
         referer => cowboy_req:header(<<"referer">>, Req),
         metrics => UserData#{ peer_ip => PeerIP }
     },
-    ringbuffer:write(queue(StatusCategory), Log);
+    ringbuffer:write(queue(StatusCategory), Log1);
 metrics_callback(_Metrics) ->
     % Early failure.
     % TODO: Should also be logged.
