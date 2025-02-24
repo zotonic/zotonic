@@ -69,12 +69,22 @@ setup(Node) ->
 load_applications() ->
     application:load(setup),
     application:load(mnesia),
+    application:load(ranch),
     application:load(filezcache),
     application:load(zotonic_core).
 
 set_configs() ->
     application:set_env(setup, log_dir, z_config:get(log_dir)),
     application:set_env(setup, data_dir, z_config:get(data_dir)),
+    % Ensure ranch is not stopping on client (TLS handshake) errors
+    case application:get_env(ranch, ranch_sup_intensity) of
+        {ok, _} -> ok;
+        undefined -> application:set_env(ranch, ranch_sup_intensity, 10_000_000)
+    end,
+    case application:get_env(ranch, ranch_sup_period) of
+        {ok, _} -> ok;
+        undefined -> application:set_env(ranch, ranch_sup_period, 1)
+    end,
     % Store filezcache data in the cache_dir.
     FileZCache = filename:join([ z_config:get(cache_dir), "filezcache", atom_to_list(node()) ]),
     application:set_env(filezcache, data_dir, filename:join([ FileZCache, "data" ])),
