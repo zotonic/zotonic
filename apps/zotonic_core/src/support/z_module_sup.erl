@@ -44,7 +44,7 @@ start_link(Site) ->
 -spec start_module(atom(), supervisor:child_spec(), Site::atom()) ->
         supervisor:startchild_ret() | {error, term()}.
 start_module(Application, ChildSpec, Site) ->
-    case application:ensure_all_started(Application) of
+    case application:ensure_all_started(Application, temporary) of
         {ok, _Started} ->
             Name = z_utils:name_for_site(z_module_sup, Site),
             supervisor:start_child(Name, ChildSpec);

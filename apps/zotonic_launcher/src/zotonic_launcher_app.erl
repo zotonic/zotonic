@@ -1,9 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017-2022 Marc Worrell
+%% @copyright 2017-2025 Marc Worrell
 %% @doc Zotonic Launcher, launches the Zotonic application server with
 %%      the Zotonic Core, file watchers, and port listeners.
+%% @end
 
-%% Copyright 2017-2022 Marc Worrell
+%% Copyright 2017-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -119,7 +120,7 @@ load_config_files(ZotonicCfgs) ->
 
 -spec ensure_started(atom()) -> ok | {error, term()}.
 ensure_started(App) ->
-    case application:start(App) of
+    case application:start(App, permanent) of
         ok ->
             ok;
         {error, {not_started, Dep}} ->

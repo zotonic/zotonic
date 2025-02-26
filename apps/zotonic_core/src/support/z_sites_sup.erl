@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017-2022 Marc Worrell
+%% @copyright 2017-2025 Marc Worrell
 %% @doc Supervisor for sites supervisors
+%% @end
 
-%% Copyright 2017-2022 Marc Worrell
+%% Copyright 2017-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -38,7 +39,7 @@ start_link() ->
 
 -spec start_site(Site::atom()) -> supervisor:startchild_ret() | {error, term()}.
 start_site(Site) ->
-    case application:ensure_all_started(Site) of
+    case application:ensure_all_started(Site, permanent) of
         {ok, _Started} ->
             supervisor:start_child(?MODULE, [Site]);
         {error, _} = Error ->

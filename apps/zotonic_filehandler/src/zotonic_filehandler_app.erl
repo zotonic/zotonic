@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019 Marc Worrell
+%% @copyright 2019-2025 Marc Worrell
 %% @doc Filehandler - handles changes on files, starts recompiles
+%% @end
 
-%% Copyright 2019 Marc Worrell
+%% Copyright 2019-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,7 +32,7 @@
 %%====================================================================
 
 start() ->
-    application:ensure_all_started(zotonic_filehandler).
+    application:ensure_all_started(zotonic_filehandler, permanent).
 
 start(_StartType, _StartArgs) ->
     ensure_job_queues(),
