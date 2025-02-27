@@ -98,7 +98,7 @@ maybe_start_logstasher() ->
         logger:get_handler_config()),
     case IsLogstasherNeeded of
         true ->
-            application:ensure_all_started(logstasher);
+            application:ensure_all_started(logstasher, permanent);
         false ->
             ok
     end.

@@ -109,7 +109,7 @@ test_connection(Args) ->
     end.
 
 ensure_all_started() ->
-    application:ensure_all_started(epgsql).
+    application:ensure_all_started(epgsql, permanent).
 
 test_connection_1(Args) ->
     case connect(Args) of
