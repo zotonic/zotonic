@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-02-11 13:18\n"
+"PO-Revision-Date: 2025-02-27 17:11\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -911,7 +911,7 @@ msgstr "所有媒体也可以通过它们自己的页面来查看。"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:44
 msgid "And {n} more."
-msgstr ""
+msgstr "還有 {n} 個。"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:96
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find.tpl:14
@@ -4660,7 +4660,7 @@ msgstr "外部服务"
 
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:2
 msgid "For more information visit <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://haveibeenpwned.com/Passwords\">{title}</a>"
-msgstr ""
+msgstr "如需更多信息，請訪問 <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://haveibeenpwned.com/Passwords\">{title}</a>"
 
 #: apps/zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:26
 msgid "For security reasons, password reset codes are only kept for a limited amount of time and can only be used once."
@@ -7946,7 +7946,11 @@ msgid "It appears you have sent\n"
 "        the recipients that did not yet receive the mail will get it. As a\n"
 "        safety-caution, it is impossible to send the same page twice to\n"
 "        the same e-mail address."
-msgstr ""
+msgstr "看來您已經將\n"
+"        此頁面發送至此列表一次。如果您再次發送，只有\n"
+"        尚未收到郵件的收件者會收到它。出於\n"
+"        安全考慮，不可能將同一頁兩次發送至\n"
+"        同一電子郵件地址。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_cancel_confirm.tpl:4
 msgid "Keep mailing"
