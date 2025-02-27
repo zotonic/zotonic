@@ -39,7 +39,7 @@ start_link() ->
 
 -spec start_site(Site::atom()) -> supervisor:startchild_ret() | {error, term()}.
 start_site(Site) ->
-    case application:ensure_all_started(Site, permanent) of
+    case application:ensure_all_started(Site, temporary) of
         {ok, _Started} ->
             supervisor:start_child(?MODULE, [Site]);
         {error, _} = Error ->
