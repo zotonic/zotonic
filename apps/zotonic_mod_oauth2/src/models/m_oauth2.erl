@@ -268,12 +268,7 @@ exchange_accept_code(ClientIdBin, ClientSecret, RedirectURL, Code, Context) ->
                                 }} when RedirectURL =:= ReqRedirectURL,
                                         ClientId =:= ReqClientId ->
                                     ContextSudo = z_acl:sudo(Context),
-                                    Expires = ?BEARER_TOKEN_TTL,
-                                    ValidTill = case Expires of
-                                        undefined -> undefined;
-                                        0 -> undefined;
-                                        Seconds -> z_datetime:to_datetime(z_datetime:timestamp() + Seconds)
-                                    end,
+                                    ValidTill = valid_till(?BEARER_TOKEN_TTL),
                                     TokenArgs = #{
                                         <<"valid_till">> => ValidTill,
                                         <<"is_full_access">> => true,
@@ -281,7 +276,7 @@ exchange_accept_code(ClientIdBin, ClientSecret, RedirectURL, Code, Context) ->
                                         <<"note">> => m_req:get(peer, Context)
                                     },
                                     {ok, TokenId} = insert_token(ClientId, UserId, ?AUTH_LABEL, TokenArgs, ContextSudo),
-                                    case encode_bearer_token(TokenId, Expires, ContextSudo) of
+                                    case encode_bearer_token(TokenId, ?BEARER_TOKEN_TTL, ContextSudo) of
                                         {ok, Token} ->
                                             {ok, {Token, UserId}};
                                         {error, _} = Error ->
@@ -304,12 +299,19 @@ exchange_accept_code(ClientIdBin, ClientSecret, RedirectURL, Code, Context) ->
             {error, code}
     end.
 
+valid_till(undefined) -> undefined;
+valid_till(0) -> undefined;
+valid_till(Secs) when is_integer(Secs) -> z_datetime:to_datetime(z_datetime:timestamp() + Secs).
+
 %% @doc Create a new client_credentials code for the given app.
--spec exchange_client_credentials(
-        ClientId :: binary(),
-        ClientSecret :: binary(),
-        z:context()) ->
-    {ok, {Code :: binary(), UserId :: m_rsc:resource_id()}} | {error, term()}.
+-spec exchange_client_credentials(ClientId, ClientSecret, Context) -> {ok, {BearerToken, Expires, UserId}} | {error, Reason} when
+    ClientId :: binary(),
+    ClientSecret :: binary(),
+    Context :: z:context(),
+    BearerToken :: binary(),
+    UserId :: m_rsc:resource_id(),
+    Expires :: undefined | integer(),
+    Reason :: term().
 exchange_client_credentials(ClientIdBin, ClientSecret, Context) ->
     ClientId = try
         binary_to_integer(ClientIdBin)
@@ -339,11 +341,7 @@ exchange_client_credentials(ClientIdBin, ClientSecret, Context) ->
             case is_equal(ClientSecret, AppSecret) of
                 true ->
                     ContextSudo = z_acl:sudo(Context),
-                    ValidTill = case Expires of
-                        undefined -> undefined;
-                        0 -> undefined;
-                        Seconds -> z_datetime:to_datetime(z_datetime:timestamp() + Seconds)
-                    end,
+                    ValidTill = valid_till(Expires),
                     TokenArgs = #{
                         <<"valid_till">> => ValidTill,
                         <<"is_full_access">> => true,

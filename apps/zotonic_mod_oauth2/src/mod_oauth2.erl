@@ -23,7 +23,7 @@
 -mod_title("OAuth2").
 -mod_description("Provides authentication over OAuth2.").
 -mod_prio(900).
--mod_schema(12).
+-mod_schema(13).
 -mod_depends([ authentication ]).
 
 -export([
