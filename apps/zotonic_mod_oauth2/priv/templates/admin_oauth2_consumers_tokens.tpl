@@ -54,7 +54,7 @@
                                 </a>
                             {% endif %}
                         </td>
-                        <td>{{ token.valid_till|date:_"d M Y, H:i" }}</td>
+                        <td>{{ token.expires|date:_"d M Y, H:i" }}</td>
                         <td>{{ token.created|date:_"d M Y, H:i" }}</td>
                         <td>
                             <button id="{{ #delete.id }}" class="btn btn-xs btn-default">

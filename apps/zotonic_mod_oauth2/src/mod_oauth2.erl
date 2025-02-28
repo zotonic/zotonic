@@ -30,8 +30,10 @@
     event/2,
     observe_request_context/3,
     observe_url_fetch_options/2,
+    observe_search_query/2,
     observe_admin_menu/3,
     observe_tick_3h/2,
+    observe_tick_24h/2,
     manage_schema/2,
     manage_data/2
 ]).
@@ -56,22 +58,27 @@ event(#submit{ message={oauth2_authorize, Args}}, Context) ->
 
 event(#submit{ message={oauth2_app_insert, []} }, Context) ->
     App = #{
-        <<"user_id">> => z_acl:user(Context),
-        <<"description">> => z_string:trim(z_context:get_q_validated(<<"description">>, Context)),
         <<"is_enabled">> => z_convert:to_bool(z_context:get_q(<<"is_enabled">>, Context)),
-        <<"redirect_urls">> => z_string:trim(z_context:get_q(<<"redirect_urls">>, Context))
+        <<"user_id">> => z_acl:user(Context),
+        <<"description">> => z_string:trim(z_context:get_q_validated(<<"description">>, Context))
     },
     case m_oauth2:insert_app(App, Context) of
-        {ok, _AppId} ->
-            z_render:wire({redirect, [ {dispatch, admin_oauth2_apps} ]}, Context);
+        {ok, AppId} ->
+            Context1 = z_render:update("apps-list", #render{ template = "_oauth2_apps_list.tpl" }, Context),
+            z_render:dialog(?__("Edit OAuth2 App", Context), "_dialog_oauth2_app.tpl", [ {app_id, AppId} ], Context1);
         {error, _} ->
             z_render:growl_error(?__("Could not insert the App.", Context), Context)
     end;
 event(#submit{ message={oauth2_app_update, [ {app_id, AppId} ]} }, Context) ->
     App = #{
-        <<"description">> => z_string:trim(z_context:get_q_validated(<<"description">>, Context)),
         <<"is_enabled">> => z_convert:to_bool(z_context:get_q(<<"is_enabled">>, Context)),
-        <<"redirect_urls">> => z_string:trim(z_context:get_q(<<"redirect_urls">>, Context))
+        <<"description">> => z_string:trim(z_context:get_q_validated(<<"description">>, Context)),
+        <<"redirect_urls">> => z_string:trim(z_context:get_q(<<"redirect_urls">>, Context)),
+        <<"is_allow_auth">> => z_convert:to_bool(z_context:get_q(<<"is_allow_auth">>, Context)),
+        <<"is_allow_client_credentials">> => z_convert:to_bool(z_context:get_q(<<"is_allow_client_credentials">>, Context)),
+        <<"client_credentials_expires">> => z_convert:to_integer(z_context:get_q(<<"client_credentials_expires">>, Context)),
+        <<"client_credentials_user_id">> => m_rsc:rid(z_context:get_q(<<"client_credentials_user_id">>, Context), Context),
+        <<"is_client_credentials_read_only">> => z_convert:to_bool(z_context:get_q(<<"is_client_credentials_read_only">>, Context))
     },
     case m_oauth2:update_app(AppId, App, Context) of
         ok ->
@@ -370,6 +377,9 @@ observe_url_fetch_options(#url_fetch_options{
 observe_url_fetch_options(_, _Context) ->
     undefined.
 
+%% @doc Queries to find OAuth2 tokens
+observe_search_query(#search_query{}, _Context) ->
+    undefined.
 
 %% @doc Periodically try to extend tokens that are expiring in the next 8 hours.
 observe_tick_3h(tick_3h, Context) ->
@@ -417,6 +427,10 @@ observe_tick_3h(tick_3h, Context) ->
             end
         end,
         Expiring).
+
+%% @doc Periodically delete expired server side tokens
+observe_tick_24h(tick_24h, Context) ->
+    m_oauth2:delete_expired_tokens(Context).
 
 observe_admin_menu(#admin_menu{}, Acc, Context) ->
      [

@@ -22,7 +22,7 @@
 
 -behaviour(zotonic_model).
 
--include_lib("kernel/include/logger.hrl").
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 -export([
     m_get/3,
@@ -31,6 +31,7 @@
 
     encode_accept_code/4,
     exchange_accept_code/5,
+    exchange_client_credentials/3,
 
     list_apps/1,
     get_app/2,
@@ -46,6 +47,7 @@
 
     insert_token/5,
     delete_token/2,
+    delete_expired_tokens/1,
 
     encode_bearer_token/3,
     decode_bearer_token/2,
@@ -64,6 +66,7 @@
 -define(BEARER_TOKEN_TTL, undefined).
 
 -define(AUTH_LABEL, <<"auth">>).
+-define(CREDENTIALS_LABEL, undefined).
 
 m_get([ <<"client">>, ClientId, RedirectURL | Rest ], _Msg, Context) ->
     case client(ClientId, RedirectURL, Context) of
@@ -232,7 +235,8 @@ exchange_accept_code(ClientIdBin, ClientSecret, RedirectURL, Code, Context) ->
     case binary:split(Code, <<"-">>) of
         [ Salt, Encoded ] ->
             case z_db:qmap_row("
-                select id, redirect_urls, app_sign_secret, app_secret
+                select id, redirect_urls, app_sign_secret, app_secret,
+                       is_allow_auth, is_enabled
                 from oauth2_app
                 where id = $1
                   and is_enabled
@@ -241,10 +245,12 @@ exchange_accept_code(ClientIdBin, ClientSecret, RedirectURL, Code, Context) ->
                 Context)
             of
                 {ok, #{
+                        <<"is_enabled">> := true,
+                        <<"is_allow_auth">> := true,
                         <<"redirect_urls">> := _Allowed,
                         <<"app_sign_secret">> := AppSignSecret,
                         <<"app_secret">> := AppSecret
-                    }} ->
+                }} ->
                     case is_equal(ClientSecret, AppSecret) of
                         true ->
                             SystemKey = oauth_key(Context),
@@ -259,11 +265,23 @@ exchange_accept_code(ClientIdBin, ClientSecret, RedirectURL, Code, Context) ->
                                         user_id := UserId,
                                         redirect_uri := ReqRedirectURL,
                                         scope := _Scope
-                                    }} when RedirectURL =:= ReqRedirectURL,
-                                            ClientId =:= ReqClientId ->
+                                }} when RedirectURL =:= ReqRedirectURL,
+                                        ClientId =:= ReqClientId ->
                                     ContextSudo = z_acl:sudo(Context),
-                                    {ok, TokenId} = insert_token(ClientId, UserId, ?AUTH_LABEL, #{}, ContextSudo),
-                                    case encode_bearer_token(TokenId, ?BEARER_TOKEN_TTL, ContextSudo) of
+                                    Expires = ?BEARER_TOKEN_TTL,
+                                    ValidTill = case Expires of
+                                        undefined -> undefined;
+                                        0 -> undefined;
+                                        Seconds -> z_datetime:to_datetime(z_datetime:timestamp() + Seconds)
+                                    end,
+                                    TokenArgs = #{
+                                        <<"valid_till">> => ValidTill,
+                                        <<"is_full_access">> => true,
+                                        <<"is_read_only">> => false,
+                                        <<"note">> => m_req:get(peer, Context)
+                                    },
+                                    {ok, TokenId} = insert_token(ClientId, UserId, ?AUTH_LABEL, TokenArgs, ContextSudo),
+                                    case encode_bearer_token(TokenId, Expires, ContextSudo) of
                                         {ok, Token} ->
                                             {ok, {Token, UserId}};
                                         {error, _} = Error ->
@@ -277,6 +295,8 @@ exchange_accept_code(ClientIdBin, ClientSecret, RedirectURL, Code, Context) ->
                         false ->
                             {error, secret}
                     end;
+                {ok, _} ->
+                    {error, disabled};
                 {error, _} = Error ->
                     Error
             end;
@@ -284,6 +304,67 @@ exchange_accept_code(ClientIdBin, ClientSecret, RedirectURL, Code, Context) ->
             {error, code}
     end.
 
+%% @doc Create a new client_credentials code for the given app.
+-spec exchange_client_credentials(
+        ClientId :: binary(),
+        ClientSecret :: binary(),
+        z:context()) ->
+    {ok, {Code :: binary(), UserId :: m_rsc:resource_id()}} | {error, term()}.
+exchange_client_credentials(ClientIdBin, ClientSecret, Context) ->
+    ClientId = try
+        binary_to_integer(ClientIdBin)
+    catch
+        error:badarg -> 0
+    end,
+    case z_db:qmap_row("
+        select id, redirect_urls, app_sign_secret, app_secret,
+               is_allow_client_credentials, client_credentials_user_id,
+               client_credentials_expires, is_client_credentials_read_only,
+               is_enabled
+        from oauth2_app
+        where id = $1
+          and is_enabled
+        ",
+        [ ClientId ],
+        Context)
+    of
+        {ok, #{
+                <<"is_allow_client_credentials">> := true,
+                <<"client_credentials_user_id">> := TokenUserId,
+                <<"client_credentials_expires">> := Expires,
+                <<"is_client_credentials_read_only">> := IsReadOnly,
+                <<"app_sign_secret">> := _AppSignSecret,
+                <<"app_secret">> := AppSecret
+        }} when is_integer(TokenUserId) ->
+            case is_equal(ClientSecret, AppSecret) of
+                true ->
+                    ContextSudo = z_acl:sudo(Context),
+                    ValidTill = case Expires of
+                        undefined -> undefined;
+                        0 -> undefined;
+                        Seconds -> z_datetime:to_datetime(z_datetime:timestamp() + Seconds)
+                    end,
+                    TokenArgs = #{
+                        <<"valid_till">> => ValidTill,
+                        <<"is_full_access">> => true,
+                        <<"is_read_only">> => IsReadOnly,
+                        <<"note">> => m_req:get(peer, Context)
+                    },
+                    {ok, TokenId} = insert_token(ClientId, TokenUserId, ?CREDENTIALS_LABEL, TokenArgs, ContextSudo),
+                    case encode_bearer_token(TokenId, Expires, ContextSudo) of
+                        {ok, Token} ->
+                            {ok, {Token, Expires, TokenUserId}};
+                        {error, _} = Error ->
+                            Error
+                    end;
+                false ->
+                    {error, secret}
+            end;
+        {ok, _} ->
+            {error, disabled};
+        {error, _} = Error ->
+            Error
+    end.
 
 %% @doc Insert a new App. The map can contain the user_id, is_enabled flag
 %% and the App description.
@@ -295,7 +376,6 @@ insert_app(Map, Context) ->
                 <<"user_id">> => maps:get(<<"user_id">>, Map, z_acl:user(Context)),
                 <<"is_enabled">> => maps:get(<<"is_enabled">>, Map, true),
                 <<"description">> => maps:get(<<"description">>, Map, <<"Untitled">>),
-                <<"redirect_urls">> => maps:get(<<"redirect_urls">>, Map, <<>>),
                 <<"app_secret">> => z_ids:id(?APP_KEYLEN),
                 <<"app_sign_secret">> => z_ids:id(?APP_KEYLEN)
             },
@@ -327,6 +407,11 @@ update_app(AppId, Map, Context) ->
                 <<"is_enabled">> => maps:get(<<"is_enabled">>, Map, true),
                 <<"description">> => maps:get(<<"description">>, Map, <<"Untitled">>),
                 <<"redirect_urls">> => maps:get(<<"redirect_urls">>, Map, <<>>),
+                <<"is_allow_auth">> => maps:get(<<"is_allow_auth">>, Map, false),
+                <<"is_allow_client_credentials">> => maps:get(<<"is_allow_client_credentials">>, Map, false),
+                <<"client_credentials_expires">> => maps:get(<<"client_credentials_expires">>, Map, undefined),
+                <<"client_credentials_user_id">> => maps:get(<<"client_credentials_user_id">>, Map, undefined),
+                <<"is_client_credentials_read_only">> => maps:get(<<"is_client_credentials_read_only">>, Map, false),
                 <<"modified">> => calendar:universal_time()
             },
             case z_db:update(oauth2_app, AppId, App, Context) of
@@ -368,9 +453,15 @@ update_app_secret(AppId, Context) ->
 list_apps(Context) ->
     case z_acl:is_admin(Context) of
         true ->
+
             z_db:qmap("
                 select a.id, a.is_enabled, a.user_id,
                        a.description, a.created, a.modified,
+                       a.is_allow_auth,
+                       a.is_allow_client_credentials,
+                       a.client_credentials_expires,
+                       a.client_credentials_user_id,
+                       a.is_client_credentials_read_only,
                        (select count(*) from oauth2_token t where a.id = t.app_id) as token_count
                 from oauth2_app a
                 order by created desc",
@@ -387,6 +478,11 @@ get_app(AppId, Context) ->
             z_db:qmap_row("
                 select a.id, a.is_enabled, a.user_id, a.app_secret,
                        a.description, a.redirect_urls, a.created, a.modified,
+                       a.is_allow_auth,
+                       a.is_allow_client_credentials,
+                       a.client_credentials_expires,
+                       a.client_credentials_user_id,
+                       a.is_client_credentials_read_only,
                        (select count(*) from oauth2_token t where a.id = t.app_id) as token_count
                 from oauth2_app a
                 where a.id = $1",
@@ -436,7 +532,8 @@ list_app_tokens(AppId, Context) ->
                 select id, user_id, label, is_read_only, ip_allowed,
                        note, valid_till, created, modified
                 from oauth2_token
-                where app_id = $1",
+                where app_id = $1
+                order by created desc",
                 [ AppId ],
                 Context);
         false ->
@@ -539,6 +636,12 @@ delete_token( TokenId, Context ) when is_integer(TokenId) ->
                     {error, eacces}
             end
     end.
+
+%% @doc Delete all expired tokens.
+-spec delete_expired_tokens(z:context()) -> ok.
+delete_expired_tokens(Context) ->
+    z_db:q("delete from oauth2_token where valid_till < now()", Context),
+    ok.
 
 %% @doc Return the Bearer OAuth2 token for the given token-id. The token is encoded using the
 %% the token secret, the app sign secret and the oauth2 system secret. An optional time-to-live
@@ -787,6 +890,10 @@ manage_schema(_Version,  Context) ->
                 Context),
 
             [] = z_db:q(
+                "CREATE INDEX oauth2_token_valid_till_key ON oauth2_token (valid_till)",
+                Context),
+
+            [] = z_db:q(
                 "CREATE INDEX fki_oauth2_token_app_id ON oauth2_token (app_id)",
                 Context),
 
@@ -818,6 +925,9 @@ manage_schema(_Version,  Context) ->
             z_db:flush(Context);
         true ->
             ok = install_oauth2_app(Context),
+            [] = z_db:q(
+                "CREATE INDEX IF NOT EXISTS oauth2_token_valid_till_key ON oauth2_token (valid_till)",
+                Context),
             case z_db:column_exists(oauth2_token, label, Context) of
                 false ->
                     [] = z_db:q("
@@ -837,7 +947,8 @@ manage_schema(_Version,  Context) ->
                     z_db:flush(Context);
                 true ->
                     ok
-            end
+            end,
+            ok
     end.
 
 install_oauth2_app(Context) ->
@@ -867,13 +978,51 @@ install_oauth2_app(Context) ->
                     [] = z_db:q("alter table oauth2_app add column redirect_urls text not null default ''", Context),
                     z_db:flush(Context)
             end,
+            case z_db:column_exists(oauth2_app, is_allow_auth, Context) of
+                true ->
+                    ok;
+                false ->
+                    [] = z_db:q("
+                        alter table oauth2_app
+                        add column is_allow_auth boolean not null default false,
+                        add column is_allow_client_credentials boolean not null default false,
+                        add column client_credentials_expires int,
+                        add column client_credentials_user_id int,
+                        add column is_client_credentials_read_only boolean not null default false,
+                        add constraint fk_oauth2_app_client_credentials_user_id foreign key (client_credentials_user_id)
+                            references rsc(id)
+                            on update cascade
+                            on delete cascade
+                            ", Context),
+                    [] = z_db:q(
+                        "CREATE INDEX IF NOT EXISTS fki_oauth2_app_user_id ON oauth2_app (user_id)",
+                        Context),
+                    [] = z_db:q(
+                        "CREATE INDEX IF NOT EXISTS fki_oauth2_app_client_credentials_user_id ON oauth2_app (client_credentials_user_id)",
+                        Context),
+                    z_db:q("
+                        update oauth2_app
+                        set is_allow_auth = true
+                        ", Context),
+                    z_db:flush(Context)
+            end,
+            case z_db:column_exists(oauth2_app, is_client_credentials_read_only, Context) of
+                true ->
+                    ok;
+                false ->
+                    [] = z_db:q("
+                        alter table oauth2_app
+                        add column is_client_credentials_read_only boolean not null default false",
+                        Context),
+                    z_db:flush(Context)
+            end,
             ok
     end.
 
 
 install_oauth2_app_table(Context) ->
     [] = z_db:q("
-        CREATE TABLE oauth2_app (
+        CREATE TABLE IF NOT EXISTS oauth2_app (
             id serial not null,
             is_enabled boolean not null default true,
             user_id int not null,
@@ -881,6 +1030,11 @@ install_oauth2_app_table(Context) ->
             app_sign_secret varchar(32),
             description varchar(255),
             redirect_urls text not null default '',
+            is_allow_auth boolean not null default false,
+            is_allow_client_credentials boolean not null default false,
+            client_credentials_expires int,
+            client_credentials_user_id int,
+            is_client_credentials_read_only boolean not null default false,
             created timestamp with time zone not null default now(),
             modified timestamp with time zone not null default now(),
 
@@ -889,6 +1043,17 @@ install_oauth2_app_table(Context) ->
             constraint fk_oauth2_app_user_id foreign key (user_id)
                 references rsc(id)
                 on update cascade
+                on delete cascade,
+            constraint fk_oauth2_app_client_credentials_user_id foreign key (client_credentials_user_id)
+                references rsc(id)
+                on update cascade
                 on delete cascade
         )",
+        Context),
+    [] = z_db:q(
+        "CREATE INDEX IF NOT EXISTS fki_oauth2_app_user_id ON oauth2_app (user_id)",
+        Context),
+    [] = z_db:q(
+        "CREATE INDEX IF NOT EXISTS fki_oauth2_app_client_credentials_user_id ON oauth2_app (client_credentials_user_id)",
         Context).
+

@@ -237,7 +237,7 @@ delete_consumer(ConsumerId, Context) ->
             AppName = id_to_name(AppId, Context),
             case z_db:delete(oauth2_consumer_app, AppId, Context) of
                 {ok, 1} ->
-                    delete_consumer_tokens_1(AppName, Context);
+                    delete_consumer_tokens_1(undefined, AppName, Context);
                 {ok, 0} ->
                     {error, enoent};
                 {error, _} = Error ->
@@ -362,19 +362,38 @@ delete_consumer_tokens(ConsumerId, Context) ->
         true ->
             ConsumerId1 = name_to_id(ConsumerId, Context),
             ConsumerName = id_to_name(ConsumerId1, Context),
-            delete_consumer_tokens_1(ConsumerName, Context);
+            delete_consumer_tokens_1(undefined, ConsumerName, Context);
         false ->
             {error, eacces}
     end.
 
-delete_consumer_tokens_1(ConsumerName, Context) ->
-    z_db:q("
-        delete from identity
+delete_consumer_tokens_1(undefined, ConsumerName, Context) ->
+    Idns = z_db:q("
+        select id
+        from identity
         where type = 'mod_oauth2'
           and key like $1 || ':%'",
         [ ConsumerName ],
         Context),
-    ok.
+    lists:foreach(
+        fun({IdnId}) ->
+            m_identity:delete(IdnId, Context)
+        end,
+        Idns);
+delete_consumer_tokens_1(UserId, ConsumerName, Context) ->
+    Idns = z_db:q("
+        select id
+        from identity
+        where type = 'mod_oauth2'
+          and key like $1 || ':%'
+          and rsc_id = $2",
+        [ ConsumerName, UserId ],
+        Context),
+    lists:foreach(
+        fun({IdnId}) ->
+            m_identity:delete(IdnId, Context)
+        end,
+        Idns).
 
 
 %% @doc Delete a token connected with a consumer.
@@ -459,10 +478,20 @@ fetch_token(ConsumerId, UserId, Context) ->
                     <<"name">> := AppName,
                     <<"grant_type">> := <<"client_credentials">>,
                     <<"domain">> := Domain,
-                    <<"access_token_url">> := TokenUrl,
+                    <<"access_token_url">> := TokenUrl0,
                     <<"app_code">> := AppCode,
                     <<"app_secret">> := AppSecret
                 }} ->
+                    TokenUrl = case z_string:trim(TokenUrl0) of
+                        <<>> ->
+                            ContextNoLang = z_context:set_language('x-default', Context),
+                            iolist_to_binary([
+                                "https://", Domain,
+                                z_dispatcher:url_for(oauth2_server_access_token, ContextNoLang)
+                            ]);
+                        TU ->
+                            TU
+                    end,
                     Payload = #{
                         <<"client_id">> => AppCode,
                         <<"client_secret">> => AppSecret,
@@ -486,8 +515,8 @@ fetch_token(ConsumerId, UserId, Context) ->
                                 {propb, {term, #{ <<"access_token">> => AccessToken }}},
                                 {expires, Expires}
                             ],
-                            delete_consumer_tokens_1(AppName, Context),
-                            {ok, IdnId} = m_identity:insert_unique(UserId, Type, Key, Props, Context),
+                            delete_consumer_tokens_1(UserId, AppName, Context),
+                            {ok, IdnId} = m_identity:insert(UserId, Type, Key, Props, Context),
                             ?LOG_INFO(#{
                                 text => <<"OAuth2 fetched new client_credentials token">>,
                                 in => zotonic_mod_oauth2,
@@ -503,7 +532,7 @@ fetch_token(ConsumerId, UserId, Context) ->
                             }),
                             {ok, AccessToken};
                         {ok, Ret} ->
-                            delete_consumer_tokens_1(AppName, Context),
+                            delete_consumer_tokens_1(UserId, AppName, Context),
                             ?LOG_ERROR(#{
                                 text => <<"OAuth2 could not fetch client_credentials token">>,
                                 in => zotonic_mod_oauth2,
@@ -520,7 +549,7 @@ fetch_token(ConsumerId, UserId, Context) ->
                         {error, Reason} = Error ->
                             case is_permanent_error(Reason) of
                                 true ->
-                                    delete_consumer_tokens_1(AppName, Context);
+                                    delete_consumer_tokens_1(UserId, AppName, Context);
                                 false ->
                                     ok
                             end,

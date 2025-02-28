@@ -9,11 +9,11 @@
     </p>
 
     <div class="form-group">
-        <p class="help-block">{_ Select the user for this. _} {_ It is good practice to have users with limited access permissions for access tokens. _}</p>
+        <p class="help-block">{_ Select the user for this token. _} {_ It is good practice to have users with limited access permissions for access tokens. _}</p>
         <div class="block-page">
             <div class="well" id="{{ #wrap }}">
             </div>
-            <button class="btn btn-default page-connect" id="{{ #connect }}">
+            <button class="btn btn-default page-connect" id="{{ #connect }}" type="button">
                 {_ Select a user _}
             </button>
             {% wire id=#connect

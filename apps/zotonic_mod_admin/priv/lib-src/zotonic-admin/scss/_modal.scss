@@ -31,3 +31,9 @@ div.modal {
         }
     }
 }
+
+.modal-dialog {
+    .well {
+        border: 1px solid $borderColorDark;
+    }
+}

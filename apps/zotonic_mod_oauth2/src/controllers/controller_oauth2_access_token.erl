@@ -52,45 +52,77 @@ process_1(<<"authorization_code">>, Context) ->
         {ok, {AccessToken, UserId}} ->
             #{
                 <<"access_token">> => AccessToken,
+                <<"token_type">> => <<"Bearer">>,
                 <<"user_id">> => UserId,
                 <<"user">> => user(UserId, Context)
             };
-        {error, secret} ->
+        {error, Reason} ->
+            return_error(Reason)
+    end;
+process_1(<<"client_credentials">>, Context) ->
+    ClientId = z_context:get_q(<<"client_id">>, Context),
+    ClientSecret = z_context:get_q(<<"client_secret">>, Context),
+    case m_oauth2:exchange_client_credentials(ClientId, ClientSecret, Context) of
+        {ok, {AccessToken, Expires, UserId}} when Expires =:= 0; Expires =:= undefined ->
             #{
-                <<"error">> => <<"client_secret">>,
-                <<"error_reason">> => <<"nonmatching_secret">>,
-                <<"error_description">> => <<"The passed client_secret does not match">>
+                <<"access_token">> => AccessToken,
+                <<"token_type">> => <<"Bearer">>,
+                <<"user_id">> => UserId,
+                <<"user">> => user(UserId, Context)
             };
-        {error, code} ->
+        {ok, {AccessToken, Expires, UserId}} ->
             #{
-                <<"error">> => <<"code">>,
-                <<"error_reason">> => <<"unknown_code">>,
-                <<"error_description">> => <<"The passed code was unknown">>
+                <<"access_token">> => AccessToken,
+                <<"token_type">> => <<"Bearer">>,
+                <<"expires_in">> => Expires,
+                <<"user_id">> => UserId,
+                <<"user">> => user(UserId, Context)
             };
-        {error, mismatch} ->
-            #{
-                <<"error">> => <<"code">>,
-                <<"error_reason">> => <<"nonmatch_code">>,
-                <<"error_description">> => <<"The passed code did not match the client_id or redirect_uri">>
-            };
-        {error, enoent} ->
-            #{
-                <<"error">> => <<"client_id">>,
-                <<"error_reason">> => <<"unknown_client">>,
-                <<"error_description">> => <<"The passed client_id was unknown">>
-            };
-        {error, _} ->
-            #{
-                <<"error">> => <<"error">>,
-                <<"error_reason">> => <<"unknown">>,
-                <<"error_description">> => <<"Could not exchange the code">>
-            }
+        {error, Reason} ->
+            return_error(Reason)
     end;
 process_1(_, _Context) ->
     #{
         <<"error">> => <<"grant_type">>,
         <<"error_reason">> => <<"wrong_grant_type">>,
-        <<"error_description">> => <<"Grant type must be 'authorization_code'">>
+        <<"error_description">> => <<"Grant type must be 'authorization_code' or 'client_credentials'">>
+    }.
+
+return_error(disabled) ->
+    #{
+        <<"error">> => <<"client_id">>,
+        <<"error_reason">> => <<"disabled">>,
+        <<"error_description">> => <<"The client_id is disabled">>
+    };
+return_error(secret) ->
+    #{
+        <<"error">> => <<"client_secret">>,
+        <<"error_reason">> => <<"nonmatching_secret">>,
+        <<"error_description">> => <<"The passed client_secret does not match">>
+    };
+return_error(code) ->
+    #{
+        <<"error">> => <<"code">>,
+        <<"error_reason">> => <<"unknown_code">>,
+        <<"error_description">> => <<"The passed code was unknown">>
+    };
+return_error(mismatch) ->
+    #{
+        <<"error">> => <<"code">>,
+        <<"error_reason">> => <<"nonmatch_code">>,
+        <<"error_description">> => <<"The passed code did not match the client_id or redirect_uri">>
+    };
+return_error(enoent) ->
+    #{
+        <<"error">> => <<"client_id">>,
+        <<"error_reason">> => <<"unknown_client">>,
+        <<"error_description">> => <<"The passed client_id was unknown">>
+    };
+return_error(_) ->
+    #{
+        <<"error">> => <<"error">>,
+        <<"error_reason">> => <<"unknown">>,
+        <<"error_description">> => <<"Could not exchange the code">>
     }.
 
 user(UserId, Context) ->

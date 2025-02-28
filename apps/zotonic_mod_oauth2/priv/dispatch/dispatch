@@ -14,7 +14,7 @@
                               controller_template,
                               [ {template, "oauth2_logon_authorize.tpl"}, {acl, is_auth} ]},
 
-    % Exchange a temporary code for an access token
+    % Exchange a temporary code or client credentials for an access token
     {oauth2_server_access_token, [ "oauth", "access_token" ],
                               controller_oauth2_access_token,
                               []},

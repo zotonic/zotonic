@@ -67,7 +67,15 @@
                                 </a>
                             {% endif %}
                         </td>
-                        <td>{{ token.label|escape }}</td>
+                        <td>
+                            {% if not token.label %}
+                                Client Credentials
+                            {% elseif token.label == 'auth' %}
+                                Access Token
+                            {% else %}
+                                {{ token.label|escape }}
+                            {% endif %}
+                        </td>
                         <td>{{ token.valid_till|date:_"d M Y, H:i" }}</td>
                         <td>{{ token.note|escape }}</td>
                         <td>{{ token.created|date:_"d M Y, H:i" }}</td>
