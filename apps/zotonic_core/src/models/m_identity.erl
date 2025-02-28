@@ -89,6 +89,7 @@
     is_verified/2,
     verify_primary_email/2,
 
+    flush/2,
     delete/2,
     merge/3,
     is_reserved_name/1,

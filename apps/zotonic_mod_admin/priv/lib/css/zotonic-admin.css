@@ -953,6 +953,10 @@ div.modal .modal-footer.sticky-bottom {
   background-color: rgba(255, 255, 255, 0.9);
 }
 
+.modal-dialog .well {
+  border: 1px solid #d4d4d4;
+}
+
 #menu-editor .widget-header {
   height: auto;
 }
