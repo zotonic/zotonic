@@ -265,8 +265,8 @@ update_consumer(ConsumerId, Map, Context) ->
             {error, eacces}
     end.
 
-%% @doc Insert a token for the remote server for the user. Any existing token is replaced.
-%% The current user must be authenticated as an admin.
+%% @doc Insert a Client Credentials or manual token for the remote server for the user. Any existing
+%% token for the user is replaced. The current user must be authenticated as an admin.
 -spec insert_token(ConsumerId, UserId, AccessToken, Context) -> ok | {error, term()} when
     ConsumerId :: consumer_id(),
     UserId :: m_rsc:resource_id(),
@@ -276,8 +276,8 @@ insert_token(ConsumerId, UserId, AccessToken, Context) ->
     insert_token(ConsumerId, UserId, AccessToken, undefined, Context).
 
 
-%% @doc Insert a token for the remote server for the user. Any existing token is replaced.
-%% The current user must be authenticated as an admin.
+%% @doc Insert a Client Credentials or manual token for the remote server for the user. Any existing
+%% token is replaced. The current user MUST be authenticated as an admin.
 -spec insert_token(ConsumerId, UserId, AccessToken, Expires, Context) -> ok | {error, term()} when
     ConsumerId :: consumer_id(),
     UserId :: m_rsc:resource_id(),
@@ -458,8 +458,8 @@ delete_user_tokens(ConsumerId, UserId, Context) ->
             {error, eacces}
     end.
 
-%% @doc Fetch a token from the remote server for the user. The grant_flow must be of the
-%% type 'Client Credentials'.  Any existing token is replaced. The current user must be
+%% @doc Fetch a token from the remote server for the user. The grant_flow MUST be of the
+%% type 'Client Credentials'.  Any existing user token is replaced. The current user MUST be
 %% authenticated as an admin.
 -spec fetch_token(ConsumerId :: consumer_id(), UserId :: m_rsc:resource_id(), z:context() ) ->
     {ok, AccessToken :: binary()} | {error, term()}.
