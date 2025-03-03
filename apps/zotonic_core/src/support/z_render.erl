@@ -115,6 +115,8 @@
 
     wire/2, wire/3, wire/4,
 
+    action_with_args/2,
+
     % From script
     add_script/2,
     get_script/1,
@@ -827,6 +829,21 @@ flatten_list(L) when is_list(L) ->
     lists:flatten(L);
 flatten_list(Other) ->
     Other.
+
+%% @doc Prepend extra arguments to an action. The arguments are prepended to
+%% the list of action arguments, overruling or adding existing arguments.
+-spec action_with_args(Action, Args) -> Action1 when
+    Action :: MaybeAction | [ MaybeAction ],
+    MaybeAction :: action() | [ Action ] | undefined,
+    Args :: proplists:proplist(),
+    Action1 :: action() | [ action() ].
+action_with_args(Actions, Args) when is_list(Actions) ->
+    [ action_with_args(A, Args) || A <- Actions, A =/= undefined ];
+action_with_args(undefined, _Args) ->
+    [];
+action_with_args({Name, Args}, ExtraArgs) when is_list(ExtraArgs) ->
+    {Name, ExtraArgs ++ Args}.
+
 
 
 %% @doc Map a target id to a css selector

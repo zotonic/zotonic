@@ -17,37 +17,42 @@
             </div>
         </div>
 
-        <div class="well">
+        <div class="form-group">
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
                         <div class="label-floating">
-                            <input id="{{ #app_code }}" type="text" value="{{ app.app_code|escape }}" class="form-control" name="app_code" required placeholder="{_ App Code _}">
+                            <input id="{{ #app_code }}" type="text" value="{{ app.app_code|escape }}" class="form-control" name="app_code" placeholder="{_ App ID _}">
                             <label class="control-label" for="app_code">{_ App ID _}</label>
-                            {% validate id=#app_code name="app_code" type={presence} %}
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <div class="label-floating">
-                            <input id="{{ #app_secret }}" type="text" value="{{ app.app_secret|escape }}" class="form-control" name="app_secret" required placeholder="{_ App Secret _}">
+                            <input id="{{ #app_secret }}" type="text" value="{{ app.app_secret|escape }}" class="form-control" name="app_secret" placeholder="{_ App Secret _}">
                             <label class="control-label" for="app_secret">{_ App Secret _}</label>
-                            {% validate id=#app_secret name="app_secret" type={presence} %}
                         </div>
                     </div>
                 </div>
             </div>
+            <p class="help-block">{_ The App ID and App Secret are needed if you want to use this website for authentication. If you only configure manually generated tokens then you can leave these fields empty._}</p>
         </div>
 
         <div class="form-group">
             <label class="control-label" for="access_token_url">{_ Token grant method _}</label>
-            <select class="form-control" name="grant_type" style="max-width: 30ch">
+            <select class="form-control" name="grant_type" required style="max-width: 30ch">
+                {% if not app.id %}
+                    <option></option>
+                {% endif %}
                 <option value="authorization_code">
-                    Authorization Code ({_ default _})
+                    Authorization Code ({_ for authentication _})
                 </option>
                 <option value="client_credentials" {% if app.grant_type == 'client_credentials' %}selected{% endif %}>
-                    Client Credentials
+                    Client Credentials ({_ for fetching a single token _})
+                </option>
+                <option value="manual" {% if app.grant_type == 'manual' %}selected{% endif %}>
+                    {_ Access tokens are added manually _}
                 </option>
             </select>
         </div>
@@ -82,7 +87,7 @@
             <div class="label-floating">
                 <input id="{{ #authorize_url }}" type="text" value="{{ app.authorize_url|escape }}" class="form-control" name="authorize_url" placeholder="{_ Authorize URL _}">
                 <label class="control-label" for="authorize_url">{_ Authorize URL _}</label>
-                <p class="help-block">{% trans "Leave empty if you use “{client}.”" client="Client Credentials" %}</p>
+                <p class="help-block">{% trans "Fill this in for “{grant}” if the remote site is not a Zotonic site." grant="Authorization Code" %}</p>
             </div>
         </div>
 
@@ -90,5 +95,11 @@
             <div class="label-floating">
                 <input id="{{ #access_token_url }}" type="text" value="{{ app.access_token_url|escape }}" class="form-control" name="access_token_url" placeholder="{_ Access Token URL _}">
                 <label class="control-label" for="access_token_url">{_ Access Token URL _}</label>
+                <p class="help-block">
+                    {% trans "Fill this in for “{client}” and “{grant}” if the remote site is not a Zotonic site."
+                            client="Client Credentials"
+                            grant="Authorization Code"
+                    %}
+                </p>
             </div>
         </div>

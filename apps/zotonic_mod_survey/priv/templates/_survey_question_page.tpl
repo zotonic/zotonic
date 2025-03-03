@@ -88,7 +88,7 @@
 			{% else %}
 				{% with questions|last as last_q %}
 					{% if not editing and not questions|survey_is_submit and last_q.type /= "survey_stop" %}
-						{% if page_nr == pages %}
+						{% if page_nr == pages or questions|survey_is_pagebreak_submit %}
 							<button type="submit" class="btn btn-primary btn-lg survey-submit">{_ Submit _}</button>
 						{% else %}
 							<button type="submit" class="btn btn-primary btn-lg survey-next">{_ Next _}</button>

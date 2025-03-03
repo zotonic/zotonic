@@ -83,12 +83,14 @@
     insert_unique/4,
     insert_unique/5,
 
+    set_propb/3,
     set_verify_key/2,
     set_verified/2,
     set_verified/4,
     is_verified/2,
     verify_primary_email/2,
 
+    flush/2,
     delete/2,
     merge/3,
     is_reserved_name/1,
@@ -758,16 +760,23 @@ set_username_pw_trans(Id, Username, Hash, Context) ->
              {ok, exists}
     end.
 
-%% @doc Flush the cached identity values fo the given resource (aka user) id.
+%% @doc Flush the cached identity values for the given resource (aka user) id and the rsc.
 -spec flush(RscId, Context) -> ok when
     RscId :: m_rsc:resource_id(),
     Context :: z:context().
 flush(RscId, Context) ->
     z_depcache:flush(RscId, Context),
+    flush_idn(RscId, Context).
+
+%% @doc Flush the cached identity values fo the given resource (aka user) id.
+-spec flush_idn(RscId, Context) -> ok when
+    RscId :: m_rsc:resource_id(),
+    Context :: z:context().
+flush_idn(RscId, Context) ->
     z_depcache:flush({idn, RscId}, Context).
 
 
-%% @doc Notify identity changes.
+%% @doc Notify identity changes, flush the cached identities and resource.
 notify(RscId, Action, Type, Key, IsVerified, Context) ->
     flush(RscId, Context),
     Type1 = z_convert:to_binary(Type),
@@ -892,7 +901,13 @@ reset_password(UserId, Context)  when is_integer(UserId) ->
 reset_password(UserId, Context) ->
     reset_password(m_rsc:rid(UserId, Context), Context).
 
-
+%% @doc Generate a username for the given resource id. The username is unique
+%% for all username identities in the database. The username is based on the
+%% first name and surname of the resource (if set).
+-spec generate_username(RscId, Context) -> Username when
+    RscId :: m_rsc:resource(),
+    Context :: z:context(),
+    Username :: binary().
 generate_username(Id, Context) ->
     Username = base_username(Id, Context),
     username_unique(Username, Context).
@@ -1684,12 +1699,25 @@ email_find_verified(Email, [Idn|Idns]) ->
     end.
 
 
--spec set_by_type(m_rsc:resource_id(), type(), key(), z:context()) -> ok.
+%% @doc Update the key and clear the propb of an identity. This will update all identities
+%% of the resource with this type. If the identity does not exist then it is inserted.
+-spec set_by_type(RscId, Type, Key, Context) -> ok when
+    RscId :: m_rsc:resource_id(),
+    Type :: type(),
+    Key :: key(),
+    Context :: z:context().
 set_by_type(RscId, Type, Key, Context) ->
     set_by_type(RscId, Type, Key, [], Context).
 
--spec set_by_type(m_rsc:resource_id(), type(), key(), term(), z:context()) -> ok.
-set_by_type(RscId, Type, Key, Props, Context) ->
+%% @doc Update the key and propb of a identity. This will update all identities
+%% of the resource with this type. If the identity does not exist then it is inserted.
+-spec set_by_type(RscId, Type, Key, PropB, Context) -> ok when
+    RscId :: m_rsc:resource_id(),
+    Type :: type(),
+    Key :: key(),
+    PropB :: term(),
+    Context :: z:context().
+set_by_type(RscId, Type, Key, PropB, Context) ->
     F = fun(Ctx) ->
         case z_db:q("
                 update identity
@@ -1698,20 +1726,26 @@ set_by_type(RscId, Type, Key, Props, Context) ->
                     modified = now()
                 where rsc_id = $1
                   and type = $2",
-                [ m_rsc:rid(RscId, Context), Type, Key, ?DB_PROPS(Props) ],
+                [ m_rsc:rid(RscId, Context), Type, Key, ?DB_PROPS(PropB) ],
                 Ctx)
         of
             0 ->
                 z_db:q("insert into identity (rsc_id, type, key, propb) values ($1,$2,$3,$4)",
-                       [ m_rsc:rid(RscId, Context), Type, Key, ?DB_PROPS(Props) ],
+                       [ m_rsc:rid(RscId, Context), Type, Key, ?DB_PROPS(PropB) ],
                        Ctx),
                 ok;
             N when N > 0 ->
                 ok
         end
     end,
-    z_db:transaction(F, Context).
+    z_db:transaction(F, Context),
+    flush(RscId, Context).
 
+%% @doc Delete the specific identity. The user must be allowed to edit the resource
+%% associated with the identity.
+-spec delete(IdnId, Context) -> {ok, 0|1} | {error, eacces | term()} when
+    IdnId :: integer(),
+    Context :: z:context().
 delete(IdnId, Context) ->
     case z_db:q_row("select rsc_id, type, key from identity where id = $1", [IdnId], Context) of
         undefined ->
@@ -1735,7 +1769,10 @@ delete(IdnId, Context) ->
     end.
 
 %% @doc Move the identities of two resources, the identities are removed from the source id.
--spec merge(m_rsc:resource(), m_rsc:resource(), z:context()) -> ok | {error, term()}.
+-spec merge(WinnerId, LoserId, Context) -> ok | {error, term()} when
+    WinnerId :: m_rsc:resource(),
+    LoserId :: m_rsc:resource(),
+    Context :: z:context().
 merge(WinnerId, LoserId, Context) ->
     case z_acl:rsc_editable(WinnerId, Context) andalso z_acl:rsc_editable(LoserId, Context) of
         true ->
@@ -1818,7 +1855,11 @@ maybe_reset_email_property(_Id, _Type, _Key, _Context) ->
     ok.
 
 
--spec delete_by_type(m_rsc:resource(), type(), z:context()) -> ok.
+%% @doc For a resource, delete all associated identities with a certain type.
+-spec delete_by_type(Resource, Type, Context) -> ok when
+    Resource :: m_rsc:resource(),
+    Type :: type(),
+    Context :: z:context().
 delete_by_type(Rsc, Type, Context) ->
     RscId = m_rsc:rid(Rsc, Context),
     case z_db:q("delete from identity where rsc_id = $1 and type = $2", [RscId, Type], Context) of
@@ -1828,7 +1869,12 @@ delete_by_type(Rsc, Type, Context) ->
             ok
     end.
 
--spec delete_by_type_and_key(m_rsc:resource(), type(), key(), z:context()) -> ok.
+%% @doc For a resource, delete all associated identities with a certain type and key.
+-spec delete_by_type_and_key(Resource, Type, Key, Context) -> ok when
+    Resource :: m_rsc:resource(),
+    Type :: type(),
+    Key :: key(),
+    Context :: z:context().
 delete_by_type_and_key(Rsc, Type, Key, Context) ->
     RscId = m_rsc:rid(Rsc, Context),
     case z_db:q("delete from identity where rsc_id = $1 and type = $2 and key = $3",
@@ -1840,15 +1886,21 @@ delete_by_type_and_key(Rsc, Type, Key, Context) ->
             ok
     end.
 
--spec delete_by_type_and_keyprefix(m_rsc:resource(), type(), key(), z:context()) -> ok.
-delete_by_type_and_keyprefix(Rsc, Type, Key, Context) ->
+%% @doc For a resource, delete all associated identities with a certain type and key
+%% starting with the given prefix.
+-spec delete_by_type_and_keyprefix(Resource, Type, KeyPrefix, Context) -> ok when
+    Resource :: m_rsc:resource(),
+    Type :: type(),
+    KeyPrefix :: key(),
+    Context :: z:context().
+delete_by_type_and_keyprefix(Rsc, Type, KeyPrefix, Context) ->
     RscId = m_rsc:rid(Rsc, Context),
     case z_db:q("delete from identity where rsc_id = $1 and type = $2 and key like $3 || ':%'",
-                [RscId, Type, Key], Context)
+                [RscId, Type, KeyPrefix], Context)
     of
         0 -> ok;
         _N ->
-            notify(RscId, delete, Type, Key, undefined, Context),
+            notify(RscId, delete, Type, KeyPrefix, undefined, Context),
             ok
     end.
 
@@ -1897,23 +1949,60 @@ lookup_users_by_verified_type_and_key(Type, Key, Context) ->
 lookup_by_verify_key(Key, Context) ->
     z_db:assoc_row("select * from identity where verify_key = $1", [Key], Context).
 
-
--spec set_verify_key(IdnId, z:context()) -> {ok, VerifyKey} when
+%% @doc Set the verify key of the identity. Return the new verification key. The
+%% verification key is a random 10 character binary identifier and unique for all
+%% identities in the database.
+-spec set_verify_key(IdnId, Context) -> {ok, VerifyKey} | {error, enoent} when
     IdnId :: pos_integer(),
+    Context :: z:context(),
     VerifyKey :: binary().
-set_verify_key(Id, Context) ->
+set_verify_key(IdnId, Context) ->
     VerifyKey = z_ids:id(10),
     case lookup_by_verify_key(VerifyKey, Context) of
         undefined ->
-            z_db:q("update identity
+            case z_db:q1("
+                    update identity
                     set verify_key = $2,
                         modified = now()
-                    where id = $1",
-                    [Id, VerifyKey],
-                    Context),
-            {ok, VerifyKey};
+                    where id = $1
+                    returning rsc_id",
+                    [IdnId, VerifyKey],
+                    Context)
+            of
+                undefined ->
+                    {error, enoent};
+                RscId ->
+                    flush_idn(RscId, Context),
+                    {ok, VerifyKey}
+            end;
         _ ->
-            set_verify_key(Id, Context)
+            set_verify_key(IdnId, Context)
+    end.
+
+%% @doc Update the (binary) properties field of the specific identity.
+-spec set_propb(IdnId, PropB, Context) -> ok | {error, enoent} when
+    IdnId :: pos_integer(),
+    PropB :: undefined | term(),
+    Context :: z:context().
+set_propb(IdnId, undefined, Context) ->
+    set_propb_1(IdnId, undefined, Context);
+set_propb(IdnId, PropB, Context) ->
+    set_propb_1(IdnId, ?DB_PROPS(PropB), Context).
+
+set_propb_1(IdnId, PropB, Context) ->
+    case z_db:q1("
+            update identity
+            set propb = $2,
+                modified = now()
+            where id = $1
+            returning rsc_id",
+            [IdnId, ?DB_PROPS(PropB)],
+            Context)
+    of
+        undefined ->
+            {error, enoent};
+        RscId ->
+            flush_idn(RscId, Context)
     end.
 
 

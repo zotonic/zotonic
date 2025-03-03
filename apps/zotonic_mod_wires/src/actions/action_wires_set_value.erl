@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Set the value of an input element
 %% @end
 
-%% Copyright 2023 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,19 +18,20 @@
 %% limitations under the License.
 
 -module(action_wires_set_value).
--include_lib("zotonic_core/include/zotonic.hrl").
+
 -export([render_action/4]).
 
 render_action(_TriggerId, TargetId, Args, Context) ->
     CssSelector = z_render:css_selector(proplists:get_value(id, Args, TargetId), Args),
-    Value = proplists:get_value(value, Args, ""),
+    Attr = proplists:get_value(value_arg, Args, value),
+    Value = proplists:get_value(Attr, Args, <<>>),
     Script = iolist_to_binary([
          $$, $(, $', CssSelector, $', $),
          <<".val(\"">>, z_utils:js_escape(Value), $", $)
        ]),
    Script1 = case proplists:get_value(trigger_event, Args) of
-      undefined ->
-         Script;
+      undefined -> Script;
+      false -> Script;
       true ->
          [
             Script,
