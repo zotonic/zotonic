@@ -366,10 +366,8 @@ maybe_update_identity(_OldProps, _NewProps, [], _Context) ->
     % no identity
     ok;
 maybe_update_identity(_OldProps, NewProps, IdnPs, Context) ->
-    {key, Key} = proplists:lookup(key, IdnPs),
-    {type, Type} = proplists:lookup(type, IdnPs),
-    {rsc_id, UserId} = proplists:lookup(rsc_id, IdnPs),
-    m_identity:set_by_type(UserId, Type, Key, NewProps, Context).
+    {id, IdnId} = proplists:lookup(id, IdnPs),
+    m_identity:set_propb(IdnId, NewProps, Context).
 
 maybe_signup(Auth, Context) ->
     case auth_match_primary_email(Auth, Context) of
