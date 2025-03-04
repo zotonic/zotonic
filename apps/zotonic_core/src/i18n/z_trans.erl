@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Translate english sentences into other languages, following
 %% the GNU gettext principle.
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -173,15 +173,23 @@ lookup_fallback(Trans, Context) ->
     OptContext :: z:context() | undefined,
     Translation :: binary() | undefined.
 lookup_fallback(Text, Lang, OptContext) when is_list(Text) ->
-    case is_string(Text) of
+    case is_iodata(Text) of
         true ->
             Text1 = unicode:characters_to_binary(Text, utf8),
             lookup_fallback(Text1, Lang, OptContext);
         false ->
             T1 = lists:map(
-                fun(T) -> z_convert:to_binary(lookup_fallback(T, Lang, OptContext)) end,
+                fun(T) ->
+                    case lookup_fallback(T, Lang, OptContext) of
+                        undefined -> <<>>;
+                        T1 -> T1
+                    end
+                end,
                 Text),
-            unicode:characters_to_binary(T1, utf8)
+            case unicode:characters_to_binary(T1, utf8) of
+                S when is_binary(S) -> S;
+                _ -> <<>>
+            end
     end;
 lookup_fallback(Text, Lang, OptContext) when is_atom(Lang) ->
     lookup_fallback(Text, [Lang], OptContext);
@@ -210,12 +218,15 @@ lookup_fallback(Text, _Lang, _Context) when is_binary(Text) ->
 lookup_fallback(_Text, _Lang, _Context) ->
     undefined.
 
+is_iodata([H|T]) when is_integer(H), H >= 1 -> is_iodata(T);
+is_iodata([H|T]) when is_binary(H) -> is_iodata(T);
+is_iodata([H|T]) when is_list(H) -> is_iodata(H) andalso is_iodata(T);
+is_iodata([]) -> true;
+is_iodata(_) -> false.
 
-is_string([H|T]) when is_integer(H), H >= 1 -> is_string(T);
-is_string([H|T]) when is_binary(H) -> is_string(T);
-is_string([]) -> true;
-is_string(_) -> false.
-
+-spec find_first(Langs, Texts) -> binary() | undefined when
+    Langs :: [ z_language:language_code() ],
+    Texts :: [ {z_language:language_code(), binary()} ].
 find_first(_Langs, []) ->
     undefined;
 find_first([], _Tr) ->
@@ -351,9 +362,9 @@ trans(#trans{ tr = Tr0 }, Languages, Context) ->
     case lists:keyfind(en, 1, Tr0) of
         {en, EnText} ->
             #trans{ tr = Tr } = translations(EnText, Context),
-            case find_first(Tr, Languages) of
+            case find_first(Languages, Tr) of
                 undefined ->
-                    case find_first(Tr0, Languages) of
+                    case find_first(Languages, Tr0) of
                         undefined -> EnText;
                         T -> T
                     end;
@@ -361,14 +372,14 @@ trans(#trans{ tr = Tr0 }, Languages, Context) ->
                     T
             end;
         false ->
-            case find_first(Tr0, Languages) of
+            case find_first(Languages, Tr0) of
                 undefined -> <<>>;
                 T -> T
             end
     end;
 trans(Text, Languages, Context) when is_binary(Text) ->
     #trans{ tr = Tr } = translations(Text, Context),
-    case find_first(Tr, Languages) of
+    case find_first(Languages, Tr) of
         undefined -> Text;
         T -> T
     end;
