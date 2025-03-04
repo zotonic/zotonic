@@ -216,6 +216,9 @@ is_string([H|T]) when is_binary(H) -> is_string(T);
 is_string([]) -> true;
 is_string(_) -> false.
 
+-spec find_first(Langs, Texts) -> binary() | undefined when
+    Langs :: [ z_language:language_code() ],
+    Texts :: [ {z_language:language_code(), binary()} ].
 find_first(_Langs, []) ->
     undefined;
 find_first([], _Tr) ->
@@ -351,9 +354,9 @@ trans(#trans{ tr = Tr0 }, Languages, Context) ->
     case lists:keyfind(en, 1, Tr0) of
         {en, EnText} ->
             #trans{ tr = Tr } = translations(EnText, Context),
-            case find_first(Tr, Languages) of
+            case find_first(Languages, Tr) of
                 undefined ->
-                    case find_first(Tr0, Languages) of
+                    case find_first(Languages, Tr0) of
                         undefined -> EnText;
                         T -> T
                     end;
@@ -361,14 +364,14 @@ trans(#trans{ tr = Tr0 }, Languages, Context) ->
                     T
             end;
         false ->
-            case find_first(Tr0, Languages) of
+            case find_first(Languages, Tr0) of
                 undefined -> <<>>;
                 T -> T
             end
     end;
 trans(Text, Languages, Context) when is_binary(Text) ->
     #trans{ tr = Tr } = translations(Text, Context),
-    case find_first(Tr, Languages) of
+    case find_first(Languages, Tr) of
         undefined -> Text;
         T -> T
     end;
