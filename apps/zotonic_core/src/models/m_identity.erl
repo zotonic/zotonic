@@ -33,6 +33,7 @@
     get_user_info/1,
     get_user_info/2,
     delete_username/2,
+    is_username_local/2,
     set_username/3,
     set_username_pw/4,
     reset_password/2,
@@ -344,7 +345,6 @@ get_username(RscId, Context) ->
     end,
     z_depcache:memo(F, {username, RscId}, 3600, [ {idn, RscId} ], Context).
 
-
 %% @doc Return the username and last login of the current user.
 -spec get_user_info(Context) -> UserInfo when
     Context :: z:context(),
@@ -546,6 +546,38 @@ set_identity_expired(IdnId, DateTime, Context) when is_integer(IdnId) ->
             {error, enoent}
     end.
 
+%% @doc Check if the value is a username or an email address coupled to somebody
+%% with a username. Helper routine for observers of the logon_options notification.
+%% Note that it is bad practice to leak information about someone being a user or not.
+-spec is_username_local(Value, Context) -> boolean() when
+    Value :: binary() | string() | undefined,
+    Context :: z:context().
+is_username_local(undefined, _Context) ->
+    false;
+is_username_local(<<>>, _Context) ->
+    false;
+is_username_local("", _Context) ->
+    false;
+is_username_local(Value, Context) ->
+    S = z_string:trim(unicode:characters_to_binary(Value)),
+    S1 = case z_email_utils:is_email(S) of
+        true -> normalize_key(email, S);
+        false -> S
+    end,
+    case z_db:q1("
+        select count(*)
+        from identity u,
+             identity k
+        where u.type = 'username_pw'
+          and u.rsc_id = k.rsc_id
+          and k.type in ('username_pw', 'email')
+          and k.key in ($1, $2)",
+        [ S, S1 ],
+        Context)
+    of
+        0 -> false;
+        _ -> true
+    end.
 
 %% @doc Change the username of the resource id, only possible if there is
 %% already a username/password set
