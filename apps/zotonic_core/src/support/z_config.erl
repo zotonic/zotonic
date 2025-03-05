@@ -309,6 +309,7 @@ default(log_http_metrics_buffer_size) -> 10000;
 default(zotonic_apps) -> filename:join([ z_path:get_path(), "apps_user" ]);
 default(proxy_allowlist) -> local;
 default(ip_allowlist) -> local;
+default(ip_allowlist_admin) -> any;
 default(ip_allowlist_system_management) -> any;
 default(sessionjobs_limit) -> erlang:max(erlang:system_info(process_limit) div 10, 10000);
 default(sidejobs_limit) -> erlang:max(erlang:system_info(process_limit) div 2, 50000);
