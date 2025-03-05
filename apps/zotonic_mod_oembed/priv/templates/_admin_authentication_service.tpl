@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="widget">
-                <h3 class="widget-header"><span class="fa fa-globe"></span> Embedly</h3>
+                <h3 class="widget-header"><span class="glyphicon glyphicon-globe"></span> Embedly</h3>
                 <div class="widget-content">
                     <p class="help-block">
                         {_ API Key can be found on _} <a href="https://app.embed.ly/" title="embed.ly" target="_blank">{_ your Embedly app dashboard _}</a>
