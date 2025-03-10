@@ -746,6 +746,7 @@ new_session(Host, SessionId, PersistId) ->
 load_persist(Session) ->
     {PropsPersist, PersistIsSaved} =
             case m_persistent:get(Session#session.persist_id, Session#session.context) of
+                [] -> {[], false};
                 L when is_list(L) -> {L,  true};
                 _ -> {[], false}
             end,
@@ -757,6 +758,11 @@ load_persist(Session) ->
 
 
 %% @doc Save the persistent data to the database, when it is changed. Reset the dirty flag.
+save_persist(#session{persist_is_dirty=true, persist_id=undefined, props_persist=Props, context=Context} = Session) ->
+    NewId = new_id(),
+    % note; to prevent loop if NewId is undefined, we dont recurse the function
+    ok = m_persistent:put(NewId, Props, Context),
+    Session#session{persist_is_dirty = false, persist_is_saved = true, persist_id = NewId};
 save_persist(#session{persist_is_dirty=true, persist_id=Id, props_persist=Props, context=Context} = Session) ->
     ok = m_persistent:put(Id, Props, Context),
     Session#session{persist_is_dirty = false, persist_is_saved = true};
