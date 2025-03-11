@@ -35,7 +35,7 @@
         {% block head_extra %}
         {% endblock %}
     </head>
-    <body id="body" class="{% block bodyclass %}{% endblock %}"{% block bodyattr %}{% endblock %}>
+    <body id="body" class="{% block bodyclass %}{% endblock %}"{% block bodyattr %}{% endblock %} data-cotonic-pathname-search="{% cotonic_pathname_search %}">
 
     {% block navigation %}
         {% include "_admin_menu.tpl" %}
