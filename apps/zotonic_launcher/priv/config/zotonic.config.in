@@ -215,6 +215,10 @@
 %%%   - "127.0.0.0/8,10.0.0.0/8,192.168.0.0/16,172.16.0.0/12,169.254.0.0/16,::1,fd00::/8,fe80::/10,100.64.0.0/10"
    %% {ip_allowlist, local},
 
+%%% IP allowlist for the admin user if the password is not the default 'admin' password.
+%%% Default no restriction.
+   %% {ip_allowlist_admin, any},
+
 %%% Zotonic Status IP allowlist, used for restricting access to system management screens. Default no restriction.
    %% {ip_allowlist_system_management, any},
 

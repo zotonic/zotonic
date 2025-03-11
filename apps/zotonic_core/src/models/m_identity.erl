@@ -95,7 +95,8 @@
     delete/2,
     merge/3,
     is_reserved_name/1,
-    is_peer_allowed/1
+    is_peer_allowed/1,
+    is_peer_allowed_admin/1
 ]).
 
 -export([
@@ -1129,11 +1130,24 @@ check_username_pw_1(<<"admin">>, Password, Context) ->
                     {error, peer_not_allowed}
             end;
         AdminPassword ->
-            case is_equal(Password1, AdminPassword) of
+            case is_peer_allowed_admin(Context) of
                 true ->
-                    {ok, 1};
+                    case is_equal(Password1, AdminPassword) of
+                        true ->
+                            {ok, 1};
+                        false ->
+                            {error, password}
+                    end;
                 false ->
-                    {error, password}
+                    ?LOG_ERROR(#{
+                        text => <<"admin login with non-default password from non allowed ip address">>,
+                        in => zotonic_core,
+                        ip_address => m_req:get(peer, Context),
+                        username => <<"admin">>,
+                        result => error,
+                        reason => peer_not_allowed
+                    }),
+                    {error, peer_not_allowed}
             end
     end;
 check_username_pw_1(Username, Password, Context) ->
@@ -1172,14 +1186,26 @@ check_username_pw_1(Username, Password, Context) ->
             end
     end.
 
-%% @doc Check if the tcp/ip peer address is a allowed ip address
+%% @doc Check if the tcp/ip peer address is a allowed ip address for admin/admin logon.
 is_peer_allowed(Context) ->
-    z_ip_address:ip_match(m_req:get(peer_ip, Context), ip_allowlist(Context)).
+    z_ip_address:ip_match(m_req:get(peer_ip, Context), ip_allowlist(Context))
+    andalso is_peer_allowed_admin(Context).
 
 ip_allowlist(Context) ->
     SiteAllowlist = m_config:get_value(site, ip_allowlist, Context),
     case z_utils:is_empty(SiteAllowlist) of
         true -> z_config:get(ip_allowlist);
+        false -> SiteAllowlist
+    end.
+
+%% @doc Check if the tcp/ip peer address is a allowed ip address for the admin/* logon.
+is_peer_allowed_admin(Context) ->
+    z_ip_address:ip_match(m_req:get(peer_ip, Context), ip_allowlist_admin(Context)).
+
+ip_allowlist_admin(Context) ->
+    SiteAllowlist = m_config:get_value(site, ip_allowlist_admin, Context),
+    case z_utils:is_empty(SiteAllowlist) of
+        true -> z_config:get(ip_allowlist_admin);
         false -> SiteAllowlist
     end.
 
