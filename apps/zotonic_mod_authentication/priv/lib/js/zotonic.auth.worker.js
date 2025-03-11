@@ -1,5 +1,5 @@
 /**
- * Copyright 2019-2024 Marc Worrell <marc@worrell.nl>
+ * Copyright 2019-2025 Marc Worrell <marc@worrell.nl>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,34 +17,46 @@
 "use strict";
 
 // Period between checking with the server if the authentication is still valid.
-var AUTH_CHECK_PERIOD = 30;
+const AUTH_CHECK_PERIOD = 30;
 
 // Maximum period between checks (in seconds).
-var AUTH_CHECK_PERIOD_MAX = 900;
+const AUTH_CHECK_PERIOD_MAX = 900;
 
 // TODO:
 // - recheck auth after ws connect and no recent auth check (or failed check)
 //   this could be due to browser wakeup or server down time.
 
-function fetchWithUA( body ) {
-    return self.call("model/sessionId/get")
+function fetchSem( body, onSuccess ) {
+    self.navigator.locks.request('z.auth', async (lock) => {
+        const resp = await fetch( self.abs_url("/zotonic-auth"), {
+            method: "POST",
+            cache: "no-cache",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+        });
+        if (resp.ok) {
+            const json = await resp.json();
+            onSuccess(json)
+        } else {
+            actions.fetchError();
+        }
+    });
+}
+
+function fetchWithUA( body, onSuccess ) {
+    self.call("model/sessionId/get")
         .then( function(sid) {
             body.timestamp = Math.floor(Date.now() / 1000);
-            return self.call("model/document/get/all")
+            self.call("model/document/get/all")
                 .then( function(msg) {
                     body.document = msg.payload;
                     body.cotonic_sid = sid.payload;
-                    return fetch( self.abs_url("/zotonic-auth"), {
-                        method: "POST",
-                        cache: "no-cache",
-                        headers: {
-                            "Accept": "application/json",
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify(body)
-                    })
+                    fetchSem(body, onSuccess);
                 })
-        });
+            });
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -152,10 +164,7 @@ model.present = function(data) {
         self.publish("model/auth/event/ping", "pong", { retain: true });
 
         // Initial check on user status
-        fetchWithUA({ cmd: "status" })
-        .then(function(resp) { return resp.json(); })
-        .then(function(body) { actions.authResponse(body); })
-        .catch((e) => { actions.fetchError(); });
+        fetchWithUA({ cmd: "status" }, actions.authResponse);
     }
 
     if ("is_fetch_error" in data) {
@@ -167,10 +176,7 @@ model.present = function(data) {
         model.state_change('auth_unknown');
 
         // Refresh the current auth status by probing the server
-        fetchWithUA({ cmd: "status" })
-        .then(function(resp) { return resp.json(); })
-        .then(function(body) { actions.authResponse(body); })
-        .catch((e) => { actions.fetchError(); });
+        fetchWithUA({ cmd: "status" }, actions.authResponse);
     }
 
     if (data.is_auth_check && (state.authKnown(model) || state.fetchError(model))) {
@@ -180,17 +186,11 @@ model.present = function(data) {
         }
         model.is_keep_alive = false;
 
-        fetchWithUA({ cmd: auth_check_cmd })
-        .then(function(resp) { return resp.json(); })
-        .then(function(body) { actions.authResponse(body); })
-        .catch((e) => { actions.fetchError(); });
+        fetchWithUA({ cmd: auth_check_cmd }, actions.authResponse);
     }
 
     if (data.is_refresh && (state.authKnown(model) || state.fetchError(model))) {
-        fetchWithUA({ cmd: 'refresh', options: data.options || {} })
-        .then(function(resp) { return resp.json(); })
-        .then(function(body) { actions.authResponse(body); })
-        .catch((e) => { actions.fetchError(); });
+        fetchWithUA({ cmd: 'refresh', options: data.options || {} }, actions.authResponse);
     }
 
     if (data.logon) {
@@ -207,10 +207,8 @@ model.present = function(data) {
                     test_passcode: data.test_passcode,
                     authuser: data.authuser || null,
                     setautologon: !!data.setautologon
-                })
-        .then(function(resp) { return resp.json(); })
-        .then(function(body) { actions.authLogonResponse(body); })
-        .catch((e) => { actions.fetchError(); });
+                },
+                actions.authLogonResponse);
     }
 
     if (data.switch_user) {
@@ -221,10 +219,8 @@ model.present = function(data) {
         fetchWithUA({
                     cmd: "switch_user",
                     user_id: data.user_id
-                })
-        .then(function(resp) { return resp.json(); })
-        .then(function(body) { actions.authLogonResponse(body); })
-        .catch((e) => { actions.fetchError(); });
+                },
+                actions.authLogonResponse);
     }
 
     if (data.is_onetime_token) {
@@ -236,10 +232,8 @@ model.present = function(data) {
                     cmd: "onetime_token",
                     token: data.token,
                     url: data.url
-                })
-        .then(function(resp) { return resp.json(); })
-        .then(function(body) { actions.authLogonResponse(body); })
-        .catch((e) => { actions.fetchError(); });
+                },
+                actions.authLogonResponse);
     }
 
     if (data.logoff) {
@@ -247,10 +241,7 @@ model.present = function(data) {
         model.onauth = data.onauth || null;
         model.state_change('authenticating');
 
-        fetchWithUA({ cmd: "logoff" })
-        .then(function(resp) { return resp.json(); })
-        .then(function(body) { actions.authResponse(body); })
-        .catch((e) => { actions.fetchError(); });
+        fetchWithUA({ cmd: "logoff" }, actions.authResponse);
     }
 
     if ("auth_response" in data) {
@@ -334,10 +325,7 @@ model.present = function(data) {
             "code-new": data["code-new"],
             test_passcode: data.test_passcode,
             setautologon: !!data.setautologon
-        })
-        .then(function(resp) { return resp.json(); })
-        .then(function(body) { actions.authLogonResponse(body); })
-        .catch((e) => { actions.fetchError(); });
+        }, actions.authLogonResponse);
     }
 
     if (data.is_change) {
@@ -351,10 +339,7 @@ model.present = function(data) {
             "code-new": data["code-new"],
             test_passcode: data.test_passcode,
             url: "#"
-        })
-        .then(function(resp) { return resp.json(); })
-        .then(function(body) { actions.authChangeResponse(body); })
-        .catch((e) => { actions.fetchError(); });
+        }, actions.authChangeResponse);
     }
 
     if (data.is_change_response) {
