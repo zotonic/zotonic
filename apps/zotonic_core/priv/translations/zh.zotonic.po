@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-02-11 13:18\n"
+"PO-Revision-Date: 2025-03-25 12:16\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -212,7 +212,7 @@ msgstr "你确定你要恢复所有的ACL规则到他们的最新发布版本"
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:125
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:134
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:50./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:53./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:13./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:77
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:69./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:88./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:39./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:51./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26./apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:181./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:200./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:26./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:77./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:51./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:85./apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:133./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:141
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:158./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:113./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:85./apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:49./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6./apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:114
@@ -249,7 +249,7 @@ msgstr "改变了配置。"
 #: apps/zotonic_mod_email_status/priv/templates/_dialog_email_status.tpl:4
 #: apps/zotonic_mod_l10n/priv/templates/_admin_configure_module.tpl:8
 #: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:16
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:24
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_view.tpl:33
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:26
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_email_addresses.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:13./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:20./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:14./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:21./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:54./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:59./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:45./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:50./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:32./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:37
 msgid "Close"
@@ -316,7 +316,7 @@ msgstr "无法移至合作团队"
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:52./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:75./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:97
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:43
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:249
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:19./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:34
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:19./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:34./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:84./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:89./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:61./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:66
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125./apps/zotonic_mod_survey/src/mod_survey.erl:137
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:24
 msgid "Delete"
@@ -402,7 +402,7 @@ msgid "If checked then users connected with an <em>author</em> predicate are con
 msgstr "如果选中，则与 <em>作者</em> 谓词连接的用户将被视为 ACL 规则评估的资源所有者。这可确保标记为 <em>管理自己的</em> ACL 规则适用于作者。"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:18
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:51
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:42
 msgid "Import"
 msgstr "输入"
 
@@ -479,7 +479,7 @@ msgid "Not allowed to change ACL options."
 msgstr "不允许更改 ACL 选项。"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:50
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:87./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:116
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:62./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:103./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:92./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:80
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:88
 msgid "Not allowed."
 msgstr "不允许。"
@@ -851,7 +851,7 @@ msgstr "添加媒体到正文"
 msgid "Add note"
 msgstr "添加备注"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:726./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
+#: apps/zotonic_mod_admin/src/mod_admin.erl:732./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
 msgid "Added the connection to"
 msgstr "将连接添加到"
 
@@ -955,7 +955,7 @@ msgid "Attached media"
 msgstr "附加媒体"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:135
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:50
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:41
 msgid "Auth"
 msgstr "作者"
 
@@ -1082,11 +1082,11 @@ msgstr "连接"
 msgid "Connect a page"
 msgstr "连接到页面"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:27
 msgid "Connected from"
 msgstr "连接自"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:20
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:22
 msgid "Connected to"
 msgstr "连接到"
 
@@ -1142,7 +1142,7 @@ msgstr "由我创建"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:24./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:111./apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:12./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:56
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:51./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:53
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:51./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:44./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:44./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:41
 msgid "Created on"
 msgstr "创建时间"
 
@@ -1206,7 +1206,7 @@ msgstr "删除选定的页面"
 msgid "Delete this page."
 msgstr "删除这个页面。"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:559
+#: apps/zotonic_mod_admin/src/mod_admin.erl:565
 msgid "Deleted tasks."
 msgstr "已删除的任务。"
 
@@ -1432,7 +1432,7 @@ msgstr "文件/媒体内容"
 msgid "File size"
 msgstr "文件大小"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:464
+#: apps/zotonic_mod_admin/src/mod_admin.erl:470
 msgid "File uploaded to the drop folder, will be handled shortly."
 msgstr "上传到拖放文件夹的文件将很快处理。"
 
@@ -1755,7 +1755,7 @@ msgstr "向上移动块"
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:23./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:11./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:10
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:13./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:14./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:47
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:13./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:14./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:38
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:632
 msgid "Name"
 msgstr "名字"
@@ -2077,7 +2077,7 @@ msgstr "附注"
 msgid "Remove"
 msgstr "删除"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:730
+#: apps/zotonic_mod_admin/src/mod_admin.erl:736
 msgid "Removed the connection to"
 msgstr "取消了与"
 
@@ -2132,7 +2132,7 @@ msgstr "保存并查看本页面。"
 msgid "Save this page."
 msgstr "保存本页面。"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:548
+#: apps/zotonic_mod_admin/src/mod_admin.erl:554
 msgid "Scheduled a background task to check all refers connections."
 msgstr "安排后台任务来检查所有引用的连接。"
 
@@ -2190,7 +2190,7 @@ msgstr "选定类别"
 msgid "Selecting a file will make the page a media item."
 msgstr "选择一个文件将使该页面成为一个媒体项目。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:30
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:32
 msgid "Settings &amp; more"
 msgstr "设置 &amp; 更多"
 
@@ -2248,28 +2248,28 @@ msgstr "一些任务正在重试。<br>总错误： {total}<br>单个任务最�
 msgid "Something went wrong. Sorry."
 msgstr "出错了。"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:437
+#: apps/zotonic_mod_admin/src/mod_admin.erl:443
 msgid "Sorry, could not handle this filename."
 msgstr "抱歉，无法处理此文件名。"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:476
+#: apps/zotonic_mod_admin/src/mod_admin.erl:482
 msgid "Sorry, could not move the file to the drop folder."
 msgstr "抱歉，无法将文件移动到放置文件夹。"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:550./apps/zotonic_mod_admin/src/mod_admin.erl:561
+#: apps/zotonic_mod_admin/src/mod_admin.erl:556./apps/zotonic_mod_admin/src/mod_admin.erl:567
 #: apps/zotonic_mod_menu/src/mod_menu.erl:88
 msgid "Sorry, only an admin is allowed to do this"
 msgstr "抱歉，只有管理员可以执行此操作"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:412./apps/zotonic_mod_admin/src/mod_admin.erl:423
+#: apps/zotonic_mod_admin/src/mod_admin.erl:418./apps/zotonic_mod_admin/src/mod_admin.erl:429
 msgid "Sorry, that page is unknown."
 msgstr "抱歉，该页面未知。"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:414./apps/zotonic_mod_admin/src/mod_admin.erl:425
+#: apps/zotonic_mod_admin/src/mod_admin.erl:420./apps/zotonic_mod_admin/src/mod_admin.erl:431
 msgid "Sorry, you are not allowed to edit notes."
 msgstr "抱歉，您不能编辑笔记。"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:480
+#: apps/zotonic_mod_admin/src/mod_admin.erl:486
 msgid "Sorry, you are not allowed to upload drop folder files."
 msgstr "抱歉，您不能上传放置文件夹文件。"
 
@@ -2277,11 +2277,11 @@ msgstr "抱歉，您不能上传放置文件夹文件。"
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "对不起，你没有添加连接的权限。"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:712
+#: apps/zotonic_mod_admin/src/mod_admin.erl:718
 msgid "Sorry, you have no permission to add the connection."
 msgstr "对不起，你没有权限添加连接。"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:714
+#: apps/zotonic_mod_admin/src/mod_admin.erl:720
 msgid "Sorry, you have no permission to delete the connection."
 msgstr "抱歉，你没有删除连接的权限。"
 
@@ -2581,7 +2581,7 @@ msgstr "唯一 URL"
 msgid "Unpublished"
 msgstr "未发表"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_item.tpl:29./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:29./apps/zotonic_mod_admin/src/mod_admin.erl:720./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:71./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:127
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_item.tpl:29./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:29./apps/zotonic_mod_admin/src/mod_admin.erl:726./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:71./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:127
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58./apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:57
 #: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
@@ -2809,7 +2809,7 @@ msgstr "由"
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:44
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:31
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:46
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:70./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:71./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:77
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:14./apps/zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:15./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:79./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:81./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:68./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:57./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:58
 msgid "d M Y, H:i"
 msgstr "Y M d, H:i"
 
@@ -3244,6 +3244,7 @@ msgid "Username"
 msgstr "用户名"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:16
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:42./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:40
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:39
 msgid "Valid till"
 msgstr "有效期至"
@@ -4307,6 +4308,7 @@ msgstr "复制到剪贴板"
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:17./apps/zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:20
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:33
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_view.tpl:18
 msgid "Copy"
 msgstr "复制"
 
@@ -4407,7 +4409,7 @@ msgid "Sorry, you are not allowed to set the 2FA."
 msgstr "抱歉，您无权设置2FA。"
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:130
-#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:170
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:258
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Success"
 msgstr "成功"
@@ -4654,7 +4656,7 @@ msgstr "每个会话都将被中断并且您将被注销。"
 msgid "Expected another account"
 msgstr "预计另一个帐户"
 
-#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:256
+#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:259
 msgid "External Services"
 msgstr "外部服务"
 
@@ -5975,6 +5977,7 @@ msgid "The license and the attribution of this page."
 msgstr "本页的许可和归属。"
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:50./apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:51
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:109
 msgid "Year"
 msgstr "年"
 
@@ -5990,7 +5993,7 @@ msgid "Admin Custom Redirects"
 msgstr "管理员自定义重定向"
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:23
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:48
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:39
 msgid "Domain"
 msgstr "領域"
 
@@ -6882,7 +6885,7 @@ msgid "App ID."
 msgstr "应用 ID。"
 
 #: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:19./apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:20
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:61./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:34./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:35
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:37./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:33./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:34
 msgid "App Secret"
 msgstr "应用 Secret"
 
@@ -7685,7 +7688,7 @@ msgid "Toggle non people"
 msgstr "切换非人"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:23./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:23
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:49
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:49./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:40./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:39
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:191
 msgid "User"
 msgstr "用户"
@@ -7841,7 +7844,7 @@ msgid "Deleted the mailing list."
 msgstr "删除了邮件列表。"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:21
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:21./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:22./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:19./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:20./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:48./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:49
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:21./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:22./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:19./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:20./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:48./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:40
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:28./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:30
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:3./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:6
 msgid "Description"
@@ -8703,7 +8706,11 @@ msgstr "您已将您的 <strong>Microsoft</strong> 帐户配对。"
 msgid "Debug MQTT publish and subscribe actions in the Zotonic console"
 msgstr "在 Zotonic 控制台中调试 MQTT 发布和订阅操作"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:91./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:92
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:165./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:51
+msgid "<b>Important:</b> write access is only disabled if the used ACL module and models support this."
+msgstr "<b>重要：</b> 仅当使用的 ACL 模块和模型支持此功能时，才会禁用写访问。"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:96./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:97
 msgid "Access Token URL"
 msgstr "访问令牌 URL"
 
@@ -8711,7 +8718,35 @@ msgstr "访问令牌 URL"
 msgid "Access content on this website."
 msgstr "访问本网站上的内容。"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:52
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:164./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:50
+msgid "Access permission"
+msgstr "访问权限"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:29./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:82
+msgid "Access tokens"
+msgstr "访问令牌"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:55
+msgid "Access tokens are added manually"
+msgstr "手动添加访问令牌"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:86
+msgid "Add Token"
+msgstr "添加代币"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:23
+msgid "Add a new token"
+msgstr "添加新令牌"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:9
+msgid "Add a new token for accessing data on <b>{domain}</b>."
+msgstr "添加一个新的令牌用于访问 <b>{domain}</b>上的数据。"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:27./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:27
+msgid "Add a token"
+msgstr "添加令牌"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:43
 msgid "Added by"
 msgstr "添加者"
 
@@ -8719,41 +8754,57 @@ msgstr "添加者"
 msgid "Allow Access"
 msgstr "允许访问"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:69
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:49
+msgid "Allow OAuth2 authorization with users on this site"
+msgstr "允许此网站上的用户进行 OAuth2 授权"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:82
+msgid "Allow fetching tokens using Client Credentials"
+msgstr "允许使用客户端凭证获取令牌"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:74
 msgid "Allow import of content from the remote website"
 msgstr "允许从远程网站导入内容"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:64
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:69
 msgid "Allow users on the remote website to authenticate here (using “{code}”)"
 msgstr "允许远程网站上的用户在此处进行身份验证（使用“{code}”）"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:16
-msgid "Allow users registered on the remote website to authenticate on this website."
-msgstr "允许在远程网站上注册的用户在此网站上进行身份验证。"
+msgid "Allow users registered on the other website to logon on this website."
+msgstr "允许在其他网站注册的用户登录本网站。"
 
-#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:126
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:170
 msgid "An OAuth2 consumer with this name already exsists, please use another name."
 msgstr "已存在使用此名称的 OAuth2 使用者，请使用其他名称。"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:25
-msgid "App Code"
-msgstr "应用代码"
-
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:44./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:26
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:31./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:25./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:26
 msgid "App ID"
 msgstr "应用程序 ID"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:85./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:19
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:197./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_view.tpl:28
 msgid "App not found, or no view permission."
 msgstr "未找到应用，或没有查看权限。"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:74
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:186
 msgid "Are you sure you want to delete this App?"
 msgstr "您确定要删除此应用程序吗？"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:22./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:36
 msgid "Are you sure you want to delete this Consumer App?"
 msgstr "您确定要删除此消费者应用程序吗？"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:88
+msgid "Are you sure you want to delete this access token?"
+msgstr "您确定要删除此访问令牌吗？"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:65
+msgid "Are you sure you want to delete this client token?"
+msgstr "您确定要删除此客户端令牌吗？"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:60
+msgid "As the application is configured to use {client}, you can fetch an access token from {domain}."
+msgstr "由于应用程序配置为使用 {client}，您可以从 {domain}获取访问令牌。"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:13
 msgid "Ask users on this website for their credentials to authenticate on their website or App."
@@ -8767,7 +8818,7 @@ msgstr "认证..."
 msgid "Authorize"
 msgstr "授权"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:83./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:84
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:88./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:89
 msgid "Authorize URL"
 msgstr "授权网址"
 
@@ -8775,13 +8826,21 @@ msgstr "授权网址"
 msgid "Authorize access to your account"
 msgstr "授权访问您的帐户"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:73
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:78
 msgid "Automatically extend tokens obtained using “{client}” before they expire"
 msgstr "在过期之前自动扩展使用“{client}”获得的令牌"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:7
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_view.tpl:7
 msgid "Be careful, this access token gives full access to your account."
 msgstr "请注意，此访问令牌可提供对您帐户的完全访问权限。"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:99
+msgid "Client Credentials token expiration"
+msgstr "客户端凭证令牌过期"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:121
+msgid "Client Credentials user"
+msgstr "客户端凭证用户"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:32
 msgid "Connect with"
@@ -8791,31 +8850,47 @@ msgstr "与连接"
 msgid "Consumer App not found, or no view permission."
 msgstr "未找到消费者应用程序，或没有查看权限。"
 
-#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:188
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:129./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:240
+msgid "Could not delete the token."
+msgstr "无法删除令牌。"
+
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:276
 msgid "Could not fetch a new access token."
 msgstr "无法获取新的访问令牌。"
 
-#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:105
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:121./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:149
 msgid "Could not generate the access token."
 msgstr "无法生成访问令牌。"
 
-#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:66./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:78./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:85
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:70./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:87./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:94
 msgid "Could not insert the App."
 msgstr "无法插入应用程序。"
 
-#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:128./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:154
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:172./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:198
 msgid "Could not insert the Consumer."
 msgstr "无法插入消费者。"
 
-#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:147
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:228
+msgid "Could not save the access token."
+msgstr "无法保存访问令牌。"
+
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:191
 msgid "Could not update the Consumer."
 msgstr "无法更新消费者。"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:8
+msgid "Create a new token to allow access to {title}."
+msgstr "创建一个新的令牌以允许访问 {title}。"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:34
 msgid "Create connections with content on {local}."
 msgstr "{local}上的内容的连接。"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:72./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:76
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:106
+msgid "Day"
+msgstr "天"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:184./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:188
 msgid "Delete App"
 msgstr "删除应用"
 
@@ -8843,17 +8918,21 @@ msgstr "您想断开您的帐户吗？"
 msgid "Domain (eg. www.example.com)"
 msgstr "域（例如 www.example.com）"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:34./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:35
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:19./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:34
 msgid "Edit App"
 msgstr "编辑应用"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:77
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:72
+msgid "Edit Client"
+msgstr "編輯客戶"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:24./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:68
 msgid "Edit OAuth2 App"
 msgstr "编辑 OAuth2 应用"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:106
-msgid "Edit OAuth2 Consumer"
-msgstr "编辑 OAuth2 消费者"
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:77
+msgid "Edit OAuth2 Client"
+msgstr "编辑 OAuth2 客户端"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:10
 msgid "Edit the description of the App."
@@ -8863,57 +8942,73 @@ msgstr "编辑应用程序的描述。"
 msgid "Enabled"
 msgstr "启用"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:82./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:95
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:65./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:215
 msgid "Fetch Token"
 msgstr "获取令牌"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:88
-msgid "Fetch your access token to this site?"
-msgstr "获取您对该网站的访问令牌？"
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:209
+msgid "Fetch an access token to this site?"
+msgstr "获取此站点的访问令牌吗？"
 
-#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:171
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:259
 msgid "Fetched a new access token."
 msgstr "获取了一个新的访问令牌。"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:92
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:213
 msgid "Fetching a token can take some time."
 msgstr "获取令牌可能需要一些时间。"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:35./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:33
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:99
+msgid "Fill this in for “{client}” and “{grant}” if the remote site is not a Zotonic site."
+msgstr "如果远程站点不是 Zotonic 站点，请填写“{client}”和“{grant}”。"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:90
+msgid "Fill this in for “{grant}” if the remote site is not a Zotonic site."
+msgstr "如果远程站点不是 Zotonic 站点，请填写“{grant}”。"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:136./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:21./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:27
+msgid "Find user"
+msgstr "查找用户"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:71
 msgid "For Zotonic sites this you can enter the domain name(s) of the website."
 msgstr "对于 Zotonic 网站，您可以输入网站的域名。"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:52
-msgid "Generate access token"
-msgstr "生成访问令牌"
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:65
+msgid "For every combination of a user and a label there can only be a single token. Existing tokens with this label will be replaced."
+msgstr "对于每个用户和标签的组合，只能有一个令牌。具有此标签的现有令牌将被替换。"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:48
-msgid "Generate my access token"
-msgstr "生成我的访问令牌"
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:110
+msgid "Forever"
+msgstr "永远"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:33./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:31
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:69
 msgid "Give the redirect URLs that are valid for the website performing the OAuth2 authorization."
 msgstr "提供对执行 OAuth2 授权的网站有效的重定向 URL。"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:3
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_view.tpl:3
 msgid "Here is the new access token."
 msgstr "这是新的访问令牌。"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:79
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:84
 msgid "If the remote website is a Zotonic website then you can leave the two URLs below empty."
 msgstr "如果远程网站是 Zotonic 网站，那么您可以将下面的两个 URL 留空。"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:51
-msgid "If you have already a token then it will be replaces with the new one."
-msgstr "如果您已经有一个令牌，那么它将被新的令牌替换。"
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:16
+msgid "If the user has already a token, then that token will be replaced with the new token."
+msgstr "如果用户已经有令牌，那么该令牌将被新令牌替换。"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:15
-msgid "Import content from the remote website to this website."
-msgstr "将内容从远程网站导入到本网站。"
+msgid "Import content from the other website to this website."
+msgstr "将其他网站的内容导入到本网站。"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:85
-msgid "Leave empty if you use “{client}.”"
-msgstr "如果您使用“{client}”，请留空。"
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:122./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:12
+msgid "It is good practice to have users with limited access permissions for access tokens."
+msgstr "对用户授予访问令牌的有限访问权限是一种很好的做法。"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:41
+msgid "Label"
+msgstr "标签"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:29
 msgid "Log in to {remote} with your {local} account."
@@ -8923,9 +9018,13 @@ msgstr "使用您的 {local} 帐户登录 {remote}"
 msgid "Log in with"
 msgstr "登录"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:40
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:27
 msgid "Make App"
 msgstr "制作应用"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:78
+msgid "Make Token"
+msgstr "制作代币"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:22./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:26
 msgid "Make a new App"
@@ -8935,51 +9034,135 @@ msgstr "制作新应用"
 msgid "Make a new App for OAuth2 authorization and/or content export to other websites."
 msgstr "为 OAuth2 授权和/或内容导出到其他网站制作一个新的应用程序。"
 
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:23
+msgid "Make a new App token"
+msgstr "创建新的 App token"
+
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:8
 msgid "Make a new consumer for OAuth2 authorization and content import from another website."
 msgstr "为 OAuth2 授权和从另一个网站导入内容创建一个新使用者。"
 
-#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:97
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:74
+msgid "Manually add a token, as copied from {domain}."
+msgstr "手动添加一个令牌，从 {domain}复制而来。"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:108
+msgid "Month"
+msgstr "月"
+
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:111./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:141
 msgid "New access token"
 msgstr "新访问令牌"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:128
+msgid "No user selected."
+msgstr "未选择用户。"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:43
+msgid "Note"
+msgstr "笔记"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:3
 msgid "OAuth2 Application"
 msgstr "OAuth2 应用程序"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:7./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:344
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:3
+msgid "OAuth2 Application - Tokens"
+msgstr "OAuth2 应用程序 - 令牌"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:7./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:15./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:439
 msgid "OAuth2 Applications"
 msgstr "OAuth2 应用程序"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:3./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:7./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:349
-msgid "OAuth2 Consumer Tokens"
-msgstr "OAuth2 消费者令牌"
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:10
+msgid "OAuth2 Applications &gt; Tokens"
+msgstr "OAuth2 应用程序 &gt; 令牌"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:88
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:3./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:7./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:15./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:444
+msgid "OAuth2 Clients"
+msgstr "OAuth2 客户端"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:10
+msgid "OAuth2 Clients &gt; Tokens to access {domain}"
+msgstr "OAuth2 客户端 &gt; 要访问的令牌 {domain}"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:3
+msgid "OAuth2 Clients - Tokens"
+msgstr "OAuth2 客户端 - 令牌"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:10
+msgid "OAuth2 clients are used to access other websites."
+msgstr "OAuth2 客户端用于访问其他网站。"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:63./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:104./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:81
 msgid "Only admnistrators can view OAuth2 applications."
 msgstr "只有管理员才能查看 OAuth2 应用程序。"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:117
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:93
 msgid "Only admnistrators can view OAuth2 consumers."
 msgstr "只有管理员才能查看 OAuth2 使用者。"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:63./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:64
+msgid "Optional label"
+msgstr "可选标签"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:71./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:72
+msgid "Optional note"
+msgstr "可选注释"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:39
+msgid "Permission"
+msgstr "允许"
+
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:104./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:203
+msgid "Please select a user."
+msgstr "请选择一个用户。"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:175./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:57./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:56
+msgid "Read &amp; write access"
+msgstr "读取 &amp; 写入访问"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:54
+msgid "Read access"
+msgstr "读取访问权限"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:170./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:54
+msgid "Read only access"
+msgstr "只读访问权限"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:27
 msgid "Register"
 msgstr "登记"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:23./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:27
-msgid "Register a new website"
-msgstr "注册一个新网站"
+msgid "Register a new client"
+msgstr "注册新客户"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:10
-msgid "Registration of tokens to access remote websites."
-msgstr "注册令牌以访问远程网站。"
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:132./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:17./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:23
+msgid "Select a user"
+msgstr "选择用户"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:90
-msgid "The token will be registered with your account and only you (or routines acting on your behalf) will be able to use it."
-msgstr "令牌将在您的帐户中注册，并且只有您（或代表您的例程）才能使用它。"
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:122
+msgid "Select the user associated with Client Credential tokens."
+msgstr "选择与客户端凭证令牌关联的用户。"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:55
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:12./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:14
+msgid "Select the user for this token."
+msgstr "选择此令牌的用户。"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:39
+msgid "The App ID and App Secret are needed if you want to use this website for authentication. If you only configure manually generated tokens then you can leave these fields empty."
+msgstr "如果您想使用此网站进行身份验证，则需要 App ID 和 App Secret。如果您只配置手动生成的令牌，则可以将这些字段留空。"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:102
+msgid "The client must extend the token before it expires."
+msgstr "客户端必须在令牌过期之前延长其有效期。"
+
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:211
+msgid "The token will be registered with the selected user account."
+msgstr "令牌将会在选定的用户账户中注册。"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:60
 msgid "The “{code}” method redirects the user to the remote website to obtain an access token. “{client}” allows an admin user to directly fetch a token from the remote website."
 msgstr "“{code}”方法将用户重定向到远程网站以获取访问令牌。 “{client}” 允许管理员用户直接从远程网站获取令牌。"
 
@@ -8987,13 +9170,17 @@ msgstr "“{code}”方法将用户重定向到远程网站以获取访问令牌
 msgid "These applications are used by 3rd parties to:"
 msgstr "这些应用程序被第 3 方用于："
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:34./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:32
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:70
 msgid "These must be complete URLs, but without the query (?..) or hash (#...) parts."
 msgstr "这些必须是完整的 URL，但没有查询 (?..) 或哈希 (#...) 部分。"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:19
-msgid "This must be an unique name to identify the remote service. This can not be changed. Only a-z and 0-9 are allowed."
-msgstr "这必须是唯一的名称来标识远程服务。这是无法改变的。只允许使用 az 和 0-9。"
+msgid "This must be an unique name to identify the remote service. This can not be changed. Only <tt>A-Z</tt>, <tt>a-z</tt>, <tt>0-9</tt>, <tt>-</tt> and <tt>_</tt> characters are allowed."
+msgstr "这必须是用于标识远程服务的唯一名称。此名称不可更改。仅允许使用 <tt>AZ</tt>、 <tt>az</tt>、 <tt>0-9</tt>、 <tt>-</tt> 和 <tt>_</tt> 字符。"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:14
+msgid "This user will be able to use the token."
+msgstr "该用户将能够使用该令牌。"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:25
 msgid "This will disconnect all tokens and users."
@@ -9003,15 +9190,31 @@ msgstr "这将断开所有令牌和用户的连接。"
 msgid "To use one of these applications, the App ID and secret must be registered with the 3rd party."
 msgstr "要使用这些应用程序之一，必须向第 3 方注册应用程序 ID 和机密。"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:44
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:79./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:80
+msgid "Token"
+msgstr "代币"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:43
 msgid "Token grant method"
 msgstr "令牌授予方法"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:101
+msgid "Tokens fetched using Client Credentials will expire after this period."
+msgstr "使用客户端凭证获取的令牌将在此期限后过期。"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:12
+msgid "Tokens to access or authenticate with <b>{domain}</b> of behalf of a user."
+msgstr "用于代表用户访问或验证 <b>{domain}</b> 的令牌。"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:12
+msgid "Tokens to let other systems access this website of behalf of an user."
+msgstr "令牌允许其他系统代表用户访问此网站。"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:64
 msgid "Unknown client or redirect, check with your website administrator."
 msgstr "未知客户端或重定向，请咨询您的网站管理员。"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:70
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:182
 msgid "Update App"
 msgstr "更新应用"
 
@@ -9019,19 +9222,23 @@ msgstr "更新应用"
 msgid "Update consumer for OAuth2 authorization and content import from another website."
 msgstr "更新消费者以进行 OAuth2 授权和从另一个网站导入内容。"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:52./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:54
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:52./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:45
 msgid "User count"
 msgstr "用户数"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:29./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:30./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:27./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:28
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:66./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:67
 msgid "Valid redirect URLs, one per line"
 msgstr "有效的重定向 URL，每行一个"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:11
-msgid "With a consumer token this website can:"
-msgstr "使用消费者令牌，该网站可以："
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:107
+msgid "Week"
+msgstr "星期"
 
-#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:195
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:11
+msgid "With a client token this website can:"
+msgstr "使用客户端令牌，该网站可以："
+
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:283
 msgid "You are not allowed to fetch a consumer token."
 msgstr "不允许您获取消费者令牌。"
 
@@ -9039,14 +9246,17 @@ msgstr "不允许您获取消费者令牌。"
 msgid "You will be able to:"
 msgstr "你将能够："
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:15
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_view.tpl:24
 msgid "You will not be able to see this token again, so copy it and save it in a secure place."
 msgstr "您将无法再次看到此令牌，因此请复制它并将其保存在安全的地方。"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:47
-#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:27
-msgid "default"
-msgstr "默认"
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:49
+msgid "for authentication"
+msgstr "用于身份验证"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:52
+msgid "for fetching a single token"
+msgstr "获取单个 token"
 
 #: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:9
 msgid "API Key can be found on"
@@ -9412,6 +9622,10 @@ msgstr "您不可以这样做"
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:5
 msgid "Zotonic maintains a sitemap of all pages. It is good to rebuild this sitemap after language or other structural content changes."
 msgstr "Zotonic 维护所有页面的站点地图。语言或其他结构内容发生变化后，最好重建此站点地图。"
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:27
+msgid "default"
+msgstr "默认"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:21
 msgid "not in sitemap"
