@@ -123,8 +123,13 @@ environment_atom(B) when is_binary(B) ->
 -spec title(z:context()) -> binary().
 title(Context) ->
     case m_config:get_value(site, title, Context) of
-        undefined -> <<>>;
-        Title -> unicode:characters_to_binary(Title)
+        undefined ->
+            <<>>;
+        Title ->
+            case unicode:characters_to_binary(Title) of
+                T when is_binary(T) -> T;
+                _ -> <<>>
+            end
     end.
 
 -spec load_config(atom()|z:context()) -> ok | {error, term()}.
