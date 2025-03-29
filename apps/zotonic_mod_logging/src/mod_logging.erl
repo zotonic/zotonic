@@ -538,6 +538,10 @@ handle_other_log(Record, State) ->
 flatten(Fields) ->
      lists:map( fun flatten_prop/1, Fields ).
 
+flatten_prop({message_nr, MessageNr}) when is_binary(MessageNr) ->
+    {message_nr, z_string:truncatechars(MessageNr, 32, <<>>)};
+flatten_prop({envelop_from, undefined}) ->
+    {envelop_from, <<>>};
 flatten_prop({_, undefined} = Prop) ->
     Prop;
 flatten_prop({_, V} = Prop) when is_binary(V); is_list(V); is_number(V); is_boolean(V); is_atom(V) ->

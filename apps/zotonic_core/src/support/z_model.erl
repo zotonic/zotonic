@@ -137,6 +137,7 @@ callback(Model, Verb, Path, Msg, Context) ->
             maybe_resolve(Verb, model_call(Mod, map_verb(Verb), Path, Msg, Context), Context);
         {error, _} = Error ->
             ?LOG_NOTICE(#{
+                site => z_context:site(Context),
                 text => <<"Publish to unknown model">>,
                 in => zotonic_core,
                 model => Model,

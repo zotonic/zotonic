@@ -22,7 +22,7 @@
     #}
     <td>
         <a href="{% url admin_log_email severity=4 message_nr=result_row.message_nr %}" title="{{ result_row.message_nr }}">
-            {{ result_row.message_nr|truncate:12|escape }}
+            {{ result_row.message_nr|truncatechars:10|escape }}
         </a>
     </td>
     {#

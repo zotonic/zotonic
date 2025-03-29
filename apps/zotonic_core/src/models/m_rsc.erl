@@ -1157,35 +1157,33 @@ is_matching_category(ExtIsA, LocalIsA) ->
     LocalIsA1 = [ z_convert:to_binary(A) || A <- LocalIsA ],
     lists:any( fun(A) -> lists:member(A, ExtIsA1) end, LocalIsA1 ).
 
-
-%% @doc Return the id of the resource with a certain unique name.
+%% @doc Return the id of the resource with a certain unique name. If not found then
+%% return 'undefined'. The name is normalized before looking up.
 -spec name_lookup(resource_name(), z:context()) -> resource_id() | undefined.
 name_lookup(Name, Context) ->
-    try
-        z_string:to_name(Name)
-    of
-        Lower ->
-            case z_depcache:get({rsc_name, Lower}, Context) of
+    Normalized = try z_string:to_name(Name) catch _:_ -> undefined end,
+    if
+        is_binary(Normalized), Normalized =/= <<>> ->
+            case z_depcache:get({rsc_name, Normalized}, Context) of
                 {ok, undefined} ->
                     undefined;
                 {ok, Id} ->
                     Id;
                 undefined ->
-                    Id = case z_db:q1("select id from rsc where name = $1", [Lower], Context) of
+                    Id = case z_db:q1("select id from rsc where name = $1", [Normalized], Context) of
                         undefined -> undefined;
                         Value -> Value
                     end,
-                    z_depcache:set({rsc_name, Lower}, Id, ?DAY, [Id, {rsc_name, Lower}], Context),
+                    z_depcache:set({rsc_name, Normalized}, Id, ?DAY, [Id, {rsc_name, Normalized}], Context),
                     Id
-            end
-    catch
-        error:badarg ->
+            end;
+        true ->
             undefined
     end.
 
-
-%% @doc Return the id of the resource with a certain uri.
--spec uri_lookup( resource_uri() | string(), z:context()) -> resource_id() | undefined.
+%% @doc Return the id of the resource with a certain uri. Return 'undefined' if
+%% not found. The uri is taken as-is and not normalized.
+-spec uri_lookup(resource_uri() | string(), z:context()) -> resource_id() | undefined.
 uri_lookup(<<>>, _Context) ->
     undefined;
 uri_lookup(Uri, Context) when is_binary(Uri) ->
@@ -1227,6 +1225,8 @@ uri_lookup_1(Uri, Context) ->
 
 
 %% @doc Check if the hostname in an URL matches the current site
+is_local_uri(<<"/">>, _Context) ->
+    true;
 is_local_uri(<<"/", C, _/binary>>, _Context) when C =/= $/ ->
     true;
 is_local_uri(Uri, Context) ->
@@ -1241,9 +1241,15 @@ is_local_uri(Uri, Context) ->
 
 
 %% @doc Use the dispatcher to extract the id from the local URI
-local_uri_to_id(<<$/, C, _/binary>> = Path, Context) when C =/= $/ ->
-    case z_sites_dispatcher:dispatch_path(Path, Context) of
+local_uri_to_id(<<"/">> = Path, Context) ->
+    local_uri_to_id_1(Path, Context);
+local_uri_to_id(<<"/", C, _/binary>> = Path, Context) when C =/= $/ ->
+    local_uri_to_id_1(Path, Context);
+local_uri_to_id(Uri, Context) ->
+    Site = z_context:site(Context),
+    case z_sites_dispatcher:dispatch_url(Uri) of
         {ok, #{
+            site := Site,
             controller_options := Options,
             bindings := Bindings
         }} ->
@@ -1252,12 +1258,11 @@ local_uri_to_id(<<$/, C, _/binary>> = Path, Context) when C =/= $/ ->
         _ ->
             % Non matching sites and illegal urls are rejected
             undefined
-    end;
-local_uri_to_id(Uri, Context) ->
-    Site = z_context:site(Context),
-    case z_sites_dispatcher:dispatch_url(Uri) of
+    end.
+
+local_uri_to_id_1(Path, Context) ->
+    case z_sites_dispatcher:dispatch_path(Path, Context) of
         {ok, #{
-            site := Site,
             controller_options := Options,
             bindings := Bindings
         }} ->

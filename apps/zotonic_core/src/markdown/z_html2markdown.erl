@@ -409,7 +409,7 @@ column_pad(Cs, Ws, Align) ->
         Zipped).
 
 -spec pad(C, W, Direction) -> binary() when
-    C :: binary(),
+    C :: binary() | iolist(),
     W :: integer(),
     Direction :: right | center | left | none.
 pad(C, W, right) when is_binary(C) ->
@@ -429,7 +429,10 @@ pad(C, W, _) when is_binary(C) ->
     case z_string:len(C) of
         N when N < W -> <<C/binary, (spaces(W-N))/binary>>;
         _ -> C
-    end.
+    end;
+pad(C, W, Direction) when is_list(C) ->
+    B = iolist_to_binary(C),
+    pad(B, W, Direction).
 
 spaces(W) ->
     spaces(W, <<>>).
