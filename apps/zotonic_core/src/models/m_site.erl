@@ -26,6 +26,7 @@
 -export([
     m_get/3,
     environment/1,
+    title/1,
     security/1,
     load_config/1,
     load_config/2,
@@ -57,11 +58,7 @@ m_get([ <<"protocol">> | Rest ], _Msg, Context) ->
 m_get([ <<"is_ssl">> | Rest ], _Msg, Context) ->
     {ok, {z_context:is_ssl_site(Context), Rest}};
 m_get([ <<"title">> | Rest ], _Msg, Context) ->
-    Title = case m_config:get_value(site, title, Context) of
-        undefined -> <<>>;
-        T -> unicode:characters_to_binary(T)
-    end,
-    {ok, {Title, Rest}};
+    {ok, {title(Context), Rest}};
 m_get([ <<"subtitle">> | Rest ], _Msg, Context) ->
     SubTitle = case m_config:get_value(site, subtitle, Context) of
         undefined -> <<>>;
@@ -123,6 +120,12 @@ environment_atom(L) when is_list(L) ->
 environment_atom(B) when is_binary(B) ->
     environment_atom( binary_to_existing_atom(B, utf8) ).
 
+-spec title(z:context()) -> binary().
+title(Context) ->
+    case m_config:get_value(site, title, Context) of
+        undefined -> <<>>;
+        Title -> unicode:characters_to_binary(Title)
+    end.
 
 -spec load_config(atom()|z:context()) -> ok | {error, term()}.
 load_config(#context{} = Context) ->

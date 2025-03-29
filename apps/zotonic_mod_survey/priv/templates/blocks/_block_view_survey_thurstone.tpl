@@ -82,7 +82,7 @@
             {% elseif blk.input_type == 'submit' and not editing %}
                 {% for option in props.answers %}
                     {% with forloop.counter as index %}
-                        <button id="{{ #thur.index }}" name="{{ blk.name }}" value="{{ option.value|default:index }}" class="btn" type="submit">
+                        <button id="{{ #thur.index }}" name="{{ blk.name }}" value="{{ option.value|default:index }}" class="btn btn-default" type="submit">
                             <span></span>{{ option.option }}
                         </button>
                     {% endwith %}

@@ -265,8 +265,9 @@ update_consumer(ConsumerId, Map, Context) ->
             {error, eacces}
     end.
 
-%% @doc Insert a Client Credentials or manual token for the remote server for the user. Any existing
-%% token for the user is replaced. The current user must be authenticated as an admin.
+%% @doc Insert a Client Credentials or manual token to access the remote server by the user.
+%% Any existing consumer token for the user is replaced. The current user must be authenticated
+%% as an admin.
 -spec insert_token(ConsumerId, UserId, AccessToken, Context) -> ok | {error, term()} when
     ConsumerId :: consumer_id(),
     UserId :: m_rsc:resource_id(),
@@ -276,8 +277,8 @@ insert_token(ConsumerId, UserId, AccessToken, Context) ->
     insert_token(ConsumerId, UserId, AccessToken, undefined, Context).
 
 
-%% @doc Insert a Client Credentials or manual token for the remote server for the user. Any existing
-%% token is replaced. The current user MUST be authenticated as an admin.
+%% @doc Insert a manual token for access to the remote server by the user. Any existing
+%% token for the consumer is replaced. The current user MUST be authenticated as an admin.
 -spec insert_token(ConsumerId, UserId, AccessToken, Expires, Context) -> ok | {error, term()} when
     ConsumerId :: consumer_id(),
     UserId :: m_rsc:resource_id(),
@@ -344,7 +345,7 @@ list_consumer_tokens(ConsumerId, Context) ->
                         select id, rsc_id as user_id, expires, created, modified
                         from identity
                         where type = 'mod_oauth2'
-                          and key like $1 || ':%'
+                          and (key like $1 || ':%' or key = $1)
                         order by modified desc",
                         [ ConsumerName ],
                         Context)
@@ -372,7 +373,7 @@ delete_consumer_tokens_1(undefined, ConsumerName, Context) ->
         select id
         from identity
         where type = 'mod_oauth2'
-          and key like $1 || ':%'",
+          and (key like $1 || ':%' or key = $1)",
         [ ConsumerName ],
         Context),
     lists:foreach(
@@ -385,7 +386,7 @@ delete_consumer_tokens_1(UserId, ConsumerName, Context) ->
         select id
         from identity
         where type = 'mod_oauth2'
-          and key like $1 || ':%'
+          and (key like $1 || ':%' or key = $1)
           and rsc_id = $2",
         [ ConsumerName, UserId ],
         Context),
@@ -413,7 +414,7 @@ delete_token(ConsumerId, TokenId, Context) ->
                         select id
                         from identity
                         where type = 'mod_oauth2'
-                          and key like $1 || ':%'
+                          and (key like $1 || ':%' or key = $1)
                           and id = $2",
                         [ ConsumerName, TokenId ],
                         Context),
@@ -444,7 +445,7 @@ delete_user_tokens(ConsumerId, UserId, Context) ->
                         select id
                         from identity
                         where type = 'mod_oauth2'
-                          and key like $1 || ':%'
+                          and (key like $1 || ':%' or key = $1)
                           and rsc_id = $2",
                         [ ConsumerName, UserId ],
                         Context),

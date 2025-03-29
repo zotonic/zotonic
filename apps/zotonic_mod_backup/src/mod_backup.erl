@@ -973,8 +973,10 @@ without_extension(Filename) ->
 
 %% @doc Check if we can make backups, the configuration is ok
 check_configuration() ->
-    Db = os:find_executable(db_dump_cmd()),
-    Tar = os:find_executable(archive_cmd()),
+    DbCmd = db_dump_cmd(),
+    TarCmd = archive_cmd(),
+    Db = os:find_executable(DbCmd),
+    Tar = os:find_executable(TarCmd),
     if
         is_list(Db) andalso is_list(Tar) ->
             {ok, #{
@@ -982,6 +984,16 @@ check_configuration() ->
                 archive => Tar
             }};
         true ->
+            ?LOG_WARNING(#{
+                in => zotonic_mod_backup,
+                text => <<"archive and/or pg_dump not found">>,
+                result => error,
+                reason => not_configured,
+                db_dump => Db,
+                db_dump_config => DbCmd,
+                archive => Tar,
+                archive_config => TarCmd
+            }),
             {error, not_configured}
     end.
 
