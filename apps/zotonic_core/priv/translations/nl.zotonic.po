@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-03-25 12:15\n"
+"PO-Revision-Date: 2025-03-29 15:42\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -8726,7 +8726,7 @@ msgstr "Toegang"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:29./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:82
 msgid "Access tokens"
-msgstr "Toegangsmunten"
+msgstr "Toegangstokens"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:55
 msgid "Access tokens are added manually"
