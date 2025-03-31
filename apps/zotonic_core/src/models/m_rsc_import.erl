@@ -564,6 +564,26 @@ fetch_json(Uri, Context) ->
                         {ok, {_FinalUrl, _Hs, _Size, Body}} ->
                             JSON = jsxrecord:decode(Body),
                             {ok, JSON};
+                        {error, {Code, FinalUrl, _Hs, _Size, _Body}} when Code =:= 403; Code =:= 401 ->
+                            ?LOG_WARNING(#{
+                                text => <<"Error fetching resource for import">>,
+                                in => zotonic_core,
+                                result => error,
+                                reason => eacces,
+                                final_url => z_convert:to_binary(FinalUrl),
+                                uri => Uri
+                            }),
+                            {error, eacces};
+                        {error, {404, FinalUrl, _Hs, _Size, _Body}} ->
+                            ?LOG_WARNING(#{
+                                text => <<"Error fetching resource for import">>,
+                                in => zotonic_core,
+                                result => error,
+                                reason => enoent,
+                                final_url => z_convert:to_binary(FinalUrl),
+                                uri => Uri
+                            }),
+                            {error, enoent};
                         {error, Reason} = Error ->
                             ?LOG_WARNING(#{
                                 text => <<"Error fetching resource for import">>,
@@ -1376,7 +1396,16 @@ import_edges(LocalId, #{ <<"edges">> := Edges }, ImportedAcc, Options, Context) 
                 Acc
         end,
         ImportedAcc,
-        Edges).
+        Edges);
+import_edges(LocalId, Rsc, ImportedAcc, _Options, _Context) ->
+    ?LOG_INFO(#{
+        text => <<"Importing edges without 'edges' key">>,
+        in => zotonic_core,
+        edges => maps:get(<<"edges">>, Rsc, undefined),
+        local_id => LocalId,
+        remote_id => maps:get(<<"id">>, Rsc, undefined)
+    }),
+    ImportedAcc.
 
 replace_edges(LocalId, PredId, Os, ImportedAcc, Options, Context) ->
     % Keep order of edges
