@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2021 Marc Worrell
+%% @copyright 2010-2025 Marc Worrell
 %% @doc Generate .po files for all found labels. The .po files are generated per module and language
+%% @end
 
-%% Copyright 2010-2021 Marc Worrell
+%% Copyright 2010-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
