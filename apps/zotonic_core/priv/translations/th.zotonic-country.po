@@ -1,11 +1,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
-"POT-Creation-Date: 2011-03-17 14:53\n"
-"PO-Revision-Date: 2022-07-12 12:06\n"
-"Last-Translator: Michael Connors <michael@bring42.net>\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2025-04-02 13:54\n"
+"Last-Translator: \n"
 "Language-Team: Thai\n"
-"Language: th_TH\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -15,6 +14,7 @@ msgstr ""
 "X-Crowdin-Language: th\n"
 "X-Crowdin-File: /master/apps/zotonic_core/priv/translations/zotonic-country.pot\n"
 "X-Crowdin-File-ID: 8694\n"
+"Language: th_TH\n"
 
 msgid "Afghanistan"
 msgstr "อัฟกานิสถาน"
@@ -93,6 +93,9 @@ msgstr "ภูฏาน"
 
 msgid "Bolivia"
 msgstr "โบลิเวีย"
+
+msgid "Bonaire, Sint Eustatius and Saba"
+msgstr "โบแนร์ ซินต์เอิสทาทิอุส และซาบา"
 
 msgid "Bosnia-Herzegovina"
 msgstr "บอสเนีย - เฮอร์เซโกวีนา"
@@ -178,6 +181,9 @@ msgstr "โครเอเชีย"
 msgid "Cuba"
 msgstr "คิวบา"
 
+msgid "Curaçao"
+msgstr "เกาะกูราเซา"
+
 msgid "Cyprus"
 msgstr "ไซปรัส"
 
@@ -238,6 +244,12 @@ msgstr "ฝรั่งเศส"
 msgid "French Guiana"
 msgstr "เฟรนช์เกีย"
 
+msgid "French Polynesia"
+msgstr "เฟรนช์โปลินีเซีย"
+
+msgid "French Southern Territories"
+msgstr "เฟรนช์เซาเทิร์นเทร์ริทอรีส์"
+
 msgid "Gabon"
 msgstr "กาบอง"
 
@@ -259,9 +271,6 @@ msgstr "กานา"
 msgid "Gibraltar"
 msgstr "ยิบรอลตาร์"
 
-msgid "Great Britain"
-msgstr "บริเตนใหญ่"
-
 msgid "Greece"
 msgstr "กรีซ"
 
@@ -279,6 +288,9 @@ msgstr "กวม"
 
 msgid "Guatemala"
 msgstr "กัวเตมาลา"
+
+msgid "Guernsey"
+msgstr "เกิร์นซีย์"
 
 msgid "Guinea"
 msgstr "กินี"
@@ -325,6 +337,9 @@ msgstr "อิรัก"
 msgid "Ireland"
 msgstr "ไอร์แลนด์"
 
+msgid "Isle of Man"
+msgstr "เกาะแมน"
+
 msgid "Israel"
 msgstr "อิสราเอล"
 
@@ -340,6 +355,9 @@ msgstr "จาเมกา"
 msgid "Japan"
 msgstr "ญี่ปุ่น"
 
+msgid "Jersey"
+msgstr "เสื้อเจอร์ซีย์"
+
 msgid "Jordan"
 msgstr "จอร์แดน"
 
@@ -351,6 +369,9 @@ msgstr "เคนยา"
 
 msgid "Kiribati"
 msgstr "คิริบาส"
+
+msgid "Kosovo"
+msgstr "โคโซโว"
 
 msgid "Kuwait"
 msgstr "คูเวต"
@@ -439,6 +460,9 @@ msgstr "โมนาโก"
 msgid "Mongolia"
 msgstr "มองโกเลีย"
 
+msgid "Montenegro"
+msgstr "มอนเตเนโกร"
+
 msgid "Montserrat"
 msgstr "มอนต์เซอร์รัต"
 
@@ -461,9 +485,6 @@ msgid "Nepal"
 msgstr "เนปาล"
 
 msgid "Netherlands"
-msgstr "เนเธอร์แลนด์"
-
-msgid "Netherlands Antilles"
 msgstr "เนเธอร์แลนด์"
 
 msgid "New Caledonia"
@@ -505,6 +526,9 @@ msgstr "ปากีสถาน"
 msgid "Palau"
 msgstr "ปาเลา"
 
+msgid "Palestinian Territory, Occupied"
+msgstr "ดินแดนปาเลสไตน์ที่ถูกยึดครอง"
+
 msgid "Panama"
 msgstr "ปานามา"
 
@@ -525,9 +549,6 @@ msgstr "เกาะพิตแคร์น"
 
 msgid "Poland"
 msgstr "โปแลนด์"
-
-msgid "French Polynesia"
-msgstr "เฟรนช์โปลินีเซีย"
 
 msgid "Portugal"
 msgstr "โปรตุเกส"
@@ -550,8 +571,8 @@ msgstr "สหพันธรัฐรัสเซีย"
 msgid "Rwanda"
 msgstr "รวันดา"
 
-msgid "South Georgia and the South Sandwich Islands"
-msgstr "เซาท์จอร์เจียและหมู่เกาะเซาท์แซนด์วิช"
+msgid "Saint Barthélemy"
+msgstr "เซนต์บาร์เธเลมี"
 
 msgid "Saint Helena"
 msgstr "เซนต์เฮเลนา"
@@ -562,11 +583,11 @@ msgstr "เซนต์คิตส์และเนวิสแองกวิ
 msgid "Saint Lucia"
 msgstr "เซนต์ลูเซีย"
 
+msgid "Saint Martin (French)"
+msgstr "เซนต์มาร์ติน (ฝรั่งเศส)"
+
 msgid "Saint Pierre and Miquelon"
 msgstr "แซงปีแยร์และมีเกอลง"
-
-msgid "Sao Tome and Principe"
-msgstr "เซาตูเมและปรินซิปี"
 
 msgid "Saint Vincent and Grenadines"
 msgstr "เซนต์วินเซนต์และเกรนาดีนส์"
@@ -577,11 +598,17 @@ msgstr "ซามัว"
 msgid "San Marino"
 msgstr "ซานมาริโน"
 
+msgid "Sao Tome and Principe"
+msgstr "เซาตูเมและปรินซิปี"
+
 msgid "Saudi Arabia"
 msgstr "ซาอุดิอาราเบีย"
 
 msgid "Senegal"
 msgstr "เซเนกัล"
+
+msgid "Serbia"
+msgstr "เซอร์เบีย"
 
 msgid "Seychelles"
 msgstr "เซเชลส์"
@@ -591,6 +618,9 @@ msgstr "เซียร์ราลีโอน"
 
 msgid "Singapore"
 msgstr "สิงคโปร์"
+
+msgid "Sint Maarten (Dutch)"
+msgstr "ซินต์มาร์เทิน (ดัตช์)"
 
 msgid "Slovakia"
 msgstr "สโลวาเกีย"
@@ -607,8 +637,14 @@ msgstr "โซมาเลีย"
 msgid "South Africa"
 msgstr "แอฟริกาใต้"
 
+msgid "South Georgia and the South Sandwich Islands"
+msgstr "เซาท์จอร์เจียและหมู่เกาะเซาท์แซนด์วิช"
+
 msgid "South Korea"
 msgstr "เกาหลีใต้"
+
+msgid "South Sudan"
+msgstr "ซูดานใต้"
 
 msgid "Spain"
 msgstr "สเปน"
@@ -637,11 +673,11 @@ msgstr "สวิตเซอร์แลนด์"
 msgid "Syria"
 msgstr "ซีเรีย"
 
-msgid "Tajikistan"
-msgstr "ทาจิกิสถาน"
-
 msgid "Taiwan"
 msgstr "ไต้หวัน"
+
+msgid "Tajikistan"
+msgstr "ทาจิกิสถาน"
 
 msgid "Tanzania"
 msgstr "แทนซาเนีย"
@@ -664,9 +700,6 @@ msgstr "ตรินิแดดและโตเบโก"
 msgid "Tunisia"
 msgstr "ตูนิเซีย"
 
-msgid "Türkiye"
-msgstr "Türkiye"
-
 msgid "Turkmenistan"
 msgstr "เติร์กเมนิสถาน"
 
@@ -675,6 +708,9 @@ msgstr "หมู่เกาะเติกส์และหมู่เกา
 
 msgid "Tuvalu"
 msgstr "ตูวาลู"
+
+msgid "Türkiye"
+msgstr "Türkiye"
 
 msgid "Uganda"
 msgstr "ยูกันดา"
@@ -690,6 +726,9 @@ msgstr "ประเทศอังกฤษ"
 
 msgid "United States"
 msgstr "สหรัฐ"
+
+msgid "United States Minor Outlying Islands"
+msgstr "หมู่เกาะเล็กรอบนอกของสหรัฐอเมริกา"
 
 msgid "Uruguay"
 msgstr "อุรุกวัย"
@@ -724,15 +763,12 @@ msgstr "ซาฮาร่าตะวันตก"
 msgid "Yemen"
 msgstr "เยเมน"
 
-msgid "Serbia and Montenegro"
-msgstr "เซอร์เบียและมอนเตเนโกร"
-
-msgid "Zaire"
-msgstr "ซาอีร์"
-
 msgid "Zambia"
 msgstr "แซมเบีย"
 
 msgid "Zimbabwe"
 msgstr "ซิมบับเว"
+
+msgid "Åland Islands"
+msgstr "หมู่เกาะโอลันด์"
 
