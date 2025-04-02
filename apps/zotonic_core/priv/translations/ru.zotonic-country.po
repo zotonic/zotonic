@@ -1,11 +1,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
-"POT-Creation-Date: 2011-03-17 14:53\n"
-"PO-Revision-Date: 2022-07-12 12:06\n"
-"Last-Translator: Michael Connors <michael@bring42.net>\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2025-04-02 13:54\n"
+"Last-Translator: \n"
 "Language-Team: Russian\n"
-"Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -15,6 +14,7 @@ msgstr ""
 "X-Crowdin-Language: ru\n"
 "X-Crowdin-File: /master/apps/zotonic_core/priv/translations/zotonic-country.pot\n"
 "X-Crowdin-File-ID: 8694\n"
+"Language: ru_RU\n"
 
 msgid "Afghanistan"
 msgstr "Афганистан"
@@ -93,6 +93,9 @@ msgstr "Бутан"
 
 msgid "Bolivia"
 msgstr "Боливия"
+
+msgid "Bonaire, Sint Eustatius and Saba"
+msgstr "Бонайре, Синт-Эстатиус и Саба"
 
 msgid "Bosnia-Herzegovina"
 msgstr "Босния и Герциговина"
@@ -178,6 +181,9 @@ msgstr "Хорватия"
 msgid "Cuba"
 msgstr "Куба"
 
+msgid "Curaçao"
+msgstr "Кюрасао"
+
 msgid "Cyprus"
 msgstr "Кипр"
 
@@ -238,6 +244,12 @@ msgstr "Франция"
 msgid "French Guiana"
 msgstr "Французская Гвиана"
 
+msgid "French Polynesia"
+msgstr "Полинезия (Франция)"
+
+msgid "French Southern Territories"
+msgstr "Французские Южные Территории"
+
 msgid "Gabon"
 msgstr "Габон"
 
@@ -259,9 +271,6 @@ msgstr "Гана"
 msgid "Gibraltar"
 msgstr "Гиблартар"
 
-msgid "Great Britain"
-msgstr "Великобритания"
-
 msgid "Greece"
 msgstr "Греция"
 
@@ -279,6 +288,9 @@ msgstr "Гума (США)"
 
 msgid "Guatemala"
 msgstr "Гватемала"
+
+msgid "Guernsey"
+msgstr "Гернси"
 
 msgid "Guinea"
 msgstr "Гвинея"
@@ -325,6 +337,9 @@ msgstr "Ирак"
 msgid "Ireland"
 msgstr "Ирландия"
 
+msgid "Isle of Man"
+msgstr "Остров Мэн"
+
 msgid "Israel"
 msgstr "Израиль"
 
@@ -340,6 +355,9 @@ msgstr "Ямайка"
 msgid "Japan"
 msgstr "Япония"
 
+msgid "Jersey"
+msgstr "Джерси"
+
 msgid "Jordan"
 msgstr "Иордания"
 
@@ -351,6 +369,9 @@ msgstr "Кения"
 
 msgid "Kiribati"
 msgstr "Кирибати"
+
+msgid "Kosovo"
+msgstr "Косово"
 
 msgid "Kuwait"
 msgstr "Кувейт"
@@ -439,6 +460,9 @@ msgstr "Монако"
 msgid "Mongolia"
 msgstr "Монголия"
 
+msgid "Montenegro"
+msgstr "Черногория"
+
 msgid "Montserrat"
 msgstr "Монсеррат"
 
@@ -462,9 +486,6 @@ msgstr "Непал"
 
 msgid "Netherlands"
 msgstr "Нидерланды"
-
-msgid "Netherlands Antilles"
-msgstr "Нидерландские Антильские острова"
 
 msgid "New Caledonia"
 msgstr "Новая Каледония (Франция)"
@@ -505,6 +526,9 @@ msgstr "Пакистан"
 msgid "Palau"
 msgstr "Палау"
 
+msgid "Palestinian Territory, Occupied"
+msgstr "Палестинская территория, оккупированная"
+
 msgid "Panama"
 msgstr "Панама"
 
@@ -525,9 +549,6 @@ msgstr "Острова Питкэрн"
 
 msgid "Poland"
 msgstr "Польша"
-
-msgid "French Polynesia"
-msgstr "Полинезия (Франция)"
 
 msgid "Portugal"
 msgstr "Португалия"
@@ -550,8 +571,8 @@ msgstr "Российская Федерация"
 msgid "Rwanda"
 msgstr "Руанда"
 
-msgid "South Georgia and the South Sandwich Islands"
-msgstr "Южная Георгия и Южные Сандвичевы острова"
+msgid "Saint Barthélemy"
+msgstr "Сен-Бартелеми"
 
 msgid "Saint Helena"
 msgstr "Остров Святой Елены"
@@ -562,11 +583,11 @@ msgstr "Сент-Китс и Невис Ангилья"
 msgid "Saint Lucia"
 msgstr "Сент-Люсия"
 
+msgid "Saint Martin (French)"
+msgstr "Сен-Мартен (французский)"
+
 msgid "Saint Pierre and Miquelon"
 msgstr "Сен-Пьер и Микелон"
-
-msgid "Sao Tome and Principe"
-msgstr "Сан-Томе и Принсипи"
 
 msgid "Saint Vincent and Grenadines"
 msgstr "Сент-Винсент и Гренадины"
@@ -577,11 +598,17 @@ msgstr "Самоа"
 msgid "San Marino"
 msgstr "Сан-Марино"
 
+msgid "Sao Tome and Principe"
+msgstr "Сан-Томе и Принсипи"
+
 msgid "Saudi Arabia"
 msgstr "Саудовская Аравия"
 
 msgid "Senegal"
 msgstr "Сенегал"
+
+msgid "Serbia"
+msgstr "Сербия"
 
 msgid "Seychelles"
 msgstr "Сейшельские острова"
@@ -591,6 +618,9 @@ msgstr "Сьерра-Леоне"
 
 msgid "Singapore"
 msgstr "Сингапур"
+
+msgid "Sint Maarten (Dutch)"
+msgstr "Синт-Мартен (голландский)"
 
 msgid "Slovakia"
 msgstr "Республика Словакия"
@@ -607,8 +637,14 @@ msgstr "Сомали"
 msgid "South Africa"
 msgstr "Северная Африка"
 
+msgid "South Georgia and the South Sandwich Islands"
+msgstr "Южная Георгия и Южные Сандвичевы острова"
+
 msgid "South Korea"
 msgstr "Северная Корея"
+
+msgid "South Sudan"
+msgstr "Южный Судан"
 
 msgid "Spain"
 msgstr "Испания"
@@ -637,11 +673,11 @@ msgstr "Швейцария"
 msgid "Syria"
 msgstr "Сирия"
 
-msgid "Tajikistan"
-msgstr "Таджикистан"
-
 msgid "Taiwan"
 msgstr "Тайвань"
+
+msgid "Tajikistan"
+msgstr "Таджикистан"
 
 msgid "Tanzania"
 msgstr "Танзания"
@@ -664,9 +700,6 @@ msgstr "Тринидад и Тобаго"
 msgid "Tunisia"
 msgstr "Тунис"
 
-msgid "Türkiye"
-msgstr "Турция"
-
 msgid "Turkmenistan"
 msgstr "Туркменистан"
 
@@ -675,6 +708,9 @@ msgstr "Острова Теркс и Кайкос"
 
 msgid "Tuvalu"
 msgstr "Тувалу"
+
+msgid "Türkiye"
+msgstr "Турция"
 
 msgid "Uganda"
 msgstr "Уганда"
@@ -690,6 +726,9 @@ msgstr "Соединенное Королевство"
 
 msgid "United States"
 msgstr "Соединенные Штаты Америки"
+
+msgid "United States Minor Outlying Islands"
+msgstr "Малые отдаленные острова США"
 
 msgid "Uruguay"
 msgstr "Уругвай"
@@ -724,15 +763,12 @@ msgstr "Западная Сахара"
 msgid "Yemen"
 msgstr "Йемен"
 
-msgid "Serbia and Montenegro"
-msgstr "Сербия и Черногория"
-
-msgid "Zaire"
-msgstr "Заир"
-
 msgid "Zambia"
 msgstr "Замбия"
 
 msgid "Zimbabwe"
 msgstr "Зимбабве"
+
+msgid "Åland Islands"
+msgstr "Аландские острова"
 
