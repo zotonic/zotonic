@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-04-02 13:54\n"
+"PO-Revision-Date: 2025-04-02 15:24\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -182,7 +182,7 @@ msgid "Cuba"
 msgstr "كوبا"
 
 msgid "Curaçao"
-msgstr ""
+msgstr "كوراساو"
 
 msgid "Cyprus"
 msgstr "قبرص"
@@ -248,7 +248,7 @@ msgid "French Polynesia"
 msgstr "بولينيزيا الفرنسية"
 
 msgid "French Southern Territories"
-msgstr ""
+msgstr "الأقاليم الجنوبية الفرنسية"
 
 msgid "Gabon"
 msgstr "الجابون"
@@ -290,7 +290,7 @@ msgid "Guatemala"
 msgstr "غواتيمالا"
 
 msgid "Guernsey"
-msgstr ""
+msgstr "غيرنسي"
 
 msgid "Guinea"
 msgstr "غينيا"
@@ -338,7 +338,7 @@ msgid "Ireland"
 msgstr "أيرلندا"
 
 msgid "Isle of Man"
-msgstr ""
+msgstr "جزيرة مان"
 
 msgid "Israel"
 msgstr "إسرائيل"
@@ -356,7 +356,7 @@ msgid "Japan"
 msgstr "اليابان"
 
 msgid "Jersey"
-msgstr ""
+msgstr "جيرسي"
 
 msgid "Jordan"
 msgstr "الأردن"
@@ -371,7 +371,7 @@ msgid "Kiribati"
 msgstr "كيريباتي"
 
 msgid "Kosovo"
-msgstr ""
+msgstr "كوسوفو"
 
 msgid "Kuwait"
 msgstr "الكويت"
@@ -461,7 +461,7 @@ msgid "Mongolia"
 msgstr "منغوليا"
 
 msgid "Montenegro"
-msgstr ""
+msgstr "الجبل الأسود"
 
 msgid "Montserrat"
 msgstr "مونتسيرات"
@@ -527,7 +527,7 @@ msgid "Palau"
 msgstr "بالاو"
 
 msgid "Palestinian Territory, Occupied"
-msgstr ""
+msgstr "الأراضي الفلسطينية المحتلة"
 
 msgid "Panama"
 msgstr "بنما"
@@ -572,7 +572,7 @@ msgid "Rwanda"
 msgstr "رواندا"
 
 msgid "Saint Barthélemy"
-msgstr ""
+msgstr "سان بارتيليمي"
 
 msgid "Saint Helena"
 msgstr "سانت هيلانة"
@@ -584,7 +584,7 @@ msgid "Saint Lucia"
 msgstr "القديسة لوسيا"
 
 msgid "Saint Martin (French)"
-msgstr ""
+msgstr "سان مارتن (الفرنسية)"
 
 msgid "Saint Pierre and Miquelon"
 msgstr "سانت بيير وميكلون"
@@ -608,7 +608,7 @@ msgid "Senegal"
 msgstr "السنغال"
 
 msgid "Serbia"
-msgstr ""
+msgstr "صربيا"
 
 msgid "Seychelles"
 msgstr "سيشيل"
@@ -620,7 +620,7 @@ msgid "Singapore"
 msgstr "سنغافورة"
 
 msgid "Sint Maarten (Dutch)"
-msgstr ""
+msgstr "سانت مارتن (هولندا)"
 
 msgid "Slovakia"
 msgstr "سلوفاكيا"
@@ -644,7 +644,7 @@ msgid "South Korea"
 msgstr "كوريا الجنوبية"
 
 msgid "South Sudan"
-msgstr ""
+msgstr "جنوب السودان"
 
 msgid "Spain"
 msgstr "إسبانيا"
@@ -728,7 +728,7 @@ msgid "United States"
 msgstr "الولايات المتحدة الأمريكية"
 
 msgid "United States Minor Outlying Islands"
-msgstr ""
+msgstr "جزر الولايات المتحدة الصغيرة النائية"
 
 msgid "Uruguay"
 msgstr "أوروغواي"
@@ -770,5 +770,5 @@ msgid "Zimbabwe"
 msgstr "زمبابوي"
 
 msgid "Åland Islands"
-msgstr ""
+msgstr "جزر آلاند"
 
