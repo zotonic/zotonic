@@ -24,7 +24,7 @@
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 %% @doc Escape a value to be used directlty in a string for JSON text output.
--spec escapejson(Value, Context) -> binary() when
+-spec escapejson(Value, Context) -> iodata() when
     Value :: term(),
     Context :: z:context().
 escapejson(undefined, _Context) ->
