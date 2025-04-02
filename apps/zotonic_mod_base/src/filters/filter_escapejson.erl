@@ -1,10 +1,10 @@
 %% @author François Cardinaux
-%% @copyright 2011-2024 François Cardinaux
+%% @copyright 2011-2025 François Cardinaux
 %% @doc Zotonic filter to escape JSON strings as specified on http://www.json.org/.
 %% Inspired by Marc Worrell's filter_escapejs module
 %% @end
 
-%% Copyright 2011-2024 Zotonic
+%% Copyright 2011-2025 François Cardinaux
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -21,6 +21,8 @@
 -module(filter_escapejson).
 -export([escapejson/2]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
+
 %% @doc Escape a string for JSON
 escapejson(undefined, _Context) ->
     <<>>;
@@ -28,7 +30,8 @@ escapejson(Input, _Context) when is_binary(Input) ->
     z_json:json_escape(Input);
 escapejson(Input, _Context) when is_list(Input) ->
     z_json:json_escape(Input);
-escapejson(Input, _Context) when is_number(Input) ->
-    z_json:json_escape(z_convert:to_binary(Input));
-escapejson(Input, _Context) when is_map(Input) ->
+escapejson(#trans{} = Tr, Context) ->
+    Text = z_trans:lookup_fallback(Tr, Context),
+    escapejson(Text, Context);
+escapejson(Input, _Context) ->
     z_json:json_escape(z_json:encode(Input)).
