@@ -1,11 +1,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
-"POT-Creation-Date: 2011-03-17 14:53\n"
-"PO-Revision-Date: 2022-07-12 12:05\n"
-"Last-Translator: Michael Connors <michael@bring42.net>\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2025-04-02 13:54\n"
+"Last-Translator: \n"
 "Language-Team: English\n"
-"Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -15,6 +14,7 @@ msgstr ""
 "X-Crowdin-Language: en\n"
 "X-Crowdin-File: /master/apps/zotonic_core/priv/translations/zotonic-country.pot\n"
 "X-Crowdin-File-ID: 8694\n"
+"Language: en_US\n"
 
 msgid "Afghanistan"
 msgstr ""
@@ -92,6 +92,9 @@ msgid "Bhutan"
 msgstr ""
 
 msgid "Bolivia"
+msgstr ""
+
+msgid "Bonaire, Sint Eustatius and Saba"
 msgstr ""
 
 msgid "Bosnia-Herzegovina"
@@ -178,6 +181,9 @@ msgstr ""
 msgid "Cuba"
 msgstr ""
 
+msgid "Curaçao"
+msgstr ""
+
 msgid "Cyprus"
 msgstr ""
 
@@ -238,6 +244,12 @@ msgstr ""
 msgid "French Guiana"
 msgstr ""
 
+msgid "French Polynesia"
+msgstr ""
+
+msgid "French Southern Territories"
+msgstr ""
+
 msgid "Gabon"
 msgstr ""
 
@@ -259,9 +271,6 @@ msgstr ""
 msgid "Gibraltar"
 msgstr ""
 
-msgid "Great Britain"
-msgstr ""
-
 msgid "Greece"
 msgstr ""
 
@@ -278,6 +287,9 @@ msgid "Guam"
 msgstr ""
 
 msgid "Guatemala"
+msgstr ""
+
+msgid "Guernsey"
 msgstr ""
 
 msgid "Guinea"
@@ -325,6 +337,9 @@ msgstr ""
 msgid "Ireland"
 msgstr ""
 
+msgid "Isle of Man"
+msgstr ""
+
 msgid "Israel"
 msgstr ""
 
@@ -340,6 +355,9 @@ msgstr ""
 msgid "Japan"
 msgstr ""
 
+msgid "Jersey"
+msgstr ""
+
 msgid "Jordan"
 msgstr ""
 
@@ -350,6 +368,9 @@ msgid "Kenya"
 msgstr ""
 
 msgid "Kiribati"
+msgstr ""
+
+msgid "Kosovo"
 msgstr ""
 
 msgid "Kuwait"
@@ -439,6 +460,9 @@ msgstr ""
 msgid "Mongolia"
 msgstr ""
 
+msgid "Montenegro"
+msgstr ""
+
 msgid "Montserrat"
 msgstr ""
 
@@ -461,9 +485,6 @@ msgid "Nepal"
 msgstr ""
 
 msgid "Netherlands"
-msgstr ""
-
-msgid "Netherlands Antilles"
 msgstr ""
 
 msgid "New Caledonia"
@@ -505,6 +526,9 @@ msgstr ""
 msgid "Palau"
 msgstr ""
 
+msgid "Palestinian Territory, Occupied"
+msgstr ""
+
 msgid "Panama"
 msgstr ""
 
@@ -524,9 +548,6 @@ msgid "Pitcairn Island"
 msgstr ""
 
 msgid "Poland"
-msgstr ""
-
-msgid "French Polynesia"
 msgstr ""
 
 msgid "Portugal"
@@ -550,7 +571,7 @@ msgstr ""
 msgid "Rwanda"
 msgstr ""
 
-msgid "South Georgia and the South Sandwich Islands"
+msgid "Saint Barthélemy"
 msgstr ""
 
 msgid "Saint Helena"
@@ -562,10 +583,10 @@ msgstr ""
 msgid "Saint Lucia"
 msgstr ""
 
-msgid "Saint Pierre and Miquelon"
+msgid "Saint Martin (French)"
 msgstr ""
 
-msgid "Sao Tome and Principe"
+msgid "Saint Pierre and Miquelon"
 msgstr ""
 
 msgid "Saint Vincent and Grenadines"
@@ -577,10 +598,16 @@ msgstr ""
 msgid "San Marino"
 msgstr ""
 
+msgid "Sao Tome and Principe"
+msgstr ""
+
 msgid "Saudi Arabia"
 msgstr ""
 
 msgid "Senegal"
+msgstr ""
+
+msgid "Serbia"
 msgstr ""
 
 msgid "Seychelles"
@@ -590,6 +617,9 @@ msgid "Sierra Leone"
 msgstr ""
 
 msgid "Singapore"
+msgstr ""
+
+msgid "Sint Maarten (Dutch)"
 msgstr ""
 
 msgid "Slovakia"
@@ -607,7 +637,13 @@ msgstr ""
 msgid "South Africa"
 msgstr ""
 
+msgid "South Georgia and the South Sandwich Islands"
+msgstr ""
+
 msgid "South Korea"
+msgstr ""
+
+msgid "South Sudan"
 msgstr ""
 
 msgid "Spain"
@@ -637,10 +673,10 @@ msgstr ""
 msgid "Syria"
 msgstr ""
 
-msgid "Tajikistan"
+msgid "Taiwan"
 msgstr ""
 
-msgid "Taiwan"
+msgid "Tajikistan"
 msgstr ""
 
 msgid "Tanzania"
@@ -664,9 +700,6 @@ msgstr ""
 msgid "Tunisia"
 msgstr ""
 
-msgid "Türkiye"
-msgstr ""
-
 msgid "Turkmenistan"
 msgstr ""
 
@@ -674,6 +707,9 @@ msgid "Turks and Caicos Islands"
 msgstr ""
 
 msgid "Tuvalu"
+msgstr ""
+
+msgid "Türkiye"
 msgstr ""
 
 msgid "Uganda"
@@ -689,6 +725,9 @@ msgid "United Kingdom"
 msgstr ""
 
 msgid "United States"
+msgstr ""
+
+msgid "United States Minor Outlying Islands"
 msgstr ""
 
 msgid "Uruguay"
@@ -724,15 +763,12 @@ msgstr ""
 msgid "Yemen"
 msgstr ""
 
-msgid "Serbia and Montenegro"
-msgstr ""
-
-msgid "Zaire"
-msgstr ""
-
 msgid "Zambia"
 msgstr ""
 
 msgid "Zimbabwe"
+msgstr ""
+
+msgid "Åland Islands"
 msgstr ""
 

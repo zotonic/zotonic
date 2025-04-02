@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-02-27 17:11\n"
+"PO-Revision-Date: 2025-03-25 12:16\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -212,7 +212,7 @@ msgstr "คุณแน่ใจหรือไม่ว่าต้องกา
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:125
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:134
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:50./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:53./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:13./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:77
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:69./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:88./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:39./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:51./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26./apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:181./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:200./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:26./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:77./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:51./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:85./apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:133./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:141
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:158./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:113./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:85./apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:49./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6./apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:114
@@ -249,7 +249,7 @@ msgstr "เปลี่ยนการกำหนดค่า"
 #: apps/zotonic_mod_email_status/priv/templates/_dialog_email_status.tpl:4
 #: apps/zotonic_mod_l10n/priv/templates/_admin_configure_module.tpl:8
 #: apps/zotonic_mod_mqtt/priv/templates/_admin_configure_module.tpl:16
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:24
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_view.tpl:33
 #: apps/zotonic_mod_site_update/priv/templates/_admin_configure_module.tpl:26
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_email_addresses.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:13./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:20./apps/zotonic_mod_survey/priv/templates/_survey_end.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:14./apps/zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:21./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:54./apps/zotonic_mod_survey/priv/templates/_survey_results.tpl:59./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:45./apps/zotonic_mod_survey/priv/templates/_survey_start.tpl:50./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:27./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:32./apps/zotonic_mod_survey/priv/templates/_survey_start_button.tpl:37
 msgid "Close"
@@ -316,7 +316,7 @@ msgstr "ไม่สามารถย้ายไปที่กลุ่มก
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:52./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:75./apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:97
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:10./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:43
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_scripts.tpl:249
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:19./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:34
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:19./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:34./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:84./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:89./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:61./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:66
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:71./apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125./apps/zotonic_mod_survey/src/mod_survey.erl:137
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:24
 msgid "Delete"
@@ -402,7 +402,7 @@ msgid "If checked then users connected with an <em>author</em> predicate are con
 msgstr "หากทำเครื่องหมาย ผู้ใช้ที่เชื่อมต่อกับเพรดิเคต <em>ผู้เขียน</em> จะถือเป็นเจ้าของทรัพยากรสำหรับการประเมินกฎ ACL เพื่อให้แน่ใจว่ากฎ ACL ที่ทำเครื่องหมายเป็น <em>จัดการเอง</em> สามารถใช้ได้กับผู้เขียน"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:18
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:51
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:42
 msgid "Import"
 msgstr "นำเข้า"
 
@@ -479,7 +479,7 @@ msgid "Not allowed to change ACL options."
 msgstr "ไม่อนุญาตให้เปลี่ยนตัวเลือก ACL"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:50
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:87./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:116
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:62./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:103./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:92./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:80
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:88
 msgid "Not allowed."
 msgstr "ไม่ได้รับอนุญาต."
@@ -851,7 +851,7 @@ msgstr "เพิ่มสื่อในร่างกาย"
 msgid "Add note"
 msgstr "เพิ่มหมายเหตุ"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:726./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
+#: apps/zotonic_mod_admin/src/mod_admin.erl:732./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
 msgid "Added the connection to"
 msgstr "เพิ่มการเชื่อมต่อไปยัง"
 
@@ -955,7 +955,7 @@ msgid "Attached media"
 msgstr "สื่อที่แนบมา"
 
 #: apps/zotonic_mod_admin/src/mod_admin.erl:135
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:50
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:41
 msgid "Auth"
 msgstr "Auth"
 
@@ -1082,11 +1082,11 @@ msgstr "เชื่อมต่อ"
 msgid "Connect a page"
 msgstr "เชื่อมต่อเพจ"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:27
 msgid "Connected from"
 msgstr "เชื่อมต่อจาก"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:20
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:22
 msgid "Connected to"
 msgstr "เชื่อมต่อกับ"
 
@@ -1142,7 +1142,7 @@ msgstr "สร้างโดยฉัน"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:24./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:111./apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:12./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:56
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:51./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:53
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:51./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:44./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:44./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:41
 msgid "Created on"
 msgstr "สร้างบน"
 
@@ -1206,7 +1206,7 @@ msgstr "ลบหน้าที่เลือก"
 msgid "Delete this page."
 msgstr "ลบหน้านี้"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:559
+#: apps/zotonic_mod_admin/src/mod_admin.erl:565
 msgid "Deleted tasks."
 msgstr "งานที่ถูกลบ"
 
@@ -1432,7 +1432,7 @@ msgstr "ไฟล์ / เนื้อหาสื่อ"
 msgid "File size"
 msgstr "ขนาดไฟล์"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:464
+#: apps/zotonic_mod_admin/src/mod_admin.erl:470
 msgid "File uploaded to the drop folder, will be handled shortly."
 msgstr "ไฟล์ที่อัปโหลดไปยังโฟลเดอร์ดร็อป จะได้รับการจัดการในไม่ช้า"
 
@@ -1755,7 +1755,7 @@ msgstr "ย้ายบล็อกขึ้น"
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:27
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:23./apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:22
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:11./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:10
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:13./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:14./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:47
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:13./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:14./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:38
 #: apps/zotonic_mod_survey/src/models/m_survey.erl:632
 msgid "Name"
 msgstr "ชื่อ"
@@ -2077,7 +2077,7 @@ msgstr "หมายเหตุ"
 msgid "Remove"
 msgstr "ลบ"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:730
+#: apps/zotonic_mod_admin/src/mod_admin.erl:736
 msgid "Removed the connection to"
 msgstr "ลบการเชื่อมต่อกับ"
 
@@ -2132,7 +2132,7 @@ msgstr "บันทึกและดูหน้า"
 msgid "Save this page."
 msgstr "บันทึกหน้านี้"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:548
+#: apps/zotonic_mod_admin/src/mod_admin.erl:554
 msgid "Scheduled a background task to check all refers connections."
 msgstr "กำหนดเวลาการทำงานพื้นหลังเพื่อตรวจสอบการเชื่อมต่อการอ้างอิงทั้งหมด"
 
@@ -2190,7 +2190,7 @@ msgstr "หมวดหมู่ที่เลือก"
 msgid "Selecting a file will make the page a media item."
 msgstr "การเลือกไฟล์จะทำให้เพจเป็นรายการสื่อ"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:30
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_sidebar_parts.tpl:32
 msgid "Settings &amp; more"
 msgstr "การตั้งค่า &amp; เพิ่มเติม"
 
@@ -2248,28 +2248,28 @@ msgstr "งานบางอย่างกำลังลองใหม่<br
 msgid "Something went wrong. Sorry."
 msgstr "อะไรบางอย่างผิดปกติ. ขออภัย."
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:437
+#: apps/zotonic_mod_admin/src/mod_admin.erl:443
 msgid "Sorry, could not handle this filename."
 msgstr "ขออภัย ไม่สามารถจัดการชื่อไฟล์นี้ได้"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:476
+#: apps/zotonic_mod_admin/src/mod_admin.erl:482
 msgid "Sorry, could not move the file to the drop folder."
 msgstr "ขออภัย ไม่สามารถย้ายไฟล์ไปยังโฟลเดอร์วาง"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:550./apps/zotonic_mod_admin/src/mod_admin.erl:561
+#: apps/zotonic_mod_admin/src/mod_admin.erl:556./apps/zotonic_mod_admin/src/mod_admin.erl:567
 #: apps/zotonic_mod_menu/src/mod_menu.erl:88
 msgid "Sorry, only an admin is allowed to do this"
 msgstr "ขออภัย เฉพาะผู้ดูแลระบบเท่านั้นที่ได้รับอนุญาตให้ทำเช่นนี้"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:412./apps/zotonic_mod_admin/src/mod_admin.erl:423
+#: apps/zotonic_mod_admin/src/mod_admin.erl:418./apps/zotonic_mod_admin/src/mod_admin.erl:429
 msgid "Sorry, that page is unknown."
 msgstr "ขออภัย เพจนั้นไม่เป็นที่รู้จัก"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:414./apps/zotonic_mod_admin/src/mod_admin.erl:425
+#: apps/zotonic_mod_admin/src/mod_admin.erl:420./apps/zotonic_mod_admin/src/mod_admin.erl:431
 msgid "Sorry, you are not allowed to edit notes."
 msgstr "ขออภัย คุณไม่ได้รับอนุญาตให้แก้ไขบันทึก"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:480
+#: apps/zotonic_mod_admin/src/mod_admin.erl:486
 msgid "Sorry, you are not allowed to upload drop folder files."
 msgstr "ขออภัย คุณไม่ได้รับอนุญาตให้อัปโหลดไฟล์โฟลเดอร์วาง"
 
@@ -2277,11 +2277,11 @@ msgstr "ขออภัย คุณไม่ได้รับอนุญา�
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "ขออภัยคุณไม่มีสิทธิ์เพิ่มการเชื่อมต่อ"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:712
+#: apps/zotonic_mod_admin/src/mod_admin.erl:718
 msgid "Sorry, you have no permission to add the connection."
 msgstr "ขออภัยคุณไม่ได้รับอนุญาตให้เพิ่มการเชื่อมต่อ"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:714
+#: apps/zotonic_mod_admin/src/mod_admin.erl:720
 msgid "Sorry, you have no permission to delete the connection."
 msgstr "ขออภัยคุณไม่ได้รับอนุญาตให้ลบการเชื่อมต่อ"
 
@@ -2581,7 +2581,7 @@ msgstr "ยูริที่ไม่เหมือนใคร"
 msgid "Unpublished"
 msgstr "ไม่ได้เผยแพร่"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_item.tpl:29./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:29./apps/zotonic_mod_admin/src/mod_admin.erl:720./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:71./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:127
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_item.tpl:29./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:29./apps/zotonic_mod_admin/src/mod_admin.erl:726./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:71./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:127
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58./apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:57
 #: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
@@ -2809,7 +2809,7 @@ msgstr "โดย"
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:44
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:31
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:46
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:70./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:71./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:77
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:14./apps/zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:15./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:79./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:81./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:68./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:57./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:58
 msgid "d M Y, H:i"
 msgstr "d M Y, H:i"
 
@@ -3244,6 +3244,7 @@ msgid "Username"
 msgstr "ชื่อผู้ใช้"
 
 #: apps/zotonic_mod_admin_config/priv/templates/_admin_config_ssl_certinfo.tpl:16
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:42./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:40
 #: apps/zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:39
 msgid "Valid till"
 msgstr "ใช้ได้ถึง"
@@ -4307,6 +4308,7 @@ msgstr "คัดลอกไปยังคลิปบอร์ดแล้ว
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:17./apps/zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:20
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:33
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_view.tpl:18
 msgid "Copy"
 msgstr "สำเนา"
 
@@ -4407,7 +4409,7 @@ msgid "Sorry, you are not allowed to set the 2FA."
 msgstr "ขออภัย คุณไม่ได้รับอนุญาตให้ตั้งค่า 2FA"
 
 #: apps/zotonic_mod_auth2fa/src/mod_auth2fa.erl:130
-#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:170
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:258
 #: apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:41
 msgid "Success"
 msgstr "ประสบความสำเร็จ"
@@ -4654,7 +4656,7 @@ msgstr "ทุกเซสชั่นจะถูกขัดจังหวะ
 msgid "Expected another account"
 msgstr "คาดว่าจะมีบัญชีอื่น"
 
-#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:256
+#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:259
 msgid "External Services"
 msgstr "บริการภายนอก"
 
@@ -5975,6 +5977,7 @@ msgid "The license and the attribution of this page."
 msgstr "ใบอนุญาตและที่มาของหน้านี้"
 
 #: apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:50./apps/zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:51
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:109
 msgid "Year"
 msgstr "ปี"
 
@@ -5990,7 +5993,7 @@ msgid "Admin Custom Redirects"
 msgstr "การเปลี่ยนเส้นทางที่กำหนดเองของผู้ดูแลระบบ"
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:23
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:48
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:39
 msgid "Domain"
 msgstr "โดเมน"
 
@@ -6882,7 +6885,7 @@ msgid "App ID."
 msgstr "รหัสแอป"
 
 #: apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:19./apps/zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:20
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:61./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:34./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:35
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:37./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:33./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:34
 msgid "App Secret"
 msgstr "ความลับของแอป"
 
@@ -7685,7 +7688,7 @@ msgid "Toggle non people"
 msgstr "สลับคนที่ไม่ใช่"
 
 #: apps/zotonic_mod_logging/priv/templates/admin_log.tpl:23./apps/zotonic_mod_logging/priv/templates/admin_log_ui.tpl:23
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:49
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:49./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:40./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:39
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:191
 msgid "User"
 msgstr "ผู้ใช้"
@@ -7841,7 +7844,7 @@ msgid "Deleted the mailing list."
 msgstr "ลบรายชื่อผู้รับจดหมาย"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:21
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:21./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:22./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:19./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:20./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:48./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:49
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:21./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:22./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:19./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:20./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:48./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:40
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:28./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:30
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:3./apps/zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:6
 msgid "Description"
@@ -8703,7 +8706,11 @@ msgstr "คุณได้เชื่อมต่อกับ <strong>Microsoft
 msgid "Debug MQTT publish and subscribe actions in the Zotonic console"
 msgstr "ดีบักการเผยแพร่ MQTT และสมัครใช้งานการดำเนินการในคอนโซล Zotonic"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:91./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:92
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:165./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:51
+msgid "<b>Important:</b> write access is only disabled if the used ACL module and models support this."
+msgstr "<b>สิ่งสำคัญ:</b> การเข้าถึงการเขียนจะถูกปิดการใช้งานเฉพาะในกรณีที่โมดูล ACL และโมเดลที่ใช้รองรับการทำงานนี้"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:96./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:97
 msgid "Access Token URL"
 msgstr "เข้าถึงโทเค็น URL"
 
@@ -8711,7 +8718,35 @@ msgstr "เข้าถึงโทเค็น URL"
 msgid "Access content on this website."
 msgstr "เข้าถึงเนื้อหาบนเว็บไซต์นี้"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:52
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:164./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:50
+msgid "Access permission"
+msgstr "การอนุญาตการเข้าถึง"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:29./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:82
+msgid "Access tokens"
+msgstr "โทเค็นการเข้าถึง"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:55
+msgid "Access tokens are added manually"
+msgstr "โทเค็นการเข้าถึงจะถูกเพิ่มด้วยตนเอง"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:86
+msgid "Add Token"
+msgstr "เพิ่มโทเค็น"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:23
+msgid "Add a new token"
+msgstr "เพิ่มโทเค็นใหม่"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:9
+msgid "Add a new token for accessing data on <b>{domain}</b>."
+msgstr "เพิ่มโทเค็นใหม่สำหรับการเข้าถึงข้อมูลบน <b>{domain}</b>."
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:27./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:27
+msgid "Add a token"
+msgstr "เพิ่มโทเค็น"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:43
 msgid "Added by"
 msgstr "เพิ่มโดย"
 
@@ -8719,41 +8754,57 @@ msgstr "เพิ่มโดย"
 msgid "Allow Access"
 msgstr "อนุญาตการเข้าถึง"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:69
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:49
+msgid "Allow OAuth2 authorization with users on this site"
+msgstr "อนุญาตให้มีการอนุญาต OAuth2 กับผู้ใช้บนไซต์นี้"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:82
+msgid "Allow fetching tokens using Client Credentials"
+msgstr "อนุญาตให้ดึงโทเค็นโดยใช้ข้อมูลประจำตัวไคลเอนต์"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:74
 msgid "Allow import of content from the remote website"
 msgstr "อนุญาตให้นำเข้าเนื้อหาจากเว็บไซต์ระยะไกล"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:64
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:69
 msgid "Allow users on the remote website to authenticate here (using “{code}”)"
 msgstr "อนุญาตให้ผู้ใช้บนเว็บไซต์ระยะไกลตรวจสอบสิทธิ์ที่นี่ (โดยใช้ “{code}”)"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:16
-msgid "Allow users registered on the remote website to authenticate on this website."
-msgstr "อนุญาตให้ผู้ใช้ที่ลงทะเบียนบนเว็บไซต์ระยะไกลเพื่อรับรองความถูกต้องบนเว็บไซต์นี้"
+msgid "Allow users registered on the other website to logon on this website."
+msgstr "อนุญาตให้ผู้ใช้ที่ลงทะเบียนบนเว็บไซต์อื่นเข้าสู่ระบบบนเว็บไซต์นี้"
 
-#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:126
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:170
 msgid "An OAuth2 consumer with this name already exsists, please use another name."
 msgstr "มีผู้ใช้ OAuth2 ที่ใช้ชื่อนี้อยู่แล้ว โปรดใช้ชื่ออื่น"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:25
-msgid "App Code"
-msgstr "รหัสแอพ"
-
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:44./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:26
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:31./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:25./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:26
 msgid "App ID"
 msgstr "รหัสแอพ"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:85./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:19
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:197./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_view.tpl:28
 msgid "App not found, or no view permission."
 msgstr "ไม่พบแอปหรือไม่มีสิทธิ์ดู"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:74
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:186
 msgid "Are you sure you want to delete this App?"
 msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบแอปนี้"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:22./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:36
 msgid "Are you sure you want to delete this Consumer App?"
 msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบแอปสำหรับผู้บริโภคนี้"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:88
+msgid "Are you sure you want to delete this access token?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบโทเค็นการเข้าถึงนี้"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:65
+msgid "Are you sure you want to delete this client token?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการลบโทเค็นไคลเอนต์นี้?"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:60
+msgid "As the application is configured to use {client}, you can fetch an access token from {domain}."
+msgstr "เนื่องจากแอปพลิเคชันได้รับการกำหนดค่าให้ใช้ {client}คุณจึงดึงโทเค็นการเข้าถึงจาก {domain}ได้"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:13
 msgid "Ask users on this website for their credentials to authenticate on their website or App."
@@ -8767,7 +8818,7 @@ msgstr "กำลังพิสูจน์ตัวตน ..."
 msgid "Authorize"
 msgstr "อนุญาต"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:83./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:84
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:88./apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:89
 msgid "Authorize URL"
 msgstr "อนุญาต URL"
 
@@ -8775,13 +8826,21 @@ msgstr "อนุญาต URL"
 msgid "Authorize access to your account"
 msgstr "ให้สิทธิ์การเข้าถึงบัญชีของคุณ"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:73
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:78
 msgid "Automatically extend tokens obtained using “{client}” before they expire"
 msgstr "ขยายโทเค็นที่ได้รับโดยอัตโนมัติโดยใช้ “{client}” ก่อนหมดอายุ"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:7
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_view.tpl:7
 msgid "Be careful, this access token gives full access to your account."
 msgstr "โปรดใช้ความระมัดระวัง โทเค็นเพื่อการเข้าถึงนี้ให้การเข้าถึงบัญชีของคุณโดยสมบูรณ์"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:99
+msgid "Client Credentials token expiration"
+msgstr "โทเค็นข้อมูลรับรองลูกค้าหมดอายุ"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:121
+msgid "Client Credentials user"
+msgstr "ผู้ใช้ข้อมูลรับรองลูกค้า"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_logon_extra_oauth2.tpl:32
 msgid "Connect with"
@@ -8791,31 +8850,47 @@ msgstr "เชื่อมต่อกับ"
 msgid "Consumer App not found, or no view permission."
 msgstr "ไม่พบแอปสำหรับผู้บริโภค หรือไม่มีการอนุญาตในการดู"
 
-#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:188
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:129./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:240
+msgid "Could not delete the token."
+msgstr "ไม่สามารถลบโทเค็นได้"
+
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:276
 msgid "Could not fetch a new access token."
 msgstr "ไม่สามารถเรียกโทเค็นการเข้าถึงใหม่"
 
-#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:105
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:121./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:149
 msgid "Could not generate the access token."
 msgstr "ไม่สามารถสร้างโทเค็นการเข้าถึง"
 
-#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:66./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:78./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:85
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:70./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:87./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:94
 msgid "Could not insert the App."
 msgstr "ไม่สามารถแทรกแอปได้"
 
-#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:128./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:154
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:172./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:198
 msgid "Could not insert the Consumer."
 msgstr "ไม่สามารถแทรกผู้บริโภค"
 
-#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:147
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:228
+msgid "Could not save the access token."
+msgstr "ไม่สามารถบันทึกโทเค็นการเข้าถึงได้"
+
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:191
 msgid "Could not update the Consumer."
 msgstr "ไม่สามารถอัปเดตผู้บริโภคได้"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:8
+msgid "Create a new token to allow access to {title}."
+msgstr "สร้างโทเค็นใหม่เพื่อให้เข้าถึง {title}ได้"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:34
 msgid "Create connections with content on {local}."
 msgstr "สร้างการเชื่อมต่อกับเนื้อหาใน {local}."
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:72./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:76
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:106
+msgid "Day"
+msgstr "วัน"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:184./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:188
 msgid "Delete App"
 msgstr "ลบแอพ"
 
@@ -8843,17 +8918,21 @@ msgstr "คุณต้องการยกเลิกการเชื่อ
 msgid "Domain (eg. www.example.com)"
 msgstr "โดเมน (เช่น www.example.com)"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:34./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:35
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:19./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:34
 msgid "Edit App"
 msgstr "แก้ไขแอพ"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:77
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:72
+msgid "Edit Client"
+msgstr "แก้ไขลูกค้า"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:24./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:68
 msgid "Edit OAuth2 App"
 msgstr "แก้ไขแอป OAuth2"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:106
-msgid "Edit OAuth2 Consumer"
-msgstr "แก้ไข OAuth2 Consumer"
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:77
+msgid "Edit OAuth2 Client"
+msgstr "แก้ไขไคลเอนต์ OAuth2"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:10
 msgid "Edit the description of the App."
@@ -8863,57 +8942,73 @@ msgstr "แก้ไขคำอธิบายของแอพ"
 msgid "Enabled"
 msgstr "เปิดใช้งาน"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:82./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:95
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:65./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:215
 msgid "Fetch Token"
 msgstr "เรียกโทเค็น"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:88
-msgid "Fetch your access token to this site?"
-msgstr "ดึงโทเค็นการเข้าถึงของคุณมาที่ไซต์นี้หรือไม่"
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:209
+msgid "Fetch an access token to this site?"
+msgstr "รับโทเค็นการเข้าถึงไปยังเว็บไซต์นี้หรือไม่?"
 
-#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:171
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:259
 msgid "Fetched a new access token."
 msgstr "เรียกโทเค็นการเข้าถึงใหม่"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:92
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:213
 msgid "Fetching a token can take some time."
 msgstr "การดึงโทเค็นอาจใช้เวลาสักครู่"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:35./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:33
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:99
+msgid "Fill this in for “{client}” and “{grant}” if the remote site is not a Zotonic site."
+msgstr "กรอกสิ่งนี้สำหรับ “{client}” และ “{grant}” หากไซต์ระยะไกลไม่ใช่ไซต์ Zotonic"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:90
+msgid "Fill this in for “{grant}” if the remote site is not a Zotonic site."
+msgstr "กรอกสิ่งนี้ลงใน “{grant}” หากไซต์ระยะไกลไม่ใช่ไซต์ Zotonic"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:136./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:21./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:27
+msgid "Find user"
+msgstr "ค้นหาผู้ใช้"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:71
 msgid "For Zotonic sites this you can enter the domain name(s) of the website."
 msgstr "สำหรับไซต์ Zotonic คุณสามารถป้อนชื่อโดเมนของเว็บไซต์ได้"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:52
-msgid "Generate access token"
-msgstr "สร้างโทเค็นการเข้าถึง"
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:65
+msgid "For every combination of a user and a label there can only be a single token. Existing tokens with this label will be replaced."
+msgstr "สำหรับการรวมกันระหว่างผู้ใช้และป้ายกำกับนั้น สามารถมีโทเค็นได้เพียงตัวเดียวเท่านั้น โทเค็นที่มีอยู่แล้วที่มีป้ายกำกับนี้จะถูกแทนที่"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:48
-msgid "Generate my access token"
-msgstr "สร้างโทเค็นการเข้าถึงของฉัน"
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:110
+msgid "Forever"
+msgstr "ตลอดไป"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:33./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:31
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:69
 msgid "Give the redirect URLs that are valid for the website performing the OAuth2 authorization."
 msgstr "ให้ URL เปลี่ยนเส้นทางที่ถูกต้องสำหรับเว็บไซต์ที่ดำเนินการให้สิทธิ์ OAuth2"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:3
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_view.tpl:3
 msgid "Here is the new access token."
 msgstr "นี่คือโทเค็นการเข้าถึงใหม่"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:79
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:84
 msgid "If the remote website is a Zotonic website then you can leave the two URLs below empty."
 msgstr "หากเว็บไซต์ระยะไกลเป็นเว็บไซต์ Zotonic คุณสามารถปล่อย URL สองรายการด้านล่างว่างไว้ได้"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:51
-msgid "If you have already a token then it will be replaces with the new one."
-msgstr "หากคุณมีโทเค็นอยู่แล้ว โทเค็นนั้นจะถูกแทนที่ด้วยโทเค็นใหม่"
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:16
+msgid "If the user has already a token, then that token will be replaced with the new token."
+msgstr "หากผู้ใช้มีโทเค็นอยู่แล้ว โทเค็นนั้นจะถูกแทนที่ด้วยโทเค็นใหม่"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:15
-msgid "Import content from the remote website to this website."
-msgstr "นำเข้าเนื้อหาจากเว็บไซต์ระยะไกลไปยังเว็บไซต์นี้"
+msgid "Import content from the other website to this website."
+msgstr "นำเข้าเนื้อหาจากเว็บไซต์อื่นมายังเว็บไซต์นี้"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:85
-msgid "Leave empty if you use “{client}.”"
-msgstr "เว้นว่างไว้หากคุณใช้ “{client}”"
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:122./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:12
+msgid "It is good practice to have users with limited access permissions for access tokens."
+msgstr "ถือเป็นแนวทางปฏิบัติที่ดีที่จะให้ผู้ใช้มีสิทธิ์การเข้าถึงแบบจำกัดสำหรับโทเค็นการเข้าถึง"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:41
+msgid "Label"
+msgstr "ฉลาก"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:29
 msgid "Log in to {remote} with your {local} account."
@@ -8923,9 +9018,13 @@ msgstr "เข้าสู่ระบบ {remote} ด้วย {local} บั�
 msgid "Log in with"
 msgstr "เข้าสู่ระบบด้วย"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:40
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:27
 msgid "Make App"
 msgstr "ทำแอป"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:78
+msgid "Make Token"
+msgstr "สร้างโทเค็น"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:22./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:26
 msgid "Make a new App"
@@ -8935,51 +9034,135 @@ msgstr "สร้างแอพใหม่"
 msgid "Make a new App for OAuth2 authorization and/or content export to other websites."
 msgstr "สร้างแอปใหม่สำหรับการอนุญาต OAuth2 และ/หรือการส่งออกเนื้อหาไปยังเว็บไซต์อื่น"
 
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:23
+msgid "Make a new App token"
+msgstr "สร้างโทเค็นแอปใหม่"
+
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:8
 msgid "Make a new consumer for OAuth2 authorization and content import from another website."
 msgstr "สร้างผู้บริโภครายใหม่สำหรับการอนุญาต OAuth2 และการนำเข้าเนื้อหาจากเว็บไซต์อื่น"
 
-#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:97
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:74
+msgid "Manually add a token, as copied from {domain}."
+msgstr "เพิ่มโทเค็นด้วยตนเอง ดังที่คัดลอกจาก {domain}"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:108
+msgid "Month"
+msgstr "เดือน"
+
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:111./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:141
 msgid "New access token"
 msgstr "โทเค็นการเข้าถึงใหม่"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:128
+msgid "No user selected."
+msgstr "ยังไม่ได้เลือกผู้ใช้"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:43
+msgid "Note"
+msgstr "บันทึก"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:3
 msgid "OAuth2 Application"
 msgstr "แอปพลิเคชัน OAuth2"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:7./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:344
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:3
+msgid "OAuth2 Application - Tokens"
+msgstr "แอปพลิเคชัน OAuth2 - โทเค็น"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:7./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:15./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:439
 msgid "OAuth2 Applications"
 msgstr "แอปพลิเคชัน OAuth2"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:3./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:7./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:349
-msgid "OAuth2 Consumer Tokens"
-msgstr "OAuth2 โทเค็นผู้บริโภค"
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:10
+msgid "OAuth2 Applications &gt; Tokens"
+msgstr "แอปพลิเคชัน OAuth2 &gt; โทเค็น"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:88
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:3./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:7./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:15./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:444
+msgid "OAuth2 Clients"
+msgstr "ไคลเอนต์ OAuth2"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:10
+msgid "OAuth2 Clients &gt; Tokens to access {domain}"
+msgstr "ไคลเอนต์ OAuth2 &gt; โทเค็นในการเข้าถึง {domain}"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:3
+msgid "OAuth2 Clients - Tokens"
+msgstr "ไคลเอนต์ OAuth2 - โทเค็น"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:10
+msgid "OAuth2 clients are used to access other websites."
+msgstr "ไคลเอนต์ OAuth2 ใช้เพื่อเข้าถึงเว็บไซต์อื่น ๆ"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:63./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:104./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:81
 msgid "Only admnistrators can view OAuth2 applications."
 msgstr "เฉพาะผู้ดูแลระบบเท่านั้นที่สามารถดูแอปพลิเคชัน OAuth2"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:117
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:93
 msgid "Only admnistrators can view OAuth2 consumers."
 msgstr "เฉพาะผู้ดูแลระบบเท่านั้นที่สามารถดูผู้บริโภค OAuth2 ได้"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:63./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:64
+msgid "Optional label"
+msgstr "ฉลากตัวเลือก"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:71./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:72
+msgid "Optional note"
+msgstr "หมายเหตุเพิ่มเติม"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:39
+msgid "Permission"
+msgstr "การอนุญาต"
+
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:104./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:203
+msgid "Please select a user."
+msgstr "กรุณาเลือกผู้ใช้"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:175./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:57./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:56
+msgid "Read &amp; write access"
+msgstr "อ่าน &amp; เข้าถึงการเขียน"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:54
+msgid "Read access"
+msgstr "อ่านการเข้าถึง"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:170./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:54
+msgid "Read only access"
+msgstr "การเข้าถึงแบบอ่านอย่างเดียว"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:27
 msgid "Register"
 msgstr "ลงทะเบียน"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:23./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:27
-msgid "Register a new website"
-msgstr "ลงทะเบียนเว็บไซต์ใหม่"
+msgid "Register a new client"
+msgstr "ลงทะเบียนลูกค้าใหม่"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:10
-msgid "Registration of tokens to access remote websites."
-msgstr "การลงทะเบียนโทเค็นเพื่อเข้าถึงเว็บไซต์ระยะไกล"
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:132./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:17./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:23
+msgid "Select a user"
+msgstr "เลือกผู้ใช้"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:90
-msgid "The token will be registered with your account and only you (or routines acting on your behalf) will be able to use it."
-msgstr "โทเค็นจะถูกลงทะเบียนกับบัญชีของคุณ และมีเพียงคุณ (หรือกิจวัตรที่ดำเนินการในนามของคุณ) เท่านั้นที่จะสามารถใช้ได้"
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:122
+msgid "Select the user associated with Client Credential tokens."
+msgstr "เลือกผู้ใช้ที่เชื่อมโยงกับโทเค็นข้อมูลรับรองไคลเอนต์"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:55
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:12./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:14
+msgid "Select the user for this token."
+msgstr "เลือกผู้ใช้สำหรับโทเค็นนี้"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:39
+msgid "The App ID and App Secret are needed if you want to use this website for authentication. If you only configure manually generated tokens then you can leave these fields empty."
+msgstr "คุณต้องใช้ App ID และ App Secret หากต้องการใช้เว็บไซต์นี้เพื่อยืนยันตัวตน หากคุณกำหนดค่าโทเค็นที่สร้างด้วยตนเองเท่านั้น คุณสามารถปล่อยให้ช่องเหล่านี้ว่างเปล่าได้"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:102
+msgid "The client must extend the token before it expires."
+msgstr "ไคลเอนต์จะต้องขยายโทเค็นก่อนที่จะหมดอายุ"
+
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:211
+msgid "The token will be registered with the selected user account."
+msgstr "โทเค็นจะถูกลงทะเบียนกับบัญชีผู้ใช้ที่เลือก"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:60
 msgid "The “{code}” method redirects the user to the remote website to obtain an access token. “{client}” allows an admin user to directly fetch a token from the remote website."
 msgstr "วิธีการ “{code}” เปลี่ยนเส้นทางผู้ใช้ไปยังเว็บไซต์ระยะไกลเพื่อรับโทเค็นการเข้าถึง “{client}” อนุญาตให้ผู้ดูแลระบบเรียกโทเค็นจากเว็บไซต์ระยะไกลได้โดยตรง"
 
@@ -8987,13 +9170,17 @@ msgstr "วิธีการ “{code}” เปลี่ยนเส้นท�
 msgid "These applications are used by 3rd parties to:"
 msgstr "แอปพลิเคชันเหล่านี้ใช้โดยบุคคลที่สามเพื่อ:"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:34./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:32
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:70
 msgid "These must be complete URLs, but without the query (?..) or hash (#...) parts."
 msgstr "ต้องเป็น URL ที่สมบูรณ์ แต่ไม่มีส่วนการสืบค้น (?..) หรือแฮช (#...)"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:19
-msgid "This must be an unique name to identify the remote service. This can not be changed. Only a-z and 0-9 are allowed."
-msgstr "ต้องเป็นชื่อที่ไม่ซ้ำเพื่อระบุบริการระยะไกล ไม่สามารถเปลี่ยนแปลงได้ อนุญาตเฉพาะ az และ 0-9 เท่านั้น"
+msgid "This must be an unique name to identify the remote service. This can not be changed. Only <tt>A-Z</tt>, <tt>a-z</tt>, <tt>0-9</tt>, <tt>-</tt> and <tt>_</tt> characters are allowed."
+msgstr "ต้องเป็นชื่อที่ไม่ซ้ำกันเพื่อระบุบริการระยะไกล ไม่สามารถเปลี่ยนแปลงได้ อนุญาตให้ใช้เฉพาะอักขระ <tt>AZ</tt>, <tt>az</tt>, <tt>0-9</tt>, <tt>-</tt> และ <tt>_</tt> เท่านั้น"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:14
+msgid "This user will be able to use the token."
+msgstr "ผู้ใช้รายนี้จะสามารถใช้โทเค็นได้"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:25
 msgid "This will disconnect all tokens and users."
@@ -9003,15 +9190,31 @@ msgstr "การดำเนินการนี้จะยกเลิกก
 msgid "To use one of these applications, the App ID and secret must be registered with the 3rd party."
 msgstr "หากต้องการใช้หนึ่งในแอปพลิเคชันเหล่านี้ จะต้องลงทะเบียน ID แอปและข้อมูลลับกับบุคคลที่สาม"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:44
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:79./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:80
+msgid "Token"
+msgstr "โทเค็น"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:43
 msgid "Token grant method"
 msgstr "วิธีการให้โทเค็น"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:101
+msgid "Tokens fetched using Client Credentials will expire after this period."
+msgstr "โทเค็นที่ดึงมาโดยใช้ข้อมูลประจำตัวของลูกค้าจะหมดอายุหลังจากช่วงเวลานี้"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:12
+msgid "Tokens to access or authenticate with <b>{domain}</b> of behalf of a user."
+msgstr "โทเค็นสำหรับการเข้าถึงหรือพิสูจน์ตัวตนโดยใช้ <b>{domain}</b> ในนามของผู้ใช้"
+
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:12
+msgid "Tokens to let other systems access this website of behalf of an user."
+msgstr "โทเค็นเพื่อให้ระบบอื่นสามารถเข้าถึงเว็บไซต์นี้ในนามของผู้ใช้"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:64
 msgid "Unknown client or redirect, check with your website administrator."
 msgstr "ไคลเอ็นต์ที่ไม่รู้จักหรือเปลี่ยนเส้นทาง โปรดตรวจสอบกับผู้ดูแลระบบเว็บไซต์ของคุณ"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:70
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:182
 msgid "Update App"
 msgstr "อัปเดตแอป"
 
@@ -9019,19 +9222,23 @@ msgstr "อัปเดตแอป"
 msgid "Update consumer for OAuth2 authorization and content import from another website."
 msgstr "อัปเดตผู้บริโภคสำหรับการอนุญาต OAuth2 และการนำเข้าเนื้อหาจากเว็บไซต์อื่น"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:52./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:54
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:52./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:45
 msgid "User count"
 msgstr "จำนวนผู้ใช้"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:29./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:30./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:27./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:28
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:66./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:67
 msgid "Valid redirect URLs, one per line"
 msgstr "URL เปลี่ยนเส้นทางที่ถูกต้อง หนึ่งรายการต่อบรรทัด"
 
-#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:11
-msgid "With a consumer token this website can:"
-msgstr "ด้วยโทเค็นผู้บริโภค เว็บไซต์นี้สามารถ:"
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:107
+msgid "Week"
+msgstr "สัปดาห์"
 
-#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:195
+#: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:11
+msgid "With a client token this website can:"
+msgstr "ด้วยโทเค็นไคลเอนต์ เว็บไซต์นี้สามารถ:"
+
+#: apps/zotonic_mod_oauth2/src/mod_oauth2.erl:283
 msgid "You are not allowed to fetch a consumer token."
 msgstr "คุณไม่ได้รับอนุญาตให้เรียกโทเค็นของผู้บริโภค"
 
@@ -9039,14 +9246,17 @@ msgstr "คุณไม่ได้รับอนุญาตให้เรี
 msgid "You will be able to:"
 msgstr "คุณสามารถที่จะ:"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token.tpl:15
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_view.tpl:24
 msgid "You will not be able to see this token again, so copy it and save it in a secure place."
 msgstr "คุณจะไม่เห็นโทเค็นนี้อีก ดังนั้นให้คัดลอกและบันทึกไว้ในที่ที่ปลอดภัย"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:47
-#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:27
-msgid "default"
-msgstr "ค่าเริ่มต้น"
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:49
+msgid "for authentication"
+msgstr "เพื่อการยืนยันตัวตน"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:52
+msgid "for fetching a single token"
+msgstr "สำหรับการดึงโทเค็นเดียว"
 
 #: apps/zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:9
 msgid "API Key can be found on"
@@ -9412,6 +9622,10 @@ msgstr "คุณไม่ได้รับอนุญาตให้ทำส
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_seo.tpl:5
 msgid "Zotonic maintains a sitemap of all pages. It is good to rebuild this sitemap after language or other structural content changes."
 msgstr "Zotonic จัดทำแผนผังเว็บไซต์สำหรับหน้าต่างๆ ทั้งหมด ขอแนะนำให้สร้างแผนผังเว็บไซต์ใหม่หลังจากมีการเปลี่ยนแปลงภาษาหรือโครงสร้างเนื้อหาอื่นๆ"
+
+#: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:27
+msgid "default"
+msgstr "ค่าเริ่มต้น"
 
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:21
 msgid "not in sitemap"
