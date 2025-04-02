@@ -1,11 +1,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
-"POT-Creation-Date: 2011-03-17 14:53\n"
-"PO-Revision-Date: 2022-07-12 12:06\n"
-"Last-Translator: Michael Connors <michael@bring42.net>\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2025-04-02 13:54\n"
+"Last-Translator: \n"
 "Language-Team: Arabic\n"
-"Language: ar_SA\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -15,6 +14,7 @@ msgstr ""
 "X-Crowdin-Language: ar\n"
 "X-Crowdin-File: /master/apps/zotonic_core/priv/translations/zotonic-country.pot\n"
 "X-Crowdin-File-ID: 8694\n"
+"Language: ar_SA\n"
 
 msgid "Afghanistan"
 msgstr "أفغانستان"
@@ -93,6 +93,9 @@ msgstr "بوتان"
 
 msgid "Bolivia"
 msgstr "بوليفيا"
+
+msgid "Bonaire, Sint Eustatius and Saba"
+msgstr "بونير، سينت أوستاتيوس وسابا"
 
 msgid "Bosnia-Herzegovina"
 msgstr "البوسنة والهرسك"
@@ -178,6 +181,9 @@ msgstr "كرواتيا"
 msgid "Cuba"
 msgstr "كوبا"
 
+msgid "Curaçao"
+msgstr ""
+
 msgid "Cyprus"
 msgstr "قبرص"
 
@@ -238,6 +244,12 @@ msgstr "فرنسا"
 msgid "French Guiana"
 msgstr "غيانا الفرنسية"
 
+msgid "French Polynesia"
+msgstr "بولينيزيا الفرنسية"
+
+msgid "French Southern Territories"
+msgstr ""
+
 msgid "Gabon"
 msgstr "الجابون"
 
@@ -259,9 +271,6 @@ msgstr "غانا"
 msgid "Gibraltar"
 msgstr "جبل طارق"
 
-msgid "Great Britain"
-msgstr "بريطانيا العظمى"
-
 msgid "Greece"
 msgstr "اليونان"
 
@@ -279,6 +288,9 @@ msgstr "غوام"
 
 msgid "Guatemala"
 msgstr "غواتيمالا"
+
+msgid "Guernsey"
+msgstr ""
 
 msgid "Guinea"
 msgstr "غينيا"
@@ -325,6 +337,9 @@ msgstr "العراق"
 msgid "Ireland"
 msgstr "أيرلندا"
 
+msgid "Isle of Man"
+msgstr ""
+
 msgid "Israel"
 msgstr "إسرائيل"
 
@@ -340,6 +355,9 @@ msgstr "جامايكا"
 msgid "Japan"
 msgstr "اليابان"
 
+msgid "Jersey"
+msgstr ""
+
 msgid "Jordan"
 msgstr "الأردن"
 
@@ -351,6 +369,9 @@ msgstr "كينيا"
 
 msgid "Kiribati"
 msgstr "كيريباتي"
+
+msgid "Kosovo"
+msgstr ""
 
 msgid "Kuwait"
 msgstr "الكويت"
@@ -439,6 +460,9 @@ msgstr "موناكو"
 msgid "Mongolia"
 msgstr "منغوليا"
 
+msgid "Montenegro"
+msgstr ""
+
 msgid "Montserrat"
 msgstr "مونتسيرات"
 
@@ -462,9 +486,6 @@ msgstr "نيبال"
 
 msgid "Netherlands"
 msgstr "هولندا"
-
-msgid "Netherlands Antilles"
-msgstr "جزر الأنتيل الهولندية"
 
 msgid "New Caledonia"
 msgstr "كاليدونيا الجديدة"
@@ -505,6 +526,9 @@ msgstr "باكستان"
 msgid "Palau"
 msgstr "بالاو"
 
+msgid "Palestinian Territory, Occupied"
+msgstr ""
+
 msgid "Panama"
 msgstr "بنما"
 
@@ -525,9 +549,6 @@ msgstr "جزيرة بيتكيرن"
 
 msgid "Poland"
 msgstr "بولندا"
-
-msgid "French Polynesia"
-msgstr "بولينيزيا الفرنسية"
 
 msgid "Portugal"
 msgstr "البرتغال"
@@ -550,8 +571,8 @@ msgstr "الاتحاد الروسي"
 msgid "Rwanda"
 msgstr "رواندا"
 
-msgid "South Georgia and the South Sandwich Islands"
-msgstr "جورجيا الجنوبية وجزر ساندويتش الجنوبية"
+msgid "Saint Barthélemy"
+msgstr ""
 
 msgid "Saint Helena"
 msgstr "سانت هيلانة"
@@ -562,11 +583,11 @@ msgstr "سانت كيتس ونيفيس أنغيلا"
 msgid "Saint Lucia"
 msgstr "القديسة لوسيا"
 
+msgid "Saint Martin (French)"
+msgstr ""
+
 msgid "Saint Pierre and Miquelon"
 msgstr "سانت بيير وميكلون"
-
-msgid "Sao Tome and Principe"
-msgstr "ساو تومي وبرينسيبي"
 
 msgid "Saint Vincent and Grenadines"
 msgstr "سانت فنسنت وجرينادينز"
@@ -577,11 +598,17 @@ msgstr "ساموا"
 msgid "San Marino"
 msgstr "سان مارينو"
 
+msgid "Sao Tome and Principe"
+msgstr "ساو تومي وبرينسيبي"
+
 msgid "Saudi Arabia"
 msgstr "المملكة العربية السعودية"
 
 msgid "Senegal"
 msgstr "السنغال"
+
+msgid "Serbia"
+msgstr ""
 
 msgid "Seychelles"
 msgstr "سيشيل"
@@ -591,6 +618,9 @@ msgstr "سيرا ليون"
 
 msgid "Singapore"
 msgstr "سنغافورة"
+
+msgid "Sint Maarten (Dutch)"
+msgstr ""
 
 msgid "Slovakia"
 msgstr "سلوفاكيا"
@@ -607,8 +637,14 @@ msgstr "الصومال"
 msgid "South Africa"
 msgstr "جنوب أفريقيا"
 
+msgid "South Georgia and the South Sandwich Islands"
+msgstr "جورجيا الجنوبية وجزر ساندويتش الجنوبية"
+
 msgid "South Korea"
 msgstr "كوريا الجنوبية"
+
+msgid "South Sudan"
+msgstr ""
 
 msgid "Spain"
 msgstr "إسبانيا"
@@ -637,11 +673,11 @@ msgstr "سويسرا"
 msgid "Syria"
 msgstr "سوريا"
 
-msgid "Tajikistan"
-msgstr "طاجيكستان"
-
 msgid "Taiwan"
 msgstr "تايوان"
+
+msgid "Tajikistan"
+msgstr "طاجيكستان"
 
 msgid "Tanzania"
 msgstr "تنزانيا"
@@ -664,9 +700,6 @@ msgstr "ترينداد وتوباغو"
 msgid "Tunisia"
 msgstr "تونس"
 
-msgid "Türkiye"
-msgstr "تركيا"
-
 msgid "Turkmenistan"
 msgstr "تركمانستان"
 
@@ -675,6 +708,9 @@ msgstr "جزر تركس وكايكوس"
 
 msgid "Tuvalu"
 msgstr "توفالو"
+
+msgid "Türkiye"
+msgstr "تركيا"
 
 msgid "Uganda"
 msgstr "أوغندا"
@@ -690,6 +726,9 @@ msgstr "المملكة المتحدة"
 
 msgid "United States"
 msgstr "الولايات المتحدة الأمريكية"
+
+msgid "United States Minor Outlying Islands"
+msgstr ""
 
 msgid "Uruguay"
 msgstr "أوروغواي"
@@ -724,15 +763,12 @@ msgstr "الصحراء الغربية"
 msgid "Yemen"
 msgstr "اليمن"
 
-msgid "Serbia and Montenegro"
-msgstr "صربيا والجبل الأسود"
-
-msgid "Zaire"
-msgstr "زائير"
-
 msgid "Zambia"
 msgstr "زامبيا"
 
 msgid "Zimbabwe"
 msgstr "زمبابوي"
+
+msgid "Åland Islands"
+msgstr ""
 
