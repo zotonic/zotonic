@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-04-02 13:54\n"
+"PO-Revision-Date: 2025-04-02 15:24\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -527,7 +527,7 @@ msgid "Palau"
 msgstr "Palau"
 
 msgid "Palestinian Territory, Occupied"
-msgstr ""
+msgstr "Palestijns gebied, bezet"
 
 msgid "Panama"
 msgstr "Panama"
@@ -644,7 +644,7 @@ msgid "South Korea"
 msgstr "Zuid Korea"
 
 msgid "South Sudan"
-msgstr ""
+msgstr "Zuid-Soedan"
 
 msgid "Spain"
 msgstr "Spanje"
@@ -728,7 +728,7 @@ msgid "United States"
 msgstr "Verenigde Staten"
 
 msgid "United States Minor Outlying Islands"
-msgstr ""
+msgstr "Amerikaanse Kleinere Afgelegen Eilanden"
 
 msgid "Uruguay"
 msgstr "Uruguay"
@@ -770,5 +770,5 @@ msgid "Zimbabwe"
 msgstr "Zimbabwe"
 
 msgid "Åland Islands"
-msgstr ""
+msgstr "Åland-eilanden"
 
