@@ -1,11 +1,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
-"POT-Creation-Date: 2011-03-17 14:53\n"
-"PO-Revision-Date: 2022-07-12 13:03\n"
-"Last-Translator: Michael Connors <michael@bring42.net>\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2025-04-02 13:54\n"
+"Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
-"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -15,6 +14,7 @@ msgstr ""
 "X-Crowdin-Language: zh-CN\n"
 "X-Crowdin-File: /master/apps/zotonic_core/priv/translations/zotonic-country.pot\n"
 "X-Crowdin-File-ID: 8694\n"
+"Language: zh_CN\n"
 
 msgid "Afghanistan"
 msgstr "阿富汗"
@@ -93,6 +93,9 @@ msgstr "不丹"
 
 msgid "Bolivia"
 msgstr "玻利维亚"
+
+msgid "Bonaire, Sint Eustatius and Saba"
+msgstr "博内尔岛、圣尤斯特歇斯岛和萨巴岛"
 
 msgid "Bosnia-Herzegovina"
 msgstr "波斯尼亚―黑塞哥维亚"
@@ -178,6 +181,9 @@ msgstr "克罗地亚"
 msgid "Cuba"
 msgstr "古巴"
 
+msgid "Curaçao"
+msgstr "库拉索"
+
 msgid "Cyprus"
 msgstr "塞浦路斯"
 
@@ -238,6 +244,12 @@ msgstr "法国"
 msgid "French Guiana"
 msgstr "法属圭亚那"
 
+msgid "French Polynesia"
+msgstr "法属波利尼西亚"
+
+msgid "French Southern Territories"
+msgstr "法属南部领土"
+
 msgid "Gabon"
 msgstr "加蓬"
 
@@ -259,9 +271,6 @@ msgstr "加纳"
 msgid "Gibraltar"
 msgstr "直布罗陀"
 
-msgid "Great Britain"
-msgstr "大不列颠"
-
 msgid "Greece"
 msgstr "希腊"
 
@@ -279,6 +288,9 @@ msgstr "关岛"
 
 msgid "Guatemala"
 msgstr "危地马拉"
+
+msgid "Guernsey"
+msgstr "根西岛"
 
 msgid "Guinea"
 msgstr "几内亚"
@@ -325,6 +337,9 @@ msgstr "伊拉克"
 msgid "Ireland"
 msgstr "爱尔兰"
 
+msgid "Isle of Man"
+msgstr "马恩岛"
+
 msgid "Israel"
 msgstr "以色列"
 
@@ -340,6 +355,9 @@ msgstr "牙买加"
 msgid "Japan"
 msgstr "日本"
 
+msgid "Jersey"
+msgstr "球衣"
+
 msgid "Jordan"
 msgstr "约旦"
 
@@ -351,6 +369,9 @@ msgstr "肯尼亚"
 
 msgid "Kiribati"
 msgstr "基里巴斯"
+
+msgid "Kosovo"
+msgstr "科索沃"
 
 msgid "Kuwait"
 msgstr "科威特"
@@ -439,6 +460,9 @@ msgstr "摩纳哥"
 msgid "Mongolia"
 msgstr "蒙古"
 
+msgid "Montenegro"
+msgstr "黑山"
+
 msgid "Montserrat"
 msgstr "蒙特塞拉特"
 
@@ -462,9 +486,6 @@ msgstr "尼泊尔"
 
 msgid "Netherlands"
 msgstr "荷兰"
-
-msgid "Netherlands Antilles"
-msgstr "荷属安的列斯"
 
 msgid "New Caledonia"
 msgstr "新喀里多尼亚"
@@ -505,6 +526,9 @@ msgstr "巴基斯坦"
 msgid "Palau"
 msgstr "帕劳"
 
+msgid "Palestinian Territory, Occupied"
+msgstr "巴勒斯坦被占领土"
+
 msgid "Panama"
 msgstr "巴拿马"
 
@@ -525,9 +549,6 @@ msgstr "皮特克恩岛"
 
 msgid "Poland"
 msgstr "波兰"
-
-msgid "French Polynesia"
-msgstr "法属波利尼西亚"
 
 msgid "Portugal"
 msgstr "葡萄牙"
@@ -550,8 +571,8 @@ msgstr "俄罗斯联邦"
 msgid "Rwanda"
 msgstr "卢旺达"
 
-msgid "South Georgia and the South Sandwich Islands"
-msgstr "南乔治亚岛和南桑威奇群岛"
+msgid "Saint Barthélemy"
+msgstr "圣巴泰勒米"
 
 msgid "Saint Helena"
 msgstr "圣赫勒拿"
@@ -562,11 +583,11 @@ msgstr "圣基茨和尼维斯安圭拉岛"
 msgid "Saint Lucia"
 msgstr "圣卢西亚岛"
 
+msgid "Saint Martin (French)"
+msgstr "圣马丁（法语）"
+
 msgid "Saint Pierre and Miquelon"
 msgstr "圣彼埃尔和密克隆岛"
-
-msgid "Sao Tome and Principe"
-msgstr "圣多美和普林西比"
 
 msgid "Saint Vincent and Grenadines"
 msgstr "圣文森特和格林纳丁斯"
@@ -577,11 +598,17 @@ msgstr "萨摩亚"
 msgid "San Marino"
 msgstr "圣马力诺"
 
+msgid "Sao Tome and Principe"
+msgstr "圣多美和普林西比"
+
 msgid "Saudi Arabia"
 msgstr "沙特阿拉伯"
 
 msgid "Senegal"
 msgstr "塞内加尔"
+
+msgid "Serbia"
+msgstr "塞尔维亚"
 
 msgid "Seychelles"
 msgstr "塞舌尔"
@@ -591,6 +618,9 @@ msgstr "塞拉利昂"
 
 msgid "Singapore"
 msgstr "新加坡"
+
+msgid "Sint Maarten (Dutch)"
+msgstr "圣马丁（荷兰）"
 
 msgid "Slovakia"
 msgstr "斯洛伐克"
@@ -607,8 +637,14 @@ msgstr "索马里"
 msgid "South Africa"
 msgstr "南非"
 
+msgid "South Georgia and the South Sandwich Islands"
+msgstr "南乔治亚岛和南桑威奇群岛"
+
 msgid "South Korea"
 msgstr "韩国"
+
+msgid "South Sudan"
+msgstr "南苏丹"
 
 msgid "Spain"
 msgstr "西班牙"
@@ -637,11 +673,11 @@ msgstr "瑞士"
 msgid "Syria"
 msgstr "叙利亚"
 
-msgid "Tajikistan"
-msgstr "塔吉克斯坦"
-
 msgid "Taiwan"
 msgstr "台湾"
+
+msgid "Tajikistan"
+msgstr "塔吉克斯坦"
 
 msgid "Tanzania"
 msgstr "坦桑尼亚"
@@ -664,9 +700,6 @@ msgstr "特立尼达和多巴哥"
 msgid "Tunisia"
 msgstr "突尼斯"
 
-msgid "Türkiye"
-msgstr "土耳其"
-
 msgid "Turkmenistan"
 msgstr "土库曼斯坦"
 
@@ -675,6 +708,9 @@ msgstr "特克斯和凯科斯群岛"
 
 msgid "Tuvalu"
 msgstr "图瓦卢"
+
+msgid "Türkiye"
+msgstr "土耳其"
 
 msgid "Uganda"
 msgstr "乌干达"
@@ -690,6 +726,9 @@ msgstr "联合王国"
 
 msgid "United States"
 msgstr "美国"
+
+msgid "United States Minor Outlying Islands"
+msgstr "美国小离岛"
 
 msgid "Uruguay"
 msgstr "乌拉圭"
@@ -724,15 +763,12 @@ msgstr "西撒哈拉"
 msgid "Yemen"
 msgstr "也门"
 
-msgid "Serbia and Montenegro"
-msgstr "塞尔维亚和黑山"
-
-msgid "Zaire"
-msgstr "扎伊尔"
-
 msgid "Zambia"
 msgstr "赞比亚"
 
 msgid "Zimbabwe"
 msgstr "津巴布韦"
+
+msgid "Åland Islands"
+msgstr "奥兰群岛"
 
