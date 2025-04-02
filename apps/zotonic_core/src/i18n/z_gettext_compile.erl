@@ -66,12 +66,18 @@ generate(Filename, Labels) ->
 
 write_entries(Fd, Labels) ->
     LibDir = z_utils:lib_dir(),
-    F = fun({Id, Trans, Finfo}) ->
-            io:format(Fd, "~n#: ~s~n", [fmt_fileinfo(Finfo, LibDir)]),
-    		file:write(Fd, "msgid \"\"\n"),
-            write_pretty(unicode:characters_to_binary(Id), Fd),
-    		file:write(Fd, "msgstr \"\"\n"),
-    		write_pretty(unicode:characters_to_binary(Trans), Fd)
+    F = fun
+            ({Id, Trans, undefined}) ->
+                file:write(Fd, "\nmsgid \"\"\n"),
+                write_pretty(unicode:characters_to_binary(Id), Fd),
+                file:write(Fd, "msgstr \"\"\n"),
+                write_pretty(unicode:characters_to_binary(Trans), Fd);
+            ({Id, Trans, Finfo}) ->
+                io:format(Fd, "~n#: ~s~n", [fmt_fileinfo(Finfo, LibDir)]),
+        		file:write(Fd, "msgid \"\"\n"),
+                write_pretty(unicode:characters_to_binary(Id), Fd),
+        		file:write(Fd, "msgstr \"\"\n"),
+        		write_pretty(unicode:characters_to_binary(Trans), Fd)
     	end,
     lists:foreach(F, Labels).
 
