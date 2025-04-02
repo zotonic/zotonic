@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-04-02 13:54\n"
+"PO-Revision-Date: 2025-04-02 15:24\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -182,7 +182,7 @@ msgid "Cuba"
 msgstr "Cuba"
 
 msgid "Curaçao"
-msgstr ""
+msgstr "Curaçao"
 
 msgid "Cyprus"
 msgstr "Chypre"
@@ -248,7 +248,7 @@ msgid "French Polynesia"
 msgstr "Polynésie Française"
 
 msgid "French Southern Territories"
-msgstr ""
+msgstr "Terres australes françaises"
 
 msgid "Gabon"
 msgstr "Gabon"
@@ -290,7 +290,7 @@ msgid "Guatemala"
 msgstr "Guatemala"
 
 msgid "Guernsey"
-msgstr ""
+msgstr "Guernesey"
 
 msgid "Guinea"
 msgstr "Guinéee"
@@ -338,7 +338,7 @@ msgid "Ireland"
 msgstr "Irlande"
 
 msgid "Isle of Man"
-msgstr ""
+msgstr "Île de Man"
 
 msgid "Israel"
 msgstr "Israël"
@@ -356,7 +356,7 @@ msgid "Japan"
 msgstr "Japon"
 
 msgid "Jersey"
-msgstr ""
+msgstr "Jersey"
 
 msgid "Jordan"
 msgstr "Jordanie"
@@ -371,7 +371,7 @@ msgid "Kiribati"
 msgstr "Kiribati"
 
 msgid "Kosovo"
-msgstr ""
+msgstr "Kosovo"
 
 msgid "Kuwait"
 msgstr "Koweït"
@@ -461,7 +461,7 @@ msgid "Mongolia"
 msgstr "Mongolie"
 
 msgid "Montenegro"
-msgstr ""
+msgstr "Monténégro"
 
 msgid "Montserrat"
 msgstr "Montserrat"
@@ -527,7 +527,7 @@ msgid "Palau"
 msgstr "Palaos"
 
 msgid "Palestinian Territory, Occupied"
-msgstr ""
+msgstr "Territoire palestinien occupé"
 
 msgid "Panama"
 msgstr "Panama"
@@ -572,7 +572,7 @@ msgid "Rwanda"
 msgstr "Rwanda"
 
 msgid "Saint Barthélemy"
-msgstr ""
+msgstr "Saint-Barthélemy"
 
 msgid "Saint Helena"
 msgstr "Sainte-Hélène"
@@ -584,7 +584,7 @@ msgid "Saint Lucia"
 msgstr "Sainte Lucie"
 
 msgid "Saint Martin (French)"
-msgstr ""
+msgstr "Saint-Martin (français)"
 
 msgid "Saint Pierre and Miquelon"
 msgstr "Saint Pierre et Miquelon"
@@ -608,7 +608,7 @@ msgid "Senegal"
 msgstr "Sénégal"
 
 msgid "Serbia"
-msgstr ""
+msgstr "Serbie"
 
 msgid "Seychelles"
 msgstr "les Seychelles"
@@ -620,7 +620,7 @@ msgid "Singapore"
 msgstr "Singapour"
 
 msgid "Sint Maarten (Dutch)"
-msgstr ""
+msgstr "Sint Maarten (néerlandais)"
 
 msgid "Slovakia"
 msgstr "Slovaquie"
@@ -644,7 +644,7 @@ msgid "South Korea"
 msgstr "Corée, République de"
 
 msgid "South Sudan"
-msgstr ""
+msgstr "Soudan du Sud"
 
 msgid "Spain"
 msgstr "Espagne"
@@ -728,7 +728,7 @@ msgid "United States"
 msgstr "États-Unis"
 
 msgid "United States Minor Outlying Islands"
-msgstr ""
+msgstr "Îles mineures éloignées des États-Unis"
 
 msgid "Uruguay"
 msgstr "Uruguay"
@@ -770,5 +770,5 @@ msgid "Zimbabwe"
 msgstr "Zimbabwe"
 
 msgid "Åland Islands"
-msgstr ""
+msgstr "Îles Åland"
 
