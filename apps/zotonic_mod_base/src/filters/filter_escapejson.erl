@@ -34,6 +34,8 @@ escapejson(List, Context) when is_list(List) ->
     escapejson(B, Context);
 escapejson(Atom, Context) when is_atom(Atom) ->
     escapejson(atom_to_binary(Atom, utf8), Context);
+escapejson(Integer, _Context) when is_integer(Integer) ->
+    integer_to_binary(Integer);
 escapejson(Input, _Context) when is_binary(Input) ->
     z_json:json_escape(Input);
 escapejson(#trans{} = Tr, Context) ->
