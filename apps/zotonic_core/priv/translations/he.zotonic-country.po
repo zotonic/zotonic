@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-04-02 13:54\n"
+"PO-Revision-Date: 2025-04-02 15:24\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -182,7 +182,7 @@ msgid "Cuba"
 msgstr "קובה"
 
 msgid "Curaçao"
-msgstr ""
+msgstr "קוראסאו"
 
 msgid "Cyprus"
 msgstr "קַפרִיסִין"
@@ -248,7 +248,7 @@ msgid "French Polynesia"
 msgstr "פולינזיה הצרפתית"
 
 msgid "French Southern Territories"
-msgstr ""
+msgstr "השטחים הדרומיים של צרפת"
 
 msgid "Gabon"
 msgstr "גבון"
@@ -290,7 +290,7 @@ msgid "Guatemala"
 msgstr "גואטמלה"
 
 msgid "Guernsey"
-msgstr ""
+msgstr "גרנזי"
 
 msgid "Guinea"
 msgstr "גינאה"
@@ -338,7 +338,7 @@ msgid "Ireland"
 msgstr "אירלנד"
 
 msgid "Isle of Man"
-msgstr ""
+msgstr "האי מאן"
 
 msgid "Israel"
 msgstr "ישראל"
@@ -356,7 +356,7 @@ msgid "Japan"
 msgstr "יפן"
 
 msgid "Jersey"
-msgstr ""
+msgstr "ג'רזי"
 
 msgid "Jordan"
 msgstr "יַרדֵן"
@@ -371,7 +371,7 @@ msgid "Kiribati"
 msgstr "קיריבטי"
 
 msgid "Kosovo"
-msgstr ""
+msgstr "קוסובו"
 
 msgid "Kuwait"
 msgstr "כווית"
@@ -461,7 +461,7 @@ msgid "Mongolia"
 msgstr "מונגוליה"
 
 msgid "Montenegro"
-msgstr ""
+msgstr "מונטנגרו"
 
 msgid "Montserrat"
 msgstr "מונטסראט"
@@ -527,7 +527,7 @@ msgid "Palau"
 msgstr "פלאו"
 
 msgid "Palestinian Territory, Occupied"
-msgstr ""
+msgstr "השטח הפלסטיני, כבוש"
 
 msgid "Panama"
 msgstr "פנמה"
@@ -572,7 +572,7 @@ msgid "Rwanda"
 msgstr "רואנדה"
 
 msgid "Saint Barthélemy"
-msgstr ""
+msgstr "סנט ברת'למי"
 
 msgid "Saint Helena"
 msgstr "סנט הלנה"
@@ -584,7 +584,7 @@ msgid "Saint Lucia"
 msgstr "סנט לוסיה"
 
 msgid "Saint Martin (French)"
-msgstr ""
+msgstr "סנט מרטין (צרפתית)"
 
 msgid "Saint Pierre and Miquelon"
 msgstr "סן פייר ומיקלון"
@@ -608,7 +608,7 @@ msgid "Senegal"
 msgstr "סנגל"
 
 msgid "Serbia"
-msgstr ""
+msgstr "סרביה"
 
 msgid "Seychelles"
 msgstr "סיישל"
@@ -620,7 +620,7 @@ msgid "Singapore"
 msgstr "סינגפור"
 
 msgid "Sint Maarten (Dutch)"
-msgstr ""
+msgstr "סנט מרטן (הולנדית)"
 
 msgid "Slovakia"
 msgstr "סלובקיה"
@@ -644,7 +644,7 @@ msgid "South Korea"
 msgstr "דרום קוריאה"
 
 msgid "South Sudan"
-msgstr ""
+msgstr "דרום סודן"
 
 msgid "Spain"
 msgstr "סְפָרַד"
@@ -728,7 +728,7 @@ msgid "United States"
 msgstr "ארצות הברית"
 
 msgid "United States Minor Outlying Islands"
-msgstr ""
+msgstr "איים מרוחקים של ארצות הברית"
 
 msgid "Uruguay"
 msgstr "אורוגוואי"
@@ -770,5 +770,5 @@ msgid "Zimbabwe"
 msgstr "זימבבואה"
 
 msgid "Åland Islands"
-msgstr ""
+msgstr "איי אולנד"
 
