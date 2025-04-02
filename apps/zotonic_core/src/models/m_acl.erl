@@ -49,6 +49,12 @@ m_get([ <<"authenticated">>, Action, Object | Rest ], _Msg, Context) ->
 m_get([ <<"authenticated">>, <<"is_allowed">>, Action, Object | Rest ], _Msg, Context) ->
     {ok, {is_allowed_authenticated(Action, Object, Context), Rest}};
 
+% Check if an anonymous (default acl setttings) is allowed to perform an action on some object
+m_get([ <<"anonymous">>, Action, Object | Rest ], _Msg, Context) ->
+    {ok, {is_allowed_anonymous(Action, Object, Context), Rest}};
+m_get([ <<"anonymous">>, <<"is_allowed">>, Action, Object | Rest ], _Msg, Context) ->
+    {ok, {is_allowed_anonymous(Action, Object, Context), Rest}};
+
 % Shortcut, should use is_allowed/action/object
 m_get([ <<"link">>, Subject, Predicate, Object | Rest ], _Msg, Context) ->
     {ok, {z_acl:is_allowed_link(Subject, Predicate, Object, Context), Rest}};
@@ -80,6 +86,9 @@ is_allowed_authenticated(Action, Object, Context) ->
     catch
         error:badarg -> false
     end.
+
+is_allowed_anonymous(Action, Object, Context) ->
+    is_allowed(Action, Object, z_acl:anondo(Context)).
 
 
 maybe_value(<<>>) ->
