@@ -1,11 +1,11 @@
 %% -*- coding: utf-8 -*-
 
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2023 Arthur Clemens, Marc Worrell
+%% @copyright 2010-2025 Arthur Clemens, Marc Worrell
 %% @doc Translation support. Handle the language list and manage translations.
 %% @end
 
-%% Copyright 2010-2023 Arthur Clemens, Marc Worrell
+%% Copyright 2010-2025 Arthur Clemens, Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.

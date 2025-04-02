@@ -95,9 +95,6 @@ extract_labels(Lang, [{Lab, Trans, Pos}|Labels], Acc) ->
 %% @doc Get the path to a module's translation template (.pot) file
 -spec template_path(atom(), file:filename_all()) -> file:filename_all().
 template_path(App, Dirname) ->
-    template_path(App, App, Dirname).
-
-template_path(App, Filename, Dirname) ->
     AppsDir = filename:join([ z_path:get_path(), "apps", App ]),
     PrivDir = case filelib:is_dir(AppsDir) of
         true ->
