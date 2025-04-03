@@ -83,7 +83,6 @@ build_query(Terms, Context) ->
         true ->
             #search_result{};
         false ->
-            ?DEBUG(Ts),
             #search_sql_terms{ terms = Ts }
     end.
 
