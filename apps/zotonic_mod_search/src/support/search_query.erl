@@ -83,6 +83,7 @@ build_query(Terms, Context) ->
         true ->
             #search_result{};
         false ->
+            ?DEBUG(Ts),
             #search_sql_terms{ terms = Ts }
     end.
 
@@ -978,19 +979,21 @@ qterm(#{ <<"term">> := <<"text">>, <<"value">> := Text}, _IsNested, Context) ->
             };
         _ ->
             TsQuery = mod_search:to_tsquery(Text, Context),
+            RankBehaviour = mod_search:rank_behaviour(Context),
             #search_sql_term{
                 where = [
                     '$1', <<" @@ rsc.pivot_tsv">>
                 ],
                 sort = [
+                    % No extra query args in the sort term, as that gives a problem when
+                    % removing the sort term when counting the exact number of rows.
                     [
                       "ts_rank_cd(", mod_search:rank_weight(Context),
-                      ", rsc.pivot_tsv, ", '$1', ", ", '$2', ") desc"
+                      ", rsc.pivot_tsv, ", '$1', ", ", integer_to_binary(RankBehaviour), ") desc"
                     ]
                 ],
                 args = [
-                    TsQuery,
-                    mod_search:rank_behaviour(Context)
+                    TsQuery
                 ]
             }
     end;

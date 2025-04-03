@@ -19,6 +19,24 @@ wait_for(QueryId, ItemId) ->
     end.
 
 
+search_count_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    Query = #{
+        <<"q">> => [
+            #{
+                <<"term">> => <<"text">>,
+                <<"value">> => <<"test">>
+            }
+        ],
+        <<"options">> => #{
+            <<"is_count_rows">> => true
+        }
+    },
+    #search_result{ result = [ N ] } = z_search:search(<<"query">>, Query, 1, 20, Context),
+    ?assert(is_integer(N) andalso N >= 0),
+    ok.
+
 query_hooks_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
     C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
