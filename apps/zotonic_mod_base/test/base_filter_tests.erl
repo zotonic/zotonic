@@ -48,6 +48,28 @@ truncatechars_test() ->
     <<"a&#39;c…"/utf8>> = filter_truncatechars:truncatechars(<<"a&#39;cd">>, 3, C),
     ok.
 
+escapejson_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_context:new(zotonic_site_testsandbox),
+
+    <<>> = filter_escapejson:escapejson(undefined, C),
+    <<"true">> = filter_escapejson:escapejson(true, C),
+    <<"false">> = filter_escapejson:escapejson(false, C),
+    <<"atom">> = filter_escapejson:escapejson(atom, C),
+    <<"42">> = filter_escapejson:escapejson(42, C),
+
+    <<>> = filter_escapejson:escapejson([], C),
+    <<"test1234">> = filter_escapejson:escapejson(["test", "1234"], C),
+
+    <<"\\\"">> = filter_escapejson:escapejson(<<$">>, C),
+    <<"Feest">> = filter_escapejson:escapejson({trans,[{en,<<"Feest">>}]}, C),
+
+    <<"2025-04-02T14:29:08Z">> = filter_escapejson:escapejson({{2025,4,2},{14,29,8}}, C),
+
+    <<"This is a \\\"test\\\" string with a backslash \\\\ and new line \\n and tab \\t characters.">> =
+        filter_escapejson:escapejson(<<"This is a \"test\" string with a backslash \\ and new line \n and tab \t characters.">>, C),
+
+    ok.
 
 is_a_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
