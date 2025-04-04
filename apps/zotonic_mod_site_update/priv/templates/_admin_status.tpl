@@ -5,7 +5,7 @@
             <span class="help-block">{_ Update the site and templates from the version control system. _}</span>
         {% else %}
             <p class="text-warning">
-                <span class="fa fa-warning"></span>
+                <span class="glyphicon glyphicon-exclamation-sign"></span>
                 {_ Site update is not available as the site does not use a known version control system, like git. _}
             </p>
         {% endif %}
