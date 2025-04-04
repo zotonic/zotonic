@@ -1206,16 +1206,14 @@ map_html_1(#trans{ tr = Tr }, UriTemplate, ImportAcc, Options, Context) ->
         Tr),
     {#trans{ tr = Tr1 }, AccIds1};
 map_html_1(Text, UriTemplate, ImportAcc, Options, Context) when is_binary(Text) ->
-    % Import options for resources that are embedded.
-    % For example images and links in HTML texts.
-    EmbeddedOptions = proplists:delete(import_edges, Options),
+    % Import embedded page references, for example images and links in HTML texts.
     case filter_embedded_media:embedded_media(Text, Context) of
         [] ->
             {Text, ImportAcc};
         EmbeddedIds ->
             {Text1, ImportAcc1} = lists:foldl(
                 fun(RemoteId, {TextAcc, ImpAcc}) ->
-                    case map_id(RemoteId, UriTemplate, ImpAcc, EmbeddedOptions, Context) of
+                    case map_id(RemoteId, UriTemplate, ImpAcc, Options, Context) of
                         {ok, {LocalId, ImpAcc1}} ->
                             From = <<"<!-- z-media ", (integer_to_binary(RemoteId))/binary, " ">>,
                             To = <<"<!-- z-media-local ", (integer_to_binary(LocalId))/binary, " ">>,
