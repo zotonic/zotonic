@@ -29,6 +29,20 @@
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ <<"admin_panel">> | Rest ], _Msg, Context) ->
     {ok, {backup_config:admin_panel(Context), Rest}};
+m_get([ <<"allow_manual_backup">> | Rest ], _Msg, Context) ->
+    case z_acl:is_allowed(use, mod_backup, Context) of
+        true ->
+            {ok, {backup_config:allow_manual_backup(Context), Rest}};
+        false ->
+            {error, eacces}
+    end;
+m_get([ <<"allow_backup_download">> | Rest ], _Msg, Context) ->
+    case z_acl:is_allowed(use, mod_backup, Context) of
+        true ->
+            {ok, {backup_config:allow_backup_download(Context), Rest}};
+        false ->
+            {error, eacces}
+    end;
 m_get([ <<"daily_dump">> | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_backup, Context) of
         true ->

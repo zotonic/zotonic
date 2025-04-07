@@ -23,6 +23,8 @@
 -export([
     is_config_locked/0,
     is_filestore_enabled/1,
+    allow_manual_backup/1,
+    allow_backup_download/1,
     daily_dump/1,
     admin_panel/1,
     encrypt_password/1,
@@ -85,6 +87,28 @@ admin_panel(Context) ->
                 {ok, V} -> z_convert:to_bool(V);
                 undefined -> false
             end;
+        V -> z_convert:to_bool(V)
+    end.
+
+%% @doc Check if a manually initiated backup is allowed. Defaults to true.
+-spec allow_manual_backup(Context) -> boolean() when
+    Context :: z:context().
+allow_manual_backup(Context) ->
+    case get_value(allow_manual_backup, Context) of
+        undefined -> true;
+        <<>> -> true;
+        "" -> true;
+        V -> z_convert:to_bool(V)
+    end.
+
+%% @doc Check if a manually initiated backup is allowed. Defaults to true.
+-spec allow_backup_download(Context) -> boolean() when
+    Context :: z:context().
+allow_backup_download(Context) ->
+    case get_value(allow_backup_download, Context) of
+        undefined -> true;
+        <<>> -> true;
+        "" -> true;
         V -> z_convert:to_bool(V)
     end.
 

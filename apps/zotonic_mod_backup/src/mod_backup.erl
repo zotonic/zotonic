@@ -171,11 +171,11 @@ file_exists(File, Context) ->
             }),
             false;
         #{
-            <<"database">> := Database,
-            <<"files">> := Files
+            <<"database">> := DatabaseDump,
+            <<"files">> := FilesTar
         } ->
-            case File of
-                Database ->
+            if
+                File =:= DatabaseDump ->
                     ?LOG_INFO(#{
                         text => <<"Download of database backup requested">>,
                         in => zotonic_mod_backup,
@@ -183,8 +183,8 @@ file_exists(File, Context) ->
                         backup => Root,
                         file => File
                     }),
-                    {true, filename:join([dir(Context), Database])};
-                Files ->
+                    {true, filename:join([dir(Context), DatabaseDump])};
+                File =:= FilesTar ->
                     ?LOG_INFO(#{
                         text => <<"Download of files backup requested">>,
                         in => zotonic_mod_backup,
@@ -192,8 +192,8 @@ file_exists(File, Context) ->
                         backup => Root,
                         file => File
                     }),
-                    {true, filename:join([dir(Context), Files])};
-                _ ->
+                    {true, filename:join([dir(Context), FilesTar])};
+                true ->
                     false
             end
     end.
@@ -203,9 +203,22 @@ file_exists(File, Context) ->
     File :: file:filename_all(),
     Context :: z:context(),
     IsForbidden :: boolean().
-file_forbidden(_File, Context) ->
-    IsAllowed = (z_acl:is_admin(Context) orelse z_acl:is_allowed(use, mod_backup, Context)),
-    not IsAllowed.
+file_forbidden(File, Context) ->
+    case (z_acl:is_admin(Context) orelse z_acl:is_allowed(use, mod_backup, Context))
+        andalso backup_config:allow_backup_download(Context)
+    of
+        true ->
+            false;
+        false ->
+            ?LOG_WARNING(#{
+                text => <<"Download of backup file failed because access is forbidden">>,
+                in => zotonic_mod_backup,
+                result => error,
+                reason => eacces,
+                file => File
+            }),
+            true
+    end.
 
 
 %% @doc Start a full backup

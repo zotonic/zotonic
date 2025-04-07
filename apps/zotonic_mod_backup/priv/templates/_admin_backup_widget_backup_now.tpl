@@ -9,7 +9,7 @@
         {_ You can have one backup per day of the week, older ones will be overwritten. _}
         </p>
 
-        {% if backup_config.ok and is_editable %}
+        {% if backup_config.ok and is_editable and m.backup.allow_manual_backup %}
             <div class="form-group">
                 {% button class="btn btn-primary" text=_"Start backup now"
                           action={backup_start is_full_backup} %}

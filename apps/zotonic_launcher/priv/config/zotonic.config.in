@@ -364,8 +364,13 @@
       %%% revision. With this panel it is also possible to download or upload a dump
       %%% of the current resource. This configuration can be overruled by the site's
       %%% admin_panel configuration.
-      {admin_panel, false}
+      {admin_panel, false},
+
+      %%% Allow a user with the use.mod_backup permission to download backup files.
+      {allow_backup_download, true},
+
+      %%% Allow a user with the use.mod_backup permission to start backups manually.
+      {allow_manual_backup, true}
   ]
  }
 ].
-
