@@ -345,8 +345,8 @@
       %%% Make a daily dump of the database and/or files.
       %%% Possible values:
       %%% 0 - no daily dump
-      %%% 1 - database only dump
-      %%% 2 - database dump and files (archive) tar
+      %%% 1 - database dump and files (archive) tar
+      %%% 2 - database only dump
       %%% If mod_filestore is enabled the the files are NOT backed up, as it is
       %%% assumed that the filestore module will backup the files.
       {daily_dump, 0},
