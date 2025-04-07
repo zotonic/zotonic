@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-04-07 16:38\n"
+"PO-Revision-Date: 2025-04-07 18:15\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -5144,7 +5144,7 @@ msgstr "בכל רגע תוכלו לבצע גיבוי של המערכת שלכם.
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:3
 msgid "Automatic daily backups of the database and uploaded files can be enabled. The backup is done at night and the last 7 backups are kept."
-msgstr ""
+msgstr "ניתן להפעיל גיבויים יומיים אוטומטיים של מסד הנתונים וקבצים שהועלו. הגיבוי נעשה בלילה ו-7 הגיבויים האחרונים נשמרים."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:53
 msgid "Back to the edit page"
@@ -5350,7 +5350,7 @@ msgstr "מצטערים, מוגדרת תצורה גלובלית של Zotonic ול
 
 #: apps/zotonic_mod_backup/src/actions/action_backup_backup_start.erl:47
 msgid "Sorry, manual backups are disabled"
-msgstr ""
+msgstr "מצטערים, גיבויים ידניים מושבתים"
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:84
 msgid "Sorry, there is no module that can import this."
@@ -5390,7 +5390,7 @@ msgstr "התחל כעת גיבוי למסד נתונים בלבד"
 
 #: apps/zotonic_mod_backup/src/actions/action_backup_backup_start.erl:42
 msgid "Started the backup. You can keep this page open or continue working."
-msgstr ""
+msgstr "התחיל את הגיבוי. אתה יכול להשאיר דף זה פתוח או להמשיך לעבוד."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:27
 msgid "The \"pg_dump\" command was not found in the path. Set in zotonic.config the \"pg_dump\" config key to the path to <tt>pg_dump</tt> and return to this page."
@@ -5412,11 +5412,11 @@ msgstr "תצורת הגיבוי מוגדרת ל:"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:7
 msgid "The backup module uses a global Zotonic configuration. The configuration cannot be changed here."
-msgstr ""
+msgstr "מודול הגיבוי משתמש בתצורה גלובלית של Zotonic. לא ניתן לשנות את התצורה כאן."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:75
 msgid "The encryption configuration is set to:"
-msgstr ""
+msgstr "תצורת ההצפנה מוגדרת ל:"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5./apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:15
 msgid "This is the version saved on"
@@ -5474,7 +5474,7 @@ msgstr "להוריד קבצים"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
 msgid "or in the Zotonic configuration files."
-msgstr ""
+msgstr "או בקבצי התצורה של Zotonic."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:15
 msgid "this backup is in progress"
@@ -7073,7 +7073,7 @@ msgstr "מחק קבצים מחנות קבצי הענן"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:67
 msgid "Delete interval"
-msgstr ""
+msgstr "מחק מרווח"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:205
 msgid "Download Queue"
@@ -7121,7 +7121,7 @@ msgstr "מיד"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:51
 msgid "Is Upload enabled?"
-msgstr ""
+msgstr "האם העלאה מופעלת?"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:126
 msgid "Keep local files after upload to the cloud file store"
@@ -7129,7 +7129,7 @@ msgstr "שמור קבצים מקומיים לאחר העלאה לחנות הקב
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:55
 msgid "Keep local files?"
-msgstr ""
+msgstr "לשמור קבצים מקומיים?"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:182
 msgid "Local Files"
@@ -7162,7 +7162,7 @@ msgstr "לעולם לא"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:61
 msgid "No, local files are deleted after upload"
-msgstr ""
+msgstr "לא, קבצים מקומיים נמחקים לאחר ההעלאה"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:103
 msgid "S3 API Key or FTP/WebDAV username"
@@ -7174,7 +7174,7 @@ msgstr "S3 API סודי או סיסמת FTP/WebDAV"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:47
 msgid "S3 Cloud Location"
-msgstr ""
+msgstr "S3 Cloud Location"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:36./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
 msgid "S3 Cloud Location and Credentials"
@@ -7186,7 +7186,7 @@ msgstr "שמור הגדרות"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:43
 msgid "Service"
-msgstr ""
+msgstr "שֵׁרוּת"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:158
 msgid "Settings are working fine and are saved."
@@ -7198,15 +7198,15 @@ msgstr "אִחסוּן"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:38
 msgid "The cloud file store uses a global Zotonic configuration. The configuration cannot be changed here."
-msgstr ""
+msgstr "חנות הקבצים בענן משתמשת בתצורה גלובלית של Zotonic. לא ניתן לשנות את התצורה כאן."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:39
 msgid "The configuration is:"
-msgstr ""
+msgstr "התצורה היא:"
 
 #: apps/zotonic_mod_filestore/src/support/filestore_admin.erl:66
 msgid "The settings are locked by the system configuration."
-msgstr ""
+msgstr "ההגדרות ננעלות על ידי תצורת המערכת."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:226
 msgid "There is a 1 minute wait before files are uploaded."
@@ -7238,7 +7238,7 @@ msgstr "עם WebDAV שם המשתמש והסיסמה מועברים בצורה �
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:59
 msgid "Yes, keep local files after upload"
-msgstr ""
+msgstr "כן, שמור קבצים מקומיים לאחר ההעלאה"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:69./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:76./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:83
 msgid "You are not allowed to change these settings."
@@ -9577,7 +9577,7 @@ msgstr "קובץ תצורת האתר אינו כולל אתר זה ממנועי 
 
 #: apps/zotonic_mod_seo/priv/templates/_seo_admin_preview_json_ld.tpl:19
 msgid "This page is not publicly viewable. JSON-LD is only generated if the page is visible for anonymous visitors."
-msgstr ""
+msgstr "דף זה אינו גלוי לציבור. JSON-LD נוצר רק אם הדף גלוי למבקרים אנונימיים."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:39
 msgid "Url for the search action on the site. Defaults to:"
