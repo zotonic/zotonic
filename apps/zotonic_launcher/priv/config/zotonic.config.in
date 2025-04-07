@@ -293,7 +293,8 @@
  },
 
  %%% Server wide configuration for the mod_filestore. If mod_filestore is enabled then
- %%% it will use this configuration, unless there is a local site configuration.
+ %%% it will use this configuration, unless is_config_locked is false and there is a
+ %%% local site configuration.
  {zotonic_mod_filestore, [
       %%% Lock the config, prevent changing per site.
       {is_config_locked, false},
