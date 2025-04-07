@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-04-07 16:38\n"
+"PO-Revision-Date: 2025-04-07 18:15\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -5144,7 +5144,7 @@ msgstr "En cualquier momento puedes hacer una copia de seguridad de su sistema."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:3
 msgid "Automatic daily backups of the database and uploaded files can be enabled. The backup is done at night and the last 7 backups are kept."
-msgstr ""
+msgstr "Se pueden habilitar copias de seguridad diarias automáticas de la base de datos y de los archivos subidos. La copia de seguridad se realiza por la noche y se conservan las últimas 7 copias."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:53
 msgid "Back to the edit page"
@@ -5350,7 +5350,7 @@ msgstr "Lo sentimos, se ha establecido una configuración global de Zotonic y no
 
 #: apps/zotonic_mod_backup/src/actions/action_backup_backup_start.erl:47
 msgid "Sorry, manual backups are disabled"
-msgstr ""
+msgstr "Lo sentimos, las copias de seguridad manuales están deshabilitadas."
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:84
 msgid "Sorry, there is no module that can import this."
@@ -5390,7 +5390,7 @@ msgstr "Iniciar ahora solo copia de seguridad de la base de datos"
 
 #: apps/zotonic_mod_backup/src/actions/action_backup_backup_start.erl:42
 msgid "Started the backup. You can keep this page open or continue working."
-msgstr ""
+msgstr "Se inició la copia de seguridad. Puedes dejar esta página abierta o seguir trabajando."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:27
 msgid "The \"pg_dump\" command was not found in the path. Set in zotonic.config the \"pg_dump\" config key to the path to <tt>pg_dump</tt> and return to this page."
@@ -5412,11 +5412,11 @@ msgstr "La configuración de respaldo se establece en:"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:7
 msgid "The backup module uses a global Zotonic configuration. The configuration cannot be changed here."
-msgstr ""
+msgstr "El módulo de copia de seguridad utiliza una configuración global de Zotonic. Esta configuración no se puede modificar aquí."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:75
 msgid "The encryption configuration is set to:"
-msgstr ""
+msgstr "La configuración de cifrado se establece en:"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5./apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:15
 msgid "This is the version saved on"
@@ -5474,7 +5474,7 @@ msgstr "descargar archivos"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
 msgid "or in the Zotonic configuration files."
-msgstr ""
+msgstr "o en los archivos de configuración de Zotonic."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:15
 msgid "this backup is in progress"
@@ -7073,7 +7073,7 @@ msgstr "Eliminar archivos de la tienda de archivos en la nube"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:67
 msgid "Delete interval"
-msgstr ""
+msgstr "Eliminar intervalo"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:205
 msgid "Download Queue"
@@ -7121,7 +7121,7 @@ msgstr "Inmediatamente"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:51
 msgid "Is Upload enabled?"
-msgstr ""
+msgstr "¿Está habilitada la carga?"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:126
 msgid "Keep local files after upload to the cloud file store"
@@ -7129,7 +7129,7 @@ msgstr "Mantenga los archivos locales después de cargarlos en el almacén de ar
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:55
 msgid "Keep local files?"
-msgstr ""
+msgstr "¿Mantener archivos locales?"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:182
 msgid "Local Files"
@@ -7162,7 +7162,7 @@ msgstr "Nunca"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:61
 msgid "No, local files are deleted after upload"
-msgstr ""
+msgstr "No, los archivos locales se eliminan después de la carga"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:103
 msgid "S3 API Key or FTP/WebDAV username"
@@ -7174,7 +7174,7 @@ msgstr "Secreto API S3 o contraseña FTP/WebDAV"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:47
 msgid "S3 Cloud Location"
-msgstr ""
+msgstr "Ubicación de la nube S3"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:36./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
 msgid "S3 Cloud Location and Credentials"
@@ -7186,7 +7186,7 @@ msgstr "Guardar configuración"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:43
 msgid "Service"
-msgstr ""
+msgstr "Servicio"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:158
 msgid "Settings are working fine and are saved."
@@ -7198,15 +7198,15 @@ msgstr "Almacenamiento"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:38
 msgid "The cloud file store uses a global Zotonic configuration. The configuration cannot be changed here."
-msgstr ""
+msgstr "El almacén de archivos en la nube utiliza una configuración global de Zotonic. Esta configuración no se puede modificar aquí."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:39
 msgid "The configuration is:"
-msgstr ""
+msgstr "La configuración es:"
 
 #: apps/zotonic_mod_filestore/src/support/filestore_admin.erl:66
 msgid "The settings are locked by the system configuration."
-msgstr ""
+msgstr "La configuración está bloqueada por la configuración del sistema."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:226
 msgid "There is a 1 minute wait before files are uploaded."
@@ -7238,7 +7238,7 @@ msgstr "Con WebDAV, el nombre de usuario y la contraseña se transfieren sin cif
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:59
 msgid "Yes, keep local files after upload"
-msgstr ""
+msgstr "Sí, conservar los archivos locales después de cargarlos"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:69./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:76./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:83
 msgid "You are not allowed to change these settings."
@@ -9577,7 +9577,7 @@ msgstr "El archivo de configuración del sitio excluye este sitio de los motores
 
 #: apps/zotonic_mod_seo/priv/templates/_seo_admin_preview_json_ld.tpl:19
 msgid "This page is not publicly viewable. JSON-LD is only generated if the page is visible for anonymous visitors."
-msgstr ""
+msgstr "Esta página no es pública. JSON-LD solo se genera si la página es visible para visitantes anónimos."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:39
 msgid "Url for the search action on the site. Defaults to:"
