@@ -63,7 +63,7 @@ event(#submit{message=admin_filestore}, Context) ->
                                 ], Context)
                     end;
                 true ->
-                    z_render:growl_error(?__("The settings are locked by the system configurarion.", Context), Context)
+                    z_render:growl_error(?__("The settings are locked by the system configuration.", Context), Context)
             end;
         false ->
             z_render:growl_error(?__("You are not allowed to change these settings.", Context), Context)
