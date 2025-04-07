@@ -290,5 +290,40 @@
    {password, "%%GENERATED%%"}
 
   ]
+ },
+
+ %%% Server wide configuration for the mod_filestore. If mod_filestore is enabled then
+ %%% it will use this configuration, unless there is a local site configuration.
+ {zotonic_mod_filestore, [
+      %%% Lock the config, prevent changing per site.
+      {is_config_locked, false},
+
+      %%% Service to be used: s3, ftp or webdav.
+      {service, "s3"},
+
+      %%% URL of the cloud files store. Start with http/https for S3, ftp/ftps for FTP and
+      %%% webdav/webdavs for WebDAV.  If "{{site}}" is found in the URL, it will be replaced
+      %%% with the name of the site, otherwise the sitename will be appended to the URL (so
+      %%% the files are uploaded in a directory per site).
+      {s3url, ""},
+
+      %%% The s3 key or ftp/webdav username.
+      {s3key, ""},
+
+      %%% The s3 secret or ftp/webdav password.
+      {s3secret, ""},
+
+      %%% Set to true to upload new files (or previews) to the file store service.
+      {is_upload_enabled, true},
+
+      %%% Set to true to keep files on the local server disk after uploading. If this is set
+      %%% then the file store functions as a backup of all the files.
+      {is_local_keep, false},
+
+      %%% Waiting period to delete files on the remote server after they are deleted locally
+      %%% from the site. Possible values are "0" form an immediate delete, a number is a number
+      %%% of seconds, or "N days", "N weeks" or "N months" (where N is a number).
+      {delete_interval, <<"0">>}
+  ]
  }
 ].

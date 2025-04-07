@@ -130,10 +130,10 @@ observe_filestore_request(#filestore_request{
 %% @doc Map the local path to the URL of the remotely stored file. This depends on the
 %% service configured in the filestore config.
 observe_filestore_credentials_lookup(#filestore_credentials_lookup{ path = Path }, Context) ->
-    Service = m_config:get_value(?MODULE, service, <<"s3">>, Context),
-    S3Key = m_config:get_value(?MODULE, s3key, Context),
-    S3Secret = m_config:get_value(?MODULE, s3secret, Context),
-    S3Url = m_config:get_value(?MODULE, s3url, Context),
+    Service = filestore_config:service(Context),
+    S3Key = filestore_config:s3key(Context),
+    S3Secret = filestore_config:s3secret(Context),
+    S3Url = filestore_config:s3url(Context),
     case is_defined(S3Key) andalso is_defined(S3Secret) andalso is_defined(S3Url) of
         true ->
             Url = make_url(S3Url, Path),
@@ -153,12 +153,12 @@ observe_filestore_credentials_revlookup(
             service = Service,
             location = Location
         }, Context) ->
-    ConfiguredService = m_config:get_value(?MODULE, service, <<"s3">>, Context),
+    ConfiguredService = filestore_config:service(Context),
     if
         Service =:= ConfiguredService ->
-            S3Key = m_config:get_value(?MODULE, s3key, Context),
-            S3Secret = m_config:get_value(?MODULE, s3secret, Context),
-            S3Url = m_config:get_value(?MODULE, s3url, Context),
+            S3Key = filestore_config:s3key(Context),
+            S3Secret = filestore_config:s3secret(Context),
+            S3Url = filestore_config:s3url(Context),
             case is_defined(S3Key) andalso is_defined(S3Secret) of
                 true ->
                     {ok, #filestore_credentials{
@@ -249,21 +249,16 @@ is_defined(<<>>) -> false;
 is_defined(_) -> true.
 
 pid_observe_tick_1m(Pid, tick_1m, Context) ->
-    case m_config:get_boolean(?MODULE, is_upload_enabled, Context) of
+    case filestore_config:is_upload_enabled(Context) of
         true ->
             start_uploaders(Pid, m_filestore:fetch_queue(Context), Context);
         false ->
-            nop
+            ok
     end,
     start_downloaders(m_filestore:fetch_move_to_local(Context), Context),
-    case m_config:get_value(?MODULE, delete_interval, <<"0">>, Context) of
-        false ->
-            nop;
+    case filestore_config:delete_interval(Context) of
         <<"false">> ->
-            nop;
-        undefined ->
-            %% For backwards compat, if the config option was not set.
-            start_deleters(m_filestore:fetch_deleted(<<"0">>, Context), Context);
+            ok;
         Interval ->
             start_deleters(m_filestore:fetch_deleted(Interval, Context), Context)
     end.
@@ -709,7 +704,7 @@ download_stream(_Id, _Path, _LocalPath, _Context, _Other) ->
     ok.
 
 download_done(Id, Path, Context) ->
-    m_filestore:purge_move_to_local(Id, m_filestore:is_local_keep(Context), Context),
+    m_filestore:purge_move_to_local(Id, filestore_config:is_local_keep(Context), Context),
     filezcache:delete({z_context:site(Context), Path}),
     filestore_uploader:stale_file_entry(Path, Context).
 

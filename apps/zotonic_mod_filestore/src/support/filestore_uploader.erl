@@ -172,7 +172,7 @@ try_upload(MaybeEntry, #state{id=Id, path=Path, context=Context, media_info=MInf
             case m_filestore:is_download_ok(MaybeEntry) of
                 true ->
                     % Already uploaded - we can safely delete the file.
-                    case m_filestore:is_local_keep(Context) of
+                    case filestore_config:is_local_keep(Context) of
                         true ->
                             ok;
                         false ->
@@ -228,7 +228,7 @@ finish_upload(ok, Path, AbsPath, Size, #filestore_credentials{service=Service, l
         service => Service,
         result => ok
     }),
-    IsLocalKeep = m_filestore:is_local_keep(Context),
+    IsLocalKeep = filestore_config:is_local_keep(Context),
     case IsLocalKeep of
         true ->
             {ok, _} = m_filestore:store(Path, Size, Service, Location, IsLocalKeep, Context),
