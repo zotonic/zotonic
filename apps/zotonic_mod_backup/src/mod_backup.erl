@@ -591,7 +591,7 @@ do_backup_process(Name, IsFullBackup, Context) ->
     end.
 
 do_backup_process_1(Name, IsFullBackup, Context) ->
-    IsFilesBackup = IsFullBackup andalso not is_filestore_enabled(Context),
+    IsFilesBackup = IsFullBackup andalso not backup_config:is_filestore_enabled(Context),
     case check_configuration() of
         {ok, Cmds} ->
             ?LOG_INFO(#{
