@@ -223,7 +223,7 @@ get_site_contexts() ->
 get_site_config(Site) ->
     gen_server:call(?MODULE, {get_site_config, Site}, infinity).
 
-%% @doc Let the sites manager reload the configurarion of a site.
+%% @doc Let the sites manager reload the configuration of a site.
 -spec reload_site_config(atom()) -> ok | {error, bad_name|term()}.
 reload_site_config(Site) ->
     gen_server:call(?MODULE, {reload_site_config, Site}, infinity).

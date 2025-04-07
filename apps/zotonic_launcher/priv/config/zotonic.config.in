@@ -284,11 +284,93 @@
 %%% to the session and page-sessions. Default is 50% of the process_limit.
    %% {sidejobs_limit, 100000},
 
+%%% 'tar' command to be used when archiving files, also used by mod_backup
+   %% {tar, "tar"},
+
+%%% 'pg_dump' command to be used when dumping a site's schema, also used by mod_backup
+   %% {pg_dump, "pg_dump"},
+
 %%% Password for the sites administration site (zotonic_status). Will be generated on
 %%% first Zotonic startup, if the zotonic.config file does not yet exist.
 %%% The corresponding account name is 'wwwadmin'
    {password, "%%GENERATED%%"}
 
+  ]
+ },
+
+ %%% Server wide configuration for the mod_filestore. If mod_filestore is enabled then
+ %%% it will use this configuration, unless is_config_locked is false and there is a
+ %%% local site configuration.
+ {zotonic_mod_filestore, [
+      %%% Lock the config, prevent changing per site.
+      {is_config_locked, false},
+
+      %%% Service to be used: s3, ftp or webdav.
+      {service, "s3"},
+
+      %%% URL of the cloud files store. Start with http/https for S3, ftp/ftps for FTP and
+      %%% webdav/webdavs for WebDAV.  If "{{site}}" is found in the URL, it will be replaced
+      %%% with the name of the site, otherwise the sitename will be appended to the URL (so
+      %%% the files are uploaded in a directory per site).
+      {s3url, ""},
+
+      %%% The s3 key or ftp/webdav username.
+      {s3key, ""},
+
+      %%% The s3 secret or ftp/webdav password.
+      {s3secret, ""},
+
+      %%% Set to true to upload new files (or previews) to the file store service.
+      {is_upload_enabled, true},
+
+      %%% Set to true to keep files on the local server disk after uploading. If this is set
+      %%% then the file store functions as a backup of all the files.
+      {is_local_keep, false},
+
+      %%% Waiting period to delete files on the remote server after they are deleted locally
+      %%% from the site. Possible values are "0" form an immediate delete, a number is a number
+      %%% of seconds, or "N days", "N weeks" or "N months" (where N is a number).
+      {delete_interval, <<"0">>}
+  ]
+ },
+
+ %%% Server wide configuration for the mod_backup. If mod_backup is enabled then
+ %%% it will use this configuration, unless is_config_locked is false and there is a
+ %%% local site configuration.
+ %%% See also the Zotonic configs 'tar' and 'pg_dump'.
+ {zotonic_mod_backup, [
+      %%% Lock the config, prevent changing per site.
+      {is_config_locked, false},
+
+      %%% Make a daily dump of the database and/or files.
+      %%% Possible values:
+      %%% 0 - no daily dump
+      %%% 1 - database only dump
+      %%% 2 - database dump and files (archive) tar
+      %%% If mod_filestore is enabled the the files are NOT backed up, as it is
+      %%% assumed that the filestore module will backup the files.
+      {daily_dump, 0},
+
+      %%% The database (and config) backup can be encrypted. Set this to true to
+      %%% enable encryption.
+      {encrypt_backups, false},
+
+      %%% The database (and config) backup can be encrypted using this password.
+      %%% If not set and the encrypt_backups is set, then the site will generate
+      %%% a password and set it in the site's config key site.backup_encrypt_password.
+      {backup_encrypt_password, ""},
+
+      %%% On the admin resource page, show the revisions panel to restore a previous
+      %%% revision. With this panel it is also possible to download or upload a dump
+      %%% of the current resource. This configuration can be overruled by the site's
+      %%% admin_panel configuration.
+      {admin_panel, false},
+
+      %%% Allow a user with the use.mod_backup permission to download backup files.
+      {allow_backup_download, true},
+
+      %%% Allow a user with the use.mod_backup permission to start backups manually.
+      {allow_manual_backup, true}
   ]
  }
 ].

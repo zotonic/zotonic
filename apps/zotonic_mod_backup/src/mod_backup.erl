@@ -50,7 +50,6 @@
     file_forbidden/2,
     dir/1,
     check_configuration/0,
-    is_filestore_enabled/1,
     is_uploading/1,
     manage_schema/2,
 
@@ -62,6 +61,7 @@
 -include_lib("zotonic_core/include/zotonic_file.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 
+-include("backup.hrl").
 
 -record(state, {
     context :: z:context(),
@@ -75,11 +75,6 @@
 
 % Interval for checking for new and/or changed files.
 -define(BCK_POLL_INTERVAL, 3600 * 1000).
-
-% Config values for daily backup
--define(BACKUP_NONE, 0).
--define(BACKUP_DB, 2).
--define(BACKUP_ALL, 1).
 
 
 observe_rsc_upload(#rsc_upload{} = Upload, Context) ->
@@ -176,11 +171,11 @@ file_exists(File, Context) ->
             }),
             false;
         #{
-            <<"database">> := Database,
-            <<"files">> := Files
+            <<"database">> := DatabaseDump,
+            <<"files">> := FilesTar
         } ->
-            case File of
-                Database ->
+            if
+                File =:= DatabaseDump ->
                     ?LOG_INFO(#{
                         text => <<"Download of database backup requested">>,
                         in => zotonic_mod_backup,
@@ -188,8 +183,8 @@ file_exists(File, Context) ->
                         backup => Root,
                         file => File
                     }),
-                    {true, filename:join([dir(Context), Database])};
-                Files ->
+                    {true, filename:join([dir(Context), DatabaseDump])};
+                File =:= FilesTar ->
                     ?LOG_INFO(#{
                         text => <<"Download of files backup requested">>,
                         in => zotonic_mod_backup,
@@ -197,8 +192,8 @@ file_exists(File, Context) ->
                         backup => Root,
                         file => File
                     }),
-                    {true, filename:join([dir(Context), Files])};
-                _ ->
+                    {true, filename:join([dir(Context), FilesTar])};
+                true ->
                     false
             end
     end.
@@ -208,9 +203,22 @@ file_exists(File, Context) ->
     File :: file:filename_all(),
     Context :: z:context(),
     IsForbidden :: boolean().
-file_forbidden(_File, Context) ->
-    IsAllowed = (z_acl:is_admin(Context) orelse z_acl:is_allowed(use, mod_backup, Context)),
-    not IsAllowed.
+file_forbidden(File, Context) ->
+    case (z_acl:is_admin(Context) orelse z_acl:is_allowed(use, mod_backup, Context))
+        andalso backup_config:allow_backup_download(Context)
+    of
+        true ->
+            false;
+        false ->
+            ?LOG_WARNING(#{
+                text => <<"Download of backup file failed because access is forbidden">>,
+                in => zotonic_mod_backup,
+                result => error,
+                reason => eacces,
+                file => File
+            }),
+            true
+    end.
 
 
 %% @doc Start a full backup
@@ -219,13 +227,13 @@ start_backup(Context) ->
 
 %% @doc Start a backup, either a full backup (including archived files) or a database only backup.
 start_backup(IsFullBackup, Context) ->
-    gen_server:call(z_utils:name_for_site(?MODULE, z_context:site(Context)), {start_backup, IsFullBackup}).
+    gen_server:call(z_utils:name_for_site(?MODULE, Context), {start_backup, IsFullBackup}).
 
 %% @doc List all backups present.  Newest first.
 -spec list_backups( z:context() ) -> list( map() ).
 list_backups(Context) ->
     Files = list_backup_files(Context),
-    case gen_server:call(z_utils:name_for_site(?MODULE, z_context:site(Context)), in_progress_start) of
+    case gen_server:call(z_utils:name_for_site(?MODULE, Context), in_progress_start) of
         undefined ->
             Files;
         InProgress ->
@@ -241,20 +249,9 @@ list_backups(Context) ->
 %% @doc Check if there is a backup in progress.
 -spec backup_in_progress(z:context()) -> boolean().
 backup_in_progress(Context) ->
-    case gen_server:call(z_utils:name_for_site(?MODULE, z_context:site(Context)), in_progress_start) of
+    case gen_server:call(z_utils:name_for_site(?MODULE, Context), in_progress_start) of
         undefined -> false;
         _ -> true
-    end.
-
-
-%% @doc Check if the cloud storage of files is enabled.
--spec is_filestore_enabled(z:context()) -> boolean().
-is_filestore_enabled(Context) ->
-    TestPath = <<"backup/backup.json">>,
-    case z_notifier:first(#filestore_credentials_lookup{ path = TestPath}, Context) of
-        {ok, #filestore_credentials{}} -> true;
-        {error, _} -> false;
-        undefined -> false
     end.
 
 -spec is_uploading( z:context() ) -> boolean().
@@ -345,7 +342,7 @@ handle_info(periodic_backup, #state{ backup_pid = Pid } = State) when is_pid(Pid
 handle_info(periodic_backup, #state{ upload_pid = Pid } = State) when is_pid(Pid) ->
     {noreply, State};
 handle_info(periodic_backup, State) ->
-    State1 = case daily_dump_config(State#state.context) of
+    State1 = case backup_config:daily_dump(State#state.context) of
         ?BACKUP_NONE -> State;
         ?BACKUP_ALL -> maybe_daily_dump(true, State);
         ?BACKUP_DB -> maybe_daily_dump(false, State)
@@ -444,19 +441,6 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
-daily_dump_config(Context) ->
-    case m_config:get_value(mod_backup, daily_dump, Context) of
-        <<"1">> ->
-            case is_filestore_enabled(Context) of
-                true -> ?BACKUP_DB;
-                false -> ?BACKUP_ALL
-            end;
-        <<"2">> ->
-            ?BACKUP_DB;
-        _ ->
-            ?BACKUP_NONE
-    end.
-
 maybe_daily_dump(IsFullBackup, State) ->
     Context = State#state.context,
     Now = {Date, Time} = calendar:universal_time(),
@@ -484,7 +468,7 @@ maybe_daily_dump(IsFullBackup, State) ->
     end.
 
 maybe_filestore_upload(#state{ context = Context } = State) ->
-    case is_filestore_enabled(Context) of
+    case backup_config:is_filestore_enabled(Context) of
         true ->
             % Check the backup.json if any files are not yet uploaded
             Data = read_admin_file(Context),
@@ -607,7 +591,7 @@ do_backup_process(Name, IsFullBackup, Context) ->
     end.
 
 do_backup_process_1(Name, IsFullBackup, Context) ->
-    IsFilesBackup = IsFullBackup andalso not is_filestore_enabled(Context),
+    IsFilesBackup = IsFullBackup andalso not backup_config:is_filestore_enabled(Context),
     case check_configuration() of
         {ok, Cmds} ->
             ?LOG_INFO(#{
@@ -690,7 +674,7 @@ maybe_encrypt_files({ok, Files}, Context) ->
                     Dir = dir(Context),
                     Files1 = maps:map(fun(_K, File) ->
                                               FullName = filename:join(Dir, File),
-                                              {ok, FullNameEnc} = mod_backup_file_crypto:password_encrypt(FullName, Password),
+                                              {ok, FullNameEnc} = backup_file_crypto:password_encrypt(FullName, Password),
                                               ok = file:delete(FullName),
                                               filename(FullNameEnc)
                                       end,

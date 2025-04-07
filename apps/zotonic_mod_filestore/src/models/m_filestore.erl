@@ -22,8 +22,6 @@
 -export([
     m_get/3,
 
-    is_local_keep/1,
-
     queue/3,
     fetch_queue/1,
     dequeue/2,
@@ -75,50 +73,52 @@ m_get([ <<"stats">> | Rest ], _Msg, Context) ->
         true -> {ok, {stats(Context), Rest}};
         false -> {error, eacces}
     end;
+m_get([ <<"service">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> {ok, {filestore_config:service(Context), Rest}};
+        false -> {error, eacces}
+    end;
 m_get([ <<"s3url">> | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
-        true -> {ok, {m_config:get_value(mod_filestore, s3url, Context), Rest}};
+        true -> {ok, {filestore_config:s3url(Context), Rest}};
         false -> {error, eacces}
     end;
 m_get([ <<"s3key">> | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
-        true -> {ok, {m_config:get_value(mod_filestore, s3key, Context), Rest}};
+        true -> {ok, {filestore_config:s3key(Context), Rest}};
         false -> {error, eacces}
     end;
 m_get([ <<"s3secret">> | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
-        true -> {ok, {m_config:get_value(mod_filestore, s3secret, Context), Rest}};
+        true -> {ok, {filestore_config:s3secret(Context), Rest}};
+        false -> {error, eacces}
+    end;
+m_get([ <<"is_config_locked">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true -> {ok, {filestore_config:is_config_locked(), Rest}};
         false -> {error, eacces}
     end;
 m_get([ <<"is_upload_enabled">> | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
-        true -> {ok, {m_config:get_boolean(mod_filestore, is_upload_enabled, Context), Rest}};
+        true -> {ok, {filestore_config:is_upload_enabled(Context), Rest}};
         false -> {error, eacces}
     end;
 m_get([ <<"is_local_keep">> | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
-        true -> {ok, {m_config:get_boolean(mod_filestore, is_local_keep, Context), Rest}};
+        true -> {ok, {filestore_config:is_local_keep(Context), Rest}};
         false -> {error, eacces}
     end;
 m_get([ <<"delete_interval">> | Rest ], _Msg, Context) ->
     case z_acl:is_admin(Context) of
         true ->
-            Interval = case m_config:get_value(mod_filestore, delete_interval, Context) of
-                undefined -> <<"0">>;
-                <<>> -> <<"0">>;
-                Interv -> Interv
-            end,
-            {ok, {Interval, Rest}};
+            {ok, {filestore_config:delete_interval(Context), Rest}};
         false -> {error, eacces}
     end;
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
--spec is_local_keep(z:context()) -> boolean().
-is_local_keep(Context) ->
-    m_config:get_boolean(mod_filestore, is_local_keep, Context).
-
-%% @doc Add a file/medium to the upload queue.
+%% @doc Add a file/medium to the upload queue in the database. This queue is periodically
+%% polled and an uploader will be started for every entry in the queue.
 -spec queue(binary(), z_media_identify:media_info(), z:context()) -> ok | {error, duplicate}.
 queue(Path, MediaProps, Context) ->
     z_db:transaction(fun(Ctx) ->
@@ -155,9 +155,7 @@ fetch_queue(Context) ->
             Rs1 = lists:map(
                 fun
                     (#{ props := L } = M) when is_list(L) ->
-                        M#{
-                            props => maps:from_list(L)
-                        };
+                        M#{ props => maps:from_list(L) };
                     (M) ->
                         M
                 end,

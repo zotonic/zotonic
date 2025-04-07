@@ -33,9 +33,6 @@
     list_revisions_assoc/2,
 
     periodic_cleanup/1,
-    retention_months/1,
-    user_retention_days/1,
-    deleted_user_retention_days/1,
 
     install/1,
 
@@ -46,13 +43,6 @@
 
 -define(BACKUP_TYPE_PROPS, $P).
 -define(BACKUP_TYPE_PROPS_DELETED, $D).
-
-% Number of months we keep revisions
--define(BACKUP_REVISION_RETENTION_MONTHS, 18).
-% Number of days we keep user revisions
--define(BACKUP_USER_REVISION_RETENTION_DAYS, 90).
-% Number of days we keep user deletions
--define(BACKUP_USER_DELETION_RETENTION_DAYS, 30).
 
 
 %% @doc Fetch the value for the key from a model source
@@ -65,11 +55,11 @@ m_get([ <<"list">>, Id | Rest ], _Msg, Context) ->
     end,
     {ok, {Revs, Rest}};
 m_get([ <<"retention_months">> | Rest ], _Msg, Context) ->
-    {ok, {retention_months(Context), Rest}};
+    {ok, {backup_config:retention_months(Context), Rest}};
 m_get([ <<"user_retention_days">> | Rest ], _Msg, Context) ->
-    {ok, {user_retention_days(Context), Rest}};
+    {ok, {backup_config:user_retention_days(Context), Rest}};
 m_get([ <<"deleted_user_retention_days">> | Rest ], _Msg, Context) ->
-    {ok, {deleted_user_retention_days(Context), Rest}};
+    {ok, {backup_config:deleted_user_retention_days(Context), Rest}};
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
@@ -134,10 +124,10 @@ save_revision(Id, #{ <<"version">> := Version } = Props, IsDeleted, Context) whe
         where rsc_id = $1
         order by created desc
         limit 1", [Id], Context),
-    case Version of
-        LastVersion when LastVersion =/= undefined andalso not IsDeleted ->
+    if
+        Version =:= LastVersion, LastVersion =/= undefined, not IsDeleted ->
             ok;
-        _ ->
+        true ->
             UserId = z_acl:user(Context),
             Type = case IsDeleted of
                 false ->
@@ -224,7 +214,7 @@ list_revisions_assoc(Id, Context) ->
 -spec periodic_cleanup(Context) -> ok when
     Context :: z:context().
 periodic_cleanup(Context) ->
-    Months = retention_months(Context),
+    Months = backup_config:retention_months(Context),
     Threshold = z_datetime:prev_month(calendar:universal_time(), Months),
     z_db:q("
         delete from backup_revision
@@ -234,7 +224,7 @@ periodic_cleanup(Context) ->
     ),
 
     % Join with the 'identity' table to find revisions of user resources
-    UserRevDays = user_retention_days(Context),
+    UserRevDays = backup_config:user_retention_days(Context),
     UserRevThreshold = z_datetime:prev_day(calendar:universal_time(), UserRevDays),
     % see 'm_identity:is_user/2':
     IdentityTypes = m_identity:user_types(Context),
@@ -248,7 +238,7 @@ periodic_cleanup(Context) ->
     ),
 
     % Join with 'rsc_gone' to find user resources that have been deleted
-    UserDelDays = deleted_user_retention_days(Context),
+    UserDelDays = backup_config:deleted_user_retention_days(Context),
     UserDelThreshold = z_datetime:prev_day(calendar:universal_time(), UserDelDays),
     z_db:q("
         DELETE FROM backup_revision
@@ -261,49 +251,6 @@ periodic_cleanup(Context) ->
         Context
     ),
     ok.
-
-%% @doc Return the number of months we keep revisions. Defaults to 18 months.
-%% Uses the configuration mod_backup.revision_retention_months
--spec retention_months(Context) -> Months when
-    Context :: z:context(),
-    Months :: pos_integer().
-retention_months(Context) ->
-    case z_convert:to_integer(m_config:get_value(mod_backup, revision_retention_months, Context)) of
-        undefined ->
-            ?BACKUP_REVISION_RETENTION_MONTHS;
-        N ->
-            max(N, 1)
-    end.
-
-%% @doc Return the number of days we keep user resource's revisions.
-%% Defaults to 3 months (90 days).
-%% Uses the configuration mod_backup.user_revision_retention_days
--spec user_retention_days(Context) -> Days when
-    Context :: z:context(),
-    Days :: pos_integer().
-user_retention_days(Context) ->
-    case z_convert:to_integer(m_config:get_value(mod_backup, user_revision_retention_days, Context)) of
-        undefined ->
-            ?BACKUP_USER_REVISION_RETENTION_DAYS;
-        N ->
-            max(N, 1)
-    end.
-
-%% @doc Return the number of days we keep user resource's revisions of deleted users.
-%% Defaults to 1 month (30 days), which is also the maximum allowed.
-%% Uses the configuration mod_backup.user_deletion_retention_days
--spec deleted_user_retention_days(Context) -> Days when
-    Context :: z:context(),
-    Days :: pos_integer().
-deleted_user_retention_days(Context) ->
-    case z_convert:to_integer(m_config:get_value(mod_backup, user_deletion_retention_days, Context)) of
-        undefined ->
-            ?BACKUP_USER_DELETION_RETENTION_DAYS;
-        N when N =< 0 ->
-            ?BACKUP_USER_DELETION_RETENTION_DAYS;
-        N ->
-            min(30, N)
-    end.
 
 %% @doc Install the revisions table.
 install(Context) ->
