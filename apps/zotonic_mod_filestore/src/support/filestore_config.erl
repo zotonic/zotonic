@@ -97,7 +97,7 @@ is_local_keep(Context) ->
 %%
 %% Defaults "0", which means immediate deletion.
 delete_interval(Context) ->
-    case z_convert:to_binary(m_config:get_value(mod_filestore, delete_interval, Context)) of
+    case z_convert:to_binary(get_value(delete_interval, Context)) of
         <<>> -> <<"0">>;
         Interval -> Interval
     end.
