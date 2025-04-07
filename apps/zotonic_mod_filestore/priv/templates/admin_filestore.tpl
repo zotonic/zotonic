@@ -35,7 +35,7 @@
                 <div class="widget">
                     <h3 class="widget-header">{_ S3 Cloud Location and Credentials _}</h3>
                     <div class="widget-content">
-                        <p class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> {_ The cloud file store uses a global Zotonic configuration. It cannot be changed here. _}</p>
+                        <p class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> {_ The cloud file store uses a global Zotonic configuration. The configuration cannot be changed here. _}</p>
                         <p>{_ The configuration is: _}</p>
 
                         <table class="table table-compact">

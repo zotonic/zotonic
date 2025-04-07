@@ -32,8 +32,7 @@
             <div class="col-lg-4 col-md-6">
                 {% if is_editable %}
                     {% include "_admin_backup_widget_config_export_panel.tpl" %}
-                    {% include "_admin_backup_widget_config_backup_frequency.tpl" %}
-                    {% include "_admin_backup_widget_config_encryption.tpl" %}
+                    {% include "_admin_backup_widget_config_backup_config.tpl" %}
                 {% endif %}
             </div>
         </div>
