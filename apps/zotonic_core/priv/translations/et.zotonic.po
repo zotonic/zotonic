@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-03-25 12:16\n"
+"PO-Revision-Date: 2025-04-07 16:38\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -237,7 +237,7 @@ msgid "Change category and/or content group..."
 msgstr "Kategooria ja / või sisugrupi muutmine ..."
 
 #: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:145
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:122
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:133
 msgid "Changed configuration."
 msgstr "Konfiguratsiooni muudetud."
 
@@ -1359,7 +1359,7 @@ msgid "Error checking the website."
 msgstr "Viga veebisaidi kontrollimisel."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:182
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:115
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:118
 msgid "Error creating the page."
 msgstr "Viga lehe loomisel."
 
@@ -1404,7 +1404,7 @@ msgid "Existing pages"
 msgstr "Olemasolevad lehed"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:196./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:168./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:169
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:101
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:104
 msgid "Failed to download the file."
 msgstr "Faili allalaadimine ebaõnnestus."
 
@@ -2444,7 +2444,7 @@ msgid "There are no tasks in the task queue."
 msgstr "Ülesannete järjekorras pole ülesandeid."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:162
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:95
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:98
 msgid "There is already a page with this name."
 msgstr "Selle nimega leht on juba olemas."
 
@@ -2457,7 +2457,7 @@ msgid "This connection already exists."
 msgstr "See ühendus on juba olemas."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:200./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:172./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:173
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:105
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:108
 msgid "This file contains links to other files or locations."
 msgstr "See fail sisaldab linke teistele failidele või asukohtadele."
 
@@ -2474,12 +2474,12 @@ msgid "This file has not been scanned for viruses."
 msgstr "Seda faili pole viiruste suhtes kontrollitud."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:198./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:170./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:171
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:103
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:106
 msgid "This file is infected with a virus."
 msgstr "See fail on nakatunud viirusega."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:202./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:174./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:175
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:107
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:110
 msgid "This file is too large."
 msgstr "See fail on liiga suur."
 
@@ -2763,7 +2763,7 @@ msgid "You don't have permission to change this media item."
 msgstr "Teil pole selle meediaüksuse muutmiseks luba."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:164
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:97
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:100
 msgid "You don't have permission to create this page."
 msgstr "Teil pole selle lehe loomiseks luba."
 
@@ -2773,7 +2773,7 @@ msgid "You don't have permission to edit this page."
 msgstr "Teil pole selle lehe muutmise luba."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:194./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:166./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:167
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:99
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:102
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "Teil pole seda tüüpi failide üleslaadimiseks õigeid õigusi."
 
@@ -3179,7 +3179,7 @@ msgid "Show log for message"
 msgstr "Kuva sõnumi logi"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:8
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:14
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
 msgid "System Configuration"
 msgstr "Süsteemikonfiguratsioon"
 
@@ -5142,15 +5142,15 @@ msgstr "Kas soovite kindlasti sellele versioonile naasta?"
 msgid "At any moment you can make a backup of your system."
 msgstr "Igal hetkel saate teha oma süsteemist varukoopia."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:3
-msgid "Automatic daily backups of the database and uploaded files can be enabled. This is done at night and the last 7 backups are kept."
-msgstr "Lubada saab andmebaasi ja üleslaaditud failide automaatse igapäevase varukoopia tegemise. Seda tehakse öösel ja 7 viimast varukoopiat säilitatakse."
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:3
+msgid "Automatic daily backups of the database and uploaded files can be enabled. The backup is done at night and the last 7 backups are kept."
+msgstr "Lubada saab andmebaasi ja üleslaaditud failide automaatse igapäevase varukoopia tegemise. Varundamine tehakse öösel ja 7 viimast varukoopiat säilitatakse."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:53
 msgid "Back to the edit page"
 msgstr "Tagasi redigeerimislehele"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:94
+#: apps/zotonic_mod_backup/src/mod_backup.erl:89
 msgid "Backup"
 msgstr "Varundamine"
 
@@ -5166,7 +5166,7 @@ msgstr "Teie sisu varundamise ja taastamise valikud."
 msgid "Backups"
 msgstr "Varukoopiad"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:4
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:71
 msgid "By default the backup of the database and files are not encrypted. It is\n"
 "        possible to encrypt the backups. This makes it safer to store them on an \n"
 "        external server."
@@ -5186,7 +5186,7 @@ msgstr "Kontrollige ja võib-olla taastage oma lehe varasem versioon."
 msgid "Click on <b>List and restore an earlier version</b> to get an overview of earlier saved versions of this page.<br/>You can also save the complete contents of a page to a file. Later you can reload this file, replacing the current page contents. Note that the file does not contain your unsaved changes. Connections and media are not saved as well."
 msgstr "Selle lehe varasematest salvestatud versioonidest ülevaate saamiseks klõpsake nuppu <b>Loend ja taastage varasem versioon</b> .<br/>Võite ka lehe kogu sisu faili salvestada. Hiljem saate selle faili uuesti laadida, asendades praeguse lehe sisu. Pange tähele, et fail ei sisalda teie salvestamata muudatusi. Ühendusi ja meediumeid ei salvestata samuti."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:23
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:24./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:46
 msgid "Cloud file store is enabled. Backups of the database are uploaded to the cloud file store. Local files are copied to the cloud and not backed up locally."
 msgstr "Pilvefailide pood on lubatud. Andmebaasi varukoopiad laaditakse üles pilvefailide poodi. Kohalikud failid kopeeritakse pilve ja neid ei varundata kohapeal."
 
@@ -5197,6 +5197,10 @@ msgstr "Pilvefailide pood on lubatud. Kohalikke faile ei varundata. Veenduge, et
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:13
 msgid "Connections and media items are not backed up and can’t be recovered."
 msgstr "Ühendusi ja meediumiüksusi ei varundata ja neid ei saa taastada."
+
+#: apps/zotonic_mod_backup/src/actions/action_backup_backup_start.erl:44
+msgid "Could not start the backup because a backup is already in progress."
+msgstr "Varundamist ei saanud alustada, kuna varundamine on juba pooleli."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:59./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:48
 msgid "Deleted"
@@ -5210,7 +5214,7 @@ msgstr "Kustutas"
 msgid "Deleted on"
 msgstr "Kustutatud"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:107
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:102
 msgid "Deleted pages"
 msgstr "Kustutatud lehed"
 
@@ -5218,7 +5222,11 @@ msgstr "Kustutatud lehed"
 msgid "Directory"
 msgstr "Kataloog"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:8./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:29
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:81
+msgid "Do not encrypt backups."
+msgstr "Ärge krüptige varukoopiaid."
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:17./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:31./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:52
 msgid "Do not make a daily backup."
 msgstr "Ärge tehke igapäevast varukoopiat."
 
@@ -5230,9 +5238,13 @@ msgstr "Laadige alla varukoopia"
 msgid "Enable <tt>mod_export</tt> to download backup files."
 msgstr "Varundusfailide allalaadimiseks lubage <tt></tt>"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:8
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:88
 msgid "Encrypt Backups"
 msgstr "Varukoopiate krüptimine"
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:79
+msgid "Encrypt backups."
+msgstr "Varukoopiate krüptimine."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:18
 msgid "Encrypted"
@@ -5248,7 +5260,7 @@ msgstr "Krüpteerimine on lubatud, kuid krüpteerimisparool puudub. Palun\n"
 msgid "Help about backup &amp; restore"
 msgstr "Abi varundamise &amp; taastamise kohta"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:14
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
 msgid "It can be found in the"
 msgstr "Selle võib leida"
 
@@ -5260,31 +5272,35 @@ msgstr "Varasema versiooni loendamine ja taastamine"
 msgid "List of recently deleted pages and recover options via the resource revisions log."
 msgstr "Hiljuti kustutatud lehtede loend ja taastamisvõimalused ressursside redaktsioonide logi kaudu."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:16./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:37
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:15./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:39./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:60
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "Tehke andmebaasist ja üleslaaditud failidest iga päev varukoopia."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:12./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:33
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:13./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:35./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:56
 msgid "Make a daily backup of the database."
 msgstr "Tehke andmebaasist igapäevane varukoopia."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:60
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:62
 msgid "No backups present."
 msgstr "Varukoopiaid pole."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:51
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:53
 msgid "Not uploaded to filestore"
 msgstr "Pole failipoodi üles laaditud"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:13
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:97
 msgid "Note:"
 msgstr "Märge:"
+
+#: apps/zotonic_mod_backup/src/actions/action_backup_backup_start.erl:50
+msgid "Only administrators can start a backup."
+msgstr "Varundamist saavad alustada ainult administraatorid."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:13
 msgid "Only the texts and other properties of pages are backed up."
 msgstr "Varundatakse ainult lehtede tekstid ja muud omadused."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:14
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
 msgid "Please make sure you store the backup encryption password in a safe <u>external</u> location."
 msgstr "Salvestage kindlasti varukrüptimise parool turvalisse <u>välisesse</u> asukohta."
 
@@ -5328,11 +5344,19 @@ msgstr "Valige varukoopia, mille soovite üles laadida. Fail peab olema .bert-fa
 msgid "Show import/export panel on the edit pages in the admin."
 msgstr "Kuva importimise/ekspordi paneel administraatori redigeerimislehtedel."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:81
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:124
+msgid "Sorry, a global Zotonic configuration is set and cannot be changed."
+msgstr "Kahjuks on globaalne Zotonic konfiguratsioon määratud ja seda ei saa muuta."
+
+#: apps/zotonic_mod_backup/src/actions/action_backup_backup_start.erl:47
+msgid "Sorry, manual backups are disabled"
+msgstr "Kahjuks on käsitsi varundamine keelatud"
+
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:84
 msgid "Sorry, there is no module that can import this."
 msgstr "Kahjuks pole moodulit, mis saaks seda importida."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:88./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:107
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:91./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:107
 msgid "Sorry, there was an error replacing your page."
 msgstr "Vabandust, teie lehe asendamisel ilmnes viga."
 
@@ -5344,15 +5368,15 @@ msgstr "Vabandust, see varukoopia on kustutatud."
 msgid "Sorry, this backup is not valid."
 msgstr "Vabandust, see varukoopia ei kehti."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:83
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:86
 msgid "Sorry, this is not a backup file or it is corrupted."
 msgstr "Kahjuks pole see varukoopia või see on rikutud."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:91
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:94
 msgid "Sorry, you don't have permission to change this page."
 msgstr "Vabandust, teil pole selle lehe muutmiseks luba."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:124
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:135
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "Vabandust, teil pole konfiguratsiooni muutmiseks luba."
 
@@ -5363,6 +5387,10 @@ msgstr "Alusta varundamist kohe"
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:16
 msgid "Start database-only backup now"
 msgstr "Alustage kohe ainult andmebaasi varundamist"
+
+#: apps/zotonic_mod_backup/src/actions/action_backup_backup_start.erl:42
+msgid "Started the backup. You can keep this page open or continue working."
+msgstr "Alustas varundamisega. Saate selle lehe avatuna hoida või tööd jätkata."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:27
 msgid "The \"pg_dump\" command was not found in the path. Set in zotonic.config the \"pg_dump\" config key to the path to <tt>pg_dump</tt> and return to this page."
@@ -5378,6 +5406,18 @@ msgid "The backup comprises three parts, the database, the configuration,\n"
 msgstr "Varukoopia koosneb kolmest osast: andmebaasist, konfiguratsioonist,\n"
 "      ja üleslaaditud failidest."
 
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:9
+msgid "The backup configuration is set to:"
+msgstr "Varunduskonfiguratsioon on seatud järgmisele:"
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:7
+msgid "The backup module uses a global Zotonic configuration. The configuration cannot be changed here."
+msgstr "Varundusmoodul kasutab globaalset Zotoniku konfiguratsiooni. Siin ei saa konfiguratsiooni muuta."
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:75
+msgid "The encryption configuration is set to:"
+msgstr "Krüptimise konfiguratsioon on seatud järgmisele:"
+
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5./apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:15
 msgid "This is the version saved on"
 msgstr "See on versioon, kuhu on salvestatud"
@@ -5386,7 +5426,7 @@ msgstr "See on versioon, kuhu on salvestatud"
 msgid "This will overwrite your page with the contents of the backup file."
 msgstr "See kirjutab teie lehe varukoopia sisuga üle."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:47
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:49
 msgid "Uploaded to filestore"
 msgstr "Laaditi üles failipoodi"
 
@@ -5400,7 +5440,7 @@ msgstr "Hoiatus"
 msgid "With the import/export panel you can download a page as a file, see page revisions and restore a previous version."
 msgstr "Impordi/ekspordi paneeli abil saate lehe failina alla laadida, vaadata lehe versioone ja taastada eelmise versiooni."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:41
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:43
 msgid "Y-m-d H:i – l"
 msgstr "Ymd H:i – l"
 
@@ -5424,13 +5464,17 @@ msgstr "Teil peavad olema varumooduli juurdepääsuõigused."
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "Teie varukoopia pole õigesti konfigureeritud. Varumoodul ei tööta enne, kui allolevad probleemid on lahendatud:"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:36
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:37
 msgid "download database"
 msgstr "allalaaditav andmebaas"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:27
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:28
 msgid "download files"
 msgstr "failide allalaadimine"
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
+msgid "or in the Zotonic configuration files."
+msgstr "või Zotonicu konfiguratsioonifailides."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:15
 msgid "this backup is in progress"
@@ -5982,7 +6026,7 @@ msgid "Year"
 msgstr "aasta"
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:170
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:221
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:17
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
@@ -6947,47 +6991,47 @@ msgstr "Olete sidunud oma <strong>Facebook</strong> kontot."
 msgid "Your Facebook Developer Dashboard"
 msgstr "Teie Facebooki arendaja juhtpaneel"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:98
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:148
 msgid "After 1 month"
 msgstr "1 kuu pärast"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:97
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:147
 msgid "After 1 week"
 msgstr "1 nädala pärast"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:99
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:149
 msgid "After 3 months"
 msgstr "3 kuu pärast"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:206
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:256
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "Kõiki pilvefaile saab serveris failisüsteemi tagasi teisaldada."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:184
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:264
 msgid "All cloud files will be queued for download."
 msgstr "Kõik pilvefailid seatakse allalaadimiseks järjekorda."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:183
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:234
 msgid "All files will be queued, uploads will start in the background within 10 minutes."
 msgstr "Kõik failid pannakse järjekorda, üleslaadimised algavad taustal 10 minuti jooksul."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:173
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:224
 msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "Kõiki kohalikke üleslaaditud ja eelvaate faile saab pilve teisaldada."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:193
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:243
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "Kas olete kindel, et soovite kõik failid pilve teisaldada?"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:221
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:273
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "Kas olete kindel, et soovite kõik failid serveri kettale teisaldada?"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:38
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:88
 msgid "Base URL"
 msgstr "Põhi-URL"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:106
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:156
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "Enne seadete salvestamist kontrollitakse neid väikese faili üleslaadimisega (ja eemaldamisega)."
 
@@ -6999,19 +7043,19 @@ msgstr "Pilvefailide pood"
 msgid "Cloud File Store Configuration"
 msgstr "Pilvefailide poe seadistamine"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:123
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:174
 msgid "Cloud File Store Utilities and Statistics"
 msgstr "Pilvefailide poe utiliidid ja statistika"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:132
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:183
 msgid "Cloud Files"
 msgstr "Pilvefailid"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:182
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:233
 msgid "Could not access the service, double check your settings and try again."
 msgstr "Teenusele ei õnnestunud juurde pääseda, kontrollige uuesti oma seadeid ja proovige uuesti."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:109
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:159
 msgid "Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file."
 msgstr "Teenusele ei õnnestunud juurde pääseda, kontrollige uuesti oma seadeid ja proovige uuesti. Veenduge, et API-võtmel oleks juurdepääsuõigused (ajutise) <code>zotonic-filestore-test-file-</code> faili loomiseks ja eemaldamiseks."
 
@@ -7019,47 +7063,51 @@ msgstr "Teenusele ei õnnestunud juurde pääseda, kontrollige uuesti oma seadei
 msgid "Currently Zotonic supports FTP and services that are compatible with the S3 file services API. These include:"
 msgstr "Praegu toetab Zotonic FTP-d ja teenuseid, mis ühilduvad S3 failiteenuste API-ga. Need sisaldavad:"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:155
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:206
 msgid "Delete Queue"
 msgstr "Kustuta järjekord"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:93
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:143
 msgid "Delete files from the cloud file store"
 msgstr "Kustutage failid pilvefailide poest"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:154
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:67
+msgid "Delete interval"
+msgstr "Kustuta intervall"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:205
 msgid "Download Queue"
 msgstr "Laadige järjekord alla"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:78
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:128
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "Lubage see, et lasta failisalal toimida teie kohalike meediumifailide varukoopiana."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:207
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:257
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "Enne selle protsessi alustamist veenduge, et kettaruumi oleks piisavalt."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:137./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:160
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:188./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:211
 msgid "Files"
 msgstr "Toimikud"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:47
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:97
 msgid "For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftp:</tt></b>"
 msgstr "FTP puhul peab URL algama <b><tt>ftps:</tt></b> või <b><tt>ftp:</tt></b>"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:46
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:96
 msgid "For S3 the URL must start with <b><tt>https:</tt></b> or <b><tt>http:</tt></b>"
 msgstr "S3 puhul peab URL algama numbriga <b><tt>https:</tt></b> või <b><tt>http:</tt></b>"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:48
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:98
 msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
 msgstr "WebDAV-i puhul peab URL algama numbriga <b><tt>webdavs:</tt></b> või <b><tt>webdav:</tt></b>"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:179
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:230
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Kui olete valinud \"Säilita kohalikud failid pärast pilvefailihoidlasse üleslaadimist\", siis kohalikke faile ei kustutata, kuna kaugfaile käsitletakse kohalike failide varukoopiana."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:211
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:261
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Kui olete valinud \"Säilita kohalikud failid pärast pilvefailihoidlasse üleslaadimist\", siis kaugfaile ei kustutata, kuna kaugfaile käsitletakse kohalike failide varukoopiana."
 
@@ -7067,88 +7115,120 @@ msgstr "Kui olete valinud \"Säilita kohalikud failid pärast pilvefailihoidlass
 msgid "If you use an FTP server then that server MUST support FTPS (secure ftp)"
 msgstr "Kui kasutate FTP-serverit, PEAB see server toetama FTPS-i (turvaline ftp)"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:96
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:71./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:146
 msgid "Immediately"
 msgstr "Kohe"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:76
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:51
+msgid "Is Upload enabled?"
+msgstr "Kas üleslaadimine on lubatud?"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:126
 msgid "Keep local files after upload to the cloud file store"
 msgstr "Hoidke kohalikud failid pärast pilvefailide poodi üleslaadimist alles"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:131
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:55
+msgid "Keep local files?"
+msgstr "Kas säilitada kohalikud failid?"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:182
 msgid "Local Files"
 msgstr "Kohalikud failid"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:130
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:181
 msgid "Media Resources"
 msgstr "Meediaallikad"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:189
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
 msgid "Move all local files to the remote storage"
 msgstr "Teisaldage kõik kohalikud failid kaugmällu"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:217
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:269
 msgid "Move all remote files to local"
 msgstr "Teisaldage kõik kaugfailid kohalikku"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:194
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:244
 msgid "Move files to cloud"
 msgstr "Failide teisaldamine pilve"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:222
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:274
 msgid "Move files to server disk"
 msgstr "Teisalda failid serveri kettale"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:100
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:73./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:150
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:62
 msgid "Never"
 msgstr "Mitte kunagi"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:53
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:61
+msgid "No, local files are deleted after upload"
+msgstr "Ei, kohalikud failid kustutatakse pärast üleslaadimist"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:103
 msgid "S3 API Key or FTP/WebDAV username"
 msgstr "S3 API võti või FTP/WebDAV kasutajanimi"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:58
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:108
 msgid "S3 API Secret or FTP/WebDAV password"
 msgstr "S3 API salajane või FTP/WebDAV parool"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:35
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:47
+msgid "S3 Cloud Location"
+msgstr "S3 pilve asukoht"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:36./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
 msgid "S3 Cloud Location and Credentials"
 msgstr "S3 pilve asukoht ja volikirjad"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:113
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:163
 msgid "Save Settings"
 msgstr "Salvesta sätted"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:108
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:43
+msgid "Service"
+msgstr "Teenindus"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:158
 msgid "Settings are working fine and are saved."
 msgstr "Seaded töötavad hästi ja on salvestatud."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:143
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:194
 msgid "Storage"
 msgstr "Ladustamine"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:175
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:38
+msgid "The cloud file store uses a global Zotonic configuration. The configuration cannot be changed here."
+msgstr "Pilvefailide pood kasutab globaalset Zotoniku konfiguratsiooni. Siin ei saa konfiguratsiooni muuta."
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:39
+msgid "The configuration is:"
+msgstr "Konfiguratsioon on järgmine:"
+
+#: apps/zotonic_mod_filestore/src/support/filestore_admin.erl:66
+msgid "The settings are locked by the system configuration."
+msgstr "Seadistused on lukustatud süsteemi konfiguratsiooniga."
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:226
 msgid "There is a 1 minute wait before files are uploaded."
 msgstr "Enne failide üleslaadimist tuleb oodata 1 minut."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:174
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:225
 msgid "This will queue the files for later asynchronous upload."
 msgstr "See seab failid hilisemaks asünkroonseks üleslaadimiseks järjekorda."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:135
 msgid "Try to create a private S3 bucket if the S3 bucket does not exist"
 msgstr "Proovige luua privaatne S3 ämber, kui S3 ämbrit pole olemas"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:153
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:204
 msgid "Upload Queue"
 msgstr "Laadige järjekord üles"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:67
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:117
 msgid "Upload new media files to the cloud file store"
 msgstr "Uute meediumifailide üleslaadimine pilvefailide poodi"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:87
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:137
 msgid "With FTP and WebDAV the directories are always created automatically."
 msgstr "FTP ja WebDAV puhul luuakse kataloogid alati automaatselt."
 
@@ -7156,7 +7236,11 @@ msgstr "FTP ja WebDAV puhul luuakse kataloogid alati automaatselt."
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
 msgstr "WebDAV-iga edastatakse kasutajanimi ja parool selgelt, seega veenduge, et kasutate <tt>webdavsi:</tt> URL-i (mis kasutab https-i)."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:64./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:71./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:78
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:59
+msgid "Yes, keep local files after upload"
+msgstr "Jah, säilitage kohalikud failid pärast üleslaadimist"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:69./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:76./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:83
 msgid "You are not allowed to change these settings."
 msgstr "Teil pole lubatud neid seadeid muuta."
 
@@ -9491,6 +9575,10 @@ msgstr "Saidi konfiguratsioonifail võimaldab seda saiti otsingumootorites indek
 msgid "The site configuration file excludes this site from search engines."
 msgstr "Saidi konfiguratsioonifail välistab selle saidi otsingumootoritest."
 
+#: apps/zotonic_mod_seo/priv/templates/_seo_admin_preview_json_ld.tpl:19
+msgid "This page is not publicly viewable. JSON-LD is only generated if the page is visible for anonymous visitors."
+msgstr "See leht ei ole avalikult vaadatav. JSON-LD luuakse ainult siis, kui leht on anonüümsetele külastajatele nähtav."
+
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:39
 msgid "Url for the search action on the site. Defaults to:"
 msgstr "Saidi otsingutoimingu URL. Vaikimisi:"
@@ -11110,7 +11198,7 @@ msgstr "Automaattõlge"
 msgid "Available sub-languages"
 msgstr "Saadaval alamkeeled"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:513
+#: apps/zotonic_mod_translation/src/mod_translation.erl:514
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "Tõlkefaile ei saa genereerida, kuna <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext pole installitud</a>."
 
@@ -11314,7 +11402,7 @@ msgstr "Uuenda tõlked"
 msgid "Reload all translations from the modules and site. All templates will be recompiled."
 msgstr "Laadige kõik tõlked moodulitest ja saidilt uuesti. Kõik mallid kompileeritakse uuesti."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:528
+#: apps/zotonic_mod_translation/src/mod_translation.erl:529
 msgid "Reloading all .po files in the background."
 msgstr "Kõigi taustal olevate .po-failide uuesti laadimine."
 
@@ -11358,27 +11446,27 @@ msgstr "Valige eelistatud keel."
 msgid "Show the language in the URL"
 msgstr "Kuva URL-is keel"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:425./apps/zotonic_mod_translation/src/mod_translation.erl:473
+#: apps/zotonic_mod_translation/src/mod_translation.erl:426./apps/zotonic_mod_translation/src/mod_translation.erl:474
 msgid "Sorry, could not change the language."
 msgstr "Vabandust, keelt ei õnnestunud muuta."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:603
+#: apps/zotonic_mod_translation/src/mod_translation.erl:604
 msgid "Sorry, that language is unknown or not enabled."
 msgstr "Vabandust, see keel on tundmatu või pole lubatud."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:412./apps/zotonic_mod_translation/src/mod_translation.erl:441./apps/zotonic_mod_translation/src/mod_translation.erl:453./apps/zotonic_mod_translation/src/mod_translation.erl:476
+#: apps/zotonic_mod_translation/src/mod_translation.erl:413./apps/zotonic_mod_translation/src/mod_translation.erl:442./apps/zotonic_mod_translation/src/mod_translation.erl:454./apps/zotonic_mod_translation/src/mod_translation.erl:477
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "Vabandust, teil pole keeleloendi muutmiseks luba."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:530
+#: apps/zotonic_mod_translation/src/mod_translation.erl:531
 msgid "Sorry, you don't have permission to reload translations."
 msgstr "Vabandust, teil pole tõlkete uuesti laadimiseks luba."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:520
+#: apps/zotonic_mod_translation/src/mod_translation.erl:521
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "Vabandust, teil pole tõlkete otsimiseks luba."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:428./apps/zotonic_mod_translation/src/mod_translation.erl:606
+#: apps/zotonic_mod_translation/src/mod_translation.erl:429./apps/zotonic_mod_translation/src/mod_translation.erl:607
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "Vabandust, teil pole luba vaikekeele seadmiseks."
 
@@ -11386,7 +11474,7 @@ msgstr "Vabandust, teil pole luba vaikekeele seadmiseks."
 msgid "Spanish"
 msgstr "Hispaania keel"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:500
+#: apps/zotonic_mod_translation/src/mod_translation.erl:501
 msgid "Started building the .pot files. This may take a while..."
 msgstr "Alustati .pot-failide ehitamist. See võib võtta mõnda aega ..."
 
@@ -11418,7 +11506,7 @@ msgstr "Uue keele juurde"
 msgid "Translate"
 msgstr "Tõlgi"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:871
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:878
 msgid "Translation"
 msgstr "Tõlge"
 
