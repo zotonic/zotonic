@@ -342,7 +342,7 @@ handle_info(periodic_backup, #state{ backup_pid = Pid } = State) when is_pid(Pid
 handle_info(periodic_backup, #state{ upload_pid = Pid } = State) when is_pid(Pid) ->
     {noreply, State};
 handle_info(periodic_backup, State) ->
-    State1 = case backup_config:daily_dump_config(State#state.context) of
+    State1 = case backup_config:daily_dump(State#state.context) of
         ?BACKUP_NONE -> State;
         ?BACKUP_ALL -> maybe_daily_dump(true, State);
         ?BACKUP_DB -> maybe_daily_dump(false, State)
