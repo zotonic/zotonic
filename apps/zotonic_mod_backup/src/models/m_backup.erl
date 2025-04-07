@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015-2024 Marc Worrell
+%% @copyright 2015-2025 Marc Worrell
 %% @doc Model for database and files backups
 %% @end
 
-%% Copyright 2015-2024 Marc Worrell
+%% Copyright 2015-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,28 +28,24 @@
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ <<"admin_panel">> | Rest ], _Msg, Context) ->
-    {ok, {m_config:get_boolean(mod_backup, admin_panel, Context), Rest}};
+    {ok, {backup_config:admin_panel(Context), Rest}};
 m_get([ <<"daily_dump">> | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_backup, Context) of
         true ->
-            DailyDump = case z_convert:to_binary(m_config:get_value(mod_backup, daily_dump, Context)) of
-                <<"1">> -> <<"1">>;
-                <<"2">> -> <<"2">>;
-                _ -> <<"0">>
-            end,
+            DailyDump = z_convert:to_binary(backup_config:daily_dump(Context)),
             {ok, {DailyDump, Rest}};
         false ->
             {error, eacces}
     end;
 m_get([ <<"encrypt_backups">> | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_backup, Context) of
-        true -> {ok, {m_config:get_boolean(mod_backup, encrypt_backups, Context), Rest}};
+        true -> {ok, {backup_config:encrypt_backups(Context), Rest}};
         false -> {error, eacces}
     end;
 m_get([ <<"has_encrypt_password">> | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_backup, Context) of
         true ->
-            PW = m_config:get_value(mod_backup, backup_encrypt_password, Context),
+            PW = backup_config:encrypt_password(Context),
             {ok, {is_binary(PW) andalso size(PW) > 0, Rest}};
         false ->
             {error, eacces}

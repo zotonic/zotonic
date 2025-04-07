@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2022 Marc Worrell
-%% @doc Overview of all backups.
+%% @copyright 2010-2025 Marc Worrell
+%% @doc Overview of all backups. Handle config change postbacks.
+%% @end
 
-%% Copyright 2010-2022 Marc Worrell
+%% Copyright 2010-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,7 +35,7 @@ service_available(Context) ->
     {true, Context2}.
 
 is_authorized(Context) ->
-    z_controller_helper:is_authorized([ {use, z_context:get(acl_module, Context, mod_backup)} ], Context).
+    z_controller_helper:is_authorized([ {use, mod_backup} ], Context).
 
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
@@ -47,7 +48,8 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
             #{}
     end,
     Vars = [
-        {is_filestore_enabled, mod_backup:is_filestore_enabled(Context)},
+        {is_config_locked, backup_config:is_config_locked()},
+        {is_filestore_enabled, backup_config:is_filestore_enabled(Context)},
         {page_admin_backup, true},
         {backup_config, Config},
         {backup_in_progress, mod_backup:backup_in_progress(Context)}
@@ -57,13 +59,14 @@ process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
 
 
 
-event(#postback{message='config_encrypt_backups'}, Context) ->
-    set_config(encrypt_backups, Context);
 event(#postback{message='config_backup_panel'}, Context) ->
     set_config(admin_panel, Context);
+event(#postback{message='config_encrypt_backups'}, Context) ->
+    set_config_if_local(encrypt_backups, Context);
 event(#postback{message='config_backup_daily'}, Context) ->
-    set_config(daily_dump, Context);
+    set_config_if_local(daily_dump, Context);
 event(#submit{message={restore, Args}}, Context) ->
+    % Restore a revision, redirect to the edit page after the resource is restored.
     {id, Id} = proplists:lookup(id, Args),
     case z_acl:rsc_editable(Id, Context) of
         true ->
@@ -114,6 +117,14 @@ error_message(R, Context) ->
     }),
     ?__("Error creating the page.", Context).
 
+
+set_config_if_local(What, Context) ->
+    case backup_config:is_config_locked() of
+        true ->
+            z_render:growl_error(?__("Sorry, a global Zotonic configuration is set and cannot be changed.", Context), Context);
+        false ->
+            set_config(What, Context)
+    end.
 
 set_config(What, Context) ->
     case z_acl:is_admin_editable(Context) of

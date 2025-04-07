@@ -1,7 +1,30 @@
 <div class="widget">
     <div class="widget-content">
         <p>{_ Automatic daily backups of the database and uploaded files can be enabled. This is done at night and the last 7 backups are kept. _}</p>
-        {% if is_filestore_enabled %}
+
+        {% if is_config_locked %}
+            <p class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span>
+                {_ The backup module uses a global Zotonic configuration. It cannot be changed here. _}
+            </p>
+            <p>{_ The backup is set to: _}</p>
+            <p>
+                <b>
+                    {% if m.backup.daily_dump == '2' %}
+                        {_ Make a daily backup of the database. _}
+                    {% elseif m.backup.daily_dump == '1' %}
+                        {_ Make a daily backup of the database and uploaded files. _}
+                    {% else %}
+                        {_ Do not make a daily backup. _}
+                    {% endif %}
+                </b>
+            </p>
+            {% if is_filestore_enabled %}
+                <p class="help-block">
+                <i class="fa fa-info-circle"></i>
+                {_ Cloud file store is enabled. Backups of the database are uploaded to the cloud file store. Local files are copied to the cloud and not backed up locally. _}
+                </p>
+            {% endif %}
+        {% elseif is_filestore_enabled %}
             <div class="radio">
                 <label>
                     <input id="backup_daily0" name="backup_daily" type="radio" value="0" {% if not m.backup.daily_dump %}checked="checked"{% endif %}>

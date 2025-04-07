@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016 Marc Worrell
-%%
-%% @doc Get system configurarion keys.
+%% @copyright 2016-2025 Marc Worrell
+%% @doc Get system configuration keys.
+%% @end
 
-%% Copyright 2016 Marc Worrell
+%% Copyright 2016-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.

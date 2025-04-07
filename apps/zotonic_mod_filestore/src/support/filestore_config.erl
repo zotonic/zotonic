@@ -44,7 +44,7 @@ is_config_locked() ->
 %% Possible values: "s3", "ftp", "webdav" or "" when disabled.
 -spec service(z:context()) -> binary().
 service(Context) ->
-    case z_convert:to_binary(get_value(service, Context)) of
+    case get_binary(service, Context) of
         <<>> -> <<"s3">>;
         Service -> Service
     end.
@@ -59,17 +59,17 @@ service(Context) ->
 %% - "dav:" or "davs:" for WebDAV
 -spec s3url(z:context()) -> binary().
 s3url(Context) ->
-    z_convert:to_binary(get_value(s3url, Context)).
+    get_binary(s3url, Context).
 
 %% @doc Get the S3 key (or FTP/WebDAV username) from the config.
 -spec s3key(z:context()) -> binary().
 s3key(Context) ->
-    z_convert:to_binary(get_value(s3key, Context)).
+    get_binary(s3key, Context).
 
 %% @doc Get the S3 secret (or FTP/WebDAV password) from the config.
 -spec s3secret(z:context()) -> binary().
 s3secret(Context) ->
-    z_convert:to_binary(get_value(s3secret, Context)).
+    get_binary(s3secret, Context).
 
 %% @doc Check if the uploading files is enabled. If set then any newly
 %% uploaded or created (preview) files is queued for uploading to the
@@ -105,6 +105,9 @@ delete_interval(Context) ->
 
 get_boolean(Key, Context) ->
     z_convert:to_bool(get_value(Key, Context)).
+
+get_binary(Key, Context) ->
+    z_convert:to_binary(get_value(Key, Context)).
 
 get_value(Key, Context) ->
     case is_config_locked() of
