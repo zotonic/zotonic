@@ -244,7 +244,6 @@ replace_special_chars(<<_/utf8, Rest/binary>>, Acc) ->
     replace_special_chars(Rest, <<Acc/binary, $->>).
 
 
-is_defined(undefined) -> false;
 is_defined(<<>>) -> false;
 is_defined(_) -> true.
 
