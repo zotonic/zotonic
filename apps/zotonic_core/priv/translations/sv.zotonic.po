@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-03-25 12:16\n"
+"PO-Revision-Date: 2025-04-07 16:38\n"
 "Last-Translator: \n"
 "Language-Team: Swedish\n"
 "MIME-Version: 1.0\n"
@@ -237,7 +237,7 @@ msgid "Change category and/or content group..."
 msgstr "Ändra kategori och/eller innehållsgrupp..."
 
 #: apps/zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:145
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:122
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:133
 msgid "Changed configuration."
 msgstr "Ändrad konfiguration."
 
@@ -1359,7 +1359,7 @@ msgid "Error checking the website."
 msgstr "Felkontroll webbplatsen."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:182
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:115
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:118
 msgid "Error creating the page."
 msgstr "Fel vid skapande av sidan."
 
@@ -1404,7 +1404,7 @@ msgid "Existing pages"
 msgstr "Befintliga sidor"
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:196./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:168./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:169
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:101
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:104
 msgid "Failed to download the file."
 msgstr "Gick inte att ladda ner filen."
 
@@ -2444,7 +2444,7 @@ msgid "There are no tasks in the task queue."
 msgstr "Det finns inga uppgifter i uppgiftskön."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:162
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:95
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:98
 msgid "There is already a page with this name."
 msgstr "Det finns redan en sida med detta namn."
 
@@ -2457,7 +2457,7 @@ msgid "This connection already exists."
 msgstr "Detta samband finns redan."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:200./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:172./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:173
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:105
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:108
 msgid "This file contains links to other files or locations."
 msgstr "Den här filen innehåller länkar till andra filer eller platser."
 
@@ -2474,12 +2474,12 @@ msgid "This file has not been scanned for viruses."
 msgstr "Den här filen har inte skannats efter virus."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:198./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:170./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:171
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:103
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:106
 msgid "This file is infected with a virus."
 msgstr "Den här filen är infekterad med ett virus."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:202./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:174./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:175
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:107
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:110
 msgid "This file is too large."
 msgstr "Den här filen är för stor."
 
@@ -2763,7 +2763,7 @@ msgid "You don't have permission to change this media item."
 msgstr "Du har inte behörighet att ändra detta media artikel."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:164
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:97
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:100
 msgid "You don't have permission to create this page."
 msgstr "Du har inte behörighet att skapa den här sidan."
 
@@ -2773,7 +2773,7 @@ msgid "You don't have permission to edit this page."
 msgstr "Du har inte behörighet att redigera den här sidan."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_dialog_media_upload.erl:194./apps/zotonic_mod_admin/src/actions/action_admin_dialog_new_rsc.erl:166./apps/zotonic_mod_admin/src/support/z_admin_media_discover.erl:167
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:99
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:102
 msgid "You don't have the proper permissions to upload this type of file."
 msgstr "Du inte har rätt behörighet för att ladda upp den här typen av fil."
 
@@ -3179,7 +3179,7 @@ msgid "Show log for message"
 msgstr "Visa logg för meddelande"
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:8
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:14
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
 msgid "System Configuration"
 msgstr "Systemkonfiguration"
 
@@ -5142,15 +5142,15 @@ msgstr "Är du säker på att du vill återkomma till denna version?"
 msgid "At any moment you can make a backup of your system."
 msgstr "På något ögonblick du kan göra en säkerhetskopia av ditt system."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:3
-msgid "Automatic daily backups of the database and uploaded files can be enabled. This is done at night and the last 7 backups are kept."
-msgstr "Automatisk daglig säkerhetskopiering av databasen och uppladdade filer kan aktiveras. Detta görs på natten och de sista 7 säkerhetskopiorna bevaras."
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:3
+msgid "Automatic daily backups of the database and uploaded files can be enabled. The backup is done at night and the last 7 backups are kept."
+msgstr "Automatisk daglig säkerhetskopiering av databasen och uppladdade filer kan aktiveras. Säkerhetskopieringen görs på natten och de sista 7 säkerhetskopiorna behålls."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:53
 msgid "Back to the edit page"
 msgstr "Tillbaka till redigeringssidan"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:94
+#: apps/zotonic_mod_backup/src/mod_backup.erl:89
 msgid "Backup"
 msgstr "Säkerhetskopiering"
 
@@ -5166,7 +5166,7 @@ msgstr "Säkerhetskopiering och återställning alternativ för ditt innehåll."
 msgid "Backups"
 msgstr "Säkerhetskopior"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:4
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:71
 msgid "By default the backup of the database and files are not encrypted. It is\n"
 "        possible to encrypt the backups. This makes it safer to store them on an \n"
 "        external server."
@@ -5186,7 +5186,7 @@ msgstr "Kontrollera och eventuellt återställa en tidigare version av din sida.
 msgid "Click on <b>List and restore an earlier version</b> to get an overview of earlier saved versions of this page.<br/>You can also save the complete contents of a page to a file. Later you can reload this file, replacing the current page contents. Note that the file does not contain your unsaved changes. Connections and media are not saved as well."
 msgstr "Klicka på <b>Lista och återställa en tidigare version</b> för att få en översikt av tidigare sparade versioner av den här sidan.<br/>Du kan också spara hela innehållet i en sida till en fil. Senare kan du ladda om denna fil, som ersätter den nuvarande sidans innehåll. Observera att filen inte innehåller osparade ändringar. Anslutningar och media sparas inte."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:23
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:24./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:46
 msgid "Cloud file store is enabled. Backups of the database are uploaded to the cloud file store. Local files are copied to the cloud and not backed up locally."
 msgstr "Cloud file store är aktiverat. Säkerhetskopieringar av databasen laddas upp till molnets filarkiv. Lokala filer kopieras till molnet och säkerhetskopieras inte lokalt."
 
@@ -5197,6 +5197,10 @@ msgstr "Cloud file store är aktiverat. De lokala filerna kommer inte att säker
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:13
 msgid "Connections and media items are not backed up and can’t be recovered."
 msgstr "Anslutningar och mediaobjekt säkerhetskopieras inte och kan inte återställas."
+
+#: apps/zotonic_mod_backup/src/actions/action_backup_backup_start.erl:44
+msgid "Could not start the backup because a backup is already in progress."
+msgstr "Det gick inte att starta säkerhetskopieringen eftersom en säkerhetskopiering redan pågår."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:59./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:48
 msgid "Deleted"
@@ -5210,7 +5214,7 @@ msgstr "Raderad av"
 msgid "Deleted on"
 msgstr "Raderad på"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:107
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:102
 msgid "Deleted pages"
 msgstr "Raderade sidor"
 
@@ -5218,7 +5222,11 @@ msgstr "Raderade sidor"
 msgid "Directory"
 msgstr "Katalog"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:8./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:29
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:81
+msgid "Do not encrypt backups."
+msgstr "Kryptera inte säkerhetskopior."
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:17./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:31./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:52
 msgid "Do not make a daily backup."
 msgstr "Gör inte en daglig säkerhetskopia."
 
@@ -5230,9 +5238,13 @@ msgstr "Ladda ner säkerhetskopian"
 msgid "Enable <tt>mod_export</tt> to download backup files."
 msgstr "Aktivera <tt>mod_export</tt> att ladda ner säkerhetskopior."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:8
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:88
 msgid "Encrypt Backups"
 msgstr "Kryptera säkerhetskopior"
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:79
+msgid "Encrypt backups."
+msgstr "Kryptera säkerhetskopior."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:18
 msgid "Encrypted"
@@ -5248,7 +5260,7 @@ msgstr "Kryptering är aktiverad, men det finns inget krypteringslösenord. Vän
 msgid "Help about backup &amp; restore"
 msgstr "Hjälp om backup &amp; återställa"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:14
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
 msgid "It can be found in the"
 msgstr "Den finns i"
 
@@ -5260,31 +5272,35 @@ msgstr "Lista och återställa en tidigare version"
 msgid "List of recently deleted pages and recover options via the resource revisions log."
 msgstr "Lista över nyligen raderade sidor och återställningsalternativ via resursrevisionsloggen."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:16./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:37
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:15./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:39./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:60
 msgid "Make a daily backup of the database and uploaded files."
 msgstr "Gör en daglig backup av databasen och uppladdade filer."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:12./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_frequency.tpl:33
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:13./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:35./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:56
 msgid "Make a daily backup of the database."
 msgstr "Gör en daglig säkerhetskopia av databasen."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:60
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:62
 msgid "No backups present."
 msgstr "Inga säkerhetskopior finns."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:51
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:53
 msgid "Not uploaded to filestore"
 msgstr "Inte uppladdat till filarkivet"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:13
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:97
 msgid "Note:"
 msgstr "Notera:"
+
+#: apps/zotonic_mod_backup/src/actions/action_backup_backup_start.erl:50
+msgid "Only administrators can start a backup."
+msgstr "Endast administratörer kan starta en säkerhetskopia."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:13
 msgid "Only the texts and other properties of pages are backed up."
 msgstr "Endast texter och andra egenskaper för sidor säkerhetskopieras."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_encryption.tpl:14
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
 msgid "Please make sure you store the backup encryption password in a safe <u>external</u> location."
 msgstr "Se till att du lagrar säkerhetskopieringskrypteringslösenordet på en säker <u>extern</u> plats."
 
@@ -5328,11 +5344,19 @@ msgstr "Välj den säkerhetskopieringsfil du vill ladda upp. Filen måste vara e
 msgid "Show import/export panel on the edit pages in the admin."
 msgstr "Visa import/exportpanelen på redigeringssidorna i admin."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:81
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:124
+msgid "Sorry, a global Zotonic configuration is set and cannot be changed."
+msgstr "Tyvärr, en global Zotonic-konfiguration är inställd och kan inte ändras."
+
+#: apps/zotonic_mod_backup/src/actions/action_backup_backup_start.erl:47
+msgid "Sorry, manual backups are disabled"
+msgstr "Tyvärr, manuell säkerhetskopiering är inaktiverad"
+
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:84
 msgid "Sorry, there is no module that can import this."
 msgstr "Tyvärr, det finns ingen modul som kan importera detta."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:88./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:107
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:91./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:107
 msgid "Sorry, there was an error replacing your page."
 msgstr "Beklagar, det uppstod ett fel ersätta din sida."
 
@@ -5344,15 +5368,15 @@ msgstr "Tyvärr, backup har tagits bort."
 msgid "Sorry, this backup is not valid."
 msgstr "Den här säkerhetskopian är tyvärr inte giltig."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:83
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:86
 msgid "Sorry, this is not a backup file or it is corrupted."
 msgstr "Sorry, detta är inte en backup-fil eller om den är skadad."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:91
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:94
 msgid "Sorry, you don't have permission to change this page."
 msgstr "Tyvärr, du har inte behörighet att ändra denna sida."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:124
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:135
 msgid "Sorry, you have no permission to change the configuration."
 msgstr "Tyvärr, du har inte behörighet att ändra denna sida."
 
@@ -5363,6 +5387,10 @@ msgstr "Starta säkerhetskopiering nu"
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:16
 msgid "Start database-only backup now"
 msgstr "Starta enbart databas-säkerhetskopiering nu"
+
+#: apps/zotonic_mod_backup/src/actions/action_backup_backup_start.erl:42
+msgid "Started the backup. You can keep this page open or continue working."
+msgstr "Startade säkerhetskopieringen. Du kan hålla den här sidan öppen eller fortsätta arbeta."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:27
 msgid "The \"pg_dump\" command was not found in the path. Set in zotonic.config the \"pg_dump\" config key to the path to <tt>pg_dump</tt> and return to this page."
@@ -5378,6 +5406,18 @@ msgid "The backup comprises three parts, the database, the configuration,\n"
 msgstr "Säkerhetskopieringen består av tre delar, databasen, konfigurationen,\n"
 "      och de uppladdade filerna."
 
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:9
+msgid "The backup configuration is set to:"
+msgstr "Säkerhetskopieringskonfigurationen är inställd på:"
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:7
+msgid "The backup module uses a global Zotonic configuration. The configuration cannot be changed here."
+msgstr "Backupmodulen använder en global Zotonic-konfiguration. Konfigurationen kan inte ändras här."
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:75
+msgid "The encryption configuration is set to:"
+msgstr "Krypteringskonfigurationen är inställd på:"
+
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:5./apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:15
 msgid "This is the version saved on"
 msgstr "Detta är versionen som sparats på"
@@ -5386,7 +5426,7 @@ msgstr "Detta är versionen som sparats på"
 msgid "This will overwrite your page with the contents of the backup file."
 msgstr "Detta kommer att skriva över din sida med innehåll av backup-fil."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:47
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:49
 msgid "Uploaded to filestore"
 msgstr "Laddat upp till filarkivet"
 
@@ -5400,7 +5440,7 @@ msgstr "Varning"
 msgid "With the import/export panel you can download a page as a file, see page revisions and restore a previous version."
 msgstr "Med import/exportpanelen kan du ladda ner en sida som en fil, se sidversioner och återställa en tidigare version."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:41
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:43
 msgid "Y-m-d H:i – l"
 msgstr "Ymd H:i – l"
 
@@ -5424,13 +5464,17 @@ msgstr "Du måste ha åtkomsträttigheter till backupmodulen."
 msgid "Your backup is not correctly configured. The backup module will not work until the problem(s) below have been resolved:"
 msgstr "Din backup är inte korrekt konfigurerad. Backup modul kommer inte att fungera förrän problemet(s) nedan har lösts:"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:36
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:37
 msgid "download database"
 msgstr "ladda ner databas"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:27
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:28
 msgid "download files"
 msgstr "ladda ner filer"
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
+msgid "or in the Zotonic configuration files."
+msgstr "eller i Zotonic-konfigurationsfilerna."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:15
 msgid "this backup is in progress"
@@ -5982,7 +6026,7 @@ msgid "Year"
 msgstr "År"
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:170
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:221
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:17
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
@@ -6947,47 +6991,47 @@ msgstr "Du har kopplat ditt <strong>Facebook</strong> konto."
 msgid "Your Facebook Developer Dashboard"
 msgstr "Din instrumentpanel för Facebook-utvecklare"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:98
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:148
 msgid "After 1 month"
 msgstr "Efter 1 månad"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:97
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:147
 msgid "After 1 week"
 msgstr "Efter 1 vecka"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:99
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:149
 msgid "After 3 months"
 msgstr "Efter 3 månader"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:206
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:256
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "Alla molnfiler kan flyttas tillbaka till filsystemet på servern."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:184
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:264
 msgid "All cloud files will be queued for download."
 msgstr "Alla molnfiler kommer i kö för nedladdning."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:183
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:234
 msgid "All files will be queued, uploads will start in the background within 10 minutes."
 msgstr "Alla filer kommer att köas, uppladdningar börjar i bakgrunden inom tio minuter."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:173
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:224
 msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "Alla lokala uppladdade och förhandsgranskningsfiler kan flyttas till molnet."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:193
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:243
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "Är du säker på att du vill flytta alla filer till molnet?"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:221
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:273
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "Är du säker på att du vill flytta alla filer till disken på servern?"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:38
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:88
 msgid "Base URL"
 msgstr "Grundadress"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:106
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:156
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "Innan inställningarna sparas kontrolleras de genom att ladda upp (och ta bort) en liten fil."
 
@@ -6999,19 +7043,19 @@ msgstr "Cloud File Store"
 msgid "Cloud File Store Configuration"
 msgstr "Cloud File Store-konfiguration"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:123
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:174
 msgid "Cloud File Store Utilities and Statistics"
 msgstr "Cloud File Store-verktyg och statistik"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:132
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:183
 msgid "Cloud Files"
 msgstr "Molnfiler"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:182
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:233
 msgid "Could not access the service, double check your settings and try again."
 msgstr "Kunde inte komma åt tjänsten, dubbelkolla dina inställningar och försök igen."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:109
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:159
 msgid "Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file."
 msgstr "Kunde inte komma åt tjänsten, dubbelkolla dina inställningar och försök igen. Se till att API-nyckeln har åtkomsträttigheter för att skapa och ta bort en (tillfällig) <code>-zotonic-filestore-test-file-</code> fil."
 
@@ -7019,47 +7063,51 @@ msgstr "Kunde inte komma åt tjänsten, dubbelkolla dina inställningar och för
 msgid "Currently Zotonic supports FTP and services that are compatible with the S3 file services API. These include:"
 msgstr "För närvarande stöder Zotonic FTP och tjänster som är kompatibla med S3 filtjänster API. Dessa inkluderar:"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:155
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:206
 msgid "Delete Queue"
 msgstr "Ta bort kö"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:93
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:143
 msgid "Delete files from the cloud file store"
 msgstr "Ta bort filer från molnfillagret"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:154
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:67
+msgid "Delete interval"
+msgstr "Ta bort intervall"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:205
 msgid "Download Queue"
 msgstr "Ladda ner kö"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:78
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:128
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "Aktivera detta för att låta filarkivet fungera som en säkerhetskopia av dina lokala mediefiler."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:207
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:257
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "Se till att det finns tillräckligt med diskutrymme innan du börjar processen."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:137./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:160
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:188./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:211
 msgid "Files"
 msgstr "Filer"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:47
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:97
 msgid "For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftp:</tt></b>"
 msgstr "För FTP måste webbadressen börja med <b><tt>ftps:</tt></b> eller <b><tt>ftp:</tt></b>"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:46
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:96
 msgid "For S3 the URL must start with <b><tt>https:</tt></b> or <b><tt>http:</tt></b>"
 msgstr "För S3 måste webbadressen börja med <b><tt>https:</tt></b> eller <b><tt>http:</tt></b>"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:48
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:98
 msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
 msgstr "För WebDAV måste URL:en börja med <b><tt>webdavs:</tt></b> eller <b><tt>webdav:</tt></b>"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:179
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:230
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Om du har valt ”Behåll lokala filer efter uppladdning till molnfilarkivet” raderas inte de lokala filerna, eftersom fjärrfilerna betraktas som en säkerhetskopia av de lokala filerna."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:211
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:261
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Om du har valt ”Behåll lokala filer efter uppladdning till molnets filarkiv” raderas inte fjärrfilerna, eftersom fjärrfilerna betraktas som en säkerhetskopia av de lokala filerna."
 
@@ -7067,88 +7115,120 @@ msgstr "Om du har valt ”Behåll lokala filer efter uppladdning till molnets fi
 msgid "If you use an FTP server then that server MUST support FTPS (secure ftp)"
 msgstr "Om du använder en FTP-server så MÅSTE den servern stödja FTPS (säker ftp)"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:96
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:71./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:146
 msgid "Immediately"
 msgstr "Omedelbart"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:76
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:51
+msgid "Is Upload enabled?"
+msgstr "Är uppladdning aktiverat?"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:126
 msgid "Keep local files after upload to the cloud file store"
 msgstr "Behåll lokala filer efter uppladdning till molnfilarkivet"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:131
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:55
+msgid "Keep local files?"
+msgstr "Behålla lokala filer?"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:182
 msgid "Local Files"
 msgstr "Lokala filer"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:130
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:181
 msgid "Media Resources"
 msgstr "Medieresurser"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:189
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
 msgid "Move all local files to the remote storage"
 msgstr "Flytta alla lokala filer till fjärrlagringen"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:217
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:269
 msgid "Move all remote files to local"
 msgstr "Flytta alla fjärrfiler till lokala"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:194
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:244
 msgid "Move files to cloud"
 msgstr "Flytta filer till molnet"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:222
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:274
 msgid "Move files to server disk"
 msgstr "Flytta filer till serverdisken"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:100
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:73./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:150
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:62
 msgid "Never"
 msgstr "Aldrig"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:53
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:61
+msgid "No, local files are deleted after upload"
+msgstr "Nej, lokala filer raderas efter uppladdning"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:103
 msgid "S3 API Key or FTP/WebDAV username"
 msgstr "S3 API-nyckel eller FTP/WebDAV-användarnamn"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:58
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:108
 msgid "S3 API Secret or FTP/WebDAV password"
 msgstr "S3 API Secret eller FTP/WebDAV-lösenord"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:35
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:47
+msgid "S3 Cloud Location"
+msgstr "S3 Cloud Location"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:36./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
 msgid "S3 Cloud Location and Credentials"
 msgstr "S3 Molnplacering och referenser"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:113
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:163
 msgid "Save Settings"
 msgstr "Spara inställningar"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:108
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:43
+msgid "Service"
+msgstr "Service"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:158
 msgid "Settings are working fine and are saved."
 msgstr "Inställningarna fungerar bra och sparas."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:143
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:194
 msgid "Storage"
 msgstr "Lagring"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:175
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:38
+msgid "The cloud file store uses a global Zotonic configuration. The configuration cannot be changed here."
+msgstr "Molnfilarkivet använder en global Zotonic-konfiguration. Konfigurationen kan inte ändras här."
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:39
+msgid "The configuration is:"
+msgstr "Konfigurationen är:"
+
+#: apps/zotonic_mod_filestore/src/support/filestore_admin.erl:66
+msgid "The settings are locked by the system configuration."
+msgstr "Inställningarna låses av systemkonfigurationen."
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:226
 msgid "There is a 1 minute wait before files are uploaded."
 msgstr "Det är en minuts väntetid innan filer laddas upp."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:174
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:225
 msgid "This will queue the files for later asynchronous upload."
 msgstr "Detta köar filerna för senare asynkron uppladdning."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:135
 msgid "Try to create a private S3 bucket if the S3 bucket does not exist"
 msgstr "Försök att skapa en privat S3-skopa om S3-hinken inte finns"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:153
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:204
 msgid "Upload Queue"
 msgstr "Ladda upp kö"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:67
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:117
 msgid "Upload new media files to the cloud file store"
 msgstr "Ladda upp nya mediefiler till molnfilbutiken"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:87
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:137
 msgid "With FTP and WebDAV the directories are always created automatically."
 msgstr "Med FTP och WebDAV skapas katalogerna alltid automatiskt."
 
@@ -7156,7 +7236,11 @@ msgstr "Med FTP och WebDAV skapas katalogerna alltid automatiskt."
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
 msgstr "Med WebDAV överförs användarnamnet och lösenordet i klartext, så se till att du använder <tt>webdavs:</tt> URLs (som använder sig av https)."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:64./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:71./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:78
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:59
+msgid "Yes, keep local files after upload"
+msgstr "Ja, behåll lokala filer efter uppladdning"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:69./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:76./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:83
 msgid "You are not allowed to change these settings."
 msgstr "Du får inte ändra dessa inställningar."
 
@@ -9491,6 +9575,10 @@ msgstr "Webbplatsens konfigurationsfil gör att denna webbplats kan indexeras av
 msgid "The site configuration file excludes this site from search engines."
 msgstr "Webbplatsens konfigurationsfil exkluderar denna webbplats från sökmotorer."
 
+#: apps/zotonic_mod_seo/priv/templates/_seo_admin_preview_json_ld.tpl:19
+msgid "This page is not publicly viewable. JSON-LD is only generated if the page is visible for anonymous visitors."
+msgstr "Den här sidan är inte offentlig. JSON-LD genereras endast om sidan är synlig för anonyma besökare."
+
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:39
 msgid "Url for the search action on the site. Defaults to:"
 msgstr "URL för sökåtgärden på webbplatsen. Som standard är:"
@@ -11110,7 +11198,7 @@ msgstr "Automatisk översättning"
 msgid "Available sub-languages"
 msgstr "Tillgängliga underspråk"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:513
+#: apps/zotonic_mod_translation/src/mod_translation.erl:514
 msgid "Cannot generate translation files because <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext is not installed</a>."
 msgstr "Det går inte att generera översättningsfiler eftersom <a href=\"http://docs.zotonic.com/en/latest/developer-guide/translation.html\">gettext inte är installerat</a>."
 
@@ -11314,7 +11402,7 @@ msgstr "Ladda om översättningar"
 msgid "Reload all translations from the modules and site. All templates will be recompiled."
 msgstr "Ladda om alla översättningar från webbplatsen och moduler. Alla mallar omkompileras."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:528
+#: apps/zotonic_mod_translation/src/mod_translation.erl:529
 msgid "Reloading all .po files in the background."
 msgstr "Ladda om alla .po-filer i bakgrunden."
 
@@ -11358,27 +11446,27 @@ msgstr "Välj ditt språk."
 msgid "Show the language in the URL"
 msgstr "Visa språket i webbadressen"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:425./apps/zotonic_mod_translation/src/mod_translation.erl:473
+#: apps/zotonic_mod_translation/src/mod_translation.erl:426./apps/zotonic_mod_translation/src/mod_translation.erl:474
 msgid "Sorry, could not change the language."
 msgstr "Tyvärr kunde inte ändra språk."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:603
+#: apps/zotonic_mod_translation/src/mod_translation.erl:604
 msgid "Sorry, that language is unknown or not enabled."
 msgstr "Tyvärr, det språket är okänt eller inte aktiverat."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:412./apps/zotonic_mod_translation/src/mod_translation.erl:441./apps/zotonic_mod_translation/src/mod_translation.erl:453./apps/zotonic_mod_translation/src/mod_translation.erl:476
+#: apps/zotonic_mod_translation/src/mod_translation.erl:413./apps/zotonic_mod_translation/src/mod_translation.erl:442./apps/zotonic_mod_translation/src/mod_translation.erl:454./apps/zotonic_mod_translation/src/mod_translation.erl:477
 msgid "Sorry, you don't have permission to change the language list."
 msgstr "Tyvärr har du inte behörighet att ändra språklistan."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:530
+#: apps/zotonic_mod_translation/src/mod_translation.erl:531
 msgid "Sorry, you don't have permission to reload translations."
 msgstr "Tyvärr har du inte behörighet att ladda om översättningar."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:520
+#: apps/zotonic_mod_translation/src/mod_translation.erl:521
 msgid "Sorry, you don't have permission to scan for translations."
 msgstr "Tyvärr har du inte behörighet att söka efter översättningar."
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:428./apps/zotonic_mod_translation/src/mod_translation.erl:606
+#: apps/zotonic_mod_translation/src/mod_translation.erl:429./apps/zotonic_mod_translation/src/mod_translation.erl:607
 msgid "Sorry, you don't have permission to set the default language."
 msgstr "Tyvärr har du inte behörighet att ställa in standardspråket."
 
@@ -11386,7 +11474,7 @@ msgstr "Tyvärr har du inte behörighet att ställa in standardspråket."
 msgid "Spanish"
 msgstr "Spanska"
 
-#: apps/zotonic_mod_translation/src/mod_translation.erl:500
+#: apps/zotonic_mod_translation/src/mod_translation.erl:501
 msgid "Started building the .pot files. This may take a while..."
 msgstr "Började bygga .pot-filerna. Det här kan ta ett tag..."
 
@@ -11418,7 +11506,7 @@ msgstr "Till ett nytt språk"
 msgid "Translate"
 msgstr "Översätt"
 
-#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:871
+#: apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:3./apps/zotonic_mod_translation/src/mod_translation.erl:878
 msgid "Translation"
 msgstr "Översättning"
 
