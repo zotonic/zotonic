@@ -13,6 +13,13 @@
                 {_ A secure password is prefilled, replace if needed. _}
             </p>
         </div>
+        {% validate id="new_password"
+                type={acceptable_password
+                    allow_empty=false
+                    failure_message=_"Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, and symbol."
+                }
+                only_on_blur
+        %}
     {% else %}
         <div class="form-group label-floating">
             <input class="form-control" type="password" id="new_password" name="new_password"
@@ -29,14 +36,14 @@
                 {_ Leave empty to not change the password. _}
             </p>
         </div>
-    {% endif %}
-
-    {% validate id="new_password"
+        {% validate id="new_password"
                 type={acceptable_password
+                    allow_empty=true
                     failure_message=_"Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, and symbol."
                 }
                 only_on_blur
-    %}
+        %}
+    {% endif %}
 {% endwith %}
 
 <div class="form-group">

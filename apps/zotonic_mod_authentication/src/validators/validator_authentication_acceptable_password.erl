@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2024 Marc Worrell
+%% @copyright 2024-2025 Marc Worrell
 %% @doc Check if a password is acceptable for the site password restrictions.
 %% @end
 
-%% Copyright 2024 Marc Worrell
+%% Copyright 2024-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -40,11 +40,17 @@ render_validator(acceptable_password, TriggerId, TargetId, Args, Context)  ->
 validate(acceptable_password, _TriggerId, Password, _Args, Context) ->
     {{ok, Password}, Context}.
 
-event(#postback{message={validate, _Args}, trigger=TriggerId}, Context) ->
+event(#postback{message={validate, Args}, trigger=TriggerId}, Context) ->
+    AllowEmpty = proplists:get_value(allow_empty, Args, false),
     Password = z_convert:to_binary(z_context:get_q(<<"triggervalue">>, Context)),
-    IsAcceptable = case m_authentication:acceptable_password(Password, Context) of
-        ok -> true;
-        {error, _} -> false
+    IsAcceptable = if
+        Password =:= <<>>, AllowEmpty ->
+            true;
+        true ->
+            case m_authentication:acceptable_password(Password, Context) of
+                ok -> true;
+                {error, _} -> false
+            end
     end,
     z_render:add_script(iolist_to_binary([
         "z_async_validation_result(",
