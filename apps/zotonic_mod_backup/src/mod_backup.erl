@@ -77,7 +77,7 @@
 -define(BCK_POLL_INTERVAL, 3600 * 1000).
 
 % Number of weekly backups to keep
--define(WEEKLY_BACKUPS, 4).
+-define(WEEKLY_BACKUPS, 5).
 
 
 observe_rsc_upload(#rsc_upload{} = Upload, Context) ->
