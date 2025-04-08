@@ -330,7 +330,9 @@
       %%% Waiting period to delete files on the remote server after they are deleted locally
       %%% from the site. Possible values are "0" form an immediate delete, a number is a number
       %%% of seconds, or "N days", "N weeks" or "N months" (where N is a number).
-      {delete_interval, <<"0">>}
+      %%% Leave empty to use the default of mod_filestore, currently "5 weeks", which matches
+      %%% the number of weekly backups by mod_backup.
+      {delete_interval, ""}
   ]
  },
 
