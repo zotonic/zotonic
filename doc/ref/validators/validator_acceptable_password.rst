@@ -27,7 +27,23 @@ You can pass a ``failure_message``::
     <input type="password" id="password" name="password" autocomplete="new-password" value="">
     {% validate id="password"
                 type={acceptable_password
-                    failure_message=_"Your new password it too short or not strong enough"
+                    failure_message=_"Your new password is too short or not strong enough"
                 }
                 only_on_blur
     %}
+
+There is an optional parameter ``allow_empty`` to allow empty passwords. This is useful if the
+password should only be filled in special circumstances (like when changing the password) and
+the handler code knows not to do anything if the password is empty.
+
+    <label for="password">{_ Optionally set a new password _}</label>
+    <input type="password" id="password" name="password" autocomplete="new-password" value="">
+    {% validate id="password"
+                type={acceptable_password
+                    allow_empty
+                    failure_message=_"Your new password is too short or not strong enough"
+                }
+                only_on_blur
+    %}
+
+
