@@ -857,7 +857,7 @@ name(Context) ->
     case calendar:day_of_the_week(Date) of
         7 ->
             GregorianDays = calendar:date_to_gregorian_days(Date),
-            WeekNr = GregorianDays rem ?WEEKLY_BACKUPS,
+            WeekNr = (GregorianDays div 7) rem ?WEEKLY_BACKUPS,
             iolist_to_binary([
                 atom_to_list(z_context:site(Context)),
                 "-w",
