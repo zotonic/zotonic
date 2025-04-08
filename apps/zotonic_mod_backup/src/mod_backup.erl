@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2023 Marc Worrell
+%% @copyright 2010-2025 Marc Worrell
 %% @doc Backup module. Creates backup of the database and files.  Allows downloading of the backup.
 %% Support creation of periodic backups.
 %% @end
 
-%% Copyright 2010-2023 Marc Worrell
+%% Copyright 2010-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -75,6 +75,9 @@
 
 % Interval for checking for new and/or changed files.
 -define(BCK_POLL_INTERVAL, 3600 * 1000).
+
+% Number of weekly backups to keep
+-define(WEEKLY_BACKUPS, 4).
 
 
 observe_rsc_upload(#rsc_upload{} = Upload, Context) ->
@@ -287,12 +290,19 @@ init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
     z_context:logger_md(Context),
+    % A jobs queue to ensure that we only run a single Database dump at a time.
+    ensure_job_queue(?MODULE, [
+        {regulators, [
+                {counter, [
+                    {limit, 1}
+                ]}
+            ]}
+        ]),
     {ok, TimerRef} = timer:send_interval(?BCK_POLL_INTERVAL, periodic_backup),
     {ok, #state{
         context = z_acl:sudo(z_context:new(Context)),
         timer_ref = TimerRef
     }}.
-
 
 %% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
 %%                                      {reply, Reply, State, Timeout} |
@@ -441,6 +451,12 @@ code_change(_OldVsn, State, _Extra) ->
 %% support functions
 %%====================================================================
 
+ensure_job_queue(Name, Options) ->
+    case jobs:queue_info(Name) of
+        undefined -> jobs:add_queue(Name, Options);
+        {queue, _Props} -> ok
+    end.
+
 maybe_daily_dump(IsFullBackup, State) ->
     Context = State#state.context,
     Now = {Date, Time} = calendar:universal_time(),
@@ -503,7 +519,7 @@ maybe_filestore_upload(#state{ context = Context } = State) ->
     end.
 
 do_upload(Name, DatabaseFile, Context) ->
-    spawn_link(
+    z_proc:spawn_link_md(
         fun() ->
             RemoteDbFile = <<"backup/", DatabaseFile/binary>>,
             LocalDbFile = filename:join(dir(Context), DatabaseFile),
@@ -570,12 +586,16 @@ do_upload(Name, DatabaseFile, Context) ->
 %% @doc Start a backup and return the pid of the backup process, whilst linking to the process.
 do_backup(DT, Name, IsFullBackup, Context) ->
     z_mqtt:publish(<<"model/backup/event/backup">>, #{ status => <<"started">> }, Context),
-    spawn_link(
+    z_proc:spawn_link_md(
         fun() ->
-            % NEVER have an upload and backup in parallel
-            Result = do_backup_process(Name, IsFullBackup, Context),
-            Result1 = maybe_encrypt_files(Result, Context),
-            update_admin_file(DT, Name, Result1, Context)
+            jobs:run(
+                ?MODULE,
+                fun() ->
+                    % NEVER have an upload and backup in parallel
+                    Result = do_backup_process(Name, IsFullBackup, Context),
+                    Result1 = maybe_encrypt_files(Result, Context),
+                    update_admin_file(DT, Name, Result1, Context)
+                end)
         end).
 
 
@@ -692,7 +712,6 @@ maybe_encrypt_files({ok, Files}, Context) ->
                                    text => <<"Could not encrypt backups. Encryption is enabled, but there is no backup password.">>,
                                    in => zotonic_mod_backup
                                   }),
-                    %% 
                     {ok, Files}
             end;
         false ->
@@ -706,7 +725,6 @@ filename(Fullname) ->
 
 update_admin_file(DT, Name, {ok, Files}, Context) ->
     Data = read_admin_file(Context),
-
     Data1 = Data#{
         Name => #{
             timestamp => z_datetime:datetime_to_timestamp(DT),
@@ -717,17 +735,55 @@ update_admin_file(DT, Name, {ok, Files}, Context) ->
 
             is_filestore_uploaded => false,
 
-            is_encrypted => m_config:get_boolean(?MODULE, encrypt_backups, Context) 
+            is_encrypted => m_config:get_boolean(?MODULE, encrypt_backups, Context)
                 andalso (size(m_config:get_value(?MODULE, backup_encrypt_password, <<>>,  Context)) > 0)
         }
     },
-
-    write_admin_file(Data1, Context);
+    % Delete the Sunday dump, it has been replaced by a weekly dump.
+    Data2 = drop_old_sunday_dump(Data1, Context),
+    write_admin_file(Data2, Context);
 update_admin_file(_DT, Name, {error, _}, Context) ->
     % Delete Name, backup failed
     Data = read_admin_file(Context),
+    maybe_delete_files(maps:get(Name, Data, #{}), Context),
     Data1 = maps:remove(Name, Data),
     write_admin_file(Data1, Context).
+
+
+% Delete old Sunday dump files, Sunday has been replaced by a weekly dump.
+% As the dump will not be overwritten, we need to remove the files manually.
+drop_old_sunday_dump(Data, Context) ->
+    maps:filter(
+        fun(DumpName, #{ timestamp := Timestamp } = D) ->
+            case binary:match(DumpName, <<"-7.">>) of
+                nomatch ->
+                    true;
+                {_, _} ->
+                    % Delete if older than a week
+                    PrevWeek = z_datetime:prev_week(calendar:universal_time()),
+                    PrevWeekTm = z_datetime:datetime_to_timestamp(PrevWeek),
+                    case Timestamp > PrevWeekTm of
+                        true ->
+                            true;
+                        false ->
+                            maybe_delete_files(D, Context),
+                            false
+                    end
+            end
+        end,
+        Data).
+
+maybe_delete_files(D, Context) ->
+    maybe_delete_file(maps:get(database, D, undefined), Context),
+    maybe_delete_file(maps:get(config_files, D, undefined), Context),
+    maybe_delete_file(maps:get(files, D, undefined), Context).
+
+maybe_delete_file(undefined, _Context) -> ok;
+maybe_delete_file(<<>>, _Context) -> ok;
+maybe_delete_file(Filename, Context) ->
+    Path = filename:join(dir(Context), Filename),
+    file:delete(Path).
+
 
 read_admin_file(Context) ->
     Filename = filename:join(dir(Context), "backup.json"),
@@ -793,15 +849,27 @@ list_backup_files(Context) ->
 dir(Context) ->
     z_path:files_subdir_ensure("backup", Context).
 
-%% @doc Return the base name of the backup files.
+%% @doc Return the base name of the backup files. We have 6 daily backups and 4
+%% weekly backups. The daily backups have the daynumber in them, the weekly backups
+%% use a week number (modulo 4) and are made on Sundays.
 name(Context) ->
     {Date, _} = calendar:universal_time(),
-    Day = calendar:day_of_the_week(Date),
-    iolist_to_binary([
-        atom_to_list(z_context:site(Context)),
-        "-",
-        integer_to_binary(Day)
-    ]).
+    case calendar:day_of_the_week(Date) of
+        7 ->
+            GregorianDays = calendar:date_to_gregorian_days(Date),
+            WeekNr = GregorianDays rem ?WEEKLY_BACKUPS,
+            iolist_to_binary([
+                atom_to_list(z_context:site(Context)),
+                "-w",
+                integer_to_binary(WeekNr)
+            ]);
+        Day ->
+            iolist_to_binary([
+                atom_to_list(z_context:site(Context)),
+                "-",
+                integer_to_binary(Day)
+            ])
+    end.
 
 %% @doc Dump the sql database into the backup directory.  The Name is the basename of the dump.
 pg_dump(Name, DbDump, Context) ->
@@ -814,13 +882,13 @@ pg_dump(Name, DbDump, Context) ->
     Schema = proplists:get_value(dbschema, DbOpts),
 
     Filename = <<Name/binary, ".sql.gz">>,
-    DumpFile = filename:join(dir(Context), Filename),
+    TmpFilename = <<Name/binary, ".sql.gz.tmp">>,
+    TmpDumpFile = filename:join(dir(Context), TmpFilename),
     PgPass = filename:join([dir(Context), ".pgpass"]),
-    ok = file:write_file(PgPass, z_convert:to_list(Host)
-                                ++":"++z_convert:to_list(Port)
-                                ++":"++z_convert:to_list(Database)
-                                ++":"++z_convert:to_list(User)
-                                ++":"++z_convert:to_list(Password)),
+    ok = file:write_file(PgPass, iolist_to_binary([
+        Host, $:, z_convert:to_binary(Port), $:,
+        Database, $:, User, $:, Password
+    ])),
     ok = file:change_mode(PgPass, 8#00600),
     Command = unicode:characters_to_list([
         "PGPASSFILE=",z_filelib:os_filename(PgPass)," ", z_filelib:os_filename(DbDump),
@@ -829,7 +897,7 @@ pg_dump(Name, DbDump, Context) ->
         " -w ",
         " --compress=7 "
         " --quote-all-identifiers ",
-        " -f ", z_filelib:os_filename(DumpFile), " ",
+        " -f ", z_filelib:os_filename(TmpDumpFile), " ",
         " -U ", z_filelib:os_filename(User), " ",
         case z_utils:is_empty(Schema) of
             true -> [];
@@ -847,6 +915,8 @@ pg_dump(Name, DbDump, Context) ->
             end),
     Result = case os:cmd(Command) of
         [] ->
+            DumpFile = filename:join(dir(Context), Filename),
+            ok = file:rename(TmpDumpFile, DumpFile),
             {ok, Filename};
         Output ->
             ?LOG_WARNING(#{
@@ -857,6 +927,7 @@ pg_dump(Name, DbDump, Context) ->
                 output => Output,
                 command => unicode:characters_to_binary(Command)
             }),
+            file:delete(TmpDumpFile),
             {error, database_archive}
     end,
     ok = file:delete(PgPass),
@@ -886,6 +957,7 @@ archive(Name, Tar, Context) ->
                 "" ->
                     {ok, Filename};
                 Output ->
+                    file:delete(DumpFile),
                      ?LOG_WARNING(#{
                         text => <<"Backup failed: tar error">>,
                         in => zotonic_mod_backup,
