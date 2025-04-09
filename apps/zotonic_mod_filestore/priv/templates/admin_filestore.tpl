@@ -145,7 +145,7 @@
                                          <select class="form-control input-sm" id="delete_interval" name="delete_interval">
                                              <option value="0"{% if value == "0" %} selected{% endif %}>{_ Immediately _}</option>
                                              <option value="1 week"{% if value == "1 week" %} selected{% endif %}>{_ After 1 week _}</option>
-                                             <option value="4 weeks"{% if value == "5 weeks" %} selected{% endif %}>{_ After 5 weeks (backup period) _}</option>
+                                             <option value="5 weeks"{% if value == "5 weeks" %} selected{% endif %}>{_ After 5 weeks (backup period) _}</option>
                                              <option value="1 month"{% if value == "1 month" %} selected{% endif %}>{_ After 1 month _}</option>
                                              <option value="3 months"{% if value == "3 months" %} selected{% endif %}>{_ After 3 months _}</option>
                                              <option value="false"{% if value == "false" %} selected{% endif %}>{_ Never _}</option>

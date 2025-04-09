@@ -53,6 +53,7 @@
     replace_url/4,
     replace_url/5,
     reupload/2,
+    recover_medium/2,
     save_preview_url/3,
     save_preview/4,
     make_preview_unique/3,
@@ -263,7 +264,8 @@ depicts(Id, Context) ->
     m_edge:subjects(Id, depiction, Context).
 
 
-%% @doc Delete the medium at the id.  The file is queued for later deletion.
+%% @doc Delete the medium at the id. The file is queued for later deletion by the
+%% database trigger that adds the file to medium delete log.
 -spec delete( m_rsc:resource_id(), z:context() ) -> ok  | {error, term()}.
 delete(Id, Context) ->
     case z_acl:rsc_editable(Id, Context) of
@@ -272,7 +274,7 @@ delete(Id, Context) ->
             medium_delete(Id, Context),
             [z_depcache:flush(DepictId, Context) || DepictId <- Depicts],
             m_rsc:touch(Id, Context),
-            z_notifier:notify(#media_replace_file{id = Id, medium = []}, Context),
+            z_notifier:notify(#media_replace_file{ id = Id, medium = undefined }, Context),
             z_mqtt:publish(
                 [ <<"model">>, <<"media">>, <<"event">>, Id, <<"delete">> ],
                 #{ id => Id },
@@ -407,8 +409,6 @@ maybe_duplicate_preview(#{ <<"preview_filename">> := <<>> } = Ms, _Context) ->
     {ok, Ms};
 maybe_duplicate_preview(#{ <<"preview_filename">> := undefined } = Ms, _Context) ->
     {ok, Ms};
-maybe_duplicate_preview(#{ <<"preview_filename">> := _, <<"is_deletable_preview">> := false  } = Ms, _Context) ->
-    {ok, Ms};
 maybe_duplicate_preview(#{ <<"preview_filename">> := Filename, <<"is_deletable_preview">> := true } = Ms, Context) ->
     case duplicate_file(preview, Filename, Context) of
         {ok, NewFile} ->
@@ -425,14 +425,17 @@ maybe_duplicate_preview(#{ <<"preview_filename">> := Filename, <<"is_deletable_p
                 reason => Reason,
                 filename => Filename
             }),
-            Ms1 = maps:remove(<<"preview_filename">>, Ms),
-            Ms2 = maps:remove(<<"is_deletable_preview">>, Ms1),
-            {ok, Ms2}
-    end.
-
+            Ms1 = Ms#{
+                <<"preview_filename">> => undefined,
+                <<"is_deletable_preview">> => false
+            },
+            {ok, Ms1}
+    end;
+maybe_duplicate_preview(#{} = Ms, _Context) ->
+    {ok, Ms}.
 
 duplicate_file(Type, Filename, Context) ->
-    case z_file_request:lookup_file(Filename, Context) of
+    case z_file_request:lookup_file(Filename, [archive], [], Context) of
         {ok, FileInfo} ->
             {ok, File} = z_file_request:content_file(FileInfo, Context),
             {ok, z_media_archive:archive_copy(Type, File, filename:basename(Filename), Context)};
@@ -1300,11 +1303,41 @@ id_to_list(insert_rsc) -> "video".
 is_unique_file(Filename, Context) ->
     z_db:q1("select count(*) from medium_log where filename = $1", [Filename], Context) =:= 0.
 
+%% @doc Recover a pre-existing medium record. Update the created timestamp to now.
+-spec recover_medium(Medium, Context) -> ok | {error, Reason} when
+    Medium :: map(),
+    Context :: z:context(),
+    Reason :: term().
+recover_medium(#{ <<"id">> := RscId } = Medium, Context) ->
+    case z_db:q1("select count(*) from medium where id = $1", [ RscId ], Context) of
+        1 -> delete(RscId, Context);
+        0 -> ok
+    end,
+    Medium1 = Medium#{
+        <<"created">> => calendar:universal_time()
+    },
+    case maybe_duplicate_file(Medium1, Context) of
+        {ok, Medium2} ->
+            {ok, Medium3} = maybe_duplicate_preview(Medium2, Context),
+            case medium_insert(RscId, Medium3, Context) of
+                {ok, _} -> ok;
+                {error, _} = Error -> Error
+            end;
+        {error, _} = Error ->
+            Error
+    end.
+
 medium_insert(Id, Props, Context) ->
     IsA = m_rsc:is_a(Id, Context),
     Props1 = check_medium_props(Props),
-    case z_db:insert(medium, Props1#{ <<"id">> => Id }, Context) of
+    Props2 = Props1#{
+        <<"id">> => Id,
+        <<"created">> => calendar:universal_time()
+    },
+    case z_db:insert(medium, Props2, Context) of
         {ok, _} = OK ->
+            z_depcache:flush({medium, Id}, Context),
+            PostProps = m_media:get(Id, Context),
             z_notifier:notify(
                 #media_update_done{
                     action = insert,
@@ -1312,7 +1345,7 @@ medium_insert(Id, Props, Context) ->
                     post_is_a = IsA,
                     pre_is_a = [],
                     pre_props= #{},
-                    post_props = Props1
+                    post_props = PostProps
                 }, Context),
             OK;
         {error, _} = Error ->
@@ -1328,6 +1361,7 @@ medium_delete(Id, Props, Context) ->
     IsA = m_rsc:is_a(Id, Context),
     case z_db:delete(medium, Id, Context) of
         {ok, _} = OK ->
+            z_depcache:flush({medium, Id}, Context),
             z_notifier:notify(
                 #media_update_done{
                     action = delete,

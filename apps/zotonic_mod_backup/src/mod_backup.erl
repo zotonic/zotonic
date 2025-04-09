@@ -42,6 +42,10 @@
     observe_tick_24h/2,
     observe_m_config_update/2,
 
+    observe_edge_insert/2,
+    observe_edge_delete/2,
+    observe_media_update_done/2,
+
     start_backup/1,
     start_backup/2,
     list_backups/1,
@@ -119,6 +123,20 @@ observe_rsc_update_done(#rsc_update_done{ action = delete, id = Id, pre_props = 
 observe_rsc_update_done(#rsc_update_done{}, _Context) ->
     ok.
 
+observe_edge_delete(#edge_delete{ subject_id = Id, predicate = Predicate, object_id = ObjId }, Context) ->
+    m_backup_revision:edge_delete(Id, Predicate, ObjId, Context).
+
+observe_edge_insert(#edge_insert{ subject_id = Id, predicate = Predicate, object_id = ObjId }, Context) ->
+    m_backup_revision:edge_insert(Id, Predicate, ObjId, Context).
+
+observe_media_update_done(#media_update_done{ id = Id, action = insert, post_props = Props }, Context) ->
+    m_backup_revision:medium_insert(Id, Props, Context);
+observe_media_update_done(#media_update_done{ id = Id, action = update, post_props = Props }, Context) ->
+    m_backup_revision:medium_update(Id, Props, Context);
+observe_media_update_done(#media_update_done{ id = Id, action = delete, pre_props = Props }, Context) ->
+    m_backup_revision:medium_delete(Id, Props, Context).
+
+
 observe_search_query(#search_query{ name = <<"backup_deleted">>, offsetlimit = OffsetLimit }, Context) ->
     case z_acl:is_allowed(use, mod_backup, Context) of
         true ->
@@ -152,7 +170,7 @@ observe_m_config_update(#m_config_update{}, _Context) ->
     ok.
 
 
-%% @doc Callback for controller_file. Check if the file exists and return
+%% @doc Callback for controller_file. Check if the backup file exists and return
 %% the path to the file on disk.
 -spec file_exists(File, Context) -> {true, FilePath} | false when
     File :: file:filename_all(),
@@ -201,7 +219,7 @@ file_exists(File, Context) ->
             end
     end.
 
-%% @doc Callback for controller_file. Check if access is allowed.
+%% @doc Callback for controller_file. Check if access to the backup file is allowed.
 -spec file_forbidden(File, Context) -> IsForbidden when
     File :: file:filename_all(),
     Context :: z:context(),
@@ -727,15 +745,15 @@ update_admin_file(DT, Name, {ok, Files}, Context) ->
     Data = read_admin_file(Context),
     Data1 = Data#{
         Name => #{
-            timestamp => z_datetime:datetime_to_timestamp(DT),
+            <<"timestamp">> => z_datetime:datetime_to_timestamp(DT),
 
-            database => maps:get(database, Files),
-            config_files => maps:get(config_files, Files),
-            files => maps:get(files, Files, undefined),
+            <<"database">> => maps:get(database, Files),
+            <<"config_files">> => maps:get(config_files, Files),
+            <<"files">> => maps:get(files, Files, undefined),
 
-            is_filestore_uploaded => false,
+            <<"is_filestore_uploaded">> => false,
 
-            is_encrypted => m_config:get_boolean(?MODULE, encrypt_backups, Context)
+            <<"is_encrypted">> => m_config:get_boolean(?MODULE, encrypt_backups, Context)
                 andalso (size(m_config:get_value(?MODULE, backup_encrypt_password, <<>>,  Context)) > 0)
         }
     },
@@ -754,7 +772,7 @@ update_admin_file(_DT, Name, {error, _}, Context) ->
 % As the dump will not be overwritten, we need to remove the files manually.
 drop_old_sunday_dump(Data, Context) ->
     maps:filter(
-        fun(DumpName, #{ timestamp := Timestamp } = D) ->
+        fun(DumpName, #{ <<"timestamp">> := Timestamp } = D) ->
             case binary:match(DumpName, <<"-7.">>) of
                 nomatch ->
                     true;
@@ -774,9 +792,9 @@ drop_old_sunday_dump(Data, Context) ->
         Data).
 
 maybe_delete_files(D, Context) ->
-    maybe_delete_file(maps:get(database, D, undefined), Context),
-    maybe_delete_file(maps:get(config_files, D, undefined), Context),
-    maybe_delete_file(maps:get(files, D, undefined), Context).
+    maybe_delete_file(maps:get(<<"database">>, D, undefined), Context),
+    maybe_delete_file(maps:get(<<"config_files">>, D, undefined), Context),
+    maybe_delete_file(maps:get(<<"files">>, D, undefined), Context).
 
 maybe_delete_file(undefined, _Context) -> ok;
 maybe_delete_file(<<>>, _Context) -> ok;

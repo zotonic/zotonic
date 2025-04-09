@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2012 Marc Worrell
+%% @copyright 2012-2025 Marc Worrell
 %% @doc Overview of the revisions of a resource.
+%% @end
 
-%% Copyright 2012 Marc Worrell
+%% Copyright 2012-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -39,7 +40,7 @@ is_authorized(Context) ->
             Id = m_rsc:rid(z_context:get_q(<<"id">>, Context), Context),
             case m_rsc:exists(Id, Context) of
                 false ->
-                    {true, Context};
+                    {z_acl:is_allowed(use, mod_backup, Context), Context};
                 true ->
                     {z_acl:rsc_editable(Id, Context), Context}
             end;
@@ -88,31 +89,16 @@ event(#postback{message={revert, Args}}, Context) ->
 
 
 do_revert(Id, RevId, Context) ->
-    case m_backup_revision:get_revision(RevId, Context) of
-        {ok, Rev} ->
-            case proplists:get_value(rsc_id, Rev) of
-                Id ->
-                    Exists = m_rsc:exists(Id, Context),
-                    Props = proplists:get_value(data, Rev),
-                    case m_rsc_update:update(Id, Props, [is_import], Context) of
-                        {ok, NewId} ->
-                            case Exists of
-                                true ->
-                                    ok;
-                                false ->
-                                    m_rsc_gone:delete(NewId, Context)
-                            end,
-                            z_render:wire([{redirect, [{dispatch, admin_edit_rsc}, {id,NewId}]}], Context);
-                        _Other ->
-                            z_render:growl_error(?__("Sorry, there was an error replacing your page.", Context), Context)
-                    end;
-                _ ->
-                    z_render:growl_error(?__("Sorry, this backup is not valid.", Context), Context)
-            end;
-        _ ->
-            z_render:growl_error(?__("Sorry, this backup has been deleted.", Context), Context)
+    case m_backup_revision:revert_resource(Id, RevId, Context) of
+        ok ->
+            z_render:wire({redirect, [ {dispatch, admin_edit_rsc}, {id, Id} ]}, Context);
+        {error, eacces} ->
+            z_render:growl_error(?__("You are not allowed to recover this page.", Context), Context);
+        {error, enoent} ->
+            z_render:growl_error(?__("Sorry, this backup has been deleted.", Context), Context);
+        {error, _} ->
+            z_render:growl_error(?__("Sorry, there was an error replacing your page.", Context), Context)
     end.
-
 
 update_diff(_Id, undefined, undefined, Context) ->
     Context;
@@ -121,7 +107,7 @@ update_diff(Id, {ok, A}, undefined, Context) ->
         {id, Id},
         {a, A},
         {b, undefined},
-        {diff, format_diff(A, [], Context)}
+        {diff, format_diff(A, #{}, Context)}
     ],
     z_render:update("page-diff", #render{template="_admin_backup_diff.tpl", vars=Vars}, Context);
 update_diff(Id, {ok, A}, {ok, B}, Context) ->
@@ -139,22 +125,19 @@ fetch_props(_Id, undefined, _Context) ->
 fetch_props(Id, "latest", Context) ->
     fetch_props(Id, <<"latest">>, Context);
 fetch_props(Id, <<"latest">>, Context) ->
-    {ok, [
-            {id, 0},
-            {rsc_id, Id},
-            {user_id, m_rsc:p(Id, modifier_id, Context)},
-            {created, m_rsc:p(Id, modified, Context)},
-            {version, m_rsc:p(Id, version, Context)},
-            {data, m_rsc:get(Id, Context)}
-        ]};
+    {ok, #{
+        <<"id">> => 0,
+        <<"rsc_id">> => Id,
+        <<"user_id">> => m_rsc:p(Id, <<"modifier_id">>, Context),
+        <<"created">> => m_rsc:p(Id, <<"modified">>, Context),
+        <<"version">> => m_rsc:p(Id, <<"version">>, Context),
+        <<"data">> => m_rsc:get(Id, Context)
+    }};
 fetch_props(Id, Rev, Context) ->
     RevId = z_convert:to_integer(Rev),
     case m_backup_revision:get_revision(RevId, Context) of
-        {ok, Row} ->
-            case proplists:get_value(rsc_id, Row) of
-                Id -> {ok, Row};
-                _ -> undefined
-            end;
+        {ok, #{ <<"rsc_id">> := RscId }} = Ok when RscId =:= Id ->
+            Ok;
         _ ->
             undefined
     end.
@@ -163,12 +146,12 @@ fetch_props(Id, Rev, Context) ->
 check_access(undefined, undefined, _Context) ->
     true;
 check_access({ok, PropsA}, undefined, Context) ->
-    z_acl:rsc_editable(proplists:get_value(rsc_id,PropsA), Context);
+    z_acl:rsc_editable(maps:get(<<"rsc_id">>, PropsA), Context);
 check_access(undefined, {ok, PropsA}, Context) ->
-    z_acl:rsc_editable(proplists:get_value(rsc_id,PropsA), Context);
+    z_acl:rsc_editable(maps:get(<<"rsc_id">>, PropsA), Context);
 check_access({ok, PropsA}, {ok, PropsB}, Context) ->
-    case {proplists:get_value(rsc_id, PropsA),
-          proplists:get_value(rsc_id, PropsB)}
+    case {maps:get(<<"rsc_id">>, PropsA),
+          maps:get(<<"rsc_id">>, PropsB)}
     of
         {Id,Id} -> z_acl:rsc_editable(Id, Context);
         _ -> false
@@ -177,7 +160,7 @@ check_access({ok, PropsA}, {ok, PropsB}, Context) ->
 
 format_diff(A, B, Context) ->
     admin_rsc_diff:format(
-                    proplists:get_value(data, A),
-                    proplists:get_value(data, B),
+                    maps:get(<<"data">>, A, undefined),
+                    maps:get(<<"data">>, B, undefined),
                     Context).
 

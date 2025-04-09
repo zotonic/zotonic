@@ -1014,10 +1014,13 @@
 }).
 
 %% @doc Notification that a medium file has been changed (notify)
-%% The id is the resource id, medium contains the medium's property list.
+%% The id is the resource id, medium contains the medium's complete property map.
 %% Type: notify
 %% Return: return value is ignored
--record(media_replace_file, {id, medium}).
+-record(media_replace_file, {
+    id :: m_rsc:resource_id(),
+    medium :: map() | undefined
+}).
 
 %% @doc Media update done notification. action is 'insert', 'update' or 'delete'
 %% Type: notify

@@ -42,18 +42,20 @@
 	{% with not id.exists as is_deleted %}
 	{% with m.backup_revision.list[id] as revs %}
 		<div class="admin-header">
-			{% if id.exists %}
-		        <h2>{_ Revisions for _} {{ id.title }}</h2>
-		    {% else %}
-		        <h2>{_ Revisions for _} <em>{_ Deleted _}</em></h2>
-		    {% endif %}
+        	<h2>
+        		<span class="text-muted">{_ Revisions for _}:</span>
+	        	{{ m.backup_revision.title[id]|default:_"<em>Untitled</em>" }}
+        	</h2>
 
 	    	{% if id.exists %}
 			    <p>
-		    		<a class="btn btn-default" href="{% url admin_edit_rsc id=id %}">{_ Back to the edit page _}</a>
+		    		<a class="btn btn-default" href="{% url admin_edit_rsc id=id %}">
+		    			{_ Back to the edit page _}
+		    		</a>
 			    </p>
 	    	{% endif %}
-		    <p>
+
+		    <p class="help-block">
 		    	{_ Check and possibly restore an earlier version of your page. _}<br>
 		    	{% trans "Revisions are kept for {n} months." n=m.backup_revision.retention_months %}<br>
 				{% trans "Revisions of active users are kept for {n} days." n=m.backup_revision.user_retention_days %}<br>
