@@ -62,10 +62,11 @@ ensure_relative(File, Context) ->
 %% @doc Ensure that the file is in the archive, when not then generate a new filename
 %% and move the file to the archive. If the file is already in the archive, then do
 %% nothing. Return the filename relative to the archive directory.
--spec ensure_relative(File, NewBasenameIfMoved, Context) -> file:filename_all() when
+-spec ensure_relative(File, NewBasenameIfMoved, Context) -> RelativeFile when
     File :: file:filename_all(),
     NewBasenameIfMoved :: string() | binary(),
-    Context :: z:context().
+    Context :: z:context(),
+    RelativeFile :: binary().
 ensure_relative(File, NewBasenameIfMoved, Context) ->
     Fileabs = filename:absname(File),
     case is_archived(Fileabs, Context) of
@@ -80,7 +81,7 @@ ensure_relative(File, NewBasenameIfMoved, Context) ->
 -spec archive_file(Filename, Context) -> ArchivedFilename when
     Filename :: file:filename_all(),
     Context :: z:context(),
-    ArchivedFilename :: file:filename_all().
+    ArchivedFilename :: binary().
 archive_file(Filename, Context) ->
     archive_file(Filename, filename:basename(Filename), Context).
 
@@ -89,7 +90,7 @@ archive_file(Filename, Context) ->
     Filename :: file:filename_all(),
     NewBasename :: string() | binary(),
     Context :: z:context(),
-    ArchivedFilename :: file:filename_all().
+    ArchivedFilename :: binary().
 archive_file(Filename, NewBasename, Context) ->
     Fileabs = filename:absname(Filename),
     case is_archived(Fileabs, Context) of
@@ -114,7 +115,7 @@ archive_file(Filename, NewBasename, Context) ->
 -spec archive_copy(Filename, Context) -> ArchivedFilename when
     Filename :: file:filename_all(),
     Context :: z:context(),
-    ArchivedFilename :: file:filename_all().
+    ArchivedFilename :: binary().
 archive_copy(Filename, Context) ->
     archive_copy(Filename, filename:basename(Filename), Context).
 
@@ -123,7 +124,7 @@ archive_copy(Filename, Context) ->
     Filename :: file:filename_all(),
     NewBasename :: string() | binary(),
     Context :: z:context(),
-    ArchivedFilename :: file:filename_all().
+    ArchivedFilename :: binary().
 archive_copy(Filename, NewBasename, Context) ->
     archive_copy(archive, Filename, NewBasename, Context).
 
@@ -133,7 +134,7 @@ archive_copy(Filename, NewBasename, Context) ->
     Filename :: file:filename_all(),
     NewBasename :: string() | binary(),
     Context :: z:context(),
-    ArchivedFilename :: file:filename_all().
+    ArchivedFilename :: binary().
 archive_copy(archive, Filename, NewBasename, Context) ->
     NewFile = archive_filename(NewBasename, Context),
     archive_copy_1(Filename, NewFile, Context);
@@ -153,7 +154,7 @@ archive_copy_1(Filename, NewFile, Context) ->
 -spec archive_copy_opt(Filename, Context) -> ArchivedFilename when
     Filename :: file:filename_all(),
     Context :: z:context(),
-    ArchivedFilename :: file:filename_all().
+    ArchivedFilename :: binary().
 archive_copy_opt(Filename, Context) ->
     archive_copy_opt(Filename, filename:basename(Filename), Context).
 
@@ -162,7 +163,7 @@ archive_copy_opt(Filename, Context) ->
     Filename :: file:filename_all(),
     NewBasename :: string() | binary(),
     Context :: z:context(),
-    ArchivedFilename :: file:filename_all().
+    ArchivedFilename :: binary().
 archive_copy_opt(Filename, NewBasename, Context) ->
     Fileabs = filename:absname(Filename),
     case is_archived(Fileabs, Context) of
@@ -189,33 +190,35 @@ archive_delete(Filename, Context) ->
 
 %% @doc Return an unique filename for archiving the file. Used when storing a
 %% new file after upload.
--spec archive_filename(Filename, Context) -> file:filename_all() when
+-spec archive_filename(Filename, Context) -> UniqueArchiveFilename when
     Filename :: file:filename_all(),
+    UniqueArchiveFilename :: binary(),
     Context :: z:context().
 archive_filename(Filename, Context) ->
     {{Y,M,D}, _} = z_datetime:to_local(calendar:universal_time(), Context),
     Rootname = filename:rootname(filename:basename(Filename)),
     Extension = filename:extension(Filename),
     RelRoot = filename:join([
-        integer_to_list(Y), integer_to_list(M), integer_to_list(D),
+        integer_to_binary(Y), integer_to_binary(M), integer_to_binary(D),
         safe_filename(Rootname)
     ]),
     make_unique(RelRoot, z_convert:to_binary(Extension), Context).
 
 %% @doc Return an unique filename for archiving a preview of a file. Used for
 %% storing a new file after preview generation.
--spec preview_filename(Filename, Context) -> file:filename_all() when
+-spec preview_filename(Filename, Context) -> UniqueArchiveFilename when
     Filename :: file:filename_all(),
-    Context :: z:context().
+    Context :: z:context(),
+    UniqueArchiveFilename :: binary().
 preview_filename(Filename, Context) ->
     Rootname = filename:rootname(filename:basename(Filename)),
     Extension = filename:extension(Filename),
     RelRoot = filename:join([
-                    "preview",
+                    <<"preview">>,
                     z_ids:identifier(2),
                     z_ids:identifier(2),
                     safe_filename(Rootname)]),
-    make_unique(RelRoot, z_convert:to_list(Extension), Context).
+    make_unique(RelRoot, z_convert:to_binary(Extension), Context).
 
 
 safe_filename(<<$.,Rest/binary>>) ->
@@ -263,11 +266,11 @@ is_archived(Filename, Context) ->
     ArchiveLen == binary:longest_common_prefix([ Fileabs, PathToArchive ]).
 
 %% @doc Remove the path to the archive directory, return a filename relative to the archive directory
-%% Crash if the path is not in relative to the archive directory.
+%% Crash if the path is not referring to the archive directory.
 rel_archive(Filename, Context) ->
     Fileabs = z_convert:to_binary(filename:absname(Filename)),
     PathToArchive = z_convert:to_binary(z_path:media_archive(Context)),
     ArchiveLen = size(PathToArchive),
-    <<Path:ArchiveLen/binary, $/, Relpath>> = Fileabs,
+    <<Path:ArchiveLen/binary, $/, Relpath/binary>> = Fileabs,
     Path = PathToArchive,  % Crash if not in archive directory
     Relpath.
