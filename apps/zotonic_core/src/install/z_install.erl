@@ -461,27 +461,9 @@ model_pgsql() ->
 
     "CREATE INDEX IF NOT EXISTS medium_deleted_deleted_key ON medium_deleted (deleted)",
 
-    % Update/insert trigger on medium to fill the deleted files queue
-    "
-    CREATE OR REPLACE FUNCTION medium_delete() RETURNS trigger AS $$
-    begin
-        if (tg_op = 'DELETE') then
-            if (old.filename <> '' and old.filename is not null and old.is_deletable_file) then
-                insert into medium_deleted (filename) values (old.filename);
-            end if;
-            if (old.preview_filename <> '' and old.preview_filename is not null and old.is_deletable_preview) then
-                insert into medium_deleted (filename) values (old.preview_filename);
-            end if;
-        end if;
-        return null;
-    end;
-    $$ LANGUAGE plpgsql
-    ",
-    "DROP TRIGGER IF EXISTS medium_deleted_trigger ON medium",
-    "
-    CREATE TRIGGER medium_deleted_trigger AFTER DELETE
-    ON medium FOR EACH ROW EXECUTE PROCEDURE medium_delete()
-    ",
+    % Remove update/insert trigger on medium to fill the deleted files queue
+    % It is now integrated into the medium update function.
+    "DROP FUNCTION IF EXISTS medium_delete CASCADE",
 
     %% Table with hierarchies for menus and the category tree
     hierarchy_table(),
@@ -591,7 +573,7 @@ rsc_pivot_log_trigger_drop() ->
     "DROP TRIGGER IF EXISTS rsc_update_log_trigger ON RSC".
 
 rsc_pivot_log_trigger() ->
-    % CREATE OR REPLACE was added in psql 14 - for now we first drop the trigger.
+    % CREATE OR REPLACE TRIGGER was added in psql 14 - for now we first drop the trigger.
     "
     CREATE TRIGGER rsc_update_log_trigger AFTER INSERT OR UPDATE
     ON rsc FOR EACH ROW EXECUTE PROCEDURE rsc_pivot_log_insert()
@@ -672,26 +654,37 @@ medium_update_function() ->
         if (tg_op = 'INSERT') then
             if (new.filename <> '' and new.filename is not null and new.is_deletable_file) then
                 insert into medium_log (filename, usr_id)
-                values (new.filename, user_id);
+                values (new.filename, user_id)
+                on conflict (filename) do nothing;
             end if;
             if (new.preview_filename <> '' and new.preview_filename is not null and new.is_deletable_preview) then
                 insert into medium_log (filename, usr_id)
-                values (new.preview_filename, user_id);
+                values (new.preview_filename, user_id)
+                on conflict (filename) do nothing;
             end if;
         elseif (tg_op = 'UPDATE') then
             if (new.filename <> '' and new.filename is not null and new.is_deletable_file and new.filename != old.filename) then
                 insert into medium_log (filename, usr_id)
-                values (new.filename, user_id);
+                values (new.filename, user_id)
+                on conflict (filename) do nothing;
             end if;
             if (new.preview_filename <> '' and new.preview_filename is not null and new.is_deletable_preview and new.preview_filename != old.preview_filename) then
                 insert into medium_log (filename, usr_id)
-                values (new.preview_filename, user_id);
+                values (new.preview_filename, user_id)
+                on conflict (filename) do nothing;
             end if;
             -- Insert files into the medium_deleted queue table
             if (old.filename <> '' and old.filename is not null and old.is_deletable_file and new.filename != old.filename) then
                 insert into medium_deleted (filename) values (old.filename);
             end if;
             if (old.preview_filename <> '' and old.preview_filename is not null and old.is_deletable_preview and new.preview_filename != old.preview_filename) then
+                insert into medium_deleted (filename) values (old.preview_filename);
+            end if;
+        elseif (tg_op = 'DELETE') then
+            if (old.filename <> '' and old.filename is not null and old.is_deletable_file) then
+                insert into medium_deleted (filename) values (old.filename);
+            end if;
+            if (old.preview_filename <> '' and old.preview_filename is not null and old.is_deletable_preview) then
                 insert into medium_deleted (filename) values (old.preview_filename);
             end if;
         end if;
@@ -705,7 +698,7 @@ medium_update_trigger_drop() ->
 
 medium_update_trigger() ->
     "
-    CREATE TRIGGER medium_update_trigger AFTER INSERT OR UPDATE
+    CREATE TRIGGER medium_update_trigger AFTER INSERT OR UPDATE OR DELETE
     ON medium FOR EACH ROW EXECUTE PROCEDURE medium_update()
     ".
 

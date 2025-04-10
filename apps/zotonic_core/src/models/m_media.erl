@@ -1300,6 +1300,12 @@ make_preview_unique(RscId, Extension, Context) ->
 id_to_list(N) when is_integer(N) -> integer_to_list(N);
 id_to_list(insert_rsc) -> "video".
 
+%% @doc Check in the log of all previous files if the given filename is unique.
+%% As file paths are cached by clients and the filestore can delay deletes
+%% indefinitely, we must prevent clashes of filenames.
+-spec is_unique_file(Filename, Context) -> boolean() when
+    Filename :: file:filename_all(),
+    Context :: z:context().
 is_unique_file(Filename, Context) ->
     z_db:q1("select count(*) from medium_log where filename = $1", [Filename], Context) =:= 0.
 

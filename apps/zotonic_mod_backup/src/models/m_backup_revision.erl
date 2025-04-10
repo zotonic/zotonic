@@ -25,7 +25,7 @@
 -export([
     m_get/3,
 
-    revert_resource/3,
+    revert_resource/4,
 
     list_deleted/2,
 
@@ -55,6 +55,8 @@
 -define(BACKUP_TYPE_PROPS, $P).
 -define(BACKUP_TYPE_PROPS_DELETED, $D).
 
+-type revert_option() :: incoming_edges | outgoing_edges | dependent.
+-export_type([ revert_option/0 ]).
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
@@ -89,24 +91,25 @@ m_get(_Vs, _Msg, _Context) ->
 
 %% @doc Revert a resource to the given revision. Also restores edges and the medium record that
 %% matches to that revision and date.
-%% @todo Also revert deletion of all referred dependent resources (if the page was deleted).
-revert_resource(Id, RevId, Context) ->
+-spec revert_resource(RscId, RevisionId, Options, Context) -> ok | {error, Reason} when
+    RscId :: m_rsc:resource_id(),
+    RevisionId :: integer(),
+    Options :: [ revert_option() ],
+    Context :: z:context(),
+    Reason :: invalid | enoent | term().
+revert_resource(RscId, RevId, Options, Context) ->
     case get_revision(RevId, Context) of
         {ok, #{
-            <<"rsc_id">> := RscId,
+            <<"rsc_id">> := RevRscId,
             <<"data">> := Props,
             <<"created">> := Created
-        }} when RscId =:= Id ->
-            Exists = m_rsc:exists(Id, Context),
-            case m_rsc_update:update(Id, Props, [ is_import ], Context) of
-                {ok, NewId} ->
-                    if
-                        Exists -> ok;
-                        true -> m_rsc_gone:delete(NewId, Context)
-                    end,
-                    _MaybeMissingDependent = revert_edges(Id, Exists, Created, Context),
-                    revert_medium(Id, Created, Context),
-                    z_depcache:flush(Id, Context),
+        }} when RevRscId =:= RscId ->
+            case m_rsc_update:update(RscId, Props, [ is_import ], Context) of
+                {ok, _} ->
+                    m_rsc_gone:delete(RscId, Context),
+                    revert_edges(RscId, Options, Created, Context),
+                    revert_medium(RscId, Created, Context),
+                    z_depcache:flush(RscId, Context),
                     ok;
                 {error, _} = Error ->
                     Error
@@ -117,71 +120,109 @@ revert_resource(Id, RevId, Context) ->
             {error, enoent}
     end.
 
+%% @doc Revert a resource if and only if the resource was a dependent resource.
+%% Revert to the newest version in the revision table.
+revert_if_dependent(RscId, Options, Context) ->
+    case z_db:qmap_row("
+        select *
+        from backup_revision
+        where rsc_id = $1
+        order by id asc
+        limit 1",
+        [RscId],
+        Context)
+    of
+        {ok, #{
+            <<"id">> := RevId,
+            <<"data">> := Data
+        }} ->
+            IsRevert = case erlang:binary_to_term(Data) of
+                #{ <<"is_dependent">> := IsDependent } ->
+                    z_convert:to_bool(IsDependent);
+                Props when is_list(Props) ->
+                    z_convert:to_bool(proplists:get_value(is_dependent, Props, false));
+                _ ->
+                    false
+            end,
+            if
+                IsRevert -> revert_resource(RscId, RevId, Options, Context);
+                true -> ok
+            end;
+        {error, _} = Error ->
+            Error
+    end.
+
 %% @doc Replay all edges in reverse. This creates a view of all edges at a certain
 %% moment in time. If the resource was deleted, then we also recover all referring edges.
-revert_edges(Id, Exists, Created, Context) ->
+revert_edges(RscId, Options, Created, Context) ->
     Objects = z_db:q("
         select subject_id, predicate, object_id, is_insert
         from backup_edge_log
         where subject_id = $1
           and timestamp >= $2
         order by id desc",
-        [Id, Created],
+        [RscId, Created],
         Context),
+    RevertIn = lists:member(incoming_edges, Options),
+    RevertOut = lists:member(outgoing_edges, Options),
     Subjects = if
-        Exists ->
-            [];
-        true ->
+        RevertIn ->
             z_db:q("
                 select subject_id, predicate, object_id, is_insert
                 from backup_edge_log
                 where object_id = $1
                   and timestamp >= $2
                 order by id desc",
-                [Id, Created],
-                Context)
+                [RscId, Created],
+                Context);
+        true ->
+            []
     end,
     Edges = Objects ++ Subjects,
-    % Incoming edges are only recovered if the resource did not exist.
-    % Outgoing edges are always recovered.
+    % Incoming edges are only recovered if the resource currently exists.
     Recover = lists:foldl(
         fun
-            ({SubjectId, Predicate, ObjectId, false}, Acc) when not Exists; Id =:= SubjectId ->
-                Acc#{
-                    {SubjectId, Predicate, ObjectId} => insert
-                };
-            ({SubjectId, Predicate, ObjectId, true}, Acc) when not Exists; Id =:= SubjectId ->
-                Acc#{
-                    {SubjectId, Predicate, ObjectId} => delete
-                };
+            ({SubjectId, Predicate, ObjectId, false}, Acc) when RevertIn, RscId =:= SubjectId ->
+                Acc#{ {SubjectId, Predicate, ObjectId} => insert };
+            ({SubjectId, Predicate, ObjectId, true}, Acc) when RevertIn, RscId =:= SubjectId ->
+                Acc#{ {SubjectId, Predicate, ObjectId} => delete };
+            ({SubjectId, Predicate, ObjectId, false}, Acc) when RevertOut, RscId =:= ObjectId ->
+                Acc#{ {SubjectId, Predicate, ObjectId} => insert };
+            ({SubjectId, Predicate, ObjectId, true}, Acc) when RevertOut, RscId =:= ObjectId ->
+                Acc#{ {SubjectId, Predicate, ObjectId} => delete };
             (_E, Acc) ->
                 Acc
         end,
         #{},
         Edges),
-    maps:fold(
+    lists:foreach(
         fun
-            ({SubjectId, Predicate, ObjectId} = E, insert, Acc) ->
-                case m_rsc:exists(SubjectId, Context)
-                    andalso m_rsc:exists(ObjectId, Context)
-                of
-                    true ->
-                        m_edge:insert(SubjectId, Predicate, ObjectId, Context),
-                        Acc;
-                    false when Exists, SubjectId =:= Id ->
-                        % Outgoing edge to missing resource.
-                        [ E | Acc ];
-                    false ->
-                        Acc
+            ({SubjectId, Predicate, ObjectId}, insert) ->
+                RevertDependent = lists:member(dependent, Options),
+                case {m_rsc:exists(SubjectId, Context), m_rsc:exists(ObjectId, Context)} of
+                    {true, true} ->
+                        m_edge:insert(SubjectId, Predicate, ObjectId, Context);
+                    {true, false} when RevertDependent ->
+                        case m_rsc:exists(Predicate, Context) of
+                            true ->
+                                case revert_if_dependent(ObjectId, Options, Context) of
+                                    ok ->
+                                        m_edge:insert(SubjectId, Predicate, ObjectId, Context);
+                                    {error, _} ->
+                                        ok
+                                end;
+                            false ->
+                                ok
+                        end;
+                    {_, _} ->
+                        ok
                 end;
-            ({SubjectId, Predicate, ObjectId}, delete, Acc) ->
-                m_edge:delete(SubjectId, Predicate, ObjectId, Context),
-                Acc
+            ({SubjectId, Predicate, ObjectId}, delete) ->
+                m_edge:delete(SubjectId, Predicate, ObjectId, Context)
         end,
-        [],
         Recover).
 
-%% @doc Revert the medium record that best matches the date of the revered resource.
+%% @doc Revert the medium record that best matches the date of the reverted resource.
 %% Fetch the medium record that existed around the time of the revision.
 %% This is not exact science as it is not guaranteed that a resource revision
 %% was saved when the medium record was created. So we fetch the medium record
@@ -354,7 +395,7 @@ save_revision(Id, #{ <<"version">> := Version } = Props, IsDeleted, Context) whe
 
 % @doc Fetch a specific revision by its unique id.
 -spec get_revision(RevisionId, Context) -> {ok, Revision} | {error, Reason} when
-    RevisionId :: integer(),
+    RevisionId :: integer() | latest,
     Context :: z:context(),
     Revision :: map(),
     Reason :: enoent | term().

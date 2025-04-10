@@ -75,21 +75,37 @@ event(#postback_notify{message= <<"rev-diff">>}, Context) ->
         false ->
             z_render:growl_error(?__("You are not allowed to see the revisions", Context), Context)
     end;
-event(#postback{message={revert, Args}}, Context) ->
+event(#submit{message={revert, Args}}, Context) ->
+    Context1 = z_render:wire([
+            {unmask, [ {body, true} ]},
+            {dialog_close, []}
+        ], Context),
     RscId = proplists:get_value(rsc_id, Args),
     RevId = proplists:get_value(rev_id, Args),
-    case z_acl:is_allowed(use, mod_backup, Context)
-        orelse (m_rsc:exists(RscId, Context) andalso z_acl:rsc_editable(RscId, Context))
+    case z_acl:is_allowed(use, mod_backup, Context1)
+        orelse (m_rsc:exists(RscId, Context1) andalso z_acl:rsc_editable(RscId, Context1))
     of
         true ->
-            do_revert(RscId, RevId, Context);
+            Options0 = case z_convert:to_bool(z_context:get_q(<<"incoming_edges">>, Context1)) of
+                true -> [ incoming_edges ];
+                false -> []
+            end,
+            Options1 = case z_convert:to_bool(z_context:get_q(<<"outgoing_edges">>, Context1)) of
+                true -> [ outgoing_edges | Options0 ];
+                false -> Options0
+            end,
+            Options2 = case z_convert:to_bool(z_context:get_q(<<"dependent">>, Context1)) of
+                true -> [ dependent | Options1 ];
+                false -> Options1
+            end,
+            do_revert(RscId, RevId, Options2, Context1);
         false ->
-            z_render:growl_error(?__("You are not allowed to see the revisions", Context), Context)
+            z_render:growl_error(?__("You are not allowed to see the revisions", Context1), Context1)
     end.
 
 
-do_revert(Id, RevId, Context) ->
-    case m_backup_revision:revert_resource(Id, RevId, Context) of
+do_revert(Id, RevId, Options, Context) ->
+    case m_backup_revision:revert_resource(Id, RevId, Options, Context) of
         ok ->
             z_render:wire({redirect, [ {dispatch, admin_edit_rsc}, {id, Id} ]}, Context);
         {error, eacces} ->

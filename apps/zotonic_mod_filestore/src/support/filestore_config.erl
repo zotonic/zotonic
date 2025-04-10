@@ -33,9 +33,10 @@
     delete_interval/1
 ]).
 
-%% Default delete interval matches with the default number of weekly backups
-%% by mod_backup.
--define(DEFAULT_DELETE_INTERVAL, <<"5 weeks">>).
+%% Default delete delay adds to the default Zotonic deletion delay
+%% of 5 weeks. Anything beyond 0 extends the period that files can
+%% be recovered.
+-define(DEFAULT_DELETE_INTERVAL, <<"0">>).
 
 %% @doc Check if the site config is locked, and we should only follow the
 %% global config.

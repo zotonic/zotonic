@@ -55,7 +55,7 @@
 			    </p>
 	    	{% endif %}
 
-		    <p class="help-block">
+		    <p>
 		    	{_ Check and possibly restore an earlier version of your page. _}<br>
 		    	{% trans "Revisions are kept for {n} months." n=m.backup_revision.retention_months %}<br>
 				{% trans "Revisions of active users are kept for {n} days." n=m.backup_revision.user_retention_days %}<br>

@@ -8,7 +8,7 @@
 
     <h2>{_ Deleted pages _}</h2>
 
-    <p class="help-block">
+    <p>
         {_ List of recently deleted pages found in the resource revisions log. _}<br>
         {_ You can select a revision to revover. _}
         {_ Note that files are only retained for 5 weeks after deletion, this is the same as the Zotonic database backup retention period. _}<br>
