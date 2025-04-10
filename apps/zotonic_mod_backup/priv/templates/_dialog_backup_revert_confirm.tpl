@@ -1,16 +1,16 @@
-{% wire id="dialog_backup_revert_confirm"
+{% wire id="revertconfirm"
         type="submit"
         postback={revert rsc_id=rsc_id rev_id=rev_id}
         delegate=`controller_admin_backup_revision`
-        action={mask message=_"Reverting page..." body}
 %}
-<form class="dialog" id="dialog_backup_revert_confirm">
+<form class="form" id="revertconfirm" action="postback">
     <p>{_ Are you sure you want to revert to this version? _}</p>
 
     <p>
         {_ You can recover incoming and outgoing connections to other pages. _}
         {_ It could be that a connected dependent page was deleted because of the deletion of this page, such a deleted dependent page can also be recovered. _}
     </p>
+
     <div class="form-group">
         <label class="checkbox">
             <input type="checkbox" checked name="outgoing_edges">
@@ -32,7 +32,7 @@
     </p>
 
     <div class="modal-footer">
-        {% button class="btn btn-default" action={dialog_close} text=_"Cancel" tag="a" %}
+        {% button class="btn btn-default" action={dialog_close} text=_"Cancel" type="button" %}
         <button class="btn btn-primary" type="submit">{_ Revert _}</button>
     </div>
 </form>

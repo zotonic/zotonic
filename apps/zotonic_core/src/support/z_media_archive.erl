@@ -250,18 +250,17 @@ make_unique(Rootname, Extension, Context) ->
             make_unique(Rootname, Extension, Context)
     end.
 
-%% @doc Check if the file is archived (ie. in the archive directory)
+%% @doc Check if the file is in the archive directory.
 -spec is_archived(Filename, Context) -> boolean() when
     Filename :: file:filename_all() | undefined,
     Context :: z:context().
 is_archived(undefined, _Context) ->
     false;
 is_archived(Filename, Context) ->
-    Fileabs = z_convert:to_binary(filename:absname(Filename)),
+    Fileabs = z_convert:to_binary(Filename),
     PathToArchive = z_convert:to_binary([ z_path:media_archive(Context), $/ ]),
     ArchiveLen = size(PathToArchive),
-    ArchiveLen = binary:longest_common_prefix([ Fileabs, PathToArchive ]).
-
+    ArchiveLen == binary:longest_common_prefix([ Fileabs, PathToArchive ]).
 
 %% @doc Remove the path to the archive directory, return a filename relative to the archive directory
 %% Crash if the path is not in relative to the archive directory.

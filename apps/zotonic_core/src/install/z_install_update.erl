@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2024 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc This server will install the database when started. It will always return ignore to the supervisor.
 %% This server should be started after the database pool but before any database queries will be done.
 %% @end
 
-%% Copyright 2009-2024 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -1048,7 +1048,8 @@ medium_update_v2(C, Database, Schema) ->
             {ok,[],[]} = epgsql:squery(C, "DROP FUNCTION IF EXISTS medium_delete CASCADE"),
             {ok,[],[]} = epgsql:squery(C, z_install:medium_update_function()),
             {ok,[],[]} = epgsql:squery(C, z_install:medium_update_trigger_drop()),
-            {ok,[],[]} = epgsql:squery(C, z_install:medium_update_trigger());
+            {ok,[],[]} = epgsql:squery(C, z_install:medium_update_trigger()),
+            ok;
         false ->
             ok
     end.

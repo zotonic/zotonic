@@ -1,6 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2024 Marc Worrell
-%%
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Install Zotonic, loads the datamodel into the database
 %% Assumes the database has already been created (which normally needs superuser permissions anyway)
 %%
@@ -8,7 +7,7 @@
 %% CREATE LANGUAGE "plpgsql";
 %% @end
 
-%% Copyright 2009-2024 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -36,6 +35,7 @@
 
          medium_log_table/0,
          medium_update_function/0,
+         medium_update_trigger_drop/0,
          medium_update_trigger/0,
 
          edge_log_table/0,

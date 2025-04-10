@@ -195,7 +195,7 @@ revert_edges(RscId, Options, Created, Context) ->
         end,
         #{},
         Edges),
-    lists:foreach(
+    maps:foreach(
         fun
             ({SubjectId, Predicate, ObjectId}, insert) ->
                 RevertDependent = lists:member(dependent, Options),
