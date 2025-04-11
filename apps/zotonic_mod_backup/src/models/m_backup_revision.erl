@@ -579,7 +579,7 @@ medium_delete(RscId, #{ <<"created">> := Created } = Props, Context) ->
 %% older content or when mod_backup is enabled after the medium creation.
 -spec medium_delete_check(Id, Context) -> ok when
     Id :: m_rsc:resource_id(),
-    Context :: z:contex().
+    Context :: z:context().
 medium_delete_check(Id, Context) ->
     case m_media:get(Id, Context) of
         undefined ->
