@@ -185,10 +185,17 @@ read_configs(Fs) when is_list(Fs) ->
         Fs).
 
 %% @doc Overlay the data read from a config file over the previously read configs.
-apps_config(File, Data, Cfgs) when is_list(Data) ->
+-spec apps_config(File, Data, ConfigsAcc) -> {ok, ConfigsAcc1} | {error, term()} when
+    File :: file:filename_all(),
+    Data :: [ proplists:proplist() | map() ],
+    ConfigsAcc :: #{ atom() => map() },
+    ConfigsAcc1 :: #{ atom() => map() }.
+apps_config(File, Data, ConfigsAcc) when is_list(Data) ->
     lists:foldl(
         fun
-            (AppConfig, Acc) when is_map(AppConfig) ->
+            (_, {error, _} = Error) ->
+                Error;
+            (AppConfig, {ok, Acc}) when is_map(AppConfig) ->
                 % Map:  #{ App => AppConfig }
                 maps:fold(
                     fun
@@ -199,7 +206,7 @@ apps_config(File, Data, Cfgs) when is_list(Data) ->
                     end,
                     {ok, Acc},
                     AppConfig);
-            (AppConfig, Acc) when is_list(AppConfig) ->
+            (AppConfig, {ok, Acc}) when is_list(AppConfig) ->
                 % Proplist:  [ {App, AppConfig}, ... ]
                 lists:foldl(
                     fun
@@ -213,7 +220,7 @@ apps_config(File, Data, Cfgs) when is_list(Data) ->
                     {ok, Acc},
                     AppConfig)
         end,
-        Cfgs,
+        {ok, ConfigsAcc},
         Data).
 
 %% @doc Accumulate/overlay the found application configuration. Ensure that the app
