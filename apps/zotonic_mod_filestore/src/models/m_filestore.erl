@@ -89,7 +89,9 @@ m_get([ <<"s3key">> | Rest ], _Msg, Context) ->
         false -> {error, eacces}
     end;
 m_get([ <<"s3secret">> | Rest ], _Msg, Context) ->
-    case z_acl:is_admin(Context) of
+    % Only show the secret if the config is not locked, the secret MUST be local
+    % to the current site.
+    case z_acl:is_admin(Context) andalso not filestore_config:is_config_locked() of
         true -> {ok, {filestore_config:s3secret(Context), Rest}};
         false -> {error, eacces}
     end;
