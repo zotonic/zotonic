@@ -292,7 +292,7 @@ manage_schema(_Version, Context) ->
 %%====================================================================
 %% API
 %%====================================================================
-%% @spec start_link(Args) -> {ok,Pid} | ignore | {error,Error}
+
 %% @doc Starts the server
 start_link(Args) when is_list(Args) ->
     Context = proplists:get_value(context, Args),
@@ -305,10 +305,6 @@ start_link(Args) when is_list(Args) ->
 %% gen_server callbacks
 %%====================================================================
 
-%% @spec init(Args) -> {ok, State} |
-%%                     {ok, State, Timeout} |
-%%                     ignore               |
-%%                     {stop, Reason}
 %% @doc Initiates the server.
 init(Args) ->
     process_flag(trap_exit, true),
@@ -328,12 +324,6 @@ init(Args) ->
         timer_ref = TimerRef
     }}.
 
-%% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
-%%                                      {reply, Reply, State, Timeout} |
-%%                                      {noreply, State} |
-%%                                      {noreply, State, Timeout} |
-%%                                      {stop, Reason, Reply, State} |
-%%                                      {stop, Reason, State}
 %% @doc Start a backup
 handle_call({start_backup, IsFullBackup}, _From, State) ->
     case State#state.backup_pid of
@@ -358,19 +348,10 @@ handle_call(is_uploading, _From, State) ->
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
-
-%% @spec handle_cast(Msg, State) -> {noreply, State} |
-%%                                  {noreply, State, Timeout} |
-%%                                  {stop, Reason, State}
-%% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
 
-%% @spec handle_info(Info, State) -> {noreply, State} |
-%%                                       {noreply, State, Timeout} |
-%%                                       {stop, Reason, State}
-%% @doc Periodic check if a scheduled backup should start
 handle_info(periodic_backup, #state{ backup_pid = Pid } = State) when is_pid(Pid) ->
     {noreply, State};
 handle_info(periodic_backup, #state{ upload_pid = Pid } = State) when is_pid(Pid) ->
@@ -451,22 +432,14 @@ handle_info({'EXIT', Pid, Reason}, #state{ upload_pid = Pid } = State) ->
     },
     {noreply, State1};
 
-%% @doc Handling all non call/cast messages
 handle_info(Info, State) ->
     ?DEBUG(Info),
     {noreply, State}.
 
-%% @spec terminate(Reason, State) -> void()
-%% @doc This function is called by a gen_server when it is about to
-%% terminate. It should be the opposite of Module:init/1 and do any necessary
-%% cleaning up. When it returns, the gen_server terminates with Reason.
-%% The return value is ignored.
 terminate(_Reason, State) ->
     timer:cancel(State#state.timer_ref),
     ok.
 
-%% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
-%% @doc Convert process state when code is changed
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
