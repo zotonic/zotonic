@@ -476,10 +476,12 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 
 ensure_job_queue(Name, Options) ->
-    case jobs:queue_info(Name) of
-        undefined -> jobs:add_queue(Name, Options);
-        {queue, _Props} -> ok
-    end.
+    jobs:run(zotonic_singular_job, fun() ->
+        case jobs:queue_info(Name) of
+            undefined -> jobs:add_queue(Name, Options);
+            {queue, _Props} -> ok
+        end
+    end).
 
 maybe_daily_dump(IsFullBackup, State) ->
     Context = State#state.context,
