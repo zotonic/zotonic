@@ -42,6 +42,7 @@
     medium_insert/3,
     medium_update/3,
     medium_delete/3,
+    medium_delete_check/2,
 
     periodic_cleanup/1,
 
@@ -52,8 +53,24 @@
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
+% The revision log contains entries for updates (P) and the props
+% saved when deleting a resource (D).
 -define(BACKUP_TYPE_PROPS, $P).
 -define(BACKUP_TYPE_PROPS_DELETED, $D).
+
+% Number of seconds a medium-log entry can be older than a revision
+% and still be recovered as part of that revision. The min is always
+% accepted, the max is used if no more recent medium-log item is found.
+% We keep a small margin as the properties log entry can be saved after
+% the medium entry is marked as deleted.
+-define(DELTA_MEDIUM_REVERT_MIN, 2).
+-define(DELTA_MEDIUM_REVERT_MAX, 15).
+
+% Number of seconds an edge-log entry can be older than a revision
+% and still be recovered as part of that revision.
+% We keep a small margin as the properties log entry can be saved after
+% the edge entries are made.
+-define(DELTA_LOG_REVERT, 2).
 
 -type revert_option() :: incoming_edges | outgoing_edges | dependent.
 -export_type([ revert_option/0 ]).
@@ -155,13 +172,14 @@ revert_if_dependent(RscId, Options, Context) ->
 %% @doc Replay all edges in reverse. This creates a view of all edges at a certain
 %% moment in time. If the resource was deleted, then we also recover all referring edges.
 revert_edges(RscId, Options, Created, Context) ->
+    CreatedEdge = z_datetime:prev_second(Created, ?DELTA_LOG_REVERT),
     Objects = z_db:q("
         select subject_id, predicate, object_id, is_insert
         from backup_edge_log
         where subject_id = $1
           and timestamp >= $2
         order by id desc",
-        [RscId, Created],
+        [RscId, CreatedEdge],
         Context),
     RevertIn = lists:member(incoming_edges, Options),
     RevertOut = lists:member(outgoing_edges, Options),
@@ -173,7 +191,7 @@ revert_edges(RscId, Options, Created, Context) ->
                 where object_id = $1
                   and timestamp >= $2
                 order by id desc",
-                [RscId, Created],
+                [RscId, CreatedEdge],
                 Context);
         true ->
             []
@@ -235,33 +253,49 @@ revert_medium(Id, Created, Context) ->
           and (medium_deleted is null or medium_deleted >= $2)
         order by medium_created
         limit 1",
-        [ Id, Created ],
+        [ Id, z_datetime:prev_second(Created, ?DELTA_MEDIUM_REVERT_MIN) ],
         Context)
     of
-        {ok, #{
-            <<"id">> := _RevId,
-            <<"props">> := Medium,
-            <<"medium_deleted">> := DeletedDate
-        }} ->
-            case m_media:get(Id, Context) of
-                Medium when DeletedDate =:= undefined ->
-                    % Still current medium record
-                    ok;
-                undefined ->
-                    % No medium record - re-insert the revision
-                    revert_medium_1(Medium, Context);
-                _Medium ->
-                    % Current one is different - delete it and
-                    % re-insert the revision
-                    m_media:delete(Id, Context),
-                    revert_medium_1(Medium, Context)
-            end;
-        {error, _} = Error ->
-            Error
+        {ok, MediumLog} ->
+            revert_medium_1(MediumLog, Context);
+        {error, _} ->
+            % Might be a timing issue - check if there was a very
+            % recent deleted medium record, if so, then take that one.
+            case z_db:qmap_row("
+                select *
+                from backup_medium_log
+                where rsc_id = $1
+                  and medium_deleted >= $2
+                order by medium_created
+                limit 1",
+                [ Id, z_datetime:prev_second(Created, ?DELTA_MEDIUM_REVERT_MAX) ],
+                Context)
+            of
+                {ok, MediumLog} ->
+                    revert_medium_1(MediumLog, Context);
+                {error, _} = Error ->
+                    Error
+            end
     end.
 
-revert_medium_1(Medium, Context) ->
-    m_media:recover_medium(Medium, Context).
+revert_medium_1(#{
+            <<"rsc_id">> := Id,
+            <<"props">> := Medium,
+            <<"medium_deleted">> := DeletedDate
+        }, Context) ->
+    case m_media:get(Id, Context) of
+        CurrentMedium when CurrentMedium =:= Medium, DeletedDate =:= undefined ->
+            % Still current medium record
+            ok;
+        undefined ->
+            % No medium record - re-insert the revision
+            m_media:recover_medium(Medium, Context);
+        _Medium ->
+            % Current one is different - delete it and
+            % re-insert the revision
+            m_media:delete(Id, Context),
+            m_media:recover_medium(Medium, Context)
+    end.
 
 
 -spec revision_title(Id, Context) -> Title when
@@ -539,6 +573,30 @@ medium_delete(RscId, #{ <<"created">> := Created } = Props, Context) ->
         Context),
     ok.
 
+%% @doc Called on a (manual) rsc delete. Check if the resource has a medium
+%% and if so, checks if the medium is in the medium backup log. This is
+%% used to ensure that no medium records are missing. Especially useful with
+%% older content or when mod_backup is enabled after the medium creation.
+-spec medium_delete_check(Id, Context) -> ok when
+    Id :: m_rsc:resource_id(),
+    Context :: z:contex().
+medium_delete_check(Id, Context) ->
+    case m_media:get(Id, Context) of
+        undefined ->
+            ok;
+        #{ <<"created">> := Created } = Medium ->
+            case z_db:q1("
+                select count(*)
+                from backup_medium_log
+                where rsc_id = $1
+                  and medium_created = $2",
+                [Id, Created],
+                Context)
+            of
+                0 -> medium_delete(Id, Medium, Context);
+                _ -> ok
+            end
+    end.
 
 %% @doc Deletes:
 %% - any revision older than:
@@ -680,7 +738,36 @@ install(Context) ->
             z_db:flush(Context);
         true ->
             ok
+    end,
+    case z_db:function_exists("backup_medium_log_delete", Context) of
+        false ->
+            [] = z_db:q(backup_medium_log_delete(), Context),
+            [] = z_db:q(backup_medium_log_delete_trigger(), Context),
+            z_db:flush(Context);
+        true ->
+            ok
     end.
+
+backup_medium_log_delete() ->
+    "
+    CREATE OR REPLACE FUNCTION backup_medium_log_delete() RETURNS trigger AS $$
+    begin
+        if (tg_op = 'DELETE') then
+            update backup_medium_log
+            set medium_deleted = now()
+            where rsc_id = old.id
+              and medium_deleted is null;
+        end if;
+        return null;
+    end;
+    $$ LANGUAGE plpgsql
+    ".
+
+backup_medium_log_delete_trigger() ->
+    "
+    CREATE TRIGGER backup_medium_log_delete_trigger AFTER DELETE
+    ON medium FOR EACH ROW EXECUTE PROCEDURE backup_medium_log_delete()
+    ".
 
 insert_deleted_revisions(Context) ->
     ?LOG_INFO(#{

@@ -27,7 +27,7 @@
 -mod_prio(600).
 -mod_provides([backup]).
 -mod_depends([admin]).
--mod_schema(3).
+-mod_schema(4).
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
@@ -36,8 +36,11 @@
 %% interface functions
 -export([
     observe_admin_menu/3,
+
+    observe_rsc_delete/2,
     observe_rsc_update_done/2,
     observe_rsc_upload/2,
+
     observe_search_query/2,
     observe_tick_24h/2,
     observe_m_config_update/2,
@@ -113,6 +116,9 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
         }
         | Acc
     ].
+
+observe_rsc_delete(#rsc_delete{ id = Id }, Context) ->
+    m_backup_revision:medium_delete_check(Id, Context).
 
 observe_rsc_update_done(#rsc_update_done{ action = insert, id = Id, post_props = Props }, Context) ->
     m_backup_revision:save_revision(Id, Props, Context);
