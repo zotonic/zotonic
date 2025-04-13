@@ -754,19 +754,19 @@ update_admin_file(_DT, Name, {error, _}, Context) ->
 drop_old_sunday_dump(Data, Context) ->
     maps:filter(
         fun(DumpName, #{ <<"timestamp">> := Timestamp } = D) ->
-            case binary:match(DumpName, <<"-7.">>) of
+            case re:run(DumpName, <<"-7$">>) of
                 nomatch ->
                     true;
-                {_, _} ->
+                {match, _} ->
                     % Delete if older than a week
                     PrevWeek = z_datetime:prev_week(calendar:universal_time()),
                     PrevWeekTm = z_datetime:datetime_to_timestamp(PrevWeek),
-                    case Timestamp > PrevWeekTm of
-                        true ->
-                            true;
-                        false ->
+                    if
+                        Timestamp =< PrevWeekTm ->
                             maybe_delete_files(D, Context),
-                            false
+                            false;
+                        true ->
+                            true
                     end
             end
         end,
