@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2023 Marc Worrell
+%% @copyright 2010-2025 Marc Worrell
 %% @doc Backup module. Creates backup of the database and files.  Allows downloading of the backup.
 %% Support creation of periodic backups.
 %% @end
 
-%% Copyright 2010-2023 Marc Worrell
+%% Copyright 2010-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@
 -mod_prio(600).
 -mod_provides([backup]).
 -mod_depends([admin]).
--mod_schema(2).
+-mod_schema(4).
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
@@ -36,11 +36,18 @@
 %% interface functions
 -export([
     observe_admin_menu/3,
+
+    observe_rsc_delete/2,
     observe_rsc_update_done/2,
     observe_rsc_upload/2,
+
     observe_search_query/2,
     observe_tick_24h/2,
     observe_m_config_update/2,
+
+    observe_edge_insert/2,
+    observe_edge_delete/2,
+    observe_media_update_done/2,
 
     start_backup/1,
     start_backup/2,
@@ -76,6 +83,9 @@
 % Interval for checking for new and/or changed files.
 -define(BCK_POLL_INTERVAL, 3600 * 1000).
 
+% Number of weekly backups to keep
+-define(WEEKLY_BACKUPS, 5).
+
 
 observe_rsc_upload(#rsc_upload{} = Upload, Context) ->
     backup_rsc_upload:rsc_upload(Upload, Context).
@@ -107,6 +117,9 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
         | Acc
     ].
 
+observe_rsc_delete(#rsc_delete{ id = Id }, Context) ->
+    m_backup_revision:medium_delete_check(Id, Context).
+
 observe_rsc_update_done(#rsc_update_done{ action = insert, id = Id, post_props = Props }, Context) ->
     m_backup_revision:save_revision(Id, Props, Context);
 observe_rsc_update_done(#rsc_update_done{ action = update, id = Id, post_props = Props }, Context) ->
@@ -115,6 +128,20 @@ observe_rsc_update_done(#rsc_update_done{ action = delete, id = Id, pre_props = 
     m_backup_revision:save_deleted(Id, Props, Context);
 observe_rsc_update_done(#rsc_update_done{}, _Context) ->
     ok.
+
+observe_edge_delete(#edge_delete{ subject_id = Id, predicate = Predicate, object_id = ObjId }, Context) ->
+    m_backup_revision:edge_delete(Id, Predicate, ObjId, Context).
+
+observe_edge_insert(#edge_insert{ subject_id = Id, predicate = Predicate, object_id = ObjId }, Context) ->
+    m_backup_revision:edge_insert(Id, Predicate, ObjId, Context).
+
+observe_media_update_done(#media_update_done{ id = Id, action = insert, post_props = Props }, Context) ->
+    m_backup_revision:medium_insert(Id, Props, Context);
+observe_media_update_done(#media_update_done{ id = Id, action = update, post_props = Props }, Context) ->
+    m_backup_revision:medium_update(Id, Props, Context);
+observe_media_update_done(#media_update_done{ id = Id, action = delete, pre_props = Props }, Context) ->
+    m_backup_revision:medium_delete(Id, Props, Context).
+
 
 observe_search_query(#search_query{ name = <<"backup_deleted">>, offsetlimit = OffsetLimit }, Context) ->
     case z_acl:is_allowed(use, mod_backup, Context) of
@@ -149,7 +176,7 @@ observe_m_config_update(#m_config_update{}, _Context) ->
     ok.
 
 
-%% @doc Callback for controller_file. Check if the file exists and return
+%% @doc Callback for controller_file. Check if the backup file exists and return
 %% the path to the file on disk.
 -spec file_exists(File, Context) -> {true, FilePath} | false when
     File :: file:filename_all(),
@@ -198,7 +225,7 @@ file_exists(File, Context) ->
             end
     end.
 
-%% @doc Callback for controller_file. Check if access is allowed.
+%% @doc Callback for controller_file. Check if access to the backup file is allowed.
 -spec file_forbidden(File, Context) -> IsForbidden when
     File :: file:filename_all(),
     Context :: z:context(),
@@ -265,7 +292,7 @@ manage_schema(_Version, Context) ->
 %%====================================================================
 %% API
 %%====================================================================
-%% @spec start_link(Args) -> {ok,Pid} | ignore | {error,Error}
+
 %% @doc Starts the server
 start_link(Args) when is_list(Args) ->
     Context = proplists:get_value(context, Args),
@@ -278,28 +305,25 @@ start_link(Args) when is_list(Args) ->
 %% gen_server callbacks
 %%====================================================================
 
-%% @spec init(Args) -> {ok, State} |
-%%                     {ok, State, Timeout} |
-%%                     ignore               |
-%%                     {stop, Reason}
 %% @doc Initiates the server.
 init(Args) ->
     process_flag(trap_exit, true),
     {context, Context} = proplists:lookup(context, Args),
     z_context:logger_md(Context),
+    % A jobs queue to ensure that we only run a single Database dump at a time.
+    ensure_job_queue(?MODULE, [
+        {regulators, [
+                {counter, [
+                    {limit, 1}
+                ]}
+            ]}
+        ]),
     {ok, TimerRef} = timer:send_interval(?BCK_POLL_INTERVAL, periodic_backup),
     {ok, #state{
         context = z_acl:sudo(z_context:new(Context)),
         timer_ref = TimerRef
     }}.
 
-
-%% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
-%%                                      {reply, Reply, State, Timeout} |
-%%                                      {noreply, State} |
-%%                                      {noreply, State, Timeout} |
-%%                                      {stop, Reason, Reply, State} |
-%%                                      {stop, Reason, State}
 %% @doc Start a backup
 handle_call({start_backup, IsFullBackup}, _From, State) ->
     case State#state.backup_pid of
@@ -324,19 +348,10 @@ handle_call(is_uploading, _From, State) ->
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
-
-%% @spec handle_cast(Msg, State) -> {noreply, State} |
-%%                                  {noreply, State, Timeout} |
-%%                                  {stop, Reason, State}
-%% @doc Trap unknown casts
 handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
 
-%% @spec handle_info(Info, State) -> {noreply, State} |
-%%                                       {noreply, State, Timeout} |
-%%                                       {stop, Reason, State}
-%% @doc Periodic check if a scheduled backup should start
 handle_info(periodic_backup, #state{ backup_pid = Pid } = State) when is_pid(Pid) ->
     {noreply, State};
 handle_info(periodic_backup, #state{ upload_pid = Pid } = State) when is_pid(Pid) ->
@@ -417,22 +432,14 @@ handle_info({'EXIT', Pid, Reason}, #state{ upload_pid = Pid } = State) ->
     },
     {noreply, State1};
 
-%% @doc Handling all non call/cast messages
 handle_info(Info, State) ->
     ?DEBUG(Info),
     {noreply, State}.
 
-%% @spec terminate(Reason, State) -> void()
-%% @doc This function is called by a gen_server when it is about to
-%% terminate. It should be the opposite of Module:init/1 and do any necessary
-%% cleaning up. When it returns, the gen_server terminates with Reason.
-%% The return value is ignored.
 terminate(_Reason, State) ->
     timer:cancel(State#state.timer_ref),
     ok.
 
-%% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
-%% @doc Convert process state when code is changed
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
@@ -440,6 +447,14 @@ code_change(_OldVsn, State, _Extra) ->
 %%====================================================================
 %% support functions
 %%====================================================================
+
+ensure_job_queue(Name, Options) ->
+    jobs:run(zotonic_singular_job, fun() ->
+        case jobs:queue_info(Name) of
+            undefined -> jobs:add_queue(Name, Options);
+            {queue, _Props} -> ok
+        end
+    end).
 
 maybe_daily_dump(IsFullBackup, State) ->
     Context = State#state.context,
@@ -503,7 +518,7 @@ maybe_filestore_upload(#state{ context = Context } = State) ->
     end.
 
 do_upload(Name, DatabaseFile, Context) ->
-    spawn_link(
+    z_proc:spawn_link_md(
         fun() ->
             RemoteDbFile = <<"backup/", DatabaseFile/binary>>,
             LocalDbFile = filename:join(dir(Context), DatabaseFile),
@@ -570,12 +585,16 @@ do_upload(Name, DatabaseFile, Context) ->
 %% @doc Start a backup and return the pid of the backup process, whilst linking to the process.
 do_backup(DT, Name, IsFullBackup, Context) ->
     z_mqtt:publish(<<"model/backup/event/backup">>, #{ status => <<"started">> }, Context),
-    spawn_link(
+    z_proc:spawn_link_md(
         fun() ->
-            % NEVER have an upload and backup in parallel
-            Result = do_backup_process(Name, IsFullBackup, Context),
-            Result1 = maybe_encrypt_files(Result, Context),
-            update_admin_file(DT, Name, Result1, Context)
+            jobs:run(
+                ?MODULE,
+                fun() ->
+                    % NEVER have an upload and backup in parallel
+                    Result = do_backup_process(Name, IsFullBackup, Context),
+                    Result1 = maybe_encrypt_files(Result, Context),
+                    update_admin_file(DT, Name, Result1, Context)
+                end)
         end).
 
 
@@ -692,7 +711,6 @@ maybe_encrypt_files({ok, Files}, Context) ->
                                    text => <<"Could not encrypt backups. Encryption is enabled, but there is no backup password.">>,
                                    in => zotonic_mod_backup
                                   }),
-                    %% 
                     {ok, Files}
             end;
         false ->
@@ -706,28 +724,65 @@ filename(Fullname) ->
 
 update_admin_file(DT, Name, {ok, Files}, Context) ->
     Data = read_admin_file(Context),
-
     Data1 = Data#{
         Name => #{
-            timestamp => z_datetime:datetime_to_timestamp(DT),
+            <<"timestamp">> => z_datetime:datetime_to_timestamp(DT),
 
-            database => maps:get(database, Files),
-            config_files => maps:get(config_files, Files),
-            files => maps:get(files, Files, undefined),
+            <<"database">> => maps:get(database, Files),
+            <<"config_files">> => maps:get(config_files, Files),
+            <<"files">> => maps:get(files, Files, undefined),
 
-            is_filestore_uploaded => false,
+            <<"is_filestore_uploaded">> => false,
 
-            is_encrypted => m_config:get_boolean(?MODULE, encrypt_backups, Context) 
+            <<"is_encrypted">> => m_config:get_boolean(?MODULE, encrypt_backups, Context)
                 andalso (size(m_config:get_value(?MODULE, backup_encrypt_password, <<>>,  Context)) > 0)
         }
     },
-
-    write_admin_file(Data1, Context);
+    % Delete the Sunday dump, it has been replaced by a weekly dump.
+    Data2 = drop_old_sunday_dump(Data1, Context),
+    write_admin_file(Data2, Context);
 update_admin_file(_DT, Name, {error, _}, Context) ->
     % Delete Name, backup failed
     Data = read_admin_file(Context),
+    maybe_delete_files(maps:get(Name, Data, #{}), Context),
     Data1 = maps:remove(Name, Data),
     write_admin_file(Data1, Context).
+
+
+% Delete old Sunday dump files, Sunday has been replaced by a weekly dump.
+% As the dump will not be overwritten, we need to remove the files manually.
+drop_old_sunday_dump(Data, Context) ->
+    maps:filter(
+        fun(DumpName, #{ <<"timestamp">> := Timestamp } = D) ->
+            case re:run(DumpName, <<"-7$">>) of
+                nomatch ->
+                    true;
+                {match, _} ->
+                    % Delete if older than a week
+                    PrevWeek = z_datetime:prev_week(calendar:universal_time()),
+                    PrevWeekTm = z_datetime:datetime_to_timestamp(PrevWeek),
+                    if
+                        Timestamp =< PrevWeekTm ->
+                            maybe_delete_files(D, Context),
+                            false;
+                        true ->
+                            true
+                    end
+            end
+        end,
+        Data).
+
+maybe_delete_files(D, Context) ->
+    maybe_delete_file(maps:get(<<"database">>, D, undefined), Context),
+    maybe_delete_file(maps:get(<<"config_files">>, D, undefined), Context),
+    maybe_delete_file(maps:get(<<"files">>, D, undefined), Context).
+
+maybe_delete_file(undefined, _Context) -> ok;
+maybe_delete_file(<<>>, _Context) -> ok;
+maybe_delete_file(Filename, Context) ->
+    Path = filename:join(dir(Context), Filename),
+    file:delete(Path).
+
 
 read_admin_file(Context) ->
     Filename = filename:join(dir(Context), "backup.json"),
@@ -793,15 +848,27 @@ list_backup_files(Context) ->
 dir(Context) ->
     z_path:files_subdir_ensure("backup", Context).
 
-%% @doc Return the base name of the backup files.
+%% @doc Return the base name of the backup files. We have 6 daily backups and 4
+%% weekly backups. The daily backups have the daynumber in them, the weekly backups
+%% use a week number (modulo 4) and are made on Sundays.
 name(Context) ->
     {Date, _} = calendar:universal_time(),
-    Day = calendar:day_of_the_week(Date),
-    iolist_to_binary([
-        atom_to_list(z_context:site(Context)),
-        "-",
-        integer_to_binary(Day)
-    ]).
+    case calendar:day_of_the_week(Date) of
+        7 ->
+            GregorianDays = calendar:date_to_gregorian_days(Date),
+            WeekNr = (GregorianDays div 7) rem ?WEEKLY_BACKUPS,
+            iolist_to_binary([
+                atom_to_list(z_context:site(Context)),
+                "-w",
+                integer_to_binary(WeekNr)
+            ]);
+        Day ->
+            iolist_to_binary([
+                atom_to_list(z_context:site(Context)),
+                "-",
+                integer_to_binary(Day)
+            ])
+    end.
 
 %% @doc Dump the sql database into the backup directory.  The Name is the basename of the dump.
 pg_dump(Name, DbDump, Context) ->
@@ -814,13 +881,13 @@ pg_dump(Name, DbDump, Context) ->
     Schema = proplists:get_value(dbschema, DbOpts),
 
     Filename = <<Name/binary, ".sql.gz">>,
-    DumpFile = filename:join(dir(Context), Filename),
+    TmpFilename = <<Name/binary, ".sql.gz.tmp">>,
+    TmpDumpFile = filename:join(dir(Context), TmpFilename),
     PgPass = filename:join([dir(Context), ".pgpass"]),
-    ok = file:write_file(PgPass, z_convert:to_list(Host)
-                                ++":"++z_convert:to_list(Port)
-                                ++":"++z_convert:to_list(Database)
-                                ++":"++z_convert:to_list(User)
-                                ++":"++z_convert:to_list(Password)),
+    ok = file:write_file(PgPass, iolist_to_binary([
+        Host, $:, z_convert:to_binary(Port), $:,
+        Database, $:, User, $:, Password
+    ])),
     ok = file:change_mode(PgPass, 8#00600),
     Command = unicode:characters_to_list([
         "PGPASSFILE=",z_filelib:os_filename(PgPass)," ", z_filelib:os_filename(DbDump),
@@ -829,7 +896,7 @@ pg_dump(Name, DbDump, Context) ->
         " -w ",
         " --compress=7 "
         " --quote-all-identifiers ",
-        " -f ", z_filelib:os_filename(DumpFile), " ",
+        " -f ", z_filelib:os_filename(TmpDumpFile), " ",
         " -U ", z_filelib:os_filename(User), " ",
         case z_utils:is_empty(Schema) of
             true -> [];
@@ -847,6 +914,8 @@ pg_dump(Name, DbDump, Context) ->
             end),
     Result = case os:cmd(Command) of
         [] ->
+            DumpFile = filename:join(dir(Context), Filename),
+            ok = file:rename(TmpDumpFile, DumpFile),
             {ok, Filename};
         Output ->
             ?LOG_WARNING(#{
@@ -857,6 +926,7 @@ pg_dump(Name, DbDump, Context) ->
                 output => Output,
                 command => unicode:characters_to_binary(Command)
             }),
+            file:delete(TmpDumpFile),
             {error, database_archive}
     end,
     ok = file:delete(PgPass),
@@ -886,6 +956,7 @@ archive(Name, Tar, Context) ->
                 "" ->
                     {ok, Filename};
                 Output ->
+                    file:delete(DumpFile),
                      ?LOG_WARNING(#{
                         text => <<"Backup failed: tar error">>,
                         in => zotonic_mod_backup,

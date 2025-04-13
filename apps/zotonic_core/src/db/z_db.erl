@@ -100,6 +100,7 @@
     update_sequence/3,
     prepare_database/1,
     constraint_exists/3,
+    function_exists/2,
     foreign_keys/2,
     foreign_key/3,
     key_exists/3,
@@ -1697,7 +1698,11 @@ create_schema(_Site, Connection, Schema) ->
     end.
 
 
--spec constraint_exists( table_name(), binary() | string() | atom(), z:context() ) -> boolean().
+%% @doc Check if a named constraint exists on a table.
+-spec constraint_exists(Table, Constraint, Context) -> boolean() when
+    Table :: table_name(),
+    Constraint :: binary() | string() | atom(),
+    Context :: z:context().
 constraint_exists(Table, Constraint, Context) ->
     Options = z_db_pool:get_database_options(Context),
     Db = proplists:get_value(dbdatabase, Options),
@@ -1713,6 +1718,27 @@ constraint_exists(Table, Constraint, Context) ->
             Context),
     HasConstraint >= 1.
 
+
+%% @doc Check if a function is defined in the current schema.
+-spec function_exists( FunctionName, Context) -> boolean() when
+    FunctionName :: binary() | string() | atom(),
+    Context :: z:context().
+function_exists(Function, Context) ->
+    Options = z_db_pool:get_database_options(Context),
+    Schema = proplists:get_value(dbschema, Options),
+    HasFunction = z_db:q1("
+        select count(*)
+        from pg_proc p
+        join pg_namespace n
+          on p.pronamespace = n.oid
+        where n.nspname = $1
+          and p.proname = $2",
+        [Schema, z_convert:to_binary(Function)],
+        Context),
+    HasFunction =:= 1.
+
+
+%% @doc Return a list with all foreign keys on a table.
 -spec foreign_keys( table_name(), z:context() ) -> {ok, [ map() ]} | {error, Reason} when
     Reason :: enoent | term().
 foreign_keys(Table, Context) ->

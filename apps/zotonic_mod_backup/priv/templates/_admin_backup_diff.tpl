@@ -25,11 +25,12 @@
 			{% button
                 text=[_"Revert to this version..."]
                 class="btn btn-danger"
-				action={confirm text=_"Are you sure you want to revert to this version?"
-								ok=_"Revert"
-								action={postback postback={revert rsc_id=a.rsc_id rev_id=a.id}
-												delegate=`controller_admin_backup_revision`}
-						}
+				action={dialog_open
+					title=_"Revert page to earlier version"
+					template="_dialog_backup_revert_confirm.tpl"
+					rsc_id=a.rsc_id
+					rev_id=a.id
+				}
 			%}
 		</td>
 	</tr>

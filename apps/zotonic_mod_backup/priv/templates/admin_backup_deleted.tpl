@@ -9,8 +9,10 @@
     <h2>{_ Deleted pages _}</h2>
 
     <p>
-        {_ List of recently deleted pages and recover options via the resource revisions log. _}<br>
-        {_ Only the texts and other properties of pages are backed up. _} {_ Connections and media items are not backed up and can’t be recovered. _}
+        {_ List of recently deleted pages found in the resource revisions log. _}<br>
+        {_ You can select a revision to revover. _}
+        {_ Note that files are only retained for 5 weeks after deletion, this is the same as the Zotonic database backup retention period. _}<br>
+        {_ If the Cloud File Store module is used, then deleted files can be retained indefinitely. _}
     </p>
 </div>
 

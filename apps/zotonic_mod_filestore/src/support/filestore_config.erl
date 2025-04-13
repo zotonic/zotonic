@@ -33,6 +33,10 @@
     delete_interval/1
 ]).
 
+%% Default delete delay adds to the default Zotonic deletion delay
+%% of 5 weeks. Anything beyond 0 extends the period that files can
+%% be recovered.
+-define(DEFAULT_DELETE_INTERVAL, <<"0">>).
 
 %% @doc Check if the site config is locked, and we should only follow the
 %% global config.
@@ -96,9 +100,11 @@ is_local_keep(Context) ->
 %% - "N months" the number of months to wait before deleting the file
 %%
 %% Defaults "0", which means immediate deletion.
+-spec delete_interval(Context) -> binary() when
+    Context :: z:context().
 delete_interval(Context) ->
     case z_convert:to_binary(get_value(delete_interval, Context)) of
-        <<>> -> <<"0">>;
+        <<>> -> ?DEFAULT_DELETE_INTERVAL;
         Interval -> Interval
     end.
 

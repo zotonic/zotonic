@@ -107,6 +107,21 @@ locate_source(NoRoots, Path, OriginalFile, Filters, Context) when NoRoots =:= un
         {ok, Loc} ->
             Loc
     end;
+locate_source([archive|Roots], Path, OriginalFile, [], Context) ->
+    case locate_source_uploaded_1(#{}, Path, OriginalFile, [], Context) of
+        {error, Reason} ->
+            ?LOG_DEBUG(#{
+                text => <<"Could not find file">>,
+                in => zotonic_core,
+                path => Path,
+                file => OriginalFile,
+                result => error,
+                reason => Reason
+            }),
+            locate_source(Roots, Path, OriginalFile, [], Context);
+        {ok, Loc} ->
+            Loc
+    end;
 locate_source([ModuleIndex|Roots], Path, OriginalFile, Filters, Context) when is_atom(ModuleIndex) ->
     case locate_source_module_indexer(ModuleIndex, Path, OriginalFile, Filters, Context) of
         {ok, Loc} ->

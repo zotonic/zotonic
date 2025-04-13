@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2024 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc This server will install the database when started. It will always return ignore to the supervisor.
 %% This server should be started after the database pool but before any database queries will be done.
 %% @end
 
-%% Copyright 2009-2024 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -243,6 +243,17 @@ has_column(C, Table, Column, Database, Schema) ->
               and column_name = $4", [Database, Schema, Table, Column]),
     HasColumn =:= 1.
 
+has_function(C, Function, _Database, Schema) ->
+    {ok, _, [{HasFunction}]} = epgsql:equery(C, "
+        select count(*)
+        from pg_proc p
+        join pg_namespace n
+          on p.pronamespace = n.oid
+        where n.nspname = $1
+          and p.proname = $2
+        ", [Schema, Function]),
+    HasFunction =:= 1.
+
 get_column_type(C, Table, Column, Database, Schema) ->
     {ok, _, [{ColumnType}]} = epgsql:equery(C, "
             select data_type
@@ -322,6 +333,7 @@ upgrade(C, Database, Schema) ->
     ok = medium_size_bigint(C, Database, Schema),
     ok = media_frame_count(C, Database, Schema),
     ok = identity_log(C, Database, Schema),
+    ok = medium_update_v2(C, Database, Schema),
     ok.
 
 
@@ -549,7 +561,8 @@ install_medium_log(C, Database, Schema) ->
                                    where m.filename is not null
                                    and m.filename <> ''
                                    and m.is_deletable_file
-                                   "),
+                                on conflict (filename) do nothing
+                                "),
             {ok, _} = epgsql:squery(C,
                                    "
                                 insert into medium_log (usr_id, filename, created)
@@ -558,7 +571,8 @@ install_medium_log(C, Database, Schema) ->
                                    where m.preview_filename is not null
                                    and m.preview_filename <> ''
                                    and m.is_deletable_preview
-                                   "),
+                                on conflict (filename) do nothing
+                                "),
             ok;
         true ->
             ok
@@ -1026,11 +1040,22 @@ identity_log(C, Database, Schema) ->
             ok
     end.
 
+medium_update_v2(C, Database, Schema) ->
+    case has_function(C, "medium_delete", Database, Schema) of
+        true ->
+            % The medium_update function now also handles deletes.
+            % Replace the previous delete handler and add the new update function.
+            {ok,[],[]} = epgsql:squery(C, "DROP FUNCTION IF EXISTS medium_delete CASCADE"),
+            {ok,[],[]} = epgsql:squery(C, z_install:medium_update_function()),
+            {ok,[],[]} = epgsql:squery(C, z_install:medium_update_trigger_drop()),
+            {ok,[],[]} = epgsql:squery(C, z_install:medium_update_trigger()),
+            ok;
+        false ->
+            ok
+    end.
+
 check_category_id_key(C, _Database, _Schema) ->
-    {ok, [], []} = epgsql:squery(
-        C,
-        "CREATE INDEX IF NOT EXISTS fki_rsc_category_id ON rsc (category_id)"
-    ),
+    {ok,[],[]} = epgsql:squery(C, "CREATE INDEX IF NOT EXISTS fki_rsc_category_id ON rsc (category_id)"),
     ok.
 
 medium_size_bigint(C, Database, Schema) ->

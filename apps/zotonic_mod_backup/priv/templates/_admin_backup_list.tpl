@@ -42,6 +42,10 @@
 
                         {{ backup.timestamp|date:_"Y-m-d H:i – l" }}
 
+                        {% if backup.name|match:"-w[0-9]$" %}
+                            <span class="text-muted">– {_ weekly backup _}</span>
+                        {% endif %}
+
                         {% if is_filestore_enabled %}
                             <br>
                             {% if backup.is_filestore_uploaded %}
