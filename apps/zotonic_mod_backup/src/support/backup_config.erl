@@ -81,7 +81,7 @@ daily_dump(Context) ->
 -spec admin_panel(Context) -> boolean() when
     Context :: z:context().
 admin_panel(Context) ->
-    case m_config:get_value(mod_filestore, admin_panel, Context) of
+    case m_config:get_value(mod_backup, admin_panel, Context) of
         undefined ->
             case application:get_env(zotonic_mod_backup, admin_panel) of
                 {ok, V} -> z_convert:to_bool(V);
