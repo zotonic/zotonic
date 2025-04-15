@@ -5646,11 +5646,11 @@ msgid "Recover"
 msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:21
-msgid "Recover incoming edges from other pages"
+msgid "Recover incoming connections from other pages"
 msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:17
-msgid "Recover outgoing edges to other pages"
+msgid "Recover outgoing connections to other pages"
 msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:38./apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:41./apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:14

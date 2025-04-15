@@ -14,11 +14,11 @@
     <div class="form-group">
         <label class="checkbox">
             <input type="checkbox" checked name="outgoing_edges">
-            {_ Recover outgoing edges to other pages _}
+            {_ Recover outgoing connections to other pages _}
         </label>
         <label class="checkbox">
             <input type="checkbox" checked name="incoming_edges">
-            {_ Recover incoming edges from other pages _}
+            {_ Recover incoming connections from other pages _}
         </label>
         <label class="checkbox">
             <input type="checkbox" checked name="dependent">
