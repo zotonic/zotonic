@@ -7553,8 +7553,8 @@ msgstr ""
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:11
 msgid ""
-"Currently Zotonic supports FTP and services that are compatible with the S3 "
-"file services API. These include:"
+"Currently Zotonic supports FTP, WebDAV and services that are compatible with "
+"the S3 file services API. These include:"
 msgstr ""
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209

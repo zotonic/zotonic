@@ -8,7 +8,7 @@
 
         <p>{_ Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service. _}</p>
 
-        <p>{_ Currently Zotonic supports FTP and services that are compatible with the S3 file services API. These include: _}</p>
+        <p>{_ Currently Zotonic supports FTP, WebDAV and services that are compatible with the S3 file services API. These include: _}</p>
 
         <ul>
             <li><a target="_blank" href="https://european-alternatives.eu/alternative-to/amazon-s3">European Block Storage providers <span class="glyphicon glyphicon-new-window"></span></a></li>
