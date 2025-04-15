@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-04-15 14:53\n"
+"PO-Revision-Date: 2025-04-15 16:18\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -5325,12 +5325,12 @@ msgid "Recover"
 msgstr "Pulih"
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:21
-msgid "Recover incoming edges from other pages"
-msgstr "Pulihkan tepi masuk dari halaman lain"
+msgid "Recover incoming connections from other pages"
+msgstr "Pulihkan koneksi masuk dari halaman lain"
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:17
-msgid "Recover outgoing edges to other pages"
-msgstr "Pulihkan tepi keluar ke halaman lain"
+msgid "Recover outgoing connections to other pages"
+msgstr "Pulihkan koneksi keluar ke halaman lain"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:38./apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:41./apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:14
 msgid "Restore backup"
@@ -7041,11 +7041,11 @@ msgstr "Setelah 1 minggu"
 msgid "After 3 months"
 msgstr "Setelah 3 bulan"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:259
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:272
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "Semua file cloud dapat dipindahkan kembali ke sistem file di server."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:267
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:280
 msgid "All cloud files will be queued for download."
 msgstr "Semua berkas awan akan diantri untuk diunduh."
 
@@ -7058,10 +7058,18 @@ msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "Semua berkas unggahan dan pratinjau lokal dapat dipindahkan ke awan."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:246
+msgid "Are you sure you want to copy all files to the cloud?"
+msgstr "Apakah Anda yakin ingin menyalin semua file ke cloud?"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289
+msgid "Are you sure you want to copy all files to the disk of the server?"
+msgstr "Apakah Anda yakin ingin menyalin semua berkas ke disk server?"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:257
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "Anda yakin ingin memindahkan semua file ke cloud?"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:276
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:300
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "Apakah Anda yakin ingin memindahkan semua file ke disk server?"
 
@@ -7089,6 +7097,22 @@ msgstr "Utilitas dan Statistik Penyimpanan File Cloud"
 msgid "Cloud Files"
 msgstr "File awan"
 
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:243
+msgid "Copy all local files to the remote storage"
+msgstr "Salin semua file lokal ke penyimpanan jarak jauh"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:286
+msgid "Copy all remote files to local"
+msgstr "Salin semua file jarak jauh ke lokal"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
+msgid "Copy files to cloud"
+msgstr "Salin file ke cloud"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:290
+msgid "Copy files to server disk"
+msgstr "Salin file ke disk server"
+
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:236
 msgid "Could not access the service, double check your settings and try again."
 msgstr "Tidak bisa mengakses layanan, periksa pengaturan anda dan coba lagi."
@@ -7098,8 +7122,8 @@ msgid "Could not access the service, double check your settings and try again. M
 msgstr "Tidak bisa mengakses layanan, periksa dua kali pengaturan anda dan coba lagi. Pastikan bahwa API key memiliki hak akses untuk membuat dan menghapus (sementara) <code>-zotonic-filestore-test-file-</code> berkas."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:11
-msgid "Currently Zotonic supports FTP and services that are compatible with the S3 file services API. These include:"
-msgstr "Saat ini Zotonic mendukung FTP dan layanan yang kompatibel dengan API layanan file S3. Ini termasuk:"
+msgid "Currently Zotonic supports FTP, WebDAV and services that are compatible with the S3 file services API. These include:"
+msgstr "Saat ini Zotonic mendukung FTP, WebDAV, dan layanan yang kompatibel dengan API layanan file S3. Layanan tersebut meliputi:"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
 msgid "Delete Queue"
@@ -7121,7 +7145,7 @@ msgstr "Antrian Download"
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "Aktifkan ini untuk membiarkan filestore bertindak sebagai cadangan file media lokal Anda."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:260
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:273
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "Pastikan Anda memiliki cukup ruang disk sebelum memulai proses ini."
 
@@ -7145,7 +7169,7 @@ msgstr "Untuk WebDAV, URL harus dimulai dengan <b><tt>webdavs:</tt></b> atau <b>
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Jika Anda telah memilih \"Simpan file lokal setelah diunggah ke penyimpanan file cloud\" maka file lokal tidak dihapus, karena file jarak jauh dianggap sebagai cadangan file lokal."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:264
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:277
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Jika Anda telah memilih \"Simpan file lokal setelah diunggah ke penyimpanan file cloud\" maka file jarak jauh tidak dihapus, karena file jarak jauh dianggap sebagai cadangan file lokal."
 
@@ -7177,19 +7201,19 @@ msgstr "Berkas Lokal"
 msgid "Media Resources"
 msgstr "Sumber Daya Media"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:242
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:254
 msgid "Move all local files to the remote storage"
 msgstr "Pindahkan semua file lokal ke penyimpanan jarak jauh"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:272
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:297
 msgid "Move all remote files to local"
 msgstr "Pindahkan semua file jarak jauh ke lokal"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:258
 msgid "Move files to cloud"
 msgstr "Pindahkan file ke cloud"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:277
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:301
 msgid "Move files to server disk"
 msgstr "Pindahkan file ke disk server"
 
@@ -7290,7 +7314,7 @@ msgstr "Dengan WebDAV, nama pengguna dan kata sandi ditransfer dengan jelas, jad
 msgid "Yes, keep local files after upload"
 msgstr "Ya, simpan file lokal setelah diunggah"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:292./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:71./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:78./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:85
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:318./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:71./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:78./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:85
 msgid "You are not allowed to change these settings."
 msgstr "Anda tidak diizinkan untuk mengubah pengaturan ini."
 
