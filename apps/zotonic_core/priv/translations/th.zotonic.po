@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-04-07 16:38\n"
+"PO-Revision-Date: 2025-04-15 14:53\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -205,7 +205,7 @@ msgstr "คุณแน่ใจหรือไม่ว่าต้องกา
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:15
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:65./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:33
 #: apps/zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:16./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:120./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:28./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:66./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:137./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
-#: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
+#: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:35./apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:36./apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:104
@@ -223,7 +223,7 @@ msgstr "ยกเลิก"
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:6./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:87
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:196./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:64./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:105./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:29./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45./apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:26
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:28
 #: apps/zotonic_mod_survey/src/mod_survey.erl:172
 msgid "Category"
 msgstr "ประเภท"
@@ -531,7 +531,7 @@ msgid "Publish successful"
 msgstr "เผยแพร่สำเร็จ"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:41
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:29
+#: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:36
 msgid "Revert"
 msgstr "เปลี่ยนกลับ"
 
@@ -793,6 +793,7 @@ msgid "<b>Warning:</b> the site will stop and restart."
 msgstr "<b>คำเตือน:</b> เว็บไซต์จะหยุดและเริ่มใหม่อีกครั้ง"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:37./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:130./apps/zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:6./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:141./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:32./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:53
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:47
 msgid "<em>Untitled</em>"
 msgstr "<em>ไม่มีชื่อ</em>"
 
@@ -1132,7 +1133,7 @@ msgid "Create"
 msgstr "สร้าง"
 
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:3
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:40
 msgid "Created by"
 msgstr "สร้างโดย"
 
@@ -1733,7 +1734,7 @@ msgstr "แก้ไขโดย"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:27./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:114./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:24
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:13./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:57
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:32
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:34
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:50
 msgid "Modified on"
 msgstr "แก้ไขเมื่อ"
@@ -2529,7 +2530,7 @@ msgstr "หมดเวลาขณะพยายามดึงข้อมู
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:28./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:36./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:102./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:124./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:9./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:11./apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:26
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:23
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:25
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:16./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:20
 msgid "Title"
 msgstr "หัวข้อ"
@@ -2583,7 +2584,7 @@ msgstr "ไม่ได้เผยแพร่"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_item.tpl:29./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:29./apps/zotonic_mod_admin/src/mod_admin.erl:726./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:71./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:127
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58./apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:57
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:59
 #: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
 msgid "Untitled"
 msgstr "ไม่มีชื่อ"
@@ -2727,7 +2728,7 @@ msgstr "Work Directory"
 
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:54
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:92
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:94
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:35
 msgid "Y-m-d H:i"
 msgstr "Y-m-d H:i"
@@ -3476,7 +3477,7 @@ msgstr "หากคุณไม่ทราบรหัสผ่าน ให�
 msgid "Last logon"
 msgstr "เข้าสู่ระบบครั้งล่าสุด"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:29
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:36
 msgid "Leave empty to not change the password."
 msgstr "เว้นว่างไว้เพื่อไม่เปลี่ยนรหัสผ่าน"
 
@@ -3500,7 +3501,7 @@ msgstr "หน้าของฉัน"
 msgid "Name and e-mail address"
 msgstr "ชื่อและที่อยู่อีเมล"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:19./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:20
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:26./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:27
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:14./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:3
 msgid "New password"
 msgstr "รหัสผ่านใหม่"
@@ -3542,7 +3543,7 @@ msgstr "มีเพียงผู้ดูแลระบบหรือผู
 msgid "Please verify your email address"
 msgstr "โปรดยืนยันที่อยู่อีเมลของคุณ"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:22
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:29
 msgid "Random secure password:"
 msgstr "รหัสผ่านที่ปลอดภัยแบบสุ่ม:"
 
@@ -3554,7 +3555,7 @@ msgstr "ค้นหาผู้ใช้"
 msgid "Send verification e-mail"
 msgstr "ส่งอีเมลยืนยัน"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:44
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:51
 msgid "Send welcome e-mail"
 msgstr "ส่งอีเมลต้อนรับ"
 
@@ -3652,11 +3653,11 @@ msgstr "ระบบจะส่งอีเมลยืนยันไปที
 msgid "Timezone"
 msgstr "เขตเวลา"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:19
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:26
 msgid "Type password to change password"
 msgstr "พิมพ์รหัสผ่านเพื่อเปลี่ยนรหัสผ่าน"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:23
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:30
 msgid "Use this password"
 msgstr "ใช้รหัสผ่านนี้"
 
@@ -3764,7 +3765,7 @@ msgstr "ที่อยู่อีเมลของคุณได้รับ
 msgid "Your login details for"
 msgstr "รายละเอียดการเข้าสู่ระบบของคุณสำหรับ"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:36
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:19./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:42
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
 msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, and symbol."
@@ -5126,7 +5127,7 @@ msgstr "บริการ"
 msgid "user@example.com"
 msgstr "user@example.com"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:64
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:66
 msgid "<i>Unknown</i>"
 msgstr "<i>ไม่ทราบ</i>"
 
@@ -5134,7 +5135,11 @@ msgstr "<i>ไม่ทราบ</i>"
 msgid "Admin Backups"
 msgstr "การสำรองข้อมูลของผู้ดูแลระบบ"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:28
+#: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:31
+msgid "After the page has been restored, you will be redirected to the edit page."
+msgstr "หลังจากที่หน้าได้รับการคืนค่าแล้ว คุณจะถูกส่งต่อไปยังหน้าแก้ไข"
+
+#: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:7
 msgid "Are you sure you want to revert to this version?"
 msgstr "แน่ใจไหมว่าต้องการเปลี่ยนกลับเป็นเวอร์ชันนี้"
 
@@ -5150,7 +5155,7 @@ msgstr "สามารถเปิดใช้งานการสำรอง
 msgid "Back to the edit page"
 msgstr "กลับไปที่หน้าแก้ไข"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:89
+#: apps/zotonic_mod_backup/src/mod_backup.erl:99
 msgid "Backup"
 msgstr "การสำรองข้อมูล"
 
@@ -5178,7 +5183,7 @@ msgstr "โดยค่าเริ่มต้น การสำรองข�
 msgid "Changes since"
 msgstr "การเปลี่ยนแปลงตั้งแต่"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:57
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:59
 msgid "Check and possibly restore an earlier version of your page."
 msgstr "ตรวจสอบและอาจกู้คืนเวอร์ชันก่อนหน้าของเพจของคุณ"
 
@@ -5194,27 +5199,23 @@ msgstr "เปิดใช้งานการจัดเก็บไฟล์
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
 msgstr "เปิดใช้งานที่เก็บไฟล์บนคลาวด์ ไฟล์ในเครื่องจะไม่ถูกสำรอง ตรวจสอบให้แน่ใจว่าระบบจัดเก็บไฟล์บนคลาวด์ของคุณมีการสำรองข้อมูลที่เหมาะสม"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:13
-msgid "Connections and media items are not backed up and can’t be recovered."
-msgstr "รายการการเชื่อมต่อและสื่อจะไม่ถูกสำรองข้อมูลและไม่สามารถกู้คืนได้"
-
 #: apps/zotonic_mod_backup/src/actions/action_backup_backup_start.erl:44
 msgid "Could not start the backup because a backup is already in progress."
 msgstr "ไม่สามารถเริ่มการสำรองข้อมูลได้ เนื่องจากการสำรองข้อมูลกำลังดำเนินการอยู่"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:59./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:48
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:61
 msgid "Deleted"
 msgstr "ลบแล้ว"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:35
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:37
 msgid "Deleted by"
 msgstr "ลบโดย"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:29
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:31
 msgid "Deleted on"
 msgstr "ลบเมื่อ"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:102
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:112
 msgid "Deleted pages"
 msgstr "หน้าที่ถูกลบ"
 
@@ -5260,17 +5261,25 @@ msgstr "เปิดใช้งานการเข้ารหัส แต�
 msgid "Help about backup &amp; restore"
 msgstr "ความช่วยเหลือเกี่ยวกับการสำรองข้อมูล &amp; คืนค่า"
 
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:15
+msgid "If the Cloud File Store module is used, then deleted files can be retained indefinitely."
+msgstr "หากใช้โมดูล Cloud File Store คุณสามารถเก็บรักษาไฟล์ที่ถูกลบไว้ได้อย่างไม่มีกำหนดเวลา"
+
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
 msgid "It can be found in the"
 msgstr "สามารถพบได้ใน"
+
+#: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:11
+msgid "It could be that a connected dependent page was deleted because of the deletion of this page, such a deleted dependent page can also be recovered."
+msgstr "อาจเป็นไปได้ว่าเพจที่เชื่อมโยงและขึ้นอยู่กับเพจอื่นนั้นถูกลบไปเนื่องจากการลบเพจนี้ เพจที่เชื่อมโยงและขึ้นอยู่กับเพจอื่นที่ถูกลบไปนั้นก็สามารถกู้คืนได้เช่นกัน"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:29
 msgid "List and restore an earlier version"
 msgstr "แสดงรายการและกู้คืนเวอร์ชันก่อนหน้า"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:12
-msgid "List of recently deleted pages and recover options via the resource revisions log."
-msgstr "รายการหน้าที่ถูกลบล่าสุดและตัวเลือกการกู้คืนผ่านบันทึกการแก้ไขทรัพยากร"
+msgid "List of recently deleted pages found in the resource revisions log."
+msgstr "รายการหน้าที่ถูกลบล่าสุดที่พบในบันทึกการแก้ไขทรัพยากร"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:15./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:39./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:60
 msgid "Make a daily backup of the database and uploaded files."
@@ -5280,13 +5289,21 @@ msgstr "ทำการสำรองฐานข้อมูลและไฟ
 msgid "Make a daily backup of the database."
 msgstr "ทำการสำรองข้อมูลรายวันของฐานข้อมูล"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:62
+#: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:30
+msgid "Media files can only be recovered if they are not yet deleted from the file storage. Zotonic will keep media for at least 5 weeks."
+msgstr "ไฟล์มีเดียสามารถกู้คืนได้เฉพาะในกรณีที่ยังไม่ได้ลบออกจากที่เก็บไฟล์ Zotonic จะเก็บไฟล์มีเดียไว้เป็นเวลาอย่างน้อย 5 สัปดาห์"
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:66
 msgid "No backups present."
 msgstr "ไม่มีการสำรองข้อมูล"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:53
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:57
 msgid "Not uploaded to filestore"
 msgstr "ไม่ได้อัปโหลดไปยัง filestore"
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:14
+msgid "Note that files are only retained for 5 weeks after deletion, this is the same as the Zotonic database backup retention period."
+msgstr "โปรดทราบว่าไฟล์จะถูกเก็บรักษาไว้เพียง 5 สัปดาห์หลังจากการลบ ซึ่งเป็นระยะเวลาเดียวกันกับช่วงเวลาการเก็บข้อมูลสำรองฐานข้อมูล Zotonic"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:97
 msgid "Note:"
@@ -5296,43 +5313,55 @@ msgstr "บันทึก:"
 msgid "Only administrators can start a backup."
 msgstr "เฉพาะผู้ดูแลระบบเท่านั้นที่สามารถเริ่มการสำรองข้อมูลได้"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:13
-msgid "Only the texts and other properties of pages are backed up."
-msgstr "สำรองข้อมูลเฉพาะข้อความและคุณสมบัติอื่นๆ ของเพจเท่านั้น"
-
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
 msgid "Please make sure you store the backup encryption password in a safe <u>external</u> location."
 msgstr "โปรดตรวจสอบให้แน่ใจว่าคุณเก็บรหัสผ่านการเข้ารหัสสำรองไว้ในตำแหน่ง <u>ภายนอก</u> ที่ปลอดภัย"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:81
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:83
 msgid "Previous"
 msgstr "ก่อนหน้า"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:83
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:85
 msgid "Recover"
 msgstr "ฟื้นตัว"
+
+#: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:21
+msgid "Recover incoming edges from other pages"
+msgstr "กู้คืนขอบขาเข้าจากหน้าอื่น"
+
+#: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:17
+msgid "Recover outgoing edges to other pages"
+msgstr "กู้คืนขอบขาออกไปยังหน้าอื่น ๆ"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:38./apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:41./apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:14
 msgid "Restore backup"
 msgstr "กู้คืนข้อมูลสำรอง"
 
+#: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:25
+msgid "Restore deleted <em>dependent</em> pages that were referred by this page"
+msgstr "กู้คืนหน้าที่ถูกลบ <em>ที่ขึ้นอยู่กับ</em> ที่ถูกอ้างอิงโดยหน้านี้"
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:29
+msgid "Revert page to earlier version"
+msgstr "ย้อนกลับหน้าไปยังเวอร์ชันก่อนหน้า"
+
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:26
 msgid "Revert to this version..."
 msgstr "เปลี่ยนกลับเป็นเวอร์ชันนี้..."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:14./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:58
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:14./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:60
 msgid "Revisions are kept for {n} months."
 msgstr "การแก้ไขจะถูกเก็บไว้เป็นเวลา {n} เดือน"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:46./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:48
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:46
 msgid "Revisions for"
 msgstr "การแก้ไขสำหรับ"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:15./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:59
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:15./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:61
 msgid "Revisions of active users are kept for {n} days."
 msgstr ""
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:16./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:60
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:16./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:62
 msgid "Revisions of deleted users are kept for {n} days."
 msgstr "การแก้ไขของผู้ใช้ที่ถูกลบจะถูกเก็บไว้เป็นเวลา {n} วัน"
 
@@ -5356,17 +5385,13 @@ msgstr "ขออภัย การสำรองข้อมูลด้ว�
 msgid "Sorry, there is no module that can import this."
 msgstr "ขออภัย ไม่มีโมดูลที่สามารถนำเข้าสิ่งนี้ได้"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:91./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:107
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:91./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:116
 msgid "Sorry, there was an error replacing your page."
 msgstr "ขออภัยเกิดข้อผิดพลาดในการแทนที่เพจของคุณ"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:113
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:114
 msgid "Sorry, this backup has been deleted."
 msgstr "ขออภัยข้อมูลสำรองนี้ถูกลบไปแล้ว"
-
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:110
-msgid "Sorry, this backup is not valid."
-msgstr "ขออภัยข้อมูลสำรองนี้ไม่ถูกต้อง"
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:86
 msgid "Sorry, this is not a backup file or it is corrupted."
@@ -5426,7 +5451,7 @@ msgstr "นี่คือเวอร์ชันที่บันทึกไ
 msgid "This will overwrite your page with the contents of the backup file."
 msgstr "สิ่งนี้จะเขียนทับหน้าของคุณด้วยเนื้อหาของไฟล์สำรอง"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:49
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:53
 msgid "Uploaded to filestore"
 msgstr "อัพโหลดไปยัง filestore"
 
@@ -5444,11 +5469,11 @@ msgstr "ด้วยแผงการนำเข้า/ส่งออก ค�
 msgid "Y-m-d H:i – l"
 msgstr "Ymd H:i – l"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:39
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:39./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:112
 msgid "You are not allowed to recover this page."
 msgstr "คุณไม่ได้รับอนุญาตให้กู้คืนหน้านี้"
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:72./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:75./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:86
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:73./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:76./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:103
 msgid "You are not allowed to see the revisions"
 msgstr "คุณไม่ได้รับอนุญาตให้ดูการแก้ไข"
 
@@ -5456,7 +5481,15 @@ msgstr "คุณไม่ได้รับอนุญาตให้ดูก
 msgid "You can have one backup per day of the week, older ones will be overwritten."
 msgstr "คุณสามารถสำรองข้อมูลได้หนึ่งรายการต่อวันในสัปดาห์ ข้อมูลสำรองที่เก่ากว่าจะถูกเขียนทับ"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:93
+#: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:10
+msgid "You can recover incoming and outgoing connections to other pages."
+msgstr "คุณสามารถกู้คืนการเชื่อมต่อขาเข้าและขาออกไปยังเพจอื่นๆ ได้"
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:13
+msgid "You can select a revision to revover."
+msgstr "คุณสามารถเลือกการแก้ไขที่จะย้อนกลับได้"
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:95
 msgid "You need to have access rights to the backup module."
 msgstr "คุณต้องมีสิทธิ์ในการเข้าถึงโมดูลสำรองข้อมูล"
 
@@ -5479,6 +5512,10 @@ msgstr "หรือในไฟล์การกำหนดค่า Zotonic"
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:15
 msgid "this backup is in progress"
 msgstr "การสำรองข้อมูลนี้อยู่ระหว่างดำเนินการ"
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:46
+msgid "weekly backup"
+msgstr "การสำรองข้อมูลรายสัปดาห์"
 
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:5
 msgid "# Pages"
@@ -5586,6 +5623,7 @@ msgstr "สถานะการเชื่อมต่อบริดจ์ MQ
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:145./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
 #: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:39
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:52
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:48./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:35./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:28./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:35./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
 msgid "No"
 msgstr "ไม่"
@@ -5726,6 +5764,7 @@ msgstr "รองรับ Websocket?"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:251./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
 #: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:39
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:52
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:47./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:30./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:19
 msgid "Yes"
@@ -6026,7 +6065,7 @@ msgid "Year"
 msgstr "ปี"
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:221
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:224
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:17
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
@@ -7003,27 +7042,27 @@ msgstr "หลังจาก 1 สัปดาห์"
 msgid "After 3 months"
 msgstr "หลังจาก 3 เดือน"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:256
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:259
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "ไฟล์คลาวด์ทั้งหมดสามารถย้ายกลับไปที่ระบบไฟล์บนเซิร์ฟเวอร์ได้"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:264
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:267
 msgid "All cloud files will be queued for download."
 msgstr "ไฟล์คลาวด์ทั้งหมดจะเข้าคิวดาวน์โหลด"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:234
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237
 msgid "All files will be queued, uploads will start in the background within 10 minutes."
 msgstr "ไฟล์ทั้งหมดจะเข้าคิวการอัปโหลดจะเริ่มต้นในพื้นหลังภายใน 10 นาที"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:224
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:227
 msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "ไฟล์ที่อัปโหลดและดูตัวอย่างในเครื่องทั้งหมดสามารถย้ายไปยังระบบคลาวด์ได้"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:243
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:246
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "แน่ใจไหมว่าต้องการย้ายไฟล์ทั้งหมดไปที่คลาวด์"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:273
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:276
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "คุณแน่ใจหรือไม่ว่าต้องการย้ายไฟล์ทั้งหมดไปยังดิสก์ของเซิร์ฟเวอร์"
 
@@ -7031,11 +7070,11 @@ msgstr "คุณแน่ใจหรือไม่ว่าต้องกา
 msgid "Base URL"
 msgstr "URL ฐาน"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:156
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:159
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "ก่อนบันทึกการตั้งค่าระบบจะตรวจสอบโดยการอัปโหลด (และลบ) ไฟล์ขนาดเล็ก"
 
-#: apps/zotonic_mod_filestore/src/mod_filestore.erl:181
+#: apps/zotonic_mod_filestore/src/mod_filestore.erl:191
 msgid "Cloud File Store"
 msgstr "Cloud File Store"
 
@@ -7043,19 +7082,19 @@ msgstr "Cloud File Store"
 msgid "Cloud File Store Configuration"
 msgstr "การกำหนดค่า Cloud File Store"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:174
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:177
 msgid "Cloud File Store Utilities and Statistics"
 msgstr "ยูทิลิตี้และสถิติการจัดเก็บไฟล์บนคลาวด์"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:183
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:186
 msgid "Cloud Files"
 msgstr "ไฟล์คลาวด์"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:233
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:236
 msgid "Could not access the service, double check your settings and try again."
 msgstr "ไม่สามารถเข้าถึงบริการได้โปรดตรวจสอบการตั้งค่าของคุณอีกครั้งแล้วลองอีกครั้ง"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:159
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:162
 msgid "Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file."
 msgstr "ไม่สามารถเข้าถึงบริการได้โปรดตรวจสอบการตั้งค่าของคุณอีกครั้งแล้วลองอีกครั้ง ตรวจสอบให้แน่ใจว่าคีย์ API มีสิทธิ์เข้าถึงเพื่อสร้างและลบไฟล์ (ชั่วคราว) <code>-zotonic-filestore-test-file-</code>"
 
@@ -7063,7 +7102,7 @@ msgstr "ไม่สามารถเข้าถึงบริการได
 msgid "Currently Zotonic supports FTP and services that are compatible with the S3 file services API. These include:"
 msgstr "ปัจจุบัน Zotonic รองรับ FTP และบริการที่เข้ากันได้กับ API บริการไฟล์ S3 ซึ่งรวมถึง:"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:206
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
 msgid "Delete Queue"
 msgstr "ลบคิว"
 
@@ -7075,7 +7114,7 @@ msgstr "ลบไฟล์จากที่เก็บไฟล์บนคล
 msgid "Delete interval"
 msgstr "ช่วงเวลาการลบ"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:205
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:208
 msgid "Download Queue"
 msgstr "ดาวน์โหลดคิว"
 
@@ -7083,11 +7122,11 @@ msgstr "ดาวน์โหลดคิว"
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "เปิดใช้งานสิ่งนี้เพื่อให้ filestore ทำหน้าที่เป็นตัวสำรองของไฟล์มีเดียในเครื่องของคุณ"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:257
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:260
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "ตรวจสอบให้แน่ใจว่าตัวเองมีเนื้อที่ว่างบนดิสก์เพียงพอก่อนเริ่มกระบวนการนี้"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:188./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:211
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:191./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:214
 msgid "Files"
 msgstr "ไฟล์"
 
@@ -7103,11 +7142,11 @@ msgstr "สำหรับ S3 URL ต้องขึ้นต้นด้วย 
 msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
 msgstr "สำหรับ WebDAV URL ต้องขึ้นต้นด้วย <b><tt>webdavs:</tt></b> หรือ <b><tt>webdav:</tt></b>"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:230
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:233
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "หากคุณเลือก \"เก็บไฟล์ในเครื่องไว้หลังจากอัปโหลดไปยังที่เก็บไฟล์บนคลาวด์\" ไฟล์ในเครื่องจะไม่ถูกลบ เนื่องจากไฟล์ระยะไกลถือเป็นข้อมูลสำรองของไฟล์ในเครื่อง"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:261
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:264
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "หากคุณเลือก \"เก็บไฟล์ในเครื่องไว้หลังจากอัปโหลดไปยังที่เก็บไฟล์บนคลาวด์\" ไฟล์ระยะไกลจะไม่ถูกลบ เนื่องจากไฟล์ระยะไกลถือเป็นข้อมูลสำรองของไฟล์ในเครื่อง"
 
@@ -7115,13 +7154,13 @@ msgstr "หากคุณเลือก \"เก็บไฟล์ในเค
 msgid "If you use an FTP server then that server MUST support FTPS (secure ftp)"
 msgstr "หากคุณใช้เซิร์ฟเวอร์ FTP แสดงว่าเซิร์ฟเวอร์นั้นต้องรองรับ FTPS (ftp ที่ปลอดภัย)"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:71./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:146
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:71
 msgid "Immediately"
 msgstr "ทันที"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:51
-msgid "Is Upload enabled?"
-msgstr "มีการเปิดใช้งานการอัพโหลดหรือยัง?"
+msgid "Is upload enabled?"
+msgstr "มีการเปิดใช้งานการอัพโหลดแล้วหรือยัง?"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:126
 msgid "Keep local files after upload to the cloud file store"
@@ -7131,27 +7170,27 @@ msgstr "เก็บไฟล์ในเครื่องไว้หลัง
 msgid "Keep local files?"
 msgstr "เก็บไฟล์ไว้ในเครื่องใช่ไหม?"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:182
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:185
 msgid "Local Files"
 msgstr "ไฟล์ในเครื่อง"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:181
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:184
 msgid "Media Resources"
 msgstr "แหล่งข้อมูลสื่อ"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:242
 msgid "Move all local files to the remote storage"
 msgstr "ย้ายไฟล์ในเครื่องทั้งหมดไปยังที่เก็บข้อมูลระยะไกล"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:269
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:272
 msgid "Move all remote files to local"
 msgstr "ย้ายไฟล์ระยะไกลทั้งหมดไปที่ local"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:244
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
 msgid "Move files to cloud"
 msgstr "ย้ายไฟล์ไปยังคลาวด์"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:274
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:277
 msgid "Move files to server disk"
 msgstr "ย้ายไฟล์ไปยังดิสก์เซิร์ฟเวอร์"
 
@@ -7159,6 +7198,10 @@ msgstr "ย้ายไฟล์ไปยังดิสก์เซิร์ฟ
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:62
 msgid "Never"
 msgstr "ไม่เลย"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:146
+msgid "No extra delay"
+msgstr "ไม่มีการล่าช้าเพิ่ม"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:61
 msgid "No, local files are deleted after upload"
@@ -7180,7 +7223,7 @@ msgstr "ตำแหน่งคลาวด์ S3"
 msgid "S3 Cloud Location and Credentials"
 msgstr "ตำแหน่งและข้อมูลประจำตัวของ S3 Cloud"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:163
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:166
 msgid "Save Settings"
 msgstr "บันทึกการตั้งค่า"
 
@@ -7188,11 +7231,11 @@ msgstr "บันทึกการตั้งค่า"
 msgid "Service"
 msgstr "บริการ"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:158
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:161
 msgid "Settings are working fine and are saved."
 msgstr "การตั้งค่าทำงานได้ดีและได้รับการบันทึก"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:194
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:197
 msgid "Storage"
 msgstr "การจัดเก็บ"
 
@@ -7204,23 +7247,31 @@ msgstr "ที่เก็บไฟล์บนคลาวด์ใช้กา
 msgid "The configuration is:"
 msgstr "การกำหนดค่าคือ:"
 
-#: apps/zotonic_mod_filestore/src/support/filestore_admin.erl:66
+#: apps/zotonic_mod_filestore/src/support/filestore_admin.erl:68
 msgid "The settings are locked by the system configuration."
 msgstr "การตั้งค่าถูกล็อคโดยการกำหนดค่าระบบ"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:226
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:229
 msgid "There is a 1 minute wait before files are uploaded."
 msgstr "ต้องรอ 1 นาทีก่อนอัพโหลดไฟล์"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:225
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:154
+msgid "This extra deletion delay extends the period files can be recovered."
+msgstr "ความล่าช้าในการลบเพิ่มเติมนี้จะทำให้ระยะเวลาในการกู้คืนไฟล์ขยายออกไป"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:228
 msgid "This will queue the files for later asynchronous upload."
 msgstr "การดำเนินการนี้จะจัดคิวไฟล์สำหรับการอัปโหลดแบบอะซิงโครนัสในภายหลัง"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:154
+msgid "To allow recovery of deleted pages, Zotonic keeps files for 5 weeks."
+msgstr "เพื่อให้สามารถกู้คืนหน้าที่ถูกลบได้ Zotonic จะเก็บไฟล์ไว้เป็นเวลา 5 สัปดาห์"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:135
 msgid "Try to create a private S3 bucket if the S3 bucket does not exist"
 msgstr "ลองสร้างบัคเก็ต S3 ส่วนตัวถ้าไม่มีบัคเก็ต S3"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:204
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:207
 msgid "Upload Queue"
 msgstr "คิวการอัปโหลด"
 
@@ -7240,7 +7291,7 @@ msgstr "ด้วย WebDAV ชื่อผู้ใช้และรหัส�
 msgid "Yes, keep local files after upload"
 msgstr "ใช่ เก็บไฟล์ในเครื่องไว้หลังจากการอัพโหลด"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:69./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:76./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:83
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:292./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:71./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:78./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:85
 msgid "You are not allowed to change these settings."
 msgstr "คุณไม่ได้รับอนุญาตให้เปลี่ยนการตั้งค่าเหล่านี้"
 
