@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-04-15 14:53\n"
+"PO-Revision-Date: 2025-04-15 16:18\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -5326,12 +5326,12 @@ msgid "Recover"
 msgstr "ฟื้นตัว"
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:21
-msgid "Recover incoming edges from other pages"
-msgstr "กู้คืนขอบขาเข้าจากหน้าอื่น"
+msgid "Recover incoming connections from other pages"
+msgstr "กู้คืนการเชื่อมต่อขาเข้าจากหน้าอื่น"
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:17
-msgid "Recover outgoing edges to other pages"
-msgstr "กู้คืนขอบขาออกไปยังหน้าอื่น ๆ"
+msgid "Recover outgoing connections to other pages"
+msgstr "กู้คืนการเชื่อมต่อขาออกไปยังเพจอื่น"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:38./apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:41./apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:14
 msgid "Restore backup"
@@ -7042,11 +7042,11 @@ msgstr "หลังจาก 1 สัปดาห์"
 msgid "After 3 months"
 msgstr "หลังจาก 3 เดือน"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:259
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:272
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "ไฟล์คลาวด์ทั้งหมดสามารถย้ายกลับไปที่ระบบไฟล์บนเซิร์ฟเวอร์ได้"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:267
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:280
 msgid "All cloud files will be queued for download."
 msgstr "ไฟล์คลาวด์ทั้งหมดจะเข้าคิวดาวน์โหลด"
 
@@ -7059,10 +7059,18 @@ msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "ไฟล์ที่อัปโหลดและดูตัวอย่างในเครื่องทั้งหมดสามารถย้ายไปยังระบบคลาวด์ได้"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:246
+msgid "Are you sure you want to copy all files to the cloud?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการคัดลอกไฟล์ทั้งหมดไปยังคลาวด์?"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289
+msgid "Are you sure you want to copy all files to the disk of the server?"
+msgstr "คุณแน่ใจหรือไม่ว่าต้องการคัดลอกไฟล์ทั้งหมดไปยังดิสก์ของเซิร์ฟเวอร์?"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:257
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "แน่ใจไหมว่าต้องการย้ายไฟล์ทั้งหมดไปที่คลาวด์"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:276
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:300
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "คุณแน่ใจหรือไม่ว่าต้องการย้ายไฟล์ทั้งหมดไปยังดิสก์ของเซิร์ฟเวอร์"
 
@@ -7090,6 +7098,22 @@ msgstr "ยูทิลิตี้และสถิติการจัดเ
 msgid "Cloud Files"
 msgstr "ไฟล์คลาวด์"
 
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:243
+msgid "Copy all local files to the remote storage"
+msgstr "คัดลอกไฟล์ทั้งหมดในเครื่องไปยังที่เก็บข้อมูลระยะไกล"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:286
+msgid "Copy all remote files to local"
+msgstr "คัดลอกไฟล์ระยะไกลทั้งหมดไปยังเครื่องท้องถิ่น"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
+msgid "Copy files to cloud"
+msgstr "คัดลอกไฟล์ไปยังคลาวด์"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:290
+msgid "Copy files to server disk"
+msgstr "คัดลอกไฟล์ไปยังดิสก์เซิร์ฟเวอร์"
+
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:236
 msgid "Could not access the service, double check your settings and try again."
 msgstr "ไม่สามารถเข้าถึงบริการได้โปรดตรวจสอบการตั้งค่าของคุณอีกครั้งแล้วลองอีกครั้ง"
@@ -7099,8 +7123,8 @@ msgid "Could not access the service, double check your settings and try again. M
 msgstr "ไม่สามารถเข้าถึงบริการได้โปรดตรวจสอบการตั้งค่าของคุณอีกครั้งแล้วลองอีกครั้ง ตรวจสอบให้แน่ใจว่าคีย์ API มีสิทธิ์เข้าถึงเพื่อสร้างและลบไฟล์ (ชั่วคราว) <code>-zotonic-filestore-test-file-</code>"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:11
-msgid "Currently Zotonic supports FTP and services that are compatible with the S3 file services API. These include:"
-msgstr "ปัจจุบัน Zotonic รองรับ FTP และบริการที่เข้ากันได้กับ API บริการไฟล์ S3 ซึ่งรวมถึง:"
+msgid "Currently Zotonic supports FTP, WebDAV and services that are compatible with the S3 file services API. These include:"
+msgstr "ปัจจุบัน Zotonic รองรับ FTP, WebDAV และบริการที่เข้ากันได้กับ API บริการไฟล์ S3 ซึ่งรวมถึง:"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
 msgid "Delete Queue"
@@ -7122,7 +7146,7 @@ msgstr "ดาวน์โหลดคิว"
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "เปิดใช้งานสิ่งนี้เพื่อให้ filestore ทำหน้าที่เป็นตัวสำรองของไฟล์มีเดียในเครื่องของคุณ"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:260
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:273
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "ตรวจสอบให้แน่ใจว่าตัวเองมีเนื้อที่ว่างบนดิสก์เพียงพอก่อนเริ่มกระบวนการนี้"
 
@@ -7146,7 +7170,7 @@ msgstr "สำหรับ WebDAV URL ต้องขึ้นต้นด้ว
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "หากคุณเลือก \"เก็บไฟล์ในเครื่องไว้หลังจากอัปโหลดไปยังที่เก็บไฟล์บนคลาวด์\" ไฟล์ในเครื่องจะไม่ถูกลบ เนื่องจากไฟล์ระยะไกลถือเป็นข้อมูลสำรองของไฟล์ในเครื่อง"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:264
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:277
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "หากคุณเลือก \"เก็บไฟล์ในเครื่องไว้หลังจากอัปโหลดไปยังที่เก็บไฟล์บนคลาวด์\" ไฟล์ระยะไกลจะไม่ถูกลบ เนื่องจากไฟล์ระยะไกลถือเป็นข้อมูลสำรองของไฟล์ในเครื่อง"
 
@@ -7178,19 +7202,19 @@ msgstr "ไฟล์ในเครื่อง"
 msgid "Media Resources"
 msgstr "แหล่งข้อมูลสื่อ"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:242
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:254
 msgid "Move all local files to the remote storage"
 msgstr "ย้ายไฟล์ในเครื่องทั้งหมดไปยังที่เก็บข้อมูลระยะไกล"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:272
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:297
 msgid "Move all remote files to local"
 msgstr "ย้ายไฟล์ระยะไกลทั้งหมดไปที่ local"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:258
 msgid "Move files to cloud"
 msgstr "ย้ายไฟล์ไปยังคลาวด์"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:277
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:301
 msgid "Move files to server disk"
 msgstr "ย้ายไฟล์ไปยังดิสก์เซิร์ฟเวอร์"
 
@@ -7291,7 +7315,7 @@ msgstr "ด้วย WebDAV ชื่อผู้ใช้และรหัส�
 msgid "Yes, keep local files after upload"
 msgstr "ใช่ เก็บไฟล์ในเครื่องไว้หลังจากการอัพโหลด"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:292./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:71./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:78./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:85
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:318./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:71./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:78./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:85
 msgid "You are not allowed to change these settings."
 msgstr "คุณไม่ได้รับอนุญาตให้เปลี่ยนการตั้งค่าเหล่านี้"
 
