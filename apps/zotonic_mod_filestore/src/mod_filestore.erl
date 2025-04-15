@@ -141,7 +141,11 @@ observe_filestore_credentials_lookup(#filestore_credentials_lookup{ path = Path 
                     service = Service,
                     service_url = S3Url,
                     location = Url,
-                    credentials = {S3Key,S3Secret}
+                    credentials = #{
+                        username => S3Key,
+                        password => S3Secret,
+                        tls_options => filestore_config:tls_options(Context)
+                    }
             }};
         false ->
             undefined
@@ -165,7 +169,11 @@ observe_filestore_credentials_revlookup(
                             service = Service,
                             service_url = S3Url,
                             location = Location,
-                            credentials = {S3Key,S3Secret}
+                            credentials = #{
+                                username => S3Key,
+                                password => S3Secret,
+                                tls_options => filestore_config:tls_options(Context)
+                            }
                     }};
                 false ->
                     undefined

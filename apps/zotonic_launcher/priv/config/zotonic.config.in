@@ -320,6 +320,15 @@
       %%% The s3 secret or ftp/webdav password.
       {s3secret, ""},
 
+      %%%% The optional TLS options for the connection. Empty list or undefined for the
+      %%%% default options, as determined by the used filestore protocol application.
+      %%%% Example of TLS options:
+      %%%% [ {verify_fun, {fun ssl_verify_fingerprint:verify_fun/3,
+      %%%%         [{check_fingerprint, {sha, "D79F076110B39293E349AC89845B0380C19E2F8B"} }]}},
+      %%%%   {verify, verify_none}
+      %%%% ].
+      {tls_options, []},
+
       %%% Set to true to upload new files (or previews) to the file store service.
       {is_upload_enabled, true},
 

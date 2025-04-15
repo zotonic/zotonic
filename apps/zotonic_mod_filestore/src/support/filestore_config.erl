@@ -28,6 +28,7 @@
     s3url/1,
     s3key/1,
     s3secret/1,
+    tls_options/1,
     is_upload_enabled/1,
     is_local_keep/1,
     delete_interval/1
@@ -75,6 +76,17 @@ s3key(Context) ->
 s3secret(Context) ->
     get_binary(s3secret, Context).
 
+%% @doc Get the TLS options for the connection to the remote filestore.
+%% The default will be set by one of the filestore application. These options
+%% are passed as-is to ssl:connect or HTTP functions of the filestore application.
+%% Check the ssl_verify_fun application for some possible options.
+-spec tls_options(z:context()) -> list().
+tls_options(Context) ->
+    case get_value(tls_options, Context) of
+        L when is_list(L) -> L;
+        undefined -> []
+    end.
+
 %% @doc Check if the uploading files is enabled. If set then any newly
 %% uploaded or created (preview) files is queued for uploading to the
 %% remote filestore.
@@ -89,7 +101,7 @@ is_upload_enabled(Context) ->
 is_local_keep(Context) ->
     get_boolean(is_local_keep, Context).
 
-%% @doc Get the delay interval after we delete files from the remote
+%% @doc Get the delay interval after which we delete files from the remote
 %% filestore.
 %%
 %% Possible values:
