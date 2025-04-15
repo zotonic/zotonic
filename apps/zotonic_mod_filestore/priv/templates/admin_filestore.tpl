@@ -48,8 +48,8 @@
                                 <td><b>{{ m.filestore.s3url|escape }}</b></td>
                             </tr>
                             <tr>
-                                <td>{_ Is Upload enabled? _}</td>
-                                <td><b>{{ m.filestore.is_upload_enabled|escape }}</b></td>
+                                <td>{_ Is upload enabled? _}</td>
+                                <td><b>{{ m.filestore.is_upload_enabled|if:_"Yes":_"No" }}</b></td>
                             </tr>
                             <tr>
                                 <td>{_ Keep local files? _}</td>
