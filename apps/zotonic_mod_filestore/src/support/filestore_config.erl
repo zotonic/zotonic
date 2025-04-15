@@ -145,7 +145,7 @@ get_app_config(s3url, Context) ->
         <<>> -> <<>>;
         UrlBin ->
             Site = z_convert:to_binary(z_context:site(Context)),
-            case binary:match(<<"{{site}}">>, UrlBin) of
+            case binary:match(UrlBin, <<"{{site}}">>) of
                 nomatch ->
                     case binary:last(UrlBin) of
                         $/ -> <<UrlBin/binary, Site/binary, $/>>;

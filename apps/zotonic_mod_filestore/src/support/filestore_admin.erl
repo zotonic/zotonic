@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014-2022 Marc Worrell
+%% @copyright 2014-2025 Marc Worrell
 %% @doc Event handling for the filestore admin functions
 %% @end
 
-%% Copyright 2014-2022 Marc Worrell
+%% Copyright 2014-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -22,7 +22,8 @@
 -export([
     event/2,
     task_file_to_local/1,
-    task_file_to_remote/1
+    task_file_to_remote/1,
+    testcred/1
     ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -42,7 +43,8 @@ event(#submit{message=admin_filestore}, Context) ->
                     IsCreateBucket = z_convert:to_bool(z_context:get_q(<<"is_create_bucket">>, Context)),
                     IsLocalKeep = z_convert:to_bool(z_context:get_q(<<"is_local_keep">>, Context)),
                     DeleteInterval = z_context:get_q(<<"delete_interval">>, Context),
-                    case testcred(Service, S3Url, S3Key, S3Secret, IsCreateBucket) of
+                    TLS = filestore_config:tls_options(Context),
+                    case testcred(Service, S3Url, S3Key, S3Secret, TLS, IsCreateBucket) of
                         ok ->
                             m_config:set_value(mod_filestore, service, Service, Context),
                             m_config:set_value(mod_filestore, s3url, S3Url, Context),
@@ -100,21 +102,38 @@ service2mod(<<"s3">>) -> s3filez;
 service2mod(<<"ftp">>) -> ftpfilez;
 service2mod(<<"webdav">>) -> webdavfilez.
 
+
+%% @doc Try to put a file onto the remote server, testing the credentials.
+-spec testcred(Context) -> ok | {error, Reason} when
+    Context :: z:context(),
+    Reason :: term().
+testcred(Context) ->
+    Service = filestore_config:service(Context),
+    S3Url = filestore_config:s3url(Context),
+    S3Key = filestore_config:s3key(Context),
+    S3Secret = filestore_config:s3secret(Context),
+    TLS = filestore_config:tls_options(Context),
+    testcred(Service, S3Url, S3Key, S3Secret, TLS, true).
+
 % Try a put, get, and delete sequence
-testcred(<<>>, _, _, _, _) ->
+testcred(<<>>, _, _, _, _, _) ->
     ok;
-testcred(Service, S3Url, S3Key, S3Secret, IsCreateBucket)
+testcred(Service, S3Url, S3Key, S3Secret, TLSOptions, IsCreateBucket)
     when is_binary(S3Url), is_binary(S3Key), is_binary(S3Secret) ->
-    case testcred_file(Service, S3Url, S3Key, S3Secret) of
+    case testcred_file(Service, S3Url, S3Key, S3Secret, TLSOptions) of
         ok ->
             ok;
         {error, enoent} when IsCreateBucket ->
             % Bucket might not exist, try creating it
-            Cred = {S3Key, S3Secret},
+            Cred = #{
+                username => S3Key,
+                password => S3Secret,
+                tls_options => TLSOptions
+            },
             Mod = service2mod(Service),
             case Mod:create_bucket(Cred, S3Url) of
                 ok ->
-                    testcred_file(Service, S3Url, S3Key, S3Secret);
+                    testcred_file(Service, S3Url, S3Key, S3Secret, TLSOptions);
                 {error, Reason} = Error ->
                     ?LOG_ERROR(#{
                         text => <<"S3 could not create bucket">>,
@@ -129,11 +148,15 @@ testcred(Service, S3Url, S3Key, S3Secret, IsCreateBucket)
             Error
     end.
 
-testcred_file(Service, S3Url, S3Key, S3Secret)
+testcred_file(Service, S3Url, S3Key, S3Secret, TLSOptions)
     when is_binary(S3Url),
          is_binary(S3Key),
          is_binary(S3Secret) ->
-    Cred = {S3Key, S3Secret},
+    Cred = #{
+        username => S3Key,
+        password => S3Secret,
+        tls_options => TLSOptions
+    },
     Url = <<S3Url/binary, $/, "-zotonic-filestore-test-file-">>,
     Data = iolist_to_binary([?DATA, " ", z_ids:identifier()]),
     Mod = service2mod(Service),
@@ -180,7 +203,7 @@ testcred_file(Service, S3Url, S3Key, S3Secret)
             }),
             Error
     end;
-testcred_file(_, _, _, _) ->
+testcred_file(_, _, _, _, _) ->
     {error, filestore_unconfigured}.
 
 
@@ -200,7 +223,8 @@ queue_upload_all(Context) ->
     S3Url = filestore_config:s3url(Context),
     S3Key = filestore_config:s3key(Context),
     S3Secret = filestore_config:s3secret(Context),
-    case testcred_file(Service, S3Url, S3Key, S3Secret) of
+    TLSOptions = filestore_config:tls_options(Context),
+    case testcred_file(Service, S3Url, S3Key, S3Secret, TLSOptions) of
         ok ->
             mod_filestore:queue_all(Context),
             z_pivot_rsc:delete_task(?MODULE, task_file_to_local, <<>>, Context),
