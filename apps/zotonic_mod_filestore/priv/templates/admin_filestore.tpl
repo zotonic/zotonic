@@ -239,17 +239,30 @@
                         <div class="form-group">
                             <div>
                                 <button id="queue-all" name="queue-all" type="submit" class="btn btn-danger">
-                                    {_ Move all local files to the remote storage _}
+                                    {% if m.filestore.is_local_keep %}
+                                        {_ Copy all local files to the remote storage _}
+                                        {% wire id="queue-all"
+                                                action={confirm
+                                                    text=_"Are you sure you want to copy all files to the cloud?"
+                                                    ok=_"Copy files to cloud"
+                                                    is_danger
+                                                    postback={admin_filestore_queue is_to_cloud}
+                                                    delegate=`filestore_admin`
+                                                }
+                                        %}
+                                    {% else %}
+                                        {_ Move all local files to the remote storage _}
+                                        {% wire id="queue-all"
+                                                action={confirm
+                                                    text=_"Are you sure you want to move all files to the cloud?"
+                                                    ok=_"Move files to cloud"
+                                                    is_danger
+                                                    postback={admin_filestore_queue is_to_cloud}
+                                                    delegate=`filestore_admin`
+                                                }
+                                        %}
+                                    {% endif %}
                                 </button>
-                                {% wire id="queue-all"
-                                        action={confirm
-                                            text=_"Are you sure you want to move all files to the cloud?"
-                                            ok=_"Move files to cloud"
-                                            is_danger
-                                            postback={admin_filestore_queue is_to_cloud}
-                                            delegate=`filestore_admin`
-                                        }
-                                %}
                             </div>
                         </div>
 
@@ -269,17 +282,30 @@
                         <div class="form-group">
                             <div>
                                 <button id="queue-local" name="queue-local" type="submit" class="btn btn-default">
-                                    {_ Move all remote files to local _}
+                                    {% if m.filestore.is_local_keep %}
+                                        {_ Copy all remote files to local _}
+                                        {% wire id="queue-local"
+                                                action={confirm
+                                                    text=_"Are you sure you want to copy all files to the disk of the server?"
+                                                    ok=_"Copy files to server disk"
+                                                    is_danger
+                                                    postback={admin_filestore_queue is_to_local}
+                                                    delegate=`filestore_admin`
+                                                }
+                                        %}
+                                    {% else %}
+                                        {_ Move all remote files to local _}
+                                        {% wire id="queue-local"
+                                                action={confirm
+                                                    text=_"Are you sure you want to move all files to the disk of the server?"
+                                                    ok=_"Move files to server disk"
+                                                    is_danger
+                                                    postback={admin_filestore_queue is_to_local}
+                                                    delegate=`filestore_admin`
+                                                }
+                                        %}
+                                    {% endif %}
                                 </button>
-                                {% wire id="queue-local"
-                                        action={confirm
-                                            text=_"Are you sure you want to move all files to the disk of the server?"
-                                            ok=_"Move files to server disk"
-                                            is_danger
-                                            postback={admin_filestore_queue is_to_local}
-                                            delegate=`filestore_admin`
-                                        }
-                                %}
                             </div>
                         </div>
                     </div>
