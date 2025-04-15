@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-04-15 14:52\n"
+"PO-Revision-Date: 2025-04-15 16:18\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -5139,7 +5139,7 @@ msgstr "Beheerdersback-ups"
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:31
 msgid "After the page has been restored, you will be redirected to the edit page."
-msgstr "Nadat de pagina is hersteld, wordt u doorgestuurd naar de pagina Bewerken."
+msgstr "Nadat de pagina is hersteld, wordt u doorgestuurd naar de bewerkingspagina."
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:7
 msgid "Are you sure you want to revert to this version?"
@@ -5328,12 +5328,12 @@ msgid "Recover"
 msgstr "Herstellen"
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:21
-msgid "Recover incoming edges from other pages"
-msgstr "Inkomende randen van andere pagina's herstellen"
+msgid "Recover incoming connections from other pages"
+msgstr "Inkomende verbindingen van andere pagina's herstellen"
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:17
-msgid "Recover outgoing edges to other pages"
-msgstr "Herstel uitgaande randen naar andere pagina's"
+msgid "Recover outgoing connections to other pages"
+msgstr "Uitgaande verbindingen naar andere pagina's herstellen"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:38./apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:41./apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:14
 msgid "Restore backup"
@@ -7044,11 +7044,11 @@ msgstr "Na 1 week"
 msgid "After 3 months"
 msgstr "Na 3 maanden"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:259
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:272
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "Alle cloud-bestanden kunnen worden verplaatst naar het bestandssysteem op de server."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:267
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:280
 msgid "All cloud files will be queued for download."
 msgstr "Alle cloud bestanden worden in een download-wachtrij geplaatst."
 
@@ -7061,10 +7061,18 @@ msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "Alle geüploade en voorbeeldbestanden kunnen naar de Cloud worden verplaatst."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:246
+msgid "Are you sure you want to copy all files to the cloud?"
+msgstr "Weet je zeker dat je alle bestanden naar de cloud wilt kopiëren?"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289
+msgid "Are you sure you want to copy all files to the disk of the server?"
+msgstr "Weet je zeker dat je alle bestanden naar de schijf van de server wilt kopiëren?"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:257
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "Weet je zeker dat je alle bestanden naar de cloud wilt verplaatsen?"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:276
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:300
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "Weet je zeker dat je alle bestanden naar de schijf van de server wilt verplaatsen?"
 
@@ -7092,6 +7100,22 @@ msgstr "Hulpprogramma's en statistieken voor Cloud File Store"
 msgid "Cloud Files"
 msgstr "Cloud Bestanden"
 
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:243
+msgid "Copy all local files to the remote storage"
+msgstr "Kopieer alle lokale bestanden naar de externe opslag"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:286
+msgid "Copy all remote files to local"
+msgstr "Kopieer alle bestanden op afstand naar lokaal"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
+msgid "Copy files to cloud"
+msgstr "Bestanden kopiëren naar cloud"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:290
+msgid "Copy files to server disk"
+msgstr "Kopieer bestanden naar de serverschijf"
+
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:236
 msgid "Could not access the service, double check your settings and try again."
 msgstr "Kon geen toegang krijgen tot de service, controleer de instellingen en probeer het opnieuw."
@@ -7101,8 +7125,8 @@ msgid "Could not access the service, double check your settings and try again. M
 msgstr "Kon geen toegang krijgen tot de service, controleer de instellingen en probeer het opnieuw. Zorg ervoor dat de API-key toegangsrechten heeft om een (tijdelijk) <code>-zotonic-filestore-test-file-</code> bestand aan te maken en te verwijderen."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:11
-msgid "Currently Zotonic supports FTP and services that are compatible with the S3 file services API. These include:"
-msgstr "Momenteel ondersteunt Zotonic FTP en services die compatibel zijn met de S3-bestandsservices-API. Waaronder:"
+msgid "Currently Zotonic supports FTP, WebDAV and services that are compatible with the S3 file services API. These include:"
+msgstr "Op dit moment ondersteunt Zotonic FTP, WebDAV en services die compatibel zijn met de S3 file services API. Deze omvatten:"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
 msgid "Delete Queue"
@@ -7124,7 +7148,7 @@ msgstr "Download wachtrij"
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "Schakel dit in om de bestandsopslag te laten fungeren als een back-up van uw lokale mediabestanden."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:260
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:273
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "Zorg er zelf voor dat er voldoende schijfruimte is voordat je met dit proces begint."
 
@@ -7148,7 +7172,7 @@ msgstr "Voor WebDAV moet de URL beginnen met <b><tt>webdavs:</tt></b> of <b><tt>
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Als je \"Lokale bestanden behouden na uploaden naar de cloud-bestandsopslag\" hebt geselecteerd, worden de lokale bestanden niet verwijderd, omdat de externe bestanden worden beschouwd als een back-up van de lokale bestanden."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:264
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:277
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Als je \"Lokale bestanden behouden na uploaden naar de cloud-bestandsopslag\" hebt geselecteerd, worden de externe bestanden niet verwijderd, omdat de externe bestanden worden beschouwd als een back-up van de lokale bestanden."
 
@@ -7180,19 +7204,19 @@ msgstr "Lokale bestanden"
 msgid "Media Resources"
 msgstr "Media"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:242
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:254
 msgid "Move all local files to the remote storage"
 msgstr "Verplaats alle lokale bestanden naar de externe opslag"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:272
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:297
 msgid "Move all remote files to local"
 msgstr "Verplaats alle externe bestanden naar de webserver"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:258
 msgid "Move files to cloud"
 msgstr "Bestanden naar de cloud verplaatsen"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:277
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:301
 msgid "Move files to server disk"
 msgstr "Bestanden verplaatsen naar de serverschijf"
 
@@ -7293,7 +7317,7 @@ msgstr "Met WebDAV worden de gebruikersnaam en het wachtwoord onversleuteld over
 msgid "Yes, keep local files after upload"
 msgstr "Ja, bewaar lokale bestanden na het uploaden"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:292./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:71./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:78./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:85
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:318./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:71./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:78./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:85
 msgid "You are not allowed to change these settings."
 msgstr "Je hebt geen rechten om de instellingen te veranderen."
 
