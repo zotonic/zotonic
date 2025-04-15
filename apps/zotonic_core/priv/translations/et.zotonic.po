@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-04-15 14:53\n"
+"PO-Revision-Date: 2025-04-15 16:18\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -5326,12 +5326,12 @@ msgid "Recover"
 msgstr "Taastage"
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:21
-msgid "Recover incoming edges from other pages"
-msgstr "Taasta teistelt lehtedelt sissetulevad servad"
+msgid "Recover incoming connections from other pages"
+msgstr "Taastage sissetulevad ühendused teistelt lehtedelt"
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:17
-msgid "Recover outgoing edges to other pages"
-msgstr "Taasta teistele lehtedele väljuvad servad"
+msgid "Recover outgoing connections to other pages"
+msgstr "Taasta väljaminevad ühendused teistele lehtedele"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:38./apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:41./apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:14
 msgid "Restore backup"
@@ -7042,11 +7042,11 @@ msgstr "1 nädala pärast"
 msgid "After 3 months"
 msgstr "3 kuu pärast"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:259
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:272
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "Kõiki pilvefaile saab serveris failisüsteemi tagasi teisaldada."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:267
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:280
 msgid "All cloud files will be queued for download."
 msgstr "Kõik pilvefailid seatakse allalaadimiseks järjekorda."
 
@@ -7059,10 +7059,18 @@ msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "Kõiki kohalikke üleslaaditud ja eelvaate faile saab pilve teisaldada."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:246
+msgid "Are you sure you want to copy all files to the cloud?"
+msgstr "Kas olete kindel, et soovite kõik failid pilve kopeerida?"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289
+msgid "Are you sure you want to copy all files to the disk of the server?"
+msgstr "Kas olete kindel, et soovite kõik failid serveri kettale kopeerida?"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:257
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "Kas olete kindel, et soovite kõik failid pilve teisaldada?"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:276
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:300
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "Kas olete kindel, et soovite kõik failid serveri kettale teisaldada?"
 
@@ -7090,6 +7098,22 @@ msgstr "Pilvefailide poe utiliidid ja statistika"
 msgid "Cloud Files"
 msgstr "Pilvefailid"
 
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:243
+msgid "Copy all local files to the remote storage"
+msgstr "Kopeerige kõik kohalikud failid kaugmällu"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:286
+msgid "Copy all remote files to local"
+msgstr "Kopeerige kõik kaugfailid kohalikku faili"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
+msgid "Copy files to cloud"
+msgstr "Kopeerige failid pilve"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:290
+msgid "Copy files to server disk"
+msgstr "Kopeerige failid serveri kettale"
+
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:236
 msgid "Could not access the service, double check your settings and try again."
 msgstr "Teenusele ei õnnestunud juurde pääseda, kontrollige uuesti oma seadeid ja proovige uuesti."
@@ -7099,8 +7123,8 @@ msgid "Could not access the service, double check your settings and try again. M
 msgstr "Teenusele ei õnnestunud juurde pääseda, kontrollige uuesti oma seadeid ja proovige uuesti. Veenduge, et API-võtmel oleks juurdepääsuõigused (ajutise) <code>zotonic-filestore-test-file-</code> faili loomiseks ja eemaldamiseks."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:11
-msgid "Currently Zotonic supports FTP and services that are compatible with the S3 file services API. These include:"
-msgstr "Praegu toetab Zotonic FTP-d ja teenuseid, mis ühilduvad S3 failiteenuste API-ga. Need sisaldavad:"
+msgid "Currently Zotonic supports FTP, WebDAV and services that are compatible with the S3 file services API. These include:"
+msgstr "Praegu toetab Zotonic FTP-d, WebDAV-i ja teenuseid, mis ühilduvad S3 failiteenuste API-ga. Nende hulka kuuluvad:"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
 msgid "Delete Queue"
@@ -7122,7 +7146,7 @@ msgstr "Laadige järjekord alla"
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "Lubage see, et lasta failisalal toimida teie kohalike meediumifailide varukoopiana."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:260
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:273
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "Enne selle protsessi alustamist veenduge, et kettaruumi oleks piisavalt."
 
@@ -7146,7 +7170,7 @@ msgstr "WebDAV-i puhul peab URL algama numbriga <b><tt>webdavs:</tt></b> või <b
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Kui olete valinud \"Säilita kohalikud failid pärast pilvefailihoidlasse üleslaadimist\", siis kohalikke faile ei kustutata, kuna kaugfaile käsitletakse kohalike failide varukoopiana."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:264
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:277
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Kui olete valinud \"Säilita kohalikud failid pärast pilvefailihoidlasse üleslaadimist\", siis kaugfaile ei kustutata, kuna kaugfaile käsitletakse kohalike failide varukoopiana."
 
@@ -7178,19 +7202,19 @@ msgstr "Kohalikud failid"
 msgid "Media Resources"
 msgstr "Meediaallikad"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:242
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:254
 msgid "Move all local files to the remote storage"
 msgstr "Teisaldage kõik kohalikud failid kaugmällu"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:272
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:297
 msgid "Move all remote files to local"
 msgstr "Teisaldage kõik kaugfailid kohalikku"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:258
 msgid "Move files to cloud"
 msgstr "Failide teisaldamine pilve"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:277
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:301
 msgid "Move files to server disk"
 msgstr "Teisalda failid serveri kettale"
 
@@ -7291,7 +7315,7 @@ msgstr "WebDAV-iga edastatakse kasutajanimi ja parool selgelt, seega veenduge, e
 msgid "Yes, keep local files after upload"
 msgstr "Jah, säilitage kohalikud failid pärast üleslaadimist"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:292./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:71./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:78./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:85
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:318./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:71./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:78./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:85
 msgid "You are not allowed to change these settings."
 msgstr "Teil pole lubatud neid seadeid muuta."
 
