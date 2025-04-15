@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-04-15 14:52\n"
+"PO-Revision-Date: 2025-04-15 16:18\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -5326,12 +5326,12 @@ msgid "Recover"
 msgstr "Восстанавливаться"
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:21
-msgid "Recover incoming edges from other pages"
-msgstr "Восстановить входящие края с других страниц"
+msgid "Recover incoming connections from other pages"
+msgstr "Восстановить входящие соединения с других страниц"
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:17
-msgid "Recover outgoing edges to other pages"
-msgstr "Восстановить исходящие края на другие страницы"
+msgid "Recover outgoing connections to other pages"
+msgstr "Восстановить исходящие соединения с другими страницами"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:38./apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:41./apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:14
 msgid "Restore backup"
@@ -7042,11 +7042,11 @@ msgstr "Через 1 неделю"
 msgid "After 3 months"
 msgstr "Через 3 месяца"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:259
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:272
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "Все \"облачные\" файлы могут быть перемещены обратно в файловую систему на сервере."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:267
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:280
 msgid "All cloud files will be queued for download."
 msgstr "Все облачные файлы будут поставлены в очередь на скачивание."
 
@@ -7059,10 +7059,18 @@ msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "Все локальные загруженные файлы и файлы предварительного просмотра могут быть перемещены в облако."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:246
+msgid "Are you sure you want to copy all files to the cloud?"
+msgstr "Вы уверены, что хотите скопировать все файлы в облако?"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289
+msgid "Are you sure you want to copy all files to the disk of the server?"
+msgstr "Вы уверены, что хотите скопировать все файлы на диск сервера?"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:257
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "Вы уверены, что хотите переместить все файлы в облако?"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:276
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:300
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "Вы уверены, что хотите переместить все файлы на диск сервера?"
 
@@ -7090,6 +7098,22 @@ msgstr "Утилиты и статистика облачного хранили
 msgid "Cloud Files"
 msgstr "Облачные Файлы"
 
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:243
+msgid "Copy all local files to the remote storage"
+msgstr "Копировать все локальные файлы в удаленное хранилище."
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:286
+msgid "Copy all remote files to local"
+msgstr "Копировать все удаленные файлы на локальный"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
+msgid "Copy files to cloud"
+msgstr "Копировать файлы в облако"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:290
+msgid "Copy files to server disk"
+msgstr "Копировать файлы на диск сервера"
+
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:236
 msgid "Could not access the service, double check your settings and try again."
 msgstr "Не удалось получить доступ к службе, дважды проверьте свои настройки и попробуйте еще раз."
@@ -7099,8 +7123,8 @@ msgid "Could not access the service, double check your settings and try again. M
 msgstr "Не удалось получить доступ к службе, дважды проверьте свои настройки и попробуйте еще раз. Убедитесь, что ключ API имеет права доступа для создания и удаления (временного) <code>-zotonic-filestore-test-file-</code> файла."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:11
-msgid "Currently Zotonic supports FTP and services that are compatible with the S3 file services API. These include:"
-msgstr "В настоящее время Zotonic поддерживает FTP и службы, совместимые с API файловых служб S3. Это включает:"
+msgid "Currently Zotonic supports FTP, WebDAV and services that are compatible with the S3 file services API. These include:"
+msgstr "В настоящее время Zotonic поддерживает FTP, WebDAV и сервисы, совместимые с API файловых сервисов S3. К ним относятся:"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
 msgid "Delete Queue"
@@ -7122,7 +7146,7 @@ msgstr "Очередь загрузки"
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "Включите это, чтобы хранилище файлов действовало как резервная копия ваших локальных медиафайлов."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:260
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:273
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "Перед началом этого процесса убедитесь, что на диске достаточно места."
 
@@ -7146,7 +7170,7 @@ msgstr "Для WebDAV URL должен начинаться с <b><tt>webdavs:</
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Если вы выбрали «Сохранить локальные файлы после загрузки в облачное хранилище файлов», то локальные файлы не удаляются, так как удаленные файлы считаются резервной копией локальных файлов."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:264
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:277
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Если вы выбрали «Сохранить локальные файлы после загрузки в облачное хранилище файлов», то удаленные файлы не удаляются, так как удаленные файлы считаются резервной копией локальных файлов."
 
@@ -7178,19 +7202,19 @@ msgstr "Локальные файлы"
 msgid "Media Resources"
 msgstr "Медиа-ресурсы"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:242
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:254
 msgid "Move all local files to the remote storage"
 msgstr "Переместите все локальные файлы в удаленное хранилище"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:272
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:297
 msgid "Move all remote files to local"
 msgstr "Переместить все удаленные файлы в локальные"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:258
 msgid "Move files to cloud"
 msgstr "Переместить файлы в облако"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:277
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:301
 msgid "Move files to server disk"
 msgstr "Переместить файлы на диск сервера"
 
@@ -7291,7 +7315,7 @@ msgstr "При использовании WebDAV имя пользователя
 msgid "Yes, keep local files after upload"
 msgstr "Да, сохранять локальные файлы после загрузки"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:292./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:71./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:78./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:85
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:318./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:71./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:78./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:85
 msgid "You are not allowed to change these settings."
 msgstr "Вы не имеете права изменять эти настройки."
 
