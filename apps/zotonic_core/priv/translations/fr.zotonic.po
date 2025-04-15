@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-04-15 16:18\n"
+"PO-Revision-Date: 2025-04-15 17:33\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -5331,7 +5331,7 @@ msgstr "Récupérer les connexions entrantes depuis d'autres pages"
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:17
 msgid "Recover outgoing connections to other pages"
-msgstr ""
+msgstr "Récupérer les connexions sortantes vers d'autres pages"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:38./apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:41./apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:14
 msgid "Restore backup"
