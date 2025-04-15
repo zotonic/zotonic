@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-04-07 16:38\n"
+"PO-Revision-Date: 2025-04-15 14:52\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -205,7 +205,7 @@ msgstr "Tüm ACL kurallarını mevcut yayınlanmış sürülerine geri yüklemek
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:30./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:46./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:15
 #: apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:65./apps/zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:33
 #: apps/zotonic_mod_authentication/priv/templates/_dialog_session_close.tpl:16./apps/zotonic_mod_authentication/priv/templates/_logon_box.tpl:120./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:28./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:66./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:137./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:28
-#: apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
+#: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:35./apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:13
 #: apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:7./apps/zotonic_mod_base/priv/templates/_action_dialog_confirm.tpl:10
 #: apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:36./apps/zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:50
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:104
@@ -223,7 +223,7 @@ msgstr "İptal Et"
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:6./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:87
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:196./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:64./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:105./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:29./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45./apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:26
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:28
 #: apps/zotonic_mod_survey/src/mod_survey.erl:172
 msgid "Category"
 msgstr "Kategori"
@@ -531,7 +531,7 @@ msgid "Publish successful"
 msgstr "Yayın başarılı"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:41
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:29
+#: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:36
 msgid "Revert"
 msgstr "Geri al"
 
@@ -793,6 +793,7 @@ msgid "<b>Warning:</b> the site will stop and restart."
 msgstr "<b>Uyarı:</b> site durdurulup yeniden başlatılacak."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:37./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:130./apps/zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:6./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:141./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:32./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:53
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:47
 msgid "<em>Untitled</em>"
 msgstr "<em>İsimsiz</em>"
 
@@ -1132,7 +1133,7 @@ msgid "Create"
 msgstr "Oluşturmak"
 
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:3
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:38
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:40
 msgid "Created by"
 msgstr "Tarafından yaratıldı"
 
@@ -1733,7 +1734,7 @@ msgstr "Tarafından Değiştirildi"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:27./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:114./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:24
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:13./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:57
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:32
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:34
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:50
 msgid "Modified on"
 msgstr "Tarihinde Değiştirildi"
@@ -2529,7 +2530,7 @@ msgstr "Web sitesinden veri almaya çalışırken zaman aşımı oluştu."
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:28./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:36./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:102./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:124./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:9./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:11./apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:26
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:23
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:25
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:16./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:20
 msgid "Title"
 msgstr "Başlık"
@@ -2583,7 +2584,7 @@ msgstr "yayınlanmamış"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_item.tpl:29./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:29./apps/zotonic_mod_admin/src/mod_admin.erl:726./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:71./apps/zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:127
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58./apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:57
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:59
 #: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
 msgid "Untitled"
 msgstr "Başlıksız"
@@ -2727,7 +2728,7 @@ msgstr "İş Rehberi"
 
 #: apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:54
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:92
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:94
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:35
 msgid "Y-m-d H:i"
 msgstr "Y-m-d H:i"
@@ -3476,7 +3477,7 @@ msgstr "Parolanızı bilmiyorsanız <i>tıklayın Parolanızı mı unuttunuz? Gi
 msgid "Last logon"
 msgstr "Son oturum açma"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:29
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:36
 msgid "Leave empty to not change the password."
 msgstr "Şifreyi değiştirmemek için boş bırakın."
 
@@ -3500,7 +3501,7 @@ msgstr "Benim sayfam"
 msgid "Name and e-mail address"
 msgstr "İsim ve e-posta adresi"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:19./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:20
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:26./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:27
 #: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:14./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:3
 msgid "New password"
 msgstr "Yeni şifre"
@@ -3542,7 +3543,7 @@ msgstr "Sadece bir yönetici veya kullanıcının kendisi bir şifre oluşturabi
 msgid "Please verify your email address"
 msgstr "Lütfen email adresini doğrula"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:22
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:29
 msgid "Random secure password:"
 msgstr "Rasgele güvenli şifre:"
 
@@ -3554,7 +3555,7 @@ msgstr "Kullanıcıları ara"
 msgid "Send verification e-mail"
 msgstr "Doğrulama e-postası gönderin"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:44
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:51
 msgid "Send welcome e-mail"
 msgstr "Hoş geldin e-postası gönderin"
 
@@ -3652,11 +3653,11 @@ msgstr "Bu şuraya bir doğrulama e-postası gönderecektir "
 msgid "Timezone"
 msgstr "Saat dilimi"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:19
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:26
 msgid "Type password to change password"
 msgstr "Parolayı değiştirmek için parolayı yazın"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:23
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:30
 msgid "Use this password"
 msgstr "Bu şifreyi kullanın"
 
@@ -3764,7 +3765,7 @@ msgstr "E-posya adresiniz doğrulandı."
 msgid "Your login details for"
 msgstr "Şunun için giriş detaylarınız"
 
-#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:36
+#: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:19./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:42
 #: apps/zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
 msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, and symbol."
@@ -5126,7 +5127,7 @@ msgstr "hizmet"
 msgid "user@example.com"
 msgstr "ornek@orneksite.com"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:64
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:66
 msgid "<i>Unknown</i>"
 msgstr "<i>Bilinmeyen</i>"
 
@@ -5134,7 +5135,11 @@ msgstr "<i>Bilinmeyen</i>"
 msgid "Admin Backups"
 msgstr "Yönetici Yedeklemeleri"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:28
+#: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:31
+msgid "After the page has been restored, you will be redirected to the edit page."
+msgstr "Sayfa geri yüklendikten sonra düzenleme sayfasına yönlendirileceksiniz."
+
+#: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:7
 msgid "Are you sure you want to revert to this version?"
 msgstr "Bu sürüme geri dönmek istediğinizden emin misini?"
 
@@ -5150,7 +5155,7 @@ msgstr "Veritabanının ve yüklenen dosyaların otomatik günlük yedeklemeleri
 msgid "Back to the edit page"
 msgstr "Düzenleme sayfasına geri dön"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:89
+#: apps/zotonic_mod_backup/src/mod_backup.erl:99
 msgid "Backup"
 msgstr "Yedekle"
 
@@ -5178,7 +5183,7 @@ msgstr "Varsayılan olarak veritabanının ve dosyaların yedeği şifrelenmez. 
 msgid "Changes since"
 msgstr "Tarihinden itibaren yapılan değişiklikler"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:57
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:59
 msgid "Check and possibly restore an earlier version of your page."
 msgstr "Sayfanızın daha önce tarihli bir sürümünü kontrol edin ve muhtemelen geri yükleyin."
 
@@ -5194,27 +5199,23 @@ msgstr "Bulut dosya deposu etkinleştirildi. Veritabanının yedekleri bulut dos
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
 msgstr "Bulut dosya deposu etkinleştirildi. Yerel dosyalar yedeklenmeyecektir. Bulut dosya deposu sisteminizin uygun bir yedeğe sahip olduğundan emin olun."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:13
-msgid "Connections and media items are not backed up and can’t be recovered."
-msgstr "Bağlantılar ve ortam öğeleri yedeklenmez ve kurtarılamaz."
-
 #: apps/zotonic_mod_backup/src/actions/action_backup_backup_start.erl:44
 msgid "Could not start the backup because a backup is already in progress."
 msgstr "Yedekleme işlemi devam ettiği için yedekleme başlatılamadı."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:59./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:48
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:61
 msgid "Deleted"
 msgstr "Silindi"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:35
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:37
 msgid "Deleted by"
 msgstr "tarafından silindi"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:29
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:31
 msgid "Deleted on"
 msgstr "tarihinde silindi"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:102
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:112
 msgid "Deleted pages"
 msgstr "Silinen sayfalar"
 
@@ -5260,17 +5261,25 @@ msgstr "Şifreleme etkin ancak şifreleme parolası yok. Lütfen\n"
 msgid "Help about backup &amp; restore"
 msgstr "Yedekleme &amp; geri yükleme hakkında yardım"
 
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:15
+msgid "If the Cloud File Store module is used, then deleted files can be retained indefinitely."
+msgstr "Bulut Dosya Depolama modülü kullanıldığında silinen dosyalar süresiz olarak saklanabilir."
+
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
 msgid "It can be found in the"
 msgstr "Şurada bulunabilir:"
+
+#: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:11
+msgid "It could be that a connected dependent page was deleted because of the deletion of this page, such a deleted dependent page can also be recovered."
+msgstr "Bu sayfanın silinmesi nedeniyle bağlı bağımlı sayfa da silinmiş olabileceği gibi, silinmiş bağımlı sayfa da kurtarılabilir."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:29
 msgid "List and restore an earlier version"
 msgstr "Önceki sürümü listele ve geri yükle"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:12
-msgid "List of recently deleted pages and recover options via the resource revisions log."
-msgstr "Yakın zamanda silinen sayfaların listesi ve kaynak revizyonları günlüğü aracılığıyla kurtarma seçenekleri."
+msgid "List of recently deleted pages found in the resource revisions log."
+msgstr "Kaynak revizyon günlüğünde bulunan yakın zamanda silinen sayfaların listesi."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:15./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:39./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:60
 msgid "Make a daily backup of the database and uploaded files."
@@ -5280,13 +5289,21 @@ msgstr "Veritabanı ve yüklenen dosyalar için günlük yedekleme oluşturun."
 msgid "Make a daily backup of the database."
 msgstr "Veritabanının günlük yedeğini alın."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:62
+#: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:30
+msgid "Media files can only be recovered if they are not yet deleted from the file storage. Zotonic will keep media for at least 5 weeks."
+msgstr "Medya dosyaları yalnızca dosya depolama alanından henüz silinmemişlerse kurtarılabilir. Zotonic medyayı en az 5 hafta saklayacaktır."
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:66
 msgid "No backups present."
 msgstr "Yedek mevcut değil."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:53
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:57
 msgid "Not uploaded to filestore"
 msgstr "Dosya deposuna yüklenmedi"
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:14
+msgid "Note that files are only retained for 5 weeks after deletion, this is the same as the Zotonic database backup retention period."
+msgstr "Dosyaların silindikten sonra yalnızca 5 hafta saklandığını unutmayın; bu, Zotonic veritabanı yedekleme saklama süresiyle aynıdır."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:97
 msgid "Note:"
@@ -5296,43 +5313,55 @@ msgstr "Not:"
 msgid "Only administrators can start a backup."
 msgstr "Yedeklemeyi yalnızca yöneticiler başlatabilir."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:13
-msgid "Only the texts and other properties of pages are backed up."
-msgstr "Yalnızca sayfaların metinleri ve diğer özellikleri yedeklenir."
-
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
 msgid "Please make sure you store the backup encryption password in a safe <u>external</u> location."
 msgstr "Lütfen yedek şifreleme parolasını güvenli bir <u>harici</u> konumunda sakladığınızdan emin olun."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:81
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:83
 msgid "Previous"
 msgstr "Önceki"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:83
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:85
 msgid "Recover"
 msgstr "İyileşmek"
+
+#: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:21
+msgid "Recover incoming edges from other pages"
+msgstr "Diğer sayfalardan gelen kenarları kurtarın"
+
+#: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:17
+msgid "Recover outgoing edges to other pages"
+msgstr "Diğer sayfalara giden kenarları kurtarın"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:38./apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:41./apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:14
 msgid "Restore backup"
 msgstr "Yedeği geri yükle"
 
+#: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:25
+msgid "Restore deleted <em>dependent</em> pages that were referred by this page"
+msgstr "Bu sayfa tarafından yönlendirilen silinmiş <em>bağımlı</em> sayfayı geri yükleyin"
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:29
+msgid "Revert page to earlier version"
+msgstr "Sayfayı önceki sürüme geri döndür"
+
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:26
 msgid "Revert to this version..."
 msgstr "Bu sürüme geri dön..."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:14./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:58
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:14./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:60
 msgid "Revisions are kept for {n} months."
 msgstr "Düzeltmeler {n} ay süreyle saklanır."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:46./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:48
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:46
 msgid "Revisions for"
 msgstr "Şunun için düzeltmeler"
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:15./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:59
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:15./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:61
 msgid "Revisions of active users are kept for {n} days."
 msgstr ""
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:16./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:60
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:16./apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:62
 msgid "Revisions of deleted users are kept for {n} days."
 msgstr "Silinen kullanıcıların düzeltmeleri {n} gün boyunca saklanır."
 
@@ -5356,17 +5385,13 @@ msgstr "Üzgünüz, manuel yedeklemeler devre dışı bırakıldı"
 msgid "Sorry, there is no module that can import this."
 msgstr "Üzgünüz, bunu içe aktarabilecek bir modül yok."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:91./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:107
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:91./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:116
 msgid "Sorry, there was an error replacing your page."
 msgstr "Üzgünüz, sayfanızı değiştirirken bir hata oluştu."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:113
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:114
 msgid "Sorry, this backup has been deleted."
 msgstr "Üzgünüz, bu yedek silinmiş."
-
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:110
-msgid "Sorry, this backup is not valid."
-msgstr "Üzgünüz, bu yedek geçerli değil."
 
 #: apps/zotonic_mod_backup/src/controllers/controller_admin_backup.erl:86
 msgid "Sorry, this is not a backup file or it is corrupted."
@@ -5426,7 +5451,7 @@ msgstr "Bu kaydedilmiş sürümdür"
 msgid "This will overwrite your page with the contents of the backup file."
 msgstr "Bu yedek dosyasındaki içeriği sayfanızın üstüne yazacaktır."
 
-#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:49
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:53
 msgid "Uploaded to filestore"
 msgstr "Dosya deposuna yüklendi"
 
@@ -5444,11 +5469,11 @@ msgstr "İçe/dışa aktarma paneliyle bir sayfayı dosya olarak indirebilir, sa
 msgid "Y-m-d H:i – l"
 msgstr "Ymd H:i – l"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:39
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:39./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:112
 msgid "You are not allowed to recover this page."
 msgstr "Bu sayfayı kurtarmanıza izin verilmiyor."
 
-#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:72./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:75./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:86
+#: apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:73./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:76./apps/zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:103
 msgid "You are not allowed to see the revisions"
 msgstr "Bu revizyonu görmeye yetkiniz yok"
 
@@ -5456,7 +5481,15 @@ msgstr "Bu revizyonu görmeye yetkiniz yok"
 msgid "You can have one backup per day of the week, older ones will be overwritten."
 msgstr "Haftanın her günü bir yedeğiniz olabilir, eskilerin üzerine yazılacaktır."
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:93
+#: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:10
+msgid "You can recover incoming and outgoing connections to other pages."
+msgstr "Diğer sayfalara gelen ve giden bağlantıları kurtarabilirsiniz."
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:13
+msgid "You can select a revision to revover."
+msgstr "Geri almak istediğiniz bir revizyonu seçebilirsiniz."
+
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:95
 msgid "You need to have access rights to the backup module."
 msgstr "Yedekleme modülüne erişim haklarına sahip olmanız gerekir."
 
@@ -5479,6 +5512,10 @@ msgstr "veya Zotonic yapılandırma dosyalarında."
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:15
 msgid "this backup is in progress"
 msgstr "bu yedekleme sürmektedir"
+
+#: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:46
+msgid "weekly backup"
+msgstr "haftalık yedekleme"
 
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:5
 msgid "# Pages"
@@ -5586,6 +5623,7 @@ msgstr "MQTT Köprü Bağlantı Durumu"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:145./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
 #: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:39
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:52
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:48./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:35./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:28./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:35./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:70
 msgid "No"
 msgstr "Hayır"
@@ -5726,6 +5764,7 @@ msgstr "Websocket Desteği?"
 
 #: apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:187./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:251./apps/zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
 #: apps/zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:39
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:52
 #: apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:47./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:30./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25./apps/zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:32./apps/zotonic_mod_survey/src/questions/survey_q_yesno.erl:72
 #: apps/zotonic_mod_translation/priv/templates/_translation_status.tpl:19
 msgid "Yes"
@@ -6026,7 +6065,7 @@ msgid "Year"
 msgstr "Yıl"
 
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:221
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:224
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:17
 #: apps/zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
@@ -7003,27 +7042,27 @@ msgstr "1 hafta sonra"
 msgid "After 3 months"
 msgstr "3 ay sonra"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:256
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:259
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "Tüm bulut dosyaları, sunucudaki dosya sistemine geri taşınabilir."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:264
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:267
 msgid "All cloud files will be queued for download."
 msgstr "Tüm bulut dosyaları indirilmek için sıraya alınır."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:234
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237
 msgid "All files will be queued, uploads will start in the background within 10 minutes."
 msgstr "Tüm dosyalar sıraya alınacak, yüklemeler 10 dakika içinde arka planda başlayacak."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:224
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:227
 msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "Tüm yerel yüklenen ve ön izleme dosyaları buluta taşınabilir."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:243
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:246
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "Tüm dosyaları buluta taşımak istediğinizden emin misiniz?"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:273
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:276
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "Tüm dosyaları sunucunun diskine taşımak istediğinizden emin misiniz?"
 
@@ -7031,11 +7070,11 @@ msgstr "Tüm dosyaları sunucunun diskine taşımak istediğinizden emin misiniz
 msgid "Base URL"
 msgstr "Temel URL"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:156
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:159
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "Ayarlar kaydedilmeden önce küçük bir dosya yüklenerek (ve silinerek) kontrol edilecektir."
 
-#: apps/zotonic_mod_filestore/src/mod_filestore.erl:181
+#: apps/zotonic_mod_filestore/src/mod_filestore.erl:191
 msgid "Cloud File Store"
 msgstr "Bulut Dosya Deposu"
 
@@ -7043,19 +7082,19 @@ msgstr "Bulut Dosya Deposu"
 msgid "Cloud File Store Configuration"
 msgstr "Bulut Dosya Deposu Yapılandırması"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:174
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:177
 msgid "Cloud File Store Utilities and Statistics"
 msgstr "Bulut Dosya Deposu Yardımcı Programları ve İstatistikleri"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:183
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:186
 msgid "Cloud Files"
 msgstr "Bulut Dosyaları"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:233
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:236
 msgid "Could not access the service, double check your settings and try again."
 msgstr "Servise erişilemedi, ayarlarınızı kontrol edin ve tekrar deneyin."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:159
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:162
 msgid "Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file."
 msgstr "Servise erişilemedi, ayarlarınızı kontrol edin ve tekrar deneyin. API anahtarının <code>-zotonic-filestore-test-file-</code> dosyasını oluşturma ve silme yetkisine (geçici olarak) sahip olduğuna emin olun."
 
@@ -7063,7 +7102,7 @@ msgstr "Servise erişilemedi, ayarlarınızı kontrol edin ve tekrar deneyin. AP
 msgid "Currently Zotonic supports FTP and services that are compatible with the S3 file services API. These include:"
 msgstr "Şu anda Zotonic, FTP'yi ve S3 dosya hizmetleri API'si ile uyumlu hizmetleri desteklemektedir. Bunlar şunları içerir:"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:206
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
 msgid "Delete Queue"
 msgstr "Kuyruğu Sil"
 
@@ -7075,7 +7114,7 @@ msgstr "Bulut dosya deposundan dosyaları sil"
 msgid "Delete interval"
 msgstr "Aralığı sil"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:205
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:208
 msgid "Download Queue"
 msgstr "Kuyruğu indir"
 
@@ -7083,11 +7122,11 @@ msgstr "Kuyruğu indir"
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "Dosya deposunun yerel medya dosyalarınızın yedeği olarak hareket etmesine izin vermek için bunu etkinleştirin."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:257
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:260
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "Bu işleme başlamadan önce yeterli disk alanı olduğundan emin olun."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:188./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:211
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:191./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:214
 msgid "Files"
 msgstr "Dosyalar"
 
@@ -7103,11 +7142,11 @@ msgstr "S3 için URL <b><tt>https:</tt></b> veya <b><tt>http:</tt></b>ile başla
 msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
 msgstr "WebDAV için URL <b>ile başlamalıdır<tt>webdavs:</tt></b> veya <b><tt>webdav:</tt></b>"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:230
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:233
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "\"Bulut dosya deposuna yükledikten sonra yerel dosyaları sakla\"yı seçtiyseniz, uzak dosyalar yerel dosyaların yedeği olarak kabul edildiğinden yerel dosyalar silinmez."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:261
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:264
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "“Bulut dosya deposuna yükledikten sonra yerel dosyaları sakla”yı seçtiyseniz, uzak dosyalar yerel dosyaların yedeği olarak kabul edildiğinden uzak dosyalar silinmez."
 
@@ -7115,12 +7154,12 @@ msgstr "“Bulut dosya deposuna yükledikten sonra yerel dosyaları sakla”yı 
 msgid "If you use an FTP server then that server MUST support FTPS (secure ftp)"
 msgstr "Bir FTP sunucusu kullanıyorsanız, o sunucunun FTPS'yi (güvenli ftp) desteklemesi ZORUNLUDUR"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:71./apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:146
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:71
 msgid "Immediately"
 msgstr "Acilen"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:51
-msgid "Is Upload enabled?"
+msgid "Is upload enabled?"
 msgstr "Yükleme etkin mi?"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:126
@@ -7131,27 +7170,27 @@ msgstr "Bulut dosya deposuna yükledikten sonra yerel dosyaları saklayın"
 msgid "Keep local files?"
 msgstr "Yerel dosyalar saklansın mı?"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:182
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:185
 msgid "Local Files"
 msgstr "Yerel dosyalar"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:181
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:184
 msgid "Media Resources"
 msgstr "Medya Kaynakları"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:242
 msgid "Move all local files to the remote storage"
 msgstr "Tüm yerel dosyaları uzak depolama birimine taşıyın"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:269
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:272
 msgid "Move all remote files to local"
 msgstr "Tüm uzak dosyaları yerele taşı"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:244
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
 msgid "Move files to cloud"
 msgstr "Dosyaları buluta taşıyın"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:274
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:277
 msgid "Move files to server disk"
 msgstr "Dosyaları sunucu diskine taşı"
 
@@ -7159,6 +7198,10 @@ msgstr "Dosyaları sunucu diskine taşı"
 #: apps/zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:62
 msgid "Never"
 msgstr "Asla"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:146
+msgid "No extra delay"
+msgstr "Ekstra gecikme yok"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:61
 msgid "No, local files are deleted after upload"
@@ -7180,7 +7223,7 @@ msgstr "S3 Bulut Konumu"
 msgid "S3 Cloud Location and Credentials"
 msgstr "S3 Bulut Konumu ve Kimlik Bilgileri"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:163
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:166
 msgid "Save Settings"
 msgstr "Ayarları kaydet"
 
@@ -7188,11 +7231,11 @@ msgstr "Ayarları kaydet"
 msgid "Service"
 msgstr "Hizmet"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:158
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:161
 msgid "Settings are working fine and are saved."
 msgstr "Ayarlar iyi çalışıyor ve kaydediliyor."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:194
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:197
 msgid "Storage"
 msgstr "Depolama"
 
@@ -7204,23 +7247,31 @@ msgstr "Bulut dosya deposu küresel bir Zotonic yapılandırması kullanır. Yap
 msgid "The configuration is:"
 msgstr "Yapılandırma şu şekildedir:"
 
-#: apps/zotonic_mod_filestore/src/support/filestore_admin.erl:66
+#: apps/zotonic_mod_filestore/src/support/filestore_admin.erl:68
 msgid "The settings are locked by the system configuration."
 msgstr "Ayarlar sistem yapılandırması tarafından kilitlenmiştir."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:226
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:229
 msgid "There is a 1 minute wait before files are uploaded."
 msgstr "Dosyalar yüklenmeden önce 1 dakika beklenir."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:225
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:154
+msgid "This extra deletion delay extends the period files can be recovered."
+msgstr "Bu ekstra silme gecikmesi dosyaların kurtarılabildiği süreyi uzatır."
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:228
 msgid "This will queue the files for later asynchronous upload."
 msgstr "Bu dosyaları daha sonraki eşzamansız yükleme için sıralar."
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:154
+msgid "To allow recovery of deleted pages, Zotonic keeps files for 5 weeks."
+msgstr "Silinen sayfaların kurtarılmasına olanak sağlamak için Zotonic dosyaları 5 hafta boyunca saklar."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:135
 msgid "Try to create a private S3 bucket if the S3 bucket does not exist"
 msgstr "S3 kovası yoksa özel bir S3 kovası oluşturmaya çalışın"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:204
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:207
 msgid "Upload Queue"
 msgstr "Yükleme Sırası"
 
@@ -7240,7 +7291,7 @@ msgstr "WebDAV ile kullanıcı adı ve şifre açık bir şekilde aktarılır, b
 msgid "Yes, keep local files after upload"
 msgstr "Evet, yerel dosyaları yükledikten sonra sakla"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:69./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:76./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:83
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:292./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:71./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:78./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:85
 msgid "You are not allowed to change these settings."
 msgstr "Bu ayarları değiştirmenize izin yok."
 
