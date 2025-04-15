@@ -46,6 +46,8 @@
 
     pid_observe_tick_1m/3,
 
+    testcred/1,
+
     queue_all/1,
     queue_all_stop/1,
 
@@ -141,7 +143,11 @@ observe_filestore_credentials_lookup(#filestore_credentials_lookup{ path = Path 
                     service = Service,
                     service_url = S3Url,
                     location = Url,
-                    credentials = {S3Key,S3Secret}
+                    credentials = #{
+                        username => S3Key,
+                        password => S3Secret,
+                        tls_options => filestore_config:tls_options(Context)
+                    }
             }};
         false ->
             undefined
@@ -165,7 +171,11 @@ observe_filestore_credentials_revlookup(
                             service = Service,
                             service_url = S3Url,
                             location = Location,
-                            credentials = {S3Key,S3Secret}
+                            credentials = #{
+                                username => S3Key,
+                                password => S3Secret,
+                                tls_options => filestore_config:tls_options(Context)
+                            }
                     }};
                 false ->
                     undefined
@@ -359,6 +369,13 @@ load_cache(#{
         undefined ->
             undefined
     end.
+
+%% @doc Try to put a file onto the remote server, testing the credentials.
+-spec testcred(Context) -> ok | {error, Reason} when
+    Context :: z:context(),
+    Reason :: term().
+testcred(Context) ->
+    filestore_admin:testcred(Context).
 
 queue_all(Context) ->
     Max = z_db:q1("select count(*) from medium", Context),
