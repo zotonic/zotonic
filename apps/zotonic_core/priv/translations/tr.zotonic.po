@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-04-15 14:52\n"
+"PO-Revision-Date: 2025-04-15 16:18\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -5326,12 +5326,12 @@ msgid "Recover"
 msgstr "İyileşmek"
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:21
-msgid "Recover incoming edges from other pages"
-msgstr "Diğer sayfalardan gelen kenarları kurtarın"
+msgid "Recover incoming connections from other pages"
+msgstr "Diğer sayfalardan gelen bağlantıları kurtarın"
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:17
-msgid "Recover outgoing edges to other pages"
-msgstr "Diğer sayfalara giden kenarları kurtarın"
+msgid "Recover outgoing connections to other pages"
+msgstr "Diğer sayfalara giden bağlantıları kurtarın"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:38./apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:41./apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:14
 msgid "Restore backup"
@@ -7042,11 +7042,11 @@ msgstr "1 hafta sonra"
 msgid "After 3 months"
 msgstr "3 ay sonra"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:259
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:272
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "Tüm bulut dosyaları, sunucudaki dosya sistemine geri taşınabilir."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:267
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:280
 msgid "All cloud files will be queued for download."
 msgstr "Tüm bulut dosyaları indirilmek için sıraya alınır."
 
@@ -7059,10 +7059,18 @@ msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "Tüm yerel yüklenen ve ön izleme dosyaları buluta taşınabilir."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:246
+msgid "Are you sure you want to copy all files to the cloud?"
+msgstr "Tüm dosyaları buluta kopyalamak istediğinizden emin misiniz?"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289
+msgid "Are you sure you want to copy all files to the disk of the server?"
+msgstr "Tüm dosyaları sunucunun diskine kopyalamak istediğinizden emin misiniz?"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:257
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "Tüm dosyaları buluta taşımak istediğinizden emin misiniz?"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:276
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:300
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "Tüm dosyaları sunucunun diskine taşımak istediğinizden emin misiniz?"
 
@@ -7090,6 +7098,22 @@ msgstr "Bulut Dosya Deposu Yardımcı Programları ve İstatistikleri"
 msgid "Cloud Files"
 msgstr "Bulut Dosyaları"
 
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:243
+msgid "Copy all local files to the remote storage"
+msgstr "Tüm yerel dosyaları uzak depolama alanına kopyalayın"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:286
+msgid "Copy all remote files to local"
+msgstr "Tüm uzak dosyaları yerele kopyala"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
+msgid "Copy files to cloud"
+msgstr "Dosyaları buluta kopyala"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:290
+msgid "Copy files to server disk"
+msgstr "Dosyaları sunucu diskine kopyala"
+
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:236
 msgid "Could not access the service, double check your settings and try again."
 msgstr "Servise erişilemedi, ayarlarınızı kontrol edin ve tekrar deneyin."
@@ -7099,8 +7123,8 @@ msgid "Could not access the service, double check your settings and try again. M
 msgstr "Servise erişilemedi, ayarlarınızı kontrol edin ve tekrar deneyin. API anahtarının <code>-zotonic-filestore-test-file-</code> dosyasını oluşturma ve silme yetkisine (geçici olarak) sahip olduğuna emin olun."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:11
-msgid "Currently Zotonic supports FTP and services that are compatible with the S3 file services API. These include:"
-msgstr "Şu anda Zotonic, FTP'yi ve S3 dosya hizmetleri API'si ile uyumlu hizmetleri desteklemektedir. Bunlar şunları içerir:"
+msgid "Currently Zotonic supports FTP, WebDAV and services that are compatible with the S3 file services API. These include:"
+msgstr "Şu anda Zotonic FTP, WebDAV ve S3 dosya hizmetleri API'siyle uyumlu hizmetleri destekliyor. Bunlar şunları içerir:"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
 msgid "Delete Queue"
@@ -7122,7 +7146,7 @@ msgstr "Kuyruğu indir"
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "Dosya deposunun yerel medya dosyalarınızın yedeği olarak hareket etmesine izin vermek için bunu etkinleştirin."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:260
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:273
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "Bu işleme başlamadan önce yeterli disk alanı olduğundan emin olun."
 
@@ -7146,7 +7170,7 @@ msgstr "WebDAV için URL <b>ile başlamalıdır<tt>webdavs:</tt></b> veya <b><tt
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "\"Bulut dosya deposuna yükledikten sonra yerel dosyaları sakla\"yı seçtiyseniz, uzak dosyalar yerel dosyaların yedeği olarak kabul edildiğinden yerel dosyalar silinmez."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:264
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:277
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "“Bulut dosya deposuna yükledikten sonra yerel dosyaları sakla”yı seçtiyseniz, uzak dosyalar yerel dosyaların yedeği olarak kabul edildiğinden uzak dosyalar silinmez."
 
@@ -7178,19 +7202,19 @@ msgstr "Yerel dosyalar"
 msgid "Media Resources"
 msgstr "Medya Kaynakları"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:242
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:254
 msgid "Move all local files to the remote storage"
 msgstr "Tüm yerel dosyaları uzak depolama birimine taşıyın"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:272
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:297
 msgid "Move all remote files to local"
 msgstr "Tüm uzak dosyaları yerele taşı"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:258
 msgid "Move files to cloud"
 msgstr "Dosyaları buluta taşıyın"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:277
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:301
 msgid "Move files to server disk"
 msgstr "Dosyaları sunucu diskine taşı"
 
@@ -7291,7 +7315,7 @@ msgstr "WebDAV ile kullanıcı adı ve şifre açık bir şekilde aktarılır, b
 msgid "Yes, keep local files after upload"
 msgstr "Evet, yerel dosyaları yükledikten sonra sakla"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:292./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:71./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:78./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:85
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:318./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:71./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:78./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:85
 msgid "You are not allowed to change these settings."
 msgstr "Bu ayarları değiştirmenize izin yok."
 
