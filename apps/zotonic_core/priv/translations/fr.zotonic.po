@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-04-15 14:52\n"
+"PO-Revision-Date: 2025-04-15 16:18\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -5137,7 +5137,7 @@ msgstr "Sauvegardes Admin"
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:31
 msgid "After the page has been restored, you will be redirected to the edit page."
-msgstr ""
+msgstr "Une fois la page restaurée, vous serez redirigé vers la page d'édition."
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:7
 msgid "Are you sure you want to revert to this version?"
@@ -5263,7 +5263,7 @@ msgstr "Aide à propos de sauvegarder &amp; restaurer"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:15
 msgid "If the Cloud File Store module is used, then deleted files can be retained indefinitely."
-msgstr ""
+msgstr "Si le module Cloud File Store est utilisé, les fichiers supprimés peuvent être conservés indéfiniment."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
 msgid "It can be found in the"
@@ -5271,7 +5271,7 @@ msgstr "On peut le trouver dans le"
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:11
 msgid "It could be that a connected dependent page was deleted because of the deletion of this page, such a deleted dependent page can also be recovered."
-msgstr ""
+msgstr "Il se peut qu'une page dépendante connectée ait été supprimée en raison de la suppression de cette page, une telle page dépendante supprimée peut également être récupérée."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:29
 msgid "List and restore an earlier version"
@@ -5279,7 +5279,7 @@ msgstr "Lister et restaurer une version antérieure"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:12
 msgid "List of recently deleted pages found in the resource revisions log."
-msgstr ""
+msgstr "Liste des pages récemment supprimées trouvées dans le journal des révisions des ressources."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:15./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:39./apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:60
 msgid "Make a daily backup of the database and uploaded files."
@@ -5291,7 +5291,7 @@ msgstr "Faites une sauvegarde quotidienne de la base de données."
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:30
 msgid "Media files can only be recovered if they are not yet deleted from the file storage. Zotonic will keep media for at least 5 weeks."
-msgstr ""
+msgstr "Les fichiers multimédias ne peuvent être récupérés que s'ils n'ont pas encore été supprimés du stockage. Zotonic conservera les fichiers multimédias pendant au moins 5 semaines."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:66
 msgid "No backups present."
@@ -5303,7 +5303,7 @@ msgstr "Non téléchargé dans le magasin de fichiers"
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:14
 msgid "Note that files are only retained for 5 weeks after deletion, this is the same as the Zotonic database backup retention period."
-msgstr ""
+msgstr "Notez que les fichiers ne sont conservés que pendant 5 semaines après la suppression, ce qui correspond à la période de conservation de la sauvegarde de la base de données Zotonic."
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:97
 msgid "Note:"
@@ -5326,11 +5326,11 @@ msgid "Recover"
 msgstr "Récupérer"
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:21
-msgid "Recover incoming edges from other pages"
-msgstr ""
+msgid "Recover incoming connections from other pages"
+msgstr "Récupérer les connexions entrantes depuis d'autres pages"
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:17
-msgid "Recover outgoing edges to other pages"
+msgid "Recover outgoing connections to other pages"
 msgstr ""
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:38./apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:41./apps/zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:14
@@ -5339,11 +5339,11 @@ msgstr "Restaurer sauvegarde"
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:25
 msgid "Restore deleted <em>dependent</em> pages that were referred by this page"
-msgstr ""
+msgstr "Restaurer les <em>pages dépendantes supprimées</em> qui ont été référencées par cette page"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:29
 msgid "Revert page to earlier version"
-msgstr ""
+msgstr "Revenir à la version antérieure de la page"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:26
 msgid "Revert to this version..."
@@ -5483,11 +5483,11 @@ msgstr "Vous pouvez avoir une sauvegarde par jour de la semaine, les plus ancien
 
 #: apps/zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:10
 msgid "You can recover incoming and outgoing connections to other pages."
-msgstr ""
+msgstr "Vous pouvez récupérer les connexions entrantes et sortantes vers d'autres pages."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:13
 msgid "You can select a revision to revover."
-msgstr ""
+msgstr "Vous pouvez sélectionner une révision à annuler."
 
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:95
 msgid "You need to have access rights to the backup module."
@@ -5515,7 +5515,7 @@ msgstr "cette sauvegarde est en cours"
 
 #: apps/zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:46
 msgid "weekly backup"
-msgstr ""
+msgstr "sauvegarde hebdomadaire"
 
 #: apps/zotonic_mod_base/priv/templates/_session_info.tpl:5
 msgid "# Pages"
@@ -7042,11 +7042,11 @@ msgstr "Après 1 semaine"
 msgid "After 3 months"
 msgstr "Après 3 mois"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:259
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:272
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "Tous les fichiers du cloud peuvent être rappatriés sur le système de fichier du serveur."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:267
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:280
 msgid "All cloud files will be queued for download."
 msgstr "Tous les fichiers du cloud seront mis en file d'attente pour téléchargement."
 
@@ -7059,10 +7059,18 @@ msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "Tous les fichiers téléchargés et d'aperçu locaux peuvent être déplacés vers le cloud."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:246
+msgid "Are you sure you want to copy all files to the cloud?"
+msgstr "Êtes-vous sûr de vouloir copier tous les fichiers dans le cloud ?"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289
+msgid "Are you sure you want to copy all files to the disk of the server?"
+msgstr "Êtes-vous sûr de vouloir copier tous les fichiers sur le disque du serveur ?"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:257
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "Êtes-vous sûr de vouloir déplacer tous les fichiers vers le cloud ?"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:276
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:300
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "Voulez-vous vraiment déplacer tous les fichiers sur le disque du serveur ?"
 
@@ -7090,6 +7098,22 @@ msgstr "Utilitaires et statistiques du magasin de fichiers cloud"
 msgid "Cloud Files"
 msgstr "fichiers Cloud"
 
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:243
+msgid "Copy all local files to the remote storage"
+msgstr "Copiez tous les fichiers locaux sur le stockage distant"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:286
+msgid "Copy all remote files to local"
+msgstr "Copier tous les fichiers distants vers les fichiers locaux"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
+msgid "Copy files to cloud"
+msgstr "Copier des fichiers vers le cloud"
+
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:290
+msgid "Copy files to server disk"
+msgstr "Copier les fichiers sur le disque du serveur"
+
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:236
 msgid "Could not access the service, double check your settings and try again."
 msgstr "Impossible d'accéder au service, vérifiez à nouveau vos paramètres et réessayez."
@@ -7099,8 +7123,8 @@ msgid "Could not access the service, double check your settings and try again. M
 msgstr "Impossible d'accéder au service, vérifiez à nouveau vos paramètres et réessayez. Assurez-vous que la clé API possède des droits d'accès pour créer et supprimer un fichier (temporaire) <code>-zotonic-filestore-test-file-</ code>."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:11
-msgid "Currently Zotonic supports FTP and services that are compatible with the S3 file services API. These include:"
-msgstr "Actuellement, Zotonic prend en charge le FTP et les services compatibles avec l'API des services de fichiers S3. Ceux-ci inclus:"
+msgid "Currently Zotonic supports FTP, WebDAV and services that are compatible with the S3 file services API. These include:"
+msgstr "Actuellement, Zotonic prend en charge FTP, WebDAV et les services compatibles avec l'API des services de fichiers S3. Parmi ceux-ci :"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
 msgid "Delete Queue"
@@ -7122,7 +7146,7 @@ msgstr "File d'attente de téléchargement"
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "Activez cette option pour permettre au magasin de fichiers d'agir comme une sauvegarde de vos fichiers multimédias locaux."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:260
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:273
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "Veuillez vous assurer qu'un espace disque est suffisant avant de démarrer le processus."
 
@@ -7146,7 +7170,7 @@ msgstr "Pour WebDAV, l'URL doit commencer par <b><tt>webdavs :</tt></b> ou <b><t
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Si vous avez sélectionné \"Conserver les fichiers locaux après le téléchargement dans le magasin de fichiers cloud\", les fichiers locaux ne sont pas supprimés, car les fichiers distants sont considérés comme une sauvegarde des fichiers locaux."
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:264
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:277
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Si vous avez sélectionné \"Conserver les fichiers locaux après le téléchargement dans le magasin de fichiers cloud\", les fichiers distants ne sont pas supprimés, car les fichiers distants sont considérés comme une sauvegarde des fichiers locaux."
 
@@ -7160,7 +7184,7 @@ msgstr "Immédiatement"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:51
 msgid "Is upload enabled?"
-msgstr ""
+msgstr "Le téléchargement est-il activé ?"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:126
 msgid "Keep local files after upload to the cloud file store"
@@ -7178,19 +7202,19 @@ msgstr "Fichiers locaux"
 msgid "Media Resources"
 msgstr "Ressources pour les médias"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:242
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:254
 msgid "Move all local files to the remote storage"
 msgstr "Déplacer tous les fichiers locaux vers le stockage distant"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:272
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:297
 msgid "Move all remote files to local"
 msgstr "Déplacer tous les fichiers distants vers local"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:258
 msgid "Move files to cloud"
 msgstr "Déplacer des fichiers vers le cloud"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:277
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:301
 msgid "Move files to server disk"
 msgstr "Déplacer les fichiers vers le disque du serveur"
 
@@ -7201,7 +7225,7 @@ msgstr "Jamais"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:146
 msgid "No extra delay"
-msgstr ""
+msgstr "Pas de délai supplémentaire"
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:61
 msgid "No, local files are deleted after upload"
@@ -7257,7 +7281,7 @@ msgstr "Il y a 1 minute d'attente avant que les fichiers ne soient téléchargé
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:154
 msgid "This extra deletion delay extends the period files can be recovered."
-msgstr ""
+msgstr "Ce délai de suppression supplémentaire prolonge la période pendant laquelle les fichiers peuvent être récupérés."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:228
 msgid "This will queue the files for later asynchronous upload."
@@ -7265,7 +7289,7 @@ msgstr "Cela mettra en queue les fichiers pour un téléchargement asynchrone ul
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:154
 msgid "To allow recovery of deleted pages, Zotonic keeps files for 5 weeks."
-msgstr ""
+msgstr "Pour permettre la récupération des pages supprimées, Zotonic conserve les fichiers pendant 5 semaines."
 
 #: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:135
 msgid "Try to create a private S3 bucket if the S3 bucket does not exist"
@@ -7291,7 +7315,7 @@ msgstr "Avec WebDAV, le nom d'utilisateur et le mot de passe sont transférés e
 msgid "Yes, keep local files after upload"
 msgstr "Oui, conserver les fichiers locaux après le téléchargement"
 
-#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:292./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:71./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:78./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:85
+#: apps/zotonic_mod_filestore/priv/templates/admin_filestore.tpl:318./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:71./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:78./apps/zotonic_mod_filestore/src/support/filestore_admin.erl:85
 msgid "You are not allowed to change these settings."
 msgstr "Vous n’êtes pas autorisé à changer ces paramètres."
 
