@@ -35,7 +35,8 @@ render({cat, Args}, Vars, Context) when is_list(Vars); is_map(Vars) ->
         {id, Id} -> set_arg(Vars, id, Id);
         none -> Vars
     end,
-    {Output, _} = z_render:output(z_template:render_to_iolist({cat, Template}, Vars1, Context), Context),
+    {Data, _Context} = z_template:render_to_iolist({cat, Template}, Vars1, Context),
+    {Output, _} = z_render:output(Data, Context),
     iolist_to_binary(Output);
 render(Template, Vars, Context) when is_list(Vars); is_map(Vars) ->
     case z_module_indexer:find(template, Template, Context) of
