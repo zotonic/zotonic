@@ -68,7 +68,7 @@ simplify({find_value, Vs}) ->
     {find_value, lists:map(fun simplify/1, Vs)};
 simplify({expr, {Op, _}, Left, Right}) ->
     try
-        {expr, binary_to_existing_atom(Op, utf8), simplify(Left), simplify(Right)}
+        {expr, Op, simplify(Left), simplify(Right)}
     catch
         _:_ ->
             ?LOG_WARNING(#{
@@ -81,7 +81,7 @@ simplify({expr, {Op, _}, Left, Right}) ->
     end;
 simplify({expr, {Op, _}, Expr}) ->
     try
-        {expr, binary_to_existing_atom(Op, utf8), simplify(Expr)}
+        {expr, Op, simplify(Expr)}
     catch
         _:_ ->
             ?LOG_WARNING(#{
