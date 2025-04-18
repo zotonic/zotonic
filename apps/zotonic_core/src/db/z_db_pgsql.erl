@@ -1,6 +1,11 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @copyright 2014-2025 Arjan Scherpenisse
-%% @doc Postgresql pool worker
+%% @doc Postgresql pool worker. Supervises a database connection, ensures
+%% it is connected. The connection is given to the query process. If the
+%% query process doesn't return the connection, then the connection is reset.
+%%
+%% The connection is given to the query process to prevent extra copying of
+%% query results between the worker and the query process.
 %% @end
 
 %% Copyright 2014-2025 Arjan Scherpenisse
@@ -75,7 +80,9 @@
     busy_start = undefined :: undefined | pos_integer(),
     busy_sql = undefined :: undefined | string() | binary(),
     busy_params = [] :: list(),
-    busy_tracing = false :: boolean()
+    busy_tracing = false :: boolean(),
+    is_paused = false :: boolean(),
+    pause_waiting = undefined
 }).
 
 -type query_result() :: squery_result()
@@ -83,11 +90,11 @@
 
 -type squery_result() :: epgsql_cmd_squery:response()
                        | epgsql_sock:error()
-                       | {error, connection_down | term()}.
+                       | {error, connection_down | paused | term()}.
 
 -type equery_result() :: epgsql_cmd_equery:response()
                        | epgsql_sock:error()
-                       | {error, connection_down | term()}.
+                       | {error, connection_down | paused | term()}.
 
 -export_type([ query_result/0, squery_result/0, equery_result/0 ]).
 
@@ -259,14 +266,18 @@ execute_batch(Worker, Sql, Batch, Timeout) ->
     Timeout :: pos_integer(),
     Conn :: pid(),
     Ref :: reference(),
-    Reason :: term().
+    Reason :: paused | connection_down | term().
 fetch_conn(Worker, Sql, Parameters, Timeout) ->
     case is_connection_alive(Worker) of
         true ->
             try
                 Ref = erlang:make_ref(),
-                {ok, Conn} = gen_server:call(Worker, {fetch_conn, Ref, self(), Sql, Parameters, Timeout, is_tracing()}),
-                {ok, {Conn, Ref}}
+                case gen_server:call(Worker, {fetch_conn, Ref, self(), Sql, Parameters, Timeout, is_tracing()}) of
+                    {ok, Conn} ->
+                        {ok, {Conn, Ref}};
+                    {error, paused} ->
+                        {error, paused}
+                end
             catch
                 exit:Reason:Stack ->
                     ?LOG_ERROR(#{
@@ -323,6 +334,16 @@ init(Args) ->
     process_flag(trap_exit, true),
     {ok, #state{conn=undefined, conn_args=Args}, ?IDLE_TIMEOUT}.
 
+handle_call(pause, _From, #state{ is_paused = true } = State) ->
+    {reply, ok, State};
+handle_call(pause, _From, #state{ busy_pid = undefined } = State) ->
+    {reply, ok, State#state{ is_paused = true, pause_waiting = undefined }};
+handle_call(pause, From, #state{ busy_pid = _Pid } = State) ->
+    {noreply, State#state{ is_paused = true, pause_waiting = From }};
+
+handle_call(unpause, _From, State) ->
+    {reply, ok, State#state{ is_paused = false, pause_waiting = undefined }};
+
 handle_call({pool_return_connection_check, _CallerPid}, _From, #state{ busy_pid = undefined } = State) ->
     {reply, ok, State};
 handle_call({pool_return_connection_check, CallerPid}, From, #state{
@@ -331,7 +352,7 @@ handle_call({pool_return_connection_check, CallerPid}, From, #state{
             busy_params = Params
         } = State) ->
     ?LOG_ERROR(#{
-        text => <<"Connection return to pool by but still running">>,
+        text => <<"Connection return to pool by worker but still running">>,
         in => zotonic_core,
         result => error,
         reason => running,
@@ -344,6 +365,9 @@ handle_call({pool_return_connection_check, CallerPid}, From, #state{
     gen_server:reply(From, {error, checkin_busy}),
     State1 = disconnect(State),
     {stop, normal, State1};
+
+handle_call({fetch_conn, _Ref, _CallerPid, _Sql, _Params, _Timeout, _IsTracing}, _From, #state{ is_paused = true } = State) ->
+    {reply, {error, paused}, State};
 
 handle_call({fetch_conn, _Ref, _CallerPid, _Sql, _Params, _Timeout, _IsTracing} = Cmd, From,
             #state{ busy_pid = undefined, conn = undefined, conn_args = Args } = State) ->
@@ -658,6 +682,9 @@ demonitor_busy(State) ->
     reset_busy_state(State).
 
 
+reset_busy_state(#state{ is_paused = true, pause_waiting = From } = State) when From =/= undefined ->
+    gen_server:reply(From, ok),
+    reset_busy_state(State#state{ pause_waiting = undefined });
 reset_busy_state(State) ->
     State#state{
         busy_monitor = undefined,

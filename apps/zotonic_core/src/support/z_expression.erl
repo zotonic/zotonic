@@ -1,6 +1,21 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011 Marc Worrell
+%% @copyright 2011-2025 Marc Worrell
 %% @doc Expression parsing and evaluation.
+%% @end
+
+%% Copyright 2011-2025 Marc Worrell
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
 
 -module(z_expression).
 
@@ -8,7 +23,8 @@
 
 -export([
     parse/1,
-    eval/3
+    eval/3,
+    eval/4
 ]).
 
 -type tree() :: number()
@@ -23,6 +39,7 @@
 
 -type op() :: atom().
 
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 %% @doc Parse an expression to an expression tree.  Uses the template_compiler parser.
 -spec parse(Expr) -> {ok, ParseTree} | {error, Reason} when
@@ -50,31 +67,65 @@ simplify({find_value, [Value]}) ->
 simplify({find_value, Vs}) ->
     {find_value, lists:map(fun simplify/1, Vs)};
 simplify({expr, {Op, _}, Left, Right}) ->
-    {expr, z_convert:to_atom(Op), simplify(Left), simplify(Right)};
+    try
+        {expr, Op, simplify(Left), simplify(Right)}
+    catch
+        _:_ ->
+            ?LOG_WARNING(#{
+                in => zotonic_mod_base,
+                text => <<"Expression operator unknown">>,
+                result => error,
+                operator => Op
+            }),
+            undefined
+    end;
 simplify({expr, {Op, _}, Expr}) ->
-    {expr, z_convert:to_atom(Op), simplify(Expr)};
+    try
+        {expr, Op, simplify(Expr)}
+    catch
+        _:_ ->
+            ?LOG_WARNING(#{
+                in => zotonic_mod_base,
+                text => <<"Expression operator unknown">>,
+                result => error,
+                operator => Op
+            }),
+            undefined
+    end;
 simplify({expr, E}) ->
     simplify(E);
-% simplify({identifier, _, <<"m">>}) ->
-%     m;
 simplify({identifier,_,Name}) ->
     {variable, Name};
 simplify({number_literal, _, Val}) ->
     z_convert:to_integer(Val);
 simplify({string_literal, _, Val}) ->
     Val;
+simplify({trans_literal, _, Val}) ->
+    {trans_literal, Val};
 simplify({attribute, {identifier,_,Attr}, From}) ->
-    {attribute, z_convert:to_atom(Attr), simplify(From)};
+    {attribute, Attr, simplify(From)};
 simplify({index_value, Array, Index}) ->
     {index_value, simplify(Array), simplify(Index)};
 simplify({value_list, List}) ->
     {value_list, [ simplify(Elt) || Elt <- List ]};
 simplify({apply_filter, Expr, {filter, {identifier,_,Filter}, Args}}) ->
-    {apply_filter,
-        z_convert:to_atom(<<"filter_", Filter/binary>>),
-        z_convert:to_atom(Filter),
-        simplify(Expr),
-        [ simplify(Arg) || Arg <- Args ]};
+    try
+        {apply_filter,
+            binary_to_existing_atom(<<"filter_", Filter/binary>>, utf8),
+            binary_to_existing_atom(Filter, utf8),
+            simplify(Expr),
+            [ simplify(Arg) || Arg <- Args ]}
+    catch
+        A:B:S ->
+            ?DEBUG({A, B, S}),
+            ?LOG_WARNING(#{
+                in => zotonic_mod_base,
+                text => <<"Expression filter unknown, or error in filter">>,
+                result => error,
+                filter => Filter
+            }),
+            undefined
+    end;
 simplify({value, _, Expr, []}) ->
     simplify(Expr).
 
@@ -89,93 +140,162 @@ simplify({value, _, Expr, []}) ->
     Context :: z:context(),
     Value :: term().
 eval(Tree, Vars, Context) ->
-    eval1(Tree, Vars, Context).
+    eval(Tree, Vars, [], Context).
 
-eval1({expr, Op, Left, Right}, Vars, Context) ->
-    template_compiler_operators:Op(eval1(Left, Vars, Context), eval1(Right, Vars, Context), z_template_compiler_runtime, Context);
-eval1({expr, Op, Expr}, Vars, Context) ->
-    template_compiler_operators:Op(eval1(Expr, Vars, Context), z_template_compiler_runtime, Context);
-eval1({variable, Name}, Vars, Context) ->
-    z_template_compiler_runtime:find_value(Name, Vars, #{}, Context);
-eval1({index_value, Array, Index}, Vars, Context) ->
-    z_template_compiler_runtime:find_value(eval1(Index, Vars, Context), eval1(Array, Vars, Context), #{}, Context);
-eval1({attribute, Attr, From}, Vars, Context) ->
-    z_template_compiler_runtime:find_value(Attr, eval1(From, Vars, Context), #{}, Context);
-eval1({value_list, List}, Vars, Context) ->
-    [ eval1(Elt, Vars, Context) || Elt <- List ];
-eval1({apply_filter, filter_default, _Func, Expr, Args}, Vars, Context) ->
-    A = eval1(Expr, Vars, Context),
+-spec eval(Tree, Vars, Options, Context) -> Value when
+    Tree :: tree(),
+    Vars :: proplists:proplist()
+          | #{ binary() => term() }
+          | fun( (binary()|atom()) -> term() ),
+    Options :: [ Option ],
+    Option :: {filters_allowed, [ atom() ]}
+            | {p, fun( (term(), binary(), z:context()) -> term() )},
+    Context :: z:context(),
+    Value :: term().
+eval(Tree, Vars, Options, Context) ->
+    eval1(Tree, Vars, Options, Context).
+
+eval1({expr, Op, Left, Right}, Vars, Options, Context) ->
+    template_compiler_operators:Op(
+        eval1(Left, Vars, Options, Context),
+        eval1(Right, Vars, Options, Context),
+        z_template_compiler_runtime,
+        Context);
+eval1({expr, Op, Expr}, Vars, Options, Context) ->
+    template_compiler_operators:Op(eval1(Expr, Vars, Options, Context), z_template_compiler_runtime, Context);
+eval1({variable, Name}, Vars, _Options, Context) ->
+    case z_template_compiler_runtime:find_value(Name, Vars, #{}, Context) of
+        undefined ->
+            RscId = z_template_compiler_runtime:find_value(<<"id">>, Vars, #{}, Context),
+            Id = m_rsc:rid(RscId, Context),
+            m_rsc:p(Id, Name, Context);
+        Value ->
+            Value
+    end;
+eval1({index_value, Array, Index}, Vars, Options, Context) ->
+    z_template_compiler_runtime:find_value(
+        eval1(Index, Vars, Options, Context),
+        eval1(Array, Vars, Options, Context),
+        #{},
+        Context);
+eval1({attribute, Attr, From}, Vars, Options, Context) ->
+    z_template_compiler_runtime:find_value(
+        Attr,
+        eval1(From, Vars, Options, Context),
+        #{},
+        Context);
+eval1({value_list, List}, Vars, Options, Context) ->
+    [ eval1(Elt, Vars, Options, Context) || Elt <- List ];
+eval1({apply_filter, filter_default, _Func, Expr, Args}, Vars, Options, Context) ->
+    A = eval1(Expr, Vars, Options, Context),
     case A of
         Empty when Empty =:= undefined; Empty =:= []; Empty =:= <<>> ->
             case Args of
-                [B|_] -> eval1(B, Vars, Context);
+                [B|_] -> eval1(B, Vars, Options, Context);
                 _ -> undefined
             end;
         _ -> A
     end;
-eval1({apply_filter, IfNone, _Func, Expr, Args}, Vars, Context)
+eval1({apply_filter, IfNone, _Func, Expr, Args}, Vars, Options, Context)
     when IfNone =:= filter_if_undefined; IfNone =:= filter_if_none ->
-    case eval1(Expr, Vars, Context) of
+    case eval1(Expr, Vars, Options, Context) of
         undefined ->
             case Args of
-                [B|_] -> eval1(B, Vars, Context);
+                [B|_] -> eval1(B, Vars, Options, Context);
                 _ -> undefined
             end;
         A -> A
     end;
-eval1({apply_filter, Mod, Func, Expr, Args}, Vars, Context) ->
-    EvalArgs = [ eval1(Arg, Vars, Context) || Arg <- Args],
-    EvalExpr = eval1(Expr, Vars, Context),
-    erlang:apply(Mod, Func, [EvalExpr | EvalArgs] ++[Context]);
-eval1({find_value, Ks}, Vars, Context) ->
-    find_value(Ks, Vars, Context);
-eval1(Val, _Vars, _Context) ->
+eval1({apply_filter, Mod, Func, Expr, Args}, Vars, Options, Context) ->
+    case is_filter_allowed(Func, Options) of
+        true ->
+            EvalArgs = [ eval1(Arg, Vars, Options, Context) || Arg <- Args],
+            EvalExpr = eval1(Expr, Vars, Options, Context),
+            erlang:apply(Mod, Func, [EvalExpr | EvalArgs] ++[Context]);
+        false ->
+            ?LOG_WARNING(#{
+                in => zotonic_mod_base,
+                text => <<"Filter not allowed">>,
+                result => error,
+                filter => Func
+            }),
+            undefined
+    end;
+eval1({find_value, Ks}, Vars, Options, Context) ->
+    find_value(Ks, Vars, Options, Context);
+eval1({trans_literal, Text}, _Vars, _Options, Context) ->
+    z_trans:trans(Text, Context);
+eval1(Val, _Vars, _Options, _Context) ->
     Val.
 
-find_value([ K | Ks ], Vars, Context) ->
-    V = eval1(K, Vars, Context),
-    find_value_1(V, Ks, Vars, Context).
+find_value([ K | Ks ], Vars, Options, Context) ->
+    V = eval1(K, Vars, Options, Context),
+    find_value_1(V, Ks, Vars, Options, Context).
 
-find_value_1(V, [], _Vars, _Context) ->
+find_value_1(V, [], _Vars, _Options, _Context) ->
     V;
-find_value_1(V, Ks, Vars, Context) when is_integer(V); is_binary(V); is_atom(V) ->
-    find_rsc_prop(V, Ks, Vars, Context);
-find_value_1([ V | _ ], [ {variable, _} | _ ] = Ks, Vars, Context) ->
-    find_value_1(V, Ks, Vars, Context);
-find_value_1([ _ | _ ] = V, [ {expr, _} = E | Ks ], Vars, Context) ->
-    V1 = case eval1(E, Vars, Context) of
+find_value_1(V, Ks, Vars, Options, Context) when is_integer(V); is_binary(V); is_atom(V) ->
+    find_rsc_prop(V, Ks, Vars, Options, Context);
+find_value_1([ V | _ ], [ {variable, _} | _ ] = Ks, Vars, Options, Context) ->
+    find_value_1(V, Ks, Vars, Options, Context);
+find_value_1([ _ | _ ] = V, [ {expr, _} = E | Ks ], Vars, Options, Context) ->
+    V1 = case eval1(E, Vars, Options, Context) of
         N when is_integer(N) -> nth(N, V);
-        Index -> z_template_compiler_runtime:find_value(V, Index, #{}, Context)
+        Index -> z_template_compiler_runtime:find_value(Index, V, #{}, Context)
     end,
-    find_value_1(V1, Ks, Vars, Context);
-find_value_1([ _ | _ ] = V, [ N | Ks ], Vars, Context) when is_integer(N) ->
+    find_value_1(V1, Ks, Vars, Options, Context);
+find_value_1([ _ | _ ] = V, [ N | Ks ], Vars, Options, Context) when is_integer(N) ->
     V1 = nth(N, V),
-    find_value_1(V1, Ks, Vars, Context);
-find_value_1(#{} = V, [ Index | _ ] = Ks, Vars, Context) ->
-    Index1 = eval1(Index, Vars, Context),
-    V1 = z_template_compiler_runtime:find_value(V, Index1, #{}, Context),
-    find_value_1(V1, Ks, Vars, Context);
-find_value_1(_, _, _Vars, _Context) ->
+    find_value_1(V1, Ks, Vars, Options, Context);
+find_value_1(#{} = V, [ {variable, Var} | Ks ], Vars, Options, Context) ->
+    V1 = z_template_compiler_runtime:find_value(Var, V, #{}, Context),
+    find_value_1(V1, Ks, Vars, Options, Context);
+find_value_1(#{} = V, [ Index | _ ] = Ks, Vars, Options, Context) ->
+    V1 = z_template_compiler_runtime:find_value(Index, V, #{}, Context),
+    find_value_1(V1, Ks, Vars, Options, Context);
+find_value_1(_, _, _Vars, _Options, _Context) ->
     undefined.
 
 
-find_rsc_prop(V, [ {variable, <<"o">>}, {variable, Pred} | Ks ], Vars, Context) ->
+find_rsc_prop(V, [ {variable, <<"o">>}, {variable, Pred} | Ks ], Vars, Options, Context) ->
     V1 = m_edge:objects(V, Pred, Context),
-    find_value_1(V1, Ks, Vars, Context);
-find_rsc_prop(V, [ {variable, <<"s">>}, {variable, Pred} | Ks ], Vars, Context) ->
+    find_value_1(V1, Ks, Vars, Options, Context);
+find_rsc_prop(V, [ {variable, <<"s">>}, {variable, Pred} | Ks ], Vars, Options, Context) ->
     V1 = m_edge:subjects(V, Pred, Context),
-    find_value_1(V1, Ks, Vars, Context);
-find_rsc_prop(V, [ {variable, Var} | Ks ], Vars, Context) ->
-    V1 = m_rsc:p(V, Var, Context),
-    find_value_1(V1, Ks, Vars, Context);
-find_rsc_prop(V, [ {expr, _} = E | Ks ], Vars, Context) ->
-    V1 = case eval1(E, Vars, Context) of
+    find_value_1(V1, Ks, Vars, Options, Context);
+find_rsc_prop(V, [ {variable, Var} | Ks ], Vars, Options, Context) ->
+    V1 = p(V, Var, Options, Context),
+    find_value_1(V1, Ks, Vars, Options, Context);
+find_rsc_prop(V, [ {expr, _} = E | Ks ], Vars, Options, Context) ->
+    V1 = case eval1(E, Vars, Options, Context) of
         1 -> V;
         N when is_integer(N) -> undefined;
-        P -> m_rsc:p(V, P, Context)
+        P -> p(V, P, Options, Context)
     end,
-    find_value_1(V1, Ks, Vars, Context).
+    find_value_1(V1, Ks, Vars, Options, Context).
 
+p(Id, Prop, Options, Context) ->
+    case proplists:get_value(p, Options) of
+        F when is_function(F, 3) ->
+            F(Id, Prop, Context);
+        undefined ->
+            m_rsc:p(Id, Prop, Context)
+    end.
+
+is_filter_allowed(<<"as_atom">>, _Options) ->
+    ?LOG_WARNING(#{
+        in => zotonic_mod_base,
+        text => <<"Filter as_atom is not allowed in free expressions">>,
+        result => error,
+        filter => <<"as_atom">>
+    }),
+    undefined;
+is_filter_allowed(Filter, Options) ->
+    case proplists:get_value(filters_allowed, Options) of
+        undefined -> true;
+        Allowed when is_list(Allowed) -> lists:member(Filter, Allowed);
+        _ -> false
+    end.
 
 nth(1, [V|_]) -> V;
 nth(N, [_|Vs]) when N > 1 -> nth(N-1, Vs);

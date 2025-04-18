@@ -174,8 +174,17 @@ output(<<>>, RenderState, Context) ->
     {[], RenderState, Context};
 output(B, RenderState, Context) when is_binary(B) ->
     {B, RenderState, Context};
-output(List, RenderState, Context) ->
-    output1(List, RenderState, Context, []).
+output(List, RenderState, Context) when is_list(List) ->
+    output1(List, RenderState, Context, []);
+output(undefined, RenderState, Context) ->
+    {<<>>, RenderState, Context};
+output(V, RenderState, Context) when is_number(V); is_atom(V) ->
+    {z_convert:to_binary(V), RenderState, Context};
+output(#trans{} = Trans, RenderState, Context) ->
+    V = z_trans:lookup_fallback(Trans, Context),
+    output(V, RenderState, Context);
+output(V, RenderState, Context) ->
+    output1([V], RenderState, Context, []).
 
 %% @doc Recursively walk through the output, replacing all context placeholders with their rendered output
 output1(B, RenderState, Context, Acc) when is_binary(B) ->
