@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2024 Marc Worrell, Maas-Maarten Zeeman
+%% @copyright 2009-2025 Marc Worrell, Maas-Maarten Zeeman
 %% @doc Pivoting server for the rsc table. Takes care of full text indices. Polls the pivot queue for any changed resources.
 %% @end
 
-%% Copyright 2009-2024 Marc Worrell, Maas-Maarten Zeeman
+%% Copyright 2009-2025 Marc Worrell, Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -97,11 +97,12 @@
 
 -record(state, {
     site :: atom(),
+    is_env_backup = false :: boolean(),
     is_initial_delay = true :: boolean(),
     is_pivot_delay = false :: boolean(),
     backoff_counter = 0 :: integer(),
 
-    poll_timer :: timer:tref(),
+    poll_timer :: timer:tref() | undefined,
 
     task_pid :: undefined | pid(),
     task_id :: undefined | integer(),
@@ -476,11 +477,18 @@ init(Site) ->
         site => Site,
         module => ?MODULE
     }),
-    timer:send_interval(?JOB_CHECK_INTERVAL*1000, job_check),
-    {ok, TRefPoll} = timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
+    {IsEnvBackup, PollTimer} = case m_site:environment(Site) of
+        backup ->
+            {true, undefined};
+        _Env ->
+            timer:send_interval(?JOB_CHECK_INTERVAL*1000, job_check),
+            {ok, TRefPoll} = timer:send_after(?PIVOT_POLL_INTERVAL_SLOW*1000, poll),
+            {false, TRefPoll}
+    end,
     {ok, #state{
         site = Site,
-        poll_timer = TRefPoll,
+        is_env_backup = IsEnvBackup,
+        poll_timer = PollTimer,
         is_initial_delay = true,
         is_pivot_delay = false
     }}.
@@ -534,7 +542,8 @@ handle_call({pivot_done, PivotPid, _IdsOrError}, _From, State) ->
         pid => PivotPid
     }),
     {reply, {error, unknown_pivot}, State};
-
+handle_call({insert_task_after, _Secs, _Module, _Func, _Key, _Args}, _From, #state{ is_env_backup = true } = State) ->
+    {reply, {error, backup}, State};
 handle_call({insert_task_after, SecondsOrDate, Module, Function, UniqueKey, ArgsFun}, _From, State) ->
     Context = z_context:new(State#state.site),
     Result = do_insert_task_after(SecondsOrDate, Module, Function, UniqueKey, ArgsFun, Context),
@@ -549,6 +558,7 @@ handle_call({insert_task_after, SecondsOrDate, Module, Function, UniqueKey, Args
 handle_call(status, _From, State) ->
     Status = #{
         site => State#state.site,
+        is_env_backup => State#state.is_env_backup,
         is_initial_delay => State#state.is_initial_delay,
         is_pivot_delay => State#state.is_pivot_delay,
         task_pid => State#state.task_pid,
@@ -567,6 +577,9 @@ handle_call(Message, _From, State) ->
 handle_cast(poll, #state{ is_initial_delay = true } = State) ->
     % Manual poll of the pivot queue, but starting up - wait
     {noreply, State};
+handle_cast(poll, #state{ is_env_backup = true } = State) ->
+    % No pivot or tasks when running as backup.
+    {noreply, State};
 handle_cast(poll, State) ->
     % Manual poll of the pivot queue
     try
@@ -584,12 +597,16 @@ handle_cast(poll, State) ->
             {noreply, State#state{ backoff_counter = ?BACKOFF_POLL_ERROR }}
     end;
 
+handle_cast({insert_queue, _DueDate, _Ids}, #state{ is_env_backup = true } = State) ->
+    {noreply, State};
 handle_cast({insert_queue, DueDate, Ids}, State) when is_list(Ids) ->
     % Insert an id into the queue.
     do_insert_queue(Ids, DueDate, z_context:new(State#state.site)),
     z_utils:flush_message({'$gen_cast', {insert_queue, DueDate, Ids}}),
     {noreply, State};
 
+handle_cast({pivot, _Id}, #state{ is_env_backup = true } = State) ->
+    {noreply, State};
 handle_cast({pivot, Id}, #state{ is_initial_delay = true } = State) when is_integer(Id) ->
     % Immediate pivot of an resource-id - but we are still starting up
     Due = z_datetime:next_minute(calendar:universal_time()),
@@ -652,6 +669,8 @@ handle_cast(Message, State) ->
 
 
 %% @doc Handling all non call/cast messages
+handle_info(poll, #state{ is_env_backup = true } = State) ->
+    {noreply, State};
 handle_info(poll, #state{ is_pivot_delay = true } = State) ->
     State1 = State#state{ is_pivot_delay = false },
     {noreply, next_poll(State1, ?PIVOT_POLL_INTERVAL_SLOW)};

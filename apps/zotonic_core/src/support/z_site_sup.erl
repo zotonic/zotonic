@@ -1,8 +1,13 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2020 Marc Worrell
-%% @doc Supervisor for a zotonic site.
+%% @copyright 2009-2025 Marc Worrell
+%% @doc Supervisor for a zotonic site. There are two modi for a site, depending
+%% on the site's environment. If a site has environment 'backup' then it is
+%% only running the modules backup, base and filestore. The site will be fetching
+%% backups from the filestore and importing the SQL dump after it is fetched.
+%% In all other environments the site is running with all enabled modules.
+%% @end
 
-%% Copyright 2009-2020 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -35,7 +40,6 @@
     install_done/1
 ]).
 
-%% @spec start_link(Site) -> ServerRet
 %% @doc API for starting the site supervisor.
 -spec start_link(Site :: atom()) -> {ok, pid()} | {error, term()}.
 start_link(Site) ->
