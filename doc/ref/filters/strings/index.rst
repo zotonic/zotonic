@@ -20,7 +20,9 @@ Strings
    ../filter_ljust
    ../filter_log_format_stack
    ../filter_lower
+   ../filter_merge_tags
    ../filter_normalize_email
+   ../filter_render
    ../filter_replace_args
    ../filter_rjust
    ../filter_split
