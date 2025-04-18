@@ -100,6 +100,8 @@ simplify({number_literal, _, Val}) ->
     z_convert:to_integer(Val);
 simplify({string_literal, _, Val}) ->
     Val;
+simplify({trans_literal, _, Val}) ->
+    {trans_literal, Val};
 simplify({attribute, {identifier,_,Attr}, From}) ->
     {attribute, Attr, simplify(From)};
 simplify({index_value, Array, Index}) ->
@@ -114,10 +116,11 @@ simplify({apply_filter, Expr, {filter, {identifier,_,Filter}, Args}}) ->
             simplify(Expr),
             [ simplify(Arg) || Arg <- Args ]}
     catch
-        _:_ ->
+        A:B:S ->
+            ?DEBUG({A, B, S}),
             ?LOG_WARNING(#{
                 in => zotonic_mod_base,
-                text => <<"Expression filter unknown">>,
+                text => <<"Expression filter unknown, or error in filter">>,
                 result => error,
                 filter => Filter
             }),
@@ -220,6 +223,8 @@ eval1({apply_filter, Mod, Func, Expr, Args}, Vars, Options, Context) ->
     end;
 eval1({find_value, Ks}, Vars, Options, Context) ->
     find_value(Ks, Vars, Options, Context);
+eval1({trans_literal, Text}, _Vars, _Options, Context) ->
+    z_trans:trans(Text, Context);
 eval1(Val, _Vars, _Options, _Context) ->
     Val.
 
