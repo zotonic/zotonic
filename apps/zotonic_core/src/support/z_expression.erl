@@ -116,13 +116,14 @@ simplify({apply_filter, Expr, {filter, {identifier,_,Filter}, Args}}) ->
             simplify(Expr),
             [ simplify(Arg) || Arg <- Args ]}
     catch
-        A:B:S ->
-            ?DEBUG({A, B, S}),
+        _:Reason:S ->
             ?LOG_WARNING(#{
                 in => zotonic_mod_base,
                 text => <<"Expression filter unknown, or error in filter">>,
                 result => error,
-                filter => Filter
+                reason => Reason,
+                filter => Filter,
+                stack => S
             }),
             undefined
     end;
