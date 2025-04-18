@@ -14,3 +14,4 @@ HTML
    ../filter_urlize
    ../filter_embedded_media
    ../filter_without_embedded_media
+   ../filter_render
