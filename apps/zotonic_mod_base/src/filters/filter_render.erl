@@ -30,7 +30,7 @@ render(Template, Context) ->
     render(Template, #{}, Context).
 
 render({cat, Args}, Vars, Context) when is_list(Vars); is_map(Vars) ->
-    Template = proplists:lookup(template, Args),
+    {template, Template} = proplists:lookup(template, Args),
     Vars1 = case proplists:lookup(id, Args) of
         {id, Id} -> set_arg(Vars, id, Id);
         none -> Vars
@@ -40,7 +40,8 @@ render({cat, Args}, Vars, Context) when is_list(Vars); is_map(Vars) ->
 render(Template, Vars, Context) when is_list(Vars); is_map(Vars) ->
     case z_module_indexer:find(template, Template, Context) of
         {ok, Index} ->
-            {Output, _} = z_render:output(z_template:render_to_iolist(Index, Vars, Context), Context),
+            {Data, _Context} = z_template:render_to_iolist(Index, Vars, Context),
+            {Output, _} = z_render:output(Data, Context),
             iolist_to_binary(Output);
         {error, Reason} ->
             ?LOG_WARNING(#{
