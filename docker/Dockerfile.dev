@@ -1,4 +1,4 @@
-FROM erlang:27
+FROM erlang:27.3.3
 
 # Start this image using ./start-docker.sh
 
