@@ -101,8 +101,10 @@ m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
 
-%% @doc Return the current DTAP environment
--spec environment( z:context() ) -> z:environment().
+%% @doc Return the current DTAP environment.
+-spec environment( z:context() | atom() ) -> z:environment().
+environment(Site) when is_atom(Site) ->
+    environment(z_context:new(Site));
 environment(Context) ->
     environment_atom( m_site:get(environment, Context) ).
 

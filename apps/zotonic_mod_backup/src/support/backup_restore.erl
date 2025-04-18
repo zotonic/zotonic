@@ -1,0 +1,254 @@
+-module(backup_restore).
+
+-export([
+    restore_newest_backup/1,
+    restore_backup/2,
+    is_file_missing/2
+]).
+
+-include_lib("zotonic_core/include/zotonic.hrl").
+
+
+%% @doc Restore the newest backup from the backup files. This
+%% is called after backups are downloaded.
+%% After the database backup is restored, the site is restarted.
+-spec restore_newest_backup(Context) -> ok | {error, Reason} when
+    Context :: z:context(),
+    Reason :: nobackup | incomplete | term().
+restore_newest_backup(Context) ->
+    BackupData = backup_create:read_admin_file(Context),
+    case newest_backup(BackupData) of
+        undefined ->
+            {error, nobackup};
+        Backup ->
+            restore_backup(Backup, Context)
+    end.
+
+%% @doc Restore a specific backup from the backup list.
+%% After the database is restored, the site is restarted.
+restore_backup(Backup, Context) ->
+    % TODO: restore config files.
+    %       For this we need to be able to force the site to backup.
+    %       Write in config.d/zz-backup.yaml:
+    %           zotonic:
+    %               - environment: backup
+    %               - enabled: true
+    %       OR a file: priv/BACKUP - which signals the above settings
+    case restore_database_backup(Backup, Context) of
+        ok ->
+            ?LOG_NOTICE(#{
+                in => zotonic_mod_backup,
+                text => <<"Restored database, restarting site">>,
+                result => ok,
+                backup => Backup
+            }),
+            % Restart site with new database (and config files)
+            z_sites_manager:restart(z_context:site(Context));
+        {error, Reason} = Error ->
+            ?LOG_ERROR(#{
+                in => zotonic_mod_backup,
+                text => <<"Restoring database failed">>,
+                result => error,
+                reason => Reason,
+                backup => Backup
+            }),
+            Error
+    end.
+
+restore_database_backup(#{ <<"database">> := BackupFile }, Context) ->
+    jobs:run(zotonic_singular_job, fun() ->
+        case is_file_missing(BackupFile, Context) of
+            true ->
+                {error, incomplete};
+            false ->
+                % Files are there - try to unpack
+                BackupPath = filename:join(backup_create:dir(Context), BackupFile),
+                case maybe_decrypt_file(BackupPath, Context) of
+                    {ok, BackupDecrypted} ->
+                        restore_database_backup_file(BackupDecrypted, Context);
+                    {error, _} = Error ->
+                        Error
+                end
+        end
+    end);
+restore_database_backup(_Status, _Context) ->
+    {error, incomplete}.
+
+restore_database_backup_file(BackupDecrypted, Context) ->
+    % 1. Check schema of the DB dump
+    case fetch_sql_schema(BackupDecrypted) of
+        {ok, BackupSchema} ->
+            DbOpts = z_db_pool:get_database_options(Context),
+            DbSchema = z_convert:to_binary(proplists:get_value(dbschema, DbOpts)),
+            if
+                DbSchema =:= BackupSchema ->
+                    % 2. Pause all db activity
+                    case z_db_pool:pause_connections(Context) of
+                        ok ->
+                            case z_db_pool:get_unpaused_connection(Context) of
+                                {ok, ConnPid} ->
+                                    % 3. Rename the schema
+                                    Timeout = 60000,
+                                    TempSchema = <<DbSchema/binary, "_temp">>,
+                                    {ok, [], []} = z_db_pgsql:squery(
+                                        ConnPid,
+                                        iolist_to_binary([
+                                            "DROP SCHEMA IF EXISTS \"", TempSchema, "\" CASCADE"
+                                        ]),
+                                        Timeout),
+                                    {ok, [], []} = z_db_pgsql:squery(
+                                        ConnPid,
+                                        iolist_to_binary([
+                                            "ALTER SCHEMA \"", DbSchema, "\""
+                                            "RENAME TO \"", TempSchema, "\""
+                                        ]),
+                                        30000),
+                                    % 4. Import the dump
+                                    case import_dump(BackupDecrypted, DbOpts, Context) of
+                                        ok ->
+                                            % 5. Drop the tmp schema
+                                            {ok, [], []} = z_db_pgsql:squery(
+                                                ConnPid,
+                                                iolist_to_binary([
+                                                    "DROP SCHEMA IF EXISTS \"", TempSchema, "\" CASCADE"
+                                                ]),
+                                                Timeout),
+                                            ok;
+                                        {error, _} = Error ->
+                                            % Recover previous schema
+                                            {ok, [], []} = z_db_pgsql:squery(
+                                                ConnPid,
+                                                iolist_to_binary([
+                                                    "DROP SCHEMA IF EXISTS \"", DbSchema, "\" CASCADE"
+                                                ]),
+                                                Timeout),
+                                            {ok, [], []} = z_db_pgsql:squery(
+                                                ConnPid,
+                                                iolist_to_binary([
+                                                    "ALTER SCHEMA \"", TempSchema, "\""
+                                                    "RENAME TO \"", DbSchema, "\""
+                                                ]),
+                                                30000),
+                                            Error
+                                    end;
+                                {error, _} = Error ->
+                                    Error
+                            end;
+                        {error, _} = Error ->
+                            Error
+                    end;
+                true ->
+                    {error, schema_mismatch}
+            end;
+        {error, _} = Error ->
+            Error
+    end.
+
+import_dump(Filename, DbOpts, Context) ->
+    Host = proplists:get_value(dbhost, DbOpts),
+    Port = proplists:get_value(dbport, DbOpts),
+    User = proplists:get_value(dbuser, DbOpts),
+    Database = proplists:get_value(dbdatabase, DbOpts),
+    {ok, PgPass} = backup_create:pg_passfile(DbOpts, Context),
+    Cmd = unicode:characters_to_list([
+        " ",
+        "gunzip -c ", z_filelib:os_filename(Filename), " | ",
+        "PGPASSFILE=", z_filelib:os_filename(PgPass), " ",
+        "psql -q "
+            " -X ",
+            " -h ", z_filelib:os_filename(Host),
+            " -p ", z_convert:to_list(Port),
+            " -U ", z_filelib:os_filename(User),
+            " -w ",
+            Database
+    ]),
+    case z_exec:run(Cmd) of
+        {ok, _} ->
+            ok;
+        {error, _} = Error ->
+            Error
+    end.
+
+fetch_sql_schema(Filename) ->
+    case file:open(Filename, [ read, raw, binary ]) of
+        {ok, Fd} ->
+            case file:read(Fd, 5000) of
+                {ok, Compressed} ->
+                    file:close(Fd),
+                    case partial_unzip(Compressed, 10000) of
+                        {ok, Data} ->
+                            case re:run(Data, <<"CREATE SCHEMA \"(.*?)\"">>, [{capture, all_but_first, binary}]) of
+                                {match, [Schema]} ->
+                                    {ok, Schema};
+                                nomatch ->
+                                    {error, no_schema}
+                            end;
+                        {error, _} = Error ->
+                            Error
+                    end;
+                {error, _} = Error ->
+                    file:close(Fd),
+                    Error
+            end;
+        {error, _} = Error ->
+            Error
+    end.
+
+partial_unzip(Compressed, MaxLength) ->
+    Z = zlib:open(),
+    zlib:inflateInit(Z, 16 + 15),
+    try
+        Uncompressed = unzip_loop(Z, <<>>, zlib:safeInflate(Z, Compressed), MaxLength),
+        {ok, Uncompressed}
+    catch
+        _:_ ->
+            {error, gunzip}
+    after
+        zlib:close(Z)
+    end.
+
+unzip_loop(_Z, Acc, _, MaxLength) when size(Acc) >= MaxLength ->
+    Acc;
+unzip_loop(Z, Acc, {continue, Output}, MaxLength) ->
+    Out1 = iolist_to_binary(Output),
+    Acc1 = <<Acc/binary, Out1/binary>>,
+    Next = try
+        zlib:safeInflate(Z, [])
+    catch
+        _:_ ->
+            {finished, <<>>}
+    end,
+    unzip_loop(Z, Acc1, Next, MaxLength);
+unzip_loop(_Z, Acc, {finished, Output}, _MaxLength) ->
+    Out1 = iolist_to_binary(Output),
+    <<Acc/binary, Out1/binary>>.
+
+newest_backup(BackupStatus) ->
+    {Newest, _} = maps:fold(
+        fun
+            (_Name, #{ <<"timestamp">> := Tm } = Status, {_, Newest}) when Tm > Newest ->
+                {Status, Tm};
+            (_Name, _, Acc) ->
+                Acc
+        end,
+        {undefined, 0},
+        BackupStatus),
+    Newest.
+
+maybe_decrypt_file(Filename, Context) ->
+    case backup_file_crypto:is_encrypted(Filename) of
+        true ->
+            Password = m_config:get_value(?MODULE, backup_encrypt_password, Context),
+            backup_file_crypto:password_decrypt(Filename, Password);
+        false ->
+            {ok, Filename}
+    end.
+
+%% @doc Check if a file is missing from the backup directory.
+is_file_missing(undefined, _Context) ->
+    false;
+is_file_missing(<<>>, _Context) ->
+    false;
+is_file_missing(Filename, Context) ->
+    LocalFile = filename:join(backup_create:dir(Context), Filename),
+    (not filelib:is_regular(LocalFile)) orelse filelib:file_size(LocalFile) =:= 0.

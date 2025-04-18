@@ -20,6 +20,7 @@
 -module(backup_file_crypto).
 
 -export([
+    is_encrypted/1,
     password_encrypt/2, password_encrypt/3,
     password_decrypt/2, password_decrypt/3
 ]).
@@ -30,6 +31,16 @@
 -define(SALT_SIZE, 16).
 -define(IV_SIZE, 16).
 -define(KEY_SIZE, 32).
+
+%% @doc Check if a file is encrypted by checking the file extension.
+-spec is_encrypted(Filename) -> boolean() when
+    Filename :: file:filename_all().
+is_encrypted(Filename) ->
+    case filename:extension(Filename) of
+        <<".enc">> -> true;
+        ".enc" -> true;
+        _ -> false
+    end.
 
 % @doc Encrypt file named Filename with a password. The output will be written to the file named InFile + ".enc".
 password_encrypt(Filename, Password) ->
@@ -48,6 +59,12 @@ password_decrypt(Filename, Password) ->
 
 
 % @doc Encrypt file named InFile with a password. The encrypted output will be written to OutFile.
+password_encrypt(_InFile, _OutFile, undefined) ->
+    {error, no_password};
+password_encrypt(_InFile, _OutFile, <<>>) ->
+    {error, no_password};
+password_encrypt(_InFile, _OutFile, "") ->
+    {error, no_password};
 password_encrypt(InFile, OutFile, Password) ->
     with_read_write_files(fun(In, Out) ->
                                   case password_encrypt_stream(In, Out, Password) of
@@ -60,7 +77,13 @@ password_encrypt(InFile, OutFile, Password) ->
                           InFile, OutFile).
 
 % @doc Decrypt the file name InFile with Password and write the output to OutFile.
-password_decrypt(InFile, OutFile, Password) -> 
+password_decrypt(_InFile, _OutFile, undefined) ->
+    {error, no_password};
+password_decrypt(_InFile, _OutFile, <<>>) ->
+    {error, no_password};
+password_decrypt(_InFile, _OutFile, "") ->
+    {error, no_password};
+password_decrypt(InFile, OutFile, Password) ->
     with_read_write_files(fun(In, Out) ->
                                   case password_decrypt_stream(In, Out, Password) of
                                       ok ->
