@@ -681,7 +681,8 @@ ensure_column_is_local(Context) ->
 ensure_size_bigint(Context) ->
     case z_db:column(filestore, size, Context) of
         {ok, #column_def{ type = <<"integer">> }} ->
-            z_db:q("alter table filestore alter column size type bigint", Context),
+            % Run with a timeout of 10 minutes, as this can be a long operation:
+            z_db:q("alter table filestore alter column size type bigint", [], Context, 10*60*1000),
             z_db:flush(Context);
         {ok, _} ->
             ok
