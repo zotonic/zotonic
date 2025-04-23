@@ -92,7 +92,7 @@ merge_tag_test() ->
     Context = z_context:new(zotonic_site_testsandbox),
     <<"The sum is 300">> = filter_merge_tags:merge_tags(<<"The sum is {{ 100 + 200 }}">>, #{}, Context),
     <<"Hello World.">> = filter_merge_tags:merge_tags(<<"Hello {{ a }}.">>, #{ <<"a">> => <<"World">> }, Context),
-    <<"Hello &lt;%gt;.">> = filter_merge_tags:merge_tags(<<"Hello {{ a }}.">>, #{ <<"a">> => <<"<>">> }, Context),
+    <<"Hello &lt;&gt;.">> = filter_merge_tags:merge_tags(<<"Hello {{ a }}.">>, #{ <<"a">> => <<"<>">> }, Context),
     <<"Hello administrator.">> = filter_merge_tags:merge_tags(<<"Hello {{ name }}.">>, #{ <<"id">> => 1 }, Context),
     <<"Hello foo.">> = filter_merge_tags:merge_tags(<<"Hello {{ name }}.">>, #{ <<"id">> => 1, <<"name">> => <<"foo">> }, Context),
     ok.
