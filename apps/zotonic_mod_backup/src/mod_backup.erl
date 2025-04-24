@@ -49,6 +49,8 @@
     observe_edge_delete/2,
     observe_media_update_done/2,
 
+    observe_backup_list/2,
+
     start_backup/1,
     start_backup/2,
     list_backups/1,
@@ -181,6 +183,10 @@ observe_m_config_update(#m_config_update{module=ModBackup, key=EncryptBackups}, 
     end;
 observe_m_config_update(#m_config_update{}, _Context) ->
     ok.
+
+
+observe_backup_list(backup_list, Context) ->
+    backup_create:read_admin_file(Context).
 
 
 %% @doc Callback for controller_file. Check if the backup file exists and return

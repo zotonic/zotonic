@@ -93,7 +93,6 @@ eval(Text, Vars, Context) ->
                     default,
                     eq_day,
                     first,
-                    first,
                     force_escape,
                     format_duration,
                     format_integer,
