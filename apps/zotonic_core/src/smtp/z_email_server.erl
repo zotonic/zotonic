@@ -1,9 +1,9 @@
 %% @author Atilla Erdodi <atilla@maximonster.com>
-%% @copyright 2010-2024 Maximonster Interactive Things
+%% @copyright 2010-2025 Maximonster Interactive Things
 %% @doc Email server. Queues, renders and sends e-mails.
 %% @end
 
-%% Copyright 2010-2024 Maximonster Interactive Things
+%% Copyright 2010-2025 Maximonster Interactive Things
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -1784,10 +1784,12 @@ send_next_batch(MaxListSize, StatusSites, State) ->
                         timer:now_diff(QEmail#email_queue.retry_on, Now) < 0,
 
                         % 4. With a running site, excluding the ones in backup mode
-                        Context = z_context:depickle_site(QEmail#email_queue.pickled_context),
-                        case m_site:environment(Context) of
-                            backup -> false;
-                            _Env -> maps:find(Context, StatusSites) =:= {ok, running}
+                        begin
+                            Context = z_context:depickle_site(QEmail#email_queue.pickled_context),
+                            case m_site:environment(Context) of
+                                backup -> false;
+                                _Env -> maps:find(Context, StatusSites) =:= {ok, running}
+                            end
                         end
             ]),
             QCursor = qlc:cursor(Q),

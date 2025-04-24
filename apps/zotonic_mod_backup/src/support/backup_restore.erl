@@ -83,55 +83,51 @@ restore_database_backup_file(BackupDecrypted, Context) ->
             if
                 DbSchema =:= BackupSchema ->
                     % 2. Pause all db activity
-                    case z_db_pool:pause_connections(Context) of
-                        ok ->
-                            case z_db_pool:get_unpaused_connection(Context) of
-                                {ok, ConnPid} ->
-                                    % 3. Rename the schema
-                                    Timeout = 60000,
-                                    TempSchema = <<DbSchema/binary, "_temp">>,
+                    ok = z_db_pool:pause_connections(Context),
+                    case z_db_pool:get_unpaused_connection(Context) of
+                        {ok, ConnPid} ->
+                            % 3. Rename the schema
+                            Timeout = 60000,
+                            TempSchema = <<DbSchema/binary, "_temp">>,
+                            {ok, [], []} = z_db_pgsql:squery(
+                                ConnPid,
+                                iolist_to_binary([
+                                    "DROP SCHEMA IF EXISTS \"", TempSchema, "\" CASCADE"
+                                ]),
+                                Timeout),
+                            {ok, [], []} = z_db_pgsql:squery(
+                                ConnPid,
+                                iolist_to_binary([
+                                    "ALTER SCHEMA \"", DbSchema, "\""
+                                    "RENAME TO \"", TempSchema, "\""
+                                ]),
+                                30000),
+                            % 4. Import the dump
+                            case import_dump(BackupDecrypted, DbOpts, Context) of
+                                ok ->
+                                    % 5. Drop the tmp schema
                                     {ok, [], []} = z_db_pgsql:squery(
                                         ConnPid,
                                         iolist_to_binary([
                                             "DROP SCHEMA IF EXISTS \"", TempSchema, "\" CASCADE"
                                         ]),
                                         Timeout),
+                                    ok;
+                                {error, _} = Error ->
+                                    % Recover previous schema
                                     {ok, [], []} = z_db_pgsql:squery(
                                         ConnPid,
                                         iolist_to_binary([
-                                            "ALTER SCHEMA \"", DbSchema, "\""
-                                            "RENAME TO \"", TempSchema, "\""
+                                            "DROP SCHEMA IF EXISTS \"", DbSchema, "\" CASCADE"
+                                        ]),
+                                        Timeout),
+                                    {ok, [], []} = z_db_pgsql:squery(
+                                        ConnPid,
+                                        iolist_to_binary([
+                                            "ALTER SCHEMA \"", TempSchema, "\""
+                                            "RENAME TO \"", DbSchema, "\""
                                         ]),
                                         30000),
-                                    % 4. Import the dump
-                                    case import_dump(BackupDecrypted, DbOpts, Context) of
-                                        ok ->
-                                            % 5. Drop the tmp schema
-                                            {ok, [], []} = z_db_pgsql:squery(
-                                                ConnPid,
-                                                iolist_to_binary([
-                                                    "DROP SCHEMA IF EXISTS \"", TempSchema, "\" CASCADE"
-                                                ]),
-                                                Timeout),
-                                            ok;
-                                        {error, _} = Error ->
-                                            % Recover previous schema
-                                            {ok, [], []} = z_db_pgsql:squery(
-                                                ConnPid,
-                                                iolist_to_binary([
-                                                    "DROP SCHEMA IF EXISTS \"", DbSchema, "\" CASCADE"
-                                                ]),
-                                                Timeout),
-                                            {ok, [], []} = z_db_pgsql:squery(
-                                                ConnPid,
-                                                iolist_to_binary([
-                                                    "ALTER SCHEMA \"", TempSchema, "\""
-                                                    "RENAME TO \"", DbSchema, "\""
-                                                ]),
-                                                30000),
-                                            Error
-                                    end;
-                                {error, _} = Error ->
                                     Error
                             end;
                         {error, _} = Error ->

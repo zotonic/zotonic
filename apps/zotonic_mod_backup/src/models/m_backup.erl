@@ -76,7 +76,7 @@ m_get([ <<"is_backup_in_progress">> | Rest ], _Msg, Context) ->
     end;
 m_get([ <<"directory">> | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_backup, Context) of
-        true -> {ok, {mod_backup:dir(Context), Rest}};
+        true -> {ok, {backup_create:dir(Context), Rest}};
         false -> {error, eacces}
     end;
 m_get(_Vs, _Msg, _Context) ->

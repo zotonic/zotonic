@@ -88,6 +88,8 @@ close_workers(PoolPid) when is_pid(PoolPid) ->
 
 %% @doc Ensure that all worker processes are paused. This is useful if
 %% a large update of the schema needs to be done.
+-spec pause_connections(Context) -> ok when
+    Context :: z:context().
 pause_connections(Context) ->
     case m_site:get(dbdatabase, Context) of
         none -> ok;

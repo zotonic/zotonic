@@ -6,6 +6,8 @@
     dir/1,
     pg_passfile/2,
 
+    command_configuration/0,
+
     write_admin_file/2,
     read_admin_file/1,
     read_json_file/1
@@ -50,7 +52,7 @@ do_backup_process(Name, IsFullBackup, Context) ->
 
 do_backup_process_1(Name, IsFullBackup, Context) ->
     IsFilesBackup = IsFullBackup andalso not backup_config:is_filestore_enabled(Context),
-    case check_configuration() of
+    case command_configuration() of
         {ok, Cmds} ->
             ?LOG_INFO(#{
                 text => <<"Backup starting">>,
@@ -428,7 +430,7 @@ make_filelist(Prefix, Dir, [File|Rest], Acc) ->
     make_filelist(Prefix, Dir, Rest, [{ArchiveName, FullName} | Acc]).
 
 %% @doc Check if we can make backups, the configuration is ok
-check_configuration() ->
+command_configuration() ->
     DbCmd = db_dump_cmd(),
     TarCmd = archive_cmd(),
     Db = os:find_executable(DbCmd),
