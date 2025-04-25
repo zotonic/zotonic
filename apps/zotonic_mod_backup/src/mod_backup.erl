@@ -193,7 +193,7 @@ observe_backup_list(backup_list, Context) ->
 observe_backup_start(backup_start, Context) ->
     start_backup(Context).
 
-observe_backup_restore({backup_restore, Backup} Context) ->
+observe_backup_restore({backup_restore, Backup}, Context) ->
     restore_backup(Backup, Context).
 
 
