@@ -95,6 +95,7 @@
 % Number of weekly backups to keep
 -define(WEEKLY_BACKUPS, 5).
 
+
 observe_rsc_upload(#rsc_upload{} = Upload, Context) ->
     backup_rsc_upload:rsc_upload(Upload, Context).
 
@@ -367,13 +368,8 @@ init(Args) ->
     z_context:logger_md(Context),
     IsEnvBackup = (m_site:environment(Context) =:= backup),
     % A jobs queue to ensure that we only run a single Database dump at a time.
-    ensure_job_queue(?MODULE, [
-        {regulators, [
-                {counter, [
-                    {limit, 1}
-                ]}
-            ]}
-        ]),
+    ensure_job_queue(?MODULE, [ {regulators, [{counter, [{limit, 1} ]} ]} ]),
+    ensure_job_queue(?CONFIG_UPDATE_JOB, [ {regulators, [{counter, [{limit, 1} ]} ]} ]),
     BackupTimerMessage = case IsEnvBackup of
         true -> periodic_download;
         false -> periodic_backup
@@ -577,7 +573,7 @@ maybe_daily_dump(IsFullBackup, State) ->
             State
     end.
 
-maybe_filestore_upload(#state{ context = Context } = State) ->
+maybe_filestore_upload(#state{ context = Context, upload_pid = undefined } = State) ->
     case backup_config:is_filestore_enabled(Context) of
         true ->
             % Check the backup.json if any files are not yet uploaded
@@ -610,7 +606,15 @@ maybe_filestore_upload(#state{ context = Context } = State) ->
             end;
         false ->
             State
-    end.
+    end;
+maybe_filestore_upload(State) ->
+    ?LOG_INFO(#{
+        in => zotonic_mod_backup,
+        text => <<"Backup delaying upload of database file to filestore because another upload is busy.">>,
+        reason => busy,
+        upload_pid => State#state.upload_pid
+    }),
+    State.
 
 do_upload(Name, DatabaseFile, Context) ->
     z_proc:spawn_link_md(
@@ -625,14 +629,15 @@ do_upload(Name, DatabaseFile, Context) ->
                 }, Context)
             of
                 ok ->
-                    Data = backup_create:read_admin_file(Context),
-                    Bck = maps:get(Name, Data),
-                    Data1 = Data#{
-                        Name => Bck#{
-                            <<"is_filestore_uploaded">> => true
+                    F = fun(Data) ->
+                        Bck = maps:get(Name, Data),
+                        Data#{
+                            Name => Bck#{
+                                <<"is_filestore_uploaded">> => true
+                            }
                         }
-                    },
-                    ok = backup_create:write_admin_file(Data1, Context),
+                    end,
+                    backup_create:update_admin_file(F, Context),
                     RemoteAdminFile = <<"backup/backup.json">>,
                     LocalAdminFile = filename:join(backup_create:dir(Context), <<"backup.json">>),
                     case z_notifier:first(
@@ -735,8 +740,11 @@ do_download(Context) ->
                                     end
                                 end,
                                 NewData),
-                            _ = file:delete(LocalAdminFile),
-                            ok = file:rename(LocalAdminFileTmp, LocalAdminFile),
+                            jobs:run(?CONFIG_UPDATE_JOB,
+                                fun() ->
+                                    _ = file:delete(LocalAdminFile),
+                                    ok = file:rename(LocalAdminFileTmp, LocalAdminFile)
+                                end),
                             z_proc:spawn_md(
                                 fun() ->
                                     backup_restore:restore_newest_backup(Context)

@@ -8,17 +8,18 @@
 
     command_configuration/0,
 
-    write_admin_file/2,
+    update_admin_file/2,
     read_admin_file/1,
     read_json_file/1
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+-include("../backup.hrl").
 
 make_backup(DT, Name, IsFullBackup, Context) ->
     Result = do_backup_process(Name, IsFullBackup, Context),
     Result1 = maybe_encrypt_files(Result, Context),
-    update_admin_file(DT, Name, Result1, Context).
+    register_backup_in_admin_file(DT, Name, Result1, Context).
 
 %% @doc Return and ensure the backup directory
 dir(Context) ->
@@ -68,25 +69,30 @@ do_backup_process_1(Name, IsFullBackup, Context) ->
                             case archive(Name, maps:get(archive, Cmds), Context) of
                                 {ok, TarFile} ->
                                     ?LOG_INFO(#{
-                                                text => <<"Backup finished">>,
-                                                in => zotonic_mod_backup,
-                                                result => ok,
-                                                full_backup => IsFilesBackup,
-                                                name => Name,
-                                                database => DumpFile,
-                                                config_files => ConfigTarFile,
-                                                files => TarFile
-                                               }),
+                                        text => <<"Backup finished">>,
+                                        in => zotonic_mod_backup,
+                                        result => ok,
+                                        full_backup => IsFilesBackup,
+                                        name => Name,
+                                        database => DumpFile,
+                                        config_files => ConfigTarFile,
+                                        files => TarFile
+                                    }),
                                     {ok, #{
-                                           database => DumpFile,
-                                           config_files => ConfigTarFile,
-                                           files => TarFile
-                                          }};
+                                        database => DumpFile,
+                                        database_hash => hash_file(DumpFile, Context),
+                                        config_files => ConfigTarFile,
+                                        config_files_hash => hash_file(ConfigTarFile, Context),
+                                        files => TarFile,
+                                        files_hash => hash_file(TarFile, Context)
+                                    }};
                                 {error, _} ->
                                     % Ignore failed tar, at least register the db dump
                                     {ok, #{
+                                        database => DumpFile,
+                                        database_hash => hash_file(DumpFile, Context),
                                         config_files => ConfigTarFile,
-                                        database => DumpFile
+                                        config_files_hash => hash_file(ConfigTarFile, Context)
                                     }}
                             end;
                         false ->
@@ -102,7 +108,9 @@ do_backup_process_1(Name, IsFullBackup, Context) ->
                             }),
                             {ok, #{
                                 database => DumpFile,
-                                config_files => ConfigTarFile
+                                database_hash => hash_file(DumpFile, Context),
+                                config_files => ConfigTarFile,
+                                config_files_hash => hash_file(ConfigTarFile, Context)
                             }}
                     end;
                 {error, _} = Error ->
@@ -120,6 +128,13 @@ do_backup_process_1(Name, IsFullBackup, Context) ->
             Error
     end.
 
+hash_file(undefined, _Context) ->
+    undefined;
+hash_file(Filename, Context) ->
+    Path = filename:join(dir(Context), Filename),
+    {ok, Hash} = z_utils:hex_sha2_file(Path),
+    Hash.
+
 maybe_encrypt_files({ok, Files}, Context) ->
     case m_config:get_boolean(?MODULE, encrypt_backups, Context) of
         true ->
@@ -132,25 +147,28 @@ maybe_encrypt_files({ok, Files}, Context) ->
 
                     Dir = dir(Context),
                     Files1 = maps:map(fun(_K, File) ->
-                                              FullName = filename:join(Dir, File),
-                                              {ok, FullNameEnc} = backup_file_crypto:password_encrypt(FullName, Password),
-                                              ok = file:delete(FullName),
-                                              filename:basename(FullNameEnc)
-                                      end,
-                                      Files),
+                        FullName = filename:join(Dir, File),
+                        {ok, FullNameEnc} = backup_file_crypto:password_encrypt(FullName, Password),
+                        ok = file:delete(FullName),
+                        filename:basename(FullNameEnc)
+                    end,
+                    Files),
 
                     ?LOG_INFO(#{
-                                text => <<"Encryption done">>,
-                                in => zotonic_mod_backup,
-                                encrypted => Files1
-                               }),
+                        text => <<"Encryption done">>,
+                        in => zotonic_mod_backup,
+                        result => ok,
+                        encrypted => Files1
+                    }),
 
                     {ok, Files1};
                 _ ->
                     ?LOG_WARNING(#{
-                                   text => <<"Could not encrypt backups. Encryption is enabled, but there is no backup password.">>,
-                                   in => zotonic_mod_backup
-                                  }),
+                       text => <<"Could not encrypt backups. Encryption is enabled, but there is no backup password.">>,
+                       in => zotonic_mod_backup,
+                       result => error,
+                       reason => no_backup_encrypt_password
+                    }),
                     {ok, Files}
             end;
         false ->
@@ -160,31 +178,36 @@ maybe_encrypt_files({error, _}=Error, _Context) ->
     Error.
 
 
-update_admin_file(DT, Name, {ok, Files}, Context) ->
-    Data = read_admin_file(Context),
-    Data1 = Data#{
-        Name => #{
-            <<"timestamp">> => z_datetime:datetime_to_timestamp(DT),
+register_backup_in_admin_file(DT, Name, {ok, Files}, Context) ->
+    F = fun(Data) ->
+        Data1 = Data#{
+            Name => #{
+                <<"timestamp">> => z_datetime:datetime_to_timestamp(DT),
 
-            <<"database">> => maps:get(database, Files),
-            <<"config_files">> => maps:get(config_files, Files),
-            <<"files">> => maps:get(files, Files, undefined),
+                <<"database">> => maps:get(database, Files),
+                <<"database_hash">> => maps:get(database_hash, Files, undefined),
+                <<"config_files">> => maps:get(config_files, Files),
+                <<"config_files_hash">> => maps:get(config_files_hash, Files, undefined),
+                <<"files">> => maps:get(files, Files, undefined),
+                <<"files_hash">> => maps:get(files_hash, Files, undefined),
 
-            <<"is_filestore_uploaded">> => false,
+                <<"is_filestore_uploaded">> => false,
 
-            <<"is_encrypted">> => m_config:get_boolean(?MODULE, encrypt_backups, Context)
-                andalso (size(m_config:get_value(?MODULE, backup_encrypt_password, <<>>,  Context)) > 0)
-        }
-    },
-    % Delete the Sunday dump, it has been replaced by a weekly dump.
-    Data2 = drop_old_sunday_dump(Data1, Context),
-    write_admin_file(Data2, Context);
-update_admin_file(_DT, Name, {error, _}, Context) ->
+                <<"is_encrypted">> => m_config:get_boolean(?MODULE, encrypt_backups, Context)
+                    andalso (size(m_config:get_value(?MODULE, backup_encrypt_password, <<>>,  Context)) > 0)
+            }
+        },
+        % Delete the Sunday dump, it has been replaced by a weekly dump.
+        drop_old_sunday_dump(Data1, Context)
+    end,
+    update_admin_file(F, Context);
+register_backup_in_admin_file(_DT, Name, {error, _}, Context) ->
     % Delete Name, backup failed
-    Data = read_admin_file(Context),
-    maybe_delete_files(maps:get(Name, Data, #{}), Context),
-    Data1 = maps:remove(Name, Data),
-    write_admin_file(Data1, Context).
+    F = fun(Data) ->
+        maybe_delete_files(maps:get(Name, Data, #{}), Context),
+        maps:remove(Name, Data)
+    end,
+    update_admin_file(F, Context).
 
 
 % Delete old Sunday dump files, Sunday has been replaced by a weekly dump.
@@ -222,6 +245,10 @@ maybe_delete_file(Filename, Context) ->
     file:delete(Path).
 
 
+%% @doc Read the admin file, create an empty file if it doesn't exist.
+-spec read_admin_file(Context) -> AdminData when
+    Context :: z:context(),
+    AdminData :: map().
 read_admin_file(Context) ->
     Filename = filename:join(dir(Context), "backup.json"),
     case read_json_file(Filename) of
@@ -260,13 +287,28 @@ read_json_file(Filename) ->
             Error
     end.
 
+%% @doc Update the admin file. Uses a jobs regulator to prevent parallel
+%% updates.
+-spec update_admin_file(UpdateFun, Context) -> {ok, AdminData} | {error, Reason} when
+    UpdateFun :: fun( (map()) -> map() ),
+    AdminData :: map(),
+    Context :: z:context(),
+    Reason :: file:posix() | term().
+update_admin_file(UpdateFun, Context) ->
+    jobs:run(?CONFIG_UPDATE_JOB, fun() ->
+        Data = read_admin_file(Context),
+        Data1 = UpdateFun(Data),
+        write_admin_file(Data1, Context)
+    end).
+
 write_admin_file(Data, Context) ->
     Filename = filename:join(dir(Context), "backup.json"),
     FilenameTmp = filename:join(dir(Context), "backup.json.tmp"),
     JSON = z_json:encode(Data),
     case file:write_file(FilenameTmp, JSON) of
         ok ->
-            file:rename(FilenameTmp, Filename);
+            file:rename(FilenameTmp, Filename),
+            {ok, Data};
         {error, _} = Error ->
             Error
     end.
