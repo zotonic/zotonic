@@ -673,7 +673,12 @@ do_upload(Name, DatabaseFile, Context) ->
                     }),
                     Error;
                 undefined ->
-                    ok
+                    ?LOG_INFO(#{
+                        text => <<"Backup not uploading database file to filestore">>,
+                        in => zotonic_mod_backup,
+                        result => error,
+                        reason => no_filestore
+                    })
             end
         end).
 

@@ -75,14 +75,18 @@ run([ Site, "restore", Backup ]) ->
                 true ->
                     io:format("Restoring backup ~s for '~p'.~n", [ Backup, SiteName ]),
                     io:format("The site will be unavailable whilst the backup is restored.~n~n"),
-                    case backup_restore(SiteName, Backup) of
-                        ok ->
-                            io:format("Done.~n");
-                        undefined ->
-                            io:format("Could not restore backup ~s for '~p': no handler~n", [ Backup, SiteName ]),
-                            halt();
-                        {error, Reason} ->
-                            io:format("Could not restore backup ~s for '~p': ~p~n", [ Backup, SiteName, Reason ]),
+                    io:format("Please type the sitename (~p) to continue, anything else to cancel.~n~n", [ SiteName ]),
+                    case io:get_line("Type the sitename to continue: ") of
+                        Input when is_list(Input) ->
+                            case string:trim(Input) of
+                                SiteNameStr when SiteNameStr =:= Site ->
+                                    do_backup_restore(SiteName, Backup);
+                                _ ->
+                                    io:format("Aborting restore.~n"),
+                                    halt()
+                            end;
+                        _ ->
+                            io:format("Could not read input, aborting restore.~n"),
                             halt()
                     end;
                 false ->
@@ -97,15 +101,32 @@ run(_) ->
     io:format("USAGE: backup <site_name> list|start|restore [backup-name]~n"),
     halt().
 
-is_mod_backup_running(SiteName) ->
-    zotonic_command:rpc(z, is_module_enabled, [ mod_backup, SiteName ]).
-
-backup_list(SiteName) ->
-    zotonic_command:rpc(z, n1, [ backup_list, SiteName ]).
-
-backup_start(SiteName) ->
-    zotonic_command:rpc(z, n1, [ backup_start, SiteName ]).
+%% @doc Restore a backup.
+do_backup_restore(SiteName, Backup) ->
+    case backup_restore(SiteName, Backup) of
+        ok ->
+            io:format("Done.~n");
+        undefined ->
+            io:format("Could not restore backup ~s for '~p': no handler~n", [ Backup, SiteName ]),
+            halt();
+        {error, Reason} ->
+            io:format("Could not restore backup ~s for '~p': ~p~n", [ Backup, SiteName, Reason ]),
+            halt()
+    end.
 
 backup_restore(SiteName, Backup) ->
     BackupBin = iolist_to_binary(Backup),
     zotonic_command:rpc(z, n1, [ {backup_restore, BackupBin}, SiteName ]).
+
+
+%% @doc Check if the site has mod_backup enabled.
+is_mod_backup_running(SiteName) ->
+    zotonic_command:rpc(z, is_module_enabled, [ mod_backup, SiteName ]).
+
+%% @doc Return the list of available backups.
+backup_list(SiteName) ->
+    zotonic_command:rpc(z, n1, [ backup_list, SiteName ]).
+
+%% @doc Start a new backup (if no backup is running).
+backup_start(SiteName) ->
+    zotonic_command:rpc(z, n1, [ backup_start, SiteName ]).

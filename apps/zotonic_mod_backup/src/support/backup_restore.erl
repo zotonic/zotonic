@@ -26,7 +26,12 @@ restore_newest_backup(Context) ->
 
 %% @doc Restore a specific backup from the backup list.
 %% After the database is restored, the site is restarted.
-restore_backup(Backup, Context) ->
+restore_backup(undefined, _Context) ->
+    {error, unknown_backup};
+restore_backup(Name, Context) when is_binary(Name) ->
+    BackupData = backup_create:read_admin_file(Context),
+    restore_backup(maps:get(Name, BackupData, undefined), Context);
+restore_backup(Backup, Context) when is_map(Backup) ->
     % TODO: restore config files.
     %       For this we need to be able to force the site to backup.
     %       Write in config.d/zz-backup.yaml:
@@ -34,6 +39,8 @@ restore_backup(Backup, Context) ->
     %               - environment: backup
     %               - enabled: true
     %       OR a file: priv/BACKUP - which signals the above settings
+    % TODO: restore files tar (if any)
+    ok = z_db_pool:pause_connections(Context),
     case restore_database_backup(Backup, Context) of
         ok ->
             ?LOG_NOTICE(#{
@@ -45,6 +52,7 @@ restore_backup(Backup, Context) ->
             % Restart site with new database (and config files)
             z_sites_manager:restart(z_context:site(Context));
         {error, Reason} = Error ->
+            z_db_pool:unpause_connections(Context),
             ?LOG_ERROR(#{
                 in => zotonic_mod_backup,
                 text => <<"Restoring database failed">>,
@@ -72,7 +80,7 @@ restore_database_backup(#{ <<"database">> := BackupFile }, Context) ->
         end
     end);
 restore_database_backup(_Status, _Context) ->
-    {error, incomplete}.
+    {error, no_database_backup}.
 
 restore_database_backup_file(BackupDecrypted, Context) ->
     % 1. Check schema of the DB dump
@@ -83,7 +91,6 @@ restore_database_backup_file(BackupDecrypted, Context) ->
             if
                 DbSchema =:= BackupSchema ->
                     % 2. Pause all db activity
-                    ok = z_db_pool:pause_connections(Context),
                     case z_db_pool:get_unpaused_connection(Context) of
                         {ok, ConnPid} ->
                             % 3. Rename the schema
