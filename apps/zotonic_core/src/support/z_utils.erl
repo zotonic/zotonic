@@ -452,9 +452,10 @@ os_escape(S) ->
     z_filelib:os_escape(S).
 
 %% @doc Calculate the hash of a file by incrementally reading it.
--spec hex_sha2_file(File) -> Hash when
+-spec hex_sha2_file(File) -> {ok, Hash} | {error, Reason} when
     File :: file:filename_all(),
-    Hash :: binary().
+    Hash :: binary(),
+    Reason :: file:posix() | term().
 hex_sha2_file(File) ->
     Hash = crypto:hash_init(sha256),
     case file:open(File, [read, binary]) of
