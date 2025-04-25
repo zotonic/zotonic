@@ -67,31 +67,9 @@ simplify({find_value, [Value]}) ->
 simplify({find_value, Vs}) ->
     {find_value, lists:map(fun simplify/1, Vs)};
 simplify({expr, {Op, _}, Left, Right}) ->
-    try
-        {expr, Op, simplify(Left), simplify(Right)}
-    catch
-        _:_ ->
-            ?LOG_WARNING(#{
-                in => zotonic_mod_base,
-                text => <<"Expression operator unknown">>,
-                result => error,
-                operator => Op
-            }),
-            undefined
-    end;
+    {expr, Op, simplify(Left), simplify(Right)};
 simplify({expr, {Op, _}, Expr}) ->
-    try
-        {expr, Op, simplify(Expr)}
-    catch
-        _:_ ->
-            ?LOG_WARNING(#{
-                in => zotonic_mod_base,
-                text => <<"Expression operator unknown">>,
-                result => error,
-                operator => Op
-            }),
-            undefined
-    end;
+    {expr, Op, simplify(Expr)};
 simplify({expr, E}) ->
     simplify(E);
 simplify({identifier,_,Name}) ->
@@ -116,13 +94,14 @@ simplify({apply_filter, Expr, {filter, {identifier,_,Filter}, Args}}) ->
             simplify(Expr),
             [ simplify(Arg) || Arg <- Args ]}
     catch
-        A:B:S ->
-            ?DEBUG({A, B, S}),
+        _:Reason:Stack ->
             ?LOG_WARNING(#{
                 in => zotonic_mod_base,
                 text => <<"Expression filter unknown, or error in filter">>,
                 result => error,
-                filter => Filter
+                reason => Reason,
+                filter => Filter,
+                stack => Stack
             }),
             undefined
     end;
