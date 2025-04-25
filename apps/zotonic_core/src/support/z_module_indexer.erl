@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2018 Marc Worrell
-%%
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Implements the module extension mechanisms for scomps, templates, actions etc.  Scans all active modules
 %% for scomps (etc) and maintains lookup lists for when the system tries to find a scomp (etc).
+%% @end
 
-%% Copyright 2009-2018 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -51,6 +51,7 @@
     scomps = [],
     actions = [],
     validators = [],
+    filters = [],
     models = [],
     templates = [],
     lib = [],
@@ -204,10 +205,6 @@ all_files1(Type, Module) ->
 %% gen_server callbacks
 %%====================================================================
 
-%% @spec init(SiteProps) -> {ok, State} |
-%%                     {ok, State, Timeout} |
-%%                     ignore               |
-%%                     {stop, Reason}
 %% @doc Initiates the server.
 init(Site) ->
     process_flag(trap_exit, true),
@@ -220,13 +217,6 @@ init(Site) ->
     z_notifier:observe(module_ready, self(), Context),
     {ok, #state{context=Context}}.
 
-
-%% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
-%%                                      {reply, Reply, State, Timeout} |
-%%                                      {noreply, State} |
-%%                                      {noreply, State, Timeout} |
-%%                                      {stop, Reason, Reply, State} |
-%%                                      {stop, Reason, State}
 handle_call({find_all, scomp, Name}, _From, State) ->
     {reply, lookup_all(Name, State#state.scomps), State, ?GC_TIMEOUT};
 handle_call({find_all, action, Name}, _From, State) ->
@@ -246,11 +236,7 @@ handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
 
-%% @spec handle_cast(Msg, State) -> {noreply, State} |
-%%                                  {noreply, State, Timeout} |
-%%                                  {stop, Reason, State}
 %% @doc Scan for all scomps etc. for the context given.
-
 handle_cast({module_ready, _NotifyContext}, #state{scanner_pid=undefined}=State) ->
     flush(),
 
@@ -275,6 +261,7 @@ handle_cast({scanned_items, Scanned}, State) ->
         scomps      = proplists:get_value(scomp, Scanned),
         actions     = proplists:get_value(action, Scanned),
         validators  = proplists:get_value(validator, Scanned),
+        filters     = proplists:get_value(filter, Scanned),
         models      = proplists:get_value(model, Scanned),
         templates   = proplists:get_value(template, Scanned),
         lib         = proplists:get_value(lib, Scanned)
@@ -299,9 +286,6 @@ handle_cast(Message, State) ->
     {stop, {unknown_cast, Message}, State}.
 
 
-%% @spec handle_info(Info, State) -> {noreply, State} |
-%%                                       {noreply, State, Timeout} |
-%%                                       {stop, Reason, State}
 %% @doc Handling all non call/cast messages
 handle_info(timeout, State) ->
     erlang:garbage_collect(),
@@ -310,7 +294,6 @@ handle_info(_Info, State) ->
     {noreply, State, ?GC_TIMEOUT}.
 
 
-%% @spec terminate(Reason, State) -> void()
 %% @doc This function is called by a gen_server when it is about to
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
@@ -319,7 +302,6 @@ terminate(_Reason, State) ->
     z_notifier:detach(module_ready, self(), State#state.context),
     ok.
 
-%% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
 %% @doc Convert process state when code is changed
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
@@ -421,7 +403,7 @@ scan(Context) ->
         fun(What) ->
             {What, scan_apps(What, ActiveApps)}
         end,
-        [ template, lib, scomp, action, validator, model ]).
+        [ template, lib, scomp, action, validator, filter, model ]).
 
 scan_apps(What, Apps) ->
     {SubDir, FileRE} = subdir_pattern(What),
@@ -434,6 +416,7 @@ subdir_pattern(translation)-> { "priv/translations", "\\.po$" };
 subdir_pattern(scomp)      -> { "src/scomps",        "^scomp_(.*)\\.erl$" };
 subdir_pattern(action)     -> { "src/actions",       "^action_(.*)\\.erl$" };
 subdir_pattern(validator)  -> { "src/validators",    "^validator_(.*)\\.erl$" };
+subdir_pattern(filter)     -> { "src/filters",       "^filter_(.*)\\.erl$" };
 subdir_pattern(model)      -> { "src/models",        "^m_(.*)\\.erl$" };
 subdir_pattern(erlang)     -> { "src/support",       "\\.erl$" }.
 
@@ -481,6 +464,7 @@ convert_name(translation, _AppPrefix, _Pattern, _Basename, _Rootname, RelPath) -
 convert_name(What, AppPrefix, Pattern, Basename, Rootname, _RelPath) ->
     case re:run(Basename, Pattern, [{capture, all_but_first, binary}]) of
         {match, [Name]} ->
+            % Drop the module name from scomps and validators
             Name1 = maybe_drop_prefix(What, AppPrefix, Name),
             erlang:binary_to_atom(Name1, utf8);
         _ ->
@@ -488,6 +472,8 @@ convert_name(What, AppPrefix, Pattern, Basename, Rootname, _RelPath) ->
     end.
 
 maybe_drop_prefix(model, _Prefix, Name) ->
+    Name;
+maybe_drop_prefix(filter, _Prefix, Name) ->
     Name;
 maybe_drop_prefix(_What, Prefix, Name) ->
     case binary:split(Name, Prefix) of
@@ -530,6 +516,7 @@ reindex_ets_lookup(State) ->
     to_ets(State#state.scomps, scomp, Tag, Site),
     to_ets(State#state.actions, action, Tag, Site),
     to_ets(State#state.validators, validator, Tag, Site),
+    to_ets(State#state.filters, filter, Tag, Site),
     to_ets(State#state.models, model, Tag, Site),
     cleanup_ets(Tag, Site).
 

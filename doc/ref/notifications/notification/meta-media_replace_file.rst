@@ -4,7 +4,7 @@ media_replace_file
 ^^^^^^^^^^^^^^^^^^
 
 Notification that a medium file has been changed (notify) 
-The id is the resource id, medium contains the medium's property list. 
+The id is the resource id, medium contains the medium's complete property map. 
 
 
 Type: 
@@ -14,5 +14,5 @@ Return:
     return value is ignored
 
 ``#media_replace_file{}`` properties:
-    - id: ``unknown``
-    - medium: ``unknown``
+    - id: ``m_rsc:resource_id()``
+    - medium: ``map|undefined``
