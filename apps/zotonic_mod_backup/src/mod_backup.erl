@@ -733,8 +733,14 @@ do_download(Context) ->
                                     end,
                                     if
                                         IsChanged ->
-                                            try_download_file(maps:get(<<"database">>, NewStatus, undefined), Context),
-                                            try_download_file(maps:get(<<"config_files">>, NewStatus, undefined), Context);
+                                            try_download_file(
+                                                maps:get(<<"database">>, NewStatus, undefined),
+                                                maps:get(<<"database_hash">>, NewStatus, undefined),
+                                                Context),
+                                            try_download_file(
+                                                maps:get(<<"config_files">>, NewStatus, undefined),
+                                                maps:get(<<"config_files_hash">>, NewStatus, undefined),
+                                                Context);
                                         true ->
                                             ok
                                     end
@@ -778,11 +784,11 @@ do_download(Context) ->
         end).
 
 %% @doc If a filename is given, then download that file from the filestore.
-try_download_file(undefined, _Context) ->
+try_download_file(undefined, _Hash, _Context) ->
     ok;
-try_download_file(<<>>, _Context) ->
+try_download_file(<<>>, _Hash, _Context) ->
     ok;
-try_download_file(Filename, Context) ->
+try_download_file(Filename, Hash, Context) ->
     RemoteFile = <<"backup/", Filename/binary>>,
     LocalFileTmp = filename:join(backup_create:dir(Context), <<Filename/binary, ".tmp">>),
     LocalFile = filename:join(backup_create:dir(Context), Filename),
@@ -794,15 +800,42 @@ try_download_file(Filename, Context) ->
         }, Context)
     of
         ok ->
-            ok = file:rename(LocalFileTmp, LocalFile),
-            ?LOG_INFO(#{
-                text => <<"Backup downloaded file from filestore">>,
-                in => zotonic_mod_backup,
-                result => ok,
-                remote => RemoteFile,
-                local => LocalFile
-            }),
-            ok;
+            case z_utils:hex_sha2_file(LocalFileTmp) of
+                {ok, TmpHash} when Hash =:= TmpHash; Hash =:= undefined ->
+                    ok = file:rename(LocalFileTmp, LocalFile),
+                    ?LOG_INFO(#{
+                        text => <<"Backup downloaded file from filestore">>,
+                        in => zotonic_mod_backup,
+                        result => ok,
+                        remote => RemoteFile,
+                        local => LocalFile
+                    }),
+                    ok;
+                {ok, TmpHash} ->
+                    ?LOG_ERROR(#{
+                        text => <<"Backup error, hash mismatch for downloaded file">>,
+                        in => zotonic_mod_backup,
+                        result => error,
+                        reason => hash,
+                        remote => RemoteFile,
+                        local => LocalFileTmp,
+                        remote_hash => Hash,
+                        local_hash => TmpHash
+                    }),
+                    file:delete(LocalFileTmp),
+                    {error, hash};
+                {error, Reason} = Error ->
+                    ?LOG_ERROR(#{
+                        text => <<"Backup error calculating hash for downloaed file">>,
+                        in => zotonic_mod_backup,
+                        result => error,
+                        reason => Reason,
+                        remote => RemoteFile,
+                        local => LocalFileTmp
+                    }),
+                    file:delete(LocalFileTmp),
+                    Error
+            end;
         {error, Reason} = Error ->
             ?LOG_ERROR(#{
                 text => <<"Backup error downloading file from filestore">>,
