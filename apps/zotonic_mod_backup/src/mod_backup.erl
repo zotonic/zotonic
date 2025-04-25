@@ -50,6 +50,8 @@
     observe_media_update_done/2,
 
     observe_backup_list/2,
+    observe_backup_start/2,
+    observe_backup_restore/2,
 
     start_backup/1,
     start_backup/2,
@@ -186,7 +188,13 @@ observe_m_config_update(#m_config_update{}, _Context) ->
 
 
 observe_backup_list(backup_list, Context) ->
-    backup_create:read_admin_file(Context).
+    list_backups(Context).
+
+observe_backup_start(backup_start, Context) ->
+    start_backup(Context).
+
+observe_backup_restore({backup_restore, Backup} Context) ->
+    restore_backup(Backup, Context).
 
 
 %% @doc Callback for controller_file. Check if the backup file exists and return
@@ -273,9 +281,24 @@ restore_backup(Context) ->
     Name :: binary() | recent,
     Context :: z:context(),
     Reason :: atom().
-restore_backup(recent, Context) ->
-    backup_restore:restore_newest_backup(Context);
+restore_backup(<<"recent">>, Context) ->
+    restore_backup(recent, Context);
 restore_backup(Name, Context) ->
+    case backup_in_progress(Context) of
+        true ->
+            {error, in_progress};
+        false ->
+            case is_uploading(Context) of
+                true ->
+                    {error, uploading};
+                false ->
+                    restore_backup_1(Name, Context)
+            end
+    end.
+
+restore_backup_1(recent, Context) ->
+    backup_restore:restore_newest_backup(Context);
+restore_backup_1(Name, Context) ->
     backup_restore:restore_backup(Name, Context).
 
 
@@ -298,7 +321,8 @@ list_backups(Context) ->
             [
                 #{
                     timestamp => InProgress,
-                    is_running => true
+                    is_running => true,
+                    name => iolist_to_binary([ $(, name(Context), $) ])
                 }
                 | Files
             ]

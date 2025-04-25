@@ -27,22 +27,63 @@
 info() ->
     "Show the configuration of a site.".
 
-run([ Site, "list" ]) ->
+run([ Site, Cmd ]) when Cmd =:= "list"; Cmd =:= "start" ->
     case zotonic_command:net_start() of
         ok ->
             SiteName = list_to_atom(Site),
-            case is_backup_running(SiteName) of
-                true ->
+            case is_mod_backup_running(SiteName) of
+                true when Cmd =:= "list" ->
                     case backup_list(SiteName) of
                         undefined ->
                             io:format("(No backups)");
                         Backups ->
                             io:format("Backups for ~p:~n", [ SiteName ]),
-                            maps:foreach(
-                                fun(_, B) ->
-                                    io:format("~p~n", [ B ])
+                            lists:foreach(
+                                fun(B) ->
+                                    io:format("~n- ~s:", [ maps:get(name, B) ]),
+                                    B1 = maps:remove(name, B),
+                                    zotonic_cmd_config:pretty_print_value(<<>>, B1)
                                 end,
                                 Backups)
+                    end;
+                true when Cmd =:= "start" ->
+                    case backup_start(SiteName) of
+                        ok ->
+                            io:format("Backup started for '~p'~n", [ SiteName ]);
+                        undefined ->
+                            io:format("Could not start backup for '~p': no handler~n", [ SiteName ]),
+                            halt();
+                        {error, in_progress} ->
+                            io:format("There is already a backup running for '~p'~n", [ SiteName ]),
+                            halt();
+                        {error, Reason} ->
+                            io:format("Could not start backup for '~p': ~p~n", [ SiteName, Reason ]),
+                            halt()
+                    end;
+                false ->
+                    io:format("Backup modules is not enabled for '~p'~n", [ SiteName ]),
+                    halt()
+            end;
+        {error, _} = Error ->
+            zotonic_command:format_error(Error)
+    end;
+run([ Site, "restore", Backup ]) ->
+    case zotonic_command:net_start() of
+        ok ->
+            SiteName = list_to_atom(Site),
+            case is_mod_backup_running(SiteName) of
+                true ->
+                    io:format("Restoring backup ~s for '~p'.~n", [ Backup, SiteName ]),
+                    io:format("The site will be unavailable whilst the backup is restored.~n~n"),
+                    case backup_restore(SiteName, Backup) of
+                        ok ->
+                            io:format("Done.~n");
+                        undefined ->
+                            io:format("Could not restore backup ~s for '~p': no handler~n", [ Backup, SiteName ]),
+                            halt();
+                        {error, Reason} ->
+                            io:format("Could not restore backup ~s for '~p': ~p~n", [ Backup, SiteName, Reason ]),
+                            halt()
                     end;
                 false ->
                     io:format("Backup modules is not enabled for '~p'~n", [ SiteName ]),
@@ -53,11 +94,18 @@ run([ Site, "list" ]) ->
     end;
 
 run(_) ->
-    io:format("USAGE: backup <site_name> list|make|restore~n"),
+    io:format("USAGE: backup <site_name> list|start|restore [backup-name]~n"),
     halt().
 
-is_backup_running(SiteName) ->
+is_mod_backup_running(SiteName) ->
     zotonic_command:rpc(z, is_module_enabled, [ mod_backup, SiteName ]).
 
 backup_list(SiteName) ->
     zotonic_command:rpc(z, n1, [ backup_list, SiteName ]).
+
+backup_start(SiteName) ->
+    zotonic_command:rpc(z, n1, [ backup_start, SiteName ]).
+
+backup_restore(SiteName, Backup) ->
+    BackupBin = iolist_to_binary(Backup),
+    zotonic_command:rpc(z, n1, [ {backup_restore, BackupBin}, SiteName ]).
