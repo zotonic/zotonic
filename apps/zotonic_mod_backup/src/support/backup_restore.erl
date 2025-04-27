@@ -1,3 +1,23 @@
+%% @author Marc Worrell <marc@worrell.nl>
+%% @copyright 2025 Marc Worrell
+%% @doc Restore a (downloaded) backup. Replaces the database schema,
+%% overwrites the archive files and unpacks the config files.
+%% @end
+
+%% Copyright 2025 Marc Worrell
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+
 -module(backup_restore).
 
 -export([
@@ -32,16 +52,8 @@ restore_backup(Name, Context) when is_binary(Name) ->
     BackupData = backup_create:read_admin_file(Context),
     restore_backup(maps:get(Name, BackupData, undefined), Context);
 restore_backup(Backup, Context) when is_map(Backup) ->
-    % TODO: restore config files.
-    %       For this we need to be able to force the site to backup.
-    %       Write in config.d/zz-backup.yaml:
-    %           zotonic:
-    %               - environment: backup
-    %               - enabled: true
-    %       OR a file: priv/BACKUP - which signals the above settings
-    % TODO: restore files tar (if any)
     ok = z_db_pool:pause_connections(Context),
-    case restore_database_backup(Backup, Context) of
+    case restore_backup_do(Backup, Context) of
         ok ->
             ?LOG_NOTICE(#{
                 in => zotonic_mod_backup,
@@ -63,24 +75,125 @@ restore_backup(Backup, Context) when is_map(Backup) ->
             Error
     end.
 
-restore_database_backup(#{ <<"database">> := BackupFile }, Context) ->
+restore_backup_do(Backup, Context) ->
+    % TODO: restore config files.
+    %       For this we need to be able to force the site to backup.
+    %       Write in config.d/zz-backup-environment.yaml:
+    %           zotonic:
+    %               - environment: backup
+    %               - enabled: true
+    %       OR a file: priv/BACKUP - which signals the above settings
     jobs:run(zotonic_singular_job, fun() ->
-        case is_file_missing(BackupFile, Context) of
-            true ->
-                {error, incomplete};
-            false ->
-                % Files are there - try to unpack
-                BackupPath = filename:join(backup_create:dir(Context), BackupFile),
-                case maybe_decrypt_file(BackupPath, Context) of
-                    {ok, BackupDecrypted} ->
-                        restore_database_backup_file(BackupDecrypted, Context);
-                    {error, _} = Error ->
-                        Error
-                end
+        case maybe_restore_database_backup(Backup, Context) of
+            ok ->
+                maybe_restore_files_backup(Backup, Context);
+            {error, _} = Error ->
+                Error
         end
-    end);
-restore_database_backup(_Status, _Context) ->
-    {error, no_database_backup}.
+    end).
+
+%% @doc Unpack the files tar in the archive directory.
+maybe_restore_files_backup(#{ <<"files">> := BackupFile }, Context) when is_binary(BackupFile) ->
+    case is_file_missing(BackupFile, Context) of
+        true ->
+            ?LOG_ERROR(#{
+                in => zotonic_mod_backup,
+                text => <<"Files backup-file missing">>,
+                result => error,
+                reason => incomplete,
+                files => BackupFile
+            }),
+            {error, incomplete};
+        false ->
+            % Files are there - try to unpack
+            BackupPath = filename:join(backup_create:dir(Context), BackupFile),
+            case maybe_decrypt_file(BackupPath, Context) of
+                {ok, BackupDecrypted} ->
+                    restore_files_backup(BackupDecrypted, Context);
+                {error, _} = Error ->
+                    Error
+            end
+    end;
+maybe_restore_files_backup(_Backup, _Context) ->
+    ok.
+
+restore_files_backup(BackupFile, Context) ->
+    case backup_create:command_configuration() of
+        {ok, #{ archive := Tar }} ->
+            case ensure_archive_dir(Context) of
+                {error, _} = Error ->
+                    Error;
+                ArchiveDir ->
+                    Command = unicode:characters_to_list([
+                        z_filelib:os_filename(Tar),
+                        " -C ", z_filelib:os_filename(ArchiveDir),
+                        " -x -z ",
+                        " -f ", z_filelib:os_filename(BackupFile)
+                    ]),
+                    case z_exec:run(Command) of
+                        {ok, <<>>} ->
+                            ok;
+                        {ok, Output} ->
+                             ?LOG_ERROR(#{
+                                text => <<"Restore failed: tar error">>,
+                                in => zotonic_mod_backup,
+                                result => error,
+                                reason => tar,
+                                output => Output,
+                                command => unicode:characters_to_binary(Command)
+                            }),
+                            {error, files_archive};
+                        {error, Reason} ->
+                             ?LOG_ERROR(#{
+                                text => <<"Restore failed: tar error">>,
+                                in => zotonic_mod_backup,
+                                result => error,
+                                reason => Reason,
+                                command => unicode:characters_to_binary(Command)
+                            }),
+                            {error, files_archive}
+                    end
+            end;
+        {error, Reason} = Error ->
+             ?LOG_ERROR(#{
+                text => <<"Restore failed: tar command missing">>,
+                in => zotonic_mod_backup,
+                result => error,
+                reason => Reason
+            }),
+            Error
+    end.
+
+ensure_archive_dir(Context) ->
+    Dir = z_path:media_archive(Context),
+    case z_filelib:ensure_dir(filename:join([Dir, ".empty"])) of
+        ok -> Dir;
+        {error, _} = Error -> Error
+    end.
+
+maybe_restore_database_backup(#{ <<"database">> := BackupFile }, Context) when is_binary(BackupFile) ->
+    case is_file_missing(BackupFile, Context) of
+        true ->
+            ?LOG_ERROR(#{
+                in => zotonic_mod_backup,
+                text => <<"Database backup file missing">>,
+                result => error,
+                reason => incomplete,
+                files => BackupFile
+            }),
+            {error, incomplete};
+        false ->
+            % Files are there - try to unpack
+            BackupPath = filename:join(backup_create:dir(Context), BackupFile),
+            case maybe_decrypt_file(BackupPath, Context) of
+                {ok, BackupDecrypted} ->
+                    restore_database_backup_file(BackupDecrypted, Context);
+                {error, _} = Error ->
+                    Error
+            end
+    end;
+maybe_restore_database_backup(_Status, _Context) ->
+    ok.
 
 restore_database_backup_file(BackupDecrypted, Context) ->
     % 1. Check schema of the DB dump

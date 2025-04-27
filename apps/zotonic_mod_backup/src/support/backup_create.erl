@@ -1,3 +1,22 @@
+%% @author Marc Worrell <marc@worrell.nl>
+%% @copyright 2025 Marc Worrell
+%% @doc Create a new backup of the database, archive and config files.
+%% @end
+
+%% Copyright 2025 Marc Worrell
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+
 -module(backup_create).
 
 -export([
@@ -389,9 +408,9 @@ archive(Name, Tar, Context) ->
             DumpFile = filename:join(dir(Context), Filename),
             Command = unicode:characters_to_list([
                 z_filelib:os_filename(Tar),
+                " -C ", z_filelib:os_filename(ArchiveDir),
                 " -c -z ",
-                "-f ", z_filelib:os_filename(DumpFile), " ",
-                "-C ", z_filelib:os_filename(ArchiveDir), " ",
+                " -f ", z_filelib:os_filename(DumpFile),
                 " ."
             ]),
             z_proc:spawn_md(
