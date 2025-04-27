@@ -800,7 +800,7 @@ try_download_file(Filename, Hash, Context) ->
         }, Context)
     of
         ok ->
-            case z_utils:hex_sha2_file(LocalFileTmp) of
+            case z_crypto:hex_sha2_file(LocalFileTmp) of
                 {ok, TmpHash} when Hash =:= TmpHash; Hash =:= undefined ->
                     ok = file:rename(LocalFileTmp, LocalFile),
                     ?LOG_INFO(#{

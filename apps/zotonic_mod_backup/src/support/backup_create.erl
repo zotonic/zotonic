@@ -132,7 +132,7 @@ hash_file(undefined, _Context) ->
     undefined;
 hash_file(Filename, Context) ->
     Path = filename:join(dir(Context), Filename),
-    {ok, Hash} = z_utils:hex_sha2_file(Path),
+    {ok, Hash} = z_crypto:hex_sha2_file(Path),
     Hash.
 
 maybe_encrypt_files({ok, Files}, Context) ->

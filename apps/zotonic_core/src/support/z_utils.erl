@@ -48,7 +48,6 @@
     hex_encode/1,
     hex_sha/1,
     hex_sha2/1,
-    hex_sha2_file/1,
     index_proplist/2,
     nested_proplist/1,
     nested_proplist/2,
@@ -431,14 +430,14 @@ hex_decode(Value) -> z_url:hex_decode(Value).
     Value :: iodata(),
     Hash :: binary().
 hex_sha(Value) ->
-    z_url:hex_encode_lc(crypto:hash(sha, Value)).
+    z_crypto:hex_sha(Value).
 
 %% @doc Hash256 data and encode into a hex string safe for filenames and texts.
 -spec hex_sha2(Value) -> Hash when
     Value :: iodata(),
     Hash :: binary().
 hex_sha2(Value) ->
-    z_url:hex_encode_lc(crypto:hash(sha256, Value)).
+    z_crypto:hex_sha2(Value).
 
 %% @doc Simple escape function for filenames as commandline arguments.
 %% foo/"bar.jpg -> "foo/\"bar.jpg"; on windows "foo\\\"bar.jpg" (both including quotes!)
@@ -450,36 +449,6 @@ os_filename(F) ->
 -spec os_escape(string()|binary()|undefined) -> string().
 os_escape(S) ->
     z_filelib:os_escape(S).
-
-%% @doc Calculate the hash of a file by incrementally reading it.
--spec hex_sha2_file(File) -> {ok, Hash} | {error, Reason} when
-    File :: file:filename_all(),
-    Hash :: binary(),
-    Reason :: file:posix() | term().
-hex_sha2_file(File) ->
-    Hash = crypto:hash_init(sha256),
-    case file:open(File, [read, binary]) of
-        {ok, Fh} ->
-            Hash1 = hash_file(Fh, Hash),
-            ok = file:close(Fh),
-            Digest = crypto:hash_final(Hash1),
-            {ok, z_url:hex_encode_lc(Digest)};
-        {error, _} = Error ->
-            Error
-    end.
-
-hash_file(Fh, Hash) ->
-    case file:read(Fh, 4096) of
-        {ok, Bin} ->
-            Hash1 = crypto:hash_update(Hash, Bin),
-            hash_file(Fh, Hash1);
-        eof ->
-            Hash;
-        {error, _} = Error ->
-            Error
-    end.
-
-
 
 %%% ESCAPE JAVASCRIPT %%%
 
