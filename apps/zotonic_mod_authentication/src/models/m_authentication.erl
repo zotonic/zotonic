@@ -206,7 +206,7 @@ is_valid_password(Password, Context) ->
 %% @doc Check is a password has been registerd with the service at https://haveibeenpwned.com
 %% They keep a list of passwords, any match is reported.
 is_powned(Password) ->
-    <<Pre:5/binary, Post/binary>>  = z_string:to_upper(z_utils:hex_sha(Password)),
+    <<Pre:5/binary, Post/binary>>  = z_string:to_upper(z_crypto:hex_sha(Password)),
     Url = <<"https://api.pwnedpasswords.com/range/", Pre/binary>>,
     case z_url_fetch:fetch(Url, []) of
         {ok, {_Url, _Hs, _Sz, Body}} ->

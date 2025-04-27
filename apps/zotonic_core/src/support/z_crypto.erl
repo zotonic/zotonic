@@ -1,9 +1,9 @@
 %% @author Marc Worrell
-%% @copyright 2023 Marc Worrell
+%% @copyright 2023-2025 Marc Worrell
 %% @doc Crypto related functions for checksums and signatures.
 %% @end
 
-%% Copyright 2023 Marc Worrell
+%% Copyright 2023-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -160,10 +160,15 @@ hex_sha2_file(File) ->
     Hash = crypto:hash_init(sha256),
     case file:open(File, [read, binary]) of
         {ok, Fh} ->
-            Hash1 = hash_file(Fh, Hash),
-            ok = file:close(Fh),
-            Digest = crypto:hash_final(Hash1),
-            {ok, z_url:hex_encode_lc(Digest)};
+            case hash_file(Fh, Hash) of
+                {ok, Hash1} ->
+                    file:close(Fh),
+                    Digest = crypto:hash_final(Hash1),
+                    {ok, z_url:hex_encode_lc(Digest)};
+                {error, _} = Error ->
+                    file:close(Fh),
+                    Error
+            end;
         {error, _} = Error ->
             Error
     end.
@@ -174,7 +179,7 @@ hash_file(Fh, Hash) ->
             Hash1 = crypto:hash_update(Hash, Bin),
             hash_file(Fh, Hash1);
         eof ->
-            Hash;
+            {ok, Hash};
         {error, _} = Error ->
             Error
     end.

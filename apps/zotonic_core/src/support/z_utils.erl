@@ -426,6 +426,7 @@ hex_encode(Value) -> z_url:hex_encode(Value).
 hex_decode(Value) -> z_url:hex_decode(Value).
 
 %% @doc Hash data and encode into a hex string safe for filenames and texts.
+%% @deprecated Use z_crypto:hex_sha/1 instead.
 -spec hex_sha(Value) -> Hash when
     Value :: iodata(),
     Hash :: binary().
@@ -433,6 +434,7 @@ hex_sha(Value) ->
     z_crypto:hex_sha(Value).
 
 %% @doc Hash256 data and encode into a hex string safe for filenames and texts.
+%% @deprecated Use z_crypto:hex_sha2/1 instead.
 -spec hex_sha2(Value) -> Hash when
     Value :: iodata(),
     Hash :: binary().
