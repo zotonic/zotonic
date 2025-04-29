@@ -755,7 +755,9 @@ do_download(Context) ->
                                 end),
                             z_proc:spawn_md(
                                 fun() ->
-                                    backup_restore:restore_newest_backup(Context)
+                                    z_sites_config:maybe_set_backup_env(Context),
+                                    Options = [ database, files, security, config ],
+                                    backup_restore:restore_newest_backup(Options, Context)
                                 end),
                             ok;
                         {error, Reason} = Error ->

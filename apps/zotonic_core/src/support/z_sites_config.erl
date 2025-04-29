@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019-2024 Marc Worrell
+%% @copyright 2019-2025 Marc Worrell
 %% @doc Load and manage site configuration files.
 %% @end
 
-%% Copyright 2019-2024 Marc Worrell
+%% Copyright 2019-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,6 +20,9 @@
 -module(z_sites_config).
 
 -export([
+    maybe_set_backup_env/1,
+    maybe_unset_backup_env/1,
+
     site_config/1,
     app_is_site/1,
     config_files/1,
@@ -30,6 +33,61 @@
     ]).
 
 -define(CONFIG_FILE, "zotonic_site.*").
+
+
+%% @doc Iff a site is running in backup environment, and its config files are
+%% restored from a remote system, then the environment in the config file is
+%% overwritten by the config from the remote environment. To keep the site in
+%% backup environment, we write a file "priv/BACKUP". If this file is present
+%% then it is hard-coded to set the environment to backup and the site to enabled.
+-spec maybe_set_backup_env(Context) -> ok | {error, Reason} when
+    Context :: z:context(),
+    Reason :: term().
+maybe_set_backup_env(Context) ->
+    Site = z_context:site(Context),
+    case app_is_site(Site) of
+        true ->
+            case m_site:environment(Context) of
+                backup ->
+                    case z_path:site_dir(Site) of
+                        {error, _} = Error ->
+                            Error;
+                        SiteDir ->
+                            Filename = filename:join([ SiteDir, "priv", "BACKUP" ]),
+                            file:write_file(Filename, <<>>)
+                    end;
+                Other ->
+                    {error, Other}
+            end;
+        false ->
+            {error, nosite}
+    end.
+
+%% @doc Remove the priv/BACKUP file. After this the site will use the environment
+%% from the config files.
+-spec maybe_unset_backup_env(Context) -> ok | {error, Reason} when
+    Context :: z:context(),
+    Reason :: term().
+maybe_unset_backup_env(Context) ->
+    Site = z_context:site(Context),
+    case app_is_site(Site) of
+        true ->
+            case z_path:site_dir(Site) of
+                {error, _} = Error ->
+                    Error;
+                SiteDir ->
+                    Filename = filename:join([ SiteDir, "priv", "BACKUP" ]),
+                    case filelib:is_file(Filename) of
+                        true ->
+                            file:delete(Filename);
+                        false ->
+                            ok
+                    end
+            end;
+        false ->
+            {error, nosite}
+    end.
+
 
 -spec site_config(Site) -> {ok, Config} | {error, Reason} when
     Site :: atom(),
@@ -45,7 +103,8 @@ site_config(Site) when is_atom(Site) ->
                     case read_configs(ZotonicFiles) of
                         {ok, GlobalConfig} when is_map(GlobalConfig) ->
                             SiteConfig1 = merge_global_configs(Site, SiteConfig, GlobalConfig),
-                            {ok, SiteConfig1};
+                            SiteConfig2 = maybe_force_backup_env(Site, SiteConfig1),
+                            {ok, SiteConfig2};
                         {error, _} = Error ->
                             Error
                     end;
@@ -55,6 +114,24 @@ site_config(Site) when is_atom(Site) ->
         false ->
             {error, nosite}
     end.
+
+maybe_force_backup_env(Site, SiteConfig) when is_map(SiteConfig) ->
+    case z_path:site_dir(Site) of
+        {error, _} ->
+            SiteConfig;
+        SiteDir ->
+            Filename = filename:join([ SiteDir, "priv", "BACKUP" ]),
+            case filelib:is_file(Filename) of
+                true ->
+                    SiteConfig#{
+                        environment => backup,
+                        enabled => true
+                    };
+                false ->
+                    SiteConfig
+            end
+    end.
+
 
 %% @doc Check if the Erlang application is a Zotonic site. A Zotonic site has a site
 %% configuration file in its priv directory.
