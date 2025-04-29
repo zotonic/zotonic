@@ -58,7 +58,7 @@
     list_backups/1,
 
     restore_backup/1,
-    restore_backup/2,
+    restore_backup/3,
 
     file_exists/2,
     file_forbidden/2,
@@ -194,8 +194,8 @@ observe_backup_list(backup_list, Context) ->
 observe_backup_start(backup_start, Context) ->
     start_backup(Context).
 
-observe_backup_restore({backup_restore, Backup}, Context) ->
-    restore_backup(Backup, Context).
+observe_backup_restore({backup_restore, Backup, Options}, Context) ->
+    restore_backup(Backup, Options, Context).
 
 
 %% @doc Callback for controller_file. Check if the backup file exists and return
@@ -274,17 +274,19 @@ file_forbidden(File, Context) ->
     Context :: z:context(),
     Reason :: atom().
 restore_backup(Context) ->
-    restore_backup(recent, Context).
+    Options = backup_restore:default_options(),
+    restore_backup(recent, Options, Context).
 
 %% @doc Restore a specific backup. Pass the name of the backup.
 %% The name is like "sitename-N" where N is 1..6 or w1..w4.
--spec restore_backup(Name, Context) -> ok | {error, Reason} when
+-spec restore_backup(Name, Options, Context) -> ok | {error, Reason} when
     Name :: binary() | recent,
+    Options :: backup_restore:options(),
     Context :: z:context(),
     Reason :: atom().
-restore_backup(<<"recent">>, Context) ->
-    restore_backup(recent, Context);
-restore_backup(Name, Context) ->
+restore_backup(<<"recent">>, Options, Context) ->
+    restore_backup(recent, Options, Context);
+restore_backup(Name, Options, Context) ->
     case backup_in_progress(Context) of
         true ->
             {error, in_progress};
@@ -293,14 +295,14 @@ restore_backup(Name, Context) ->
                 true ->
                     {error, uploading};
                 false ->
-                    restore_backup_1(Name, Context)
+                    restore_backup_1(Name, Options, Context)
             end
     end.
 
-restore_backup_1(recent, Context) ->
-    backup_restore:restore_newest_backup(Context);
-restore_backup_1(Name, Context) ->
-    backup_restore:restore_backup(Name, Context).
+restore_backup_1(recent, Options, Context) ->
+    backup_restore:restore_newest_backup(Options, Context);
+restore_backup_1(Name, Options, Context) ->
+    backup_restore:restore_backup(Name, Options, Context).
 
 
 %% @doc Start a full backup

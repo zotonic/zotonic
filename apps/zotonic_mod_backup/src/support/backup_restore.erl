@@ -21,13 +21,30 @@
 -module(backup_restore).
 
 -export([
+    default_options/0,
     restore_newest_backup/1,
+    restore_newest_backup/2,
     restore_backup/2,
+    restore_backup/3,
     is_file_missing/2
 ]).
 
+-type restore_option() :: database
+                        | files
+                        | security
+                        | config.
+
+-type restore_options() :: [ restore_option() ].
+
+-export_type([ restore_option/0, restore_options/0 ]).
+
+-define(DEFAULT_RESTORE_OPTIONS, [ database, files ]).
+
 -include_lib("zotonic_core/include/zotonic.hrl").
 
+-spec default_options() -> [ restore_option() ].
+default_options() ->
+    ?DEFAULT_RESTORE_OPTIONS.
 
 %% @doc Restore the newest backup from the backup files. This
 %% is called after backups are downloaded.
@@ -36,24 +53,48 @@
     Context :: z:context(),
     Reason :: nobackup | incomplete | term().
 restore_newest_backup(Context) ->
+    restore_newest_backup(?DEFAULT_RESTORE_OPTIONS, Context).
+
+%% @doc Restore the newest backup from the backup files. This
+%% is called after backups are downloaded.
+%% After the database backup is restored, the site is restarted.
+-spec restore_newest_backup(Options, Context) -> ok | {error, Reason} when
+    Context :: z:context(),
+    Options :: [ restore_option() ],
+    Reason :: nobackup | incomplete | term().
+restore_newest_backup(Options, Context) ->
     BackupData = backup_create:read_admin_file(Context),
     case newest_backup(BackupData) of
         undefined ->
             {error, nobackup};
         Backup ->
-            restore_backup(Backup, Context)
+            restore_backup(Backup, Options, Context)
     end.
 
 %% @doc Restore a specific backup from the backup list.
 %% After the database is restored, the site is restarted.
-restore_backup(undefined, _Context) ->
+-spec restore_backup(Backup, Context) -> ok | {error, Reason} when
+    Backup :: binary() | map() | undefined,
+    Context :: z:context(),
+    Reason :: unknown_backup | incomplete | term().
+restore_backup(Backup, Context) ->
+    restore_backup(Backup, ?DEFAULT_RESTORE_OPTIONS, Context).
+
+%% @doc Restore a specific backup from the backup list.
+%% After the database is restored, the site is restarted.
+-spec restore_backup(Backup, Options, Context) -> ok | {error, Reason} when
+    Backup :: binary() | map() | undefined,
+    Options :: [ restore_option() ],
+    Context :: z:context(),
+    Reason :: unknown_backup | incomplete | term().
+restore_backup(undefined, _Options, _Context) ->
     {error, unknown_backup};
-restore_backup(Name, Context) when is_binary(Name) ->
+restore_backup(Name, Options, Context) when is_binary(Name) ->
     BackupData = backup_create:read_admin_file(Context),
-    restore_backup(maps:get(Name, BackupData, undefined), Context);
-restore_backup(Backup, Context) when is_map(Backup) ->
+    restore_backup(maps:get(Name, BackupData, undefined), Options, Context);
+restore_backup(Backup, Options, Context) when is_map(Backup) ->
     ok = z_db_pool:pause_connections(Context),
-    case restore_backup_do(Backup, Context) of
+    case restore_backup_do(Backup, Options, Context) of
         ok ->
             ?LOG_NOTICE(#{
                 in => zotonic_mod_backup,
@@ -75,7 +116,7 @@ restore_backup(Backup, Context) when is_map(Backup) ->
             Error
     end.
 
-restore_backup_do(Backup, Context) ->
+restore_backup_do(Backup, Options, Context) ->
     % TODO: restore config files.
     %       For this we need to be able to force the site to backup.
     %       Write in config.d/zz-backup-environment.yaml:
@@ -84,16 +125,216 @@ restore_backup_do(Backup, Context) ->
     %               - enabled: true
     %       OR a file: priv/BACKUP - which signals the above settings
     jobs:run(zotonic_singular_job, fun() ->
-        case maybe_restore_database_backup(Backup, Context) of
-            ok ->
-                maybe_restore_files_backup(Backup, Context);
-            {error, _} = Error ->
-                Error
-        end
+        steps([
+                {files, fun maybe_restore_files_backup/3},
+                {database, fun maybe_restore_database_backup/3},
+                {security, fun maybe_restore_security_backup/3},
+                {config, fun maybe_restore_config_backup/3}
+            ], Backup, Options, Context)
     end).
 
+steps([], _Backup, _Options, _Context) ->
+    ok;
+steps([ {Opt, Func} | Steps ], Backup, Options, Context) ->
+    case proplists:get_bool(Opt, Options) of
+        true ->
+            case Func(Backup, Options, Context) of
+                ok -> steps(Steps, Backup, Options, Context);
+                {error, _} = Error -> Error
+            end;
+        false ->
+            steps(Steps, Backup, Options, Context)
+    end.
+
+%% @doc Unpack the security files into the zotonic security directory.
+%% Overwrites existing files, does not delete files that are not in the archive.
+maybe_restore_security_backup(#{ <<"config_files">> := ConfigFile }, _Options, Context) when is_binary(ConfigFile) ->
+    case is_file_missing(ConfigFile, Context) of
+        true ->
+            ?LOG_ERROR(#{
+                in => zotonic_mod_backup,
+                text => <<"Config backup-file missing">>,
+                result => error,
+                reason => incomplete,
+                files => ConfigFile
+            }),
+            {error, incomplete};
+        false ->
+            % Files are there - try to unpack
+            BackupPath = filename:join(backup_create:dir(Context), ConfigFile),
+            case maybe_decrypt_file(BackupPath, Context) of
+                {ok, BackupDecrypted} ->
+                    restore_security_backup(BackupDecrypted, Context);
+                {error, _} = Error ->
+                    Error
+            end
+    end;
+maybe_restore_security_backup(_Backup, _Options, _Context) ->
+    ok.
+
+restore_security_backup(BackupDecrypted, Context) ->
+    % List all files - save:
+    %% - config-sitename/security/...
+    % to the zotonic security dir.
+    case erl_tar:extract(BackupDecrypted, [ compressed, memory ]) of
+        {ok, Files} ->
+            Site = z_context:site(Context),
+            {ok, SecurityDir} = z_sites_config:security_dir(Site),
+            Sitename = atom_to_list(Site),
+            Prefix = "config-" ++ Sitename ++ "/security/",
+            lists:foreach(
+                fun
+                    ({Filename, Content}) ->
+                        case string:prefix(Filename, Prefix) of
+                            nomatch ->
+                                ok;
+                            RelPath ->
+                                % Write the file in the relative path of the
+                                % security directory
+                                AbsPath = filename:join(SecurityDir, RelPath),
+                                ok = z_filelib:ensure_dir(AbsPath),
+                                case file:write_file(AbsPath, Content) of
+                                    ok ->
+                                        ok;
+                                    {error, Reason} ->
+                                        ?LOG_ERROR(#{
+                                            text => <<"Restore partially failed: cannot write security file">>,
+                                            in => zotonic_mod_backup,
+                                            result => error,
+                                            reason => Reason,
+                                            filename => AbsPath
+                                        })
+                                end
+                        end;
+                    (_) ->
+                        ok
+                end,
+                Files);
+        {error, Reason} = Error ->
+             ?LOG_ERROR(#{
+                text => <<"Restore failed: cannot open config tar for security files">>,
+                in => zotonic_mod_backup,
+                result => error,
+                reason => Reason,
+                filename => BackupDecrypted
+            }),
+            Error
+    end.
+
+
+
+%% @doc Unpack the config files into the site priv and priv/config.d directory.
+%% Overwrites existing files, does not delete files that are not in the archive.
+maybe_restore_config_backup(#{ <<"config_files">> := ConfigFile }, _Options, Context) when is_binary(ConfigFile) ->
+    case is_file_missing(ConfigFile, Context) of
+        true ->
+            ?LOG_ERROR(#{
+                in => zotonic_mod_backup,
+                text => <<"Config backup-file missing">>,
+                result => error,
+                reason => incomplete,
+                files => ConfigFile
+            }),
+            {error, incomplete};
+        false ->
+            % Files are there - try to unpack
+            BackupPath = filename:join(backup_create:dir(Context), ConfigFile),
+            case maybe_decrypt_file(BackupPath, Context) of
+                {ok, BackupDecrypted} ->
+                    restore_config_backup(BackupDecrypted, Context);
+                {error, _} = Error ->
+                    Error
+            end
+    end;
+maybe_restore_config_backup(_Backup, _Options, _Context) ->
+    ok.
+
+restore_config_backup(BackupDecrypted, Context) ->
+    % List all files - save:
+    % - config-sitename/config/priv/zotonic_site.<ext>
+    % - config-sitename/config/config.d/...
+    % to the site priv dir.
+    case erl_tar:extract(BackupDecrypted, [ compressed, memory ]) of
+        {ok, Files} ->
+            Site = z_context:site(Context),
+            case z_path:site_dir(Site) of
+                {error, Reason} = Error ->
+                     ?LOG_ERROR(#{
+                        text => <<"Restore failed: no site_dir for site">>,
+                        in => zotonic_mod_backup,
+                        site => Site,
+                        result => error,
+                        reason => Reason,
+                        filename => BackupDecrypted
+                    }),
+                    Error;
+                SiteDir ->
+                    PrivDir = filename:join([ SiteDir, "priv" ]),
+                    Sitename = atom_to_list(Site),
+                    ConfigFilePrefix = "config-" ++ Sitename ++ "/config/priv/zotonic_site.",
+                    ConfigDPrefix = "config-" ++ Sitename ++ "/config/config.d/",
+                    lists:foreach(
+                        fun({Filename, Content}) ->
+                            % Restore config.d
+                            case string:prefix(Filename, ConfigDPrefix) of
+                                nomatch ->
+                                    ok;
+                                RelPath ->
+                                    % Write the file to the priv/config.d directory
+                                    DAbsPath = filename:join([ PrivDir, "config.d", RelPath ]),
+                                    ok = z_filelib:ensure_dir(DAbsPath),
+                                    case file:write_file(DAbsPath, Content) of
+                                        ok ->
+                                            ok;
+                                        {error, DReason} ->
+                                            ?LOG_ERROR(#{
+                                                text => <<"Restore partially failed: cannot write config.d file">>,
+                                                in => zotonic_mod_backup,
+                                                result => error,
+                                                reason => DReason,
+                                                filename => DAbsPath
+                                            })
+                                    end
+                            end,
+                            case string:prefix(Filename, ConfigFilePrefix) of
+                                nomatch ->
+                                    ok;
+                                "in" ->
+                                    % Skip "zotonic_site.config.in" files
+                                    ok;
+                                Extension ->
+                                    % Write the file to the priv directory
+                                    FAbsPath = filename:join([ PrivDir, "zotonic_site." ++ Extension ]),
+                                    case file:write_file(FAbsPath, Content) of
+                                        ok ->
+                                            ok;
+                                        {error, FReason} ->
+                                            ?LOG_ERROR(#{
+                                                text => <<"Restore partially failed: cannot write zotonic_site config file">>,
+                                                in => zotonic_mod_backup,
+                                                result => error,
+                                                reason => FReason,
+                                                filename => FAbsPath
+                                            })
+                                    end
+                            end
+                        end,
+                        Files)
+            end;
+        {error, Reason} = Error ->
+             ?LOG_ERROR(#{
+                text => <<"Restore failed: cannot open config tar for config files">>,
+                in => zotonic_mod_backup,
+                result => error,
+                reason => Reason,
+                filename => BackupDecrypted
+            }),
+            Error
+    end.
+
+
 %% @doc Unpack the files tar in the archive directory.
-maybe_restore_files_backup(#{ <<"files">> := BackupFile }, Context) when is_binary(BackupFile) ->
+maybe_restore_files_backup(#{ <<"files">> := BackupFile }, _Options, Context) when is_binary(BackupFile) ->
     case is_file_missing(BackupFile, Context) of
         true ->
             ?LOG_ERROR(#{
@@ -114,7 +355,7 @@ maybe_restore_files_backup(#{ <<"files">> := BackupFile }, Context) when is_bina
                     Error
             end
     end;
-maybe_restore_files_backup(_Backup, _Context) ->
+maybe_restore_files_backup(_Backup, _Options, _Context) ->
     ok.
 
 restore_files_backup(BackupFile, Context) ->
@@ -171,7 +412,7 @@ ensure_archive_dir(Context) ->
         {error, _} = Error -> Error
     end.
 
-maybe_restore_database_backup(#{ <<"database">> := BackupFile }, Context) when is_binary(BackupFile) ->
+maybe_restore_database_backup(#{ <<"database">> := BackupFile }, _Options, Context) when is_binary(BackupFile) ->
     case is_file_missing(BackupFile, Context) of
         true ->
             ?LOG_ERROR(#{
@@ -192,7 +433,7 @@ maybe_restore_database_backup(#{ <<"database">> := BackupFile }, Context) when i
                     Error
             end
     end;
-maybe_restore_database_backup(_Status, _Context) ->
+maybe_restore_database_backup(_Status, _Options, _Context) ->
     ok.
 
 restore_database_backup_file(BackupDecrypted, Context) ->

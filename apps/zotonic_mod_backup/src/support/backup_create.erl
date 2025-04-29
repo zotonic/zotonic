@@ -448,7 +448,18 @@ archive(Name, Tar, Context) ->
             {ok, undefined}
     end.
 
-%% Make an archive of the configuraton and security files of a site.
+%% @doc Make an archive of the configuraton and security files of a site.
+%% The config-sitename.tar.gz file contains:
+%%
+%% - All files from the sites's security dir
+%% - All config files, as listed by z_sites_config:config_files/1
+%%
+%% Paths in the tar:
+%%
+%% - config-sitename/config/priv/zotonic_site.<ext>
+%% - config-sitename/config/config.d/...
+%% - config-sitename/security/...
+%%
 archive_config(Name, Context) ->
     Site = z_context:site(Context),
     ConfigDirName = "config-" ++ z_convert:to_list(Site),
@@ -464,9 +475,8 @@ archive_config(Name, Context) ->
                                      SecurityDir, SecurityFiles, []),
 
     %% Create the tarball.
-    ConfigName = <<"config-", Name/binary>>,
     Dir = dir(Context),
-    ArchiveName = <<ConfigName/binary,  ".tar.gz">>,
+    ArchiveName = <<"config-", Name/binary,  ".tar.gz">>,
     filename:join([Dir, ArchiveName]),
     FileList = ConfigFileList ++ SecurityFileList,
 

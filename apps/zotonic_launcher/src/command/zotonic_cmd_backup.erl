@@ -80,7 +80,13 @@ run([ Site, "restore", Backup ]) ->
                         Input when is_list(Input) ->
                             case string:trim(Input) of
                                 SiteNameStr when SiteNameStr =:= Site ->
-                                    do_backup_restore(SiteName, Backup);
+                                    case restore_request_config_options() of
+                                        {ok, Config} ->
+                                            do_backup_restore(SiteName, Backup, Config);
+                                        {error, _} ->
+                                            io:format("Aborting restore.~n"),
+                                            halt()
+                                    end;
                                 _ ->
                                     io:format("Aborting restore.~n"),
                                     halt()
@@ -101,9 +107,34 @@ run(_) ->
     io:format("USAGE: backup <site_name> list|start|restore [backup-name]~n"),
     halt().
 
+
+restore_request_config_options() ->
+    io:format("Optionally the configuration and security files can also be restored.~n"),
+    io:format("The configuration are the priv/zotonic_site.* and priv/config/* files.~n"),
+    io:format("The security files are the certificates and other secrets stored in the Zotonic~n"),
+    io:format("security directory for the site.~n~n"),
+    io:format("Per default no configuration or security files are restored.~n~n"),
+    get_config_options().
+
+get_config_options() ->
+    Prompt = "Do you want to restore the configuration files? All, Config, Security or None [a/c/s/N] ",
+    case io:get_line(Prompt) of
+        Input when is_list(Input) ->
+            case string:trim(Input) of
+                "" -> {ok, [ database, files ]};
+                "N" -> {ok, [ database, files ]};
+                "a" -> {ok, [ database, files, security, config ]};
+                "c" -> {ok, [ database, files, config ]};
+                "s" -> {ok, [ database, files, security ]};
+                _ -> get_config_options()
+            end;
+        _ ->
+            {error, eof}
+    end.
+
 %% @doc Restore a backup.
-do_backup_restore(SiteName, Backup) ->
-    case backup_restore(SiteName, Backup) of
+do_backup_restore(SiteName, Backup, Config) ->
+    case backup_restore(SiteName, Backup, Config) of
         ok ->
             io:format("Done.~n");
         undefined ->
@@ -114,9 +145,9 @@ do_backup_restore(SiteName, Backup) ->
             halt()
     end.
 
-backup_restore(SiteName, Backup) ->
+backup_restore(SiteName, Backup, Config) ->
     BackupBin = iolist_to_binary(Backup),
-    zotonic_command:rpc(z, n1, [ {backup_restore, BackupBin}, SiteName ]).
+    zotonic_command:rpc(z, n1, [ {backup_restore, BackupBin, Config}, SiteName ]).
 
 
 %% @doc Check if the site has mod_backup enabled.
