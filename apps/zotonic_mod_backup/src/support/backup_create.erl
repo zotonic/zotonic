@@ -456,7 +456,7 @@ archive(Name, Tar, Context) ->
 %%
 %% Paths in the tar:
 %%
-%% - config-sitename/config/priv/zotonic_site.<ext>
+%% - config-sitename/config/priv/zotonic_site.ext
 %% - config-sitename/config/config.d/...
 %% - config-sitename/security/...
 %%

@@ -117,13 +117,6 @@ restore_backup(Backup, Options, Context) when is_map(Backup) ->
     end.
 
 restore_backup_do(Backup, Options, Context) ->
-    % TODO: restore config files.
-    %       For this we need to be able to force the site to backup.
-    %       Write in config.d/zz-backup-environment.yaml:
-    %           zotonic:
-    %               - environment: backup
-    %               - enabled: true
-    %       OR a file: priv/BACKUP - which signals the above settings
     jobs:run(zotonic_singular_job, fun() ->
         steps([
                 {files, fun maybe_restore_files_backup/3},
@@ -251,7 +244,7 @@ maybe_restore_config_backup(_Backup, _Options, _Context) ->
 
 restore_config_backup(BackupDecrypted, Context) ->
     % List all files - save:
-    % - config-sitename/config/priv/zotonic_site.<ext>
+    % - config-sitename/config/priv/zotonic_site.ext
     % - config-sitename/config/config.d/...
     % to the site priv dir.
     case erl_tar:extract(BackupDecrypted, [ compressed, memory ]) of
