@@ -69,7 +69,6 @@
 	</tr>
 	{% if result %}
 		{% for blk in id.blocks %}
-			{% print blk %}
 		    {% if blk.is_hide_result %}
 		        {# Nothing #}
 		    {% elseif blk.type == 'header' %}
@@ -123,7 +122,6 @@
 							{% if ans.question.prompt %}
 								{{ ans.question.prompt }}
 							{% else %}
-								{% print blk %}
 								{{ name|force_escape }}
 							{% endif %}
 						</td>
