@@ -57,8 +57,19 @@ parse(<<"{{", Rest/binary>>, Vars, Acc, Context) ->
         [_] ->
             parse(Rest, Vars, <<Acc/binary, "{{">>, Context)
     end;
+parse(<<"{{%20", Rest/binary>>, Vars, Acc, Context) ->
+    case binary:split(Rest, [ <<"%7D%7D">>, <<"}}">> ]) of
+        [Expr, Rest1] ->
+            Expr1 = z_url:url_decode(Expr),
+            Result = eval(Expr1, Vars, Context),
+            Result1 = z_html:escape_check(Result),
+            Acc1 = <<Acc/binary, Result1/binary>>,
+            parse(Rest1, Vars, Acc1, Context);
+        [_] ->
+            parse(Rest, Vars, <<Acc/binary, "{{">>, Context)
+    end;
 parse(<<"%7B%7B", Rest/binary>>, Vars, Acc, Context) ->
-    case binary:split(Rest, <<"%7D%7D">>) of
+    case binary:split(Rest, [ <<"%7D%7D">>, <<"}}">> ]) of
         [Expr, Rest1] ->
             Expr1 = z_url:url_decode(Expr),
             Result = eval(Expr1, Vars, Context),
