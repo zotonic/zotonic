@@ -69,6 +69,7 @@
 	</tr>
 	{% if result %}
 		{% for blk in id.blocks %}
+			{% print blk %}
 		    {% if blk.is_hide_result %}
 		        {# Nothing #}
 		    {% elseif blk.type == 'header' %}
@@ -80,6 +81,7 @@
 		    {% elseif blk.type|match:"^survey_.*"
 		    	  and blk.type != 'survey_page_break'
 		    	  and blk.name != 'survey_feedback'
+		    	  and blk.name != 'survey_stop'
 		   	%}
 				<tr style="border-top: 1px solid #ccc">
 					<td valign="top" style="padding: 8px; line-height: 18px; text-align: left; vertical-align: top; border-top: 1px solid #dddddd; max-width:45%;">
@@ -121,6 +123,7 @@
 							{% if ans.question.prompt %}
 								{{ ans.question.prompt }}
 							{% else %}
+								{% print blk %}
 								{{ name|force_escape }}
 							{% endif %}
 						</td>
