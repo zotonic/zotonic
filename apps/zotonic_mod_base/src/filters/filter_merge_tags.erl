@@ -46,10 +46,10 @@ merge_tags(Text, Vars, Context) ->
 
 parse(<<>>, _Vars, Acc, _Context) ->
     Acc;
-parse(<<"{{", Rest/binary>>, Vars, Acc, Context) ->
-    case binary:split(Rest, <<"}}">>) of
+parse(<<"{{%20", Rest/binary>>, Vars, Acc, Context) ->
+    case binary:split(Rest, [ <<"%7D%7D">>, <<"}}">> ]) of
         [Expr, Rest1] ->
-            Expr1 = z_html:unescape(Expr),
+            Expr1 = z_url:url_decode(Expr),
             Result = eval(Expr1, Vars, Context),
             Result1 = z_html:escape_check(Result),
             Acc1 = <<Acc/binary, Result1/binary>>,
@@ -57,10 +57,10 @@ parse(<<"{{", Rest/binary>>, Vars, Acc, Context) ->
         [_] ->
             parse(Rest, Vars, <<Acc/binary, "{{">>, Context)
     end;
-parse(<<"{{%20", Rest/binary>>, Vars, Acc, Context) ->
-    case binary:split(Rest, [ <<"%7D%7D">>, <<"}}">> ]) of
+parse(<<"{{", Rest/binary>>, Vars, Acc, Context) ->
+    case binary:split(Rest, <<"}}">>) of
         [Expr, Rest1] ->
-            Expr1 = z_url:url_decode(Expr),
+            Expr1 = z_html:unescape(Expr),
             Result = eval(Expr1, Vars, Context),
             Result1 = z_html:escape_check(Result),
             Acc1 = <<Acc/binary, Result1/binary>>,
