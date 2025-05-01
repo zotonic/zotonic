@@ -281,7 +281,7 @@ restore_backup(Context) ->
 %% The name is like "sitename-N" where N is 1..6 or w1..w4.
 -spec restore_backup(Name, Options, Context) -> ok | {error, Reason} when
     Name :: binary() | recent,
-    Options :: backup_restore:options(),
+    Options :: backup_restore:restore_options(),
     Context :: z:context(),
     Reason :: atom().
 restore_backup(<<"recent">>, Options, Context) ->
