@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2018-2024 Marc Worrell
+%% @copyright 2018-2025 Marc Worrell
 %% @doc Zotonic specific callbacks for MQTT connections
 %% @end
 
-%% Copyright 2018-2024 Marc Worrell
+%% Copyright 2018-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -231,7 +231,20 @@ subscribe_forced_logoff(Context) ->
     end.
 
 -spec connect( mqtt_packet_map:mqtt_packet(), boolean(), mqtt_sessions:msg_options(), z:context()) -> {ok, mqtt_packet_map:mqtt_packet(), z:context()} | {error, term()}.
-connect(#{ type := connect, username := U, password := P, properties := Props }, false,
+connect(Packet, IsSessionPresent, Options, Context) ->
+    case m_site:environment(Context) of
+        backup ->
+            ConnAck = #{
+                type => connack,
+                reason_code => ?MQTT_RC_SERVER_UNAVAILABLE
+            },
+            {ok, ConnAck, Context};
+        _Env ->
+            connect_1(Packet, IsSessionPresent, Options, Context)
+    end.
+
+-spec connect_1( mqtt_packet_map:mqtt_packet(), boolean(), mqtt_sessions:msg_options(), z:context()) -> {ok, mqtt_packet_map:mqtt_packet(), z:context()} | {error, term()}.
+connect_1(#{ type := connect, username := U, password := P, properties := Props }, false,
         #{ context_prefs := #{ user_id := UserId } = Prefs } = Options,
         Context) when ?none(U), ?none(P) ->
     % No session, accept user from the mqtt controller
@@ -254,7 +267,7 @@ connect(#{ type := connect, username := U, password := P, properties := Props },
     },
     z_context:logger_md(Context3),
     {ok, ConnAck, Context3};
-connect(#{ type := connect, username := U, password := P }, true,
+connect_1(#{ type := connect, username := U, password := P }, true,
         #{ context_prefs := #{ user_id := UserId } } = Options,
         Context) when ?none(U), ?none(P) ->
     % Existing session, user from the mqtt controller must be the user in the mqtt session
@@ -274,7 +287,7 @@ connect(#{ type := connect, username := U, password := P }, true,
             },
             {ok, ConnAck, Context}
     end;
-connect(#{ type := connect, username := U, password := P }, _IsSessionPresent, Options, Context) when ?none(U), ?none(P) ->
+connect_1(#{ type := connect, username := U, password := P }, _IsSessionPresent, Options, Context) when ?none(U), ?none(P) ->
     % Anonymous login, and no user from the MQTT controller
     case z_acl:user(Context) of
         undefined ->
@@ -292,7 +305,7 @@ connect(#{ type := connect, username := U, password := P }, _IsSessionPresent, O
             },
             {ok, ConnAck, Context}
     end;
-connect(#{ type := connect, username := U, password := P, properties := Props }, IsSessionPresent, Options, Context) when not ?none(U), not ?none(P) ->
+connect_1(#{ type := connect, username := U, password := P, properties := Props }, IsSessionPresent, Options, Context) when not ?none(U), not ?none(P) ->
     % User login, and no user from the MQTT controller
     % The username might be something like: "example.com:localuser"
     Username = case split_vhost_username(U) of
@@ -373,7 +386,7 @@ connect(#{ type := connect, username := U, password := P, properties := Props },
             },
             {ok, ConnAck, Context}
     end;
-connect(#{ type := connect, properties := #{ authentication_method := _AuthMethod } = Props }, _IsSessionPresent, _Options, Context) ->
+connect_1(#{ type := connect, properties := #{ authentication_method := _AuthMethod } = Props }, _IsSessionPresent, _Options, Context) ->
     % User logs on using extended authentication method
     _AuthData = maps:get(authentication_data, Props, undefined),
     % ... handle extended authentication handshake
@@ -382,7 +395,7 @@ connect(#{ type := connect, properties := #{ authentication_method := _AuthMetho
         reason_code => ?MQTT_RC_NOT_AUTHORIZED
     },
     {ok, ConnAck, Context};
-connect(_Packet, _IsSessionPresent, _Options, Context) ->
+connect_1(_Packet, _IsSessionPresent, _Options, Context) ->
     % Extended authentication
     ConnAck = #{
         type => connack,
