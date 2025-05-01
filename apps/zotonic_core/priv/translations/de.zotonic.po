@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-05-01 10:35\n"
+"PO-Revision-Date: 2025-05-01 12:15\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -11267,7 +11267,7 @@ msgstr "Möchten Sie diese Sprache entfernen?"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_new_rsc_extra.tpl:4
 msgid "Automatic from title"
-msgstr ""
+msgstr "Automatisch aus dem Titel"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:87
 msgid "Automatic translation"
