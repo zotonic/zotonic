@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-04-15 16:18\n"
+"PO-Revision-Date: 2025-05-01 10:35\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -3286,7 +3286,7 @@ msgstr "启用或禁用语言选项卡。"
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:69./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:99
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:24
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:56
-#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:46./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:41
+#: apps/zotonic_mod_translation/priv/templates/_dialog_new_rsc_extra.tpl:2./apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:46./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:41
 msgid "Language"
 msgstr "语言"
 
@@ -10364,7 +10364,7 @@ msgstr "单击“编辑”以查看和更改输入的数据。"
 msgid "Closed"
 msgstr "关闭"
 
-#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:98./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:132./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
+#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:99./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:133./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
 msgid "Correct"
 msgstr "正确的"
 
@@ -11101,7 +11101,7 @@ msgstr "当没有条件成立时，所有此中断后面的问题将成为下个
 msgid "White"
 msgstr "白色的"
 
-#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:98./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:132
+#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:99./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:133
 msgid "Wrong"
 msgstr "错误的"
 
@@ -11264,6 +11264,10 @@ msgstr "你确定你要删除："
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:1
 msgid "Are you sure you want to remove this language?"
 msgstr "你确定要删除这句话吗？"
+
+#: apps/zotonic_mod_translation/priv/templates/_dialog_new_rsc_extra.tpl:4
+msgid "Automatic from title"
+msgstr "自动从标题"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:87
 msgid "Automatic translation"

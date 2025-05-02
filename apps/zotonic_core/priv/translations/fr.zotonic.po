@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-04-15 17:33\n"
+"PO-Revision-Date: 2025-05-01 10:34\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -3286,7 +3286,7 @@ msgstr "Activer ou désactiver les onglets de langue."
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:69./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:99
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:24
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:56
-#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:46./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:41
+#: apps/zotonic_mod_translation/priv/templates/_dialog_new_rsc_extra.tpl:2./apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:46./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:41
 msgid "Language"
 msgstr "Langage"
 
@@ -10364,7 +10364,7 @@ msgstr "Cliquez sur \"Modifier\" pour voir et modifier les données saisies."
 msgid "Closed"
 msgstr "Fermé"
 
-#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:98./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:132./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
+#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:99./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:133./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
 msgid "Correct"
 msgstr "Corriger"
 
@@ -11101,7 +11101,7 @@ msgstr "Lorsque aucune condition n'est vraie, la question qui suit cette pause s
 msgid "White"
 msgstr "Blanc"
 
-#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:98./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:132
+#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:99./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:133
 msgid "Wrong"
 msgstr "Mauvais"
 
@@ -11264,6 +11264,10 @@ msgstr "Etes-vous sûr que vous voulez supprimer:"
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:1
 msgid "Are you sure you want to remove this language?"
 msgstr "Êtes vous sûr de vouloir effacer cette langue ?"
+
+#: apps/zotonic_mod_translation/priv/templates/_dialog_new_rsc_extra.tpl:4
+msgid "Automatic from title"
+msgstr "Automatique à partir du titre"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:87
 msgid "Automatic translation"

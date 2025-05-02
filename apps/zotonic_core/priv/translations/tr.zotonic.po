@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-04-15 16:18\n"
+"PO-Revision-Date: 2025-05-01 10:35\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -3286,7 +3286,7 @@ msgstr "Dil sekmelerini etkinleştirin veya devre dışı bırakın."
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:69./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:99
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:24
 #: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:56
-#: apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:46./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:41
+#: apps/zotonic_mod_translation/priv/templates/_dialog_new_rsc_extra.tpl:2./apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:46./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:41
 msgid "Language"
 msgstr "Dil"
 
@@ -10364,7 +10364,7 @@ msgstr "Girilen verileri görmek ve değiştirmek için “Düzenle”ye tıklay
 msgid "Closed"
 msgstr "Kapalı"
 
-#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:98./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:132./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
+#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:99./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:133./apps/zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
 msgid "Correct"
 msgstr "Doğru"
 
@@ -11101,7 +11101,7 @@ msgstr "Hiçbir koşul doğru olmadığı zaman sayfanın sonunu takip eden soru
 msgid "White"
 msgstr "Beyaz"
 
-#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:98./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:132
+#: apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:99./apps/zotonic_mod_survey/priv/templates/email_survey_result.tpl:133
 msgid "Wrong"
 msgstr "Yanlış"
 
@@ -11264,6 +11264,10 @@ msgstr "Silmek istediğine emin misin:"
 #: apps/zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:1
 msgid "Are you sure you want to remove this language?"
 msgstr "Bu dili silmek istediğinize emin misiniz?"
+
+#: apps/zotonic_mod_translation/priv/templates/_dialog_new_rsc_extra.tpl:4
+msgid "Automatic from title"
+msgstr "Başlıktan otomatik"
 
 #: apps/zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:87
 msgid "Automatic translation"
