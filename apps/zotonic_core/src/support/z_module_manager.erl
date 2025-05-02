@@ -876,7 +876,7 @@ db_schema_version(M, Context) ->
     z_db:q1("SELECT schema_version FROM module WHERE name = $1", [M], Context).
 
 set_db_schema_version(M, V, Context) ->
-    1 = z_db:q("UPDATE module SET schema_version = $1 WHERE name = $2", [V, M], Context),
+    _ = z_db:q("UPDATE module SET schema_version = $1 WHERE name = $2", [V, M], Context),
     ok.
 
 
