@@ -182,7 +182,7 @@ edges(Id, Context) ->
                             }
                         };
                     false ->
-                        false
+                        Acc
                 end
         end,
         #{},
