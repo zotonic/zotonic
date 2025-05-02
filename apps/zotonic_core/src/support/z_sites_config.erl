@@ -103,8 +103,7 @@ site_config(Site) when is_atom(Site) ->
                     case read_configs(ZotonicFiles) of
                         {ok, GlobalConfig} when is_map(GlobalConfig) ->
                             SiteConfig1 = merge_global_configs(Site, SiteConfig, GlobalConfig),
-                            SiteConfig2 = maybe_force_backup_env(Site, SiteConfig1),
-                            {ok, SiteConfig2};
+                            {ok, SiteConfig1};
                         {error, _} = Error ->
                             Error
                     end;
@@ -114,24 +113,6 @@ site_config(Site) when is_atom(Site) ->
         false ->
             {error, nosite}
     end.
-
-maybe_force_backup_env(Site, SiteConfig) when is_map(SiteConfig) ->
-    case z_path:site_dir(Site) of
-        {error, _} ->
-            SiteConfig;
-        SiteDir ->
-            Filename = filename:join([ SiteDir, "priv", "BACKUP" ]),
-            case filelib:is_file(Filename) of
-                true ->
-                    SiteConfig#{
-                        environment => backup,
-                        enabled => true
-                    };
-                false ->
-                    SiteConfig
-            end
-    end.
-
 
 %% @doc Check if the Erlang application is a Zotonic site. A Zotonic site has a site
 %% configuration file in its priv directory.
@@ -182,11 +163,19 @@ config_files(Node, Site) ->
                 {ok, ConfigDir} ->
                     [ ConfigFile ]
                     ++ z_config_files:files( filename:join([ ConfigDir, "site_config.d", Site ]) )
-                    ++ z_config_files:files( filename:join([ SitePrivDir, "config.d" ]) );
+                    ++ z_config_files:files( filename:join([ SitePrivDir, "config.d" ]) )
+                    ++ maybe_backup( filename:join([ SitePrivDir, "BACKUP" ]) );
                 {error, _} ->
                     [ ConfigFile ]
                     ++ z_config_files:files( filename:join([ SitePrivDir, "config.d" ]) )
+                    ++ maybe_backup( filename:join([ SitePrivDir, "BACKUP" ]) )
             end
+    end.
+
+maybe_backup(F) ->
+    case filelib:is_file(F) of
+        true -> [ "BACKUP" ];
+        false -> []
     end.
 
 -spec security_dir( atom() ) -> {ok, file:filename_all()} | {error, term()}.
@@ -204,6 +193,12 @@ read_configs(Fs) when is_list(Fs) ->
         fun
             (_, {error, _} = Error) ->
                 Error;
+            ("BACKUP", {ok, Acc}) ->
+                Data = #{
+                    environment => backup,
+                    enabled => true
+                },
+                apps_config("BACKUP", Data, Acc);
             (F, {ok, Acc}) ->
                 case z_config_files:consult(F) of
                     {ok, Data} ->
