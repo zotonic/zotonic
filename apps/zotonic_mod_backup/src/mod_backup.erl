@@ -271,7 +271,7 @@ file_forbidden(File, Context) ->
     end.
 
 %% @doc Start download backup files if the environment is 'backup'.
--spec download_backup(z:context()) -> {ok, started|in_progress} | {error, Reason} when
+-spec download_backup(Context) -> {ok, started|in_progress} | {error, Reason} when
     Context :: z:context(),
     Reason :: not_env_backup | uploading.
 download_backup(Context) ->
@@ -419,19 +419,19 @@ handle_call(is_uploading, _From, #state{ upload_pid = Pid } = State) ->
 handle_call(is_downloading, _From, #state{ download_pid = Pid } = State) ->
     {reply, is_pid(Pid), State};
 
-handle_call(download_backup, #state{ backup_pid = Pid } = State) when is_pid(Pid) ->
+handle_call(download_backup, _From, #state{ backup_pid = Pid } = State) when is_pid(Pid) ->
     {reply, {error, uploading}, State};
-handle_call(download_backup, #state{ upload_pid = Pid } = State) when is_pid(Pid) ->
+handle_call(download_backup, _From, #state{ upload_pid = Pid } = State) when is_pid(Pid) ->
     {reply, {error, uploading}, State};
-handle_call(download_backup, #state{ download_pid = Pid } = State) when is_pid(Pid) ->
+handle_call(download_backup, _From, #state{ download_pid = Pid } = State) when is_pid(Pid) ->
     {reply, {ok, in_progress}, State};
-handle_call(download_backup, #state{ is_env_backup = true } = State) ->
+handle_call(download_backup, _From, #state{ is_env_backup = true } = State) ->
     State1 = maybe_filestore_download(State),
     case is_pid(State1#state.download_pid) of
         true ->  {reply, {ok, started}, State1};
         false -> {reply, {error, not_started}, State1}
     end;
-handle_call(download_backup, #state{} = State) ->
+handle_call(download_backup, _From, #state{} = State) ->
     {noreply, {error, not_env_backup}, State};
 
 %% @doc Trap unknown calls
