@@ -299,10 +299,7 @@ activate_1(Module, IsSync, Context) ->
         backup ->
             case lists:member(Module, env_backup_modules()) of
                 true ->
-                    case IsSync of
-                        true -> upgrade_await(Context);
-                        false -> upgrade(Context)
-                    end;
+                    activate_2(Module, IsSync, Context);
                 false ->
                     {error, not_found}
             end;
