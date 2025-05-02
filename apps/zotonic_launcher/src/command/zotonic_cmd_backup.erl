@@ -61,7 +61,7 @@ run([ Site, Cmd ]) when Cmd =:= "list"; Cmd =:= "start" ->
                             halt()
                     end;
                 false ->
-                    io:format("Backup modules is not enabled for '~p'~n", [ SiteName ]),
+                    io:format("Backup module is not enabled for '~p'~n", [ SiteName ]),
                     halt()
             end;
         {error, _} = Error ->
@@ -96,13 +96,41 @@ run([ Site, "restore", Backup ]) ->
                             halt()
                     end;
                 false ->
-                    io:format("Backup modules is not enabled for '~p'~n", [ SiteName ]),
+                    io:format("Backup module is not enabled for '~p'~n", [ SiteName ]),
                     halt()
             end;
         {error, _} = Error ->
             zotonic_command:format_error(Error)
     end;
-
+run([ Site, "download", Backup ]) ->
+    case zotonic_command:net_start() of
+        ok ->
+            SiteName = list_to_atom(Site),
+            case is_mod_backup_running(SiteName) of
+                true ->
+                    io:format("Downloading and restoring newest backup ~s for '~p'.~n", [ Backup, SiteName ]),
+                    io:format("The site will be unavailable whilst the backup is restored.~n~n"),
+                    io:format("Please type the sitename (~p) to continue, anything else to cancel.~n~n", [ SiteName ]),
+                    case io:get_line("Type the sitename to continue: ") of
+                        Input when is_list(Input) ->
+                            case string:trim(Input) of
+                                SiteNameStr when SiteNameStr =:= Site ->
+                                    do_backup_download(SiteName);
+                                _ ->
+                                    io:format("Aborting download and restore.~n"),
+                                    halt()
+                            end;
+                        _ ->
+                            io:format("Could not read input, aborting restore.~n"),
+                            halt()
+                    end;
+                false ->
+                    io:format("Backup module is not enabled for '~p'~n", [ SiteName ]),
+                    halt()
+            end;
+        {error, _} = Error ->
+            zotonic_command:format_error(Error)
+    end;
 run(_) ->
     io:format("USAGE: backup <site_name> list|start|restore [backup-name]~n"),
     halt().
@@ -149,6 +177,25 @@ backup_restore(SiteName, Backup, Config) ->
     BackupBin = iolist_to_binary(Backup),
     zotonic_command:rpc(z, n1, [ {backup_restore, BackupBin, Config}, SiteName ]).
 
+%% @doc Download and restore a backup.
+do_backup_download(SiteName) ->
+    case backup_download(SiteName) of
+        ok ->
+            io:format("Download and restore started, site will restart when ready.~n");
+        undefined ->
+            io:format("Could not download and restore newest backup for '~p': no handler~n", [ SiteName ]),
+            halt();
+        {error, in_progress} ->
+            io:format("Download and restore are already in progress.~n"),
+            halt();
+        {error, no_env_backup} ->
+            io:format("Error: the site MUST be set to 'backup' environment.~n"),
+            halt();
+        {error, Reason} ->
+            io:format("Could not restore newest backup for '~p': ~p~n", [ SiteName, Reason ]),
+            halt()
+    end.
+
 
 %% @doc Check if the site has mod_backup enabled.
 is_mod_backup_running(SiteName) ->
@@ -161,3 +208,7 @@ backup_list(SiteName) ->
 %% @doc Start a new backup (if no backup is running).
 backup_start(SiteName) ->
     zotonic_command:rpc(z, n1, [ backup_start, SiteName ]).
+
+%% @doc Start a new backup (if no backup is running).
+backup_download(SiteName) ->
+    zotonic_command:rpc(z, n1, [ backup_download, SiteName ]).

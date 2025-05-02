@@ -52,6 +52,7 @@
     observe_backup_list/2,
     observe_backup_start/2,
     observe_backup_restore/2,
+    observe_backup_download/2,
 
     start_backup/1,
     start_backup/2,
@@ -198,6 +199,9 @@ observe_backup_start(backup_start, Context) ->
 observe_backup_restore({backup_restore, Backup, Options}, Context) ->
     restore_backup(Backup, Options, Context).
 
+observe_backup_download(backup_download, Context) ->
+    download_backup(Context).
+
 
 %% @doc Callback for controller_file. Check if the backup file exists and return
 %% the path to the file on disk.
@@ -208,7 +212,6 @@ observe_backup_restore({backup_restore, Backup, Options}, Context) ->
 file_exists(File, Context) ->
     Root = without_extension(File),
     Admin = backup_create:read_admin_file(Context),
-
     case maps:get(Root, Admin, undefined) of
         undefined ->
             ?LOG_WARNING(#{
@@ -271,7 +274,7 @@ file_forbidden(File, Context) ->
     end.
 
 %% @doc Start download backup files if the environment is 'backup'.
--spec download_backup(Context) -> {ok, started|in_progress} | {error, Reason} when
+-spec download_backup(Context) -> ok | {error, Reason} when
     Context :: z:context(),
     Reason :: not_env_backup | uploading.
 download_backup(Context) ->
@@ -424,11 +427,11 @@ handle_call(download_backup, _From, #state{ backup_pid = Pid } = State) when is_
 handle_call(download_backup, _From, #state{ upload_pid = Pid } = State) when is_pid(Pid) ->
     {reply, {error, uploading}, State};
 handle_call(download_backup, _From, #state{ download_pid = Pid } = State) when is_pid(Pid) ->
-    {reply, {ok, in_progress}, State};
+    {reply, {error, in_progress}, State};
 handle_call(download_backup, _From, #state{ is_env_backup = true } = State) ->
     State1 = maybe_filestore_download(State),
     case is_pid(State1#state.download_pid) of
-        true ->  {reply, {ok, started}, State1};
+        true ->  {reply, ok, State1};
         false -> {reply, {error, not_started}, State1}
     end;
 handle_call(download_backup, _From, #state{} = State) ->
