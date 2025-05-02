@@ -198,7 +198,7 @@ read_configs(Fs) when is_list(Fs) ->
                     environment => backup,
                     enabled => true
                 },
-                apps_config("BACKUP", Data, Acc);
+                apps_config("BACKUP", [ Data ], Acc);
             (F, {ok, Acc}) ->
                 case z_config_files:consult(F) of
                     {ok, Data} ->
