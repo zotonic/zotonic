@@ -616,9 +616,8 @@ maybe_filestore_upload(#state{ context = Context, upload_pid = undefined } = Sta
                         true ->
                             Acc;
                         false ->
-                            Db = maps:get(<<"database">>, Bck),
                             Tm = maps:get(<<"timestamp">>, Bck),
-                            [ {Tm, Nm, Db} | Acc ]
+                            [ {Tm, Nm, Bck} | Acc ]
                     end
                 end,
                 [],
@@ -628,8 +627,8 @@ maybe_filestore_upload(#state{ context = Context, upload_pid = undefined } = Sta
                     State;
                 Sorted ->
                     % Start uploader for newest backup
-                    {_, Name, DatabaseFile} = lists:last(Sorted),
-                    Pid = do_upload(Name, DatabaseFile, Context),
+                    {_, Name, Backup} = lists:last(Sorted),
+                    Pid = do_upload(Name, Backup, Context),
                     State#state{
                         upload_start = calendar:universal_time(),
                         upload_pid = Pid,
@@ -642,60 +641,63 @@ maybe_filestore_upload(#state{ context = Context, upload_pid = undefined } = Sta
 maybe_filestore_upload(State) ->
     ?LOG_INFO(#{
         in => zotonic_mod_backup,
-        text => <<"Backup delaying upload of database file to filestore because another upload is busy.">>,
+        text => <<"Backup delaying upload of database and config file to filestore because another upload is busy.">>,
         reason => busy,
         upload_pid => State#state.upload_pid
     }),
     State.
 
-do_upload(Name, DatabaseFile, Context) ->
+do_upload(Name, Backup, Context) ->
     z_proc:spawn_link_md(
         fun() ->
-            RemoteDbFile = <<"backup/", DatabaseFile/binary>>,
-            LocalDbFile = filename:join(backup_create:dir(Context), DatabaseFile),
-            case z_notifier:first(
-                #filestore_request{
-                    action = upload,
-                    remote = RemoteDbFile,
-                    local = LocalDbFile
-                }, Context)
-            of
+            case upload_database(Backup, Context) of
                 ok ->
-                    F = fun(Data) ->
-                        Bck = maps:get(Name, Data),
-                        Data#{
-                            Name => Bck#{
-                                <<"is_filestore_uploaded">> => true
-                            }
-                        }
-                    end,
-                    backup_create:update_admin_file(F, Context),
-                    RemoteAdminFile = <<"backup/backup.json">>,
-                    LocalAdminFile = filename:join(backup_create:dir(Context), <<"backup.json">>),
-                    case z_notifier:first(
-                        #filestore_request{
-                            action = upload,
-                            remote = RemoteAdminFile,
-                            local = LocalAdminFile
-                        }, Context)
-                    of
+                    case upload_config(Backup, Context) of
                         ok ->
-                            ?LOG_INFO(#{
-                                text => <<"Backup uploaded database file to filestore">>,
-                                in => zotonic_mod_backup,
-                                result => ok,
-                                remote => RemoteDbFile,
-                                local => LocalDbFile
-                            }),
-                            ok;
+                            F = fun(Data) ->
+                                Bck = maps:get(Name, Data),
+                                Data#{
+                                    Name => Bck#{
+                                        <<"is_filestore_uploaded">> => true
+                                    }
+                                }
+                            end,
+                            backup_create:update_admin_file(F, Context),
+                            RemoteAdminFile = <<"backup/backup.json">>,
+                            LocalAdminFile = filename:join(backup_create:dir(Context), <<"backup.json">>),
+                            case z_notifier:first(
+                                #filestore_request{
+                                    action = upload,
+                                    remote = RemoteAdminFile,
+                                    local = LocalAdminFile
+                                }, Context)
+                            of
+                                ok ->
+                                    ?LOG_INFO(#{
+                                        text => <<"Backup uploaded database and config file to filestore">>,
+                                        in => zotonic_mod_backup,
+                                        result => ok,
+                                        name => Name
+                                    }),
+                                    ok;
+                                {error, Reason} = Error ->
+                                    ?LOG_ERROR(#{
+                                        text => <<"Backup error uploading backup.json to filestore">>,
+                                        in => zotonic_mod_backup,
+                                        result => error,
+                                        reason => Reason,
+                                        remote => RemoteAdminFile,
+                                        local => LocalAdminFile
+                                    }),
+                                    Error
+                            end;
                         {error, Reason} = Error ->
                             ?LOG_ERROR(#{
-                                text => <<"Backup error uploading backup.json to filestore">>,
+                                text => <<"Backup error uploading config file to filestore">>,
                                 in => zotonic_mod_backup,
                                 result => error,
                                 reason => Reason,
-                                remote => RemoteAdminFile,
-                                local => LocalAdminFile
+                                local => maps:get(<<"config_files">>, Backup)
                             }),
                             Error
                     end;
@@ -705,8 +707,7 @@ do_upload(Name, DatabaseFile, Context) ->
                         in => zotonic_mod_backup,
                         result => error,
                         reason => Reason,
-                        remote => RemoteDbFile,
-                        local => LocalDbFile
+                        local => maps:get(<<"database">>, Backup)
                     }),
                     Error;
                 undefined ->
@@ -718,6 +719,31 @@ do_upload(Name, DatabaseFile, Context) ->
                     })
             end
         end).
+
+upload_database(#{ <<"database">> := Db }, Context) when is_binary(Db), Db =/= <<>> ->
+    RemoteDbFile = <<"backup/", Db/binary>>,
+    LocalDbFile = filename:join(backup_create:dir(Context), Db),
+    z_notifier:first(
+        #filestore_request{
+            action = upload,
+            remote = RemoteDbFile,
+            local = LocalDbFile
+        }, Context);
+upload_database(#{}, _Context) ->
+    ok.
+
+upload_config(#{ <<"config_files">> := Cfg }, Context) when is_binary(Cfg), Cfg =/= <<>> ->
+    RemoteCfgFile = <<"backup/", Cfg/binary>>,
+    LocalCfgFile = filename:join(backup_create:dir(Context), Cfg),
+    z_notifier:first(
+        #filestore_request{
+            action = upload,
+            remote = RemoteCfgFile,
+            local = LocalCfgFile
+        }, Context);
+upload_config(#{}, _Context) ->
+    ok.
+
 
 maybe_filestore_download(#state{ context = Context } = State) ->
     case backup_config:is_filestore_enabled(Context) of
