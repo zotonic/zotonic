@@ -102,7 +102,7 @@ run([ Site, "restore", Backup ]) ->
         {error, _} = Error ->
             zotonic_command:format_error(Error)
     end;
-run([ Site, "download", Backup ]) ->
+run([ Site, "download" ]) ->
     case zotonic_command:net_start() of
         ok ->
             SiteName = list_to_atom(Site),
@@ -132,7 +132,7 @@ run([ Site, "download", Backup ]) ->
             zotonic_command:format_error(Error)
     end;
 run(_) ->
-    io:format("USAGE: backup <site_name> list|start|restore [backup-name]~n"),
+    io:format("USAGE: backup <site_name> list|start|restore|download [backup-name-for-restore]~n"),
     halt().
 
 
