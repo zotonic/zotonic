@@ -57,6 +57,7 @@
     start_backup/2,
     list_backups/1,
 
+    download_backup/1,
     restore_backup/1,
     restore_backup/3,
 
@@ -269,6 +270,18 @@ file_forbidden(File, Context) ->
             true
     end.
 
+%% @doc Start download backup files if the environment is 'backup'.
+-spec download_backup(z:context()) -> {ok, started|in_progress} | {error, Reason} when
+    Context :: z:context(),
+    Reason :: not_env_backup | uploading.
+download_backup(Context) ->
+    case m_site:environment(Context) of
+        backup ->
+            gen_server:call(z_utils:name_for_site(?MODULE, Context), download_backup);
+        _ ->
+            {error, not_env_backup}
+    end.
+
 %% @doc Restore the most recent backup
 -spec restore_backup(Context) -> ok | {error, Reason} when
     Context :: z:context(),
@@ -406,6 +419,21 @@ handle_call(is_uploading, _From, #state{ upload_pid = Pid } = State) ->
 handle_call(is_downloading, _From, #state{ download_pid = Pid } = State) ->
     {reply, is_pid(Pid), State};
 
+handle_call(download_backup, #state{ backup_pid = Pid } = State) when is_pid(Pid) ->
+    {reply, {error, uploading}, State};
+handle_call(download_backup, #state{ upload_pid = Pid } = State) when is_pid(Pid) ->
+    {reply, {error, uploading}, State};
+handle_call(download_backup, #state{ download_pid = Pid } = State) when is_pid(Pid) ->
+    {reply, {ok, in_progress}, State};
+handle_call(download_backup, #state{ is_env_backup = true } = State) ->
+    State1 = maybe_filestore_download(State),
+    case is_pid(State1#state.download_pid) of
+        true ->  {reply, {ok, started}, State1};
+        false -> {reply, {error, not_started}, State1}
+    end;
+handle_call(download_backup, #state{} = State) ->
+    {noreply, {error, not_env_backup}, State};
+
 %% @doc Trap unknown calls
 handle_call(Message, _From, #state{} = State) ->
     {stop, {unknown_call, Message}, State}.
@@ -436,6 +464,8 @@ handle_info(periodic_backup, #state{ is_env_backup = false } = State) ->
 handle_info(periodic_download, #state{ backup_pid = Pid } = State) when is_pid(Pid) ->
     {noreply, State};
 handle_info(periodic_download, #state{ download_pid = Pid } = State) when is_pid(Pid) ->
+    {noreply, State};
+handle_info(periodic_download, #state{ upload_pid = Pid } = State) when is_pid(Pid) ->
     {noreply, State};
 handle_info(periodic_download, #state{ is_env_backup = true } = State) ->
     State1 = maybe_filestore_download(State),
