@@ -108,7 +108,7 @@ run([ Site, "download" ]) ->
             SiteName = list_to_atom(Site),
             case is_mod_backup_running(SiteName) of
                 true ->
-                    io:format("Downloading and restoring newest backup ~s for '~p'.~n", [ Backup, SiteName ]),
+                    io:format("Downloading and restoring newest backup for '~p'.~n", [ SiteName ]),
                     io:format("The site will be unavailable whilst the backup is restored.~n~n"),
                     io:format("Please type the sitename (~p) to continue, anything else to cancel.~n~n", [ SiteName ]),
                     case io:get_line("Type the sitename to continue: ") of
