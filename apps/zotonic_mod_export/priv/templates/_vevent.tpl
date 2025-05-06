@@ -1,4 +1,5 @@
-{% with id.date_start, id.date_end as dtstart, dtend %}{% if dtstart %}BEGIN:VEVENT
+{% with id.date_start, id.date_end as dtstart, dtend %}{% if dtstart %}
+BEGIN:VEVENT
 CREATED:{{ id.created|date:"Ymd\\THis":"UTC" }}Z
 LAST-MODIFIED:{{ id.modified|date:"Ymd\\THis":"UTC" }}Z
 UID:{{ id.uri|escape_ical }}{% if id.date_is_all_day %}
