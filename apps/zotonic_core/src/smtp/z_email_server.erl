@@ -1,9 +1,9 @@
 %% @author Atilla Erdodi <atilla@maximonster.com>
-%% @copyright 2010-2024 Maximonster Interactive Things
+%% @copyright 2010-2025 Maximonster Interactive Things
 %% @doc Email server. Queues, renders and sends e-mails.
 %% @end
 
-%% Copyright 2010-2024 Maximonster Interactive Things
+%% Copyright 2010-2025 Maximonster Interactive Things
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -762,11 +762,11 @@ check_templates_1([ T | Ts ], Context) ->
 
 drop_blocked_email(Id, Recipient, Email, Context) ->
     delete_emailq(Id),
+    % Leave message undefined, not overwriting previous error message
     z_notifier:notify(#email_failed{
             message_nr = Id,
             recipient = Recipient,
             is_final = true,
-            status = <<"Recipient blocked by Zotonic module (#is_recipient_ok)">>,
             reason = bounce
         }, Context),
     LogEmail = #log_email{
@@ -1021,7 +1021,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                         message => Message
                     }),
                     case is_retry_possible(Reason, FailureType, Message) of
-                        true ->
+                        {true, OptDelayMinutes} ->
                             %% do nothing, it will retry later
                             z_notifier:notify(#email_failed{
                                     message_nr = Id,
@@ -1040,6 +1040,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                                                             mailer_host = Host
                                                         }
                                               }, Context),
+                            update_emailq_delay(Id, OptDelayMinutes),
                             ok;
                         false ->
                             % permanent failure, something is wrong with the receiving server or the recipient
@@ -1243,21 +1244,40 @@ plaintext_port(Context) ->
     end.
 
 
+-spec is_retry_possible(Reason, FailureType, Message) -> {true, DelayMinutes} | false when
+    Reason :: retries_exceeded | term(),
+    FailureType :: temporary_failure | permanent_failure,
+    Message :: binary() | undefined,
+    DelayMinutes :: undefined | non_neg_integer().
 is_retry_possible(_Reason, _FailureType, auth_failed) ->
-    true;  % proxy - could be temporary
+    {true, undefined};  % proxy - could be temporary
 is_retry_possible(retries_exceeded, _FailureType, _Message) ->
-    true;
+    {true, undefined};
 is_retry_possible(_Reason, permanent_failure, Message) when is_binary(Message) ->
-    % Check for issue with proxy (https://github.com/zotonic/zotonic/issues/3508):
-    % 554 5.7.0 Your message could not be sent. The limit on the number of allowed outgoing messages was exceeded. Try again later.
-    case binary:match(Message, <<"Try again later.">>) of
-        {_, _} -> true;
-        nomatch -> false
+    case is_proxy_issue(Message) of
+        true -> {true, undefined};
+        false ->
+            case is_spamcop_block(Message) of
+                true -> {true, 12*60};  % Retry after 12 hours
+                false -> false
+            end
     end;
 is_retry_possible(_Reason, permanent_failure, _Message) ->
     false;
 is_retry_possible(_Reason, _FailureType, _Message) ->
-    true.
+    {true, undefined}.
+
+% Check for issue with proxy (https://github.com/zotonic/zotonic/issues/3508):
+% 554 5.7.0 Your message could not be sent. The limit on the number of allowed outgoing
+% messages was exceeded. Try again later.
+is_proxy_issue(Message) ->
+    binary:match(Message, <<"Try again later.">>) =/= nomatch.
+
+% Spamcop blocks for approx 12-24 hours:
+% 550 5.7.1 5.7.1 Service unavailable; client [...] blocked using bl.spamcop.net
+is_spamcop_block(Message) ->
+    binary:match(Message, <<"blocked using bl.spamcop.net">>) =/= nomatch.
+
 
 encode_email(_Id, #email{raw=Raw}, _MessageId, _From, _Context) when is_list(Raw); is_binary(Raw) ->
     {ok, z_convert:to_binary(Raw)};
@@ -1628,6 +1648,32 @@ delete_emailq(Id) ->
                 text => <<"Could not delete message">>,
                 in => zotonic_core,
                 message_id => Id,
+                reason => Reason
+            }),
+            {error, Reason}
+    end.
+
+%% @doc Set the next delay for the given message
+update_emailq_delay(_Id, undefined) ->
+    % Automatic
+    ok;
+update_emailq_delay(Id, DelayMinutes) ->
+    Next = inc_timestamp(os:timestamp(), DelayMinutes),
+    Tr = fun() ->
+                 case mnesia:read(email_queue, Id) of
+                    [QEmail] -> mnesia:write(QEmail#email_queue{retry_on = Next });
+                    [] -> {error, notfound}
+                end
+         end,
+    case mnesia:transaction(Tr) of
+        {atomic, Result} ->
+            Result;
+        {aborted, Reason} ->
+            ?LOG_NOTICE(#{
+                text => <<"Could not set delay for message">>,
+                in => zotonic_core,
+                message_id => id,
+                delay => DelayMinutes,
                 reason => Reason
             }),
             {error, Reason}
