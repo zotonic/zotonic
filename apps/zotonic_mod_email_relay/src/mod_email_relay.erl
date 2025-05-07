@@ -94,7 +94,7 @@ set_email_block_status(Email, IsBlock, Context) ->
                 undefined -> ok;
                 <<>> -> ok;
                 _ ->
-                    Key = z_utils:hex_sha(Email),
+                    Key = z_crypto:hex_sha(Email),
                     z_pivot_rsc:insert_task(
                         ?MODULE, task_set_email_block_status, Key,
                         [Email, IsBlock, 0],

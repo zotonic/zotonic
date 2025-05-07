@@ -1,10 +1,10 @@
 %% @author Marc Worrell
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Misc utility functions for zotonic
 %% Parts are from wf_utils.erl which is Copyright (c) 2008-2009 Rusty Klophaus
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -426,18 +426,20 @@ hex_encode(Value) -> z_url:hex_encode(Value).
 hex_decode(Value) -> z_url:hex_decode(Value).
 
 %% @doc Hash data and encode into a hex string safe for filenames and texts.
+%% @deprecated Use z_crypto:hex_sha/1 instead.
 -spec hex_sha(Value) -> Hash when
     Value :: iodata(),
     Hash :: binary().
 hex_sha(Value) ->
-    z_url:hex_encode_lc(crypto:hash(sha, Value)).
+    z_crypto:hex_sha(Value).
 
 %% @doc Hash256 data and encode into a hex string safe for filenames and texts.
+%% @deprecated Use z_crypto:hex_sha2/1 instead.
 -spec hex_sha2(Value) -> Hash when
     Value :: iodata(),
     Hash :: binary().
 hex_sha2(Value) ->
-    z_url:hex_encode_lc(crypto:hash(sha256, Value)).
+    z_crypto:hex_sha2(Value).
 
 %% @doc Simple escape function for filenames as commandline arguments.
 %% foo/"bar.jpg -> "foo/\"bar.jpg"; on windows "foo\\\"bar.jpg" (both including quotes!)

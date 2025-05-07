@@ -1,9 +1,9 @@
 %% @author Marc Worrell
-%% @copyright 2023 Marc Worrell
+%% @copyright 2023-2025 Marc Worrell
 %% @doc Crypto related functions for checksums and signatures.
 %% @end
 
-%% Copyright 2023 Marc Worrell
+%% Copyright 2023-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,6 +31,10 @@
 
     checksum/2,
     checksum_assert/3,
+
+    hex_sha/1,
+    hex_sha2/1,
+    hex_sha2_file/1,
 
     pickle/2,
     depickle/2
@@ -133,6 +137,54 @@ checksum_assert(Data, Checksum, Context) when is_binary(Checksum )->
 checksum_assert(Data, Checksum, Context) ->
     checksum_assert(Data, z_convert:to_binary(Checksum), Context).
 
+%% @doc Hash data and encode into a hex string safe for filenames and texts.
+-spec hex_sha(Value) -> Hash when
+    Value :: iodata(),
+    Hash :: binary().
+hex_sha(Value) ->
+    z_url:hex_encode_lc(crypto:hash(sha, Value)).
+
+%% @doc Hash256 data and encode into a hex string safe for filenames and texts.
+-spec hex_sha2(Value) -> Hash when
+    Value :: iodata(),
+    Hash :: binary().
+hex_sha2(Value) ->
+    z_url:hex_encode_lc(crypto:hash(sha256, Value)).
+
+%% @doc Calculate the hash of a file by incrementally reading it.
+-spec hex_sha2_file(File) -> {ok, Hash} | {error, Reason} when
+    File :: file:filename_all(),
+    Hash :: binary(),
+    Reason :: file:posix() | term().
+hex_sha2_file(File) ->
+    Hash = crypto:hash_init(sha256),
+    case file:open(File, [read, binary]) of
+        {ok, Fh} ->
+            try
+                case hash_file(Fh, Hash) of
+                    {ok, Hash1} ->
+                        Digest = crypto:hash_final(Hash1),
+                        {ok, z_url:hex_encode_lc(Digest)};
+                    {error, _} = Error ->
+                        Error
+                end
+            after
+                file:close(Fh)
+            end;
+        {error, _} = Error ->
+            Error
+    end.
+
+hash_file(Fh, Hash) ->
+    case file:read(Fh, 4096) of
+        {ok, Bin} ->
+            Hash1 = crypto:hash_update(Hash, Bin),
+            hash_file(Fh, Hash1);
+        eof ->
+            {ok, Hash};
+        {error, _} = Error ->
+            Error
+    end.
 
 %%% PICKLE / UNPICKLE %%%
 

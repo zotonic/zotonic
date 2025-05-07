@@ -28,6 +28,7 @@
 
 %% API exports
 -export([
+    env_backup_modules/0,
     upgrade/1,
     upgrade_await/1,
     deactivate/2,
@@ -146,6 +147,15 @@
 start_link(Site) ->
     gen_server:start_link({local, name(Site)}, ?MODULE, Site, []).
 
+%% @doc List of modules enabled for backup sites.
+-spec env_backup_modules() -> list( atom() ).
+env_backup_modules() ->
+    [
+        mod_cron,
+        mod_base,
+        mod_filestore,
+        mod_backup
+    ].
 
 %% @doc Reload the list of all modules, add processes if necessary.
 -spec upgrade( z:context() ) -> ok.
@@ -274,7 +284,8 @@ activate(Module, IsSync, #context{site=Module} = Context) ->
 activate(Module, IsSync, Context) ->
     flush(Context),
     case proplists:is_defined(Module, scan(Context)) of
-        true -> activate_1(Module, IsSync, Context);
+        true ->
+            activate_1(Module, IsSync, Context);
         false ->
             ?zError(
                 "Could not find module '~p'",
@@ -284,6 +295,19 @@ activate(Module, IsSync, Context) ->
     end.
 
 activate_1(Module, IsSync, Context) ->
+    case m_site:environment(Context) of
+        backup ->
+            case lists:member(Module, env_backup_modules()) of
+                true ->
+                    activate_2(Module, IsSync, Context);
+                false ->
+                    {error, not_found}
+            end;
+        _Env ->
+            activate_2(Module, IsSync, Context)
+    end.
+
+activate_2(Module, IsSync, Context) ->
     F = fun(Ctx) ->
             case z_db:q("
                 update module
@@ -314,55 +338,64 @@ activate_1(Module, IsSync, Context) ->
         false -> upgrade(Context)
     end.
 
+is_module_activated(Module, Context) ->
+    case m_site:environment(Context) of
+        backup ->
+            lists:member(Module, env_backup_modules());
+        _Env ->
+            z_convert:to_bool(
+                z_db:q1("
+                    select is_active
+                    from module
+                    where name = $1",
+                    [Module],
+                    Context))
+    end.
 
 %% @doc Restart a module, activates the module if it was not activated.
 -spec restart(Module::atom(), #context{}) -> ok | {error, not_found}.
 restart(Module, Context) ->
-    case z_db:q1("
-            select is_active
-            from module
-            where name = $1",
-            [Module],
-            Context)
-    of
+    Env = m_site:environment(Context),
+    case is_module_activated(Module, Context) of
         true -> gen_server:cast(name(Context), {restart_module, Module});
-        _ -> activate(Module, Context)
+        false when Env =:= backup -> {error, not_found};
+        false -> activate(Module, Context)
     end.
 
 %% @doc Check all observers of a module, ensure that they are all active.
 %%      Used after a module has been reloaded
 -spec module_reloaded(Module::atom(), #context{}) -> ok.
 module_reloaded(Module, Context) ->
-    case z_db:q1("
-        select is_active
-        from module
-        where name = $1",
-        [Module],
-        Context)
-    of
+    case is_module_activated(Module, Context) of
         true -> gen_server:cast(name(Context), {module_reloaded, Module});
         _ -> ok
     end.
 
+
 %% @doc Return the list of active modules.
 -spec active(#context{}) -> list(Module::atom()).
 active(Context) ->
-    case z_db:has_connection(Context) of
-        true ->
-            F = fun() ->
-                Modules = z_db:q("
-                        select name
-                        from module
-                        where is_active = true
-                        order by name",
-                        Context),
-                [ z_convert:to_atom(M) || {M} <- Modules ]
-            end,
-            z_depcache:memo(F, {?MODULE, active, z_context:site(Context)}, Context);
-        false ->
-            case m_site:get(modules, Context) of
-                L when is_list(L) -> L;
-                _ -> []
+    case m_site:environment(Context) of
+        backup ->
+            env_backup_modules();
+        _Env ->
+            case z_db:has_connection(Context) of
+                true ->
+                    F = fun() ->
+                        Modules = z_db:q("
+                                select name
+                                from module
+                                where is_active = true
+                                order by name",
+                                Context),
+                        [ z_convert:to_atom(M) || {M} <- Modules ]
+                    end,
+                    z_depcache:memo(F, {?MODULE, active, z_context:site(Context)}, Context);
+                false ->
+                    case m_site:get(modules, Context) of
+                        L when is_list(L) -> L;
+                        _ -> []
+                    end
             end
     end.
 
@@ -374,17 +407,7 @@ active(Module, Context) ->
     case z_db:has_connection(Context) of
         true ->
             F = fun() ->
-                case z_db:q1("
-                    select is_active
-                    from module
-                    where name = $1",
-                    [Module],
-                    Context)
-                of
-                    true -> true;
-                    false -> false;
-                    undefined -> false
-                end
+                is_module_activated(Module, Context)
             end,
             z_depcache:memo(F, {?MODULE, {active, Module}, z_context:site(Context)}, Context);
         false ->
@@ -548,12 +571,16 @@ whereis(Module, Context) ->
 %% @doc Return the list of all modules in the database.
 -spec all(z:context()) -> [ atom() ].
 all(Context) ->
-    Modules = z_db:q("
-            select name
-            from module
-            order by name",
-            Context),
-    [ z_convert:to_atom(M) || {M} <- Modules ].
+    case m_site:environment(Context) of
+        backup -> env_backup_modules();
+        _ ->
+            Modules = z_db:q("
+                    select name
+                    from module
+                    order by name",
+                    Context),
+            [ z_convert:to_atom(M) || {M} <- Modules ]
+    end.
 
 
 %% @doc Scan for a list of modules and the current site. A module is always an OTP application,
@@ -849,7 +876,7 @@ db_schema_version(M, Context) ->
     z_db:q1("SELECT schema_version FROM module WHERE name = $1", [M], Context).
 
 set_db_schema_version(M, V, Context) ->
-    1 = z_db:q("UPDATE module SET schema_version = $1 WHERE name = $2", [V, M], Context),
+    _ = z_db:q("UPDATE module SET schema_version = $1 WHERE name = $2", [V, M], Context),
     ok.
 
 

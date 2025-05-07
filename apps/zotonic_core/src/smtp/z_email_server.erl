@@ -118,21 +118,38 @@ delivery_report(What, OptRecipient, MsgIdHeader, OptStatusMessage) ->
 generate_message_id() ->
     z_ids:random_id('az09', 20).
 
-%% @doc Send an email
+%% @doc Send an email, generate an unique message-id for it.
+-spec send(Email, Context) -> {ok, SentEmailId} | {error, Reason} when
+    Email :: #email{},
+    SentEmailId :: binary(),
+    Context :: z:context(),
+    Reason :: env_backup | sender_disabled.
 send(#email{} = Email, Context) ->
     send(generate_message_id(), Email, Context).
 
-%% @doc Send an email using a predefined unique id.
+%% @doc Send an email using a predefined unique id. Emails are only sent
+%% for enabled senders and non-backup environments.
+-spec send(EmailId, Email, Context) -> {ok, SentEmailId} | {error, Reason} when
+    EmailId :: binary() | string(),
+    Email :: #email{},
+    SentEmailId :: binary(),
+    Context :: z:context(),
+    Reason :: env_backup | sender_disabled.
 send(EmailId, #email{} = Email, Context) ->
-    case is_sender_enabled(Email, Context) of
-        true ->
-            EmailId1 = z_convert:to_binary(EmailId),
-            Email1 = copy_attachments(Email),
-            Context1 = z_context:depickle(z_context:pickle(Context)),
-            gen_server:cast(?MODULE, {send, EmailId1, Email1, Context1}),
-            {ok, EmailId1};
-        false ->
-            {error, sender_disabled}
+    case m_site:environment(Context) of
+        backup ->
+            {error, env_backup};
+        _Env ->
+            case is_sender_enabled(Email, Context) of
+                true ->
+                    EmailId1 = z_convert:to_binary(EmailId),
+                    Email1 = copy_attachments(Email),
+                    Context1 = z_context:depickle(z_context:pickle(Context)),
+                    gen_server:cast(?MODULE, {send, EmailId1, Email1, Context1}),
+                    {ok, EmailId1};
+                false ->
+                    {error, sender_disabled}
+            end
     end.
 
 %% @doc Return the filename for a tempfile that can be used for the emailer
@@ -1819,10 +1836,14 @@ send_next_batch(MaxListSize, StatusSites, State) ->
                         % 3. Eligible for retry
                         timer:now_diff(QEmail#email_queue.retry_on, Now) < 0,
 
-                        % 4. With a running site
-                        maps:find(
-                            z_context:depickle_site(QEmail#email_queue.pickled_context),
-                            StatusSites) =:= {ok, running}
+                        % 4. With a running site, excluding the ones in backup mode
+                        begin
+                            Context = z_context:depickle_site(QEmail#email_queue.pickled_context),
+                            case m_site:environment(Context) of
+                                backup -> false;
+                                _Env -> maps:find(Context, StatusSites) =:= {ok, running}
+                            end
+                        end
             ]),
             QCursor = qlc:cursor(Q),
             QFound = qlc:next_answers(QCursor, MaxListSize),

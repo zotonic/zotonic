@@ -39,7 +39,7 @@ is_authorized(Context) ->
 
 
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
-    Config = case mod_backup:check_configuration() of
+    Config = case backup_create:command_configuration() of
         {ok, Cfg} ->
             Cfg#{
                 ok => true

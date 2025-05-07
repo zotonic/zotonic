@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019 Marc Worrell
+%% @copyright 2019-2025 Marc Worrell
 %% @doc Test if the config files are syntactically ok
+%% @end
 
-%% Copyright 2019 Marc Worrell
+%% Copyright 2019-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -150,6 +151,10 @@ pretty_print_value(_Key, Value) when is_list(Value) ->
                         end;
                     (V) when is_number(V); is_boolean(V); is_atom(V) ->
                         io:format("~n      - ~p", [ V ]);
+                    ({{Y, M, D}, {H, I, S}} = Date) when
+                        is_integer(Y), M >= 1, M =< 12, D >= 1, D =< 31,
+                        H >= 0, H =< 23, I >= 0, I =< 59, S >= 0, S =< 60 ->
+                        dateformat(Date);
                     (V) ->
                         io:format("~n      - >~n        ~p", [ V ])
                 end,
@@ -173,15 +178,28 @@ pretty_print_value(_Key, Value) when is_map(Value) ->
                 end;
             ({K, V}) when is_number(V); is_boolean(V); is_atom(V) ->
                 io:format("~n      ~p: ~p", [ K, V ]);
+            ({K, {{Y, M, D}, {H, I, S}} = Date}) when
+                is_integer(Y), M >= 1, M =< 12, D >= 1, D =< 31,
+                H >= 0, H =< 23, I >= 0, I =< 59, S >= 0, S =< 60 ->
+                io:format("~n      ~p: ~s", [ K, dateformat(Date) ]);
             ({K, V}) ->
                 io:format("~n      ~p: >~n        ~p", [ K, V ])
         end,
         List);
 pretty_print_value(_Key, Value) when is_number(Value); is_boolean(Value); is_atom(Value) ->
     io:format("~p", [ Value ]);
+pretty_print_value(_Key, {{Y, M, D}, {H, I, S}} = Date) when
+    is_integer(Y), is_integer(M), is_integer(D),
+    is_integer(H), is_integer(I), is_integer(S),
+    M >= 1, M =< 12, D >= 1, D =< 31,
+    H >= 0, H =< 23, I >= 0, I =< 59, S >= 0, S =< 60 ->
+    dateformat(Date);
 pretty_print_value(_Key, Value) ->
     io:format("> ~n      ~p", [ Value ]).
 
 is_utf8(<<>>) -> true;
 is_utf8(<<_/utf8, R/binary>>) -> is_utf8(R);
 is_utf8(_) -> false.
+
+dateformat(Date) ->
+    z_dateformat:format(Date, "c", [ {tz, <<"UTC">>} ]).

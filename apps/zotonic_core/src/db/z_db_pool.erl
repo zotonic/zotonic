@@ -1,8 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2014-2020 Arjan Scherpenisse
-%% @doc Database pool wrapper
+%% @copyright 2014-2025 Arjan Scherpenisse
+%% @doc Database pool wrapper. Start and stop database pool workers.
+%% @end
 
-%% Copyright 2014-2020 Arjan Scherpenisse
+%% Copyright 2014-2025 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,6 +29,8 @@
     status/1,
     close_connections/0,
     close_connections/1,
+    pause_connections/1,
+    unpause_connections/1,
     child_spec/2,
     get_database_options/1,
     test_connection/1,
@@ -38,6 +41,7 @@
     database_options/2,
     database_options/3,
     get_connection/1,
+    get_unpaused_connection/1,
     return_connection/2
 ]).
 
@@ -79,6 +83,47 @@ close_workers(PoolPid) when is_pid(PoolPid) ->
     lists:foreach(
                 fun(WorkerPid) ->
                     WorkerPid ! disconnect
+                end,
+                WorkerPids).
+
+%% @doc Ensure that all worker processes are paused. This is useful if
+%% a large update of the schema needs to be done.
+-spec pause_connections(Context) -> ok when
+    Context :: z:context().
+pause_connections(Context) ->
+    case m_site:get(dbdatabase, Context) of
+        none -> ok;
+        _Db ->
+            PoolName = db_pool_name(Context),
+            pause_workers(erlang:whereis(PoolName))
+    end.
+
+pause_workers(undefined) ->
+    ok;
+pause_workers(PoolPid) when is_pid(PoolPid) ->
+    WorkerPids = gen_server:call(PoolPid, get_avail_workers),
+    lists:foreach(
+                fun(WorkerPid) ->
+                    catch gen_server:call(WorkerPid, pause, infinity)
+                end,
+                WorkerPids).
+
+%% @doc Tell all (paused) workers that it is ok to continue.
+unpause_connections(Context) ->
+    case m_site:get(dbdatabase, Context) of
+        none -> ok;
+        _Db ->
+            PoolName = db_pool_name(Context),
+            unpause_workers(erlang:whereis(PoolName))
+    end.
+
+unpause_workers(undefined) ->
+    ok;
+unpause_workers(PoolPid) when is_pid(PoolPid) ->
+    WorkerPids = gen_server:call(PoolPid, get_avail_workers),
+    lists:foreach(
+                fun(WorkerPid) ->
+                    catch gen_server:call(WorkerPid, unpause, infinity)
                 end,
                 WorkerPids).
 
@@ -220,6 +265,25 @@ is_empty(0) -> true;
 is_empty(null) -> true;
 is_empty(_) -> false.
 
+
+%% @doc Request a database connection and unpause it if it was paused.
+-spec get_unpaused_connection(Context) -> {ok, pid()} | {error, full | nodatabase} when
+    Context :: z:context().
+get_unpaused_connection(Context) ->
+    case get_connection(Context) of
+        {ok, Pid} ->
+            gen_server:call(Pid, unpause, infinity),
+            {ok, Pid};
+        {error, _} = Error ->
+            Error
+    end.
+
+
+%% @doc Request a database connection worker from the database pool. Each worker
+%% manages a single database connection. If a worker is available then its pid is
+%% returned. The worker can then provide the actual database connection for querying
+%% the database. See z_db_pgql for query functions that fetch the database connection
+%% from the worker process.
 -spec get_connection( z:context() ) -> {ok, pid()} | {error, full | nodatabase}.
 get_connection(#context{db={Pool,_}} = Context) ->
     case timer:tc(fun() -> poolboy:checkout(Pool) end) of

@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2024 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Server for matching the request path to correct site and dispatch rule.
 %% @end
 
-%% Copyright 2009-2024 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -595,7 +595,12 @@ dispatch_site_if_running(DispReq, OptReq, OptEnv, Site, ExtraBindings) ->
     case z_sites_manager:wait_for_running(Site) of
         ok ->
             Context = z_context:init_cowdata(OptReq, OptEnv, z_context:new(Site)),
-            dispatch_site(DispReq, Context, ExtraBindings);
+            case m_site:environment(Context) of
+                backup ->
+                    #stop_request{ status = 503 };
+                _Env ->
+                    dispatch_site(DispReq, Context, ExtraBindings)
+            end;
         {error, timeout} ->
             #stop_request{ status = 503 };
         {error, _} ->

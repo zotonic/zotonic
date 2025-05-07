@@ -236,7 +236,7 @@ shorten(_Name, OrgName) ->
 
 shorten_1(Root, OrgName) ->
     Truncated = z_string:truncatechars(Root, 32),
-    Hash = z_utils:hex_sha(OrgName),
+    Hash = z_crypto:hex_sha(OrgName),
     <<Truncated/binary, $-, Hash/binary>>.
 
 replace_special_chars(<<>>, Acc) ->

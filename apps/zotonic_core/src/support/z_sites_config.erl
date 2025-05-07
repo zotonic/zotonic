@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019-2024 Marc Worrell
+%% @copyright 2019-2025 Marc Worrell
 %% @doc Load and manage site configuration files.
 %% @end
 
-%% Copyright 2019-2024 Marc Worrell
+%% Copyright 2019-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,6 +20,9 @@
 -module(z_sites_config).
 
 -export([
+    maybe_set_backup_env/1,
+    maybe_unset_backup_env/1,
+
     site_config/1,
     app_is_site/1,
     config_files/1,
@@ -30,6 +33,61 @@
     ]).
 
 -define(CONFIG_FILE, "zotonic_site.*").
+
+
+%% @doc Iff a site is running in backup environment, and its config files are
+%% restored from a remote system, then the environment in the config file is
+%% overwritten by the config from the remote environment. To keep the site in
+%% backup environment, we write a file "priv/BACKUP". If this file is present
+%% then it is hard-coded to set the environment to backup and the site to enabled.
+-spec maybe_set_backup_env(Context) -> ok | {error, Reason} when
+    Context :: z:context(),
+    Reason :: term().
+maybe_set_backup_env(Context) ->
+    Site = z_context:site(Context),
+    case app_is_site(Site) of
+        true ->
+            case m_site:environment(Context) of
+                backup ->
+                    case z_path:site_dir(Site) of
+                        {error, _} = Error ->
+                            Error;
+                        SiteDir ->
+                            Filename = filename:join([ SiteDir, "priv", "BACKUP" ]),
+                            file:write_file(Filename, <<>>)
+                    end;
+                Other ->
+                    {error, Other}
+            end;
+        false ->
+            {error, nosite}
+    end.
+
+%% @doc Remove the priv/BACKUP file. After this the site will use the environment
+%% from the config files.
+-spec maybe_unset_backup_env(Context) -> ok | {error, Reason} when
+    Context :: z:context(),
+    Reason :: term().
+maybe_unset_backup_env(Context) ->
+    Site = z_context:site(Context),
+    case app_is_site(Site) of
+        true ->
+            case z_path:site_dir(Site) of
+                {error, _} = Error ->
+                    Error;
+                SiteDir ->
+                    Filename = filename:join([ SiteDir, "priv", "BACKUP" ]),
+                    case filelib:is_file(Filename) of
+                        true ->
+                            file:delete(Filename);
+                        false ->
+                            ok
+                    end
+            end;
+        false ->
+            {error, nosite}
+    end.
+
 
 -spec site_config(Site) -> {ok, Config} | {error, Reason} when
     Site :: atom(),
@@ -105,11 +163,19 @@ config_files(Node, Site) ->
                 {ok, ConfigDir} ->
                     [ ConfigFile ]
                     ++ z_config_files:files( filename:join([ ConfigDir, "site_config.d", Site ]) )
-                    ++ z_config_files:files( filename:join([ SitePrivDir, "config.d" ]) );
+                    ++ z_config_files:files( filename:join([ SitePrivDir, "config.d" ]) )
+                    ++ maybe_backup( filename:join([ SitePrivDir, "BACKUP" ]) );
                 {error, _} ->
                     [ ConfigFile ]
                     ++ z_config_files:files( filename:join([ SitePrivDir, "config.d" ]) )
+                    ++ maybe_backup( filename:join([ SitePrivDir, "BACKUP" ]) )
             end
+    end.
+
+maybe_backup(F) ->
+    case filelib:is_file(F) of
+        true -> [ "BACKUP" ];
+        false -> []
     end.
 
 -spec security_dir( atom() ) -> {ok, file:filename_all()} | {error, term()}.
@@ -127,6 +193,12 @@ read_configs(Fs) when is_list(Fs) ->
         fun
             (_, {error, _} = Error) ->
                 Error;
+            ("BACKUP", {ok, Acc}) ->
+                Data = #{
+                    environment => backup,
+                    enabled => true
+                },
+                apps_config("BACKUP", [ Data ], Acc);
             (F, {ok, Acc}) ->
                 case z_config_files:consult(F) of
                     {ok, Data} ->
