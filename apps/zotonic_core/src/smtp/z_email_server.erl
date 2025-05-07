@@ -1660,11 +1660,18 @@ update_emailq_delay(_Id, undefined) ->
 update_emailq_delay(Id, DelayMinutes) ->
     Next = inc_timestamp(os:timestamp(), DelayMinutes),
     Tr = fun() ->
-                 case mnesia:read(email_queue, Id) of
-                    [QEmail] -> mnesia:write(QEmail#email_queue{retry_on = Next });
-                    [] -> {error, notfound}
-                end
-         end,
+        case mnesia:read(email_queue, Id) of
+            [QEmail] ->
+                if
+                    QEmail#email_queue.retry_on < Next ->
+                        mnesia:write(QEmail#email_queue{ retry_on = Next });
+                    true ->
+                        ok
+                end;
+            [] ->
+                {error, notfound}
+        end
+    end,
     case mnesia:transaction(Tr) of
         {atomic, Result} ->
             Result;
