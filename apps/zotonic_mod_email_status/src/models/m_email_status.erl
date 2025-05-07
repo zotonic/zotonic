@@ -361,7 +361,10 @@ mark_sent(Email0, true, Context) ->
 mark_failed(Email0, IsFinal, Status, Context) ->
     Email = normalize(Email0),
     {IsValid, _IsOkToSend, _IsBlocked} = is_valid_nocache(Email, Context),
-    Status1 = z_string:truncatechars(to_binary(Status), 490),
+    Status1 = if
+        Status =:= undefined -> undefined;
+        true -> z_string:truncatechars(to_binary(Status), 490)
+    end,
     z_db:transaction(
                 fun(Ctx) ->
                     case z_db:q("
@@ -372,12 +375,13 @@ mark_failed(Email0, IsFinal, Status, Context) ->
                         Ctx)
                     of
                         [] ->
+                            Status2 = z_convert:to_binary(Status1),
                             z_db:q(
                                 "insert into email_status
                                     (email, is_valid, error_is_final, error, error_status,
                                      error_ct, recent_error_ct, recent_error, modified)
                                  values ($1, false, $2, now(), $3, 1, $4, now(), now())",
-                                [Email, IsFinal, Status1, 1],
+                                [Email, IsFinal, Status2, 1],
                                 Ctx);
                         [{LastRecent}] ->
                             {RecentDelta, RecentDate} = new_recent_error(LastRecent, IsFinal, Status1),
@@ -386,7 +390,7 @@ mark_failed(Email0, IsFinal, Status, Context) ->
                                 set is_valid = false,
                                     error = now(),
                                     error_is_final = $2,
-                                    error_status = $3,
+                                    error_status = coalesce($3, error_status),
                                     error_ct = error_ct + 1,
                                     recent_error_ct = recent_error_ct + $4,
                                     recent_error = $5,
