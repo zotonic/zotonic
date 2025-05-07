@@ -189,7 +189,9 @@ pretty_print_value(_Key, Value) when is_map(Value) ->
 pretty_print_value(_Key, Value) when is_number(Value); is_boolean(Value); is_atom(Value) ->
     io:format("~p", [ Value ]);
 pretty_print_value(_Key, {{Y, M, D}, {H, I, S}} = Date) when
-    is_integer(Y), M >= 1, M =< 12, D >= 1, D =< 31,
+    is_integer(Y), is_integer(M), is_integer(D),
+    is_integer(H), is_integer(I), is_integer(S),
+    M >= 1, M =< 12, D >= 1, D =< 31,
     H >= 0, H =< 23, I >= 0, I =< 59, S >= 0, S =< 60 ->
     dateformat(Date);
 pretty_print_value(_Key, Value) ->
