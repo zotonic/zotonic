@@ -160,14 +160,16 @@ hex_sha2_file(File) ->
     Hash = crypto:hash_init(sha256),
     case file:open(File, [read, binary]) of
         {ok, Fh} ->
-            case hash_file(Fh, Hash) of
-                {ok, Hash1} ->
-                    file:close(Fh),
-                    Digest = crypto:hash_final(Hash1),
-                    {ok, z_url:hex_encode_lc(Digest)};
-                {error, _} = Error ->
-                    file:close(Fh),
-                    Error
+            try
+                case hash_file(Fh, Hash) of
+                    {ok, Hash1} ->
+                        Digest = crypto:hash_final(Hash1),
+                        {ok, z_url:hex_encode_lc(Digest)};
+                    {error, _} = Error ->
+                        Error
+                end
+            after
+                file:close(Fh)
             end;
         {error, _} = Error ->
             Error
