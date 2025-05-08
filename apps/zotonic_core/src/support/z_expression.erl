@@ -142,12 +142,12 @@ eval1({expr, Op, Left, Right}, Vars, Options, Context) ->
         Context);
 eval1({expr, Op, Expr}, Vars, Options, Context) ->
     template_compiler_operators:Op(eval1(Expr, Vars, Options, Context), z_template_compiler_runtime, Context);
-eval1({variable, Name}, Vars, _Options, Context) ->
+eval1({variable, Name}, Vars, Options, Context) ->
     case z_template_compiler_runtime:find_value(Name, Vars, #{}, Context) of
         undefined ->
             RscId = z_template_compiler_runtime:find_value(<<"id">>, Vars, #{}, Context),
             Id = m_rsc:rid(RscId, Context),
-            m_rsc:p(Id, Name, Context);
+            p(Id, Name, Options, Context);
         Value ->
             Value
     end;
@@ -253,6 +253,8 @@ find_rsc_prop(V, [ {expr, _} = E | Ks ], Vars, Options, Context) ->
     end,
     find_value_1(V1, Ks, Vars, Options, Context).
 
+p(undefined, _Prop, _Options, _Context) ->
+    undefined;
 p(Id, Prop, Options, Context) ->
     case proplists:get_value(p, Options) of
         F when is_function(F, 3) ->
