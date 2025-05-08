@@ -97,9 +97,10 @@ tls_options() ->
     Options = z_ssl_certs:ssl_listener_options(),
     Options1 = lists:keydelete(session_tickets, 1, Options),
     Options2 = lists:keydelete(reuse_sessions, 1, Options1),
+    Options3 = lists:keydelete(anti_replay, 1, Options2),
     [
         {session_tickets, disabled}
-        | Options2
+        | Options3
     ].
 
 ip_to_string(any) -> "any";
