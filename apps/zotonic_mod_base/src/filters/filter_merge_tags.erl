@@ -169,7 +169,7 @@ p(Id, Country, Context) when
         P -> m_l10n:country_name(P, Context)
     end;
 p(Id, <<"name_full">>, Context) ->
-    {Name, _} = z_template:render_to_iolist("_name.tpl", Id, Context),
+    {Name, _} = z_template:render_to_iolist("_name.tpl", [ {id, Id} ], Context),
     iolist_to_binary(Name);
 p(Id, Prop, Context) ->
     m_rsc:p(Id, Prop, Context).
