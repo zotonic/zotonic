@@ -161,7 +161,7 @@ eval(Text, Vars, Context) ->
 p(Id, <<"country">>, Context) ->
     p(Id, <<"address_country">>, Context);
 p(Id, Country, Context) when
-    Country =:= <<"address_country">>,
+    Country =:= <<"address_country">>;
     Country =:= <<"mail_country">>;
     Country =:= <<"billing_country">> ->
     case m_rsc:p(Id, Country, Context) of
@@ -170,7 +170,7 @@ p(Id, Country, Context) when
     end;
 p(Id, <<"name_full">>, Context) ->
     {Name, _} = z_template:render_to_iolist("_name.tpl", [ {id, Id} ], Context),
-    iolist_to_binary(Name);
+    z_string:trim(iolist_to_binary(Name));
 p(Id, Prop, Context) ->
     m_rsc:p(Id, Prop, Context).
 
