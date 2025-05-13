@@ -155,9 +155,9 @@ hash_file(Filename, Context) ->
     Hash.
 
 maybe_encrypt_files({ok, Files}, Context) ->
-    case m_config:get_boolean(?MODULE, encrypt_backups, Context) of
+    case m_config:get_boolean(mod_backup, encrypt_backups, Context) of
         true ->
-            case m_config:get_value(?MODULE, backup_encrypt_password, Context) of
+            case m_config:get_value(mod_backup, backup_encrypt_password, Context) of
                 Password when is_binary(Password) andalso size(Password) > 0 ->
                     ?LOG_INFO(#{
                                 text => <<"Encrypting backup">>,
@@ -165,13 +165,18 @@ maybe_encrypt_files({ok, Files}, Context) ->
                                }),
 
                     Dir = dir(Context),
-                    Files1 = maps:map(fun(_K, File) ->
-                        FullName = filename:join(Dir, File),
-                        {ok, FullNameEnc} = backup_file_crypto:password_encrypt(FullName, Password),
-                        ok = file:delete(FullName),
-                        filename:basename(FullNameEnc)
-                    end,
-                    Files),
+                    Files1 = maps:map(fun(Key, FileOrHash) ->
+                                              case is_hash(Key) of
+                                                  true ->
+                                                      FileOrHash;
+                                                  false ->
+                                                      FullName = filename:join(Dir, FileOrHash),
+                                                      {ok, FullNameEnc} = backup_file_crypto:password_encrypt(FullName, Password),
+                                                      ok = file:delete(FullName),
+                                                      filename:basename(FullNameEnc)
+                                              end
+                                      end,
+                                      Files),
 
                     ?LOG_INFO(#{
                         text => <<"Encryption done">>,
@@ -196,6 +201,10 @@ maybe_encrypt_files({ok, Files}, Context) ->
 maybe_encrypt_files({error, _}=Error, _Context) ->
     Error.
 
+is_hash(config_files_hash) -> true;
+is_hash(database_hash) -> true;
+is_hash(files_hash) -> true;
+is_hash(_) -> false.
 
 register_backup_in_admin_file(DT, Name, {ok, Files}, Context) ->
     F = fun(Data) ->
@@ -212,8 +221,8 @@ register_backup_in_admin_file(DT, Name, {ok, Files}, Context) ->
 
                 <<"is_filestore_uploaded">> => false,
 
-                <<"is_encrypted">> => m_config:get_boolean(?MODULE, encrypt_backups, Context)
-                    andalso (size(m_config:get_value(?MODULE, backup_encrypt_password, <<>>,  Context)) > 0)
+                <<"is_encrypted">> => m_config:get_boolean(mod_backup, encrypt_backups, Context)
+                    andalso (size(m_config:get_value(mod_backup, backup_encrypt_password, <<>>,  Context)) > 0)
             }
         },
         % Delete the Sunday dump, it has been replaced by a weekly dump.
