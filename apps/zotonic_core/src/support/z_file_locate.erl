@@ -231,6 +231,8 @@ locate_source_uploaded(Path, OriginalFile, Filters, Context) ->
 
 locate_source_uploaded_1(Medium, _Path, OriginalFile, undefined, Context) ->
     locate_in_filestore(OriginalFile, z_path:media_archive(Context), false, Medium, Context);
+locate_source_uploaded_1(Medium, _Path, OriginalFile, [], Context) ->
+    locate_in_filestore(OriginalFile, z_path:media_archive(Context), false, Medium, Context);
 locate_source_uploaded_1(Medium, Path, OriginalFile, Filters, Context) ->
     case locate_in_filestore(Path, z_path:media_preview(Context), true, Medium, Context) of
         {ok, Part} ->
