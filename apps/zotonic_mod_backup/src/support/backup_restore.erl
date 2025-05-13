@@ -588,7 +588,7 @@ newest_backup(BackupStatus) ->
 maybe_decrypt_file(Filename, Context) ->
     case backup_file_crypto:is_encrypted(Filename) of
         true ->
-            Password = m_config:get_value(?MODULE, backup_encrypt_password, Context),
+            Password = backup_config:encrypt_password(Context),
             backup_file_crypto:password_decrypt(Filename, Password);
         false ->
             {ok, Filename}

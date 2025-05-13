@@ -155,10 +155,18 @@ hash_file(Filename, Context) ->
     Hash.
 
 maybe_encrypt_files({ok, Files}, Context) ->
-    case m_config:get_boolean(mod_backup, encrypt_backups, Context) of
+    case backup_config:encrypt_backups(Context) of
         true ->
-            case m_config:get_value(mod_backup, backup_encrypt_password, Context) of
-                Password when is_binary(Password) andalso size(Password) > 0 ->
+            case backup_config:encrypt_password(Context) of
+                <<>> ->
+                    ?LOG_WARNING(#{
+                       text => <<"Could not encrypt backups. Encryption is enabled, but there is no backup password.">>,
+                       in => zotonic_mod_backup,
+                       result => error,
+                       reason => no_backup_encrypt_password
+                    }),
+                    {ok, Files};
+                Password when Password =/= <<>> ->
                     ?LOG_INFO(#{
                                 text => <<"Encrypting backup">>,
                                 in => zotonic_mod_backup
@@ -185,15 +193,7 @@ maybe_encrypt_files({ok, Files}, Context) ->
                         encrypted => Files1
                     }),
 
-                    {ok, Files1};
-                _ ->
-                    ?LOG_WARNING(#{
-                       text => <<"Could not encrypt backups. Encryption is enabled, but there is no backup password.">>,
-                       in => zotonic_mod_backup,
-                       result => error,
-                       reason => no_backup_encrypt_password
-                    }),
-                    {ok, Files}
+                    {ok, Files1}
             end;
         false ->
             {ok, Files}
@@ -221,8 +221,8 @@ register_backup_in_admin_file(DT, Name, {ok, Files}, Context) ->
 
                 <<"is_filestore_uploaded">> => false,
 
-                <<"is_encrypted">> => m_config:get_boolean(mod_backup, encrypt_backups, Context)
-                    andalso (size(m_config:get_value(mod_backup, backup_encrypt_password, <<>>,  Context)) > 0)
+                <<"is_encrypted">> => backup_config:encrypt_backups(Context)
+                    andalso (backup_config:encrypt_password(Context) =/= <<>>)
             }
         },
         % Delete the Sunday dump, it has been replaced by a weekly dump.
