@@ -423,7 +423,7 @@ new_recent_error(LastRecent, IsFinal, Status) ->
 is_unrecoverable_error(<<"605", _/binary>>) ->
     % mailgun - not trying again as they blocked the email address
     true;
-is_unrecoverable_error(<<"5", _/binary>> = Status) ->
+is_unrecoverable_error(<<C, _/binary>> = Status) when C =:= $5; C =:= $6 ->
     S = z_string:to_lower(Status),
     is_unknown_mailbox(S) orelse is_permanent_mailgun_error(Status);
 is_unrecoverable_error(S) when is_binary(S) ->
@@ -443,7 +443,7 @@ is_unknown_mailbox(S) ->
     orelse binary:match(S, <<"user invalid">>) =/= nomatch
     orelse binary:match(S, <<"mailbox unavailable">>) =/= nomatch
     orelse binary:match(S, <<"recipient rejected">>) =/= nomatch
-    orelse binary:match(S, <<"failed to deliver due to bounce">>) =/= nomatch
+    orelse binary:match(S, <<"failed to deliver due to bounce">>) =/= nomatch  % mailgun
     orelse binary:match(S, <<"check email address">>) =/= nomatch.
 
 % Mailgun: unsure the status code of these messages, so match error text.

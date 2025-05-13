@@ -779,17 +779,10 @@ check_templates_1([ T | Ts ], Context) ->
 
 drop_blocked_email(Id, Recipient, Email, Context) ->
     delete_emailq(Id),
-    % Leave message undefined, not overwriting previous error message
-    z_notifier:notify(#email_failed{
-            message_nr = Id,
-            recipient = Recipient,
-            is_final = true,
-            reason = bounce
-        }, Context),
     LogEmail = #log_email{
-        severity = ?LOG_LEVEL_ERROR,
+        severity = ?LOG_LEVEL_INFO,
         mailer_status = blocked,
-        mailer_message = <<"Recipient blocked by Zotonic module (#is_recipient_ok)">>,
+        mailer_message = <<"Not sending email, recipient is blocked by us - check email status.">>,
         props = [ {reason, recipient_blocked} ],
         message_nr = Id,
         envelop_to = Recipient,
@@ -805,22 +798,19 @@ drop_blocked_email(Id, Recipient, Email, Context) ->
             props = LogEmail
         }, Context).
 
-delete_email(Error, Id, Recipient, Email, Context) ->
+delete_email(illegal_address, Id, Recipient, Email, Context) ->
     delete_emailq(Id),
     z_notifier:notify(#email_failed{
             message_nr = Id,
             recipient = Recipient,
             is_final = true,
-            status = case Error of
-                        illegal_address -> <<"Malformed email address">>;
-                        sender_disabled -> <<"Sender disabled">>
-                    end,
-            reason=Error
+            status = <<"Malformed email address">>,
+            reason = illegal_address
         }, Context),
     LogEmail = #log_email{
         severity = ?LOG_LEVEL_ERROR,
         mailer_status = error,
-        props=[{reason, Error}],
+        props = [ {reason, illegal_address} ],
         message_nr = Id,
         envelop_to = Recipient,
         envelop_from = <<>>,
@@ -830,7 +820,23 @@ delete_email(Error, Id, Recipient, Email, Context) ->
         other_id = proplists:get_value(list_id, Email#email.vars),
         message_template = Email#email.html_tpl
     },
-    z_notifier:notify(#zlog{user_id=z_acl:user(Context), props=LogEmail}, Context).
+    z_notifier:notify(#zlog{ user_id = z_acl:user(Context), props = LogEmail }, Context);
+delete_email(sender_disabled, Id, Recipient, Email, Context) ->
+    delete_emailq(Id),
+    LogEmail = #log_email{
+        severity = ?LOG_LEVEL_INFO,
+        mailer_status = error,
+        props = [ {reason, sender_disabled} ],
+        message_nr = Id,
+        envelop_to = Recipient,
+        envelop_from = <<>>,
+        to_id = proplists:get_value(recipient_id, Email#email.vars),
+        from_id = z_acl:user(Context),
+        content_id = proplists:get_value(id, Email#email.vars),
+        other_id = proplists:get_value(list_id, Email#email.vars),
+        message_template = Email#email.html_tpl
+    },
+    z_notifier:notify(#zlog{ user_id = z_acl:user(Context), props = LogEmail }, Context).
 
 
 % Start a worker, prevent too many workers per domain.
