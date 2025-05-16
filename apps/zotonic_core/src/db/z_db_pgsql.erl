@@ -936,7 +936,6 @@ decode_values(L) when is_list(L) ->
 
 decode_value({V}) ->
     {decode_value(V)};
-
 decode_value(null) ->
     undefined;
 decode_value(<<?TERM_MAGIC_NUMBER, B/binary>>) ->
@@ -945,5 +944,7 @@ decode_value({H,M,S}) when is_float(S) ->
     {H,M,trunc(S)};
 decode_value({{Y,Mm,D},{H,M,S}}) when is_float(S) ->
     {{Y,Mm,D},{H,M,trunc(S)}};
+decode_value(L) when is_list(L) ->
+    decode_values(L);
 decode_value(V) ->
     V.
