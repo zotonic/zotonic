@@ -115,7 +115,8 @@ simplify({value, _, Expr, []}) ->
     Tree :: tree(),
     Vars :: proplists:proplist()
           | #{ binary() => term() }
-          | fun( (binary()|atom()) -> term() ),
+          | fun( (binary() ) -> term() )
+          | fun( (binary(), z:context() ) -> term() ),
     Context :: z:context(),
     Value :: term().
 eval(Tree, Vars, Context) ->

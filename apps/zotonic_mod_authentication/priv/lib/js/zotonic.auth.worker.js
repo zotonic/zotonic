@@ -201,6 +201,7 @@ model.present = function(data) {
         fetchWithUA({
                     cmd: "logon",
                     username: data.username,
+                    is_username_check: !!data.is_username_check,
                     password: data.password,
                     passcode: data.passcode,
                     "code-new": data["code-new"],
@@ -599,6 +600,7 @@ actions.logonForm = function(data) {
     let dataLogon = {
         logon: true,
         username: username,
+        is_username_check: !!data.value.is_username_check,
         password: data.value.password || null,
         passcode: data.value.passcode || null,
         "code-new": data.value["code-new"],

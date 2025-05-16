@@ -268,6 +268,7 @@ maybe_add_logon_options(#{ status := error } = Result, Payload, Context) ->
         user_external => [],
         page => maps:get(<<"page">>, Payload, undefined),
         is_password_entered => not z_utils:is_empty(maps:get(<<"password">>, Payload, <<>>))
+                               andalso not maps:get(<<"is_username_check">>, Payload, false)
     },
     Options1 = case Result of #{ token := Token } -> Options#{ token => Token}; _ -> Options end,
     Options2 = z_notifier:foldr(#logon_options{ payload = Payload }, Options1, Context),
