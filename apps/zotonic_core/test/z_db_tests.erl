@@ -51,7 +51,7 @@ alter_table_test() ->
     ok = z_db:drop_table(dbtests, Context),
     ok.
 
-postgres_datetime_converstion_test() ->
+postgres_datetime_conversion_test() ->
     Context = z_context:new(zotonic_site_testsandbox),
 
     ?assertMatch( [{{{_,_,_},{_,_,S}}}] when is_integer(S), z_db:q("select now();", Context)),
