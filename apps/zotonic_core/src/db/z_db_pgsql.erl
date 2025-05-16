@@ -946,5 +946,7 @@ decode_value({{Y,Mm,D},{H,M,S}}) when is_float(S) ->
     {{Y,Mm,D},{H,M,trunc(S)}};
 decode_value(L) when is_list(L) ->
     decode_values(L);
+decode_value(T) when is_tuple(T) ->
+    decode_values(T);
 decode_value(V) ->
     V.

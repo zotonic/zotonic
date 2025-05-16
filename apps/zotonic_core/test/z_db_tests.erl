@@ -56,6 +56,7 @@ postgres_datetime_converstion_test() ->
 
     ?assertMatch( [{{{_,_,_},{_,_,S}}}] when is_integer(S), z_db:q("select now();", Context)),
     ?assertMatch( [{[{{_,_,_},{_,_,S}}]}] when is_integer(S), z_db:q("select array_agg(now());", Context)),
+    ?assertMatch( [{[{{{_,_,_},{_,_, S}}, _} ]}] when is_integer(S), z_db:q("select array_agg(row(now(), 1));", Context)),
 
     ok.
 
