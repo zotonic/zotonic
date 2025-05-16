@@ -136,6 +136,12 @@ observe_auth_options_update(#auth_options_update{ request_options = ROpts }, Acc
 %% @doc Check username/password against the identity tables.
 observe_logon_submit(#logon_submit{
             payload = #{
+                <<"is_username_check">> := true
+            }
+        }, _Context) ->
+    undefined;
+observe_logon_submit(#logon_submit{
+            payload = #{
                 <<"username">> := Username,
                 <<"password">> := Password
             } = Payload
@@ -163,11 +169,25 @@ observe_logon_submit(#logon_submit{}, _Context) ->
 observe_logon_options(#logon_options{
             payload = #{
                 <<"username">> := Username,
+                <<"is_username_check">> := true
+            }
+        },
+        Acc,
+        Context) when is_binary(Username) ->
+    check_username(Username, Acc, Context);
+observe_logon_options(#logon_options{
+            payload = #{
+                <<"username">> := Username,
                 <<"password">> := undefined
             }
         },
         Acc,
         Context) when is_binary(Username) ->
+    check_username(Username, Acc, Context);
+observe_logon_options(#logon_options{}, Acc, _Context) ->
+    Acc.
+
+check_username(Username, Acc, Context) ->
     case z_string:to_lower( z_string:trim( Username ) ) of
         <<>> ->
             Acc;
@@ -180,10 +200,7 @@ observe_logon_options(#logon_options{
                 is_user_local => IsUserLocal,
                 username => UsernameOrEmail
             }
-    end;
-observe_logon_options(#logon_options{}, Acc, _Context) ->
-    Acc.
-
+    end.
 
 %% @doc Send a request to the client to login a user. The zotonic.auth.worker.js will
 %% send a request to controller_authentication to exchange the one time token with
