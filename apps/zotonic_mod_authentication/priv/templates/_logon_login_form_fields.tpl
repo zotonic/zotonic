@@ -59,7 +59,7 @@
     </div>
 {% else %}
     {% if q.options.is_username_checked %}
-        <div class="form-group hidden" id="form-username">
+        <div class="form-group x-hidden" id="form-username" style="height: 0; overflow: hidden;" aria-hidden="true">
             <label for="username" class="control-label">{_ Email or username _}</label>
             <input type="text"
                    id="username"
@@ -126,7 +126,8 @@
     {% endif %}
 
     {% if q.options.is_user_local %}
-        <div class="form-group {% if is_show_passcode or is_set_passcode %}hidden{% endif %}" id="form-password">
+        <div class="form-group {% if is_show_passcode or is_set_passcode %}x-hidden{% endif %}" id="form-password"
+            {% if is_show_passcode or is_set_passcode %}style="padding:0; height:0; margin:0; overflow:hidden;" aria-hidden="true"{% endif %}>
             <label for="password" class="control-label">{_ Password _}</label>
             <input class="form-control" type="password" id="password" name="password" value="{{ q.password|escape }}"
                    required
@@ -134,7 +135,8 @@
                    autocomplete="current-password"
                    autocapitalize="off"
                    autocorrect="off"
-                   placeholder="{_ Password _}">
+                   placeholder="{_ Password _}"
+                   {% if is_show_passcode or is_set_passcode %}tabindex="-1"{% endif %}>
         </div>
 
         {% if is_show_passcode %}
@@ -153,22 +155,24 @@
             </div>
         {% endif %}
     {% elseif not q.options.is_username_checked %}
-        <div class="form-group hidden" id="form-password">
+        <div class="form-group x-hidden" id="form-password" style="padding:0; height:0; margin:0; overflow:hidden;" aria-hidden="true">
             <label for="password" class="control-label">{_ Password _}</label>
             <input class="form-control" type="password" id="password" name="password" value=""
                    placeholder="{_ Password _}"
                    autocomplete="current-password"
                    autocapitalize="off"
-                   autocorrect="off">
+                   autocorrect="off"
+                   tabindex="-1">
         </div>
-        <div class="form-group passcode hidden" id="form-passcode">
+        <div class="form-group passcode x-hidden" id="form-passcode" style="padding:0; height:0; margin:0; overflow:hidden;" aria-hidden="true">
             <label for="passcode" class="control-label">{_ Passcode _}</label>
             <input class="form-control" type="text" id="passcode" name="passcode" value=""
                    inputmode="numeric" pattern="[0-9]+"
                    placeholder="{_ Two-factor passcode _}"
                    autocomplete="one-time-code"
                    autocapitalize="off"
-                   autocorrect="off">
+                   autocorrect="off"
+                   tabindex="-1">
         </div>
     {% endif %}
 
