@@ -65,3 +65,8 @@ postgres_null_conversion_test() ->
     [{undefined}] = z_db:q("select null;", Context),
     ok.
 
+postgres_eterm_conversion_test() ->
+    Context = z_context:new(zotonic_site_testsandbox),
+    [{undefined}] = z_db:q("select $1::bytea;", [{term, undefined}], Context),
+    [{#{ test := 123 }}] = z_db:q("select $1::bytea;", [{term, #{ test => 123 }}], Context),
+    ok.

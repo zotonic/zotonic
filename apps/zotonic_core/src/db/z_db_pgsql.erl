@@ -54,8 +54,6 @@
     get_raw_connection/1
 ]).
 
--define(TERM_MAGIC_NUMBER, 16#01326A3A:1/big-unsigned-unit:32).
-
 -define(CONNECT_TIMEOUT, 5000).
 -define(IDLE_TIMEOUT, 60000).
 
@@ -777,7 +775,7 @@ build_connect_options(DatabaseName, Args) ->
     Opts = #{
              database => DatabaseName,
              codecs => [{z_db_pgsql_codec, []}],
-             nulls => [undefined, null]
+             nulls => [undefined, null, {term, undefined}]
             },
     Opts1 = maybe_put_arg(dbhost, Args, host, Opts),
     Opts2 = maybe_put_arg(dbport , Args, port, Opts1),
@@ -907,19 +905,9 @@ msec() ->
 %%
 %% These are conversion routines between how z_db expects values and how epgsl expects them.
 
-%% Notable differences:
-%% - Input values {term, ...} (use the ?DB_PROPS(...) macro!) are term_to_binary encoded and decoded
-%% - null <-> undefined
-%% - date/datetimes have a floating-point second argument in epgsql, in Zotonic they don't.
-
 encode_values(L) when is_list(L) ->
     lists:map(fun encode_value/1, L).
 
-encode_value({term, undefined}) ->
-    null;
-encode_value({term, Term}) ->
-    B = term_to_binary(Term),
-    <<?TERM_MAGIC_NUMBER, B/binary>>;
 encode_value({term_json, undefined}) ->
     null;
 encode_value({term_json, Term}) ->
