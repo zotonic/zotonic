@@ -1619,7 +1619,9 @@ open_connection(DatabaseName, Options) ->
         proplists:get_value(dbpassword, Options),
         [
             {port, proplists:get_value(dbport, Options)},
-            {database, DatabaseName}
+            {database, DatabaseName},
+            {codecs, [{z_db_pgsql_codec, []}]},
+            {nulls, [undefined, null]}
         ]
     ).
 

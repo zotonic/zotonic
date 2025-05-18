@@ -191,7 +191,8 @@ squery(Worker, Sql, Timeout) ->
                 {ok, {Conn, Ref}} ->
                     Result = epgsql:squery(Conn, Sql),
                     ok = return_conn(Worker, Ref),
-                    decode_reply(Result);
+                    Result;
+                    %%decode_reply(Result);
                 {error, _} = Error ->
                     Error
             end;
@@ -214,7 +215,8 @@ equery(Worker, Sql, Parameters, Timeout) ->
                 {ok, {Conn, Ref}} ->
                     Result = epgsql:equery(Conn, Sql, encode_values(Parameters)),
                     ok = return_conn(Worker, Ref),
-                    decode_reply(Result);
+                    Result;
+                    % decode_reply(Result);
                 {error, _} = Error ->
                     Error
             end;
@@ -249,7 +251,8 @@ execute_batch(Worker, Sql, Batch, Timeout) ->
                             ({error, _} = Error) -> Error
                         end,
                         Result),
-                    {ok, [ decode_reply(R) || R <- Result1 ]};
+                    % {ok, [ decode_reply(R) || R <- Result1 ]};
+                    {ok, Result1};
                 {error, _} = Error ->
                     Error
             end;
@@ -748,7 +751,12 @@ connect_1(Args, RetryCt, MRef) ->
     Schema = get_arg(dbschema, Args),
     try
         case epgsql:connect(Hostname, Username, Password,
-                           [{database, Database}, {port, Port}]) of
+                           [{database, Database},
+                            {port, Port},
+                            {codecs, [{z_db_pgsql_codec, [] }]},
+                            {nulls, [undefined, null]}
+                           ])
+        of
             {ok, Conn} ->
                 set_schema(Conn, Schema);
             {error, #error{ codename = too_many_connections }} ->
@@ -934,16 +942,16 @@ decode_values(T) when is_tuple(T) ->
 decode_values(L) when is_list(L) ->
     lists:map(fun decode_value/1, L).
 
-decode_value({V}) ->
-    {decode_value(V)};
-decode_value(null) ->
-    undefined;
-decode_value(<<?TERM_MAGIC_NUMBER, B/binary>>) ->
-    binary_to_term(B);
-decode_value({H,M,S}) when is_float(S) ->
-    {H,M,trunc(S)};
-decode_value({{Y,Mm,D},{H,M,S}}) when is_float(S) ->
-    {{Y,Mm,D},{H,M,trunc(S)}};
+%decode_value({V}) ->
+%    {decode_value(V)};
+%decode_value(null) ->
+%    undefined;
+%decode_value(<<?TERM_MAGIC_NUMBER, B/binary>>) ->
+%    binary_to_term(B);
+%%decode_value({H,M,S}) when is_float(S) ->
+%%    {H,M,trunc(S)};
+%%decode_value({{Y,Mm,D},{H,M,S}}) when is_float(S) ->
+%%    {{Y,Mm,D},{H,M,trunc(S)}};
 decode_value(L) when is_list(L) ->
     decode_values(L);
 decode_value(T) when is_tuple(T) ->

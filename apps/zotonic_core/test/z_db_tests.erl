@@ -60,3 +60,8 @@ postgres_datetime_conversion_test() ->
 
     ok.
 
+postgres_null_conversion_test() ->
+    Context = z_context:new(zotonic_site_testsandbox),
+    [{undefined}] = z_db:q("select null;", Context),
+    ok.
+
