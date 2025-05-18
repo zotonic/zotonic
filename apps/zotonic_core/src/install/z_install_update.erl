@@ -870,7 +870,7 @@ task_queue_error_count(C, Database, Schema) ->
 
             lists:foreach(
                 fun({TaskId, Props}) ->
-                    case task_error_ct(z_db_pgsql:decode_value(Props)) of
+                    case task_error_ct(Props) of
                         N when is_integer(N), N > 0 ->
                             {ok, _} = epgsql:equery(C, "
                                             update pivot_task_queue

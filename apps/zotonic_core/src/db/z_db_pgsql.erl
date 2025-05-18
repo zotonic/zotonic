@@ -54,11 +54,6 @@
     get_raw_connection/1
 ]).
 
-%% Used by the z_install_update to access props columns
--export([
-    decode_value/1
-    ]).
-
 -define(TERM_MAGIC_NUMBER, 16#01326A3A:1/big-unsigned-unit:32).
 
 -define(CONNECT_TIMEOUT, 5000).
@@ -194,7 +189,6 @@ squery(Worker, Sql, Timeout) ->
                     Result = epgsql:squery(Conn, Sql),
                     ok = return_conn(Worker, Ref),
                     Result;
-                    %%decode_reply(Result);
                 {error, _} = Error ->
                     Error
             end;
@@ -218,7 +212,6 @@ equery(Worker, Sql, Parameters, Timeout) ->
                     Result = epgsql:equery(Conn, Sql, encode_values(Parameters)),
                     ok = return_conn(Worker, Ref),
                     Result;
-                    % decode_reply(Result);
                 {error, _} = Error ->
                     Error
             end;
@@ -253,7 +246,6 @@ execute_batch(Worker, Sql, Batch, Timeout) ->
                             ({error, _} = Error) -> Error
                         end,
                         Result),
-                    % {ok, [ decode_reply(R) || R <- Result1 ]};
                     {ok, Result1};
                 {error, _} = Error ->
                     Error
@@ -923,8 +915,6 @@ msec() ->
 encode_values(L) when is_list(L) ->
     lists:map(fun encode_value/1, L).
 
-encode_value(undefined) ->
-    null;
 encode_value({term, undefined}) ->
     null;
 encode_value({term, Term}) ->
@@ -936,35 +926,3 @@ encode_value({term_json, Term}) ->
     jsxrecord:encode(Term);
 encode_value(Value) ->
     Value.
-
-
-decode_reply({ok, Columns, Rows}) ->
-    {ok, Columns, lists:map(fun decode_values/1, Rows)};
-decode_reply({ok, Nr, Columns, Rows}) ->
-    {ok, Nr, Columns, lists:map(fun decode_values/1, Rows)};
-decode_reply({ok, _} = R) ->
-    R;
-decode_reply({error, _} = R) ->
-    R.
-
-decode_values(T) when is_tuple(T) ->
-    list_to_tuple(decode_values(tuple_to_list(T)));
-decode_values(L) when is_list(L) ->
-    lists:map(fun decode_value/1, L).
-
-%decode_value({V}) ->
-%    {decode_value(V)};
-%decode_value(null) ->
-%    undefined;
-%decode_value(<<?TERM_MAGIC_NUMBER, B/binary>>) ->
-%    binary_to_term(B);
-%%decode_value({H,M,S}) when is_float(S) ->
-%%    {H,M,trunc(S)};
-%%decode_value({{Y,Mm,D},{H,M,S}}) when is_float(S) ->
-%%    {{Y,Mm,D},{H,M,trunc(S)}};
-decode_value(L) when is_list(L) ->
-    decode_values(L);
-decode_value(T) when is_tuple(T) ->
-    decode_values(T);
-decode_value(V) ->
-    V.
