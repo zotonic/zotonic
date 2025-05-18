@@ -44,6 +44,8 @@
     pool_get_connection/1,
     is_connection_alive/1,
 
+    build_connect_options/2,
+
     ensure_all_started/0,
     test_connection/1,
     squery/3,
@@ -743,20 +745,11 @@ connect(Args, RetryCt, MRef) ->
 % It is returning it, but the type spec in epgsql is wrong.
 -dialyzer({nowarn_function, connect_1/3}).
 connect_1(Args, RetryCt, MRef) ->
-    Hostname = get_arg(dbhost, Args),
-    Port = get_arg(dbport, Args),
-    Database = get_arg(dbdatabase, Args),
-    Username = get_arg(dbuser, Args),
-    Password = get_arg(dbpassword, Args),
-    Schema = get_arg(dbschema, Args),
     try
-        case epgsql:connect(Hostname, Username, Password,
-                           [{database, Database},
-                            {port, Port},
-                            {codecs, [{z_db_pgsql_codec, [] }]},
-                            {nulls, [undefined, null]}
-                           ])
-        of
+        Database = get_arg(dbdatabase, Args),
+        Schema = get_arg(dbschema, Args),
+        Options = build_connect_options(Database, Args),
+        case epgsql:connect(Options) of
             {ok, Conn} ->
                 set_schema(Conn, Schema);
             {error, #error{ codename = too_many_connections }} ->
@@ -777,9 +770,7 @@ connect_1(Args, RetryCt, MRef) ->
                     in => zotonic_core,
                     database => Database,
                     schema => Schema,
-                    username => Username,
-                    hostname => Hostname,
-                    port => Port,
+                    options => Options,
                     result => error,
                     reason => Reason
                 }),
@@ -788,6 +779,25 @@ connect_1(Args, RetryCt, MRef) ->
     catch
         A:B ->
             retry(Args, {A, B}, RetryCt, MRef)
+    end.
+
+build_connect_options(DatabaseName, Args) ->
+    Opts = #{
+             database => DatabaseName,
+             codecs => [{z_db_pgsql_codec, []}],
+             nulls => [undefined, null]
+            },
+    Opts1 = maybe_put_arg(dbhost, Args, host, Opts),
+    Opts2 = maybe_put_arg(dbport , Args, port, Opts1),
+    Opts3 = maybe_put_arg(dbuser, Args, username, Opts2),
+    maybe_put_arg(dbpassword, Args, password, Opts3).
+
+maybe_put_arg(ArgsKey, Args, Key, Map) ->
+    case get_arg(ArgsKey, Args) of
+        undefined ->
+            Map;
+        Value ->
+            maps:put(Key, Value, Map)
     end.
 
 set_schema(Conn, Schema) ->
