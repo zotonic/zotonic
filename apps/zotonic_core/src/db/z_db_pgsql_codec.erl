@@ -43,7 +43,6 @@ names() ->
 % bytea
 encode({term, Term}, bytea, State) ->
     B = term_to_binary(Term),
-    <<?TERM_MAGIC_NUMBER, B/binary>>,
     epgsql_codec_text:encode(<<?TERM_MAGIC_NUMBER, B/binary>>, bytea, State);
 encode(Cell, bytea, State) ->
     epgsql_codec_text:encode(Cell, bytea, State);
@@ -69,7 +68,7 @@ decode(Cell, TypeName, State) ->
 decode_text(Cell, bytea, _State) ->
     epgsql_codec_text:decode_text(Cell, bytea, []);
 decode_text(Cell, jsonb, _State) ->
-    epgsql_codec_jsong:decode_text(Cell, jsonb, []);
+    epgsql_codec_json:decode_text(Cell, jsonb, []);
 decode_text(Cell, TypeName, State) ->
     epgsql_codec_datetime:decode_text(Cell, TypeName, State).
 
