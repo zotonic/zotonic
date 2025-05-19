@@ -32,6 +32,7 @@
 %% Helps identify and distinguish term binaries in raw byte streams.
 -define(TERM_MAGIC_NUMBER, 16#01326A3A:1/big-unsigned-unit:32).
 
+
 init(Term, Sock) ->
     %% The datetime codec has to check what time formatting is used
     epgsql_codec_datetime:init(Term, Sock).
