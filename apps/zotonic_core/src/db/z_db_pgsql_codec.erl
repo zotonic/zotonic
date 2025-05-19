@@ -48,9 +48,9 @@ encode({term, Term}, bytea, State) ->
 encode(Cell, bytea, State) ->
     epgsql_codec_text:encode(Cell, bytea, State);
 % jsonb
-encode({term_json, Term}, jsonb, State) ->
+encode({term_json, Term}, jsonb, _State) ->
     epgsql_codec_json:encode(jsxrecord:encode(Term), jsonb, []);
-encode(Term, jsonb, State) ->
+encode(Term, jsonb, _State) ->
     epgsql_codec_json:encode(Term, jsonb, []);
 % datetime types
 encode(Cell, TypeName, State) ->
@@ -58,13 +58,13 @@ encode(Cell, TypeName, State) ->
 
 % bytea
 decode(Cell, bytea, _State) ->
-    decode_value(epgsql_codec_text:decode(Cell, bytea, []));
+    decode_bytea_value(epgsql_codec_text:decode(Cell, bytea, []));
 % jsonb
 decode(Cell, jsonb, _State) ->
-    decode_value(epgsql_codec_json:decode(Cell, jsonb, []));
+    epgsql_codec_json:decode(Cell, jsonb, []);
 % datetime types
 decode(Cell, TypeName, State) ->
-    decode_value(epgsql_codec_datetime:decode(Cell, TypeName, State)).
+    decode_datetime_value(epgsql_codec_datetime:decode(Cell, TypeName, State)).
 
 decode_text(Cell, bytea, _State) ->
     epgsql_codec_text:decode_text(Cell, bytea, []);
@@ -73,11 +73,14 @@ decode_text(Cell, jsonb, _State) ->
 decode_text(Cell, TypeName, State) ->
     epgsql_codec_datetime:decode_text(Cell, TypeName, State).
 
-decode_value(<<?TERM_MAGIC_NUMBER, B/binary>>) ->
+decode_bytea_value(<<?TERM_MAGIC_NUMBER, B/binary>>) ->
     binary_to_term(B);
-decode_value({H, M, S}) when is_float(S) ->
+decode_bytea_value(V) ->
+    V.
+
+decode_datetime_value({H, M, S}) when is_float(S) ->
     {H, M, trunc(S)};
-decode_value({{Y, Mm, D}, {H, M, S}}) when is_float(S) ->
+decode_datetime_value({{Y, Mm, D}, {H, M, S}}) when is_float(S) ->
     {{Y, Mm, D}, {H, M, trunc(S)}};
-decode_value(V) ->
+decode_datetime_value(V) ->
     V.
