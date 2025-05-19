@@ -777,17 +777,16 @@ build_connect_options(DatabaseName, Args) ->
              codecs => [{z_db_pgsql_codec, []}],
              nulls => [undefined, null, {term, undefined}]
             },
-    Opts1 = maybe_put_arg(dbhost, Args, host, Opts),
-    Opts2 = maybe_put_arg(dbport , Args, port, Opts1),
-    Opts3 = maybe_put_arg(dbuser, Args, username, Opts2),
-    maybe_put_arg(dbpassword, Args, password, Opts3).
+    maybe_put_args([{dbhost, host}, {dbport, port}, {dbuser, username}, {dbpassword, password}], Args, Opts).
 
-maybe_put_arg(ArgsKey, Args, Key, Map) ->
+maybe_put_args([], _, Map) ->
+    Map;
+maybe_put_args([{ArgsKey, Key} | T], Args, Map) ->
     case get_arg(ArgsKey, Args) of
         undefined ->
-            Map;
+            maybe_put_args(T, Args, Map);
         Value ->
-            maps:put(Key, Value, Map)
+            maybe_put_args(T, Args, Map#{Key => Value})
     end.
 
 set_schema(Conn, Schema) ->

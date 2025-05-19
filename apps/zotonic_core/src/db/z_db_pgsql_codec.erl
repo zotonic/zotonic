@@ -28,6 +28,8 @@
 
 -export([init/2, names/0, encode/3, decode/3, decode_text/3]).
 
+%% 4-byte magic number used as a prefix to serialized Erlang terms.
+%% Helps identify and distinguish term binaries in raw byte streams.
 -define(TERM_MAGIC_NUMBER, 16#01326A3A:1/big-unsigned-unit:32).
 
 init(Term, Sock) ->
@@ -58,9 +60,9 @@ decode_text(Cell, TypeName, State) ->
 
 decode_value(<<?TERM_MAGIC_NUMBER, B/binary>>) ->
     binary_to_term(B);
-decode_value({H,M,S}) when is_float(S) ->
-    {H,M,trunc(S)};
-decode_value({{Y,Mm,D},{H,M,S}}) when is_float(S) ->
-    {{Y,Mm,D},{H,M,trunc(S)}};
+decode_value({H, M, S}) when is_float(S) ->
+    {H, M, trunc(S)};
+decode_value({{Y, Mm, D}, {H, M, S}}) when is_float(S) ->
+    {{Y, Mm, D}, {H, M, trunc(S)}};
 decode_value(V) ->
     V.
