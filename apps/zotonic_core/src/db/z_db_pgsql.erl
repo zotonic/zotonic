@@ -184,9 +184,11 @@ squery(Worker, Sql, Timeout) ->
         true ->
             case fetch_conn(Worker, Sql, [], Timeout) of
                 {ok, {Conn, Ref}} ->
-                    Result = epgsql:squery(Conn, Sql),
-                    ok = return_conn(Worker, Ref),
-                    Result;
+                    try
+                        epgsql:squery(Conn, Sql)
+                    after
+                        ok = return_conn(Worker, Ref)
+                    end;
                 {error, _} = Error ->
                     Error
             end;
@@ -207,9 +209,11 @@ equery(Worker, Sql, Parameters, Timeout) ->
         true ->
             case fetch_conn(Worker, Sql, Parameters, Timeout) of
                 {ok, {Conn, Ref}} ->
-                    Result = epgsql:equery(Conn, Sql, Parameters),
-                    ok = return_conn(Worker, Ref),
-                    Result;
+                    try
+                        epgsql:equery(Conn, Sql, Parameters)
+                    after
+                        ok = return_conn(Worker, Ref)
+                    end;
                 {error, _} = Error ->
                     Error
             end;
@@ -231,19 +235,24 @@ execute_batch(Worker, Sql, Batch, Timeout) ->
         true ->
             case fetch_conn(Worker, Sql, Batch, Timeout) of
                 {ok, {Conn, Ref}} ->
-                    {Columns, Result} = epgsql:execute_batch(Conn, Sql, Batch),
-                    ok = return_conn(Worker, Ref),
-                    Result1 = lists:map(
-                        fun
-                            ({ok, Count, Rows}) when is_list(Rows) ->
-                                {ok, Count, Columns, Rows};
-                            ({ok, Rows}) when is_list(Rows) ->
-                                {ok, Columns, Rows};
-                            ({ok, _} = Ok) -> Ok;
-                            ({error, _} = Error) -> Error
-                        end,
-                        Result),
-                    {ok, Result1};
+                    try
+                        {Columns, Result} = epgsql:execute_batch(Conn, Sql, Batch),
+                        Result1 = lists:map(
+                                    fun
+                                        ({ok, Count, Rows}) when is_list(Rows) ->
+                                            {ok, Count, Columns, Rows};
+                                        ({ok, Rows}) when is_list(Rows) ->
+                                            {ok, Columns, Rows};
+                                        ({ok, _} = Ok) ->
+                                            Ok;
+                                        ({error, _} = Error) ->
+                                            Error
+                                    end,
+                                    Result),
+                        {ok, Result1}
+                    after
+                        ok = return_conn(Worker, Ref)
+                    end;
                 {error, _} = Error ->
                     Error
             end;
