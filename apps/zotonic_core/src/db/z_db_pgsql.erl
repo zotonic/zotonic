@@ -207,7 +207,7 @@ equery(Worker, Sql, Parameters, Timeout) ->
         true ->
             case fetch_conn(Worker, Sql, Parameters, Timeout) of
                 {ok, {Conn, Ref}} ->
-                    Result = epgsql:equery(Conn, Sql, encode_values(Parameters)),
+                    Result = epgsql:equery(Conn, Sql, Parameters),
                     ok = return_conn(Worker, Ref),
                     Result;
                 {error, _} = Error ->
@@ -231,8 +231,7 @@ execute_batch(Worker, Sql, Batch, Timeout) ->
         true ->
             case fetch_conn(Worker, Sql, Batch, Timeout) of
                 {ok, {Conn, Ref}} ->
-                    EncodedBatch = [encode_values(P) || P <- Batch],
-                    {Columns, Result} = epgsql:execute_batch(Conn, Sql, EncodedBatch),
+                    {Columns, Result} = epgsql:execute_batch(Conn, Sql, Batch),
                     ok = return_conn(Worker, Ref),
                     Result1 = lists:map(
                         fun
@@ -775,7 +774,7 @@ build_connect_options(DatabaseName, Args) ->
     Opts = #{
              database => DatabaseName,
              codecs => [{z_db_pgsql_codec, []}],
-             nulls => [undefined, null, {term, undefined}]
+             nulls => [undefined, null, {term, undefined}, {term_json, undefined}]
             },
     maybe_put_args([{dbhost, host}, {dbport, port}, {dbuser, username}, {dbpassword, password}], Args, Opts).
 
@@ -867,7 +866,7 @@ maybe_explain(_Duration, Sql, Params, Conn) ->
     case is_explainable(z_string:to_lower(Sql)) of
         true ->
             Sql1 = "explain "++Sql,
-            R = epgsql:equery(Conn, Sql1, encode_values(Params)),
+            R = epgsql:equery(Conn, Sql1, Params),
             maybe_log_query_plan(R);
         false ->
             ok
@@ -901,15 +900,3 @@ msec() ->
     {A, B, C} = os:timestamp(),
     A * 1000000000 + B * 1000 + C div 1000.
 
-%%
-%% These are conversion routines between how z_db expects values and how epgsl expects them.
-
-encode_values(L) when is_list(L) ->
-    lists:map(fun encode_value/1, L).
-
-encode_value({term_json, undefined}) ->
-    null;
-encode_value({term_json, Term}) ->
-    jsxrecord:encode(Term);
-encode_value(Value) ->
-    Value.

@@ -37,24 +37,38 @@ init(Term, Sock) ->
     epgsql_codec_datetime:init(Term, Sock).
 
 names() ->
-    [bytea, time, timetz, date, timestamp, timestamptz].
+    [jsonb, bytea, time, timetz, date, timestamp, timestamptz].
 
+% bytea
 encode({term, Term}, bytea, State) ->
     B = term_to_binary(Term),
     <<?TERM_MAGIC_NUMBER, B/binary>>,
     epgsql_codec_text:encode(<<?TERM_MAGIC_NUMBER, B/binary>>, bytea, State);
 encode(Cell, bytea, State) ->
     epgsql_codec_text:encode(Cell, bytea, State);
+% jsonb
+encode({term_json, Term}, jsonb, State) ->
+    epgsql_codec_json:encode(jsxrecord:encode(Term), jsonb, []);
+encode(Term, jsonb, State) ->
+    epgsql_codec_json:encode(Term, jsonb, []);
+% datetime types
 encode(Cell, TypeName, State) ->
     epgsql_codec_datetime:encode(Cell, TypeName, State).
 
-decode(Cell, bytea, State) ->
-    decode_value(epgsql_codec_text:decode(Cell, bytea, State));
+% bytea
+decode(Cell, bytea, _State) ->
+    decode_value(epgsql_codec_text:decode(Cell, bytea, []));
+% jsonb
+decode(Cell, jsonb, _State) ->
+    decode_value(epgsql_codec_json:decode(Cell, jsonb, []));
+% datetime types
 decode(Cell, TypeName, State) ->
     decode_value(epgsql_codec_datetime:decode(Cell, TypeName, State)).
 
-decode_text(Cell, bytea, State) ->
-    epgsql_codec_text:decode_text(Cell, bytea, State);
+decode_text(Cell, bytea, _State) ->
+    epgsql_codec_text:decode_text(Cell, bytea, []);
+decode_text(Cell, jsonb, _State) ->
+    epgsql_codec_jsong:decode_text(Cell, jsonb, []);
 decode_text(Cell, TypeName, State) ->
     epgsql_codec_datetime:decode_text(Cell, TypeName, State).
 
