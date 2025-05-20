@@ -132,7 +132,7 @@
             </script>
         {% endif %}
         {% if m.seo.plausible.analytics %}
-            <script defer type="{{ script_type }}" nonce="{{ m.req.csp_nonce }}"
+            <script defer type="text/javascript" nonce="{{ m.req.csp_nonce }}"
                     data-api="https://plausible.io/api/event" data-domain="{{ m.site.hostname }}"
                     src="https://plausible.io/js/script.js">
         {% endif %}
