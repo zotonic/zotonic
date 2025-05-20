@@ -38,6 +38,8 @@ m_get([ <<"google">>, <<"analytics">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_value(seo_google, analytics, Context), Rest}};
 m_get([ <<"google">>, <<"gtm">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_value(seo_google, gtm, Context), Rest}};
+m_get([ <<"plausible">>, <<"analytics">> | Rest ], _Msg, Context) ->
+    {ok, {m_config:get_boolean(seo_plausible, analytics, Context), Rest}};
 m_get([ <<"yandex">>, <<"webmaster_verify">> | Rest ], _Msg, Context) ->
     {ok, {m_config:get_value(seo_yandex, webmaster_verify, Context), Rest}};
 m_get([ <<"jsonld">>, Id | Rest ], _Msg, Context) ->

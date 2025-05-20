@@ -137,6 +137,23 @@
         </div>
 
         <div class="widget">
+            <h3 class="widget-header">Plausible</h3>
+            <div class="widget-content">
+                <div class="form-group">
+                    <label class="checkbox">
+                        <input type="checkbox" id="seo_plausible-analytics" name="seo_plausible-analytics" value="1"
+                        {% if m.config.seo_plausible.analytics.value %}checked{% endif %}>
+                        {_ Add Plausible tracking script _}
+                    </label>
+                    <p class="help-block">
+                        {% trans "If you check this then the default tracking script for Plausible will be added, using the domain <tt>{domain}</tt>." domain=m.site.hostname
+                        %}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="widget">
             <h3 class="widget-header">Yandex</h3>
             <div class="widget-content">
                 <div class="form-group label-floating">
