@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-04-26
-%% @doc Add an edge between two resources
+%% @copyright 2009-2025 Marc Worrell
+%% @doc Add an edge between two resources.
+%% @end
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -41,12 +41,9 @@ render_action(TriggerId, TargetId, Args, Context) ->
 	{PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
 	{PostbackMsgJS, Context}.
 
-
 %% @doc Unlink the edge, on success show an undo message in the element with id "unlink-message"
-%% @spec event(Event, Context1) -> Context2
 event(#postback{message={link, SubjectId, Predicate, ObjectId, ElementId, EdgeTemplate, Actions}}, Context) ->
     do_link(SubjectId, Predicate, ObjectId, ElementId, EdgeTemplate, Actions, Context).
-
 
 do_link(SubjectId, Predicate, ObjectId, EdgeTemplate, Context) ->
     do_link(SubjectId, Predicate, ObjectId, undefined, EdgeTemplate, [], Context).
@@ -76,9 +73,7 @@ do_link(SubjectId, Predicate, ObjectId, ElementId, EdgeTemplate, Actions, Contex
                                          end,
                             z_render:insert_bottom(ElementId1, Html, Context)
                     end,
-                    Title = m_rsc:p(ObjectId, title, Context),
-                    z_render:wire([{growl, [{text, [?__("Added the connection to", Context), <<" \"">>, Title, <<"\".">>]}]}
-                                            | Actions], Context1);
+                    z_render:wire(Actions, Context1);
                 _ ->
                     z_render:growl_error(?__("This connection already exists.", Context), Context)
             end;
