@@ -7,6 +7,6 @@ Add other login options
         <li class="text-muted z-logon-extra-separator"><span>{_ or _}</span></li>
     </ul>
 {% else %}
-    <ul class="z-logon-extra">
+    <ul class="z-logon-extra" style="display: none">
     </ul>
 {% endif %}
