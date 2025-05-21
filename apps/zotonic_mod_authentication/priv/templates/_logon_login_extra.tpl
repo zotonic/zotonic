@@ -10,5 +10,3 @@ Add other login options
     <ul class="z-logon-extra">
     </ul>
 {% endif %}
-```suggestion
-{% endif %}
