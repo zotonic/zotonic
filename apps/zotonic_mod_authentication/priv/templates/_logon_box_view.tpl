@@ -22,12 +22,14 @@ Params:
         {% include form_extra_tpl %}
     {% endif %}
 
-    {% if q.error and q.error != "unknown_code" %}
-        {% if q.error != 'pw' or q.options.is_password_entered or q.logon_view == 'change'%}
-            <div id="logon_error">
-                {% include "_logon_error.tpl" %}
-            </div>
-        {% endif %}
+    {% if q.error and q.error != "unknown_code"
+          and (q.error != 'pw' or q.options.is_password_entered or q.logon_view == 'change')
+    %}
+        <div id="logon_error">
+            {% include "_logon_error.tpl" %}
+        </div>
+    {% else %}
+        <div id="logon_error" style="display: none"></div>
     {% endif %}
 
     {% if form_form_tpl %}
