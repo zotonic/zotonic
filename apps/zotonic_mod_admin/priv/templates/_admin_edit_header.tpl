@@ -57,6 +57,12 @@
                 <a class="btn btn-default btn-xs" href="{% url admin_overview_rsc qcat=cat_id %}">
                     {% trans "Show all {title} pages" title=cat_id.title %}
                 </a>
+
+                {% if m.modules.active.mod_content_groups %}
+                    <small class="text-muted" title="{_ Content group _}">
+                        {{ id.content_group_id.title }}
+                    </small>
+                {% endif %}
             </div>
         {% endwith %}
     {% endwith %}
