@@ -1,23 +1,23 @@
 %% -*- mode: erlang -*-
 [
  {logoff,           ["logoff"],                           controller_logoff,   []},
- {logon,            ["logon"],                            controller_template, [ {template, "logon.tpl"}, seo_noindex, is_logon ]},
+ {logon,            ["logon"],                            controller_template, [ {template, "logon.tpl"}, seo_noindex, is_logon, notrack ]},
 
  % Handles the redirect after a logon from the logon page
  {logon_done,       ["logon", "done"],                    controller_logon_done, []},
 
- {logon_change,     ["logon", {logon_view, "change"}],    controller_template, [ {template, "logon.tpl"}, seo_noindex, is_logon ]},
+ {logon_change,     ["logon", {logon_view, "change"}],    controller_template, [ {template, "logon.tpl"}, seo_noindex, is_logon, notrack ]},
 
- {logon_reminder,   ["logon", {logon_view, "reminder"}],  controller_template, [ {template, "logon.tpl"}, seo_noindex, is_logon ]},
- {logon_reset,      ["logon", {logon_view, "reset"}],     controller_template, [ {template, "logon.tpl"}, seo_noindex, is_logon ]},
+ {logon_reminder,   ["logon", {logon_view, "reminder"}],  controller_template, [ {template, "logon.tpl"}, seo_noindex, is_logon, notrack ]},
+ {logon_reset,      ["logon", {logon_view, "reset"}],     controller_template, [ {template, "logon.tpl"}, seo_noindex, is_logon, notrack ]},
 
- {logon_confirm,    ["logon", {logon_view, "confirm"}],   controller_template, [ {template, "logon.tpl"}, seo_noindex, is_logon ]},
+ {logon_confirm,    ["logon", {logon_view, "confirm"}],   controller_template, [ {template, "logon.tpl"}, seo_noindex, is_logon, notrack ]},
 
  % For simple dispatching in the templates (without the "logon_view")
- {logon_change,     ["logon", "change"],                  controller_template, [ {template, "logon.tpl"}, seo_noindex, is_logon ]},
- {logon_reset,      ["logon", "reset"],                   controller_template, [ {template, "logon.tpl"}, seo_noindex, is_logon ]},
- {logon_reminder,   ["logon", "reminder"],                controller_template, [ {template, "logon.tpl"}, seo_noindex, is_logon ]},
- {logon_confirm,    ["logon", "confirm"],                 controller_template, [ {template, "logon.tpl"}, seo_noindex, is_logon ]},
+ {logon_change,     ["logon", "change"],                  controller_template, [ {template, "logon.tpl"}, seo_noindex, is_logon, notrack ]},
+ {logon_reset,      ["logon", "reset"],                   controller_template, [ {template, "logon.tpl"}, seo_noindex, is_logon, notrack ]},
+ {logon_reminder,   ["logon", "reminder"],                controller_template, [ {template, "logon.tpl"}, seo_noindex, is_logon, notrack ]},
+ {logon_confirm,    ["logon", "confirm"],                 controller_template, [ {template, "logon.tpl"}, seo_noindex, is_logon, notrack ]},
 
  % Simple session overview
  {sessions_user, ["logon", "sessions"], controller_template, [ {template, "sessions.tpl"}, seo_noindex, {acl, is_auth} ]},
