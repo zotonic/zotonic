@@ -1,9 +1,28 @@
 {% with m.mailinglist.recipient[recipient_id] as rcpt %}
 {% with form_id|default:#form as form_id %}
     {% if recipient_id %}
-        {% wire id=form_id type="submit" postback={recipient_edit id=id in_admin=in_admin recipient_id=recipient_id} delegate=delegate %}
+        {% wire id=form_id
+        		type="submit"
+        		postback={recipient_edit
+        			id=id
+        			in_admin=in_admin
+        			recipient_id=recipient_id
+        			send_confirm=send_confirm
+        			send_welcome=send_welcome
+        		}
+        		delegate=delegate
+        %}
     {% else %}
-        {% wire id=form_id type="submit" postback={recipient_add id=id in_admin=in_admin} delegate=delegate %}
+        {% wire id=form_id
+        		type="submit"
+        		postback={recipient_add
+        			id=id
+        			in_admin=in_admin
+        			send_confirm=send_confirm
+        			send_welcome=send_welcome
+        		}
+        		delegate=delegate
+        %}
     {% endif %}
 
     {% if is_email_only %}

@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2023 Marc Worrell
+%% @copyright 2010-2025 Marc Worrell
 %% @doc Show a form to subscribe to a mailinglist. Prefill the form with the account details
 %% of the current user (if any).
 %% @end
 
-%% Copyright 2010-2023 Marc Worrell
+%% Copyright 2010-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -30,6 +30,8 @@ render(Params, _Vars, Context) ->
     Template = proplists:get_value(template, Params, "_scomp_mailinglist_subscribe.tpl"),
     Props = [
         {id, m_rsc:rid(proplists:get_value(id, Params), Context)},
+        {send_confirm, z_convert:to_bool(proplists:get_value(send_confirm, Params))},
+        {send_welcome, z_convert:to_bool(proplists:get_value(send_welcome, Params))},
         {user_id, z_acl:user(Context)},
         {delegate, ?MODULE}
         | Params

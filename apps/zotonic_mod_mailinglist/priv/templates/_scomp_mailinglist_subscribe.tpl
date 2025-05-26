@@ -23,7 +23,7 @@
 	<div id="{{ #form }}-done" style="display:none" class="mailinglist_subscribe__done">
 		<h2>{_ Thank you _}</h2>
 	 	<p>
-		{_ Your e-mail address is added to the mailing list. A confirmation mail is sent to your e-mail address and will arrive shortly. When you don’t receive it, then please check your spam folder. _}
+		{_ Your e-mail address is added to the mailing list. A confirmation mail is sent to your e-mail address and will arrive shortly. If you don’t receive it, then please check your spam folder. _}
 		</p>
 	</div>
 
