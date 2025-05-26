@@ -12,5 +12,9 @@
 
 	<p><a href="{% url mailinglist_confirm confirm_key=recipient.confirm_key absolute_url %}">{% url mailinglist_confirm confirm_key=recipient.confirm_key absolute_url %}</a></p>
 
-	<p>{_ When you don’t want to receive any mail then please ignore this message. _}</p>
+	<p>{_ If you don’t want to receive any mail then please ignore this message. _}</p>
+
+    {% if m.rsc[confirm.mailinglist_id].subscription_info_html as info %}
+        {{ info|show_media }}
+    {% endif %}
 {% endblock %}

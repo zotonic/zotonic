@@ -10,4 +10,9 @@
             title=m.rsc[list_id].title
     %}
 </p>
+
+{% if m.rsc[confirm.mailinglist_id].subscription_info_html as info %}
+    {{ info|show_media }}
+{% endif %}
+
 {% endblock %}

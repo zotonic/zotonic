@@ -42,10 +42,20 @@ event(#submit{message={recipient_add, Props}, form=FormId}, Context) ->
     InAdmin = z_convert:to_bool(proplists:get_value(in_admin, Props)),
 	case z_acl:rsc_visible(ListId, Context) of
 		true ->
-			Email = z_context:get_q_validated(<<"email">>, Context),
-			Notification = case not InAdmin orelse z_convert:to_bool(z_context:get_q(<<"send_welcome">>, Context)) of
-				true -> send_welcome;
-				false -> silent
+			QEmail = z_context:get_q_validated(<<"email">>, Context),
+			QSendWelcome = z_convert:to_bool(z_context:get_q(<<"send_welcome">>, Context)),
+			QSendConfirm = z_convert:to_bool(z_context:get_q(<<"send_confirm">>, Context)),
+			ArgSendWelcome = z_convert:to_bool(proplists:get_value(send_welcome, Props)),
+			ArgSendConfirm = z_convert:to_bool(proplists:get_value(send_confirm, Props)),
+			CfgSendConfirm = m_config:get_boolean(mod_mailinglist, send_confirm, Context),
+			Notification = if
+				QSendConfirm -> send_confirm;
+				QSendWelcome -> send_welcome;
+				ArgSendConfirm -> send_confirm;
+				ArgSendWelcome -> send_welcome;
+				InAdmin -> silent;
+				CfgSendConfirm -> send_confirm;
+				true -> send_welcome
 			end,
 			RecipientProps = [
 			    {user_id, undefined},
@@ -55,7 +65,7 @@ event(#submit{message={recipient_add, Props}, form=FormId}, Context) ->
 			    {name_surname, sanitize(z_context:get_q(<<"name_surname">>, Context, <<>>))},
                 {pref_language, pref_language(Context)}
 			],
-			case m_mailinglist:insert_recipient(ListId, Email, RecipientProps, Notification, Context) of
+			case m_mailinglist:insert_recipient(ListId, QEmail, RecipientProps, Notification, Context) of
 				ok ->
 				    case InAdmin of
 				        true ->
