@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-05-27 10:57\n"
+"PO-Revision-Date: 2025-05-27 13:11\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -8572,7 +8572,7 @@ msgstr "No estás suscrito a ninguna lista de correo."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:8
 msgid "You are now subscribed to our mailing list <b><a href=\"{url}\">{title}</a></b> with your e-mail address <b>{email}</b>."
-msgstr ""
+msgstr "Ahora estás suscrito a nuestra lista de correo <b><a href=\"{url}\">{title}</a></b> con tu dirección de correo electrónico <b>{email}</b>."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_goodbye.tpl:3
 msgid "You are now unsubscribed from"
@@ -8608,11 +8608,11 @@ msgstr "Recibirá una confirmación en su correo electrónico."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:9
 msgid "You, or someone else, added your e-mail address to our mailing list <b><a href=\"{url}\">{title}</a></b>."
-msgstr ""
+msgstr "Usted, u otra persona, agregó su dirección de correo electrónico a nuestra lista de correo <b><a href=\"{url}\">{title}</a></b>."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:26
 msgid "Your e-mail address is added to the mailing list. A confirmation mail is sent to your e-mail address and will arrive shortly. If you don’t receive it, then please check your spam folder."
-msgstr ""
+msgstr "Su dirección de correo electrónico se ha añadido a la lista de correo. Recibirá un correo de confirmación en breve. Si no lo recibe, revise su carpeta de correo no deseado."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:16
 msgid "Your mailing list subscriptions"
@@ -9495,7 +9495,7 @@ msgstr "Reconstruyendo la tabla de búsqueda por facetas."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:146
 msgid "Add Plausible tracking script"
-msgstr ""
+msgstr "Agregar secuencia de comandos de seguimiento plausible"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:69
 msgid "Add a noindex, nofollow element to all pages."
@@ -9591,7 +9591,7 @@ msgstr "Acepto el riesgo de seguridad de agregar código personalizado en Google
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:149
 msgid "If you check this then the default tracking script for Plausible will be added, using the domain <tt>{domain}</tt>."
-msgstr ""
+msgstr "Si marca esta opción, se agregará el script de seguimiento predeterminado para Plausible, utilizando el dominio <tt>{domain}</tt>."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:50
 msgid "If your site does not have a search page, check this box to prevent displaying a search box on Google et al."
