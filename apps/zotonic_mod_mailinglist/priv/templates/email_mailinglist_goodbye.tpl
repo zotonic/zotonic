@@ -10,4 +10,7 @@
             title=m.rsc[list_id].title
     %}
 </p>
+
+{{ m.rsc[list_id].subscription_info_html|show_media }}
+
 {% endblock %}

@@ -469,7 +469,6 @@ insert_recipient_1(ListId, Email, Props, WelcomeMessageType, Context) ->
                               from mailinglist_recipient
                               where mailinglist_id = $1
                                 and email = $2", [ListId, Email1], Context),
-            ConfirmKey = z_ids:id(20),
             {RecipientId, WelcomeMessageType1} = case Rec of
                 {RcptId, true, _OldConfirmKey} ->
                     %% Present and enabled
@@ -477,18 +476,22 @@ insert_recipient_1(ListId, Email, Props, WelcomeMessageType, Context) ->
                 {RcptId, false, OldConfirmKey} ->
                     %% Present, but not enabled
                     NewConfirmKey = case OldConfirmKey of
-                        undefined -> ConfirmKey;
+                        undefined -> z_ids:id(20);
                         _ -> OldConfirmKey
                     end,
                     case WelcomeMessageType of
                         send_confirm ->
-                            case NewConfirmKey of
-                                OldConfirmKey -> nop;
-                                _ -> z_db:q("update mailinglist_recipient
-                                             set confirm_key = $2
-                                             where id = $1", [RcptId, NewConfirmKey], Context)
+                            if
+                                NewConfirmKey =:= OldConfirmKey ->
+                                    nop;
+                                true ->
+                                    z_db:q("update mailinglist_recipient
+                                            set confirm_key = $2
+                                            where id = $1",
+                                           [RcptId, NewConfirmKey],
+                                           Context)
                             end,
-                            {RcptId, {send_confirm, NewConfirmKey}};
+                            {RcptId, send_confirm};
                         _ ->
                             z_db:q("update mailinglist_recipient
                                     set is_enabled = true,
@@ -507,8 +510,11 @@ insert_recipient_1(ListId, Email, Props, WelcomeMessageType, Context) ->
                         {mailinglist_id, ListId},
                         {is_enabled, IsEnabled},
                         {email, Email1},
-                        {confirm_key, ConfirmKey}
-                    ] ++ [ {K, case is_list(V) of true-> z_convert:to_binary(V); false -> V end} || {K,V} <- Props ],
+                        {confirm_key, z_ids:id(20)}
+                    ] ++ [
+                        {K, if is_list(V) -> z_convert:to_binary(V); true -> V end}
+                        || {K,V} <- Props
+                    ],
                     {ok, RcptId} = z_db:insert(mailinglist_recipient, Cols, Context),
                     {RcptId, WelcomeMessageType}
             end,
