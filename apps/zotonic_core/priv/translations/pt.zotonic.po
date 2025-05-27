@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-05-27 10:57\n"
+"PO-Revision-Date: 2025-05-27 14:07\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -8103,7 +8103,7 @@ msgstr "Se não desejar receber qualquer e-mail, ignore esta mensagem."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:16
 msgid "If you don’t want to receive any more mail then <a href=\"{url}\">click here to unsubscribe</a>."
-msgstr ""
+msgstr "Se não quiser receber mais correio, <a href=\"{url}\">clique aqui para anular a subscrição</a>."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:44
 msgid "If you opt-out then it is still possible to subscribe to mailing lists using an e-mail address (instead of your account)."
