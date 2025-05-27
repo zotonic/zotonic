@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-05-27 10:57\n"
+"PO-Revision-Date: 2025-05-27 13:11\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -8099,11 +8099,11 @@ msgstr "Ici, vous pouvez modifier les arguments de la requête de recherche. Cha
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:24
 msgid "If you don’t want to receive any mail then please ignore this message."
-msgstr ""
+msgstr "Si vous ne souhaitez pas recevoir de courrier, veuillez ignorer ce message."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:16
 msgid "If you don’t want to receive any more mail then <a href=\"{url}\">click here to unsubscribe</a>."
-msgstr ""
+msgstr "Si vous ne souhaitez plus recevoir de courrier, alors <a href=\"{url}\">cliquez ici pour vous désabonner</a>."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:44
 msgid "If you opt-out then it is still possible to subscribe to mailing lists using an e-mail address (instead of your account)."
@@ -8147,7 +8147,7 @@ msgstr "Statut de l'envoi"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:6
 msgid "Mailinglist email text and recipients query"
-msgstr ""
+msgstr "Texte de l'e-mail de la liste de diffusion et requête des destinataires"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:4./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:4
 msgid "Mailinglist subscriptions"
@@ -8211,7 +8211,7 @@ msgstr "Les pages qui ont le bord \"subscriberof\" de la liste de diffusion."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:54
 msgid "Pages that match the recipients search query below."
-msgstr ""
+msgstr "Pages correspondant à la requête de recherche des destinataires ci-dessous."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:51
 msgid "Perform operation"
@@ -8239,7 +8239,7 @@ msgstr "Entrez l'adresse e-mail à laquelle vous souhaitez envoyer cette page."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:17
 msgid "Please follow <a href=\"{url}\">this link to confirm</a>,  or copy and paste the address below in your browser."
-msgstr ""
+msgstr "Veuillez suivre <a href=\"{url}\">ce lien pour confirmer</a>, ou copiez et collez l'adresse ci-dessous dans votre navigateur."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:16
 msgid "Please note:"
@@ -8260,7 +8260,7 @@ msgstr "Prévisualisation mailing"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:88
 msgid "Query, for example:"
-msgstr ""
+msgstr "Requête, par exemple :"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailing_page.collection.tpl:28
 msgid "Read more on the web"
@@ -8284,7 +8284,7 @@ msgstr "Destinataires pour"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:81
 msgid "Recipients search query"
-msgstr ""
+msgstr "Requête de recherche des destinataires"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
 msgid "Remove this recipient. No undo possible."
@@ -8376,7 +8376,7 @@ msgstr "Emis le"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:57
 msgid "Show all recipients"
-msgstr ""
+msgstr "Afficher tous les destinataires"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:31
 msgid "Sorry, I could not subscribe you to the mailing list. Please try again later or with another e-mail address."
@@ -8424,7 +8424,7 @@ msgstr "Liste de diffusion cible"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:63
 msgid "Text shown below the confirmation, welcome and unsubscribe e-mails."
-msgstr ""
+msgstr "Texte affiché sous les e-mails de confirmation, de bienvenue et de désabonnement."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:21
 msgid "Thank you. You are now subscribed."
@@ -8524,7 +8524,7 @@ msgstr "Utilisez le lien dans votre e-mail pour gérer vos abonnements."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:38
 msgid "Used for uploading CSV files with recipients."
-msgstr ""
+msgstr "Utilisé pour télécharger des fichiers CSV avec des destinataires."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:18
 msgid "View this page as mailing."
@@ -8572,7 +8572,7 @@ msgstr "Vous n'êtes inscrit à aucune liste de diffusion."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:8
 msgid "You are now subscribed to our mailing list <b><a href=\"{url}\">{title}</a></b> with your e-mail address <b>{email}</b>."
-msgstr ""
+msgstr "Vous êtes maintenant inscrit à notre liste de diffusion <b><a href=\"{url}\">{title}</a></b> avec votre adresse e-mail <b>{email}</b>."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_goodbye.tpl:3
 msgid "You are now unsubscribed from"
@@ -8608,11 +8608,11 @@ msgstr "Vous recevrez une confirmation dans votre e-mail."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:9
 msgid "You, or someone else, added your e-mail address to our mailing list <b><a href=\"{url}\">{title}</a></b>."
-msgstr ""
+msgstr "Vous, ou quelqu'un d'autre, avez ajouté votre adresse e-mail à notre liste de diffusion <b><a href=\"{url}\">{title}</a></b>."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:26
 msgid "Your e-mail address is added to the mailing list. A confirmation mail is sent to your e-mail address and will arrive shortly. If you don’t receive it, then please check your spam folder."
-msgstr ""
+msgstr "Votre adresse e-mail a été ajoutée à la liste de diffusion. Un e-mail de confirmation vous sera envoyé prochainement. Si vous ne le recevez pas, veuillez vérifier vos spams."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:16
 msgid "Your mailing list subscriptions"
@@ -9495,7 +9495,7 @@ msgstr "Reconstruire la table de recherche à facettes."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:146
 msgid "Add Plausible tracking script"
-msgstr ""
+msgstr "Ajouter un script de suivi plausible"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:69
 msgid "Add a noindex, nofollow element to all pages."
@@ -9591,7 +9591,7 @@ msgstr "J'accepte le risque de sécurité lié à l'ajout de code personnalisé 
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:149
 msgid "If you check this then the default tracking script for Plausible will be added, using the domain <tt>{domain}</tt>."
-msgstr ""
+msgstr "Si vous cochez cette case, le script de suivi par défaut pour Plausible sera ajouté, en utilisant le domaine <tt>{domain}</tt>."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:50
 msgid "If your site does not have a search page, check this box to prevent displaying a search box on Google et al."
