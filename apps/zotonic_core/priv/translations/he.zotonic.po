@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-05-27 10:57\n"
+"PO-Revision-Date: 2025-05-27 13:11\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -8572,7 +8572,7 @@ msgstr "אינך רשום לשום רשימות תפוצה."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:8
 msgid "You are now subscribed to our mailing list <b><a href=\"{url}\">{title}</a></b> with your e-mail address <b>{email}</b>."
-msgstr ""
+msgstr "כעת אתה רשום לרשימת התפוצה שלנו <b><a href=\"{url}\">{title}</a></b> עם כתובת הדוא\"ל שלך <b>{email}</b>."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_goodbye.tpl:3
 msgid "You are now unsubscribed from"
@@ -8608,11 +8608,11 @@ msgstr "תקבל אישור בדואר האלקטרוני שלך."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:9
 msgid "You, or someone else, added your e-mail address to our mailing list <b><a href=\"{url}\">{title}</a></b>."
-msgstr ""
+msgstr "אתה, או מישהו אחר, הוספת את כתובת הדוא\"ל שלך לרשימת התפוצה שלנו <b><a href=\"{url}\">{title}</a></b>."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:26
 msgid "Your e-mail address is added to the mailing list. A confirmation mail is sent to your e-mail address and will arrive shortly. If you don’t receive it, then please check your spam folder."
-msgstr ""
+msgstr "כתובת הדוא\"ל שלך נוספה לרשימת התפוצה. דוא\"ל אישור יישלח לכתובת הדוא\"ל שלך ויגיע בקרוב. אם לא קיבלת אותו, אנא בדוק את תיקיית דואר הזבל שלך."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:16
 msgid "Your mailing list subscriptions"
@@ -9495,7 +9495,7 @@ msgstr "בנייה מחדש של טבלת החיפוש עם פנים."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:146
 msgid "Add Plausible tracking script"
-msgstr ""
+msgstr "הוסף סקריפט מעקב סביר"
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:69
 msgid "Add a noindex, nofollow element to all pages."
@@ -9591,7 +9591,7 @@ msgstr "אני מקבל את סיכון האבטחה של הוספת קוד מו
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:149
 msgid "If you check this then the default tracking script for Plausible will be added, using the domain <tt>{domain}</tt>."
-msgstr ""
+msgstr "אם תסמן אפשרות זו, יתווסף סקריפט המעקב המוגדר כברירת מחדל עבור Plausible, תוך שימוש בדומיין <tt>{domain}</tt>."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:50
 msgid "If your site does not have a search page, check this box to prevent displaying a search box on Google et al."
