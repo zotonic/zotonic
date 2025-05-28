@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-05-01 10:35\n"
+"PO-Revision-Date: 2025-05-27 10:57\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -211,7 +211,7 @@ msgstr "Kas olete kindel, et soovite taastada kõik ACL-reeglid nende praegu ava
 #: apps/zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:104
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:125
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:134
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:50./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:53./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:13./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:77
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:50./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:53./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:13./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_delete_confirm.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:26./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:96
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:181./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:200./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_new.tpl:26./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:77./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:15./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:51./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:26./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:85./apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:60
 #: apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:133./apps/zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:141
 #: apps/zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70./apps/zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:158./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:113./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:85./apps/zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:49./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82./apps/zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
@@ -288,6 +288,7 @@ msgid "Content"
 msgstr "Sisu"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_edit_visible_for.tpl:16./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:58
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:62
 #: apps/zotonic_mod_content_groups/priv/templates/_admin_overview_filter_panel.tpl:6./apps/zotonic_mod_content_groups/priv/templates/_dialog_admin_bulk_update.tpl:5
 msgid "Content group"
 msgstr "Sisurühm"
@@ -552,7 +553,7 @@ msgstr "Tagasireeglid"
 #: apps/zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:126
 #: apps/zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:42./apps/zotonic_mod_email_relay/priv/templates/_admin_config_email_panel.tpl:67
 #: apps/zotonic_mod_image_edit/priv/templates/_overlay_image_edit.tpl:136
-#: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:81./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:54
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:100./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:54
 msgid "Save"
 msgstr "Salvesta"
 
@@ -852,7 +853,7 @@ msgstr "Lisa meedia sisule"
 msgid "Add note"
 msgstr "Lisada märkus"
 
-#: apps/zotonic_mod_admin/src/mod_admin.erl:732./apps/zotonic_mod_admin/src/actions/action_admin_link.erl:80
+#: apps/zotonic_mod_admin/src/mod_admin.erl:732
 msgid "Added the connection to"
 msgstr "Lisas ühenduse domeeniga"
 
@@ -1771,7 +1772,7 @@ msgstr "Arvete nimi"
 #: apps/zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:13
 #: apps/zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:18
 #: apps/zotonic_mod_l10n/priv/templates/_admin_edit_content_timezone.tpl:13
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:11./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:16
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:13./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:16
 msgid "Need more help?"
 msgstr "Veel abi?"
 
@@ -1837,7 +1838,7 @@ msgid "No pages selected"
 msgstr "Ühtegi lehte pole valitud"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:21
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:46
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:104
 msgid "No results."
 msgstr "Tulemused puuduvad."
 
@@ -2010,12 +2011,11 @@ msgid "Published on, oldest first"
 msgstr "Avaldatud, vanim enne"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:19
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:27
 msgid "Query"
 msgstr "P√§ring"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:41
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:40
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:98
 msgid "Query preview"
 msgstr "P√§ringu eelvaade"
 
@@ -2150,7 +2150,6 @@ msgid "Search other media"
 msgstr "Otsi muud meediat"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:7
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:7
 msgid "Search query"
 msgstr "Otsinu p√§ring"
 
@@ -2274,7 +2273,7 @@ msgstr "Kahjuks ei ole teil lubatud märkmeid redigeerida."
 msgid "Sorry, you are not allowed to upload drop folder files."
 msgstr "Kahjuks ei ole teil lubatud rippkausta faile üles laadida."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_link.erl:86
+#: apps/zotonic_mod_admin/src/actions/action_admin_link.erl:81
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "Vabandust, teil pole ühenduse lisamiseks luba."
 
@@ -2341,7 +2340,7 @@ msgstr "Eesliidend"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:40./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:41
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:28./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:30
-#: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:41
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:60
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:22./apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:23
 msgid "Surname"
 msgstr "Perenimi"
@@ -2384,7 +2383,7 @@ msgid "Templates will be recompiled."
 msgstr "Mallid kompileeritakse uuesti."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content.query.tpl:30
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:36
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:94
 msgid "Test query"
 msgstr "Testpäring"
 
@@ -2453,7 +2452,7 @@ msgstr "Selle nimega leht on juba olemas."
 msgid "This can't be undone. Your page will be lost forever."
 msgstr "Seda tegevust ei saa tagasi v√µtte. Sinu leht kaob igaeseks."
 
-#: apps/zotonic_mod_admin/src/actions/action_admin_link.erl:83
+#: apps/zotonic_mod_admin/src/actions/action_admin_link.erl:78
 msgid "This connection already exists."
 msgstr "See ühendus on juba olemas."
 
@@ -3117,7 +3116,7 @@ msgstr "Konfiguratsioonivõtmeid saab lisada ainult administraator."
 
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:91./apps/zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:92
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:10./apps/zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:11
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:22./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:25./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:130./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:137./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:157./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:159./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:22./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:25./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:131./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:138./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:159./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:161./apps/zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:30
 #: apps/zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:202
 msgid "Password"
@@ -3285,7 +3284,7 @@ msgstr "Keelevahelehtede lubamine või keelamine."
 
 #: apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:69./apps/zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:99
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:24
-#: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:56
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:75
 #: apps/zotonic_mod_translation/priv/templates/_dialog_new_rsc_extra.tpl:2./apps/zotonic_mod_translation/priv/templates/_translation_language_status.tpl:46./apps/zotonic_mod_translation/priv/templates/admin_translation.tpl:41
 msgid "Language"
 msgstr "Keel"
@@ -3414,7 +3413,7 @@ msgstr "Kasutajanime koopia, palun valige teine kasutajanimi."
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:36./apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:38
 #: apps/zotonic_mod_comment/priv/templates/_comments_form.tpl:31
 #: apps/zotonic_mod_contact/priv/templates/contact.tpl:16./apps/zotonic_mod_contact/priv/templates/email_contact.tpl:13
-#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:8./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:8./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:20
+#: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:8./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mail_page.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:8./apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_testaddress.tpl:9./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:39
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:52
 msgid "E-mail"
 msgstr "E-post"
@@ -4465,7 +4464,7 @@ msgid "Two-factor authentication is not enabled for this account."
 msgstr "Kahefaktoriline autentimine pole selle konto jaoks lubatud."
 
 #: apps/zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:30
-#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:145./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:59
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:37./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:38./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:147./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:171./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:23./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:59
 msgid "Two-factor passcode"
 msgstr "Kahefaktoriline pääsukood"
 
@@ -4657,7 +4656,7 @@ msgstr "Iga seanss katkestatakse ja teid logitakse välja."
 msgid "Expected another account"
 msgstr "Oodati teist kontot"
 
-#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:259
+#: apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3./apps/zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7./apps/zotonic_mod_authentication/src/mod_authentication.erl:276
 msgid "External Services"
 msgstr "Välisteenused"
 
@@ -4750,7 +4749,7 @@ msgstr "Katkesta kõik aktiivsed seansid"
 msgid "Interrupted sessions might still be visible in the sessions overview, but will not be updated anymore."
 msgstr "Katkestatud seansid võivad olla endiselt nähtavad seansside ülevaates, kuid neid enam ei värskendata."
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:51./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:174./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:37
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:51./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:187./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:37
 msgid "Keep me logged in"
 msgstr "Hoia mind sisse logituna"
 
@@ -4762,7 +4761,7 @@ msgstr "Viimased teadaolevad sisselogimised"
 msgid "Last seen"
 msgstr "Viimati nähtud"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:58./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:189./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:58./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:202./apps/zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
 msgid "Log in"
 msgstr "Logi sisse"
 
@@ -4794,7 +4793,7 @@ msgstr "Veenduge, et olete oma e-posti aadressi kinnitanud."
 msgid "Multiple accounts"
 msgstr "Mitu kontot"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:195
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:209
 #: apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:87./apps/zotonic_mod_survey/priv/templates/_survey_question_page.tpl:94
 msgid "Next"
 msgstr "Järgmine"
@@ -4826,7 +4825,7 @@ msgstr "Sellel lehel näete oma konto hiljutisi sisselogimisi ja aktiivseid sean
 msgid "One moment please"
 msgstr "Üks hetk palun"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:35./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:142./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:55
+#: apps/zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:34./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:35./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:144./apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:168./apps/zotonic_mod_authentication/priv/templates/_logon_reset_form_fields.tpl:20./apps/zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:55
 msgid "Passcode"
 msgstr "Pääsukood"
 
@@ -4931,7 +4930,7 @@ msgstr "Vabandust, liiga palju proovib uuesti"
 msgid "Sorry, your password reset code is unknown or expired"
 msgstr "Kahjuks on teie paroolivahetuse kood tundmatu või vananenud"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:171
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:184
 msgid "Stay logged on unless I log off."
 msgstr "Püsige sisselogituna, kui ma välja ei logi."
 
@@ -5110,7 +5109,7 @@ msgstr "tund"
 msgid "external service"
 msgstr "välisteenistus"
 
-#: apps/zotonic_mod_authentication/priv/templates/_logon_login_extra.tpl:6
+#: apps/zotonic_mod_authentication/priv/templates/_logon_login_extra.tpl:7
 #: apps/zotonic_mod_signup/priv/templates/_signup_extra.tpl:9
 msgid "or"
 msgstr "või"
@@ -5155,7 +5154,7 @@ msgstr "Lubada saab andmebaasi ja üleslaaditud failide automaatse igapäevase v
 msgid "Back to the edit page"
 msgstr "Tagasi redigeerimislehele"
 
-#: apps/zotonic_mod_backup/src/mod_backup.erl:99
+#: apps/zotonic_mod_backup/src/mod_backup.erl:110
 msgid "Backup"
 msgstr "Varundamine"
 
@@ -5199,7 +5198,7 @@ msgstr "Pilvefailide pood on lubatud. Andmebaasi varukoopiad laaditakse üles pi
 msgid "Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup."
 msgstr "Pilvefailide pood on lubatud. Kohalikke faile ei varundata. Veenduge, et teie pilvefailide salvestamise süsteemil oleks korralik varukoopia."
 
-#: apps/zotonic_mod_backup/src/actions/action_backup_backup_start.erl:44
+#: apps/zotonic_mod_backup/src/actions/action_backup_backup_start.erl:47
 msgid "Could not start the backup because a backup is already in progress."
 msgstr "Varundamist ei saanud alustada, kuna varundamine on juba pooleli."
 
@@ -5215,7 +5214,7 @@ msgstr "Kustutas"
 msgid "Deleted on"
 msgstr "Kustutatud"
 
-#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:112
+#: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:3./apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:9./apps/zotonic_mod_backup/src/mod_backup.erl:123
 msgid "Deleted pages"
 msgstr "Kustutatud lehed"
 
@@ -5309,7 +5308,7 @@ msgstr "Pange tähele, et faile säilitatakse pärast kustutamist ainult 5 näda
 msgid "Note:"
 msgstr "Märge:"
 
-#: apps/zotonic_mod_backup/src/actions/action_backup_backup_start.erl:50
+#: apps/zotonic_mod_backup/src/actions/action_backup_backup_start.erl:53
 msgid "Only administrators can start a backup."
 msgstr "Varundamist saavad alustada ainult administraatorid."
 
@@ -5377,7 +5376,7 @@ msgstr "Kuva importimise/ekspordi paneel administraatori redigeerimislehtedel."
 msgid "Sorry, a global Zotonic configuration is set and cannot be changed."
 msgstr "Kahjuks on globaalne Zotonic konfiguratsioon määratud ja seda ei saa muuta."
 
-#: apps/zotonic_mod_backup/src/actions/action_backup_backup_start.erl:47
+#: apps/zotonic_mod_backup/src/actions/action_backup_backup_start.erl:50
 msgid "Sorry, manual backups are disabled"
 msgstr "Kahjuks on käsitsi varundamine keelatud"
 
@@ -5413,7 +5412,7 @@ msgstr "Alusta varundamist kohe"
 msgid "Start database-only backup now"
 msgstr "Alustage kohe ainult andmebaasi varundamist"
 
-#: apps/zotonic_mod_backup/src/actions/action_backup_backup_start.erl:42
+#: apps/zotonic_mod_backup/src/actions/action_backup_backup_start.erl:45
 msgid "Started the backup. You can keep this page open or continue working."
 msgstr "Alustas varundamisega. Saate selle lehe avatuna hoida või tööd jätkata."
 
@@ -7877,7 +7876,7 @@ msgstr "<em>Lisage sellesse loendisse</em> kõik adressaadid, kes on sihtloendis
 msgid "<em>Remove</em> all recipients from this list that are on the target list"
 msgstr "<em>Eemaldage</em> kõik adressaadid, kes on sihtloendis"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:9
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:11
 msgid "<h3>Recipients</h3><p>To add, remove or view the mailing list recipients, click on the “show all recipients” link.</p><h3>Sender name and e-mail address</h3><p>The sender name and e-mail address can be set per mailing list. This defaults to the config key <tt>site.email_from</tt>.  The <i>From</i> of the sent e-mails will be set to the sender name and address.</p><h3>Automatic upload of recipient lists</h3><p>The drop folder filename is used for the automatic upload of complete recipients list. The filename must match the filename of the uploaded recipient list. The complete list of recipients will be replaced with the recipients in the drop folder file.</p><h3>Access control</h3><p>Everybody who can edit a mailing list is also allowed to send a page to the mailing list. Everybody who can view the mailing list is allowed to add an e-mail address to the mailing list.</p>"
 msgstr "<h3>Saajad</h3><p>Meililisti adressaatide lisamiseks, eemaldamiseks või vaatamiseks klõpsake lingil \"näita kõiki saajaid\".</p><h3>Saatja nimi ja e-posti aadress</h3><p>Saatja nime ja e-posti aadressi saab määrata postiloendi kaupa. Vaikimisi on see konfiguratsioonivõti <tt>site.email_from</tt>. Saadetud e-kirjadest <i>From</i> määratakse saatja nimeks ja aadressiks.</p><h3>Saajate loendite automaatne üleslaadimine</h3><p>Rippkausta failinime kasutatakse täieliku adressaatide loendi automaatseks üleslaadimiseks. Failinimi peab ühtima üleslaaditud adressaatide loendi failinimega. Täielik adressaatide loend asendatakse ripkaustafailis olevate adressaatidega.</p><h3>Juurdepääsu kontroll</h3><p>Kõigil, kes saavad meililisti redigeerida, on lubatud ka lehekülg postiloendisse saata. Kõigil, kes saavad meililistiga tutvuda, on lubatud meililisti lisada e-posti aadress.</p>"
 
@@ -7893,7 +7892,7 @@ msgstr "Lisage uus saaja."
 msgid "Add recipient"
 msgstr "Lisa saaja"
 
-#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:62
+#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:74
 msgid "Added the recipient."
 msgstr "Lisas saaja."
 
@@ -7921,7 +7920,7 @@ msgstr "Kas soovite kindlasti meililoendi kustutada"
 msgid "Are you sure you want to reset the statistics for this mailing? This means that if you send the mailing again afterwards, recipients might have gotten the mailing twice."
 msgstr "Kas olete kindel, et soovite selle postituse statistika lähtestada? See tähendab, et kui saadate postituse hiljem uuesti, võivad adressaadid kirja saada kaks korda."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:9
+#: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:13
 msgid "Before you will receive any further mail you need to confirm your subscription."
 msgstr "Enne uute e-kirjade saamist peate oma tellimuse kinnitama."
 
@@ -7973,7 +7972,7 @@ msgstr "Kinnitage meililisti saatmine"
 msgid "Confirm subscription"
 msgstr "Kinnitage tellimus"
 
-#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:72
+#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:84
 msgid "Could not add the recipient."
 msgstr "Saajat ei saanud lisada."
 
@@ -8025,7 +8024,7 @@ msgstr "Laadige alla kõigi aktiivsete saajate loend."
 msgid "Downloading active recipients list. Check your download window."
 msgstr "Aktiivsete saajate loendi allalaadimine. Kontrollige allalaadimisakent."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:41
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:36./apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:37
 msgid "Drop folder filename (optional)"
 msgstr "Loobuge kausta failinimi (valikuline)"
 
@@ -8053,11 +8052,11 @@ msgstr "Redigeerige postiloendit &raquo;"
 msgid "Enter the e-mail address of the recipient. The name of the recipient is optional."
 msgstr "Sisestage saaja e-posti aadress. Saaja nimi ei ole kohustuslik."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:34
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:44
 msgid "Externally managed list &mdash; no unsubscribe/subscribe links"
 msgstr "Väliselt hallatud loend &mdash; pole linkide tühistamise / tellimise linke"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:27
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:46
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:16
 msgid "First name"
 msgstr "Eesnimi"
@@ -8066,7 +8065,7 @@ msgstr "Eesnimi"
 msgid "Forget previous e-mails, mail all recipients again."
 msgstr "Unustage eelmised e-kirjad, saatke kõik adressaadid uuesti."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:7
+#: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:13
 msgid "From now on you will receive mail from our mailing list."
 msgstr "Nüüdsest saate meile meie meililoendist."
 
@@ -8082,7 +8081,7 @@ msgstr "Minge postiloendi lehele"
 msgid "Hello,"
 msgstr "Tere,"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:8
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:10
 msgid "Help about mailing lists"
 msgstr "Abi postiloendite kohta"
 
@@ -8094,9 +8093,17 @@ msgstr "Abi postituslehe kohta"
 msgid "Here you can change subscriptions connected to your email address <b>{email}</b>."
 msgstr "Siin saate muuta oma e-posti aadressiga seotud tellimusi <b>{email}</b>."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:23
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:84
 msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://docs.zotonic.com/en/latest/developer-guide/search.html#query-arguments\">documentation on the query arguments</a> on the Zotonic website."
 msgstr "Siin saate muuta otsingupäringu argumente. Iga argument läheb oma rida. Lisateabe saamiseks vaadake päringuargumentide</a> dokumentatsiooni <a href=\"https://docs.zotonic.com/en/latest/developer-guide/search.html#query-arguments\">Zotonicu veebisaidil."
+
+#: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:24
+msgid "If you don’t want to receive any mail then please ignore this message."
+msgstr "Kui te ei soovi ühtegi kirja saada, siis palun ignoreerige seda sõnumit."
+
+#: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:16
+msgid "If you don’t want to receive any more mail then <a href=\"{url}\">click here to unsubscribe</a>."
+msgstr "Kui te ei soovi enam e-kirju saada, siis <a href=\"{url}\">klõpsake siin tellimuse tühistamiseks</a>."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:44
 msgid "If you opt-out then it is still possible to subscribe to mailing lists using an e-mail address (instead of your account)."
@@ -8126,7 +8133,7 @@ msgstr "Mail"
 msgid "Mailing Lists"
 msgstr "Postitusloendid"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:4./apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:4
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:4
 msgid "Mailing list"
 msgstr "Postiloend"
 
@@ -8138,11 +8145,15 @@ msgstr "Postiloendid"
 msgid "Mailing status"
 msgstr "Postituse olek"
 
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:6
+msgid "Mailinglist email text and recipients query"
+msgstr "Postitusloendi e-kirja tekst ja saajate päring"
+
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.tpl:4./apps/zotonic_mod_mailinglist/priv/templates/_admin_overview_list_page1.tpl:4
 msgid "Mailinglist subscriptions"
 msgstr "Meililistide tellimused"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:15
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:50
 msgid "Mailings are sent to:"
 msgstr "Postitused saadetakse aadressile:"
 
@@ -8194,13 +8205,13 @@ msgstr "Loobun kõigist minu kontoga seotud meililistidest"
 msgid "Our excuses for the inconvenience."
 msgstr "Meie vabandused ebamugavuste pärast."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:18
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:53
 msgid "Pages that have the 'subscriberof' edge to the mailinglist."
 msgstr "Lehed, millel on meililoendi serv „tellija”."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:19
-msgid "Pages that match the query below."
-msgstr "Lehed, mis vastavad allolevale päringule."
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:54
+msgid "Pages that match the recipients search query below."
+msgstr "Leheküljed, mis vastavad allolevale saaja otsingupäringule."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:51
 msgid "Perform operation"
@@ -8226,9 +8237,9 @@ msgstr "Sisestage e-posti aadress, millele soovite prooviposti saata."
 msgid "Please enter the e-mail address you want to send this page to."
 msgstr "Palun sisestage e-posti aadress, millele soovite selle lehe saata."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:11
-msgid "Please follow"
-msgstr "Palun järgige"
+#: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:17
+msgid "Please follow <a href=\"{url}\">this link to confirm</a>,  or copy and paste the address below in your browser."
+msgstr ""
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:16
 msgid "Please note:"
@@ -8238,7 +8249,7 @@ msgstr "Pane tähele:"
 msgid "Please unsubscribe"
 msgstr "Palun tühistage tellimus"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:34
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:53
 #: apps/zotonic_mod_signup/priv/templates/_signup_form_fields_email.tpl:30
 msgid "Prefix"
 msgstr "Eesliide"
@@ -8246,6 +8257,10 @@ msgstr "Eesliide"
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:20./apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:20
 msgid "Preview mailing"
 msgstr "Postituse eelvaade"
+
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:88
+msgid "Query, for example:"
+msgstr "Päring, näiteks:"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailing_page.collection.tpl:28
 msgid "Read more on the web"
@@ -8266,6 +8281,10 @@ msgstr "Saajad tellitakse kas ainult e-posti teel (lihtsa registreerimisvormi ka
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:3./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:7
 msgid "Recipients for"
 msgstr "Saaja"
+
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:81
+msgid "Recipients search query"
+msgstr "Saajate otsingupäring"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
 msgid "Remove this recipient. No undo possible."
@@ -8327,15 +8346,15 @@ msgstr "Saada see leht ühele aadressile"
 msgid "Send this page to the test mailing list."
 msgstr "Saada see leht testpostiloendisse."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:71
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:90
 msgid "Send welcome"
 msgstr "Saada teretulnud"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:26
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:28./apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:30
 msgid "Sender address for e-mails (optional)"
 msgstr "E-kirjade saatja aadress (valikuline)"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:21
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:23./apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:24
 msgid "Sender name for e-mails (optional)"
 msgstr "Saatja nimi e-kirjadele (valikuline)"
 
@@ -8355,15 +8374,15 @@ msgstr "Lehe saatmine testpostiloendisse ..."
 msgid "Sent on"
 msgstr "Saadetud"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.mailinglist.tpl:18
-msgid "Show all recipients &raquo;"
-msgstr "Kuva kõigile adressaatidele &raquo;"
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:57
+msgid "Show all recipients"
+msgstr "Kuva kõik saajad"
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:31
 msgid "Sorry, I could not subscribe you to the mailing list. Please try again later or with another e-mail address."
 msgstr "Vabandust, ma ei saanud teid postitusloendisse tellida. Proovige hiljem uuesti või kasutage mõnda muud e-posti aadressi."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:26
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:25
 msgid "Sorry, can’t confirm your subscription"
 msgstr "Kahjuks ei saa teie tellimust kinnitada"
 
@@ -8379,7 +8398,7 @@ msgstr "Vabandust, midagi läks valesti. Palun proovi hiljem uuesti."
 msgid "Sorry, something went wrong. Please try to re-subscribe."
 msgstr "Vabandust, midagi läks valesti. Proovige uuesti tellida."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:14./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:83./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:18
+#: apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:33./apps/zotonic_mod_mailinglist/priv/templates/_mailinglist_subscribe_form.tpl:102./apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:18
 msgid "Subscribe"
 msgstr "Telli"
 
@@ -8395,13 +8414,17 @@ msgstr "Tellitud teenusega"
 msgid "Subscriber Edges"
 msgstr "Tellija servad"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content.mailinglist.tpl:17
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:52
 msgid "Subscribers, added via the subscription form."
 msgstr "Tellijad, lisatud tellimisvormi kaudu."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_dialog_mailinglist_combine.tpl:33
 msgid "Target mailing list"
 msgstr "Sihtpostiloend"
+
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:63
+msgid "Text shown below the confirmation, welcome and unsubscribe e-mails."
+msgstr "Kinnitus-, tervitus- ja tellimuse tühistamise e-kirjade all kuvatav tekst."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:21
 msgid "Thank you. You are now subscribed."
@@ -8411,7 +8434,7 @@ msgstr "Aitäh. Olete nüüd tellinud."
 msgid "Thank you. You are now unsubscribed."
 msgstr "Aitäh. Teie tellimus on nüüd tühistatud."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:28
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:27
 msgid "The confirmation key is unknown. Either you already confirmed or something else went wrong."
 msgstr "Kinnitusvõti pole teada. Kas olete juba kinnitanud või läks midagi muud valesti."
 
@@ -8483,7 +8506,7 @@ msgstr "Tühista tellimus"
 msgid "Unsubscribe from mailing list"
 msgstr "Lõpeta meililoendi tellimus"
 
-#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:102
+#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:114
 msgid "Updated the recipient."
 msgstr "Värskendas saajat."
 
@@ -8499,6 +8522,10 @@ msgstr "Laadige üles saajate loend."
 msgid "Use the link in your email to manage your subscriptions."
 msgstr "Tellimuste haldamiseks kasutage meilis olevat linki."
 
+#: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:38
+msgid "Used for uploading CSV files with recipients."
+msgstr "Kasutatakse CSV-failide üleslaadimiseks koos adressaatidega."
+
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_edit_sidebar.tpl:18
 msgid "View this page as mailing."
 msgstr "Kuva see leht postitamisena."
@@ -8507,15 +8534,7 @@ msgstr "Kuva see leht postitamisena."
 msgid "Welcome to"
 msgstr "Tere tulemast"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:15
-msgid "When you don’t want to receive any mail then please ignore this message."
-msgstr "Kui te ei soovi ühtegi kirja saada, siis ignoreerige seda sõnumit."
-
-#: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:9
-msgid "When you don’t want to receive any more mail then"
-msgstr "Kui te ei soovi enam e-kirju saada, siis"
-
-#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:80
+#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:92
 msgid "You are not allowed to add or enable recipients."
 msgstr "Teil pole lubatud adressaate lisada ega lubada."
 
@@ -8527,7 +8546,7 @@ msgstr "Teil pole lubatud seda postitust tühistada."
 msgid "You are not allowed to delete the mailing list."
 msgstr "Teil pole lubatud postiloendit kustutada."
 
-#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:108
+#: apps/zotonic_mod_mailinglist/src/scomps/scomp_mailinglist_mailinglist_subscribe.erl:120
 msgid "You are not allowed to edit recipients."
 msgstr "Teil pole lubatud adressaate muuta."
 
@@ -8551,9 +8570,9 @@ msgstr "Teil pole lubatud adressaatide loendit vaadata ega muuta. Adressaatide m
 msgid "You are not subscribed to any mailing lists."
 msgstr "Te ei ole liitunud ühegi meililistiga."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:7
-msgid "You are now subscribed to our mailing list"
-msgstr "Olete nüüd liitunud meie meililistiga"
+#: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:8
+msgid "You are now subscribed to our mailing list <b><a href=\"{url}\">{title}</a></b> with your e-mail address <b>{email}</b>."
+msgstr "Oled nüüd meie meililistiga <b><a href=\"{url}\">{title}</a></b> liitunud oma e-posti aadressiga <b>{email}</b>."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_goodbye.tpl:3
 msgid "You are now unsubscribed from"
@@ -8571,7 +8590,7 @@ msgstr "Olete liitunud järgmiste meililistidega."
 msgid "You can opt-out of all current and future mailings using your account on this website."
 msgstr "Saate loobuda kõigist praegustest ja tulevastest kirjadest, kasutades sellel veebisaidil oma kontot."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:29
+#: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_confirm.tpl:28
 msgid "You can try to re-subscribe to one of our mailing lists in the side column."
 msgstr "Külgveerus saate proovida uuesti tellida ühte meie meililistidest."
 
@@ -8587,13 +8606,13 @@ msgstr "Saite selle kirja, kuna olete liitunud meililistiga"
 msgid "You will receive a confirmation in your e-mail."
 msgstr "Te saate kinnituse oma e-postile."
 
-#: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:8
-msgid "You, or someone else, added your e-mail address to our mailing list"
-msgstr "Teie või keegi teine lisasite oma meiliaadressi meie meililistile"
+#: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:9
+msgid "You, or someone else, added your e-mail address to our mailing list <b><a href=\"{url}\">{title}</a></b>."
+msgstr "Teie või keegi teine lisas oma e-posti aadressi meie meililisti <b><a href=\"{url}\">{title}</a></b>."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:26
-msgid "Your e-mail address is added to the mailing list. A confirmation mail is sent to your e-mail address and will arrive shortly. When you don’t receive it, then please check your spam folder."
-msgstr "Teie e-posti aadress lisatakse meililistile. Teie e-posti aadressile saadetakse kinnituskiri, mis saabub peagi. Kui te seda ei saa, kontrollige palun oma rämpsposti kausta."
+msgid "Your e-mail address is added to the mailing list. A confirmation mail is sent to your e-mail address and will arrive shortly. If you don’t receive it, then please check your spam folder."
+msgstr "Teie e-posti aadress on lisatud meililisti. Kinnituskiri saadetakse teie e-posti aadressile ja saabub peagi. Kui te seda ei saa, siis palun kontrollige oma rämpsposti kausta."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/mailinglist_subscriptions.tpl:16
 msgid "Your mailing list subscriptions"
@@ -8615,10 +8634,6 @@ msgstr "tühista"
 msgid "clear"
 msgstr "selge"
 
-#: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:9
-msgid "click here to unsubscribe."
-msgstr "tellimuse tühistamiseks klõpsake siin."
-
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:8
 msgid "has been sent to the following lists:"
 msgstr "on saadetud järgmistesse loenditesse:"
@@ -8638,10 +8653,6 @@ msgstr "meililist"
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:8
 msgid "mailinglist status page"
 msgstr "meililisti oleku leht"
-
-#: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:11
-msgid "or copy and paste the address below in your browser."
-msgstr "või kopeerige ja kleepige allolev aadress oma brauserisse."
 
 #: apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:46./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:51
 msgid "pages"
@@ -8666,14 +8677,6 @@ msgstr "saatke postitusi"
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:43
 msgid "send to"
 msgstr "saada"
-
-#: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:11
-msgid "this link to confirm"
-msgstr "selle lingi kinnitamiseks"
-
-#: apps/zotonic_mod_mailinglist/priv/templates/email_mailinglist_welcome.tpl:7
-msgid "with your e-mail address"
-msgstr "oma e-posti aadressiga"
 
 #: apps/zotonic_mod_menu/priv/templates/_menu_edit_item.tpl:30
 msgid "Add after"
@@ -9490,6 +9493,10 @@ msgstr "Ehitage uuesti otsingu tahud"
 msgid "Rebuilding the faceted search table."
 msgstr "Lihvitud otsingutabeli taastamine."
 
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:146
+msgid "Add Plausible tracking script"
+msgstr "Lisa usutav jälgimisskript"
+
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:69
 msgid "Add a noindex, nofollow element to all pages."
 msgstr "Lisa noindex, nofollow elemendid kõigile lehtedele."
@@ -9542,7 +9549,7 @@ msgstr "Kirjeldus, mis haaratakse kõigile lehtedele"
 msgid "Do not show site search action"
 msgstr "Ära näita saidiotsingu toimingut"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:119./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:132./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:146
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:119./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:132./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:163
 msgid "Enter here the verification code for"
 msgstr "Sisestage siia konto kinnituskood"
 
@@ -9581,6 +9588,10 @@ msgstr "Siit leiate seaded saidi indekseerimise optimeerimiseks otsingumootorite
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:101
 msgid "I accept the security risk of adding custom code in Google Tag Manager"
 msgstr "Nõustun Google Tag Manageris kohandatud koodi lisamisega seotud turvariskiga"
+
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:149
+msgid "If you check this then the default tracking script for Plausible will be added, using the domain <tt>{domain}</tt>."
+msgstr "Kui te selle märgite, lisatakse usutava vaikejälgimisskript, kasutades domeeni <tt>{domain}</tt>."
 
 #: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:50
 msgid "If your site does not have a search page, check this box to prevent displaying a search box on Google et al."
@@ -9626,7 +9637,7 @@ msgstr "SEO sisu"
 msgid "SEO indexing of this page is disabled because it is in the “{cat}” category."
 msgstr "Selle lehe SEO indekseerimine on keelatud, kuna see on kategoorias \"{cat}\"."
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:156
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:173
 msgid "Save SEO settings"
 msgstr "Salvesta SEO seaded"
 
@@ -9662,15 +9673,15 @@ msgstr "Saidi otsingutoimingu URL. Vaikimisi:"
 msgid "Where can I find my tracking script?"
 msgstr "Kust leida oma jälgimisskript?"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:146
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:163
 msgid "Yandex Webmaster"
 msgstr "Yandexi veebimeister"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:143./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:144
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:160./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:161
 msgid "Yandex Webmaster validation id"
 msgstr "Yandexi veebimeistri valideerimise ID"
 
-#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:133./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:147
+#: apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:133./apps/zotonic_mod_seo/priv/templates/admin_seo.tpl:164
 msgid "You find this id in the content attribute of the meta tag, it has the format"
 msgstr "Selle ID leiate metasildi atribuudist content, see on vormingus"
 
