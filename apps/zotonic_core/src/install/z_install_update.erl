@@ -334,6 +334,7 @@ upgrade(C, Database, Schema) ->
     ok = media_frame_count(C, Database, Schema),
     ok = identity_log(C, Database, Schema),
     ok = medium_update_v2(C, Database, Schema),
+    ok = pivot_page_path(C, Database, Schema),
     ok.
 
 
@@ -977,7 +978,7 @@ media_frame_count(C, Database, Schema) ->
                 in => zotonic_core,
                 database => Database,
                 schema => Schema,
-                table => rsc
+                table => medium
             }),
             {ok, [], []} = epgsql:squery(C,
                                     "alter table medium "
@@ -1064,5 +1065,33 @@ medium_size_bigint(C, Database, Schema) ->
             ok;
         _ ->
             {ok,[],[]} = epgsql:squery(C, "alter table medium alter column size type bigint"),
+            ok
+    end.
+
+pivot_page_path(C, Database, Schema) ->
+    case has_column(C, "rsc", "pivot_page_path", Database, Schema) of
+        true ->
+            ok;
+        false ->
+            ?LOG_NOTICE(#{
+                text => <<"Upgrade: adding pivot_page_path column to rsc">>,
+                in => zotonic_core,
+                database => Database,
+                schema => Schema,
+                table => rsc
+            }),
+            {ok, [], []} = epgsql:squery(C,
+                                    "alter table rsc "
+                                    "add column pivot_page_path character varying(80)[],"
+                                    "drop constraint if exists rsc_page_path_key"),
+            {ok, _} = epgsql:squery(C,
+                                    "update rsc "
+                                    "set pivot_page_path = array[page_path]"
+                                    "where page_path is not null and page_path <> ''"),
+            {ok, [], []} = epgsql:squery(C,
+                                    "alter table rsc "
+                                    "drop column page_path"),
+            {ok, [], []} = epgsql:squery(C,
+                                    "CREATE INDEX IF NOT EXISTS rsc_pivot_page_path_key ON rsc USING gin(pivot_page_path)"),
             ok
     end.

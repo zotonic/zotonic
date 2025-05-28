@@ -157,7 +157,6 @@ model_pgsql() ->
       id serial NOT NULL,
       uri character varying(2048),
       name character varying(80),
-      page_path character varying(80),
       is_authoritative boolean NOT NULL DEFAULT true,
       is_published boolean NOT NULL DEFAULT false,
       is_featured boolean NOT NULL DEFAULT false,
@@ -180,6 +179,7 @@ model_pgsql() ->
 
       -- pivot fields for searching
       pivot_category_nr int,
+      pivot_page_path character varying(80)[],
       pivot_tsv tsvector,       -- texts
       pivot_rtsv tsvector,      -- related ids (cat, prop, rsc)
 
@@ -207,7 +207,6 @@ model_pgsql() ->
       CONSTRAINT rsc_pkey PRIMARY KEY (id),
       CONSTRAINT rsc_uri_key UNIQUE (uri),
       CONSTRAINT rsc_name_key UNIQUE (name),
-      CONSTRAINT rsc_page_path_key UNIQUE (page_path),
 
       CONSTRAINT fk_rsc_content_group_id FOREIGN KEY (content_group_id)
       REFERENCES rsc (id)
@@ -220,7 +219,6 @@ model_pgsql() ->
       CONSTRAINT fk_rsc_modifier_id FOREIGN KEY (modifier_id)
       REFERENCES rsc (id)
       ON UPDATE CASCADE ON DELETE SET NULL,
-
 
       CONSTRAINT fk_rsc_category_id FOREIGN KEY (category_id)
       REFERENCES rsc (id)
@@ -235,6 +233,8 @@ model_pgsql() ->
      "CREATE INDEX IF NOT EXISTS rsc_language_key ON rsc USING gin(language)",
      "CREATE INDEX IF NOT EXISTS rsc_pivot_tsv_key ON rsc USING gin(pivot_tsv)",
      "CREATE INDEX IF NOT EXISTS rsc_pivot_rtsv_key ON rsc USING gin(pivot_rtsv)",
+
+     "CREATE INDEX IF NOT EXISTS rsc_pivot_page_path_key ON rsc USING gin(pivot_page_path)",
 
      "CREATE INDEX IF NOT EXISTS rsc_pivot_category_nr ON rsc (pivot_category_nr)",
      "CREATE INDEX IF NOT EXISTS rsc_pivot_surname_key ON rsc (pivot_surname)",

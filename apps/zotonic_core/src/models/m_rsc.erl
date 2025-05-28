@@ -239,7 +239,7 @@ name_to_id_cat(Name, Cat, Context) ->
     z_depcache:memo(F, {rsc_name, Name, Cat}, ?DAY, [Cat], Context).
 
 %% @doc Given a page path, return {ok, Id} with the id of the found
-%% resource. When the resource does not have the page path, but did so
+%% resource. If a resource does not have the page path, but did so
 %% once, this function will return {redirect, Id} to indicate that the
 %% page path was found but is no longer the current page path for the
 %% resource.
@@ -252,7 +252,7 @@ page_path_to_id(Path, Context) ->
     Path1 = iolist_to_binary([ $/, z_string:trim(Path, $/) ]),
     case is_utf8(Path1) of
         true when size(Path1) < 200 ->
-            case z_db:q1("select id from rsc where page_path = $1", [Path1], Context) of
+            case z_db:q1("select id from rsc where pivot_page_path @> $1", [ [Path1] ], Context) of
                 undefined ->
                     case z_db:q1(
                         "select id from rsc_page_path_log where page_path = $1",
@@ -414,6 +414,7 @@ get_raw(Id, IsLock, Context) when ?is_valid_rsc_id(Id) ->
                 fun (<<"pivot_geocode">>) -> true;
                     (<<"pivot_location_lat">>) -> true;
                     (<<"pivot_location_lng">>) -> true;
+                    (<<"pivot_page_path">>) -> true;
                     (<<"pivot_", _/binary>>) -> false;
                     (_) -> true
                 end,
@@ -433,7 +434,8 @@ get_raw(Id, IsLock, Context) when ?is_valid_rsc_id(Id) ->
     end,
     case z_db:qmap_props_row(SQL1, [ Id ], [ {keys, binary} ], Context) of
         {ok, Map} ->
-            {ok, map_language_atoms(Map)};
+            Map1 = maybe_fix_page_path(Map),
+            {ok, map_language_atoms(Map1)};
         {error, _} = Error ->
             Error
     end;
@@ -443,6 +445,13 @@ get_raw(undefined, _IsLock, _Context) ->
     {error, enoent};
 get_raw(Id, IsLock, Context) ->
     get_raw(rid(Id, Context), IsLock, Context).
+
+maybe_fix_page_path(#{ <<"page_path">> := _ } = Map) ->
+    maps:remove(<<"pivot_page_path">>, Map);
+maybe_fix_page_path(#{ <<"pivot_page_path">> := [ Path ] } = Map) when is_binary(Path) ->
+    maps:remove(<<"pivot_page_path">>, Map#{ <<"page_path">> => Path });
+maybe_fix_page_path(Map) ->
+    maps:remove(<<"pivot_page_path">>, Map).
 
 %% The languages are stored as a psql array, map to the internal atom
 %% representation. On update this is mapped to binaries in z_db:update/3.
@@ -824,15 +833,23 @@ p_no_acl(Id, <<"is_a">>, Context) -> is_a(Id, Context);
 p_no_acl(Id, <<"exists">>, Context) -> exists(Id, Context);
 p_no_acl(Id, <<"page_url_abs">>, Context) ->
     case p_no_acl(Id, <<"page_path">>, Context) of
-        undefined -> page_url(Id, true, Context);
+        undefined ->
+            page_url(Id, true, Context);
         PagePath ->
-            opt_url_abs(z_notifier:foldl(#url_rewrite{args = [{id, Id}]}, PagePath, Context), true, Context)
+            case path_for_lang(PagePath, Context) of
+                <<>> -> page_url(Id, true, Context);
+                Path -> opt_url_abs(z_notifier:foldl(#url_rewrite{args = [{id, Id}]}, Path, Context), true, Context)
+            end
     end;
 p_no_acl(Id, <<"page_url">>, Context) ->
     case p_no_acl(Id, <<"page_path">>, Context) of
-        undefined -> page_url(Id, false, Context);
+        undefined ->
+            page_url(Id, false, Context);
         PagePath ->
-            opt_url_abs(z_notifier:foldl(#url_rewrite{args = [{id, Id}]}, PagePath, Context), false, Context)
+            case path_for_lang(PagePath, Context) of
+                <<>> -> page_url(Id, true, Context);
+                Path -> z_notifier:foldl(#url_rewrite{args = [{id, Id}]}, Path, Context)
+            end
     end;
 p_no_acl(Id, <<"translation">>, Context) ->
     fun(Code) ->
@@ -911,6 +928,22 @@ p_cached_1(Id, Property, Context) ->
             end
     end.
 
+path_for_lang(undefined, _Context) ->
+    <<>>;
+path_for_lang(#trans{ tr = Tr } = PagePath, Context) ->
+    case z_trans:lookup_fallback(PagePath, Context) of
+        <<>> ->
+            case [ {Lang, Path } || {Lang, Path} <- Tr, Path =/= <<>> ] of
+                [] ->
+                    <<>>;
+                Tr1 ->
+                    z_trans:lookup_fallback(#trans{ tr = Tr1 }, Context)
+            end;
+        Path ->
+            Path
+    end;
+path_for_lang(Path, _Context) ->
+    Path.
 
 %% @doc Determine the non informational uri of a resource.
 -spec uri( resource() | undefined, z:context() ) -> binary() | undefined.

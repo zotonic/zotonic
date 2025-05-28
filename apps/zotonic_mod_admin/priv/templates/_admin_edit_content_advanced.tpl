@@ -1,4 +1,4 @@
-{% extends "admin_edit_widget_std.tpl" %}
+{% extends "admin_edit_widget_i18n.tpl" %}
 
 {# Widget to edit some advanced rsc props #}
 
@@ -12,14 +12,20 @@
 
 {% block widget_content %}
     <div class="form-group label-floating">
-        <input class="form-control" type="text" id="field-page-path" name="page_path" value="{{ id.page_path|urldecode|escape }}"
+        <input type="text" id="page_path{{ lang_code_for_id }}"
+            name="page_path{{ lang_code_with_dollar }}"
+            placeholder="{_ Page path _} {{ lang_code_with_brackets }} &mdash; {{ id.default_page_url|escape }}"
+            value="{{ (is_i18n|if : id.translation[lang_code].page_path : id.page_path)|urldecode|escape }}"
             {% if not id.is_editable %}disabled="disabled"{% endif %}
-            {% include "_language_attrs.tpl" language=`en` %}
-            placeholder="{_ Page path _} &mdash; {{ id.default_page_url|escape }}"
+            {% include "_language_attrs.tpl" language=lang_code class="form-control" %}
         >
-        <label class="control-label" for="field-page-path">{_ Page path _}</label>
+        <label class="control-label" for="{{ #title }}{{ lang_code_for_id }}">
+            {_ Page path _} {{ lang_code_with_brackets }}
+        </label>
     </div>
+{% endblock %}
 
+{% block widget_content_nolang %}
     <div class="form-group">
         <label class="control-label">
             <input type="checkbox" id="field-is-page-path-multiple"
