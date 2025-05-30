@@ -295,6 +295,23 @@ A boolean option that specifies if a page should not be findable::
 
 This checks the rescource’s ``is_unfindable`` flag.
 
+is_protected
+^^^^^^^^^^^^
+
+Boolean, filters whether a resource is protected::
+
+    is_protected
+
+is_dependent
+^^^^^^^^^^^^
+
+Boolean, filters whether a resource is dependent on other resources.
+When resources are dependent they will be automatically removed when
+no other resources have edges to it::
+
+    is_dependent
+
+
 upcoming
 ^^^^^^^^
 
