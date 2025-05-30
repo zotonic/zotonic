@@ -931,13 +931,14 @@ p_cached_1(Id, Property, Context) ->
 path_for_lang(undefined, _Context) ->
     <<>>;
 path_for_lang(#trans{ tr = Tr } = PagePath, Context) ->
-    case z_trans:lookup_fallback(PagePath, Context) of
+    Langs = [ z_context:language(Context) ],
+    case z_trans:lookup_fallback(PagePath, Langs, Context) of
         <<>> ->
             case [ {Lang, Path } || {Lang, Path} <- Tr, Path =/= <<>> ] of
                 [] ->
                     <<>>;
                 Tr1 ->
-                    z_trans:lookup_fallback(#trans{ tr = Tr1 }, Context)
+                    z_trans:lookup_fallback(#trans{ tr = Tr1 }, Langs, Context)
             end;
         Path ->
             Path

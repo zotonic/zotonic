@@ -130,7 +130,9 @@ gone(Id, Context) when is_integer(Id) ->
 %%      Also sets the 'new id', which is the id that replaces the deleted id.
 gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:= undefined ->
     case z_db:assoc_row("
-            select id, name, version, page_path, uri, is_authoritative, creator_id, created
+            select id, is_authoritative, name, version,
+                   pivot_page_path as page_paths, uri,
+                   creator_id, created
             from rsc
             where id = $1
             ", [Id], Context)
@@ -200,7 +202,7 @@ install(Context) ->
                     version int not null,
                     uri character varying(2048),
                     name character varying(80),
-                    page_path character varying(80),
+                    page_paths character varying(80)[],
                     is_authoritative boolean NOT NULL DEFAULT true,
                     creator_id bigint,
                     modifier_id bigint,
@@ -213,7 +215,7 @@ install(Context) ->
 
             [] = z_db:q("CREATE INDEX IF NOT EXISTS rsc_gone_name_key ON rsc_gone(name)", Context),
             [] = z_db:q("CREATE INDEX IF NOT EXISTS rsc_gone_uri_key ON rsc_gone(uri)", Context),
-            [] = z_db:q("CREATE INDEX IF NOT EXISTS rsc_gone_page_path_key ON rsc_gone(page_path)", Context),
+            [] = z_db:q("CREATE INDEX IF NOT EXISTS rsc_gone_page_paths_key ON rsc_gone USING gin(page_paths)", Context),
             [] = z_db:q("CREATE INDEX IF NOT EXISTS rsc_gone_modified_key ON rsc_gone(modified)", Context),
             z_db:flush(Context),
             ok;
@@ -230,6 +232,19 @@ install(Context) ->
             case z_db:column_exists(rsc_gone, is_personal_data, Context) of
                 false ->
                     [] = z_db:q("ALTER TABLE rsc_gone ADD COLUMN is_personal_data boolean NOT NULL DEFAULT false", Context),
+                    z_db:flush(Context);
+                true ->
+                    ok
+            end,
+            % Check for page_paths column
+            case z_db:column_exists(rsc_gone, page_paths, Context) of
+                false ->
+                    [] = z_db:q("ALTER TABLE rsc_gone ADD COLUMN page_paths character varying(80)[]", Context),
+                    z_db:q("update rsc_gone
+                            set page_paths = array[page_path]
+                            where page_path is not null", Context),
+                    [] = z_db:q("ALTER TABLE rsc_gone DROP COLUMN page_path CASCADE", Context),
+                    [] = z_db:q("CREATE INDEX IF NOT EXISTS rsc_gone_page_paths_key ON rsc_gone USING gin(page_paths)", Context),
                     z_db:flush(Context);
                 true ->
                     ok

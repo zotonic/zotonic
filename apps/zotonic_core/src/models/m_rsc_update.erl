@@ -1240,6 +1240,7 @@ preflight_check_name(_Id, _Props, _Context) ->
     ok.
 
 
+%% @doc Preflight checks are done after the page_path is normalized.
 preflight_check_page_path(Id, #{ <<"page_path">> := PagePath }, Context) ->
     case page_paths(PagePath) of
         [] ->
@@ -1550,9 +1551,10 @@ props_filter(P, V, Acc, _Context) ->
 normalize_page_path(<<>>) ->
     <<>>;
 normalize_page_path(Path) ->
-    iolist_to_binary([
+    Path1 = iolist_to_binary([
         $/, z_string:trim(z_url:url_path_encode(Path), $/)
-    ]).
+    ]),
+    binary:replace(Path1, [ <<"&">>, <<"=">> ], <<"-">>, [ global ]).
 
 
 %% Filter all given languages, drop unknown languages.

@@ -12,14 +12,14 @@
 
 {% block widget_content %}
     <div class="form-group label-floating">
-        <input type="text" id="page_path{{ lang_code_for_id }}"
+        <input type="text" id="field-page-path{{ lang_code_for_id }}"
             name="page_path{{ lang_code_with_dollar }}"
             placeholder="{_ Page path _} {{ lang_code_with_brackets }} &mdash; {{ id.default_page_url|escape }}"
             value="{{ (is_i18n|if : id.translation[lang_code].page_path : id.page_path)|urldecode|escape }}"
             {% if not id.is_editable %}disabled="disabled"{% endif %}
             {% include "_language_attrs.tpl" language=lang_code class="form-control" %}
         >
-        <label class="control-label" for="{{ #title }}{{ lang_code_for_id }}">
+        <label class="control-label" for="field-page-path{{ lang_code_for_id }}">
             {_ Page path _} {{ lang_code_with_brackets }}
         </label>
     </div>
