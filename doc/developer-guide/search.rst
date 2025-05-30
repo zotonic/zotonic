@@ -103,9 +103,14 @@ database table, and the second column name to be the filter value::
 If the filter is a three-column list, the second column is the
 operator. This must be an atom (surround it in backquotes!) and must
 be one of the following: ``eq``, ``ne``, ``gt``, ``gte``, ``lt``,
-``lte``; or one of ``=``, ``<>``, ``>``, ``>=``, ``<``, ``<=``, ``~``::
+``lte``; or one of ``=``, ``<>``, ``>``, ``>=``, ``<``, ``<=``, ``~``,
+``contains``, or ``overlaps``::
 
     filter=['facet.numeric_value', `>`, 10]
+
+or::
+
+    filter=['facet.keyword', `contains`, [`zotonic`, `search`]]
 
 It is possible to define an OR query for multiple terms::
 
