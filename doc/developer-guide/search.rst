@@ -311,7 +311,6 @@ no other resources have edges to it::
 
     is_dependent
 
-
 upcoming
 ^^^^^^^^
 
@@ -661,6 +660,63 @@ date_end_year
 Select items with an "event end date" in the given year::
 
     date_end_year=2012
+
+publication_year
+^^^^^^^^^^^^^^^^
+
+Select items with publication year in the given year::
+
+    publication_year=2012
+
+publication_month
+^^^^^^^^^^^^^^^^^
+
+Select items which are published in the given month::
+
+    publication_month=2
+
+publication_after
+^^^^^^^^^^^^^^^^^
+
+Select items which are published after the specified date::
+
+    publication_after="2012-12-1"
+
+publication_before
+^^^^^^^^^^^^^^^^^^
+
+Select items which are published before the specified date::
+
+    publication_before="2024-12-1"
+
+created_after
+^^^^^^^^^^^^^
+
+Select items which are created after the specified date::
+
+    created_after="2012-12-1"
+
+created_before
+^^^^^^^^^^^^^^
+
+Select items which are created before the specified date::
+
+    created_before="2024-12-1"
+
+modified_after
+^^^^^^^^^^^^^^
+
+Select items which are modified after the specified date::
+
+    modified_after="2017-5-17"
+
+modified_before
+^^^^^^^^^^^^^^^
+
+Select items which are modified before the specified date::
+
+    modified_before="2024-12-1"
+
 
 content_group
 ^^^^^^^^^^^^^
