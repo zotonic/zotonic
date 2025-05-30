@@ -44,6 +44,8 @@
     pool_get_connection/1,
     is_connection_alive/1,
 
+    build_connect_options/2,
+
     ensure_all_started/0,
     test_connection/1,
     squery/3,
@@ -51,13 +53,6 @@
     execute_batch/4,
     get_raw_connection/1
 ]).
-
-%% Used by the z_install_update to access props columns
--export([
-    decode_value/1
-    ]).
-
--define(TERM_MAGIC_NUMBER, 16#01326A3A:1/big-unsigned-unit:32).
 
 -define(CONNECT_TIMEOUT, 5000).
 -define(IDLE_TIMEOUT, 60000).
@@ -189,9 +184,11 @@ squery(Worker, Sql, Timeout) ->
         true ->
             case fetch_conn(Worker, Sql, [], Timeout) of
                 {ok, {Conn, Ref}} ->
-                    Result = epgsql:squery(Conn, Sql),
-                    ok = return_conn(Worker, Ref),
-                    decode_reply(Result);
+                    try
+                        epgsql:squery(Conn, Sql)
+                    after
+                        ok = return_conn(Worker, Ref)
+                    end;
                 {error, _} = Error ->
                     Error
             end;
@@ -212,9 +209,11 @@ equery(Worker, Sql, Parameters, Timeout) ->
         true ->
             case fetch_conn(Worker, Sql, Parameters, Timeout) of
                 {ok, {Conn, Ref}} ->
-                    Result = epgsql:equery(Conn, Sql, encode_values(Parameters)),
-                    ok = return_conn(Worker, Ref),
-                    decode_reply(Result);
+                    try
+                        epgsql:equery(Conn, Sql, Parameters)
+                    after
+                        ok = return_conn(Worker, Ref)
+                    end;
                 {error, _} = Error ->
                     Error
             end;
@@ -236,20 +235,24 @@ execute_batch(Worker, Sql, Batch, Timeout) ->
         true ->
             case fetch_conn(Worker, Sql, Batch, Timeout) of
                 {ok, {Conn, Ref}} ->
-                    EncodedBatch = [encode_values(P) || P <- Batch],
-                    {Columns, Result} = epgsql:execute_batch(Conn, Sql, EncodedBatch),
-                    ok = return_conn(Worker, Ref),
-                    Result1 = lists:map(
-                        fun
-                            ({ok, Count, Rows}) when is_list(Rows) ->
-                                {ok, Count, Columns, Rows};
-                            ({ok, Rows}) when is_list(Rows) ->
-                                {ok, Columns, Rows};
-                            ({ok, _} = Ok) -> Ok;
-                            ({error, _} = Error) -> Error
-                        end,
-                        Result),
-                    {ok, [ decode_reply(R) || R <- Result1 ]};
+                    try
+                        {Columns, Result} = epgsql:execute_batch(Conn, Sql, Batch),
+                        Result1 = lists:map(
+                                    fun
+                                        ({ok, Count, Rows}) when is_list(Rows) ->
+                                            {ok, Count, Columns, Rows};
+                                        ({ok, Rows}) when is_list(Rows) ->
+                                            {ok, Columns, Rows};
+                                        ({ok, _} = Ok) ->
+                                            Ok;
+                                        ({error, _} = Error) ->
+                                            Error
+                                    end,
+                                    Result),
+                        {ok, Result1}
+                    after
+                        ok = return_conn(Worker, Ref)
+                    end;
                 {error, _} = Error ->
                     Error
             end;
@@ -740,15 +743,11 @@ connect(Args, RetryCt, MRef) ->
 % It is returning it, but the type spec in epgsql is wrong.
 -dialyzer({nowarn_function, connect_1/3}).
 connect_1(Args, RetryCt, MRef) ->
-    Hostname = get_arg(dbhost, Args),
-    Port = get_arg(dbport, Args),
-    Database = get_arg(dbdatabase, Args),
-    Username = get_arg(dbuser, Args),
-    Password = get_arg(dbpassword, Args),
-    Schema = get_arg(dbschema, Args),
     try
-        case epgsql:connect(Hostname, Username, Password,
-                           [{database, Database}, {port, Port}]) of
+        Database = get_arg(dbdatabase, Args),
+        Schema = get_arg(dbschema, Args),
+        Options = build_connect_options(Database, Args),
+        case epgsql:connect(Options) of
             {ok, Conn} ->
                 set_schema(Conn, Schema);
             {error, #error{ codename = too_many_connections }} ->
@@ -769,9 +768,7 @@ connect_1(Args, RetryCt, MRef) ->
                     in => zotonic_core,
                     database => Database,
                     schema => Schema,
-                    username => Username,
-                    hostname => Hostname,
-                    port => Port,
+                    options => Options,
                     result => error,
                     reason => Reason
                 }),
@@ -780,6 +777,24 @@ connect_1(Args, RetryCt, MRef) ->
     catch
         A:B ->
             retry(Args, {A, B}, RetryCt, MRef)
+    end.
+
+build_connect_options(DatabaseName, Args) ->
+    Opts = #{
+             database => DatabaseName,
+             codecs => [{z_db_pgsql_codec, []}],
+             nulls => [undefined, null, {term, undefined}, {term_json, undefined}]
+            },
+    maybe_put_args([{dbhost, host}, {dbport, port}, {dbuser, username}, {dbpassword, password}], Args, Opts).
+
+maybe_put_args([], _, Map) ->
+    Map;
+maybe_put_args([{ArgsKey, Key} | T], Args, Map) ->
+    case get_arg(ArgsKey, Args) of
+        undefined ->
+            maybe_put_args(T, Args, Map);
+        Value ->
+            maybe_put_args(T, Args, Map#{Key => Value})
     end.
 
 set_schema(Conn, Schema) ->
@@ -860,7 +875,7 @@ maybe_explain(_Duration, Sql, Params, Conn) ->
     case is_explainable(z_string:to_lower(Sql)) of
         true ->
             Sql1 = "explain "++Sql,
-            R = epgsql:equery(Conn, Sql1, encode_values(Params)),
+            R = epgsql:equery(Conn, Sql1, Params),
             maybe_log_query_plan(R);
         false ->
             ok
@@ -894,56 +909,3 @@ msec() ->
     {A, B, C} = os:timestamp(),
     A * 1000000000 + B * 1000 + C div 1000.
 
-%%
-%% These are conversion routines between how z_db expects values and how epgsl expects them.
-
-%% Notable differences:
-%% - Input values {term, ...} (use the ?DB_PROPS(...) macro!) are term_to_binary encoded and decoded
-%% - null <-> undefined
-%% - date/datetimes have a floating-point second argument in epgsql, in Zotonic they don't.
-
-encode_values(L) when is_list(L) ->
-    lists:map(fun encode_value/1, L).
-
-encode_value(undefined) ->
-    null;
-encode_value({term, undefined}) ->
-    null;
-encode_value({term, Term}) ->
-    B = term_to_binary(Term),
-    <<?TERM_MAGIC_NUMBER, B/binary>>;
-encode_value({term_json, undefined}) ->
-    null;
-encode_value({term_json, Term}) ->
-    jsxrecord:encode(Term);
-encode_value(Value) ->
-    Value.
-
-
-decode_reply({ok, Columns, Rows}) ->
-    {ok, Columns, lists:map(fun decode_values/1, Rows)};
-decode_reply({ok, Nr, Columns, Rows}) ->
-    {ok, Nr, Columns, lists:map(fun decode_values/1, Rows)};
-decode_reply({ok, _} = R) ->
-    R;
-decode_reply({error, _} = R) ->
-    R.
-
-decode_values(T) when is_tuple(T) ->
-    list_to_tuple(decode_values(tuple_to_list(T)));
-decode_values(L) when is_list(L) ->
-    lists:map(fun decode_value/1, L).
-
-decode_value({V}) ->
-    {decode_value(V)};
-
-decode_value(null) ->
-    undefined;
-decode_value(<<?TERM_MAGIC_NUMBER, B/binary>>) ->
-    binary_to_term(B);
-decode_value({H,M,S}) when is_float(S) ->
-    {H,M,trunc(S)};
-decode_value({{Y,Mm,D},{H,M,S}}) when is_float(S) ->
-    {{Y,Mm,D},{H,M,trunc(S)}};
-decode_value(V) ->
-    V.

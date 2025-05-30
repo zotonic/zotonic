@@ -51,3 +51,40 @@ alter_table_test() ->
     ok = z_db:drop_table(dbtests, Context),
     ok.
 
+postgres_datetime_conversion_test() ->
+    Context = z_context:new(zotonic_site_testsandbox),
+
+    ?assertMatch( [{{{_,_,_},{_,_,S}}}] when is_integer(S), z_db:q("select now();", Context)),
+    ?assertMatch( [{[{{_,_,_},{_,_,S}}]}] when is_integer(S), z_db:q("select array_agg(now());", Context)),
+    ?assertMatch( [{[{{{_,_,_},{_,_, S}}, _} ]}] when is_integer(S), z_db:q("select array_agg(row(now(), 1));", Context)),
+
+    ok.
+
+postgres_null_conversion_test() ->
+    Context = z_context:new(zotonic_site_testsandbox),
+    [{undefined}] = z_db:q("select null;", Context),
+    ok.
+
+postgres_eterm_conversion_test() ->
+    Context = z_context:new(zotonic_site_testsandbox),
+
+    %% Should be encoded as null value in postgres, which is returned as undefined.
+    [{undefined}] = z_db:q("select $1::bytea;", [{term, undefined}], Context),
+
+    [{#{ test := 123 }}] = z_db:q("select $1::bytea;", [{term, #{ test => 123 }}], Context),
+    ok.
+
+postgres_json_conversion_test() ->
+    Context = z_context:new(zotonic_site_testsandbox),
+
+    %% Should be encoded as null value in postgres, which is returned as undefined.
+    [{undefined}] = z_db:q("select $1::jsonb;", [{term_json, undefined}], Context),
+
+    %% Currently the result is not decoded.
+    [{<<"{\"test\": 123}">>}] = z_db:q("select $1::jsonb;", [{term_json, #{ test => 123 }}], Context),
+
+    %% Check if jsxrecord is used to encode the terms.
+    [{<<"{\"list\": [1], \"_type\": \"rsc_list\"}">>}] =
+        z_db:q("select $1::jsonb;", [{term_json, #rsc_list{ list = [1] }}], Context),
+
+    ok.
