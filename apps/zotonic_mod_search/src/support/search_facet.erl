@@ -1273,7 +1273,11 @@ template_facets(Context) ->
                     }),
                     {error, duplicate_blocks}
             end;
-        {error, _} = Error ->
+        {error, Reason} = Error ->
+            ?LOG_ERROR(#{ test => <<"Could not check facet.tpl">>,
+                          in => zotonic_mod_search,
+                          result => error,
+                          error => Reason }),
             Error
     end.
 
