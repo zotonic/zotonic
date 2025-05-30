@@ -142,16 +142,16 @@ m_get([ <<"-">>, <<"lookup">>, <<"page_path">> | Path ], _Msg, Context) ->
     Path1 = iolist_to_binary(lists:join($/, Path)),
     case page_path_to_id(Path1, Context) of
         {ok, Id} ->
-            {#{
+            {ok, {#{
                 <<"id">> => Id,
                 <<"is_redirect">> => false
-            }, []};
+            }, []}};
         {redirect, Id} ->
-            {#{
+            {ok, {#{
                 <<"id">> => Id,
                 <<"is_redirect">> => true,
                 <<"page_url">> => m_rsc:p(Id, <<"page_url">>, Context)
-            }, []};
+            }, []}};
         {error, _} = Error ->
             Error
     end;

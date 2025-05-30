@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2024 Marc Worrell, Arjan Scherpenisse
+%% @copyright 2009-2025 Marc Worrell, Arjan Scherpenisse
 %% @doc Update routines for resources.  For use by the m_rsc module.
 %% @end
 
-%% Copyright 2009-2024 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2009-2025 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -36,7 +36,8 @@
 
     delete_nocheck/2,
 
-    to_slug/1
+    to_slug/1,
+    normalize_page_path/1
 ]).
 
 -include_lib("zotonic.hrl").
