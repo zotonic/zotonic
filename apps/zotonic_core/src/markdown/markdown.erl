@@ -20,8 +20,15 @@
 -define(LF,    10).
 -define(CR,    13).
 -define(NBSP, 160).
+
+% Common HTML entities
 -define(AMP, $&, $a, $m, $p, $;).
 -define(COPY, $&, $c, $o, $p, $y, $;).
+-define(LT, $&, $l, $t, $;).
+-define(GT, $&, $g, $t, $;).
+-define(QUOT, $&, $q, $u, $o, $t, $;).
+-define(SQUOT, $&, $#, $3, $9, $;).
+
 
 %%% the lexer first lexes the input
 %%% make_lines does 2 passes:
@@ -753,6 +760,7 @@ is_block_tag("dir")        -> true;
 is_block_tag("div")        -> true;
 is_block_tag("dl")         -> true;
 is_block_tag("fieldset")   -> true;
+is_block_tag("footer")     -> true;
 is_block_tag("form")       -> true;
 is_block_tag("h1")         -> true;
 is_block_tag("h2")         -> true;
@@ -762,12 +770,15 @@ is_block_tag("h5")         -> true;
 is_block_tag("h6")         -> true;
 is_block_tag("hr")         -> true;
 is_block_tag("isindex")    -> true;
+is_block_tag("nav")        -> true;
+is_block_tag("main")       -> true;
 is_block_tag("menu")       -> true;
 is_block_tag("noframes")   -> true;
 is_block_tag("noscript")   -> true;
 is_block_tag("ol")         -> true;
 is_block_tag("p")          -> true;
 is_block_tag("pre")        -> true;
+is_block_tag("section")    -> true;
 is_block_tag("table")      -> true;
 is_block_tag("thead")      -> true;
 is_block_tag("tbody")      -> true;
@@ -1379,6 +1390,11 @@ htmlchars1([$*, $* | T], A)          -> {T2, NewA} = strong(T, $*),
 htmlchars1([$\\, $* | T], A)         -> htmlchars1(T, [$* | A]);
 htmlchars1([$* | T], A)              -> {T2, NewA} = emphasis(T, $*),
                                         htmlchars1(T2, [NewA | A]);
+
+%% likewise for del
+htmlchars1([$\\, $~, $~ | T], A)     -> htmlchars1(T, [$~, $~ | A]);
+htmlchars1([$~, $~ | T], A)          -> {T2, NewA} = del(T, $~),
+                                        htmlchars1(T2, [NewA | A]);
 %% and again for underscores
 htmlchars1([$\\, $_, $_, $_ | T], A) -> htmlchars1(T, [$_, $_, $_ | A]);
 %% the none atom is the non-space filling whitespace
@@ -1401,8 +1417,14 @@ htmlchars1([$` | T], A)              -> {T2, NewA} = code(T),
                                         htmlchars1(T2, [NewA | A]);
 htmlchars1([?COPY | T], A)           -> htmlchars1(T, ["&copy;" | A]);
 htmlchars1([?AMP | T], A)            -> htmlchars1(T, ["&amp;" | A]);
+htmlchars1([?LT | T], A)             -> htmlchars1(T, ["&lt;" | A]);
+htmlchars1([?GT | T], A)             -> htmlchars1(T, ["&gt;" | A]);
+htmlchars1([?QUOT | T], A)           -> htmlchars1(T, ["&quot;" | A]);
+htmlchars1([?SQUOT | T], A)          -> htmlchars1(T, ["&#39;" | A]);
 htmlchars1([$& | T], A)              -> htmlchars1(T, ["&amp;" | A]);
 htmlchars1([$< | T], A)              -> htmlchars1(T, ["&lt;" | A]);
+htmlchars1([$> | T], A)              -> htmlchars1(T, ["&gt;" | A]);
+htmlchars1([$" | T], A)              -> htmlchars1(T, ["&quot;" | A]);
 htmlchars1([?NBSP | T], A)           -> htmlchars1(T, ["&nbsp;" | A]);
 htmlchars1([?TAB | T], A)            -> htmlchars1(T, ["    " | A]);
 htmlchars1([none | T], A)            -> htmlchars1(T, A);
@@ -1410,6 +1432,7 @@ htmlchars1([H | T], A)               -> htmlchars1(T, [H | A]).
 
 emphasis(List, Delim)    -> interpolate(List, Delim, "em", "" ,[]).
 strong(List, Delim)      -> interpolate2(List, Delim, "strong", "", []).
+del(List, Delim)          -> interpolate2(List, Delim, "del", "", []).
 superstrong(List, Delim) -> interpolate3(List, Delim, "strong", "em", "", []).
 dblcode(List)            -> {T, Tag} = interpolate2(List, $`, "code", "" ,[]),
                             {T, "<pre>" ++ Tag ++ "</pre>"}.
@@ -1421,16 +1444,14 @@ code(List)               -> interpolateX(List, $`, "code", "", []).
 interpolateX([], Delim, _Tag, _X, Acc) ->
     {[], [Delim] ++ htmlchars(lists:reverse(Acc))};
 interpolateX([Delim | T], Delim, Tag, X, Acc) ->
-    {T,  "<" ++ Tag ++ ">" ++ htmlchars(lists:reverse(Acc)) ++ X ++
-     "</" ++ Tag ++ ">"};
+    {T,  "<" ++ Tag ++ ">" ++ htmlchars(lists:reverse(Acc)) ++ X ++ "</" ++ Tag ++ ">"};
 interpolateX([H | T], Delim, Tag, X, Acc) ->
     interpolateX(T, Delim, Tag, X, [H | Acc]).
 
 interpolate([], Delim, _Tag, _X, Acc) ->
     {[], [Delim] ++ htmlchars(lists:reverse(Acc))};
 interpolate([Delim | T], Delim, Tag, X, Acc) ->
-    {T,  "<" ++ Tag ++ ">" ++ htmlchars(lists:reverse(Acc)) ++ X ++
-     "</" ++ Tag ++ ">"};
+    {T,  "<" ++ Tag ++ ">" ++ htmlchars(lists:reverse(Acc)) ++ X ++ "</" ++ Tag ++ ">"};
 interpolate([H | T], Delim, Tag, X, Acc) ->
     interpolate(T, Delim, Tag, X, [H | Acc]).
 
@@ -1438,19 +1459,16 @@ interpolate([H | T], Delim, Tag, X, Acc) ->
 interpolate2([], Delim, _Tag,  _X, Acc) ->
     {[], [Delim] ++ [Delim] ++ htmlchars(lists:reverse(Acc))};
 interpolate2([Delim, Delim | T], Delim, Tag, X, Acc) ->
-    {T,  "<" ++ Tag ++ ">" ++ htmlchars(lists:reverse(Acc)) ++ X ++
-     "</" ++ Tag ++ ">"};
+    {T,  "<" ++ Tag ++ ">" ++ htmlchars(lists:reverse(Acc)) ++ X ++ "</" ++ Tag ++ ">"};
 interpolate2([H | T], Delim, Tag, X, Acc) ->
     interpolate2(T, Delim, Tag, X, [H | Acc]).
 
 %% interpolate three is for triple delimiters...
 interpolate3([], D, _Tag1, Tag2, _X, Acc)           ->
-    {[], "<" ++ Tag2 ++ ">" ++ [D] ++ "</" ++ Tag2 ++ ">"
-     ++ htmlchars(lists:reverse(Acc))};
+    {[], "<" ++ Tag2 ++ ">" ++ [D] ++ "</" ++ Tag2 ++ ">" ++ htmlchars(lists:reverse(Acc))};
 interpolate3([D, D, D | T], D, Tag1, Tag2, _X, Acc) ->
     {T,  "<" ++ Tag1 ++ ">" ++  "<" ++ Tag2 ++ ">"
-     ++ htmlchars(lists:reverse(Acc)) ++ "</" ++ Tag2 ++ ">"
-     ++ "</" ++ Tag1 ++ ">"};
+     ++ htmlchars(lists:reverse(Acc)) ++ "</" ++ Tag2 ++ ">" ++ "</" ++ Tag1 ++ ">"};
 interpolate3([H | T], D, Tag1, Tag2, X, Acc) ->
     interpolate3(T, D, Tag1, Tag2, X, [H | Acc]).
 
