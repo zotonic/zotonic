@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-06-03 14:28\n"
+"PO-Revision-Date: 2025-06-03 16:20\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -1552,11 +1552,11 @@ msgstr "Si une page a une plage de dates de publication, elle ne sera visible qu
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:39
 msgid "If none of the languages has a page path then the complete path will be:"
-msgstr ""
+msgstr "Si aucune des langues n'a de chemin de page, le chemin complet sera :"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:61
 msgid "If not checked then a visitor is always redirected to the canonical URL of this page."
-msgstr ""
+msgstr "Si cette case n'est pas cochée, le visiteur est toujours redirigé vers l'URL canonique de cette page."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:141
 msgid "Import only direct connections (shallow copy)."
@@ -1672,7 +1672,7 @@ msgstr "Correspondant"
 
 #: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:22./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:14
 msgid "Matching id, name, page path or redirection"
-msgstr ""
+msgstr "Correspondance d'identifiant, de nom, de chemin de page ou de redirection"
 
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:3./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:78./apps/zotonic_mod_admin/src/mod_admin.erl:113
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:100./apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:103./apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:113
@@ -2429,11 +2429,11 @@ msgstr "La page restera, mais sans l'élément multimédia."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:33
 msgid "The path <em>after the language code</em> for the URL, if left empty then the path of one of the other languages is used."
-msgstr ""
+msgstr "Le chemin <em>après le code de langue</em> pour l'URL, s'il est laissé vide, le chemin de l'une des autres langues est utilisé."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:35
 msgid "The path <em>after the language code</em> for the URL, if left empty then the path of the default language is used."
-msgstr ""
+msgstr "Le chemin <em>après le code de langue</em> pour l'URL, s'il est laissé vide, le chemin de la langue par défaut est utilisé."
 
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:47
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
@@ -2537,7 +2537,7 @@ msgstr "Cette page provient d'un autre site. L'original est disponible sur"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:29
 msgid "This page path is in use by another page."
-msgstr ""
+msgstr "Ce chemin de page est utilisé par une autre page."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:89
 msgid "This resource was created by the module"
@@ -9154,7 +9154,7 @@ msgstr "Pour les sites Zotonic, vous pouvez saisir le(s) nom(s) de domaine du si
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:65
 msgid "For every combination of a user and a label there can only be a single access token. Existing access tokens with this label will be replaced."
-msgstr ""
+msgstr "Pour chaque combinaison d'un utilisateur et d'un libellé, il ne peut y avoir qu'un seul jeton d'accès. Les jetons d'accès existants portant ce libellé seront remplacés."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:110
 msgid "Forever"
@@ -9210,7 +9210,7 @@ msgstr "Créez une nouvelle application pour l'autorisation OAuth2 et/ou l'expor
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:23
 msgid "Make a new access token"
-msgstr ""
+msgstr "Créer un nouveau jeton d'accès"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:8
 msgid "Make a new consumer for OAuth2 authorization and content import from another website."
@@ -9218,7 +9218,7 @@ msgstr "Créez un nouveau consommateur pour l'autorisation OAuth2 et l'importati
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:78
 msgid "Make access token"
-msgstr ""
+msgstr "Créer un jeton d'accès"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:74
 msgid "Manually add a token, as copied from {domain}."
@@ -9246,7 +9246,7 @@ msgstr "Application OAuth2"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:3
 msgid "OAuth2 Application - Access Tokens"
-msgstr ""
+msgstr "Application OAuth2 - Jetons d'accès"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:7./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:15./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:439
 msgid "OAuth2 Applications"
@@ -9254,7 +9254,7 @@ msgstr "Applications OAuth2"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:10
 msgid "OAuth2 Applications &gt; Access Tokens"
-msgstr ""
+msgstr "Applications OAuth2 &gt; Jetons d'accès"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:3./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:7./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:15./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:444
 msgid "OAuth2 Clients"
@@ -9326,7 +9326,7 @@ msgstr "Sélectionnez l’utilisateur associé aux jetons d’informations d’i
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:12
 msgid "Select the user for this access token."
-msgstr ""
+msgstr "Sélectionnez l’utilisateur pour ce jeton d’accès."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:14
 msgid "Select the user for this token."
@@ -9390,7 +9390,7 @@ msgstr "Jetons pour accéder ou s'authentifier avec <b>{domain}</b> au nom d'un 
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:12
 msgid "Tokens to let other systems access this website of behalf of a user."
-msgstr ""
+msgstr "Jetons permettant à d'autres systèmes d'accéder à ce site Web au nom d'un utilisateur."
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:64
 msgid "Unknown client or redirect, check with your website administrator."
@@ -9502,15 +9502,15 @@ msgstr "Consultez le tableau pour la recherche à facettes et remplissez-le en r
 
 #: apps/zotonic_mod_search/priv/templates/search_view.tpl:8
 msgid "Matching id, name or path"
-msgstr ""
+msgstr "ID, nom ou chemin correspondant"
 
 #: apps/zotonic_mod_search/priv/templates/search_view.tpl:20
 msgid "Matching page path"
-msgstr ""
+msgstr "Chemin de page correspondant"
 
 #: apps/zotonic_mod_search/priv/templates/search_view.tpl:18
 msgid "Matching previous page path"
-msgstr ""
+msgstr "Correspondance du chemin de la page précédente"
 
 #: apps/zotonic_mod_search/priv/templates/search_view.tpl:41
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:59
