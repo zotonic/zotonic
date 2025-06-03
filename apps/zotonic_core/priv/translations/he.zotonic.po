@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-06-03 14:28\n"
+"PO-Revision-Date: 2025-06-03 16:21\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -9506,11 +9506,11 @@ msgstr "מזהה, שם או נתיב תואמים"
 
 #: apps/zotonic_mod_search/priv/templates/search_view.tpl:20
 msgid "Matching page path"
-msgstr ""
+msgstr "נתיב דף תואם"
 
 #: apps/zotonic_mod_search/priv/templates/search_view.tpl:18
 msgid "Matching previous page path"
-msgstr ""
+msgstr "תואם את נתיב הדף הקודם"
 
 #: apps/zotonic_mod_search/priv/templates/search_view.tpl:41
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:59
