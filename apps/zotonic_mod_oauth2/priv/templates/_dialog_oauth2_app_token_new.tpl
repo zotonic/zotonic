@@ -9,7 +9,7 @@
     </p>
 
     <div class="form-group">
-        <p class="help-block">{_ Select the user for this token. _} {_ It is good practice to have users with limited access permissions for access tokens. _}</p>
+        <p class="help-block">{_ Select the user for this access token. _} {_ It is good practice to have users with limited access permissions for access tokens. _}</p>
         <div class="block-page">
             <div class="well" id="{{ #wrap }}">
             </div>
@@ -62,7 +62,7 @@
         <div class="label-floating">
             <input type="text" value="" class="form-control" name="label"  placeholder="{_ Optional label _}">
             <label class="control-label">{_ Optional label _}</label>
-            <p class="help-block">{_ For every combination of a user and a label there can only be a single token. Existing tokens with this label will be replaced. _}</p>
+            <p class="help-block">{_ For every combination of a user and a label there can only be a single access token. Existing access tokens with this label will be replaced. _}</p>
         </div>
     </div>
 
@@ -75,6 +75,6 @@
 
     <div class="modal-footer">
         {% button class="btn btn-default" text=_"Cancel" action={dialog_close} tag="a" %}
-        {% button class="btn btn-primary" type="submit" text=_"Make Token" %}
+        {% button class="btn btn-primary" type="submit" text=_"Make access token" %}
     </div>
 </form>

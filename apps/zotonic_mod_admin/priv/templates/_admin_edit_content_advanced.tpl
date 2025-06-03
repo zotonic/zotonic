@@ -17,7 +17,8 @@
         <div class="form-group label-floating">
             <input type="text" id="{{ elt_id }}"
                 name="{{ elt_name }}"
-                placeholder="{_ Page path _} {{ lang_code_with_brackets }} &mdash; {{ id.default_page_url|escape }}"
+                placeholder="{_ Page path _} {{ lang_code_with_brackets }} &mdash; {% with lang_code as z_language %}
+{{ id.default_page_url|escape }}{% endwith %}"
                 value="{{ (is_i18n|if : id.translation[lang_code].page_path : id.page_path)|urldecode|escape }}"
                 {% if not id.is_editable %}disabled="disabled"{% endif %}
                 {% include "_language_attrs.tpl" language=lang_code class="form-control" %}>
@@ -27,6 +28,18 @@
             {% validate id=elt_id name=elt_name
                         type={page_path_unique id=id failure_message=_"This page path is in use by another page."}
             %}
+            <p class="help-block">
+                {% if m.translation.default_language == lang_code %}
+                    {_ The path <em>after the language code</em> for the URL, if left empty then the path of one of the other languages is used. _}
+                {% else %}
+                    {_ The path <em>after the language code</em> for the URL, if left empty then the path of the default language is used. _}
+                {% endif %}
+                <br>
+                {% with lang_code as z_language %}
+                    {_ If none of the languages has a page path then the complete path will be: _}
+                    <br><tt>{{ id.default_page_url|escape }}</tt>
+                {% endwith %}
+            </p>
         </div>
         {% endwith %}
         {% endwith %}
@@ -45,6 +58,7 @@
                 {% if not id.is_editable %}disabled="disabled"{% endif %}>
             {_ Show page on multiple paths _}
         </label>
+        <p class="help-block">{_ If not checked then a visitor is always redirected to the canonical URL of this page. _}</p>
     </div>
 
     <div class="form-group">

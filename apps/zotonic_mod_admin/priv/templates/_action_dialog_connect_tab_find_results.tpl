@@ -15,19 +15,29 @@
         as result
     %}
         <div id="dialog_connect_loop_results" class="thumbnails">
-            {% if m.rsc[text].id as id %}
-                {% if id.is_visible %}
-                    <h4>{_ Unique page _}</h4>
-                    <div class="row">
-                        {% catinclude "_action_dialog_connect_tab_find_results_item.tpl" id
-                            predicate=predicate
-                            subject_id=subject_id
-                            object_id=object_id
-                        %}
-                    </div>
-                    <hr>
-                    <h4>{_ Search results _}</h4>
-                {% endif %}
+            {% if text|trim as qs %}
+                {% with m.rsc[qs].id as rid %}
+                {% with m.rsc['-'].lookup.page_path[qs] as path %}
+                    {% if rid.is_visible or path.id.is_visible %}
+                        <h4>{_ Matching id, name, page path or redirection _}</h4>
+                        <div class="row">
+                            {% for id in [ rid ]
+                                        ++ (rid =/= path.id)|if:[path.id]:[]
+                            %}
+                                {% if id.is_visible %}
+                                    {% catinclude "_action_dialog_connect_tab_find_results_item.tpl" id
+                                        predicate=predicate
+                                        subject_id=subject_id
+                                        object_id=object_id
+                                    %}
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <hr>
+                        <h4>{_ Search results _}</h4>
+                    {% endif %}
+                {% endwith %}
+                {% endwith %}
             {% endif %}
 
             {% include "_action_dialog_connect_tab_find_results_loop.tpl"

@@ -1,15 +1,15 @@
 {% extends "admin_base.tpl" %}
 
-{% block title %}{_ OAuth2 Application - Tokens _}{% endblock %}
+{% block title %}{_ OAuth2 Application - Access Tokens _}{% endblock %}
 
 {% block content %}
 
 {% with m.oauth2.apps[q.appid] as app %}
 
 <div class="admin-header">
-    <h2>{_ OAuth2 Applications &gt; Tokens _}</h2>
+    <h2>{_ OAuth2 Applications &gt; Access Tokens _}</h2>
 
-    <p>{_ Tokens to let other systems access this website of behalf of an user. _}</p>
+    <p>{_ Tokens to let other systems access this website of behalf of a user. _}</p>
 
     <p>
         <a href="{% url admin_oauth2_apps %}">{_ OAuth2 Applications _}</a>
@@ -20,7 +20,7 @@
 {% if m.acl.is_admin %}
     <div class="well z-button-row">
         <button id="token-new" class="btn btn-primary">
-            {_ Make a new App token _}
+            {_ Make a new access token _}
         </button>
         {% wire id="token-new"
                 action={dialog_open

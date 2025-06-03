@@ -284,7 +284,7 @@ read_admin_file(Context) ->
             JSON;
         {error, enoent} ->
             ?LOG_NOTICE(#{
-                text => <<"Backup admin file missing, creating an empty file">>,
+                text => <<"Backup admin file missing, assuming an empty file">>,
                 in => zotonic_mod_backup,
                 result => error,
                 reason => enoent,
@@ -293,7 +293,7 @@ read_admin_file(Context) ->
             #{};
         {error, Reason} ->
             ?LOG_ERROR(#{
-                text => <<"Backup admin file corrupt, resetting file">>,
+                text => <<"Backup admin file corrupt, restarting with empty file">>,
                 in => zotonic_mod_backup,
                 result => error,
                 reason => Reason,
