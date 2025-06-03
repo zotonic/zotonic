@@ -48,13 +48,13 @@
 
 
 %% @doc Schedule a check if the resource is connected, if not then then the resource will be deleted.
-%% This is called after a resource is inserted. The check is done 24 hours after the resource has
+%% This is called after a resource is inserted. The check is done 12 hours after the resource has
 %% been inserted.
 -spec maybe_schedule_dependent_check(Id, Context) -> ok when
     Id :: m_rsc:resource_id(),
     Context :: z:context().
 maybe_schedule_dependent_check(Id, Context) ->
-    maybe_schedule_dependent_check(Id, 24*3600, Context).
+    maybe_schedule_dependent_check(Id, 12*3600, Context).
 
 
 %% @doc Force a check, useful after known edge operations.
