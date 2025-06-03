@@ -851,7 +851,7 @@ qterm(#{ <<"term">> := <<"language">>, <<"value">> := Lang}, _IsNested, Context)
         {ok, Code} ->
             #search_sql_term{
                 where = [
-                    <<"rsc.language @> ">>, '$1'
+                    <<"rsc.language && ">>, '$1'
                 ],
                 args = [
                     [ z_convert:to_binary(Code) ]
@@ -893,7 +893,7 @@ qterm(#{ <<"term">> := <<"notlanguage">>, <<"value">> := Lang}, _IsNested, Conte
         {ok, Code} ->
             #search_sql_term{
                 where = [
-                    <<"not (rsc.language @> ">>, '$1', <<")">>
+                    <<"not (rsc.language && ">>, '$1', <<")">>
                 ],
                 args = [
                     [ z_convert:to_binary(Code) ]
