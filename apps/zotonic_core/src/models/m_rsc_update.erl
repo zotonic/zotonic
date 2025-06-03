@@ -657,6 +657,15 @@ update_result({ok, NewId, {OldProps, NewProps, OldCatList, IsCatInsert}}, #rscup
         },
         Context),
 
+    % If a newly inserted resource is dependent, then schedule a check
+    % if it is connected. If not then it should be deleted.
+    if
+        Id =:= insert_rsc ->
+            z_edge_log_server:maybe_schedule_dependent_check(Id, Context);
+        true ->
+            ok
+    end,
+
     % Return the updated or inserted id
     {ok, NewId};
 update_result({rollback, {error, _} = Er}, _RscUpd, _Context) ->
