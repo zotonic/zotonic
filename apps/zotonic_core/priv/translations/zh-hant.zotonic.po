@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-05-27 10:57\n"
+"PO-Revision-Date: 2025-06-03 14:28\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -221,7 +221,7 @@ msgid "Cancel"
 msgstr "取消"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:6./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:87
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:196./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:64./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:105./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:29./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:196./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:64./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:23./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:114./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:29./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45./apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:28
 #: apps/zotonic_mod_survey/src/mod_survey.erl:172
@@ -308,7 +308,7 @@ msgid "Could not move to collaboration group."
 msgstr "無法轉移去合作夥伴群"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:51./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:168
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:41./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:64./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:92./apps/zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:41./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:18./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:21./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:25./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:110
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:41./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:64./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:101./apps/zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:41./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:18./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:21./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:25./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:110
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:53
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:65
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:30./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:53./apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:186
@@ -793,7 +793,7 @@ msgstr "+ 新增頁面區塊"
 msgid "<b>Warning:</b> the site will stop and restart."
 msgstr "<b>警告：</b> 站點將停止並重新啟動。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:37./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:130./apps/zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:6./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:141./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:32./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:53
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:139./apps/zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:6./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:141./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:32./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:53
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:47
 msgid "<em>Untitled</em>"
 msgstr "<em>無標題</em>"
@@ -1142,7 +1142,7 @@ msgstr "创建者"
 msgid "Created by me"
 msgstr "由我创建"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:24./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:111./apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:26./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:120./apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:12./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:56
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:51./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:44./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:44./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:41
 msgid "Created on"
@@ -1373,15 +1373,15 @@ msgstr "從遠程服務器導入頁面時出錯。"
 msgid "Error uploading the file."
 msgstr "上传文件時出错。"
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:151
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:143
 msgid "Error, duplicate name. Please change the name."
 msgstr "錯誤，重名。請更改名稱。"
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:149
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:141
 msgid "Error, duplicate page path. Please change the uri."
 msgstr "錯誤，重複的頁面路徑。請更改uri。"
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:147
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:139
 msgid "Error, duplicate uri. Please change the uri."
 msgstr "錯誤，重複的 uri。請更改uri。"
 
@@ -1533,7 +1533,7 @@ msgstr "幫助"
 msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://zotonic.com/en/latest/developer-guide/search.html#query-arguments\">documentation on the query arguments</a> on the Zotonic website."
 msgstr "您可以在此處編輯搜尋查詢的參數。每個論點都有自己的路線。有關更多信息，請參閱 Zotonic 網站上有關查詢參數</a> 的 <a href=\"https://zotonic.com/en/latest/developer-guide/search.html#query-arguments\">文檔。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:41
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:70
 msgid "Hide page from searches (depends on the search query)"
 msgstr "從搜索中隱藏頁面（取決於搜索查詢）"
 
@@ -1549,6 +1549,14 @@ msgstr "IP地址"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:11
 msgid "If a page has a publication date range then it will only be visible between the two dates. Note that if you are allowed to edit the page then you can always see it."
 msgstr "如果一个页面有一个发布日期范围，那么它将只在两个日期之间可见。请注意，如果你被允许编辑页面，那么你可以一直看到它。"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:39
+msgid "If none of the languages has a page path then the complete path will be:"
+msgstr "如果沒有任何語言具有頁面路徑，則完整路徑將為："
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:61
+msgid "If not checked then a visitor is always redirected to the canonical URL of this page."
+msgstr "如果未選中，則訪客始終會被重新導向到此頁面的規範 URL。"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:141
 msgid "Import only direct connections (shallow copy)."
@@ -1662,6 +1670,10 @@ msgstr "创建新页面或媒体項目"
 msgid "Matching"
 msgstr "匹配"
 
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:22./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:14
+msgid "Matching id, name, page path or redirection"
+msgstr "匹配 ID、名稱、頁面路徑或重定向"
+
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:3./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:78./apps/zotonic_mod_admin/src/mod_admin.erl:113
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:100./apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:103./apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:113
 msgid "Media"
@@ -1728,12 +1740,12 @@ msgstr "修改日期，最早的在前"
 msgid "Modified"
 msgstr "修改时间"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:117./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:126./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:25
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:14
 msgid "Modified by"
 msgstr "修改者"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:27./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:114./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:24
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:123./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:24
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:13./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:57
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:34
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:50
@@ -1828,7 +1840,7 @@ msgstr "無介質"
 msgid "No other pages found"
 msgstr "未发现其他页面"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_loop.tpl:20./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_loop.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:169./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:48
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_loop.tpl:20./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_loop.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:178./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:48
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find_results_loop.tpl:10
 msgid "No pages found."
 msgstr "没有找到页面。"
@@ -1879,7 +1891,7 @@ msgstr "頁面區塊"
 msgid "Page connections"
 msgstr "页面连接數"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:20
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:26./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:47
 msgid "Page path"
 msgstr "页面路径"
 
@@ -1964,7 +1976,7 @@ msgstr "保护避免被删除"
 msgid "Protected"
 msgstr "受保護"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:37./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:39./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:132./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:143
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:37./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:45./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:141./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:143
 msgid "Protected, not deletable"
 msgstr "受保護，不可刪除"
 
@@ -1998,7 +2010,7 @@ msgstr "發布結束，最新的在前"
 msgid "Published ends, oldest first"
 msgstr "發布結束，最早的在前"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:108
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:117
 msgid "Published on"
 msgstr "發表於"
 
@@ -2153,7 +2165,7 @@ msgstr "搜索其他媒体"
 msgid "Search query"
 msgstr "搜尋查询"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:86
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:37./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:95
 msgid "Search results"
 msgstr "搜索結果"
 
@@ -2178,7 +2190,7 @@ msgstr "選擇"
 msgid "Select a connected image"
 msgstr "选择一个连接图片"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:89./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:107
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:98./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:107
 msgid "Selected"
 msgstr "已選擇"
 
@@ -2210,7 +2222,7 @@ msgstr "顯示全部 {title} 頁"
 msgid "Show as"
 msgstr "显示为"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:30
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
 msgid "Show page on multiple paths"
 msgstr "在多个路径上显示页面"
 
@@ -2415,6 +2427,14 @@ msgstr "這页面"
 msgid "The page will stay, but without the media item."
 msgstr "該頁面將保留，但沒有媒體項。"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:33
+msgid "The path <em>after the language code</em> for the URL, if left empty then the path of one of the other languages is used."
+msgstr "URL 的語言代碼</em> 後的路徑 <em>，如果留空，則使用其他語言之一的路徑。"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:35
+msgid "The path <em>after the language code</em> for the URL, if left empty then the path of the default language is used."
+msgstr "URL 的語言代碼</em> 後的路徑 <em>，如果留空則使用預設語言的路徑。"
+
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:47
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
 msgstr "搜索索引正在重建。根据数据库的大小，这可能需要很长的时间。"
@@ -2483,11 +2503,11 @@ msgstr "这个文件被病毒感染了。"
 msgid "This file is too large."
 msgstr "这个文件太大。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:136./apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:8
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:145./apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:8
 msgid "This is system content."
 msgstr "这是系统内容。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:52
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:81
 msgid "This name is in use by another page."
 msgstr "这个名字被另一个页面使用。"
 
@@ -2515,7 +2535,11 @@ msgstr "本页面可以连接到其他页面。例如你可以链接到作者或
 msgid "This page is from another website. The original can be found at"
 msgstr "此頁面來自另一個網站。原文可以在"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:29
+msgid "This page path is in use by another page."
+msgstr "此頁面路徑正被另一個頁面使用。"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:89
 msgid "This resource was created by the module"
 msgstr "这个资源的创建模块是"
 
@@ -2527,7 +2551,7 @@ msgstr "终止"
 msgid "Timeout while trying to fetch data from the website."
 msgstr "试图从网站获取数据时超时。"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:28./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:36./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:102./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:124./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:28./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:36./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:111./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:124./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:9./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:11./apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:26
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:25
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:16./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:20
@@ -2561,19 +2585,11 @@ msgstr "输入文本进行检索"
 msgid "Type to filter the list below."
 msgstr "鍵入以過濾下面的清單。"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:12
-msgid "Unique Page"
-msgstr "獨特的頁面"
-
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:31./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:44./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:51./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:258
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:31./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:44./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:79./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:80./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:83./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:258
 msgid "Unique name"
 msgstr "唯一标识"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:20
-msgid "Unique page"
-msgstr "獨特的頁面"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:66./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:71
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:96./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:97./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:101
 msgid "Unique uri"
 msgstr "唯一 URL"
 
@@ -2596,7 +2612,7 @@ msgstr "未使用"
 msgid "Upcoming"
 msgstr "即將推出"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:91./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:86./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:109
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:100./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:86./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:109
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:16
 msgid "Update"
 msgstr "更新"
@@ -2767,7 +2783,7 @@ msgstr "没有权限更改这个媒体条目。"
 msgid "You don't have permission to create this page."
 msgstr "你没有权限创建这个页面。"
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:153
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:145
 #: apps/zotonic_mod_image_edit/src/mod_image_edit.erl:52
 msgid "You don't have permission to edit this page."
 msgstr "您無權編輯此頁面。"
@@ -2785,7 +2801,7 @@ msgstr "你没有权限执行这个动作。"
 msgid "You have to specify a description of the file to make it easier to find and share."
 msgstr "请指定文件的描述信息，让查找和共享更方便。"
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:155
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:147
 msgid "Your search query is invalid. Please correct it before saving."
 msgstr "您的搜索查詢無效。保存前請更正。"
 
@@ -2803,7 +2819,7 @@ msgstr "添加媒体条目"
 msgid "by"
 msgstr "由"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:64./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:65./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:155./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:156./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:157./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:161./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:164./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:70./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:164./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:165./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:166./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:161./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:164./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:68
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:32./apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:33./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:76./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:77./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:78
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:44
@@ -2824,7 +2840,7 @@ msgstr "删除"
 msgid "e.g. might change"
 msgstr "如：可能改变"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:70./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:162./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:179./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:76./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:171./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:179./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:38./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:87
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:45
 #: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:21./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:16
@@ -2878,7 +2894,7 @@ msgstr "像素"
 msgid "show all"
 msgstr "显示所有"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:44./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:137
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:50./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:146
 msgid "system content"
 msgstr "系统内容"
 
@@ -2894,7 +2910,7 @@ msgstr "未命名"
 msgid "uploaded on"
 msgstr "上传时间"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:69./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:161./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:39./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:75./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:170./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:39./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:37
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:36
 #: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:17./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:12
@@ -9137,8 +9153,8 @@ msgid "For Zotonic sites this you can enter the domain name(s) of the website."
 msgstr "對於 Zotonic 網站，您可以輸入網站的域名。"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:65
-msgid "For every combination of a user and a label there can only be a single token. Existing tokens with this label will be replaced."
-msgstr "對於每個使用者和標籤的組合，只能有一個令牌。帶有此標籤的現有令牌將被替換。"
+msgid "For every combination of a user and a label there can only be a single access token. Existing access tokens with this label will be replaced."
+msgstr "對於每個使用者和標籤的組合，只能有一個存取令牌。具有此標籤的現有存取權令牌將被替換。"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:110
 msgid "Forever"
@@ -9184,10 +9200,6 @@ msgstr "登錄"
 msgid "Make App"
 msgstr "製作應用"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:78
-msgid "Make Token"
-msgstr "製作代幣"
-
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:22./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:26
 msgid "Make a new App"
 msgstr "製作新應用"
@@ -9197,12 +9209,16 @@ msgid "Make a new App for OAuth2 authorization and/or content export to other we
 msgstr "為 OAuth2 授權和/或內容導出到其他網站製作一個新的應用程序。"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:23
-msgid "Make a new App token"
-msgstr "建立新的 App token"
+msgid "Make a new access token"
+msgstr "建立新的存取令牌"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:8
 msgid "Make a new consumer for OAuth2 authorization and content import from another website."
 msgstr "為 OAuth2 授權和從另一個網站導入內容創建一個新使用者。"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:78
+msgid "Make access token"
+msgstr "製作訪問令牌"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:74
 msgid "Manually add a token, as copied from {domain}."
@@ -9229,16 +9245,16 @@ msgid "OAuth2 Application"
 msgstr "OAuth2 應用程序"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:3
-msgid "OAuth2 Application - Tokens"
-msgstr "OAuth2 應用程式 - 令牌"
+msgid "OAuth2 Application - Access Tokens"
+msgstr "OAuth2 應用程式 - 存取權令牌"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:7./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:15./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:439
 msgid "OAuth2 Applications"
 msgstr "OAuth2 應用程序"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:10
-msgid "OAuth2 Applications &gt; Tokens"
-msgstr "OAuth2 應用程式 &gt; 令牌"
+msgid "OAuth2 Applications &gt; Access Tokens"
+msgstr "OAuth2 應用程式 &gt; 存取權令牌"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:3./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:7./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:15./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:444
 msgid "OAuth2 Clients"
@@ -9308,7 +9324,11 @@ msgstr "選擇用戶"
 msgid "Select the user associated with Client Credential tokens."
 msgstr "選擇與客戶端憑證令牌關聯的使用者。"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:12./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:14
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:12
+msgid "Select the user for this access token."
+msgstr "選擇此存取令牌的使用者。"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:14
 msgid "Select the user for this token."
 msgstr "選擇此令牌的使用者。"
 
@@ -9369,8 +9389,8 @@ msgid "Tokens to access or authenticate with <b>{domain}</b> of behalf of a user
 msgstr "用於代表使用者存取或驗證 <b>{domain}</b> 的令牌。"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:12
-msgid "Tokens to let other systems access this website of behalf of an user."
-msgstr "令牌讓其他系統代表使用者造訪此網站。"
+msgid "Tokens to let other systems access this website of behalf of a user."
+msgstr "令牌允許其他系統代表使用者存取此網站。"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:64
 msgid "Unknown client or redirect, check with your website administrator."
@@ -9480,7 +9500,19 @@ msgstr "你不可以這樣做。"
 msgid "Check the table for the faceted search and fill it by reindexing all pages."
 msgstr "檢查分面搜索表並通過重新索引所有頁面來填充它。"
 
-#: apps/zotonic_mod_search/priv/templates/search_view.tpl:15
+#: apps/zotonic_mod_search/priv/templates/search_view.tpl:8
+msgid "Matching id, name or path"
+msgstr "匹配 ID、名稱或路徑"
+
+#: apps/zotonic_mod_search/priv/templates/search_view.tpl:20
+msgid "Matching page path"
+msgstr "符合頁面路徑"
+
+#: apps/zotonic_mod_search/priv/templates/search_view.tpl:18
+msgid "Matching previous page path"
+msgstr "符合上一頁路徑"
+
+#: apps/zotonic_mod_search/priv/templates/search_view.tpl:41
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:59
 msgid "Matching text"
 msgstr "匹配文本"
