@@ -1123,6 +1123,15 @@ pivot_page_path(C, Database, Schema) ->
                             Props1 = Props#{ <<"page_path">> => Path },
                             PropsBin = <<?TERM_MAGIC_NUMBER, (term_to_binary(Props1))/binary>>,
                             {ok, _} = epgsql:equery(C, "update rsc set props = $2 where id = $1", [ Id, PropsBin ]);
+                        {ok, _, [ {Props} ]} when is_map(Props) ->
+                            Props1 = Props#{ <<"page_path">> => Path },
+                            PropsBin = <<?TERM_MAGIC_NUMBER, (term_to_binary(Props1))/binary>>,
+                            {ok, _} = epgsql:equery(C, "update rsc set props = $2 where id = $1", [ Id, PropsBin ]);
+                        {ok, _, [ {Props} ]} when is_list(Props) ->
+                            Props1 = z_props:from_props(Props),
+                            Props2 = Props1#{ <<"page_path">> => Path },
+                            PropsBin = <<?TERM_MAGIC_NUMBER, (term_to_binary(Props2))/binary>>,
+                            {ok, _} = epgsql:equery(C, "update rsc set props = $2 where id = $1", [ Id, PropsBin ]);
                         {ok, _, [ {null} ]} ->
                             ok;
                         {ok, _, []} ->
