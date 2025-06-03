@@ -414,7 +414,6 @@ get_raw(Id, IsLock, Context) when ?is_valid_rsc_id(Id) ->
                 fun (<<"pivot_geocode">>) -> true;
                     (<<"pivot_location_lat">>) -> true;
                     (<<"pivot_location_lng">>) -> true;
-                    (<<"pivot_page_path">>) -> true;
                     (<<"pivot_", _/binary>>) -> false;
                     (_) -> true
                 end,
@@ -434,8 +433,7 @@ get_raw(Id, IsLock, Context) when ?is_valid_rsc_id(Id) ->
     end,
     case z_db:qmap_props_row(SQL1, [ Id ], [ {keys, binary} ], Context) of
         {ok, Map} ->
-            Map1 = maybe_fix_page_path(Map),
-            {ok, map_language_atoms(Map1)};
+            {ok, map_language_atoms(Map)};
         {error, _} = Error ->
             Error
     end;
@@ -445,13 +443,6 @@ get_raw(undefined, _IsLock, _Context) ->
     {error, enoent};
 get_raw(Id, IsLock, Context) ->
     get_raw(rid(Id, Context), IsLock, Context).
-
-maybe_fix_page_path(#{ <<"page_path">> := _ } = Map) ->
-    maps:remove(<<"pivot_page_path">>, Map);
-maybe_fix_page_path(#{ <<"pivot_page_path">> := [ Path ] } = Map) when is_binary(Path) ->
-    maps:remove(<<"pivot_page_path">>, Map#{ <<"page_path">> => Path });
-maybe_fix_page_path(Map) ->
-    maps:remove(<<"pivot_page_path">>, Map).
 
 %% The languages are stored as a psql array, map to the internal atom
 %% representation. On update this is mapped to binaries in z_db:update/3.
