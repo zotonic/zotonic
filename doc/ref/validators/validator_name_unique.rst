@@ -1,6 +1,6 @@
 .. highlight:: django
 .. include:: meta-name_unique.rst
-.. seealso:: :ref:`guide-validators`, :ref:`validator-username_unique`
+.. seealso:: :ref:`guide-validators`, :ref:`validator-username_unique`, :ref:`validator-page_path_unique`
 
 A :ref:`validator <guide-validators>` to check whether a resource’s name is
 unique::

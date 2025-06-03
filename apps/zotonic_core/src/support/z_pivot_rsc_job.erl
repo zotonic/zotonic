@@ -81,14 +81,24 @@ pivot_resource_update(Id, UpdateProps, RawProps, Context) ->
         error -> maps:get(<<"tz">>, RawProps, undefined)
     end,
     ContextTz = z_context:set_tz(Tz, Context),
+    PivotPagePath = case maps:find(<<"page_path">>, Props) of
+        {ok, PagePath0} -> PagePath0;
+        error -> maps:get(<<"page_path">>, RawProps, undefined)
+    end,
     Props1 = Props#{
         <<"pivot_date_start">> => tz_shift_all_day(IsAllDay, DateStart, ContextTz),
         <<"pivot_date_end">> => tz_shift_all_day(IsAllDay, DateEnd, ContextTz),
         <<"pivot_date_start_month_day">> => month_day(DateStart),
         <<"pivot_date_end_month_day">> => month_day(DateEnd),
-        <<"pivot_title">> => PivotTitle
+        <<"pivot_title">> => PivotTitle,
+        <<"pivot_page_path">> => as_string_array(PivotPagePath)
     },
     z_notifier:foldr(#pivot_update{id=Id, raw_props=RawProps}, Props1, Context).
+
+as_string_array(undefined) -> undefined;
+as_string_array(<<>>) -> undefined;
+as_string_array(B) when is_binary(B) -> [ B ];
+as_string_array(#trans{ tr = Tr }) -> lists:usort([ T || {_, T} <- Tr, T =/= <<>> ]).
 
 tz_shift_all_day(true, ?EPOCH_START = Date, _Context) ->
     Date;

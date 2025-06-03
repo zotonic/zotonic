@@ -98,7 +98,7 @@ event(#submit{message={rscform, Args}}, Context) ->
     Props = filter_props(Post),
     Id = z_convert:to_integer(proplists:get_value(<<"id">>, Props)),
     Props1 = proplists:delete(<<"id">>, Props),
-    CatBefore = m_rsc:p(Id, category_id, Context),
+    CatBefore = m_rsc:p(Id, <<"category_id">>, Context),
     Props2 = z_notifier:foldl(
         #admin_rscform{
             id = Id,
@@ -109,35 +109,27 @@ event(#submit{message={rscform, Args}}, Context) ->
     case m_rsc:update(Id, Props2, Context) of
         {ok, _} ->
             case z_context:get_q(<<"z_submitter">>, Context) of
-                SaveView when SaveView =:= <<"save_view">> orelse SaveView =:= <<"save_view_float">> ->
+                SaveView when SaveView =:= <<"save_view">>;
+                              SaveView =:= <<"save_view_float">> ->
                     case proplists:get_value(view_location, Args) of
                         undefined ->
-                            PageUrl = m_rsc:p(Id, page_url, Context),
+                            PageUrl = m_rsc:p(Id, <<"page_url">>, Context),
                             z_render:wire({redirect, [{location, PageUrl}]}, Context);
                         Location ->
                             z_render:wire({redirect, [{location, Location}]}, Context)
                     end;
                 Submitter ->
-                    case m_rsc:p(Id, category_id, Context) of
+                    case m_rsc:p(Id, <<"category_id">>, Context) of
                         CatBefore ->
-                            PagePath = filter_urldecode:urldecode(m_rsc:p(Id, page_path, Context), Context),
-                            Context1 = z_render:set_value("field-name", m_rsc:p(Id, name, Context), Context),
-                            Context2 = z_render:set_value("field-uri",  m_rsc:p(Id, uri_raw, Context), Context1),
-                            Context3 = z_render:set_value("field-page-path", PagePath, Context2),
-                            Context4 = z_render:set_value("website",  m_rsc:p(Id, website, Context), Context3),
-                            Context4a = set_value_slug(m_rsc:p(Id, title_slug, Context), Context4),
-                            Context5 = case z_convert:to_bool(m_rsc:p(Id, is_protected, Context)) of
-                                           true ->  z_render:wire("delete-button", {disable, []}, Context4a);
-                                           false -> z_render:wire("delete-button", {enable, []}, Context4a)
-                                       end,
+                            Context1 = update_rsc_form(Id, Context),
                             Title = z_convert:to_binary(
-                                z_trans:lookup_fallback(m_rsc:p(Id, title, Context5), Context5)),
-                            Context6 = z_render:growl([<<"Saved \"">>, Title, <<"\".">>], Context5),
+                                z_trans:lookup_fallback(m_rsc:p(Id, <<"title">>, Context1), Context1)),
+                            Context2 = z_render:growl([<<"Saved \"">>, Title, <<"\".">>], Context1),
                             case Submitter of
                                 <<"save_duplicate">> ->
-                                    z_render:wire({dialog_duplicate_rsc, [{id, Id}]}, Context6);
+                                    z_render:wire({dialog_duplicate_rsc, [{id, Id}]}, Context2);
                                 _SaveStay ->
-                                    z_render:wire(proplists:get_all_values(on_success, Args), Context6)
+                                    z_render:wire(proplists:get_all_values(on_success, Args), Context2)
                             end;
                         _CatOther ->
                             z_render:wire({reload, []}, Context)
@@ -199,7 +191,7 @@ event(#postback{message={query_preview, Opts}}, Context) ->
 
 set_value_slug(undefined, Context) ->
     set_value_slug(<<>>, Context);
-set_value_slug({trans, Tr}, Context) ->
+set_value_slug(#trans{ tr = Tr }, Context) ->
     lists:foldl(
         fun({Lang, V}, Ctx) ->
             z_render:set_value(
@@ -222,3 +214,33 @@ filter_props(Fs) ->
         <<"save_stay_float">>
     ],
     lists:foldl(fun(P, Acc) -> proplists:delete(P, Acc) end, Fs, Remove).
+
+%% @doc Patch the rsc edit form with the new values.
+update_rsc_form(Id, Context) ->
+    Context1 = z_render:set_value("field-name", m_rsc:p(Id, <<"name">>, Context), Context),
+    Context2 = z_render:set_value("field-uri",  m_rsc:p(Id, <<"uri_raw">>, Context), Context1),
+    Context3 = update_rsc_page_path(m_rsc:p(Id, <<"page_path">>, Context), Context2),
+    Context4 = z_render:set_value("website",  m_rsc:p(Id, <<"website">>, Context), Context3),
+    Context5 = set_value_slug(m_rsc:p(Id, <<"title_slug">>, Context), Context4),
+    case z_convert:to_bool(m_rsc:p(Id, <<"is_protected">>, Context))
+        andalso z_acl:rsc_deletable(Id, Context)
+    of
+        true ->  z_render:wire("delete-button", {disable, []}, Context5);
+        false -> z_render:wire("delete-button", {enable, []}, Context5)
+    end.
+
+update_rsc_page_path(undefined, Context) ->
+    z_render:set_value("field-page-path", <<>>, Context);
+update_rsc_page_path(Path, Context) when is_binary(Path) ->
+    Tr = #trans{ tr = [ {z_language:default_language(Context), Path} ]},
+    update_rsc_page_path(Tr, Context);
+update_rsc_page_path(#trans{} = TransPath, Context) ->
+    lists:foldl(
+        fun(Lang, CAcc) ->
+            Path = z_trans:lookup_fallback(TransPath, [ Lang ], CAcc),
+            Path1 = filter_urldecode:urldecode(z_convert:to_binary(Path), Context),
+            EltId = <<"field-page-path--", (atom_to_binary(Lang))/binary>>,
+            z_render:set_value(EltId, Path1, CAcc)
+        end,
+        Context,
+        z_language:enabled_language_codes(Context)).

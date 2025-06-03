@@ -7,9 +7,11 @@ qcat
 {% if (not q.page or q.page == "1") and q.qs %}
 
     {# Try exact match on id #}
-    {% if m.rsc[q.qs].id as id %}
-        {% if id.is_visible %}
-            <h2>{_ Unique Page _}</h2>
+    {% with m.rsc[q.qs|trim].id as rid %}
+    {% with m.rsc['-'].lookup.page_path[q.qs|trim] as path %}
+
+        {% if rid.is_visible or path.id.is_visible %}
+            <h2>{_ Matching id, name, page path or redirection _}</h2>
 
             <table class="table table-striped do_adminLinkedTable">
                 <thead>
@@ -32,49 +34,56 @@ qcat
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="{% if not id.is_published %}unpublished{% endif %}" data-href="{% url admin_edit_rsc id=id %}">
-                        <td>
-                            <span {% include "_language_attrs.tpl" %}>{{ id.title|striptags|default:_"<em>Untitled</em>" }}</span>
-                            {% if id.is_protected %}
-                                &nbsp; <span class="fa fa-lock text-muted" title="{_ Protected, not deletable _}"></span>
-                            {% endif %}
+                    {% for id in [ rid ]
+                                ++ (rid =/= path.id)|if:[path.id]:[]
+                    %}
+                        {% if id.is_visible %}
+                            <tr class="{% if not id.is_published %}unpublished{% endif %}" data-href="{% url admin_edit_rsc id=id %}">
+                                <td>
+                                    <span {% include "_language_attrs.tpl" %}>{{ id.title|striptags|default:_"<em>Untitled</em>" }}</span>
+                                    {% if id.is_protected %}
+                                        &nbsp; <span class="fa fa-lock text-muted" title="{_ Protected, not deletable _}"></span>
+                                    {% endif %}
 
-                            {% if id == 1 or id.is_a.meta or id.content_group_id.name == 'system_content_group' %}
-                                <span class="label label-warning pull-right hidden-xs" title="{_ This is system content. _}">
-                                    {{ id.name|default:_"system content" }}
-                                </span>
-                            {% elif id.name %}
-                                <span class="label label-default pull-right hidden-xs">
-                                    {{ id.name }}
-                                </span>
-                            {% endif %}
-                            {% if m.identity[id].username as username %}
-                                <span class="label label-info pull-right hidden-xs">
-                                    {{ username | escape }}
-                                </span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if qcat %}
-                                {% catinclude "_admin_overview_list_data.tpl" id %}
-                            {% else %}
-                                {% include "_admin_overview_list_data.tpl" %}
-                            {% endif %}
-                        </td>
-                        <td class="hidden-xs">{{ id.created|date:_"d M Y, H:i" }}</td>
-                        <td>{{ id.modified|date:_"d M Y, H:i" }}</td>
-                        <td>
-                            <span class="hidden-xs">{{ id.modifier_id.title|default:"-" }}</span>
-                            <span class="pull-right buttons">
-                                <a href="{{ id.page_url }}" class="btn btn-default btn-xs">{_ view _}</a>
-                                <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default btn-xs">{_ edit _}</a>
-                            </span>
-                        </td>
-                    </tr>
+                                    {% if id == 1 or id.is_a.meta or id.content_group_id.name == 'system_content_group' %}
+                                        <span class="label label-warning pull-right hidden-xs" title="{_ This is system content. _}">
+                                            {{ id.name|default:_"system content" }}
+                                        </span>
+                                    {% elif id.name %}
+                                        <span class="label label-default pull-right hidden-xs">
+                                            {{ id.name }}
+                                        </span>
+                                    {% endif %}
+                                    {% if m.identity[id].username as username %}
+                                        <span class="label label-info pull-right hidden-xs">
+                                            {{ username | escape }}
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if qcat %}
+                                        {% catinclude "_admin_overview_list_data.tpl" id %}
+                                    {% else %}
+                                        {% include "_admin_overview_list_data.tpl" %}
+                                    {% endif %}
+                                </td>
+                                <td class="hidden-xs">{{ id.created|date:_"d M Y, H:i" }}</td>
+                                <td>{{ id.modified|date:_"d M Y, H:i" }}</td>
+                                <td>
+                                    <span class="hidden-xs">{{ id.modifier_id.title|default:"-" }}</span>
+                                    <span class="pull-right buttons">
+                                        <a href="{{ id.page_url }}" class="btn btn-default btn-xs">{_ view _}</a>
+                                        <a href="{% url admin_edit_rsc id=id %}" class="btn btn-default btn-xs">{_ edit _}</a>
+                                    </span>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
                 </tbody>
             </table>
         {% endif %}
-    {% endif %}
+    {% endwith %}
+    {% endwith %}
 
     {# Let other modules inject results on the first page #}
     {% all include "_admin_overview_list_page1.tpl" %}

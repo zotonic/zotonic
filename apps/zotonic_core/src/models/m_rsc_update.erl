@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2024 Marc Worrell, Arjan Scherpenisse
+%% @copyright 2009-2025 Marc Worrell, Arjan Scherpenisse
 %% @doc Update routines for resources.  For use by the m_rsc module.
 %% @end
 
-%% Copyright 2009-2024 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2009-2025 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -36,7 +36,8 @@
 
     delete_nocheck/2,
 
-    to_slug/1
+    to_slug/1,
+    normalize_page_path/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -1240,23 +1241,39 @@ preflight_check_name(_Id, _Props, _Context) ->
     ok.
 
 
-preflight_check_page_path(Id, #{ <<"page_path">> := Path }, Context) when Path =/= undefined ->
-    case z_db:q1("select count(*) from rsc where page_path = $1 and id <> $2", [Path, Id], Context) of
-        0 ->
+%% @doc Preflight checks are done after the page_path is normalized.
+preflight_check_page_path(Id, #{ <<"page_path">> := PagePath }, Context) ->
+    case page_paths(PagePath) of
+        [] ->
             ok;
-        _N ->
-            ?LOG_WARNING(#{
-                text => <<"Trying to insert duplicate page_path">>,
-                in => zotonic_core,
-                result => error,
-                reason => duplicate_page_path,
-                rsc_id => Id,
-                page_path => Path
-            }),
-            {error, duplicate_page_path}
+        Paths ->
+            case z_db:q1("
+                select count(*) from rsc
+                where pivot_page_path && $1
+                  and id <> $2", [ Paths, Id], Context)
+            of
+                0 ->
+                    ok;
+                _N ->
+                    ?LOG_WARNING(#{
+                        text => <<"Trying to insert duplicate page_path">>,
+                        in => zotonic_core,
+                        result => error,
+                        reason => duplicate_page_path,
+                        rsc_id => Id,
+                        page_path => Paths
+                    }),
+                    {error, duplicate_page_path}
+            end
     end;
 preflight_check_page_path(_Id, _Props, _Context) ->
     ok.
+
+page_paths(undefined) -> [];
+page_paths(<<>>) -> [];
+page_paths(B) when is_binary(B) -> [B];
+page_paths(#trans{ tr = Tr }) -> lists:usort([ T || {_, T} <- Tr, T =/= <<>> ]).
+
 
 preflight_check_uri(Id, #{ <<"uri">> := Uri }, Context) when Uri =/= undefined ->
     case z_db:q1("select count(*) from rsc where uri = $1 and id <> $2", [Uri, Id], Context) of
@@ -1377,10 +1394,23 @@ props_filter(<<"page_path">>, Path, Acc, Context) ->
         true when ?is_empty(Path) ->
             Acc#{ <<"page_path">> => undefined };
         true ->
-            P = iolist_to_binary([
-                $/, z_string:trim(z_url:url_path_encode(Path), $/)
-            ]),
-            Acc#{ <<"page_path">> => P };
+            Path1 = if
+                is_binary(Path) ->
+                    normalize_page_path(Path);
+                is_list(Path) ->
+                    normalize_page_path(unicode:characters_to_binary(Path));
+                true ->
+                    case Path of
+                        #trans{ tr = [] } ->
+                            undefined;
+                        #trans{ tr = Tr } ->
+                            Tr1 = [ {Lang, normalize_page_path(P)} || {Lang, P} <- Tr ],
+                            #trans{ tr = Tr1 };
+                        _ ->
+                            undefined
+                    end
+            end,
+            Acc#{ <<"page_path">> => Path1 };
         false ->
             Acc
     end;
@@ -1518,6 +1548,14 @@ props_filter(<<"privacy">>, Privacy, Acc, _Context) ->
     Acc#{ <<"privacy">> => P };
 props_filter(P, V, Acc, _Context) ->
     Acc#{ P => V }.
+
+normalize_page_path(<<>>) ->
+    <<>>;
+normalize_page_path(Path) ->
+    Path1 = iolist_to_binary([
+        $/, z_string:trim(z_url:url_path_encode(Path), $/)
+    ]),
+    binary:replace(Path1, [ <<"&">>, <<"=">> ], <<"-">>, [ global ]).
 
 
 %% Filter all given languages, drop unknown languages.
@@ -1670,22 +1708,21 @@ is_trimmable(<<"rsc_id">>, _) -> true;
 is_trimmable(_, _) -> false.
 
 
-update_page_path_log(RscId, OldProps, NewProps, Context) ->
-    Old = maps:get(<<"page_path">>, OldProps, undefined),
-    New = maps:get(<<"page_path">>, NewProps, not_updated),
-    case {Old, New} of
-        {_, not_updated} ->
-            ok;
-        {Old, Old} ->
-            %% not changed
-            ok;
-        {undefined, _} ->
-            %% no old page path
-            ok;
-        {Old, New} ->
-            %% update
-            z_db:q("DELETE FROM rsc_page_path_log WHERE page_path = $1 OR page_path = $2", [New, Old],
-                Context),
-            z_db:q("INSERT INTO rsc_page_path_log(id, page_path) VALUES ($1, $2)", [RscId, Old], Context),
-            ok
-    end.
+update_page_path_log(RscId, OldProps, #{ <<"page_path">> := NewPath }, Context) ->
+    Old = page_paths(maps:get(<<"page_path">>, OldProps, undefined)),
+    New = page_paths(NewPath),
+    % Store dropped page paths
+    lists:foreach(
+        fun(P) ->
+            z_db:q("
+                INSERT INTO rsc_page_path_log(id, page_path)
+                VALUES ($1, $2)
+                ON CONFLICT (page_path) DO UPDATE
+                SET id = EXCLUDED.id",
+                [RscId, P],
+                Context)
+        end,
+        Old -- New);
+update_page_path_log(_RscId, _OldProps, _NewProps, _Context) ->
+    ok.
+

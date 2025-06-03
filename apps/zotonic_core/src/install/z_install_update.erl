@@ -36,6 +36,8 @@
 
 -include_lib("kernel/include/logger.hrl").
 
+% From z_db_pgsql.erl
+-define(TERM_MAGIC_NUMBER, 16#01326A3A:1/big-unsigned-unit:32).
 
 %%====================================================================
 %% API
@@ -334,6 +336,7 @@ upgrade(C, Database, Schema) ->
     ok = media_frame_count(C, Database, Schema),
     ok = identity_log(C, Database, Schema),
     ok = medium_update_v2(C, Database, Schema),
+    ok = pivot_page_path(C, Database, Schema),
     ok.
 
 
@@ -977,7 +980,7 @@ media_frame_count(C, Database, Schema) ->
                 in => zotonic_core,
                 database => Database,
                 schema => Schema,
-                table => rsc
+                table => medium
             }),
             {ok, [], []} = epgsql:squery(C,
                                     "alter table medium "
@@ -1066,3 +1069,67 @@ medium_size_bigint(C, Database, Schema) ->
             {ok,[],[]} = epgsql:squery(C, "alter table medium alter column size type bigint"),
             ok
     end.
+
+pivot_page_path(C, Database, Schema) ->
+    case has_column(C, "rsc", "pivot_page_path", Database, Schema) of
+        true ->
+            ok;
+        false ->
+            ?LOG_NOTICE(#{
+                text => <<"Upgrade: adding pivot_page_path column to rsc">>,
+                in => zotonic_core,
+                database => Database,
+                schema => Schema,
+                table => rsc
+            }),
+            {ok, _, Rscs} = epgsql:equery(C, "
+                select id, page_path
+                from rsc
+                where page_path is not null and page_path <> ''"),
+            {ok, [], []} = epgsql:squery(C,
+                                    "alter table rsc "
+                                    "add column pivot_page_path character varying(80)[],"
+                                    "drop constraint if exists rsc_page_path_key"),
+            {ok, _} = epgsql:squery(C,
+                                    "update rsc "
+                                    "set pivot_page_path = array[page_path]"
+                                    "where page_path is not null and page_path <> ''"),
+            {ok, [], []} = epgsql:squery(C,
+                                    "alter table rsc "
+                                    "drop column page_path"),
+            {ok, [], []} = epgsql:squery(C,
+                                    "CREATE INDEX IF NOT EXISTS rsc_pivot_page_path_key ON rsc USING gin(pivot_page_path)"),
+            ?LOG_NOTICE(#{
+                text => <<"Upgrade: fixing page_path property of resources with page_path">>,
+                in => zotonic_core,
+                database => Database,
+                schema => Schema,
+                table => rsc,
+                count => length(Rscs)
+            }),
+            % Ensure the page_path is moved to the rsc props
+            lists:foreach(
+                fun({Id, Path}) ->
+                    case epgsql:equery(C, "select props from rsc where id = $1", [Id]) of
+                        {ok, _, [ {<<?TERM_MAGIC_NUMBER, B/binary>>} ]} ->
+                            Props = case binary_to_term(B) of
+                                Ps when is_list(Ps) ->
+                                    z_props:from_props(Ps);
+                                Ps when is_map(Ps) ->
+                                    Ps;
+                                _ ->
+                                    #{}
+                            end,
+                            Props1 = Props#{ <<"page_path">> => Path },
+                            PropsBin = <<?TERM_MAGIC_NUMBER, (term_to_binary(Props1))/binary>>,
+                            {ok, _} = epgsql:equery(C, "update rsc set props = $2 where id = $1", [ Id, PropsBin ]);
+                        {ok, _, [ {null} ]} ->
+                            ok;
+                        {ok, _, []} ->
+                            ok
+                    end
+                end,
+                Rscs),
+            ok
+    end.
+
