@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-05-27 13:11\n"
+"PO-Revision-Date: 2025-06-03 16:21\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -221,7 +221,7 @@ msgid "Cancel"
 msgstr "לְבַטֵל"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:6./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:87
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:196./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:64./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:105./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:29./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:196./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:64./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:23./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:114./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:29./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45./apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:28
 #: apps/zotonic_mod_survey/src/mod_survey.erl:172
@@ -308,7 +308,7 @@ msgid "Could not move to collaboration group."
 msgstr "לא ניתן היה לעבור לקבוצת שיתוף פעולה."
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:51./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:168
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:41./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:64./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:92./apps/zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:41./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:18./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:21./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:25./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:110
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:41./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:64./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:101./apps/zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:41./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:18./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:21./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:25./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:110
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:53
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:65
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:30./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:53./apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:186
@@ -793,7 +793,7 @@ msgstr "+ הוסף בלוק עמוד"
 msgid "<b>Warning:</b> the site will stop and restart."
 msgstr "<b>אזהרה:</b> האתר ייעצר ויתחיל מחדש."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:37./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:130./apps/zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:6./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:141./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:32./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:53
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:139./apps/zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:6./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:141./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:32./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:53
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:47
 msgid "<em>Untitled</em>"
 msgstr "<em>ללא כותרת</em>"
@@ -1142,7 +1142,7 @@ msgstr "נוצר על ידי"
 msgid "Created by me"
 msgstr "נוצר על ידי"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:24./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:111./apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:26./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:120./apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:12./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:56
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:51./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:44./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:44./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:41
 msgid "Created on"
@@ -1373,15 +1373,15 @@ msgstr "שגיאה בייבוא דף מהשרת המרוחק."
 msgid "Error uploading the file."
 msgstr "שגיאה בהעלאת הקובץ."
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:151
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:143
 msgid "Error, duplicate name. Please change the name."
 msgstr "שגיאה, שם כפול. אנא שנה את השם."
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:149
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:141
 msgid "Error, duplicate page path. Please change the uri."
 msgstr "שגיאה, נתיב דף כפול. אנא שנה את ה- uri."
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:147
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:139
 msgid "Error, duplicate uri. Please change the uri."
 msgstr "שגיאה, כפול אורי. אנא שנה את ה- uri."
 
@@ -1533,7 +1533,7 @@ msgstr "עֶזרָה"
 msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://zotonic.com/en/latest/developer-guide/search.html#query-arguments\">documentation on the query arguments</a> on the Zotonic website."
 msgstr "כאן תוכל לערוך את הארגומנטים של שאילתת החיפוש. כל טיעון הולך על הקו שלו. למידע נוסף, עיין בתיעוד <a href=\"https://zotonic.com/en/latest/developer-guide/search.html#query-arguments\">על ארגומנטי השאילתה</a> באתר Zotonic."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:41
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:70
 msgid "Hide page from searches (depends on the search query)"
 msgstr "הסתר דף מחיפושים (תלוי בשאילתת החיפוש)"
 
@@ -1549,6 +1549,14 @@ msgstr "כתובת ה - IP"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:11
 msgid "If a page has a publication date range then it will only be visible between the two dates. Note that if you are allowed to edit the page then you can always see it."
 msgstr "אם לדף יש טווח תאריכים לפרסום, הוא יהיה גלוי רק בין שני התאריכים. שים לב שאם אתה רשאי לערוך את הדף אז אתה תמיד יכול לראות אותו."
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:39
+msgid "If none of the languages has a page path then the complete path will be:"
+msgstr "אם לאף אחת מהשפות אין נתיב דף, הנתיב המלא יהיה:"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:61
+msgid "If not checked then a visitor is always redirected to the canonical URL of this page."
+msgstr "אם לא מסומן, מבקר תמיד מופנה לכתובת האתר הקנונית של דף זה."
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:141
 msgid "Import only direct connections (shallow copy)."
@@ -1662,6 +1670,10 @@ msgstr "הכינו דף או מדיה חדשים"
 msgid "Matching"
 msgstr "תוֹאֵם"
 
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:22./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:14
+msgid "Matching id, name, page path or redirection"
+msgstr "מזהה, שם, נתיב דף או הפניה מחדש תואמים"
+
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:3./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:78./apps/zotonic_mod_admin/src/mod_admin.erl:113
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:100./apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:103./apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:113
 msgid "Media"
@@ -1728,12 +1740,12 @@ msgstr "תאריך השינוי, הישן ביותר ראשון"
 msgid "Modified"
 msgstr "שונה"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:117./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:126./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:25
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:14
 msgid "Modified by"
 msgstr "שונה על ידי"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:27./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:114./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:24
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:123./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:24
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:13./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:57
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:34
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:50
@@ -1828,7 +1840,7 @@ msgstr "אין מדיום"
 msgid "No other pages found"
 msgstr "לא נמצאו דפים אחרים"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_loop.tpl:20./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_loop.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:169./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:48
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_loop.tpl:20./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_loop.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:178./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:48
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find_results_loop.tpl:10
 msgid "No pages found."
 msgstr "לא נמצאו דפים."
@@ -1879,7 +1891,7 @@ msgstr "בלוק עמוד"
 msgid "Page connections"
 msgstr "חיבורי עמודים"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:20
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:26./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:47
 msgid "Page path"
 msgstr "נתיב העמוד"
 
@@ -1964,7 +1976,7 @@ msgstr "הגן מפני מחיקה"
 msgid "Protected"
 msgstr "מוּגָן"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:37./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:39./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:132./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:143
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:37./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:45./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:141./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:143
 msgid "Protected, not deletable"
 msgstr "מוגן, לא ניתן למחיקה"
 
@@ -1998,7 +2010,7 @@ msgstr "מסתיים שפורסמו, החדש ביותר ראשון"
 msgid "Published ends, oldest first"
 msgstr "קצוות שפורסמו, הישן ביותר ראשון"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:108
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:117
 msgid "Published on"
 msgstr "פורסם ב"
 
@@ -2153,7 +2165,7 @@ msgstr "חפש בתקשורת אחרת"
 msgid "Search query"
 msgstr "שאילתת חיפוש"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:86
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:37./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:95
 msgid "Search results"
 msgstr "תוצאות חיפוש"
 
@@ -2178,7 +2190,7 @@ msgstr "בחר"
 msgid "Select a connected image"
 msgstr "בחר תמונה מחוברת"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:89./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:107
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:98./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:107
 msgid "Selected"
 msgstr "נבחר"
 
@@ -2210,7 +2222,7 @@ msgstr "הצג את כל {title} הדפים"
 msgid "Show as"
 msgstr "הראה כ"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:30
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
 msgid "Show page on multiple paths"
 msgstr "הצג דף במספר נתיבים"
 
@@ -2415,6 +2427,14 @@ msgstr "העמוד"
 msgid "The page will stay, but without the media item."
 msgstr "העמוד יישאר, אך ללא פריט המדיה."
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:33
+msgid "The path <em>after the language code</em> for the URL, if left empty then the path of one of the other languages is used."
+msgstr "הנתיב <em>אחרי קוד השפה</em> עבור כתובת ה-URL. אם נותר ריק, נעשה שימוש בנתיב של אחת השפות האחרות."
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:35
+msgid "The path <em>after the language code</em> for the URL, if left empty then the path of the default language is used."
+msgstr "הנתיב <em>אחרי קוד השפה</em> עבור כתובת ה-URL. אם נותר ריק, נעשה שימוש בנתיב של שפת ברירת המחדל."
+
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:47
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
 msgstr "אינדקס החיפוש נבנה מחדש. בהתאם לגודל מסד הנתונים, זה יכול לקחת זמן רב."
@@ -2483,11 +2503,11 @@ msgstr "קובץ זה נגוע בווירוס."
 msgid "This file is too large."
 msgstr "קובץ זה גדול מדי."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:136./apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:8
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:145./apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:8
 msgid "This is system content."
 msgstr "זהו תוכן מערכת."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:52
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:81
 msgid "This name is in use by another page."
 msgstr "שם זה נמצא בשימוש על ידי דף אחר."
 
@@ -2515,7 +2535,11 @@ msgstr "דף זה מסוגל להתחבר לאחרים. לדוגמא תוכלו 
 msgid "This page is from another website. The original can be found at"
 msgstr "דף זה הוא מאתר אחר. את המקור ניתן למצוא ב"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:29
+msgid "This page path is in use by another page."
+msgstr "נתיב דף זה נמצא בשימוש על ידי דף אחר."
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:89
 msgid "This resource was created by the module"
 msgstr "משאב זה נוצר על ידי המודול"
 
@@ -2527,7 +2551,7 @@ msgstr "עד"
 msgid "Timeout while trying to fetch data from the website."
 msgstr "פסק זמן בזמן ניסיון להביא נתונים מהאתר."
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:28./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:36./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:102./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:124./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:28./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:36./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:111./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:124./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:9./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:11./apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:26
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:25
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:16./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:20
@@ -2561,19 +2585,11 @@ msgstr "הקלד טקסט לחיפוש"
 msgid "Type to filter the list below."
 msgstr "הקלד כדי לסנן את הרשימה למטה."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:12
-msgid "Unique Page"
-msgstr "עמוד ייחודי"
-
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:31./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:44./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:51./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:258
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:31./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:44./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:79./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:80./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:83./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:258
 msgid "Unique name"
 msgstr "שם ייחודי"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:20
-msgid "Unique page"
-msgstr "עמוד ייחודי"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:66./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:71
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:96./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:97./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:101
 msgid "Unique uri"
 msgstr "אורי ייחודי"
 
@@ -2596,7 +2612,7 @@ msgstr "לא בשימוש"
 msgid "Upcoming"
 msgstr "בקרוב"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:91./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:86./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:109
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:100./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:86./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:109
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:16
 msgid "Update"
 msgstr "עדכון"
@@ -2767,7 +2783,7 @@ msgstr "אין לך הרשאה לשנות את פריט המדיה הזה."
 msgid "You don't have permission to create this page."
 msgstr "אין לך הרשאה ליצור דף זה."
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:153
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:145
 #: apps/zotonic_mod_image_edit/src/mod_image_edit.erl:52
 msgid "You don't have permission to edit this page."
 msgstr "אין לך הרשאה לערוך דף זה."
@@ -2785,7 +2801,7 @@ msgstr "אין לך הרשאה לבצע פעולה זו."
 msgid "You have to specify a description of the file to make it easier to find and share."
 msgstr "עליך לציין תיאור של הקובץ כדי להקל על איתורו ושיתופו."
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:155
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:147
 msgid "Your search query is invalid. Please correct it before saving."
 msgstr "שאילתת החיפוש שלך אינה חוקית. אנא תקן זאת לפני השמירה."
 
@@ -2803,7 +2819,7 @@ msgstr "הוסף פריט מדיה"
 msgid "by"
 msgstr "על ידי"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:64./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:65./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:155./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:156./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:157./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:161./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:164./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:70./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:164./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:165./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:166./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:161./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:164./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:68
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:32./apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:33./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:76./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:77./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:78
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:44
@@ -2824,7 +2840,7 @@ msgstr "לִמְחוֹק"
 msgid "e.g. might change"
 msgstr "למשל עשוי להשתנות"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:70./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:162./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:179./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:76./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:171./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:179./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:38./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:87
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:45
 #: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:21./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:16
@@ -2878,7 +2894,7 @@ msgstr "פיקסלים"
 msgid "show all"
 msgstr "תראה הכול"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:44./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:137
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:50./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:146
 msgid "system content"
 msgstr "תוכן המערכת"
 
@@ -2894,7 +2910,7 @@ msgstr "ללא כותרת"
 msgid "uploaded on"
 msgstr "הועלה בתאריך"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:69./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:161./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:39./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:75./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:170./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:39./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:37
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:36
 #: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:17./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:12
@@ -9137,8 +9153,8 @@ msgid "For Zotonic sites this you can enter the domain name(s) of the website."
 msgstr "לאתרי Zotonic ניתן להזין את שמות הדומיינים של האתר."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:65
-msgid "For every combination of a user and a label there can only be a single token. Existing tokens with this label will be replaced."
-msgstr "עבור כל שילוב של משתמש ותווית יכול להיות רק אסימון בודד. אסימונים קיימים עם תווית זו יוחלפו."
+msgid "For every combination of a user and a label there can only be a single access token. Existing access tokens with this label will be replaced."
+msgstr "עבור כל שילוב של משתמש ותווית יכול להיות רק אסימון גישה יחיד. אסמוני גישה קיימים עם תווית זו יוחלפו."
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:110
 msgid "Forever"
@@ -9184,10 +9200,6 @@ msgstr "היכנס עם"
 msgid "Make App"
 msgstr "צור אפליקציה"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:78
-msgid "Make Token"
-msgstr "הפוך אסימון"
-
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:22./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:26
 msgid "Make a new App"
 msgstr "צור אפליקציה חדשה"
@@ -9197,12 +9209,16 @@ msgid "Make a new App for OAuth2 authorization and/or content export to other we
 msgstr "צור אפליקציה חדשה לאישור OAuth2 ו/או ייצוא תוכן לאתרים אחרים."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:23
-msgid "Make a new App token"
-msgstr "צור אסימון אפליקציה חדש"
+msgid "Make a new access token"
+msgstr "צור אסימון גישה חדש"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:8
 msgid "Make a new consumer for OAuth2 authorization and content import from another website."
 msgstr "צור צרכן חדש לאישור OAuth2 וייבוא תוכן מאתר אחר."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:78
+msgid "Make access token"
+msgstr "צור אסימון גישה"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:74
 msgid "Manually add a token, as copied from {domain}."
@@ -9229,16 +9245,16 @@ msgid "OAuth2 Application"
 msgstr "יישום OAuth2"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:3
-msgid "OAuth2 Application - Tokens"
-msgstr "יישום OAuth2 - אסימונים"
+msgid "OAuth2 Application - Access Tokens"
+msgstr "יישום OAuth2 - אסימוני גישה"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:7./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:15./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:439
 msgid "OAuth2 Applications"
 msgstr "יישומי OAuth2"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:10
-msgid "OAuth2 Applications &gt; Tokens"
-msgstr "יישומי OAuth2 &gt; אסימונים"
+msgid "OAuth2 Applications &gt; Access Tokens"
+msgstr "יישומי OAuth2 &gt; אסימוני גישה"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:3./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:7./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:15./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:444
 msgid "OAuth2 Clients"
@@ -9308,7 +9324,11 @@ msgstr "בחר משתמש"
 msgid "Select the user associated with Client Credential tokens."
 msgstr "בחר את המשתמש המשויך לאסימוני אישורי לקוח."
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:12./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:14
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:12
+msgid "Select the user for this access token."
+msgstr "בחר את המשתמש עבור אסימון גישה זה."
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:14
 msgid "Select the user for this token."
 msgstr "בחר את המשתמש עבור האסימון הזה."
 
@@ -9369,8 +9389,8 @@ msgid "Tokens to access or authenticate with <b>{domain}</b> of behalf of a user
 msgstr "אסימונים לגישה או אימות עם <b>{domain}</b> מטעם משתמש."
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:12
-msgid "Tokens to let other systems access this website of behalf of an user."
-msgstr "אסימונים לאפשר למערכות אחרות לגשת לאתר זה מטעם משתמש."
+msgid "Tokens to let other systems access this website of behalf of a user."
+msgstr "אסימונים המאפשרים למערכות אחרות גישה לאתר זה מטעם משתמש."
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:64
 msgid "Unknown client or redirect, check with your website administrator."
@@ -9480,7 +9500,19 @@ msgstr "אסור לך לעשות את זה."
 msgid "Check the table for the faceted search and fill it by reindexing all pages."
 msgstr "בדוק את הטבלה עבור חיפוש ההיבטים ומלא אותו על ידי הוספת כל הדפים לאינדקס מחדש."
 
-#: apps/zotonic_mod_search/priv/templates/search_view.tpl:15
+#: apps/zotonic_mod_search/priv/templates/search_view.tpl:8
+msgid "Matching id, name or path"
+msgstr "מזהה, שם או נתיב תואמים"
+
+#: apps/zotonic_mod_search/priv/templates/search_view.tpl:20
+msgid "Matching page path"
+msgstr "נתיב דף תואם"
+
+#: apps/zotonic_mod_search/priv/templates/search_view.tpl:18
+msgid "Matching previous page path"
+msgstr "תואם את נתיב הדף הקודם"
+
+#: apps/zotonic_mod_search/priv/templates/search_view.tpl:41
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:59
 msgid "Matching text"
 msgstr "טקסט תואם"

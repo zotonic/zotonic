@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-05-27 10:57\n"
+"PO-Revision-Date: 2025-06-03 14:28\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -221,7 +221,7 @@ msgid "Cancel"
 msgstr "ยกเลิก"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:6./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:8./apps/zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:5./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:87
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:196./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:64./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:21./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:105./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:29./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:196./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:3./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:64./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:23./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:114./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:29./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:22./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:40
 #: apps/zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45./apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:28
 #: apps/zotonic_mod_survey/src/mod_survey.erl:172
@@ -308,7 +308,7 @@ msgid "Could not move to collaboration group."
 msgstr "ไม่สามารถย้ายไปที่กลุ่มการทำงานร่วมกัน"
 
 #: apps/zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:51./apps/zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:168
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:41./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:64./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:92./apps/zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:41./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:18./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:21./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:25./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:110
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:7./apps/zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:41./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:64./apps/zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:73./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:101./apps/zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:41./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:18./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:21./apps/zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:25./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:110
 #: apps/zotonic_mod_admin_category/priv/templates/_action_dialog_delete_rsc.category.tpl:53
 #: apps/zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:8./apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:65
 #: apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:30./apps/zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:53./apps/zotonic_mod_admin_identity/src/mod_admin_identity.erl:186
@@ -793,7 +793,7 @@ msgstr "+ เพิ่มบล็อคหน้า"
 msgid "<b>Warning:</b> the site will stop and restart."
 msgstr "<b>คำเตือน:</b> เว็บไซต์จะหยุดและเริ่มใหม่อีกครั้ง"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:37./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:130./apps/zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:6./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:141./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:32./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:53
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:139./apps/zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:6./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:141./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:32./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:53
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:47
 msgid "<em>Untitled</em>"
 msgstr "<em>ไม่มีชื่อ</em>"
@@ -1142,7 +1142,7 @@ msgstr "สร้างโดย"
 msgid "Created by me"
 msgstr "สร้างโดยฉัน"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:24./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:111./apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:26./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:120./apps/zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:12./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:56
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:51./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:44./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:44./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:41
 msgid "Created on"
@@ -1373,15 +1373,15 @@ msgstr "เกิดข้อผิดพลาดในการนำเข้
 msgid "Error uploading the file."
 msgstr "เกิดข้อผิดพลาดในการอัปโหลดไฟล์"
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:151
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:143
 msgid "Error, duplicate name. Please change the name."
 msgstr "เกิดข้อผิดพลาด ชื่อซ้ำ กรุณาเปลี่ยนชื่อ"
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:149
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:141
 msgid "Error, duplicate page path. Please change the uri."
 msgstr "เกิดข้อผิดพลาด เส้นทางของหน้าที่ซ้ำกัน กรุณาเปลี่ยน uri"
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:147
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:139
 msgid "Error, duplicate uri. Please change the uri."
 msgstr "เกิดข้อผิดพลาด ซ้ำ uri กรุณาเปลี่ยน uri"
 
@@ -1533,7 +1533,7 @@ msgstr "ช่วย"
 msgid "Here you can edit the arguments of the search query. Every argument goes on its own line. For more information, see the <a href=\"https://zotonic.com/en/latest/developer-guide/search.html#query-arguments\">documentation on the query arguments</a> on the Zotonic website."
 msgstr "คุณสามารถแก้ไขอาร์กิวเมนต์ของแบบสอบถามการค้นหาได้ที่นี่ อาร์กิวเมนต์แต่ละตัวจะอยู่ในบรรทัดของตัวเอง สำหรับข้อมูลเพิ่มเติม โปรดดูเอกสาร <a href=\"https://zotonic.com/en/latest/developer-guide/search.html#query-arguments\">เกี่ยวกับอาร์กิวเมนต์แบบสอบถาม</a> บนเว็บไซต์ Zotonic"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:41
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:70
 msgid "Hide page from searches (depends on the search query)"
 msgstr "ซ่อนหน้าจากการค้นหา (ขึ้นอยู่กับคำค้นหา)"
 
@@ -1549,6 +1549,14 @@ msgstr "ที่อยู่ IP"
 #: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:11
 msgid "If a page has a publication date range then it will only be visible between the two dates. Note that if you are allowed to edit the page then you can always see it."
 msgstr "หากหน้ามีช่วงวันที่เผยแพร่หน้านั้นจะมองเห็นได้ระหว่างวันที่สองวันเท่านั้น โปรดทราบว่าหากคุณได้รับอนุญาตให้แก้ไขเพจคุณจะสามารถดูได้ตลอดเวลา"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:39
+msgid "If none of the languages has a page path then the complete path will be:"
+msgstr "ถ้าไม่มีภาษาใดมีเส้นทางของหน้า เส้นทางทั้งหมดจะเป็นดังนี้:"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:61
+msgid "If not checked then a visitor is always redirected to the canonical URL of this page."
+msgstr "หากไม่ได้ตรวจสอบ ผู้เยี่ยมชมจะถูกส่งต่อไปยัง URL ตามหลักเกณฑ์ของหน้านี้เสมอ"
 
 #: apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:141
 msgid "Import only direct connections (shallow copy)."
@@ -1662,6 +1670,10 @@ msgstr "สร้างเพจหรือสื่อใหม่"
 msgid "Matching"
 msgstr "การจับคู่"
 
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:22./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:14
+msgid "Matching id, name, page path or redirection"
+msgstr "การจับคู่ ID, ชื่อ, เส้นทางหน้า หรือการเปลี่ยนเส้นทาง"
+
 #: apps/zotonic_mod_admin/priv/templates/admin_media.tpl:3./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:78./apps/zotonic_mod_admin/src/mod_admin.erl:113
 #: apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:100./apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:103./apps/zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:113
 msgid "Media"
@@ -1728,12 +1740,12 @@ msgstr "วันที่แก้ไข เก่าที่สุดก่�
 msgid "Modified"
 msgstr "แก้ไข"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:117./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:25
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:32./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:126./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:25
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:14
 msgid "Modified by"
 msgstr "แก้ไขโดย"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:27./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:114./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:24
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:123./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:24
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:13./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:57
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:34
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:50
@@ -1828,7 +1840,7 @@ msgstr "ไม่มีสื่อ"
 msgid "No other pages found"
 msgstr "ไม่พบหน้าอื่น ๆ"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_loop.tpl:20./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_loop.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:169./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:48
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_loop.tpl:20./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_loop.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:178./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:48
 #: apps/zotonic_mod_admin_merge/priv/templates/_merge_find_results_loop.tpl:10
 msgid "No pages found."
 msgstr "ไม่พบเพจ"
@@ -1879,7 +1891,7 @@ msgstr "บล็อคหน้า"
 msgid "Page connections"
 msgstr "การเชื่อมต่อเพจ"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:20
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:26./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:47
 msgid "Page path"
 msgstr "เส้นทางหน้า"
 
@@ -1964,7 +1976,7 @@ msgstr "ป้องกันจากการลบ"
 msgid "Protected"
 msgstr "มีการป้องกัน"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:37./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:39./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:132./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:143
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:37./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:45./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:141./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:143
 msgid "Protected, not deletable"
 msgstr "ป้องกันไว้ ไม่สามารถลบได้"
 
@@ -1998,7 +2010,7 @@ msgstr "สิ้นสุดการเผยแพร่ ใหม่สุ�
 msgid "Published ends, oldest first"
 msgstr "สิ้นสุดการเผยแพร่ เก่าที่สุดก่อน"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:108
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:117
 msgid "Published on"
 msgstr "เผยแพร่เมื่อ"
 
@@ -2153,7 +2165,7 @@ msgstr "ค้นหาสื่ออื่น ๆ"
 msgid "Search query"
 msgstr "การค้นหา"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:29./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:86
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:37./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:95
 msgid "Search results"
 msgstr "ผลการค้นหา"
 
@@ -2178,7 +2190,7 @@ msgstr "เลือก"
 msgid "Select a connected image"
 msgstr "เลือกภาพที่เชื่อมต่อ"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:89./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:107
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:98./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:107
 msgid "Selected"
 msgstr "เลือกแล้ว"
 
@@ -2210,7 +2222,7 @@ msgstr "แสดงทั้งหมด {title} หน้า"
 msgid "Show as"
 msgstr "แสดงเป็น"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:30
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
 msgid "Show page on multiple paths"
 msgstr "แสดงเพจในหลายเส้นทาง"
 
@@ -2415,6 +2427,14 @@ msgstr "หน้า"
 msgid "The page will stay, but without the media item."
 msgstr "เพจจะยังคงอยู่ แต่ไม่มีรายการสื่อ"
 
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:33
+msgid "The path <em>after the language code</em> for the URL, if left empty then the path of one of the other languages is used."
+msgstr "เส้นทาง <em>หลังรหัสภาษา</em> สำหรับ URL ถ้าปล่อยทิ้งไว้ เส้นทางของภาษาอื่นจะถูกใช้"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:35
+msgid "The path <em>after the language code</em> for the URL, if left empty then the path of the default language is used."
+msgstr "เส้นทาง <em>หลังรหัสภาษา</em> สำหรับ URL ถ้าปล่อยทิ้งไว้ เส้นทางของภาษาเริ่มต้นจะถูกนำมาใช้"
+
 #: apps/zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:47
 msgid "The search index is rebuilding. Depending on the database size, this can take a long time."
 msgstr "ดัชนีการค้นหากำลังสร้างใหม่ ขึ้นอยู่กับขนาดฐานข้อมูลอาจใช้เวลานาน"
@@ -2483,11 +2503,11 @@ msgstr "ไฟล์นี้ติดไวรัส"
 msgid "This file is too large."
 msgstr "ไฟล์นี้มีขนาดใหญ่เกินไป"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:43./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:136./apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:8
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:145./apps/zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:8
 msgid "This is system content."
 msgstr "นี่คือเนื้อหาของระบบ"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:52
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:81
 msgid "This name is in use by another page."
 msgstr "ชื่อนี้ถูกใช้โดยเพจอื่น"
 
@@ -2515,7 +2535,11 @@ msgstr "เพจนี้สามารถเชื่อมต่อกับ
 msgid "This page is from another website. The original can be found at"
 msgstr "หน้านี้มาจากเว็บไซต์อื่น สามารถติดตามต้นฉบับได้ที่"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:59
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:29
+msgid "This page path is in use by another page."
+msgstr "เส้นทางของหน้านี้ถูกใช้โดยหน้าอื่นแล้ว"
+
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:89
 msgid "This resource was created by the module"
 msgstr "ทรัพยากรนี้สร้างขึ้นโดยโมดูล"
 
@@ -2527,7 +2551,7 @@ msgstr "จนถึง"
 msgid "Timeout while trying to fetch data from the website."
 msgstr "หมดเวลาขณะพยายามดึงข้อมูลจากเว็บไซต์"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:28./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:36./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:18./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:102./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:124./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:28./apps/zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:30./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:6./apps/zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12./apps/zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:36./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:20./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:111./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:124./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:21./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:39
 #: apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:9./apps/zotonic_mod_admin_predicate/priv/templates/_action_dialog_predicate_new.tpl:11./apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:26
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:25
 #: apps/zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:16./apps/zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:20
@@ -2561,19 +2585,11 @@ msgstr "พิมพ์ข้อความเพื่อค้นหา"
 msgid "Type to filter the list below."
 msgstr "พิมพ์เพื่อกรองรายการด้านล่าง"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:12
-msgid "Unique Page"
-msgstr "หน้าที่ไม่ซ้ำ"
-
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:31./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:44./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:49./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:51./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:258
+#: apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:31./apps/zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:44./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:79./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:80./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:83./apps/zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:258
 msgid "Unique name"
 msgstr "ชื่อเฉพาะ"
 
-#: apps/zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:20
-msgid "Unique page"
-msgstr "หน้าไม่ซ้ำใคร"
-
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:66./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:67./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:71
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:96./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:97./apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:101
 msgid "Unique uri"
 msgstr "ยูริที่ไม่เหมือนใคร"
 
@@ -2596,7 +2612,7 @@ msgstr "ไม่ได้ใช้"
 msgid "Upcoming"
 msgstr "ที่กำลังจะมาถึง"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:91./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:86./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:109
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:100./apps/zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:86./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:109
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:16
 msgid "Update"
 msgstr "อัปเดต"
@@ -2767,7 +2783,7 @@ msgstr "คุณไม่ได้รับอนุญาตให้เปล
 msgid "You don't have permission to create this page."
 msgstr "คุณไม่มีสิทธิ์สร้างเพจนี้"
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:153
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:145
 #: apps/zotonic_mod_image_edit/src/mod_image_edit.erl:52
 msgid "You don't have permission to edit this page."
 msgstr "คุณไม่ได้รับอนุญาตให้แก้ไขหน้านี้"
@@ -2785,7 +2801,7 @@ msgstr "คุณไม่มีสิทธิ์ดำเนินการน
 msgid "You have to specify a description of the file to make it easier to find and share."
 msgstr "คุณต้องระบุคำอธิบายของไฟล์เพื่อให้ค้นหาและแชร์ได้ง่ายขึ้น"
 
-#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:155
+#: apps/zotonic_mod_admin/src/controllers/controller_admin_edit.erl:147
 msgid "Your search query is invalid. Please correct it before saving."
 msgstr "คำค้นหาของคุณไม่ถูกต้อง โปรดแก้ไขก่อนบันทึก"
 
@@ -2803,7 +2819,7 @@ msgstr "เพิ่มรายการสื่อ"
 msgid "by"
 msgstr "โดย"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:64./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:65./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:155./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:156./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:157./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:161./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:164./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:70./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:71./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:164./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:165./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:166./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:161./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:164./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
 #: apps/zotonic_mod_admin_config/priv/templates/admin_config.tpl:68
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:32./apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:33./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:76./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:77./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:78
 #: apps/zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:44
@@ -2824,7 +2840,7 @@ msgstr "ลบ"
 msgid "e.g. might change"
 msgstr "เช่นอาจมีการเปลี่ยนแปลง"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:70./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:162./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:179./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:76./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:171./apps/zotonic_mod_admin/priv/templates/admin_media.tpl:179./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:40./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:38./apps/zotonic_mod_admin_identity/priv/templates/admin_users.tpl:87
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:45
 #: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:21./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:16
@@ -2878,7 +2894,7 @@ msgstr "พิกเซล"
 msgid "show all"
 msgstr "แสดงทั้งหมด"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:44./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:137
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:50./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:146
 msgid "system content"
 msgstr "เนื้อหาระบบ"
 
@@ -2894,7 +2910,7 @@ msgstr "ไม่มีชื่อ"
 msgid "uploaded on"
 msgstr "อัปโหลดเมื่อ"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:69./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:161./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:39./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
+#: apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:75./apps/zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:170./apps/zotonic_mod_admin/priv/templates/admin_referrers.tpl:39./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66./apps/zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
 #: apps/zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:37
 #: apps/zotonic_mod_comment/priv/templates/admin_comments.tpl:36
 #: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:17./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:12
@@ -9137,8 +9153,8 @@ msgid "For Zotonic sites this you can enter the domain name(s) of the website."
 msgstr "สำหรับไซต์ Zotonic คุณสามารถป้อนชื่อโดเมนของเว็บไซต์ได้"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:65
-msgid "For every combination of a user and a label there can only be a single token. Existing tokens with this label will be replaced."
-msgstr "สำหรับการรวมกันระหว่างผู้ใช้และป้ายกำกับนั้น สามารถมีโทเค็นได้เพียงตัวเดียวเท่านั้น โทเค็นที่มีอยู่แล้วที่มีป้ายกำกับนี้จะถูกแทนที่"
+msgid "For every combination of a user and a label there can only be a single access token. Existing access tokens with this label will be replaced."
+msgstr "สำหรับการรวมกันระหว่างผู้ใช้และป้ายกำกับนั้น สามารถมีโทเค็นการเข้าถึงได้เพียงอันเดียวเท่านั้น โทเค็นการเข้าถึงที่มีอยู่ซึ่งมีป้ายกำกับนี้จะถูกแทนที่"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:110
 msgid "Forever"
@@ -9184,10 +9200,6 @@ msgstr "เข้าสู่ระบบด้วย"
 msgid "Make App"
 msgstr "ทำแอป"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:78
-msgid "Make Token"
-msgstr "สร้างโทเค็น"
-
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:22./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:26
 msgid "Make a new App"
 msgstr "สร้างแอพใหม่"
@@ -9197,12 +9209,16 @@ msgid "Make a new App for OAuth2 authorization and/or content export to other we
 msgstr "สร้างแอปใหม่สำหรับการอนุญาต OAuth2 และ/หรือการส่งออกเนื้อหาไปยังเว็บไซต์อื่น"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:23
-msgid "Make a new App token"
-msgstr "สร้างโทเค็นแอปใหม่"
+msgid "Make a new access token"
+msgstr "สร้างโทเค็นการเข้าถึงใหม่"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:8
 msgid "Make a new consumer for OAuth2 authorization and content import from another website."
 msgstr "สร้างผู้บริโภครายใหม่สำหรับการอนุญาต OAuth2 และการนำเข้าเนื้อหาจากเว็บไซต์อื่น"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:78
+msgid "Make access token"
+msgstr "สร้างโทเค็นการเข้าถึง"
 
 #: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:74
 msgid "Manually add a token, as copied from {domain}."
@@ -9229,16 +9245,16 @@ msgid "OAuth2 Application"
 msgstr "แอปพลิเคชัน OAuth2"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:3
-msgid "OAuth2 Application - Tokens"
-msgstr "แอปพลิเคชัน OAuth2 - โทเค็น"
+msgid "OAuth2 Application - Access Tokens"
+msgstr "แอปพลิเคชัน OAuth2 - โทเค็นการเข้าถึง"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:7./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:15./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:439
 msgid "OAuth2 Applications"
 msgstr "แอปพลิเคชัน OAuth2"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:10
-msgid "OAuth2 Applications &gt; Tokens"
-msgstr "แอปพลิเคชัน OAuth2 &gt; โทเค็น"
+msgid "OAuth2 Applications &gt; Access Tokens"
+msgstr "แอปพลิเคชัน OAuth2 &gt; โทเค็นการเข้าถึง"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:3./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:7./apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:15./apps/zotonic_mod_oauth2/src/mod_oauth2.erl:444
 msgid "OAuth2 Clients"
@@ -9308,7 +9324,11 @@ msgstr "เลือกผู้ใช้"
 msgid "Select the user associated with Client Credential tokens."
 msgstr "เลือกผู้ใช้ที่เชื่อมโยงกับโทเค็นข้อมูลรับรองไคลเอนต์"
 
-#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:12./apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:14
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:12
+msgid "Select the user for this access token."
+msgstr "เลือกผู้ใช้สำหรับโทเค็นการเข้าถึงนี้"
+
+#: apps/zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:14
 msgid "Select the user for this token."
 msgstr "เลือกผู้ใช้สำหรับโทเค็นนี้"
 
@@ -9369,8 +9389,8 @@ msgid "Tokens to access or authenticate with <b>{domain}</b> of behalf of a user
 msgstr "โทเค็นสำหรับการเข้าถึงหรือพิสูจน์ตัวตนโดยใช้ <b>{domain}</b> ในนามของผู้ใช้"
 
 #: apps/zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:12
-msgid "Tokens to let other systems access this website of behalf of an user."
-msgstr "โทเค็นเพื่อให้ระบบอื่นสามารถเข้าถึงเว็บไซต์นี้ในนามของผู้ใช้"
+msgid "Tokens to let other systems access this website of behalf of a user."
+msgstr "โทเค็นเพื่อให้ระบบอื่นเข้าถึงเว็บไซต์นี้ในนามของผู้ใช้"
 
 #: apps/zotonic_mod_oauth2/priv/templates/oauth2_logon_authorize.tpl:64
 msgid "Unknown client or redirect, check with your website administrator."
@@ -9480,7 +9500,19 @@ msgstr "คุณไม่ได้รับอนุญาตให้ทำเ
 msgid "Check the table for the faceted search and fill it by reindexing all pages."
 msgstr "ตรวจสอบตารางสำหรับการค้นหาแบบเหลี่ยมเพชรพลอยและกรอกข้อมูลโดยจัดทำดัชนีใหม่ทุกหน้า"
 
-#: apps/zotonic_mod_search/priv/templates/search_view.tpl:15
+#: apps/zotonic_mod_search/priv/templates/search_view.tpl:8
+msgid "Matching id, name or path"
+msgstr "การจับคู่ ID, ชื่อ หรือเส้นทาง"
+
+#: apps/zotonic_mod_search/priv/templates/search_view.tpl:20
+msgid "Matching page path"
+msgstr "การจับคู่เส้นทางหน้า"
+
+#: apps/zotonic_mod_search/priv/templates/search_view.tpl:18
+msgid "Matching previous page path"
+msgstr "การจับคู่เส้นทางหน้าก่อนหน้า"
+
+#: apps/zotonic_mod_search/priv/templates/search_view.tpl:41
 #: apps/zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:59
 msgid "Matching text"
 msgstr "ข้อความที่ตรงกัน"
