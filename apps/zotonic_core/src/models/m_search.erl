@@ -174,7 +174,7 @@ search_pager(Search, Context) ->
 search_args(#{ payload := Args }) when is_map(Args) ->
     Args;
 search_args(#{ payload := [ [_,_] | _ ] = Args }) ->
-    Args;
+    z_search:props_to_map(Args);
 search_args(_) ->
     #{ <<"qargs">> => true }.
 

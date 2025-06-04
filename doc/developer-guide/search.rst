@@ -103,9 +103,14 @@ database table, and the second column name to be the filter value::
 If the filter is a three-column list, the second column is the
 operator. This must be an atom (surround it in backquotes!) and must
 be one of the following: ``eq``, ``ne``, ``gt``, ``gte``, ``lt``,
-``lte``; or one of ``=``, ``<>``, ``>``, ``>=``, ``<``, ``<=``, ``~``::
+``lte``; or one of ``=``, ``<>``, ``>``, ``>=``, ``<``, ``<=``, ``~``,
+``contains``, or ``overlaps``::
 
     filter=['facet.numeric_value', `>`, 10]
+
+or::
+
+    filter=['facet.keyword', `contains`, [`zotonic`, `search`]]
 
 It is possible to define an OR query for multiple terms::
 
@@ -289,6 +294,22 @@ A boolean option that specifies if a page should not be findable::
     is_unfindable
 
 This checks the rescource’s ``is_unfindable`` flag.
+
+is_protected
+^^^^^^^^^^^^
+
+Boolean, filters whether a resource is protected::
+
+    is_protected
+
+is_dependent
+^^^^^^^^^^^^
+
+Boolean, filters whether a resource is dependent on other resources.
+When resources are dependent they will be automatically removed when
+no other resources have edges to it::
+
+    is_dependent
 
 upcoming
 ^^^^^^^^
@@ -639,6 +660,63 @@ date_end_year
 Select items with an "event end date" in the given year::
 
     date_end_year=2012
+
+publication_year
+^^^^^^^^^^^^^^^^
+
+Select items with publication year in the given year::
+
+    publication_year=2012
+
+publication_month
+^^^^^^^^^^^^^^^^^
+
+Select items which are published in the given month::
+
+    publication_month=2
+
+publication_after
+^^^^^^^^^^^^^^^^^
+
+Select items which are published after the specified date::
+
+    publication_after="2012-12-1"
+
+publication_before
+^^^^^^^^^^^^^^^^^^
+
+Select items which are published before the specified date::
+
+    publication_before="2024-12-1"
+
+created_after
+^^^^^^^^^^^^^
+
+Select items which are created after the specified date::
+
+    created_after="2012-12-1"
+
+created_before
+^^^^^^^^^^^^^^
+
+Select items which are created before the specified date::
+
+    created_before="2024-12-1"
+
+modified_after
+^^^^^^^^^^^^^^
+
+Select items which are modified after the specified date::
+
+    modified_after="2017-5-17"
+
+modified_before
+^^^^^^^^^^^^^^^
+
+Select items which are modified before the specified date::
+
+    modified_before="2024-12-1"
+
 
 content_group
 ^^^^^^^^^^^^^

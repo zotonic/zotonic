@@ -1627,6 +1627,7 @@ pivot_qterm_op(Tab, Alias, Col, Op, Value, Query, Context) ->
                 table => Tab,
                 alias => Alias,
                 column => Col,
+                op => Op,
                 value => Value
             }),
             Error
@@ -1686,7 +1687,8 @@ sanitize_op(<<"=">>) -> <<"=">>;
 sanitize_op(<<">">>) -> <<">">>;
 sanitize_op(<<"<">>) -> <<"<">>;
 sanitize_op(<<"~">>) -> <<"~">>;
-sanitize_op(_) -> <<"=">>.
+sanitize_op(_) ->
+    <<"=">>.
 
 
 add_filters(Filters, Context) ->
@@ -1823,6 +1825,10 @@ map_filter_operator('>=') -> <<">=">>;
 map_filter_operator(lte) -> <<"<=">>;
 map_filter_operator('<=') -> <<"<=">>;
 map_filter_operator('~') -> <<"~">>;
+map_filter_operator('&&') -> <<"&&">>;
+map_filter_operator(overlaps) -> <<"&&">>;
+map_filter_operator('@>') -> <<"@>">>;
+map_filter_operator(contains) -> <<"@>">>;
 map_filter_operator("=") -> <<"=">>;
 map_filter_operator("<>") -> <<"<>">>;
 map_filter_operator(">") -> <<">">>;
@@ -1830,6 +1836,10 @@ map_filter_operator("<") -> <<"<">>;
 map_filter_operator(">=") -> <<">=">>;
 map_filter_operator("<=") -> <<"<=">>;
 map_filter_operator("~") -> <<"~">>;
+map_filter_operator("&&") -> <<"&&">>;
+map_filter_operator("overlaps") -> <<"&&">>;
+map_filter_operator("@>") -> <<"@>">>;
+map_filter_operator("contains") -> <<"@>">>;
 map_filter_operator(<<"=">>) -> <<"=">>;
 map_filter_operator(<<"<>">>) -> <<"<>">>;
 map_filter_operator(<<">">>) -> <<">">>;
@@ -1837,6 +1847,11 @@ map_filter_operator(<<"<">>) -> <<"<">>;
 map_filter_operator(<<">=">>) -> <<">=">>;
 map_filter_operator(<<"<=">>) -> <<"<=">>;
 map_filter_operator(<<"~">>) -> <<"~">>;
+map_filter_operator(<<"<@">>) -> <<"<@">>;
+map_filter_operator(<<"&&">>) -> <<"&&">>;
+map_filter_operator(<<"overlaps">>) -> <<"&&">>;
+map_filter_operator(<<"@>">>) -> <<"@>">>;
+map_filter_operator(<<"contains">>) -> <<"@>">>;
 map_filter_operator(Op) -> throw({error, {unknown_filter_operator, Op}}).
 
 

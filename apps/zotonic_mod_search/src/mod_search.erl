@@ -136,8 +136,8 @@ observe_custom_pivot(#custom_pivot{ id = Id }, Context) ->
 observe_filewatcher(#filewatcher{ file = File, extension = <<".tpl">> }, Context) ->
     case filename:basename(File) of
         <<"facet.tpl">> ->
-            % If the facet.tpl is changed, then check if the facet table is still
-            % aligned with the facet.tpl template.
+            % If a template named facet.tpl check if the facet table is still aligned
+            % with the facet.tpl template.
             search_facet:ensure_table(Context);
         _ ->
             ok

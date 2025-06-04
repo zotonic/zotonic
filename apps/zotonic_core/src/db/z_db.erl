@@ -1430,9 +1430,16 @@ column_exists(Table, Column, Context) when is_atom(Column) ->
 -spec to_column_value(table_name(), column_name(), term(), z:context()) -> {ok, term()} | {error, term()}.
 to_column_value(Table, Column, Value, Context) ->
     case column(Table, Column, Context) of
-        {ok, #column_def{ type = Type, length = Length }} ->
+        {ok, #column_def{ type = Type, length = Length, is_array = false }} ->
             try
                 {ok, convert_value(Type, Length, Value)}
+            catch
+                _:Reason ->
+                    {error, Reason}
+            end;
+        {ok, #column_def{ type = Type, length = Length, is_array = true }} ->
+            try
+                {ok, convert_array_value(Type, Length, Value)}
             catch
                 _:Reason ->
                     {error, Reason}
@@ -1472,6 +1479,11 @@ convert_value(Type, _, V) when is_binary(Type) ->
         value => V
     }),
     V.
+
+convert_array_value(Type, Length, V) when is_list(V) ->
+    [ convert_value(Type, Length, E) || E <- V ];
+convert_array_value(Type, Length, V) ->
+    [ convert_value(Type, Length, V) ].
 
 
 %% @doc Flush all cached information about the database.

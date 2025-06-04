@@ -801,7 +801,7 @@ convert_type_1(list, L, _Context) when is_list(L) ->
 convert_type_1(ids, [], _Context) ->
     undefined;
 convert_type_1(ids, L, Context) when is_list(L) ->
-    lists:map(fun(V) -> convert_type_1(id, V, Context) end, L);
+    lists:uniq(lists:map(fun(V) -> convert_type_1(id, V, Context) end, L));
 convert_type_1(Type, L, Context) when is_list(L) ->
     L1 = lists:map(fun(V) -> convert_type_1(Type, V, Context) end, L),
     lists:filter(fun(V) -> V =/= <<>> andalso V =/= undefined end, L1);
@@ -1273,7 +1273,11 @@ template_facets(Context) ->
                     }),
                     {error, duplicate_blocks}
             end;
-        {error, _} = Error ->
+        {error, Reason} = Error ->
+            ?LOG_ERROR(#{ test => <<"Could not check facet.tpl">>,
+                          in => zotonic_mod_search,
+                          result => error,
+                          error => Reason }),
             Error
     end.
 
