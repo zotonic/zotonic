@@ -661,7 +661,7 @@ update_result({ok, NewId, {OldProps, NewProps, OldCatList, IsCatInsert}}, #rscup
     % if it is connected. If not then it should be deleted.
     if
         Id =:= insert_rsc ->
-            z_edge_log_server:maybe_schedule_dependent_check(Id, Context);
+            z_edge_log_server:maybe_schedule_dependent_check(NewId, Context);
         true ->
             ok
     end,

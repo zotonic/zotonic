@@ -50,9 +50,10 @@
 %% @doc Schedule a check if the resource is connected, if not then then the resource will be deleted.
 %% This is called after a resource is inserted. The check is done 12 hours after the resource has
 %% been inserted.
--spec maybe_schedule_dependent_check(Id, Context) -> ok when
+-spec maybe_schedule_dependent_check(Id, Context) -> ok | {error, Reason} when
     Id :: m_rsc:resource_id(),
-    Context :: z:context().
+    Context :: z:context(),
+    Reason :: term().
 maybe_schedule_dependent_check(Id, Context) ->
     maybe_schedule_dependent_check(Id, 12*3600, Context).
 
@@ -228,7 +229,10 @@ maybe_schedule_dependent_check(Id, Delay, Context) when is_integer(Id) ->
     case m_rsc:p_no_acl(Id, <<"is_dependent">>, Context) of
         true ->
             Key = z_convert:to_binary(Id),
-            z_pivot_rsc:insert_task_after(Delay, ?MODULE, delete_if_unconnected, Key, [Id], Context);
+            case z_pivot_rsc:insert_task_after(Delay, ?MODULE, delete_if_unconnected, Key, [Id], Context) of
+                {ok, _} -> ok;
+                {error, _} = Error -> Error
+            end;
         _False ->
             ok
     end.
