@@ -229,9 +229,13 @@ maybe_schedule_dependent_check(Id, Delay, Context) when is_integer(Id) ->
     case m_rsc:p_no_acl(Id, <<"is_dependent">>, Context) of
         true ->
             Key = z_convert:to_binary(Id),
-            case z_pivot_rsc:insert_task_after(Delay, ?MODULE, delete_if_unconnected, Key, [Id], Context) of
-                {ok, _} -> ok;
-                {error, _} = Error -> Error
+            case m_edge:has_subjects(Id, Context) of
+                true -> ok;
+                false ->
+                    case z_pivot_rsc:insert_task_after(Delay, ?MODULE, delete_if_unconnected, Key, [Id], Context) of
+                        {ok, _} -> ok;
+                        {error, _} = Error -> Error
+                    end
             end;
         _False ->
             ok

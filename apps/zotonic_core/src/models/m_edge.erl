@@ -48,6 +48,8 @@
     subjects/3,
     objects/2,
     subjects/2,
+    has_objects/2,
+    has_subjects/2,
     object_edge_ids/3,
     subject_edge_ids/3,
     object_edge_props/3,
@@ -887,6 +889,37 @@ subjects(Object, Context) ->
             z_depcache:memo(F, {subjects, ObjectId}, ?HOUR, [ObjectId], Context)
     end.
 
+%% @doc Check if a resource has object edges, no caching is done.
+-spec has_objects(m_rsc:resource(), z:context()) -> boolean().
+has_objects(Subject, Context) ->
+    case m_rsc:rid(Subject, Context) of
+        undefined ->
+            false;
+        SubjectId ->
+            is_integer(
+                z_db:q1("
+                    select id from edge
+                    where subject_id = $1
+                    limit 1",
+                    [SubjectId],
+                    Context))
+    end.
+
+%% @doc Check if a resource has subject edges, no caching is done.
+-spec has_subjects(m_rsc:resource(), z:context()) -> boolean().
+has_subjects(Object, Context) ->
+    case m_rsc:rid(Object, Context) of
+        undefined ->
+            false;
+        ObjectId ->
+            is_integer(
+                z_db:q1("
+                    select id from edge
+                    where object_id = $1
+                    limit 1",
+                    [ObjectId],
+                    Context))
+    end.
 
 %% @doc Return all object ids with the edge id for a predicate/subject_id
 -spec object_edge_ids( m_rsc:resource(), m_rsc:resource(), z:context() ) -> [ {m_rsc:resource_id(), integer()} ].
