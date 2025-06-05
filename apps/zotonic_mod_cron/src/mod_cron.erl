@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017-2024 Marc Worrell
+%% @copyright 2017-2025 Marc Worrell
 %% @doc Periodic tasks and ticks for other modules.
 %% @end
 
-%% Copyright 2017-2024 Marc Worrell
+%% Copyright 2017-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
