@@ -42,11 +42,13 @@
         </div>
     </div>
 
-    <div class="form-group">
-        <label class="control-label">{_ Publication date of original article _}</label>
-        <div>
-            {% include "_edit_date.tpl" date=id.org_pubdate name="org_pubdate" is_end=0 is_editable=id.is_editable timezone=id.tz %}
+    {% block org_pubdate %}
+        <div class="form-group">
+            <label class="control-label">{_ Publication date of original article _}</label>
+            <div>
+                {% include "_edit_date.tpl" date=id.org_pubdate name="org_pubdate" is_end=0 is_editable=id.is_editable timezone=id.tz %}
+            </div>
         </div>
-    </div>
+    {% endblock %}
 </fieldset>
 {% endblock %}
