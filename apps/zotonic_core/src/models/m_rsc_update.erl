@@ -465,32 +465,39 @@ update(Name, PropsOrFun, Options, Context) when not is_integer(Name), Name =/= i
             end
     end;
 update(Id, Props, Options, Context) when is_list(Props) ->
-    {ok, Props1} = z_props:from_list(Props),
+    {ok, PropsMap} = z_props:from_list(Props),
     OptionsTz = case proplists:lookup(tz, Options) of
         {tz, _} ->
             % Timezone set in the update options
             Options;
         none ->
-            case maps:find(<<"tz">>, Props1) of
-                {ok, Tz} ->
-                    % Timezone specified in the update
-                    [ {tz, Tz} | Options ];
-                error ->
-                    case Props of
-                        [ {K, _} | _ ] when is_binary(K); is_list(K) ->
-                            % On a form post input we use the timezone of
-                            % of the request context.
-                            [ {tz, z_context:tz(Context)} | Options ];
-                        _ ->
-                            % Assume UTC
-                            Options
-                    end
+            case timezone(Id, PropsMap, Props, Context) of
+                undefined -> Options;
+                Tz -> [ {tz, Tz} | Options ]
             end
     end,
-    update_1(Id, Props1, OptionsTz, Context);
+    update_1(Id, PropsMap, OptionsTz, Context);
 update(Id, PropsOrFun0, Options, Context) when is_integer(Id); Id =:= insert_rsc ->
     PropsOrFun = binary_keys(PropsOrFun0),
     update_1(Id, PropsOrFun, Options, Context).
+
+
+%% @doc Determine the timezone for date conversions, if it is not given in the options.
+timezone(_Id, #{ <<"tz">> := Tz }, _Props, _Context) when Tz =/= undefined ->
+    % Timezone specified in the update.
+    Tz;
+timezone(Id, PropsMap, [ {K, _} | _ ] = Props, Context) when is_integer(Id), is_binary(K); is_list(K) ->
+    case m_rsc:p_no_acl(Id, <<"tz">>, Context) of
+        undefined -> timezone(undefined, PropsMap, Props, Context);
+        Tz -> Tz
+    end;
+timezone(_Id, _PropsMap, [ {K, _} | _ ], Context) when is_binary(K); is_list(K) ->
+    % On a form post input we use the timezone of
+    % of the request context.
+    z_context:tz(Context);
+timezone(_Id, _PropsMap, _Props, _Context) ->
+    % The conversion will assume UTC.
+    undefined.
 
 update_1(Id, PropsOrFun, Options, Context) when is_integer(Id); Id =:= insert_rsc ->
     IsImport = proplists:get_value(is_import, Options, false),
