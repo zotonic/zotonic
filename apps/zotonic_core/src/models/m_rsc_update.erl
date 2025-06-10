@@ -486,7 +486,7 @@ update(Id, PropsOrFun0, Options, Context) when is_integer(Id); Id =:= insert_rsc
 timezone(_Id, #{ <<"tz">> := Tz }, _Props, _Context) when Tz =/= undefined ->
     % Timezone specified in the update.
     Tz;
-timezone(Id, PropsMap, [ {K, _} | _ ] = Props, Context) when is_integer(Id), is_binary(K); is_list(K) ->
+timezone(Id, PropsMap, Props, Context) when is_integer(Id) ->
     case m_rsc:p_no_acl(Id, <<"tz">>, Context) of
         undefined -> timezone(undefined, PropsMap, Props, Context);
         Tz -> Tz
