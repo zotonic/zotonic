@@ -34,15 +34,10 @@ forbidden(Context) ->
     Context2 = z_context:ensure_qs(Context),
     z_context:logger_md(Context2),
     Dispatch = z_context:get(zotonic_dispatch, Context2),
-    case z_acl:is_allowed(use, mod_export, Context2) of
-        true ->
-            case export_helper:call(#export_resource_visible{dispatch=Dispatch}, Context2) of
-                undefined -> {false, Context2};
-                true -> {false, Context2};
-                false -> {true, Context2}
-            end;
-        false ->
-            {true, Context2}
+    case export_helper:call(#export_resource_visible{dispatch=Dispatch}, Context2) of
+        undefined -> {false, Context2};
+        true -> {false, Context2};
+        false -> {true, Context2}
     end.
 
 content_types_provided(Context) ->
