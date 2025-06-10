@@ -37,13 +37,13 @@ $.widget("ui.survey_test_feedback",
                     }
                 }
                 self.reset_feedback_icons($wrap);
-                $wrap.find("input[name=" + name + "]").each(
+                $wrap.find(`input[name="${CSS.escape(name)}"]`).each(
                     function(_idx, input) {
                         let nr = $(input).attr('data-answer-nr');
                         if ($(input).is(':checked')) {
                             let $icon_wrap = $(input).closest('label');
                             self.show_feedback($(input), obj, $icon_wrap, 'true');
-                            $wrap.find(".survey-test-feedback-answer[data-answer-nr=\""+ nr +"\"").show();
+                            $wrap.find(`.survey-test-feedback-answer[data-answer-nr="${CSS.escape(nr)}"]`).show();
                         }
                     });
             });
@@ -64,7 +64,7 @@ $.widget("ui.survey_test_feedback",
                         if ($(option).attr('value') == val) {
                             self.show_feedback($(option), obj, $wrap, 'true', $select);
                             let nr = $(option).attr('data-answer-nr');
-                            $wrap.find(".survey-test-feedback-answer[data-answer-nr=\""+ nr +"\"").show();
+                            $wrap.find(`.survey-test-feedback-answer[data-answer-nr="${CSS.escape(nr)}"]`).show();
                         }
                     });
             });
