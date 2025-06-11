@@ -187,7 +187,10 @@ handle_cmd(<<"copy">>, Data, Context) ->
     case m_rsc:is_visible(FromId, Context) of
         true ->
             NewTitle = make_copy_title(m_rsc:p(FromId, title, Context), Context),
-            case m_rsc:duplicate(FromId, [{title, NewTitle}], Context) of
+            NewProps = #{
+                <<"title">> => z_html:unescape(NewTitle)
+            },
+            case m_rsc:duplicate(FromId, NewProps, Context) of
                 {ok, NewId} ->
                     Template = case proplists:get_value(<<"template">>, Data) of
                         undefined -> "_menu_edit_item.tpl";
