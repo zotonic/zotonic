@@ -471,7 +471,7 @@ update(Id, Props, Options, Context) when is_list(Props) ->
             % Timezone set in the update options
             Options;
         none ->
-            case timezone(Id, PropsMap, Props, Context) of
+            case timezone(Id, PropsMap, Context) of
                 undefined -> Options;
                 Tz -> [ {tz, Tz} | Options ]
             end
@@ -483,34 +483,31 @@ update(Id, PropsOrFun0, Options, Context) when is_integer(Id); Id =:= insert_rsc
 
 
 %% @doc Determine the timezone for date conversions, if it is not given in the options.
-timezone(_Id, #{ <<"tz">> := Tz }, _Props, _Context) when Tz =/= undefined ->
+timezone(_Id, #{ <<"tz">> := Tz }, _Context) when Tz =/= undefined, Tz =/= <<>> ->
     % Timezone specified in the update.
     Tz;
-timezone(Id, PropsMap, Props, Context) when is_integer(Id) ->
+timezone(Id, _PropsMap, Context) when is_integer(Id) ->
+    % Assume a resource is edited in its own timezone, if the timezone is not
+    % part of the update.
     case m_rsc:p_no_acl(Id, <<"tz">>, Context) of
-        undefined -> timezone(undefined, PropsMap, Props, Context);
-        Tz -> Tz
+        None when None =:= undefined; None =:= <<>> ->
+            % Assume requestor's timezone.
+            z_context:tz(Context);
+        Tz ->
+            Tz
     end;
-timezone(_Id, _PropsMap, [ {K, _} | _ ], Context) when is_binary(K); is_list(K) ->
-    % On a form post input we use the timezone of
-    % of the request context.
-    z_context:tz(Context);
-timezone(_Id, _PropsMap, _Props, _Context) ->
-    % The conversion will assume UTC.
-    undefined.
+timezone(_Id, _PropsMap, Context) ->
+    % Assume the timezone of the request context -- when inserting new resources
+    % we do assume the requestor's timezone.
+    z_context:tz(Context).
 
 update_1(Id, PropsOrFun, Options, Context) when is_integer(Id); Id =:= insert_rsc ->
     IsImport = proplists:get_value(is_import, Options, false),
     Tz0 = case is_map(PropsOrFun) of
         true when not IsImport ->
-            % Timezone in the update props is leading over the timezone in the options
-            case maps:get(<<"tz">>, PropsOrFun, undefined) of
-                undefined -> proplists:get_value(tz, Options, <<"UTC">>);
-                <<>> -> proplists:get_value(tz, Options, <<"UTC">>);
-                PropTz -> PropTz
-            end;
+            timezone(Id, PropsOrFun, Context);
         _ ->
-            proplists:get_value(tz, Options, <<"UTC">>)
+            proplists:get_value(tz, Options, z_context:tz(Context))
     end,
     % Sanity fallback for 'undefined' tz in the options
     Tz = case Tz0 of
@@ -598,7 +595,7 @@ update_normalize_props(RscUpd, Func, Context) when is_function(Func) ->
 is_all_day(_Id, #{ <<"date_is_all_day">> := IsAllDay }, _Context) ->
     z_convert:to_bool(IsAllDay);
 is_all_day(Id, _Props, Context) when is_integer(Id) ->
-    z_convert:to_bool(m_rsc:p_no_acl(Id, date_is_all_day, Context));
+    z_convert:to_bool(m_rsc:p_no_acl(Id, <<"date_is_all_day">>, Context));
 is_all_day(_Id, _Props, _Context) ->
     false.
 
