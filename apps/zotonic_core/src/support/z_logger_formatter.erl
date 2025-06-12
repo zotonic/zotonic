@@ -112,12 +112,13 @@ format(Map = #{msg := {report, #{label := {proc_lib, crash}, report := [Info, Li
     end,
     format(Map#{ msg => {report, Report} }, UsrConfig);
 format(#{level:=Level, msg:={report, Msg}, meta:=Meta}, UsrConfig) when is_map(Msg) ->
+    Msg1 = maybe_flatten_report(Msg),
     Config = apply_defaults(UsrConfig),
     NewMeta = maps:merge(Meta, #{level => Level
                                 ,colored_start => Level
                                 ,colored_end => ?COLOR_END
                                 }),
-    format_log(maps:get(template, Config), Config, Msg, NewMeta);
+    format_log(maps:get(template, Config), Config, Msg1, NewMeta);
 format(Map = #{msg := {report, KeyVal}}, UsrConfig) when is_list(KeyVal) ->
     format(Map#{msg := {report, maps:from_list(KeyVal)}}, UsrConfig);
 format(Map = #{msg := {string, String}}, UsrConfig) ->
@@ -193,6 +194,17 @@ format(Map = #{msg := Msg}, UsrConfig) ->
 %%====================================================================
 %% Internal functions
 %%====================================================================
+
+maybe_flatten_report(#{ label := {error_logger, error_report}, report := Text } = Msg) when is_list(Text) ->
+    try
+        Text1 = unicode:characters_to_binary(Text),
+        Msg#{ report => Text1 }
+    catch
+        _:_ ->
+            Msg
+    end;
+maybe_flatten_report(Msg) ->
+    Msg.
 
 apply_defaults(UserConfig) ->
     DefaultConfig = #{

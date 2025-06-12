@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014-2023 Marc Worrell
+%% @copyright 2014-2025 Marc Worrell
 %% @doc Check for changed edges, trigger notifications.
+%% @end
 
-%% Copyright 2014-2023 Marc Worrell
+%% Copyright 2014-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -27,6 +28,7 @@
 %% interface functions
 -export([
     check/1,
+    maybe_schedule_dependent_check/2,
     delete_if_unconnected/2
 ]).
 
@@ -43,6 +45,16 @@
 -define(CLEANUP_BATCH_SIZE, 100).
 
 -record(state, {site :: atom()}).
+
+
+%% @doc Schedule a check if the resource is connected in 12 hours, if not then the resource will be deleted.
+%% This is called after a resource is inserted or updated.
+-spec maybe_schedule_dependent_check(Id, Context) -> ok | {error, Reason} when
+    Id :: m_rsc:resource_id(),
+    Context :: z:context(),
+    Reason :: term().
+maybe_schedule_dependent_check(Id, Context) ->
+    maybe_schedule_dependent_check(Id, 12*3600, Context).
 
 
 %% @doc Force a check, useful after known edge operations.
@@ -67,10 +79,6 @@ start_link(Site) ->
 %% gen_server callbacks
 %%====================================================================
 
-%% @spec init(Args) -> {ok, State} |
-%%                     {ok, State, Timeout} |
-%%                     ignore               |
-%%                     {stop, Reason}
 %% @doc Initiates the server.
 init(Site) ->
     logger:set_process_metadata(#{
@@ -80,19 +88,10 @@ init(Site) ->
     z_notifier:observe(check_edge_log, {?MODULE, observe_check_edge_log}, Site),
     {ok, #state{site=Site}, ?CLEANUP_TIMEOUT_LONG}.
 
-%% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
-%%                                      {reply, Reply, State, Timeout} |
-%%                                      {noreply, State} |
-%%                                      {noreply, State, Timeout} |
-%%                                      {stop, Reason, Reply, State} |
-%%                                      {stop, Reason, State}
 %% @doc Trap unknown calls
 handle_call(Message, _From, State) ->
     {stop, {unknown_call, Message}, State}.
 
-%% @spec handle_cast(Msg, State) -> {noreply, State} |
-%%                                  {noreply, State, Timeout} |
-%%                                  {stop, Reason, State}
 handle_cast(check, State) ->
     case do_check(State#state.site) of
         {ok, 0} ->
@@ -109,16 +108,12 @@ handle_cast(Message, State) ->
 
 
 
-%% @spec handle_info(Info, State) -> {noreply, State} |
-%%                                       {noreply, State, Timeout} |
-%%                                       {stop, Reason, State}
 %% @doc Handling all non call/cast messages
 handle_info(timeout, State) ->
     handle_cast(check, State);
 handle_info(_Info, State) ->
     {noreply, State}.
 
-%% @spec terminate(Reason, State) -> void()
 %% @doc This function is called by a gen_server when it is about to
 %% terminate. It should be the opposite of Module:init/1 and do any necessary
 %% cleaning up. When it returns, the gen_server terminates with Reason.
@@ -126,7 +121,6 @@ handle_info(_Info, State) ->
 terminate(_Reason, _State) ->
     ok.
 
-%% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
 %% @doc Convert process state when code is changed
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
@@ -224,11 +218,24 @@ do_edge_notify(<<"INSERT">>, SubjectId, PredName, ObjectId, EdgeId, Acc, Context
         T2 => [ Edge | maps:get(T2, Acc, []) ]
     }.
 
+%% @doc After edge deletion, check if a dependent resource is connected. If not then the resource
+%% can be deleted. There is a waiting period of an hour so that a resource can be disconnected first
+%% before being connected to another resource.
 maybe_delete_dependent(Id, Context) ->
-    case m_rsc:p_no_acl(Id, is_dependent, Context) of
+    maybe_schedule_dependent_check(Id, 3600, Context).
+
+maybe_schedule_dependent_check(Id, Delay, Context) when is_integer(Id) ->
+    case m_rsc:p_no_acl(Id, <<"is_dependent">>, Context) of
         true ->
             Key = z_convert:to_binary(Id),
-            z_pivot_rsc:insert_task_after(3600, ?MODULE, delete_if_unconnected, Key, [Id], Context);
+            case m_edge:has_subjects(Id, Context) of
+                true -> ok;
+                false ->
+                    case z_pivot_rsc:insert_task_after(Delay, ?MODULE, delete_if_unconnected, Key, [Id], Context) of
+                        {ok, _} -> ok;
+                        {error, _} = Error -> Error
+                    end
+            end;
         _False ->
             ok
     end.
