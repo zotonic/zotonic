@@ -657,7 +657,7 @@ update_result({ok, NewId, {OldProps, NewProps, OldCatList, IsCatInsert}}, #rscup
         },
         Context),
 
-    % If a newly inserted resource is dependent, then schedule a check
+    % If a new or updated resource becomes dependent, then schedule a check
     % if it is connected. If not then it should be deleted.
     case maps:get(<<"is_dependent">>, NewProps, false) of
         true ->
