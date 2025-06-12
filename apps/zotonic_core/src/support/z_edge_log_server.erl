@@ -47,9 +47,8 @@
 -record(state, {site :: atom()}).
 
 
-%% @doc Schedule a check if the resource is connected, if not then then the resource will be deleted.
-%% This is called after a resource is inserted. The check is done 12 hours after the resource has
-%% been inserted.
+%% @doc Schedule a check if the resource is connected in 12 hours, if not then the resource will be deleted.
+%% This is called after a resource is inserted or updated.
 -spec maybe_schedule_dependent_check(Id, Context) -> ok | {error, Reason} when
     Id :: m_rsc:resource_id(),
     Context :: z:context(),
