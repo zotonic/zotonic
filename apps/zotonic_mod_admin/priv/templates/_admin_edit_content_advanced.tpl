@@ -35,8 +35,8 @@
                     {_ The path <em>after the language code</em> for the URL, if left empty then the path of the default language is used. _}
                 {% endif %}
                 <br>
+                {_ If none of the languages has a page path then the complete path will be: _}
                 {% with lang_code as z_language %}
-                    {_ If none of the languages has a page path then the complete path will be: _}
                     <br><tt>{{ id.default_page_url|escape }}</tt>
                 {% endwith %}
             </p>
