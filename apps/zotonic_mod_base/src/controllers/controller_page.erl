@@ -117,18 +117,19 @@ redirect(Location, Context) ->
 process(_Method, _AcceptedCT, _ProvidedCT, Context) ->
     Id = z_controller_helper:get_id(Context),
     CatId = m_rsc:p_no_acl(Id, category_id, Context),
-    IsSeoNoIndex = z_convert:to_bool(m_rsc:p_no_acl(Id, seo_noindex, Context))
-        orelse z_convert:to_bool(m_rsc:p_no_acl(CatId, is_seo_noindex_cat, Context))
+    IsSeoNoIndex = z_convert:to_bool(m_rsc:p_no_acl(Id, <<"seo_noindex">>, Context))
+        orelse z_convert:to_bool(m_rsc:p_no_acl(CatId, <<"is_seo_noindex_cat">>, Context))
         orelse z_convert:to_bool(z_context:get(seo_noindex, Context, false)),
     Context0 = z_context:set_noindex_header(IsSeoNoIndex, Context),
     Context1 = z_context:set_resource_headers(Id, Context0),
     IsCollection = m_rsc:is_a(Id, collection, Context),
-    IsHome = m_rsc:p_no_acl(Id, page_path, Context) =:= <<"/">>,
+    ContextNoLang = z_context:set_language('x-default', Context),
+    IsHome = m_rsc:p_no_acl(Id, <<"page_url">>, ContextNoLang) =:= <<"/">>,
     ContentLanguage = if
         IsCollection orelse IsHome ->
             z_context:language(Context1);
         true ->
-            Translations = case m_rsc:p_no_acl(Id, language, Context1) of
+            Translations = case m_rsc:p_no_acl(Id, <<"language">>, Context1) of
                 undefined -> [];
                 Lngs -> Lngs
             end,
@@ -199,9 +200,9 @@ maybe_redirect_canonical(Id, Context) ->
             [ReqPath1|_] = binary:split(ReqPath, <<"?">>),
             PageUrl = m_rsc:p(Id, <<"page_url">>, Context),
             if
-                ReqPath == PageUrl ->
+                ReqPath =:= PageUrl ->
                     {true, Context};
-                ReqPath1 == PageUrl ->
+                ReqPath1 =:= PageUrl ->
                     {true, Context};
                 true ->
                     AbsUrl = z_context:abs_url(PageUrl, Context),
