@@ -29,5 +29,5 @@ add_month(undefined, _N, _Context) ->
 	undefined;
 add_month(Date, 0, _Context) ->
 	Date;
-add_month(Date, N, _Context) when is_integer(N), N > 0 ->
+add_month(Date, N, _Context) when is_integer(N) ->
 	z_datetime:next_month(Date, N).
