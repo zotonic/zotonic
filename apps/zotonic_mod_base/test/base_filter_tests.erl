@@ -97,3 +97,10 @@ merge_tag_test() ->
     <<"Hello foo.">> = filter_merge_tags:merge_tags(<<"Hello {{ name }}.">>, #{ <<"id">> => 1, <<"name">> => <<"foo">> }, Context),
     ok.
 
+replace_args_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    Context = z_context:new(zotonic_site_testsandbox),
+    ?assertEqual(<<"Your €300 donation"/utf8>>, unicode:characters_to_binary(filter_replace_args:replace_args(<<"Your €$1 donation"/utf8>>, ["300"], Context))),
+    ?assertEqual(<<"Your €10 donation"/utf8>>, unicode:characters_to_binary(filter_replace_args:replace_args(<<"Your $2$1 donation"/utf8>>, ["10", "€"], Context))),
+    ?assertEqual(<<"Your €5.95 donation"/utf8>>, unicode:characters_to_binary(filter_replace_args:replace_args(<<"Your $2$1 donation"/utf8>>, ["5.95", <<"€"/utf8>>], Context))),
+    ok.
