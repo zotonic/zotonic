@@ -47,7 +47,7 @@ replace_args(Input, Args, _Context) when is_list(Input) andalso is_list(Args) ->
             do_replace_args(Input, [Arg], [])
     end;
 replace_args(Input, Args, Context) when is_binary(Input) ->
-    replace_args(z_convert:to_list(Input), Args, Context);
+    replace_args(unicode:characters_to_list(Input), Args, Context);
 replace_args(Input, _Args, _Context) ->
     Input.
 
