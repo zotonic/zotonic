@@ -174,7 +174,7 @@ maybe_encrypt_files({ok, Files}, Context) ->
 
                     Dir = dir(Context),
                     Files1 = maps:map(fun(Key, FileOrHash) ->
-                                              case is_hash(Key) of
+                                              case is_hash(Key) orelse FileOrHash == undefined of
                                                   true ->
                                                       FileOrHash;
                                                   false ->
