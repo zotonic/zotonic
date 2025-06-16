@@ -177,13 +177,20 @@ received_1(Recipient, ParsedEmail,
                             {ok, Other}
                     end;
                 true ->
+                    HeaderFrom = proplists:get_value(<<"from">>, LHeaders),
+                    HeaderTo = proplists:get_value(<<"to">>, LHeaders),
                     ?LOG_NOTICE(#{
                         text => <<"[smtp] Dropping email from blocked address">>,
                         in => zotonic_core,
                         result => error,
                         reason => blocked,
+                        recipient => Recipient,
                         email => ParsedEmail#email.from,
-                        recipient => Recipient
+                        email_blocked => is_blocked(ParsedEmail#email.from, Context),
+                        header_from => HeaderFrom,
+                        header_from_blocked => is_blocked(HeaderFrom, Context),
+                        header_to => HeaderTo,
+                        header_to_blocked => is_blocked(HeaderTo, Context)
                     }),
                     LogEmail = #log_email{
                         severity = ?LOG_LEVEL_WARNING,
@@ -199,7 +206,7 @@ received_1(Recipient, ParsedEmail,
                         envelop_from = ParsedEmail#email.from
                     },
                     z_notifier:notify(#zlog{ props = LogEmail }, Context),
-                    % Silently ignore - do now warn sender
+                    % Silently ignore - do not warn sender
                     {ok, undefined}
             end;
         {error, unknown_host} ->
