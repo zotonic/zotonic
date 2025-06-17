@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-06-03 14:28\n"
+"PO-Revision-Date: 2025-06-17 08:49\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -586,7 +586,7 @@ msgstr "Kõigepealt kuvage see ACL-i kasutajagrupp:"
 #: apps/zotonic_mod_admin_category/src/mod_admin_category.erl:52./apps/zotonic_mod_admin_category/src/mod_admin_category.erl:68
 #: apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:61./apps/zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:76
 #: apps/zotonic_mod_content_groups/src/mod_content_groups.erl:56./apps/zotonic_mod_content_groups/src/mod_content_groups.erl:72
-#: apps/zotonic_mod_menu/src/mod_menu.erl:232
+#: apps/zotonic_mod_menu/src/mod_menu.erl:235
 msgid "Sorry, you are not allowed to delete this."
 msgstr "Vabandust, teil pole lubatud seda kustutada."
 
@@ -1550,7 +1550,7 @@ msgstr "IP-aadress"
 msgid "If a page has a publication date range then it will only be visible between the two dates. Note that if you are allowed to edit the page then you can always see it."
 msgstr "Kui lehel on avaldamise kuupäevavahemik, on see nähtav ainult kahe kuupäeva vahel. Pange tähele, et kui teil on lubatud lehte muuta, näete seda alati."
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:39
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:38
 msgid "If none of the languages has a page path then the complete path will be:"
 msgstr "Kui ühelgi keelel pole lehe teed, siis on täielik tee järgmine:"
 
@@ -1592,6 +1592,10 @@ msgstr "On seotud predikaadiga"
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:39
 msgid "Items per page"
 msgstr "Üksusi lehel"
+
+#: apps/zotonic_mod_admin/priv/templates/_edit_medium_language.tpl:14
+msgid "Language independent"
+msgstr ""
 
 #: apps/zotonic_mod_admin/priv/templates/_edit_medium_language.tpl:3./apps/zotonic_mod_admin/priv/templates/_edit_medium_language.tpl:7
 msgid "Language of media content"
@@ -1980,7 +1984,7 @@ msgstr "Kaitstud"
 msgid "Protected, not deletable"
 msgstr "Kaitstud, mitte kustutatav"
 
-#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:46
+#: apps/zotonic_mod_admin/priv/templates/_admin_edit_content_pub_period.tpl:47
 msgid "Publication date of original article"
 msgstr "Algartikli avaldamise kuupäev"
 
@@ -2601,6 +2605,7 @@ msgstr "Avaldamata"
 #: apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58./apps/zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 #: apps/zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:59
 #: apps/zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13./apps/zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
+#: apps/zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:279
 msgid "Untitled"
 msgstr "Pealkirjata"
 
@@ -8740,7 +8745,7 @@ msgstr "Kõikide menüüressursside kontrollimine taustal"
 msgid "Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add pages."
 msgstr "Lehekülgede lisamiseks klõpsake nuppu <strong>Lisa menüüelement</strong> või <strong>Menüüpunkt</strong>."
 
-#: apps/zotonic_mod_menu/src/mod_menu.erl:240
+#: apps/zotonic_mod_menu/src/mod_menu.erl:243
 msgid "Copy of:"
 msgstr "Koopia:"
 
@@ -8780,7 +8785,7 @@ msgstr "Hierarhia"
 msgid "Menu"
 msgstr "Menüü"
 
-#: apps/zotonic_mod_menu/src/mod_menu.erl:205
+#: apps/zotonic_mod_menu/src/mod_menu.erl:208
 msgid "Sorry, can’t copy that page."
 msgstr "Vabandust, seda lehte ei saa kopeerida."
 
