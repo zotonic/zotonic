@@ -11,7 +11,7 @@
            }}" title="{_ Help _}"></a>
     </label>
     <select id="{{ #medium_language }}" name="medium_language" class="form-control" style="width: auto">
-        <option value="">{{ defaultLangText|default:_"Select language" }}</option>
+        <option value="">{_ Language independent _}</option>
         {% for code, lang in m.translation.language_list_editable %}
             <option value="{{ code }}" {% if id.medium_language == code %}selected{% endif %}>
                 {{ lang.name }}
