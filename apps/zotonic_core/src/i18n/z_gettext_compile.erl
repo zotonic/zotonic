@@ -81,7 +81,6 @@ write_entries(Fd, Labels) ->
     lists:foreach(F, Labels).
 
 -define(ENDCOL, 72).
-% -define(PIVOT, 4).
 -define(SEP, <<" ">>).
 
 write_pretty(Binary, Fd) ->
