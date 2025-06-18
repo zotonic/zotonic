@@ -196,6 +196,8 @@ shorten_path(Path) ->
     filename:join(Parts2).
 
 drop_till_module([]) -> error;
+drop_till_module([ <<"Users">>, _Username , <<"src">> | Path ] = Path) -> drop_till_module(Path);
+drop_till_module([ <<"home">>, _Username , <<"src">> | Path ] = Path) -> drop_till_module(Path);
 drop_till_module([ <<"user">>, <<"sites">> | _ ] = Path) -> {ok, tl(tl(Path))};
 drop_till_module([ <<"user">>, <<"modules">> | _ ] = Path) -> {ok, tl(tl(Path))};
 drop_till_module([ <<"ginger">>, <<"sites">> | _ ] = Path) -> {ok, tl(tl(Path))};
@@ -206,12 +208,17 @@ drop_till_module([ <<"mod_", _/binary>> | _ ] = Path) -> {ok, Path};
 drop_till_module([ _Mod, <<"priv">> | _ ] = Path) -> {ok, Path};
 drop_till_module([ _Mod, <<"templates">> | _ ] = Path) -> {ok, Path};
 drop_till_module([ _Mod, <<"support">> | _ ] = Path) -> {ok, Path};
-drop_till_module([ _Mod, <<"src">> | _ ] = Path) -> {ok, Path};
 drop_till_module([ _Mod, <<"actions">> | _ ] = Path) -> {ok, Path};
 drop_till_module([ _Mod, <<"controllers">> | _ ] = Path) -> {ok, Path};
 drop_till_module([ _Mod, <<"filters">> | _ ] = Path) -> {ok, Path};
 drop_till_module([ _Mod, <<"models">> | _ ] = Path) -> {ok, Path};
 drop_till_module([ _Mod, <<"services">> | _ ] = Path) -> {ok, Path};
+drop_till_module([ Mod, <<"src">> | Rest ] = Path) ->
+    % Prevent paths like "../<username>/src/..." to be matched as a module name.
+    case z_utils:ensure_existing_module(Mod) of
+        {ok, _} -> {ok, Path};
+        {error, _} -> drop_till_module(Rest)
+    end;
 drop_till_module([ _Mod, <<"tests">> | _ ] = Path) -> {ok, Path};
 drop_till_module([ _Mod, <<"validators">> | _ ] = Path) -> {ok, Path};
 drop_till_module([ _ | Path ]) -> drop_till_module(Path).
