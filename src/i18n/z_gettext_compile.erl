@@ -196,8 +196,8 @@ shorten_path(Path) ->
     filename:join(Parts2).
 
 drop_till_module([]) -> error;
-drop_till_module([ <<"Users">>, _Username , <<"src">> | Path ] = Path) -> drop_till_module(Path);
-drop_till_module([ <<"home">>, _Username , <<"src">> | Path ] = Path) -> drop_till_module(Path);
+drop_till_module([ <<"Users">>, _Username , <<"src">> | Rest ]) -> drop_till_module(Rest);
+drop_till_module([ <<"home">>, _Username , <<"src">> | Rest ]) -> drop_till_module(Rest);
 drop_till_module([ <<"user">>, <<"sites">> | _ ] = Path) -> {ok, tl(tl(Path))};
 drop_till_module([ <<"user">>, <<"modules">> | _ ] = Path) -> {ok, tl(tl(Path))};
 drop_till_module([ <<"ginger">>, <<"sites">> | _ ] = Path) -> {ok, tl(tl(Path))};
