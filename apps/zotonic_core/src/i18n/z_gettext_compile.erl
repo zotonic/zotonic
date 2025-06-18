@@ -121,7 +121,7 @@ wrap(Parts, Length) ->
 fmt_fileinfo(Finfo) ->
     F = fun({Fname0,LineNo}, Acc) ->
         Fname1 = shorten_path(Fname0),
-        iolist_to_binary([ [ "\n#: ", Fname1, ":", z_convert:to_binary(LineNo)], Acc])
+        iolist_to_binary([["\n#: ", Fname1, ":", z_convert:to_binary(LineNo)], Acc])
 	end,
     lists:foldr(F,<<>>,Finfo).
 
