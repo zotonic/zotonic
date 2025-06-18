@@ -65,9 +65,8 @@ generate(Filename, Labels) ->
     ok = file:close(Fd).
 
 write_entries(Fd, L) ->
-    LibDir = z_utils:lib_dir(),
     F = fun({Id,Trans,Finfo}) ->
-            io:format(Fd, "~n#: ~s~n", [fmt_fileinfo(Finfo, LibDir)]),
+            io:format(Fd, "~s~n", [fmt_fileinfo(Finfo)]),
     		file:write(Fd, "msgid \"\"\n"),
     		write_pretty(Id, Fd),
     		file:write(Fd, "msgstr \"\"\n"),
@@ -157,17 +156,12 @@ split_string([], _End, _N, Acc) ->
     {lists:reverse(Acc), []}.
 
 
-
-fmt_fileinfo(Finfo, LibDir) ->
+fmt_fileinfo(Finfo) ->
     F = fun({Fname,LineNo}, Acc) ->
-        Fname1 = case lists:prefix(LibDir, Fname) of
-                    true -> [$.|lists:nthtail(length(LibDir), Fname)];
-                    false -> Fname
-                 end,
-		Fname1 ++ ":" ++ to_list(LineNo) ++ [$\s|Acc]
+        Fname1 = shorten_path(Fname),
+		[["\n#: ", Fname1, ":", to_list(LineNo)] | Acc ]
 	end,
-    lists:foldr(F,[],Finfo).
-
+    iolist_to_binary(lists:foldr(F,[],Finfo)).
 
 
 write_header(Fd) ->
@@ -191,6 +185,36 @@ write_header(Fd) ->
 	      "\"MIME-Version: 1.0\\n\"\n"
 	      "\"Content-Type: text/plain; charset=utf-8\\n\"\n"
 	      "\"Content-Transfer-Encoding: 8bit\\n\"\n").
+
+shorten_path(Path) ->
+    Parts = filename:split(Path),
+    Parts1 = [ unicode:characters_to_binary(P) || P <- Parts ],
+    Parts2 = case drop_till_module(Parts1) of
+        {ok, P1} -> P1;
+        error -> Parts1
+    end,
+    filename:join(Parts2).
+
+drop_till_module([]) -> error;
+drop_till_module([ <<"user">>, <<"sites">> | _ ] = Path) -> {ok, tl(tl(Path))};
+drop_till_module([ <<"user">>, <<"modules">> | _ ] = Path) -> {ok, tl(tl(Path))};
+drop_till_module([ <<"ginger">>, <<"sites">> | _ ] = Path) -> {ok, tl(tl(Path))};
+drop_till_module([ <<"ginger">>, <<"modules">> | _ ] = Path) -> {ok, tl(tl(Path))};
+drop_till_module([ <<"sites">>, _ | _ ] = Path) -> {ok, tl(Path)};
+drop_till_module([ <<"modules">>, _ | _ ] = Path) -> {ok, tl(Path)};
+drop_till_module([ <<"mod_", _/binary>> | _ ] = Path) -> {ok, Path};
+drop_till_module([ _Mod, <<"priv">> | _ ] = Path) -> {ok, Path};
+drop_till_module([ _Mod, <<"templates">> | _ ] = Path) -> {ok, Path};
+drop_till_module([ _Mod, <<"support">> | _ ] = Path) -> {ok, Path};
+drop_till_module([ _Mod, <<"src">> | _ ] = Path) -> {ok, Path};
+drop_till_module([ _Mod, <<"actions">> | _ ] = Path) -> {ok, Path};
+drop_till_module([ _Mod, <<"controllers">> | _ ] = Path) -> {ok, Path};
+drop_till_module([ _Mod, <<"filters">> | _ ] = Path) -> {ok, Path};
+drop_till_module([ _Mod, <<"models">> | _ ] = Path) -> {ok, Path};
+drop_till_module([ _Mod, <<"services">> | _ ] = Path) -> {ok, Path};
+drop_till_module([ _Mod, <<"tests">> | _ ] = Path) -> {ok, Path};
+drop_till_module([ _Mod, <<"validators">> | _ ] = Path) -> {ok, Path};
+drop_till_module([ _ | Path ]) -> drop_till_module(Path).
 
 
 %print_date() ->
