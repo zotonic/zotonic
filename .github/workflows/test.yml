@@ -18,8 +18,7 @@ jobs:
 
     strategy:
       matrix:
-        # 28 can be added if a new gen_smtp package has been released
-        otp_version: [26, 27]
+        otp_version: [26, 27, 28]
         os: [ubuntu-latest]
 
     container:
