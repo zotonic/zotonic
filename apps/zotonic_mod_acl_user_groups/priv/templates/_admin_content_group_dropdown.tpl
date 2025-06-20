@@ -34,7 +34,10 @@
         {% if not cg_id %}
             <option value=""></option>
         {% endif %}
-        {% if collabs or cg_id.is_a.acl_collaboration_group %}
+        {% if collabs
+              or cg_id.is_a.acl_collaboration_group
+              or subject_id.is_a.acl_collaboration_group
+        %}
             <optgroup label="{{ m.rsc.content_group.title }}">
         {% endif %}
         {% for cg in m.hierarchy.content_group.tree_flat %}
@@ -48,15 +51,28 @@
                 </option>
             {% endif %}
         {% endfor %}
-        {% if collabs or cg_id.is_a.acl_collaboration_group %}
+        {% if collabs
+              or cg_id.is_a.acl_collaboration_group
+              or subject_id.is_a.acl_collaboration_group
+        %}
             </optgroup>
             <optgroup label="{{ m.rsc.acl_collaboration_group.title }}">
                 {% if cg_id
                     and cg_id.is_a.acl_collaboration_group
                     and not cg_id|member:collabs
                 %}
-                    <option value="{{ cg_id }}" selected {% if not cid|member:cg_allowed %}disabled{% endif %}>
+                    <option value="{{ cg_id }}" selected>
                         {{ cg_id.title }}
+                    </option>
+                {% endif %}
+                {% if subject_id
+                    and subject_id /= cg_id
+                    and subject_id.is_a.acl_collaboration_group
+                    and not subject_id|member:collabs
+                    and subject_id|member:cg_allowed
+                %}
+                    <option value="{{ subject_id }}" {% if cg_id == subject_id %}selected{% endif %}>
+                        {{ subject_id.title }}
                     </option>
                 {% endif %}
                 {% for cid in collabs %}
@@ -77,7 +93,10 @@
 
         <select class="form-control" id="{{ cgsel_id|default:#content_group_id }}" name="content_group_id">
             {% if category_id %}
-                {% if collabs or content_group_id.is_a.acl_collaboration_group %}
+                {% if collabs
+                    or content_group_id.is_a.acl_collaboration_group
+                    or subject_id.is_a.acl_collaboration_group
+                %}
                     <optgroup label="{{ m.rsc.content_group.title }}">
                 {% endif %}
                 {% for cg in m.hierarchy.content_group.tree_flat %}
@@ -95,7 +114,10 @@
                         </option>
                     {% endif %}
                 {% endfor %}
-                {% if collabs or content_group_id.is_a.acl_collaboration_group %}
+                {% if collabs
+                      or content_group_id.is_a.acl_collaboration_group
+                      or subject_id.is_a.acl_collaboration_group
+                %}
                     </optgroup>
                     <optgroup label="{{ m.rsc.acl_collaboration_group.title }}">
                         {% if content_group_id
@@ -106,13 +128,25 @@
                                 {{ content_group_id.title }}
                             </option>
                         {% endif %}
-                        {% for cid in collabs %}
+                        {% if subject_id
+                            and subject_id /= content_group_id
+                            and subject_id.is_a.acl_collaboration_group
+                        %}
+                            <option value="{{ subject_id }}" {% if not content_group_id %}selected{% endif %}>
+                                {{ subject_id.title }}
+                            </option>
+                        {% endif %}
+                        {% for cid in collabs -- [subject_id] %}
                             <option value="{{ cid }}" {% if content_group_id == cid %}selected{% endif %}>
                                 {{ cid.title }}
                             </option>
                         {% endfor %}
                     </opgroup>
                 {% endif %}
+            {% else %}
+                <option value="" disabled>
+                    {_ First select a category _}
+                </option>
             {% endif %}
         </select>
 
