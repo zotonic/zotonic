@@ -1,8 +1,8 @@
-%% @copyright 2015-2024 Marc Worrell
+%% @copyright 2015-2025 Marc Worrell
 %% @doc Support routines for editing/creating resources
 %% @end
 
-%% Copyright 2015-2024 Marc Worrell
+%% Copyright 2015-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -65,19 +65,25 @@ handle_cmd(<<"reload_cgsel">>, Data, Context) ->
     CatId = m_rsc:rid(proplists:get_value(<<"cat_id">>, Data), Context),
     CGId1 = m_rsc:rid(proplists:get_value(<<"cg_id1">>, Data), Context),
     CGId2 = m_rsc:rid(proplists:get_value(<<"cg_id2">>, Data), Context),
+    SubjectId = m_rsc:rid(proplists:get_value(<<"subject_id">>, Data), Context),
+    CGId3 = case m_rsc:is_a(SubjectId, acl_collaboration_group, Context) of
+        true -> SubjectId;
+        false -> undefined
+    end,
     CGMenu = m_hierarchy:menu('content_group', Context),
-    CGAllowed = allowed_content_groups(CatId, [CGId1, CGId2], CGMenu, Context),
-    CGId = case {lists:member(CGId1, CGAllowed),lists:member(CGId2, CGAllowed)} of
-                {true, _} -> CGId1;
-                {_, true} -> CGId2;
-                _ -> undefined
-           end,
+    CGExtraIds = [CGId1, CGId2, CGId3],
+    CGAllowed = allowed_content_groups(CatId, CGExtraIds, CGMenu, Context),
+    CGId = case lists:filter(fun(GId) -> lists:member(GId, CGAllowed) end, CGExtraIds) of
+        [GId1 | _] -> GId1;
+        [] -> undefined
+    end,
     Vars = [
         {is_cg_reload, true},
         {cg_id, CGId},
         {cg_allowed, CGAllowed},
         {cg_menu, CGMenu},
-        {cgsel_id, proplists:get_value(<<"cgsel">>, Data)}
+        {cgsel_id, proplists:get_value(<<"cgsel">>, Data)},
+        {subject_id, SubjectId}
     ],
     z_render:update(proplists:get_value(<<"cgwrap">>, Data),
                     #render{
