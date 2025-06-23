@@ -1401,22 +1401,29 @@
 %% Find an import definition for a CSV file by checking the filename of the to be imported file.
 %% Type: first
 -callback observe_import_csv_definition(#import_csv_definition{}, z:context()) -> Result when
-    Result :: #import_csv_definition{}
+    Result :: {ok, #import_data_def{}}
+            | ok
+            | {error, term()}
             | undefined.
 -callback pid_observe_import_csv_definition(pid(), #import_csv_definition{}, z:context()) -> Result when
-    Result :: #import_csv_definition{}
+    Result :: {ok, #import_data_def{}}
+            | ok
+            | {error, term()}
             | undefined.
 
 -optional_callbacks([ observe_import_csv_definition/2, pid_observe_import_csv_definition/3 ]).
 
 %% Handle a new file received in the 'files/dropbox' folder of a site.
-%% Unhandled files are deleted after a hour.
+%% Unhandled files are deleted after an hour. If the handler returns 'ok' then
+%% the file is moved from the files/processing folder to files/handled.
 %% Type: first
 -callback observe_dropbox_file(#dropbox_file{}, z:context()) -> Result when
     Result :: ok
+            | {ok, processing}
             | undefined.
 -callback pid_observe_dropbox_file(pid(), #dropbox_file{}, z:context()) -> Result when
     Result :: ok
+            | {ok, processing}
             | undefined.
 
 -optional_callbacks([ observe_dropbox_file/2, pid_observe_dropbox_file/3 ]).
