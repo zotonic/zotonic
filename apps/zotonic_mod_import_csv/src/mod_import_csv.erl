@@ -1,7 +1,8 @@
 %% @doc Import tab or comma separated files. There must be an import definition for the file to be accepted.
 %% @author Marc Worrell <marc@worrell.nl>
+%% @end
 
-%% Copyright 2010-2015 Marc Worrell
+%% Copyright 2010-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -46,9 +47,10 @@ observe_dropbox_file(#dropbox_file{ filename = F }, Context) ->
             %% Either a module has a definition or there are correct header lines.
             case can_handle(F, F, Context) of
                 {ok, Definition} ->
-                    handle_spawn(Definition, false, z_acl:sudo(Context)), true;
-                ok ->
+                    handle_spawn(Definition, false, z_acl:sudo(Context)),
                     ok;
+                ok ->
+                    undefined;
                 {error, _} ->
                     undefined
             end;
@@ -119,8 +121,10 @@ manage_schema(What, Context) ->
 handle_spawn(Def, IsReset, Context) ->
     {ok, Def1} = to_importing_dir(Def, Context),
     ContextAsync = z_context:prune_for_async(Context),
-    spawn(fun() ->
-            import_csv:import(Def1, IsReset, ContextAsync)
+    z_proc:spawn_md(
+          fun() ->
+            import_csv:import(Def1, IsReset, ContextAsync),
+            to_handled_dir(Def1, Context)
           end).
 
 
@@ -131,8 +135,15 @@ handle_spawn(Def, IsReset, Context) ->
 
 %% @doc Move the to be imported file to the importing dir, from the processing dir.
 to_importing_dir(Def, Context) ->
-    ImportDir = z_path:files_subdir_ensure("importing", Context),
-    Target = filename:join([ImportDir, filename:basename(Def#filedef.filename)]),
+    to_subdir(Def, "importing", Context).
+
+%% @doc Move the to imported file to the handled dir, from the importing dir.
+to_handled_dir(Def, Context) ->
+    to_subdir(Def, "handled", Context).
+
+to_subdir(Def, Name, Context) ->
+    ToDir = z_path:files_subdir_ensure(Name, Context),
+    Target = filename:join([ToDir, filename:basename(Def#filedef.filename)]),
     file:delete(Target),
     ok = file:rename(Def#filedef.filename, Target),
     {ok, Def#filedef{filename=Target}}.

@@ -1107,7 +1107,9 @@
 }).
 
 %% @doc Handle a new file received in the 'files/dropbox' folder of a site.
-%% Unhandled files are deleted after a hour.
+%% Unhandled files are deleted after an hour. If the handler returns 'ok' then
+%% the file is moved from the files/processing folder to files/handled.
+%% folder.
 %% Type: first
 -record(dropbox_file, {
     filename :: file:filename_all(),

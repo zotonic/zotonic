@@ -43,6 +43,7 @@
     dropbox_dir :: binary(),
     processing_dir :: binary(),
     unhandled_dir :: binary(),
+    handled_dir :: binary(),
     min_age :: integer(),
     max_age :: integer(),
     site :: atom(),
@@ -89,13 +90,16 @@ init(Site) ->
 	DefaultDropBoxDir = z_path:files_subdir_ensure(<<"dropbox">>, Context),
 	DefaultProcessingDir = z_path:files_subdir_ensure(<<"processing">>, Context),
 	DefaultUnhandledDir = z_path:files_subdir_ensure(<<"unhandled">>, Context),
-    DropBox  = z_string:trim_right(config(dropbox_dir,            Context, DefaultDropBoxDir),    $/),
-    ProcDir  = z_string:trim_right(config(dropbox_processing_dir, Context, DefaultProcessingDir), $/),
-    UnDir    = z_string:trim_right(config(dropbox_unhandled_dir,  Context, DefaultUnhandledDir),  $/),
+    DefaultHandledDir = z_path:files_subdir_ensure(<<"handled">>, Context),
+    DropBox    = z_string:trim_right(config(dropbox_dir,            Context, DefaultDropBoxDir),    $/),
+    ProcDir    = z_string:trim_right(config(dropbox_processing_dir, Context, DefaultProcessingDir), $/),
+    UnDir      = z_string:trim_right(config(dropbox_unhandled_dir,  Context, DefaultUnhandledDir),  $/),
+    HandledDir = z_string:trim_right(config(dropbox_handled_dir,    Context, DefaultHandledDir),  $/),
     State    = #state{
         dropbox_dir = DropBox,
         processing_dir = ProcDir,
         unhandled_dir = UnDir,
+        handled_dir = HandledDir,
         min_age = z_convert:to_integer(config(dropbox_min_age, Context, ?FILE_MIN_AGE)),
         max_age = z_convert:to_integer(config(dropbox_max_age, Context, ?FILE_MAX_AGE)),
         site = Site,
@@ -178,6 +182,7 @@ do_scan(State) ->
         processing_dir = ProcDir,
         dropbox_dir = DropDir,
         unhandled_dir = UnhandledDir,
+        handled_dir = HandledDir,
         min_age = MinAge,
         max_age = MaxAge
     } = State,
@@ -229,7 +234,10 @@ do_scan(State) ->
                         basename => Basename
                     }),
                     move_file(ProcDir, File1, true, UnhandledDir);
+                ok ->
+                    move_file(ProcDir, File1, true, HandledDir);
                 _ ->
+                    % Retry next time
                     ok
             end
         end,

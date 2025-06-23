@@ -1410,7 +1410,8 @@
 -optional_callbacks([ observe_import_csv_definition/2, pid_observe_import_csv_definition/3 ]).
 
 %% Handle a new file received in the 'files/dropbox' folder of a site.
-%% Unhandled files are deleted after a hour.
+%% Unhandled files are deleted after an hour. If the handler returns 'ok' then
+%% the file is moved from the files/processing folder to files/handled.
 %% Type: first
 -callback observe_dropbox_file(#dropbox_file{}, z:context()) -> Result when
     Result :: ok

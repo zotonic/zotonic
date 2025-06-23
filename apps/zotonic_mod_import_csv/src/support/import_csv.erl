@@ -68,7 +68,6 @@ import(Def, IsReset, Context) ->
     {ok, Device} = file:open(Def#filedef.filename, [read, binary, {encoding, utf8}]),
     Rows = z_csv_parser:scan_lines(Device, Def#filedef.colsep),
     file:close(Device),
-    file:delete(Def#filedef.filename),
 
     %% Drop (optionally) the first row, empty rows and the comment rows (starting with a '#')
     Rows1 = case Def#filedef.skip_first_row of
