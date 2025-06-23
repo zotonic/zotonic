@@ -156,11 +156,18 @@ shorten_path(Path) ->
     filename:join(Parts2).
 
 drop_till_module([]) -> error;
+drop_till_module([ <<"Users">>, _Username, <<"src">> | Rest ]) -> drop_till_module(Rest);
+drop_till_module([ <<"home">>, _Username, <<"src">> | Rest ]) -> drop_till_module(Rest);
 drop_till_module([ <<"apps">> | _ ] = Path) -> {ok, tl(Path)};
 drop_till_module([ <<"apps_user">> | _ ] = Path) -> {ok, tl(Path)};
 drop_till_module([ <<"zotonic_mod_", _/binary>> | _ ] = Path) -> {ok, Path};
 drop_till_module([ _Mod, <<"priv">> | _ ] = Path) -> {ok, Path};
-drop_till_module([ _Mod, <<"src">> | _ ] = Path) -> {ok, Path};
+drop_till_module([ Mod, <<"src">> | Rest ] = Path) ->
+    % Prevent paths like "../<username>/src/..." to be matched as a module name.
+    case z_utils:ensure_existing_module(Mod) of
+        {ok, _} -> {ok, Path};
+        {error, _} -> drop_till_module(Rest)
+    end;
 drop_till_module([ _ | Path ]) -> drop_till_module(Path).
 
 %print_date() ->
