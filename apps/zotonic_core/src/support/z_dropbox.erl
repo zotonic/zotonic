@@ -38,9 +38,7 @@
     scan/1
 ]).
 
-%% internal
--export([]).
-
+-include_lib("kernel/include/file.hrl").
 -include_lib("zotonic.hrl").
 
 -record(state, {
@@ -229,12 +227,17 @@ do_scan(State) ->
                                        ProcFiles),
     lists:foreach(fun(F) -> move_file(ProcDir, F, true, UnhandledDir) end, ToRemove),
 
-    % Move all new drop folder files to the processing directory
+    % Move all new drop folder files to the processing directory, touch them to ensure
+    % that we move the files after set periods to handled or unhandled.
     AllDropFiles  = scan_directory(DropDir),
     SafeDropFiles = lists:foldl(fun(F, Acc)-> min_age_check(F, MinAge, Acc) end,
                                 [],
                                 AllDropFiles),
-    Moved      = lists:map(fun(F) -> {F,move_file(DropDir, F, false, ProcDir)} end, SafeDropFiles),
+    Moved = lists:map(fun(F) ->
+                          set_modified(F),
+                          {F, move_file(DropDir, F, false, ProcDir)}
+                      end,
+                      SafeDropFiles),
     ToProcess1 = lists:foldl(   fun
                                     ({_, {ok, File}}, Acc) ->
                                         [File|Acc];
@@ -352,6 +355,8 @@ max_age_split(File, MaxAge, {AccNew, AccOld}) ->
 
 %% @doc Move a file relative to one directory to another directory. If the
 %% target file exists then it is deleted before the file is moved there.
+%% The file is touched after being moved, so that the file routines can check
+%% the age of the file for later cleanup.
 move_file(BaseDir, File, DeleteTarget, ToDir) ->
     case filelib:is_regular(File) of
         true ->
@@ -381,6 +386,15 @@ move_file(BaseDir, File, DeleteTarget, ToDir) ->
             end;
         false ->
             {error, enoent}
+    end.
+
+set_modified(Filename) ->
+    case file:read_file_info(Filename, [ {time, universal} ]) of
+        {ok, FInfo} ->
+            FInfo1 = FInfo#file_info{ mtime = calendar:universal_time() },
+            file:write_file_info(Filename, FInfo1, [ {time, universal} ]);
+        {error, _} = Error ->
+            Error
     end.
 
 %% @doc Return the relative path of the file to a BaseDir
