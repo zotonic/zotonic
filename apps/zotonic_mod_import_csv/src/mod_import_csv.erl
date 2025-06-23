@@ -47,10 +47,12 @@ observe_dropbox_file(#dropbox_file{ filename = F }, Context) ->
             %% Either a module has a definition or there are correct header lines.
             case can_handle(F, F, Context) of
                 {ok, Definition} ->
+                    % Import in background, let dropbox keep the file in processing.
                     handle_spawn(Definition, false, z_acl:sudo(Context)),
-                    ok;
+                    {ok, processing};
                 ok ->
-                    undefined;
+                    % Handled by the notifier - dropbox can move the file to handled.
+                    ok;
                 {error, _} ->
                     undefined
             end;
@@ -87,24 +89,28 @@ event(#submit{message={csv_upload, []}}, Context) ->
             #upload{filename=OriginalFilename, tmpfile=TmpFile} = z_context:get_q_validated(<<"upload_file">>, Context),
             IsReset = z_convert:to_bool(z_context:get_q(<<"reset">>, Context)),
 
-            %% Move temporary file to processing directory
-            Dir = z_path:files_subdir_ensure("processing", Context),
-            Target = filename:join([Dir, z_string:to_name(OriginalFilename)]),
-            _ = file:delete(Target),
-            {ok, _} = file:copy(TmpFile, Target),
-            ok = file:delete(TmpFile),
-
-            Context2 = case can_handle(OriginalFilename, Target, Context) of
+            % Move temporary file to the dropbox processing directory
+            % It will be deleted/moved away by either:
+            % - the dropbox code when it is more than 10 hours old; or
+            % - the import code after processing.
+            ProcessingDir = z_dropbox:dropbox_processing_dir(Context),
+            Filename = iolist_to_binary([
+                z_string:truncatechars(z_string:to_name(OriginalFilename), 50, <<>>),
+                $-,
+                z_ids:identifier(10)]),
+            ProcessingFile = filename:join([ProcessingDir, Filename]),
+            ok = z_filelib:rename(TmpFile, ProcessingFile),
+            Context2 = case can_handle(OriginalFilename, ProcessingFile, Context) of
                 {ok, Definition} ->
                     handle_spawn(Definition, IsReset, Context),
                     z_render:growl(?__("Please hold on while the file is importing. You will get a notification when it is ready.", Context), Context);
                 ok ->
-                    z_render:growl(?__("Please hold on while the file is importing. You will get a notification when it is ready.", Context), Context);
+                    z_render:growl(?__("The uploaded file has been imported.", Context), Context);
                 {error, _} ->
-                    file:delete(Target),
+                    file:delete(ProcessingFile),
                     z_render:growl_error(?__("This file cannot be imported.", Context), Context)
             end,
-            z_render:wire([{dialog_close, []}], Context2);
+            z_render:dialog_close(Context2);
         false ->
             z_render:growl_error(?__("Only admins can import CSV files.", Context), Context)
     end.
@@ -117,42 +123,39 @@ manage_schema(What, Context) ->
 %% Internal functions
 %%====================================================================
 
-
 handle_spawn(Def, IsReset, Context) ->
-    {ok, Def1} = to_importing_dir(Def, Context),
     ContextAsync = z_context:prune_for_async(Context),
     z_proc:spawn_md(
           fun() ->
-            import_csv:import(Def1, IsReset, ContextAsync),
-            to_handled_dir(Def1, Context)
+            import_csv:import(Def, IsReset, ContextAsync),
+            to_handled_dir(Def, Context),
+            Context1 = z_render:growl_error(?__("The uploaded file has been imported.", Context), Context),
+            z_transport:reply_actions(Context1)
           end).
-
 
 
 %%====================================================================
 %% File handling
 %%====================================================================
 
-%% @doc Move the to be imported file to the importing dir, from the processing dir.
-to_importing_dir(Def, Context) ->
-    to_subdir(Def, "importing", Context).
-
-%% @doc Move the to imported file to the handled dir, from the importing dir.
+%% @doc Move the imported file from the processing to the handled dir.
 to_handled_dir(Def, Context) ->
-    to_subdir(Def, "handled", Context).
-
-to_subdir(Def, Name, Context) ->
-    ToDir = z_path:files_subdir_ensure(Name, Context),
+    ToDir = z_dropbox:dropbox_handled_dir(Context),
     Target = filename:join([ToDir, filename:basename(Def#filedef.filename)]),
-    file:delete(Target),
-    ok = file:rename(Def#filedef.filename, Target),
-    {ok, Def#filedef{filename=Target}}.
+    case filelib:is_regular(Def#filedef.filename) of
+        true ->
+            file:delete(Target),
+            z_filelib:rename(Def#filedef.filename, Target);
+        false ->
+            ok
+    end.
 
 
 %% @doc Check if we can import this file
 can_handle(OriginalFilename, DataFile, Context) ->
     case z_notifier:first(#import_csv_definition{basename=filename:basename(OriginalFilename), filename=DataFile}, Context) of
         {ok, #import_data_def{colsep=ColSep, skip_first_row=SkipFirstRow, columns=Columns, importdef=ImportDef}} ->
+            % Column definition of the CSV file, to be handled by our CSV importer.
             {ok, #filedef{
                         filename=DataFile,
                         file_size=filelib:file_size(DataFile),
@@ -162,6 +165,7 @@ can_handle(OriginalFilename, DataFile, Context) ->
                         importdef=ImportDef
                 }};
         ok ->
+            % Handled by the notifier - dropbox can move the file to handled.
             ok;
         {error, _} = Error ->
             Error;

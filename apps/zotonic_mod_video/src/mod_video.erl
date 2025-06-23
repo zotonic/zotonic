@@ -257,14 +257,7 @@ post_insert_fun(Id, Medium, Upload, ProcessNr, Context) ->
     ok = z_filelib:ensure_dir(QueuePath),
     case z_tempfile:is_tempfile(UploadedFile) of
         true ->
-            case file:rename(UploadedFile, QueuePath) of
-                %% cross-fs rename is not supported by erlang, so copy and delete the file
-                {error, exdev} ->
-                    {ok, _BytesCopied} = file:copy(UploadedFile, QueuePath),
-                    ok = file:delete(UploadedFile);
-                ok ->
-                    ok
-            end;
+            ok = z_filelib:rename(UploadedFile, QueuePath);
         false ->
             {ok, _BytesCopied} = file:copy(UploadedFile, QueuePath)
     end,

@@ -1,5 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Simple drop folder handler, monitors a directory and signals new files.
 %%
 %% Flow:
@@ -7,7 +7,7 @@
 %% 2. Drop folder handler sees the file, moves it so a safe place, and notifies the file handler of it existance.
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,6 +31,10 @@
 
 %% interface functions
 -export([
+    dropbox_dir/1,
+    dropbox_processing_dir/1,
+    dropbox_unhandled_dir/1,
+    dropbox_handled_dir/1,
     scan/1
 ]).
 
@@ -50,8 +54,18 @@
     context :: z:context()
 }).
 
+% Before a file is processed it must be at least this many seconds old.
+% This ensures that files that are still written are not partially moved
+% to the processing directory.
 -define(FILE_MIN_AGE, 2).
--define(FILE_MAX_AGE, 3600).
+
+% After 10 hours, all files in the processing dir are moved to unhandled.
+-define(FILE_MAX_AGE, 36000).
+
+% After 14 days, all files in the handled dir are deleted.
+-define(HANDLED_MAX_AGE, 14*24*3600).
+
+% Period in msec between scans of the dropbox dir.
 -define(SCAN_INTERVAL, 10000).
 
 
@@ -72,6 +86,28 @@ start_link(Site) ->
 scan(Context) ->
     gen_server:cast(Context#context.dropbox_server, scan).
 
+
+%% @doc Directory used by dropbox to scan for new files. Drop a files here to let the
+%% dropbox pick it up.
+dropbox_dir(Context) ->
+    DefaultDropBoxDir = z_path:files_subdir_ensure(<<"dropbox">>, Context),
+    z_string:trim_right(config(dropbox_dir, Context, DefaultDropBoxDir), $/).
+
+%% @doc Directory used by dropbox to contain files to be processed.
+dropbox_processing_dir(Context) ->
+    DefaultProcessingDir = z_path:files_subdir_ensure(<<"processing">>, Context),
+    z_string:trim_right(config(dropbox_processing_dir, Context, DefaultProcessingDir), $/).
+
+%% @doc After a file is processed a module can move it to the handled directory.
+dropbox_handled_dir(Context) ->
+    DefaultHandledDir = z_path:files_subdir_ensure(<<"handled">>, Context),
+    z_string:trim_right(config(dropbox_handled_dir, Context, DefaultHandledDir),  $/).
+
+%% @doc If a file could not be process it is moved to the unhandled directory.
+dropbox_unhandled_dir(Context) ->
+    DefaultUnhandledDir = z_path:files_subdir_ensure(<<"unhandled">>, Context),
+    z_string:trim_right(config(dropbox_unhandled_dir,  Context, DefaultUnhandledDir),  $/).
+
 %%====================================================================
 %% gen_server callbacks
 %%====================================================================
@@ -87,19 +123,11 @@ init(Site) ->
         module => ?MODULE
     }),
     Context = z_context:new(Site),
-	DefaultDropBoxDir = z_path:files_subdir_ensure(<<"dropbox">>, Context),
-	DefaultProcessingDir = z_path:files_subdir_ensure(<<"processing">>, Context),
-	DefaultUnhandledDir = z_path:files_subdir_ensure(<<"unhandled">>, Context),
-    DefaultHandledDir = z_path:files_subdir_ensure(<<"handled">>, Context),
-    DropBox    = z_string:trim_right(config(dropbox_dir,            Context, DefaultDropBoxDir),    $/),
-    ProcDir    = z_string:trim_right(config(dropbox_processing_dir, Context, DefaultProcessingDir), $/),
-    UnDir      = z_string:trim_right(config(dropbox_unhandled_dir,  Context, DefaultUnhandledDir),  $/),
-    HandledDir = z_string:trim_right(config(dropbox_handled_dir,    Context, DefaultHandledDir),  $/),
-    State    = #state{
-        dropbox_dir = DropBox,
-        processing_dir = ProcDir,
-        unhandled_dir = UnDir,
-        handled_dir = HandledDir,
+    State = #state{
+        dropbox_dir = dropbox_dir(Context),
+        processing_dir = dropbox_processing_dir(Context),
+        unhandled_dir = dropbox_unhandled_dir(Context),
+        handled_dir = dropbox_handled_dir(Context),
         min_age = z_convert:to_integer(config(dropbox_min_age, Context, ?FILE_MIN_AGE)),
         max_age = z_convert:to_integer(config(dropbox_max_age, Context, ?FILE_MAX_AGE)),
         site = Site,
@@ -187,6 +215,13 @@ do_scan(State) ->
         max_age = MaxAge
     } = State,
 
+    % Cleanup handled dir.
+    HandledFiles = scan_directory(HandledDir),
+    {_,ToRemoveHandled} = lists:foldl(fun(F, Acc) -> max_age_split(F, ?HANDLED_MAX_AGE, Acc) end,
+                                       {[],[]},
+                                       HandledFiles),
+    lists:foreach(fun(F) -> file:delete(F) end, ToRemoveHandled),
+
     % Move all old files in the processing directory to the unhandled directory
     ProcFiles = scan_directory(ProcDir),
     {ToProcess,ToRemove} = lists:foldl(fun(F, Acc) -> max_age_split(F, MaxAge, Acc) end,
@@ -224,6 +259,39 @@ do_scan(State) ->
                     basename = Basename
                 }, State#state.context)
             of
+                ok ->
+                    % Move the file to the handled directory.
+                    ?LOG_INFO(#{
+                        in => zotonic_core,
+                        text => <<"Drop folder file has been processed, moved to handled">>,
+                        result => ok,
+                        file => File1,
+                        basename => Basename,
+                        processing_status => ok
+                    }),
+                    move_file(ProcDir, File1, true, HandledDir);
+                {ok, ProcessingStatus} ->
+                    % Leave the file, assume the module is still processing it.
+                    ?LOG_INFO(#{
+                        in => zotonic_core,
+                        text => <<"Drop folder file is being processed, leaving in processing">>,
+                        result => ok,
+                        file => File1,
+                        basename => Basename,
+                        processing_status => ProcessingStatus
+                    }),
+                    ok;
+                {error, Reason} ->
+                    % Leave the file, assume the module is still processing it.
+                    ?LOG_ERROR(#{
+                        in => zotonic_core,
+                        text => <<"Drop folder file was not handled by modules, moved to unhandled">>,
+                        result => error,
+                        reason => Reason,
+                        file => File1,
+                        basename => Basename
+                    }),
+                    move_file(ProcDir, File1, true, UnhandledDir);
                 undefined ->
                     ?LOG_WARNING(#{
                         in => zotonic_core,
@@ -233,24 +301,19 @@ do_scan(State) ->
                         file => File1,
                         basename => Basename
                     }),
-                    move_file(ProcDir, File1, true, UnhandledDir);
-                ok ->
-                    move_file(ProcDir, File1, true, HandledDir);
-                _ ->
-                    % Retry next time
-                    ok
+                    move_file(ProcDir, File1, true, UnhandledDir)
             end
         end,
         ToProcess1).
 
-
-%% @doc Scan a directory, return list of files not changed in the last 10 seconds.
+%% @doc Scan a directory, return list of regular files that do not start with a '.' anywhere in
+%% their path. Do allow '..', as that might be part of the dropbox directory configuration.
 scan_directory(Dir) ->
     Fs = filelib:fold_files(unicode:characters_to_list(Dir), "", true, fun(F,Acc) -> append_file(F, Acc) end, []),
     [ unicode:characters_to_binary(F) || F <- Fs ].
 
-
-%% @doc Check if this is a file we are interested in, should not be part of a .svn or other directory
+%% @doc Check if this is a file we are interested in, should not be part of a .git or other '.' directory
+%% The file must also be a regular file, skip directories.
 -spec append_file( file:filename_all(), list( file:filename_all() ) ) -> list( file:filename_all() ).
 append_file(Filename, Acc) ->
     Parts = filename:split(Filename),
@@ -287,32 +350,37 @@ max_age_split(File, MaxAge, {AccNew, AccOld}) ->
     end.
 
 
-%% @spec move_file(BaseDir, File, DeleteTarget, ToDir) -> {ok, NewFile} | {error, Reason}
-%% @doc Move a file relative to one directory to another directory
+%% @doc Move a file relative to one directory to another directory. If the
+%% target file exists then it is deleted before the file is moved there.
 move_file(BaseDir, File, DeleteTarget, ToDir) ->
-    Rel    = rel_file(BaseDir, File),
-    Target = filename:join(ToDir,Rel),
-    case filelib:is_dir(Target) of
-        true -> file:del_dir(Target);
-        false -> ok
-    end,
-    case DeleteTarget of
-        true -> file:delete(Target);
-        false -> ok
-    end,
-    case filelib:is_regular(Target) of
-        false ->
-            case z_filelib:ensure_dir(Target) of
-                ok ->
-                    case file:rename(File,Target) of
-                        ok -> {ok, Target};
-                        Error -> Error
-                    end;
-                Error ->
-                    Error
-            end;
+    case filelib:is_regular(File) of
         true ->
-            {error, eexist}
+            Rel    = rel_file(BaseDir, File),
+            Target = filename:join(ToDir,Rel),
+            case filelib:is_dir(Target) of
+                true -> file:del_dir(Target);
+                false -> ok
+            end,
+            case DeleteTarget of
+                true -> file:delete(Target);
+                false -> ok
+            end,
+            case filelib:is_regular(Target) of
+                false ->
+                    case z_filelib:ensure_dir(Target) of
+                        ok ->
+                            case z_filelib:rename(File,Target) of
+                                ok -> {ok, Target};
+                                Error -> Error
+                            end;
+                        Error ->
+                            Error
+                    end;
+                true ->
+                    {error, eexist}
+            end;
+        false ->
+            {error, enoent}
     end.
 
 %% @doc Return the relative path of the file to a BaseDir

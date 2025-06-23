@@ -1,8 +1,9 @@
-%% @doc Import a csv file according to the derived file/record definitions.
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @author Marc Worrell <marc@worrell.nl>
+%% @doc Import a csv file according to the derived file/record definitions.
+%% @end
 
-%% Copyright 2010-2020 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2010-2025 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
