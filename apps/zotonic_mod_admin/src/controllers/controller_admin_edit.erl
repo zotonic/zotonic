@@ -243,4 +243,4 @@ update_rsc_page_path(#trans{} = TransPath, Context) ->
             z_render:set_value(EltId, Path1, CAcc)
         end,
         Context,
-        z_language:enabled_language_codes(Context)).
+        z_language:editable_language_codes(Context)).

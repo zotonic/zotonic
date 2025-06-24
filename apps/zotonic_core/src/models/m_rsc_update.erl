@@ -1565,13 +1565,15 @@ props_filter(<<"privacy">>, Privacy, Acc, _Context) ->
 props_filter(P, V, Acc, _Context) ->
     Acc#{ P => V }.
 
-normalize_page_path(<<>>) ->
-    <<>>;
+normalize_page_path(undefined) -> <<>>;
+normalize_page_path(<<>>) -> <<>>;
+normalize_page_path("") -> <<>>;
 normalize_page_path(Path) ->
-    Path1 = iolist_to_binary([
-        $/, z_string:trim(z_url:url_path_encode(Path), $/)
+    Path1 = z_string:trim(z_string:trim(Path), $/),
+    Path2 = iolist_to_binary([
+        $/, z_url:url_path_encode(Path1)
     ]),
-    binary:replace(Path1, [ <<"&">>, <<"=">> ], <<"-">>, [ global ]).
+    binary:replace(Path2, [ <<"&">>, <<"=">> ], <<"-">>, [ global ]).
 
 
 %% Filter all given languages, drop unknown languages.

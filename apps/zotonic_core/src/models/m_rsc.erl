@@ -838,8 +838,8 @@ p_no_acl(Id, <<"page_url">>, Context) ->
             page_url(Id, false, Context);
         PagePath ->
             case path_for_lang(PagePath, Context) of
-                <<>> -> page_url(Id, true, Context);
-                Path -> z_notifier:foldl(#url_rewrite{args = [{id, Id}]}, Path, Context)
+                <<>> -> page_url(Id, false, Context);
+                Path -> opt_url_abs(z_notifier:foldl(#url_rewrite{args = [{id, Id}]}, Path, Context), false, Context)
             end
     end;
 p_no_acl(Id, <<"translation">>, Context) ->
