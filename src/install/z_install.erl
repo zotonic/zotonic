@@ -1,13 +1,13 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2015 Marc Worrell
-%%
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Install Zotonic, loads the datamodel into the database
 %% Assumes the database has already been created (which normally needs superuser permissions anyway)
 %%
 %% CREATE DATABASE zotonic WITH OWNER = zotonic ENCODING = 'UTF8';
 %% CREATE LANGUAGE "plpgsql";
+%% @end
 
-%% Copyright 2009-2015 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -121,7 +121,6 @@ model_pgsql() ->
       id serial NOT NULL,
       uri character varying(2048),
       name character varying(80),
-      page_path character varying(80),
       is_authoritative boolean NOT NULL DEFAULT true,
       is_published boolean NOT NULL DEFAULT false,
       is_featured boolean NOT NULL DEFAULT false,
@@ -142,6 +141,7 @@ model_pgsql() ->
 
       -- pivot fields for searching
       pivot_category_nr int,
+      pivot_page_path character varying(80)[],
       pivot_tsv tsvector,       -- texts
       pivot_rtsv tsvector,      -- related ids (cat, prop, rsc)
 
@@ -168,8 +168,7 @@ model_pgsql() ->
 
       CONSTRAINT rsc_pkey PRIMARY KEY (id),
       CONSTRAINT rsc_uri_key UNIQUE (uri),
-      CONSTRAINT rsc_name_key UNIQUE (name),
-      CONSTRAINT rsc_page_path_key UNIQUE (page_path)
+      CONSTRAINT rsc_name_key UNIQUE (name)
     )",
     "COMMENT ON COLUMN rsc.visible_for IS '0 = public, 1 = community, 2 = group'",
 
@@ -197,6 +196,8 @@ model_pgsql() ->
      "CREATE INDEX rsc_pivot_tsv_key ON rsc USING gin(pivot_tsv)",
      "CREATE INDEX rsc_pivot_rtsv_key ON rsc USING gin(pivot_rtsv)",
 
+     "CREATE INDEX IF NOT EXISTS rsc_pivot_page_path_key ON rsc USING gin(pivot_page_path)",
+
      "CREATE INDEX rsc_pivot_category_nr ON rsc (pivot_category_nr)",
      "CREATE INDEX rsc_pivot_surname_key ON rsc (pivot_surname)",
      "CREATE INDEX rsc_pivot_first_name_key ON rsc (pivot_first_name)",
@@ -219,22 +220,22 @@ model_pgsql() ->
 
      "CREATE TABLE rsc_gone (
         id bigint not null,
-     new_id bigint,
-     new_uri character varying(2048),
-     version int not null,
-     uri character varying(2048),
-     name character varying(80),
-     page_path character varying(80),
-     is_authoritative boolean NOT NULL DEFAULT true,
-     creator_id bigint,
-     modifier_id bigint,
-     created timestamp with time zone NOT NULL DEFAULT now(),
-     modified timestamp with time zone NOT NULL DEFAULT now(),
-     is_personal_data boolean NOT NULL DEFAULT false,
-     CONSTRAINT rsc_gone_pkey PRIMARY KEY (id)
+        new_id bigint,
+        new_uri character varying(2048),
+        version int not null,
+        uri character varying(2048),
+        name character varying(80),
+        page_paths character varying(80)[],
+        is_authoritative boolean NOT NULL DEFAULT true,
+        creator_id bigint,
+        modifier_id bigint,
+        created timestamp with time zone NOT NULL DEFAULT now(),
+        modified timestamp with time zone NOT NULL DEFAULT now(),
+        is_personal_data boolean NOT NULL DEFAULT false,
+        CONSTRAINT rsc_gone_pkey PRIMARY KEY (id)
     )",
     "CREATE INDEX rsc_gone_name ON rsc_gone(name)",
-    "CREATE INDEX rsc_gone_page_path ON rsc_gone(page_path)",
+    "CREATE INDEX IF NOT EXISTS rsc_gone_page_paths_key ON rsc_gone USING gin(page_paths)",
     "CREATE INDEX rsc_gone_modified ON rsc_gone(modified)",
 
 

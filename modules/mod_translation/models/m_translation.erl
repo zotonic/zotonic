@@ -29,7 +29,8 @@
     m_value/2,
 
     language_list/1,
-    language_list_enabled/1
+    language_list_enabled/1,
+    language_list_editable/1
 ]).
 
 -include("zotonic.hrl").

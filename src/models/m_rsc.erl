@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2014 Marc Worrell
-%%
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Model for resource data. Interfaces between zotonic, templates and the database.
+%% @end
 
-%% Copyright 2009-2014 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -177,8 +177,8 @@ name_to_id_cat_check(Name, Cat, Context) ->
 %% page path was found but is no longer the current page path for the
 %% resource.
 page_path_to_id(Path, Context) ->
-    Path1 = [ $/, string:strip(Path, both, $/)],
-    case catch z_db:q1("select id from rsc where page_path = $1", [Path1], Context) of
+    Path1 = z_convert:to_binary([ $/, z_string:trim(Path, $/) ]),
+    case z_db:q1("select id from rsc where pivot_page_path && $1", [ [Path1] ], Context) of
         Id when is_integer(Id) -> {ok, Id};
         undefined ->
             case z_db:q1("select id from rsc_page_path_log where page_path = $1", [Path1], Context) of
@@ -515,13 +515,23 @@ p_no_acl(Id, is_a, Context) -> [ {C,true} || C <- is_a(Id, Context) ];
 p_no_acl(Id, exists, Context) -> exists(Id, Context);
 p_no_acl(Id, page_url_abs, Context) ->
     case p_no_acl(Id, page_path, Context) of
-        undefined -> page_url(Id, true, Context);
-        PagePath -> opt_url_abs(z_notifier:foldl(#url_rewrite{args=[{id,Id}]}, PagePath, Context), true, Context)
+        undefined ->
+            page_url(Id, true, Context);
+        PagePath ->
+            case path_for_lang(PagePath, Context) of
+                <<>> -> page_url(Id, true, Context);
+                Path -> opt_url_abs(z_notifier:foldl(#url_rewrite{args = [{id, Id}]}, Path, Context), true, Context)
+            end
     end;
 p_no_acl(Id, page_url, Context) ->
     case p_no_acl(Id, page_path, Context) of
-        undefined -> page_url(Id, false, Context);
-        PagePath -> opt_url_abs(z_notifier:foldl(#url_rewrite{args=[{id,Id}]}, PagePath, Context), false, Context)
+        undefined ->
+            page_url(Id, false, Context);
+        PagePath ->
+            case path_for_lang(PagePath, Context) of
+                <<>> -> page_url(Id, false, Context);
+                Path -> opt_url_abs(z_notifier:foldl(#url_rewrite{args = [{id, Id}]}, Path, Context), false, Context)
+            end
     end;
 p_no_acl(Id, translation, Context) ->
     fun(Code) ->
@@ -597,6 +607,23 @@ p_no_acl(Id, Predicate, Context) when is_integer(Id) ->
                 Value
         end.
 
+path_for_lang(undefined, _Context) ->
+    <<>>;
+path_for_lang({trans, Tr } = PagePath, Context) ->
+    Langs = [ z_context:language(Context) ],
+    case z_trans:lookup_fallback(PagePath, Langs, Context) of
+        <<>> ->
+            case [ {Lang, Path } || {Lang, Path} <- Tr, Path =/= <<>> ] of
+                [] ->
+                    <<>>;
+                Tr1 ->
+                    z_trans:lookup_fallback({trans, Tr1}, Langs, Context)
+            end;
+        Path ->
+            Path
+    end;
+path_for_lang(Path, _Context) ->
+    Path.
 
 non_informational_uri(Id, Context) ->
     case z_dispatcher:url_for(id, [{id, Id}], z_context:set_language(undefined, Context)) of

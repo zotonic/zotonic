@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2010 Marc Worrell, Arjan Scherpenisse
+%% @copyright 2009-2025 Marc Worrell, Arjan Scherpenisse
 %% @doc Admin webmachine_controller.
+%% @end
 
-%% Copyright 2009-2010 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2009-2025 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -113,12 +114,7 @@ event(#submit{message={rscform, Args}}, Context) ->
                 case m_rsc:p(Id, category_id, Context) of
                     CatBefore ->
                         % Update some automatically generated or adapted fields
-                        PagePath = filter_urldecode:urldecode(m_rsc:p(Id, page_path, Context), Context),
-                        Context1 = z_render:set_value("field-name", m_rsc:p(Id, name, Context), Context),
-                        Context2 = z_render:set_value("field-uri",  m_rsc:p(Id, uri, Context), Context1),
-                        Context3 = z_render:set_value("field-page-path", PagePath, Context2),
-                        Context4 = z_render:set_value("website",  m_rsc:p(Id, website, Context), Context3),
-                        Context4a = set_value_slug(m_rsc:p(Id, title_slug, Context), Context4),
+                        Context4a = update_rsc_form(Id, Context),
                         Context4b= z_render:set_value("visible_for", integer_to_list(m_rsc:p(Id, visible_for, Context)), Context4a),
                         Context4c = case m_rsc:p(Id, publication_start, Context4b) of
                             undefined ->
@@ -197,6 +193,33 @@ event(#postback{message={query_preview, Opts}}, Context) ->
         _: {error, {Kind, Arg}} ->
             z_render:growl_error(["There is an error in your query: ", Kind, " - ", Arg], Context)
     end.
+
+update_rsc_form(Id, Context) ->
+    Context1 = z_render:set_value("field-name", m_rsc:p(Id, name, Context), Context),
+    Context2 = z_render:set_value("field-uri",  m_rsc:p(Id, uri, Context), Context1),
+    Context3 = update_rsc_page_path(m_rsc:p(Id, page_path, Context), Context2),
+    Context4 = z_render:set_value("website",  m_rsc:p(Id, website, Context), Context3),
+    set_value_slug(m_rsc:p(Id, title_slug, Context), Context4).
+
+update_rsc_page_path(undefined, Context) ->
+    z_render:set_value("field-page-path", <<>>, Context);
+update_rsc_page_path(Path, Context) when is_binary(Path) ->
+    Tr = {trans, [ {z_language:default_language(Context), Path} ]},
+    update_rsc_page_path(Tr, Context);
+update_rsc_page_path({trans, _} = TransPath, Context) ->
+    lists:foldl(
+        fun(Lang, CAcc) ->
+            Path = z_trans:lookup_fallback(TransPath, [ Lang ], CAcc),
+            Path1 = filter_urldecode:urldecode(z_convert:to_binary(Path), Context),
+            EltId = <<"field-page-path--", (atom_to_binary(Lang, utf8))/binary>>,
+            z_render:set_value(EltId, Path1, CAcc)
+        end,
+        Context,
+        enabled_language_codes(Context)).
+
+enabled_language_codes(Context) ->
+    Editable = m_translation:language_list_editable(Context),
+    [ Code || {Code, _} <- Editable ].
 
 set_value_slug(undefined, Context) ->
     set_value_slug(<<>>, Context);
