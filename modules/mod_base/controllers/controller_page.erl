@@ -126,13 +126,13 @@ maybe_redirect_website(_Website, _False, Id, Context) ->
 maybe_redirect_canonical(Id, Context) ->
     case is_canonical(Id, Context) of
         false ->
-            {true, Context};
+            ?WM_REPLY(true, Context);
         true ->
             ReqPath = current_path(Context),
             PageUrl = m_rsc:p(Id, page_url, Context),
             if
                 ReqPath =:= PageUrl ->
-                    {true, Context};
+                    ?WM_REPLY(true, Context);
                 true ->
                     AbsUrl = m_rsc:p(Id, page_url_abs, Context),
                     AbsUrlQs = append_qs(AbsUrl, wrq:req_qs(z_context:get_reqdata(Context))),
