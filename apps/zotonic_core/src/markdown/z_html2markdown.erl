@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2024 Marc Worrell
+%% @copyright 2011-2025 Marc Worrell
 %% @doc Convert a html text to markdown syntax.
 %% This is used when editing TinyMCE texts with the markdown editor.
 %% @end
 
-%% Copyright 2011-2024 Marc Worrell
+%% Copyright 2011-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -27,18 +27,20 @@
     convert/2
 ]).
 
--include("zotonic.hrl").
+-include("../../include/zotonic.hrl").
 
 % Accumulated markdown state (tree walker)
--record(md, {a=[]}).
+-record(md, {
+    a = [],         % Link accumulator
+    li = 1          % List item number
+}).
 
 % Recursive context dependent markdown state (context)
 -record(ms, {
-    li = none,
-    indent = [],
+    li = none,                  % Type of li - ul or ol
     allow_html = true,
-    format_tables = true,
-    level = -1
+    format_tables = true,       % Format tables with dashes or remove them (useful for emails)
+    in_code = false             % Are we in a code block or not, escaping is influenced
 }).
 
 -define(MAX_TABLE_CELL_WIDTH, 80).
@@ -57,7 +59,8 @@ convert(Html, Options) when is_list(Html) ->
 convert1(Html, Options) ->
     case z_html_parse:parse(Html) of
         {ok, {<<"sanitize">>, _, Parsed}} ->
-            {Text, M} = to_md(Parsed, #md{}, set_options(Options, #ms{})),
+            Parsed1 = trim(Parsed),
+            {Text, M} = to_md(Parsed1, #md{}, set_options(Options, #ms{})),
             iolist_to_binary([trimnl(unicode:characters_to_binary(Text, utf8)), expand_anchors(M)]);
         {error, _} ->
             <<>>
@@ -70,34 +73,97 @@ set_options([no_html|T], S) ->
 set_options([no_tables|T], S) ->
     set_options(T, S#ms{ format_tables = false }).
 
+
+%% @doc Trim texts after block level tags.
+trim(Html) ->
+    {Html1, _} = trim(Html, true),
+    Html1.
+
+trim(L, IsTrim) when is_list(L) ->
+    {L1, IsTrim1} = lists:foldl(
+        fun(T, {EltsAcc, IsTrimAcc}) ->
+            {T1, IstrimAcc1} = trim(T, IsTrimAcc),
+            {[ T1 | EltsAcc ], IstrimAcc1}
+        end,
+        {[], IsTrim},
+        L),
+    {lists:reverse(L1), IsTrim1};
+trim({<<"pre">>, _Params, _Elts} = Pre, IsTrim) ->
+    % Do not trim inside highlighted code blocks
+    {Pre, IsTrim};
+trim({<<"code">>, _Params, _Elts} = Code, IsTrim) ->
+    % Do not trim inside highlighted code blocks
+    {Code, IsTrim};
+trim({<<"div">>, Params, _Elts} = Div, IsTrim) ->
+    case proplists:get_value(<<"class">>, Params) of
+        <<"highlight-", _/binary>> ->
+            % Do not trim inside highlighted code blocks
+            {Div, IsTrim};
+        _ ->
+            trim_tag(Div, IsTrim)
+    end;
+trim({_Tag, _Params, _Elts} = HtmlElement, IsTrim) ->
+    trim_tag(HtmlElement, IsTrim);
+trim(Data, true) when is_binary(Data) ->
+    Data1 = z_string:trim_left(drop_nl(Data)),
+    {Data1, Data1 =:= <<>>};
+trim(Data, false) when is_binary(Data) ->
+    {drop_nl(Data), false};
+trim(_Other, IsTrim) ->
+    {<<>>, IsTrim}.
+
+trim_tag({Tag, Params, Elts}, IsTrim) ->
+    case is_block(Tag) of
+        true ->
+            {Elts1, _} = lists:foldl(
+                fun(T, {EltsAcc, IsTrimAcc}) ->
+                    {T1, IstrimAcc1} = trim(T, IsTrimAcc),
+                    {[ T1 | EltsAcc ], IstrimAcc1}
+                end,
+                {[], true},
+                Elts),
+            {{Tag, Params, lists:reverse(Elts1)}, true};
+        false ->
+            {Elts1, IsTrim1} = lists:foldl(
+                fun(T, {EltsAcc, IsTrimAcc}) ->
+                    {T1, IstrimAcc1} = trim(T, IsTrimAcc),
+                    {[ T1 | EltsAcc ], IstrimAcc1}
+                end,
+                {[], IsTrim},
+                Elts),
+            {{Tag, Params, lists:reverse(Elts1)}, IsTrim1}
+    end.
+
+drop_nl(Data) ->
+    binary:replace(Data, [ <<"\n">>, <<"\r">>, <<"\t">> ], <<" ">>, [ global ]).
+
+
 -spec to_md(Html, M, S) -> {iodata(), M1} when
     Html :: z_html_parse:html_element()
           | [ z_html_parse:html_element() ],
     M :: #md{},
     S :: #ms{},
     M1 :: #md{}.
-to_md(B, M, #ms{ level = 0 }) when is_binary(B) ->
-    B1 = z_string:trim(binary:replace(B, <<"\n">>, <<" ">>, [ global ])),
-    {escape_html_text(B1, <<>>), M};
+to_md(B, M, #ms{ in_code = true }) when is_binary(B) ->
+    % Escape text for in code blocks.
+    B1 = code_block_text(B, <<>>),
+    {B1, M};
 to_md(B, M, _S) when is_binary(B) ->
-    B1 = binary:replace(B, <<"\n">>, <<" ">>, [ global ]),
-    {escape_html_text(B1, <<>>), M};
-to_md({comment, _Text}, M, _S) ->
-    {<<>>, M};
-
+    B1 = markdown_text(B, <<>>),
+    {B1, M};
 to_md({<<"h1">>, _Args, Enclosed}, M, S) ->
     header($=, Enclosed, M, S);
 to_md({<<"h2">>, _Args, Enclosed}, M, S) ->
     header($-, Enclosed, M, S);
 to_md({<<"h",N>>, _Args, Enclosed}, M, S) when N >= $1, N =< $6 ->
     {EncText, M1} = to_md(Enclosed, M, S),
-    {[nl(S), nl(S), lists:duplicate(N-$0, "#"), 32, EncText, nl(S), nl(S)], M1};
+    {["\n\n", lists:duplicate(N-$0, "#"), 32, EncText, "\n\n"], M1};
 
-to_md({<<"hr">>, [], []}, M, S) ->
-    {[nl(S), nl(S), <<"---">>, nl(S), nl(S)], M};
+to_md({<<"hr">>, [], []}, M, _S) ->
+    {<<"\n\n---\n\n">>, M};
 
-to_md({<<"br">>, [], []}, M, S) ->
-    {[32, 32, nl(S)], M};
+to_md({<<"br">>, [], []}, M, _S) ->
+    {["  \n"], M};
 to_md({<<"em">>, _Args, Enclosed}, M, S) ->
     {EncText, M1} = to_md(Enclosed, M, S),
     {[$*, trl(EncText), $*], M1};
@@ -110,10 +176,14 @@ to_md({<<"strong">>, _Args, Enclosed}, M, S) ->
 to_md({<<"b">>, _Args, Enclosed}, M, S) ->
     {EncText, M1} = to_md(Enclosed, M, S),
     {[$*, $*, trl(EncText), $*, $*], M1};
+to_md({<<"del">>, _Args, Enclosed}, M, S) ->
+    {EncText, M1} = to_md(Enclosed, M, S),
+    {[$~, $~, trl(EncText), $~, $~], M1};
 
 to_md({<<"p">>, _Args, Enclosed}, M, S) ->
     {EncText, M1} = to_md(Enclosed, M, S),
-    {[trl(EncText), nl(S), nl(S)], M1};
+    EncText1 = z_string:trim(iolist_to_binary(EncText)),
+    {[EncText1, "\n\n"], M1};
 
 to_md({<<"a">>, Args, Enclosed}, M, S) ->
     case proplists:get_value(<<"href">>, Args) of
@@ -136,8 +206,14 @@ to_md({<<"a">>, Args, Enclosed}, M, S) ->
     end;
 
 to_md({<<"code">>, _Args, Enclosed}, M, S) ->
-    {EncText, M1} = to_md(Enclosed, M, S),
-    {[$`, z_string:trim(EncText), $`], M1};
+    {EncText, M1} = to_md(Enclosed, M, S#ms{ in_code = true }),
+    Trimmed = z_string:trim(EncText),
+    case binary:match(Trimmed, <<"`">>) of
+        nomatch ->
+            {[$`, Trimmed, $`], M1};
+        _ ->
+            {[<<"`` ">>, Trimmed, <<" ``">>], M1}
+    end;
 to_md({<<"pre">>, Args, Enclosed}, M, S) ->
     case drop_ws(Enclosed) of
         [{<<"code">>, _, EnclosedCode}] ->
@@ -152,17 +228,17 @@ to_md({<<"pre">>, Args, Enclosed}, M, S) ->
                 _ -> <<"````">>
             end,
             {[
-                nl(S),
-                Quote, " ", Lang, "\n",
+                "\n",
+                Quote, Lang, "\n",
                 EncText1, "\n",
-                nl(S), Quote,
-                nl(S),
-                nl(S)
+                Quote, "\n",
+                "\n"
             ], M};
         _ ->
-            S1 = S#ms{indent=[code|S#ms.indent]},
-            {EncText, M1} = to_md(Enclosed, M, S1),
-            {[nl(S1), trl(EncText), nl(S)], M1}
+            {EncText, M1} = to_md(Enclosed, M, S),
+            EncText1 = iolist_to_binary(z_string:trim(EncText)),
+            EncText2 = binary:replace(EncText1, <<"\n">>, <<"\n> ">>, [ global ]),
+            {["\n> ", EncText2, "\n"], M1}
     end;
 to_md({<<"div">>, Args, Enclosed}, M, S) ->
     % Check for RST generated texts
@@ -186,10 +262,11 @@ to_md({<<"div">>, Args, Enclosed}, M, S) ->
                                 _ -> <<"````">>
                             end,
                             {[
-                                nl(S), Quote, " ", Lang,
-                                nl(S), EncText1,
-                                nl(S), Quote,
-                                nl(S)
+                                "\n",
+                                Quote, Lang, "\n",
+                                EncText1, "\n",
+                                Quote, "\n",
+                                "\n"
                             ], M};
                         _ ->
                             to_md(Enclosed2, M, S)
@@ -201,9 +278,10 @@ to_md({<<"div">>, Args, Enclosed}, M, S) ->
             to_md(Enclosed, M, S)
     end;
 to_md({<<"blockquote">>, _Args, Enclosed}, M, S) ->
-    S1 = S#ms{indent=[quote|S#ms.indent]},
-    {EncText, M1} = to_md(Enclosed, M, S1),
-    {[nl(S1), EncText, nl(S)], M1};
+    {EncText, M1} = to_md(Enclosed, M, S),
+    EncText1 = iolist_to_binary(z_string:trim(EncText)),
+    EncText2 = binary:replace(EncText1, <<"\n">>, <<"\n> ">>, [ global ]),
+    {["\n> ", EncText2, "\n"], M1};
 
 to_md({<<"table">>, _Args, Enclosed}, M, #ms{ format_tables = true } = S) ->
     THeads = filter_tags(<<"thead">>, Enclosed),
@@ -301,35 +379,67 @@ to_md({<<"table">>, _Args, Enclosed}, M, #ms{ format_tables = true } = S) ->
       "\n"], M};
 
 to_md({<<"ul">>, _Args, Enclosed}, M, S) ->
-    {EncText, M1} = to_md(Enclosed, M, S#ms{li=ul}),
-    {[nl(S), EncText, nl(S)], M1};
+    PrevNth = M#md.li,
+    {EncText, M1} = to_md(Enclosed, M#md{ li = 1 }, S#ms{ li = ul }),
+    EncText1 = z_string:trim(iolist_to_binary(EncText)),
+    {[EncText1, "\n\n"], M1#md{ li = PrevNth }};
 to_md({<<"ol">>, _Args, Enclosed}, M, S) ->
-    {EncText, M1} = to_md(Enclosed, M, S#ms{li=ol}),
-    {[nl(S), trl(EncText), nl(S)], M1};
+    PrevNth = M#md.li,
+    {EncText, M1} = to_md(Enclosed, M#md{ li = 1 }, S#ms{ li = ol }),
+    EncText1 = z_string:trim(iolist_to_binary(EncText)),
+    {[EncText1, "\n\n"], M1#md{ li = PrevNth}};
 to_md({<<"li">>, _Args, Enclosed}, M, S) ->
     Bullet = case S#ms.li of
-                ol -> "1.  ";
-                ul -> "*   "
+                ol -> iolist_to_binary([ integer_to_binary(M#md.li), "." ]);
+                ul -> <<"*">>
              end,
-    {EncText, M1} = to_md(Enclosed, M, S#ms{li=none, indent=[S#ms.li|S#ms.indent]}),
-    {[nl(S), Bullet, 32, trl(EncText)], M1};
+    {EncText, M1} = to_md(Enclosed, M, S#ms{ li = none }),
+    Spaces = iolist_to_binary([ " " || _N <- lists:seq(1, size(Bullet) + 3 )]),
+    EncText1 = binary:replace(
+        z_string:trim(iolist_to_binary(EncText)),
+        <<"\n">>,
+        <<"\n", Spaces/binary>>,
+        [ global ]),
+    {["\n", Bullet, "   ", trl(EncText1)], M1#md{ li = 1 + M#md.li }};
 
 to_md({<<"head">>, _Args, _Enclosed}, M, _S) ->
     {[], M};
 to_md({<<"script">>, _Args, _Enclosed}, M, _S) ->
     {[], M};
 
-to_md({_, _, Enclosed}, M, S) ->
-    to_md(Enclosed, M, S);
+to_md({Elt, _, Enclosed}, M, S) ->
+    {Data, M1} = to_md(Enclosed, M, S),
+    Data1 = case is_block(Elt) of
+        true -> [ z_string:trim_right(Data), "\n", "\n" ];
+        false -> Data
+    end,
+    {Data1, M1};
 to_md(L, M, S) when is_list(L) ->
-    S1 = lev(S),
     lists:foldl(fun(Elt,{AT,AM}) ->
-                    {AT1, AM1} = to_md(Elt, AM, S1),
+                    {AT1, AM1} = to_md(Elt, AM, S),
                     {AT++[AT1], AM1}
                 end, {[], M}, L);
 to_md(_Other, M, _S) ->
     {<<>>, M}.
 
+is_block(Tag) -> not is_inline(Tag).
+
+is_inline(<<"a">>) -> true;
+is_inline(<<"span">>) -> true;
+is_inline(<<"u">>) -> true;
+is_inline(<<"b">>) -> true;
+is_inline(<<"i">>) -> true;
+is_inline(<<"em">>) -> true;
+is_inline(<<"strong">>) -> true;
+is_inline(<<"tt">>) -> true;
+is_inline(<<"cite">>) -> true;
+is_inline(<<"q">>) -> true;
+is_inline(<<"mark">>) -> true;
+is_inline(<<"ins">>) -> true;
+is_inline(<<"del">>) -> true;
+is_inline(<<"font">>) -> true;
+is_inline(<<"code">>) -> true;
+is_inline(_) -> false.
 
 filter_tags(Tag, Elts) when is_binary(Tag) ->
     filter_tags([Tag], Elts);
@@ -349,7 +459,7 @@ header(Char, Enclosed, M, S) ->
         <<>> ->
             {[], M1};
         Trimmed ->
-            {[nl(S), nl(S), Trimmed, nl(S), lists:duplicate(max(len(Trimmed), 3), [Char]), nl(S), nl(S)], M1}
+            {["\n\n", Trimmed, "\n", lists:duplicate(max(len(Trimmed), 3), [Char]), "\n\n"], M1}
     end.
 
 -spec row(Cells) -> binary() when
@@ -446,28 +556,8 @@ dashes(W) ->
 dashes(N, Acc) when N =< 0 -> Acc;
 dashes(N, Acc) -> dashes(N-1, <<Acc/binary, "-">>).
 
-lev(#ms{ level = Level } = S) ->
-    S#ms{ level = Level + 1}.
-
 max(A,B) when A > B -> A;
 max(_A,B) -> B.
-
-
-nl(#ms{indent=[]}) ->
-    $\n;
-nl(#ms{indent=Indent}) ->
-    nl1(Indent, []).
-
-nl1([], Acc) ->
-    [$\n|Acc];
-nl1([ul|Rest], Acc) ->
-    nl1(Rest, ["   "|Acc]);
-nl1([ol|Rest], Acc) ->
-    nl1(Rest, ["    "|Acc]);
-nl1([code|Rest], Acc) ->
-    nl1(Rest, ["    "|Acc]);
-nl1([quote|Rest], Acc) ->
-    nl1(Rest, ["> "|Acc]).
 
 drop_ws([]) -> [];
 drop_ws([B|T]) when is_binary(B) -> drop_ws(T);
@@ -484,40 +574,61 @@ len([]) ->
     0.
 
 
-
-%% @doc Escape pointy brackets, single and double quotes in texts (ampersand is already removed or escaped).
-escape_html_text(<<>>, Acc) ->
+%% @doc Markdown-escape of unescaped HTML texts.
+%% Used for texts inside HTML code block.
+code_block_text(<<>>, Acc) ->
     Acc;
-escape_html_text(<<${, T/binary>>, Acc) ->
-    escape_html_text(T, <<Acc/binary, "\\{">>);
-escape_html_text(<<$}, T/binary>>, Acc) ->
-    escape_html_text(T, <<Acc/binary, "\\}">>);
-escape_html_text(<<$[, T/binary>>, Acc) ->
-    escape_html_text(T, <<Acc/binary, "\\[">>);
-escape_html_text(<<$], T/binary>>, Acc) ->
-    escape_html_text(T, <<Acc/binary, "\\]">>);
-escape_html_text(<<$_, T/binary>>, Acc) ->
-    escape_html_text(T, <<Acc/binary, "\\_">>);
-escape_html_text(<<$*, T/binary>>, Acc) ->
-    escape_html_text(T, <<Acc/binary, "\\*">>);
-escape_html_text(<<$`, T/binary>>, Acc) ->
-    escape_html_text(T, <<Acc/binary, "``">>);
-escape_html_text(<<$<, T/binary>>, Acc) ->
-    escape_html_text(T, <<Acc/binary, "&lt;">>);
-escape_html_text(<<$>, T/binary>>, Acc) ->
-    escape_html_text(T, <<Acc/binary, "&gt;">>);
-escape_html_text(<<$", T/binary>>, Acc) ->
-    escape_html_text(T, <<Acc/binary, "&quot;">>);
-escape_html_text(<<$', T/binary>>, Acc) ->
-    escape_html_text(T, <<Acc/binary, "&#39;">>);
-escape_html_text(<<32, T/binary>>, Acc) ->
-    escape_html_text(trl(T), <<Acc/binary, 32>>);
-escape_html_text(<<9, T/binary>>, Acc) ->
-    escape_html_text(trl(T), <<Acc/binary, 32>>);
-escape_html_text(<<$\n, T/binary>>, Acc) ->
-    escape_html_text(trl(T), <<Acc/binary, $\n>>);
-escape_html_text(<<C, T/binary>>, Acc) ->
-    escape_html_text(T, <<Acc/binary, C>>).
+code_block_text(<<$`, T/binary>>, <<>>) ->
+    code_block_text(T, <<" `">>);
+code_block_text(<<$`>>, Acc) ->
+    <<Acc/binary,"` ">>;
+code_block_text(<<$`, T/binary>>, Acc) ->
+    code_block_text(T, <<Acc/binary, "\\`">>);
+code_block_text(<<$>, T/binary>>, Acc) ->
+    code_block_text(T, <<Acc/binary, "\\>">>);
+code_block_text(<<9, T/binary>>, Acc) ->
+    code_block_text(T, <<Acc/binary, 32>>);
+code_block_text(<<C, T/binary>>, Acc) ->
+    code_block_text(T, <<Acc/binary, C>>).
+
+
+%% @doc Escape a literal text. Used for normal texts.
+%% Special care for escaping HTML entities and possible
+%% HTML tags.
+markdown_text(<<>>, Acc) ->
+    Acc;
+markdown_text(<<${, T/binary>>, Acc) ->
+    markdown_text(T, <<Acc/binary, "\\{">>);
+markdown_text(<<$}, T/binary>>, Acc) ->
+    markdown_text(T, <<Acc/binary, "\\}">>);
+markdown_text(<<$[, T/binary>>, Acc) ->
+    markdown_text(T, <<Acc/binary, "\\[">>);
+markdown_text(<<$], T/binary>>, Acc) ->
+    markdown_text(T, <<Acc/binary, "\\]">>);
+markdown_text(<<$_, T/binary>>, Acc) ->
+    markdown_text(T, <<Acc/binary, "\\_">>);
+markdown_text(<<$*, T/binary>>, Acc) ->
+    markdown_text(T, <<Acc/binary, "\\*">>);
+markdown_text(<<$`, T/binary>>, Acc) ->
+    markdown_text(T, <<Acc/binary, "\\`">>);
+markdown_text(<<$&, T/binary>>, Acc) ->
+    case maybe_entity(T) of
+        true -> markdown_text(T, <<Acc/binary, "&amp;">>);
+        false -> markdown_text(T, <<Acc/binary, "&">>)
+    end;
+markdown_text(<<$<, T/binary>>, Acc) ->
+    case maybe_tag(T) of
+        true -> markdown_text(T, <<Acc/binary, "&lt;">>);
+        false -> markdown_text(T, <<Acc/binary, "<">>)
+    end;
+markdown_text(<<32, T/binary>>, Acc) ->
+    markdown_text(trl(T), <<Acc/binary, 32>>);
+markdown_text(<<9, T/binary>>, Acc) ->
+    markdown_text(trl(T), <<Acc/binary, 32>>);
+markdown_text(<<$\n, T/binary>>, Acc) ->
+    markdown_text(trl(T), <<Acc/binary, $\n>>);
+markdown_text(<<C, T/binary>>, Acc) ->
+    markdown_text(T, <<Acc/binary, C>>).
 
 
 trimnl(<<$\n, Rest/binary>>) ->
@@ -528,6 +639,41 @@ trimnl(B) ->
 trl(B) ->
     z_string:trim_left(B).
 
+
+% Check after a "&" if it might have been the start of
+% a HTML entity. Erring on the safe side.
+maybe_entity(<<>>) ->
+    % Never know what comes next - err on the safe side.
+    true;
+maybe_entity(<<"#", _T/binary>>) ->
+    true;
+maybe_entity(<<C, T/binary>>) when C >= $a, C =< $z ->
+    maybe_entity_1(T);
+maybe_entity(<<C, T/binary>>) when C >= $A, C =< $Z ->
+    maybe_entity_1(T);
+maybe_entity(_) ->
+    false.
+
+maybe_entity_1(<<";", _/binary>>) ->
+    true;
+maybe_entity_1(<<C, T/binary>>) when C >= $a, C =< $z ->
+    maybe_entity_1(T);
+maybe_entity_1(<<C, T/binary>>) when C >= $A, C =< $Z ->
+    maybe_entity_1(T);
+maybe_entity_1(_) ->
+    false.
+
+% Check after a "<" if it might have been the start of
+% a HTML entity. Erring on the safe side.
+maybe_tag(<<>>) ->
+    % Never know what comes next - err on the safe side.
+    true;
+maybe_tag(<<C, T/binary>>) when C >= $a, C =< $z ->
+    binary:match(T, <<">">>) /= nomatch;
+maybe_tag(<<C, T/binary>>) when C >= $A, C =< $Z ->
+    binary:match(T, <<">">>) /= nomatch;
+maybe_tag(_) ->
+    false.
 
 % add_anchor(Href, M) ->
 %     case indexof(Href, M#md.a, 1) of

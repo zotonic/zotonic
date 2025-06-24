@@ -48,7 +48,7 @@ rst_code_to_markdown_test() ->
 </pre></div>
 </div>">>,
     MD = z_markdown:to_markdown(Html),
-    ?assertEqual(<<"``` django\n<div class=\"form-group\"> <!-- form-group has class \"has-error\" if validation fails -->\n```\n">>, MD).
+    ?assertEqual(<<"```django\n<div class=\"form-group\"> <!-- form-group has class \"has-error\" if validation fails -->\n```\n\n">>, MD).
 
 
 lines_test() ->
