@@ -62,17 +62,46 @@ page_path_test() ->
     ?assertEqual(<<"/foo/bar">>, m_rsc:p(Id, page_path, AdminC)),
     ok = m_rsc:delete(Id, AdminC).
 
+page_path_trans_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_context:new(zotonic_site_testsandbox),
+    AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
+    Path = {trans, [ {en, <<"/foo/bar">>}, {nl, <<"/aap/noot">>} ]},
+    {ok, Id} = m_rsc:insert([
+            {title, <<"Hello.">>},
+            {category_id, text},
+            {page_path, Path}
+        ], AdminC),
+    ?assertEqual(Path, m_rsc:p(Id, page_path, AdminC)),
+    PivotPaths = z_db:q1("select pivot_page_path from rsc where id = $1", [ Id ], AdminC),
+    % Expect sorted values
+    ?assertEqual([ <<"/aap/noot">>, <<"/foo/bar">> ], PivotPaths),
+    ok = m_rsc:delete(Id, AdminC).
+
+page_path_escape_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_context:new(zotonic_site_testsandbox),
+    AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
+    {ok, Id} = m_rsc:insert([
+            {title, <<"Hello.">>},
+            {category_id, text},
+            {page_path, <<" foo /bar&">>}
+        ], AdminC),
+    ?assertEqual(<<"/foo%20/bar-">>, m_rsc:p(Id, page_path, AdminC)),
+    ok = m_rsc:delete(Id, AdminC).
+
 %% @doc Resource name instead of id as argument.
 name_rid_test() ->
     C = z_context:new(testsandboxdb),
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
     {ok, Id} = m_rsc:insert([{title, <<"What’s in a name?"/utf8>>}, {category_id, text}, {name, rose}], AdminC),
-
-    m_rsc:get_raw(rose, AdminC),
+    % m_rsc:get_raw(rose, AdminC),
     ok = m_rsc_update:flush(rose, AdminC),
     {ok, Id} = m_rsc:update(rose, [], AdminC),
-    {ok, _DuplicateId} = m_rsc:duplicate(rose, [], AdminC),
-    ok = m_rsc:delete(rose, AdminC).
+    {ok, DuplicateId} = m_rsc:duplicate(rose, [], AdminC),
+    ok = m_rsc:delete(rose, AdminC),
+    false = m_rsc:exists(rose, AdminC),
+    ok = m_rsc:delete(DuplicateId, AdminC).
 
 %% @doc Check normalization of dates
 normalize_date_props_test() ->

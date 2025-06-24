@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2012 Marc Worrell
-%%
+%% @copyright 2012-2025 Marc Worrell
 %% @doc Model for administration of deleted resources and their possible new location.
+%% @end
 
-%% Copyright 2012 Marc Worrell
+%% Copyright 2012-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -112,7 +112,9 @@ gone(Id, Context) when is_integer(Id) ->
 %%      Also sets the 'new id', which is the id that replaces the deleted id.
 gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:= undefined ->
     case z_db:assoc_row("
-            select id, name, version, page_path, uri, is_authoritative, creator_id, created
+            select id, is_authoritative, name, version,
+                   pivot_page_path as page_paths, uri,
+                   creator_id, created
             from rsc
             where id = $1
             ", [Id], Context)
@@ -122,7 +124,7 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
         Props when is_list(Props) ->
             case z_db:equery(
                 "insert into rsc_gone
-                    (id, new_id, new_uri, version, uri, name, page_path,
+                    (id, new_id, new_uri, version, uri, name, page_paths,
                      is_authoritative, creator_id, modifier_id, is_personal_data, created, modified)
                  values
                      ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, now())
@@ -134,7 +136,7 @@ gone(Id, NewId, Context) when is_integer(Id), is_integer(NewId) orelse NewId =:=
                     proplists:get_value(version, Props),
                     proplists:get_value(uri, Props),
                     proplists:get_value(name, Props),
-                    proplists:get_value(page_path, Props),
+                    proplists:get_value(page_paths, Props),
                     proplists:get_value(is_authoritative, Props),
                     proplists:get_value(creator_id, Props),
                     z_acl:user(Context),
@@ -163,7 +165,7 @@ gone_update(Id, NewId, Props, Context) ->
             version = $4,
             uri = $5,
             name = $6,
-            page_path = $7,
+            page_paths = $7,
             is_authoritative = $8,
             creator_id = $9,
             modifier_id = $10,
@@ -178,7 +180,7 @@ gone_update(Id, NewId, Props, Context) ->
             proplists:get_value(version, Props),
             proplists:get_value(uri, Props),
             proplists:get_value(name, Props),
-            proplists:get_value(page_path, Props),
+            proplists:get_value(page_paths, Props),
             proplists:get_value(is_authoritative, Props),
             proplists:get_value(creator_id, Props),
             z_acl:user(Context),

@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2015 Marc Worrell, Arjan Scherpenisse
+%% @copyright 2009-2025 Marc Worrell, Arjan Scherpenisse
 %% @doc Update routines for resources.  For use by the m_rsc module.
+%% @end
 
-%% Copyright 2009-2015 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2009-2025 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -38,6 +39,7 @@
     props_filter/3,
 
     to_slug/1,
+    normalize_page_path/1,
     test/0
 ]).
 
@@ -713,10 +715,10 @@ preflight_check(Id, [{name, Name}|T], Context) when Name =/= undefined ->
             throw({error, duplicate_name})
     end;
 preflight_check(Id, [{page_path, Path}|T], Context) when Path =/= undefined ->
-    case z_db:q1("select count(*) from rsc where page_path = $1 and id <> $2", [Path, Id], Context) of
-        0 ->
+    case preflight_check_page_path(Id, Path, Context) of
+        ok ->
             preflight_check(Id, T, Context);
-        _N ->
+        error ->
             lager:warning("Trying to insert duplicate page_path ~p", [Path]),
             throw({error, duplicate_page_path})
     end;
@@ -747,6 +749,28 @@ preflight_check(Id, [{'query', Query}|T], Context) ->
     end;
 preflight_check(Id, [_H|T], Context) ->
     preflight_check(Id, T, Context).
+
+%% @doc Preflight checks are done after the page_path is normalized.
+preflight_check_page_path(Id, PagePath, Context) ->
+    case page_paths(PagePath) of
+        [] ->
+            ok;
+        Paths ->
+            case z_db:q1("
+                select count(*) from rsc
+                where pivot_page_path && $1
+                  and id <> $2", [ Paths, Id], Context)
+            of
+                0 -> ok;
+                _N -> error
+            end
+    end.
+
+page_paths(undefined) -> [];
+page_paths(<<>>) -> [];
+page_paths("") -> [];
+page_paths(B) when is_binary(B) -> [B];
+page_paths({trans, Tr}) -> lists:usort([ T || {_, T} <- Tr, T =/= <<>> ]).
 
 
 throw_if_category_not_allowed(_Id, _SafeProps, false, _Context) ->
@@ -825,8 +849,23 @@ props_filter([{page_path, Path}|T], Acc, Context) ->
                 Empty when Empty == undefined; Empty == []; Empty == <<>> ->
                     props_filter(T, [{page_path, undefined} | Acc], Context);
                 _ ->
-                    P = [ $/ | string:strip(z_utils:url_path_encode(Path), both, $/) ],
-                    props_filter(T, [{page_path, P} | Acc], Context)
+                    Path1 = if
+                        is_binary(Path) ->
+                            normalize_page_path(Path);
+                        is_list(Path) ->
+                            normalize_page_path(z_convert:to_binary(Path));
+                        true ->
+                            case Path of
+                                {trans, []} ->
+                                    undefined;
+                                {trans, Tr} ->
+                                    Tr1 = [ {Lang, normalize_page_path(P)} || {Lang, P} <- Tr ],
+                                    {trans, Tr1};
+                                _ ->
+                                    undefined
+                            end
+                    end,
+                    props_filter(T, [{page_path, Path1} | Acc], Context)
             end;
         false ->
             props_filter(T, Acc, Context)
@@ -954,6 +993,13 @@ props_filter([{crop_center, CropCenter}|T], Acc, Context) ->
 props_filter([{_Prop, _V}=H|T], Acc, Context) ->
     props_filter(T, [H|Acc], Context).
 
+normalize_page_path(<<>>) ->
+    <<>>;
+normalize_page_path(Path) ->
+    Path1 = iolist_to_binary([
+        $/, z_string:trim(z_url:url_path_encode(Path), $/)
+    ]),
+    binary:replace(Path1, [ <<"&">>, <<"=">> ], <<"-">>, [ global ]).
 
 %% Filter all given languages, drop unknown languages.
 %% Ensure that the languages are a list of atoms.
@@ -1578,24 +1624,26 @@ config_langs(Context) ->
 
 
 update_page_path_log(RscId, OldProps, NewProps, Context) ->
-    Old = proplists:get_value(page_path, OldProps),
-    New = proplists:get_value(page_path, NewProps, not_updated),
-    case {Old, New} of
-        {_, not_updated} ->
+    IsUpdated = proplists:is_defined(page_path, NewProps),
+    if
+        not IsUpdated ->
             ok;
-        {Old, Old} ->
-            %% not changed
-            ok;
-        {undefined, _} ->
-            %% no old page path
-            ok;
-        {Old, New} ->
-            %% update
-            z_db:q("DELETE FROM rsc_page_path_log WHERE page_path = $1 OR page_path = $2", [New, Old], Context),
-            z_db:q("INSERT INTO rsc_page_path_log(id, page_path) VALUES ($1, $2)", [RscId, Old], Context),
-            ok
+        true ->
+            % Store dropped page paths
+            Old = page_paths(proplists:get_value(page_path, OldProps)),
+            New = page_paths(proplists:get_value(page_path, NewProps)),
+            lists:foreach(
+                fun(P) ->
+                    z_db:q("
+                        INSERT INTO rsc_page_path_log(id, page_path)
+                        VALUES ($1, $2)
+                        ON CONFLICT (page_path) DO UPDATE
+                        SET id = EXCLUDED.id",
+                        [RscId, P],
+                        Context)
+                end,
+                Old -- New)
     end.
-
 
 test() ->
     [{"publication_start",{{2009,7,9},{0,0,0}}},

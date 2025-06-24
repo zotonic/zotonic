@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2015 Marc Worrell
-%%
+%% @copyright 2009-2025 Marc Worrell
 %% @doc This server will install the database when started. It will always return ignore to the supervisor.
 %% This server should be started after the database pool but before any database queries will be done.
+%% @end
 
-%% Copyright 2009-2015 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -33,6 +33,9 @@
 -include_lib("zotonic.hrl").
 
 -record(state, { site :: atom(), site_props :: list() }).
+
+% From z_db_pgsql.erl
+-define(TERM_MAGIC_NUMBER, 16#01326A3A:1/big-unsigned-unit:32).
 
 %%====================================================================
 %% API
@@ -233,6 +236,8 @@ upgrade(C, Database, Schema) ->
     ok = check_category_id_key(C, Database, Schema),
     % 0.84
     ok = install_rsc_gone_is_personal_data(C, Database, Schema),
+    % 0.89 (from the 1.x master branch)
+    ok = pivot_page_path(C, Database, Schema),
     ok.
 
 upgrade_config_schema(C, Database, Schema) ->
@@ -609,5 +614,77 @@ install_rsc_gone_is_personal_data(C, Database, Schema) ->
             {ok, [], []} = epgsql:squery(C,
                               "ALTER TABLE rsc_gone "
                               "ADD COLUMN is_personal_data boolean NOT NULL DEFAULT false"),
+            ok
+    end.
+
+
+pivot_page_path(C, Database, Schema) ->
+    case has_column(C, "rsc", "pivot_page_path", Database, Schema) of
+        true ->
+            ok;
+        false ->
+            lager:notice(
+                "Upgrade: adding pivot_page_path column to rsc, database ~s / ~s",
+                [ Database, Schema ]),
+            {ok, _, Rscs} = epgsql:equery(C, "
+                select id, page_path
+                from rsc
+                where page_path is not null and page_path <> ''"),
+            {ok, [], []} = epgsql:squery(C,
+                                    "alter table rsc "
+                                    "add column pivot_page_path character varying(80)[],"
+                                    "drop constraint if exists rsc_page_path_key"),
+            {ok, _} = epgsql:squery(C,
+                                    "update rsc "
+                                    "set pivot_page_path = array[page_path]"
+                                    "where page_path is not null and page_path <> ''"),
+            {ok, [], []} = epgsql:squery(C,
+                                    "alter table rsc "
+                                    "drop column page_path"),
+            {ok, [], []} = epgsql:squery(C,
+                                    "CREATE INDEX IF NOT EXISTS rsc_pivot_page_path_key ON rsc USING gin(pivot_page_path)"),
+            lager:notice(
+                "Upgrade: fixing page_path property of resources with page_path, database ~s / ~s",
+                [ Database, Schema ]),
+            % Ensure the page_path is moved to the rsc props
+            lists:foreach(
+                fun({Id, Path}) ->
+                    case epgsql:equery(C, "select props from rsc where id = $1", [Id]) of
+                        {ok, _, [ {<<?TERM_MAGIC_NUMBER, B/binary>>} ]} ->
+                            Props = case binary_to_term(B) of
+                                Ps when is_list(Ps) ->
+                                    [ {page_path, Path} | Ps ];
+                                Ps when is_map(Ps) ->
+                                    Ps#{ <<"page_path">> => Path };
+                                _ ->
+                                    []
+                            end,
+                            PropsBin = <<?TERM_MAGIC_NUMBER, (term_to_binary(Props))/binary>>,
+                            {ok, _} = epgsql:equery(C, "update rsc set props = $2 where id = $1", [ Id, PropsBin ]);
+                        {ok, _, [ {null} ]} ->
+                            ok;
+                        {ok, _, []} ->
+                            ok
+                    end
+                end,
+                Rscs),
+
+            % Update m_rsc_gone table for multiple page_paths
+            % Check for page_paths column
+            case has_column(C, "rsc_gone", "page_paths", Database, Schema) of
+                false ->
+                    {ok, [], []} = epgsql:squery(C,
+                            "ALTER TABLE rsc_gone ADD COLUMN page_paths character varying(80)[]"),
+                    {ok, _} = epgsql:squery(C,
+                            "update rsc_gone
+                             set page_paths = array[page_path]
+                             where page_path is not null"),
+                    {ok, [], []} = epgsql:squery(C,
+                            "ALTER TABLE rsc_gone DROP COLUMN page_path CASCADE"),
+                    {ok, [], []} = epgsql:squery(C,
+                            "CREATE INDEX IF NOT EXISTS rsc_gone_page_paths_key ON rsc_gone USING gin(page_paths)");
+                true ->
+                    ok
+            end,
             ok
     end.

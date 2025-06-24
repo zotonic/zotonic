@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2015 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Pivoting server for the rsc table. Takes care of full text indices. Polls the pivot queue for any changed resources.
+%% @end
 
-%% Copyright 2009-2015 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -119,19 +120,26 @@ pivot_resource_update(Id, UpdateProps, RawProps, Context) ->
                                     true ->
                                         All
                                 end
-                        end, UpdateProps, [date_start, date_end, title]),
+                        end, UpdateProps, [date_start, date_end, title, page_path]),
 
     {DateStart, DateEnd} = pivot_date(Props),
     PivotTitle = truncate(get_pivot_title(Props), 60),
+    PivotPagePath = proplists:get_value(page_path, Props),
     Props1 = [
         {pivot_date_start, DateStart},
         {pivot_date_end, DateEnd},
         {pivot_date_start_month_day, month_day(DateStart)},
         {pivot_date_end_month_day, month_day(DateEnd)},
-        {pivot_title, PivotTitle}
+        {pivot_title, PivotTitle},
+        {pivot_page_path, as_string_array(PivotPagePath)}
         | Props
     ],
     z_notifier:foldr(#pivot_update{id=Id, raw_props=RawProps}, Props1, Context).
+
+as_string_array(undefined) -> undefined;
+as_string_array(<<>>) -> undefined;
+as_string_array(B) when is_binary(B) -> [ B ];
+as_string_array({trans, Tr}) -> lists:usort([ T || {_, T} <- Tr, T =/= <<>> ]).
 
 month_day(undefined) -> undefined;
 month_day(?EPOCH_START) -> undefined;
