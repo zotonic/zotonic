@@ -206,7 +206,7 @@ update_rsc_page_path(undefined, Context) ->
 update_rsc_page_path(Path, Context) when is_binary(Path) ->
     Tr = {trans, [ {z_language:default_language(Context), Path} ]},
     update_rsc_page_path(Tr, Context);
-update_rsc_page_path({trans, TransPath}, Context) ->
+update_rsc_page_path({trans, _} = TransPath, Context) ->
     lists:foldl(
         fun(Lang, CAcc) ->
             Path = z_trans:lookup_fallback(TransPath, [ Lang ], CAcc),

@@ -14,21 +14,25 @@
     {% if m.acl.use.mod_admin %}
         {% with "field-page-path" ++ lang_code_for_id as elt_id %}
         {% with "page_path" ++ lang_code_with_dollar as elt_name %}
-        <div class="form-group label-floating">
-            <input type="text" id="{{ elt_id }}"
-                name="{{ elt_name }}"
-                placeholder="{_ Page path _} {{ lang_code_with_brackets }} &mdash; {% with lang_code as z_language %}
-{{ id.default_page_url|escape }}{% endwith %}"
-                value="{{ (is_i18n|if : id.translation[lang_code].page_path : id.page_path)|urldecode|escape }}"
-                {% if not id.is_editable %}disabled="disabled"{% endif %}
-                {% include "_language_attrs.tpl" language=lang_code class="form-control" %}>
-            <label class="control-label" for="{{ elt_id }}">
+        <div class="form-group row" style="margin-bottom: 0">
+            <label class="control-label col-md-3" for="{{ elt_id }}">
                 {_ Page path _} {{ lang_code_with_brackets }}
             </label>
-            {% validate id=elt_id name=elt_name
-                        type={page_path_unique id=id failure_message=_"This page path is in use by another page."}
-            %}
-            <p class="help-block">
+            <div class="col-md-9">
+                <input type="text" id="{{ elt_id }}"
+                    name="{{ elt_name }}"
+                    placeholder="{_ Page path _} {{ lang_code_with_brackets }} &mdash; {% with lang_code as z_language %}
+    {{ id.default_page_url|escape }}{% endwith %}"
+                    value="{{ (is_i18n|if : id.translation[lang_code].page_path : id.page_path)|urldecode|escape }}"
+                    {% if not id.is_editable %}disabled="disabled"{% endif %}
+                    {% include "_language_attrs.tpl" language=lang_code class="form-control" %}>
+                {% validate id=elt_id name=elt_name
+                            type={page_path_unique id=id failure_message=_"This page path is in use by another page."}
+                %}
+            </div>
+        </div>
+        <div class="form-group row">
+            <p class="help-block col-md-offset-3 col-md-9">
                 {% if m.translation.default_language == lang_code %}
                     {_ The path <em>after the language code</em> for the URL, if left empty then the path of one of the other languages is used. _}
                 {% else %}

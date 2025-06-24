@@ -177,7 +177,7 @@ name_to_id_cat_check(Name, Cat, Context) ->
 %% page path was found but is no longer the current page path for the
 %% resource.
 page_path_to_id(Path, Context) ->
-    Path1 = z_convert:to_binary([ $/, string:strip(Path, both, $/) ]),
+    Path1 = z_convert:to_binary([ $/, z_string:trim(Path, $/) ]),
     case z_db:q1("select id from rsc where pivot_page_path && $1", [ [Path1] ], Context) of
         Id when is_integer(Id) -> {ok, Id};
         undefined ->

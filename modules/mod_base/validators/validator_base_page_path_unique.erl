@@ -26,7 +26,7 @@ render_validator(page_path_unique, TriggerId, TargetId, Args, Context)  ->
     {_PostbackJS, PostbackInfo} = z_render:make_postback({validate, Args}, 'postback', TriggerId, TargetId, ?MODULE, Context),
     JsObject = z_utils:js_object(z_validation:rename_args([{z_postback, PostbackInfo} | Args])),
     Script = [<<"z_add_validator(\"">>, TriggerId, <<"\", \"postback\", ">>, JsObject, <<");\n">>],
-    {Args, Script}.
+    {Args, Script, Context}.
 
 -spec validate(page_path_unique, binary(), term(), list(), z:context()) ->
     {{ok, binary()}, z:context()} | {{error, m_rsc:resource(), atom() | binary()}, #context{}}.
@@ -53,8 +53,9 @@ validate(page_path_unique, Id, Value, Args, Context) ->
 
 %% @doc Handle the validation during form entry.
 -spec event(#postback{}, z:context()) -> z:context().
-event(#postback{message = {validate, Args}, trigger = TriggerId}, Context) ->
-    Value = z_context:get_q(triggervalue, Context),
+event(#postback{message = {validate, Args}, trigger = TriggerId0}, Context) ->
+    TriggerId = z_convert:to_binary(TriggerId0),
+    Value = z_convert:to_binary(z_context:get_q(triggervalue, Context)),
     {IsValid, ContextValidated} = case validate(page_path_unique, TriggerId, Value, Args, Context) of
         {{ok, _}, ContextOk} ->
             {"true", z_render:wire({fade_out, [{target, <<TriggerId/binary, "_path_unique_error">>}]}, ContextOk)};
@@ -62,7 +63,7 @@ event(#postback{message = {validate, Args}, trigger = TriggerId}, Context) ->
             {"false", z_render:wire({fade_in, [{target, <<TriggerId/binary, "_path_unique_error">>}]},
                 z_validation:report_errors([{Id, Error}], ContextScript))}
     end,
-    z_render:add_script(
+    z_script:add_script(
         ["z_async_validation_result('", TriggerId, "', ", IsValid, ", '", z_utils:js_escape(Value), "');"],
         ContextValidated
     ).
