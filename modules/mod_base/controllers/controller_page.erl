@@ -22,7 +22,7 @@
 -export([
     resource_exists/2,
     previously_existed/2,
-    moved_temporarily/2,
+    moved_permanently/2,
     is_authorized/2,
     html/1
 ]).
@@ -35,7 +35,12 @@ resource_exists(ReqData, Context) ->
     ContextQs = z_context:ensure_qs(Context1),
     try
         Id = z_controller_helper:get_id(ContextQs),
-        maybe_redirect(Id, ContextQs)
+        case exists(Id, ContextQs) of
+            true ->
+                maybe_redirect(Id, ContextQs);
+            false ->
+                {false, ContextQs}
+        end
     catch
         _:_ -> ?WM_REPLY(false, ContextQs)
     end.
@@ -47,7 +52,7 @@ previously_existed(ReqData, Context) ->
     IsGone = m_rsc_gone:is_gone(Id, Context1),
     ?WM_REPLY(IsGone, Context1).
 
-moved_temporarily(ReqData, Context) ->
+moved_permanently(ReqData, Context) ->
     Context1 = ?WM_REQ(ReqData, Context),
     Id = z_controller_helper:get_id(Context1),
     redirect(m_rsc_gone:get_new_location(Id, Context1), Context1).
@@ -113,39 +118,45 @@ maybe_redirect_website(Website, true, Id, Context) ->
     CurrAbsUrl = z_context:abs_url(current_path(Context), Context),
     case AbsUrl of
         CurrAbsUrl -> maybe_redirect_canonical(Id, Context);
-        _ -> do_temporary_redirect(AbsUrl, Context)
+        _ -> do_redirect(false, AbsUrl, Context)
     end;
 maybe_redirect_website(_Website, _False, Id, Context) ->
     maybe_redirect_canonical(Id, Context).
 
 maybe_redirect_canonical(Id, Context) ->
-    maybe_redirect_page_path(m_rsc:p_no_acl(Id, page_path, Context), Id, Context).
-
-maybe_redirect_page_path(undefined, Id, Context) ->
-    maybe_exists(Id, Context);
-maybe_redirect_page_path(<<>>, Id, Context) ->
-    maybe_exists(Id, Context);
-maybe_redirect_page_path(PagePath, Id, Context) ->
     case is_canonical(Id, Context) of
         false ->
-            maybe_exists(Id, Context);
+            {true, Context};
         true ->
-            %% Check if we need to be at a different URL. If the page_path
-            %% of a resource is set, we need to redirect there if the
-            %% current request's path is not equal to the resource's path.
-            case current_path(Context) of
-                PagePath ->
-                    maybe_exists(Id, Context);
-                _ ->
+            ReqPath = current_path(Context),
+            PageUrl = m_rsc:p(Id, page_url, Context),
+            if
+                ReqPath =:= PageUrl ->
+                    {true, Context};
+                true ->
                     AbsUrl = m_rsc:p(Id, page_url_abs, Context),
                     AbsUrlQs = append_qs(AbsUrl, wrq:req_qs(z_context:get_reqdata(Context))),
-                    do_temporary_redirect(AbsUrlQs, Context)
+                    do_redirect(true, AbsUrlQs, Context)
             end
     end.
 
-do_temporary_redirect(Location, Context) ->
-    ContextRedirect = z_context:set_resp_header("Location", Location, Context),
-    ?WM_REPLY({halt, 302}, ContextRedirect).
+do_redirect(IsPermanent, Location, Context) ->
+    Context1 = z_context:set_resp_header(
+            "Cache-Control",
+            "no-store, no-cache, must-revalidate, private, post-check=0, pre-check=0",
+            Context),
+    Context2 = case z_context:get_resp_header("Vary", Context1) of
+        undefined ->
+            z_context:set_resp_header("Vary", "accept-language", Context1);
+        _ ->
+            Context1
+    end,
+    Code = if
+        IsPermanent -> 307;
+        true -> 308
+    end,
+    ContextRedirect = z_context:set_resp_header("Location", Location, Context2),
+    ?WM_REPLY({halt, Code}, ContextRedirect).
 
 current_path(Context) ->
     case z_context:get_q(zotonic_dispatch_path, Context) of
@@ -164,13 +175,12 @@ append_qs(AbsUrl, []) ->
 append_qs(AbsUrl, Qs) ->
     iolist_to_binary([AbsUrl, $?, mochiweb_util:urlencode(Qs)]).
 
-maybe_exists(Id, Context) ->
+exists(Id, Context) ->
     case {m_rsc:exists(Id, Context), z_context:get(cat, Context)} of
         {Exists, undefined} ->
-            ?WM_REPLY(Exists, Context);
+            Exists;
         {true, Cat} ->
-            ?WM_REPLY(m_rsc:is_a(Id, Cat, Context), Context);
+            m_rsc:is_a(Id, Cat, Context);
         {false, _} ->
-            ?WM_REPLY(false, Context)
+            false
     end.
-
