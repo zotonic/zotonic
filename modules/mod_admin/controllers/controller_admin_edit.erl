@@ -209,7 +209,7 @@ update_rsc_page_path(Path, Context) when is_binary(Path) ->
 update_rsc_page_path({trans, _} = TransPath, Context) ->
     lists:foldl(
         fun(Lang, CAcc) ->
-            Path = z_trans:lookup_fallback(TransPath, [ Lang ], CAcc),
+            Path = z_trans:lookup_fallback(TransPath, Lang, CAcc),
             Path1 = filter_urldecode:urldecode(z_convert:to_binary(Path), Context),
             EltId = <<"field-page-path--", (atom_to_binary(Lang, utf8))/binary>>,
             z_render:set_value(EltId, Path1, CAcc)
