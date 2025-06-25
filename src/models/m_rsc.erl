@@ -610,14 +610,14 @@ p_no_acl(Id, Predicate, Context) when is_integer(Id) ->
 path_for_lang(undefined, _Context) ->
     <<>>;
 path_for_lang({trans, Tr } = PagePath, Context) ->
-    Langs = [ z_context:language(Context) ],
-    case z_trans:lookup_fallback(PagePath, Langs, Context) of
+    UrlLang = z_context:language(Context),
+    case z_trans:lookup_fallback(PagePath, UrlLang, Context) of
         <<>> ->
             case [ {Lang, Path } || {Lang, Path} <- Tr, Path =/= <<>> ] of
                 [] ->
                     <<>>;
                 Tr1 ->
-                    z_trans:lookup_fallback({trans, Tr1}, Langs, Context)
+                    z_trans:lookup_fallback({trans, Tr1}, UrlLang, Context)
             end;
         Path ->
             Path

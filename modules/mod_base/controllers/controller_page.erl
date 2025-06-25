@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2015 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Basic page
+%% @end
 
-%% Copyright 2009-2015 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -159,10 +160,8 @@ do_redirect(IsPermanent, Location, Context) ->
     ?WM_REPLY({halt, Code}, ContextRedirect).
 
 current_path(Context) ->
-    case z_context:get_q(zotonic_dispatch_path, Context) of
-        [] -> <<"/">>;
-        DP -> z_convert:to_binary([[ $/, P ] || P <- DP ])
-    end.
+    Path = z_convert:to_binary(wrq:raw_path(z_context:get_reqdata(Context))),
+    hd(binary:split(Path, <<"?">>)).
 
 is_canonical(Id, Context) ->
     case m_rsc:p_no_acl(Id, is_page_path_multiple, Context) of
