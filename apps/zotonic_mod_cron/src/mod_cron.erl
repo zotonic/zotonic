@@ -54,7 +54,7 @@
 
 -record(state, {
           jobs = #{},
-          context :: z_context:context()
+          context :: z:context()
          }).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
