@@ -82,7 +82,7 @@ handle_call(_Msg, _From, State) ->
     {reply, {error, unknown_message}, State}.
 
 handle_cast({#module_activate{ module=Module }, _Context}, State) ->
-    State1 = add_jobs(Module, State),
+        State1 = add_jobs(Module, State),
     {noreply, State1};
 handle_cast({#module_deactivate{ module=Module }, _Context}, State) ->
     State1 = cancel_jobs(Module, State),
@@ -114,13 +114,18 @@ jobs(Module) ->
         error:badarg -> []
     end.
 
-add_jobs(Module, #state{ jobs = Jobs }=State) ->
+add_jobs(Module, State) ->
+    %% Cancel exsisting jobs
+    State1 = cancel_jobs(Module, State),
+
+    %% Add jobs defined in the module
     ModuleJobs = jobs(Module),
-    case add_jobs1(ModuleJobs, State#state.context) of
+    case add_jobs1(ModuleJobs, State1#state.context) of
         [] ->
             State;
         ModuleJobRefs ->
-            State#state{ jobs = Jobs#{ Module => ModuleJobRefs }}
+            Jobs = State1#state.jobs,
+            State1#state{ jobs = Jobs#{ Module => ModuleJobRefs }}
     end.
 add_jobs1(Jobs, Context) ->
     JobRefs = [add_job(Job, Context) || Job <- Jobs],
