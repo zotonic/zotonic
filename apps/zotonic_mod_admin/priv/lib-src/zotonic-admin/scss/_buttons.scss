@@ -6,6 +6,13 @@
     }
 }
 
+/* Give buttons that can wrap a bit of margin */
+.buttons {
+    .btn {
+        margin-bottom: 4px;
+    }
+}
+
 .btn {
 	position: relative;
 }
