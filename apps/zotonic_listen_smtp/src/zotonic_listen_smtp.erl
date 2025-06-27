@@ -86,7 +86,8 @@ child_spec() ->
             Options = [
                 {port, Port},
                 {sessionoptions, [
-                    {tls_options, tls_options()}
+                    {tls_options, tls_options()},
+                    {size, z_config:get(smtp_listen_size)}
                 ]}
                 | Args2
             ],

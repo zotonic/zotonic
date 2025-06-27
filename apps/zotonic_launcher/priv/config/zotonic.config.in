@@ -181,6 +181,9 @@
    %% {smtp_listen_ip, "127.0.0.1"},
    %% {smtp_listen_port, 2525},
 
+%%% Maximum size of received messages, defaults to 20MB.
+   %% {smtp_listen_size, 20971520},
+
 %%% Enable STARTTLS extension on incoming SMTP connections
    %% {smtp_starttls, true},
 
