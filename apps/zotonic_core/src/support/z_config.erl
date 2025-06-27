@@ -273,6 +273,7 @@ default(smtp_ssl) -> false;
 default(smtp_plaintext_fallback) -> true;
 default(smtp_listen_ip) -> {127,0,0,1};
 default(smtp_listen_port) -> 2525;
+default(smtp_listen_size) -> 20971520;  % 20MB
 default(smtp_starttls) -> true;
 default(smtp_spamd_ip) -> none;
 default(smtp_spamd_port) -> 783;
