@@ -32,7 +32,9 @@ and *h* for hours.
 Example
 """""""
 
-Check something every hour::
+Check something every hour.
+
+.. code-block:: erlang
 
     -include_lib("kernel/include/logger.hrl").
 
@@ -55,7 +57,9 @@ jobs.
 For example, if you want to send out an automated weekly reminder to your
 users you can do this by defining a module specific task in your module.
 
-Example::
+Example:
+
+.. code-block:: erlang
 
     -mod_depends([cron]).
     -mod_cron_jobs([
@@ -66,7 +70,9 @@ This definition will be read and will cause the function `send_weekly_reminders`
 to be called at monday's on 10:00 UTC. The function will be called with a
 context of the site.
 
-Example::
+Example:
+
+.. code-block:: erlang
 
     send_weekly_reminders(Context) ->
         Events = get_this_weeks_events(Context),
