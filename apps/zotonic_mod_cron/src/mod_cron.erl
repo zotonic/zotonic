@@ -133,23 +133,39 @@ add_jobs1(Jobs, Context) ->
 
 add_job({RunWhen, MFA}, Context) ->
     add_job({RunWhen, MFA, #{}}, Context);
-add_job({RunWhen, {M, F, A}, JobOpts}, Context) ->
-    case erlcron:cron( {RunWhen, {M, F, A ++ [Context]}, JobOpts}) of
-        ignored ->
+add_job({RunWhen, {M, F, A}, JobOpts}=Clause, Context) ->
+    try
+        case erlcron:cron( {RunWhen, {M, F, A ++ [Context]}, JobOpts}) of
+            ignored ->
+                ?LOG_ERROR(#{ text => <<"Could not add job">>,
+                              reason => ignored,
+                              job => Clause}
+                          ),
+                undefined;
+            {error, Reason} ->
+                ?LOG_ERROR(#{ text => <<"Could not add job">>,
+                              reason => {error, Reason},
+                              job => Clause}),
+                undefined;
+            Ref when is_atom(Ref) orelse is_reference(Ref) orelse is_binary(Ref) ->
+                Ref
+        end
+    catch
+        %% erlcron throws an exception when the arity of the function
+        %% is wrong or if the module does not exist. Catching it here
+        %% prevents mod_cron for the entire site to be stopped if one
+        %% module has a misconfigured job.
+        error:ErrorReason ->
             ?LOG_ERROR(#{ text => <<"Could not add job">>,
-                          reason => ignored }),
-            undefined;
-        {error, Reason} ->
-            ?LOG_ERROR(#{ text => <<"Could not add job">>,
-                          reason => {error, Reason} }),
-            undefined;
-        Ref when is_atom(Ref) orelse is_reference(Ref) orelse is_binary(Ref) ->
-            Ref
+                          error => {catched, {error, ErrorReason}},
+                          job => Clause
+                        }),
+            undefined
     end;
 add_job(Clause, _Context) ->
     ?LOG_ERROR(#{ text => <<"Could not add job">>,
                   reason => wrong_job_clause,
-                  clause => Clause }),
+                  job => Clause }),
     undefined.
 
 % Cancel all jobs defined by a module
