@@ -81,10 +81,10 @@ init(Args) ->
 handle_call(_Msg, _From, State) ->
     {reply, {error, unknown_message}, State}.
 
-handle_cast({#module_activate{ module=Module }, _Context}, State) ->
-        State1 = add_jobs(Module, State),
+handle_cast({#module_activate{ module = Module }, _Context}, State) ->
+    State1 = add_jobs(Module, State),
     {noreply, State1};
-handle_cast({#module_deactivate{ module=Module }, _Context}, State) ->
+handle_cast({#module_deactivate{ module = Module }, _Context}, State) ->
     State1 = cancel_jobs(Module, State),
     {noreply, State1};
 handle_cast(_Msg, State) ->
