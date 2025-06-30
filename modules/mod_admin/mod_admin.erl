@@ -504,7 +504,7 @@ do_link_unlink_feedback(IsNew, IsDelete, EdgeId, SubjectId, Predicate, ObjectId,
                     {predicate, Predicate},
                     {object_id, ObjectId},
                     {edge_id, EdgeId},
-                    {url_language, m_rsc:page_url(ObjectId, ContextP)},
+                    {url_language, m_rsc:p(ObjectId, page_url, ContextP)},
                     {title_language, z_trans:lookup_fallback(Title, ContextP)},
                     {title, z_trans:lookup_fallback(Title, Context)}
                    ],
