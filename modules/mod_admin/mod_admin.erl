@@ -411,7 +411,7 @@ do_link_unlink(_IsUnlink, SubjectId, Predicate, ObjectId, Callback, Context)
             {subject_id, undefined},
             {predicate, undefined},
             {object_id, ObjectId},
-            {url_language, m_rsc:page_url(ObjectId, ContextP)},
+            {url_language, m_rsc:p(ObjectId, page_url, ContextP)},
             {title_language, z_trans:lookup_fallback(Title, ContextP)},
             {title, z_trans:lookup_fallback(Title, Context)}
            ],
