@@ -8,7 +8,7 @@
 
     <p>{_ You have requested a new password for _} <a href="https://{{ m.site.hostname }}/">{{ m.site.hostname }}</a>.</p>
 
-    <p>{_ However this email address does not belong to one of our registered users so you will not be able to change the password. _}</p><br/>
+    <p>{_ However this email address does not belong to one of our users or you have simply not added a password yet so that you will not be able to change it. _}</p><br/>
     <p> {_ Are you sure you have created an account? If not, you can create one here: _} https://{{ m.site.hostname }}/signup</p><br/>
 
     <p>{_ If you think you do have an account, please try again using the correct email address. _}</p>
