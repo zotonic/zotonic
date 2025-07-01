@@ -1,9 +1,9 @@
 %% @author Marc Worrell
-%% @copyright 2014-2023 Marc Worrell
+%% @copyright 2014-2025 Marc Worrell
 %% @doc Helper functions commonly used in controllers.
 %% @end
 
-%% Copyright 2014-2023 Marc Worrell
+%% Copyright 2014-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,7 +29,8 @@
     decode_request/2,
     decode_request_noz/2,
     encode_response/2,
-    req_body/1
+    req_body/1,
+    redirect/3
  ]).
 
 % Default max body length (32MB) for HTTP requests, this should be configurable.
@@ -266,4 +267,35 @@ encode_prep_qs(List) when is_list(List) ->
             (K) when is_binary(K) -> {K, true}
         end,
         List).
+
+%% @doc Redirect to another location, set correct vary and cache-control headers.
+-spec redirect(IsPermanent, Url, Context) -> {{halt, StatusCode}, RespContext} when
+    IsPermanent :: boolean(),
+    Url :: binary(),
+    Context :: z:context(),
+    StatusCode :: 307 | 308,
+    RespContext :: z:context().
+redirect(IsPermanent, Url, Context) ->
+    Context1 = cowmachine_req:set_resp_headers([
+            {<<"location">>, Url},
+            {<<"cache-control">>, <<"no-store, no-cache, must-revalidate, private, post-check=0, pre-check=0">>}
+        ],
+        Context),
+    Context2 = case cowmachine_req:get_resp_header(<<"vary">>, Context1) of
+        undefined ->
+            Vary = case z_context:get_cookie(<<"z.lang">>, Context1) of
+                None when None =:= <<>>; None =:= undefined ->
+                    <<"accept-language">>;
+                _ ->
+                    <<"accept-language, cookie">>
+            end,
+            cowmachine_req:set_resp_header(<<"vary">>, Vary, Context1);
+        _ ->
+            Context1
+    end,
+    Code = case IsPermanent of
+        true -> 308;
+        false -> 307
+    end,
+    {{halt, Code}, Context2}.
 
