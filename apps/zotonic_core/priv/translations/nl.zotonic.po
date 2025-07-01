@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-07-01 15:33\n"
+"PO-Revision-Date: 2025-07-01 16:45\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -6136,7 +6136,7 @@ msgstr "Toon import/export paneel op de bewerk pagina's in de admin."
 
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:124
 msgid "Sorry, a global Zotonic configuration is set and cannot be changed."
-msgstr "Sorry, een globale Zotonic-configuratie is ingesteld en kan niet worden gewijzigd."
+msgstr "Er is een globale Zotonic-configuratie ingesteld en dit kan niet worden gewijzigd."
 
 #: zotonic_mod_backup/src/actions/action_backup_backup_start.erl:50
 msgid "Sorry, manual backups are disabled"
@@ -6988,7 +6988,7 @@ msgstr "Controller"
 #: zotonic_mod_development/priv/templates/_development_template_graph.tpl:26
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:122
 msgid "Copied dot file to the clipboard."
-msgstr "Gekopieerd puntbestand naar het klembord."
+msgstr "Dot file is gekopieerd naar het klembord."
 
 #: zotonic_mod_development/priv/templates/_development_template_graph.tpl:1
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:76
@@ -7032,11 +7032,11 @@ msgstr "Afhankelijkheidsgrafiek van alle sjablonen"
 
 #: zotonic_mod_development/priv/templates/_development_template_graph.tpl:3
 msgid "Dependency graph of all templates. Only includes using a direct string value for the template are shown."
-msgstr "Afhankelijkheidsgrafiek van alle sjablonen. Alleen het gebruik van een directe tekenreekswaarde voor de sjabloon wordt weergegeven."
+msgstr "Afhankelijkheidsgrafiek van alle sjablonen. Alleen includes die een directe string-waarde voor het sjabloon wordt weergegeven."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:78
 msgid "Dependency graph of all traced templates. All includes are shown."
-msgstr "Afhankelijkheidsgrafiek van alle getraceerde sjablonen. Alle omvat worden getoond."
+msgstr "Afhankelijkheidsgrafiek van alle getraceerde sjablonen. Alle includes worden getoond."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:3
 #: zotonic_mod_development/src/mod_development.erl:552
@@ -7981,7 +7981,7 @@ msgstr "Kopieer alle bestanden op afstand naar lokaal"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
 msgid "Copy files to cloud"
-msgstr "Bestanden kopiëren naar cloud"
+msgstr "Bestanden kopiëren naar de cloud"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:290
 msgid "Copy files to server disk"
@@ -10368,7 +10368,7 @@ msgstr "Om een van deze applicaties te gebruiken, moeten de app-ID en het geheim
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:79
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:80
 msgid "Token"
-msgstr "Penning"
+msgstr "Token"
 
 #: zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:43
 msgid "Token grant method"
