@@ -60,13 +60,13 @@ is_authorized(Context) ->
 process(_Method, _AcceptedCT, ProvidedCT, Context) ->
     case ProvidedCT of
         {<<"text">>, <<"html">>, _} ->
+            % Redirect if the language should be added to the URL path.
             case z_controller_helper:is_redirect_language(Context) of
                 true ->
                     Path = cowmachine_req:raw_path(Context),
                     Path1 = iolist_to_binary([ $/, z_convert:to_binary(z_context:language(Context)), Path ]),
                     Location = z_context:abs_url(Path1, Context),
-                    Context1 = z_context:set_resp_header(<<"location">>, Location, Context),
-                    {{halt, 303}, Context1};
+                    z_controller_helper:redirect(true, Location, Context);
                 false ->
                     process_1(Context)
             end;

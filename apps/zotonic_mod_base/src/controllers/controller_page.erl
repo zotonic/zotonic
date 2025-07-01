@@ -186,7 +186,7 @@ maybe_redirect_website(Website, true, _Id, Context) ->
             % Redirect requested to itself - no further redirects
             {true, Context};
         true ->
-            redirect(false, WebsiteUrl, Context)
+            z_controller_helper:redirect(false, WebsiteUrl, Context)
     end;
 maybe_redirect_website(_Website, _False, Id, Context) ->
     maybe_redirect_canonical(Id, Context).
@@ -207,27 +207,9 @@ maybe_redirect_canonical(Id, Context) ->
                 true ->
                     AbsUrl = z_context:abs_url(PageUrl, Context),
                     AbsUrlQs = append_qs(AbsUrl, cowmachine_req:req_qs(Context)),
-                    redirect(true, AbsUrlQs, Context)
+                    z_controller_helper:redirect(true, AbsUrlQs, Context)
             end
     end.
-
-redirect(IsPermanent, Url, Context) ->
-    Context1 = cowmachine_req:set_resp_headers([
-            {<<"location">>, Url},
-            {<<"cache-control">>, <<"no-store, no-cache, must-revalidate, private, post-check=0, pre-check=0">>}
-        ],
-        Context),
-    Context2 = case cowmachine_req:get_resp_header(<<"vary">>, Context1) of
-        undefined ->
-            cowmachine_req:set_resp_header(<<"vary">>, <<"accept-language">>, Context1);
-        _ ->
-            Context1
-    end,
-    Code = case IsPermanent of
-        true -> 308;
-        false -> 307
-    end,
-    {{halt, Code}, Context2}.
 
 %% @doc Return true if the page should only be shown on the canonical url.
 is_canonical(Id, Context) ->
