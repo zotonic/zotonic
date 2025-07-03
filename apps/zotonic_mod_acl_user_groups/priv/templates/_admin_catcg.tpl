@@ -71,14 +71,14 @@
                         });
         });
 
-        if ($('#{{ #catsel }}').val() && !$('#{{ #cgsel }}').val()) {
+        const cats = $('#{{ #catsel }} option:enabled');
+        const cgs = $('#{{ #cgsel }} option:enabled');
+
+        if (!$('#{{ #catsel }}').val() && cats.length == 1) {
+            $('#{{ #catsel }}').val(cats[0].value);
             $('#{{ #catsel }}').trigger('change');
-        } else {
-            const cats = $('#{{ #catsel }} option:not([disabled])');
-            if (cats.length == 1)
-            {
-                $('#{{ #catsel }}').val(cats.attr('value'));
-            }
+        } else if ($('#{{ #catsel }}').val() && cgs.length >= 1 && !$('#{{ #cgsel }}').val()) {
+            $('#{{ #catsel }}').trigger('change');
         }
     {% endjavascript %}
 {% endif %}
