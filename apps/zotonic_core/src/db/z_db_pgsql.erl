@@ -56,6 +56,7 @@
 
 -define(CONNECT_TIMEOUT, 5000).
 -define(IDLE_TIMEOUT, 60000).
+-define(RAW_CONN_TIMEOUT, 2*3600*1000).
 
 -define(CONNECT_RETRIES, 50).
 -define(CONNECT_RETRY_SHORT,   100).
@@ -477,7 +478,7 @@ handle_call(get_raw_connection, From, #state{ conn = undefined, conn_args = Args
             {reply, E, State}
     end;
 handle_call(get_raw_connection, _From, #state{ conn = Conn } = State) ->
-    {reply, Conn, State, timeout(State)};
+    {reply, Conn, State, ?RAW_CONN_TIMEOUT};
 
 handle_call(Message, _From, State) ->
     ?LOG_NOTICE(#{
