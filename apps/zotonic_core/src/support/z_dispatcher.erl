@@ -434,6 +434,7 @@ page_path_lookup(RscPathList) ->
         RscPathList).
 
 %% @doc Collect all dispatch lists.  Checks priv/dispatch for all dispatch list definitions.
+%% Dispatch rules are ordered by highest prio first.
 collect_dispatch_lists(Context) ->
     ModDispOnPrio = lists:concat(
         lists:map(
@@ -486,15 +487,30 @@ get_file_dispatch({File, Mod}) ->
 split_paths(Disp, Mod, File) ->
     lists:filtermap(
         fun
-            ({Name, [ $/ | Path ], Controller, Opts}) when is_atom(Name), is_atom(Controller), is_list(Opts) ->
-                Path1 = split_binary_path(unicode:characters_to_binary(Path)),
-                {true, {Name, Path1, Controller, Opts}};
-            ({Name, <<"/", Path/binary>>, Controller, Opts}) when is_atom(Name), is_atom(Controller), is_list(Opts) ->
+            ({Name, [ C | _ ] = Path, Controller, Opts} = Rule) when is_integer(C) ->
+                try
+                    Path1 = split_binary_path(unicode:characters_to_binary(Path)),
+                    {true, {Name, Path1, Controller, Opts}}
+                catch
+                    E:R:S ->
+                        ?LOG_ERROR(#{
+                            in => zotonic_core,
+                            text => <<"Error in dispatch rule - can not convert string to binary">>,
+                            result => E,
+                            reason => R,
+                            modules => Mod,
+                            dispatch_file => File,
+                            dispatch_rule => Rule,
+                            stack => S
+                        }),
+                        false
+                end;
+            ({Name, Path, Controller, Opts}) when is_atom(Name), is_binary(Path), is_atom(Controller), is_list(Opts) ->
                 Path1 = split_binary_path(Path),
                 {true, {Name, Path1, Controller, Opts}};
             ({Name, Path, Controller, Opts}) when is_atom(Name), is_list(Path), is_atom(Controller), is_list(Opts) ->
                 {true, {Name, Path, Controller, Opts}};
-            ({Name, RscName, Controller, Opts}) when is_atom(Name), is_atom(Name), is_atom(Controller), is_list(Opts) ->
+            ({Name, RscName, Controller, Opts}) when is_atom(Name), is_atom(RscName), is_atom(Controller), is_list(Opts) ->
                 {true, {Name, RscName, Controller, Opts}};
             (Other) ->
                 ?LOG_ERROR(#{
@@ -502,9 +518,9 @@ split_paths(Disp, Mod, File) ->
                     text => <<"Unrecognized dispatch rule">>,
                     result => error,
                     reason => format,
-                    rule => Other,
-                    module => Mod,
-                    file => File
+                    dispatch_rule => Other,
+                    dispatch_file => File,
+                    module => Mod
                 }),
                 false
         end,
@@ -715,12 +731,11 @@ select_best_pattern1(A, undefined) ->
     A;
 select_best_pattern1({AQS, _APat, _AOpts}=A, {BQS, _BPat, _BOpts}=B) ->
     if
-        length(BQS) > length(AQS) -> A;
+        length(BQS) >= length(AQS) -> A;
         true -> B
     end.
 
 
-%% @spec urlencode([{Key, Value}], Join) -> string()
 %% @doc URL encode the property list.
 urlencode(Props, Join) ->
     RevPairs = lists:foldl(fun ({K, V}, Acc) ->
