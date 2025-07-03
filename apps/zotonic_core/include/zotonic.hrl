@@ -214,7 +214,8 @@
     smtphost = undefined       :: z_sites_dispatcher:hostname() | undefined,
     hostalias = []             :: list(z_sites_dispatcher:hostname()),
     redirect = false           :: boolean(),
-    dispatch_list = []         :: list(z_sites_dispatcher:dispatch_rule())
+    dispatch_list = []         :: list(z_sites_dispatcher:dispatch_rule()),
+    page_paths = #{}           :: #{ atom() | binary() => z_sites_dispatcher:dispatch_rsc_rule() }
 }).
 
 

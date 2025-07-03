@@ -1,11 +1,12 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright (c) 2009-2020 Marc Worrell
+%% @copyright (c) 2009-2025 Marc Worrell
 %% @doc Support for the {% lib filename ... %} tag in the templates.
 %% Generates the &lt;link /&gt; or %lt;script /%gt; tag for css or js files.  Also
 %% adds the greatest modification date so that updates are loaded by
 %% the browser.
+%% @end
 
-%% Copyright 2009-2020 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -96,7 +97,7 @@ url(Files, Args, Context) ->
 url_for([], _Ext, _Args, _Context) ->
     <<>>;
 url_for(P, Ext, Args, Context) ->
-    z_dispatcher:url_for(lib(Args, Context), url_for_args(P, Ext, Args, Context), Context).
+    z_convert:to_binary(z_dispatcher:url_for(lib(Args, Context), url_for_args(P, Ext, Args, Context), Context)).
 
 lib(Args, Context) ->
     MinifyRequested = z_convert:to_bool( proplists:get_value(minify, Args, false))

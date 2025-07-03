@@ -61,7 +61,9 @@
 -include_lib("zotonic.hrl").
 
 -type site_dispatch_list() :: #site_dispatch_list{}.
--type dispatch_rule() :: dispatch_compiler:dispatch_rule().
+-type dispatch_rule() :: dispatch_compiler:dispatch_rule()
+                       | dispatch_rsc_rule().
+-type dispatch_rsc_rule() :: {Name::atom(), RscName::atom(), Handler::any(), HandlerArgs::list()}.
 -type binding() :: dispatch_compiler:binding() | {atom(), atom()}.
 -type bindings() :: list(binding()).
 -type hostname() :: binary() | string().
@@ -135,6 +137,7 @@
     site_dispatch_list/0,
     dispatch/0,
     dispatch_rule/0,
+    dispatch_rsc_rule/0,
     redirect/0,
     redirect_protocol/0,
     stop_request/0,
@@ -144,6 +147,15 @@
     binding/0,
     trace/0
 ]).
+
+%% ETS table holding the mapping from host names to sites.
+-define(ETS_HOSTS, ?MODULE).
+
+%% ETS table holding the mapping for resources to dispatch rules.
+%% Index is a tuple {site, resource_name}. Value is the best dispatch rule.
+%% Both the atom and binary value of the resource name is stored.
+-define(ETS_RSC_TO_DISPATCH, z_sites_dispatcher_rsc2disp).
+
 
 %%====================================================================
 %% API
@@ -385,7 +397,7 @@ get_fallback_site() ->
 get_site_for_hostname(Hostname) when is_list(Hostname) ->
     get_site_for_hostname(list_to_binary(Hostname));
 get_site_for_hostname(Hostname) ->
-    case ets:lookup(?MODULE, strip_port(Hostname)) of
+    case ets:lookup(?ETS_HOSTS, strip_port(Hostname)) of
         [{_, Site, _Redirect}] -> {ok, Site};
         [] -> undefined
     end.
@@ -463,7 +475,7 @@ redirect(Uri, IsPermanent, Req) ->
 
 stop_request(RespCode, Req, Env) ->
     Method = cowboy_req:method(Req),
-    case ets:lookup(?MODULE, '*') of
+    case ets:lookup(?ETS_HOSTS, '*') of
         [] ->
             handle_error(RespCode, Method, undefined, Req, Env, [], undefined);
         [{_, Site, _}] ->
@@ -517,7 +529,7 @@ send_static_response(RespCode, Req) ->
 dispatch_1(#dispatch{ protocol = http, host = Hostname } = DispReq, OptReq, OptEnv) when Hostname =/= undefined ->
     % If we redirect to https, then first check if we also have to change the hostname.
     % Otherwise we might have a mismatch between the certs and the requested hostname.
-    case ets:lookup(?MODULE, DispReq#dispatch.host) of
+    case ets:lookup(?ETS_HOSTS, DispReq#dispatch.host) of
         [] ->
             case find_no_host_match(DispReq, OptReq, OptEnv) of
                 {fallback, FallbackSite} ->
@@ -529,7 +541,7 @@ dispatch_1(#dispatch{ protocol = http, host = Hostname } = DispReq, OptReq, OptE
             redirect_protocol(Site, Hostname, DispReq#dispatch.tracer_pid, [])
     end;
 dispatch_1(DispReq, OptReq, OptEnv) ->
-    case ets:lookup(?MODULE, DispReq#dispatch.host) of
+    case ets:lookup(?ETS_HOSTS, DispReq#dispatch.host) of
         [] ->
             % Check for fallback sites or other site handling this hostname
             case find_no_host_match(DispReq, OptReq, OptEnv) of
@@ -608,7 +620,7 @@ dispatch_site_if_running(DispReq, OptReq, OptEnv, Site, ExtraBindings) ->
     end.
 
 redirect_fallback(DispReq, OptReq, OptEnv, ExtraBindings) ->
-    case ets:lookup(?MODULE, '*') of
+    case ets:lookup(?ETS_HOSTS, '*') of
         [] ->
             #stop_request{ status = 400 };
         [{_Host, _Site, _Redirect}] ->
@@ -753,7 +765,8 @@ is_bind_language(Match, _Context) ->
 %%                     {stop, Reason}
 %% @doc Initiates the server.
 init(_Args) ->
-    ets:new(?MODULE, [named_table, set, {keypos, 1}, protected, {read_concurrency, true}]),
+    ets:new(?ETS_HOSTS, [named_table, set, {keypos, 1}, protected, {read_concurrency, true}]),
+    ets:new(?ETS_RSC_TO_DISPATCH, [named_table, set, {keypos, 1}, protected, {read_concurrency, true}]),
     {ok, #state{}}.
 
 
@@ -849,14 +862,14 @@ do_update_hosts() ->
     HostList = [ HSR || {_,HSR} <- dict:to_list(Dict) ],
     % Fetch current list from ets
     HostSiteNew = lists:sort(HostList),
-    HostSiteOld = lists:sort(ets:tab2list(?MODULE)),
+    HostSiteOld = lists:sort(ets:tab2list(?ETS_HOSTS)),
     % Insert/delete the changed host definitions
     lists:foreach(
         fun(HostSite) ->
-            ets:delete_object(?MODULE, HostSite)
+            ets:delete_object(?ETS_HOSTS, HostSite)
         end,
         HostSiteOld -- HostSiteNew),
-    ets:insert(?MODULE, HostSiteNew -- HostSiteOld),
+    ets:insert(?ETS_HOSTS, HostSiteNew -- HostSiteOld),
     ok.
 
 map_generic("*") -> '*';
@@ -872,8 +885,29 @@ do_compile_modified(OldDs, NewDs) ->
     Ds = NewDs -- OldDs,
     lists:foreach(fun do_compile/1, Ds).
 
-do_compile(#site_dispatch_list{site=Site, dispatch_list=DL}) ->
+do_compile(Disp) ->
+    do_load_dispatch(Disp),
+    do_load_page_paths(Disp).
+
+do_load_dispatch(#site_dispatch_list{ site = Site, dispatch_list = DL }) ->
     dispatch_compiler:compile_load(z_utils:name_for_site(dispatch, Site), map_z_language(DL)).
+
+%% @doc Add the resource page_path dispatch rules into the lookup table. The lookup table is
+%% used to find the dispatch rule for a specifically named resource after the #dispatch
+%% notification returns a resource id.
+do_load_page_paths(#site_dispatch_list{ site = Site, page_paths = PagePaths }) ->
+    OldDisps = ets:match_object(?ETS_RSC_TO_DISPATCH, {{Site, '_'}, '_'}),
+    OldKeys = [ K || {K, _Disp} <- OldDisps ],
+    NewKeys = maps:fold(
+        fun(RscName, Disp, Acc) ->
+            ets:insert(?ETS_RSC_TO_DISPATCH, {{Site, RscName}, Disp}),
+            [ RscName | Acc ]
+        end,
+        [],
+        PagePaths),
+    DelKeys = OldKeys -- NewKeys,
+    lists:foreach(fun(K) -> ets:delete(?ETS_RSC_TO_DISPATCH, K) end, DelKeys).
+
 
 map_z_language(DL) ->
     [ map_z_language_1(Disp) || Disp <- DL ].
@@ -949,48 +983,54 @@ tokens_to_path(Ts) ->
     Dispatch :: dispatch().
 handle_rewrite({ok, Id}, DispReq, MatchedHost, NonMatchedPathTokens, Bindings, Context) when is_integer(Id) ->
     %% Retry with the resource's default page uri
-    UrlContext = case proplists:get_value(z_language, Bindings) of
-        undefined -> z_context:set_language('x-default', Context);
-        _Lang -> Context
-    end,
-    case m_rsc:p_no_acl(Id, default_page_url, UrlContext) of
-        undefined ->
-            trace(DispReq#dispatch.tracer_pid, undefined, rewrite_id, [{id,Id}]),
-            #dispatch_nomatch{
-                site = z_context:site(Context),
-                host = MatchedHost,
-                path_tokens = NonMatchedPathTokens,
-                bindings = Bindings,
-                context = Context
-            };
-        DefaultPagePath ->
-            trace(DispReq#dispatch.tracer_pid, undefined, rewrite_id, [{id,Id},{path,DefaultPagePath}]),
-            {Tokens, IsDir} = split_path(DefaultPagePath),
-            {TokensRewritten, BindingsRewritten} = dispatch_rewrite(DispReq#dispatch.host, DefaultPagePath, Tokens, IsDir, DispReq#dispatch.tracer_pid, Context),
-            BindingsRewritten1 = [
-                {zotonic_dispatch_path, TokensRewritten},
-                {zotonic_site, z_context:site(Context)}
-                | BindingsRewritten
-            ],
-            trace(DispReq#dispatch.tracer_pid, TokensRewritten, try_match, [{bindings, BindingsRewritten1}]),
-            case dispatch_match(TokensRewritten, Context) of
-                {ok, {DispatchRule, MatchBindings}} ->
-                    set_dispatch_path(
-                        do_dispatch_rule(
-                                    DispatchRule,
-                                    BindingsRewritten1++fix_match_bindings(MatchBindings, IsDir),
-                                    TokensRewritten, IsDir, DispReq,
-                                    Context),
-                        NonMatchedPathTokens);
-                fail ->
-                    trace(DispReq#dispatch.tracer_pid, undefined, rewrite_nomatch, []),
+    case rsc_dispatch(Id, Context) of
+        {ok, DispRule} ->
+            Bindings1 = [ {id, Id} | Bindings ],
+            do_dispatch_rule(DispRule, Bindings1, NonMatchedPathTokens, false, DispReq, Context);
+        none ->
+            UrlContext = case proplists:get_value(z_language, Bindings) of
+                undefined -> z_context:set_language('x-default', Context);
+                _Lang -> Context
+            end,
+            case m_rsc:p_no_acl(Id, default_page_url, UrlContext) of
+                undefined ->
+                    trace(DispReq#dispatch.tracer_pid, undefined, rewrite_id, [{id,Id}]),
                     #dispatch_nomatch{
                         site = z_context:site(Context),
                         host = MatchedHost,
                         path_tokens = NonMatchedPathTokens,
                         bindings = Bindings,
                         context = Context
-                    }
+                    };
+                DefaultPagePath ->
+                    trace(DispReq#dispatch.tracer_pid, undefined, rewrite_id, [{id,Id},{path,DefaultPagePath}]),
+                    {Tokens, IsDir} = split_path(DefaultPagePath),
+                    {TokensRewritten, BindingsRewritten} = dispatch_rewrite(DispReq#dispatch.host, DefaultPagePath, Tokens, IsDir, DispReq#dispatch.tracer_pid, Context),
+                    BindingsRewritten1 = [
+                        {zotonic_dispatch_path, TokensRewritten},
+                        {zotonic_site, z_context:site(Context)}
+                        | BindingsRewritten
+                    ],
+                    trace(DispReq#dispatch.tracer_pid, TokensRewritten, try_match, [{bindings, BindingsRewritten1}]),
+                    case dispatch_match(TokensRewritten, Context) of
+                        {ok, {DispatchRule, MatchBindings}} ->
+                            set_dispatch_path(
+                                do_dispatch_rule(
+                                            DispatchRule,
+                                            BindingsRewritten1++fix_match_bindings(MatchBindings, IsDir),
+                                            TokensRewritten, IsDir, DispReq,
+                                            Context),
+                                NonMatchedPathTokens);
+                        fail ->
+                            trace(DispReq#dispatch.tracer_pid, undefined, rewrite_nomatch, []),
+                            #dispatch_nomatch{
+                                site = z_context:site(Context),
+                                host = MatchedHost,
+                                path_tokens = NonMatchedPathTokens,
+                                bindings = Bindings,
+                                context = Context
+                            }
+                    end
             end
     end;
 handle_rewrite({ok, #dispatch_match{
@@ -1034,6 +1074,18 @@ handle_rewrite(undefined, DispReq, MatchedHost, NonMatchedPathTokens, Bindings, 
         context = Context
     }.
 
+%% @doc Check if there is a special dispatch rule for this resource.
+rsc_dispatch(Id, Context) ->
+    Site = z_context:site(Context),
+    case m_rsc:p_no_acl(Id, <<"name">>, Context) of
+        undefined ->
+            none;
+        Name ->
+            case ets:lookup(?ETS_RSC_TO_DISPATCH, {Site, Name}) of
+                [] -> none;
+                [{_, DispRule}] -> {ok, DispRule}
+            end
+    end.
 
 set_dispatch_path(Match, []) ->
     Match;
@@ -1073,7 +1125,7 @@ find_no_host_match(DispReq, OptReq, OptEnv) ->
     case first_site_match(Sites, DispHost, OptReq, OptEnv) of
         no_host_match ->
             % See if there is a site handling wildcard domains
-            case ets:lookup(?MODULE, '*') of
+            case ets:lookup(?ETS_HOSTS, '*') of
                 [] ->
                     #stop_request{ status = 400 };
                 [{_, FallbackSite, undefined}] ->
@@ -1149,10 +1201,23 @@ collect_dispatchrules(Site) ->
 fetch_dispatchinfo(SiteOrContext) ->
     Name = z_utils:name_for_site(z_dispatcher, SiteOrContext),
     case z_dispatcher:dispatchinfo(Name) of
-        {ok, {Site, Hostname, SmtpHost, Hostalias, Redirect, DispatchList}} ->
+        {ok, #{
+            site := Site,
+            hostname := Hostname,
+            smtphost := SmtpHost,
+            hostalias := Hostalias,
+            redirect := Redirect,
+            dispatch_list := DispatchList,
+            page_paths := PagePaths
+        }} ->
             {ok, #site_dispatch_list{
-                site=Site, hostname=Hostname, smtphost=SmtpHost, hostalias=Hostalias,
-                redirect=Redirect, dispatch_list=DispatchList
+                site = Site,
+                hostname = Hostname,
+                smtphost = SmtpHost,
+                hostalias = Hostalias,
+                redirect = Redirect,
+                dispatch_list = DispatchList,
+                page_paths = PagePaths
             }};
         {error, _} = Error ->
             Error
@@ -1172,12 +1237,6 @@ split_host(Host) when is_binary(Host) ->
         [H] -> {H, 80}
     end.
 
-% %% @doc Check if the hostname is a hostname suitable to redirect to
-% is_hostname(undefined) -> false;
-% is_hostname("") -> false;
-% is_hostname("localhost") -> false;
-% is_hostname("127.0.0.1") -> false;
-% is_hostname(_) -> true.
 
 %% @doc Filter all rules, also used to set/reset protocol (https) options.
 filter_rules(Rules, Site) ->

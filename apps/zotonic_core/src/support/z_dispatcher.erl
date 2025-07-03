@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Manage dispatch lists (aka definitions for url patterns). Constructs named urls from dispatch lists.
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -46,8 +46,9 @@
 -include_lib("zotonic.hrl").
 
 -record(state, {
-    dispatchlist :: list(),
-    lookup :: dict:dict(),
+    dispatch_list :: [ z_sites_dispatcher:dispatch_rule() ],
+    page_paths :: #{ binary() | atom() => z_sites_dispatcher:dispatch_rsc_rule() },
+    lookup :: #{  },
     context :: z:context(),
     site :: atom(),
     hostname :: binary() | undefined,
@@ -75,43 +76,51 @@ dispatcher_args() ->
         auth_options, auth_expires, csp_nonce
     ].
 
-%% @spec start_link(SiteProps) -> {ok,Pid} | ignore | {error,Error}
 %% @doc Starts the dispatch server
 start_link(Site) ->
-    Name = z_utils:name_for_site(?MODULE, Site),
+    Name = name(Site),
     gen_server:start_link({local, Name}, ?MODULE, Site, []).
 
-
-%% @spec url_for(atom(), Context) -> iolist()
-%% @doc Construct an uri from a named dispatch, assuming no parameters. Use html escape.
-url_for(Name, #context{dispatcher=Dispatcher} = Context) ->
+%% @doc Construct an uri from a named dispatch, assuming no parameters. Uses html escape.
+-spec url_for(Name, Context) -> Url when
+    Name :: atom() | binary(),
+    Context :: z:context(),
+    Url :: binary() | undefined.
+url_for(Name, Context) ->
     return_url(
         opt_abs_url(
-            rewrite(gen_server:call(Dispatcher, {'url_for', Name, [], html}),
+            rewrite(make_url_for(Name, [], html, Context),
                     Name, [], Context),
             Name, [], Context)).
 
 
-%% @spec url_for(atom(), Args, Context) -> iolist()
-%%    Args = proplist()
-%% @doc Construct an uri from a named dispatch and the parameters. Use html escape.
-url_for(Name, Args, #context{dispatcher=Dispatcher} = Context) ->
+%% @doc Construct an uri from a named dispatch and the parameters. Uses html escape.
+-spec url_for(Name, Args, Context) -> Url when
+    Name :: atom() | binary(),
+    Args :: proplists:proplist(),
+    Context :: z:context(),
+    Url :: binary() | undefined.
+url_for(Name, Args, Context) ->
     Args1 = append_extra_args(Args, Context),
     return_url(
         opt_abs_url(
-            rewrite(gen_server:call(Dispatcher, {'url_for', Name, Args1, html}),
+            rewrite(make_url_for(Name, Args1, html, Context),
                     Name, Args1, Context),
             Name, Args1, Context)).
 
 
-%% @spec url_for(atom(), Args, atom(), Context) -> iolist()
-%%        Args = proplist()
 %% @doc Construct an uri from a named dispatch and the parameters
-url_for(Name, Args, Escape, #context{dispatcher=Dispatcher} = Context) ->
+-spec url_for(Name, Args, Escape, Context) -> Url when
+    Name :: atom() | binary(),
+    Args :: proplists:proplist(),
+    Escape :: html | xml | none,
+    Context :: z:context(),
+    Url :: binary() | undefined.
+url_for(Name, Args, Escape, Context) ->
     Args1 = append_extra_args(Args, Context),
     return_url(
         opt_abs_url(
-            rewrite(gen_server:call(Dispatcher, {'url_for', Name, Args1, Escape}),
+            rewrite(make_url_for(Name, Args1, Escape, Context),
                     Name, Args1, Context),
             Name, Args1, Context)).
 
@@ -151,9 +160,16 @@ abs_url(Url, Context) ->
     abs_url(Url, undefined, [], Context).
 
 %% @doc Fetch the dispatchlist for the site.
--spec dispatchinfo( z:context() | pid() | atom() ) ->
-              {ok, {atom(), binary()|string(), binary()|string(), list(), boolean(), list()}}
-            | {error, noproc}.
+-spec dispatchinfo( z:context() | pid() | atom() ) -> {ok, DispatchInfo} | {error, noproc} when
+    DispatchInfo :: #{
+        site := atom(),
+        hostname := binary() | undefined,
+        smtphost := binary() | undefined,
+        hostalias := [ binary() ],
+        redirect := boolean(),
+        dispatch_list := [ z_sites_dispatcher:dispatch_rule() ],
+        page_paths := #{ atom() | binary() => z_sites_dispatcher:dispatch_rsc_rule() }
+    }.
 dispatchinfo(#context{dispatcher=Dispatcher}) ->
     dispatchinfo(Dispatcher);
 dispatchinfo(Server) when is_pid(Server) orelse is_atom(Server) ->
@@ -179,11 +195,19 @@ reload(#context{dispatcher=Dispatcher}) ->
 reload(module_ready, Context) ->
     reload(Context).
 
+name(SiteOrContext) ->
+    z_utils:name_for_site(?MODULE, SiteOrContext).
+
 %%====================================================================
 %% Support routines, called outside the gen_server
 %%====================================================================
 
 %% @doc Rewrite the generated urls. Checks for zotonic_http_accept and checks modules.
+rewrite({page_url, #dispatch_url{ url = Url } = D}, _Dispatch, Args, _Context) ->
+    Url1 = iolist_to_binary(Url),
+    D#dispatch_url{
+        url = check_http_options(Url1, Args)
+    };
 rewrite(#dispatch_url{url = undefined} = D, _Dispatch, _Args, _Context) ->
     D;
 rewrite(#dispatch_url{url = Url} = D, Dispatch, Args, Context) ->
@@ -220,8 +244,9 @@ abs_url(Url, Dispatch, DispatchOptions, Context) ->
         AbsUrl -> z_convert:to_binary(AbsUrl)
     end.
 
-%% @doc Convenience function, just return the generated Url
-return_url(#dispatch_url{url=Url}) -> Url.
+%% @doc Convenience function, return the generated Url as a binary (or undefined if none).
+return_url(#dispatch_url{ url = undefined }) -> undefined;
+return_url(#dispatch_url{ url = Url }) -> iolist_to_binary(Url).
 
 %% @doc Check if an url should be made an absolute url
 use_absolute_url(Args, Options, Context) ->
@@ -249,16 +274,13 @@ to_bool(N) -> z_convert:to_bool(N).
 %% gen_server callbacks
 %%====================================================================
 
-%% @spec init(Args) -> {ok, State} |
-%%                     {ok, State, Timeout} |
-%%                     ignore               |
-%%                     {stop, Reason}
 %% @doc Initiates the server, loads the dispatch list into the webmachine dispatcher
 init(Site) ->
     logger:set_process_metadata(#{
         site => Site,
         module => ?MODULE
     }),
+    ets:new(name(Site), [named_table, set, {keypos, 1}, protected, {read_concurrency, true}]),
     Context = z_context:new(Site),
     Hostname0 = m_site:get(hostname, Context),
     Hostname = drop_port(Hostname0),
@@ -278,8 +300,9 @@ init(Site) ->
     process_flag(trap_exit, true),
     IsRedirect = z_context:is_hostname_redirect_configured(Context),
     State  = #state{
-                dispatchlist = [],
-                lookup = dict:new(),
+                dispatch_list = [],
+                page_paths = #{},
+                lookup = #{},
                 context = Context,
                 site = Site,
                 smtphost = Smtphost,
@@ -292,8 +315,66 @@ init(Site) ->
     z_notifier:observe(module_ready, {?MODULE, reload}, Context),
     {ok, State}.
 
+%% @doc Return the preferred hostname for the site
+handle_call('hostname', _From, State) ->
+    {reply, State#state.hostname, State};
+
+%% @doc Return the preferred hostname, and port, for the site
+handle_call('hostname_port', _From, State) ->
+    {reply, State#state.hostname_port, State};
+
+%% @doc Return the preferred hostname for ssl, and port, for the site
+handle_call('hostname_ssl_port', _From, State) ->
+    {reply, State#state.hostname_ssl_port, State};
+
+%% @doc Return the dispatchinfo for the site.
+handle_call('dispatchinfo', _From, State) ->
+    {reply, #{
+        site => State#state.site,
+        hostname => State#state.hostname,
+        smtphost => State#state.smtphost,
+        hostalias => State#state.hostalias,
+        redirect => State#state.redirect,
+        dispatch_list => State#state.dispatch_list,
+        page_paths => State#state.page_paths
+     },
+     State};
+
+%% @doc Reload the dispatch list, signal the sites supervisor that the dispatch list has been changed.
+%% The site supervisor will collect all dispatch lists and compile a new dispatcher module using
+%% dispatch_compiler.
+handle_call('reload', _From, State) ->
+    State1 = reload_dispatch_list(State),
+    {reply, ok, State1}.
+
+%% @doc Handle casts.
+handle_cast(_Msg, State) ->
+    {noreply, State}.
+
+%% @doc Handling all non call/cast messages
+handle_info(_Info, State) ->
+    {noreply, State}.
+
+
+%% @doc This function is called by a gen_server when it is about to
+%% terminate. It should be the opposite of Module:init/1 and do any necessary
+%% cleaning up. When it returns, the gen_server terminates with Reason.
+%% The return value is ignored.
+terminate(_Reason, State) ->
+    z_notifier:detach(module_ready, State#state.context),
+    ok.
+
+%% @doc Convert process state when code is changed
+code_change(_OldVsn, State, _Extra) ->
+    {ok, State}.
+
+
+%%====================================================================
+%% support functions
+%%====================================================================
+
+
 % @doc Drop the portnumber from the hostname
-%
 -spec drop_port( undefined | none | string() | binary() ) -> undefined | binary().
 drop_port(undefined) -> undefined;
 drop_port(none) -> undefined;
@@ -311,90 +392,49 @@ add_port(Hostname, https, 443) -> Hostname;
 add_port(Hostname, _, Port) ->
     iolist_to_binary([ Hostname, $:, integer_to_list(Port) ]).
 
-%% @spec handle_call(Request, From, State) -> {reply, Reply, State} |
-%%                                      {reply, Reply, State, Timeout} |
-%%                                      {noreply, State} |
-%%                                      {noreply, State, Timeout} |
-%%                                      {stop, Reason, Reply, State} |
-%%                                      {stop, Reason, State}
-%% @doc Create the url for the dispatch rule with name and arguments Args.
-handle_call({'url_for', Name, Args, Escape}, _From, State) ->
-    Uri = make_url_for(Name, Args, Escape, State#state.lookup),
-    {reply, Uri, State};
-
-%% @doc Return the preferred hostname for the site
-handle_call('hostname', _From, State) ->
-    {reply, State#state.hostname, State};
-
-%% @doc Return the preferred hostname, and port, for the site
-handle_call('hostname_port', _From, State) ->
-    {reply, State#state.hostname_port, State};
-
-%% @doc Return the preferred hostname for ssl, and port, for the site
-handle_call('hostname_ssl_port', _From, State) ->
-    {reply, State#state.hostname_ssl_port, State};
-
-%% @doc Return the dispatchinfo for the site  {site, hostname, smtphost, hostaliases, redirect, dispatchlist}
-handle_call('dispatchinfo', _From, State) ->
-    {reply,
-     {State#state.site, State#state.hostname, State#state.smtphost,
-      State#state.hostalias, State#state.redirect, State#state.dispatchlist},
-     State};
-
-%% @doc Reload the dispatch list, signal the sites supervisor that the dispatch list has been changed.
-%% The site supervisor will collect all dispatch lists and send them at once to webmachine.
-handle_call('reload', _From, State) ->
-    State1 = reload_dispatch_list(State),
-    {reply, ok, State1}.
-
-%% @spec handle_cast(Msg, State) -> {noreply, State} |
-%%                                  {noreply, State, Timeout} |
-%%                                  {stop, Reason, State}
-handle_cast(_Msg, State) ->
-    {noreply, State}.
-
-%% @spec handle_info(Info, State) -> {noreply, State} |
-%%                                       {noreply, State, Timeout} |
-%%                                       {stop, Reason, State}
-%% @doc Handling all non call/cast messages
-handle_info(_Info, State) ->
-    {noreply, State}.
-
-
-%% @spec terminate(Reason, State) -> void()
-%% @doc This function is called by a gen_server when it is about to
-%% terminate. It should be the opposite of Module:init/1 and do any necessary
-%% cleaning up. When it returns, the gen_server terminates with Reason.
-%% The return value is ignored.
-terminate(_Reason, State) ->
-    z_notifier:detach(module_ready, State#state.context),
-    ok.
-
-%% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
-%% @doc Convert process state when code is changed
-
-code_change(_OldVsn, State, _Extra) ->
-    {ok, State}.
-
-
-%%====================================================================
-%% support functions
-%%====================================================================
-
-
-%% @doc Reload the dispatch list and send it to the webmachine dispatcher.
-reload_dispatch_list(#state{context=Context} = State) ->
-    DispatchList = try
+%% @doc Reload the dispatch list and update the ets table for the URL generation.
+reload_dispatch_list(#state{ context = Context } = State) ->
+    DispatchRules = try
         collect_dispatch_lists(Context)
     catch
         _:{error, _Msg} ->
-           State#state.dispatchlist
+           State#state.dispatch_list
     end,
-    LookupDict = dispatch_for_uri_lookup(DispatchList),
-    State#state{dispatchlist=DispatchList, lookup=LookupDict}.
+    LookupMap = dispatch_for_uri_lookup(DispatchRules),
+    update_ets(LookupMap, Context),
+    {DispatchList, RscPathList} = lists:partition(fun is_dispatch/1, DispatchRules),
+    PagePathsLookup = page_path_lookup(RscPathList),
+    State#state{
+        dispatch_list = DispatchList,
+        page_paths = PagePathsLookup,
+        lookup = LookupMap
+    }.
 
+update_ets(LookupMap, Context) ->
+    Name = name(Context),
+    LookupList = maps:to_list(LookupMap),
+    Current = ets:match(Name, {'$1', '_'}),
+    DelKeys = lists:flatten(Current) -- maps:keys(LookupMap),
+    lists:foreach(fun(K) -> ets:delete(Name, K) end, DelKeys),
+    ets:insert(Name, LookupList).
+
+is_dispatch({_Name, Path, _Controller, _Options}) when is_list(Path) -> true;
+is_dispatch({_Name, RscName, _Controller, _Options}) when is_atom(RscName) -> false.
+
+page_path_lookup(RscPathList) ->
+    lists:foldr(
+        fun({_Name, RscName, _Controller, _Options} = Disp, Acc) ->
+            NameBin = z_convert:to_binary(RscName),
+            Acc#{
+                RscName => Disp,
+                NameBin => Disp
+            }
+        end,
+        #{},
+        RscPathList).
 
 %% @doc Collect all dispatch lists.  Checks priv/dispatch for all dispatch list definitions.
+%% Dispatch rules are ordered by highest prio first.
 collect_dispatch_lists(Context) ->
     ModDispOnPrio = lists:concat(
         lists:map(
@@ -408,7 +448,6 @@ collect_dispatch_lists(Context) ->
 
 
 %% @doc Read a dispatch file, the file should contain a valid Erlang dispatch datastructure.
-%% @spec get_file_dispatch(filename()) -> DispatchList
 get_file_dispatch({File, Mod}) ->
     try
         case filelib:is_regular(File)
@@ -419,9 +458,12 @@ get_file_dispatch({File, Mod}) ->
                 case Basename of
                     "." ++ _ ->
                         [];
+                    <<".", _/binary>> ->
+                        [];
                     _Other  ->
                         {ok, Disp} = file:consult(File),
-                        add_mod_to_options(Disp, Mod, filename:basename(File))
+                        Disp1 = split_paths(lists:flatten(Disp), Mod, File),
+                        add_mod_to_options(Disp1, Mod, filename:basename(File))
                 end;
             false ->
                 []
@@ -429,40 +471,100 @@ get_file_dispatch({File, Mod}) ->
     catch
         M:E ->
             ?LOG_ERROR(#{
-                text => <<"File dispatch error">>,
+                text => <<"Dispatch file parse error">>,
                 in => zotonic_core,
-                file => File,
                 result => M,
-                reason => E
+                reason => E,
+                module => Mod,
+                file => File
             }),
             throw({error, "Parse error in " ++ z_convert:to_list(File)})
     end.
 
+%% @doc Check all dispatch rules for proper format, complain about non matching ones.
+%% Split paths like "/path/to/:var" into a list of path segments.
+%% Drop all non conforming dispatch paths, and log errors for those.
+split_paths(Disp, Mod, File) ->
+    lists:filtermap(
+        fun
+            ({Name, [ C | _ ] = Path, Controller, Opts} = Rule) when is_integer(C) ->
+                try
+                    Path1 = split_binary_path(unicode:characters_to_binary(Path)),
+                    {true, {Name, Path1, Controller, Opts}}
+                catch
+                    E:R:S ->
+                        ?LOG_ERROR(#{
+                            in => zotonic_core,
+                            text => <<"Error in dispatch rule - can not convert string to binary">>,
+                            result => E,
+                            reason => R,
+                            modules => Mod,
+                            dispatch_file => File,
+                            dispatch_rule => Rule,
+                            stack => S
+                        }),
+                        false
+                end;
+            ({Name, Path, Controller, Opts}) when is_atom(Name), is_binary(Path), is_atom(Controller), is_list(Opts) ->
+                Path1 = split_binary_path(Path),
+                {true, {Name, Path1, Controller, Opts}};
+            ({Name, Path, Controller, Opts}) when is_atom(Name), is_list(Path), is_atom(Controller), is_list(Opts) ->
+                {true, {Name, Path, Controller, Opts}};
+            ({Name, RscName, Controller, Opts}) when is_atom(Name), is_atom(RscName), is_atom(Controller), is_list(Opts) ->
+                {true, {Name, RscName, Controller, Opts}};
+            (Other) ->
+                ?LOG_ERROR(#{
+                    in => zotonic_core,
+                    text => <<"Unrecognized dispatch rule">>,
+                    result => error,
+                    reason => format,
+                    dispatch_rule => Other,
+                    dispatch_file => File,
+                    module => Mod
+                }),
+                false
+        end,
+        Disp).
+
+split_binary_path(Path) ->
+    Ps = binary:split(Path, <<"/">>, [ global ]),
+    lists:filtermap(
+        fun
+            (<<>>) -> false;
+            (<<"*">>) -> {true, '*'};
+            (<<":", Var/binary>>) -> {true, binary_to_atom(Var, utf8)};
+            (P) -> {true, P}
+        end,
+        Ps).
+
 add_mod_to_options(Disp, Mod, Filename) ->
     F = z_convert:to_binary(Filename),
     lists:map(
-        fun(Ds) ->
-            lists:map(
-                fun({Name, Path, Controller, Opts}) ->
-                    Opts1 = [
-                        {zotonic_dispatch_module, Mod},
-                        {zotonic_dispatch_file, F}
-                        | Opts
-                    ],
-                    {Name, Path, Controller, Opts1}
-                end,
-                Ds)
+        fun({Name, Path, Controller, Opts}) ->
+            Opts1 = [
+                {zotonic_dispatch_module, Mod},
+                {zotonic_dispatch_file, F}
+                | Opts
+            ],
+            {Name, Path, Controller, Opts1}
         end,
         Disp).
 
 %% @doc Transform the dispatchlist into a datastructure for building uris from name/vars
 %% Datastructure needed is:   name -> [vars, pattern]
 dispatch_for_uri_lookup(DispatchList) ->
-    dispatch_for_uri_lookup1(DispatchList, dict:new()).
+    dispatch_for_uri_lookup1(DispatchList, #{}).
 
-dispatch_for_uri_lookup1([], Dict) ->
-    Dict;
-dispatch_for_uri_lookup1([{Name, Pattern, Controller, DispatchOptions}|T], Dict)
+dispatch_for_uri_lookup1([], LookupAcc) ->
+    LookupAcc;
+dispatch_for_uri_lookup1([{Name, RscName, Controller, DispatchOptions}|T], LookupAcc)
+    when is_atom(Name), is_atom(RscName), is_atom(Controller), is_list(DispatchOptions) ->
+    Current = maps:get(Name, LookupAcc, []),
+    LookupAcc1 = LookupAcc#{
+        Name => [ {0, [], RscName, DispatchOptions} | Current ]
+    },
+    dispatch_for_uri_lookup1(T, LookupAcc1);
+dispatch_for_uri_lookup1([{Name, Pattern, Controller, DispatchOptions}|T], LookupAcc)
     when is_atom(Name), is_list(Pattern), is_atom(Controller), is_list(DispatchOptions) ->
     Vars  = lists:foldl(fun(A, Acc) when is_atom(A) -> [A|Acc];
                            ({A,_RegExp}, Acc) when is_atom(A) -> [A|Acc];
@@ -470,12 +572,12 @@ dispatch_for_uri_lookup1([{Name, Pattern, Controller, DispatchOptions}|T], Dict)
                         end,
                         [],
                         Pattern),
-    Dict1 = case dict:is_key(Name, Dict) of
-                true  -> dict:append(Name, {length(Vars), Vars, Pattern, DispatchOptions}, Dict);
-                false -> dict:store(Name, [{length(Vars), Vars, Pattern, DispatchOptions}], Dict)
-            end,
-    dispatch_for_uri_lookup1(T, Dict1);
-dispatch_for_uri_lookup1([IllegalDispatch|T], Dict) ->
+    Current = maps:get(Name, LookupAcc, []),
+    LookupAcc1 = LookupAcc#{
+        Name => [ {length(Vars), Vars, Pattern, DispatchOptions} | Current ]
+    },
+    dispatch_for_uri_lookup1(T, LookupAcc1);
+dispatch_for_uri_lookup1([IllegalDispatch|T], LookupAcc) ->
     ?LOG_ERROR(#{
         text => <<"Dispatcher dropping malformed dispatch rule">>,
         in => zotonic_core,
@@ -483,11 +585,11 @@ dispatch_for_uri_lookup1([IllegalDispatch|T], Dict) ->
         reason => malformed,
         dispatch_rule => IllegalDispatch
     }),
-    dispatch_for_uri_lookup1(T, Dict).
+    dispatch_for_uri_lookup1(T, LookupAcc).
 
 
 %% @doc Make an uri for the named dispatch with the given parameters
-make_url_for(Name, Args, Escape, _UriLookup) when Name =:= none; Name =:= <<"none">> ->
+make_url_for(Name, Args, Escape, _Context) when Name =:= none; Name =:= <<"none">> ->
     QueryStringArgs = filter_empty_args(Args),
     Sep = case Escape of
             xml  -> "&amp;";
@@ -495,15 +597,17 @@ make_url_for(Name, Args, Escape, _UriLookup) when Name =:= none; Name =:= <<"non
             _    -> $&
           end,
     #dispatch_url{
-        url=z_convert:to_binary([$?, urlencode(QueryStringArgs, Sep)]),
-        dispatch_options=[]
+        url = z_convert:to_binary([$?, urlencode(QueryStringArgs, Sep)]),
+        dispatch_options = []
     };
-make_url_for(Name, Args, Escape, UriLookup) ->
+make_url_for(Name, Args, Escape, Context) ->
     Name1 = z_convert:to_atom(Name),
     Args1 = filter_empty_args(Args),
-    case dict:find(Name1, UriLookup) of
-        {ok, Patterns} ->
-            case make_url_for1(Args1, Patterns, Escape, undefined) of
+    case ets:lookup(name(Context), Name1) of
+        [] ->
+            #dispatch_url{};
+        [{_, Patterns}] ->
+            case make_url_for1(Args1, Patterns, Escape, undefined, Context) of
                 #dispatch_url{ url = undefined } = DispUrl when Name =/= image->
                     ?LOG_INFO(#{
                         text => <<"Dispatcher make_url_for failed">>,
@@ -516,9 +620,7 @@ make_url_for(Name, Args, Escape, UriLookup) ->
                     DispUrl;
                 DispUrl ->
                     DispUrl
-            end;
-        error ->
-            #dispatch_url{}
+            end
     end.
 
 
@@ -537,9 +639,28 @@ filter_empty_args(Args) ->
 
 
 %% @doc Try to match all patterns with the arguments
-make_url_for1(_Args, [], _Escape, undefined) ->
+make_url_for1(_Args, [], _Escape, undefined, _Context) ->
     #dispatch_url{};
-make_url_for1(Args, [], Escape, {QueryStringArgs, Pattern, DispOpts}) ->
+make_url_for1(_Args, [], Escape, {QueryStringArgs, RscName, DispOpts}, Context) when is_atom(RscName) ->
+    PageUrl = m_rsc:p(RscName, <<"page_url">>, Context),
+    case QueryStringArgs of
+        [] ->
+            {page_url, #dispatch_url{
+                url = z_convert:to_binary(PageUrl),
+                dispatch_options = DispOpts
+            }};
+        _  ->
+            Sep = case Escape of
+                    xml  -> "&amp;";
+                    html -> "&amp;";
+                    _    -> $&
+                  end,
+            {page_url, #dispatch_url{
+                url = z_convert:to_binary([PageUrl, $?, urlencode(QueryStringArgs, Sep)]),
+                dispatch_options = DispOpts
+            }}
+    end;
+make_url_for1(Args, [], Escape, {QueryStringArgs, Pattern, DispOpts}, _Context) ->
     ReplArgs =  fun
                     ('*') -> path_argval('*', Args);
                     (V) when is_atom(V) -> path_argval(V, Args);
@@ -553,8 +674,8 @@ make_url_for1(Args, [], Escape, {QueryStringArgs, Pattern, DispOpts}) ->
     case QueryStringArgs of
         [] ->
             #dispatch_url{
-                url=z_convert:to_binary(Uri),
-                dispatch_options=DispOpts
+                url = z_convert:to_binary(Uri),
+                dispatch_options = DispOpts
             };
         _  ->
             Sep = case Escape of
@@ -563,13 +684,13 @@ make_url_for1(Args, [], Escape, {QueryStringArgs, Pattern, DispOpts}) ->
                     _    -> $&
                   end,
             #dispatch_url{
-                url=z_convert:to_binary([Uri, $?, urlencode(QueryStringArgs, Sep)]),
-                dispatch_options=DispOpts
+                url = z_convert:to_binary([Uri, $?, urlencode(QueryStringArgs, Sep)]),
+                dispatch_options = DispOpts
             }
     end;
-make_url_for1(Args, [Pattern|T], Escape, Best) ->
+make_url_for1(Args, [Pattern|T], Escape, Best, Context) ->
     Best1 = select_best_pattern(Args, Pattern, Best),
-    make_url_for1(Args, T, Escape, Best1).
+    make_url_for1(Args, T, Escape, Best1, Context).
 
 path_argval('*', Args) ->
     case proplists:get_value(star, Args) of
@@ -584,7 +705,9 @@ path_argval(Arg, Args) ->
     B = z_convert:to_binary(proplists:get_value(Arg, Args, <<"-">>)),
     cow_qs:urlencode(B).
 
-select_best_pattern(Args, {PCount, PArgs, Pattern, DispOpts}, Best) ->
+select_best_pattern(Args, {0, [], RscName, DispOpts}, Best) when is_atom(RscName) ->
+    select_best_pattern1({Args, RscName, DispOpts}, Best);
+select_best_pattern(Args, {PCount, PArgs, Pattern, DispOpts}, Best) when is_list(Pattern) ->
     if
         length(Args) >= PCount ->
             %% Check if all PArgs are part of Args
@@ -608,12 +731,11 @@ select_best_pattern1(A, undefined) ->
     A;
 select_best_pattern1({AQS, _APat, _AOpts}=A, {BQS, _BPat, _BOpts}=B) ->
     if
-        length(BQS) > length(AQS) -> A;
+        length(BQS) >= length(AQS) -> A;
         true -> B
     end.
 
 
-%% @spec urlencode([{Key, Value}], Join) -> string()
 %% @doc URL encode the property list.
 urlencode(Props, Join) ->
     RevPairs = lists:foldl(fun ({K, V}, Acc) ->
