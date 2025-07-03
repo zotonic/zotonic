@@ -24,6 +24,21 @@
 -mod_description("Periodic tasks and ticks for other modules.").
 -mod_provides([cron]).
 -mod_prio(500).
+-mod_cron_jobs([
+    {{daily, {every, { 1, sec}}}, {z_notifier, notify, [tick_1s]}},
+    {{daily, {every, { 1, min}}}, {z_notifier, notify, [tick_1m]}},
+    {{daily, {every, { 5, min}}}, {z_notifier, notify, [tick_5m]}},
+    {{daily, {every, {10, min}}}, {z_notifier, notify, [tick_10m]}},
+    {{daily, {every, {15, min}}}, {z_notifier, notify, [tick_15m]}},
+    {{daily, {every, {30, min}}}, {z_notifier, notify, [tick_30m]}},
+    {{daily, {every, { 1, hr}}},  {z_notifier, notify, [tick_1h]}},
+    {{daily, {every, { 2, hr}}},  {z_notifier, notify, [tick_2h]}},
+    {{daily, {every, { 3, hr}}},  {z_notifier, notify, [tick_3h]}},
+    {{daily, {every, { 4, hr}}},  {z_notifier, notify, [tick_4h]}},
+    {{daily, {every, { 6, hr}}},  {z_notifier, notify, [tick_6h]}},
+    {{daily, {every, {12, hr}}},  {z_notifier, notify, [tick_12h]}},
+    {{daily, {every, {24, hr}}},  {z_notifier, notify, [tick_24h]}}
+]).
 
 -behaviour(gen_server).
 
@@ -37,48 +52,41 @@
     terminate/2
 ]).
 
--export([ tick_event/2 ]).
-
 -record(state, {
-          site :: atom(),
-          tick_job_refs = [] :: list(erlcron:job_ref())
+          jobs = #{},
+          context :: z:context()
          }).
-
-%% Default timers. These are called approximately every N seconds.
--define(TIMER_INTERVAL, [
-    {{ 1, sec}, tick_1s},
-    {{ 1, min}, tick_1m},
-    {{10, min}, tick_10m},
-    {{15, min}, tick_15m},
-    {{30, min}, tick_30m},
-    {{ 1, hr},  tick_1h},
-    {{ 2, hr},  tick_2h},
-    {{ 3, hr},  tick_3h},
-    {{ 4, hr},  tick_4h},
-    {{ 6, hr},  tick_6h},
-    {{12, hr},  tick_12h},
-    {{24, hr},  tick_24h}
-]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 
-tick_event(Event, Site) ->
-    z_notifier:notify(Event, z_context:new(Site)).
-
 start_link(Args) when is_list(Args) ->
-    {context, Context} = proplists:lookup(context, Args),
-    Site = z_context:site(Context),
-    gen_server:start_link(?MODULE, Site, []).
+    gen_server:start_link(?MODULE, Args, []).
 
-init(Site) when is_atom(Site) ->
+init(Args) ->
     erlang:process_flag(trap_exit, true),
-    z_context:logger_md(Site),
-    JobRefs = start_tick_jobs(Site),
-    {ok, #state{ site = Site, tick_job_refs = JobRefs }}.
+    {context, Context} = proplists:lookup(context, Args),
+
+    Site = z_context:site(Context),
+    logger:set_process_metadata(#{
+        site => Site,
+        module => ?MODULE
+    }),
+
+    z_notifier:observe(module_activate, self(), Context),
+    z_notifier:observe(module_deactivate, self(), Context),
+
+    State = add_jobs(?MODULE, #state{context = Context}),
+    {ok, State}.
 
 handle_call(_Msg, _From, State) ->
     {reply, {error, unknown_message}, State}.
 
+handle_cast({#module_activate{ module = Module }, _Context}, State) ->
+    State1 = add_jobs(Module, State),
+    {noreply, State1};
+handle_cast({#module_deactivate{ module = Module }, _Context}, State) ->
+    State1 = cancel_jobs(Module, State),
+    {noreply, State1};
 handle_cast(_Msg, State) ->
     {noreply, State}.
 
@@ -88,26 +96,83 @@ handle_info(_Info, State) ->
 code_change(_Vsn, State, _Extra) ->
     {ok, State}.
 
-terminate(_Reason, #state{ tick_job_refs = TickJobs }) ->
-    lists:foreach(fun(JobRef) -> _ = erlcron:cancel(JobRef) end, TickJobs),
+terminate(_Reason, #state{ context = Context, jobs = Jobs}) ->
+    z_notifier:detach(module_activate, self(), Context),
+    z_notifier:detach(module_deactivate, self(), Context),
+    maps:foreach(fun(_Module, ModuleJobs) -> _ = cancel_jobs(ModuleJobs) end, Jobs),
     ok.
 
 %%
 %% Helpers
 %%
 
-start_tick_jobs(Site) ->
-    [ start_tick_job(Event, Timeout, Site) || {Timeout, Event} <- ?TIMER_INTERVAL].
-
-start_tick_job(Event, Timeout, Site) ->
-    JobRef = job_ref(Event, Site),
-    Job = #{ id => JobRef,
-             interval => {daily, {every, Timeout}},
-             execute => {?MODULE, tick_event, [Event, Site]} },
-    case erlcron:cron(Job) of
-        already_started -> JobRef;
-        JobRef -> JobRef
+jobs(Module) ->
+    try
+        Info = erlang:get_module_info(Module, attributes),
+        lists:flatten(proplists:get_all_values(mod_cron_jobs, Info))
+    catch
+        error:badarg -> []
     end.
 
-job_ref(Event, Site) ->
-    <<(z_convert:to_binary(Site))/binary, $_, (z_convert:to_binary(Event))/binary>>.
+add_jobs(Module, State) ->
+    %% Cancel exsisting jobs
+    State1 = cancel_jobs(Module, State),
+
+    %% Add jobs defined in the module
+    ModuleJobs = jobs(Module),
+    case add_jobs1(ModuleJobs, State1#state.context) of
+        [] ->
+            State;
+        ModuleJobRefs ->
+            Jobs = State1#state.jobs,
+            State1#state{ jobs = Jobs#{ Module => ModuleJobRefs }}
+    end.
+add_jobs1(Jobs, Context) ->
+    JobRefs = [add_job(Job, Context) || Job <- Jobs],
+    [Job || Job <- JobRefs, Job =/= undefined].
+
+add_job({RunWhen, MFA}, Context) ->
+    add_job({RunWhen, MFA, #{}}, Context);
+add_job({RunWhen, {M, F, A}, JobOpts}=Clause, Context) ->
+    try
+        case erlcron:cron( {RunWhen, {M, F, A ++ [Context]}, JobOpts}) of
+            ignored ->
+                ?LOG_ERROR(#{ text => <<"Could not add job">>,
+                              reason => ignored,
+                              job => Clause}
+                          ),
+                undefined;
+            {error, Reason} ->
+                ?LOG_ERROR(#{ text => <<"Could not add job">>,
+                              reason => {error, Reason},
+                              job => Clause}),
+                undefined;
+            Ref when is_atom(Ref) orelse is_reference(Ref) orelse is_binary(Ref) ->
+                Ref
+        end
+    catch
+        %% erlcron throws an exception when the arity of the function
+        %% is wrong or if the module does not exist. Catching it here
+        %% prevents mod_cron for the entire site to be stopped if one
+        %% module has a misconfigured job.
+        error:ErrorReason ->
+            ?LOG_ERROR(#{ text => <<"Could not add job">>,
+                          error => {catched, {error, ErrorReason}},
+                          job => Clause
+                        }),
+            undefined
+    end;
+add_job(Clause, _Context) ->
+    ?LOG_ERROR(#{ text => <<"Could not add job">>,
+                  reason => wrong_job_clause,
+                  job => Clause }),
+    undefined.
+
+% Cancel all jobs defined by a module
+cancel_jobs(Module, #state{ jobs = Jobs }=State) ->
+    cancel_jobs(maps:get(Module, Jobs, [])),
+    State#state{ jobs = maps:without([Module], Jobs) }.
+
+cancel_jobs(Jobs) ->
+    lists:foreach( fun(Job) -> _ = erlcron:cancel(Job) end, Jobs).
+
