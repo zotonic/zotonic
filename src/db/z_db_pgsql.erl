@@ -48,6 +48,7 @@
 -define(TERM_MAGIC_NUMBER, 16#01326A3A:1/big-unsigned-unit:32).
 
 -define(IDLE_TIMEOUT, 60000).
+-define(RAW_CONN_TIMEOUT, 2*3600*1000).
 
 -define(CONNECT_RETRIES, 50).
 -define(CONNECT_RETRY_SLEEP, 10000).
@@ -138,7 +139,6 @@ is_tracing() ->
 get_raw_connection(#context{ dbc = Worker }) when Worker =/= undefined ->
     gen_server:call(Worker, get_raw_connection).
 
-
 %%
 %% gen_server callbacks
 %%
@@ -212,7 +212,7 @@ handle_call({return_conn, _Ref}, From, #state{ busy_pid = OtherPid } = State) ->
     {reply, {error, notyours}, State, timeout(State)};
 
 handle_call(get_raw_connection, _From, #state{ conn = Conn } = State) ->
-    {reply, Conn, State, timeout(State)};
+    {reply, Conn, State, ?RAW_CONN_TIMEOUT};
 
 handle_call(_Request, _From, State) ->
     {reply, unknown_call, State, timeout(State)}.
