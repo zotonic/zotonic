@@ -19,13 +19,20 @@
     text-align: center;
 }
 
+/* Give buttons that can wrap a bit of margin */
+.buttons {
+    .btn {
+        margin-bottom: 4px;
+    }
+}
+
 .btn {
     &.disabled {
         pointer-events: none;
         background: transparent;
         color: lighten($textColorLight, 5%);
         opacity: 1;
-        
+
         .glyphicon {
             opacity: .6;
         }

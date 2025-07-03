@@ -14,21 +14,22 @@
 
 <div class="form-group">
     <label class="control-label" for="{{ #category }}">{_ Content group _}</label>
+
     <div id="{{ #cgwrapper }}">
         {% include "_admin_content_group_dropdown.tpl" cgsel_id=#cgsel %}
 
-        {% if not no_collab %}
+        {% if not no_collab and m.search::%{ cat: 'acl_collaboration_group', pagelen: 1 } %}
             <br/>
-            <a href="#" class="btn btn-default" id="{{ #collab_select }}">
-                {_ Move to another _} {{ m.rsc.acl_collaboration_group.title }} …
-            </a>
+            <button type="button" class="btn btn-default" id="{{ #collab_select }}">
+                {% trans "Move to {title}…" title=m.rsc.acl_collaboration_group.title %}
+            </button>
 
             {% wire id=#collab_select
                     action={dialog_open
                             intent="select"
                             template="_action_dialog_connect.tpl"
                             subject_id=id
-                            title=[_"Move to another", " ", m.rsc.acl_collaboration_group.title]
+                            title=[_"Select", " ", m.rsc.acl_collaboration_group.title]
                             category=`acl_collaboration_group`
                             tabs_enabled=["find"]
                             delegate=`admin_acl_rules`
@@ -47,7 +48,7 @@
     </div>
 </div>
 
-{% if is_notcatselect %}
+{% if is_nocatselect %}
     {% javascript %}
         if (!$('#{{ #cgsel }}').val()) {
             $('#{{ error|default:#error }}').show();
@@ -65,11 +66,18 @@
                             cg_id1: $('#{{ #cgsel }}').val(),
                             cg_id2: '{{ cg_id|default:id.content_group_id }}',
                             cgwrap: "{{ #cgwrapper }}",
-                            cgsel: "{{ #cgsel }}"
+                            cgsel: "{{ #cgsel }}",
+                            subject_id: '{{ subject_id }}'
                         });
         });
 
-        if ($('#{{ #catsel }}').val() && !$('#{{ #cgsel }}').val()) {
+        const cats = $('#{{ #catsel }} option:enabled');
+        const cgs = $('#{{ #cgsel }} option:enabled');
+
+        if (!$('#{{ #catsel }}').val() && cats.length == 1) {
+            $('#{{ #catsel }}').val(cats[0].value);
+            $('#{{ #catsel }}').trigger('change');
+        } else if ($('#{{ #catsel }}').val() && cgs.length >= 1 && !$('#{{ #cgsel }}').val()) {
             $('#{{ #catsel }}').trigger('change');
         }
     {% endjavascript %}

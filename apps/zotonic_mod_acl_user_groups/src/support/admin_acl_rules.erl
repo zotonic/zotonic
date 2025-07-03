@@ -1,7 +1,8 @@
-%% @copyright 2015 Arjan Scherpenisse
+%% @copyright 2015-2025 Arjan Scherpenisse
 %% @doc Admin callbacks for the user groups
+%% @end
 
-%% Copyright 2015 Arjan Scherpenisse
+%% Copyright 2015-2025 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.

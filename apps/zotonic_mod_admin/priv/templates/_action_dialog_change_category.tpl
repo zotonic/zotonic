@@ -5,7 +5,7 @@ cat_id
 #}
 
 {% block about %}
-    <p class="text-muted pull-right">{_ Category name: _} {{ cat_id.name }}</p>
+    <p class="text-muted pull-right">{_ Category name: _} {{ cat_id.name|default:"-" }}</p>
 
     <h4>{_ About categories _}</h4>
 
