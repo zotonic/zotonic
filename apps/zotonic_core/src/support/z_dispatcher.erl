@@ -85,7 +85,7 @@ start_link(Site) ->
 -spec url_for(Name, Context) -> Url when
     Name :: atom() | binary(),
     Context :: z:context(),
-    Url :: iodata().
+    Url :: binary() | undefined.
 url_for(Name, Context) ->
     return_url(
         opt_abs_url(
@@ -99,7 +99,7 @@ url_for(Name, Context) ->
     Name :: atom() | binary(),
     Args :: proplists:proplist(),
     Context :: z:context(),
-    Url :: iodata().
+    Url :: binary() | undefined.
 url_for(Name, Args, Context) ->
     Args1 = append_extra_args(Args, Context),
     return_url(
@@ -115,7 +115,7 @@ url_for(Name, Args, Context) ->
     Args :: proplists:proplist(),
     Escape :: html | xml | none,
     Context :: z:context(),
-    Url :: iodata().
+    Url :: binary() | undefined.
 url_for(Name, Args, Escape, Context) ->
     Args1 = append_extra_args(Args, Context),
     return_url(
@@ -168,7 +168,7 @@ abs_url(Url, Context) ->
         hostalias := [ binary() ],
         redirect := boolean(),
         dispatch_list := [ z_sites_dispatcher:dispatch_rule() ],
-        page_paths := #{ atom() | binary() => z_sites_dispatcher:page_path_rule() }
+        page_paths := #{ atom() | binary() => z_sites_dispatcher:dispatch_rsc_rule() }
     }.
 dispatchinfo(#context{dispatcher=Dispatcher}) ->
     dispatchinfo(Dispatcher);
@@ -244,8 +244,9 @@ abs_url(Url, Dispatch, DispatchOptions, Context) ->
         AbsUrl -> z_convert:to_binary(AbsUrl)
     end.
 
-%% @doc Convenience function, just return the generated Url
-return_url(#dispatch_url{url=Url}) -> Url.
+%% @doc Convenience function, return the generated Url as a binary (or undefined if none).
+return_url(#dispatch_url{ url = undefined }) -> undefined;
+return_url(#dispatch_url{ url = Url }) -> iolist_to_binary(Url).
 
 %% @doc Check if an url should be made an absolute url
 use_absolute_url(Args, Options, Context) ->
