@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-06-18 14:09\n"
+"PO-Revision-Date: 2025-07-01 16:45\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -1858,7 +1858,7 @@ msgstr "Als een pagina een publicatiedatumbereik heeft, dan is deze alleen zicht
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:38
 msgid "If none of the languages has a page path then the complete path will be:"
-msgstr "Als geen van de talen een paginapad heeft, dan is het volledige pad:"
+msgstr "Als geen van de talen een pagina-pad heeft, dan is het volledige pad:"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:61
 msgid "If not checked then a visitor is always redirected to the canonical URL of this page."
@@ -2546,7 +2546,7 @@ msgstr "Bewaar deze pagina."
 
 #: zotonic_mod_admin/src/mod_admin.erl:554
 msgid "Scheduled a background task to check all refers connections."
-msgstr "Een achtergrondtaak ingepland om alle verwijzingen te controleren."
+msgstr "Een achtergrondtaak is ingepland om alle verwijzingen te controleren."
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:303
 msgid "Search"
@@ -5789,7 +5789,7 @@ msgstr "U kunt inloggen met de volgende externe dienst"
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:9
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:18
 msgid "You have requested a new password for"
-msgstr "U heeft een nieuw wachtwoord aangevraagd voor"
+msgstr "Je hebt een nieuw wachtwoord aangevraagd voor"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:75
 msgid "You have to share your email address to be able to log in."
@@ -6005,8 +6005,8 @@ msgstr "Versleuteld"
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:40
 msgid "Encryption is enabled, but there is no encryption password. Please\n"
 "      make sure there is an encryption password in the settings."
-msgstr "Versleuteling is ingeschakeld, maar er is geen coderingswachtwoord.\n"
-"      controleer of er een coderingswachtwoord in de instellingen staat."
+msgstr "Versleuteling is ingeschakeld, maar er is geen wachtwoord voor de encryptie.\n"
+"      Controleer of er een encryptiewachtwoord in de instellingen staat."
 
 #: zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:15
 msgid "Help about backup &amp; restore"
@@ -6030,7 +6030,7 @@ msgstr "Bekijk en herstel een eerdere versie."
 
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:12
 msgid "List of recently deleted pages found in the resource revisions log."
-msgstr "Lijst met recent verwijderde pagina's gevonden in het logboek met bronrevisies."
+msgstr "Lijst met recent verwijderde pagina's gevonden in het log met bronrevisies."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:15
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:39
@@ -6136,11 +6136,11 @@ msgstr "Toon import/export paneel op de bewerk pagina's in de admin."
 
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:124
 msgid "Sorry, a global Zotonic configuration is set and cannot be changed."
-msgstr "Sorry, een globale Zotonic-configuratie is ingesteld en kan niet worden gewijzigd."
+msgstr "Er is een globale Zotonic-configuratie ingesteld en dit kan niet worden gewijzigd."
 
 #: zotonic_mod_backup/src/actions/action_backup_backup_start.erl:50
 msgid "Sorry, manual backups are disabled"
-msgstr "Sorry, handmatige back-ups zijn uitgeschakeld"
+msgstr "Handmatige back-ups zijn uitgeschakeld"
 
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:84
 msgid "Sorry, there is no module that can import this."
@@ -6988,7 +6988,7 @@ msgstr "Controller"
 #: zotonic_mod_development/priv/templates/_development_template_graph.tpl:26
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:122
 msgid "Copied dot file to the clipboard."
-msgstr "Gekopieerd puntbestand naar het klembord."
+msgstr "Dot file is gekopieerd naar het klembord."
 
 #: zotonic_mod_development/priv/templates/_development_template_graph.tpl:1
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:76
@@ -7032,11 +7032,11 @@ msgstr "Afhankelijkheidsgrafiek van alle sjablonen"
 
 #: zotonic_mod_development/priv/templates/_development_template_graph.tpl:3
 msgid "Dependency graph of all templates. Only includes using a direct string value for the template are shown."
-msgstr "Afhankelijkheidsgrafiek van alle sjablonen. Alleen het gebruik van een directe tekenreekswaarde voor de sjabloon wordt weergegeven."
+msgstr "Afhankelijkheidsgrafiek van alle sjablonen. Alleen includes die een directe string-waarde voor het sjabloon wordt weergegeven."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:78
 msgid "Dependency graph of all traced templates. All includes are shown."
-msgstr "Afhankelijkheidsgrafiek van alle getraceerde sjablonen. Alle omvat worden getoond."
+msgstr "Afhankelijkheidsgrafiek van alle getraceerde sjablonen. Alle includes worden getoond."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:3
 #: zotonic_mod_development/src/mod_development.erl:552
@@ -7981,7 +7981,7 @@ msgstr "Kopieer alle bestanden op afstand naar lokaal"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
 msgid "Copy files to cloud"
-msgstr "Bestanden kopiëren naar cloud"
+msgstr "Bestanden kopiëren naar de cloud"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:290
 msgid "Copy files to server disk"
@@ -9563,7 +9563,7 @@ msgstr "Je ontvangt een bevestiging in je e-mail."
 
 #: zotonic_mod_mailinglist/priv/templates/email_mailinglist_confirm.tpl:9
 msgid "You, or someone else, added your e-mail address to our mailing list <b><a href=\"{url}\">{title}</a></b>."
-msgstr "U, of iemand anders, heeft uw e-mailadres toegevoegd aan onze mailinglijst <b><a href=\"{url}\">{title}</a></b>."
+msgstr "Jouw e-mailadres is toegevoegd aan onze mailinglijst <b><a href=\"{url}\">{title}</a></b>."
 
 #: zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:26
 msgid "Your e-mail address is added to the mailing list. A confirmation mail is sent to your e-mail address and will arrive shortly. If you don’t receive it, then please check your spam folder."
@@ -10368,7 +10368,7 @@ msgstr "Om een van deze applicaties te gebruiken, moeten de app-ID en het geheim
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:79
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_token_new.tpl:80
 msgid "Token"
-msgstr "Penning"
+msgstr "Token"
 
 #: zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:43
 msgid "Token grant method"
@@ -12952,7 +12952,7 @@ msgstr "Hostnaam"
 
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:79
 msgid "If you are creating a new site, ignore this section. If you have an existing Zotonic site on a git repo, you can optionally specify it here. in which case Zotonic will check that out instead of creating a new site."
-msgstr "Als je een nieuwe site aanmaakt, negeer deze sectie dan. Als je een bestaande Zotonic site op een git repo hebt, kun je die hier optioneel opgeven. in dat geval zal Zotonic die controleren in plaats van een nieuwe site aan te maken."
+msgstr "Als je een nieuwe site aanmaakt, negeer deze sectie dan. Als je een bestaande Zotonic site op een git repo hebt, kun je die hier opgeven. In dat geval zal Zotonic die uitchecken in plaats van een nieuwe site aan te maken."
 
 #: zotonic_mod_zotonic_site_management/priv/templates/_addsite_success.tpl:14
 msgid "Log on with username <b>admin</b> and password"
