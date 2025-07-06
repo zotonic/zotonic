@@ -769,27 +769,6 @@ is_multiple_languages_config(Context) ->
 
 
 %% @private
--spec is_enabled_language(binary() | atom(), z:context()) -> boolean().
-is_enabled_language(LanguageCode, Context) when is_binary(LanguageCode) ->
-    case maybe_language_code(LanguageCode) of
-        true ->
-            try
-                is_enabled_language(binary_to_existing_atom(LanguageCode), Context)
-            catch
-                error:badarg -> false
-            end;
-        false ->
-            false
-    end;
-is_enabled_language(LangAtom, Context) when is_atom(LangAtom) ->
-    Enabled = z_language:editable_languages(Context),
-    case lists:member(LangAtom, Enabled) of
-        false ->
-            z_acl:is_allowed(use, mod_admin, Context)
-            andalso lists:member(LangAtom, z_language:editable_languages(Context));
-        true -> true
-    end.
-
 -spec is_editable_language(binary() | atom(), z:context()) -> boolean().
 is_editable_language(LanguageCode, Context) when is_binary(LanguageCode) ->
     case maybe_language_code(LanguageCode) of
