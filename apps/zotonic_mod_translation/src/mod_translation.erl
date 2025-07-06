@@ -794,8 +794,6 @@ maybe_language_code(<<A,B,C>> = Code) when A >= $a, A =< $z, B >= $a, B =< $z, C
 maybe_language_code(<<$x,$-,_/binary>> = Code) ->
     % x-default, x-klingon, etc.
     z_language:is_valid(Code);
-maybe_language_code(Code) when is_atom(Code) ->
-    maybe_language_code( atom_to_binary(Code, utf8) );
 maybe_language_code(_) ->
     false.
 
