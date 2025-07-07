@@ -377,20 +377,40 @@ duplicate(Id, DupProps, DupOpts, Context) when is_integer(Id) ->
                         is_escape_texts = false
                     },
                     FilteredProps = props_filter_protected(RawProps, RscUpd),
+                    % Todo: convert date in DupProps to UTC
                     SafeDupProps = escape_props(true, DupProps, Context),
+                    Tz = case proplists:lookup(tz, DupOpts) of
+                        {tz, TzDupOpt} ->
+                            TzDupOpt;
+                        none ->
+                            case timezone(Id, SafeDupProps, Context) of
+                                undefined -> maps:get(<<"tz">>, RawProps, <<"UTC">>);
+                                TzDupProp -> TzDupProp
+                            end
+                    end,
+                    IsAllDay = case maps:get(<<"date_is_all_day">>, DupProps, undefined) of
+                        undefined -> maps:get(<<"date_is_all_day">>, RawProps, false);
+                        DupIsAllDay -> DupIsAllDay
+                    end,
+                    SafeDupProps1 = z_props:normalize_dates(SafeDupProps, z_convert:to_bool(IsAllDay), Tz),
                     InsProps = maps:fold(
                         fun(Key, Value, Acc) ->
                             Acc#{ Key => Value }
                         end,
                         FilteredProps,
-                        SafeDupProps#{
+                        SafeDupProps1#{
                             <<"name">> => undefined,
                             <<"uri">> => undefined,
                             <<"page_path">> => undefined,
                             <<"is_authoritative">> => true,
                             <<"is_protected">> => false
                         }),
-                    case insert(InsProps, [{is_escape_texts, false}], Context) of
+                    InsOpts = [
+                        {is_escape_texts, false},
+                        {is_import, true},
+                        {tz, <<"UTC">>}
+                    ],
+                    case insert(InsProps, InsOpts, Context) of
                         {ok, NewId} ->
                             case proplists:get_value(edges, DupOpts, true) of
                                 true ->
