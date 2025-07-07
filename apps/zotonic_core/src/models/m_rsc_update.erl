@@ -388,7 +388,7 @@ duplicate(Id, DupProps, DupOpts, Context) when is_integer(Id) ->
                                 TzDupProp -> TzDupProp
                             end
                     end,
-                    IsAllDay = case maps:get(<<"date_is_all_day">>, DupProps, undefind) of
+                    IsAllDay = case maps:get(<<"date_is_all_day">>, DupProps, undefined) of
                         undefined -> maps:get(<<"date_is_all_day">>, RawProps, false);
                         DupIsAllDay -> DupIsAllDay
                     end,
