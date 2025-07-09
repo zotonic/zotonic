@@ -153,8 +153,8 @@ do_redirect(IsPermanent, Location, Context) ->
             Context1
     end,
     Code = if
-        IsPermanent -> 307;
-        true -> 308
+        IsPermanent -> 308;
+        true -> 307
     end,
     ContextRedirect = z_context:set_resp_header("Location", Location, Context2),
     ?WM_REPLY({halt, Code}, ContextRedirect).
