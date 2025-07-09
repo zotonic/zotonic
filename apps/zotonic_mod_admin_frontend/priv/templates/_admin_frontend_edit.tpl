@@ -22,6 +22,7 @@
 			postback={rscform
 				view_location=view_location
 				on_success=on_save
+				default_tz=m.req.timezone
 			}
 			delegate=`controller_admin_edit`
 	%}
