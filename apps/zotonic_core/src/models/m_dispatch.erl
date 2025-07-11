@@ -37,12 +37,12 @@ m_get([ <<"path">> ], #{ payload := #{ <<"path">> := Path } }, Context) ->
     dispatch_path(Path, Context);
 m_get([ <<"path">> | Path ], _Msg, Context) ->
     dispatch_path(Path, Context);
-m_get([ <<"url_for">>, Name | Rest ], #{ payload := Payload }, Context) when is_map(Payload) ->
+m_get([ <<"url_for">>, Name | Rest ], #{ payload := Payload }, Context) ->
     case url_for(Name, Payload, Context) of
         undefined -> {error, enoent};
         Url -> {ok, {Url, Rest}}
     end;
-m_get([ <<"abs_url_for">>, Name | Rest ], #{ payload := Payload }, Context) when is_map(Payload) ->
+m_get([ <<"abs_url_for">>, Name | Rest ], #{ payload := Payload }, Context) ->
     case url_for(Name, Payload, Context) of
         undefined -> {error, enoent};
         Url -> {ok, {z_context:abs_url(Url, Context), Rest}}
@@ -53,6 +53,8 @@ m_get(_, _Msg, _Context) ->
 url_for(Name, undefined, Context) ->
     z_dispatcher:url_for(Name, Context);
 url_for(Name, Args, Context) when is_map(Args) ->
+    url_for(Name, maps:to_list(Args), Context);
+url_for(Name, Args, Context) when is_list(Args) ->
     ArgsList = lists:map(
         fun
             ({K, V} = KV) when is_binary(K) ->
@@ -62,9 +64,17 @@ url_for(Name, Args, Context) when is_map(Args) ->
                     _:_ -> KV
                 end;
             ({K, _V} = KV) when is_atom(K) ->
-                KV
+                KV;
+            (K) when is_atom(K) ->
+                {K, true};
+            (K) when is_binary(K) ->
+                try
+                    {binary_to_existing_atom(K, utf8), true}
+                catch
+                    _:_ -> {K, true}
+                end
         end,
-        maps:to_list(Args)),
+        Args),
     z_dispatcher:url_for(Name, ArgsList, none, Context).
 
 dispatch_url(undefined, _Context) ->
