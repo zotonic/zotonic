@@ -547,7 +547,6 @@ function z_postback_data_set(name, value) {
         postbackData = {};
     }
     postbackData[name] = value;
-    console.log(postbackData);
     document.body.setAttribute("data-wired-postback", JSON.stringify(postbackData));
 }
 
@@ -558,6 +557,27 @@ function z_postback_data_delete(name) {
         delete postbackData[name];
         document.body.setAttribute("data-wired-postback", JSON.stringify(postbackData));
     }
+}
+
+function z_postback_data() {
+    const postbackAttr = document.body.getAttribute("data-wired-postback");
+    let postbackData;
+    if (postbackAttr) {
+        postbackData = JSON.parse(postbackAttr);
+    } else {
+        postbackData = {};
+    }
+    let sessionStorageData = sessionStorage.postbackData;
+    if (typeof sessionStorageData == 'string') {
+        sessionStorageData = JSON.parse(sessionStorageData);
+        postbackData = {...sessionStorageData, ...postbackData};
+    }
+    let localStorageData = localStorage.postbackData;
+    if (typeof localStorageData == 'string') {
+        localStorageData = JSON.parse(localStorageData);
+        postbackData = {...localStorageData, ...postbackData};
+    }
+    return postbackData;
 }
 
 /* Call the server side notifier for {postback_notify, Message, Context}
@@ -578,9 +598,9 @@ function z_notify(message, extraParams) {
   }
   params = ensure_name_value(params);
 
-  let postbackAttr = document.body.getAttribute("data-wired-postback");
-  if (postbackAttr) {
-    params.push({ name: "z_postback_data", value: JSON.parse(postbackAttr) });
+  let postbackData = z_postback_data();
+  if (typeof postbackData == "object") {
+    params.push({ name: "z_postback_data", value: postbackData });
   }
 
   let notify = {
@@ -768,9 +788,9 @@ function z_queue_postback(
   params = extraParams || [];
   params = ensure_name_value(params);
 
-  const postbackAttr = document.body.getAttribute("data-wired-postback");
-  if (postbackAttr) {
-    params.push({ name: "z_postback_data", value: JSON.parse(postbackAttr) });
+  const postbackData = z_postback_data();
+  if (typeof postbackData == "object") {
+    params.push({ name: "z_postback_data", value: postbackData });
   }
 
   const pb_event = {
