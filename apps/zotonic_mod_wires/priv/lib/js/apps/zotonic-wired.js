@@ -525,6 +525,41 @@ function z_event(name, extraParams) {
   }
 }
 
+
+/* Add or remove a value from the postback data.
+---------------------------------------------------------- */
+
+function z_postback_data_get(name) {
+    const postbackAttr = document.body.getAttribute("data-wired-postback");
+    if (postbackAttr) {
+        const postbackData = JSON.parse(postbackAttr);
+        return postbackData[name];
+    }
+    return undefined;
+}
+
+function z_postback_data_set(name, value) {
+    const postbackAttr = document.body.getAttribute("data-wired-postback");
+    let postbackData;
+    if (postbackAttr) {
+        postbackData = JSON.parse(postbackAttr);
+    } else {
+        postbackData = {};
+    }
+    postbackData[name] = value;
+    console.log(postbackData);
+    document.body.setAttribute("data-wired-postback", JSON.stringify(postbackData));
+}
+
+function z_postback_data_delete(name) {
+    const postbackAttr = document.body.getAttribute("data-wired-postback");
+    if (postbackAttr) {
+        let postbackData = JSON.parse(postbackAttr);
+        delete postbackData[name];
+        document.body.setAttribute("data-wired-postback", JSON.stringify(postbackData));
+    }
+}
+
 /* Call the server side notifier for {postback_notify, Message, Context}
 ---------------------------------------------------------- */
 

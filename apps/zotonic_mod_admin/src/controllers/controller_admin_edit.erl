@@ -89,6 +89,18 @@ ensure_id(Context) ->
             {z_context:set(id, MaybeId, Context), MaybeId}
     end.
 
+%% @doc Return the language the user is editing. This is part of the postback data
+%% which gets updated whenever the user switches languages.
+edit_language(Context) ->
+    case z_context:get_q(<<"z_postback_data">>, Context) of
+        #{ <<"z_edit_language">> := ELang } ->
+            case z_language:to_language_atom(ELang) of
+                {ok, ElangAtom} -> ElangAtom;
+                {error, _} -> z_context:language(Context)
+            end;
+        _ ->
+            z_context:language(Context)
+    end.
 
 %% @doc Handle the submit of the resource edit form
 event(#submit{message=rscform} = Msg, Context) ->
@@ -115,9 +127,10 @@ event(#submit{message={rscform, Args}}, Context) ->
             case z_context:get_q(<<"z_submitter">>, Context) of
                 SaveView when SaveView =:= <<"save_view">>;
                               SaveView =:= <<"save_view_float">> ->
+                    ContextRedirect = z_context:set_language(edit_language(Context), Context),
                     case proplists:get_value(view_location, Args) of
                         undefined ->
-                            PageUrl = m_rsc:p(Id, <<"page_url">>, Context),
+                            PageUrl = m_rsc:p(Id, <<"page_url">>, ContextRedirect),
                             z_render:wire({redirect, [{location, PageUrl}]}, Context);
                         Location ->
                             z_render:wire({redirect, [{location, Location}]}, Context)
@@ -152,6 +165,11 @@ event(#submit{message={rscform, Args}}, Context) ->
         {error, Message} when is_list(Message); is_binary(Message) ->
             z_render:growl_error(Message, Context)
     end;
+event(#postback{message={view, Args}}, Context) ->
+    {id, Id} = proplists:lookup(id, Args),
+    ContextRedirect = z_context:set_language(edit_language(Context), Context),
+    PageUrl = m_rsc:p(Id, <<"page_url">>, ContextRedirect),
+    z_render:wire({redirect, [{location, PageUrl}]}, Context);
 
 %% Opts: rsc_id, div_id, edge_template
 event(#postback{message={reload_media, Opts}}, Context) ->
