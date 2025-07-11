@@ -67,7 +67,7 @@ insert(Props, Options, Context) when is_list(Props) ->
     {ok, Map} = z_props:from_list(Props),
     insert(Map, Options, Context);
 insert(Props, Options, Context) when is_map(Props) ->
-    PropsDefaults = props_defaults(Props, Context),
+    PropsDefaults = props_defaults(Props, Options, Context),
     update(insert_rsc, PropsDefaults, Options, Context).
 
 
@@ -378,19 +378,31 @@ duplicate(Id, DupProps, DupOpts, Context) when is_integer(Id) ->
                     },
                     FilteredProps = props_filter_protected(RawProps, RscUpd),
                     SafeDupProps = escape_props(true, DupProps, Context),
+                    % Convert date in DupProps to UTC, determine timezone
+                    Tz = timezone(Id, SafeDupProps, DupOpts, Context),
+                    IsAllDay = case maps:get(<<"date_is_all_day">>, DupProps, undefined) of
+                        undefined -> maps:get(<<"date_is_all_day">>, RawProps, false);
+                        DupIsAllDay -> DupIsAllDay
+                    end,
+                    SafeDupProps1 = z_props:normalize_dates(SafeDupProps, z_convert:to_bool(IsAllDay), Tz),
                     InsProps = maps:fold(
                         fun(Key, Value, Acc) ->
                             Acc#{ Key => Value }
                         end,
                         FilteredProps,
-                        SafeDupProps#{
+                        SafeDupProps1#{
                             <<"name">> => undefined,
                             <<"uri">> => undefined,
                             <<"page_path">> => undefined,
                             <<"is_authoritative">> => true,
                             <<"is_protected">> => false
                         }),
-                    case insert(InsProps, [{is_escape_texts, false}], Context) of
+                    InsOpts = [
+                        {is_escape_texts, false},
+                        {is_import, true},
+                        {tz, <<"UTC">>}
+                    ],
+                    case insert(InsProps, InsOpts, Context) of
                         {ok, NewId} ->
                             case proplists:get_value(edges, DupOpts, true) of
                                 true ->
@@ -436,7 +448,9 @@ update(Id, Props, Context) ->
 %%      no_touch        (default: false)
 %%      is_import       (default: false)
 %% Other options:
-%%      tz - timezone for date conversions
+%%      tz - forced timezone for date conversions
+%%      default_tz - timezone if no other timezone in update or options, this
+%%                   timezone is selected above the resource timezone.
 %%      expected - list with property value pairs that
 %%                 are expected, fail if the properties
 %%                 are different.
@@ -466,15 +480,9 @@ update(Name, PropsOrFun, Options, Context) when not is_integer(Name), Name =/= i
     end;
 update(Id, Props, Options, Context) when is_list(Props) ->
     {ok, PropsMap} = z_props:from_list(Props),
-    OptionsTz = case proplists:lookup(tz, Options) of
-        {tz, _} ->
-            % Timezone set in the update options
-            Options;
-        none ->
-            case timezone(Id, PropsMap, Context) of
-                undefined -> Options;
-                Tz -> [ {tz, Tz} | Options ]
-            end
+    OptionsTz = case timezone(Id, PropsMap, Options, Context) of
+        undefined -> Options;
+        Tz -> [ {tz, Tz} | proplists:delete(tz, Options) ]
     end,
     update_1(Id, PropsMap, OptionsTz, Context);
 update(Id, PropsOrFun0, Options, Context) when is_integer(Id); Id =:= insert_rsc ->
@@ -483,12 +491,36 @@ update(Id, PropsOrFun0, Options, Context) when is_integer(Id); Id =:= insert_rsc
 
 
 %% @doc Determine the timezone for date conversions, if it is not given in the options.
-timezone(_Id, #{ <<"tz">> := Tz }, _Context) when Tz =/= undefined, Tz =/= <<>> ->
+%% Order:
+%% 1. 'tz' option in options
+%% 2. 'tz' value in update props
+%% 3. 'default_tz' option in options
+%% 4. 'tz' property of resource
+%% 5. timezone of context.
+timezone(Id, PropsMap, Options, Context) ->
+    case proplists:lookup(tz, Options) of
+        {tz, Tz} when Tz =/= <<>>, Tz =/= undefined ->
+            % Timezone forced in the update options
+            Tz;
+        _ ->
+            timezone_1(Id, PropsMap, Options, Context)
+    end.
+
+%% @doc Determine the timezone for date conversions, if it is not given in the options.
+timezone_1(_Id, #{ <<"tz">> := Tz }, _Options, _Context) when Tz =/= undefined, Tz =/= <<>> ->
     % Timezone specified in the update.
     Tz;
-timezone(Id, _PropsMap, Context) when is_integer(Id) ->
+timezone_1(Id, _PropsMap, Options, Context) ->
+    case proplists:lookup(default_tz, Options) of
+        {default_tz, Tz} when Tz =/= <<>>, Tz =/= undefined ->
+            Tz;
+        _ ->
+            timezone_2(Id, Context)
+    end.
+
+timezone_2(Id, Context) when is_integer(Id) ->
     % Assume a resource is edited in its own timezone, if the timezone is not
-    % part of the update.
+    % part of the update or update options.
     case m_rsc:p_no_acl(Id, <<"tz">>, Context) of
         None when None =:= undefined; None =:= <<>> ->
             % Assume requestor's timezone.
@@ -496,7 +528,7 @@ timezone(Id, _PropsMap, Context) when is_integer(Id) ->
         Tz ->
             Tz
     end;
-timezone(_Id, _PropsMap, Context) ->
+timezone_2(_Id, Context) ->
     % Assume the timezone of the request context -- when inserting new resources
     % we do assume the requestor's timezone.
     z_context:tz(Context).
@@ -505,9 +537,10 @@ update_1(Id, PropsOrFun, Options, Context) when is_integer(Id); Id =:= insert_rs
     IsImport = proplists:get_value(is_import, Options, false),
     Tz0 = case is_map(PropsOrFun) of
         true when not IsImport ->
-            timezone(Id, PropsOrFun, Context);
+            timezone(Id, PropsOrFun, Options, Context);
         _ ->
-            proplists:get_value(tz, Options, z_context:tz(Context))
+            % Take timezone from options or request
+            timezone(undefined, #{}, Options, Context)
     end,
     % Sanity fallback for 'undefined' tz in the options
     Tz = case Tz0 of
@@ -1618,7 +1651,7 @@ generate_slug(Id, Props, Context) ->
 
 
 %% @doc Fill in some defaults for empty props on insert.
-props_defaults(Props, Context) ->
+props_defaults(Props, Options, Context) ->
     % Generate slug from the title (when there is a title)
     Props1 = case maps:find(<<"title_slug">>, Props) of
         error ->
@@ -1641,10 +1674,15 @@ props_defaults(Props, Context) ->
             Props
     end,
     % Assume content is authoritative, unless stated otherwise
-    case maps:get(<<"is_authoritative">>, Props1, undefined) of
+    Props2 = case maps:get(<<"is_authoritative">>, Props1, undefined) of
         undefined -> Props1#{ <<"is_authoritative">> => true };
-        _ -> Props
-    end.
+        _ -> Props1
+    end,
+    % Default timezone of resource to options or request
+    Props2#{
+        <<"tz">> => timezone(undefined, Props2, Options, Context)
+    }.
+
 
 props_filter_protected(Props, RscUpd) ->
     IsNormalUpdate = is_normal_update(RscUpd),

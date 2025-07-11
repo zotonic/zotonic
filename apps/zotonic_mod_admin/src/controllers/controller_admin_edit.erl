@@ -1,9 +1,9 @@
 %% @author Marc Worrell, Arjan Scherpenisse
-%% @copyright 2009-2023 Marc Worrell, Arjan Scherpenisse
+%% @copyright 2009-2025 Marc Worrell, Arjan Scherpenisse
 %% @doc Admin webmachine_controller.
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2009-2025 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -106,7 +106,11 @@ event(#submit{message={rscform, Args}}, Context) ->
         },
         Props1,
         Context),
-    case m_rsc:update(Id, Props2, Context) of
+    UpdateOptions = case proplists:get_value(default_tz, Args) of
+        undefined -> [];
+        Tz -> [ {default_tz, Tz} ]
+    end,
+    case m_rsc:update(Id, Props2, UpdateOptions, Context) of
         {ok, _} ->
             case z_context:get_q(<<"z_submitter">>, Context) of
                 SaveView when SaveView =:= <<"save_view">>;
