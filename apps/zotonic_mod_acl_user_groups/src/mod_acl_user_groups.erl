@@ -44,6 +44,8 @@
     await_table/3,
     lookup/2,
     await_lookup/2,
+    match/2,
+    await_match/2,
     rebuild/2,
     observe_admin_menu/3,
     observe_rsc_update_done/2,
@@ -337,7 +339,7 @@ observe_rsc_update(#rsc_update{ id = Id, props = PrevProps }, {ok, NewProps}, Co
         orelse maps:is_key(<<"acl_upload_size">>, NewProps1)
     of
         true ->
-            case mod_acl_user_groups:is_acl_admin(Context) of
+            case is_acl_admin(Context) of
                 true ->
                     {ok, NewProps1};
                 false ->
@@ -545,10 +547,27 @@ await_lookup(Key, Context) ->
 lookup1(undefined, _Key) ->
     undefined;
 lookup1(TId, Key) ->
-    case ets:lookup(TId, Key) of
+    Res = case ets:lookup(TId, Key) of
         [] -> undefined;
         [{_,V}|_] -> V
-    end.
+    end,
+    % TODO: revert
+    io:format("debug mod_acl_user_groups:lookup1 ~p: ~p~n", [Key, Res]),
+    Res.
+
+match(Pattern, Context) ->
+    match1(table(Context), Pattern).
+
+await_match(Pattern, Context) ->
+    match1(await_table(Context), Pattern).
+
+match1(undefined, _Pattern) ->
+    [];
+match1(TId, Pattern) ->
+    Res = ets:match(TId, Pattern),
+    % TODO: revert
+    io:format("debug mod_acl_user_groups:match1 ~p: ~p~n", [Pattern, Res]),
+    Res.
 
 
 -spec observe_admin_menu(#admin_menu{}, Acc, z:context()) -> Result when
