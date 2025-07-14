@@ -425,7 +425,7 @@ is_allowed(false, Action, Topic, Packet, Context) ->
 % Check if it is allowed for the admin to subscribe to a topic.
 is_allowed_admin_subscribe([<<"$SYS">>, <<"site">>, Site | _], Context) ->
     case z_context:site(Context) of
-        zotonic_status_site ->
+        zotonic_site_status ->
             % admin of the status site is allowed to subscribe to sys
             % topics of all sites.
             true;
@@ -440,9 +440,14 @@ is_allowed_admin_subscribe([<<"$SYS">>, <<"erlang">> | _], _Context) ->
 is_allowed_admin_subscribe([<<"$SYS">>, <<"statistics">> | _], _Context) ->
     % and to zotonic node wide stats topics
     true;
-is_allowed_admin_subscribe([<<"$SYS">> | _], _Context) ->
-    % other sys topics are disallowed
-    false;
+is_allowed_admin_subscribe([<<"$SYS">> | _], Context) ->
+    % other sys topics are allowed only for zotonic_site_status admin
+    case z_context:site(Context) of
+        zotonic_site_status ->
+            true;
+        _ ->
+            false
+    end;
 is_allowed_admin_subscribe(_, _Context) ->
     true.
 
