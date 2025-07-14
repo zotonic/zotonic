@@ -530,12 +530,8 @@ function z_event(name, extraParams) {
 ---------------------------------------------------------- */
 
 function z_postback_data_get(name) {
-    const postbackAttr = document.body.getAttribute("data-wired-postback");
-    if (postbackAttr) {
-        const postbackData = JSON.parse(postbackAttr);
-        return postbackData[name];
-    }
-    return undefined;
+    const postbackData = z_postback_data();
+    return postbackData[name];
 }
 
 function z_postback_data_set(name, value) {
