@@ -62,7 +62,7 @@ observe_auth_validate( #auth_validate{ username = <<"wwwadmin">>, password = Pas
                         in => zotonic_site_status,
                         result => ok,
                         username => <<"wwwadmin">>,
-                        ip => m_req:get(peer, Context)
+                        ip => inet:ntoa(m_req:get(peer_ip, Context))
                     }),
                     {ok, 1};
                 false ->
@@ -71,7 +71,8 @@ observe_auth_validate( #auth_validate{ username = <<"wwwadmin">>, password = Pas
                         in => zotonic_site_status,
                         result => error,
                         reason => password,
-                        ip => m_req:get(peer, Context)
+                        ip => inet:ntoa(m_req:get(peer_ip, Context))
+
                     }),
                     {error, pw}
             end;
@@ -81,7 +82,7 @@ observe_auth_validate( #auth_validate{ username = <<"wwwadmin">>, password = Pas
                 in => zotonic_site_status,
                 result => error,
                 reason => blocked,
-                ip => m_req:get(peer, Context)
+                ip => inet:ntoa(m_req:get(peer_ip, Context))
             }),
             {error, blocked}
     end;
@@ -92,7 +93,7 @@ observe_auth_validate( #auth_validate{ username = Username }, Context ) ->
         result => error,
         reason => pw,
         username => Username,
-        ip => m_req:get(peer, Context)
+        ip => inet:ntoa(m_req:get(peer_ip, Context))
     }),
     {error, pw}.
 
@@ -112,7 +113,7 @@ observe_acl_logoff(#acl_logoff{}, Context) ->
 %% @doc Check peer address to the system management IP allowlist
 -spec is_peer_allowed( z:context() ) -> boolean().
 is_peer_allowed(Context) ->
-    Peer = m_req:get(peer, Context),
+    Peer = m_req:get(peer_ip, Context),
     z_ip_address:ip_match(Peer, z_config:get(ip_allowlist_system_management)).
 
 % Constant time comparison.
