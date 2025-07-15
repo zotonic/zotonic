@@ -5,7 +5,7 @@
 @Author:    Tim Benniks <tim@timbenniks.nl>
 @Author:    Marc Worrell <marc@worrell.nl>
 
-Copyright 2009-2024 Tim Benniks, Marc Worrell
+Copyright 2009-2025 Tim Benniks, Marc Worrell
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -546,6 +546,14 @@ function z_postback_data_set(name, value) {
     document.body.setAttribute("data-wired-postback", JSON.stringify(postbackData));
 }
 
+function z_postback_data_set_session(name, value) {
+    cotonic.broker.publish("model/sessionStorage/post/postbackData/" + name, value);
+}
+
+function z_postback_data_set_local(name, value) {
+    cotonic.broker.publish("model/localStorage/post/postbackData/" + name, value);
+}
+
 function z_postback_data_delete(name) {
     const postbackAttr = document.body.getAttribute("data-wired-postback");
     if (postbackAttr) {
@@ -553,6 +561,8 @@ function z_postback_data_delete(name) {
         delete postbackData[name];
         document.body.setAttribute("data-wired-postback", JSON.stringify(postbackData));
     }
+    cotonic.broker.publish("model/sessionStorage/delete/postbackData/" + name);
+    cotonic.broker.publish("model/localStorage/delete/postbackData/" + name);
 }
 
 function z_postback_data() {
