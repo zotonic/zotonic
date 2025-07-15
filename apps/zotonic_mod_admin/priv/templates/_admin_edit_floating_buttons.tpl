@@ -5,7 +5,15 @@
 		{% if id.is_editable %}
 			{% button type="submit" id="save_view_float" class="btn btn-default" text=_"Save and View" title=_"Save and view the page." %}
 		{% else %}
-			{% button id="save_view" class="btn btn-primary" text=_"View" title=_"View this page." action={redirect id=id} %}
+			{% button id="save_view"
+					  class="btn btn-primary"
+					  text=_"View"
+					  title=_"View this page."
+					  action={postback
+					  		postback={view id=id}
+					  		delegate="controller_admin_edit"
+					  	}
+			%}
 		{% endif %}
 	{% endif %}
 </div>

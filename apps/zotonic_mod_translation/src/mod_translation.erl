@@ -32,7 +32,7 @@
 
 -mod_title("Translation").
 -mod_description("Handle user’s language and generate .pot files with translatable texts.").
--mod_prio(500).
+-mod_prio(501).
 -mod_provides([translation]).
 
 -export([
@@ -109,7 +109,10 @@ set_language([Code|_] = Langs, Context) when is_atom(Code) ->
         Langs =:= ContextLangs ->
             Context;
         true ->
-            Enabled = z_language:enabled_languages(Context),
+            Enabled = case z_auth:is_auth(Context) andalso z_acl:is_allowed(use, mod_admin, Context) of
+                true -> z_language:editable_languages(Context);
+                false -> z_language:enabled_languages(Context)
+            end,
             Langs1 = lists:filter(
                 fun(Lang) ->
                     lists:member(Lang, Enabled)
@@ -252,7 +255,13 @@ get_q_language(Context) ->
                 {ok, Code} ->
                     case z_language:is_language_enabled(Code, Context) of
                         true -> Code;
-                        false -> get_q_language_1(Lang, Context)
+                        false ->
+                            case z_language:is_language_editable(Code, Context)
+                                andalso z_acl:is_allowed(use, mod_admin, Context)
+                            of
+                                true -> Code;
+                                false -> get_q_language_1(Lang, Context)
+                            end
                     end;
                 {error, _} ->
                     get_q_language_1(Lang, Context)
@@ -345,13 +354,13 @@ observe_dispatch_rewrite(#dispatch_rewrite{is_dir=IsDir}, {Parts, Args} = Dispat
                 true ->
                     Dispatch;
                 false ->
-                    case is_enabled_language(<<"id">>, Context) of
+                    case is_editable_language(id, Context) of
                         true -> {[Other], [{z_language, <<"id">>}|Args]};
                         false -> Dispatch
                     end
             end;
         [First|Rest] when IsDir orelse Rest /= [] ->
-            case is_enabled_language(First, Context) of
+            case is_editable_language(First, Context) of
                 true -> {Rest, [{z_language, First}|Args]};
                 false -> Dispatch
             end;
@@ -622,16 +631,30 @@ valid_config_language(Code, Context, Tries) ->
     EnabledLanguages = z_language:enabled_languages(Context),
     case proplists:get_value(Code, EnabledLanguages, false) of
         false ->
-            % Language code is not listed in config, let's try a fallback
-            Fallback = z_language:fallback_language(Code, Context),
-            % Bail out if we got into a loop
-            case lists:member(Fallback, Tries) of
-                true -> undefined;
-                false -> valid_config_language(Fallback, Context, [ Fallback | Tries ])
+            case z_acl:is_allowed(use, mod_admin, Context) of
+                true ->
+                    EditableLanguages = z_language:editable_languages(Context),
+                    case proplists:get_value(Code, EditableLanguages, false) of
+                        false ->
+                            valid_config_language_fallback(Code, Context, Tries);
+                        true ->
+                            Code
+                    end;
+                false ->
+                    valid_config_language_fallback(Code, Context, Tries)
             end;
         true ->
             % Language is listed and enabled
             Code
+    end.
+
+valid_config_language_fallback(Code, Context, Tries) ->
+    % Language code is not listed in config, let's try a fallback
+    Fallback = z_language:fallback_language(Code, Context),
+    % Bail out if we got into a loop
+    case lists:member(Fallback, Tries) of
+        true -> undefined;
+        false -> valid_config_language(Fallback, Context, [ Fallback | Tries ])
     end.
 
 %% @doc Set the enabled/editable status of a language. Returns an error if the
@@ -746,19 +769,21 @@ is_multiple_languages_config(Context) ->
 
 
 %% @private
--spec is_enabled_language(binary() | atom(), z:context()) -> boolean().
-is_enabled_language(LanguageCode, Context) ->
+-spec is_editable_language(binary() | atom(), z:context()) -> boolean().
+is_editable_language(LanguageCode, Context) when is_binary(LanguageCode) ->
     case maybe_language_code(LanguageCode) of
         true ->
-            Enabled = z_language:enabled_languages(Context),
             try
-                lists:member(z_convert:to_atom(LanguageCode), Enabled)
+                is_editable_language(binary_to_existing_atom(LanguageCode), Context)
             catch
                 error:badarg -> false
             end;
         false ->
             false
-    end.
+    end;
+is_editable_language(LangAtom, Context) when is_atom(LangAtom) ->
+    Enabled = z_language:editable_languages(Context),
+    lists:member(LangAtom, Enabled).
 
 maybe_language_code(<<A,B>> = Code) when A >= $a, A =< $z, B >= $a, B =< $z ->
     z_language:is_valid(Code);
@@ -769,8 +794,6 @@ maybe_language_code(<<A,B,C>> = Code) when A >= $a, A =< $z, B >= $a, B =< $z, C
 maybe_language_code(<<$x,$-,_/binary>> = Code) ->
     % x-default, x-klingon, etc.
     z_language:is_valid(Code);
-maybe_language_code(Code) when is_atom(Code) ->
-    maybe_language_code( atom_to_binary(Code, utf8) );
 maybe_language_code(_) ->
     false.
 

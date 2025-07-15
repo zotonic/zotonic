@@ -5,7 +5,7 @@
 @Author:    Tim Benniks <tim@timbenniks.nl>
 @Author:    Marc Worrell <marc@worrell.nl>
 
-Copyright 2009-2024 Tim Benniks, Marc Worrell
+Copyright 2009-2025 Tim Benniks, Marc Worrell
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -525,6 +525,67 @@ function z_event(name, extraParams) {
   }
 }
 
+
+/* Add or remove a value from the postback data.
+---------------------------------------------------------- */
+
+function z_postback_data_get(name) {
+    const postbackData = z_postback_data();
+    return postbackData[name];
+}
+
+function z_postback_data_set(name, value) {
+    const postbackAttr = document.body.getAttribute("data-wired-postback");
+    let postbackData;
+    if (postbackAttr) {
+        postbackData = JSON.parse(postbackAttr);
+    } else {
+        postbackData = {};
+    }
+    postbackData[name] = value;
+    document.body.setAttribute("data-wired-postback", JSON.stringify(postbackData));
+}
+
+function z_postback_data_set_session(name, value) {
+    cotonic.broker.publish("model/sessionStorage/post/postbackData/" + name, value);
+}
+
+function z_postback_data_set_local(name, value) {
+    cotonic.broker.publish("model/localStorage/post/postbackData/" + name, value);
+}
+
+function z_postback_data_delete(name) {
+    const postbackAttr = document.body.getAttribute("data-wired-postback");
+    if (postbackAttr) {
+        let postbackData = JSON.parse(postbackAttr);
+        delete postbackData[name];
+        document.body.setAttribute("data-wired-postback", JSON.stringify(postbackData));
+    }
+    cotonic.broker.publish("model/sessionStorage/delete/postbackData/" + name);
+    cotonic.broker.publish("model/localStorage/delete/postbackData/" + name);
+}
+
+function z_postback_data() {
+    const postbackAttr = document.body.getAttribute("data-wired-postback");
+    let postbackData;
+    if (postbackAttr) {
+        postbackData = JSON.parse(postbackAttr);
+    } else {
+        postbackData = {};
+    }
+    let sessionStorageData = sessionStorage.postbackData;
+    if (typeof sessionStorageData == 'string') {
+        sessionStorageData = JSON.parse(sessionStorageData);
+        postbackData = {...sessionStorageData, ...postbackData};
+    }
+    let localStorageData = localStorage.postbackData;
+    if (typeof localStorageData == 'string') {
+        localStorageData = JSON.parse(localStorageData);
+        postbackData = {...localStorageData, ...postbackData};
+    }
+    return postbackData;
+}
+
 /* Call the server side notifier for {postback_notify, Message, Context}
 ---------------------------------------------------------- */
 
@@ -543,9 +604,9 @@ function z_notify(message, extraParams) {
   }
   params = ensure_name_value(params);
 
-  let postbackAttr = document.body.getAttribute("data-wired-postback");
-  if (postbackAttr) {
-    params.push({ name: "z_postback_data", value: JSON.parse(postbackAttr) });
+  let postbackData = z_postback_data();
+  if (typeof postbackData == "object") {
+    params.push({ name: "z_postback_data", value: postbackData });
   }
 
   let notify = {
@@ -733,9 +794,9 @@ function z_queue_postback(
   params = extraParams || [];
   params = ensure_name_value(params);
 
-  const postbackAttr = document.body.getAttribute("data-wired-postback");
-  if (postbackAttr) {
-    params.push({ name: "z_postback_data", value: JSON.parse(postbackAttr) });
+  const postbackData = z_postback_data();
+  if (typeof postbackData == "object") {
+    params.push({ name: "z_postback_data", value: postbackData });
   }
 
   const pb_event = {

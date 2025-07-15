@@ -10,9 +10,17 @@ $('#rscform, #translation-tabs').on('shown.bs.tab', '.language-tabs > li > a[dat
 		$(".widget-content-lang-" + hideLang).hide()
 		$(".widget-content-lang-" + showLang).show();
 
+		z_postback_data_set('z_edit_language', showLang);
+
 		setTimeout( () => z_editor.init(), 1 );
 	}
 });
+
+const activeLang = $('#translation-tabs .active');
+if (activeLang.length) {
+	const lang = activeLang.attr('lang');
+	z_postback_data_set('z_edit_language', lang);
+}
 
 cotonic.broker.subscribe("bridge/origin/model/rsc/event/{{ id }}/delete", function(msg) {
 	if ($('#rscform input[name=id]').val() == '{{ id }}') {
