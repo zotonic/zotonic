@@ -62,6 +62,11 @@ get(peer_ip, #context{} = Context) ->
         undefined -> maybe_get_req(peer_ip, Context);
         PeerIP -> PeerIP
     end;
+get(peer, #context{} = Context) ->
+    case z_context:get(peer_ip, Context) of
+        undefined -> maybe_get_req(peer, Context);
+        PeerIP -> inet:ntoa(PeerIP)
+    end;
 get(user_agent, #context{} = Context) ->
     case z_context:get(user_agent, Context) of
         undefined -> maybe_get_req(user_agent, Context);
