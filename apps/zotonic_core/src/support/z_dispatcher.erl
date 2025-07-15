@@ -195,6 +195,8 @@ reload(#context{dispatcher=Dispatcher}) ->
 reload(module_ready, Context) ->
     reload(Context).
 
+name(#context{ dispatcher = Dispatcher }) when Dispatcher =/= undefined ->
+    Dispatcher;
 name(SiteOrContext) ->
     z_utils:name_for_site(?MODULE, SiteOrContext).
 
@@ -414,9 +416,12 @@ update_ets(LookupMap, Context) ->
     Name = name(Context),
     LookupList = maps:to_list(LookupMap),
     Current = ets:match(Name, {'$1', '_'}),
-    DelKeys = lists:flatten(Current) -- maps:keys(LookupMap),
+    NewKeys = maps:keys(LookupMap),
+    NewKeys1 = NewKeys ++ [ z_convert:to_binary(K) || K <- NewKeys ],
+    DelKeys = lists:flatten(Current) -- NewKeys1,
     lists:foreach(fun(K) -> ets:delete(Name, K) end, DelKeys),
-    ets:insert(Name, LookupList).
+    ets:insert(Name, LookupList),
+    ets:insert(Name, [ {z_convert:to_binary(K), Ls} || {K, Ls} <- LookupList ]).
 
 is_dispatch({_Name, Path, _Controller, _Options}) when is_list(Path) -> true;
 is_dispatch({_Name, RscName, _Controller, _Options}) when is_atom(RscName) -> false.
@@ -601,18 +606,17 @@ make_url_for(Name, Args, Escape, _Context) when Name =:= none; Name =:= <<"none"
         dispatch_options = []
     };
 make_url_for(Name, Args, Escape, Context) ->
-    Name1 = z_convert:to_atom(Name),
     Args1 = filter_empty_args(Args),
-    case ets:lookup(name(Context), Name1) of
+    case ets:lookup(name(Context), Name) of
         [] ->
             #dispatch_url{};
         [{_, Patterns}] ->
             case make_url_for1(Args1, Patterns, Escape, undefined, Context) of
-                #dispatch_url{ url = undefined } = DispUrl when Name =/= image->
+                #dispatch_url{ url = undefined } = DispUrl when Name =/= image, Name =/= <<"image">> ->
                     ?LOG_INFO(#{
                         text => <<"Dispatcher make_url_for failed">>,
                         in => zotonic_core,
-                        dispatch_rule => Name1,
+                        dispatch_rule => Name,
                         args => Args1,
                         patterns => Patterns,
                         escape => Escape
