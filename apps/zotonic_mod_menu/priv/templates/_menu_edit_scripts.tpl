@@ -166,7 +166,7 @@ function menu_dequeue()
 
                 break;
             default:
-                console.log("Unknown menu queue command");
+                console.log("Unknown menu queue command", msg);
                 break;
         }
     }
@@ -175,11 +175,11 @@ function menu_dequeue()
 
 cotonic.ready.then(
     function() {
-    	var sortupdater = undefined;
+    	let sortupdater = undefined;
 
     	cotonic.broker.subscribe("bridge/origin/model/rsc/event/+id/delete", function(args, bindings) {
-            var id = parseInt(bindings.id);
-    		var elts = $('#{{ menu_id }} [data-page-id='+bindings.id+']').closest('li.menu-item');
+            const id = parseInt(bindings.id);
+    		const elts = $('#{{ menu_id }} [data-page-id='+bindings.id+']').closest('li.menu-item');
     		if (elts.length) {
     			elts.remove();
     			if (sortupdater) {
@@ -196,7 +196,7 @@ cotonic.ready.then(
         });
 
         cotonic.broker.subscribe("menu/edit/insert-below", function(msg, bindings) {
-            let m = {
+            const m = {
                 cmd: "insert-below",
                 payload: msg.payload
             }
@@ -206,7 +206,7 @@ cotonic.ready.then(
     });
 
 $('#{{ menu_id }}').on('click', '.menu-edit', function(e) {
-	var id = $(this).closest('.menu-wrapper').data('page-id');
+	const id = $(this).closest('[data-page-id]').data('page-id');
 	window.zMenuEditDone = function(id, title) {
 		$(".title-"+id+" .menu-label").html(title);
 	};
@@ -220,12 +220,12 @@ $('#{{ menu_id }}').on('click', '.menu-toggle', function(e) {
 });
 
 $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
-	var $a = $(e.currentTarget);
-	var where = $a.data('where');
-	var $menu_item = $a.closest('li.menu-item');
-	var $sorter = $('#{{ in_sorter }}');
-	var $menuedit = $a.closest(".do_menuedit");
-    var options = $sorter.data().uiMenuedit.options;
+	let $a = $(e.currentTarget);
+	let where = $a.data('where');
+	let $menu_item = $a.closest('li.menu-item');
+	let $sorter = $('#{{ in_sorter }}');
+	let $menuedit = $a.closest(".do_menuedit");
+    let options = $sorter.data().uiMenuedit.options;
 
 	if ($menuedit.length === 0) {
 		$menuedit = $(".do_menuedit", $a.closest("div"));
@@ -238,13 +238,21 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 		{% if is_hierarchy or in_sorter == 'category' %}
 			z_transport('mod_menu', 'ubf', {
 				cmd: "delete",
-				id: $menu_item.children('div').data('page-id')
+				id: $menu_item.find('[data-page-id]').data('page-id')
 			});
 		{% else %}
-            var self = this;
+            const self = this;
+            let title = html_escape($menu_item.find(".menu-label:not(.color-danger, .text-danger):first").text().trim());
+            if (!title) {
+                title = html_escape($menu_item.find(".title:first").text().trim());
+            }
+            if (!title) {
+                title = '{_ <em>Untitled</em> _}';
+            }
+            console.log('t3', title);
             z_dialog_confirm({
                 text: "{_ Are you sure you want to delete _}: "
-                    + "<b>" + $menu_item.find(".menu-label").html() + "</b><br>"
+                    + "<b>" + title + "</b><br>"
                     + "{_ and all indented items below it? _}<br><br><b>{_ THIS CAN NOT BE UNDONE! _}</b>",
                 ok: "{_ Delete _}",
                 on_confirm: function() {
@@ -259,12 +267,12 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 	} else if (where == 'copy') {
 		z_transport("mod_menu", "ubf", {
 			cmd: "copy",
-			id: $menu_item.children('div').data('page-id'),
+			id: $menu_item.children('[data-page-id]').data('page-id'),
             template: options.item_template || ""
 		});
 	} else {
 		window.zMenuEditDone = function(v) {
-            var m = {
+            let m = {
                 cmd: "menu-edit-done",
                 payload: {
                     where: where,
@@ -284,7 +292,7 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
 });
 
 window.zMenuInsertAfter = function(after_id, html) {
-	var $menu_item = $('#{{ menu_id }} div[data-page-id='+after_id+']').closest('li.menu-item');
+	const $menu_item = $('#{{ menu_id }} div[data-page-id='+after_id+']').closest('li.menu-item');
 	$html = $(html);
 	$html.insertAfter($menu_item);
 	$('#{{ in_sorter }}').trigger('sortupdate');
