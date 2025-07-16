@@ -400,7 +400,7 @@ duplicate(Id, DupProps, DupOpts, Context) when is_integer(Id) ->
                     InsOpts = [
                         {is_escape_texts, false},
                         {is_import, true},
-                        {tz, <<"UTC">>}
+                        {default_tz, <<"UTC">>}
                     ],
                     case insert(InsProps, InsOpts, Context) of
                         {ok, NewId} ->
