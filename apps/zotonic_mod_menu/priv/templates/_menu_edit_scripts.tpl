@@ -249,7 +249,6 @@ $('#{{ menu_id }}').on('click', '.dropdown-menu a', function(e) {
             if (!title) {
                 title = '{_ <em>Untitled</em> _}';
             }
-            console.log('t3', title);
             z_dialog_confirm({
                 text: "{_ Are you sure you want to delete _}: "
                     + "<b>" + title + "</b><br>"
