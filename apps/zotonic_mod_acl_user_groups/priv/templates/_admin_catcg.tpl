@@ -56,29 +56,31 @@
     {% endjavascript %}
 {% else %}
     {% javascript %}
-        $('#{{ #catsel }}').change(function() {
-            $('#{{ #cgsel }}').mask();
-            z_transport("admin_acl_rules_rsc",
-                        "ubf",
-                        {
-                            cmd: "reload_cgsel",
-                            cat_id: $(this).val(),
-                            cg_id1: $('#{{ #cgsel }}').val(),
-                            cg_id2: '{{ cg_id|default:id.content_group_id }}',
-                            cgwrap: "{{ #cgwrapper }}",
-                            cgsel: "{{ #cgsel }}",
-                            subject_id: '{{ subject_id }}'
-                        });
-        });
+        {
+            $('#{{ #catsel }}').change(function() {
+                $('#{{ #cgsel }}').mask();
+                z_transport("admin_acl_rules_rsc",
+                            "ubf",
+                            {
+                                cmd: "reload_cgsel",
+                                cat_id: $(this).val(),
+                                cg_id1: $('#{{ #cgsel }}').val(),
+                                cg_id2: '{{ cg_id|default:id.content_group_id }}',
+                                cgwrap: "{{ #cgwrapper }}",
+                                cgsel: "{{ #cgsel }}",
+                                subject_id: '{{ subject_id }}'
+                            });
+            });
 
-        const cats = $('#{{ #catsel }} option:enabled');
-        const cgs = $('#{{ #cgsel }} option:enabled');
+            const cats = $('#{{ #catsel }} option:enabled');
+            const cgs = $('#{{ #cgsel }} option:enabled');
 
-        if (!$('#{{ #catsel }}').val() && cats.length == 1) {
-            $('#{{ #catsel }}').val(cats[0].value);
-            $('#{{ #catsel }}').trigger('change');
-        } else if ($('#{{ #catsel }}').val() && cgs.length >= 1 && !$('#{{ #cgsel }}').val()) {
-            $('#{{ #catsel }}').trigger('change');
+            if (!$('#{{ #catsel }}').val() && cats.length == 1) {
+                $('#{{ #catsel }}').val(cats[0].value);
+                $('#{{ #catsel }}').trigger('change');
+            } else if ($('#{{ #catsel }}').val() && cgs.length >= 1 && !$('#{{ #cgsel }}').val()) {
+                $('#{{ #catsel }}').trigger('change');
+            }
         }
     {% endjavascript %}
 {% endif %}
