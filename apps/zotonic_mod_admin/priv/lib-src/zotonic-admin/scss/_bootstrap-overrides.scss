@@ -58,6 +58,11 @@
         background-color: $brand-primary;
         color: #fff;
         text-shadow: $lightOnDarkTextShadow;
+
+        .text-muted {
+            color: inherit;
+            opacity: 0.6;
+        }
     }
 }
 

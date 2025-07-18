@@ -251,6 +251,12 @@ pre:empty {
   color: #fff;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
 }
+.dropdown-menu > li.active > a .text-muted,
+.dropdown-menu > li.active > a:hover .text-muted,
+.dropdown-menu > li > a:hover .text-muted {
+  color: inherit;
+  opacity: 0.6;
+}
 
 .well {
   box-shadow: none;
@@ -339,6 +345,11 @@ code {
   line-height: 18px;
   vertical-align: bottom;
   text-align: center;
+}
+
+/* Give buttons that can wrap a bit of margin */
+.buttons .btn {
+  margin-bottom: 4px;
 }
 
 .btn.disabled {
