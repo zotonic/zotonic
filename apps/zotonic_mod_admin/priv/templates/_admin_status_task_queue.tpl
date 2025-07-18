@@ -20,7 +20,7 @@
                     {% if t.error_count_total %}
                         <br>
                         <span class="text-danger">
-                            <span class="fa fa-warning"></span>
+                            <span class="glyphicon glyphicon-exclamation-sign"></span>
                             {% trans "Some tasks are retrying.<br>Total errors: {total}<br>Highest for single task: {max}"
                                     total=t.error_count_total
                                     max=t.error_count_max

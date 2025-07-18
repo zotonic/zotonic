@@ -7,7 +7,7 @@
                     {{ lang.name }} <span class="text-muted">/ {{ lang.name_en }} ({{ code }})</span>
 
                     <button class="btn btn-link" title="{_ Delete translation _}" id="{{ #del.code }}">
-                        <span class="text-danger"><span class="fa fa-trash"></span></span>
+                        <span class="text-danger"><span class="glyphicon glyphicon-remove-sign"></span></span>
                     </button>
 
                     {% wire id=#del.code

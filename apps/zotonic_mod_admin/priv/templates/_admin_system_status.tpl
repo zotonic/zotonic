@@ -84,14 +84,14 @@
                             <td>{{ (d.size * 1024)|filesizeformat }}</td>
                             <td>
                                 {% if d.alert %}
-                                    <span class="fa fa-warning"></span>
+                                    <span class="glyphicon glyphicon-exclamation-sign"></span>
                                 {% endif %}
                                 {{ d.percent_used }}%</td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
-            <p class="help-block"><span class="fa fa-info-circle"></span> {_ Refreshed every 30 minutes. _}</p>
+            <p class="help-block"><span class="glyphicon glyphicon-info-sign"></span> {_ Refreshed every 30 minutes. _}</p>
         </div>
     </div>
 </div>
