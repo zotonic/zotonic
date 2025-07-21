@@ -42,11 +42,12 @@
 -type user_group_id() :: rsc_id().
 -type content_group_id() :: rsc_id().
 -type category_id() :: rsc_id().
+-type visibility() :: undefined | integer().
 -type rsc_action() :: view | insert | delete | update | link.
 
 -type module_rule() :: {module_name(), module_action(), user_group_id(), allow()}.
--type rsc_rule() :: {content_group_id(), {category_id(), rsc_action(), only_if_owner(), allow()}, user_group_id()}.
--type collab_rule() :: {collab, rsc_action(), collab}.
+-type rsc_rule() :: {content_group_id(), {category_id(), visibility(), rsc_action(), only_if_owner(), allow()}, user_group_id()}.
+-type collab_rule() :: {collab, {category_id(), visibility(), rsc_action(), only_if_owner(), allow()}, collab}.
 
 -type rule() :: rsc_rule() | module_rule().
 -type user_group_path() :: {user_group_id(), list(user_group_id())}.
@@ -79,7 +80,7 @@ rule_content_groups(Rules) ->
         Rules),
     maps:keys(Ks).
 
--spec expand_rsc(edit|publish, z:context()) -> list(rule()).
+-spec expand_rsc(edit|publish, z:context()) -> list(rsc_rule()).
 expand_rsc(State, Context) ->
     GroupTree = m_hierarchy:menu(content_group, Context),
     UserTree = m_hierarchy:menu(acl_user_group, Context),
@@ -92,7 +93,7 @@ expand_module(State, UserTree, Context) ->
     RuleRows = resort_deny_rules(m_acl_rule:all_rules(module, State, Context)),
     Rules = expand_rule_rows(<<"module">>, Modules1, RuleRows, Context),
     lists:map(
-        fun({x,{M,A,_IsOwner,IsAllow},GId}) ->
+        fun({x,{M, _V, A,_IsOwner,IsAllow},GId}) ->
             {z_convert:to_atom(M),A,GId,IsAllow}
         end,
         expand_rules([{x,[]}], Rules, UserTree, Context)).
@@ -143,6 +144,7 @@ expand_rule_row(Prop, Row, Cs, NonMetaCs, Context) when is_binary(Prop) ->
     UserGroupId = maps:get(<<"acl_user_group_id">>, Row, undefined),
     ContentGroupId = maps:get(<<"content_group_id">>, Row, undefined),
     IsCategoryExact = maps:get(<<"is_category_exact">>, Row, false),
+    Visibility = maps:get(<<"visibility">>, Row, undefined),
     PropId = maps:get(Prop, Row),
     ContentGroupName = m_rsc:p_no_acl(ContentGroupId, name, Context),
     CIdsEdit = maybe_filter_meta(ContentGroupName, Prop, PropId, Cs, NonMetaCs, Context),
@@ -150,7 +152,7 @@ expand_rule_row(Prop, Row, Cs, NonMetaCs, Context) when is_binary(Prop) ->
     lists:flatten(
         [
             [
-              {ContentGroupId, {CId, Action, IsOwner, IsAllow}, UserGroupId}
+              {ContentGroupId, {CId, Visibility, Action, IsOwner, IsAllow}, UserGroupId}
               || CId <- select_cids(Action, IsCategoryExact, CIdsEdit, CIdsView)
             ]
             || Action <- Actions
@@ -269,5 +271,5 @@ resort_deny_rules([R|Rs], GroupId, DenyAcc, Acc) ->
 test() ->
     [] = tree_expand([]),
     [{1,[1]}, {2,[2]}] = tree_expand([{1,[]}, {2,[]}]),
-    [{1,[1]},{2,[2,3]},{3,[3]}] = acl_user_groups_rules:tree_expand([{1,[]}, {2,[{3,[]}]}]),
+    [{1,[1]},{2,[2,3]},{3,[3]}] = tree_expand([{1,[]}, {2,[{3,[]}]}]),
     ok.

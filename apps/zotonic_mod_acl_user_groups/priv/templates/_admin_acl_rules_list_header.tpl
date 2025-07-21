@@ -4,8 +4,10 @@
         <th>{_ ACL user group _}</th>
         <th>{_ Content group _}</th>
         <th>{_ Category _}</th>
+        <th>{_ Visibility _}</th>
     {% elseif kind == `collab` %}
         <th>{_ Category _}</th>
+        <th>{_ Visibility _}</th>
     {% elseif kind == `module` %}
         <th>{_ ACL user group _}</th>
         <th>{_ Module _}</th>
