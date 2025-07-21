@@ -64,6 +64,8 @@
     await_table/3,
     lookup/2,
     await_lookup/2,
+    match/2,
+    await_match/2,
     rebuild/2,
     observe_admin_menu/3,
     observe_rsc_update_done/2,
@@ -357,7 +359,7 @@ observe_rsc_update(#rsc_update{ id = Id, props = PrevProps }, {ok, NewProps}, Co
         orelse maps:is_key(<<"acl_upload_size">>, NewProps1)
     of
         true ->
-            case mod_acl_user_groups:is_acl_admin(Context) of
+            case is_acl_admin(Context) of
                 true ->
                     {ok, NewProps1};
                 false ->
@@ -569,6 +571,17 @@ lookup1(TId, Key) ->
         [] -> undefined;
         [{_,V}|_] -> V
     end.
+
+match(Pattern, Context) ->
+    match1(table(Context), Pattern).
+
+await_match(Pattern, Context) ->
+    match1(await_table(Context), Pattern).
+
+match1(undefined, _Pattern) ->
+    [];
+match1(TId, Pattern) ->
+    ets:match(TId, Pattern).
 
 
 -spec observe_admin_menu(#admin_menu{}, Acc, z:context()) -> Result when

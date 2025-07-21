@@ -107,6 +107,19 @@
                     </label>
                 </div>
             </div>
+            {% block visibility_field %}
+            <div class="form-group">
+                <label class="col-sm-3">
+                    {_ Visibility _}
+                </label>
+                <div class="col-sm-7">
+                    <input id="{{ #visibility }}" name="visibility"
+                        class="form-control" type="number"
+                        placeholder="{_ Any visibility _}" value="{{ rule.visibility }}"
+                    />
+                </div>
+            </div>
+            {% endblock %}
         {% endif %}
 
         {% if kind == `module` %}
