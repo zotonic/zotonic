@@ -87,6 +87,11 @@ Zotonic-wide configuration for sending email
 |smtp_password             |The password for the relay host, only |
 |                          |needed if smtp_relay is enabled.      |
 +--------------------------+--------------------------------------+
+|smtp_relay_tls_options    |Optionally pass tls_options for the   |
+|                          |gen_smtp socket. All tls_options() as |
+|                          |defined by the module ssl are         |
+|                          |supported.                            |
++--------------------------+--------------------------------------+
 |smtp_no_mx_lookups        |Set to true to not do a MX lookup     |
 |                          |before sending mail. (default: false) |
 +--------------------------+--------------------------------------+

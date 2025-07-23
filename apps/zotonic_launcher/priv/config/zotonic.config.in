@@ -147,6 +147,7 @@
    %% {smtp_ssl, false},
    %% {smtp_username, undefined},
    %% {smtp_password, undefined},
+   %% {smtp_relay_tls_options, []},
 
 %%% SMTP fallback to plaintext delivery if the TLS connection failed.
 %%% This defaults to 'true' because many SMTP servers use self-signed certificates, which will

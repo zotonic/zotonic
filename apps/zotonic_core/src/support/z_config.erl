@@ -270,6 +270,7 @@ default(smtp_relay) -> false;
 default(smtp_host) -> "localhost";
 default(smtp_port) -> 25;
 default(smtp_ssl) -> false;
+default(smtp_relay_tls_options) -> [];
 default(smtp_plaintext_fallback) -> true;
 default(smtp_listen_ip) -> {127,0,0,1};
 default(smtp_listen_port) -> 2525;
@@ -366,6 +367,7 @@ all() ->
             smtp_host,
             smtp_port,
             smtp_ssl,
+            smtp_relay_tls_options,
             smtp_listen_ip,
             smtp_listen_port,
             smtp_starttls,
