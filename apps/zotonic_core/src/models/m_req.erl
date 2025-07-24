@@ -62,6 +62,11 @@ get(peer_ip, #context{} = Context) ->
         undefined -> maybe_get_req(peer_ip, Context);
         PeerIP -> PeerIP
     end;
+get(peer, #context{} = Context) ->
+    case z_context:get(peer_ip, Context) of
+        undefined -> maybe_get_req(peer, Context);
+        PeerIP -> ip_ntob(PeerIP)
+    end;
 get(user_agent, #context{} = Context) ->
     case z_context:get(user_agent, Context) of
         undefined -> maybe_get_req(user_agent, Context);
@@ -106,6 +111,13 @@ get_req(referer, Context) -> cowmachine_req:get_req_header(<<"referer">>, Contex
 get_req(referrer, Context) -> get_req(referer, Context);
 get_req(_Key, _Context) -> undefined.
 
+ip_ntob(IP) when is_tuple(IP) ->
+    case inet:ntoa(IP) of
+        {error, _} -> undefined;
+        IPS -> z_convert:to_binary(IPS)
+    end;
+ip_ntob(_) ->
+    undefined.
 
 -spec values( z:context() ) -> list({atom(), any()}).
 values(Context) ->
