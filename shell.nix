@@ -6,6 +6,7 @@ pkgs.mkShell {
     rebar3
     erlfmt
     imagemagick
+    ghostscript
     ffmpeg
     postgresql
     gettext
