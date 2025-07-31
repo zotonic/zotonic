@@ -64,7 +64,7 @@
             <div class="col-sm-6">
                 <label class="control-label">{_ Till _}</label>
                 <div>
-                    {% include "_edit_date.tpl" date=id.date_end|default:id.date_start
+                    {% include "_edit_date.tpl" date=id.date_end
                     name="date_end" is_end=1 date_is_all_day=id.date_is_all_day  is_editable=id.is_editable timezone=id.tz %}
                 </div>
             </div>
