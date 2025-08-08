@@ -359,6 +359,16 @@ url_strip_language(<<$/,A,B,$/, Rest/binary>> = Url) ->
         true -> <<$/, Rest/binary>>;
         false -> Url
     end;
+url_strip_language([$/,A,B,C,$/ | Rest] = Url) ->
+    case z_trans:is_language([A,B,C]) of
+        true -> [$/|Rest];
+        false -> Url
+    end;
+url_strip_language(<<$/,A,B,C,$/, Rest/binary>> = Url) ->
+    case z_trans:is_language([A,B,C]) of
+        true -> <<$/, Rest/binary>>;
+        false -> Url
+    end;
 url_strip_language(Url) ->
     Url.
 
