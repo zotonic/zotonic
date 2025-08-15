@@ -123,7 +123,7 @@ ping(Context) ->
 
 maybe_set_peer_ip(#{ peer_ip := PeerIp }, Context) ->
     z_context:set(peer_ip, PeerIp, Context);
-maybe_set_peer_ip(#{ }, Context) ->
+maybe_set_peer_ip(_Payload, Context) ->
     Context.
 
 maybe_set_language(#{ <<"preferences">> := #{ <<"language">> := <<>> } }, Context) ->
