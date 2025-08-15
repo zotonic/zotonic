@@ -39,3 +39,10 @@
         <em>{_ All Categories _}</em>
     {% endif %}
 </td>
+<td>
+    {% if rule.visibility|is_defined %}
+        {{ rule.visibility }}
+    {% else %}
+        <em>{_ Any visibility _}</em>
+    {% endif %}
+</td>

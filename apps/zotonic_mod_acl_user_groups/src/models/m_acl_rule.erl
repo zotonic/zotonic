@@ -410,7 +410,8 @@ ensure_acl_rule_rsc(Context) ->
                 #column_def{name=is_owner, type="boolean", is_nullable=false, default="false"},
                 #column_def{name=is_category_exact, type="boolean", is_nullable=false, default="false"},
                 #column_def{name=category_id, type="integer", is_nullable=true},
-                #column_def{name=content_group_id, type="integer", is_nullable=true}
+                #column_def{name=content_group_id, type="integer", is_nullable=true},
+                #column_def{name=visibility, type="integer", is_nullable=true, default="null"}
             ],
             z_db:create_table(acl_rule_rsc, Columns, Context),
             fk_setnull("acl_rule_rsc", "creator_id", Context),
@@ -422,6 +423,7 @@ ensure_acl_rule_rsc(Context) ->
             ensure_column_is_category_exact(acl_rule_rsc, Context),
             ensure_column_is_block(acl_rule_rsc, Context),
             ensure_column_managed_by(acl_rule_rsc, Context),
+            ensure_column_visibility(acl_rule_rsc, Context),
             ensure_fix_nullable(acl_rule_rsc, Context)
     end.
 
@@ -448,7 +450,8 @@ ensure_acl_rule_collab(Context) ->
             Columns = shared_table_columns() ++ [
                 #column_def{name=is_owner, type="boolean", is_nullable=false, default="false"},
                 #column_def{name=category_id, type="integer", is_nullable=true},
-                #column_def{name=is_category_exact, type="boolean", is_nullable=false, default="false"}
+                #column_def{name=is_category_exact, type="boolean", is_nullable=false, default="false"},
+                #column_def{name=visibility, type="integer", is_nullable=true, default="null"}
             ],
             z_db:create_table(acl_rule_collab, Columns, Context),
             fk_setnull("acl_rule_collab", "creator_id", Context),
@@ -456,8 +459,9 @@ ensure_acl_rule_collab(Context) ->
             fk_cascade("acl_rule_collab", "category_id", Context);
         true ->
             ensure_column_is_category_exact(acl_rule_collab, Context),
-            ensure_column_is_block(acl_rule_module, Context),
-            ensure_column_managed_by(acl_rule_module, Context)
+            ensure_column_visibility(acl_rule_collab, Context),
+            ensure_column_is_block(acl_rule_collab, Context),
+            ensure_column_managed_by(acl_rule_collab, Context)
     end.
 
 ensure_column_is_category_exact(Table, Context) ->
@@ -496,6 +500,19 @@ ensure_column_managed_by(Table, Context) ->
             [] = z_db:q(lists:flatten([
                     "alter table ", atom_to_list(Table),
                     " add column managed_by character varying(255)"
+                ]), Context),
+            z_db:flush(Context)
+    end.
+
+ensure_column_visibility(Table, Context) ->
+    Columns = z_db:column_names(Table, Context),
+    case lists:member(visibility, Columns) of
+        true ->
+            ok;
+        false ->
+            [] = z_db:q(lists:flatten([
+                    "alter table ", atom_to_list(Table),
+                    " add column visibility integer default null"
                 ]), Context),
             z_db:flush(Context)
     end.
