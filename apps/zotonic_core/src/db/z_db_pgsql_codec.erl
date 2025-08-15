@@ -60,7 +60,7 @@ decode(Cell, bytea, _State) ->
     decode_bytea_value(epgsql_codec_text:decode(Cell, bytea, []));
 % jsonb
 decode(Cell, jsonb, _State) ->
-    epgsql_codec_json:decode(Cell, jsonb, []);
+    epgsql_codec_json:decode(Cell, jsonb, jsxrecord);
 % datetime types
 decode(Cell, TypeName, State) ->
     decode_datetime_value(epgsql_codec_datetime:decode(Cell, TypeName, State)).

@@ -80,11 +80,11 @@ postgres_json_conversion_test() ->
     %% Should be encoded as null value in postgres, which is returned as undefined.
     [{undefined}] = z_db:q("select $1::jsonb;", [{term_json, undefined}], Context),
 
-    %% Currently the result is not decoded.
-    [{<<"{\"test\": 123}">>}] = z_db:q("select $1::jsonb;", [{term_json, #{ test => 123 }}], Context),
+    %% jsonb typed cells are decoded.
+    [{#{<<"test">> := 123}}] = z_db:q("select $1::jsonb;", [{term_json, #{ test => 123 }}], Context),
 
-    %% Check if jsxrecord is used to encode the terms.
-    [{<<"{\"list\": [1], \"_type\": \"rsc_list\"}">>}] =
+    %% Check if jsxrecord is used to encode and decode the terms.
+    [{#rsc_list{ list = [1] }}] =
         z_db:q("select $1::jsonb;", [{term_json, #rsc_list{ list = [1] }}], Context),
 
     ok.
