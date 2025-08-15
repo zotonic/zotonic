@@ -71,7 +71,7 @@
 % Default port for plain text email delivery
 -define(SMTP_PORT_PLAIN_TEXT, 25).
 
--record(state, {smtp_relay, smtp_relay_opts, smtp_no_mx_lookups,
+-record(state, {smtp_relay, smtp_relay_opts, smtp_relay_tls_options, smtp_no_mx_lookups,
                 smtp_verp_as_from, smtp_bcc, override,
                 sending=[], delete_sent_after, poll_ref}).
 -record(email_queue, {id, retry_on=inc_timestamp(os:timestamp(), 1), retry=0,
@@ -588,13 +588,14 @@ create_email_queue() ->
 %% @doc Refetch the emailer configuration so that we adapt to any config changes.
 update_config(State) ->
     SmtpRelay = z_config:get(smtp_relay),
-    SmtpRelayOpts =
+    {SmtpRelayOpts, SmtpRelayTLSOpts} =
         case SmtpRelay of
             true ->
-                [{relay, z_config:get(smtp_host, "localhost")},
-                 {port, z_config:get(smtp_port, ?SMTP_PORT_PLAIN_TEXT)}
-                ]
-                ++ case {z_config:get(smtp_username),
+                {
+                    [{relay, z_config:get(smtp_host, "localhost")},
+                        {port, z_config:get(smtp_port, ?SMTP_PORT_PLAIN_TEXT)}
+                    ]
+                    ++ case {z_config:get(smtp_username),
                          z_config:get(smtp_password)} of
                         {undefined, undefined} ->
                             [];
@@ -602,13 +603,16 @@ update_config(State) ->
                             [{auth, always},
                              {username, User},
                              {password, Pass}]
-                   end
-                ++ case z_config:get(smtp_ssl, false) of
-                    true -> [ {tls, always} ];
-                    false -> []
-                end;
+                        end
+                    ++ case z_config:get(smtp_ssl, false) of
+                        true -> [ {tls, always} ];
+                        false -> []
+                    end,
+
+                    z_config:get(smtp_relay_tls_options, [])
+                };
             false ->
-                []
+                {[], []}
         end,
     SmtpNoMxLookups = z_config:get(smtp_no_mx_lookups),
     SmtpVerpAsFrom = z_config:get(smtp_verp_as_from),
@@ -617,6 +621,7 @@ update_config(State) ->
     DeleteSentAfter = z_config:get(smtp_delete_sent_after),
     State#state{smtp_relay=SmtpRelay,
                 smtp_relay_opts=SmtpRelayOpts,
+                smtp_relay_tls_options=SmtpRelayTLSOpts,
                 smtp_no_mx_lookups=SmtpNoMxLookups,
                 smtp_verp_as_from=SmtpVerpAsFrom,
                 smtp_bcc=SmtpBcc,
@@ -921,7 +926,7 @@ client_smtphost(Context) ->
 relay_site_options(#state{ smtp_relay = true } = State, _Context) ->
     Relay = proplists:get_value(relay, State#state.smtp_relay_opts),
     RelayOpts = [
-        {tls_options, [ tls_versions() | tls_certificate_check:options(Relay) ]}
+        {tls_options, lists:merge3([tls_versions()], State#state.smtp_relay_tls_options, tls_certificate_check:options(Relay))}
         | State#state.smtp_relay_opts
     ],
     {true, RelayOpts};
