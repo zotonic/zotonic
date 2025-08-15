@@ -331,6 +331,8 @@ trans(Text, Lang) when is_list(Text) ->
     trans(unicode:characters_to_binary(Text), Lang);
 trans(Text, #context{} = Context) when is_binary(Text) ->
     trans(Text, z_context:languages(Context), Context);
+trans(#trans{} = Trans, #context{} = Context) ->
+    trans(Trans, z_context:languages(Context));
 trans(#trans{ tr = Tr }, Langs) ->
     case find_first(Langs, Tr) of
         undefined ->
