@@ -342,7 +342,10 @@ english_name(Code) ->
 %% @doc Returns the language name in the current language.
 -spec localized_name( language(), z:context() ) -> binary() | undefined.
 localized_name(Code, Context) ->
-    z_trans:trans(english_name(Code), Context).
+    case z_context:language(Context) of
+        Code -> get_property(Code, name);
+        _ -> z_trans:trans(english_name(Code), Context)
+    end.
 
 %% @doc Returns the local language name in the language itself.
 -spec local_name( language() ) -> binary() | undefined.
