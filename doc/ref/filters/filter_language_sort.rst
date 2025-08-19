@@ -1,7 +1,7 @@
 .. highlight:: erlang
 .. include:: meta-language_sort.rst
 
-Sort a list of language codes or map with languages on their name.
+Sort a list of language codes or map with languages on their sort key.
 Return a list of ``{Code, LanguageProps}`` pairs.
 
 LanguageProps is a map::

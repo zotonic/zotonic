@@ -10,6 +10,7 @@ Translation
    ../filter_language
    ../filter_language_dir
    ../filter_language_sort
+   ../filter_language_sort_localized
    ../filter_media_for_language
    ../filter_set_url_language
    ../filter_trans_languages

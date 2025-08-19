@@ -846,6 +846,7 @@ generate_core() ->
                     }),
                     translation_po:generate(translation_scan:scan(core_apps())),
                     generate_country_pot(),
+                    generate_languages_pot(),
                     consolidate_core();
                 false ->
                     {error, gettext_notfound}
@@ -858,6 +859,11 @@ generate_country_pot() ->
     ZotonicPot = filename:join([ code:priv_dir(zotonic_core), "translations", "zotonic-country.pot" ]),
     Countries = [ {Country, <<>>, undefined} || {_Code, Country} <- l10n_iso2country:iso2country() ],
     z_gettext_compile:generate(ZotonicPot, lists:sort(Countries)).
+
+generate_languages_pot() ->
+    ZotonicPot = filename:join([ code:priv_dir(zotonic_core), "translations", "zotonic-language.pot" ]),
+    Languages = [ {Language, <<>>, undefined} || Language <- z_language_data:language_names_en() ],
+    z_gettext_compile:generate(ZotonicPot, Languages).
 
 %% @doc Return a list of all core modules and sites - only for the zotonic git project.
 core_apps() ->
