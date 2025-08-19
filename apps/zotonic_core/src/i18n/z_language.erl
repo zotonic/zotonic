@@ -1,3 +1,5 @@
+%% @author Arthur Clemens
+%% @copyright Copyright 2016-2025 Arthur Clemens
 %% @doc Language code handling functions.
 %%
 %% Mandatory background read on language tags: [1].
