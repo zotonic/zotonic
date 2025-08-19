@@ -129,12 +129,13 @@ check_db_and_upgrade(Context, Tries) when Tries =< 2 ->
                     %% Normal startup, do upgrade / check
                     ok = z_db:transaction(
                             fun(Context1) ->
-                                C = z_db_pgsql:get_raw_connection(Context1),
+                                {ok, C} = z_db_pgsql:get_raw_connection(Context1),
                                 Database = proplists:get_value(dbdatabase, DbOptions),
                                 Schema = proplists:get_value(dbschema, DbOptions),
                                 ok = upgrade(C, Database, Schema),
                                 ok = upgrade_models(Context),
-                                ok = sanity_check(C, Database, Schema)
+                                ok = sanity_check(C, Database, Schema),
+                                ok = z_db_pgsql:release_raw_connection(Context1)
                             end,
                             Context),
                     ok

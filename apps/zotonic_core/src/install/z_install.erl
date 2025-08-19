@@ -96,7 +96,7 @@ install_models(Context) ->
     Context :: z:context(),
     Sql :: [ string() | [ string() ] ].
 install_sql_list(Context, Model) ->
-    C = z_db_pgsql:get_raw_connection(Context),
+    {ok, C} = z_db_pgsql:get_raw_connection(Context),
     lists:foreach(
         fun
             ([ Q | _ ] = SqlList) when is_list(Q) ->
@@ -108,7 +108,8 @@ install_sql_list(Context, Model) ->
             (Sql) ->
                 {ok, [], []} = epgsql:squery(C, Sql)
         end,
-        Model).
+        Model),
+    ok = z_db_pgsql:release_raw_connection(Context).
 
 
 %% @doc Return a list containing the SQL statements to build the database model

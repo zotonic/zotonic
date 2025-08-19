@@ -51,7 +51,8 @@
     squery/3,
     equery/4,
     execute_batch/4,
-    get_raw_connection/1
+    get_raw_connection/1,
+    release_raw_connection/1
 ]).
 
 -define(CONNECT_TIMEOUT, 5000).
@@ -325,8 +326,22 @@ is_tracing() ->
 %% @doc This function MUST NOT be used, but currently is required by the
 %% install / upgrade routines. Can only be called from inside a
 %% z_db:transaction/2.
+-spec get_raw_connection(Context) -> {ok, ConnPid} | {error, Reason} when
+    Context :: z:context(),
+    ConnPid :: pid(),
+    Reason :: term().
 get_raw_connection(#context{dbc=Worker}) when Worker =/= undefined ->
-    gen_server:call(Worker, get_raw_connection).
+    gen_server:call(Worker, {get_raw_connection, self()}).
+
+%% @doc After a connection is fetched using get_raw_connection/1, use this
+%% to release the connection again. Otherwise the connection can not be used
+%% for other SQL queries. This must be called from inside the same transaction
+%% as get_raw_connection/1 was called.
+-spec release_raw_connection(Context) -> ok | {error, Reason} when
+    Context :: z:context(),
+    Reason :: term().
+release_raw_connection(#context{dbc=Worker}) when Worker =/= undefined ->
+    gen_server:call(Worker, {release_raw_connection, self()}).
 
 
 %%
@@ -469,16 +484,50 @@ handle_call({return_conn, _Ref, Pid}, _From, #state{ busy_pid = OtherPid } = Sta
     }),
     {reply, {error, notyours}, State, timeout(State)};
 
-handle_call(get_raw_connection, From, #state{ conn = undefined, conn_args = Args } = State) ->
+handle_call({get_raw_connection, CallerPid}, _From, #state{ busy_pid = BusyPid } = State) when BusyPid =/= undefined, CallerPid =/= BusyPid ->
+    ?LOG_ERROR(#{
+        text => <<"Raw SQL connection requested but already in use by other pid">>,
+        in => zotonic_core,
+        result => error,
+        reason => busy,
+        request_pid => CallerPid,
+        busy_pid => BusyPid,
+        worker_pid => self()
+    }),
+    {reply, {error, busy}, State, timeout(State)};
+handle_call({get_raw_connection, CallerPid}, From, #state{ conn = undefined, conn_args = Args } = State) ->
     case connect(Args, From) of
         {ok, Conn} ->
             erlang:monitor(process, Conn),
-            handle_call(get_raw_connection, From, State#state{conn=Conn});
+            handle_call({get_raw_connection, CallerPid}, From, State#state{conn=Conn});
         {error, _} = E ->
             {reply, E, State}
     end;
-handle_call(get_raw_connection, _From, #state{ conn = Conn } = State) ->
-    {reply, Conn, State, ?RAW_CONN_TIMEOUT};
+handle_call({get_raw_connection, CallerPid}, _From, #state{ conn = Conn } = State) ->
+    State1 = State#state{
+        busy_monitor = erlang:monitor(process, CallerPid),
+        busy_pid = CallerPid
+    },
+    {reply, {ok, Conn}, State1, ?RAW_CONN_TIMEOUT};
+
+handle_call({release_raw_connection, CallerPid}, _From, #state{ busy_pid = BusyPid } = State) when BusyPid =:= CallerPid ->
+    erlang:demonitor(State#state.busy_monitor),
+    State1 = State#state{
+        busy_monitor = undefined,
+        busy_pid = undefined
+    },
+    {reply, ok, State1, ?IDLE_TIMEOUT};
+handle_call({release_raw_connection, CallerPid}, _From, #state{ busy_pid = BusyPid } = State) ->
+    ?LOG_ERROR(#{
+        text => <<"Raw SQL connection released but in use by other pid">>,
+        in => zotonic_core,
+        result => error,
+        reason => busy,
+        request_pid => CallerPid,
+        busy_pid => BusyPid,
+        worker_pid => self()
+    }),
+    {reply, {error, notyours}, State, ?RAW_CONN_TIMEOUT};
 
 handle_call(Message, _From, State) ->
     ?LOG_NOTICE(#{
@@ -652,10 +701,16 @@ code_change(_OldVsn, State, _Extra) ->
 %% Helper functions
 %%
 
-%% @doc Close the connection to the SQL server
+%% @doc Cancel any running query and close the connection to the SQL server
 disconnect(#state{ conn = undefined } = State) ->
     demonitor_busy(State);
-disconnect(#state{ conn = Conn } = State) ->
+disconnect(#state{ conn = Conn, busy_pid = Pid } = State) when is_pid(Pid) ->
+    ok = epgsql:cancel(Conn),
+    disconnect_1(State);
+disconnect(#state{ busy_pid = undefined } = State) ->
+    disconnect_1(State).
+
+disconnect_1(#state{ conn = Conn, busy_pid = undefined } = State) ->
     ok = epgsql:close(Conn),
     State1 = receive
         {'DOWN', _Ref, process, Conn, _Reason} ->
