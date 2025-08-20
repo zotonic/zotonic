@@ -343,6 +343,7 @@ all() ->
             log_dir,
             cache_dir,
             password,
+            admin_email,
             timezone,
             listen_ip,
             listen_ip6,
