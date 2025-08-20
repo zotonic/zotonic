@@ -88,11 +88,11 @@
 
 -type squery_result() :: epgsql_cmd_squery:response()
                        | epgsql_sock:error()
-                       | {error, connection_down | paused | term()}.
+                       | {error, connection_down | paused | query_timeout | #error{} | term()}.
 
 -type equery_result() :: epgsql_cmd_equery:response()
                        | epgsql_sock:error()
-                       | {error, connection_down | paused | term()}.
+                       | {error, connection_down | paused | query_timeout | #error{} | term()}.
 
 -export_type([ query_result/0, squery_result/0, equery_result/0 ]).
 
@@ -265,7 +265,11 @@ execute_batch(Worker, Sql, Batch, Timeout) ->
 
 maybe_map_error({error, #error{ codename = query_canceled }}) ->
     {error, query_timeout};
-maybe_map_error(Result) ->
+maybe_map_error({error, _} = Error) ->
+    Error;
+maybe_map_error({ok, _, _} = Result) ->
+    Result;
+maybe_map_error({ok, _} = Result) ->
     Result.
 
 
