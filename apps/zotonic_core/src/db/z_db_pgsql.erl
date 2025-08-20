@@ -267,6 +267,8 @@ maybe_map_error({error, #error{ codename = query_canceled }}) ->
     {error, query_timeout};
 maybe_map_error({error, _} = Error) ->
     Error;
+maybe_map_error({ok, _, _, _} = Result) ->
+    Result;
 maybe_map_error({ok, _, _} = Result) ->
     Result;
 maybe_map_error({ok, _} = Result) ->
