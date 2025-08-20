@@ -21,7 +21,8 @@
 
 -export([
     request/5,
-    request_process/5
+    request_process/5,
+    send_admin/3
     ]).
 
 -include_lib("kernel/include/logger.hrl").

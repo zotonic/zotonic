@@ -309,6 +309,8 @@ handle_info({'DOWN', MRef, process, _Pid, Reason}, #state{request_monitor = MRef
         hostname => State#state.request_hostname,
         san => State#state.request_san
     }),
+    Context = z_context:new(State#state.site),
+    z_letsencrypt_job:send_admin(Reason, State#state.request_hostname, Context),
     gen_server:cast(self(), load_cert),
     {noreply, State#state{
         request_monitor = undefined,
