@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-08-20 13:19\n"
+"PO-Revision-Date: 2025-08-20 16:45\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -17,151 +17,151 @@ msgstr ""
 "Language: et_EE\n"
 
 msgid "Abkhazian"
-msgstr ""
+msgstr "Abhaasia"
 
 msgid "Afar"
-msgstr ""
+msgstr "Afar"
 
 msgid "Afrikaans"
-msgstr ""
+msgstr "Afrikaans"
 
 msgid "Albanian"
-msgstr ""
+msgstr "Albaania"
 
 msgid "Amharic"
-msgstr ""
+msgstr "Amharic"
 
 msgid "Arabic"
-msgstr ""
+msgstr "Araabia keel"
 
 msgid "Arabic - Algerian Sahara"
-msgstr ""
+msgstr "Araabia keel - Alžeeria Sahara"
 
 msgid "Arabic - Bahrain"
-msgstr ""
+msgstr "Araabia keel - Bahrein"
 
 msgid "Arabic - Egypt"
-msgstr ""
+msgstr "Araabia keel - Egiptus"
 
 msgid "Arabic - Gulf"
-msgstr ""
+msgstr "Araabia keel - Pärsia laht"
 
 msgid "Arabic - Iraq"
-msgstr ""
+msgstr "Araabia keel - Iraak"
 
 msgid "Arabic - Jordan"
-msgstr ""
+msgstr "Araabia keel - Jordaania"
 
 msgid "Arabic - Kuwait"
-msgstr ""
+msgstr "Araabia keel - Kuveit"
 
 msgid "Arabic - Lebanon"
-msgstr ""
+msgstr "Araabia keel - Liibanon"
 
 msgid "Arabic - Libya"
-msgstr ""
+msgstr "Araabia keel - Liibüa"
 
 msgid "Arabic - Marocco"
-msgstr ""
+msgstr "Araabia keel - Maroko"
 
 msgid "Arabic - Morocco"
-msgstr ""
+msgstr "Araabia keel - Maroko"
 
 msgid "Arabic - North Levant"
-msgstr ""
+msgstr "Araabia keel - Põhja-Levant"
 
 msgid "Arabic - Oman"
-msgstr ""
+msgstr "Araabia keel - Omaan"
 
 msgid "Arabic - Qatar"
-msgstr ""
+msgstr "Araabia keel - Katar"
 
 msgid "Arabic - Saudi Arabia"
-msgstr ""
+msgstr "Araabia keel - Saudi Araabia"
 
 msgid "Arabic - South Levant"
-msgstr ""
+msgstr "Araabia keel - Lõuna-Levant"
 
 msgid "Arabic - Sudan"
-msgstr ""
+msgstr "Araabia keel - Sudaan"
 
 msgid "Arabic - Syria"
-msgstr ""
+msgstr "Araabia keel - Süüria"
 
 msgid "Arabic - Tunisia"
-msgstr ""
+msgstr "Araabia keel - Tuneesia"
 
 msgid "Arabic - U.A.E."
-msgstr ""
+msgstr "Araabia keel - Araabia Ühendemiraadid."
 
 msgid "Arabic - Yemen"
-msgstr ""
+msgstr "Araabia keel - Jeemen"
 
 msgid "Assamese"
-msgstr ""
+msgstr "Assami"
 
 msgid "Aymara"
-msgstr ""
+msgstr "Aymara"
 
 msgid "Azerbaijani"
-msgstr ""
+msgstr "Aserbaidžaan"
 
 msgid "Bashkir"
-msgstr ""
+msgstr "Bashkir"
 
 msgid "Basque"
-msgstr ""
+msgstr "Baskimaa"
 
 msgid "Bengali"
-msgstr ""
+msgstr "Bengali"
 
 msgid "Bislama"
-msgstr ""
+msgstr "Bislama"
 
 msgid "Bosnian"
-msgstr ""
+msgstr "Bosnia ja Hertsegoviina"
 
 msgid "Breton"
-msgstr ""
+msgstr "Bretooni"
 
 msgid "Bulgarian"
-msgstr ""
+msgstr "Bulgaaria"
 
 msgid "Byelorussian"
-msgstr ""
+msgstr "Valgevene"
 
 msgid "Catalan"
-msgstr ""
+msgstr "Katalaani"
 
 msgid "Chamorro"
-msgstr ""
+msgstr "Chamorro"
 
 msgid "Chechen"
-msgstr ""
+msgstr "Tšetšeenia"
 
 msgid "Chinese (Simplified)"
-msgstr ""
+msgstr "Hiina keel (lihtsustatud)"
 
 msgid "Chinese (Traditional)"
-msgstr ""
+msgstr "Hiina (traditsiooniline)"
 
 msgid "Chuvash"
-msgstr ""
+msgstr "Tšuvaši"
 
 msgid "Corsican"
-msgstr ""
+msgstr "Korsika"
 
 msgid "Croatian"
-msgstr ""
+msgstr "Horvaatia"
 
 msgid "Croatian - Bosnia and Herzegovina"
-msgstr ""
+msgstr "Horvaatia - Bosnia ja Hertsegoviina"
 
 msgid "Croatian - Croatia"
-msgstr ""
+msgstr "Horvaatia - Horvaatia"
 
 msgid "Czech"
-msgstr ""
+msgstr "Tšehhi"
 
 msgid "Danish"
 msgstr "Taani keel"
@@ -170,220 +170,220 @@ msgid "Dutch"
 msgstr "Hollandi"
 
 msgid "Dutch - Netherlands"
-msgstr ""
+msgstr "Hollandi - Holland"
 
 msgid "Dzongkha"
-msgstr ""
+msgstr "Dzongkha"
 
 msgid "English"
 msgstr "Inglise"
 
 msgid "English - Australia"
-msgstr ""
+msgstr "Inglise keel - Austraalia"
 
 msgid "English - Belize"
-msgstr ""
+msgstr "inglise keel - Belize"
 
 msgid "English - Canada"
-msgstr ""
+msgstr "inglise keel - Kanada"
 
 msgid "English - Caribbean"
-msgstr ""
+msgstr "Inglise keel - Kariibi mere piirkond"
 
 msgid "English - Ireland"
-msgstr ""
+msgstr "Inglise keel - Iirimaa"
 
 msgid "English - Jamaica"
-msgstr ""
+msgstr "inglise keel - Jamaica"
 
 msgid "English - New Zealand"
-msgstr ""
+msgstr "Inglise keel - Uus-Meremaa"
 
 msgid "English - Republic of the Philippines"
-msgstr ""
+msgstr "Inglise keel - Filipiini Vabariik"
 
 msgid "English - South Africa"
-msgstr ""
+msgstr "Inglise keel - Lõuna-Aafrika Vabariik"
 
 msgid "English - Trinidad and Tobago"
-msgstr ""
+msgstr "Inglise keel - Trinidad ja Tobago"
 
 msgid "English - United Kingdom"
-msgstr ""
+msgstr "Inglise keel - Ühendkuningriik"
 
 msgid "English - United States"
-msgstr ""
+msgstr "Inglise keel - Ameerika Ühendriigid"
 
 msgid "English - Zimbabwe"
-msgstr ""
+msgstr "Inglise keel - Zimbabwe"
 
 msgid "Esperanto"
-msgstr ""
+msgstr "Esperanto"
 
 msgid "Estonian"
-msgstr ""
+msgstr "Eesti"
 
 msgid "Faroese"
-msgstr ""
+msgstr "Fääri saarte"
 
 msgid "Fijian"
-msgstr ""
+msgstr "Fidži"
 
 msgid "Finnish"
 msgstr "Soome keel"
 
 msgid "Flemish - Belgium"
-msgstr ""
+msgstr "Flaami - Belgia"
 
 msgid "French"
 msgstr "Prantsuse keel"
 
 msgid "French - Belgium"
-msgstr ""
+msgstr "Prantsuse keel - Belgia"
 
 msgid "French - Canada"
-msgstr ""
+msgstr "Prantsuse keel - Kanada"
 
 msgid "French - France"
-msgstr ""
+msgstr "Prantsuse keel - Prantsusmaa"
 
 msgid "French - Luxembourg"
-msgstr ""
+msgstr "Prantsuse keel - Luksemburg"
 
 msgid "French - Monaco"
-msgstr ""
+msgstr "Prantsuse - Monaco"
 
 msgid "French - Switzerland"
-msgstr ""
+msgstr "Prantsuse keel - Šveits"
 
 msgid "Frisian"
-msgstr ""
+msgstr "Friisi"
 
 msgid "Gaelic"
-msgstr ""
+msgstr "Gaelic"
 
 msgid "Galician"
-msgstr ""
+msgstr "Galicia"
 
 msgid "Georgian"
-msgstr ""
+msgstr "Gruusia"
 
 msgid "German"
 msgstr "Saksa keel"
 
 msgid "German - Austria"
-msgstr ""
+msgstr "Saksamaa - Austria"
 
 msgid "German - Germany"
-msgstr ""
+msgstr "Saksa keel - Saksamaa"
 
 msgid "German - Liechtenstein"
-msgstr ""
+msgstr "Saksa keel - Liechtenstein"
 
 msgid "German - Luxembourg"
-msgstr ""
+msgstr "Saksa keel - Luksemburg"
 
 msgid "German - Switzerland"
-msgstr ""
+msgstr "Saksa keel - Šveits"
 
 msgid "Greek"
-msgstr ""
+msgstr "Kreeka"
 
 msgid "Guarani"
-msgstr ""
+msgstr "Guarani"
 
 msgid "Gujarati"
-msgstr ""
+msgstr "Gujarati"
 
 msgid "Hebrew"
-msgstr ""
+msgstr "Heebrea"
 
 msgid "Hindi"
-msgstr ""
+msgstr "Hindi"
 
 msgid "Hungarian"
 msgstr "Ungari keel"
 
 msgid "Indonesian"
-msgstr ""
+msgstr "Indoneesia"
 
 msgid "Interlingua"
-msgstr ""
+msgstr "Interlingua"
 
 msgid "Islandic"
-msgstr ""
+msgstr "Islandic"
 
 msgid "Italian"
 msgstr "Itaalia keel"
 
 msgid "Italian - Italy"
-msgstr ""
+msgstr "Itaalia - Itaalia"
 
 msgid "Italian - Switzerland"
-msgstr ""
+msgstr "Itaalia - Šveits"
 
 msgid "Japanese"
-msgstr ""
+msgstr "Jaapani"
 
 msgid "Javanese"
-msgstr ""
+msgstr "Javanese"
 
 msgid "Korean"
-msgstr ""
+msgstr "Korea"
 
 msgid "Kurdish"
-msgstr ""
+msgstr "Kurdi"
 
 msgid "Latvian"
-msgstr ""
+msgstr "Läti"
 
 msgid "Lithuanian"
-msgstr ""
+msgstr "Leedu"
 
 msgid "Macedonian"
-msgstr ""
+msgstr "Makedoonia"
 
 msgid "Malagasy"
-msgstr ""
+msgstr "Madagaskar"
 
 msgid "Malay"
-msgstr ""
+msgstr "Malai"
 
 msgid "Maltese"
-msgstr ""
+msgstr "Malta"
 
 msgid "Mongolian"
-msgstr ""
+msgstr "Mongoolia"
 
 msgid "Norwegian"
 msgstr "Norra keel"
 
 msgid "Norwegian Nynorsk"
-msgstr ""
+msgstr "Norra Nynorsk"
 
 msgid "Pashto"
-msgstr ""
+msgstr "Pashto"
 
 msgid "Persian"
-msgstr ""
+msgstr "Pärsia"
 
 msgid "Polish"
-msgstr ""
+msgstr "Poola"
 
 msgid "Portuguese"
-msgstr ""
+msgstr "Portugali"
 
 msgid "Portuguese - Brazil"
-msgstr ""
+msgstr "Portugali keel - Brasiilia"
 
 msgid "Portuguese - Portugal"
-msgstr ""
+msgstr "Portugali keel - Portugal"
 
 msgid "Punjabi"
-msgstr ""
+msgstr "Pandžabi"
 
 msgid "Punjabi - Arab"
-msgstr ""
+msgstr "Pandžabi - araabia"
 
 msgid "Romanian"
 msgstr "Rumeenia keel"
@@ -392,125 +392,125 @@ msgid "Russian"
 msgstr "Vene keel"
 
 msgid "Scottish Gaelic"
-msgstr ""
+msgstr "Šoti gaeli keel"
 
 msgid "Serbian"
-msgstr ""
+msgstr "Serbia"
 
 msgid "Sinhalese"
-msgstr ""
+msgstr "Sinaallased"
 
 msgid "Slovak"
-msgstr ""
+msgstr "Slovakkia"
 
 msgid "Slovenian"
-msgstr ""
+msgstr "Sloveenia"
 
 msgid "Spanish"
 msgstr "Hispaania keel"
 
 msgid "Spanish - Argentina"
-msgstr ""
+msgstr "Hispaania - Argentiina"
 
 msgid "Spanish - Bolivia"
-msgstr ""
+msgstr "Hispaania - Boliivia"
 
 msgid "Spanish - Chile"
-msgstr ""
+msgstr "Hispaania - Tšiili"
 
 msgid "Spanish - Colombia"
-msgstr ""
+msgstr "Hispaania - Kolumbia"
 
 msgid "Spanish - Costa Rica"
-msgstr ""
+msgstr "Hispaania - Costa Rica"
 
 msgid "Spanish - Dominican Republic"
-msgstr ""
+msgstr "Hispaania - Dominikaani Vabariik"
 
 msgid "Spanish - Ecuador"
-msgstr ""
+msgstr "Hispaania - Ecuador"
 
 msgid "Spanish - El Salvador"
-msgstr ""
+msgstr "Hispaania - El Salvador"
 
 msgid "Spanish - Guatemala"
-msgstr ""
+msgstr "Hispaania - Guatemala"
 
 msgid "Spanish - Honduras"
-msgstr ""
+msgstr "Hispaania - Honduras"
 
 msgid "Spanish - Latin America and the Caribbean"
-msgstr ""
+msgstr "Hispaania - Ladina-Ameerika ja Kariibi mere piirkond"
 
 msgid "Spanish - Mexico"
-msgstr ""
+msgstr "Hispaania - Mehhiko"
 
 msgid "Spanish - Nicaragua"
-msgstr ""
+msgstr "Hispaania - Nicaragua"
 
 msgid "Spanish - Panama"
-msgstr ""
+msgstr "Hispaania - Panama"
 
 msgid "Spanish - Paraguay"
-msgstr ""
+msgstr "Hispaania - Paraguay"
 
 msgid "Spanish - Peru"
-msgstr ""
+msgstr "Hispaania - Peruu"
 
 msgid "Spanish - Puerto Rico"
-msgstr ""
+msgstr "Hispaania - Puerto Rico"
 
 msgid "Spanish - Spain"
-msgstr ""
+msgstr "Hispaania - Hispaania"
 
 msgid "Spanish - Uruguay"
-msgstr ""
+msgstr "Hispaania - Uruguay"
 
 msgid "Spanish - Venezuela"
-msgstr ""
+msgstr "Hispaania - Venezuela"
 
 msgid "Standard Arabic"
-msgstr ""
+msgstr "Standardne araabia keel"
 
 msgid "Sundanese"
-msgstr ""
+msgstr "Sundanese"
 
 msgid "Swahili"
-msgstr ""
+msgstr "Swahili"
 
 msgid "Swedish"
 msgstr "Rootsi keel"
 
 msgid "Tagalog"
-msgstr ""
+msgstr "Tagalog"
 
 msgid "Tamil"
-msgstr ""
+msgstr "Tamil"
 
 msgid "Thai"
-msgstr ""
+msgstr "Tai"
 
 msgid "Tibetan"
-msgstr ""
+msgstr "Tiibeti"
 
 msgid "Turkish"
 msgstr "Türgi keel"
 
 msgid "Ukrainian"
-msgstr ""
+msgstr "Ukraina"
 
 msgid "Urdu"
-msgstr ""
+msgstr "Urdu"
 
 msgid "Vietnamese"
-msgstr ""
+msgstr "Vietnami"
 
 msgid "Welsh"
-msgstr ""
+msgstr "Walesi"
 
 msgid "Xhosa"
-msgstr ""
+msgstr "Xhosa"
 
 msgid "Yoruba"
-msgstr ""
+msgstr "Joruba"
 
