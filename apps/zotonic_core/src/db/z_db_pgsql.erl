@@ -75,9 +75,10 @@
     busy_ref = undefined :: undefined | reference(),
     busy_timeout = undefined :: undefined | integer(),
     busy_start = undefined :: undefined | pos_integer(),
-    busy_sql = undefined :: undefined | string() | binary(),
+    busy_sql = undefined :: undefined | string() | binary() | raw,
     busy_params = [] :: list(),
     busy_tracing = false :: boolean(),
+    canceled_busy_ref = undefined :: undefined | pid(),
     is_paused = false :: boolean(),
     pause_waiting = undefined
 }).
@@ -187,7 +188,7 @@ squery(Worker, Sql, Timeout) ->
             case fetch_conn(Worker, Sql, [], Timeout) of
                 {ok, {Conn, Ref}} ->
                     try
-                        epgsql:squery(Conn, Sql)
+                        maybe_map_error(epgsql:squery(Conn, Sql))
                     after
                         ok = return_conn(Worker, Ref)
                     end;
@@ -212,7 +213,7 @@ equery(Worker, Sql, Parameters, Timeout) ->
             case fetch_conn(Worker, Sql, Parameters, Timeout) of
                 {ok, {Conn, Ref}} ->
                     try
-                        epgsql:equery(Conn, Sql, Parameters)
+                        maybe_map_error(epgsql:equery(Conn, Sql, Parameters))
                     after
                         ok = return_conn(Worker, Ref)
                     end;
@@ -248,7 +249,7 @@ execute_batch(Worker, Sql, Batch, Timeout) ->
                                         ({ok, _} = Ok) ->
                                             Ok;
                                         ({error, _} = Error) ->
-                                            Error
+                                            maybe_map_error(Error)
                                     end,
                                     Result),
                         {ok, Result1}
@@ -261,6 +262,12 @@ execute_batch(Worker, Sql, Batch, Timeout) ->
         false ->
             {error, connection_down}
     end.
+
+maybe_map_error({error, #error{ codename = query_canceled }}) ->
+    {error, query_timeout};
+maybe_map_error(Result) ->
+    Result.
+
 
 %% @doc Request the SQL connection from the worker. The query is passed for logging
 % purposes. This caller will do the query using the returned connection.
@@ -408,7 +415,8 @@ handle_call({fetch_conn, Ref, CallerPid, Sql, Params, Timeout, IsTracing}, _From
         busy_start = Start,
         busy_sql = Sql,
         busy_params = Params,
-        busy_tracing = IsTracing
+        busy_tracing = IsTracing,
+        canceled_busy_ref = undefined
     },
     {reply, {ok, State#state.conn}, State1, Timeout};
 
@@ -464,13 +472,13 @@ handle_call({return_conn, Ref, Pid}, _From,
     State1 = reset_busy_state(State),
     {reply, ok, State1, timeout(State1)};
 
-handle_call({return_conn, _Ref, Pid}, _From, #state{ busy_pid = undefined } = State) ->
-    ?LOG_ERROR(#{
-        text => <<"SQL connection returned but not in use.">>,
+handle_call({return_conn, Ref, Pid}, _From, #state{ busy_pid = undefined, canceled_busy_ref = Ref } = State) ->
+    ?LOG_INFO(#{
+        text => <<"SQL connection returned after cancel">>,
         in => zotonic_core,
         request_pid => Pid
     }),
-    {reply, {error, idle}, State, timeout(State)};
+    {reply, ok, State#state{ canceled_busy_ref = undefined }, timeout(State)};
 
 handle_call({return_conn, _Ref, Pid}, _From, #state{ busy_pid = OtherPid } = State) ->
     ?LOG_ERROR(#{
@@ -506,16 +514,13 @@ handle_call({get_raw_connection, CallerPid}, From, #state{ conn = undefined, con
 handle_call({get_raw_connection, CallerPid}, _From, #state{ conn = Conn } = State) ->
     State1 = State#state{
         busy_monitor = erlang:monitor(process, CallerPid),
-        busy_pid = CallerPid
+        busy_pid = CallerPid,
+        busy_sql = raw
     },
     {reply, {ok, Conn}, State1, ?RAW_CONN_TIMEOUT};
 
 handle_call({release_raw_connection, CallerPid}, _From, #state{ busy_pid = BusyPid } = State) when BusyPid =:= CallerPid ->
-    erlang:demonitor(State#state.busy_monitor),
-    State1 = State#state{
-        busy_monitor = undefined,
-        busy_pid = undefined
-    },
+    State1 = demonitor_busy(State),
     {reply, ok, State1, ?IDLE_TIMEOUT};
 handle_call({release_raw_connection, CallerPid}, _From, #state{ busy_pid = BusyPid } = State) ->
     ?LOG_ERROR(#{
@@ -584,10 +589,7 @@ handle_info(timeout, #state{
         busy_params = Params,
         busy_timeout = Timeout
     } = State) ->
-    % Query timeout - pull the connection from underneath the caller
-    % The connection needs to be killed to stop the out-of-bounds query
-    % on the db server. This to prevent that long running queries are
-    % filling up all our connections and also slowing down the database.
+    % Query timeout - cancel the running query.
     Database = get_arg(dbdatabase, State#state.conn_args),
     Schema = get_arg(dbschema, State#state.conn_args),
     ?LOG_ERROR(#{
@@ -603,8 +605,8 @@ handle_info(timeout, #state{
         args => Params,
         worker_pid => self()
     }),
-    State1 = disconnect(State),
-    {stop, normal, State1};
+    State1 = cancel(State),
+    {noreply, State1, hibernate};
 
 handle_info({'DOWN', _Ref, process, BusyPid, Reason}, #state{
         busy_pid = BusyPid,
@@ -701,12 +703,26 @@ code_change(_OldVsn, State, _Extra) ->
 %% Helper functions
 %%
 
+%% @doc Cancel the running query.
+cancel(#state{ conn = Conn, busy_pid = Pid, busy_ref = Ref } = State) when is_pid(Pid), Conn =/= undefined ->
+    ok = epgsql:cancel(Conn),
+    State1 = demonitor_busy(State),
+    State1#state{
+        canceled_busy_ref = Ref
+    };
+cancel(#state{ conn = undefined } = State) ->
+    State.
+
+
 %% @doc Cancel any running query and close the connection to the SQL server
 disconnect(#state{ conn = undefined } = State) ->
     demonitor_busy(State);
-disconnect(#state{ conn = Conn, busy_pid = Pid } = State) when is_pid(Pid) ->
+disconnect(#state{ conn = Conn, busy_pid = Pid, busy_ref = Ref } = State) when is_pid(Pid) ->
     ok = epgsql:cancel(Conn),
-    disconnect_1(State);
+    State1 = disconnect_1(State),
+    State1#state{
+        canceled_busy_ref = Ref
+    };
 disconnect(#state{ busy_pid = undefined } = State) ->
     disconnect_1(State).
 
@@ -752,7 +768,8 @@ reset_busy_state(State) ->
         busy_timeout = undefined,
         busy_start = undefined,
         busy_sql = undefined,
-        busy_params = []
+        busy_params = [],
+        canceled_busy_ref = undefined
     }.
 
 %% @doc Calculate the remaining timeout for the running query.
