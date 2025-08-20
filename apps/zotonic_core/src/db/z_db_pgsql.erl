@@ -88,11 +88,11 @@
 
 -type squery_result() :: epgsql_cmd_squery:response()
                        | epgsql_sock:error()
-                       | {error, connection_down | paused | query_timeout | #error{} | term()}.
+                       | {error, connection_down | paused | query_timeout | epgsql:query_error() | term()}.
 
 -type equery_result() :: epgsql_cmd_equery:response()
                        | epgsql_sock:error()
-                       | {error, connection_down | paused | query_timeout | #error{} | term()}.
+                       | {error, connection_down | paused | query_timeout | epgsql:query_error() | term()}.
 
 -export_type([ query_result/0, squery_result/0, equery_result/0 ]).
 
