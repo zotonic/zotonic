@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-08-20 13:19\n"
+"PO-Revision-Date: 2025-08-20 16:45\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -17,151 +17,151 @@ msgstr ""
 "Language: uk_UA\n"
 
 msgid "Abkhazian"
-msgstr ""
+msgstr "Абхазька"
 
 msgid "Afar"
-msgstr ""
+msgstr "Далеко"
 
 msgid "Afrikaans"
-msgstr ""
+msgstr "африкаанс"
 
 msgid "Albanian"
-msgstr ""
+msgstr "Албанська"
 
 msgid "Amharic"
-msgstr ""
+msgstr "Амхарська."
 
 msgid "Arabic"
-msgstr ""
+msgstr "Арабська"
 
 msgid "Arabic - Algerian Sahara"
-msgstr ""
+msgstr "Арабська - Алжирська Сахара"
 
 msgid "Arabic - Bahrain"
-msgstr ""
+msgstr "Арабська - Бахрейн"
 
 msgid "Arabic - Egypt"
-msgstr ""
+msgstr "Арабська - Єгипет"
 
 msgid "Arabic - Gulf"
-msgstr ""
+msgstr "Арабська - Перська затока"
 
 msgid "Arabic - Iraq"
-msgstr ""
+msgstr "Арабська - Ірак"
 
 msgid "Arabic - Jordan"
-msgstr ""
+msgstr "Арабська - Йорданія"
 
 msgid "Arabic - Kuwait"
-msgstr ""
+msgstr "Арабська - Кувейт"
 
 msgid "Arabic - Lebanon"
-msgstr ""
+msgstr "Арабська - Ліван"
 
 msgid "Arabic - Libya"
-msgstr ""
+msgstr "Арабська - Лівія"
 
 msgid "Arabic - Marocco"
-msgstr ""
+msgstr "Арабська - Марокко"
 
 msgid "Arabic - Morocco"
-msgstr ""
+msgstr "Арабська - Марокко"
 
 msgid "Arabic - North Levant"
-msgstr ""
+msgstr "Арабська - Північний Левант"
 
 msgid "Arabic - Oman"
-msgstr ""
+msgstr "Арабська - Оман"
 
 msgid "Arabic - Qatar"
-msgstr ""
+msgstr "Арабська - Катар"
 
 msgid "Arabic - Saudi Arabia"
-msgstr ""
+msgstr "Арабська - Саудівська Аравія"
 
 msgid "Arabic - South Levant"
-msgstr ""
+msgstr "Арабська - Південний Левант"
 
 msgid "Arabic - Sudan"
-msgstr ""
+msgstr "Арабська - Судан"
 
 msgid "Arabic - Syria"
-msgstr ""
+msgstr "Арабська - Сирія"
 
 msgid "Arabic - Tunisia"
-msgstr ""
+msgstr "Арабська - Туніс"
 
 msgid "Arabic - U.A.E."
-msgstr ""
+msgstr "Арабська - ОАЕ."
 
 msgid "Arabic - Yemen"
-msgstr ""
+msgstr "Арабська - Ємен"
 
 msgid "Assamese"
-msgstr ""
+msgstr "Ассамська"
 
 msgid "Aymara"
-msgstr ""
+msgstr "Аймара."
 
 msgid "Azerbaijani"
-msgstr ""
+msgstr "Азербайджанська"
 
 msgid "Bashkir"
-msgstr ""
+msgstr "Башкирська"
 
 msgid "Basque"
-msgstr ""
+msgstr "Баски"
 
 msgid "Bengali"
-msgstr ""
+msgstr "Бенгальська"
 
 msgid "Bislama"
-msgstr ""
+msgstr "Біслама."
 
 msgid "Bosnian"
-msgstr ""
+msgstr "Боснійський"
 
 msgid "Breton"
-msgstr ""
+msgstr "Бретонська."
 
 msgid "Bulgarian"
-msgstr ""
+msgstr "Болгарська"
 
 msgid "Byelorussian"
-msgstr ""
+msgstr "Білоруська"
 
 msgid "Catalan"
-msgstr ""
+msgstr "Каталонська"
 
 msgid "Chamorro"
-msgstr ""
+msgstr "Чаморро"
 
 msgid "Chechen"
-msgstr ""
+msgstr "Чеченський"
 
 msgid "Chinese (Simplified)"
-msgstr ""
+msgstr "Китайська (спрощена)"
 
 msgid "Chinese (Traditional)"
-msgstr ""
+msgstr "Китайська (традиційна)"
 
 msgid "Chuvash"
-msgstr ""
+msgstr "Чуваська"
 
 msgid "Corsican"
-msgstr ""
+msgstr "Корсиканець"
 
 msgid "Croatian"
-msgstr ""
+msgstr "Хорватська"
 
 msgid "Croatian - Bosnia and Herzegovina"
-msgstr ""
+msgstr "Хорватська - Боснія і Герцеговина"
 
 msgid "Croatian - Croatia"
-msgstr ""
+msgstr "Хорватська - Хорватія"
 
 msgid "Czech"
-msgstr ""
+msgstr "Чеська"
 
 msgid "Danish"
 msgstr "Данська"
@@ -170,220 +170,220 @@ msgid "Dutch"
 msgstr "Голландська"
 
 msgid "Dutch - Netherlands"
-msgstr ""
+msgstr "Голландська - Нідерланди"
 
 msgid "Dzongkha"
-msgstr ""
+msgstr "Дзонгха"
 
 msgid "English"
 msgstr "Англійська"
 
 msgid "English - Australia"
-msgstr ""
+msgstr "Англійська - Австралія"
 
 msgid "English - Belize"
-msgstr ""
+msgstr "Англійська - Беліз"
 
 msgid "English - Canada"
-msgstr ""
+msgstr "Англійська - Канада"
 
 msgid "English - Caribbean"
-msgstr ""
+msgstr "Англійська - Карибський басейн"
 
 msgid "English - Ireland"
-msgstr ""
+msgstr "Англійська - Ірландія"
 
 msgid "English - Jamaica"
-msgstr ""
+msgstr "Англійська - Ямайка"
 
 msgid "English - New Zealand"
-msgstr ""
+msgstr "Англійська - Нова Зеландія"
 
 msgid "English - Republic of the Philippines"
-msgstr ""
+msgstr "Англійська - Республіка Філіппіни"
 
 msgid "English - South Africa"
-msgstr ""
+msgstr "Англійська - Південна Африка"
 
 msgid "English - Trinidad and Tobago"
-msgstr ""
+msgstr "Англійська - Тринідад і Тобаго"
 
 msgid "English - United Kingdom"
-msgstr ""
+msgstr "Англійська - Велика Британія"
 
 msgid "English - United States"
-msgstr ""
+msgstr "Англійська - Сполучені Штати"
 
 msgid "English - Zimbabwe"
-msgstr ""
+msgstr "Англійська - Зімбабве"
 
 msgid "Esperanto"
-msgstr ""
+msgstr "Есперанто"
 
 msgid "Estonian"
-msgstr ""
+msgstr "естонська"
 
 msgid "Faroese"
-msgstr ""
+msgstr "Фарерські"
 
 msgid "Fijian"
-msgstr ""
+msgstr "Фіджійський"
 
 msgid "Finnish"
 msgstr "Фінська"
 
 msgid "Flemish - Belgium"
-msgstr ""
+msgstr "Фламандська - Бельгія"
 
 msgid "French"
 msgstr "Французька"
 
 msgid "French - Belgium"
-msgstr ""
+msgstr "Французька - Бельгія"
 
 msgid "French - Canada"
-msgstr ""
+msgstr "Французька - Канада"
 
 msgid "French - France"
-msgstr ""
+msgstr "Французька - Франція"
 
 msgid "French - Luxembourg"
-msgstr ""
+msgstr "Французька - Люксембург"
 
 msgid "French - Monaco"
-msgstr ""
+msgstr "Французька - Монако"
 
 msgid "French - Switzerland"
-msgstr ""
+msgstr "Французька - Швейцарія"
 
 msgid "Frisian"
-msgstr ""
+msgstr "Фриз"
 
 msgid "Gaelic"
-msgstr ""
+msgstr "Ґельська"
 
 msgid "Galician"
-msgstr ""
+msgstr "Галицький"
 
 msgid "Georgian"
-msgstr ""
+msgstr "Грузинська"
 
 msgid "German"
 msgstr "Німецька"
 
 msgid "German - Austria"
-msgstr ""
+msgstr "Німецька - Австрія"
 
 msgid "German - Germany"
-msgstr ""
+msgstr "Німецька - Німеччина"
 
 msgid "German - Liechtenstein"
-msgstr ""
+msgstr "Німецька - Ліхтенштейн"
 
 msgid "German - Luxembourg"
-msgstr ""
+msgstr "Німецька - Люксембург"
 
 msgid "German - Switzerland"
-msgstr ""
+msgstr "Німецька - Швейцарія"
 
 msgid "Greek"
-msgstr ""
+msgstr "Грецька"
 
 msgid "Guarani"
-msgstr ""
+msgstr "Гуарані."
 
 msgid "Gujarati"
-msgstr ""
+msgstr "Гуджараті"
 
 msgid "Hebrew"
-msgstr ""
+msgstr "Іврит"
 
 msgid "Hindi"
-msgstr ""
+msgstr "Хінді"
 
 msgid "Hungarian"
 msgstr "Угорська"
 
 msgid "Indonesian"
-msgstr ""
+msgstr "Індонезійська"
 
 msgid "Interlingua"
-msgstr ""
+msgstr "Interlingua"
 
 msgid "Islandic"
-msgstr ""
+msgstr "Острівний"
 
 msgid "Italian"
 msgstr "Італійська"
 
 msgid "Italian - Italy"
-msgstr ""
+msgstr "Італійська - Італія"
 
 msgid "Italian - Switzerland"
-msgstr ""
+msgstr "Італійська - Швейцарія"
 
 msgid "Japanese"
-msgstr ""
+msgstr "Японський"
 
 msgid "Javanese"
-msgstr ""
+msgstr "Яванський"
 
 msgid "Korean"
-msgstr ""
+msgstr "Корейська"
 
 msgid "Kurdish"
-msgstr ""
+msgstr "Курдська."
 
 msgid "Latvian"
-msgstr ""
+msgstr "латвійська"
 
 msgid "Lithuanian"
-msgstr ""
+msgstr "Литовська"
 
 msgid "Macedonian"
-msgstr ""
+msgstr "Македонська"
 
 msgid "Malagasy"
-msgstr ""
+msgstr "Малагасійська"
 
 msgid "Malay"
-msgstr ""
+msgstr "Малайзія."
 
 msgid "Maltese"
-msgstr ""
+msgstr "Мальтійський"
 
 msgid "Mongolian"
-msgstr ""
+msgstr "Монгольська"
 
 msgid "Norwegian"
 msgstr "Норвезька"
 
 msgid "Norwegian Nynorsk"
-msgstr ""
+msgstr "Норвезький Нюнорск"
 
 msgid "Pashto"
-msgstr ""
+msgstr "Пушту"
 
 msgid "Persian"
-msgstr ""
+msgstr "Персидська."
 
 msgid "Polish"
-msgstr ""
+msgstr "Польська"
 
 msgid "Portuguese"
-msgstr ""
+msgstr "Португальська"
 
 msgid "Portuguese - Brazil"
-msgstr ""
+msgstr "Португальська - Бразилія"
 
 msgid "Portuguese - Portugal"
-msgstr ""
+msgstr "Португальська - Португалія"
 
 msgid "Punjabi"
-msgstr ""
+msgstr "Пенджабі"
 
 msgid "Punjabi - Arab"
-msgstr ""
+msgstr "пенджабі - арабська"
 
 msgid "Romanian"
 msgstr "Румунська"
@@ -392,125 +392,125 @@ msgid "Russian"
 msgstr "Російська"
 
 msgid "Scottish Gaelic"
-msgstr ""
+msgstr "Шотландська гельська"
 
 msgid "Serbian"
-msgstr ""
+msgstr "Сербська"
 
 msgid "Sinhalese"
-msgstr ""
+msgstr "Сингальська"
 
 msgid "Slovak"
-msgstr ""
+msgstr "Словацька"
 
 msgid "Slovenian"
-msgstr ""
+msgstr "Словенська"
 
 msgid "Spanish"
 msgstr "Іспанська"
 
 msgid "Spanish - Argentina"
-msgstr ""
+msgstr "Іспанська - Аргентина"
 
 msgid "Spanish - Bolivia"
-msgstr ""
+msgstr "Іспанська - Болівія"
 
 msgid "Spanish - Chile"
-msgstr ""
+msgstr "Іспанська - Чилі"
 
 msgid "Spanish - Colombia"
-msgstr ""
+msgstr "Іспанська - Колумбія"
 
 msgid "Spanish - Costa Rica"
-msgstr ""
+msgstr "Іспанська - Коста-Ріка"
 
 msgid "Spanish - Dominican Republic"
-msgstr ""
+msgstr "Іспанська - Домініканська Республіка"
 
 msgid "Spanish - Ecuador"
-msgstr ""
+msgstr "Іспанська - Еквадор"
 
 msgid "Spanish - El Salvador"
-msgstr ""
+msgstr "Іспанська - Сальвадор"
 
 msgid "Spanish - Guatemala"
-msgstr ""
+msgstr "Іспанська - Гватемала"
 
 msgid "Spanish - Honduras"
-msgstr ""
+msgstr "Іспанська - Гондурас"
 
 msgid "Spanish - Latin America and the Caribbean"
-msgstr ""
+msgstr "Іспанська - Латинська Америка та Карибський басейн"
 
 msgid "Spanish - Mexico"
-msgstr ""
+msgstr "Іспанська - Мексика"
 
 msgid "Spanish - Nicaragua"
-msgstr ""
+msgstr "Іспанська - Нікарагуа"
 
 msgid "Spanish - Panama"
-msgstr ""
+msgstr "Іспанська - Панама"
 
 msgid "Spanish - Paraguay"
-msgstr ""
+msgstr "Іспанська - Парагвай"
 
 msgid "Spanish - Peru"
-msgstr ""
+msgstr "Іспанська - Перу"
 
 msgid "Spanish - Puerto Rico"
-msgstr ""
+msgstr "Іспанська - Пуерто-Рико"
 
 msgid "Spanish - Spain"
-msgstr ""
+msgstr "Іспанська - Іспанія"
 
 msgid "Spanish - Uruguay"
-msgstr ""
+msgstr "Іспанська - Уругвай"
 
 msgid "Spanish - Venezuela"
-msgstr ""
+msgstr "Іспанська - Венесуела"
 
 msgid "Standard Arabic"
-msgstr ""
+msgstr "Стандартна арабська"
 
 msgid "Sundanese"
-msgstr ""
+msgstr "Сунданський"
 
 msgid "Swahili"
-msgstr ""
+msgstr "Суахілі."
 
 msgid "Swedish"
 msgstr "Шведська"
 
 msgid "Tagalog"
-msgstr ""
+msgstr "Тагальська"
 
 msgid "Tamil"
-msgstr ""
+msgstr "Тамільська"
 
 msgid "Thai"
-msgstr ""
+msgstr "Тайська"
 
 msgid "Tibetan"
-msgstr ""
+msgstr "Тибетський"
 
 msgid "Turkish"
 msgstr "Турецька"
 
 msgid "Ukrainian"
-msgstr ""
+msgstr "Українська"
 
 msgid "Urdu"
-msgstr ""
+msgstr "Урду"
 
 msgid "Vietnamese"
-msgstr ""
+msgstr "В'єтнамці"
 
 msgid "Welsh"
-msgstr ""
+msgstr "валлійська"
 
 msgid "Xhosa"
-msgstr ""
+msgstr "Ксоса."
 
 msgid "Yoruba"
-msgstr ""
+msgstr "Йоруба."
 
