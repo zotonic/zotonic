@@ -88,3 +88,21 @@ postgres_json_conversion_test() ->
         z_db:q("select $1::jsonb;", [{term_json, #rsc_list{ list = [1] }}], Context),
 
     ok.
+
+cancel_timeout_test() ->
+    Context = z_context:new(zotonic_site_testsandbox),
+
+    % Ensure that we can see our own queries
+    {ok, [ #{ <<"query">> := <<"select * from pg_stat_activity ", _/binary>> } ]}
+        = z_db:qmap("select * from pg_stat_activity where state = 'active' and query like 'select * from pg_stat_activity %'", Context),
+
+    % Query that should not timeout
+    {ok, [ #{ <<"pg_sleep">> :=  <<>> } ]} = z_db:qmap("select PG_SLEEP(0.1)", [], [ {timeout, 200} ], Context),
+
+    % Query that must time out
+    {error, query_timeout} = z_db:qmap("select PG_SLEEP(30)", [], [ {timeout, 200} ], Context),
+
+    % Canceled query should be gone
+    {ok, []} = z_db:qmap("select * from pg_stat_activity where state = 'active' and query = 'select PG_SLEEP(30)'", Context),
+
+    ok.
