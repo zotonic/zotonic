@@ -1,10 +1,11 @@
+{% with m.translation.language_list_editable|language_sort_localized as language_list_editable %}
 {% if id.is_editable %}
     <p>{_ Current translations _}:</p>
     <ul id="{{ #current }}">
-        {% for code, lang in m.translation.language_list_editable %}
+        {% for code, lang in language_list_editable %}
             {% if lang.code_bin|member:q.enabled %}
                 <li lang="{{ code }}">
-                    {{ lang.name }} <span class="text-muted">/ {{ lang.name_en }} ({{ code }})</span>
+                    {{ lang.name }} <span class="text-muted">/ {{ lang.name_localized }} ({{ code }})</span>
 
                     <button class="btn btn-link" title="{_ Delete translation _}" id="{{ #del.code }}">
                         <span class="text-danger"><span class="fa fa-trash"></span></span>
@@ -16,7 +17,7 @@
                                 level=1
                                 text=[
                                     _"Are you sure you want to delete:",
-                                    " <b>", lang.name,
+                                    " <b>", lang.name_localized,
                                     "</b> <span class='text-muted'>(", code, ")</li></span><br><br>",
                                     _"All translated texts will be removed."
                                 ]
@@ -56,10 +57,10 @@
                 <div class="form-group">
                     <label>{_ From existing language _}</label>
                     <select name="src" class="form-control">
-                        {% for code, lang in m.translation.language_list_editable %}
+                        {% for code, lang in language_list_editable %}
                             {% if lang.code_bin|member:q.enabled %}
                                 <option value="{{ code }}" {% if code == q.language %}selected{% endif %}>
-                                    {{ lang.name }} ({{ code }})
+                                    {{ lang.name_localized }} ({{ code }})
                                 </option>
                             {% endif %}
                         {% endfor %}
@@ -71,9 +72,9 @@
                     <label>{_ To new language _}</label>
                     <select name="dst" class="form-control" required>
                         <option></option>
-                        {% for code, lang in m.translation.language_list_editable %}
+                        {% for code, lang in language_list_editable %}
                             <option value="{{ code }}">
-                                {{ lang.name }} ({{ code }})
+                                {{ lang.name_localized }} ({{ code }})
                             </option>
                         {% endfor %}
                     </select>
@@ -122,12 +123,14 @@
     </form>
 {% else %}
     <ul>
-        {% for code, lang in m.translation.language_list_editable %}
+        {% for code, lang in language_list_editable %}
             {% if lang.code_bin|member:q.enabled %}
                 <li>
-                    {{ lang.name }} <span class="text-muted">/ {{ lang.name_en }} ({{ code }})</span>
+                    {{ lang.name_localized }} <span class="text-muted">/ {{ lang.name }} ({{ code }})</span>
                 </li>
             {% endif %}
         {% endfor %}
     </ul>
 {% endif %}
+{% endwith %}
+

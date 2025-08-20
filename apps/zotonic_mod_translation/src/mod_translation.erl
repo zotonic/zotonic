@@ -269,23 +269,28 @@ get_q_language(Context) ->
     end.
 
 get_q_language_1(<<A, B, $-, _/binary>> = Lang, Context) ->
-    Acceptable = z_language:acceptable_languages_map(Context),
-    case maps:get(Lang, Acceptable, undefined) of
-        undefined ->
-            case maps:get(<<A,B>>, Acceptable, undefined) of
-                undefined ->
-                    undefined;
-                Code ->
-                    binary_to_atom(Code, utf8)
-            end;
-        Code ->
-            binary_to_atom(Code, utf8)
-    end;
+    get_q_language_1_sub(<<A, B>>, Lang, Context);
+get_q_language_1(<<A, B, C, $-, _/binary>> = Lang, Context) ->
+    get_q_language_1_sub(<<A, B, C>>, Lang, Context);
 get_q_language_1(Lang, Context) ->
     Acceptable = z_language:acceptable_languages_map(Context),
     case maps:get(Lang, Acceptable, undefined) of
         undefined ->
             undefined;
+        Code ->
+            binary_to_atom(Code, utf8)
+    end.
+
+get_q_language_1_sub(BaseLang, Lang, Context) ->
+    Acceptable = z_language:acceptable_languages_map(Context),
+    case maps:get(Lang, Acceptable, undefined) of
+        undefined ->
+            case maps:get(BaseLang, Acceptable, undefined) of
+                undefined ->
+                    undefined;
+                Code ->
+                    binary_to_atom(Code, utf8)
+            end;
         Code ->
             binary_to_atom(Code, utf8)
     end.
@@ -791,6 +796,8 @@ maybe_language_code(<<A,B,$-,_/binary>> = Code) when A >= $a, A =< $z, B >= $a, 
     z_language:is_valid(Code);
 maybe_language_code(<<A,B,C>> = Code) when A >= $a, A =< $z, B >= $a, B =< $z, C >= $a, C =< $z ->
     z_language:is_valid(Code);
+maybe_language_code(<<A,B,C,$-,_/binary>> = Code) when A >= $a, A =< $z, B >= $a, B =< $z, C >= $a, C =< $z ->
+    z_language:is_valid(Code);
 maybe_language_code(<<$x,$-,_/binary>> = Code) ->
     % x-default, x-klingon, etc.
     z_language:is_valid(Code);
@@ -846,6 +853,7 @@ generate_core() ->
                     }),
                     translation_po:generate(translation_scan:scan(core_apps())),
                     generate_country_pot(),
+                    generate_languages_pot(),
                     consolidate_core();
                 false ->
                     {error, gettext_notfound}
@@ -858,6 +866,11 @@ generate_country_pot() ->
     ZotonicPot = filename:join([ code:priv_dir(zotonic_core), "translations", "zotonic-country.pot" ]),
     Countries = [ {Country, <<>>, undefined} || {_Code, Country} <- l10n_iso2country:iso2country() ],
     z_gettext_compile:generate(ZotonicPot, lists:sort(Countries)).
+
+generate_languages_pot() ->
+    ZotonicPot = filename:join([ code:priv_dir(zotonic_core), "translations", "zotonic-language.pot" ]),
+    Languages = [ {Language, <<>>, undefined} || Language <- z_language_data:language_names_en() ],
+    z_gettext_compile:generate(ZotonicPot, Languages).
 
 %% @doc Return a list of all core modules and sites - only for the zotonic git project.
 core_apps() ->

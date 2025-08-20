@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013-2024 Marc Worrell
+%% @copyright 2013-2025 Marc Worrell
 %% @doc Model for access to request language, language lists and language configuration.
 %% @end
 
-%% Copyright 2013-2024 Marc Worrell
+%% Copyright 2013-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -92,6 +92,8 @@ m_get([ <<"editable_language_codes">> | Rest ], _Msg, Context) ->
     {ok, {z_language:editable_language_codes(Context), Rest}};
 m_get([ <<"language_list">> | Rest ], _Msg, Context) ->
     {ok, {z_language:language_list(Context), Rest}};
+m_get([ <<"language_list_sorted">> | Rest ], _Msg, Context) ->
+    {ok, {z_language:language_list_sorted(Context), Rest}};
 m_get([ <<"language_stemmer">> | Rest ], _Msg, Context) ->
     Stemmer = case m_config:get_value(i18n, language_stemmer, Context) of
         undefined -> z_language:default_language(Context);
@@ -103,6 +105,8 @@ m_get([ <<"name">>, Code | Rest ], _Msg, _Context) ->
     {ok, {z_language:local_name(Code), Rest}};
 m_get([ <<"english_name">>, Code | Rest ], _Msg, _Context) ->
     {ok, {z_language:english_name(Code), Rest}};
+m_get([ <<"localized_name">>, Code | Rest ], _Msg, Context) ->
+    {ok, {z_language:localized_name(Code, Context), Rest}};
 m_get([ <<"properties">>, Code | Rest ], _Msg, _Context) ->
     {ok, {z_language:properties(Code), Rest}};
 m_get([ <<"translate">> | Rest ], #{ payload := Payload }, Context) ->
@@ -312,15 +316,25 @@ language_list_configured(Context) ->
     end,
     List1.
 
+-spec language_list_enabled(Context) -> Languages when
+    Context :: z:context(),
+    Languages :: [ {z_language:language_code(), map()} ].
 language_list_enabled(Context) ->
 	add_properties(z_language:enabled_languages(Context)).
 
+-spec language_list_editable(Context) -> Languages when
+    Context :: z:context(),
+    Languages :: [ {z_language:language_code(), map()} ].
 language_list_editable(Context) ->
     add_properties(z_language:editable_languages(Context)).
 
+-spec main_languages() -> Languages when
+    Languages :: [ {z_language:language_code(), map()} ].
 main_languages() ->
     sort(z_language:main_languages()).
 
+-spec all_languages() -> Languages when
+    Languages :: [ {z_language:language_code(), map()} ].
 all_languages() ->
     sort(z_language:all_languages()).
 
@@ -351,10 +365,14 @@ sort_codes(Codes) when is_list(Codes) ->
 sort(Map) when is_map(Map) ->
     List = maps:fold(
         fun
-            (K, V, Acc) when is_atom(K) ->
-                [ {K, V} | Acc ];
-            (_, _, Acc) ->
-                Acc
+            (Lang, V, Acc) ->
+                case z_language:to_language_atom(Lang) of
+                    {ok, Code} when is_atom(Code) ->
+                        [ {Code, V} | Acc ];
+                    {error, not_a_language} ->
+                        %% Ignore unknown languages
+                        Acc
+                end
         end,
         [],
         Map),

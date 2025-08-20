@@ -41,6 +41,8 @@
         codes_bin/0,
         codes_atom/0,
 
+        language_names_en/0,
+
         languages_map_flat/0,
         languages_map_main/0,
         languages_list/0,
@@ -83,6 +85,19 @@ fallback(Code) when is_atom(Code); is_binary(Code) ->
     end;
 fallback(Code) when is_list(Code) ->
     fallback(z_convert:to_binary(Code)).
+
+-spec language_names_en() -> [ LanguageName ] when
+    LanguageName :: binary().
+language_names_en() ->
+    All = languages_map_flat(),
+    Names = maps:fold(
+        fun(_Key, #{ name_en := Name }, Acc) ->
+            [ Name | Acc ]
+        end,
+        [],
+        All),
+    lists:usort(Names).
+
 
 -spec languages_map_flat() -> #{ (z_language:language_code() | binary()) => map() }.
 languages_map_flat() ->
