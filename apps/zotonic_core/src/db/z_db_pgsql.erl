@@ -83,6 +83,10 @@
     pause_waiting = undefined
 }).
 
+
+-type error() :: {error, query_error()}
+               | epgsql_sock:error().
+
 -type query_error() :: epgsql:query_error()
                      | query_timeout
                      | connection_down
@@ -93,14 +97,18 @@
                       | equery_result().
 
 -type squery_result() :: epgsql_cmd_squery:response()
-                       | epgsql_sock:error()
-                       | {error, query_error()}.
+                       | error().
 
 -type equery_result() :: epgsql_cmd_equery:response()
-                       | epgsql_sock:error()
-                       | {error, query_error()}.
+                       | error().
 
--export_type([ query_result/0, squery_result/0, equery_result/0, query_error/0 ]).
+-export_type([
+    query_result/0,
+    squery_result/0,
+    equery_result/0,
+    query_error/0,
+    error/0
+]).
 
 
 %%
