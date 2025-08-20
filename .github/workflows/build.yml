@@ -25,11 +25,9 @@ jobs:
       image: erlang:${{ matrix.otp_version }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
       - name: Add user Zotonic
         run: |
-          apt-get update
-          apt-get -y install sudo
           adduser --disabled-login zotonic
       - name: Compile
         run: make
