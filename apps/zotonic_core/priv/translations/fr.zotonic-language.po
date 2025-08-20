@@ -1,0 +1,516 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2025-08-20 16:44\n"
+"Last-Translator: \n"
+"Language-Team: French\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Crowdin-Project: zotonic\n"
+"X-Crowdin-Project-ID: 3405\n"
+"X-Crowdin-Language: fr\n"
+"X-Crowdin-File: /master/apps/zotonic_core/priv/translations/zotonic-language.pot\n"
+"X-Crowdin-File-ID: 8696\n"
+"Language: fr_FR\n"
+
+msgid "Abkhazian"
+msgstr "Abkhaze"
+
+msgid "Afar"
+msgstr "Afar"
+
+msgid "Afrikaans"
+msgstr "Afrikaans"
+
+msgid "Albanian"
+msgstr "Albanais"
+
+msgid "Amharic"
+msgstr "Amharique"
+
+msgid "Arabic"
+msgstr "L'arabe"
+
+msgid "Arabic - Algerian Sahara"
+msgstr "Arabe - Sahara algérien"
+
+msgid "Arabic - Bahrain"
+msgstr "Arabe - Bahreïn"
+
+msgid "Arabic - Egypt"
+msgstr "Arabe - Égypte"
+
+msgid "Arabic - Gulf"
+msgstr "Arabe - Golfe"
+
+msgid "Arabic - Iraq"
+msgstr "Arabe - Irak"
+
+msgid "Arabic - Jordan"
+msgstr "Arabe - Jordanie"
+
+msgid "Arabic - Kuwait"
+msgstr "Arabe - Koweït"
+
+msgid "Arabic - Lebanon"
+msgstr "Arabe - Liban"
+
+msgid "Arabic - Libya"
+msgstr "Arabe - Libye"
+
+msgid "Arabic - Marocco"
+msgstr "Arabe - Maroc"
+
+msgid "Arabic - Morocco"
+msgstr "Arabe - Maroc"
+
+msgid "Arabic - North Levant"
+msgstr "Arabe - Levant Nord"
+
+msgid "Arabic - Oman"
+msgstr "Arabe - Oman"
+
+msgid "Arabic - Qatar"
+msgstr "Arabe - Qatar"
+
+msgid "Arabic - Saudi Arabia"
+msgstr "Arabe - Arabie Saoudite"
+
+msgid "Arabic - South Levant"
+msgstr "Arabe - Levant Sud"
+
+msgid "Arabic - Sudan"
+msgstr "Arabe - Soudan"
+
+msgid "Arabic - Syria"
+msgstr "Arabe - Syrie"
+
+msgid "Arabic - Tunisia"
+msgstr "Arabe - Tunisie"
+
+msgid "Arabic - U.A.E."
+msgstr "Arabe - E.A.U."
+
+msgid "Arabic - Yemen"
+msgstr "Arabe - Yémen"
+
+msgid "Assamese"
+msgstr "Assamais"
+
+msgid "Aymara"
+msgstr "Aymara"
+
+msgid "Azerbaijani"
+msgstr "Azerbaïdjan"
+
+msgid "Bashkir"
+msgstr "Bashkir"
+
+msgid "Basque"
+msgstr "Basque"
+
+msgid "Bengali"
+msgstr "Bengali"
+
+msgid "Bislama"
+msgstr "Bislama"
+
+msgid "Bosnian"
+msgstr "Bosniaque"
+
+msgid "Breton"
+msgstr "Breton"
+
+msgid "Bulgarian"
+msgstr "Bulgare"
+
+msgid "Byelorussian"
+msgstr "Biélorusse"
+
+msgid "Catalan"
+msgstr "Catalan"
+
+msgid "Chamorro"
+msgstr "Chamorro"
+
+msgid "Chechen"
+msgstr "Tchétchénie"
+
+msgid "Chinese (Simplified)"
+msgstr "Chinois (simplifié)"
+
+msgid "Chinese (Traditional)"
+msgstr "Chinois (traditionnel)"
+
+msgid "Chuvash"
+msgstr "Tchouvache"
+
+msgid "Corsican"
+msgstr "Corse"
+
+msgid "Croatian"
+msgstr "Croate"
+
+msgid "Croatian - Bosnia and Herzegovina"
+msgstr "Croate - Bosnie-Herzégovine"
+
+msgid "Croatian - Croatia"
+msgstr "Croate - Croatie"
+
+msgid "Czech"
+msgstr "Tchèque"
+
+msgid "Danish"
+msgstr "Danois"
+
+msgid "Dutch"
+msgstr "Néerlandais"
+
+msgid "Dutch - Netherlands"
+msgstr "Néerlandais - Pays-Bas"
+
+msgid "Dzongkha"
+msgstr "Dzongkha"
+
+msgid "English"
+msgstr "Anglais"
+
+msgid "English - Australia"
+msgstr "Anglais - Australie"
+
+msgid "English - Belize"
+msgstr "Anglais - Belize"
+
+msgid "English - Canada"
+msgstr "Anglais - Canada"
+
+msgid "English - Caribbean"
+msgstr "Anglais - Caraïbes"
+
+msgid "English - Ireland"
+msgstr "Anglais - Irlande"
+
+msgid "English - Jamaica"
+msgstr "Anglais - Jamaïque"
+
+msgid "English - New Zealand"
+msgstr "Anglais - Nouvelle-Zélande"
+
+msgid "English - Republic of the Philippines"
+msgstr "Anglais - République des Philippines"
+
+msgid "English - South Africa"
+msgstr "Anglais - Afrique du Sud"
+
+msgid "English - Trinidad and Tobago"
+msgstr "Anglais - Trinité-et-Tobago"
+
+msgid "English - United Kingdom"
+msgstr "Anglais - Royaume-Uni"
+
+msgid "English - United States"
+msgstr "Anglais - États-Unis"
+
+msgid "English - Zimbabwe"
+msgstr "Anglais - Zimbabwe"
+
+msgid "Esperanto"
+msgstr "Espéranto"
+
+msgid "Estonian"
+msgstr "Estonien"
+
+msgid "Faroese"
+msgstr "Féroïen"
+
+msgid "Fijian"
+msgstr "Fidjien"
+
+msgid "Finnish"
+msgstr "Finlandais"
+
+msgid "Flemish - Belgium"
+msgstr "Flamand - Belgique"
+
+msgid "French"
+msgstr "Français"
+
+msgid "French - Belgium"
+msgstr "Français - Belgique"
+
+msgid "French - Canada"
+msgstr "Français - Canada"
+
+msgid "French - France"
+msgstr "Français - France"
+
+msgid "French - Luxembourg"
+msgstr "Français - Luxembourg"
+
+msgid "French - Monaco"
+msgstr "Français - Monaco"
+
+msgid "French - Switzerland"
+msgstr "Français - Suisse"
+
+msgid "Frisian"
+msgstr "Frison"
+
+msgid "Gaelic"
+msgstr "gaélique"
+
+msgid "Galician"
+msgstr "Galicien"
+
+msgid "Georgian"
+msgstr "Géorgien"
+
+msgid "German"
+msgstr "Allemand"
+
+msgid "German - Austria"
+msgstr "Allemand - Autriche"
+
+msgid "German - Germany"
+msgstr "Allemand - Allemagne"
+
+msgid "German - Liechtenstein"
+msgstr "Allemand - Liechtenstein"
+
+msgid "German - Luxembourg"
+msgstr "Allemand - Luxembourg"
+
+msgid "German - Switzerland"
+msgstr "Allemand - Suisse"
+
+msgid "Greek"
+msgstr "Grecque"
+
+msgid "Guarani"
+msgstr "Guarani"
+
+msgid "Gujarati"
+msgstr "Gujarati"
+
+msgid "Hebrew"
+msgstr "Hébreu"
+
+msgid "Hindi"
+msgstr "Hindi"
+
+msgid "Hungarian"
+msgstr "Hongrois"
+
+msgid "Indonesian"
+msgstr "Indonésien"
+
+msgid "Interlingua"
+msgstr "Interlingua"
+
+msgid "Islandic"
+msgstr "Islandais"
+
+msgid "Italian"
+msgstr "Italien"
+
+msgid "Italian - Italy"
+msgstr "Italien - Italie"
+
+msgid "Italian - Switzerland"
+msgstr "Italien - Suisse"
+
+msgid "Japanese"
+msgstr "Japonais"
+
+msgid "Javanese"
+msgstr "Javanais"
+
+msgid "Korean"
+msgstr "Coréen"
+
+msgid "Kurdish"
+msgstr "Kurde"
+
+msgid "Latvian"
+msgstr "Letton"
+
+msgid "Lithuanian"
+msgstr "Lituanien"
+
+msgid "Macedonian"
+msgstr "Macédonien"
+
+msgid "Malagasy"
+msgstr "Malgache"
+
+msgid "Malay"
+msgstr "Malais"
+
+msgid "Maltese"
+msgstr "Maltais"
+
+msgid "Mongolian"
+msgstr "Mongol"
+
+msgid "Norwegian"
+msgstr "Norvégien"
+
+msgid "Norwegian Nynorsk"
+msgstr "Norvégien Nynorsk"
+
+msgid "Pashto"
+msgstr "Pashto"
+
+msgid "Persian"
+msgstr "Persan"
+
+msgid "Polish"
+msgstr "Polonais"
+
+msgid "Portuguese"
+msgstr "Portugais"
+
+msgid "Portuguese - Brazil"
+msgstr "Portugais - Brésil"
+
+msgid "Portuguese - Portugal"
+msgstr "Portugais - Portugal"
+
+msgid "Punjabi"
+msgstr "Pendjabi"
+
+msgid "Punjabi - Arab"
+msgstr "Punjabi - Arabe"
+
+msgid "Romanian"
+msgstr "Roumain"
+
+msgid "Russian"
+msgstr "Russe"
+
+msgid "Scottish Gaelic"
+msgstr "Gaelic écossais"
+
+msgid "Serbian"
+msgstr "Serbe"
+
+msgid "Sinhalese"
+msgstr "Cingalais"
+
+msgid "Slovak"
+msgstr "Slovaque"
+
+msgid "Slovenian"
+msgstr "Slovène"
+
+msgid "Spanish"
+msgstr "Espagnol"
+
+msgid "Spanish - Argentina"
+msgstr "Espagnol - Argentine"
+
+msgid "Spanish - Bolivia"
+msgstr "Espagnol - Bolivie"
+
+msgid "Spanish - Chile"
+msgstr "Espagnol - Chili"
+
+msgid "Spanish - Colombia"
+msgstr "Espagnol - Colombie"
+
+msgid "Spanish - Costa Rica"
+msgstr "Espagnol - Costa Rica"
+
+msgid "Spanish - Dominican Republic"
+msgstr "Espagnol - République dominicaine"
+
+msgid "Spanish - Ecuador"
+msgstr "Espagnol - Équateur"
+
+msgid "Spanish - El Salvador"
+msgstr "Espagnol - El Salvador"
+
+msgid "Spanish - Guatemala"
+msgstr "Espagnol - Guatemala"
+
+msgid "Spanish - Honduras"
+msgstr "Espagnol - Honduras"
+
+msgid "Spanish - Latin America and the Caribbean"
+msgstr "Espagnol - Amérique latine et Caraïbes"
+
+msgid "Spanish - Mexico"
+msgstr "Espagnol - Mexique"
+
+msgid "Spanish - Nicaragua"
+msgstr "Espagnol - Nicaragua"
+
+msgid "Spanish - Panama"
+msgstr "Espagnol - Panama"
+
+msgid "Spanish - Paraguay"
+msgstr "Espagnol - Paraguay"
+
+msgid "Spanish - Peru"
+msgstr "Espagnol - Pérou"
+
+msgid "Spanish - Puerto Rico"
+msgstr "Espagnol - Porto Rico"
+
+msgid "Spanish - Spain"
+msgstr "Espagnol - Espagne"
+
+msgid "Spanish - Uruguay"
+msgstr "Espagnol - Uruguay"
+
+msgid "Spanish - Venezuela"
+msgstr "Espagnol - Venezuela"
+
+msgid "Standard Arabic"
+msgstr "Arabe standard"
+
+msgid "Sundanese"
+msgstr "Sundanais"
+
+msgid "Swahili"
+msgstr "Swahili"
+
+msgid "Swedish"
+msgstr "Suédois"
+
+msgid "Tagalog"
+msgstr "Tagalog"
+
+msgid "Tamil"
+msgstr "Tamoul"
+
+msgid "Thai"
+msgstr "Thaïlande"
+
+msgid "Tibetan"
+msgstr "tibétain"
+
+msgid "Turkish"
+msgstr "Turc"
+
+msgid "Ukrainian"
+msgstr "Ukrainien"
+
+msgid "Urdu"
+msgstr "Urdu"
+
+msgid "Vietnamese"
+msgstr "Vietnamien"
+
+msgid "Welsh"
+msgstr "Gallois"
+
+msgid "Xhosa"
+msgstr "Xhosa"
+
+msgid "Yoruba"
+msgstr "Yoruba"
+

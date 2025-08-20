@@ -1,0 +1,516 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2025-08-20 16:44\n"
+"Last-Translator: \n"
+"Language-Team: Arabic\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5);\n"
+"X-Crowdin-Project: zotonic\n"
+"X-Crowdin-Project-ID: 3405\n"
+"X-Crowdin-Language: ar\n"
+"X-Crowdin-File: /master/apps/zotonic_core/priv/translations/zotonic-language.pot\n"
+"X-Crowdin-File-ID: 8696\n"
+"Language: ar_SA\n"
+
+msgid "Abkhazian"
+msgstr "أبخازيا"
+
+msgid "Afar"
+msgstr "عفار"
+
+msgid "Afrikaans"
+msgstr "الأفريكانية"
+
+msgid "Albanian"
+msgstr "الألبانية"
+
+msgid "Amharic"
+msgstr "الأمهرية"
+
+msgid "Arabic"
+msgstr "اللغة العربية"
+
+msgid "Arabic - Algerian Sahara"
+msgstr "العربية - الصحراء الجزائرية"
+
+msgid "Arabic - Bahrain"
+msgstr "العربية - البحرين"
+
+msgid "Arabic - Egypt"
+msgstr "العربية - مصر"
+
+msgid "Arabic - Gulf"
+msgstr "العربية - الخليج"
+
+msgid "Arabic - Iraq"
+msgstr "العربية - العراق"
+
+msgid "Arabic - Jordan"
+msgstr "العربية - الأردن"
+
+msgid "Arabic - Kuwait"
+msgstr "العربية - الكويت"
+
+msgid "Arabic - Lebanon"
+msgstr "العربية - لبنان"
+
+msgid "Arabic - Libya"
+msgstr "العربية - ليبيا"
+
+msgid "Arabic - Marocco"
+msgstr "العربية - المغرب"
+
+msgid "Arabic - Morocco"
+msgstr "العربية - المغرب"
+
+msgid "Arabic - North Levant"
+msgstr "العربية - شمال المشرق العربي"
+
+msgid "Arabic - Oman"
+msgstr "العربية - عُمان"
+
+msgid "Arabic - Qatar"
+msgstr "العربية - قطر"
+
+msgid "Arabic - Saudi Arabia"
+msgstr "العربية - المملكة العربية السعودية"
+
+msgid "Arabic - South Levant"
+msgstr "العربية - جنوب المشرق العربي"
+
+msgid "Arabic - Sudan"
+msgstr "العربية - السودان"
+
+msgid "Arabic - Syria"
+msgstr "العربية - سوريا"
+
+msgid "Arabic - Tunisia"
+msgstr "العربية - تونس"
+
+msgid "Arabic - U.A.E."
+msgstr "العربية - الإمارات العربية المتحدة"
+
+msgid "Arabic - Yemen"
+msgstr "العربية - اليمن"
+
+msgid "Assamese"
+msgstr "آسامية"
+
+msgid "Aymara"
+msgstr "أيمارا"
+
+msgid "Azerbaijani"
+msgstr "أذربيجان"
+
+msgid "Bashkir"
+msgstr "باشكير"
+
+msgid "Basque"
+msgstr "الباسك"
+
+msgid "Bengali"
+msgstr "البنغالية"
+
+msgid "Bislama"
+msgstr "بيسلاما"
+
+msgid "Bosnian"
+msgstr "البوسني"
+
+msgid "Breton"
+msgstr "بريتون"
+
+msgid "Bulgarian"
+msgstr "البلغارية"
+
+msgid "Byelorussian"
+msgstr "البيلاروسية"
+
+msgid "Catalan"
+msgstr "الكاتالونية"
+
+msgid "Chamorro"
+msgstr "تشامورو"
+
+msgid "Chechen"
+msgstr "الشيشان"
+
+msgid "Chinese (Simplified)"
+msgstr "الصينية (المبسطة)"
+
+msgid "Chinese (Traditional)"
+msgstr "الصينية (التقليدية)"
+
+msgid "Chuvash"
+msgstr "تشوفاش"
+
+msgid "Corsican"
+msgstr "الكورسيكية"
+
+msgid "Croatian"
+msgstr "الكرواتية"
+
+msgid "Croatian - Bosnia and Herzegovina"
+msgstr "الكرواتية - البوسنة والهرسك"
+
+msgid "Croatian - Croatia"
+msgstr "الكرواتية - كرواتيا"
+
+msgid "Czech"
+msgstr "التشيكية"
+
+msgid "Danish"
+msgstr "دانماركي"
+
+msgid "Dutch"
+msgstr "هولندي"
+
+msgid "Dutch - Netherlands"
+msgstr "الهولندية - هولندا"
+
+msgid "Dzongkha"
+msgstr "دزونغخا"
+
+msgid "English"
+msgstr "الإنجليزية"
+
+msgid "English - Australia"
+msgstr "الإنجليزية - أستراليا"
+
+msgid "English - Belize"
+msgstr "الإنجليزية - بليز"
+
+msgid "English - Canada"
+msgstr "الإنجليزية - كندا"
+
+msgid "English - Caribbean"
+msgstr "الإنجليزية - الكاريبي"
+
+msgid "English - Ireland"
+msgstr "الإنجليزية - أيرلندا"
+
+msgid "English - Jamaica"
+msgstr "الإنجليزية - جامايكا"
+
+msgid "English - New Zealand"
+msgstr "الإنجليزية - نيوزيلندا"
+
+msgid "English - Republic of the Philippines"
+msgstr "الإنجليزية - جمهورية الفلبين"
+
+msgid "English - South Africa"
+msgstr "الإنجليزية - جنوب أفريقيا"
+
+msgid "English - Trinidad and Tobago"
+msgstr "الإنجليزية - ترينيداد وتوباغو"
+
+msgid "English - United Kingdom"
+msgstr "الإنجليزية - المملكة المتحدة"
+
+msgid "English - United States"
+msgstr "الإنجليزية - الولايات المتحدة"
+
+msgid "English - Zimbabwe"
+msgstr "الإنجليزية - زيمبابوي"
+
+msgid "Esperanto"
+msgstr "الإسبرانتو"
+
+msgid "Estonian"
+msgstr "الإستونية"
+
+msgid "Faroese"
+msgstr "الفارو"
+
+msgid "Fijian"
+msgstr "فيجي"
+
+msgid "Finnish"
+msgstr "الفنلندية"
+
+msgid "Flemish - Belgium"
+msgstr "الفلمنكية - بلجيكا"
+
+msgid "French"
+msgstr "فرنسي"
+
+msgid "French - Belgium"
+msgstr "الفرنسية - بلجيكا"
+
+msgid "French - Canada"
+msgstr "الفرنسية - كندا"
+
+msgid "French - France"
+msgstr "الفرنسية - فرنسا"
+
+msgid "French - Luxembourg"
+msgstr "الفرنسية - لوكسمبورغ"
+
+msgid "French - Monaco"
+msgstr "الفرنسية - موناكو"
+
+msgid "French - Switzerland"
+msgstr "الفرنسية - سويسرا"
+
+msgid "Frisian"
+msgstr "الفريزية"
+
+msgid "Gaelic"
+msgstr "الغيلية"
+
+msgid "Galician"
+msgstr "الجاليكية"
+
+msgid "Georgian"
+msgstr "جورجي"
+
+msgid "German"
+msgstr "ألمانية"
+
+msgid "German - Austria"
+msgstr "الألمانية - النمسا"
+
+msgid "German - Germany"
+msgstr "الألمانية - ألمانيا"
+
+msgid "German - Liechtenstein"
+msgstr "الألمانية - ليختنشتاين"
+
+msgid "German - Luxembourg"
+msgstr "الألمانية - لوكسمبورغ"
+
+msgid "German - Switzerland"
+msgstr "الألمانية - سويسرا"
+
+msgid "Greek"
+msgstr "اليونانية"
+
+msgid "Guarani"
+msgstr "غواراني"
+
+msgid "Gujarati"
+msgstr "الغوجاراتية"
+
+msgid "Hebrew"
+msgstr "العبرية"
+
+msgid "Hindi"
+msgstr "هندي"
+
+msgid "Hungarian"
+msgstr "المجرية"
+
+msgid "Indonesian"
+msgstr "الإندونيسية"
+
+msgid "Interlingua"
+msgstr "إنترلينجوا"
+
+msgid "Islandic"
+msgstr "آيلاندك"
+
+msgid "Italian"
+msgstr "إيطالي"
+
+msgid "Italian - Italy"
+msgstr "الإيطالية - إيطاليا"
+
+msgid "Italian - Switzerland"
+msgstr "الإيطالية - سويسرا"
+
+msgid "Japanese"
+msgstr "ياباني"
+
+msgid "Javanese"
+msgstr "الجاوية"
+
+msgid "Korean"
+msgstr "كوري"
+
+msgid "Kurdish"
+msgstr "الكردية"
+
+msgid "Latvian"
+msgstr "اللاتفية"
+
+msgid "Lithuanian"
+msgstr "الليتوانية"
+
+msgid "Macedonian"
+msgstr "المقدونية"
+
+msgid "Malagasy"
+msgstr "مدغشقر"
+
+msgid "Malay"
+msgstr "الملايو"
+
+msgid "Maltese"
+msgstr "المالطية"
+
+msgid "Mongolian"
+msgstr "المنغولية"
+
+msgid "Norwegian"
+msgstr "النرويجية"
+
+msgid "Norwegian Nynorsk"
+msgstr "نينورسك النرويجية"
+
+msgid "Pashto"
+msgstr "الباشتو"
+
+msgid "Persian"
+msgstr "فارسي"
+
+msgid "Polish"
+msgstr "البولندية"
+
+msgid "Portuguese"
+msgstr "البرتغالية"
+
+msgid "Portuguese - Brazil"
+msgstr "البرتغالية - البرازيل"
+
+msgid "Portuguese - Portugal"
+msgstr "البرتغالية - البرتغال"
+
+msgid "Punjabi"
+msgstr "البنجابية"
+
+msgid "Punjabi - Arab"
+msgstr "البنجابية - العربية"
+
+msgid "Romanian"
+msgstr "روماني"
+
+msgid "Russian"
+msgstr "الروسية"
+
+msgid "Scottish Gaelic"
+msgstr "الغيلية الاسكتلندية"
+
+msgid "Serbian"
+msgstr "الصربية"
+
+msgid "Sinhalese"
+msgstr "السنهالية"
+
+msgid "Slovak"
+msgstr "السلوفاكية"
+
+msgid "Slovenian"
+msgstr "السلوفينية"
+
+msgid "Spanish"
+msgstr "الأسبانية"
+
+msgid "Spanish - Argentina"
+msgstr "الإسبانية - الأرجنتين"
+
+msgid "Spanish - Bolivia"
+msgstr "الإسبانية - بوليفيا"
+
+msgid "Spanish - Chile"
+msgstr "الإسبانية - تشيلي"
+
+msgid "Spanish - Colombia"
+msgstr "الإسبانية - كولومبيا"
+
+msgid "Spanish - Costa Rica"
+msgstr "الإسبانية - كوستاريكا"
+
+msgid "Spanish - Dominican Republic"
+msgstr "الإسبانية - جمهورية الدومينيكان"
+
+msgid "Spanish - Ecuador"
+msgstr "الإسبانية - الإكوادور"
+
+msgid "Spanish - El Salvador"
+msgstr "الإسبانية - السلفادور"
+
+msgid "Spanish - Guatemala"
+msgstr "الإسبانية - غواتيمالا"
+
+msgid "Spanish - Honduras"
+msgstr "الإسبانية - هندوراس"
+
+msgid "Spanish - Latin America and the Caribbean"
+msgstr "الإسبانية - أمريكا اللاتينية ومنطقة البحر الكاريبي"
+
+msgid "Spanish - Mexico"
+msgstr "الإسبانية - المكسيك"
+
+msgid "Spanish - Nicaragua"
+msgstr "الإسبانية - نيكاراغوا"
+
+msgid "Spanish - Panama"
+msgstr "الإسبانية - بنما"
+
+msgid "Spanish - Paraguay"
+msgstr "الإسبانية - باراغواي"
+
+msgid "Spanish - Peru"
+msgstr "الإسبانية - بيرو"
+
+msgid "Spanish - Puerto Rico"
+msgstr "الإسبانية - بورتوريكو"
+
+msgid "Spanish - Spain"
+msgstr "الإسبانية - إسبانيا"
+
+msgid "Spanish - Uruguay"
+msgstr "الإسبانية - أوروغواي"
+
+msgid "Spanish - Venezuela"
+msgstr "الإسبانية - فنزويلا"
+
+msgid "Standard Arabic"
+msgstr "اللغة العربية الفصحى"
+
+msgid "Sundanese"
+msgstr "سوندانيز"
+
+msgid "Swahili"
+msgstr "السواحيلية"
+
+msgid "Swedish"
+msgstr "السويدية"
+
+msgid "Tagalog"
+msgstr "التاغالوغية"
+
+msgid "Tamil"
+msgstr "التاميل"
+
+msgid "Thai"
+msgstr "التايلاندية"
+
+msgid "Tibetan"
+msgstr "التبتية"
+
+msgid "Turkish"
+msgstr "اللغة التركية"
+
+msgid "Ukrainian"
+msgstr "أوكراني"
+
+msgid "Urdu"
+msgstr "الأردية"
+
+msgid "Vietnamese"
+msgstr "الفيتنامية"
+
+msgid "Welsh"
+msgstr "الويلزية"
+
+msgid "Xhosa"
+msgstr "الزوسا"
+
+msgid "Yoruba"
+msgstr "اليوروبا"
+

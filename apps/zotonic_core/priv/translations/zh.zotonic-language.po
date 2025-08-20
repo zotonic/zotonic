@@ -1,0 +1,516 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2025-08-20 16:45\n"
+"Last-Translator: \n"
+"Language-Team: Chinese Simplified\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: zotonic\n"
+"X-Crowdin-Project-ID: 3405\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /master/apps/zotonic_core/priv/translations/zotonic-language.pot\n"
+"X-Crowdin-File-ID: 8696\n"
+"Language: zh_CN\n"
+
+msgid "Abkhazian"
+msgstr "阿布哈兹语"
+
+msgid "Afar"
+msgstr "阿法尔"
+
+msgid "Afrikaans"
+msgstr "南非语"
+
+msgid "Albanian"
+msgstr "阿尔巴尼亚语"
+
+msgid "Amharic"
+msgstr "阿姆哈拉语"
+
+msgid "Arabic"
+msgstr "阿拉伯语"
+
+msgid "Arabic - Algerian Sahara"
+msgstr "阿拉伯语 - 阿尔及利亚撒哈拉"
+
+msgid "Arabic - Bahrain"
+msgstr "阿拉伯语 - 巴林"
+
+msgid "Arabic - Egypt"
+msgstr "阿拉伯语 - 埃及"
+
+msgid "Arabic - Gulf"
+msgstr "阿拉伯语 - 海湾"
+
+msgid "Arabic - Iraq"
+msgstr "阿拉伯语 - 伊拉克"
+
+msgid "Arabic - Jordan"
+msgstr "阿拉伯语 - 约旦"
+
+msgid "Arabic - Kuwait"
+msgstr "阿拉伯语 - 科威特"
+
+msgid "Arabic - Lebanon"
+msgstr "阿拉伯语 - 黎巴嫩"
+
+msgid "Arabic - Libya"
+msgstr "阿拉伯语 - 利比亚"
+
+msgid "Arabic - Marocco"
+msgstr "阿拉伯语 - 摩洛哥"
+
+msgid "Arabic - Morocco"
+msgstr "阿拉伯语 - 摩洛哥"
+
+msgid "Arabic - North Levant"
+msgstr "阿拉伯语 - 北黎凡特"
+
+msgid "Arabic - Oman"
+msgstr "阿拉伯语 - 阿曼"
+
+msgid "Arabic - Qatar"
+msgstr "阿拉伯语 - 卡塔尔"
+
+msgid "Arabic - Saudi Arabia"
+msgstr "阿拉伯语 - 沙特阿拉伯"
+
+msgid "Arabic - South Levant"
+msgstr "阿拉伯语 - 南黎凡特"
+
+msgid "Arabic - Sudan"
+msgstr "阿拉伯语 - 苏丹"
+
+msgid "Arabic - Syria"
+msgstr "阿拉伯语 - 叙利亚"
+
+msgid "Arabic - Tunisia"
+msgstr "阿拉伯语 - 突尼斯"
+
+msgid "Arabic - U.A.E."
+msgstr "阿拉伯语 - 阿拉伯联合酋长国"
+
+msgid "Arabic - Yemen"
+msgstr "阿拉伯语 - 也门"
+
+msgid "Assamese"
+msgstr "阿萨姆语"
+
+msgid "Aymara"
+msgstr "艾马拉语"
+
+msgid "Azerbaijani"
+msgstr "阿塞拜疆"
+
+msgid "Bashkir"
+msgstr "巴什基尔"
+
+msgid "Basque"
+msgstr "巴斯克语"
+
+msgid "Bengali"
+msgstr "孟加拉语"
+
+msgid "Bislama"
+msgstr "比斯拉马"
+
+msgid "Bosnian"
+msgstr "波斯尼亚语"
+
+msgid "Breton"
+msgstr "布列塔尼"
+
+msgid "Bulgarian"
+msgstr "保加利亚语"
+
+msgid "Byelorussian"
+msgstr "白俄罗斯语"
+
+msgid "Catalan"
+msgstr "加泰罗尼亚语"
+
+msgid "Chamorro"
+msgstr "查莫罗"
+
+msgid "Chechen"
+msgstr "车臣"
+
+msgid "Chinese (Simplified)"
+msgstr "简体中文"
+
+msgid "Chinese (Traditional)"
+msgstr "中文（繁体）"
+
+msgid "Chuvash"
+msgstr "楚瓦什"
+
+msgid "Corsican"
+msgstr "科西嘉"
+
+msgid "Croatian"
+msgstr "克罗地亚语"
+
+msgid "Croatian - Bosnia and Herzegovina"
+msgstr "克罗地亚语 - 波斯尼亚和黑塞哥维那"
+
+msgid "Croatian - Croatia"
+msgstr "克罗地亚语 - 克罗地亚"
+
+msgid "Czech"
+msgstr "捷克语"
+
+msgid "Danish"
+msgstr "丹麦语"
+
+msgid "Dutch"
+msgstr "荷兰语"
+
+msgid "Dutch - Netherlands"
+msgstr "荷兰语 - 荷兰"
+
+msgid "Dzongkha"
+msgstr "宗卡语"
+
+msgid "English"
+msgstr "英文"
+
+msgid "English - Australia"
+msgstr "英语 - 澳大利亚"
+
+msgid "English - Belize"
+msgstr "英语 - 伯利兹"
+
+msgid "English - Canada"
+msgstr "英语 - 加拿大"
+
+msgid "English - Caribbean"
+msgstr "英语 - 加勒比地区"
+
+msgid "English - Ireland"
+msgstr "英语 - 爱尔兰"
+
+msgid "English - Jamaica"
+msgstr "英语 - 牙买加"
+
+msgid "English - New Zealand"
+msgstr "英语 - 新西兰"
+
+msgid "English - Republic of the Philippines"
+msgstr "英语 - 菲律宾共和国"
+
+msgid "English - South Africa"
+msgstr "英语 - 南非"
+
+msgid "English - Trinidad and Tobago"
+msgstr "英语 - 特立尼达和多巴哥"
+
+msgid "English - United Kingdom"
+msgstr "英语 - 英国"
+
+msgid "English - United States"
+msgstr "英语 - 美国"
+
+msgid "English - Zimbabwe"
+msgstr "英语 - 津巴布韦"
+
+msgid "Esperanto"
+msgstr "世界语"
+
+msgid "Estonian"
+msgstr "爱沙尼亚语"
+
+msgid "Faroese"
+msgstr "法罗语"
+
+msgid "Fijian"
+msgstr "斐济语"
+
+msgid "Finnish"
+msgstr "芬兰"
+
+msgid "Flemish - Belgium"
+msgstr "弗拉芒语 - 比利时"
+
+msgid "French"
+msgstr "法国人"
+
+msgid "French - Belgium"
+msgstr "法语 - 比利时"
+
+msgid "French - Canada"
+msgstr "法语 - 加拿大"
+
+msgid "French - France"
+msgstr "法语 - 法国"
+
+msgid "French - Luxembourg"
+msgstr "法语 - 卢森堡"
+
+msgid "French - Monaco"
+msgstr "法语 - 摩纳哥"
+
+msgid "French - Switzerland"
+msgstr "法语 - 瑞士"
+
+msgid "Frisian"
+msgstr "弗里斯兰语"
+
+msgid "Gaelic"
+msgstr "盖尔语"
+
+msgid "Galician"
+msgstr "加利西亚语"
+
+msgid "Georgian"
+msgstr "格鲁吉亚语"
+
+msgid "German"
+msgstr "德国"
+
+msgid "German - Austria"
+msgstr "德语 - 奥地利"
+
+msgid "German - Germany"
+msgstr "德语 - 德国"
+
+msgid "German - Liechtenstein"
+msgstr "德语 - 列支敦士登"
+
+msgid "German - Luxembourg"
+msgstr "德语 - 卢森堡"
+
+msgid "German - Switzerland"
+msgstr "德语 - 瑞士"
+
+msgid "Greek"
+msgstr "希腊文"
+
+msgid "Guarani"
+msgstr "瓜拉尼语"
+
+msgid "Gujarati"
+msgstr "古吉拉特语"
+
+msgid "Hebrew"
+msgstr "希伯来文"
+
+msgid "Hindi"
+msgstr "北印度语"
+
+msgid "Hungarian"
+msgstr "匈牙利语"
+
+msgid "Indonesian"
+msgstr "印尼语"
+
+msgid "Interlingua"
+msgstr "Interlingua"
+
+msgid "Islandic"
+msgstr "岛国"
+
+msgid "Italian"
+msgstr "意大利"
+
+msgid "Italian - Italy"
+msgstr "意大利语 - 意大利"
+
+msgid "Italian - Switzerland"
+msgstr "意大利语 - 瑞士"
+
+msgid "Japanese"
+msgstr "日语"
+
+msgid "Javanese"
+msgstr "爪哇语"
+
+msgid "Korean"
+msgstr "韩语"
+
+msgid "Kurdish"
+msgstr "库尔德语"
+
+msgid "Latvian"
+msgstr "拉脱维亚语"
+
+msgid "Lithuanian"
+msgstr "立陶宛语"
+
+msgid "Macedonian"
+msgstr "马其顿"
+
+msgid "Malagasy"
+msgstr "马达加斯加"
+
+msgid "Malay"
+msgstr "马来语"
+
+msgid "Maltese"
+msgstr "马耳他"
+
+msgid "Mongolian"
+msgstr "蒙古语"
+
+msgid "Norwegian"
+msgstr "挪威人"
+
+msgid "Norwegian Nynorsk"
+msgstr "挪威语"
+
+msgid "Pashto"
+msgstr "普什图语"
+
+msgid "Persian"
+msgstr "波斯语"
+
+msgid "Polish"
+msgstr "波兰语"
+
+msgid "Portuguese"
+msgstr "葡萄牙语"
+
+msgid "Portuguese - Brazil"
+msgstr "葡萄牙语 - 巴西"
+
+msgid "Portuguese - Portugal"
+msgstr "葡萄牙语 - 葡萄牙"
+
+msgid "Punjabi"
+msgstr "旁遮普语"
+
+msgid "Punjabi - Arab"
+msgstr "旁遮普语 - 阿拉伯语"
+
+msgid "Romanian"
+msgstr "罗马尼亚语"
+
+msgid "Russian"
+msgstr "俄语"
+
+msgid "Scottish Gaelic"
+msgstr "苏格兰盖尔语"
+
+msgid "Serbian"
+msgstr "塞尔维亚语"
+
+msgid "Sinhalese"
+msgstr "僧伽罗语"
+
+msgid "Slovak"
+msgstr "斯"
+
+msgid "Slovenian"
+msgstr "斯洛文尼亚语"
+
+msgid "Spanish"
+msgstr "西班牙语"
+
+msgid "Spanish - Argentina"
+msgstr "西班牙语 - 阿根廷"
+
+msgid "Spanish - Bolivia"
+msgstr "西班牙语 - 玻利维亚"
+
+msgid "Spanish - Chile"
+msgstr "西班牙语 - 智利"
+
+msgid "Spanish - Colombia"
+msgstr "西班牙语 - 哥伦比亚"
+
+msgid "Spanish - Costa Rica"
+msgstr "西班牙语 - 哥斯达黎加"
+
+msgid "Spanish - Dominican Republic"
+msgstr "西班牙语 - 多米尼加共和国"
+
+msgid "Spanish - Ecuador"
+msgstr "西班牙语 - 厄瓜多尔"
+
+msgid "Spanish - El Salvador"
+msgstr "西班牙语 - 萨尔瓦多"
+
+msgid "Spanish - Guatemala"
+msgstr "西班牙语 - 危地马拉"
+
+msgid "Spanish - Honduras"
+msgstr "西班牙语 - 洪都拉斯"
+
+msgid "Spanish - Latin America and the Caribbean"
+msgstr "西班牙语 - 拉丁美洲和加勒比地区"
+
+msgid "Spanish - Mexico"
+msgstr "西班牙语 - 墨西哥"
+
+msgid "Spanish - Nicaragua"
+msgstr "西班牙语 - 尼加拉瓜"
+
+msgid "Spanish - Panama"
+msgstr "西班牙语 - 巴拿马"
+
+msgid "Spanish - Paraguay"
+msgstr "西班牙语 - 巴拉圭"
+
+msgid "Spanish - Peru"
+msgstr "西班牙语 - 秘鲁"
+
+msgid "Spanish - Puerto Rico"
+msgstr "西班牙语 - 波多黎各"
+
+msgid "Spanish - Spain"
+msgstr "西班牙语 - 西班牙"
+
+msgid "Spanish - Uruguay"
+msgstr "西班牙语 - 乌拉圭"
+
+msgid "Spanish - Venezuela"
+msgstr "西班牙语 - 委内瑞拉"
+
+msgid "Standard Arabic"
+msgstr "标准阿拉伯语"
+
+msgid "Sundanese"
+msgstr "巽他语"
+
+msgid "Swahili"
+msgstr "斯瓦希里语"
+
+msgid "Swedish"
+msgstr "瑞典语"
+
+msgid "Tagalog"
+msgstr "菲律宾语"
+
+msgid "Tamil"
+msgstr "梵语"
+
+msgid "Thai"
+msgstr "泰语"
+
+msgid "Tibetan"
+msgstr "藏语"
+
+msgid "Turkish"
+msgstr "土耳其人"
+
+msgid "Ukrainian"
+msgstr "乌克兰"
+
+msgid "Urdu"
+msgstr "烏爾都語"
+
+msgid "Vietnamese"
+msgstr "越南语"
+
+msgid "Welsh"
+msgstr "威尔士"
+
+msgid "Xhosa"
+msgstr "科萨语"
+
+msgid "Yoruba"
+msgstr "伊博语"
+

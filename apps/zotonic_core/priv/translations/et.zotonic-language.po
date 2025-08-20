@@ -1,0 +1,516 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2025-08-20 16:45\n"
+"Last-Translator: \n"
+"Language-Team: Estonian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: zotonic\n"
+"X-Crowdin-Project-ID: 3405\n"
+"X-Crowdin-Language: et\n"
+"X-Crowdin-File: /master/apps/zotonic_core/priv/translations/zotonic-language.pot\n"
+"X-Crowdin-File-ID: 8696\n"
+"Language: et_EE\n"
+
+msgid "Abkhazian"
+msgstr "Abhaasia"
+
+msgid "Afar"
+msgstr "Afar"
+
+msgid "Afrikaans"
+msgstr "Afrikaans"
+
+msgid "Albanian"
+msgstr "Albaania"
+
+msgid "Amharic"
+msgstr "Amharic"
+
+msgid "Arabic"
+msgstr "Araabia keel"
+
+msgid "Arabic - Algerian Sahara"
+msgstr "Araabia keel - Alžeeria Sahara"
+
+msgid "Arabic - Bahrain"
+msgstr "Araabia keel - Bahrein"
+
+msgid "Arabic - Egypt"
+msgstr "Araabia keel - Egiptus"
+
+msgid "Arabic - Gulf"
+msgstr "Araabia keel - Pärsia laht"
+
+msgid "Arabic - Iraq"
+msgstr "Araabia keel - Iraak"
+
+msgid "Arabic - Jordan"
+msgstr "Araabia keel - Jordaania"
+
+msgid "Arabic - Kuwait"
+msgstr "Araabia keel - Kuveit"
+
+msgid "Arabic - Lebanon"
+msgstr "Araabia keel - Liibanon"
+
+msgid "Arabic - Libya"
+msgstr "Araabia keel - Liibüa"
+
+msgid "Arabic - Marocco"
+msgstr "Araabia keel - Maroko"
+
+msgid "Arabic - Morocco"
+msgstr "Araabia keel - Maroko"
+
+msgid "Arabic - North Levant"
+msgstr "Araabia keel - Põhja-Levant"
+
+msgid "Arabic - Oman"
+msgstr "Araabia keel - Omaan"
+
+msgid "Arabic - Qatar"
+msgstr "Araabia keel - Katar"
+
+msgid "Arabic - Saudi Arabia"
+msgstr "Araabia keel - Saudi Araabia"
+
+msgid "Arabic - South Levant"
+msgstr "Araabia keel - Lõuna-Levant"
+
+msgid "Arabic - Sudan"
+msgstr "Araabia keel - Sudaan"
+
+msgid "Arabic - Syria"
+msgstr "Araabia keel - Süüria"
+
+msgid "Arabic - Tunisia"
+msgstr "Araabia keel - Tuneesia"
+
+msgid "Arabic - U.A.E."
+msgstr "Araabia keel - Araabia Ühendemiraadid."
+
+msgid "Arabic - Yemen"
+msgstr "Araabia keel - Jeemen"
+
+msgid "Assamese"
+msgstr "Assami"
+
+msgid "Aymara"
+msgstr "Aymara"
+
+msgid "Azerbaijani"
+msgstr "Aserbaidžaan"
+
+msgid "Bashkir"
+msgstr "Bashkir"
+
+msgid "Basque"
+msgstr "Baskimaa"
+
+msgid "Bengali"
+msgstr "Bengali"
+
+msgid "Bislama"
+msgstr "Bislama"
+
+msgid "Bosnian"
+msgstr "Bosnia ja Hertsegoviina"
+
+msgid "Breton"
+msgstr "Bretooni"
+
+msgid "Bulgarian"
+msgstr "Bulgaaria"
+
+msgid "Byelorussian"
+msgstr "Valgevene"
+
+msgid "Catalan"
+msgstr "Katalaani"
+
+msgid "Chamorro"
+msgstr "Chamorro"
+
+msgid "Chechen"
+msgstr "Tšetšeenia"
+
+msgid "Chinese (Simplified)"
+msgstr "Hiina keel (lihtsustatud)"
+
+msgid "Chinese (Traditional)"
+msgstr "Hiina (traditsiooniline)"
+
+msgid "Chuvash"
+msgstr "Tšuvaši"
+
+msgid "Corsican"
+msgstr "Korsika"
+
+msgid "Croatian"
+msgstr "Horvaatia"
+
+msgid "Croatian - Bosnia and Herzegovina"
+msgstr "Horvaatia - Bosnia ja Hertsegoviina"
+
+msgid "Croatian - Croatia"
+msgstr "Horvaatia - Horvaatia"
+
+msgid "Czech"
+msgstr "Tšehhi"
+
+msgid "Danish"
+msgstr "Taani keel"
+
+msgid "Dutch"
+msgstr "Hollandi"
+
+msgid "Dutch - Netherlands"
+msgstr "Hollandi - Holland"
+
+msgid "Dzongkha"
+msgstr "Dzongkha"
+
+msgid "English"
+msgstr "Inglise"
+
+msgid "English - Australia"
+msgstr "Inglise keel - Austraalia"
+
+msgid "English - Belize"
+msgstr "inglise keel - Belize"
+
+msgid "English - Canada"
+msgstr "inglise keel - Kanada"
+
+msgid "English - Caribbean"
+msgstr "Inglise keel - Kariibi mere piirkond"
+
+msgid "English - Ireland"
+msgstr "Inglise keel - Iirimaa"
+
+msgid "English - Jamaica"
+msgstr "inglise keel - Jamaica"
+
+msgid "English - New Zealand"
+msgstr "Inglise keel - Uus-Meremaa"
+
+msgid "English - Republic of the Philippines"
+msgstr "Inglise keel - Filipiini Vabariik"
+
+msgid "English - South Africa"
+msgstr "Inglise keel - Lõuna-Aafrika Vabariik"
+
+msgid "English - Trinidad and Tobago"
+msgstr "Inglise keel - Trinidad ja Tobago"
+
+msgid "English - United Kingdom"
+msgstr "Inglise keel - Ühendkuningriik"
+
+msgid "English - United States"
+msgstr "Inglise keel - Ameerika Ühendriigid"
+
+msgid "English - Zimbabwe"
+msgstr "Inglise keel - Zimbabwe"
+
+msgid "Esperanto"
+msgstr "Esperanto"
+
+msgid "Estonian"
+msgstr "Eesti"
+
+msgid "Faroese"
+msgstr "Fääri saarte"
+
+msgid "Fijian"
+msgstr "Fidži"
+
+msgid "Finnish"
+msgstr "Soome keel"
+
+msgid "Flemish - Belgium"
+msgstr "Flaami - Belgia"
+
+msgid "French"
+msgstr "Prantsuse keel"
+
+msgid "French - Belgium"
+msgstr "Prantsuse keel - Belgia"
+
+msgid "French - Canada"
+msgstr "Prantsuse keel - Kanada"
+
+msgid "French - France"
+msgstr "Prantsuse keel - Prantsusmaa"
+
+msgid "French - Luxembourg"
+msgstr "Prantsuse keel - Luksemburg"
+
+msgid "French - Monaco"
+msgstr "Prantsuse - Monaco"
+
+msgid "French - Switzerland"
+msgstr "Prantsuse keel - Šveits"
+
+msgid "Frisian"
+msgstr "Friisi"
+
+msgid "Gaelic"
+msgstr "Gaelic"
+
+msgid "Galician"
+msgstr "Galicia"
+
+msgid "Georgian"
+msgstr "Gruusia"
+
+msgid "German"
+msgstr "Saksa keel"
+
+msgid "German - Austria"
+msgstr "Saksamaa - Austria"
+
+msgid "German - Germany"
+msgstr "Saksa keel - Saksamaa"
+
+msgid "German - Liechtenstein"
+msgstr "Saksa keel - Liechtenstein"
+
+msgid "German - Luxembourg"
+msgstr "Saksa keel - Luksemburg"
+
+msgid "German - Switzerland"
+msgstr "Saksa keel - Šveits"
+
+msgid "Greek"
+msgstr "Kreeka"
+
+msgid "Guarani"
+msgstr "Guarani"
+
+msgid "Gujarati"
+msgstr "Gujarati"
+
+msgid "Hebrew"
+msgstr "Heebrea"
+
+msgid "Hindi"
+msgstr "Hindi"
+
+msgid "Hungarian"
+msgstr "Ungari keel"
+
+msgid "Indonesian"
+msgstr "Indoneesia"
+
+msgid "Interlingua"
+msgstr "Interlingua"
+
+msgid "Islandic"
+msgstr "Islandic"
+
+msgid "Italian"
+msgstr "Itaalia keel"
+
+msgid "Italian - Italy"
+msgstr "Itaalia - Itaalia"
+
+msgid "Italian - Switzerland"
+msgstr "Itaalia - Šveits"
+
+msgid "Japanese"
+msgstr "Jaapani"
+
+msgid "Javanese"
+msgstr "Javanese"
+
+msgid "Korean"
+msgstr "Korea"
+
+msgid "Kurdish"
+msgstr "Kurdi"
+
+msgid "Latvian"
+msgstr "Läti"
+
+msgid "Lithuanian"
+msgstr "Leedu"
+
+msgid "Macedonian"
+msgstr "Makedoonia"
+
+msgid "Malagasy"
+msgstr "Madagaskar"
+
+msgid "Malay"
+msgstr "Malai"
+
+msgid "Maltese"
+msgstr "Malta"
+
+msgid "Mongolian"
+msgstr "Mongoolia"
+
+msgid "Norwegian"
+msgstr "Norra keel"
+
+msgid "Norwegian Nynorsk"
+msgstr "Norra Nynorsk"
+
+msgid "Pashto"
+msgstr "Pashto"
+
+msgid "Persian"
+msgstr "Pärsia"
+
+msgid "Polish"
+msgstr "Poola"
+
+msgid "Portuguese"
+msgstr "Portugali"
+
+msgid "Portuguese - Brazil"
+msgstr "Portugali keel - Brasiilia"
+
+msgid "Portuguese - Portugal"
+msgstr "Portugali keel - Portugal"
+
+msgid "Punjabi"
+msgstr "Pandžabi"
+
+msgid "Punjabi - Arab"
+msgstr "Pandžabi - araabia"
+
+msgid "Romanian"
+msgstr "Rumeenia keel"
+
+msgid "Russian"
+msgstr "Vene keel"
+
+msgid "Scottish Gaelic"
+msgstr "Šoti gaeli keel"
+
+msgid "Serbian"
+msgstr "Serbia"
+
+msgid "Sinhalese"
+msgstr "Sinaallased"
+
+msgid "Slovak"
+msgstr "Slovakkia"
+
+msgid "Slovenian"
+msgstr "Sloveenia"
+
+msgid "Spanish"
+msgstr "Hispaania keel"
+
+msgid "Spanish - Argentina"
+msgstr "Hispaania - Argentiina"
+
+msgid "Spanish - Bolivia"
+msgstr "Hispaania - Boliivia"
+
+msgid "Spanish - Chile"
+msgstr "Hispaania - Tšiili"
+
+msgid "Spanish - Colombia"
+msgstr "Hispaania - Kolumbia"
+
+msgid "Spanish - Costa Rica"
+msgstr "Hispaania - Costa Rica"
+
+msgid "Spanish - Dominican Republic"
+msgstr "Hispaania - Dominikaani Vabariik"
+
+msgid "Spanish - Ecuador"
+msgstr "Hispaania - Ecuador"
+
+msgid "Spanish - El Salvador"
+msgstr "Hispaania - El Salvador"
+
+msgid "Spanish - Guatemala"
+msgstr "Hispaania - Guatemala"
+
+msgid "Spanish - Honduras"
+msgstr "Hispaania - Honduras"
+
+msgid "Spanish - Latin America and the Caribbean"
+msgstr "Hispaania - Ladina-Ameerika ja Kariibi mere piirkond"
+
+msgid "Spanish - Mexico"
+msgstr "Hispaania - Mehhiko"
+
+msgid "Spanish - Nicaragua"
+msgstr "Hispaania - Nicaragua"
+
+msgid "Spanish - Panama"
+msgstr "Hispaania - Panama"
+
+msgid "Spanish - Paraguay"
+msgstr "Hispaania - Paraguay"
+
+msgid "Spanish - Peru"
+msgstr "Hispaania - Peruu"
+
+msgid "Spanish - Puerto Rico"
+msgstr "Hispaania - Puerto Rico"
+
+msgid "Spanish - Spain"
+msgstr "Hispaania - Hispaania"
+
+msgid "Spanish - Uruguay"
+msgstr "Hispaania - Uruguay"
+
+msgid "Spanish - Venezuela"
+msgstr "Hispaania - Venezuela"
+
+msgid "Standard Arabic"
+msgstr "Standardne araabia keel"
+
+msgid "Sundanese"
+msgstr "Sundanese"
+
+msgid "Swahili"
+msgstr "Swahili"
+
+msgid "Swedish"
+msgstr "Rootsi keel"
+
+msgid "Tagalog"
+msgstr "Tagalog"
+
+msgid "Tamil"
+msgstr "Tamil"
+
+msgid "Thai"
+msgstr "Tai"
+
+msgid "Tibetan"
+msgstr "Tiibeti"
+
+msgid "Turkish"
+msgstr "Türgi keel"
+
+msgid "Ukrainian"
+msgstr "Ukraina"
+
+msgid "Urdu"
+msgstr "Urdu"
+
+msgid "Vietnamese"
+msgstr "Vietnami"
+
+msgid "Welsh"
+msgstr "Walesi"
+
+msgid "Xhosa"
+msgstr "Xhosa"
+
+msgid "Yoruba"
+msgstr "Joruba"
+

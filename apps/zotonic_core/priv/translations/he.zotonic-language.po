@@ -1,0 +1,516 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2025-08-20 16:44\n"
+"Last-Translator: \n"
+"Language-Team: Hebrew\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3;\n"
+"X-Crowdin-Project: zotonic\n"
+"X-Crowdin-Project-ID: 3405\n"
+"X-Crowdin-Language: he\n"
+"X-Crowdin-File: /master/apps/zotonic_core/priv/translations/zotonic-language.pot\n"
+"X-Crowdin-File-ID: 8696\n"
+"Language: he_IL\n"
+
+msgid "Abkhazian"
+msgstr "אבחזית"
+
+msgid "Afar"
+msgstr "אפר"
+
+msgid "Afrikaans"
+msgstr "אפריקנס"
+
+msgid "Albanian"
+msgstr "אלבנית"
+
+msgid "Amharic"
+msgstr "אמהרית"
+
+msgid "Arabic"
+msgstr "ערבית"
+
+msgid "Arabic - Algerian Sahara"
+msgstr "ערבית - אלג'ירית סהרה"
+
+msgid "Arabic - Bahrain"
+msgstr "ערבית - בחריין"
+
+msgid "Arabic - Egypt"
+msgstr "ערבית - מצרים"
+
+msgid "Arabic - Gulf"
+msgstr "ערבית - המפרץ"
+
+msgid "Arabic - Iraq"
+msgstr "ערבית - עיראק"
+
+msgid "Arabic - Jordan"
+msgstr "ערבית - ירדן"
+
+msgid "Arabic - Kuwait"
+msgstr "ערבית - כווית"
+
+msgid "Arabic - Lebanon"
+msgstr "ערבית - לבנון"
+
+msgid "Arabic - Libya"
+msgstr "ערבית - לוב"
+
+msgid "Arabic - Marocco"
+msgstr "ערבית - מרוקו"
+
+msgid "Arabic - Morocco"
+msgstr "ערבית - מרוקו"
+
+msgid "Arabic - North Levant"
+msgstr "ערבית - לבנט הצפוני"
+
+msgid "Arabic - Oman"
+msgstr "ערבית - עומאן"
+
+msgid "Arabic - Qatar"
+msgstr "ערבית - קטאר"
+
+msgid "Arabic - Saudi Arabia"
+msgstr "ערבית - ערב הסעודית"
+
+msgid "Arabic - South Levant"
+msgstr "ערבית - דרום לבנט"
+
+msgid "Arabic - Sudan"
+msgstr "ערבית - סודן"
+
+msgid "Arabic - Syria"
+msgstr "ערבית - סוריה"
+
+msgid "Arabic - Tunisia"
+msgstr "ערבית - תוניסיה"
+
+msgid "Arabic - U.A.E."
+msgstr "ערבית - איחוד האמירויות הערביות"
+
+msgid "Arabic - Yemen"
+msgstr "ערבית - תימנית"
+
+msgid "Assamese"
+msgstr "אסייתית"
+
+msgid "Aymara"
+msgstr "איימרה"
+
+msgid "Azerbaijani"
+msgstr "אזרבייג'ני"
+
+msgid "Bashkir"
+msgstr "בשיקרי"
+
+msgid "Basque"
+msgstr "בסקית"
+
+msgid "Bengali"
+msgstr "בנגלית"
+
+msgid "Bislama"
+msgstr "ביסלמה"
+
+msgid "Bosnian"
+msgstr "בוסני"
+
+msgid "Breton"
+msgstr "ברטון"
+
+msgid "Bulgarian"
+msgstr "בולגרית"
+
+msgid "Byelorussian"
+msgstr "בלארוסי"
+
+msgid "Catalan"
+msgstr "קטלאנית"
+
+msgid "Chamorro"
+msgstr "צ'אמורו"
+
+msgid "Chechen"
+msgstr "צ'צ'ני"
+
+msgid "Chinese (Simplified)"
+msgstr "סינית (פשוטה)"
+
+msgid "Chinese (Traditional)"
+msgstr "סינית (מסורתית)"
+
+msgid "Chuvash"
+msgstr "צ'ובאש"
+
+msgid "Corsican"
+msgstr "קורסיקאי"
+
+msgid "Croatian"
+msgstr "קרואטית"
+
+msgid "Croatian - Bosnia and Herzegovina"
+msgstr "קרואטית - בוסניה והרצגובינה"
+
+msgid "Croatian - Croatia"
+msgstr "קרואטית - קרואטיה"
+
+msgid "Czech"
+msgstr "צ'כית"
+
+msgid "Danish"
+msgstr "דַנִי"
+
+msgid "Dutch"
+msgstr "הוֹלַנדִי"
+
+msgid "Dutch - Netherlands"
+msgstr "הולנדית - הולנד"
+
+msgid "Dzongkha"
+msgstr "דזונקה"
+
+msgid "English"
+msgstr "אנגלית"
+
+msgid "English - Australia"
+msgstr "אנגלית - אוסטרליה"
+
+msgid "English - Belize"
+msgstr "אנגלית - בליז"
+
+msgid "English - Canada"
+msgstr "אנגלית - קנדה"
+
+msgid "English - Caribbean"
+msgstr "אנגלית - קריבית"
+
+msgid "English - Ireland"
+msgstr "אנגלית - אירלנד"
+
+msgid "English - Jamaica"
+msgstr "אנגלית - ג'מייקה"
+
+msgid "English - New Zealand"
+msgstr "אנגלית - ניו זילנד"
+
+msgid "English - Republic of the Philippines"
+msgstr "אנגלית - רפובליקת הפיליפינים"
+
+msgid "English - South Africa"
+msgstr "אנגלית - דרום אפריקה"
+
+msgid "English - Trinidad and Tobago"
+msgstr "אנגלית - טרינידד וטובגו"
+
+msgid "English - United Kingdom"
+msgstr "אנגלית - בריטניה"
+
+msgid "English - United States"
+msgstr "אנגלית - ארצות הברית"
+
+msgid "English - Zimbabwe"
+msgstr "אנגלית - זימבבואה"
+
+msgid "Esperanto"
+msgstr "אספרנטו"
+
+msgid "Estonian"
+msgstr "אסטונית"
+
+msgid "Faroese"
+msgstr "פארואי"
+
+msgid "Fijian"
+msgstr "פיג'יאני"
+
+msgid "Finnish"
+msgstr "פִינִית"
+
+msgid "Flemish - Belgium"
+msgstr "פלמית - בלגיה"
+
+msgid "French"
+msgstr "צָרְפָתִית"
+
+msgid "French - Belgium"
+msgstr "צרפתית - בלגיה"
+
+msgid "French - Canada"
+msgstr "צרפתית - קנדה"
+
+msgid "French - France"
+msgstr "צרפתית - צרפת"
+
+msgid "French - Luxembourg"
+msgstr "צרפתית - לוקסמבורג"
+
+msgid "French - Monaco"
+msgstr "צרפתית - מונקו"
+
+msgid "French - Switzerland"
+msgstr "צרפתית - שווייץ"
+
+msgid "Frisian"
+msgstr "פריזית"
+
+msgid "Gaelic"
+msgstr "גאלית"
+
+msgid "Galician"
+msgstr "גליציאני"
+
+msgid "Georgian"
+msgstr "גאורגית"
+
+msgid "German"
+msgstr "גֶרמָנִיָת"
+
+msgid "German - Austria"
+msgstr "גרמנית - אוסטריה"
+
+msgid "German - Germany"
+msgstr "גרמנית - גרמניה"
+
+msgid "German - Liechtenstein"
+msgstr "גרמנית - ליכטנשטיין"
+
+msgid "German - Luxembourg"
+msgstr "גרמנית - לוקסמבורגית"
+
+msgid "German - Switzerland"
+msgstr "גרמנית - שווייץ"
+
+msgid "Greek"
+msgstr "יוונית"
+
+msgid "Guarani"
+msgstr "גוארני"
+
+msgid "Gujarati"
+msgstr "גוג'ראטית"
+
+msgid "Hebrew"
+msgstr "עברית"
+
+msgid "Hindi"
+msgstr "הינדי"
+
+msgid "Hungarian"
+msgstr "הוּנגָרִי"
+
+msgid "Indonesian"
+msgstr "אינדונזית"
+
+msgid "Interlingua"
+msgstr "אינטרלינגואה"
+
+msgid "Islandic"
+msgstr "איסלנדית"
+
+msgid "Italian"
+msgstr "אִיטַלְקִית"
+
+msgid "Italian - Italy"
+msgstr "איטלקית - איטליה"
+
+msgid "Italian - Switzerland"
+msgstr "איטלקית - שווייץ"
+
+msgid "Japanese"
+msgstr "יפנית"
+
+msgid "Javanese"
+msgstr "ג'אווה"
+
+msgid "Korean"
+msgstr "קוריאני"
+
+msgid "Kurdish"
+msgstr "כורדי"
+
+msgid "Latvian"
+msgstr "לטבית"
+
+msgid "Lithuanian"
+msgstr "ליטאית"
+
+msgid "Macedonian"
+msgstr "מקדונית"
+
+msgid "Malagasy"
+msgstr "מלגשית"
+
+msgid "Malay"
+msgstr "מלאית"
+
+msgid "Maltese"
+msgstr "מלטית"
+
+msgid "Mongolian"
+msgstr "מונגולי"
+
+msgid "Norwegian"
+msgstr "נורווגית"
+
+msgid "Norwegian Nynorsk"
+msgstr "נורווגית נינורסק"
+
+msgid "Pashto"
+msgstr "פשטו"
+
+msgid "Persian"
+msgstr "פרסית"
+
+msgid "Polish"
+msgstr "פולנית"
+
+msgid "Portuguese"
+msgstr "פורטוגזית"
+
+msgid "Portuguese - Brazil"
+msgstr "פורטוגזית - ברזיל"
+
+msgid "Portuguese - Portugal"
+msgstr "פורטוגזית - פורטוגל"
+
+msgid "Punjabi"
+msgstr "פנג'אבי"
+
+msgid "Punjabi - Arab"
+msgstr "פנג'אבי - ערבית"
+
+msgid "Romanian"
+msgstr "רומנית"
+
+msgid "Russian"
+msgstr "רוּסִי"
+
+msgid "Scottish Gaelic"
+msgstr "גאלית סקוטית"
+
+msgid "Serbian"
+msgstr "סרבית"
+
+msgid "Sinhalese"
+msgstr "סינהלית"
+
+msgid "Slovak"
+msgstr "סלובקית"
+
+msgid "Slovenian"
+msgstr "סלובנית"
+
+msgid "Spanish"
+msgstr "ספרדית"
+
+msgid "Spanish - Argentina"
+msgstr "ספרדית - ארגנטינה"
+
+msgid "Spanish - Bolivia"
+msgstr "ספרדית - בוליביה"
+
+msgid "Spanish - Chile"
+msgstr "ספרדית - צ'ילה"
+
+msgid "Spanish - Colombia"
+msgstr "ספרדית - קולומביה"
+
+msgid "Spanish - Costa Rica"
+msgstr "ספרדית - קוסטה ריקה"
+
+msgid "Spanish - Dominican Republic"
+msgstr "ספרדית - הרפובליקה הדומיניקנית"
+
+msgid "Spanish - Ecuador"
+msgstr "ספרדית - אקוודור"
+
+msgid "Spanish - El Salvador"
+msgstr "ספרדית - אל סלבדור"
+
+msgid "Spanish - Guatemala"
+msgstr "ספרדית - גואטמלה"
+
+msgid "Spanish - Honduras"
+msgstr "ספרדית - הונדורס"
+
+msgid "Spanish - Latin America and the Caribbean"
+msgstr "ספרדית - אמריקה הלטינית והקריביים"
+
+msgid "Spanish - Mexico"
+msgstr "ספרדית - מקסיקו"
+
+msgid "Spanish - Nicaragua"
+msgstr "ספרדית - ניקרגואה"
+
+msgid "Spanish - Panama"
+msgstr "ספרדית - פנמה"
+
+msgid "Spanish - Paraguay"
+msgstr "ספרדית - פרגוואי"
+
+msgid "Spanish - Peru"
+msgstr "ספרדית - פרו"
+
+msgid "Spanish - Puerto Rico"
+msgstr "ספרדית - פורטו ריקו"
+
+msgid "Spanish - Spain"
+msgstr "ספרדית - ספרד"
+
+msgid "Spanish - Uruguay"
+msgstr "ספרדית - אורוגוואי"
+
+msgid "Spanish - Venezuela"
+msgstr "ספרדית - ונצואלה"
+
+msgid "Standard Arabic"
+msgstr "ערבית סטנדרטית"
+
+msgid "Sundanese"
+msgstr "סונדנית"
+
+msgid "Swahili"
+msgstr "סוואהילית"
+
+msgid "Swedish"
+msgstr "שוודית"
+
+msgid "Tagalog"
+msgstr "טאגלוג"
+
+msgid "Tamil"
+msgstr "טמילית"
+
+msgid "Thai"
+msgstr "תאילנדית"
+
+msgid "Tibetan"
+msgstr "טיבטי"
+
+msgid "Turkish"
+msgstr "טורקי"
+
+msgid "Ukrainian"
+msgstr "אוקראינית"
+
+msgid "Urdu"
+msgstr "אורדו"
+
+msgid "Vietnamese"
+msgstr "וייטנאמית"
+
+msgid "Welsh"
+msgstr "וולשית"
+
+msgid "Xhosa"
+msgstr "קסוסה"
+
+msgid "Yoruba"
+msgstr "יורובה"
+

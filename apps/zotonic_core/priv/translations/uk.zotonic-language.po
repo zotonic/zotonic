@@ -1,0 +1,516 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2025-08-20 16:45\n"
+"Last-Translator: \n"
+"Language-Team: Ukrainian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=((n%10==1 && n%100!=11) ? 0 : ((n%10 >= 2 && n%10 <=4 && (n%100 < 12 || n%100 > 14)) ? 1 : ((n%10 == 0 || (n%10 >= 5 && n%10 <=9)) || (n%100 >= 11 && n%100 <= 14)) ? 2 : 3));\n"
+"X-Crowdin-Project: zotonic\n"
+"X-Crowdin-Project-ID: 3405\n"
+"X-Crowdin-Language: uk\n"
+"X-Crowdin-File: /master/apps/zotonic_core/priv/translations/zotonic-language.pot\n"
+"X-Crowdin-File-ID: 8696\n"
+"Language: uk_UA\n"
+
+msgid "Abkhazian"
+msgstr "Абхазька"
+
+msgid "Afar"
+msgstr "Далеко"
+
+msgid "Afrikaans"
+msgstr "африкаанс"
+
+msgid "Albanian"
+msgstr "Албанська"
+
+msgid "Amharic"
+msgstr "Амхарська."
+
+msgid "Arabic"
+msgstr "Арабська"
+
+msgid "Arabic - Algerian Sahara"
+msgstr "Арабська - Алжирська Сахара"
+
+msgid "Arabic - Bahrain"
+msgstr "Арабська - Бахрейн"
+
+msgid "Arabic - Egypt"
+msgstr "Арабська - Єгипет"
+
+msgid "Arabic - Gulf"
+msgstr "Арабська - Перська затока"
+
+msgid "Arabic - Iraq"
+msgstr "Арабська - Ірак"
+
+msgid "Arabic - Jordan"
+msgstr "Арабська - Йорданія"
+
+msgid "Arabic - Kuwait"
+msgstr "Арабська - Кувейт"
+
+msgid "Arabic - Lebanon"
+msgstr "Арабська - Ліван"
+
+msgid "Arabic - Libya"
+msgstr "Арабська - Лівія"
+
+msgid "Arabic - Marocco"
+msgstr "Арабська - Марокко"
+
+msgid "Arabic - Morocco"
+msgstr "Арабська - Марокко"
+
+msgid "Arabic - North Levant"
+msgstr "Арабська - Північний Левант"
+
+msgid "Arabic - Oman"
+msgstr "Арабська - Оман"
+
+msgid "Arabic - Qatar"
+msgstr "Арабська - Катар"
+
+msgid "Arabic - Saudi Arabia"
+msgstr "Арабська - Саудівська Аравія"
+
+msgid "Arabic - South Levant"
+msgstr "Арабська - Південний Левант"
+
+msgid "Arabic - Sudan"
+msgstr "Арабська - Судан"
+
+msgid "Arabic - Syria"
+msgstr "Арабська - Сирія"
+
+msgid "Arabic - Tunisia"
+msgstr "Арабська - Туніс"
+
+msgid "Arabic - U.A.E."
+msgstr "Арабська - ОАЕ."
+
+msgid "Arabic - Yemen"
+msgstr "Арабська - Ємен"
+
+msgid "Assamese"
+msgstr "Ассамська"
+
+msgid "Aymara"
+msgstr "Аймара."
+
+msgid "Azerbaijani"
+msgstr "Азербайджанська"
+
+msgid "Bashkir"
+msgstr "Башкирська"
+
+msgid "Basque"
+msgstr "Баски"
+
+msgid "Bengali"
+msgstr "Бенгальська"
+
+msgid "Bislama"
+msgstr "Біслама."
+
+msgid "Bosnian"
+msgstr "Боснійський"
+
+msgid "Breton"
+msgstr "Бретонська."
+
+msgid "Bulgarian"
+msgstr "Болгарська"
+
+msgid "Byelorussian"
+msgstr "Білоруська"
+
+msgid "Catalan"
+msgstr "Каталонська"
+
+msgid "Chamorro"
+msgstr "Чаморро"
+
+msgid "Chechen"
+msgstr "Чеченський"
+
+msgid "Chinese (Simplified)"
+msgstr "Китайська (спрощена)"
+
+msgid "Chinese (Traditional)"
+msgstr "Китайська (традиційна)"
+
+msgid "Chuvash"
+msgstr "Чуваська"
+
+msgid "Corsican"
+msgstr "Корсиканець"
+
+msgid "Croatian"
+msgstr "Хорватська"
+
+msgid "Croatian - Bosnia and Herzegovina"
+msgstr "Хорватська - Боснія і Герцеговина"
+
+msgid "Croatian - Croatia"
+msgstr "Хорватська - Хорватія"
+
+msgid "Czech"
+msgstr "Чеська"
+
+msgid "Danish"
+msgstr "Данська"
+
+msgid "Dutch"
+msgstr "Голландська"
+
+msgid "Dutch - Netherlands"
+msgstr "Голландська - Нідерланди"
+
+msgid "Dzongkha"
+msgstr "Дзонгха"
+
+msgid "English"
+msgstr "Англійська"
+
+msgid "English - Australia"
+msgstr "Англійська - Австралія"
+
+msgid "English - Belize"
+msgstr "Англійська - Беліз"
+
+msgid "English - Canada"
+msgstr "Англійська - Канада"
+
+msgid "English - Caribbean"
+msgstr "Англійська - Карибський басейн"
+
+msgid "English - Ireland"
+msgstr "Англійська - Ірландія"
+
+msgid "English - Jamaica"
+msgstr "Англійська - Ямайка"
+
+msgid "English - New Zealand"
+msgstr "Англійська - Нова Зеландія"
+
+msgid "English - Republic of the Philippines"
+msgstr "Англійська - Республіка Філіппіни"
+
+msgid "English - South Africa"
+msgstr "Англійська - Південна Африка"
+
+msgid "English - Trinidad and Tobago"
+msgstr "Англійська - Тринідад і Тобаго"
+
+msgid "English - United Kingdom"
+msgstr "Англійська - Велика Британія"
+
+msgid "English - United States"
+msgstr "Англійська - Сполучені Штати"
+
+msgid "English - Zimbabwe"
+msgstr "Англійська - Зімбабве"
+
+msgid "Esperanto"
+msgstr "Есперанто"
+
+msgid "Estonian"
+msgstr "естонська"
+
+msgid "Faroese"
+msgstr "Фарерські"
+
+msgid "Fijian"
+msgstr "Фіджійський"
+
+msgid "Finnish"
+msgstr "Фінська"
+
+msgid "Flemish - Belgium"
+msgstr "Фламандська - Бельгія"
+
+msgid "French"
+msgstr "Французька"
+
+msgid "French - Belgium"
+msgstr "Французька - Бельгія"
+
+msgid "French - Canada"
+msgstr "Французька - Канада"
+
+msgid "French - France"
+msgstr "Французька - Франція"
+
+msgid "French - Luxembourg"
+msgstr "Французька - Люксембург"
+
+msgid "French - Monaco"
+msgstr "Французька - Монако"
+
+msgid "French - Switzerland"
+msgstr "Французька - Швейцарія"
+
+msgid "Frisian"
+msgstr "Фриз"
+
+msgid "Gaelic"
+msgstr "Ґельська"
+
+msgid "Galician"
+msgstr "Галицький"
+
+msgid "Georgian"
+msgstr "Грузинська"
+
+msgid "German"
+msgstr "Німецька"
+
+msgid "German - Austria"
+msgstr "Німецька - Австрія"
+
+msgid "German - Germany"
+msgstr "Німецька - Німеччина"
+
+msgid "German - Liechtenstein"
+msgstr "Німецька - Ліхтенштейн"
+
+msgid "German - Luxembourg"
+msgstr "Німецька - Люксембург"
+
+msgid "German - Switzerland"
+msgstr "Німецька - Швейцарія"
+
+msgid "Greek"
+msgstr "Грецька"
+
+msgid "Guarani"
+msgstr "Гуарані."
+
+msgid "Gujarati"
+msgstr "Гуджараті"
+
+msgid "Hebrew"
+msgstr "Іврит"
+
+msgid "Hindi"
+msgstr "Хінді"
+
+msgid "Hungarian"
+msgstr "Угорська"
+
+msgid "Indonesian"
+msgstr "Індонезійська"
+
+msgid "Interlingua"
+msgstr "Interlingua"
+
+msgid "Islandic"
+msgstr "Острівний"
+
+msgid "Italian"
+msgstr "Італійська"
+
+msgid "Italian - Italy"
+msgstr "Італійська - Італія"
+
+msgid "Italian - Switzerland"
+msgstr "Італійська - Швейцарія"
+
+msgid "Japanese"
+msgstr "Японський"
+
+msgid "Javanese"
+msgstr "Яванський"
+
+msgid "Korean"
+msgstr "Корейська"
+
+msgid "Kurdish"
+msgstr "Курдська."
+
+msgid "Latvian"
+msgstr "латвійська"
+
+msgid "Lithuanian"
+msgstr "Литовська"
+
+msgid "Macedonian"
+msgstr "Македонська"
+
+msgid "Malagasy"
+msgstr "Малагасійська"
+
+msgid "Malay"
+msgstr "Малайзія."
+
+msgid "Maltese"
+msgstr "Мальтійський"
+
+msgid "Mongolian"
+msgstr "Монгольська"
+
+msgid "Norwegian"
+msgstr "Норвезька"
+
+msgid "Norwegian Nynorsk"
+msgstr "Норвезький Нюнорск"
+
+msgid "Pashto"
+msgstr "Пушту"
+
+msgid "Persian"
+msgstr "Персидська."
+
+msgid "Polish"
+msgstr "Польська"
+
+msgid "Portuguese"
+msgstr "Португальська"
+
+msgid "Portuguese - Brazil"
+msgstr "Португальська - Бразилія"
+
+msgid "Portuguese - Portugal"
+msgstr "Португальська - Португалія"
+
+msgid "Punjabi"
+msgstr "Пенджабі"
+
+msgid "Punjabi - Arab"
+msgstr "пенджабі - арабська"
+
+msgid "Romanian"
+msgstr "Румунська"
+
+msgid "Russian"
+msgstr "Російська"
+
+msgid "Scottish Gaelic"
+msgstr "Шотландська гельська"
+
+msgid "Serbian"
+msgstr "Сербська"
+
+msgid "Sinhalese"
+msgstr "Сингальська"
+
+msgid "Slovak"
+msgstr "Словацька"
+
+msgid "Slovenian"
+msgstr "Словенська"
+
+msgid "Spanish"
+msgstr "Іспанська"
+
+msgid "Spanish - Argentina"
+msgstr "Іспанська - Аргентина"
+
+msgid "Spanish - Bolivia"
+msgstr "Іспанська - Болівія"
+
+msgid "Spanish - Chile"
+msgstr "Іспанська - Чилі"
+
+msgid "Spanish - Colombia"
+msgstr "Іспанська - Колумбія"
+
+msgid "Spanish - Costa Rica"
+msgstr "Іспанська - Коста-Ріка"
+
+msgid "Spanish - Dominican Republic"
+msgstr "Іспанська - Домініканська Республіка"
+
+msgid "Spanish - Ecuador"
+msgstr "Іспанська - Еквадор"
+
+msgid "Spanish - El Salvador"
+msgstr "Іспанська - Сальвадор"
+
+msgid "Spanish - Guatemala"
+msgstr "Іспанська - Гватемала"
+
+msgid "Spanish - Honduras"
+msgstr "Іспанська - Гондурас"
+
+msgid "Spanish - Latin America and the Caribbean"
+msgstr "Іспанська - Латинська Америка та Карибський басейн"
+
+msgid "Spanish - Mexico"
+msgstr "Іспанська - Мексика"
+
+msgid "Spanish - Nicaragua"
+msgstr "Іспанська - Нікарагуа"
+
+msgid "Spanish - Panama"
+msgstr "Іспанська - Панама"
+
+msgid "Spanish - Paraguay"
+msgstr "Іспанська - Парагвай"
+
+msgid "Spanish - Peru"
+msgstr "Іспанська - Перу"
+
+msgid "Spanish - Puerto Rico"
+msgstr "Іспанська - Пуерто-Рико"
+
+msgid "Spanish - Spain"
+msgstr "Іспанська - Іспанія"
+
+msgid "Spanish - Uruguay"
+msgstr "Іспанська - Уругвай"
+
+msgid "Spanish - Venezuela"
+msgstr "Іспанська - Венесуела"
+
+msgid "Standard Arabic"
+msgstr "Стандартна арабська"
+
+msgid "Sundanese"
+msgstr "Сунданський"
+
+msgid "Swahili"
+msgstr "Суахілі."
+
+msgid "Swedish"
+msgstr "Шведська"
+
+msgid "Tagalog"
+msgstr "Тагальська"
+
+msgid "Tamil"
+msgstr "Тамільська"
+
+msgid "Thai"
+msgstr "Тайська"
+
+msgid "Tibetan"
+msgstr "Тибетський"
+
+msgid "Turkish"
+msgstr "Турецька"
+
+msgid "Ukrainian"
+msgstr "Українська"
+
+msgid "Urdu"
+msgstr "Урду"
+
+msgid "Vietnamese"
+msgstr "В'єтнамці"
+
+msgid "Welsh"
+msgstr "валлійська"
+
+msgid "Xhosa"
+msgstr "Ксоса."
+
+msgid "Yoruba"
+msgstr "Йоруба."
+

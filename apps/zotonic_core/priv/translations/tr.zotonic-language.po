@@ -1,0 +1,516 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: zotonic\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2025-08-20 16:44\n"
+"Last-Translator: \n"
+"Language-Team: Turkish\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: zotonic\n"
+"X-Crowdin-Project-ID: 3405\n"
+"X-Crowdin-Language: tr\n"
+"X-Crowdin-File: /master/apps/zotonic_core/priv/translations/zotonic-language.pot\n"
+"X-Crowdin-File-ID: 8696\n"
+"Language: tr_TR\n"
+
+msgid "Abkhazian"
+msgstr "Abhazca"
+
+msgid "Afar"
+msgstr "Afar"
+
+msgid "Afrikaans"
+msgstr "Afrikanca"
+
+msgid "Albanian"
+msgstr "Arnavutça"
+
+msgid "Amharic"
+msgstr "Amharca"
+
+msgid "Arabic"
+msgstr "Arapça"
+
+msgid "Arabic - Algerian Sahara"
+msgstr "Arapça - Cezayir Sahrası"
+
+msgid "Arabic - Bahrain"
+msgstr "Arapça - Bahreyn"
+
+msgid "Arabic - Egypt"
+msgstr "Arapça - Mısır"
+
+msgid "Arabic - Gulf"
+msgstr "Arapça - Körfez"
+
+msgid "Arabic - Iraq"
+msgstr "Arapça - Irak"
+
+msgid "Arabic - Jordan"
+msgstr "Arapça - Ürdün"
+
+msgid "Arabic - Kuwait"
+msgstr "Arapça - Kuveyt"
+
+msgid "Arabic - Lebanon"
+msgstr "Arapça - Lübnan"
+
+msgid "Arabic - Libya"
+msgstr "Arapça - Libya"
+
+msgid "Arabic - Marocco"
+msgstr "Arapça - Marocco"
+
+msgid "Arabic - Morocco"
+msgstr "Arapça - Fas"
+
+msgid "Arabic - North Levant"
+msgstr "Arapça - Kuzey Levant"
+
+msgid "Arabic - Oman"
+msgstr "Arapça - Umman"
+
+msgid "Arabic - Qatar"
+msgstr "Arapça - Katar"
+
+msgid "Arabic - Saudi Arabia"
+msgstr "Arapça - Suudi Arabistan"
+
+msgid "Arabic - South Levant"
+msgstr "Arapça - Güney Levant"
+
+msgid "Arabic - Sudan"
+msgstr "Arapça - Sudan"
+
+msgid "Arabic - Syria"
+msgstr "Arapça - Suriye"
+
+msgid "Arabic - Tunisia"
+msgstr "Arapça - Tunus"
+
+msgid "Arabic - U.A.E."
+msgstr "Arapça - U.A.E."
+
+msgid "Arabic - Yemen"
+msgstr "Arapça - Yemen"
+
+msgid "Assamese"
+msgstr "Assamca"
+
+msgid "Aymara"
+msgstr "Aymara"
+
+msgid "Azerbaijani"
+msgstr "Azerice"
+
+msgid "Bashkir"
+msgstr "Başkurt"
+
+msgid "Basque"
+msgstr "Bask"
+
+msgid "Bengali"
+msgstr "Bengalce"
+
+msgid "Bislama"
+msgstr "Bislama"
+
+msgid "Bosnian"
+msgstr "Boşnakça"
+
+msgid "Breton"
+msgstr "Breton"
+
+msgid "Bulgarian"
+msgstr "Bulgarca"
+
+msgid "Byelorussian"
+msgstr "Byelorussian"
+
+msgid "Catalan"
+msgstr "Katalanca"
+
+msgid "Chamorro"
+msgstr "Chamorro"
+
+msgid "Chechen"
+msgstr "Çeçen"
+
+msgid "Chinese (Simplified)"
+msgstr "Çince (Basitleştirilmiş)"
+
+msgid "Chinese (Traditional)"
+msgstr "Çince (Geleneksel)"
+
+msgid "Chuvash"
+msgstr "Çuvaş"
+
+msgid "Corsican"
+msgstr "Korsikalı"
+
+msgid "Croatian"
+msgstr "Hırvatça"
+
+msgid "Croatian - Bosnia and Herzegovina"
+msgstr "Hırvatça - Bosna Hersek"
+
+msgid "Croatian - Croatia"
+msgstr "Hırvatça - Hırvatistan"
+
+msgid "Czech"
+msgstr "Çek Cumhuriyeti"
+
+msgid "Danish"
+msgstr "Danimarkalı"
+
+msgid "Dutch"
+msgstr "Flemenkçe"
+
+msgid "Dutch - Netherlands"
+msgstr "Felemenkçe - Hollanda"
+
+msgid "Dzongkha"
+msgstr "Dzongkha"
+
+msgid "English"
+msgstr "İngilizce"
+
+msgid "English - Australia"
+msgstr "İngilizce - Avustralya"
+
+msgid "English - Belize"
+msgstr "İngilizce - Belize"
+
+msgid "English - Canada"
+msgstr "İngilizce - Kanada"
+
+msgid "English - Caribbean"
+msgstr "İngilizce - Karayipler"
+
+msgid "English - Ireland"
+msgstr "İngilizce - İrlanda"
+
+msgid "English - Jamaica"
+msgstr "İngilizce - Jamaika"
+
+msgid "English - New Zealand"
+msgstr "İngilizce - Yeni Zelanda"
+
+msgid "English - Republic of the Philippines"
+msgstr "İngilizce - Filipinler Cumhuriyeti"
+
+msgid "English - South Africa"
+msgstr "İngilizce - Güney Afrika"
+
+msgid "English - Trinidad and Tobago"
+msgstr "İngilizce - Trinidad ve Tobago"
+
+msgid "English - United Kingdom"
+msgstr "İngilizce - Birleşik Krallık"
+
+msgid "English - United States"
+msgstr "İngilizce - Amerika Birleşik Devletleri"
+
+msgid "English - Zimbabwe"
+msgstr "İngilizce - Zimbabve"
+
+msgid "Esperanto"
+msgstr "Esperanto"
+
+msgid "Estonian"
+msgstr "Estonca"
+
+msgid "Faroese"
+msgstr "Faroese"
+
+msgid "Fijian"
+msgstr "Fijian"
+
+msgid "Finnish"
+msgstr "Fince"
+
+msgid "Flemish - Belgium"
+msgstr "Flamanca - Belçika"
+
+msgid "French"
+msgstr "Fransızca"
+
+msgid "French - Belgium"
+msgstr "Fransızca - Belçika"
+
+msgid "French - Canada"
+msgstr "Fransızca - Kanada"
+
+msgid "French - France"
+msgstr "Fransızca - Fransa"
+
+msgid "French - Luxembourg"
+msgstr "Fransızca - Lüksemburg"
+
+msgid "French - Monaco"
+msgstr "Fransızca - Monako"
+
+msgid "French - Switzerland"
+msgstr "Fransızca - İsviçre"
+
+msgid "Frisian"
+msgstr "Frizce"
+
+msgid "Gaelic"
+msgstr "Galce"
+
+msgid "Galician"
+msgstr "Galiçyaca"
+
+msgid "Georgian"
+msgstr "Gürcüce"
+
+msgid "German"
+msgstr "Almanca"
+
+msgid "German - Austria"
+msgstr "Almanca - Avusturya"
+
+msgid "German - Germany"
+msgstr "Almanca - Almanya"
+
+msgid "German - Liechtenstein"
+msgstr "Almanca - Lihtenştayn"
+
+msgid "German - Luxembourg"
+msgstr "Almanca - Lüksemburg"
+
+msgid "German - Switzerland"
+msgstr "Almanca - İsviçre"
+
+msgid "Greek"
+msgstr "Yunan"
+
+msgid "Guarani"
+msgstr "Guarani"
+
+msgid "Gujarati"
+msgstr "Gujarati"
+
+msgid "Hebrew"
+msgstr "İbranice"
+
+msgid "Hindi"
+msgstr "Hintçe"
+
+msgid "Hungarian"
+msgstr "Macarca"
+
+msgid "Indonesian"
+msgstr "Endonezce"
+
+msgid "Interlingua"
+msgstr "Interlingua"
+
+msgid "Islandic"
+msgstr "Islandic"
+
+msgid "Italian"
+msgstr "İtalyanca"
+
+msgid "Italian - Italy"
+msgstr "İtalyanca - İtalya"
+
+msgid "Italian - Switzerland"
+msgstr "İtalyanca - İsviçre"
+
+msgid "Japanese"
+msgstr "Japonca"
+
+msgid "Javanese"
+msgstr "Javanese"
+
+msgid "Korean"
+msgstr "Korece"
+
+msgid "Kurdish"
+msgstr "Kürtçe"
+
+msgid "Latvian"
+msgstr "Letonca"
+
+msgid "Lithuanian"
+msgstr "Litvanyalı"
+
+msgid "Macedonian"
+msgstr "Makedonca"
+
+msgid "Malagasy"
+msgstr "Malgaşça"
+
+msgid "Malay"
+msgstr "Malay"
+
+msgid "Maltese"
+msgstr "Maltaca"
+
+msgid "Mongolian"
+msgstr "Moğolca"
+
+msgid "Norwegian"
+msgstr "Norveçce"
+
+msgid "Norwegian Nynorsk"
+msgstr "Norveççe Nynorsk"
+
+msgid "Pashto"
+msgstr "Peştuca"
+
+msgid "Persian"
+msgstr "Farsça"
+
+msgid "Polish"
+msgstr "Lehçe"
+
+msgid "Portuguese"
+msgstr "Portekizce"
+
+msgid "Portuguese - Brazil"
+msgstr "Portekizce - Brezilya"
+
+msgid "Portuguese - Portugal"
+msgstr "Portekizce - Portekiz"
+
+msgid "Punjabi"
+msgstr "Punjabi"
+
+msgid "Punjabi - Arab"
+msgstr "Pencap - Arap"
+
+msgid "Romanian"
+msgstr "Romence"
+
+msgid "Russian"
+msgstr "Rusça"
+
+msgid "Scottish Gaelic"
+msgstr "İskoç Galcesi"
+
+msgid "Serbian"
+msgstr "Sırpça"
+
+msgid "Sinhalese"
+msgstr "Sinhalese"
+
+msgid "Slovak"
+msgstr "Slovakça"
+
+msgid "Slovenian"
+msgstr "Slovence"
+
+msgid "Spanish"
+msgstr "İspanyolca"
+
+msgid "Spanish - Argentina"
+msgstr "İspanyolca - Arjantin"
+
+msgid "Spanish - Bolivia"
+msgstr "İspanyolca - Bolivya"
+
+msgid "Spanish - Chile"
+msgstr "İspanyolca - Şili"
+
+msgid "Spanish - Colombia"
+msgstr "İspanyolca - Kolombiya"
+
+msgid "Spanish - Costa Rica"
+msgstr "İspanyolca - Kosta Rika"
+
+msgid "Spanish - Dominican Republic"
+msgstr "İspanyolca - Dominik Cumhuriyeti"
+
+msgid "Spanish - Ecuador"
+msgstr "İspanyolca - Ekvador"
+
+msgid "Spanish - El Salvador"
+msgstr "İspanyolca - El Salvador"
+
+msgid "Spanish - Guatemala"
+msgstr "İspanyolca - Guatemala"
+
+msgid "Spanish - Honduras"
+msgstr "İspanyolca - Honduras"
+
+msgid "Spanish - Latin America and the Caribbean"
+msgstr "İspanyolca - Latin Amerika ve Karayipler"
+
+msgid "Spanish - Mexico"
+msgstr "İspanyolca - Meksika"
+
+msgid "Spanish - Nicaragua"
+msgstr "İspanyolca - Nikaragua"
+
+msgid "Spanish - Panama"
+msgstr "İspanyolca - Panama"
+
+msgid "Spanish - Paraguay"
+msgstr "İspanyolca - Paraguay"
+
+msgid "Spanish - Peru"
+msgstr "İspanyolca - Peru"
+
+msgid "Spanish - Puerto Rico"
+msgstr "İspanyolca - Porto Riko"
+
+msgid "Spanish - Spain"
+msgstr "İspanyolca - İspanya"
+
+msgid "Spanish - Uruguay"
+msgstr "İspanyolca - Uruguay"
+
+msgid "Spanish - Venezuela"
+msgstr "İspanyolca - Venezuela"
+
+msgid "Standard Arabic"
+msgstr "Standart Arapça"
+
+msgid "Sundanese"
+msgstr "Sundanese"
+
+msgid "Swahili"
+msgstr "Swahili"
+
+msgid "Swedish"
+msgstr "İsveçce"
+
+msgid "Tagalog"
+msgstr "Tagalogca"
+
+msgid "Tamil"
+msgstr "Tamilce"
+
+msgid "Thai"
+msgstr "Tayland"
+
+msgid "Tibetan"
+msgstr "Tibetçe"
+
+msgid "Turkish"
+msgstr "Türkçe"
+
+msgid "Ukrainian"
+msgstr "Ukrayna"
+
+msgid "Urdu"
+msgstr "Urduca"
+
+msgid "Vietnamese"
+msgstr "Vietnamca"
+
+msgid "Welsh"
+msgstr "Welsh"
+
+msgid "Xhosa"
+msgstr "Xhosa"
+
+msgid "Yoruba"
+msgstr "Yoruba"
+
