@@ -229,6 +229,9 @@ unpublish_user_session(Context) ->
 
 %% @doc Check if the user is enabled, a user is enabled when the rsc is published and within its publication date range.
 -spec is_enabled( m_rsc:resource_id(), z:context() ) -> boolean().
+is_enabled(?ACL_ADMIN_USER_ID, _Context) ->
+    % The admin user is always enabled.
+    true;
 is_enabled(UserId, Context) ->
     case z_notifier:first(#user_is_enabled{id=UserId}, Context) of
         undefined ->
