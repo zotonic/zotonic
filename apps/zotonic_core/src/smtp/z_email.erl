@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2024 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Send e-mail to a recipient. Optionally queue low priority messages.
 %% @end
 
-%% Copyright 2009-2024 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -124,7 +124,29 @@ ensure_to_email(#email{ to = Id } = E, Context) when is_integer(Id) ->
 ensure_to_email(#email{} = E, _Context) ->
     {ok, E}.
 
-%% @doc Fetch the e-mail address of the site administrator
+
+%% @doc Fetch the e-mail addresses for admin emails, do not make up any email addresses.
+-spec get_admin_email_recipients(z:context()) -> [ binary() ].
+get_admin_email_recipients(Context) ->
+    Es = [
+        case m_config:get_value(zotonic, admin_email, Context) of
+            undefined ->
+                z_convert:to_binary(m_site:get(admin_email, Context));
+            Email ->
+                z_convert:to_binary(Email)
+        end,
+        case m_rsc:p_no_acl(1, email_raw, Context) of
+            undefined -> undefined;
+            <<>> -> undefined;
+            Email when is_binary(Email) -> Email
+        end,
+        z_convert:to_binary(z_config:get(admin_email))
+    ],
+    lists:usort(lists:filter(fun(E) -> is_binary(E) andalso E =/= <<>> end, Es)).
+
+%% @doc Fetch the e-mail address of the site administrator. This is the email address for
+%% display purposes. The admin emails are not send to the wwwadmin_email, as that might
+%% not (yet) exist.
 -spec get_admin_email(z:context()) -> binary().
 get_admin_email(Context) ->
 	case m_config:get_value(zotonic, admin_email, Context) of
@@ -148,23 +170,36 @@ get_admin_email(Context) ->
 get_email_from(Context) ->
     z_email_server:get_email_from(Context).
 
-
 wwwadmin_email(Context) ->
     <<"wwwadmin@", (z_context:hostname(Context))/binary>>.
 
 %% @doc Send a simple text message to the administrator
--spec send_admin(iodata(), iodata(), z:context()) ->
-          {ok, MsgId::binary()}
-        | {error, sender_disabled|term()}.
+-spec send_admin(iodata(), iodata(), z:context()) -> ok | {error, no_recipient}.
 send_admin(Subject, Message, Context) ->
-	Email = get_admin_email(Context),
-	Subject1 = iolist_to_binary([ $[, z_context:hostname(Context), "] ", Subject ]),
-	Message1 = iolist_to_binary([
-		Message,
-		"\n\n-- \nYou receive this e-mail because you are registered as the admin of the site ",
-		z_context:abs_url(<<"/">>, Context)
-	]),
-	z_email_server:send(#email{queue=false, to=Email, subject=Subject1, text=Message1}, Context).
+    Subject1 = iolist_to_binary([ $[, z_context:hostname(Context), "] ", Subject ]),
+    Message1 = iolist_to_binary([
+        Message,
+        "\n\n-- \nYou receive this e-mail because you are registered as the admin of the site ",
+        z_context:abs_url(<<"/">>, Context)
+    ]),
+	case get_admin_email_recipients(Context) of
+        [] ->
+            ?LOG_ERROR(#{
+                in => zotonic_core,
+                text => <<"No recipients for admin email">>,
+                result => error,
+                reason => no_recipient,
+                subject => Subject1,
+                message => Message1
+            }),
+            {error, no_recipient};
+        Es ->
+            lists:foreach(
+                fun(E) ->
+                	z_email_server:send(#email{queue=false, to=E, subject=Subject1, text=Message1}, Context)
+                end,
+                Es)
+    end.
 
 
 %% @doc Send a page to an e-mail address, assumes the correct template "mailing_page.tpl" is available.
