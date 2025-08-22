@@ -26,6 +26,44 @@
 -mod_provides([ admin ]).
 -mod_schema(3).
 -mod_prio(1000).
+-mod_config([
+        #{
+            key => is_notrack_refers,
+            type => boolean,
+            default => false,
+            description => "If true, the admin module will not track refers connections between resources."
+        },
+        #{
+            key => connect_created_me,
+            type => boolean,
+            default => true,
+            description => "If true, the connect dialog will set per default the 'created by me' filter."
+        },
+        #{
+            key => edge_list_max_length,
+            type => integer,
+            default => 100,
+            description => "Maximum number of edges to show in the edge list on the resource edit pages."
+        },
+        #{
+            key => rsc_dialog_is_published,
+            type => boolean,
+            default => false,
+            description => "If true, the resource create dialog will check the 'is published' checkbox."
+        },
+        #{
+            key => rsc_dialog_is_dependent,
+            type => boolean,
+            default => false,
+            description => "If true, the resource create dialog will check the 'is dependent' checkbox."
+        },
+        #{
+            key => rsc_dialog_hide_dependent,
+            type => boolean,
+            default => false,
+            description => "If true, the resource create dialog will hide the dependent checkbox."
+        }
+    ]).
 
 -export([
      observe_sanitize_element/3,

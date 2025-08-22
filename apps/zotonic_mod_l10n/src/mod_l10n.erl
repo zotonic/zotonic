@@ -3,10 +3,11 @@
 %% coding: utf-8
 
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2014 Marc Worrell
+%% @copyright 2011-2025 Marc Worrell
 %% @doc Localization of Zotonic.  Country, timezone, and other lookups.
+%% @end
 
-%% Copyright 2011-2014 Marc Worrell
+%% Copyright 2011-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -26,6 +27,21 @@
 
 -mod_title("Localization").
 -mod_description("Localization, timezones, translations for country names etc.").
+-mod_config([
+        #{
+            key => timezone_is_fixed,
+            type => boolean,
+            default => false,
+            description => "If true, all dates are displayed in the configured timezone."
+        },
+        #{
+            key => timezone,
+            type => string,
+            default => "",
+            description => "The default timezone to use for this site. Defaults to the Zotonic "
+                           "config 'timezone', which defaults to UTC."
+        }
+    ]).
 
 -export([
     % observe_auth_logon/3,

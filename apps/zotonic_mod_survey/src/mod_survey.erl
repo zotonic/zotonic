@@ -26,6 +26,21 @@
 -mod_schema(5).
 -mod_depends([ admin, mod_wires ]).
 -mod_provides([ survey, poll ]).
+-mod_config([
+        #{
+            key => person_category,
+            type => string,
+            default => "person",
+            description => "The category used for the person resource when creating a user from a survey result."
+        },
+        #{
+            key => person_content_group,
+            type => string,
+            default => "default_content_group",
+            description => "The content group used for the person resource when creating a user from a survey result. "
+                           "If empty the default group for the current ACL module is used."
+        }
+    ]).
 
 %% interface functions
 -export([

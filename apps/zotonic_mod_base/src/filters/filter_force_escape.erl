@@ -32,15 +32,16 @@
 -author('rsaccon@gmail.com').
 -author('emmiller@gmail.com').
 
+-include_lib("zotonic_core/include/zotonic.hrl").
 
 force_escape(undefined, _Context) ->
     <<>>;
-force_escape({trans, _} = Trans, Context) ->
+force_escape(#trans{} = Trans, Context) ->
     force_escape(z_trans:lookup_fallback(Trans, Context), Context);
 force_escape(true, _Context) ->
-    filter_yesno:yesno(true, _Context);
+    <<"true">>;
 force_escape(false, _Context) ->
-    filter_yesno:yesno(false, _Context);
+    <<"false">>;
 force_escape(Input, _Context) when is_atom(Input) ->
     escape1(atom_to_binary(Input, utf8), []);
 force_escape(Input, _Context) when is_list(Input) ->

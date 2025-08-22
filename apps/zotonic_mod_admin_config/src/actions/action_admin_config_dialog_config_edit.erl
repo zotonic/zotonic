@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
-%% Date: 2009-08-07
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Open a dialog to change the module/key/value of a config entry.
+%% @end
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -47,7 +47,10 @@ event(#postback{message={config_edit_dialog, Module, Key, Value, OnSuccess}}, Co
         {value, Value},
         {on_success, OnSuccess}
     ],
-    z_render:dialog([?__("Edit", Context), " ", Module, "." , Key], "_action_dialog_config_edit.tpl", Vars, Context);
+    Title = unicode:characters_to_binary([
+        ?__("Edit", Context), ": ", z_convert:to_binary(Module), "." , z_convert:to_binary(Key)
+    ]),
+    z_render:dialog(Title, "_action_dialog_config_edit.tpl", Vars, Context);
 
 
 %% @doc Add a member to a group.  The roles are in the request (they come from a form)
@@ -57,8 +60,8 @@ event(#submit{message={config_edit, Args}}, Context) ->
         true ->
             CurrentModule = proplists:get_value(module, Args),
             CurrentKey = proplists:get_value(key, Args),
-            Module = z_context:get_q(<<"module">>, Context, <<>>),
-            Key = z_context:get_q(<<"key">>, Context, <<>>),
+            Module = binary_to_atom(z_string:to_name(z_context:get_q(<<"module">>, Context, <<>>))),
+            Key = binary_to_atom(z_string:to_name(z_context:get_q(<<"key">>, Context, <<>>))),
             Value = z_context:get_q(<<"val">>, Context, <<>>),
             OnSuccess = proplists:get_all_values(on_success, Args),
             update_entry(CurrentModule, CurrentKey, Module, Key, Value, Context),

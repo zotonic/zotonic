@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Support functions for site development and introspection of the
 %% live system for template and database query tracing.
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,6 +25,44 @@
 -mod_title("Development").
 -mod_description("Development support, periodically builds and loads changed files.").
 -mod_prio(1000).
+-mod_config([
+        #{
+            key => livereload,
+            type => boolean,
+            default => false,
+            description => "Enable live reloading of CSS, JS and templates in the browser. This requires the mod_livereload module to be loaded."
+        },
+        #{
+            key => debug_includes,
+            type => boolean,
+            default => false,
+            description => "Enable debugging of template includes, this will add markers for all template includes in rendered templates."
+        },
+        #{
+            key => debug_blocks,
+            type => boolean,
+            default => false,
+            description => "Enable debugging of template blocks, this will add markers for all template blocks in rendered templates."
+        },
+        #{
+            key => enable_api,
+            type => boolean,
+            default => false,
+            description => "Enable the APIs for mod_development, this allows the unauthenticated use of the development APIs."
+        },
+        #{
+            key => libsep,
+            type => boolean,
+            default => false,
+            description => "If set, then separate script and style tags are generated for all css and js files."
+        },
+        #{
+            key => nocache,
+            type => boolean,
+            default => false,
+            description => "If set, disable caching by the <tt>{% cache %}</tt> tag."
+        }
+    ]).
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).

@@ -1,9 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2011-2023 Arjan Scherpenisse <arjan@scherpenisse.net>
+%% @copyright 2011-2025 Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @doc Enables embedding media from their URL.
 %% @end
 
-%% Copyright 2011-2023 Arjan Scherpenisse <arjan@scherpenisse.net>
+%% Copyright 2011-2025 Arjan Scherpenisse <arjan@scherpenisse.net>
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,6 +23,26 @@
 -mod_title("OEmbed support").
 -mod_description("Add external media in your site by their URL.").
 -mod_prio(600).
+-mod_config([
+        #{
+            key => embedly_key,
+            type => string,
+            default => "",
+            description => "The optional Embedly API key to use for oembed requests."
+        },
+        #{
+            key => maxwidth,
+            type => integer,
+            default => 1200,
+            description => "The maximum width of the oembed preview images. Defaults to 1200 pixels."
+        },
+        #{
+            key => maxheight,
+            type => integer,
+            default => "",
+            description => "The maximum height of the oembed preview images. Defaults to no max height."
+        }
+    ]).
 
 %% interface functions
 -export([

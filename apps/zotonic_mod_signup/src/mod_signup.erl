@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2022 Marc Worrell
+%% @copyright 2010-2024 Marc Worrell
 %% @doc Let new members register themselves.
+%% @end
 
-%% Copyright 2010-2022 Marc Worrell
+%% Copyright 2010-2024 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,6 +26,43 @@
 -mod_schema(1).
 -mod_depends([ base, mod_authentication, mod_server_storage ]).
 -mod_provides([signup]).
+-mod_config([
+        #{
+            key => member_category,
+            type => string,
+            default => "person",
+            description => "The category to assign to new members. Defaults to 'person'."
+        },
+        #{
+            key => content_group,
+            type => string,
+            default => "",
+            description => "The content group to assign to new members. Defaults to the empty string, "
+                           "which means the default content group for the current ACL module."
+        },
+        #{
+            key => depiction_as_medium,
+            type => boolean,
+            default => false,
+            description => "If true, the depiction of the user will be the medium beloging to the user's resource, "
+                           "otherwise it will be uploaded as a separate image resource and connected to the user using "
+                           "a depiction connection."
+        },
+        #{
+            key => request_confirm,
+            type => boolean,
+            default => true,
+            description => "If true, the user will not be verified immediately, but will receive a verification email to confirm their identity. "
+                           "If false, the user is verified immediately."
+        },
+        #{
+            key => username_equals_email,
+            type => boolean,
+            default => false,
+            description => "If true, the username will be set to the email address of the user. "
+                           "If false, the user can choose a different username."
+        }
+    ]).
 
 
 -export([

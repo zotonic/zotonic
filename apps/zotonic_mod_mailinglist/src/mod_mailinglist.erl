@@ -1,11 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2024 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Mailinglist implementation. Mailings are pages sent to a list of recipients.
 %% Recipients are either email addresses in the recipients table, resources matching
 %% the mailinglist query, or resources subscribed to the mailinglist using an edge.
 %% @end
 
-%% Copyright 2009-2024 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,6 +29,30 @@
 -mod_schema(3).
 -mod_depends([ admin, mod_wires, mod_logging, mod_email_status ]).
 -mod_provides([ mailinglist ]).
+-mod_config([
+        #{
+            key => email_from,
+            type => string,
+            default => "",
+            description => "The email address used as the 'From' of mailings, used if the "
+                           "property 'mailinglist_reply_to' is not set on the mailinglist. Defaults to the smtpfrom "
+                           "email address."
+        },
+        #{
+            key => send_confirm,
+            type => boolean,
+            default => false,
+            description => "If true, send a confirmation email to the recipient when they are added to a mailinglist. "
+                           "If false, send a welcome email. Can be overridden in the signup form and mailinglist settings."
+        },
+        #{
+            key => recipient_secret,
+            type => string,
+            default => "",
+            description => "The secret used to encrypt the keys to manage a specific subscription for an email address."
+                           "This is generated automatically and must be kept secret."
+        }
+    ]).
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).

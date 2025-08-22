@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2020 Marc Worrell
+%% @copyright 2010-2025 Marc Worrell
 %% @doc Git and Mercurial support for zotonic sites
+%% @end
 
-%% Copyright 2010-2020 Marc Worrell
+%% Copyright 2010-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -22,6 +23,15 @@
 -mod_title("Site update").
 -mod_description("Update the site to a new version from Git or other version control systems.").
 -mod_prio(500).
+-mod_config([
+        #{
+            key => webhook_token,
+            type => string,
+            default => "",
+            description => "The token to use for the webhook used to fetch new code from the version control system. "
+                           "If empty the webhook is disabled. This must be kept secret."
+        }
+    ]).
 
 -export([
     event/2

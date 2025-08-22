@@ -25,6 +25,48 @@
 -mod_prio(400).
 -mod_depends([ admin, authentication, mod_oauth2 ]).
 
+% You have to add your Microsoft appid and secret to the config.
+% By default, we only request access to the Microsoft user's e-mail address.
+% The 'openid' scope is always added when requesting the access token.
+-define(MICROSOFT_SCOPE, <<"User.Read email">>).
+
+% The tenant: common, organizations, consumers or Microsot tenant id's
+-define(MICROSOFT_TENANT, <<"common">>).
+
+
+-mod_config([
+        #{
+            key => useauth,
+            type => boolean,
+            default => false,
+            description => "Enable Microsoft Azure authentication. This allows users to log in using their Microsoft Azure account."
+        },
+        #{
+            key => appid,
+            type => string,
+            default => "",
+            description => "The Microsoft Azure App ID used for user authentication."
+        },
+        #{
+            key => appsecret,
+            type => string,
+            default => "",
+            description => "The Microsoft Azure App Secret used for user authentication."
+        },
+        #{
+            key => tennant,
+            type => string,
+            default => ?MICROSOFT_TENANT,
+            description => "The Microsoft Azure tenant used for user authentication."
+        },
+        #{
+            key => scope,
+            type => string,
+            default => ?MICROSOFT_SCOPE,
+            description => "The scope used when requesting access to Microsoft Azure data."
+        }
+    ]).
+
 -export([
     event/2
 ]).
@@ -33,15 +75,6 @@
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
-
-
-% You have to add your Microsoft appid and secret to the config.
-% By default, we only request access to the Microsoft user's e-mail address.
-% The 'openid' scope is always added when requesting the access token.
--define(MICROSOFT_SCOPE, <<"User.Read email">>).
-
-% The tenant: common, organizations, consumers or Microsot tenant id's
--define(MICROSOFT_TENANT, <<"common">>).
 
 
 %% @doc Return the Microsoft appid, secret and scope

@@ -25,6 +25,92 @@
 -mod_prio(500).
 -mod_depends([base, acl]).
 -mod_provides([authentication]).
+-mod_config([
+        #{
+            key => password_min_length,
+            type => integer,
+            default => 8,
+            description => "The minimum length of new passwords."
+        },
+        #{
+            key => is_signup_confirm,
+            type => boolean,
+            default => true,
+            description => "If true, users will have to confirm their signup by clicking on a link in an email."
+        },
+        #{
+            key => reset_token_max_age,
+            type => integer,
+            default => 172_800,
+            description => "The maximum age of a password reset token in seconds. Default is 2 days (172800 seconds)."
+        },
+        #{
+            key => is_one_step_logon,
+            type => boolean,
+            default => false,
+            description => "If true, the user must enter both their username and password at once. Otherwise they are entered one by one, "
+                           "which helps checking other (external) login options."
+        },
+        #{
+            key => is_rememberme,
+            type => boolean,
+            default => false,
+            description => "If true, the 'remember me' option on the login form will be pre-checked. This will set a cookie that will "
+                           "automatically log them in when they return to the site."
+        },
+        #{
+            key => email_reminder_if_nomatch,
+            type => boolean,
+            default => false,
+            description => "If true, on a password reset with a unregistered email address, an email is sent to that address with "
+                           "the message that it is unknown."
+        },
+        #{
+            key => password_disable_leak_check,
+            type => boolean,
+            default => false,
+            description => "If true, the password leak check with haveibeenpwned.com is disabled. This is useful for testing purposes, "
+                           "but must not be used in production."
+        },
+        #{
+            key => site_auth_key,
+            type => string,
+            default => "",
+            description => "The site authentication key is used to encrypt the tokens that can be exchanged for a valid authentication cookie or "
+                           "MQTT login. It is automatically set, and must be a random string that is kept secret."
+        },
+        #{
+            key => auth_secret,
+            type => string,
+            default => "",
+            description => "The site authentication secret is used to encrypt the authentication cookies. "
+                           "This key is used for sites without database connections, if there is a database connection then every user will "
+                           "receive their own key. It is automatically set, and must be a random string that is kept secret."
+        },
+        #{
+            key => auth_user_secret,
+            type => string,
+            default => "",
+            description => "The authentication user secret is placed in the encrypted authentication cookies. "
+                           "This secret is used for sites without database connections, if there is a database connection then every user will "
+                           "receive their own secret. It is automatically set, and must be a random string that is kept secret."
+        },
+        #{
+            key => auth_anon_secret,
+            type => string,
+            default => "",
+            description => "The authentication secret for anonymous users is placed in the encrypted authentication cookies. "
+                           "This is used to authenticate anonymous users only, the auth_user_secret is used for authenticated users. "
+                           "It is automatically set, and must be a random string that is kept secret."
+        },
+        #{
+            key => auth_autologon_secret,
+            type => string,
+            default => "",
+            description => "The secret used to sign the autologon cookie for automatic authentication of users that checked 'remember me'. "
+                           "It is automatically set, and must be a random string that is kept secret."
+        }
+    ]).
 
 %% gen_server exports
 -export([

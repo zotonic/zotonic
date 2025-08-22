@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%%
+%% @copyright 2010-2025 Marc Worrell
 %% @doc Facebook integration. Adds Facebook login and other functionalities.
+%% @end
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,6 +25,37 @@
 -mod_prio(400).
 -mod_depends([ admin, authentication, mod_oauth2 ]).
 
+% You have to add your Facebook appid and secret to the config.
+% By default, we only request access to the Facebook user's e-mail address.
+-define(FACEBOOK_SCOPE, <<"email">>).
+
+-mod_config([
+        #{
+            key => useauth,
+            type => boolean,
+            default => false,
+            description => "Enable Facebook authentication. This allows users to log in using their Facebook account."
+        },
+        #{
+            key => appid,
+            type => string,
+            default => "",
+            description => "The Facebook App ID used for user authentication."
+        },
+        #{
+            key => appsecret,
+            type => string,
+            default => "",
+            description => "The Facebook App Secret used for user authentication."
+        },
+        #{
+            key => scope,
+            type => string,
+            default => ?FACEBOOK_SCOPE,
+            description => "The scope used when requesting access to Facebook data."
+        }
+    ]).
+
 -export([
     observe_search_query/2,
     event/2
@@ -34,11 +65,6 @@
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
-
-
-% You have to add your Facebook appid and secret to the config.
-% By default, we only request access to the Facebook user's e-mail address.
--define(FACEBOOK_SCOPE, <<"email">>).
 
 
 %% @doc Return the facebook appid, secret and scope

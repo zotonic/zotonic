@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc The base module, implementing basic Zotonic scomps, actions, models and validators.
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,9 +25,227 @@
 -mod_prio(9999).
 -mod_depends([]).
 -mod_provides([base]).
+-mod_schema(3).
+-mod_config([
+        #{
+            module => site,
+            key => title,
+            type => string,
+            default => "",
+            description => "The title of the site, used in the HTML <title> tag and in the header."
+        },
+        #{
+            module => site,
+            key => subtitle,
+            type => string,
+            default => "",
+            description => "The sub-title of the site, can used in the HTML <title> tag and in the header."
+        },
+        #{
+            module => site,
+            key => pagelen,
+            type => integer,
+            default => 20,
+            description => "The default page length of paginated searches. Default is 20 items per page."
+        },
+        #{
+            module => site,
+            key => session_expire_inactive,
+            type => integer,
+            default => 14_400,
+            description => "The time in seconds after which an inactive session expires. Default is 14400 seconds (4 hours)."
+        },
+        #{
+            module => site,
+            key => autologon_expire,
+            type => integer,
+            default => 15_552_000,
+            description => "The time in seconds after which an autologon cookie expires. Default is 15552000 seconds (180 days)."
+        },
+        #{
+            module => site,
+            key => password_force_different,
+            type => boolean,
+            default => false,
+            description => "If true, a user must choose a different password when changing their password."
+        },
+        #{
+            module => site,
+            key => state_cookie_secret,
+            type => string,
+            default => "",
+            description => "The secret used to encrypt the state cookie with application state data remembered between page reloads. "
+                           "It is automatically set, and must be a random string that is kept secret."
+        },
+        #{
+            module => site,
+            key => security_expires,
+            type => string,
+            default => "+1 month",
+            description => "The relative time after which the .well-known/security.txt expires. Default is '+1 month'."
+        },
+        #{
+            module => site,
+            key => security_email,
+            type => string,
+            default => "",
+            description => "The contact email address for security issues, used in the .well-known/security.txt file. "
+                           "Defaults to the Zotonic config security_email, and if not set to the public mail_email address of the admin (id 1) user."
+        },
+        #{
+            module => site,
+            key => security_url,
+            type => string,
+            default => "",
+            description => "The URL to the security contact, used in the .well-known/security.txt file. "
+                           "Defaults to the URL of the page_security_contact page, and if not set to the Zotonic config security_url."
+        },
+        #{
+            module => site,
+            key => security_policy_url,
+            type => string,
+            default => "",
+            description => "The URL to the security policy, used in the .well-known/security.txt file."
+                           "Defaults to the URL of the page_security_policy page, and if not set to the Zotonic config security_policy_url."
+        },
+        #{
+            module => site,
+            key => security_hiring_url,
+            type => string,
+            default => "",
+            description => "The URL to the security hiring, used in the .well-known/security.txt file."
+                           "Defaults to the URL of the page_security_hiring page, and if not set to the Zotonic config security_hiring_url."
+        },
+        #{
+            module => site,
+            key => smtphost,
+            type => string,
+            default => "",
+            description => "The domain used for the 'from' when sending email and the SMTP hostname used for receiving email. "
+                           "Defaults to the site's configured hostname."
+        },
+        #{
+            module => site,
+            key => bounce_email_override,
+            type => string,
+            default => "",
+            description => "If set, this email address is used as the envelop address on emails and will receive bounced emails. "
+                           "Defaults to the Zotonic config smtp_bounce_email_override, and if not set to the noreply with the smtphost as the domain."
+        },
+        #{
+            module => site,
+            key => email_from,
+            type => string,
+            default => "",
+            description => "The email address used as the 'from' address when sending emails. "
+                           "Defaults to noreply with the smtphost as the domain."
+        },
+        #{
+            module => site,
+            key => email_override,
+            type => string,
+            default => "",
+            description => "If set, all outgoing email will be sent to this address. Useful on development systems to catch all email. "
+                           "The Zotonic config email_override always takes precedence over this setting."
+        },
+        #{
+            module => site,
+            key => email_override_exceptions,
+            type => string,
+            default => "",
+            description => "Comma or space separated list of email addresses and @domains that are not overridden by the email_override. "
+                           "Useful to allow some emails to be sent to their original destination, while others are caught by the email_override."
+        },
+        #{
+            module => site,
+            key => client_smtphost,
+            type => string,
+            default => "",
+            description => "The domain hostname as identification when sending email to other SMTP servers. "
+                           "Defaults to the site's configured hostname."
+        },
+        #{
+            module => site,
+            key => smtp_relay,
+            type => boolean,
+            default => false,
+            description => "If true, the site will relay email through the SMTP server configured in smtp_relay_host. "
+                           "If false, the site will send email directly to the recipient's mail server."
+        },
+        #{
+            module => site,
+            key => smtp_relay_host,
+            type => string,
+            default => "",
+            description => "If smtp_relay is set, the hostname of the SMTP server to relay email through. "
+                           "Defaults to localhost."
+        },
+        #{
+            module => site,
+            key => smtp_relay_port,
+            type => integer,
+            default => 25,
+            description => "If smtp_relay is set, the port of the SMTP server to relay email through. "
+                           "Defaults to 25 or 587, depending on smtp_relay_ssl."
+        },
+        #{
+            module => site,
+            key => smtp_relay_ssl,
+            type => boolean,
+            default => false,
+            description => "If smtp_relay is set, always use SSL/TLS when connecting to the relaying SMTP server. "
+                           "Defaults to false, which means STARTTLS is only used if supported by the relaying server."
+        },
+        #{
+            module => site,
+            key => smtp_relay_username,
+            type => string,
+            default => "",
+            description => "If smtp_relay is set, the username to authenticate with the relaying SMTP server. "
+                           "Defaults to an empty string, which means no authentication is used."
+        },
+        #{
+            module => site,
+            key => smtp_relay_password,
+            type => string,
+            default => "",
+            description => "If smtp_relay is set, the password to authenticate with the relaying SMTP server. "
+        },
+        #{
+            module => site,
+            key => hsts,
+            type => boolean,
+            default => false,
+            description => "If true, the site will send the Strict-Transport-Security header to enforce HTTPS connections. "
+                           "Defaults to false."
+        },
+        #{
+            module => site,
+            key => hsts_maxage,
+            type => integer,
+            default => 17_280_000,
+            description => "The maximum age in seconds for the Strict-Transport-Security header. "
+                           "This is only useful if hsts is also set to true. Defaults to 17280000 seconds (200 days)."
+        },
+        #{
+            module => site,
+            key => hsts_include_subdomains,
+            type => boolean,
+            default => false,
+            description => "If true, the Strict-Transport-Security header will include the 'includeSubDomains' directive. "
+                           "This is only useful if hsts is also set to true. Defaults to false."
+        },
+        #{
+            module => site,
+            key => hsts_preload,
+            type => boolean,
+            default => false,
+            description => "If true, the site will include the 'preload' directive in the Strict-Transport-Security header. "
+                           "This is only useful if hsts is also set to true. Defaults to false."
+        }
+    ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--mod_schema(3).
 
 %% interface functions
 -export([

@@ -1466,7 +1466,7 @@ hsts_header(Context) ->
             F = fun() ->
                 MaxAge = z_convert:to_integer(m_config:get_value(site, hsts_maxage, ?HSTS_MAXAGE, Context)),
                 IncludeSubdomains = z_convert:to_bool(m_config:get_value(site, hsts_include_subdomains, false, Context)),
-                Preload = z_convert:to_bool(m_config:get_value(site, preload, false, Context)),
+                Preload = z_convert:to_bool(m_config:get_value(site, hsts_preload, false, Context)),
                 Options = case {IncludeSubdomains, Preload} of
                     {true, true} -> <<"; includeSubDomains; preload">>;
                     {true, _} -> <<"; includeSubDomains">>;

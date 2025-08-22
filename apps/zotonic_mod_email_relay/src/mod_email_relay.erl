@@ -24,6 +24,42 @@
 -mod_description("Relay e-mails via other Zotonic servers.").
 -mod_prio(500).
 -mod_schema(1).
+-mod_config([
+        #{
+            key => is_email_relay,
+            type => boolean,
+            default => false,
+            description => "Enable email relay via other Zotonic servers."
+        },
+        #{
+            key => email_relay_url,
+            type => string,
+            default => "",
+            description => "The Zotonic server URL to relay emails to."
+        },
+        #{
+            key => email_relay_send_secret,
+            type => string,
+            default => "",
+            description => "The secret used to authenticate sending emails to the relay server. "
+                           "This is a shared secret between this server and the relay server and must "
+                           "be set manually on both servers. This must be kept secret."
+        },
+        #{
+            key => email_relay_receive_secret,
+            type => string,
+            default => "",
+            description => "The secret used to authenticate receiving emails from the sending server. "
+                           "This is a shared secret between this server and the sending server and must "
+                           "be set manually on both servers. This must be kept secret."
+        },
+        #{
+            key => is_user_relay,
+            type => boolean,
+            default => false,
+            description => "[EXPERIMENTAL - DO NOT USE] Relay received emails for an user directly to known users."
+        }
+    ]).
 
 -export([
     observe_email_status/2,

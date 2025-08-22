@@ -1,8 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016 Marc Worrell
-%% @doc Model returning information about the available SSL certificates.
+%% @copyright 2016-2025 Marc Worrell
+%% @doc Model returning information about SSL certificates, security directory
+%% and available configurations.
+%% @end
 
-%% Copyright 2016 Marc Worrell
+%% Copyright 2016-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -46,8 +48,45 @@ m_get([ <<"security_dir">> | Rest ], _Msg, Context) ->
         false ->
             {ok, {<<>>, Rest}}
     end;
+m_get([ <<"configs">> | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            {ok, {mod_admin_config:collect_configs(Context), Rest}};
+        false ->
+            {ok, {[], Rest}}
+    end;
+m_get([ <<"config">>, Module, Key | Rest ], _Msg, Context) ->
+    case z_acl:is_admin(Context) of
+        true ->
+            Configs = mod_admin_config:collect_configs(Context),
+            M1 = to_existing_atom(Module),
+            K1 = to_existing_atom(Key),
+            case lists:filter(
+                fun
+                    (#{ module := M, key := K }) when M =:= M1, K =:= K1 -> true;
+                    (_) -> false
+                end,
+                Configs)
+            of
+                [C|_] ->
+                    {ok, {C, Rest}};
+                [] ->
+                    {ok, {undefined, Rest}}
+            end;
+        false ->
+            {ok, {[], Rest}}
+    end;
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
+
+to_existing_atom(Atom) when is_atom(Atom) ->
+    Atom;
+to_existing_atom(Binary) when is_binary(Binary) ->
+    try
+        binary_to_existing_atom(Binary, utf8)
+    catch
+        _:_ -> undefined
+    end.
 
 ssl_certificates(Context) ->
     Observers = z_notifier:get_observers(ssl_options, Context),

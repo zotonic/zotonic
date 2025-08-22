@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Identity administration.  Adds overview of users to the admin and enables to add passwords on the edit page.
+%% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,6 +24,26 @@
 -mod_description("Adds support for handling and verification of user identities.").
 -mod_depends([admin]).
 -mod_provides([]).
+-mod_config([
+        #{
+            key => password_regex,
+            type => string,
+            default => "",
+            description => "The regular expression that is used to validate passwords."
+        },
+        #{
+            key => new_user_category,
+            type => string,
+            default => "person",
+            description => "The category that is assigned to new users."
+        },
+        #{
+            key => new_user_contentgroup,
+            type => string,
+            default => "default_content_group",
+            description => "The content group that is assigned to new users."
+        }
+    ]).
 
 
 %% interface functions

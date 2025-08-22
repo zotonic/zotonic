@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013-2018 Marc Worrell
-
+%% @copyright 2013-2025 Marc Worrell
 %% @doc Link MQTT messaging with Zotonic module callbacks
+%% @end
 
-%% Copyright 2013-2018 Marc Worrell
+%% Copyright 2013-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,6 +23,15 @@
 -mod_description("MQTT messaging, connecting server and browser.").
 -mod_author("Marc Worrell <marc@worrell.nl>").
 -mod_prio(1000).
+-mod_config([
+        #{
+            key => local_storage_secret,
+            type => string,
+            default => "",
+            description => "The encryption key for secure data stored in the browser's LocalStorage."
+                           "This secret is automatically generated and must be kept secret."
+        }
+    ]).
 
 -export([
     'mqtt:test/#'/2,

@@ -26,6 +26,54 @@
 -mod_schema(12).
 -mod_provides([filestore]).
 -mod_depends([cron]).
+-mod_config([
+        #{
+            key => service,
+            type => string,
+            default => "",
+            description => "The service to use for storing files. One of: s3, ftp, ftps, webdav, webdavs"
+        },
+        #{
+            key => s3url,
+            type => string,
+            default => "",
+            description => "The URL of the S3 service, e.g. https://s3.myblockstorage.com"
+        },
+        #{
+            key => s3key,
+            type => string,
+            default => "",
+            description => "The S3 access key or FTP/WebDAV username, used for authentication."
+        },
+        #{
+            key => s3secret,
+            type => string,
+            default => "",
+            description => "The S3 secret key or FTP/WebDAV password, used for authentication"
+        },
+        #{
+            key => is_local_keep,
+            type => boolean,
+            default => false,
+            description => "Keep a local copy of the files that are uploaded to the remote server. "
+                           "If set, the storage server is used as a backup for the locally uploaded files."
+        },
+        #{
+            key => is_upload_enabled,
+            type => boolean,
+            default => true,
+            description => "Enable the upload of new files to the remote server."
+        },
+        #{
+            key => delete_interval,
+            type => string,
+            default => <<"0">>,
+            description => "The interval at which to delete files marked as deleted. "
+                           "Set to 'false' to disable deletion of remote files. Use seconds, 'false', or "
+                           "'N days/weeks/months' to specify the interval. "
+                           "The default is '0', which means immediate deletion."
+        }
+    ]).
 
 -behaviour(supervisor).
 
