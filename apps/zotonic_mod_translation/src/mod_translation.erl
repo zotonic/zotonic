@@ -34,6 +34,37 @@
 -mod_description("Handle user’s language and generate .pot files with translatable texts.").
 -mod_prio(501).
 -mod_provides([translation]).
+-mod_config([
+        #{
+            module => i18n,
+            key => language,
+            type => string,
+            default => "en",
+            description => "The default language to use for this site. Defaults to 'en'. Note that "
+                           "this is set by reordering the languages in /admin/translation"
+        },
+        #{
+            module => i18n,
+            key => language_stemmer,
+            type => string,
+            default => "en",
+            description => "The default language stemmer to use for this site. Defaults to 'en'. "
+                           "This is used for search indexing and stemming."
+        },
+        #{
+            key => rewrite_url,
+            type => boolean,
+            default => true,
+            description => "Rewrite URLs to include the language code, e.g. /en/ instead of /"
+        },
+        #{
+            key => force_default,
+            type => boolean,
+            default => false,
+            description => "Force the default language if no language is set in the request. "
+                           "If not set then language negotation using the request's Accept-Language header is used."
+        }
+    ]).
 
 -export([
     observe_request_context/3,

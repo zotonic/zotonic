@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019-2024 Driebit BV
+%% @copyright 2019-2025 Driebit BV
 %% @doc Rate limiting of authentication tries and other types of requests
 %% This follows https://www.owasp.org/index.php/Slow_Down_Online_Guessing_Attacks_with_Device_Cookies
 %% @end
 
-%% Copyright 2019-2024 Driebit BV
+%% Copyright 2019-2025 Driebit BV
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -26,6 +26,28 @@
 -mod_description("Rate limiting of authentication tries and other types of requests.").
 -mod_prio(500).
 -mod_depends([ cron ]).
+-mod_config([
+        #{
+            key => device_secret,
+            type => string,
+            default => "",
+            description => "The secret used to sign the device cookie. The device cookie is used to "
+                           "give known browsers their own rate limiting. "
+                           "This is automatically generated and must be kept secret."
+        },
+        #{
+            key => event_period,
+            type => integer,
+            default => 3600,
+            description => "The period in seconds for counting events, defaults to 3600 seconds (1 hour)."
+        },
+        #{
+            key => event_count,
+            type => integer,
+            default => 5,
+            description => "The number of events before a rate limit is applied, defaults to 5."
+        }
+    ]).
 
 -export([
     event/2,

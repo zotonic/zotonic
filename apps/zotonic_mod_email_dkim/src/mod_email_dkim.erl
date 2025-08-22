@@ -1,8 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@miraclethings.nl>
-%% @copyright 2016-2021 Arjan Scherpenisse
+%% @copyright 2016-2025 Arjan Scherpenisse
 %% @doc DKIM signing of outgoing emails
+%% @end
 
-%% Copyright 2016-2021 Arjan Scherpenisse
+%% Copyright 2016-2025 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -22,6 +23,16 @@
 -mod_title("Email DKIM signing").
 -mod_description("Signs outgoing e-mails with DomainKeys Identified Mail Signatures (RFC 6376)").
 -mod_prio(500).
+-mod_config([
+        #{
+            module => site,
+            key => dkim_selector,
+            type => string,
+            default => "zotonic",
+            description => "The DKIM selector to use for signing e-mails. This is used to find the public key in the DNS TXT record."
+                           "Defaults to 'zotonic'."
+        }
+    ]).
 
 -export([
     init/1,

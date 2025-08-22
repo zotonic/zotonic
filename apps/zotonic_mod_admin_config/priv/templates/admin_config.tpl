@@ -45,7 +45,7 @@
                updateAction,
                deleteAction
             %}
-            <tr id="{{ #tr.id }}" class="clickable" data-href="#" data-entry="{{module}}.{{key}}">
+            <tr id="{{ #tr.id }}" class="clickable" data-entry="{{module}}.{{key}}">
                 <td>{{ module|escape|default:"-" }}</td>
                 <td>{{ key|escape|default:"-" }}</td>
                 <td>

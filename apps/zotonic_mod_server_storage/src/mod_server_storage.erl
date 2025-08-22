@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2020 Marc Worrell
+%% @copyright 2020-2025 Marc Worrell
 %% @doc Server side sessions and data storage.
+%% @end
 
-%% Copyright 2020 Marc Worrell
+%% Copyright 2020-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,6 +25,20 @@
 -mod_prio(500).
 -mod_depends([base]).
 -mod_provides([server_storage]).
+-mod_config([
+        #{
+            key => storage_expire,
+            type => integer,
+            default => 900,
+            description => "The time in seconds after which the server side storage expires and is removed."
+        },
+        #{
+            key => storage_maxsize,
+            type => integer,
+            default => 102400,
+            description => "The maximum size of the server side storage in bytes. Above this size writes are refused."
+        }
+    ]).
 
 -behaviour(supervisor).
 

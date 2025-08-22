@@ -28,6 +28,63 @@
 -mod_provides([backup]).
 -mod_depends([]).
 -mod_schema(4).
+-mod_config([
+        #{
+            key => daily_dump,
+            type => integer,
+            default => "0",
+            description => "How to perform a daily backup. 0 = no backup, 1 = database and file, 2 = only database."
+        },
+        #{
+            key => admin_panel,
+            type => boolean,
+            default => false,
+            description => "Show the revisions admin panel on the resource edit pages in the admin."
+        },
+        #{
+            key => allow_backup_download,
+            type => boolean,
+            default => true,
+            description => "Allow downloading of the backup files from the admin backups page."
+        },
+        #{
+            key => allow_manual_backup,
+            type => boolean,
+            default => true,
+            description => "Allow manual backups to be started from the admin backups page."
+        },
+        #{
+            key => revision_retention_months,
+            type => integer,
+            default => 18,
+            description => "How many months to keep revisions of resources. At least 1 month."
+        },
+        #{
+            key => user_revision_retention_days,
+            type => integer,
+            default => 90,
+            description => "How many days to keep revisions of resources with personal information. At least 1 day."
+        },
+        #{
+            key => user_deletion_retention_days,
+            type => integer,
+            default => 30,
+            description => "How many days to keep revisions of resources with personal information of deleted users. Maximum is 30 days."
+        },
+        #{
+            key => encrypt_backups,
+            type => boolean,
+            default => false,
+            description => "Encrypt backups with a password. If enabled, a password is generated if not set in the config."
+        },
+        #{
+            key => backup_encrypt_password,
+            type => string,
+            default => "",
+            description => "The password to encrypt the backups with. This must be kept secret and copied to offline, secure storage. "
+                           "If not set, a random password is generated."
+        }
+    ]).
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).

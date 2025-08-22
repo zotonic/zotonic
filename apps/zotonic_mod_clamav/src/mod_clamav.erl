@@ -24,6 +24,15 @@
 -mod_prio(100).
 -mod_provides([ antivirus ]).
 -mod_depends([ cron ]).
+-mod_config([
+        #{
+            key => clamav_reject_msoffice_external_links,
+            type => boolean,
+            default => false,
+            description => "Reject MS Office files with external links. Set by the Zotonic config clamav_reject_msoffice_external_links "
+                           "(defaults to true), and if not set, can also be enabled by this config."
+        }
+    ]).
 
 -export([
      observe_media_upload_preprocess/2,

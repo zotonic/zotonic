@@ -28,7 +28,26 @@
 -mod_prio(500).
 -mod_depends([ admin, authentication, mod_oauth2 ]).
 -mod_provides([ linkedin ]).
-
+-mod_config([
+        #{
+            key => useauth,
+            type => boolean,
+            default => false,
+            description => "Enable LinkedIn authentication. This allows users to log in using their LinkedIn account."
+        },
+        #{
+            key => appid,
+            type => string,
+            default => "",
+            description => "The LinkedIn App ID used for user authentication."
+        },
+        #{
+            key => appsecret,
+            type => string,
+            default => "",
+            description => "The LinkedIn App Secret used for user authentication."
+        }
+    ]).
 %% interface functions
 -export([
         event/2,

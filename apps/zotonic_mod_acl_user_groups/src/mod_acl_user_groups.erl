@@ -24,6 +24,26 @@
 -mod_schema(12).
 -mod_depends([menu, mod_content_groups]).
 -mod_provides([acl]).
+-mod_config([
+        #{
+            key => author_is_owner,
+            type => boolean,
+            default => false,
+            description => "If true, authors of resources are considered owners of the resource, and can edit it."
+        },
+        #{
+            key => collab_group_update,
+            type => string,
+            default => "",
+            description => "Who is allowed to update the collaboration group itself: member or manager"
+        },
+        #{
+            key => collab_group_link,
+            type => string,
+            default => "",
+            description => "Who is allowed to add connections to the collaboration group itself: member or manager"
+        }
+    ]).
 
 -behaviour(gen_server).
 -behaviour(zotonic_observer).

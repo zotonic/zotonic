@@ -29,7 +29,8 @@
 %% interface functions
 -export([
     observe_admin_menu/3,
-    event/2
+    event/2,
+    collect_configs/1
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -110,3 +111,17 @@ split_key(Module, Key) ->
         [ K ] ->
             {Module, K}
     end.
+
+
+collect_configs(Context) ->
+    Modules = lists:sort(z_module_manager:active(Context)),
+    Modules1 = case lists:member(mod_base, Modules) of
+        true -> [ mod_base | Modules -- [ mod_base ] ];
+        false -> Modules
+    end,
+    Cfgs = lists:map(
+        fun(Module) ->
+            z_module_manager:mod_config(Module)
+        end,
+        Modules1),
+    lists:flatten(Cfgs).

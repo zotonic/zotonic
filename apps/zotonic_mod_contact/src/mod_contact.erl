@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
-%% Date: 2010-07-20
+%% @copyright 2010-2025 Marc Worrell
 %% @doc Simple contact form.
+%% @end
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,6 +24,23 @@
 -mod_description("Simple contact form. Mails a contact form to the administrator user.").
 -mod_prio(500).
 -mod_schema(1).
+-mod_config([
+        #{
+            name => email,
+            type => string,
+            default => "",
+            description => "The email address to send the contact form to if not set in "
+                           "the contact form postback arguments. If not set them the admin email "
+                           "address is used."
+        },
+        #{
+            name => from,
+            type => string,
+            default => "",
+            description => "The email address to use as the 'From' for the contact email, if not defined in "
+                           "the contact form postback arguments. If not set, mail address entered in the form used."
+        }
+    ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 

@@ -1,9 +1,9 @@
 %% @author Arthur Clemens <arthurclemens@gmail.com>
-%% @copyright 2014-2023 Arthur Clemens
+%% @copyright 2014-2025 Arthur Clemens
 %% @doc TinyMCE Editor module
 %% @end
 
-%% Copyright 2014-2023 Arthur Clemens
+%% Copyright 2014-2025 Arthur Clemens
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,6 +23,14 @@
 -mod_title("TinyMCE Editor").
 -mod_description("Rich Text Editor using TinyMCE.").
 -mod_prio(500).
+-mod_config([
+        #{
+            name => version,
+            type => string,
+            default => "newest",
+            description => "The TinyMCE version to use. Either the version number or 'newest'."
+        }
+    ]).
 
 -export([
     event/2

@@ -68,6 +68,7 @@
     mod_description/1,
     mod_author/1,
     mod_schema/1,
+    mod_config/1,
     reinstall/2,
     sidejob_finish_start/1
 ]).
@@ -871,6 +872,25 @@ mod_schema(Module) ->
     catch
         _M:_E -> undefined
     end.
+
+%% @doc Get the configurations of a module.
+-spec mod_config(Module) -> ConfigList when
+    Module :: atom() | binary() | string(),
+    ConfigList :: [ map() ].
+mod_config(Module) ->
+    Mod = module_to_mod(Module),
+    try
+        {mod_config, Configs} = proplists:lookup(mod_config, Mod:module_info(attributes)),
+        lists:map(
+            fun
+                (#{ module := _ } = C) -> C;
+                (C) -> C#{ module => Mod }
+            end,
+            Configs)
+    catch
+        _M:_E -> []
+    end.
+
 
 db_schema_version(M, Context) ->
     z_db:q1("SELECT schema_version FROM module WHERE name = $1", [M], Context).

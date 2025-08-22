@@ -1,11 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2025 Marc Worrell
 %% @doc Defines PostgreSQL queries for basic content searches in Zotonic.
 %% This module needs to be split in specific PostgreSQL queries and standard SQL queries
 %% when you want to support other databases (like MySQL).
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -26,6 +26,44 @@
 -mod_title("Search Queries").
 -mod_description("Defines PostgreSQL queries for basic content searches in Zotonic.").
 -mod_prio(1000).
+
+% For the ranking defined below, check:
+% https://www.postgresql.org/docs/14/textsearch-controls.html
+
+% Default weights for ranking texts in D, C, B and A blocks.
+% PostgreSQL default is {0.1, 0.2, 0.4, 1.0}
+% The max weight is 1.0
+-define(RANK_WEIGHT, <<"'{0.01, 0.02, 0.2, 1.0}'">>).
+
+% Default rank behaviour for psql text searches:
+%
+% 0 (the default) ignores the document length
+% 1 divides the rank by 1 + the logarithm of the document length
+% 2 divides the rank by the document length
+% 4 divides the rank by the mean harmonic distance between extents (this is implemented only by ts_rank_cd)
+% 8 divides the rank by the number of unique words in document
+% 16 divides the rank by 1 + the logarithm of the number of unique words in document
+% 32 divides the rank by itself + 1
+%
+-define(RANK_BEHAVIOUR, 1 bor 4).
+
+-mod_config([
+        #{
+            key => rank_weight,
+            type => string,
+            default => ?RANK_WEIGHT,
+            description => "Default weights for ranking texts in D, C, B and A blocks, used in the full text search queries. "
+                           "The default for PostgreSQL is '{0.1, 0.2, 0.4, 1.0}'."
+        },
+        #{
+            key => rank_behaviour,
+            type => integer,
+            default => 5,
+            description => "Default rank behaviour for PostgreSQL text searches. "
+                           "The default is 1 bor 4, which divides the rank by 1 + the logarithm of the document length "
+                           "and divides the rank by the mean harmonic distance between extents."
+        }
+    ]).
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
@@ -57,25 +95,6 @@
 
 -define(TIMEOUT_GC, 1000).
 
-% For the ranking defined below, check:
-% https://www.postgresql.org/docs/14/textsearch-controls.html
-
-% Default weights for ranking texts in D, C, B and A blocks.
-% PostgreSQL default is {0.1, 0.2, 0.4, 1.0}
-% The max weight is 1.0
--define(RANK_WEIGHT, <<"'{0.01, 0.02, 0.2, 1.0}'">>).
-
-% Default rank behaviour for psql text searches:
-%
-% 0 (the default) ignores the document length
-% 1 divides the rank by 1 + the logarithm of the document length
-% 2 divides the rank by the document length
-% 4 divides the rank by the mean harmonic distance between extents (this is implemented only by ts_rank_cd)
-% 8 divides the rank by the number of unique words in document
-% 16 divides the rank by 1 + the logarithm of the number of unique words in document
-% 32 divides the rank by itself + 1
-%
--define(RANK_BEHAVIOUR, 1 bor 4).
 
 
 event(#postback{ message={facet_rebuild, _Args}}, Context) ->

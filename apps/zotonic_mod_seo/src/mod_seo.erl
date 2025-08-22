@@ -25,6 +25,92 @@
 -mod_prio(600).
 -mod_depends([base, admin]).
 -mod_provides([seo]).
+-mod_config([
+        #{
+            module => seo,
+            key => noindex,
+            type => boolean,
+            default => false,
+            description => "Set to true to request search engines to not index this site. Sets the robots meta tag to 'noindex' and 'nofollow'."
+        },
+        #{
+            module => seo,
+            key => keywords,
+            type => string,
+            default => "",
+            description => "SEO keywords for this site, will be added to the SEO keywords meta tag."
+        },
+        #{
+            module => seo,
+            key => description,
+            type => string,
+            default => "",
+            description => "SEO description for this site, will be added to the SEO description meta tag."
+        },
+        #{
+            module => seo,
+            key => search_action_hide,
+            type => boolean,
+            default => false,
+            description => "Set to true to not add the search action to the JSON-LD structured data."
+        },
+        #{
+            module => seo,
+            key => search_action_url,
+            type => string,
+            default => "",
+            description => "URL for the search action in the JSON-LD structured data. The default is the 'search' dispatch rule."
+        },
+        #{
+            module => seo_plausible,
+            key => analytics,
+            type => boolean,
+            default => false,
+            description => "If set, this will generate the Plausible tracking code with the hostname as the domain."
+        },
+        #{
+            module => seo_google,
+            key => gtm,
+            type => string,
+            default => "",
+            description => "Google Tag Manager ID. Generate GTM tracking code if set."
+        },
+        #{
+            module => seo_google,
+            key => gtm_insecure,
+            type => string,
+            default => "",
+            description => "Flag for Google Tag Manager ID, allows Google full access to your pages."
+        },
+        #{
+            module => seo_google,
+            key => analytics,
+            type => string,
+            default => "",
+            description => "Google Analytics ID. Generate GA tracking code if set."
+        },
+        #{
+            module => seo_google,
+            key => webmaster_verify,
+            type => string,
+            default => "",
+            description => "Google Webmaster Tools verification code. Add a meta tag to verify your site with Google Webmaster Tools."
+        },
+        #{
+            module => seo_bing,
+            key => webmaster_verify,
+            type => string,
+            default => "",
+            description => "Bing Webmaster Tools verification code. Add a meta tag to verify your site with Bing Webmaster Tools."
+        },
+        #{
+            module => seo_yandex,
+            key => webmaster_verify,
+            type => string,
+            default => "",
+            description => "Yandex Webmaster Tools verification code. Add a meta tag to verify your site with Yandex Webmaster Tools."
+        }
+    ]).
 
 %% interface functions
 -export([

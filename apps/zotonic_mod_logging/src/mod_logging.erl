@@ -26,6 +26,14 @@
 -mod_prio(1000).
 -mod_schema(2).
 -mod_depends([ cron ]).
+-mod_config([
+        #{
+            key => ui_log_disabled,
+            type => boolean,
+            default => false,
+            description => "Disable the logging of errors in the browser UI. This is useful for performance reasons."
+        }
+    ]).
 
 %% gen_server exports
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
