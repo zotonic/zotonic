@@ -349,6 +349,16 @@ event(#postback{message={language_status, Args}}, Context) ->
 
 
 %% @doc Strip any language from the URL (iff the first part of the url is a known language)
+url_strip_language([$/,A,B,C,D,E,F,G,$/ | Rest] = Url) ->
+    case z_trans:is_language([A,B,C,D,E,F,G]) of
+        true -> [$/|Rest];
+        false -> Url
+    end;
+url_strip_language(<<$/,A,B,C,D,E,F,G,$/, Rest/binary>> = Url) ->
+    case z_trans:is_language([A,B,C,D,E,F,G]) of
+        true -> <<$/, Rest/binary>>;
+        false -> Url
+    end;
 url_strip_language([$/,A,B,$/ | Rest] = Url) ->
     case z_trans:is_language([A,B]) of
         true -> [$/|Rest];
