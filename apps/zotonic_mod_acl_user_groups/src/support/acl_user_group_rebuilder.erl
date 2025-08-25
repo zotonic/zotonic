@@ -18,7 +18,7 @@
 %% {{module, module_action, user_group_id}, true}
 %% {{action, user_group_id}, [content_group_id]}
 %% {user_group_id, [user_group_id]}
-%% ```
+%% '''
 %%
 %% The action is one of the atoms: view, insert, delete, update, and link.
 %%
