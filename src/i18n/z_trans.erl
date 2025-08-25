@@ -254,10 +254,10 @@ default_language(Context) ->
 
 %% @doc check if the two/three letter code is a valid language
 -spec is_language(Language :: string() | binary()) -> boolean().
-is_language("ppo") -> true; %papiamento
-is_language(<<"ppo">>) -> true; %papiamento
-is_language("ppu") -> true; %papiamentu
-is_language(<<"ppu">>) -> true; %papiamentu
+is_language("pap_533") -> true; %papiamento - aruba
+is_language(<<"pap_533">>) -> true; %papiamento - aruba
+is_language("pap_531") -> true; %papiamentu - curacao & bonaire
+is_language(<<"pap_531">>) -> true; %papiamentu - curacao & bonaire
 is_language(<<A,B>>) -> iso639:lc2lang([A,B]) /= <<>>;
 is_language([_,_] = IsoCode) -> iso639:lc2lang(IsoCode) /= <<>>;
 is_language(<<A,B,C>>) -> iso639:lc3lang([A,B,C]) /= <<>>;
