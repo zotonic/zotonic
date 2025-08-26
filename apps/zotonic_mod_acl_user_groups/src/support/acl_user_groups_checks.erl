@@ -695,9 +695,9 @@ viewable_cg_sql(Lines, Alias, Args0, Context) when is_list(Lines) ->
                         % itself apply to all resources whose 'content_group_id'
                         % is _any_ of the existing collaboration groups
                         CGId =:= CollabId ->
-                            [Alias, ".content_group_id IN (SELECT id FROM rsc WHERE category_id = $", integer_to_list(length(Args0)+1), ")"];
+                            [Alias, ".content_group_id IN (SELECT id FROM rsc WHERE category_id = $", integer_to_list(length(ArgsIn)+1), ")"];
                         true ->
-                            [Alias, ".content_group_id = $", integer_to_list(length(Args0)+1)]
+                            [Alias, ".content_group_id = $", integer_to_list(length(ArgsIn)+1)]
                     end,
                     ArgsIn ++ [CGId]
                 },
