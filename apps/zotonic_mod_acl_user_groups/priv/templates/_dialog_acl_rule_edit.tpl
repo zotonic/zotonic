@@ -113,10 +113,19 @@
                     {_ Visibility _}
                 </label>
                 <div class="col-sm-7">
-                    <input id="{{ #visibility }}" name="visibility"
-                        class="form-control" type="number"
-                        placeholder="{_ Any visibility _}" value="{{ rule.visibility }}"
-                    />
+                    <select class="form-control" id="{{ #visibility }}" name="visibility">
+                        <option value="" {% if rule.visibility|is_undefined %}selected{% endif %}>
+                            {_ Any visibility _}
+                        </option>
+
+                        <option value="0" {% if rule.visibility == 0 %}selected{% endif %}>
+                            0 {_ (public) _}
+                        </option>
+
+                        <option value="50" {% if rule.visibility == 50 %}selected{% endif %}>
+                            50 {_ (private) _}
+                        </option>
+                    </select>
                 </div>
             </div>
             {% endblock %}
