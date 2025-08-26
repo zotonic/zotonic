@@ -605,17 +605,23 @@ find_first_collab_group(CatId, Context) ->
 
 %% @doc Add a restriction on the visible content groups to SQL searches
 acl_add_sql_check(#acl_add_sql_check{alias=Alias, args=Args, search_sql=SearchSql}, Context) ->
-    PublishedSQL =
-        case lists:member(no_publish_check, SearchSql#search_sql.extra) of
-            true -> [];
-            false -> publish_check(Alias)
-        end,
-    {ContentGroupSQL, NewArgs} =
-        case lists:member(no_content_group_check, SearchSql#search_sql.extra) of
-            true -> {[], Args};
-            false -> visibility_check(Alias, Args, Context)
-        end,
-    {join_sql(PublishedSQL, "AND", ContentGroupSQL), NewArgs}.
+    case z_acl:is_admin(Context) of
+        true ->
+            % admins can see all resources
+            {"", Args};
+        false ->
+            PublishedSQL =
+                case lists:member(no_publish_check, SearchSql#search_sql.extra) of
+                    true -> [];
+                    false -> publish_check(Alias)
+                end,
+            {ContentGroupSQL, NewArgs} =
+                case lists:member(no_content_group_check, SearchSql#search_sql.extra) of
+                    true -> {[], Args};
+                    false -> visibility_check(Alias, Args, Context)
+                end,
+            {join_sql(PublishedSQL, "AND", ContentGroupSQL), NewArgs}
+    end.
 
 visibility_check(Alias, Args0, Context) ->
     % find all the user's usergroups:
