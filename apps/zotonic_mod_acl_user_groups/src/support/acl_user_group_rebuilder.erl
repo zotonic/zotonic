@@ -12,8 +12,8 @@
 %% The entries in the ets table are:
 %%
 %% ```
-%% {{content_group_id, {category_id, action, only_if_owner}, user_group_id}, true}
-%% {{'collab', {category_id, action, only_if_owner}, 'collab'}, true}
+%% {{content_group_id, {category_id, visibility, action, only_if_owner}, user_group_id}, true}
+%% {{'collab', {category_id, visibility, action, only_if_owner}, 'collab'}, true}
 %% {{content_group_id, action, user_group_id}, true}
 %% {{module, module_action, user_group_id}, true}
 %% {{action, user_group_id}, [content_group_id]}
@@ -59,21 +59,21 @@ rebuild(ModulePid, State, Context) ->
 		fun(K0) ->
 			{IsAllow, K} = extract_is_allow(K0),
 			case K of
-				{CId, {CatId, insert, _IfOwner}, GId} when IsAllow =:= true ->
+				{CId, {CatId, Visibility, insert, _IfOwner}, GId} when IsAllow =:= true ->
 					% Also store generic allow rules, to allow for rough filtering
-					% on content group in for allowed actions.
-					ets:insert(Table, {{CId, {CatId, insert, false}, GId}, true}),
-					ets:insert(Table, {{CId, {CatId, insert, true}, GId}, true}),
+					% on content group for allowed actions.
+					ets:insert(Table, {{CId, {CatId, Visibility, insert, false}, GId}, true}),
+					ets:insert(Table, {{CId, {CatId, Visibility, insert, true}, GId}, true}),
 					ets:insert(Table, {{CatId, insert, GId}, true}),
 					ets:insert(Table, {{CId, insert, GId}, true});
-				{CId, {CatId, insert, _IfOwner}, GId} when IsAllow =:= false ->
+				{CId, {CatId, Visibility, insert, _IfOwner}, GId} when IsAllow =:= false ->
 					% Only store specific deny rules
-					ets:insert(Table, {{CId, {CatId, insert, false}, GId}, false}),
-					ets:insert(Table, {{CId, {CatId, insert, true}, GId}, false});
-				{CId, {_CatId, Action, _IfOwner}, GId} when IsAllow =:= true ->
+					ets:insert(Table, {{CId, {CatId, Visibility, insert, false}, GId}, false}),
+					ets:insert(Table, {{CId, {CatId, Visibility, insert, true}, GId}, false});
+				{CId, {CatId, Visibility, Action, IfOwner}, GId} when IsAllow =:= true ->
 					% Also store generic allow rules, to allow for rough filtering
-					% on content group in for allowed actions.
-					ets:insert(Table, {K, true}),
+					% on content group for allowed actions.
+					ets:insert(Table, {{CId, {CatId, Visibility, Action, IfOwner}, GId}, true}),
 					ets:insert(Table, {{CId, Action, GId}, true});
 				_ ->
 					ets:insert(Table, {K, IsAllow})
@@ -89,8 +89,8 @@ rebuild(ModulePid, State, Context) ->
 	can_action(Table, insert, UserGroupIds, ContentGroupIds).
 
 
-extract_is_allow({CId, {CatId, Action, IfOwner, IsAllow}, GId}) ->
-	K1 = {CId, {CatId, Action, IfOwner}, GId},
+extract_is_allow({CId, {CatId, Visibility, Action, IfOwner, IsAllow}, GId}) ->
+	K1 = {CId, {CatId, Visibility, Action, IfOwner}, GId},
 	{IsAllow, K1};
 extract_is_allow({Module, Action, GId, IsAllow}) ->
 	K1 = {Module, Action, GId},

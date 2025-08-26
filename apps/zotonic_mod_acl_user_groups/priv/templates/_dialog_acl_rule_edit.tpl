@@ -107,6 +107,28 @@
                     </label>
                 </div>
             </div>
+            {% block visibility_field %}
+            <div class="form-group">
+                <label class="col-sm-3">
+                    {_ Visibility _}
+                </label>
+                <div class="col-sm-7">
+                    <select class="form-control" id="{{ #visibility }}" name="visibility">
+                        <option value="" {% if rule.visibility|is_undefined %}selected{% endif %}>
+                            {_ Any visibility _}
+                        </option>
+
+                        <option value="0" {% if rule.visibility == 0 %}selected{% endif %}>
+                            0 {_ (public) _}
+                        </option>
+
+                        <option value="50" {% if rule.visibility == 50 %}selected{% endif %}>
+                            50 {_ (private) _}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            {% endblock %}
         {% endif %}
 
         {% if kind == `module` %}
