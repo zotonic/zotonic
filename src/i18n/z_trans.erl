@@ -276,6 +276,11 @@ to_language_atom([_,_,_] = IsoCode) ->
         false -> {error, not_a_language};
         true -> {ok, list_to_atom(IsoCode)}
     end;
+to_language_atom([_,_,_,_,_,_,_] = IsoCode) ->
+    case is_language(IsoCode) of
+        false -> {error, not_a_language};
+        true -> {ok, list_to_atom(IsoCode)}
+    end;
 to_language_atom(IsoCode) when is_atom(IsoCode) ->
     to_language_atom(atom_to_list(IsoCode));
 to_language_atom(IsoCode) when is_binary(IsoCode) ->
