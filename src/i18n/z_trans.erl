@@ -254,6 +254,10 @@ default_language(Context) ->
 
 %% @doc check if the two/three letter code is a valid language
 -spec is_language(Language :: string() | binary()) -> boolean().
+is_language("pap_533") -> true; %papiamento - aruba
+is_language(<<"pap_533">>) -> true; %papiamento - aruba
+is_language("pap_531") -> true; %papiamentu - curacao & bonaire
+is_language(<<"pap_531">>) -> true; %papiamentu - curacao & bonaire
 is_language(<<A,B>>) -> iso639:lc2lang([A,B]) /= <<>>;
 is_language([_,_] = IsoCode) -> iso639:lc2lang(IsoCode) /= <<>>;
 is_language(<<A,B,C>>) -> iso639:lc3lang([A,B,C]) /= <<>>;
@@ -268,6 +272,11 @@ to_language_atom([_,_] = IsoCode) ->
         true -> {ok, list_to_atom(IsoCode)}
     end;
 to_language_atom([_,_,_] = IsoCode) ->
+    case is_language(IsoCode) of
+        false -> {error, not_a_language};
+        true -> {ok, list_to_atom(IsoCode)}
+    end;
+to_language_atom([_,_,_,_,_,_,_] = IsoCode) ->
     case is_language(IsoCode) of
         false -> {error, not_a_language};
         true -> {ok, list_to_atom(IsoCode)}
