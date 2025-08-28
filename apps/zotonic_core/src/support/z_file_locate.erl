@@ -279,7 +279,7 @@ part_missing(Filename) ->
     }}.
 
 part_file(Filename, Opts) ->
-    case file:read_file_info(Filename) of
+    case file:read_file_info(Filename, [raw, {time, universal}]) of
         {ok, #file_info{access = none}} ->
             % No access
             {error, eacces};

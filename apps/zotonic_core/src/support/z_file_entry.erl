@@ -389,7 +389,7 @@ check_current_1(_Diff, _Now, State) ->
     {ok, State}.
 
 is_stale_part(#part_file{filepath=Filename, size=Size, modified=MTime}) ->
-    case file:read_file_info(Filename) of
+    case file:read_file_info(Filename, [raw, {time, universal}]) of
         {ok, #file_info{size=Size, type=regular, mtime=MTime}} ->
             false;
         _ ->
