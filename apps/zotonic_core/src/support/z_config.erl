@@ -315,6 +315,7 @@ default(ip_allowlist_admin) -> any;
 default(ip_allowlist_system_management) -> any;
 default(sessionjobs_limit) -> erlang:max(erlang:system_info(process_limit) div 10, 10000);
 default(sidejobs_limit) -> erlang:max(erlang:system_info(process_limit) div 2, 50000);
+default(media_resizer_limit) -> 3;
 default(server_header) -> "Zotonic";
 default(html_error_path) -> filename:join(code:priv_dir(zotonic_core), "htmlerrors");
 default(_) -> undefined.

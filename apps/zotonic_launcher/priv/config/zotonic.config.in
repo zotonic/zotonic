@@ -292,6 +292,10 @@
 %%% to the session and page-sessions. Default is 50% of the process_limit.
    %% {sidejobs_limit, 100000},
 
+%%% Maximum number of concurrent spawned ImageMagick image resizers. More CPU cores and memory
+%%% allows more resizers at the same time. Default is 3.
+   %% {media_resizer_limit, 3},
+
 %%% 'tar' command to be used when archiving files, also used by mod_backup
    %% {tar, "tar"},
 

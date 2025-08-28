@@ -108,7 +108,7 @@ ensure_job_queues() ->
         [
             {regulators, [
                 {counter, [
-                    {limit, 3},
+                    {limit, z_config:get(media_resizer_limit)},
                     {modifiers, [{cpu, 1}]}
                 ]}
             ]}
