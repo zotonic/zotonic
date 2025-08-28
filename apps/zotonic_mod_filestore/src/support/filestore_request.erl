@@ -67,7 +67,7 @@ delete(RemoteFile, Context) ->
 
 
 handle_upload(Cred, LocalFile, Mime) ->
-    case file:read_file_info(LocalFile) of
+    case file:read_file_info(LocalFile, [raw, {time, universal}]) of
         {ok, #file_info{type=regular, size=0}} ->
             ?LOG_NOTICE(#{
                 text => <<"Not uploading empty file">>,

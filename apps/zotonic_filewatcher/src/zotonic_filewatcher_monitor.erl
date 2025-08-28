@@ -623,7 +623,7 @@ automonitor_path(Path, Pid, Ref, St) ->
 
 %% see add_monitor for possible thrown exceptions
 unsafe_automonitor_path(Path, Pid, Ref, St) ->
-    Object = case file:read_file_info(binary_to_list(Path)) of
+    Object = case file:read_file_info(Path, [raw, {time, universal}]) of
                  {ok, #file_info{type=directory}} ->
                      {directory, Path};
                  _ ->
@@ -1032,8 +1032,8 @@ refresh_entry_2(Path, Entry, Type, Delta, Info, Stable) ->
 %% We clear some fields of the file_info so that we only trigger on real
 %% changes; see the //kernel/file.erl manual and file.hrl for details.
 
-get_file_info(Path) when is_list(Path) ->
-    case file:read_file_info(Path) of
+get_file_info(Path) when is_list(Path); is_binary(Path) ->
+    case file:read_file_info(Path, [raw, {time, universal}]) of
         {ok, Info} ->
             Info#file_info{access = undefined,
                            atime  = undefined};

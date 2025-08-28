@@ -113,7 +113,7 @@ is_template_modified(Module, Site) ->
 %% @doc Return the (universal) modification time of file, 0 on enoent
 -spec file_mtime(file:filename_all()) -> file:date_time() | 0.
 file_mtime(File) ->
-    case file:read_file_info(File, [{time, universal}]) of
+    case file:read_file_info(File, [raw, {time, universal}]) of
         {ok, #file_info{ mtime = undefined }} ->
             0;
         {ok, #file_info{ mtime = MTime }} when is_tuple(MTime) ->

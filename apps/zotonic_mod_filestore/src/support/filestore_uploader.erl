@@ -188,7 +188,7 @@ try_upload(MaybeEntry, #state{id=Id, path=Path, context=Context, media_info=MInf
 
 handle_upload(Path, Mime, Cred, Context) ->
     AbsPath = z_path:abspath(Path, Context),
-    case file:read_file_info(AbsPath) of
+    case file:read_file_info(AbsPath, [raw, {time, universal}]) of
         {ok, #file_info{type=regular, size=0}} ->
             ?LOG_NOTICE(#{
                 text => <<"Not uploading empty file">>,
