@@ -39,6 +39,7 @@
          observe_scomp_script_render/2,
          observe_admin_menu/3,
 
+         language_add/5,
          url_strip_language/1,
          set_user_language/2,
          try_set_language/2,
@@ -349,13 +350,13 @@ event(#postback{message={language_status, Args}}, Context) ->
 
 
 %% @doc Strip any language from the URL (iff the first part of the url is a known language)
-url_strip_language([$/,A,B,C,D,E,F,G,$/ | Rest] = Url) ->
-    case z_trans:is_language([A,B,C,D,E,F,G]) of
+url_strip_language([$/,A,B,C,$-,E,F,G,$/ | Rest] = Url) ->
+    case z_trans:is_language([A,B,C,$-,E,F,G]) of
         true -> [$/|Rest];
         false -> Url
     end;
-url_strip_language(<<$/,A,B,C,D,E,F,G,$/, Rest/binary>> = Url) ->
-    case z_trans:is_language([A,B,C,D,E,F,G]) of
+url_strip_language(<<$/,A,B,C,$-,E,F,G,$/, Rest/binary>> = Url) ->
+    case z_trans:is_language([A,B,C,$-,E,F,G]) of
         true -> <<$/, Rest/binary>>;
         false -> Url
     end;
@@ -445,20 +446,30 @@ do_set_language(Code, Context) when is_atom(Code) ->
             Context1
     end.
 
+%% @doc Add a new language to the i18n configuration
+-spec language_add(NewIsoCode, Language, FallbackIsoCode, IsEnabled, Context) -> ok when
+    NewIsoCode :: string() | binary(),
+    Language :: string() | binary(),
+    FallbackIsoCode :: string() | binary(),
+    IsEnabled :: boolean(),
+    Context :: z:context().
+language_add(NewIsoCode, Language, FallbackIsoCode, IsEnabled, Context) ->
+    language_add('$empty', NewIsoCode, Language, FallbackIsoCode, IsEnabled, Context).
 
-%% @doc Add a language to the i18n configuration
+%% @doc Add or update a language in the i18n configuration
 language_add(OldIsoCode, NewIsoCode, Language, FallbackIsoCode, IsEnabled, Context) ->
     IsoCodeNewAtom = z_convert:to_atom(z_string:to_name(z_string:trim(NewIsoCode))),
     FallbackIsoCodeAtom = z_convert:to_atom(z_string:to_name(z_string:trim(FallbackIsoCode))),
     Languages = get_language_config(Context),
     Languages1 = proplists:delete(OldIsoCode, Languages),
-    Languages2 = lists:usort([{IsoCodeNewAtom,
+    Languages2 = proplists:delete(IsoCodeNewAtom, Languages1),
+    Languages3 = lists:usort([{IsoCodeNewAtom,
                                [{language, z_convert:to_binary(z_string:trim(z_html:escape(Language)))},
                                 {fallback, FallbackIsoCodeAtom},
                                 {is_enabled, z_convert:to_bool(IsEnabled)},
                                 {is_editable, z_convert:to_bool(IsEnabled)}
-                               ]} | Languages1]),
-    set_language_config(Languages2, Context).
+                               ]} | Languages2]),
+    set_language_config(Languages3, Context).
 
 
 %% @doc Remove a language from the i18n configuration
