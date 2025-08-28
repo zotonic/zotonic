@@ -89,6 +89,8 @@
 
 -type state() :: #state{}.
 
+-define(TIMEOUT, 60_000).
+
 % start(Args).
 %
 % Starts letsencrypt service.
@@ -176,7 +178,7 @@ make_cert(Domain, Opts) ->
 
 -spec make_cert_bg(string()|binary(), map()) -> {'ok', map()}|{'error', 'invalid'}.
 make_cert_bg(Domain, Opts=#{async := Async}) ->
-    Ret = case gen_statem:call({global, ?MODULE}, {create, bin(Domain), Opts}, 15000) of
+    Ret = case gen_statem:call({global, ?MODULE}, {create, bin(Domain), Opts}, ?TIMEOUT) of
         {error, Err} ->
             ?LOG_ERROR(#{
                 text => <<"LetsEncrypt error making cert">>,
@@ -189,7 +191,7 @@ make_cert_bg(Domain, Opts=#{async := Async}) ->
         ok ->
             case wait_valid(20) of
                 ok ->
-                    Status = gen_statem:call({global, ?MODULE}, finalize, 15000),
+                    Status = gen_statem:call({global, ?MODULE}, finalize, ?TIMEOUT),
                     case wait_finalized(Status, 20) of
                         {ok, Res} -> {ok, Res};
                         Err -> Err
@@ -616,7 +618,7 @@ wait_valid(X) ->
 wait_valid(0,_) ->
     {error, timeout};
 wait_valid(Cnt,Max) ->
-    case gen_statem:call({global, ?MODULE}, check, 15000) of
+    case gen_statem:call({global, ?MODULE}, check, ?TIMEOUT) of
         valid ->
             ok;
         pending ->
@@ -646,7 +648,7 @@ wait_finalized(Status, X) ->
 wait_finalized(_, 0, _) ->
     {error, timeout};
 wait_finalized(Status, Cnt, Max) ->
-    case gen_statem:call({global, ?MODULE}, Status, 15000) of
+    case gen_statem:call({global, ?MODULE}, Status, ?TIMEOUT) of
         {ok, Res} ->
             {ok, Res};
         valid ->
