@@ -458,8 +458,8 @@ language_add(NewIsoCode, Language, FallbackIsoCode, IsEnabled, Context) ->
 
 %% @doc Add or update a language in the i18n configuration
 language_add(OldIsoCode, NewIsoCode, Language, FallbackIsoCode, IsEnabled, Context) ->
-    IsoCodeNewAtom = z_convert:to_atom(z_string:to_name(z_string:trim(NewIsoCode))),
-    FallbackIsoCodeAtom = z_convert:to_atom(z_string:to_name(z_string:trim(FallbackIsoCode))),
+    IsoCodeNewAtom = to_language_atom(NewIsoCode),
+    FallbackIsoCodeAtom = to_language_atom(FallbackIsoCode),
     Languages = get_language_config(Context),
     Languages1 = proplists:delete(OldIsoCode, Languages),
     Languages2 = proplists:delete(IsoCodeNewAtom, Languages1),
@@ -470,6 +470,24 @@ language_add(OldIsoCode, NewIsoCode, Language, FallbackIsoCode, IsEnabled, Conte
                                 {is_editable, z_convert:to_bool(IsEnabled)}
                                ]} | Languages2]),
     set_language_config(Languages3, Context).
+
+-define(is_09(C), ((C) >= $0 andalso (C) =< $9)).
+-define(is_az(C), ((C) >= $a andalso (C) =< $b)).
+
+to_language_atom(S) when is_atom(S) ->
+    S;
+to_language_atom(S) when is_list(S); is_binary(S) ->
+    S1 = unicode:characters_to_list(z_string:to_lower(z_string:trim(S))),
+    S2 = case S1 of
+        [A, B] when
+            ?is_az(A), ?is_az(B) -> <<A, B>>;
+        [A, B, C] when
+            ?is_az(A), ?is_az(B), ?is_az(C) -> <<A, B, C>>;
+        [A, B, C, $-, D, E, F] when
+            ?is_az(A), ?is_az(B), ?is_az(C),
+            ?is_09(D), ?is_09(E), ?is_09(F) -> <<A, B, C, $-, D, E, F>>
+    end,
+    binary_to_atom(S2, utf8).
 
 
 %% @doc Remove a language from the i18n configuration
