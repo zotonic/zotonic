@@ -64,6 +64,7 @@
     unregister_nonce/1,
     do_submit/4,
     save_submit/2,
+    survey_start/2,
 
     collect_answers/4,
     render_next_page/8,
@@ -85,40 +86,8 @@ manage_schema(What, Context) ->
     survey_schema:manage_schema(What, Context).
 
 event(#postback{message={survey_start, Args}}, Context) ->
-    {id, SurveyId} = proplists:lookup(id, Args),
-    AnswerId = z_convert:to_integer(proplists:get_value(answer_id, Args)),
-    case is_integer(AnswerId) andalso z_acl:rsc_editable(SurveyId, Context) of
-        true ->
-            {Answers, ResultUserId} = case m_survey:single_result(SurveyId, AnswerId, Context) of
-                [] ->
-                    {[], undefined};
-                Result ->
-                    As = proplists:get_value(answers, Result, []),
-                    As1 = lists:map(
-                        fun({QName, Ans}) ->
-                            Answer = proplists:get_value(answer, Ans),
-                            {QName, Answer}
-                        end,
-                        As),
-                    {As1, proplists:get_value(user_id, Result)}
-            end,
-            Editing = {editing, AnswerId, undefined},
-            Args1 = [
-                {answer_user_id, ResultUserId},
-                {survey_session_nonce, z_nonce:nonce(?SURVEY_FILL_NONCE_TIMEOUT)}
-                | proplists:delete(answer_user_id, Args)
-            ],
-            render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context), Args1, Context);
-        false ->
-            Answers = normalize_answers(proplists:get_value(answers, Args)),
-            Editing = proplists:get_value(editing, Args),
-            Args1 = [
-                {answer_user_id, z_acl:user(Context)},
-                {survey_session_nonce, z_nonce:nonce(?SURVEY_FILL_NONCE_TIMEOUT)}
-                | proplists:delete(answer_user_id, Args)
-            ],
-            render_update(render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context), Args1, Context)
-    end;
+    Update = survey_start(Args, Context),
+    render_update(Update, Args, Context);
 
 event(#submit{message={survey_next, Args}}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
@@ -297,6 +266,46 @@ observe_acl_is_allowed(#acl_is_allowed{
     end;
 observe_acl_is_allowed(#acl_is_allowed{}, _Context) ->
     undefined.
+
+-spec survey_start(Args, Context) -> Update when
+    Args :: proplists:proplist(),
+    Context :: z:context(),
+    Update :: z:context() | #render{}.
+survey_start(Args, Context) ->
+    {id, SurveyId} = proplists:lookup(id, Args),
+    AnswerId = z_convert:to_integer(proplists:get_value(answer_id, Args)),
+    case is_integer(AnswerId) andalso z_acl:rsc_editable(SurveyId, Context) of
+        true ->
+            {Answers, ResultUserId} = case m_survey:single_result(SurveyId, AnswerId, Context) of
+                [] ->
+                    {[], undefined};
+                Result ->
+                    As = proplists:get_value(answers, Result, []),
+                    As1 = lists:map(
+                        fun({QName, Ans}) ->
+                            Answer = proplists:get_value(answer, Ans),
+                            {QName, Answer}
+                        end,
+                        As),
+                    {As1, proplists:get_value(user_id, Result)}
+            end,
+            Editing = {editing, AnswerId, undefined},
+            Args1 = [
+                {answer_user_id, ResultUserId},
+                {survey_session_nonce, z_nonce:nonce(?SURVEY_FILL_NONCE_TIMEOUT)}
+                | proplists:delete(answer_user_id, Args)
+            ],
+            render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context);
+        false ->
+            Answers = normalize_answers(proplists:get_value(answers, Args)),
+            Editing = proplists:get_value(editing, Args),
+            Args1 = [
+                {answer_user_id, z_acl:user(Context)},
+                {survey_session_nonce, z_nonce:nonce(?SURVEY_FILL_NONCE_TIMEOUT)}
+                | proplists:delete(answer_user_id, Args)
+            ],
+            render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context)
+    end.
 
 get_page(Id, Nr, #context{} = Context) when is_integer(Nr) ->
     case m_rsc:p(Id, <<"blocks">>, Context) of

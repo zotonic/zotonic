@@ -27,12 +27,26 @@
     {% endif %}
 
     {% if id.is_a.survey and (not id.survey_is_disabled or id.is_editable) %}
-    	{% lazy template="_survey_start.tpl"
-                id=id
-                answers=answers
-                is_autostart=(q.autostart or id.survey_is_autostart)
-                element_id=element_id|default:"survey-question"
+        {% if    id.survey_multiple
+              or m.acl.user
+              or m.req.session_id
         %}
+            {% include "_survey_start.tpl"
+                    id=id
+                    answers=answers
+                    is_autostart=(q.autostart or id.survey_is_autostart)
+                    element_id=element_id|default:"survey-question"
+            %}
+        {% else %}
+            {# Lazy load to ensure that the unique cotonic-sid for the browser is set. #}
+            {# On first page loads for new visitors the cotonic-sid is not yet set.    #}
+            {% lazy template="_survey_start.tpl"
+                    id=id
+                    answers=answers
+                    is_autostart=(q.autostart or id.survey_is_autostart)
+                    element_id=element_id|default:"survey-question"
+            %}
+        {% endif %}
     {% endif %}
 
     {% inherit %}

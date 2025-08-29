@@ -1,5 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2011-2021 Marc Worrell
+%% @doc Render a complete survey as a single page. Optionally
+%% with answers from a previous submit.
+%% @end
 
 %% Copyright 2011-2021 Marc Worrell
 %%
@@ -22,7 +25,6 @@
 -export([single_result/3]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--include_lib("zotonic_mod_survey/include/survey.hrl").
 
 vary(_,_) -> nocache.
 

@@ -1,13 +1,10 @@
 {% if is_autostart or id.survey_is_autostart %}
-    {% wire
-        postback={survey_start
+    {% survey_start
             id=id
             answers=answers
             answer_user_id=answer_user_id
             viewer=viewer
             element_id=element_id|default:"survey-question"
-        }
-        delegate="mod_survey"
     %}
 {% else %}
     <p class="buttons survey-start clearfix">
