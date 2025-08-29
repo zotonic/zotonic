@@ -472,7 +472,7 @@ language_add(OldIsoCode, NewIsoCode, Language, FallbackIsoCode, IsEnabled, Conte
     set_language_config(Languages3, Context).
 
 -define(is_09(C), ((C) >= $0 andalso (C) =< $9)).
--define(is_az(C), ((C) >= $a andalso (C) =< $b)).
+-define(is_az(C), ((C) >= $a andalso (C) =< $z)).
 
 to_language_atom(S) when is_atom(S) ->
     S;
