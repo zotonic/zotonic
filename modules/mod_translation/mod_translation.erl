@@ -39,6 +39,7 @@
          observe_scomp_script_render/2,
          observe_admin_menu/3,
 
+         language_add/5,
          url_strip_language/1,
          set_user_language/2,
          try_set_language/2,
@@ -349,6 +350,16 @@ event(#postback{message={language_status, Args}}, Context) ->
 
 
 %% @doc Strip any language from the URL (iff the first part of the url is a known language)
+url_strip_language([$/,A,B,C,$-,E,F,G,$/ | Rest] = Url) ->
+    case z_trans:is_language([A,B,C,$-,E,F,G]) of
+        true -> [$/|Rest];
+        false -> Url
+    end;
+url_strip_language(<<$/,A,B,C,$-,E,F,G,$/, Rest/binary>> = Url) ->
+    case z_trans:is_language([A,B,C,$-,E,F,G]) of
+        true -> <<$/, Rest/binary>>;
+        false -> Url
+    end;
 url_strip_language([$/,A,B,$/ | Rest] = Url) ->
     case z_trans:is_language([A,B]) of
         true -> [$/|Rest];
@@ -356,6 +367,16 @@ url_strip_language([$/,A,B,$/ | Rest] = Url) ->
     end;
 url_strip_language(<<$/,A,B,$/, Rest/binary>> = Url) ->
     case z_trans:is_language([A,B]) of
+        true -> <<$/, Rest/binary>>;
+        false -> Url
+    end;
+url_strip_language([$/,A,B,C,$/ | Rest] = Url) ->
+    case z_trans:is_language([A,B,C]) of
+        true -> [$/|Rest];
+        false -> Url
+    end;
+url_strip_language(<<$/,A,B,C,$/, Rest/binary>> = Url) ->
+    case z_trans:is_language([A,B,C]) of
         true -> <<$/, Rest/binary>>;
         false -> Url
     end;
@@ -425,20 +446,48 @@ do_set_language(Code, Context) when is_atom(Code) ->
             Context1
     end.
 
+%% @doc Add a new language to the i18n configuration
+-spec language_add(NewIsoCode, Language, FallbackIsoCode, IsEnabled, Context) -> ok when
+    NewIsoCode :: string() | binary(),
+    Language :: string() | binary(),
+    FallbackIsoCode :: string() | binary(),
+    IsEnabled :: boolean(),
+    Context :: z:context().
+language_add(NewIsoCode, Language, FallbackIsoCode, IsEnabled, Context) ->
+    language_add('$empty', NewIsoCode, Language, FallbackIsoCode, IsEnabled, Context).
 
-%% @doc Add a language to the i18n configuration
+%% @doc Add or update a language in the i18n configuration
 language_add(OldIsoCode, NewIsoCode, Language, FallbackIsoCode, IsEnabled, Context) ->
-    IsoCodeNewAtom = z_convert:to_atom(z_string:to_name(z_string:trim(NewIsoCode))),
-    FallbackIsoCodeAtom = z_convert:to_atom(z_string:to_name(z_string:trim(FallbackIsoCode))),
+    IsoCodeNewAtom = to_language_atom(NewIsoCode),
+    FallbackIsoCodeAtom = to_language_atom(FallbackIsoCode),
     Languages = get_language_config(Context),
     Languages1 = proplists:delete(OldIsoCode, Languages),
-    Languages2 = lists:usort([{IsoCodeNewAtom,
+    Languages2 = proplists:delete(IsoCodeNewAtom, Languages1),
+    Languages3 = lists:usort([{IsoCodeNewAtom,
                                [{language, z_convert:to_binary(z_string:trim(z_html:escape(Language)))},
                                 {fallback, FallbackIsoCodeAtom},
                                 {is_enabled, z_convert:to_bool(IsEnabled)},
                                 {is_editable, z_convert:to_bool(IsEnabled)}
-                               ]} | Languages1]),
-    set_language_config(Languages2, Context).
+                               ]} | Languages2]),
+    set_language_config(Languages3, Context).
+
+-define(is_09(C), ((C) >= $0 andalso (C) =< $9)).
+-define(is_az(C), ((C) >= $a andalso (C) =< $z)).
+
+to_language_atom(S) when is_atom(S) ->
+    S;
+to_language_atom(S) when is_list(S); is_binary(S) ->
+    S1 = unicode:characters_to_list(z_string:to_lower(z_string:trim(S))),
+    S2 = case S1 of
+        [A, B] when
+            ?is_az(A), ?is_az(B) -> <<A, B>>;
+        [A, B, C] when
+            ?is_az(A), ?is_az(B), ?is_az(C) -> <<A, B, C>>;
+        [A, B, C, $-, D, E, F] when
+            ?is_az(A), ?is_az(B), ?is_az(C),
+            ?is_09(D), ?is_09(E), ?is_09(F) -> <<A, B, C, $-, D, E, F>>
+    end,
+    binary_to_atom(S2, utf8).
 
 
 %% @doc Remove a language from the i18n configuration

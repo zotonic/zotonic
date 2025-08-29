@@ -252,15 +252,37 @@ default_language(Context) ->
     z_convert:to_atom(m_config:get_value(i18n, language, en, Context)).
 
 
-%% @doc check if the two letter code is a valid language
+%% @doc check if the two/three letter code is a valid language. For three letter language
+%% codes we also accept the optional regional variation, e.g. "pap-531".
+%% See https://en.wikipedia.org/wiki/UN_M49
 -spec is_language(Language :: string() | binary()) -> boolean().
 is_language(<<A,B>>) -> iso639:lc2lang([A,B]) /= <<>>;
 is_language([_,_] = IsoCode) -> iso639:lc2lang(IsoCode) /= <<>>;
+is_language(<<A,B,C>>) -> iso639:lc3lang([A,B,C]) /= <<>>;
+is_language(<<A,B,C,$-,Loc>>) ->
+    iso639:lc3lang([A,B,C]) /= <<>>
+    andalso z_utils:only_digits(Loc)
+    andalso size(Loc) =:= 3;
+is_language([_,_,_] = IsoCode) -> iso639:lc3lang(IsoCode) /= <<>>;
+is_language([A,B,C,$-|Loc]) ->
+    iso639:lc3lang([A,B,C]) /= <<>>
+    andalso z_utils:only_digits(Loc)
+    andalso length(Loc) =:= 3;
 is_language(_) -> false.
 
 %% @doc Translate a language-code to an atom.
 -spec to_language_atom(IsoCode:: list() | binary()) -> {ok, atom()} | {error, not_a_language}.
 to_language_atom([_,_] = IsoCode) ->
+    case is_language(IsoCode) of
+        false -> {error, not_a_language};
+        true -> {ok, list_to_atom(IsoCode)}
+    end;
+to_language_atom([_,_,_] = IsoCode) ->
+    case is_language(IsoCode) of
+        false -> {error, not_a_language};
+        true -> {ok, list_to_atom(IsoCode)}
+    end;
+to_language_atom([_,_,_,$-|_] = IsoCode) ->
     case is_language(IsoCode) of
         false -> {error, not_a_language};
         true -> {ok, list_to_atom(IsoCode)}
