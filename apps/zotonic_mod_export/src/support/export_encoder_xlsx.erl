@@ -21,7 +21,8 @@
 -author("Marc Worrell <marc@worrell.nl>").
 
 -record(state, {
-    props :: list(atom()) | undefined,
+    query_id :: m_rsc:resource_id() | undefined,
+    props :: list(binary() | atom()) | undefined,
     rows = [] :: list(),
     is_raw = false
     }).
@@ -51,30 +52,31 @@ mime() ->
 
 init(Options, Context) ->
     IsRaw = proplists:get_value(is_raw, Options, false),
-    case z_context:get(rsc_props, Context) of
-        L when is_list(L) ->
-            {ok, #state{ props=L, is_raw=IsRaw}};
-        undefined ->
-            {ok, #state{ props=undefined, is_raw=IsRaw }}
-    end.
+    QueryId = proplists:get_value(id, Options, z_context:get(id, Context)),
+    Props = case proplists:get_value(rsc_props, Options, z_context:get(rsc_props, Context)) of
+        L when is_list(L) -> L;
+        undefined -> export_helper:rsc_props(QueryId, Context)
+    end,
+    {ok, #state{
+        query_id = QueryId,
+        props = Props,
+        is_raw=IsRaw
+    }}.
 
-header(undefined, #state{props=undefined} = State, Context) ->
-    Ps = mod_export:rsc_props(Context) -- [blocks],
-    {ok, <<>>, State#state{props=Ps}};
-header(undefined, #state{props=Ps} = State, _Context) ->
-    {ok, <<>>, State#state{props=Ps}};
+header(undefined, #state{ props = Ps } = State, _Context) ->
+    {ok, <<>>, State#state{ props = Ps }};
 header(Row, State, _Context) ->
-    {ok, <<>>, State#state{props=Row}}.
+    {ok, <<>>, State#state{ props = Row }}.
 
-row(Row, #state{rows=Rows} = State, _Context) ->
-    {ok, <<>>, State#state{rows=[Row|Rows]}}.
+row(Row, #state{ rows = Rows } = State, _Context) ->
+    {ok, <<>>, State#state{ rows = [ Row | Rows ]}}.
 
 footer(_Row, State, Context) ->
     zip(State#state.props, lists:reverse(State#state.rows), State#state.is_raw, Context).
 
 zip(Keys, Rows, IsRaw, Context) ->
     Vars = [
-        {encode_cell, fun (V, Ctx) -> encode_cell(V, IsRaw, Ctx) end},
+        {encode_cell, fun(V, Ctx) -> encode_cell(V, IsRaw, Ctx) end},
         {lookup_header, fun export_encoder:lookup_header/2},
         {lookup_value, fun export_encoder:lookup_value/2},
         {sheet_name, <<"Sheet1">>},

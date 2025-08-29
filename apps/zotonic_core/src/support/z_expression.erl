@@ -39,6 +39,8 @@
 
 -type op() :: atom().
 
+-export_type([ tree/0, op/0 ]).
+
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 %% @doc Parse an expression to an expression tree.  Uses the template_compiler parser.

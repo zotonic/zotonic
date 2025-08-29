@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013 Marc Worrell
+%% @copyright 2013-2025 Marc Worrell
 %% @doc Generic export routines for data sources
+%% @end
 
-%% Copyright 2013 Marc Worrell
+%% Copyright 2013-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -26,8 +27,7 @@
 
 -export([
     observe_content_types_dispatch/3,
-    observe_export_resource_content_disposition/2,
-    rsc_props/1
+    observe_export_resource_content_disposition/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -49,5 +49,3 @@ observe_export_resource_content_disposition(
 observe_export_resource_content_disposition(#export_resource_content_disposition{}, _Context) ->
     {ok, <<"attachment">>}.
 
-rsc_props(Context) ->
-    m_rsc:common_properties(Context) ++ [page_url_abs].
