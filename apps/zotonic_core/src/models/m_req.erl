@@ -57,6 +57,11 @@ get(language, #context{} = Context) -> z_context:language(Context);
 get(csp_nonce, Context) -> z_context:csp_nonce(Context);
 get(is_crawler, #context{} = Context) -> z_user_agent:is_crawler(Context);
 get(is_http_request, #context{} = Context) -> z_context:get(is_http_request, Context);
+get(session_id, #context{} = Context) ->
+    case z_context:session_id(Context) of
+        {ok, SId} -> SId;
+        {error, _} -> undefined
+    end;
 get(peer_ip, #context{} = Context) ->
     case z_context:get(peer_ip, Context) of
         undefined -> maybe_get_req(peer_ip, Context);
