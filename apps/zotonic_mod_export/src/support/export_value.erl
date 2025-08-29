@@ -52,7 +52,8 @@ rsc_props(QueryId, Context) ->
           | string()
           | #trans{},
     Context :: z:context(),
-    PrepProps :: {named, Name, Expr}
+    PrepProps :: [ PrepProp ],
+    PrepProp:: {named, Name, Expr}
           | {value, binary(), binary()}
           | {expr, binary(), Expr},
     Expr :: z_expression:tree().
