@@ -11,9 +11,9 @@
         </div>
 
         <p class="help-block">
-        <i class="fa fa-info-circle"></i> {% trans "Revisions are kept for {n} months." n=m.backup_revision.retention_months %}<br>
-        <i class="fa fa-info-circle"></i> {% trans "Revisions of active users are kept for {n} days." n=m.backup_revision.user_retention_days %}<br>
-        <i class="fa fa-info-circle"></i> {% trans "Revisions of deleted users are kept for {n} days." n=m.backup_revision.deleted_user_retention_days %}
+        <i class="glyphicon glyphicon-info-sign"></i> {% trans "Revisions are kept for {n} months." n=m.backup_revision.retention_months %}<br>
+        <i class="glyphicon glyphicon-info-sign"></i> {% trans "Revisions of active users are kept for {n} days." n=m.backup_revision.user_retention_days %}<br>
+        <i class="glyphicon glyphicon-info-sign"></i> {% trans "Revisions of deleted users are kept for {n} days." n=m.backup_revision.deleted_user_retention_days %}
         </p>
     </div>
 </div>

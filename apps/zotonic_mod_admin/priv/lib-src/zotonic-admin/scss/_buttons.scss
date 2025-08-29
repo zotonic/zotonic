@@ -37,19 +37,19 @@
             opacity: .6;
         }
     }
-    .glyphicon {
-        top: 3px;
-    }
-    &.btn-xs {
-        .glyphicon {
-            top: 2px;
-        }
-    }
-    &.btn-sm {
-        .glyphicon {
-            top: 1px;
-        }
-    }
+    // .glyphicon {
+    //     top: 3px;
+    // }
+    // &.btn-xs {
+    //     .glyphicon {
+    //         top: 2px;
+    //     }
+    // }
+    // &.btn-sm {
+    //     .glyphicon {
+    //         top: 1px;
+    //     }
+    // }
     &.btn-primary:hover {
         background-color: $brandPrimaryDark;
         border-color: darken($brandPrimaryDark, 5%);
