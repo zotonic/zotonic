@@ -1,3 +1,5 @@
+%% @author Arthur Clemens
+%% @copyright Copyright 2016-2025 Arthur Clemens
 %% @doc Mandatory background read on language tags: [1].
 %%
 %%      Some quotes from [1]:
@@ -21,7 +23,7 @@
 %%          the language+extlang combination, where possible. For example, use 'yue'
 %%          rather than 'zh-yue' for Cantonese, and 'afb' rather than 'ar-afb' for Gulf
 %%          Arabic, if you can.
-
+%%
 %%      Language identifiers can have the following forms:
 %%      - language;
 %%      - language-extlang;
@@ -32,6 +34,26 @@
 %%      For a list of language, region and script codes, see [2].
 %%      [1] http://www.w3.org/International/articles/language-tags/
 %%      [2] http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry
+%%      [3] http://www.loc.gov/standards/iso639-2/php/code_list.php
+%%      [4] https://en.wikipedia.org/wiki/UN_M49
+%%
+%% @end
+
+%% Copyright 2016-2025 Arthur Clemens
+%%
+%% Licensed under the Apache License, Version 2.0 (the "License");
+%% you may not use this file except in compliance with the License.
+%% You may obtain a copy of the License at
+%%
+%%     http://www.apache.org/licenses/LICENSE-2.0
+%%
+%% Unless required by applicable law or agreed to in writing, software
+%% distributed under the License is distributed on an "AS IS" BASIS,
+%% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%% See the License for the specific language governing permissions and
+%% limitations under the License.
+
+
 -module(z_language_data).
 
 -export([
@@ -1184,6 +1206,37 @@ languages_list() -> [
                 {name_en, <<"Punjabi - Arab"/utf8>>}
             ]}
         ]}
+    ]},
+    {<<"pap">>, [
+        {language, <<"pap">>},
+        {name, <<"Papiamento"/utf8>>},
+        {name_en, <<"Papiamento"/utf8>>},
+        {sublanguages, [
+            {<<"pap-531">>, [
+                {language, <<"pap">>},
+                {region, <<"CW">>},
+                {name, <<"Papiamentu - Curaçao (Bonaire)"/utf8>>},
+                {name_en, <<"Papiamentu - Curaçao (Bonaire)"/utf8>>}
+            ]},
+            {<<"pap-535">>, [
+                {language, <<"pap-535">>},
+                {region, <<"BQ">>},
+                {name, <<"Papiamentu - Carribean Netherlands"/utf8>>},
+                {name_en, <<"Papiamentu - Carribean Netherlands"/utf8>>}
+            ]},
+            {<<"pap-533">>, [
+                {language, <<"pap">>},
+                {region, <<"AW">>},
+                {name, <<"Papiamento - Aruba"/utf8>>},
+                {name_en, <<"Papiamento - Aruba"/utf8>>}
+            ]}
+        ]}
+
+% is_language("pap_533") -> true; %papiamento - aruba
+% is_language(<<"pap_533">>) -> true; %papiamento - aruba
+% is_language("pap_531") -> true; %papiamentu - curacao & bonaire
+% is_language(<<"pap_531">>) -> true; %papiamentu - curacao & bonaire
+
     ]},
     {<<"pl">>, [
         {language, <<"pl">>},
