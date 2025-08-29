@@ -30,6 +30,25 @@ p {
     margin: 0 0 $baseMargin 0;
 }
 
+details {
+    summary {
+        display: list-item;
+        list-style: none;
+
+        &:before {
+            content: "▶";
+            padding-right: 5px;
+        }
+    }
+
+    &[open] > summary:first-of-type {
+        &:before {
+            content: "▼";
+        }
+    }
+}
+
+
 table {
     td, th {
         vertical-align: top;

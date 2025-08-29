@@ -1452,6 +1452,7 @@ postfix(N) -> integer_to_list(N).
 
 
 %% @doc Common properties, these are used by exporter and backup routines.
+-spec common_properties(z:context()) -> [binary()].
 common_properties(_Context) ->
     [
         <<"title">>,
