@@ -123,21 +123,24 @@ ZLive.prototype.updateWidget = function(topic, target, options, message, wid) {
         const self = this;
         this._timers[wid] = setTimeout(
             function() {
-                const payload = {
-                    topic: topic,
-                    target: target,
-                    message: message,
-                    data: document.getElementById(target).dataset
-                };
-                cotonic.broker.publish(
-                    "bridge/origin/model/template/get/render/" + options.template,
-                    payload,
-                    {
-                        properties: {
-                            response_topic: "model/ui/replace/" + target
-                        },
-                        qos: 0
-                    });
+                const targetElt = document.getElementById(target);
+                if (targetElt) {
+                    const payload = {
+                        topic: topic,
+                        target: target,
+                        message: message,
+                        data: targetElt.dataset
+                    };
+                    cotonic.broker.publish(
+                        "bridge/origin/model/template/get/render/" + options.template,
+                        payload,
+                        {
+                            properties: {
+                                response_topic: "model/ui/replace/" + target
+                            },
+                            qos: 0
+                        });
+                }
                 self._timers[wid] = undefined;
             },
             100);
