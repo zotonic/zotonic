@@ -22,6 +22,7 @@
 
 -record(state, {
     id :: integer() | undefined,
+    props :: list() | undefined,
     is_first_row = true
 }).
 
@@ -40,17 +41,24 @@ extension() ->
 mime() ->
     [ {<<"application">>, <<"json">>, []} ].
 
-init(Options, _Context) ->
+init(Options, Context) ->
+    Id = proplists:get_value(id, Options),
+    Props = case proplists:get_value(rsc_props, Options, z_context:get(rsc_props, Context)) of
+        L when is_list(L) -> L;
+        undefined -> export_value:maybe_rsc_props(Id, Context)
+    end,
+    PropExprs = export_value:prepare_rsc_props(Props, Context),
     {ok, #state{
-        id = proplists:get_value(id, Options),
+        id = Id,
+        props = PropExprs,
         is_first_row = true
     }}.
 
-header(_Header, #state{ id = _Id } = State, _Context) ->
+header(_Header, #state{} = State, _Context) ->
     {ok, <<"[">>, State}.
 
-row(Row, #state{ is_first_row = IsFirstRow } = State, Context) when is_integer(Row) ->
-    case m_rsc_export:full(Row, Context) of
+row(Row, #state{ is_first_row = IsFirstRow, props = Props } = State, Context) when is_integer(Row) ->
+    case row_value(Row, Props, Context) of
         {ok, JSON} ->
             Data = [
                 case IsFirstRow of
@@ -68,3 +76,17 @@ row(_Row, #state{} = State, _Context) ->
 
 footer(_Data, #state{}, _Context) ->
     {ok, <<"]">>}.
+
+row_value(Id, undefined, Context) ->
+    m_rsc_export:full(Id, Context);
+row_value(Id, Props, Context) ->
+    {ok, lists:foldl(
+        fun(P, Acc) ->
+            Label = export_value:header(P),
+            Value = export_value:value(Id, P, Context),
+            Acc#{
+                Label => Value
+            }
+        end,
+        #{},
+        Props)}.

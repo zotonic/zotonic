@@ -21,6 +21,7 @@
 
 -export([
     rsc_props_default/1,
+    maybe_rsc_props/2,
     rsc_props/2,
     prepare_rsc_props/2,
     header/1,
@@ -36,19 +37,31 @@ rsc_props_default(Context) ->
 
 %% @doc Return the properties to export for a resource. The fields can be expressions, for
 %% example: foo|default:"none"  These expressions can be evaluated using z_expression.
+%% Return 'undefined' if the resource does not have props defined.
+-spec maybe_rsc_props(Id, Context) -> Fields when
+    Id :: m_rsc:resource_id(),
+    Context :: z:context(),
+    Fields :: [ binary() ].
+maybe_rsc_props(Id, Context) ->
+    case m_rsc:p(Id, <<"export_fields">>, Context) of
+        undefined -> undefined;
+        Fields when is_binary(Fields) ->
+            case split_fields(z_html:unescape(Fields)) of
+                [] -> undefined;
+                Fs -> Fs
+            end
+    end.
+
+%% @doc Return the properties to export for a resource. The fields can be expressions, for
+%% example: foo|default:"none"  These expressions can be evaluated using z_expression.
 -spec rsc_props(Id, Context) -> Fields when
     Id :: m_rsc:resource_id(),
     Context :: z:context(),
     Fields :: [ binary() ].
 rsc_props(Id, Context) ->
-    case m_rsc:p(Id, <<"export_fields">>, Context) of
+    case maybe_rsc_props(Id, Context) of
         undefined -> rsc_props_default(Context);
-        Fields when is_binary(Fields) ->
-            case split_fields(z_html:unescape(Fields)) of
-                [] -> rsc_props_default(Context);
-                Fs -> Fs
-            end
-
+        Props -> Props
     end.
 
 split_fields(Fields) ->
