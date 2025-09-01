@@ -31,9 +31,7 @@
 
 -spec rsc_props_default(z:context()) -> [ binary() ].
 rsc_props_default(Context) ->
-    m_rsc:common_properties(Context)
-    ++ [ <<"page_url_abs">> ]
-    -- [ <<"blocks">> ].
+    (m_rsc:common_properties(Context) ++ [ <<"page_url_abs">> ]) -- [ <<"blocks">> ].
 
 
 %% @doc Return the properties to export for a resource. The fields can be expressions, for
