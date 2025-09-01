@@ -22,8 +22,7 @@
 -export([
     call/2,
     get_content_type/3,
-    set_filename/4,
-    rsc_props/2
+    set_filename/4
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -143,29 +142,3 @@ set_filename(Id, ProvidedCT, Dispatch, Context) ->
 
 maybe_add_dot(<<".", _/binary>> = Ext) -> Ext;
 maybe_add_dot(Ext) -> <<".", Ext/binary>>.
-
-
-%% @doc Return the properties to export for a resource. The fields can be expressions, for
-%% example: foo|default:"none"  These expressions can be evaluated using z_expression.
--spec rsc_props(Id, Context) -> Fields when
-    Id :: m_rsc:resource_id(),
-    Context :: z:context(),
-    Fields :: [ binary() ].
-rsc_props(Id, Context) ->
-    case m_rsc:p(Id, <<"export_fields">>, Context) of
-        undefined -> rsc_props_default(Context);
-        Fields when is_binary(Fields) ->
-            case split_fields(Fields) of
-                [] -> rsc_props_default(Context);
-                Fs -> Fs
-            end
-
-    end.
-
-rsc_props_default(Context) ->
-    m_rsc:common_properties(Context) ++ [ <<"page_url_abs">> ].
-
-split_fields(Fields) ->
-    All = binary:split(Fields, [ <<"\n">>, <<"\r">>, <<" ">>, <<"\t">> ], [ global, trim_all ]),
-    All1 = [ z_string:trim(F) || F <- All ],
-    [ F || F <- All1, F =/= <<>> ].

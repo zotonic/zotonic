@@ -45,11 +45,12 @@ init(Options, Context) ->
     QueryId = proplists:get_value(id, Options, z_context:get(id, Context)),
     Props = case proplists:get_value(rsc_props, Options, z_context:get(rsc_props, Context)) of
         L when is_list(L) -> L;
-        undefined -> export_helper:rsc_props(QueryId, Context)
+        undefined -> export_value:rsc_props(QueryId, Context)
     end,
+    PropExprs = export_value:prepare_rsc_props(Props, Context),
     {ok, #state{
         query_id = QueryId,
-        props = Props,
+        props = PropExprs,
         is_raw=IsRaw
     }}.
 
@@ -70,7 +71,7 @@ header(Row, State, Context) ->
     {ok, Data, State}.
 
 row(Id, #state{ props = Ps, is_raw = IsRaw } = State, Context) when is_integer(Id), is_list(Ps) ->
-    Data = [ export_encoder:lookup_value([Id, P], Context) || P <- Ps ],
+    Data = [ export_encoder:lookup_value(Id, P, Context) || P <- Ps ],
     Data1 = flatten_row(Data, IsRaw, Context),
     {ok, Data1, State};
 row(Row, #state{ is_raw = IsRaw } = State, Context) ->

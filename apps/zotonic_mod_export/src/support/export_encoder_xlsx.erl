@@ -55,11 +55,12 @@ init(Options, Context) ->
     QueryId = proplists:get_value(id, Options, z_context:get(id, Context)),
     Props = case proplists:get_value(rsc_props, Options, z_context:get(rsc_props, Context)) of
         L when is_list(L) -> L;
-        undefined -> export_helper:rsc_props(QueryId, Context)
+        undefined -> export_value:rsc_props(QueryId, Context)
     end,
+    PropExprs = export_value:prepare_rsc_props(Props, Context),
     {ok, #state{
         query_id = QueryId,
-        props = Props,
+        props = PropExprs,
         is_raw=IsRaw
     }}.
 
