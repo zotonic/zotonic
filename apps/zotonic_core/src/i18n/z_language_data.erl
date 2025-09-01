@@ -36,6 +36,7 @@
 %%      [2] http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry
 %%      [3] http://www.loc.gov/standards/iso639-2/php/code_list.php
 %%      [4] https://en.wikipedia.org/wiki/UN_M49
+%%      [5] https://standaarden.overheid.nl/diwoo/metadata/doc/0.9.0/diwoo-metadata-lijsten_xsd_Simple_Type_diwoo_scw_talen
 %%
 %% @end
 
