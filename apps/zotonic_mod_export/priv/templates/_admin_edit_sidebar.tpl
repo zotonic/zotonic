@@ -56,7 +56,7 @@
 <details class="form-group">
     <summary>{_ Export fields _}</summary>
     <p class="help-block">
-        {_ Define which fields (columns) should be exported. Separate the fields with spaces, commas, or newlines. _}
+        {_ Define which fields (columns) should be exported. One field expression per line. _}
         {_ Leave this empty for a default set of fields. _}
         {_ Do not forget to save your changes before exporting. _}
     </p>

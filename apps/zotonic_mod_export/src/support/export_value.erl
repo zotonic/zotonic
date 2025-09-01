@@ -66,7 +66,7 @@ rsc_props(Id, Context) ->
     end.
 
 split_fields(Fields) ->
-    All = binary:split(Fields, [ <<"\n">>, <<"\r">>, <<" ">>, <<"\t">> ], [ global, trim_all ]),
+    All = binary:split(Fields, [ <<"\n">>, <<"\r">> ], [ global, trim_all ]),
     All1 = [ z_string:trim(F) || F <- All ],
     [ F || F <- All1, F =/= <<>> ].
 
