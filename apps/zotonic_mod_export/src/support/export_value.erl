@@ -41,7 +41,8 @@ rsc_props_default(Context) ->
 -spec maybe_rsc_props(Id, Context) -> Fields when
     Id :: m_rsc:resource_id(),
     Context :: z:context(),
-    Fields :: [ binary() ].
+    Fields :: [ binary() ]
+            | undefined.
 maybe_rsc_props(Id, Context) ->
     case m_rsc:p(Id, <<"export_fields">>, Context) of
         undefined -> undefined;
