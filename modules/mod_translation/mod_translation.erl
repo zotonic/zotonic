@@ -485,7 +485,10 @@ to_language_atom(S) when is_list(S); is_binary(S) ->
             ?is_az(A), ?is_az(B), ?is_az(C) -> <<A, B, C>>;
         [A, B, C, $-, D, E, F] when
             ?is_az(A), ?is_az(B), ?is_az(C),
-            ?is_09(D), ?is_09(E), ?is_09(F) -> <<A, B, C, $-, D, E, F>>
+            ?is_09(D), ?is_09(E), ?is_09(F) -> <<A, B, C, $-, D, E, F>>;
+        [A, B, C, $-, D, E] when
+            ?is_az(A), ?is_az(B), ?is_az(C),
+            ?is_az(D), ?is_az(E) -> <<A, B, C, $-, D, E>>
     end,
     binary_to_atom(S2, utf8).
 
