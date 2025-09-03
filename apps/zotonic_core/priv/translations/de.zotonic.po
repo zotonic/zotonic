@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-09-03 14:43\n"
+"PO-Revision-Date: 2025-09-03 16:32\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -12597,7 +12597,7 @@ msgstr "Editierbar"
 
 #: zotonic_mod_translation/priv/templates/_admin_headeritem.tpl:26
 msgid "Editable languages"
-msgstr ""
+msgstr "Bearbeitbare Sprachen"
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:127
 msgid "English"
