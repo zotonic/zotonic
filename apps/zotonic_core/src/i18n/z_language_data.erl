@@ -1213,31 +1213,19 @@ languages_list() -> [
         {name, <<"Papiamento"/utf8>>},
         {name_en, <<"Papiamento"/utf8>>},
         {sublanguages, [
-            {<<"pap-531">>, [
+            {<<"pap-cw">>, [
                 {language, <<"pap">>},
                 {region, <<"CW">>},
                 {name, <<"Papiamentu - Curaçao (Bonaire)"/utf8>>},
                 {name_en, <<"Papiamentu - Curaçao (Bonaire)"/utf8>>}
             ]},
-            {<<"pap-535">>, [
-                {language, <<"pap-535">>},
-                {region, <<"BQ">>},
-                {name, <<"Papiamentu - Carribean Netherlands"/utf8>>},
-                {name_en, <<"Papiamentu - Carribean Netherlands"/utf8>>}
-            ]},
-            {<<"pap-533">>, [
+            {<<"pap-aw">>, [
                 {language, <<"pap">>},
                 {region, <<"AW">>},
                 {name, <<"Papiamento - Aruba"/utf8>>},
                 {name_en, <<"Papiamento - Aruba"/utf8>>}
             ]}
         ]}
-
-% is_language("pap_533") -> true; %papiamento - aruba
-% is_language(<<"pap_533">>) -> true; %papiamento - aruba
-% is_language("pap_531") -> true; %papiamentu - curacao & bonaire
-% is_language(<<"pap_531">>) -> true; %papiamentu - curacao & bonaire
-
     ]},
     {<<"pl">>, [
         {language, <<"pl">>},
