@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2024 Marc Worrell <marc@worrell.nl>
+%% @copyright 2024-2025 Marc Worrell <marc@worrell.nl>
 %% @doc Helper functions for exports.
 %% @end
 
-%% Copyright 2024 Marc Worrell
+%% Copyright 2024-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.

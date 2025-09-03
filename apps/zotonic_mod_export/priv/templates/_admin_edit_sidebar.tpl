@@ -23,11 +23,12 @@
         <p>
             <a class="btn btn-default" href="{% url export_rsc_query type='csv' id=id %}">{_ Download CSV _}</a>
             <a class="btn btn-default" href="{% url export_rsc_query type='xlsx' id=id %}">{_ Download Excel _}</a>
+            <a class="btn btn-default" href="{% url export_rsc_query type='json' id=id %}">{_ Download JSON _}</a>
             <a class="btn btn-default" href="{% url export_rsc_query type='vevent' id=id %}">{_ Download Event _}</a>
         </p>
 
         <p class="help-block">
-            <span class="glyphicon glyphicon-info-sign"></span> {_ Download as Event if the query returns events and you want export for a calendar program. _}
+            <span class="glyphicon glyphicon-info-sign"></span> {_ Download as Event if the query returns events and you want to export for a calendar program. _}
         </p>
     {% elseif id.is_a.collection %}
         <p>{_ Download all the pages in the collection _}</p>
@@ -35,6 +36,7 @@
         <p>
             <a class="btn btn-default" href="{% url export_rsc_query type='csv' id=id %}">{_ Download CSV _}</a>
             <a class="btn btn-default" href="{% url export_rsc_query type='xlsx' id=id %}">{_ Download Excel _}</a>
+            <a class="btn btn-default" href="{% url export_rsc_query type='json' id=id %}">{_ Download JSON _}</a>
             {% if id.o.haspart[1].is_a.event %}
                 <a class="btn btn-default" href="{% url export_rsc_query type='vevent' id=id %}">{_ Download Event _}</a>
             {% endif %}
@@ -43,10 +45,26 @@
         <p>
             <a class="btn btn-default" href="{% url export_rsc type='csv' id=id %}">{_ Download CSV _}</a>
             <a class="btn btn-default" href="{% url export_rsc type='xlsx' id=id %}">{_ Download Excel _}</a>
+            <a class="btn btn-default" href="{% url export_rsc type='json' id=id %}">{_ Download JSON _}</a>
             {% if id.is_a.event %}
                 <a class="btn btn-default" href="{% url export_rsc type='vevent' id=id %}">{_ Download Event _}</a>
             {% endif %}
         </p>
     {% endif %}
 </div>
+
+<details class="form-group">
+    <summary>{_ Export fields _}</summary>
+    <p class="help-block">
+        {_ Define which fields (columns) should be exported. One field expression per line. _}
+        {_ Leave this empty for a default set of fields. _}
+        {_ Do not forget to save your changes before exporting. _}
+    </p>
+
+    <div class="form-group label-floating">
+        <textarea class="form-control" name="export_fields" rows="15" placeholder="{_ Export fields _}">{{ id.export_fields }}</textarea>
+        <label class="control-label" for="export_fields">{_ Export fields _}</label>
+    </div>
+</details>
+
 {% endblock %}

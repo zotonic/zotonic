@@ -48,6 +48,18 @@ p {
   margin: 0 0 15px 0;
 }
 
+details summary {
+  display: list-item;
+  list-style: none;
+}
+details summary:before {
+  content: "▶";
+  padding-right: 5px;
+}
+details[open] > summary:first-of-type:before {
+  content: "▼";
+}
+
 table td, table th {
   vertical-align: top;
 }

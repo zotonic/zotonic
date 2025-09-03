@@ -26,7 +26,8 @@
     stream/4,
 
     lookup_header/2,
-    lookup_value/2
+    lookup_value/2,
+    lookup_value/3
     ]).
 
 -record(stream_state, {
@@ -215,16 +216,20 @@ do_footer(#stream_state{encoder=E, encoder_state=ES} = StreamState, Context) ->
 
 
 %% @doc Used to lookup the header name, a header might be a tuple with lookup key and a textual representation.
-lookup_header({trans, _} = Tr, Context) ->
+lookup_header(#trans{} = Tr, Context) ->
     z_trans:lookup_fallback(Tr, Context);
-lookup_header({_Key, Header}, Context) ->
-    lookup_header(Header, Context);
 lookup_header(Key, _Context) ->
-    z_convert:to_binary(Key).
+    export_value:header(Key).
 
 %% @doc Used to lookup the row value, a key might be a tuple with lookup key and a textual representation.
-lookup_value([Id, {Key, _Header}], Context) ->
-    z_template_compiler_runtime:find_value(Key, Id, #{}, Context);
-lookup_value([Id, Key], Context) ->
-    z_template_compiler_runtime:find_value(Key, Id, #{}, Context).
+lookup_value(#trans{} = Tr, Context) ->
+    z_trans:lookup_fallback(Tr, Context);
+lookup_value([Id, Value], Context) ->
+    lookup_value(Id, Value, Context);
+lookup_value(Value, _Context) ->
+    Value.
 
+lookup_value(_Id, #trans{} = Tr, Context) ->
+    z_trans:lookup_fallback(Tr, Context);
+lookup_value(Id, Value, Context) ->
+    export_value:value(Id, Value, Context).
