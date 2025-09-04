@@ -75,7 +75,7 @@
         }
     ]).
 
--behaviour(supervisor).
+-behaviour(gen_server).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_core/include/zotonic_file.hrl").
@@ -103,6 +103,9 @@
 
     lookup/2,
 
+    update_backoff/2,
+    batch_size/1,
+
     delete_ready/5,
     download_stream/5,
     manage_schema/2
@@ -110,12 +113,20 @@
 
 -export([
     start_link/1,
-    init/1
+    init/1,
+    handle_call/3,
+    handle_cast/2
     ]).
 
 -export([
     shorten_filename/1
     ]).
+
+-record(state, {
+        backoff :: backoff:backoff(),
+        context :: z:context(),
+        in_flight = 0 :: non_neg_integer()
+    }).
 
 observe_media_update_done(#media_update_done{action=insert, post_props=Props}, Context) ->
     queue_medium(Props, Context);
@@ -305,21 +316,26 @@ replace_special_chars(<<_/utf8, Rest/binary>>, Acc) ->
 is_defined(<<>>) -> false;
 is_defined(_) -> true.
 
-pid_observe_tick_1m(Pid, tick_1m, Context) ->
-    case filestore_config:is_upload_enabled(Context) of
-        true ->
-            start_uploaders(Pid, m_filestore:fetch_queue(Context), Context);
-        false ->
-            ok
-    end,
-    start_downloaders(m_filestore:fetch_move_to_local(Context), Context),
-    case filestore_config:delete_interval(Context) of
-        <<"false">> ->
-            ok;
-        Interval ->
-            start_deleters(m_filestore:fetch_deleted(Interval, Context), Context)
-    end.
+pid_observe_tick_1m(Pid, tick_1m, _Context) ->
+    gen_server:cast(Pid, next_batch).
 
+%% @doc Update the filestore backoff with a success or failure signal.
+%% On failure, the batch size is lowered, on success it is increased.
+-spec update_backoff(What, Context) -> ok when
+    What :: success | fail,
+    Context :: z:context().
+update_backoff(What, Context) when What =:= success; What =:= fail ->
+    Name = name(Context),
+    gen_server:cast(Name, What).
+
+%% @doc Return the current batch size, used for batch processing of
+%% uploads, downloads and deletions. Between 0 and ?BATCH_SIZE.
+-spec batch_size(Context) -> non_neg_integer() when
+    Context :: z:context().
+batch_size(Context) ->
+    Name = name(Context),
+    {ok, BatchSize} = gen_server:call(Name, batch_size),
+    BatchSize.
 
 manage_schema(What, Context) ->
     m_filestore:install(What, Context).
@@ -383,6 +399,8 @@ load_cache(#{
                                 remote => Location,
                                 id => Id
                             }),
+                            % Do not signal a backoff, as s3 has the strange behaviour
+                            % of returning 'forbidden' on missing entries...
                             ok = m_filestore:mark_error(Id, FinalError, Ctx),
                             exit(normal);
                         ({error, Reason} = Error) ->
@@ -397,6 +415,7 @@ load_cache(#{
                                 remote => Location,
                                 id => Id
                             }),
+                            update_backoff(fail, Ctx),
                             exit(Error);
                         (stream_start) ->
                             nop;
@@ -405,6 +424,7 @@ load_cache(#{
                         (B) when is_binary(B) ->
                             filezcache:append_stream(CachePid, B);
                          (eof) ->
+                            update_backoff(success, Ctx),
                             filezcache:finish_stream(CachePid)
                     end)
             end,
@@ -498,52 +518,91 @@ maybe_queue_file(Prefix, Filename, true, MediaInfo, Context) ->
     end.
 
 
+name(Context) ->
+    z_utils:name_for_site(?MODULE, Context).
 
 %%% ------------------------------------------------------------------------------------
 %%% Supervisor callbacks
 %%% ------------------------------------------------------------------------------------
 
 start_link(Args) ->
-    supervisor:start_link(?MODULE, Args).
+    {context, Context} = proplists:lookup(context, Args),
+    Name = name(Context),
+    gen_server:start_link({local, Name}, ?MODULE, Args, []).
 
-init(_Args) ->
-    {ok,{
-        #{
-            strategy => simple_one_for_one,
-            intensity => 20,
-            period => 10
-        },
-        [
-            #{
-                id => undefined,
-                start => {filestore_uploader, start_link, []},
-                restart => transient,
-                shutdown => brutal_kill,
-                type => worker,
-                modules => [filestore_uploader]
-            }
-        ]}}.
+init(Args) ->
+    {context, Context} = proplists:lookup(context, Args),
+    z_context:ensure_logger_md(Context),
+    {ok, #state{
+        backoff = backoff:init(1, ?BATCH_SIZE - 1),
+        context = Context,
+        in_flight = 0
+    }}.
+
+handle_call(batch_size, _From, #state{ backoff = Backoff } = State) ->
+    BatchSize = current_batch_size(Backoff),
+    {reply, {ok, BatchSize}, State}.
+
+handle_cast(next_batch, #state{ backoff = Backoff, context = Context } = State) ->
+    BatchSize = current_batch_size(Backoff),
+    case filestore_config:is_upload_enabled(Context) of
+        true ->
+            start_uploaders(m_filestore:fetch_queue(BatchSize, Context), Context);
+        false ->
+            ok
+    end,
+    start_downloaders(m_filestore:fetch_move_to_local(BatchSize, Context), Context),
+    case filestore_config:delete_interval(Context) of
+        <<"false">> ->
+            ok;
+        Interval ->
+            start_deleters(m_filestore:fetch_deleted(Interval, BatchSize, Context), Context)
+    end,
+    {noreply, State};
+handle_cast(success, #state{ backoff = Backoff } = State) ->
+    {_, Backoff1} = backoff:succeed(Backoff),
+    {noreply, State#state{ backoff = Backoff1 }};
+handle_cast(fail, #state{ backoff = Backoff } = State) ->
+    {_, Backoff1} = backoff:fail(Backoff),
+    {noreply, State#state{ backoff = Backoff1 }}.
 
 
 %%% ------------------------------------------------------------------------------------
 %%% Support routines
 %%% ------------------------------------------------------------------------------------
 
--spec start_uploaders(pid(), {ok, [ m_filestore:queue_entry() ]} | {error, term()}, z:context()) -> ok.
-start_uploaders(Pid, {ok, Rs}, Context) ->
+current_batch_size(Backoff) ->
+    case z_sidejob:space() of
+        N when N > (?BATCH_SIZE + 50) ->
+            erlang:min(?BATCH_SIZE - backoff:get(Backoff), N);
+        _ ->
+            0
+    end.
+
+-spec start_uploaders({ok, [ m_filestore:queue_entry() ]} | {error, term()}, z:context()) -> ok.
+start_uploaders({ok, Rs}, Context) ->
     lists:foreach(
         fun(QueueEntry) ->
-            start_uploader(Pid, QueueEntry, Context)
+            start_uploader(QueueEntry, Context)
         end,
         Rs);
-start_uploaders(_Pid, {error, _}, _Context) ->
+start_uploaders({error, _}, _Context) ->
     % Ignore error, will be retried later
     ok.
 
-start_uploader(Pid, #{ id := Id, path := Path, props := MediumInfo }, Context) ->
+start_uploader(#{ id := Id, path := Path, props := MediumInfo }, Context) ->
     Path1 = z_convert:to_binary(Path),
     PathLookup = m_filestore:lookup(Path1, Context),
-    supervisor:start_child(Pid, [Id, Path1, PathLookup, MediumInfo, Context]).
+    case z_sidejob:space() of
+        N when N > 0 ->
+            case filestore_uploader:is_upload_running(Path1, Context) of
+                true -> ok;
+                false ->
+                    filestore_uploader:upload(Id, Path1, PathLookup, MediumInfo, Context)
+            end;
+        _ ->
+            {error, busy}
+    end.
 
 -spec start_deleters( {ok, [ m_filestore:filestore_entry() ]} | {error, term()}, z:context() ) -> ok.
 start_deleters({ok, Rs}, Context) ->
@@ -632,6 +691,7 @@ delete_ready(Id, Path, Context, _Ref, ok) ->
         path => Path,
         action => delete
     }),
+    update_backoff(success, Context),
     m_filestore:purge_deleted(Id, Context);
 delete_ready(Id, Path, Context, _Ref, {error, Reason})
     when Reason =:= enoent; Reason =:= epath ->
@@ -655,7 +715,7 @@ delete_ready(Id, Path, Context, _Ref, {error, forbidden}) ->
         action => delete
     }),
     m_filestore:purge_deleted(Id, Context);
-delete_ready(Id, Path, _Context, _Ref, {error, Reason}) ->
+delete_ready(Id, Path, Context, _Ref, {error, Reason}) ->
     ?LOG_ERROR(#{
         text => <<"Delete remote file failed, will retry">>,
         in => zotonic_mod_filestore,
@@ -664,7 +724,8 @@ delete_ready(Id, Path, _Context, _Ref, {error, Reason}) ->
         reason => Reason,
         id => Id,
         action => delete
-    }).
+    }),
+    update_backoff(fail, Context).
 
 
 -spec start_downloaders( {ok, [ m_filestore:filestore_entry() ]} | {error, term()}, z:context() ) -> ok.
@@ -751,6 +812,7 @@ download_stream(Id, Path, LocalPath, Context, eof) ->
         local => LocalPath
     }),
     ok = file:rename(temp_path(LocalPath), LocalPath),
+    update_backoff(success, Context),
     download_done(Id, Path, Context);
 download_stream(Id, Path, LocalPath, Context, {error, Reason}) ->
     ?LOG_WARNING(#{
@@ -762,6 +824,11 @@ download_stream(Id, Path, LocalPath, Context, {error, Reason}) ->
         id => Id,
         path => Path
     }),
+    case Reason of
+        enoent -> ok;
+        eacces -> ok;
+        _ -> update_backoff(fail, Context)
+    end,
     file:delete(temp_path(LocalPath)),
     m_filestore:unmark_move_to_local(Id, Context);
 download_stream(_Id, _Path, _LocalPath, _Context, _Other) ->

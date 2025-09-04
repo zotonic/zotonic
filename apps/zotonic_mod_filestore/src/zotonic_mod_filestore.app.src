@@ -2,7 +2,7 @@
     {description, "Store files on cloud storage services like FTP, S3 and WebDAV"},
     {vsn, {file, "../../VERSION"}},
     {registered, []},
-    {applications, [kernel, stdlib, s3filez, ftpfilez, webdavfilez, zotonic_core]},
+    {applications, [kernel, stdlib, s3filez, ftpfilez, webdavfilez, backoff, zotonic_core]},
     {env, []},
     {modules, []},
     {doc, "doc"},

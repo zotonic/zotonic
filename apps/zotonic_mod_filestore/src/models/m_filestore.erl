@@ -24,10 +24,12 @@
 
     queue/3,
     fetch_queue/1,
+    fetch_queue/2,
     dequeue/2,
     mark_error/3,
     mark_deleted/2,
     fetch_deleted/2,
+    fetch_deleted/3,
     purge_deleted/2,
     clear_deleted/2,
 
@@ -40,6 +42,7 @@
     unmark_move_to_local/2,
 
     fetch_move_to_local/1,
+    fetch_move_to_local/2,
     purge_move_to_local/3,
 
     store/6,
@@ -65,6 +68,7 @@
 
 % It is ok to retry transient errors every 10 minutes
 -define(RETRY_TRANSIENT_ERRORS, 600).
+-define(BATCH_SIZE, 200).
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
@@ -142,12 +146,20 @@ queue(Path, MediaProps, Context) ->
 %% @doc Fetch the next batch of queued uploads, at least 1 minute old and max 200.
 -spec fetch_queue( z:context() ) -> {ok, [ queue_entry() ]} | {error, term()}.
 fetch_queue(Context) ->
+    fetch_queue(?BATCH_SIZE, Context).
+
+
+%% @doc Fetch the next batch of queued uploads, at least 1 minute old and max BatchSize.
+-spec fetch_queue(BatchSize, Context) -> {ok, [ queue_entry() ]} | {error, term()} when
+    BatchSize :: non_neg_integer(),
+    Context :: z:context().
+fetch_queue(BatchSize, Context) ->
     case z_db:qmap("
                 select *
                 from filestore_queue
                 where created < now() - interval '1 min'
-                limit 200",
-                [],
+                limit $1",
+                [ BatchSize ],
                 [ {keys, atom} ],
                 Context)
     of
@@ -311,15 +323,27 @@ mark_deleted(Path, Context) when is_binary(Path) ->
 %% @doc Fetch all deleted file entries where the entry was marked as deleted
 %% at least 'Interval' ago. The Interval comes from the mod_filestore.delete_interval
 %% configuration.
--spec fetch_deleted( binary() | undefined, z:context() ) -> {ok, [ filestore_entry() ]} | {error, term()}.
+-spec fetch_deleted(Interval, Context) -> {ok, [ filestore_entry() ]} | {error, term()} when
+    Interval :: binary() | undefined,
+    Context :: z:context().
 fetch_deleted(Interval, Context) ->
+    fetch_deleted(Interval, ?BATCH_SIZE, Context).
+
+%% @doc Fetch all deleted file entries where the entry was marked as deleted
+%% at least 'Interval' ago. The Interval comes from the mod_filestore.delete_interval
+%% configuration.
+-spec fetch_deleted(Interval, BatchSize, Context) -> {ok, [ filestore_entry() ]} | {error, term()} when
+    Interval :: binary() | undefined,
+    BatchSize :: non_neg_integer(),
+    Context :: z:context().
+fetch_deleted(Interval, BatchSize, Context) ->
     case map_interval(Interval) of
         <<"false">> ->
             {ok, []};
         <<"0">> ->
             z_db:qmap(
-                "select * from filestore where is_deleted = true limit 200",
-                [],
+                "select * from filestore where is_deleted = true limit $1",
+                [ BatchSize ],
                 [ {keys, atom} ],
                 Context);
         Interval1 ->
@@ -328,8 +352,8 @@ fetch_deleted(Interval, Context) ->
                 "from filestore ",
                 "where is_deleted =true "
                 "  and deleted < now() - interval '", Interval1/binary,"' ",
-                "limit 200">>,
-                [],
+                "limit $1">>,
+                [ BatchSize ],
                 [ {keys, atom} ],
                 Context)
     end.
@@ -491,14 +515,21 @@ unmark_move_to_local(Id, Context) ->
 %% @doc Fetch at most 200 filestore entries that are marked with "move to local".
 -spec fetch_move_to_local( z:context() ) -> {ok, [ filestore_entry() ]} | {error, term()}.
 fetch_move_to_local(Context) ->
+    fetch_move_to_local(?BATCH_SIZE, Context).
+
+%% @doc Fetch at most BatchSize filestore entries that are marked with "move to local".
+-spec fetch_move_to_local(BatchSize, Context) -> {ok, [ filestore_entry() ]} | {error, term()} when
+    BatchSize :: non_neg_integer(),
+    Context :: z:context().
+fetch_move_to_local(BatchSize, Context) ->
     z_db:qmap("
             select *
             from filestore
             where is_move_to_local = true
               and is_deleted = false
               and error is null
-            limit 200",
-            [],
+            limit $1",
+            [ BatchSize ],
             [ {keys, atom} ],
             Context).
 
