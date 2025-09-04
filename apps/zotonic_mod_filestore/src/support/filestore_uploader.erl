@@ -19,17 +19,9 @@
 
 -module(filestore_uploader).
 
--behaviour(gen_server).
-
 -export([
-    start_link/5,
-    init/1,
-    handle_call/3,
-    handle_cast/2,
-    handle_info/2,
-    code_change/3,
-    terminate/2,
-
+    is_upload_running/2,
+    upload/5,
     stale_file_entry/2
     ]).
 
@@ -37,52 +29,43 @@
 -include_lib("zotonic_core/include/zotonic_file.hrl").
 -include_lib("kernel/include/file.hrl").
 
--define(RETRY_DELAY, 1800000).   % Retry after 30 minutes
 
--record(state, {
-        id,
-        path,
-        media_info,
-        lookup,
-        context
-    }).
+is_upload_running(Path, Context) ->
+    Name = {upload, Path},
+    is_pid(z_proc:whereis(Name, Context)).
 
-start_link(Id, Path, PathLookup, MediaInfo, Context) ->
-    gen_server:start_link(
-        {via, z_proc, {{upload, Path}, Context}},
-        ?MODULE,
-        [Id, Path, MediaInfo, PathLookup, Context],
-        []).
-
-init([Id, Path, MediaInfo, PathLookup, Context]) ->
+upload(QueueId, Path, {ok, Entry}, MediaInfo, Context) ->
     z_context:logger_md(Context),
-    ?LOG_DEBUG(#{
-        text => <<"Started uploader">>,
-        in => zotonic_mod_filestore,
-        src => Path
-    }),
-    gen_server:cast(self(), start),
-    {ok, #state{
-            id = Id,
-            path = Path,
-            media_info = MediaInfo,
-            lookup = PathLookup,
-            context = Context
-        }}.
-
-handle_call(Msg, _From, State) ->
-    ?LOG_ERROR(#{
-        text => <<"Unknown call">>,
-        in => zotonic_mod_filestore,
-        msg => Msg
-    }),
-    {reply, {error, unknown_msg}, State}.
-
-handle_cast(start, #state{lookup = {ok, Entry}} = State) ->
-    try_upload(Entry, State);
-handle_cast(start, #state{lookup = {error, enoent}} = State) ->
-    try_upload(undefined, State);
-handle_cast(start, #state{path = Path, lookup = {error, Reason}} = State) ->
+    Name = {upload, Path},
+    case z_proc:register(Name, self(), Context) of
+        ok ->
+            ?LOG_DEBUG(#{
+                text => <<"Started uploader">>,
+                in => zotonic_mod_filestore,
+                src => Path,
+                queue_id => QueueId
+            }),
+            try_upload(Entry, QueueId, Path, MediaInfo, Context);
+        {error, duplicate} ->
+            ok
+    end;
+upload(QueueId, Path, {error, enoent}, MediaInfo, Context) ->
+    z_context:logger_md(Context),
+    Name = {upload, Path},
+    case z_proc:register(Name, self(), Context) of
+        ok ->
+            ?LOG_DEBUG(#{
+                text => <<"Started uploader">>,
+                in => zotonic_mod_filestore,
+                src => Path,
+                queue_id => QueueId
+            }),
+            try_upload(undefined, QueueId, Path, MediaInfo, Context);
+        {error, duplicate} ->
+            ok
+    end;
+upload(_QueueId, Path, {error, Reason}, _MediaInfo, Context) ->
+    z_context:logger_md(Context),
     ?LOG_ERROR(#{
         text => <<"Filestore upload error reading file">>,
         in => zotonic_mod_filestore,
@@ -90,49 +73,12 @@ handle_cast(start, #state{path = Path, lookup = {error, Reason}} = State) ->
         result => error,
         reason => Reason
     }),
-    {stop, normal, State};
-
-handle_cast(stop, State) ->
-    {stop, normal, State};
-handle_cast(Msg, State) ->
-    ?LOG_ERROR("Unknown cast: ~p", [Msg]),
-    {noreply, State}.
-
-handle_info(restart, State) ->
-    gen_server:cast(self(), start),
-    {noreply, State};
-handle_info(_Info, State) ->
-    {noreply, State}.
-
-code_change(_OldVersion, State, _Extra) ->
-    {ok, State}.
-
-terminate(normal, _State) ->
-    ok;
-terminate({Reason, [{_Mod, _Fun, _Args, _Info} | _] = Stack}, #state{ id = Id, path = Path }) ->
-    ?LOG_ERROR(#{
-        text => <<"Filestore upload terminated">>,
-        in => zotonic_mod_filestore,
-        result => error,
-        reason => Reason,
-        stack => Stack,
-        id => Id,
-        path => Path
-    });
-terminate(Reason, #state{ id = Id, path = Path }) ->
-    ?LOG_ERROR(#{
-        text => <<"Filestore upload terminated">>,
-        in => zotonic_mod_filestore,
-        result => error,
-        reason => Reason,
-        id => Id,
-        path => Path
-    }).
+    {error, Reason}.
 
 
 %%% ------ Support routines --------
 
-try_upload(MaybeEntry, #state{id=Id, path=Path, context=Context, media_info=MInfo} = State) ->
+try_upload(MaybeEntry, QueueId, Path, MInfo, Context) ->
     case m_filestore:is_upload_ok(MaybeEntry) of
         true ->
             RscId = maps:get(<<"id">>, MInfo, undefined),
@@ -141,21 +87,15 @@ try_upload(MaybeEntry, #state{id=Id, path=Path, context=Context, media_info=MInf
                     Mime = maps:get(<<"mime">>, MInfo, undefined),
                     case handle_upload(Path, Mime, Cred, Context) of
                         ok ->
-                            m_filestore:dequeue(Id, Context),
-                            {stop, normal, State};
-                        fatal ->
-                            m_filestore:dequeue(Id, Context),
-                            {stop, normal, State};
+                            % Uploaded, signal backoff to up the batch size.
+                            m_filestore:dequeue(QueueId, Context),
+                            mod_filestore:update_backoff(success, Context);
+                        skip ->
+                            % Nothing to do, remove entry, no backoff change.
+                            m_filestore:dequeue(QueueId, Context);
                         retry ->
-                            ?LOG_NOTICE(#{
-                                text => <<"Filestore upload sleeping 30m for retry">>,
-                                in => zotonic_mod_filestore,
-                                result => warning,
-                                reason => retry,
-                                src => Path
-                            }),
-                            timer:send_after(?RETRY_DELAY, restart),
-                            {noreply, State, hibernate}
+                            % Failure uploading, backoff.
+                            mod_filestore:update_backoff(fail, Context)
                     end;
                 undefined ->
                     ?LOG_WARNING(#{
@@ -163,10 +103,11 @@ try_upload(MaybeEntry, #state{id=Id, path=Path, context=Context, media_info=MInf
                         in => zotonic_mod_filestore,
                         result => error,
                         reason => no_credentials,
-                        src =>  Path
+                        src =>  Path,
+                        queue_id => QueueId
                     }),
-                    m_filestore:dequeue(Id, Context),
-                    {stop, normal, State}
+                    m_filestore:dequeue(QueueId, Context),
+                    {error, no_credentials}
             end;
         false ->
             case m_filestore:is_download_ok(MaybeEntry) of
@@ -182,8 +123,8 @@ try_upload(MaybeEntry, #state{id=Id, path=Path, context=Context, media_info=MInf
                 false ->
                     ok
             end,
-            m_filestore:dequeue(Id, Context),
-            {stop, normal, State}
+            m_filestore:dequeue(QueueId, Context),
+            ok
     end.
 
 handle_upload(Path, Mime, Cred, Context) ->
@@ -208,14 +149,14 @@ handle_upload(Path, Mime, Cred, Context) ->
                 src => Path,
                 type => Type
             }),
-            fatal;
+            skip;
         {error, enoent} ->
             ?LOG_INFO(#{
                 text => <<"Not uploading file because it is not found">>,
                 in => zotonic_mod_filestore,
                 src => Path
             }),
-            fatal
+            skip
     end.
 
 %% @doc Remember the new location in the m_filestore, move the file to the filezcache and delete the file
@@ -262,7 +203,7 @@ finish_upload(ok, Path, AbsPath, Size, #filestore_credentials{service=Service, l
     end;
 finish_upload({error, Reason}, Path, _AbsPath, _Size, #filestore_credentials{service=Service, location=Location}, _Context) ->
     ?LOG_ERROR(#{
-        text => <<"Filestore upload error">>,
+        text => <<"Filestore upload error, will retry">>,
         in => zotonic_mod_filestore,
         result => error,
         reason => Reason,
