@@ -252,22 +252,35 @@ default_language(Context) ->
     z_convert:to_atom(m_config:get_value(i18n, language, en, Context)).
 
 
+-define(is_az(C), (C >= $a andalso C =< $z)).
+-define(is_09(C), (C >= $0 andalso C =< $9)).
+
 %% @doc check if the two/three letter code is a valid language. For three letter language
-%% codes we also accept the optional regional variation, e.g. "pap-531".
+%% codes we also accept the optional regional variation, e.g. "pap-531" and "pap-cw".
 %% See https://en.wikipedia.org/wiki/UN_M49
 -spec is_language(Language :: string() | binary()) -> boolean().
 is_language(<<A,B>>) -> iso639:lc2lang([A,B]) /= <<>>;
 is_language([_,_] = IsoCode) -> iso639:lc2lang(IsoCode) /= <<>>;
 is_language(<<A,B,C>>) -> iso639:lc3lang([A,B,C]) /= <<>>;
-is_language(<<A,B,C,$-,Loc>>) ->
+is_language(<<A,B,C,$-,E,F,G>>) ->
     iso639:lc3lang([A,B,C]) /= <<>>
-    andalso z_utils:only_digits(Loc)
-    andalso size(Loc) =:= 3;
+    andalso ?is_09(E)
+    andalso ?is_09(F)
+    andalso ?is_09(G);
+is_language(<<A,B,C,$-,E,F>>) ->
+    iso639:lc3lang([A,B,C]) /= <<>>
+    andalso ?is_az(E)
+    andalso ?is_az(F);
 is_language([_,_,_] = IsoCode) -> iso639:lc3lang(IsoCode) /= <<>>;
-is_language([A,B,C,$-|Loc]) ->
+is_language([A,B,C,$-,E,F]) ->
     iso639:lc3lang([A,B,C]) /= <<>>
-    andalso z_utils:only_digits(Loc)
-    andalso length(Loc) =:= 3;
+    andalso ?is_az(E)
+    andalso ?is_az(F);
+is_language([A,B,C,$-,E,F,G]) ->
+    iso639:lc3lang([A,B,C]) /= <<>>
+    andalso ?is_09(E)
+    andalso ?is_09(F)
+    andalso ?is_09(G);
 is_language(_) -> false.
 
 %% @doc Translate a language-code to an atom.

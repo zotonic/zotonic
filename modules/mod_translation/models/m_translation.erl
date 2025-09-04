@@ -82,5 +82,11 @@ language_list_editable(Context) ->
 				 language_list(Context)).
 
 language_list_all(_Context) ->
-	[ {Code, [{language, Title}]} || {Code,Title} <- iso639:all2lang() ].
+	ISO639_1 = [ {Code, [{language, Title}]} || {Code,Title} <- iso639:all2lang() ],
+	All = [
+		{"pap-aw", [ {language, <<"Papiamento - Aruba">>} ]},
+		{"pap-cw", [ {language, <<"Papiamentu - Curaçao (Bonaire)"/utf8>>} ]}
+		| ISO639_1
+	],
+	lists:sort(All).
 
