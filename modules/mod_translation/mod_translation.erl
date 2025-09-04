@@ -43,6 +43,7 @@
          url_strip_language/1,
          set_user_language/2,
          try_set_language/2,
+         to_language_atom/1,
 
          init/1,
          event/2,
@@ -360,6 +361,16 @@ url_strip_language(<<$/,A,B,C,$-,E,F,G,$/, Rest/binary>> = Url) ->
         true -> <<$/, Rest/binary>>;
         false -> Url
     end;
+url_strip_language([$/,A,B,C,$-,E,F,$/ | Rest] = Url) ->
+    case z_trans:is_language([A,B,C,$-,E,F]) of
+        true -> [$/|Rest];
+        false -> Url
+    end;
+url_strip_language(<<$/,A,B,C,$-,E,F,$/, Rest/binary>> = Url) ->
+    case z_trans:is_language([A,B,C,$-,E,F]) of
+        true -> <<$/, Rest/binary>>;
+        false -> Url
+    end;
 url_strip_language([$/,A,B,$/ | Rest] = Url) ->
     case z_trans:is_language([A,B]) of
         true -> [$/|Rest];
@@ -479,6 +490,8 @@ to_language_atom(S) when is_atom(S) ->
 to_language_atom(S) when is_list(S); is_binary(S) ->
     S1 = unicode:characters_to_list(z_string:to_lower(z_string:trim(S))),
     S2 = case S1 of
+        [] ->
+            undefined;
         [A, B] when
             ?is_az(A), ?is_az(B) -> <<A, B>>;
         [A, B, C] when
@@ -490,7 +503,10 @@ to_language_atom(S) when is_list(S); is_binary(S) ->
             ?is_az(A), ?is_az(B), ?is_az(C),
             ?is_az(D), ?is_az(E) -> <<A, B, C, $-, D, E>>
     end,
-    binary_to_atom(S2, utf8).
+    case is_atom(S2) of
+        true -> S2;
+        false -> binary_to_atom(S2, utf8)
+    end.
 
 
 %% @doc Remove a language from the i18n configuration
