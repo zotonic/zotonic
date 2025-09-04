@@ -104,6 +104,7 @@
     lookup/2,
 
     update_backoff/2,
+    batch_size/1,
 
     delete_ready/5,
     download_stream/5,
@@ -327,6 +328,15 @@ update_backoff(What, Context) when What =:= success; What =:= fail ->
     Name = name(Context),
     gen_server:cast(Name, What).
 
+%% @doc Return the current batch size, used for batch processing of
+%% uploads, downloads and deletions. Between 0 and ?BATCH_SIZE.
+-spec batch_size(Context) -> non_neg_integer() when
+    Context :: z:context().
+batch_size(Context) ->
+    Name = name(Context),
+    {ok, BatchSize} = gen_server:call(Name, batch_size),
+    BatchSize.
+
 manage_schema(What, Context) ->
     m_filestore:install(What, Context).
 
@@ -530,11 +540,11 @@ init(Args) ->
     }}.
 
 handle_call(batch_size, _From, #state{ backoff = Backoff } = State) ->
-    BatchSize = batch_size(Backoff),
+    BatchSize = current_batch_size(Backoff),
     {reply, {ok, BatchSize}, State}.
 
 handle_cast(next_batch, #state{ backoff = Backoff, context = Context } = State) ->
-    BatchSize = batch_size(Backoff),
+    BatchSize = current_batch_size(Backoff),
     case filestore_config:is_upload_enabled(Context) of
         true ->
             start_uploaders(m_filestore:fetch_queue(BatchSize, Context), Context);
@@ -561,7 +571,7 @@ handle_cast(fail, #state{ backoff = Backoff } = State) ->
 %%% Support routines
 %%% ------------------------------------------------------------------------------------
 
-batch_size(Backoff) ->
+current_batch_size(Backoff) ->
     case z_sidejob:space() of
         N when N > (?BATCH_SIZE + 50) ->
             erlang:min(?BATCH_SIZE - backoff:get(Backoff), N);
