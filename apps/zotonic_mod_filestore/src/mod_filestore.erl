@@ -533,7 +533,7 @@ handle_call(batch_size, _From, #state{ backoff = Backoff } = State) ->
     BatchSize = batch_size(Backoff),
     {reply, {ok, BatchSize}, State}.
 
-handle_cast(next_batch, #state{ backoff = Backoff, context = Context }) ->
+handle_cast(next_batch, #state{ backoff = Backoff, context = Context } = State) ->
     BatchSize = batch_size(Backoff),
     case filestore_config:is_upload_enabled(Context) of
         true ->
@@ -547,7 +547,8 @@ handle_cast(next_batch, #state{ backoff = Backoff, context = Context }) ->
             ok;
         Interval ->
             start_deleters(m_filestore:fetch_deleted(Interval, BatchSize, Context), Context)
-    end;
+    end,
+    {noreply, State};
 handle_cast(success, #state{ backoff = Backoff } = State) ->
     {_, Backoff1} = backoff:succeed(Backoff),
     {noreply, State#state{ backoff = Backoff1 }};
