@@ -518,13 +518,13 @@ name(Context) ->
 start_link(Args) ->
     {context, Context} = proplists:lookup(context, Args),
     Name = name(Context),
-    gen_server:start_link(Name, ?MODULE, Args, []).
+    gen_server:start_link({local, Name}, ?MODULE, Args, []).
 
 init(Args) ->
     {context, Context} = proplists:lookup(context, Args),
     z_context:ensure_logger_md(Context),
     {ok, #state{
-        backoff = backoff:init(0, ?BATCH_SIZE - 1),
+        backoff = backoff:init(1, ?BATCH_SIZE - 1),
         context = Context,
         in_flight = 0
     }}.
@@ -561,7 +561,12 @@ handle_cast(fail, #state{ backoff = Backoff } = State) ->
 %%% ------------------------------------------------------------------------------------
 
 batch_size(Backoff) ->
-    erlang:min(?BATCH_SIZE - backoff:get(Backoff), z_sidejob:space()).
+    case z_sidejob:space() of
+        N when N > (?BATCH_SIZE + 50) ->
+            erlang:min(?BATCH_SIZE - backoff:get(Backoff), N);
+        _ ->
+            0
+    end.
 
 -spec start_uploaders({ok, [ m_filestore:queue_entry() ]} | {error, term()}, z:context()) -> ok.
 start_uploaders({ok, Rs}, Context) ->
@@ -572,7 +577,7 @@ start_uploaders({ok, Rs}, Context) ->
         Rs);
 start_uploaders({error, _}, _Context) ->
     % Ignore error, will be retried later
-    [].
+    ok.
 
 start_uploader(#{ id := Id, path := Path, props := MediumInfo }, Context) ->
     Path1 = z_convert:to_binary(Path),
