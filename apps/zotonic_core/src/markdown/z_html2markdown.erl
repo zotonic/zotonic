@@ -60,7 +60,6 @@ convert1(Html, Options) ->
     case z_html_parse:parse(Html) of
         {ok, {<<"sanitize">>, _, Parsed}} ->
             Parsed1 = trim(Parsed),
-            io:format("~p", [ Parsed1 ]),
             {Text, M} = to_md(Parsed1, #md{}, set_options(Options, #ms{})),
             iolist_to_binary([trimnl(unicode:characters_to_binary(Text, utf8)), expand_anchors(M)]);
         {error, _} ->
