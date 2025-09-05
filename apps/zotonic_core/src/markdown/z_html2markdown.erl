@@ -91,9 +91,11 @@ trim(L, IsTrim) when is_list(L) ->
 trim({<<"pre">>, _Params, _Elts} = Pre, IsTrim) ->
     % Do not trim inside highlighted code blocks
     {Pre, IsTrim};
-trim({<<"code">>, _Params, _Elts} = Code, IsTrim) ->
-    % Do not trim inside highlighted code blocks
-    {Code, IsTrim};
+trim({<<"code">>, _Params, _Elts} = Code, _IsTrim) ->
+    % Do not trim inside highlighted code blocks.
+    % <code> is a an inline element, so set trim to false
+    % for all following (inline) elements.
+    {Code, false};
 trim({<<"div">>, Params, _Elts} = Div, IsTrim) ->
     case proplists:get_value(<<"class">>, Params) of
         <<"highlight-", _/binary>> ->
