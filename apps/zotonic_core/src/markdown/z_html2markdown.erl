@@ -60,6 +60,7 @@ convert1(Html, Options) ->
     case z_html_parse:parse(Html) of
         {ok, {<<"sanitize">>, _, Parsed}} ->
             Parsed1 = trim(Parsed),
+            io:format("~p", [ Parsed1 ]),
             {Text, M} = to_md(Parsed1, #md{}, set_options(Options, #ms{})),
             iolist_to_binary([trimnl(unicode:characters_to_binary(Text, utf8)), expand_anchors(M)]);
         {error, _} ->
@@ -91,9 +92,11 @@ trim(L, IsTrim) when is_list(L) ->
 trim({<<"pre">>, _Params, _Elts} = Pre, IsTrim) ->
     % Do not trim inside highlighted code blocks
     {Pre, IsTrim};
-trim({<<"code">>, _Params, _Elts} = Code, IsTrim) ->
-    % Do not trim inside highlighted code blocks
-    {Code, IsTrim};
+trim({<<"code">>, _Params, _Elts} = Code, _IsTrim) ->
+    % Do not trim inside highlighted code blocks.
+    % <code> is a an inline element, so set trim to false
+    % for all following (inline) elements.
+    {Code, false};
 trim({<<"div">>, Params, _Elts} = Div, IsTrim) ->
     case proplists:get_value(<<"class">>, Params) of
         <<"highlight-", _/binary>> ->
