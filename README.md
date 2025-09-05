@@ -17,7 +17,7 @@ Installation
 ------------
 
 * Download Zotonic from the [**official website**](https://zotonic.com/download)
-  or start Zotonic from a [**Docker image**](https://zotonic.com/docs/1411/docker).
+  or start Zotonic from a [**Docker or Podman image**](https://zotonic.com/docs/1411/docker).
 * Read the [**Installation chapter**](https://zotonic.com/docs/1526/getting-started#installation)
   in the documentation.
 
@@ -52,5 +52,3 @@ Thanks
 Thanks to the following services for supporting Open Source:
 
 <a href="https://browserstack.com/"><img rel="Thanks to BrowserStack" src="https://raw.githubusercontent.com/zotonic/zotonic/master/doc/img/browserstack-logo.png" height="64" /></a> <a href="https://crowdin.com/"><img src="https://user-images.githubusercontent.com/38268/188396792-7142a245-7805-4654-aead-9ae337f6d977.svg" height="64" /></a>
-
-
