@@ -39,6 +39,11 @@ else
             --uid $USER_ID --gid $GROUP_ID \
             --shell /bin/bash \
             zotonic
+    if [ -f /run/.containerenv ]; then # Running in Podman?
+        # Zotonic needs root privileges. Unlike Docker, Podman doesn't grant
+        # them by default.
+        usermod --append --groups root zotonic
+    fi
 fi
 
 # Ensure the config, data and log directories are present and owned by the zotonic user

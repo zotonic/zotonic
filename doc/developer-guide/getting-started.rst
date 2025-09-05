@@ -19,8 +19,24 @@ command::
 
     $ ./start-docker.sh
 
-Docker will download and boot the container. The container will start building
-Zotonic. After which Zotonic can be started with::
+Docker will download and boot the container.
+
+Podman
+------
+
+[Tested with `podman` version 4.3.1 and `podman-compose` version 1.5.0]
+
+First download and install Podman and Podman Compose (the Python package). Then
+build and start Zotonic with a single command::
+
+    $ ./start-podman.sh
+
+Podman will download and boot the container.
+
+Both Docker and Podman
+----------------------
+
+The container will start building Zotonic. After which Zotonic can be started with::
 
     bash-4.4$ bin/zotonic debug
 

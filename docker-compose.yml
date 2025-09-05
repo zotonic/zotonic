@@ -12,7 +12,7 @@
 
 services:
     postgres:
-        image: postgres:16.2-alpine
+        image: docker.io/library/postgres:16.2-alpine
         hostname: postgres
         restart: always
         environment:
