@@ -487,7 +487,7 @@
 
 -optional_callbacks([ observe_email_is_blocked/2, pid_observe_email_is_blocked/3 ]).
 
-%% @doc Check if an email address is safe to send email to. The email address is not blocked
+%% Check if an email address is safe to send email to. The email address is not blocked
 %% and is not marked as bouncing.
 %% Type: first
 -callback observe_email_is_recipient_ok(#email_is_recipient_ok{}, z:context()) -> boolean() | undefined.
