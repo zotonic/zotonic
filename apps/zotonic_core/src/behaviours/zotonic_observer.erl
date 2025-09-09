@@ -487,6 +487,14 @@
 
 -optional_callbacks([ observe_email_is_blocked/2, pid_observe_email_is_blocked/3 ]).
 
+%% Check if an email address is safe to send email to. The email address is not blocked
+%% and is not marked as bouncing.
+%% Type: first
+-callback observe_email_is_recipient_ok(#email_is_recipient_ok{}, z:context()) -> boolean() | undefined.
+-callback pid_observe_email_is_recipient_ok(pid(), #email_is_recipient_ok{}, z:context()) -> boolean() | undefined.
+
+-optional_callbacks([ observe_email_is_recipient_ok/2, pid_observe_email_is_recipient_ok/3 ]).
+
 %% Email status notification, sent when the validity of an email recipient changes
 %% Type: notify
 -callback observe_email_status(#email_status{}, z:context()) -> any().
