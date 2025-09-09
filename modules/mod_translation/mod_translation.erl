@@ -441,20 +441,23 @@ set_language(Code, [{CodeAtom, _Language}|Other], Context) ->
     end.
 
 do_set_language(Code, Context) when is_atom(Code) ->
-    List = get_language_config(Context),
-    LangProps = proplists:get_value(Code, List),
-    FallbackLangCode = proplists:get_value(fallback, LangProps),
-    Langs = case FallbackLangCode of
-        undefined -> [Code];
-        _ -> [Code, z_convert:to_atom(FallbackLangCode)]
-    end,
-    Context1 = z_context:set_language(Langs, Context),
-    case {z_context:language(Context), z_context:language(Context1)} of
-        {Code, Code} ->
-            Context1;
-        _ ->
-            z_context:set_session(language, Code, Context1),
-            Context1
+    case proplists:get_value(Code, get_language_config(Context)) of
+        LangProps when is_list(LangProps) ->
+            FallbackLangCode = proplists:get_value(fallback, LangProps),
+            Langs = case FallbackLangCode of
+                undefined -> [Code];
+                _ -> [Code, z_convert:to_atom(FallbackLangCode)]
+            end,
+            Context1 = z_context:set_language(Langs, Context),
+            case {z_context:language(Context), z_context:language(Context1)} of
+                {Code, Code} ->
+                    Context1;
+                _ ->
+                    z_context:set_session(language, Code, Context1),
+                    Context1
+            end;
+        undefined ->
+            Context
     end.
 
 %% @doc Add a new language to the i18n configuration
