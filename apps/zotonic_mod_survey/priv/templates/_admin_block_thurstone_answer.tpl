@@ -3,7 +3,7 @@
     <td>
         {# push new answer entry #}
         <input type="hidden" name="blocks[].answers[]." value="">
-        <a href="#delete-answer" class="btn"><span class="fa fa-trash"></span></a>
+        <a href="#delete-answer" class="btn"><span class="glyphicon glyphicon-trash"></span></a>
     </td>
 
     <td class="test-controls" {% if not blk.is_test %}style="display: none"{% endif %}>

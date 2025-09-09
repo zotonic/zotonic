@@ -29,7 +29,7 @@
             </li>
             <li role="presentation">
                 <a href="#tools" aria-controls="tools" role="tab" data-toggle="tab">
-                    <i class="fa fa-cog"></i> {_ Settings &amp; more _}
+                    <i class="glyphicon glyphicon-cog"></i> {_ Settings &amp; more _}
                 </a>
             </li>
         </ul>
