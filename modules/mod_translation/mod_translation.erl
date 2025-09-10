@@ -433,12 +433,15 @@ try_set_language(LanguagesRequested, Context) when is_list(LanguagesRequested) -
     end.
 
 
-%% @doc Set the language of the current user/session
-set_language(Code, [{CodeAtom, _Language}|Other], Context) ->
+%% @doc Set the language of the current user/session. Ignore unknown languages.
+set_language(Code, [{CodeAtom, _Language}|Other], Context) when is_list(Code) ->
     case z_convert:to_list(CodeAtom) of
         Code ->   do_set_language(CodeAtom, Context);
         _Other -> set_language(Code, Other, Context)
-    end.
+    end;
+set_language(_Code, [], Context) ->
+    Context.
+
 
 do_set_language(Code, Context) when is_atom(Code) ->
     case proplists:get_value(Code, get_language_config(Context)) of
