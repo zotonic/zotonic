@@ -439,6 +439,8 @@ set_language(Code, [{CodeAtom, _Language}|Other], Context) when is_list(Code) ->
         Code ->   do_set_language(CodeAtom, Context);
         _Other -> set_language(Code, Other, Context)
     end;
+set_language(Code, LangConfig, Context) when not is_list(Code) ->
+    set_language(z_convert:to_list(Code), LangConfig, Context);
 set_language(_Code, [], Context) ->
     Context.
 
