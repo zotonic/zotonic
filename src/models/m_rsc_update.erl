@@ -1561,7 +1561,8 @@ recombine_blocks_import(Props, _OrgProps, Context) ->
 block_ids([], Acc) ->
     lists:reverse(Acc);
 block_ids([{"block-"++Name,_}|Rest], Acc) when Name =/= [] ->
-    Ts = string:tokens(Name, "-"),
+    NameWithoutLanguage = drop_lang(Name, []),
+    Ts = string:tokens(NameWithoutLanguage, "-"),
     BlockId = iolist_to_binary(tl(lists:reverse(Ts))),
     case lists:member(BlockId, Acc) of
         true -> block_ids(Rest, Acc);
@@ -1570,6 +1571,12 @@ block_ids([{"block-"++Name,_}|Rest], Acc) when Name =/= [] ->
 block_ids([_|Rest], Acc) ->
     block_ids(Rest, Acc).
 
+drop_lang("", Acc) ->
+    lists:reverse(Acc);
+drop_lang([$$|_], Acc) ->
+    lists:reverse(Acc);
+drop_lang([H|T], Acc) ->
+    drop_lang(T, [H|Acc]).
 
 normalize_blocks(Blocks, Context) ->
     Blocks1 = lists:map(
