@@ -1901,30 +1901,34 @@ merge_props([], Acc) ->
 merge_props([R | Rest], Acc) when is_list(R) ->
     case {proplists:get_value(props, R, undefined), proplists:get_value(props_json, R, undefined)} of
         {Props, PropsJSON} when ?IS_EMPTY(Props) andalso ?IS_EMPTY(PropsJSON) ->
-            merge_props(Rest, [R|Acc]);
+            merge_props(Rest, [R | Acc]);
         {Term, PropsJSON} when ?IS_EMPTY(PropsJSON) ->
             case Term of
                 T when is_list(T) ->
-                    merge_props(Rest, [lists:keydelete(props, 1, R)++Term|Acc]);
+                    merge_props(Rest, [lists:keydelete(props, 1, R) ++ Term | Acc]);
                 T when is_map(T) ->
-                    T1 = lists:map(fun({K,V}) -> {z_convert:to_atom(K), V} end, maps:to_list(Term)),
-                    merge_props(Rest, [lists:keydelete(props, 1, R)++T1|Acc])
+                    ?DEBUG(T),
+                    T1 =  atomize_keys(Term),
+                    merge_props(Rest, [lists:keydelete(props, 1, R) ++ T1 | Acc])
             end;
         {Term, PropsJSON} when ?IS_EMPTY(Term) ->
-            T1 = lists:map(fun({K,V}) -> {z_convert:to_atom(K), V} end, maps:to_list(PropsJSON)),
+            T1 = atomize_keys(PropsJSON),
             merge_props(Rest, [lists:keydelete(props_json, 1, R)++ T1| Acc]);
         {Term, PropsJSON} ->
             PropsTerm = case Term of
                             L when is_list(L) ->
                                 L;
                             M when is_map(M) ->
-                                lists:map(fun({K,V}) -> {z_convert:to_atom(K), V} end, maps:to_list(Term))
+                                atomize_keys(Term)
                         end,
-            PropsJSONTerm = lists:map(fun({K,V}) -> {z_convert:to_atom(K), V} end, maps:to_list(PropsJSON)),
+            PropsJSONTerm = atomize_keys(PropsJSON),
             PropsMerged = z_utils:props_merge(PropsJSONTerm, PropsTerm),
 
             merge_props(Rest, [ lists:keydelete(props_json, 1, lists:keydelete(props, 1, R))  ++ PropsMerged | Acc])
     end.
+
+atomize_keys(Map) ->
+    lists:map(fun({K,V}) -> {z_convert:to_atom(K), V} end, maps:to_list(Map)).
 
 
 -spec assoc1(atom(), z:context(), sql(), parameters(), pos_integer()) -> {ok, [proplists:proplist()]}.
