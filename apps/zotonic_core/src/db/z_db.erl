@@ -1905,28 +1905,26 @@ merge_props([R | Rest], Acc) when is_list(R) ->
         {Term, PropsJSON} when ?IS_EMPTY(PropsJSON) ->
             case Term of
                 T when is_list(T) ->
-                    merge_props(Rest, [lists:keydelete(props, 1, R) ++ Term | Acc]);
+                    merge_props(Rest, [lists:keydelete(props, 1, R) ++ T | Acc]);
                 T when is_map(T) ->
-                    T1 =  atomize_keys(Term),
+                    T1 =  map_to_proplist(Term),
                     merge_props(Rest, [lists:keydelete(props, 1, R) ++ T1 | Acc])
             end;
         {Term, PropsJSON} when ?IS_EMPTY(Term) ->
-            T1 = atomize_keys(PropsJSON),
-            merge_props(Rest, [lists:keydelete(props_json, 1, R)++ T1| Acc]);
+            T1 = map_to_proplist(PropsJSON),
+            merge_props(Rest, [lists:keydelete(props_json, 1, R) ++ T1 | Acc]);
         {Term, PropsJSON} ->
             PropsTerm = case Term of
-                            L when is_list(L) ->
-                                L;
-                            M when is_map(M) ->
-                                atomize_keys(Term)
+                            L when is_list(L) -> L;
+                            M when is_map(M) -> map_to_proplist(M)
                         end,
-            PropsJSONTerm = atomize_keys(PropsJSON),
+            PropsJSONTerm = map_to_proplist(PropsJSON),
             PropsMerged = z_utils:props_merge(PropsJSONTerm, PropsTerm),
 
             merge_props(Rest, [ lists:keydelete(props_json, 1, lists:keydelete(props, 1, R))  ++ PropsMerged | Acc])
     end.
 
-atomize_keys(Map) ->
+map_to_proplist(Map) ->
     lists:map(fun({K,V}) -> {z_convert:to_atom(K), V} end, maps:to_list(Map)).
 
 
