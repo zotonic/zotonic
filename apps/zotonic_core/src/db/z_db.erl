@@ -630,21 +630,21 @@ qmap_props(Sql, Args, Options, Context) ->
 cols_map(_Cols, [], _IsMergeProps, _Keys) -> [];
 cols_map(Cols, Rows, IsMergeProps, Keys) ->
     ColIndices = build_col_indices(Cols, Keys),
-    lists:map(
-        fun(Row) ->
-            lists:foldl(
-                fun
-                    ({Nr, Col}, Acc) when IsMergeProps andalso ?IS_PROPS_COL(Col) ->
-                        Props = erlang:element(Nr, Row),
-                        map_merge_props(Props, Acc);
+    [ map_row(ColIndices, IsMergeProps, Row) || Row <- Rows ].
 
-                    ({Nr, Col}, Acc) ->
-                        Acc#{ Col => erlang:element(Nr, Row) }
-                end,
-                #{},
-                ColIndices)
-        end,
-        Rows).
+map_row(ColIndices, IsMergeProps, Row) ->
+    lists:foldl(
+      fun
+          ({Nr, Col}, Acc) when IsMergeProps andalso ?IS_PROPS_COL(Col) ->
+              Props = erlang:element(Nr, Row),
+              map_merge_props(Props, Acc);
+
+          ({Nr, Col}, Acc) ->
+              Acc#{ Col => erlang:element(Nr, Row) }
+      end,
+      #{},
+      ColIndices).
+
 
 build_col_indices(Cols, Keys) ->
     build_col_indices(Cols, Keys, 1, []).
