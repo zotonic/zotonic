@@ -629,12 +629,7 @@ qmap_props(Sql, Args, Options, Context) ->
 %% @doc Make associative maps from all the rows in the result set.
 cols_map(_Cols, [], _IsMergeProps, _Keys) -> [];
 cols_map(Cols, Rows, IsMergeProps, Keys) ->
-    ColNames = [ Name || #column{ name = Name } <- Cols ],
-    ColNames1 = case Keys of
-        atom -> [ binary_to_atom(K, utf8) || K <- ColNames ];
-        binary -> ColNames
-    end,
-    ColIndices = lists:zip( lists:seq(1, length(ColNames1)), ColNames1 ),
+    ColIndices = build_col_indices(Cols, Keys),
     lists:map(
         fun(Row) ->
             lists:foldl(
@@ -650,6 +645,16 @@ cols_map(Cols, Rows, IsMergeProps, Keys) ->
                 ColIndices)
         end,
         Rows).
+
+build_col_indices(Cols, Keys) ->
+    build_col_indices(Cols, Keys, 1, []).
+
+build_col_indices([], _Keys, _N, Acc) ->
+    lists:reverse(Acc);
+build_col_indices([#column{ name = Name } | Rest], binary, N, Acc) ->
+    build_col_indices(Rest, binary, N + 1, [{N, Name} | Acc]);
+build_col_indices([#column{ name = Name } | Rest], atom, N, Acc) ->
+    build_col_indices(Rest, atom, N + 1, [{N, binary_to_atom(Name, utf8)} | Acc]).
 
 map_merge_props(M, Acc) when is_map(M) ->
     maps:merge(M, Acc);
