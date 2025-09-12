@@ -1907,7 +1907,6 @@ merge_props([R | Rest], Acc) when is_list(R) ->
                 T when is_list(T) ->
                     merge_props(Rest, [lists:keydelete(props, 1, R) ++ Term | Acc]);
                 T when is_map(T) ->
-                    ?DEBUG(T),
                     T1 =  atomize_keys(Term),
                     merge_props(Rest, [lists:keydelete(props, 1, R) ++ T1 | Acc])
             end;
