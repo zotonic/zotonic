@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2018-2023 Marc Worrell
+%% @copyright 2018-2025 Marc Worrell
 %% @doc Support for wires, actions, and transport.
 %% @end
 
-%% Copyright 2018-2023 Marc Worrell
+%% Copyright 2018-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -22,10 +22,12 @@
 -mod_title("Wires and Actions").
 -mod_description("Build interactive user interfaces with template wires, actions, validators and more.").
 -mod_depends([ mod_mqtt ]).
+-mod_prio(1000).
 
 -export([
     observe_acl_is_allowed/2,
     observe_output_html/3,
+    observe_scomp_script_render/2,
     observe_page_actions/2,
     'mqtt:zotonic-transport/+'/2
     ]).
@@ -52,6 +54,16 @@ observe_acl_is_allowed(_, _Context) ->
 %% @doc Render nested actions and scomp results.
 observe_output_html(#output_html{}, {MixedHtml, Context}, _Context) ->
     z_render:output(MixedHtml, Context).
+
+%% @doc Part of the {% script %} rendering in templates
+observe_scomp_script_render(#scomp_script_render{ is_nostartup = false }, Context) ->
+    DefaultFormPostback = z_render:make_postback_info(<<>>, <<"submit">>, undefined, undefined, undefined, Context),
+    [
+        <<"z_init_postback_forms();\nz_default_form_postback = \"">>, DefaultFormPostback, $", $;,
+        <<"if (typeof zotonic.wiresReadyResolve == 'function') { zotonic.wiresReadyResolve(); }">>
+    ];
+observe_scomp_script_render(#scomp_script_render{ is_nostartup = true }, _Context) ->
+    [].
 
 observe_page_actions(#page_actions{ actions = Actions }, Context) ->
     Context1 = z_render:clean(Context),

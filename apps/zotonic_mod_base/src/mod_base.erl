@@ -253,7 +253,6 @@
     observe_edge_insert/2,
     observe_edge_delete/2,
     observe_media_stillimage/2,
-    observe_scomp_script_render/2,
     observe_dispatch/2,
     observe_hierarchy_updated/2,
     manage_schema/2
@@ -321,14 +320,6 @@ observe_media_stillimage(#media_stillimage{props=Props}, Context) ->
         PreviewFilename ->
             {ok, z_convert:to_list(PreviewFilename)}
     end.
-
-
-%% @doc Part of the {% script %} rendering in templates
-observe_scomp_script_render(#scomp_script_render{is_nostartup=false}, Context) ->
-    DefaultFormPostback = z_render:make_postback_info(<<>>, <<"submit">>, undefined, undefined, undefined, Context),
-    [<<"z_init_postback_forms();\nz_default_form_postback = \"">>, DefaultFormPostback, $", $; ];
-observe_scomp_script_render(#scomp_script_render{is_nostartup=true}, _Context) ->
-    [].
 
 %% @doc Check if there is a controller or template matching the path.
 observe_dispatch(#dispatch{path=Path}, Context) ->
