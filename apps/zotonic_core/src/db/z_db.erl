@@ -22,10 +22,7 @@
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -define(TIMEOUT, 30000).
--define(IS_PROPS_COL(Col), (Col =:= props_json
-                            orelse Col =:= <<"props_json">>
-                            orelse Col =:= props
-                            orelse Col =:= <<"props">>)).
+-define(IS_PROPS_COL(Col), (Col =:= <<"props">> orelse Col =:= <<"props_json">>)).
 
 %% interface functions
 -export([
@@ -634,27 +631,30 @@ cols_map(Cols, Rows, IsMergeProps, Keys) ->
 
 map_row(ColProps, Row) ->
     lists:foldl(
-      fun
-          ({Nr, _Col, true}, Acc) ->
-              Props = erlang:element(Nr, Row),
-              map_merge_props(Props, Acc);
-
-          ({Nr, Col, false}, Acc) ->
-              Acc#{ Col => erlang:element(Nr, Row) }
+      fun({Nr, Col, NeedsMap}, Acc) ->
+              Val = erlang:element(Nr, Row),
+              map_cell(Col, NeedsMap, Val, Acc)
       end,
       #{},
       ColProps).
 
+map_cell(_Col, true, Cell, Acc) ->
+    map_merge_props(Cell, Acc);
+map_cell(Col, false, Cell, Acc) ->
+    maps:put(Col, Cell, Acc).
 
 build_col_props(Cols, Keys, IsMergeProps) ->
     build_col_props(Cols, Keys, IsMergeProps, 1, []).
 
 build_col_props([], _Keys, _IsMergeProps, _N, Acc) ->
     lists:reverse(Acc);
-build_col_props([#column{ name = Name } | Rest], binary, IsMergeProps, N, Acc) ->
-    build_col_props(Rest, binary, IsMergeProps, N + 1, [{N, Name, IsMergeProps andalso ?IS_PROPS_COL(Name)} | Acc]);
-build_col_props([#column{ name = Name } | Rest], atom, IsMergeProps, N, Acc) ->
-    build_col_props(Rest, atom, IsMergeProps, N + 1, [{N, binary_to_atom(Name, utf8), IsMergeProps andalso ?IS_PROPS_COL(Name)} | Acc]).
+build_col_props([#column{ name = Name } | Rest], Keys, IsMergeProps, N, Acc) ->
+    Name1 = case Keys of
+        atom -> binary_to_atom(Name, utf8);
+        binary -> Name
+    end,
+    NeedsMerge = IsMergeProps andalso ?IS_PROPS_COL(Name),
+    build_col_props(Rest, Keys, IsMergeProps, N + 1, [{N, Name1, NeedsMerge} | Acc]).
 
 map_merge_props(M, Acc) when is_map(M) ->
     maps:merge(M, Acc);
