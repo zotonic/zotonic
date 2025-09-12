@@ -188,6 +188,132 @@ merge_props_test() ->
                    {message, <<"123">>}]], M),
     ok.
 
+qmap_props_json_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_context:new(zotonic_site_testsandbox),
+
+    Columns = [
+        #column_def{name=id, type="serial", is_nullable=false},
+        #column_def{name=name, type="bytea"},
+        #column_def{name=props_json, type="jsonb"} ],
+
+    Table = qmap_props_json_test,
+
+    ok = z_db:create_table(Table, Columns, C),
+    {ok, _ } = z_db:insert(Table, #{ name => <<"a">>, prop_1 => <<"abc">>, prop_2 => <<"def">> }, C),
+    {ok, _ } = z_db:insert(Table, #{ name => <<"b">>, prop_3 => <<"ghi">>, prop_4 => <<"jkl">> }, C),
+
+    ?assertEqual(
+       {ok, [#{<<"id">> => 1,
+               <<"name">> => <<"a">>,
+               <<"props_json">> =>
+               #{<<"prop_1">> => <<"abc">>,
+                 <<"prop_2">> => <<"def">>}},
+             #{<<"id">> => 2,
+               <<"name">> => <<"b">>,
+               <<"props_json">> =>
+               #{<<"prop_3">> => <<"ghi">>,
+                 <<"prop_4">> => <<"jkl">>}}]},
+       z_db:qmap(<<"select * from qmap_props_json_test order by id">>, C)),
+
+    ?assertEqual(
+       {ok, [#{<<"id">> => 1,
+               <<"name">> => <<"a">>,
+               <<"prop_1">> => <<"abc">>,
+               <<"prop_2">> => <<"def">>},
+             #{<<"id">> => 2,
+               <<"name">> => <<"b">>,
+               <<"prop_3">> => <<"ghi">>,
+               <<"prop_4">> => <<"jkl">>}]},
+       z_db:qmap_props(<<"select * from qmap_props_json_test order by id">>, C)),
+
+    ?assertEqual(
+       {ok, [#{id => 1,
+               name => <<"a">>,
+               <<"prop_1">> => <<"abc">>,
+               <<"prop_2">> => <<"def">>},
+             #{id => 2,
+               name => <<"b">>,
+               <<"prop_3">> => <<"ghi">>,
+               <<"prop_4">> => <<"jkl">>}]},
+       z_db:qmap_props(<<"select * from qmap_props_json_test order by id">>, [], [{keys, atom}], C)),
+
+    ?assertEqual(
+       [ [{id, 1},
+          {name, <<"a">>},
+          {prop_1, <<"abc">>},
+          {prop_2, <<"def">>}],
+         [{id, 2},
+          {name, <<"b">>},
+          {prop_3, <<"ghi">>},
+          {prop_4, <<"jkl">>}] ],
+       z_db:assoc_props(<<"select * from qmap_props_json_test order by id">>, [], C)),
+
+    ok.
+
+qmap_props_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_context:new(zotonic_site_testsandbox),
+
+    Columns = [
+        #column_def{name=id, type="serial", is_nullable=false},
+        #column_def{name=name, type="bytea"},
+        #column_def{name=props, type="bytea"} ],
+
+    Table = qmap_props_test,
+
+    ok = z_db:create_table(Table, Columns, C),
+    {ok, _ } = z_db:insert(Table, #{ name => <<"a">>, prop_1 => <<"abc">>, prop_2 => <<"def">> }, C),
+    {ok, _ } = z_db:insert(Table, #{ name => <<"b">>, prop_3 => <<"ghi">>, prop_4 => <<"jkl">> }, C),
+
+    ?assertEqual(
+       {ok, [#{<<"id">> => 1,
+               <<"name">> => <<"a">>,
+               <<"props">> =>
+               #{<<"prop_1">> => <<"abc">>,
+                 <<"prop_2">> => <<"def">>}},
+             #{<<"id">> => 2,
+               <<"name">> => <<"b">>,
+               <<"props">> =>
+               #{<<"prop_3">> => <<"ghi">>,
+                 <<"prop_4">> => <<"jkl">>}}]},
+       z_db:qmap(<<"select * from qmap_props_test order by id">>, C)),
+
+    ?assertEqual(
+       {ok, [#{<<"id">> => 1,
+               <<"name">> => <<"a">>,
+               <<"prop_1">> => <<"abc">>,
+               <<"prop_2">> => <<"def">>},
+             #{<<"id">> => 2,
+               <<"name">> => <<"b">>,
+               <<"prop_3">> => <<"ghi">>,
+               <<"prop_4">> => <<"jkl">>}]},
+       z_db:qmap_props(<<"select * from qmap_props_test order by id">>, C)),
+
+    ?assertEqual(
+       {ok, [#{id => 1,
+               name => <<"a">>,
+               <<"prop_1">> => <<"abc">>,
+               <<"prop_2">> => <<"def">>},
+             #{id => 2,
+               name => <<"b">>,
+               <<"prop_3">> => <<"ghi">>,
+               <<"prop_4">> => <<"jkl">>}]},
+       z_db:qmap_props(<<"select * from qmap_props_test order by id">>, [], [{keys, atom}], C)),
+
+    ?assertEqual(
+       [ [{id, 1},
+          {name, <<"a">>},
+          {prop_1, <<"abc">>},
+          {prop_2, <<"def">>}],
+         [{id, 2},
+          {name, <<"b">>},
+          {prop_3, <<"ghi">>},
+          {prop_4, <<"jkl">>}] ],
+       z_db:assoc_props(<<"select * from qmap_props_test order by id">>, [], C)),
+
+    ok.
+
 modify_rsc_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
     C = z_context:new(zotonic_site_testsandbox),
@@ -240,7 +366,6 @@ modify_rsc_test() ->
     ?assertEqual(false, m_rsc:exists(Id, C)),
 
     ok.
-
 
 page_path_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
