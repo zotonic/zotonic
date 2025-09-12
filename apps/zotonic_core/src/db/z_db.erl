@@ -22,6 +22,10 @@
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -define(TIMEOUT, 30000).
+-define(IS_PROPS_COL(Col), (Col =:= props_json
+                            orelse Col =:= <<"props_json">>
+                            orelse Col =:= props
+                            orelse Col =:= <<"props">>)).
 
 %% interface functions
 -export([
@@ -623,6 +627,7 @@ qmap_props(Sql, Args, Options, Context) ->
 
 
 %% @doc Make associative maps from all the rows in the result set.
+cols_map(_Cols, [], _IsMergeProps, _Keys) -> [];
 cols_map(Cols, Rows, IsMergeProps, Keys) ->
     ColNames = [ Name || #column{ name = Name } <- Cols ],
     ColNames1 = case Keys of
@@ -634,16 +639,7 @@ cols_map(Cols, Rows, IsMergeProps, Keys) ->
         fun(Row) ->
             lists:foldl(
                 fun
-                    ({Nr, Col}, Acc) when IsMergeProps and (Col =:= props_json orelse Col =:= <<"props_json">>) ->
-                        JSON = erlang:element(Nr, Row),
-                        case is_binary(JSON) of
-                            true ->
-                                map_merge_props(jsxrecord:decode(JSON), Acc);
-                            false ->
-                                Acc
-                        end;
-
-                    ({Nr, Col}, Acc) when IsMergeProps and (Col =:= props orelse Col =:= <<"props">>) ->
+                    ({Nr, Col}, Acc) when IsMergeProps andalso ?IS_PROPS_COL(Col) ->
                         Props = erlang:element(Nr, Row),
                         map_merge_props(Props, Acc);
 
