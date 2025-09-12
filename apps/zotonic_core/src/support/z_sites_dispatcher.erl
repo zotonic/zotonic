@@ -981,6 +981,9 @@ tokens_to_path(Ts) ->
     Bindings :: bindings(),
     Context :: z:context(),
     Dispatch :: dispatch().
+handle_rewrite({ok, Id, ExtraBindings}, DispReq, MatchedHost, NonMatchedPathTokens, Bindings, Context) when is_integer(Id) ->
+    Bindings1 = ExtraBindings ++ Bindings,
+    handle_rewrite({ok, Id}, DispReq, MatchedHost, NonMatchedPathTokens, Bindings1, Context);
 handle_rewrite({ok, Id}, DispReq, MatchedHost, NonMatchedPathTokens, Bindings, Context) when is_integer(Id) ->
     %% Retry with the resource's default page uri
     case rsc_dispatch(Id, Context) of
