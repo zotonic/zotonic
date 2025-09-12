@@ -629,32 +629,32 @@ qmap_props(Sql, Args, Options, Context) ->
 %% @doc Make associative maps from all the rows in the result set.
 cols_map(_Cols, [], _IsMergeProps, _Keys) -> [];
 cols_map(Cols, Rows, IsMergeProps, Keys) ->
-    ColIndices = build_col_indices(Cols, Keys),
-    [ map_row(ColIndices, IsMergeProps, Row) || Row <- Rows ].
+    ColProps = build_col_props(Cols, Keys, IsMergeProps),
+    [ map_row(ColProps, Row) || Row <- Rows ].
 
-map_row(ColIndices, IsMergeProps, Row) ->
+map_row(ColProps, Row) ->
     lists:foldl(
       fun
-          ({Nr, Col}, Acc) when IsMergeProps andalso ?IS_PROPS_COL(Col) ->
+          ({Nr, _Col, true}, Acc) ->
               Props = erlang:element(Nr, Row),
               map_merge_props(Props, Acc);
 
-          ({Nr, Col}, Acc) ->
+          ({Nr, Col, false}, Acc) ->
               Acc#{ Col => erlang:element(Nr, Row) }
       end,
       #{},
-      ColIndices).
+      ColProps).
 
 
-build_col_indices(Cols, Keys) ->
-    build_col_indices(Cols, Keys, 1, []).
+build_col_props(Cols, Keys, IsMergeProps) ->
+    build_col_props(Cols, Keys, IsMergeProps, 1, []).
 
-build_col_indices([], _Keys, _N, Acc) ->
+build_col_props([], _Keys, _IsMergeProps, _N, Acc) ->
     lists:reverse(Acc);
-build_col_indices([#column{ name = Name } | Rest], binary, N, Acc) ->
-    build_col_indices(Rest, binary, N + 1, [{N, Name} | Acc]);
-build_col_indices([#column{ name = Name } | Rest], atom, N, Acc) ->
-    build_col_indices(Rest, atom, N + 1, [{N, binary_to_atom(Name, utf8)} | Acc]).
+build_col_props([#column{ name = Name } | Rest], binary, IsMergeProps, N, Acc) ->
+    build_col_props(Rest, binary, IsMergeProps, N + 1, [{N, Name, IsMergeProps andalso ?IS_PROPS_COL(Name)} | Acc]);
+build_col_props([#column{ name = Name } | Rest], atom, IsMergeProps, N, Acc) ->
+    build_col_props(Rest, atom, IsMergeProps, N + 1, [{N, binary_to_atom(Name, utf8), IsMergeProps andalso ?IS_PROPS_COL(Name)} | Acc]).
 
 map_merge_props(M, Acc) when is_map(M) ->
     maps:merge(M, Acc);
