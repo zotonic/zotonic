@@ -30,9 +30,6 @@
 
 -export([format_msg/2, to_string/2, pretty_stack/2, truncate_value/1]).
 
--ifdef(TEST).
--endif.
-
 -define(BLACK, "\e[0;30m").
 -define(BLACKB, "\e[1;30m").
 -define(BLACK_ON_GOLD, "\e[30;43m").

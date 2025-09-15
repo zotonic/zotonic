@@ -22,6 +22,8 @@
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -define(TIMEOUT, 30000).
+-define(IS_PROPS_COL(Col), (Col =:= <<"props">> orelse Col =:= <<"props_json">>)).
+-define(IS_EMPTY(V), (V =:= undefined orelse V =:= <<>>)).
 
 %% interface functions
 -export([
@@ -114,16 +116,13 @@
     assert_table_name/1,
     quoted_table_name/1,
     prepare_cols/2,
+    merge_props/1,
 
     ensure_database/2,
     ensure_schema/2,
     schema_exists_conn/2,
     drop_schema/1
 ]).
-
--ifdef(TEST).
--include_lib("eunit/include/eunit.hrl").
--endif.
 
 -type database_server() :: postgresql.
 
@@ -623,37 +622,37 @@ qmap_props(Sql, Args, Options, Context) ->
 
 
 %% @doc Make associative maps from all the rows in the result set.
+cols_map(_Cols, [], _IsMergeProps, _Keys) -> [];
 cols_map(Cols, Rows, IsMergeProps, Keys) ->
-    ColNames = [ Name || #column{ name = Name } <- Cols ],
-    ColNames1 = case Keys of
-        atom -> [ binary_to_atom(K, utf8) || K <- ColNames ];
-        binary -> ColNames
+    ColProps = build_col_props(Cols, Keys, IsMergeProps),
+    [ map_row(ColProps, Row) || Row <- Rows ].
+
+map_row(ColProps, Row) ->
+    lists:foldl(
+      fun({Nr, Col, NeedsMap}, Acc) ->
+              Val = erlang:element(Nr, Row),
+              map_cell(Col, NeedsMap, Val, Acc)
+      end,
+      #{},
+      ColProps).
+
+map_cell(_Col, true, Cell, Acc) ->
+    map_merge_props(Cell, Acc);
+map_cell(Col, false, Cell, Acc) ->
+    maps:put(Col, Cell, Acc).
+
+build_col_props(Cols, Keys, IsMergeProps) ->
+    build_col_props(Cols, Keys, IsMergeProps, 1, []).
+
+build_col_props([], _Keys, _IsMergeProps, _N, Acc) ->
+    lists:reverse(Acc);
+build_col_props([#column{ name = Name } | Rest], Keys, IsMergeProps, N, Acc) ->
+    Name1 = case Keys of
+        atom -> binary_to_atom(Name, utf8);
+        binary -> Name
     end,
-    ColIndices = lists:zip( lists:seq(1, length(ColNames1)), ColNames1 ),
-    lists:map(
-        fun(Row) ->
-            lists:foldl(
-                fun
-                    ({Nr, Col}, Acc) when IsMergeProps and (Col =:= props_json orelse Col =:= <<"props_json">>) ->
-                        JSON = erlang:element(Nr, Row),
-                        case is_binary(JSON) of
-                            true ->
-                                map_merge_props(jsxrecord:decode(JSON), Acc);
-                            false ->
-                                Acc
-                        end;
-
-                    ({Nr, Col}, Acc) when IsMergeProps and (Col =:= props orelse Col =:= <<"props">>) ->
-                        Props = erlang:element(Nr, Row),
-                        map_merge_props(Props, Acc);
-
-                    ({Nr, Col}, Acc) ->
-                        Acc#{ Col => erlang:element(Nr, Row) }
-                end,
-                #{},
-                ColIndices)
-        end,
-        Rows).
+    NeedsMerge = IsMergeProps andalso ?IS_PROPS_COL(Name),
+    build_col_props(Rest, Keys, IsMergeProps, N + 1, [{N, Name1, NeedsMerge} | Acc]).
 
 map_merge_props(M, Acc) when is_map(M) ->
     maps:merge(M, Acc);
@@ -1899,39 +1898,34 @@ merge_props(List) ->
 
 merge_props([], Acc) ->
     lists:reverse(Acc);
-merge_props([R|Rest], Acc) when is_list(R) ->
+merge_props([R | Rest], Acc) when is_list(R) ->
     case {proplists:get_value(props, R, undefined), proplists:get_value(props_json, R, undefined)} of
-        {Props, PropsJSON} when (Props == undefined orelse Props == <<>>) andalso (PropsJSON == undefined orelse PropsJSON == <<>>)  ->
-            merge_props(Rest, [R|Acc]);
-        {Term, PropsJSON} when PropsJSON == undefined orelse PropsJSON == <<>> ->
+        {Props, PropsJSON} when ?IS_EMPTY(Props) andalso ?IS_EMPTY(PropsJSON) ->
+            merge_props(Rest, [R | Acc]);
+        {Term, PropsJSON} when ?IS_EMPTY(PropsJSON) ->
             case Term of
                 T when is_list(T) ->
-                    merge_props(Rest, [lists:keydelete(props, 1, R)++Term|Acc]);
+                    merge_props(Rest, [lists:keydelete(props, 1, R) ++ T | Acc]);
                 T when is_map(T) ->
-                    T1 = lists:map(fun({K,V}) -> {z_convert:to_atom(K), V} end, maps:to_list(Term)),
-                    merge_props(Rest, [lists:keydelete(props, 1, R)++T1|Acc])
+                    T1 =  map_to_proplist(Term),
+                    merge_props(Rest, [lists:keydelete(props, 1, R) ++ T1 | Acc])
             end;
-        {Term, PropsJSON} when Term == undefined orelse Term == <<>> ->
-            Map = jsxrecord:decode(PropsJSON),
-            T1 = lists:map(fun({K,V}) ->
-                                   {z_convert:to_atom(K), V}
-                           end,
-                           maps:to_list(Map)),
-            merge_props(Rest, [lists:keydelete(props_json, 1, R)++ T1| Acc]);
+        {Term, PropsJSON} when ?IS_EMPTY(Term) ->
+            T1 = map_to_proplist(PropsJSON),
+            merge_props(Rest, [lists:keydelete(props_json, 1, R) ++ T1 | Acc]);
         {Term, PropsJSON} ->
             PropsTerm = case Term of
-                            L when is_list(L) ->
-                                L;
-                            M when is_map(M) ->
-                                lists:map(fun({K,V}) -> {z_convert:to_atom(K), V} end, maps:to_list(Term))
+                            L when is_list(L) -> L;
+                            M when is_map(M) -> map_to_proplist(M)
                         end,
-            PropsJSONTerm = lists:map(fun({K,V}) ->
-                                              {z_convert:to_atom(K), V}
-                                      end, maps:to_list(jsxrecord:decode(PropsJSON))),
+            PropsJSONTerm = map_to_proplist(PropsJSON),
             PropsMerged = z_utils:props_merge(PropsJSONTerm, PropsTerm),
 
             merge_props(Rest, [ lists:keydelete(props_json, 1, lists:keydelete(props, 1, R))  ++ PropsMerged | Acc])
     end.
+
+map_to_proplist(Map) ->
+    lists:map(fun({K,V}) -> {z_convert:to_atom(K), V} end, maps:to_list(Map)).
 
 
 -spec assoc1(atom(), z:context(), sql(), parameters(), pos_integer()) -> {ok, [proplists:proplist()]}.
@@ -1960,195 +1954,3 @@ equery1(DbDriver, C, Sql, Parameters, Timeout) ->
         Other -> Other
     end.
 
-
-%%
-%% Tests
-%%
-
--ifdef(TEST).
-
-prepare_cols_test() ->
-    ?assertEqual({ok, #{}}, prepare_cols([], #{})),
-
-    % Props go to the right place
-    ?assertEqual({ok, #{<<"a">> => <<"a value">>}},
-                 prepare_cols([<<"a">>, <<"b">>], #{<<"a">> => <<"a value">>})),
-    ?assertEqual({ok, #{<<"a">> => <<"a value">>, <<"b">> => <<"b value">>}},
-                 prepare_cols([<<"a">>, <<"b">>], #{<<"a">> => <<"a value">>,
-                                                    <<"b">> => <<"b value">>})),
-
-    % Column is not known
-    ?assertEqual({error, {unknown_column,[<<"c">>]}},
-                 prepare_cols([<<"a">>, <<"b">>], #{<<"a">> => <<"a value">>,
-                                                    <<"c">> => <<"c value">>})),
-
-    % When there is a props column, unknown properties go to that column.
-    ?assertEqual({ok,#{<<"a">> => <<"a value">>,
-                       <<"props">> => #{<<"c">> => <<"c value">>}}},
-                 prepare_cols([<<"a">>, <<"b">>, <<"props">>], #{<<"a">> => <<"a value">>,
-                                                                 <<"c">> => <<"c value">>})),
-
-    % An existing props map will be merged with any new values.
-    ?assertEqual({ok,#{<<"a">> => <<"a value">>,
-                       <<"props">> => #{<<"c">> => <<"c value">>,
-                                        <<"d">> => <<"d value">>}}},
-                 prepare_cols([<<"a">>, <<"b">>, <<"props">>],
-                              #{<<"a">> => <<"a value">>,
-                                <<"c">> => <<"c value">>,
-                                <<"props">> => #{<<"d">> => <<"d value">>}})),
-
-    % When there is a props_json column, unknown properties go to that column.
-    ?assertEqual({ok,#{<<"a">> => <<"a value">>,
-                       <<"props_json">> => #{<<"c">> => <<"c value">>}}},
-                 prepare_cols([<<"a">>, <<"b">>, <<"props">>, <<"props_json">>],
-                              #{<<"a">> => <<"a value">>,
-                                <<"c">> => <<"c value">>})),
-
-    % When there is a props_json column, that gets priority
-    ?assertEqual({ok,#{<<"a">> => <<"a value">>,
-                       <<"props_json">> => #{<<"c">> => <<"c value">>}}},
-                 prepare_cols([<<"a">>, <<"b">>, <<"props">>, <<"props_json">>],
-                              #{<<"a">> => <<"a value">>, <<"c">> => <<"c value">>})),
-    ?assertEqual({ok,#{<<"a">> => <<"a value">>,
-                       <<"props_json">> => #{<<"c">> => <<"c value">>}}},
-                 prepare_cols([<<"a">>, <<"b">>, <<"props_json">>],
-                              #{<<"a">> => <<"a value">>, <<"c">> => <<"c value">>})),
-
-    % existing props and props_json fields are merged
-    ?assertEqual({ok,#{<<"a">> => <<"a value">>,
-                       <<"props_json">> => #{<<"c">> => <<"c value">>,
-                                             <<"e">> => <<"e value">>}}},
-                 prepare_cols([<<"a">>, <<"b">>, <<"props">>, <<"props_json">>],
-                              #{<<"a">> => <<"a value">>,
-                                <<"c">> => <<"c value">>,
-                                <<"props_json">> => #{<<"e">> => <<"e value">>}
-                               })),
-
-
-    ok.
-
-merge_props_test() ->
-    M = merge_props([[{id,1},
-                      {is_visible,true},
-                      {rsc_id,330},
-                      {user_id,undefined},
-                      {email,<<"test@example.com">>},
-                      {name,<<"foo">>},
-                      {keep_informed,false},
-                      {props, undefined},
-                      {created,{{2020,6,25},{10,54,37}}},
-                      {props_json,undefined}],
-                     [{id,2},
-                      {is_visible,true},
-                      {rsc_id,330},
-                      {user_id,undefined},
-                      {email,<<"test@example.com">>},
-                      {name,<<"foo">>},
-                      {keep_informed,false},
-                      {props,#{<<"message">> => <<"test test">>}},
-                      {created,{{2020,6,25},{10,54,37}}},
-                      {props_json,undefined}],
-                     [{id,3},
-                      {is_visible,true},
-                      {rsc_id,330},
-                      {user_id,undefined},
-                      {email,<<"test@example.com">>},
-                      {name,<<"foo">>},
-                      {keep_informed,false},
-                      {props,[{message, <<"test test">>}]},
-                      {created,{{2020,6,25},{10,54,37}}},
-                      {props_json,undefined}],
-                     [{id,4},
-                      {is_visible,true},
-                      {rsc_id,330},
-                      {user_id,undefined},
-                      {email,<<"test@example.com">>},
-                      {name,<<"foo">>},
-                      {keep_informed,false},
-                      {props,undefined},
-                      {created,{{2020,6,25},{10,54,37}}},
-                      {props_json,<<"{\"message\": \"test test\"}">>}],
-                     [{id,5},
-                      {is_visible,true},
-                      {rsc_id,330},
-                      {user_id,undefined},
-                      {email,<<"test@example.com">>},
-                      {name,<<"foo">>},
-                      {keep_informed,false},
-                      {props,#{<<"message">> => <<"test test">>}},
-                      {created,{{2020,6,25},{11,54,55}}},
-                      {props_json,<<"{\"message\": \"123\"}">>}],
-                     [{id,6},
-                      {is_visible,true},
-                      {rsc_id,330},
-                      {user_id,undefined},
-                      {email,<<"test@example.com">>},
-                      {name,<<"foo">>},
-                      {keep_informed,false},
-                      {props, [{message,  <<"test test">>}, {extra, <<"hello">>} ]},
-                      {created,{{2020,6,25},{11,54,55}}},
-                      {props_json,<<"{\"message\": \"123\"}">>}] ]),
-
-    ?assertEqual([[{id,1},
-                   {is_visible,true},
-                   {rsc_id,330},
-                   {user_id,undefined},
-                   {email,<<"test@example.com">>},
-                   {name,<<"foo">>},
-                   {keep_informed,false},
-                   {props,undefined},
-                   {created,{{2020,6,25},{10,54,37}}},
-                   {props_json,undefined}],
-                  [{id,2},
-                   {is_visible,true},
-                   {rsc_id,330},
-                   {user_id,undefined},
-                   {email,<<"test@example.com">>},
-                   {name,<<"foo">>},
-                   {keep_informed,false},
-                   {created,{{2020,6,25},{10,54,37}}},
-                   {props_json,undefined},
-                   {message,<<"test test">>}],
-                  [{id,3},
-                   {is_visible,true},
-                   {rsc_id,330},
-                   {user_id,undefined},
-                   {email,<<"test@example.com">>},
-                   {name,<<"foo">>},
-                   {keep_informed,false},
-                   {created,{{2020,6,25},{10,54,37}}},
-                   {props_json,undefined},
-                   {message,<<"test test">>}],
-                  [{id,4},
-                   {is_visible,true},
-                   {rsc_id,330},
-                   {user_id,undefined},
-                   {email,<<"test@example.com">>},
-                   {name,<<"foo">>},
-                   {keep_informed,false},
-                   {props,undefined},
-                   {created,{{2020,6,25},{10,54,37}}},
-                   {message,<<"test test">>}],
-                  [{id,5},
-                   {is_visible,true},
-                   {rsc_id,330},
-                   {user_id,undefined},
-                   {email,<<"test@example.com">>},
-                   {name,<<"foo">>},
-                   {keep_informed,false},
-                   {created,{{2020,6,25},{11,54,55}}},
-                   {message,<<"123">>}],
-                  [{id,5},
-                   {is_visible,true},
-                   {rsc_id,330},
-                   {user_id,undefined},
-                   {email,<<"test@example.com">>},
-                   {name,<<"foo">>},
-                   {keep_informed,false},
-                   {created,{{2020,6,25},{11,54,55}}},
-                   {extra, <<"hello">>},
-                   {message,<<"123">>}]], M),
-    ok.
-
-
--endif.
