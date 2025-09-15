@@ -241,6 +241,17 @@ qmap_props_json_test() ->
     ?assertEqual(
        [ [{id, 1},
           {name, <<"a">>},
+          {props_json, #{<<"prop_1">> => <<"abc">>,
+                         <<"prop_2">> => <<"def">>}}],
+         [{id, 2},
+          {name, <<"b">>},
+          {props_json, #{<<"prop_3">> => <<"ghi">>,
+                         <<"prop_4">> => <<"jkl">>}}] ],
+       z_db:assoc(<<"select * from qmap_props_json_test order by id">>, [], C)),
+
+    ?assertEqual(
+       [ [{id, 1},
+          {name, <<"a">>},
           {prop_1, <<"abc">>},
           {prop_2, <<"def">>}],
          [{id, 2},
@@ -248,6 +259,7 @@ qmap_props_json_test() ->
           {prop_3, <<"ghi">>},
           {prop_4, <<"jkl">>}] ],
        z_db:assoc_props(<<"select * from qmap_props_json_test order by id">>, [], C)),
+
 
     ok.
 
@@ -300,6 +312,17 @@ qmap_props_test() ->
                <<"prop_3">> => <<"ghi">>,
                <<"prop_4">> => <<"jkl">>}]},
        z_db:qmap_props(<<"select * from qmap_props_test order by id">>, [], [{keys, atom}], C)),
+
+    ?assertEqual(
+       [ [{id, 1},
+          {name, <<"a">>},
+          {props, #{<<"prop_1">> => <<"abc">>,
+                    <<"prop_2">> => <<"def">>}}],
+         [{id, 2},
+          {name, <<"b">>},
+          {props, #{<<"prop_3">> => <<"ghi">>,
+                    <<"prop_4">> => <<"jkl">>}}] ],
+       z_db:assoc(<<"select * from qmap_props_test order by id">>, [], C)),
 
     ?assertEqual(
        [ [{id, 1},
