@@ -1366,6 +1366,12 @@ function z_validated_form_submit(ev, theForm) {
           args.push({ name: name + ".y", value: theForm.clk_y });
         }
       }
+    } else {
+      const n = ev.submitter?.name;
+      if (n) {
+        args.push({ name: n, value: $(ev.submitter).val() });
+        args.push({ name: "z_submitter", value: n });
+      }
     }
 
     // Queue the postback, or use a post to an iframe (if requested)
