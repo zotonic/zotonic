@@ -13,28 +13,34 @@
     <p>{_ This checks all templates to see if included or extended templates are available. _}</p>
 </div>
 
-<div class="well">
-    {% button class="btn btn-primary" text=_"Refresh"
-              postback={template_xref_check element_id="xref-results"}
-              delegate=`mod_development`
+{% if m.acl.is_allowed.use.mod_development %}
+    <div class="well">
+        {% button class="btn btn-primary" text=_"Refresh"
+                  postback={template_xref_check element_id="xref-results"}
+                  delegate=`mod_development`
+        %}
+    </div>
+
+    {% wire postback={template_xref_check element_id="xref-results"}
+            delegate=`mod_development`
     %}
-</div>
 
-{% wire postback={template_xref_check element_id="xref-results"}
-        delegate=`mod_development`
-%}
-
-<div class="widget">
-    <div class="widget-header">
-        {_ Cross-reference check results _}
+    <div class="widget">
+        <div class="widget-header">
+            {_ Cross-reference check results _}
+        </div>
+        <div class="widget-content" id="xref-results">
+            <p class="text-muted">
+                {# Some minimal height for the loading mask to show #}
+                <br>
+                <br>
+            </p>
+        </div>
     </div>
-    <div class="widget-content" id="xref-results">
-        <p class="text-muted">
-            {# Some minimal height for the loading mask to show #}
-            <br>
-            <br>
-        </p>
+{% else %}
+    <div class="alert alert-danger">
+        {_ You do not have permission to access development tools. _}
     </div>
-</div>
+{% endif %}
 
 {% endblock %}
