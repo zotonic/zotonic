@@ -993,7 +993,7 @@ handle_rewrite({ok, Id}, DispReq, MatchedHost, NonMatchedPathTokens, Bindings, C
         none ->
             UrlContext = case proplists:get_value(z_language, Bindings) of
                 undefined -> z_context:set_language('x-default', Context);
-                _Lang -> Context
+                Lang -> z_context:set_language(Lang, Context)
             end,
             case m_rsc:p_no_acl(Id, default_page_url, UrlContext) of
                 undefined ->
