@@ -9,7 +9,7 @@ var cotonic = cotonic || {};
 cotonic.readyResolve = null;
 cotonic.ready = new Promise(function(resolve) { cotonic.readyResolve = resolve; });
 cotonic.bridgeSocket = new WebSocket(
-    window.location.origin.replace(/^http/, 'ws')+ '{{ `mqtt_transport`|url }}',
+    window.location.origin.replace(/^http/, 'ws')+ '{{ `mqtt_transport`|url with z_language=`x-default` }}',
     [ 'mqtt' ]);
 cotonic.bridgeSocket.binaryType = 'arraybuffer';
 
