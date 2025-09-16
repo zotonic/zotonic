@@ -87,7 +87,7 @@ event1(#submit{message={add_rule, [{kind, Kind}]}}, Context) ->
 event1(#submit{message={update_rule, [{id, RuleId}, {kind, Kind}]}}, Context) ->
     Row = z_context:get_q_all_noz(Context),
     Row1 = normalize_values(Row),
-    m_acl_rule:update(Kind, RuleId, Row1, Context),
+    {ok, _} = m_acl_rule:update(Kind, RuleId, Row1, Context),
     Context;
 
 event1(#postback{message={remove_rule, [{id, RuleId}, {kind, Kind}]}}, Context) ->
@@ -107,15 +107,15 @@ event1(#postback{message={publish, _Args}}, Context) ->
     z_render:growl(?__("Publish successful", Context), Context);
 
 event1(#submit{ message = {set_upload_permissions, _Args} }, Context) ->
-    QIds = z_context:get_q_all("id", Context),
+    QIds = z_context:get_q_all(<<"id">>, Context),
     lists:foreach(
         fun(QId) ->
             case m_rsc:rid(QId, Context) of
                 undefined ->
                     skip;
                 Id ->
-                    Size = z_convert:to_integer(z_context:get_q("size-"++QId, Context)),
-                    Mime = z_convert:to_binary(z_context:get_q("mime-"++QId, Context)),
+                    Size = z_convert:to_integer(z_context:get_q(<<"size-", QId/binary>>, Context)),
+                    Mime = z_convert:to_binary(z_context:get_q(<<"mime-", QId/binary>>, Context)),
                     Props = [
                         {acl_upload_size, Size},
                         {acl_mime_allowed, z_string:trim(Mime)}
@@ -137,8 +137,8 @@ event1(#submit{message={acl_rule_import, []}}, Context) ->
     z_render:dialog_close(z_render:growl(?__("Importing, the list of rules will refresh after importing.", Context), Context));
 
 event1(#submit{message=acl_collab_config}, Context) ->
-    CollabGroupLink = z_context:get_q(collab_group_link, Context),
-    CollabGroupUpdate = z_context:get_q(collab_group_update, Context),
+    CollabGroupLink = z_context:get_q(<<"collab_group_link">>, Context),
+    CollabGroupUpdate = z_context:get_q(<<"collab_group_update">>, Context),
     m_config:set_value(mod_acl_user_groups, collab_group_link, CollabGroupLink, Context),
     m_config:set_value(mod_acl_user_groups, collab_group_update, CollabGroupUpdate, Context),
     z_render:growl(?__("Saved collaboration group settings", Context), Context).
