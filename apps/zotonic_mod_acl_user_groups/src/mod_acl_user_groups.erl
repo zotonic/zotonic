@@ -1,8 +1,8 @@
-%% @copyright 2015-2023 Arjan Scherpenisse
+%% @copyright 2015-2025 Arjan Scherpenisse
 %% @doc Adds content groups to enable access-control rules on resources.
 %% @end
 
-%% Copyright 2015-2023 Arjan Scherpenisse
+%% Copyright 2015-2025 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 -mod_title("ACL User Groups").
 -mod_description("Organize users into hierarchical groups").
 -mod_prio(400).
--mod_schema(12).
+-mod_schema(13).
 -mod_depends([menu, mod_content_groups]).
 -mod_provides([acl]).
 -mod_config([
