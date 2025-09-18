@@ -17,6 +17,19 @@
 %% limitations under the License.
 
 -module(filter_menu_subtree).
+-moduledoc("
+See also
+
+[menu\\_trail](/id/doc_template_filter_filter_menu_trail), [menu\\_flat](/id/doc_template_filter_filter_menu_flat)
+
+Get the subtree of an id in a menu (if any).
+
+Returns the subtree of the filter value. Useful for showing a part of a menu when browsing sub-pages.
+
+If the given id is not found inside the menu, it returns `undefined`.
+
+If no argument is given, it takes menu from the resource with the name `main_menu`.
+").
 -export([
     menu_subtree/2,
     menu_subtree/3,

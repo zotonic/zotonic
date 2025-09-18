@@ -17,6 +17,29 @@
 %% limitations under the License.
 
 -module(filter_summary).
+-moduledoc("
+Extract a summary from a resource.
+
+The value of the filter is the resource’s id.
+
+This uses the summary field if available, but if it is empty, uses the first paragraph of the body text to show a summary.
+
+Useful for displaying excerpts of texts that do not always have a separate summary provided.
+
+Example:
+
+
+```django
+{{ id|summary }}
+```
+
+It is also possible to give a maximum length to which the text will be truncated:
+
+
+```django
+{{ id|summary:80 }}
+```
+").
 -export([summary/2, summary/3, strip/2]).
 
 summary(undefined, _Context) ->

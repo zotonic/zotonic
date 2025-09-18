@@ -17,6 +17,13 @@
 %% limitations under the License.
 
 -module(action_admin_zmedia).
+-moduledoc("
+Used for triggering the insertion of a media item in the TinyMCE editor in the admin.
+
+Todo
+
+Extend documentation
+").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 -include_lib("zotonic_core/include/zotonic.hrl").
 

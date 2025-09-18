@@ -19,6 +19,24 @@
 %% limitations under the License.
 
 -module(scomp_mailinglist_mailinglist_subscribe).
+-moduledoc("
+Show the mailinglist subscription form to subscribe to a certain mailinglist id.
+
+Parameters:
+
+`id`
+
+Required; the id of the mailinglist [resource](/id/doc_glossary#term-resource) that is being subscribed to.
+
+`template`
+
+Which form template to render. Defaults to the template `_scomp_mailinglist_subscribe.tpl`.
+
+All other parameters are passed in to the template which is being rendered.
+
+The form is at least supposed to have an email input field. Besides email, it can have name\\_first,
+name\\_surname\\_prefix and name\\_surname fields, which will be stored in the recipient table.
+").
 -behaviour(zotonic_scomp).
 
 -export([vary/2, render/3, event/2]).

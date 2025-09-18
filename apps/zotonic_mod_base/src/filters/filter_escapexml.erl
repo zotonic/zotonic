@@ -18,6 +18,18 @@
 %% limitations under the License.
 
 -module(filter_escapexml).
+-moduledoc("
+Escape the value for insertion in xml output.
+
+For example:
+
+
+```django
+{{ value|escapexml }}
+```
+
+When the value is `<hel'lo\\>` then the output is `&#60;hel&#39;lo&#62;`.
+").
 -export([escapexml/2]).
 
 escapexml(Input, Context) when is_map(Input) ->

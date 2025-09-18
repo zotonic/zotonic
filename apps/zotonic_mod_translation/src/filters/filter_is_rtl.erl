@@ -17,6 +17,24 @@
 %% limitations under the License.
 
 -module(filter_is_rtl).
+-moduledoc("
+See also
+
+[language\\_dir](/id/doc_template_filter_filter_language_dir), [language](/id/doc_template_filter_filter_language)
+
+Check if the given language is a rtl or ltr language.
+
+Example:
+
+
+```django
+{% if z_language|is_rtl %}
+    You are browsing in an RTL language
+{% endif %}
+```
+
+It currently returns `true` only for Arabic (`ar`), Farsi (`fa`) and Hebrew (`he`).
+").
 -export([
     is_rtl/2
 ]).

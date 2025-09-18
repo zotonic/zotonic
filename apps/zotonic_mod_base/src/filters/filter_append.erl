@@ -18,6 +18,22 @@
 %% limitations under the License.
 
 -module(filter_append).
+-moduledoc("
+See also
+
+[insert](/id/doc_template_filter_filter_insert)
+
+Appends the argument to the value.
+
+For example:
+
+
+```django
+{{ value|append:\" world\" }}
+```
+
+When value is `hello` then the output will be `hello world`.
+").
 -export([append/3]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

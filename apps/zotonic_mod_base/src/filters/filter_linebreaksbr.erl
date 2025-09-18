@@ -17,6 +17,22 @@
 %% limitations under the License.
 
 -module(filter_linebreaksbr).
+-moduledoc("
+See also
+
+[brlinebreaks](/id/doc_template_filter_filter_brlinebreaks)
+
+Translate ASCII newlines (`\\n`) into HTML `<br /\\>` elements.
+
+The following string:
+
+
+```django
+{{ \"foo\\nbar\"|linebreaksbr }}
+```
+
+will evaluate to `foo<br /\\>bar`.
+").
 -export([linebreaksbr/2]).
 
 linebreaksbr(S, Context) ->

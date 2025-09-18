@@ -17,6 +17,9 @@
 %% limitations under the License.
 
 -module(m_seo_sitemap).
+-moduledoc("
+Not yet documented.
+").
 
 -export([
     m_get/3

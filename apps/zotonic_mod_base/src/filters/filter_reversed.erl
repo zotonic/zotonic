@@ -17,6 +17,23 @@
 %% limitations under the License.
 
 -module(filter_reversed).
+-moduledoc("
+Reverse a list.
+
+For example:
+
+
+```django
+{{ value|reversed }}
+```
+
+When value is \\[“hello”, “world”\\] then the output is “worldhello”.
+
+The main use for this filter is to reverse lists of values or search results. There is no support for multi-byte unicode
+characters, this is only a problem when applying the filter directly to a string value.
+
+New in version 0.6.
+").
 -export([reversed/2]).
 
 

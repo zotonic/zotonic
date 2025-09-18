@@ -16,6 +16,13 @@
 %% limitations under the License.
 
 -module(controller_website_redirect).
+-moduledoc("
+This controller does a redirect to the `website` property of the given [resource](/id/doc_glossary#term-resource).
+
+Todo
+
+Extend documentation
+").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -export([

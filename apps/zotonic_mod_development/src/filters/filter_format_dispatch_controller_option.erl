@@ -17,6 +17,15 @@
 %% limitations under the License.
 
 -module(filter_format_dispatch_controller_option).
+-moduledoc("
+Format dispatch controller options.
+
+See [mod\\_development](/id/doc_module_mod_development)
+
+Todo
+
+Not yet documented.
+").
 -export([
     format_dispatch_controller_option/2,
     format_dispatch_controller_option/3

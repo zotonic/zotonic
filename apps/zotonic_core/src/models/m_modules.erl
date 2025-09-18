@@ -18,6 +18,25 @@
 %% limitations under the License.
 
 -module(m_modules).
+-moduledoc("
+Access information about which [modules](/id/doc_developerguide_modules#guide-modules) are installed and which ones are active.
+
+To test if a module is activated, for instance mod\\_signup:
+
+
+```django
+{% if m.modules.active.mod_signup %}
+    {# Do things that depend on mod_signup #}
+{% endif %}
+```
+
+To print a list of all active modules:
+
+
+```django
+{{ m.modules.all|pprint }}
+```
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 -behaviour(zotonic_model).

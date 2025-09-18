@@ -17,6 +17,28 @@
 %% limitations under the License.
 
 -module(filter_format_price).
+-moduledoc("
+See also
+
+[format\\_number](/id/doc_template_filter_filter_format_number), [format\\_integer](/id/doc_template_filter_filter_format_integer), [format\\_duration](/id/doc_template_filter_filter_format_duration)
+
+Show a price with decimals.
+
+Formats integer and float values as a number with two decimals.
+
+For example:
+
+
+```django
+{{ value|format_price }}
+```
+
+When the value is the float `12.1` then the output is the list `12.10`.
+
+An undefined price will have the output “-”.
+
+**Note:** the decimal separator is currently always a dot, independent of the user’s language.
+").
 -export([format_price/4, format_price/3, format_price/2]).
 
 insert_thousands_separator(_Sep, Output, []) ->

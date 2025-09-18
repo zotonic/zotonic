@@ -18,6 +18,16 @@
 %% limitations under the License.
 
 -module(controller_admin_edit).
+-moduledoc("
+The main admin edit controller. This controller serves the edit page where [resources](/id/doc_glossary#term-resource)
+can be edited.
+
+
+
+Todo
+
+Extend documentation
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([

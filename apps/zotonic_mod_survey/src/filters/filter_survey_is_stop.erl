@@ -17,6 +17,15 @@
 %% limitations under the License.
 
 -module(filter_survey_is_stop).
+-moduledoc("
+Check if there is a ‘stop’ question in list of (survey) blocks
+
+See [mod\\_survey](/id/doc_module_mod_survey)
+
+Todo
+
+Not yet documented.
+").
 
 -export([
     survey_is_stop/2

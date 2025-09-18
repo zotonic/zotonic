@@ -17,6 +17,23 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 -module(filter_menu_ids).
+-moduledoc("
+See also
+
+[menu\\_flat](/id/doc_template_filter_filter_menu_flat), [menu\\_is\\_visible](/id/doc_template_filter_filter_menu_is_visible)
+
+Returns all resource ids in a menu. Could return invisible and non existing resource ids. The returned ids are a flat
+list, the hierarchy of the menu is lost.
+
+Example:
+
+
+```django
+{% for mid in id|menu_ids %}
+    {{ mid.title }}
+{% endif %}
+```
+").
 
 -export([ menu_ids/2 ]).
 

@@ -18,6 +18,19 @@
 %% limitations under the License.
 
 -module(action_wires_animate).
+-moduledoc("
+Add a `$(..).animate` jQuery call to the target element.
+
+Arguments:
+
+*   speed
+*   easing
+*   options
+
+Todo
+
+Extend documentation
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
 

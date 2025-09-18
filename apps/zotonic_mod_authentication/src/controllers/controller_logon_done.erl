@@ -18,6 +18,21 @@
 %% limitations under the License.
 
 -module(controller_logon_done).
+-moduledoc("
+See also
+
+[logon\\_ready\\_page](/id/doc_notification_logon_ready_page#logon-ready-page), [controller\\_authentication](/id/doc_controller_controller_authentication)
+
+This controller is used as a jumping stone after a log on from the `/logon` page. The `p` argument is passed from the
+`/logon` page.
+
+The controller will notify observers of `#logon_ready_page{ request_page = P }}` to see where to redirect next.
+
+The notification is a [first](/id/doc_developerguide_notifications#notification-first), so the first module responding
+with something else than `undefined` will determine the redirect.
+
+If no redirection is returned, and the `p` argument is empty, then the user is redirected to the home page `/`.
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([

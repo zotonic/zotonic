@@ -17,6 +17,39 @@
 %% limitations under the License.
 
 -module(filter_escape_check).
+-moduledoc("
+See also
+
+[force\\_escape](/id/doc_template_filter_filter_force_escape), [escape](/id/doc_template_filter_filter_escape)
+
+Ensures thant an HTML escaped value is properly escaped.
+
+Checks for all reserved HTML characters if they are properly escaped.
+
+Escaped strings are safe to be displayed in a HTML page. When you echo a query string argument or path variable then you
+must escape the value before displaying it on a HTML page.
+
+The following characters are replaced:
+
+| Character | Replacement |
+| --------- | ----------- |
+| `\\\\>`     | `&gt;`      |
+| `<`       | `&lt;`      |
+| `\"`       | `&quot;`    |
+| `'`       | `&#039;`    |
+| `&`       | `&amp;`     |
+
+If you always want escaping to be applied, use the [force\\_escape](/id/doc_template_filter_filter_force_escape) filter.
+
+For example:
+
+
+```django
+{{ value|escape_check }}
+```
+
+When the value is `<hel&amp;lo\\>` then the output is `&lt;hel&amp;lo&gt;`.
+").
 
 -export([ escape_check/ 2]).
 

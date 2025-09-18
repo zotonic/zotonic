@@ -17,6 +17,11 @@
 %% limitations under the License.
 
 -module(controller_keyserver_key).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 -author("Maas-Maarten Zeeman <maas@channel.me>").
 
 -export([

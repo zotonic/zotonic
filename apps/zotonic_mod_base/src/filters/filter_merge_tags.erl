@@ -18,6 +18,58 @@
 %% limitations under the License.
 
 -module(filter_merge_tags).
+-moduledoc("
+A mail-merge like filter where tag-expressions in a text are replaced with the value of their evaluation.
+
+The tags in the text are surrounded by `{{ ... }}` markers. After the tag is evaluated the resulting text is escaped and
+replaces the tag.
+
+Example:
+
+
+```django
+{{ \"Hello {{ name }}\"|merge_tags:%{ name: \"World\" } }}
+```
+
+This is most useful to replace markers in texts like emails, where the default text is saved into a body or summary of a page.
+
+For example, a page’s body could be like:
+
+
+```django
+<p>Hello {{ name_first }},</p>
+```
+
+And the template could be like:
+
+
+```django
+{{ message_id.body|merge_tags:%{ id: recipient_id } }}
+```
+
+Then the tag in the saved body will be replaced with the first name of the recipient.
+
+It is also possible to use some simple filters:
+
+
+```django
+<p>Hello {{ name_first|default:title }},</p>
+```
+
+Or simple expressions:
+
+
+```django
+<p>The sum is {{ 100 + 200 }}</p>
+```
+
+Or a date filter:
+
+
+```django
+<p>This article was created on {{ created|date:\"Y-m-d\" }}</p>
+```
+").
 
 -export([
     merge_tags/2,

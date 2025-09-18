@@ -18,6 +18,13 @@
 %% limitations under the License.
 
 -module(mod_contact).
+-moduledoc("
+Implements a basic contact form, which gets emailed to the configuration value `mod_contact.email`, when submitted.
+
+Todo
+
+Add more documentation
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Contact Form").

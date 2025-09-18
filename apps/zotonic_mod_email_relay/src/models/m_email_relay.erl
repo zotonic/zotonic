@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(m_email_relay).
+-moduledoc("
+Not yet documented.
+").
 
 -export([
     m_get/3,

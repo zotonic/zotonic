@@ -20,6 +20,113 @@
 %% limitations under the License.
 
 -module(scomp_base_google_chart).
+-moduledoc("
+Make charts with Google.
+
+This tag interfaces to the [Google chart API](http://code.google.com/apis/chart/) to dynamically generate charts.
+
+For example:
+
+
+```erlang
+{% google_chart type=\"line\" axis={axis position=\"bottom\" labels=[\"jan\",\"feb\",\"mar\"]}
+   axis={axis position=\"left\" labels=[0,25,50,75,100]} data=[{data values=[20,80,33]}] %}
+```
+
+Will generate the following image tag:
+
+
+```erlang
+<img class='google_chart' alt='google chart'
+   src='http://chart.apis.google.com/chart?&amp;cht=lc&amp;chts=909090,10&amp;chs=300x150&amp;chg=0,0,1,5&amp;chf=bg,s,ffffff|c,s,ffffff&amp;chdlp=b&amp;chbh=-3,3,7&amp;chxt=x,y&amp;chxl=0:|jan|feb|mar|1:|0|25|50|75|100&amp;chxs=0,909090,10|1,909090,10&amp;chco=&amp;chds=0,100&amp;chd=t:20,80,33&amp;chls=1,1,0'
+   width='300' height='150'/>
+```
+
+[View the chart](http://chart.apis.google.com/chart?&cht=lc&chts=909090,10&chs=300x150&chg=0,0,1,5&chf=bg,s,ffffff|c,s,ffffff&chdlp=b&chbh=-3,3,7&chxt=x,y&chxl=0:|jan|feb|mar|1:|0|25|50|75|100&chxs=0,909090,10|1,909090,10&chco=&chds=0,100&chd=t:20,80,33&chls=1,1,0).
+
+Google chart accepts the following arguments:
+
+| Argument              | Description                                                                      | Example                        |
+| --------------------- | -------------------------------------------------------------------------------- | ------------------------------ |
+| type                  | Kind of chart is generated. One of “line”, “sparkline”, “stacked\\\\_horizontal\\\\_bar”, “stacked\\\\_vertical\\\\_bar”, “grouped\\\\_horizontal\\\\_bar”, “grouped\\\\_vertical\\\\_bar”, “pie” or “pie3d”. Defaults to “line”. | type=”sparkline”               |
+| id                    | The id of the generated image tag.                                               | id=”mychart”                   |
+| class                 | CSS class of the generated image tag. The class “google\\\\_chart” is always added. | class=”chart”                  |
+| style                 | CSS style attribute for the generated image tag.                                 | style=”border: 1px solid #fcc” |
+| title                 | Title shown on the chart.                                                        | title=”Browser shares”         |
+| color                 | Color for the title. Must be in hexadecimal, defaults to “909090”.               | color=”ffcc00”                 |
+| font\\\\_size           | Font size in pixels for the title. Defaults to 10.                               | font\\\\_size=12                 |
+| width                 | Width of the generated chart. Defaults to 300.                                   | width=450                      |
+| height                | Height of the generated chart.                                                   | height=200                     |
+| grid\\\\_x              | X axis grid step size.                                                           | grid\\\\_x=10                    |
+| grid\\\\_y              | Y axis grid step size.                                                           | grid\\\\_y=10                    |
+| grid\\\\_line\\\\_length  | Length of line segment for the grid lines, defaults to 1.                        | grid\\\\_line\\\\_length=1         |
+| grid\\\\_blank\\\\_length | Length of gaps in the grid lines, defaults to 5.                                 | grid\\\\_blank\\\\_length=5        |
+| background\\\\_color    | Background color for the complete chart. in hexadecimal, defaults to “ffffff”.   | background\\\\_color=”331133”    |
+| chart\\\\_color         | Background color for the chart area. In hexadecimal, defaults to “ffffff”.       | chart\\\\_color=”113311”         |
+| legend\\\\_location     | Where the legend is placed. One of “top”, “left”, “bottom” or “right”. Defaults to “bottom”. | legend\\\\_location=”right”      |
+| axis                  | Description of an axis. You can given more than one axis argument. See the section [Axis styles and labels](#axis-styles-and-labels) below. |                                |
+| data                  | The data to be shown. You can give more than one data argument. See [Data](#data) definition below. |                                |
+| bar\\\\_space           | Space in pixels between the bar of a bar chart. Defaults to 3.                   | bar\\\\_space=5                  |
+| bar\\\\_group\\\\_space   | Space in pixels between the groups of bars of a bar chart. Defaults to 7.        | bar\\\\_group\\\\_space=10         |
+
+
+
+Axis styles and labels
+----------------------
+
+Axis styles and labels are available for line charts and bar charts.
+
+An example for an axis argument is:
+
+
+```erlang
+axis={axis font_size=10 color=\"909090\" position=\"top\" labels=[\"jan\", \"feb\", \"mar\"]}
+```
+
+This defines an axis that will be displayed above the chart. It has three labels and will be displayed in a 10 pixel
+font with color “909090”. You can give a multiple axis arguments and also a list of axes for each argument.
+
+Valid arguments for an axis are:
+
+| Argument    | Description                                                                      | Example                     |
+| ----------- | -------------------------------------------------------------------------------- | --------------------------- |
+| font\\\\_size | Size of the labels in pixels. Defaults to 10.                                    | font\\\\_size=12              |
+| color       | Color for the label texts, in hexadecimal RGB. Defaults to “909090”.             | color=”cc0000”              |
+| position    | Which axis is defined. One of “top”, “right”, “bottom” and “left”. Defaults to “top”. You can have multiple definitions for a position. | position=”bottom”           |
+| labels      | A list with labels displayed. The labels will be evenly distributed over the axis. | labels=\\\\[2006,2007,2008\\\\] |
+
+
+
+Data
+----
+
+All data definitions to be displayed. Each data definition is a record with arguments. You can supply all data sets at
+once or with multiple data arguments.
+
+Example with one data set:
+
+
+```erlang
+data=[{data line_width=1 min_value=1 max_value=100 values=[10,20,42,34,68,73,80]}]
+```
+
+Valid arguments for a data record are:
+
+| Argument       | Description                                                             | Example                |
+| -------------- | ----------------------------------------------------------------------- | ---------------------- |
+| line\\\\_width   | The width of the line in pixels. Defaults to 1.                         | line\\\\_width=2         |
+| line\\\\_length  | Length of line segment in pixels. Defaults to 1.                        | line\\\\_length=1        |
+| blank\\\\_length | Length of blank segment in pixels. Defaults to 0.                       | blank\\\\_length=1       |
+| min\\\\_value    | The minimum value for the data set, used for the axis. Defaults to 0.   | min\\\\_value=-100       |
+| max\\\\_value    | The maximum value for the data set, used for the axis. Defaults to 100. | max\\\\_value=100        |
+| color          | The color used for this data set. Hexadecimal RGB value.                | color=”ffcc00”         |
+| legend         | Label for the dataset as shown in the legend.                           | legend=”monthly sales” |
+| values         | The values for drawing the chart. Must be a list.                       | values=\\\\[0,10,5,8\\\\]  |
+
+See also
+
+tags [chart\\_pie](/id/doc_template_scomp_scomp_chart_pie#scomp-chart-pie) and [chart\\_pie3d](/id/doc_template_scomp_scomp_chart_pie3d#scomp-chart-pie3d).
+").
 -behaviour(zotonic_scomp).
 
 -export([vary/2, render/3]).

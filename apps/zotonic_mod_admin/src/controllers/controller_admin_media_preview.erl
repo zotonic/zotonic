@@ -17,6 +17,14 @@
 %% limitations under the License.
 
 -module(controller_admin_media_preview).
+-moduledoc("
+A controller for rendering preview thumbnails of any media embedded in a richtext-editor component of a
+[resource](/id/doc_glossary#term-resource) on the [admin edit controller](/id/doc_controller_controller_admin_edit) page.
+
+Todo
+
+Extend documentation
+").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -export([

@@ -23,6 +23,9 @@
 %% limitations under the License.
 
 -module(m_oauth2_consumer).
+-moduledoc("
+Not yet documented.
+").
 
 -export([
     m_get/3,

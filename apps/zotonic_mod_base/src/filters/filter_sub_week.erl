@@ -17,6 +17,33 @@
 %% limitations under the License.
 
 -module(filter_sub_week).
+-moduledoc("
+See also
+
+[sub\\_day](/id/doc_template_filter_filter_sub_day), [add\\_week](/id/doc_template_filter_filter_add_week), [sub\\_month](/id/doc_template_filter_filter_sub_month), [sub\\_year](/id/doc_template_filter_filter_sub_year)
+
+Subtracts a week from a date. The value must be of the form `{{Y,M,D},{H,I,S}}`.
+
+For example:
+
+
+```django
+{{ value|sub_week }}
+```
+
+When the value is `{{2008,12,10},{15,30,0}}` then the output is `{{2008,12,3},{15,30,0}}`.
+
+The filter has an optional argument which defines the number of weeks to subtract:
+
+For example:
+
+
+```django
+{{ value|sub_week:3 }}
+```
+
+When the value is `{{2008,12,10},{15,30,0}}` then the output is `{{2008,11,19},{15,30,0}}`.
+").
 -export([sub_week/2, sub_week/3]).
 
 sub_week(undefined, _Context) ->

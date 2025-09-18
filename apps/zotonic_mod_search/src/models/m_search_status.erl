@@ -17,6 +17,9 @@
 %% limitations under the License.
 
 -module(m_search_status).
+-moduledoc("
+Not yet documented.
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 -behaviour(zotonic_model).

@@ -18,6 +18,13 @@
 %% limitations under the License.
 
 -module(controller_admin_comments_settings).
+-moduledoc("
+Shows an admin settings screen where you can edit settings related to [mod\\_comment](/id/doc_module_mod_comment).
+
+Todo
+
+Extend documentation
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([

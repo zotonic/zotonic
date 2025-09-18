@@ -18,6 +18,34 @@
 %% limitations under the License.
 
 -module(filter_without_embedded_media).
+-moduledoc("
+See also
+
+[show\\_media](/id/doc_template_filter_filter_show_media), [embedded\\_media](/id/doc_template_filter_filter_embedded_media), [media\\_for\\_language](/id/doc_template_filter_filter_media_for_language)
+
+Filter out media ids that are embedded in the `body`, `body_extra` and *text* blocks of your page.
+
+This filter lets you loop over every image that is not included in the embedded `body` texts of the given page. This
+makes it easy to only show images that have not been shown already:
+
+
+```django
+{% for media_id in m.rsc[id].media|without_embedded_media:id %}
+    {% media media_id width=315 extent %}
+{% endfor %}
+```
+
+The only argument to the filter is the id of the page that you want to consider for filtering from the body text.
+
+There is an optional second argument to only consider media ids in the `body` and `body_extra` properties:
+
+
+```django
+{% for media_id in m.rsc[id].media|without_embedded_media:id:0 %}
+    {% media media_id width=315 extent %}
+{% endfor %}
+```
+").
 -export([
     without_embedded_media/3,
     without_embedded_media/4

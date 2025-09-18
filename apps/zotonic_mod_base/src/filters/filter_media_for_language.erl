@@ -20,6 +20,78 @@
 %% limitations under the License.
 
 -module(filter_media_for_language).
+-moduledoc("
+See also
+
+[show\\_media](/id/doc_template_filter_filter_show_media), [embedded\\_media](/id/doc_template_filter_filter_embedded_media), [without\\_embedded\\_media](/id/doc_template_filter_filter_without_embedded_media)
+
+Filter a list of media items by their `medium_language` property, return the best matching with the current or given
+language. Only visible media items are returned.
+
+Let’s assume two media resources:
+
+*   13925 with `medium_language` set to `en`
+*   13926 with `medium_language` set to `nl`
+
+If the current language is `nl` then:
+
+
+```erlang
+{% print [13926, 13925]|media_for_language %}
+```
+
+Will show:
+
+
+```erlang
+[13926]
+```
+
+But:
+
+
+```erlang
+{% print [13926, 13925]|media_for_language:\"en\" %}
+```
+
+Will show:
+
+
+```erlang
+[13925]
+```
+
+The filter tries to select the *best* matching language for the requested language. If there is no language requested,
+then the current request language is used.
+
+If a language could not be found then the normal *fallback* language lookup will apply, just as with text translations lookups.
+
+For example, given the above two ids and a request language of `nl` then the following:
+
+
+```erlang
+{% print [13926, 13925]|media_for_language:\"de\" %}
+```
+
+Will print:
+
+
+```erlang
+[13926]
+```
+
+This is because there are no German translations. So the system fell back to the request language(s) and selected the
+Dutch version.
+
+This filter can be used to show all connected media that are in a certain language:
+
+
+```erlang
+{% for media_id in m.edge.o[id].depiction %}
+   {% media media_id %}
+{% endfor %}
+```
+").
 
 -export([
     media_for_language/2,

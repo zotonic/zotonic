@@ -17,6 +17,11 @@
 %% limitations under the License.
 
 -module(controller_nocontent).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 
 -author("Maas-Maarten Zeeman <mmzeeman@xs4all.nl>").
 

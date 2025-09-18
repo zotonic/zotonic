@@ -17,6 +17,15 @@
 %% limitations under the License.
 
 -module(filter_survey_as_pages).
+-moduledoc("
+Split the page blocks into pages, prepare them for easy display in the survey question editor.
+
+See [mod\\_survey](/id/doc_module_mod_survey)
+
+Todo
+
+Not yet documented.
+").
 
 -export([
     survey_as_pages/2

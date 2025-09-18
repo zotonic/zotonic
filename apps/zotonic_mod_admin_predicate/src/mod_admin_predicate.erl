@@ -19,6 +19,26 @@
 %% limitations under the License.
 
 -module(mod_admin_predicate).
+-moduledoc("
+Add support for editing [predicates](/id/doc_userguide_datamodel#guide-datamodel-edge-predicates) in the admin, by
+presenting a list of all defined predicates on `http://yoursite.com/admin/predicate`.
+
+Predicates can be added, removed and edited, just like regular [resources](/id/doc_glossary#term-resource).
+
+
+
+ACL permissions
+---------------
+
+The following [ACL permissions](/id/doc_developerguide_access_control#guide-authorization) are required:
+
+*   to view the page, [use permission](/id/doc_module_mod_acl_user_groups) on the ‘mod\\_admin\\_predicate’ module
+*   to edit and delete predicates, [edit and delete permissions](/id/doc_module_mod_acl_user_groups#content-acl) on category ‘predicate’.
+
+Todo
+
+Add more documentation
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Admin predicate support").

@@ -26,6 +26,24 @@
 %%% THE SOFTWARE.
 
 -module(filter_format_number).
+-moduledoc("
+See also
+
+[format\\_integer](/id/doc_template_filter_filter_format_integer), [format\\_price](/id/doc_template_filter_filter_format_price), [format\\_duration](/id/doc_template_filter_filter_format_duration),
+
+Show an integer or float.
+
+Formats integer and float values as a list, assuming a radix of ten.
+
+For example:
+
+
+```django
+{{ value|format_number }}
+```
+
+When the value is the float `12.0` then the output is the list `12.0`.
+").
 -export([format_number/2]).
 
 -author('rsaccon@gmail.com').

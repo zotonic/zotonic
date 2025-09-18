@@ -17,6 +17,24 @@
 %% limitations under the License.
 
 -module(filter_slugify).
+-moduledoc("
+See also
+
+[stringify](/id/doc_template_filter_filter_stringify)
+
+Converts a text into a slug.
+
+Makes the value safe for use as a part in an url. Mostly used for adding titles or descriptions to an url.
+
+For example:
+
+
+```django
+{{ value|slugify }}
+```
+
+When value is “Nichts is unmöglich!” then the output will be “nichts-is-unmoglich”.
+").
 -export([slugify/2]).
 
 

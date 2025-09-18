@@ -18,6 +18,13 @@
 %% limitations under the License.
 
 -module(action_admin_predicate_dialog_predicate_new).
+-moduledoc("
+Show a dialog for creating a new [predicate](/id/doc_glossary#term-predicate).
+
+Todo
+
+Extend documentation
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 %% interface functions

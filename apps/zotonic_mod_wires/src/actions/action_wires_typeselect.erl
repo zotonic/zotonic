@@ -17,6 +17,47 @@
 %% limitations under the License.
 
 -module(action_wires_typeselect).
+-moduledoc("
+Show possible selections whilst typing.
+
+Performs a search for the typed text whilst typing in an input field. Shows possible matching pages in a selectable list.
+
+Example:
+
+
+```erlang
+<form method=\"get\" action=\"/search\">
+  <input type=\"search\" id=\"person\" name=\"person\" value=\"\" />
+  <ul id=\"suggestions\"></ul>
+  <input type=\"hidden\" id=\"person_id\" value=\"\" />
+  {% wire id=\"person\" type=\"input\"
+          action={typeselect cat=\"person\"
+                             target=\"suggestions\"
+                             action_with_id={with_args action={set_value target=\"person_id\"} arg={value select_id}}
+                             action={submit}}
+  %}
+</form>
+```
+
+This is a rather complicated example. It connects the typeahead action to the input element. The list of suggestions
+will be shown in the &lt;ul/> with id suggestions. Only pages in the category person will be found.
+
+The listed suggestions will have two actions attached. One action will set the value of the hidden input element
+person\\_id to the id of the selected suggestion (which is a [page](/id/doc_glossary#term-page)). The other action will
+submit the form.
+
+The action\\_with\\_id arguments are always performed before the action arguments.
+
+The typeselect action accepts the following arguments:
+
+| Argument           | Description                                                                      | Example                                                    |
+| ------------------ | -------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| target             | The id of element that will show the list of suggestions.                        | target=”mylist”                                            |
+| cat                | The category for the searched pages. This argument can be repeated.              | cat=”text”                                                 |
+| template           | Template used to show the list of possible pages. This defaults to the template “\\\\_action\\\\_typeselect\\\\_result.tpl”. The template gets the following arguments: result (list of ids), action\\\\_with\\\\_id and action. | template=”\\\\_show\\\\_suggestions.tpl”                       |
+| action\\\\_with\\\\_id | Actions executed when a suggestion is selected. The id of the selected page will be added as the id parameter. This argument can be repeated. | action\\\\_with\\\\_id=\\\\{postback postback=”page\\\\_select”\\\\} |
+| action             | Actions executed when a suggestion is selected. This list is executed after the action\\\\_with\\\\_id actions. This argument can be repeated. | action=\\\\{slide\\\\_up target=”form-id”\\\\}                   |
+").
 -author("Marc Worrell <marc@worrell.nl").
 -include_lib("zotonic_core/include/zotonic.hrl").
 

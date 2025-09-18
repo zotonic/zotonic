@@ -5,6 +5,13 @@
 %% @todo Adapt this for Zotonic.
 
 -module(action_wires_validation_error).
+-moduledoc("
+Render a validation error on the target. Text is given in the text argument.
+
+Todo
+
+Extend documentation
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
 

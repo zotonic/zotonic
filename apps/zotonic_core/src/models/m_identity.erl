@@ -19,6 +19,24 @@
 %% limitations under the License.
 
 -module(m_identity).
+-moduledoc("
+See also
+
+[Access control](/id/doc_developerguide_access_control#guide-auth), [mod\\_authentication](/id/doc_module_mod_authentication) or [mod\\_facebook](/id/doc_module_mod_facebook).
+
+The m\\_identity model manages usernames and other user identities.
+[mod\\_authentication](/id/doc_module_mod_authentication) uses it to store and check salted passwords, but also provides
+a safe storage for user tokens of any kind, as used by [mod\\_facebook](/id/doc_module_mod_facebook).
+
+Note that a user does not have to be of the person category per se, in Zotonic anything can have identities attached to it.
+
+The following m\\_identity model properties are available in templates:
+
+| Property  | Description                                                                      | Example value |
+| --------- | -------------------------------------------------------------------------------- | ------------- |
+| is\\\\_user | Check if a page id is an user. Return a bool. Usage: m.identity\\\\[page\\\\_id\\\\].is\\\\_user | true          |
+| username  | Fetch the username, if any, of a user. Returns a binary or undefined. Usage: m.identity\\\\[page\\\\_id\\\\].username | <<”admin”>>   |
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 -behaviour(zotonic_model).

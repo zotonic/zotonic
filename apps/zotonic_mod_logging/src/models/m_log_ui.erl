@@ -17,6 +17,9 @@
 %% limitations under the License.
 
 -module(m_log_ui).
+-moduledoc("
+Not yet documented.
+").
 -author("Marc Worrell").
 
 -behaviour(zotonic_model).

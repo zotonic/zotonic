@@ -17,6 +17,11 @@
 %% limitations under the License.
 
 -module(controller_log_client).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 
 -author("Marc Worrell <marc@worrell.nl>").
 

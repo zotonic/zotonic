@@ -17,6 +17,23 @@
 %% limitations under the License.
 
 -module(filter_gravatar_code).
+-moduledoc("
+Calculate the gravatar code for an e-mail address:
+
+
+```django
+{{ \"arjan@scherpenisse.net\"|gravatar_code }}
+```
+
+Will output:
+
+
+```django
+3046ecab06c4f9cdb49963a96636e5ef
+```
+
+This hash can then be used for [displaying Gravatar images](https://en.gravatar.com/site/implement/hash/).
+").
 -export([gravatar_code/2]).
 
 gravatar_code(Email, _Context) ->

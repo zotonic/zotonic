@@ -18,6 +18,24 @@
 %% limitations under the License.
 
 -module(filter_capfirst).
+-moduledoc("
+See also
+
+[upper](/id/doc_template_filter_filter_upper)
+
+Converts the first character of the value to uppercase.
+
+For example:
+
+
+```django
+{{ value|capfirst }}
+```
+
+When value is `hello world` then the output is `Hello world`.
+
+At the moment this only works for the characters a through z. Accented characters (like ü) are not yet supported.
+").
 -export([capfirst/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

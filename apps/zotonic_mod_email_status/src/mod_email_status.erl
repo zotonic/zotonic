@@ -18,6 +18,17 @@
 %% limitations under the License.
 
 -module(mod_email_status).
+-moduledoc("
+This module tracks for all outgoing email addresses:
+
+*   If emails are successfully sent
+*   Number of emails sent
+*   Number of errors
+*   Number of bounces
+*   Latest error message
+
+With this it will be much easier to get feedback on all outgoing email.
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Email Status").

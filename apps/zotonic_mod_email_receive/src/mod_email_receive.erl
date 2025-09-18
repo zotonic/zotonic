@@ -17,6 +17,20 @@
 %% limitations under the License.
 
 -module(mod_email_receive).
+-moduledoc("
+See also
+
+[mod\\_email\\_relay](/id/doc_module_mod_email_relay), [E-mail handling](/id/doc_developerguide_email#guide-email).
+
+Enables the Zotonic site to receive emails for the site’s users. The user’s email address is username@hostname,
+where the hostname is the hostname as configured in the [site’s config file](/id/doc_developerguide_sites#guide-site-anatomy).
+
+Any email that has no valid recipient is rejected.
+
+Todo
+
+Add more documentation
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Email Receive Handler").

@@ -18,6 +18,25 @@
 %% limitations under the License.
 
 -module(filter_parse_url).
+-moduledoc("
+Parses an URL (URI) using `uri_string:parse/1`.
+
+Example:
+
+
+```django
+{% print \"https://example.com:8443/foo?a=b#test\"|parse_url %}
+```
+
+Gives:
+
+
+```erlang
+#{fragment => <<\"test\">>, host => <<\"example.com\">>,
+  path => <<\"/foo\">>, port => 8443, query => <<\"a=b\">>,
+  scheme => <<\"https\">>}
+```
+").
 -export([parse_url/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

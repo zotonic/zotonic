@@ -21,6 +21,55 @@
 %% limitations under the License.
 
 -module(scomp_wires_draggable).
+-moduledoc("
+Mark a html element as draggable.
+
+The draggable tag is used in conjunction with the [\\{% droppable
+%\\}](/id/doc_template_scomp_scomp_droppable#scomp-droppable) tag to implement drag & drop. Elements that are marked as
+draggable can be dropped on elements marked as droppable. Drag & drop generates dragdrop events that are sent to the
+[controller](/id/doc_glossary#term-controller) or the [delegate](/id/doc_glossary#term-delegate).
+
+For example:
+
+
+```erlang
+<div id=\"drag1\">Drag me</div>
+{% draggable id=\"drag1\" tag=\"drag-one\" %}
+```
+
+Now the div with id “drag1” can be dragged. When it is dropped then `event/2` of the controller or delegate Erlang
+module is called signaling the drag (and also the drop to the module receiving the droppable events):
+
+
+```erlang
+event({drag, Drag, Drop}, Context).
+```
+
+Where both Drag and Drop are `#dragdrop` records:
+
+
+```erlang
+-record(dragdrop, {tag, delegate, id}).
+```
+
+The draggable tag accepts the following arguments:
+
+| Argument | Description                                                                      | Example                                      |
+| -------- | -------------------------------------------------------------------------------- | -------------------------------------------- |
+| id       | The id of the element that becomes draggable.                                    | id=”drag1”                                   |
+| tag      | The tag of the draggable that is sent as part of the drag and drop events. This can be any value, including a tuple. | tag=\\\\{subject\\\\_list id=42 changed=false\\\\} |
+| clone    | Clone the element when dragging or drag the element itself. Defaults to false.   | clone=true                                   |
+| revert   | When the element has to revert to its starting position. Defaults to “invalid”, i.e. when the drop was above an invalid position. Other options are true, false and “valid”. | revert=false                                 |
+| axis     | Constrain the drag movement to either the x or y direction. Normally the drag is not constrained. Acceptable values are “x” or “y” axis=”x” |                                              |
+| handle   | The css selector that is the handle to drag with. Defaults to the whole element. | handle=”handleclass”                         |
+| group    | The name of this drag group, for use in the droppable element’s “accept” argument. Multiple groups are allowed. | group=”edges”                                |
+| opacity  | Change the opacity while dragging. Defaults to “0.8”.                            | opacity=”0.5”                                |
+| delegate | The Erlang module that will receive the drag event after a successful drop.      |                                              |
+
+See also
+
+the [droppable](/id/doc_template_scomp_scomp_droppable#scomp-droppable) tag.
+").
 -behaviour(zotonic_scomp).
 
 -export([vary/2, render/3]).

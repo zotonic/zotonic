@@ -1,4 +1,7 @@
 -module(m_copyright).
+-moduledoc("
+Not yet documented.
+").
 
 -export([
     m_get/3,

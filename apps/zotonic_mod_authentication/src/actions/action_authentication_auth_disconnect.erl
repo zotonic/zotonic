@@ -17,6 +17,11 @@
 %% limitations under the License.
 
 -module(action_authentication_auth_disconnect).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 -author("Marc Worrell <marc@worrell.nl>").
 -include_lib("zotonic_core/include/zotonic.hrl").
 

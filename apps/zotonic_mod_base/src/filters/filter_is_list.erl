@@ -17,6 +17,14 @@
 %% limitations under the License.
 
 -module(filter_is_list).
+-moduledoc("
+Test if a value is a list:
+
+
+```django
+{% if [1,2,3]|is_list %}Yes, this is a list {% endif %}
+```
+").
 -export([is_list/2]).
 
 is_list(L, _Context) when is_list(L) -> true;

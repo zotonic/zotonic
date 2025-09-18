@@ -18,6 +18,36 @@
 %% limitations under the License.
 
 -module(filter_language_dir).
+-moduledoc("
+Return `rtl` or `ltr` depening on the direction of the language.
+
+Example:
+
+
+```django
+<div dir=\"{{ z_language|language_dir }}\">
+    {_ Text _}
+</div>
+```
+
+Input can also be an resource (page) id. In that case the language that the resource is shown in will be used to
+determine the direction.
+
+Example:
+
+
+```django
+<div lang=\"{{ id|language }}\" dir=\"{{ id|language_dir }}\">
+    {{ id.body }}
+</div>
+```
+
+It currently returns `rtl` for Arabic (`ar`), Farsi (`fa`) and Hebrew (`he`).
+
+See also
+
+[language](/id/doc_template_filter_filter_language), [is\\_rtl](/id/doc_template_filter_filter_is_rtl)
+").
 -export([
     language_dir/2
 ]).

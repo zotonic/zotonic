@@ -18,6 +18,138 @@
 %% limitations under the License.
 
 -module(m_rsc).
+-moduledoc("
+See also
+
+[Resources](/id/doc_developerguide_resources#guide-datamodel-resources), [The Zotonic data model](/id/doc_userguide_datamodel#guide-datamodel), [m\\_edge](/id/doc_model_model_edge), [m\\_media](/id/doc_model_model_media), [m\\_rsc\\_gone](/id/doc_model_model_rsc_gone).
+
+The main resource model, which is the central part of the [Zotonic data
+model](/id/doc_userguide_datamodel#guide-datamodel). This model provides an interface to all resource (“page”)
+information. It also provides an easy way to fetch edges from pages without needing to use the
+[m\\_edge](/id/doc_model_model_edge) model.
+
+
+
+Properties of the resource model
+--------------------------------
+
+A resource has the following properties accessible from the templates:
+
+| Property                    | Description                                                                      | Example value                                                                 |
+| --------------------------- | -------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| id                          | Id of the page, an integer.                                                      | 42                                                                            |
+| title                       | Title of the page. Returns a binary.                                             | <<”Breaking News”>>                                                           |
+| short\\\\_title               | Short title of the page. Used in menus. Returns a binary.                        | <<”News!”>>                                                                   |
+| summary                     | Summary of the page. Returns a binary or undefined.                              | <<”Page summary.”>>                                                           |
+| body                        | The HTML body of a page. Returns a binary or undefined.                          | <<”&lt;p>Hello</p>”>>                                                         |
+| date\\\\_start                | Start date when the page has a period. Examples are events or the birth date of a person. Returns a datetime tuple or undefined. | \\\\{\\\\{2008,12,10\\\\},\\\\{15,30,00\\\\}\\\\}                                         |
+| date\\\\_end                  | End date when the page has a period. Returns a datetime tuple or undefined. When there is a start date then there is also an end date. | \\\\{\\\\{2009,12,5\\\\},\\\\{23,59,59\\\\}\\\\}                                          |
+| name                        | Unique name of the page. Returns a binary or undefined. Valid characters are a-z, 0-9 and \\\\_ | <<”page\\\\_home”>>                                                             |
+| page\\\\_path                 | Unique path of the page, used for url generation. Returns a binary or undefined. Valid characters are a-z, 0-9, / and - | <<”/”>>                                                                       |
+| is\\\\_page\\\\_path\\\\_multiple | Allow the page to be served on multiple URLs                                     | false                                                                         |
+| page\\\\_url                  | The url of the page. Derived using the page’s category, the page id and its slug. Returns a non flattened list. Returns the binary page\\\\_path when it is set.  The additional parameter `with` can be used to pass extra (optional) query arguments to the url, for instance:  `{{ id.page_url with t=now\\|date:\"U\" }}`  `{{ id.page_url with t=\"new\" u=m.acl.user.id }}` | <<”/blog/42”>>                                                                |
+| page\\\\_url\\\\_abs            | The absolute url of the page. Same as `page_url` but then with added protocol, hostname and port. | <<”<http://example.org/blog/42>“>>                                            |
+| default\\\\_page\\\\_url        | The page without considering its page\\\\_path setting.                            | <<”/page/42/my-slug”>>                                                        |
+| is\\\\_authoritative          | Whether this page originated on this site or is imported and maintained on another site. Return a boolean. | true                                                                          |
+| uri                         | The absolute unique uri of this resource. Refers to the “id” dispatch rule for authoritative (local) resources. Returns a binary. | <<”<http://example.com/id/42>“>>                                              |
+| category\\\\_id               | Id of the category the page belongs to. Returns an integer.                      | 102                                                                           |
+| category                    | Category record the page belongs to. Returns a property list.                    | \\\\[\\\\{id,102\\\\},\\\\{parent\\\\_id,undefined\\\\], ... ,\\\\{name, <<”person”>>\\\\}\\\\] |
+| seo\\\\_noindex               | Whether to let search engines index this page. Returns a boolean or undefined.   | false                                                                         |
+| slug                        | Slug used for url generation, appended to page urls. Binary or undefined. Valid characters are a-z, 0-9 and - | <<”the-world-is-flat”>>                                                       |
+| seo\\\\_desc                  | Page description for search engines. Returns a binary or undefined.              | <<”The truth about the world’s shape”>>                                       |
+| is\\\\_me                     | Check if this page is the current user’s person page. Returns a boolean.         | false                                                                         |
+| is\\\\_visible                | Check if this page is visible for the current user. Returns a boolean.           | true                                                                          |
+| is\\\\_editable               | Check if this page is editable by the current user. Returns a boolean.           | false                                                                         |
+| is\\\\_linkable               | Check if this page can be connected to another page. Returns a boolean.          | false                                                                         |
+| is\\\\_ingroup                | Check if the current user is a member of the group the page belongs to. Returns a boolean. | true                                                                          |
+| exists                      | Check if the page exists. Useful when checking if a named page is present or not. Returns a boolean. | true                                                                          |
+| is\\\\_a                      | Returns a list of the category hierarchy the page belongs to. The list is suitable for indexing with category atoms.  Example usage: `{{ m.rsc[id].is_a.article }}` | \\\\[\\\\{text,true\\\\}, \\\\{article,true\\\\}\\\\]                                     |
+| is\\\\_cat                    | Direct check if a page is a certain category. More efficient then is\\\\_a.  Example usage: `{{ m.rsc[id].is_cat.person }}` | true                                                                          |
+| is\\\\_featured               | If featured checked or not. Returns a boolean                                    | false                                                                         |
+| is\\\\_protected              | If this page is protected from deletion. Returns a boolean.  Resources are protected by a simple table called `protect` that prevents accidental deletions of rsc records. It does this by having a foreign key constraint that prohibits the deletion of the referred rsc record. | false                                                                         |
+| is\\\\_dependent              | If set to *true* then this page should only exist if there are incoming edges to this page. This flag is checked when an edge is deleted. | true                                                                          |
+| is\\\\_published              | If this page has been published. Returns a boolean                               | true                                                                          |
+| publication\\\\_start         | Start date of the publication period. Returns a datetime tuple.                  | \\\\{\\\\{2009,12,24\\\\},\\\\{9,0,0\\\\}\\\\}                                            |
+| publication\\\\_end           | End date of the publication period. Returns a datetime tuple.                    | \\\\{\\\\{9999,8,17\\\\},\\\\{12,0,0\\\\}\\\\}                                            |
+| is\\\\_published\\\\_date       | If this page is published and the current date/time is within the set publication\\\\_start/end range. Note that no ACL checks are performed, use is\\\\_visible to check if a resource is visible for the current user. | true                                                                          |
+| visible\\\\_for               | Visibility level. Returns an integer. The actual meaning depends on the active ACL module. | 0                                                                             |
+| content\\\\_group\\\\_id        | Content group this resource belongs to. Defaults to the id of the content group named *default\\\\_content\\\\_group* or *system\\\\_content\\\\_group* for resources within the *meta* category. See [mod\\\\_content\\\\_groups](/id/doc_module_mod_content_groups) | 31415                                                                         |
+| o                           | Used to access the objects of page: the pages this page refers to. Returns a function which should be indexed with the edge’s predicate name (atom). When indexed the function will return a list of integers.  Example usage: `{{ m.rsc[id].o.author[1].title }}`  This returns the first author that is linked from this page. | fun(Predicate,Context)                                                        |
+| s                           | Access the subjects of a page: the pages that are referring to this page. Returns a function which should be indexed with the edge’s predicate name (atom). When indexed the function will return a list of integers.  Example usage: `{{ m.rsc[id].s.author[1].title }}`  This returns the first article that links to me with a author connection. | fun(Predicate,Context)                                                        |
+| op                          | Returns a list of all predicates on edges from this page. The predicates are atoms. | \\\\[about, related\\\\]                                                          |
+| sp                          | Returns a list of all predicates on edges to this page. The predicates are atoms. | \\\\[author\\\\]                                                                  |
+| predicates\\\\_edit           | Returns a list of all allowed predicates from this page. Used for editing the page. Returns a list of predicate ids (in contrast with the atoms of op and sp). | \\\\[308,300,304,303,302,300\\\\]                                                 |
+| media                       | Return a list of all media ids connected to the page. The media are connected with the predicate “depiction”. | \\\\[842,3078\\\\]                                                                |
+| medium                      | Return a property list describing the file or medium attached to the page. A medium record is present for pages that are an image, video etc. Returns undefined when there is no medium defined. See the model m\\\\_media for more information. | \\\\[ \\\\{id,512\\\\}, \\\\{filename, <<”2009/1…”>>, … \\\\]                           |
+| depiction                   | Return the medium record that can be used for the image of a page. Either returns a medium page attached to the page or the medium record of the page itself. When no medium is found then undefined is returned. | \\\\[ \\\\{id,512\\\\}, \\\\{filename, <<”2009/1…”>>, … \\\\]                           |
+| image\\\\_url                 | An url of the depiction, using the mediaclass `image` defined in mod\\\\_base      | <<”/image/...”>>                                                              |
+| image\\\\_url\\\\_abs           | The absolute `image_url`, that is including https:                               | <<”<http://example.com//>...”>>                                               |
+| thumbnail\\\\_url             | An url of the depiction, using the mediaclass  `thumbnail` defined in mod\\\\_base | <<”/image/...”>>                                                              |
+| thumbnail\\\\_url\\\\_abs       | The absolute `thumbnail_url`, including https:                                   | <<”<http://example.com//>...”>>                                               |
+| email                       | E-mail address. Returns a binary or undefined.                                   | <<”[me@example.com](mailto:me%40example.com)“>>                               |
+| website                     | URL of a website. Returns a binary or undefined.                                 | <<”<http://zotonic.com>“>>                                                    |
+| is\\\\_website\\\\_redirect     | Tell *controller\\\\_page* to redirect to the website URL instead of showing the HTML page. | false                                                                         |
+| phone                       | Phone number. Returns a binary or undefined.                                     | <<”+31201234567”>>                                                            |
+| phone\\\\_alt                 | Alternative phone number. Returns a binary or undefined.                         | undefined                                                                     |
+| phone\\\\_emergency           | Phone number to call in emergencies.                                             | <<”112”>>                                                                     |
+| address\\\\_street\\\\_1        | Address line 1. Returns a binary or undefined.                                   |                                                                               |
+| address\\\\_street\\\\_2        | Address line 2. Returns a binary or undefined.                                   |                                                                               |
+| address\\\\_city              | City part of address. Returns a binary or undefined.                             |                                                                               |
+| address\\\\_postcode          | Postcode part of address. Returns a binary or undefined.                         |                                                                               |
+| address\\\\_state             | State part of address. Returns a binary or undefined.                            |                                                                               |
+| address\\\\_country           | Country part of address. Returns a binary or undefined.                          |                                                                               |
+| mail\\\\_street\\\\_1           | Mailing address line 1. Returns a binary or undefined.                           |                                                                               |
+| mail\\\\_street\\\\_2           | Mailing address line 2. Returns a binary or undefined.                           |                                                                               |
+| mail\\\\_city                 | City part of mailing address. Returns a binary or undefined.                     |                                                                               |
+| mail\\\\_postcode             | Postcode part of mailing address. Returns a binary or undefined.                 |                                                                               |
+| mail\\\\_state                | State part of mailing address. Returns a binary or undefined.                    |                                                                               |
+| mail\\\\_country              | Country part of mailing address. Returns a binary or undefined.                  |                                                                               |
+| name\\\\_first                | First name of person. Returns a binary or undefined.                             |                                                                               |
+| name\\\\_middle               | Middle name of person. Returns a binary of undefined.                            |                                                                               |
+| name\\\\_surname\\\\_prefix     | Prefix for the surname of a person. Returns a binary or undefined.               | <<”van der”“>, <<”von”>>                                                      |
+| name\\\\_surname              | Surname or family name of person. Returns a binary or undefined.                 |                                                                               |
+
+
+
+Escaping
+--------
+
+All strings that are stored inside resources are automatically HTML escaped. This means that these texts do not require
+any processing when they are being displayed in the browser, which causes major performance gains.
+
+There are some fields in the resource that are exceptions to these rule, namely, the `body` field and any fields whose
+name ends in `_html`. These fields are assumed to contain HTML text and are sanitized on save instead of escaped.
+
+
+
+Dates
+-----
+
+Dates are stored as a standard Erlang date time tuple, for example `{{2008,12,10},{15,30,00}}`. Dates are stored and
+retrieved in UTC (universal time). When displaying a date, (e.g. with the [date](/id/doc_template_filter_filter_date)
+filter), the date is automatically converted into the time zone of the site or that of the user.
+
+
+
+Printing all properties of a resource
+-------------------------------------
+
+In your templates, you can loop over the properties of a resource like this:
+
+
+```erlang
+{% for k,v in m.rsc[id] %}
+  {{ k }} - {{ v }} <br/>
+{% endfor %}
+```
+
+And also using the [print](/id/doc_template_tag_tag_print) tag:
+
+
+```erlang
+{% print m.rsc[id] %}
+```
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -behaviour(zotonic_model).

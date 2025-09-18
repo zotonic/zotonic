@@ -13,6 +13,36 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 -module(validator_base_name_unique).
+-moduledoc("
+See also
+
+[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators), [username\\_unique](/id/doc_template_validator_validator_username_unique), [page\\_path\\_unique](/id/doc_template_validator_validator_page_path_unique)
+
+A [validator](/id/doc_developerguide_forms_and_validation#guide-validators) to check whether a resource’s name is unique:
+
+
+```django
+<input type=\"text\" id=\"name\" name=\"name\" value=\"\" />
+{% validate id=\"name\" type={name_unique} %}
+```
+
+Optionally, pass an `id` parameter to exclude that particular id when testing for uniqueness. This is useful when you
+want to exclude the name of the resource currently being edited:
+
+
+```django
+<input type=\"text\" id=\"name\" name=\"name\" value=\"\" />
+{% validate id=\"name\" type={name_unique id=id} %}
+```
+
+You can also pass a `failure_message`:
+
+
+```django
+<input type=\"text\" id=\"name\" name=\"name\" value=\"\" />
+{% validate id=\"name\" type={name_unique id=id failure_message=_\"Eek! Already used!\"} %}
+```
+").
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 

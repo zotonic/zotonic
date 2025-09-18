@@ -18,6 +18,23 @@
 %% limitations under the License.
 
 -module(mod_email_relay).
+-moduledoc("
+See also
+
+[mod\\_email\\_receive](/id/doc_module_mod_email_receive), [E-mail handling](/id/doc_developerguide_email#guide-email).
+
+Enables the Zotonic site to relay emails for the site’s users to their real email addresses.
+
+The user’s email address is username@hostname, where the hostname is the hostname as configured in the [site’s
+config file](/id/doc_developerguide_sites#guide-site-anatomy). Any mails to those addresses get forwarded to the
+user’s email address, as configured in the user [resource](/id/doc_glossary#term-resource).
+
+Any email that has no valid recipient is rejected.
+
+Todo
+
+Add more documentation
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Email Relay").

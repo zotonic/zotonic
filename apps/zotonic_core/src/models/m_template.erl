@@ -18,6 +18,11 @@
 %% limitations under the License.
 
 -module(m_template).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 -behaviour(zotonic_model).

@@ -18,6 +18,29 @@
 %% limitations under the License.
 
 -module(filter_trans_filter_filled).
+-moduledoc("
+Filters all empty translations from a property.
+
+This is used if it is important to show a text, but not all translations are filled in.
+
+The filter takes as input a resource or other variable and as argument the property to be shown.
+
+Example usage:
+
+
+```none
+{{ id|trans_filter_filled:`body` }}
+```
+
+If the resource `id` has the body property:
+
+
+```erlang
+{trans, [{en, <<>>}, {nl,<<\"Hallo\">>}]}
+```
+
+Then this will show `Hallo`, even if the language is set to `en`.
+").
 
 -export([
     trans_filter_filled/2,

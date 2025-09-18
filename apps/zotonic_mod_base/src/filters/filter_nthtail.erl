@@ -17,6 +17,24 @@
 %% limitations under the License.
 
 -module(filter_nthtail).
+-moduledoc("
+See also
+
+[first](/id/doc_template_filter_filter_first), [tail](/id/doc_template_filter_filter_tail)
+
+Fetch the nth tail of a list.
+
+Useful when you want to skip the first N elements of a list when looping.
+
+For example:
+
+
+```django
+{% for a in value|nthtail:2 %}{{ a|format_number }}{% endfor %}
+```
+
+When value is the list `[1,2,3]` then the output is `3`.
+").
 -export([nthtail/3]).
 
 

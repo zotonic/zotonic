@@ -18,6 +18,35 @@
 %% limitations under the License.
 
 -module(action_wires_set_value).
+-moduledoc("
+Set the value of a form field.
+
+Example:
+
+
+```erlang
+<input type=\"text\" id=\"x\" name=\"xyz\" value=\"\">
+{% button text=\"fill\" action={set_value target=\"x\" value=\"etaoinstrdlu\"} %}
+```
+
+Clicking on the button will set the value of the input element to the most interesting string `etaoinstrdlu`.
+
+This action can set the value of any input element, select or text area. It uses the jQuery `val()` method to set the value.
+
+Optionally the argument `trigger_event` can be passed to trigger a change event:
+
+
+```erlang
+{% button text=\"fill\" action={set_value target=\"x\" value=\"...\" trigger_event} %}
+```
+
+To trigger a custom event:
+
+
+```erlang
+{% button text=\"fill\" action={set_value target=\"x\" value=\"...\" trigger_event=\"myevent\"} %}
+```
+").
 
 -export([render_action/4]).
 

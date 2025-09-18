@@ -17,6 +17,11 @@
 %% limitations under the License.
 
 -module(filter_survey_is_submit).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 
 -export([
     survey_is_submit/2

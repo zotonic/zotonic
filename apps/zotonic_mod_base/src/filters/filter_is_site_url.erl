@@ -17,6 +17,32 @@
 %% limitations under the License.
 
 -module(filter_is_site_url).
+-moduledoc("
+See also
+
+[sanitize\\_url](/id/doc_template_filter_filter_sanitize_url), [url\\_abs](/id/doc_template_filter_filter_url_abs), [url](/id/doc_template_filter_filter_url), [urlencode](/id/doc_template_filter_filter_urlencode)
+
+Test if the given URL is a url for the current site.
+
+If the current site handles requests for the hostname `example.com`, then all of the following expressions will echo `true`:
+
+
+```django
+{{ \"https://example.com\"|is_site_url }}
+{{ \"#foo\"|is_site_url }}
+{{ \"/page/path\"|is_site_url }}
+{{ \"//example.com\"|is_site_url }}
+```
+
+The following will echo `false`:
+
+
+```django
+{{ \"https://foo.test\"|is_site_url }}
+{{ \"example.com\"|is_site_url }}
+{{ \"//foo.test\"|is_site_url }}
+```
+").
 -export([is_site_url/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

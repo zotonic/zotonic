@@ -17,6 +17,40 @@
 %% limitations under the License.
 
 -module(filter_group_by).
+-moduledoc("
+Groups items of a list by a property.
+
+When the item is an integer then it is assumed to be the id of a resource. This is especially useful for grouping items
+in for-loops.
+
+For example:
+
+
+```django
+{% for grp in value|group_by:\"a\" %} ... loop over grp ... {% endfor %}
+```
+
+When value is the three element list:
+
+
+```django
+[
+ [{a,1}, {b,1}],
+ [{a,1},{b,2}],
+ [{a,2},{b,3}]
+]
+```
+
+then the output of group\\_by “a” will be the two element list:
+
+
+```django
+[
+ [[{a,1},{b,1}],[{a,1},{b,2}]],
+ [[{a,2},{b,3}]]
+].
+```
+").
 -export([group_by/3]).
 
 

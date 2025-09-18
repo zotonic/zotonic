@@ -18,6 +18,47 @@
 %% limitations under the License.
 
 -module(action_admin_link).
+-moduledoc("
+See also
+
+[unlink](/id/doc_template_action_action_unlink)
+
+Add an [edge](/id/doc_glossary#term-edge) between two [resources](/id/doc_glossary#term-resource). Used in the admin.
+
+The edge is selected with either:
+
+*   the argument `edge_id`
+*   the arguments `subject_id`, `predicate`, `object_id`
+
+For instance:
+
+
+```django
+{% button
+    text=\"Add\"
+    class=\"btn\"
+    action={
+        link
+        subject_id=id
+        predicate=\"contains\"
+        object_id=other_id
+        action={
+            reload
+        }
+    }
+%}
+```
+
+Other arguments:
+
+*   element\\_id
+*   edge\\_template
+*   action - actions executed after linking
+
+Todo
+
+Extend documentation
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 -include_lib("zotonic_core/include/zotonic.hrl").

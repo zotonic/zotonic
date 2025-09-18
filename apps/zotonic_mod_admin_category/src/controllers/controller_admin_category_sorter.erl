@@ -17,6 +17,14 @@
 %% limitations under the License.
 
 -module(controller_admin_category_sorter).
+-moduledoc("
+Shows the admin category screen where you can edit the [category](/id/doc_glossary#term-category) tree, rearranging the
+categories, adding new categories, or removing existing ones.
+
+Todo
+
+Extend documentation
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([

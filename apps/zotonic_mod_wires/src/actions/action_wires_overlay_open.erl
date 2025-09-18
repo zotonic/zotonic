@@ -17,6 +17,41 @@
 %% limitations under the License.
 
 -module(action_wires_overlay_open).
+-moduledoc("
+See also
+
+actions [overlay\\_close](/id/doc_template_action_action_overlay_close),
+[dialog\\_open](/id/doc_template_action_action_dialog_open) and [dialog](/id/doc_template_action_action_dialog).
+
+Renders a template on the server and opens a full screen overlay with the HTML output of the template.
+
+Example:
+
+
+```django
+{% button text=\"show story\" action={overlay_open template=\"_story.tpl\" id=1234} %}
+```
+
+This opens an overlay over the current content. The template `_story.tpl` will be rendered with the argument `id` (and
+possibly any other arguments). The rendered html will then be shown inside the overlay.
+
+The overlay template is a `div` with the class `modal-overlay`. Extra classes can be added using the `class` argument:
+
+
+```django
+{% wire action={overlay_open template=\"_splash.tpl\" class=\"splash\"} %}
+```
+
+The overlay action has the following arguments:
+
+| Argument | Description                                                                      | Example                   |
+| -------- | -------------------------------------------------------------------------------- | ------------------------- |
+| template | Template to render in the overlay                                                | template=”\\\\_overlay.tpl” |
+| class    | Extra CSS class(es) to add to the overlay diff.                                  | class=”myclass other”     |
+| level    | Nesting of the overlay. Non negative integer, higher numbered levels are displayed above lower levels. Special level `\"top\"` to force display on top, above all dialogs and other overlays. | level=”top”               |
+
+All (extra) arguments are passed to the rendered template.
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 %% interface functions

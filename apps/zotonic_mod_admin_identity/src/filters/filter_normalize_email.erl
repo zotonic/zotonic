@@ -18,6 +18,20 @@
 %% limitations under the License.
 
 -module(filter_normalize_email).
+-moduledoc("
+Normalize an email address, used in the identity management.
+
+The email address is lowercased and trimmed.
+
+For example:
+
+
+```django
+{{ \"ME@Example.Com \"|normalize_email }}
+```
+
+Evaluates to the value `me@example.com`.
+").
 
 -export([ normalize_email/2 ]).
 

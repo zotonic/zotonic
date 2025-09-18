@@ -17,6 +17,23 @@
 %% limitations under the License.
 
 -module(validator_admin_identity_email_unique).
+-moduledoc("
+See also
+
+[m\\_identity](/id/doc_model_model_identity), [username\\_unique](/id/doc_template_validator_validator_username_unique), [Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators)
+
+Check if an entered e-mail address is unique, by looking in the [m\\_identity](/id/doc_model_model_identity) table for
+the email key:
+
+
+```django
+<input type=\"text\" id=\"email\" name=\"email\" value=\"\" />
+{% validate id=\"email\" type={email} type={email_unique} %}
+```
+
+Optionally, an rsc\\_id parameter can be given to the validator to skip that particular id when doing the uniqueness
+check. This is useful when you are displaying a form in which the user is editing his own email address.
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([
     render_validator/5,

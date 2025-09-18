@@ -18,6 +18,33 @@
 %% limitations under the License.
 
 -module(action_wires_script).
+-moduledoc("
+This action executes JavaScript directly. It can be used to interface with non-Zotonic JavaScript libraries and functions.
+
+Example:
+
+
+```erlang
+{% button text=\"hello\" action={script script=\"alert('hello world')\"} %}
+```
+
+Clicking on the button will show a JavaScript alert with the text hello world in it.
+
+Using template variables:
+
+
+```erlang
+{% with \"world\" as recipient %}
+    {% button
+        text=\"hello\"
+        action={
+            script
+            script=\"alert('hello \" ++ recipient ++ \"')\"
+        }
+    %}
+{% endwith %}
+```
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
 

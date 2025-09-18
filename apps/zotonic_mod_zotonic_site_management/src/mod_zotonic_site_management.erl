@@ -17,6 +17,11 @@
 %% limitations under the License.
 
 -module(mod_zotonic_site_management).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 
 -author("Marc Worrell <marc@worrell.nl>").
 

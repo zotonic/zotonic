@@ -17,6 +17,11 @@
 %% limitations under the License.
 
 -module(controller_ping).
+-moduledoc("
+Simple controller for connection tests, used on the `/test/connection` page.
+
+It always responds with the four character string `pong`. The ususal path is: `/.zotonic/ping`
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 -export([

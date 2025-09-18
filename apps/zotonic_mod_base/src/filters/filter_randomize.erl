@@ -17,6 +17,22 @@
 %% limitations under the License.
 
 -module(filter_randomize).
+-moduledoc("
+See also
+
+[rand](/id/doc_template_filter_filter_rand), [random](/id/doc_template_filter_filter_random)
+
+Shuffle a list of values.
+
+For example:
+
+
+```django
+{{ [\"a\",\"b\",\"c\"]|randomize }}
+```
+
+The output of this is the same list, but the order of the elements randomized. So for instance: \\[“c”, “a”, “b”\\].
+").
 -export([randomize/2]).
 
 

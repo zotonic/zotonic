@@ -17,6 +17,28 @@
 %% limitations under the License.
 
 -module(action_wires_remove).
+-moduledoc("
+See also
+
+[Actions](/id/template_action#actions), [button](/id/doc_template_scomp_scomp_button#scomp-button)
+
+Remove an element from the page.
+
+For example, the following removes the foo div from the page:
+
+
+```django
+<div id=\"foo\">I am the foo div</div>
+{% button text=\"Remove foo\" action={remove target=\"foo\"} %}
+```
+
+Without target, the action removes its triggering element:
+
+
+```django
+{% button text=\"Click me to remove me\" action={remove} %}
+```
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
 

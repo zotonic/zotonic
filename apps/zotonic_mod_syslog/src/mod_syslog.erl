@@ -17,6 +17,11 @@
 %% limitations under the License.
 
 -module(mod_syslog).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Syslog").

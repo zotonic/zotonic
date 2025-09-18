@@ -18,6 +18,11 @@
 %% limitations under the License.
 
 -module(validator_base_json).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 
 -export([render_validator/5, validate/5]).
 

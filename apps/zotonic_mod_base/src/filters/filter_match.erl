@@ -17,6 +17,21 @@
 %% limitations under the License.
 
 -module(filter_match).
+-moduledoc("
+Match a value with a regular expression.
+
+Returns true if the value matches the regular expression. This is handy for checking if a string starts or ends with a
+particular value.
+
+Usage:
+
+
+```django
+{% if value|match:\".*foo$\" %}
+```
+
+Checks if the value ends with “foo”.
+").
 -export([match/3]).
 
 -author('mmzeeman@xs4all.nl').

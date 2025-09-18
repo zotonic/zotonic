@@ -17,6 +17,25 @@
 %% limitations under the License.
 
 -module(filter_to_json).
+-moduledoc("
+Display any value as in JSON (JavaScript Object Notation).
+
+For example:
+
+
+```django
+{{ [1,2,3]|to_json }}
+```
+
+Converts this list to a valid JSON UTF-8 encoded string which can be directly used in JavaScript calls.
+
+Another example for a JSON object:
+
+
+```django
+{{ %{ a: 1, b: 2 }|to_json }}
+```
+").
 -export([to_json/2]).
 
 %% @doc Convert an Erlang list or tuple to JSON

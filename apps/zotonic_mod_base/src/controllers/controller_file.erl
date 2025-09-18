@@ -24,6 +24,94 @@
 %% /media/attachment/<filepath>
 
 -module(controller_file).
+-moduledoc("
+See also
+
+[controller\\_file\\_id](/id/doc_controller_controller_file_id), [lib](/id/doc_template_tag_tag_lib), [image](/id/doc_template_tag_tag_image), [image\\_url](/id/doc_template_tag_tag_image_url)
+
+Serve an uploaded-, resized- or library file.
+
+This controller is used to serve files and images. It is able to manipulate an image according to the parameters supplied.
+
+Image manipulation parameters are signed to prevent random image manipulations on the request of visitors, which might
+result in a denial of service due to processing- or disk space limitations.
+
+This controller serves all files with a very long client side caching time and handles if-modified-since checks. Text
+files are served with gzip compression if the user-agent supports it.
+
+Multiple files can be served in a single request; the controller concatenates them into a single file. See the
+[lib](/id/doc_template_tag_tag_lib) tag for more information. The creators of the files have to ensure that they can be
+properly concatenated.
+
+
+
+Dispatch rules and options
+--------------------------
+
+Example dispatch rules:
+
+
+```django
+{image, [\"image\", '*'], controller_file, []},
+{lib, [\"lib\", '*'], controller_file, [{root, [lib]}]}
+```
+
+controller\\_file has the following dispatch options:
+
+| Option                | Description                                                                      | Example                             |
+| --------------------- | -------------------------------------------------------------------------------- | ----------------------------------- |
+| root                  | List of root directories where files are located. Use ‘lib’ for the library files. This defaults to the site’s “files/archive” directory. | \\\\{root, \\\\[lib\\\\]\\\\}               |
+| path                  | Default file to be served. Used for files like “robots.txt” and “favicon.ico”.   | \\\\{path,”misc/robots.txt”\\\\}        |
+| content\\\\_disposition | If the file should be viewed in the browser or downloaded. Possible values are `inline` and `attachment`. Defaults to the browser’s defaults by not setting the “Content-Disposition” response header. | \\\\{content\\\\_disposition, inline\\\\} |
+| acl                   | Extra authorization checks to be performed.                                      | See [ACL options](#acl-options).    |
+| max\\\\_age             | Max age, used for Cache and Expires. Value is an integer, number of secs.        | \\\\{max\\\\_age,3600\\\\}                |
+
+
+
+### ACL options
+
+[Authorization](/id/doc_developerguide_access_control#guide-authorization) checks to perform, in addition to the `acl_action` dispatch option, can be given in the `acl` dispatch option, and accepts the following options:
+
+| ACL option             | Description                                                                      | Example                                                                   |
+| ---------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `is_auth`              | Disable anonymous access to this resource.                                       | `{acl, is_auth}`                                                          |
+| `logoff`               | Log out user before processing the request.                                      | `{acl, logoff}`                                                           |
+| `{Action, Resource}`   | Check if user is allowed to perform `Action` on `Resource`. The example is equivalent to the options `{acl_action, edit}, {id, my_named_page}`. | `{acl, {edit, my_named_page}}`                                            |
+| `[{Action, Resource}]` | A list of checks to be performed, as above.                                      | > \\\\{acl, \\\\[ >  \\\\{view, secret\\\\_page\\\\}, >  \\\\{update, 345\\\\} > \\\\]\\\\} |
+| `ignore`               | Don’t perform any access control checks. Be careful to add your own checks in the rendered template and all its included templates. | `{acl, ignore}`                                                           |
+
+
+
+More about the search root
+--------------------------
+
+The search root can be a list with one or more of the following:
+
+*   The atom lib for finding library files in the *lib* directory of modules.
+*   The atom template for finding files in the *template* directory of modules.
+*   A directory name (binary or string). This directory name must be absolute or relative to the *files* directory of the site.
+*   A tuple \\{module, ModuleName\\} to refer to a module. The module must implement the functions file\\_exists/2 and file\\_forbidden/2.
+*   A tuple \\{id, RscId\\} where RscId is the unique name or id of a resource. The resource must have a medium record containing an uploaded file.
+
+Note that located files are aggressively cached. Changes to the lookup routines or files will take a while before they
+are visible for new requests.
+
+
+
+CSS and JavaScript templates
+----------------------------
+
+Note
+
+`controller_file` replaces `controller_file_readonly` and `controller_lib`
+
+If a file with a lib or template root is not found, then the same filename with the addition of .tpl is checked. For
+example styles.css.tpl. If found then the template will be rendered against an empty site context. This means that, with
+the current implementation, the template will not receive the current language, user etc. This behavior may change in
+the future.
+
+New in version 0.11.
+").
 -export([
     service_available/1,
     allowed_methods/1,

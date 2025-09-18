@@ -17,6 +17,27 @@
 %% limitations under the License.
 
 -module(scomp_base_lazy).
+-moduledoc("
+Custom tag which adds a ‘loader’ image to the page and performs a one-time action when loader comes into view.
+
+`mod_geomap` uses this to load the map JavaScript once the admin widget has been opened by the user.
+
+Example:
+
+
+```none
+<div id=\"{{ #lazy }}\">
+    {% lazy action={update target=#lazy id=id template=\"_geomap_admin_location_map.tpl\"} %}
+</div>
+```
+
+`lazy` accepts the following arguments:
+
+| Argument | Description                                                       | Example                         |
+| -------- | ----------------------------------------------------------------- | ------------------------------- |
+| image    | The source of the image tag. Defaults to /lib/images/spinner.gif. | image=”/lib/images/loading.gif” |
+| class    | The css class of the image. Defaults to z-lazy.                   | class=”loader”                  |
+").
 -behaviour(zotonic_scomp).
 
 -export([vary/2, render/3]).

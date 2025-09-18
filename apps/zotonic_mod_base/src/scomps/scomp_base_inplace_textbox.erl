@@ -19,6 +19,20 @@
 
 
 -module(scomp_base_inplace_textbox).
+-moduledoc("
+Render a JS-aided inplace textbox.
+
+Example:
+
+
+```django
+{% inplace_textbox value=\"def.val.\" delegate=\"my_resource\" hint=\"edit\" %}
+```
+
+Todo
+
+Improve documentation
+").
 -behaviour(zotonic_scomp).
 
 -export([vary/2, render/3]).

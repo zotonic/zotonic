@@ -17,6 +17,25 @@
 %% limitations under the License.
 
 -module(filter_pprint).
+-moduledoc("
+See also
+
+[print](/id/doc_template_tag_tag_print)
+
+Pretty print a zotonic value in a template.
+
+Pretty printing a zotonic value in a template is handy during development. It outputs the value of an erlang variable in Html.
+
+Usage:
+
+
+```django
+{{ value | pprint }}
+```
+
+This output is similar to the [print](/id/doc_template_tag_tag_print) tag, only are the values of the pprint filter not
+wrapped in `<pre\\>` tag.
+").
 -export([pprint/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

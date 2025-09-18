@@ -17,6 +17,22 @@
 %% limitations under the License.
 
 -module(filter_random).
+-moduledoc("
+See also
+
+[randomize](/id/doc_template_filter_filter_randomize), [rand](/id/doc_template_filter_filter_rand)
+
+Returns a random value from a list of values. When the input is an empty list or not a list then the result is undefined.
+
+For example:
+
+
+```django
+{{ [\"a\",\"b\",\"c\"]|random }}
+```
+
+The output of this is one of “a”, “b” or “c”.
+").
 -export([random/2, random/3]).
 
 

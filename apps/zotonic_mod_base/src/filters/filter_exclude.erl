@@ -17,6 +17,74 @@
 %% limitations under the License.
 
 -module(filter_exclude).
+-moduledoc("
+See also
+
+[is\\_visible](/id/doc_template_filter_filter_is_visible), [is\\_a](/id/doc_template_filter_filter_is_a), [filter](/id/doc_template_filter_filter_filter)
+
+Filters a list on the value of a property, either on absence or inequality.
+
+This is the inverse of [filter](/id/doc_template_filter_filter_filter).
+
+
+
+Testing presence
+----------------
+
+To filter a list of values:
+
+
+```django
+{% print somelist|exclude:`p` %}
+```
+
+Results in a list where all elements **do not have** the property `p` defined and where the property (after conversion
+to boolean) is `false`.
+
+This can be used to filter a list of resource ids on the absence of a property. For example, to see all unpublished
+elements in a list of resource ids:
+
+
+```django
+{% print [1,2,3,4,5,6]|exclude:`is_published` %}
+```
+
+To find all pages from page connection `hasdocument` that **do not have** an image:
+
+
+```django
+{% print id.o.hasdocument|exclude:`depiction` %}
+```
+
+
+
+Testing equality
+----------------
+
+A second argument can be added to test on inequality:
+
+
+```django
+{% print somelist|exclude:`title`:\"Untitled\" %}
+```
+
+Shows all elements whose `title` property **is not** “Untitled”.
+
+Below is another example of inversely filtering a list:
+
+
+```django
+{% with m.search[{latest cat='gallery'}] as result %}
+  {% if result.total > 0 %}
+    {%  with result|exclude:`name`:\"page_home_gallery\"|random as gallery_rsc_id %}
+      {% include \"_gallery_widget.tpl\" id=gallery_rsc_id %}
+    {% endwith %}
+  {% endif %}
+{% endwith %}
+```
+
+The example above filters against a search result and returns only elements whose `name` **is not** “page\\_home\\_gallery”.
+").
 -export([
 	exclude/3,
 	exclude/4

@@ -17,6 +17,23 @@
 %% limitations under the License.
 
 -module(filter_language).
+-moduledoc("
+See also
+
+[language\\_dir](/id/doc_template_filter_filter_language_dir), [is\\_rtl](/id/doc_template_filter_filter_is_rtl)
+
+Return the language the resource (or translated text) will be displayed in.
+
+Example:
+
+
+```erlang
+{{ id|language }}
+```
+
+The languages of the resource will be fetched and using the currently selected interface language (variable
+`z_language`) the language for the resource to be displayed in will be returned.
+").
 -export([
     language/2
 ]).

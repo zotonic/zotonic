@@ -17,6 +17,46 @@
 %% limitations under the License.
 
 -module(action_wires_redirect).
+-moduledoc("
+This action redirects the browser to another page or back to the previous page.
+
+Example:
+
+
+```erlang
+{% button text=\"home\" action={redirect location=\"/\"} %}
+```
+
+Redirects back to the home page when the button is clicked.
+
+Back in history example:
+
+
+```erlang
+{% button text=\"Back\" action={redirect back} %}
+```
+
+After clicking the button the browser will go back to the last page using the JavaScript history.
+
+Example of using dispatch rules for the redirect location:
+
+
+```erlang
+{% button text=\"edit\" action={redirect dispatch=\"admin_edit_rsc\" id=my_id} %}
+```
+
+When clicked the browser is redirected to the admin edit page for the [resource](/id/doc_glossary#term-resource) with
+the id of my\\_id.
+
+This action can have the following arguments:
+
+| Argument | Description                                                                      | Example                         |
+| -------- | -------------------------------------------------------------------------------- | ------------------------------- |
+| back     | When given then the browser is directed to the previous page.                    | back                            |
+| dispatch | The name of a dispatch rule. All other parameters are assumed to be parameters for the dispatch rule. | dispatch=”admin”                |
+| id       | When back and dispatch are not defined then the redirect uri will be the page\\\\_url of the resource. | id=42                           |
+| location | The http address to redirect to. Can be an url with or without host name.        | location=”<http://example.com>“ |
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([
     render_action/4,

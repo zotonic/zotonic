@@ -19,6 +19,26 @@
 %% limitations under the License.
 
 -module(action_wires_template).
+-moduledoc("
+Render a template. When used in a postback action, the result will be sent back with the response data for the postback.
+
+This is useful when you want to send the output from a template back as response in a postback or submit event handler.
+
+Example:
+
+
+```erlang
+z_render:wire({template, [{template, \"my_response.tpl\"}, {data,
+Response}]}, Context).
+```
+
+Template accepts the following arguments:
+
+| Argument | Description                                                           | Example                      |
+| -------- | --------------------------------------------------------------------- | ---------------------------- |
+| template | Name of template to render.                                           | template=”my\\\\_template.tpl” |
+| *        | Any other arguments will be passed on to the template being rendered. | id=123                       |
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
 

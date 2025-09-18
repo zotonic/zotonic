@@ -16,6 +16,13 @@
 %% limitations under the License.
 
 -module(action_admin_zmedia_has_chosen).
+-moduledoc("
+Used by the admin as a callback when a media file has been selected for insertion into the rich-text editor.
+
+Todo
+
+Extend documentation
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
 

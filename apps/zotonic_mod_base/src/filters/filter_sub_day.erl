@@ -17,6 +17,33 @@
 %% limitations under the License.
 
 -module(filter_sub_day).
+-moduledoc("
+See also
+
+[add\\_day](/id/doc_template_filter_filter_add_day), [sub\\_week](/id/doc_template_filter_filter_sub_week), [sub\\_month](/id/doc_template_filter_filter_sub_month), [sub\\_year](/id/doc_template_filter_filter_sub_year)
+
+Subtracts a day from a date. The value must be of the form `{{Y,M,D},{H,I,S}}`.
+
+For example:
+
+
+```django
+{{ value|sub_day }}
+```
+
+When the value is `{{2008,12,10},{15,30,0}}` then the output is `{{2008,12,9},{15,30,0}}`.
+
+The filter has an optional argument which defines the number of days to subtract:
+
+For example:
+
+
+```django
+{{ value|sub_day:3 }}
+```
+
+When the value is `{{2008,12,10},{15,30,0}}` then the output is `{{2008,12,7},{15,30,0}}`.
+").
 -export([sub_day/2, sub_day/3]).
 
 sub_day(undefined, _Context) ->

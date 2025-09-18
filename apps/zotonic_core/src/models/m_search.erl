@@ -26,6 +26,37 @@
 %%
 
 -module(m_search).
+-moduledoc("
+See also
+
+[Search](/id/doc_developerguide_search#guide-datamodel-query-model) , [pager](/id/doc_template_scomp_scomp_pager#scomp-pager) tag , [mod\\_search](/id/doc_module_mod_search) module , [Custom search](/id/doc_cookbook_custom_search#cookbook-custom-search)
+
+The m\\_search model provides access to different kinds of search queries for searching through models.
+
+Most searches in Zotonic are implemented in the [mod\\_search](/id/doc_module_mod_search) module, searching through the
+`rsc` table in different kinds of ways.
+
+Though, any module can implement a search by observing the `search_query` notification.
+
+The search module is used inside templates. For example, the following snippet fetches the latest 10 modified pages in
+the “text” category:
+
+
+```django
+{% for id in m.search[{latest cat=\"text\" pagelen=10}] %}
+    {{ m.rsc[id].title }}
+{% endfor %}
+```
+
+Another example, searching for a text and requesting the second page with 20 results at a time:
+
+
+```django
+{% for id, rank in m.search.paged[{fulltext text=query_string page=2 pagelen=20}] %}
+    {{ m.rsc[id].title }}
+{% endfor %}
+```
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 -behaviour(zotonic_model).

@@ -17,6 +17,11 @@
 %% limitations under the License.
 
 -module(scomp_base_cotonic_pathname_search).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 -author("Marc Worrell <marc@worrell.nl").
 -behaviour(zotonic_scomp).
 

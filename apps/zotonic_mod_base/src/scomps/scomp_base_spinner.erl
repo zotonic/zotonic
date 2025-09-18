@@ -17,6 +17,32 @@
 %% limitations under the License.
 
 -module(scomp_base_spinner).
+-moduledoc("
+Add an AJAX activity indicator.
+
+Whenever an AJAX call is made the HTML element with the id `#spinner` will be shown during the call.
+
+You can add a spinner element to your page yourself or use this tag to place it somewhere on your page.
+
+Example:
+
+
+```erlang
+{% spinner %}
+```
+
+Outputs the HTML code:
+
+
+```erlang
+<div id=\"spinner\" class=\"spinner\" style=\"display: none\">
+  <img alt=\"activity indicator\" src=\"/lib/images/spinner.gif\" />
+</div>
+```
+
+The spinner tag accepts a single argument “image”. The “image” argument must contain the URL for the image
+displayed. It defaults to “`/lib/images/spinner.gif`”.
+").
 -behaviour(zotonic_scomp).
 
 -export([vary/2, render/3]).

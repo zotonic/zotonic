@@ -18,6 +18,13 @@
 %% limitations under the License.
 
 -module(m_sysconfig).
+-moduledoc("
+Note
+
+System configurations are only accessible from templates, using `m.sysconfig`, for users with administrator rights.
+
+Gives access to the Zotonic system configuration from the `zotonic.config` file(s).
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 -behaviour(zotonic_model).

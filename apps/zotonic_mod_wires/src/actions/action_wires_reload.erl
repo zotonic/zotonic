@@ -18,6 +18,18 @@
 %% limitations under the License.
 
 -module(action_wires_reload).
+-moduledoc("
+Reload the current page.
+
+Example:
+
+
+```erlang
+{% button text=\"refresh\" action={reload} %}
+```
+
+Clicking on the button will reload the page.
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
 

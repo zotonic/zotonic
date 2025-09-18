@@ -17,6 +17,11 @@
 %% limitations under the License.
 
 -module(m_server_storage).
+-moduledoc("
+Model to access the server side storage of data.
+
+See the module documentation of [mod\\_server\\_storage](/id/doc_module_mod_server_storage) for information.
+").
 
 -behaviour(zotonic_model).
 

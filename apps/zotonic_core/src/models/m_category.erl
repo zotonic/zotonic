@@ -18,6 +18,93 @@
 %% limitations under the License.
 
 -module(m_category).
+-moduledoc("
+This model can retrieve information about the resource category hierarchy in different ways.
+
+Categories are the principal categorization (typing) system of resources. Every page is assigned to exactly one
+category. Categories themselves are organized in a tree-like hierarchy.
+
+A category is a resource with a special `category` record attached to it to store metadata related to the category
+hierarchy. The `m_category` model provides accessors to this category tree and individual category information.
+
+An example of a category tree, as returned by `{% print m.category.tree %}`:
+
+
+```erlang
+[[{id,101},
+  {parent_id,undefined},
+  {level,1},
+  {children,[]},
+  {path,\"e\"},
+  {left,1000000},
+  {right,1000000}],
+ [{id,104},
+  {parent_id,undefined},
+  {level,1},
+  {children,[[{id,106},
+              {parent_id,104},
+              {level,2},
+              {children,[[{id,109},
+                          {parent_id,106},
+                          {level,3},
+                          {children,[]},
+                          {path,\"hjm\"},
+                          {left,4000000},
+                          {right,4000000}]]},
+              {path,\"hj\"},
+              {left,3000000},
+              {right,4000000}]]},
+  {path,\"h\"},
+  {left,2000000},
+  {right,4000000}],
+  ...]
+```
+
+
+
+About the complete category tree
+--------------------------------
+
+The following m\\_category model properties are available in templates:
+
+| Property           | Description                                                                      | Example value      |
+| ------------------ | -------------------------------------------------------------------------------- | ------------------ |
+| tree               | Return the complete forest of category trees as nested property lists.           | See above.         |
+| tree2              | Return the forest of category trees as nested property lists. Up to the children of the children. | See above.         |
+| tree\\\\_flat        | Return a list of tuples for the category tree. This list is intended for select lists. There is a special field for the indentation. The returned list consists of proplists. The list does not contain the “meta” category, which contains the categories “predicate”, “category” etc. | See above entries. |
+| tree\\\\_flat\\\\_meta | Same as tree\\\\_flat but with the categories in the meta category.                | See above entries. |
+
+
+
+About a single category
+-----------------------
+
+The m\\_category has some special properties defined when fetching a category, they are accessed by id or category name.
+For example:
+
+
+```erlang
+{{ m.category[104].tree }}
+{{ m.category.text.tree }}
+```
+
+| Property    | Description                                                                      | Example value                         |
+| ----------- | -------------------------------------------------------------------------------- | ------------------------------------- |
+| tree        | The category tree below and including the indexing category.                     | See above.                            |
+| tree1       | The list of direct children below the indexing category.                         | See above.                            |
+| tree2       | The category tree below and including the indexing category, up to the children of the children. | See above.                            |
+| tree\\\\_flat | The category tree below and including the indexing category, up to the children of the children. As a flattened list. | See above.                            |
+| path        | List of parent category ids from the root till the category, excluding the indexing category. | \\\\[ 104, 106 \\\\]                      |
+| is\\\\_a      | List of the parent category names form the root till the category, including the current category. | \\\\[ text, article, news \\\\]           |
+| image       | A random depiction for this category. The returned image filename comes from one of the pages within this category. | <<”2009/10/20/flat-world-proof.jpg”>> |
+| parent\\\\_id | The page id of the parent category. Returns an integer or, for a root category, undefined. | 104                                   |
+| nr          | The category nr. Used for building the tree, will change when categories are added or removed. An integer. | 2                                     |
+| level       | The depth of the category. Level 1 is the root, 2 and more are below the root.   | 1                                     |
+| left        | The lowest value of the nr range of this category, including its sub categories. | 2                                     |
+| right       | The highest value of the nr range of this category, including its sub categories. | 8                                     |
+| name        | The unique page name of this category. A binary.                                 | <<”text”>>                            |
+| path        | The path through the hierarchy of categories to this category.                   | \\\\[104, 106\\\\]                        |
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 -behaviour(zotonic_model).

@@ -17,6 +17,9 @@
 %% limitations under the License.
 
 -module(filter_survey_any_correct_answer).
+-moduledoc("
+Determine if any answer of a question was correct. Used for showing results of thurstone test questions.
+").
 
 -export([
     survey_any_correct_answer/3

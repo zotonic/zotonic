@@ -18,6 +18,17 @@
 %% limitations under the License.
 
 -module(controller_admin_module_manager).
+-moduledoc("
+Shows the list of Zotonic modules currently known to the system.
+
+The list is sorted based on the module’s status: active modules are listed first, non-active modules next.
+
+Each module has a button which let you toggle the active status of the module.
+
+Todo
+
+Extend documentation
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
