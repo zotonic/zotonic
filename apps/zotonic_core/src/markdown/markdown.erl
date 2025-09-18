@@ -29,6 +29,9 @@
 -define(QUOT, $&, $q, $u, $o, $t, $;).
 -define(SQUOT, $&, $#, $3, $9, $;).
 
+-define(is_alnum(C), ((C >= $a andalso C =< $z) orelse
+                      (C >= $A andalso C =< $Z) orelse
+                      (C >= $0 andalso C =< $9))).
 
 %%% the lexer first lexes the input
 %%% make_lines does 2 passes:
@@ -1120,8 +1123,21 @@ l1([], A1, A2)             -> l1([], [], [l2(A1) | A2]);
 %% these two heads capture opening and closing tags
 l1([$<, $/|T], A1, A2)     -> {Tag, NewT} = closingdiv(T, []),
                               l1(NewT, [], [Tag, l2(A1) | A2]);
-l1([$< | T], A1, A2)       -> {Tag, NewT} = openingdiv(T),
+l1([$<, C | T], A1, A2) when ?is_alnum(C) -> {Tag, NewT} = openingdiv([C|T]),
                               l1(NewT, [], [Tag , l2(A1) | A2]);
+%% these clauses catch code escapes
+l1([$\\, $\\ | T], A1, A2)  -> l1(T, [], [{{punc, bslash}, "\\"}, l2(A1) | A2]);
+l1([$\\, $` | T], A1, A2)   -> l1(T, [], [{{punc, backtick}, "`"}, l2(A1) | A2]);
+l1([$`, $`, C | T], A1, A2) when C =/= $` ->
+                              case strdcode([C|T], []) of
+                                none -> l1([C|T], [], [{{punc, backtick}, "`"}, {{punc, backtick}, "`"}, l2(A1) | A2]);
+                                {Code, T1} -> l1(T1, [], [ {tags, Code}, l2(A1) | A2])
+                              end;
+l1([$`, C | T], A1, A2) when C =/= $` ->
+                              case strcode([C|T], []) of
+                                none -> l1([C|T], [], [{{punc, backtick}, "`"}, l2(A1) | A2]);
+                                {Code, T1} -> l1(T1, [], [ {tags, Code}, l2(A1) | A2])
+                              end;
 %% these clauses are the normal lexer clauses
 l1([$= | T], A1, A2)       -> l1(T, [], [{{md, eq}, "="},   l2(A1) | A2]);
 l1([$- | T], A1, A2)       -> l1(T, [], [{{md, dash}, "-"}, l2(A1) | A2]);
@@ -1169,6 +1185,28 @@ l1([H|T], A1, A2)          -> l1(T, [H |A1] , A2).
 l2([])   -> [];
 l2(List) -> {string, lists:flatten(lists:reverse(List))}.
 
+strcode([], _Acc) -> none;
+strcode([?CR|_], _Acc) -> none;
+strcode([?LF|_], _Acc) -> none;
+strcode([$`, $` | T], Acc) ->
+    {Bs, T1} = lists:splitwith(fun(C) -> C =:= $` end, T),
+    strcode(T1, [$`, $`, Bs | Acc]);
+strcode([$` | T], Acc) ->
+    {["<code>", htmlencode(lists:reverse(Acc)), "</code>"], T};
+strcode([H | T], Acc) ->
+    strcode(T, [H | Acc]).
+
+strdcode([], _Acc) -> none;
+strdcode([?CR|_], _Acc) -> none;
+strdcode([?LF|_], _Acc) -> none;
+strdcode([$`, $`, $` | T], Acc) ->
+    {Bs, T1} = lists:splitwith(fun(C) -> C =:= $` end, T),
+    strdcode(T1, [$`, $`, $`, Bs | Acc]);
+strdcode([$`, $` | T], Acc) ->
+    {["<code>", htmlencode(lists:reverse(Acc)), "</code>"], T};
+strdcode([H | T], Acc) ->
+    strdcode(T, [H | Acc]).
+
 %% need to put in regexes for urls and e-mail addies
 openingdiv(String) ->
     case get_url(String) of
@@ -1183,6 +1221,10 @@ openingdiv(String) ->
 % dumps out a list if it is not an opening div
 openingdiv1([], Acc)         -> {lists:flatten([{{punc, bra}, "<"}
                                           | lex(lists:reverse(Acc))]), []};
+openingdiv1([?CR, ?LF|T], Acc) -> {lists:flatten([{{punc, bra}, "<"}
+                                          | lex(lists:reverse(Acc, [?CR, ?LF | T]))]), []};
+openingdiv1([?LF|T], Acc) -> {lists:flatten([{{punc, bra}, "<"}
+                                          | lex(lists:reverse(Acc, [?LF | T]))]), []};
 openingdiv1([$/,$>| T], Acc) -> Acc2 = lists:flatten(lists:reverse(Acc)),
                                 Acc3 = string:lowercase(Acc2),
                                 [Tag | _T] = string:lexemes(Acc3, " "),
@@ -1228,14 +1270,9 @@ get_email_addie(String) ->
         {_, []} ->
             not_email;
         {Possible, [$> | T]} ->
-            EMail_regex = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+"
-                ++ "(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*"
-                ++ "@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+"
-                ++ "(?:[a-zA-Z]{2}|com|org|net|gov|mil"
-                ++ "|biz|info|mobi|name|aero|jobs|museum)",
-            case re:run(Possible, EMail_regex, [ unicode ]) of
-                nomatch    -> not_email;
-                {match, _} -> {{email, Possible}, T}
+            case z_email_utils:is_email(unicode:characters_to_binary(Possible)) of
+                true -> {{email, Possible}, T};
+                false -> not_email
             end
     end.
 
@@ -1248,14 +1285,13 @@ make_plain_str(List) -> m_plain(List, []).
 
 m_plain([], Acc)                           -> lists:flatten(lists:reverse(Acc));
 m_plain([{{ws, none}, none} | T], Acc)     -> m_plain(T, [" " | Acc]);
+m_plain([{email, Email} | T], Acc)         -> m_plain(T, ["<"++Email++">" | Acc]);
 m_plain([{_, Str} | T], Acc)               -> m_plain(T, [Str | Acc]).
 
 make_esc_str(List, Refs) -> m_esc(List, Refs, []).
 
 m_esc([], _R, A)               -> lists:flatten(lists:reverse(A));
-m_esc([{tags, Tag} | T], R, A) -> m_esc(T, R, [{tags, Tag} | A]);
 m_esc([H | T], R, A)           -> m_esc(T, R, [make_str([H], R) | A]).
-
 
 make_str(List, Refs) -> m_str1(List, Refs, []).
 
@@ -1286,10 +1322,10 @@ m_str1([{{inline, open}, O} | T], R, A) ->
             m_str1(Rest, R, [Tag, O | A])
     end;
 m_str1([{email, Addie} | T], R, A) ->
-    m_str1(T, R, [ {tags, "</a>"}, Addie, {tags, "\">"}, Addie,
+    m_str1(T, R, [ {tags, "</a>"}, Addie, {tags, "\">"}, z_url:url_encode(Addie),
                    {tags, "<a href=\"mailto:"} | A]);
 m_str1([{url, Url} | T], R, A) ->
-    m_str1(T, R, [ {tags, "</a>"}, Url, {tags, "\">"}, Url,
+    m_str1(T, R, [ {tags, "</a>"}, Url, {tags, "\">"}, htmlencode(Url),
                    {tags, "<a href=\""} | A]);
 m_str1([{tags, _} = Tag | T], R, A) ->
     m_str1(T, R, [Tag | A]);
@@ -1299,6 +1335,9 @@ m_str1([{{{tag, Type}, Tag}, _} | T], R, A) ->
                  open         -> {tags, "&lt;"  ++ Tag2 ++ "&gt;"};
                  close        -> {tags, "&lt;/" ++ Tag2 ++ "&gt;"};
                  self_closing -> {tags, "&lt;"  ++ Tag2 ++ " /&gt;"}
+                 % open         -> {tags, "<"  ++ Tag2 ++ ">"};
+                 % close        -> {tags, "</" ++ Tag2 ++ ">"};
+                 % self_closing -> {tags, "<"  ++ Tag2 ++ " />"}
              end,
     m_str1(T, R, [TagStr | A]);
 m_str1([{_, Orig} | T], R, A)  ->
@@ -1374,6 +1413,10 @@ htmlencode([$&   | Rest], Acc) -> htmlencode(Rest, ["&amp;" | Acc]);
 htmlencode([$<   | Rest], Acc) -> htmlencode(Rest, ["&lt;" | Acc]);
 htmlencode([$>   | Rest], Acc) -> htmlencode(Rest, ["&gt;" | Acc]);
 htmlencode([160  | Rest], Acc) -> htmlencode(Rest, ["&nbsp;" | Acc]);
+htmlencode([{tags, T}  | Rest], Acc) -> htmlencode(Rest, [T | Acc]);
+htmlencode([L    | Rest], Acc) when is_list(L) ->
+    A1 = htmlencode(L, []),
+    htmlencode(Rest, [A1 | Acc]);
 htmlencode([Else | Rest], Acc) -> htmlencode(Rest, [Else | Acc]).
 
 htmlchars(List) -> htmlchars1(List, []).
@@ -1420,12 +1463,6 @@ htmlchars1([$_, $_ | T], A)          -> {T2, NewA} = strong(T, $_),
 htmlchars1([$\\, $_ | T], A)         -> htmlchars1(T, [$_ | A]);
 htmlchars1([$_ | T], A)              -> {T2, NewA} = emphasis(T, $_),
                                         htmlchars1(T2, [NewA | A]);
-%% handle backtick escaping
-htmlchars1([$\\, $` | T], A)         -> htmlchars1(T, [$` | A]);
-htmlchars1([$`, $` | T], A)          -> {T2, NewA} = dblcode(T),
-                                        htmlchars1(T2, [NewA | A]);
-htmlchars1([$` | T], A)              -> {T2, NewA} = code(T),
-                                        htmlchars1(T2, [NewA | A]);
 htmlchars1([?COPY | T], A)           -> htmlchars1(T, ["&copy;" | A]);
 htmlchars1([?AMP | T], A)            -> htmlchars1(T, ["&amp;" | A]);
 htmlchars1([?LT | T], A)             -> htmlchars1(T, ["&lt;" | A]);
@@ -1439,26 +1476,19 @@ htmlchars1([$" | T], A)              -> htmlchars1(T, ["&quot;" | A]);
 htmlchars1([?NBSP | T], A)           -> htmlchars1(T, ["&nbsp;" | A]);
 htmlchars1([?TAB | T], A)            -> htmlchars1(T, ["    " | A]);
 htmlchars1([none | T], A)            -> htmlchars1(T, A);
+htmlchars1([L | T], A) when is_list(L) ->
+    A1 = htmlchars1(L, []),
+    htmlchars1(T, [ A1 | A ]);
 htmlchars1([H | T], A)               -> htmlchars1(T, [H | A]).
 
 emphasis(List, Delim)    -> interpolate(List, Delim, "em", "" ,[]).
 strong(List, Delim)      -> interpolate2(List, Delim, "strong", "", []).
 del(List, Delim)          -> interpolate2(List, Delim, "del", "", []).
 superstrong(List, Delim) -> interpolate3(List, Delim, "strong", "em", "", []).
-dblcode(List)            -> {T, Tag} = interpolate2(List, $`, "code", "" ,[]),
-                            {T, "<pre>" ++ Tag ++ "</pre>"}.
-code(List)               -> interpolateX(List, $`, "code", "", []).
 
 %% pain in the arse - sometimes the closing tag should be preceded by
 %% a "\n" and sometimes not in showdown.js
 %% interpolate is for single delimiters...
-interpolateX([], Delim, _Tag, _X, Acc) ->
-    {[], [Delim] ++ htmlchars(lists:reverse(Acc))};
-interpolateX([Delim | T], Delim, Tag, X, Acc) ->
-    {T,  "<" ++ Tag ++ ">" ++ htmlchars(lists:reverse(Acc)) ++ X ++ "</" ++ Tag ++ ">"};
-interpolateX([H | T], Delim, Tag, X, Acc) ->
-    interpolateX(T, Delim, Tag, X, [H | Acc]).
-
 interpolate([], Delim, _Tag, _X, Acc) ->
     {[], [Delim] ++ htmlchars(lists:reverse(Acc))};
 interpolate([Delim | T], Delim, Tag, X, Acc) ->
