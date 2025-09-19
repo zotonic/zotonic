@@ -139,3 +139,10 @@ not sanitized and must be escaped or otherwise sanitized.
 Files in the directory `priv/templates/static` can be served as-is. If a file in this directory has
 the extension `.tpl` then it *must* be a valid template.
 
+Favor semantic HTML and accessibility.
+
+- Use semantic tags: `header`, `nav`, `main`, `section`, `article`, `footer`, etc.
+- Prefer Zotonic template constructs ({% block %}, {% if %}, {% for %}, etc.) for logic.
+- Avoid excessive divs and inline styles.
+- Add `aria-` attributes and `alt` text to images for accessibility.
+- Use lowercase for HTML tags and attributes.
