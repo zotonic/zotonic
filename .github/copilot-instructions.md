@@ -1,6 +1,6 @@
 # Project Overview
 
-This project is a content management system and framework. It us used to
+This project is a content management system and framework. It is used to
 build websites that are information-rich, have real-time functionality or special
 security or connectivity needs.
 
