@@ -130,7 +130,7 @@ in the config file. The supported formats are:
 Templates are always stored in the `priv/templates` directory. They have the file extension `.tpl`.
 The syntax of templates is very similar to the Django template language.
 
-In templates care should be taken that values from `q` are not directly shown in `{{ ... }}}` constructs
+In templates care should be taken that values from `q` are not directly shown in `{{ ... }}` constructs
 but escaped or otherwise sanitized.
 
 Values from the `m.rsc` model are sanitized and can be displayed directly. Values from other models are
