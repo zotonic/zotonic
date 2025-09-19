@@ -1,0 +1,2 @@
+prefix foaf: <http://xmlns.com/foaf/0.1/>
+select ?name where { ?x foaf:name ?name }

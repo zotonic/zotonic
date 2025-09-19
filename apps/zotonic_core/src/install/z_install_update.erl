@@ -349,6 +349,7 @@ upgrade(C, Database, Schema) ->
     ok = media_frame_count(C, Database, Schema),
     ok = identity_log(C, Database, Schema),
     ok = medium_update_v2(C, Database, Schema),
+    ok = rsc_props_json(C, Database, Schema),
     ok = pivot_page_path(C, Database, Schema),
     ok = medium_update_function_check(C, Database, Schema),
     ok = medium_digest_field(C, Database, Schema),
@@ -1101,6 +1102,24 @@ medium_digest_field(C, Database, Schema) ->
                 table => medium
             }),
             {ok,[],[]} = epgsql:squery(C, "alter table medium add column digest character varying(80)"),
+            ok
+    end.
+
+rsc_props_json(C, Database, Schema) ->
+    case has_column(C, "rsc", "props_json", Database, Schema) of
+        true ->
+            ok;
+        false ->
+            ?LOG_NOTICE(#{
+                text => <<"Upgrade: adding props_json column to rsc">>,
+                in => zotonic_core,
+                database => Database,
+                schema => Schema,
+                table => rsc
+            }),
+            {ok, [], []} = epgsql:squery(C,
+                                    "alter table rsc "
+                                    "add column props_json jsonb"),
             ok
     end.
 

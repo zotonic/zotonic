@@ -176,6 +176,7 @@ model_pgsql() ->
       language character varying(16)[],
       slug character varying(80) NOT NULL DEFAULT ''::character varying,
       props bytea,
+      props_json jsonb,
       created timestamp with time zone NOT NULL DEFAULT now(),
       modified timestamp with time zone NOT NULL DEFAULT now(),
 

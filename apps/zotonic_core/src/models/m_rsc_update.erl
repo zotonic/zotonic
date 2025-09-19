@@ -2172,6 +2172,7 @@ is_protected(<<"creator_id">>, true) -> true;
 is_protected(<<"modified">>, true) -> true;
 is_protected(<<"modifier_id">>, true) -> true;
 is_protected(<<"props">>, _IsNormal) -> true;
+is_protected(<<"props_json">>, _IsNormal) -> true;
 is_protected(<<"version">>, _IsNormal) -> true;
 is_protected(<<"short_url">>, _IsNormal) -> true;
 is_protected(<<"page_url">>, _IsNormal) -> true;

@@ -1,0 +1,79 @@
+Builtin functions
+=================
+
+These need to be mapped to PostgreSQL equivalents.
+
+
+BuiltInCall   ::= Aggregate
+                | 'STR' '(' Expression ')'
+                | 'LANG' '(' Expression ')'
+                | 'LANGMATCHES' '(' Expression ',' Expression ')'
+                | 'DATATYPE' '(' Expression ')'
+                | 'BOUND' '(' Var ')'
+                | 'IRI' '(' Expression ')'
+                | 'URI' '(' Expression ')'
+                | 'BNODE' ( '(' Expression ')' | NIL )
+                | 'RAND' NIL
+                | 'ABS' '(' Expression ')'
+                | 'CEIL' '(' Expression ')'
+                | 'FLOOR' '(' Expression ')'
+                | 'ROUND' '(' Expression ')'
+                | 'CONCAT' ExpressionList
+                | SubstringExpression
+                | 'STRLEN' '(' Expression ')'
+                | StrReplaceExpression
+                | 'UCASE' '(' Expression ')'
+                | 'LCASE' '(' Expression ')'
+                | 'ENCODE_FOR_URI' '(' Expression ')'
+                | 'CONTAINS' '(' Expression ',' Expression ')'
+                | 'STRSTARTS' '(' Expression ',' Expression ')'
+                | 'STRENDS' '(' Expression ',' Expression ')'
+                | 'STRBEFORE' '(' Expression ',' Expression ')'
+                | 'STRAFTER' '(' Expression ',' Expression ')'
+                | 'YEAR' '(' Expression ')'
+                | 'MONTH' '(' Expression ')'
+                | 'DAY' '(' Expression ')'
+                | 'HOURS' '(' Expression ')'
+                | 'MINUTES' '(' Expression ')'
+                | 'SECONDS' '(' Expression ')'
+                | 'TIMEZONE' '(' Expression ')'
+                | 'TZ' '(' Expression ')'
+                | 'NOW' NIL
+                | 'UUID' NIL
+                | 'STRUUID' NIL
+                | 'MD5' '(' Expression ')'
+                | 'SHA1' '(' Expression ')'
+                | 'SHA256' '(' Expression ')'
+                | 'SHA384' '(' Expression ')'
+                | 'SHA512' '(' Expression ')'
+                | 'COALESCE' ExpressionList
+                | 'IF' '(' Expression ',' Expression ',' Expression ')'
+                | 'STRLANG' '(' Expression ',' Expression ')'
+                | 'STRDT' '(' Expression ',' Expression ')'
+                | 'sameTerm' '(' Expression ',' Expression ')'
+                | 'isIRI' '(' Expression ')'
+                | 'isURI' '(' Expression ')'
+                | 'isBLANK' '(' Expression ')'
+                | 'isLITERAL' '(' Expression ')'
+                | 'isNUMERIC' '(' Expression ')'
+                | RegexExpression
+                | ExistsFunc
+                | NotExistsFunc
+
+RegexExpression   ::=   'REGEX' '(' Expression ',' Expression ( ',' Expression )? ')'
+
+SubstringExpression   ::=   'SUBSTR' '(' Expression ',' Expression ( ',' Expression )? ')'
+
+StrReplaceExpression      ::=   'REPLACE' '(' Expression ',' Expression ',' Expression ( ',' Expression )? ')'
+
+ExistsFunc    ::=   'EXISTS' GroupGraphPattern
+
+NotExistsFunc     ::=   'NOT' 'EXISTS' GroupGraphPattern
+
+Aggregate     ::=     'COUNT' '(' 'DISTINCT'? ( '*' | Expression ) ')'
+                | 'SUM' '(' 'DISTINCT'? Expression ')'
+                | 'MIN' '(' 'DISTINCT'? Expression ')'
+                | 'MAX' '(' 'DISTINCT'? Expression ')'
+                | 'AVG' '(' 'DISTINCT'? Expression ')'
+                | 'SAMPLE' '(' 'DISTINCT'? Expression ')'
+                | 'GROUP_CONCAT' '(' 'DISTINCT'? Expression ( ';' 'SEPARATOR' '=' String )? ')'
