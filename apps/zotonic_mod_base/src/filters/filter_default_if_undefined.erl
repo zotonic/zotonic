@@ -35,7 +35,7 @@ For example:
 {{ value|default_if_undefined:1 }}
 ```
 
-Same as [default_if_none](/id/doc/template_filter_filter_default_if_none).
+Same as [default\\_if\\_none](/id/doc_template_filter_filter_default_if_none).
 
 This filter is built-in in the template compiler and inlined when compiling templates.
 
