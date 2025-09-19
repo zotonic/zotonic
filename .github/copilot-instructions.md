@@ -118,11 +118,12 @@ sitename/
       nl.po
 ```
 
-The `priv/zotonic_site` config can be in different formats. The supported formats are:
+The `priv/zotonic_site.config` file can be in different formats. The extension depends on the format used
+in the config file. The supported formats are:
 
- - `.config` for Erlang
- - `.json` for JSON
- - `.yaml` or `.yml` for YAML
+ - `.config` for Erlang (`priv/zotonic_site.config`)
+ - `.json` for JSON (`priv/zotonic_site.json`)
+ - `.yaml` or `.yml` for YAML (`priv/zotonic_site.yml`)
 
 ## Templates
 
