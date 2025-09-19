@@ -31,35 +31,35 @@ be used as modules pulled from Hex.pm using rebar dependencies.
 Each site and module is an Erlang application. They must have a .app.src file in
 their src directory and a rebar.config file in the root directory.
 
-A module name *must* start with `zotonic_mod_<modulename>` and *must* have the
+A module name *must* start with `zotonic_mod_<mymod>` and *must* have the
 following files:
 
 - `rebar.config`
-- `src/zotonic_mod_<modulename>.app.src`
-- `src/mod_<modulename>.erl`
+- `src/zotonic_mod_<mymod>.app.src`
+- `src/mod_<mymod>.erl`
 
 The directory structure of a Zotonic module application is as follows:
 
 ```
-zotonic_mod_example/
+zotonic_mod_mymod/
   rebar.config
   src/
-    zotonic_mod_example.app.src
-    mod_example.erl
+    zotonic_mod_mymod.app.src
+    mod_mymod.erl
     actions/
-        action_example_somename.erl
+        action_mymod_somename.erl
     filters/
         filter_foobar.erl
     scomps/
-        scomp_example_somename.erl
+        scomp_mymod_somename.erl
     validators/
-        validator_example_somename.erl
+        validator_mymod_somename.erl
     models/
         m_foobar.erl
     controllers/
         controller_foobar.erl
     support/
-        example_routines.erl
+        mymod_routines.erl
   include/
   priv/
     dispatch/
@@ -69,6 +69,8 @@ zotonic_mod_example/
         images/
     lib-src/
     templates/
+        page.tpl
+        mediaclass.config
     translations/
       en.po
       nl.po
@@ -121,9 +123,9 @@ sitename/
 The `priv/zotonic_site.config` file can be in different formats. The extension depends on the format used
 in the config file. The supported formats are:
 
- - `.config` for Erlang (`priv/zotonic_site.config`)
- - `.json` for JSON (`priv/zotonic_site.json`)
- - `.yaml` or `.yml` for YAML (`priv/zotonic_site.yml`)
+- `.config` for Erlang (`priv/zotonic_site.config`)
+- `.json` for JSON (`priv/zotonic_site.json`)
+- `.yaml` or `.yml` for YAML (`priv/zotonic_site.yml`)
 
 ## Templates
 
@@ -139,10 +141,15 @@ not sanitized and must be escaped or otherwise sanitized.
 Files in the directory `priv/templates/static` can be served as-is. If a file in this directory has
 the extension `.tpl` then it *must* be a valid template.
 
-Favor semantic HTML and accessibility.
+General advise for templates:
 
+- Favor semantic HTML and accessibility.
 - Use semantic tags: `header`, `nav`, `main`, `section`, `article`, `footer`, etc.
 - Prefer Zotonic template constructs ({% block %}, {% if %}, {% for %}, etc.) for logic.
 - Avoid excessive divs and inline styles.
 - Add `aria-` attributes and `alt` text to images for accessibility.
 - Use lowercase for HTML tags and attributes.
+
+In the templates directory there can be a file `mediaclass.config` which contains definitions for
+image preview generation. The names of the mediaclasses in these files can be used in `{% image %}` tags.
+The `mediaclass.config` file must be in Erlang format.
