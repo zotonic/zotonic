@@ -81,7 +81,7 @@ priority module or site.
 In priv/lib-src we have the source code of CSS and Javascript code, which is placed in priv/lib.
 
 The directory structure of a Zotonic site application is very similar to a module, but it *must*
-have a `priv/zotonic_site` configurarion file:
+have a `priv/zotonic_site` configuration file:
 
 ```
 sitename/
