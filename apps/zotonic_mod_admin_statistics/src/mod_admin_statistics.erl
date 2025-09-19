@@ -17,6 +17,11 @@
 %% limitations under the License.
 
 -module(mod_admin_statistics).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 -author("Maas-Maarten Zeeman <mmzeeman@xs4all.nl>").
 
 -mod_title("Admin Statistics").

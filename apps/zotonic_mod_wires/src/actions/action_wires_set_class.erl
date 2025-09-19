@@ -18,6 +18,19 @@
 %% limitations under the License.
 
 -module(action_wires_set_class).
+-moduledoc("
+Set the class of an element.
+
+Example:
+
+
+```erlang
+<div id=\"x\" class=\"not-inited\"></div>
+{% button text=\"Init\" action={set_class target=\"x\" class=\"inited\"} %}
+```
+
+This uses the jQuery attr(‘class’, class\\_name) method to set the new class.
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
 

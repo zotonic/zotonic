@@ -17,6 +17,18 @@
 %% limitations under the License.
 
 -module(filter_round).
+-moduledoc("
+Round a floating point value to the nearest integer.
+
+Example:
+
+
+```django
+{{ 3.5|round }}
+```
+
+Results in the integer value `4`.
+").
 
 -export([round/2]).
 

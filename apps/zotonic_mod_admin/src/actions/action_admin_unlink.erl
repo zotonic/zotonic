@@ -18,6 +18,51 @@
 %% limitations under the License.
 
 -module(action_admin_unlink).
+-moduledoc("
+See also
+
+[link](/id/doc_template_action_action_link)
+
+Remove an [edge](/id/doc_glossary#term-edge) between two [resources](/id/doc_glossary#term-resource). Used in the admin.
+
+The edge is selected with either:
+
+*   the argument `edge_id`
+*   the arguments `subject_id`, `predicate`, `object_id`
+
+For instance:
+
+
+```django
+{% button
+    text=\"Remove\"
+    class=\"btn\"
+    action={
+        unlink
+        subject_id=id
+        predicate=\"contains\"
+        object_id=other_id
+        action={
+            reload
+        }
+    }
+%}
+```
+
+Other arguments:
+
+*   hide - selector to fade out after unlink
+*   edge\\_template - passed on to the undo action template
+*   action - actions executed after unlink
+*   undo\\_action - passed on to the undo action template
+*   undo\\_message\\_id - defaults to unlink-undo-message
+
+After update, an undo message is rendered in the undo\\_message\\_id target, with the template `_action_unlink_undo.tpl`.
+
+Todo
+
+Extend documentation
+").
 -author("Marc Worrell <marc@worrell.nl").
 -include_lib("zotonic_core/include/zotonic.hrl").
 

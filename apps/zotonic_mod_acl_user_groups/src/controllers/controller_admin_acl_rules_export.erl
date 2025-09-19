@@ -17,6 +17,11 @@
 %% limitations under the License.
 
 -module(controller_admin_acl_rules_export).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 
 -export([
         service_available/1,

@@ -18,6 +18,22 @@
 %% limitations under the License.
 
 -module(filter_split).
+-moduledoc("
+See also
+
+[join](/id/doc_template_filter_filter_join)
+
+Splits the filter value into a list of values.
+
+The input value is split by the filter argument, for example:
+
+
+```django
+{{ \"foo bar baz\"|split:\" \" }}
+```
+
+Will create the list `[\"foo\", \"bar\", \"baz\"]`.
+").
 -export([split/3]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

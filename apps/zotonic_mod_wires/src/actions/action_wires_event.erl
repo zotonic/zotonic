@@ -18,6 +18,12 @@
 %% limitations under the License.
 
 -module(action_wires_event).
+-moduledoc("
+Bind actions to a jQuery event or submit a form.
+
+This action is the base action for the [wire](/id/doc_template_scomp_scomp_wire#scomp-wire) scomp. Normally this event
+is not used directly.
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
 

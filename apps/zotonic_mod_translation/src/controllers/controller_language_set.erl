@@ -17,6 +17,14 @@
 %% limitations under the License.
 
 -module(controller_language_set).
+-moduledoc("
+Controller which sets the language as given in the `code` argument, and redirects the user back to the page given in the
+`p` argument.
+
+Todo
+
+Extend documentation
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([

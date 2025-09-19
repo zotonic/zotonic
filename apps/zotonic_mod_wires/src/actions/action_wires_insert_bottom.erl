@@ -18,6 +18,38 @@
 %% limitations under the License.
 
 -module(action_wires_insert_bottom).
+-moduledoc("
+See also
+
+actions [insert\\_after](/id/doc_template_action_action_insert_after),
+[insert\\_before](/id/doc_template_action_action_insert_before),
+[insert\\_top](/id/doc_template_action_action_insert_top) and [update](/id/doc_template_action_action_update).
+
+Inserts HTML after the contents of an HTML element.
+
+Adds a template or a literal HTML text after the existing content.
+
+Example:
+
+
+```django
+<div id=\"mydiv\"><p>Bye Bye.</p></div>
+{% button text=\"hello\" action={insert_bottom target=\"mydiv\" text=\"<p>Hello World!</p>\"} %}
+```
+
+After the button is clicked, the contents of the div will be &lt;p>Bye Bye.</p>&lt;p>Hello World!</p>.
+
+Another example, now rendering a template:
+
+
+```django
+<ul id=\"mylist\"><li>Some item</li></li>
+{% button text=\"hello\" action={insert_bottom target=\"mylist\" template=\"_list_item.tpl\" id=42} %}
+```
+
+This insert the output of the template \\_list\\_item.tpl below the existing &lt;li/>. All arguments to the update
+action are also arguments to the template.
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -export([

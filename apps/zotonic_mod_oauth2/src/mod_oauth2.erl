@@ -18,6 +18,11 @@
 %% limitations under the License.
 
 -module(mod_oauth2).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("OAuth2").

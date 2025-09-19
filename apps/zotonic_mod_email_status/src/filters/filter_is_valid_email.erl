@@ -17,6 +17,11 @@
 %% limitations under the License.
 
 -module(filter_is_valid_email).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 -export([is_valid_email/2]).
 
 

@@ -17,6 +17,25 @@
 %% limitations under the License.
 
 -module(filter_eq_day).
+-moduledoc("
+See also
+
+[ne\\_day](/id/doc_template_filter_filter_ne_day)
+
+Tests if the value is a date and equal to the argument. The value and the argument must be a tuple of the format
+`{Y,M,D}` or `{{Y,M,D},{H,I,S}}`.
+
+For example:
+
+
+```django
+{% if value|eq_day:othervalue %}same day{% endif %}
+```
+
+This outputs “same day” if value and othervalue are dates and on the same day.
+
+This is useful for conditions, in combination with for example the if tag.
+").
 -export([eq_day/3]).
 
 eq_day({Y,M,D}, {Y,M,D}, _Context) ->

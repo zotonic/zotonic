@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_facebook).
+-moduledoc("
+Not yet documented.
+").
 -author("Maas-Maarten Zeeman <mmzeeman@xs4all.nl").
 
 -behaviour(zotonic_model).

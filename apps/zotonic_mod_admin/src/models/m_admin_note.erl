@@ -18,6 +18,12 @@
 %% limitations under the License.
 
 -module(m_admin_note).
+-moduledoc("
+Add an editorial note to any resource.
+
+The note is entered on the admin edit page. Only people with edit permission on the resource *and* access to the admin
+are allowed to see and edit notes.
+").
 
 -export([
     m_get/3,

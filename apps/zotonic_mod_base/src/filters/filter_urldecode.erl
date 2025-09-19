@@ -18,6 +18,24 @@
 %% limitations under the License.
 
 -module(filter_urldecode).
+-moduledoc("
+See also
+
+[sanitize\\_url](/id/doc_template_filter_filter_sanitize_url), [is\\_site\\_url](/id/doc_template_filter_filter_is_site_url), [url\\_abs](/id/doc_template_filter_filter_url_abs), [url](/id/doc_template_filter_filter_url), [urlencode](/id/doc_template_filter_filter_urlencode)
+
+Decode a text where characters are encoded as URL-safe characters.
+
+Translates all percent encoded characters back to their original encoding.
+
+For example:
+
+
+```django
+{{ value|urldecode }}
+```
+
+When value is “msg%3DHello%26World” then the output is “msg=Hello&World”.
+").
 -export([urldecode/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

@@ -18,6 +18,11 @@
 %% limitations under the License.
 
 -module(filter_survey_prepare_thurstone).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 
 -export([
     survey_prepare_thurstone/1,

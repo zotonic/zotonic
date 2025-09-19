@@ -19,6 +19,13 @@
 %% limitations under the License.
 
 -module(action_admin_modules_module_rescan).
+-moduledoc("
+Rescans all modules, to find all templates, lib files, dispatch rules, etc. again.
+
+Todo
+
+Extend documentation
+").
 -author("Marc Worrell <marc@worrell.nl").
 -include_lib("zotonic_core/include/zotonic.hrl").
 

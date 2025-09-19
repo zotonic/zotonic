@@ -16,6 +16,15 @@
 %% limitations under the License.
 
 -module(m_hierarchy).
+-moduledoc("
+The category hierarchy tables have been replaced by *m\\_hierarchy*. This model defines named hierarchies of resources (pages).
+
+If the categories are changed then the system needs to update the *pivot\\_category\\_nr* field of all resources. With
+the introduction of *m\\_hierarchy* this renumbering is much more efficient and will only affect a minimal number of resources.
+
+The *m\\_hierarchy* module is also used for the content- and user group hierarchies, as used by the new
+*mod\\_acl\\_user\\_groups* module.
+").
 
 -export([
     m_get/3,

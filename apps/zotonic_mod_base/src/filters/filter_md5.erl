@@ -17,6 +17,25 @@
 %% limitations under the License.
 
 -module(filter_md5).
+-moduledoc("
+Translates a string to a [md5](http://en.wikipedia.org/wiki/MD5) hex value.
+
+For example:
+
+
+```django
+{{ \"The quick brown fox jumps over the lazy dog\"|md5 }}
+```
+
+Creates:
+
+
+```django
+9E107D9D372BB6826BD81D3542A419D6
+```
+
+Note that MD5 is not considered to be a very safe encryption algorithm.
+").
 -export([md5/2]).
 
 

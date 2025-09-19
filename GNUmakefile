@@ -70,12 +70,7 @@ dialyzer: $(REBAR)
 	./rebar3 dialyzer
 
 # Generate documentation
-.PHONY: docs edocs
-
-docs:
-	@echo Building HTML documentation...
-	cd doc && $(MAKE) stubs && $(MAKE) html
-	@echo HTML documentation is now available in doc/_build/html/
+.PHONY: edocs
 
 edocs: $(REBAR)
 	@echo Building reference edoc documentation...

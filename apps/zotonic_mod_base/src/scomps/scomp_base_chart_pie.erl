@@ -20,6 +20,52 @@
 %% limitations under the License.
 
 -module(scomp_base_chart_pie).
+-moduledoc("
+Show a pie chart.
+
+This is an utility tag providing a simplified interface to the pie chart feature of the [\\{% google\\_chart
+%\\}](/id/doc_template_scomp_scomp_google_chart#scomp-google-chart) tag. It has an easier way to define the data.
+
+Example of simple pie chart:
+
+
+```django
+{% chart_pie data=[[\"firefox\",23],
+                   [\"internet explorer\", 67],
+                   [\"safari\",4],
+                   [\"chrome\",3],
+                   [\"other\", 3]]
+%}
+```
+
+This generates the following image tag:
+
+
+```django
+<img class='google_chart' alt='google chart'
+   src='http://chart.apis.google.com/chart?&cht=p&chts=909090,10&chs=300x150&chg=0,0,1,5&chf=bg,s,ffffff|c,s,ffffff&chdlp=b&chbh=-3,3,7&chxt=x&chxl=0:|firefox|internet%20explorer|safari|chrome|other&chxs=0,909090,10&chco=&chds=0,100&chd=t:23,67,4,3,3&chls=1,1,0' width='300' height='150' />
+```
+
+Or, as an image:
+
+
+
+The tag chart\\_pie accepts the following arguments:
+
+| Argument | Description                                                                      | Example                                 |
+| -------- | -------------------------------------------------------------------------------- | --------------------------------------- |
+| data     | The data for the pie chart. A list of pairs of \\\\{label, value\\\\} or \\\\[label, value\\\\]. | \\\\[\\\\{“nl”,300\\\\},\\\\{uk,”200”\\\\}\\\\]     |
+| colors   | The colors for the pies. A list of colors, when there are more data points than colors then the colors are interpolated. Colors are specified in hexadecimal. Defaults to Google default colors. | colors=\\\\[“ffcc00”,”ccff00”,”00ffcc”\\\\] |
+| threed   | Set to true to have a 3D effect on the pie chart. Defaults to false.             | threed=true                             |
+| width    | The width of the generated pie chart, in pixels. Defaults to 300.                | width=450                               |
+| height   | The height of the generated pie chart, in pixels. Defaults to 150.               | height=200                              |
+
+Other arguments can be found at the [google\\_chart](/id/doc_template_scomp_scomp_google_chart#scomp-google-chart) tag.
+
+See also
+
+[google\\_chart](/id/doc_template_scomp_scomp_google_chart#scomp-google-chart) and [chart\\_pie3d](/id/doc_template_scomp_scomp_chart_pie3d#scomp-chart-pie3d).
+").
 -author("Marc Worrell <marc@worrell.nl").
 -behaviour(zotonic_scomp).
 

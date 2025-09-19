@@ -18,6 +18,13 @@
 %% limitations under the License.
 
 -module(controller_admin_mailing_preview).
+-moduledoc("
+This controller shows a preview of what a resource that is being mailed would look like, in a popup window.
+
+Todo
+
+Extend documentation
+").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -export([

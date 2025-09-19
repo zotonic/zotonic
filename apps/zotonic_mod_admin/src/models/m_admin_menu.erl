@@ -19,6 +19,11 @@
 %% limitations under the License.
 
 -module(m_admin_menu).
+-moduledoc("
+This model holds the admin menu, which is built up by calling each module to add items to the menu.
+
+You can extend the admin menu by observing the [admin\\_menu](/id/doc_notification_admin_menu#admin-menu) notification.
+").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -behaviour(zotonic_model).

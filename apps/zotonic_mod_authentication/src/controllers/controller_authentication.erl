@@ -18,6 +18,13 @@
 %% limitations under the License.
 
 -module(controller_authentication).
+-moduledoc("
+This controller manages all authentication cookies. It is called by the `auth` model in the browser.
+
+Todo
+
+Not yet documented.
+").
 
 -author("Marc Worrell <marc@worrell.nl>").
 

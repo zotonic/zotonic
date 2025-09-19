@@ -19,6 +19,24 @@
 %% limitations under the License.
 
 -module(filter_index_of).
+-moduledoc("
+See also
+
+[element](/id/doc_template_filter_filter_element)
+
+Returns the index of the first occurrence of the item in the given list.
+
+For example:
+
+
+```django
+{{ [44,11,2,443,2]|index_of:11 }}
+```
+
+Returns `2`.
+
+**Note:** Erlang list indices are always 1-based.
+").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -include_lib("zotonic_core/include/zotonic.hrl").

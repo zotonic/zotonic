@@ -18,6 +18,11 @@
 %% limitations under the License.
 
 -module(filter_mailinglist_recipient_key_decode).
+-moduledoc("
+Used on the mailing list subscriptions page where users and recipients can unsubscribe from mailinglists.
+
+This filter decodes the passed to the page and extract the user id or the email for which the subscriptions should be shown.
+").
 
 -export([
     mailinglist_recipient_key_decode/2

@@ -18,6 +18,13 @@
 %% limitations under the License.
 
 -module(action_admin_dialog_delete_rsc).
+-moduledoc("
+Open a dialog to confirm the deletion of a [resource](/id/doc_glossary#term-resource).
+
+Todo
+
+Extend documentation
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 %% interface functions

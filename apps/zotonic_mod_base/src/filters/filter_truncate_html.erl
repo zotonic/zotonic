@@ -18,6 +18,43 @@
 %% limitations under the License.
 
 -module(filter_truncate_html).
+-moduledoc("
+See also
+
+[truncate](/id/doc_template_filter_filter_truncate), [truncatechars](/id/doc_template_filter_filter_truncatechars)
+
+Truncate a HTML text to a maximum length.
+
+The HTML text is truncated to the maximum length specified with the argument. The text will be truncated at the maximum
+length, if any text remains then the ellipsis character … is added and all open HTML tags are closed.
+
+For example:
+
+
+```django
+{{ value|truncate_html:8 }}
+```
+
+If the value is `hello <b\\>world</b\\>` then the output is `hello <b\\>wo…</b\\>`.
+
+Entities like “&amp;amp;” are counted as a single character.
+
+Self closing entities like `<img/\\>` and `<br/\\>` are not counted as characters.
+
+
+
+Truncating character
+--------------------
+
+An optional second argument defines which text will be added if the text is truncated:
+
+
+```django
+{{ value|truncate_html:8:\" (more)\" }}
+```
+
+If the value is `hello <b\\>world</b\\>` then the output is `hello <b\\>wo (more)</b\\>`.
+").
 -export([truncate_html/2, truncate_html/3, truncate_html/4]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

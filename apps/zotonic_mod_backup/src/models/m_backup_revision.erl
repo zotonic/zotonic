@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(m_backup_revision).
+-moduledoc("
+Not yet documented.
+").
 
 -behaviour(zotonic_model).
 

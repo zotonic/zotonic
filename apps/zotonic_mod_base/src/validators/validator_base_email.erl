@@ -18,6 +18,30 @@
 %% limitations under the License.
 
 -module(validator_base_email).
+-moduledoc("
+See also
+
+[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators)
+
+Check if the content of the input field is an e-mail address.
+
+For example:
+
+
+```django
+<input type=\"text\" id=\"email\" name=\"email\" value=\"\" />
+{% validate id=\"email\" type={email} %}
+```
+
+
+
+Arguments
+---------
+
+| Argument          | Description                                                                      | Example                                               |
+| ----------------- | -------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| failure\\\\_message | Message to show when the entered value is not an e-mail address. Defaults to “Incorrect E-mail” | `failure_message=\"Please enter your e-mail address.\"` |
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_validator/5, validate/5]).
 

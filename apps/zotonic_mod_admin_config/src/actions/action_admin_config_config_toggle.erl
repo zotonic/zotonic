@@ -18,6 +18,14 @@
 %% limitations under the License.
 
 -module(action_admin_config_config_toggle).
+-moduledoc("
+Toggle a configuration value. Used in the admin, for instance when displaying a “live” checkbox the state of which
+should reflect a config value.
+
+Todo
+
+Extend documentation
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 %% interface functions

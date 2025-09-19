@@ -1,2 +1,0 @@
-.. include:: meta-translate.rst
-

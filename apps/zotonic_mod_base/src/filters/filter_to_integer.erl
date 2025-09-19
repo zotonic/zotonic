@@ -18,6 +18,24 @@
 %% limitations under the License.
 
 -module(filter_to_integer).
+-moduledoc("
+See also
+
+[to\\_binary](/id/doc_template_filter_filter_to_binary), [format\\_number](/id/doc_template_filter_filter_format_number), [format\\_integer](/id/doc_template_filter_filter_format_integer)
+
+Convert the input to an integer value.
+
+Example:
+
+
+```django
+{{ \"123\"|to_integer }}
+```
+
+Results in the integer value `123`.
+
+This filter uses the `z_convert:to_integer/1` function.
+").
 -export([to_integer/2]).
 
 to_integer(undefined, _Context) ->

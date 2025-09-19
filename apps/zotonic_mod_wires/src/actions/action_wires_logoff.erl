@@ -17,6 +17,18 @@
 %% limitations under the License.
 
 -module(action_wires_logoff).
+-moduledoc("
+This action logs off the current user and reloads the current page as the anonymous visitor.
+
+Example:
+
+
+```erlang
+{% button text=\"Log off\" action={logoff} %}
+```
+
+After clicking the button the page will reload and the current user will be signed out.
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4, event/2]).
 

@@ -17,6 +17,14 @@
 %% limitations under the License.
 
 -module(filter_is_even).
+-moduledoc("
+Test if an integer value is even:
+
+
+```django
+{% if 2|is_even %}Yes, the number 2 is even{% endif %}
+```
+").
 -export([is_even/2]).
 
 is_even(Number, _Context) when is_integer(Number) ->

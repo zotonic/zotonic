@@ -16,6 +16,59 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 -module(filter_toc).
+-moduledoc("
+Filter to derive a Table Of Contents from a HTML body.
+
+This filter extracts a nested table of contents from the h2..h6 elements in a HTML text.
+
+The headers may not have any attributes (ie. only `<h2\\>`).
+
+All sections are wrapped in `<div\\>` elements, this to make it possible to make the headers sticky without having them overlap.
+
+Example usage:
+
+
+```django
+{% with id.body|toc as toc, body %}
+    {% include \"page-parts/_toc.tpl\" toc=toc %}
+    {{ body|show_media }}
+{% endwith %}
+```
+
+The returned ToC tree is a nested tree of 3-tuples:
+
+
+```erlang
+[ {<<\"toc1\">>, <<\"Text of header\">>, [ ... ]}, ... ]
+```
+
+The third element is a list of sub-headers.
+
+To generate a nested table of contents from the above structure:
+
+
+```django
+{% include \"page-parts/_toc.tpl\" toc=toc %}
+```
+
+And then the `page-parts/_toc.tpl` as:
+
+
+```django
+{% with level|default:1 as level %}
+{% if toc %}
+    <ol class=\"toc-level-{{ level }}\">
+    {% for p, text, sub in toc %}
+        <li>
+            <a href=\"#{{ p }}\">{{ text }}</a>
+            {% include \"page-parts/_toc.tpl\" toc=sub level=level+1 %}
+        </li>
+    {% endfor %}
+    </ol>
+{% endif %}
+{% endwith %}
+```
+").
 
 -export([
     toc/2,

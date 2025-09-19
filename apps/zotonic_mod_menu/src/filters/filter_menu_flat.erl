@@ -17,6 +17,22 @@
 %% limitations under the License.
 
 -module(filter_menu_flat).
+-moduledoc("
+See also
+
+[menu\\_subtree](/id/doc_template_filter_filter_menu_subtree), [menu\\_trail](/id/doc_template_filter_filter_menu_trail)
+
+Flattens the rsc menu structure for use in a template loop.
+
+Example:
+
+
+```django
+{% for item in m.rsc[id].menu|menu_flat %}
+...
+{% endif %}
+```
+").
 -export([menu_flat/2]).
 
 

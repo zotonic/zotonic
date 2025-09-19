@@ -17,6 +17,19 @@
 %% limitations under the License.
 
 -module(filter_as_atom).
+-moduledoc("
+Convert a value to an Erlang atom.
+
+Atoms are represented in the template language as strings between backticks, `` `like this` ``. Some template function
+require their arguments to be atoms, and this filter helps in converting any value to such an atom:
+
+
+```django
+{{ \"foobar\"|as_atom }}
+```
+
+evaluates to the atom `foobar`.
+").
 -export([as_atom/2]).
 
 as_atom(V, _Context) ->

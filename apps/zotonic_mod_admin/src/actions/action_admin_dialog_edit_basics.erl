@@ -17,6 +17,19 @@
 %% limitations under the License.
 
 -module(action_admin_dialog_edit_basics).
+-moduledoc("
+Open a dialog to edit the “basic” information of a [resource](/id/doc_glossary#term-resource).
+
+The basic information usually comprises of the title, the summary and the category, but what exactly is displayed as
+“basic” info is dependent on the [category](/id/doc_glossary#term-category) of the resource and can be changed per
+category by making a category specific template named `_admin_edit_basics_form.tpl` which is included using a [catinclude](/id/doc_template_tag_tag_catinclude).
+
+For instance, to create a special “basics” dialog for the category news, you would create a template called `_admin_edit_basics_form.news.tpl`
+
+Todo
+
+Extend documentation
+").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 %% interface functions

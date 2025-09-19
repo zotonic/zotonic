@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_acl_user_group).
+-moduledoc("
+Not yet documented.
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 -behaviour(zotonic_model).

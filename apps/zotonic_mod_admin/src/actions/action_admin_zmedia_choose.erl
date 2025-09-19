@@ -17,6 +17,13 @@
 %% limitations under the License.
 
 -module(action_admin_zmedia_choose).
+-moduledoc("
+Used after a media item is selected in the media chooser for the TinyMCE editor.
+
+Todo
+
+Extend documentation
+").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 -include_lib("zotonic_core/include/zotonic.hrl").
 

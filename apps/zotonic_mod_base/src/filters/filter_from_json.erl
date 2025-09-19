@@ -18,6 +18,41 @@
 %% limitations under the License.
 
 -module(filter_from_json).
+-moduledoc("
+Parse a string as a JSON (JavaScript Object Notation) value. The returned value can be processed futher.
+
+For example:
+
+
+```django
+{{ \"[1,2,3]\"|from_json|first }}
+```
+
+Converts this JSON string to a list of integers and displays the first result:
+
+
+```django
+1
+```
+
+Another example with a string that parses to a structured value:
+
+
+```django
+{% with '{ \"a\": \"Hello\", \"b\": 2 }'|from_json as obj %}
+    {% print obj.a %}
+{% endwith %}
+```
+
+This will display:
+
+
+```django
+Hello
+```
+
+If the given value can not be parsed as JSON then it is silently mapped to `undefined`.
+").
 -export([from_json/2]).
 
 %% @doc Decode a JSON string to a term. If the decode fails then 'undefined' is returned.

@@ -17,6 +17,27 @@
 %% limitations under the License.
 
 -module(filter_range).
+-moduledoc("
+Generate a list of integers, with an optional step.
+
+For example:
+
+
+```django
+{{ 1|range:4 }}
+```
+
+Generates the list `[1,2,3,4]`.
+
+The second filter argument is the step size:
+
+
+```django
+{{ 1|range:10:2 }}
+```
+
+Generates the list `[1,3,5,7,9]`.
+").
 -export([range/3, range/4]).
 
 range(Start, End, _Context) when Start =:= undefined; End =:= undefined->

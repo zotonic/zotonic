@@ -18,6 +18,13 @@
 %% limitations under the License.
 
 -module(controller_admin_backup_revision).
+-moduledoc("
+Shows the admin backup revisions screen where you can see older version for a [resource](/id/doc_glossary#term-resource).
+
+Todo
+
+Extend documentation
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([

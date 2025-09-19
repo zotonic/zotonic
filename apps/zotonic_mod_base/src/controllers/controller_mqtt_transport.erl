@@ -17,6 +17,21 @@
 %% limitations under the License.
 
 -module(controller_mqtt_transport).
+-moduledoc("
+Controller for transport of MQTT data between the browser (client) and server.
+
+This controller accepts Websocket connections and out-of-band HTTP POSTs.
+
+The HTTP POSTs must have a valid ticket. See [m\\_mqtt\\_ticket](/id/doc_model_model_mqtt_ticket) on how to obtain such
+a ticket and more information about tickets.
+
+The Websocket connection is a normal MQTT transport over Websocket.
+
+For the authentication the Websocket accepts two methods:
+
+*   Cookie authentication with `z.auth` cookie, see [controller\\_authentication](/id/doc_controller_controller_authentication).
+*   Username and password in the MQTT connect
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([

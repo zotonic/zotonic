@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_log).
+-moduledoc("
+Not yet documented.
+").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -behaviour(zotonic_model).

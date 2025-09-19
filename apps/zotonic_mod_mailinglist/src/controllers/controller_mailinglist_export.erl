@@ -18,6 +18,13 @@
 %% limitations under the License.
 
 -module(controller_mailinglist_export).
+-moduledoc("
+Controller which downloads the given mailinglist id as a CSV file.
+
+Todo
+
+Extend documentation
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([

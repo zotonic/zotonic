@@ -18,6 +18,11 @@
 %% limitations under the License.
 
 -module(action_wires_buttonize).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
 

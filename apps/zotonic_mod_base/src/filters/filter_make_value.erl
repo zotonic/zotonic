@@ -17,6 +17,11 @@
 %% limitations under the License.
 
 -module(filter_make_value).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 -export([make_value/2]).
 
 make_value(In, Context) ->

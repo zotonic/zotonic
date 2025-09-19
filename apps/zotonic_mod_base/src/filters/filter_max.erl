@@ -17,6 +17,22 @@
 %% limitations under the License.
 
 -module(filter_max).
+-moduledoc("
+See also
+
+[min](/id/doc_template_filter_filter_min), [minmax](/id/doc_template_filter_filter_minmax)
+
+Take the maximum of the filter value and its first argument.
+
+The following:
+
+
+```django
+{% print 102|to_integer|max:103 %}
+```
+
+Prints `103`.
+").
 -export([max/3]).
 
 max(undefined, _Arg, _Context) ->

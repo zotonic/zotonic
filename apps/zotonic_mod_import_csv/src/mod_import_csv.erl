@@ -17,6 +17,25 @@
 %% limitations under the License.
 
 -module(mod_import_csv).
+-moduledoc("
+Module which adds “import CSV” button to the admin status screen.
+
+The dropbox folder of the site is also watched for CSV files.
+
+To determine whether it can import a file, it uses a notification:
+
+
+```erlang
+#import_csv_definition{basename, filename}
+```
+
+If the notification is not returning anything, it tries to map the columns found in the first row of the CSV file to
+[resource](/id/doc_glossary#term-resource) column names.
+
+Todo
+
+Add more documentation
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Import CSV Data").

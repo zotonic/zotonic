@@ -17,6 +17,11 @@
 %% limitations under the License.
 
 -module(filter_admin_merge_diff).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 
 -export([
     admin_merge_diff/3

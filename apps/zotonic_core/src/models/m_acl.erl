@@ -18,6 +18,65 @@
 %% limitations under the License.
 
 -module(m_acl).
+-moduledoc("
+The m\\_acl model gives access the id of the currently logged in user, and provides a mechanism to do basic access
+control checks.
+
+The following m\\_acl model properties are available in templates:
+
+| Property                                       | Description                                                                      |
+| ---------------------------------------------- | -------------------------------------------------------------------------------- |
+| user                                           | Returns the current user id. If not logged in, this returns `undefined`.         |
+| is\\\\_admin                                     | Check if the current user is alllowed to access the admin. Internally, this checks the `use, mod_admin_config` ACL. |
+| use, admin, view, delete, update, insert, link | These properties are shortcuts to check if the current user is allowed to do some action. |
+| is\\\\_allowed                                   | Perform custom ACL checks which are different from the ones mentioned.           |
+| authenticated                                  | Used before the other ACL checks to check if a *typical* user is allowed to perform some actions. Example: `m.acl.authenticated.insert.article` If a user is logged on the that user’s permissions are used. |
+
+This example prints a greeting to the currently logged in user, if logged in:
+
+
+```django
+{% if m.acl.user %}
+    Hello, {{ m.rsc[m.acl.user].title }}!
+{% else %}
+    Not logged in yet
+{% endif %}
+```
+
+This example checks if the user can access the admin pages:
+
+
+```django
+{% if m.acl.is_admin %} You are an admin {% endif %}
+```
+
+This example performs a custom check:
+
+
+```django
+{% if m.acl.is_allowed.use.mod_admin_config %}
+    User has rights to edit the admin config
+{% endif %}
+```
+
+And to check if a resource is editable:
+
+
+```django
+{% if m.acl.is_allowed.update[id] %}
+   User can edit the resource with id {{ id }}
+{% endif %}
+```
+
+A short hand for the above is (assuming id is an integer):
+
+
+```django
+{% if id.is_editable %}
+   User can edit the resource with id {{ id }}
+{% endif %}
+```
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 -behaviour(zotonic_model).

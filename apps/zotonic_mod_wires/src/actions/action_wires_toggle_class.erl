@@ -18,6 +18,22 @@
 %% limitations under the License.
 
 -module(action_wires_toggle_class).
+-moduledoc("
+See also
+
+actions [add\\_class](/id/doc_template_action_action_add_class) and [remove\\_class](/id/doc_template_action_action_remove_class).
+
+Toggle a CSS class from an HTML element.
+
+Example:
+
+
+```django
+{% button action={toggle_class target=\"myid\" class=\"newclass\"} %}
+```
+
+When the HTML element with id “myid” has the CSS class “newclass” then it is removed, otherwise it is added.
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
 

@@ -1,6 +1,11 @@
 %% @author David de Boer <david@ddeboer.nl>
 %% @doc Get a list of content type URLs for a resource
 -module(filter_content_type_urls).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 -export([
     content_type_urls/2
 ]).

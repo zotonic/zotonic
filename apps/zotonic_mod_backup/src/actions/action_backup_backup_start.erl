@@ -17,6 +17,13 @@
 %% limitations under the License.
 
 -module(action_backup_backup_start).
+-moduledoc("
+Action which starts a manual backup.
+
+Todo
+
+Extend documentation
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([
     render_action/4,

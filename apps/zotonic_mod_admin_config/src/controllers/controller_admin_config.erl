@@ -18,6 +18,15 @@
 %% limitations under the License.
 
 -module(controller_admin_config).
+-moduledoc("
+Shows the admin config editor. Here you can edit the key/value pairs of [m\\_config](/id/doc_model_model_config).
+
+
+
+Todo
+
+Extend documentation
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([

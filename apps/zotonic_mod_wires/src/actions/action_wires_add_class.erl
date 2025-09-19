@@ -18,6 +18,22 @@
 %% limitations under the License.
 
 -module(action_wires_add_class).
+-moduledoc("
+See also
+
+actions [remove\\_class](/id/doc_template_action_action_remove_class) and [toggle\\_class](/id/doc_template_action_action_toggle_class).
+
+Add a css class to an html element.
+
+Example:
+
+
+```django
+{% button action={add_class target=\"myid\" class=\"newclass\"} %}
+```
+
+Adds the CSS class “newclass” to the element with HTML id “myid”.
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
 

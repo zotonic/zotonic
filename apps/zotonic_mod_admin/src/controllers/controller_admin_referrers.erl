@@ -17,6 +17,14 @@
 %% limitations under the License.
 
 -module(controller_admin_referrers).
+-moduledoc("
+Shows the list of pages ([resources](/id/doc_glossary#term-resource)) which refer to this
+[resource](/id/doc_glossary#term-resource) through an [edge](/id/doc_glossary#term-edge).
+
+Todo
+
+Extend documentation
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 -export([

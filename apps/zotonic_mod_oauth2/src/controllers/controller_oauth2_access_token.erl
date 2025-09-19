@@ -18,6 +18,11 @@
 %% limitations under the License.
 
 -module(controller_oauth2_access_token).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([

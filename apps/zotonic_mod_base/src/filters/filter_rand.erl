@@ -17,6 +17,32 @@
 %% limitations under the License.
 
 -module(filter_rand).
+-moduledoc("
+See also
+
+[randomize](/id/doc_template_filter_filter_randomize), [random](/id/doc_template_filter_filter_random)
+
+Generates a random number. The number is from, and including, 1 up to, and including, the input value.
+
+Example:
+
+
+```django
+{{ 100|rand|format_integer }}
+```
+
+Might output “42”.
+
+The rand filter can also generate a floating point value by given it a floating point number or a string representing a
+floating point number as input. It will generate a number from, but not including, 0 to, and including, the input value:
+
+
+```django
+{{ \"4.0\"|rand|format_number }}
+```
+
+Might output “3.1415926536”
+").
 -export([rand/1, rand/2]).
 
 

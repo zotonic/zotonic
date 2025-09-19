@@ -22,6 +22,13 @@
 %% limitations under the License.
 
 -module(mod_l10n).
+-moduledoc("
+Localization of Zotonic. Provides lookups for country, month, week names.
+
+Todo
+
+Add more documentation
+").
 
 -author("Marc Worrell <marc@worrell.nl>").
 

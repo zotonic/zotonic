@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_ssl_letsencrypt).
+-moduledoc("
+Not yet documented.
+").
 
 -author("Marc Worrell <marc@worrell.nl").
 

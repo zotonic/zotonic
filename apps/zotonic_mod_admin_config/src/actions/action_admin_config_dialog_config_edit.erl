@@ -18,6 +18,13 @@
 %% limitations under the License.
 
 -module(action_admin_config_dialog_config_edit).
+-moduledoc("
+Open a dialog to edit a configuration key/value pair.
+
+Todo
+
+Extend documentation
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 %% interface functions

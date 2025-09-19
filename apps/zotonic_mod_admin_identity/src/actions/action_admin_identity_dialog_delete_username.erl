@@ -18,6 +18,13 @@
 %% limitations under the License.
 
 -module(action_admin_identity_dialog_delete_username).
+-moduledoc("
+Open a dialog to confirm the deletion of the username of a user.
+
+Todo
+
+Extend documentation
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 %% interface functions

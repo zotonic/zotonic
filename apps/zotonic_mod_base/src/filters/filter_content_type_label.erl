@@ -18,6 +18,11 @@
 %% limitations under the License.
 
 -module(filter_content_type_label).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 -export([
     content_type_label/2
 ]).

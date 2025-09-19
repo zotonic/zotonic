@@ -18,6 +18,13 @@
 %% limitations under the License.
 
 -module(controller_admin_backup).
+-moduledoc("
+Shows the admin backup screen where you can download nightly backups that were made by [mod\\_backup](/id/doc_module_mod_backup).
+
+Todo
+
+Extend documentation
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([

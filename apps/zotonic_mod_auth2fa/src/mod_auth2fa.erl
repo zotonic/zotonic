@@ -18,6 +18,11 @@
 %% limitations under the License.
 
 -module(mod_auth2fa).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Two-Factor authentication").

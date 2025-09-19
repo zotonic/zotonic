@@ -18,6 +18,13 @@
 %% limitations under the License.
 
 -module(action_wires_replace).
+-moduledoc("
+Replace the target HTML element by new one.
+
+Todo
+
+Extend documentation
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([
     render_action/4

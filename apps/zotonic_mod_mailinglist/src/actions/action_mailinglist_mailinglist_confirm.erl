@@ -18,6 +18,18 @@
 %% limitations under the License.
 
 -module(action_mailinglist_mailinglist_confirm).
+-moduledoc("
+Confirm a mailinglist subscription. Required argument is the `confirm_key`.
+
+Other arguments:
+
+*   `on_success` - actions which get executed when the subscription is confirmed.
+*   `on_error` - actions which get executed when the subscription fails (e.g. wrong confirm key).
+
+Todo
+
+Extend documentation
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 %% interface functions

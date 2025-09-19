@@ -18,6 +18,26 @@
 %% limitations under the License.
 
 -module(filter_render).
+-moduledoc("
+Render a template.
+
+Example:
+
+
+```django
+{% include \"_email.tpl\" name=\"_name.tpl\"|render:%{ id: recipient_id } %}
+```
+
+This renders the template `_name.tpl` with the argument `id`.
+
+If the argument is only single id, then it can be passed at once and will be assigned to the `id` argument. The
+following is equivalent to the example above:
+
+
+```django
+{% include \"_email.tpl\" name=\"_name.tpl\"|render:recipient_id %}
+```
+").
 
 -export([
     render/2,

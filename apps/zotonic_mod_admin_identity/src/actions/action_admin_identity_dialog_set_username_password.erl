@@ -17,6 +17,14 @@
 %% limitations under the License.
 
 -module(action_admin_identity_dialog_set_username_password).
+-moduledoc("
+Show a dialog for setting a username / password on the given [resource](/id/doc_glossary#term-resource) (which is
+usually a person).
+
+Todo
+
+Extend documentation
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 %% interface functions

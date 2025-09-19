@@ -17,6 +17,9 @@
 %% limitations under the License.
 
 -module(m_l10n).
+-moduledoc("
+Not yet documented.
+").
 
 -author("Marc Worrell <marc@worrell.nl>").
 

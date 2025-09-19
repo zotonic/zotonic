@@ -17,6 +17,13 @@
 %% limitations under the License.
 
 -module(mod_bootstrap).
+-moduledoc("
+Adds support for the [Twitter Bootstrap](https://twitter.github.com/bootstrap/) CSS / JavaScript framework.
+
+Todo
+
+Add more documentation
+").
 -author("Andreas Stenius <git@astekk.se>").
 
 -mod_title("Bootstrap framework").

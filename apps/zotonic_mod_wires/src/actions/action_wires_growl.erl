@@ -16,6 +16,31 @@
 %% limitations under the License.
 
 -module(action_wires_growl).
+-moduledoc("
+See also
+
+actions [alert](/id/doc_template_action_action_alert) and [confirm](/id/doc_template_action_action_confirm); and
+[Enabling Growl Notifications](/id/doc_cookbook_frontend_growl#guide-cookbook-frontend-growl).
+
+Show a message in the upper right corner of the browser window. The message will automatically disappear after some time.
+
+Example:
+
+
+```django
+{% button action={growl text=\"hello world\"} %}
+```
+
+Shows a message with the text “hello world”.
+
+Growl accepts the following arguments:
+
+| Argument | Description                                                           | Example      |
+| -------- | --------------------------------------------------------------------- | ------------ |
+| text     | The text to be displayed.                                             | text=”Hola!” |
+| stay     | When true then the message does not disappear automatically           | stay         |
+| type     | Type of the message, one of “notice” or “error”. Default is “notice”. | type=”error” |
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
 

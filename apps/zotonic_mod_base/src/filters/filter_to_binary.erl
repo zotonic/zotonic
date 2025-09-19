@@ -17,6 +17,24 @@
 %% limitations under the License.
 
 -module(filter_to_binary).
+-moduledoc("
+See also
+
+[stringify](/id/doc_template_filter_filter_stringify)
+
+Convert the input to a binary value.
+
+Example:
+
+
+```django
+{{ 42|to_binary }}
+```
+
+Results in the binary value `<<\"42\"\\>\\>`.
+
+This filter uses the `z_convert:to_binary/1` function.
+").
 -export([to_binary/2]).
 
 to_binary(undefined, _Context) ->

@@ -17,6 +17,22 @@
 %% limitations under the License.
 
 -module(filter_insert).
+-moduledoc("
+See also
+
+[append](/id/doc_template_filter_filter_append)
+
+Prepends the argument in front of the value.
+
+For example:
+
+
+```django
+{{ value|insert:\"world \" }}
+```
+
+When value is “hello” then the output will be “world hello”.
+").
 -export([insert/3]).
 
 insert(Input, Insert, Context) ->

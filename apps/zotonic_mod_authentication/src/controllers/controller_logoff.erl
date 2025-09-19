@@ -17,6 +17,18 @@
 %% limitations under the License.
 
 -module(controller_logoff).
+-moduledoc("
+Controller that logs off a user, destroying the session. It also removes any “remember me” cookies the user has, so
+that auto-logon is disabled.
+
+Todo
+
+Extend documentation
+
+See also
+
+[controller\\_authentication](/id/doc_controller_controller_authentication), [Authentication](/id/doc_developerguide_access_control#guide-authentication).
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([

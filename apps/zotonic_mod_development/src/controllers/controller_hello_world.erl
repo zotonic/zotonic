@@ -18,6 +18,15 @@
 %% limitations under the License.
 
 -module(controller_hello_world).
+-moduledoc("
+See also
+
+[controller\\_ping](/id/doc_controller_controller_ping)
+
+Simple controller that always serves the string `Hello, World!`
+
+This controller can be used for a dispatch rule to check if the server is responding.
+").
 -author("Maas-Maarten Zeeman <mmzeeman@xs4all.nl").
 
 -export([

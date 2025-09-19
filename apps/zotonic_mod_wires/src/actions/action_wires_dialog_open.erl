@@ -18,6 +18,43 @@
 %% limitations under the License.
 
 -module(action_wires_dialog_open).
+-moduledoc("
+See also
+
+actions [dialog\\_close](/id/doc_template_action_action_dialog_close), [dialog](/id/doc_template_action_action_dialog)
+and [overlay\\_open](/id/doc_template_action_action_overlay_open).
+
+Renders a template on the server and opens a dialog with the HTML output of the template.
+
+Example:
+
+
+```django
+{% button text=\"cancel\" action={dialog_open title=\"Select a name\" template=\"_select_name.tpl\" arg=100} %}
+```
+
+The title of this new dialog will be “Select a name”, its contents are the output of rendering the template
+“\\_select\\_name.tpl”. All arguments are handed as arguments to the template. In this example the template
+“\\_select\\_name.tpl” is rendered with the arguments “title”, “template” and “arg”.
+
+There can be many levels of dialogs open, they are designated by a *level*, the default dialog opens at level 0. Higher
+levels are displayed above lower levels. There is a special level `\"top\"` which ensures that a dialog is always opened
+above any other open dialog.
+
+Example, opening a dialog above the default dialog:
+
+
+```django
+{% button text=\"ok\" action={dialog_open title=\"Confirm\" template=\"_confirm.tpl\" level=1} %}
+```
+
+Example, opening a dialog above any open dialog:
+
+
+```django
+{% button text=\"ok\" action={dialog_open title=\"Confirm\" template=\"_confirm.tpl\" level=\"top\"} %}
+```
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 %% interface functions

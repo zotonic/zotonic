@@ -16,6 +16,9 @@
 %% limitations under the License.
 
 -module(m_import_csv_data).
+-moduledoc("
+Not yet documented.
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([

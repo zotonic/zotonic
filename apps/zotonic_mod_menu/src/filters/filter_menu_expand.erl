@@ -17,6 +17,31 @@
 %% limitations under the License.
 
 -module(filter_menu_expand).
+-moduledoc("
+Takes a menu, or a menu resource id, and adds all `haspart` objects connected to the menu ids.
+
+With this filter it is possible to add a collection to the menu and have the pages in the collection automatically added
+to the menu.
+
+Example:
+
+
+```django
+{% with m.rsc.main_menu.menu|menu_expand as menu %}
+    {% if menu %}
+        {% with id|menu_trail:menu as trail %}
+        <ul>
+            {% for item in menu %}
+                <li {% if item.id|member:trail %}class=\"active\"{% endif %}>
+                    <a href=\"{{ item.id.page_url }}\">{{ item.id.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+        {% endwith %}
+    {% endif %}
+{% endwith %}
+```
+").
 
 -export([
     menu_expand/2

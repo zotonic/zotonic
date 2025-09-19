@@ -17,6 +17,15 @@
 %% limitations under the License.
 
 -module(controller_signup_confirm).
+-moduledoc("
+Controller which displays the confirmation page where the user can confirm his signup.
+
+The template used is `signup_confirm.tpl`.
+
+Todo
+
+Extend documentation
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([

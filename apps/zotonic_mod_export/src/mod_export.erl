@@ -18,6 +18,29 @@
 %% limitations under the License.
 
 -module(mod_export).
+-moduledoc("
+Provides a generic framework to export [resources](/id/doc_glossary#term-resource).
+
+
+
+Admin interface
+---------------
+
+[](../../_images/admin_view.png)When [enabled](/id/doc_developerguide_modules#activating-modules), this module adds two things to each admin edit page:
+
+*   extra content types to the ‘View’ dropdown menu
+*   an ‘Export’ block.
+
+Both single pages and [query resources](/id/doc_developerguide_search#guide-query-resources) can be exported. For a
+query, all resources matching it will be included in the export.
+
+
+
+Customizing exports
+-------------------
+
+To customize data selection and the properties that are exported, observe one or several of the [export notifications](/id/doc_reference_notifications_import_export#export-notifications).
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Export Data").

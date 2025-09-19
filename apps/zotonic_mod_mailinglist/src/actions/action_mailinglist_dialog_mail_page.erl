@@ -17,6 +17,14 @@
 %% limitations under the License.
 
 -module(action_mailinglist_dialog_mail_page).
+-moduledoc("
+Shows the dialog to mail the current page ([resource](/id/doc_glossary#term-resource)) to a single e-mail address. This
+is used in the frontend of a site to “share” the current page over e-mail.
+
+Todo
+
+Extend documentation
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 %% interface functions

@@ -16,6 +16,15 @@
 %% limitations under the License.
 
 -module(mod_content_groups).
+-moduledoc("
+See also
+
+[mod\\_acl\\_user\\_groups](/id/doc_module_mod_acl_user_groups)
+
+Todo
+
+Not yet documented.
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Content Groups").

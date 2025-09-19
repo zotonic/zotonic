@@ -18,6 +18,23 @@
 %% limitations under the License.
 
 -module(action_wires_jquery_effect).
+-moduledoc("
+Trigger various jQuery effects on the target element. Mostly, each of these effects have their own action as a shortcut,
+for example [show](/id/doc_template_action_action_show), [hide](/id/doc_template_action_action_hide).
+
+Arguments:
+
+*   type - one of show, hide, remove, slide\\_toggle, toggle, set\\_class, add\\_class, remove\\_class, fade\\_in, fade\\_out, slide\\_up, slide\\_fade\\_out, slide\\_fade\\_in, disable, enable, effect, animate.
+*   speed
+*   class
+*   easing
+*   effect
+*   options
+
+Todo
+
+Extend documentation
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
 

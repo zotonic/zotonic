@@ -17,6 +17,23 @@
 %% limitations under the License.
 
 -module(filter_stringify).
+-moduledoc("
+See also
+
+[slugify](/id/doc_template_filter_filter_slugify), [to\\_binary](/id/doc_template_filter_filter_to_binary)
+
+Translates atoms, integers and floats to strings. The undefined value is translated to the empty string. Does not
+translate tuples.
+
+For example:
+
+
+```django
+{{ value|stringify }}
+```
+
+When value is undefined then the output will be “”.
+").
 -export([stringify/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

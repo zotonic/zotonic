@@ -16,6 +16,42 @@
 %% limitations under the License.
 
 -module(action_wires_postback).
+-moduledoc("
+This action sends a message to the event handler on the server.
+
+Example:
+
+
+```erlang
+{% button text=\"Go\" action={postback postback=\"go\" action={growl text=\"sent message\"}} %}
+```
+
+Note
+
+The [button](/id/doc_template_scomp_scomp_button#scomp-button) scomp can also take a postback argument directly.
+
+After clicking the button the event go will be sent to the [controller](/id/doc_glossary#term-controller) module on the
+server and a [growl](/id/doc_template_action_action_growl) message will be displayed.
+
+The event/2 function in the controller module will be called as:
+
+
+```erlang
+event(#postback{message=go, trigger=TriggerId, target=TargetId}, Context)
+```
+
+This action can have the following arguments:
+
+| Argument      | Description                                                                      | Example                                                                          |
+| ------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| postback      | The message that will be send to the server module.                              | postback=\\\\{my\\\\_message arg=”hello”\\\\}                                          |
+| delegate      | The name of the Erlang module that will be called. Defaults to the controller module generating the page. | delegate=”my\\\\_module”                                                           |
+| action        | Any other actions that will be executed when the postback is done. This parameter can be repeated. | action=\\\\{show target=”wait”\\\\}                                                  |
+| inject\\\\_args | If set to true, and postback is a tuple (as in the my\\\\_message example in this table), any values from the args in the postback will replace the arg value in the postback argument. This is useful when the arg is coming from an outer action and not set explicitly in the template code (as is done in the example for illustration). The value of some\\\\_arg in the postback handler will be 123. | \\\\{postback postback=\\\\{my\\\\_event some\\\\_arg\\\\} inject\\\\_args some\\\\_arg=123\\\\} |
+| qarg          | Post the value of an input or select with the postback. The value of the qarg argument is the id of the element to be posted. Multiple qarg arguments can be given. On the server the value will be available as a normal query argument using z\\\\_context:get\\\\_q/2 | qarg=”my-input-id”                                                               |
+
+New in version 0.9.0: Added inject\\_args option.
+").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
 

@@ -19,6 +19,15 @@
 %% limitations under the License.
 
 -module(scomp_survey_poll).
+-moduledoc("
+Show a given survey (with the `id` parameter) as a “poll”. This presents a simpler interface, in which the user is
+directly asked to enter some information, e.g. make a choice between certain things:
+
+
+```django
+{% poll id=123 %}
+```
+").
 
 -behaviour(zotonic_scomp).
 -export([vary/2, render/3]).

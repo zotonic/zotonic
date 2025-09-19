@@ -18,6 +18,21 @@
 %% limitations under the License.
 
 -module(mod_base).
+-moduledoc("
+See also
+
+[dispatch rules](/id/doc_dispatch_index#all-dispatch-rules).
+
+mod\\_base is the base module, which acts as a container module holding most of Zotonic basic [dispatch
+rules](/id/doc_dispatch_index#all-dispatch-rules), [Actions](/id/template_action#actions) and [Module tags](/id/template_tag#scomps).
+
+Note that the amount of templates has been kept to a minimum in this module, so that sites are free to implement
+whatever templates they want.
+
+Todo
+
+Add more documentation
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Zotonic Base").

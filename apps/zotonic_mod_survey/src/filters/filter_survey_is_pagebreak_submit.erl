@@ -19,6 +19,9 @@
 %% limitations under the License.
 
 -module(filter_survey_is_pagebreak_submit).
+-moduledoc("
+Check if a list of questions contains a pagebreak block with an unconditional submit.
+").
 
 -export([
     survey_is_pagebreak_submit/2

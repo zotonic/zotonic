@@ -18,6 +18,9 @@
 %% limitations under the License.
 
 -module(m_acl_rule).
+-moduledoc("
+Not yet documented.
+").
 -author("Arjan Scherpenisse <marc@worrell.nl").
 
 -behaviour(zotonic_model).

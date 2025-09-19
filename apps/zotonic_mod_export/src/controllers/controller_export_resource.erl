@@ -19,6 +19,11 @@
 %% limitations under the License.
 
 -module(controller_export_resource).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([

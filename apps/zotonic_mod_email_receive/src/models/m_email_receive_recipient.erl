@@ -17,6 +17,9 @@
 %% limitations under the License.
 
 -module(m_email_receive_recipient).
+-moduledoc("
+Not yet documented.
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([

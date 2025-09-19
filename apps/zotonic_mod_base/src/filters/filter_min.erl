@@ -17,6 +17,22 @@
 %% limitations under the License.
 
 -module(filter_min).
+-moduledoc("
+See also
+
+[max](/id/doc_template_filter_filter_max)
+
+Take the minimum of the filter value and its first argument.
+
+The following:
+
+
+```django
+{% print 102|to_integer|min:103 %}
+```
+
+Prints `102`.
+").
 -export([min/3]).
 
 min(undefined, _Arg, _Context) ->

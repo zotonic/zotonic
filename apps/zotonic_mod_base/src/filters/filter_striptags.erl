@@ -18,6 +18,29 @@
 %% limitations under the License.
 
 -module(filter_striptags).
+-moduledoc("
+Removes all HTML tags from the value.
+
+Useful as part of filtering input from external sources.
+
+For example:
+
+
+```django
+{{ value|striptags }}
+```
+
+When value is “&lt;b>Hello</b>world” then the output will be “Helloworld”.
+
+Striptags optionally allows a maximum length of characters to be returned:
+
+
+```django
+{{ value|striptags:80 }}
+```
+
+This returns a string truncated to max 80 characters, including whitespaces etc.
+").
 
 -export([striptags/2, striptags/3]).
 

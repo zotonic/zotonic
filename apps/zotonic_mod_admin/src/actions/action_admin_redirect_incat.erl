@@ -17,6 +17,11 @@
 %% limitations under the License.
 
 -module(action_admin_redirect_incat).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 %% interface functions

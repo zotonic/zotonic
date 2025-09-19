@@ -18,6 +18,13 @@
 %% limitations under the License.
 
 -module(m_image_edit).
+-moduledoc("
+See also
+
+[image](/id/doc_template_tag_tag_image), [Arguments](/id/doc_template_tag_tag_image)
+
+Manages the `medium_edit_settings` property for non destructive image editing.
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 -behaviour(zotonic_model).

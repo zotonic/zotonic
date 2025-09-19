@@ -17,6 +17,75 @@
 %% limitations under the License.
 
 -module(m_req).
+-moduledoc("
+This model gives access to the request variables from within a template.
+
+Sometimes you need direct access to request variables in your template. The m\\_req model is meant for this. It exposes
+some values from the Cowmachine request record.
+
+
+
+Fetching a single value
+-----------------------
+
+You can fetch individual values by key, for example:
+
+
+```django
+{{ m.req.host|escape }}
+```
+
+
+
+Viewing all request variables
+-----------------------------
+
+Use the [print](/id/doc_template_tag_tag_print) tag to get a complete overview of all request variables:
+
+
+```django
+{% print m.req|make_list %}
+```
+
+This will show something like:
+
+
+```django
+[{method,<<\"GET\">>},
+ {version,{1,1}},
+ {peer,<<\"127.0.0.1\">>},
+ {is_ssl,false},
+ {host,<<\"mysite.test\">>},
+ {raw_path,<<\"/en/page/1234?foo=bar\">>},
+ {path,<<\"/en/page/1234\">>},
+ {qs,[{<<\"foo\">>,<<\"bar\">>}]},
+ {referrer,<<\"http://mysite.test:8000/\">>},
+ {user_agent,<<\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/601.4.4 (KHTML, like Gecko) Version/9.0.3 Safari/601.4.4\">>},
+ {is_crawler,false},
+ {req_id,525158920},
+ {headers,[{<<\"accept\">>,
+            <<\"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\">>},
+           {<<\"accept-encoding\">>,<<\"gzip, deflate\">>},
+           {<<\"accept-language\">>,<<\"en-us\">>},
+           {<<\"cache-control\">>,<<\"max-age=0\">>},
+           {<<\"connection\">>,<<\"keep-alive\">>},
+           {<<\"cookie\">>,
+            \"z_logon=; z_sid=LopWHBmHXCs94virnboZhBHLKV6m1Cga; z_ua=c%3Ddesktop%26u%3D1%26t%3D1%26w%3D1920%26h%3D1200\"},
+           {<<\"dnt\">>,<<\"1\">>},
+           {<<\"host\">>,<<\"mysite.test:8000\"},
+           {<<\"referer\">>,<<\"http://mysite.test:8000/\">>},
+           {<<\"user-agent\">>,
+            <<\"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/601.4.4 (KHTML, like Gecko) Version/9.0.3 Safari/601.4.4\">>}]},
+ {timezone,<<\"UTC\">>},
+ {language,en}]
+```
+
+Please note that all values are raw and not escaped, take care to escape the values before you use them in your
+templates, using the [escape](/id/doc_template_filter_filter_escape) filter.
+
+The [make\\_list](/id/doc_template_filter_filter_make_list) filter is used to force the evaluation of the model;
+otherwise it would just print `{m,req,undefined}`.
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 -behaviour(zotonic_model).

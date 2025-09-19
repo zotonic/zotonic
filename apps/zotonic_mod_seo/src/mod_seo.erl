@@ -18,6 +18,96 @@
 %% limitations under the License.
 
 -module(mod_seo).
+-moduledoc("
+Adds basic search engine optimization to the base templates and provides an admin interface for configuring SEO options
+and Google Universal Analytics.
+
+
+
+SEO data
+--------
+
+mod\\_seo adds metadata to your pages to improve your website’s display and ranking in search engine (e.g. Google)
+results. This metadata includes [structured data](https://developers.google.com/search/docs/guides/intro-structured-data):
+
+Google uses structured data that it finds on the web to understand the content of the page, as well as to gather
+information about the web and the world in general.
+
+Following Google’s recommendations, mod\\_seo adds data in the [Schema.org](https://schema.org) vocabulary, using the
+JSON-LD format. This enables [search features](https://developers.google.com/search/docs/guides/search-features) such as
+rich results, carousels and the sitelinks searchbox.
+
+Tip
+
+If you wish to alter the structured data, you can do so by overriding the `schema_org/schema.*.tpl` templates. When you
+do so, make sure to validate your changes with Google’s [structured data testing tool](https://search.google.com/structured-data/testing-tool).
+
+
+
+Configuration
+-------------
+
+
+
+### Disable search engine indexing
+
+To prevent search engines from indexing a page, check the ‘Ask Google not to index this page’ checkbox in the admin.
+Programmatically, you can set the `seo_noindex` flag on a resource to do the same.
+
+To disable indexing for the site as a whole, go to Modules > SEO in the Admin (`https://yoursite/admin/seo`) and tick
+the ‘Exclude this site from search engines’ checkbox.
+
+
+
+### Google Analytics
+
+To enable [Google Universal Analytics](https://support.google.com/analytics/answer/2790010) tracking on your Zotonic
+website, go to `https://yoursite/admin/seo` in your browser and enter your Google Analytics tracking code.
+
+Zotonic does not automatically supports the [User ID Analytics
+feature](https://support.google.com/analytics/answer/3123662). You have to [enable User
+ID](https://support.google.com/analytics/answer/3123666) in your Analytics account and override the `_ga_params.tpl`
+template to add the parameter:
+
+
+```django
+{#
+    Override this template to provide extra Google Analytics parameters.
+    See https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference
+#}
+{
+    {% if m.acl.user %}
+        \"userId\": \"{{ m.acl.user|escapejs }}\",
+    {% endif %}
+}
+```
+
+
+
+### Extra parameters
+
+If you wish to add extra [Google Analytics
+parameters](https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference), override the
+`_ga_params.tpl` file and add the parameters:
+
+
+```django
+{#
+    Override this template to provide extra Google Analytics parameters.
+    See https://developers.google.com/analytics/devguides/collection/analyticsjs/field-reference
+#}
+{
+    {% if m.acl.user %}
+        \"userId\": \"{{ m.acl.user|escapejs }}\",
+    {% endif %}
+    \"sessionControl\": \"start\"
+}
+```
+
+Todo
+
+Add more documentation
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Search Engine Optimization (SEO)").

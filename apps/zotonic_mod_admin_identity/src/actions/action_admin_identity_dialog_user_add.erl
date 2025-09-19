@@ -18,6 +18,14 @@
 %% limitations under the License.
 
 -module(action_admin_identity_dialog_user_add).
+-moduledoc("
+Show a dialog for adding a user. This creates a person [resource](/id/doc_glossary#term-resource) and adds a username /
+password to it.
+
+Todo
+
+Extend documentation
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 %% interface functions

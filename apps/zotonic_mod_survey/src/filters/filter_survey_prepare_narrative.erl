@@ -16,6 +16,11 @@
 %% limitations under the License.
 
 -module(filter_survey_prepare_narrative).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 
 -export([
     survey_prepare_narrative/2,

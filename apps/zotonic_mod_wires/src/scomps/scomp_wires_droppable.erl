@@ -21,6 +21,53 @@
 %% limitations under the License.
 
 -module(scomp_wires_droppable).
+-moduledoc("
+Mark an element as valid drag destination.
+
+The droppable tag is used in conjunction with the [\\{% draggable
+%\\}](/id/doc_template_scomp_scomp_draggable#scomp-draggable) tag to implement drag & drop. Elements that are marked as
+droppable can receive drops of draggable elements. Drag & drop generates dragdrop events that are sent to the
+[controller](/id/doc_glossary#term-controller) or the [delegate](/id/doc_glossary#term-delegate).
+
+For example:
+
+
+```erlang
+<div id=\"dropzone\">Drop your stuff here</div>
+{% droppable id=\"dropzone\" tag=\"drop-tag\" %}
+```
+
+Now draggable elements can de dropped onto the div with id “dropzone”. When a draggable is dropped then `event/2` of
+the controller or delegate Erlang module is called signaling the drop (and also the drag to the module receiving the
+draggable events):
+
+
+```erlang
+event({drop, Drag, Drop}, Context).
+```
+
+Where both Drag and Drop are `#dragdrop` records:
+
+
+```erlang
+-record(dragdrop, {tag, delegate, id}).
+```
+
+The droppable tag accepts the following arguments:
+
+| Argument | Description                                                                      | Example                  |
+| -------- | -------------------------------------------------------------------------------- | ------------------------ |
+| id       | The id of the element that will accept drops of draggables.                      | id=”dropzone”            |
+| tag      | The tag of the droppable that is sent as part of the drag and drop events. This can be any value, including a tuple. | tag=\\\\{subject id=123\\\\} |
+| active   | The droppable will have this CSS class added when there is an acceptable draggable being dragged. | active=”draghere”        |
+| hover    | The droppable will have this CSS class added when there is an acceptable draggable hovering over it. | active=”dropnow”         |
+| accept   | The group the droppable accepts. See the group argument of the draggable. A droppable can accept multiple groups, just repeat the accept argument. | accept=”edges”           |
+| delegate | The Erlang module that will receive the drop event after a successful drop.      |                          |
+
+See also
+
+the [draggable](/id/doc_template_scomp_scomp_draggable#scomp-draggable) tag.
+").
 -behaviour(zotonic_scomp).
 
 -export([vary/2, render/3, event/2]).

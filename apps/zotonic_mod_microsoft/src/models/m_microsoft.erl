@@ -17,6 +17,9 @@
 %% limitations under the License.
 
 -module(m_microsoft).
+-moduledoc("
+Check with `useauth` if the authentication using the Microsoft identity platform is enabled and configured.
+").
 -author("Maas-Maarten Zeeman <mmzeeman@xs4all.nl").
 
 -behaviour(zotonic_model).

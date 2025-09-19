@@ -17,6 +17,11 @@
 %% limitations under the License.
 
 -module(scomp_base_worker).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 
 -behaviour(zotonic_scomp).
 

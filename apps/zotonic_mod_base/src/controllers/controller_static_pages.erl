@@ -19,6 +19,37 @@
 %% limitations under the License.
 
 -module(controller_static_pages).
+-moduledoc("
+Serve a static page or pages.
+
+With this controller it is possible to add a folder with static files as a sub-site to your Zotonic site. Add the folder
+and all files to a directory in your template directory or your site’s directory and define the directory in a
+dispatch rule.
+
+Example dispatch rule:
+
+
+```erlang
+{oldsite, [\"old\", '*'], controller_static_pages, [{root, \"priv/old_site\"}]}
+```
+
+When a file `a.txt` is requested this resource will check for `a.txt` and `a.txt.tpl`. When it finds a `.tpl` file then
+that file be handled as a template. All dispatch configuration variables are available in the template.
+
+Directories will be redirected to the directory name with a `/` appended. The resource serves the file `index.html` or
+`index.html.tpl` for the directory contents. If these are not found, it will give a 404 page, unless the
+`allow_directory_index` option is set; in which case a directory listing is displayed.
+
+It has the following dispatch options:
+
+| Option                    | Description                                                                      | Example                               |
+| ------------------------- | -------------------------------------------------------------------------------- | ------------------------------------- |
+| root                      | Name of the directory in the site directory containing the static files. The root is a path name relative to the current site’s base directory or `{files, \"some/path\"}` for a path relative to a site‘s files directory. | \\\\{root, “priv/oldsite”\\\\}            |
+| use\\\\_cache               | Whether or not served files are cached in memory for an hour. Defaults to false. Use this for high-volume traffic when the files themselves do not change often. | \\\\{use\\\\_cache, true\\\\}               |
+| allow\\\\_directory\\\\_index | Whether or not to serve a directory listing when no index file is found. Defaults to false. The directory index is rendered using [directory\\\\_index.tpl](../templates/template_directory_index.html#template-directory-index).  New in version 0.9. | \\\\{allow\\\\_directory\\\\_index, true\\\\} |
+
+This resource does not handle any request arguments.
+").
 -export([
      service_available/1,
      allowed_methods/1,

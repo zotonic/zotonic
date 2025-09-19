@@ -17,6 +17,23 @@
 %% limitations under the License.
 
 -module(action_wires_overlay_close).
+-moduledoc("
+See also
+
+actions [overlay\\_open](/id/doc_template_action_action_overlay_open),
+[dialog\\_open](/id/doc_template_action_action_dialog_open) and [dialog](/id/doc_template_action_action_dialog).
+
+Closes the currently open overlay. When there is no overlay open then nothing happens.
+
+Example:
+
+
+```django
+{% button text=\"cancel\" action={overlay_close} %}
+```
+
+This button closes any open overlay when clicked.
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 %% interface functions

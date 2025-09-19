@@ -18,6 +18,13 @@
 %% limitations under the License.
 
 -module(action_admin_config_dialog_config_delete).
+-moduledoc("
+Open a dialog that asks confirmation to delete a configuration key/value pair.
+
+Todo
+
+Extend documentation
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 %% interface functions

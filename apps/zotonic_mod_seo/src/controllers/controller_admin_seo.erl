@@ -18,6 +18,13 @@
 %% limitations under the License.
 
 -module(controller_admin_seo).
+-moduledoc("
+Shows a form with settings related to Search Engine Optimization.
+
+Todo
+
+Extend documentation
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([

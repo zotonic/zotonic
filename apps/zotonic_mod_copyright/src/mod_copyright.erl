@@ -18,6 +18,11 @@
 %% limitations under the License.
 
 -module(mod_copyright).
+-moduledoc("
+Todo
+
+Not yet documented.
+").
 
 -mod_title("Copyright").
 -mod_description("Add copyrights and attribution to resources").

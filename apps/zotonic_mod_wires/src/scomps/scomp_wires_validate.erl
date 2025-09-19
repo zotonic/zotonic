@@ -17,6 +17,28 @@
 %% limitations under the License.
 
 -module(scomp_wires_validate).
+-moduledoc("
+The validator tag accepts the following arguments:
+
+| Argument           | Description                                                                      | Example                                 |
+| ------------------ | -------------------------------------------------------------------------------- | --------------------------------------- |
+| id                 | The id of the input element to be validated.                                     | id=”password\\\\_field”                   |
+| type               | The validator for the input element. Can be specified multiple times to add multiple validators. The value depends on the validator choosen but is always a record `{validatorname arg=value ...}` | type=\\\\{acceptance\\\\}                   |
+| trigger            | Id of the element that triggers the validation. Defaults to the value of “id”. The validator is triggered by a change of this. Almost never used. | trigger=”title”                         |
+| target             | Target of validator, defaults to the trigger. Almost never used.                 |                                         |
+| name               | Use this when the name of the input element is unequal to the id. The name is used by the server side code to validate the received input. Defaults to the target argument (which defaults to id). | name=”password\\\\_field”                 |
+| valid\\\\_message    | Message to show when the field passes validation. Defaults to the empty string.  | valid\\\\_message=”ok!”                   |
+| failure\\\\_message  | Argument passed to the type argument. See individual validators.                 |                                         |
+| message\\\\_after    | The id of the element after which the failure message should be shown. Defaults to the id argument. | message\\\\_after= “signup\\\\_tos\\\\_agree” |
+| only\\\\_on\\\\_blur   | Normally validates on change, unles only\\\\_on\\\\_blur is set.                     | only\\\\_on\\\\_blur                        |
+| wait               | Time in msec to wait for validation after the last keystroke. Default: 0.        | wait=100                                |
+| only\\\\_on\\\\_submit | Whether the validation should be done when entering data or only on submit of the form. Set this to suppress validation when entering data. | only\\\\_on\\\\_submit                      |
+
+See also
+
+*   the list of [Validators](/id/template_validator#validators)
+*   [Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators) in the Developer Guide
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -behaviour(zotonic_scomp).

@@ -17,6 +17,24 @@
 %% limitations under the License.
 
 -module(filter_lower).
+-moduledoc("
+See also
+
+[upper](/id/doc_template_filter_filter_upper)
+
+Translates the value to lower case.
+
+For example:
+
+
+```django
+{{ value|lower }}
+```
+
+When value is “Hello World” then the output is “hello world”.
+
+**Note:** There is partial support for multi-byte unicode characters.
+").
 -export([lower/2]).
 
 

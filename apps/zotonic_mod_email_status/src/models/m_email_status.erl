@@ -19,6 +19,9 @@
 
 
 -module(m_email_status).
+-moduledoc("
+Tracks the send/bounce/error status of all outgoing emails.
+").
 
 -behaviour (zotonic_model).
 

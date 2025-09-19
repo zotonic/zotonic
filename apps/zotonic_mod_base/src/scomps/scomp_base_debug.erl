@@ -18,6 +18,44 @@
 %% limitations under the License.
 
 -module(scomp_base_debug).
+-moduledoc("
+Shows which variables are assigned for use in the current template’s scope:
+
+
+```erlang
+{% debug %}
+```
+
+
+
+Optionally, variable names can be provided to be debugged:
+
+
+```erlang
+{% debug session_id q template zotonic_dispatch %}
+```
+
+
+
+By default, all key nodes are collapsed. Expanded, each node contains the value associated and highlighted as Erlang code:
+
+
+```erlang
+.. image:: /img/scomp_base_debug_expanded.png
+```
+
+The debug scomp contains three buttons at the top right:
+
+*   `_`: Collapse all key nodes;
+*   `□`: Expand all key nodes;
+*   `×`: Removes the debug element from the HTML document.
+
+There is also a resizer at the bottom right corner to resize the `debug` element horizontally.
+
+See also
+
+[print](/id/doc_template_tag_tag_print)
+").
 -behaviour(zotonic_scomp).
 
 -export([vary/2, render/3]).
