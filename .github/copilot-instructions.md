@@ -20,7 +20,8 @@ be used as modules pulled from Hex.pm using rebar dependencies.
 
 ## Libraries and Frameworks
 
-- Cotonic for the user interface and client/server communication
+- [Erlang](https://erlang.org) for controllers, models and module code
+- [Cotonic](https://cotonic.org) for the user interface and client/server communication
 - MQTT for the client/server protocol
 - Bootstrap as the css framework used for core modules
 - Cowboy for the HTTP server
