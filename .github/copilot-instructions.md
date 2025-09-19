@@ -141,7 +141,7 @@ not sanitized and must be escaped or otherwise sanitized.
 Files in the directory `priv/templates/static` can be served as-is. If a file in this directory has
 the extension `.tpl` then it *must* be a valid template.
 
-General advise for templates:
+General advice for templates:
 
 - Favor semantic HTML and accessibility.
 - Use semantic tags: `header`, `nav`, `main`, `section`, `article`, `footer`, etc.
