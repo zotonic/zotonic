@@ -132,7 +132,7 @@ The syntax of templates is very similar to the Django template language.
 In templates care should be taken that values from `q` are not directly shown in `{{ ... }}}` constructs
 but escaped or otherwise sanitized.
 
-Values from the `m.rsc` module are sanitized and can be displayed directly. Values from other models are
+Values from the `m.rsc` model are sanitized and can be displayed directly. Values from other models are
 not sanitized and must be escaped or otherwise sanitized.
 
 Files in the directory `priv/templates/static` can be served as-is. If a file in this directory has
