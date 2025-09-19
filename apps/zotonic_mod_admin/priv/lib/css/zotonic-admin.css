@@ -373,15 +373,6 @@ code {
 .btn.disabled .glyphicon {
   opacity: 0.6;
 }
-.btn .glyphicon {
-  top: 3px;
-}
-.btn.btn-xs .glyphicon {
-  top: 2px;
-}
-.btn.btn-sm .glyphicon {
-  top: 1px;
-}
 .btn.btn-primary:hover {
   background-color: #0c91cb;
   border-color: #0b80b3;

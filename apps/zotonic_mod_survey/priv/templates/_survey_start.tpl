@@ -19,7 +19,7 @@
 {% else %}
     {% with m.survey.did_survey[id] as did_survey %}
         {% if did_survey and id.survey_multiple == 2 %}
-            <p><span class="fa fa-exclamation-triangle"></span> {_ You already filled this in, but you can change your previous answers. _}</p>
+            <p><span class="glyphicon glyphicon-exclamation-sign"></span> {_ You already filled this in, but you can change your previous answers. _}</p>
             {% include "_survey_start_button.tpl"
                         id=id
                         answers=answers|default:m.survey.did_survey_answers[id]
@@ -37,7 +37,7 @@
             %}
         {% else %}
             <p class="alert alert-info">
-                <span class="fa fa-exclamation-triangle"></span>
+                <span class="glyphicon glyphicon-exclamation-sign"></span>
                 {_ You already filled this in. _}
             </p>
 
