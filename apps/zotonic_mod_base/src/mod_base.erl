@@ -389,7 +389,7 @@ maybe_page_path_language(Id, RequestedPagePath, Context) ->
                     {ok, Id}
             end;
         _OtherPath ->
-            % Assume language was in the URL andthere was a rewrite for the language
+            % Assume language was in the URL and there was a rewrite for the language
             {ok, Id}
     end.
 
