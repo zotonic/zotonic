@@ -143,7 +143,7 @@ With a `_search.tpl` template like this:
       <a href=\"{{ id.page_url }}\">{{ id.title }}</a>
     {% endfor %}
   </ul>
-  {% pager result=result topic=\"mode/location/post/push\" qargs %}
+  {% pager result=result topic=\"model/location/post/push\" qargs %}
 {% endwith %}
 ```
 
