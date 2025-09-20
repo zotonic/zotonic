@@ -82,11 +82,11 @@
             </table>
         </div>
     </div>
+    {% endwith %}
 {% else %}
     <div class="alert alert-danger">
         {_ You do not have permission to access development tools. _}
     </div>
 {% endif %}
 
-{% endwith %}
 {% endblock %}
