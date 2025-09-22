@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-09-22 11:23\n"
+"PO-Revision-Date: 2025-09-22 12:49\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -1513,7 +1513,7 @@ msgstr "Verwijder deze pagina."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:74
 msgid "Delete..."
-msgstr ""
+msgstr "Verwijderen..."
 
 #: zotonic_mod_admin/src/mod_admin.erl:920
 msgid "Deleted tasks."
@@ -1600,7 +1600,7 @@ msgstr "Dupliceer deze pagina."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:65
 msgid "Duplicate..."
-msgstr ""
+msgstr "Duplicaat..."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:31
 msgid "Duration"
@@ -2010,7 +2010,7 @@ msgstr "Maak"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:64
 msgid "Make a duplicate of this page."
-msgstr ""
+msgstr "Maak een kopie van deze pagina."
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:90
 msgid "Make a new media item"
@@ -2136,11 +2136,11 @@ msgstr "Bewerkt:"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:58
 msgid "More"
-msgstr ""
+msgstr "Meer"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:57
 msgid "More actions: duplicate or delete page"
-msgstr ""
+msgstr "Meer acties: pagina dupliceren of verwijderen"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:13
 msgid "Move block down"
@@ -6183,7 +6183,7 @@ msgstr "Pagina terugzetten naar vorige versie"
 
 #: zotonic_mod_backup/priv/templates/_admin_edit_content_publish.tpl:6
 msgid "Revert to an earlier revision of this page."
-msgstr ""
+msgstr "Terugkeren naar een eerdere revisie van deze pagina."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:26
 msgid "Revert to this version..."
@@ -6191,7 +6191,7 @@ msgstr "Terugkeren naar deze versie..."
 
 #: zotonic_mod_backup/priv/templates/_admin_edit_content_publish.tpl:7
 msgid "Revert..."
-msgstr ""
+msgstr "Terugkeren..."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:14
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:60
@@ -7549,7 +7549,7 @@ msgstr "Je hebt geen rechten om templates te debuggen."
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:137
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:42
 msgid "You do not have permission to access development tools."
-msgstr ""
+msgstr "Je hebt geen toegang tot de ontwikkelingstools."
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:59
 msgid "found dispatch rule"
