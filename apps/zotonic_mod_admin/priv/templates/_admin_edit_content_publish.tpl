@@ -51,5 +51,34 @@
         <input type="checkbox" id="is_featured" name="is_featured" value="1" {% if id.is_featured %}checked="checked"{% endif %}/>
         {_ Featured _}
     </label>
+
+    <div class="pull-right">
+        <div class="btn-group">
+            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {_ More _} <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right">
+                {% block more_actions %}
+                    {% if m.acl.insert[id.category.name] %}
+                        <li>
+                            <a href="#duplicate" id="duplicate-rsc-action" title="{_ Duplicate this page. _}">
+                                <span class="glyphicon glyphicon-duplicate"></span> {_ Duplicate... _}
+                            </a>
+                            {% wire id="duplicate-rsc-action" action={dialog_duplicate_rsc id=id} %}
+                        </li>
+                    {% endif %}
+                    {% if id.is_deletable %}
+                        <li role="separator" class="divider"></li>
+                        <li>
+                            <a href="#delete" id="delete-rsc-action" title="{_ Delete this page. _}">
+                                <span class="glyphicon glyphicon-trash"></span> {_ Delete... _}
+                            </a>
+                        </li>
+                        {% wire id="delete-rsc-action" action={dialog_delete_rsc id=id on_success={redirect back}} %}
+                    {% endif %}
+                {% endblock %}
+            </ul>
+        </div>
+    </div>
 </div>
 {% endblock %}

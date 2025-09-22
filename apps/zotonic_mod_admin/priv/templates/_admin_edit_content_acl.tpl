@@ -38,7 +38,7 @@
                                   text=[_"Duplicate", "…"]
                                   action={dialog_duplicate_rsc id=id}
                                   title=_"Duplicate this page."
-                                  disabled=(not m.acl.insert[r.category.name])
+                                  disabled=(not m.acl.insert[id.category.name])
                         %}
                     {% endif %}
 
