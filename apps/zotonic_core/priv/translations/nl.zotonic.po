@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-09-22 12:49\n"
+"PO-Revision-Date: 2025-09-22 13:58\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -1512,8 +1512,8 @@ msgid "Delete this page."
 msgstr "Verwijder deze pagina."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:74
-msgid "Delete..."
-msgstr "Verwijderen..."
+msgid "Delete this page..."
+msgstr "Verwijder deze pagina..."
 
 #: zotonic_mod_admin/src/mod_admin.erl:920
 msgid "Deleted tasks."
@@ -1594,13 +1594,12 @@ msgstr "Dupliceer pagina"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:34
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:40
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:64
 msgid "Duplicate this page."
 msgstr "Dupliceer deze pagina."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:65
-msgid "Duplicate..."
-msgstr "Duplicaat..."
+msgid "Duplicate this page..."
+msgstr "Deze pagina dupliceren..."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:31
 msgid "Duration"
@@ -6185,13 +6184,13 @@ msgstr "Pagina terugzetten naar vorige versie"
 msgid "Revert to an earlier revision of this page."
 msgstr "Terugkeren naar een eerdere revisie van deze pagina."
 
+#: zotonic_mod_backup/priv/templates/_admin_edit_content_publish.tpl:7
+msgid "Revert to earlier version..."
+msgstr "Terugkeren naar eerdere versie..."
+
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:26
 msgid "Revert to this version..."
 msgstr "Terugkeren naar deze versie..."
-
-#: zotonic_mod_backup/priv/templates/_admin_edit_content_publish.tpl:7
-msgid "Revert..."
-msgstr "Terugkeren..."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:14
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:60
