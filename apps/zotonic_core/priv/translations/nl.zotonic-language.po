@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-09-22 11:23\n"
+"PO-Revision-Date: 2025-09-22 12:49\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -2723,53 +2723,53 @@ msgid "Yiddish"
 msgstr "Jiddisch"
 
 msgid "Yom"
-msgstr ""
+msgstr "Yom"
 
 msgid "Yombe"
-msgstr ""
+msgstr "Yombe"
 
 msgid "Yongbei Zhuang"
-msgstr ""
+msgstr "Yongbei Zhuang"
 
 msgid "Yongnan Zhuang"
-msgstr ""
+msgstr "Yongnan Zhuang"
 
 msgid "Yoruba"
 msgstr "Yoruba"
 
 msgid "Youjiang Zhuang"
-msgstr ""
+msgstr "Youjiang Zhuang"
 
 msgid "Yucateco"
-msgstr ""
+msgstr "Yucateco"
 
 msgid "Yue Chinese"
-msgstr ""
+msgstr "Yue Chinees"
 
 msgid "Zaghawa"
-msgstr ""
+msgstr "Zaghawa"
 
 msgid "Zande"
-msgstr ""
+msgstr "Zande"
 
 msgid "Zapotec"
-msgstr ""
+msgstr "Zapotec"
 
 msgid "Zarma"
-msgstr ""
+msgstr "Djerma"
 
 msgid "Zaza"
-msgstr ""
+msgstr "Zaza"
 
 msgid "Zhuang"
-msgstr ""
+msgstr "Zhuang"
 
 msgid "Zigula"
-msgstr ""
+msgstr "Zigula"
 
 msgid "Zulu"
-msgstr ""
+msgstr "Zoeloe"
 
 msgid "Zuojiang Zhuang"
-msgstr ""
+msgstr "Zuojiang Zhuang"
 
