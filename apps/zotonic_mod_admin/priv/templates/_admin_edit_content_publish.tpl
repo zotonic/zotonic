@@ -54,14 +54,14 @@
 
     <div class="pull-right">
         <div class="btn-group">
-            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="More actions: duplicate or delete page">
+            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="{_ More actions: duplicate or delete page _}">
                 {_ More _} <span class="caret"></span>
             </button>
             <ul class="dropdown-menu dropdown-menu-right">
                 {% block more_actions %}
                     {% if m.acl.insert[id.category.name] %}
                         <li>
-                            <a href="#duplicate" id="duplicate-rsc-action" title="{_ Duplicate this page. _}">
+                            <a href="#duplicate" id="duplicate-rsc-action" title="{_ Duplicate this page. _}" role="menuitem" aria-label="{_ Make a duplicate of this page. _}">
                                 <span class="glyphicon glyphicon-duplicate"></span> {_ Duplicate... _}
                             </a>
                             {% wire id="duplicate-rsc-action" action={dialog_duplicate_rsc id=id} %}
@@ -70,7 +70,7 @@
                     {% if id.is_deletable %}
                         <li role="separator" class="divider"></li>
                         <li>
-                            <a href="#delete" id="delete-rsc-action" title="{_ Delete this page. _}">
+                            <a href="#delete" id="delete-rsc-action" title="{_ Delete this page. _}" role="menuitem" aria-label="{_ Delete this page. _}">
                                 <span class="glyphicon glyphicon-trash"></span> {_ Delete... _}
                             </a>
                         </li>
