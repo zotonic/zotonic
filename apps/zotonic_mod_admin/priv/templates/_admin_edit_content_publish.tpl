@@ -61,8 +61,8 @@
                 {% block more_actions %}
                     {% if m.acl.insert[id.category.name] %}
                         <li>
-                            <a href="#duplicate" id="duplicate-rsc-action" title="{_ Duplicate this page. _}" role="menuitem" aria-label="{_ Make a duplicate of this page. _}">
-                                <span class="glyphicon glyphicon-duplicate"></span> {_ Duplicate... _}
+                            <a href="#duplicate" id="duplicate-rsc-action" role="menuitem" aria-label="{_ Make a duplicate of this page. _}">
+                                <span class="glyphicon glyphicon-duplicate"></span> {_ Duplicate this page... _}
                             </a>
                             {% wire id="duplicate-rsc-action" action={dialog_duplicate_rsc id=id} %}
                         </li>
@@ -70,8 +70,8 @@
                     {% if id.is_deletable %}
                         <li role="separator" class="divider"></li>
                         <li>
-                            <a href="#delete" id="delete-rsc-action" title="{_ Delete this page. _}" role="menuitem" aria-label="{_ Delete this page. _}">
-                                <span class="glyphicon glyphicon-trash"></span> {_ Delete... _}
+                            <a href="#delete" id="delete-rsc-action" role="menuitem" aria-label="{_ Delete this page. _}">
+                                <span class="glyphicon glyphicon-trash"></span> {_ Delete this page... _}
                             </a>
                         </li>
                         {% wire id="delete-rsc-action" action={dialog_delete_rsc id=id on_success={redirect back}} %}
