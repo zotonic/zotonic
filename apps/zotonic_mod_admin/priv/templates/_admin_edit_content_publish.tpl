@@ -54,7 +54,7 @@
 
     <div class="pull-right">
         <div class="btn-group">
-            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="More actions: duplicate or delete page">
                 {_ More _} <span class="caret"></span>
             </button>
             <ul class="dropdown-menu dropdown-menu-right">
