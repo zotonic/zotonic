@@ -244,19 +244,19 @@ pivot_resource_1(Id, Lang, Context) ->
                     KVs = #{
                         <<"pivot_tsv">> => Tsv,
                         <<"pivot_rtsv">> =>  Rtsv,
-                        <<"pivot_street">> => truncate(Street, 120),
-                        <<"pivot_city">> => truncate(City, 100),
-                        <<"pivot_postcode">> => truncate(Postcode, 30),
-                        <<"pivot_state">> => truncate(State, 50),
-                        <<"pivot_country">> => truncate(Country, 80),
-                        <<"pivot_first_name">> => truncate(NameFirst, 100),
-                        <<"pivot_surname">> => truncate(NameSurname, 100),
-                        <<"pivot_gender">> => truncate(Gender, 1),
+                        <<"pivot_street">> => z_string:to_lower(truncate(Street, 120)),
+                        <<"pivot_city">> => z_string:to_lower(truncate(City, 100)),
+                        <<"pivot_postcode">> => z_string:to_lower(truncate(Postcode, 30)),
+                        <<"pivot_state">> => z_string:to_lower(truncate(State, 50)),
+                        <<"pivot_country">> => z_string:to_lower(truncate(Country, 80)),
+                        <<"pivot_first_name">> => z_string:to_lower(truncate(NameFirst, 100)),
+                        <<"pivot_surname">> => z_string:to_lower(truncate(NameSurname, 100)),
+                        <<"pivot_gender">> => z_string:to_lower(truncate(Gender, 1)),
                         <<"pivot_date_start">> => DateStart,
                         <<"pivot_date_end">> => DateEnd,
                         <<"pivot_date_start_month_day">> => DateStartMonthDay,
                         <<"pivot_date_end_month_day">> => DateEndMonthDay,
-                        <<"pivot_title">> => truncate(Title, 100),
+                        <<"pivot_title">> => truncate(z_string:normalize(Title), 100),
                         <<"pivot_location_lat">> => LocationLat,
                         <<"pivot_location_lng">> => LocationLng
                     },
@@ -398,7 +398,8 @@ to_tsv(Text, Level, Args, StemmingLanguage) when is_binary(Text) ->
             {"tsvector('')", Args};
         TsvText ->
             N = length(Args) + 1,
-            Truncated = z_string:truncatechars(TsvText, ?MAX_TSV_LEN, <<>>),
+            TsvText1 = z_string:normalize(TsvText),
+            Truncated = z_string:truncate(TsvText1, ?MAX_TSV_LEN, <<>>),
             Args1 = Args ++ [Truncated],
             {["setweight(to_tsvector('pg_catalog.",StemmingLanguage,"', $",integer_to_list(N),"), '",Level,"')"], Args1}
     end.
@@ -417,17 +418,20 @@ to_integer(Text) ->
         Text1 -> z_convert:to_integer(Text1)
     end.
 
+%% @doc Preprocess a text before making in into a TSV. Ensure the text is valid utf8, replace newlines
+%% and tabs with a space, and trim the resuling text.
 -spec cleanup_tsv_text(binary()) -> binary().
 cleanup_tsv_text(Text) when is_binary(Text) ->
     Text1 = z_string:sanitize_utf8(Text),
-    Text2 = iolist_to_binary(re:replace(Text1, <<"[ ",13,10,9,"/-]+">>, <<" ">>, [global])),
+    Text2 = iolist_to_binary(re:replace(Text1, <<"[ ",13,10,9,"/–]+">>, <<" ">>, [global])),
     z_string:trim(Text2).
 
+%% @doc Truncate a string to a max length, map control characters to spaces
+%% and remove non-utf8 codepoints.
 -spec truncate(binary(), integer()) -> binary().
 truncate(S, Len) ->
     S1 = z_string:trim(S),
-    S2 = truncate_1(S1, Len, <<>>),
-    z_string:trim( z_string:to_lower(S2) ).
+    z_string:trim(truncate_1(S1, Len, <<>>)).
 
 truncate_1(_S, 0, Acc) ->
     Acc;
@@ -472,20 +476,25 @@ get_pivot_title(Id, Context) ->
     Title = m_rsc:p(Id, <<"title">>, z_language:default_language(Context), Context),
     Lang = z_language:default_language(Context),
     Title1 = z_trans:lookup_fallback(Title, Lang, Context),
-    z_string:trim(z_string:to_lower(Title1)).
+    z_string:trim(z_string:normalize(z_convert:to_binary(Title1))).
 
-%% @doc Fetch the first title from the record for sorting.
+%% @doc Fetch the English or first title from the record for sorting.
 -spec get_pivot_title(map()) -> binary().
 get_pivot_title(Props) ->
     Title = case maps:get(<<"title">>, Props, <<>>) of
         #trans{ tr = [] } ->
             <<>>;
-        #trans{ tr = [{_, Text}|_] } ->
-            Text;
-        T ->
-            T
+        #trans{ tr = [ {_,First} | _ ] = Tr } ->
+            case proplists:get_value(en, Tr) of
+                undefined -> First;
+                En -> En
+            end;
+        T when is_binary(T) ->
+            T;
+        _ ->
+            <<>>
     end,
-    z_string:trim(z_string:to_lower(Title)).
+    z_string:trim(z_string:normalize(Title)).
 
 
 %% @doc Return the raw resource data for the pivoter
