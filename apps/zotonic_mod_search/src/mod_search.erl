@@ -788,9 +788,26 @@ trim(S, Context) -> trim(z_convert:to_binary(S), Context).
 
 characters_to_binary(S) when is_list(S) ->
     case unicode:characters_to_binary(S) of
-        {incomplete, B, _} -> z_string:sanitize_utf8(B);
-        {error, B, _} -> B;
-        B when is_binary(B) -> B
+        {incomplete, B, R} ->
+            ?LOG_NOTICE(#{
+                in => zotonic_mod_search,
+                text => <<"Error in characters_to_binary/1: incomplete UTF-8 sequence">>,
+                result => error,
+                input => S,
+                remaining => R
+            }),
+            z_string:sanitize_utf8(B);
+        {error, B, R} ->
+            ?LOG_NOTICE(#{
+                in => zotonic_mod_search,
+                text => <<"Error in characters_to_binary/1: illegal UTF-8 sequence">>,
+                result => error,
+                input => S,
+                remaining => R
+            }),
+            B;
+        B when is_binary(B) ->
+            B
     end.
 
 %% @doc Expand a search string like "hello wor" to a PostgreSQL tsquery string.
