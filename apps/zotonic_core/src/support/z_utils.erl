@@ -896,13 +896,8 @@ group_by_dict([{Key,V}|T], Dict) ->
         false -> group_by_dict(T, dict:store(Key, [V], Dict))
     end.
 
-group_by_addprop(Id, Prop, Context) when is_integer(Id) ->
-    {m_rsc:p(Id, Prop, Context), Id};
-group_by_addprop(L, Prop, _Context) when is_list(L) ->
-    {proplists:get_value(Prop, L), L};
-group_by_addprop(N, _Prop, _Context) ->
-    {undefined, N}.
-
+group_by_addprop(Item, Key, Context) ->
+    {z_template_compiler_runtime:find_value(Key, Item, #{}, Context), Item}.
 
 replace1(F, T, L) ->
     replace1(F, T, L, []).

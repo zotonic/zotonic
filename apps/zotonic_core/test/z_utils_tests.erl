@@ -15,3 +15,19 @@ filter_dot_files_test() ->
         z_utils:filter_dot_files(["/.tmp", "/test", "/test/it", "/test/.foo"])),
 
     ok.
+
+group_by_test() ->
+    Context = z_context:new(zotonic_site_testsandbox),
+    ?assertEqual([
+                  [ [ {a, 1} ],[ {a, 1} ] ],
+                  [ [ {a, 2} ] ]
+                 ],
+                 z_utils:group_by([ [ {a, 1} ], [ {a, 1} ], [ {a,2} ] ], a, Context)),
+
+    ?assertEqual([
+                  [ #{ a => 1}, #{ a => 1} ],
+                  [ #{ a => 2} ]
+                 ],
+                 z_utils:group_by([ #{ a => 1},  #{a => 1}, #{a => 2} ], a, Context)),
+
+    ok.
