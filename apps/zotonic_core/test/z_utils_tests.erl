@@ -23,4 +23,11 @@ group_by_test() ->
                   [ [ {a, 2} ] ]
                  ],
                  z_utils:group_by([ [ {a, 1} ], [ {a, 1} ], [ {a,2} ] ], a, Context)),
+
+    ?assertEqual([
+                  [ #{ a => 1}, #{ a =>  1} ],
+                  [ #{ a => 2} ]
+                 ],
+                 z_utils:group_by([ #{ a => 1},  #{a => 1}, #{a => 2} ], a, Context)),
+
     ok.

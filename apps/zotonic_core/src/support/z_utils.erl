@@ -900,6 +900,8 @@ group_by_addprop(Id, Prop, Context) when is_integer(Id) ->
     {m_rsc:p(Id, Prop, Context), Id};
 group_by_addprop(L, Prop, _Context) when is_list(L) ->
     {proplists:get_value(Prop, L), L};
+group_by_addprop(M, Prop, _Context) when is_map(M) ->
+    {maps:get(Prop, M, undefined), M};
 group_by_addprop(N, _Prop, _Context) ->
     {undefined, N}.
 
