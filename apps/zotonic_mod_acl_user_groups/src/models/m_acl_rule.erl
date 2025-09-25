@@ -39,6 +39,7 @@ Not yet documented.
     insert/3,
     delete/3,
     replace_managed/3,
+    save_hierarchy/3,
 
     revert/2,
     publish/2,
@@ -391,6 +392,9 @@ replace_managed(Rules, Module, Context) ->
 
 manage_acl_rule({Type, Props}, Module, Context) ->
     insert(Type, [{managed_by, Module} | Props], Context).
+
+save_hierarchy(Hierarchy, _Module, Context) when is_list(Hierarchy) ->
+    m_hierarchy:save_partial_tree(acl_user_group, acl_user_group, Hierarchy, Context).
 
 %% Remove all edit versions, add edit versions of published rules
 revert(Kind, Context) ->
