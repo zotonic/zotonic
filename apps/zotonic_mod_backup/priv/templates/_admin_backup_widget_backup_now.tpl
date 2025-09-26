@@ -36,7 +36,7 @@
 
         {% if m.backup.encrypt_backups and not m.backup.has_encrypt_password %}
             <p class="help-block alert-danger">
-            <i class="fa fa-info-circle"></i>
+            <i class="glyphicon glyphicon-info-sign"></i>
 
             {_ Encryption is enabled, but there is no encryption password. Please
                make sure there is an encryption password in the settings. _}
@@ -44,7 +44,7 @@
         {% endif %}
         {% if is_filestore_enabled  %}
             <p class="help-block">
-            <i class="fa fa-info-circle"></i>
+            <i class="glyphicon glyphicon-info-sign"></i>
 
             {_ Cloud file store is enabled. The local files will not be backed up. Ensure that your cloud file store system has a proper backup. _}
             </p>

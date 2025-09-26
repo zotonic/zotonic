@@ -80,7 +80,7 @@ Params
         </div>
         <div class="form-group row">
             <div class="col-md-10 text-danger">
-                <i class="fa fa-warning"></i> {_ Deletion cannot be undone. _}
+                <i class="glyphicon glyphicon-exclamation-sign"></i> {_ Deletion cannot be undone. _}
             </div>
         </div>
     </fieldset>

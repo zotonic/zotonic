@@ -19,7 +19,7 @@
 
 {% block widget_content %}
 <p class="help-block" {% if not id.tz or id.tz == m.req.timezone %}style="display:none"{% endif %}>
-    <i class="fa fa-exclamation-triangle"></i>
+    <i class="glyphicon glyphicon-exclamation-sign"></i>
     {_ Showing dates in _}: <b class="rsc-timezone">{{ id.tz|escape }}</b>
 </p>
 <fieldset>
