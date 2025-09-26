@@ -1098,9 +1098,9 @@
     action_js :: iolist()
 }).
 
-%% @doc Find an import definition for a CSV file by checking the filename of the to be imported file.
+%% @doc Find an import definition for a CSV or XLSX file by checking the filename of the to be imported file.
 %% Type: first
-%% Return: ``#import_csv_definition{}`` or ``undefined`` (in which case the column headers are used as property names)
+%% Return: ``#import_data_def{}`` or ``undefined`` (in which case the column headers are used as property names)
 -record(import_csv_definition, {
     basename :: binary(),
     filename :: file:filename_all()
