@@ -58,14 +58,31 @@ Add more documentation
 
 
 %% @doc Handle a drop folder file when it is a tsv/csv file we know.
-observe_dropbox_file(#dropbox_file{ filename = F }, Context) ->
-    case can_handle(F, F, Context) of
+observe_dropbox_file(#dropbox_file{ filename = DropboxFile }, Context) ->
+    Basename = filename:basename(DropboxFile),
+    case can_handle(Basename, DropboxFile, Context) of
         {ok, Definition} ->
+            ?zInfo("Dropbox CSV/XLSX file will be imported: ~s", [ Basename ], Context),
+            ?LOG_INFO(#{
+                in => zotonic_mod_import_csv,
+                text => <<"Dropbox CSV/XLSX file will be imported">>,
+                file => DropboxFile,
+                source => dropbox,
+                user_id => z_acl:user(Context)
+            }),
             % Import in background, let dropbox keep the file in processing.
-            handle_spawn(F, Definition, false, z_acl:sudo(Context)),
+            handle_spawn(Basename, DropboxFile, Definition, false, z_acl:sudo(Context)),
             {ok, processing};
         ok ->
             % Handled by the notifier - dropbox can move the file to handled.
+            ?zInfo("Dropbox CSV/XLSX file has been imported: ~s", [ Basename ], Context),
+            ?LOG_INFO(#{
+                in => zotonic_mod_import_csv,
+                text => <<"Dropbox CSV/XLSX file has been imported">>,
+                file => DropboxFile,
+                source => dropbox,
+                user_id => z_acl:user(Context)
+            }),
             ok;
         {error, _} ->
             undefined
@@ -95,6 +112,15 @@ event(#submit{message={csv_upload, []}}, Context) ->
         true ->
             #upload{filename=OriginalFilename, tmpfile=TmpFile} = z_context:get_q_validated(<<"upload_file">>, Context),
             IsReset = z_convert:to_bool(z_context:get_q(<<"reset">>, Context)),
+            ?LOG_INFO(#{
+                in => zotonic_mod_import_csv,
+                text => <<"Importing CSV/XLSX file">>,
+                file => OriginalFilename,
+                source => upload,
+                user_id => z_acl:user(Context),
+                is_reset => IsReset
+            }),
+            ?zInfo("Uploaded CSV/XLSX file will be imported: ~s", [ OriginalFilename ], Context),
 
             % Move temporary file to the dropbox processing directory
             % It will be deleted/moved away by either:
@@ -109,11 +135,29 @@ event(#submit{message={csv_upload, []}}, Context) ->
             ok = z_filelib:rename(TmpFile, ProcessingFile),
             Context2 = case can_handle(OriginalFilename, ProcessingFile, Context) of
                 {ok, Definition} ->
-                    handle_spawn(ProcessingFile, Definition, IsReset, Context),
+                    handle_spawn(OriginalFilename, ProcessingFile, Definition, IsReset, Context),
                     z_render:growl(?__("Please hold on while the file is importing. You will get a notification when it is ready.", Context), Context);
                 ok ->
+                    ?zInfo("CSV/XLSX file has been imported: ~s", [ OriginalFilename ], Context),
+                    ?LOG_INFO(#{
+                        in => zotonic_mod_import_csv,
+                        text => <<"CSV/XLSX file has been imported">>,
+                        file => OriginalFilename,
+                        source => upload,
+                        user_id => z_acl:user(Context)
+                    }),
                     z_render:growl(?__("The uploaded file has been imported.", Context), Context);
-                {error, _} ->
+                {error, Reason} ->
+                    ?zError("CSV/XLSX could not be imported, reason: ~p", [ Reason ], Context),
+                    ?LOG_WARNING(#{
+                        in => zotonic_mod_import_csv,
+                        text => <<"CSV/XLSX file could not be imported">>,
+                        result => error,
+                        reason => Reason,
+                        file => OriginalFilename,
+                        source => upload,
+                        user_id => z_acl:user(Context)
+                    }),
                     file:delete(ProcessingFile),
                     z_render:growl_error(?__("This file cannot be imported.", Context), Context)
             end,
@@ -130,16 +174,17 @@ manage_schema(What, Context) ->
 %% Internal functions
 %%====================================================================
 
-handle_spawn(File, #import_data_def{ importmodule = undefined } = Def, IsReset, Context) ->
+handle_spawn(OriginalFilename, File, #import_data_def{ importmodule = undefined } = Def, IsReset, Context) ->
     Def1 = Def#import_data_def{ importmodule = import_data_csv },
-    handle_spawn(File, Def1, IsReset, Context);
-handle_spawn(File, #import_data_def{ importmodule = ImportMod } = Def, IsReset, Context) ->
+    handle_spawn(OriginalFilename, File, Def1, IsReset, Context);
+handle_spawn(OriginalFilename, File, #import_data_def{ importmodule = ImportMod } = Def, IsReset, Context) ->
     ContextAsync = z_context:prune_for_async(Context),
     z_proc:spawn_md(
         fun() ->
             ImportMod:import(File, Def, IsReset, ContextAsync),
+            ?zInfo("CSV/XLSX file has been imported: ~s", [ OriginalFilename ], Context),
             to_handled_dir(File, Context),
-            Context1 = z_render:growl_error(?__("The uploaded file has been imported.", Context), Context),
+            Context1 = z_render:growl(?__("The uploaded file has been imported.", Context), Context),
             z_transport:reply_actions(Context1)
         end).
 
@@ -208,7 +253,7 @@ can_handle(Type, OriginalFilename, DataFile, Context) ->
                             {ok, Def};
                         false ->
                             ?LOG_WARNING(#{
-                                text => <<"Invalid CSV file, missing 'name' and/or 'category' columns">>,
+                                text => <<"Invalid CSV/XLSX file, missing 'name' and/or 'category' columns">>,
                                 in => zotonic_mod_import_csv,
                                 result => error,
                                 reason => missing_columns,
@@ -219,7 +264,7 @@ can_handle(Type, OriginalFilename, DataFile, Context) ->
                     end;
                 {error, Reason} = Error ->
                     ?LOG_WARNING(#{
-                        text => <<"Invalid CSV file, error during inspect">>,
+                        text => <<"Invalid CSV/XLSX file, error during inspect">>,
                         in => zotonic_mod_import_csv,
                         result => error,
                         reason => Reason,

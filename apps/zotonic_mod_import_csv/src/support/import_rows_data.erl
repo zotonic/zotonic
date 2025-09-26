@@ -359,6 +359,8 @@ rsc_insert(Props, Context) ->
     end.
 
 -spec rsc_update( m_rsc:resource_id(), m_rsc:props_all(), z:context() ) -> {ok, m_rsc:resource_id()} | {error, term()}.
+rsc_update(?ACL_ADMIN_USER_ID, _Props, _Context) ->
+    {error, admin_user_update};
 rsc_update(Id, Props, Context) ->
     case check_medium(Props) of
         {url, Url, PropsMedia} ->
@@ -484,7 +486,8 @@ name_lookup(Name, #importstate{ name_to_id = NameToId } = State, Context) ->
     case maps:get(Name, NameToId, none) of
         none ->
             Id = m_rsc:rid(Name, Context),
-            {Id, NameToId#{ Name => Id }};
+            NameToId1 = NameToId#{ Name => Id },
+            {Id, State#importstate{ name_to_id = NameToId1 }};
         Id ->
             {Id, State}
     end.
