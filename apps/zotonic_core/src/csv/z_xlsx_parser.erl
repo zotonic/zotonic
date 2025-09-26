@@ -28,7 +28,7 @@
     fetch_worksheet/1
     ]).
 
-% -include_lib("zotonic_core/include/zotonic.hrl").
+-define(DEFAULT_MAX_MEMORY, 160 * 1024 * 1024). % 160MB
 
 %% @doc Parse a XLSX file with safety on the maximum amount of memory used. The parsing
 %% is done in a separate process. Same as `parse_file/2` with no options.
@@ -49,7 +49,7 @@ parse_file(File) ->
     Cell :: binary() | integer() | float() | undefined.
 parse_file(Filename, Options) ->
     SpawnOpts = [
-        {max_heap_size, proplists:get_value(max_memory, Options, 160 * 1024 * 1024)}, % default max 160MB memory
+        {max_heap_size, proplists:get_value(max_memory, Options, ?DEFAULT_MAX_MEMORY)},
         monitor
     ],
     Self = self(),
