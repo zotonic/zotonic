@@ -1,6 +1,6 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @author Marc Worrell <marc@worrell.nl>
-%% @doc Import a csv file according to the derived file/record definitions.
+%% @doc Import a rows of data according to the derived file/record definitions.
 %% @end
 
 %% Copyright 2010-2025 Marc Worrell, Arjan Scherpenisse
@@ -17,22 +17,19 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
-
--module(import_csv).
+-module(import_rows_data).
 
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -export([
-    import/3
+    import_rows/4
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--include("../../include/import_csv.hrl").
 
 -record(importresult, {seen=[], new=[], updated=[], errors=[], ignored=[], deleted=0}).
 -record(importstate, {is_reset, name_to_id, managed_edges, to_flush=[], result, managed_resources}).
-
 
 -type importresult() :: {file, file:filename_all()}
                       | {date_start, calendar:datetime()}
@@ -61,26 +58,33 @@
 %% @doc The import function, read the csv file and fetch all records.
 %% This function is run as a spawned process.  The Context should have the right permissions for inserting
 %% or updating the resources.
--spec import(#filedef{}, boolean(), z:context()) -> importresults().
-import(Def, IsReset, Context) ->
+-spec import_rows(RowData, DataDef, IsReset, Context) -> importresults() when
+    RowData :: list( list( term() ) ),
+    DataDef :: #import_data_def{},
+    IsReset :: boolean(),
+    Context :: z:context().
+import_rows([], _Def, _IsReset, _Context) ->
+    [
+        {date_start, erlang:universaltime()},
+        {date_end, erlang:universaltime()},
+        {seen, 0},
+        {new, 0},
+        {updated, 0},
+        {errors, 0},
+        {deleted, 0},
+        {ignored, 0}
+    ];
+import_rows(RowData, Def, IsReset, Context) ->
     StartDate = erlang:universaltime(),
-
-    %% Read and parse all rows
-    {ok, Device} = file:open(Def#filedef.filename, [read, binary, {encoding, utf8}]),
-    Rows = z_csv_parser:scan_lines(Device, Def#filedef.colsep),
-    file:close(Device),
-
     %% Drop (optionally) the first row, empty rows and the comment rows (starting with a '#')
-    Rows1 = case Def#filedef.skip_first_row of
-                true -> tl(Rows);
-                _ -> Rows
+    RowData1 = case Def#import_data_def.skip_first_row of
+                true -> tl(RowData);
+                _ -> RowData
             end,
-    State = import_rows(Rows1, 1, Def, new_importstate(IsReset), Context),
-
+    State = import_rows(RowData1, 1, Def, new_importstate(IsReset), Context),
     %% Return the stats from this import run
     R = State#importstate.result,
     [
-        {file, filename:basename(Def#filedef.filename)},
         {date_start, StartDate},
         {date_end, erlang:universaltime()},
         {seen, R#importresult.seen},
@@ -94,11 +98,11 @@ import(Def, IsReset, Context) ->
 
 new_importstate(IsReset) ->
     #importstate{
-        is_reset=IsReset,
-        name_to_id=gb_trees:empty(),
-        managed_edges=gb_trees:empty(),
-        managed_resources=sets:new(),
-        result=#importresult{}
+        is_reset = IsReset,
+        name_to_id = #{},
+        managed_edges = #{},
+        managed_resources = #{},
+        result = #importresult{}
     }.
 
 %%====================================================================
@@ -106,7 +110,7 @@ new_importstate(IsReset) ->
 %%====================================================================
 
 %% @doc Import all rows.
--spec import_rows(list( row() ), non_neg_integer(), #filedef{}, #importstate{}, z:context()) ->
+-spec import_rows(list( row() ), non_neg_integer(), #import_data_def{}, #importstate{}, z:context()) ->
         #importstate{}.
 import_rows([], _RowNr, _Def, ImportState, _Context) ->
     ImportState;
@@ -115,8 +119,8 @@ import_rows([[<<$#, _/binary>>|_]|Rows], RowNr, Def, ImportState, Context) ->
 import_rows([[]|Rows], RowNr, Def, ImportState, Context) ->
     import_rows(Rows, RowNr+1, Def, ImportState, Context);
 import_rows([R|Rows], RowNr, Def, ImportState, Context) ->
-    Zipped = zip(R, Def#filedef.columns, []),
-    ImportState1 = import_parts(Zipped, RowNr, Def#filedef.importdef, ImportState, Context),
+    Zipped = zip(R, Def#import_data_def.columns, []),
+    ImportState1 = import_parts(Zipped, RowNr, Def#import_data_def.importdef, ImportState, Context),
     import_rows(Rows, RowNr+1, Def, ImportState1, Context).
 
 
@@ -130,12 +134,13 @@ zip([C|Cs], [N|Ns], Acc) -> zip(Cs, Ns, [{N, C}|Acc]).
 
 
 %% @doc Import all resources on a row
--spec import_parts( row(), non_neg_integer(), list( tuple() ), #importstate{}, z:context() ) ->
+-spec import_parts( row(), non_neg_integer(), map(), #importstate{}, z:context() ) ->
     #importstate{}.
 import_parts(_Row, _RowNr, [], ImportState, _Context) ->
     ImportState;
 import_parts(Row, RowNr, [Def | Definitions], ImportState, Context) ->
-    {FieldMapping, ConnectionMapping} = Def,
+    FieldMapping = maps:get(props, Def),
+    ConnectionMapping = maps:get(edges, Def),
     try
         case import_def_rsc(FieldMapping, Row, ImportState, Context) of
             {S, ignore} ->
@@ -229,7 +234,6 @@ import_def_rsc_2_name(insert_rsc, State, Name, CategoryName, NormalizedRowMap, C
             RawRscFinal = get_updated_props(NewId, NormalizedRowMap, Context),
             Checksum = checksum(NormalizedRowMap),
             m_import_csv_data:update(NewId, Checksum, NormalizedRowMap, RawRscFinal, Context),
-
             case proplists:get_value(rsc_insert, Callbacks) of
                 undefined -> none;
                 Callback -> Callback(NewId, NormalizedRowMap, Context)
@@ -459,28 +463,30 @@ import_do_edge(Id, Row, {Predicate, {ObjectCat, ObjectRowField, ObjectProps}}, S
 import_do_edge(_, _, Def, _State, _Context) ->
     throw({import_error, {invalid_edge_definition, Def}}).
 
-
 %% Adds a resource Id to the list of managed resources, if the import definition allows it.
-add_managed_resource(Id, FieldMapping, State=#importstate{managed_resources=M}) ->
-    case proplists:get_value(import_skip_delete, FieldMapping) of
+add_managed_resource(Id, FieldMapping, State = #importstate{ managed_resources = M }) ->
+    case proplists:get_bool(import_skip_delete, FieldMapping) of
         true -> State;
-        _ -> State#importstate{managed_resources=sets:add_element(Id, M)}
+        false -> State#importstate{ managed_resources = M#{ Id => true } }
     end.
 
-add_name_lookup(State=#importstate{name_to_id=Tree}, Name, Id) ->
-    case gb_trees:lookup(Name, Tree) of
-        {value, undefined} -> State#importstate{name_to_id=gb_trees:update(Name, Id, Tree)};
-        {value, _} -> State;
-        none -> State#importstate{name_to_id=gb_trees:insert(Name, Id, Tree)}
+add_name_lookup(State = #importstate{ name_to_id = NameToId }, Name, Id) when is_integer(Id) ->
+    case maps:get(Name, NameToId, undefined) of
+        undefined ->
+            State#importstate{
+                name_to_id = NameToId#{ Name => Id }
+            };
+        _Id ->
+            State
     end.
 
-name_lookup(Name, #importstate{name_to_id=Tree} = State, Context) ->
-    case gb_trees:lookup(Name, Tree) of
-        {value, V} ->
-            {V, State};
+name_lookup(Name, #importstate{ name_to_id = NameToId } = State, Context) ->
+    case maps:get(Name, NameToId, none) of
         none ->
-            V = m_rsc:rid(Name, Context),
-            {V, add_name_lookup(State, Name, V)}
+            Id = m_rsc:rid(Name, Context),
+            {Id, NameToId#{ Name => Id }};
+        Id ->
+            {Id, State}
     end.
 
 name_lookup_exists(Name, State, Context) ->
@@ -501,15 +507,15 @@ map_fields(Mapping, Row, State) ->
                undefined -> throw({import_error, no_category_in_import_definition});
                T -> T
            end,
-	% Normalize and remove undefined values
+    % Normalize and remove undefined values
     P = lists:filter(fun({_K,undefined}) -> false; (_) -> true end,
-					 [{K, map_one_normalize(K, Type, V)} || {K,V} <- Mapped]),
+                     [{K, map_one_normalize(K, Type, V)} || {K,V} <- Mapped]),
     add_defaults(Defaults, P).
 
 map_def({K,F}, Row, State) ->
-	{K, map_one(F, Row, State)};
+    {K, map_one(F, Row, State)};
 map_def(K, Row, State) when is_atom(K); is_list(K) ->
-	map_def({K,K}, Row, State).
+    map_def({K,K}, Row, State).
 
 
 -spec map_one_normalize( binary(), any(), any() | {name_prefix, binary() | string() | atom(), binary() | string() | atom()} ) -> any().
@@ -664,16 +670,17 @@ flush_add(Id, State=#importstate{to_flush=F}) ->
     State#importstate{to_flush=[Id|F]}.
 
 
-managed_edge_add(Id, NewEdges, State=#importstate{managed_edges=Tree}) ->
-    case gb_trees:lookup(Id, Tree) of
-        {value, NewEdges} ->
+managed_edge_add(Id, NewEdges, State=#importstate{ managed_edges = ManagedEdges}) ->
+    case maps:get(Id, ManagedEdges, none) of
+        NewEdges ->
             State;
-        {value, undefined} ->
-            State#importstate{managed_edges=gb_trees:update(Id, NewEdges, Tree)};
-        {value, V} ->
-            State#importstate{managed_edges=gb_trees:update(Id, sets:to_list(sets:from_list(NewEdges ++ V)), Tree)};
+        undefined ->
+            State#importstate{ managed_edges = ManagedEdges#{ Id => NewEdges } };
+        V ->
+            MergedEdges = sets:to_list(sets:from_list(NewEdges ++ V)),
+            State#importstate{ managed_edges = ManagedEdges#{ Id => MergedEdges } };
         none ->
-            State#importstate{managed_edges=gb_trees:insert(Id, NewEdges, Tree)}
+            State#importstate{ managed_edges = ManagedEdges#{ Id => NewEdges } }
     end.
 
 
@@ -681,8 +688,9 @@ prop_empty(<<>>) -> true;
 prop_empty(<<" ">>) -> true;
 prop_empty(<<"\n">>) -> true;
 prop_empty(undefined) -> true;
-prop_empty({trans, [{_,<<>>}]}) -> true;
-prop_empty({trans, []}) -> true;
+prop_empty(null) -> true;
+prop_empty(#trans{ tr = [{_,<<>>}] }) -> true;
+prop_empty(#trans{ tr = [] }) -> true;
 prop_empty(_) -> false.
 
 

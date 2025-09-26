@@ -49,39 +49,27 @@ Add more documentation
     observe_admin_menu/3,
     can_handle/3,
     event/2,
-    inspect_file/1,
+    inspect_file/2,
     manage_schema/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
--include_lib("zotonic_mod_import_csv/include/import_csv.hrl").
 -include_lib("zotonic_mod_admin/include/admin_menu.hrl").
 
 
 %% @doc Handle a drop folder file when it is a tsv/csv file we know.
 observe_dropbox_file(#dropbox_file{ filename = F }, Context) ->
-    case is_csv( filename:extension(F) ) of
-        true ->
-            %% Correct file type, see if we can handle the file.
-            %% Either a module has a definition or there are correct header lines.
-            case can_handle(F, F, Context) of
-                {ok, Definition} ->
-                    % Import in background, let dropbox keep the file in processing.
-                    handle_spawn(Definition, false, z_acl:sudo(Context)),
-                    {ok, processing};
-                ok ->
-                    % Handled by the notifier - dropbox can move the file to handled.
-                    ok;
-                {error, _} ->
-                    undefined
-            end;
-        false ->
+    case can_handle(F, F, Context) of
+        {ok, Definition} ->
+            % Import in background, let dropbox keep the file in processing.
+            handle_spawn(F, Definition, false, z_acl:sudo(Context)),
+            {ok, processing};
+        ok ->
+            % Handled by the notifier - dropbox can move the file to handled.
+            ok;
+        {error, _} ->
             undefined
     end.
-
-is_csv(".csv") -> true;
-is_csv(<<".csv">>) -> true;
-is_csv(_) -> false.
 
 %% @doc Add menu item to 'Content' admin menu
 -spec observe_admin_menu(#admin_menu{}, list(), z:context()) -> list().
@@ -94,7 +82,7 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
         #menu_item{
             id = admin_import,
             parent = admin_content,
-            label = ?__("Import content", Context),
+            label = ?__("Import CSV or XLSX file", Context),
             url = {admin_import},
             visiblecheck = {acl, use, mod_import_csv}
         }|
@@ -121,7 +109,7 @@ event(#submit{message={csv_upload, []}}, Context) ->
             ok = z_filelib:rename(TmpFile, ProcessingFile),
             Context2 = case can_handle(OriginalFilename, ProcessingFile, Context) of
                 {ok, Definition} ->
-                    handle_spawn(Definition, IsReset, Context),
+                    handle_spawn(ProcessingFile, Definition, IsReset, Context),
                     z_render:growl(?__("Please hold on while the file is importing. You will get a notification when it is ready.", Context), Context);
                 ok ->
                     z_render:growl(?__("The uploaded file has been imported.", Context), Context);
@@ -142,15 +130,18 @@ manage_schema(What, Context) ->
 %% Internal functions
 %%====================================================================
 
-handle_spawn(Def, IsReset, Context) ->
+handle_spawn(File, #import_data_def{ importmodule = undefined } = Def, IsReset, Context) ->
+    Def1 = Def#import_data_def{ importmodule = import_data_csv },
+    handle_spawn(File, Def1, IsReset, Context);
+handle_spawn(File, #import_data_def{ importmodule = ImportMod } = Def, IsReset, Context) ->
     ContextAsync = z_context:prune_for_async(Context),
     z_proc:spawn_md(
-          fun() ->
-            import_csv:import(Def, IsReset, ContextAsync),
-            to_handled_dir(Def, Context),
+        fun() ->
+            ImportMod:import(File, Def, IsReset, ContextAsync),
+            to_handled_dir(File, Context),
             Context1 = z_render:growl_error(?__("The uploaded file has been imported.", Context), Context),
             z_transport:reply_actions(Context1)
-          end).
+        end).
 
 
 %%====================================================================
@@ -158,42 +149,63 @@ handle_spawn(Def, IsReset, Context) ->
 %%====================================================================
 
 %% @doc Move the imported file from the processing to the handled dir.
-to_handled_dir(Def, Context) ->
+to_handled_dir(File, Context) ->
     ToDir = z_dropbox:dropbox_handled_dir(Context),
-    Target = filename:join([ToDir, filename:basename(Def#filedef.filename)]),
-    case filelib:is_regular(Def#filedef.filename) of
+    Target = filename:join([ToDir, filename:basename(File)]),
+    case filelib:is_regular(File) of
         true ->
             file:delete(Target),
-            z_filelib:rename(Def#filedef.filename, Target);
+            z_filelib:rename(File, Target);
         false ->
             ok
     end.
 
+import_file_type(Filename) ->
+    case z_string:to_lower(filename:extension(Filename)) of
+        <<".csv">> -> csv;
+        <<".xlsx">> -> xlsx;
+        _ -> false
+    end.
+
+%% @doc Check if we can import this file. Derive the file type from the original filename.
+-spec can_handle(OriginalFilename, DataFile, Context) -> {ok, #import_data_def{}} | ok | {error, Reason} when
+    OriginalFilename :: file:filename_all(),
+    DataFile :: file:filename_all(),
+    Reason :: term(),
+    Context :: z:context().
+can_handle(OriginalFilename, DataFile, Context) ->
+    case import_file_type(OriginalFilename) of
+        false ->
+            {error, file_type};
+        Type ->
+            %% Correct file type, see if we can handle the file.
+            %% Either a module has a definition or there are correct header lines.
+            can_handle(Type, OriginalFilename, DataFile, Context)
+    end.
 
 %% @doc Check if we can import this file
-can_handle(OriginalFilename, DataFile, Context) ->
-    case z_notifier:first(#import_csv_definition{basename=filename:basename(OriginalFilename), filename=DataFile}, Context) of
-        {ok, #import_data_def{colsep=ColSep, skip_first_row=SkipFirstRow, columns=Columns, importdef=ImportDef}} ->
-            % Column definition of the CSV file, to be handled by our CSV importer.
-            {ok, #filedef{
-                        filename=DataFile,
-                        file_size=filelib:file_size(DataFile),
-                        colsep=ColSep,
-                        columns=Columns,
-                        skip_first_row=SkipFirstRow,
-                        importdef=ImportDef
-                }};
+-spec can_handle(Type, OriginalFilename, DataFile, Context) -> {ok, #import_data_def{}} | ok | {error, Reason} when
+    Type :: csv | xlsx,
+    OriginalFilename :: file:filename_all(),
+    DataFile :: file:filename_all(),
+    Reason :: term(),
+    Context :: z:context().
+can_handle(Type, OriginalFilename, DataFile, Context) ->
+    case z_notifier:first(#import_csv_definition{ basename = filename:basename(OriginalFilename), filename = DataFile }, Context) of
+        {ok, #import_data_def{} = Def} ->
+            % Column definition of the data file, to be handled by our importers.
+            {ok, Def};
         ok ->
             % Handled by the notifier - dropbox can move the file to handled.
             ok;
         {error, _} = Error ->
             Error;
         undefined ->
-            case inspect_file(DataFile) of
-                {ok, #filedef{ columns = Cols } = FD} ->
+            case inspect_file(Type, DataFile) of
+                {ok, #import_data_def{ columns = Cols } = Def} ->
                     case lists:member(<<"name">>, Cols) andalso lists:member(<<"category">>, Cols) of
                         true ->
-                            {ok, FD};
+                            {ok, Def};
                         false ->
                             ?LOG_WARNING(#{
                                 text => <<"Invalid CSV file, missing 'name' and/or 'category' columns">>,
@@ -218,18 +230,35 @@ can_handle(OriginalFilename, DataFile, Context) ->
     end.
 
 %% @doc Inspect the first line of a CSV file, extract the column headers
--spec inspect_file( file:filename_all() ) -> {ok, #filedef{}} | {error, term()}.
-inspect_file(Filename) ->
+-spec inspect_file(Type, File) -> {ok, #import_data_def{}} | {error, term()} when
+    Type :: csv | xlsx,
+    File :: file:filename_all().
+inspect_file(csv, Filename) ->
     case z_csv_parser:inspect_file(Filename) of
         {ok, Cols, Sep} ->
             Cols1 = [ to_property_name(Col) || Col <- Cols ],
-            {ok, #filedef{
-                filename = Filename,
-                file_size = filelib:file_size(Filename),
+            {ok, #import_data_def{
                 colsep = Sep,
                 columns = Cols1,
                 skip_first_row = true,
-                importdef = cols2importdef(Cols1)
+                importdef = cols2importdef(Cols1),
+                importstate = undefined,
+                importmodule = import_data_csv
+            }};
+        {error, _} = Error ->
+            Error
+    end;
+inspect_file(xlsx, Filename) ->
+    case z_xlsx_parser:parse_file(Filename) of
+        {ok, [Row|_] = Rows} ->
+            Cols1 = [ to_property_name(Col) || Col <- Row ],
+            {ok, #import_data_def{
+                colsep = undefined,
+                columns = Cols1,
+                skip_first_row = true,
+                importdef = cols2importdef(Cols1),
+                importstate = Rows,
+                importmodule = import_data_xlsx
             }};
         {error, _} = Error ->
             Error
@@ -243,17 +272,14 @@ inspect_file(Filename) ->
 cols2importdef(Cols) ->
     ImportDefMap = [ cols2importdef_map(Col) || Col <- unique(Cols,[]) ],
     [
-        {
-            % Field mapping
-            [
-             {<<"name">>, {concat, [<<"name_prefix">>, <<"name">>]}}
-             | lists:filter(fun(X) ->
-                                X =/= undefined
-                            end,
-                            ImportDefMap)
-            ],
-            % Edges
-            []
+        #{
+            props => % Field mapping
+                [
+                 {<<"name">>, {concat, [<<"name_prefix">>, <<"name">>]}}
+                 | lists:filter(fun(X) -> X =/= undefined end, ImportDefMap)
+                ],
+            edges => % Edges
+                []
         }
     ].
 

@@ -343,7 +343,9 @@
     colsep = $\t :: 0..255,
     skip_first_row = true :: boolean(),
     columns = [] :: list(),
-    importdef
+    importdef = [] :: [ #{ props => list(), edges => list() } ],
+    importstate = undefined :: term(),
+    importmodule = import_csv :: module() | undefined
 }).
 
 
