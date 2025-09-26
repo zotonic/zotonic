@@ -134,8 +134,7 @@ zip([C|Cs], [N|Ns], Acc) -> zip(Cs, Ns, [{N, C}|Acc]).
 
 
 %% @doc Import all resources on a row
--spec import_parts( row(), non_neg_integer(), map(), #importstate{}, z:context() ) ->
-    #importstate{}.
+-spec import_parts(row(), pos_integer(), list(), #importstate{}, z:context()) -> #importstate{}.
 import_parts(_Row, _RowNr, [], ImportState, _Context) ->
     ImportState;
 import_parts(Row, RowNr, [Def | Definitions], ImportState, Context) ->
@@ -235,7 +234,7 @@ import_def_rsc_2_name(insert_rsc, State, Name, CategoryName, NormalizedRowMap, C
             Checksum = checksum(NormalizedRowMap),
             m_import_csv_data:update(NewId, Checksum, NormalizedRowMap, RawRscFinal, Context),
             case proplists:get_value(rsc_insert, Callbacks) of
-                undefined -> none;
+                undefined -> ok;
                 Callback -> Callback(NewId, NormalizedRowMap, Context)
             end,
             {flush_add(NewId, State), {new, CategoryName, NewId, Name}};
@@ -675,15 +674,15 @@ flush_add(Id, State=#importstate{to_flush=F}) ->
 
 managed_edge_add(Id, NewEdges, State=#importstate{ managed_edges = ManagedEdges}) ->
     case maps:get(Id, ManagedEdges, none) of
+        none ->
+            State#importstate{ managed_edges = ManagedEdges#{ Id => NewEdges } };
         NewEdges ->
             State;
         undefined ->
             State#importstate{ managed_edges = ManagedEdges#{ Id => NewEdges } };
-        V ->
+        V when is_list(V) ->
             MergedEdges = sets:to_list(sets:from_list(NewEdges ++ V)),
-            State#importstate{ managed_edges = ManagedEdges#{ Id => MergedEdges } };
-        none ->
-            State#importstate{ managed_edges = ManagedEdges#{ Id => NewEdges } }
+            State#importstate{ managed_edges = ManagedEdges#{ Id => MergedEdges } }
     end.
 
 
