@@ -298,7 +298,6 @@ inspect_file(xlsx, Filename) ->
         {ok, [Row|_] = Rows} ->
             Cols1 = [ to_property_name(Col) || Col <- Row ],
             {ok, #import_data_def{
-                colsep = undefined,
                 columns = Cols1,
                 skip_first_row = true,
                 importdef = cols2importdef(Cols1),
