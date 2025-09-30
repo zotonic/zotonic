@@ -502,7 +502,8 @@ db_pool(#context{ db = {Pool, _Driver} }) ->
 db_driver(#context{ db = {_Pool, Driver} }) ->
     Driver.
 
-%% @doc Fetch the database driver module for this site
+%% @doc Fetch the database connection
+-spec db_connection(z:context()) -> undefined | pid().
 db_connection(#context{ dbc = Connection }) ->
     Connection.
 

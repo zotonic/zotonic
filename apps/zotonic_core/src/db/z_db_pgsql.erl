@@ -285,13 +285,10 @@ maybe_map_error({ok, _} = Result) ->
     Ref :: reference(),
     Reason :: paused | connection_down | term().
 fetch_conn(Worker, Sql, Parameters, Timeout) ->
-
-    ?DEBUG({is_alive, Worker}),
-    case ?DEBUG(is_connection_alive(Worker)) of
+    case is_connection_alive(Worker) of
         true ->
             try
                 Ref = erlang:make_ref(),
-                ?DEBUG({voor_fetch_conn, Worker}),
                 case gen_server:call(Worker, {fetch_conn, Ref, self(), Sql, Parameters, Timeout, is_tracing()}) of
                     {ok, Conn} ->
                         {ok, {Conn, Ref}};

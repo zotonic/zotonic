@@ -110,16 +110,16 @@ cancel_timeout_test() ->
 disconnect_test() ->
     Context = z_context:new(zotonic_site_testsandbox),
 
-    ok = z_db:transaction(
-           fun(Ctx) ->
-                   spawn(fun() ->
-                                 z_db:qmap("select pg_sleep(10)", Ctx),
-                                 ok
-                         end),
-                   P = z_context:db_connection(Ctx),
-                   timer:sleep(1),
-                   P ! disconnect,
-                   ok
-           end, Context),
-    
+    no_problem = z_db:transaction(
+                   fun(Ctx) ->
+                           spawn(fun() ->
+                                         z_db:qmap("select pg_sleep(10)", Ctx),
+                                         ok
+                                 end),
+                           P = z_context:db_connection(Ctx),
+                           timer:sleep(1),
+                           P ! disconnect,
+                           no_problem 
+                   end, Context),
+
     ok.
