@@ -172,9 +172,11 @@ Will output 10 October 1990 - 10:11:12.
 -include_lib("kernel/include/logger.hrl").
 
 date(Date, Format, 0, Context) ->
+    % In Zotonic 0.x the timezone argument 0 was used for the current request timezone.
     date(Date, Format, false, Context);
 date(Date, Format, 1, Context) ->
-    ?LOG_INFO(#{
+    % In Zotonic 0.x the timezone argument 1 was used to use UTC (no conversion)
+    ?LOG_DEBUG(#{
         in => zotonic_mod_base,
         text => <<"Filter 'date' now accepts a resource id as the timezone. Use 'UTC' or true to not convert timezones.">>,
         id => 1,
