@@ -296,6 +296,8 @@ fetch_conn(Worker, Sql, Parameters, Timeout) ->
                         {error, paused}
                 end
             catch
+                exit:{normal, _} ->
+                    {error, connection_down};
                 exit:Reason:Stack ->
                     ?LOG_ERROR(#{
                         text => <<"Fetch connection failed.">>,
@@ -395,7 +397,7 @@ handle_call({pool_return_connection_check, CallerPid}, From, #state{
     }),
     gen_server:reply(From, {error, checkin_busy}),
     State1 = disconnect(State),
-    {stop, normal, State1};
+    {stop, normal, {error, running}, State1};
 
 handle_call({fetch_conn, _Ref, _CallerPid, _Sql, _Params, _Timeout, _IsTracing}, _From, #state{ is_paused = true } = State) ->
     {reply, {error, paused}, State};
@@ -443,7 +445,8 @@ handle_call({fetch_conn, _Ref, CallerPid, Sql, Params, _Timeout, _IsTracing}, Fr
     }),
     gen_server:reply(From, {error, busy}),
     State1 = disconnect(State),
-    {stop, normal, State1};
+    ?DEBUG({stop, normal, busy}),
+    {stop, normal, {error, busy}, State1};
 
 handle_call({fetch_conn, _Ref, CallerPid, Sql, Params, _Timeout, _IsTracing}, _From, #state{ busy_pid = OtherPid } = State) ->
     % This can happen if a connection is shared by two processes.
@@ -582,7 +585,7 @@ handle_info(disconnect, State) ->
         args => State#state.busy_params,
         worker_pid => self()
     }),
-    {noreply, disconnect(State), hibernate};
+    {stop, normal, disconnect(State)};
 
 handle_info(timeout, #state{ busy_pid = undefined } = State) ->
     % Idle timeout - no SQL query is running
