@@ -106,3 +106,20 @@ cancel_timeout_test() ->
     {ok, []} = z_db:qmap("select * from pg_stat_activity where state = 'active' and query = 'select PG_SLEEP(30)'", Context),
 
     ok.
+
+disconnect_test() ->
+    Context = z_context:new(zotonic_site_testsandbox),
+
+    ok = z_db:transaction(
+           fun(Ctx) ->
+                   spawn(fun() ->
+                                 z_db:qmap("select pg_sleep(10)", Ctx),
+                                 ok
+                         end),
+                   P = z_context:db_connection(Ctx),
+                   timer:sleep(1),
+                   P ! disconnect,
+                   ok
+           end, Context),
+    
+    ok.

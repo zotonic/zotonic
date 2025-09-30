@@ -197,7 +197,6 @@ pool_return_connection(Worker, Context) ->
     Timeout :: pos_integer(),
     Result :: squery_result().
 squery(Worker, Sql, Timeout) ->
-    ?DEBUG({is_alive, Worker}),
     case fetch_conn(Worker, Sql, [], Timeout) of
         {ok, {Conn, Ref}} ->
             try
@@ -286,7 +285,9 @@ maybe_map_error({ok, _} = Result) ->
     Ref :: reference(),
     Reason :: paused | connection_down | term().
 fetch_conn(Worker, Sql, Parameters, Timeout) ->
-    case is_connection_alive(Worker) of
+
+    ?DEBUG({is_alive, Worker}),
+    case ?DEBUG(is_connection_alive(Worker)) of
         true ->
             try
                 Ref = erlang:make_ref(),
@@ -584,7 +585,7 @@ handle_info(disconnect, State) ->
         args => State#state.busy_params,
         worker_pid => self()
     }),
-    {noreply, State, disconnect(State), hibernate};
+    {noreply, disconnect(State), hibernate};
 
 handle_info(timeout, #state{ busy_pid = undefined } = State) ->
     % Idle timeout - no SQL query is running
@@ -700,7 +701,6 @@ handle_info(Info, State) ->
 
 terminate(_Reason, #state{} = State) ->
     disconnect(State),
-    ?DEBUG({worker, self(), terminate}),
     ok.
 
 code_change(_OldVsn, State, _Extra) ->
@@ -713,34 +713,28 @@ code_change(_OldVsn, State, _Extra) ->
 
 %% @doc Cancel the running query.
 cancel(#state{ conn = Conn, busy_pid = Pid, busy_ref = Ref } = State) when is_pid(Pid), Conn =/= undefined ->
-    ?DEBUG(cancel),
     ok = epgsql:cancel(Conn),
     State1 = demonitor_busy(State),
     State1#state{
         canceled_busy_ref = Ref
     };
 cancel(#state{ conn = undefined } = State) ->
-    ?DEBUG(cancel),
     State.
 
 
 %% @doc Cancel any running query and close the connection to the SQL server
 disconnect(#state{ conn = undefined } = State) ->
-    ?DEBUG({disconnect, no_conn}),
     demonitor_busy(State);
 disconnect(#state{ conn = Conn, busy_pid = Pid, busy_ref = Ref } = State) when is_pid(Pid) ->
-    ?DEBUG({disconnect, conn_with_pid}),
     ok = epgsql:cancel(Conn),
     State1 = disconnect_1(State),
     State1#state{
         canceled_busy_ref = Ref
     };
 disconnect(#state{ busy_pid = undefined } = State) ->
-    ?DEBUG({disconnect, no_pid }),
     disconnect_1(State).
 
 disconnect_1(#state{ conn = Conn} = State) ->
-    ?DEBUG({disconnect_1, State#state.is_paused, State#state.pause_waiting}),
     ok = epgsql:close(Conn),
     State1 = receive
         {'DOWN', _Ref, process, Conn, _Reason} ->
