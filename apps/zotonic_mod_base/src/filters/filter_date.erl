@@ -61,41 +61,43 @@ context. This timezone can be one of the following, in order of preference:
 *   Default timezone of the Zotonic server
 *   UTC
 
-A specific timezone can be enforced by adding a second parameter to the date-filter. For example, to display a date in UTC:
+A specific timezone can be enforced by adding a second parameter to the date-filter. For example, to display a date in
+Amsterdam time:
 
 
 ```django
-{{ mydate|date:\"Y-m-d H:i T\":\"UTC\" }}
+{{ mydate|date:\"Y-m-d H:i T\":\"Europe/Amsterdam\" }}
 ```
 
 Instead of the timezone, the following arguments are also accepted:
 
-*   `true` set the timezone to UTC
-*   `false` leave the timezone as is
-*   `undefined` leave the timezone as is
-*   a resource id (integer), set the timezone according to the tz property of the resource
+*   `true` set the timezone to UTC (no conversion, display as-is)
+*   `false` use the timezone of the current request context
+*   `undefined` use the timezone of the current request context
+*   a resource id (integer), set the timezone according to the tz property of the resource, unless the
+    the resource’s `date_is_all_day` flag is set, then the timezone is set to UTC (see below for details).
 
+For example, to display the date as entered in the admin:
 
+```django
+{{ id.publication_start|date:\"Y-m-d H:i T\":id }}
+```
 
 Timezone and *all day* date ranges
 ----------------------------------
 
-If a resource’s date range is set with the *date\\_is\\_all\\_day* flag then the dates are not converted to or from
-UTC but stored as-is. This needs to be taken into account when displaying those dates, otherwise a conversion from
-(assumed) UTC to the current timezone is performed and the wrong date might be displayed.
+If a resource’s date range is set with the `date_is_all_day` flag then the dates are not converted to or from
+UTC but stored as they are entered. This needs to be taken into account when displaying those dates, otherwise a
+conversion from (assumed) UTC to the current request timezone is performed and the wrong date might be displayed.
 
-The timezone conversion can be prevented by adding the *date\\_is\\_all\\_day* flag to the date-filter as the timezone.
+The timezone conversion can be prevented by adding the `date_is_all_day` flag to the date-filter as the timezone.
 Example, for displaying the start date of a resource:
 
 
 ```django
-{{ id.date_start|date:\"Y-m-d\":id.date_is_all_day }}
+{{ id.date_start|date:\"Y-m-d\":id.date_is_all_day }}  (In request tz if not all day)
+{{ id.date_start|date:\"Y-m-d\":id }}  (In resource tz, if not all day)
 ```
-
-An alternative is to display the “all day” date in the timezone of the resource itself:
-
-\\{\\{ id.date\\_start|date:”Y-m-d”:id \\}\\}
-
 
 
 Date formatting characters
@@ -169,18 +171,35 @@ Will output 10 October 1990 - 10:11:12.
 
 -include_lib("kernel/include/logger.hrl").
 
-date(Date, Format, Id, Context) when Id =:= 0; Id =:= 1 ->
+date(Date, Format, 0, Context) ->
+    date(Date, Format, false, Context);
+date(Date, Format, 1, Context) ->
     ?LOG_INFO(#{
         in => zotonic_mod_base,
-        text => <<"Filter 'date' now accepts a resource id as the timezone. Use 'UTC' to not convert timezones.">>
+        text => <<"Filter 'date' now accepts a resource id as the timezone. Use 'UTC' or true to not convert timezones.">>,
+        id => 1,
+        format => Format
     }),
-    Tz = m_rsc:p(Id, <<"tz">>, Context),
-    date(Date, Format, z_context:set_tz(Tz, Context));
+    date_for_id_tz(Date, Format, 1, Context);
 date(Date, Format, Id, Context) when is_integer(Id) ->
-    Tz = m_rsc:p(Id, <<"tz">>, Context),
-    date(Date, Format, z_context:set_tz(Tz, Context));
+    date_for_id_tz(Date, Format, Id, Context);
+date(Date, Format, true, Context) ->
+    date(Date, Format, z_context:set_tz(<<"UTC">>, Context));
+date(Date, Format, false, Context) ->
+    date(Date, Format, Context);
+date(Date, Format, undefined, Context) ->
+    date(Date, Format, false, Context);
 date(Date, Format, Tz, Context) ->
     date(Date, Format, z_context:set_tz(Tz, Context)).
+
+date_for_id_tz(Date, Format, Id, Context) ->
+    case z_convert:to_bool(m_rsc:p(Id, <<"date_is_all_day">>, Context)) of
+        true ->
+            date(Date, Format, true, Context);
+        false ->
+            Tz = m_rsc:p(Id, <<"tz">>, Context),
+            date(Date, Format, z_context:set_tz(Tz, Context))
+    end.
 
 date(undefined, _FormatStr, _Context) ->
     undefined;
