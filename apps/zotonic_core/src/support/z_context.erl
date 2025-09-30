@@ -36,6 +36,7 @@
 
     db_pool/1,
     db_driver/1,
+    db_connection/1,
 
     is_request/1,
     is_session/1,
@@ -500,6 +501,10 @@ db_pool(#context{ db = {Pool, _Driver} }) ->
 -spec db_driver(z:context()) -> atom().
 db_driver(#context{ db = {_Pool, Driver} }) ->
     Driver.
+
+%% @doc Fetch the database driver module for this site
+db_connection(#context{ dbc = Connection }) ->
+    Connection.
 
 %% @doc Fetch the protocol for absolute urls referring to the site (always https).
 -spec site_protocol(z:context()) -> binary().

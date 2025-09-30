@@ -304,6 +304,7 @@ fetch_conn(Worker, Sql, Parameters, Timeout) ->
         true ->
             try
                 Ref = erlang:make_ref(),
+                ?DEBUG({voor_fetch_conn, Worker}),
                 case gen_server:call(Worker, {fetch_conn, Ref, self(), Sql, Parameters, Timeout, is_tracing()}) of
                     {ok, Conn} ->
                         {ok, {Conn, Ref}};
@@ -713,6 +714,7 @@ handle_info(Info, State) ->
 
 terminate(_Reason, #state{} = State) ->
     disconnect(State),
+    ?DEBUG({worker, self(), terminate}),
     ok.
 
 code_change(_OldVsn, State, _Extra) ->
@@ -725,28 +727,34 @@ code_change(_OldVsn, State, _Extra) ->
 
 %% @doc Cancel the running query.
 cancel(#state{ conn = Conn, busy_pid = Pid, busy_ref = Ref } = State) when is_pid(Pid), Conn =/= undefined ->
+    ?DEBUG(cancel),
     ok = epgsql:cancel(Conn),
     State1 = demonitor_busy(State),
     State1#state{
         canceled_busy_ref = Ref
     };
 cancel(#state{ conn = undefined } = State) ->
+    ?DEBUG(cancel),
     State.
 
 
 %% @doc Cancel any running query and close the connection to the SQL server
 disconnect(#state{ conn = undefined } = State) ->
+    ?DEBUG({disconnect, no_conn}),
     demonitor_busy(State);
 disconnect(#state{ conn = Conn, busy_pid = Pid, busy_ref = Ref } = State) when is_pid(Pid) ->
+    ?DEBUG({disconnect, conn_with_pid}),
     ok = epgsql:cancel(Conn),
     State1 = disconnect_1(State),
     State1#state{
         canceled_busy_ref = Ref
     };
 disconnect(#state{ busy_pid = undefined } = State) ->
+    ?DEBUG({disconnect, no_pid }),
     disconnect_1(State).
 
-disconnect_1(#state{ conn = Conn } = State) ->
+disconnect_1(#state{ conn = Conn, busy_pid = X} = State) ->
+    ?DEBUG({disconnect_1, X}),
     ok = epgsql:close(Conn),
     State1 = receive
         {'DOWN', _Ref, process, Conn, _Reason} ->
