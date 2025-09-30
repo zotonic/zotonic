@@ -16,6 +16,7 @@
         value="{% if not date_is_all_day %}{{ date|date:'H:i':disp_tz }}{% endif %}"
         {% if date_is_all_day %}
             style="display: none;"
+            disabled="disabled"
         {% endif %}
         data-timepicker='{
             "timeFormat": "H:i",

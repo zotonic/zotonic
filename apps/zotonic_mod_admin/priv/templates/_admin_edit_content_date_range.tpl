@@ -49,9 +49,9 @@
             $("#{{ #all_day }}").on('change', function() {
                 var $times = $(this).closest('.date-range').find("input[type='time']");
                 if ($(this).is(":checked"))
-                    $times.fadeOut("fast").val('');
+                    $times.fadeOut("fast").val('').attr('disabled', 'disabled');
                 else
-                    $times.fadeIn("fast");
+                    $times.fadeIn("fast").attr('disabled', null);
             });
         {% endjavascript %}
         <div class="row">
