@@ -110,6 +110,32 @@ event(#z_msg_v1{ data = Data }, Context) ->
         proplists:get_value(<<"fileuploader">>, Data)),
     z_render:wire({unmask, [ {target, "body"} ]}, Context1).
 
+do_upload({ok, #{ is_complete := true } = Status}, #{ <<"id">> := Id, <<"is_medium">> := true }, Context) ->
+    #{
+        name := Name,
+        filename := Filename,
+        uploaded_file := TmpFile
+    } = Status,
+    ?LOG_DEBUG(#{
+        in => zotonic_mod_fileuploader,
+        text => <<"Upload finished with complete file - medium update">>,
+        result => ok,
+        filename => Filename,
+        tmp_file => TmpFile
+    }),
+    RscProps = #{
+        <<"original_filename">> => Filename
+    },
+    Context1 = case m_media:replace_file(TmpFile, Id, RscProps, [], Context) of
+        {ok, _UpdatedId} ->
+            F = z_html:escape(Filename),
+            z_render:growl([ ?__("Uploaded", Context), " ", F ], Context);
+        {error, _} ->
+            F = z_html:escape(Filename),
+            z_render:growl_error([ ?__("Could not upload", Context), " ", F ], Context)
+    end,
+    z_fileuploader:stop(Name),
+    Context1;
 do_upload({ok, #{ is_complete := true } = Status}, Data, Context) ->
     #{
         name := Name,
@@ -118,7 +144,7 @@ do_upload({ok, #{ is_complete := true } = Status}, Data, Context) ->
     } = Status,
     ?LOG_DEBUG(#{
         in => zotonic_mod_fileuploader,
-        text => <<"Upload finished with complete file">>,
+        text => <<"Upload finished with complete file - medium creation">>,
         result => ok,
         filename => Filename,
         tmp_file => TmpFile

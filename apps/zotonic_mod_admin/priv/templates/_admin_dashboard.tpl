@@ -6,6 +6,6 @@
     <div class="col-lg-6 col-md-6">
         {% include "_admin_dashboard_locations.tpl" %}
         {% include "_admin_dashboard_events.tpl" %}
-        {% include "_admin_dashboard_media.tpl" %}
+        {% live template="_admin_dashboard_media.tpl" topic="bridge/origin/model/media/event/+/update" %}
     </div>
 </div>
