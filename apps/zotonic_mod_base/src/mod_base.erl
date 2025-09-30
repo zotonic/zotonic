@@ -338,9 +338,10 @@ observe_media_stillimage(#media_stillimage{props=Props}, Context) ->
 
 %% @doc Check if there is a controller or template matching the path.
 observe_dispatch(#dispatch{path=Path}, Context) ->
-    case m_rsc:page_path_to_id(z_url:url_path_encode(Path), Context) of
+    EncodedPagePath = z_url:url_path_encode(Path),
+    case m_rsc:page_path_to_id(EncodedPagePath, Context) of
         {ok, Id} ->
-            {ok, Id};
+            maybe_page_path_language(Id, EncodedPagePath, Context);
         {redirect, Id} ->
             {ok, #dispatch_match{
                     mod=controller_redirect,
@@ -358,6 +359,46 @@ observe_dispatch(#dispatch{path=Path}, Context) ->
                     find_static_file(SlashPath, Context)
             end
     end.
+
+maybe_page_path_language(Id, RequestedPagePath, Context) ->
+    case m_req:get(raw_path, Context) of
+        RequestedPagePath ->
+            % This is the original request path - assume no language rewrite done
+            case z_context:get_q(<<"z_language">>, Context) of
+                undefined ->
+                    % No language override in the URL
+                    % Check the language matching the found page_path.
+                    case m_rsc:p_no_acl(Id, <<"page_path">>, Context) of
+                        #trans{ tr = Tr } ->
+                            Langs = lists:filtermap(
+                                fun
+                                    ({Lang, P}) when P =:= RequestedPagePath -> {true, Lang};
+                                    (_) -> false
+                                end,
+                                Tr),
+                            if
+                                Langs =:= [] ->
+                                    {ok, Id};
+                                true ->
+                                    case lists:member(z_context:language(Context), Langs) of
+                                        true -> {ok, Id};
+                                        false ->
+                                            % Select best language for the current context
+                                            Lang = z_trans:lookup_fallback_language(Langs, Context),
+                                            {ok, Id, [ {z_language, Lang} ]}
+                                    end
+                            end;
+                        _ ->
+                            {ok, Id}
+                    end;
+                _QLang ->
+                    {ok, Id}
+            end;
+        _OtherPath ->
+            % Assume language was in the URL and there was a rewrite for the language
+            {ok, Id}
+    end.
+
 
 find_static_file(SlashPath, Context) ->
     Lang = z_convert:to_binary(z_context:language(Context)),
