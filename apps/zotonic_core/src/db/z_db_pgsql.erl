@@ -445,7 +445,6 @@ handle_call({fetch_conn, _Ref, CallerPid, Sql, Params, _Timeout, _IsTracing}, Fr
     }),
     gen_server:reply(From, {error, busy}),
     State1 = disconnect(State),
-    ?DEBUG({stop, normal, busy}),
     {stop, normal, {error, busy}, State1};
 
 handle_call({fetch_conn, _Ref, CallerPid, Sql, Params, _Timeout, _IsTracing}, _From, #state{ busy_pid = OtherPid } = State) ->
