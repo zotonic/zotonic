@@ -51,7 +51,7 @@
                 if ($(this).is(":checked"))
                     $times.fadeOut("fast").val('').attr('disabled', 'disabled');
                 else
-                    $times.fadeIn("fast").attr('disabled', null);
+                    $times.fadeIn("fast").removeAttr('disabled');
             });
         {% endjavascript %}
         <div class="row">
