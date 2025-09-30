@@ -746,7 +746,7 @@ disconnect(#state{ conn = Conn, busy_pid = Pid, busy_ref = Ref } = State) when i
 disconnect(#state{ busy_pid = undefined } = State) ->
     disconnect_1(State).
 
-disconnect_1(#state{ conn = Conn, busy_pid = undefined } = State) ->
+disconnect_1(#state{ conn = Conn } = State) ->
     ok = epgsql:close(Conn),
     State1 = receive
         {'DOWN', _Ref, process, Conn, _Reason} ->
