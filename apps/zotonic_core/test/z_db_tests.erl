@@ -99,8 +99,6 @@ cancel_timeout_test() ->
     % Query that should not timeout
     {ok, [ #{ <<"pg_sleep">> :=  <<>> } ]} = z_db:qmap("select PG_SLEEP(0.1)", [], [ {timeout, 200} ], Context),
 
-    1/0,
-
     % Query that must time out
     {error, query_timeout} = z_db:qmap("select PG_SLEEP(30)", [], [ {timeout, 200} ], Context),
 

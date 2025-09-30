@@ -197,20 +197,16 @@ pool_return_connection(Worker, Context) ->
     Timeout :: pos_integer(),
     Result :: squery_result().
 squery(Worker, Sql, Timeout) ->
-    case is_connection_alive(Worker) of
-        true ->
-            case fetch_conn(Worker, Sql, [], Timeout) of
-                {ok, {Conn, Ref}} ->
-                    try
-                        maybe_map_error(epgsql:squery(Conn, Sql))
-                    after
-                        ok = return_conn(Worker, Ref)
-                    end;
-                {error, _} = Error ->
-                    Error
+    ?DEBUG({is_alive, Worker}),
+    case fetch_conn(Worker, Sql, [], Timeout) of
+        {ok, {Conn, Ref}} ->
+            try
+                maybe_map_error(epgsql:squery(Conn, Sql))
+            after
+                ok = return_conn(Worker, Ref)
             end;
-        false ->
-            {error, connection_down}
+        {error, _} = Error ->
+            Error
     end.
 
 %% @doc Query with parameters, the query is interrupted if it takes
@@ -222,20 +218,15 @@ squery(Worker, Sql, Timeout) ->
     Timeout :: pos_integer(),
     Result :: equery_result().
 equery(Worker, Sql, Parameters, Timeout) ->
-    case is_connection_alive(Worker) of
-        true ->
-            case fetch_conn(Worker, Sql, Parameters, Timeout) of
-                {ok, {Conn, Ref}} ->
-                    try
-                        maybe_map_error(epgsql:equery(Conn, Sql, Parameters))
-                    after
-                        ok = return_conn(Worker, Ref)
-                    end;
-                {error, _} = Error ->
-                    Error
+    case fetch_conn(Worker, Sql, Parameters, Timeout) of
+        {ok, {Conn, Ref}} ->
+            try
+                maybe_map_error(epgsql:equery(Conn, Sql, Parameters))
+            after
+                ok = return_conn(Worker, Ref)
             end;
-        false ->
-            {error, connection_down}
+        {error, _} = Error ->
+            Error
     end.
 
 %% @doc Batch Query, the query is interrupted if it takes
@@ -248,33 +239,28 @@ equery(Worker, Sql, Parameters, Timeout) ->
     Result :: {ok, [ equery_result() ]}
             | {error, connection_down | term()}.
 execute_batch(Worker, Sql, Batch, Timeout) ->
-    case is_connection_alive(Worker) of
-        true ->
-            case fetch_conn(Worker, Sql, Batch, Timeout) of
-                {ok, {Conn, Ref}} ->
-                    try
-                        {Columns, Result} = epgsql:execute_batch(Conn, Sql, Batch),
-                        Result1 = lists:map(
-                                    fun
-                                        ({ok, Count, Rows}) when is_list(Rows) ->
-                                            {ok, Count, Columns, Rows};
-                                        ({ok, Rows}) when is_list(Rows) ->
-                                            {ok, Columns, Rows};
-                                        ({ok, _} = Ok) ->
-                                            Ok;
-                                        ({error, _} = Error) ->
-                                            maybe_map_error(Error)
-                                    end,
-                                    Result),
-                        {ok, Result1}
-                    after
-                        ok = return_conn(Worker, Ref)
-                    end;
-                {error, _} = Error ->
-                    Error
+    case fetch_conn(Worker, Sql, Batch, Timeout) of
+        {ok, {Conn, Ref}} ->
+            try
+                {Columns, Result} = epgsql:execute_batch(Conn, Sql, Batch),
+                Result1 = lists:map(
+                            fun
+                                ({ok, Count, Rows}) when is_list(Rows) ->
+                                    {ok, Count, Columns, Rows};
+                                ({ok, Rows}) when is_list(Rows) ->
+                                    {ok, Columns, Rows};
+                                ({ok, _} = Ok) ->
+                                    Ok;
+                                ({error, _} = Error) ->
+                                    maybe_map_error(Error)
+                            end,
+                            Result),
+                {ok, Result1}
+            after
+                ok = return_conn(Worker, Ref)
             end;
-        false ->
-            {error, connection_down}
+        {error, _} = Error ->
+            Error
     end.
 
 maybe_map_error({error, #error{ codename = query_canceled }}) ->
@@ -753,8 +739,8 @@ disconnect(#state{ busy_pid = undefined } = State) ->
     ?DEBUG({disconnect, no_pid }),
     disconnect_1(State).
 
-disconnect_1(#state{ conn = Conn, busy_pid = X} = State) ->
-    ?DEBUG({disconnect_1, X}),
+disconnect_1(#state{ conn = Conn} = State) ->
+    ?DEBUG({disconnect_1, State#state.is_paused, State#state.pause_waiting}),
     ok = epgsql:close(Conn),
     State1 = receive
         {'DOWN', _Ref, process, Conn, _Reason} ->
