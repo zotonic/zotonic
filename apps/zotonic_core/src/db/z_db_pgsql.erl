@@ -285,33 +285,33 @@ maybe_map_error({ok, _} = Result) ->
     Ref :: reference(),
     Reason :: paused | connection_down | term().
 fetch_conn(Worker, Sql, Parameters, Timeout) ->
-    case is_connection_alive(Worker) of
-        true ->
-            try
-                Ref = erlang:make_ref(),
-                case gen_server:call(Worker, {fetch_conn, Ref, self(), Sql, Parameters, Timeout, is_tracing()}) of
-                    {ok, Conn} ->
-                        {ok, {Conn, Ref}};
-                    {error, paused} ->
-                        {error, paused}
-                end
-            catch
-                exit:{normal, _} ->
-                    {error, connection_down};
-                exit:Reason:Stack ->
-                    ?LOG_ERROR(#{
-                        text => <<"Fetch connection failed.">>,
-                        in => zotonic_core,
-                        result => exit,
-                        reason => Reason,
-                        stack => Stack,
-                        worker_pid => Worker,
-                        sql => Sql
-                    }),
-                    {error, Reason}
-            end;
-        false ->
-            {error, connection_down}
+    Ref = erlang:make_ref(),
+    try
+        case gen_server:call(Worker, {fetch_conn, Ref, self(), Sql, Parameters, Timeout, is_tracing()}) of
+            {ok, Conn} ->
+                {ok, {Conn, Ref}};
+            {error, paused} ->
+                {error, paused}
+        end
+    catch
+        exit:{noproc, _} ->
+            %% The worker process is gone.
+            {error, connection_down};
+        exit:{normal, _} ->
+            %% The worker went down after the call was sent, but
+            %% the worker exited normally.
+            {error, connection_down};
+        exit:Reason:Stack ->
+            ?LOG_ERROR(#{
+                         text => <<"Fetch connection failed.">>,
+                         in => zotonic_core,
+                         result => exit,
+                         reason => Reason,
+                         stack => Stack,
+                         worker_pid => Worker,
+                         sql => Sql
+                        }),
+            {error, Reason}
     end.
 
 %% @doc Return the SQL connection to the worker, must be done within the timeout
