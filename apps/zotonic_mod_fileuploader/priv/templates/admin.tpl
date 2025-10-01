@@ -1,3 +1,3 @@
 {% overrules %}
 
-{% block bodyattr %} {% inherits%} data-fileuploader="{}" {% endblock %}
+{% block bodyattr %} {% inherit %} data-fileuploader="{}" {% endblock %}
