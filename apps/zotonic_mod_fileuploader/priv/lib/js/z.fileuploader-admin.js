@@ -79,7 +79,7 @@
             e.stopPropagation();
             e.preventDefault();
             if (e.target.nodeName == 'BODY') {
-                dropZone.classList.remove("dragover", "dragover-media");
+                dropZone.classList.remove("dragover", "dragover-medium");
             }
         }
     });
