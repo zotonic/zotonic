@@ -3,6 +3,11 @@
 (function(){
     let dropZone = document.getElementsByTagName('body')[0];
 
+    function isUploadActive() {
+        return (!document.getElementById('zmodal') || document.getElementById('zmodal').style.display === 'none')
+               && document.getElementsByTagName('body')[0].getAttribute('data-fileuploader') !== null;
+    }
+
     function containsFiles(event) {
         if (event.dataTransfer.types) {
             for (let i = 0; i < event.dataTransfer.types.length; i++) {
@@ -54,29 +59,36 @@
     }
 
     dropZone.addEventListener('dragover', function(e) {
-        if (containsFiles(e)) {
+        if (isUploadActive() && containsFiles(e)) {
             e.stopPropagation();
             e.preventDefault();
             e.dataTransfer.dropEffect = 'copy';
             dropZone.classList.add("dragover");
+            let dataFileuploader = dropZone.getAttribute("data-fileuploader");
+            if (dataFileuploader) {
+                dataFileuploader = JSON.parse(dataFileuploader);
+                if (dataFileuploader.is_medium) {
+                    dropZone.classList.add("dragover-medium");
+                }
+            }
         }
     });
 
     dropZone.addEventListener('dragleave', function(e) {
-        if (containsFiles(e)) {
+        if (isUploadActive() && containsFiles(e)) {
             e.stopPropagation();
             e.preventDefault();
             if (e.target.nodeName == 'BODY') {
-                dropZone.classList.remove("dragover");
+                dropZone.classList.remove("dragover", "dragover-medium");
             }
         }
     });
 
     dropZone.addEventListener('drop', function(e) {
-        if (containsFiles(e)) {
+        if (isUploadActive() && containsFiles(e)) {
             e.stopPropagation();
             e.preventDefault();
-            dropZone.classList.remove("dragover");
+            dropZone.classList.remove("dragover", "dragover-medium");
             uploadFiles(e);
         }
     });

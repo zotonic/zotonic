@@ -109,8 +109,14 @@ A medium record has minimally the following properties, other properties can be 
 -define(MEDIA_MAX_ROOTNAME_LENGTH, 80).
 
 -type media_url() :: binary() | string().
+-type options() :: [ option() ].
+-type option() :: {preferred_category, m_rsc:resource()}
+                | {preview_url, media_url()}
+                | {max_length, non_neg_integer()}
+                | {timeout, non_neg_integer()}
+                | m_rsc:update_option().
 
--export_type([media_url/0]).
+-export_type([media_url/0, options/0, option/0]).
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
@@ -324,13 +330,16 @@ delete(Id, Context) ->
 
 %% @doc Replace or insert a medium record for the page.  This is useful for non-file related media.
 %% Resets all non mentioned attributes.
--spec replace( m_rsc:resource_id(), map(), z:context() ) -> ok  | {error, term()}.
-replace(Id, Props, Context) when is_list(Props) ->
-    {ok, Map} = z_props:from_list(Props),
+-spec replace(Id, MediaProps, Context) -> ok  | {error, term()} when
+    Id :: m_rsc:resource_id(),
+    MediaProps :: map() | list(),
+    Context :: z:context().
+replace(Id, MediaProps, Context) when is_list(MediaProps) ->
+    {ok, Map} = z_props:from_list(MediaProps),
     replace(Id, Map, Context);
-replace(Id, Props, Context) ->
-    Mime = maps:get(<<"mime">>, Props, undefined),
-    Size = maps:get(<<"size">>, Props, 1),
+replace(Id, MediaProps, Context) ->
+    Mime = maps:get(<<"mime">>, MediaProps, undefined),
+    Size = maps:get(<<"size">>, MediaProps, 1),
     case z_acl:rsc_editable(Id, Context) andalso
         z_acl:is_allowed(insert, #acl_media{mime = Mime, size = Size}, Context)
     of
@@ -338,7 +347,7 @@ replace(Id, Props, Context) ->
             Depicts = depicts(Id, Context),
             #media_upload_preprocess{ medium = Props1 } = set_av_flag(
                 #media_upload_preprocess{
-                    medium = Props,
+                    medium = MediaProps,
                     mime = Mime
                 },
                 Context),
@@ -645,18 +654,52 @@ filename_to_title(Filename) ->
     binary:split(F2, [ <<"/">>, <<"\\">> ], [global,trim])),
     filename:rootname(F3).
 
-%% @doc Replaces a medium file, when the file is not in archive then a copy is
+%% @doc Replaces a medium file, if the file is not in archive then a copy is
 %% made in the archive. When the resource is in the media category, then the
 %% category is adapted depending on the mime type of the uploaded file.
+-spec replace_file(File, RscId, Context) -> {ok, RscId} | {error, term()} when
+      File :: file:filename_all() | #upload{},
+      RscId :: m_rsc:resource_id(),
+      Context :: z:context().
 replace_file(File, RscId, Context) ->
     replace_file(File, RscId, #{}, #{}, [], Context).
 
+%% @doc Replaces a medium file, if the file is not in archive then a copy is
+%% made in the archive. When the resource is in the media category, then the
+%% category is adapted depending on the mime type of the uploaded file.
+%% The resource is updated with the given RscProps.
+-spec replace_file(File, RscId, RscProps, Context) -> {ok, RscId} | {error, term()} when
+      File :: file:filename_all() | #upload{},
+      RscId :: m_rsc:resource_id(),
+      RscProps :: m_rsc:props_all(),
+      Context :: z:context().
 replace_file(File, RscId, RscProps, Context) ->
     replace_file(File, RscId, RscProps, #{}, [], Context).
 
+%% @doc Replaces a medium file, if the file is not in archive then a copy is
+%% made in the archive. When the resource is in the media category, then the
+%% category is adapted depending on the mime type of the uploaded file.
+%% The resource is updated with the given RscProps.
+-spec replace_file(File, RscId, RscProps, Options, Context) -> {ok, RscId} | {error, term()} when
+      File :: file:filename_all() | #upload{},
+      RscId :: m_rsc:resource_id(),
+      RscProps :: m_rsc:props_all(),
+      Options :: options(),
+      Context :: z:context().
 replace_file(File, RscId, RscProps, Opts, Context) ->
     replace_file(File, RscId, RscProps, #{}, Opts, Context).
 
+%% @doc Replaces a medium file, if the file is not in archive then a copy is
+%% made in the archive. When the resource is in the media category, then the
+%% category is adapted depending on the mime type of the uploaded file.
+%% The resource is updated with the given RscProps.
+-spec replace_file(File, RscId, RscProps, MediaInfo, Options, Context) -> {ok, RscId} | {error, term()} when
+      File :: file:filename_all() | #upload{},
+      RscId :: m_rsc:resource_id(),
+      RscProps :: m_rsc:props_all(),
+      MediaInfo :: z_media_identify:media_info() | list(),
+      Options :: options(),
+      Context :: z:context().
 replace_file(File, RscId, RscProps, MediaInfo, Opts, Context) when is_list(RscProps) ->
     {ok, RscMap} = z_props:from_list(RscProps),
     replace_file(File, RscId, RscMap, MediaInfo, Opts, Context);
@@ -927,9 +970,24 @@ is_deletable_file(undefined, _Context) ->
 is_deletable_file(File, Context) ->
     not z_media_archive:is_archived(File, Context).
 
+%% @doc Replace a resource's medium with the contents found a the URL. After medium update
+%% the resource is updated with the RscProps.
+-spec replace_url(Url, RscId, RscProps, Context) -> {ok, RscId} | {error, term()} when
+    Url :: media_url(),
+    RscId :: m_rsc:resource_id(),
+    RscProps :: m_rsc:props_all(),
+    Context :: z:context().
 replace_url(Url, RscId, RscProps, Context) ->
     replace_url(Url, RscId, RscProps, [], Context).
 
+%% @doc Replace a resource's medium with the contents found a the URL. After medium update
+%% the resource is updated with the RscProps.
+-spec replace_url(Url, RscId, RscProps, Options, Context) -> {ok, RscId} | {error, term()} when
+    Url :: media_url(),
+    RscId :: m_rsc:resource_id(),
+    RscProps :: m_rsc:props_all(),
+    Options :: options(),
+    Context :: z:context().
 replace_url(Url, RscId, RscProps, Options, Context) when is_list(RscProps) ->
     {ok, PropsMap} = z_props:from_list(RscProps),
     replace_url(Url, RscId, PropsMap, Options, Context);

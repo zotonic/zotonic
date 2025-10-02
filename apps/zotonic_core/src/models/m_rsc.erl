@@ -244,7 +244,22 @@ And also using the [print](/id/doc_template_tag_tag_print) tag:
 -type duplicate_option() :: edges
                           | {edges, boolean()}
                           | medium
-                          | {medium, boolean()}.
+                          | {medium, boolean()}
+                          | {tz, string()|binary()}
+                          | {default_tz, string()|binary()}.
+
+-type update_options() :: list(update_option()).
+-type update_option() :: no_touch
+                       | {no_touch, boolean()}
+                       | is_escape_texts
+                       | {is_escape_texts, boolean()}
+                       | is_acl_check
+                       | {is_acl_check, boolean()}
+                       | is_import
+                       | {is_import, boolean()}
+                       | {tz, string()|binary()}
+                       | {default_tz, string()|binary()}
+                       | {expected, list({binary()|atom(), term()})}.
 
 % Range of resource id values in PostgreSQL.
 % Make larger if moving to bigint resource ids.
@@ -263,6 +278,8 @@ And also using the [print](/id/doc_template_tag_tag_print) tag:
     props_all/0,
     props_legacy/0,
     update_function/0,
+    update_option/0,
+    update_options/0,
     duplicate_option/0,
     duplicate_options/0
 ]).
@@ -685,7 +702,7 @@ get_acl_props(Name, Context) ->
 insert(Props, Context) ->
     m_rsc_update:insert(Props, [], Context).
 
--spec insert(props_all(), list(), z:context()) -> {ok, resource_id()} | {error, term()}.
+-spec insert(props_all(), update_options(), z:context()) -> {ok, resource_id()} | {error, term()}.
 insert(Props, Options, Context) ->
     m_rsc_update:insert(Props, Options, Context).
 
@@ -720,7 +737,7 @@ update(Id, Props, Context) ->
 -spec update(
         resource(),
         props_all() | update_function(),
-        list(),
+        update_options(),
         z:context()
     ) -> {ok, resource()} | {error, term()}.
 update(Id, Props, Options, Context) ->
