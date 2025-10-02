@@ -4,7 +4,7 @@
     let dropZone = document.getElementsByTagName('body')[0];
 
     function isUploadActive() {
-        return !document.getElementById('zmodal')?.checkVisibility()
+        return (!document.getElementById('zmodal') || document.getElementById('zmodal').style.display === 'none')
                && document.getElementsByTagName('body')[0].getAttribute('data-fileuploader') !== null;
     }
 
