@@ -197,20 +197,15 @@ pool_return_connection(Worker, Context) ->
     Timeout :: pos_integer(),
     Result :: squery_result().
 squery(Worker, Sql, Timeout) ->
-    case is_connection_alive(Worker) of
-        true ->
-            case fetch_conn(Worker, Sql, [], Timeout) of
-                {ok, {Conn, Ref}} ->
-                    try
-                        maybe_map_error(epgsql:squery(Conn, Sql))
-                    after
-                        ok = return_conn(Worker, Ref)
-                    end;
-                {error, _} = Error ->
-                    Error
+    case fetch_conn(Worker, Sql, [], Timeout) of
+        {ok, {Conn, Ref}} ->
+            try
+                maybe_map_error(epgsql:squery(Conn, Sql))
+            after
+                ok = return_conn(Worker, Ref)
             end;
-        false ->
-            {error, connection_down}
+        {error, _} = Error ->
+            Error
     end.
 
 %% @doc Query with parameters, the query is interrupted if it takes
@@ -222,20 +217,15 @@ squery(Worker, Sql, Timeout) ->
     Timeout :: pos_integer(),
     Result :: equery_result().
 equery(Worker, Sql, Parameters, Timeout) ->
-    case is_connection_alive(Worker) of
-        true ->
-            case fetch_conn(Worker, Sql, Parameters, Timeout) of
-                {ok, {Conn, Ref}} ->
-                    try
-                        maybe_map_error(epgsql:equery(Conn, Sql, Parameters))
-                    after
-                        ok = return_conn(Worker, Ref)
-                    end;
-                {error, _} = Error ->
-                    Error
+    case fetch_conn(Worker, Sql, Parameters, Timeout) of
+        {ok, {Conn, Ref}} ->
+            try
+                maybe_map_error(epgsql:equery(Conn, Sql, Parameters))
+            after
+                ok = return_conn(Worker, Ref)
             end;
-        false ->
-            {error, connection_down}
+        {error, _} = Error ->
+            Error
     end.
 
 %% @doc Batch Query, the query is interrupted if it takes
@@ -248,33 +238,28 @@ equery(Worker, Sql, Parameters, Timeout) ->
     Result :: {ok, [ equery_result() ]}
             | {error, connection_down | term()}.
 execute_batch(Worker, Sql, Batch, Timeout) ->
-    case is_connection_alive(Worker) of
-        true ->
-            case fetch_conn(Worker, Sql, Batch, Timeout) of
-                {ok, {Conn, Ref}} ->
-                    try
-                        {Columns, Result} = epgsql:execute_batch(Conn, Sql, Batch),
-                        Result1 = lists:map(
-                                    fun
-                                        ({ok, Count, Rows}) when is_list(Rows) ->
-                                            {ok, Count, Columns, Rows};
-                                        ({ok, Rows}) when is_list(Rows) ->
-                                            {ok, Columns, Rows};
-                                        ({ok, _} = Ok) ->
-                                            Ok;
-                                        ({error, _} = Error) ->
-                                            maybe_map_error(Error)
-                                    end,
-                                    Result),
-                        {ok, Result1}
-                    after
-                        ok = return_conn(Worker, Ref)
-                    end;
-                {error, _} = Error ->
-                    Error
+    case fetch_conn(Worker, Sql, Batch, Timeout) of
+        {ok, {Conn, Ref}} ->
+            try
+                {Columns, Result} = epgsql:execute_batch(Conn, Sql, Batch),
+                Result1 = lists:map(
+                            fun
+                                ({ok, Count, Rows}) when is_list(Rows) ->
+                                    {ok, Count, Columns, Rows};
+                                ({ok, Rows}) when is_list(Rows) ->
+                                    {ok, Columns, Rows};
+                                ({ok, _} = Ok) ->
+                                    Ok;
+                                ({error, _} = Error) ->
+                                    maybe_map_error(Error)
+                            end,
+                            Result),
+                {ok, Result1}
+            after
+                ok = return_conn(Worker, Ref)
             end;
-        false ->
-            {error, connection_down}
+        {error, _} = Error ->
+            Error
     end.
 
 maybe_map_error({error, #error{ codename = query_canceled }}) ->
@@ -300,31 +285,33 @@ maybe_map_error({ok, _} = Result) ->
     Ref :: reference(),
     Reason :: paused | connection_down | term().
 fetch_conn(Worker, Sql, Parameters, Timeout) ->
-    case is_connection_alive(Worker) of
-        true ->
-            try
-                Ref = erlang:make_ref(),
-                case gen_server:call(Worker, {fetch_conn, Ref, self(), Sql, Parameters, Timeout, is_tracing()}) of
-                    {ok, Conn} ->
-                        {ok, {Conn, Ref}};
-                    {error, paused} ->
-                        {error, paused}
-                end
-            catch
-                exit:Reason:Stack ->
-                    ?LOG_ERROR(#{
-                        text => <<"Fetch connection failed.">>,
-                        in => zotonic_core,
-                        result => exit,
-                        reason => Reason,
-                        stack => Stack,
-                        worker_pid => Worker,
-                        sql => Sql
-                    }),
-                    {error, Reason}
-            end;
-        false ->
-            {error, connection_down}
+    Ref = erlang:make_ref(),
+    try
+        case gen_server:call(Worker, {fetch_conn, Ref, self(), Sql, Parameters, Timeout, is_tracing()}) of
+            {ok, Conn} ->
+                {ok, {Conn, Ref}};
+            {error, paused} ->
+                {error, paused}
+        end
+    catch
+        exit:{noproc, _} ->
+            %% The worker process is gone.
+            {error, connection_down};
+        exit:{normal, _} ->
+            %% The worker went down after the call was sent, but
+            %% the worker exited normally.
+            {error, connection_down};
+        exit:Reason:Stack ->
+            ?LOG_ERROR(#{
+                         text => <<"Fetch connection failed.">>,
+                         in => zotonic_core,
+                         result => exit,
+                         reason => Reason,
+                         stack => Stack,
+                         worker_pid => Worker,
+                         sql => Sql
+                        }),
+            {error, Reason}
     end.
 
 %% @doc Return the SQL connection to the worker, must be done within the timeout
@@ -410,7 +397,7 @@ handle_call({pool_return_connection_check, CallerPid}, From, #state{
     }),
     gen_server:reply(From, {error, checkin_busy}),
     State1 = disconnect(State),
-    {stop, normal, State1};
+    {stop, normal, {error, running}, State1};
 
 handle_call({fetch_conn, _Ref, _CallerPid, _Sql, _Params, _Timeout, _IsTracing}, _From, #state{ is_paused = true } = State) ->
     {reply, {error, paused}, State};
@@ -458,7 +445,7 @@ handle_call({fetch_conn, _Ref, CallerPid, Sql, Params, _Timeout, _IsTracing}, Fr
     }),
     gen_server:reply(From, {error, busy}),
     State1 = disconnect(State),
-    {stop, normal, State1};
+    {stop, normal, {error, busy}, State1};
 
 handle_call({fetch_conn, _Ref, CallerPid, Sql, Params, _Timeout, _IsTracing}, _From, #state{ busy_pid = OtherPid } = State) ->
     % This can happen if a connection is shared by two processes.
@@ -597,7 +584,7 @@ handle_info(disconnect, State) ->
         args => State#state.busy_params,
         worker_pid => self()
     }),
-    {noreply, State, disconnect(State), hibernate};
+    {stop, normal, disconnect(State)};
 
 handle_info(timeout, #state{ busy_pid = undefined } = State) ->
     % Idle timeout - no SQL query is running
@@ -746,7 +733,7 @@ disconnect(#state{ conn = Conn, busy_pid = Pid, busy_ref = Ref } = State) when i
 disconnect(#state{ busy_pid = undefined } = State) ->
     disconnect_1(State).
 
-disconnect_1(#state{ conn = Conn, busy_pid = undefined } = State) ->
+disconnect_1(#state{ conn = Conn} = State) ->
     ok = epgsql:close(Conn),
     State1 = receive
         {'DOWN', _Ref, process, Conn, _Reason} ->

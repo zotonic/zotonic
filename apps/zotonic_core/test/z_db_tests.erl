@@ -106,3 +106,42 @@ cancel_timeout_test() ->
     {ok, []} = z_db:qmap("select * from pg_stat_activity where state = 'active' and query = 'select PG_SLEEP(30)'", Context),
 
     ok.
+
+disconnect_test() ->
+    Context = z_context:new(zotonic_site_testsandbox),
+
+    %% Disconnect the worker while a query is running. 
+    %% The transaction should not be able to complete, because
+    %% the COMMIT message could not be sent.
+    {rollback,{error,connection_down}} = z_db:transaction(
+        fun(Ctx) ->
+                spawn(fun() ->
+                              z_db:qmap("select pg_sleep(10)", Ctx),
+                              ok
+                      end),
+                P = z_context:db_connection(Ctx),
+                timer:sleep(1),
+                P ! disconnect,
+                ok 
+        end, Context),
+
+    %% Kill the worker during a transaction.
+    %% Checks if the expected errors are returned and the
+    %% transactions also returns the right error, because 
+    %% it could not send the COMMIT message either.
+    {rollback,{error,connection_down}} = z_db:transaction(
+        fun(Ctx) ->
+                {ok, [#{<<"?column?">> := 1}]} = z_db:qmap("select 1", Ctx),
+
+                %% Kill the connection
+                P = z_context:db_connection(Ctx),
+                exit(P, kill),
+
+                %% Wait a bit until the worker is really dead.
+                timer:sleep(1),
+
+                %% The expected error in this situation
+                {error, connection_down} = z_db:qmap("select 1", Ctx)
+        end, Context),
+
+    ok.

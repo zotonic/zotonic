@@ -252,17 +252,14 @@ transaction1(Function, #context{dbc=undefined} = Context) ->
                                 DbDriver:squery(C, "ROLLBACK", ?TIMEOUT),
                                 R;
                             R ->
-                                case DbDriver:is_connection_alive(C) of
-                                    true ->
-                                        case DbDriver:squery(C, "COMMIT", ?TIMEOUT) of
-                                            {ok, [], []} -> ok;
-                                            {error, _} = ErrorCommit ->
-                                                z_notifier:notify_queue_flush(Context),
-                                                throw(ErrorCommit)
-                                        end,
+                                case DbDriver:squery(C, "COMMIT", ?TIMEOUT) of
+                                    {ok, [], []} ->
                                         R;
-                                    false ->
-                                        {rollback, {error, connection_down}}
+                                    {error, connection_down} ->
+                                        {rollback, {error, connection_down}};
+                                    {error, _} = ErrorCommit ->
+                                        z_notifier:notify_queue_flush(Context),
+                                        throw(ErrorCommit)
                                 end
                         end
                     catch
