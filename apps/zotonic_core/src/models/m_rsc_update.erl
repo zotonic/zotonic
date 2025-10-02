@@ -62,7 +62,7 @@
 insert(Props, Context) ->
     insert(Props, [{is_escape_texts, true}], Context).
 
--spec insert(m_rsc:props_all(), list(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
+-spec insert(m_rsc:props_all(), m_rsc:update_options(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
 insert(Props, Options, Context) when is_list(Props) ->
     {ok, Map} = z_props:from_list(Props),
     insert(Map, Options, Context);
@@ -199,7 +199,7 @@ merge_delete_nocheck(WinnerId, LoserId, Opts, Context) ->
         [] ->
             ok;
         UpdProps ->
-            {ok, _} = update(WinnerId, UpdProps, [{escape_texts, false}], Context)
+            {ok, _} = update(WinnerId, UpdProps, [{is_escape_texts, false}], Context)
     end,
     ok.
 
@@ -460,7 +460,7 @@ update(Id, Props, Context) ->
 -spec update(
         m_rsc:resource() | insert_rsc,
         m_rsc:props_all() | m_rsc:update_function(),
-        list() | boolean(),
+        m_rsc:update_options() | boolean(),
         z:context()
     ) ->
     {ok, m_rsc:resource_id()} | {error, term()}.

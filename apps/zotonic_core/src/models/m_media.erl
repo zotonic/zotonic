@@ -109,12 +109,14 @@ A medium record has minimally the following properties, other properties can be 
 -define(MEDIA_MAX_ROOTNAME_LENGTH, 80).
 
 -type media_url() :: binary() | string().
--type options() :: {preferred_category, m_rsc:resource()}
-                 | {preview_url, media_url()}
-                 | {max_length, non_neg_integer()}
-                 | {timeout, non_neg_integer()}.
+-type options() :: [ option() ].
+-type option() :: {preferred_category, m_rsc:resource()}
+                | {preview_url, media_url()}
+                | {max_length, non_neg_integer()}
+                | {timeout, non_neg_integer()}
+                | m_rsc:update_option().
 
--export_type([media_url/0, options/0]).
+-export_type([media_url/0, options/0, option/0]).
 
 %% @doc Fetch the value for the key from a model source
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
@@ -328,13 +330,16 @@ delete(Id, Context) ->
 
 %% @doc Replace or insert a medium record for the page.  This is useful for non-file related media.
 %% Resets all non mentioned attributes.
--spec replace( m_rsc:resource_id(), map(), z:context() ) -> ok  | {error, term()}.
-replace(Id, Props, Context) when is_list(Props) ->
-    {ok, Map} = z_props:from_list(Props),
+-spec replace(Id, MediaProps, Context) -> ok  | {error, term()} when
+    Id :: m_rsc:resource_id(),
+    MediaProps :: map() | list(),
+    Context :: z:context().
+replace(Id, MediaProps, Context) when is_list(MediaProps) ->
+    {ok, Map} = z_props:from_list(MediaProps),
     replace(Id, Map, Context);
-replace(Id, Props, Context) ->
-    Mime = maps:get(<<"mime">>, Props, undefined),
-    Size = maps:get(<<"size">>, Props, 1),
+replace(Id, MediaProps, Context) ->
+    Mime = maps:get(<<"mime">>, MediaProps, undefined),
+    Size = maps:get(<<"size">>, MediaProps, 1),
     case z_acl:rsc_editable(Id, Context) andalso
         z_acl:is_allowed(insert, #acl_media{mime = Mime, size = Size}, Context)
     of
@@ -342,7 +347,7 @@ replace(Id, Props, Context) ->
             Depicts = depicts(Id, Context),
             #media_upload_preprocess{ medium = Props1 } = set_av_flag(
                 #media_upload_preprocess{
-                    medium = Props,
+                    medium = MediaProps,
                     mime = Mime
                 },
                 Context),

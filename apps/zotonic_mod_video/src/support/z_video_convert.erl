@@ -153,9 +153,10 @@ insert_broken(State) ->
     case is_current_upload(State, Context) of
         true ->
             PropsMedia = #{
-                <<"mime">> => <<"video/x-mp4-broken">>
+                <<"mime">> => <<"video/x-mp4-broken">>,
+                <<"size">> => 0
             },
-            m_media:replace_file(undefined, State#state.id, #{}, PropsMedia, [no_touch], Context);
+            m_media:replace(State#state.id, PropsMedia, Context);
         false ->
             ?LOG_NOTICE(#{
                 text => <<"Video conversion (broken): medium is not current anymore">>,
