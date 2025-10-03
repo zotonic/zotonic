@@ -505,8 +505,6 @@ lift_singles(#{ <<>> := V } = M) when map_size(M) =:= 1 ->
     lift_singles(V);
 lift_singles(M) when is_map(M) ->
     maps:map(fun(_K, V) -> lift_singles(V) end, M);
-lift_singles([ #{ <<>> := _ } | _ ] = L) ->
-    lists:map(fun lift_singles/1, L);
 lift_singles(L) when is_list(L) ->
     lists:map(fun lift_singles/1, L);
 lift_singles(V) ->
