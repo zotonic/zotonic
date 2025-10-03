@@ -130,4 +130,38 @@ props_test() ->
                     }
                 ]
             }, [ nl, de ]),
+
+    % Property indices - appending and merging special cases
+    #{
+        <<"a">> := [ <<"a1">>, <<"b1">> ]
+    } = z_props:from_qs([ {<<"a[]">>, <<"a1">>}, {<<"a[]">>, <<"b1">>} ]),
+    #{
+        <<"a">> := [ <<"a1">>, <<"b1">> ]
+    } = z_props:from_qs([ {<<"a[1]">>, <<"a1">>}, {<<"a[2]">>, <<"b1">>} ]),
+    #{
+        <<"a">> := [ <<"b1">>, <<"a1">> ]
+    } = z_props:from_qs([ {<<"a[2]">>, <<"a1">>}, {<<"a[1]">>, <<"b1">>} ]),
+    #{
+        <<"a">> := [ <<"b1">>, undefined, <<"a1">> ]
+    } = z_props:from_qs([ {<<"a[3]">>, <<"a1">>}, {<<"a[1]">>, <<"b1">>} ]),
+
+    % Property indices - appending and merging special cases
+    #{
+        <<"a">> := [ #trans{ tr = [ {en, <<"a1">>}, {nl, <<"b1">>} ] } ]
+    } = z_props:from_qs([ {<<"a[1]$en">>, <<"a1">>}, {<<"a[1]$nl">>, <<"b1">>} ]),
+    #{
+        <<"a">> := [
+            #trans{ tr = [ {en, <<"a1">>} ] },
+            #trans{ tr = [ {nl, <<"b1">>} ] }
+        ]
+    } = z_props:from_qs([ {<<"a[1]$en">>, <<"a1">>}, {<<"a[2]$nl">>, <<"b1">>} ]),
+    #{
+        <<"a">> := [ #trans{ tr = [ {en, <<"a1">>}, {nl, <<"b1">>} ] } ]
+    } = z_props:from_qs([ {<<"a[]$en">>, <<"a1">>}, {<<"a[]$nl">>, <<"b1">>} ]),
+    #{
+        <<"a">> := [
+            #trans{ tr = [ {en, <<"a1">>} ] },
+            #trans{ tr = [ {en, <<"b1">>} ] }
+        ]
+    } = z_props:from_qs([ {<<"a[]$en">>, <<"a1">>}, {<<"a[]$en">>, <<"b1">>} ]),
     ok.
