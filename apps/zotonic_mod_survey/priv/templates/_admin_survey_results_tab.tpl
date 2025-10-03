@@ -21,9 +21,9 @@
         <div>
             <a class="btn btn-default" href="{% url admin_survey_editor id=id %}">{_ Results editor _}</a>
 
-            <a class="btn btn-default" href="{% url survey_results_printable id=id %}" target="_blank">{_ Printable list _} <i class="fa fa-external-link"></i></a>
+            <a class="btn btn-default" href="{% url survey_results_printable id=id %}" target="_blank">{_ Printable list _} <i class="glyphicon glyphicon-new-window"></i></a>
 
-            <a class="btn btn-default" href="{% url survey_results id=id %}" target="_blank">{_ Show charts _} <i class="fa fa-external-link"></i></a>
+            <a class="btn btn-default" href="{% url survey_results id=id %}" target="_blank">{_ Show charts _} <i class="glyphicon glyphicon-new-window"></i></a>
         </div>
         <p class="help-block">{_ View and edit results. _} {_ The charts show aggregated results from closed questions like thurstone or multiple choice and yes/no. _}</p>
     </fieldset>
