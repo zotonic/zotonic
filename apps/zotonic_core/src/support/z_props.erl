@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2020 Marc Worrell
-%%
+%% @copyright 2020-2025 Marc Worrell
 %% @doc Query string processing, property lists and property maps for
 %% Zotonic resources.
+%% @end
 
-%% Copyright 2020 Marc Worrell
+%% Copyright 2020-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -179,7 +179,8 @@ from_qs(Qs, Now) ->
     Nested = nested(Qs),
     WithDates = combine_dates(Nested, Now),
     WithTrans = combine_trans(WithDates),
-    {ok, WithTrans}.
+    WithoutSingles = lift_singles(WithTrans),
+    {ok, WithoutSingles}.
 
 % -spec local_now(z:context()) -> calendar:datetime().
 % local_now(Context) ->
@@ -240,9 +241,8 @@ nested_assign([ <<"block-", Rest/binary>> ], V, Map) ->
         [ K ] -> nested_assign([ <<"blocks[].", K/binary>> ], V, Map)
     end;
 nested_assign([ K, <<>> ], _V, Map) ->
-    % Start a new map, if key ends in "[]"
     % This was a key 'a.b[].' which notifies the
-    % start of a new map.
+    % start of a new map in a list 'b'
     case has_suffix(K, <<"[]">>) of
         true ->
             Len = size(K) - size(<<"[]">>),
@@ -257,41 +257,155 @@ nested_assign([ K, <<>> ], _V, Map) ->
             Map
     end;
 nested_assign([ K ], V, Map) ->
-    case has_suffix(K, <<"[]">>) of
-        true ->
-            % This was a key 'a.b[]' which appends a
-            % value to a list.
-            Len = size(K) - size(<<"[]">>),
-            <<K1:Len/binary, "[]">> = K,
-            case maps:get(K1, Map, []) of
-                L when is_list(L) ->
-                    Map#{ K1 => [ V | L ] };
-                _ ->
-                    Map#{ K1 => [ V ] }
+    case binary:split(K, <<"[">>) of
+        [Key, KIdxPost] ->
+            case binary:split(KIdxPost, <<"]">>) of
+                [<<>>, <<>>] ->
+                    % This was a key 'a.b[]' which appends a value to a list.
+                    case maps:find(Key, Map) of
+                        {ok, L} when is_list(L) ->
+                            Map#{ Key => [ V | L ] };
+                        {ok, _} ->
+                            Map#{ Key => [ V ] };
+                        error ->
+                            Map#{ Key => [ V ] }
+                    end;
+                [Index, <<>>] ->
+                    % This was a key a.b[123] which sets a value on a
+                    % specific index value in a list; or a.b[]$en which
+                    % appends a value to the list.
+                    IndexNr = try
+                                    max(1, binary_to_integer(Index))
+                              catch _:_ ->
+                                    append
+                              end,
+                    MaybeList = maps:get(Key, Map, []),
+                    List = case is_list(MaybeList) of
+                        true -> MaybeList;
+                        false -> []
+                    end,
+                    List1 = lists:reverse(List),
+                    M = get_index(IndexNr, List1),
+                    V1 = if
+                        is_map(M) -> M#{ <<>> => V };
+                        true -> #{ <<>> => V }
+                    end,
+                    List2 = set_index(IndexNr, V1, List1, []),
+                    Map#{ Key => List2 };
+                [<<>>, Post] ->
+                    % This was a key a.b[]$en which appends a new value if
+                    % the post key was not known yet, otherwise it will set
+                    % the post key on the current value.
+                    MaybeList = maps:get(Key, Map, []),
+                    List = case is_list(MaybeList) of
+                        true -> MaybeList;
+                        false -> []
+                    end,
+                    case List of
+                        [ #{ Post := _ } | _ ] ->
+                            Map#{ Key => [ #{ Post => V } | List ]};
+                        [ M | L ] when is_map(M) ->
+                            Map#{ Key => [ M#{ Post => V } | L ]};
+                        _ ->
+                            Map#{ Key => [ #{ Post => V } | List ]}
+                    end;
+                [Index, Post] ->
+                    % This was a key a.b[123]$en which set the value if
+                    % the post key was not known yet, otherwise appends
+                    % a value to the list.
+                    IndexNr = try
+                                    max(1, binary_to_integer(Index))
+                              catch _:_ ->
+                                    append
+                              end,
+                    MaybeList = maps:get(Key, Map, []),
+                    List = case is_list(MaybeList) of
+                        true -> MaybeList;
+                        false -> []
+                    end,
+                    List1 = lists:reverse(List),
+                    M = get_index(IndexNr, List1),
+                    V1 = if
+                        is_map(M) -> M#{ Post => V };
+                        true -> #{ Post => V }
+                    end,
+                    List2 = set_index(IndexNr, V1, List1, []),
+                    Map#{ Key => List2 }
             end;
-        false ->
+        _ ->
             Map#{ K => V }
     end;
 nested_assign([ K | Ks ], V, Map) ->
-    case has_suffix(K, <<"[]">>) of
-        true ->
-            % This was a key 'a.b[].d' which sets a
-            % value in a list of maps.
-            Len = size(K) - size(<<"[]">>),
-            <<K1:Len/binary, "[]">> = K,
-            case maps:find(K1, Map) of
-                {ok, [ M | L ]} ->
-                    M1 = nested_assign(Ks, V, M),
-                    Map#{ K1 => [ M1 | L ]};
-                _ ->
-                    M1 = nested_assign(Ks, V, #{}),
-                    Map#{ K1 => [ M1 ]}
+    case binary:split(K, <<"[">>) of
+        [Key, KIdxPost] ->
+            case binary:split(KIdxPost, <<"]">>) of
+                [<<>>, <<>>] ->
+                    % This was a key 'a.b[].d' which sets a key in the last
+                    % map in a list 'b'.
+                    case maps:find(Key, Map) of
+                        {ok, [ M | L ]} when is_map(M) ->
+                            M1 = nested_assign(Ks, V, M),
+                            Map#{ Key => [ M1 | L ]};
+                        {ok, L} when is_list(L) ->
+                            M1 = nested_assign(Ks, V, #{}),
+                            Map#{ Key => [ M1 | L ]};
+                        {ok, _}  ->
+                            M1 = nested_assign(Ks, V, #{}),
+                            Map#{ Key => [ M1 ]};
+                        error ->
+                            M1 = nested_assign(Ks, V, #{}),
+                            Map#{ Key => [ M1 ]}
+                    end;
+                [Index, _Post] ->
+                    % This was key a.b[123].d which sets a value on a specific
+                    % index value in a list.
+                    % Any special post value like the '$en' in a.b[123]$en.d'
+                    % is ignored, as the are only allowed after the final key.
+                    IndexNr = try
+                                    max(1, binary_to_integer(Index))
+                              catch _:_ ->
+                                    append
+                              end,
+                    MaybeList = maps:get(Key, Map, []),
+                    List = case is_list(MaybeList) of
+                        true -> MaybeList;
+                        false -> []
+                    end,
+                    List1 = lists:reverse(List),
+                    M = get_index(IndexNr, List1),
+                    M1 = if
+                        is_map(M) -> M;
+                        true -> #{}
+                    end,
+                    V1 = nested_assign(Ks, V, M1),
+                    List2 = set_index(IndexNr, V1, List1, []),
+                    Map#{ Key => List2 }
             end;
-        false ->
+        _ when Ks =:= [] ->
+            Map#{ K => V };
+        _ when Ks =/= [] ->
             Sub = maps:get(K, Map, #{}),
             Sub1 = nested_assign(Ks, V, Sub),
             Map#{ K => Sub1 }
     end.
+
+set_index(append, V, [], Acc) ->
+    [V|Acc];
+set_index(append, V, [VL|L], Acc) ->
+    set_index(append, V, L, [VL|Acc]);
+set_index(1, V, [], Acc) ->
+    [V|Acc];
+set_index(1, V, [_|L], Acc) ->
+    lists:reverse(L, [V|Acc]);
+set_index(N, V, [VL|L], Acc) when N > 1 ->
+    set_index(N-1, V, L, [VL|Acc]);
+set_index(N, V, [], Acc) when N > 1 ->
+    set_index(N-1, V, [], [undefined|Acc]).
+
+get_index(append, _L) -> #{};
+get_index(1, [V|_]) -> V;
+get_index(N, [_|L]) when N > 0 -> get_index(N-1, L);
+get_index(_, [])-> #{}.
 
 %% ---------------------------------------------------------------------------------------
 %% Language handling
@@ -386,6 +500,15 @@ add_trans(Name, Code, V, Acc) ->
     #trans{ tr = Tr } = maps:get(Name, Acc, #trans{}),
     Tr1 = [ {Code, z_string:trim(V)} | proplists:delete(Code, Tr) ],
     Acc#{ Name => #trans{ tr = Tr1 } }.
+
+lift_singles(#{ <<>> := V } = M) when map_size(M) =:= 1 ->
+    lift_singles(V);
+lift_singles(M) when is_map(M) ->
+    maps:map(fun(_K, V) -> lift_singles(V) end, M);
+lift_singles(L) when is_list(L) ->
+    lists:map(fun lift_singles/1, L);
+lift_singles(V) ->
+    V.
 
 %% ---------------------------------------------------------------------------------------
 %% Date handling
