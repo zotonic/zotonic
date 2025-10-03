@@ -1,6 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2025 Marc Worrell
-%% @doc SPARQL support for Zotonic.
+%% @doc SPARQL support for Zotonic.  See also z_rdf_props in code and
+%% the zotonic_rdf app.
 %% @end
 
 %% Copyright 2025 Marc Worrell
@@ -30,6 +31,22 @@ Support for mapping between Zotonic and RDF data.
 -author('Marc Worrell <marc@worrell.nl>').
 
 -export([
+    observe_rdf_ns/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+
+%% @todo Check this and if ok then move to zotonic_rdf app.
+-define(NS_ZOTONIC, <<"http://zotonic.net/predicate/">>).
+
+observe_rdf_ns(#rdf_ns{ ns = ?NS_ZOTONIC }, _Context) ->
+    {ok, <<"zotonic">>};
+observe_rdf_ns(#rdf_ns{ ns = NS }, _Context) ->
+    case zotonic_rdf:ns_compact(NS) of
+        Prefix when Prefix =:= NS ->
+            % Might be the base URL of the local site.
+            % TODO: should we compact that? Maybe to <<"">>?
+            undefined;
+        Prefix ->
+            {ok, Prefix}
+    end.

@@ -250,7 +250,7 @@ creative_work(Id, IsTransFallback, IsTopDoc, Context) ->
     end.
 
 content_language(Id, Context) ->
-    Translations = case m_rsc:p_no_acl(Id, language, Context) of
+    Translations = case m_rsc:p_no_acl(Id, <<"language">>, Context) of
         undefined -> [];
         Lngs -> Lngs
     end,

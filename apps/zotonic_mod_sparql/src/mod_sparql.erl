@@ -19,7 +19,7 @@
 
 -module(mod_sparql).
 -moduledoc("
-The mod_sparql module adds support for the SPARQL query language to access Zotonic data.
+The mod_sparql module adds support to use the SPARQL query language for accessing Zotonic data.
 ").
 
 -mod_title("SPARQL").
@@ -30,6 +30,66 @@ The mod_sparql module adds support for the SPARQL query language to access Zoton
 -author('Marc Worrell <marc@worrell.nl>').
 
 -export([
+    observe_sparql_mapping/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+-include("../include/sparql.hrl").
+
+
+observe_sparql_mapping(#sparql_mapping{ ns_prefix = Prefix, ns = NS, predicate = Predicate }, Context) ->
+    % Could be a predicate or a property (of some table)
+    case find_predicate(NS, Predicate, Context) of
+        undefined ->
+            % Check known rsc and pivot properties - use z_rdf_props
+            case find_column(Prefix, Predicate, Context) of
+                {ok, _} = Ok -> Ok;
+                undefined -> undefined
+            end;
+        RId ->
+            % Known predicate - will be an edge
+            {ok, {edge, RId}}
+    end.
+
+find_column(<<"zotonic">>, Predicate, Context) ->
+    case is_protected(Predicate) of
+        true -> undefined;
+        false ->
+            case z_db:column(<<"rsc">>, Predicate, Context) of
+                {ok, _Column} -> {ok, {column, <<"rsc">>, Predicate}};
+                {error, enoent} ->
+                    % TODO:
+                    % 1. Check facet
+                    % 2. Check pivots
+                    % 3. JSON selector in props_json
+                    undefined
+            end
+    end;
+find_column(_NS, _Predicate, _Context) ->
+    % TODO: check known property mappings from z_rdf_props.
+    undefined.
+
+
+is_protected(<<"props">>) -> true;
+is_protected(<<"props_json">>) -> true;
+is_protected(_) -> false.
+
+find_predicate(NS, Predicate, Context) ->
+    case find_id(NS, Predicate, Context) of
+        undefined ->
+            undefined;
+        RId ->
+            case m_rsc:is_a(RId, predicate, Context) of
+                true -> RId;
+                false -> undefined
+            end
+    end.
+
+find_id(NS, Predicate, Context) ->
+    URI = <<NS/binary, Predicate/binary>>,
+    case m_rsc:rid(URI, Context) of
+        undefined ->
+            m_rsc:rid(Predicate, Context);
+        RId ->
+            RId
+    end.

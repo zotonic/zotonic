@@ -115,6 +115,7 @@
     flush/1,
 
     assert_table_name/1,
+    assert_column_name/1,
     quoted_table_name/1,
     prepare_cols/2,
     merge_props/1,
@@ -1962,6 +1963,11 @@ drop_table(Table, Context) ->
 -spec assert_table_name(table_name()) -> true.
 assert_table_name(Table) ->
     z_db_table:assert_table_name(Table).
+
+%% @doc Assert that the column name is safe to use. Crashes if the column name is not safe.
+-spec assert_column_name(column_name()) -> true.
+assert_column_name(Table) ->
+    z_db_table:assert_column_name(Table).
 
 %% @doc Quote a table name so that it is safe to use in SQL queries.
 -spec quoted_table_name(table_name()) -> {default | string(), string(), string()}.

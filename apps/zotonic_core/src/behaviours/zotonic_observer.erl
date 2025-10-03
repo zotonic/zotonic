@@ -2295,6 +2295,22 @@ Return:
 
 -optional_callbacks([ observe_sanitize_element/3, pid_observe_sanitize_element/4 ]).
 
+
+%% Map a RDF namespace to its prefix (compact form).
+%% Type: first
+%% Return: ``{ok, Prefix}``, ``{error, Reason}``, ``undefined``
+-callback observe_rdf_ns(#rdf_ns{}, z:context()) -> Result when
+    Result :: {ok, binary()}
+            | {error, term()}
+            | undefined.
+-callback pid_observe_rdf_ns(pid(), #rdf_ns{}, z:context()) -> Result when
+    Result :: {ok, binary()}
+            | {error, term()}
+            | undefined.
+
+-optional_callbacks([ observe_rdf_ns/2, pid_observe_rdf_ns/3 ]).
+
+
 %% Sanitize an embed url. The hostpart is of the format: ``<<"youtube.com/v...">>``.
 %% Type: first
 %% Return: ``undefined``, ``false`` or a binary with a acceptable hostpath

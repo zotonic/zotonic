@@ -623,6 +623,15 @@
     hostpath :: binary()
 }).
 
+%% @doc Notifier to map a RDF namespace to a standardized prefix.
+%% Type: first
+%% Returns: {ok, Prefix}, {error, Reason}, or undefined
+%%
+%% If the namespace is unknown the the caller can use the namespace instead
+%% the prefix.
+-record(rdf_ns, {
+    ns :: binary()
+}).
 
 %% @doc Check if a user is the owner of a resource.
 %% ``id`` is the resource id.
