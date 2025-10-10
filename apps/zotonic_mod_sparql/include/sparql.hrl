@@ -9,7 +9,7 @@
 %% - {ok, subclass}
 %% - {ok, {column, TableName, Column}}
 %% - {ok, {jsonb, TableName, Column, Selector}}
-%% - {ok, {edge, Predicate}}
+%% - {ok, {edge, Predicate, IsReversed}}
 %% - {error, eacces | Reason}
 %% - undefined
 %%
@@ -18,8 +18,6 @@
 %% The returned TableName _must_ join on an 'id' column with a resource id.
 %% The 'category' mapping checks the object category and all its sub-categories.
 %% The 'subclass' mapping selects the sub-categories of the object category.
-%%
-%% TODO: add 'is_reversed' flag to returned edge
 %%
 -record(sparql_mapping, {
     ns :: binary(),

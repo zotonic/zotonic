@@ -46,7 +46,7 @@
     | subclass
     | {column, binary(), binary()}
     | {jsonb, binary(), binary(), term()}
-    | {edge, term()}
+    | {edge, term(), boolean()}
     | undefined.
 
 -type predicate_plan() :: #{
@@ -333,8 +333,8 @@ predicate_mapping(Namespace, NamespacePrefix, LocalName, Context) ->
             z_db:assert_column_name(Column),
             % TODO: sanitize selector???
             {jsonb, Table, Column, Selector};
-        {ok, {edge, Predicate}} ->
-            {edge, Predicate};
+        {ok, {edge, Predicate, IsReversed}} when is_boolean(IsReversed) ->
+            {edge, Predicate, IsReversed};
         {error, Reason} ->
             throw({error, Reason});
         undefined ->
@@ -435,7 +435,7 @@ resource_variables(identity) -> [];
 resource_variables({triple, Subject, Predicate, Object}) ->
     SubjectVariables = term_variables(Subject),
     ObjectVariables = case Predicate of
-        #{ mapping := {edge, _} } ->
+        #{ mapping := {edge, _, _} } ->
             term_variables(Object);
         #{ iri := Iri } ->
             RdfType = <<?NS_RDF/binary, "type">>,

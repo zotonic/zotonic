@@ -25,10 +25,49 @@ relation_edge_test() ->
             "    ?subject dcterms:relation <", ObjectUri/binary, ">\n"
             "}"
         >>,
+        {ok, RelationId} = m_predicate:name_to_id(relation, Context),
+        ?assertEqual({edge, RelationId, false}, query_mapping(Sparql, Context)),
         ?assertEqual([SubjectId], search(Sparql, Context))
     after
         ok = m_rsc:delete(SubjectId, Context),
         ok = m_rsc:delete(ObjectId, Context)
+    end.
+
+reversed_relation_edge_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    {ok, PredicateId} = m_predicate:insert(<<"SPARQL reversed predicate">>, Context),
+    {ok, PredicateId} = m_rsc:update(PredicateId, [{reversed, true}], Context),
+    {ok, StoredSubjectId} = m_rsc:insert([
+        {category, article},
+        {title, <<"SPARQL stored edge subject">>}
+    ], Context),
+    {ok, StoredObjectId} = m_rsc:insert([
+        {category, article},
+        {title, <<"SPARQL stored edge object">>}
+    ], Context),
+    try
+        {ok, _EdgeId} = m_edge:insert(StoredSubjectId, PredicateId, StoredObjectId, Context),
+        PredicateUri = m_rsc:uri(PredicateId, Context),
+        StoredSubjectUri = m_rsc:uri(StoredSubjectId, Context),
+        StoredObjectUri = m_rsc:uri(StoredObjectId, Context),
+        ReversedSparql = <<
+            "SELECT ?subject WHERE {\n"
+            "    ?subject <", PredicateUri/binary, "> <", StoredSubjectUri/binary, ">\n"
+            "}"
+        >>,
+        StoredDirectionSparql = <<
+            "SELECT ?subject WHERE {\n"
+            "    ?subject <", PredicateUri/binary, "> <", StoredObjectUri/binary, ">\n"
+            "}"
+        >>,
+        ?assertEqual({edge, PredicateId, true}, query_mapping(ReversedSparql, Context)),
+        ?assertEqual([StoredObjectId], search(ReversedSparql, Context)),
+        ?assertEqual([], search(StoredDirectionSparql, Context))
+    after
+        ok = m_rsc:delete(StoredSubjectId, Context),
+        ok = m_rsc:delete(StoredObjectId, Context),
+        ok = m_rsc:delete(PredicateId, Context)
     end.
 
 resource_identifier_test() ->
@@ -106,15 +145,15 @@ resource_identifier_test() ->
 json_property_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
     Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
-    {ok, RscId} = m_rsc:insert([
-        {category, article},
-        {title, <<"SPARQL nested JSON property">>},
-        {<<"sparql_nested">>, #{
-            <<"number">> => 42,
-            <<"text">> => <<"42">>,
-            <<"enabled">> => true
-        }}
-    ], Context),
+    {ok, RscId} = m_rsc:insert(#{
+            <<"category">> => article,
+            <<"title">> => <<"SPARQL nested JSON property">>,
+            <<"sparql_nested">> => #{
+                <<"number">> => 42,
+                <<"text">> => <<"42">>,
+                <<"is_enabled">> => true
+            }
+        }, Context),
     try
         Prefix = <<"PREFIX zotonic: <http://zotonic.net/predicate/>\n">>,
         NumberSparql = <<
@@ -131,7 +170,7 @@ json_property_test() ->
         >>,
         BooleanSparql = <<
             Prefix/binary,
-            "SELECT ?subject WHERE { ?subject zotonic:sparql_nested.enabled true }"
+            "SELECT ?subject WHERE { ?subject zotonic:sparqlNested.isEnabled true }"
         >>,
         FullIriSparql = <<
             "SELECT ?subject WHERE {\n"
@@ -290,6 +329,9 @@ predicate_mapping(Predicate, Context) ->
         "PREFIX zotonic: <http://zotonic.net/predicate/>\n"
         "SELECT ?subject WHERE { ?subject zotonic:", Predicate/binary, " ?value }"
     >>,
+    query_mapping(Sparql, Context).
+
+query_mapping(Sparql, Context) ->
     {ok, Query} = z_sparql:parse(Sparql),
     {ok, #{ where := {triple, _, #{ mapping := Mapping }, _} }} =
         z_sparql_plan:to_query_plan(Query, Context),

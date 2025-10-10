@@ -53,7 +53,8 @@ observe_sparql_mapping(#sparql_mapping{ ns_prefix = Prefix, ns = NS, predicate =
             end;
         RId ->
             % Known predicate - will be an edge
-            {ok, {edge, RId}}
+            IsReversed = z_convert:to_bool(m_rsc:p_no_acl(RId, <<"reversed">>, Context)),
+            {ok, {edge, RId, IsReversed}}
     end.
 
 find_column(<<"rdfs">>, _NS, <<"subClassOf">>, _Context) ->

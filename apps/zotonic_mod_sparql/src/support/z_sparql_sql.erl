@@ -136,18 +136,14 @@ mapped_triple_to_sql({jsonb, Table, Column, Selector}, SubjectAlias, Object, Ter
     Expression = jsonb_expression(Alias, Column, Selector),
     {Term2, State2} = bind_jsonb_object(Object, Expression, Term1, State1),
     {[Term2], State2};
-mapped_triple_to_sql({edge, Predicate}, SubjectAlias, Object, Term0, State0) ->
-    PredicateId = case m_predicate:name_to_id(Predicate, State0#sql_state.context) of
-        {ok, Id} -> Id;
-        {error, Reason} -> throw({error, Reason})
-    end,
-    {EdgeAlias, State1} = new_alias(<<"edge">>, State0),
-    Term1 = add_table(EdgeAlias, <<"edge">>, Term0),
-    Term2 = add_where([EdgeAlias, <<".subject_id = ">>, SubjectAlias, <<".id">>], Term1),
-    {PredicateArg, Term3} = add_arg(PredicateId, Term2),
-    Term4 = add_where([EdgeAlias, <<".predicate_id = ">>, PredicateArg], Term3),
-    {Term5, State2} = bind_edge_object(Object, EdgeAlias, Term4, State1),
-    {[Term5], State2};
+mapped_triple_to_sql({edge, Predicate, false}, SubjectAlias, Object, Term0, State0) ->
+    edge_to_sql(
+        Predicate, <<"subject_id">>, <<"object_id">>,
+        SubjectAlias, Object, Term0, State0);
+mapped_triple_to_sql({edge, Predicate, true}, SubjectAlias, Object, Term0, State0) ->
+    edge_to_sql(
+        Predicate, <<"object_id">>, <<"subject_id">>,
+        SubjectAlias, Object, Term0, State0);
 mapped_triple_to_sql(category, SubjectAlias, {iri, Iri}, Term0, State) ->
     Context = State#sql_state.context,
     case m_rsc:uri_lookup(Iri, Context) of
@@ -184,6 +180,19 @@ mapped_triple_to_sql(subclass, SubjectAlias, {iri, Iri}, Term0, State) ->
     end;
 mapped_triple_to_sql(subclass, _SubjectAlias, Object, _Term, _State) ->
     throw({error, {expected_category, Object}}).
+
+edge_to_sql(Predicate, SubjectColumn, ObjectColumn, SubjectAlias, Object, Term0, State0) ->
+    PredicateId = case m_predicate:name_to_id(Predicate, State0#sql_state.context) of
+        {ok, Id} -> Id;
+        {error, Reason} -> throw({error, Reason})
+    end,
+    {EdgeAlias, State1} = new_alias(<<"edge">>, State0),
+    Term1 = add_table(EdgeAlias, <<"edge">>, Term0),
+    Term2 = add_where([EdgeAlias, $., SubjectColumn, <<" = ">>, SubjectAlias, <<".id">>], Term1),
+    {PredicateArg, Term3} = add_arg(PredicateId, Term2),
+    Term4 = add_where([EdgeAlias, <<".predicate_id = ">>, PredicateArg], Term3),
+    {Term5, State2} = bind_edge_object(Object, EdgeAlias, ObjectColumn, Term4, State1),
+    {[Term5], State2}.
 
 category_ids(CategoryId, Context) ->
     [
@@ -254,21 +263,21 @@ bind_jsonb_object(Object, Expression, Term0, State) ->
     {Arg, Term1} = add_arg(Value, Term0),
     {add_where([Expression, <<" = ">>, Arg, <<"::jsonb">>], Term1), State}.
 
-bind_edge_object({var, _} = Variable, EdgeAlias, Term0, State0) ->
+bind_edge_object({var, _} = Variable, EdgeAlias, Column, Term0, State0) ->
     {ObjectAlias, Term1, State1} = resource_alias(Variable, Term0, State0),
-    {add_where([EdgeAlias, <<".object_id = ">>, ObjectAlias, <<".id">>], Term1), State1};
-bind_edge_object({bnode, _} = BlankNode, EdgeAlias, Term, State) ->
+    {add_where([EdgeAlias, $., Column, <<" = ">>, ObjectAlias, <<".id">>], Term1), State1};
+bind_edge_object({bnode, _} = BlankNode, EdgeAlias, Column, Term, State) ->
     {ObjectAlias, Term1, State1} = resource_alias(BlankNode, Term, State),
-    {add_where([EdgeAlias, <<".object_id = ">>, ObjectAlias, <<".id">>], Term1), State1};
-bind_edge_object({iri, Iri}, EdgeAlias, Term0, State) ->
+    {add_where([EdgeAlias, $., Column, <<" = ">>, ObjectAlias, <<".id">>], Term1), State1};
+bind_edge_object({iri, Iri}, EdgeAlias, Column, Term0, State) ->
     case m_rsc:rid(Iri, State#sql_state.context) of
         undefined ->
             {add_where(<<"false">>, Term0), State};
         RscId ->
             {Arg, Term1} = add_arg(RscId, Term0),
-            {add_where([EdgeAlias, <<".object_id = ">>, Arg], Term1), State}
+            {add_where([EdgeAlias, $., Column, <<" = ">>, Arg], Term1), State}
     end;
-bind_edge_object(Object, _EdgeAlias, _Term, _State) ->
+bind_edge_object(Object, _EdgeAlias, _Column, _Term, _State) ->
     throw({error, {expected_resource, Object}}).
 
 expression_to_sql({var, _} = Variable, State, Term) ->
