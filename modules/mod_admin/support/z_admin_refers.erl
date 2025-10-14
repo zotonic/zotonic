@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2023 Maximonster Interactive Things BV
+%% @copyright 2023-2025 Maximonster Interactive Things BV
 %% @doc Ensure that alle embedded ids in a resource are connected using
 %% a 'refers' edge.
 %% @end
 
-%% Copyright 2023 Maximonster Interactive Things BV
+%% Copyright 2023-2025 Maximonster Interactive Things BV
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,7 +23,8 @@
 -export([
     ensure_refers/2,
     insert_ensure_refers_all_task/1,
-    task_ensure_refers_all/2
+    task_ensure_refers_all/2,
+    find_ids/3
 ]).
 
 -include_lib("zotonic.hrl").
@@ -148,7 +149,7 @@ ids(K, {trans, _} = V, _Context) ->
         false ->
             []
     end;
-ids(_K, [ V | _ ] = L, Context) when is_map(V) ->
+ids(blocks, [ V | _ ] = L, Context) when is_list(V); is_map(V) ->
     lists:flatmap(
         fun(B) ->
             find_ids(B, [], Context)
