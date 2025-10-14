@@ -28,6 +28,8 @@
     fetch_worksheet/1
     ]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
+
 -define(DEFAULT_MAX_MEMORY, 160 * 1024 * 1024). % 160MB
 
 %% @doc Parse a XLSX file with safety on the maximum amount of memory used. The parsing
@@ -92,7 +94,7 @@ do_parse_file(File) ->
                                 fun(NC) ->
                                     maps:get({NR, NC}, Idx, <<>>)
                                 end,
-                                lists:seq(0,MaxCols))
+                                lists:seq(1, MaxCols))
                         end,
                         lists:seq(1, MaxRows)),
                     {ok, RowData};
@@ -133,7 +135,7 @@ loc_to_num(Loc) ->
 letters_to_num(Letters) ->
     lists:foldl(
         fun(C, Acc) ->
-            Acc * 26 + (C-$A)
+            Acc * 26 + (C-$A+1)
         end,
         0,
         Letters).
@@ -141,7 +143,6 @@ letters_to_num(Letters) ->
 parse_shared(#{ shared := SharedBin }) ->
     case z_html_parse:parse(SharedBin, #{ mode => xml, lowercase => true }) of
         {ok, {<<"sst">>, _, Elts}} ->
-            % io:format("~p~n~n", [ Elts ]),
             {_, Shared} = lists:foldl(
                 fun
                     ({<<"si">>, _, Ts}, {N, Acc}) ->
@@ -163,15 +164,26 @@ parse_shared(_) ->
     #{}.
 
 parse_worksheet({<<"worksheet">>, _Args, Elts}, Shared) ->
-    [ Data | _ ] = lists:filtermap(
+    case lists:filtermap(
         fun
             ({<<"sheetdata">>, _, SheetRows}) ->
                 {true, extract_rows(SheetRows, Shared)};
             (_) ->
                 false
         end,
-        Elts),
-    Data.
+        Elts)
+    of
+        [ Data | _ ] ->
+            Data;
+        [] ->
+            ?LOG_WARNING(#{
+                in => zotonic_core,
+                text => <<"No sheetdata in XLSX worksheet">>,
+                result => error,
+                reason => sheetdata_missing
+            }),
+            []
+    end.
 
 extract_rows(Rs, Shared) ->
     lists:filtermap(
@@ -193,16 +205,26 @@ extract_row({<<"row">>, _RowArgs, Cells}, Shared) ->
         Cells).
 
 map_cell(<<"inlineStr">>, _CellArgs, CellData, _Shared) ->
+    % Text
     case lists:keyfind(<<"is">>, 1, CellData) of
-        {<<"is">>, _, IsData} ->
+        {<<"is">>, _, IsData} when is_list(IsData) ->
             text(IsData);
         false ->
             <<>>
     end;
 map_cell(<<"s">>, _CellArgs, CellData, Shared) ->
+    % String from the shared string data
     case lists:keyfind(<<"v">>, 1, CellData) of
         {<<"v">>, _, VData} ->
             maps:get(binary_to_integer(text(VData)), Shared, <<>>);
+        false ->
+            <<>>
+    end;
+map_cell(<<"str">>, _CellArgs, CellData, _Shared) ->
+    % Formula with string result
+    case lists:keyfind(<<"v">>, 1, CellData) of
+        {<<"v">>, _, VData} ->
+            text(VData);
         false ->
             <<>>
     end;
@@ -212,6 +234,8 @@ map_cell(undefined, _CellArgs, CellData, _Shared) ->
         false -> <<>>
     end.
 
+text(B) when is_binary(B) ->
+    B;
 text(Rs) ->
     text(Rs, <<>>).
 
