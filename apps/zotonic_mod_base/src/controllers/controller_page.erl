@@ -144,7 +144,7 @@ resource_exists(Context) ->
     catch
         _:Reason:S ->
             ?LOG_ERROR(#{
-                in => zotonc_core,
+                in => zotonic_core,
                 text => <<"Error checking resource_exists">>,
                 result => error,
                 reason => Reason,
