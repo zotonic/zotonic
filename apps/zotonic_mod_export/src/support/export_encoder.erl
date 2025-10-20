@@ -134,7 +134,8 @@ is_empty(_) -> false.
 do_body(#stream_state{is_query=true, id=Id} = StreamState, Context) ->
     #search_result{result=Ids} = z_search:search(
             <<"query">>, #{ <<"query_id">> => Id },
-            1, 30000,
+            1, 50000,
+            #{ is_count_rows => false, is_single_page => true },
             Context),
     do_body_data(Ids, StreamState, Context);
 do_body(StreamState, Context) ->
@@ -146,29 +147,36 @@ do_body(StreamState, Context) ->
                           },
                           Context)
     of
-        undefined ->
+        undefined when StreamState#stream_state.id =/= undefined ->
             do_body_data([StreamState#stream_state.id], StreamState, Context);
-        {ok, List} ->
+        undefined ->
+            do_body_data([], StreamState, Context);
+        {ok, List} when is_list(List) ->
             do_body_data(List, StreamState, Context);
-        {ok, List, NewState} ->
+        {ok, List, NewState} when is_list(List) ->
             do_body_data(List, StreamState#stream_state{exporter_state=NewState}, Context)
     end.
 
 do_body_data([], StreamState, Context) ->
     do_footer(StreamState, Context);
 do_body_data(List, StreamState, Context) ->
-    {Data, NewStreamState} = lists:foldl(
-                                fun(D, {Acc, AccState}) ->
-                                    {DEnc, AccState1} = body_encode_row(D, AccState, Context),
-                                    {[Acc, DEnc], AccState1}
-                                end,
-                                {[], StreamState},
-                                List),
-    DataBin = iolist_to_binary(Data),
-    NextFun = case NewStreamState#stream_state.exporter_state of
-                  undefined -> fun() -> do_footer(NewStreamState, Context) end;
-                  _ -> fun() -> do_body(NewStreamState, Context) end
-              end,
+    stream_body_rows(List, StreamState, Context).
+
+stream_body_rows([], #stream_state{ exporter_state = undefined } = StreamState, Context) ->
+    do_footer(StreamState, Context);
+stream_body_rows([], StreamState, Context) ->
+    do_body(StreamState, Context);
+stream_body_rows([RowItem|NextRows], StreamState, Context) ->
+    {IoData, NewStreamState} = body_encode_row(RowItem, StreamState, Context),
+    DataBin = iolist_to_binary(IoData),
+    NextFun = case NextRows of
+        [] when NewStreamState#stream_state.exporter_state =:= undefined ->
+            fun() -> do_footer(NewStreamState, Context) end;
+        [] ->
+            fun() -> do_body(NewStreamState, Context) end;
+        _ ->
+            fun() -> stream_body_rows(NextRows, NewStreamState, Context) end
+    end,
     case is_empty(DataBin) of
         true -> NextFun();
         false -> {DataBin, NextFun}

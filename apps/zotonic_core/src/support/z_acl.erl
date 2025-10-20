@@ -159,9 +159,9 @@ is_allowed_prop(Action, Object, Property, Context) ->
 is_allowed_link(SubjectId, PredicateId, ObjectId, Context) when
     is_integer(SubjectId), is_integer(PredicateId), is_integer(ObjectId) ->
     try
-        case z_acl:rsc_visible(SubjectId, Context)
-            andalso z_acl:rsc_visible(ObjectId, Context)
-            andalso z_acl:rsc_visible(PredicateId, Context)
+        case rsc_visible(SubjectId, Context)
+            andalso rsc_visible(ObjectId, Context)
+            andalso rsc_visible(PredicateId, Context)
             andalso m_rsc:is_a(PredicateId, predicate, Context)
         of
             true ->

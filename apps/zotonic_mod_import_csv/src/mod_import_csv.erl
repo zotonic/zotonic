@@ -20,7 +20,7 @@
 -moduledoc("
 Module which adds “import CSV” button to the admin status screen.
 
-The dropbox folder of the site is also watched for CSV files.
+The dropbox folder of the site is also watched for CSV or XLSX files.
 
 To determine whether it can import a file, it uses a notification:
 
@@ -39,7 +39,7 @@ Add more documentation
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Import CSV Data").
--mod_description("Import files with tab separated data.").
+-mod_description("Import CSV and XLSX files.").
 -mod_prio(20).
 -mod_schema(1).
 

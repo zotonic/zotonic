@@ -515,10 +515,15 @@ map_fields(Mapping, Row, State) ->
     add_defaults(Defaults, P).
 
 map_def({K,F}, Row, State) ->
-    {K, map_one(F, Row, State)};
-map_def(K, Row, State) when is_atom(K); is_list(K) ->
-    map_def({K,K}, Row, State).
+    K1 = to_binary(K),
+    {K1, map_one(F, Row, State)};
+map_def(K, Row, State) ->
+    K1 = to_binary(K),
+    map_def({K1, K1}, Row, State).
 
+to_binary(K) when is_binary(K) -> K;
+to_binary(S) when is_list(S) -> unicode:characters_to_binary(S, utf8);
+to_binary(A) when is_atom(A) -> atom_to_binary(A, utf8).
 
 -spec map_one_normalize( binary(), any(), any() | {name_prefix, binary() | string() | atom(), binary() | string() | atom()} ) -> any().
 map_one_normalize(<<"name">>, _Type, <<>>) ->
@@ -545,12 +550,8 @@ strlen(A) when is_atom(A) -> erlang:length(atom_to_list(A)).
 map_one(undefined, _Row, _State) -> undefined;
 map_one(true, _Row, _State) -> true;
 map_one(false, _Row, _State) -> false;
-map_one(F, Row, _State) when is_binary(F) ->
-    concat_spaces(proplists:get_all_values(F, Row));
-map_one(F, Row, _State) when is_atom(F) ->
-    concat_spaces(proplists:get_all_values(z_convert:to_binary(F), Row));
-map_one(F, Row, _State) when is_list(F) ->
-    concat_spaces(proplists:get_all_values(z_convert:to_binary(F), Row));
+map_one(F, Row, _State) when is_binary(F); is_list(F); is_atom(F) ->
+    concat_spaces(proplists:get_all_values(to_binary(F), Row));
 map_one(F, Row, _State) when is_function(F) ->
     F(Row);
 map_one({prefer, Fields}, Row, State) ->
@@ -566,26 +567,19 @@ map_one({surroundspace, Field}, Row, State) ->
     end;
 map_one({name_prefix, Prefix, Rest}, Row, State) ->
     {name_prefix, Prefix, map_one(Rest, Row, State)};
-
 map_one({datetime, F}, Row, State) ->
     z_convert:to_datetime(map_one(F, Row, State));
-
+map_one({datetime, D, T}, Row, State) ->
+    {map_one({date, D}, Row, State), map_one({time, T}, Row, State)};
 map_one({date, F}, Row, State) ->
     z_convert:to_date(map_one(F, Row, State));
-
 map_one({time, F}, Row, State) ->
     z_convert:to_time(map_one(F, Row, State));
-
-map_one({datetime, D, T}, Row, State) ->
-    {map_one({date, D}, Row, State),
-     map_one({time, T}, Row, State)};
-
 map_one({if_then_else, Cond, If, Else}, Row, State) ->
     case prop_empty(map_one(Cond, Row, State)) of
         false -> map_one(If, Row, State);
         true -> map_one(Else, Row, State)
     end;
-
 map_one(F, _, _) ->
     throw({import_error, {invalid_import_definition, F}}).
 

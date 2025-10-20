@@ -205,8 +205,8 @@ is_sender_enabled(Id, RecipientEmail, Context) when is_integer(Id) ->
 recipient_is_user_or_admin(Id, RecipientEmail, Context) ->
     m_config:get_value(zotonic, admin_email, Context) =:= RecipientEmail
     orelse z_config:get(admin_email) =:= RecipientEmail
-    orelse m_rsc:p_no_acl(1, email_raw, Context) =:= RecipientEmail
-    orelse m_rsc:p_no_acl(Id, email_raw, Context) =:= RecipientEmail
+    orelse m_rsc:p_no_acl(1, <<"email_raw">>, Context) =:= RecipientEmail
+    orelse m_rsc:p_no_acl(Id, <<"email_raw">>, Context) =:= RecipientEmail
     orelse lists:any(fun(Idn) ->
                         proplists:get_value(key, Idn) =:= RecipientEmail
                      end,
@@ -290,15 +290,15 @@ handle_cast({send, Id, #email{} = Email, Context}, State) ->
     State1 = update_config(State),
     State2 = case z_utils:is_empty(Email#email.to) of
         true -> State1;
-        false -> send_email(Id, Email#email.to, Email, Context, State1)
+        false -> send_emails(Id, Email#email.to, Email, Context, State1)
     end,
     State3 = case z_utils:is_empty(Email#email.cc) of
         true -> State2;
-        false -> send_email(<<Id/binary, "+cc">>, Email#email.cc, Email, Context, State2)
+        false -> send_emails(<<Id/binary, "+cc">>, Email#email.cc, Email, Context, State2)
     end,
     State4 = case z_utils:is_empty(Email#email.bcc) of
         true -> State3;
-        false -> send_email(<<Id/binary, "+bcc">>, Email#email.bcc, Email, Context, State3)
+        false -> send_emails(<<Id/binary, "+bcc">>, Email#email.bcc, Email, Context, State3)
     end,
     {noreply, State4};
 
@@ -707,7 +707,41 @@ remove_worker(Pid, State) ->
 %% SENDING related functions
 %% =========================
 
-% Send an email
+%% @doc Send an email to a single or a list of recipients. The list must be a list
+%% of email addresses (and not rescource ids), otherwise the list is assumed to be a string.
+send_emails(_Id, [], _Email, _Context, State) ->
+    State;
+send_emails(_Id, undefined, _Email, _Context, State) ->
+    State;
+send_emails(_Id, <<>>, _Email, _Context, State) ->
+    State;
+send_emails(Id, Recipient, Email, Context, State) when is_binary(Recipient) ->
+    send_email(Id, Recipient, Email, Context, State);
+send_emails(Id, Recipient, Email, Context, State) when is_integer(Recipient) ->
+    % The sender must have access to the email address of the recipient.
+    send_emails(Id, m_rsc:p(Recipient, <<"email_raw">>, Context), Email, Context, State);
+send_emails(Id, [ Recipient | _ ] = Recipients, Email, Context, State) when not is_integer(Recipient) ->
+    {_, State1} = lists:foldl(
+        fun
+            (undefined, Acc) -> Acc;
+            (<<>>, Acc) -> Acc;
+            ("", Acc) -> Acc;
+            (Rcpt, {N, StateAcc}) ->
+                % Ensure the message-id is unique per recipient
+                Id1 = case N of
+                    1 -> Id;
+                    _ -> <<Id/binary, "-", (integer_to_binary(N))/binary>>
+                end,
+                StateAcc1 = send_emails(Id1, Rcpt, Email, Context, StateAcc),
+                {N+1, StateAcc1}
+        end,
+        {1, State},
+        Recipients),
+    State1;
+send_emails(Id, Recipient, Email, Context, State) ->
+    send_email(Id, Recipient, Email, Context, State).
+
+%% @doc Send an email to a single recipient
 send_email(Id, Recipient, Email, Context, State) ->
     QEmail = #email_queue{id=Id,
                           recipient=Recipient,
@@ -1319,16 +1353,15 @@ encode_email(Id, #email{body=undefined} = Email, MessageId, From, Context) ->
 
     %% Fetch the subject from the title of the HTML part or from the Email record
     Subject = case {Html, Email#email.subject} of
-                      {[], undefined} ->
-                          <<>>;
+                      {[], undefined} -> <<>>;
+                      {<<>>, undefined} -> <<>>;
                       {_Html, undefined} ->
                           {match, [_, {Start,Len}|_]} = re:run(Html, "<title>(.*?)</title>", [dotall, caseless]),
                           z_string:trim(z_string:line(z_html:unescape(lists:sublist(Html, Start+1, Len))));
-                      {_Html, Sub} ->
-                          Sub
+                      {_Html, Sub} -> Sub
                   end,
     Headers = [{<<"From">>, From},
-               {<<"To">>, ensure_brackets(Email#email.to)},
+               {<<"To">>, ensure_brackets(Email#email.to, Context)},
                {<<"Subject">>, drop_non_printable(iolist_to_binary(Subject))},
                {<<"Date">>, date(Context)},
                {<<"MIME-Version">>, <<"1.0">>},
@@ -1352,7 +1385,7 @@ encode_email(Id, #email{body=undefined} = Email, MessageId, From, Context) ->
     end;
 encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_tuple(Body) ->
     Headers = [{<<"From">>, From},
-               {<<"To">>, ensure_brackets(Email#email.to)},
+               {<<"To">>, ensure_brackets(Email#email.to, Context)},
                {<<"Message-Id">>, MessageId}
                 | Email#email.headers ],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
@@ -1377,7 +1410,7 @@ encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_tu
     end;
 encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_list(Body); is_binary(Body) ->
     Headers = [{<<"From">>, From},
-               {<<"To">>, ensure_brackets(Email#email.to)},
+               {<<"To">>, ensure_brackets(Email#email.to, Context)},
                {<<"Message-Id">>, MessageId}
                 | Email#email.headers ],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
@@ -1397,16 +1430,23 @@ encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_li
             {error, R}
     end.
 
-ensure_brackets(Email) when is_binary(Email) ->
+ensure_brackets(UserId, Context) when is_integer(UserId) ->
+    {Name, _} = z_template:render_to_iolist("_name.tpl", [ {id, UserId} ], Context),
+    Email = m_rsc:p(UserId, <<"email_raw">>, Context),
+    z_email:combine_name_email(iolist_to_binary(Name), z_convert:to_binary(Email));
+ensure_brackets(Email, _Context) when is_binary(Email) ->
     case binary:match(Email, <<"<">>) of
         {_,_} ->
             Email;
         nomatch ->
             [ Name | _ ] = binary:split(Email, <<"@">>),
-            <<Name/binary, " <", Email/binary, $>>>
+            z_email:combine_name_email(Name, Email)
     end;
-ensure_brackets(Email) ->
-    ensure_brackets(z_convert:to_binary(Email)).
+ensure_brackets([Email|_] = Es, Context) when not is_integer(Email) ->
+    Es1 = lists:map(fun(E) -> ensure_brackets(E, Context) end, Es),
+    iolist_to_binary(lists:join($,, Es1));
+ensure_brackets(Email, Context) ->
+    ensure_brackets(z_convert:to_binary(Email), Context).
 
 date(Context) ->
     iolist_to_binary(z_datetime:format("r", z_context:set_language(en, Context))).

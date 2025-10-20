@@ -414,7 +414,7 @@ get_q_language_1_sub(BaseLang, Lang, Context) ->
     end.
 
 observe_user_context(#user_context{ id = UserId }, Context, _Context) ->
-    case m_rsc:p_no_acl(UserId, pref_language, Context) of
+    case m_rsc:p_no_acl(UserId, <<"pref_language">>, Context) of
         Code when Code /= undefined ->
             set_language(Code, Context);
         _ ->
@@ -422,7 +422,7 @@ observe_user_context(#user_context{ id = UserId }, Context, _Context) ->
     end.
 
 observe_set_user_language(#set_user_language{ id = UserId }, Context, _Context) when is_integer(UserId) ->
-    case m_rsc:p_no_acl(UserId, pref_language, Context) of
+    case m_rsc:p_no_acl(UserId, <<"pref_language">>, Context) of
         Code when Code /= undefined -> set_language(Code, Context);
         _ -> Context
     end;
