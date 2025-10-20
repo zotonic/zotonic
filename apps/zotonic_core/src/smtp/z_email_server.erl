@@ -1513,7 +1513,7 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
             end;
         false ->
             TextBin = if
-                Html =:= undefined -> <<>>;
+                Text =:= undefined -> <<>>;
                 true -> unicode:characters_to_binary(Text)
             end,
             [{<<"text">>, <<"plain">>, [], Params, expand_cr(TextBin)}]
