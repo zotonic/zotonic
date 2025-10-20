@@ -304,11 +304,24 @@ expression_to_sql({'u+', Expression}, State, Term) ->
 expression_to_sql({'u-', Expression}, State, Term0) ->
     {Expression1, Term1} = expression_to_sql(Expression, State, Term0),
     {[<<"-(">>, Expression1, <<")">>], Term1};
-expression_to_sql({call, Function, _Arguments}, _State, _Term) ->
-    throw({error, {unsupported_function, Function}});
+expression_to_sql({call, Function, Arguments}, State, Term0) ->
+    {Arguments1, Term1} = expression_list_to_sql(Arguments, State, Term0),
+    case z_sparql_sql_function:to_sql(Function, Arguments1) of
+        {ok, SqlExpression} ->
+            {SqlExpression, Term1};
+        {error, Reason} ->
+            throw({error, Reason})
+    end;
 expression_to_sql(Value, _State, Term0) ->
     {Arg, Term1} = add_arg(rdf_value(Value), Term0),
     {Arg, Term1}.
+
+expression_list_to_sql([], _State, Term) ->
+    {[], Term};
+expression_list_to_sql([Expression | Rest], State, Term0) ->
+    {Expression1, Term1} = expression_to_sql(Expression, State, Term0),
+    {Rest1, Term2} = expression_list_to_sql(Rest, State, Term1),
+    {[Expression1 | Rest1], Term2}.
 
 projection_term(#{ select := Select, distinct := Distinct, root := Root }, State) ->
     Variables0 = case Select of

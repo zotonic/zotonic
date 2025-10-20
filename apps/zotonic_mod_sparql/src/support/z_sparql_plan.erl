@@ -406,6 +406,9 @@ map_expression({Operator, Expression}, State0)
     when Operator =:= 'not'; Operator =:= 'u+'; Operator =:= 'u-' ->
     {Expression1, State1} = map_expression(Expression, State0),
     {{Operator, Expression1}, State1};
+map_expression({call, Function, Arguments}, State0) when is_atom(Function) ->
+    {Arguments1, State1} = map_expressions(Arguments, State0),
+    {{call, Function, Arguments1}, State1};
 map_expression({call, Function, Arguments}, State0) ->
     {Function1, State1} = map_term(Function, State0),
     {Arguments1, State2} = map_expressions(Arguments, State1),
