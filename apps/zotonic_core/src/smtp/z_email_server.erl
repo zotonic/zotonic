@@ -1353,11 +1353,12 @@ encode_email(Id, #email{body=undefined} = Email, MessageId, From, Context) ->
 
     %% Fetch the subject from the title of the HTML part or from the Email record
     Subject = case {Html, Email#email.subject} of
-                      {[], undefined} -> <<>>;
                       {<<>>, undefined} -> <<>>;
                       {_Html, undefined} ->
-                          {match, [_, {Start,Len}|_]} = re:run(Html, "<title>(.*?)</title>", [dotall, caseless]),
-                          z_string:trim(z_string:line(z_html:unescape(lists:sublist(Html, Start+1, Len))));
+                            case re:run(Html, "<title>(.*?)</title>", [dotall, caseless, {capture, all_but_first, binary}]) of
+                                {match, [Title]} -> z_string:trim(z_string:line(z_html:unescape(Title)));
+                                nomatch -> <<>>
+                            end;
                       {_Html, Sub} -> Sub
                   end,
     Headers = [{<<"From">>, From},
@@ -1369,8 +1370,10 @@ encode_email(Id, #email{body=undefined} = Email, MessageId, From, Context) ->
                 | Email#email.headers ],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
     try
-        Encoded = build_and_encode_mail(Headers2, Text, Html, Email#email.attachments, Context),
-        {ok, Encoded}
+        case build_and_encode_mail(Headers2, Text, Html, Email#email.attachments, Context) of
+            {ok, _} = Ok -> Ok;
+            {error, _} = Error -> Error
+        end
     catch
         E:R:S ->
             ?LOG_ERROR(#{
@@ -1490,7 +1493,11 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
         disposition => <<"inline">>,
         disposition_params => []
     },
-    HtmlBin = z_convert:to_binary(Html),
+    HtmlBin = if
+        Html =:= undefined -> <<>>;
+        true -> unicode:characters_to_binary(Html)
+    end,
+    % Ensure text part
     Parts = case z_utils:is_empty(Text) of
         true ->
             case z_utils:is_empty(Html) of
@@ -1505,29 +1512,40 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
                      expand_cr(z_convert:to_binary(z_markdown:to_markdown(ContentHtml, [no_html, no_tables])))}]
             end;
         false ->
-            [{<<"text">>, <<"plain">>, [], Params,
-             expand_cr(z_convert:to_binary(Text))}]
+            TextBin = if
+                Html =:= undefined -> <<>>;
+                true -> unicode:characters_to_binary(Text)
+            end,
+            [{<<"text">>, <<"plain">>, [], Params, expand_cr(TextBin)}]
     end,
+    % Optionally add html part
     Parts1 = case z_utils:is_empty(HtmlBin) of
         true ->
             Parts;
         false ->
             z_email_embed:embed_images(Parts ++ [{<<"text">>, <<"html">>, [], Params, HtmlBin}], Context)
     end,
-    case Attachment of
-        [] ->
-            case Parts1 of
+    % Encode, with or without attachments
+    if
+        Attachment =:= [] ->
+            Encoded = case Parts1 of
                 [{T,ST,[],Ps,SubParts}] -> mimemail:encode({T,ST,Headers1,Ps,SubParts}, opt_dkim(Context));
                 _MultiPart -> mimemail:encode({<<"multipart">>, <<"alternative">>, Headers1, #{}, Parts1}, opt_dkim(Context))
-            end;
-        _ ->
+            end,
+            {ok, Encoded};
+        true ->
             AttsEncoded = [ encode_attachment(Att, Context) || Att <- Attachment ],
-            AttsEncodedOk = lists:filter(fun({error, _}) -> false; (_) -> true end, AttsEncoded),
-            mimemail:encode({<<"multipart">>, <<"mixed">>,
-                             Headers1,
-                             #{},
-                             [ {<<"multipart">>, <<"alternative">>, [], #{}, Parts1} | AttsEncodedOk ]
-                            }, opt_dkim(Context))
+            case lists:any(fun({error, _}) -> true; (_) -> false end, AttsEncoded) of
+                true ->
+                    {error, attachment_encoding_failed};
+                false ->
+                    Encoded = mimemail:encode({<<"multipart">>, <<"mixed">>,
+                                     Headers1,
+                                     #{},
+                                     [ {<<"multipart">>, <<"alternative">>, [], #{}, Parts1} | AttsEncoded ]
+                                    }, opt_dkim(Context)),
+                    {ok, Encoded}
+            end
     end.
 
 encode_attachment(AttId, Context) when is_integer(AttId) ->
@@ -1543,15 +1561,70 @@ encode_attachment(AttId, Context) when is_integer(AttId) ->
                                 filename = filename:basename(Filename)
                             },
                             encode_attachment(Upload, Context);
-                        {error, _} = Error ->
+                        {error, Reason} = Error ->
+                            ?LOG_ERROR(#{
+                                in => zotonic_core,
+                                text => <<"Email: error fetching attachment file">>,
+                                result => error,
+                                reason => Reason,
+                                attachment_id => AttId,
+                                filename => Filename,
+                                user_id => z_acl:user(Context)
+                            }),
+                            Error
+                    end;
+                #{ <<"preview_filename">> := Filename } when is_binary(Filename), Filename =/= <<>> ->
+                    case z_file_request:lookup_file(Filename, Context) of
+                        {ok, FInfo} ->
+                            Mime = z_media_identify:guess_mime(Filename),
+                            Upload = #upload{
+                                data = z_file_request:content_data(FInfo, identity),
+                                mime = Mime,
+                                filename = filename:basename(Filename)
+                            },
+                            encode_attachment(Upload, Context);
+                        {error, Reason} = Error ->
+                            ?LOG_ERROR(#{
+                                in => zotonic_core,
+                                text => <<"Email: error fetching attachment file">>,
+                                result => error,
+                                reason => Reason,
+                                attachment_id => AttId,
+                                filename => Filename,
+                                user_id => z_acl:user(Context)
+                            }),
                             Error
                     end;
                 #{} ->
+                    ?LOG_ERROR(#{
+                        in => zotonic_core,
+                        text => <<"Email: attachment has no file to send">>,
+                        result => error,
+                        reason => enoent,
+                        attachment_id => AttId,
+                        user_id => z_acl:user(Context)
+                    }),
                     {error, enoent};
                 undefined ->
+                    ?LOG_ERROR(#{
+                        in => zotonic_core,
+                        text => <<"Email: attachment has no medium record">>,
+                        result => error,
+                        reason => no_medium,
+                        attachment_id => AttId,
+                        user_id => z_acl:user(Context)
+                    }),
                     {error, no_medium}
             end;
         false ->
+            ?LOG_ERROR(#{
+                in => zotonic_core,
+                text => <<"Email: no access to attachment">>,
+                result => error,
+                reason => eacces,
+                attachment_id => AttId,
+                user_id => z_acl:user(Context)
+            }),
             {error, eacces}
     end;
 encode_attachment(#upload{mime=undefined, data=undefined, tmpfile=TmpFile, filename=Filename} = Att, Context) ->
@@ -1565,6 +1638,15 @@ encode_attachment(#upload{mime=undefined, data=undefined, tmpfile=TmpFile, filen
                     encode_attachment(Att#upload{mime= <<"application/octet-stream">>}, Context)
             end;
         false ->
+            ?LOG_ERROR(#{
+                in => zotonic_core,
+                text => <<"Email: attachment tempfile is not a valid tempfile">>,
+                result => error,
+                reason => upload_not_tempfile,
+                tmpfile => TmpFile,
+                filename => Filename,
+                user_id => z_acl:user(Context)
+            }),
             {error, upload_not_tempfile}
     end;
 encode_attachment(#upload{mime=undefined, filename=Filename} = Att, Context) ->
@@ -1606,7 +1688,8 @@ expand_cr(<<>>, Acc) -> Acc;
 expand_cr(<<13, 10, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, 13, 10>>);
 expand_cr(<<10, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, 13, 10>>);
 expand_cr(<<13, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, 13, 10>>);
-expand_cr(<<C, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, C>>).
+expand_cr(<<C/utf8, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, C/utf8>>);
+expand_cr(<<_, R/binary>>, Acc) -> expand_cr(R, Acc).
 
 
 
@@ -1654,12 +1737,12 @@ split_override_exceptions(S) ->
     binary:split(S, [ <<" ">>, <<"\t">>, <<"\n">>, <<";">>, <<",">> ], [ global, trim_all ]).
 
 optional_render(undefined, undefined, _Vars, _Context) ->
-    [];
+    <<>>;
 optional_render(Text, undefined, _Vars, _Context) ->
-    Text;
+    unicode:characters_to_binary(Text);
 optional_render(undefined, Template, Vars, Context) ->
     {Output, _RenderState} = z_template:render_to_iolist(Template, Vars, Context),
-    binary_to_list(iolist_to_binary(Output)).
+    iolist_to_binary(Output).
 
 set_recipient_prefs(Vars, Context) ->
     case proplists:get_value(recipient_id, Vars) of
