@@ -1482,7 +1482,14 @@ add_reply_to(_Id, #email{ reply_to = ReplyTo }, Headers, Context) ->
     ReplyTo1 = combine_name_email(Name, Email, Context),
     [{<<"Reply-To">>, ReplyTo1} | Headers].
 
-
+-spec build_and_encode_mail(Headers, Text, Html, Attachments, Context) -> {ok, Encoded} | {error, Reason} when
+    Headers :: list(),
+    Text :: binary(),
+    Html :: binary(),
+    Attachments :: [ m_rsc:resource_id() | #upload{} ],
+    Context :: z:context(),
+    Encoded :: binary(),
+    Reason :: attachment_encoding_failed.
 build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
     Headers1 = [
         {z_convert:to_binary(H), z_convert:to_binary(V)} || {H,V} <- Headers
@@ -1493,37 +1500,26 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
         disposition => <<"inline">>,
         disposition_params => []
     },
-    HtmlBin = if
-        Html =:= undefined -> <<>>;
-        true -> unicode:characters_to_binary(Html)
-    end,
     % Ensure text part
-    Parts = case z_utils:is_empty(Text) of
-        true ->
-            case z_utils:is_empty(Html) of
-                true ->
-                    [];
-                false ->
-                    ContentHtml = case binary:split(HtmlBin, <<"<!--content-->">>) of
-                        [ _, MDH ] -> MDH;
-                        _ -> HtmlBin
-                    end,
-                    [{<<"text">>, <<"plain">>, [], Params,
-                     expand_cr(z_convert:to_binary(z_markdown:to_markdown(ContentHtml, [no_html, no_tables])))}]
-            end;
-        false ->
-            TextBin = if
-                Text =:= undefined -> <<>>;
-                true -> unicode:characters_to_binary(Text)
+    Parts = if
+        Text =/= <<>> ->
+            [{<<"text">>, <<"plain">>, [], Params, expand_cr(Text)}];
+        Html =/= <<>> ->
+            ContentHtml = case binary:split(Html, <<"<!--content-->">>) of
+                [ _, MDH ] -> MDH;
+                _ -> Html
             end,
-            [{<<"text">>, <<"plain">>, [], Params, expand_cr(TextBin)}]
+            [{<<"text">>, <<"plain">>, [], Params,
+             expand_cr(z_convert:to_binary(z_markdown:to_markdown(ContentHtml, [no_html, no_tables])))}];
+        true ->
+            []
     end,
     % Optionally add html part
-    Parts1 = case z_utils:is_empty(HtmlBin) of
+    Parts1 = if
+        Html =/= <<>> ->
+            z_email_embed:embed_images(Parts ++ [{<<"text">>, <<"html">>, [], Params, Html}], Context);
         true ->
-            Parts;
-        false ->
-            z_email_embed:embed_images(Parts ++ [{<<"text">>, <<"html">>, [], Params, HtmlBin}], Context)
+            Parts
     end,
     % Encode, with or without attachments
     if
@@ -1739,7 +1735,11 @@ split_override_exceptions(S) ->
 optional_render(undefined, undefined, _Vars, _Context) ->
     <<>>;
 optional_render(Text, undefined, _Vars, _Context) ->
-    unicode:characters_to_binary(Text);
+    case unicode:characters_to_binary(Text) of
+        Bin when is_binary(Bin) -> Bin;
+        {incomplete, Encoded, _Rest} -> Encoded;
+        {error, Encoded, _Rest} -> Encoded
+    end;
 optional_render(undefined, Template, Vars, Context) ->
     {Output, _RenderState} = z_template:render_to_iolist(Template, Vars, Context),
     iolist_to_binary(Output).
