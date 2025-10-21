@@ -205,8 +205,8 @@ is_sender_enabled(Id, RecipientEmail, Context) when is_integer(Id) ->
 recipient_is_user_or_admin(Id, RecipientEmail, Context) ->
     m_config:get_value(zotonic, admin_email, Context) =:= RecipientEmail
     orelse z_config:get(admin_email) =:= RecipientEmail
-    orelse m_rsc:p_no_acl(1, email_raw, Context) =:= RecipientEmail
-    orelse m_rsc:p_no_acl(Id, email_raw, Context) =:= RecipientEmail
+    orelse m_rsc:p_no_acl(1, <<"email_raw">>, Context) =:= RecipientEmail
+    orelse m_rsc:p_no_acl(Id, <<"email_raw">>, Context) =:= RecipientEmail
     orelse lists:any(fun(Idn) ->
                         proplists:get_value(key, Idn) =:= RecipientEmail
                      end,
@@ -290,15 +290,15 @@ handle_cast({send, Id, #email{} = Email, Context}, State) ->
     State1 = update_config(State),
     State2 = case z_utils:is_empty(Email#email.to) of
         true -> State1;
-        false -> send_email(Id, Email#email.to, Email, Context, State1)
+        false -> send_emails(Id, Email#email.to, Email, Context, State1)
     end,
     State3 = case z_utils:is_empty(Email#email.cc) of
         true -> State2;
-        false -> send_email(<<Id/binary, "+cc">>, Email#email.cc, Email, Context, State2)
+        false -> send_emails(<<Id/binary, "+cc">>, Email#email.cc, Email, Context, State2)
     end,
     State4 = case z_utils:is_empty(Email#email.bcc) of
         true -> State3;
-        false -> send_email(<<Id/binary, "+bcc">>, Email#email.bcc, Email, Context, State3)
+        false -> send_emails(<<Id/binary, "+bcc">>, Email#email.bcc, Email, Context, State3)
     end,
     {noreply, State4};
 
@@ -363,11 +363,12 @@ handle_cast({bounced, Peer, BounceEmail}, State) ->
             end;
         {aborted, Reason} ->
             ?LOG_WARNING(#{
-                text => <<"Could not handle bounced messages">>,
                 in => zotonic_core,
+                text => <<"[smtp] Could not handle bounced messages">>,
+                result => error,
+                reason => Reason,
                 src => Peer,
-                bounce_email => BounceEmail,
-                reason => Reason
+                bounce_email => BounceEmail
             }),
             ok
     end,
@@ -455,8 +456,10 @@ code_change(_OldVsn, State, _Extra) ->
 
 handle_delivery_report(permanent_failure, MsgId, Recipient, OptMessage, Context) ->
     ?LOG_WARNING(#{
-        text => <<"Permanent failure sending email">>,
         in => zotonic_core,
+        text => <<"[smtp] Permanent failure sending email">>,
+        result => error,
+        reason => permanent_failure,
         recipient => Recipient,
         message_id => MsgId,
         message => OptMessage
@@ -485,8 +488,10 @@ handle_delivery_report(permanent_failure, MsgId, Recipient, OptMessage, Context)
     delete_emailq(MsgId);
 handle_delivery_report(temporary_failure, MsgId, Recipient, OptMessage, Context) ->
     ?LOG_WARNING(#{
-        text => <<"Temporary failure sending email">>,
         in => zotonic_core,
+        text => <<"[smtp] Temporary failure sending email">>,
+        result => error,
+        reason => temporary_failure,
         recipient => Recipient,
         message_id => MsgId,
         message => OptMessage
@@ -514,8 +519,9 @@ handle_delivery_report(temporary_failure, MsgId, Recipient, OptMessage, Context)
 handle_delivery_report(Status, MsgId, Recipient, OptMessage, Context)
     when Status =:= sent; Status =:= relayed ->
     ?LOG_NOTICE(#{
-        text => <<"Success sending email">>,
         in => zotonic_core,
+        text => <<"[smtp] Success sending email">>,
+        result => ok,
         recipient => Recipient,
         message_id => MsgId,
         state => Status
@@ -540,8 +546,9 @@ handle_delivery_report(Status, MsgId, Recipient, OptMessage, Context)
           }, Context);
 handle_delivery_report(received, MsgId, Recipient, OptMessage, Context) ->
     ?LOG_NOTICE(#{
-        text => <<"Success sending email">>,
         in => zotonic_core,
+        text => <<"[smtp] Success sending email">>,
+        result => ok,
         recipient => Recipient,
         message_id => MsgId,
         status => received
@@ -707,7 +714,41 @@ remove_worker(Pid, State) ->
 %% SENDING related functions
 %% =========================
 
-% Send an email
+%% @doc Send an email to a single or a list of recipients. The list must be a list
+%% of email addresses (and not rescource ids), otherwise the list is assumed to be a string.
+send_emails(_Id, [], _Email, _Context, State) ->
+    State;
+send_emails(_Id, undefined, _Email, _Context, State) ->
+    State;
+send_emails(_Id, <<>>, _Email, _Context, State) ->
+    State;
+send_emails(Id, Recipient, Email, Context, State) when is_binary(Recipient) ->
+    send_email(Id, Recipient, Email, Context, State);
+send_emails(Id, Recipient, Email, Context, State) when is_integer(Recipient) ->
+    % The sender must have access to the email address of the recipient.
+    send_emails(Id, m_rsc:p(Recipient, <<"email_raw">>, Context), Email, Context, State);
+send_emails(Id, [ Recipient | _ ] = Recipients, Email, Context, State) when not is_integer(Recipient) ->
+    {_, State1} = lists:foldl(
+        fun
+            (undefined, Acc) -> Acc;
+            (<<>>, Acc) -> Acc;
+            ("", Acc) -> Acc;
+            (Rcpt, {N, StateAcc}) ->
+                % Ensure the message-id is unique per recipient
+                Id1 = case N of
+                    1 -> Id;
+                    _ -> <<Id/binary, "-", (integer_to_binary(N))/binary>>
+                end,
+                StateAcc1 = send_emails(Id1, Rcpt, Email, Context, StateAcc),
+                {N+1, StateAcc1}
+        end,
+        {1, State},
+        Recipients),
+    State1;
+send_emails(Id, Recipient, Email, Context, State) ->
+    send_email(Id, Recipient, Email, Context, State).
+
+%% @doc Send an email to a single recipient
 send_email(Id, Recipient, Email, Context, State) ->
     QEmail = #email_queue{id=Id,
                           recipient=Recipient,
@@ -741,8 +782,10 @@ spawn_send_check_email(Id, Recipient, Email, RetryCt, Context, State) ->
                             spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State);
                         false ->
                             ?LOG_NOTICE(#{
-                                text => <<"Dropping email to invalid address">>,
                                 in => zotonic_core,
+                                text => <<"[smtp] Dropping email to invalid address">>,
+                                result => error,
+                                reason => illegal_address,
                                 recipient => Recipient
                             }),
                             %% delete email from the queue and notify the system
@@ -751,8 +794,10 @@ spawn_send_check_email(Id, Recipient, Email, RetryCt, Context, State) ->
                     end;
                 false ->
                     ?LOG_NOTICE(#{
-                        text => <<"Dropping email from disabled sender">>,
                         in => zotonic_core,
+                        text => <<"[smtp] Dropping email from disabled sender">>,
+                        result => error,
+                        reason => sender_disabled,
                         recipient => Recipient,
                         sender => z_acl:user(Context)
                     }),
@@ -761,8 +806,10 @@ spawn_send_check_email(Id, Recipient, Email, RetryCt, Context, State) ->
             end;
         {error, Template} ->
             ?LOG_WARNING(#{
-                text => <<"Delayed sending email because template is not available">>,
                 in => zotonic_core,
+                text => <<"[smtp] Delayed sending email because template is not available">>,
+                result => error,
+                reason => template_missing,
                 template => Template
             }),
             State
@@ -881,8 +928,8 @@ spawn_send_checked(Id, Recipient, Email, RetryCt, Context, State) ->
                     ]};
         false ->
             ?LOG_NOTICE(#{
-                text => <<"[smtp] Dropping email to address blocked by Zotonic module (#is_recipient_ok)">>,
                 in => zotonic_core,
+                text => <<"[smtp] Dropping email to address blocked by Zotonic module (#is_recipient_ok)">>,
                 result => error,
                 reason => blocked,
                 email => RecipientEmail
@@ -1000,7 +1047,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
     case gen_server:call(?MODULE, {is_sending_allowed, self(), Relay}) of
         {error, wait} ->
             ?LOG_INFO(#{
-                text => <<"Delaying email send: too many parallel senders for relay">>,
+                text => <<"[smtp] Delaying email send: too many parallel senders for relay">>,
                 in => zotonic_core,
                 recipient => RecipientEmail,
                 message_id => Id,
@@ -1039,7 +1086,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
             case SendResult of
                 {error, Reason, {FailureType, Host, Message}} ->
                     ?LOG_ERROR(#{
-                        text => <<"Error sending email">>,
+                        text => <<"[smtp] Error sending email">>,
                         in => zotonic_core,
                         recipient => RecipientEmail,
                         relay => Relay,
@@ -1095,7 +1142,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                     end;
                 {error, Reason} ->
                     ?LOG_ERROR(#{
-                        text => <<"Error sending email">>,
+                        text => <<"[smtp] Error sending email">>,
                         in => zotonic_core,
                         recipient => RecipientEmail,
                         result => error,
@@ -1122,7 +1169,7 @@ spawned_email_sender_loop(Id, MessageId, Recipient, RecipientEmail, VERP, From,
                 {ok, Receipt} when is_binary(Receipt) ->
                     Receipt1 = z_string:trim(Receipt),
                     ?LOG_NOTICE(#{
-                        text => <<"Sent email">>,
+                        text => <<"[smtp] Sent email">>,
                         in => zotonic_core,
                         result => ok,
                         recipient => RecipientEmail,
@@ -1190,7 +1237,7 @@ send_blocking(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context) ->
 send_blocking_smtp(MsgId, VERP, RecipientEmail, EncodedMail, SmtpOpts, Context) ->
     {relay, Relay} = proplists:lookup(relay, SmtpOpts),
     ?LOG_INFO(#{
-        text => <<"Sending email">>,
+        text => <<"[smtp] Sending email">>,
         in => zotonic_core,
         recipient => RecipientEmail,
         message_id => MsgId,
@@ -1234,7 +1281,7 @@ send_blocking_no_tls(VERP, RecipientEmail, EncodedMail, SmtpOpts, Context) ->
         | proplists:delete(port, SmtpOpts1)
     ],
     ?LOG_NOTICE(#{
-        text => <<"SMTP closed or timeout error, retrying without TLS">>,
+        text => <<"[smtp] SMTP closed or timeout error, retrying without TLS">>,
         in => zotonic_core,
         recipient => RecipientEmail,
         relay => proplists:get_value(relay, SmtpOpts2),
@@ -1319,16 +1366,16 @@ encode_email(Id, #email{body=undefined} = Email, MessageId, From, Context) ->
 
     %% Fetch the subject from the title of the HTML part or from the Email record
     Subject = case {Html, Email#email.subject} of
-                      {[], undefined} ->
-                          <<>>;
+                      {<<>>, undefined} -> <<>>;
                       {_Html, undefined} ->
-                          {match, [_, {Start,Len}|_]} = re:run(Html, "<title>(.*?)</title>", [dotall, caseless]),
-                          z_string:trim(z_string:line(z_html:unescape(lists:sublist(Html, Start+1, Len))));
-                      {_Html, Sub} ->
-                          Sub
+                            case re:run(Html, "<title>(.*?)</title>", [dotall, caseless, {capture, all_but_first, binary}]) of
+                                {match, [Title]} -> z_string:trim(z_string:line(z_html:unescape(Title)));
+                                nomatch -> <<>>
+                            end;
+                      {_Html, Sub} -> Sub
                   end,
     Headers = [{<<"From">>, From},
-               {<<"To">>, ensure_brackets(Email#email.to)},
+               {<<"To">>, ensure_brackets(Email#email.to, Context)},
                {<<"Subject">>, drop_non_printable(iolist_to_binary(Subject))},
                {<<"Date">>, date(Context)},
                {<<"MIME-Version">>, <<"1.0">>},
@@ -1336,13 +1383,15 @@ encode_email(Id, #email{body=undefined} = Email, MessageId, From, Context) ->
                 | Email#email.headers ],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
     try
-        Encoded = build_and_encode_mail(Headers2, Text, Html, Email#email.attachments, Context),
-        {ok, Encoded}
+        case build_and_encode_mail(Headers2, Text, Html, Email#email.attachments, Context) of
+            {ok, _} = Ok -> Ok;
+            {error, _} = Error -> Error
+        end
     catch
         E:R:S ->
             ?LOG_ERROR(#{
                 in => zotonic_core,
-                text => <<"Error encoding email">>,
+                text => <<"[smtp] Error encoding email">>,
                 result => E,
                 reason => R,
                 stack => S,
@@ -1352,7 +1401,7 @@ encode_email(Id, #email{body=undefined} = Email, MessageId, From, Context) ->
     end;
 encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_tuple(Body) ->
     Headers = [{<<"From">>, From},
-               {<<"To">>, ensure_brackets(Email#email.to)},
+               {<<"To">>, ensure_brackets(Email#email.to, Context)},
                {<<"Message-Id">>, MessageId}
                 | Email#email.headers ],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
@@ -1367,7 +1416,7 @@ encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_tu
         E:R:S ->
             ?LOG_ERROR(#{
                 in => zotonic_core,
-                text => <<"Error encoding email">>,
+                text => <<"[smtp] Error encoding email">>,
                 result => E,
                 reason => R,
                 stack => S,
@@ -1377,7 +1426,7 @@ encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_tu
     end;
 encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_list(Body); is_binary(Body) ->
     Headers = [{<<"From">>, From},
-               {<<"To">>, ensure_brackets(Email#email.to)},
+               {<<"To">>, ensure_brackets(Email#email.to, Context)},
                {<<"Message-Id">>, MessageId}
                 | Email#email.headers ],
     Headers2 = add_reply_to(Id, Email, add_cc(Email, Headers), Context),
@@ -1388,7 +1437,7 @@ encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_li
         E:R:S ->
             ?LOG_ERROR(#{
                 in => zotonic_core,
-                text => <<"Error encoding email">>,
+                text => <<"[smtp] Error encoding email">>,
                 result => E,
                 reason => R,
                 stack => S,
@@ -1397,16 +1446,23 @@ encode_email(Id, #email{body=Body} = Email, MessageId, From, Context) when is_li
             {error, R}
     end.
 
-ensure_brackets(Email) when is_binary(Email) ->
+ensure_brackets(UserId, Context) when is_integer(UserId) ->
+    {Name, _} = z_template:render_to_iolist("_name.tpl", [ {id, UserId} ], Context),
+    Email = m_rsc:p(UserId, <<"email_raw">>, Context),
+    z_email:combine_name_email(iolist_to_binary(Name), z_convert:to_binary(Email));
+ensure_brackets(Email, _Context) when is_binary(Email) ->
     case binary:match(Email, <<"<">>) of
         {_,_} ->
             Email;
         nomatch ->
             [ Name | _ ] = binary:split(Email, <<"@">>),
-            <<Name/binary, " <", Email/binary, $>>>
+            z_email:combine_name_email(Name, Email)
     end;
-ensure_brackets(Email) ->
-    ensure_brackets(z_convert:to_binary(Email)).
+ensure_brackets([Email|_] = Es, Context) when not is_integer(Email) ->
+    Es1 = lists:map(fun(E) -> ensure_brackets(E, Context) end, Es),
+    iolist_to_binary(lists:join($,, Es1));
+ensure_brackets(Email, Context) ->
+    ensure_brackets(z_convert:to_binary(Email), Context).
 
 date(Context) ->
     iolist_to_binary(z_datetime:format("r", z_context:set_language(en, Context))).
@@ -1439,7 +1495,14 @@ add_reply_to(_Id, #email{ reply_to = ReplyTo }, Headers, Context) ->
     ReplyTo1 = combine_name_email(Name, Email, Context),
     [{<<"Reply-To">>, ReplyTo1} | Headers].
 
-
+-spec build_and_encode_mail(Headers, Text, Html, Attachments, Context) -> {ok, Encoded} | {error, Reason} when
+    Headers :: list(),
+    Text :: binary(),
+    Html :: binary(),
+    Attachments :: [ m_rsc:resource_id() | #upload{} ],
+    Context :: z:context(),
+    Encoded :: binary(),
+    Reason :: attachment_encoding_failed.
 build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
     Headers1 = [
         {z_convert:to_binary(H), z_convert:to_binary(V)} || {H,V} <- Headers
@@ -1450,44 +1513,48 @@ build_and_encode_mail(Headers, Text, Html, Attachment, Context) ->
         disposition => <<"inline">>,
         disposition_params => []
     },
-    HtmlBin = z_convert:to_binary(Html),
-    Parts = case z_utils:is_empty(Text) of
-        true ->
-            case z_utils:is_empty(Html) of
-                true ->
-                    [];
-                false ->
-                    ContentHtml = case binary:split(HtmlBin, <<"<!--content-->">>) of
-                        [ _, MDH ] -> MDH;
-                        _ -> HtmlBin
-                    end,
-                    [{<<"text">>, <<"plain">>, [], Params,
-                     expand_cr(z_convert:to_binary(z_markdown:to_markdown(ContentHtml, [no_html, no_tables])))}]
-            end;
-        false ->
+    % Ensure text part
+    Parts = if
+        Text =/= <<>> ->
+            [{<<"text">>, <<"plain">>, [], Params, expand_cr(Text)}];
+        Html =/= <<>> ->
+            ContentHtml = case binary:split(Html, <<"<!--content-->">>) of
+                [ _, MDH ] -> MDH;
+                _ -> Html
+            end,
             [{<<"text">>, <<"plain">>, [], Params,
-             expand_cr(z_convert:to_binary(Text))}]
-    end,
-    Parts1 = case z_utils:is_empty(HtmlBin) of
+             expand_cr(z_convert:to_binary(z_markdown:to_markdown(ContentHtml, [no_html, no_tables])))}];
         true ->
-            Parts;
-        false ->
-            z_email_embed:embed_images(Parts ++ [{<<"text">>, <<"html">>, [], Params, HtmlBin}], Context)
+            []
     end,
-    case Attachment of
-        [] ->
-            case Parts1 of
+    % Optionally add html part
+    Parts1 = if
+        Html =/= <<>> ->
+            z_email_embed:embed_images(Parts ++ [{<<"text">>, <<"html">>, [], Params, Html}], Context);
+        true ->
+            Parts
+    end,
+    % Encode, with or without attachments
+    if
+        Attachment =:= [] ->
+            Encoded = case Parts1 of
                 [{T,ST,[],Ps,SubParts}] -> mimemail:encode({T,ST,Headers1,Ps,SubParts}, opt_dkim(Context));
                 _MultiPart -> mimemail:encode({<<"multipart">>, <<"alternative">>, Headers1, #{}, Parts1}, opt_dkim(Context))
-            end;
-        _ ->
+            end,
+            {ok, Encoded};
+        true ->
             AttsEncoded = [ encode_attachment(Att, Context) || Att <- Attachment ],
-            AttsEncodedOk = lists:filter(fun({error, _}) -> false; (_) -> true end, AttsEncoded),
-            mimemail:encode({<<"multipart">>, <<"mixed">>,
-                             Headers1,
-                             #{},
-                             [ {<<"multipart">>, <<"alternative">>, [], #{}, Parts1} | AttsEncodedOk ]
-                            }, opt_dkim(Context))
+            case lists:any(fun({error, _}) -> true; (_) -> false end, AttsEncoded) of
+                true ->
+                    {error, attachment_encoding_failed};
+                false ->
+                    Encoded = mimemail:encode({<<"multipart">>, <<"mixed">>,
+                                     Headers1,
+                                     #{},
+                                     [ {<<"multipart">>, <<"alternative">>, [], #{}, Parts1} | AttsEncoded ]
+                                    }, opt_dkim(Context)),
+                    {ok, Encoded}
+            end
     end.
 
 encode_attachment(AttId, Context) when is_integer(AttId) ->
@@ -1503,15 +1570,70 @@ encode_attachment(AttId, Context) when is_integer(AttId) ->
                                 filename = filename:basename(Filename)
                             },
                             encode_attachment(Upload, Context);
-                        {error, _} = Error ->
+                        {error, Reason} = Error ->
+                            ?LOG_ERROR(#{
+                                in => zotonic_core,
+                                text => <<"[smtp] Error fetching attachment file">>,
+                                result => error,
+                                reason => Reason,
+                                attachment_id => AttId,
+                                filename => Filename,
+                                user_id => z_acl:user(Context)
+                            }),
+                            Error
+                    end;
+                #{ <<"preview_filename">> := Filename } when is_binary(Filename), Filename =/= <<>> ->
+                    case z_file_request:lookup_file(Filename, Context) of
+                        {ok, FInfo} ->
+                            Mime = z_media_identify:guess_mime(Filename),
+                            Upload = #upload{
+                                data = z_file_request:content_data(FInfo, identity),
+                                mime = Mime,
+                                filename = filename:basename(Filename)
+                            },
+                            encode_attachment(Upload, Context);
+                        {error, Reason} = Error ->
+                            ?LOG_ERROR(#{
+                                in => zotonic_core,
+                                text => <<"[smtp] Error fetching attachment file">>,
+                                result => error,
+                                reason => Reason,
+                                attachment_id => AttId,
+                                filename => Filename,
+                                user_id => z_acl:user(Context)
+                            }),
                             Error
                     end;
                 #{} ->
+                    ?LOG_ERROR(#{
+                        in => zotonic_core,
+                        text => <<"[smtp] Attachment has no file to send">>,
+                        result => error,
+                        reason => enoent,
+                        attachment_id => AttId,
+                        user_id => z_acl:user(Context)
+                    }),
                     {error, enoent};
                 undefined ->
+                    ?LOG_ERROR(#{
+                        in => zotonic_core,
+                        text => <<"[smtp] Attachment has no medium record">>,
+                        result => error,
+                        reason => no_medium,
+                        attachment_id => AttId,
+                        user_id => z_acl:user(Context)
+                    }),
                     {error, no_medium}
             end;
         false ->
+            ?LOG_ERROR(#{
+                in => zotonic_core,
+                text => <<"[smtp] No access to attachment">>,
+                result => error,
+                reason => eacces,
+                attachment_id => AttId,
+                user_id => z_acl:user(Context)
+            }),
             {error, eacces}
     end;
 encode_attachment(#upload{mime=undefined, data=undefined, tmpfile=TmpFile, filename=Filename} = Att, Context) ->
@@ -1525,6 +1647,15 @@ encode_attachment(#upload{mime=undefined, data=undefined, tmpfile=TmpFile, filen
                     encode_attachment(Att#upload{mime= <<"application/octet-stream">>}, Context)
             end;
         false ->
+            ?LOG_ERROR(#{
+                in => zotonic_core,
+                text => <<"[smtp] Attachment tempfile is not a valid tempfile">>,
+                result => error,
+                reason => upload_not_tempfile,
+                tmpfile => TmpFile,
+                filename => Filename,
+                user_id => z_acl:user(Context)
+            }),
             {error, upload_not_tempfile}
     end;
 encode_attachment(#upload{mime=undefined, filename=Filename} = Att, Context) ->
@@ -1566,7 +1697,17 @@ expand_cr(<<>>, Acc) -> Acc;
 expand_cr(<<13, 10, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, 13, 10>>);
 expand_cr(<<10, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, 13, 10>>);
 expand_cr(<<13, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, 13, 10>>);
-expand_cr(<<C, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, C>>).
+expand_cr(<<C/utf8, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, C/utf8>>);
+expand_cr(<<Invalid, R/binary>>, Acc) ->
+    ?LOG_WARNING(#{
+        in => zotonic_core,
+        text => <<"[smtp] Dropping invalid UTF-8 byte in expand_cr">>,
+        result => error,
+        reason => invalid_utf8,
+        invalid_byte => Invalid,
+        accumulator => Acc
+    }),
+    expand_cr(R, Acc).
 
 
 
@@ -1614,12 +1755,34 @@ split_override_exceptions(S) ->
     binary:split(S, [ <<" ">>, <<"\t">>, <<"\n">>, <<";">>, <<",">> ], [ global, trim_all ]).
 
 optional_render(undefined, undefined, _Vars, _Context) ->
-    [];
+    <<>>;
 optional_render(Text, undefined, _Vars, _Context) ->
-    Text;
+    case unicode:characters_to_binary(Text) of
+        Bin when is_binary(Bin) -> Bin;
+        {incomplete, Encoded, _Rest} ->
+            ?LOG_WARNING(#{
+                in => zotonic_core,
+                text => <<"[smtp] failed to fully encode text to binary (incomplete)">>,
+                result => error,
+                reason => invalid_utf8,
+                original_text => Text,
+                partial_encoded => Encoded
+            }),
+            <<>>;
+        {error, Encoded, _Rest} ->
+            ?LOG_WARNING(#{
+                in => zotonic_core,
+                text => <<"[smtp] failed to encode text to binary (error)">>,
+                result => error,
+                reason => invalid_utf8,
+                original_text => Text,
+                partial_encoded => Encoded
+            }),
+            <<>>
+    end;
 optional_render(undefined, Template, Vars, Context) ->
     {Output, _RenderState} = z_template:render_to_iolist(Template, Vars, Context),
-    binary_to_list(iolist_to_binary(Output)).
+    iolist_to_binary(Output).
 
 set_recipient_prefs(Vars, Context) ->
     case proplists:get_value(recipient_id, Vars) of
@@ -1643,10 +1806,11 @@ mark_sent(Id) ->
             Result;
         {aborted, Reason} ->
             ?LOG_NOTICE(#{
-                text => <<"Could not mark message as sent">>,
                 in => zotonic_core,
-                message_id => id,
-                reason => Reason
+                text => <<"[smtp] Could not mark message as sent">>,
+                result => error,
+                reason => Reason,
+                message_id => id
             }),
             {error, Reason}
     end.
@@ -1666,18 +1830,19 @@ delete_emailq(Id) ->
             ok;
         {atomic, NotOk} ->
             ?LOG_NOTICE(#{
-                text => <<"Could not delete message">>,
                 in => zotonic_core,
+                text => <<"[smtp] Could not delete message">>,
                 message_id => Id,
                 reason => NotOk
             }),
             {error, NotOk};
         {aborted, Reason} ->
             ?LOG_NOTICE(#{
-                text => <<"Could not delete message">>,
                 in => zotonic_core,
-                message_id => Id,
-                reason => Reason
+                text => <<"[smtp] Could not delete message">>,
+                result => error,
+                reason => Reason,
+                message_id => Id
             }),
             {error, Reason}
     end.
@@ -1706,11 +1871,12 @@ update_emailq_delay(Id, DelayMinutes) ->
             Result;
         {aborted, Reason} ->
             ?LOG_NOTICE(#{
-                text => <<"Could not set delay for message">>,
                 in => zotonic_core,
+                text => <<"[smtp] Could not set delay for message">>,
+                result => error,
                 message_id => id,
-                delay => DelayMinutes,
-                reason => Reason
+                reason => Reason,
+                delay => DelayMinutes
             }),
             {error, Reason}
     end.
@@ -1766,8 +1932,9 @@ delete_sent_messages(StatusSites, State) ->
                 NotifyList);
         {aborted, Reason} ->
             ?LOG_NOTICE(#{
-                text => <<"Could not delete sent messages">>,
                 in => zotonic_core,
+                text => <<"[smtp] Could not delete sent messages">>,
+                result => error,
                 reason => Reason
             }),
             ok
@@ -1822,8 +1989,9 @@ delete_failed_messages(StatusSites) ->
                 NotifyList);
         {aborted, Reason} ->
             ?LOG_NOTICE(#{
-                text => <<"Could not delete failed messages">>,
                 in => zotonic_core,
+                text => <<"[smtp] Could not delete failed messages">>,
+                result => error,
                 reason => Reason
             }),
             ok
@@ -1883,8 +2051,9 @@ send_next_batch(MaxListSize, StatusSites, State) ->
             {true, State3};
         {aborted, Reason} ->
             ?LOG_NOTICE(#{
-                text => <<"Could not fetch next messages to be sent">>,
                 in => zotonic_core,
+                text => <<"[smtp] Could not fetch next messages to be sent">>,
+                result => error,
                 reason => Reason
             }),
             {false, State}

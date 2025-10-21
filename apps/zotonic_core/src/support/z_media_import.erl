@@ -1,9 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014-2024 Marc Worrell
-%% @doc Import media from internet locations.
+%% @copyright 2014-2025 Marc Worrell
+%% @doc Import media from internet locations. The URL is inspected and the
+%% best possible import method is used to make resource, with optionally
+%% a medium record attached.
 %% @end
 
-%% Copyright 2014-2024 Marc Worrell
+%% Copyright 2014-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,19 +36,17 @@
 -define(EMPTY(A), ((A =:= undefined) orelse (A =:= "") orelse (A =:= <<>>))).
 
 %% @doc Create a resource with a selected #media_import_props{}, URL or embed code.
--spec insert( MediaImport, Context ) -> {ok, m_rsc:resource_id()} | {error, term()}
-    when MediaImport :: #media_import_props{} | Url,
-         Url :: string() | binary(),
+-spec insert( UrlOrMediaImport, Context ) -> {ok, m_rsc:resource_id()} | {error, term()}
+    when UrlOrMediaImport :: #media_import_props{} | m_media:media_url(),
          Context :: z:context().
-insert(MI, Context) ->
-    insert(MI, #{}, Context).
+insert(UrlOrMediaImport, Context) ->
+    insert(UrlOrMediaImport, #{}, Context).
 
 %% @doc Create a resource with a selected #media_import_props{}, URL or embed code.
-%% Add the forced properties to the resource.
--spec insert( MediaImport, RscProps, Context ) ->
+%% The given resource properties are merged over the extracted properties.
+-spec insert( UrlOrMediaImport, RscProps, Context ) ->
         {ok, m_rsc:resource_id()} | {error, term()}
-    when MediaImport :: #media_import_props{} | Url,
-         Url :: string() | binary(),
+    when UrlOrMediaImport :: m_media:media_url() | #media_import_props{},
          RscProps :: #{ binary() => term() },
          Context :: z:context().
 insert(#media_import_props{medium_props = MI} = MIPs, RscProps, Context) ->

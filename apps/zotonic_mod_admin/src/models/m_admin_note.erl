@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2022 Marc Worrell
+%% @copyright 2022-2025 Marc Worrell
 %% @doc Note about a resource, edited in the admin, not part of the resource.
 %% @enddoc
 
-%% Copyright 2022 Marc Worrell
+%% Copyright 2022-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -36,25 +36,22 @@ are allowed to see and edit notes.
 ]).
 
 m_get([ <<"rsc">>, Id | Rest ], _Msg, Context) ->
-    case m_rsc:rid(Id, Context) of
-        undefined ->
-            {error, enoent};
-        RId ->
-            case get_rsc(RId, Context) of
-                {ok, Note} ->
-                    {ok, {Note, Rest}};
-                {error, _} = Error ->
-                    Error
-            end
+    case get_rsc(Id, Context) of
+        {ok, Note} ->
+            {ok, {Note, Rest}};
+        {error, _} = Error ->
+            Error
     end.
 
 
-%% @doc Fetch the admin note belonging the resource.
+%% @doc Fetch the admin note belonging the resource. Returns a binary
+%% map with rsc_id, note, modified and modifier_id keys.
 -spec get_rsc(Id, Context) -> Result when
     Id :: m_rsc:resource() | undefined,
     Context :: z:context(),
-    Result :: {ok, map()} | {error, term()}.
-get_rsc(Id, Context) when is_integer(Id) ->
+    Result :: {ok, map()} | {error, Reason},
+    Reason :: enoent | eacces | term().
+get_rsc(Id, Context) ->
     case m_rsc:rid(Id, Context) of
         undefined ->
             {error, enoent};

@@ -91,7 +91,6 @@ discover_per_provider(Url, UrlExtra, [], Context) ->
             oembed_request(EmbedlyUrl1)
     end.
 
-
 oembed_request(RequestUrl) ->
     FetchOptions = [
         {timeout, ?HTTP_GET_TIMEOUT},
@@ -104,6 +103,17 @@ oembed_request(RequestUrl) ->
             catch
                 _:_ -> {error, nojson}
             end;
+        {error, {Code, FinalUrl, _Hs, _Sz, Body}} when is_integer(Code) ->
+            ?LOG_WARNING(#{
+                text => <<"OEmbed HTTP Request returned error">>,
+                in => zotonic_mod_oembed,
+                result => error,
+                reason => Code,
+                final_url => z_convert:to_binary(FinalUrl),
+                url => RequestUrl,
+                body => Body
+            }),
+            {error, Code};
         {error, Reason} = Error ->
             ?LOG_WARNING(#{
                 text => <<"OEmbed HTTP Request returned error">>,

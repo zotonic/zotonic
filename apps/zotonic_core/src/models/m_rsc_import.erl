@@ -86,6 +86,13 @@
 ]).
 
 
+% List of predicates (and properties) that are filtered per default.
+-define(DEFAULT_DENY_PREDICATE, [ <<"hasusergroup">>, <<"creator_id">>, <<"modifier_id">> ]).
+
+% List of categories that are filtered per default.
+-define(DEFAULT_DENY_CATEGORY, [ <<"meta">> ]).
+
+
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ <<"fetch_raw">> | Rest ], #{ payload := Uri }, Context) ->
     case z_auth:is_auth(Context) of
@@ -982,6 +989,7 @@ ensure_language_prop(Rsc) ->
 
 
 cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context) ->
+    DenyPredicate = proplists:get_value(deny_predicate, Options, []),
     PropsForced = proplists:get_value(props_forced, Options, #{}),
     PropsDefault = proplists:get_value(props_default, Options, #{}),
 
@@ -1001,9 +1009,11 @@ cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context) ->
     {Rsc1, ImportedAcc1} = maps:fold(
         fun
             (K, V, {Acc, ImpAcc}) ->
-                case maps:is_key(K, PropsForced) of
+                case maps:is_key(K, PropsForced) orelse lists:member(K, DenyPredicate) of
                     true ->
                         % Forced props are assumed to use local ids, no mapping needed.
+                        % Predicates (props) that are denied are filtered out, examples could
+                        % be the modifier_id and creator_id, which is often unwanted in a copy.
                         {Acc, ImpAcc};
                     false ->
                         case K of
@@ -1449,7 +1459,7 @@ find_allowed_predicate(Name, Pred, Options, Context) ->
         {ok, PredId} ->
             PredName = m_rsc:p_no_acl(PredId, name, Context),
             Allow = proplists:get_value(allow_predicate, Options),
-            Deny = proplists:get_value(deny_predicate, Options, [ <<"hasusergroup">> ]),
+            Deny = proplists:get_value(deny_predicate, Options, ?DEFAULT_DENY_PREDICATE),
             case (Allow =:= undefined orelse lists:member(PredName, Allow))
                 andalso not lists:member(PredName, Deny)
             of
@@ -1509,7 +1519,7 @@ find_allowed_category(RId, Rsc, Options, Context) ->
     CatId = find_category(RId, Rsc, Context),
     CatName = m_rsc:p_no_acl(CatId, name, Context),
     Allow = proplists:get_value(allow_category, Options, undefined),
-    Deny = proplists:get_value(deny_category, Options, [ <<"meta">> ]),
+    Deny = proplists:get_value(deny_category, Options, ?DEFAULT_DENY_CATEGORY),
     case
         (Allow =:= undefined orelse matching_category(CatName, Allow, Context))
         andalso not matching_category(CatName, Deny, Context)

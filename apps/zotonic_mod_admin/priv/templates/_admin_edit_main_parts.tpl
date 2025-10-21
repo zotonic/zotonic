@@ -3,7 +3,7 @@
 
 {% catinclude "_admin_edit_basics.tpl" id show_header=false %}
 
-{% all catinclude "_admin_edit_content.tpl" id %}
+{% all catinclude "_admin_edit_content.tpl" id show_header %}
 
 {% if id.category_id.is_feature_show_address|if_undefined:true %}
     {% catinclude "_admin_edit_content_address.tpl" id %}

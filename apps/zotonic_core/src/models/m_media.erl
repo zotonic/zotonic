@@ -491,15 +491,33 @@ duplicate_file(Type, Filename, Context) ->
 
 %% @doc Make a new resource for the file, when the file is not in the archive
 %% dir then a copy is made in the archive dir
--spec insert_file(file:filename_all() | #upload{}, z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
+-spec insert_file(File, Context) -> {ok, RscId} | {error, term()} when
+    File :: file:filename_all() | #upload{},
+    Context :: z:context(),
+    RscId :: m_rsc:resource_id().
 insert_file(File, Context) ->
     insert_file(File, #{}, [], Context).
 
--spec insert_file(file:filename_all() | #upload{}, m_rsc:props_all(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
+%% @doc Make a new resource for the file, when the file is not in the archive
+%% dir then a copy is made in the archive dir. The given resource properties are
+%% merged over the properties extracted from the file.
+-spec insert_file(File, RscProps, Context) -> {ok, RscId} | {error, term()} when
+    File :: file:filename_all() | #upload{},
+    RscProps :: m_rsc:props_all(),
+    Context :: z:context(),
+    RscId :: m_rsc:resource_id().
 insert_file(File, RscProps, Context) ->
     insert_file(File, RscProps, [], Context).
 
--spec insert_file(file:filename_all() | #upload{}, m_rsc:props_all(), list(), z:context()) -> {ok, m_rsc:resource_id()} | {error, term()}.
+%% @doc Make a new resource for the file, when the file is not in the archive
+%% dir then a copy is made in the archive dir. The given resource properties are
+%% merged over the properties extracted from the file.
+-spec insert_file(File, RscProps, Options, Context) -> {ok, RscId} | {error, term()} when
+    File :: file:filename_all() | #upload{},
+    RscProps :: m_rsc:props_all(),
+    Options :: options(),
+    Context :: z:context(),
+    RscId :: m_rsc:resource_id().
 insert_file(File, RscProps, Options, Context) when is_list(RscProps) ->
     {ok, PropsMap} = z_props:from_list(RscProps),
     insert_file(File, PropsMap, Options, Context);
@@ -544,6 +562,7 @@ insert_file(File, RscProps, Options, Context) ->
     MediaProps1 = add_medium_info(File, OriginalFilename, MediaProps, Context),
     insert_file(File, RscProps, MediaProps1, Options, Context).
 
+%% @internal
 insert_file(File, RscProps, MediaProps, Options, Context) ->
     Mime = maps:get(<<"mime">>, MediaProps, undefined),
     MimeCat = mime_to_category(Mime, Options, Context),
@@ -607,18 +626,34 @@ is_update_medium_allowed(_RscId, #{ <<"mime">> := Mime }, _RscProps, Context) ->
     % Update check was already done, only check the Mime type
     z_acl:is_allowed(insert, #acl_media{mime=Mime, size=0}, Context).
 
-
-
-%% @doc Make a new resource for the file based on a URL.
--spec insert_url(media_url(), z:context()) -> {ok, pos_integer()} | {error, term()}.
+%% @doc Make a new resource for the file at a URL. The file is downloaded and then inserted as a
+%% new media item.
+-spec insert_url(Url, Context) -> {ok, RscId} | {error, term()} when
+    Url :: media_url(),
+    Context :: z:context(),
+    RscId :: m_rsc:resource_id().
 insert_url(Url, Context) ->
     insert_url(Url, #{}, [], Context).
 
--spec insert_url(media_url(), m_rsc:props_all(), z:context()) -> {ok, pos_integer()} | {error, term()}.
+%% @doc Make a new resource for the file at the URL. The given props are merged
+%% over the properties extracted from the file at the URL.
+-spec insert_url(Url, RscProps, Context) -> {ok, RscId} | {error, term()} when
+    Url :: media_url(),
+    RscProps :: m_rsc:props_all(),
+    Context :: z:context(),
+    RscId :: m_rsc:resource_id().
 insert_url(Url, RscProps, Context) ->
     insert_url(Url, RscProps, [], Context).
 
--spec insert_url(media_url(), m_rsc:props_all(), list(), z:context()) -> {ok, pos_integer()} | {error, term()}.
+%% @doc Make a new resource for the file at the URL. The given props are merged
+%% over the properties extracted from the file at the URL. The options are passed
+%% to the download function and the file insert function.
+-spec insert_url(Url, RscProps, Options, Context) -> {ok, RscId} | {error, term()} when
+    Url :: media_url(),
+    RscProps :: m_rsc:props_all(),
+    Options :: options(),
+    Context :: z:context(),
+    RscId :: m_rsc:resource_id().
 insert_url(Url, RscProps, Options, Context) when is_list(RscProps) ->
     {ok, PropsMap} = z_props:from_list(RscProps),
     insert_url(Url, PropsMap, Options, Context);

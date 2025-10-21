@@ -198,7 +198,7 @@ qterm(#{ <<"term">> := <<"content_group">>, <<"value">> := ContentGroups}, _IsNe
             case m_rsc:is_a(CGId, content_group, Context) of
                 true ->
                     List = m_hierarchy:contains(<<"content_group">>, CGId, Context),
-                    case m_rsc:p_no_acl(CGId, name, Context) of
+                    case m_rsc:p_no_acl(CGId, <<"name">>, Context) of
                         <<"default_content_group">> ->
                             { true, CGs ++ List };
                         _ ->
