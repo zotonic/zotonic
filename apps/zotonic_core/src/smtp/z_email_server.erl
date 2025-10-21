@@ -1744,8 +1744,20 @@ optional_render(undefined, undefined, _Vars, _Context) ->
 optional_render(Text, undefined, _Vars, _Context) ->
     case unicode:characters_to_binary(Text) of
         Bin when is_binary(Bin) -> Bin;
-        {incomplete, Encoded, _Rest} -> Encoded;
-        {error, Encoded, _Rest} -> Encoded
+        {incomplete, Encoded, _Rest} ->
+            ?LOG_WARNING(#{
+                text => <<"Failed to fully encode text to binary (incomplete)">>,
+                original_text => Text,
+                partial_encoded => Encoded
+            }),
+            <<>>;
+        {error, Encoded, _Rest} ->
+            ?LOG_WARNING(#{
+                text => <<"Failed to encode text to binary (error)">>,
+                original_text => Text,
+                partial_encoded => Encoded
+            }),
+            <<>>
     end;
 optional_render(undefined, Template, Vars, Context) ->
     {Output, _RenderState} = z_template:render_to_iolist(Template, Vars, Context),
