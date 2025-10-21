@@ -1685,7 +1685,14 @@ expand_cr(<<13, 10, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, 13, 10>>);
 expand_cr(<<10, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, 13, 10>>);
 expand_cr(<<13, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, 13, 10>>);
 expand_cr(<<C/utf8, R/binary>>, Acc) -> expand_cr(R, <<Acc/binary, C/utf8>>);
-expand_cr(<<_, R/binary>>, Acc) -> expand_cr(R, Acc).
+expand_cr(<<Invalid, R/binary>>, Acc) ->
+    ?LOG_WARNING(#{
+        in => zotonic_core,
+        text => <<"Email: Dropping invalid UTF-8 byte in expand_cr">>,
+        invalid_byte => Invalid,
+        accumulator => Acc
+    }),
+    expand_cr(R, Acc).
 
 
 
