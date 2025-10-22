@@ -29,7 +29,7 @@
     {% else %}
         <p class="text-muted">
             <small>
-                <span class="fa fa-info-circle"></span> {_ Add a note about this page. _}
+                <span class="glyphicon glyphicon-info-sign"></span> {_ Add a note about this page. _}
                 <span class="pull-right">
                     <button id="rsc-note-btn" class="btn btn-default btn-xs">
                         {_ Add note _}

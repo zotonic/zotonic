@@ -84,11 +84,11 @@ $.widget("ui.survey_test_feedback",
 
     show_feedback: function ($elt, obj, $icon_wrap, value, after) {
         let cls = 'survey-q-ok';
-        let icn = 'fa fa-check';
+        let icn = 'glyphicon glyphicon-ok';
 
         if ($elt.attr('data-is-correct') != value) {
             cls = 'survey-q-not-ok';
-            icn = 'fa fa-times';
+            icn = 'glyphicon glyphicon-remove';
             $(obj)
                 .removeClass('survey-test-correct')
                 .addClass('survey-test-wrong');

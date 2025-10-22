@@ -34,7 +34,7 @@
                     {{ id.title|default:id.short_title|default:("<em>" ++ _"untitled" ++ "</em>")}}
 
                 {% if id.is_protected %}
-                    &nbsp; <small class="fa fa-lock text-muted small" title="{_ Protected, not deletable _}"></small>
+                    &nbsp; <small class="glyphicon glyphicon-lock text-muted small" title="{_ Protected, not deletable _}"></small>
                 {% endif %}
 
                 </h2>

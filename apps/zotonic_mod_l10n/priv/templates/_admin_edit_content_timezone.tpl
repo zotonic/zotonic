@@ -19,7 +19,7 @@
 
 {% block widget_content %}
     <p class="help-block">
-        <i class="fa fa-info-circle"></i>
+        <i class="glyphicon glyphicon-info-sign"></i>
         {_ Changing the time zone will in effect change the publication period and date range. _}
         {_ All dates are stored in UTC. _}
     </p>

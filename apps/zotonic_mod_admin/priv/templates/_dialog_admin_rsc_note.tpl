@@ -10,7 +10,7 @@
         </div>
 
         <p class="help-block">
-            <span class="fa fa-info-circle"></span> {_ This note is only visible for people who can edit the page. _}
+            <span class="glyphicon glyphicon-info-sign"></span> {_ This note is only visible for people who can edit the page. _}
         </p>
 
         <div class="modal-footer">

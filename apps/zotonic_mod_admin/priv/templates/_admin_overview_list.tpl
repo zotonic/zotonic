@@ -42,7 +42,7 @@ qcat
                                 <td>
                                     <span {% include "_language_attrs.tpl" %}>{{ id.title|striptags|default:_"<em>Untitled</em>" }}</span>
                                     {% if id.is_protected %}
-                                        &nbsp; <span class="fa fa-lock text-muted" title="{_ Protected, not deletable _}"></span>
+                                        &nbsp; <span class="glyphicon glyphicon-lock text-muted" title="{_ Protected, not deletable _}"></span>
                                     {% endif %}
 
                                     {% if id == 1 or id.is_a.meta or id.content_group_id.name == 'system_content_group' %}
@@ -138,7 +138,7 @@ qcat
             <td>
                 <span {% include "_language_attrs.tpl" %}>{{ id.title|default:id.short_title|striptags|default:_"<em>Untitled</em>" }}</span>
                 {% if id.is_protected %}
-                    &nbsp; <span class="fa fa-lock text-muted" title="{_ Protected, not deletable _}"></span>
+                    &nbsp; <span class="glyphicon glyphicon-lock text-muted" title="{_ Protected, not deletable _}"></span>
                 {% endif %}
 
                 {% if id == 1 or id.is_a.meta or id.content_group_id.name == 'system_content_group' %}

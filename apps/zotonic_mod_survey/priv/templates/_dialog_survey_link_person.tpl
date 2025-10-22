@@ -22,7 +22,7 @@
                             <tr>
                                 <td>
                                     <a href="{% url admin_edit_rsc id=id %}" target=_"blank">
-                                        {% include "_name.tpl" %} <i class="fa fa-external-link"></i>
+                                        {% include "_name.tpl" %} <i class="glyphicon glyphicon-new-window"></i>
                                     </a><br>
                                     <span class="text-muted">
                                         {{ id.category_id.title }}
@@ -78,7 +78,7 @@
                 <tr>
                     <td>
                         <a href="{% url admin_edit_rsc id=id %}" target=_"blank">
-                            {% include "_name.tpl" %} <i class="fa fa-external-link"></i>
+                            {% include "_name.tpl" %} <i class="glyphicon glyphicon-new-window"></i>
                         </a><br>
                         <span class="text-muted">
                             {{ id.category_id.title }}
