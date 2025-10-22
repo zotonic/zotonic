@@ -5,66 +5,66 @@ These need to be mapped to PostgreSQL equivalents.
 
 
 BuiltInCall   ::= Aggregate
-                | 'STR' '(' Expression ')'
-                | 'LANG' '(' Expression ')'
-                | 'LANGMATCHES' '(' Expression ',' Expression ')'
-                | 'DATATYPE' '(' Expression ')'
-                | 'BOUND' '(' Var ')'
+                | 'STR' '(' Expression ')'                                      # Bit tricky, due to rDF types
+                | 'LANG' '(' Expression ')'                                     # Needs lang support
+                | 'LANGMATCHES' '(' Expression ',' Expression ')'               # Needs lang support
+                | 'DATATYPE' '(' Expression ')'                                 # Expects RDF data type...
+                | 'BOUND' '(' Var ')'                                           # done
                 | 'IRI' '(' Expression ')'
                 | 'URI' '(' Expression ')'
-                | 'BNODE' ( '(' Expression ')' | NIL )
-                | 'RAND' NIL
-                | 'ABS' '(' Expression ')'
-                | 'CEIL' '(' Expression ')'
-                | 'FLOOR' '(' Expression ')'
-                | 'ROUND' '(' Expression ')'
-                | 'CONCAT' ExpressionList
-                | SubstringExpression
-                | 'STRLEN' '(' Expression ')'
-                | StrReplaceExpression
-                | 'UCASE' '(' Expression ')'
-                | 'LCASE' '(' Expression ')'
+                | 'BNODE' ( '(' Expression ')' | NIL )                          # ? check semantics of this one
+                | 'RAND' NIL                                                    # done
+                | 'ABS' '(' Expression ')'                                      # done
+                | 'CEIL' '(' Expression ')'                                     # done
+                | 'FLOOR' '(' Expression ')'                                    # done
+                | 'ROUND' '(' Expression ')'                                    # done
+                | 'CONCAT' ExpressionList                                       # done
+                | SubstringExpression                                           # done
+                | 'STRLEN' '(' Expression ')'                                   # done
+                | StrReplaceExpression                                          # done
+                | 'UCASE' '(' Expression ')'                                    # done
+                | 'LCASE' '(' Expression ')'                                    # done
                 | 'ENCODE_FOR_URI' '(' Expression ')'
-                | 'CONTAINS' '(' Expression ',' Expression ')'
-                | 'STRSTARTS' '(' Expression ',' Expression ')'
-                | 'STRENDS' '(' Expression ',' Expression ')'
-                | 'STRBEFORE' '(' Expression ',' Expression ')'
-                | 'STRAFTER' '(' Expression ',' Expression ')'
-                | 'YEAR' '(' Expression ')'
-                | 'MONTH' '(' Expression ')'
-                | 'DAY' '(' Expression ')'
-                | 'HOURS' '(' Expression ')'
-                | 'MINUTES' '(' Expression ')'
-                | 'SECONDS' '(' Expression ')'
-                | 'TIMEZONE' '(' Expression ')'
+                | 'CONTAINS' '(' Expression ',' Expression ')'                  # done
+                | 'STRSTARTS' '(' Expression ',' Expression ')'                 # done
+                | 'STRENDS' '(' Expression ',' Expression ')'                   # done
+                | 'STRBEFORE' '(' Expression ',' Expression ')'                 # done
+                | 'STRAFTER' '(' Expression ',' Expression ')'                  # done
+                | 'YEAR' '(' Expression ')'                                     # done
+                | 'MONTH' '(' Expression ')'                                    # done
+                | 'DAY' '(' Expression ')'                                      # done
+                | 'HOURS' '(' Expression ')'                                    # done
+                | 'MINUTES' '(' Expression ')'                                  # done
+                | 'SECONDS' '(' Expression ')'                                  # done
+                | 'TIMEZONE' '(' Expression ')'                                 # check diff with psql tz support
                 | 'TZ' '(' Expression ')'
-                | 'NOW' NIL
-                | 'UUID' NIL
+                | 'NOW' NIL                                                     # done
+                | 'UUID' NIL                                                    # needs psql extensions
                 | 'STRUUID' NIL
-                | 'MD5' '(' Expression ')'
-                | 'SHA1' '(' Expression ')'
+                | 'MD5' '(' Expression ')'                                      # done
+                | 'SHA1' '(' Expression ')'                                     # needs psql extensions
                 | 'SHA256' '(' Expression ')'
                 | 'SHA384' '(' Expression ')'
                 | 'SHA512' '(' Expression ')'
-                | 'COALESCE' ExpressionList
-                | 'IF' '(' Expression ',' Expression ',' Expression ')'
-                | 'STRLANG' '(' Expression ',' Expression ')'
+                | 'COALESCE' ExpressionList                                     # done
+                | 'IF' '(' Expression ',' Expression ',' Expression ')'         # done
+                | 'STRLANG' '(' Expression ',' Expression ')'                   # trans rec problem
                 | 'STRDT' '(' Expression ',' Expression ')'
-                | 'sameTerm' '(' Expression ',' Expression ')'
-                | 'isIRI' '(' Expression ')'
+                | 'sameTerm' '(' Expression ',' Expression ')'                  # deep nesting? how to compare?
+                | 'isIRI' '(' Expression ')'                                    # we use rsc-ids, so no direct test
                 | 'isURI' '(' Expression ')'
                 | 'isBLANK' '(' Expression ')'
-                | 'isLITERAL' '(' Expression ')'
-                | 'isNUMERIC' '(' Expression ')'
-                | RegexExpression
+                | 'isLITERAL' '(' Expression ')'                                # maybe just a test for number/string/boolean type?
+                | 'isNUMERIC' '(' Expression ')'                                # maybe test for int/float types? ok for json?
+                | RegexExpression                                               # done
                 | ExistsFunc
                 | NotExistsFunc
 
-RegexExpression   ::=   'REGEX' '(' Expression ',' Expression ( ',' Expression )? ')'
+RegexExpression   ::=   'REGEX' '(' Expression ',' Expression ( ',' Expression )? ')'           # check this one
 
-SubstringExpression   ::=   'SUBSTR' '(' Expression ',' Expression ( ',' Expression )? ')'
+SubstringExpression   ::=   'SUBSTR' '(' Expression ',' Expression ( ',' Expression )? ')'      # done
 
-StrReplaceExpression      ::=   'REPLACE' '(' Expression ',' Expression ',' Expression ( ',' Expression )? ')'
+StrReplaceExpression      ::=   'REPLACE' '(' Expression ',' Expression ',' Expression ( ',' Expression )? ')'   # kind of done
 
 ExistsFunc    ::=   'EXISTS' GroupGraphPattern
 
