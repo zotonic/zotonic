@@ -138,11 +138,7 @@
                                             </td>
                                             <td>{% image medium mediaclass="admin-list-overview" class="thumb" %}</td>
                                             <td>
-                                                <strong>{{ id.title|default:id.short_title|default:_"<em>Untitled</em>" }}</strong>
-                                                {% if id.is_protected %}
-                                                    &nbsp; <small class="fa fa-lock text-muted" title="{_ Protected, not deletable _}"></small>
-                                                {% endif %}
-
+                                                {% include "_admin_overview_list_title.tpl" %}
                                                 <br />
                                                 {% if id.medium.filename|split:"/"|last as filename %}
                                                     <span class="text-muted">
