@@ -61,7 +61,7 @@ STRDT(E,E)
   https://www.w3.org/TR/sparql11-query/#func-strdt
 
 sameTerm(E,E)
-- term comparison with deep nesting? how to compare?
+- Equivalent of literals, check if we can use '='
   https://www.w3.org/TR/sparql11-query/#func-sameTerm
 
 isIRI(E)
