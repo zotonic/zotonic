@@ -43,6 +43,10 @@ Not yet documented.
 service_available(Context) ->
     Context1 = z_context:set_noindex_header(Context),
     Context2 = z_context:set_nocache_headers(Context1),
+    case z_config:get(environment) of
+        development -> ok;
+        _ -> erlang:process_flag(sensitive, true)
+    end,
     {true, Context2}.
 
 allowed_methods(Context) ->
