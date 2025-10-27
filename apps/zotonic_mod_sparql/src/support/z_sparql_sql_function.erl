@@ -6,7 +6,8 @@
 %% enough semantics are supported.
 %%
 %% Functions inspecting RDF term metadata, such as LANG, DATATYPE and isIRI,
-%% need typed bindings and are not yet added.
+%% need typed bindings and are not yet added. isLITERAL, isNUMERIC and sameTerm
+%% use the PostgreSQL scalar type as a useful approximation.
 %%
 %% SHA hashes and UUID functions are omitted as they depend on PostgreSQL
 %% extensions or version-specific functions.
@@ -71,8 +72,7 @@ to_sql(strstarts, [Value, Prefix]) ->
     sql_call(<<"starts_with">>, [Value, Prefix]);
 to_sql(strends, [Value, Suffix]) ->
     {ok, [
-        <<"starts_with(reverse(">>, Value,
-        <<"), reverse(">>, Suffix, <<"))">>
+        <<"starts_with(reverse(">>, Value, <<"), reverse(">>, Suffix, <<"))">>
     ]};
 to_sql(strbefore, [Value, Delimiter]) ->
     strbefore(Value, Delimiter);
@@ -104,6 +104,23 @@ to_sql('if', [Condition, Then, Else]) ->
         <<" THEN ">>, Then,
         <<" ELSE ">>, Else,
         <<" END)">>
+    ]};
+%% PostgreSQL scalars and JSONB scalars are normalized to JSONB so that one
+%% check handles both storage forms. Objects and arrays are structured Zotonic
+%% values and are not considered RDF literals by this approximation.
+to_sql(isliteral, [Value]) ->
+    {ok, [
+        <<"(jsonb_typeof(to_jsonb(">>, Value, <<")) IN ('string', 'number', 'boolean'))">>
+    ]};
+to_sql(isnumeric, [Value]) ->
+    {ok, [
+        <<"(jsonb_typeof(to_jsonb(">>, Value, <<")) = 'number')">>
+    ]};
+to_sql(sameterm, [Left, Right]) ->
+    {ok, [
+        <<"(jsonb_typeof(to_jsonb(">>, Left, <<")) IN ('string', 'number', 'boolean') ">>,
+        <<"AND jsonb_typeof(to_jsonb(">>, Left, <<")) = jsonb_typeof(to_jsonb(">>, Right, <<")) ">>,
+        <<"AND (to_jsonb(">>, Left, <<"))::text = (to_jsonb(">>, Right, <<"))::text)">>
     ]};
 to_sql(regex, [Value, Pattern]) ->
     regex(Value, Pattern, undefined);
@@ -157,8 +174,7 @@ regex(Value, Pattern, undefined) ->
     {ok, [<<"(">>, Value, <<" ~ ">>, Pattern, <<")">>]};
 regex(Value, Pattern, Flags) ->
     {ok, [
-        <<"(">>, Value, <<" ~ concat('(?', ">>, Flags, <<", ')', ">>, Pattern,
-        <<"))">>
+        <<"(">>, Value, <<" ~ concat('(?', ">>, Flags, <<", ')', ">>, Pattern, <<"))">>
     ]}.
 
 %% @doc SPARQL REPLACE uses XPath regular expressions and replaces all matches.
@@ -168,8 +184,7 @@ regex(Value, Pattern, Flags) ->
 replace(Value, Pattern, Replacement, Flags) ->
     Replacement1 = replacement_expression(Replacement),
     {ok, [
-        <<"regexp_replace(">>, Value, <<", ">>, Pattern, <<", ">>,
-        Replacement1, <<", ">>, Flags, $\)
+        <<"regexp_replace(">>, Value, <<", ">>, Pattern, <<", ">>, Replacement1, <<", ">>, Flags, $\)
     ]}.
 
 %% @doc XPath uses $0 for the complete match and $1..$9 for captured groups.
@@ -178,8 +193,7 @@ replace(Value, Pattern, Replacement, Flags) ->
 %% not supported, they would need a full XPath implementation and/or parser.
 replacement_expression(Replacement) ->
     [
-        <<"replace(replace(">>, Replacement,
-        <<", '$0', chr(92) || '&'), '$', chr(92))">>
+        <<"replace(replace(">>, Replacement, <<", '$0', chr(92) || '&'), '$', chr(92))">>
     ].
 
 is_supported(abs) -> true;
@@ -208,6 +222,9 @@ is_supported(md5) -> true;
 is_supported(coalesce) -> true;
 is_supported('if') -> true;
 is_supported(bound) -> true;
+is_supported(isliteral) -> true;
+is_supported(isnumeric) -> true;
+is_supported(sameterm) -> true;
 is_supported(regex) -> true;
 is_supported(replace) -> true;
 is_supported(_) -> false.

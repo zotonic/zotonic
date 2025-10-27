@@ -60,10 +60,6 @@ STRDT(E,E)
 - Literal with rdf type construction...
   https://www.w3.org/TR/sparql11-query/#func-strdt
 
-sameTerm(E,E)
-- Equivalent of literals, check if we can use '='
-  https://www.w3.org/TR/sparql11-query/#func-sameTerm
-
 isIRI(E)
 isURI(E)
 - we use rsc-ids, so no direct test
@@ -72,13 +68,6 @@ isURI(E)
 
 isBLANK(E)
 - might do on a static, but no rdf typing yet...
-
-isLITERAL(E)
-- maybe just a test for number/string/boolean type?
-  special care for lang types...
-
-isNUMERIC(E)
-- maybe test for int/float types? ok for json?
 
 
 ----------------------------------------------------------------------------------------------------
@@ -96,6 +85,14 @@ REGEX(E,E(,E)?)
 STRENDS(E,E)
 - starts_with + reverse -- might need better solution?
 
+isLITERAL(E)
+isNUMERIC(E)
+- done by conversion to jsonb and then testing, some short-circuits for known values
+  fails for things like 'creator_id', which looks like an integer but is (for sparql) an iri.
+
+sameTerm(E,E)
+- Equivalent of literals, we use '=' after a jsonb conversion and jsonb type checks.
+  https://www.w3.org/TR/sparql11-query/#func-sameTerm
 
 ----------------------------------------------------------------------------------------------------
 Done  (see z_sparql_sql_function.erl)

@@ -304,17 +304,58 @@ expression_to_sql({'u+', Expression}, State, Term) ->
 expression_to_sql({'u-', Expression}, State, Term0) ->
     {Expression1, Term1} = expression_to_sql(Expression, State, Term0),
     {[<<"-(">>, Expression1, <<")">>], Term1};
+expression_to_sql({call, Function, [Argument]}, State, Term0)
+    when Function =:= isliteral; Function =:= isnumeric ->
+    type_test_to_sql(Function, Argument, State, Term0);
 expression_to_sql({call, Function, Arguments}, State, Term0) ->
     {Arguments1, Term1} = expression_list_to_sql(Arguments, State, Term0),
-    case z_sparql_sql_function:to_sql(Function, Arguments1) of
-        {ok, SqlExpression} ->
-            {SqlExpression, Term1};
-        {error, Reason} ->
-            throw({error, Reason})
-    end;
+    function_to_sql(Function, Arguments1, Term1);
 expression_to_sql(Value, _State, Term0) ->
     {Arg, Term1} = add_arg(rdf_value(Value), Term0),
     {Arg, Term1}.
+
+%% @doc If we know we have a resource, the we know the type is
+%% not a literal and not a number (even when a rsc id is a number).
+%% Also short-circuit some constants, then they do not need to go
+%% through the jsonb conversions.
+type_test_to_sql(Function, {var, _} = Variable, State, Term) ->
+    case maps:find(Variable, State#sql_state.bindings) of
+        {ok, {resource, _Alias}} ->
+            {<<"false">>, Term};
+        {ok, {value, Expression}} ->
+            function_to_sql(Function, [Expression], Term);
+        error ->
+            throw({error, {unbound_variable, Variable}})
+    end;
+type_test_to_sql(_Function, {iri, _Iri}, _State, Term) ->
+    {<<"false">>, Term};
+type_test_to_sql(_Function, {bnode, _Name}, _State, Term) ->
+    {<<"false">>, Term};
+type_test_to_sql(isliteral, {literal, _Value, _Datatype, _Language}, _State, Term) ->
+    {<<"true">>, Term};
+type_test_to_sql(isnumeric, {literal, _Value, _Datatype, _Language}, _State, Term) ->
+    {<<"false">>, Term};
+type_test_to_sql(isliteral, {Type, _Value}, _State, Term)
+    when Type =:= integer; Type =:= decimal; Type =:= double ->
+    {<<"true">>, Term};
+type_test_to_sql(isnumeric, {Type, _Value}, _State, Term)
+    when Type =:= integer; Type =:= decimal; Type =:= double ->
+    {<<"true">>, Term};
+type_test_to_sql(isliteral, Value, _State, Term) when is_boolean(Value) ->
+    {<<"true">>, Term};
+type_test_to_sql(isnumeric, Value, _State, Term) when is_boolean(Value) ->
+    {<<"false">>, Term};
+type_test_to_sql(Function, Expression, State, Term0) ->
+    {Expression1, Term1} = expression_to_sql(Expression, State, Term0),
+    function_to_sql(Function, [Expression1], Term1).
+
+function_to_sql(Function, Arguments, Term) ->
+    case z_sparql_sql_function:to_sql(Function, Arguments) of
+        {ok, SqlExpression} ->
+            {SqlExpression, Term};
+        {error, Reason} ->
+            throw({error, Reason})
+    end.
 
 expression_list_to_sql([], _State, Term) ->
     {[], Term};

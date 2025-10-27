@@ -50,12 +50,12 @@ BuiltInCall   ::= Aggregate
                 | 'IF' '(' Expression ',' Expression ',' Expression ')'         # done
                 | 'STRLANG' '(' Expression ',' Expression ')'                   # trans rec problem
                 | 'STRDT' '(' Expression ',' Expression ')'
-                | 'sameTerm' '(' Expression ',' Expression ')'                  # deep nesting? how to compare?
+                | 'sameTerm' '(' Expression ',' Expression ')'                  # done - 80/20
                 | 'isIRI' '(' Expression ')'                                    # we use rsc-ids, so no direct test
                 | 'isURI' '(' Expression ')'
                 | 'isBLANK' '(' Expression ')'
-                | 'isLITERAL' '(' Expression ')'                                # maybe just a test for number/string/boolean type?
-                | 'isNUMERIC' '(' Expression ')'                                # maybe test for int/float types? ok for json?
+                | 'isLITERAL' '(' Expression ')'                                # done
+                | 'isNUMERIC' '(' Expression ')'                                # done
                 | RegexExpression                                               # done
                 | ExistsFunc
                 | NotExistsFunc

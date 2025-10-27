@@ -45,6 +45,12 @@ postgresql_mapping_test_() ->
         mapping(md5, [<<"value">>], <<"md5(value)">>),
         mapping(coalesce, [<<"a">>, <<"b">>], <<"coalesce(a, b)">>),
         mapping('if', [<<"condition">>, <<"a">>, <<"b">>], <<"(CASE WHEN condition THEN a ELSE b END)">>),
+        mapping(isliteral, [<<"value">>], <<"(jsonb_typeof(to_jsonb(value)) IN ('string', 'number', 'boolean'))">>),
+        mapping(isnumeric, [<<"value">>], <<"(jsonb_typeof(to_jsonb(value)) = 'number')">>),
+        mapping(sameterm, [<<"a">>, <<"b">>],
+            <<"(jsonb_typeof(to_jsonb(a)) IN ('string', 'number', 'boolean') "
+              "AND jsonb_typeof(to_jsonb(a)) = jsonb_typeof(to_jsonb(b)) "
+              "AND (to_jsonb(a))::text = (to_jsonb(b))::text)">>),
         mapping(regex, [<<"value">>, <<"pattern">>], <<"(value ~ pattern)">>),
         mapping(regex, [<<"value">>, <<"pattern">>, <<"flags">>], <<"(value ~ concat('(?', flags, ')', pattern))">>),
         % The replace function needs to adapt the regexp from XPATH to POSIX

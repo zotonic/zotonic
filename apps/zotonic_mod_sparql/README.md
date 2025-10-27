@@ -47,6 +47,7 @@ TODO
  - [x] Mapping of SPARQL functions to (very) similar SQL functions (see doc/sparql/builtins.txt)
  - [ ] Check extraction of JSON terms, do we need to use `#>>` ??
  - [ ] Check PostgreSQL functions for functions like: LANG, DATATYPE and isIRI/isBLANK/etc
+ - [ ] Add support for dates (from JSONB, literals, etc.) -- xsd:dateTime
  - [ ] Support for aggregate function (count/min/max/etc.)
  - [ ] Figure out language handling, with the JSON objects: { _type: "trans", tr = { "en":"..." } }
  - [ ] Figure out how parametrized queries can be implemented in SPARQL, especially considering types.
