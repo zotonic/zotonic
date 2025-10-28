@@ -23,7 +23,7 @@
  {sessions_user, ["logon", "sessions"], controller_template, [ {template, "sessions.tpl"}, seo_noindex, {acl, is_auth} ]},
 
  % Authentication API used by zotonic.auth.worker.js
- {logon_auth,       [ "zotonic-auth" ],     controller_authentication, []},
+ {logon_auth,       [ "zotonic-auth" ],     controller_authentication, [ sensitive ]},
 
  {admin_authentication_services, ["admin", "authentication-services"],  controller_admin, [{template, "admin_authentication_services.tpl"}]},
 
