@@ -19,8 +19,21 @@
 %% The 'category' mapping checks the object category and all its sub-categories.
 %% The 'subclass' mapping selects the sub-categories of the object category.
 %%
+%% The types are the union from search_facet and z_props.
+%%
 -record(sparql_mapping, {
     ns :: binary(),
     ns_prefix :: binary(),
-    predicate :: binary()
+    predicate :: binary(),
+    type :: text
+          | fulltext     % fulltext search using pg_trgm
+          | fts          % fulltext search using fts
+          | integer
+          | float
+          | boolean
+          | datetime
+          | uri
+          | id
+          | ids          % list of [id]
+          | list         % list of [text]
 }).

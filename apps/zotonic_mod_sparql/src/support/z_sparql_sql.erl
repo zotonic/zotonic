@@ -126,12 +126,12 @@ triple_to_sql(Subject, #{ mapping := Mapping }, Object, State0) ->
     {SubjectAlias, Term0, State1} = resource_alias(Subject, empty_term(), State0),
     mapped_triple_to_sql(Mapping, SubjectAlias, Object, Term0, State1).
 
-mapped_triple_to_sql({column, Table, Column}, SubjectAlias, Object, Term0, State0) ->
+mapped_triple_to_sql({column, Table, Column, Type}, SubjectAlias, Object, Term0, State0) ->
     {Alias, Term1, State1} = property_alias(Table, SubjectAlias, Term0, State0),
     Expression = column_expression(Alias, Column),
     {Term2, State2} = bind_object(Object, value, Expression, Table, Column, Term1, State1),
     {[Term2], State2};
-mapped_triple_to_sql({jsonb, Table, Column, Selector}, SubjectAlias, Object, Term0, State0) ->
+mapped_triple_to_sql({jsonb, Table, Column, Selector, Type}, SubjectAlias, Object, Term0, State0) ->
     {Alias, Term1, State1} = property_alias(Table, SubjectAlias, Term0, State0),
     Expression = jsonb_expression(Alias, Column, Selector),
     {Term2, State2} = bind_jsonb_object(Object, Expression, Term1, State1),

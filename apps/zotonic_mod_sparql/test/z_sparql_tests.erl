@@ -89,7 +89,7 @@ select_query_plan_test() ->
                             ns := <<"http://xmlns.com/foaf/0.1/">>,
                             ns_prefix := <<"foaf">>,
                             predicate := <<"name">>,
-                            mapping := {jsonb, <<"rsc">>, <<"props_json">>, [<<"title">>]}
+                            mapping := {jsonb, <<"rsc">>, <<"props_json">>, [<<"title">>], text}
                         },
                         {var, <<"name">>}}
             },

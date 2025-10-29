@@ -68,6 +68,7 @@
 
 
 -export([
+    lookup_facet/2,
     facet_values/1,
 
     search_query_facets/3,
@@ -91,6 +92,25 @@
 -define(FULLTEXT_LENGTH, 500).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
+
+
+%% @doc Lookup a facet definition, return a map with the facet definition.
+-spec lookup_facet(Facet, Context) -> {ok, map()} | {error, term()} when
+    Facet :: binary(),
+    Context :: z:context().
+lookup_facet(Facet, Context) ->
+    case facet_def(Facet, Context) of
+        {ok, #facet_def{ name = Name, type = Type, is_range = IsRange }} ->
+            {ok, #{
+                table => <<"search_facet">>,
+                column => <<"f_", Name/binary>>,
+                name => Name,
+                type => Type,
+                is_range => IsRange
+            }};
+        {error, _} = Error ->
+            Error
+    end.
 
 %% @doc Return all found values (or min/max for all facets).
 -spec facet_values(z:context()) -> {ok, map()} | {error, term()}.

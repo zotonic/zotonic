@@ -1,0 +1,87 @@
+Mapping types for operators/builtins
+====================================
+
+1. For select results do nothing, use #> for jsonb
+2. Operators:
+
+   Unitary:
+
+        <op> <$arg>     do nothing
+        <op> <column>   map to proper type if type info says non-proper type
+        <op> <jsonb>    map to proper type for <op> (or expression tree)
+        <op> <expr>     map tree to proper type, if it is not already of that type
+
+   Binary (either side can be a column, jsonb, or query argument):
+
+       <any> op <$arg>        -- do nothing postgresql $arg will be mapped  (use #> for jsonb)
+       <column> op <column>   -- do nothing (may need to cast to compatible type)
+       <column> op <jsonb>    -- convert jsonb to proper type
+
+
+Method:
+
+- Walk expression tree
+- Mark expression nodes with type, from bottom to top  (assuming #> for jsonb)
+- See also builtins below, mark builtin result with result type
+- Check types for operator, in generated sql map to compatible types, use type
+  signature of operator:
+
+    -   <number>, <number>   -> <number>
+    +   <number>, <number>   -> <number>
+    *   <number>, <number>   -> <number>
+    /   <number>, <number>   -> <number>
+    or  <boolean>, <boolean> -> <boolean>
+    and <boolean>, <boolean> -> <boolean>
+    =   <a>, <a>             -> <boolean>
+    !=  <a>, <a>             -> <boolean>
+    <   <a>, <a>             -> <boolean>
+    <=  <a>, <a>             -> <boolean>
+    >   <a>, <a>             -> <boolean>
+    >=  <a>, <a>             -> <boolean>
+
+    - <number>               -> <number>
+    + <number>               -> <number>
+    ! <boolean>              -> <boolean>
+
+Where <a> is any type, "<a>, <a>" means same type of both sides of the operator.
+<a> Is the "super type", <integer>/<float> are sub-types of <number> and compatible
+with each other.
+Any query argument is of any compatible type, we denote this with <$>, when this
+type appears, then it can be assumed to be compatible with the type of the other
+argument.
+
+Types could be:
+
+    <number>    -- either <integer> or <float>, but not yet determined
+    <integer>   -- subtype of <number>
+    <float>     -- subtype of <number>
+    <boolean>
+    <text>
+    <uri>       -- subtype of <text>
+    <datetime>  -- maps to postgresql timestamptz
+
+Special types:
+
+    <$>         -- argument, assume it will be in correct type needed
+    <id>        -- integer, but could be considered an <uri> (https://domain/id/<id>)
+
+    <ids>       -- list of <id>     postgresql "integer[]"
+    <list>      -- list of <text>   postgresql "text[]"
+
+Not considered for now:
+
+    <fts>
+    <fulltext>
+
+
+Note that if any side of a  "-+*/" operator is a float, then the result is a float.
+If we don't know if the type is an integer or a float, then denote it as a number.
+
+"datetime" is converted to postgresql timestamptz, when needed as datetime.
+
+3. Builtins/functions
+
+Builtins know their type-signature, convert the arguments to those types.
+This is similar to the operators, except with functions.
+Mark the resulting node with the expected output-type of the builtin.
+

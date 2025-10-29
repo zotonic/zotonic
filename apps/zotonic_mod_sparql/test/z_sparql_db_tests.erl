@@ -315,13 +315,13 @@ facet_and_pivot_column_mapping_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
     Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
     ?assertEqual(
-        {column, <<"search_facet">>, <<"f_category">>},
+        {column, <<"search_facet">>, <<"f_category">>, id},
         predicate_mapping(<<"facet.category">>, Context)),
     ?assertEqual(
-        {column, <<"rsc">>, <<"pivot_date_start">>},
+        {column, <<"rsc">>, <<"pivot_date_start">>, datetime},
         predicate_mapping(<<"pivot.dateStart">>, Context)),
     ?assertEqual(
-        {jsonb, <<"rsc">>, <<"props_json">>, [<<"pivot">>, <<"not_defined">>]},
+        {jsonb, <<"rsc">>, <<"props_json">>, [<<"pivot">>, <<"not_defined">>], text},
         predicate_mapping(<<"pivot.notDefined">>, Context)).
 
 predicate_mapping(Predicate, Context) ->

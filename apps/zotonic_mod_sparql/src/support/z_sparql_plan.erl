@@ -44,8 +44,8 @@
 -type predicate_mapping() ::
       category
     | subclass
-    | {column, binary(), binary()}
-    | {jsonb, binary(), binary(), term()}
+    | {column, binary(), binary(), atom()}
+    | {jsonb, binary(), binary(), term(), atom()}
     | {edge, term(), boolean()}
     | undefined.
 
@@ -324,15 +324,15 @@ predicate_mapping(Namespace, NamespacePrefix, LocalName, Context) ->
             category;
         {ok, subclass} ->
             subclass;
-        {ok, {column, Table, Column}} ->
+        {ok, {column, Table, Column, Type}} ->
             z_db:assert_table_name(Table),
             z_db:assert_column_name(Column),
-            {column, Table, Column};
-        {ok, {jsonb, Table, Column, Selector}} ->
+            {column, Table, Column, Type};
+        {ok, {jsonb, Table, Column, Selector, Type}} ->
             z_db:assert_table_name(Table),
             z_db:assert_column_name(Column),
             % TODO: sanitize selector???
-            {jsonb, Table, Column, Selector};
+            {jsonb, Table, Column, Selector, Type};
         {ok, {edge, Predicate, IsReversed}} when is_boolean(IsReversed) ->
             {edge, Predicate, IsReversed};
         {error, Reason} ->

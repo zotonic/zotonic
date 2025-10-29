@@ -150,3 +150,22 @@ Aggregate     ::=     'COUNT' '(' 'DISTINCT'? ( '*' | Expression ) ')'
                 | 'AVG' '(' 'DISTINCT'? Expression ')'
                 | 'SAMPLE' '(' 'DISTINCT'? Expression ')'
                 | 'GROUP_CONCAT' '(' 'DISTINCT'? Expression ( ';' 'SEPARATOR' '=' String )? ')'
+
+
+----------------------------------------------------------------------------------------------------
+Types
+----------------------------------------------------------------------------------------------------
+
+Try to coerce JSONB types to their type in postgresql:  text, integer, float, timestamptz, boolean
+
+- select ('{"a":"foo"}'::jsonb #> '{a}')::text
+- select ('{"a":true}'::jsonb #> '{a}')::boolean
+- select ('{"a":10}'::jsonb #> '{a}')::integer
+- select ('{"a":10}'::jsonb #> '{a}')::float
+- select (('{"a":"2004-10-20"}'::jsonb #> '{a}')::text)::timestamptz
+
+This could be done using type hints from the property name (or schema...) and the types
+of the known properties.  Fallback to text.
+
+See: builtins-type-mapping.txt
+

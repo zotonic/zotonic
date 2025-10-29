@@ -76,15 +76,24 @@ find_table_column(Predicate, Context) ->
         true -> undefined;
         false ->
             case z_db:column(<<"rsc">>, Predicate, Context) of
-                {ok, _Column} -> {ok, {column, <<"rsc">>, Predicate}};
+                {ok, #column_def{} = Def} -> {ok, {column, <<"rsc">>, Predicate, column_type(Def)}};
                 {error, enoent} -> find_table_column_1(Predicate, Context)
             end
     end.
 
 %% @doc Map a facet or pivot property to its database column. If the column
 %% is not defined then assume it as a path in the resource JSON properties.
-find_table_column_1(<<"facet.", Name/binary>> = Predicate, Context) ->
-    find_table_column_2(<<"search_facet">>, <<"f_", Name/binary>>, Predicate, Context);
+find_table_column_1(<<"facet.", Facet/binary>>, Context) ->
+    case search_facet:lookup_facet(Facet, Context) of
+        {ok, #{
+            table := Table,
+            column := Column,
+            type := Type
+        }} ->
+            {ok, {column, Table, Column, Type}};
+        {error, _} ->
+            undefined
+    end;
 find_table_column_1(<<"pivot.", Pivot/binary>> = Predicate, Context) ->
     case binary:split(Pivot, <<".">>, [global]) of
         [ Name ] ->
@@ -99,14 +108,55 @@ find_table_column_1(Predicate, _Context) ->
 
 find_table_column_2(Table, Column, Predicate, Context) ->
     case z_db:column(Table, Column, Context) of
-        {ok, _Column} -> {ok, {column, Table, Column}};
+        {ok, #column_def{} = Def} -> {ok, {column, Table, Column, column_type(Def)}};
         {error, enoent} -> json_property(Predicate)
+    end.
+
+column_type(#column_def{ name = Name, is_array = true }) ->
+    case maybe_id(Name) of
+        id -> ids;
+        _ -> list
+    end;
+column_type(#column_def{ type = Type, name = Name }) ->
+    case Type of
+        <<"text">> -> text;
+        <<"character varying">> -> text;
+        <<"integer">> -> maybe_id(Name);
+        <<"bigint">> -> integer;
+        <<"smallint">> -> integer;
+        <<"serial">> -> integer;
+        <<"bigserial">> -> integer;
+        <<"smallserial">> -> integer;
+        <<"numeric">> -> float;
+        <<"decimal">> -> float;
+        <<"float">> -> float;
+        <<"double">> -> float;
+        <<"boolean">> -> boolean;
+        <<"timestamp", _/binary>> -> datetime;
+        <<"datetime", _/binary>> -> datetime;
+        <<"date", _/binary>> -> datetime;
+        <<"tsvector">> -> fts;
+        <<"ARRAY">> -> list;
+        <<"array">> -> list;
+        _ -> text
     end.
 
 %% @doc Expand a dot-separated property name to a JSON path.
 json_property(Predicate) ->
     Path = binary:split(Predicate, <<".">>, [global]),
-    {ok, {jsonb, <<"rsc">>, <<"props_json">>, Path}}.
+    {ok, {jsonb, <<"rsc">>, <<"props_json">>, Path, type_from_name(lists:last(Path))}}.
+
+maybe_id(Name) ->
+    case z_props:property_name_type_hint(Name) of
+        id -> id;
+        _ -> integer
+    end.
+
+type_from_name(Name) ->
+    case z_props:property_name_type_hint(Name) of
+        undefined -> text;
+        Type -> Type
+    end.
 
 %% @doc Expand something like FooBar to the usual zotonic lowercased
 %% property name foo_bar.
