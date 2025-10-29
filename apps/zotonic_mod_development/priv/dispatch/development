@@ -11,5 +11,5 @@
 
  {admin_development_observers, ["admin", "development", "observers"], controller_admin, [{template, "admin_development_observers.tpl"}, {selected, "development"}]},
 
- {admin_development_tracing, ["admin", "development", "tracing"], controller_admin, [{template, "admin_development_tracing.tpl"}, {selected, "development"}]}
+ {admin_development_function_trace, ["admin", "development", "function-trace"], controller_admin, [{template, "admin_development_function_trace.tpl"}, {selected, "development"}]}
 ].

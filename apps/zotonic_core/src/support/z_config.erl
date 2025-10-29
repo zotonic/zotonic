@@ -25,6 +25,8 @@
     get/1,
     get/2,
 
+    set/2,
+
     init_app_env/0,
     maybe_map_env/1,
 
@@ -141,13 +143,19 @@ get(Key, Default) ->
 			maybe_map_value(Key, maybe_map_env(Value))
 	end.
 
+%% @doc Set a (runtime) config value.
+-spec set(atom(), any()) -> ok.
+set(Key, Value) ->
+    Value1 = maybe_map_value(Key, Value),
+    application:set_env(zotonic, Key, Value1).
+
 maybe_map_env({env, Name}) -> os:getenv(Name);
 maybe_map_env({env, Name, Default}) -> os:getenv(Name, Default);
 maybe_map_env({env_int, Name}) -> z_convert:to_integer(os:getenv(Name));
 maybe_map_env({env_int, Name, Default}) -> z_convert:to_integer(os:getenv(Name, Default));
 maybe_map_env(V) -> V.
 
-%% @doc Translate IP addresses to a tuple(), 'any', or 'none'
+%% @doc Translate some values to their expected format. Extend when needed.
 -spec maybe_map_value(atom(), term()) -> term().
 maybe_map_value(listen_ip, IP) -> map_ip_address(listen_ip, IP);
 maybe_map_value(listen_ip6, IP) -> map_ip_address(listen_ip6, IP);
@@ -155,6 +163,22 @@ maybe_map_value(mqtt_listen_ip, IP) -> map_ip_address(mqtt_listen_ip, IP);
 maybe_map_value(mqtt_listen_ip6, IP) -> map_ip_address(mqtt_listen_ip6, IP);
 maybe_map_value(smtp_listen_ip, IP) -> map_ip_address(smtp_listen_ip, IP);
 maybe_map_value(smtp_spamd_ip, IP) -> map_ip_address(smtp_spamd_ip, IP);
+maybe_map_value(environment, Env) -> z_convert:to_atom(Env);
+maybe_map_value(max_connections, N) -> z_convert:to_integer(N);
+maybe_map_value(ssl_max_connections, N) -> z_convert:to_integer(N);
+maybe_map_value(log_http_buffer_size, N) -> z_convert:to_integer(N);
+maybe_map_value(security_headers, V) -> z_convert:to_bool(V);
+maybe_map_value(smtp_verp_as_from, V) -> z_convert:to_bool(V);
+maybe_map_value(smtp_no_mx_lookups, V) -> z_convert:to_bool(V);
+maybe_map_value(smtp_relay, V) -> z_convert:to_bool(V);
+maybe_map_value(smtp_port, V) -> z_convert:to_integer(V);
+maybe_map_value(smtp_ssl, V) -> z_convert:to_bool(V);
+maybe_map_value(smtp_listen_port, V) -> z_convert:to_integer(V);
+maybe_map_value(smtp_listen_size, V) -> z_convert:to_integer(V);
+maybe_map_value(smtp_delete_sent_after, V) -> z_convert:to_integer(V);
+maybe_map_value(smtp_is_blackhole, V) -> z_convert:to_bool(V);
+maybe_map_value(timezone, V) -> z_convert:to_binary(V);
+maybe_map_value(function_tracing_enabled, V) -> z_convert:to_bool(V);
 maybe_map_value(_Key, Value) ->
     Value.
 
@@ -318,6 +342,12 @@ default(sidejobs_limit) -> erlang:max(erlang:system_info(process_limit) div 2, 5
 default(media_resizer_limit) -> 3;
 default(server_header) -> "Zotonic";
 default(html_error_path) -> filename:join(code:priv_dir(zotonic_core), "htmlerrors");
+default(function_tracing_enabled) ->
+    case ?MODULE:get(environment) of
+        development -> true;
+        test -> true;
+        _ -> false
+    end;
 default(_) -> undefined.
 
 -spec all() -> list( {atom(), term()}) .

@@ -248,14 +248,14 @@
 
     <div class="widget">
         <div class="widget-header">
-            {_ Tracing _}
+            {_ Function Call Tracing _}
         </div>
         <div class="widget-content">
             <p>{_ Live trace of function calls on the server (only for the admin user). _}</p>
 
             {% if m.acl.user == 1 %}
                 <p>
-                    <a href="{% url admin_development_tracing %}">{_ Trace function calls _} &gt;</a>
+                    <a href="{% url admin_development_function_trace %}">{_ Trace function calls _} &gt;</a>
                 </p>
             {% else %}
                 <p class="alert alert-info">

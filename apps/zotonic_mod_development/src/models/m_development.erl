@@ -46,6 +46,13 @@ m_get([ Cfg | Rest ], _Msg, Context)
          Cfg =:= <<"livereload">>;
          Cfg =:= <<"nocache">> ->
     {ok, {m_config:get_boolean(mod_development, Cfg, Context), Rest}};
+m_get([ <<"function_tracing_enabled">> | Rest ], _Msg, Context) ->
+    case z_acl:user(Context) of
+        ?ACL_ADMIN_USER_ID ->
+            {ok, {z_config:get(function_tracing_enabled), Rest}};
+        _ ->
+            {error, eacces}
+    end;
 m_get([ <<"list_observers">> | Rest ], _Msg, Context) ->
     case z_acl:is_allowed(use, mod_development, Context) of
         true ->
