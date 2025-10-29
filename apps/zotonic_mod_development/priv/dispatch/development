@@ -9,5 +9,7 @@
 
  {admin_development_dispatch_details, ["admin", "development", "dispatch"], controller_admin, [{template, "admin_development_dispatch_details.tpl"}, {selected, "development"}]},
 
- {admin_development_observers, ["admin", "development", "observers"], controller_admin, [{template, "admin_development_observers.tpl"}, {selected, "development"}]}
+ {admin_development_observers, ["admin", "development", "observers"], controller_admin, [{template, "admin_development_observers.tpl"}, {selected, "development"}]},
+
+ {admin_development_tracing, ["admin", "development", "tracing"], controller_admin, [{template, "admin_development_tracing.tpl"}, {selected, "development"}]}
 ].

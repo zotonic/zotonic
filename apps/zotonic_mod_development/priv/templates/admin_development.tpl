@@ -198,8 +198,6 @@
     </div>
 
     <div class="widget">
-
-
         <div class="widget-header">
             {_ Dispatch rule debugging _}
         </div>
@@ -235,19 +233,38 @@
         </div>
     </div>
 
-
     <div class="widget">
         <div class="widget-header">
             {_ Introspection _}
         </div>
         <div class="widget-content">
-            <p>{_ Show internals of Zotonic and the modules _}</p>
+            <p>{_ Show internals of Zotonic and the modules. _}</p>
 
             <p>
                 <a href="{% url admin_development_observers %}">{_ Show an overview of all observers _} &gt;</a>
             </p>
         </div>
     </div>
+
+    <div class="widget">
+        <div class="widget-header">
+            {_ Tracing _}
+        </div>
+        <div class="widget-content">
+            <p>{_ Live trace of function calls on the server (only for the admin user). _}</p>
+
+            {% if m.acl.user == 1 %}
+                <p>
+                    <a href="{% url admin_development_tracing %}">{_ Trace function calls _} &gt;</a>
+                </p>
+            {% else %}
+                <p class="alert alert-info">
+                    {_ Only the admin user can use function call tracing. _}
+                </p>
+            {% endif %}
+        </div>
+    </div>
+
 {% else %}
     <div class="alert alert-danger">
         {_ You do not have permission to access development tools. _}

@@ -194,13 +194,11 @@ update_hosts() ->
     Req1 :: cowboy_req:req(),
     Env1 :: cowboy_middleware:env().
 execute(Req, Env) ->
-    % Reset sensitive flag from a possible previous http1 request.
-    erlang:process_flag(sensitive, false),
     case dispatch(Req, Env) of
         #dispatch_controller{} = Match ->
             Context = Match#dispatch_controller.context,
             BindingsMap = maps:from_list( Match#dispatch_controller.bindings ),
-            % Ensure that sensitive data is not logged in production
+            % Ensure that sensitive data is only traceable in development environment
             case m_site:environment(Context) of
                 development -> ok;
                 _ ->
