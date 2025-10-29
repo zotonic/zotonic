@@ -29,7 +29,7 @@ info() ->
 run([ "zotonic", Name, Value ]) ->
     set(Name, Value);
 run(_) ->
-    io:format("USAGE: setconfig zotonic <name> <value>~n"),
+    io:format("USAGE: setconfig zotonic <config_name> <value>~n"),
     halt(1).
 
 set(Name, "true") ->
