@@ -53,7 +53,7 @@
     {% endif %}
 
     {% javascript %}
-        cotonic.broker.subscribe("development/tracer_output", function(message) {
+        cotonic.broker.subscribe("development/function_trace_output", function(message) {
             const traceElem = document.getElementById("trace");
             const text = html_escape(message.payload.data);
             traceElem.innerHTML += text;

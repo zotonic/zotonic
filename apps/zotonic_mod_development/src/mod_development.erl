@@ -410,7 +410,7 @@ function_tracer_output(Count, Context) ->
 
 function_tracer_stream_data(Data, Context) ->
     z_mqtt:publish(
-        [ <<"~client">>, <<"development">>, <<"function_tracer_output">> ],
+        [ <<"~client">>, <<"development">>, <<"function_trace_output">> ],
         #{
             <<"data">> => unicode:characters_to_binary(Data)
         },
