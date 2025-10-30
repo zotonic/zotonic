@@ -1,10 +1,9 @@
 %% @author Arjan Scherpenisse <marc@worrell.nl>
-%% @copyright 2015 Arjan Scherpenisse
-%% Date: 2015-03-09
-%%
+%% @copyright 2015-2025 Arjan Scherpenisse
 %% @doc Access to the ACL rules
+%% @end
 
-%% Copyright 2015 Arjan Scherpenisse
+%% Copyright 2015-2025 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -222,19 +221,27 @@ actions(module, Context) ->
 
 
 update(Kind, Id, Props, Context) ->
-    lager:debug(
+    lager:info(
         "ACL user groups update by ~p of ~p:~p with ~p",
        [z_acl:user(Context), Kind, Id, Props]
     ),
-    Result = z_db:update(
-               table(Kind), Id,
-               [{is_edit, true},
+    case map_props(Props, Context) of
+        {error, Reason} = Error ->
+            lager:error(
+                "ACL user groups update error by ~p of ~p:~p with ~p: ~p",
+                [z_acl:user(Context), Kind, Id, Props, Reason]),
+            Error;
+        BaseProps ->
+            RuleProps = [
+                {is_edit, true},
                 {modifier_id, z_acl:user(Context)},
                 {modified, calendar:universal_time()}
-                | map_props(Props, Context)], Context
-              ),
-    mod_acl_user_groups:rebuild(edit, Context),
-    Result.
+                | without([is_edit, modifier_id, modified], BaseProps)
+            ],
+            Result = z_db:update(table(Kind), Id, RuleProps, Context),
+            mod_acl_user_groups:rebuild(edit, Context),
+            Result
+    end.
 
 get(Kind, Id, Context) ->
     case z_db:select(table(Kind), Id, Context) of
@@ -243,36 +250,72 @@ get(Kind, Id, Context) ->
     end.
 
 insert(Kind, Props, Context) ->
-    lager:debug(
+    lager:info(
         "ACL user groups insert by ~p of ~p with ~p",
        [z_acl:user(Context), Kind, Props]
     ),
-
-    Result = z_db:insert(
-               table(Kind),
-               [{is_edit, true},
+    case map_props(Props, Context) of
+        {error, Reason} = Error ->
+            lager:error(
+                "ACL user groups insert error by ~p of ~p with ~p: ~p",
+                [z_acl:user(Context), Kind, Props, Reason]),
+            Error;
+        BaseProps ->
+            RuleProps = [
+                {is_edit, true},
                 {modifier_id, z_acl:user(Context)},
                 {modified, calendar:universal_time()},
                 {creator_id, z_acl:user(Context)},
-                {created, calendar:universal_time()} | map_props(Props, Context)], Context
-              ),
-    mod_acl_user_groups:rebuild(edit, Context),
-    Result.
+                {created, calendar:universal_time()}
+                | without([is_edit, modifier_id, modified, creator_id, created], BaseProps)
+            ],
+            Result = z_db:insert(table(Kind), RuleProps, Context),
+            mod_acl_user_groups:rebuild(edit, Context),
+            Result
+    end.
+
+without([], Props) ->
+    Props;
+without([K|Ks], Props) ->
+    without(Ks, proplists:delete(K, Props)).
 
 map_props(Props, Context) ->
-    lists:map(
-        fun(Prop) ->
-            map_prop(Prop, Context)
+    lists:foldl(
+        fun
+            (_Prop, {error, _} = Error) ->
+                Error;
+            (Prop, Acc) ->
+                case map_prop(Prop, Context) of
+                    {error, _} = Error ->
+                        Error;
+                    MappedProp ->
+                        [MappedProp | Acc]
+                end
         end,
-        Props
-    ).
+        [],
+        Props).
 
+map_prop({acl_user_group_id, undefined}, _Context) ->
+    {acl_user_group_id, undefined};
 map_prop({acl_user_group_id, Id}, Context) ->
-    {acl_user_group_id, m_rsc:rid(Id, Context)};
+    case m_rsc:rid(Id, Context) of
+        undefined -> {error, {invalid_acl_user_group, Id}};
+        RId -> {acl_user_group_id, RId}
+    end;
+map_prop({content_group_id, undefined}, _Context) ->
+    {content_group_id, undefined};
 map_prop({content_group_id, Id}, Context) ->
-    {content_group_id, m_rsc:rid(Id, Context)};
+    case m_rsc:rid(Id, Context) of
+        undefined -> {error, {invalid_content_group, Id}};
+        RId -> {content_group_id, RId}
+    end;
+map_prop({category_id, undefined}, _Context) ->
+    {category_id, undefined};
 map_prop({category_id, Id}, Context) ->
-    {category_id, m_rsc:rid(Id, Context)};
+    case m_rsc:rid(Id, Context) of
+        undefined -> {error, {invalid_category, Id}};
+        RId -> {category_id, RId}
+    end;
 map_prop({actions, Actions}, _Context) when is_list(Actions) ->
     Joined = string:join(
         [z_convert:to_list(Action) || Action <- Actions],
