@@ -413,7 +413,9 @@ properties(Code) when is_list(Code) ->
 %% For each language a map with properties is returned - see properties/1.
 %% Each language is present with its iso code as an atom and binary key. This for
 %% easier lookups.
--spec all_languages() -> map().
+-spec all_languages() -> LanguageMap when
+    LanguageMap :: #{ Code => map() },
+    Code :: binary() | atom().
 all_languages() ->
     z_language_data:languages_map_flat().
 
