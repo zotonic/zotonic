@@ -73,6 +73,10 @@
 		        			{_ Results from the respondent _}
 						</label>
 						<label class="radio">
+		        			<input type="radio" name="survey_show_results" value="3" {% if id.survey_show_results == 3 %}checked{% endif %}>
+		        			{_ Results from the respondent - if passed only_}
+						</label>
+						<label class="radio">
 		        			<input type="radio" name="survey_show_results" value="1" {% if id.survey_show_results == 1 %}checked{% endif %}>
 		        			{_ Aggregated results from all respondents _}
 						</label>
