@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-09-22 13:58\n"
+"PO-Revision-Date: 2025-10-30 17:00\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -325,7 +325,7 @@ msgstr "您確定要將所有ACL規則還原到其當前發布的版本嗎？"
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:113
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:85
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:49
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:88
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:115
@@ -342,7 +342,7 @@ msgstr "取消"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:64
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:23
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:114
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:96
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:29
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:22
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37
@@ -386,8 +386,8 @@ msgstr "改变了配置。"
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:14
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:21
-#: zotonic_mod_survey/priv/templates/_survey_results.tpl:54
-#: zotonic_mod_survey/priv/templates/_survey_results.tpl:59
+#: zotonic_mod_survey/priv/templates/_survey_results.tpl:56
+#: zotonic_mod_survey/priv/templates/_survey_results.tpl:61
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:45
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:50
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:24
@@ -461,7 +461,7 @@ msgstr "無法轉移去合作夥伴群"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:49
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:64
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:73
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:101
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:83
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:32
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:41
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:18
@@ -1033,10 +1033,8 @@ msgstr "+ 新增頁面區塊"
 msgid "<b>Warning:</b> the site will stop and restart."
 msgstr "<b>警告：</b> 站點將停止並重新啟動。"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:43
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:139
+#: zotonic_mod_admin/priv/templates/_admin_overview_list_title.tpl:2
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:6
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:141
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:32
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:53
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:47
@@ -1061,7 +1059,7 @@ msgid "About categories"
 msgstr "关于类别"
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:16
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:196
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:192
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:131
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:56
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:96
@@ -1236,7 +1234,7 @@ msgstr "可用的"
 #: zotonic_mod_survey/priv/templates/_survey_end.tpl:28
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:23
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:63
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:69
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:35
 msgid "Back"
 msgstr "返回"
@@ -1428,7 +1426,7 @@ msgid "Created by me"
 msgstr "由我创建"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:26
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:120
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:102
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:12
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:56
@@ -2110,14 +2108,14 @@ msgid "Modified"
 msgstr "修改时间"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:32
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:126
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:108
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:25
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:14
 msgid "Modified by"
 msgstr "修改者"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:29
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:123
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:105
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:24
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:13
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:57
@@ -2225,7 +2223,7 @@ msgstr "无項目"
 msgid "No media content."
 msgstr "沒有媒體內容。"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:188
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:184
 msgid "No media found."
 msgstr "没有找到媒体。"
 
@@ -2240,7 +2238,7 @@ msgstr "未发现其他页面"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_loop.tpl:20
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_loop.tpl:12
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:178
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:144
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:48
 #: zotonic_mod_admin_merge/priv/templates/_merge_find_results_loop.tpl:10
 msgid "No pages found."
@@ -2404,9 +2402,7 @@ msgid "Protected"
 msgstr "受保護"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:37
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:45
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:141
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:143
+#: zotonic_mod_admin/priv/templates/_admin_overview_list_flags.tpl:2
 msgid "Protected, not deletable"
 msgstr "受保護，不可刪除"
 
@@ -2448,7 +2444,7 @@ msgstr "發布結束，最新的在前"
 msgid "Published ends, oldest first"
 msgstr "發布結束，最早的在前"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:117
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:99
 msgid "Published on"
 msgstr "發表於"
 
@@ -2615,7 +2611,7 @@ msgid "Search query"
 msgstr "搜尋查询"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:37
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:95
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:77
 msgid "Search results"
 msgstr "搜索結果"
 
@@ -2635,7 +2631,7 @@ msgstr "另請參閱： <a href=\"https://zotonic.com/en/stable/ref/configuratio
 msgid "Select a connected image"
 msgstr "选择一个连接图片"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:98
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:80
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:107
 msgid "Selected"
 msgstr "已選擇"
@@ -2989,8 +2985,7 @@ msgstr "这个文件被病毒感染了。"
 msgid "This file is too large."
 msgstr "这个文件太大。"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:49
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:145
+#: zotonic_mod_admin/priv/templates/_admin_overview_list_flags.tpl:5
 #: zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:8
 msgid "This is system content."
 msgstr "这是系统内容。"
@@ -3045,7 +3040,7 @@ msgstr "试图从网站获取数据时超时。"
 #: zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:36
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:20
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:111
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:93
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:124
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:21
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35
@@ -3128,7 +3123,7 @@ msgstr "未使用"
 msgid "Upcoming"
 msgstr "即將推出"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:100
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:82
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:86
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:109
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:16
@@ -3169,7 +3164,8 @@ msgid "Upload file"
 msgstr "上传文件"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:127
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:136
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:132
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:162
 msgid "Uploaded"
 msgstr "上传时间"
 
@@ -3359,13 +3355,13 @@ msgstr "添加媒体条目"
 msgid "by"
 msgstr "由"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:70
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:71
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:164
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:165
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:166
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:161
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:164
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:52
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:53
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:130
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:131
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:132
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:157
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:160
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:68
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:32
@@ -3386,7 +3382,7 @@ msgstr "由"
 msgid "d M Y, H:i"
 msgstr "Y M d, H:i"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:168
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:164
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:42
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:39
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
@@ -3397,9 +3393,9 @@ msgstr "删除"
 msgid "e.g. might change"
 msgstr "如：可能改变"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:76
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:171
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:179
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:58
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:137
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:175
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:40
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
@@ -3462,8 +3458,7 @@ msgstr "像素"
 msgid "show all"
 msgstr "显示所有"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:50
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:146
+#: zotonic_mod_admin/priv/templates/_admin_overview_list_flags.tpl:6
 msgid "system content"
 msgstr "系统内容"
 
@@ -3486,8 +3481,8 @@ msgstr "未命名"
 msgid "uploaded on"
 msgstr "上传时间"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:75
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:170
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:57
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:136
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:39
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
@@ -3503,7 +3498,7 @@ msgid "visit site"
 msgstr "流覽網站"
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:17
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:197
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:193
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:132
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:57
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:97
@@ -3638,6 +3633,8 @@ msgid "Defaults to the hostname of the site."
 msgstr "默认为站点的主机名。"
 
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:45
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:28
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:44
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:21
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:21
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:22
@@ -5369,9 +5366,9 @@ msgid "Confirmation failure"
 msgstr "验证失败"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:67
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:74
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:76
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:78
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:80
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:84
 msgid "Continue"
 msgstr "继续"
 
@@ -5596,8 +5593,8 @@ msgid "Multiple accounts"
 msgstr "多個帳戶"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:209
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:87
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:94
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:93
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:100
 msgid "Next"
 msgstr "下一页"
 
@@ -6995,6 +6992,14 @@ msgstr "新的位置可以是一个本地路径或一个完整的URL。对于本
 msgid "You are not allowed to change this."
 msgstr "你不允许改变这个。"
 
+#: zotonic_mod_development/src/mod_development.erl:376
+msgid "<i>Function name does not exist.</i>"
+msgstr ""
+
+#: zotonic_mod_development/src/mod_development.erl:379
+msgid "<i>Module not found.</i>"
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/_development_template_graph.tpl:5
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:80
 msgid "<tt>{extends}</tt> are shown with a striped line, <tt>{overrules}</tt> are shown with a dotted line."
@@ -7045,8 +7050,8 @@ msgstr "装订"
 msgid "Calculate and visualize a dependency graph of all templates."
 msgstr "計算並視覺化所有模板的依賴圖。"
 
-#: zotonic_mod_development/src/mod_development.erl:244
 #: zotonic_mod_development/src/mod_development.erl:259
+#: zotonic_mod_development/src/mod_development.erl:274
 msgid "Checking all templates..."
 msgstr "檢查所有模板..."
 
@@ -7123,9 +7128,13 @@ msgid "Dependency graph of all traced templates. All includes are shown."
 msgstr "所有追蹤模板的依賴關係圖。顯示所有包含內容。"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:3
-#: zotonic_mod_development/src/mod_development.erl:710
+#: zotonic_mod_development/src/mod_development.erl:803
 msgid "Development"
 msgstr "开发"
+
+#: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:3
+msgid "Development - Function Call Tracing"
+msgstr ""
 
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:3
 msgid "Development - Observers"
@@ -7143,7 +7152,7 @@ msgstr "禁用數據庫查詢跟踪"
 msgid "Dispatch Name"
 msgstr "調度名稱"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:201
+#: zotonic_mod_development/priv/templates/admin_development.tpl:199
 msgid "Dispatch rule debugging"
 msgstr "调度规则调试"
 
@@ -7167,7 +7176,11 @@ msgstr "啟用所有模板渲染的追蹤。"
 msgid "Enabled database query tracing"
 msgstr "啟用數據庫查詢跟踪"
 
-#: zotonic_mod_development/src/mod_development.erl:333
+#: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:21
+msgid "Enter the module and function you want to trace. If no function is given, all functions in the module will be traced. Enter how many calls to trace before stopping."
+msgstr ""
+
+#: zotonic_mod_development/src/mod_development.erl:348
 msgid "Error changing the console logs."
 msgstr "更改控制台日誌時發生錯誤。"
 
@@ -7179,7 +7192,7 @@ msgstr "事件"
 msgid "Every URL which is reachable in the site is defined with dispatch rules. This page shows all available dispatch rules in this site."
 msgstr "網站中可存取的每個 URL 均使用排程規則進行定義。此頁面顯示該網站中所有可用的調度規則。"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:227
+#: zotonic_mod_development/priv/templates/admin_development.tpl:225
 msgid "Explain"
 msgstr "解释"
 
@@ -7215,6 +7228,20 @@ msgstr "强制将协议切换到"
 msgid "Found matching dispatch rule"
 msgstr "找到匹配的调度规则"
 
+#: zotonic_mod_development/priv/templates/admin_development.tpl:248
+#: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:8
+#: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:12
+msgid "Function Call Tracing"
+msgstr ""
+
+#: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:45
+msgid "Function call tracing has been disabled. Use the following to enable function call tracing:"
+msgstr ""
+
+#: zotonic_mod_development/src/mod_development.erl:382
+msgid "Function tracing has been disabled in the Zotonic config."
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:74
 msgid "Graph of all template dependencies"
 msgstr "所有模板依賴關係圖"
@@ -7232,7 +7259,7 @@ msgstr "包含模板"
 msgid "Includes using variable names or expressions are not shown."
 msgstr "包括使用變數名稱或表達式未顯示。"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:238
+#: zotonic_mod_development/priv/templates/admin_development.tpl:235
 msgid "Introspection"
 msgstr "自省"
 
@@ -7250,10 +7277,18 @@ msgstr "模板的即時依賴圖"
 msgid "Live reload of changed CSS files. Reload page on change of templates or JavaScript."
 msgstr "实时重载更改后的CSS文件。更改模板或JavaScript时重新加载页面。"
 
+#: zotonic_mod_development/priv/templates/admin_development.tpl:251
+msgid "Live trace of function calls on the server (only for the admin user)."
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:32
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:36
 msgid "Live traces of template rendering"
 msgstr "模板渲染的即時痕跡"
+
+#: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:13
+msgid "Live tracing of function calls on the server."
+msgstr ""
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:89
 msgid "Loading..."
@@ -7268,7 +7303,7 @@ msgstr "场地"
 msgid "Log in as the admin to enable logging to the javascript console."
 msgstr "以管理員身分登入以啟用 JavaScript 控制台日誌記錄。"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:211
+#: zotonic_mod_development/priv/templates/admin_development.tpl:209
 msgid "Match a request URL, display matched dispatch rule."
 msgstr "匹配请求URL，显示匹配的调度规则。"
 
@@ -7302,15 +7337,15 @@ msgstr "沒有數據。"
 msgid "No matching dispatch rule found"
 msgstr "没有找到匹配的调度规则"
 
-#: zotonic_mod_development/src/mod_development.erl:331
+#: zotonic_mod_development/src/mod_development.erl:346
 msgid "No permission to access the console logs."
 msgstr "無權存取控制台日誌。"
 
-#: zotonic_mod_development/src/mod_development.erl:249
 #: zotonic_mod_development/src/mod_development.erl:264
 #: zotonic_mod_development/src/mod_development.erl:279
-#: zotonic_mod_development/src/mod_development.erl:287
-#: zotonic_mod_development/src/mod_development.erl:314
+#: zotonic_mod_development/src/mod_development.erl:294
+#: zotonic_mod_development/src/mod_development.erl:302
+#: zotonic_mod_development/src/mod_development.erl:329
 msgid "No permission to use mod_development."
 msgstr "無權使用 mod_development。"
 
@@ -7322,6 +7357,15 @@ msgstr "未找到"
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:12
 msgid "Observers"
 msgstr "观察员"
+
+#: zotonic_mod_development/src/mod_development.erl:385
+msgid "Only the admin user can set traces."
+msgstr ""
+
+#: zotonic_mod_development/priv/templates/admin_development.tpl:259
+#: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:51
+msgid "Only the admin user can use function call tracing."
+msgstr ""
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:140
 msgid "Optional category for catinclude"
@@ -7352,7 +7396,7 @@ msgstr "重新運行圖表"
 msgid "Set the class <tt>environment-development</tt> on the <tt>&lt;html&gt;</tt> element of your pages to see the server log in the browser console.<br>In development, admin pages always show the server log in the javascript console."
 msgstr "在頁面的 <tt>&lt;html&gt;</tt> 元素上設定類別 <tt>環境開發</tt> 以在瀏覽器控制台中查看伺服器日誌。<br>在開發中，管理頁面總是在 javascript 控制台中顯示伺服器日誌。"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:244
+#: zotonic_mod_development/priv/templates/admin_development.tpl:241
 msgid "Show an overview of all observers"
 msgstr "顯示所有觀察者的概覽"
 
@@ -7360,9 +7404,9 @@ msgstr "顯示所有觀察者的概覽"
 msgid "Show defined blocks in generated templates"
 msgstr "在生成的模板中显示定义的块"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:241
-msgid "Show internals of Zotonic and the modules"
-msgstr "显示Zotonic和模块的内部结构。"
+#: zotonic_mod_development/priv/templates/admin_development.tpl:238
+msgid "Show internals of Zotonic and the modules."
+msgstr ""
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:25
 msgid "Show paths to included template files in generated templates"
@@ -7374,6 +7418,7 @@ msgstr "在瀏覽器控制台中顯示伺服器日誌"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:7
+#: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:7
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:7
 #: zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:7
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:31
@@ -7389,19 +7434,23 @@ msgstr "站點調度規則"
 msgid "Site Name"
 msgstr "網站名稱"
 
+#: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:34
+msgid "Start Tracing"
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:21
 msgid "Start matching dispatch rules"
 msgstr "开始匹配调度规则"
 
-#: zotonic_mod_development/src/mod_development.erl:327
+#: zotonic_mod_development/src/mod_development.erl:342
 msgid "Started logging to the console of your browser tab."
 msgstr "開始登入瀏覽器標籤的控制台。"
 
-#: zotonic_mod_development/src/mod_development.erl:276
+#: zotonic_mod_development/src/mod_development.erl:291
 msgid "Started tracing all template inclusions."
 msgstr "開始追蹤所有模板包含物。"
 
-#: zotonic_mod_development/src/mod_development.erl:273
+#: zotonic_mod_development/src/mod_development.erl:288
 msgid "Started tracing template inclusions for your session."
 msgstr "開始追蹤您的會話的範本包含內容。"
 
@@ -7410,11 +7459,11 @@ msgstr "開始追蹤您的會話的範本包含內容。"
 msgid "Stop"
 msgstr "中止"
 
-#: zotonic_mod_development/src/mod_development.erl:329
+#: zotonic_mod_development/src/mod_development.erl:344
 msgid "Stopped logging to the console of all browser tabs."
 msgstr "停止記錄到所有瀏覽器標籤的控制台。"
 
-#: zotonic_mod_development/src/mod_development.erl:285
+#: zotonic_mod_development/src/mod_development.erl:300
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr "停止追蹤所有會話的範本包含內容。"
 
@@ -7486,6 +7535,10 @@ msgstr "站点开发中使用的工具和设置。"
 msgid "Trace all database queries for the current session"
 msgstr "跟踪当前会话的所有数据库查询"
 
+#: zotonic_mod_development/priv/templates/admin_development.tpl:255
+msgid "Trace function calls"
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/admin_development.tpl:172
 msgid "Traces all templates for the current session-id, or all sessions, and renders them as a graph."
 msgstr "追蹤當前會話 ID 或所有會話的所有模板，並將它們呈現為圖表。"
@@ -7518,12 +7571,12 @@ msgstr "類型 {include}"
 msgid "URI Pattern"
 msgstr "URI模式"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:205
+#: zotonic_mod_development/priv/templates/admin_development.tpl:203
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:8
 msgid "View all dispatch rules"
 msgstr "查看所有調度規則"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:207
+#: zotonic_mod_development/priv/templates/admin_development.tpl:205
 msgid "View all dispatch rules and hostnames usable in the site."
 msgstr "查看網站中可用的所有調度規則和主機名稱。"
 
@@ -7539,8 +7592,9 @@ msgstr "你是不允许使用调度调试的。"
 msgid "You are not allowed to use the template debugging."
 msgstr "你不允许使用模板调试。"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:250
+#: zotonic_mod_development/priv/templates/admin_development.tpl:267
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:88
+#: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:64
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:53
 #: zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:42
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:137
@@ -8319,7 +8373,8 @@ msgstr "您不允许更改这些设置。"
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
 msgstr "Zotonic可以在云端存储上传和调整大小的文件。在这里您可以配置云服务的位置和访问密钥。"
 
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:139
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:135
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:165
 msgid "Could not upload"
 msgstr "無法上傳"
 
@@ -8415,56 +8470,140 @@ msgstr "原始圖像保持不變，所有編輯都可以隨時更改。"
 msgid "Tilt"
 msgstr "傾斜"
 
-#: zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:3
-#: zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:4
-msgid "Import CSV file"
-msgstr "导入 CSV 文件"
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:18
+msgid "About the columns of the spreadsheet data"
+msgstr ""
 
-#: zotonic_mod_import_csv/priv/templates/_admin_import.tpl:3
-#: zotonic_mod_import_csv/priv/templates/_admin_import.tpl:8
-#: zotonic_mod_import_csv/src/mod_import_csv.erl:97
-msgid "Import content"
-msgstr "导入内容"
+#: zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:4
+#: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:3
+msgid "Depending on the filename the data can be imported as pages or as special data."
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:21
+msgid "Every row in the CSV or XLSX file contains a single page. The columns are the properties."
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:78
+msgid "For example, the English title would have the column name: <code>title$en</code>"
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:60
+msgid "If the page is a person, the first name."
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:64
+msgid "If the page is a person, the last or family name."
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:8
+msgid "Import CSV XLSX file"
+msgstr ""
 
 #: zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:7
-msgid "Import data from a CSV file."
-msgstr "从CSV文件导入数据。"
+#: zotonic_mod_import_csv/src/mod_import_csv.erl:102
+msgid "Import CSV or XLSX file"
+msgstr ""
 
-#: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:20
-#: zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:19
-msgid "Import previously deleted items again"
-msgstr "重新导入之前被删除的条目"
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:3
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:8
+msgid "Import a CSV or XLSX file"
+msgstr ""
 
-#: zotonic_mod_import_csv/src/mod_import_csv.erl:134
+#: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:18
+msgid "Import any previously deleted items again"
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:3
+msgid "Import data from a CSV or XLSX file."
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:77
+msgid "Multilingual properties can be set by specifying the language after the property name."
+msgstr ""
+
+#: zotonic_mod_import_csv/src/mod_import_csv.erl:166
 msgid "Only admins can import CSV files."
 msgstr "只有管理员才能导入CSV文件。"
 
-#: zotonic_mod_import_csv/src/mod_import_csv.erl:125
+#: zotonic_mod_import_csv/src/mod_import_csv.erl:139
 msgid "Please hold on while the file is importing. You will get a notification when it is ready."
 msgstr "请等待文件导入完成。完成后你将看到通知。"
 
-#: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:9
+#: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:24
+msgid "Progress will be reported in the <a href=\"{url}\">admin log</a> and with notifications in the admin."
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:27
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:43
+msgid "Property"
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:7
 msgid "Select file"
 msgstr "选择文件"
 
-#: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:27
+#: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:31
 #: zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:26
 msgid "Start import"
 msgstr "开始导入"
 
-#: zotonic_mod_import_csv/src/mod_import_csv.erl:127
-#: zotonic_mod_import_csv/src/mod_import_csv.erl:151
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:56
+msgid "The HTML main text of the page."
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:36
+msgid "The category of the page. Examples: <code>article</code> or <code>text</code>."
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:72
+msgid "The custom path for the URL of the page, for example <code>/my/page</code>"
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:68
+msgid "The email address associated with the page."
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:22
+msgid "The following properties must be present:"
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:23
+msgid "The import will be done in the background after the file has been uploaded to the server."
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:52
+msgid "The summary of the page."
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:48
+msgid "The title of the page."
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:32
+msgid "The unique name of the page, used to identify the page."
+msgstr ""
+
+#: zotonic_mod_import_csv/src/mod_import_csv.erl:149
+#: zotonic_mod_import_csv/src/mod_import_csv.erl:187
 msgid "The uploaded file has been imported."
 msgstr ""
 
-#: zotonic_mod_import_csv/src/mod_import_csv.erl:130
+#: zotonic_mod_import_csv/src/mod_import_csv.erl:162
 msgid "This file cannot be imported."
 msgstr "该文件不能被导入。"
 
 #: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:2
-msgid "Upload a CSV file from your computer."
-msgstr "从本机上传一个 CSV 文件。"
+msgid "Upload a CSV or XLSX file from your computer."
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:40
+msgid "Well known properties are:"
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:85
+msgid "You do not have permission to use the CSV/XLSX import module."
+msgstr ""
 
 #: zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:4
 msgid "Import WXR file"
@@ -8473,6 +8612,10 @@ msgstr "导入 WXR 文件"
 #: zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:5
 msgid "Import a WordPress WXR export file into Zotonic."
 msgstr "將 WordPress WXR 導出文件導入 Zotonic。"
+
+#: zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:19
+msgid "Import previously deleted items again"
+msgstr "重新导入之前被删除的条目"
 
 #: zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:2
 msgid "Upload a WordPress WXR file from your computer."
@@ -11425,7 +11568,7 @@ msgstr "添加到現有郵件列表"
 msgid "Add to mailinglist"
 msgstr "添加到郵件列表"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:77
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:81
 msgid "Aggregated results from all respondents"
 msgstr "所有受訪者的匯總結果"
 
@@ -11445,7 +11588,7 @@ msgstr "另一個頁面、視頻或圖像。"
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:78
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:79
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:80
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:68
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:74
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:86
 msgid "Answer"
 msgstr "回答"
@@ -11485,9 +11628,9 @@ msgstr "你确定要删除这个问题吗？"
 msgid "Are you sure you want to delete this result?"
 msgstr "你确定要删除这个结果吗？"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:74
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:76
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:78
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:80
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:84
 msgid "Are you sure you want to stop without saving?"
 msgstr "您確定要停止而不保存嗎？"
 
@@ -11545,8 +11688,8 @@ msgstr "單擊“編輯”以查看和更改輸入的數據。"
 msgid "Closed"
 msgstr "關閉"
 
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:99
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:133
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:105
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:139
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
 msgid "Correct"
 msgstr "正確的"
@@ -11722,11 +11865,11 @@ msgstr "對於日期範圍，您也可以使用相對日期，例如 <code>-5 �
 msgid "Go to question"
 msgstr "进入问题"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:164
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:168
 msgid "Handle this form with"
 msgstr "處理此表單"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:143
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:147
 msgid "Handling"
 msgstr "处理"
 
@@ -11753,7 +11896,7 @@ msgstr "隱藏值，與表單一起保存但不顯示給填寫表單的人。"
 msgid "Hide from results"
 msgstr "隐藏结果"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:99
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:103
 msgid "Hide progress information"
 msgstr "隐藏进度信息"
 
@@ -11826,8 +11969,8 @@ msgstr "與人聯繫"
 msgid "Long answer"
 msgstr "长答案"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:146
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:147
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:150
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:151
 msgid "Mail results to"
 msgstr "将结果邮寄给"
 
@@ -11956,7 +12099,7 @@ msgstr "經過？"
 msgid "Passed"
 msgstr "通过"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:127
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:131
 msgid "Passing score"
 msgstr "合格分數"
 
@@ -11968,7 +12111,7 @@ msgstr "百分比"
 msgid "Person"
 msgstr "人"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:52
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:58
 msgid "Please fill in all the required fields."
 msgstr "请填写所有必填项目。"
 
@@ -11999,7 +12142,7 @@ msgstr "主要"
 msgid "Printable list"
 msgstr "可打印列表"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:94
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:98
 msgid "Progress"
 msgstr "进展情况"
 
@@ -12007,7 +12150,7 @@ msgstr "进展情况"
 msgid "Prompt"
 msgstr "提示"
 
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:67
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:73
 msgid "Question"
 msgstr "问题"
 
@@ -12096,6 +12239,10 @@ msgstr "結果編輯器"
 msgid "Results from the respondent"
 msgstr "答辩人的结果"
 
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:77
+msgid "Results from the respondent - if passed only"
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
 msgid "Results until"
 msgstr "結果直到"
@@ -12126,11 +12273,11 @@ msgstr "選擇郵件列表"
 msgid "Select your country"
 msgstr "选择你的国家"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:157
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:161
 msgid "Send a confirmation to the respondent. The email address must be known (logged in respondents) or you can add a short text field with the label “email” and the validation set to \"must be an email address\"."
 msgstr "向受訪者發送確認信。電子郵件地址必須是已知的（在受訪者中登錄），或者您可以添加帶有標籤“電子郵件”和驗證設置為“必須是電子郵件地址”的短文本字段。"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:149
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:153
 msgid "Separate multiple email addresses with a comma."
 msgstr "用逗号分隔多个电子邮件地址。"
 
@@ -12146,11 +12293,11 @@ msgstr "顯示圖表"
 msgid "Show email addresses"
 msgstr "显示 e-mail 地址"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:111
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:115
 msgid "Show progress bar"
 msgstr "显示进度条"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:105
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:109
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "显示进度信息，如“<em>问题 3/10</em>”"
 
@@ -12183,10 +12330,10 @@ msgstr "抱歉，您已經提交了答案。如果您想再次填寫表格，請
 msgid "Start"
 msgstr "开始"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:72
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:74
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:76
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:78
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:80
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:84
 msgid "Stop without saving"
 msgstr "停止而不保存"
 
@@ -12214,8 +12361,8 @@ msgstr "强烈同意"
 msgid "Strongly Disagree"
 msgstr "强烈不同意"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:87
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:92
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:93
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:98
 #: zotonic_mod_wires/src/scomps/scomp_wires_button.erl:81
 msgid "Submit"
 msgstr "提交"
@@ -12235,7 +12382,7 @@ msgstr "错答减分（总分不低于0分）。"
 msgid "Survey editor"
 msgstr "问卷调查编辑器"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:122
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:126
 msgid "Test pass percentage"
 msgstr "考试合格率"
 
@@ -12303,7 +12450,7 @@ msgstr "此表單已禁用。因為您可以編輯，所以您可以繼續進行
 msgid "This is a result for:"
 msgstr "这是一个结果，因为："
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:134
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:138
 msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
 msgstr "這是通過測驗或測試所需的百分比。僅在您添加了測驗或測試問題時使用。"
 
@@ -12385,8 +12532,8 @@ msgstr "当没有条件成立时，所有此中断后面的问题将成为下个
 msgid "White"
 msgstr "白色的"
 
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:99
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:133
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:105
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:139
 msgid "Wrong"
 msgstr "錯誤的"
 
@@ -12413,7 +12560,7 @@ msgstr "你已经填好了"
 msgid "You are not allowed to change these results."
 msgstr "你不允许改变这些结果。"
 
-#: zotonic_mod_survey/priv/templates/_survey_results.tpl:45
+#: zotonic_mod_survey/priv/templates/_survey_results.tpl:47
 msgid "You are not allowed to see the results."
 msgstr "您無權查看結果。"
 

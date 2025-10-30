@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-09-22 13:58\n"
+"PO-Revision-Date: 2025-10-30 17:00\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -325,7 +325,7 @@ msgstr "คุณแน่ใจหรือไม่ว่าต้องกา
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:113
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:85
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:49
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:88
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:115
@@ -342,7 +342,7 @@ msgstr "ยกเลิก"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:8
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:64
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:23
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:114
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:96
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:29
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:22
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:37
@@ -386,8 +386,8 @@ msgstr "เปลี่ยนการกำหนดค่า"
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:7
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:14
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:21
-#: zotonic_mod_survey/priv/templates/_survey_results.tpl:54
-#: zotonic_mod_survey/priv/templates/_survey_results.tpl:59
+#: zotonic_mod_survey/priv/templates/_survey_results.tpl:56
+#: zotonic_mod_survey/priv/templates/_survey_results.tpl:61
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:45
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:50
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:24
@@ -461,7 +461,7 @@ msgstr "ไม่สามารถย้ายไปที่กลุ่มก
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:49
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:64
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:73
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:101
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:83
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:32
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:41
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_delete.tpl:18
@@ -1033,10 +1033,8 @@ msgstr "+ เพิ่มบล็อคหน้า"
 msgid "<b>Warning:</b> the site will stop and restart."
 msgstr "<b>คำเตือน:</b> เว็บไซต์จะหยุดและเริ่มใหม่อีกครั้ง"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:43
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:139
+#: zotonic_mod_admin/priv/templates/_admin_overview_list_title.tpl:2
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:6
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:141
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:32
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:53
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:47
@@ -1061,7 +1059,7 @@ msgid "About categories"
 msgstr "เกี่ยวกับหมวดหมู่"
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:16
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:196
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:192
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:131
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:56
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:96
@@ -1236,7 +1234,7 @@ msgstr "มีอยู่"
 #: zotonic_mod_survey/priv/templates/_survey_end.tpl:28
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:23
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:63
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:69
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:35
 msgid "Back"
 msgstr "ย้อนกลับ"
@@ -1428,7 +1426,7 @@ msgid "Created by me"
 msgstr "สร้างโดยฉัน"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:26
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:120
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:102
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:9
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:12
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:56
@@ -2110,14 +2108,14 @@ msgid "Modified"
 msgstr "แก้ไข"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:32
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:126
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:108
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:25
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:14
 msgid "Modified by"
 msgstr "แก้ไขโดย"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:29
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:123
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:105
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:24
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:13
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:57
@@ -2225,7 +2223,7 @@ msgstr "ไม่มีรายการ"
 msgid "No media content."
 msgstr "ไม่มีเนื้อหาสื่อ"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:188
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:184
 msgid "No media found."
 msgstr "ไม่พบสื่อ"
 
@@ -2240,7 +2238,7 @@ msgstr "ไม่พบหน้าอื่น ๆ"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_loop.tpl:20
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_loop.tpl:12
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:178
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:144
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:48
 #: zotonic_mod_admin_merge/priv/templates/_merge_find_results_loop.tpl:10
 msgid "No pages found."
@@ -2404,9 +2402,7 @@ msgid "Protected"
 msgstr "มีการป้องกัน"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:37
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:45
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:141
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:143
+#: zotonic_mod_admin/priv/templates/_admin_overview_list_flags.tpl:2
 msgid "Protected, not deletable"
 msgstr "ป้องกันไว้ ไม่สามารถลบได้"
 
@@ -2448,7 +2444,7 @@ msgstr "สิ้นสุดการเผยแพร่ ใหม่สุ�
 msgid "Published ends, oldest first"
 msgstr "สิ้นสุดการเผยแพร่ เก่าที่สุดก่อน"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:117
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:99
 msgid "Published on"
 msgstr "เผยแพร่เมื่อ"
 
@@ -2615,7 +2611,7 @@ msgid "Search query"
 msgstr "การค้นหา"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results.tpl:37
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:95
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:77
 msgid "Search results"
 msgstr "ผลการค้นหา"
 
@@ -2635,7 +2631,7 @@ msgstr "ดูเพิ่มเติม: <a href=\"https://zotonic.com/en/stab
 msgid "Select a connected image"
 msgstr "เลือกภาพที่เชื่อมต่อ"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:98
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:80
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:107
 msgid "Selected"
 msgstr "เลือกแล้ว"
@@ -2989,8 +2985,7 @@ msgstr "ไฟล์นี้ติดไวรัส"
 msgid "This file is too large."
 msgstr "ไฟล์นี้มีขนาดใหญ่เกินไป"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:49
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:145
+#: zotonic_mod_admin/priv/templates/_admin_overview_list_flags.tpl:5
 #: zotonic_mod_admin/priv/templates/_admin_system_content_warning.tpl:8
 msgid "This is system content."
 msgstr "นี่คือเนื้อหาของระบบ"
@@ -3045,7 +3040,7 @@ msgstr "หมดเวลาขณะพยายามดึงข้อมู
 #: zotonic_mod_admin/priv/templates/_admin_edit_basics_form.tpl:12
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:36
 #: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:20
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:111
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:93
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:124
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:21
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:35
@@ -3128,7 +3123,7 @@ msgstr "ไม่ได้ใช้"
 msgid "Upcoming"
 msgstr "ที่กำลังจะมาถึง"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:100
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:82
 #: zotonic_mod_admin/priv/templates/_dialog_admin_bulk_update.tpl:86
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:109
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer.tpl:16
@@ -3169,7 +3164,8 @@ msgid "Upload file"
 msgstr "อัปโหลดไฟล์"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:127
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:136
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:132
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:162
 msgid "Uploaded"
 msgstr "อัปโหลดแล้ว"
 
@@ -3359,13 +3355,13 @@ msgstr "เพิ่มรายการสื่อ"
 msgid "by"
 msgstr "โดย"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:70
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:71
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:164
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:165
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:166
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:161
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:164
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:52
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:53
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:130
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:131
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:132
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:157
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:160
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:35
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:68
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:32
@@ -3386,7 +3382,7 @@ msgstr "โดย"
 msgid "d M Y, H:i"
 msgstr "d M Y, H:i"
 
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:168
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:164
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:42
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:39
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist_recipients.tpl:79
@@ -3397,9 +3393,9 @@ msgstr "ลบ"
 msgid "e.g. might change"
 msgstr "เช่นอาจมีการเปลี่ยนแปลง"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:76
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:171
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:179
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:58
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:137
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:175
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:40
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:67
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:75
@@ -3462,8 +3458,7 @@ msgstr "พิกเซล"
 msgid "show all"
 msgstr "แสดงทั้งหมด"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:50
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:146
+#: zotonic_mod_admin/priv/templates/_admin_overview_list_flags.tpl:6
 msgid "system content"
 msgstr "เนื้อหาระบบ"
 
@@ -3486,8 +3481,8 @@ msgstr "ไม่มีชื่อ"
 msgid "uploaded on"
 msgstr "อัปโหลดเมื่อ"
 
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:75
-#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:170
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:57
+#: zotonic_mod_admin/priv/templates/_admin_overview_list.tpl:136
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:39
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:66
 #: zotonic_mod_admin/priv/templates/admin_widget_dashboard_latest.tpl:74
@@ -3503,7 +3498,7 @@ msgid "visit site"
 msgstr "เยี่ยมชมเว็บไซต์"
 
 #: zotonic_mod_admin/priv/templates/_admin_query_preview.tpl:17
-#: zotonic_mod_admin/priv/templates/admin_media.tpl:197
+#: zotonic_mod_admin/priv/templates/admin_media.tpl:193
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:132
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:57
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:97
@@ -3638,6 +3633,8 @@ msgid "Defaults to the hostname of the site."
 msgstr "ค่าเริ่มต้นเป็นชื่อโฮสต์ของไซต์"
 
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:45
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:28
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:44
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:21
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:21
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:22
@@ -5369,9 +5366,9 @@ msgid "Confirmation failure"
 msgstr "การยืนยันล้มเหลว"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:67
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:74
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:76
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:78
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:80
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:84
 msgid "Continue"
 msgstr "สานต่อ"
 
@@ -5596,8 +5593,8 @@ msgid "Multiple accounts"
 msgstr "หลายบัญชี"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:209
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:87
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:94
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:93
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:100
 msgid "Next"
 msgstr "ต่อไป"
 
@@ -6995,6 +6992,14 @@ msgstr "ตำแหน่งใหม่อาจเป็นเส้นทา
 msgid "You are not allowed to change this."
 msgstr "คุณไม่ได้รับอนุญาตให้เปลี่ยนแปลงสิ่งนี้"
 
+#: zotonic_mod_development/src/mod_development.erl:376
+msgid "<i>Function name does not exist.</i>"
+msgstr ""
+
+#: zotonic_mod_development/src/mod_development.erl:379
+msgid "<i>Module not found.</i>"
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/_development_template_graph.tpl:5
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:80
 msgid "<tt>{extends}</tt> are shown with a striped line, <tt>{overrules}</tt> are shown with a dotted line."
@@ -7045,8 +7050,8 @@ msgstr "การผูก"
 msgid "Calculate and visualize a dependency graph of all templates."
 msgstr "คำนวณและแสดงภาพกราฟการขึ้นต่อกันของเทมเพลตทั้งหมด"
 
-#: zotonic_mod_development/src/mod_development.erl:244
 #: zotonic_mod_development/src/mod_development.erl:259
+#: zotonic_mod_development/src/mod_development.erl:274
 msgid "Checking all templates..."
 msgstr "กำลังตรวจสอบเทมเพลตทั้งหมด..."
 
@@ -7123,9 +7128,13 @@ msgid "Dependency graph of all traced templates. All includes are shown."
 msgstr "กราฟการขึ้นต่อกันของเทมเพลตที่ติดตามทั้งหมด รวมทั้งหมดจะแสดง"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:3
-#: zotonic_mod_development/src/mod_development.erl:710
+#: zotonic_mod_development/src/mod_development.erl:803
 msgid "Development"
 msgstr "การพัฒนา"
+
+#: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:3
+msgid "Development - Function Call Tracing"
+msgstr ""
 
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:3
 msgid "Development - Observers"
@@ -7143,7 +7152,7 @@ msgstr "ปิดใช้งานการติดตามการสืบ
 msgid "Dispatch Name"
 msgstr "ชื่อที่จัดส่ง"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:201
+#: zotonic_mod_development/priv/templates/admin_development.tpl:199
 msgid "Dispatch rule debugging"
 msgstr "ส่งการแก้ไขข้อบกพร่องของกฎ"
 
@@ -7167,7 +7176,11 @@ msgstr "เปิดใช้งานการติดตามการเร
 msgid "Enabled database query tracing"
 msgstr "เปิดใช้งานการติดตามการสืบค้นฐานข้อมูล"
 
-#: zotonic_mod_development/src/mod_development.erl:333
+#: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:21
+msgid "Enter the module and function you want to trace. If no function is given, all functions in the module will be traced. Enter how many calls to trace before stopping."
+msgstr ""
+
+#: zotonic_mod_development/src/mod_development.erl:348
 msgid "Error changing the console logs."
 msgstr "เกิดข้อผิดพลาดในการเปลี่ยนบันทึกคอนโซล"
 
@@ -7179,7 +7192,7 @@ msgstr "เหตุการณ์"
 msgid "Every URL which is reachable in the site is defined with dispatch rules. This page shows all available dispatch rules in this site."
 msgstr "ทุก URL ที่สามารถเข้าถึงได้บนเว็บไซต์ถูกกำหนดด้วยกฎการจัดส่ง หน้านี้แสดงกฎการจัดส่งทั้งหมดที่มีอยู่ในไซต์นี้"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:227
+#: zotonic_mod_development/priv/templates/admin_development.tpl:225
 msgid "Explain"
 msgstr "อธิบาย"
 
@@ -7215,6 +7228,20 @@ msgstr "บังคับให้เปลี่ยนโปรโตคอล
 msgid "Found matching dispatch rule"
 msgstr "พบกฎการจัดส่งที่ตรงกัน"
 
+#: zotonic_mod_development/priv/templates/admin_development.tpl:248
+#: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:8
+#: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:12
+msgid "Function Call Tracing"
+msgstr ""
+
+#: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:45
+msgid "Function call tracing has been disabled. Use the following to enable function call tracing:"
+msgstr ""
+
+#: zotonic_mod_development/src/mod_development.erl:382
+msgid "Function tracing has been disabled in the Zotonic config."
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:74
 msgid "Graph of all template dependencies"
 msgstr "กราฟของการขึ้นต่อกันของเทมเพลตทั้งหมด"
@@ -7232,7 +7259,7 @@ msgstr "รวมเทมเพลตแล้ว"
 msgid "Includes using variable names or expressions are not shown."
 msgstr "รวมถึงการใช้ชื่อตัวแปรหรือนิพจน์จะไม่แสดง"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:238
+#: zotonic_mod_development/priv/templates/admin_development.tpl:235
 msgid "Introspection"
 msgstr "วิปัสสนา"
 
@@ -7250,10 +7277,18 @@ msgstr "กราฟการขึ้นต่อกันของเทมเ
 msgid "Live reload of changed CSS files. Reload page on change of templates or JavaScript."
 msgstr "โหลดไฟล์ CSS ที่เปลี่ยนแปลงแบบสด โหลดหน้าซ้ำเมื่อเปลี่ยนเทมเพลตหรือ JavaScript"
 
+#: zotonic_mod_development/priv/templates/admin_development.tpl:251
+msgid "Live trace of function calls on the server (only for the admin user)."
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:32
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:36
 msgid "Live traces of template rendering"
 msgstr "ร่องรอยสดของการแสดงเทมเพลต"
+
+#: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:13
+msgid "Live tracing of function calls on the server."
+msgstr ""
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:89
 msgid "Loading..."
@@ -7268,7 +7303,7 @@ msgstr "สถานที่"
 msgid "Log in as the admin to enable logging to the javascript console."
 msgstr "เข้าสู่ระบบในฐานะผู้ดูแลระบบเพื่อเปิดใช้งานการเข้าสู่ระบบคอนโซลจาวาสคริปต์"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:211
+#: zotonic_mod_development/priv/templates/admin_development.tpl:209
 msgid "Match a request URL, display matched dispatch rule."
 msgstr "จับคู่ URL คำขอแสดงกฎการจัดส่งที่ตรงกัน"
 
@@ -7302,15 +7337,15 @@ msgstr "ไม่มีข้อมูล."
 msgid "No matching dispatch rule found"
 msgstr "ไม่พบกฎการจัดส่งที่ตรงกัน"
 
-#: zotonic_mod_development/src/mod_development.erl:331
+#: zotonic_mod_development/src/mod_development.erl:346
 msgid "No permission to access the console logs."
 msgstr "ไม่มีสิทธิ์ในการเข้าถึงบันทึกของคอนโซล"
 
-#: zotonic_mod_development/src/mod_development.erl:249
 #: zotonic_mod_development/src/mod_development.erl:264
 #: zotonic_mod_development/src/mod_development.erl:279
-#: zotonic_mod_development/src/mod_development.erl:287
-#: zotonic_mod_development/src/mod_development.erl:314
+#: zotonic_mod_development/src/mod_development.erl:294
+#: zotonic_mod_development/src/mod_development.erl:302
+#: zotonic_mod_development/src/mod_development.erl:329
 msgid "No permission to use mod_development."
 msgstr "ไม่ได้รับอนุญาตให้ใช้ mod_development"
 
@@ -7322,6 +7357,15 @@ msgstr "ไม่พบ"
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:12
 msgid "Observers"
 msgstr "ผู้สังเกตการณ์"
+
+#: zotonic_mod_development/src/mod_development.erl:385
+msgid "Only the admin user can set traces."
+msgstr ""
+
+#: zotonic_mod_development/priv/templates/admin_development.tpl:259
+#: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:51
+msgid "Only the admin user can use function call tracing."
+msgstr ""
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:140
 msgid "Optional category for catinclude"
@@ -7352,7 +7396,7 @@ msgstr "รีรันกราฟ"
 msgid "Set the class <tt>environment-development</tt> on the <tt>&lt;html&gt;</tt> element of your pages to see the server log in the browser console.<br>In development, admin pages always show the server log in the javascript console."
 msgstr "ตั้งค่าคลาส <tt>การพัฒนาสภาพแวดล้อม</tt> บนองค์ประกอบ <tt>&lt;html&gt;</tt> ของเพจของคุณเพื่อดูบันทึกของเซิร์ฟเวอร์ในคอนโซลของเบราว์เซอร์<br>ในการพัฒนา หน้าผู้ดูแลระบบจะแสดงบันทึกของเซิร์ฟเวอร์ในคอนโซลจาวาสคริปต์เสมอ"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:244
+#: zotonic_mod_development/priv/templates/admin_development.tpl:241
 msgid "Show an overview of all observers"
 msgstr "แสดงภาพรวมของผู้สังเกตการณ์ทั้งหมด"
 
@@ -7360,9 +7404,9 @@ msgstr "แสดงภาพรวมของผู้สังเกตกา
 msgid "Show defined blocks in generated templates"
 msgstr "แสดงบล็อกที่กำหนดไว้ในเทมเพลตที่สร้างขึ้น"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:241
-msgid "Show internals of Zotonic and the modules"
-msgstr "แสดงภายในของ Zotonic และโมดูล"
+#: zotonic_mod_development/priv/templates/admin_development.tpl:238
+msgid "Show internals of Zotonic and the modules."
+msgstr ""
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:25
 msgid "Show paths to included template files in generated templates"
@@ -7374,6 +7418,7 @@ msgstr "แสดงบันทึกเซิร์ฟเวอร์ในค
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:7
+#: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:7
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:7
 #: zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:7
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:31
@@ -7389,19 +7434,23 @@ msgstr "กฎการจัดส่งไซต์"
 msgid "Site Name"
 msgstr "ชื่อไซต์"
 
+#: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:34
+msgid "Start Tracing"
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:21
 msgid "Start matching dispatch rules"
 msgstr "เริ่มจับคู่กฎการจัดส่ง"
 
-#: zotonic_mod_development/src/mod_development.erl:327
+#: zotonic_mod_development/src/mod_development.erl:342
 msgid "Started logging to the console of your browser tab."
 msgstr "เริ่มเข้าสู่ระบบคอนโซลของแท็บเบราว์เซอร์ของคุณ"
 
-#: zotonic_mod_development/src/mod_development.erl:276
+#: zotonic_mod_development/src/mod_development.erl:291
 msgid "Started tracing all template inclusions."
 msgstr "เริ่มติดตามการรวมเทมเพลตทั้งหมด"
 
-#: zotonic_mod_development/src/mod_development.erl:273
+#: zotonic_mod_development/src/mod_development.erl:288
 msgid "Started tracing template inclusions for your session."
 msgstr "เริ่มการรวมเทมเพลตการติดตามสำหรับเซสชันของคุณ"
 
@@ -7410,11 +7459,11 @@ msgstr "เริ่มการรวมเทมเพลตการติด
 msgid "Stop"
 msgstr "เลิก"
 
-#: zotonic_mod_development/src/mod_development.erl:329
+#: zotonic_mod_development/src/mod_development.erl:344
 msgid "Stopped logging to the console of all browser tabs."
 msgstr "หยุดการเข้าสู่ระบบคอนโซลของแท็บเบราว์เซอร์ทั้งหมด"
 
-#: zotonic_mod_development/src/mod_development.erl:285
+#: zotonic_mod_development/src/mod_development.erl:300
 msgid "Stopped tracing template inclusions for all sessions."
 msgstr "หยุดการรวมเทมเพลตการติดตามสำหรับเซสชันทั้งหมด"
 
@@ -7486,6 +7535,10 @@ msgstr "เครื่องมือและการตั้งค่าท
 msgid "Trace all database queries for the current session"
 msgstr "ติดตามการสืบค้นฐานข้อมูลทั้งหมดสำหรับเซสชันปัจจุบัน"
 
+#: zotonic_mod_development/priv/templates/admin_development.tpl:255
+msgid "Trace function calls"
+msgstr ""
+
 #: zotonic_mod_development/priv/templates/admin_development.tpl:172
 msgid "Traces all templates for the current session-id, or all sessions, and renders them as a graph."
 msgstr "ติดตามเทมเพลตทั้งหมดสำหรับ session-id ปัจจุบันหรือเซสชันทั้งหมด และแสดงผลเป็นกราฟ"
@@ -7518,12 +7571,12 @@ msgstr "ประเภท {include}"
 msgid "URI Pattern"
 msgstr "รูปแบบ URI"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:205
+#: zotonic_mod_development/priv/templates/admin_development.tpl:203
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:8
 msgid "View all dispatch rules"
 msgstr "ดูกฎการจัดส่งทั้งหมด"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:207
+#: zotonic_mod_development/priv/templates/admin_development.tpl:205
 msgid "View all dispatch rules and hostnames usable in the site."
 msgstr "ดูกฎการจัดส่งและชื่อโฮสต์ทั้งหมดที่ใช้งานได้ในไซต์"
 
@@ -7539,8 +7592,9 @@ msgstr "คุณไม่ได้รับอนุญาตให้ใช้
 msgid "You are not allowed to use the template debugging."
 msgstr "คุณไม่ได้รับอนุญาตให้ใช้การดีบักเทมเพลต"
 
-#: zotonic_mod_development/priv/templates/admin_development.tpl:250
+#: zotonic_mod_development/priv/templates/admin_development.tpl:267
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:88
+#: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:64
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:53
 #: zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:42
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:137
@@ -8319,7 +8373,8 @@ msgstr "คุณไม่ได้รับอนุญาตให้เปล
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
 msgstr "Zotonic สามารถจัดเก็บไฟล์ที่อัปโหลดและปรับขนาดในระบบคลาวด์ คุณสามารถกำหนดค่าตำแหน่งและคีย์การเข้าถึงสำหรับบริการคลาวด์ได้ที่นี่"
 
-#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:139
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:135
+#: zotonic_mod_fileuploader/src/mod_fileuploader.erl:165
 msgid "Could not upload"
 msgstr "ไม่สามารถอัปโหลด"
 
@@ -8415,56 +8470,140 @@ msgstr "รูปภาพต้นฉบับจะไม่มีการเ
 msgid "Tilt"
 msgstr "เอียง"
 
-#: zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:3
-#: zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:4
-msgid "Import CSV file"
-msgstr "นำเข้าไฟล์ CSV"
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:18
+msgid "About the columns of the spreadsheet data"
+msgstr ""
 
-#: zotonic_mod_import_csv/priv/templates/_admin_import.tpl:3
-#: zotonic_mod_import_csv/priv/templates/_admin_import.tpl:8
-#: zotonic_mod_import_csv/src/mod_import_csv.erl:97
-msgid "Import content"
-msgstr "นำเข้าเนื้อหา"
+#: zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:4
+#: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:3
+msgid "Depending on the filename the data can be imported as pages or as special data."
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:21
+msgid "Every row in the CSV or XLSX file contains a single page. The columns are the properties."
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:78
+msgid "For example, the English title would have the column name: <code>title$en</code>"
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:60
+msgid "If the page is a person, the first name."
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:64
+msgid "If the page is a person, the last or family name."
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:8
+msgid "Import CSV XLSX file"
+msgstr ""
 
 #: zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:7
-msgid "Import data from a CSV file."
-msgstr "นำเข้าข้อมูลจากไฟล์ CSV"
+#: zotonic_mod_import_csv/src/mod_import_csv.erl:102
+msgid "Import CSV or XLSX file"
+msgstr ""
 
-#: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:20
-#: zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:19
-msgid "Import previously deleted items again"
-msgstr "นำเข้ารายการที่ลบไปก่อนหน้านี้อีกครั้ง"
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:3
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:8
+msgid "Import a CSV or XLSX file"
+msgstr ""
 
-#: zotonic_mod_import_csv/src/mod_import_csv.erl:134
+#: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:18
+msgid "Import any previously deleted items again"
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:3
+msgid "Import data from a CSV or XLSX file."
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:77
+msgid "Multilingual properties can be set by specifying the language after the property name."
+msgstr ""
+
+#: zotonic_mod_import_csv/src/mod_import_csv.erl:166
 msgid "Only admins can import CSV files."
 msgstr "เฉพาะผู้ดูแลระบบเท่านั้นที่สามารถนำเข้าไฟล์ CSV"
 
-#: zotonic_mod_import_csv/src/mod_import_csv.erl:125
+#: zotonic_mod_import_csv/src/mod_import_csv.erl:139
 msgid "Please hold on while the file is importing. You will get a notification when it is ready."
 msgstr "โปรดรอในขณะที่กำลังนำเข้าไฟล์ คุณจะได้รับการแจ้งเตือนเมื่อพร้อม"
 
-#: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:9
+#: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:24
+msgid "Progress will be reported in the <a href=\"{url}\">admin log</a> and with notifications in the admin."
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:27
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:43
+msgid "Property"
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:7
 msgid "Select file"
 msgstr "เลือกไฟล์"
 
-#: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:27
+#: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:31
 #: zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:26
 msgid "Start import"
 msgstr "เริ่มการนำเข้า"
 
-#: zotonic_mod_import_csv/src/mod_import_csv.erl:127
-#: zotonic_mod_import_csv/src/mod_import_csv.erl:151
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:56
+msgid "The HTML main text of the page."
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:36
+msgid "The category of the page. Examples: <code>article</code> or <code>text</code>."
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:72
+msgid "The custom path for the URL of the page, for example <code>/my/page</code>"
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:68
+msgid "The email address associated with the page."
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:22
+msgid "The following properties must be present:"
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:23
+msgid "The import will be done in the background after the file has been uploaded to the server."
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:52
+msgid "The summary of the page."
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:48
+msgid "The title of the page."
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:32
+msgid "The unique name of the page, used to identify the page."
+msgstr ""
+
+#: zotonic_mod_import_csv/src/mod_import_csv.erl:149
+#: zotonic_mod_import_csv/src/mod_import_csv.erl:187
 msgid "The uploaded file has been imported."
 msgstr ""
 
-#: zotonic_mod_import_csv/src/mod_import_csv.erl:130
+#: zotonic_mod_import_csv/src/mod_import_csv.erl:162
 msgid "This file cannot be imported."
 msgstr "ไม่สามารถนำเข้าไฟล์นี้ได้"
 
 #: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:2
-msgid "Upload a CSV file from your computer."
-msgstr "อัปโหลดไฟล์ CSV จากคอมพิวเตอร์ของคุณ"
+msgid "Upload a CSV or XLSX file from your computer."
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:40
+msgid "Well known properties are:"
+msgstr ""
+
+#: zotonic_mod_import_csv/priv/templates/admin_import.tpl:85
+msgid "You do not have permission to use the CSV/XLSX import module."
+msgstr ""
 
 #: zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:4
 msgid "Import WXR file"
@@ -8473,6 +8612,10 @@ msgstr "นำเข้าไฟล์ WXR"
 #: zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:5
 msgid "Import a WordPress WXR export file into Zotonic."
 msgstr "นำเข้าไฟล์ส่งออก WordPress WXR ไปยัง Zotonic"
+
+#: zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:19
+msgid "Import previously deleted items again"
+msgstr "นำเข้ารายการที่ลบไปก่อนหน้านี้อีกครั้ง"
 
 #: zotonic_mod_import_wordpress/priv/templates/_dialog_import_wordpress.tpl:2
 msgid "Upload a WordPress WXR file from your computer."
@@ -11425,7 +11568,7 @@ msgstr "เพิ่มไปยังรายชื่อผู้รับจ
 msgid "Add to mailinglist"
 msgstr "เพิ่มไปยังรายชื่อผู้รับจดหมาย"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:77
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:81
 msgid "Aggregated results from all respondents"
 msgstr "ผลรวมจากผู้ตอบแบบสอบถามทั้งหมด"
 
@@ -11445,7 +11588,7 @@ msgstr "หน้าวิดีโอหรือรูปภาพอื่น
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:78
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:79
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:80
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:68
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:74
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:86
 msgid "Answer"
 msgstr "ตอบ"
@@ -11485,9 +11628,9 @@ msgstr "แน่ใจไหมว่าต้องการลบคำถา
 msgid "Are you sure you want to delete this result?"
 msgstr "แน่ใจไหมว่าต้องการลบผลลัพธ์นี้"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:74
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:76
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:78
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:80
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:84
 msgid "Are you sure you want to stop without saving?"
 msgstr "คุณแน่ใจหรือไม่ว่าต้องการหยุดโดยไม่บันทึก"
 
@@ -11545,8 +11688,8 @@ msgstr "คลิกที่ “แก้ไข” เพื่อดูแล�
 msgid "Closed"
 msgstr "ปิด"
 
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:99
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:133
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:105
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:139
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
 msgid "Correct"
 msgstr "ถูกต้อง"
@@ -11722,11 +11865,11 @@ msgstr "สำหรับช่วงวันที่ คุณยังส�
 msgid "Go to question"
 msgstr "ไปที่คำถาม"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:164
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:168
 msgid "Handle this form with"
 msgstr "จัดการแบบฟอร์มนี้ด้วย"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:143
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:147
 msgid "Handling"
 msgstr "การจัดการ"
 
@@ -11753,7 +11896,7 @@ msgstr "ค่าที่ซ่อนอยู่ บันทึกด้ว�
 msgid "Hide from results"
 msgstr "ซ่อนจากผลลัพธ์"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:99
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:103
 msgid "Hide progress information"
 msgstr "ซ่อนข้อมูลความคืบหน้า"
 
@@ -11826,8 +11969,8 @@ msgstr "เชื่อมโยงกับบุคคล"
 msgid "Long answer"
 msgstr "คำตอบยาว"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:146
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:147
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:150
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:151
 msgid "Mail results to"
 msgstr "ส่งผลลัพธ์ไปที่"
 
@@ -11956,7 +12099,7 @@ msgstr "ผ่าน?"
 msgid "Passed"
 msgstr "ผ่านไป"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:127
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:131
 msgid "Passing score"
 msgstr "คะแนนผ่าน"
 
@@ -11968,7 +12111,7 @@ msgstr "เปอร์เซ็นต์"
 msgid "Person"
 msgstr "บุคคล"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:52
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:58
 msgid "Please fill in all the required fields."
 msgstr "กรุณากรอกข้อมูลในฟิลด์ที่จำเป็นทั้งหมด"
 
@@ -11999,7 +12142,7 @@ msgstr "หลัก"
 msgid "Printable list"
 msgstr "รายการที่พิมพ์ได้"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:94
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:98
 msgid "Progress"
 msgstr "ความคืบหน้า"
 
@@ -12007,7 +12150,7 @@ msgstr "ความคืบหน้า"
 msgid "Prompt"
 msgstr "พร้อมท์"
 
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:67
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:73
 msgid "Question"
 msgstr "คำถาม"
 
@@ -12096,6 +12239,10 @@ msgstr "ตัวแก้ไขผลลัพธ์"
 msgid "Results from the respondent"
 msgstr "ผลลัพธ์จากผู้ตอบ"
 
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:77
+msgid "Results from the respondent - if passed only"
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
 msgid "Results until"
 msgstr "ผลลัพธ์จนถึง"
@@ -12126,11 +12273,11 @@ msgstr "เลือกรายชื่อผู้รับจดหมาย
 msgid "Select your country"
 msgstr "เลือกประเทศของคุณ"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:157
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:161
 msgid "Send a confirmation to the respondent. The email address must be known (logged in respondents) or you can add a short text field with the label “email” and the validation set to \"must be an email address\"."
 msgstr "ส่งการยืนยันไปยังผู้ตอบ ต้องระบุที่อยู่อีเมล (ผู้ตอบเข้าสู่ระบบ) หรือคุณสามารถเพิ่มช่องข้อความสั้นที่มีป้ายกำกับว่า \"อีเมล\" และตั้งค่าการตรวจสอบเป็น \"ต้องเป็นที่อยู่อีเมล\""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:149
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:153
 msgid "Separate multiple email addresses with a comma."
 msgstr "แยกที่อยู่อีเมลหลายรายการด้วยลูกน้ำ"
 
@@ -12146,11 +12293,11 @@ msgstr "แสดงแผนภูมิ"
 msgid "Show email addresses"
 msgstr "แสดงที่อยู่อีเมล"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:111
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:115
 msgid "Show progress bar"
 msgstr "แสดงแถบความคืบหน้า"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:105
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:109
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "แสดงข้อมูลความคืบหน้าเป็น“<em>คำถาม 3/10</em>”"
 
@@ -12183,10 +12330,10 @@ msgstr "ขออภัย คุณได้ส่งคำตอบของ�
 msgid "Start"
 msgstr "เริ่มต้น"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:72
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:74
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:76
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:78
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:80
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:84
 msgid "Stop without saving"
 msgstr "หยุดโดยไม่บันทึก"
 
@@ -12214,8 +12361,8 @@ msgstr "เห็นด้วยอย่างยิ่ง"
 msgid "Strongly Disagree"
 msgstr "ไม่เห็นด้วยอย่างยิ่ง"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:87
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:92
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:93
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:98
 #: zotonic_mod_wires/src/scomps/scomp_wires_button.erl:81
 msgid "Submit"
 msgstr "ส่ง"
@@ -12235,7 +12382,7 @@ msgstr "ลบคะแนนสำหรับคำตอบที่ผิด
 msgid "Survey editor"
 msgstr "ตัวแก้ไขแบบสำรวจ"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:122
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:126
 msgid "Test pass percentage"
 msgstr "เปอร์เซ็นต์การผ่านการทดสอบ"
 
@@ -12303,7 +12450,7 @@ msgstr "แบบฟอร์มนี้ถูกปิดใช้งาน �
 msgid "This is a result for:"
 msgstr "นี่เป็นผลลัพธ์สำหรับ:"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:134
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:138
 msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
 msgstr "นี่คือเปอร์เซ็นต์ที่จำเป็นในการผ่านแบบทดสอบหรือแบบทดสอบ ใช้เฉพาะเมื่อคุณได้เพิ่มแบบทดสอบหรือคำถามทดสอบ"
 
@@ -12385,8 +12532,8 @@ msgstr "เมื่อไม่มีเงื่อนไขใดเป็น
 msgid "White"
 msgstr "สีขาว"
 
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:99
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:133
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:105
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:139
 msgid "Wrong"
 msgstr "ผิด"
 
@@ -12413,7 +12560,7 @@ msgstr "คุณกรอกข้อมูลนี้แล้ว"
 msgid "You are not allowed to change these results."
 msgstr "คุณไม่ได้รับอนุญาตให้เปลี่ยนแปลงผลลัพธ์เหล่านี้"
 
-#: zotonic_mod_survey/priv/templates/_survey_results.tpl:45
+#: zotonic_mod_survey/priv/templates/_survey_results.tpl:47
 msgid "You are not allowed to see the results."
 msgstr "คุณไม่ได้รับอนุญาตให้ดูผลลัพธ์"
 
