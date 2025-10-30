@@ -35,6 +35,9 @@
 				{% endif %}
 			{% endif %}
 
+			{% block before_questions %}
+			{% endblock %}
+
 			{% for blk in questions %}
 				{% optional include ["blocks/_block_view_",blk.type,".tpl"]|join
 							id=id
@@ -45,6 +48,9 @@
 							nr=forloop.counter
 				%}
 			{% endfor %}
+
+			{% block after_questions %}
+			{% endblock %}
 		</fieldset>
 
 		{% if not editing %}
@@ -87,7 +93,7 @@
 				<button type="submit" class="btn btn-lg btn-primary">{% if page_nr == pages %}{_ Submit _}{% else %}{_ Next _}{% endif %}</button>
 			{% else %}
 				{% with questions|last as last_q %}
-					{% if not editing and not questions|survey_is_submit and last_q.type /= "survey_stop" %}
+					{% if not questions|survey_is_submit and last_q.type /= "survey_stop" %}
 						{% if page_nr == pages or questions|survey_is_pagebreak_submit %}
 							<button type="submit" class="btn btn-primary btn-lg survey-submit">{_ Submit _}</button>
 						{% else %}
