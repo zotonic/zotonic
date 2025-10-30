@@ -352,6 +352,7 @@ event(#submit{ message = function_trace }, Context) ->
         ?ACL_ADMIN_USER_ID ->
             case z_config:get(function_tracing_enabled) of
                 true ->
+                    recon_trace:clear(),
                     Module = z_context:get_q(<<"module">>, Context),
                     Function = z_context:get_q(<<"function">>, Context),
                     Count = z_convert:to_integer(z_context:get_q(<<"count">>, Context)),
@@ -372,10 +373,10 @@ event(#submit{ message = function_trace }, Context) ->
                                     Output = io_lib:format("<i>Set ~p traces...</i>\n\n", [N]),
                                     z_render:update("trace", Output, Context);
                                 true ->
-                                    z_render:growl_error(?__("Function name does not exist.", Context), Context)
+                                    z_render:update("trace", ?__("<i>Function name does not exist.</i>", Context), Context)
                             end;
                         {error, _} ->
-                            z_render:growl_error(?__("Module not found.", Context), Context)
+                            z_render:update("trace", ?__("<i>Module not found.</i>", Context), Context)
                     end;
                 false ->
                     z_render:growl_error(?__("Function tracing has been disabled in the Zotonic config.", Context), Context)
