@@ -360,12 +360,20 @@ event(#submit{ message = function_trace }, Context) ->
                             Fun = case z_string:trim(Function) of
                                 <<>> -> '_';
                                 <<"_">> -> '_';
-                                F -> binary_to_atom(F)
+                                F ->
+                                    try binary_to_existing_atom(F, utf8)
+                                    catch error:badarg -> {error, nofun}
+                                    end
                             end,
-                            recon_rec:import([z]),
-                            N = function_trace_start(Mod, Fun, Count, Context),
-                            Output = io_lib:format("<i>Set ~p traces...</i>\n\n", [N]),
-                            z_render:update("trace", Output, Context);
+                            if
+                                is_atom(Fun) ->
+                                    recon_rec:import([z]),
+                                    N = function_trace_start(Mod, Fun, Count, Context),
+                                    Output = io_lib:format("<i>Set ~p traces...</i>\n\n", [N]),
+                                    z_render:update("trace", Output, Context);
+                                true ->
+                                    z_render:growl_error(?__("Function name does not exist.", Context), Context)
+                            end;
                         {error, _} ->
                             z_render:growl_error(?__("Module not found.", Context), Context)
                     end;
