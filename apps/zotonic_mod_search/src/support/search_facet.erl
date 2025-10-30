@@ -612,8 +612,7 @@ qterm_1(Field, OpTerm, Value, Query, Context) ->
                         Query,
                         Words);
                 fts when Op =:= <<"=">> ->
-                    NormV = z_string:normalize(Value2),
-                    TsQuery = mod_search:to_tsquery(NormV, Context),
+                    TsQuery = mod_search:to_tsquery(Value2, Context),
                     {ArgN, Query2} = add_term_arg(TsQuery, Query),
                     W = [
                         <<"facet.fts_">>, Field, " @@ ", ArgN
