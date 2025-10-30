@@ -368,7 +368,9 @@ main_languages() ->
 -spec all_languages() -> Languages when
     Languages :: [ {z_language:language_code(), map()} ].
 all_languages() ->
-    sort(z_language:all_languages()).
+    Langs = z_language:all_languages(),
+    Langs1 = maps:filter( fun(K,_V) -> is_atom(K) end, Langs ),
+    sort(Langs1).
 
 %% @doc Return the specific language as requested in the current HTTP query (URL).
 %% Return 'x-default' if there isn't a HTTP request or no language was
