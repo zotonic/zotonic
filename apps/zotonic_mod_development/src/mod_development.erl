@@ -365,7 +365,9 @@ event(#submit{ message = function_trace }, Context) ->
                             recon_rec:import([z]),
                             N = function_trace_start(Mod, Fun, Count, Context),
                             Output = io_lib:format("<i>Set ~p traces...</i>\n\n", [N]),
-                            z_render:update("trace", Output, Context)
+                            z_render:update("trace", Output, Context);
+                        {error, _} ->
+                            z_render:growl_error(?__("Module not found.", Context), Context)
                     end;
                 false ->
                     z_render:growl_error(?__("Function tracing has been disabled in the Zotonic config.", Context), Context)
