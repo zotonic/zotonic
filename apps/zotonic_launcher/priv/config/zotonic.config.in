@@ -279,6 +279,12 @@
 %%% Show a growl message on the terminal if a file is compiled or handled.
    %% {filewatcher_terminal_notifier, true},
 
+%%% Allow the development module to set traces on functions. Default only enabled on
+%%% a Zotonic server with default environment 'development' or 'test'
+%%% Enabling this will will allow the admin user to trace almost all functions in the
+%%% running server and is a security risk.
+   %% {function_tracing_enabled, true},
+
 %%% Maximum number of entries in the metrics log buffer. There are two buffers, one for 1/2/3xx
 %%% results and one for 4/5xx results. All metrics are buffered so that the loggers can easily
 %%% handle spikes.

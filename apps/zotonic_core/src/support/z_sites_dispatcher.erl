@@ -198,6 +198,15 @@ execute(Req, Env) ->
         #dispatch_controller{} = Match ->
             Context = Match#dispatch_controller.context,
             BindingsMap = maps:from_list( Match#dispatch_controller.bindings ),
+            % Ensure that sensitive data is only traceable in development environment
+            case m_site:environment(Context) of
+                development -> ok;
+                _ ->
+                    case proplists:get_bool(sensitive, Match#dispatch_controller.controller_options) of
+                        true -> erlang:process_flag(sensitive, true);
+                        false -> ok
+                    end
+            end,
             Metrics = #{
                 site => z_context:site(Context),
                 peer_ip => m_req:get(peer_ip, Context),

@@ -78,7 +78,23 @@ greater insight in the template selection and compilation.
 With this it is possible to see for a request path which dispatch rules are matched and/or how it is rewritten.
 
 
+### Function call tracing
 
+The function tracing tool allows you to trace calls to a specific function in a module. You can specify the module name,
+function name and the number of calls to trace. The output will be sent to the page that started the trace, via MQTT.
+
+Function tracing can be enabled or disabled in the zotonic.config file. Per default it is enabled for the
+development and test environments. You can enable it runtime using:
+
+    bin/zotonic setconfig zotonic function_tracing_enabled true
+
+Or disable it with:
+
+    bin/zotonic setconfig zotonic function_tracing_enabled false
+
+In dispatch rules it is possible to protect certain requests from being traced. This is done by adding the
+dispatch rule option `sensitive`. This option is set for the authentication requests. On development
+environments this dispatch option is ignored.
 
 
 Automatic recompilation
@@ -128,7 +144,6 @@ On Mac OS X (version 10.8 and higher), we use the external programs `fswatch` an
 sudo brew install fswatch
 sudo brew install terminal-notifier
 ```
-
 
 
 Configuration options
@@ -331,8 +346,86 @@ event(#postback{ message = log_client_enable }, Context) ->
             z_render:growl(?__("No permission to access the console logs.", Context), Context);
         {error, _} ->
             z_render:growl(?__("Error changing the console logs.", Context), Context)
+    end;
+event(#submit{ message = function_trace }, Context) ->
+    case z_acl:user(Context) of
+        ?ACL_ADMIN_USER_ID ->
+            case z_config:get(function_tracing_enabled) of
+                true ->
+                    recon_trace:clear(),
+                    Module = z_context:get_q(<<"module">>, Context),
+                    Function = z_context:get_q(<<"function">>, Context),
+                    Count = z_convert:to_integer(z_context:get_q(<<"count">>, Context)),
+                    case z_utils:ensure_existing_module(z_string:trim(Module)) of
+                        {ok, Mod} ->
+                            Fun = case z_string:trim(Function) of
+                                <<>> -> '_';
+                                <<"_">> -> '_';
+                                F ->
+                                    try binary_to_existing_atom(F, utf8)
+                                    catch error:badarg -> {error, nofun}
+                                    end
+                            end,
+                            if
+                                is_atom(Fun) ->
+                                    recon_rec:import([z]),
+                                    N = function_trace_start(Mod, Fun, Count, Context),
+                                    Output = io_lib:format("<i>Set ~p traces...</i>\n\n", [N]),
+                                    z_render:update("trace", Output, Context);
+                                true ->
+                                    z_render:update("trace", ?__("<i>Function name does not exist.</i>", Context), Context)
+                            end;
+                        {error, _} ->
+                            z_render:update("trace", ?__("<i>Module not found.</i>", Context), Context)
+                    end;
+                false ->
+                    z_render:growl_error(?__("Function tracing has been disabled in the Zotonic config.", Context), Context)
+            end;
+        _ ->
+            z_render:growl_error(?__("Only the admin user can set traces.", Context), Context)
     end.
 
+function_trace_start(Mod, Fun, Count, Context) ->
+    Pid = self(),
+    ContextAsync = z_context:prune_for_async(Context),
+    z_proc:spawn_md(
+        fun() ->
+            Options = [
+                {io_server, self()}
+            ],
+            N = recon_trace:calls({Mod, Fun, '_'}, Count, Options),
+            Pid ! {start_trace, N},
+            function_tracer_output(Count, ContextAsync)
+        end),
+    receive
+        {start_trace, Funs} ->
+            Funs
+    end.
+
+function_tracer_output(Count, Context) when Count =< 0 ->
+    recon_trace:clear(),
+    function_tracer_stream_data(<<"\n\n\nTrace limit reached.">>, Context);
+function_tracer_output(Count, Context) ->
+    receive
+        {io_request, From, ReplyAs, {put_chars, unicode, io_lib, format, Data}} ->
+            function_tracer_stream_data(Data, Context),
+            From ! {io_reply, ReplyAs, ok},
+            function_tracer_output(Count - 1, Context);
+        {io_request, From, ReplyAs, _} ->
+            recon_trace:clear(),
+            From ! {io_reply, ReplyAs, {error, enotsup}}
+        after 600000 ->
+            recon_trace:clear(),
+            function_tracer_stream_data(<<"\n\n\nStreaming timeout after 10 minutes.\n">>, Context)
+    end.
+
+function_tracer_stream_data(Data, Context) ->
+    z_mqtt:publish(
+        [ <<"~client">>, <<"development">>, <<"function_trace_output">> ],
+        #{
+            <<"data">> => unicode:characters_to_binary(Data)
+        },
+        Context).
 
 task_xref_check(EltId, Context) ->
     {ok, XRef} = z_development_template_xref:check(Context),
