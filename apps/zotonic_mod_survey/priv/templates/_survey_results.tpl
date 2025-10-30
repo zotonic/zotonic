@@ -6,7 +6,9 @@
 	<h2>{_ Results _}</h2>
 {% endif %}
 
-{% if id.survey_show_results == 2 and not is_aggregated %}
+{% if (id.survey_show_results == 2 or id.survey_show_results == 3)
+      and not is_aggregated
+%}
 
     {# Personal results #}
     {% include "_survey_results_user.tpl" %}
