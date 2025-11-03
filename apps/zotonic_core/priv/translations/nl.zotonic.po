@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-10-30 16:59\n"
+"PO-Revision-Date: 2025-11-03 18:11\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -665,7 +665,7 @@ msgstr "Verplaats alle gebruikers in deze gebruikersgroepen naar:"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:24
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_visible_for.tpl:29
 msgid "Move to {title}…"
-msgstr "Ga naar {title}…"
+msgstr "Verplaats naar {title}…"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list.tpl:15
 msgid "No ACL rules"
@@ -8533,7 +8533,7 @@ msgstr "Een moment geduld terwijl het bestand wordt geïmporteerd. Je krijgt een
 
 #: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:24
 msgid "Progress will be reported in the <a href=\"{url}\">admin log</a> and with notifications in the admin."
-msgstr "De voortgang wordt gerapporteerd in het <a href=\"{url}\">beheerlogboek</a> en met meldingen in de beheerder."
+msgstr "De voortgang wordt gerapporteerd in het <a href=\"{url}\">beheerlogboek</a> en met meldingen in de admin."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:27
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:43
@@ -8584,7 +8584,7 @@ msgstr "De titel van de pagina."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:32
 msgid "The unique name of the page, used to identify the page."
-msgstr "De unieke naam van de pagina, gebruikt om de pagina te identificeren."
+msgstr "De unieke naam van de pagina die wordt gebruikt om de pagina te identificeren."
 
 #: zotonic_mod_import_csv/src/mod_import_csv.erl:149
 #: zotonic_mod_import_csv/src/mod_import_csv.erl:187
@@ -8597,7 +8597,7 @@ msgstr "Dit bestand kan niet worden geïmporteerd."
 
 #: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:2
 msgid "Upload a CSV or XLSX file from your computer."
-msgstr "Upload een CSV- of XLSX-bestand vanaf je computer."
+msgstr "Upload een CSV- of XLSX-bestand"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:40
 msgid "Well known properties are:"
@@ -10539,11 +10539,11 @@ msgstr "Selecteer een gebruiker."
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:57
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:56
 msgid "Read &amp; write access"
-msgstr "Lezen &amp; schrijftoegang"
+msgstr "Lezen &amp; schrijf-toegang"
 
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:54
 msgid "Read access"
-msgstr "Toegang lezen"
+msgstr "Lees toegang"
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:170
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:54
@@ -10557,7 +10557,7 @@ msgstr "Registreer"
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:23
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:27
 msgid "Register a new client"
-msgstr "Een nieuwe klant registreren"
+msgstr "Een nieuwe client registreren"
 
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:132
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:17
