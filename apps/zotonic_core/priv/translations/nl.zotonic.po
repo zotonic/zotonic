@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-11-03 18:11\n"
+"PO-Revision-Date: 2025-11-03 19:43\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -3890,7 +3890,7 @@ msgstr "Deze module levert geen certificaten."
 
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:35
 msgid "Type to find configuration keys..."
-msgstr "Type om configuratietoetsen te vinden..."
+msgstr "Type om configuratie-keys te vinden..."
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:48
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:75
@@ -7559,15 +7559,15 @@ msgstr "Andere sessie traceren..."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:58
 msgid "Tracing this session..."
-msgstr "Deze sessie wordt gevolgd..."
+msgstr "Deze sessie wordt getraceerd.."
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:126
 msgid "Type of include"
-msgstr "Soort opnemen"
+msgstr "Type insluiting"
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:64
 msgid "Type of {include}"
-msgstr "Soort {include}"
+msgstr "Type {include}"
 
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:47
 msgid "URI Pattern"
@@ -7965,7 +7965,7 @@ msgstr "Download Excel"
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:39
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:48
 msgid "Download JSON"
-msgstr "JSON downloaden"
+msgstr "Download JSON"
 
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:34
 msgid "Download all the pages in the collection"
@@ -8182,7 +8182,7 @@ msgstr "Verwijder bestanden uit de cloud"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:67
 msgid "Delete interval"
-msgstr "Interval verwijderen"
+msgstr "Verwijder interval"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:208
 msgid "Download Queue"
@@ -8289,7 +8289,7 @@ msgstr "S3 API Geheim of FTP/WebDAV-wachtwoord"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:47
 msgid "S3 Cloud Location"
-msgstr "S3-cloudlocatie"
+msgstr "S3-cloud locatie"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:36
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
@@ -8330,7 +8330,7 @@ msgstr "Er is een wachttijd van 1 minuut voordat bestanden worden geüpload."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:154
 msgid "This extra deletion delay extends the period files can be recovered."
-msgstr "Deze extra wisvertraging verlengt de periode waarin bestanden kunnen worden hersteld."
+msgstr "Deze extra verwijder-vertraging verlengt de periode waarin bestanden kunnen worden hersteld."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:228
 msgid "This will queue the files for later asynchronous upload."
@@ -9933,7 +9933,7 @@ msgstr "Controleer alle menupagina's en voeg <i>hasmenupart</i> -verbindingen to
 
 #: zotonic_mod_menu/src/mod_menu.erl:116
 msgid "Checking all menu resources in the backgroud"
-msgstr "Alle menubronnen op de achtergrond controleren"
+msgstr "Alle menu-bronnen op de achtergrond controleren"
 
 #: zotonic_mod_menu/priv/templates/_admin_menu_menu_view.tpl:20
 msgid "Click on <strong>Add menu item</strong> or <strong>Menu item</strong> to add pages."
@@ -10101,7 +10101,7 @@ msgstr "Toegang tot inhoud op deze website."
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:164
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app_token_new.tpl:50
 msgid "Access permission"
-msgstr "Toegang"
+msgstr "Toegangsrechten"
 
 #: zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:29
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:82
@@ -10322,7 +10322,7 @@ msgstr "App bewerken"
 
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:72
 msgid "Edit Client"
-msgstr "Klant bewerken"
+msgstr "Client bewerken"
 
 #: zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:24
 #: zotonic_mod_oauth2/src/mod_oauth2.erl:82
@@ -10475,7 +10475,7 @@ msgstr "OAuth2-toepassing"
 
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:3
 msgid "OAuth2 Application - Access Tokens"
-msgstr "OAuth2-toepassing - toegangsmunten"
+msgstr "OAuth2-toepassing - toegangstokens"
 
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps.tpl:7
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_apps_tokens.tpl:15
@@ -10750,15 +10750,15 @@ msgstr "Controleer de tabel voor de gefacetteerde zoekopdracht en vul deze door 
 
 #: zotonic_mod_search/priv/templates/search_view.tpl:8
 msgid "Matching id, name or path"
-msgstr "Overeenkomende id, naam of pad"
+msgstr "Matchend id, naam of pad"
 
 #: zotonic_mod_search/priv/templates/search_view.tpl:20
 msgid "Matching page path"
-msgstr "Bijpassend paginapad"
+msgstr "Matchend paginapad"
 
 #: zotonic_mod_search/priv/templates/search_view.tpl:18
 msgid "Matching previous page path"
-msgstr "Overeenkomend met het pad van de vorige pagina"
+msgstr "Matchend met het pad van de vorige pagina"
 
 #: zotonic_mod_search/priv/templates/search_view.tpl:41
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:59
