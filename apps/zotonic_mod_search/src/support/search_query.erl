@@ -1197,15 +1197,27 @@ qterm(#{ <<"term">> := <<"modified_before">>, <<"value">> := Date}, _IsNested, C
 qterm(#{ <<"term">> := Term, <<"value">> := Arg}, IsNested, Context) ->
     case z_notifier:first(#search_query_term{ term = Term, arg = Arg }, Context) of
         undefined ->
-            ?LOG_WARNING(#{
-                in => zotonic_mod_search,
-                text => <<"Ignored unknown query search term">>,
-                term => Term,
-                arg => Arg,
-                result => error,
-                reason => unknown_query_term
-            }),
-            [];
+            case maybe_predicate(Term, Context) of
+                {ok, Predicate} ->
+                    NewTerm = #{
+                        <<"term">> => <<"hasobject">>,
+                        <<"value">> => #{
+                            <<"id">> => Arg,
+                            <<"predicate">> => Predicate
+                        }
+                    },
+                    qterm(NewTerm, IsNested, Context);
+                {error, _} ->
+                    ?LOG_WARNING(#{
+                        in => zotonic_mod_search,
+                        text => <<"Ignored unknown query search term">>,
+                        term => Term,
+                        arg => Arg,
+                        result => error,
+                        reason => unknown_query_term
+                    }),
+                    []
+            end;
         [] ->
             [];
         Map when is_map(Map) ->
@@ -1219,6 +1231,14 @@ qterm(#{ <<"term">> := Term, <<"value">> := Arg}, IsNested, Context) ->
 %%
 %% Helper functions
 %%
+
+maybe_predicate(Term, Context) ->
+    case m_rsc:rid(Term, Context) of
+        undefined -> {error, enoent};
+        RId -> m_predicate:id_to_name(RId, Context)
+    end.
+
+
 
 -spec term_op_expr(Ref, Op, Value, Type) -> list() when
     Ref :: iodata(),
