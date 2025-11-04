@@ -146,17 +146,35 @@ json_property(Predicate) ->
     Path = binary:split(Predicate, <<".">>, [global]),
     {ok, {jsonb, <<"rsc">>, <<"props_json">>, Path, type_from_name(lists:last(Path))}}.
 
-maybe_id(Name) ->
+maybe_id(Name) when is_atom(Name) ->
+    maybe_id(atom_to_binary(Name, utf8));
+maybe_id(Name) when is_binary(Name) ->
     case z_props:property_name_type_hint(Name) of
         id -> id;
         _ -> integer
     end.
 
+type_from_name(Name) when is_atom(Name) ->
+    type_from_name(atom_to_binary(Name, utf8));
 type_from_name(Name) ->
     case z_props:property_name_type_hint(Name) of
         undefined -> text;
-        Type -> Type
+        Type -> property_type(Type)
     end.
+
+property_type(id) -> id;
+property_type(int) -> integer;
+property_type(float) -> float;
+property_type(bool) -> boolean;
+property_type(datetime) -> datetime;
+property_type(list) -> list;
+property_type(uri) -> uri;
+property_type(binary) -> text;
+property_type(text) -> text;
+property_type(html) -> text;
+property_type(language) -> text;
+property_type(email) -> text;
+property_type(unsafe) -> text.
 
 %% @doc Expand something like FooBar to the usual zotonic lowercased
 %% property name foo_bar.

@@ -18,8 +18,10 @@ literal_numeric_test() ->
         <<"is_published">> => true,
         <<"sparql_type_check">> => #{
             <<"number">> => 42,
+            <<"count_int">> => 42,
             <<"text">> => <<"42">>,
             <<"boolean">> => true,
+            <<"is_enabled">> => true,
             <<"object">> => #{<<"number">> => 42},
             <<"translation">> => #trans{ tr = [
                 {en, <<"Number">>},
@@ -65,7 +67,31 @@ literal_numeric_test() ->
             search(resource_filter(<<"isLiteral">>, ObjectUri), Context)),
         ?assertEqual(
             [],
-            search(resource_filter(<<"isNumeric">>, ObjectUri), Context))
+            search(resource_filter(<<"isNumeric">>, ObjectUri), Context)),
+        ?assertEqual(
+            [SubjectId],
+            search(
+                property_expression_filter(
+                    <<"sparql_type_check.count_int">>,
+                    <<"?value + 1 = 43">>,
+                    ObjectUri),
+                Context)),
+        ?assertEqual(
+            [SubjectId],
+            search(
+                property_expression_filter(
+                    <<"sparql_type_check.text">>,
+                    <<"CONTAINS(?value, \"4\")">>,
+                    ObjectUri),
+                Context)),
+        ?assertEqual(
+            [SubjectId],
+            search(
+                property_expression_filter(
+                    <<"sparql_type_check.is_enabled">>,
+                    <<"?value && true">>,
+                    ObjectUri),
+                Context))
     after
         ok = m_rsc:delete(SubjectId, Context),
         ok = m_rsc:delete(ObjectId, Context)
@@ -79,6 +105,17 @@ property_filter(Predicate, Function, ObjectUri) ->
         "    ?subject dcterms:relation <", ObjectUri/binary, "> .\n"
         "    ?subject zotonic:", Predicate/binary, " ?value .\n"
         "    FILTER(", Function/binary, "(?value))\n"
+        "}"
+    >>.
+
+property_expression_filter(Predicate, Expression, ObjectUri) ->
+    <<
+        "PREFIX dcterms: <http://purl.org/dc/terms/>\n"
+        "PREFIX zotonic: <http://zotonic.net/predicate/>\n"
+        "SELECT ?subject WHERE {\n"
+        "    ?subject dcterms:relation <", ObjectUri/binary, "> .\n"
+        "    ?subject zotonic:", Predicate/binary, " ?value .\n"
+        "    FILTER(", Expression/binary, ")\n"
         "}"
     >>.
 

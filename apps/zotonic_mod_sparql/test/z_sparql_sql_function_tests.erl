@@ -45,12 +45,13 @@ postgresql_mapping_test_() ->
         mapping(md5, [<<"value">>], <<"md5(value)">>),
         mapping(coalesce, [<<"a">>, <<"b">>], <<"coalesce(a, b)">>),
         mapping('if', [<<"condition">>, <<"a">>, <<"b">>], <<"(CASE WHEN condition THEN a ELSE b END)">>),
-        mapping(isliteral, [<<"value">>], <<"(jsonb_typeof(to_jsonb(value)) IN ('string', 'number', 'boolean'))">>),
-        mapping(isnumeric, [<<"value">>], <<"(jsonb_typeof(to_jsonb(value)) = 'number')">>),
-        mapping(sameterm, [<<"a">>, <<"b">>],
-            <<"(jsonb_typeof(to_jsonb(a)) IN ('string', 'number', 'boolean') "
-              "AND jsonb_typeof(to_jsonb(a)) = jsonb_typeof(to_jsonb(b)) "
-              "AND (to_jsonb(a))::text = (to_jsonb(b))::text)">>),
+        % Following are now handled by the SQL generator
+        % mapping(isliteral, [<<"value">>], <<"(jsonb_typeof(to_jsonb(value)) IN ('string', 'number', 'boolean'))">>),
+        % mapping(isnumeric, [<<"value">>], <<"(jsonb_typeof(to_jsonb(value)) = 'number')">>),
+        % mapping(sameterm, [<<"a">>, <<"b">>],
+        %     <<"(jsonb_typeof(to_jsonb(a)) IN ('string', 'number', 'boolean') "
+        %       "AND jsonb_typeof(to_jsonb(a)) = jsonb_typeof(to_jsonb(b)) "
+        %       "AND (to_jsonb(a))::text = (to_jsonb(b))::text)">>),
         mapping(regex, [<<"value">>, <<"pattern">>], <<"(value ~ pattern)">>),
         mapping(regex, [<<"value">>, <<"pattern">>, <<"flags">>], <<"(value ~ concat('(?', flags, ')', pattern))">>),
         % The replace function needs to adapt the regexp from XPATH to POSIX
@@ -72,6 +73,23 @@ unsupported_function_test() ->
         {error, {unsupported_function, lang}},
         z_sparql_sql_function:to_sql(lang, [<<"value">>])).
 
+type_signature_test() ->
+    ?assertEqual(
+        {ok, {[number], number}},
+        z_sparql_sql_function:type_signature(abs, 1)),
+    ?assertEqual(
+        {ok, {[text, integer, integer], text}},
+        z_sparql_sql_function:type_signature(substr, 3)),
+    ?assertEqual(
+        {ok, {[datetime], integer}},
+        z_sparql_sql_function:type_signature(year, 1)),
+    ?assertEqual(
+        {ok, {[boolean, common, common], common}},
+        z_sparql_sql_function:type_signature('if', 3)),
+    ?assertEqual(
+        {error, {invalid_function_arity, substr, 1}},
+        z_sparql_sql_function:type_signature(substr, 1)).
+
 parse_function_test() ->
     {ok, {query, [], {select, default, _, [], {group, Patterns}, _}}} =
         z_sparql:parse(<<
@@ -90,8 +108,8 @@ parse_function_test() ->
 function_to_sql_term_test() ->
     {ok, _} = application:ensure_all_started(zotonic_notifier),
     Context = z_context:new(zotonic_site_testsandbox),
-    ok = z_notifier:observe(rdf_ns, {?MODULE, observe_rdf_ns}, Context),
-    ok = z_notifier:observe(sparql_mapping, {?MODULE, observe_sparql_mapping}, Context),
+    ok = z_notifier:observe(rdf_ns, {?MODULE, observe_rdf_ns}, 100, Context),
+    ok = z_notifier:observe(sparql_mapping, {?MODULE, observe_sparql_mapping}, 100, Context),
     try
         {ok, Query} = z_sparql:parse(<<
             "PREFIX test: <https://example.test/> "
@@ -135,6 +153,6 @@ observe_rdf_ns(#rdf_ns{}, _Context) ->
     undefined.
 
 observe_sparql_mapping(#sparql_mapping{ ns_prefix = <<"test">>, predicate = <<"name">> }, _Context) ->
-    {ok, {column, <<"rsc">>, <<"name">>}};
+    {ok, {column, <<"rsc">>, <<"name">>, text}};
 observe_sparql_mapping(#sparql_mapping{}, _Context) ->
     undefined.

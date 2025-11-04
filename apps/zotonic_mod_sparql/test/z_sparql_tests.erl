@@ -69,8 +69,8 @@ zotonic_rsc_mapping_test() ->
 select_query_plan_test() ->
     {ok, _} = application:ensure_all_started(zotonic_notifier),
     Context = z_context:new(zotonic_site_testsandbox),
-    ok = z_notifier:observe(rdf_ns, {?MODULE, observe_rdf_ns}, Context),
-    ok = z_notifier:observe(sparql_mapping, {?MODULE, observe_sparql_mapping}, Context),
+    ok = z_notifier:observe(rdf_ns, {?MODULE, observe_rdf_ns}, 100, Context),
+    ok = z_notifier:observe(sparql_mapping, {?MODULE, observe_sparql_mapping}, 100, Context),
     try
         {ok, Query} = z_sparql:parse(<<
             "PREFIX f: <http://xmlns.com/foaf/0.1/> "
@@ -130,8 +130,8 @@ observe_rdf_ns(#rdf_ns{}, _Context) ->
     undefined.
 
 observe_sparql_mapping(#sparql_mapping{ ns_prefix = <<"foaf">>, predicate = <<"name">> }, _Context) ->
-    {ok, {jsonb, <<"rsc">>, <<"props_json">>, [<<"title">>]}};
+    {ok, {jsonb, <<"rsc">>, <<"props_json">>, [<<"title">>], text}};
 observe_sparql_mapping(#sparql_mapping{ ns_prefix = <<"https://example.test/vocab#">>, predicate = <<"label">> }, _Context) ->
-    {ok, {jsonb, <<"rsc">>, <<"props_json">>, [<<"label">>]}};
+    {ok, {jsonb, <<"rsc">>, <<"props_json">>, [<<"label">>], text}};
 observe_sparql_mapping(#sparql_mapping{}, _Context) ->
     undefined.

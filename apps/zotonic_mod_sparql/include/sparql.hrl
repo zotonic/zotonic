@@ -7,8 +7,8 @@
 %% Returns:
 %% - {ok, category}
 %% - {ok, subclass}
-%% - {ok, {column, TableName, Column}}
-%% - {ok, {jsonb, TableName, Column, Selector}}
+%% - {ok, {column, TableName, Column, Type}}
+%% - {ok, {jsonb, TableName, Column, Selector, Type}}
 %% - {ok, {edge, Predicate, IsReversed}}
 %% - {error, eacces | Reason}
 %% - undefined

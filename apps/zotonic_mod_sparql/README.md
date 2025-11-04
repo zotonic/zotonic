@@ -45,8 +45,8 @@ TODO
  - [x] Add basic mappings to properties using the z_rdf_props
  - [x] Add mappings to facet and pivot tables (use dot-syntax: facet.col, pivot.name.col)
  - [x] Mapping of SPARQL functions to (very) similar SQL functions (see doc/sparql/builtins.txt)
- - [ ] Check extraction of JSON terms, do we need to use `#>>` ?? --> Makes type casting easier?
- - [ ] Add type hints for the column and jsonb value mapping, use those for type casting
+ - [x] Check extraction of JSON terms, do we need to use `#>>` ?? --> Makes type casting easier?
+ - [x] Add type hints for the column and jsonb value mapping, use those for type casting
        when using '=' and other operators -- use these for type coercion in operators
  - [ ] Check PostgreSQL functions for functions like: LANG, DATATYPE and isIRI/isBLANK/etc
  - [ ] Add support for dates (from JSONB, literals, etc.) -- xsd:dateTime
@@ -57,6 +57,9 @@ TODO
  - [ ] Add Zotonic model for querying
  - [ ] Add SPARQL endpoint, with expected results (for use with 3rd parties)
  - [ ] Allow SPARQL query in search_query resources
+
+After merge:
+ - [ ] Ensure the types of z_props, mod_rdf and search_facet are the same (bool -> boolean, int -> integer)
 
 The joins problem: the current z_search_terms implementation lifts all joins from all subqueries
 to the top level. This will not work for joins that are only used in a 'noneof' (also in 'anyof'?)

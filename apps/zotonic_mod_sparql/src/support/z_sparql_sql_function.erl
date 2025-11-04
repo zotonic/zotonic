@@ -32,10 +32,26 @@
 -module(z_sparql_sql_function).
 
 -export([
-    to_sql/2
+    to_sql/2,
+    type_signature/2
 ]).
 
 -type sql_expression() :: term().
+
+% The 'common' type is used if two arguments can be of 'any' type, but
+% must resolve to the same type.
+-type result_type() ::
+      boolean
+    | datetime
+    | float
+    | integer
+    | number
+    | text
+    | common.
+
+-type argument_type() ::
+      any
+    | result_type().
 
 -spec to_sql(Function, Arguments) -> {ok, sql_expression()} | {error, Reason} when
     Function :: atom() | term(),
@@ -105,23 +121,25 @@ to_sql('if', [Condition, Then, Else]) ->
         <<" ELSE ">>, Else,
         <<" END)">>
     ]};
-%% PostgreSQL scalars and JSONB scalars are normalized to JSONB so that one
-%% check handles both storage forms. Objects and arrays are structured Zotonic
-%% values and are not considered RDF literals by this approximation.
-to_sql(isliteral, [Value]) ->
-    {ok, [
-        <<"(jsonb_typeof(to_jsonb(">>, Value, <<")) IN ('string', 'number', 'boolean'))">>
-    ]};
-to_sql(isnumeric, [Value]) ->
-    {ok, [
-        <<"(jsonb_typeof(to_jsonb(">>, Value, <<")) = 'number')">>
-    ]};
-to_sql(sameterm, [Left, Right]) ->
-    {ok, [
-        <<"(jsonb_typeof(to_jsonb(">>, Left, <<")) IN ('string', 'number', 'boolean') ">>,
-        <<"AND jsonb_typeof(to_jsonb(">>, Left, <<")) = jsonb_typeof(to_jsonb(">>, Right, <<")) ">>,
-        <<"AND (to_jsonb(">>, Left, <<"))::text = (to_jsonb(">>, Right, <<"))::text)">>
-    ]};
+% %% PostgreSQL scalars and JSONB scalars are normalized to JSONB so that one
+% %% check handles both storage forms. Objects and arrays are structured Zotonic
+% %% values and are not considered RDF literals by this approximation.
+% %% If the types were already known, then z_sparql_sql.erl directly emits
+% %% optimized code.
+% to_sql(isliteral, [Value]) ->
+%     {ok, [
+%         <<"(jsonb_typeof(to_jsonb(">>, Value, <<")) IN ('string', 'number', 'boolean'))">>
+%     ]};
+% to_sql(isnumeric, [Value]) ->
+%     {ok, [
+%         <<"(jsonb_typeof(to_jsonb(">>, Value, <<")) = 'number')">>
+%     ]};
+% to_sql(sameterm, [Left, Right]) ->
+%     {ok, [
+%         <<"(jsonb_typeof(to_jsonb(">>, Left, <<")) IN ('string', 'number', 'boolean') ">>,
+%         <<"AND jsonb_typeof(to_jsonb(">>, Left, <<")) = jsonb_typeof(to_jsonb(">>, Right, <<")) ">>,
+%         <<"AND (to_jsonb(">>, Left, <<"))::text = (to_jsonb(">>, Right, <<"))::text)">>
+%     ]};
 to_sql(regex, [Value, Pattern]) ->
     regex(Value, Pattern, undefined);
 to_sql(regex, [Value, Pattern, Flags]) ->
@@ -138,6 +156,58 @@ to_sql(Function, Arguments) when is_atom(Function) ->
             {error, {unsupported_function, Function}}
     end;
 to_sql(Function, _Arguments) ->
+    {error, {unsupported_function, Function}}.
+
+%% @doc Return the SPARQL input and output types for a supported builtin.
+%% The SQL generator resolves number and common against the actual argument
+%% types before adding casts. `any` deliberately preserves the storage form.
+-spec type_signature(Function, Arity) ->
+    {ok, {[ argument_type() ], result_type()}}
+    | {error, {invalid_function_arity, atom(), non_neg_integer()}}
+    | {error, {unsupported_function, term()}}
+when
+    Function :: atom() | term(),
+    Arity :: non_neg_integer().
+type_signature(bound, 1) -> {ok, {[any], boolean}};
+type_signature(abs, 1) -> {ok, {[number], number}};
+type_signature(ceil, 1) -> {ok, {[number], number}};
+type_signature(floor, 1) -> {ok, {[number], number}};
+type_signature(round, 1) -> {ok, {[number], number}};
+type_signature(concat, Arity) -> {ok, {lists:duplicate(Arity, text), text}};
+type_signature(substr, 2) -> {ok, {[text, integer], text}};
+type_signature(substr, 3) -> {ok, {[text, integer, integer], text}};
+type_signature(strlen, 1) -> {ok, {[text], integer}};
+type_signature(ucase, 1) -> {ok, {[text], text}};
+type_signature(lcase, 1) -> {ok, {[text], text}};
+type_signature(contains, 2) -> {ok, {[text, text], boolean}};
+type_signature(strstarts, 2) -> {ok, {[text, text], boolean}};
+type_signature(strends, 2) -> {ok, {[text, text], boolean}};
+type_signature(strbefore, 2) -> {ok, {[text, text], text}};
+type_signature(strafter, 2) -> {ok, {[text, text], text}};
+type_signature(year, 1) -> {ok, {[datetime], integer}};
+type_signature(month, 1) -> {ok, {[datetime], integer}};
+type_signature(day, 1) -> {ok, {[datetime], integer}};
+type_signature(hours, 1) -> {ok, {[datetime], integer}};
+type_signature(minutes, 1) -> {ok, {[datetime], integer}};
+type_signature(seconds, 1) -> {ok, {[datetime], float}};
+type_signature(now, 0) -> {ok, {[], datetime}};
+type_signature(rand, 0) -> {ok, {[], float}};
+type_signature(md5, 1) -> {ok, {[text], text}};
+type_signature(coalesce, Arity) when Arity > 0 -> {ok, {lists:duplicate(Arity, common), common}};
+type_signature('if', 3) -> {ok, {[boolean, common, common], common}};
+type_signature(isliteral, 1) -> {ok, {[any], boolean}};
+type_signature(isnumeric, 1) -> {ok, {[any], boolean}};
+type_signature(sameterm, 2) -> {ok, {[any, any], boolean}};
+type_signature(regex, 2) -> {ok, {[text, text], boolean}};
+type_signature(regex, 3) -> {ok, {[text, text, text], boolean}};
+type_signature(replace, 3) -> {ok, {[text, text, text], text}};
+type_signature(replace, 4) -> {ok, {[text, text, text, text], text}};
+type_signature(Function, Arity) when is_atom(Function) ->
+    case is_supported(Function) of
+        true -> {error, {invalid_function_arity, Function, Arity}};
+        false -> {error, {unsupported_function, Function}}
+    end;
+type_signature(Function, _Arity) ->
     {error, {unsupported_function, Function}}.
 
 sql_call(Name, Arguments) ->
