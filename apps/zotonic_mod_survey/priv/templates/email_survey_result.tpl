@@ -56,8 +56,8 @@
 		        	<br/>
 		        	<br/>
 		        </p>
-	        {% endif %}
-        {% endwith %}
+	        {% endwith %}
+        {% endif %}
 	{% endif %}
 {% endblock %}
 
