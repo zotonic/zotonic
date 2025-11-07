@@ -518,6 +518,64 @@ nested_category_terms_search_test() ->
     ok.
 
 
+nested_join_aliases_search_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+
+    {ok, ObjectAId} = m_rsc:insert([
+        {category, article},
+        {title, <<"Nested join object A">>}
+    ], C),
+    {ok, ObjectBId} = m_rsc:insert([
+        {category, article},
+        {title, <<"Nested join object B">>}
+    ], C),
+    {ok, SubjectAId} = m_rsc:insert([
+        {category, article},
+        {title, <<"Nested join subject A">>}
+    ], C),
+    {ok, SubjectBId} = m_rsc:insert([
+        {category, article},
+        {title, <<"Nested join subject B">>}
+    ], C),
+    {ok, _} = m_edge:insert(SubjectAId, relation, ObjectAId, C),
+    {ok, _} = m_edge:insert(SubjectBId, relation, ObjectBId, C),
+
+    PredicateId = m_rsc:rid(relation, C),
+    SearchSql = z_search_terms:combine([
+        #search_sql_nested{
+            operator = <<"allof">>,
+            terms = [
+                #search_sql_nested{
+                    operator = <<"anyof">>,
+                    terms = [
+                        nested_edge_term(<<"edge_nested_a">>, ObjectAId, PredicateId),
+                        nested_edge_term(<<"edge_nested_b">>, ObjectBId, PredicateId)
+                    ]
+                },
+                #search_sql_nested{
+                    operator = <<"noneof">>,
+                    terms = [
+                        nested_edge_term(<<"edge_nested_not">>, ObjectBId, PredicateId)
+                    ]
+                }
+            ]
+        },
+        #search_sql_term{
+            where = [<<"rsc.id = ANY(">>, '$1', <<"::int[])">>],
+            args = [[SubjectAId, SubjectBId]]
+        }
+    ]),
+    #search_result{ result = Result } = z_search:search_result(SearchSql, undefined, C),
+    ?assertEqual([SubjectAId], Result),
+
+    m_rsc:delete(SubjectAId, C),
+    m_rsc:delete(SubjectBId, C),
+    m_rsc:delete(ObjectAId, C),
+    m_rsc:delete(ObjectBId, C),
+    ok.
+
+
 nested_filter_search_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
     C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
@@ -658,6 +716,21 @@ to_tsquery_accented_text_test() ->
     ?assert(is_binary(TsQ)),
     ?assert(byte_size(TsQ) > 0),
     ok.
+
+
+%% @doc Join for a nested query in the nested joins test.
+nested_edge_term(Alias, ObjectId, PredicateId) ->
+    #search_sql_term{
+        select = [],
+        join_inner = #{
+            Alias => {<<"edge">>, [Alias, <<".subject_id = rsc.id">>]}
+        },
+        where = [
+            Alias, <<".object_id = ">>, '$1',
+            <<" AND ">>, Alias, <<".predicate_id = ">>, '$2'
+        ],
+        args = [ObjectId, PredicateId]
+    }.
 
 
 uniq([]) ->
