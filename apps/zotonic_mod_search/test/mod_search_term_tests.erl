@@ -77,7 +77,7 @@ props_map3_test() ->
     },
     M = #{
         <<"options">> => #{
-             <<"foo">> => <<"bar">>
+            <<"foo">> => <<"bar">>
         },
         <<"page">> => 1,
         <<"pagelen">> => 20,
