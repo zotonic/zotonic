@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2023 Marc Worrell
+%% @copyright 2023-2025 Marc Worrell
 %% @doc Map query args to query maps and vice versa. Special backwards compatible handling
 %% for repeating terms with the same name.
 %% @end
 
-%% Copyright 2023 Marc Worrell
+%% Copyright 2023-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -412,10 +412,12 @@ map_term({K, V}) ->
     end;
 map_term(#{ <<"terms">> := Terms } = Term) when is_list(Terms) ->
     Terms1 = lists:filtermap(fun map_term/1, Terms),
-    {true, Term#{ <<"terms">> => Terms1 }};
+    {true, Term#{ <<"terms">> => lists:flatten(Terms1) }};
 map_term(#{ <<"term">> := K } = Term) ->
     {K1, _} = maybe_rename_arg({K, undefined}),
     {true, Term#{ <<"term">> => K1 }};
+map_term(Term) when is_map(Term) ->
+    {true, map_terms(Term)};
 map_term(Term) ->
     ?LOG_INFO(#{
         in => zotonic_mod_search,
@@ -432,7 +434,7 @@ map_value(<<"is_", _/binary>>, <<>>) ->
     undefined;
 map_value(<<"is_published", _/binary>>, All) when All =:= <<"all">>; All =:= all ->
     <<"all">>;
-map_value(<<"is_", _/binary>>, V) when is_binary(V) ->
+map_value(<<"is_", _/binary>>, V) when is_binary(V); is_number(V) ->
     z_convert:to_bool(V);
 map_value(_K, V) when is_binary(V) ->
     case binary:match(V, <<",">>) =:= nomatch

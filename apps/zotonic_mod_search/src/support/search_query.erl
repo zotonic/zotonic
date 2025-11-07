@@ -1,9 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2009-2024 Arjan Scherpenisse
+%% @copyright 2009-2025 Arjan Scherpenisse
 %% @doc Handler for m.search[{query, Args..}]
 %% @end
 
-%% Copyright 2009-2024 Arjan Scherpenisse
+%% Copyright 2009-2025 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -180,7 +180,7 @@ qterm(#{ <<"term">> := <<"cat_exact">>, <<"value">> := Cats}, _IsNested, Context
 qterm(#{ <<"term">> := <<"content_group">>, <<"value">> := ContentGroup}, IsNested, Context) when not is_list(ContentGroup) ->
     %% content_group=id
     case rid(ContentGroup, Context) of
-        any ->
+        '*' ->
             #search_sql_term{ extra = [ no_content_group_check ] };
         undefined ->
             % Force an empty result
@@ -359,7 +359,7 @@ qterm(#{ <<"term">> := <<"hasanyobject">>, <<"value">> := ObjPreds}, _IsNested, 
     %% Give all things which have an outgoing edge to Id with any of the given object/predicate combinations
     OPs = expand_object_predicates(ObjPreds, Context),
     % rsc.id in (select subject_id from edge where (object_id = ... and predicate_id = ... ) or (...) or ...)
-    OPClauses = [ object_predicate_clause(Obj, Pred) || {Obj, Pred} <- OPs ],
+    OPClauses = [ object_predicate_clause(Obj, Pred) || {Obj, Pred} <- lists:flatten(OPs) ],
     #search_sql_term{
         where = [
             "rsc.id in (select subject_id from edge where (",
@@ -371,7 +371,7 @@ qterm(#{ <<"term">> := <<"hasanysubject">>, <<"value">> := ObjPreds}, _IsNested,
     %% hasanysubbject=[[id,predicate]|id, ...]
     %% Give all things which have an incoming edge to Id with any of the given subject/predicate combinations
     OPs = expand_object_predicates(ObjPreds, Context),
-    OPClauses = [ subject_predicate_clause(Obj, Pred) || {Obj, Pred} <- OPs ],
+    OPClauses = [ subject_predicate_clause(Obj, Pred) || {Obj, Pred} <- lists:flatten(OPs) ],
     #search_sql_term{
         where = [
             "rsc.id in (select object_id from edge where (",
@@ -1197,15 +1197,27 @@ qterm(#{ <<"term">> := <<"modified_before">>, <<"value">> := Date}, _IsNested, C
 qterm(#{ <<"term">> := Term, <<"value">> := Arg}, IsNested, Context) ->
     case z_notifier:first(#search_query_term{ term = Term, arg = Arg }, Context) of
         undefined ->
-            ?LOG_WARNING(#{
-                in => zotonic_mod_search,
-                text => <<"Ignored unknown query search term">>,
-                term => Term,
-                arg => Arg,
-                result => error,
-                reason => unknown_query_term
-            }),
-            [];
+            case maybe_predicate(Term, Context) of
+                {ok, Predicate} ->
+                    NewTerm = #{
+                        <<"term">> => <<"hasobject">>,
+                        <<"value">> => #{
+                            <<"id">> => Arg,
+                            <<"predicate">> => Predicate
+                        }
+                    },
+                    qterm(NewTerm, IsNested, Context);
+                {error, _} ->
+                    ?LOG_WARNING(#{
+                        in => zotonic_mod_search,
+                        text => <<"Ignored unknown query search term">>,
+                        term => Term,
+                        arg => Arg,
+                        result => error,
+                        reason => unknown_query_term
+                    }),
+                    []
+            end;
         [] ->
             [];
         Map when is_map(Map) ->
@@ -1219,6 +1231,14 @@ qterm(#{ <<"term">> := Term, <<"value">> := Arg}, IsNested, Context) ->
 %%
 %% Helper functions
 %%
+
+maybe_predicate(Term, Context) ->
+    case m_rsc:rid(Term, Context) of
+        undefined -> {error, enoent};
+        RId -> m_predicate:id_to_name(RId, Context)
+    end.
+
+
 
 -spec term_op_expr(Ref, Op, Value, Type) -> list() when
     Ref :: iodata(),
@@ -1254,19 +1274,39 @@ to_language_atom(Code, _Context) ->
     IsNested :: boolean(),
     Context :: z:context(),
     TermOrTerms :: #search_sql_term{} | [ #search_sql_term{} ].
-parse_edges(Term, [H], IsNested, Context) when is_list(H) ->
-    parse_edges(Term, H, IsNested, Context);
-parse_edges(Term, [H|_] = Es, _IsNested, Context) when is_list(H) ->
+parse_edges(Term, Edges, IsNested, Context) ->
+    NormEdges = lists:flatten(normalize_edge_list(Edges, Context)),
     lists:map(
         fun(E) ->
-            parse_edges(Term, E, true, Context)
+            edge_term(Term, E, IsNested, Context)
         end,
-        Es);
-parse_edges(Term, Id, IsNested, Context) when is_number(Id); is_binary(Id); is_atom(Id) ->
-    parse_edges(Term, [Id], IsNested, Context);
-parse_edges(Term, [Id, Predicate], IsNested, Context) ->
-    parse_edges(Term, [Id, Predicate, <<"rsc">>], IsNested, Context);
-parse_edges(hassubject, [Id, Predicate, JoinAlias], true, Context) ->
+        NormEdges).
+
+edge_term(hassubject, #{ id := '*', predicate := '*', join_rsc := Alias }, _IsNested, _Context) ->
+    #search_sql_term{
+        where = [
+            <<"EXISTS (SELECT id FROM edge WHERE edge.object_id = ", Alias/binary, ".id)">>
+        ]
+    };
+edge_term(hassubject, #{ id := Id, predicate := '*', join_rsc := Alias }, _IsNested, Context) ->
+    #search_sql_term{
+        where = [
+            <<"EXISTS (SELECT id FROM edge WHERE edge.object_id = ", Alias/binary, ".id AND edge.subject_id = ">>, '$1', <<")">>
+        ],
+        args = [
+            m_rsc:rid(Id, Context)
+        ]
+    };
+edge_term(hassubject, #{ id := '*', predicate := Predicate, join_rsc := Alias }, _IsNested, Context) ->
+    #search_sql_term{
+        where = [
+            <<"EXISTS (SELECT id FROM edge WHERE edge.object_id = ", Alias/binary, ".id AND edge.predicate_id = ">>, '$1', <<")">>
+        ],
+        args = [
+            predicate_to_id(Predicate, Context)
+        ]
+    };
+edge_term(hassubject, #{ id := Id, predicate := Predicate, join_rsc := JoinAlias }, true, Context) ->
     % For sub-query terms we use 'exists', to prevent a "dangling" edge join.
     JoinAlias1 = sql_safe(JoinAlias),
     #search_sql_term{
@@ -1280,7 +1320,7 @@ parse_edges(hassubject, [Id, Predicate, JoinAlias], true, Context) ->
             predicate_to_id(Predicate, Context)
         ]
     };
-parse_edges(hassubject, [Id, Predicate, JoinAlias], false, Context) ->
+edge_term(hassubject, #{ id := Id, predicate := Predicate, join_rsc := JoinAlias }, false, Context) ->
     % For top-level terms we use a join to allow sort by the edge order.
     JoinAlias1 = sql_safe(JoinAlias),
     EdgeAlias = z_ids:identifier(),
@@ -1298,16 +1338,31 @@ parse_edges(hassubject, [Id, Predicate, JoinAlias], false, Context) ->
             predicate_to_id(Predicate, Context)
         ]
     };
-parse_edges(hassubject, [Id], _IsNested, Context) ->
+edge_term(hasobject, #{ id := '*', predicate := '*', join_rsc := Alias }, _IsNested, _Context) ->
     #search_sql_term{
         where = [
-            <<"EXISTS (SELECT id FROM edge WHERE edge.object_id = rsc.id AND edge.subject_id = ">>, '$1', <<")">>
+            <<"EXISTS (SELECT id FROM edge WHERE edge.subject_id = ", Alias/binary, ".id)">>
+        ]
+    };
+edge_term(hasobject, #{ id := Id, predicate := '*', join_rsc := Alias }, _IsNested, Context) ->
+    #search_sql_term{
+        where = [
+            <<"EXISTS (SELECT id FROM edge WHERE edge.subject_id = ", Alias/binary, ".id AND edge.object_id = ">>, '$1', <<")">>
         ],
         args = [
             m_rsc:rid(Id, Context)
         ]
     };
-parse_edges(hasobject, [Id, Predicate, JoinAlias], true, Context) ->
+edge_term(hasobject, #{ id := '*', predicate := Predicate, join_rsc := Alias }, _IsNested, Context) ->
+    #search_sql_term{
+        where = [
+            <<"EXISTS (SELECT id FROM edge WHERE edge.subject_id = ", Alias/binary, ".id AND edge.predicate_id = ">>, '$1', <<")">>
+        ],
+        args = [
+            predicate_to_id(Predicate, Context)
+        ]
+    };
+edge_term(hasobject, #{ id := Id, predicate := Predicate, join_rsc := JoinAlias }, true, Context) ->
     % For sub-query terms we use 'exists', to prevent a "dangling" edge join.
     JoinAlias1 = sql_safe(JoinAlias),
     #search_sql_term{
@@ -1321,7 +1376,7 @@ parse_edges(hasobject, [Id, Predicate, JoinAlias], true, Context) ->
             predicate_to_id(Predicate, Context)
         ]
     };
-parse_edges(hasobject, [Id, Predicate, JoinAlias], false, Context) ->
+edge_term(hasobject, #{ id := Id, predicate := Predicate, join_rsc := JoinAlias }, false, Context) ->
     % For top-level terms we use a join to allow sort by the edge order.
     JoinAlias1 = sql_safe(JoinAlias),
     EdgeAlias = z_ids:identifier(),
@@ -1338,16 +1393,47 @@ parse_edges(hasobject, [Id, Predicate, JoinAlias], false, Context) ->
             m_rsc:rid(Id, Context),
             predicate_to_id(Predicate, Context)
         ]
-    };
-parse_edges(hasobject, [Id], _IsNested, Context) ->
-    #search_sql_term{
-        where = [
-            <<"EXISTS (SELECT id FROM edge WHERE edge.subject_id = rsc.id AND edge.object_id = ">>, '$1', <<")">>
-        ],
-        args = [
-            m_rsc:rid(Id, Context)
-        ]
     }.
+
+% Edges can have the form:
+%
+% - Id
+% - [Id, Predicate]
+% - [Id, Predicate, Alias]
+% - [ [Id, Predicate], ... ]
+% - [ [Id, Predicate, Alias], ... ]
+% - #{ <<"id">> => Id, <<"predicate">> => Predicate, <<"join_rsc">> => Alias }
+%
+% The alias defaults to 'rsc' when not given.
+% The predicate defaults to '*' when not given.
+%
+% The given edges will be handled as an 'AND' query.
+%
+normalize_edge_list(E, Context) when is_map(E) ->
+    [
+        #{
+            id => rid(maps:get(<<"id">>, E, '*'), Context),
+            predicate => rid(maps:get(<<"predicate">>, E, '*'), Context),
+            join_rsc => sql_safe(maps:get(<<"join_rsc">>, E, <<"rsc">>))
+        }
+    ];
+normalize_edge_list(Id, Context) when is_atom(Id); is_integer(Id); is_binary(Id) ->
+    normalize_edge_list(#{ <<"id">> => Id }, Context);
+normalize_edge_list([H], Context) when is_list(H); is_map(H) ->
+    normalize_edge_list(H, Context);
+normalize_edge_list([H|_] = Es, Context) when is_list(H); is_map(H) ->
+    lists:map(
+        fun(E) ->
+            normalize_edge_list(E, Context)
+        end,
+        Es);
+normalize_edge_list([Id], Context) ->
+    normalize_edge_list(#{ <<"id">> => Id }, Context);
+normalize_edge_list([Id, Predicate], Context) ->
+    normalize_edge_list(#{ <<"id">> => Id, <<"predicate">> => Predicate }, Context);
+normalize_edge_list([Id, Predicate, Alias], Context) ->
+    normalize_edge_list(#{ <<"id">> => Id, <<"predicate">> => Predicate, <<"join_rsc">> => Alias }, Context).
+
 
 %% Add a join on the hierarchy table.
 % add_hierarchy_join(HierarchyName, Lft, Rght, Search) ->
@@ -1861,24 +1947,26 @@ expand_object_predicates(Bin, Context) when is_binary(Bin) ->
 expand_object_predicates(OPs, Context) ->
     map_rids(OPs, Context).
 
-map_rids({rsc_list, L}, Context) ->
+map_rids(#rsc_list{ list = L }, Context) ->
     map_rids(L, Context);
 map_rids(L, Context) when is_list(L) ->
-    [ map_rid(X,Context) || X <- L, X =/= <<>> ];
+    [ map_rid(X,Context) || X <- L, X =/= <<>>, X =/= undefined ];
 map_rids(Id, Context) ->
     map_rid(Id, Context).
 
-map_rid([], _Context) ->  {any, any};
-map_rid([Obj,Pred|_], Context) -> {rid(Obj,Context),rid(Pred,Context)};
-map_rid([Obj], Context) ->  {rid(Obj, Context), any};
-map_rid(Obj, Context) ->  {rid(Obj, Context), any}.
+map_rid([], _Context) ->  {'*', '*'};
+map_rid(#{ <<"id">> := Obj, <<"predicate">> := Pred }, Context) -> {rid(Obj,Context), rid(Pred,Context)};
+map_rid(#{ <<"id">> := Obj }, Context) -> {rid(Obj,Context), '*'};
+map_rid([Obj,Pred|_], Context) -> {rid(Obj,Context), rid(Pred,Context)};
+map_rid([Obj], Context) ->  {rid(Obj, Context), '*'};
+map_rid(Obj, Context) ->  {rid(Obj, Context), '*'}.
 
 rid(undefined, _Context) -> undefined;
-rid(<<"*">>, _Context) -> any;
-rid('*', _Context) -> any;
-rid("*", _Context) -> any;
-rid("", _Context) -> any;
-rid(<<>>, _Context) -> any;
+rid(<<"*">>, _Context) -> '*';
+rid('*', _Context) -> '*';
+rid("*", _Context) -> '*';
+rid("", _Context) -> '*';
+rid(<<>>, _Context) -> '*';
 rid(Id, _Context) when is_integer(Id) -> Id;
 rid(Id, Context) -> m_rsc:rid(Id, Context).
 
@@ -1889,7 +1977,7 @@ predicate_to_id(Pred, Context) ->
         {error, _} ->
             case m_rsc:rid(Pred, Context) of
                 undefined ->
-                    ?LOG_NOTICE(#{
+                    ?LOG_INFO(#{
                         text => <<"Query: unknown predicate">>,
                         in => zotonic_mod_search,
                         predicate => Pred
@@ -1907,11 +1995,11 @@ object_predicate_clause(_Object, undefined) ->
     "false";
 object_predicate_clause(undefined, _Predicate) ->
     "false";
-object_predicate_clause(any, any) ->
+object_predicate_clause('*', '*') ->
     ["edge.subject_id = rsc.id"];
-object_predicate_clause(any, PredicateId) when is_integer(PredicateId) ->
+object_predicate_clause('*', PredicateId) when is_integer(PredicateId) ->
     ["edge.predicate_id = ", integer_to_list(PredicateId)];
-object_predicate_clause(ObjectId, any) when is_integer(ObjectId) ->
+object_predicate_clause(ObjectId, '*') when is_integer(ObjectId) ->
     ["edge.object_id = ", integer_to_list(ObjectId)];
 object_predicate_clause(ObjectId, PredicateId) when is_integer(PredicateId), is_integer(ObjectId) ->
     ["edge.object_id=", integer_to_list(ObjectId),
@@ -1924,11 +2012,11 @@ subject_predicate_clause(_Subject, undefined) ->
     "false";
 subject_predicate_clause(undefined, _Predicate) ->
     "false";
-subject_predicate_clause(any, any) ->
+subject_predicate_clause('*', '*') ->
     ["edge.object_id = rsc.id"];
-subject_predicate_clause(any, PredicateId) when is_integer(PredicateId) ->
+subject_predicate_clause('*', PredicateId) when is_integer(PredicateId) ->
     ["edge.predicate_id = ", integer_to_list(PredicateId)];
-subject_predicate_clause(SubjectId, any) when is_integer(SubjectId) ->
+subject_predicate_clause(SubjectId, '*') when is_integer(SubjectId) ->
     ["edge.subject_id = ", integer_to_list(SubjectId)];
 subject_predicate_clause(SubjectId, PredicateId) when is_integer(PredicateId), is_integer(SubjectId) ->
     ["edge.subject_id=", integer_to_list(SubjectId),
