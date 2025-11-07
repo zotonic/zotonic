@@ -1,8 +1,6 @@
 -module(mod_search_term_tests).
 
 -include_lib("eunit/include/eunit.hrl").
-% -include_lib("zotonic_core/include/zotonic.hrl").
-
 props_map1_test() ->
     T = #{
         <<"page">> => 1,
