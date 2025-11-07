@@ -1276,7 +1276,6 @@ to_language_atom(Code, _Context) ->
     TermOrTerms :: #search_sql_term{} | [ #search_sql_term{} ].
 parse_edges(Term, Edges, IsNested, Context) ->
     NormEdges = lists:flatten(normalize_edge_list(Edges, Context)),
-    ?DEBUG(NormEdges),
     lists:map(
         fun(E) ->
             edge_term(Term, E, IsNested, Context)
