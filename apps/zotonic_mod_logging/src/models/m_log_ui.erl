@@ -27,9 +27,11 @@ Not yet documented.
 %% interface functions
 -export([
     m_get/3,
+    log_event/2,
     insert_event/2,
     insert/2,
     get/2,
+    ringbuffer/1,
     search_query/2,
     periodic_cleanup/1,
     install/1
@@ -46,41 +48,73 @@ m_get([ Index | Rest ], _Msg, Context) ->
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
 
-
+%% @doc Fetch a specific log entry from the database UI log.
+-spec get(Id, Context) -> map() | undefined when
+    Id :: integer(),
+    Context :: z:context().
 get(Id, Context) ->
     case z_db:select(log_ui, Id, Context) of
         {ok, R} -> R;
         {error, enoent} -> undefined
     end.
 
+%% @doc Return the name of the UI event ringbuffer for this site.
+-spec ringbuffer(Context) -> Name when
+    Context :: z:context(),
+    Name :: atom().
+ringbuffer(Context) ->
+    z_utils:name_for_site(ui_log_buffer, Context).
+
+%% @doc Log a UI event in the ringbuffer. The buffer is slowly consumed
+%% and the surviving events are written to the UI log.
+-spec log_event(Event, Context) -> ok | {error, Reason} when
+    Event :: map(),
+    Context :: z:context(),
+    Reason :: ignored.
+log_event(Event, Context) ->
+    case is_event_loggable(Event) of
+        true ->
+            LogEvent = #{
+                event => Event,
+                user_id => z_acl:user(Context),
+                peer => m_req:get(peer, Context),
+                timestamp => z_datetime:timestamp()
+            },
+            ringbuffer:write(ringbuffer(Context), LogEvent);
+        false ->
+            {error, ignored}
+    end.
+
+%% @doc Write an event row to the database log table.
 insert(Props, Context) ->
     z_db:insert(log_ui, Props, Context).
 
-insert_event(Props, Context) when is_map(Props) ->
-    insert_event(maps:to_list(Props), Context);
-insert_event(Props, Context) when is_list(Props) ->
-    case is_event_loggable(Props) of
-        true ->
-            UserId = z_acl:user(Context),
-            Props1 = lists:filter( fun filter_prop/1, Props ),
-            Props2 = lists:map( fun map_prop/1, Props1 ),
-            Type = case proplists:get_value(type, Props2) of
-                undefined -> <<"error">>;
-                T -> T
-            end,
-            Message = [
-                {user_id, UserId},
-                {type, Type},
-                {remote_ip, m_req:get(peer, Context)}
-            ] ++ proplists:delete(type, Props2),
-            MsgUserProps = maybe_add_user_props(Message, Context),
-            z_db:insert(log_ui, MsgUserProps, Context);
-        false ->
-            {error, ignore}
-    end.
+%% @doc Write a queued event to the database log table. Decorate with
+%% information about the user.
+insert_event(#{ event := Event, user_id := UserId, timestamp := Timestamp, peer := Peer }, Context) ->
+    Props1 = lists:filter( fun filter_prop/1, maps:to_list(Event) ),
+    Props2 = lists:map( fun map_prop/1, Props1 ),
+    Type = case proplists:get_value(type, Props2) of
+        undefined -> <<"error">>;
+        T -> T
+    end,
+    Message = [
+        {user_id, UserId},
+        {type, Type},
+        {remote_ip, Peer},
+        {created, z_datetime:timestamp_to_datetime(Timestamp)}
+    ] ++ proplists:delete(type, Props2),
+    MsgUserProps = maybe_add_user_props(Message, Context),
+    z_db:insert(log_ui, MsgUserProps, Context).
 
+%% @doc Only log UI events with a known user_agent. The user-agent must
+%% not be a known bot.
+is_event_loggable(#{ <<"user_agent">> := UserAgent }) ->
+    not is_ignored_bot(UserAgent);
 is_event_loggable(Props) ->
-    not is_ignored_bot(proplists:get_value(<<"user_agent">>, Props)).
+    not is_ignored_bot(proplists:get_value(<<"user_agent">>, Props));
+is_event_loggable(_Props) ->
+    false.
 
 is_ignored_bot(undefined) ->
     false;
