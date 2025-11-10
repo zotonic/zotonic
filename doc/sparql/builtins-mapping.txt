@@ -136,7 +136,7 @@ Think of max/min/any/etc.  ('sample' doesn't have an equivalent afaik)
 - https://www.w3.org/TR/sparql11-query/#func-filter-exists
 
 --> Need to add support in grammar (yrl), plan and sql mapping.
-
+--> Changes needed for group_by in the sql terms record and sql generation
 
 
 ExistsFunc    ::=   'EXISTS' GroupGraphPattern
@@ -150,6 +150,29 @@ Aggregate     ::=     'COUNT' '(' 'DISTINCT'? ( '*' | Expression ) ')'
                 | 'AVG' '(' 'DISTINCT'? Expression ')'
                 | 'SAMPLE' '(' 'DISTINCT'? Expression ')'
                 | 'GROUP_CONCAT' '(' 'DISTINCT'? Expression ( ';' 'SEPARATOR' '=' String )? ')'
+
+
+Possible mappings from sparql to postgresql:
+
+SPARQL                PostgreSQL              Result type / notes
+--------------------- ----------------------- -----------------------------------
+COUNT(*)              count(*)                integer
+COUNT(expr)           count(expr)             integer; SQL NULL for unbound/null input
+COUNT(DISTINCT expr)  count(DISTINCT expr)    Direct mapping
+SUM(expr)             coalesce(sum(expr), 0)  Numeric input only
+AVG(expr)             coalesce(avg(expr), 0)  Numeric input; result normally number/float
+MIN(expr)             min(expr)               Preserve argument type
+MAX(expr)             max(expr)               Preserve argument type
+
+GROUP_CONCAT(expr)    coalesce(string_agg(text_expr, ' '), '')
+                                              default separator is ' '
+
+GROUP_CONCAT(expr; SEPARATOR=",")
+                      coalesce(string_agg(text_expr, ','), '')  Order is not specified in SPARQL
+
+SAMPLE(expr)          any_value(expr)         PostgreSQL 16+ only
+
+EXISTS/NOT EXISTS     EXISTS/NOT EXISTS       boolean, use subqueries
 
 
 ----------------------------------------------------------------------------------------------------
