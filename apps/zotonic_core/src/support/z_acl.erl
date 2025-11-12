@@ -157,7 +157,7 @@ is_allowed_prop(_Action, _Object, _Property, #context{ user_id = ?ACL_ADMIN_USER
 is_allowed_prop(Action, Object, Property, Context) when is_atom(Property) ->
     is_allowed_prop(Action, Object, atom_to_binary(Property, utf8), Context);
 is_allowed_prop(Action, Object, Property, Context) ->
-    case z_memo:get({rsc_prop_allowed, Action, Object, Property}, Context) of
+    case z_memo:get({rsc_prop_visible, Action, Object, Property}, Context) of
         {ok, IsAllowed} ->
             IsAllowed;
         undefined ->
