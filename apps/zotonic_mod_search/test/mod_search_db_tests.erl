@@ -176,7 +176,8 @@ search_edge_exclude_test() ->
                 <<"value">> => <<"{}">>
             },
             #{
-                <<"id">> => [ A, B ]
+                <<"term">> => <<"id">>,
+                <<"value">> => [ A, B ]
             },
             #{
                 <<"term">> => <<"sort">>,
@@ -191,7 +192,8 @@ search_edge_exclude_test() ->
                 <<"value">> => <<"{}">>
             },
             #{
-                <<"id">> => [ A, B ]
+                <<"term">> => <<"id">>,
+                <<"value">> => [ A, B ]
             },
             #{
                 <<"term">> => <<"sort">>,
