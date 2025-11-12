@@ -1356,19 +1356,8 @@ edge_term(hasobject, #{ id := '*', predicate := '*', join_rsc := Alias }, _IsNes
             <<"EXISTS (SELECT id FROM edge WHERE edge.subject_id = ", Alias/binary, ".id)">>
         ]
     };
-edge_term(hasobject, #{ id := '{}', predicate := '{}', join_rsc := Alias }, _IsNested, _Context) ->
-    #search_sql_term{
-        where = [
-            <<"NOT EXISTS (SELECT id FROM edge WHERE edge.subject_id = ", Alias/binary, ".id)">>
-        ]
-    };
-edge_term(hasobject, #{ id := '{}', predicate := '*', join_rsc := Alias }, _IsNested, _Context) ->
-    #search_sql_term{
-        where = [
-            <<"NOT EXISTS (SELECT id FROM edge WHERE edge.subject_id = ", Alias/binary, ".id)">>
-        ]
-    };
-edge_term(hasobject, #{ id := '*', predicate := '{}', join_rsc := Alias }, _IsNested, _Context) ->
+edge_term(hasobject, #{ id := Id, predicate := Predicate, join_rsc := Alias }, _IsNested, _Context)
+    when (Id =:= '{}' orelse Id =:= '*') andalso (Predicate =:= '{}' orelse Predicate =:= '*') andalso (Id =:= '{}' orelse Predicate =:= '{}') ->
     #search_sql_term{
         where = [
             <<"NOT EXISTS (SELECT id FROM edge WHERE edge.subject_id = ", Alias/binary, ".id)">>
