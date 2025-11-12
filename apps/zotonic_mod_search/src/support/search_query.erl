@@ -1288,25 +1288,53 @@ edge_term(hassubject, #{ id := '*', predicate := '*', join_rsc := Alias }, _IsNe
             <<"EXISTS (SELECT id FROM edge WHERE edge.object_id = ", Alias/binary, ".id)">>
         ]
     };
-edge_term(hassubject, #{ id := Id, predicate := '*', join_rsc := Alias }, _IsNested, Context) ->
+edge_term(hassubject, #{ id := '{}', predicate := '{}', join_rsc := Alias }, _IsNested, _Context) ->
+    #search_sql_term{
+        where = [
+            <<"NOT EXISTS (SELECT id FROM edge WHERE edge.object_id = ", Alias/binary, ".id)">>
+        ]
+    };
+edge_term(hassubject, #{ id := '{}', predicate := '*', join_rsc := Alias }, _IsNested, _Context) ->
+    #search_sql_term{
+        where = [
+            <<"NOT EXISTS (SELECT id FROM edge WHERE edge.object_id = ", Alias/binary, ".id)">>
+        ]
+    };
+edge_term(hassubject, #{ id := '*', predicate := '{}', join_rsc := Alias }, _IsNested, _Context) ->
+    #search_sql_term{
+        where = [
+            <<"NOT EXISTS (SELECT id FROM edge WHERE edge.object_id = ", Alias/binary, ".id)">>
+        ]
+    };
+edge_term(hassubject, #{ id := Id, predicate := '*', join_rsc := Alias }, _IsNested, _Context) ->
     #search_sql_term{
         where = [
             <<"EXISTS (SELECT id FROM edge WHERE edge.object_id = ", Alias/binary, ".id AND edge.subject_id = ">>, '$1', <<")">>
         ],
-        args = [
-            m_rsc:rid(Id, Context)
-        ]
+        args = [ Id ]
     };
-edge_term(hassubject, #{ id := '*', predicate := Predicate, join_rsc := Alias }, _IsNested, Context) ->
+edge_term(hassubject, #{ id := Id, predicate := '{}', join_rsc := Alias }, _IsNested, _Context) ->
+    #search_sql_term{
+        where = [
+            <<"NOT EXISTS (SELECT id FROM edge WHERE edge.object_id = ", Alias/binary, ".id AND edge.subject_id = ">>, '$1', <<")">>
+        ],
+        args = [ Id ]
+    };
+edge_term(hassubject, #{ id := '*', predicate := PredicateId, join_rsc := Alias }, _IsNested, _Context) ->
     #search_sql_term{
         where = [
             <<"EXISTS (SELECT id FROM edge WHERE edge.object_id = ", Alias/binary, ".id AND edge.predicate_id = ">>, '$1', <<")">>
         ],
-        args = [
-            predicate_to_id(Predicate, Context)
-        ]
+        args = [ PredicateId ]
     };
-edge_term(hassubject, #{ id := Id, predicate := Predicate, join_rsc := JoinAlias }, true, Context) ->
+edge_term(hassubject, #{ id := '{}', predicate := PredicateId, join_rsc := Alias }, _IsNested, _Context) ->
+    #search_sql_term{
+        where = [
+            <<"NOT EXISTS (SELECT id FROM edge WHERE edge.object_id = ", Alias/binary, ".id AND edge.predicate_id = ">>, '$1', <<")">>
+        ],
+        args = [ PredicateId ]
+    };
+edge_term(hassubject, #{ id := Id, predicate := PredicateId, join_rsc := JoinAlias }, true, _Context) ->
     % For sub-query terms we use 'exists', to prevent a "dangling" edge join.
     JoinAlias1 = sql_safe(JoinAlias),
     #search_sql_term{
@@ -1315,12 +1343,9 @@ edge_term(hassubject, #{ id := Id, predicate := Predicate, join_rsc := JoinAlias
                              <<" AND edge.subject_id = ">>, '$1',
                              <<" AND edge.predicate_id = ">>, '$2', <<")">>
         ],
-        args = [
-            m_rsc:rid(Id, Context),
-            predicate_to_id(Predicate, Context)
-        ]
+        args = [ Id, PredicateId ]
     };
-edge_term(hassubject, #{ id := Id, predicate := Predicate, join_rsc := JoinAlias }, false, Context) ->
+edge_term(hassubject, #{ id := Id, predicate := PredicateId, join_rsc := JoinAlias }, false, _Context) ->
     % For top-level terms we use a join to allow sort by the edge order.
     JoinAlias1 = sql_safe(JoinAlias),
     EdgeAlias = z_ids:identifier(),
@@ -1333,10 +1358,7 @@ edge_term(hassubject, #{ id := Id, predicate := Predicate, join_rsc := JoinAlias
             <<" AND ">>, EdgeAlias, <<".subject_id = ">>, '$1',
             <<" AND ">>, EdgeAlias, <<".predicate_id = ">>, '$2'
         ],
-        args = [
-            m_rsc:rid(Id, Context),
-            predicate_to_id(Predicate, Context)
-        ]
+        args = [ Id, PredicateId ]
     };
 edge_term(hasobject, #{ id := '*', predicate := '*', join_rsc := Alias }, _IsNested, _Context) ->
     #search_sql_term{
@@ -1344,25 +1366,53 @@ edge_term(hasobject, #{ id := '*', predicate := '*', join_rsc := Alias }, _IsNes
             <<"EXISTS (SELECT id FROM edge WHERE edge.subject_id = ", Alias/binary, ".id)">>
         ]
     };
-edge_term(hasobject, #{ id := Id, predicate := '*', join_rsc := Alias }, _IsNested, Context) ->
+edge_term(hasobject, #{ id := '{}', predicate := '{}', join_rsc := Alias }, _IsNested, _Context) ->
+    #search_sql_term{
+        where = [
+            <<"NOT EXISTS (SELECT id FROM edge WHERE edge.subject_id = ", Alias/binary, ".id)">>
+        ]
+    };
+edge_term(hasobject, #{ id := '{}', predicate := '*', join_rsc := Alias }, _IsNested, _Context) ->
+    #search_sql_term{
+        where = [
+            <<"NOT EXISTS (SELECT id FROM edge WHERE edge.subject_id = ", Alias/binary, ".id)">>
+        ]
+    };
+edge_term(hasobject, #{ id := '*', predicate := '{}', join_rsc := Alias }, _IsNested, _Context) ->
+    #search_sql_term{
+        where = [
+            <<"NOT EXISTS (SELECT id FROM edge WHERE edge.subject_id = ", Alias/binary, ".id)">>
+        ]
+    };
+edge_term(hasobject, #{ id := Id, predicate := '*', join_rsc := Alias }, _IsNested, _Context) ->
     #search_sql_term{
         where = [
             <<"EXISTS (SELECT id FROM edge WHERE edge.subject_id = ", Alias/binary, ".id AND edge.object_id = ">>, '$1', <<")">>
         ],
-        args = [
-            m_rsc:rid(Id, Context)
-        ]
+        args = [ Id ]
     };
-edge_term(hasobject, #{ id := '*', predicate := Predicate, join_rsc := Alias }, _IsNested, Context) ->
+edge_term(hasobject, #{ id := Id, predicate := '{}', join_rsc := Alias }, _IsNested, _Context) ->
+    #search_sql_term{
+        where = [
+            <<"NOT EXISTS (SELECT id FROM edge WHERE edge.subject_id = ", Alias/binary, ".id AND edge.object_id = ">>, '$1', <<")">>
+        ],
+        args = [ Id ]
+    };
+edge_term(hasobject, #{ id := '*', predicate := PredicateId, join_rsc := Alias }, _IsNested, _Context) ->
     #search_sql_term{
         where = [
             <<"EXISTS (SELECT id FROM edge WHERE edge.subject_id = ", Alias/binary, ".id AND edge.predicate_id = ">>, '$1', <<")">>
         ],
-        args = [
-            predicate_to_id(Predicate, Context)
-        ]
+        args = [ PredicateId ]
     };
-edge_term(hasobject, #{ id := Id, predicate := Predicate, join_rsc := JoinAlias }, true, Context) ->
+edge_term(hasobject, #{ id := '{}', predicate := PredicateId, join_rsc := Alias }, _IsNested, _Context) ->
+    #search_sql_term{
+        where = [
+            <<"NOT EXISTS (SELECT id FROM edge WHERE edge.subject_id = ", Alias/binary, ".id AND edge.predicate_id = ">>, '$1', <<")">>
+        ],
+        args = [ PredicateId ]
+    };
+edge_term(hasobject, #{ id := Id, predicate := PredicateId, join_rsc := JoinAlias }, true, _Context) ->
     % For sub-query terms we use 'exists', to prevent a "dangling" edge join.
     JoinAlias1 = sql_safe(JoinAlias),
     #search_sql_term{
@@ -1371,12 +1421,9 @@ edge_term(hasobject, #{ id := Id, predicate := Predicate, join_rsc := JoinAlias 
                              <<" AND edge.object_id = ">>, '$1',
                              <<" AND edge.predicate_id = ">>, '$2', <<")">>
         ],
-        args = [
-            m_rsc:rid(Id, Context),
-            predicate_to_id(Predicate, Context)
-        ]
+        args = [ Id, PredicateId ]
     };
-edge_term(hasobject, #{ id := Id, predicate := Predicate, join_rsc := JoinAlias }, false, Context) ->
+edge_term(hasobject, #{ id := Id, predicate := PredicateId, join_rsc := JoinAlias }, false, _Context) ->
     % For top-level terms we use a join to allow sort by the edge order.
     JoinAlias1 = sql_safe(JoinAlias),
     EdgeAlias = z_ids:identifier(),
@@ -1389,10 +1436,7 @@ edge_term(hasobject, #{ id := Id, predicate := Predicate, join_rsc := JoinAlias 
             <<" AND ">>, EdgeAlias, <<".object_id = ">>, '$1',
             <<" AND ">>, EdgeAlias, <<".predicate_id = ">>, '$2'
         ],
-        args = [
-            m_rsc:rid(Id, Context),
-            predicate_to_id(Predicate, Context)
-        ]
+        args = [ Id, PredicateId ]
     }.
 
 % Edges can have the form:
@@ -1962,11 +2006,18 @@ map_rid([Obj], Context) ->  {rid(Obj, Context), '*'};
 map_rid(Obj, Context) ->  {rid(Obj, Context), '*'}.
 
 rid(undefined, _Context) -> undefined;
+rid(null, _Context) -> undefined;
+rid(<<>>, _Context) -> undefined;
+rid("", _Context) -> undefined;
 rid(<<"*">>, _Context) -> '*';
 rid('*', _Context) -> '*';
 rid("*", _Context) -> '*';
-rid("", _Context) -> '*';
-rid(<<>>, _Context) -> '*';
+rid(<<"_">>, _Context) -> '*';
+rid('_', _Context) -> '*';
+rid("_", _Context) -> '*';
+rid(<<"{}">>, _Context) -> '{}';
+rid('{}', _Context) -> '{}';
+rid("{}", _Context) -> '{}';
 rid(Id, _Context) when is_integer(Id) -> Id;
 rid(Id, Context) -> m_rsc:rid(Id, Context).
 
