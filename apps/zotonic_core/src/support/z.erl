@@ -156,6 +156,7 @@ flush(Site) when is_atom(Site) ->
 flush(Context) ->
     z_depcache:flush(Context),
     z_dispatcher:reload(Context),
+    z_memo:flush(Context),
     n(module_ready, Context),
     ok.
 

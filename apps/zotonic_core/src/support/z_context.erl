@@ -182,8 +182,10 @@ new(undefined) ->
         undefined -> throw({error, no_site_enabled})
     end;
 new(Site) when is_atom(Site) ->
-    set_default_language_tz(
-        set_server_names(#context{ site = Site })).
+    Context = set_default_language_tz(
+        set_server_names(#context{ site = Site })),
+    z_memo:flush(Context),
+    Context.
 
 %% @doc Create a new context record for a site with a certain language
 -spec new( Site :: atom(), Language :: atom() | [ atom() ] ) -> z:context().
