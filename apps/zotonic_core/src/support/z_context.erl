@@ -253,7 +253,6 @@ set_server_names(#context{ site = Site } = Context) ->
         translation_table = z_trans_server:table(Site)
     },
     Context1#context{
-        % session_manager=list_to_atom("z_session_manager"++SiteAsList),
         db = { z_db_pool:db_pool_name(Site), z_db_pool:db_driver(Context1) }
     }.
 
