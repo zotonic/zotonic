@@ -358,7 +358,6 @@ prune_for_database(Context) ->
         db = Context#context.db,
         dbc = Context#context.dbc,
         depcache = Context#context.depcache,
-        % session_manager=Context#context.session_manager,
         dispatcher = Context#context.dispatcher,
         template_server = Context#context.template_server,
         scomp_server = Context#context.scomp_server,
