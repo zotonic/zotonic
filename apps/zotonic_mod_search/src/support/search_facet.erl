@@ -705,6 +705,7 @@ pivot_rsc(Id, Context) ->
             Upd = maps:from_list(
                 lists:flatten(
                     lists:map( fun(F) -> render_facet(Id, F, Context) end, Facets ) ) ),
+            io:format("~p~n", [ Upd ]),
             R = case z_db:q1("select id from search_facet where id = $1", [ Id ], Context) of
                 undefined ->
                     Upd1 = Upd#{ <<"id">> => Id },
@@ -808,7 +809,16 @@ convert_type_1(Type, L, Context) when is_list(L) ->
 convert_type_1(boolean, V, _Context) -> z_convert:to_bool(V);
 convert_type_1(_, <<>>, _Context) -> undefined;
 convert_type_1(_, undefined, _Context) -> undefined;
-convert_type_1(id, V, Context) -> m_rsc:rid(V, Context);
+convert_type_1(id, V, Context) ->
+    % Allow non-existing ids, so first try an integer conversion.
+    try
+        case z_convert:to_integer(V) of
+            Id when is_integer(Id) -> Id;
+            _ -> m_rsc:rid(V, Context)
+        end
+    catch
+        _:_ -> m_rsc:rid(V, Context)
+    end;
 convert_type_1(integer, V, _Context) -> z_convert:to_integer(V);
 convert_type_1(float, V, _Context) -> z_convert:to_float(V);
 convert_type_1(datetime, V, _Context) -> z_datetime:to_datetime(V);
