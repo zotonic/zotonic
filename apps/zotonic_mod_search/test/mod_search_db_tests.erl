@@ -162,6 +162,57 @@ search_all_test() ->
 
     ok.
 
+search_edge_exclude_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+
+    {ok, A} = m_rsc:insert([{category, article}, {title, <<"Article A">>}], C),
+    {ok, B} = m_rsc:insert([{category, article}, {title, <<"Article B">>}], C),
+
+    Q1 = #{
+        <<"q">> => [
+            #{
+                <<"term">> => <<"hasobject">>,
+                <<"value">> => <<"{}">>
+            },
+            #{
+                <<"term">> => <<"id">>,
+                <<"value">> => [ A, B ]
+            },
+            #{
+                <<"term">> => <<"sort">>,
+                <<"value">> => <<"id">>
+            }
+        ]
+    },
+    Q2 = #{
+        <<"q">> => [
+            #{
+                <<"term">> => <<"hassubject">>,
+                <<"value">> => <<"{}">>
+            },
+            #{
+                <<"term">> => <<"id">>,
+                <<"value">> => [ A, B ]
+            },
+            #{
+                <<"term">> => <<"sort">>,
+                <<"value">> => <<"id">>
+            }
+        ]
+    },
+    #search_result{ result = [ A, B ] } = z_search:search(<<"query">>, Q1, 1, 100, C),
+    #search_result{ result = [ A, B ] } = z_search:search(<<"query">>, Q2, 1, 100, C),
+
+    {ok, _} = m_edge:insert(A, author, B, C),
+    #search_result{ result = [ B ] } = z_search:search(<<"query">>, Q1, 1, 100, C),
+    #search_result{ result = [ A ] } = z_search:search(<<"query">>, Q2, 1, 100, C),
+
+    m_rsc:delete(A, C),
+    m_rsc:delete(B, C),
+    ok.
+
+
 language_search_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
     C = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
