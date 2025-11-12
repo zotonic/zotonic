@@ -159,7 +159,7 @@
 
 
 %% @doc Return a new empty context, no request is initialized.
--spec new( z:context() | atom() | cowboy_req:req() ) -> z:context().
+-spec new( z:context() | atom() | undefined ) -> z:context().
 new(#context{} = C) ->
     #context{
         site = C#context.site,
