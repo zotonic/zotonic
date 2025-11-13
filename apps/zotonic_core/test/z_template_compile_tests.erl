@@ -15,5 +15,5 @@ compile_templates_test() ->
         fun(#module_index{} = Tpl) ->
             ?assertMatch(
                 {{ok, _},_},
-                {z_template:template_module(Tpl, [], Context), Tpl})
+                {z_template:template_module(Tpl, #{}, Context), Tpl})
         end, Templates).
