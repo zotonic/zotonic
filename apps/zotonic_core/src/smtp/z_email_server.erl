@@ -1347,7 +1347,7 @@ is_retry_possible(_Reason, _FailureType, _Message) ->
     {true, undefined}.
 
 random_delay(From, To) ->
-    z_ids:number(To - From) + From.
+    z_ids:number(To - From + 1) + From - 1.
 
 % Check for issue with proxy (https://github.com/zotonic/zotonic/issues/3508):
 %   554 5.7.0 Your message could not be sent. The limit on the number of allowed outgoing
