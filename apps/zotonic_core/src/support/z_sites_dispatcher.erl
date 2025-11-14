@@ -287,7 +287,6 @@ dispatch(Req, Env) ->
         protocol = Scheme,
         tracer_pid = undefined
     },
-    z_depcache:in_process(true),
     z_memo:enable(),
     dispatch_1(DispReq, Req, Env).
 

@@ -55,9 +55,11 @@
     Pid :: pid().
 spawn_link_md(Fun) ->
     MD = logger:get_process_metadata(),
+    Memo = z_memo:get_status(),
     proc_lib:spawn_link(
         fun() ->
             set_process_metadata(MD),
+            z_memo:set_status(Memo),
             Fun()
         end).
 
@@ -68,9 +70,11 @@ spawn_link_md(Fun) ->
     Pid :: pid().
 spawn_md(Fun) ->
     MD = logger:get_process_metadata(),
+    Memo = z_memo:get_status(),
     proc_lib:spawn(
         fun() ->
             set_process_metadata(MD),
+            z_memo:set_status(Memo),
             Fun()
         end).
 
@@ -84,9 +88,11 @@ spawn_md(Fun) ->
     Reference :: reference().
 spawn_md_opt(Fun, SpawnOpts) ->
     MD = logger:get_process_metadata(),
+    Memo = z_memo:get_status(),
     proc_lib:spawn_opt(
         fun() ->
             set_process_metadata(MD),
+            z_memo:set_status(Memo),
             Fun()
         end,
         SpawnOpts).

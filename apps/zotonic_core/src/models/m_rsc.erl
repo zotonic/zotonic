@@ -571,8 +571,7 @@ get_raw(Id, IsLock, Context) when ?is_valid_rsc_id(Id) ->
                 "select ",lists:join($,, DataCols),
                 " from rsc where id = $1"
             ]),
-            z_memo:set(rsc_raw_sql, Query),
-            Query;
+            z_memo:set(rsc_raw_sql, Query);
         Memo ->
             Memo
     end,

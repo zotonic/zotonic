@@ -159,7 +159,7 @@
 
 
 %% @doc Return a new empty context, no request is initialized.
--spec new( z:context() | atom() | cowboy_req:req() ) -> z:context().
+-spec new( z:context() | atom() | undefined ) -> z:context().
 new(#context{} = C) ->
     #context{
         site = C#context.site,
@@ -182,8 +182,10 @@ new(undefined) ->
         undefined -> throw({error, no_site_enabled})
     end;
 new(Site) when is_atom(Site) ->
-    set_default_language_tz(
-        set_server_names(#context{ site = Site })).
+    Context = set_default_language_tz(
+        set_server_names(#context{ site = Site })),
+    z_memo:flush(Context),
+    Context.
 
 %% @doc Create a new context record for a site with a certain language
 -spec new( Site :: atom(), Language :: atom() | [ atom() ] ) -> z:context().
@@ -251,7 +253,6 @@ set_server_names(#context{ site = Site } = Context) ->
         translation_table = z_trans_server:table(Site)
     },
     Context1#context{
-        % session_manager=list_to_atom("z_session_manager"++SiteAsList),
         db = { z_db_pool:db_pool_name(Site), z_db_pool:db_driver(Context1) }
     }.
 
@@ -357,7 +358,6 @@ prune_for_database(Context) ->
         db = Context#context.db,
         dbc = Context#context.dbc,
         depcache = Context#context.depcache,
-        % session_manager=Context#context.session_manager,
         dispatcher = Context#context.dispatcher,
         template_server = Context#context.template_server,
         scomp_server = Context#context.scomp_server,
