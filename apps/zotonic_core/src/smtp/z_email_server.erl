@@ -1333,8 +1333,11 @@ is_retry_possible(_Reason, permanent_failure, Message) when is_binary(Message) -
     case is_proxy_issue(Message) of
         true -> {true, undefined};
         false ->
-            case is_spamcop_block(Message) of
-                true -> {true, 12*60};  % Retry after 12 hours
+            % If it is spam block then we retry after some time.
+            % Also apply a random delay to avoid thundering herd.
+            case check_spam_block(Message) of
+                blacklist -> {true, random_delay(12*60,14*60)};  % Retry after 12 hours
+                gmail -> {true, random_delay(2*60,3*60)};        % Retry after 2 hours
                 false -> false
             end
     end;
@@ -1343,17 +1346,38 @@ is_retry_possible(_Reason, permanent_failure, _Message) ->
 is_retry_possible(_Reason, _FailureType, _Message) ->
     {true, undefined}.
 
+random_delay(From, To) ->
+    z_ids:number(To - From) + From.
+
 % Check for issue with proxy (https://github.com/zotonic/zotonic/issues/3508):
-% 554 5.7.0 Your message could not be sent. The limit on the number of allowed outgoing
-% messages was exceeded. Try again later.
+%   554 5.7.0 Your message could not be sent. The limit on the number of allowed outgoing
+%   messages was exceeded. Try again later.
 is_proxy_issue(Message) ->
     binary:match(Message, <<"Try again later.">>) =/= nomatch.
 
 % Spamcop blocks for approx 12-24 hours:
-% 550 5.7.1 5.7.1 Service unavailable; client [...] blocked using bl.spamcop.net
-is_spamcop_block(Message) ->
-    binary:match(Message, <<"blocked using bl.spamcop.net">>) =/= nomatch.
+%   550 5.7.1 5.7.1 Service unavailable; client [...] blocked using bl.spamcop.net
+%
+% Gmail blocks for approx 2 hours:
+%   550-5.7.1 [IP-address] Gmail has detected that this message is
+%   550-5.7.1 likely unsolicited mail. To reduce the amount of spam sent to Gmail,
+%   550-5.7.1 this message has been blocked. For more information, go to
+%   550 5.7.1 https://support.google.com/mail/?p=UnsolicitedMessageError [hex-code] - gsmtp
+check_spam_block(Message) ->
+    Blocks = [
+        {<<"blocked using bl.spamcop.net">>, blacklist},
+        {<<"https://support.google.com/mail/?p=UnsolicitedMessageError">>, gmail},
+        {<<"To reduce the amount of spam sent to Gmail">>, gmail}
+    ],
+    check_spam_block_1(Blocks, Message).
 
+check_spam_block_1([], _Message) ->
+    false;
+check_spam_block_1([{Pattern, Type} | Rest], Message) ->
+    case binary:match(Message, Pattern) of
+        {_,_} -> Type;
+        nomatch -> check_spam_block_1(Rest, Message)
+    end.
 
 encode_email(_Id, #email{raw=Raw}, _MessageId, _From, _Context) when is_list(Raw); is_binary(Raw) ->
     {ok, z_convert:to_binary(Raw)};
