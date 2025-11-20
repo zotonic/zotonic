@@ -5,7 +5,7 @@ We will map the SPARQL query to Zotonic SQL terms.
 The SQL terms are then combined into a SQL query using the usual Zotonic
 query builders.
 
-**NOTA BENE** there is a problem with nested queries and table references. Right now the
+**FIXED** there is a problem with nested queries and table references. Right now the
 table definitions are "lifted" to the top-level, where it should be lifted to the highest
 level (anyof/noneof) where the table is needed. For that we need to emit nested queries.
 

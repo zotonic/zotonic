@@ -353,6 +353,14 @@ expression_to_sql({call, Function, [Argument]}, State, Term0)
     type_test_to_sql(Function, Argument, State, Term0);
 expression_to_sql({call, sameterm, [Left, Right]}, State, Term0) ->
     same_term_to_sql(Left, Right, State, Term0);
+expression_to_sql({call, {iri, Iri} = Function, Arguments}, State, Term0) ->
+    case z_sparql_sql_datatype:mapping(Iri) of
+        {ok, Mapping} ->
+            datatype_to_sql(Function, Mapping, Arguments, State, Term0);
+        undefined ->
+            {Arguments1, Term1} = expression_list_to_sql(Arguments, State, Term0),
+            function_to_sql(Function, Arguments1, Term1)
+    end;
 expression_to_sql({call, Function, Arguments}, State, Term0) ->
     {Arguments1, Term1} = expression_list_to_sql(Arguments, State, Term0),
     function_to_sql(Function, Arguments1, Term1);
@@ -487,6 +495,123 @@ function_expression(Function, Arguments, ResultType, Term) ->
             throw({error, Reason})
     end.
 
+datatype_to_sql(_Function, {Type, SqlType}, [Argument], State, Term0) ->
+    {Argument1, Term1} = expression_to_sql(Argument, State, Term0),
+    case is_datatype_argument(Type, Argument1#sql_expression.type) of
+        true -> {datatype_expression(Type, SqlType, Argument1), Term1};
+        false -> throw({error, {incompatible_types, Type, Argument1#sql_expression.type}})
+    end;
+datatype_to_sql({iri, Iri}, _Mapping, Arguments, _State, _Term) ->
+    throw({error, {invalid_datatype_arity, Iri, length(Arguments)}}).
+
+%% These are the direct and predictable SPARQL constructor conversions. More
+%% involved conversions, such as boolean-to-number, need explicit XPath rules.
+is_datatype_argument(text, Type)
+    when Type =:= text; Type =:= uri; Type =:= boolean;
+         Type =:= integer; Type =:= float; Type =:= number;
+         Type =:= datetime -> true;
+is_datatype_argument(boolean, Type)
+    when Type =:= text; Type =:= boolean -> true;
+is_datatype_argument(integer, Type)
+    when Type =:= text; Type =:= integer -> true;
+is_datatype_argument(number, Type)
+    when Type =:= text; Type =:= integer; Type =:= float; Type =:= number -> true;
+is_datatype_argument(float, Type)
+    when Type =:= text; Type =:= integer; Type =:= float; Type =:= number -> true;
+is_datatype_argument(datetime, Type)
+    when Type =:= text; Type =:= integer; Type =:= datetime -> true;
+is_datatype_argument(_Expected, _Actual) -> false.
+
+%% @doc Integers used as datetimes are Unix timestamps in seconds.
+%% PostgreSQL's to_timestamp/1 accepts double precision and returns timestamptz.
+datatype_expression(datetime, _SqlType, #sql_expression{ source = jsonb, type = integer, sql = Sql }) ->
+    #sql_expression{
+        sql = jsonb_unix_timestamp_sql(Sql),
+        type = datetime,
+        source = expression
+    };
+datatype_expression(datetime, _SqlType, #sql_expression{ source = argument, type = integer, sql = Sql }) ->
+    #sql_expression{
+        % Ensure bigint before converting to the type for to_timestamp/1.
+        sql = unix_timestamp_sql(datatype_cast_sql(Sql, <<"bigint">>)),
+        type = datetime,
+        source = expression
+    };
+datatype_expression(datetime, _SqlType, #sql_expression{ type = integer, sql = Sql }) ->
+    #sql_expression{
+        sql = unix_timestamp_sql(Sql),
+        type = datetime,
+        source = expression
+    };
+datatype_expression(Type, SqlType, #sql_expression{ source = jsonb, sql = Sql }) ->
+    #sql_expression{
+        sql = jsonb_datatype_sql(Sql, Type, SqlType),
+        type = Type,
+        source = expression
+    };
+datatype_expression(Type, _SqlType, #sql_expression{ type = Type } = Expression) ->
+    Expression;
+datatype_expression(Type, SqlType, #sql_expression{ source = argument, type = ArgumentType, sql = Sql }) ->
+    ArgumentSqlType = datatype_argument_sql_type(ArgumentType),
+    #sql_expression{
+        % Convert the parameter to its Erlang type before converting it further.
+        % Otherwise the epgsql driver might try to encode a lexical binary as, for example,
+        % a native timestamptz or boolean.
+        sql = datatype_cast_sql(datatype_cast_sql(Sql, ArgumentSqlType), SqlType),
+        type = Type,
+        source = expression
+    };
+datatype_expression(Type, SqlType, #sql_expression{ sql = Sql }) ->
+    #sql_expression{
+        sql = datatype_cast_sql(Sql, SqlType),
+        type = Type,
+        source = expression
+    }.
+
+%% @doc Use 'CAST', as that is standard SQL and '::' is PostgreSQL only.
+datatype_cast_sql(Sql, SqlType) ->
+    [<<"CAST(">>, Sql, <<" AS ">>, SqlType, $)].
+
+unix_timestamp_sql(Sql) ->
+    [<<"to_timestamp(">>, datatype_cast_sql(Sql, <<"double precision">>), $)].
+
+jsonb_unix_timestamp_sql(Sql) ->
+    Scalar = [$(, Sql, <<" #>> '{}')">>],
+    [
+        <<"(CASE WHEN jsonb_typeof(">>, Sql, <<") = 'number' THEN ">>,
+        unix_timestamp_sql(Scalar), <<" ELSE NULL END)">>
+    ].
+
+datatype_argument_sql_type(text) -> <<"text">>;
+datatype_argument_sql_type(uri) -> <<"text">>;
+datatype_argument_sql_type(boolean) -> <<"boolean">>;
+datatype_argument_sql_type(integer) -> <<"bigint">>;
+datatype_argument_sql_type(float) -> <<"double precision">>;
+datatype_argument_sql_type(number) -> <<"numeric">>;
+datatype_argument_sql_type(datetime) -> <<"timestamptz">>.
+
+%% @doc JSON properties can contain serialized Zotonic terms. We only
+%% want to convert basic (scalar) types, so first we check the type of
+%% the JSONB expression, and if it is not scalar then return NULL.
+jsonb_datatype_sql(Sql, Type, SqlType) ->
+    JsonTypes = jsonb_datatype_types(Type),
+    Scalar = [$(, Sql, <<" #>> '{}')">>],
+    Conversion = case Type of
+        text -> Scalar;
+        _ -> datatype_cast_sql(Scalar, SqlType)
+    end,
+    [
+        <<"(CASE WHEN jsonb_typeof(">>, Sql, <<") IN (">>, JsonTypes,
+        <<") THEN ">>, Conversion, <<" ELSE NULL END)">>
+    ].
+
+jsonb_datatype_types(text) -> <<"'string', 'number', 'boolean'">>;
+jsonb_datatype_types(boolean) -> <<"'string', 'boolean'">>;
+jsonb_datatype_types(datetime) -> <<"'string'">>;  % datatype_expression handles/3 jsonb integer 
+jsonb_datatype_types(integer) -> <<"'string', 'number'">>;
+jsonb_datatype_types(number) -> <<"'string', 'number'">>;
+jsonb_datatype_types(float) -> <<"'string', 'number'">>.
+
 expression_list_to_sql([], _State, Term) ->
     {[], Term};
 expression_list_to_sql([Expression | Rest], State, Term0) ->
@@ -586,8 +711,7 @@ binary_expression(Operator, Left, Right)
 operator_expression(Operator, Left, Right, Type) ->
     #sql_expression{
         sql = [
-            <<"(">>, expression_sql(Left), sql_operator(Operator),
-            expression_sql(Right), <<")">>
+            <<"(">>, expression_sql(Left), sql_operator(Operator), expression_sql(Right), <<")">>
         ],
         type = Type,
         source = expression
@@ -931,7 +1055,7 @@ normalize_type(fulltext) -> fulltext;
 normalize_type(Type) -> throw({error, {invalid_mapping_type, Type}}).
 
 rdf_typed_value({literal, Value, Datatype, _Language}) ->
-    Type = datatype_type(Datatype),
+    Type = z_sparql_sql_datatype:datatype_type(Datatype),
     {literal_value(Type, Value), Type};
 rdf_typed_value({integer, Value}) ->
     {binary_to_integer(Value), integer};
@@ -946,39 +1070,13 @@ rdf_typed_value({iri, Iri}) ->
 rdf_typed_value(Value) ->
     throw({error, {expected_value, Value}}).
 
-datatype_type(undefined) -> text;
-datatype_type(<<"http://www.w3.org/2001/XMLSchema#", Name/binary>>) ->
-    xsd_type(Name);
-datatype_type(_Datatype) -> text.
-
-xsd_type(Name)
-    when Name =:= <<"integer">>;
-         Name =:= <<"long">>;
-         Name =:= <<"int">>;
-         Name =:= <<"short">>;
-         Name =:= <<"byte">>;
-         Name =:= <<"nonPositiveInteger">>;
-         Name =:= <<"negativeInteger">>;
-         Name =:= <<"nonNegativeInteger">>;
-         Name =:= <<"positiveInteger">>;
-         Name =:= <<"unsignedLong">>;
-         Name =:= <<"unsignedInt">>;
-         Name =:= <<"unsignedShort">>;
-         Name =:= <<"unsignedByte">> -> integer;
-xsd_type(Name)
-    when Name =:= <<"decimal">>;
-         Name =:= <<"double">>;
-         Name =:= <<"float">> -> float;
-xsd_type(<<"boolean">>) -> boolean;
-xsd_type(Name)
-    when Name =:= <<"dateTime">>;
-         Name =:= <<"dateTimeStamp">>;
-         Name =:= <<"date">> -> datetime;
-xsd_type(<<"anyURI">>) -> uri;
-xsd_type(_Name) -> text.
-
 literal_value(integer, Value) -> z_convert:to_integer(Value);
 literal_value(float, Value) -> z_convert:to_float(Value);
+literal_value(datetime, Value) ->
+    case z_convert:to_datetime(Value) of
+        undefined -> throw({error, {invalid_datetime, Value}});
+        DateTime -> DateTime
+    end;
 literal_value(boolean, <<"true">>) -> true;
 literal_value(boolean, <<"1">>) -> true;
 literal_value(boolean, <<"false">>) -> false;

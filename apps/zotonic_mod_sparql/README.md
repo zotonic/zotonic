@@ -49,7 +49,7 @@ TODO
  - [x] Add type hints for the column and jsonb value mapping, use those for type casting
        when using '=' and other operators -- use these for type coercion in operators
  - [ ] Check PostgreSQL functions for functions like: LANG, DATATYPE and isIRI/isBLANK/etc
- - [ ] Add support for dates (from JSONB, literals, etc.) -- xsd:dateTime
+ - [x] Add support for dates (from JSONB, literals, etc.) -- xsd:dateTime
  - [x] Support for aggregate function (count/min/max/etc.)
  - [ ] Figure out language handling, with the JSON objects: { _type: "trans", tr = { "en":"..." } }
  - [ ] Figure out how parametrized queries can be implemented in SPARQL, especially considering types.
