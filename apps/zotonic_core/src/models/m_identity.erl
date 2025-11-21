@@ -628,8 +628,9 @@ set_username(Id, Username, Context) when is_integer(Id) ->
                         UniqueTest = z_db:q1("
                             select count(*)
                             from identity
-                            where type = 'username_pw'
-                              and rsc_id <> $1 and key = $2",
+                            where rsc_id <> $1
+                              and type = 'username_pw'
+                              and key = $2 collate ucs_basic",
                             [Id, Username1],
                             Ctx
                         ),
@@ -784,8 +785,11 @@ set_username_pw_trans(Id, Username, Hash, Context) ->
                 true ->
                     {rollback, {error, eexist}};
                 false ->
-                    UniqueTest = z_db:q1(
-                        "select count(*) from identity where type = 'username_pw' and key = $1",
+                    UniqueTest = z_db:q1("
+                        select count(*)
+                        from identity
+                        where type = 'username_pw'
+                          and key = $1 collate ucs_basic",
                         [Username],
                         Context
                     ),
@@ -964,8 +968,11 @@ generate_username(Id, Context) ->
     username_unique(Username, Context).
 
 username_unique(U, Context) ->
-    case z_db:q1(
-        "select count(*) from identity where type = 'username_pw' and key = $1",
+    case z_db:q1("
+        select count(*)
+        from identity
+        where type = 'username_pw'
+          and key = $1 collate ucs_basic",
         [U],
         Context
     ) of
@@ -976,8 +983,11 @@ username_unique(U, Context) ->
 username_unique_x(U, X, Context) ->
     N = z_convert:to_binary(z_ids:number(X)),
     U1 = <<U/binary, $., N/binary>>,
-    case z_db:q1(
-        "select count(*) from identity where type = 'username_pw' and key = $1",
+    case z_db:q1("
+        select count(*)
+        from identity
+        where type = 'username_pw'
+          and key = $1 collate ucs_basic",
         [U1],
         Context
     ) of
@@ -1180,7 +1190,7 @@ check_username_pw_1(Username, Password, Context) ->
                 select rsc_id, propb, coalesce(expires <= now(),false) as is_expired
                 from identity
                 where type = 'username_pw'
-                  and key = $1",
+                  and key = $1 collate ucs_basic",
                 [Username],
                 Context),
             case Row of
@@ -1987,12 +1997,16 @@ lookup_by_username(Key, Context) ->
 -spec lookup_by_type_and_key(type(), key(), z:context()) -> identity() | undefined.
 lookup_by_type_and_key(Type, Key, Context) ->
     Key1 = normalize_key(Type, Key),
-    z_db:assoc_row("select * from identity where type = $1 and key = $2", [Type, Key1], Context).
+    z_db:assoc_row(
+        "select * from identity where type = $1 and key = $2 collate ucs_basic",
+        [Type, Key1], Context).
 
 -spec lookup_by_type_and_key_multi(type(), key(), z:context()) -> list( identity() ).
 lookup_by_type_and_key_multi(Type, Key, Context) ->
     Key1 = normalize_key(Type, Key),
-    z_db:assoc("select * from identity where type = $1 and key = $2", [Type, Key1], Context).
+    z_db:assoc(
+        "select * from identity where type = $1 and key = $2 collate ucs_basic",
+        [Type, Key1], Context).
 
 -spec lookup_users_by_type_and_key(type(), key(), z:context()) -> list( identity() ).
 lookup_users_by_type_and_key(Type, Key, Context) ->
