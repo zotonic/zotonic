@@ -52,6 +52,49 @@ parser_error_test() ->
         {error, {_Location, z_sparql_parser, _Message}},
         z_sparql:parse(<<"SELECT WHERE {}">>)).
 
+blank_node_property_list_test() ->
+    {ok, _} = application:ensure_all_started(zotonic_notifier),
+    Context = z_context:new(zotonic_site_testsandbox),
+    ok = z_notifier:observe(rdf_ns, {?MODULE, observe_rdf_ns}, 100, Context),
+    ok = z_notifier:observe(sparql_mapping, {?MODULE, observe_sparql_mapping}, 100, Context),
+    try
+        {ok, Query} = z_sparql:parse(<<
+            "PREFIX ex: <http://example/> "
+            "SELECT ?o WHERE { "
+                "[ ex:source ?s ] ex:p [ ex:q [ ex:r ?o ] ] . "
+            "}"
+        >>),
+        ?assertMatch(
+            {query, _, {select, _, _, _, {group, [
+                {triple_pattern, {subject,
+                    {blank_node_property_list, _},
+                    [{predicate, _, [{blank_node_property_list, _}]}]}}
+            ]}, _}},
+            Query),
+        {ok, #{ where := Where }} = z_sparql_plan:to_query_plan(Query, Context),
+        ?assertEqual(
+            [
+                {{bnode, <<"anon1">>}, <<"http://example/source">>, {var, <<"s">>}},
+                {{bnode, <<"anon1">>}, <<"http://example/p">>, {bnode, <<"anon2">>}},
+                {{bnode, <<"anon2">>}, <<"http://example/q">>, {bnode, <<"anon3">>}},
+                {{bnode, <<"anon3">>}, <<"http://example/r">>, {var, <<"o">>}}
+            ],
+            plan_triples(Where)),
+
+        {ok, StandaloneQuery} = z_sparql:parse(<<
+            "PREFIX ex: <http://example/> "
+            "SELECT ?o WHERE { [ ex:p ?o ] . }"
+        >>),
+        {ok, #{ where := StandaloneWhere }} =
+            z_sparql_plan:to_query_plan(StandaloneQuery, Context),
+        ?assertEqual(
+            [{{bnode, <<"anon1">>}, <<"http://example/p">>, {var, <<"o">>}}],
+            plan_triples(StandaloneWhere))
+    after
+        z_notifier:detach(rdf_ns, Context),
+        z_notifier:detach(sparql_mapping, Context)
+    end.
+
 category_mapping_test() ->
     ?assertEqual(<<"text">>, z_rdf_props:category_mapping(<<"dctype:Text">>)),
     ?assertEqual(
@@ -135,3 +178,8 @@ observe_sparql_mapping(#sparql_mapping{ ns_prefix = <<"https://example.test/voca
     {ok, {jsonb, <<"rsc">>, <<"props_json">>, [<<"label">>], text}};
 observe_sparql_mapping(#sparql_mapping{}, _Context) ->
     undefined.
+
+plan_triples({triple, Subject, #{ iri := Predicate }, Object}) ->
+    [{Subject, Predicate, Object}];
+plan_triples({join, Left, Right}) ->
+    plan_triples(Left) ++ plan_triples(Right).

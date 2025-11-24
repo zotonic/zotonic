@@ -16,7 +16,8 @@ Nonterminals
     group_graph_pattern group_graph_pattern_sub triples_block
     graph_pattern_not_triples optional_graph_pattern group_graph_pattern_inner
     union_graph_pattern filter_pattern bind_pattern inline_data
-    triples_same_subject property_list_not_empty property_list object_list object
+    triples_same_subject blank_node_property_list
+    property_list_not_empty property_list object_list object
     verb var_or_term var iri_term prefixed_name
     expression conditional_or_expression conditional_and_expression
     relational_expression additive_expression multiplicative_expression
@@ -46,6 +47,9 @@ Terminals
 
 Rootsymbol
     query.
+
+%% Expected shift/reduce conflicts
+Expect 15.
 
 %% ---------- Queries ----------
 
@@ -193,6 +197,11 @@ inline_data -> values var lbrace object_list rbrace :
 
 triples_same_subject -> var_or_term property_list_not_empty :
     {subject, '$1', '$2'}.
+triples_same_subject -> blank_node_property_list property_list :
+    {subject, '$1', '$2'}.
+
+blank_node_property_list -> lbracket property_list_not_empty rbracket :
+    {blank_node_property_list, '$2'}.
 
 property_list_not_empty -> verb object_list :
     [{predicate, '$1', '$2'}].
@@ -206,6 +215,7 @@ object_list -> object : ['$1'].
 object_list -> object_list comma object : '$1' ++ ['$3'].
 
 object -> var_or_term : '$1'.
+object -> blank_node_property_list : '$1'.
 
 verb -> var_or_term : '$1'.
 verb -> a : rdf_type.

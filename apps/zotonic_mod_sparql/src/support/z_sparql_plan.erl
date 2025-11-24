@@ -280,8 +280,9 @@ add_filters([Filter | Rest], Plan) ->
     add_filters(Rest, {filter, Filter, Plan}).
 
 map_triple_pattern({subject, Subject, Predicates}, State0) ->
-    {Subject1, State1} = map_term(Subject, State0),
-    map_predicates(Predicates, Subject1, State1);
+    {Subject1, SubjectTriples, State1} = map_graph_node(Subject, State0),
+    {PredicateTriples, State2} = map_predicates(Predicates, Subject1, State1),
+    {SubjectTriples ++ PredicateTriples, State2};
 map_triple_pattern(Triple, _State) ->
     throw({error, {invalid_triple, Triple}}).
 
@@ -289,10 +290,24 @@ map_predicates([], _Subject, State) ->
     {[], State};
 map_predicates([{predicate, Predicate, Objects} | Rest], Subject, State0) ->
     Predicate1 = map_predicate(Predicate, State0),
-    {Objects1, State1} = map_terms(Objects, State0),
-    Triples = [ {triple, Subject, Predicate1, Object} || Object <- Objects1 ],
+    {Triples, State1} = map_predicate_objects(Objects, Subject, Predicate1, State0),
     {Rest1, State2} = map_predicates(Rest, Subject, State1),
     {Triples ++ Rest1, State2}.
+
+map_predicate_objects([], _Subject, _Predicate, State) ->
+    {[], State};
+map_predicate_objects([Object | Rest], Subject, Predicate, State0) ->
+    {Object1, ObjectTriples, State1} = map_graph_node(Object, State0),
+    {Rest1, State2} = map_predicate_objects(Rest, Subject, Predicate, State1),
+    {[{triple, Subject, Predicate, Object1} | ObjectTriples] ++ Rest1, State2}.
+
+map_graph_node({blank_node_property_list, Predicates}, State0) ->
+    {BlankNode, State1} = map_term(anon, State0),
+    {Triples, State2} = map_predicates(Predicates, BlankNode, State1),
+    {BlankNode, Triples, State2};
+map_graph_node(Term, State0) ->
+    {Term1, State1} = map_term(Term, State0),
+    {Term1, [], State1}.
 
 map_predicate({var, _} = Variable, _State) ->
     Variable;
