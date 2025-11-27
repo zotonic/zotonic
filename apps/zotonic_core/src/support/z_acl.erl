@@ -158,7 +158,7 @@ is_allowed_prop(Action, Object, Property, Context) when is_atom(Property) ->
     is_allowed_prop(Action, Object, atom_to_binary(Property, utf8), Context);
 is_allowed_prop(Action, Object, Property, Context) ->
     case z_memo:get({rsc_prop_visible, Action, Object, Property}, Context) of
-        {ok, IsAllowed} ->
+        IsAllowed when is_boolean(IsAllowed) ->
             IsAllowed;
         undefined ->
             IsAllowed = case z_notifier:first(#acl_is_allowed_prop{ action = Action, object = Object, prop = Property }, Context) of
@@ -166,8 +166,7 @@ is_allowed_prop(Action, Object, Property, Context) ->
                 true -> true;
                 false -> false
             end,
-            z_memo:set({rsc_prop_visible, Action, Object, Property}, {ok, IsAllowed}, Context),
-            IsAllowed
+            z_memo:set({rsc_prop_visible, Action, Object, Property}, IsAllowed, Context)
     end.
 
 %% @doc Check if it is allowed to create an edge between the subject and object using the predicate.
