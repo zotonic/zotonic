@@ -1,11 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016-2022 Marc Worrell
-%%
+%% @copyright 2016-2025 Marc Worrell
 %% @doc Middleware for cowmachine, extra Context based initializations.
 %% This starts the https request processing after the site and dispatch rule
 %% have been selected by the z_sites_dispatcher middleware.
+%% @end
 
-%% Copyright 2016-2022 Marc Worrell
+%% Copyright 2016-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -60,6 +60,7 @@ execute(Req, #{ cowmachine_controller := Controller, cowmachine_controller_optio
                 undefined -> Ctx1;
                 HttpAccept -> set_accept_context(HttpAccept, Ctx1)
             end,
+            z_memo:enable(Ctx2),
             z_notifier:foldl(#middleware{ on = welformed }, Ctx2, Ctx2)
         end,
         on_handled => fun(Ctx) ->

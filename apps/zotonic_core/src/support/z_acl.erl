@@ -103,7 +103,7 @@ is_allowed(_Action, _Object, #context{ user_id=?ACL_ADMIN_USER_ID }) ->
 is_allowed(link, Object, Context) ->
     is_allowed(insert, #acl_edge{subject_id=Object, predicate=relation, object_id=Object}, Context);
 is_allowed(Action, Object, Context) ->
-    case maybe_allowed(Action, Object, Context) of
+    case maybe_allowed_memo(Action, Object, Context) of
         undefined -> false;
         true -> true;
         false -> false
@@ -117,13 +117,26 @@ is_allowed(Action, Object, Context) ->
     Context :: z:context(),
     MaybeIsAllowed :: maybe_boolean().
 maybe_allowed(_Action, _Object, #context{ acl = admin }) ->
+    % Sudo context
     true;
 maybe_allowed(UpdateAction, _Object, #context{ acl_is_read_only = true }) when ?is_update_action(UpdateAction) ->
+    % Read-only context - maybe from an OAuth token
     false;
 maybe_allowed(_Action, _Object, #context{user_id = ?ACL_ADMIN_USER_ID}) ->
+    % Shortcut for the admin user
     true;
 maybe_allowed(Action, Object, Context) ->
-    z_notifier:first(#acl_is_allowed{action=Action, object=Object}, Context).
+    maybe_allowed_memo(Action, Object, Context).
+
+maybe_allowed_memo(Action, Object, Context) ->
+    case z_memo:get({Action, Object}, Context) of
+        {ok, MaybeIsAllowed} ->
+            MaybeIsAllowed;
+        undefined ->
+            MaybeIsAllowed = z_notifier:first(#acl_is_allowed{action=Action, object=Object}, Context),
+            z_memo:set({Action, Object}, {ok, MaybeIsAllowed}, Context),
+            MaybeIsAllowed
+    end.
 
 %% @doc Check if an action on a property of a resource is allowed for the current actor. If the ACL
 %% is inconclusive and returns 'undefined' then the property is assumed to be visible. This is
@@ -144,10 +157,16 @@ is_allowed_prop(_Action, _Object, _Property, #context{ user_id = ?ACL_ADMIN_USER
 is_allowed_prop(Action, Object, Property, Context) when is_atom(Property) ->
     is_allowed_prop(Action, Object, atom_to_binary(Property, utf8), Context);
 is_allowed_prop(Action, Object, Property, Context) ->
-    case z_notifier:first(#acl_is_allowed_prop{action=Action, object=Object, prop=Property}, Context) of
-        undefined -> true; % Note, the default behaviour is different for props!
-        true -> true;
-        false -> false
+    case z_memo:get({rsc_prop_visible, Action, Object, Property}, Context) of
+        IsAllowed when is_boolean(IsAllowed) ->
+            IsAllowed;
+        undefined ->
+            IsAllowed = case z_notifier:first(#acl_is_allowed_prop{ action = Action, object = Object, prop = Property }, Context) of
+                undefined -> true; % Note, the default behaviour is different for props!
+                true -> true;
+                false -> false
+            end,
+            z_memo:set({rsc_prop_visible, Action, Object, Property}, IsAllowed, Context)
     end.
 
 %% @doc Check if it is allowed to create an edge between the subject and object using the predicate.
@@ -166,7 +185,7 @@ is_allowed_link(SubjectId, PredicateId, ObjectId, Context) when
         of
             true ->
                 {ok, PredName} = m_predicate:id_to_name(PredicateId, Context),
-                z_acl:is_allowed(
+                is_allowed(
                     insert,
                     #acl_edge{
                         subject_id = SubjectId,
@@ -194,24 +213,8 @@ is_allowed_link(Subject, Predicate, Object, Context) ->
 -spec rsc_visible( m_rsc:resource(), z:context() ) -> boolean().
 rsc_visible(undefined, _Context) ->
     true;
-rsc_visible(_Id, #context{user_id=?ACL_ADMIN_USER_ID}) ->
-    true;
-rsc_visible(_Id, #context{acl=admin}) ->
-    true;
 rsc_visible(Id, Context) when is_integer(Id) ->
-    case z_memo:is_enabled(Context) of
-        true ->
-            case z_memo:get({rsc_visible, Id}) of
-                undefined ->
-                    Visible = is_allowed(view, Id, Context),
-                    z_memo:set({rsc_visible, Id}, Visible),
-                    Visible;
-                Visible ->
-                    Visible
-            end;
-        false ->
-            is_allowed(view, Id, Context)
-    end;
+    is_allowed(view, Id, Context);
 rsc_visible(RscName, Context) ->
     case m_rsc:rid(RscName, Context) of
         undefined -> true;
@@ -228,26 +231,14 @@ rsc_visible(RscName, Context) ->
     IsVisible :: boolean().
 rsc_prop_visible(undefined, _Property, _Context) ->
     true;
-rsc_prop_visible(_Id, _Property, #context{user_id=?ACL_ADMIN_USER_ID}) ->
+rsc_prop_visible(_Id, _Property, #context{ user_id = ?ACL_ADMIN_USER_ID }) ->
     true;
-rsc_prop_visible(_Id, _Property, #context{acl=admin}) ->
+rsc_prop_visible(_Id, _Property, #context{ acl = admin }) ->
     true;
 rsc_prop_visible(Id, Property, Context) when is_atom(Property) ->
     rsc_prop_visible(Id, atom_to_binary(Property, utf8), Context);
 rsc_prop_visible(Id, Property, Context) when is_integer(Id) ->
-    case z_memo:is_enabled(Context) of
-        true ->
-            case z_memo:get({rsc_prop_visible, Id, Property}) of
-                undefined ->
-                    Visible = is_allowed_prop(view, Id, Property, Context),
-                    z_memo:set({rsc_prop_visible, Id, Property}, Visible),
-                    Visible;
-                Visible ->
-                    Visible
-            end;
-        false ->
-            is_allowed_prop(view, Id, Property, Context)
-    end;
+    is_allowed_prop(view, Id, Property, Context);
 rsc_prop_visible(RscName, Property, Context) ->
     case m_rsc:rid(RscName, Context) of
         undefined -> false;
@@ -259,8 +250,6 @@ rsc_prop_visible(RscName, Property, Context) ->
 -spec rsc_editable(m_rsc:resource(), z:context()) -> boolean().
 rsc_editable(undefined, _Context) ->
     false;
-rsc_editable(_Id, #context{ acl = admin }) ->
-    true;
 rsc_editable(Id, Context) when is_integer(Id) ->
     is_allowed(update, Id, Context);
 rsc_editable(RscName, Context) ->
@@ -276,11 +265,9 @@ rsc_deletable(undefined, _Context) ->
     false;
 rsc_deletable(_Id, #context{ user_id = undefined }) ->
     false;
-rsc_deletable(Id, #context{ acl = admin } = Context) ->
-    not z_convert:to_bool(m_rsc:p_no_acl(Id, <<"is_protected">>, Context));
 rsc_deletable(Id, Context) when is_integer(Id) ->
     not z_convert:to_bool(m_rsc:p_no_acl(Id, <<"is_protected">>, Context))
-        andalso is_allowed(delete, Id, Context);
+    andalso is_allowed(delete, Id, Context);
 rsc_deletable(RscName, Context) ->
     case m_rsc:rid(RscName, Context) of
         undefined -> false;
@@ -292,8 +279,6 @@ rsc_deletable(RscName, Context) ->
 -spec rsc_linkable(m_rsc:resource(), z:context()) -> boolean().
 rsc_linkable(undefined, _Context) ->
     false;
-rsc_linkable(_Id, #context{ acl = admin }) ->
-    true;
 rsc_linkable(Id, Context) when is_integer(Id) ->
     is_allowed(link, Id, Context);
 rsc_linkable(RscName, Context) ->
@@ -471,7 +456,7 @@ logon(Id, Context) ->
     UserContext :: z:context().
 logon(Id, Options, Context) ->
     UserId = m_rsc:rid(Id, Context),
-    case z_notifier:first(#acl_logon{ id = UserId, options = Options }, Context) of
+    ContextUser = case z_notifier:first(#acl_logon{ id = UserId, options = Options }, Context) of
         undefined ->
             Context#context{
                 acl = undefined,
@@ -479,7 +464,9 @@ logon(Id, Options, Context) ->
             };
         #context{} = NewContext ->
             NewContext
-    end.
+    end,
+    z_memo:set_userid(ContextUser),
+    ContextUser.
 
 %% @doc Refresh the authentication of the current user
 -spec logon_refresh(z:context()) -> z:context().
@@ -517,10 +504,12 @@ logon_prefs(Id, Options, Context) ->
 logoff(#context{ user_id = undefined, acl = undefined} = Context) ->
     Context;
 logoff(Context) ->
-    case z_notifier:first(#acl_logoff{}, Context) of
+    ContextNoUser = case z_notifier:first(#acl_logoff{}, Context) of
         undefined -> Context#context{ user_id = undefined, acl = undefined};
         #context{} = NewContext -> NewContext
-    end.
+    end,
+    z_memo:set_userid(ContextNoUser),
+    ContextNoUser.
 
 
 %% @doc Flush the memo cache of ACL lookups for the given resource id.
