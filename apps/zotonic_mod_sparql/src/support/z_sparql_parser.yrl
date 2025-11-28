@@ -18,7 +18,7 @@ Nonterminals
     union_graph_pattern filter_pattern bind_pattern inline_data
     triples_same_subject blank_node_property_list
     property_list_not_empty property_list object_list object
-    verb var_or_term var iri_term prefixed_name
+    verb inverse_path path_elt path_primary var_or_term var iri_term prefixed_name
     expression conditional_or_expression conditional_and_expression
     relational_expression additive_expression multiplicative_expression
     unary_expression primary_expression
@@ -219,6 +219,15 @@ object -> blank_node_property_list : '$1'.
 
 verb -> var_or_term : '$1'.
 verb -> a : rdf_type.
+verb -> inverse_path : '$1'.
+
+inverse_path -> hat path_elt :
+    {inverse, '$2'}.
+
+path_elt -> path_primary : '$1'.
+
+path_primary -> iri_term : '$1'.
+path_primary -> a : rdf_type.
 
 var_or_term -> var : '$1'.
 var_or_term -> iri_term : '$1'.

@@ -25,9 +25,16 @@ relation_edge_test() ->
             "    ?subject dcterms:relation <", ObjectUri/binary, ">\n"
             "}"
         >>,
+        InverseSparql = <<
+            "PREFIX dcterms: <http://purl.org/dc/terms/>\n"
+            "SELECT ?subject WHERE {\n"
+            "    <", ObjectUri/binary, "> ^dcterms:relation ?subject\n"
+            "}"
+        >>,
         {ok, RelationId} = m_predicate:name_to_id(relation, Context),
         ?assertEqual({edge, RelationId, false}, query_mapping(Sparql, Context)),
-        ?assertEqual([SubjectId], search(Sparql, Context))
+        ?assertEqual([SubjectId], search(Sparql, Context)),
+        ?assertEqual([SubjectId], search(InverseSparql, Context))
     after
         ok = m_rsc:delete(SubjectId, Context),
         ok = m_rsc:delete(ObjectId, Context)
@@ -56,6 +63,11 @@ reversed_relation_edge_test() ->
             "    ?subject <", PredicateUri/binary, "> <", StoredSubjectUri/binary, ">\n"
             "}"
         >>,
+        InverseReversedSparql = <<
+            "SELECT ?subject WHERE {\n"
+            "    <", StoredSubjectUri/binary, "> ^<", PredicateUri/binary, "> ?subject\n"
+            "}"
+        >>,
         StoredDirectionSparql = <<
             "SELECT ?subject WHERE {\n"
             "    ?subject <", PredicateUri/binary, "> <", StoredObjectUri/binary, ">\n"
@@ -63,6 +75,7 @@ reversed_relation_edge_test() ->
         >>,
         ?assertEqual({edge, PredicateId, true}, query_mapping(ReversedSparql, Context)),
         ?assertEqual([StoredObjectId], search(ReversedSparql, Context)),
+        ?assertEqual([StoredObjectId], search(InverseReversedSparql, Context)),
         ?assertEqual([], search(StoredDirectionSparql, Context))
     after
         ok = m_rsc:delete(StoredSubjectId, Context),

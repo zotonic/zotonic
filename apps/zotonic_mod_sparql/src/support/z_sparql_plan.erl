@@ -299,7 +299,12 @@ map_predicate_objects([], _Subject, _Predicate, State) ->
 map_predicate_objects([Object | Rest], Subject, Predicate, State0) ->
     {Object1, ObjectTriples, State1} = map_graph_node(Object, State0),
     {Rest1, State2} = map_predicate_objects(Rest, Subject, Predicate, State1),
-    {[{triple, Subject, Predicate, Object1} | ObjectTriples] ++ Rest1, State2}.
+    {[predicate_triple(Predicate, Subject, Object1) | ObjectTriples] ++ Rest1, State2}.
+
+predicate_triple({inverse, Predicate}, Subject, Object) ->
+    {triple, Object, Predicate, Subject};
+predicate_triple(Predicate, Subject, Object) ->
+    {triple, Subject, Predicate, Object}.
 
 map_graph_node({blank_node_property_list, Predicates}, State0) ->
     {BlankNode, State1} = map_term(anon, State0),
@@ -311,6 +316,8 @@ map_graph_node(Term, State0) ->
 
 map_predicate({var, _} = Variable, _State) ->
     Variable;
+map_predicate({inverse, Predicate}, State) ->
+    {inverse, map_predicate(Predicate, State)};
 map_predicate(rdf_type, State) ->
     map_predicate_iri(?NS_RDF, <<"type">>, State);
 map_predicate({pname, PName}, State) ->

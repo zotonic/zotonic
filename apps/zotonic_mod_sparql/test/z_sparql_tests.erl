@@ -95,6 +95,42 @@ blank_node_property_list_test() ->
         z_notifier:detach(sparql_mapping, Context)
     end.
 
+inverse_predicate_path_test() ->
+    {ok, _} = application:ensure_all_started(zotonic_notifier),
+    Context = z_context:new(zotonic_site_testsandbox),
+    ok = z_notifier:observe(rdf_ns, {?MODULE, observe_rdf_ns}, 100, Context),
+    ok = z_notifier:observe(sparql_mapping, {?MODULE, observe_sparql_mapping}, 100, Context),
+    try
+        {ok, Query} = z_sparql:parse(<<
+            "PREFIX ex: <http://example/> "
+            "SELECT ?parent WHERE { ?child ^ex:parent ?parent . }"
+        >>),
+        ?assertMatch(
+            {query, _, {select, _, _, _, {group, [
+                {triple_pattern, {subject, {var, <<"child">>}, [
+                    {predicate, {inverse, {pname, <<"ex:parent">>}}, [{var, <<"parent">>}]}
+                ]}}
+            ]}, _}},
+            Query),
+        {ok, #{ where := Where }} = z_sparql_plan:to_query_plan(Query, Context),
+        ?assertEqual(
+            [{{var, <<"parent">>}, <<"http://example/parent">>, {var, <<"child">>}}],
+            plan_triples(Where)),
+
+        {ok, TypeQuery} = z_sparql:parse(<<
+            "SELECT ?class WHERE { ?resource ^a ?class . }"
+        >>),
+        {ok, #{ where := TypeWhere }} = z_sparql_plan:to_query_plan(TypeQuery, Context),
+        ?assertEqual(
+            [{{var, <<"class">>},
+              <<"http://www.w3.org/1999/02/22-rdf-syntax-ns#type">>,
+              {var, <<"resource">>}}],
+            plan_triples(TypeWhere))
+    after
+        z_notifier:detach(rdf_ns, Context),
+        z_notifier:detach(sparql_mapping, Context)
+    end.
+
 category_mapping_test() ->
     ?assertEqual(<<"text">>, z_rdf_props:category_mapping(<<"dctype:Text">>)),
     ?assertEqual(
