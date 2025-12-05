@@ -212,7 +212,7 @@ task_set_email_block_status(Email, IsBlock, Retries, Context) ->
 observe_email_failed(#email_failed{
         message_nr = MsgId,
         recipient = Recipient,
-        is_final = _IsFinal,
+        is_final = IsFinal,
         reason = Reason,
         status = Status
     }, Context) ->
@@ -220,12 +220,8 @@ observe_email_failed(#email_failed{
         bounce -> permanent_failure;
         illegal_address -> permanent_failure;
         smtphost -> permanent_failure;
-        _ ->
-            case Status of
-                <<"5", _/binary>> -> permanent_failure;
-                <<"605", _/binary>> -> permanent_failure;
-                _ -> temporary_failure
-            end
+        _ when not IsFinal -> temporary_failure;
+        _ when IsFinal -> permanent_failure
     end,
     Report = #{
         <<"type">> => Severity,
