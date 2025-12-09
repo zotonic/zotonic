@@ -1,7 +1,7 @@
 {# Initialize Zotonic - set promises and queue early form submits
  #}
 {% block style %}
-<style type="text/css">
+<style type="text/css" nonce="{{ m.req.csp_nonce }}">
     .z-wires-submitting {
         pointer-events: none;
         opacity: 0.5;
