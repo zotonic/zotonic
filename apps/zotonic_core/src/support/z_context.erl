@@ -1391,7 +1391,7 @@ set_security_headers(Context) ->
         {<<"content-security-policy">>, flatten_csp(CSP1)},
         {<<"x-content-type-options">>, <<"nosniff">>},
         {<<"x-permitted-cross-domain-policies">>, <<"none">>},
-        {<<"referrer-policy">>, <<"origin-when-cross-origin">>}
+        {<<"referrer-policy">>, <<"strict-origin-when-cross-origin">>}
     ],
     Default1 = case z_context:get(allow_frame, Context, false) of
         true -> Default;
