@@ -1,0 +1,42 @@
+Language support (#trans)
+=========================
+
+Problem: the translatable properties in the JSONB are encoded as either
+a string (default language), of a #trans{} record with translation.
+
+The available translations for a resource are in the "language" property.
+This is an array of ISO639-1 language codes.
+
+In the generated SQL we can't readily access the translated properties.
+We might need extra stored procedures to easily inspect values. The values
+might be 'text' (psql) and 'jsonb' types (text and object).
+
+
+Functions:
+
+STRLANG(Expr,Lang) -> LangString
+
+    Create a language tagged string from the expression.
+    Maybe a JSONB value?
+
+LANG(Expr) -> Lang
+
+    LANG(SomeTranslatableString) --- return language of the string
+
+LANGMATCHES(Lang1, Lang2)
+
+    Check if Lang2 is Lang2 or a sublanguage of Lang2
+    Example: LANGMATCHES("nl-be", "nl")
+
+
+Also:
+
+  "...."@en -->  mark string as having a language
+
+
+We could actually do a kind of "superset" of the above. Instead of a
+single language tagged string we use a trans record. That can contain
+zero or more languages.
+
+The LANG could return the first language.  LANGMATCHES could be extended
+to also accept a trans record as the first argument.

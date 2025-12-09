@@ -101,16 +101,28 @@
 lookup_facet(Facet, Context) ->
     case facet_def(Facet, Context) of
         {ok, #facet_def{ name = Name, type = Type, is_range = IsRange }} ->
-            {ok, #{
+            FacetInfo = #{
                 table => <<"search_facet">>,
                 column => <<"f_", Name/binary>>,
                 name => Name,
                 type => Type,
                 is_range => IsRange
-            }};
+            },
+            {ok, set_facet_search_column(Type, Name, FacetInfo)};
         {error, _} = Error ->
             Error
     end.
+
+%% @doc Full-text facets store the value in two columns, one for the text itself
+%% and one for the queries using fts (fts_) or trigram searches (ft_).
+%% Return both columns in the lookup result so callers can select the correct
+%% column based on the operation.
+set_facet_search_column(fulltext, Name, FacetInfo) ->
+    FacetInfo#{ search_column => <<"ft_", Name/binary>> };
+set_facet_search_column(fts, Name, FacetInfo) ->
+    FacetInfo#{ search_column => <<"fts_", Name/binary>> };
+set_facet_search_column(_Type, _Name, FacetInfo) ->
+    FacetInfo.
 
 %% @doc Return all found values (or min/max for all facets).
 -spec facet_values(z:context()) -> {ok, map()} | {error, term()}.
@@ -616,21 +628,18 @@ qterm_1(Field, OpTerm, Value, Query, Context) ->
             Value2 = convert_type(Def#facet_def.type, Value1, Context),
             Final = case Def#facet_def.type of
                 fulltext when Op =:= <<"=">> ->
-                    NormV = z_search:normalize_value(Field, text, Value2, Context),
-                    Words = words(NormV),
-                    lists:foldl(
-                        fun(Word, AccQ) ->
-                            {ArgN, AccQ1} = add_term_arg(<<"%", Word/binary, "%">>, AccQ),
-                            W = [
-                                <<"facet.ft_">>, Field, <<" like ">>, ArgN
-                            ],
-                            AccQ1#search_sql_term{
-                                label = {facet_ft, Field},
-                                where = AccQ1#search_sql_term.where ++ [ W ]
-                            }
-                        end,
-                        Query,
-                        Words);
+                    QueryText = z_search:normalize_value(Field, text, Value2, Context),
+                    {ArgN, Query1} = add_term_arg(QueryText, Query),
+                    SearchColumn = [<<"facet.ft_">>, Field],
+                    Match = [ArgN, <<" OPERATOR(public.<%) ">>, SearchColumn],
+                    Sort = [
+                        <<"public.word_similarity(">>, ArgN, <<", ">>, SearchColumn, <<") DESC">>
+                    ],
+                    Query1#search_sql_term{
+                        label = {facet_ft, Field},
+                        where = Query1#search_sql_term.where ++ [Match],
+                        sort = Query1#search_sql_term.sort ++ [Sort]
+                    };
                 fts when Op =:= <<"=">> ->
                     TsQuery = mod_search:to_tsquery(Value2, Context),
                     {ArgN, Query2} = add_term_arg(TsQuery, Query),
@@ -668,19 +677,10 @@ qterm_1(Field, OpTerm, Value, Query, Context) ->
             Error
     end.
 
-words(Text) ->
-    binary:split(Text, [ <<" ">>, <<"\n">>, <<"\r">>, <<"\t">> ], [ global, trim_all ]).
-
+%% @doc Append an argument to a #search_sql
 add_term_arg(ArgValue, #search_sql_term{ args = Args } = Q) ->
     Arg = [$$] ++ integer_to_list(length(Args) + 1),
     {list_to_atom(Arg), Q#search_sql_term{args = Args ++ [ ArgValue ]}}.
-
-
-% %% Append an argument to a #search_sql
-% add_arg(ArgValue, Search) ->
-%     Arg = [$$] ++ integer_to_list(length(Search#search_sql.args) + 1),
-%     {Arg, Search#search_sql{args=Search#search_sql.args ++ [ArgValue]}}.
-
 
 %% @doc Pivot all resources to fill the facet table. This runs after every change to the
 %% the facet.tpl blocks.

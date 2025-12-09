@@ -24,8 +24,8 @@ The mod_sparql module adds support to use the SPARQL query language for accessin
 
 -mod_title("SPARQL").
 -mod_description("SPARQL for Zotonic data.").
--mod_provides([]).
--mod_depends([]).
+-mod_provides([ sparql ]).
+-mod_depends([ mod_search ]).
 
 -author('Marc Worrell <marc@worrell.nl>').
 
@@ -85,6 +85,13 @@ find_table_column(Predicate, Context) ->
 %% is not defined then assume it as a path in the resource JSON properties.
 find_table_column_1(<<"facet.", Facet/binary>>, Context) ->
     case search_facet:lookup_facet(Facet, Context) of
+        {ok, #{
+            table := Table,
+            column := Column,
+            search_column := SearchColumn,
+            type := Type
+        }} when Type =:= fulltext; Type =:= fts ->
+            {ok, {search_column, Table, Column, SearchColumn, Type}};
         {ok, #{
             table := Table,
             column := Column,

@@ -160,6 +160,18 @@ mapped_triple_to_sql({column, Table, Column, Type}, SubjectAlias, Object, Term0,
     },
     {Term2, State2} = bind_object(Object, value, Expression, Table, Column, Term1, State1),
     {[Term2], State2};
+mapped_triple_to_sql(
+        {search_column, Table, ValueColumn, _SearchColumn, _SearchType},
+        SubjectAlias, Object, Term0, State0) ->
+    {Alias, Term1, State1} = property_alias(Table, SubjectAlias, Term0, State0),
+    Expression = #sql_expression{
+        sql = column_expression(Alias, ValueColumn),
+        type = text,
+        source = column
+    },
+    {Term2, State2} = bind_object(
+        Object, value, Expression, Table, ValueColumn, Term1, State1),
+    {[Term2], State2};
 mapped_triple_to_sql({jsonb, Table, Column, Selector, Type}, SubjectAlias, Object, Term0, State0) ->
     {Alias, Term1, State1} = property_alias(Table, SubjectAlias, Term0, State0),
     Expression = #sql_expression{
@@ -353,6 +365,9 @@ expression_to_sql({call, Function, [Argument]}, State, Term0)
     type_test_to_sql(Function, Argument, State, Term0);
 expression_to_sql({call, sameterm, [Left, Right]}, State, Term0) ->
     same_term_to_sql(Left, Right, State, Term0);
+expression_to_sql({call, Function, Arguments}, State, Term0)
+    when Function =:= fulltext; Function =:= fulltext_rank ->
+    fulltext_to_sql(Function, Arguments, State, Term0);
 expression_to_sql({call, {iri, Iri} = Function, Arguments}, State, Term0) ->
     case z_sparql_sql_datatype:mapping(Iri) of
         {ok, Mapping} ->
@@ -369,7 +384,149 @@ expression_to_sql(Value, _State, Term0) ->
     {Arg, Term1} = add_arg(ArgumentValue, Term0),
     {#sql_expression{ sql = Arg, type = Type, source = argument }, Term1}.
 
-%% @doc If we know we have a resource, the we know the type is
+fulltext_to_sql(Function, [Resource, Query], State0, Term0) ->
+    fulltext_to_sql(Function, Resource, default, Query, State0, Term0);
+fulltext_to_sql(Function, [Resource, Field, Query], State0, Term0) ->
+    fulltext_to_sql(Function, Resource, Field, Query, State0, Term0);
+fulltext_to_sql(Function, Arguments, _State, _Term) ->
+    throw({error, {invalid_function_arity, Function, length(Arguments)}}).
+
+fulltext_to_sql(Function, Resource, Field, Query, State0, Term0) ->
+    QueryText = fulltext_query_text(Query),
+    {ResourceAlias, Term1} = fulltext_resource_alias(Resource, Term0, State0),
+    {SearchExpression, SearchType, NormalizeName, Term2} = fulltext_search_expression(Field, ResourceAlias, Term1),
+    fulltext_expression(
+        Function, SearchType, SearchExpression, NormalizeName, QueryText,
+        State0#sql_state.context, Term2).
+
+fulltext_query_text({literal, QueryText, _Datatype, _Language}) ->
+    QueryText;
+fulltext_query_text(Query) ->
+    throw({error, {expected_fulltext_query_string, Query}}).
+
+fulltext_resource_alias({var, _} = Variable, Term, #sql_state{ bindings = Bindings }) ->
+    case maps:find(Variable, Bindings) of
+        {ok, {resource, Alias}} -> {Alias, Term};
+        {ok, _} -> throw({error, {incompatible_variable, Variable}});
+        error -> throw({error, {unbound_variable, Variable}})
+    end;
+fulltext_resource_alias({bnode, _} = BlankNode, Term, #sql_state{ bindings = Bindings }) ->
+    case maps:find(BlankNode, Bindings) of
+        {ok, {resource, Alias}} -> {Alias, Term};
+        {ok, _} -> throw({error, {incompatible_variable, BlankNode}});
+        error -> throw({error, {unbound_variable, BlankNode}})
+    end;
+fulltext_resource_alias({iri, Iri}, Term0, #sql_state{ context = Context }) ->
+    Alias = search_alias({rsc, Iri}),
+    Term1 = add_table(Alias, <<"rsc">>, Term0),
+    case m_rsc:rid(Iri, Context) of
+        undefined -> {Alias, add_where(<<"false">>, Term1)};
+        RscId ->
+            {RscArg, Term2} = add_arg(RscId, Term1),
+            {Alias, add_where([Alias, <<".id = ">>, RscArg], Term2)}
+    end;
+fulltext_resource_alias(Resource, _Term, _State) ->
+    throw({error, {expected_resource, Resource}}).
+
+fulltext_search_expression(default, ResourceAlias, Term) ->
+    {column_expression(ResourceAlias, <<"pivot_tsv">>), fts, <<"pivot_tsv">>, Term};
+fulltext_search_expression(
+        #{
+            mapping := {search_column, Table, _ValueColumn, SearchColumn, SearchType},
+            predicate := Predicate
+        },
+        ResourceAlias, Term0) ->
+    {Alias, Term1} = search_property_alias(Table, SearchColumn, ResourceAlias, Term0),
+    NormalizeName = case Predicate of
+        <<"facet.", Facet/binary>> -> Facet;
+        _ -> Predicate
+    end,
+    {column_expression(Alias, SearchColumn), SearchType, NormalizeName, Term1};
+fulltext_search_expression(
+        #{
+            mapping := {column, Table, Column, Type},
+            predicate := Predicate
+        },
+        ResourceAlias, Term0)
+    when Type =:= fts; Type =:= fulltext; Type =:= text ->
+    {Alias, Term1} = search_property_alias(Table, Column, ResourceAlias, Term0),
+    SearchType = case Type of
+        text -> fulltext;
+        _ -> Type
+    end,
+    NormalizeName = case Predicate of
+        <<"facet.", Facet/binary>> -> Facet;
+        _ -> Column
+    end,
+    {column_expression(Alias, Column), SearchType, NormalizeName, Term1};
+fulltext_search_expression(#{ mapping := undefined, iri := Iri }, _Alias, _Term) ->
+    throw({error, {unknown_predicate, Iri}});
+fulltext_search_expression(#{ iri := Iri }, _Alias, _Term) ->
+    throw({error, {not_a_fulltext_column, Iri}});
+fulltext_search_expression(Field, _Alias, _Term) ->
+    throw({error, {expected_fulltext_field, Field}}).
+
+search_property_alias(<<"rsc">>, _Column, ResourceAlias, Term) ->
+    {ResourceAlias, Term};
+search_property_alias(Table, _Column, ResourceAlias, #search_sql_term{ join_inner = Joins } = Term) ->
+    Alias = search_alias({ResourceAlias, Table}),
+    On = [Alias, <<".id = ">>, ResourceAlias, <<".id">>],
+    {Alias, Term#search_sql_term{ join_inner = Joins#{ Alias => {Table, On} } }}.
+
+%% @doc Make an alias for the table key, as we don't save it in the state we base the alias
+%% name of a hash of the key.
+search_alias(Key) ->
+    <<"sparql_search_", (integer_to_binary(erlang:phash2(Key)))/binary>>.
+
+fulltext_expression(fulltext, fts, SearchExpression, _Name, QueryText, Context, Term0) ->
+    case mod_search:to_tsquery(QueryText, Context) of
+        <<>> ->
+            {constant_expression(false), Term0};
+        TsQuery ->
+            {QueryArg, Term1} = add_arg(TsQuery, Term0),
+            {boolean_expression([$(, SearchExpression, <<" @@ ">>, QueryArg, $)]), Term1}
+    end;
+fulltext_expression(
+        fulltext_rank, fts, SearchExpression, _Name, QueryText, Context, Term0) ->
+    case mod_search:to_tsquery(QueryText, Context) of
+        <<>> ->
+            {float_expression(<<"CAST(0 AS double precision)">>), Term0};
+        TsQuery ->
+            {QueryArg, Term1} = add_arg(TsQuery, Term0),
+            {BehaviourArg, Term2} = add_arg(mod_search:rank_behaviour(Context), Term1),
+            {float_expression([
+                <<"ts_rank_cd(">>, mod_search:rank_weight(Context), <<", ">>,
+                SearchExpression, <<", ">>, QueryArg, <<", ">>, BehaviourArg, $)
+            ]), Term2}
+    end;
+fulltext_expression(fulltext, fulltext, SearchExpression, Name, QueryText, Context, Term0) ->
+    Normalized = normalize_fulltext(Name, QueryText, Context),
+    case Normalized of
+        <<>> ->
+            {constant_expression(false), Term0};
+        _ ->
+            {QueryArg, Term1} = add_arg(Normalized, Term0),
+            {boolean_expression([
+                $(, QueryArg, <<" OPERATOR(public.<%) ">>, SearchExpression, $)
+            ]), Term1}
+    end;
+fulltext_expression(fulltext_rank, fulltext, SearchExpression, Name, QueryText, Context, Term0) ->
+    Normalized = normalize_fulltext(Name, QueryText, Context),
+    case Normalized of
+        <<>> ->
+            % Nothing to rank, fallback to 0.0
+            {float_expression(<<"CAST(0 AS double precision)">>), Term0};
+        _ ->
+            {QueryArg, Term1} = add_arg(Normalized, Term0),
+            {float_expression([
+                <<"public.word_similarity(">>, QueryArg, <<", ">>, SearchExpression, $)
+            ]), Term1}
+    end.
+
+normalize_fulltext(Name, QueryText, Context) ->
+    z_search:normalize_value(Name, text, QueryText, Context).
+
+%% @doc If we know we have a resource, then we know the type is
 %% not a literal and not a number (even when a rsc id is a number).
 %% Also short-circuit some constants, then they do not need to go
 %% through the jsonb conversions.
@@ -875,6 +1032,13 @@ boolean_expression(Sql) ->
     #sql_expression{
         sql = Sql,
         type = boolean,
+        source = expression
+    }.
+
+float_expression(Sql) ->
+    #sql_expression{
+        sql = Sql,
+        type = float,
         source = expression
     }.
 

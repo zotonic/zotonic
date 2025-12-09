@@ -1,0 +1,25 @@
+Parametrized SPARQL
+===================
+
+
+We want to prevent SPARQL injection attacks by adding parameters to the SPARQL queries.
+
+These parameters might be pre-bound values. In this way we can parametrize every spot
+where a constant or an IRI is used.
+
+Discussions:
+
+https://web.archive.org/web/20150512231123/http://answers.semanticweb.com/questions/12147/whats-the-best-way-to-parameterize-sparql-queries
+
+Many implementations use a dynamic way to build SPARQL with arguments. By concatenation and
+escaping the arguments manually.
+
+Looks like the method of pre-binding the arguments to variables is the way to go.
+In this way we could supply a map of arguments, which is then used by the SPARQL planner.
+This prevents any need for escaping, as the SQL mapper already uses PostgreSQL bindings
+for all values in the SPARQL query.
+
+Questions:
+
+1. Types. We might need to add type hints for IRIs?  Numeric and boolean arguments are clear.
+2. Should we be able to pass JSONB structured objects  (why not?)

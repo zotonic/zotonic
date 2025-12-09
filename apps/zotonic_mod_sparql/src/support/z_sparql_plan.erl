@@ -45,6 +45,7 @@
       category
     | subclass
     | {column, binary(), binary(), atom()}
+    | {search_column, binary(), binary(), binary(), fulltext | fts}
     | {jsonb, binary(), binary(), term(), atom()}
     | {edge, term(), boolean()}
     | undefined.
@@ -372,6 +373,12 @@ predicate_mapping(Namespace, NamespacePrefix, LocalName, Context) ->
             z_db:assert_table_name(Table),
             z_db:assert_column_name(Column),
             {column, Table, Column, Type};
+        {ok, {search_column, Table, ValueColumn, SearchColumn, Type}}
+            when Type =:= fulltext; Type =:= fts ->
+            z_db:assert_table_name(Table),
+            z_db:assert_column_name(ValueColumn),
+            z_db:assert_column_name(SearchColumn),
+            {search_column, Table, ValueColumn, SearchColumn, Type};
         {ok, {jsonb, Table, Column, Selector, Type}} ->
             z_db:assert_table_name(Table),
             z_db:assert_column_name(Column),
@@ -459,10 +466,29 @@ map_expression({call, Function, Arguments}, State0) when is_atom(Function) ->
     {{call, Function, Arguments1}, State1};
 map_expression({call, Function, Arguments}, State0) ->
     {Function1, State1} = map_term(Function, State0),
-    {Arguments1, State2} = map_expressions(Arguments, State1),
-    {{call, Function1, Arguments1}, State2};
+    map_extension_call(Function1, Arguments, State1);
 map_expression(Expression, State) ->
     map_term(Expression, State).
+
+map_extension_call({iri, <<"http://zotonic.net/predicate/fullText">>}, Arguments, State) ->
+    map_fulltext_call(fulltext, Arguments, State);
+map_extension_call({iri, <<"http://zotonic.net/predicate/fullTextRank">>}, Arguments, State) ->
+    map_fulltext_call(fulltext_rank, Arguments, State);
+map_extension_call(Function, Arguments, State0) ->
+    {Arguments1, State1} = map_expressions(Arguments, State0),
+    {{call, Function, Arguments1}, State1}.
+
+map_fulltext_call(Function, [Resource, Query], State0) ->
+    {Resource1, State1} = map_expression(Resource, State0),
+    {Query1, State2} = map_expression(Query, State1),
+    {{call, Function, [Resource1, Query1]}, State2};
+map_fulltext_call(Function, [Resource, Field, Query], State0) ->
+    {Resource1, State1} = map_expression(Resource, State0),
+    Field1 = map_predicate(Field, State1),
+    {Query1, State2} = map_expression(Query, State1),
+    {{call, Function, [Resource1, Field1, Query1]}, State2};
+map_fulltext_call(Function, Arguments, _State) ->
+    throw({error, {invalid_function_arity, Function, length(Arguments)}}).
 
 map_aggregate_argument(all, State) ->
     {all, State};
@@ -518,8 +544,8 @@ resource_variables({left_join, Left, Right, _Expression}) ->
     resource_variables(Left) ++ resource_variables(Right);
 resource_variables({union, Branches}) ->
     lists:append([ resource_variables(Branch) || Branch <- Branches ]);
-resource_variables({filter, _Expression, Pattern}) ->
-    resource_variables(Pattern);
+resource_variables({filter, Expression, Pattern}) ->
+    expression_resource_variables(Expression) ++ resource_variables(Pattern);
 resource_variables({extend, _Variable, _Expression, Pattern}) ->
     resource_variables(Pattern);
 resource_variables({values, _Variable, _Values}) -> [];
@@ -528,6 +554,16 @@ resource_variables({graph, Graph, Pattern}) ->
 
 term_variables({var, _} = Variable) -> [Variable];
 term_variables(_) -> [].
+
+expression_resource_variables({call, Function, [Resource | _]})
+    when Function =:= fulltext; Function =:= fulltext_rank ->
+    term_variables(Resource);
+expression_resource_variables({_Operator, Left, Right}) ->
+    expression_resource_variables(Left) ++ expression_resource_variables(Right);
+expression_resource_variables({_Operator, Expression}) ->
+    expression_resource_variables(Expression);
+expression_resource_variables(_) ->
+    [].
 
 %% @doc Resove an IRI against a base url, remove '..' etc.
 resolve_iri(Iri, Base) when is_binary(Iri) ->
