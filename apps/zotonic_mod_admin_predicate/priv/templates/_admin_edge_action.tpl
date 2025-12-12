@@ -8,7 +8,7 @@
 {% wire id=#unlink.id
         action={confirm text=confirm_remove_text
                         ok=_"Remove connection"
-                        action={unlink edge_id=id hide=tr_id}
+                        action={unlink edge_id=id subject_id=edge.subject_id hide=tr_id}
                         is_danger
                }
 %}
