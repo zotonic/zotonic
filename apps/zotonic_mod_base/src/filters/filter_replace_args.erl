@@ -72,12 +72,7 @@ replace_args(Input, _Context) ->
     Input.
 
 replace_args(Input, Args, _Context) when is_list(Input) andalso is_list(Args) ->
-    case Args of
-        [H|_] when is_list(H) ->
-            do_replace_args(Input, Args, []);
-        Arg ->
-            do_replace_args(Input, [Arg], [])
-    end;
+    do_replace_args(Input, Args, []);
 replace_args(Input, Args, Context) when is_binary(Input) ->
     replace_args(unicode:characters_to_list(Input), Args, Context);
 replace_args(Input, _Args, _Context) ->
