@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-09-22 11:23\n"
+"PO-Revision-Date: 2025-12-16 13:17\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -20,13 +20,13 @@ msgid "Abkhazian"
 msgstr "أبخازيا"
 
 msgid "Adamawa Fulfulde"
-msgstr ""
+msgstr "أداماوا فولفولدي"
 
 msgid "Adara"
-msgstr ""
+msgstr "أدارا"
 
 msgid "Adilabad Gondi"
-msgstr ""
+msgstr "عديل آباد جوندي"
 
 msgid "Afar"
 msgstr "عفار"
@@ -35,7 +35,7 @@ msgid "Afrikaans"
 msgstr "الأفريكانية"
 
 msgid "Akan"
-msgstr ""
+msgstr "أكان"
 
 msgid "Albanian"
 msgstr "الألبانية"
@@ -44,10 +44,10 @@ msgid "Amharic"
 msgstr "الأمهرية"
 
 msgid "Anyin Morofo"
-msgstr ""
+msgstr "أنين موروفو"
 
 msgid "Ao Naga"
-msgstr ""
+msgstr "آو ناجا"
 
 msgid "Arabic"
 msgstr "اللغة العربية"
@@ -116,19 +116,19 @@ msgid "Arabic - Yemen"
 msgstr "العربية - اليمن"
 
 msgid "Aringa"
-msgstr ""
+msgstr "أرينجا"
 
 msgid "Assamese"
 msgstr "آسامية"
 
 msgid "Avaric"
-msgstr ""
+msgstr "أفاريك"
 
 msgid "Awa (China)"
-msgstr ""
+msgstr "آوا (الصين)"
 
 msgid "Ayacucho Quechua"
-msgstr ""
+msgstr "أياكوتشو كيتشوا"
 
 msgid "Aymara"
 msgstr "أيمارا"
@@ -137,22 +137,22 @@ msgid "Azerbaijani"
 msgstr "أذربيجان"
 
 msgid "Balangingi"
-msgstr ""
+msgstr "بالينجي"
 
 msgid "Balkan Romani"
-msgstr ""
+msgstr "روماني البلقان"
 
 msgid "Balti"
-msgstr ""
+msgstr "بالتي"
 
 msgid "Bambara"
-msgstr ""
+msgstr "بامبارا"
 
 msgid "Bangka"
-msgstr ""
+msgstr "بانجكا"
 
 msgid "Barclayville Grebo"
-msgstr ""
+msgstr "باركلايفيل جريبو"
 
 msgid "Bashkir"
 msgstr "باشكير"
@@ -161,103 +161,103 @@ msgid "Basque"
 msgstr "الباسك"
 
 msgid "Bavarian"
-msgstr ""
+msgstr "بافاري"
 
 msgid "Bazigar"
-msgstr ""
+msgstr "بازيغار"
 
 msgid "Bengali"
 msgstr "البنغالية"
 
 msgid "Berta"
-msgstr ""
+msgstr "بيرتا"
 
 msgid "Bilaspuri"
-msgstr ""
+msgstr "بيلاسبوري"
 
 msgid "Bislama"
 msgstr "بيسلاما"
 
 msgid "Borana-Arsi-Guji Oromo"
-msgstr ""
+msgstr "بورانا-أرسي-غوجي-أورومو بورانا-أرسي-غوجي أورومو"
 
 msgid "Borgu Fulfulde"
-msgstr ""
+msgstr "بورجو فولفولدي"
 
 msgid "Bosnian"
 msgstr "البوسني"
 
 msgid "Bouyei"
-msgstr ""
+msgstr "بويي"
 
 msgid "Breton"
 msgstr "بريتون"
 
 msgid "Brunei"
-msgstr ""
+msgstr "بروناي"
 
 msgid "Bulgarian"
 msgstr "البلغارية"
 
 msgid "Burmese"
-msgstr ""
+msgstr "البورمية"
 
 msgid "Byelorussian"
 msgstr "البيلاروسية"
 
 msgid "Caló"
-msgstr ""
+msgstr "كالو"
 
 msgid "Cambodian"
-msgstr ""
+msgstr "كمبودي"
 
 msgid "Cameroon Pidgin"
-msgstr ""
+msgstr "الكاميرون بيدجين"
 
 msgid "Campidanese Sardinian"
-msgstr ""
+msgstr "سارديني كامبيداني سارديني"
 
 msgid "Capiznon"
-msgstr ""
+msgstr "كابيزنون"
 
 msgid "Catalan"
 msgstr "الكاتالونية"
 
 msgid "Cebaara Senoufo"
-msgstr ""
+msgstr "سيبارا سينوفو"
 
 msgid "Cebuano"
-msgstr ""
+msgstr "سيبوانو"
 
 msgid "Central Atlas Tamazight"
-msgstr ""
+msgstr "الأطلس المركزي أطلس الأمازيغية"
 
 msgid "Central Hongshuihe Zhuang"
-msgstr ""
+msgstr "وسط هونغشويهي تشوانغ"
 
 msgid "Central Huasteca Nahuatl"
-msgstr ""
+msgstr "هواستيكا الوسطى ناهواتل الهواستيكا الوسطى"
 
 msgid "Central Kanuri"
-msgstr ""
+msgstr "كانوري الوسطى"
 
 msgid "Central Malay"
-msgstr ""
+msgstr "وسط الملايو"
 
 msgid "Central Okinawan"
-msgstr ""
+msgstr "أوكيناوا الوسطى"
 
 msgid "Central Pashto"
-msgstr ""
+msgstr "البشتو الوسطى"
 
 msgid "Central Sama"
-msgstr ""
+msgstr "سما الوسطى"
 
 msgid "Central-Eastern Niger Fulfulde"
-msgstr ""
+msgstr "فولفولدي وسط شرق النيجر"
 
 msgid "Chadian Arabic"
-msgstr ""
+msgstr "العربية التشادية"
 
 msgid "Chamorro"
 msgstr "تشامورو"
@@ -266,13 +266,13 @@ msgid "Chechen"
 msgstr "الشيشان"
 
 msgid "Chewa"
-msgstr ""
+msgstr "تشوا"
 
 msgid "Chhattisgarhi"
-msgstr ""
+msgstr "تشاتيسغارهي"
 
 msgid "Chimborazo Highland Quichua"
-msgstr ""
+msgstr "تشيمبورازو هايلاند كيتشوا"
 
 msgid "Chinese (Simplified)"
 msgstr "الصينية (المبسطة)"
@@ -281,25 +281,25 @@ msgid "Chinese (Traditional)"
 msgstr "الصينية (التقليدية)"
 
 msgid "Chittagonian"
-msgstr ""
+msgstr "شيتاغونيان"
 
 msgid "Chitwania Tharu"
-msgstr ""
+msgstr "شيتوانيا ثارو"
 
 msgid "Chuanqiandian Cluster Miao"
-msgstr ""
+msgstr "مجموعة تشوانكيانديان العنقودية مياو"
 
 msgid "Chuvash"
 msgstr "تشوفاش"
 
 msgid "Congo Swahili"
-msgstr ""
+msgstr "الكونغو السواحيلية"
 
 msgid "Corsican"
 msgstr "الكورسيكية"
 
 msgid "Crimean Tatar"
-msgstr ""
+msgstr "تتار القرم"
 
 msgid "Croatian"
 msgstr "الكرواتية"
@@ -311,76 +311,76 @@ msgid "Croatian - Croatia"
 msgstr "الكرواتية - كرواتيا"
 
 msgid "Cusco Quechua"
-msgstr ""
+msgstr "كوسكو كيتشوا"
 
 msgid "Czech"
 msgstr "التشيكية"
 
 msgid "Dagbani"
-msgstr ""
+msgstr "دغباني"
 
 msgid "Dan"
-msgstr ""
+msgstr "دان"
 
 msgid "Dangaura Tharu"
-msgstr ""
+msgstr "دانغورا ثارو"
 
 msgid "Danish"
 msgstr "دانماركي"
 
 msgid "Dari"
-msgstr ""
+msgstr "داري"
 
 msgid "Dawro"
-msgstr ""
+msgstr "داورو"
 
 msgid "Dazaga"
-msgstr ""
+msgstr "دازاغا"
 
 msgid "Deccan"
-msgstr ""
+msgstr "ديكان"
 
 msgid "Dhivehi"
-msgstr ""
+msgstr "ضيفيهي"
 
 msgid "Dhundari"
-msgstr ""
+msgstr "دنداري"
 
 msgid "Digo"
-msgstr ""
+msgstr "ديجو"
 
 msgid "Dimli"
-msgstr ""
+msgstr "ديملي"
 
 msgid "Dinka"
-msgstr ""
+msgstr "الدينكا"
 
 msgid "Dogri"
-msgstr ""
+msgstr "دوغري"
 
 msgid "Dogri (macrolanguage)"
-msgstr ""
+msgstr "دوغري (اللغة الكلية)"
 
 msgid "Domari"
-msgstr ""
+msgstr "دوماري"
 
 msgid "Dombe"
-msgstr ""
+msgstr "دومبي"
 
 msgid "Dong"
-msgstr ""
+msgstr "دونغ"
 
 msgid "Dotyali"
-msgstr ""
+msgstr "دوتيالي"
 
 msgid "Drents"
-msgstr ""
+msgstr "درينتس"
 
 msgid "Dubli"
-msgstr ""
+msgstr "دوبلي"
 
 msgid "Duruma"
-msgstr ""
+msgstr "دوروما"
 
 msgid "Dutch"
 msgstr "هولندي"
@@ -389,61 +389,61 @@ msgid "Dutch - Netherlands"
 msgstr "الهولندية - هولندا"
 
 msgid "Dyula"
-msgstr ""
+msgstr "ديولا"
 
 msgid "Dzongkha"
 msgstr "دزونغخا"
 
 msgid "Early Tripuri"
-msgstr ""
+msgstr "تريبوري المبكر"
 
 msgid "East Nyala"
-msgstr ""
+msgstr "نيالا الشرقية"
 
 msgid "Eastern Gorkha Tamang"
-msgstr ""
+msgstr "غورخا تامانغ الشرقية"
 
 msgid "Eastern Hongshuihe Zhuang"
-msgstr ""
+msgstr "هونغشويهي تشوانغ الشرقية"
 
 msgid "Eastern Huasteca Nahuatl"
-msgstr ""
+msgstr "الهواستيكا الشرقية ناهواتل الهواستيكا الشرقية"
 
 msgid "Eastern Magar"
-msgstr ""
+msgstr "ماغار الشرقية"
 
 msgid "Eastern Maninkakan"
-msgstr ""
+msgstr "مانينكاكان الشرقية"
 
 msgid "Eastern Mari"
-msgstr ""
+msgstr "ماري الشرقية"
 
 msgid "Eastern Nisu"
-msgstr ""
+msgstr "نيسو الشرقية"
 
 msgid "Eastern Oromo"
-msgstr ""
+msgstr "أورومو الشرقية"
 
 msgid "Eastern Qiandong Miao"
-msgstr ""
+msgstr "تشياندونغ مياو الشرقية"
 
 msgid "Eastern Tamang"
-msgstr ""
+msgstr "تامانغ الشرقية"
 
 msgid "Eastern Yiddish"
-msgstr ""
+msgstr "اليديشية الشرقية"
 
 msgid "Ebira"
-msgstr ""
+msgstr "إبيرا"
 
 msgid "Efik"
-msgstr ""
+msgstr "إيفيك"
 
 msgid "Embu"
-msgstr ""
+msgstr "إيمبو"
 
 msgid "Emilian"
-msgstr ""
+msgstr "إميليان"
 
 msgid "English"
 msgstr "الإنجليزية"
@@ -488,10 +488,10 @@ msgid "English - Zimbabwe"
 msgstr "الإنجليزية - زيمبابوي"
 
 msgid "Erzya"
-msgstr ""
+msgstr "أرزيا"
 
 msgid "Esan"
-msgstr ""
+msgstr "إيسان"
 
 msgid "Esperanto"
 msgstr "الإسبرانتو"
@@ -500,34 +500,34 @@ msgid "Estonian"
 msgstr "الإستونية"
 
 msgid "Eton (Cameroon)"
-msgstr ""
+msgstr "إيتون (الكاميرون)"
 
 msgid "Ewe"
-msgstr ""
+msgstr "إيوي"
 
 msgid "Ewondo"
-msgstr ""
+msgstr "إيووندو"
 
 msgid "Ezaa"
-msgstr ""
+msgstr "إيزاء"
 
 msgid "Fang (Equatorial Guinea)"
-msgstr ""
+msgstr "فانغ (غينيا الاستوائية)"
 
 msgid "Fanti"
-msgstr ""
+msgstr "فانتي"
 
 msgid "Far Western Muria"
-msgstr ""
+msgstr "موريا الغربية القصوى"
 
 msgid "Farefare"
-msgstr ""
+msgstr "أجرة"
 
 msgid "Faroese"
 msgstr "الفارو"
 
 msgid "Fiji Hindi"
-msgstr ""
+msgstr "الهندية الفيجية"
 
 msgid "Fijian"
 msgstr "فيجي"
@@ -539,7 +539,7 @@ msgid "Flemish - Belgium"
 msgstr "الفلمنكية - بلجيكا"
 
 msgid "Fon"
-msgstr ""
+msgstr "فون"
 
 msgid "French"
 msgstr "فرنسي"
@@ -566,61 +566,61 @@ msgid "Frisian"
 msgstr "الفريزية"
 
 msgid "Friulian"
-msgstr ""
+msgstr "فريوليان"
 
 msgid "Fula"
-msgstr ""
+msgstr "فولا"
 
 msgid "Fuliiru"
-msgstr ""
+msgstr "فوليرو"
 
 msgid "Fur"
-msgstr ""
+msgstr "الفراء"
 
 msgid "Ga"
-msgstr ""
+msgstr "جا"
 
 msgid "Gaelic"
 msgstr "الغيلية"
 
 msgid "Gagauz"
-msgstr ""
+msgstr "غاغاوز"
 
 msgid "Galician"
 msgstr "الجاليكية"
 
 msgid "Gamit"
-msgstr ""
+msgstr "جاميت"
 
 msgid "Gamo"
-msgstr ""
+msgstr "غامو"
 
 msgid "Gan"
-msgstr ""
+msgstr "جان"
 
 msgid "Ganda"
-msgstr ""
+msgstr "غاندا"
 
 msgid "Garhwali"
-msgstr ""
+msgstr "غارهوالي"
 
 msgid "Garo"
-msgstr ""
+msgstr "غارو"
 
 msgid "Gayo"
-msgstr ""
+msgstr "جايو"
 
 msgid "Gbagyi"
-msgstr ""
+msgstr "غباجي"
 
 msgid "Gbari"
-msgstr ""
+msgstr "غباري"
 
 msgid "Gedeo"
-msgstr ""
+msgstr "جيديو"
 
 msgid "Gen"
-msgstr ""
+msgstr "جنرال لواء"
 
 msgid "Georgian"
 msgstr "جورجي"
@@ -644,247 +644,247 @@ msgid "German - Switzerland"
 msgstr "الألمانية - سويسرا"
 
 msgid "Ghanaian Pidgin English"
-msgstr ""
+msgstr "اللغة الإنجليزية الغانية العامية"
 
 msgid "Gilaki"
-msgstr ""
+msgstr "جيلاكي"
 
 msgid "Giryama"
-msgstr ""
+msgstr "جيرياما"
 
 msgid "Goan Konkani"
-msgstr ""
+msgstr "غوان كونكاني"
 
 msgid "Godwari"
-msgstr ""
+msgstr "غودواري"
 
 msgid "Gofa"
-msgstr ""
+msgstr "غوفا"
 
 msgid "Gogo"
-msgstr ""
+msgstr "جوجو"
 
 msgid "Gondi"
-msgstr ""
+msgstr "غوندي"
 
 msgid "Gorontalo"
-msgstr ""
+msgstr "غورونتالو"
 
 msgid "Gourmanchéma"
-msgstr ""
+msgstr "جورمانشيما"
 
 msgid "Grebo"
-msgstr ""
+msgstr "جريبو"
 
 msgid "Greek"
 msgstr "اليونانية"
 
 msgid "Gronings"
-msgstr ""
+msgstr "جرونينجز"
 
 msgid "Guadeloupean Creole French"
-msgstr ""
+msgstr "الفرنسية الكريولية الغوادلوبية الكريولية"
 
 msgid "Guarani"
 msgstr "غواراني"
 
 msgid "Guaraní"
-msgstr ""
+msgstr "غواراني"
 
 msgid "Guibei Zhuang"
-msgstr ""
+msgstr "غويبي تشوانغ"
 
 msgid "Guibian Zhuang"
-msgstr ""
+msgstr "غويبيان زوانغ"
 
 msgid "Guinea Kpelle"
-msgstr ""
+msgstr "غينيا كبيلي"
 
 msgid "Gujarati"
 msgstr "الغوجاراتية"
 
 msgid "Gujari"
-msgstr ""
+msgstr "غوجاري"
 
 msgid "Gun"
-msgstr ""
+msgstr "المسدس"
 
 msgid "Gurani"
-msgstr ""
+msgstr "جوراني"
 
 msgid "Guro"
-msgstr ""
+msgstr "غورو"
 
 msgid "Gurung"
-msgstr ""
+msgstr "غورونغ"
 
 msgid "Gusii"
-msgstr ""
+msgstr "جوسي"
 
 msgid "Guyanese Creole English"
-msgstr ""
+msgstr "الإنجليزية الكريولية الغويانية الكريولية"
 
 msgid "Gwere"
-msgstr ""
+msgstr "جويري"
 
 msgid "Ha"
-msgstr ""
+msgstr "هكتار"
 
 msgid "Hadiyya"
-msgstr ""
+msgstr "هادية"
 
 msgid "Hadothi"
-msgstr ""
+msgstr "هادوثي"
 
 msgid "Hadrami"
-msgstr ""
+msgstr "حضرمي"
 
 msgid "Haitian Creole"
-msgstr ""
+msgstr "الكريولية الهايتية"
 
 msgid "Hakka"
-msgstr ""
+msgstr "هاكا"
 
 msgid "Halbi"
-msgstr ""
+msgstr "حلبي"
 
 msgid "Halh Mongolian"
-msgstr ""
+msgstr "هاله المنغولية"
 
 msgid "Hani"
-msgstr ""
+msgstr "هاني"
 
 msgid "Hassaniyya"
-msgstr ""
+msgstr "الحسنية"
 
 msgid "Hausa"
-msgstr ""
+msgstr "الهوسا"
 
 msgid "Havu"
-msgstr ""
+msgstr "هافو"
 
 msgid "Hawaiian Creole English"
-msgstr ""
+msgstr "لغة هاواي الكريولية الإنجليزية"
 
 msgid "Haya"
-msgstr ""
+msgstr "هايا"
 
 msgid "Hazaragi"
-msgstr ""
+msgstr "هازاراغي"
 
 msgid "Hebrew"
 msgstr "العبرية"
 
 msgid "Hehe"
-msgstr ""
+msgstr "هيه"
 
 msgid "Herero"
-msgstr ""
+msgstr "هيريرو"
 
 msgid "Hiligaynon"
-msgstr ""
+msgstr "هيليغينون"
 
 msgid "Hindi"
 msgstr "هندي"
 
 msgid "Hlai"
-msgstr ""
+msgstr "هلاي"
 
 msgid "Hmong"
-msgstr ""
+msgstr "الهمونغ"
 
 msgid "Hmong Shua"
-msgstr ""
+msgstr "همونغ شوا"
 
 msgid "Ho"
-msgstr ""
+msgstr "هو"
 
 msgid "Huaxcaleca Nahuatl"
-msgstr ""
+msgstr "هواكسكاليكا ناهواتل"
 
 msgid "Huaylas Ancash Quechua"
-msgstr ""
+msgstr "هوايلاس أنكاش كيتشوا"
 
 msgid "Huaylla Wanca Quechua"
-msgstr ""
+msgstr "هوايلا وانكا وانكا كيتشوا"
 
 msgid "Huba"
-msgstr ""
+msgstr "هوبا"
 
 msgid "Huizhou Chinese"
-msgstr ""
+msgstr "هويتشو الصينية"
 
 msgid "Hungarian"
 msgstr "المجرية"
 
 msgid "Hunsrik"
-msgstr ""
+msgstr "هونسريك"
 
 msgid "Hyam"
-msgstr ""
+msgstr "هيام"
 
 msgid "Iban"
-msgstr ""
+msgstr "إيبان"
 
 msgid "Ibanag"
-msgstr ""
+msgstr "إيباناغ"
 
 msgid "Ibibio"
-msgstr ""
+msgstr "إبيبيو"
 
 msgid "Idakho-Isukha-Tiriki"
-msgstr ""
+msgstr "إداخو-إسوخا-تيريكي"
 
 msgid "Idoma"
-msgstr ""
+msgstr "إيدوما"
 
 msgid "Igala"
-msgstr ""
+msgstr "إيغالا"
 
 msgid "Igbo "
-msgstr ""
+msgstr "الإيغبو "
 
 msgid "Igede"
-msgstr ""
+msgstr "إيجيد"
 
 msgid "Ikwo"
-msgstr ""
+msgstr "إيكوو"
 
 msgid "Iloko"
-msgstr ""
+msgstr "إيلوكو"
 
 msgid "Indonesian"
 msgstr "الإندونيسية"
 
 msgid "Ingush"
-msgstr ""
+msgstr "إنغوش"
 
 msgid "Inor"
-msgstr ""
+msgstr "إينور"
 
 msgid "Interlingua"
 msgstr "إنترلينجوا"
 
 msgid "Iranian Persian"
-msgstr ""
+msgstr "الفارسية الإيرانية"
 
 msgid "Iranun (Malaysia)"
-msgstr ""
+msgstr "إيرانون (ماليزيا)"
 
 msgid "Iranun (Philippines)"
-msgstr ""
+msgstr "إيرانون (الفلبين)"
 
 msgid "Iraqw"
-msgstr ""
+msgstr "العراق"
 
 msgid "Isekiri"
-msgstr ""
+msgstr "إيسكيري"
 
 msgid "Islandic"
 msgstr "آيلاندك"
 
 msgid "Isoko"
-msgstr ""
+msgstr "إيسوكو"
 
 msgid "Italian"
 msgstr "إيطالي"
@@ -896,862 +896,862 @@ msgid "Italian - Switzerland"
 msgstr "الإيطالية - سويسرا"
 
 msgid "Iu Mein"
-msgstr ""
+msgstr "يو مين"
 
 msgid "Izii"
-msgstr ""
+msgstr "إزي"
 
 msgid "Izon"
-msgstr ""
+msgstr "إيزون"
 
 msgid "Jamaican Creole English"
-msgstr ""
+msgstr "اللغة الإنجليزية الكريولية الجامايكية"
 
 msgid "Jambi Malay"
-msgstr ""
+msgstr "جامبي مالاي"
 
 msgid "Japanese"
 msgstr "ياباني"
 
 msgid "Jarai"
-msgstr ""
+msgstr "جاراي"
 
 msgid "Javanese"
 msgstr "الجاوية"
 
 msgid "Jju"
-msgstr ""
+msgstr "ججو"
 
 msgid "Jola-Fonyi"
-msgstr ""
+msgstr "جولا-فونيي"
 
 msgid "Judeo-Arabic"
-msgstr ""
+msgstr "يهودي-عربي"
 
 msgid "Juray"
-msgstr ""
+msgstr "جوراي"
 
 msgid "K'iche'"
-msgstr ""
+msgstr "كيشي"
 
 msgid "Kabardian"
-msgstr ""
+msgstr "قبارديان"
 
 msgid "Kabiyè"
-msgstr ""
+msgstr "كابييه"
 
 msgid "Kabras"
-msgstr ""
+msgstr "كبراس"
 
 msgid "Kabuverdianu"
-msgstr ""
+msgstr "كابوفيرديانو"
 
 msgid "Kabyle"
-msgstr ""
+msgstr "القبائل"
 
 msgid "Kachhi"
-msgstr ""
+msgstr "كاتشي"
 
 msgid "Kachi Koli"
-msgstr ""
+msgstr "كاتشي كولي"
 
 msgid "Kachin"
-msgstr ""
+msgstr "كاشين"
 
 msgid "Kafa"
-msgstr ""
+msgstr "كفى"
 
 msgid "Kalabari"
-msgstr ""
+msgstr "كالاباري"
 
 msgid "Kalanga"
-msgstr ""
+msgstr "كالانغا"
 
 msgid "Kam"
-msgstr ""
+msgstr "كام"
 
 msgid "Kamayo"
-msgstr ""
+msgstr "كامايو"
 
 msgid "Kamba (Kenya)"
-msgstr ""
+msgstr "كامبا (كينيا)"
 
 msgid "Kambaata"
-msgstr ""
+msgstr "كامباتا"
 
 msgid "Kamwe"
-msgstr ""
+msgstr "كاموي"
 
 msgid "Kanembu"
-msgstr ""
+msgstr "كانيمبو"
 
 msgid "Kangri"
-msgstr ""
+msgstr "كانغري"
 
 msgid "Kanuri"
-msgstr ""
+msgstr "كانوري"
 
 msgid "Kara-Kalpak"
-msgstr ""
+msgstr "كارا-كالباك"
 
 msgid "Karachay-Balkar"
-msgstr ""
+msgstr "كراتشاي-بلكار"
 
 msgid "Karamojong"
-msgstr ""
+msgstr "كاراموجونج"
 
 msgid "Karbi"
-msgstr ""
+msgstr "كربي"
 
 msgid "Kasem"
-msgstr ""
+msgstr "قاسم"
 
 msgid "Kashmiri"
-msgstr ""
+msgstr "كشميري"
 
 msgid "Katkari"
-msgstr ""
+msgstr "كتكاري"
 
 msgid "Kazakh"
-msgstr ""
+msgstr "الكازاخستانية"
 
 msgid "Kedah Malay"
-msgstr ""
+msgstr "كيداه مالاي"
 
 msgid "Keiyo"
-msgstr ""
+msgstr "كيو"
 
 msgid "Kekchí"
-msgstr ""
+msgstr "كيكتشي"
 
 msgid "Kendayan"
-msgstr ""
+msgstr "كيندايان"
 
 msgid "Kerinci"
-msgstr ""
+msgstr "كيرينسي"
 
 msgid "Khams Tibetan"
-msgstr ""
+msgstr "خميس التبتية"
 
 msgid "Khandesi"
-msgstr ""
+msgstr "خندسي"
 
 msgid "Khasi"
-msgstr ""
+msgstr "خاسي"
 
 msgid "Khmu"
-msgstr ""
+msgstr "خمو"
 
 msgid "Khoekhoe"
-msgstr ""
+msgstr "خويخو"
 
 msgid "Khorasani Turkish"
-msgstr ""
+msgstr "خراساني تركي خراساني"
 
 msgid "Kikuyu"
-msgstr ""
+msgstr "كيكويو"
 
 msgid "Kim Mun"
-msgstr ""
+msgstr "كيم مون"
 
 msgid "Kimbundu"
-msgstr ""
+msgstr "كيمبوندو"
 
 msgid "Kinaray-A"
-msgstr ""
+msgstr "كيناراي-أ"
 
 msgid "Kinyarwanda"
-msgstr ""
+msgstr "كينيارواندا"
 
 msgid "Kipsigis"
-msgstr ""
+msgstr "كيبسيجيس"
 
 msgid "Kirike"
-msgstr ""
+msgstr "كيريكه"
 
 msgid "Kistane"
-msgstr ""
+msgstr "كيستان"
 
 msgid "Kita Maninkakan"
-msgstr ""
+msgstr "كيتا مانينكاكان"
 
 msgid "Kituba (Congo)"
-msgstr ""
+msgstr "كيتوبا (الكونغو)"
 
 msgid "Kituba (Democratic Republic of Congo)"
-msgstr ""
+msgstr "كيتوبا (جمهورية الكونغو الديمقراطية)"
 
 msgid "Kochila Tharu"
-msgstr ""
+msgstr "كوتشيلا ثارو"
 
 msgid "Kok Borok"
-msgstr ""
+msgstr "كوك بوروك"
 
 msgid "Kokola"
-msgstr ""
+msgstr "كوكولا"
 
 msgid "Komering"
-msgstr ""
+msgstr "كوميرينج"
 
 msgid "Komo (Democratic Republic of Congo)"
-msgstr ""
+msgstr "كومو (جمهورية الكونغو الديمقراطية)"
 
 msgid "Kongo"
-msgstr ""
+msgstr "كونغو"
 
 msgid "Konkani"
-msgstr ""
+msgstr "كونكاني"
 
 msgid "Konkani (macrolanguage)"
-msgstr ""
+msgstr "الكونكانية (اللغة الكلية)"
 
 msgid "Konkomba"
-msgstr ""
+msgstr "كونكومبا"
 
 msgid "Konyak Naga"
-msgstr ""
+msgstr "كونياك ناجا"
 
 msgid "Konzo"
-msgstr ""
+msgstr "كونزو"
 
 msgid "Koongo"
-msgstr ""
+msgstr "كوونغو"
 
 msgid "Korean"
 msgstr "كوري"
 
 msgid "Korku"
-msgstr ""
+msgstr "كوركو"
 
 msgid "Kota Bangun Kutai Malay"
-msgstr ""
+msgstr "كوتا بانجون كوتاي مالاي"
 
 msgid "Koya"
-msgstr ""
+msgstr "كويا"
 
 msgid "Koyraboro Senni Songhai"
-msgstr ""
+msgstr "كويربورو سيني سونغهاي"
 
 msgid "Kpelle"
-msgstr ""
+msgstr "كبيلي"
 
 msgid "Krio"
-msgstr ""
+msgstr "كريو"
 
 msgid "Kuanyama"
-msgstr ""
+msgstr "كوانياما"
 
 msgid "Kui (India)"
-msgstr ""
+msgstr "كوي (الهند)"
 
 msgid "Kumaoni"
-msgstr ""
+msgstr "كوموني"
 
 msgid "Kumyk"
-msgstr ""
+msgstr "كوميك"
 
 msgid "Kura Ede Nago"
-msgstr ""
+msgstr "كورا إيدي ناغو"
 
 msgid "Kuranko"
-msgstr ""
+msgstr "كورانكو"
 
 msgid "Kurdish"
 msgstr "الكردية"
 
 msgid "Kuria"
-msgstr ""
+msgstr "كورية"
 
 msgid "Kurukh"
-msgstr ""
+msgstr "كوروخ"
 
 msgid "Kusaal"
-msgstr ""
+msgstr "كوسال"
 
 msgid "Kuy"
-msgstr ""
+msgstr "كوي"
 
 msgid "Kyrgyz"
-msgstr ""
+msgstr "قيرغيزستان"
 
 msgid "Kölsch"
-msgstr ""
+msgstr "كولش"
 
 msgid "Lahnda"
-msgstr ""
+msgstr "لاهندا"
 
 msgid "Lahu"
-msgstr ""
+msgstr "لاهو"
 
 msgid "Lala-Bisa"
-msgstr ""
+msgstr "لالا-بيسا"
 
 msgid "Lama (Togo)"
-msgstr ""
+msgstr "لاما (توغو)"
 
 msgid "Lambadi"
-msgstr ""
+msgstr "لمبادي"
 
 msgid "Lampung Api"
-msgstr ""
+msgstr "لامبونج آبي"
 
 msgid "Langi"
-msgstr ""
+msgstr "لانجي"
 
 msgid "Lango (Sudan)"
-msgstr ""
+msgstr "لانجو (السودان)"
 
 msgid "Lango (Uganda)"
-msgstr ""
+msgstr "لانجو (أوغندا)"
 
 msgid "Lao-Isan"
-msgstr ""
+msgstr "لاو-إيسان"
 
 msgid "Large Flowery Miao"
-msgstr ""
+msgstr "مياو زهري كبير مياو"
 
 msgid "Latvian"
 msgstr "اللاتفية"
 
 msgid "Ledo Kaili"
-msgstr ""
+msgstr "ليدو كايلي"
 
 msgid "Lega-Shabunda"
-msgstr ""
+msgstr "ليغا شابوندا"
 
 msgid "Lendu"
-msgstr ""
+msgstr "ليندو"
 
 msgid "Lezghian"
-msgstr ""
+msgstr "ليزغيان"
 
 msgid "Li'o"
-msgstr ""
+msgstr "ليو"
 
 msgid "Liberia Kpelle"
-msgstr ""
+msgstr "ليبيريا كبيلي"
 
 msgid "Ligurian"
-msgstr ""
+msgstr "ليغوريان"
 
 msgid "Limbu"
-msgstr ""
+msgstr "ليمبو"
 
 msgid "Limburgan"
-msgstr ""
+msgstr "ليمبورجان"
 
 msgid "Lingala"
-msgstr ""
+msgstr "لينغالا"
 
 msgid "Lingao"
-msgstr ""
+msgstr "لينجاو"
 
 msgid "Lipo"
-msgstr ""
+msgstr "ليبو"
 
 msgid "Lisu"
-msgstr ""
+msgstr "ليسو"
 
 msgid "Lithuanian"
 msgstr "الليتوانية"
 
 msgid "Liujiang Zhuang"
-msgstr ""
+msgstr "ليوجيانغ زوانغ"
 
 msgid "Liuqian Zhuang"
-msgstr ""
+msgstr "ليوكيان زوانغ"
 
 msgid "Lobi"
-msgstr ""
+msgstr "لوبي"
 
 msgid "Logooli"
-msgstr ""
+msgstr "لوجولي"
 
 msgid "Logudorese Sardinian"
-msgstr ""
+msgstr "لوجودوريه ساردينيا"
 
 msgid "Lolopo"
-msgstr ""
+msgstr "لولوبو"
 
 msgid "Lombard"
-msgstr ""
+msgstr "لومبارد"
 
 msgid "Lomwe"
-msgstr ""
+msgstr "لوموي"
 
 msgid "Lozi"
-msgstr ""
+msgstr "لوزي"
 
 msgid "Luba-Lulua"
-msgstr ""
+msgstr "لوبا لولوا"
 
 msgid "Luchazi"
-msgstr ""
+msgstr "لوشازي"
 
 msgid "Lugbara"
-msgstr ""
+msgstr "لوغبارا"
 
 msgid "Luguru"
-msgstr ""
+msgstr "لوغورو"
 
 msgid "Lunda"
-msgstr ""
+msgstr "لوندا"
 
 msgid "Luo (Kenya and Tanzania)"
-msgstr ""
+msgstr "لوو (كينيا وتنزانيا)"
 
 msgid "Lushai"
-msgstr ""
+msgstr "لوشاي"
 
 msgid "Luvale"
-msgstr ""
+msgstr "لوفال"
 
 msgid "Luxembourgish"
-msgstr ""
+msgstr "اللوكسمبورجية"
 
 msgid "Luyia"
-msgstr ""
+msgstr "لويا"
 
 msgid "Lü"
-msgstr ""
+msgstr "لو"
 
 msgid "Ma'di"
-msgstr ""
+msgstr "معدي"
 
 msgid "Maasina Fulfulde"
-msgstr ""
+msgstr "ماسينا فولفولدي"
 
 msgid "Maay"
-msgstr ""
+msgstr "ماي"
 
 msgid "Maba (Chad)"
-msgstr ""
+msgstr "مابا (تشاد)"
 
 msgid "Maba (Indonesia)"
-msgstr ""
+msgstr "مابا (إندونيسيا)"
 
 msgid "Macedo-Romanian"
-msgstr ""
+msgstr "المقدونية-الرومانية"
 
 msgid "Macedonian"
 msgstr "المقدونية"
 
 msgid "Machame"
-msgstr ""
+msgstr "ماشامي"
 
 msgid "Madi"
-msgstr ""
+msgstr "ماضي"
 
 msgid "Madurese"
-msgstr ""
+msgstr "مادوريسي"
 
 msgid "Magahi"
-msgstr ""
+msgstr "ماجاهي"
 
 msgid "Maguindanaon"
-msgstr ""
+msgstr "ماغيندانون"
 
 msgid "Mahou"
-msgstr ""
+msgstr "ماهو"
 
 msgid "Mainfränkisch"
-msgstr ""
+msgstr "ماينفرانكيش"
 
 msgid "Maithili"
-msgstr ""
+msgstr "ميثيلي"
 
 msgid "Makasar"
-msgstr ""
+msgstr "مكسار"
 
 msgid "Makassar Malay"
-msgstr ""
+msgstr "ماكاسار مالاي"
 
 msgid "Makhuwa"
-msgstr ""
+msgstr "ماخوا"
 
 msgid "Makhuwa-Marrevone"
-msgstr ""
+msgstr "ماخوا ماريفوني"
 
 msgid "Makhuwa-Meetto"
-msgstr ""
+msgstr "ماخوا-ميتو"
 
 msgid "Makhuwa-Saka"
-msgstr ""
+msgstr "ماخوا-ساكا"
 
 msgid "Makhuwa-Shirima"
-msgstr ""
+msgstr "ماخوا شيريما"
 
 msgid "Makonde"
-msgstr ""
+msgstr "ماكوندي"
 
 msgid "Malagasy"
 msgstr "مدغشقر"
 
 msgid "Malawi Lomwe"
-msgstr ""
+msgstr "ملاوي لوموي"
 
 msgid "Malawi Sena"
-msgstr ""
+msgstr "ملاوي سينا"
 
 msgid "Malay"
 msgstr "الملايو"
 
 msgid "Malayalam"
-msgstr ""
+msgstr "المالايالامية"
 
 msgid "Malayic Dayak"
-msgstr ""
+msgstr "الداياك الملايوية"
 
 msgid "Maltese"
 msgstr "المالطية"
 
 msgid "Malvi"
-msgstr ""
+msgstr "مالفي"
 
 msgid "Mam"
-msgstr ""
+msgstr "مام"
 
 msgid "Mamara Senoufo"
-msgstr ""
+msgstr "مامارا سينوفو"
 
 msgid "Mambwe-Lungu"
-msgstr ""
+msgstr "مامبوي-لونغو"
 
 msgid "Manado Malay"
-msgstr ""
+msgstr "مانادو مالاي"
 
 msgid "Manchu"
-msgstr ""
+msgstr "مانشو"
 
 msgid "Mandar"
-msgstr ""
+msgstr "ماندار"
 
 msgid "Mandaya"
-msgstr ""
+msgstr "مندايا"
 
 msgid "Mandeali"
-msgstr ""
+msgstr "منديلي"
 
 msgid "Mandingo"
-msgstr ""
+msgstr "ماندينجو"
 
 msgid "Mandinka"
-msgstr ""
+msgstr "ماندينكا"
 
 msgid "Mandjak"
-msgstr ""
+msgstr "مندجك"
 
 msgid "Manga Kanuri"
-msgstr ""
+msgstr "مانغا كانوري"
 
 msgid "Mangbetu"
-msgstr ""
+msgstr "مانغبيتو"
 
 msgid "Manggarai"
-msgstr ""
+msgstr "مانجاراي"
 
 msgid "Manipuri"
-msgstr ""
+msgstr "مانيبوري"
 
 msgid "Mano"
-msgstr ""
+msgstr "مانو"
 
 msgid "Manya"
-msgstr ""
+msgstr "مانيا"
 
 msgid "Manyika"
-msgstr ""
+msgstr "مانيكا"
 
 msgid "Maranao"
-msgstr ""
+msgstr "ماراناو"
 
 msgid "Marathi"
-msgstr ""
+msgstr "الماراثية"
 
 msgid "Marenje"
-msgstr ""
+msgstr "مارينجي"
 
 msgid "Marwari"
-msgstr ""
+msgstr "مرواري"
 
 msgid "Marwari (India)"
-msgstr ""
+msgstr "مرواري (الهند)"
 
 msgid "Masaaba"
-msgstr ""
+msgstr "مصعابة"
 
 msgid "Masai"
-msgstr ""
+msgstr "ماساي"
 
 msgid "Masalit"
-msgstr ""
+msgstr "مساليت"
 
 msgid "Masbatenyo"
-msgstr ""
+msgstr "ماسباتنيو"
 
 msgid "Masikoro Malagasy"
-msgstr ""
+msgstr "ماسيكورو الملغاشية"
 
 msgid "Mawchi"
-msgstr ""
+msgstr "ماوتشي"
 
 msgid "Maxi Gbe"
-msgstr ""
+msgstr "ماكسي جبي"
 
 msgid "Mazanderani"
-msgstr ""
+msgstr "مازاندراني"
 
 msgid "Mbandja"
-msgstr ""
+msgstr "مبندجة"
 
 msgid "Mbangala"
-msgstr ""
+msgstr "مبانغالا"
 
 msgid "Mbangi"
-msgstr ""
+msgstr "مبانجي"
 
 msgid "Mbunda"
-msgstr ""
+msgstr "مبوندا"
 
 msgid "Mende (Papua New Guinea)"
-msgstr ""
+msgstr "ميندي (بابوا غينيا الجديدة)"
 
 msgid "Mende (Sierra Leone)"
-msgstr ""
+msgstr "ميندي (سيراليون)"
 
 msgid "Mennonite Low German"
-msgstr ""
+msgstr "المينونايت الألمانية المنخفضة"
 
 msgid "Meru"
-msgstr ""
+msgstr "ميرو"
 
 msgid "Merwari"
-msgstr ""
+msgstr "مرواري"
 
 msgid "Mewari"
-msgstr ""
+msgstr "ميواري"
 
 msgid "Mewati"
-msgstr ""
+msgstr "ميواتي"
 
 msgid "Middle Newar"
-msgstr ""
+msgstr "نيوار الوسطى"
 
 msgid "Min Zhong Chinese"
-msgstr ""
+msgstr "مين تشونغ صيني"
 
 msgid "Minangkabau"
-msgstr ""
+msgstr "مينانجكاباو"
 
 msgid "Mingrelian"
-msgstr ""
+msgstr "مينجرليان"
 
 msgid "Miraya Bikol"
-msgstr ""
+msgstr "ميرايا بيكول"
 
 msgid "Mising"
-msgstr ""
+msgstr "مايسينج"
 
 msgid "Moba"
-msgstr ""
+msgstr "موبا"
 
 msgid "Mochi"
-msgstr ""
+msgstr "موتشي"
 
 msgid "Moksha"
-msgstr ""
+msgstr "موكشا"
 
 msgid "Mon"
-msgstr ""
+msgstr "الإثنين"
 
 msgid "Mongo"
-msgstr ""
+msgstr "مونجو"
 
 msgid "Mongolian"
 msgstr "المنغولية"
 
 msgid "Morisyen"
-msgstr ""
+msgstr "موريسين"
 
 msgid "Mossi"
-msgstr ""
+msgstr "موسي"
 
 msgid "Mumuye"
-msgstr ""
+msgstr "مومويي"
 
 msgid "Muna"
-msgstr ""
+msgstr "منى"
 
 msgid "Munda"
-msgstr ""
+msgstr "موندا"
 
 msgid "Mundari"
-msgstr ""
+msgstr "مونداري"
 
 msgid "Muong"
-msgstr ""
+msgstr "مونج"
 
 msgid "Musey"
-msgstr ""
+msgstr "موسي"
 
 msgid "Musi"
-msgstr ""
+msgstr "موسيقى"
 
 msgid "Mwaghavul"
-msgstr ""
+msgstr "مواغافول"
 
 msgid "Mwera (Chimwera)"
-msgstr ""
+msgstr "مويرا (شيمويرا)"
 
 msgid "Mwera (Nyasa)"
-msgstr ""
+msgstr "مويرا (نياسا)"
 
 msgid "Naba"
-msgstr ""
+msgstr "نابا"
 
 msgid "Nage"
-msgstr ""
+msgstr "ناجي"
 
 msgid "Nambya"
-msgstr ""
+msgstr "نامبيا"
 
 msgid "Nande"
-msgstr ""
+msgstr "ناندي"
 
 msgid "Nandi"
-msgstr ""
+msgstr "ناندي"
 
 msgid "Naxi"
-msgstr ""
+msgstr "ناكسي"
 
 msgid "Ndau"
-msgstr ""
+msgstr "نداو"
 
 msgid "Ndonde Hamba"
-msgstr ""
+msgstr "ندوندي هامبا"
 
 msgid "Ndonga"
-msgstr ""
+msgstr "ندونغا"
 
 msgid "Ndzwani Comorian"
-msgstr ""
+msgstr "ندزواني كوموريان"
 
 msgid "Neapolitan"
-msgstr ""
+msgstr "نابولي"
 
 msgid "Negeri Sembilan Malay"
-msgstr ""
+msgstr "نيجيري سيمبيلان الملايو"
 
 msgid "Nepali"
-msgstr ""
+msgstr "النيبالية"
 
 msgid "Newari"
-msgstr ""
+msgstr "نيواري"
 
 msgid "Ngaju"
-msgstr ""
+msgstr "نجاجو"
 
 msgid "Ngambay"
-msgstr ""
+msgstr "نغامباي"
 
 msgid "Ngandyera"
-msgstr ""
+msgstr "نجاندييرا"
 
 msgid "Ngazidja Comorian"
-msgstr ""
+msgstr "نغازيدجا كوموريان"
 
 msgid "Ngbaka"
-msgstr ""
+msgstr "نغباكا"
 
 msgid "Ngiemboon"
-msgstr ""
+msgstr "نجييمبون"
 
 msgid "Ngundu"
-msgstr ""
+msgstr "نجوندو"
 
 msgid "Nias"
-msgstr ""
+msgstr "نياس"
 
 msgid "Nigerian Fulfulde"
-msgstr ""
+msgstr "الفولفولدي النيجيري"
 
 msgid "Nigerian Pidgin"
-msgstr ""
+msgstr "البيدجين النيجيرية"
 
 msgid "Nilamba"
-msgstr ""
+msgstr "نيلامبا"
 
 msgid "Nimadi"
-msgstr ""
+msgstr "نيمادي"
 
 msgid "Nkangala"
-msgstr ""
+msgstr "نكانغالا"
 
 msgid "Nobiin"
-msgstr ""
+msgstr "نوبين"
 
 msgid "Nong Zhuang"
-msgstr ""
+msgstr "نونغ زوانغ"
 
 msgid "North Moluccan Malay"
-msgstr ""
+msgstr "الملايو الشمالية الملوكية"
 
 msgid "North Ndebele"
-msgstr ""
+msgstr "نديبيلي الشمالية"
 
 msgid "Northeastern Dinka"
-msgstr ""
+msgstr "الدينكا الشمالية الشرقية"
 
 msgid "Northeastern Thai"
-msgstr ""
+msgstr "شمال شرق تايلاند"
 
 msgid "Northern Conchucos Ancash Quechua"
-msgstr ""
+msgstr "كونتشوكوس أنكاش كيتشوا الشمالية"
 
 msgid "Northern Dong"
-msgstr ""
+msgstr "دونغ الشمالية"
 
 msgid "Northern Gondi"
-msgstr ""
+msgstr "جوندي الشمالية"
 
 msgid "Northern Hindko"
-msgstr ""
+msgstr "هندكو الشمالية"
 
 msgid "Northern Khmer"
-msgstr ""
+msgstr "الخمير الشمالي"
 
 msgid "Northern Kissi"
-msgstr ""
+msgstr "كيسي الشمالية"
 
 msgid "Northern Kurdish"
-msgstr ""
+msgstr "اللغة الكردية الشمالية"
 
 msgid "Northern Luri"
-msgstr ""
+msgstr "لوري الشمالية"
 
 msgid "Northern Min"
-msgstr ""
+msgstr "نورثرن مين"
 
 msgid "Northern Ngbandi"
-msgstr ""
+msgstr "نغباندي الشمالية"
 
 msgid "Northern Oaxaca Nahuatl"
-msgstr ""
+msgstr "ناهواتل شمال أواكساكا الشمالية"
 
 msgid "Northern Pashto"
-msgstr ""
+msgstr "البشتو الشمالية"
 
 msgid "Northern Qiandong Miao"
-msgstr ""
+msgstr "تشياندونغ مياو الشمالية"
 
 msgid "Northern Thai"
-msgstr ""
+msgstr "التايلاندية الشمالية"
 
 msgid "Northern Uzbek"
-msgstr ""
+msgstr "الأوزبكية الشمالية"
 
 msgid "Northwest Gbaya"
-msgstr ""
+msgstr "شمال غرب قبايا"
 
 msgid "Norwegian"
 msgstr "النرويجية"
@@ -1760,175 +1760,175 @@ msgid "Norwegian Nynorsk"
 msgstr "نينورسك النرويجية"
 
 msgid "Nsenga"
-msgstr ""
+msgstr "نسينجا"
 
 msgid "Nuer"
-msgstr ""
+msgstr "النوير"
 
 msgid "Nung (Viet Nam)"
-msgstr ""
+msgstr "نونغ (فيتنام)"
 
 msgid "Nupe-Nupe-Tako"
-msgstr ""
+msgstr "نوبي-نوبي-تاكو"
 
 msgid "Nyakyusa-Ngonde"
-msgstr ""
+msgstr "نياكيوسا-نغوندي"
 
 msgid "Nyambo"
-msgstr ""
+msgstr "نيامبو"
 
 msgid "Nyamwezi"
-msgstr ""
+msgstr "نيامويزي"
 
 msgid "Nyaneka"
-msgstr ""
+msgstr "نيانيكا"
 
 msgid "Nyankole"
-msgstr ""
+msgstr "نيانكولي"
 
 msgid "Nyaturu"
-msgstr ""
+msgstr "نياتورو"
 
 msgid "Nyeu"
-msgstr ""
+msgstr "نيو"
 
 msgid "Nyiha (Tanzania)"
-msgstr ""
+msgstr "نييها (تنزانيا)"
 
 msgid "Nyindu"
-msgstr ""
+msgstr "نييندو"
 
 msgid "Nyole"
-msgstr ""
+msgstr "نيول"
 
 msgid "Nyore"
-msgstr ""
+msgstr "نيور"
 
 msgid "Nyoro"
-msgstr ""
+msgstr "نيورو"
 
 msgid "Nyungwe"
-msgstr ""
+msgstr "نيونجوي"
 
 msgid "Nzima"
-msgstr ""
+msgstr "نزيما"
 
 msgid "Occitan"
-msgstr ""
+msgstr "أوكسيتان"
 
 msgid "Odia"
-msgstr ""
+msgstr "أوديا"
 
 msgid "Ogbah"
-msgstr ""
+msgstr "أوجبا"
 
 msgid "Oriya"
-msgstr ""
+msgstr "أوريا"
 
 msgid "Oromo"
-msgstr ""
+msgstr "أورومو"
 
 msgid "Osing"
-msgstr ""
+msgstr "أوسينج"
 
 msgid "Ossetian"
-msgstr ""
+msgstr "أوسيتيا"
 
 msgid "Pahari-Potwari"
-msgstr ""
+msgstr "باهاري-بوتواري"
 
 msgid "Pampanga"
-msgstr ""
+msgstr "بامبانجا"
 
 msgid "Pangasinan"
-msgstr ""
+msgstr "بانغاسينان"
 
 msgid "Panjabi"
-msgstr ""
+msgstr "بنجابي"
 
 msgid "Papiamento"
-msgstr ""
+msgstr "بابيامنتو"
 
 msgid "Papiamento - Aruba"
-msgstr ""
+msgstr "بابيامنتو - أروبا"
 
 msgid "Papiamentu - Curaçao (Bonaire)"
-msgstr ""
+msgstr "بابيامنتو - كوراساو (بونير)"
 
 msgid "Papuan Malay"
-msgstr ""
+msgstr "بابوا الملايو"
 
 msgid "Paraguayan Guaraní"
-msgstr ""
+msgstr "باراغواي غواراني غواراني"
 
 msgid "Parauk"
-msgstr ""
+msgstr "باروك"
 
 msgid "Pare"
-msgstr ""
+msgstr "باري"
 
 msgid "Parkari Koli"
-msgstr ""
+msgstr "باركاري كولي"
 
 msgid "Parsi"
-msgstr ""
+msgstr "بارسي"
 
 msgid "Parsi-Dari"
-msgstr ""
+msgstr "بارسي-داري"
 
 msgid "Pashto"
 msgstr "الباشتو"
 
 msgid "Pattani Malay"
-msgstr ""
+msgstr "باتاني مالاي"
 
 msgid "Pauri Bareli"
-msgstr ""
+msgstr "بوري باريلي"
 
 msgid "Pedi"
-msgstr ""
+msgstr "بيدي"
 
 msgid "Pelende"
-msgstr ""
+msgstr "بيليندي"
 
 msgid "Pengo"
-msgstr ""
+msgstr "بينجو"
 
 msgid "Pennsylvania German"
-msgstr ""
+msgstr "بنسلفانيا الألمانية"
 
 msgid "Peripheral Mongolian"
-msgstr ""
+msgstr "المنغولية المحيطية"
 
 msgid "Persian"
 msgstr "فارسي"
 
 msgid "Phende"
-msgstr ""
+msgstr "فيندي"
 
 msgid "Phu Thai"
-msgstr ""
+msgstr "فو تاي"
 
 msgid "Phuan"
-msgstr ""
+msgstr "فوان"
 
 msgid "Picard"
-msgstr ""
+msgstr "بيكارد"
 
 msgid "Piemontese"
-msgstr ""
+msgstr "بيمونتيز"
 
 msgid "Plateau Malagasy"
-msgstr ""
+msgstr "هضبة مدغشقر"
 
 msgid "Pnar"
-msgstr ""
+msgstr "بنار"
 
 msgid "Polish"
 msgstr "البولندية"
 
 msgid "Pontic"
-msgstr ""
+msgstr "بونتيك"
 
 msgid "Portuguese"
 msgstr "البرتغالية"
@@ -1940,13 +1940,13 @@ msgid "Portuguese - Portugal"
 msgstr "البرتغالية - البرتغال"
 
 msgid "Powari"
-msgstr ""
+msgstr "بواري"
 
 msgid "Pulaar "
-msgstr ""
+msgstr "بولار "
 
 msgid "Pular"
-msgstr ""
+msgstr "بولار"
 
 msgid "Punjabi"
 msgstr "البنجابية"
@@ -1955,217 +1955,217 @@ msgid "Punjabi - Arab"
 msgstr "البنجابية - العربية"
 
 msgid "Puno Quechua"
-msgstr ""
+msgstr "بونو كيتشوا"
 
 msgid "Puxian Min"
-msgstr ""
+msgstr "بوكسيان مين"
 
 msgid "Pwo Eastern Karen"
-msgstr ""
+msgstr "بوو شرق كارين"
 
 msgid "Pökoot"
-msgstr ""
+msgstr "بوكوت"
 
 msgid "Qashqa'i"
-msgstr ""
+msgstr "قشقائي"
 
 msgid "Quechua "
-msgstr ""
+msgstr "الكيتشوا "
 
 msgid "Rabha"
-msgstr ""
+msgstr "رابحة"
 
 msgid "Rajasthani"
-msgstr ""
+msgstr "راجاستاني"
 
 msgid "Rajbanshi"
-msgstr ""
+msgstr "راجبانشي"
 
 msgid "Rakhine"
-msgstr ""
+msgstr "راخين"
 
 msgid "Rana Tharu"
-msgstr ""
+msgstr "رنا ثارو"
 
 msgid "Rangpuri"
-msgstr ""
+msgstr "رانجبوري"
 
 msgid "Rathawi"
-msgstr ""
+msgstr "رذاوي"
 
 msgid "Rejang"
-msgstr ""
+msgstr "ريجانج"
 
 msgid "Reunion Creole"
-msgstr ""
+msgstr "ريونيون كريول"
 
 msgid "Riverain Sango"
-msgstr ""
+msgstr "ريفرين سانجو"
 
 msgid "Rohingya"
-msgstr ""
+msgstr "الروهينجا"
 
 msgid "Romagnol"
-msgstr ""
+msgstr "رومانيول"
 
 msgid "Romanian"
 msgstr "روماني"
 
 msgid "Romany"
-msgstr ""
+msgstr "روماني"
 
 msgid "Ronga"
-msgstr ""
+msgstr "رونجا"
 
 msgid "Ruching Palaung"
-msgstr ""
+msgstr "روشينغ بالونغ"
 
 msgid "Rundi"
-msgstr ""
+msgstr "راندي"
 
 msgid "Russian"
 msgstr "الروسية"
 
 msgid "Ruund"
-msgstr ""
+msgstr "روند"
 
 msgid "S'gaw Karen"
-msgstr ""
+msgstr "سجاو كارين"
 
 msgid "Saamia"
-msgstr ""
+msgstr "سامية"
 
 msgid "Sabah Malay"
-msgstr ""
+msgstr "صباح الملايو"
 
 msgid "Sadri"
-msgstr ""
+msgstr "صدري"
 
 msgid "Sakalava Malagasy"
-msgstr ""
+msgstr "ساكالافا مدغشقر"
 
 msgid "Sambalpuri"
-msgstr ""
+msgstr "سامبالبوري"
 
 msgid "Samoan"
-msgstr ""
+msgstr "ساموا"
 
 msgid "Samogitian"
-msgstr ""
+msgstr "ساموجيتيان"
 
 msgid "San Salvador Kongo"
-msgstr ""
+msgstr "سان سلفادور كونغو"
 
 msgid "Sanga (Democratic Republic of Congo)"
-msgstr ""
+msgstr "سانغا (جمهورية الكونغو الديمقراطية)"
 
 msgid "Sangil"
-msgstr ""
+msgstr "سانجيل"
 
 msgid "Sangir"
-msgstr ""
+msgstr "سانجير"
 
 msgid "Sango"
-msgstr ""
+msgstr "سانجو"
 
 msgid "Sankaran Maninka"
-msgstr ""
+msgstr "سانكاران مانينكا"
 
 msgid "Santa María La Alta Nahuatl"
-msgstr ""
+msgstr "سانتا ماريا لا ألتا ناهواتل"
 
 msgid "Santali"
-msgstr ""
+msgstr "سانتالي"
 
 msgid "Saraiki"
-msgstr ""
+msgstr "ساريكي"
 
 msgid "Sardinian"
-msgstr ""
+msgstr "سردينيا"
 
 msgid "Sasak"
-msgstr ""
+msgstr "ساسك"
 
 msgid "Saya"
-msgstr ""
+msgstr "سايا"
 
 msgid "Scots"
-msgstr ""
+msgstr "الاسكتلنديون"
 
 msgid "Scottish Gaelic"
 msgstr "الغيلية الاسكتلندية"
 
 msgid "Sebat Bet Gurage"
-msgstr ""
+msgstr "سبت بيت غوراج"
 
 msgid "Sehwi"
-msgstr ""
+msgstr "سيهوي"
 
 msgid "Sena"
-msgstr ""
+msgstr "سينا"
 
 msgid "Serbian"
 msgstr "الصربية"
 
 msgid "Serbo-Croatian"
-msgstr ""
+msgstr "الصربية الكرواتية"
 
 msgid "Serer"
-msgstr ""
+msgstr "سيرير"
 
 msgid "Shambala"
-msgstr ""
+msgstr "شامبالا"
 
 msgid "Shan"
-msgstr ""
+msgstr "شان"
 
 msgid "Shekhawati"
-msgstr ""
+msgstr "شيخاواتي"
 
 msgid "Shelta"
-msgstr ""
+msgstr "شيلتا"
 
 msgid "Shi"
-msgstr ""
+msgstr "شي"
 
 msgid "Shina"
-msgstr ""
+msgstr "شينا"
 
 msgid "Shona"
-msgstr ""
+msgstr "شونا"
 
 msgid "Sichuan Yi"
-msgstr ""
+msgstr "سيتشوان يي"
 
 msgid "Sicilian"
-msgstr ""
+msgstr "صقلية"
 
 msgid "Sidamo"
-msgstr ""
+msgstr "سيدامو"
 
 msgid "Sierra Negra Nahuatl"
-msgstr ""
+msgstr "سييرا نيغرا ناهواتل"
 
 msgid "Silesian"
-msgstr ""
+msgstr "سيليزيا"
 
 msgid "Siliput"
-msgstr ""
+msgstr "سيليبوت"
 
 msgid "Silt'e"
-msgstr ""
+msgstr "سيلت"
 
 msgid "Sindhi"
-msgstr ""
+msgstr "السندية"
 
 msgid "Sinhalese"
 msgstr "السنهالية"
 
 msgid "Sinte Romani"
-msgstr ""
+msgstr "سينتي روماني"
 
 msgid "Sirmauri"
-msgstr ""
+msgstr "سيرموري"
 
 msgid "Slovak"
 msgstr "السلوفاكية"
@@ -2174,85 +2174,85 @@ msgid "Slovenian"
 msgstr "السلوفينية"
 
 msgid "Soga"
-msgstr ""
+msgstr "سوغا"
 
 msgid "Somali"
-msgstr ""
+msgstr "الصومالية"
 
 msgid "Songe"
-msgstr ""
+msgstr "سونجي"
 
 msgid "Soninke"
-msgstr ""
+msgstr "سونينكي"
 
 msgid "Sora"
-msgstr ""
+msgstr "سورا"
 
 msgid "Sotho"
-msgstr ""
+msgstr "السوتو"
 
 msgid "South Bolivian Quechua"
-msgstr ""
+msgstr "الكيتشوا البوليفي الجنوبي"
 
 msgid "South Central Dinka"
-msgstr ""
+msgstr "الدينكا الجنوبية الوسطى الجنوبية"
 
 msgid "South Ndebele"
-msgstr ""
+msgstr "نديبيلي الجنوبية"
 
 msgid "Southeastern Dinka"
-msgstr ""
+msgstr "الدينكا الجنوبية الشرقية"
 
 msgid "Southeastern Puebla Nahuatl"
-msgstr ""
+msgstr "ناهواتل بويبلا جنوب شرق بويبلا"
 
 msgid "Southern Bai"
-msgstr ""
+msgstr "باي الجنوبية"
 
 msgid "Southern Conchucos Ancash Quechua"
-msgstr ""
+msgstr "كونتشوكوس أنكاش أنكاش كيتشوا الجنوبية"
 
 msgid "Southern Dagaare"
-msgstr ""
+msgstr "دقارة الجنوبية"
 
 msgid "Southern Dong"
-msgstr ""
+msgstr "دونغ الجنوبية"
 
 msgid "Southern Hindko"
-msgstr ""
+msgstr "هندكو الجنوبية"
 
 msgid "Southern Kurdish"
-msgstr ""
+msgstr "اللغة الكردية الجنوبية"
 
 msgid "Southern Lolopo"
-msgstr ""
+msgstr "لولوبو الجنوبية"
 
 msgid "Southern Luri"
-msgstr ""
+msgstr "لوري الجنوبية"
 
 msgid "Southern Nago"
-msgstr ""
+msgstr "ناغو الجنوبية"
 
 msgid "Southern Nisu"
-msgstr ""
+msgstr "نيسو الجنوبية"
 
 msgid "Southern Qiandong Miao"
-msgstr ""
+msgstr "تشياندونغ مياو الجنوبية"
 
 msgid "Southern Sama"
-msgstr ""
+msgstr "ساما الجنوبية"
 
 msgid "Southern Sorsoganon"
-msgstr ""
+msgstr "سورسوجانون الجنوبية"
 
 msgid "Southern Thai"
-msgstr ""
+msgstr "جنوب تايلاند"
 
 msgid "Southern Uzbek"
-msgstr ""
+msgstr "جنوب أوزبكستان"
 
 msgid "Southwestern Dinka"
-msgstr ""
+msgstr "الدينكا الجنوبية الغربية"
 
 msgid "Spanish"
 msgstr "الأسبانية"
@@ -2321,154 +2321,154 @@ msgid "Standard Arabic"
 msgstr "اللغة العربية الفصحى"
 
 msgid "Standard Estonian"
-msgstr ""
+msgstr "اللغة الإستونية القياسية"
 
 msgid "Standard Latvian"
-msgstr ""
+msgstr "اللغة اللاتفية القياسية"
 
 msgid "Sui"
-msgstr ""
+msgstr "سوي"
 
 msgid "Sukuma"
-msgstr ""
+msgstr "سوكوما"
 
 msgid "Sumbawa"
-msgstr ""
+msgstr "سومباوا"
 
 msgid "Sundanese"
 msgstr "سوندانيز"
 
 msgid "Supyire Senoufo"
-msgstr ""
+msgstr "سوبير سينوفو"
 
 msgid "Surgujia"
-msgstr ""
+msgstr "سورجوجيا"
 
 msgid "Surigaonon"
-msgstr ""
+msgstr "سوريغاونونون"
 
 msgid "Surjapuri"
-msgstr ""
+msgstr "سرجابوري"
 
 msgid "Susu"
-msgstr ""
+msgstr "سوسو"
 
 msgid "Swabian"
-msgstr ""
+msgstr "سوابيان"
 
 msgid "Swahili"
 msgstr "السواحيلية"
 
 msgid "Swati"
-msgstr ""
+msgstr "سواتي"
 
 msgid "Swedish"
 msgstr "السويدية"
 
 msgid "Swiss German"
-msgstr ""
+msgstr "الألمانية السويسرية"
 
 msgid "Sylheti"
-msgstr ""
+msgstr "سيليتي"
 
 msgid "Taabwa"
-msgstr ""
+msgstr "طابوا"
 
 msgid "Tachawit"
-msgstr ""
+msgstr "تاتشاويت"
 
 msgid "Tachelhit"
-msgstr ""
+msgstr "تاتشيلهايت"
 
 msgid "Tae'"
-msgstr ""
+msgstr "تاي"
 
 msgid "Tagalog"
 msgstr "التاغالوغية"
 
 msgid "Tai Dón"
-msgstr ""
+msgstr "تاي دون"
 
 msgid "Tai Nüa"
-msgstr ""
+msgstr "تاي نوا"
 
 msgid "Taita"
-msgstr ""
+msgstr "تايتا"
 
 msgid "Tajik"
-msgstr ""
+msgstr "الطاجيكية"
 
 msgid "Talysh"
-msgstr ""
+msgstr "تاليش"
 
 msgid "Tamashek"
-msgstr ""
+msgstr "تاماشيك"
 
 msgid "Tamasheq"
-msgstr ""
+msgstr "تماشق"
 
 msgid "Tamil"
 msgstr "التاميل"
 
 msgid "Tandroy-Mahafaly Malagasy"
-msgstr ""
+msgstr "تاندروي-ماهافالي الملغاشية"
 
 msgid "Tanosy Malagasy"
-msgstr ""
+msgstr "تانوسي الملغاشية"
 
 msgid "Tarifit"
-msgstr ""
+msgstr "تعريفيت"
 
 msgid "Tarok"
-msgstr ""
+msgstr "تاروك"
 
 msgid "Tatar"
-msgstr ""
+msgstr "تتار"
 
 msgid "Tausug"
-msgstr ""
+msgstr "تاوسوغ"
 
 msgid "Tavoyan"
-msgstr ""
+msgstr "تافويان"
 
 msgid "Tawallammat Tamajaq"
-msgstr ""
+msgstr "توالمات تمازج"
 
 msgid "Tayart Tamajeq"
-msgstr ""
+msgstr "تايارت تمازج"
 
 msgid "Tee"
-msgstr ""
+msgstr "تي"
 
 msgid "Tem"
-msgstr ""
+msgstr "تيم"
 
 msgid "Tenggarong Kutai Malay"
-msgstr ""
+msgstr "تينجارونج كوتاي الملايو"
 
 msgid "Terik"
-msgstr ""
+msgstr "تيريك"
 
 msgid "Tesaka Malagasy"
-msgstr ""
+msgstr "تيساكا الملغاشية"
 
 msgid "Teso"
-msgstr ""
+msgstr "تيسو"
 
 msgid "Tetela"
-msgstr ""
+msgstr "تيتيلا"
 
 msgid "Tetum"
-msgstr ""
+msgstr "تيتوم"
 
 msgid "Tetun Dili"
-msgstr ""
+msgstr "تيتون ديلي"
 
 msgid "Tewe"
-msgstr ""
+msgstr "توي"
 
 msgid "Thado Chin"
-msgstr ""
+msgstr "ثادو تشين"
 
 msgid "Thai"
 msgstr "التايلاندية"
@@ -2477,299 +2477,299 @@ msgid "Tibetan"
 msgstr "التبتية"
 
 msgid "Tigre"
-msgstr ""
+msgstr "تيغري"
 
 msgid "Tigrinya"
-msgstr ""
+msgstr "التيغرينية"
 
 msgid "Timne"
-msgstr ""
+msgstr "تيمني"
 
 msgid "Tiv"
-msgstr ""
+msgstr "تيف"
 
 msgid "Tobagonian Creole English"
-msgstr ""
+msgstr "الإنجليزية الكريولية التوباغونية الكريولية"
 
 msgid "Tolaki"
-msgstr ""
+msgstr "طولاقي"
 
 msgid "Tonga"
 msgstr "تونغا"
 
 msgid "Tonga (Zambia)"
-msgstr ""
+msgstr "تونغا (زامبيا)"
 
 msgid "Tooro"
-msgstr ""
+msgstr "تورو"
 
 msgid "Toraja-Sa'dan"
-msgstr ""
+msgstr "توراجا-سعدان"
 
 msgid "Tshiluba"
-msgstr ""
+msgstr "تشيلوبا"
 
 msgid "Tsimihety Malagasy"
-msgstr ""
+msgstr "تسيميهتي الملغاشية"
 
 msgid "Tsonga"
-msgstr ""
+msgstr "تسونجا"
 
 msgid "Tswa"
-msgstr ""
+msgstr "تسوا"
 
 msgid "Tulu"
-msgstr ""
+msgstr "تولو"
 
 msgid "Tumbuka"
-msgstr ""
+msgstr "تومبوكا"
 
 msgid "Turkana"
-msgstr ""
+msgstr "توركانا"
 
 msgid "Turkish"
 msgstr "اللغة التركية"
 
 msgid "Tuvinian"
-msgstr ""
+msgstr "توفينيان"
 
 msgid "Twents"
-msgstr ""
+msgstr "توينتس"
 
 msgid "Twi"
-msgstr ""
+msgstr "توي"
 
 msgid "Tzeltal"
-msgstr ""
+msgstr "تسيلتال"
 
 msgid "Tzotzil"
-msgstr ""
+msgstr "تزوتزيل"
 
 msgid "Tày"
-msgstr ""
+msgstr "تاي"
 
 msgid "Udmurt"
-msgstr ""
+msgstr "أودمورت"
 
 msgid "Ukrainian"
 msgstr "أوكراني"
 
 msgid "Umbundu"
-msgstr ""
+msgstr "أومبوندو"
 
 msgid "Upper Saxon"
-msgstr ""
+msgstr "السكسونية العليا"
 
 msgid "Urdu"
 msgstr "الأردية"
 
 msgid "Urhobo"
-msgstr ""
+msgstr "أورهوبو"
 
 msgid "Uyghur"
-msgstr ""
+msgstr "الأويغور"
 
 msgid "Uzbek"
-msgstr ""
+msgstr "الأوزبكية"
 
 msgid "Varhadi-Nagpuri"
-msgstr ""
+msgstr "فارهادي-ناغبوري"
 
 msgid "Varli"
-msgstr ""
+msgstr "فارلي"
 
 msgid "Vasavi"
-msgstr ""
+msgstr "فاسافي"
 
 msgid "Venda"
-msgstr ""
+msgstr "فيندا"
 
 msgid "Venetian"
-msgstr ""
+msgstr "البندقية"
 
 msgid "Vietnamese"
 msgstr "الفيتنامية"
 
 msgid "Vlax Romani"
-msgstr ""
+msgstr "فلاكس روماني"
 
 msgid "Vunjo"
-msgstr ""
+msgstr "فونجو"
 
 msgid "Wa"
-msgstr ""
+msgstr "وا"
 
 msgid "Waci Gbe"
-msgstr ""
+msgstr "واجي غبي"
 
 msgid "Wadiyara Koli"
-msgstr ""
+msgstr "وديارا كولي"
 
 msgid "Wagdi"
-msgstr ""
+msgstr "وجدي"
 
 msgid "Walloon"
-msgstr ""
+msgstr "والون"
 
 msgid "Walungge"
-msgstr ""
+msgstr "والونجي"
 
 msgid "Wanga"
-msgstr ""
+msgstr "وانجا"
 
 msgid "Waray (Philippines)"
-msgstr ""
+msgstr "واراي (الفلبين)"
 
 msgid "Wasa"
-msgstr ""
+msgstr "واسا"
 
 msgid "Waxianghua"
-msgstr ""
+msgstr "واكسيانغوا"
 
 msgid "Wayu"
-msgstr ""
+msgstr "وايو"
 
 msgid "Wayuu"
-msgstr ""
+msgstr "وايوو"
 
 msgid "Welsh"
 msgstr "الويلزية"
 
 msgid "West Albay Bikol"
-msgstr ""
+msgstr "غرب ألباي بيكول"
 
 msgid "West Central Oromo"
-msgstr ""
+msgstr "أورومو غرب وسط أورومو"
 
 msgid "West-Central Limba"
-msgstr ""
+msgstr "غرب وسط ليمبا"
 
 msgid "Western Frisian"
-msgstr ""
+msgstr "الفريزية الغربية"
 
 msgid "Western Huasteca Nahuatl"
-msgstr ""
+msgstr "الهواستيكا الغربية ناهواتل الهواستيكا الغربية"
 
 msgid "Western Magar"
-msgstr ""
+msgstr "ماغار الغربية"
 
 msgid "Western Maninkakan"
-msgstr ""
+msgstr "مانينكاكان الغربية"
 
 msgid "Western Muria"
-msgstr ""
+msgstr "موريا الغربية"
 
 msgid "Western Niger Fulfulde"
-msgstr ""
+msgstr "فولفولدي النيجر الغربية"
 
 msgid "Western Panjabi"
-msgstr ""
+msgstr "البنجابية الغربية"
 
 msgid "Western Tamang"
-msgstr ""
+msgstr "تامانغ الغربية"
 
 msgid "Western Xiangxi Miao"
-msgstr ""
+msgstr "شيانغشي مياو الغربية"
 
 msgid "Wolaytta"
-msgstr ""
+msgstr "ولايتا"
 
 msgid "Wolof"
-msgstr ""
+msgstr "وولوف"
 
 msgid "Wu Chinese"
-msgstr ""
+msgstr "وو الصينية"
 
 msgid "Wuding-Luquan Yi"
-msgstr ""
+msgstr "وودينج-لوكوان يي"
 
 msgid "Wusa Nasu"
-msgstr ""
+msgstr "ووسا ناسو"
 
 msgid "Wè Southern"
-msgstr ""
+msgstr "وى الجنوبية"
 
 msgid "Xaasongaxango"
-msgstr ""
+msgstr "زاسونغاكسانغو"
 
 msgid "Xhosa"
 msgstr "الزوسا"
 
 msgid "Xiang"
-msgstr ""
+msgstr "شيانغ"
 
 msgid "Yaka (Congo)"
-msgstr ""
+msgstr "ياكا (الكونغو)"
 
 msgid "Yaka (Democratic Republic of Congo)"
-msgstr ""
+msgstr "ياكا (جمهورية الكونغو الديمقراطية)"
 
 msgid "Yakut"
-msgstr ""
+msgstr "ياقوت"
 
 msgid "Yang Zhuang"
-msgstr ""
+msgstr "يانغ زوانغ"
 
 msgid "Yao"
-msgstr ""
+msgstr "ياو"
 
 msgid "Yekhee"
-msgstr ""
+msgstr "يخي"
 
 msgid "Yemba"
-msgstr ""
+msgstr "يمبا"
 
 msgid "Yiddish"
-msgstr ""
+msgstr "اليديشية"
 
 msgid "Yom"
-msgstr ""
+msgstr "يوم"
 
 msgid "Yombe"
-msgstr ""
+msgstr "يومبي"
 
 msgid "Yongbei Zhuang"
-msgstr ""
+msgstr "يونغبي تشوانغ"
 
 msgid "Yongnan Zhuang"
-msgstr ""
+msgstr "يونغنان زوانغ"
 
 msgid "Yoruba"
 msgstr "اليوروبا"
 
 msgid "Youjiang Zhuang"
-msgstr ""
+msgstr "يوجيانغ زوانغ"
 
 msgid "Yucateco"
-msgstr ""
+msgstr "يوكاتيكو"
 
 msgid "Yue Chinese"
-msgstr ""
+msgstr "يوي الصينية"
 
 msgid "Zaghawa"
-msgstr ""
+msgstr "زغاوة"
 
 msgid "Zande"
-msgstr ""
+msgstr "زاندي"
 
 msgid "Zapotec"
-msgstr ""
+msgstr "زابوتيك"
 
 msgid "Zarma"
-msgstr ""
+msgstr "زارما"
 
 msgid "Zaza"
-msgstr ""
+msgstr "زازا"
 
 msgid "Zhuang"
-msgstr ""
+msgstr "زوانج"
 
 msgid "Zigula"
-msgstr ""
+msgstr "زيجولا"
 
 msgid "Zulu"
-msgstr ""
+msgstr "زولو"
 
 msgid "Zuojiang Zhuang"
-msgstr ""
+msgstr "زوجيانغ تشوانغ"
 
