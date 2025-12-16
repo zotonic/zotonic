@@ -20,7 +20,8 @@
 -module(z_sparql_sql).
 
 -export([
-    to_sql_term/2
+    to_sql_term/2,
+    to_sql_term/3
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -56,6 +57,7 @@
 -export_type([ sql_term/0 ]).
 
 -record(sql_state, {
+    arguments = #{} :: #{ z_sparql_plan:variable() := z_sparql_plan:argument() },
     bindings = #{} :: map(),
     solution_bindings = #{} :: map(),
     alias_nr = 1 :: pos_integer(),
@@ -69,8 +71,18 @@
     Context :: z:context(),
     Reason :: term().
 to_sql_term(ParsedQuery, Context) ->
+    to_sql_term(ParsedQuery, #{}, Context).
+
+%% @doc Map a parsed query with pre-bound variables to Zotonic SQL terms.
+-spec to_sql_term(ParsedQuery, Arguments, Context) ->
+    {ok, [ sql_term() ]} | {error, Reason} when
+        ParsedQuery :: term(),
+        Arguments :: map(),
+        Context :: z:context(),
+        Reason :: term().
+to_sql_term(ParsedQuery, Arguments, Context) ->
     % First map the parsed query to a query plan, normalizing values and expressions.
-    case z_sparql_plan:to_query_plan(ParsedQuery, Context) of
+    case z_sparql_plan:to_query_plan(ParsedQuery, Arguments, Context) of
         {ok, Plan} ->
             % Map the query plan to Zotonic sql terms
             query_plan_to_sql(Plan, Context);
@@ -86,6 +98,7 @@ to_sql_term(ParsedQuery, Context) ->
     Context :: z:context(),
     Reason :: term().
 query_plan_to_sql(#{
+    arguments := Arguments,
     dataset := [],
     limit := undefined,
     offset := undefined,
@@ -93,6 +106,7 @@ query_plan_to_sql(#{
     where := Pattern
 } = Plan, Context) ->
     State0 = #sql_state{
+        arguments = Arguments,
         bindings = #{{var, RootName} => {resource, <<"rsc">>}},
         context = Context
     },
@@ -195,15 +209,16 @@ mapped_triple_to_sql(category, SubjectAlias, {iri, Iri}, Term0, State) ->
         undefined ->
             {[add_where(<<"false">>, Term0)], State};
         CategoryId ->
-            case m_rsc:is_a(CategoryId, category, Context) of
-                true ->
-                    CategoryIds = category_ids(CategoryId, Context),
-                    {CategoryArg, Term1} = add_arg(CategoryIds, Term0),
-                    Where = [SubjectAlias, <<".category_id = ANY(">>, CategoryArg, <<"::int[])">>],
-                    {[add_where(Where, Term1)], State};
-                false ->
-                    throw({error, {not_a_category, Iri}})
-            end
+            category_to_sql(CategoryId, SubjectAlias, Term0, State)
+    end;
+mapped_triple_to_sql(category, SubjectAlias, {var, _} = Variable, Term0, State) ->
+    case argument_resource_id(Variable, State) of
+        {ok, undefined} ->
+            {[add_where(<<"false">>, Term0)], State};
+        {ok, CategoryId} ->
+            category_to_sql(CategoryId, SubjectAlias, Term0, State);
+        undefined ->
+            throw({error, {expected_category, Variable}})
     end;
 mapped_triple_to_sql(category, _SubjectAlias, Object, _Term, _State) ->
     throw({error, {expected_category, Object}});
@@ -213,18 +228,43 @@ mapped_triple_to_sql(subclass, SubjectAlias, {iri, Iri}, Term0, State) ->
         undefined ->
             {[add_where(<<"false">>, Term0)], State};
         CategoryId ->
-            case m_rsc:is_a(CategoryId, category, Context) of
-                true ->
-                    CategoryIds = lists:delete(CategoryId, category_ids(CategoryId, Context)),
-                    {CategoryArg, Term1} = add_arg(CategoryIds, Term0),
-                    Where = [SubjectAlias, <<".id = ANY(">>, CategoryArg, <<"::int[])">>],
-                    {[add_where(Where, Term1)], State};
-                false ->
-                    throw({error, {not_a_category, Iri}})
-            end
+            subclass_to_sql(CategoryId, SubjectAlias, Term0, State)
+    end;
+mapped_triple_to_sql(subclass, SubjectAlias, {var, _} = Variable, Term0, State) ->
+    case argument_resource_id(Variable, State) of
+        {ok, undefined} ->
+            {[add_where(<<"false">>, Term0)], State};
+        {ok, CategoryId} ->
+            subclass_to_sql(CategoryId, SubjectAlias, Term0, State);
+        undefined ->
+            throw({error, {expected_category, Variable}})
     end;
 mapped_triple_to_sql(subclass, _SubjectAlias, Object, _Term, _State) ->
     throw({error, {expected_category, Object}}).
+
+category_to_sql(CategoryId, SubjectAlias, Term0, State) ->
+    Context = State#sql_state.context,
+    case m_rsc:is_a(CategoryId, category, Context) of
+        true ->
+            CategoryIds = category_ids(CategoryId, Context),
+            {CategoryArg, Term1} = add_arg(CategoryIds, Term0),
+            Where = [SubjectAlias, <<".category_id = ANY(">>, CategoryArg, <<"::int[])">>],
+            {[add_where(Where, Term1)], State};
+        false ->
+            throw({error, {not_a_category, CategoryId}})
+    end.
+
+subclass_to_sql(CategoryId, SubjectAlias, Term0, State) ->
+    Context = State#sql_state.context,
+    case m_rsc:is_a(CategoryId, category, Context) of
+        true ->
+            CategoryIds = lists:delete(CategoryId, category_ids(CategoryId, Context)),
+            {CategoryArg, Term1} = add_arg(CategoryIds, Term0),
+            Where = [SubjectAlias, <<".id = ANY(">>, CategoryArg, <<"::int[])">>],
+            {[add_where(Where, Term1)], State};
+        false ->
+            throw({error, {not_a_category, CategoryId}})
+    end.
 
 edge_to_sql(Predicate, SubjectColumn, ObjectColumn, SubjectAlias, Object, Term0, State0) ->
     PredicateId = case m_predicate:name_to_id(Predicate, State0#sql_state.context) of
@@ -246,7 +286,8 @@ category_ids(CategoryId, Context) ->
     ].
 
 resource_alias({var, _} = Variable, Term, State) ->
-    resource_binding_alias(Variable, Term, State);
+    {Alias, Term1, State1} = resource_binding_alias(Variable, Term, State),
+    {Alias, bind_resource_argument(Variable, Alias, Term1, State1), State1};
 resource_alias({bnode, _} = BlankNode, Term, State) ->
     resource_binding_alias(BlankNode, Term, State);
 resource_alias({iri, Iri}, Term, State0) ->
@@ -274,6 +315,40 @@ resource_binding_alias(Key, Term, #sql_state{ bindings = Bindings } = State) ->
             {Alias, add_table(Alias, <<"rsc">>, Term), State1#sql_state{ bindings = Bindings1 }}
     end.
 
+bind_resource_argument(Variable, Alias, Term0, State) ->
+    case argument_resource_id(Variable, State) of
+        {ok, undefined} ->
+            add_where(<<"false">>, Term0);
+        {ok, RscId} ->
+            {Arg, Term1} = add_arg(RscId, Term0),
+            add_where([Alias, <<".id = ">>, Arg], Term1);
+        undefined ->
+            Term0
+    end.
+
+argument_resource_id(Variable, #sql_state{ arguments = Arguments, context = Context }) ->
+    case maps:find(Variable, Arguments) of
+        {ok, undefined} ->
+            undefined;
+        {ok, {resource, Reference}} ->
+            {ok, m_rsc:rid(Reference, Context)};
+        {ok, {iri, Iri}} ->
+            {ok, m_rsc:rid(Iri, Context)};
+        {ok, {value, Reference, Type}} when Type =:= integer; Type =:= text ->
+            {ok, m_rsc:rid(Reference, Context)};
+        {ok, Argument} ->
+            throw({error, {expected_resource_argument, Variable, Argument}});
+        error ->
+            undefined
+    end.
+
+argument_value({value, Value, _Type}, _Context) ->
+    Value;
+argument_value({iri, Iri}, _Context) ->
+    Iri;
+argument_value({resource, Reference}, Context) ->
+    m_rsc:rid(Reference, Context).
+
 property_alias(<<"rsc">>, SubjectAlias, Term, State) ->
     {SubjectAlias, Term, State};
 property_alias(Table, SubjectAlias, Term, State0) ->
@@ -282,7 +357,18 @@ property_alias(Table, SubjectAlias, Term, State0) ->
     JoinInner = (Term#search_sql_term.join_inner)#{ Alias => {Table, On} },
     {Alias, Term#search_sql_term{ join_inner = JoinInner }, State1}.
 
-bind_object({var, _} = Variable, Kind, Expression, _Table, _Column, Term,
+bind_object({var, _} = Variable, Kind, Expression, Table, Column, Term0, State0) ->
+    {Term1, State1} = bind_variable_object(Variable, Kind, Expression, Term0, State0),
+    {bind_value_argument(Variable, Expression, Table, Column, Term1, State1), State1};
+bind_object(Object, value, Expression, Table, Column, Term0, State) ->
+    Value = rdf_value(Object),
+    Value1 = column_value(Table, Column, Value, State#sql_state.context),
+    {Arg, Term1} = add_arg(Value1, Term0),
+    {add_where([expression_sql(Expression), <<" = ">>, Arg], Term1), State};
+bind_object(Object, resource, _Expression, _Table, _Column, _Term, _State) ->
+    throw({error, {expected_resource, Object}}).
+
+bind_variable_object(Variable, Kind, Expression, Term,
         #sql_state{ bindings = Bindings } = State) ->
     case maps:find(Variable, Bindings) of
         {ok, {Kind, #sql_expression{} = BoundExpression}} ->
@@ -294,21 +380,50 @@ bind_object({var, _} = Variable, Kind, Expression, _Table, _Column, Term,
             Bindings1 = Bindings#{ Variable => {Kind, Expression} },
             Where = [expression_sql(Expression), <<" IS NOT NULL">>],
             {add_where(Where, Term), State#sql_state{ bindings = Bindings1 }}
-    end;
-bind_object(Object, value, Expression, Table, Column, Term0, State) ->
-    Value = rdf_value(Object),
-    Value1 = column_value(Table, Column, Value, State#sql_state.context),
-    {Arg, Term1} = add_arg(Value1, Term0),
-    {add_where([expression_sql(Expression), <<" = ">>, Arg], Term1), State};
-bind_object(Object, resource, _Expression, _Table, _Column, _Term, _State) ->
-    throw({error, {expected_resource, Object}}).
+    end.
 
-bind_jsonb_object({var, _} = Variable, Expression, Term, State) ->
-    bind_object(Variable, value, Expression, undefined, undefined, Term, State);
+bind_value_argument(Variable, Expression, Table, Column, Term0,
+        #sql_state{ arguments = Arguments, context = Context }) ->
+    case maps:find(Variable, Arguments) of
+        {ok, undefined} ->
+            Term0;
+        {ok, Argument} ->
+            case argument_value(Argument, Context) of
+                undefined ->
+                    add_where(<<"false">>, Term0);
+                Value ->
+                    Value1 = column_value(Table, Column, Value, Context),
+                    {Arg, Term1} = add_arg(Value1, Term0),
+                    add_where([expression_sql(Expression), <<" = ">>, Arg], Term1)
+            end;
+        error ->
+            Term0
+    end.
+
+bind_jsonb_object({var, _} = Variable, Expression, Term0, State0) ->
+    {Term1, State1} = bind_variable_object(Variable, value, Expression, Term0, State0),
+    {bind_jsonb_argument(Variable, Expression, Term1, State1), State1};
 bind_jsonb_object(Object, Expression, Term0, State) ->
     Value = ?DB_PROPS_JSON(rdf_json_value(Object)),
     {Arg, Term1} = add_arg(Value, Term0),
     {add_where([expression_sql(Expression), <<" = ">>, Arg, <<"::jsonb">>], Term1), State}.
+
+bind_jsonb_argument(Variable, Expression, Term0,
+        #sql_state{ arguments = Arguments, context = Context }) ->
+    case maps:find(Variable, Arguments) of
+        {ok, undefined} ->
+            Term0;
+        {ok, Argument} ->
+            case argument_value(Argument, Context) of
+                undefined ->
+                    add_where(<<"false">>, Term0);
+                Value ->
+                    {Arg, Term1} = add_arg(?DB_PROPS_JSON(Value), Term0),
+                    add_where([expression_sql(Expression), <<" = ">>, Arg, <<"::jsonb">>], Term1)
+            end;
+        error ->
+            Term0
+    end.
 
 bind_edge_object({var, _} = Variable, EdgeAlias, Column, Term0, State0) ->
     {ObjectAlias, Term1, State1} = resource_alias(Variable, Term0, State0),
@@ -337,7 +452,7 @@ expression_to_sql({var, _} = Variable, State, Term) ->
             }, Term};
         {ok, {value, #sql_expression{} = Expression}} ->
             {Expression, Term};
-        error -> throw({error, {unbound_variable, Variable}})
+        error -> argument_to_expression(Variable, State, Term)
     end;
 expression_to_sql({Operator, Left, Right}, State, Term0)
     when Operator =:= 'or'; Operator =:= 'and';
@@ -384,6 +499,27 @@ expression_to_sql(Value, _State, Term0) ->
     {Arg, Term1} = add_arg(ArgumentValue, Term0),
     {#sql_expression{ sql = Arg, type = Type, source = argument }, Term1}.
 
+argument_to_expression(Variable, #sql_state{ arguments = Arguments, context = Context }, Term0) ->
+    case maps:find(Variable, Arguments) of
+        {ok, undefined} ->
+            {#sql_expression{ sql = <<"NULL">>, type = any, source = expression }, Term0};
+        {ok, {value, Value, Type}} ->
+            argument_expression(Value, Type, Term0);
+        {ok, {iri, Iri}} ->
+            argument_expression(Iri, uri, Term0);
+        {ok, {resource, Reference}} ->
+            case m_rsc:rid(Reference, Context) of
+                undefined -> throw({error, {unknown_resource_argument, Variable, Reference}});
+                RscId -> argument_expression(RscId, id, Term0)
+            end;
+        error ->
+            throw({error, {unbound_variable, Variable}})
+    end.
+
+argument_expression(Value, Type, Term0) ->
+    {Arg, Term1} = add_arg(Value, Term0),
+    {#sql_expression{ sql = Arg, type = Type, source = argument }, Term1}.
+
 fulltext_to_sql(Function, [Resource, Query], State0, Term0) ->
     fulltext_to_sql(Function, Resource, default, Query, State0, Term0);
 fulltext_to_sql(Function, [Resource, Field, Query], State0, Term0) ->
@@ -392,21 +528,30 @@ fulltext_to_sql(Function, Arguments, _State, _Term) ->
     throw({error, {invalid_function_arity, Function, length(Arguments)}}).
 
 fulltext_to_sql(Function, Resource, Field, Query, State0, Term0) ->
-    QueryText = fulltext_query_text(Query),
+    QueryText = fulltext_query_text(Query, State0),
     {ResourceAlias, Term1} = fulltext_resource_alias(Resource, Term0, State0),
     {SearchExpression, SearchType, NormalizeName, Term2} = fulltext_search_expression(Field, ResourceAlias, Term1),
     fulltext_expression(
         Function, SearchType, SearchExpression, NormalizeName, QueryText,
         State0#sql_state.context, Term2).
 
-fulltext_query_text({literal, QueryText, _Datatype, _Language}) ->
+fulltext_query_text({literal, QueryText, _Datatype, _Language}, _State) ->
     QueryText;
-fulltext_query_text(Query) ->
+fulltext_query_text({var, _} = Variable, #sql_state{ arguments = Arguments }) ->
+    case maps:find(Variable, Arguments) of
+        {ok, undefined} -> <<>>;
+        {ok, {value, QueryText, text}} -> QueryText;
+        {ok, Argument} -> throw({error, {expected_fulltext_query_string, Argument}});
+        error -> throw({error, {unbound_variable, Variable}})
+    end;
+fulltext_query_text(Query, _State) ->
     throw({error, {expected_fulltext_query_string, Query}}).
 
-fulltext_resource_alias({var, _} = Variable, Term, #sql_state{ bindings = Bindings }) ->
+fulltext_resource_alias({var, _} = Variable, Term,
+        #sql_state{ bindings = Bindings } = State) ->
     case maps:find(Variable, Bindings) of
-        {ok, {resource, Alias}} -> {Alias, Term};
+        {ok, {resource, Alias}} ->
+            {Alias, bind_resource_argument(Variable, Alias, Term, State)};
         {ok, _} -> throw({error, {incompatible_variable, Variable}});
         error -> throw({error, {unbound_variable, Variable}})
     end;
@@ -1075,21 +1220,28 @@ projection_term(#{ select := Select, distinct := Distinct, root := Root } = Plan
 
 projection_expressions([], State, Term, _Nr, Acc) ->
     {lists:reverse(Acc), Term, State};
-projection_expressions([{var, _} = Variable | Rest], State, Term, Nr, Acc) ->
-    Expression = case maps:find(Variable, State#sql_state.bindings) of
-        {ok, {resource, Alias}} -> column_expression(Alias, <<"id">>);
-        {ok, {value, BoundExpression}} -> expression_sql(BoundExpression);
-        error -> throw({error, {unbound_variable, Variable}})
-    end,
+projection_expressions([{var, _} = Variable | Rest], State, Term0, Nr, Acc) ->
+    {Expression, Term1} = projection_variable(Variable, State, Term0),
     ColumnAlias = <<"sparql_", (integer_to_binary(Nr))/binary>>,
     SelectExpression = [Expression, <<" AS ">>, ColumnAlias],
-    projection_expressions(Rest, State, Term, Nr + 1, [SelectExpression | Acc]);
+    projection_expressions(Rest, State, Term1, Nr + 1, [SelectExpression | Acc]);
 projection_expressions([{as, Expression, Variable} | Rest], State0, Term0, Nr, Acc) ->
     {Expression1, Term1} = expression_to_sql(Expression, State0, Term0),
     State1 = bind_projection(Variable, Expression1, State0),
     ColumnAlias = <<"sparql_", (integer_to_binary(Nr))/binary>>,
     SelectExpression = [expression_sql(Expression1), <<" AS ">>, ColumnAlias],
     projection_expressions(Rest, State1, Term1, Nr + 1, [SelectExpression | Acc]).
+
+projection_variable(Variable, State, Term) ->
+    case maps:find(Variable, State#sql_state.bindings) of
+        {ok, {resource, Alias}} ->
+            {column_expression(Alias, <<"id">>), Term};
+        {ok, {value, BoundExpression}} ->
+            {expression_sql(BoundExpression), Term};
+        error ->
+            {Expression, Term1} = argument_to_expression(Variable, State, Term),
+            {expression_sql(Expression), Term1}
+    end.
 
 bind_projection(Variable, Expression, #sql_state{ bindings = Bindings } = State) ->
     case maps:is_key(Variable, Bindings) of

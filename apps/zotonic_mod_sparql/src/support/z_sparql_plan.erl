@@ -21,7 +21,8 @@
 -module(z_sparql_plan).
 
 -export([
-    to_query_plan/2
+    to_query_plan/2,
+    to_query_plan/3
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -60,6 +61,12 @@
 
 -type triple_plan() :: {triple, rdf_term(), predicate_plan() | variable(), rdf_term()}.
 
+-type argument() ::
+      undefined
+    | {value, term(), boolean | datetime | float | integer | text}
+    | {resource, term()}
+    | {iri, binary()}.
+
 -type query_pattern() ::
       identity
     | triple_plan()
@@ -82,13 +89,15 @@
     having := [ term() ],
     order_by := list(),
     limit := non_neg_integer() | undefined,
-    offset := non_neg_integer() | undefined
+    offset := non_neg_integer() | undefined,
+    arguments := #{ variable() := argument() }
 }.
 
 -export_type([
     query_plan/0,
     query_pattern/0,
     variable/0,
+    argument/0,
     triple_plan/0,
     rdf_term/0,
     predicate_mapping/0,
@@ -102,6 +111,9 @@
     context :: z:context()          % just to make the calls a bit more compact
 }).
 
+%% Zotonic namespace, do not use NS_... as this will clash with binary zotonic_rdf defines.
+-define(NAMESPACE_ZOTONIC, "http://zotonic.net/predicate/").
+
 
 %% @doc Make a normalized query plan from a parsed SPARQL SELECT query.
 %% Predicates in the plan contain the result of the sparql_mapping notification.
@@ -111,7 +123,18 @@
     Context :: z:context(),
     QueryPlan :: query_plan(),
     Reason :: term().
-to_query_plan({query, Prologue, {select, Distinct, Select, Dataset, Where, SolutionModifier}}, Context) ->
+to_query_plan(Query, Context) ->
+    to_query_plan(Query, #{}, Context).
+
+%% @doc Make a normalized query plan with pre-bound query variables.
+-spec to_query_plan(ParsedQuery, Arguments, Context) -> {ok, QueryPlan} | {error, Reason} when
+    ParsedQuery :: term(),
+    Arguments :: map(),
+    Context :: z:context(),
+    QueryPlan :: query_plan(),
+    Reason :: term().
+to_query_plan({query, Prologue, {select, Distinct, Select, Dataset, Where, SolutionModifier}}, Arguments, Context)
+        when is_map(Arguments) ->
     try
         State0 = map_prologue(Prologue, #plan_state{ context = Context }),
         {Dataset1, State1} = map_dataset(Dataset, State0),
@@ -131,16 +154,78 @@ to_query_plan({query, Prologue, {select, Distinct, Select, Dataset, Where, Solut
             having => Having,
             order_by => OrderBy,
             limit => Limit,
-            offset => Offset
+            offset => Offset,
+            arguments => normalize_arguments(Arguments)
         }}
     catch
         throw:{error, Reason} ->
             {error, Reason}
     end;
-to_query_plan({query, _Prologue, Query}, _Context) when is_tuple(Query), tuple_size(Query) > 0 ->
+to_query_plan({query, _Prologue, Query}, _Arguments, _Context)
+        when is_tuple(Query), tuple_size(Query) > 0 ->
     {error, {unsupported_query, element(1, Query)}};
-to_query_plan(Query, _Context) ->
+to_query_plan(_Query, Arguments, _Context) when not is_map(Arguments) ->
+    {error, {invalid_arguments, Arguments}};
+to_query_plan(Query, _Arguments, _Context) ->
     {error, {invalid_query, Query}}.
+
+
+%% @doc Normalize Erlang argument values to typed SPARQL values. Date tuples
+%% are matched before other tuples so that records and structured terms are
+%% never accidentally treated as dates.
+normalize_arguments(Arguments) ->
+    maps:fold(fun normalize_argument/3, #{}, Arguments).
+
+normalize_argument(Key, Value, Acc) ->
+    Variable = {var, argument_name(Key)},
+    case maps:is_key(Variable, Acc) of
+        true -> throw({error, {duplicate_argument, Variable}});
+        false -> Acc#{ Variable => argument_value(Value) }
+    end.
+
+argument_name(Name) when is_binary(Name), Name =/= <<>> ->
+    Name;
+argument_name(Name) when is_atom(Name) ->
+    argument_name(atom_to_binary(Name, utf8));
+argument_name(Name) ->
+    throw({error, {invalid_argument_name, Name}}).
+
+argument_value({rsc, Reference}) ->
+    {resource, Reference};
+argument_value({iri, Iri}) when is_binary(Iri) ->
+    {iri, Iri};
+argument_value(undefined) ->
+    undefined;
+argument_value({{Y, M, D}, {H, I, S}} = DateTime)
+        when is_integer(Y), is_integer(M), is_integer(D),
+             is_integer(H), is_integer(I), is_integer(S) ->
+    case z_datetime:undefined_if_invalid_date(DateTime) of
+        undefined -> throw({error, {invalid_argument_datetime, DateTime}});
+        DateTime -> {value, DateTime, datetime}
+    end;
+argument_value({Y, M, D} = Date)
+        when is_integer(Y), is_integer(M), is_integer(D) ->
+    case z_datetime:undefined_if_invalid_date({Date, {0, 0, 0}}) of
+        undefined -> throw({error, {invalid_argument_date, Date}});
+        DateTime -> {value, DateTime, datetime}
+    end;
+argument_value(Value) when is_boolean(Value) ->
+    {value, Value, boolean};
+argument_value(Value) when is_integer(Value) ->
+    {value, Value, integer};
+argument_value(Value) when is_float(Value) ->
+    {value, Value, float};
+argument_value(Value) when is_binary(Value) ->
+    {value, Value, text};
+argument_value(Value) when is_atom(Value) ->
+    {value, atom_to_binary(Value, utf8), text};
+argument_value(Value) when is_list(Value) ->
+    case unicode:characters_to_binary(Value) of
+        Binary when is_binary(Binary) -> {value, Binary, text};
+        _ -> throw({error, {invalid_argument_value, Value}})
+    end;
+argument_value(Value) ->
+    throw({error, {invalid_argument_value, Value}}).
 
 
 %% @doc Collect all namespaces from the prologue.
@@ -470,9 +555,9 @@ map_expression({call, Function, Arguments}, State0) ->
 map_expression(Expression, State) ->
     map_term(Expression, State).
 
-map_extension_call({iri, <<"http://zotonic.net/predicate/fullText">>}, Arguments, State) ->
+map_extension_call({iri, <<?NAMESPACE_ZOTONIC, "fullText">>}, Arguments, State) ->
     map_fulltext_call(fulltext, Arguments, State);
-map_extension_call({iri, <<"http://zotonic.net/predicate/fullTextRank">>}, Arguments, State) ->
+map_extension_call({iri, <<?NAMESPACE_ZOTONIC, "fullTextRank">>}, Arguments, State) ->
     map_fulltext_call(fulltext_rank, Arguments, State);
 map_extension_call(Function, Arguments, State0) ->
     {Arguments1, State1} = map_expressions(Arguments, State0),

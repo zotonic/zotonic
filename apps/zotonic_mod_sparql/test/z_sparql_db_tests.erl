@@ -324,6 +324,65 @@ is_published_column_test() ->
         ok = m_rsc:delete(ObjectId, Context)
     end.
 
+arguments_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    {ok, RelatedId} = m_rsc:insert([
+        {category, article},
+        {title, <<"SPARQL argument relation object">>}
+    ], Context),
+    {ok, MatchingId} = m_rsc:insert([
+        {category, article},
+        {title, <<"sparql_argument_title">>},
+        {date_start, {{2008, 12, 11}, {12, 0, 0}}},
+        {is_published, false}
+    ], Context),
+    {ok, EarlierId} = m_rsc:insert([
+        {category, article},
+        {title, <<"sparql_argument_title">>},
+        {date_start, {{2008, 12, 9}, {12, 0, 0}}},
+        {is_published, false}
+    ], Context),
+    {ok, PublishedMatchingId} = m_rsc:insert([
+        {category, article},
+        {title, <<"sparql_argument_title">>},
+        {date_start, {{2008, 12, 11}, {12, 0, 0}}},
+        {is_published, true}
+    ], Context),
+    try
+        {ok, _MatchingEdgeId} = m_edge:insert(MatchingId, relation, RelatedId, Context),
+        {ok, _EarlierEdgeId} = m_edge:insert(EarlierId, relation, RelatedId, Context),
+        {ok, _PublishedMatchingEdgeId} =
+            m_edge:insert(PublishedMatchingId, relation, RelatedId, Context),
+        Sparql = <<
+            "PREFIX dcterms: <http://purl.org/dc/terms/>\n"
+            "PREFIX zotonic: <http://zotonic.net/predicate/>\n"
+            "SELECT ?subject WHERE {\n"
+            "    ?subject dcterms:relation ?related .\n"
+            "    ?subject zotonic:is_published ?published .\n"
+            "    ?subject zotonic:date_start ?date_start .\n"
+            "    ?subject zotonic:title ?title .\n"
+            "    FILTER (?date_start >= ?since)\n"
+            "}"
+        >>,
+        Arguments = #{
+            related => {rsc, RelatedId},
+            published => false,
+            <<"since">> => {2008, 12, 10},
+            title => sparql_argument_title
+        },
+        ?assertEqual([MatchingId], search(Sparql, Arguments, Context)),
+        UnboundArguments = Arguments#{ published => undefined },
+        ?assertEqual(
+            lists:sort([MatchingId, PublishedMatchingId]),
+            lists:sort(search(Sparql, UnboundArguments, Context)))
+    after
+        ok = m_rsc:delete(MatchingId, Context),
+        ok = m_rsc:delete(EarlierId, Context),
+        ok = m_rsc:delete(PublishedMatchingId, Context),
+        ok = m_rsc:delete(RelatedId, Context)
+    end.
+
 facet_and_pivot_column_mapping_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
     Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
@@ -346,10 +405,13 @@ predicate_mapping(Predicate, Context) ->
 
 query_mapping(Sparql, Context) ->
     {ok, Query} = z_sparql:parse(Sparql),
-    {ok, #{ where := {triple, _, #{ mapping := Mapping }, _} }} =
-        z_sparql_plan:to_query_plan(Query, Context),
+    {ok, #{ where := {triple, _, #{ mapping := Mapping }, _} }} = z_sparql_plan:to_query_plan(Query, Context),
     Mapping.
 
 search(Sparql, Context) ->
     {ok, #search_result{ result = Result }} = z_sparql:search(Sparql, {1, 10}, Context),
+    Result.
+
+search(Sparql, Arguments, Context) ->
+    {ok, #search_result{ result = Result }} = z_sparql:search(Sparql, Arguments, {1, 10}, Context),
     Result.

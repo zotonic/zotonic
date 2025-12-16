@@ -22,7 +22,8 @@
 -export([
     parse/1,
     search/2,
-    search/3
+    search/3,
+    search/4
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -52,23 +53,37 @@ search(Sparql, Context) ->
     OffsetLimit = {1, z_search:default_pagelen(Context)},
     search(Sparql, OffsetLimit, Context).
 
-%% @doc Do a SPARQL SELECT query, with a defined offset and limit.
--spec search(Sparql, OffsetLimit, Context) -> {ok, Result} | {error, Reason} when
+%% @doc Do a SPARQL SELECT query with arguments, or with a defined offset and limit.
+-spec search(Sparql, ArgumentsOrOffsetLimit, Context) -> {ok, Result} | {error, Reason} when
     Sparql :: string() | binary(),
+    ArgumentsOrOffsetLimit :: map() | z_search:search_offset(),
+    Context :: z:context(),
+    Result :: #search_result{},
+    Reason :: term().
+search(Sparql, Arguments, Context) when is_map(Arguments) ->
+    OffsetLimit = {1, z_search:default_pagelen(Context)},
+    search(Sparql, Arguments, OffsetLimit, Context);
+search(Sparql, OffsetLimit, Context) ->
+    search(Sparql, #{}, OffsetLimit, Context).
+
+%% @doc Do a SPARQL SELECT query with pre-bound arguments and pagination.
+-spec search(Sparql, Arguments, OffsetLimit, Context) -> {ok, Result} | {error, Reason} when
+    Sparql :: string() | binary(),
+    Arguments :: map(),
     OffsetLimit :: z_search:search_offset(),
     Context :: z:context(),
     Result :: #search_result{},
     Reason :: term().
-search(Sparql, OffsetLimit, Context) ->
+search(Sparql, Arguments, OffsetLimit, Context) ->
     case parse(Sparql) of
         {ok, ParsedQuery} ->
-            search_parsed(ParsedQuery, OffsetLimit, Context);
+            search_parsed(ParsedQuery, Arguments, OffsetLimit, Context);
         {error, _} = Error ->
             Error
     end.
 
-search_parsed(ParsedQuery, OffsetLimit, Context) ->
-    case z_sparql_sql:to_sql_term(ParsedQuery, Context) of
+search_parsed(ParsedQuery, Arguments, OffsetLimit, Context) ->
+    case z_sparql_sql:to_sql_term(ParsedQuery, Arguments, Context) of
         {ok, SqlTerms} ->
             SearchSql = z_search_terms:combine(SqlTerms),
             {ok, z_search:search_result(SearchSql, OffsetLimit, Context)};
