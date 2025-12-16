@@ -9,22 +9,17 @@
         {% if placeholder %}
             placeholder="{{ placeholder }}"
         {% endif %}
-    />
+    >
     <input
         type="time"
         name="dt:hi:{{ is_end|if:1:0 }}:{{ name }}"
         value="{% if not date_is_all_day %}{{ date|date:'H:i':disp_tz }}{% endif %}"
+        class="input-mini {{ class }} {{ time_class }} form-control"
         {% if date_is_all_day %}
             style="display: none;"
             disabled="disabled"
         {% endif %}
-        data-timepicker='{
-            "timeFormat": "H:i",
-            "step": 15,
-            "scrollDefaultTime": {% if is_end %} "18:00" {% else %} "08:30" {% endif %}
-        }'
-        class="input-mini {{ class }} {{ time_class }} form-control"
-    />
+    >
     {% endwith %}
 {% else %}
     <span class="date">{{ date|date:'Y-m-d':date_is_all_day }} {% if not date_is_all_day %}{{ date|date:'H:i':timezone }}{% endif %}</span>

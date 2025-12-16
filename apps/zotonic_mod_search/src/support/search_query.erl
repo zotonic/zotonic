@@ -1779,6 +1779,12 @@ extract_value_op(<<">", V/binary>>, _Op) ->
     {<<">">>, V};
 extract_value_op(<<"<", V/binary>>, _Op) ->
     {<<"<">>, V};
+extract_value_op(#{ <<"operator">> := Op, <<"value">> := V }, _Op) ->
+    {Op, V};
+extract_value_op(#{ <<"value">> := V }, undefined) ->
+    {<<"=">>, V};
+extract_value_op(#{ <<"value">> := V }, Op) ->
+    {Op, V};
 extract_value_op(V, undefined) ->
     {<<"=">>, V};
 extract_value_op(V, Op) ->

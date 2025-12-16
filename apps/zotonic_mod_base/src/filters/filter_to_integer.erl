@@ -38,9 +38,11 @@ This filter uses the `z_convert:to_integer/1` function.
 ").
 -export([to_integer/2]).
 
+-include_lib("zotonic_core/include/zotonic.hrl").
+
 to_integer(undefined, _Context) ->
     undefined;
-to_integer({trans, _} = Tr, Context) ->
+to_integer(#trans{} = Tr, Context) ->
     to_integer(z_trans:lookup_fallback(Tr, Context), Context);
 to_integer(B, _Context) when is_binary(B) ->
 	try

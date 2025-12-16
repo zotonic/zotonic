@@ -705,7 +705,6 @@ pivot_rsc(Id, Context) ->
             Upd = maps:from_list(
                 lists:flatten(
                     lists:map( fun(F) -> render_facet(Id, F, Context) end, Facets ) ) ),
-            io:format("~p~n", [ Upd ]),
             R = case z_db:q1("select id from search_facet where id = $1", [ Id ], Context) of
                 undefined ->
                     Upd1 = Upd#{ <<"id">> => Id },

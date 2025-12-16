@@ -24,7 +24,9 @@
     from_text/1,
     from_list/1,
     from_qargs/1,
-    from_map/1
+    from_map/1,
+
+    default_terms/2
 ]).
 
 % -type termvalue() :: #{
@@ -491,4 +493,23 @@ combine_terms(K, Terms) ->
             },
             [ Term | Other ]
     end.
+
+%% @doc Add default search terms if they do not exist in the original query
+%% terms.
+default_terms(#{ <<"q">> := Terms } = Q, Defaults) ->
+    Terms1 = default_terms_1(Defaults, Terms),
+    Q#{ <<"q">> => Terms1 }.
+
+default_terms_1([], Terms) ->
+    Terms;
+default_terms_1([ #{ <<"term">> := T } = Term | Defaults ], Terms) ->
+    case has_term(T, Terms) of
+        true -> default_terms_1(Defaults, Terms);
+        false -> default_terms_1(Defaults, [ Term | Terms ])
+    end.
+
+has_term(_T, []) -> false;
+has_term(T, [ #{ <<"term">> := T } | _ ]) -> true;
+has_term(T, [ _ | Rest ]) -> has_term(T, Rest).
+
 
