@@ -39,24 +39,42 @@
 	<hr>
 
 	<fieldset class="row" style="margin-bottom: 16px;">
-		<div class="form-group col-sm-6">
-        	<h4>{_ Fill in _}</h4>
-        	<div class="controls">
-        		<label class="radio">
-        			<input type="radio" name="survey_multiple" value="0" {% if not id.survey_multiple %}checked{% endif %}>
-        			{_ Once only per user/browser _}
-        		</label>
-        		<label class="radio">
-        			<input type="radio" name="survey_multiple" value="1" {% if id.survey_multiple == 1 %}checked{% endif %}>
-        			{_ Multiple times per user/browser (each time with new results) _}
-        		</label>
-        		<label class="radio">
-        			<input type="radio" name="survey_multiple" value="2" {% if id.survey_multiple == 2 %}checked{% endif %}>
-        			{_ Fill in and edit later after saving (one set of results) _}
-        		</label>
-			</div>
+		<div class="col-sm-6">
+			<div class="form-group">
+	        	<h4>{_ Fill in _}</h4>
+	        	<div class="controls">
+	        		<label class="radio">
+	        			<input type="radio" name="survey_multiple" value="0" {% if not id.survey_multiple %}checked{% endif %}>
+	        			{_ Once only per user/browser _}
+	        		</label>
+	        		<label class="radio">
+	        			<input type="radio" name="survey_multiple" value="1" {% if id.survey_multiple == 1 %}checked{% endif %}>
+	        			{_ Multiple times per user/browser (each time with new results) _}
+	        		</label>
+	        		<label class="radio">
+	        			<input type="radio" name="survey_multiple" value="2" {% if id.survey_multiple == 2 %}checked{% endif %}>
+	        			{_ Fill in and edit later after saving (one set of results) _}
+	        		</label>
+				</div>
 
-			{% block survey_settings_fill %}{% endblock %}
+				{% block survey_settings_fill %}{% endblock %}
+
+				<div class="label-floating">
+			        <input type="number" name="survey_max_results_int" id="{{ #survey_max_results }}" 
+			               class="form-control" value="{{ id.survey_max_results_int }}"
+			               placeholder="{_ Maximum number of submissions _}"
+			               min="1">
+			        {% validate id=#survey_max_results name="survey_max_results_int"
+			        			type={numericality minimum=1}
+			        %}
+			        <label for="survey_max_results">
+			        	{_ Maximum number of submissions _}
+			        </label>
+			        <p class="help-block">
+			        	{_ If this number of answers has been submitted then the start button is deactivated and an email is sent to the <em>Handling</em> addresses below. Leave empty for no limit. _}
+			        </p>
+			    </div>
+			</div>
 		</div>
 
 		{% if not id.is_a.poll %}

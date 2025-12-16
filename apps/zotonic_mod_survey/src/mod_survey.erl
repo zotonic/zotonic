@@ -1100,31 +1100,24 @@ probably_email(SurveyId, Context) ->
 
 %% @doc mail the survey result to an e-mail address
 mail_result(SurveyId, PrepAnswers, SurveyResult, Attachments, Context) ->
-    case m_rsc:p_no_acl(SurveyId, survey_email, Context) of
-        undefined -> skip;
-        <<>> -> skip;
-        Email ->
-            Es = z_email_utils:extract_emails(Email),
+    case m_survey:survey_emails(SurveyId, Context) of
+        [] -> skip;
+        Es ->
             lists:foreach(
                 fun(E) ->
-                    case z_email_utils:is_email(E) of
-                        true ->
-                            Vars = [
-                                {is_result_email, true},
-                                {id, SurveyId},
-                                {answers, PrepAnswers},
-                                {result, SurveyResult}
-                            ],
-                            EmailRec = #email{
-                                to=E,
-                                html_tpl="email_survey_result.tpl",
-                                vars=Vars,
-                                attachments=Attachments
-                            },
-                            z_email:send(EmailRec, Context);
-                        false ->
-                            ok
-                    end
+                    Vars = [
+                        {is_result_email, true},
+                        {id, SurveyId},
+                        {answers, PrepAnswers},
+                        {result, SurveyResult}
+                    ],
+                    EmailRec = #email{
+                        to=E,
+                        html_tpl="email_survey_result.tpl",
+                        vars=Vars,
+                        attachments=Attachments
+                    },
+                    z_email:send(EmailRec, Context)
                 end,
                 Es)
     end.
