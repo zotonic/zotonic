@@ -1,7 +1,7 @@
 %% @author Marc Worrell <marc@worrell.nl>
 %% @copyright 2015-2025 Marc Worrell
 %% @doc Creates a temporary resource. If not modified then it will be deleted.
-%% 2end
+%% @end
 
 %% Copyright 2015-2025 Marc Worrell
 %%

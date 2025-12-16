@@ -1780,7 +1780,7 @@ extract_value_op(<<">", V/binary>>, _Op) ->
 extract_value_op(<<"<", V/binary>>, _Op) ->
     {<<"<">>, V};
 extract_value_op(#{ <<"operator">> := Op, <<"value">> := V }, _Op) ->
-    {Op, V};
+    {sanitize_op(Op), V};
 extract_value_op(#{ <<"value">> := V }, undefined) ->
     {<<"=">>, V};
 extract_value_op(#{ <<"value">> := V }, Op) ->
@@ -1795,6 +1795,8 @@ extract_term_op(#{ <<"operator">> := Op }, _Op) ->
 extract_term_op(_, Op) ->
     Op.
 
+sanitize_op(undefined) -> <<"=">>;
+sanitize_op(<<>>) -> <<"=">>;
 sanitize_op(<<"!=">>) -> <<"<>">>;
 sanitize_op(<<"<>">>) -> <<"<>">>;
 sanitize_op(<<">=">>) -> <<">=">>;
@@ -1803,8 +1805,8 @@ sanitize_op(<<"=">>) -> <<"=">>;
 sanitize_op(<<">">>) -> <<">">>;
 sanitize_op(<<"<">>) -> <<"<">>;
 sanitize_op(<<"~">>) -> <<"~">>;
-sanitize_op(_) ->
-    <<"=">>.
+sanitize_op(Op) when not is_binary(Op) -> sanitize_op(z_convert:to_binary(Op));
+sanitize_op(_) -> <<"=">>.
 
 
 add_filters(Filters, Context) ->
