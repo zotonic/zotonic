@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-12-16 12:44\n"
+"PO-Revision-Date: 2025-12-16 13:17\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -236,7 +236,7 @@ msgstr "Jenis file dan mime yang diizinkan, pisahkan dengan ',' - ketik 'tidak a
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:44
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:118
 msgid "Any visibility"
-msgstr ""
+msgstr "Visibilitas apa pun"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:1
 msgid "Are you sure you want to delete the following user groups:"
@@ -565,7 +565,7 @@ msgstr "Menemukan kolaborasi kelompok"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_content_group_dropdown.tpl:148
 msgid "First select a category"
-msgstr ""
+msgstr "Pertama, pilih kategori"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:50
 msgid "Group managers can edit"
@@ -667,7 +667,7 @@ msgstr "Memindahkan semua pengguna dalam kelompok-kelompok pengguna untuk:"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:24
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_visible_for.tpl:29
 msgid "Move to {title}…"
-msgstr ""
+msgstr "Pindah ke {title}…"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list.tpl:15
 msgid "No ACL rules"
@@ -918,7 +918,7 @@ msgstr "Pengguna kelompok"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:10
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:113
 msgid "Visibility"
-msgstr ""
+msgstr "Visibilitas"
 
 #: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:24
 msgid "Which version of the ACL rules do you want to use?"
@@ -1510,7 +1510,7 @@ msgstr "Hapus Halaman ini."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:74
 msgid "Delete this page..."
-msgstr ""
+msgstr "Hapus halaman ini..."
 
 #: zotonic_mod_admin/src/mod_admin.erl:936
 msgid "Deleted tasks."
@@ -1596,7 +1596,7 @@ msgstr "Gandakan halaman ini."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:65
 msgid "Duplicate this page..."
-msgstr ""
+msgstr "Gandakan halaman ini..."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:31
 msgid "Duration"
@@ -1941,7 +1941,7 @@ msgstr "Butir per halaman"
 
 #: zotonic_mod_admin/priv/templates/_edit_medium_language.tpl:14
 msgid "Language independent"
-msgstr ""
+msgstr "Bahasa yang independen"
 
 #: zotonic_mod_admin/priv/templates/_edit_medium_language.tpl:3
 #: zotonic_mod_admin/priv/templates/_edit_medium_language.tpl:7
@@ -2006,7 +2006,7 @@ msgstr "Membuat"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:64
 msgid "Make a duplicate of this page."
-msgstr ""
+msgstr "Buatlah duplikat dari halaman ini."
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:90
 msgid "Make a new media item"
@@ -2132,11 +2132,11 @@ msgstr "Dimodifikasi:"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:58
 msgid "More"
-msgstr ""
+msgstr "Lebih lanjut"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:57
 msgid "More actions: duplicate or delete page"
-msgstr ""
+msgstr "Tindakan lainnya: menggandakan atau menghapus halaman"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:13
 msgid "Move block down"
@@ -3734,7 +3734,7 @@ msgstr "Buatlah pengaturan konfigurasi baru"
 
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:58
 msgid "No configuration keys found."
-msgstr ""
+msgstr "Tidak ditemukan kunci konfigurasi."
 
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:79
 msgid "No configurations found."
@@ -3890,7 +3890,7 @@ msgstr "Modul ini tidak menyediakan sertifikat."
 
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:35
 msgid "Type to find configuration keys..."
-msgstr ""
+msgstr "Ketik untuk menemukan kunci konfigurasi..."
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:48
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:75
@@ -5506,7 +5506,7 @@ msgstr "Cara mereset kata sandi anda"
 
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:11
 msgid "However this email address does not belong to one of our users or you have simply not added a password yet so that you will not be able to change it."
-msgstr ""
+msgstr "Namun alamat email ini bukan milik salah satu pengguna kami atau Anda belum menambahkan kata sandi sehingga Anda tidak dapat mengubahnya."
 
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:30
 msgid "I forgot my password"
@@ -6181,11 +6181,11 @@ msgstr "Kembalikan halaman ke versi sebelumnya"
 
 #: zotonic_mod_backup/priv/templates/_admin_edit_content_publish.tpl:6
 msgid "Revert to an earlier revision of this page."
-msgstr ""
+msgstr "Kembali ke revisi sebelumnya dari halaman ini."
 
 #: zotonic_mod_backup/priv/templates/_admin_edit_content_publish.tpl:7
 msgid "Revert to earlier version..."
-msgstr ""
+msgstr "Kembali ke versi sebelumnya..."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:26
 msgid "Revert to this version..."
@@ -6204,7 +6204,7 @@ msgstr "Revisi untuk"
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:15
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:61
 msgid "Revisions of active users are kept for {n} days."
-msgstr ""
+msgstr "Revisi pengguna aktif disimpan selama {n} hari."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:16
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:62
@@ -6998,11 +6998,11 @@ msgstr "Anda tidak diizinkan untuk mengubah ini."
 
 #: zotonic_mod_development/src/mod_development.erl:376
 msgid "<i>Function name does not exist.</i>"
-msgstr ""
+msgstr "<i>Nama fungsi tidak ada.</i>"
 
 #: zotonic_mod_development/src/mod_development.erl:379
 msgid "<i>Module not found.</i>"
-msgstr ""
+msgstr "<i>Modul tidak ditemukan.</i>"
 
 #: zotonic_mod_development/priv/templates/_development_template_graph.tpl:5
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:80
@@ -7138,7 +7138,7 @@ msgstr "Pengembangan"
 
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:3
 msgid "Development - Function Call Tracing"
-msgstr ""
+msgstr "Pengembangan - Penelusuran Panggilan Fungsi"
 
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:3
 msgid "Development - Observers"
@@ -7182,7 +7182,7 @@ msgstr "Pelacakan kueri database yang diaktifkan"
 
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:21
 msgid "Enter the module and function you want to trace. If no function is given, all functions in the module will be traced. Enter how many calls to trace before stopping."
-msgstr ""
+msgstr "Masukkan modul dan fungsi yang ingin Anda lacak. Jika tidak ada fungsi yang diberikan, semua fungsi dalam modul akan dilacak. Masukkan jumlah panggilan yang akan dilacak sebelum berhenti."
 
 #: zotonic_mod_development/src/mod_development.erl:348
 msgid "Error changing the console logs."
@@ -7236,15 +7236,15 @@ msgstr "Menemukan aturan pengiriman yang cocok"
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:8
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:12
 msgid "Function Call Tracing"
-msgstr ""
+msgstr "Penelusuran Panggilan Fungsi"
 
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:45
 msgid "Function call tracing has been disabled. Use the following to enable function call tracing:"
-msgstr ""
+msgstr "Penelusuran panggilan fungsi telah dinonaktifkan. Gunakan langkah berikut ini untuk mengaktifkan penelusuran panggilan fungsi:"
 
 #: zotonic_mod_development/src/mod_development.erl:382
 msgid "Function tracing has been disabled in the Zotonic config."
-msgstr ""
+msgstr "Pelacakan fungsi telah dinonaktifkan dalam konfigurasi Zotonic."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:74
 msgid "Graph of all template dependencies"
@@ -7283,7 +7283,7 @@ msgstr "Reload langsung dari file CSS yang diubah. Muat ulang halaman saat mengg
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:251
 msgid "Live trace of function calls on the server (only for the admin user)."
-msgstr ""
+msgstr "Penelusuran langsung panggilan fungsi pada server (hanya untuk pengguna admin)."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:32
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:36
@@ -7292,7 +7292,7 @@ msgstr "Jejak langsung rendering template"
 
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:13
 msgid "Live tracing of function calls on the server."
-msgstr ""
+msgstr "Penelusuran langsung panggilan fungsi pada server."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:89
 msgid "Loading..."
@@ -7364,12 +7364,12 @@ msgstr "Pengamat"
 
 #: zotonic_mod_development/src/mod_development.erl:385
 msgid "Only the admin user can set traces."
-msgstr ""
+msgstr "Hanya pengguna admin yang dapat mengatur jejak."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:259
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:51
 msgid "Only the admin user can use function call tracing."
-msgstr ""
+msgstr "Hanya pengguna admin yang dapat menggunakan penelusuran panggilan fungsi."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:140
 msgid "Optional category for catinclude"
@@ -7410,7 +7410,7 @@ msgstr "Tampilkan didefinisikan blok dihasilkan template"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:238
 msgid "Show internals of Zotonic and the modules."
-msgstr ""
+msgstr "Menunjukkan bagian dalam Zotonic dan modul."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:25
 msgid "Show paths to included template files in generated templates"
@@ -7440,7 +7440,7 @@ msgstr "Nama situs"
 
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:34
 msgid "Start Tracing"
-msgstr ""
+msgstr "Mulai Melacak"
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:21
 msgid "Start matching dispatch rules"
@@ -7541,7 +7541,7 @@ msgstr "Lacak semua kueri database untuk sesi saat ini"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:255
 msgid "Trace function calls"
-msgstr ""
+msgstr "Melacak panggilan fungsi"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:172
 msgid "Traces all templates for the current session-id, or all sessions, and renders them as a graph."
@@ -7604,7 +7604,7 @@ msgstr "Anda tidak diizinkan untuk menggunakan template debugging."
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:137
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:42
 msgid "You do not have permission to access development tools."
-msgstr ""
+msgstr "Anda tidak memiliki izin untuk mengakses alat bantu pengembangan."
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:59
 msgid "found dispatch rule"
@@ -7937,11 +7937,11 @@ msgstr "Kalender"
 
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:59
 msgid "Define which fields (columns) should be exported. One field expression per line."
-msgstr ""
+msgstr "Tentukan bidang (kolom) mana yang harus diekspor. Satu ekspresi bidang per baris."
 
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:61
 msgid "Do not forget to save your changes before exporting."
-msgstr ""
+msgstr "Jangan lupa untuk menyimpan perubahan Anda sebelum mengekspor."
 
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:24
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:37
@@ -7967,7 +7967,7 @@ msgstr "Unduh Excel"
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:39
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:48
 msgid "Download JSON"
-msgstr ""
+msgstr "Unduh JSON"
 
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:34
 msgid "Download all the pages in the collection"
@@ -7979,7 +7979,7 @@ msgstr "Unduh semua halaman sesuai permintaan"
 
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:31
 msgid "Download as Event if the query returns events and you want to export for a calendar program."
-msgstr ""
+msgstr "Unduh sebagai Peristiwa jika kueri mengembalikan peristiwa dan Anda ingin mengekspor untuk program kalender."
 
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:9
 msgid "Download this page or the query as a spreadsheet or in another format."
@@ -7993,7 +7993,7 @@ msgstr "Ekspor"
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:65
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:66
 msgid "Export fields"
-msgstr ""
+msgstr "Bidang ekspor"
 
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:8
 msgid "Help about export"
@@ -8001,7 +8001,7 @@ msgstr "Bantuan tentang ekspor"
 
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:60
 msgid "Leave this empty for a default set of fields."
-msgstr ""
+msgstr "Biarkan ini kosong untuk satu set bidang default."
 
 #: zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:14
 #: zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:15
@@ -8476,54 +8476,54 @@ msgstr "Memiringkan"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:18
 msgid "About the columns of the spreadsheet data"
-msgstr ""
+msgstr "Tentang kolom-kolom data spreadsheet"
 
 #: zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:4
 #: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:3
 msgid "Depending on the filename the data can be imported as pages or as special data."
-msgstr ""
+msgstr "Tergantung pada nama file, data dapat diimpor sebagai halaman atau sebagai data khusus."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:21
 msgid "Every row in the CSV or XLSX file contains a single page. The columns are the properties."
-msgstr ""
+msgstr "Setiap baris dalam file CSV atau XLSX berisi satu halaman. Kolom-kolomnya adalah properti."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:78
 msgid "For example, the English title would have the column name: <code>title$en</code>"
-msgstr ""
+msgstr "Sebagai contoh, judul dalam bahasa Inggris akan memiliki nama kolom: <code>title$en</code>"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:60
 msgid "If the page is a person, the first name."
-msgstr ""
+msgstr "Jika halaman tersebut adalah orang, nama depan."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:64
 msgid "If the page is a person, the last or family name."
-msgstr ""
+msgstr "Jika halaman tersebut adalah orang, nama belakang atau nama keluarga."
 
 #: zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:8
 msgid "Import CSV XLSX file"
-msgstr ""
+msgstr "Impor file CSV XLSX"
 
 #: zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:7
 #: zotonic_mod_import_csv/src/mod_import_csv.erl:102
 msgid "Import CSV or XLSX file"
-msgstr ""
+msgstr "Impor file CSV atau XLSX"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:3
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:8
 msgid "Import a CSV or XLSX file"
-msgstr ""
+msgstr "Mengimpor file CSV atau XLSX"
 
 #: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:18
 msgid "Import any previously deleted items again"
-msgstr ""
+msgstr "Mengimpor kembali item yang telah dihapus sebelumnya"
 
 #: zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:3
 msgid "Import data from a CSV or XLSX file."
-msgstr ""
+msgstr "Mengimpor data dari file CSV atau XLSX."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:77
 msgid "Multilingual properties can be set by specifying the language after the property name."
-msgstr ""
+msgstr "Properti multibahasa dapat diatur dengan menentukan bahasa setelah nama properti."
 
 #: zotonic_mod_import_csv/src/mod_import_csv.erl:166
 msgid "Only admins can import CSV files."
@@ -8535,12 +8535,12 @@ msgstr "Mohon tahan sementara berkas sedang mengimpor. Anda akan mendapatkan seb
 
 #: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:24
 msgid "Progress will be reported in the <a href=\"{url}\">admin log</a> and with notifications in the admin."
-msgstr ""
+msgstr "Kemajuan akan dilaporkan dalam <a href=\"{url}\">log admin</a> dan dengan pemberitahuan di admin."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:27
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:43
 msgid "Property"
-msgstr ""
+msgstr "Properti"
 
 #: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:7
@@ -8554,44 +8554,44 @@ msgstr "Mulai impor"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:56
 msgid "The HTML main text of the page."
-msgstr ""
+msgstr "Teks utama HTML dari halaman."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:36
 msgid "The category of the page. Examples: <code>article</code> or <code>text</code>."
-msgstr ""
+msgstr "Kategori halaman. Contoh: <code>artikel</code> atau <code>teks</code>."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:72
 msgid "The custom path for the URL of the page, for example <code>/my/page</code>"
-msgstr ""
+msgstr "Jalur khusus untuk URL halaman, misalnya <code>/my/page</code>"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:68
 msgid "The email address associated with the page."
-msgstr ""
+msgstr "Alamat email yang terkait dengan halaman tersebut."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:22
 msgid "The following properties must be present:"
-msgstr ""
+msgstr "Properti berikut ini harus ada:"
 
 #: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:23
 msgid "The import will be done in the background after the file has been uploaded to the server."
-msgstr ""
+msgstr "Impor akan dilakukan di latar belakang setelah file diunggah ke server."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:52
 msgid "The summary of the page."
-msgstr ""
+msgstr "Ringkasan halaman."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:48
 msgid "The title of the page."
-msgstr ""
+msgstr "Judul halaman."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:32
 msgid "The unique name of the page, used to identify the page."
-msgstr ""
+msgstr "Nama unik halaman, yang digunakan untuk mengidentifikasi halaman."
 
 #: zotonic_mod_import_csv/src/mod_import_csv.erl:149
 #: zotonic_mod_import_csv/src/mod_import_csv.erl:187
 msgid "The uploaded file has been imported."
-msgstr ""
+msgstr "File yang diunggah telah diimpor."
 
 #: zotonic_mod_import_csv/src/mod_import_csv.erl:162
 msgid "This file cannot be imported."
@@ -8599,15 +8599,15 @@ msgstr "Berkas ini tidak dapat diimpor."
 
 #: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:2
 msgid "Upload a CSV or XLSX file from your computer."
-msgstr ""
+msgstr "Unggah file CSV atau XLSX dari komputer Anda."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:40
 msgid "Well known properties are:"
-msgstr ""
+msgstr "Properti yang terkenal adalah:"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:85
 msgid "You do not have permission to use the CSV/XLSX import module."
-msgstr ""
+msgstr "Anda tidak memiliki izin untuk menggunakan modul impor CSV/XLSX."
 
 #: zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:4
 msgid "Import WXR file"
@@ -11113,7 +11113,7 @@ msgstr "Memeriksa Persyaratan Layanan dan kebijakan Privasi"
 
 #: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:11
 msgid "Choose a password"
-msgstr ""
+msgstr "Memilih kata sandi"
 
 #: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:52
 msgid "Choose a username and password"
@@ -11930,7 +11930,7 @@ msgstr "Saya [age] tahun. Saya suka es krim [icecream=vanilla|strawberry|chocola
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:74
 msgid "If this number of answers has been submitted then the start button is deactivated and an email is sent to the <em>Handling</em> addresses below. Leave empty for no limit."
-msgstr ""
+msgstr "Jika jumlah jawaban ini telah dikirimkan, maka tombol mulai akan dinonaktifkan dan email akan dikirim ke alamat <em>penanganan</em> di bawah ini. Biarkan kosong tanpa batas."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:24
 msgid "Immediately start with the questions, no “Start” button"
@@ -12018,11 +12018,11 @@ msgstr "Nilai maksimal"
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:65
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
 msgid "Maximum number of submissions"
-msgstr ""
+msgstr "Jumlah maksimum pengiriman"
 
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:3
 msgid "Maximum submissions reached"
-msgstr ""
+msgstr "Pengiriman maksimum tercapai"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
 msgid "Milk"
@@ -12269,7 +12269,7 @@ msgstr "Hasil dari responden"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:95
 msgid "Results from the respondent - if passed only"
-msgstr ""
+msgstr "Hasil dari responden - jika lulus saja"
 
 #: zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
 msgid "Results until"
@@ -12448,11 +12448,11 @@ msgstr "Berikut ini telah diisi:"
 
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:9
 msgid "The maximum number of submissions for <a href=\"{url}\"><b>{title}</b></a> on {site} has been reached."
-msgstr ""
+msgstr "Jumlah maksimum pengiriman untuk <a href=\"{url}\"><b>{title}</b></a> di {site} telah tercapai."
 
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:59
 msgid "The maximum number of submissions has been reached, you cannot fill this in anymore."
-msgstr ""
+msgstr "Jumlah maksimum pengiriman telah tercapai, Anda tidak dapat mengisinya lagi."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:3
 msgid "The result can be linked to an existing person or to a newly created person."
@@ -12468,7 +12468,7 @@ msgstr "File yang diunggah akan dilampirkan ke email hasil."
 
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:15
 msgid "There are now <b>{n}</b> submissions out of a maximum of {max}."
-msgstr ""
+msgstr "Sekarang ada <b>{n}</b> kiriman dari maksimum {max}."
 
 #: zotonic_mod_survey/priv/templates/_survey_error.tpl:3
 msgid "There was an error while handling your answers. We are terribly sorry about this."
@@ -12610,7 +12610,7 @@ msgstr "Anda harus diizinkan untuk mengedit formulir, untuk mengedit hasilnya."
 
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:20
 msgid "You received this email because your email address is configured in the settings as the handling address."
-msgstr ""
+msgstr "Anda menerima email ini karena alamat email Anda dikonfigurasikan dalam pengaturan sebagai alamat penanganan."
 
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:50
@@ -12827,7 +12827,7 @@ msgstr "Dapat diedit"
 
 #: zotonic_mod_translation/priv/templates/_admin_headeritem.tpl:26
 msgid "Editable languages"
-msgstr ""
+msgstr "Bahasa yang dapat diedit"
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:127
 msgid "English"
