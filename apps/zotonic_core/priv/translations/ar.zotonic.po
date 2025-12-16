@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-12-16 12:44\n"
+"PO-Revision-Date: 2025-12-16 13:17\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -11113,7 +11113,7 @@ msgstr "تحقق من شروط الخدمة وسياسات الخصوصية"
 
 #: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:11
 msgid "Choose a password"
-msgstr ""
+msgstr "اختر كلمة مرور"
 
 #: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:52
 msgid "Choose a username and password"
@@ -11930,7 +11930,7 @@ msgstr "عمري [age] سنة. أحب الآيس كريم [الآيس كريم =
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:74
 msgid "If this number of answers has been submitted then the start button is deactivated and an email is sent to the <em>Handling</em> addresses below. Leave empty for no limit."
-msgstr ""
+msgstr "إذا تم إرسال هذا العدد من الإجابات، فسيتم إلغاء تنشيط زر البدء وإرسال بريد إلكتروني إلى عناوين <em>المناولة</em> أدناه. اتركها فارغة لعدم وجود حد."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:24
 msgid "Immediately start with the questions, no “Start” button"
@@ -12018,11 +12018,11 @@ msgstr "القيمة القصوى"
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:65
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
 msgid "Maximum number of submissions"
-msgstr ""
+msgstr "الحد الأقصى لعدد الطلبات المقدمة"
 
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:3
 msgid "Maximum submissions reached"
-msgstr ""
+msgstr "تم الوصول إلى الحد الأقصى للطلبات المقدمة"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
 msgid "Milk"
@@ -12448,11 +12448,11 @@ msgstr "تم ملء ما يلي:"
 
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:9
 msgid "The maximum number of submissions for <a href=\"{url}\"><b>{title}</b></a> on {site} has been reached."
-msgstr ""
+msgstr "تم الوصول إلى الحد الأقصى لعدد الطلبات المقدمة لـ <a href=\"{url}\"><b>{title}</b></a> على {site} قد تم الوصول إليه."
 
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:59
 msgid "The maximum number of submissions has been reached, you cannot fill this in anymore."
-msgstr ""
+msgstr "لقد تم الوصول إلى الحد الأقصى لعدد الطلبات المرسلة، ولا يمكنك ملء هذا بعد الآن."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:3
 msgid "The result can be linked to an existing person or to a newly created person."
@@ -12468,7 +12468,7 @@ msgstr "سيتم إرفاق الملف الذي تم تحميله بالبريد
 
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:15
 msgid "There are now <b>{n}</b> submissions out of a maximum of {max}."
-msgstr ""
+msgstr "يوجد الآن <b>{n}</b> الطلبات المقدمة من أصل {max}."
 
 #: zotonic_mod_survey/priv/templates/_survey_error.tpl:3
 msgid "There was an error while handling your answers. We are terribly sorry about this."
@@ -12610,7 +12610,7 @@ msgstr "يجب أن يُسمح لك بتحرير النموذج ، لتحرير 
 
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:20
 msgid "You received this email because your email address is configured in the settings as the handling address."
-msgstr ""
+msgstr "لقد استلمت هذا البريد الإلكتروني لأن عنوان بريدك الإلكتروني مهيأ في الإعدادات كعنوان معالجة."
 
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:50
