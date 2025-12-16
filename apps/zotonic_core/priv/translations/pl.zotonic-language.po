@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-09-22 11:23\n"
+"PO-Revision-Date: 2025-12-16 13:18\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -20,13 +20,13 @@ msgid "Abkhazian"
 msgstr "Abchaski"
 
 msgid "Adamawa Fulfulde"
-msgstr ""
+msgstr "Adamawa Fulfulde"
 
 msgid "Adara"
-msgstr ""
+msgstr "Adara"
 
 msgid "Adilabad Gondi"
-msgstr ""
+msgstr "Adilabad Gondi"
 
 msgid "Afar"
 msgstr "Afar"
@@ -35,7 +35,7 @@ msgid "Afrikaans"
 msgstr "Afrikaans"
 
 msgid "Akan"
-msgstr ""
+msgstr "Akan"
 
 msgid "Albanian"
 msgstr "Albański"
@@ -44,10 +44,10 @@ msgid "Amharic"
 msgstr "Amharski"
 
 msgid "Anyin Morofo"
-msgstr ""
+msgstr "Anyin Morofo"
 
 msgid "Ao Naga"
-msgstr ""
+msgstr "Ao Naga"
 
 msgid "Arabic"
 msgstr "Arabski"
@@ -116,19 +116,19 @@ msgid "Arabic - Yemen"
 msgstr "Arabski - Jemen"
 
 msgid "Aringa"
-msgstr ""
+msgstr "Aringa"
 
 msgid "Assamese"
 msgstr "Assamese"
 
 msgid "Avaric"
-msgstr ""
+msgstr "Avaric"
 
 msgid "Awa (China)"
-msgstr ""
+msgstr "Awa (Chiny)"
 
 msgid "Ayacucho Quechua"
-msgstr ""
+msgstr "Ayacucho Quechua"
 
 msgid "Aymara"
 msgstr "Aymara"
@@ -137,22 +137,22 @@ msgid "Azerbaijani"
 msgstr "Azerbejdżan"
 
 msgid "Balangingi"
-msgstr ""
+msgstr "Balangingi"
 
 msgid "Balkan Romani"
-msgstr ""
+msgstr "Romowie bałkańscy"
 
 msgid "Balti"
-msgstr ""
+msgstr "Balti"
 
 msgid "Bambara"
-msgstr ""
+msgstr "Bambara"
 
 msgid "Bangka"
-msgstr ""
+msgstr "Bangka"
 
 msgid "Barclayville Grebo"
-msgstr ""
+msgstr "Barclayville Grebo"
 
 msgid "Bashkir"
 msgstr "Baszkir"
@@ -161,103 +161,103 @@ msgid "Basque"
 msgstr "Baskijski"
 
 msgid "Bavarian"
-msgstr ""
+msgstr "Bawarski"
 
 msgid "Bazigar"
-msgstr ""
+msgstr "Bazigar"
 
 msgid "Bengali"
 msgstr "Bengalski"
 
 msgid "Berta"
-msgstr ""
+msgstr "Berta"
 
 msgid "Bilaspuri"
-msgstr ""
+msgstr "Bilaspuri"
 
 msgid "Bislama"
 msgstr "Bislama"
 
 msgid "Borana-Arsi-Guji Oromo"
-msgstr ""
+msgstr "Borana-Arsi-Guji Oromo"
 
 msgid "Borgu Fulfulde"
-msgstr ""
+msgstr "Borgu Fulfulde"
 
 msgid "Bosnian"
 msgstr "Bośniacki"
 
 msgid "Bouyei"
-msgstr ""
+msgstr "Bouyei"
 
 msgid "Breton"
 msgstr "Bretończyk"
 
 msgid "Brunei"
-msgstr ""
+msgstr "Brunei"
 
 msgid "Bulgarian"
 msgstr "Bułgarski"
 
 msgid "Burmese"
-msgstr ""
+msgstr "Birmański"
 
 msgid "Byelorussian"
 msgstr "Białoruski"
 
 msgid "Caló"
-msgstr ""
+msgstr "Caló"
 
 msgid "Cambodian"
-msgstr ""
+msgstr "Kambodżański"
 
 msgid "Cameroon Pidgin"
-msgstr ""
+msgstr "Kamerun Pidgin"
 
 msgid "Campidanese Sardinian"
-msgstr ""
+msgstr "Campidanese Sardinian"
 
 msgid "Capiznon"
-msgstr ""
+msgstr "Capiznon"
 
 msgid "Catalan"
 msgstr "Kataloński"
 
 msgid "Cebaara Senoufo"
-msgstr ""
+msgstr "Cebaara Senoufo"
 
 msgid "Cebuano"
-msgstr ""
+msgstr "Cebuano"
 
 msgid "Central Atlas Tamazight"
-msgstr ""
+msgstr "Atlas Centralny Tamazight"
 
 msgid "Central Hongshuihe Zhuang"
-msgstr ""
+msgstr "Central Hongshuihe Zhuang"
 
 msgid "Central Huasteca Nahuatl"
-msgstr ""
+msgstr "Central Huasteca Nahuatl"
 
 msgid "Central Kanuri"
-msgstr ""
+msgstr "Central Kanuri"
 
 msgid "Central Malay"
-msgstr ""
+msgstr "Central Malay"
 
 msgid "Central Okinawan"
-msgstr ""
+msgstr "Centralny Okinawan"
 
 msgid "Central Pashto"
-msgstr ""
+msgstr "Central Pashto"
 
 msgid "Central Sama"
-msgstr ""
+msgstr "Central Sama"
 
 msgid "Central-Eastern Niger Fulfulde"
-msgstr ""
+msgstr "Środkowo-wschodni Niger Fulfulde"
 
 msgid "Chadian Arabic"
-msgstr ""
+msgstr "Arabski czadyjski"
 
 msgid "Chamorro"
 msgstr "Chamorro"
@@ -266,13 +266,13 @@ msgid "Chechen"
 msgstr "Czeczenia"
 
 msgid "Chewa"
-msgstr ""
+msgstr "Chewa"
 
 msgid "Chhattisgarhi"
-msgstr ""
+msgstr "Chhattisgarhi"
 
 msgid "Chimborazo Highland Quichua"
-msgstr ""
+msgstr "Chimborazo Highland Quichua"
 
 msgid "Chinese (Simplified)"
 msgstr "Chiński (uproszczony)"
@@ -281,25 +281,25 @@ msgid "Chinese (Traditional)"
 msgstr "Chiński (tradycyjny)"
 
 msgid "Chittagonian"
-msgstr ""
+msgstr "Chittagonian"
 
 msgid "Chitwania Tharu"
-msgstr ""
+msgstr "Chitwania Tharu"
 
 msgid "Chuanqiandian Cluster Miao"
-msgstr ""
+msgstr "Chuanqiandian Cluster Miao"
 
 msgid "Chuvash"
 msgstr "Czuwasz"
 
 msgid "Congo Swahili"
-msgstr ""
+msgstr "Kongo Suahili"
 
 msgid "Corsican"
 msgstr "Korsykanin"
 
 msgid "Crimean Tatar"
-msgstr ""
+msgstr "Tatar krymski"
 
 msgid "Croatian"
 msgstr "Chorwacki"
@@ -311,76 +311,76 @@ msgid "Croatian - Croatia"
 msgstr "Chorwacki - Chorwacja"
 
 msgid "Cusco Quechua"
-msgstr ""
+msgstr "Cusco Quechua"
 
 msgid "Czech"
 msgstr "Czechy"
 
 msgid "Dagbani"
-msgstr ""
+msgstr "Dagbani"
 
 msgid "Dan"
-msgstr ""
+msgstr "Dan"
 
 msgid "Dangaura Tharu"
-msgstr ""
+msgstr "Dangaura Tharu"
 
 msgid "Danish"
 msgstr "Duński"
 
 msgid "Dari"
-msgstr ""
+msgstr "Dari"
 
 msgid "Dawro"
-msgstr ""
+msgstr "Dawro"
 
 msgid "Dazaga"
-msgstr ""
+msgstr "Dazaga"
 
 msgid "Deccan"
-msgstr ""
+msgstr "Deccan"
 
 msgid "Dhivehi"
-msgstr ""
+msgstr "Dhivehi"
 
 msgid "Dhundari"
-msgstr ""
+msgstr "Dhundari"
 
 msgid "Digo"
-msgstr ""
+msgstr "Digo"
 
 msgid "Dimli"
-msgstr ""
+msgstr "Dimli"
 
 msgid "Dinka"
-msgstr ""
+msgstr "Dinka"
 
 msgid "Dogri"
-msgstr ""
+msgstr "Dogri"
 
 msgid "Dogri (macrolanguage)"
-msgstr ""
+msgstr "Dogri (makrojęzyk)"
 
 msgid "Domari"
-msgstr ""
+msgstr "Domari"
 
 msgid "Dombe"
-msgstr ""
+msgstr "Dombe"
 
 msgid "Dong"
-msgstr ""
+msgstr "Dong"
 
 msgid "Dotyali"
-msgstr ""
+msgstr "Dotyali"
 
 msgid "Drents"
-msgstr ""
+msgstr "Drents"
 
 msgid "Dubli"
-msgstr ""
+msgstr "Dubli"
 
 msgid "Duruma"
-msgstr ""
+msgstr "Duruma"
 
 msgid "Dutch"
 msgstr "Holenderski"
@@ -389,61 +389,61 @@ msgid "Dutch - Netherlands"
 msgstr "Niderlandzki - Holandia"
 
 msgid "Dyula"
-msgstr ""
+msgstr "Dyula"
 
 msgid "Dzongkha"
 msgstr "Dzongkha"
 
 msgid "Early Tripuri"
-msgstr ""
+msgstr "Wczesne Tripuri"
 
 msgid "East Nyala"
-msgstr ""
+msgstr "Wschodnia Nyala"
 
 msgid "Eastern Gorkha Tamang"
-msgstr ""
+msgstr "Wschodni Gorkha Tamang"
 
 msgid "Eastern Hongshuihe Zhuang"
-msgstr ""
+msgstr "Wschodni Hongshuihe Zhuang"
 
 msgid "Eastern Huasteca Nahuatl"
-msgstr ""
+msgstr "Wschodnia Huasteca Nahuatl"
 
 msgid "Eastern Magar"
-msgstr ""
+msgstr "Wschodni Magar"
 
 msgid "Eastern Maninkakan"
-msgstr ""
+msgstr "Wschodni Maninkakan"
 
 msgid "Eastern Mari"
-msgstr ""
+msgstr "Eastern Mari"
 
 msgid "Eastern Nisu"
-msgstr ""
+msgstr "Wschodnie Nisu"
 
 msgid "Eastern Oromo"
-msgstr ""
+msgstr "Wschodni Oromo"
 
 msgid "Eastern Qiandong Miao"
-msgstr ""
+msgstr "Wschodni Qiandong Miao"
 
 msgid "Eastern Tamang"
-msgstr ""
+msgstr "Wschodni Tamang"
 
 msgid "Eastern Yiddish"
-msgstr ""
+msgstr "Wschodni jidysz"
 
 msgid "Ebira"
-msgstr ""
+msgstr "Ebira"
 
 msgid "Efik"
-msgstr ""
+msgstr "Efik"
 
 msgid "Embu"
-msgstr ""
+msgstr "Embu"
 
 msgid "Emilian"
-msgstr ""
+msgstr "Emilian"
 
 msgid "English"
 msgstr "Angielski"
@@ -488,10 +488,10 @@ msgid "English - Zimbabwe"
 msgstr "Angielski - Zimbabwe"
 
 msgid "Erzya"
-msgstr ""
+msgstr "Erzya"
 
 msgid "Esan"
-msgstr ""
+msgstr "Esan"
 
 msgid "Esperanto"
 msgstr "Esperanto"
@@ -500,34 +500,34 @@ msgid "Estonian"
 msgstr "Estoński"
 
 msgid "Eton (Cameroon)"
-msgstr ""
+msgstr "Eton (Kamerun)"
 
 msgid "Ewe"
-msgstr ""
+msgstr "Maciorek"
 
 msgid "Ewondo"
-msgstr ""
+msgstr "Ewondo"
 
 msgid "Ezaa"
-msgstr ""
+msgstr "Ezaa"
 
 msgid "Fang (Equatorial Guinea)"
-msgstr ""
+msgstr "Fang (Gwinea Równikowa)"
 
 msgid "Fanti"
-msgstr ""
+msgstr "Fanti"
 
 msgid "Far Western Muria"
-msgstr ""
+msgstr "Daleko na zachód od Murii"
 
 msgid "Farefare"
-msgstr ""
+msgstr "Farefare"
 
 msgid "Faroese"
 msgstr "Wyspy Owcze"
 
 msgid "Fiji Hindi"
-msgstr ""
+msgstr "Fidżi Hindi"
 
 msgid "Fijian"
 msgstr "Fidżyjczyk"
@@ -539,7 +539,7 @@ msgid "Flemish - Belgium"
 msgstr "Flamandzki - Belgia"
 
 msgid "Fon"
-msgstr ""
+msgstr "Fon"
 
 msgid "French"
 msgstr "Francuski"
@@ -566,61 +566,61 @@ msgid "Frisian"
 msgstr "Fryzyjski"
 
 msgid "Friulian"
-msgstr ""
+msgstr "Friulian"
 
 msgid "Fula"
-msgstr ""
+msgstr "Fula"
 
 msgid "Fuliiru"
-msgstr ""
+msgstr "Fuliiru"
 
 msgid "Fur"
-msgstr ""
+msgstr "Futro"
 
 msgid "Ga"
-msgstr ""
+msgstr "Ga"
 
 msgid "Gaelic"
 msgstr "Gaelicki"
 
 msgid "Gagauz"
-msgstr ""
+msgstr "Gagauz"
 
 msgid "Galician"
 msgstr "Galicyjski"
 
 msgid "Gamit"
-msgstr ""
+msgstr "Gamit"
 
 msgid "Gamo"
-msgstr ""
+msgstr "Gamo"
 
 msgid "Gan"
-msgstr ""
+msgstr "Gan"
 
 msgid "Ganda"
-msgstr ""
+msgstr "Ganda"
 
 msgid "Garhwali"
-msgstr ""
+msgstr "Garhwali"
 
 msgid "Garo"
-msgstr ""
+msgstr "Garo"
 
 msgid "Gayo"
-msgstr ""
+msgstr "Gayo"
 
 msgid "Gbagyi"
-msgstr ""
+msgstr "Gbagyi"
 
 msgid "Gbari"
-msgstr ""
+msgstr "Gbari"
 
 msgid "Gedeo"
-msgstr ""
+msgstr "Gedeo"
 
 msgid "Gen"
-msgstr ""
+msgstr "Gen"
 
 msgid "Georgian"
 msgstr "Gruziński"
@@ -644,247 +644,247 @@ msgid "German - Switzerland"
 msgstr "Niemiecki - Szwajcaria"
 
 msgid "Ghanaian Pidgin English"
-msgstr ""
+msgstr "Ghanaian Pidgin English"
 
 msgid "Gilaki"
-msgstr ""
+msgstr "Gilaki"
 
 msgid "Giryama"
-msgstr ""
+msgstr "Giryama"
 
 msgid "Goan Konkani"
-msgstr ""
+msgstr "Goański Konkani"
 
 msgid "Godwari"
-msgstr ""
+msgstr "Godwari"
 
 msgid "Gofa"
-msgstr ""
+msgstr "Gofa"
 
 msgid "Gogo"
-msgstr ""
+msgstr "Gogo"
 
 msgid "Gondi"
-msgstr ""
+msgstr "Gondi"
 
 msgid "Gorontalo"
-msgstr ""
+msgstr "Gorontalo"
 
 msgid "Gourmanchéma"
-msgstr ""
+msgstr "Gourmanchéma"
 
 msgid "Grebo"
-msgstr ""
+msgstr "Grebo"
 
 msgid "Greek"
 msgstr "Grecki"
 
 msgid "Gronings"
-msgstr ""
+msgstr "Gronings"
 
 msgid "Guadeloupean Creole French"
-msgstr ""
+msgstr "Gwadelupa kreolski francuski"
 
 msgid "Guarani"
 msgstr "Guarani"
 
 msgid "Guaraní"
-msgstr ""
+msgstr "Guaraní"
 
 msgid "Guibei Zhuang"
-msgstr ""
+msgstr "Guibei Zhuang"
 
 msgid "Guibian Zhuang"
-msgstr ""
+msgstr "Guibian Zhuang"
 
 msgid "Guinea Kpelle"
-msgstr ""
+msgstr "Gwinea Kpelle"
 
 msgid "Gujarati"
 msgstr "Gudżarati"
 
 msgid "Gujari"
-msgstr ""
+msgstr "Gujari"
 
 msgid "Gun"
-msgstr ""
+msgstr "Pistolet"
 
 msgid "Gurani"
-msgstr ""
+msgstr "Gurani"
 
 msgid "Guro"
-msgstr ""
+msgstr "Guro"
 
 msgid "Gurung"
-msgstr ""
+msgstr "Gurung"
 
 msgid "Gusii"
-msgstr ""
+msgstr "Gusii"
 
 msgid "Guyanese Creole English"
-msgstr ""
+msgstr "Gujański kreolski angielski"
 
 msgid "Gwere"
-msgstr ""
+msgstr "Gwere"
 
 msgid "Ha"
-msgstr ""
+msgstr "Ha"
 
 msgid "Hadiyya"
-msgstr ""
+msgstr "Hadiyya"
 
 msgid "Hadothi"
-msgstr ""
+msgstr "Hadothi"
 
 msgid "Hadrami"
-msgstr ""
+msgstr "Hadrami"
 
 msgid "Haitian Creole"
-msgstr ""
+msgstr "Kreolski haitański"
 
 msgid "Hakka"
-msgstr ""
+msgstr "Hakka"
 
 msgid "Halbi"
-msgstr ""
+msgstr "Halbi"
 
 msgid "Halh Mongolian"
-msgstr ""
+msgstr "Halh mongolski"
 
 msgid "Hani"
-msgstr ""
+msgstr "Hani"
 
 msgid "Hassaniyya"
-msgstr ""
+msgstr "Hassaniyya"
 
 msgid "Hausa"
-msgstr ""
+msgstr "Hausa"
 
 msgid "Havu"
-msgstr ""
+msgstr "Havu"
 
 msgid "Hawaiian Creole English"
-msgstr ""
+msgstr "Hawajski kreolski angielski"
 
 msgid "Haya"
-msgstr ""
+msgstr "Haya"
 
 msgid "Hazaragi"
-msgstr ""
+msgstr "Hazaragi"
 
 msgid "Hebrew"
 msgstr "Hebrajski"
 
 msgid "Hehe"
-msgstr ""
+msgstr "Hehe"
 
 msgid "Herero"
-msgstr ""
+msgstr "Herero"
 
 msgid "Hiligaynon"
-msgstr ""
+msgstr "Hiligaynon"
 
 msgid "Hindi"
 msgstr "Hindi"
 
 msgid "Hlai"
-msgstr ""
+msgstr "Hlai"
 
 msgid "Hmong"
-msgstr ""
+msgstr "Hmong"
 
 msgid "Hmong Shua"
-msgstr ""
+msgstr "Hmong Shua"
 
 msgid "Ho"
-msgstr ""
+msgstr "Ho"
 
 msgid "Huaxcaleca Nahuatl"
-msgstr ""
+msgstr "Huaxcaleca Nahuatl"
 
 msgid "Huaylas Ancash Quechua"
-msgstr ""
+msgstr "Huaylas Ancash Quechua"
 
 msgid "Huaylla Wanca Quechua"
-msgstr ""
+msgstr "Huaylla Wanca Quechua"
 
 msgid "Huba"
-msgstr ""
+msgstr "Huba"
 
 msgid "Huizhou Chinese"
-msgstr ""
+msgstr "Chiński Huizhou"
 
 msgid "Hungarian"
 msgstr "Węgierski"
 
 msgid "Hunsrik"
-msgstr ""
+msgstr "Hunsrik"
 
 msgid "Hyam"
-msgstr ""
+msgstr "Hyam"
 
 msgid "Iban"
-msgstr ""
+msgstr "Iban"
 
 msgid "Ibanag"
-msgstr ""
+msgstr "Ibanag"
 
 msgid "Ibibio"
-msgstr ""
+msgstr "Ibibio"
 
 msgid "Idakho-Isukha-Tiriki"
-msgstr ""
+msgstr "Idakho-Isukha-Tiriki"
 
 msgid "Idoma"
-msgstr ""
+msgstr "Idoma"
 
 msgid "Igala"
-msgstr ""
+msgstr "Igala"
 
 msgid "Igbo "
-msgstr ""
+msgstr "Igbo "
 
 msgid "Igede"
-msgstr ""
+msgstr "Igede"
 
 msgid "Ikwo"
-msgstr ""
+msgstr "Ikwo"
 
 msgid "Iloko"
-msgstr ""
+msgstr "Iloko"
 
 msgid "Indonesian"
 msgstr "Indonezyjski"
 
 msgid "Ingush"
-msgstr ""
+msgstr "Ingusz"
 
 msgid "Inor"
-msgstr ""
+msgstr "Inor"
 
 msgid "Interlingua"
 msgstr "Interlingua"
 
 msgid "Iranian Persian"
-msgstr ""
+msgstr "Irański perski"
 
 msgid "Iranun (Malaysia)"
-msgstr ""
+msgstr "Iranun (Malezja)"
 
 msgid "Iranun (Philippines)"
-msgstr ""
+msgstr "Iranun (Filipiny)"
 
 msgid "Iraqw"
-msgstr ""
+msgstr "Irak"
 
 msgid "Isekiri"
-msgstr ""
+msgstr "Isekiri"
 
 msgid "Islandic"
 msgstr "Islandic"
 
 msgid "Isoko"
-msgstr ""
+msgstr "Isoko"
 
 msgid "Italian"
 msgstr "Włoski"
@@ -896,862 +896,862 @@ msgid "Italian - Switzerland"
 msgstr "Włoski - Szwajcaria"
 
 msgid "Iu Mein"
-msgstr ""
+msgstr "Iu Mein"
 
 msgid "Izii"
-msgstr ""
+msgstr "Izii"
 
 msgid "Izon"
-msgstr ""
+msgstr "Izon"
 
 msgid "Jamaican Creole English"
-msgstr ""
+msgstr "Jamajski kreolski angielski"
 
 msgid "Jambi Malay"
-msgstr ""
+msgstr "Jambi Malay"
 
 msgid "Japanese"
 msgstr "Japoński"
 
 msgid "Jarai"
-msgstr ""
+msgstr "Jarai"
 
 msgid "Javanese"
 msgstr "Jawajski"
 
 msgid "Jju"
-msgstr ""
+msgstr "Jju"
 
 msgid "Jola-Fonyi"
-msgstr ""
+msgstr "Jola-Fonyi"
 
 msgid "Judeo-Arabic"
-msgstr ""
+msgstr "Judeoarabski"
 
 msgid "Juray"
-msgstr ""
+msgstr "Juray"
 
 msgid "K'iche'"
-msgstr ""
+msgstr "K'iche'"
 
 msgid "Kabardian"
-msgstr ""
+msgstr "Kabardyjczyk"
 
 msgid "Kabiyè"
-msgstr ""
+msgstr "Kabiyè"
 
 msgid "Kabras"
-msgstr ""
+msgstr "Kabras"
 
 msgid "Kabuverdianu"
-msgstr ""
+msgstr "Kabuverdianu"
 
 msgid "Kabyle"
-msgstr ""
+msgstr "Kabyle"
 
 msgid "Kachhi"
-msgstr ""
+msgstr "Kachhi"
 
 msgid "Kachi Koli"
-msgstr ""
+msgstr "Kachi Koli"
 
 msgid "Kachin"
-msgstr ""
+msgstr "Kachin"
 
 msgid "Kafa"
-msgstr ""
+msgstr "Kafa"
 
 msgid "Kalabari"
-msgstr ""
+msgstr "Kalabari"
 
 msgid "Kalanga"
-msgstr ""
+msgstr "Kalanga"
 
 msgid "Kam"
-msgstr ""
+msgstr "Kam"
 
 msgid "Kamayo"
-msgstr ""
+msgstr "Kamayo"
 
 msgid "Kamba (Kenya)"
-msgstr ""
+msgstr "Kamba (Kenia)"
 
 msgid "Kambaata"
-msgstr ""
+msgstr "Kambaata"
 
 msgid "Kamwe"
-msgstr ""
+msgstr "Kamwe"
 
 msgid "Kanembu"
-msgstr ""
+msgstr "Kanembu"
 
 msgid "Kangri"
-msgstr ""
+msgstr "Kangri"
 
 msgid "Kanuri"
-msgstr ""
+msgstr "Kanuri"
 
 msgid "Kara-Kalpak"
-msgstr ""
+msgstr "Kara-Kalpak"
 
 msgid "Karachay-Balkar"
-msgstr ""
+msgstr "Karaczaj-Bałkar"
 
 msgid "Karamojong"
-msgstr ""
+msgstr "Karamojong"
 
 msgid "Karbi"
-msgstr ""
+msgstr "Karbi"
 
 msgid "Kasem"
-msgstr ""
+msgstr "Kasem"
 
 msgid "Kashmiri"
-msgstr ""
+msgstr "Kaszmir"
 
 msgid "Katkari"
-msgstr ""
+msgstr "Katkari"
 
 msgid "Kazakh"
-msgstr ""
+msgstr "Kazachstan"
 
 msgid "Kedah Malay"
-msgstr ""
+msgstr "Kedah Malay"
 
 msgid "Keiyo"
-msgstr ""
+msgstr "Keiyo"
 
 msgid "Kekchí"
-msgstr ""
+msgstr "Kekchí"
 
 msgid "Kendayan"
-msgstr ""
+msgstr "Kendayan"
 
 msgid "Kerinci"
-msgstr ""
+msgstr "Kerinci"
 
 msgid "Khams Tibetan"
-msgstr ""
+msgstr "Khams Tybetański"
 
 msgid "Khandesi"
-msgstr ""
+msgstr "Khandesi"
 
 msgid "Khasi"
-msgstr ""
+msgstr "Khasi"
 
 msgid "Khmu"
-msgstr ""
+msgstr "Khmu"
 
 msgid "Khoekhoe"
-msgstr ""
+msgstr "Khoekhoe"
 
 msgid "Khorasani Turkish"
-msgstr ""
+msgstr "Khorasani turecki"
 
 msgid "Kikuyu"
-msgstr ""
+msgstr "Kikuju"
 
 msgid "Kim Mun"
-msgstr ""
+msgstr "Kim Mun"
 
 msgid "Kimbundu"
-msgstr ""
+msgstr "Kimbundu"
 
 msgid "Kinaray-A"
-msgstr ""
+msgstr "Kinaray-A"
 
 msgid "Kinyarwanda"
-msgstr ""
+msgstr "Kinyarwanda"
 
 msgid "Kipsigis"
-msgstr ""
+msgstr "Kipsigis"
 
 msgid "Kirike"
-msgstr ""
+msgstr "Kirike"
 
 msgid "Kistane"
-msgstr ""
+msgstr "Kistane"
 
 msgid "Kita Maninkakan"
-msgstr ""
+msgstr "Kita Maninkakan"
 
 msgid "Kituba (Congo)"
-msgstr ""
+msgstr "Kituba (Kongo)"
 
 msgid "Kituba (Democratic Republic of Congo)"
-msgstr ""
+msgstr "Kituba (Demokratyczna Republika Konga)"
 
 msgid "Kochila Tharu"
-msgstr ""
+msgstr "Kochila Tharu"
 
 msgid "Kok Borok"
-msgstr ""
+msgstr "Kok Borok"
 
 msgid "Kokola"
-msgstr ""
+msgstr "Kokola"
 
 msgid "Komering"
-msgstr ""
+msgstr "Komering"
 
 msgid "Komo (Democratic Republic of Congo)"
-msgstr ""
+msgstr "Komo (Demokratyczna Republika Konga)"
 
 msgid "Kongo"
-msgstr ""
+msgstr "Kongo"
 
 msgid "Konkani"
-msgstr ""
+msgstr "Konkani"
 
 msgid "Konkani (macrolanguage)"
-msgstr ""
+msgstr "Konkani (makrojęzyk)"
 
 msgid "Konkomba"
-msgstr ""
+msgstr "Konkomba"
 
 msgid "Konyak Naga"
-msgstr ""
+msgstr "Konyak Naga"
 
 msgid "Konzo"
-msgstr ""
+msgstr "Konzo"
 
 msgid "Koongo"
-msgstr ""
+msgstr "Koongo"
 
 msgid "Korean"
 msgstr "Koreański"
 
 msgid "Korku"
-msgstr ""
+msgstr "Korku"
 
 msgid "Kota Bangun Kutai Malay"
-msgstr ""
+msgstr "Kota Bangun Kutai Malay"
 
 msgid "Koya"
-msgstr ""
+msgstr "Koya"
 
 msgid "Koyraboro Senni Songhai"
-msgstr ""
+msgstr "Koyraboro Senni Songhai"
 
 msgid "Kpelle"
-msgstr ""
+msgstr "Kpelle"
 
 msgid "Krio"
-msgstr ""
+msgstr "Krio"
 
 msgid "Kuanyama"
-msgstr ""
+msgstr "Kuanyama"
 
 msgid "Kui (India)"
-msgstr ""
+msgstr "Kui (Indie)"
 
 msgid "Kumaoni"
-msgstr ""
+msgstr "Kumaoni"
 
 msgid "Kumyk"
-msgstr ""
+msgstr "Kumyk"
 
 msgid "Kura Ede Nago"
-msgstr ""
+msgstr "Kura Ede Nago"
 
 msgid "Kuranko"
-msgstr ""
+msgstr "Kuranko"
 
 msgid "Kurdish"
 msgstr "Kurdyjski"
 
 msgid "Kuria"
-msgstr ""
+msgstr "Kuria"
 
 msgid "Kurukh"
-msgstr ""
+msgstr "Kurukh"
 
 msgid "Kusaal"
-msgstr ""
+msgstr "Kusaal"
 
 msgid "Kuy"
-msgstr ""
+msgstr "Kuy"
 
 msgid "Kyrgyz"
-msgstr ""
+msgstr "Kirgiz"
 
 msgid "Kölsch"
-msgstr ""
+msgstr "Kölsch"
 
 msgid "Lahnda"
-msgstr ""
+msgstr "Lahnda"
 
 msgid "Lahu"
-msgstr ""
+msgstr "Lahu"
 
 msgid "Lala-Bisa"
-msgstr ""
+msgstr "Lala-Bisa"
 
 msgid "Lama (Togo)"
-msgstr ""
+msgstr "Lama (Togo)"
 
 msgid "Lambadi"
-msgstr ""
+msgstr "Lambadi"
 
 msgid "Lampung Api"
-msgstr ""
+msgstr "Lampung Api"
 
 msgid "Langi"
-msgstr ""
+msgstr "Langi"
 
 msgid "Lango (Sudan)"
-msgstr ""
+msgstr "Lango (Sudan)"
 
 msgid "Lango (Uganda)"
-msgstr ""
+msgstr "Lango (Uganda)"
 
 msgid "Lao-Isan"
-msgstr ""
+msgstr "Lao-Isan"
 
 msgid "Large Flowery Miao"
-msgstr ""
+msgstr "Duży kwiat Miao"
 
 msgid "Latvian"
 msgstr "Łotewski"
 
 msgid "Ledo Kaili"
-msgstr ""
+msgstr "Ledo Kaili"
 
 msgid "Lega-Shabunda"
-msgstr ""
+msgstr "Lega-Shabunda"
 
 msgid "Lendu"
-msgstr ""
+msgstr "Lendu"
 
 msgid "Lezghian"
-msgstr ""
+msgstr "Lezghian"
 
 msgid "Li'o"
-msgstr ""
+msgstr "Li'o"
 
 msgid "Liberia Kpelle"
-msgstr ""
+msgstr "Liberia Kpelle"
 
 msgid "Ligurian"
-msgstr ""
+msgstr "Liguryjski"
 
 msgid "Limbu"
-msgstr ""
+msgstr "Limbu"
 
 msgid "Limburgan"
-msgstr ""
+msgstr "Limburgan"
 
 msgid "Lingala"
-msgstr ""
+msgstr "Lingala"
 
 msgid "Lingao"
-msgstr ""
+msgstr "Lingao"
 
 msgid "Lipo"
-msgstr ""
+msgstr "Lipo"
 
 msgid "Lisu"
-msgstr ""
+msgstr "Lisu"
 
 msgid "Lithuanian"
 msgstr "Litewski"
 
 msgid "Liujiang Zhuang"
-msgstr ""
+msgstr "Liujiang Zhuang"
 
 msgid "Liuqian Zhuang"
-msgstr ""
+msgstr "Liuqian Zhuang"
 
 msgid "Lobi"
-msgstr ""
+msgstr "Lobi"
 
 msgid "Logooli"
-msgstr ""
+msgstr "Logooli"
 
 msgid "Logudorese Sardinian"
-msgstr ""
+msgstr "Logudorese sardyński"
 
 msgid "Lolopo"
-msgstr ""
+msgstr "Lolopo"
 
 msgid "Lombard"
-msgstr ""
+msgstr "Lombard"
 
 msgid "Lomwe"
-msgstr ""
+msgstr "Lomwe"
 
 msgid "Lozi"
-msgstr ""
+msgstr "Lozi"
 
 msgid "Luba-Lulua"
-msgstr ""
+msgstr "Luba-Lulua"
 
 msgid "Luchazi"
-msgstr ""
+msgstr "Luchazi"
 
 msgid "Lugbara"
-msgstr ""
+msgstr "Lugbara"
 
 msgid "Luguru"
-msgstr ""
+msgstr "Luguru"
 
 msgid "Lunda"
-msgstr ""
+msgstr "Lunda"
 
 msgid "Luo (Kenya and Tanzania)"
-msgstr ""
+msgstr "Luo (Kenia i Tanzania)"
 
 msgid "Lushai"
-msgstr ""
+msgstr "Lushai"
 
 msgid "Luvale"
-msgstr ""
+msgstr "Luvale"
 
 msgid "Luxembourgish"
-msgstr ""
+msgstr "Luksemburski"
 
 msgid "Luyia"
-msgstr ""
+msgstr "Luyia"
 
 msgid "Lü"
-msgstr ""
+msgstr "Lü"
 
 msgid "Ma'di"
-msgstr ""
+msgstr "Ma'di"
 
 msgid "Maasina Fulfulde"
-msgstr ""
+msgstr "Maasina Fulfulde"
 
 msgid "Maay"
-msgstr ""
+msgstr "Maay"
 
 msgid "Maba (Chad)"
-msgstr ""
+msgstr "Maba (Czad)"
 
 msgid "Maba (Indonesia)"
-msgstr ""
+msgstr "Maba (Indonezja)"
 
 msgid "Macedo-Romanian"
-msgstr ""
+msgstr "Macedońsko-rumuński"
 
 msgid "Macedonian"
 msgstr "Macedoński"
 
 msgid "Machame"
-msgstr ""
+msgstr "Machame"
 
 msgid "Madi"
-msgstr ""
+msgstr "Madi"
 
 msgid "Madurese"
-msgstr ""
+msgstr "Madurese"
 
 msgid "Magahi"
-msgstr ""
+msgstr "Magahi"
 
 msgid "Maguindanaon"
-msgstr ""
+msgstr "Maguindanaon"
 
 msgid "Mahou"
-msgstr ""
+msgstr "Mahou"
 
 msgid "Mainfränkisch"
-msgstr ""
+msgstr "Mainfränkisch"
 
 msgid "Maithili"
-msgstr ""
+msgstr "Maithili"
 
 msgid "Makasar"
-msgstr ""
+msgstr "Makasar"
 
 msgid "Makassar Malay"
-msgstr ""
+msgstr "Makassar Malay"
 
 msgid "Makhuwa"
-msgstr ""
+msgstr "Makhuwa"
 
 msgid "Makhuwa-Marrevone"
-msgstr ""
+msgstr "Makhuwa-Marrevone"
 
 msgid "Makhuwa-Meetto"
-msgstr ""
+msgstr "Makhuwa-Meetto"
 
 msgid "Makhuwa-Saka"
-msgstr ""
+msgstr "Makhuwa-Saka"
 
 msgid "Makhuwa-Shirima"
-msgstr ""
+msgstr "Makhuwa-Shirima"
 
 msgid "Makonde"
-msgstr ""
+msgstr "Makonde"
 
 msgid "Malagasy"
 msgstr "Madagaskar"
 
 msgid "Malawi Lomwe"
-msgstr ""
+msgstr "Malawi Lomwe"
 
 msgid "Malawi Sena"
-msgstr ""
+msgstr "Malawi Sena"
 
 msgid "Malay"
 msgstr "Malajski"
 
 msgid "Malayalam"
-msgstr ""
+msgstr "Malajalam"
 
 msgid "Malayic Dayak"
-msgstr ""
+msgstr "Malajski Dayak"
 
 msgid "Maltese"
 msgstr "Maltański"
 
 msgid "Malvi"
-msgstr ""
+msgstr "Malvi"
 
 msgid "Mam"
-msgstr ""
+msgstr "Mam"
 
 msgid "Mamara Senoufo"
-msgstr ""
+msgstr "Mamara Senoufo"
 
 msgid "Mambwe-Lungu"
-msgstr ""
+msgstr "Mambwe-Lungu"
 
 msgid "Manado Malay"
-msgstr ""
+msgstr "Manado Malay"
 
 msgid "Manchu"
-msgstr ""
+msgstr "Manchu"
 
 msgid "Mandar"
-msgstr ""
+msgstr "Mandar"
 
 msgid "Mandaya"
-msgstr ""
+msgstr "Mandaya"
 
 msgid "Mandeali"
-msgstr ""
+msgstr "Mandeali"
 
 msgid "Mandingo"
-msgstr ""
+msgstr "Mandingo"
 
 msgid "Mandinka"
-msgstr ""
+msgstr "Mandinka"
 
 msgid "Mandjak"
-msgstr ""
+msgstr "Mandjak"
 
 msgid "Manga Kanuri"
-msgstr ""
+msgstr "Manga Kanuri"
 
 msgid "Mangbetu"
-msgstr ""
+msgstr "Mangbetu"
 
 msgid "Manggarai"
-msgstr ""
+msgstr "Manggarai"
 
 msgid "Manipuri"
-msgstr ""
+msgstr "Manipuri"
 
 msgid "Mano"
-msgstr ""
+msgstr "Mano"
 
 msgid "Manya"
-msgstr ""
+msgstr "Manya"
 
 msgid "Manyika"
-msgstr ""
+msgstr "Manyika"
 
 msgid "Maranao"
-msgstr ""
+msgstr "Maranao"
 
 msgid "Marathi"
-msgstr ""
+msgstr "Marathi"
 
 msgid "Marenje"
-msgstr ""
+msgstr "Marenje"
 
 msgid "Marwari"
-msgstr ""
+msgstr "Marwari"
 
 msgid "Marwari (India)"
-msgstr ""
+msgstr "Marwari (Indie)"
 
 msgid "Masaaba"
-msgstr ""
+msgstr "Masaaba"
 
 msgid "Masai"
-msgstr ""
+msgstr "Masaj"
 
 msgid "Masalit"
-msgstr ""
+msgstr "Masalit"
 
 msgid "Masbatenyo"
-msgstr ""
+msgstr "Masbatenyo"
 
 msgid "Masikoro Malagasy"
-msgstr ""
+msgstr "Masikoro malgaski"
 
 msgid "Mawchi"
-msgstr ""
+msgstr "Mawchi"
 
 msgid "Maxi Gbe"
-msgstr ""
+msgstr "Maxi Gbe"
 
 msgid "Mazanderani"
-msgstr ""
+msgstr "Mazanderani"
 
 msgid "Mbandja"
-msgstr ""
+msgstr "Mbandja"
 
 msgid "Mbangala"
-msgstr ""
+msgstr "Mbangala"
 
 msgid "Mbangi"
-msgstr ""
+msgstr "Mbangi"
 
 msgid "Mbunda"
-msgstr ""
+msgstr "Mbunda"
 
 msgid "Mende (Papua New Guinea)"
-msgstr ""
+msgstr "Mende (Papua-Nowa Gwinea)"
 
 msgid "Mende (Sierra Leone)"
-msgstr ""
+msgstr "Mende (Sierra Leone)"
 
 msgid "Mennonite Low German"
-msgstr ""
+msgstr "Niski niemiecki mennonicki"
 
 msgid "Meru"
-msgstr ""
+msgstr "Meru"
 
 msgid "Merwari"
-msgstr ""
+msgstr "Merwari"
 
 msgid "Mewari"
-msgstr ""
+msgstr "Mewari"
 
 msgid "Mewati"
-msgstr ""
+msgstr "Mewati"
 
 msgid "Middle Newar"
-msgstr ""
+msgstr "Środkowy Newar"
 
 msgid "Min Zhong Chinese"
-msgstr ""
+msgstr "Chińczyk Min Zhong"
 
 msgid "Minangkabau"
-msgstr ""
+msgstr "Minangkabau"
 
 msgid "Mingrelian"
-msgstr ""
+msgstr "Mingrelian"
 
 msgid "Miraya Bikol"
-msgstr ""
+msgstr "Miraya Bikol"
 
 msgid "Mising"
-msgstr ""
+msgstr "Mising"
 
 msgid "Moba"
-msgstr ""
+msgstr "Moba"
 
 msgid "Mochi"
-msgstr ""
+msgstr "Mochi"
 
 msgid "Moksha"
-msgstr ""
+msgstr "Moksha"
 
 msgid "Mon"
-msgstr ""
+msgstr "Mon"
 
 msgid "Mongo"
-msgstr ""
+msgstr "Mongo"
 
 msgid "Mongolian"
 msgstr "Mongolski"
 
 msgid "Morisyen"
-msgstr ""
+msgstr "Morisyen"
 
 msgid "Mossi"
-msgstr ""
+msgstr "Mossi"
 
 msgid "Mumuye"
-msgstr ""
+msgstr "Mumuye"
 
 msgid "Muna"
-msgstr ""
+msgstr "Muna"
 
 msgid "Munda"
-msgstr ""
+msgstr "Munda"
 
 msgid "Mundari"
-msgstr ""
+msgstr "Mundari"
 
 msgid "Muong"
-msgstr ""
+msgstr "Muong"
 
 msgid "Musey"
-msgstr ""
+msgstr "Musey"
 
 msgid "Musi"
-msgstr ""
+msgstr "Musi"
 
 msgid "Mwaghavul"
-msgstr ""
+msgstr "Mwaghavul"
 
 msgid "Mwera (Chimwera)"
-msgstr ""
+msgstr "Mwera (Chimwera)"
 
 msgid "Mwera (Nyasa)"
-msgstr ""
+msgstr "Mwera (Nyasa)"
 
 msgid "Naba"
-msgstr ""
+msgstr "Naba"
 
 msgid "Nage"
-msgstr ""
+msgstr "Nage"
 
 msgid "Nambya"
-msgstr ""
+msgstr "Nambya"
 
 msgid "Nande"
-msgstr ""
+msgstr "Nande"
 
 msgid "Nandi"
-msgstr ""
+msgstr "Nandi"
 
 msgid "Naxi"
-msgstr ""
+msgstr "Naxi"
 
 msgid "Ndau"
-msgstr ""
+msgstr "Ndau"
 
 msgid "Ndonde Hamba"
-msgstr ""
+msgstr "Ndonde Hamba"
 
 msgid "Ndonga"
-msgstr ""
+msgstr "Ndonga"
 
 msgid "Ndzwani Comorian"
-msgstr ""
+msgstr "Ndzwani Comorian"
 
 msgid "Neapolitan"
-msgstr ""
+msgstr "Neapolitański"
 
 msgid "Negeri Sembilan Malay"
-msgstr ""
+msgstr "Negeri Sembilan Malay"
 
 msgid "Nepali"
-msgstr ""
+msgstr "Nepalski"
 
 msgid "Newari"
-msgstr ""
+msgstr "Newari"
 
 msgid "Ngaju"
-msgstr ""
+msgstr "Ngaju"
 
 msgid "Ngambay"
-msgstr ""
+msgstr "Ngambay"
 
 msgid "Ngandyera"
-msgstr ""
+msgstr "Ngandyera"
 
 msgid "Ngazidja Comorian"
-msgstr ""
+msgstr "Ngazidja Comorian"
 
 msgid "Ngbaka"
-msgstr ""
+msgstr "Ngbaka"
 
 msgid "Ngiemboon"
-msgstr ""
+msgstr "Ngiemboon"
 
 msgid "Ngundu"
-msgstr ""
+msgstr "Ngundu"
 
 msgid "Nias"
-msgstr ""
+msgstr "Nias"
 
 msgid "Nigerian Fulfulde"
-msgstr ""
+msgstr "Nigeryjski Fulfulde"
 
 msgid "Nigerian Pidgin"
-msgstr ""
+msgstr "Nigeryjski Pidgin"
 
 msgid "Nilamba"
-msgstr ""
+msgstr "Nilamba"
 
 msgid "Nimadi"
-msgstr ""
+msgstr "Nimadi"
 
 msgid "Nkangala"
-msgstr ""
+msgstr "Nkangala"
 
 msgid "Nobiin"
-msgstr ""
+msgstr "Nobiin"
 
 msgid "Nong Zhuang"
-msgstr ""
+msgstr "Nong Zhuang"
 
 msgid "North Moluccan Malay"
-msgstr ""
+msgstr "Północnomolukański malajski"
 
 msgid "North Ndebele"
-msgstr ""
+msgstr "Północ Ndebele"
 
 msgid "Northeastern Dinka"
-msgstr ""
+msgstr "Północno-wschodni Dinka"
 
 msgid "Northeastern Thai"
-msgstr ""
+msgstr "Północno-wschodni tajski"
 
 msgid "Northern Conchucos Ancash Quechua"
-msgstr ""
+msgstr "Północne Conchucos Ancash Quechua"
 
 msgid "Northern Dong"
-msgstr ""
+msgstr "Północny Dong"
 
 msgid "Northern Gondi"
-msgstr ""
+msgstr "Gondi północne"
 
 msgid "Northern Hindko"
-msgstr ""
+msgstr "Hindko północne"
 
 msgid "Northern Khmer"
-msgstr ""
+msgstr "Północni Khmerowie"
 
 msgid "Northern Kissi"
-msgstr ""
+msgstr "Północny Kissi"
 
 msgid "Northern Kurdish"
-msgstr ""
+msgstr "Północny kurdyjski"
 
 msgid "Northern Luri"
-msgstr ""
+msgstr "Północna Luri"
 
 msgid "Northern Min"
-msgstr ""
+msgstr "Northern Min"
 
 msgid "Northern Ngbandi"
-msgstr ""
+msgstr "Północne Ngbandi"
 
 msgid "Northern Oaxaca Nahuatl"
-msgstr ""
+msgstr "Północna Oaxaca Nahuatl"
 
 msgid "Northern Pashto"
-msgstr ""
+msgstr "Północny paszto"
 
 msgid "Northern Qiandong Miao"
-msgstr ""
+msgstr "Północny Qiandong Miao"
 
 msgid "Northern Thai"
-msgstr ""
+msgstr "Północny tajski"
 
 msgid "Northern Uzbek"
-msgstr ""
+msgstr "Północny Uzbek"
 
 msgid "Northwest Gbaya"
-msgstr ""
+msgstr "Northwest Gbaya"
 
 msgid "Norwegian"
 msgstr "Norweski"
@@ -1760,175 +1760,175 @@ msgid "Norwegian Nynorsk"
 msgstr "Norweski nynorsk"
 
 msgid "Nsenga"
-msgstr ""
+msgstr "Nsenga"
 
 msgid "Nuer"
-msgstr ""
+msgstr "Nuer"
 
 msgid "Nung (Viet Nam)"
-msgstr ""
+msgstr "Nung (Wietnam)"
 
 msgid "Nupe-Nupe-Tako"
-msgstr ""
+msgstr "Nupe-Nupe-Tako"
 
 msgid "Nyakyusa-Ngonde"
-msgstr ""
+msgstr "Nyakyusa-Ngonde"
 
 msgid "Nyambo"
-msgstr ""
+msgstr "Nyambo"
 
 msgid "Nyamwezi"
-msgstr ""
+msgstr "Nyamwezi"
 
 msgid "Nyaneka"
-msgstr ""
+msgstr "Nyaneka"
 
 msgid "Nyankole"
-msgstr ""
+msgstr "Nyankole"
 
 msgid "Nyaturu"
-msgstr ""
+msgstr "Nyaturu"
 
 msgid "Nyeu"
-msgstr ""
+msgstr "Nyeu"
 
 msgid "Nyiha (Tanzania)"
-msgstr ""
+msgstr "Nyiha (Tanzania)"
 
 msgid "Nyindu"
-msgstr ""
+msgstr "Nyindu"
 
 msgid "Nyole"
-msgstr ""
+msgstr "Nyole"
 
 msgid "Nyore"
-msgstr ""
+msgstr "Nyore"
 
 msgid "Nyoro"
-msgstr ""
+msgstr "Nyoro"
 
 msgid "Nyungwe"
-msgstr ""
+msgstr "Nyungwe"
 
 msgid "Nzima"
-msgstr ""
+msgstr "Nzima"
 
 msgid "Occitan"
-msgstr ""
+msgstr "Oksytański"
 
 msgid "Odia"
-msgstr ""
+msgstr "Odia"
 
 msgid "Ogbah"
-msgstr ""
+msgstr "Ogbah"
 
 msgid "Oriya"
-msgstr ""
+msgstr "Oriya"
 
 msgid "Oromo"
-msgstr ""
+msgstr "Oromo"
 
 msgid "Osing"
-msgstr ""
+msgstr "Osing"
 
 msgid "Ossetian"
-msgstr ""
+msgstr "Osetyjski"
 
 msgid "Pahari-Potwari"
-msgstr ""
+msgstr "Pahari-Potwari"
 
 msgid "Pampanga"
-msgstr ""
+msgstr "Pampanga"
 
 msgid "Pangasinan"
-msgstr ""
+msgstr "Pangasinan"
 
 msgid "Panjabi"
-msgstr ""
+msgstr "Panjabi"
 
 msgid "Papiamento"
-msgstr ""
+msgstr "Papiamento"
 
 msgid "Papiamento - Aruba"
-msgstr ""
+msgstr "Papiamento - Aruba"
 
 msgid "Papiamentu - Curaçao (Bonaire)"
-msgstr ""
+msgstr "Papiamentu - Curaçao (Bonaire)"
 
 msgid "Papuan Malay"
-msgstr ""
+msgstr "Papuaski malajski"
 
 msgid "Paraguayan Guaraní"
-msgstr ""
+msgstr "Paragwajski Guaraní"
 
 msgid "Parauk"
-msgstr ""
+msgstr "Parauk"
 
 msgid "Pare"
-msgstr ""
+msgstr "Pare"
 
 msgid "Parkari Koli"
-msgstr ""
+msgstr "Parkari Koli"
 
 msgid "Parsi"
-msgstr ""
+msgstr "Parsi"
 
 msgid "Parsi-Dari"
-msgstr ""
+msgstr "Parsi-Dari"
 
 msgid "Pashto"
 msgstr "Paszto"
 
 msgid "Pattani Malay"
-msgstr ""
+msgstr "Pattani Malay"
 
 msgid "Pauri Bareli"
-msgstr ""
+msgstr "Pauri Bareli"
 
 msgid "Pedi"
-msgstr ""
+msgstr "Pedi"
 
 msgid "Pelende"
-msgstr ""
+msgstr "Pelende"
 
 msgid "Pengo"
-msgstr ""
+msgstr "Pengo"
 
 msgid "Pennsylvania German"
-msgstr ""
+msgstr "Niemiecki Pensylwania"
 
 msgid "Peripheral Mongolian"
-msgstr ""
+msgstr "Peryferyjny mongolski"
 
 msgid "Persian"
 msgstr "Perski"
 
 msgid "Phende"
-msgstr ""
+msgstr "Phende"
 
 msgid "Phu Thai"
-msgstr ""
+msgstr "Phu Thai"
 
 msgid "Phuan"
-msgstr ""
+msgstr "Phuan"
 
 msgid "Picard"
-msgstr ""
+msgstr "Picard"
 
 msgid "Piemontese"
-msgstr ""
+msgstr "Piemontese"
 
 msgid "Plateau Malagasy"
-msgstr ""
+msgstr "Plateau Malagasy"
 
 msgid "Pnar"
-msgstr ""
+msgstr "Pnar"
 
 msgid "Polish"
 msgstr "Polski"
 
 msgid "Pontic"
-msgstr ""
+msgstr "Pontic"
 
 msgid "Portuguese"
 msgstr "Portugalski"
@@ -1940,13 +1940,13 @@ msgid "Portuguese - Portugal"
 msgstr "Portugalski - Portugalia"
 
 msgid "Powari"
-msgstr ""
+msgstr "Powari"
 
 msgid "Pulaar "
-msgstr ""
+msgstr "Pulaar "
 
 msgid "Pular"
-msgstr ""
+msgstr "Pular"
 
 msgid "Punjabi"
 msgstr "Pendżabski"
@@ -1955,217 +1955,217 @@ msgid "Punjabi - Arab"
 msgstr "Pendżabski - Arabski"
 
 msgid "Puno Quechua"
-msgstr ""
+msgstr "Puno Quechua"
 
 msgid "Puxian Min"
-msgstr ""
+msgstr "Puxian Min"
 
 msgid "Pwo Eastern Karen"
-msgstr ""
+msgstr "Pwo Eastern Karen"
 
 msgid "Pökoot"
-msgstr ""
+msgstr "Pökoot"
 
 msgid "Qashqa'i"
-msgstr ""
+msgstr "Qashqa'i"
 
 msgid "Quechua "
-msgstr ""
+msgstr "Quechua "
 
 msgid "Rabha"
-msgstr ""
+msgstr "Rabha"
 
 msgid "Rajasthani"
-msgstr ""
+msgstr "Radżastani"
 
 msgid "Rajbanshi"
-msgstr ""
+msgstr "Rajbanshi"
 
 msgid "Rakhine"
-msgstr ""
+msgstr "Arakan"
 
 msgid "Rana Tharu"
-msgstr ""
+msgstr "Rana Tharu"
 
 msgid "Rangpuri"
-msgstr ""
+msgstr "Rangpuri"
 
 msgid "Rathawi"
-msgstr ""
+msgstr "Rathawi"
 
 msgid "Rejang"
-msgstr ""
+msgstr "Rejang"
 
 msgid "Reunion Creole"
-msgstr ""
+msgstr "Reunion Creole"
 
 msgid "Riverain Sango"
-msgstr ""
+msgstr "Riverain Sango"
 
 msgid "Rohingya"
-msgstr ""
+msgstr "Rohingya"
 
 msgid "Romagnol"
-msgstr ""
+msgstr "Romagnol"
 
 msgid "Romanian"
 msgstr "Rumuński"
 
 msgid "Romany"
-msgstr ""
+msgstr "Romowie"
 
 msgid "Ronga"
-msgstr ""
+msgstr "Ronga"
 
 msgid "Ruching Palaung"
-msgstr ""
+msgstr "Ruching Palaung"
 
 msgid "Rundi"
-msgstr ""
+msgstr "Rundi"
 
 msgid "Russian"
 msgstr "Rosyjski"
 
 msgid "Ruund"
-msgstr ""
+msgstr "Ruund"
 
 msgid "S'gaw Karen"
-msgstr ""
+msgstr "S'gaw Karen"
 
 msgid "Saamia"
-msgstr ""
+msgstr "Saamia"
 
 msgid "Sabah Malay"
-msgstr ""
+msgstr "Sabah Malay"
 
 msgid "Sadri"
-msgstr ""
+msgstr "Sadri"
 
 msgid "Sakalava Malagasy"
-msgstr ""
+msgstr "Sakalava Malagasy"
 
 msgid "Sambalpuri"
-msgstr ""
+msgstr "Sambalpuri"
 
 msgid "Samoan"
-msgstr ""
+msgstr "Samoańczyk"
 
 msgid "Samogitian"
-msgstr ""
+msgstr "Żmudzki"
 
 msgid "San Salvador Kongo"
-msgstr ""
+msgstr "San Salvador Kongo"
 
 msgid "Sanga (Democratic Republic of Congo)"
-msgstr ""
+msgstr "Sanga (Demokratyczna Republika Konga)"
 
 msgid "Sangil"
-msgstr ""
+msgstr "Sangil"
 
 msgid "Sangir"
-msgstr ""
+msgstr "Sangir"
 
 msgid "Sango"
-msgstr ""
+msgstr "Sango"
 
 msgid "Sankaran Maninka"
-msgstr ""
+msgstr "Sankaran Maninka"
 
 msgid "Santa María La Alta Nahuatl"
-msgstr ""
+msgstr "Santa María La Alta Nahuatl"
 
 msgid "Santali"
-msgstr ""
+msgstr "Santali"
 
 msgid "Saraiki"
-msgstr ""
+msgstr "Saraiki"
 
 msgid "Sardinian"
-msgstr ""
+msgstr "Sardyńczyk"
 
 msgid "Sasak"
-msgstr ""
+msgstr "Sasak"
 
 msgid "Saya"
-msgstr ""
+msgstr "Saya"
 
 msgid "Scots"
-msgstr ""
+msgstr "Szkoci"
 
 msgid "Scottish Gaelic"
 msgstr "Szkocki gaelicki"
 
 msgid "Sebat Bet Gurage"
-msgstr ""
+msgstr "Sebat Bet Gurage"
 
 msgid "Sehwi"
-msgstr ""
+msgstr "Sehwi"
 
 msgid "Sena"
-msgstr ""
+msgstr "Sena"
 
 msgid "Serbian"
 msgstr "Serbski"
 
 msgid "Serbo-Croatian"
-msgstr ""
+msgstr "Serbsko-chorwacki"
 
 msgid "Serer"
-msgstr ""
+msgstr "Serer"
 
 msgid "Shambala"
-msgstr ""
+msgstr "Shambala"
 
 msgid "Shan"
-msgstr ""
+msgstr "Shan"
 
 msgid "Shekhawati"
-msgstr ""
+msgstr "Shekhawati"
 
 msgid "Shelta"
-msgstr ""
+msgstr "Shelta"
 
 msgid "Shi"
-msgstr ""
+msgstr "Shi"
 
 msgid "Shina"
-msgstr ""
+msgstr "Shina"
 
 msgid "Shona"
-msgstr ""
+msgstr "Shona"
 
 msgid "Sichuan Yi"
-msgstr ""
+msgstr "Sichuan Yi"
 
 msgid "Sicilian"
-msgstr ""
+msgstr "Sycylijczyk"
 
 msgid "Sidamo"
-msgstr ""
+msgstr "Sidamo"
 
 msgid "Sierra Negra Nahuatl"
-msgstr ""
+msgstr "Sierra Negra Nahuatl"
 
 msgid "Silesian"
-msgstr ""
+msgstr "śląski"
 
 msgid "Siliput"
-msgstr ""
+msgstr "Siliput"
 
 msgid "Silt'e"
-msgstr ""
+msgstr "Silt'e"
 
 msgid "Sindhi"
-msgstr ""
+msgstr "Sindhi"
 
 msgid "Sinhalese"
 msgstr "Syngaleski"
 
 msgid "Sinte Romani"
-msgstr ""
+msgstr "Sinte Romani"
 
 msgid "Sirmauri"
-msgstr ""
+msgstr "Sirmauri"
 
 msgid "Slovak"
 msgstr "Słowacki"
@@ -2174,85 +2174,85 @@ msgid "Slovenian"
 msgstr "Słoweński"
 
 msgid "Soga"
-msgstr ""
+msgstr "Soga"
 
 msgid "Somali"
-msgstr ""
+msgstr "Somalijski"
 
 msgid "Songe"
-msgstr ""
+msgstr "Songe"
 
 msgid "Soninke"
-msgstr ""
+msgstr "Soninke"
 
 msgid "Sora"
-msgstr ""
+msgstr "Sora"
 
 msgid "Sotho"
-msgstr ""
+msgstr "Sotho"
 
 msgid "South Bolivian Quechua"
-msgstr ""
+msgstr "Południowo-boliwijski keczua"
 
 msgid "South Central Dinka"
-msgstr ""
+msgstr "Południowo-środkowy Dinka"
 
 msgid "South Ndebele"
-msgstr ""
+msgstr "Południowy Ndebele"
 
 msgid "Southeastern Dinka"
-msgstr ""
+msgstr "Południowo-wschodni Dinka"
 
 msgid "Southeastern Puebla Nahuatl"
-msgstr ""
+msgstr "Południowo-wschodnia Puebla Nahuatl"
 
 msgid "Southern Bai"
-msgstr ""
+msgstr "Southern Bai"
 
 msgid "Southern Conchucos Ancash Quechua"
-msgstr ""
+msgstr "Południowe Conchucos Ancash Quechua"
 
 msgid "Southern Dagaare"
-msgstr ""
+msgstr "Południowe Dagaare"
 
 msgid "Southern Dong"
-msgstr ""
+msgstr "Southern Dong"
 
 msgid "Southern Hindko"
-msgstr ""
+msgstr "Południowy Hindko"
 
 msgid "Southern Kurdish"
-msgstr ""
+msgstr "Południowy kurdyjski"
 
 msgid "Southern Lolopo"
-msgstr ""
+msgstr "Południowe Lolopo"
 
 msgid "Southern Luri"
-msgstr ""
+msgstr "Południowe Luri"
 
 msgid "Southern Nago"
-msgstr ""
+msgstr "Południowe Nago"
 
 msgid "Southern Nisu"
-msgstr ""
+msgstr "Południowe Nisu"
 
 msgid "Southern Qiandong Miao"
-msgstr ""
+msgstr "Południowy Qiandong Miao"
 
 msgid "Southern Sama"
-msgstr ""
+msgstr "Południowa Sama"
 
 msgid "Southern Sorsoganon"
-msgstr ""
+msgstr "Południowy Sorsoganon"
 
 msgid "Southern Thai"
-msgstr ""
+msgstr "Południowa Tajlandia"
 
 msgid "Southern Uzbek"
-msgstr ""
+msgstr "Południowy Uzbek"
 
 msgid "Southwestern Dinka"
-msgstr ""
+msgstr "Południowo-zachodni Dinka"
 
 msgid "Spanish"
 msgstr "Hiszpański"
@@ -2321,154 +2321,154 @@ msgid "Standard Arabic"
 msgstr "Arabski standardowy"
 
 msgid "Standard Estonian"
-msgstr ""
+msgstr "Standardowy estoński"
 
 msgid "Standard Latvian"
-msgstr ""
+msgstr "Standardowy język łotewski"
 
 msgid "Sui"
-msgstr ""
+msgstr "Sui"
 
 msgid "Sukuma"
-msgstr ""
+msgstr "Sukuma"
 
 msgid "Sumbawa"
-msgstr ""
+msgstr "Sumbawa"
 
 msgid "Sundanese"
 msgstr "Sundański"
 
 msgid "Supyire Senoufo"
-msgstr ""
+msgstr "Supyire Senoufo"
 
 msgid "Surgujia"
-msgstr ""
+msgstr "Surgujia"
 
 msgid "Surigaonon"
-msgstr ""
+msgstr "Surigaonon"
 
 msgid "Surjapuri"
-msgstr ""
+msgstr "Surjapuri"
 
 msgid "Susu"
-msgstr ""
+msgstr "Susu"
 
 msgid "Swabian"
-msgstr ""
+msgstr "Szwabski"
 
 msgid "Swahili"
 msgstr "Suahili"
 
 msgid "Swati"
-msgstr ""
+msgstr "Swati"
 
 msgid "Swedish"
 msgstr "Szwedzki"
 
 msgid "Swiss German"
-msgstr ""
+msgstr "Szwajcarski niemiecki"
 
 msgid "Sylheti"
-msgstr ""
+msgstr "Sylheti"
 
 msgid "Taabwa"
-msgstr ""
+msgstr "Taabwa"
 
 msgid "Tachawit"
-msgstr ""
+msgstr "Tachawit"
 
 msgid "Tachelhit"
-msgstr ""
+msgstr "Tachelhit"
 
 msgid "Tae'"
-msgstr ""
+msgstr "Tae'"
 
 msgid "Tagalog"
 msgstr "Tagalog"
 
 msgid "Tai Dón"
-msgstr ""
+msgstr "Tai Dón"
 
 msgid "Tai Nüa"
-msgstr ""
+msgstr "Tai Nüa"
 
 msgid "Taita"
-msgstr ""
+msgstr "Taita"
 
 msgid "Tajik"
-msgstr ""
+msgstr "Tadżyk"
 
 msgid "Talysh"
-msgstr ""
+msgstr "Talysh"
 
 msgid "Tamashek"
-msgstr ""
+msgstr "Tamashek"
 
 msgid "Tamasheq"
-msgstr ""
+msgstr "Tamasheq"
 
 msgid "Tamil"
 msgstr "Tamil"
 
 msgid "Tandroy-Mahafaly Malagasy"
-msgstr ""
+msgstr "Tandroy-Mahafaly malgaski"
 
 msgid "Tanosy Malagasy"
-msgstr ""
+msgstr "Tanosy Malagasy"
 
 msgid "Tarifit"
-msgstr ""
+msgstr "Tarifit"
 
 msgid "Tarok"
-msgstr ""
+msgstr "Tarok"
 
 msgid "Tatar"
-msgstr ""
+msgstr "Tatar"
 
 msgid "Tausug"
-msgstr ""
+msgstr "Tausug"
 
 msgid "Tavoyan"
-msgstr ""
+msgstr "Tavoyan"
 
 msgid "Tawallammat Tamajaq"
-msgstr ""
+msgstr "Tawallammat Tamajaq"
 
 msgid "Tayart Tamajeq"
-msgstr ""
+msgstr "Tayart Tamajeq"
 
 msgid "Tee"
-msgstr ""
+msgstr "Koszulka"
 
 msgid "Tem"
-msgstr ""
+msgstr "Tem"
 
 msgid "Tenggarong Kutai Malay"
-msgstr ""
+msgstr "Tenggarong Kutai Malay"
 
 msgid "Terik"
-msgstr ""
+msgstr "Terik"
 
 msgid "Tesaka Malagasy"
-msgstr ""
+msgstr "Tesaka Malagasy"
 
 msgid "Teso"
-msgstr ""
+msgstr "Teso"
 
 msgid "Tetela"
-msgstr ""
+msgstr "Tetela"
 
 msgid "Tetum"
-msgstr ""
+msgstr "Tetum"
 
 msgid "Tetun Dili"
-msgstr ""
+msgstr "Tetun Dili"
 
 msgid "Tewe"
-msgstr ""
+msgstr "Tewe"
 
 msgid "Thado Chin"
-msgstr ""
+msgstr "Thado Chin"
 
 msgid "Thai"
 msgstr "Tajski"
@@ -2477,299 +2477,299 @@ msgid "Tibetan"
 msgstr "Tybetański"
 
 msgid "Tigre"
-msgstr ""
+msgstr "Tigre"
 
 msgid "Tigrinya"
-msgstr ""
+msgstr "Tigrinya"
 
 msgid "Timne"
-msgstr ""
+msgstr "Timne"
 
 msgid "Tiv"
-msgstr ""
+msgstr "Tiv"
 
 msgid "Tobagonian Creole English"
-msgstr ""
+msgstr "Toboński kreolski angielski"
 
 msgid "Tolaki"
-msgstr ""
+msgstr "Tolaki"
 
 msgid "Tonga"
 msgstr "Tonga"
 
 msgid "Tonga (Zambia)"
-msgstr ""
+msgstr "Tonga (Zambia)"
 
 msgid "Tooro"
-msgstr ""
+msgstr "Tooro"
 
 msgid "Toraja-Sa'dan"
-msgstr ""
+msgstr "Toraja-Sa'dan"
 
 msgid "Tshiluba"
-msgstr ""
+msgstr "Tshiluba"
 
 msgid "Tsimihety Malagasy"
-msgstr ""
+msgstr "Tsimihety malgaski"
 
 msgid "Tsonga"
-msgstr ""
+msgstr "Tsonga"
 
 msgid "Tswa"
-msgstr ""
+msgstr "Tswa"
 
 msgid "Tulu"
-msgstr ""
+msgstr "Tulu"
 
 msgid "Tumbuka"
-msgstr ""
+msgstr "Tumbuka"
 
 msgid "Turkana"
-msgstr ""
+msgstr "Turkana"
 
 msgid "Turkish"
 msgstr "Turecki"
 
 msgid "Tuvinian"
-msgstr ""
+msgstr "Tuwińczyk"
 
 msgid "Twents"
-msgstr ""
+msgstr "Twents"
 
 msgid "Twi"
-msgstr ""
+msgstr "Twi"
 
 msgid "Tzeltal"
-msgstr ""
+msgstr "Tzeltal"
 
 msgid "Tzotzil"
-msgstr ""
+msgstr "Tzotzil"
 
 msgid "Tày"
-msgstr ""
+msgstr "Tày"
 
 msgid "Udmurt"
-msgstr ""
+msgstr "Udmurt"
 
 msgid "Ukrainian"
 msgstr "Ukraiński"
 
 msgid "Umbundu"
-msgstr ""
+msgstr "Umbundu"
 
 msgid "Upper Saxon"
-msgstr ""
+msgstr "Górna Saksonia"
 
 msgid "Urdu"
 msgstr "Urdu"
 
 msgid "Urhobo"
-msgstr ""
+msgstr "Urhobo"
 
 msgid "Uyghur"
-msgstr ""
+msgstr "Ujgur"
 
 msgid "Uzbek"
-msgstr ""
+msgstr "Uzbek"
 
 msgid "Varhadi-Nagpuri"
-msgstr ""
+msgstr "Varhadi-Nagpuri"
 
 msgid "Varli"
-msgstr ""
+msgstr "Varli"
 
 msgid "Vasavi"
-msgstr ""
+msgstr "Vasavi"
 
 msgid "Venda"
-msgstr ""
+msgstr "Venda"
 
 msgid "Venetian"
-msgstr ""
+msgstr "Wenecki"
 
 msgid "Vietnamese"
 msgstr "Wietnamski"
 
 msgid "Vlax Romani"
-msgstr ""
+msgstr "Vlax Romani"
 
 msgid "Vunjo"
-msgstr ""
+msgstr "Vunjo"
 
 msgid "Wa"
-msgstr ""
+msgstr "Wa"
 
 msgid "Waci Gbe"
-msgstr ""
+msgstr "Waci Gbe"
 
 msgid "Wadiyara Koli"
-msgstr ""
+msgstr "Wadiyara Koli"
 
 msgid "Wagdi"
-msgstr ""
+msgstr "Wagdi"
 
 msgid "Walloon"
-msgstr ""
+msgstr "Walonia"
 
 msgid "Walungge"
-msgstr ""
+msgstr "Walungge"
 
 msgid "Wanga"
-msgstr ""
+msgstr "Wanga"
 
 msgid "Waray (Philippines)"
-msgstr ""
+msgstr "Waray (Filipiny)"
 
 msgid "Wasa"
-msgstr ""
+msgstr "Wasa"
 
 msgid "Waxianghua"
-msgstr ""
+msgstr "Waxianghua"
 
 msgid "Wayu"
-msgstr ""
+msgstr "Wayu"
 
 msgid "Wayuu"
-msgstr ""
+msgstr "Wayuu"
 
 msgid "Welsh"
 msgstr "Walijczyk"
 
 msgid "West Albay Bikol"
-msgstr ""
+msgstr "Zachodnia Albay Bikol"
 
 msgid "West Central Oromo"
-msgstr ""
+msgstr "Zachodnio-środkowy Oromo"
 
 msgid "West-Central Limba"
-msgstr ""
+msgstr "Zachodnio-środkowa Limba"
 
 msgid "Western Frisian"
-msgstr ""
+msgstr "Fryzyjski zachodni"
 
 msgid "Western Huasteca Nahuatl"
-msgstr ""
+msgstr "Zachodnia Huasteca Nahuatl"
 
 msgid "Western Magar"
-msgstr ""
+msgstr "Zachodni Magar"
 
 msgid "Western Maninkakan"
-msgstr ""
+msgstr "Zachodni Maninkakan"
 
 msgid "Western Muria"
-msgstr ""
+msgstr "Muria Zachodnia"
 
 msgid "Western Niger Fulfulde"
-msgstr ""
+msgstr "Zachodni Niger Fulfulde"
 
 msgid "Western Panjabi"
-msgstr ""
+msgstr "Western Panjabi"
 
 msgid "Western Tamang"
-msgstr ""
+msgstr "Zachodni Tamang"
 
 msgid "Western Xiangxi Miao"
-msgstr ""
+msgstr "Zachodnie Xiangxi Miao"
 
 msgid "Wolaytta"
-msgstr ""
+msgstr "Wolaytta"
 
 msgid "Wolof"
-msgstr ""
+msgstr "Wolof"
 
 msgid "Wu Chinese"
-msgstr ""
+msgstr "Chiński Wu"
 
 msgid "Wuding-Luquan Yi"
-msgstr ""
+msgstr "Wuding-Luquan Yi"
 
 msgid "Wusa Nasu"
-msgstr ""
+msgstr "Wusa Nasu"
 
 msgid "Wè Southern"
-msgstr ""
+msgstr "Wè Southern"
 
 msgid "Xaasongaxango"
-msgstr ""
+msgstr "Xaasongaxango"
 
 msgid "Xhosa"
 msgstr "Xhosa"
 
 msgid "Xiang"
-msgstr ""
+msgstr "Xiang"
 
 msgid "Yaka (Congo)"
-msgstr ""
+msgstr "Yaka (Kongo)"
 
 msgid "Yaka (Democratic Republic of Congo)"
-msgstr ""
+msgstr "Yaka (Demokratyczna Republika Konga)"
 
 msgid "Yakut"
-msgstr ""
+msgstr "Jakut"
 
 msgid "Yang Zhuang"
-msgstr ""
+msgstr "Yang Zhuang"
 
 msgid "Yao"
-msgstr ""
+msgstr "Yao"
 
 msgid "Yekhee"
-msgstr ""
+msgstr "Yekhee"
 
 msgid "Yemba"
-msgstr ""
+msgstr "Yemba"
 
 msgid "Yiddish"
-msgstr ""
+msgstr "Jidysz"
 
 msgid "Yom"
-msgstr ""
+msgstr "Jom"
 
 msgid "Yombe"
-msgstr ""
+msgstr "Yombe"
 
 msgid "Yongbei Zhuang"
-msgstr ""
+msgstr "Yongbei Zhuang"
 
 msgid "Yongnan Zhuang"
-msgstr ""
+msgstr "Yongnan Zhuang"
 
 msgid "Yoruba"
 msgstr "Yoruba"
 
 msgid "Youjiang Zhuang"
-msgstr ""
+msgstr "Youjiang Zhuang"
 
 msgid "Yucateco"
-msgstr ""
+msgstr "Yucateco"
 
 msgid "Yue Chinese"
-msgstr ""
+msgstr "Yue Chinese"
 
 msgid "Zaghawa"
-msgstr ""
+msgstr "Zaghawa"
 
 msgid "Zande"
-msgstr ""
+msgstr "Zande"
 
 msgid "Zapotec"
-msgstr ""
+msgstr "Zapotek"
 
 msgid "Zarma"
-msgstr ""
+msgstr "Zarma"
 
 msgid "Zaza"
-msgstr ""
+msgstr "Zaza"
 
 msgid "Zhuang"
-msgstr ""
+msgstr "Zhuang"
 
 msgid "Zigula"
-msgstr ""
+msgstr "Zigula"
 
 msgid "Zulu"
-msgstr ""
+msgstr "Zulu"
 
 msgid "Zuojiang Zhuang"
-msgstr ""
+msgstr "Zuojiang Zhuang"
 
