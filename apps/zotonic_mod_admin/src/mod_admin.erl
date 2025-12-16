@@ -388,6 +388,8 @@ current user. The current setting is stored in the sessionStorage with the key `
      observe_admin_edit_blocks/3,
      observe_module_ready/2,
      observe_rsc_update_done/2,
+     observe_acl_is_owner/2,
+
      event/2,
 
      do_link/5,
@@ -444,6 +446,7 @@ class_to_opts(Class) ->
     end.
 
 
+%% @doc Provide standard admin menu items.
 -spec observe_admin_menu(#admin_menu{}, Acc, z:context()) -> Result when
     Acc :: MenuItems,
     Result :: MenuItems,
@@ -531,7 +534,7 @@ admin_menu_content_queries(Context) ->
             CQ ++ [ #menu_separator{ parent = admin_content, sort = 10 } ]
     end.
 
-
+%% @doc Provide standard resource block types for admin edit page.
 -spec observe_admin_edit_blocks(#admin_edit_blocks{}, Acc, z:context()) -> Result when
     Acc :: BlockGroups,
     Result :: BlockGroups,
@@ -549,11 +552,14 @@ observe_admin_edit_blocks(#admin_edit_blocks{}, Menu, Context) ->
         | Menu
     ].
 
-
+%% @doc When the module is ready, flush the admin_menu depcache. The new module might
+%% add menu entries.
 -spec observe_module_ready(module_ready, z:context()) -> any().
 observe_module_ready(module_ready, Context) ->
     z_depcache:flush(admin_menu, Context).
 
+%% @doc After a resource is saved, ensure that all embedded resource references are
+%% reflected in refers connections.
 -spec observe_rsc_update_done(#rsc_update_done{}, z:context()) -> any().
 observe_rsc_update_done(#rsc_update_done{ action = Action, id = Id }, Context) when
     Action =:= insert;
@@ -566,6 +572,16 @@ observe_rsc_update_done(#rsc_update_done{ action = Action, id = Id }, Context) w
     end;
 observe_rsc_update_done(#rsc_update_done{}, _Context) ->
     ok.
+
+%% @doc If the given resource is a temporary resource then the current session
+%% can be the owner/creator of that resource. Even if the current session does not
+%% have a user. Example is the creation of remark resources by visitors.
+-spec observe_acl_is_owner(#acl_is_owner{}, z:context()) -> boolean() | undefined.
+observe_acl_is_owner(#acl_is_owner{ id = RscId }, Context) ->
+    case filter_temporary_rsc:is_creator(RscId, Context) of
+        true -> true;
+        false -> undefined
+    end.
 
 
 event(#postback_notify{message= <<"admin-insert-block">>}, Context) ->
@@ -1136,6 +1152,7 @@ context_language(Context) ->
             end
     end.
 
+-spec manage_schema(z_module_manager:manage_schema(), z:context()) -> #datamodel{}.
 manage_schema(_Version, Context) ->
     m_admin_note:install(Context),
     #datamodel{

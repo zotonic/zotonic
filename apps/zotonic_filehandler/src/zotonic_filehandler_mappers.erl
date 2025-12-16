@@ -363,10 +363,7 @@ compile_coffee(Application, SrcPath) ->
 run_build(Application, {make, Makefile}) ->
     zotonic_filehandler:terminal_notifier("Make: " ++ app_path(Application, Makefile)),
     CmdOpts = [
-        {env, [
-            {"APP_DIR", code:lib_dir(Application)},
-            {"ZOTONIC_LIB", "1"}
-        ]}
+        {env, build_env(Application)}
     ],
     BuildDir = filename:dirname(Makefile),
     MakeCmd = "cd " ++ z_filelib:os_escape(BuildDir) ++ "; sh -c make " ++ z_filelib:os_escape(Makefile),
@@ -374,14 +371,19 @@ run_build(Application, {make, Makefile}) ->
 run_build(Application, {task, Taskfile}) ->
     zotonic_filehandler:terminal_notifier("Task: " ++ app_path(Application, Taskfile)),
     CmdOpts = [
-        {env, [
-            {"APP_DIR", code:lib_dir(Application)},
-            {"ZOTONIC_LIB", "1"}
-        ]}
+        {env, build_env(Application)}
     ],
     BuildDir = filename:dirname(Taskfile),
     TaskCmd = "cd " ++ z_filelib:os_escape(BuildDir) ++ "; sh -c task",
     zotonic_filehandler_compile:run_cmd(TaskCmd, CmdOpts, #{ ignore_dir => BuildDir }).
+
+%% @doc Environment variables passed to the Make or Task command.
+build_env(Application) ->
+    [
+        {"APP_DIR", code:lib_dir(Application)},
+        {"ZOTONIC_APPS", z_path:zotonic_apps()},
+        {"ZOTONIC_LIB", "1"}
+    ].
 
 %% ---------------------------------------- Support routines ------------------------------
 

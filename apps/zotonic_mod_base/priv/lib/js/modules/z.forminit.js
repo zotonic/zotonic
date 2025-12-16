@@ -111,6 +111,9 @@ $.widget("ui.forminit",
                                 control.value = new_value;
                             }
                             break;
+                        case "range":
+                            control.value = args[name].shift() ?? control.defaultValue;
+                            break;
                         default:
                             control.value = args[name].shift() ?? "";
                             break;
@@ -147,6 +150,9 @@ $.widget("ui.forminit",
                         case 'radio':
                         case 'checkbox':
                             control.checked = false;
+                            break;
+                        case "range":
+                            control.value = control.defaultValue;
                             break;
                         case "hidden":
                             break;

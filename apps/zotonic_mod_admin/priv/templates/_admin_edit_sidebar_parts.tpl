@@ -3,7 +3,7 @@
 {% include "_admin_edit_content_publish.tpl" noheader %}
 
 <div> {# also sidebar #}
-    {% all include "_admin_edit_content_sidebar_extra.tpl" %}
+    {% all catinclude "_admin_edit_content_sidebar_extra.tpl" id %}
 
     {% include "_admin_edit_content_note.tpl" %}
 

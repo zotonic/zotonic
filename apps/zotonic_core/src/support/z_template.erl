@@ -116,6 +116,7 @@ render_block(OptBlock, Template, Vars, Context) when is_map(Vars) ->
                     text => <<"Error rendering template">>,
                     in => zotonic_core,
                     template => Template,
+                    block => OptBlock,
                     result => error,
                     reason => Reason1
                 })
@@ -125,6 +126,7 @@ render_block(OptBlock, Template, Vars, Context) when is_map(Vars) ->
                         text => <<"Error rendering template">>,
                         in => zotonic_core,
                         template => Template,
+                        block => OptBlock,
                         result => error,
                         reason => Reason
                     })
@@ -138,6 +140,7 @@ render_block(OptBlock, Template, Vars, Context) when is_map(Vars) ->
                 text => <<"Error rendering template">>,
                 in => zotonic_core,
                 template => Template,
+                block => OptBlock,
                 result => error,
                 reason => Reason
             }),

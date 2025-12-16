@@ -1632,12 +1632,12 @@ Return:
 
 -optional_callbacks([ observe_rsc_delete/2, pid_observe_rsc_delete/3 ]).
 
-%% Foldr for an resource insert, these are the initial properties and will overrule
+%% Foldr for a resource insert, these are the initial properties and will overrule
 %% the properties in the insert request. Use with care.  The props are the properties of
 %% the later insert, after escaping/filtering but before the #rsc_update{} notification below.
 %% Type: foldr
 -doc("
-Foldr for an resource insert, these are the initial properties and will overrule the properties in the insert request.
+Foldr for a resource insert, these are the initial properties and will overrule the properties in the insert request.
 Use with care. The props are the properties of the later insert, after escaping/filtering but before the
 #rsc\\_update\\{\\} notification below.
 

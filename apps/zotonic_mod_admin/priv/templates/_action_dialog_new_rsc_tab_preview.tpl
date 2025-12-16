@@ -33,7 +33,7 @@
         <a href="#" id="{{ #cancel }}" class="btn btn-default">{_ Close preview _}</a>
         {% wire id=#cancel action={trigger_event name='dialog_new_rsc_preview_close'} %}
 
-        {% if id.is_editable %}
+        {% if id.is_editable and (m.acl.use.mod_admin_frontend or m.acl.use.mod_admin) %}
             <a href="#" class="btn {% if intent == "create" %}btn-primary{% else %}btn-default{% endif %} action-edit">
                 {_ Visit full edit page _}
             </a>
