@@ -67,7 +67,7 @@
 			        {% validate id=#survey_max_results name="survey_max_results_int"
 			        			type={numericality minimum=1}
 			        %}
-			        <label for="survey_max_results">
+			        <label for="{{ #survey_max_results }}">
 			        	{_ Maximum number of submissions _}
 			        </label>
 			        <p class="help-block">
