@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-12-16 12:44\n"
+"PO-Revision-Date: 2025-12-16 13:17\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -236,7 +236,7 @@ msgstr "允许的文件和mime类型，用','分开--如果不允许额外的类
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:44
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:118
 msgid "Any visibility"
-msgstr ""
+msgstr "任何可见度"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:1
 msgid "Are you sure you want to delete the following user groups:"
@@ -565,7 +565,7 @@ msgstr "寻找合作团队"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_content_group_dropdown.tpl:148
 msgid "First select a category"
-msgstr ""
+msgstr "首先选择类别"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:50
 msgid "Group managers can edit"
@@ -667,7 +667,7 @@ msgstr "将这些用户组内的所有用户移至："
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:24
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_visible_for.tpl:29
 msgid "Move to {title}…"
-msgstr ""
+msgstr "移至 {title}…"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list.tpl:15
 msgid "No ACL rules"
@@ -918,7 +918,7 @@ msgstr "用户组"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:10
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:113
 msgid "Visibility"
-msgstr ""
+msgstr "可见性"
 
 #: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:24
 msgid "Which version of the ACL rules do you want to use?"
@@ -1510,7 +1510,7 @@ msgstr "删除这个页面。"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:74
 msgid "Delete this page..."
-msgstr ""
+msgstr "删除此页..."
 
 #: zotonic_mod_admin/src/mod_admin.erl:936
 msgid "Deleted tasks."
@@ -1596,7 +1596,7 @@ msgstr "复制这个页面。"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:65
 msgid "Duplicate this page..."
-msgstr ""
+msgstr "复制此页..."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:31
 msgid "Duration"
@@ -1941,7 +1941,7 @@ msgstr "每页项目"
 
 #: zotonic_mod_admin/priv/templates/_edit_medium_language.tpl:14
 msgid "Language independent"
-msgstr ""
+msgstr "语言独立"
 
 #: zotonic_mod_admin/priv/templates/_edit_medium_language.tpl:3
 #: zotonic_mod_admin/priv/templates/_edit_medium_language.tpl:7
@@ -2006,7 +2006,7 @@ msgstr "创建"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:64
 msgid "Make a duplicate of this page."
-msgstr ""
+msgstr "复制此页。"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:90
 msgid "Make a new media item"
@@ -2132,11 +2132,11 @@ msgstr "已修改。"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:58
 msgid "More"
-msgstr ""
+msgstr "更多信息"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:57
 msgid "More actions: duplicate or delete page"
-msgstr ""
+msgstr "更多操作：复制或删除页面"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:13
 msgid "Move block down"
@@ -3734,7 +3734,7 @@ msgstr "创建新配置"
 
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:58
 msgid "No configuration keys found."
-msgstr ""
+msgstr "未找到配置密钥。"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:79
 msgid "No configurations found."
@@ -3890,7 +3890,7 @@ msgstr "该模块不提供证书。"
 
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:35
 msgid "Type to find configuration keys..."
-msgstr ""
+msgstr "键入查找配置键..."
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:48
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:75
@@ -5507,7 +5507,7 @@ msgstr "如何重设密码"
 
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:11
 msgid "However this email address does not belong to one of our users or you have simply not added a password yet so that you will not be able to change it."
-msgstr ""
+msgstr "但是，该电子邮件地址不属于我们的用户，或者您尚未添加密码，因此无法更改。"
 
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:30
 msgid "I forgot my password"
@@ -6182,11 +6182,11 @@ msgstr "将页面恢复到早期版本"
 
 #: zotonic_mod_backup/priv/templates/_admin_edit_content_publish.tpl:6
 msgid "Revert to an earlier revision of this page."
-msgstr ""
+msgstr "还原至本页的早期版本。"
 
 #: zotonic_mod_backup/priv/templates/_admin_edit_content_publish.tpl:7
 msgid "Revert to earlier version..."
-msgstr ""
+msgstr "恢复到早期版本..."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:26
 msgid "Revert to this version..."
@@ -6205,7 +6205,7 @@ msgstr "订正"
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:15
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:61
 msgid "Revisions of active users are kept for {n} days."
-msgstr ""
+msgstr "活跃用户的修订保存期为 {n} 天。"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:16
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:62
@@ -6999,11 +6999,11 @@ msgstr "你不允许改变这个。"
 
 #: zotonic_mod_development/src/mod_development.erl:376
 msgid "<i>Function name does not exist.</i>"
-msgstr ""
+msgstr "<i>函数名不存在。</i>"
 
 #: zotonic_mod_development/src/mod_development.erl:379
 msgid "<i>Module not found.</i>"
-msgstr ""
+msgstr "<i>未找到模块。</i>"
 
 #: zotonic_mod_development/priv/templates/_development_template_graph.tpl:5
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:80
@@ -7139,7 +7139,7 @@ msgstr "开发"
 
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:3
 msgid "Development - Function Call Tracing"
-msgstr ""
+msgstr "开发 - 函数调用跟踪"
 
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:3
 msgid "Development - Observers"
@@ -7183,7 +7183,7 @@ msgstr "启用数据库查询跟踪"
 
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:21
 msgid "Enter the module and function you want to trace. If no function is given, all functions in the module will be traced. Enter how many calls to trace before stopping."
-msgstr ""
+msgstr "输入要跟踪的模块和函数。如果没有给出函数，则将跟踪模块中的所有函数。输入要跟踪多少次调用才会停止。"
 
 #: zotonic_mod_development/src/mod_development.erl:348
 msgid "Error changing the console logs."
@@ -7237,15 +7237,15 @@ msgstr "找到匹配的调度规则"
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:8
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:12
 msgid "Function Call Tracing"
-msgstr ""
+msgstr "函数调用跟踪"
 
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:45
 msgid "Function call tracing has been disabled. Use the following to enable function call tracing:"
-msgstr ""
+msgstr "函数调用跟踪已禁用。使用以下命令启用函数调用跟踪："
 
 #: zotonic_mod_development/src/mod_development.erl:382
 msgid "Function tracing has been disabled in the Zotonic config."
-msgstr ""
+msgstr "在 Zotonic 配置中已禁用功能跟踪。"
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:74
 msgid "Graph of all template dependencies"
@@ -7284,7 +7284,7 @@ msgstr "实时重载更改后的CSS文件。更改模板或JavaScript时重新�
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:251
 msgid "Live trace of function calls on the server (only for the admin user)."
-msgstr ""
+msgstr "实时跟踪服务器上的函数调用（仅限管理员用户）。"
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:32
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:36
@@ -7293,7 +7293,7 @@ msgstr "模板渲染的实时痕迹"
 
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:13
 msgid "Live tracing of function calls on the server."
-msgstr ""
+msgstr "实时跟踪服务器上的函数调用。"
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:89
 msgid "Loading..."
@@ -7365,12 +7365,12 @@ msgstr "观察员"
 
 #: zotonic_mod_development/src/mod_development.erl:385
 msgid "Only the admin user can set traces."
-msgstr ""
+msgstr "只有管理员用户才能设置跟踪。"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:259
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:51
 msgid "Only the admin user can use function call tracing."
-msgstr ""
+msgstr "只有管理员用户才能使用函数调用跟踪。"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:140
 msgid "Optional category for catinclude"
@@ -7411,7 +7411,7 @@ msgstr "在生成的模板中显示定义的块"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:238
 msgid "Show internals of Zotonic and the modules."
-msgstr ""
+msgstr "显示 Zotonic 和模块的内部结构。"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:25
 msgid "Show paths to included template files in generated templates"
@@ -7441,7 +7441,7 @@ msgstr "站点名称"
 
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:34
 msgid "Start Tracing"
-msgstr ""
+msgstr "开始追踪"
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:21
 msgid "Start matching dispatch rules"
@@ -7542,7 +7542,7 @@ msgstr "跟踪当前会话的所有数据库查询"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:255
 msgid "Trace function calls"
-msgstr ""
+msgstr "跟踪函数调用"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:172
 msgid "Traces all templates for the current session-id, or all sessions, and renders them as a graph."
@@ -7605,7 +7605,7 @@ msgstr "你不允许使用模板调试。"
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:137
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:42
 msgid "You do not have permission to access development tools."
-msgstr ""
+msgstr "您没有访问开发工具的权限。"
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:59
 msgid "found dispatch rule"
@@ -7938,11 +7938,11 @@ msgstr "日历"
 
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:59
 msgid "Define which fields (columns) should be exported. One field expression per line."
-msgstr ""
+msgstr "定义应导出哪些字段（列）。每行一个字段表达式。"
 
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:61
 msgid "Do not forget to save your changes before exporting."
-msgstr ""
+msgstr "导出前不要忘记保存更改。"
 
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:24
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:37
@@ -7968,7 +7968,7 @@ msgstr "下载Excel"
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:39
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:48
 msgid "Download JSON"
-msgstr ""
+msgstr "下载 JSON"
 
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:34
 msgid "Download all the pages in the collection"
@@ -7980,7 +7980,7 @@ msgstr "下载所有符合查询的页面"
 
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:31
 msgid "Download as Event if the query returns events and you want to export for a calendar program."
-msgstr ""
+msgstr "如果查询返回的是事件，而您想导出到日历程序中，则下载为事件。"
 
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:9
 msgid "Download this page or the query as a spreadsheet or in another format."
@@ -7994,7 +7994,7 @@ msgstr "出口"
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:65
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:66
 msgid "Export fields"
-msgstr ""
+msgstr "导出字段"
 
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:8
 msgid "Help about export"
@@ -8002,7 +8002,7 @@ msgstr "关于出口的帮助"
 
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:60
 msgid "Leave this empty for a default set of fields."
-msgstr ""
+msgstr "此项留空，表示默认字段集。"
 
 #: zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:14
 #: zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:15
@@ -8477,54 +8477,54 @@ msgstr "倾斜"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:18
 msgid "About the columns of the spreadsheet data"
-msgstr ""
+msgstr "关于电子表格数据列"
 
 #: zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:4
 #: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:3
 msgid "Depending on the filename the data can be imported as pages or as special data."
-msgstr ""
+msgstr "根据文件名，数据可以作为页面或特殊数据导入。"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:21
 msgid "Every row in the CSV or XLSX file contains a single page. The columns are the properties."
-msgstr ""
+msgstr "CSV 或 XLSX 文件中的每一行都包含一个页面。列是属性。"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:78
 msgid "For example, the English title would have the column name: <code>title$en</code>"
-msgstr ""
+msgstr "例如，英文标题的列名为：<code>title$en</code>"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:60
 msgid "If the page is a person, the first name."
-msgstr ""
+msgstr "如果页面是个人，则是名字。"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:64
 msgid "If the page is a person, the last or family name."
-msgstr ""
+msgstr "如果页面是个人，则是姓氏或家族名称。"
 
 #: zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:8
 msgid "Import CSV XLSX file"
-msgstr ""
+msgstr "导入 CSV XLSX 文件"
 
 #: zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:7
 #: zotonic_mod_import_csv/src/mod_import_csv.erl:102
 msgid "Import CSV or XLSX file"
-msgstr ""
+msgstr "导入 CSV 或 XLSX 文件"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:3
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:8
 msgid "Import a CSV or XLSX file"
-msgstr ""
+msgstr "导入 CSV 或 XLSX 文件"
 
 #: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:18
 msgid "Import any previously deleted items again"
-msgstr ""
+msgstr "再次导入之前删除的项目"
 
 #: zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:3
 msgid "Import data from a CSV or XLSX file."
-msgstr ""
+msgstr "从 CSV 或 XLSX 文件导入数据。"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:77
 msgid "Multilingual properties can be set by specifying the language after the property name."
-msgstr ""
+msgstr "在属性名称后指定语言，即可设置多语言属性。"
 
 #: zotonic_mod_import_csv/src/mod_import_csv.erl:166
 msgid "Only admins can import CSV files."
@@ -8536,12 +8536,12 @@ msgstr "请等待文件导入完成。完成后你将看到通知。"
 
 #: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:24
 msgid "Progress will be reported in the <a href=\"{url}\">admin log</a> and with notifications in the admin."
-msgstr ""
+msgstr "进度将在管理员<a href=\"{url}\">日志</a>中报告，并在管理员中发出通知。"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:27
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:43
 msgid "Property"
-msgstr ""
+msgstr "财产"
 
 #: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:7
@@ -8555,44 +8555,44 @@ msgstr "开始导入"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:56
 msgid "The HTML main text of the page."
-msgstr ""
+msgstr "页面的 HTML 正文。"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:36
 msgid "The category of the page. Examples: <code>article</code> or <code>text</code>."
-msgstr ""
+msgstr "页面的类别。例如：<code>文章</code>或<code>文本</code>。"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:72
 msgid "The custom path for the URL of the page, for example <code>/my/page</code>"
-msgstr ""
+msgstr "页面 URL 的自定义路径，例如<code>/my/page</code>"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:68
 msgid "The email address associated with the page."
-msgstr ""
+msgstr "与页面相关的电子邮件地址。"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:22
 msgid "The following properties must be present:"
-msgstr ""
+msgstr "必须具备以下属性"
 
 #: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:23
 msgid "The import will be done in the background after the file has been uploaded to the server."
-msgstr ""
+msgstr "文件上传到服务器后，导入将在后台完成。"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:52
 msgid "The summary of the page."
-msgstr ""
+msgstr "页面摘要。"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:48
 msgid "The title of the page."
-msgstr ""
+msgstr "页面标题。"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:32
 msgid "The unique name of the page, used to identify the page."
-msgstr ""
+msgstr "页面的唯一名称，用于识别页面。"
 
 #: zotonic_mod_import_csv/src/mod_import_csv.erl:149
 #: zotonic_mod_import_csv/src/mod_import_csv.erl:187
 msgid "The uploaded file has been imported."
-msgstr ""
+msgstr "上传的文件已导入。"
 
 #: zotonic_mod_import_csv/src/mod_import_csv.erl:162
 msgid "This file cannot be imported."
@@ -8600,15 +8600,15 @@ msgstr "该文件不能被导入。"
 
 #: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:2
 msgid "Upload a CSV or XLSX file from your computer."
-msgstr ""
+msgstr "从电脑上传 CSV 或 XLSX 文件。"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:40
 msgid "Well known properties are:"
-msgstr ""
+msgstr "众所周知的特性有"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:85
 msgid "You do not have permission to use the CSV/XLSX import module."
-msgstr ""
+msgstr "您没有使用 CSV/XLSX 导入模块的权限。"
 
 #: zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:4
 msgid "Import WXR file"
@@ -11113,7 +11113,7 @@ msgstr "阅读服务条款和隐私政策"
 
 #: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:11
 msgid "Choose a password"
-msgstr ""
+msgstr "选择密码"
 
 #: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:52
 msgid "Choose a username and password"
@@ -11930,7 +11930,7 @@ msgstr "我今年 [age] 岁。我喜欢 [icecream=vanilla|strawberry|chocolate|o
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:74
 msgid "If this number of answers has been submitted then the start button is deactivated and an email is sent to the <em>Handling</em> addresses below. Leave empty for no limit."
-msgstr ""
+msgstr "如果提交的答案达到此数量，开始按钮将失效，并向以下<em>处理</em>地址发送电子邮件。留空表示无限制。"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:24
 msgid "Immediately start with the questions, no “Start” button"
@@ -12018,11 +12018,11 @@ msgstr "最大值"
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:65
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
 msgid "Maximum number of submissions"
-msgstr ""
+msgstr "最多提交数量"
 
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:3
 msgid "Maximum submissions reached"
-msgstr ""
+msgstr "达到的最大提交量"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
 msgid "Milk"
@@ -12269,7 +12269,7 @@ msgstr "答辩人的结果"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:95
 msgid "Results from the respondent - if passed only"
-msgstr ""
+msgstr "受访者提供的结果 - 如果仅通过"
 
 #: zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
 msgid "Results until"
@@ -12448,11 +12448,11 @@ msgstr "以下是已填写的内容："
 
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:9
 msgid "The maximum number of submissions for <a href=\"{url}\"><b>{title}</b></a> on {site} has been reached."
-msgstr ""
+msgstr "上的 <a href=\"{url}\"><b>{title}</b></a> {site} 的提交数量已达到上限。"
 
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:59
 msgid "The maximum number of submissions has been reached, you cannot fill this in anymore."
-msgstr ""
+msgstr "已达到提交的最大数量，您不能再填写。"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:3
 msgid "The result can be linked to an existing person or to a newly created person."
@@ -12468,7 +12468,7 @@ msgstr "上传的文件将附加到结果电子邮件中。"
 
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:15
 msgid "There are now <b>{n}</b> submissions out of a maximum of {max}."
-msgstr ""
+msgstr "现在有 <b>{n}</b> {max}。"
 
 #: zotonic_mod_survey/priv/templates/_survey_error.tpl:3
 msgid "There was an error while handling your answers. We are terribly sorry about this."
@@ -12610,7 +12610,7 @@ msgstr "您必须被允许编辑表格，才能编辑其结果。"
 
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:20
 msgid "You received this email because your email address is configured in the settings as the handling address."
-msgstr ""
+msgstr "您收到这封邮件是因为您的电子邮件地址在设置中被配置为处理地址。"
 
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:50
@@ -12827,7 +12827,7 @@ msgstr "可编辑"
 
 #: zotonic_mod_translation/priv/templates/_admin_headeritem.tpl:26
 msgid "Editable languages"
-msgstr ""
+msgstr "可编辑语言"
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:127
 msgid "English"
