@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-10-30 17:00\n"
+"PO-Revision-Date: 2025-12-16 12:44\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -146,8 +146,8 @@ msgstr "数年"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:17
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:48
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:126
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:68
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:178
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:192
 msgid "(private)"
 msgstr "(私人)"
 
@@ -158,7 +158,7 @@ msgstr "(私人)"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:34
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:118
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:128
 msgid "(public)"
 msgstr "(公开)"
 
@@ -178,7 +178,7 @@ msgid "ACL user group"
 msgstr "ACL 用户群"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:897
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:899
 msgid "Access control rules"
 msgstr "通过规则控制"
 
@@ -390,6 +390,8 @@ msgstr "改变了配置。"
 #: zotonic_mod_survey/priv/templates/_survey_results.tpl:61
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:45
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:50
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:63
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:68
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:24
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:29
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:34
@@ -405,7 +407,7 @@ msgid "Collaboration group members"
 msgstr "合作团队成员"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:893
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:895
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:123
 msgid "Collaboration groups"
 msgstr "合作团队"
@@ -424,7 +426,7 @@ msgstr "将资源作者视为所有者。"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:19
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
-#: zotonic_mod_admin/src/mod_admin.erl:459
+#: zotonic_mod_admin/src/mod_admin.erl:462
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:67
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:113
 msgid "Content"
@@ -651,7 +653,7 @@ msgid "Module"
 msgstr "模块"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:25
-#: zotonic_mod_admin/src/mod_admin.erl:485
+#: zotonic_mod_admin/src/mod_admin.erl:488
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:3
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:7
 #: zotonic_mod_admin_modules/src/mod_admin_modules.erl:122
@@ -908,7 +910,7 @@ msgstr "在发布访问控制规则之前，请使用以下URL测试这些规则
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:888
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:890
 msgid "User groups"
 msgstr "用户组"
 
@@ -1105,7 +1107,7 @@ msgstr "添加媒体到正文"
 msgid "Add note"
 msgstr "添加备注"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1087
+#: zotonic_mod_admin/src/mod_admin.erl:1103
 msgid "Added the connection to"
 msgstr "将连接添加到"
 
@@ -1215,7 +1217,7 @@ msgstr "旁边"
 msgid "Attached media"
 msgstr "附加媒体"
 
-#: zotonic_mod_admin/src/mod_admin.erl:490
+#: zotonic_mod_admin/src/mod_admin.erl:493
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:41
 msgid "Auth"
 msgstr "作者"
@@ -1243,7 +1245,7 @@ msgstr "返回"
 msgid "Basic"
 msgstr "基本"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:178
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:192
 msgid "Billing address"
 msgstr "帐单地址"
 
@@ -1300,12 +1302,12 @@ msgstr "检查您要更新的页面。"
 msgid "Choose a media item from this page to insert in the body text."
 msgstr "从本页面的媒体条目中选择一个，插入到正文文本中。"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:99
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:100
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:158
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:159
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:229
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:230
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:105
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:106
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:169
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:170
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:244
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:245
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:66
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:67
 msgid "City"
@@ -1399,10 +1401,10 @@ msgstr "无法重新加载站点配置，请检查日志。"
 msgid "Count"
 msgstr "数数"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:78
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:80
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:128
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:199
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:84
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:86
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:139
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:214
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:113
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:106
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:45
@@ -1451,7 +1453,7 @@ msgstr "创建日期，最早的在前"
 
 #: zotonic_mod_admin/priv/templates/admin.tpl:4
 #: zotonic_mod_admin/priv/templates/admin.tpl:8
-#: zotonic_mod_admin/src/mod_admin.erl:454
+#: zotonic_mod_admin/src/mod_admin.erl:457
 msgid "Dashboard"
 msgstr "控制台"
 
@@ -1470,8 +1472,8 @@ msgstr "数据库版本"
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:116
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:20
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:16
-#: zotonic_mod_survey/src/models/m_survey.erl:630
-#: zotonic_mod_survey/src/models/m_survey.erl:633
+#: zotonic_mod_survey/src/models/m_survey.erl:704
+#: zotonic_mod_survey/src/models/m_survey.erl:707
 msgid "Date"
 msgstr "日期"
 
@@ -1510,7 +1512,7 @@ msgstr "删除这个页面。"
 msgid "Delete this page..."
 msgstr ""
 
-#: zotonic_mod_admin/src/mod_admin.erl:920
+#: zotonic_mod_admin/src/mod_admin.erl:936
 msgid "Deleted tasks."
 msgstr "已删除的任务。"
 
@@ -1630,13 +1632,13 @@ msgstr "编辑笔记"
 msgid "Edit:"
 msgstr "编辑："
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:188
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:190
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:203
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:205
 msgid "Email address for invoices"
 msgstr "发票的电子邮件地址"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:122
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:124
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:133
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:135
 msgid "Email address for public display"
 msgstr "用于公开展示的电子邮件地址"
 
@@ -1649,7 +1651,7 @@ msgstr "嵌入"
 msgid "Embed code will be sanitized for allowed sites and html."
 msgstr "嵌入代码将被允许的网站和html消毒。"
 
-#: zotonic_mod_admin/src/mod_admin.erl:547
+#: zotonic_mod_admin/src/mod_admin.erl:550
 msgid "Embed page | a citation, popup, or link to another page"
 msgstr "嵌入页面 | 引用、弹出窗口或链接到另一个页面"
 
@@ -1766,7 +1768,7 @@ msgstr "文件/媒体内容"
 msgid "File size"
 msgstr "文件大小"
 
-#: zotonic_mod_admin/src/mod_admin.erl:825
+#: zotonic_mod_admin/src/mod_admin.erl:841
 msgid "File uploaded to the drop folder, will be handled shortly."
 msgstr "上传到拖放文件夹的文件将很快处理。"
 
@@ -1863,7 +1865,7 @@ msgstr "附有介质"
 msgid "Header"
 msgstr "题头"
 
-#: zotonic_mod_admin/src/mod_admin.erl:545
+#: zotonic_mod_admin/src/mod_admin.erl:548
 msgid "Header | a big header"
 msgstr "标题 | 大标题"
 
@@ -1989,7 +1991,7 @@ msgstr "日志目录"
 msgid "Log Off"
 msgstr "登出"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:118
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:128
 msgid "Mailing address"
 msgstr "通信地址"
 
@@ -2032,7 +2034,7 @@ msgstr "匹配 ID、名称、页面路径或重定向"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:3
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:78
-#: zotonic_mod_admin/src/mod_admin.erl:468
+#: zotonic_mod_admin/src/mod_admin.erl:471
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:100
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:103
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:113
@@ -2156,12 +2158,12 @@ msgstr "向上移动块"
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:13
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:14
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:38
-#: zotonic_mod_survey/src/models/m_survey.erl:635
+#: zotonic_mod_survey/src/models/m_survey.erl:709
 msgid "Name"
 msgstr "名字"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:184
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:185
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:199
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:200
 msgid "Name for invoices"
 msgstr "发票名称"
 
@@ -2312,7 +2314,7 @@ msgid "Page settings"
 msgstr "页面设置"
 
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:3
-#: zotonic_mod_admin/src/mod_admin.erl:463
+#: zotonic_mod_admin/src/mod_admin.erl:466
 msgid "Pages"
 msgstr "页面"
 
@@ -2340,8 +2342,8 @@ msgstr "使用百分比"
 msgid "Personal name"
 msgstr "个人姓名"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:193
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:194
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:208
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:209
 msgid "Phone number for invoices"
 msgstr "发票电话号码"
 
@@ -2349,12 +2351,12 @@ msgstr "发票电话号码"
 msgid "Pivot queue count size:"
 msgstr "枢轴队列计数大小。"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:104
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:105
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:163
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:164
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:234
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:235
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:110
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:111
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:174
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:175
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:249
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:250
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:71
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:72
 msgid "Postcode"
@@ -2528,7 +2530,7 @@ msgstr "附注"
 msgid "Remove"
 msgstr "删除"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1091
+#: zotonic_mod_admin/src/mod_admin.erl:1107
 msgid "Removed the connection to"
 msgstr "取消了与"
 
@@ -2590,7 +2592,7 @@ msgstr "保存并查看本页面。"
 msgid "Save this page."
 msgstr "保存本页面。"
 
-#: zotonic_mod_admin/src/mod_admin.erl:909
+#: zotonic_mod_admin/src/mod_admin.erl:925
 msgid "Scheduled a background task to check all refers connections."
 msgstr "安排后台任务来检查所有引用的连接。"
 
@@ -2705,31 +2707,31 @@ msgstr "一些任务正在重试。<br>总错误： {total}<br>单个任务最�
 msgid "Something went wrong. Sorry."
 msgstr "出错了。"
 
-#: zotonic_mod_admin/src/mod_admin.erl:798
+#: zotonic_mod_admin/src/mod_admin.erl:814
 msgid "Sorry, could not handle this filename."
 msgstr "抱歉，无法处理此文件名。"
 
-#: zotonic_mod_admin/src/mod_admin.erl:837
+#: zotonic_mod_admin/src/mod_admin.erl:853
 msgid "Sorry, could not move the file to the drop folder."
 msgstr "抱歉，无法将文件移动到放置文件夹。"
 
-#: zotonic_mod_admin/src/mod_admin.erl:911
-#: zotonic_mod_admin/src/mod_admin.erl:922
+#: zotonic_mod_admin/src/mod_admin.erl:927
+#: zotonic_mod_admin/src/mod_admin.erl:938
 #: zotonic_mod_menu/src/mod_menu.erl:118
 msgid "Sorry, only an admin is allowed to do this"
 msgstr "抱歉，只有管理员可以执行此操作"
 
-#: zotonic_mod_admin/src/mod_admin.erl:773
-#: zotonic_mod_admin/src/mod_admin.erl:784
+#: zotonic_mod_admin/src/mod_admin.erl:789
+#: zotonic_mod_admin/src/mod_admin.erl:800
 msgid "Sorry, that page is unknown."
 msgstr "抱歉，该页面未知。"
 
-#: zotonic_mod_admin/src/mod_admin.erl:775
-#: zotonic_mod_admin/src/mod_admin.erl:786
+#: zotonic_mod_admin/src/mod_admin.erl:791
+#: zotonic_mod_admin/src/mod_admin.erl:802
 msgid "Sorry, you are not allowed to edit notes."
 msgstr "抱歉，您不能编辑笔记。"
 
-#: zotonic_mod_admin/src/mod_admin.erl:841
+#: zotonic_mod_admin/src/mod_admin.erl:857
 msgid "Sorry, you are not allowed to upload drop folder files."
 msgstr "抱歉，您不能上传放置文件夹文件。"
 
@@ -2737,11 +2739,11 @@ msgstr "抱歉，您不能上传放置文件夹文件。"
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "对不起，你没有添加连接的权限。"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1073
+#: zotonic_mod_admin/src/mod_admin.erl:1089
 msgid "Sorry, you have no permission to add the connection."
 msgstr "对不起，你没有权限添加连接。"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1075
+#: zotonic_mod_admin/src/mod_admin.erl:1091
 msgid "Sorry, you have no permission to delete the connection."
 msgstr "抱歉，你没有删除连接的权限。"
 
@@ -2749,7 +2751,7 @@ msgstr "抱歉，你没有删除连接的权限。"
 msgid "Sort by"
 msgstr "排序方式"
 
-#: zotonic_mod_admin/src/mod_admin.erl:544
+#: zotonic_mod_admin/src/mod_admin.erl:547
 msgid "Standard page block types"
 msgstr "标准页块类型"
 
@@ -2757,18 +2759,18 @@ msgstr "标准页块类型"
 msgid "Starts"
 msgstr "开始"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:111
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:112
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:170
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:171
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:241
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:242
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:117
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:118
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:181
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:182
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:256
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:257
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:78
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:79
 msgid "State"
 msgstr "省/直辖市/自治区"
 
-#: zotonic_mod_admin/src/mod_admin.erl:499
+#: zotonic_mod_admin/src/mod_admin.erl:502
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 #: zotonic_mod_base/priv/templates/_session_info.tpl:12
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:109
@@ -2777,29 +2779,29 @@ msgstr "省/直辖市/自治区"
 msgid "Status"
 msgstr "状态"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:88
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:89
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:147
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:148
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:218
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:219
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:94
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:95
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:158
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:159
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:233
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:234
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:55
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:56
 msgid "Street Line 1"
 msgstr "街道地址"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:93
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:94
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:152
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:153
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:223
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:224
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:99
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:100
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:163
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:164
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:238
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:239
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:60
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:61
 msgid "Street Line 2"
 msgstr "街道地址(续)"
 
-#: zotonic_mod_admin/src/mod_admin.erl:480
+#: zotonic_mod_admin/src/mod_admin.erl:483
 msgid "Structure"
 msgstr "架构"
 
@@ -2835,7 +2837,7 @@ msgstr "姓"
 msgid "Swap"
 msgstr "交换"
 
-#: zotonic_mod_admin/src/mod_admin.erl:494
+#: zotonic_mod_admin/src/mod_admin.erl:497
 msgid "System"
 msgstr "体系"
 
@@ -2879,7 +2881,7 @@ msgstr "测试查询"
 msgid "Text"
 msgstr "文本"
 
-#: zotonic_mod_admin/src/mod_admin.erl:546
+#: zotonic_mod_admin/src/mod_admin.erl:549
 msgid "Text | a (rich) text block"
 msgstr "文本 | （富）文本块"
 
@@ -2887,7 +2889,7 @@ msgstr "文本 | （富）文本块"
 msgid "The Zotonic datamodel is being reinstalled. Watch the console for messages"
 msgstr "Zotonic 数据模型正在重新安装。查看控制台中的消息"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:180
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:195
 msgid "The billing address is only visible for people who can edit this page."
 msgstr "账单地址仅对可以编辑此页面的人可见。"
 
@@ -3103,7 +3105,7 @@ msgstr "未发表"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_item.tpl:29
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:29
-#: zotonic_mod_admin/src/mod_admin.erl:1081
+#: zotonic_mod_admin/src/mod_admin.erl:1097
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:84
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:140
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58
@@ -3112,6 +3114,7 @@ msgstr "未发表"
 #: zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13
 #: zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
 #: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:279
+#: zotonic_mod_survey/priv/templates/email_survey_full.tpl:10
 msgid "Untitled"
 msgstr "未命名"
 
@@ -3244,7 +3247,7 @@ msgstr "可见结束时间"
 msgid "Visit full edit page"
 msgstr "访问完整编辑页面"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:68
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73
 msgid "Visiting address"
 msgstr "可访问地址"
 
@@ -3760,7 +3763,8 @@ msgstr "只有管理员可以创建配置 Key。"
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:159
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:161
 #: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:30
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:16
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:72
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:202
 msgid "Password"
 msgstr "密码"
@@ -3902,7 +3906,7 @@ msgstr "使用中继发送电子邮件"
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:53
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:81
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:21
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:15
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:57
 msgid "Username"
 msgstr "用户名"
 
@@ -4475,7 +4479,8 @@ msgstr "您的登录信息"
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:19
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:42
 #: zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:26
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:82
 msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, and symbol."
 msgstr "您的新密码太短或强度不够。请使用：大写字母、小写字母、数字和符号。"
 
@@ -6909,41 +6914,41 @@ msgstr "本网站使用 cookie"
 msgid "To add more information about the use of cookies, either use the content field below or add a 'relation' in the page connections."
 msgstr "要添加有关 cookie 使用的更多信息，请使用下面的内容字段或在页面连接中添加“关系”。"
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:17
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:17
 msgid "<b>NB</b> connected pages and images have their own rights."
 msgstr "<b>NB</b> 连接的页面和图像有自己的权利。"
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:24
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:24
 msgid "All Rights Reserved"
 msgstr "版权所有"
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:44
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:45
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:44
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:45
 msgid "Attribution"
 msgstr "归因"
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:21
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:21
 msgid "License"
 msgstr "执照"
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:8
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:8
 msgid "License and attribution"
 msgstr "许可和归属"
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:55
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:55
 msgid "More about licenses:"
 msgstr "有关许可证的更多信息："
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:25
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:25
 msgid "Public Domain"
 msgstr "公共区域"
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:16
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:16
 msgid "The license and the attribution of this page."
 msgstr "本页的许可和归属。"
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:50
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:51
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:50
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:51
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:109
 msgid "Year"
 msgstr "年"
@@ -9023,7 +9028,7 @@ msgstr "用户"
 
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:42
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
-#: zotonic_mod_survey/src/models/m_survey.erl:634
+#: zotonic_mod_survey/src/models/m_survey.erl:708
 msgid "User Id"
 msgstr "用户ID"
 
@@ -9252,6 +9257,7 @@ msgid "Go to mailinglist page"
 msgstr "前往邮件列表页面"
 
 #: zotonic_mod_mailinglist/priv/templates/_email_mailinglist_hello.tpl:6
+#: zotonic_mod_survey/priv/templates/email_survey_full.tpl:7
 msgid "Hello,"
 msgstr "你好，"
 
@@ -11105,7 +11111,11 @@ msgstr "不在站点地图中"
 msgid "Check our Terms of Service and Privacy policies"
 msgstr "阅读服务条款和隐私政策"
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:10
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:11
+msgid "Choose a password"
+msgstr ""
+
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:52
 msgid "Choose a username and password"
 msgstr "选择用户名和密码"
 
@@ -11131,11 +11141,12 @@ msgstr "确认中..."
 msgid "Enter a name"
 msgstr "输入一个名字"
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:38
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:24
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:80
 msgid "Enter a password"
 msgstr "输入密码"
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:22
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:64
 msgid "Enter a username"
 msgstr "输入用户名"
 
@@ -11187,7 +11198,8 @@ msgstr "请点击下面的链接。"
 msgid "Privacy policies"
 msgstr "隐私条款"
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:56
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:42
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:98
 msgid "Repeat your password"
 msgstr "重复您的密码"
 
@@ -11217,7 +11229,8 @@ msgstr "服务条款"
 msgid "Thank you for registering at our site. We request you to confirm your account before you can use it."
 msgstr "感谢您注册本站点。接下来将需要您在使用账户前对账户进行确认。"
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:57
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:43
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:99
 msgid "This does not match the first password"
 msgstr "这不符合第一个密码"
 
@@ -11225,7 +11238,8 @@ msgstr "这不符合第一个密码"
 msgid "To sign up you must agree with the Terms of Service and Privacy policies."
 msgstr "要注册，您必须同意服务条款和隐私政策。"
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:49
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:35
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:91
 msgid "Verify password"
 msgstr "确认密码"
 
@@ -11568,7 +11582,7 @@ msgstr "添加到现有邮件列表"
 msgid "Add to mailinglist"
 msgstr "添加到邮件列表"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:81
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:99
 msgid "Aggregated results from all respondents"
 msgstr "所有受访者的汇总结果"
 
@@ -11684,6 +11698,7 @@ msgstr "选择"
 msgid "Click on “Edit” to see and change the entered data."
 msgstr "单击“编辑”以查看和更改输入的数据。"
 
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:6
 #: zotonic_mod_survey/priv/templates/survey.tpl:23
 msgid "Closed"
 msgstr "关闭"
@@ -11731,7 +11746,7 @@ msgstr "创建新的邮件列表"
 msgid "Create new person"
 msgstr "创建新人"
 
-#: zotonic_mod_survey/src/models/m_survey.erl:979
+#: zotonic_mod_survey/src/models/m_survey.erl:1053
 msgid "Created"
 msgstr "创建"
 
@@ -11836,11 +11851,11 @@ msgstr "如有错误，请反馈"
 msgid "File upload"
 msgstr "文件上传"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:43
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:44
 msgid "Fill in"
 msgstr "填写"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:55
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:56
 msgid "Fill in and edit later after saving (one set of results)"
 msgstr "保存后填写并稍后编辑（一组结果）"
 
@@ -11865,11 +11880,11 @@ msgstr "对于日期范围，您还可以使用相对日期，如 <code>-5 年</
 msgid "Go to question"
 msgstr "进入问题"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:168
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:186
 msgid "Handle this form with"
 msgstr "处理此表单"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:147
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:165
 msgid "Handling"
 msgstr "处理"
 
@@ -11896,7 +11911,7 @@ msgstr "隐藏值，与表单一起保存但不显示给填写表单的人。"
 msgid "Hide from results"
 msgstr "隐藏结果"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:103
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:121
 msgid "Hide progress information"
 msgstr "隐藏进度信息"
 
@@ -11912,6 +11927,10 @@ msgstr "我是"
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27
 msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color]."
 msgstr "我今年 [age] 岁。我喜欢 [icecream=vanilla|strawberry|chocolate|other] 冰淇淋，我最喜欢的颜色是 [color]。"
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:74
+msgid "If this number of answers has been submitted then the start button is deactivated and an email is sent to the <em>Handling</em> addresses below. Leave empty for no limit."
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:24
 msgid "Immediately start with the questions, no “Start” button"
@@ -11969,8 +11988,8 @@ msgstr "与人联系"
 msgid "Long answer"
 msgstr "长答案"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:150
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:151
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:168
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:169
 msgid "Mail results to"
 msgstr "将结果邮寄给"
 
@@ -11995,6 +12014,15 @@ msgstr "匹配问题"
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:72
 msgid "Maximal value"
 msgstr "最大值"
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:65
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
+msgid "Maximum number of submissions"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/email_survey_full.tpl:3
+msgid "Maximum submissions reached"
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
 msgid "Milk"
@@ -12034,7 +12062,7 @@ msgstr "多项选择或测验问题"
 msgid "Multiple page break blocks are merged into one."
 msgstr "多个页面块会被合成一个。"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:51
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:52
 msgid "Multiple times per user/browser (each time with new results)"
 msgstr "每个用户/浏览器多次（每次都有新结果）"
 
@@ -12068,7 +12096,7 @@ msgstr "添加到邮件列表的收件人数量："
 msgid "Numeric input, show totals for this field in the results."
 msgstr "数字输入，在结果中显示该字段的总计。"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:47
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:48
 msgid "Once only per user/browser"
 msgstr "每个用户/浏览器只能使用一次"
 
@@ -12095,15 +12123,15 @@ msgstr "经过？"
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:95
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:10
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:34
-#: zotonic_mod_survey/src/models/m_survey.erl:641
+#: zotonic_mod_survey/src/models/m_survey.erl:715
 msgid "Passed"
 msgstr "通过"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:131
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:149
 msgid "Passing score"
 msgstr "合格分数"
 
-#: zotonic_mod_survey/src/models/m_survey.erl:643
+#: zotonic_mod_survey/src/models/m_survey.erl:717
 msgid "Percent"
 msgstr "百分比"
 
@@ -12142,7 +12170,7 @@ msgstr "主要"
 msgid "Printable list"
 msgstr "可打印列表"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:98
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:116
 msgid "Progress"
 msgstr "进展情况"
 
@@ -12235,11 +12263,11 @@ msgstr "查看结果"
 msgid "Results editor"
 msgstr "结果编辑器"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:73
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:91
 msgid "Results from the respondent"
 msgstr "答辩人的结果"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:77
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:95
 msgid "Results from the respondent - if passed only"
 msgstr ""
 
@@ -12252,7 +12280,7 @@ msgid "Saved"
 msgstr "已保存"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:23
-#: zotonic_mod_survey/src/models/m_survey.erl:642
+#: zotonic_mod_survey/src/models/m_survey.erl:716
 msgid "Score"
 msgstr "分数"
 
@@ -12273,11 +12301,11 @@ msgstr "选择邮件列表"
 msgid "Select your country"
 msgstr "选择你的国家"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:161
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:179
 msgid "Send a confirmation to the respondent. The email address must be known (logged in respondents) or you can add a short text field with the label “email” and the validation set to \"must be an email address\"."
 msgstr "向受访者发送确认信。电子邮件地址必须是已知的（在受访者中登录），或者您可以添加带有标签“电子邮件”和验证设置为“必须是电子邮件地址”的短文本字段。"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:153
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:171
 msgid "Separate multiple email addresses with a comma."
 msgstr "用逗号分隔多个电子邮件地址。"
 
@@ -12293,15 +12321,15 @@ msgstr "显示图表"
 msgid "Show email addresses"
 msgstr "显示 e-mail 地址"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:115
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:133
 msgid "Show progress bar"
 msgstr "显示进度条"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:109
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:127
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "显示进度信息，如“<em>问题 3/10</em>”"
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:62
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:90
 msgid "Show results (admin only)"
 msgstr "显示结果（仅限管理员"
 
@@ -12382,7 +12410,7 @@ msgstr "错答减分（总分不低于0分）。"
 msgid "Survey editor"
 msgstr "问卷调查编辑器"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:126
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:144
 msgid "Test pass percentage"
 msgstr "考试合格率"
 
@@ -12394,7 +12422,7 @@ msgstr "文字、图片、视频"
 msgid "Thank you for filling in our survey."
 msgstr "谢谢你填写我们的问卷调查。"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:69
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:87
 msgid "Thank you text only"
 msgstr "谢谢你只发短信"
 
@@ -12418,6 +12446,14 @@ msgstr "如果有带有“电子邮件”标签的问题，或者如果有人拥
 msgid "The following has been filled in:"
 msgstr "以下是已填写的内容："
 
+#: zotonic_mod_survey/priv/templates/email_survey_full.tpl:9
+msgid "The maximum number of submissions for <a href=\"{url}\"><b>{title}</b></a> on {site} has been reached."
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:59
+msgid "The maximum number of submissions has been reached, you cannot fill this in anymore."
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:3
 msgid "The result can be linked to an existing person or to a newly created person."
 msgstr "结果可以链接到现有人员或新创建的人员。"
@@ -12429,6 +12465,10 @@ msgstr "结果已经保存下来了。"
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:147
 msgid "The uploaded file will be attached to the result email."
 msgstr "上传的文件将附加到结果电子邮件中。"
+
+#: zotonic_mod_survey/priv/templates/email_survey_full.tpl:15
+msgid "There are now <b>{n}</b> submissions out of a maximum of {max}."
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_survey_error.tpl:3
 msgid "There was an error while handling your answers. We are terribly sorry about this."
@@ -12450,7 +12490,7 @@ msgstr "此表单已禁用。因为您可以编辑，所以您可以继续进行
 msgid "This is a result for:"
 msgstr "这是一个结果，因为："
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:138
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:156
 msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
 msgstr "这是通过测验或测试所需的百分比。仅在您添加了测验或测试问题时使用。"
 
@@ -12520,7 +12560,7 @@ msgstr "查看和编辑结果。"
 msgid "We are experiencing an overload, please try again in 10 minutes."
 msgstr "我们正处于超载状态，请 10 分钟后重试。"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:65
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:83
 msgid "When finished show"
 msgstr "完成后显示"
 
@@ -12546,7 +12586,7 @@ msgstr "是或否问题"
 msgid "Yes/No"
 msgstr "是/否"
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:22
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:29
 msgid "You already filled this in, but you can change your previous answers."
 msgstr "你已经填好了，但你可以改变你之前的答案。"
 
@@ -12567,6 +12607,10 @@ msgstr "您无权查看结果。"
 #: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:23
 msgid "You must be allowed to edit the form, to edit its results."
 msgstr "您必须被允许编辑表格，才能编辑其结果。"
+
+#: zotonic_mod_survey/priv/templates/email_survey_full.tpl:20
+msgid "You received this email because your email address is configured in the settings as the handling address."
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:50
