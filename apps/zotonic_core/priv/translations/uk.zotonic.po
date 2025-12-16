@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-11-27 22:36\n"
+"PO-Revision-Date: 2025-12-16 12:44\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -146,8 +146,8 @@ msgstr "років"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_collab.tpl:17
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:48
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:126
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:68
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:178
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:192
 msgid "(private)"
 msgstr "(приватний)"
 
@@ -158,7 +158,7 @@ msgstr "(приватний)"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:34
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:42
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:43
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:118
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:128
 msgid "(public)"
 msgstr "(публічний)"
 
@@ -178,7 +178,7 @@ msgid "ACL user group"
 msgstr "Група користувачів ACL"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:7
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:897
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:899
 msgid "Access control rules"
 msgstr "Правила контролю доступу"
 
@@ -390,6 +390,8 @@ msgstr "Змінена конфігурація."
 #: zotonic_mod_survey/priv/templates/_survey_results.tpl:61
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:45
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:50
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:63
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:68
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:24
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:29
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:34
@@ -405,7 +407,7 @@ msgid "Collaboration group members"
 msgstr "Члени групи співпраці"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:22
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:893
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:895
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:123
 msgid "Collaboration groups"
 msgstr "Групи співпраці"
@@ -424,7 +426,7 @@ msgstr "Вважайте авторів ресурсів власниками."
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:19
 #: zotonic_mod_admin/priv/templates/_admin_edit_body.tpl:4
-#: zotonic_mod_admin/src/mod_admin.erl:459
+#: zotonic_mod_admin/src/mod_admin.erl:462
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:67
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:113
 msgid "Content"
@@ -651,7 +653,7 @@ msgid "Module"
 msgstr "Модуль"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:25
-#: zotonic_mod_admin/src/mod_admin.erl:485
+#: zotonic_mod_admin/src/mod_admin.erl:488
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:3
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:7
 #: zotonic_mod_admin_modules/src/mod_admin_modules.erl:122
@@ -908,7 +910,7 @@ msgstr "Використовуйте наступну URL-адресу, щоб �
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_user_add.tpl:8
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_basics_user_extra.tpl:3
-#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:888
+#: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:890
 msgid "User groups"
 msgstr "Групи користувачів"
 
@@ -1105,7 +1107,7 @@ msgstr "Додайте медіа в тіло"
 msgid "Add note"
 msgstr "Додати коментар"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1087
+#: zotonic_mod_admin/src/mod_admin.erl:1103
 msgid "Added the connection to"
 msgstr "Додано підключення до"
 
@@ -1215,7 +1217,7 @@ msgstr "Осторонь"
 msgid "Attached media"
 msgstr "Прикріплені медіа"
 
-#: zotonic_mod_admin/src/mod_admin.erl:490
+#: zotonic_mod_admin/src/mod_admin.erl:493
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:41
 msgid "Auth"
 msgstr "Авторизація"
@@ -1243,7 +1245,7 @@ msgstr "Назад"
 msgid "Basic"
 msgstr "Основний"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:178
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:192
 msgid "Billing address"
 msgstr "Платіжна адреса"
 
@@ -1300,12 +1302,12 @@ msgstr "Позначте сторінки, які потрібно оновит�
 msgid "Choose a media item from this page to insert in the body text."
 msgstr "Виберіть медіа-елемент на цій сторінці, щоб вставити його в основний текст."
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:99
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:100
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:158
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:159
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:229
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:230
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:105
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:106
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:169
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:170
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:244
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:245
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:66
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:67
 msgid "City"
@@ -1399,10 +1401,10 @@ msgstr "Не вдалося перезавантажити конфігурац�
 msgid "Count"
 msgstr "Рахувати"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:78
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:80
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:128
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:199
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:84
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:86
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:139
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:214
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:113
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:106
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:45
@@ -1451,7 +1453,7 @@ msgstr "Дата створення, спочатку найстаріші"
 
 #: zotonic_mod_admin/priv/templates/admin.tpl:4
 #: zotonic_mod_admin/priv/templates/admin.tpl:8
-#: zotonic_mod_admin/src/mod_admin.erl:454
+#: zotonic_mod_admin/src/mod_admin.erl:457
 msgid "Dashboard"
 msgstr "Панель приладів"
 
@@ -1470,8 +1472,8 @@ msgstr "Версія бази даних"
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:116
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:20
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:16
-#: zotonic_mod_survey/src/models/m_survey.erl:630
-#: zotonic_mod_survey/src/models/m_survey.erl:633
+#: zotonic_mod_survey/src/models/m_survey.erl:704
+#: zotonic_mod_survey/src/models/m_survey.erl:707
 msgid "Date"
 msgstr "Дата"
 
@@ -1510,7 +1512,7 @@ msgstr "Видалити цю сторінку."
 msgid "Delete this page..."
 msgstr "Видалити цю сторінку..."
 
-#: zotonic_mod_admin/src/mod_admin.erl:920
+#: zotonic_mod_admin/src/mod_admin.erl:936
 msgid "Deleted tasks."
 msgstr "Видалені завдання."
 
@@ -1630,13 +1632,13 @@ msgstr "Редагувати примітку"
 msgid "Edit:"
 msgstr "Редагувати:"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:188
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:190
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:203
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:205
 msgid "Email address for invoices"
 msgstr "Електронна адреса для рахунків"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:122
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:124
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:133
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:135
 msgid "Email address for public display"
 msgstr "Адреса електронної пошти для публічного показу"
 
@@ -1649,7 +1651,7 @@ msgstr "Вставити"
 msgid "Embed code will be sanitized for allowed sites and html."
 msgstr "Код вставки буде очищено для дозволених сайтів і HTML."
 
-#: zotonic_mod_admin/src/mod_admin.erl:547
+#: zotonic_mod_admin/src/mod_admin.erl:550
 msgid "Embed page | a citation, popup, or link to another page"
 msgstr "Вставити сторінку | цитата, спливаюче вікно або посилання на іншу сторінку"
 
@@ -1766,7 +1768,7 @@ msgstr "Файловий / медіаконтент"
 msgid "File size"
 msgstr "Розмір файлу"
 
-#: zotonic_mod_admin/src/mod_admin.erl:825
+#: zotonic_mod_admin/src/mod_admin.erl:841
 msgid "File uploaded to the drop folder, will be handled shortly."
 msgstr "Файл, завантажений у розвантажувальну папку, незабаром буде оброблено."
 
@@ -1863,7 +1865,7 @@ msgstr "Прикріплений середній"
 msgid "Header"
 msgstr "Заголовок"
 
-#: zotonic_mod_admin/src/mod_admin.erl:545
+#: zotonic_mod_admin/src/mod_admin.erl:548
 msgid "Header | a big header"
 msgstr "Заголовок | великий заголовок"
 
@@ -1989,7 +1991,7 @@ msgstr "Каталог журналів"
 msgid "Log Off"
 msgstr "Вийти"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:118
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:128
 msgid "Mailing address"
 msgstr "Поштова адреса"
 
@@ -2032,7 +2034,7 @@ msgstr "Збіг ідентифікатора, назви, шляху сторі
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:3
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:78
-#: zotonic_mod_admin/src/mod_admin.erl:468
+#: zotonic_mod_admin/src/mod_admin.erl:471
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:100
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:103
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:113
@@ -2156,12 +2158,12 @@ msgstr "Перемістіть блок вгору"
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:13
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:14
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:38
-#: zotonic_mod_survey/src/models/m_survey.erl:635
+#: zotonic_mod_survey/src/models/m_survey.erl:709
 msgid "Name"
 msgstr "Ім'я"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:184
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:185
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:199
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:200
 msgid "Name for invoices"
 msgstr "Найменування для рахунків"
 
@@ -2312,7 +2314,7 @@ msgid "Page settings"
 msgstr "Налаштування сторінки"
 
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:3
-#: zotonic_mod_admin/src/mod_admin.erl:463
+#: zotonic_mod_admin/src/mod_admin.erl:466
 msgid "Pages"
 msgstr "Сторінки"
 
@@ -2340,8 +2342,8 @@ msgstr "Відсоток у використанні"
 msgid "Personal name"
 msgstr "Особисте ім'я"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:193
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:194
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:208
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:209
 msgid "Phone number for invoices"
 msgstr "Номер телефону для рахунків"
 
@@ -2349,12 +2351,12 @@ msgstr "Номер телефону для рахунків"
 msgid "Pivot queue count size:"
 msgstr "Розмір кількості зведеної черги:"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:104
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:105
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:163
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:164
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:234
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:235
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:110
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:111
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:174
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:175
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:249
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:250
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:71
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:72
 msgid "Postcode"
@@ -2528,7 +2530,7 @@ msgstr "Зауваження"
 msgid "Remove"
 msgstr "Видалити"
 
-#: zotonic_mod_admin/src/mod_admin.erl:1091
+#: zotonic_mod_admin/src/mod_admin.erl:1107
 msgid "Removed the connection to"
 msgstr "Вилучено підключення до"
 
@@ -2590,7 +2592,7 @@ msgstr "Збережіть і перегляньте сторінку."
 msgid "Save this page."
 msgstr "Збережіть цю сторінку."
 
-#: zotonic_mod_admin/src/mod_admin.erl:909
+#: zotonic_mod_admin/src/mod_admin.erl:925
 msgid "Scheduled a background task to check all refers connections."
 msgstr "Заплановано фонове завдання для перевірки всіх посилань."
 
@@ -2705,31 +2707,31 @@ msgstr "Деякі завдання повторюються.<br>Загальн�
 msgid "Something went wrong. Sorry."
 msgstr "Щось пішло не так. Вибачте."
 
-#: zotonic_mod_admin/src/mod_admin.erl:798
+#: zotonic_mod_admin/src/mod_admin.erl:814
 msgid "Sorry, could not handle this filename."
 msgstr "На жаль, не вдалося обробити цю назву файлу."
 
-#: zotonic_mod_admin/src/mod_admin.erl:837
+#: zotonic_mod_admin/src/mod_admin.erl:853
 msgid "Sorry, could not move the file to the drop folder."
 msgstr "На жаль, не вдалося перемістити файл у папку для розвантаження."
 
-#: zotonic_mod_admin/src/mod_admin.erl:911
-#: zotonic_mod_admin/src/mod_admin.erl:922
+#: zotonic_mod_admin/src/mod_admin.erl:927
+#: zotonic_mod_admin/src/mod_admin.erl:938
 #: zotonic_mod_menu/src/mod_menu.erl:118
 msgid "Sorry, only an admin is allowed to do this"
 msgstr "На жаль, тільки адміністратор має право це робити"
 
-#: zotonic_mod_admin/src/mod_admin.erl:773
-#: zotonic_mod_admin/src/mod_admin.erl:784
+#: zotonic_mod_admin/src/mod_admin.erl:789
+#: zotonic_mod_admin/src/mod_admin.erl:800
 msgid "Sorry, that page is unknown."
 msgstr "Вибачте, ця сторінка невідома."
 
-#: zotonic_mod_admin/src/mod_admin.erl:775
-#: zotonic_mod_admin/src/mod_admin.erl:786
+#: zotonic_mod_admin/src/mod_admin.erl:791
+#: zotonic_mod_admin/src/mod_admin.erl:802
 msgid "Sorry, you are not allowed to edit notes."
 msgstr "Вибачте, вам не дозволено редагувати нотатки."
 
-#: zotonic_mod_admin/src/mod_admin.erl:841
+#: zotonic_mod_admin/src/mod_admin.erl:857
 msgid "Sorry, you are not allowed to upload drop folder files."
 msgstr "Вибачте, вам не дозволено завантажувати файли папки."
 
@@ -2737,11 +2739,11 @@ msgstr "Вибачте, вам не дозволено завантажуват�
 msgid "Sorry, you don't have permission to add the connection."
 msgstr "На жаль, у вас немає дозволу на додавання підключення."
 
-#: zotonic_mod_admin/src/mod_admin.erl:1073
+#: zotonic_mod_admin/src/mod_admin.erl:1089
 msgid "Sorry, you have no permission to add the connection."
 msgstr "На жаль, у вас немає дозволу на додавання підключення."
 
-#: zotonic_mod_admin/src/mod_admin.erl:1075
+#: zotonic_mod_admin/src/mod_admin.erl:1091
 msgid "Sorry, you have no permission to delete the connection."
 msgstr "На жаль, у вас немає дозволу на видалення з’єднання."
 
@@ -2749,7 +2751,7 @@ msgstr "На жаль, у вас немає дозволу на видаленн
 msgid "Sort by"
 msgstr "Сортувати за"
 
-#: zotonic_mod_admin/src/mod_admin.erl:544
+#: zotonic_mod_admin/src/mod_admin.erl:547
 msgid "Standard page block types"
 msgstr "Стандартні типи блоків сторінок"
 
@@ -2757,18 +2759,18 @@ msgstr "Стандартні типи блоків сторінок"
 msgid "Starts"
 msgstr "Починається"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:111
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:112
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:170
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:171
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:241
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:242
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:117
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:118
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:181
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:182
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:256
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:257
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:78
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:79
 msgid "State"
 msgstr "Стан"
 
-#: zotonic_mod_admin/src/mod_admin.erl:499
+#: zotonic_mod_admin/src/mod_admin.erl:502
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:37
 #: zotonic_mod_base/priv/templates/_session_info.tpl:12
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:109
@@ -2777,29 +2779,29 @@ msgstr "Стан"
 msgid "Status"
 msgstr "Статус"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:88
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:89
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:147
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:148
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:218
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:219
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:94
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:95
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:158
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:159
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:233
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:234
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:55
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:56
 msgid "Street Line 1"
 msgstr "Вулиця 1"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:93
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:94
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:152
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:153
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:223
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:224
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:99
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:100
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:163
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:164
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:238
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:239
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:60
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:61
 msgid "Street Line 2"
 msgstr "Вулиця 2"
 
-#: zotonic_mod_admin/src/mod_admin.erl:480
+#: zotonic_mod_admin/src/mod_admin.erl:483
 msgid "Structure"
 msgstr "Структура"
 
@@ -2835,7 +2837,7 @@ msgstr "Прізвище"
 msgid "Swap"
 msgstr "Обмін"
 
-#: zotonic_mod_admin/src/mod_admin.erl:494
+#: zotonic_mod_admin/src/mod_admin.erl:497
 msgid "System"
 msgstr "Система"
 
@@ -2879,7 +2881,7 @@ msgstr "Тестовий запит"
 msgid "Text"
 msgstr "Текст"
 
-#: zotonic_mod_admin/src/mod_admin.erl:546
+#: zotonic_mod_admin/src/mod_admin.erl:549
 msgid "Text | a (rich) text block"
 msgstr "Текст | (розширений) текстовий блок"
 
@@ -2887,7 +2889,7 @@ msgstr "Текст | (розширений) текстовий блок"
 msgid "The Zotonic datamodel is being reinstalled. Watch the console for messages"
 msgstr "Модель даних Zotonic перевстановлюється. Слідкуйте за повідомленнями на консолі"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:180
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:195
 msgid "The billing address is only visible for people who can edit this page."
 msgstr "Платіжну адресу бачать лише ті люди, які можуть редагувати цю сторінку."
 
@@ -3103,7 +3105,7 @@ msgstr "Неопублікований"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_item.tpl:29
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:29
-#: zotonic_mod_admin/src/mod_admin.erl:1081
+#: zotonic_mod_admin/src/mod_admin.erl:1097
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:84
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:140
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58
@@ -3112,6 +3114,7 @@ msgstr "Неопублікований"
 #: zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13
 #: zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
 #: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:279
+#: zotonic_mod_survey/priv/templates/email_survey_full.tpl:10
 msgid "Untitled"
 msgstr "Без заголовка"
 
@@ -3244,7 +3247,7 @@ msgstr "Видимий до"
 msgid "Visit full edit page"
 msgstr "Відвідайте повну сторінку редагування"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:68
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:73
 msgid "Visiting address"
 msgstr "Адреса для відвідування"
 
@@ -3760,7 +3763,8 @@ msgstr "Тільки адміністратор може додавати клю
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:159
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:161
 #: zotonic_mod_authentication/priv/templates/logon_confirm_form.tpl:15
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:30
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:16
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:72
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:202
 msgid "Password"
 msgstr "Пароль"
@@ -3902,7 +3906,7 @@ msgstr "Використовуйте реле для надсилання еле
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:53
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:81
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:21
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:15
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:57
 msgid "Username"
 msgstr "Ім'я користувача"
 
@@ -4475,7 +4479,8 @@ msgstr "Ваші дані для входу для"
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:19
 #: zotonic_mod_admin_identity/priv/templates/_identity_password.tpl:42
 #: zotonic_mod_authentication/priv/templates/logon_error/message.tooshort.tpl:1
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:40
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:26
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:82
 msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, and symbol."
 msgstr "Ваш новий пароль занадто короткий або недостатньо надійний. Використовуйте: велику літеру, малу літеру, цифру та символ."
 
@@ -6909,41 +6914,41 @@ msgstr "Цей сайт використовує файли cookie"
 msgid "To add more information about the use of cookies, either use the content field below or add a 'relation' in the page connections."
 msgstr "Щоб додати більше інформації про використання файлів cookie, скористайтеся полем вмісту нижче або додайте «відношення» до з’єднань сторінок."
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:17
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:17
 msgid "<b>NB</b> connected pages and images have their own rights."
 msgstr "<b>NB</b> підключені сторінки та зображення мають власні права."
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:24
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:24
 msgid "All Rights Reserved"
 msgstr "Всі права захищені"
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:44
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:45
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:44
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:45
 msgid "Attribution"
 msgstr "Атрибуція"
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:21
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:21
 msgid "License"
 msgstr "Ліцензія"
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:8
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:8
 msgid "License and attribution"
 msgstr "Ліцензія та авторство"
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:55
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:55
 msgid "More about licenses:"
 msgstr "Детальніше про ліцензії:"
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:25
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:25
 msgid "Public Domain"
 msgstr "Публічний домен"
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:16
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:16
 msgid "The license and the attribution of this page."
 msgstr "Ліцензія та посилання на цю сторінку."
 
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:50
-#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar.tpl:51
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:50
+#: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:51
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_app.tpl:109
 msgid "Year"
 msgstr "рік"
@@ -9023,7 +9028,7 @@ msgstr "Користувач"
 
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:42
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
-#: zotonic_mod_survey/src/models/m_survey.erl:634
+#: zotonic_mod_survey/src/models/m_survey.erl:708
 msgid "User Id"
 msgstr "Ідентифікатор користувача"
 
@@ -9252,6 +9257,7 @@ msgid "Go to mailinglist page"
 msgstr "Перейдіть на сторінку списку розсилки"
 
 #: zotonic_mod_mailinglist/priv/templates/_email_mailinglist_hello.tpl:6
+#: zotonic_mod_survey/priv/templates/email_survey_full.tpl:7
 msgid "Hello,"
 msgstr "Здравствуйте,"
 
@@ -11105,7 +11111,11 @@ msgstr "немає в карті сайту"
 msgid "Check our Terms of Service and Privacy policies"
 msgstr "Ознайомтеся з нашими Умовами надання послуг та Політикою конфіденційності"
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:10
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:11
+msgid "Choose a password"
+msgstr ""
+
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:52
 msgid "Choose a username and password"
 msgstr "Виберіть ім’я користувача та пароль"
 
@@ -11131,11 +11141,12 @@ msgstr "Підтвердження..."
 msgid "Enter a name"
 msgstr "Введіть назву"
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:38
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:24
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:80
 msgid "Enter a password"
 msgstr "Введіть пароль"
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:22
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:64
 msgid "Enter a username"
 msgstr "Введіть ім'я користувача"
 
@@ -11187,7 +11198,8 @@ msgstr "Будь ласка, перейдіть за посиланням ниж
 msgid "Privacy policies"
 msgstr "Політика конфіденційності"
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:56
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:42
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:98
 msgid "Repeat your password"
 msgstr "Повторіть свій пароль"
 
@@ -11217,7 +11229,8 @@ msgstr "Умови обслуговування"
 msgid "Thank you for registering at our site. We request you to confirm your account before you can use it."
 msgstr "Дякуємо за реєстрацію на нашому сайті. Ми просимо Вас підтвердити свій обліковий запис, перш ніж Ви зможете ним користуватися."
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:57
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:43
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:99
 msgid "This does not match the first password"
 msgstr "Це не відповідає першому паролю"
 
@@ -11225,7 +11238,8 @@ msgstr "Це не відповідає першому паролю"
 msgid "To sign up you must agree with the Terms of Service and Privacy policies."
 msgstr "Щоб зареєструватися, ви повинні погодитися з Умовами обслуговування та політикою конфіденційності."
 
-#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:49
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:35
+#: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:91
 msgid "Verify password"
 msgstr "Підтвердіть пароль"
 
@@ -11568,7 +11582,7 @@ msgstr "Додати до існуючого списку розсилки"
 msgid "Add to mailinglist"
 msgstr "Додати до списку розсилки"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:81
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:99
 msgid "Aggregated results from all respondents"
 msgstr "Зведені результати від усіх респондентів"
 
@@ -11684,6 +11698,7 @@ msgstr "Вибір"
 msgid "Click on “Edit” to see and change the entered data."
 msgstr "Натисніть «Редагувати», щоб переглянути та змінити введені дані."
 
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:6
 #: zotonic_mod_survey/priv/templates/survey.tpl:23
 msgid "Closed"
 msgstr "ЗАЧИНЕНО"
@@ -11731,7 +11746,7 @@ msgstr "Створити новий список розсилки"
 msgid "Create new person"
 msgstr "Створити нову людину"
 
-#: zotonic_mod_survey/src/models/m_survey.erl:979
+#: zotonic_mod_survey/src/models/m_survey.erl:1053
 msgid "Created"
 msgstr "Створено"
 
@@ -11836,11 +11851,11 @@ msgstr "Відгук, якщо неправильно"
 msgid "File upload"
 msgstr "Завантаження файлу"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:43
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:44
 msgid "Fill in"
 msgstr "Заповнити"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:55
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:56
 msgid "Fill in and edit later after saving (one set of results)"
 msgstr "Заповніть та відредагуйте пізніше після збереження (один набір результатів)"
 
@@ -11865,11 +11880,11 @@ msgstr "Для діапазонів дат ви також можете вико
 msgid "Go to question"
 msgstr "Перейти до питання"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:168
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:186
 msgid "Handle this form with"
 msgstr "Обробити цю форму за допомогою"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:147
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:165
 msgid "Handling"
 msgstr "Обробка"
 
@@ -11896,7 +11911,7 @@ msgstr "Приховане значення, збережене разом із 
 msgid "Hide from results"
 msgstr "Приховати від результатів"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:103
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:121
 msgid "Hide progress information"
 msgstr "Приховати інформацію про прогрес"
 
@@ -11912,6 +11927,10 @@ msgstr "я"
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27
 msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color]."
 msgstr "Мені [age] років. Мені подобається [морозиво=ваніль|полуниця|шоколад|інше] морозиво, і мій улюблений колір [color]."
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:74
+msgid "If this number of answers has been submitted then the start button is deactivated and an email is sent to the <em>Handling</em> addresses below. Leave empty for no limit."
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:24
 msgid "Immediately start with the questions, no “Start” button"
@@ -11969,8 +11988,8 @@ msgstr "Посилання на людину"
 msgid "Long answer"
 msgstr "Довга відповідь"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:150
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:151
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:168
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:169
 msgid "Mail results to"
 msgstr "Надішліть результати на адресу"
 
@@ -11995,6 +12014,15 @@ msgstr "Відповідне запитання"
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_short_answer.tpl:72
 msgid "Maximal value"
 msgstr "Максимальне значення"
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:65
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
+msgid "Maximum number of submissions"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/email_survey_full.tpl:3
+msgid "Maximum submissions reached"
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
 msgid "Milk"
@@ -12034,7 +12062,7 @@ msgstr "Запитання з кількома варіантами або ві�
 msgid "Multiple page break blocks are merged into one."
 msgstr "Кілька блоків розриву сторінок об’єднуються в один."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:51
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:52
 msgid "Multiple times per user/browser (each time with new results)"
 msgstr "Кілька разів на користувача/браузер (кожен раз з новими результатами)"
 
@@ -12068,7 +12096,7 @@ msgstr "Кількість одержувачів, доданих до спис�
 msgid "Numeric input, show totals for this field in the results."
 msgstr "Числове введення, відображення підсумків для цього поля в результатах."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:47
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:48
 msgid "Once only per user/browser"
 msgstr "Лише один раз для користувача/браузера"
 
@@ -12095,15 +12123,15 @@ msgstr "Пас?"
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:95
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:10
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:34
-#: zotonic_mod_survey/src/models/m_survey.erl:641
+#: zotonic_mod_survey/src/models/m_survey.erl:715
 msgid "Passed"
 msgstr "Пройшов"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:131
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:149
 msgid "Passing score"
 msgstr "Прохідний бал"
 
-#: zotonic_mod_survey/src/models/m_survey.erl:643
+#: zotonic_mod_survey/src/models/m_survey.erl:717
 msgid "Percent"
 msgstr "Відсоток"
 
@@ -12142,7 +12170,7 @@ msgstr "Первинний"
 msgid "Printable list"
 msgstr "Список для друку"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:98
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:116
 msgid "Progress"
 msgstr "Прогрес"
 
@@ -12235,11 +12263,11 @@ msgstr "Результати"
 msgid "Results editor"
 msgstr "Редактор результатів"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:73
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:91
 msgid "Results from the respondent"
 msgstr "Результати респондента"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:77
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:95
 msgid "Results from the respondent - if passed only"
 msgstr ""
 
@@ -12252,7 +12280,7 @@ msgid "Saved"
 msgstr "Збережено"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:23
-#: zotonic_mod_survey/src/models/m_survey.erl:642
+#: zotonic_mod_survey/src/models/m_survey.erl:716
 msgid "Score"
 msgstr "Оцінка"
 
@@ -12273,11 +12301,11 @@ msgstr "Виберіть список розсилки"
 msgid "Select your country"
 msgstr "Виберіть свою країну"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:161
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:179
 msgid "Send a confirmation to the respondent. The email address must be known (logged in respondents) or you can add a short text field with the label “email” and the validation set to \"must be an email address\"."
 msgstr "Надіслати респонденту підтвердження. Адреса електронної пошти має бути відома (респонденти, які ввійшли в систему), або ви можете додати коротке текстове поле з міткою «email» і для перевірки встановлено значення «повинна бути адресою електронної пошти»."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:153
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:171
 msgid "Separate multiple email addresses with a comma."
 msgstr "Розділіть кілька адрес електронної пошти комою."
 
@@ -12293,15 +12321,15 @@ msgstr "Показати діаграми"
 msgid "Show email addresses"
 msgstr "Показати електронні адреси"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:115
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:133
 msgid "Show progress bar"
 msgstr "Показати індикатор виконання"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:109
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:127
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "Показати інформацію про прогрес як «<em>Питання 3/10</em>»"
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:62
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:90
 msgid "Show results (admin only)"
 msgstr "Показати результати (лише адміністратор)"
 
@@ -12382,7 +12410,7 @@ msgstr "Віднімайте бали за неправильні відпові
 msgid "Survey editor"
 msgstr "Редактор опитування"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:126
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:144
 msgid "Test pass percentage"
 msgstr "Відсоток проходження тесту"
 
@@ -12394,7 +12422,7 @@ msgstr "Текст, зображення, відео"
 msgid "Thank you for filling in our survey."
 msgstr "Дякуємо, що заповнили наше опитування."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:69
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:87
 msgid "Thank you text only"
 msgstr "Лише текст подяки"
 
@@ -12418,6 +12446,14 @@ msgstr "Адреса електронної пошти відображаєть�
 msgid "The following has been filled in:"
 msgstr "Заповнено:"
 
+#: zotonic_mod_survey/priv/templates/email_survey_full.tpl:9
+msgid "The maximum number of submissions for <a href=\"{url}\"><b>{title}</b></a> on {site} has been reached."
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:59
+msgid "The maximum number of submissions has been reached, you cannot fill this in anymore."
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:3
 msgid "The result can be linked to an existing person or to a newly created person."
 msgstr "Результат можна пов’язати з наявною особою або з новоствореною особою."
@@ -12429,6 +12465,10 @@ msgstr "Результати збережено."
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:147
 msgid "The uploaded file will be attached to the result email."
 msgstr "Завантажений файл буде прикріплено до електронного листа з результатами."
+
+#: zotonic_mod_survey/priv/templates/email_survey_full.tpl:15
+msgid "There are now <b>{n}</b> submissions out of a maximum of {max}."
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_survey_error.tpl:3
 msgid "There was an error while handling your answers. We are terribly sorry about this."
@@ -12450,7 +12490,7 @@ msgstr "Ця форма вимкнена. Оскільки ви можете р�
 msgid "This is a result for:"
 msgstr "Це результат для:"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:138
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:156
 msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
 msgstr "Це відсоток, необхідний для проходження тесту або тесту. Використовується, лише якщо Ви додали запитання вікторини або тесту."
 
@@ -12520,7 +12560,7 @@ msgstr "Перегляд і редагування результатів."
 msgid "We are experiencing an overload, please try again in 10 minutes."
 msgstr "Ми відчуваємо перевантаження, спробуйте ще раз через 10 хвилин."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:65
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:83
 msgid "When finished show"
 msgstr "Коли закінчитися, показати"
 
@@ -12546,7 +12586,7 @@ msgstr "Так чи ні питання"
 msgid "Yes/No"
 msgstr "Так/Ні"
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:22
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:29
 msgid "You already filled this in, but you can change your previous answers."
 msgstr "Ви вже заповнили це, але можете змінити свої попередні відповіді."
 
@@ -12567,6 +12607,10 @@ msgstr "Ви не маєте права переглядати результа�
 #: zotonic_mod_survey/priv/templates/admin_survey_editor.tpl:23
 msgid "You must be allowed to edit the form, to edit its results."
 msgstr "Вам необхідно дозволити редагувати форму, редагувати її результати."
+
+#: zotonic_mod_survey/priv/templates/email_survey_full.tpl:20
+msgid "You received this email because your email address is configured in the settings as the handling address."
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:50
