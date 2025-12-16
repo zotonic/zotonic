@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-12-16 12:44\n"
+"PO-Revision-Date: 2025-12-16 13:17\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "MIME-Version: 1.0\n"
@@ -236,7 +236,7 @@ msgstr "Tipos de arquivo e mime permitidos, separados com ',' - digite 'none' se
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rule_row_rsc.tpl:44
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:118
 msgid "Any visibility"
-msgstr ""
+msgstr "Qualquer visibilidade"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:1
 msgid "Are you sure you want to delete the following user groups:"
@@ -565,7 +565,7 @@ msgstr "Encontrar grupo de colaboração"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_content_group_dropdown.tpl:148
 msgid "First select a category"
-msgstr ""
+msgstr "Primeiro, selecione uma categoria"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:50
 msgid "Group managers can edit"
@@ -667,7 +667,7 @@ msgstr "Mova todos os utilizadores dentro destes grupos de utilizadores para:"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:24
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_visible_for.tpl:29
 msgid "Move to {title}…"
-msgstr ""
+msgstr "Aceder a {title}…"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list.tpl:15
 msgid "No ACL rules"
@@ -918,7 +918,7 @@ msgstr "Grupos de usuários"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_list_header.tpl:10
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:113
 msgid "Visibility"
-msgstr ""
+msgstr "Visibilidade"
 
 #: zotonic_mod_acl_user_groups/priv/templates/page_acl_user_group_try.tpl:24
 msgid "Which version of the ACL rules do you want to use?"
@@ -1510,7 +1510,7 @@ msgstr "Apagar esta página."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:74
 msgid "Delete this page..."
-msgstr ""
+msgstr "Eliminar esta página..."
 
 #: zotonic_mod_admin/src/mod_admin.erl:936
 msgid "Deleted tasks."
@@ -1596,7 +1596,7 @@ msgstr "Duplicar esta página."
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:65
 msgid "Duplicate this page..."
-msgstr ""
+msgstr "Duplicar esta página..."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:31
 msgid "Duration"
@@ -1941,7 +1941,7 @@ msgstr "Itens por página"
 
 #: zotonic_mod_admin/priv/templates/_edit_medium_language.tpl:14
 msgid "Language independent"
-msgstr ""
+msgstr "Independente da língua"
 
 #: zotonic_mod_admin/priv/templates/_edit_medium_language.tpl:3
 #: zotonic_mod_admin/priv/templates/_edit_medium_language.tpl:7
@@ -2006,7 +2006,7 @@ msgstr "Faça"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:64
 msgid "Make a duplicate of this page."
-msgstr ""
+msgstr "Fazer um duplicado desta página."
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:90
 msgid "Make a new media item"
@@ -2132,11 +2132,11 @@ msgstr "Modificado:"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:58
 msgid "More"
-msgstr ""
+msgstr "Mais"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:57
 msgid "More actions: duplicate or delete page"
-msgstr ""
+msgstr "Mais acções: duplicar ou eliminar página"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:13
 msgid "Move block down"
@@ -3734,7 +3734,7 @@ msgstr "Faça uma nova configuração"
 
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:58
 msgid "No configuration keys found."
-msgstr ""
+msgstr "Não foram encontradas chaves de configuração."
 
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:79
 msgid "No configurations found."
@@ -3890,7 +3890,7 @@ msgstr "Este módulo não fornece um certificado."
 
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_new.tpl:35
 msgid "Type to find configuration keys..."
-msgstr ""
+msgstr "Digite para encontrar as chaves de configuração..."
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:48
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:75
@@ -5507,7 +5507,7 @@ msgstr "Como redefinir sua senha"
 
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:11
 msgid "However this email address does not belong to one of our users or you have simply not added a password yet so that you will not be able to change it."
-msgstr ""
+msgstr "No entanto, este endereço de correio eletrónico não pertence a um dos nossos utilizadores ou simplesmente ainda não adicionou uma palavra-passe, pelo que não poderá alterá-la."
 
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:30
 msgid "I forgot my password"
@@ -6182,11 +6182,11 @@ msgstr "Reverter página para versão anterior"
 
 #: zotonic_mod_backup/priv/templates/_admin_edit_content_publish.tpl:6
 msgid "Revert to an earlier revision of this page."
-msgstr ""
+msgstr "Reverter para uma revisão anterior desta página."
 
 #: zotonic_mod_backup/priv/templates/_admin_edit_content_publish.tpl:7
 msgid "Revert to earlier version..."
-msgstr ""
+msgstr "Reverter para uma versão anterior..."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:26
 msgid "Revert to this version..."
@@ -6205,7 +6205,7 @@ msgstr "Revisões para"
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:15
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:61
 msgid "Revisions of active users are kept for {n} days."
-msgstr ""
+msgstr "As revisões dos utilizadores activos são mantidas durante {n} dias."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:16
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:62
@@ -6999,11 +6999,11 @@ msgstr "Não estás autorizado a mudar isto."
 
 #: zotonic_mod_development/src/mod_development.erl:376
 msgid "<i>Function name does not exist.</i>"
-msgstr ""
+msgstr "<i>O nome da função não existe.</i>"
 
 #: zotonic_mod_development/src/mod_development.erl:379
 msgid "<i>Module not found.</i>"
-msgstr ""
+msgstr "<i>Módulo não encontrado.</i>"
 
 #: zotonic_mod_development/priv/templates/_development_template_graph.tpl:5
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:80
@@ -7139,7 +7139,7 @@ msgstr "Desenvolvimento"
 
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:3
 msgid "Development - Function Call Tracing"
-msgstr ""
+msgstr "Desenvolvimento - Rastreio de chamadas de função"
 
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:3
 msgid "Development - Observers"
@@ -7183,7 +7183,7 @@ msgstr "Rastreamento de consulta de banco de dados habilitado"
 
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:21
 msgid "Enter the module and function you want to trace. If no function is given, all functions in the module will be traced. Enter how many calls to trace before stopping."
-msgstr ""
+msgstr "Introduza o módulo e a função que pretende rastrear. Se não for indicada nenhuma função, todas as funções do módulo serão rastreadas. Introduza o número de chamadas a rastrear antes de parar."
 
 #: zotonic_mod_development/src/mod_development.erl:348
 msgid "Error changing the console logs."
@@ -7237,15 +7237,15 @@ msgstr "Encontrada regra de expedição correspondente"
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:8
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:12
 msgid "Function Call Tracing"
-msgstr ""
+msgstr "Rastreio de chamadas de função"
 
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:45
 msgid "Function call tracing has been disabled. Use the following to enable function call tracing:"
-msgstr ""
+msgstr "O rastreio de chamadas de função foi desativado. Utilize o seguinte para ativar o rastreio de chamadas de função:"
 
 #: zotonic_mod_development/src/mod_development.erl:382
 msgid "Function tracing has been disabled in the Zotonic config."
-msgstr ""
+msgstr "O rastreio de funções foi desativado na configuração do Zotonic."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:74
 msgid "Graph of all template dependencies"
@@ -7284,7 +7284,7 @@ msgstr "Recarga ao vivo de arquivos CSS alterados. Recarregar página sobre alte
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:251
 msgid "Live trace of function calls on the server (only for the admin user)."
-msgstr ""
+msgstr "Rastreio em tempo real das chamadas de função no servidor (apenas para o utilizador administrador)."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:32
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:36
@@ -7293,7 +7293,7 @@ msgstr "Traços dinâmicos de renderização de modelo"
 
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:13
 msgid "Live tracing of function calls on the server."
-msgstr ""
+msgstr "Rastreio em tempo real das chamadas de função no servidor."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:89
 msgid "Loading..."
@@ -7365,12 +7365,12 @@ msgstr "Observadores"
 
 #: zotonic_mod_development/src/mod_development.erl:385
 msgid "Only the admin user can set traces."
-msgstr ""
+msgstr "Apenas o utilizador administrador pode definir os traços."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:259
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:51
 msgid "Only the admin user can use function call tracing."
-msgstr ""
+msgstr "Apenas o utilizador administrador pode utilizar o rastreio de chamadas de função."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:140
 msgid "Optional category for catinclude"
@@ -7411,7 +7411,7 @@ msgstr "Mostrar blocos definidos nos modelos gerados"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:238
 msgid "Show internals of Zotonic and the modules."
-msgstr ""
+msgstr "Mostrar os aspectos internos do Zotonic e os módulos."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:25
 msgid "Show paths to included template files in generated templates"
@@ -7441,7 +7441,7 @@ msgstr "Nome do site"
 
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:34
 msgid "Start Tracing"
-msgstr ""
+msgstr "Iniciar rastreio"
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:21
 msgid "Start matching dispatch rules"
@@ -7542,7 +7542,7 @@ msgstr "Rastrear todas as consultas da base de dados para a sessão em curso"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:255
 msgid "Trace function calls"
-msgstr ""
+msgstr "Chamadas de função de rastreio"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:172
 msgid "Traces all templates for the current session-id, or all sessions, and renders them as a graph."
@@ -7605,7 +7605,7 @@ msgstr "Não é permitido utilizar a depuração do modelo."
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:137
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:42
 msgid "You do not have permission to access development tools."
-msgstr ""
+msgstr "Não tem permissão para aceder às ferramentas de desenvolvimento."
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:59
 msgid "found dispatch rule"
@@ -7938,11 +7938,11 @@ msgstr "Calendário"
 
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:59
 msgid "Define which fields (columns) should be exported. One field expression per line."
-msgstr ""
+msgstr "Define os campos (colunas) que devem ser exportados. Uma expressão de campo por linha."
 
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:61
 msgid "Do not forget to save your changes before exporting."
-msgstr ""
+msgstr "Não se esqueça de guardar as suas alterações antes de exportar."
 
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:24
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:37
@@ -7968,7 +7968,7 @@ msgstr "Baixar Excel"
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:39
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:48
 msgid "Download JSON"
-msgstr ""
+msgstr "Descarregar JSON"
 
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:34
 msgid "Download all the pages in the collection"
@@ -7980,7 +7980,7 @@ msgstr "Download de todas as páginas que correspondem à consulta"
 
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:31
 msgid "Download as Event if the query returns events and you want to export for a calendar program."
-msgstr ""
+msgstr "Descarregar como Evento se a consulta devolver eventos e pretender exportar para um programa de calendário."
 
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:9
 msgid "Download this page or the query as a spreadsheet or in another format."
@@ -7994,7 +7994,7 @@ msgstr "Exportação"
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:65
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:66
 msgid "Export fields"
-msgstr ""
+msgstr "Campos de exportação"
 
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:8
 msgid "Help about export"
@@ -8002,7 +8002,7 @@ msgstr "Ajuda sobre exportação"
 
 #: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:60
 msgid "Leave this empty for a default set of fields."
-msgstr ""
+msgstr "Deixe esta opção vazia para obter um conjunto de campos predefinido."
 
 #: zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:14
 #: zotonic_mod_facebook/priv/templates/_admin_authentication_service.tpl:15
@@ -8477,54 +8477,54 @@ msgstr "Inclinar"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:18
 msgid "About the columns of the spreadsheet data"
-msgstr ""
+msgstr "Sobre as colunas dos dados da folha de cálculo"
 
 #: zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:4
 #: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:3
 msgid "Depending on the filename the data can be imported as pages or as special data."
-msgstr ""
+msgstr "Dependendo do nome do ficheiro, os dados podem ser importados como páginas ou como dados especiais."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:21
 msgid "Every row in the CSV or XLSX file contains a single page. The columns are the properties."
-msgstr ""
+msgstr "Cada linha do ficheiro CSV ou XLSX contém uma única página. As colunas são as propriedades."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:78
 msgid "For example, the English title would have the column name: <code>title$en</code>"
-msgstr ""
+msgstr "Por exemplo, o título em inglês teria o nome de coluna: <code>title$en</code>"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:60
 msgid "If the page is a person, the first name."
-msgstr ""
+msgstr "Se a página for uma pessoa, o primeiro nome."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:64
 msgid "If the page is a person, the last or family name."
-msgstr ""
+msgstr "Se a página for uma pessoa, o apelido ou nome de família."
 
 #: zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:8
 msgid "Import CSV XLSX file"
-msgstr ""
+msgstr "Importar ficheiro CSV XLSX"
 
 #: zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:7
 #: zotonic_mod_import_csv/src/mod_import_csv.erl:102
 msgid "Import CSV or XLSX file"
-msgstr ""
+msgstr "Importar ficheiro CSV ou XLSX"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:3
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:8
 msgid "Import a CSV or XLSX file"
-msgstr ""
+msgstr "Importar um ficheiro CSV ou XLSX"
 
 #: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:18
 msgid "Import any previously deleted items again"
-msgstr ""
+msgstr "Importar novamente todos os itens anteriormente eliminados"
 
 #: zotonic_mod_import_csv/priv/templates/_admin_import_button.tpl:3
 msgid "Import data from a CSV or XLSX file."
-msgstr ""
+msgstr "Importar dados de um ficheiro CSV ou XLSX."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:77
 msgid "Multilingual properties can be set by specifying the language after the property name."
-msgstr ""
+msgstr "As propriedades multilingues podem ser definidas especificando o idioma a seguir ao nome da propriedade."
 
 #: zotonic_mod_import_csv/src/mod_import_csv.erl:166
 msgid "Only admins can import CSV files."
@@ -8536,12 +8536,12 @@ msgstr "Por favor, aguarde enquanto o arquivo está importando. Você receberá 
 
 #: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:24
 msgid "Progress will be reported in the <a href=\"{url}\">admin log</a> and with notifications in the admin."
-msgstr ""
+msgstr "Os progressos serão comunicados no <a href=\"{url}\">registo administrativo</a> e com notificações na administração."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:27
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:43
 msgid "Property"
-msgstr ""
+msgstr "Imóveis"
 
 #: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:10
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailinglist_recipients_upload.tpl:7
@@ -8555,44 +8555,44 @@ msgstr "Iniciar importação"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:56
 msgid "The HTML main text of the page."
-msgstr ""
+msgstr "O texto principal HTML da página."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:36
 msgid "The category of the page. Examples: <code>article</code> or <code>text</code>."
-msgstr ""
+msgstr "A categoria da página. Exemplos: <code>artigo</code> ou <code>texto</code>."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:72
 msgid "The custom path for the URL of the page, for example <code>/my/page</code>"
-msgstr ""
+msgstr "O caminho personalizado para o URL da página, por exemplo <code>/my/page</code>"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:68
 msgid "The email address associated with the page."
-msgstr ""
+msgstr "O endereço de correio eletrónico associado à página."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:22
 msgid "The following properties must be present:"
-msgstr ""
+msgstr "As seguintes propriedades devem estar presentes:"
 
 #: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:23
 msgid "The import will be done in the background after the file has been uploaded to the server."
-msgstr ""
+msgstr "A importação será feita em segundo plano depois de o ficheiro ter sido carregado para o servidor."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:52
 msgid "The summary of the page."
-msgstr ""
+msgstr "O resumo da página."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:48
 msgid "The title of the page."
-msgstr ""
+msgstr "O título da página."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:32
 msgid "The unique name of the page, used to identify the page."
-msgstr ""
+msgstr "O nome único da página, utilizado para identificar a página."
 
 #: zotonic_mod_import_csv/src/mod_import_csv.erl:149
 #: zotonic_mod_import_csv/src/mod_import_csv.erl:187
 msgid "The uploaded file has been imported."
-msgstr ""
+msgstr "O ficheiro carregado foi importado."
 
 #: zotonic_mod_import_csv/src/mod_import_csv.erl:162
 msgid "This file cannot be imported."
@@ -8600,15 +8600,15 @@ msgstr "Este arquivo não pode ser importado."
 
 #: zotonic_mod_import_csv/priv/templates/_dialog_import_csv.tpl:2
 msgid "Upload a CSV or XLSX file from your computer."
-msgstr ""
+msgstr "Carregue um ficheiro CSV ou XLSX a partir do seu computador."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:40
 msgid "Well known properties are:"
-msgstr ""
+msgstr "As propriedades mais conhecidas são:"
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:85
 msgid "You do not have permission to use the CSV/XLSX import module."
-msgstr ""
+msgstr "Não tem autorização para utilizar o módulo de importação CSV/XLSX."
 
 #: zotonic_mod_import_wordpress/priv/templates/_admin_status.tpl:4
 msgid "Import WXR file"
@@ -11113,7 +11113,7 @@ msgstr "Consulte os nossos Termos de Serviço e Políticas de Privacidade"
 
 #: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:11
 msgid "Choose a password"
-msgstr ""
+msgstr "Escolher uma palavra-passe"
 
 #: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:52
 msgid "Choose a username and password"
@@ -11930,7 +11930,7 @@ msgstr "Eu tenho [age] anos Eu gosto de sorvete de [sorvete = baunilha | morango
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:74
 msgid "If this number of answers has been submitted then the start button is deactivated and an email is sent to the <em>Handling</em> addresses below. Leave empty for no limit."
-msgstr ""
+msgstr "Se este número de respostas tiver sido apresentado, o botão iniciar é desativado e é enviada uma mensagem de correio eletrónico para os endereços <em>de tratamento</em> abaixo indicados. Deixar em branco para não haver limite."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:24
 msgid "Immediately start with the questions, no “Start” button"
@@ -12018,11 +12018,11 @@ msgstr "Valor máximo"
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:65
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
 msgid "Maximum number of submissions"
-msgstr ""
+msgstr "Número máximo de apresentações"
 
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:3
 msgid "Maximum submissions reached"
-msgstr ""
+msgstr "Número máximo de submissões atingido"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
 msgid "Milk"
@@ -12269,7 +12269,7 @@ msgstr "Resultados do respondente"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:95
 msgid "Results from the respondent - if passed only"
-msgstr ""
+msgstr "Resultados do inquirido - se aprovado apenas"
 
 #: zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
 msgid "Results until"
@@ -12448,11 +12448,11 @@ msgstr "O seguinte foi preenchido:"
 
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:9
 msgid "The maximum number of submissions for <a href=\"{url}\"><b>{title}</b></a> on {site} has been reached."
-msgstr ""
+msgstr "O número máximo de submissões para <a href=\"{url}\"><b>{title}</b></a> em {site} foi atingido."
 
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:59
 msgid "The maximum number of submissions has been reached, you cannot fill this in anymore."
-msgstr ""
+msgstr "O número máximo de submissões foi atingido, já não é possível preencher este formulário."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:3
 msgid "The result can be linked to an existing person or to a newly created person."
@@ -12468,7 +12468,7 @@ msgstr "O arquivo carregado será anexado ao e-mail de resultado."
 
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:15
 msgid "There are now <b>{n}</b> submissions out of a maximum of {max}."
-msgstr ""
+msgstr "Atualmente, existem <b>{n}</b> submissões de um máximo de {max}."
 
 #: zotonic_mod_survey/priv/templates/_survey_error.tpl:3
 msgid "There was an error while handling your answers. We are terribly sorry about this."
@@ -12610,7 +12610,7 @@ msgstr "Você deve ter permissão para editar o formulário, para editar seus re
 
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:20
 msgid "You received this email because your email address is configured in the settings as the handling address."
-msgstr ""
+msgstr "Recebeu esta mensagem de correio eletrónico porque o seu endereço de correio eletrónico está configurado nas definições como o endereço de tratamento."
 
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:50
@@ -12827,7 +12827,7 @@ msgstr "Editável"
 
 #: zotonic_mod_translation/priv/templates/_admin_headeritem.tpl:26
 msgid "Editable languages"
-msgstr ""
+msgstr "Línguas editáveis"
 
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:127
 msgid "English"
