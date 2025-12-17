@@ -415,12 +415,7 @@ insert_survey_submission_1(SurveyId, UserId, PersistentId, Answers, Context) ->
         is_integer(UserId) -> {UserId, undefined};
         true -> {undefined, PersistentId}
     end,
-    case do_insert_checked(
-        SurveyId,
-        fun() ->
-            do_insert_survey_submission(SurveyId, UserId1, PersistentId1, Answers, Context)
-        end,
-        Context)
+    case do_insert_checked(SurveyId, UserId1, PersistentId1, Answers, Context)
     of
         {ok, _} = Ok ->
             publish(SurveyId, UserId1, PersistentId1, Context),
@@ -430,7 +425,11 @@ insert_survey_submission_1(SurveyId, UserId, PersistentId, Answers, Context) ->
             Error
     end.
 
-do_insert_checked(SurveyId, Fun, Context) ->
+%% @private
+%% @doc If max results is checked, check the amount of submissions before
+%% inserting the new result. Run the check/insert as a singular job to prevent
+%% race conditions.
+do_insert_checked(SurveyId, UserId, PersistentId, Answers, Context, Context) ->
     case m_rsc:p_no_acl(SurveyId, <<"survey_max_results_int">>, Context) of
         Max when is_integer(Max) ->
             jobs:run(
@@ -438,15 +437,16 @@ do_insert_checked(SurveyId, Fun, Context) ->
                 fun() ->
                     case is_max_results_reached(SurveyId, Context) of
                         false ->
-                            Fun();
+                            do_insert_unchecked(SurveyId, UserId, PersistentId, Answers, Context);
                         true ->
                             {error, full}
                     end);
         undefined ->
-            Fun()
+            do_insert_unchecked(SurveyId, UserId, PersistentId, Answers, Context)
     end.
 
-do_insert_survey_submission(SurveyId, UserId, PersistentId, Answers, Context) ->
+%% @private
+do_insert_unchecked(SurveyId, UserId, PersistentId, Answers, Context) ->
     {Points, AnswersPoints} = survey_test_results:calc_test_results(SurveyId, Answers, Context),
     z_db:insert(
         survey_answers,
