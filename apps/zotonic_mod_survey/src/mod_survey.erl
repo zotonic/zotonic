@@ -959,7 +959,24 @@ do_submit(SurveyId, Questions, Answers, Editing, SubmitArgs, Context) ->
     SurveySessionNonce = proplists:get_value(survey_session_nonce, SubmitArgs),
     case register_nonce(SurveySessionNonce) of
         ok ->
-            do_submit_1(SurveyId, Questions, Answers, Editing, SubmitArgs, Context);
+            case do_submit_1(SurveyId, Questions, Answers, Editing, SubmitArgs, Context) of
+                ok -> ok;
+                {ok, #context{}} = OK -> OK;
+                {ok, #render{}} = OK -> OK;
+                {error, full} ->
+                    unregister_nonce(SurveySessionNonce),
+                    Context1 = z_render:wire(
+                            {alert, [
+                                {title, ?__("Sorry", Context)},
+                                {text, ?__(
+                                    "Sorry, the maximum number of submissions has been reached. You can no longer submit this survey.",
+                                    Context)}
+                            ]}, Context),
+                    {ok, Context1};
+                {error, _} = Error ->
+                    unregister_nonce(SurveySessionNonce),
+                    Error
+            end;
         {error, duplicate} ->
             Context1 = z_render:wire(
                     {alert, [
@@ -1000,24 +1017,27 @@ do_submit_1(SurveyId, Questions, Answers, undefined, SubmitArgs, Context) ->
         Context)
     of
         undefined ->
-            save_submit(SurveyId, FoundAnswers, Answers, Context),
-            ok;
+            case save_submit(SurveyId, FoundAnswers, Answers, Context) of
+                {ok, _} -> ok;
+                {error, _} = Error -> Error
+            end;
         ok ->
             maybe_mail(SurveyId, Answers, undefined, false, Context),
             ok;
-        {save, #context{}=Context1} ->
+        {save, #context{} = SaveContext} ->
             %% Use the passed context to save the answers.
-            save_submit(SurveyId, FoundAnswers, Answers, Context1),
-            {ok, Context1};
-        {save, #render{}=Render} ->
-            save_submit(SurveyId, FoundAnswers, Answers, Context),
-            {ok, Render};
+            case save_submit(SurveyId, FoundAnswers, Answers, SaveContext) of
+                {ok, _} -> {ok, SaveContext};
+                {error, _} = Error -> Error
+            end;
+        {save, #render{} = Render} ->
+            case save_submit(SurveyId, FoundAnswers, Answers, Context) of
+                {ok, _} -> {ok, Render};
+                {error, _} = Error -> Error
+            end;
         {ok, _ContextOrRender} = Handled ->
-            % maybe_mail(SurveyId, Answers, undefined, false, Context),
             Handled;
         {error, _Reason} = Error ->
-            SurveySessionNonce = proplists:get_value(survey_session_nonce, SubmitArgs),
-            unregister_nonce(SurveySessionNonce),
             Error
     end;
 do_submit_1(SurveyId, Questions, Answers, {editing, AnswerId, _Actions}, _SubmitArgs, Context) ->
@@ -1041,10 +1061,11 @@ do_submit_1(SurveyId, Questions, Answers, {editing, AnswerId, _Actions}, _Submit
 
 %% @doc Save the form in the submit. Can be called from survey_submit observers if they
 %% need the answer id.
--spec save_submit(SurveySubmit, Context) -> {ok, AnswerId} when
+-spec save_submit(SurveySubmit, Context) -> {ok, AnswerId} | {error, Reason} when
     SurveySubmit :: #survey_submit{},
     Context :: z:context(),
-    AnswerId :: integer().
+    AnswerId :: integer(),
+    Reason :: full | term().
 save_submit(#survey_submit{
         id = SurveyId,
         answers = FoundAnswers,
@@ -1052,17 +1073,22 @@ save_submit(#survey_submit{
     }, Context) ->
     save_submit(SurveyId, FoundAnswers, Answers, Context).
 
--spec save_submit(SurveyId, FoundAnswers, Answers, Context) -> {ok, AnswerId} when
+-spec save_submit(SurveyId, FoundAnswers, Answers, Context) -> {ok, AnswerId} | {error, Reason} when
     SurveyId :: m_rsc:resource_id(),
     FoundAnswers :: list(),
     Answers :: list(),
     Context :: z:context(),
-    AnswerId :: integer().
+    AnswerId :: integer(),
+    Reason :: full | term().
 save_submit(SurveyId, FoundAnswers, Answers, Context) ->
     StorageAnswers = survey_answers_to_storage(FoundAnswers),
-    {ok, ResultId} = insert_survey_submission(SurveyId, StorageAnswers, Context),
-    maybe_mail(SurveyId, Answers, ResultId, false, Context),
-    {ok, ResultId}.
+    case insert_survey_submission(SurveyId, StorageAnswers, Context) of
+        {ok, ResultId} ->
+            maybe_mail(SurveyId, Answers, ResultId, false, Context),
+            {ok, ResultId};
+        {error, _} = Error ->
+            Error
+    end.
 
 
 insert_survey_submission(SurveyId, StorageAnswers, Context) ->
