@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-12-17 12:27\n"
+"PO-Revision-Date: 2025-12-17 12:32\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -12356,7 +12356,7 @@ msgstr "De nieuwe persoon kon niet worden toegevoegd."
 
 #: zotonic_mod_survey/src/mod_survey.erl:972
 msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
-msgstr ""
+msgstr "Sorry, het maximum aantal inzendingen is bereikt. U kunt dit formulier niet langer indienen."
 
 #: zotonic_mod_survey/src/mod_survey.erl:985
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
