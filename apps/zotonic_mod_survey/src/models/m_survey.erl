@@ -426,7 +426,7 @@ insert_survey_submission_1(SurveyId, UserId, PersistentId, Answers, Context) ->
     end.
 
 %% @private
-%% @doc If max results is checked, check the amount of submissions before
+%% @doc If max results is set, check the amount of submissions before
 %% inserting the new result. Run the check/insert as a singular job to prevent
 %% race conditions.
 do_insert_checked(SurveyId, UserId, PersistentId, Answers, Context, Context) ->
