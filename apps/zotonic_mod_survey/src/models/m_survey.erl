@@ -415,8 +415,7 @@ insert_survey_submission_1(SurveyId, UserId, PersistentId, Answers, Context) ->
         is_integer(UserId) -> {UserId, undefined};
         true -> {undefined, PersistentId}
     end,
-    case do_insert_checked(SurveyId, UserId1, PersistentId1, Answers, Context)
-    of
+    case do_insert_checked(SurveyId, UserId1, PersistentId1, Answers, Context) of
         {ok, _} = Ok ->
             publish(SurveyId, UserId1, PersistentId1, Context),
             maybe_mail_max_results_reached(SurveyId, Context),
@@ -429,7 +428,7 @@ insert_survey_submission_1(SurveyId, UserId, PersistentId, Answers, Context) ->
 %% @doc If max results is set, check the amount of submissions before
 %% inserting the new result. Run the check/insert as a singular job to prevent
 %% race conditions.
-do_insert_checked(SurveyId, UserId, PersistentId, Answers, Context, Context) ->
+do_insert_checked(SurveyId, UserId, PersistentId, Answers, Context) ->
     case m_rsc:p_no_acl(SurveyId, <<"survey_max_results_int">>, Context) of
         Max when is_integer(Max) ->
             jobs:run(
@@ -440,7 +439,8 @@ do_insert_checked(SurveyId, UserId, PersistentId, Answers, Context, Context) ->
                             do_insert_unchecked(SurveyId, UserId, PersistentId, Answers, Context);
                         true ->
                             {error, full}
-                    end);
+                    end
+                end);
         undefined ->
             do_insert_unchecked(SurveyId, UserId, PersistentId, Answers, Context)
     end.
