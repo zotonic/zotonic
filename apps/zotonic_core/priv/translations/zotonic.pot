@@ -13077,7 +13077,7 @@ msgstr ""
 #: zotonic_mod_survey/src/mod_survey.erl:972
 msgid ""
 "Sorry, the maximum number of submissions has been reached. You can no longer "
-"submit this survey."
+"submit this form."
 msgstr ""
 
 #: zotonic_mod_survey/src/mod_survey.erl:985

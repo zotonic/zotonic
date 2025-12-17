@@ -969,7 +969,7 @@ do_submit(SurveyId, Questions, Answers, Editing, SubmitArgs, Context) ->
                             {alert, [
                                 {title, ?__("Sorry", Context)},
                                 {text, ?__(
-                                    "Sorry, the maximum number of submissions has been reached. You can no longer submit this survey.",
+                                    "Sorry, the maximum number of submissions has been reached. You can no longer submit this form.",
                                     Context)}
                             ]}, Context),
                     {ok, Context1};
