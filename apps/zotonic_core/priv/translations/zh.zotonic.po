@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-12-17 12:14\n"
+"PO-Revision-Date: 2025-12-17 12:27\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -12352,7 +12352,7 @@ msgid "Sorry, could not insert the new person."
 msgstr "抱歉，无法插入新人。"
 
 #: zotonic_mod_survey/src/mod_survey.erl:972
-msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this survey."
+msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
 msgstr ""
 
 #: zotonic_mod_survey/src/mod_survey.erl:985
