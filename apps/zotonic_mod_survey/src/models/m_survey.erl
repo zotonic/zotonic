@@ -410,40 +410,55 @@ find_answer_id(SurveyId, UserId, _PersistendId, Context) ->
 
 -spec insert_survey_submission_1(m_rsc:resource_id(), undefined | m_rsc:resource_id(), binary(), list(), z:context() )
     -> {ok, pos_integer()|undefined} | {error, term()}.
-insert_survey_submission_1(SurveyId, undefined, PersistentId, Answers, Context) ->
-    {Points, AnswersPoints} = survey_test_results:calc_test_results(SurveyId, Answers, Context),
-    Result = z_db:insert(
-        survey_answers,
-        #{
-            <<"survey_id">> => SurveyId,
-            <<"user_id">> => undefined,
-            <<"persistent">> => PersistentId,
-            <<"is_anonymous">> => z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
-            <<"language">> => z_context:language(Context),
-            <<"points">> => Points,
-            <<"answers">> => AnswersPoints
-        },
-        Context),
-    publish(SurveyId, undefined, PersistentId, Context),
-    maybe_mail_max_results_reached(SurveyId, Context),
-    Result;
-insert_survey_submission_1(SurveyId, UserId, _PersistentId, Answers, Context) ->
-    {Points, AnswersPoints} = survey_test_results:calc_test_results(SurveyId, Answers, Context),
-    Result = z_db:insert(
-        survey_answers,
-        #{
-            <<"survey_id">> => SurveyId,
-            <<"user_id">> => UserId,
-            <<"persistent">> => undefined,
-            <<"is_anonymous">> => z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
-            <<"language">> => z_context:language(Context),
-            <<"points">> => Points,
-            <<"answers">> => AnswersPoints
-        },
-        Context),
-    publish(SurveyId, UserId, undefined, Context),
-    maybe_mail_max_results_reached(SurveyId, Context),
-    Result.
+insert_survey_submission_1(SurveyId, UserId, PersistentId, Answers, Context) ->
+    {UserId1, PersistentId1} = if
+        is_integer(UserId) -> {UserId, undefined};
+        true -> {undefined, PersistentId}
+    end,
+    case do_insert_checked(
+        SurveyId,
+        fun() ->
+            do_insert_survey_submission(SurveyId, UserId1, PersistentId1, Answers, Context)
+        end,
+        Context)
+    of
+        {ok, _} = Ok ->
+            publish(SurveyId, UserId1, PersistentId1, Context),
+            maybe_mail_max_results_reached(SurveyId, Context),
+            Ok;
+        {error, _} = Error ->
+            Error
+    end.
+
+do_insert_checked(SurveyId, Fun, Context) ->
+    case m_rsc:p_no_acl(SurveyId, <<"survey_max_results_int">>, Context) of
+        Max when is_integer(Max) ->
+            jobs:run(zotonic_singular_job, Fun);
+        undefined ->
+            Fun()
+    end.
+
+do_insert_survey_submission(SurveyId, UserId, PersistentId, Answers, Context) ->
+    case is_max_results_reached(SurveyId, Context) of
+        false ->
+            {Points, AnswersPoints} = survey_test_results:calc_test_results(SurveyId, Answers, Context),
+            Result = z_db:insert(
+                survey_answers,
+                #{
+                    <<"survey_id">> => SurveyId,
+                    <<"user_id">> => UserId,
+                    <<"persistent">> => PersistentId,
+                    <<"is_anonymous">> => z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
+                    <<"language">> => z_context:language(Context),
+                    <<"points">> => Points,
+                    <<"answers">> => AnswersPoints
+                },
+                Context),
+            Result;
+        true ->
+            {error, full}
+    end.
+
 
 maybe_mail_max_results_reached(SurveyId, Context) ->
     case is_max_results_reached(SurveyId, Context) of
