@@ -433,31 +433,33 @@ insert_survey_submission_1(SurveyId, UserId, PersistentId, Answers, Context) ->
 do_insert_checked(SurveyId, Fun, Context) ->
     case m_rsc:p_no_acl(SurveyId, <<"survey_max_results_int">>, Context) of
         Max when is_integer(Max) ->
-            jobs:run(zotonic_singular_job, Fun);
+            jobs:run(
+                zotonic_singular_job,
+                fun() ->
+                    case is_max_results_reached(SurveyId, Context) of
+                        false ->
+                            Fun();
+                        true ->
+                            {error, full}
+                    end);
         undefined ->
             Fun()
     end.
 
 do_insert_survey_submission(SurveyId, UserId, PersistentId, Answers, Context) ->
-    case is_max_results_reached(SurveyId, Context) of
-        false ->
-            {Points, AnswersPoints} = survey_test_results:calc_test_results(SurveyId, Answers, Context),
-            Result = z_db:insert(
-                survey_answers,
-                #{
-                    <<"survey_id">> => SurveyId,
-                    <<"user_id">> => UserId,
-                    <<"persistent">> => PersistentId,
-                    <<"is_anonymous">> => z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
-                    <<"language">> => z_context:language(Context),
-                    <<"points">> => Points,
-                    <<"answers">> => AnswersPoints
-                },
-                Context),
-            Result;
-        true ->
-            {error, full}
-    end.
+    {Points, AnswersPoints} = survey_test_results:calc_test_results(SurveyId, Answers, Context),
+    z_db:insert(
+        survey_answers,
+        #{
+            <<"survey_id">> => SurveyId,
+            <<"user_id">> => UserId,
+            <<"persistent">> => PersistentId,
+            <<"is_anonymous">> => z_convert:to_bool(m_rsc:p_no_acl(SurveyId, survey_anonymous, Context)),
+            <<"language">> => z_context:language(Context),
+            <<"points">> => Points,
+            <<"answers">> => AnswersPoints
+        },
+        Context).
 
 
 maybe_mail_max_results_reached(SurveyId, Context) ->
@@ -549,7 +551,7 @@ prep_chart(Type, Block, Stats, Context) ->
     SurveyId :: m_rsc:resource(),
     Context :: z:context().
 is_max_results_reached(SurveyId, Context) ->
-    case m_rsc:p(SurveyId, <<"survey_max_results_int">>, Context) of
+    case m_rsc:p_no_acl(SurveyId, <<"survey_max_results_int">>, Context) of
         Max when is_integer(Max), Max =< 0 ->
             true;
         Max when is_integer(Max) ->
