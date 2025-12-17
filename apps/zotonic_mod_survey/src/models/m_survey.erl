@@ -430,6 +430,8 @@ insert_survey_submission_1(SurveyId, UserId, PersistentId, Answers, Context) ->
 %% race conditions.
 do_insert_checked(SurveyId, UserId, PersistentId, Answers, Context) ->
     case m_rsc:p_no_acl(SurveyId, <<"survey_max_results_int">>, Context) of
+        Max when is_integer(Max), Max =< 0 ->
+            {error, full};
         Max when is_integer(Max) ->
             jobs:run(
                 zotonic_singular_job,
