@@ -467,7 +467,10 @@ LiveValidation.prototype = {
                     if (isValid){
                         this.onValid();
                     } else {
-                        this.showErrorMessage(validation.params?.failureMessage);
+                        // Show the 'failureMessage' unless it's a postback validation
+                        if (validation.type != Validate.Postback) {
+                            this.showErrorMessage(validation.params?.failureMessage);
+                        };
                         this.onInvalid();
                     }
                     if (this.formObj) {
