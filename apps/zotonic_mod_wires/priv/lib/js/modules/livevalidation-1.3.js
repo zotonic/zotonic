@@ -527,7 +527,7 @@ LiveValidation.prototype = {
             return null;
         }
         const span = document.createElement('span');
-        span.appendChild(document.createTextNode(this.message));
+        span.innerHTML = this.message;
         return span;
     },
 
