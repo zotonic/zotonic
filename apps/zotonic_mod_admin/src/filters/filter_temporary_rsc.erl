@@ -75,10 +75,10 @@ temporary_rsc(undefined, Props, Context) when is_map(Props) ->
     PropsMap = z_props:from_map(Props),
     make_temporary_rsc(PropsMap, Context);
 temporary_rsc(undefined, {props, Props}, Context) when is_list(Props) ->
-    PropsMap = z_props:from_list(Props),
+    {ok, PropsMap} = z_props:from_list(Props),
     make_temporary_rsc(PropsMap, Context);
 temporary_rsc(undefined, Props, Context) when is_list(Props) ->
-    PropsMap = z_props:from_list(Props),
+    {ok, PropsMap} = z_props:from_list(Props),
     make_temporary_rsc(PropsMap, Context);
 temporary_rsc(<<>>, Props, Context) ->
     temporary_rsc(undefined, Props, Context);
