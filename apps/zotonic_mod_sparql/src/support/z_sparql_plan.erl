@@ -75,7 +75,7 @@
     | {union, [ query_pattern() ]}
     | {filter, term(), query_pattern()}
     | {extend, variable(), term(), query_pattern()}
-    | {values, variable(), [ rdf_term() ]}
+    | {values, [ variable() ], [ [ rdf_term() | undefined ] ]}
     | {graph, rdf_term(), query_pattern()}.
 
 -type query_plan() :: #{
@@ -308,46 +308,71 @@ to_non_negative_integer(Name, Value) ->
     throw({error, {invalid_modifier, Name, Value}}).
 
 map_group({group, Patterns}, State0) ->
-    {Pattern, Filters, State1} = map_patterns(Patterns, identity, [], State0),
+    {Pattern, Filters, State1} = map_patterns(Patterns, identity, [], [], State0),
     {add_filters(Filters, Pattern), State1};
 map_group(Group, _State) ->
     throw({error, {invalid_group, Group}}).
 
-map_patterns([], Plan, Filters, State) ->
-    {Plan, lists:reverse(Filters), State};
-map_patterns([{triple_pattern, Triple} | Rest], Plan, Filters, State0) ->
+map_patterns([], Plan, Filters, Values, State) ->
+    Plan1 = lists:foldl(fun join_pattern/2, Plan, lists:reverse(Values)),
+    {Plan1, lists:reverse(Filters), State};
+map_patterns([{triple_pattern, Triple} | Rest], Plan, Filters, Values, State0) ->
     {Triples, State1} = map_triple_pattern(Triple, State0),
     Plan1 = lists:foldl(fun join_pattern/2, Plan, Triples),
-    map_patterns(Rest, Plan1, Filters, State1);
-map_patterns([{optional, Group} | Rest], Plan, Filters, State0) ->
+    map_patterns(Rest, Plan1, Filters, Values, State1);
+map_patterns([{optional, Group} | Rest], Plan, Filters, Values, State0) ->
     {Optional, State1} = map_group(Group, State0),
     Plan1 = {left_join, Plan, Optional, none},
-    map_patterns(Rest, Plan1, Filters, State1);
-map_patterns([{union, Groups} | Rest], Plan, Filters, State0) ->
+    map_patterns(Rest, Plan1, Filters, Values, State1);
+map_patterns([{union, Groups} | Rest], Plan, Filters, Values, State0) ->
     {Branches, State1} = map_groups(Groups, State0),
     Plan1 = join_pattern({union, Branches}, Plan),
-    map_patterns(Rest, Plan1, Filters, State1);
-map_patterns([{group, _} = Group | Rest], Plan, Filters, State0) ->
+    map_patterns(Rest, Plan1, Filters, Values, State1);
+map_patterns([{group, _} = Group | Rest], Plan, Filters, Values, State0) ->
     {Group1, State1} = map_group(Group, State0),
-    map_patterns(Rest, join_pattern(Group1, Plan), Filters, State1);
-map_patterns([{filter, Expression} | Rest], Plan, Filters, State0) ->
+    map_patterns(Rest, join_pattern(Group1, Plan), Filters, Values, State1);
+map_patterns([{filter, Expression} | Rest], Plan, Filters, Values, State0) ->
     {Expression1, State1} = map_expression(Expression, State0),
-    map_patterns(Rest, Plan, [Expression1 | Filters], State1);
-map_patterns([{bind, Expression, Variable} | Rest], Plan, Filters, State0) ->
+    map_patterns(Rest, Plan, [Expression1 | Filters], Values, State1);
+map_patterns([{bind, Expression, Variable} | Rest], Plan, Filters, Values, State0) ->
     {Expression1, State1} = map_expression(Expression, State0),
     Plan1 = {extend, Variable, Expression1, Plan},
-    map_patterns(Rest, Plan1, Filters, State1);
-map_patterns([{values, Variable, Values} | Rest], Plan, Filters, State0) ->
-    {Values1, State1} = map_terms(Values, State0),
-    Plan1 = join_pattern({values, Variable, Values1}, Plan),
-    map_patterns(Rest, Plan1, Filters, State1);
-map_patterns([{graph, Graph, Group} | Rest], Plan, Filters, State0) ->
+    map_patterns(Rest, Plan1, Filters, Values, State1);
+map_patterns([{values, Variables, Rows} | Rest], Plan, Filters, Values, State0) ->
+    {Rows1, State1} = map_values(Variables, Rows, State0),
+    map_patterns(Rest, Plan, Filters, [{values, Variables, Rows1} | Values], State1);
+map_patterns([{graph, Graph, Group} | Rest], Plan, Filters, Values, State0) ->
     {Graph1, State1} = map_term(Graph, State0),
     {Group1, State2} = map_group(Group, State1),
     Plan1 = join_pattern({graph, Graph1, Group1}, Plan),
-    map_patterns(Rest, Plan1, Filters, State2);
-map_patterns([Pattern | _], _Plan, _Filters, _State) ->
+    map_patterns(Rest, Plan1, Filters, Values, State2);
+map_patterns([Pattern | _], _Plan, _Filters, _Values, _State) ->
     throw({error, {invalid_graph_pattern, Pattern}}).
+
+map_values(Variables, Rows, State) ->
+    case length(Variables) =:= length(lists:usort(Variables)) of
+        true -> map_value_rows(Rows, length(Variables), State);
+        false -> throw({error, {duplicate_values_variable, Variables}})
+    end.
+
+map_value_rows([], _Width, State) ->
+    {[], State};
+map_value_rows([Row | Rest], Width, State0) when length(Row) =:= Width ->
+    {Row1, State1} = map_value_row(Row, State0),
+    {Rest1, State2} = map_value_rows(Rest, Width, State1),
+    {[Row1 | Rest1], State2};
+map_value_rows([Row | _], Width, _State) ->
+    throw({error, {invalid_values_row, Width, Row}}).
+
+map_value_row([], State) ->
+    {[], State};
+map_value_row([undefined | Rest], State0) ->
+    {Rest1, State1} = map_value_row(Rest, State0),
+    {[undefined | Rest1], State1};
+map_value_row([Value | Rest], State0) ->
+    {Value1, State1} = map_term(Value, State0),
+    {Rest1, State2} = map_value_row(Rest, State1),
+    {[Value1 | Rest1], State2}.
 
 map_groups([], State) ->
     {[], State};
@@ -476,13 +501,6 @@ predicate_mapping(Namespace, NamespacePrefix, LocalName, Context) ->
         undefined ->
             undefined
     end.
-
-map_terms([], State) ->
-    {[], State};
-map_terms([Term | Rest], State0) ->
-    {Term1, State1} = map_term(Term, State0),
-    {Rest1, State2} = map_terms(Rest, State1),
-    {[Term1 | Rest1], State2}.
 
 map_term({var, _} = Variable, State) ->
     {Variable, State};
@@ -633,9 +651,19 @@ resource_variables({filter, Expression, Pattern}) ->
     expression_resource_variables(Expression) ++ resource_variables(Pattern);
 resource_variables({extend, _Variable, _Expression, Pattern}) ->
     resource_variables(Pattern);
-resource_variables({values, _Variable, _Values}) -> [];
+resource_variables({values, Variables, Rows}) ->
+    VariableNrs = lists:zip(Variables, lists:seq(1, length(Variables))),
+    [ Variable || {Variable, Nr} <- VariableNrs, values_resource_column(Nr, Rows) ];
 resource_variables({graph, Graph, Pattern}) ->
     term_variables(Graph) ++ resource_variables(Pattern).
+
+values_resource_column(Nr, Rows) ->
+    Values = [ lists:nth(Nr, Row) || Row <- Rows ],
+    Values1 = [ V || V <- Values, V  =/= undefined ],
+    Values1 =/= [] andalso lists:all(fun is_iri/1, Values1).
+
+is_iri({iri, _Iri}) -> true;
+is_iri(_Value) -> false.
 
 term_variables({var, _} = Variable) -> [Variable];
 term_variables(_) -> [].

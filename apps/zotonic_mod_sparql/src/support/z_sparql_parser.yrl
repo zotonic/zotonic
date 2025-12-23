@@ -8,7 +8,7 @@ Nonterminals
     query prologue decls decl
     select_query construct_query describe_query ask_query
     dataset_clauses dataset_clause
-    where_clause solution_modifier
+    where_clause solution_modifier values_clause
     group_clause having_clause having_conditions having_condition
     order_clause order_conditions order_condition
     limit_offset_clause limit_clause offset_clause
@@ -16,6 +16,7 @@ Nonterminals
     group_graph_pattern group_graph_pattern_sub triples_block
     graph_pattern_not_triples optional_graph_pattern group_graph_pattern_inner
     union_graph_pattern filter_pattern bind_pattern inline_data
+    data_block data_block_values data_block_value data_block_rows data_block_row
     triples_same_subject blank_node_property_list
     property_list_not_empty property_list object_list object
     verb inverse_path path_elt path_primary var_or_term var iri_term prefixed_name
@@ -28,7 +29,7 @@ Nonterminals
 
 Terminals
     select construct describe ask where distinct reduced from named graph optional
-    union filter bind as values
+    union filter bind as values undef
     group by having order asc desc limit offset base prefix a
     var1 var2 iri_ref pname_ns pname_ln blank_node_label anon nil
     integer decimal double integer_positive decimal_positive double_positive
@@ -71,12 +72,12 @@ decl -> base iri_ref :
 decl -> prefix pname_ns iri_ref :
     {prefix, unwrap('$2'), unwrap('$3')}.
 
-select_query -> select var_or_star dataset_clauses where_clause solution_modifier :
-    {select, default, '$2', '$3', '$4', '$5'}.
-select_query -> select distinct var_or_star dataset_clauses where_clause solution_modifier :
-    {select, distinct, '$3', '$4', '$5', '$6'}.
-select_query -> select reduced var_or_star dataset_clauses where_clause solution_modifier :
-    {select, reduced, '$3', '$4', '$5', '$6'}.
+select_query -> select var_or_star dataset_clauses where_clause solution_modifier values_clause :
+    {select, default, '$2', '$3', add_values_clause('$4', '$6'), '$5'}.
+select_query -> select distinct var_or_star dataset_clauses where_clause solution_modifier values_clause :
+    {select, distinct, '$3', '$4', add_values_clause('$5', '$7'), '$6'}.
+select_query -> select reduced var_or_star dataset_clauses where_clause solution_modifier values_clause :
+    {select, reduced, '$3', '$4', add_values_clause('$5', '$7'), '$6'}.
 
 construct_query -> construct group_graph_pattern dataset_clauses where_clause solution_modifier :
     {construct, '$2', '$3', '$4', '$5'}.
@@ -113,6 +114,9 @@ where_clause -> where group_graph_pattern : '$2'.
 
 solution_modifier -> group_clause having_clause order_clause limit_offset_clause :
     {solution_modifier, '$1', '$2', '$3', '$4'}.
+
+values_clause -> '$empty' : none.
+values_clause -> inline_data : '$1'.
 
 group_clause -> '$empty' : [].
 group_clause -> group by var_list : '$3'.
@@ -190,8 +194,27 @@ filter_pattern -> filter expression :
 bind_pattern -> bind lparen expression as var rparen :
     {bind, '$3', '$5'}.
 
-inline_data -> values var lbrace object_list rbrace :
-    {values, '$2', '$4'}.
+inline_data -> values data_block : '$2'.
+
+data_block -> var lbrace data_block_values rbrace :
+    {values, ['$1'], [[Value] || Value <- '$3']}.
+data_block -> lparen var_list rparen lbrace data_block_rows rbrace :
+    {values, '$2', '$5'}.
+
+data_block_values -> '$empty' : [].
+data_block_values -> data_block_values data_block_value : '$1' ++ ['$2'].
+
+data_block_value -> iri_term : '$1'.
+data_block_value -> rdf_literal : '$1'.
+data_block_value -> numeric_literal : '$1'.
+data_block_value -> boolean_literal : '$1'.
+data_block_value -> undef : undefined.
+
+data_block_rows -> '$empty' : [].
+data_block_rows -> data_block_rows data_block_row : '$1' ++ ['$2'].
+
+data_block_row -> lparen data_block_values rparen : '$2'.
+data_block_row -> nil : [].
 
 %% ---------- Triples ----------
 
@@ -421,3 +444,6 @@ unwrap(Value) -> Value.
 
 append_union({union, Xs}, G) -> {union, Xs ++ [G]};
 append_union(G1, G2) -> {union, [G1, G2]}.
+
+add_values_clause(Group, none) -> Group;
+add_values_clause({group, Patterns}, Values) -> {group, Patterns ++ [Values]}.

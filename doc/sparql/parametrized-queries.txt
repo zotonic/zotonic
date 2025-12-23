@@ -83,6 +83,3 @@ This would then be as if the following query was written:
     }
 
 So we add the values, and the namespace (if needed).
-
-Possible todo: update the parser (and planner etc.) to accept multi-value VALUES.
-Currently we only accept single VALUE clauses.

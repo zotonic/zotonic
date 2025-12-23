@@ -383,6 +383,55 @@ arguments_test() ->
         ok = m_rsc:delete(RelatedId, Context)
     end.
 
+values_test() ->
+    ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
+    Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),
+    {ok, TutorialId} = m_rsc:insert([
+        {category, article},
+        {title, <<"SPARQL Tutorial">>}
+    ], Context),
+    {ok, SemanticWebId} = m_rsc:insert([
+        {category, article},
+        {title, <<"The Semantic Web">>}
+    ], Context),
+    {ok, OtherId} = m_rsc:insert([
+        {category, article},
+        {title, <<"Another SPARQL Book">>}
+    ], Context),
+    try
+        SemanticWebUri = m_rsc:uri(SemanticWebId, Context),
+        InlineSparql = <<
+            "PREFIX zotonic: <http://zotonic.net/predicate/>\n"
+            "SELECT ?book ?title WHERE {\n"
+            "    ?book zotonic:title ?title .\n"
+            "    VALUES (?book ?title) {\n"
+            "        (UNDEF \"SPARQL Tutorial\")\n"
+            "        (<", SemanticWebUri/binary, "> UNDEF)\n"
+            "    }\n"
+            "}"
+        >>,
+        TrailingSparql = <<
+            "PREFIX zotonic: <http://zotonic.net/predicate/>\n"
+            "SELECT ?book ?title WHERE {\n"
+            "    ?book zotonic:title ?title .\n"
+            "}\n"
+            "VALUES (?book ?title) {\n"
+            "    (UNDEF \"SPARQL Tutorial\")\n"
+            "    (<", SemanticWebUri/binary, "> UNDEF)\n"
+            "}"
+        >>,
+        Expected = lists:sort([
+            {TutorialId, <<"SPARQL Tutorial">>},
+            {SemanticWebId, <<"The Semantic Web">>}
+        ]),
+        ?assertEqual(Expected, lists:sort(search(InlineSparql, Context))),
+        ?assertEqual(Expected, lists:sort(search(TrailingSparql, Context)))
+    after
+        ok = m_rsc:delete(TutorialId, Context),
+        ok = m_rsc:delete(SemanticWebId, Context),
+        ok = m_rsc:delete(OtherId, Context)
+    end.
+
 facet_and_pivot_column_mapping_test() ->
     ok = z_sites_manager:await_startup(zotonic_site_testsandbox),
     Context = z_acl:sudo(z_context:new(zotonic_site_testsandbox)),

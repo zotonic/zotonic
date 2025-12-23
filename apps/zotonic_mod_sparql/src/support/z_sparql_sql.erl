@@ -51,7 +51,8 @@
     % they are needed as values in expressions.
     sql :: term(),
     type :: value_type(),
-    source :: argument | column | expression | jsonb
+    source :: argument | column | expression | jsonb,
+    defined = true :: true | false | term()
 }).
 
 -export_type([ sql_term/0 ]).
@@ -152,10 +153,175 @@ pattern_to_sql({left_join, _, _, _}, _State) ->
     throw({error, {unsupported, optional}});
 pattern_to_sql({extend, _, _, _}, _State) ->
     throw({error, {unsupported, bind}});
-pattern_to_sql({values, _, _}, _State) ->
-    throw({error, {unsupported, values}});
+pattern_to_sql({values, Variables, Rows}, State) ->
+    values_to_sql(Variables, Rows, State);
 pattern_to_sql({graph, _, _}, _State) ->
     throw({error, {unsupported, graph}}).
+
+values_to_sql(Variables, Rows, State0) ->
+    Columns = values_columns(Variables, Rows),
+    {Alias, State1} = new_alias(<<"values">>, State0),
+    {Table, Term0} = values_table(Columns, Rows, State1#sql_state.context),
+    Term1 = add_table(Alias, Table, Term0),
+    {Term2, State2} = bind_values_columns(Columns, Alias, Term1, State1),
+    Term3 = case Rows of
+        [] -> add_where(<<"false">>, Term2);
+        _ -> Term2
+    end,
+    {[Term3], State2}.
+
+values_columns(Variables, Rows) ->
+    VariableNrs = lists:zip(Variables, lists:seq(1, length(Variables))),
+    [ values_column(Variable, Nr, Rows) || {Variable, Nr} <- VariableNrs ].
+
+values_column(Variable, Nr, Rows) ->
+    Values = [ lists:nth(Nr, Row) || Row <- Rows ],
+    Values1 = [ Value || Value <- Values, Value =/= undefined ],
+    case lists:usort([ values_kind(Value) || Value <- Values1 ]) of
+        [] ->
+            {Variable, Nr, unbound, any};
+        [resource] ->
+            {Variable, Nr, resource, id};
+        [value] ->
+            Types = [ Type || Value <- Values1, {_Value, Type} <- [rdf_typed_value(Value)] ],
+            {Variable, Nr, value, common_types(Types)};
+        _ ->
+            throw({error, {incompatible_values, Variable, Values1}})
+    end.
+
+values_kind({iri, _Iri}) -> resource;
+values_kind(_Value) -> value.
+
+values_table(Columns, Rows, Context) ->
+    ColumnNames = lists:append([
+        [values_column_name(value, Nr), values_column_name(defined, Nr)]
+        || {_Variable, Nr, _Kind, _Type} <- Columns
+    ]),
+    {RowsSql, Term} = values_rows(Rows, Columns, Context, empty_term(), []),
+    RowsSql1 = case RowsSql of
+        [] -> [<<"(1)">>];
+        _ -> RowsSql
+    end,
+    Names1 = case ColumnNames of
+        [] -> [<<"dummy">>];
+        _ -> ColumnNames
+    end,
+    Table = [
+        <<"(SELECT * FROM (VALUES ">>, lists:join(<<", ">>, RowsSql1),
+        <<") AS sparql_values_row(">>, lists:join(<<", ">>, Names1), <<"))">>
+    ],
+    {Table, Term}.
+
+values_rows([], _Columns, _Context, Term, Acc) ->
+    {lists:reverse(Acc), Term};
+values_rows([Row | Rest], Columns, Context, Term0, Acc) ->
+    {Cells, Term1} = values_row(Row, Columns, Context, Term0, []),
+    RowSql = case Cells of
+        [] -> <<"(1)">>;
+        _ -> [$\(, lists:join(<<", ">>, Cells), $\)]
+    end,
+    values_rows(Rest, Columns, Context, Term1, [RowSql | Acc]).
+
+values_row([], [], _Context, Term, Acc) ->
+    {lists:reverse(Acc), Term};
+values_row([Value | Rest], [{_Variable, _Nr, Kind, Type} | Columns], Context, Term0, Acc) ->
+    {ValueSql, DefinedSql, Term1} = values_cell(Value, Kind, Type, Context, Term0),
+    values_row(Rest, Columns, Context, Term1, [DefinedSql, ValueSql | Acc]).
+
+values_cell(undefined, _Kind, Type, _Context, Term) ->
+    {[<<"CAST(NULL AS ">>, values_sql_type(Type), $\)], <<"false">>, Term};
+values_cell({iri, Iri}, resource, id, Context, Term0) ->
+    RscId = case m_rsc:rid(Iri, Context) of
+        undefined -> -1;
+        Id -> Id
+    end,
+    {Arg, Term1} = add_arg(RscId, Term0),
+    {[<<"CAST(">>, Arg, <<" AS bigint)">>], <<"true">>, Term1};
+values_cell(Value, value, Type, _Context, Term0) ->
+    {Value1, _ValueType} = rdf_typed_value(Value),
+    {Arg, Term1} = add_arg(Value1, Term0),
+    {[<<"CAST(">>, Arg, <<" AS ">>, values_sql_type(Type), $\)], <<"true">>, Term1}.
+
+%% @doc Values support a different set of types than arguments in datatype_argument_sql_type/1
+values_sql_type(any) -> <<"text">>;
+values_sql_type(boolean) -> <<"boolean">>;
+values_sql_type(datetime) -> <<"timestamptz">>;
+values_sql_type(float) -> <<"double precision">>;
+values_sql_type(id) -> <<"bigint">>;
+values_sql_type(integer) -> <<"bigint">>;
+values_sql_type(number) -> <<"numeric">>;
+values_sql_type(text) -> <<"text">>;
+values_sql_type(uri) -> <<"text">>;
+values_sql_type(Type) -> throw({error, {unsupported_values_type, Type}}).
+
+values_column_name(value, Nr) ->
+    <<"value_", (integer_to_binary(Nr))/binary>>;
+values_column_name(defined, Nr) ->
+    <<"defined_", (integer_to_binary(Nr))/binary>>.
+
+bind_values_columns([], _Alias, Term, State) ->
+    {Term, State};
+bind_values_columns([Column | Rest], Alias, Term0, State0) ->
+    {Term1, State1} = bind_values_column(Column, Alias, Term0, State0),
+    bind_values_columns(Rest, Alias, Term1, State1).
+
+bind_values_column({Variable, _Nr, unbound, any}, _Alias, Term,
+        #sql_state{ bindings = Bindings } = State) ->
+    case maps:is_key(Variable, Bindings) of
+        true -> {Term, State};
+        false ->
+            Expression = #sql_expression{
+                sql = <<"NULL">>, type = any, source = expression, defined = false
+            },
+            {Term, State#sql_state{ bindings = Bindings#{ Variable => {value, Expression} } }}
+    end;
+bind_values_column({Variable, Nr, Kind, Type}, Alias, Term0,
+        #sql_state{ bindings = Bindings } = State) ->
+    Expression = #sql_expression{
+        sql = column_expression(Alias, values_column_name(value, Nr)),
+        type = Type,
+        source = column,
+        defined = column_expression(Alias, values_column_name(defined, Nr))
+    },
+    case maps:find(Variable, Bindings) of
+        {ok, {resource, ResourceAlias}} when Kind =:= resource ->
+            Where = values_resource_where(ResourceAlias, Expression),
+            {add_where(Where, Term0), State};
+        {ok, {resource, _ResourceAlias}} ->
+            Where = [<<"NOT (">>, expression_defined_sql(Expression), $\)],
+            {add_where(Where, Term0), State};
+        {ok, {value, BoundExpression}} ->
+            {Where, MergedExpression} = merge_values_expressions(BoundExpression, Expression),
+            Bindings1 = Bindings#{ Variable => {value, MergedExpression} },
+            {add_where(Where, Term0), State#sql_state{ bindings = Bindings1 }};
+        error ->
+            Bindings1 = Bindings#{ Variable => {value, Expression} },
+            {Term0, State#sql_state{ bindings = Bindings1 }}
+    end.
+
+values_resource_where(Alias, Expression) ->
+    [
+        <<"((NOT ">>, expression_defined_sql(Expression), <<") OR (">>,
+        column_expression(Alias, <<"id">>), <<" = ">>, expression_sql(Expression), <<"))">>
+    ].
+
+merge_values_expressions(Left, Right) ->
+    Type = common_type(Left#sql_expression.type, Right#sql_expression.type),
+    Left1 = coerce_expression(Left, Type),
+    Right1 = coerce_expression(Right, Type),
+    LeftDefined = expression_defined_sql(Left1),
+    RightDefined = expression_defined_sql(Right1),
+    Where = [
+        <<"((NOT ">>, LeftDefined, <<") OR (NOT ">>, RightDefined, <<") OR (">>,
+        expression_sql(Left1), <<" = ">>, expression_sql(Right1), <<"))">>
+    ],
+    Merged = #sql_expression{
+        sql = [<<"COALESCE(">>, expression_sql(Left1), <<", ">>, expression_sql(Right1), $\)],
+        type = Type,
+        source = expression,
+        defined = [$(, LeftDefined, <<" OR ">>, RightDefined, $)]
+    },
+    {Where, Merged}.
 
 triple_to_sql(_Subject, {var, _}, _Object, _State) ->
     throw({error, {unsupported, variable_predicate}});
@@ -372,8 +538,9 @@ bind_variable_object(Variable, Kind, Expression, Term,
         #sql_state{ bindings = Bindings } = State) ->
     case maps:find(Variable, Bindings) of
         {ok, {Kind, #sql_expression{} = BoundExpression}} ->
-            EqualExpression = binary_expression('=', Expression, BoundExpression),
-            {add_where(expression_sql(EqualExpression), Term), State};
+            {Where, MergedExpression} = bind_expressions(BoundExpression, Expression),
+            Bindings1 = Bindings#{ Variable => {Kind, MergedExpression} },
+            {add_where(Where, Term), State#sql_state{ bindings = Bindings1 }};
         {ok, _OtherKind} ->
             throw({error, {incompatible_variable, Variable}});
         error ->
@@ -381,6 +548,20 @@ bind_variable_object(Variable, Kind, Expression, Term,
             Where = [expression_sql(Expression), <<" IS NOT NULL">>],
             {add_where(Where, Term), State#sql_state{ bindings = Bindings1 }}
     end.
+
+bind_expressions(#sql_expression{ defined = true } = BoundExpression, Expression) ->
+    EqualExpression = binary_expression('=', Expression, BoundExpression),
+    {expression_sql(EqualExpression), BoundExpression};
+bind_expressions(#sql_expression{ defined = false }, Expression) ->
+    {[expression_sql(Expression), <<" IS NOT NULL">>], Expression};
+bind_expressions(BoundExpression, Expression) ->
+    EqualExpression = binary_expression('=', Expression, BoundExpression),
+    Where = [
+        $\(, expression_sql(Expression), <<" IS NOT NULL AND ((NOT ">>,
+        expression_defined_sql(BoundExpression), <<") OR ">>,
+        expression_sql(EqualExpression), <<"))">>
+    ],
+    {Where, Expression}.
 
 bind_value_argument(Variable, Expression, Table, Column, Term0,
         #sql_state{ arguments = Arguments, context = Context }) ->
@@ -884,6 +1065,7 @@ jsonb_unix_timestamp_sql(Sql) ->
         unix_timestamp_sql(Scalar), <<" ELSE NULL END)">>
     ].
 
+%% @doc Arguments support a different set of types than values in values_sql_type/1
 datatype_argument_sql_type(text) -> <<"text">>;
 datatype_argument_sql_type(uri) -> <<"text">>;
 datatype_argument_sql_type(boolean) -> <<"boolean">>;
@@ -1106,6 +1288,8 @@ numeric_result_type(Expressions) ->
 
 coerce_expression(Expression, any) ->
     Expression;
+coerce_expression(#sql_expression{ type = any } = Expression, Type) ->
+    Expression#sql_expression{ type = Type };
 coerce_expression(#sql_expression{ source = argument } = Expression, _Type) ->
     Expression;
 coerce_expression(#sql_expression{ type = Actual } = Expression, Expected) ->
@@ -1188,6 +1372,10 @@ float_expression(Sql) ->
     }.
 
 expression_sql(#sql_expression{ sql = Sql }) -> Sql.
+
+expression_defined_sql(#sql_expression{ defined = true }) -> <<"true">>;
+expression_defined_sql(#sql_expression{ defined = false }) -> <<"false">>;
+expression_defined_sql(#sql_expression{ defined = Defined }) -> Defined.
 
 projection_term(#{ select := Select, distinct := Distinct, root := Root } = Plan, State0) ->
     SelectItems0 = case Select of
