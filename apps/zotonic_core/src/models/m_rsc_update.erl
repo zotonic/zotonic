@@ -1599,19 +1599,22 @@ props_filter(<<"privacy">>, Privacy, Acc, _RscUpd, _Context) ->
 props_filter(P, V, Acc, _RscUpd, _Context) ->
     Acc#{ P => V }.
 
-normalize_page_path(undefined, _IsEncoded) -> <<>>;
 normalize_page_path(<<>>, _IsEncoded) -> <<>>;
-normalize_page_path("", _IsEncoded) -> <<>>;
 normalize_page_path(Path, true) ->
     try
         Path1 = z_url:url_decode(Path),
         normalize_page_path(Path1)
     catch
-        _:_ -> <<>>
+        _:_ ->
+            % Reject improper encoded page paths
+            <<>>
     end;
-normalize_page_path(Path, false) ->
-    normalize_page_path(Path).
+normalize_page_path(Path, false) when is_binary(Path); is_list(Path) ->
+    normalize_page_path(Path);
+normalize_page_path(_InvalidPath, _IsEncoded) -> <<>>.
 
+-spec normalize_page_path(Path) -> binary() when
+    Path :: binary() | string() | undefined.
 normalize_page_path(undefined) -> <<>>;
 normalize_page_path(<<>>) -> <<>>;
 normalize_page_path("") -> <<>>;
