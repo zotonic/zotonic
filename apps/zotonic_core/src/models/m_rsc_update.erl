@@ -741,7 +741,7 @@ update_transaction_fun_props_1(#rscupd{id = Id} = RscUpd, Raw, Func, Context) ->
 
 update_transaction_filter_props(#rscupd{id = Id} = RscUpd, UpdateProps, Raw, Context) ->
     {Edges, UpdateProps1} = split_edges(UpdateProps),
-    EditableProps = props_filter_protected( props_filter( props_trim(UpdateProps1), Context), RscUpd),
+    EditableProps = props_filter_protected( props_filter( props_trim(UpdateProps1), RscUpd, Context), RscUpd),
     SafeProps = escape_props(RscUpd#rscupd.is_escape_texts, EditableProps, Context),
     SafeSlugProps = generate_slug(Id, SafeProps, Context),
     case preflight_check(Id, SafeSlugProps, Context) of
@@ -1405,24 +1405,24 @@ props_trim(Props) ->
 
 
 %% @doc Remove properties the user is not allowed to change and convert some other to the correct data type
-props_filter(Props, Context) ->
+props_filter(Props, RscUpd, Context) ->
     maps:fold(
         fun(K, V, Acc) ->
-            props_filter(K, V, Acc, Context)
+            props_filter(K, V, Acc, RscUpd, Context)
         end,
         #{},
         Props).
 
-props_filter(<<"uri">>, Uri, Acc, _Context) when ?is_empty(Uri) ->
+props_filter(<<"uri">>, Uri, Acc, _RscUpd, _Context) when ?is_empty(Uri) ->
     Acc#{ <<"uri">> => undefined };
-props_filter(<<"uri">>, Uri, Acc, _Context) ->
+props_filter(<<"uri">>, Uri, Acc, _RscUpd, _Context) ->
     case z_sanitize:uri(Uri) of
         <<"#script-removed">> ->
             Acc#{ <<"uri">> => undefined };
         CleanUri ->
             Acc#{ <<"uri">> => CleanUri }
     end;
-props_filter(<<"name">>, Name, Acc, Context) ->
+props_filter(<<"name">>, Name, Acc, _RscUpd, Context) ->
     case z_acl:is_allowed(use, mod_admin, Context) of
         true ->
             case z_utils:is_empty(Name) of
@@ -1438,22 +1438,23 @@ props_filter(<<"name">>, Name, Acc, Context) ->
         false ->
             Acc
     end;
-props_filter(<<"page_path">>, Path, Acc, Context) ->
+props_filter(<<"page_path">>, Path, Acc, RscUpd, Context) ->
     case z_acl:is_allowed(use, mod_admin, Context) of
         true when ?is_empty(Path) ->
             Acc#{ <<"page_path">> => undefined };
         true ->
+            IsEncoded = not RscUpd#rscupd.is_escape_texts,
             Path1 = if
                 is_binary(Path) ->
-                    normalize_page_path(Path);
+                    normalize_page_path(Path, IsEncoded);
                 is_list(Path) ->
-                    normalize_page_path(unicode:characters_to_binary(Path));
+                    normalize_page_path(unicode:characters_to_binary(Path), IsEncoded);
                 true ->
                     case Path of
                         #trans{ tr = [] } ->
                             undefined;
                         #trans{ tr = Tr } ->
-                            Tr1 = [ {Lang, normalize_page_path(P)} || {Lang, P} <- Tr ],
+                            Tr1 = [ {Lang, normalize_page_path(P, IsEncoded)} || {Lang, P} <- Tr ],
                             #trans{ tr = Tr1 };
                         _ ->
                             undefined
@@ -1463,16 +1464,16 @@ props_filter(<<"page_path">>, Path, Acc, Context) ->
         false ->
             Acc
     end;
-props_filter(<<"title_slug">>, Slug, Acc, _Context) when ?is_empty(Slug) ->
+props_filter(<<"title_slug">>, Slug, Acc, _RscUpd, _Context) when ?is_empty(Slug) ->
     Acc;
-props_filter(<<"title_slug">>, Slug, Acc, Context) ->
+props_filter(<<"title_slug">>, Slug, Acc, _RscUpd, Context) ->
     Slug1 = to_slug(Slug),
     SlugNoTr = z_trans:lookup_fallback(Slug1, en, Context),
     Acc#{
         <<"slug">> => z_convert:to_binary(SlugNoTr),
         <<"title_slug">> => Slug1
     };
-props_filter(<<"slug">>, Slug, Acc, _Context) ->
+props_filter(<<"slug">>, Slug, Acc, _RscUpd, _Context) ->
     case maps:is_key(<<"slug">>, Acc) of
         true ->
             Acc;
@@ -1481,17 +1482,17 @@ props_filter(<<"slug">>, Slug, Acc, _Context) ->
                 <<"slug">> => to_slug(Slug)
             }
     end;
-props_filter(<<"is_", _/binary>> = B, P, Acc, _Context) ->
+props_filter(<<"is_", _/binary>> = B, P, Acc, _RscUpd, _Context) ->
     Acc#{ B => z_convert:to_bool(P) };
-props_filter(<<"visible_for">> = B, P, Acc, _Context) ->
+props_filter(<<"visible_for">> = B, P, Acc, _RscUpd, _Context) ->
     Acc#{ B => z_convert:to_integer(P) };
-props_filter(<<"custom_slug">> = B, P, Acc, _Context) ->
+props_filter(<<"custom_slug">> = B, P, Acc, _RscUpd, _Context) ->
     Acc#{ B => z_convert:to_bool(P) };
-props_filter(<<"date_is_all_day">> = B, P, Acc, _Context) ->
+props_filter(<<"date_is_all_day">> = B, P, Acc, _RscUpd, _Context) ->
     Acc#{ B => z_convert:to_bool(P) };
-props_filter(<<"seo_noindex">> = B, P, Acc, _Context) ->
+props_filter(<<"seo_noindex">> = B, P, Acc, _RscUpd, _Context) ->
     Acc#{ B => z_convert:to_bool(P) };
-props_filter(P, DT, Acc, _Context)
+props_filter(P, DT, Acc, _RscUpd, _Context)
     when P =:= <<"created">>;           P =:= <<"modified">>;
          P =:= <<"date_start">>;        P =:= <<"date_end">>;
          P =:= <<"publication_start">>; P =:= <<"publication_end">>  ->
@@ -1504,7 +1505,7 @@ props_filter(P, DT, Acc, _Context)
     Acc#{
         P => DateTime
     };
-props_filter(P, Id, Acc, Context)
+props_filter(P, Id, Acc, _RscUpd, Context)
     when P =:= <<"creator_id">>;
          P =:= <<"modifier_id">> ->
     case m_rsc:rid(Id, Context) of
@@ -1513,10 +1514,10 @@ props_filter(P, Id, Acc, Context)
         RId ->
             Acc#{ P => RId }
     end;
-props_filter(<<"category">>, CatName, Acc, Context) ->
+props_filter(<<"category">>, CatName, Acc, _RscUpd, Context) ->
     {ok, CategoryId} = m_category:name_to_id(CatName, Context),
     Acc#{ <<"category_id">> => CategoryId };
-props_filter(<<"category_id">>, CatId, Acc, Context) ->
+props_filter(<<"category_id">>, CatId, Acc, _RscUpd, Context) ->
     CatId1 = m_rsc:rid(CatId, Context),
     case m_rsc:is_a(CatId1, category, Context) of
         true ->
@@ -1530,13 +1531,13 @@ props_filter(<<"category_id">>, CatId, Acc, Context) ->
             {ok, OtherId} = m_category:name_to_id(other, Context),
             Acc#{ <<"category_id">> => OtherId }
     end;
-props_filter(<<"content_group">>, CG, Acc, _Context) when ?is_empty(CG) ->
+props_filter(<<"content_group">>, CG, Acc, _RscUpd, _Context) when ?is_empty(CG) ->
     Acc#{ <<"content_group_id">> => undefined };
-props_filter(<<"content_group">>, CgName, Acc, Context) ->
-    props_filter(<<"content_group_id">>, CgName, Acc, Context);
-props_filter(<<"content_group_id">>, CgId, Acc, _Context) when ?is_empty(CgId) ->
+props_filter(<<"content_group">>, CgName, Acc, RscUpd, Context) ->
+    props_filter(<<"content_group_id">>, CgName, Acc, RscUpd, Context);
+props_filter(<<"content_group_id">>, CgId, Acc, _RscUpd, _Context) when ?is_empty(CgId) ->
     Acc#{ <<"content_group_id">> => undefined };
-props_filter(<<"content_group_id">>, CgId, Acc, Context) ->
+props_filter(<<"content_group_id">>, CgId, Acc, _RscUpd, Context) ->
     CgId1 = m_rsc:rid(CgId, Context),
     case m_rsc:is_a(CgId1, content_group, Context)
         orelse m_rsc:is_a(CgId1, acl_collaboration_group, Context)
@@ -1551,7 +1552,7 @@ props_filter(<<"content_group_id">>, CgId, Acc, Context) ->
             }),
             Acc
     end;
-props_filter(Location, P, Acc, _Context)
+props_filter(Location, P, Acc, _RscUpd, _Context)
     when Location =:= <<"location_lat">>;
          Location =:= <<"location_lng">> ->
     X = try
@@ -1560,23 +1561,23 @@ props_filter(Location, P, Acc, _Context)
             _:_ -> undefined
         end,
     Acc#{ Location => X };
-props_filter(<<"pref_language">>, Lang, Acc, _Context) ->
+props_filter(<<"pref_language">>, Lang, Acc, _RscUpd, _Context) ->
     Lang1 = case z_language:to_language_atom(Lang) of
         {ok, LangAtom} -> LangAtom;
         {error, not_a_language} -> undefined
     end,
     Acc#{ <<"pref_language">> => Lang1 };
-props_filter(<<"medium_language">>, Lang, Acc, _Context) ->
+props_filter(<<"medium_language">>, Lang, Acc, _RscUpd, _Context) ->
     Lang1 = case z_language:to_language_atom(Lang) of
         {ok, LangAtom} -> LangAtom;
         {error, not_a_language} -> undefined
     end,
     Acc#{ <<"medium_language">> => Lang1 };
-props_filter(<<"language">>, Langs, Acc, _Context) ->
+props_filter(<<"language">>, Langs, Acc, _RscUpd, _Context) ->
     Acc#{ <<"language">> => filter_languages(Langs) };
-props_filter(<<"crop_center">>, CropCenter, Acc, _Context) when ?is_empty(CropCenter) ->
+props_filter(<<"crop_center">>, CropCenter, Acc, _RscUpd, _Context) when ?is_empty(CropCenter) ->
     Acc#{ <<"crop_center">> => undefined };
-props_filter(<<"crop_center">>, CropCenter, Acc, _Context) ->
+props_filter(<<"crop_center">>, CropCenter, Acc, _RscUpd, _Context) ->
     CropCenter1 = case z_string:trim(CropCenter) of
         <<>> -> undefined;
         Trimmed ->
@@ -1586,17 +1587,30 @@ props_filter(<<"crop_center">>, CropCenter, Acc, _Context) ->
             end
     end,
     Acc#{ <<"crop_center">> => CropCenter1 };
-props_filter(<<"privacy">>, Privacy, Acc, _Context) when ?is_empty(Privacy) ->
+props_filter(<<"privacy">>, Privacy, Acc, _RscUpd, _Context) when ?is_empty(Privacy) ->
     Acc#{ <<"privacy">> => undefined };
-props_filter(<<"privacy">>, Privacy, Acc, _Context) ->
+props_filter(<<"privacy">>, Privacy, Acc, _RscUpd, _Context) ->
     P = try
             z_convert:to_integer(Privacy)
         catch
             _:_ -> undefined
         end,
     Acc#{ <<"privacy">> => P };
-props_filter(P, V, Acc, _Context) ->
+props_filter(P, V, Acc, _RscUpd, _Context) ->
     Acc#{ P => V }.
+
+normalize_page_path(undefined, _IsEncoded) -> <<>>;
+normalize_page_path(<<>>, _IsEncoded) -> <<>>;
+normalize_page_path("", _IsEncoded) -> <<>>;
+normalize_page_path(Path, true) ->
+    try
+        Path1 = z_url:url_decode(Path),
+        normalize_page_path(Path1)
+    catch
+        _:_ -> <<>>
+    end;
+normalize_page_path(Path, false) ->
+    normalize_page_path(Path).
 
 normalize_page_path(undefined) -> <<>>;
 normalize_page_path(<<>>) -> <<>>;
