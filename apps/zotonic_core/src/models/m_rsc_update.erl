@@ -1448,7 +1448,7 @@ props_filter(<<"page_path">>, Path, Acc, RscUpd, Context) ->
                 is_binary(Path) ->
                     normalize_page_path(Path, IsEncoded);
                 is_list(Path) ->
-                    normalize_page_path(unicode:characters_to_binary(Path), IsEncoded);
+                    normalize_page_path(unicode_characters_to_binary(Path), IsEncoded);
                 true ->
                     case Path of
                         #trans{ tr = [] } ->
@@ -1599,6 +1599,16 @@ props_filter(<<"privacy">>, Privacy, Acc, _RscUpd, _Context) ->
 props_filter(P, V, Acc, _RscUpd, _Context) ->
     Acc#{ P => V }.
 
+unicode_characters_to_binary(Path) ->
+    case unicode:characters_to_binary(Path) of
+        Bin when is_binary(Bin) -> Bin;
+        {error, Bin, _} -> Bin;
+        {incomplete, Bin, _} -> Bin
+    end.
+
+-spec normalize_page_path(Path, IsEncoded) -> binary() when
+    Path :: binary(),
+    IsEncoded :: boolean().
 normalize_page_path(<<>>, _IsEncoded) -> <<>>;
 normalize_page_path(Path, true) ->
     try
@@ -1609,9 +1619,8 @@ normalize_page_path(Path, true) ->
             % Reject improper encoded page paths
             <<>>
     end;
-normalize_page_path(Path, false) when is_binary(Path); is_list(Path) ->
-    normalize_page_path(Path);
-normalize_page_path(_InvalidPath, _IsEncoded) -> <<>>.
+normalize_page_path(Path, false) ->
+    normalize_page_path(Path).
 
 -spec normalize_page_path(Path) -> binary() when
     Path :: binary() | string() | undefined.
