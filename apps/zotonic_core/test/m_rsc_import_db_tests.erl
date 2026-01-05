@@ -100,7 +100,7 @@ page_path_test() ->
     C = z_context:new(zotonic_site_testsandbox),
     ok = z_module_manager:upgrade_await(C),
     AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
-    Rsc = #{
+    Rsc1 = #{
         category_id => other,
         title => <<"Page Path Test">>,
         language => [ en ],
@@ -109,9 +109,9 @@ page_path_test() ->
             {en, <<"/på/öl"/utf8>>}
         ]}
     },
-    {ok, Id1} = m_rsc:insert(Rsc, [ {is_escape_text, true} ], AdminC),
+    {ok, Id1} = m_rsc:insert(Rsc1, [ {is_escape_text, true} ], AdminC),
     ?assertEqual(#trans{ tr = [{en, <<"/p%C3%A5/%C3%B6l">>}] }, m_rsc:p(Id1, <<"page_path">>, AdminC)),
-    Rsc1 = #{
+    Rsc2 = #{
         category_id => other,
         title => <<"Page Path Test">>,
         language => [ en ],
@@ -120,7 +120,7 @@ page_path_test() ->
             {en, <<"/p%C3%A5/%C3%B6l">>}
         ]}
     },
-    {ok, Id2} = m_rsc:insert(Rsc, [ {is_escape_text, false} ], AdminC),
+    {ok, Id2} = m_rsc:insert(Rsc2, [ {is_escape_text, false} ], AdminC),
     ?assertEqual(#trans{ tr = [{en, <<"/p%C3%A5/%C3%B6l">>}] }, m_rsc:p(Id2, <<"page_path">>, AdminC)),
     ok = m_rsc:delete(Id1, AdminC),
     ok = m_rsc:delete(Id2, AdminC),
