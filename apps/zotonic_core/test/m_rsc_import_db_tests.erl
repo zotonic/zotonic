@@ -95,6 +95,36 @@ modify_rsc_test() ->
 
     ok.
 
+%% Test that page_path is properly escaped on insert
+page_path_test() ->
+    C = z_context:new(zotonic_site_testsandbox),
+    ok = z_module_manager:upgrade_await(C),
+    AdminC = z_acl:logon(?ACL_ADMIN_USER_ID, C),
+    Rsc1 = #{
+        category_id => other,
+        title => <<"Page Path Test">>,
+        language => [ en ],
+        is_published => true,
+        page_path => #trans{ tr = [
+            {en, <<"/på/öl"/utf8>>}
+        ]}
+    },
+    {ok, Id1} = m_rsc:insert(Rsc1, [ {is_escape_texts, true} ], AdminC),
+    ?assertEqual(#trans{ tr = [{en, <<"/p%C3%A5/%C3%B6l">>}] }, m_rsc:p(Id1, <<"page_path">>, AdminC)),
+    ok = m_rsc:delete(Id1, AdminC),
+    Rsc2 = #{
+        category_id => other,
+        title => <<"Page Path Test">>,
+        language => [ en ],
+        is_published => true,
+        page_path => #trans{ tr = [
+            {en, <<"/p%C3%A5/%C3%B6l">>}
+        ]}
+    },
+    {ok, Id2} = m_rsc:insert(Rsc2, [ {is_escape_texts, false} ], AdminC),
+    ?assertEqual(#trans{ tr = [{en, <<"/p%C3%A5/%C3%B6l">>}] }, m_rsc:p(Id2, <<"page_path">>, AdminC)),
+    ok = m_rsc:delete(Id2, AdminC),
+    ok.
 
 export_data() ->
     #{<<"depiction_url">> => <<"https://localhost/lib/images/koe.jpg">>,
