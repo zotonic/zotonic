@@ -36,7 +36,7 @@
     normalize_props/4,
 
     delete_nocheck/2,
-    props_filter/3,
+    props_filter/4,
 
     to_slug/1,
     normalize_page_path/1,
