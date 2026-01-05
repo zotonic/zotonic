@@ -482,8 +482,7 @@ update_transaction_fun_props(#rscupd{id=Id} = RscUpd, Func, Context) ->
     case Func(Id, Raw, Context) of
         {ok, UpdateProps} ->
             EditableProps = props_filter_protected(
-                                props_filter(
-                                    props_trim(UpdateProps), [], Context),
+                                props_filter(props_trim(UpdateProps), [], RscUpd, Context),
                                 RscUpd),
             AclCheckedProps = case z_acl:rsc_update_check(Id, EditableProps, Context) of
                                  L when is_list(L) -> L;
@@ -813,173 +812,173 @@ props_trim(Props) ->
 
 
 %% @doc Remove properties the user is not allowed to change and convert some other to the correct data type
-%% @spec props_filter(Props1, Acc, Context) -> Props2
-props_filter([], Acc, _Context) ->
+props_filter([], Acc, _RscUpd, _Context) ->
     Acc;
 
-props_filter([{uri, Uri}|T], Acc, Context) ->
+props_filter([{uri, Uri}|T], Acc, RscUpd, Context) ->
     case Uri of
         Empty when Empty == undefined; Empty == []; Empty == <<>> ->
-            props_filter(T, [{uri, undefined} | Acc], Context);
+            props_filter(T, [{uri, undefined} | Acc], RscUpd, Context);
         _ ->
-            props_filter(T, [{uri, z_sanitize:uri(Uri)} | Acc], Context)
+            props_filter(T, [{uri, z_sanitize:uri(Uri)} | Acc], RscUpd, Context)
     end;
 
-props_filter([{name, Name}|T], Acc, Context) ->
+props_filter([{name, Name}|T], Acc, RscUpd, Context) ->
     case z_acl:is_allowed(use, mod_admin, Context) of
         true ->
             case z_utils:is_empty(Name) of
                 true ->
-                    props_filter(T, [{name, undefined} | Acc], Context);
+                    props_filter(T, [{name, undefined} | Acc], RscUpd, Context);
                 false ->
                     Name1 = case z_string:to_name(Name) of
                         <<"_">> -> undefined;
                         N -> N
                     end,
-                    props_filter(T, [{name, Name1} | Acc], Context)
+                    props_filter(T, [{name, Name1} | Acc], RscUpd, Context)
             end;
         false ->
-            props_filter(T, Acc, Context)
+            props_filter(T, Acc, RscUpd, Context)
     end;
 
-props_filter([{page_path, Path}|T], Acc, Context) ->
+props_filter([{page_path, Path}|T], Acc, RscUpd, Context) ->
     case z_acl:is_allowed(use, mod_admin, Context) of
         true ->
             case Path of
                 Empty when Empty == undefined; Empty == []; Empty == <<>> ->
-                    props_filter(T, [{page_path, undefined} | Acc], Context);
+                    props_filter(T, [{page_path, undefined} | Acc], RscUpd, Context);
                 _ ->
+                    IsEncoded = not RscUpd#rscupd.is_escape_texts,
                     Path1 = if
                         is_binary(Path) ->
-                            normalize_page_path(Path);
+                            normalize_page_path(Path, IsEncoded);
                         is_list(Path) ->
-                            normalize_page_path(z_convert:to_binary(Path));
+                            normalize_page_path(z_convert:to_binary(Path), IsEncoded);
                         true ->
                             case Path of
                                 {trans, []} ->
                                     undefined;
                                 {trans, Tr} ->
-                                    Tr1 = [ {Lang, normalize_page_path(P)} || {Lang, P} <- Tr ],
+                                    Tr1 = [ {Lang, normalize_page_path(P, IsEncoded)} || {Lang, P} <- Tr ],
                                     {trans, Tr1};
                                 _ ->
                                     undefined
                             end
                     end,
-                    props_filter(T, [{page_path, Path1} | Acc], Context)
+                    props_filter(T, [{page_path, Path1} | Acc], RscUpd, Context)
             end;
         false ->
-            props_filter(T, Acc, Context)
+            props_filter(T, Acc, RscUpd, Context)
     end;
-props_filter([{title_slug, Slug}|T], Acc, Context) ->
+props_filter([{title_slug, Slug}|T], Acc, RscUpd, Context) ->
     case z_utils:is_empty(Slug) of
         true ->
-            props_filter(T, Acc, Context);
+            props_filter(T, Acc, RscUpd, Context);
         false ->
             Slug1 = to_slug(Slug),
             SlugNoTr = z_trans:lookup_fallback(Slug1, en, Context),
             Acc1 = proplists:delete(slug, Acc),
             T1 = proplists:delete(slug, T),
-            props_filter(T1, [ {title_slug, Slug1}, {slug, SlugNoTr} | Acc1 ], Context)
+            props_filter(T1, [ {title_slug, Slug1}, {slug, SlugNoTr} | Acc1 ], RscUpd, Context)
     end;
 
-props_filter([{B, P}|T], Acc, Context)
+props_filter([{B, P}|T], Acc, RscUpd, Context)
     when  B =:= is_published; B =:= is_featured; B=:= is_protected;
           B =:= is_dependent; B =:= is_query_live; B =:= date_is_all_day;
           B =:= is_website_redirect; B =:= is_page_path_multiple;
           B =:= is_authoritative;
           B =:= custom_slug; B =:= seo_noindex ->
-    props_filter(T, [{B, z_convert:to_bool(P)} | Acc], Context);
+    props_filter(T, [{B, z_convert:to_bool(P)} | Acc], RscUpd, Context);
 
-props_filter([{P, DT}|T], Acc, Context)
+props_filter([{P, DT}|T], Acc, RscUpd, Context)
     when P =:= created; P =:= modified;
          P =:= date_start; P =:= date_end;
          P =:= publication_start; P =:= publication_end  ->
-    props_filter(T, [{P,z_datetime:to_datetime(DT)}|Acc], Context);
+    props_filter(T, [{P,z_datetime:to_datetime(DT)}|Acc], RscUpd, Context);
 
-props_filter([{P, Id}|T], Acc, Context)
+props_filter([{P, Id}|T], Acc, RscUpd, Context)
     when P =:= creator_id; P =:= modifier_id ->
     case m_rsc:rid(Id, Context) of
         undefined ->
-            props_filter(T, Acc, Context);
+            props_filter(T, Acc, RscUpd, Context);
         RId ->
-            props_filter(T, [{P,RId}|Acc], Context)
+            props_filter(T, [{P,RId}|Acc], RscUpd, Context)
     end;
 
-props_filter([{visible_for, Vis}|T], Acc, Context) ->
+props_filter([{visible_for, Vis}|T], Acc, RscUpd, Context) ->
     VisibleFor = z_convert:to_integer(Vis),
     case VisibleFor of
         N when N >= 0 ->
-            props_filter(T, [{visible_for, N} | Acc], Context);
+            props_filter(T, [{visible_for, N} | Acc], RscUpd, Context);
         _ ->
-            props_filter(T, Acc, Context)
+            props_filter(T, Acc, RscUpd, Context)
     end;
 
-props_filter([{category, CatName}|T], Acc, Context) ->
-    props_filter([{category_id, m_category:name_to_id_check(CatName, Context)} | T], Acc, Context);
-props_filter([{category_id, CatId}|T], Acc, Context) ->
+props_filter([{category, CatName}|T], Acc, RscUpd, Context) ->
+    props_filter([{category_id, m_category:name_to_id_check(CatName, Context)} | T], Acc, RscUpd, Context);
+props_filter([{category_id, CatId}|T], Acc, RscUpd, Context) ->
     CatId1 = m_rsc:rid(CatId, Context),
     case m_rsc:is_a(CatId1, category, Context) of
         true ->
-            props_filter(T, [{category_id, CatId1}|Acc], Context);
+            props_filter(T, [{category_id, CatId1}|Acc], RscUpd, Context);
         false ->
             lager:error("Ignoring unknown category '~p' in update, using 'other' instead.",
                         [CatId]),
-            props_filter(T, [{category_id,m_rsc:rid(other, Context)}|Acc], Context)
+            props_filter(T, [{category_id,m_rsc:rid(other, Context)}|Acc], RscUpd, Context)
     end;
 
-props_filter([{content_group, undefined}|T], Acc, Context) ->
-    props_filter(T, [{content_group_id, undefined}|Acc], Context);
-props_filter([{content_group, CgName}|T], Acc, Context) ->
+props_filter([{content_group, undefined}|T], Acc, RscUpd, Context) ->
+    props_filter(T, [{content_group_id, undefined}|Acc], RscUpd, Context);
+props_filter([{content_group, CgName}|T], Acc, RscUpd, Context) ->
     case m_rsc:rid(CgName, Context) of
         undefined ->
             lager:error("Ignoring unknown content group '~p' in update.", [CgName]),
-            props_filter(T, Acc, Context);
+            props_filter(T, Acc, RscUpd, Context);
         CgId ->
-            props_filter([{content_group_id, CgId}|T], Acc, Context)
+            props_filter([{content_group_id, CgId}|T], Acc, RscUpd, Context)
     end;
-props_filter([{content_group_id, undefined}|T], Acc, Context) ->
-    props_filter(T, [{content_group_id, undefined}|Acc], Context);
-props_filter([{content_group_id, CgId}|T], Acc, Context) ->
+props_filter([{content_group_id, undefined}|T], Acc, RscUpd, Context) ->
+    props_filter(T, [{content_group_id, undefined}|Acc], RscUpd, Context);
+props_filter([{content_group_id, CgId}|T], Acc, RscUpd, Context) ->
     CgId1 = m_rsc:rid(CgId, Context),
     case m_rsc:is_a(CgId1, content_group, Context)
         orelse m_rsc:is_a(CgId1, acl_collaboration_group, Context)
     of
         true ->
-            props_filter(T, [{content_group_id, CgId1}|Acc], Context);
+            props_filter(T, [{content_group_id, CgId1}|Acc], RscUpd, Context);
         false ->
             lager:error("Ignoring unknown content group '~p' in update.", [CgId]),
-            props_filter(T, Acc, Context)
+            props_filter(T, Acc, RscUpd, Context)
     end;
 
-props_filter([{Location, P}|T], Acc, Context)
+props_filter([{Location, P}|T], Acc, RscUpd, Context)
     when Location =:= location_lat; Location =:= location_lng ->
     X = try
             z_convert:to_float(P)
         catch
             _:_ -> undefined
         end,
-    props_filter(T, [{Location, X} | Acc], Context);
+    props_filter(T, [{Location, X} | Acc], RscUpd, Context);
 
-props_filter([{pref_language, Lang}|T], Acc, Context) ->
+props_filter([{pref_language, Lang}|T], Acc, RscUpd, Context) ->
     Lang1 = case z_trans:to_language_atom(Lang) of
                 {ok, LangAtom} -> LangAtom;
                 {error, not_a_language} -> undefined
             end,
-    props_filter(T, [{pref_language, Lang1} | Acc], Context);
+    props_filter(T, [{pref_language, Lang1} | Acc], RscUpd, Context);
 
-props_filter([{medium_language, Lang}|T], Acc, Context) ->
+props_filter([{medium_language, Lang}|T], Acc, RscUpd, Context) ->
     Lang1 = case z_trans:to_language_atom(Lang) of
                 {ok, LangAtom} -> LangAtom;
                 {error, not_a_language} -> undefined
             end,
-    props_filter(T, [{medium_language, Lang1} | Acc], Context);
+    props_filter(T, [{medium_language, Lang1} | Acc], RscUpd, Context);
 
-props_filter([{language, Langs}|T], Acc, Context) ->
-    props_filter(T, [{language, filter_languages(Langs)}|Acc], Context);
+props_filter([{language, Langs}|T], Acc, RscUpd, Context) ->
+    props_filter(T, [{language, filter_languages(Langs)}|Acc], RscUpd, Context);
 
-props_filter([{crop_center, undefined}=H|T], Acc, Context) ->
-    props_filter(T, [H|Acc], Context);
-props_filter([{crop_center, CropCenter}|T], Acc, Context) ->
+props_filter([{crop_center, undefined}=H|T], Acc, RscUpd, Context) ->
+    props_filter(T, [H|Acc], RscUpd, Context);
+props_filter([{crop_center, CropCenter}|T], Acc, RscUpd, Context) ->
     CropCenter1 = case z_string:trim(CropCenter) of
         <<>> -> undefined;
         Trimmed ->
@@ -988,10 +987,25 @@ props_filter([{crop_center, CropCenter}|T], Acc, Context) ->
                 {match, _} -> Trimmed
             end
     end,
-    props_filter(T, [{crop_center, CropCenter1}|Acc], Context);
+    props_filter(T, [{crop_center, CropCenter1}|Acc], RscUpd, Context);
 
-props_filter([{_Prop, _V}=H|T], Acc, Context) ->
-    props_filter(T, [H|Acc], Context).
+props_filter([{_Prop, _V}=H|T], Acc, RscUpd, Context) ->
+    props_filter(T, [H|Acc], RscUpd, Context).
+
+
+normalize_page_path(<<>>, _IsEncoded) -> <<>>;
+normalize_page_path("", _IsEncoded) -> <<>>;
+normalize_page_path(Path, true) ->
+    try
+        Path1 = z_url:url_decode(Path),
+        normalize_page_path(Path1)
+    catch
+        _:_ ->
+            % Reject improper encoded page paths
+            <<>>
+    end;
+normalize_page_path(Path, false) ->
+    normalize_page_path(Path).
 
 normalize_page_path(undefined) -> <<>>;
 normalize_page_path(<<>>) -> <<>>;
