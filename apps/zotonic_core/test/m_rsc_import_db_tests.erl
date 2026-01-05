@@ -111,6 +111,7 @@ page_path_test() ->
     },
     {ok, Id1} = m_rsc:insert(Rsc1, [ {is_escape_text, true} ], AdminC),
     ?assertEqual(#trans{ tr = [{en, <<"/p%C3%A5/%C3%B6l">>}] }, m_rsc:p(Id1, <<"page_path">>, AdminC)),
+    ok = m_rsc:delete(Id1, AdminC),
     Rsc2 = #{
         category_id => other,
         title => <<"Page Path Test">>,
@@ -122,7 +123,6 @@ page_path_test() ->
     },
     {ok, Id2} = m_rsc:insert(Rsc2, [ {is_escape_text, false} ], AdminC),
     ?assertEqual(#trans{ tr = [{en, <<"/p%C3%A5/%C3%B6l">>}] }, m_rsc:p(Id2, <<"page_path">>, AdminC)),
-    ok = m_rsc:delete(Id1, AdminC),
     ok = m_rsc:delete(Id2, AdminC),
     ok.
 
