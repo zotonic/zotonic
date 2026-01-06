@@ -516,7 +516,7 @@ insert_edge_1(SubjectId, ObjectId, PredId, SeqOpt, CreatorId, Created, Context) 
         Context).
 
 %% @doc Determine the sequence number for the new edge. Needed for importes with
-%% specific sequence order, of if the "is_insert_before" option is used or set for
+%% specific sequence order, or if the "is_insert_before" option is used or set for
 %% the predicate.
 maybe_seq_opt(Opts, SubjectId, PredId, Context) ->
     case proplists:get_value(seq, Opts) of
