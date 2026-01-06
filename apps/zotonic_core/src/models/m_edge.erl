@@ -336,7 +336,7 @@ get_edges(Subject, Context) ->
     ObjectId :: m_rsc:resource(),
     Context :: z:context(),
     EdgeId :: pos_integer(),
-    Reason :: {unknown_predicate, m_rsc:resource()} | object | subject | eacces.
+    Reason :: {unknown_predicate, m_rsc:resource()} | object | subject | eacces | unknown.
 insert(Subject, Pred, Object, Context) ->
     insert(Subject, Pred, Object, [], Context).
 
@@ -364,42 +364,80 @@ insert(Subject, Pred, Object, Opts, Context) ->
     end.
 
 insert1(SubjectId, PredId, ObjectId, Opts, Context) ->
-    case z_db:q1("select id
-              from edge
-              where subject_id = $1
-                and object_id = $2
-                and predicate_id = $3",
+    case z_db:q1("
+        select id
+        from edge
+        where subject_id = $1
+          and object_id = $2
+          and predicate_id = $3",
         [SubjectId, ObjectId, PredId],
         Context)
     of
         undefined ->
-            F = fun(Ctx) ->
-                SeqOpt = maybe_seq_opt(Opts, SubjectId, PredId, Ctx),
-                CreatedOpt = case proplists:get_value(created, Opts) of
-                                 DT when is_tuple(DT) -> [{created, DT}];
-                                 undefined -> []
-                             end,
-                EdgeProps = [
-                    {subject_id, SubjectId},
-                    {object_id, ObjectId},
-                    {predicate_id, PredId},
-                    {creator_id, case proplists:get_value(creator_id, Opts) of
-                                     undefined -> z_acl:user(Ctx);
-                                     CreatorId -> CreatorId
-                                 end}
-                    | (SeqOpt ++ CreatedOpt)
-                ],
-                z_db:insert(edge, EdgeProps, Ctx)
-            end,
             {ok, PredName} = m_predicate:id_to_name(PredId, Context),
             case z_acl:is_allowed(insert,
                                   #acl_edge{subject_id=SubjectId, predicate=PredName, object_id=ObjectId},
                                   Context)
             of
                 true ->
-                    {ok, EdgeId} = z_db:transaction(F, Context),
-                    z_edge_log_server:check(Context),
-                    {ok, EdgeId};
+                    Created = case proplists:get_value(created, Opts) of
+                        DT when is_tuple(DT) -> DT;
+                        undefined -> undefined
+                    end,
+                    CreatorId = case proplists:get_value(creator_id, Opts) of
+                        undefined -> z_acl:user(Context);
+                        CId -> CId
+                    end,
+                    Transaction = fun(Ctx) ->
+                        SeqOpt = maybe_seq_opt(Opts, SubjectId, PredId, Ctx),
+                        insert_edge_1(SubjectId, ObjectId, PredId, SeqOpt, CreatorId, Created, Ctx)
+                    end,
+                    case z_db:transaction(Transaction, Context) of
+                        {ok, 1, _, [{EdgeId}]} ->
+                            z_edge_log_server:check(Context),
+                            {ok, EdgeId};
+                        {ok, 0, _, []} ->
+                            % Race condition, edge might have been inserted by another transaction
+                            case z_db:q1("
+                                select id
+                                from edge
+                                where subject_id = $1
+                                  and object_id = $2
+                                  and predicate_id = $3",
+                                [SubjectId, ObjectId, PredId],
+                                Context)
+                            of
+                                undefined ->
+                                    % Some other error during insert -- should not happen
+                                    ?LOG_ERROR(#{
+                                        in => zotonic_core,
+                                        text => <<"Error inserting edge">>,
+                                        result => error,
+                                        reason => unknown,
+                                        subject_id => SubjectId,
+                                        predicate_id => PredId,
+                                        object_id => ObjectId,
+                                        creator_id => CreatorId,
+                                        created => Created
+                                    }),
+                                    {error, unknown};
+                                EdgeId ->
+                                    {ok, EdgeId}
+                            end;
+                        {error, Reason} ->
+                            ?LOG_ERROR(#{
+                                in => zotonic_core,
+                                text => <<"Error inserting edge">>,
+                                result => error,
+                                reason => Reason,
+                                subject_id => SubjectId,
+                                predicate_id => PredId,
+                                object_id => ObjectId,
+                                creator_id => CreatorId,
+                                created => Created
+                            }),
+                            {error, enoent}
+                    end;
                 false ->
                     {error, eacces}
             end;
@@ -408,13 +446,85 @@ insert1(SubjectId, PredId, ObjectId, Opts, Context) ->
             {ok, EdgeId}
 end.
 
+insert_edge_1(SubjectId, ObjectId, PredId, undefined, CreatorId, undefined, Context) ->
+    z_db:equery("
+        insert into edge
+            (subject_id, object_id, predicate_id, creator_id)
+        values
+            ($1, $2, $3, $4)
+        on conflict do nothing
+        returning id
+        ",
+        [
+            SubjectId,
+            ObjectId,
+            PredId,
+            CreatorId
+        ],
+        Context);
+insert_edge_1(SubjectId, ObjectId, PredId, Seq, CreatorId, undefined, Context) ->
+    z_db:equery("
+        insert into edge
+            (subject_id, object_id, predicate_id, seq, creator_id)
+        values
+            ($1, $2, $3, $4, $5)
+        on conflict do nothing
+        returning id
+        ",
+        [
+            SubjectId,
+            ObjectId,
+            PredId,
+            Seq,
+            CreatorId
+        ],
+        Context);
+insert_edge_1(SubjectId, ObjectId, PredId, undefined, CreatorId, Created, Context) ->
+    z_db:equery("
+        insert into edge
+            (subject_id, object_id, predicate_id, creator_id, created)
+        values
+            ($1, $2, $3, $4, $5)
+        on conflict do nothing
+        returning id
+        ",
+        [
+            SubjectId,
+            ObjectId,
+            PredId,
+            CreatorId,
+            Created
+        ],
+        Context);
+insert_edge_1(SubjectId, ObjectId, PredId, SeqOpt, CreatorId, Created, Context) ->
+    z_db:equery("
+        insert into edge
+            (subject_id, object_id, predicate_id, seq, creator_id, created)
+        values
+            ($1, $2, $3, $4, $5, $6)
+        on conflict do nothing
+        returning id
+        ",
+        [
+            SubjectId,
+            ObjectId,
+            PredId,
+            SeqOpt,
+            CreatorId,
+            Created
+        ],
+        Context).
+
+%% @doc Determine the sequence number for the new edge. Needed for importes with
+%% specific sequence order, of if the "is_insert_before" option is used or set for
+%% the predicate.
 maybe_seq_opt(Opts, SubjectId, PredId, Context) ->
     case proplists:get_value(seq, Opts) of
         S when is_integer(S) ->
-            [ {seq, S} ];
+            S;
         _ ->
-            case z_convert:to_bool( m_rsc:p_no_acl(PredId, is_insert_before, Context) )
-                orelse z_convert:to_bool( proplists:get_value(is_insert_before, Opts) )
+            case z_convert:to_bool( proplists:get_value(is_insert_before, Opts) )
+                orelse z_convert:to_bool( m_rsc:p_no_acl(PredId, <<"is_insert_before">>, Context) )
             of
                 true ->
                     case z_db:q1("
@@ -425,11 +535,11 @@ maybe_seq_opt(Opts, SubjectId, PredId, Context) ->
                         [SubjectId, PredId],
                         Context)
                     of
-                        undefined -> [];
-                        N -> [ {seq, N-1} ]
+                        undefined -> undefined;
+                        N -> N-1
                     end;
                 false ->
-                    []
+                    undefined
             end
     end.
 

@@ -212,11 +212,34 @@ normalize_actions(Rows) ->
 
 normalize_action(Row) when is_map(Row) ->
     Actions = maps:get(<<"actions">>, Row),
-    ActionsSplit = binary:split(Actions, <<",">>, [global]),
-    Actions1 = [ {binary_to_existing_atom(T,utf8), true} || T <- ActionsSplit ],
+    ActionsAsAtoms = lists:filtermap(
+        fun(T) ->
+            case maybe_to_existing_atom(T) of
+                undefined ->
+                    ?LOG_ERROR(#{
+                        in => zotonic_mod_acl_user_groups,
+                        text => <<"Action could not be mapped to an atom">>,
+                        result => error,
+                        reason => unknown_action,
+                        action => T,
+                        row => Row
+                    }),
+                    false;
+                Action ->
+                    {true, {Action, true}}
+            end
+        end,
+        binary:split(Actions, <<",">>, [global, trim_all])),
     Row#{
-        <<"actions">> => Actions1
+        <<"actions">> => ActionsAsAtoms
     }.
+
+maybe_to_existing_atom(T) ->
+    try
+        binary_to_existing_atom(T, utf8)
+    catch
+        _:_ -> undefined
+    end.
 
 actions(Kind, Context) when Kind =:= rsc; Kind =:= collab ->
     [
