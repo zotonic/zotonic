@@ -164,7 +164,7 @@ to_local(DT, Tz) ->
         case qdate:to_date(z_convert:to_list(Tz), {DT, "GMT"}) of
             {ambiguous, _Standard, Daylight} ->
                 Daylight;
-            {{_, _, _}, {_, _, _}} = NewDT ->
+            {{_Y, _M, _D}, {_H, _I, _S}} = NewDT ->
                 NewDT
         end
     catch
@@ -210,7 +210,7 @@ to_utc(DT, Tz) ->
         case qdate:to_date("GMT", {DT, z_convert:to_list(Tz)}) of
             {ambiguous, _Standard, Daylight} ->
                 Daylight;
-            {{_, _, _}, {_, _, _}} = NewDT ->
+            {{_Y, _M, _D}, {_H, _I, _S}} = NewDT ->
                 NewDT
         end
     catch
