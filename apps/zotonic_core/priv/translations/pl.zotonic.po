@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-12-17 12:32\n"
+"PO-Revision-Date: 2026-01-08 10:54\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -5602,7 +5602,7 @@ msgstr "Wiele kont"
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:93
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:100
 msgid "Next"
-msgstr "Następnie"
+msgstr "Dalej"
 
 #: zotonic_mod_authentication/priv/templates/error.403.tpl:3
 #: zotonic_mod_base/priv/templates/error.403.tpl:3
