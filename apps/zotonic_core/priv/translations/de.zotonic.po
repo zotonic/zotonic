@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-01-09 11:52\n"
+"PO-Revision-Date: 2026-01-09 15:24\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -8315,7 +8315,7 @@ msgstr "Die Einstellungen funktionieren einwandfrei und werden gespeichert."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:75
 msgid "Settings are working fine."
-msgstr ""
+msgstr "Die Einstellungen funktionieren einwandfrei."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
 msgid "Storage"
@@ -8323,7 +8323,7 @@ msgstr "Lagerung"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:79
 msgid "Test Cloud File Store Settings"
-msgstr ""
+msgstr "Einstellungen des Cloud-Dateispeichers testen"
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:32
 msgid "The cloud file store uses a global Zotonic configuration. The configuration cannot be changed here."
@@ -8339,7 +8339,7 @@ msgstr "Die Einstellungen sind durch die Systemkonfiguration gesperrt."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
 msgid "The settings are tested by uploading (and removing) a small file."
-msgstr ""
+msgstr "Die Einstellungen werden durch Hochladen (und Entfernen) einer kleinen Datei getestet."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:241
 msgid "There is a 1 minute wait before files are uploaded."
@@ -8390,7 +8390,7 @@ msgstr "Diese Einstellungen dürfen Sie nicht ändern."
 
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:109
 msgid "You are not allowed to use this."
-msgstr ""
+msgstr "Sie dürfen dies nicht verwenden."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:9
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
