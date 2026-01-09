@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014-2025 Marc Worrell
+%% @copyright 2014-2026 Marc Worrell
 %% @doc Module managing the storage of files on remote servers.
 %% @end
 
-%% Copyright 2014-2025 Marc Worrell
+%% Copyright 2014-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -274,6 +274,7 @@ The statistics are generated dynamically, which is not a good idea with many fil
     task_queue_all/3,
 
     lookup/2,
+    lookup/3,
 
     update_backoff/2,
     batch_size/1,
@@ -307,8 +308,8 @@ observe_media_update_done(#media_update_done{action=update, post_props=Props}, C
 observe_media_update_done(#media_update_done{}, _Context) ->
     ok.
 
-observe_filestore(#filestore{action=lookup, path=Path}, Context) ->
-    lookup(Path, Context);
+observe_filestore(#filestore{action=lookup, path=Path, local_path=OptLocalPath}, Context) ->
+    lookup(Path, OptLocalPath, Context);
 observe_filestore(#filestore{action=upload, path=Path, mime=undefined} = Upload, Context) ->
     Mime = z_media_identify:guess_mime(Path),
     observe_filestore(Upload#filestore{mime=Mime}, Context);
@@ -512,6 +513,10 @@ batch_size(Context) ->
 manage_schema(What, Context) ->
     m_filestore:install(What, Context).
 
+%% @doc Find a file in the filestore, if not found then return 'undefined'.
+%% If the file is found and it is in the caching system then return a
+%% reference to the cached file. If it is not cached then start a download
+%% and return a reference to the download stream.
 -spec lookup(Path, Context) -> Found | undefined when
     Path :: binary(),
     Context :: z:context(),
@@ -521,6 +526,43 @@ manage_schema(What, Context) ->
     Pid :: pid(),
     StoreEntry :: map().
 lookup(Path, Context) ->
+    lookup(Path, undefined, Context).
+
+%% @doc If there is a local file and the 'is_local_keep' config is set then
+%% return 'undefined' to let the lookup process use the local file.
+%% If there is no local file then check the filestore, if not found then return 'undefined'.
+%% If the file is found and it is in the caching system then return a
+%% reference to the cached file. If it is not cached then start a download
+%% and return a reference to the download stream.
+-spec lookup(Path, LocalPath, Context) -> Found | undefined when
+    Path :: binary(),
+    LocalPath :: file:filename_all() | undefined,
+    Context :: z:context(),
+    Found :: {ok, {filename, Filename, StoreEntry}}
+           | {ok, {filezcache, Pid, StoreEntry}},
+    Filename :: binary(),
+    Pid :: pid(),
+    StoreEntry :: map().
+lookup(Path, undefined, Context) ->
+    lookup_1(Path, Context);
+lookup(Path, LocalPath, Context) ->
+    case m_config:get_boolean(mod_filestore, is_local_keep, Context) of
+        true ->
+            case filelib:is_regular(LocalPath) of
+                true ->
+                    % There is a local file, let z_file_locate use that.
+                    undefined;
+                false ->
+                    % No local file, let the filestore lookup proceed.
+                    % TODO: on success we might want to download the remote
+                    % file to the local file system.
+                    lookup_1(Path, Context)
+            end;
+        false ->
+            lookup_1(Path, Context)
+    end.
+
+lookup_1(Path, Context) ->
     case m_filestore:lookup(Path, Context) of
         {ok, #{ location := Location } = StoreEntry} ->
             case filezcache:locate_monitor(Location) of

@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013-2025 Marc Worrell
+%% @copyright 2013-2026 Marc Worrell
 %% @doc File/media interface definitions. See also z_media_request.erl
 %% @end
 
-%% Copyright 2013-2025 Marc Worrell
+%% Copyright 2013-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@
 -record(filestore, {
         action = upload :: lookup | upload | delete,
         path :: file:filename_all() | {prefix, file:filename_all()},
+        local_path :: file:filename_all() | undefined,
         filename :: file:filename_all() | undefined,
         mime :: binary() | string() | undefined
     }).
