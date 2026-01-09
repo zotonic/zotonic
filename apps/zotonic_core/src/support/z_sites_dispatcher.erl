@@ -713,10 +713,14 @@ split_path(<<"/", P/binary>>) ->
 split_path(Path) when is_binary(Path) ->
     Parts = binary:split(Path, <<"/">>, [global]),
     Parts1 = remove_dotdot(Parts),
-    Parts2 = [ unescape(Part) || Part <- Parts1 ],
-    case lists:last(Parts2) of
-        <<>> -> {lists:sublist(Parts2, length(Parts2)-1), true};
-        _ -> {Parts2, false}
+    case [ unescape(Part) || Part <- Parts1 ] of
+        [] ->
+            {[], false};
+        Parts2 ->
+            case lists:last(Parts2) of
+                <<>> -> {lists:sublist(Parts2, length(Parts2)-1), true};
+                _ -> {Parts2, false}
+            end
     end.
 
 remove_dotdot(Parts) ->
