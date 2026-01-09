@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-12-17 12:32\n"
+"PO-Revision-Date: 2026-01-09 11:52\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "MIME-Version: 1.0\n"
@@ -969,12 +969,12 @@ msgid "closing this browser tab"
 msgstr "關閉這個流覽器空間 (tab)"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:226
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:249
 msgid "delete (acl action)"
 msgstr "删除"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:225
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:248
 msgid "edit (acl action)"
 msgstr "修改 (acl 應用)"
 
@@ -983,12 +983,12 @@ msgid "in the group"
 msgstr "在這群組"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:224
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:247
 msgid "insert (acl action)"
 msgstr "揷入 (acl 應用)"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:227
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:250
 msgid "link (acl action)"
 msgstr "聯結 (acl 應用)"
 
@@ -1001,7 +1001,7 @@ msgstr "管理自己的"
 msgid "send this URL to somebody else for testing"
 msgstr "送這個 URL 給別人做測試"
 
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:231
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:254
 msgid "use (acl action)"
 msgstr "釆用 (acl 應用)"
 
@@ -1014,7 +1014,7 @@ msgid "use another browser (eg. Chrome if you are now using Firefox)"
 msgstr "用另一種流覽器 (例如，改用 Chrome 如果你現在是用 Firefox)"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:223
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:246
 msgid "view (acl action)"
 msgstr "流覽 (acl 应用)"
 
@@ -6481,7 +6481,7 @@ msgstr "MQTT 網橋連接狀態"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:40
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:52
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:46
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:48
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:35
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:28
@@ -6632,7 +6632,7 @@ msgstr "網絡套接字支持？"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:251
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:40
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:52
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:46
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:47
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:30
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25
@@ -6955,7 +6955,7 @@ msgid "Year"
 msgstr "年"
 
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:224
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:236
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:17
 #: zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
@@ -8079,55 +8079,55 @@ msgstr "您已将您的 <strong>Facebook</strong> 账户绑定。"
 msgid "Your Facebook Developer Dashboard"
 msgstr "您的Facebook开发者仪表板"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:148
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:160
 msgid "After 1 month"
 msgstr "1个月后"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:147
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:159
 msgid "After 1 week"
 msgstr "1周后"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:149
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:161
 msgid "After 3 months"
 msgstr "3个月后"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:272
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:284
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "所有的云文件都可以移回服务器上的文件系统。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:280
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:292
 msgid "All cloud files will be queued for download."
 msgstr "所有的云文件都会排队下载。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:249
 msgid "All files will be queued, uploads will start in the background within 10 minutes."
 msgstr "所有的文件将被排队，上传将在10分钟内开始在后台。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:227
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
 msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "所有本地上传和预览的文件都可以移动到云端。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:246
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:258
 msgid "Are you sure you want to copy all files to the cloud?"
 msgstr "您確定要將所有檔案複製到雲端嗎？"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:301
 msgid "Are you sure you want to copy all files to the disk of the server?"
 msgstr "您確定要將所有檔案複製到伺服器磁碟嗎？"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:257
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:269
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "你确定要把所有文件都移到云端吗？"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:300
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:312
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "您確定要將所有文件移動到服務器的磁盤嗎？"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:88
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:100
 msgid "Base URL"
 msgstr "基础URL"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:159
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:171
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "在保存设置之前，将通过上传（和删除）一个小文件进行检查。"
 
@@ -8140,35 +8140,36 @@ msgstr "云端文件存储"
 msgid "Cloud File Store Configuration"
 msgstr "云文件存储配置"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:177
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:189
 msgid "Cloud File Store Utilities and Statistics"
 msgstr "雲文件存儲實用程序和統計信息"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:186
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:198
 msgid "Cloud Files"
 msgstr "云文件"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:243
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:255
 msgid "Copy all local files to the remote storage"
 msgstr "將所有本機檔案複製到遠端存儲"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:286
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:298
 msgid "Copy all remote files to local"
 msgstr "將所有遠端檔案複製到本機"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:259
 msgid "Copy files to cloud"
 msgstr "將檔案複製到雲端"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:290
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:302
 msgid "Copy files to server disk"
 msgstr "將文件複製到伺服器磁碟"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:236
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:248
 msgid "Could not access the service, double check your settings and try again."
 msgstr "无法访问服务，请仔细检查您的设置并再次尝试。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:162
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:76
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:174
 msgid "Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file."
 msgstr "无法访问服务，请仔细检查您的设置并再次尝试。确保API密钥具有创建和删除（临时） <code>-zotonic-filetore-test-file-</code> 文件的访问权限。"
 
@@ -8176,52 +8177,52 @@ msgstr "无法访问服务，请仔细检查您的设置并再次尝试。确保
 msgid "Currently Zotonic supports FTP, WebDAV and services that are compatible with the S3 file services API. These include:"
 msgstr "目前 Zotonic 支援 FTP、WebDAV 和與 S3 檔案服務 API 相容的服務。這些包括："
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:221
 msgid "Delete Queue"
 msgstr "删除队列"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:143
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:155
 msgid "Delete files from the cloud file store"
 msgstr "从云文件存储中删除文件"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:67
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:61
 msgid "Delete interval"
 msgstr "刪除間隔"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:208
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:220
 msgid "Download Queue"
 msgstr "下载队列"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:128
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:140
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "啟用此選項可讓文件存儲充當本地媒體文件的備份。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:273
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:285
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "确保自己有足够的磁盘空间才开始这个过程。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:191
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:214
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:203
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:226
 msgid "Files"
 msgstr "文件"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:97
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:109
 msgid "For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftp:</tt></b>"
 msgstr "對於 FTP，URL 必須以 <b><tt>ftps:</tt></b> 或 <b><tt>ftp:</tt></b>開頭"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:96
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:108
 msgid "For S3 the URL must start with <b><tt>https:</tt></b> or <b><tt>http:</tt></b>"
 msgstr "對於 S3，URL 必須以 <b><tt>https:</tt></b> 或 <b><tt>http:</tt></b>開頭"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:98
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:110
 msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
 msgstr "對於 WebDAV，URL 必須以 <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>開頭"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:233
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:245
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "如果您選擇了“上傳到雲文件存儲後保留本地文件”，則不會刪除本地文件，因為遠程文件被視為本地文件的備份。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:277
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "如果您選擇了“上傳到雲文件存儲後保留本地文件”，則不會刪除遠程文件，因為遠程文件被視為本地文件的備份。"
 
@@ -8229,98 +8230,106 @@ msgstr "如果您選擇了“上傳到雲文件存儲後保留本地文件”，
 msgid "If you use an FTP server then that server MUST support FTPS (secure ftp)"
 msgstr "如果您使用 FTP 服務器，那麼該服務器必須支持 FTPS（安全 ftp）"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:71
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:65
 msgid "Immediately"
 msgstr "立即"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:51
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:45
 msgid "Is upload enabled?"
 msgstr "是否啟用上傳？"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:126
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:138
 msgid "Keep local files after upload to the cloud file store"
 msgstr "上傳到雲文件存儲後保留本地文件"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:55
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:49
 msgid "Keep local files?"
 msgstr "保留本地文件？"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:185
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:197
 msgid "Local Files"
 msgstr "本地文件"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:184
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:196
 msgid "Media Resources"
 msgstr "媒体资源"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:254
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:266
 msgid "Move all local files to the remote storage"
 msgstr "將所有本地文件移動到遠程存儲"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:297
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:309
 msgid "Move all remote files to local"
 msgstr "將所有遠程文件移動到本地"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:258
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:270
 msgid "Move files to cloud"
 msgstr "移动文件到云端"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:301
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:313
 msgid "Move files to server disk"
 msgstr "將文件移動到服務器磁盤"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:73
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:150
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:67
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:162
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:62
 msgid "Never"
 msgstr "絶不"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:146
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:158
 msgid "No extra delay"
 msgstr "無額外延遲"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:61
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:55
 msgid "No, local files are deleted after upload"
 msgstr "否，本地檔案上傳後會被刪除"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:103
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:115
 msgid "S3 API Key or FTP/WebDAV username"
 msgstr "S3 API 密鑰或 FTP/WebDAV 用戶名"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:108
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:120
 msgid "S3 API Secret or FTP/WebDAV password"
 msgstr "S3 API 密碼或 FTP/WebDAV 密碼"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:47
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:41
 msgid "S3 Cloud Location"
 msgstr "S3 雲位置"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:36
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:30
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:97
 msgid "S3 Cloud Location and Credentials"
 msgstr "S3云的位置和证书"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:166
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:178
 msgid "Save Settings"
 msgstr "保存设置"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:43
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:37
 msgid "Service"
 msgstr "服務"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:161
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:173
 msgid "Settings are working fine and are saved."
 msgstr "设置工作正常并保存。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:197
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:75
+msgid "Settings are working fine."
+msgstr ""
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
 msgid "Storage"
 msgstr "存储"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:38
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:79
+msgid "Test Cloud File Store Settings"
+msgstr ""
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:32
 msgid "The cloud file store uses a global Zotonic configuration. The configuration cannot be changed here."
 msgstr "雲端檔案儲存使用全域 Zotonic 配置。此處無法變更配置。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:39
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:33
 msgid "The configuration is:"
 msgstr "配置如下："
 
@@ -8328,35 +8337,39 @@ msgstr "配置如下："
 msgid "The settings are locked by the system configuration."
 msgstr "該設定已被系統配置鎖定。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:229
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
+msgid "The settings are tested by uploading (and removing) a small file."
+msgstr ""
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:241
 msgid "There is a 1 minute wait before files are uploaded."
 msgstr "上傳文件前需要等待 1 分鐘。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:154
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:166
 msgid "This extra deletion delay extends the period files can be recovered."
 msgstr "這種額外的刪除延遲延長了檔案恢復的時間。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:228
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:240
 msgid "This will queue the files for later asynchronous upload."
 msgstr "这将为以后的异步上传文件排队。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:154
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:166
 msgid "To allow recovery of deleted pages, Zotonic keeps files for 5 weeks."
 msgstr "為了恢復已刪除的頁面，Zotonic 會將檔案保留 5 週。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:135
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:147
 msgid "Try to create a private S3 bucket if the S3 bucket does not exist"
 msgstr "如果 S3 存儲桶不存在，請嘗試創建私有 S3 存儲桶"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:207
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
 msgid "Upload Queue"
 msgstr "上传队列"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:117
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:129
 msgid "Upload new media files to the cloud file store"
 msgstr "将新媒体文件上传到云文件存储中"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:137
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:149
 msgid "With FTP and WebDAV the directories are always created automatically."
 msgstr "使用 FTP 和 WebDAV，目錄總是自動創建的。"
 
@@ -8364,16 +8377,20 @@ msgstr "使用 FTP 和 WebDAV，目錄總是自動創建的。"
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
 msgstr "使用 WebDAV，用戶名和密碼以明文形式傳輸，因此請確保您使用 <tt>個 webdav：</tt> URL（使用 https）。"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:59
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:53
 msgid "Yes, keep local files after upload"
 msgstr "是的，上傳後保留本機文件"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:318
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:330
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:71
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:78
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:85
 msgid "You are not allowed to change these settings."
 msgstr "您不允许更改这些设置。"
+
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:109
+msgid "You are not allowed to use this."
+msgstr ""
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:9
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
