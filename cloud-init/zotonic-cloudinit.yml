@@ -51,12 +51,12 @@ runcmd:
   - mv kerl /usr/local/bin/kerl
   - mkdir -p /usr/local/lib/erlang
   - /usr/local/bin/kerl update releases
-  - /usr/local/bin/kerl build 27.3.3
-  - /usr/local/bin/kerl install 27.3.3 /usr/local/lib/erlang/27.3.3
-  - echo ". /usr/local/lib/erlang/27.3.3/activate" >> /etc/profile
+  - /usr/local/bin/kerl build 27.3.4
+  - /usr/local/bin/kerl install 27.3.4 /usr/local/lib/erlang/27.3.4
+  - echo ". /usr/local/lib/erlang/27.3.4/activate" >> /etc/profile
   - echo "export REBAR_CACHE_DIR=~/.cache/rebar3" >> /etc/profile
   # Allow Erlang (beam.smp) to listen on restricted ports (below 1024)
-  - setcap 'cap_net_bind_service=+ep' /usr/local/lib/erlang/27.3.3/erts-*/bin/beam.smp
+  - setcap 'cap_net_bind_service=+ep' /usr/local/lib/erlang/27.3.4/erts-*/bin/beam.smp
   # Restrict epmd listen IP addresses
   - echo "ERL_EPMD_ADDRESS=127.0.0.1,127.0.1.1" >> /etc/environment
   # Postgres installation
