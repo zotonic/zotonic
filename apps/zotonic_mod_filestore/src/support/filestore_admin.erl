@@ -83,6 +83,30 @@ event(#postback{message={admin_filestore_queue, [{is_to_cloud, true}]}}, Context
             queue_upload_all(Context);
         false ->
             z_render:growl_error(?__("You are not allowed to change these settings.", Context), Context)
+    end;
+event(#postback{message={admin_filestore_test_credentials, _Args}}, Context) ->
+    case z_acl:is_allowed(use, mod_admin_config, Context)
+        orelse z_acl:is_allowed(use, mod_filestore, Context)
+    of
+        true ->
+            case testcred(Context) of
+                ok ->
+                    z_render:wire([
+                            {hide, [{target, "s3error"}]},
+                            {fade_in, [{target, "s3ok"}]}
+                        ], Context);
+                {error, _Reason} ->
+                    z_render:wire([
+                            {hide, [{target, "s3ok"}]},
+                            {fade_in, [{target, "s3error"}]}
+                        ], Context)
+            end;
+        false ->
+            z_render:wire([
+                    {hide, [{target, "s3error"}]},
+                    {hide, [{target, "s3ok"}]}
+                ], Context),
+            z_render:growl_error(?__("You are not allowed to use this.", Context), Context)
     end.
 
 -define(DATA, <<"Geen wolkje aan de lucht.">>).
