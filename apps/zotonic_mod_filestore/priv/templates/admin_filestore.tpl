@@ -23,12 +23,6 @@
 
 
     {% if m.acl.is_allowed.use.mod_admin_config %}
-        {% wire id="admin_filestore"
-            type="submit"
-            postback=`admin_filestore`
-            delegate=`filestore_admin`
-        %}
-
         <div class="row">
             <div class="col-md-6">
             {% if m.filestore.is_config_locked %}
@@ -77,9 +71,27 @@
                                     </b>
                             </tr>
                         </table>
+
+                        <p id="s3ok" class="alert alert-success" style="display:none">{_ Settings are working fine. _}</p>
+                        <p id="s3error" class="alert alert-danger" style="display:none">{_ Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file. _}</p>
+
+                        <p>
+                            <button type="button" id="s3testcred" class="btn btn-primary">{_ Test Cloud File Store Settings _}</button>
+                            {% wire id="s3testcred"
+                                    postback={admin_filestore_test_credentials}
+                                    delegate=`filestore_admin`
+                            %}
+                        </p>
+                        <p class="help-block">{_ The settings are tested by uploading (and removing) a small file. _}</p>
+
                     </div>
                 </div>
             {% else %}
+                {% wire id="admin_filestore"
+                    type="submit"
+                    postback=`admin_filestore`
+                    delegate=`filestore_admin`
+                %}
                 <form name="admin_filestore" id="admin_filestore" method="POST" action="postback" class="form">
                     <div class="widget">
                         <h3 class="widget-header">{_ S3 Cloud Location and Credentials _}</h3>
