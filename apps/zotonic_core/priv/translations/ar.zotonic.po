@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-12-17 12:32\n"
+"PO-Revision-Date: 2026-01-09 11:51\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -969,12 +969,12 @@ msgid "closing this browser tab"
 msgstr "إغلاق علامة تبويب المتصفح"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:226
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:249
 msgid "delete (acl action)"
 msgstr "احذف (إجراء acl)"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:225
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:248
 msgid "edit (acl action)"
 msgstr "قم بتعديل (إجراء acl)"
 
@@ -983,12 +983,12 @@ msgid "in the group"
 msgstr "في المجموعة"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:224
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:247
 msgid "insert (acl action)"
 msgstr "أدرج (إجراء acl)"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:227
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:250
 msgid "link (acl action)"
 msgstr "اربط (إجراء acl)"
 
@@ -1001,7 +1001,7 @@ msgstr "إدارة نفسك"
 msgid "send this URL to somebody else for testing"
 msgstr "أرسل رابط URL هذا لشخص آخر للاختبار"
 
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:231
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:254
 msgid "use (acl action)"
 msgstr "استخدم (إجراء acl)"
 
@@ -1014,7 +1014,7 @@ msgid "use another browser (eg. Chrome if you are now using Firefox)"
 msgstr "استخدم متصفح آخر (مثلاً. كروم إذا كنت تستخدم فايرفوكس)"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:223
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:246
 msgid "view (acl action)"
 msgstr "عرض (إجراء acl)"
 
@@ -6481,7 +6481,7 @@ msgstr "حالة اتصال MQTT Bridge"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:40
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:52
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:46
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:48
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:35
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:28
@@ -6632,7 +6632,7 @@ msgstr "دعم Websocket؟"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:251
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:40
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:52
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:46
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:47
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:30
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25
@@ -6955,7 +6955,7 @@ msgid "Year"
 msgstr "سنة"
 
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:224
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:236
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:17
 #: zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
@@ -8079,55 +8079,55 @@ msgstr "لقد قمت بإقران حساب <strong>Facebook</strong> الخاص
 msgid "Your Facebook Developer Dashboard"
 msgstr "لوحة تحكم مطور Facebook"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:148
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:160
 msgid "After 1 month"
 msgstr "بعد شهر واحد"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:147
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:159
 msgid "After 1 week"
 msgstr "بعد 1 أسبوع"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:149
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:161
 msgid "After 3 months"
 msgstr "بعد 3 أشهر"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:272
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:284
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "يمكن إعادة جميع ملفات السحابة إلى نظام الملفات على الخادم."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:280
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:292
 msgid "All cloud files will be queued for download."
 msgstr "سيتم وضع جميع ملفات السحابة في قائمة الانتظار للتنزيل."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:249
 msgid "All files will be queued, uploads will start in the background within 10 minutes."
 msgstr "سيتم وضع جميع الملفات في قائمة الانتظار ، وسيبدأ التحميل في الخلفية في غضون 10 دقائق."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:227
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
 msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "يمكن نقل جميع الملفات المحلية المرفوعة والمعاينة إلى السحابة."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:246
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:258
 msgid "Are you sure you want to copy all files to the cloud?"
 msgstr "هل أنت متأكد أنك تريد نسخ كافة الملفات إلى السحابة؟"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:301
 msgid "Are you sure you want to copy all files to the disk of the server?"
 msgstr "هل أنت متأكد أنك تريد نسخ كافة الملفات إلى قرص الخادم؟"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:257
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:269
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "هل أنت متأكد أنك تريد نقل جميع الملفات إلى السحابة؟"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:300
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:312
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "هل أنت متأكد أنك تريد نقل جميع الملفات إلى قرص الخادم؟"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:88
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:100
 msgid "Base URL"
 msgstr "URL الأساسي"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:159
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:171
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "قبل أن يتم حفظ الإعدادات ، سيتم التحقق منها عن طريق تحميل (وإزالة) ملف صغير."
 
@@ -8140,35 +8140,36 @@ msgstr "مخزن الملفات السحابية"
 msgid "Cloud File Store Configuration"
 msgstr "تكوين Cloud File Store"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:177
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:189
 msgid "Cloud File Store Utilities and Statistics"
 msgstr "أدوات تخزين الملفات السحابية والإحصائيات"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:186
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:198
 msgid "Cloud Files"
 msgstr "ملفات السحابة"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:243
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:255
 msgid "Copy all local files to the remote storage"
 msgstr "نسخ جميع الملفات المحلية إلى وحدة التخزين البعيدة"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:286
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:298
 msgid "Copy all remote files to local"
 msgstr "نسخ جميع الملفات البعيدة إلى المحلية"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:259
 msgid "Copy files to cloud"
 msgstr "نسخ الملفات إلى السحابة"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:290
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:302
 msgid "Copy files to server disk"
 msgstr "نسخ الملفات إلى قرص الخادم"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:236
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:248
 msgid "Could not access the service, double check your settings and try again."
 msgstr "تعذر الوصول إلى الخدمة ، تحقق جيدًا من الإعدادات وحاول مرة أخرى."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:162
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:76
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:174
 msgid "Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file."
 msgstr "تعذر الوصول إلى الخدمة ، تحقق جيدًا من الإعدادات وحاول مرة أخرى. تأكد من أن مفتاح API لديه حقوق الوصول لإنشاء وإزالة (مؤقت) <code>ملف zotonic-filestore-test-file-</code>."
 
@@ -8176,52 +8177,52 @@ msgstr "تعذر الوصول إلى الخدمة ، تحقق جيدًا من ا
 msgid "Currently Zotonic supports FTP, WebDAV and services that are compatible with the S3 file services API. These include:"
 msgstr "يدعم Zotonic حاليًا FTP وWebDAV والخدمات المتوافقة مع واجهة برمجة تطبيقات خدمات الملفات S3. وتشمل هذه:"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:221
 msgid "Delete Queue"
 msgstr "حذف قائمة الانتظار"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:143
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:155
 msgid "Delete files from the cloud file store"
 msgstr "احذف الملفات من مخزن الملفات السحابي"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:67
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:61
 msgid "Delete interval"
 msgstr "حذف الفاصل الزمني"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:208
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:220
 msgid "Download Queue"
 msgstr "تنزيل قائمة الانتظار"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:128
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:140
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "قم بتمكين هذا للسماح لملف الملف بالعمل كنسخة احتياطية لملفات الوسائط المحلية الخاصة بك."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:273
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:285
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "تأكد من وجود مساحة كافية على القرص قبل بدء هذه العملية."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:191
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:214
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:203
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:226
 msgid "Files"
 msgstr "الملفات"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:97
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:109
 msgid "For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftp:</tt></b>"
 msgstr "بالنسبة إلى FTP ، يجب أن يبدأ عنوان URL بـ <b><tt>ftps:</tt></b> أو <b><tt>ftp:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:96
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:108
 msgid "For S3 the URL must start with <b><tt>https:</tt></b> or <b><tt>http:</tt></b>"
 msgstr "بالنسبة إلى S3 ، يجب أن يبدأ عنوان URL بـ <b><tt>https:</tt></b> أو <b><tt>http:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:98
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:110
 msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
 msgstr "بالنسبة إلى WebDAV ، يجب أن يبدأ عنوان URL بـ <b><tt>webdavs:</tt></b> أو <b><tt>webdav:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:233
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:245
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "إذا قمت بتحديد \"الاحتفاظ بالملفات المحلية بعد التحميل إلى مخزن الملفات السحابي\" ، فلن يتم حذف الملفات المحلية ، حيث تعتبر الملفات البعيدة نسخة احتياطية من الملفات المحلية."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:277
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "إذا حددت \"الاحتفاظ بالملفات المحلية بعد التحميل إلى مخزن الملفات السحابي\" ، فلن يتم حذف الملفات البعيدة ، حيث تعتبر الملفات البعيدة نسخة احتياطية من الملفات المحلية."
 
@@ -8229,98 +8230,106 @@ msgstr "إذا حددت \"الاحتفاظ بالملفات المحلية بع�
 msgid "If you use an FTP server then that server MUST support FTPS (secure ftp)"
 msgstr "إذا كنت تستخدم خادم FTP ، فيجب أن يدعم هذا الخادم FTPS (بروتوكول نقل الملفات الآمن)"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:71
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:65
 msgid "Immediately"
 msgstr "فورا"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:51
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:45
 msgid "Is upload enabled?"
 msgstr "هل تم تمكين التحميل؟"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:126
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:138
 msgid "Keep local files after upload to the cloud file store"
 msgstr "احتفظ بالملفات المحلية بعد تحميلها إلى مخزن الملفات السحابي"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:55
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:49
 msgid "Keep local files?"
 msgstr "حفظ الملفات المحلية؟"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:185
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:197
 msgid "Local Files"
 msgstr "ملفات محلية"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:184
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:196
 msgid "Media Resources"
 msgstr "موارد وسائل الإعلام"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:254
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:266
 msgid "Move all local files to the remote storage"
 msgstr "انقل جميع الملفات المحلية إلى التخزين البعيد"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:297
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:309
 msgid "Move all remote files to local"
 msgstr "انقل جميع الملفات البعيدة إلى الملفات المحلية"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:258
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:270
 msgid "Move files to cloud"
 msgstr "نقل الملفات إلى السحابة"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:301
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:313
 msgid "Move files to server disk"
 msgstr "نقل الملفات إلى قرص الخادم"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:73
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:150
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:67
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:162
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:62
 msgid "Never"
 msgstr "أبدا"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:146
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:158
 msgid "No extra delay"
 msgstr "لا يوجد تأخير إضافي"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:61
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:55
 msgid "No, local files are deleted after upload"
 msgstr "لا، يتم حذف الملفات المحلية بعد التحميل"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:103
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:115
 msgid "S3 API Key or FTP/WebDAV username"
 msgstr "مفتاح S3 API أو اسم مستخدم FTP / WebDAV"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:108
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:120
 msgid "S3 API Secret or FTP/WebDAV password"
 msgstr "S3 API Secret أو كلمة مرور FTP / WebDAV"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:47
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:41
 msgid "S3 Cloud Location"
 msgstr "موقع S3 السحابي"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:36
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:30
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:97
 msgid "S3 Cloud Location and Credentials"
 msgstr "موقع S3 Cloud وبيانات الاعتماد"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:166
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:178
 msgid "Save Settings"
 msgstr "احفظ التغييرات"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:43
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:37
 msgid "Service"
 msgstr "خدمة"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:161
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:173
 msgid "Settings are working fine and are saved."
 msgstr "الإعدادات تعمل بشكل جيد ويتم حفظها."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:197
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:75
+msgid "Settings are working fine."
+msgstr ""
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
 msgid "Storage"
 msgstr "تخزين"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:38
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:79
+msgid "Test Cloud File Store Settings"
+msgstr ""
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:32
 msgid "The cloud file store uses a global Zotonic configuration. The configuration cannot be changed here."
 msgstr "يستخدم مخزن الملفات السحابي تكوين Zotonic عالميًا. لا يمكن تغيير التكوين هنا."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:39
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:33
 msgid "The configuration is:"
 msgstr "التكوين هو:"
 
@@ -8328,35 +8337,39 @@ msgstr "التكوين هو:"
 msgid "The settings are locked by the system configuration."
 msgstr "تم قفل الإعدادات بواسطة تكوين النظام."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:229
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
+msgid "The settings are tested by uploading (and removing) a small file."
+msgstr ""
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:241
 msgid "There is a 1 minute wait before files are uploaded."
 msgstr "هناك دقيقة واحدة من الانتظار قبل أن يتم تحميل الملفات."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:154
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:166
 msgid "This extra deletion delay extends the period files can be recovered."
 msgstr "يؤدي تأخير الحذف الإضافي هذا إلى تمديد الفترة التي يمكن فيها استرداد الملفات."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:228
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:240
 msgid "This will queue the files for later asynchronous upload."
 msgstr "سيؤدي هذا إلى وضع الملفات في قائمة انتظار للتحميل غير المتزامن لاحقًا."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:154
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:166
 msgid "To allow recovery of deleted pages, Zotonic keeps files for 5 weeks."
 msgstr "للسماح باستعادة الصفحات المحذوفة، يحتفظ Zotonic بالملفات لمدة 5 أسابيع."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:135
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:147
 msgid "Try to create a private S3 bucket if the S3 bucket does not exist"
 msgstr "حاول إنشاء حاوية S3 خاصة إذا لم تكن حاوية S3 موجودة"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:207
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
 msgid "Upload Queue"
 msgstr "تحميل قائمة الانتظار"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:117
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:129
 msgid "Upload new media files to the cloud file store"
 msgstr "قم بتحميل ملفات وسائط جديدة إلى مخزن الملفات السحابي"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:137
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:149
 msgid "With FTP and WebDAV the directories are always created automatically."
 msgstr "باستخدام FTP و WebDAV ، يتم دائمًا إنشاء الدلائل تلقائيًا."
 
@@ -8364,16 +8377,20 @@ msgstr "باستخدام FTP و WebDAV ، يتم دائمًا إنشاء الد�
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
 msgstr "باستخدام WebDAV ، يتم نقل اسم المستخدم وكلمة المرور بشكل واضح ، لذا تأكد من استخدام <tt>webdavs:</tt> URLs (التي تستخدم https)."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:59
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:53
 msgid "Yes, keep local files after upload"
 msgstr "نعم، الاحتفاظ بالملفات المحلية بعد التحميل"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:318
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:330
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:71
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:78
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:85
 msgid "You are not allowed to change these settings."
 msgstr "لا يسمح لك بتغيير هذه الإعدادات."
+
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:109
+msgid "You are not allowed to use this."
+msgstr ""
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:9
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."

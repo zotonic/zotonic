@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-12-17 12:32\n"
+"PO-Revision-Date: 2026-01-09 11:52\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -969,12 +969,12 @@ msgid "closing this browser tab"
 msgstr "selle brauseri vahelehe sulgemine"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:226
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:249
 msgid "delete (acl action)"
 msgstr "kustuta (acl-toiming)"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:225
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:248
 msgid "edit (acl action)"
 msgstr "muuda (acl-toiming)"
 
@@ -983,12 +983,12 @@ msgid "in the group"
 msgstr "rühmas"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:224
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:247
 msgid "insert (acl action)"
 msgstr "sisesta (acl-toiming)"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:227
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:250
 msgid "link (acl action)"
 msgstr "link (ACL-toiming)"
 
@@ -1001,7 +1001,7 @@ msgstr "ise hakkama saama"
 msgid "send this URL to somebody else for testing"
 msgstr "saada see URL kellelegi teisele testimiseks"
 
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:231
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:254
 msgid "use (acl action)"
 msgstr "kasutamine (acl-toiming)"
 
@@ -1014,7 +1014,7 @@ msgid "use another browser (eg. Chrome if you are now using Firefox)"
 msgstr "kasutage mõnda muud brauserit (nt Chrome, kui kasutate nüüd Firefoxi)"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:223
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:246
 msgid "view (acl action)"
 msgstr "vaade (acl-toiming)"
 
@@ -6481,7 +6481,7 @@ msgstr "MQTT silla ühenduse olek"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:40
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:52
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:46
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:48
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:35
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:28
@@ -6632,7 +6632,7 @@ msgstr "Websockti tugi?"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:251
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:40
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:52
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:46
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:47
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:30
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25
@@ -6955,7 +6955,7 @@ msgid "Year"
 msgstr "aasta"
 
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:224
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:236
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:17
 #: zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
@@ -8079,55 +8079,55 @@ msgstr "Olete sidunud oma <strong>Facebook</strong> kontot."
 msgid "Your Facebook Developer Dashboard"
 msgstr "Teie Facebooki arendaja juhtpaneel"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:148
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:160
 msgid "After 1 month"
 msgstr "1 kuu pärast"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:147
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:159
 msgid "After 1 week"
 msgstr "1 nädala pärast"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:149
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:161
 msgid "After 3 months"
 msgstr "3 kuu pärast"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:272
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:284
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "Kõiki pilvefaile saab serveris failisüsteemi tagasi teisaldada."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:280
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:292
 msgid "All cloud files will be queued for download."
 msgstr "Kõik pilvefailid seatakse allalaadimiseks järjekorda."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:249
 msgid "All files will be queued, uploads will start in the background within 10 minutes."
 msgstr "Kõik failid pannakse järjekorda, üleslaadimised algavad taustal 10 minuti jooksul."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:227
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
 msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "Kõiki kohalikke üleslaaditud ja eelvaate faile saab pilve teisaldada."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:246
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:258
 msgid "Are you sure you want to copy all files to the cloud?"
 msgstr "Kas olete kindel, et soovite kõik failid pilve kopeerida?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:301
 msgid "Are you sure you want to copy all files to the disk of the server?"
 msgstr "Kas olete kindel, et soovite kõik failid serveri kettale kopeerida?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:257
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:269
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "Kas olete kindel, et soovite kõik failid pilve teisaldada?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:300
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:312
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "Kas olete kindel, et soovite kõik failid serveri kettale teisaldada?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:88
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:100
 msgid "Base URL"
 msgstr "Põhi-URL"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:159
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:171
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "Enne seadete salvestamist kontrollitakse neid väikese faili üleslaadimisega (ja eemaldamisega)."
 
@@ -8140,35 +8140,36 @@ msgstr "Pilvefailide pood"
 msgid "Cloud File Store Configuration"
 msgstr "Pilvefailide poe seadistamine"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:177
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:189
 msgid "Cloud File Store Utilities and Statistics"
 msgstr "Pilvefailide poe utiliidid ja statistika"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:186
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:198
 msgid "Cloud Files"
 msgstr "Pilvefailid"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:243
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:255
 msgid "Copy all local files to the remote storage"
 msgstr "Kopeerige kõik kohalikud failid kaugmällu"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:286
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:298
 msgid "Copy all remote files to local"
 msgstr "Kopeerige kõik kaugfailid kohalikku faili"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:259
 msgid "Copy files to cloud"
 msgstr "Kopeerige failid pilve"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:290
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:302
 msgid "Copy files to server disk"
 msgstr "Kopeerige failid serveri kettale"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:236
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:248
 msgid "Could not access the service, double check your settings and try again."
 msgstr "Teenusele ei õnnestunud juurde pääseda, kontrollige uuesti oma seadeid ja proovige uuesti."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:162
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:76
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:174
 msgid "Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file."
 msgstr "Teenusele ei õnnestunud juurde pääseda, kontrollige uuesti oma seadeid ja proovige uuesti. Veenduge, et API-võtmel oleks juurdepääsuõigused (ajutise) <code>zotonic-filestore-test-file-</code> faili loomiseks ja eemaldamiseks."
 
@@ -8176,52 +8177,52 @@ msgstr "Teenusele ei õnnestunud juurde pääseda, kontrollige uuesti oma seadei
 msgid "Currently Zotonic supports FTP, WebDAV and services that are compatible with the S3 file services API. These include:"
 msgstr "Praegu toetab Zotonic FTP-d, WebDAV-i ja teenuseid, mis ühilduvad S3 failiteenuste API-ga. Nende hulka kuuluvad:"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:221
 msgid "Delete Queue"
 msgstr "Kustuta järjekord"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:143
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:155
 msgid "Delete files from the cloud file store"
 msgstr "Kustutage failid pilvefailide poest"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:67
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:61
 msgid "Delete interval"
 msgstr "Kustuta intervall"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:208
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:220
 msgid "Download Queue"
 msgstr "Laadige järjekord alla"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:128
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:140
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "Lubage see, et lasta failisalal toimida teie kohalike meediumifailide varukoopiana."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:273
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:285
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "Enne selle protsessi alustamist veenduge, et kettaruumi oleks piisavalt."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:191
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:214
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:203
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:226
 msgid "Files"
 msgstr "Toimikud"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:97
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:109
 msgid "For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftp:</tt></b>"
 msgstr "FTP puhul peab URL algama <b><tt>ftps:</tt></b> või <b><tt>ftp:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:96
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:108
 msgid "For S3 the URL must start with <b><tt>https:</tt></b> or <b><tt>http:</tt></b>"
 msgstr "S3 puhul peab URL algama numbriga <b><tt>https:</tt></b> või <b><tt>http:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:98
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:110
 msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
 msgstr "WebDAV-i puhul peab URL algama numbriga <b><tt>webdavs:</tt></b> või <b><tt>webdav:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:233
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:245
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Kui olete valinud \"Säilita kohalikud failid pärast pilvefailihoidlasse üleslaadimist\", siis kohalikke faile ei kustutata, kuna kaugfaile käsitletakse kohalike failide varukoopiana."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:277
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Kui olete valinud \"Säilita kohalikud failid pärast pilvefailihoidlasse üleslaadimist\", siis kaugfaile ei kustutata, kuna kaugfaile käsitletakse kohalike failide varukoopiana."
 
@@ -8229,98 +8230,106 @@ msgstr "Kui olete valinud \"Säilita kohalikud failid pärast pilvefailihoidlass
 msgid "If you use an FTP server then that server MUST support FTPS (secure ftp)"
 msgstr "Kui kasutate FTP-serverit, PEAB see server toetama FTPS-i (turvaline ftp)"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:71
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:65
 msgid "Immediately"
 msgstr "Kohe"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:51
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:45
 msgid "Is upload enabled?"
 msgstr "Kas üleslaadimine on lubatud?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:126
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:138
 msgid "Keep local files after upload to the cloud file store"
 msgstr "Hoidke kohalikud failid pärast pilvefailide poodi üleslaadimist alles"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:55
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:49
 msgid "Keep local files?"
 msgstr "Kas säilitada kohalikud failid?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:185
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:197
 msgid "Local Files"
 msgstr "Kohalikud failid"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:184
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:196
 msgid "Media Resources"
 msgstr "Meediaallikad"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:254
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:266
 msgid "Move all local files to the remote storage"
 msgstr "Teisaldage kõik kohalikud failid kaugmällu"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:297
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:309
 msgid "Move all remote files to local"
 msgstr "Teisaldage kõik kaugfailid kohalikku"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:258
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:270
 msgid "Move files to cloud"
 msgstr "Failide teisaldamine pilve"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:301
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:313
 msgid "Move files to server disk"
 msgstr "Teisalda failid serveri kettale"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:73
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:150
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:67
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:162
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:62
 msgid "Never"
 msgstr "Mitte kunagi"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:146
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:158
 msgid "No extra delay"
 msgstr "Ei mingit lisaviivitust"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:61
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:55
 msgid "No, local files are deleted after upload"
 msgstr "Ei, kohalikud failid kustutatakse pärast üleslaadimist"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:103
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:115
 msgid "S3 API Key or FTP/WebDAV username"
 msgstr "S3 API võti või FTP/WebDAV kasutajanimi"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:108
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:120
 msgid "S3 API Secret or FTP/WebDAV password"
 msgstr "S3 API salajane või FTP/WebDAV parool"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:47
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:41
 msgid "S3 Cloud Location"
 msgstr "S3 pilve asukoht"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:36
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:30
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:97
 msgid "S3 Cloud Location and Credentials"
 msgstr "S3 pilve asukoht ja volikirjad"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:166
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:178
 msgid "Save Settings"
 msgstr "Salvesta sätted"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:43
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:37
 msgid "Service"
 msgstr "Teenindus"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:161
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:173
 msgid "Settings are working fine and are saved."
 msgstr "Seaded töötavad hästi ja on salvestatud."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:197
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:75
+msgid "Settings are working fine."
+msgstr ""
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
 msgid "Storage"
 msgstr "Ladustamine"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:38
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:79
+msgid "Test Cloud File Store Settings"
+msgstr ""
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:32
 msgid "The cloud file store uses a global Zotonic configuration. The configuration cannot be changed here."
 msgstr "Pilvefailide pood kasutab globaalset Zotoniku konfiguratsiooni. Siin ei saa konfiguratsiooni muuta."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:39
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:33
 msgid "The configuration is:"
 msgstr "Konfiguratsioon on järgmine:"
 
@@ -8328,35 +8337,39 @@ msgstr "Konfiguratsioon on järgmine:"
 msgid "The settings are locked by the system configuration."
 msgstr "Seadistused on lukustatud süsteemi konfiguratsiooniga."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:229
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
+msgid "The settings are tested by uploading (and removing) a small file."
+msgstr ""
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:241
 msgid "There is a 1 minute wait before files are uploaded."
 msgstr "Enne failide üleslaadimist tuleb oodata 1 minut."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:154
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:166
 msgid "This extra deletion delay extends the period files can be recovered."
 msgstr "See täiendav kustutamise viivitus pikendab failide taastamise perioodi."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:228
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:240
 msgid "This will queue the files for later asynchronous upload."
 msgstr "See seab failid hilisemaks asünkroonseks üleslaadimiseks järjekorda."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:154
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:166
 msgid "To allow recovery of deleted pages, Zotonic keeps files for 5 weeks."
 msgstr "Kustutatud lehtede taastamise võimaldamiseks säilitab Zotonic faile 5 nädalat."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:135
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:147
 msgid "Try to create a private S3 bucket if the S3 bucket does not exist"
 msgstr "Proovige luua privaatne S3 ämber, kui S3 ämbrit pole olemas"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:207
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
 msgid "Upload Queue"
 msgstr "Laadige järjekord üles"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:117
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:129
 msgid "Upload new media files to the cloud file store"
 msgstr "Uute meediumifailide üleslaadimine pilvefailide poodi"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:137
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:149
 msgid "With FTP and WebDAV the directories are always created automatically."
 msgstr "FTP ja WebDAV puhul luuakse kataloogid alati automaatselt."
 
@@ -8364,16 +8377,20 @@ msgstr "FTP ja WebDAV puhul luuakse kataloogid alati automaatselt."
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
 msgstr "WebDAV-iga edastatakse kasutajanimi ja parool selgelt, seega veenduge, et kasutate <tt>webdavsi:</tt> URL-i (mis kasutab https-i)."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:59
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:53
 msgid "Yes, keep local files after upload"
 msgstr "Jah, säilitage kohalikud failid pärast üleslaadimist"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:318
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:330
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:71
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:78
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:85
 msgid "You are not allowed to change these settings."
 msgstr "Teil pole lubatud neid seadeid muuta."
+
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:109
+msgid "You are not allowed to use this."
+msgstr ""
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:9
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."

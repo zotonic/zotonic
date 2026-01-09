@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-12-17 12:32\n"
+"PO-Revision-Date: 2026-01-09 11:52\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -969,12 +969,12 @@ msgid "closing this browser tab"
 msgstr "закриття цієї вкладки браузера"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:226
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:249
 msgid "delete (acl action)"
 msgstr "видалити (дія acl)"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:225
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:248
 msgid "edit (acl action)"
 msgstr "редагувати (дія acl)"
 
@@ -983,12 +983,12 @@ msgid "in the group"
 msgstr "в групі"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:224
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:247
 msgid "insert (acl action)"
 msgstr "вставка (дія acl)"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:227
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:250
 msgid "link (acl action)"
 msgstr "посилання (дія acl)"
 
@@ -1001,7 +1001,7 @@ msgstr "керувати своїми"
 msgid "send this URL to somebody else for testing"
 msgstr "надіслати цю URL-адресу комусь іншому для тестування"
 
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:231
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:254
 msgid "use (acl action)"
 msgstr "використання (дія acl)"
 
@@ -1014,7 +1014,7 @@ msgid "use another browser (eg. Chrome if you are now using Firefox)"
 msgstr "використовувати інший браузер (наприклад, Chrome, якщо ви зараз використовуєте Firefox)"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules_base.tpl:46
-#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:223
+#: zotonic_mod_acl_user_groups/src/models/m_acl_rule.erl:246
 msgid "view (acl action)"
 msgstr "перегляд (дія acl)"
 
@@ -6481,7 +6481,7 @@ msgstr "Стан підключення MQTT мосту"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:40
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:52
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:46
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:48
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:35
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:28
@@ -6632,7 +6632,7 @@ msgstr "Підтримка Websocket?"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:251
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:40
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:52
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:46
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:47
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:30
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25
@@ -6955,7 +6955,7 @@ msgid "Year"
 msgstr "рік"
 
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:224
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:236
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:17
 #: zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
@@ -8079,55 +8079,55 @@ msgstr "Ви підключили свій <strong>обліковий запис
 msgid "Your Facebook Developer Dashboard"
 msgstr "Ваша інформаційна панель розробника Facebook"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:148
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:160
 msgid "After 1 month"
 msgstr "Через 1 місяць"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:147
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:159
 msgid "After 1 week"
 msgstr "Через 1 тиждень"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:149
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:161
 msgid "After 3 months"
 msgstr "Через 3 місяці"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:272
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:284
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "Всі хмарні файли можна перемістити назад у файлову систему на сервері."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:280
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:292
 msgid "All cloud files will be queued for download."
 msgstr "Всі хмарні файли будуть поставлені в чергу для завантаження."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:249
 msgid "All files will be queued, uploads will start in the background within 10 minutes."
 msgstr "Всі файли будуть поставлені в чергу, завантаження почнеться у фоновому режимі протягом 10 хвилин."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:227
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
 msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "Всі локально завантажені файли та файли попереднього перегляду можна перемістити в хмару."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:246
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:258
 msgid "Are you sure you want to copy all files to the cloud?"
 msgstr "Ви впевнені, що бажаєте скопіювати всі файли в хмару?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:301
 msgid "Are you sure you want to copy all files to the disk of the server?"
 msgstr "Ви впевнені, що бажаєте скопіювати всі файли на диск сервера?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:257
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:269
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "Ви впевнені, що хочете перемістити всі файли в хмару?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:300
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:312
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "Ви впевнені, що бажаєте перемістити всі файли на диск сервера?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:88
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:100
 msgid "Base URL"
 msgstr "Базовий URL"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:159
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:171
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "Перед збереженням налаштувань вони будуть перевірені шляхом завантаження (і видалення) невеликого файлу."
 
@@ -8140,35 +8140,36 @@ msgstr "Хмарне сховище файлів"
 msgid "Cloud File Store Configuration"
 msgstr "Конфігурація Cloud File Store"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:177
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:189
 msgid "Cloud File Store Utilities and Statistics"
 msgstr "Утиліти та статистика Cloud File Store"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:186
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:198
 msgid "Cloud Files"
 msgstr "Хмарні файли"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:243
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:255
 msgid "Copy all local files to the remote storage"
 msgstr "Скопіюйте всі локальні файли у віддалене сховище"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:286
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:298
 msgid "Copy all remote files to local"
 msgstr "Скопіюйте всі віддалені файли на локальні"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:259
 msgid "Copy files to cloud"
 msgstr "Скопіюйте файли в хмару"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:290
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:302
 msgid "Copy files to server disk"
 msgstr "Скопіюйте файли на диск сервера"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:236
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:248
 msgid "Could not access the service, double check your settings and try again."
 msgstr "Не вдалося отримати доступ до служби, перевірте налаштування та повторіть спробу."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:162
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:76
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:174
 msgid "Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file."
 msgstr "Не вдалося отримати доступ до служби, перевірте налаштування та повторіть спробу. Переконайтеся, що ключ API має права доступу для створення та видалення (тимчасового) файлу <code>-zotonic-filestore-test-file-</code>."
 
@@ -8176,52 +8177,52 @@ msgstr "Не вдалося отримати доступ до служби, п�
 msgid "Currently Zotonic supports FTP, WebDAV and services that are compatible with the S3 file services API. These include:"
 msgstr "Наразі Zotonic підтримує FTP, WebDAV і служби, сумісні з API файлових служб S3. До них належать:"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:221
 msgid "Delete Queue"
 msgstr "Видалити чергу"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:143
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:155
 msgid "Delete files from the cloud file store"
 msgstr "Видаліть файли з хмарного сховища файлів"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:67
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:61
 msgid "Delete interval"
 msgstr "Видалити інтервал"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:208
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:220
 msgid "Download Queue"
 msgstr "Черга завантаження"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:128
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:140
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "Увімкніть це, щоб сховище файлів використовувало резервну копію ваших локальних медіафайлів."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:273
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:285
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "Перш ніж почати цей процес, переконайтеся, що на диску достатньо місця."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:191
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:214
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:203
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:226
 msgid "Files"
 msgstr "Файли"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:97
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:109
 msgid "For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftp:</tt></b>"
 msgstr "Для FTP URL-адреса має починатися з <b><tt>ftps:</tt></b> або <b><tt>ftp:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:96
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:108
 msgid "For S3 the URL must start with <b><tt>https:</tt></b> or <b><tt>http:</tt></b>"
 msgstr "Для S3 URL має починатися з <b><tt>https:</tt></b> або <b><tt>http:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:98
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:110
 msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
 msgstr "Для WebDAV URL має починатися з <b><tt>webdavs:</tt></b> або <b><tt>webdav:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:233
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:245
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Якщо ви вибрали «Зберігати локальні файли після завантаження в хмарне сховище файлів», тоді локальні файли не видаляються, оскільки віддалені файли вважаються резервними копіями локальних файлів."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:277
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "Якщо ви вибрали «Зберігати локальні файли після завантаження в хмарне сховище файлів», тоді віддалені файли не видаляються, оскільки віддалені файли вважаються резервними копіями локальних файлів."
 
@@ -8229,98 +8230,106 @@ msgstr "Якщо ви вибрали «Зберігати локальні фа�
 msgid "If you use an FTP server then that server MUST support FTPS (secure ftp)"
 msgstr "Якщо ви використовуєте FTP-сервер, то цей сервер ПОВИНЕН підтримувати FTPS (захищений ftp)"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:71
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:65
 msgid "Immediately"
 msgstr "Негайно"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:51
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:45
 msgid "Is upload enabled?"
 msgstr "Чи ввімкнено завантаження?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:126
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:138
 msgid "Keep local files after upload to the cloud file store"
 msgstr "Зберігайте локальні файли після завантаження в хмарне сховище файлів"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:55
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:49
 msgid "Keep local files?"
 msgstr "Зберігати локальні файли?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:185
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:197
 msgid "Local Files"
 msgstr "Локальні файли"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:184
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:196
 msgid "Media Resources"
 msgstr "Медіаресурси"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:254
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:266
 msgid "Move all local files to the remote storage"
 msgstr "Перемістіть усі локальні файли у віддалене сховище"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:297
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:309
 msgid "Move all remote files to local"
 msgstr "Перемістіть усі віддалені файли на локальні"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:258
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:270
 msgid "Move files to cloud"
 msgstr "Перемістити файли в хмару"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:301
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:313
 msgid "Move files to server disk"
 msgstr "Перемістити файли на диск сервера"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:73
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:150
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:67
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:162
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:62
 msgid "Never"
 msgstr "Ніколи"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:146
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:158
 msgid "No extra delay"
 msgstr "Без додаткової затримки"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:61
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:55
 msgid "No, local files are deleted after upload"
 msgstr "Ні, локальні файли видаляються після завантаження"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:103
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:115
 msgid "S3 API Key or FTP/WebDAV username"
 msgstr "Ключ S3 API або ім’я користувача FTP/WebDAV"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:108
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:120
 msgid "S3 API Secret or FTP/WebDAV password"
 msgstr "S3 API Secret або пароль FTP/WebDAV"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:47
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:41
 msgid "S3 Cloud Location"
 msgstr "S3 Cloud Location"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:36
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:30
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:97
 msgid "S3 Cloud Location and Credentials"
 msgstr "Розташування та облікові дані S3 Cloud"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:166
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:178
 msgid "Save Settings"
 msgstr "Зберегти налаштування"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:43
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:37
 msgid "Service"
 msgstr "Сервіс"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:161
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:173
 msgid "Settings are working fine and are saved."
 msgstr "Налаштування працюють нормально і збережені."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:197
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:75
+msgid "Settings are working fine."
+msgstr ""
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
 msgid "Storage"
 msgstr "Зберігання"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:38
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:79
+msgid "Test Cloud File Store Settings"
+msgstr ""
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:32
 msgid "The cloud file store uses a global Zotonic configuration. The configuration cannot be changed here."
 msgstr "Хмарне сховище файлів використовує глобальну конфігурацію Zotonic. Тут не можна змінити конфігурацію."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:39
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:33
 msgid "The configuration is:"
 msgstr "Конфігурація:"
 
@@ -8328,35 +8337,39 @@ msgstr "Конфігурація:"
 msgid "The settings are locked by the system configuration."
 msgstr "Параметри заблоковано конфігурацією системи."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:229
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
+msgid "The settings are tested by uploading (and removing) a small file."
+msgstr ""
+
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:241
 msgid "There is a 1 minute wait before files are uploaded."
 msgstr "Завантаження файлів триває 1 хвилину."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:154
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:166
 msgid "This extra deletion delay extends the period files can be recovered."
 msgstr "Ця додаткова затримка видалення подовжує період відновлення файлів."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:228
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:240
 msgid "This will queue the files for later asynchronous upload."
 msgstr "Це поставить файли в чергу для подальшого асинхронного завантаження."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:154
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:166
 msgid "To allow recovery of deleted pages, Zotonic keeps files for 5 weeks."
 msgstr "Щоб дозволити відновлення видалених сторінок, Zotonic зберігає файли протягом 5 тижнів."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:135
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:147
 msgid "Try to create a private S3 bucket if the S3 bucket does not exist"
 msgstr "Спробуйте створити приватне відро S3, якщо відро S3 не існує"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:207
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
 msgid "Upload Queue"
 msgstr "Черга завантаження"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:117
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:129
 msgid "Upload new media files to the cloud file store"
 msgstr "Завантажте нові медіафайли в хмарне сховище файлів"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:137
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:149
 msgid "With FTP and WebDAV the directories are always created automatically."
 msgstr "За допомогою FTP і WebDAV каталоги завжди створюються автоматично."
 
@@ -8364,16 +8377,20 @@ msgstr "За допомогою FTP і WebDAV каталоги завжди ст
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
 msgstr "За допомогою WebDAV ім’я користувача та пароль передаються у відкритому вигляді, тому переконайтеся, що ви використовуєте <tt>webdavs:</tt> URL-адреси (які використовують https)."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:59
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:53
 msgid "Yes, keep local files after upload"
 msgstr "Так, зберігати локальні файли після завантаження"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:318
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:330
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:71
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:78
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:85
 msgid "You are not allowed to change these settings."
 msgstr "Вам не дозволено змінювати ці налаштування."
+
+#: zotonic_mod_filestore/src/support/filestore_admin.erl:109
+msgid "You are not allowed to use this."
+msgstr ""
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:9
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
