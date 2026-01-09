@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014-2022 Marc Worrell
-%% @doc Process uploading a file to a remote storage.
+%% @copyright 2014-2026 Marc Worrell
+%% @doc Start a process to upload a file to a remote storage.
 %% @end
 
-%% Copyright 2014-2022 Marc Worrell
+%% Copyright 2014-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@
 -export([
     is_upload_running/2,
     upload/5,
+    upload_job/5,
     stale_file_entry/2
     ]).
 
@@ -31,12 +32,34 @@
 
 
 is_upload_running(Path, Context) ->
-    Name = {upload, Path},
+    Name = {?MODULE, Path},
     is_pid(z_proc:whereis(Name, Context)).
 
-upload(QueueId, Path, {ok, Entry}, MediaInfo, Context) ->
+upload(_QueueId, Path, {error, Reason}, _MediaInfo, _Context) when Reason =/= enoent ->
+    ?LOG_ERROR(#{
+        text => <<"Filestore upload error reading file">>,
+        in => zotonic_mod_filestore,
+        path => Path,
+        result => error,
+        reason => Reason
+    }),
+    {error, Reason};
+upload(QueueId, Path, Status, MediaInfo, Context) ->
+    case is_upload_running(Path, Context) of
+        false ->
+            case z_sidejob:space() of
+                N when N > 0 ->
+                    z_sidejob:start({?MODULE, upload_job, [QueueId, Path, Status, MediaInfo, Context]});
+                _ ->
+                    {error, busy}
+            end;
+        true ->
+            {error, running}
+    end.
+
+upload_job(QueueId, Path, {ok, Entry}, MediaInfo, Context) ->
     z_context:logger_md(Context),
-    Name = {upload, Path},
+    Name = {?MODULE, Path},
     case z_proc:register(Name, self(), Context) of
         ok ->
             ?LOG_DEBUG(#{
@@ -49,9 +72,9 @@ upload(QueueId, Path, {ok, Entry}, MediaInfo, Context) ->
         {error, duplicate} ->
             ok
     end;
-upload(QueueId, Path, {error, enoent}, MediaInfo, Context) ->
+upload_job(QueueId, Path, {error, enoent}, MediaInfo, Context) ->
     z_context:logger_md(Context),
-    Name = {upload, Path},
+    Name = {?MODULE, Path},
     case z_proc:register(Name, self(), Context) of
         ok ->
             ?LOG_DEBUG(#{
@@ -63,18 +86,7 @@ upload(QueueId, Path, {error, enoent}, MediaInfo, Context) ->
             try_upload(undefined, QueueId, Path, MediaInfo, Context);
         {error, duplicate} ->
             ok
-    end;
-upload(_QueueId, Path, {error, Reason}, _MediaInfo, Context) ->
-    z_context:logger_md(Context),
-    ?LOG_ERROR(#{
-        text => <<"Filestore upload error reading file">>,
-        in => zotonic_mod_filestore,
-        path => Path,
-        result => error,
-        reason => Reason
-    }),
-    {error, Reason}.
-
+    end.
 
 %%% ------ Support routines --------
 

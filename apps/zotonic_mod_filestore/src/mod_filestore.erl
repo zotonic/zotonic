@@ -765,16 +765,7 @@ start_uploaders({error, _}, _Context) ->
 start_uploader(#{ id := Id, path := Path, props := MediumInfo }, Context) ->
     Path1 = z_convert:to_binary(Path),
     PathLookup = m_filestore:lookup(Path1, Context),
-    case z_sidejob:space() of
-        N when N > 0 ->
-            case filestore_uploader:is_upload_running(Path1, Context) of
-                true -> ok;
-                false ->
-                    filestore_uploader:upload(Id, Path1, PathLookup, MediumInfo, Context)
-            end;
-        _ ->
-            {error, busy}
-    end.
+    filestore_uploader:upload(Id, Path1, PathLookup, MediumInfo, Context).
 
 -spec start_deleters( {ok, [ m_filestore:filestore_entry() ]} | {error, term()}, z:context() ) -> ok.
 start_deleters({ok, Rs}, Context) ->
