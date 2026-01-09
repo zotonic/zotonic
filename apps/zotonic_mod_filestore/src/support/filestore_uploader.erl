@@ -49,7 +49,7 @@ upload(QueueId, Path, Status, MediaInfo, Context) ->
         false ->
             case z_sidejob:space() of
                 N when N > 0 ->
-                    z_sidejob:start({?MODULE, upload_job, [QueueId, Path, Status, MediaInfo, Context]});
+                    z_sidejob:start(?MODULE, upload_job, [QueueId, Path, Status, MediaInfo], Context);
                 _ ->
                     {error, busy}
             end;
