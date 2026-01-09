@@ -242,6 +242,7 @@ locate_source_uploaded_1(Medium, Path, OriginalFile, Filters, Context) ->
     end.
 
 locate_in_filestore(Path, InDir, IsPreview, Medium, Context) ->
+    LocalPath = filename:join(InDir, Path),
     FSPath = z_convert:to_binary(filename:join(filename:basename(InDir), Path)),
     OptRscId = maps:get(<<"id">>, Medium, undefined),
     OptMime = case IsPreview of
@@ -250,7 +251,7 @@ locate_in_filestore(Path, InDir, IsPreview, Medium, Context) ->
         false ->
             maps:get(<<"mime">>, Medium, undefined)
     end,
-    case z_notifier:first(#filestore{action=lookup, path=FSPath}, Context) of
+    case z_notifier:first(#filestore{action=lookup, path=FSPath, local_path=LocalPath}, Context) of
         {ok, {filezcache, Pid, #{ created := Created, size := Size }}} when is_pid(Pid) ->
             {ok, #part_cache{
                 cache_pid=Pid,
@@ -270,7 +271,7 @@ locate_in_filestore(Path, InDir, IsPreview, Medium, Context) ->
                 mime = OptMime
             }};
         undefined ->
-            part_file(filename:join(InDir, Path), [{acl,OptRscId}, {mime, OptMime}])
+            part_file(LocalPath, [{acl,OptRscId}, {mime, OptMime}])
     end.
 
 part_missing(Filename) ->
