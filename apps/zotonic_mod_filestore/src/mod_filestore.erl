@@ -546,7 +546,7 @@ lookup(Path, Context) ->
 lookup(Path, undefined, Context) ->
     lookup_1(Path, Context);
 lookup(Path, LocalPath, Context) ->
-    case m_config:get_boolean(mod_filestore, is_local_keep, Context) of
+    case filestore_config:is_local_keep(Context) of
         true ->
             case filelib:is_regular(LocalPath) of
                 true ->
