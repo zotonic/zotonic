@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-01-09 11:51\n"
+"PO-Revision-Date: 2026-01-13 13:25\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -2199,7 +2199,7 @@ msgstr "Najnowsze połączenia przychodzące."
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:188
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:190
 msgid "Next &gt;"
-msgstr "Następny &gt;"
+msgstr "Dalej &gt;"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:7
 msgid "Next due"
