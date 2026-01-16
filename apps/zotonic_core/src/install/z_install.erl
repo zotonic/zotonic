@@ -651,8 +651,8 @@ medium_update_function() ->
     declare
         user_id integer;
     begin
-        select into user_id r.creator_id from rsc r where r.id = new.id;
         if (tg_op = 'INSERT') then
+            select into user_id r.creator_id from rsc r where r.id = new.id;
             if (new.filename <> '' and new.filename is not null and new.is_deletable_file) then
                 insert into medium_log (filename, usr_id)
                 values (new.filename, user_id)
@@ -664,6 +664,7 @@ medium_update_function() ->
                 on conflict (filename) do nothing;
             end if;
         elseif (tg_op = 'UPDATE') then
+            select into user_id r.creator_id from rsc r where r.id = new.id;
             if (new.filename <> '' and new.filename is not null and new.is_deletable_file and new.filename != old.filename) then
                 insert into medium_log (filename, usr_id)
                 values (new.filename, user_id)
