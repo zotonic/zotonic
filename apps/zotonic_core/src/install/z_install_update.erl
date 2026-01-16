@@ -338,6 +338,7 @@ upgrade(C, Database, Schema) ->
     ok = identity_log(C, Database, Schema),
     ok = medium_update_v2(C, Database, Schema),
     ok = pivot_page_path(C, Database, Schema),
+    ok = medium_update_function_check(C, Database, Schema),
     ok.
 
 
@@ -1057,6 +1058,29 @@ medium_update_v2(C, Database, Schema) ->
         false ->
             ok
     end.
+
+medium_update_function_check(C, Database, Schema) ->
+    % Check if the medium update function needs replacing.
+    {ok, _, [{ProcSrc}]} = epgsql:equery(C,
+                            "
+                        select routine_definition
+                        from information_schema.routines
+                        where routine_name = 'medium_update'
+                          and specific_schema = $1
+                          and specific_catalog = $2
+                        ",
+                        [Schema, Database]),
+    NewSrc = z_convert:to_binary(z_install:medium_update_function()),
+    [_, NewSrc1, _] = binary:split(NewSrc, <<"$$">>, [ global ]),
+    NewSrc2 = z_string:trim(NewSrc1),
+    ProcSrc1 = z_string:trim(ProcSrc),
+    if
+        NewSrc2 =/= ProcSrc1 ->
+            {ok,[],[]} = epgsql:squery(C, z_install:medium_update_function());
+        true ->
+            ok
+    end,
+    ok.
 
 check_category_id_key(C, _Database, _Schema) ->
     {ok,[],[]} = epgsql:squery(C, "CREATE INDEX IF NOT EXISTS fki_rsc_category_id ON rsc (category_id)"),
