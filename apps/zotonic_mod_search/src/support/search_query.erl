@@ -1078,6 +1078,16 @@ qterm(#{ <<"term">> := <<"date_start_before">>, <<"value">> := Date}, _IsNested,
             z_datetime:to_datetime(Date, Context)
         ]
     };
+qterm(#{ <<"term">> := <<"date_start_month">>, <<"value">> := Month} = T, _IsNested, _Context) ->
+    %% date_start_month=month
+    %% Filter on month of start date
+    Op = extract_term_op(T, <<"=">>),
+    #search_sql_term{
+        where = term_op_expr(<<"date_part('month', rsc.pivot_date_start) ">>, Op, '$1', number),
+        args = [
+            z_convert:to_integer(Month)
+        ]
+    };
 qterm(#{ <<"term">> := <<"date_start_year">>, <<"value">> := Year} = T, _IsNested, _Context) ->
     %% date_start_year=year
     %% Filter on year of start date
