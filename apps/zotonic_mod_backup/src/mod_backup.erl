@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2025 Marc Worrell
+%% @copyright 2010-2026 Marc Worrell
 %% @doc Backup module. Creates backup of the database and files.  Allows downloading of the backup.
 %% Support creation of periodic backups.
 %% @end
 
-%% Copyright 2010-2025 Marc Worrell
+%% Copyright 2010-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -253,11 +253,11 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
     [
         % Menu to access all backups and settings
         #menu_item{
-            id=admin_backup,
-            parent=admin_modules,
-            label=?__("Backup", Context),
-            url={admin_backup},
-            visiblecheck={acl, use, mod_backup}
+            id = admin_backup,
+            parent = admin_modules,
+            label = ?__("Backup", Context),
+            url = {admin_backup},
+            visiblecheck = {acl, use, mod_backup}
         },
 
         % Menu to view and recover deleted pages
@@ -267,10 +267,10 @@ observe_admin_menu(#admin_menu{}, Acc, Context) ->
             sort=2000000
         },
         #menu_item{id=admin_backup_deleted,
-            parent=admin_content,
-            label=?__("Deleted pages", Context),
-            url={admin_backup_deleted},
-            visiblecheck={acl, use, mod_backup},
+            parent = admin_content,
+            label = ?__("Deleted pages", Context),
+            url = {admin_backup_deleted},
+            visiblecheck = {acl, use, mod_backup},
             sort=2000000
         }
         | Acc

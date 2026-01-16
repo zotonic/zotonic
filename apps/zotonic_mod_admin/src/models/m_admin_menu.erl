@@ -131,15 +131,26 @@ item_visible({_Key, ItemProps}, Context) ->
                 end,
                 proplists:get_value(items, ItemProps, [])
             ) =/= [];
-        F when is_function(F, 0) ->
-            F();
-        F when is_function(F, 1) ->
-            F(Context);
-        {acl, Action, Object} ->
-            z_acl:is_allowed(Action, Object, Context)
+        C ->
+            visiblecheck(C, Context)
     end.
 
-
+visiblecheck(F, _Context) when is_function(F, 0) ->
+    F();
+visiblecheck(F, Context) when is_function(F, 1) ->
+    F(Context);
+visiblecheck({acl, Action, Object}, Context) ->
+    z_acl:is_allowed(Action, Object, Context);
+visiblecheck({allof, L}, Context) ->
+    lists:all(fun(C) -> visiblecheck(C, Context) end, L);
+visiblecheck({anyof, L}, Context) ->
+    lists:any(fun(C) -> visiblecheck(C, Context) end, L);
+visiblecheck(L, Context) when is_list(L) ->
+    lists:all(fun(C) -> visiblecheck(C, Context) end, L);
+visiblecheck(true, _Context) ->
+    true;
+visiblecheck(false, _Context) ->
+    false.
 
 test() ->
     C = z:c(zotonic_site_status),

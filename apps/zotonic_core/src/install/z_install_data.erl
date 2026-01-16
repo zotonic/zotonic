@@ -1,11 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell, Arjan Scherpenisse
+%% @copyright 2009-2026 Marc Worrell, Arjan Scherpenisse
 %% @doc Initialize the database with start data.
 %% @todo Insert these after translation functions have started so that we can use the
 %% Zotonic .po files for selecting all translations of the predicates.
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2009-2026 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -25,7 +25,8 @@
 %% interface functions
 -export([
          install/2,
-         install_category/1
+         install_category/1,
+         reset_rsc_id_seq/1
 ]).
 
 -include_lib("zotonic.hrl").
@@ -44,12 +45,19 @@ install(Site, Context) ->
     ok = install_rsc(Context),
     ok = install_identity(Context),
     ok = install_predicate(Context),
-    z_db:equery("SELECT setval('rsc_id_seq', m) FROM (select 1 + max(id) as m from rsc) sub", Context),
+    reset_rsc_id_seq(Context),
     ?LOG_NOTICE(#{
         text => <<"Site install done.">>,
         in => zotonic_core,
         site => Site
     }),
+    ok.
+
+%% @doc Reset the resource id sequence to the next max id value.
+-spec reset_rsc_id_seq(Context) -> ok when
+    Context :: z:context().
+reset_rsc_id_seq(Context) ->
+    z_db:equery("SELECT setval('rsc_id_seq', m) FROM (select 1 + max(id) as m from rsc) sub", Context),
     ok.
 
 install_category(C) ->
