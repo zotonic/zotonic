@@ -153,10 +153,17 @@ fetch_json(Method, Url, Args, Options, Context) ->
     end.
 
 payload(B, _CT) when is_binary(B) -> B;
-payload(M, <<"application/x-www-form-urlencoded">>) when is_map(M) -> cow_qs:qs(maps:to_list(M));
-payload(L, <<"application/x-www-form-urlencoded">>) when is_list(L) -> cow_qs:qs(L);
+payload(M, <<"application/x-www-form-urlencoded">>) when is_map(M) -> cow_qs:qs(ensure_qlist(maps:to_list(M)));
+payload(L, <<"application/x-www-form-urlencoded">>) when is_list(L) -> cow_qs:qs(ensure_qlist(L));
 payload(Data, <<"application/json">>) -> jsxrecord:encode(Data).
 
+ensure_qlist(L) ->
+    lists:map(
+        fun
+            ({K, V}) -> {z_convert:to_binary(K), z_convert:to_binary(V)};
+            (K) when is_atom(K) -> {z_convert:to_binary(K), <<"1">>}
+        end,
+        L).
 
 %% @doc Fetch the metadata from an URL. Let modules change the fetch options.
 -spec metadata( string() | binary(), z_url_fetch:options(), z:context() ) -> {ok, z_url_metadata:metadata()} | {error, term()}.

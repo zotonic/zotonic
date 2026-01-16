@@ -1,4 +1,4 @@
-{% if m.acl.use.mod_backup %}
+{% if m.acl.use.mod_backup or m.acl.use.mod_admin_config %}
     <table class="table">
         <thead>
             <tr>
