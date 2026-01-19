@@ -27,7 +27,6 @@ Test if a value is a number (integer or floating point):
 ").
 -export([is_number/2]).
 
-is_number(V, _Context) when is_integer(V) -> true;
-is_number(V, _Context) when is_float(V) -> true;
+is_number(V, _Context) when is_number(V) -> true;
 is_number(_, _Context) -> false.
 
