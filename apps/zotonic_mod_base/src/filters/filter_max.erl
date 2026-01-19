@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
+%% @copyright 2010-2026 Marc Worrell
 %% @doc Take maximum value.
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,29 +24,66 @@ See also
 
 Take the maximum of the filter value and its first argument.
 
-The following:
+Usage with two values
+---------------------
 
+Take the maximum of the filter value and its first argument.
 
 ```django
-{% print 102|to_integer|max:103 %}
+   {% print 102 | to_integer | max:103 %}
 ```
 
 Prints `103`.
+
+Usage with two values
+---------------------
+
+Take the maximum of the filter value and its first argument::
+
+   {{ 102|max:103 }}
+
+Prints ``103``.
+
+Usage with lists
+----------------
+
+Find the maximum value in a list::
+
+```django
+
+   {% print [1, 5, 3, 9, 2] | max %}
+```
+
+Prints `9`.
+
+Edge cases
+----------
+
+- `undefined | max` returns `undefined`
+- `undefined | max:1000` returns `undefined`
+- `[] | max` (empty list) returns `undefined`
+- Works with translation tuple.
 ").
--export([max/3]).
+
+-compile({no_auto_import, [max/2]}).
+
+-export([max/2, max/3]).
+
+max(undefined, _Context) ->
+    undefined;
+max([], _Context) ->
+    undefined;
+max(List, Context) when is_list(List) ->
+    lists:max( [ maybe_trans_lookup(E, Context) || E <- List ]).
 
 max(undefined, _Arg, _Context) ->
     undefined;
 max(Value, undefined, _Context) ->
     Value;
-max({trans, _} = Tr, Arg, Context) ->
-    max(z_trans:lookup_fallback(Tr, Context), Arg, Context);
-max(Value, {trans, _} = Tr, Context) ->
-    max(Value, z_trans:lookup_fallback(Tr, Context), Context);
-max(Value, Arg, _Context) ->
-    case Value > Arg of
-        true -> Value;
-        false -> Arg
-    end.
+max(Value, Arg, Context) ->
+    max([Value, Arg], Context).
 
-
+maybe_trans_lookup({trans, _} = Tr, Context) ->
+    z_trans:lookup_fallback(Tr, Context);
+maybe_trans_lookup(Value, _Context) ->
+    Value.
