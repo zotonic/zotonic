@@ -76,30 +76,24 @@ builtin_predicate_fun(Prop, Predicate, Args, Context) ->
     Args1 = [ z_template_compiler_runtime:to_simple_value(A, Context) || A <- Args ],
     fun(Elt) ->
         Value = extract_value(Elt, Prop, Context),
-        builtin_predicate(Value, P, Args1, Context)
+        builtin_predicate(Value, P, Args1)
     end.
 
-builtin_predicate(Value, between, [Lower, Upper], Context) ->
-    operator(Value, ge, Lower, Context) andalso operator(Value, le, Upper, Context);
-builtin_predicate(Value, in, List, Context) ->
-    member(Value, List, Context);
-builtin_predicate(Value, not_in, List, Context) ->
-    not member(Value, List, Context);
-builtin_predicate(Value, Op, [Other], Context) ->
-    operator(Value, Op, Other, Context).
+builtin_predicate(Value, between, [Lower, Upper]) ->
+    operator(Value, ge, Lower) andalso operator(Value, le, Upper);
+builtin_predicate(Value, in, List) ->
+    lists:member(Value, List);
+builtin_predicate(Value, not_in, List) ->
+    not liss:member(Value, List);
+builtin_predicate(Value, Op, [Other]) ->
+    operator(Value, Op, Other).
 
-operator(Value, Op, Other, Context) ->
-    template_compiler_operators:Op(Value, Other, z_template_compiler_runtime, Context).
-
-member(_Value, [], _Context) ->
-    false;
-member(Value, [Other|Rest], Context) ->
-    case operator(Value, eq, Other, Context) of
-        true ->
-            true;
-        false ->
-            member(Value, Rest, Context)
-    end.
+operator(Value, eq, Other) -> Value == Other;
+operator(Value, ne, Other) -> Value /= Other;
+operator(Value, lt, Other) -> Value < Other;
+operator(Value, le, Other) -> Value =< Other;
+operator(Value, gt, Other) -> Value > Other;
+operator(Value, ge, Other) -> Value >= Other.
 
 extract_value(Item, Prop, Context) ->
     z_template_compiler_runtime:find_value(Prop, Item, #{}, Context).

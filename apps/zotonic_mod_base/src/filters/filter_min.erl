@@ -74,16 +74,12 @@ min(undefined, _Context) ->
 min([], _Context) ->
     undefined;
 min(List, Context) ->
-    lists:min( [ maybe_trans_lookup(E, Context) || E <- List ]).
+    lists:min([ z_template_compiler_runtime:to_simple_value(E, Context) || E <- List ]).
 
 min(undefined, _Arg, _Context) ->
     undefined;
-min(Value, undefined, _Context) ->
-    Value;
+min(_Value, undefined, _Context) ->
+    undefined;
 min(Value, Arg, Context) ->
     min([Value, Arg], Context).
 
-maybe_trans_lookup({trans, _} = Tr, Context) ->
-    z_trans:lookup_fallback(Tr, Context);
-maybe_trans_lookup(Value, _Context) ->
-    Value.

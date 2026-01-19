@@ -62,7 +62,7 @@ Edge cases
 - `undefined | max` returns `undefined`
 - `undefined | max:1000` returns `undefined`
 - `[] | max` (empty list) returns `undefined`
-- Works with translation tuple.
+- Works with translation tuple values.
 ").
 
 -compile({no_auto_import, [max/2]}).
@@ -74,16 +74,12 @@ max(undefined, _Context) ->
 max([], _Context) ->
     undefined;
 max(List, Context) when is_list(List) ->
-    lists:max( [ maybe_trans_lookup(E, Context) || E <- List ]).
+    lists:max( [ z_template_compiler_runtime:to_simple_value(E, Context) || E <- List ]).
 
 max(undefined, _Arg, _Context) ->
     undefined;
-max(Value, undefined, _Context) ->
-    Value;
+max(_Value, undefined, _Context) ->
+    undefined;
 max(Value, Arg, Context) ->
     max([Value, Arg], Context).
 
-maybe_trans_lookup({trans, _} = Tr, Context) ->
-    z_trans:lookup_fallback(Tr, Context);
-maybe_trans_lookup(Value, _Context) ->
-    Value.
