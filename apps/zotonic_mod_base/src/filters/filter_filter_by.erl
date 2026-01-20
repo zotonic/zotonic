@@ -84,7 +84,7 @@ builtin_predicate(Value, between, [Lower, Upper]) ->
 builtin_predicate(Value, in, List) ->
     lists:member(Value, List);
 builtin_predicate(Value, not_in, List) ->
-    not liss:member(Value, List);
+    not lists:member(Value, List);
 builtin_predicate(Value, Op, [Other]) ->
     operator(Value, Op, Other).
 
