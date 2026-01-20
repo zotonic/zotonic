@@ -272,6 +272,71 @@ ensure(Name, CatId, Context) when not is_binary(Name) ->
     ensure(z_convert:to_binary(Name), CatId, Context).
 
 
+
+-spec save_partial_tree( atom() | binary(), m_rsc:resource(), list({m_rsc:resource_id(), list()}), z:context() ) -> ok | {error, term()}.
+save_partial_tree(Name, Category, PartialTree, Context) ->
+    ensure(Name, Category, Context),
+    CatId = m_rsc:rid(Category, Context),
+    CatName = m_category:id_to_name(CatId, Context),
+    case is_valid_save_tree(CatName, PartialTree, Context) of
+        true ->
+            % 0. Fetch the current tree
+            CurrentTree = menu(Name, Context),
+            % Bottom up:
+            %   1. Find and remove child subtree
+            %   2. Remove parent from child subtree
+            %   3. If found: move parent-node from child sub-tree to top level
+            %   4. Add child-node subtree of parent
+            %
+            % Save new tree.
+            {error, todo};
+        false ->
+            {error, invalid_tree}
+    end.
+
+% merge_partial_tree(Tree, _ParentId, []) ->
+%     Tree;
+% merge_partial_tree(Tree, ParentId, [ {ChildId, Sub} | Nodes ]) ->
+%     TreeSub = merge_partial_tree(Tree, ChildId, Sub),
+%     OptionalChildNode = find_node(ChildId, Tree),
+%     MaybeParentBelowChild = 
+%         false -> false;
+%         {ChildId, CurrentSub} ->
+%             remove_node(ParentId, )
+
+%     ChildSubTree = case find_child_tree(ChildId, Tree) of
+%         false -> {ChildId, []}
+
+find_node(_Id, []) ->
+    false;
+find_node(Id, [ {Id, _} = Node | _ ]) ->
+    Node;
+find_node(Id, [ {_, Sub} | Nodes ]) ->
+    case find_node(Id, Sub) of
+        false -> find_node(Id, Nodes);
+        N -> N
+    end.
+
+
+
+is_valid_save_tree(_Category, [], _Context) ->
+    ok;
+is_valid_save_tree(Category, [ {PId, Children} | Nodes ], Context) ->
+    case m_rsc:is_a(PId, Category, Context) of
+        true ->
+            lists:all(
+                fun(Child) ->
+                    is_valid_save_tree(Category, Child, Context)
+                end,
+                Children)
+            andalso is_valid_save_tree(Category, Nodes, Context);
+        false ->
+            lager:error("m_hierarchy: not saving tree for category ~p because ~p is a ~p",
+                        [ Category, PId, m_rsc:is_a(PId, Context) ]),
+            false
+    end.
+
+
 %% @doc Save a new hierarchy, replacing a previous one.
 save(Name, Tree, Context) ->
     case z_acl:is_admin(Context) of
