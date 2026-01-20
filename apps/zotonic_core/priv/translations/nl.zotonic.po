@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-01-09 11:52\n"
+"PO-Revision-Date: 2026-01-20 13:46\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -7048,7 +7048,7 @@ msgstr "Alle sjablonen zullen worden gecompileerd."
 
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:13
 msgid "Below is the list of all notifications and the installed observers."
-msgstr "Hieronder vindt je de lijst met alle notificaties en de geïnstalleerde observers."
+msgstr "Hieronder vind je de lijst met alle notificaties en de geïnstalleerde observers."
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:6
 msgid "Bindings"
@@ -10895,7 +10895,7 @@ msgstr "Google Tag Manager-ID"
 
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:9
 msgid "Here you find settings to optimize the indexing of your site by search engines."
-msgstr "Hier vindt je instellingen voor het optimaliseren van het indexeren van je site door zoekmachines."
+msgstr "Hier vind je instellingen voor het optimaliseren van het indexeren van je site door zoekmachines."
 
 #: zotonic_mod_seo/priv/templates/admin_seo.tpl:101
 msgid "I accept the security risk of adding custom code in Google Tag Manager"
