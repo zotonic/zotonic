@@ -21,8 +21,8 @@
     <label class="control-label">{_ License _}</label>
     <select name="rights" class="form-control">
         <option></option>
-        <option value="CR">© {_ All Rights Reserved _}</option>
-        <option value="PD">{_ Public Domain _}</option>
+        <option value="CR" {% if id.rights == 'CR' %}selected{% endif %}>© {_ All Rights Reserved _}</option>
+        <option value="PD" {% if id.rights == 'PD' %}selected{% endif %}>{_ Public Domain _}</option>
         <optgroup label="Creative Commons">
             {% for lic in m.copyright.list.creative_commons %}
                 <option value="{{ lic.name }}" {% if lic.name == id.rights %}selected{% endif %}>

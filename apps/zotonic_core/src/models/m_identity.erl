@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2025 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Manage identities of users. An identity can be a username/password, openid, oauth
 %% credentials etc.
 %% @end
 
-%% Copyright 2009-2025 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -433,9 +433,12 @@ is_allowed_set_username(Id, Context) when is_integer(Id) ->
 delete_username(undefined, _Context) ->
     {error, enoent};
 delete_username(?ACL_ADMIN_USER_ID, Context) ->
-    ?LOG_WARNING(#{
+    ?LOG_ERROR(#{
         text => <<"Trying to delete admin username (1)">>,
         in => zotonic_core,
+        audit => auth,
+        result => error,
+        reason => eacces,
         user_id => z_acl:user(Context)
     }),
     {error, eacces};
@@ -608,9 +611,10 @@ is_username_local(Value, Context) ->
 set_username(undefined, _Username, _Context) ->
     {error, enoent};
 set_username(?ACL_ADMIN_USER_ID, _Username, Context) ->
-    ?LOG_WARNING(#{
+    ?LOG_ERROR(#{
         text => <<"Trying to set admin username (1)">>,
         in => zotonic_core,
+        audit => auth,
         result => error,
         reason => eacces,
         user_id => z_acl:user(Context)
@@ -687,9 +691,10 @@ set_username_pw(undefined, _, _, _) ->
     {error, enoent};
 set_username_pw(?ACL_ADMIN_USER_ID, _, _, Context) ->
     % The password of the admin is set in the priv/zotonic_site.config file.
-    ?LOG_WARNING(#{
+    ?LOG_ERROR(#{
         text => <<"Trying to set admin username (1)">>,
         in => zotonic_core,
+        audit => auth,
         user_id => z_acl:user(Context),
         result => error,
         reason => eacces
@@ -726,6 +731,14 @@ set_username_pw_2(Id, Username, Password, Context) when is_integer(Id) ->
         {ok, S} ->
             Action = case S of
                 new ->
+                    ?LOG_INFO(#{
+                        in => zotonic_core,
+                        text => <<"New username/password for user">>,
+                        audit => auth,
+                        result => ok,
+                        user_id => Id,
+                        username => Username
+                    }),
                     z:info(
                         "New username/password for user ~p (~s)",
                         [ Id, Username ],
@@ -733,6 +746,14 @@ set_username_pw_2(Id, Username, Password, Context) when is_integer(Id) ->
                         Context),
                     insert;
                 exists ->
+                    ?LOG_INFO(#{
+                        in => zotonic_core,
+                        text => <<"Update username/password for user">>,
+                        audit => auth,
+                        result => ok,
+                        user_id => Id,
+                        username => Username
+                    }),
                     z:info(
                         "Change of username/password for user ~p (~s)",
                         [ Id, Username ],
@@ -747,6 +768,7 @@ set_username_pw_2(Id, Username, Password, Context) when is_integer(Id) ->
             ?LOG_ERROR(#{
                 text => <<"Error setting username/password">>,
                 in => zotonic_core,
+                audit => auth,
                 user_id => Id,
                 username => Username,
                 result => error,
@@ -758,6 +780,7 @@ set_username_pw_2(Id, Username, Password, Context) when is_integer(Id) ->
             ?LOG_ERROR(#{
                 text => <<"Error setting username/password">>,
                 in => zotonic_core,
+                audit => auth,
                 result => error,
                 reason => Reason,
                 user_id => Id,
@@ -909,9 +932,10 @@ reset_password(undefined, _Context) ->
     {error, enoent};
 reset_password(?ACL_ADMIN_USER_ID, Context) ->
     % The password of the admin is set in the priv/zotonic_site.config file.
-    ?LOG_WARNING(#{
+    ?LOG_ERROR(#{
         text => <<"Trying to reset admin password (1)">>,
         in => zotonic_core,
+        audit => auth,
         user_id => z_acl:user(Context),
         result => error,
         reason => eacces
@@ -934,6 +958,7 @@ reset_password(UserId, Context)  when is_integer(UserId) ->
                     ?LOG_WARNING(#{
                         in => zotonic_core,
                         text => <<"Password reset of user, but no username_pw identity">>,
+                        audit => auth,
                         result => error,
                         reason => nouser,
                         user => UserId
@@ -945,6 +970,7 @@ reset_password(UserId, Context)  when is_integer(UserId) ->
                     ?LOG_INFO(#{
                         in => zotonic_core,
                         text => <<"Password reset of user">>,
+                        audit => auth,
                         result => ok,
                         user => UserId
                     }),
@@ -1150,6 +1176,7 @@ check_username_pw_1(<<"admin">>, Password, Context) ->
                     ?LOG_ERROR(#{
                         text => <<"admin login with default password from non allowed ip address">>,
                         in => zotonic_core,
+                        audit => auth,
                         ip_address => m_req:get(peer, Context),
                         username => <<"admin">>,
                         result => error,
@@ -1170,6 +1197,7 @@ check_username_pw_1(<<"admin">>, Password, Context) ->
                     ?LOG_ERROR(#{
                         text => <<"admin login with non-default password from non allowed ip address">>,
                         in => zotonic_core,
+                        audit => auth,
                         ip_address => m_req:get(peer, Context),
                         username => <<"admin">>,
                         result => error,

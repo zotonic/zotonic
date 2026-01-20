@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019-2024 Marc Worrell
+%% @copyright 2019-2026 Marc Worrell
 %% @doc Handle HTTP authentication of users.
 %% @end
 
-%% Copyright 2019-2024 Marc Worrell
+%% Copyright 2019-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -108,6 +108,9 @@ handle_cmd(Cmd, _Payload, Context) ->
     ?LOG_INFO(#{
         text => <<"controller_authentication: unknown cmd">>,
         in => zotonic_mod_authentication,
+        audit => auth,
+        result => error,
+        reason => unknown_cmd,
         cmd => Cmd
     }),
     {
@@ -144,9 +147,10 @@ logon_1({ok, UserId}, Payload, AuthOptions, Context) when is_integer(UserId) ->
             ?LOG_INFO(#{
                 text => <<"Logon attempt of disabled user">>,
                 in => zotonic_mod_authentication,
-                user_id => UserId,
+                audit => auth,
                 result => error,
-                reason => user_not_enabled
+                reason => user_not_enabled,
+                user_id => UserId
             }),
             Reply = #{ status => error, user_id => UserId },
             case m_rsc:p_no_acl(UserId, is_verified_account, Context) of
@@ -170,18 +174,21 @@ logon_1({expired, UserId}, _Payload, _AuthOptions, Context) when is_integer(User
             ?LOG_NOTICE(#{
                 text => <<"Logon attempt of user with expired password and no username">>,
                 in => zotonic_mod_authentication,
-                user_id => UserId,
+                audit => auth,
                 result => error,
-                reason => expired
+                reason => expired,
+                user_id => UserId
             }),
             { #{ status => error, error => pw }, Context };
         Username ->
             ?LOG_INFO(#{
-                text => <<"Logon attempt of user wth expired password">>,
+                text => <<"Logon attempt of user with expired password">>,
                 in => zotonic_mod_authentication,
-                user_id => UserId,
+                audit => auth,
                 result => error,
-                reason => expired_password
+                reason => expired_password,
+                user_id => UserId,
+                username => Username
             }),
             Code = m_authentication:set_reminder_secret(UserId, Context),
             { #{ status => error, error => password_expired, username => Username, secret => Code }, Context }
@@ -198,13 +205,15 @@ logon_1({error, passcode}, _Payload, _AuthOptions, Context) ->
     { #{ status => error, error => passcode }, Context };
 logon_1({error, user_external}, _Payload, _AuthOptions, Context) ->
     { #{ status => error, error => user_external }, Context };
-logon_1({error, Reason}, _Payload, _AuthOptions, Context) ->
+logon_1({error, Reason}, Payload, _AuthOptions, Context) ->
     % Hide other error codes, map to generic 'pw' error
     ?LOG_INFO(#{
-        text => <<"Logon attempt of user">>,
+        text => <<"Logon attempt of user failed">>,
         in => zotonic_mod_authentication,
+        audit => auth,
         result => error,
-        reason => Reason
+        reason => Reason,
+        username => maps:get(<<"username">>, Payload, undefined)
     }),
     { #{ status => error, error => pw }, Context };
 logon_1(undefined, _Payload, _AuthOptions, Context) ->
@@ -215,6 +224,7 @@ log_logon(UserId, #{ <<"username">> := Username }, Context) when is_binary(Usern
     ?LOG_NOTICE(#{
         text => <<"Logon of user using username">>,
         in => zotonic_mod_authentication,
+        audit => auth,
         result => ok,
         user_id => UserId,
         username_used => Username,
@@ -224,6 +234,7 @@ log_logon(UserId, #{ <<"token">> := Token }, Context) when is_binary(Token) ->
     ?LOG_NOTICE(#{
         text => <<"Logon of user using token">>,
         in => zotonic_mod_authentication,
+        audit => auth,
         result => ok,
         user_id => UserId,
         username => username(UserId, Context)
@@ -232,6 +243,7 @@ log_logon(UserId, #{}, Context) ->
     ?LOG_NOTICE(#{
         text => <<"Logon of user">>,
         in => zotonic_mod_authentication,
+        audit => auth,
         result => ok,
         user_id => UserId,
         username => username(UserId, Context)
@@ -314,6 +326,14 @@ switch_user(#{ <<"user_id">> := UserId } = Payload, Context) when is_integer(Use
     SudoUserId = maps:get(sudo_user_id, AuthOptions, z_acl:user(Context)),
     case z_auth:logon_switch(UserId, SudoUserId, Context) of
         {ok, Context1} ->
+            ?LOG_WARNING(#{
+                in => zotonic_mod_authentication,
+                text => <<"Switch user (sudo)">>,
+                audit => auth,
+                result => ok,
+                user_id => z_acl:user(Context),
+                to_user_id => UserId
+            }),
             z:warning(
                 "Sudo as user ~p (~s) by user ~p (~s)",
                 [
@@ -400,6 +420,7 @@ change(#{
                     ?LOG_ERROR(#{
                         text => <<"Password change for user without username">>,
                         in => zotonic_mod_authentication,
+                        audit => auth,
                         result => error,
                         reason => no_username,
                         user_id => UserId
@@ -462,6 +483,7 @@ change_1(UserId, Username, Password, NewPassword, Passcode, Context) ->
                     ?LOG_WARNING(#{
                         in => zotonic_mod_authentication,
                         text => <<"Password change request with password mismatch">>,
+                        audit => auth,
                         result => error,
                         reason => Reason,
                         user_id => UserId,
@@ -498,6 +520,7 @@ reset(#{
                                             ?LOG_ERROR(#{
                                                 text => <<"Password reset for user without username">>,
                                                 in => zotonic_mod_authentication,
+                                                audit => auth,
                                                 result => error,
                                                 reason => no_username,
                                                 user_id => UserId
@@ -631,6 +654,7 @@ check_reminder_secret(#{ <<"secret">> := Secret, <<"username">> := Username }, C
                             ?LOG_ERROR(#{
                                 text => <<"Password reset with username mismatch">>,
                                 in => zotonic_mod_authentication,
+                                audit => auth,
                                 result => error,
                                 reason => username_mismatch,
                                 username_given => Username,
@@ -680,6 +704,7 @@ get_by_reminder_secret(Code, Context) ->
                     ?LOG_INFO(#{
                         text => <<"Accessing expired reminder secret for user">>,
                         in => zotonic_mod_authentication,
+                        audit => auth,
                         result => warning,
                         reason => expired_secret,
                         user_id => UserId

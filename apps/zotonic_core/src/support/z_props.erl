@@ -933,7 +933,7 @@ is_date_value(_) ->
     false.
 
 is_date_key(<<"is_", _/binary>>) -> false;
-is_date_key(<<"date_is_all_day">>) -> false;
+is_date_key(<<"date_is_", _/binary>>) -> false;
 is_date_key(<<"date_remarks">>) -> false;
 is_date_key(<<"date_", _/binary>>) -> true;
 is_date_key(<<"org_pubdate">>) -> true;
