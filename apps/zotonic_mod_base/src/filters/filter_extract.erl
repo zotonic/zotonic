@@ -18,6 +18,38 @@
 
 
 -module(filter_extract).
+-moduledoc("
+Extract a specific property from each item in a list.
+
+This filter extracts a named property from maps, proplists, or resources in a list,
+returning a new list containing only those values.
+
+For example:
+
+```django
+    {{ items | extract:\"price\" }}
+```
+
+When `items` is a list like `[#{price => 10, name => \"A\"}, #{price => 20, name => \"B\"}],
+this returns `[10, 20]`.
+
+This is particularly useful when combined with the sum filter for analytics:
+
+```django
+    {{ orders | extract:\"amount\" | sum }}
+```
+
+When extracting from resources, you can use any valid resource property:
+
+```django
+    {{ m.search[{query cat=\"product\"}] | extract:\"title\" }}
+```
+
+If applied to a single item instead of a list, it extracts and returns the property value
+from that item.
+
+If the input is `undefined`, the filter returns an empty list `[]`.
+").
 -export([extract/3]).
 
 extract(undefined, _Prop, _Context) ->
