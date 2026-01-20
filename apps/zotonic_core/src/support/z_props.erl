@@ -106,6 +106,8 @@ from_prop_value(K, V) when is_boolean(V) ->
     {K, V};
 from_prop_value(<<"is_", _/binary>> = K, V) ->
     {K, z_convert:to_bool(V)};
+from_prop_value(<<"date_is_", _/binary>> = K, V) ->
+    {K, z_convert:to_bool(V)};
 from_prop_value(K, V) when is_atom(V) ->
     {K, atom_to_binary(V, utf8)};
 from_prop_value(K, "") ->
@@ -181,17 +183,6 @@ from_qs(Qs, Now) ->
     WithTrans = combine_trans(WithDates),
     WithoutSingles = lift_singles(WithTrans),
     {ok, WithoutSingles}.
-
-% -spec local_now(z:context()) -> calendar:datetime().
-% local_now(Context) ->
-%     z_datetime:to_local(erlang:universaltime(), Context).
-
-% is_date_prop({<<"date_remarks", _/binary>>, _}) -> false;
-% is_date_prop({<<"date_", _/binary>>, _}) -> true;
-% is_date_prop({<<"publication_start">>, _}) -> true;
-% is_date_prop({<<"publication_end">>, _}) -> true;
-% is_date_prop({<<"org_pubdate">>, _}) -> true;
-% is_date_prop(_) -> false.
 
 
 %% ---------------------------------------------------------------------------------------
@@ -933,7 +924,7 @@ is_date_value(_) ->
     false.
 
 is_date_key(<<"is_", _/binary>>) -> false;
-is_date_key(<<"date_is_all_day">>) -> false;
+is_date_key(<<"date_is_", _/binary>>) -> false;
 is_date_key(<<"date_remarks">>) -> false;
 is_date_key(<<"date_", _/binary>>) -> true;
 is_date_key(<<"org_pubdate">>) -> true;
