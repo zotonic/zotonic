@@ -1,4 +1,4 @@
-<div class="rsc-item">
+<div class="rsc-item" id="{{ #rsc_item }}">
 {% block rsc_item %}
 	{% if show_medium %}
 	   	{% image id.medium mediaclass="admin-list-overview" class="thumb pull-left" %}
@@ -19,8 +19,8 @@
 </div>
 
 {% if is_page_block %}
-{% wire 
-    id=#edit
-    action={dialog_edit_basics id=id}
-%}
+    {% wire
+        id=#edit
+        action={dialog_edit_basics id=id update_element=#rsc_item template="_rsc_item.tpl"}
+    %}
 {% endif %}

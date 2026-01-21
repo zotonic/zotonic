@@ -119,7 +119,7 @@
 
           {% block button_edit %}
                <a class="btn btn-default pull-left" id="{{ #edit }}" href="{% url admin_edit_rsc id=id %}">{_ Edit _}</a>
-               {% wire id=#edit action={dialog_edit_basics id=id level=6} %}
+               {% wire id=#edit action={dialog_edit_basics id=id level=6 target=undefined} %}
           {% endblock %}
 
           <button class="btn btn-default" type="button" id="{{ #cancel }}">{_ Cancel _}</button>
