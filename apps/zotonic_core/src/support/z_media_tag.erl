@@ -225,7 +225,13 @@ tag1(MediaRef, Filename, Options, Context) ->
         Link ->
             HRef = iolist_to_binary(get_link(MediaRef, Link, Context)),
             Tag = z_tags:render_tag("img", Attrs),
-            {ok, iolist_to_binary(z_tags:render_tag("a", [{href,HRef}], Tag))}
+            TagArgs = case z_convert:to_bool(proplists:get_value(link_new, TagOpts)) of
+                true ->
+                    [ {href, HRef}, {target, <<"_blank">>} ];
+                false ->
+                    [ {href, HRef} ]
+            end,
+            {ok, iolist_to_binary(z_tags:render_tag("a", TagArgs, Tag))}
     end.
 
 
@@ -340,7 +346,7 @@ attributes1(MediaRef, Filename, Options, Context) ->
     % Add the optional srcset
     TagOpts5 = with_srcset(TagOpts4, Filename, Options, Context),
     % Filter some opts
-    TagOpts6 = proplists:delete(link, TagOpts5),
+    TagOpts6 = proplists:delete(link, proplists:delete(link_new, TagOpts5)),
     {Url1, TagOpts7} = case maybe_replace_gif_url(MediaRef, Url, TagOpts6, Context) of
         Url ->
             {Url, TagOpts6};
@@ -652,6 +658,7 @@ filter_options(Options) ->
         Options).
 
 is_tagopt({link,  _}) -> true;
+is_tagopt({link_new, _}) -> true;
 is_tagopt({alt,   _}) -> true;
 is_tagopt({title, _}) -> true;
 is_tagopt({class, _}) -> true;
