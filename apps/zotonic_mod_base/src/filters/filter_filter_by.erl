@@ -18,6 +18,82 @@
 
 
 -module(filter_filter_by).
+-moduledoc("
+See also
+
+[filter](/id/doc_template_filter_filter_filter),
+[exclude](/id/doc_template_filter_filter_exclude),
+and [extract](/id/doc_template_filter_filter_extract)
+
+Filter a list of items based on a property value and optional predicate.
+
+This filter provides powerful filtering capabilities for lists of maps, proplists, or resources
+by checking property values against predicates.
+
+## Basic Usage
+
+Filter items where a property is defined (not `undefined`):
+
+```django
+{{ items | filter_by:\"price\" }}
+```
+
+Returns only items that have a price property defined.
+
+## Using Predicates
+
+Filter with a boolean predicate filter:
+
+```django
+{{ items | filter_by:\"active\":\"is_defined\" }}
+```
+
+This applies the `is_defined` filter to each item's active property. It is possible
+to use all boolean filters.
+
+## Built-in Comparison Operators
+
+- `eq` - equal to
+- `ne` - not equal to
+- `lt` - less than
+- `le` - less than or equal to
+- `gt` - greater than
+- `ge` - greater than or equal to
+- `between` - between two values (inclusive)
+- `in` - value is in a list
+- `not_in` - value is not in a list
+
+Examples:
+
+```django
+{{ products | filter_by:\"price\":\"gt\":100 }}
+```
+
+Returns products with price greater than `100`.
+
+```django
+{{ items | filter_by:\"status\":\"in\":[\"active\", \"pending\"] }}
+```
+
+Returns items where status is either \"active\" or \"pending\".
+
+```django
+{{ orders | filter_by:\"amount\":\"between\":[50, 200] }}
+```
+
+Returns orders with amount between 50 and 200 (inclusive).
+
+## Filtering Resources
+
+Works seamlessly with Zotonic resources:
+
+```django
+{{ m.search[{query cat=\"product\"}] | filter_by:\"is_published\":\"eq\":true }}
+```
+
+If the input is undefined, the filter returns undefined.
+").
+
 -export([filter_by/3, filter_by/4, filter_by/5]).
 
 -define(IS_BUILTIN(P), (
