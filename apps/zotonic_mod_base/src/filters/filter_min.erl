@@ -1,8 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010 Marc Worrell
+%% @copyright 2010-2026 Marc Worrell
 %% @doc Take minimum value.
 
-%% Copyright 2010 Marc Worrell
+%% Copyright 2010-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,29 +24,62 @@ See also
 
 Take the minimum of the filter value and its first argument.
 
-The following:
+Usage with two values
+---------------------
 
+Take the maximum of the filter value and its first argument.
 
 ```django
-{% print 102|to_integer|min:103 %}
+   {% print 102 | to_integer | max:103 %}
 ```
 
 Prints `102`.
+
+Usage with two values
+---------------------
+
+Take the minimum of the filter value and its first argument::
+
+   {{ 102 | min:103 }}
+
+Prints `103`.
+
+Usage with lists
+----------------
+
+Find the minimum value in a list::
+
+```django
+
+   {% print [1, 5, 3, 9, 2] | min %}
+```
+
+Prints `1`.
+
+Edge cases
+----------
+
+- `undefined | min` returns `undefined`
+- `undefined | min:1000` returns `undefined`
+- `[] | max` (empty list) returns `undefined`
+- Works with translation tuple values.
 ").
--export([min/3]).
+
+-compile({no_auto_import, [min/2]}).
+
+-export([min/2, min/3]).
+
+min(undefined, _Context) ->
+    undefined;
+min([], _Context) ->
+    undefined;
+min(List, Context) ->
+    lists:min([ z_template_compiler_runtime:to_simple_value(E, Context) || E <- List ]).
 
 min(undefined, _Arg, _Context) ->
     undefined;
-min(Value, undefined, _Context) ->
-    Value;
-min({trans, _} = Tr, Arg, Context) ->
-    min(z_trans:lookup_fallback(Tr, Context), Arg, Context);
-min(Value, {trans, _} = Tr, Context) ->
-    min(Value, z_trans:lookup_fallback(Tr, Context), Context);
-min(Value, Arg, _Context) ->
-    case Value < Arg of
-        true -> Value;
-        false -> Arg
-    end.
-
+min(_Value, undefined, _Context) ->
+    undefined;
+min(Value, Arg, Context) ->
+    min([Value, Arg], Context).
 

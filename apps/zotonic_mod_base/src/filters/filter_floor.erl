@@ -1,8 +1,8 @@
-%% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016 Marc Worrell
-%% @doc is_number filter, test if a value is a number
+%% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
+%% @copyright 2026 Maas-Maarten Zeeman
+%% @doc Floor a value to integer
 
-%% Copyright 2016 Marc Worrell
+%% Copyright 2026 Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -16,17 +16,31 @@
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
 
--module(filter_is_number).
+-module(filter_floor).
 -moduledoc("
-Test if a value is a number (integer or floating point):
+Round down a floating point value.
+
+Example:
 
 
 ```django
-{% if 1|is_number %}Yes, this is a number{% endif %}
+{{ 3.5 | floor }}
 ```
-").
--export([is_number/2]).
 
-is_number(V, _Context) when is_number(V) -> true;
-is_number(_, _Context) -> false.
+Results in the integer value `3`.
+").
+
+-export([floor/2]).
+
+floor(undefined, _Context) ->
+    undefined;
+floor(N, _Context) when is_integer(N) ->
+    N;
+floor(N, _Context) ->
+    try
+        F = z_convert:to_float(N),
+        erlang:floor(F)
+    catch
+        _:_ -> undefined
+    end.
 
