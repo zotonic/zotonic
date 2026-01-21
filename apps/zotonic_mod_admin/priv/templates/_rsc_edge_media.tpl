@@ -16,8 +16,7 @@
 </li>
 
 {% wire id=#unlink.object_id
-    action={
-        unlink
+    action={unlink
         subject_id=subject_id
         predicate="depiction"
         object_id=object_id
@@ -37,8 +36,7 @@
 {% wire
     id=#edit
     target=#unlink_wrapper
-    action={
-        dialog_edit_basics
+    action={dialog_edit_basics
         edge_id=edge_id
         template="_rsc_edge_media.tpl"
     }

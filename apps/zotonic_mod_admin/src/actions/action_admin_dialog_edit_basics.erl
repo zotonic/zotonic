@@ -1,8 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2011-2021 Arjan Scherpenisse
+%% @copyright 2011-2026 Arjan Scherpenisse
 %% @doc Edit the basic properties of a rsc in a dialog.
+%% @end
 
-%% Copyright 2011-2021 Arjan Scherpenisse
+%% Copyright 2011-2026 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -47,14 +48,15 @@ render_action(TriggerId, TargetId, Args, Context) ->
     Template = proplists:get_value(template, Args),
     Actions = proplists:get_all_values(action, Args),
     Level = proplists:get_value(level, Args, 0),
-    Postback = {edit_basics, RscId, EdgeId, Template, Level, Actions, Callback},
+    UpdateElement = proplists:get_value(update_element, Args),
+    OptIsUpdate = proplists:get_value(is_update, Args),
+    Postback = {edit_basics, RscId, EdgeId, UpdateElement, OptIsUpdate, Template, Level, Actions, Callback},
     {PostbackMsgJS, _PickledPostback} = z_render:make_postback(Postback, click, TriggerId, TargetId, ?MODULE, Context),
     {PostbackMsgJS, Context}.
 
 
 %% @doc Fill the dialog with the edit basics form. The form will be posted back to this module.
-%% @spec event(Event, Context1) -> Context2
-event(#postback{message={edit_basics, RscId, EdgeId, Template, Level, Actions, Callback}, target=TargetId}, Context) ->
+event(#postback{message={edit_basics, RscId, EdgeId, UpdateElement, OptIsUpdate, Template, Level, Actions, Callback}, target=TargetId}, Context) ->
     ObjectId = case RscId of
                     undefined ->
                         case EdgeId of
@@ -67,20 +69,33 @@ event(#postback{message={edit_basics, RscId, EdgeId, Template, Level, Actions, C
                     _ ->
                         RscId
                end,
-    TargetId1 = z_context:get_q(<<"element_id">>, Context, TargetId),
+    UpdateElement1 = if
+        UpdateElement =:= undefined -> TargetId;
+        true -> UpdateElement
+    end,
+    UpdateElement2 = z_context:get_q(<<"element_id">>, Context, UpdateElement1),
+    IsUpdate = case z_context:get_q(<<"is_update">>, Context) of
+        undefined ->
+            case OptIsUpdate of
+                undefined -> false;
+                V -> z_convert:to_bool(V)
+            end;
+        QIsUpd ->
+            z_convert:to_bool(QIsUpd)
+    end,
     Vars = [
         {delegate, atom_to_list(?MODULE)},
         {id, ObjectId},
         {edge_id, EdgeId},
         {template, Template},
-        {update_element, TargetId1},
-        {is_update, z_convert:to_bool(z_context:get_q(<<"is_update">>, Context))},
+        {update_element, UpdateElement2},
+        {is_update, IsUpdate},
         {actions, Actions},
         {callback, Callback},
         {center, 0},
         {level, Level}
     ],
-    Title = case m_rsc:p(ObjectId, title, Context) of
+    Title = case m_rsc:p(ObjectId, <<"title">>, Context) of
         undefined -> ?__("Untitled", Context);
         T -> T
     end,
@@ -95,7 +110,7 @@ event(#postback{message={edit_basics, RscId, EdgeId, Template, Level, Actions, C
 event(#submit{message={rsc_edit_basics, Args}}, Context) ->
     {id, Id} = proplists:lookup(id, Args),
     {edge_id, EdgeId} = proplists:lookup(edge_id, Args),
-    Actions = proplists:get_value(actions, Args, []),
+    Actions = lists:flatten(proplists:get_all_values(actions, Args)),
 
     Post = z_context:get_q_all_noz(Context),
     Props = controller_admin_edit:filter_props(Post),
@@ -107,26 +122,34 @@ event(#submit{message={rsc_edit_basics, Args}}, Context) ->
                      undefined ->
                         [ {id, Id} ];
                      _Other ->
-                        {SubjectId, Predicate, Id} = m_edge:get_triple(EdgeId, Context),
+                        {SubjectId, Predicate, ObjectId} = m_edge:get_triple(EdgeId, Context),
                         [
+                            {id, Id},
                             {subject_id, SubjectId},
                             {predicate, Predicate},
-                            {object_id, Id},
+                            {object_id, ObjectId},
                             {edge_id, EdgeId}
                         ]
                   end,
             Context1 = case proplists:get_value(update_element, Args) of
                 window -> Context;
                 undefined -> Context;
+                <<"none">> -> Context;
+                none -> Context;
+                <<>> -> Context;
                 UpdateElt ->
                     Template = case proplists:get_value(template, Args) of
-                        undefined -> "_rsc_edge.tpl";
-                        X -> X
+                        undefined -> {cat, "_rsc_edge.tpl"};
+                        TplArg when is_binary(TplArg); is_list(TplArg) -> {cat, TplArg};
+                        TplArg -> TplArg
                     end,
-                    MixedHtml = z_template:render(Template, Vars, Context),
-                    case proplists:get_value(is_update, Args) of
-                        true -> z_render:update(UpdateElt, MixedHtml, Context);
-                        false -> z_render:replace(UpdateElt, MixedHtml, Context)
+                    Render = #render{
+                        template = Template,
+                        vars = Vars
+                    },
+                    case z_convert:to_bool(proplists:get_value(is_update, Args, false)) of
+                        true -> z_render:update(UpdateElt, Render, Context);
+                        false -> z_render:replace(UpdateElt, Render, Context)
                     end
             end,
             Context2 = z_render:wire({dialog_close, []}, Context1),
@@ -136,9 +159,9 @@ event(#submit{message={rsc_edit_basics, Args}}, Context) ->
                 "" -> Context2;
                 <<>> -> Context2;
                 Callback ->
-                    Title = case m_rsc:p(Id, title, Context2) of
-                        undefind -> ?__("Untitled", Context2);
-                        T -> T
+                    Title = case m_rsc:p(Id, <<"title">>, Context2) of
+                        undefined -> ?__("Untitled", Context2);
+                        T -> z_trans:lookup_fallback(T, Context2)
                     end,
                     z_render:wire({script, [{script, [
                                     z_sanitize:ensure_safe_js_callback(Callback),
@@ -157,7 +180,7 @@ maybe_add_language(Id, Props, Context) ->
         true ->
             Props;
         false ->
-            case m_rsc:p_no_acl(Id, language, Context) of
+            case m_rsc:p_no_acl(Id, <<"language">>, Context) of
                 undefined -> Props;
                 Language -> [ {<<"language">>, Language} | Props ]
             end

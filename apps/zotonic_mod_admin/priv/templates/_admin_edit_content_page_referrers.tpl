@@ -30,7 +30,7 @@
                             {% catinclude "_rsc_edge_item.tpl" s_id %}
                         </a>
                         {% wire id=#edit.index
-                            action={dialog_edit_basics id=s_id}
+                            action={dialog_edit_basics id=s_id update_element=#edit.index template="_rsc_edge_item.tpl" is_update}
                         %}
                     </div>
                 </li>

@@ -1,6 +1,5 @@
 {% wire id=#form type="submit"
-    postback={
-        rsc_edit_basics
+    postback={rsc_edit_basics
         id=id
         edge_id=edge_id
         update_element=update_element
