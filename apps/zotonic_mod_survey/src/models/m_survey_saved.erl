@@ -77,7 +77,7 @@ put_saved(undefined, _PageNr, _Answers, _Context) ->
 put_saved(SurveyId, PageNr, Answers, Context) when is_integer(SurveyId) ->
     case z_acl:user(Context) of
         undefined ->
-            case m_client_local_storage:device_id(Context) of
+            case m_client_local_storage:fetch_device_id(Context) of
                 {ok, PersistentNr} ->
                     put_saved_persistent(SurveyId, PersistentNr, PageNr, Answers, Context);
                 {error, _} ->
@@ -150,7 +150,7 @@ get_saved(undefined, _Context) ->
 get_saved(SurveyId, Context) when is_integer(SurveyId) ->
     case z_acl:user(Context) of
         undefined ->
-            case m_client_local_storage:device_id(Context) of
+            case m_client_local_storage:fetch_device_id(Context) of
                 {ok, PersistentNr} ->
                     get_saved_persistent(SurveyId, PersistentNr, Context);
                 {error, _} ->
@@ -192,7 +192,7 @@ has_saved(undefined, _Context) ->
 has_saved(SurveyId, Context) when is_integer(SurveyId) ->
     case z_acl:user(Context) of
         undefined ->
-            case m_client_local_storage:device_id(Context) of
+            case m_client_local_storage:fetch_device_id(Context) of
                 {ok, PersistentNr} ->
                     has_saved_persistent(SurveyId, PersistentNr, Context);
                 {error, _} ->
@@ -234,7 +234,7 @@ delete_saved(undefined, _Context) ->
 delete_saved(SurveyId, Context) when is_integer(SurveyId) ->
     case z_acl:user(Context) of
         undefined ->
-            case m_client_local_storage:device_id(Context) of
+            case m_client_local_storage:fetch_device_id(Context) of
                 {ok, PersistentNr} ->
                     delete_saved_persistent(SurveyId, PersistentNr, Context);
                 {error, _} ->
