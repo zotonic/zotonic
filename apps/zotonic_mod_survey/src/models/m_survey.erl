@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2023 Marc Worrell
-%%
+%% @copyright 2010-2026 Marc Worrell
 %% @doc Model for accessing survey information.
+%% @end
 
-%% Copyright 2010-2023 Marc Worrell
+%% Copyright 2010-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.

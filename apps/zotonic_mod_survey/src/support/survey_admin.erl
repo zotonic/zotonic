@@ -425,51 +425,82 @@ r_language(Context) ->
         Ls ->
             Ls1 = binary:split(Ls, <<",">>, [global]),
             [ binary_to_atom(L, 'utf8') || L <- lists:filter(fun z_language:is_valid/1, Ls1) ]
-
     end.
 
 
 %% @doc Preprocess a posted form before it is given to the rsc update routines.
-%%      This fixes the page break and stop questions.
+%% This fixes the page break, page options and stop questions.
+%% This combines page jump and page options inputs into serialized blocks.
+-spec admin_rscform(QueryArgs) -> QueryArgs1 when
+    QueryArgs :: [ QueryArg ],
+    QueryArgs1 :: [ QueryArg ],
+    QueryArg :: {binary(), term()}.
 admin_rscform(Args) ->
     combine_conditions(Args, []).
 
 combine_conditions([], Acc) ->
     lists:flatten(lists:reverse(Acc));
+combine_conditions([{<<"page-options-", _Option/binary>>, _} | _] = Bs, Acc) ->
+    {Bs1, Block} = combine_page_options(Bs, page_options_block()),
+    BlockAsList = [ {<<"blocks[].">>, <<>>} | maps:to_list(Block) ],
+    combine_conditions(Bs1, [ BlockAsList | Acc ]);
+%% Older editors might have the `is_stop_page` option, newer ones use the `page-options-...`
+%% input fields.
 combine_conditions([{<<"is_stop_page">>, <<>>}], Acc) ->
     combine_conditions([], Acc);
 combine_conditions([{<<"is_stop_page">>, <<>>}, {<<"jump-condition-", _/binary>>, _} = JC|Bs], Acc) ->
     combine_conditions([JC|Bs], Acc);
 combine_conditions([{<<"is_stop_page">>, <<>>}|Bs], Acc) ->
-    combine_conditions(Bs, break_block(<<>>,<<>>,<<>>,<<>>)++Acc);
+    combine_conditions(Bs, [ break_block(<<>>,<<>>,<<>>,<<>>) | Acc ]);
 combine_conditions([{<<"is_stop_page">>, _IsChecked}|Bs], Acc) ->
-    combine_conditions(Bs, stop_block()++Acc);
+    combine_conditions(Bs, [ stop_block() | Acc ]);
 combine_conditions([
             {<<"jump-condition-", _/binary>>, Cond1}, {<<"jump-target-", _/binary>>, Target1},
             {<<"jump-condition-", _/binary>>, Cond2}, {<<"jump-target-", _/binary>>, Target2}|Bs], Acc) ->
-    combine_conditions(Bs, break_block(Cond1,Target1,Cond2,Target2)++Acc);
+    combine_conditions(Bs, [ break_block(Cond1,Target1,Cond2,Target2) | Acc ]);
 combine_conditions([
             {<<"jump-condition-", _/binary>>, Cond}, {<<"jump-target-", _/binary>>, Target}|Bs], Acc) ->
-    combine_conditions(Bs, break_block(Cond,Target,<<>>,<<>>)++Acc);
+    combine_conditions(Bs, [ break_block(Cond,Target,<<>>,<<>>) | Acc ]);
 combine_conditions([B|Bs], Acc) ->
     combine_conditions(Bs, [B|Acc]).
 
+%% Combine all page-options into a single block.
+combine_page_options([ {<<"page-options-", Option/binary>>, V} | Bs ], Block) ->
+    Block1 = Block#{
+        <<"blocks[].", Option/binary>> => V
+    },
+    combine_page_options(Bs, Block1);
+combine_page_options(Bs, Block) ->
+    {Bs, Block}.
+
+%% @doc This page_options block will be serialized after the page options
+%% are fetched.
+page_options_block() ->
+    #{
+        <<"blocks[].type">> => <<"survey_page_options">>,
+        <<"blocks[].name">> => z_ids:id(),
+        <<"blocks[].is_hide_back">> => false,
+        <<"blocks[].is_stop_page">> => false
+    }.
+
+%% @doc This stop block is in the serialized form.
 stop_block() ->
-    Id = z_ids:id(),
     [
+        {<<"blocks[].">>, <<>>},
         {<<"blocks[].type">>, <<"survey_stop">>},
-        {<<"blocks[].name">>, Id},
-        {<<"blocks[].">>, <<>>}
+        {<<"blocks[].name">>, z_ids:id()}
     ].
 
+%% @doc This page_break block is in the serialized form. A page_break block can have
+%% one or two conditions/targets. If there are more breaks then more page_break
+%% blocks are added.
 break_block(Cond1, Target1, Cond2, Target2) ->
-    Id = z_ids:id(),
     [
-        {<<"blocks[].target2">>, Target2},
-        {<<"blocks[].condition2">>, Cond2},
+        {<<"blocks[].">>, <<>>},
+        {<<"blocks[].type">>, <<"survey_page_break">>},
+        {<<"blocks[].name">>, z_ids:id()},
         {<<"blocks[].target1">>, Target1},
         {<<"blocks[].condition1">>, Cond1},
-        {<<"blocks[].type">>, <<"survey_page_break">>},
-        {<<"blocks[].name">>, Id},
-        {<<"blocks[].">>, <<>>}
+        {<<"blocks[].target2">>, Target2},
+        {<<"blocks[].condition2">>, Cond2}
     ].

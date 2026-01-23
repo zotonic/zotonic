@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013 Marc Worrell
+%% @copyright 2013-2026 Marc Worrell
 %% @doc Split the page blocks into pages, prepare them for easy display in the survey (form) question editor.
+%% @end
 
-%% Copyright 2013 Marc Worrell
+%% Copyright 2013-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,25 +21,22 @@
 -moduledoc("
 Split the page blocks into pages, prepare them for easy display in the survey question editor.
 
+A page is split in two lists: one with questions and one with the page break/options/stop
+blocks.
+
 See [mod\\_survey](/id/doc_module_mod_survey)
-
-Todo
-
-Not yet documented.
 ").
 
 -export([
     survey_as_pages/2
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
-
 survey_as_pages(undefined, _Context) ->
 	[];
-survey_as_pages([], _Context) ->
-	[];
-survey_as_pages(Blocks, _Context) ->
-	split(Blocks, [], []).
+survey_as_pages(Blocks, _Context) when is_list(Blocks) ->
+	split(Blocks, [], []);
+survey_as_pages(_Blocks, _Context) ->
+	[].
 
 split([], [], Pages) ->
 	lists:reverse(Pages);
@@ -49,6 +47,10 @@ split(Ps, Acc, Pages) ->
 		{[], [Q|Ps1]} ->
 			case maps:get(<<"name">>, Q, undefined) of
 				<<"survey_feedback">> ->
+					% Special block with feedback text that is
+					% shown after the survey has been submitted.
+					% This block is not part of the survey question
+					% pages.
 					split(Ps1, Acc, Pages);
 				_ ->
 					split(Ps1, [Q|Acc], Pages)
@@ -60,6 +62,7 @@ split(Ps, Acc, Pages) ->
 is_page_end(P) ->
 	case maps:get(<<"type">>, P, undefined) of
 		<<"survey_page_break">> -> true;
+		<<"survey_page_options">> -> true;
 		<<"survey_stop">> -> true;
 		_ -> false
 	end.

@@ -52,6 +52,18 @@
                 action={dialog_close}
         %}
     {% endif %}
+{% elseif id.survey_multiple == 3 and not is_max_results_reached and m.survey_saved.has_saved[id] %}
+    {# Single entry form with intermediate saved results can be continued. #}
+    <p><span class="fa fa-info-circle"></span>
+    {_ You started filling this in and will continue where you left off. _}</p>
+    {% include "_survey_start_button.tpl"
+                id=id
+                answers=answers|default:m.survey.did_survey_answers[id]
+                viewer=viewer
+                is_autostart=is_autostart
+                is_survey_saved
+                element_id=element_id|default:"survey-question"
+    %}
 {% elseif is_max_results_reached %}
     {# Maximum number of submissions has been reached. #}
     <p class="alert alert-info">

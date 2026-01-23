@@ -13,6 +13,8 @@
 		postback={survey_next
 			id=id
 			page_nr=page_nr
+			is_feedback_view=is_feedback_view
+			feedback_submitter=feedback_submitter
 			answers=answers
 			answer_user_id=answer_user_id
 			history=history
@@ -38,16 +40,30 @@
 			{% block before_questions %}
 			{% endblock %}
 
-			{% for blk in questions %}
-				{% optional include ["blocks/_block_view_",blk.type,".tpl"]|join
-							id=id
-							blk=blk
-							answers=answers
-                            answer_user_id=answer_user_id|default:m.acl.user
-							editing=editing
-							nr=forloop.counter
-				%}
-			{% endfor %}
+			{% if is_feedback_view %}
+				{% for blk in questions %}
+					{% optional include ["blocks/_block_view_",blk.type,".tpl"]|join
+								id=id
+								blk=blk
+								result=feedback_result
+	                            answer_user_id=answer_user_id|default:m.acl.user
+								editing=editing
+								nr=forloop.counter
+								is_survey_answer_view
+					%}
+				{% endfor %}
+			{% else %}
+				{% for blk in questions %}
+					{% optional include ["blocks/_block_view_",blk.type,".tpl"]|join
+								id=id
+								blk=blk
+								answers=answers
+	                            answer_user_id=answer_user_id|default:m.acl.user
+								editing=editing
+								nr=forloop.counter
+					%}
+				{% endfor %}
+			{% endif %}
 
 			{% block after_questions %}
 			{% endblock %}
@@ -65,43 +81,51 @@
 			<div class="form-actions">
 		{% endif %}
 
-			{% if page_nr > 1 %}
-				<a id="{{ #back }}" href="#" class="btn btn-default">{_ Back _}</a>
-				{% wire id=#back
-						postback={survey_back id=id page_nr=page_nr answers=answers history=history editing=editing element_id=element_id|default:"survey-question"}
-						delegate="mod_survey"
-				%}
-			{% endif %}
+		{% if is_feedback_view %}
+			<button type="submit" class="btn btn-primary btn-lg survey-next">{_ Continue _}</button>
+		{% else %}
+			{% with questions|survey_page_options as options %}
 
-			{% if not editing or pages > 1 %}
-				{% if not id.survey_is_autostart or page_nr > 1 %}
-					<a id="{{ #cancel }}" href="#" class="btn btn-lg btn-default">{_ Stop without saving _}</a>
-					{% if viewer == 'overlay' %}
-						{% wire id=#cancel action={confirm text=_"Are you sure you want to stop without saving?" ok=_"Stop without saving" cancel=_"Continue" action={overlay_close}} %}
-					{% elseif viewer == 'dialog' %}
-						{% wire id=#cancel action={confirm text=_"Are you sure you want to stop without saving?" ok=_"Stop without saving" cancel=_"Continue" action={dialog_close}} %}
-					{% else %}
-						{% wire id=#cancel action={confirm text=_"Are you sure you want to stop without saving?" ok=_"Stop without saving" cancel=_"Continue" action={redirect id=id}} %}
-					{% endif %}
+				{% if page_nr > 1 and not options.is_hide_back %}
+					<a id="{{ #back }}" href="#" class="btn btn-default">{_ Back _}</a>
+					{% wire id=#back
+							postback={survey_back id=id page_nr=page_nr answers=answers history=history editing=editing element_id=element_id|default:"survey-question"}
+							delegate="mod_survey"
+					%}
 				{% endif %}
-			{% else %}
-				<a id="{{ #cancel }}" href="#" class="btn btn-lg btn-default">{_ Cancel _}</a>
-				{% wire id=#cancel action={dialog_close} %}
-			{% endif %}
 
-			{% if editing %}
-				<button type="submit" class="btn btn-lg btn-primary">{% if page_nr == pages %}{_ Submit _}{% else %}{_ Next _}{% endif %}</button>
-			{% else %}
-				{% with questions|last as last_q %}
-					{% if not questions|survey_is_submit and last_q.type /= "survey_stop" %}
-						{% if page_nr == pages or questions|survey_is_pagebreak_submit %}
-							<button type="submit" class="btn btn-primary btn-lg survey-submit">{_ Submit _}</button>
+				{% if not editing or pages > 1 %}
+					{% if not id.survey_is_autostart or page_nr > 1 %}
+						<a id="{{ #cancel }}" href="#" class="btn btn-lg btn-default">{_ Stop without saving _}</a>
+						{% if viewer == 'overlay' %}
+							{% wire id=#cancel action={confirm text=_"Are you sure you want to stop without saving?" ok=_"Stop without saving" cancel=_"Continue" action={overlay_close}} %}
+						{% elseif viewer == 'dialog' %}
+							{% wire id=#cancel action={confirm text=_"Are you sure you want to stop without saving?" ok=_"Stop without saving" cancel=_"Continue" action={dialog_close}} %}
 						{% else %}
-							<button type="submit" class="btn btn-primary btn-lg survey-next">{_ Next _}</button>
+							{% wire id=#cancel action={confirm text=_"Are you sure you want to stop without saving?" ok=_"Stop without saving" cancel=_"Continue" action={redirect id=id}} %}
 						{% endif %}
 					{% endif %}
-				{% endwith %}
-			{% endif %}
+				{% else %}
+					<a id="{{ #cancel }}" href="#" class="btn btn-lg btn-default">{_ Cancel _}</a>
+					{% wire id=#cancel action={dialog_close} %}
+				{% endif %}
+
+				{% if editing %}
+					<button type="submit" class="btn btn-lg btn-primary">{% if page_nr == pages %}{_ Submit _}{% else %}{_ Next _}{% endif %}</button>
+				{% else %}
+					{% with questions|last as last_q %}
+						{% if not questions|survey_is_submit and last_q.type /= "survey_stop" %}
+							{% if page_nr == pages or questions|survey_is_pagebreak_submit %}
+								<button type="submit" class="btn btn-primary btn-lg survey-submit">{_ Submit _}</button>
+							{% else %}
+								<button type="submit" class="btn btn-primary btn-lg survey-next">{_ Next _}</button>
+							{% endif %}
+						{% endif %}
+					{% endwith %}
+				{% endif %}
+
+			{% endwith %}
+		{% endif %}
 		</div>
 	</form>
 	{% javascript %}

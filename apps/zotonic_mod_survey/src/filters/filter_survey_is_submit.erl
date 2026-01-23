@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2012 Marc Worrell
+%% @copyright 2012-2026 Marc Worrell
 %% @doc Check if the questions end with a question type that is a submit button.
+%% @end
 
-%% Copyright 2012 Marc Worrell
+%% Copyright 2012-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,9 +19,14 @@
 
 -module(filter_survey_is_submit).
 -moduledoc("
-Todo
+Check if the questions end with a question type that is a submit button.
 
-Not yet documented.
+Every block is checked for possible submit actions by calling the notification
+`survey_is_submit`.
+
+Per default blocks of type `survey_button` and any block with an `input_type`
+of `submit` are submit blocks. This behavior can be changed by hooking into
+the `survey_is_submit` notification before or after the `mod_survey` handles it.
 ").
 
 -export([

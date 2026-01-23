@@ -48,15 +48,16 @@
 							<input type="radio" disabled /> {_ No _}
 						</p>
 					</div>
-					<!--
-					<div class="col-lg-4 col-md-4" data-block-type='survey_truefalse'>
-						<p>{_ True or false question _}</p>
-						<p>
-							<input type="radio" disabled /> {_ True _}<br/>
-							<input type="radio" disabled /> {_ False _}
-						</p>
-					</div>
-					-->
+					{#
+						<!-- Deprecated question type, use yesno instead -->
+						<div class="col-lg-4 col-md-4" data-block-type='survey_truefalse'>
+							<p>{_ True or false question _}</p>
+							<p>
+								<input type="radio" disabled /> {_ True _}<br/>
+								<input type="radio" disabled /> {_ False _}
+							</p>
+						</div>
+					#}
 				</div>
 				<hr/>
 				<div class="row">
