@@ -465,12 +465,13 @@ unregister_nonce(SessionNonce) when is_binary(SessionNonce) ->
 
 %% @doc If the survey is set to save intermediate results then those are saved to the
 %% survey_saved model.
--spec maybe_save_intermediate_results(Editing, SurveyId, PageNr, SubmitArgs, Context) -> ok when
+-spec maybe_save_intermediate_results(Editing, SurveyId, PageNr, SubmitArgs, Context) -> ok | {error, Reason} when
     Editing :: term() | undefined,
     SurveyId :: m_rsc:resource_id(),
     PageNr :: non_neg_integer(),
     SubmitArgs :: proplists:proplist(),
-    Context :: z:context().
+    Context :: z:context(),
+    Reason :: term().
 maybe_save_intermediate_results(undefined, SurveyId, PageNr, SubmitArgs, Context) ->
     case z_convert:to_binary(m_rsc:p(SurveyId, <<"survey_multiple">>, Context)) of
         <<"3">> -> m_survey_saved:put_saved(SurveyId, PageNr, SubmitArgs, Context);
@@ -480,9 +481,10 @@ maybe_save_intermediate_results(_Editing, _SurveyId, _PageNr, _SubmitArgs, _Cont
     ok.
 
 %% @doc Delete any intermediate results for the user / device.
--spec maybe_delete_saved(SurveyId, Context) -> ok when
+-spec maybe_delete_saved(SurveyId, Context) -> ok | {error, Reason} when
     SurveyId :: m_rsc:resource_id(),
-    Context :: z:context().
+    Context :: z:context(),
+    Reason :: term().
 maybe_delete_saved(SurveyId, Context) ->
     case z_convert:to_binary(m_rsc:p(SurveyId, <<"survey_multiple">>, Context)) of
         <<"3">> -> m_survey_saved:delete_saved(SurveyId, Context);

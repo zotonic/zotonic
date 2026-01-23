@@ -66,12 +66,11 @@ m_get([ <<"has_saved">>, SurveyId | Rest ], _Msg, Context) ->
 
 %% @doc Store the intermediate answers for the current user or the persistent
 %% id from the user agent.
--spec put_saved(SurveyId, PageNr, Answers, Context) -> {ok, Data} | {error, Reason} when
+-spec put_saved(SurveyId, PageNr, Answers, Context) -> ok | {error, Reason} when
     SurveyId :: m_rsc:resource() | undefined,
     PageNr :: pos_integer(),
     Answers :: list(),
     Context :: z:context(),
-    Data :: map(),
     Reason :: enoent | term().
 put_saved(undefined, _PageNr, _Answers, _Context) ->
     {error, enoent};
@@ -91,13 +90,12 @@ put_saved(SurveyId, PageNr, Answers, Context) ->
     put_saved(m_rsc:rid(SurveyId, Context), PageNr, Answers, Context).
 
 
--spec put_saved_user(SurveyId, UserId, PageNr, Answers, Context) -> {ok, Data} | {error, Reason} when
+-spec put_saved_user(SurveyId, UserId, PageNr, Answers, Context) -> ok | {error, Reason} when
     SurveyId :: m_rsc:resource() | undefined,
     UserId :: m_rsc:resource_id(),
     PageNr :: pos_integer(),
     Answers :: list(),
     Context :: z:context(),
-    Data :: map(),
     Reason :: enoent | term().
 put_saved_user(SurveyId, UserId, PageNr, Answers, Context) ->
     _ = z_db:q("
@@ -116,13 +114,12 @@ put_saved_user(SurveyId, UserId, PageNr, Answers, Context) ->
     ok.
 
 
--spec put_saved_persistent(SurveyId, PersistentNr, PageNr, Answers, Context) -> {ok, Data} | {error, Reason} when
+-spec put_saved_persistent(SurveyId, PersistentNr, PageNr, Answers, Context) -> ok | {error, Reason} when
     SurveyId :: m_rsc:resource() | undefined,
     PersistentNr :: binary(),
     PageNr :: pos_integer(),
     Answers :: list(),
     Context :: z:context(),
-    Data :: map(),
     Reason :: enoent | term().
 put_saved_persistent(SurveyId, PersistentNr, PageNr, Answers, Context) ->
     _ = z_db:q("
@@ -227,13 +224,13 @@ has_saved_persistent(SurveyId, PersistentNr, Context) ->
         Context) == 1.
 
 
-%% @doc Delete the are intermediate answers for the current user or the persistent
+%% @doc Delete the intermediate answers for the current user or the persistent
 %% id from the user agent.
--spec delete_saved(SurveyId, Context) -> boolean() when
+-spec delete_saved(SurveyId, Context) -> ok when
     SurveyId :: m_rsc:resource() | undefined,
     Context :: z:context().
 delete_saved(undefined, _Context) ->
-    false;
+    ok;
 delete_saved(SurveyId, Context) when is_integer(SurveyId) ->
     case z_acl:user(Context) of
         undefined ->
@@ -241,7 +238,7 @@ delete_saved(SurveyId, Context) when is_integer(SurveyId) ->
                 {ok, PersistentNr} ->
                     delete_saved_persistent(SurveyId, PersistentNr, Context);
                 {error, _} ->
-                    false
+                    ok
             end;
         UserId ->
             delete_saved_user(SurveyId, UserId, Context)
