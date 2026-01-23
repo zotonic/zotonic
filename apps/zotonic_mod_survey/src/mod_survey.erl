@@ -671,6 +671,8 @@ page_has_feedback(Nr, Qs) ->
 has_feedback(Blocks) when is_list(Blocks) ->
     lists:any(fun(B) -> has_feedback_1(B) end, Blocks).
 
+has_feedback_1(#{ <<"is_test_direct">> := true }) ->
+    false;
 has_feedback_1(B) ->
     not z_utils:is_empty(maps:get(<<"test_correct">>, B, undefined))
     orelse not z_utils:is_empty(maps:get(<<"test_wrong">>, B, undefined)).
