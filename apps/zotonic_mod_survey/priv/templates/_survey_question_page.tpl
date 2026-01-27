@@ -111,16 +111,12 @@
 
 				{% if editing %}
 					<button type="submit" class="btn btn-lg btn-primary">{% if page_nr == pages %}{_ Submit _}{% else %}{_ Next _}{% endif %}</button>
-				{% else %}
-					{% with questions|last as last_q %}
-						{% if not questions|survey_is_submit and last_q.type /= "survey_stop" %}
-							{% if page_nr == pages or questions|survey_is_pagebreak_submit %}
-								<button type="submit" class="btn btn-primary btn-lg survey-submit">{_ Submit _}</button>
-							{% else %}
-								<button type="submit" class="btn btn-primary btn-lg survey-next">{_ Next _}</button>
-							{% endif %}
-						{% endif %}
-					{% endwith %}
+				{% elseif not options.is_stop_page and not questions|survey_is_submit %}
+					{% if page_nr == pages or questions|survey_is_pagebreak_submit %}
+						<button type="submit" class="btn btn-primary btn-lg survey-submit">{_ Submit _}</button>
+					{% else %}
+						<button type="submit" class="btn btn-primary btn-lg survey-next">{_ Next _}</button>
+					{% endif %}
 				{% endif %}
 
 			{% endwith %}
