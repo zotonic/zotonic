@@ -16,6 +16,7 @@
 			is_feedback_view=is_feedback_view
 			feedback_submitter=feedback_submitter
 			answers=answers
+			answers_novalidate=answers_novalidate
 			answer_user_id=answer_user_id
 			history=history
 			editing=editing
@@ -53,16 +54,18 @@
 					%}
 				{% endfor %}
 			{% else %}
-				{% for blk in questions %}
-					{% optional include ["blocks/_block_view_",blk.type,".tpl"]|join
-								id=id
-								blk=blk
-								answers=answers
-	                            answer_user_id=answer_user_id|default:m.acl.user
-								editing=editing
-								nr=forloop.counter
-					%}
-				{% endfor %}
+				{% with answers ++ answers_novalidate as answers_prefill %}
+					{% for blk in questions %}
+						{% optional include ["blocks/_block_view_",blk.type,".tpl"]|join
+									id=id
+									blk=blk
+									answers=answers_prefill
+		                            answer_user_id=answer_user_id|default:m.acl.user
+									editing=editing
+									nr=forloop.counter
+						%}
+					{% endfor %}
+				{% endwith %}
 			{% endif %}
 
 			{% block after_questions %}
@@ -87,11 +90,13 @@
 			{% with questions|survey_page_options as options %}
 
 				{% if page_nr > 1 and not options.is_hide_back %}
-					<a id="{{ #back }}" href="#" class="btn btn-default">{_ Back _}</a>
-					{% wire id=#back
-							postback={survey_back id=id page_nr=page_nr answers=answers history=history editing=editing element_id=element_id|default:"survey-question"}
-							delegate="mod_survey"
-					%}
+					<button class="btn btn-default" formnovalidate type="submit">{_ Back _}</button>
+					{#
+						{% wire id=#back
+								postback={survey_back id=id page_nr=page_nr answers=answers history=history editing=editing element_id=element_id|default:"survey-question"}
+								delegate="mod_survey"
+						%}
+					#}
 				{% endif %}
 
 				{% if not editing or pages > 1 %}

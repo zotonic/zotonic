@@ -7,8 +7,8 @@
             <p class="help-block">{{ blk.explanation|linebreaksbr }}</p>
         {% endif %}
         <b>
-            {% if result.answers[blk.name].answer == 'true' %}{{ blk.yes|default:_"True" }}
-            {% elseif result.answers[blk.name].answer == 'false' %}{{ blk.no|default:_"False" }}
+            {% if result.answers[blk.name].answer|to_boolean %}{{ blk.yes|default:_"True" }}
+            {% elseif result.answers[blk.name].answer|is_defined and not result.answers[blk.name].answer|to_boolean %}{{ blk.no|default:_"False" }}
             {% else %}-
             {% endif %}
         </b>
@@ -29,10 +29,10 @@
             </button>
         {% else %}
             <label class="radio-inline">
-                <input type="radio" id="{{ #yes }}" name="{{ blk.name}}" {% if answers[blk.name] == "true" %}checked="checked"{% endif %} value="1" /> {{ blk.yes|default:_"True" }}
+                <input type="radio" id="{{ #yes }}" name="{{ blk.name}}" {% if answers[blk.name]|to_boolean %}checked="checked"{% endif %} value="1"> {{ blk.yes|default:_"True" }}
             </label>
             <label class="radio-inline">
-                <input type="radio" id="{{ #no }}" name="{{ blk.name}}" {% if answers[blk.name] == "false" %}checked="checked"{% endif %} value="0" /> {{ blk.no|default:_"False" }}
+                <input type="radio" id="{{ #no }}" name="{{ blk.name}}" {% if answers[blk.name]|is_defined and not answers[blk.name]|to_boolean %}checked="checked"{% endif %} value="0"> {{ blk.no|default:_"False" }}
             </label>
             {% if blk.is_required %}
                 {% validate id=#yes name=blk.name type={presence} %}

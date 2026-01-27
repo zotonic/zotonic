@@ -195,11 +195,29 @@ event(#postback{message={survey_start, Args}}, Context) ->
 
 event(#submit{message={survey_next, Args}}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
-    {page_nr, PageNr} = proplists:lookup(page_nr, Args),
     {answers, Answers} = proplists:lookup(answers, Args),
     {history, History} = proplists:lookup(history, Args),
     Editing = proplists:get_value(editing, Args),
-    render_update(render_next_page(SurveyId, PageNr+1, forward, Answers, History, Editing, Args, Context), Args, Context);
+    case z_convert:to_bool(z_context:get_q(<<"z_formnovalidate">>, Context)) of
+        true ->
+            % Back button pressed, no validation of query args.
+            case History of
+                [_,PageNr|History1] ->
+                    render_update(
+                        render_next_page(SurveyId, PageNr, exact, Answers, History1, Editing, Args, Context),
+                        Args, Context);
+                _History ->
+                    render_update(
+                        render_next_page(SurveyId, 0, exact, Answers, [], Editing, Args, Context),
+                        Args, Context)
+            end;
+        false ->
+            % Submit button pressed, query args are validated.
+            {page_nr, PageNr} = proplists:lookup(page_nr, Args),
+            render_update(
+                render_next_page(SurveyId, PageNr+1, forward, Answers, History, Editing, Args, Context),
+                Args, Context)
+    end;
 
 event(#postback{message={survey_back, Args}}, Context) ->
     {id, SurveyId} = proplists:lookup(id, Args),
@@ -208,9 +226,13 @@ event(#postback{message={survey_back, Args}}, Context) ->
     Editing = proplists:get_value(editing, Args),
     case History of
         [_,PageNr|History1] ->
-            render_update(render_next_page(SurveyId, PageNr, exact, Answers, History1, Editing, Args, Context), Args, Context);
+            render_update(
+                render_next_page(SurveyId, PageNr, exact, Answers, History1, Editing, Args, Context),
+                Args, Context);
         _History ->
-            render_update(render_next_page(SurveyId, 0, exact, Answers, [], Editing, Args, Context), Args, Context)
+            render_update(
+                render_next_page(SurveyId, 0, exact, Answers, [], Editing, Args, Context),
+                Args, Context)
     end;
 
 event(#postback{message={survey_remove_result_confirm, Args}}, Context) ->
@@ -537,13 +559,24 @@ render_next_page(SurveyId, 0, _Direction, _Answers, _History, _Editing, Args, Co
     end;
 render_next_page(SurveyId, PageNr, Direction, Answers, History, Editing, Args, Context) when is_integer(SurveyId) ->
     Viewer = z_convert:to_binary(proplists:get_value(viewer, Args)),
-    {Answers2, Submitter} = case proplists:get_value(is_feedback_view, Args) of
+    {Answers2, AnswersNoValidate2, Submitter} = case proplists:get_value(is_feedback_view, Args) of
         true ->
             {Answers, proplists:get_value(feedback_submitter, Args)};
         _ ->
             {As, Submitter0} = get_args(Context),
+            AnswersNoValidate = z_convert:to_list(proplists:get_value(answers_novalidate, Args, [])),
+            % Remove the newly submitted question answers from both the validated and the unvalidated lists.
+            % The user could be backing through multiple pages, effectively removing the answers from the validated answers.
             Answers1 = lists:foldl(fun({Arg,_Val}, Acc) -> proplists:delete(Arg, Acc) end, Answers, As),
-            {Answers1 ++ group_multiselect(As), Submitter0}
+            AnswersNoValidate1 = lists:foldl(fun({Arg,_Val}, Acc) -> proplists:delete(Arg, Acc) end, AnswersNoValidate, As),
+            case z_convert:to_bool(z_context:get_q(<<"z_formnovalidate">>, Context)) of
+                true when Direction =:= exact ->
+                    % Back - form was not validated
+                    {Answers1, AnswersNoValidate1 ++ group_multiselect(As), Submitter0};
+                false ->
+                    % Forward - form was validated
+                    {Answers1 ++ group_multiselect(As), AnswersNoValidate1, Submitter0}
+            end
     end,
     case m_rsc:p(SurveyId, <<"blocks">>, Context) of
         Questions when is_list(Questions) ->
@@ -567,9 +600,11 @@ render_next_page(SurveyId, PageNr, Direction, Answers, History, Editing, Args, C
                     % Maybe save the intermediate results.
                     SavedArgs = [
                         {answers, Answers2},
+                        {answers_novalidate, AnswersNoValidate2},
                         {page_nr, NewPageNr}
                         | proplists:delete(answers,
-                            proplists:delete(page_nr, Args))
+                            proplists:delete(answers_novalidate,
+                                proplists:delete(page_nr, Args)))
                     ],
                     maybe_save_intermediate_results(Editing, SurveyId, PageNr, SavedArgs, Context),
 
@@ -591,6 +626,7 @@ render_next_page(SurveyId, PageNr, Direction, Answers, History, Editing, Args, C
                         {questions, L},
                         {pages, count_pages(Questions)},
                         {answers, Answers2},
+                        {answers_novalidate, AnswersNoValidate2},
                         {answer_user_id, proplists:get_value(answer_user_id, Args)},
                         {history, push_history(NewPageNr, History)},
                         {editing, Editing},

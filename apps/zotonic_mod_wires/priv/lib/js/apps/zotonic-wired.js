@@ -1324,34 +1324,18 @@ function z_validated_form_submit(ev, theForm) {
     let postback = $(theForm).data("z_submit_postback");
     const action = $(theForm).data("z_submit_action");
     const form_id = $(theForm).attr("id");
-    const validations = $(theForm).formValidationPostback();
+    let validations = [];
     let transport = "";
-    const files = $("input:file:not(.nosubmit)", theForm).fieldValue();
+    let is_novalidate = false;
+    let files = [];
     let is_file_form = false;
+    let args = []
 
     if (!postback) {
       postback = z_default_form_postback;
     }
     if (typeof action == "function") {
       setTimeout(action, 10);
-    }
-
-    for (let j = 0; j < files.length; j++) {
-      if (files[j]) {
-        is_file_form = true;
-        break;
-      }
-    }
-
-    if ($(theForm).hasClass("z_cookie_form") || (typeof z_only_post_forms != "undefined" && z_only_post_forms)) {
-      transport = "form";
-      args = validations;
-    } else if (is_file_form) {
-      transport = "fileuploader";
-      args = validations;
-    } else {
-      transport = "";
-      args = validations.concat($(theForm).formToArray());
     }
 
     // Add submitting element to data, if we know it
@@ -1366,12 +1350,39 @@ function z_validated_form_submit(ev, theForm) {
           args.push({ name: name + ".y", value: theForm.clk_y });
         }
       }
+      is_novalidate = clk.formNoValidate || false;
     } else {
       const n = ev.submitter?.name;
       if (n) {
         args.push({ name: n, value: $(ev.submitter).val() });
         args.push({ name: "z_submitter", value: n });
       }
+      is_novalidate = ev.submitter?.formNoValidate || false;
+    }
+
+    if (!is_novalidate) {
+      validations = $(theForm).formValidationPostback();
+      files = $("input:file:not(.nosubmit)", theForm).fieldValue();
+      for (let j = 0; j < files.length; j++) {
+        if (files[j]) {
+          is_file_form = true;
+          break;
+        }
+      }
+    } else {
+      args.push({ name: "z_formnovalidate", value: "1" });
+    }
+
+    if ($(theForm).hasClass("z_cookie_form") || (typeof z_only_post_forms != "undefined" && z_only_post_forms)) {
+      transport = "form";
+      args = args.concat(validations);
+    } else if (is_file_form) {
+      transport = "fileuploader";
+      args = args.concat(validations);
+    } else {
+      transport = "";
+      args = args.concat(validations);
+      args = args.concat($(theForm).formToArray());
     }
 
     // Queue the postback, or use a post to an iframe (if requested)

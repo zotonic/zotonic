@@ -787,19 +787,21 @@ LiveValidationForm.prototype = {
         event.preventDefault();
 
         let result = true;
-        const fields = self.getFields();
 
         self.submitEvent = event;
         self.submitWaitForAsync = [];
         self.isWaitForFormAsync = false;
 
-        for(let i = 0, len = fields.length; i < len; ++i ) {
-            if (!fields[i].element.disabled) {
-                const ve = fields[i].validate(true, self.element.clk);
-                if (ve === 'async') {
-                    self.submitWaitForAsync.push(fields[i]);
-                } else if (!ve) {
-                    result = false;
+        if (!event.submitter?.formNoValidate) {
+            const fields = self.getFields();
+            for(let i = 0, len = fields.length; i < len; ++i ) {
+                if (!fields[i].element.disabled) {
+                    const ve = fields[i].validate(true, self.element.clk);
+                    if (ve === 'async') {
+                        self.submitWaitForAsync.push(fields[i]);
+                    } else if (!ve) {
+                        result = false;
+                    }
                 }
             }
         }
@@ -828,6 +830,8 @@ LiveValidationForm.prototype = {
             self.onInvalid.call(this);
             event.stopImmediatePropagation();
             return false;
+        } else if (event.submitter?.formNoValidate) {
+            return self.onValidSubmit(event, self.element);
         } else {
             self.onValid.call(this);
             return self.onValidSubmit(event, self.element);
