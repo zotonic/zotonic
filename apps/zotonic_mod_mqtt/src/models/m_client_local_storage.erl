@@ -164,7 +164,7 @@ fetch_device_id_1(Context) ->
             Error;
         undefined ->
             case get(<<"z.deviceId">>, Context) of
-                {ok, DeviceId} when is_binary(DeviceId), DeviceId =/= <<>> ->
+                {ok, <<_, _/binary>> = DeviceId} ->
                     {ok, DeviceId};
                 {ok, _} ->
                     {error, enoent};
