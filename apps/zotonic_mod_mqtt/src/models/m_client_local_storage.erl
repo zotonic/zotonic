@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019-2025 Marc Worrell
+%% @copyright 2019-2026 Marc Worrell
 %% @doc Store information in the localStorage on the client.
 %% @end
 
-%% Copyright 2019-2025 Marc Worrell
+%% Copyright 2019-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -40,6 +40,7 @@ the topic is `model/localStorage/...`.
     delete/2,
     delete/3,
 
+    fetch_device_id/1,
     device_id/1
 ]).
 
@@ -142,6 +143,38 @@ delete(Key, BridgeTopic, Context) ->
     z_mqtt:publish(Topic, undefined, Context).
 
 
+%% @doc Return the unique device id. Might fetch it from the local storage of the
+%% user agent. The device id is cached in the process memo cache.
+-spec fetch_device_id( z:context() ) -> {ok, binary()} | {error, error()}.
+fetch_device_id(Context) ->
+    case z_memo:get(z_device_id) of
+        undefined ->
+            Result = fetch_device_id_1(Context),
+            z_memo:set(z_device_id, Result),
+            Result;
+        Result ->
+            Result
+    end.
+
+fetch_device_id_1(Context) ->
+    case z_context:get(z_device_id, Context) of
+        {ok, _} = OK ->
+            OK;
+        {error, _} = Error ->
+            Error;
+        undefined ->
+            case get(<<"z.deviceId">>, Context) of
+                {ok, <<_, _/binary>> = DeviceId} ->
+                    {ok, DeviceId};
+                {ok, _} ->
+                    {error, enoent};
+                {error, _} = Error ->
+                    Error
+            end
+    end.
+
+%% @doc Return the unique device id. Might generate a new id and store it
+%% in the local storage of the user-agent.
 -spec device_id( z:context() ) -> {{ok, binary()}, z:context()} | {{error, error()}, z:context()}.
 device_id(Context) ->
     case z_memo:get(z_device_id) of

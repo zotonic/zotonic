@@ -51,9 +51,12 @@ manage_schema({upgrade, 4}, Context) ->
             % z_db:q("drop table survey_answer", ContextAsync)
             ok
         end),
-    ok;
+    datamodel();
 manage_schema(_Version, Context) ->
     install_schema_v2(Context),
+    datamodel().
+
+datamodel() ->
     #datamodel{
         categories=[
             {survey, undefined, [{title, <<"Survey">>}]},
@@ -79,11 +82,11 @@ install_schema_v2(Context) ->
                     modifier_id int,
 
                     constraint survey_answers_pkey primary key (id),
-                    constraint fki_survey_answers_survey_id foreign key (survey_id)
+                    constraint fk_survey_answers_survey_id foreign key (survey_id)
                         references rsc (id)
                         on delete cascade
                         on update cascade,
-                    constraint fki_survey_answers_user_id foreign key (user_id)
+                    constraint fk_survey_answers_user_id foreign key (user_id)
                         references rsc (id)
                         on delete set null
                         on update cascade
@@ -106,6 +109,42 @@ install_schema_v2(Context) ->
                 true ->
                     ok
             end,
+            ok
+    end,
+    case z_db:table_exists(survey_answers_saved, Context) of
+        false ->
+            [] = z_db:q("
+                create table survey_answers_saved (
+                    survey_id int not null,
+                    user_id int,
+                    persistent character varying(32),
+                    page_nr int not null default 1,
+                    saved_args bytea,
+                    created timestamp with time zone not null default current_timestamp,
+                    modified timestamp with time zone,
+
+                    constraint chk_survey_answers_saved check (
+                                (persistent is not null and user_id is null)
+                             or (persistent is null and user_id is not null)
+                         ),
+                    constraint survey_answers_saved_survey_user_key unique (survey_id, user_id),
+                    constraint survey_answers_saved_survey_persistent_key unique (survey_id, persistent),
+
+                    constraint fk_survey_answers_saved_survey_id foreign key (survey_id)
+                        references rsc (id)
+                        on delete cascade
+                        on update cascade,
+                    constraint fk_survey_answers_saved_user_id foreign key (user_id)
+                        references rsc (id)
+                        on delete cascade
+                        on update cascade
+                )
+                ", Context),
+            [] = z_db:q("create index fki_survey_answers_saved_survey_id on survey_answers_saved(survey_id)", Context),
+            [] = z_db:q("create index fki_survey_answers_saved_user_id on survey_answers_saved(user_id)", Context),
+            z_db:flush(Context),
+            ok;
+        true ->
             ok
     end.
 

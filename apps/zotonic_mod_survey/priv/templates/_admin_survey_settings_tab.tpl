@@ -55,6 +55,10 @@
 	        			<input type="radio" name="survey_multiple" value="2" {% if id.survey_multiple == 2 %}checked{% endif %}>
 	        			{_ Fill in and edit later after saving (one set of results) _}
 	        		</label>
+	        		<label class="radio">
+	        			<input type="radio" name="survey_multiple" value="3" {% if id.survey_multiple == 3 %}checked{% endif %}>
+	        			{_ One time per user/browser with later continuation of questions (one set of results) _}
+	        		</label>
 				</div>
 
 				{% block survey_settings_fill %}{% endblock %}

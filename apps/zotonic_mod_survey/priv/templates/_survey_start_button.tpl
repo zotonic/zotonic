@@ -8,7 +8,13 @@
     %}
 {% else %}
     <p class="buttons survey-start clearfix">
-        <button id="{{ #survey_next }}" class="btn btn-lg btn-primary">{{ start_button_text|default:_"Start" }}</button>
+        <button id="{{ #survey_next }}" class="btn btn-lg btn-primary">
+            {% if is_survey_saved %}
+                {_ Continue _}
+            {% else %}
+                {{ start_button_text|default:_"Start" }}
+            {% endif %}
+        </button>
         {% wire id=#survey_next
             postback={survey_start
                 id=id
