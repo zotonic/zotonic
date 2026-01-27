@@ -91,12 +91,6 @@
 
 				{% if page_nr > 1 and not options.is_hide_back %}
 					<button class="btn btn-default" formnovalidate type="submit">{_ Back _}</button>
-					{#
-						{% wire id=#back
-								postback={survey_back id=id page_nr=page_nr answers=answers history=history editing=editing element_id=element_id|default:"survey-question"}
-								delegate="mod_survey"
-						%}
-					#}
 				{% endif %}
 
 				{% if not editing or pages > 1 %}
