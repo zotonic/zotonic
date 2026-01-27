@@ -40,4 +40,3 @@ prep_answer(_Q, _Answer, _Context) ->
 
 prep_block(B, _Context) ->
     B.
-
