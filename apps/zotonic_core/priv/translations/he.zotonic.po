@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-01-09 11:52\n"
+"PO-Revision-Date: 2026-01-27 15:23\n"
 "Last-Translator: \n"
 "Language-Team: Hebrew\n"
 "MIME-Version: 1.0\n"
@@ -16,11 +16,11 @@ msgstr ""
 "X-Crowdin-File-ID: 8692\n"
 "Language: he_IL\n"
 
-#: zotonic_core/src/support/z_fetch.erl:215
+#: zotonic_core/src/support/z_fetch.erl:222
 msgid "Could not fetch the remote resource URL."
 msgstr "לא ניתן היה לאחזר את כתובת ה- URL של המשאב המרוחק."
 
-#: zotonic_core/src/support/z_fetch.erl:201
+#: zotonic_core/src/support/z_fetch.erl:208
 msgid "Forbidden to access the remote resource URL."
 msgstr "אסור לגשת לכתובת ה- URL של המשאב המרוחק."
 
@@ -28,31 +28,31 @@ msgstr "אסור לגשת לכתובת ה- URL של המשאב המרוחק."
 msgid "Page Import"
 msgstr "ייבוא עמודים"
 
-#: zotonic_core/src/support/z_fetch.erl:209
+#: zotonic_core/src/support/z_fetch.erl:216
 msgid "The remote server can not handle this URL."
 msgstr "השרת המרוחק אינו יכול להתמודד עם כתובת אתר זו."
 
-#: zotonic_core/src/support/z_fetch.erl:213
+#: zotonic_core/src/support/z_fetch.erl:220
 msgid "The remote server for the URL is having problems."
 msgstr "לשרת המרוחק של כתובת ה- URL יש בעיות."
 
-#: zotonic_core/src/support/z_fetch.erl:211
+#: zotonic_core/src/support/z_fetch.erl:218
 msgid "The remote server for the URL is having temporary problems."
 msgstr "לשרת המרוחק של כתובת ה- URL יש בעיות זמניות."
 
-#: zotonic_core/src/support/z_fetch.erl:203
+#: zotonic_core/src/support/z_fetch.erl:210
 msgid "The resource at the URL can not be found."
 msgstr "לא ניתן למצוא את המשאב בכתובת האתר."
 
-#: zotonic_core/src/support/z_fetch.erl:205
+#: zotonic_core/src/support/z_fetch.erl:212
 msgid "The resource at the URL is gone."
 msgstr "המשאב בכתובת ה- URL נעלם."
 
-#: zotonic_core/src/support/z_fetch.erl:207
+#: zotonic_core/src/support/z_fetch.erl:214
 msgid "Too many requests for the remote server, try again later."
 msgstr "יותר מדי בקשות לשרת המרוחק, נסה שוב מאוחר יותר."
 
-#: zotonic_core/src/support/z_fetch.erl:199
+#: zotonic_core/src/support/z_fetch.erl:206
 msgid "Unauthorized to access the remote resource URL."
 msgstr "לא מורשה לגשת לכתובת ה- URL של המשאב המרוחק."
 
@@ -258,9 +258,9 @@ msgstr "האם אתה בטוח שברצונך להחזיר את כל כללי ה
 #: zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:39
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:41
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:174
-#: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:6
+#: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:9
 #: zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:7
-#: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:77
+#: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:76
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:73
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_url.tpl:35
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:259
@@ -321,11 +321,11 @@ msgstr "האם אתה בטוח שברצונך להחזיר את כל כללי ה
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:215
 #: zotonic_mod_ssl_letsencrypt/src/mod_ssl_letsencrypt.erl:223
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:70
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:158
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:159
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:113
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:85
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:49
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:88
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:108
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:115
@@ -350,7 +350,7 @@ msgstr "לְבַטֵל"
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:28
-#: zotonic_mod_survey/src/mod_survey.erl:300
+#: zotonic_mod_survey/src/mod_survey.erl:281
 msgid "Category"
 msgstr "קטגוריה"
 
@@ -390,11 +390,11 @@ msgstr "תצורה שונתה."
 #: zotonic_mod_survey/priv/templates/_survey_results.tpl:61
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:45
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:50
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:63
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:68
-#: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:24
-#: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:29
-#: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:34
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:75
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:80
+#: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:30
+#: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:35
+#: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:40
 msgid "Close"
 msgstr "סגור"
 
@@ -458,7 +458,7 @@ msgstr "לא ניתן היה לעבור לקבוצת שיתוף פעולה."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:51
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:190
-#: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:7
+#: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:10
 #: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:41
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:49
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:64
@@ -494,7 +494,7 @@ msgstr "לא ניתן היה לעבור לקבוצת שיתוף פעולה."
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
-#: zotonic_mod_survey/src/mod_survey.erl:265
+#: zotonic_mod_survey/src/mod_survey.erl:247
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 msgid "Delete"
 msgstr "לִמְחוֹק"
@@ -758,7 +758,7 @@ msgstr "חוקים שהוחזרו"
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:183
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:64
 #: zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:40
-#: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:78
+#: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:77
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:17
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:2
 #: zotonic_mod_admin/priv/templates/_dialog_admin_rsc_note.tpl:29
@@ -1068,7 +1068,7 @@ msgstr "על קטגוריות"
 msgid "About {n} items found."
 msgstr "נמצאו בערך {n} פריטים."
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:19
+#: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:18
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:62
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:72
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:118
@@ -1236,8 +1236,8 @@ msgstr "זָמִין"
 #: zotonic_mod_survey/priv/templates/_survey_end.tpl:28
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:23
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:69
-#: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:35
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:93
+#: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:41
 msgid "Back"
 msgstr "חזור"
 
@@ -1406,7 +1406,7 @@ msgstr "לספור"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:139
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:214
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:113
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:106
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:107
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:45
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:47
 msgid "Country"
@@ -1628,7 +1628,7 @@ msgstr "לַעֲרוֹך"
 msgid "Edit note"
 msgstr "ערוך הערה"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:88
+#: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:103
 msgid "Edit:"
 msgstr "לַעֲרוֹך:"
 
@@ -1804,7 +1804,7 @@ msgid "Find Page"
 msgstr "מצא דף"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_blocks.tpl:139
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:218
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:219
 msgid "Find page"
 msgstr "מצא דף"
 
@@ -1861,7 +1861,7 @@ msgstr "יש מדיום מחובר"
 
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:21
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:22
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:119
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:120
 msgid "Header"
 msgstr "כּוֹתֶרֶת"
 
@@ -1995,7 +1995,7 @@ msgstr "להתנתק"
 msgid "Mailing address"
 msgstr "כתובת דואר"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:18
+#: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:17
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_edit_basics.person.tpl:5
 msgid "Main"
 msgstr "רָאשִׁי"
@@ -2023,7 +2023,7 @@ msgid "Make a new page or media"
 msgstr "הכינו דף או מדיה חדשים"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
-#: zotonic_mod_survey/src/mod_survey.erl:301
+#: zotonic_mod_survey/src/mod_survey.erl:282
 msgid "Matching"
 msgstr "תוֹאֵם"
 
@@ -2424,7 +2424,7 @@ msgstr "תקופת הפרסום"
 msgid "Publish this page"
 msgstr "פרסם דף זה"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:51
+#: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:50
 #: zotonic_mod_admin/priv/templates/_action_dialog_media_upload_tab_upload.tpl:63
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:248
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_publish.tpl:47
@@ -2703,7 +2703,7 @@ msgstr "חלק מהתמונות, קובצי PDF, אודיו ווידאו מוצ�
 msgid "Some tasks are retrying.<br>Total errors: {total}<br>Highest for single task: {max}"
 msgstr "חלק מהמשימות מנסים שוב.<br>סך השגיאות: {total}<br>הגבוה ביותר עבור משימה בודדת: {max}"
 
-#: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:152
+#: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:175
 msgid "Something went wrong. Sorry."
 msgstr "משהו השתבש. מצטער."
 
@@ -2946,7 +2946,7 @@ msgstr "אין משימות בתור המשימות."
 msgid "There is already a page with this name."
 msgstr "יש כבר דף עם השם הזה."
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:3
+#: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:5
 msgid "This can't be undone. Your page will be lost forever."
 msgstr "אי אפשר לבטל את זה. הדף שלך יאבד לנצח."
 
@@ -3083,8 +3083,8 @@ msgstr "הקלד טקסט לחיפוש"
 msgid "Type to filter the list below."
 msgstr "הקלד כדי לסנן את הרשימה למטה."
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:31
-#: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:44
+#: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:30
+#: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:43
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:79
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:80
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_advanced.tpl:83
@@ -3104,10 +3104,11 @@ msgid "Unpublished"
 msgstr "לא פורסם"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find_results_item.tpl:29
+#: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:2
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_results_item.tpl:29
 #: zotonic_mod_admin/src/mod_admin.erl:1097
-#: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:84
-#: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:140
+#: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:99
+#: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:163
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:59
@@ -3242,7 +3243,7 @@ msgstr "גלוי מ"
 msgid "Visible till"
 msgstr "גלוי עד"
 
-#: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:74
+#: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:73
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_preview.tpl:38
 msgid "Visit full edit page"
 msgstr "בקר בדף העריכה המלא"
@@ -4271,9 +4272,9 @@ msgstr "הגדר שם משתמש / סיסמה"
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:73
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:128
-#: zotonic_mod_survey/src/mod_survey.erl:970
-#: zotonic_mod_survey/src/mod_survey.erl:992
-#: zotonic_mod_survey/src/mod_survey.erl:1000
+#: zotonic_mod_survey/src/mod_survey.erl:1066
+#: zotonic_mod_survey/src/mod_survey.erl:1088
+#: zotonic_mod_survey/src/mod_survey.erl:1096
 msgid "Sorry"
 msgstr "מצטער"
 
@@ -5372,9 +5373,11 @@ msgid "Confirmation failure"
 msgstr "כישלון אישור"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:67
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:80
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:84
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:88
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:100
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:102
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:104
+#: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:13
 msgid "Continue"
 msgstr "לְהַמשִׁיך"
 
@@ -5599,8 +5602,8 @@ msgid "Multiple accounts"
 msgstr "מספר חשבונות"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:209
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:93
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:100
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:113
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:118
 msgid "Next"
 msgstr "הַבָּא"
 
@@ -6481,7 +6484,7 @@ msgstr "סטטוס חיבור MQTT Bridge"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:267
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:40
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:46
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:48
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:35
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:28
@@ -6632,7 +6635,7 @@ msgstr "תמיכה ב- Websocket?"
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:251
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:274
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:40
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:46
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:44
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:47
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_yesno.tpl:30
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_yesno.tpl:25
@@ -6955,7 +6958,7 @@ msgid "Year"
 msgstr "שָׁנָה"
 
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:27
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:236
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:234
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:17
 #: zotonic_site_status/priv/templates/_sites.tpl:6
 msgid "Actions"
@@ -7461,7 +7464,7 @@ msgid "Started tracing template inclusions for your session."
 msgstr "התחלת להתחקות אחר הכללות תבניות עבור הפגישה שלך."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:51
-#: zotonic_mod_survey/src/mod_survey.erl:308
+#: zotonic_mod_survey/src/mod_survey.erl:290
 msgid "Stop"
 msgstr "תפסיק"
 
@@ -7937,71 +7940,71 @@ msgstr "הפסקנו את משלוח הדוא\"ל."
 msgid "Calendar"
 msgstr "לוּחַ שָׁנָה"
 
-#: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:59
+#: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:59
 msgid "Define which fields (columns) should be exported. One field expression per line."
 msgstr "הגדר אילו שדות (עמודות) יש לייצא. ביטוי שדה אחד בכל שורה."
 
-#: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:61
+#: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:61
 msgid "Do not forget to save your changes before exporting."
 msgstr "אל תשכח לשמור את השינויים לפני הייצוא."
 
-#: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:24
-#: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:37
-#: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:46
+#: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:24
+#: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:37
+#: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:46
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:35
 msgid "Download CSV"
 msgstr "הורד CSV"
 
-#: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:27
-#: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:41
-#: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:50
+#: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:27
+#: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:41
+#: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:50
 msgid "Download Event"
 msgstr "הורד אירוע"
 
-#: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:25
-#: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:38
-#: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:47
+#: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:25
+#: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:38
+#: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:47
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:40
 msgid "Download Excel"
 msgstr "הורד את Excel"
 
-#: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:26
-#: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:39
-#: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:48
+#: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:26
+#: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:39
+#: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:48
 msgid "Download JSON"
 msgstr "הורד JSON"
 
-#: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:34
+#: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:34
 msgid "Download all the pages in the collection"
 msgstr "הורד את כל הדפים באוסף"
 
-#: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:21
+#: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:21
 msgid "Download all the pages matching the query"
 msgstr "הורד את כל הדפים התואמים לשאילתה"
 
-#: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:31
+#: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:31
 msgid "Download as Event if the query returns events and you want to export for a calendar program."
 msgstr "הורד כאירוע אם השאילתה מחזירה אירועים ואתה רוצה לייצא אותם לתוכנית לוח שנה."
 
-#: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:9
+#: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:9
 msgid "Download this page or the query as a spreadsheet or in another format."
 msgstr "הורד דף זה או את השאילתה כגיליון אלקטרוני או בפורמט אחר."
 
-#: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:4
+#: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:4
 msgid "Export"
 msgstr "יְצוּא"
 
-#: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:57
-#: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:65
-#: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:66
+#: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:57
+#: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:65
+#: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:66
 msgid "Export fields"
 msgstr "שדות ייצוא"
 
-#: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:8
+#: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:8
 msgid "Help about export"
 msgstr "עזרה בנושא ייצוא"
 
-#: zotonic_mod_export/priv/templates/_admin_edit_sidebar.tpl:60
+#: zotonic_mod_export/priv/templates/_admin_edit_content_extra.collection.tpl:60
 msgid "Leave this empty for a default set of fields."
 msgstr "השאר שדה זה ריק כדי להשתמש במערך השדות המוגדר כברירת מחדל."
 
@@ -8079,59 +8082,59 @@ msgstr "חיברת <strong>חשבון פייסבוק</strong>."
 msgid "Your Facebook Developer Dashboard"
 msgstr "לוח המחוונים למפתחים בפייסבוק"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:160
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:158
 msgid "After 1 month"
 msgstr "לאחר חודש"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:159
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:157
 msgid "After 1 week"
 msgstr "אחרי שבוע אחד"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:161
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:159
 msgid "After 3 months"
 msgstr "אחרי 3 חודשים"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:284
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:282
 msgid "All cloud files can be moved back to the file system on the server."
 msgstr "ניתן להעביר את כל קבצי הענן חזרה למערכת הקבצים בשרת."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:292
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:290
 msgid "All cloud files will be queued for download."
 msgstr "כל קבצי הענן יעמדו בתור להורדה."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:249
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:247
 msgid "All files will be queued, uploads will start in the background within 10 minutes."
 msgstr "כל הקבצים יעמדו בתור, ההעלאות יתחילו ברקע תוך 10 דקות."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:237
 msgid "All local uploaded and preview files can be moved to the cloud."
 msgstr "ניתן להעביר לעננים את כל קבצי העלאה והתצוגה המקדימה המקומית."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:258
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:256
 msgid "Are you sure you want to copy all files to the cloud?"
 msgstr "האם אתה בטוח שברצונך להעתיק את כל הקבצים לענן?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:301
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:299
 msgid "Are you sure you want to copy all files to the disk of the server?"
 msgstr "האם אתה בטוח שברצונך להעתיק את כל הקבצים לדיסק של השרת?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:269
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:267
 msgid "Are you sure you want to move all files to the cloud?"
 msgstr "האם אתה בטוח שברצונך להעביר את כל הקבצים לענן?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:312
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:310
 msgid "Are you sure you want to move all files to the disk of the server?"
 msgstr "האם אתה בטוח שברצונך להעביר את כל הקבצים לדיסק של השרת?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:100
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:98
 msgid "Base URL"
 msgstr "כתובת URL בסיסית"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:171
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:169
 msgid "Before the settings are saved they will be checked by uploading (and removing) a small file."
 msgstr "לפני שמירת ההגדרות הם ייבדקו על ידי העלאת (והסרה) של קובץ קטן."
 
-#: zotonic_mod_filestore/src/mod_filestore.erl:422
+#: zotonic_mod_filestore/src/mod_filestore.erl:423
 msgid "Cloud File Store"
 msgstr "חנות קבצי ענן"
 
@@ -8140,36 +8143,36 @@ msgstr "חנות קבצי ענן"
 msgid "Cloud File Store Configuration"
 msgstr "תצורת חנות קבצי ענן"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:189
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:187
 msgid "Cloud File Store Utilities and Statistics"
 msgstr "כלי עזר וסטטיסטיקה של Cloud File Store"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:198
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:196
 msgid "Cloud Files"
 msgstr "קבצי ענן"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:255
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:253
 msgid "Copy all local files to the remote storage"
 msgstr "העתק את כל הקבצים המקומיים לאחסון המרוחק"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:298
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:296
 msgid "Copy all remote files to local"
 msgstr "העתק את כל הקבצים המרוחקים למקומיים"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:259
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:257
 msgid "Copy files to cloud"
 msgstr "העתק קבצים לענן"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:302
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:300
 msgid "Copy files to server disk"
 msgstr "העתק קבצים לדיסק השרת"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:248
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:246
 msgid "Could not access the service, double check your settings and try again."
 msgstr "לא הייתה אפשרות לגשת לשירות, בדוק שוב את הגדרותיך ונסה שוב."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:76
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:174
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:74
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:172
 msgid "Could not access the service, double check your settings and try again. Make sure that API key has access rights to create and remove a (temporary) <code>-zotonic-filestore-test-file-</code> file."
 msgstr "לא הייתה אפשרות לגשת לשירות, בדוק שוב את הגדרותיך ונסה שוב. וודא שלמפתח ה- API יש זכויות גישה ליצירת והסרה של קובץ (זמני) <code>-zotonic-filestore-test-file-</code>."
 
@@ -8177,159 +8180,159 @@ msgstr "לא הייתה אפשרות לגשת לשירות, בדוק שוב את
 msgid "Currently Zotonic supports FTP, WebDAV and services that are compatible with the S3 file services API. These include:"
 msgstr "נכון לעכשיו Zotonic תומך ב-FTP, WebDAV ושירותים התואמים ל-API של שירותי קבצים S3. אלה כוללים:"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:221
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
 msgid "Delete Queue"
 msgstr "מחק תור"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:155
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:153
 msgid "Delete files from the cloud file store"
 msgstr "מחק קבצים מחנות קבצי הענן"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:61
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:59
 msgid "Delete interval"
 msgstr "מחק מרווח"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:220
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:218
 msgid "Download Queue"
 msgstr "הורד תור"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:140
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:138
 msgid "Enable this to let the filestore act as a backup of  your local media files."
 msgstr "הפעל זאת כדי לאפשר למאגר הקבצים לפעול כגיבוי של קבצי המדיה המקומיים שלך."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:285
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:283
 msgid "Ensure yourself there is enough disk space before starting this process."
 msgstr "וודא לעצמך שיש מספיק מקום בדיסק לפני שתתחיל בתהליך זה."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:203
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:226
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:201
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:224
 msgid "Files"
 msgstr "קבצים"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:109
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:107
 msgid "For FTP the URL must start with <b><tt>ftps:</tt></b> or <b><tt>ftp:</tt></b>"
 msgstr "עבור FTP כתובת האתר חייבת להתחיל ב <b><tt>ftps:</tt></b> או <b><tt>ftp:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:108
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:106
 msgid "For S3 the URL must start with <b><tt>https:</tt></b> or <b><tt>http:</tt></b>"
 msgstr "עבור S3 כתובת האתר חייבת להתחיל ב <b><tt>https:</tt></b> או <b><tt>http:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:110
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:108
 msgid "For WebDAV the URL must start with <b><tt>webdavs:</tt></b> or <b><tt>webdav:</tt></b>"
 msgstr "עבור WebDAV כתובת האתר חייבת להתחיל ב <b><tt>webdavs:</tt></b> או <b><tt>webdav:</tt></b>"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:245
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:243
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the local files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "אם בחרת \"שמור קבצים מקומיים לאחר העלאה לחנות הקבצים בענן\", אז הקבצים המקומיים לא יימחקו, מכיוון שהקבצים המרוחקים נחשבים לגיבוי של הקבצים המקומיים."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:289
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:287
 msgid "If you have selected ”Keep local files after upload to the cloud file store” then the remote files are not deleted, as the remote files are considered a backup of the local files."
 msgstr "אם בחרת \"שמור קבצים מקומיים לאחר העלאה לחנות הקבצים בענן\" אז הקבצים המרוחקים לא יימחקו, מכיוון שהקבצים המרוחקים נחשבים לגיבוי של הקבצים המקומיים."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:19
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:17
 msgid "If you use an FTP server then that server MUST support FTPS (secure ftp)"
 msgstr "אם אתה משתמש בשרת FTP אז השרת הזה חייב לתמוך ב-FTPS (ftp מאובטח)"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:65
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:63
 msgid "Immediately"
 msgstr "מיד"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:45
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:43
 msgid "Is upload enabled?"
 msgstr "האם ההעלאה מופעלת?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:138
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:136
 msgid "Keep local files after upload to the cloud file store"
 msgstr "שמור קבצים מקומיים לאחר העלאה לחנות הקבצים בענן"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:49
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:47
 msgid "Keep local files?"
 msgstr "לשמור קבצים מקומיים?"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:197
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:195
 msgid "Local Files"
 msgstr "תיקים מקומיים"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:196
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:194
 msgid "Media Resources"
 msgstr "משאבי מדיה"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:266
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:264
 msgid "Move all local files to the remote storage"
 msgstr "העבר את כל הקבצים המקומיים לאחסון המרוחק"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:309
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:307
 msgid "Move all remote files to local"
 msgstr "העבר את כל הקבצים המרוחקים למקומיים"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:270
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:268
 msgid "Move files to cloud"
 msgstr "העבר קבצים לענן"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:313
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:311
 msgid "Move files to server disk"
 msgstr "העבר קבצים לדיסק השרת"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:67
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:162
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:65
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:160
 #: zotonic_mod_seo_sitemap/priv/templates/_admin_edit_content_seo_extra.tpl:62
 msgid "Never"
 msgstr "לעולם לא"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:158
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:156
 msgid "No extra delay"
 msgstr "אין עיכוב נוסף"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:55
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:53
 msgid "No, local files are deleted after upload"
 msgstr "לא, קבצים מקומיים נמחקים לאחר ההעלאה"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:115
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:113
 msgid "S3 API Key or FTP/WebDAV username"
 msgstr "מפתח API S3 או שם משתמש FTP/WebDAV"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:120
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:118
 msgid "S3 API Secret or FTP/WebDAV password"
 msgstr "S3 API סודי או סיסמת FTP/WebDAV"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:41
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:39
 msgid "S3 Cloud Location"
 msgstr "S3 Cloud Location"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:30
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:97
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:28
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:95
 msgid "S3 Cloud Location and Credentials"
 msgstr "S3 ענן מיקום ותעודות"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:178
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:176
 msgid "Save Settings"
 msgstr "שמור הגדרות"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:37
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:35
 msgid "Service"
 msgstr "שֵׁרוּת"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:173
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:171
 msgid "Settings are working fine and are saved."
 msgstr "ההגדרות עובדות בסדר ונשמרות."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:75
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:73
 msgid "Settings are working fine."
 msgstr ""
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:209
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:207
 msgid "Storage"
 msgstr "אִחסוּן"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:79
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:77
 msgid "Test Cloud File Store Settings"
 msgstr ""
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:32
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:30
 msgid "The cloud file store uses a global Zotonic configuration. The configuration cannot be changed here."
 msgstr "חנות הקבצים בענן משתמשת בתצורה גלובלית של Zotonic. לא ניתן לשנות את התצורה כאן."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:33
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:31
 msgid "The configuration is:"
 msgstr "התצורה היא:"
 
@@ -8337,51 +8340,51 @@ msgstr "התצורה היא:"
 msgid "The settings are locked by the system configuration."
 msgstr "ההגדרות ננעלות על ידי תצורת המערכת."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:85
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:83
 msgid "The settings are tested by uploading (and removing) a small file."
 msgstr ""
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:241
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:239
 msgid "There is a 1 minute wait before files are uploaded."
 msgstr "יש המתנה של דקה אחת לפני העלאת קבצים."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:166
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:164
 msgid "This extra deletion delay extends the period files can be recovered."
 msgstr "עיכוב המחיקה הנוסף הזה מאריך את התקופה שניתן לשחזר קבצים."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:240
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:238
 msgid "This will queue the files for later asynchronous upload."
 msgstr "זה יעמוד בתור לקבצים להעלאה אסינכרונית מאוחר יותר."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:166
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:164
 msgid "To allow recovery of deleted pages, Zotonic keeps files for 5 weeks."
 msgstr "כדי לאפשר שחזור של דפים שנמחקו, Zotonic שומרת קבצים למשך 5 שבועות."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:147
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:145
 msgid "Try to create a private S3 bucket if the S3 bucket does not exist"
 msgstr "נסה ליצור דלי S3 פרטי אם הדלי S3 לא קיים"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:219
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:217
 msgid "Upload Queue"
 msgstr "העלה תור"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:129
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:127
 msgid "Upload new media files to the cloud file store"
 msgstr "העלה קבצי מדיה חדשים לחנות קבצי הענן"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:149
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:147
 msgid "With FTP and WebDAV the directories are always created automatically."
 msgstr "עם FTP ו-WebDAV הספריות נוצרות תמיד באופן אוטומטי."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:21
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:19
 msgid "With WebDAV the username and password are transfered in the clear, so ensure that you use <tt>webdavs:</tt> URLs (which makes use of https)."
 msgstr "עם WebDAV שם המשתמש והסיסמה מועברים בצורה ברורה, אז ודא שאתה משתמש ב <tt>webdavs:</tt> כתובות URL (שעושה שימוש ב-https)."
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:53
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:51
 msgid "Yes, keep local files after upload"
 msgstr "כן, שמור קבצים מקומיים לאחר ההעלאה"
 
-#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:330
+#: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:328
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:71
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:78
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:85
@@ -11546,7 +11549,7 @@ msgstr "הוסף שאלה או חסום"
 msgid "Add all email addresses to a mailinglist. Users are subscribed by connecting them to the mailinglist."
 msgstr "הוסף את כל כתובות האימייל לרשימת תפוצה. משתמשים נרשמים על ידי חיבורם לרשימת התפוצה."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:123
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:124
 msgid "Add an introduction or explanation including uploaded or embedded images or video's. Add full width blocks or set a percentage to combine blocks."
 msgstr "הוסף הקדמה או הסבר כולל תמונות או סרטונים שהועלו או מוטבעו. הוסף בלוקים ברוחב מלא או הגדר אחוז לשילוב בלוקים."
 
@@ -11574,7 +11577,7 @@ msgstr "הוסף דף למעלה"
 msgid "Add page below"
 msgstr "הוסף דף למטה"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:51
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:57
 msgid "Add page jump"
 msgstr "הוסף קפיצה לדף"
 
@@ -11600,26 +11603,26 @@ msgstr "הוסף לרשימת התפוצה הקיימת"
 msgid "Add to mailinglist"
 msgstr "הוסף לרשימת התפוצה"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:99
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:103
 msgid "Aggregated results from all respondents"
 msgstr "תוצאות מצטברות מכל המשיבים"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:72
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:73
 msgid "Agree"
 msgstr "לְהַסכִּים"
 
-#: zotonic_mod_survey/src/mod_survey.erl:983
+#: zotonic_mod_survey/src/mod_survey.erl:1079
 msgid "Already submitted"
 msgstr "כבר הוגש"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:150
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:151
 msgid "Another page, video or image."
 msgstr "עוד עמוד, סרטון או תמונה."
 
 #: zotonic_mod_survey/priv/templates/_admin_block_thurstone_answer.tpl:31
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:78
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:79
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:80
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:81
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:74
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:86
 msgid "Answer"
@@ -11629,7 +11632,7 @@ msgstr "תשובה"
 msgid "Answering"
 msgstr "עונה"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:86
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
 msgid "Apple"
 msgstr "תפוח עץ"
 
@@ -11656,13 +11659,13 @@ msgstr "האם אתה בטוח שברצונך למחוק דף זה?<br/>זה ג�
 msgid "Are you sure you want to delete this question?"
 msgstr "האם אתה בטוח שברצונך למחוק שאלה זו?"
 
-#: zotonic_mod_survey/src/mod_survey.erl:264
+#: zotonic_mod_survey/src/mod_survey.erl:246
 msgid "Are you sure you want to delete this result?"
 msgstr "האם אתה בטוח שברצונך למחוק את התוצאה הזו?"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:80
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:84
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:100
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:102
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:104
 msgid "Are you sure you want to stop without saving?"
 msgstr "האם אתה בטוח שברצונך להפסיק בלי לשמור?"
 
@@ -11670,8 +11673,8 @@ msgstr "האם אתה בטוח שברצונך להפסיק בלי לשמור?"
 msgid "Because you can edit, you can proceed for testing."
 msgstr "מכיוון שאתה יכול לערוך, אתה יכול להמשיך לבדיקה."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111
-#: zotonic_mod_survey/src/mod_survey.erl:306
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:112
+#: zotonic_mod_survey/src/mod_survey.erl:287
 msgid "Button"
 msgstr "לַחְצָן"
 
@@ -11683,12 +11686,12 @@ msgstr "תצוגה מקדימה של כפתור"
 msgid "Button style"
 msgstr "סגנון כפתור"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:112
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:113
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:18
 msgid "Button text"
 msgstr "טקסט כפתור"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:147
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:148
 msgid "Can only be used on the last questions page."
 msgstr "ניתן להשתמש רק בעמוד השאלות האחרון."
 
@@ -11736,7 +11739,7 @@ msgstr "לא ניתן להוסיף את הנמענים."
 msgid "Could not create the mailinglist."
 msgstr "לא ניתן ליצור את רשימת התפוצה."
 
-#: zotonic_mod_survey/src/mod_survey.erl:305
+#: zotonic_mod_survey/src/mod_survey.erl:286
 msgid "Country select"
 msgstr "בחר מדינה"
 
@@ -11748,7 +11751,7 @@ msgstr "צור אדם חדש לקשר אליו את התשובה."
 msgid "Create and link"
 msgstr "ליצור ולקשר"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:111
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:112
 msgid "Create jumps to other questions or blocks."
 msgstr "צור קפיצות לשאלות או חסימות אחרות."
 
@@ -11788,7 +11791,7 @@ msgstr "מחק קפיצה לדף"
 msgid "Delete question"
 msgstr "מחק שאלה"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:66
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:67
 msgid "Disagree"
 msgstr "לא מסכים"
 
@@ -11841,7 +11844,6 @@ msgstr "דוגמא:"
 msgid "Explanation"
 msgstr "הֶסבֵּר"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:56
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:30
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:11
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:28
@@ -11865,7 +11867,7 @@ msgstr "משוב אם נכון"
 msgid "Feedback if wrong"
 msgstr "משוב אם שגוי"
 
-#: zotonic_mod_survey/src/mod_survey.erl:309
+#: zotonic_mod_survey/src/mod_survey.erl:291
 msgid "File upload"
 msgstr "העלאת קובץ"
 
@@ -11877,7 +11879,7 @@ msgstr "מלא"
 msgid "Fill in and edit later after saving (one set of results)"
 msgstr "מלא וערוך מאוחר יותר לאחר השמירה (סט אחד של תוצאות)"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:95
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:96
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:16
 msgid "Fill in the gaps"
 msgstr "השלם את החסר"
@@ -11886,7 +11888,7 @@ msgstr "השלם את החסר"
 msgid "Find a person to link the answer to. If you do not find a person then you can create a new person."
 msgstr "מצא אדם לקשר אליו את התשובה. אם אתה לא מוצא אדם אז אתה יכול ליצור אדם חדש."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:137
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:138
 msgid "First page in category"
 msgstr "עמוד ראשון בקטגוריה"
 
@@ -11898,15 +11900,15 @@ msgstr "עבור טווחי תאריכים אתה יכול גם להשתמש ב�
 msgid "Go to question"
 msgstr "לך לשאלה"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:186
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:190
 msgid "Handle this form with"
 msgstr "טפל בטופס זה עם"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:165
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:169
 msgid "Handling"
 msgstr "טיפול"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:126
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:127
 msgid "Hidden input"
 msgstr "קלט נסתר"
 
@@ -11929,7 +11931,7 @@ msgstr "ערך נסתר, נשמר עם הטופס אך לא מוצג למי שמ
 msgid "Hide from results"
 msgstr "הסתר מהתוצאות"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:121
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:125
 msgid "Hide progress information"
 msgstr "הסתר מידע על התקדמות"
 
@@ -11937,7 +11939,7 @@ msgstr "הסתר מידע על התקדמות"
 msgid "Hide the user’s id or browser-id from result exports"
 msgstr "הסתר את מזהה המשתמש או מזהה הדפדפן מייצוא התוצאות"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:95
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:96
 msgid "I am"
 msgstr "אני"
 
@@ -11946,7 +11948,7 @@ msgstr "אני"
 msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color]."
 msgstr "אני בת [age] אני אוהב גלידה [גלידה = וניל | תות | שוקולד | אחר] והצבע האהוב עלי הוא [color]."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:74
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:78
 msgid "If this number of answers has been submitted then the start button is deactivated and an email is sent to the <em>Handling</em> addresses below. Leave empty for no limit."
 msgstr "אם מספר התשובות שהוגשו הגיע למספר זה, כפתור ההתחלה יושבת ויישלח דוא\"ל לכתובות <em>הטיפול</em> המפורטות להלן. השאר ריק אם אין הגבלה."
 
@@ -11991,7 +11993,7 @@ msgstr "קפצו לשאלה בעמוד הבא."
 msgid "Jump to this question label (must be on an other page below)"
 msgstr "קפוץ לתווית השאלה הזו (חייב להיות בדף אחר למטה)"
 
-#: zotonic_mod_survey/src/mod_survey.erl:298
+#: zotonic_mod_survey/src/mod_survey.erl:279
 msgid "Likert"
 msgstr "ליקרט"
 
@@ -12002,12 +12004,12 @@ msgstr "ליקרט"
 msgid "Link with person"
 msgstr "קישור עם אדם"
 
-#: zotonic_mod_survey/src/mod_survey.erl:304
+#: zotonic_mod_survey/src/mod_survey.erl:285
 msgid "Long answer"
 msgstr "תשובה ארוכה"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:168
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:169
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:172
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:173
 msgid "Mail results to"
 msgstr "תוצאות דואר אל"
 
@@ -12024,7 +12026,7 @@ msgstr "כותרת רשימת התפוצה"
 msgid "Matching email address"
 msgstr "כתובת אימייל תואמת"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:84
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:85
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_matching.tpl:16
 msgid "Matching question"
 msgstr "שאלה תואמת"
@@ -12033,8 +12035,8 @@ msgstr "שאלה תואמת"
 msgid "Maximal value"
 msgstr "ערך מקסימלי"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:65
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:69
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:75
 msgid "Maximum number of submissions"
 msgstr "מספר מקסימלי של הגשות"
 
@@ -12042,7 +12044,7 @@ msgstr "מספר מקסימלי של הגשות"
 msgid "Maximum submissions reached"
 msgstr "הוגשו מספר ההגשות המרבי"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:88
 msgid "Milk"
 msgstr "חלב"
 
@@ -12067,11 +12069,11 @@ msgstr "תשובות מרובות אפשריות"
 msgid "Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer."
 msgstr "אפשר מספר תשובות: ניתנות נקודות עבור התשובה הנכונה <i>ו</i> נקודות ניתנות עבור <i>לא</i> בבחירת התשובה השגויה. ברירת מחדל: נקודה אחת עבור תשובה נכונה, נקודה אחת עבור אי בחירת תשובה שגויה."
 
-#: zotonic_mod_survey/src/mod_survey.erl:310
+#: zotonic_mod_survey/src/mod_survey.erl:292
 msgid "Multiple choice"
 msgstr "בחירה מרובה"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:76
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:77
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:16
 msgid "Multiple choice or quiz question"
 msgstr "שאלת בחירה מרובה או חידון"
@@ -12084,7 +12086,7 @@ msgstr "חסימות מעבר של עמודים מרובות מוזגות לאח
 msgid "Multiple times per user/browser (each time with new results)"
 msgstr "מספר פעמים לכל משתמש/דפדפן (בכל פעם עם תוצאות חדשות)"
 
-#: zotonic_mod_survey/src/mod_survey.erl:302
+#: zotonic_mod_survey/src/mod_survey.erl:283
 msgid "Narrative"
 msgstr "נרטיב"
 
@@ -12097,7 +12099,7 @@ msgstr "דרוש לעבור"
 msgid "New result:"
 msgstr "תוצאה חדשה:"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:139
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:140
 msgid "Next page in category"
 msgstr "העמוד הבא בקטגוריה"
 
@@ -12118,21 +12120,29 @@ msgstr "קלט מספרי, הצג סכומים עבור שדה זה בתוצאו
 msgid "Once only per user/browser"
 msgstr "פעם אחת בלבד למשתמש / דפדפן"
 
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:60
+msgid "One time per user/browser with later continuation of questions (one set of results)"
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:33
 msgid "Only accept images."
 msgstr "קבל רק תמונות."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:135
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:136
 msgid "Options from a page category"
 msgstr "אפשרויות מקטגוריית עמודים"
 
-#: zotonic_mod_survey/src/mod_survey.erl:307
+#: zotonic_mod_survey/src/mod_survey.erl:288
 msgid "Page break"
 msgstr "מעבר דף"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:11
 msgid "Page jump condition"
 msgstr "מצב קפיצה לדף"
+
+#: zotonic_mod_survey/src/mod_survey.erl:289
+msgid "Page options"
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:25
 msgid "Pass?"
@@ -12145,7 +12155,7 @@ msgstr "לַעֲבוֹר?"
 msgid "Passed"
 msgstr "עבר"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:149
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:153
 msgid "Passing score"
 msgstr "ציון מעבר"
 
@@ -12157,7 +12167,7 @@ msgstr "אָחוּז"
 msgid "Person"
 msgstr "אדם"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:58
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:77
 msgid "Please fill in all the required fields."
 msgstr "נא למלא את כל השדות הדרושים."
 
@@ -12165,7 +12175,7 @@ msgstr "נא למלא את כל השדות הדרושים."
 msgid "Please make a choice."
 msgstr "אנא בחר."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:143
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:144
 msgid "Please upload your file."
 msgstr "אנא העלה את הקובץ שלך."
 
@@ -12188,7 +12198,7 @@ msgstr "יְסוֹדִי"
 msgid "Printable list"
 msgstr "רשימה להדפסה"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:116
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:120
 msgid "Progress"
 msgstr "התקדמות"
 
@@ -12207,7 +12217,7 @@ msgstr "שְׁאֵלָה"
 msgid "Question label"
 msgstr "תווית השאלה"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:64
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:65
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:16
 msgid "Question with a 5-point scale"
 msgstr "שאלה בסולם 5 נקודות"
@@ -12225,7 +12235,7 @@ msgstr "שאלה עם תשובה קצרה"
 #: zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8
-#: zotonic_mod_survey/src/mod_survey.erl:295
+#: zotonic_mod_survey/src/mod_survey.erl:276
 msgid "Questions"
 msgstr "שאלות"
 
@@ -12242,11 +12252,17 @@ msgstr "חידון או שאלת מבחן"
 msgid "Randomize answers"
 msgstr "אקראי תשובות"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:86
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
 msgid "Red"
 msgstr "אָדוֹם"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:36
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:41
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:21
+msgid "Remove \"Back\" button. If there is instant question feedback then it will be shown after submit."
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:37
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:17
 msgid "Remove \"Next\" button. No answers will be submitted unless you add a button jump to a next page."
 msgstr "הסר את כפתור \"הבא\". לא יישלחו תשובות אלא אם תוסיף כפתור קפיצה לעמוד הבא."
 
@@ -12265,7 +12281,7 @@ msgstr "הסר את כפתור \"הבא\". לא יישלחו תשובות אלא
 msgid "Required, this question must be answered."
 msgstr "חובה, יש לענות על שאלה זו."
 
-#: zotonic_mod_survey/src/mod_survey.erl:283
+#: zotonic_mod_survey/src/mod_survey.erl:264
 msgid "Result deleted."
 msgstr "התוצאה נמחקה."
 
@@ -12281,11 +12297,11 @@ msgstr "תוצאות"
 msgid "Results editor"
 msgstr "עורך תוצאות"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:91
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:95
 msgid "Results from the respondent"
 msgstr "תוצאות מהמשיבה"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:95
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:99
 msgid "Results from the respondent - if passed only"
 msgstr "תוצאות מהמשיב - אם עבר בלבד"
 
@@ -12302,7 +12318,7 @@ msgstr "שמור"
 msgid "Score"
 msgstr "ציון"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:138
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:139
 msgid "Second page in category"
 msgstr "דף שני בקטגוריה"
 
@@ -12314,20 +12330,20 @@ msgstr "בחר מדינה"
 msgid "Select mailinglist"
 msgstr "בחר רשימת תפוצה"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:103
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:104
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_country.tpl:13
 msgid "Select your country"
 msgstr "בחר את המדינה שלך"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:179
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:183
 msgid "Send a confirmation to the respondent. The email address must be known (logged in respondents) or you can add a short text field with the label “email” and the validation set to \"must be an email address\"."
 msgstr "שלח אישור למשיב. כתובת הדוא\"ל חייבת להיות ידועה (משיבים מחוברים) או שתוכל להוסיף שדה טקסט קצר עם התווית \"אימייל\" והאימות מוגדר ל\"חייב להיות כתובת דוא\"ל."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:171
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:175
 msgid "Separate multiple email addresses with a comma."
 msgstr "הפרד מספר כתובות דוא\"ל באמצעות פסיק."
 
-#: zotonic_mod_survey/src/mod_survey.erl:303
+#: zotonic_mod_survey/src/mod_survey.erl:284
 msgid "Short answer"
 msgstr "תשובה קצרה"
 
@@ -12339,15 +12355,15 @@ msgstr "הצג תרשימים"
 msgid "Show email addresses"
 msgstr "הצג כתובות דוא\"ל"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:133
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:137
 msgid "Show progress bar"
 msgstr "הצג סרגל התקדמות"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:127
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:131
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "הצג מידע על התקדמות כ\"<em>שאלה 3/10</em>\""
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:90
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:102
 msgid "Show results (admin only)"
 msgstr "הצג תוצאות (מנהל בלבד)"
 
@@ -12368,26 +12384,26 @@ msgstr "משהו השתבש"
 msgid "Sorry, could not insert the new person."
 msgstr "מצטערים, לא ניתן היה להוסיף את האדם החדש."
 
-#: zotonic_mod_survey/src/mod_survey.erl:972
+#: zotonic_mod_survey/src/mod_survey.erl:1068
 msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
 msgstr "מצטערים, מספר ההגשות המרבי הושג. לא ניתן להגיש טופס זה עוד."
 
-#: zotonic_mod_survey/src/mod_survey.erl:985
+#: zotonic_mod_survey/src/mod_survey.erl:1081
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
 msgstr "סליחה, כבר הגשת את התשובות שלך. טען מחדש את הדף אם ברצונך למלא שוב את הטופס."
 
-#: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:11
+#: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:15
 msgid "Start"
 msgstr "הַתחָלָה"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:78
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:80
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:82
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:84
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:98
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:100
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:102
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:104
 msgid "Stop without saving"
 msgstr "עצור בלי לשמור"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:127
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:128
 msgid "Store a value without showing an input to the respondent."
 msgstr "אחסן ערך מבלי להציג קלט למשיב."
 
@@ -12411,8 +12427,8 @@ msgstr "מסכים לחלוטין"
 msgid "Strongly Disagree"
 msgstr "מאוד לא מסכים"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:93
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:98
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:113
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:116
 #: zotonic_mod_wires/src/scomps/scomp_wires_button.erl:81
 msgid "Submit"
 msgstr "שלח"
@@ -12432,11 +12448,11 @@ msgstr "מחסרים נקודות לתשובות שגויות (סה\"כ לעול
 msgid "Survey editor"
 msgstr "עורך הסקר"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:144
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:148
 msgid "Test pass percentage"
 msgstr "אחוזי מבחן לעבור"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:122
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:123
 msgid "Text, image, video"
 msgstr "טקסט, תמונה, וידאו"
 
@@ -12444,7 +12460,7 @@ msgstr "טקסט, תמונה, וידאו"
 msgid "Thank you for filling in our survey."
 msgstr "תודה על מילוי הסקר שלנו."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:87
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:91
 msgid "Thank you text only"
 msgstr "תודה לך טקסט בלבד"
 
@@ -12472,7 +12488,7 @@ msgstr "הדברים הבאים הושלמו:"
 msgid "The maximum number of submissions for <a href=\"{url}\"><b>{title}</b></a> on {site} has been reached."
 msgstr "המספר המרבי של הגשות עבור <a href=\"{url}\"><b>{title}</b></a> ב- {site} הושג."
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:59
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:71
 msgid "The maximum number of submissions has been reached, you cannot fill this in anymore."
 msgstr "המספר המרבי של הגשות הושג, לא ניתן למלא את הטופס עוד."
 
@@ -12484,7 +12500,7 @@ msgstr "ניתן לקשר את התוצאה לאדם קיים או לאדם חד
 msgid "The results have been saved."
 msgstr "התוצאות נשמרו."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:147
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:148
 msgid "The uploaded file will be attached to the result email."
 msgstr "הקובץ שהועלה יצורף למייל התוצאה."
 
@@ -12495,6 +12511,10 @@ msgstr "יש כעת <b>{n}</b> הגשות מתוך מקסימום {max}."
 #: zotonic_mod_survey/priv/templates/_survey_error.tpl:3
 msgid "There was an error while handling your answers. We are terribly sorry about this."
 msgstr "אירעה שגיאה בטיפול בתשובות שלך. אנחנו נורא מצטערים על זה."
+
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:9
+msgid "This block contains options for a page. The presence of this block signals the end of the questions for a page."
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:14
 msgid "This block show a file upload field. This can only be used as the last question of a form. The default form routines can’t handle file upload, you will need to add your own form handler to your site or module."
@@ -12512,7 +12532,7 @@ msgstr "טופס זה מושבת. מכיוון שאתה יכול לערוך, א�
 msgid "This is a result for:"
 msgstr "זו תוצאה עבור:"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:156
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:160
 msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
 msgstr "זה האחוז הדרוש כדי לעבור חידון או מבחן. משמש רק אם הוספת חידון או שאלות מבחן."
 
@@ -12530,7 +12550,7 @@ msgstr "טקסט זה מוצג כמבוא לסקר."
 msgid "This text is shown below the start button."
 msgstr "טקסט זה מוצג מתחת לחצן התחל."
 
-#: zotonic_mod_survey/src/mod_survey.erl:299
+#: zotonic_mod_survey/src/mod_survey.erl:280
 msgid "Thurstone"
 msgstr "ת'רסטון"
 
@@ -12547,7 +12567,6 @@ msgstr "החלף את תצוגת המתאר"
 msgid "Totals"
 msgstr "סך הכל"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:55
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:24
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:10
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_truefalse.tpl:25
@@ -12557,12 +12576,11 @@ msgstr "סך הכל"
 msgid "True"
 msgstr "נָכוֹן"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:53
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_truefalse.tpl:16
 msgid "True or false question"
 msgstr "שאלה אמיתית או שקרית"
 
-#: zotonic_mod_survey/src/mod_survey.erl:296
+#: zotonic_mod_survey/src/mod_survey.erl:277
 msgid "True/False"
 msgstr "אמת שקר"
 
@@ -12578,11 +12596,11 @@ msgstr "מַתַן תוֹקֵף"
 msgid "View and edit results."
 msgstr "הצג וערוך תוצאות."
 
-#: zotonic_mod_survey/src/mod_survey.erl:993
+#: zotonic_mod_survey/src/mod_survey.erl:1089
 msgid "We are experiencing an overload, please try again in 10 minutes."
 msgstr "אנו חווים עומס יתר, אנא נסה שוב בעוד 10 דקות."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:83
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:87
 msgid "When finished show"
 msgstr "בסיום המופע"
 
@@ -12590,7 +12608,7 @@ msgstr "בסיום המופע"
 msgid "When no condition is true then the question following this break will be the next page."
 msgstr "כאשר אין תנאי נכון, השאלה הבאה להפסקה זו תהיה העמוד הבא."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:87
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:88
 msgid "White"
 msgstr "לבן"
 
@@ -12604,7 +12622,7 @@ msgstr "שגוי"
 msgid "Yes or no question"
 msgstr "כן או לא שאלה"
 
-#: zotonic_mod_survey/src/mod_survey.erl:297
+#: zotonic_mod_survey/src/mod_survey.erl:278
 msgid "Yes/No"
 msgstr "כן לא"
 
@@ -12616,9 +12634,9 @@ msgstr "כבר מילאת את זה, אבל אתה יכול לשנות את הת
 msgid "You already filled this in."
 msgstr "כבר מילאת את זה."
 
-#: zotonic_mod_survey/src/mod_survey.erl:271
-#: zotonic_mod_survey/src/mod_survey.erl:287
-#: zotonic_mod_survey/src/mod_survey.erl:1058
+#: zotonic_mod_survey/src/mod_survey.erl:253
+#: zotonic_mod_survey/src/mod_survey.erl:268
+#: zotonic_mod_survey/src/mod_survey.erl:1156
 msgid "You are not allowed to change these results."
 msgstr "אינך רשאי לשנות תוצאות אלה."
 
@@ -12634,16 +12652,20 @@ msgstr "יש לאפשר לך לערוך את הטופס, כדי לערוך את 
 msgid "You received this email because your email address is configured in the settings as the handling address."
 msgstr "קיבלת דוא\"ל זה מכיוון שכתובת הדוא\"ל שלך מוגדרת בהגדרות ככתובת הטיפול."
 
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:58
+msgid "You started filling this in and will continue where you left off."
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:50
 msgid "Your result"
 msgstr "התוצאה שלך"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1001
+#: zotonic_mod_survey/src/mod_survey.erl:1097
 msgid "Your session was expired, please restart and try again."
 msgstr "פג תוקף ההפעלה שלך, אנא הפעל מחדש ונסה שוב."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:98
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:99
 msgid "chocolate"
 msgstr "שוקולד"
 
@@ -12659,7 +12681,7 @@ msgstr "אימייל"
 msgid "go to"
 msgstr "לך ל"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:99
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:100
 msgid "ice cream and my favorite color is"
 msgstr "גלידה והצבע האהוב עלי ביותר הוא"
 
@@ -12727,7 +12749,7 @@ msgstr "בחר…"
 msgid "text"
 msgstr "טֶקסט"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:97
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:98
 msgid "years old. I like"
 msgstr "שנים. אני אוהב"
 
