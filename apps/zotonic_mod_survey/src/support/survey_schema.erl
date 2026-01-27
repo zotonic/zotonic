@@ -136,7 +136,7 @@ install_schema_v2(Context) ->
                         on update cascade,
                     constraint fk_survey_answers_saved_user_id foreign key (user_id)
                         references rsc (id)
-                        on delete set null
+                        on delete cascade
                         on update cascade
                 )
                 ", Context),
