@@ -149,11 +149,11 @@ delete(Key, BridgeTopic, Context) ->
 fetch_device_id(Context) ->
     case z_memo:get(z_device_id) of
         undefined ->
-            RC = {Result, _Context1} = fetch_device_id_1(Context),
+            Result = fetch_device_id_1(Context),
             z_memo:set(z_device_id, Result),
-            RC;
+            Result;
         Result ->
-            {Result, Context}
+            Result
     end.
 
 fetch_device_id_1(Context) ->
