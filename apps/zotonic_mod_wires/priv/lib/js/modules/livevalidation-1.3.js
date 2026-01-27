@@ -786,14 +786,18 @@ LiveValidationForm.prototype = {
 
         event.preventDefault();
 
-        let result = true;
-
         self.submitEvent = event;
         self.submitWaitForAsync = [];
         self.isWaitForFormAsync = false;
 
-        if (!event.submitter?.formNoValidate) {
+        if (event.submitter?.formNoValidate || false) {
+            // Submit button with 'formnovalidate' attribute - bypass all validations
+            return self.onValidSubmit(event, self.element);
+        } else {
+            // Submit if all validations pass.
+            let result = true;
             const fields = self.getFields();
+
             for(let i = 0, len = fields.length; i < len; ++i ) {
                 if (!fields[i].element.disabled) {
                     const ve = fields[i].validate(true, self.element.clk);
@@ -804,37 +808,36 @@ LiveValidationForm.prototype = {
                     }
                 }
             }
-        }
-        if (result === false) {
-            self.submitWaitForAsync = [];
-        }
 
-        // Optionally check validations attached to the form itself.
-        // Only done if all other validations are done and passing.
-        if (result && self.submitWaitForAsync.length === 0) {
-            const formValidation = $(this).data('z_live_validation');
-            if (formValidation) {
-                const vf = formValidation.validate(true, self.element.clk);
-                if (vf === 'async') {
-                    self.submitWaitForAsync = [formValidation];
-                    self.isWaitForFormAsync = true;
-                } else if (!vf) {
-                    result = false;
+            if (result === false) {
+                self.submitWaitForAsync = [];
+            }
+
+            // Optionally check validations attached to the form itself.
+            // Only done if all other validations are done and passing.
+            if (result && self.submitWaitForAsync.length === 0) {
+                const formValidation = $(this).data('z_live_validation');
+                if (formValidation) {
+                    const vf = formValidation.validate(true, self.element.clk);
+                    if (vf === 'async') {
+                        self.submitWaitForAsync = [formValidation];
+                        self.isWaitForFormAsync = true;
+                    } else if (!vf) {
+                        result = false;
+                    }
                 }
             }
-        }
-        if (self.submitWaitForAsync.length > 0) {
-            event.stopImmediatePropagation();
-            return false;
-        } else if (!result) {
-            self.onInvalid.call(this);
-            event.stopImmediatePropagation();
-            return false;
-        } else if (event.submitter?.formNoValidate) {
-            return self.onValidSubmit(event, self.element);
-        } else {
-            self.onValid.call(this);
-            return self.onValidSubmit(event, self.element);
+            if (self.submitWaitForAsync.length > 0) {
+                event.stopImmediatePropagation();
+                return false;
+            } else if (!result) {
+                self.onInvalid.call(this);
+                event.stopImmediatePropagation();
+                return false;
+            } else {
+                self.onValid.call(this);
+                return self.onValidSubmit(event, self.element);
+            }
         }
     };
   },
