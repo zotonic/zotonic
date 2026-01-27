@@ -33,7 +33,7 @@ See [mod\\_survey](/id/doc_module_mod_survey)
 
 survey_as_pages(undefined, _Context) ->
 	[];
-survey_as_pages(Blocks, _Context) when is_list(Blocks) ->
+survey_as_pages([_|_] = Blocks, _Context) ->
 	split(Blocks, [], []);
 survey_as_pages(_Blocks, _Context) ->
 	[].
