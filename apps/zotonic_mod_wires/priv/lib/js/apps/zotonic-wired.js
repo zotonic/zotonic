@@ -1329,7 +1329,7 @@ function z_validated_form_submit(ev, theForm) {
     let is_novalidate = false;
     let files = [];
     let is_file_form = false;
-    let args = []
+    let args = [];
 
     if (!postback) {
       postback = z_default_form_postback;
