@@ -559,23 +559,24 @@ render_next_page(SurveyId, 0, _Direction, _Answers, _History, _Editing, Args, Co
     end;
 render_next_page(SurveyId, PageNr, Direction, Answers, History, Editing, Args, Context) when is_integer(SurveyId) ->
     Viewer = z_convert:to_binary(proplists:get_value(viewer, Args)),
+    AnswersNoValidate = z_convert:to_list(proplists:get_value(answers_novalidate, Args, [])),
     {Answers2, AnswersNoValidate2, Submitter} = case proplists:get_value(is_feedback_view, Args) of
         true ->
-            {Answers, proplists:get_value(feedback_submitter, Args)};
+            {Answers, AnswersNoValidate, proplists:get_value(feedback_submitter, Args)};
         _ ->
-            {As, Submitter0} = get_args(Context),
-            AnswersNoValidate = z_convert:to_list(proplists:get_value(answers_novalidate, Args, [])),
+            {SubmittedAnswers, Submitter0} = get_args(Context),
+            SubmittedAnswers1 = group_multiselect(SubmittedAnswers),
             % Remove the newly submitted question answers from both the validated and the unvalidated lists.
             % The user could be backing through multiple pages, effectively removing the answers from the validated answers.
-            Answers1 = lists:foldl(fun({Arg,_Val}, Acc) -> proplists:delete(Arg, Acc) end, Answers, As),
-            AnswersNoValidate1 = lists:foldl(fun({Arg,_Val}, Acc) -> proplists:delete(Arg, Acc) end, AnswersNoValidate, As),
+            Answers1 = lists:foldl(fun({Arg,_Val}, Acc) -> proplists:delete(Arg, Acc) end, Answers, SubmittedAnswers1),
+            AnswersNoValidate1 = lists:foldl(fun({Arg,_Val}, Acc) -> proplists:delete(Arg, Acc) end, AnswersNoValidate, SubmittedAnswers1),
             case z_convert:to_bool(z_context:get_q(<<"z_formnovalidate">>, Context)) of
                 true when Direction =:= exact ->
                     % Back - form was not validated
-                    {Answers1, AnswersNoValidate1 ++ group_multiselect(As), Submitter0};
+                    {Answers1, AnswersNoValidate1 ++ SubmittedAnswers1, Submitter0};
                 false ->
                     % Forward - form was validated
-                    {Answers1 ++ group_multiselect(As), AnswersNoValidate1, Submitter0}
+                    {Answers1 ++ SubmittedAnswers1, AnswersNoValidate1, Submitter0}
             end
     end,
     case m_rsc:p(SurveyId, <<"blocks">>, Context) of
