@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-01-27 15:23\n"
+"PO-Revision-Date: 2026-01-27 17:50\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -8318,7 +8318,7 @@ msgstr "الإعدادات تعمل بشكل جيد ويتم حفظها."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:73
 msgid "Settings are working fine."
-msgstr ""
+msgstr "الإعدادات تعمل بشكل جيد."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:207
 msgid "Storage"
@@ -8393,7 +8393,7 @@ msgstr "لا يسمح لك بتغيير هذه الإعدادات."
 
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:109
 msgid "You are not allowed to use this."
-msgstr ""
+msgstr "لا يسمح لك باستخدام هذا."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:9
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
@@ -12142,7 +12142,7 @@ msgstr "شرط الانتقال إلى الصفحة"
 
 #: zotonic_mod_survey/src/mod_survey.erl:289
 msgid "Page options"
-msgstr ""
+msgstr "خيارات الصفحة"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:25
 msgid "Pass?"
