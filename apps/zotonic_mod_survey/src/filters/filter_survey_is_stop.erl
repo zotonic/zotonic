@@ -36,5 +36,5 @@ survey_is_stop(Qs, _Context) ->
 	lists:any(fun is_stop/1, Qs).
 
 is_stop(#{ <<"type">> := <<"survey_stop">> }) -> true;
-is_stop(#{ <<"type">> := <<"survey_options">>, <<"is_stop_page">> := true }) -> true;
+is_stop(#{ <<"type">> := <<"survey_page_options">>, <<"is_stop_page">> := true }) -> true;
 is_stop(_) -> false.
