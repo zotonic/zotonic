@@ -26,10 +26,10 @@ Options are:
  * `is_stop_page`: stop survey, no submit button
  * `is_hide_back`: hide back button
 
-The options could be in two types of blocks: the `survey_stop` and the `survey_options` blocks.
-The `survey_stop` block is deprecated in favor of the `survey_options` block.
+The options could be in two types of blocks: the `survey_stop` and the `survey_page_options` blocks.
+The `survey_stop` block is deprecated in favor of the `survey_page_options` block.
 
-When displaying or editing a survey, the `survey_options` block is collected together with all
+When displaying or editing a survey, the `survey_page_options` block is collected together with all
 page jump blocks.
 
 See [mod\\_survey](/id/doc_module_mod_survey)
