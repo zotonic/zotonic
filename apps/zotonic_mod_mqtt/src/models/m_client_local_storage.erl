@@ -41,7 +41,7 @@ the topic is `model/localStorage/...`.
     delete/3,
 
     fetch_device_id/1,
-    device_id/1
+    ensure_device_id/1
 ]).
 
 -type key() :: binary() | atom().
@@ -60,6 +60,7 @@ the topic is `model/localStorage/...`.
                | expired.
 
 -define(SECRET_LENGTH, 32).
+-define(DEVICE_ID_LENGTH, 20).
 
 
 -spec get( key(), z:context() ) -> {ok, value()} | {error, error()}.
@@ -117,7 +118,6 @@ generate_local_storage_secret(Context) ->
     m_config:set_value(mod_mqtt, local_storage_secret, Secret, Context),
     Secret.
 
-
 -spec put( key(), value(), mqtt_sessions:topic(), z:context() ) -> ok | {error, error()}.
 put(_Key, _Value, undefined, _Context) ->
     {error, no_client};
@@ -149,64 +149,49 @@ delete(Key, BridgeTopic, Context) ->
 fetch_device_id(Context) ->
     case z_memo:get(z_device_id) of
         undefined ->
-            Result = fetch_device_id_1(Context),
-            z_memo:set(z_device_id, Result),
-            Result;
+            case z_context:get(z_device_id, Context) of
+                {ok, _} = OK ->
+                    OK;
+                {error, _} = Error ->
+                    Error;
+                undefined ->
+                    Result = get_device_id(Context),
+                    z_memo:set(z_device_id, Result),
+                    Result;
+                Result ->
+                    Result
+            end;
         Result ->
             Result
     end.
 
-fetch_device_id_1(Context) ->
-    case z_context:get(z_device_id, Context) of
-        {ok, _} = OK ->
-            OK;
-        {error, _} = Error ->
-            Error;
-        undefined ->
-            case get(<<"z.deviceId">>, Context) of
-                {ok, <<_, _/binary>> = DeviceId} ->
-                    {ok, DeviceId};
-                {ok, _} ->
-                    {error, enoent};
-                {error, _} = Error ->
-                    Error
-            end
-    end.
-
 %% @doc Return the unique device id. Might generate a new id and store it
 %% in the local storage of the user-agent.
--spec device_id( z:context() ) -> {{ok, binary()}, z:context()} | {{error, error()}, z:context()}.
-device_id(Context) ->
-    case z_memo:get(z_device_id) of
-        undefined ->
-            RC = {Result, _Context1} = device_id_1(Context),
+-spec ensure_device_id( z:context() ) -> {{ok, binary()}, z:context()} | {{error, error()}, z:context()}.
+ensure_device_id(Context) ->
+    case fetch_device_id(Context) of
+        {ok, _} = Result ->
+            {Result, Context};
+        {error, enoent} ->
+            Result = set_device_id(Context),
             z_memo:set(z_device_id, Result),
-            RC;
-        Result ->
-            {Result, Context}
+            {Result, z_context:set(z_device_id, Result, Context)};
+        {error, _} = Error ->
+            {Error, Context}
     end.
 
-device_id_1(Context) ->
-    case z_context:get(z_device_id, Context) of
-        {ok, _} = OK ->
-            {OK, Context};
+get_device_id(Context) ->
+    case get(<<"z.deviceId">>, Context) of
+        {ok, <<DeviceId:?DEVICE_ID_LENGTH/binary>>} ->
+            {ok, DeviceId};
+        {ok, _} ->
+            {error, enoent};
         {error, _} = Error ->
-            {Error, Context};
-        undefined ->
-            Result = case get(<<"z.deviceId">>, Context) of
-                {ok, DeviceId} when is_binary(DeviceId), DeviceId =/= <<>> ->
-                    {ok, DeviceId};
-                {ok, _} ->
-                    set_device_id(Context);
-                {error, _} = Error ->
-                    Error
-            end,
-            Context1 = z_context:set(z_device_id, Result, Context),
-            {Result, Context1}
+            Error
     end.
 
 set_device_id(Context) ->
-    Id = z_ids:id(),
+    Id = z_ids:id(?DEVICE_ID_LENGTH),
     case put(<<"z.deviceId">>, Id, Context) of
         ok ->
             {ok, Id};

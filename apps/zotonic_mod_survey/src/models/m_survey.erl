@@ -263,7 +263,7 @@ result_columns(SurveyId, Format, _Context) ->
 
 -spec persistent_id( z:context() ) -> {binary() | undefined, z:context()}.
 persistent_id(Context) ->
-    {Result, Context1} = m_client_local_storage:device_id(Context),
+    {Result, Context1} = m_client_local_storage:ensure_device_id(Context),
     case Result of
         {ok, DeviceId} -> {DeviceId, Context1};
         {error, _} -> {undefined, Context1}

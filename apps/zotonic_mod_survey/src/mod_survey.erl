@@ -429,9 +429,12 @@ survey_start(Args, Context) ->
             render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context);
         false ->
             Editing = proplists:get_value(editing, Args),
-            MaybePrevArgs = case z_convert:to_binary(m_rsc:p(SurveyId, <<"survey_multiple">>, Context)) of
-                <<"3">> when Editing =:= undefined -> m_survey_saved:get_saved(SurveyId, Context);
-                _ -> {error, enoent}
+            {MaybePrevArgs, Context2} = case z_convert:to_binary(m_rsc:p(SurveyId, <<"survey_multiple">>, Context)) of
+                <<"3">> when Editing =:= undefined ->
+                    Context1 = maybe_set_device_id(Context),
+                    {m_survey_saved:get_saved(SurveyId, Context1), Context1};
+                _ ->
+                    {{error, enoent}, Context}
             end,
             case MaybePrevArgs of
                 {ok, #{
@@ -440,16 +443,27 @@ survey_start(Args, Context) ->
                 }} ->
                     {answers, Answers} = proplists:lookup(answers, PrevArgs),
                     {history, History} = proplists:lookup(history, PrevArgs),
-                    render_next_page(SurveyId, PageNr, exact, Answers, History, undefined, PrevArgs, Context);
+                    render_next_page(SurveyId, PageNr, exact, Answers, History, undefined, PrevArgs, Context2);
                 {error, _} ->
                     Answers = normalize_answers(proplists:get_value(answers, Args)),
                     Args1 = [
-                        {answer_user_id, z_acl:user(Context)},
+                        {answer_user_id, z_acl:user(Context2)},
                         {survey_session_nonce, z_nonce:nonce(?SURVEY_FILL_NONCE_TIMEOUT)}
                         | proplists:delete(answer_user_id, Args)
                     ],
-                    render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context)
+                    render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context2)
             end
+    end.
+
+%% @doc If there isn't an user, then set the deviceId, so we can store
+%% the anonymous results for later continuation.
+maybe_set_device_id(Context) ->
+    case z_auth:is_auth(Context) of
+        true ->
+            Context;
+        false ->
+            {_, Context1} = m_survey:persistent_id(Context),
+            Context1
     end.
 
 get_page(Id, Nr, #context{} = Context) when is_integer(Nr) ->
