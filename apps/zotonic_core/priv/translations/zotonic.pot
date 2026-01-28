@@ -394,10 +394,10 @@ msgstr ""
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:21
 #: zotonic_mod_survey/priv/templates/_survey_results.tpl:56
 #: zotonic_mod_survey/priv/templates/_survey_results.tpl:61
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:45
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:50
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:75
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:80
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:49
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:54
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:79
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:84
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:30
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:35
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:40
@@ -1508,8 +1508,8 @@ msgstr ""
 #: zotonic_mod_logging/priv/templates/admin_log_email.tpl:116
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:20
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:16
-#: zotonic_mod_survey/src/models/m_survey.erl:723
-#: zotonic_mod_survey/src/models/m_survey.erl:726
+#: zotonic_mod_survey/src/models/m_survey.erl:795
+#: zotonic_mod_survey/src/models/m_survey.erl:798
 msgid "Date"
 msgstr ""
 
@@ -1572,8 +1572,6 @@ msgstr ""
 #: zotonic_mod_admin/priv/templates/_admin_edit_block_li.tpl:26
 #: zotonic_mod_admin/priv/templates/_rsc_edge.tpl:22
 #: zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:8
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:28
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:32
 #: zotonic_mod_facebook/priv/templates/_facebook_login_link.tpl:8
 #: zotonic_mod_linkedin/priv/templates/_linkedin_login_link.tpl:8
 #: zotonic_mod_microsoft/priv/templates/_microsoft_login_link.tpl:8
@@ -2217,7 +2215,7 @@ msgstr ""
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:13
 #: zotonic_mod_oauth2/priv/templates/_dialog_oauth2_consumer_new.tpl:14
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers.tpl:38
-#: zotonic_mod_survey/src/models/m_survey.erl:728
+#: zotonic_mod_survey/src/models/m_survey.erl:800
 msgid "Name"
 msgstr ""
 
@@ -3447,7 +3445,7 @@ msgstr ""
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:14
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:19
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:48
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:39
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:6
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:16
 msgid "by"
@@ -3467,7 +3465,7 @@ msgstr ""
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:76
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:77
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:78
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:44
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:35
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:31
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:46
 #: zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:14
@@ -4418,9 +4416,9 @@ msgstr ""
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:73
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:128
-#: zotonic_mod_survey/src/mod_survey.erl:1066
-#: zotonic_mod_survey/src/mod_survey.erl:1088
-#: zotonic_mod_survey/src/mod_survey.erl:1096
+#: zotonic_mod_survey/src/mod_survey.erl:1077
+#: zotonic_mod_survey/src/mod_survey.erl:1099
+#: zotonic_mod_survey/src/mod_survey.erl:1107
 msgid "Sorry"
 msgstr ""
 
@@ -4932,8 +4930,11 @@ msgstr ""
 msgid "Are you sure you want to delete"
 msgstr ""
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:31
-msgid "Are you sure you want to disconnect:"
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edge_action.tpl:2
+msgid ""
+"Are you sure you want to remove the <strong>{{ predicate }}</strong>\n"
+"    connection between <strong>{{ subject }}</strong>\n"
+"          and <strong>{{ object }}</strong>?"
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:9
@@ -4999,11 +5000,11 @@ msgstr ""
 msgid "Make predicate"
 msgstr ""
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:68
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:59
 msgid "No page connections found."
 msgstr ""
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:66
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:57
 msgid "No page connections with the predicate:"
 msgstr ""
 
@@ -5046,6 +5047,11 @@ msgstr ""
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:12
 #: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:208
 msgid "Predicates"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edge_action.tpl:8
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edge_action.tpl:13
+msgid "Remove connection"
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:98
@@ -9541,7 +9547,7 @@ msgstr ""
 
 #: zotonic_mod_logging/priv/templates/admin_log.tpl:42
 #: zotonic_mod_logging/priv/templates/admin_log_ui.tpl:41
-#: zotonic_mod_survey/src/models/m_survey.erl:727
+#: zotonic_mod_survey/src/models/m_survey.erl:799
 msgid "User Id"
 msgstr ""
 
@@ -12311,7 +12317,7 @@ msgstr ""
 msgid "Agree"
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:1079
+#: zotonic_mod_survey/src/mod_survey.erl:1090
 msgid "Already submitted"
 msgstr ""
 
@@ -12469,7 +12475,7 @@ msgstr ""
 msgid "Create new person"
 msgstr ""
 
-#: zotonic_mod_survey/src/models/m_survey.erl:1072
+#: zotonic_mod_survey/src/models/m_survey.erl:1144
 msgid "Created"
 msgstr ""
 
@@ -12869,7 +12875,7 @@ msgstr ""
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:95
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:10
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:34
-#: zotonic_mod_survey/src/models/m_survey.erl:734
+#: zotonic_mod_survey/src/models/m_survey.erl:806
 msgid "Passed"
 msgstr ""
 
@@ -12877,7 +12883,7 @@ msgstr ""
 msgid "Passing score"
 msgstr ""
 
-#: zotonic_mod_survey/src/models/m_survey.erl:736
+#: zotonic_mod_survey/src/models/m_survey.erl:808
 msgid "Percent"
 msgstr ""
 
@@ -13036,7 +13042,7 @@ msgid "Saved"
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:23
-#: zotonic_mod_survey/src/models/m_survey.erl:735
+#: zotonic_mod_survey/src/models/m_survey.erl:807
 msgid "Score"
 msgstr ""
 
@@ -13088,7 +13094,7 @@ msgstr ""
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:102
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:106
 msgid "Show results (admin only)"
 msgstr ""
 
@@ -13111,13 +13117,13 @@ msgstr ""
 msgid "Sorry, could not insert the new person."
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:1068
+#: zotonic_mod_survey/src/mod_survey.erl:1079
 msgid ""
 "Sorry, the maximum number of submissions has been reached. You can no longer "
 "submit this form."
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:1081
+#: zotonic_mod_survey/src/mod_survey.erl:1092
 msgid ""
 "Sorry, you already submitted your answers. Reload the page if you want to "
 "fill in the form again."
@@ -13227,7 +13233,7 @@ msgid ""
 "on {site} has been reached."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:71
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:75
 msgid ""
 "The maximum number of submissions has been reached, you cannot fill this in "
 "anymore."
@@ -13352,7 +13358,7 @@ msgstr ""
 msgid "View and edit results."
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:1089
+#: zotonic_mod_survey/src/mod_survey.erl:1100
 msgid "We are experiencing an overload, please try again in 10 minutes."
 msgstr ""
 
@@ -13384,17 +13390,17 @@ msgstr ""
 msgid "Yes/No"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:29
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:33
 msgid "You already filled this in, but you can change your previous answers."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:41
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:45
 msgid "You already filled this in."
 msgstr ""
 
 #: zotonic_mod_survey/src/mod_survey.erl:253
 #: zotonic_mod_survey/src/mod_survey.erl:268
-#: zotonic_mod_survey/src/mod_survey.erl:1156
+#: zotonic_mod_survey/src/mod_survey.erl:1167
 msgid "You are not allowed to change these results."
 msgstr ""
 
@@ -13406,13 +13412,17 @@ msgstr ""
 msgid "You must be allowed to edit the form, to edit its results."
 msgstr ""
 
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:29
+msgid "You need to be logged in to fill this in."
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:20
 msgid ""
 "You received this email because your email address is configured in the "
 "settings as the handling address."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:58
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:62
 msgid "You started filling this in and will continue where you left off."
 msgstr ""
 
@@ -13421,7 +13431,7 @@ msgstr ""
 msgid "Your result"
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:1097
+#: zotonic_mod_survey/src/mod_survey.erl:1108
 msgid "Your session was expired, please restart and try again."
 msgstr ""
 
