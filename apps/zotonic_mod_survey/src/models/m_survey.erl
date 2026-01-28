@@ -321,9 +321,14 @@ did_survey(SurveyId, Context) ->
             find_answer_id(SurveyId, UserId, undefined, Context) /= undefined
     end.
 
-%% @doc Replace a survey answer
--spec replace_survey_submission(m_rsc:resource_id(), {user, m_rsc:resource_id()} | integer(), list(), z:context())
-     -> {ok, integer()} | {error, term()}.
+%% @doc Replace a survey answer for a user or a specific answer.
+-spec replace_survey_submission(SurveyId, AnswerRef, Answers, Context) -> {ok, AnswerId} | {error, Reason} when
+    SurveyId :: m_rsc:resource_id(),
+    AnswerRef :: {user, m_rsc:resource_id()} | pos_integer(),
+    Answers :: list(),
+    Context :: z:context(),
+    AnswerId :: pos_integer(),
+    Reason :: term().
 replace_survey_submission(SurveyId, {user, UserId}, Answers, Context) ->
     case z_db:q1("
         select id
@@ -390,7 +395,12 @@ publish(SurveyId, UserId, _Persistent, Context) ->
         Context).
 
 %% @doc Save a survey, connect to the current user (if any) or persistent id.
--spec insert_survey_submission(m_rsc:resource_id(), list(), z:context()) -> {ok, pos_integer()} | {error, any()}.
+-spec insert_survey_submission(SurveyId, Answers, Context) -> {ok, AnswerId} | {error, Reason} when
+    SurveyId :: m_rsc:resource_id(),
+    Answers :: list(),
+    Context :: z:context(),
+    AnswerId :: pos_integer(),
+    Reason :: term().
 insert_survey_submission(SurveyId, Answers, Context) ->
     case z_acl:user(Context) of
         undefined ->
@@ -420,6 +430,14 @@ insert_survey_submission(SurveyId, Answers, Context) ->
     end.
 
 %% @doc Save or replace a survey, resetting the created if needed.
+-spec insert_survey_submission(SurveyId, UserId, PersistentId, Answers, Context) -> {ok, AnswerId} | {error, Reason} when
+    SurveyId :: m_rsc:resource_id(),
+    UserId :: m_rsc:resource_id() | undefined,
+    PersistentId :: binary() | undefined,
+    Answers :: list(),
+    Context :: z:context(),
+    AnswerId :: pos_integer(),
+    Reason :: term().
 insert_survey_submission(SurveyId, UserId, PersistentId, Answers, Context) ->
     case is_survey_multiple(SurveyId, Context) of
         true ->
@@ -451,8 +469,14 @@ find_answer_id(SurveyId, UserId, _PersistendId, Context) ->
             [SurveyId, UserId],
             Context).
 
--spec insert_survey_submission_1(m_rsc:resource_id(), undefined | m_rsc:resource_id(), binary(), list(), z:context() )
-    -> {ok, pos_integer()|undefined} | {error, term()}.
+-spec insert_survey_submission_1(SurveyId, UserId, PersistentId, Answers, Context) -> {ok, AnswerId} | {error, Reason} when
+    SurveyId :: m_rsc:resource_id(),
+    UserId :: m_rsc:resource_id() | undefined,
+    PersistentId :: binary() | undefined,
+    Answers :: list(),
+    Context :: z:context(),
+    AnswerId :: pos_integer(),
+    Reason :: term().
 insert_survey_submission_1(SurveyId, UserId, PersistentId, Answers, Context) ->
     {UserId1, PersistentId1} = if
         is_integer(UserId) -> {UserId, undefined};
