@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-01-28 13:50\n"
+"PO-Revision-Date: 2026-01-28 14:10\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -4763,7 +4763,9 @@ msgstr "Weet je zeker dat je wilt verwijderen:"
 msgid "Are you sure you want to remove the <strong>{{ predicate }}</strong>\n"
 "    connection between <strong>{{ subject }}</strong>\n"
 "          and <strong>{{ object }}</strong>?"
-msgstr ""
+msgstr "Weet je zeker dat je de <strong>{{ predicate }}</strong>\n"
+"    verbinding tussen <strong>{{ subject }}</strong>\n"
+"          en <strong>{{ object }}</strong>?"
 
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:9
 msgid "Change the predicate on all existing page connections to:"
@@ -4871,7 +4873,7 @@ msgstr "Predicaten"
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edge_action.tpl:8
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edge_action.tpl:13
 msgid "Remove connection"
-msgstr ""
+msgstr "Verbinding verwijderen"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:98
 msgid "Some predicates are mostly for internal purposes. Check this if you don’t want to show this predicate on the <em>Connected to</em> list."
@@ -12658,7 +12660,7 @@ msgstr "Je hebt toestemming nodig om het formulier te bewerken, om de resultaten
 
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:29
 msgid "You need to be logged in to fill this in."
-msgstr ""
+msgstr "Je moet ingelogd zijn om dit in te vullen."
 
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:20
 msgid "You received this email because your email address is configured in the settings as the handling address."
