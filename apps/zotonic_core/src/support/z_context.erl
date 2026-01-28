@@ -1044,8 +1044,39 @@ session_id(Context) ->
 %% @doc Set the cotonic session id. Mostly used when on a request with
 %%      a cotonic session id in the cookie.
 -spec set_session_id( binary(), z:context() ) -> z:context().
+set_session_id(Sid, Context) when size(Sid) =< 64 ->
+    case is_valid_session_id(Sid) of
+        true ->
+            set(session_id, Sid, Context);
+        false ->
+            ?LOG_WARNING(#{
+                in => zotonic_core,
+                text => <<"Trying to set invalid session id">>,
+                result => error,
+                reason => session_id_invalid,
+                session_id => Sid
+            }),
+            Context
+    end;
 set_session_id(Sid, Context) ->
-    set(session_id, Sid, Context).
+    ?LOG_WARNING(#{
+        in => zotonic_core,
+        text => <<"Trying to set invalid session id">>,
+        result => error,
+        reason => session_id_invalid,
+        session_id => Sid
+    }),
+    Context.
+
+is_valid_session_id(<<>>) -> true;
+is_valid_session_id(<<C, R/binary>>) when
+        (C >= $0 andalso C =< $9);
+        (C >= $a andalso C =< $z);
+        (C >= $A andalso C =< $Z);
+        (C == $-)
+     -> is_valid_session_id(R);
+is_valid_session_id(_) ->
+    false.
 
 %% @doc Set the value of the context variable Key to Value
 -spec set( atom(), term(), z:context() ) -> z:context().

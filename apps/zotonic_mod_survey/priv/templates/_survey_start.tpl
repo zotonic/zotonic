@@ -23,9 +23,13 @@
                 viewer=viewer
                 element_id=element_id|default:"survey-question"
     %}
-{% elseif id.survey_multiple == 2 and did_survey %}
-    {# Single entry form and previous answers are allowed to be changed. #}
+{% elseif id.survey_multiple == 2 and not m.acl.user %}
+    {# Single entry form and previous answers are allowed to be changed by a logged in user #}
     <p><span class="fa fa-exclamation-triangle"></span>
+    {_ You need to be logged in to fill this in. _}</p>
+{% elseif id.survey_multiple == 2 and did_survey %}
+    {# Single entry form and previous answers are allowed to be changed by a logged in user #}
+    <p><span class="fa fa-info-circle"></span>
     {_ You already filled this in, but you can change your previous answers. _}</p>
     {% include "_survey_start_button.tpl"
                 id=id

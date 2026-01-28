@@ -125,7 +125,7 @@ Add more documentation
 -mod_title("Survey").
 -mod_description("Create and publish questionnaires.").
 -mod_prio(400).
--mod_schema(6).
+-mod_schema(7).
 -mod_depends([ admin, mod_wires ]).
 -mod_provides([ survey, poll ]).
 -mod_config([
@@ -393,7 +393,7 @@ observe_acl_is_allowed(#acl_is_allowed{
 observe_acl_is_allowed(#acl_is_allowed{}, _Context) ->
     undefined.
 
-%% @doc Every day prune old saved surveys.
+%% @doc Every day prune old saved intermediate survey results.
 observe_tick_24h(tick_24h, Context) ->
     m_survey_saved:prune_saved(Context).
 
@@ -424,14 +424,17 @@ survey_start(Args, Context) ->
             Args1 = [
                 {answer_user_id, ResultUserId},
                 {survey_session_nonce, z_nonce:nonce(?SURVEY_FILL_NONCE_TIMEOUT)}
-                | proplists:delete(answer_user_id, Args)
+                | proplists:delete(answer_user_id,
+                    proplists:delete(survey_session_nonce, Args))
             ],
             render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context);
         false ->
             Editing = proplists:get_value(editing, Args),
             MaybePrevArgs = case z_convert:to_binary(m_rsc:p(SurveyId, <<"survey_multiple">>, Context)) of
-                <<"3">> when Editing =:= undefined -> m_survey_saved:get_saved(SurveyId, Context);
-                _ -> {error, enoent}
+                <<"3">> when Editing =:= undefined ->
+                    m_survey_saved:get_saved(SurveyId, Context);
+                _ ->
+                    {error, enoent}
             end,
             case MaybePrevArgs of
                 {ok, #{
@@ -439,19 +442,25 @@ survey_start(Args, Context) ->
                     <<"saved_args">> := PrevArgs
                 }} ->
                     {answers, Answers} = proplists:lookup(answers, PrevArgs),
-                    {history, History} = proplists:lookup(history, PrevArgs),
-                    render_next_page(SurveyId, PageNr, exact, Answers, History, undefined, PrevArgs, Context);
+                    History = proplists:get_value(history, PrevArgs, []),
+                    PrevArgs1 = [
+                        {survey_session_nonce, z_nonce:nonce(?SURVEY_FILL_NONCE_TIMEOUT)}
+                        | proplists:delete(survey_session_nonce, PrevArgs)
+                    ],
+                    render_next_page(SurveyId, PageNr, exact, Answers, History, undefined, PrevArgs1, Context);
                 {error, _} ->
                     Answers = normalize_answers(proplists:get_value(answers, Args)),
                     Args1 = [
                         {answer_user_id, z_acl:user(Context)},
                         {survey_session_nonce, z_nonce:nonce(?SURVEY_FILL_NONCE_TIMEOUT)}
-                        | proplists:delete(answer_user_id, Args)
+                        | proplists:delete(answer_user_id,
+                            proplists:delete(survey_session_nonce, Args))
                     ],
                     render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context)
             end
     end.
 
+%% @doc Fetch all the blocks for the specific survey page.
 get_page(Id, Nr, #context{} = Context) when is_integer(Nr) ->
     case m_rsc:p(Id, <<"blocks">>, Context) of
         Qs when is_list(Qs) ->
@@ -460,6 +469,8 @@ get_page(Id, Nr, #context{} = Context) when is_integer(Nr) ->
             []
     end.
 
+%% @doc Register a nonce to prevent duplicate form submits by people
+%% clicking multiple times on the submit button.
 -spec register_nonce(SessionNonce) -> ok | {error, Reason} when
     SessionNonce :: binary() | undefined,
     Reason :: duplicate | overload | key | expired.
@@ -1179,7 +1190,7 @@ save_submit(#survey_submit{
     Reason :: full | term().
 save_submit(SurveyId, FoundAnswers, Answers, Context) ->
     StorageAnswers = survey_answers_to_storage(FoundAnswers),
-    case insert_survey_submission(SurveyId, StorageAnswers, Context) of
+    case m_survey:insert_survey_submission(SurveyId, StorageAnswers, Context) of
         {ok, ResultId} ->
             maybe_delete_saved(SurveyId, Context),
             maybe_mail(SurveyId, Answers, ResultId, false, Context),
@@ -1187,17 +1198,6 @@ save_submit(SurveyId, FoundAnswers, Answers, Context) ->
         {error, _} = Error ->
             Error
     end.
-
-
-insert_survey_submission(SurveyId, StorageAnswers, Context) ->
-    {UserId, PersistentId, Context1} = case z_acl:user(Context) of
-                                undefined ->
-                                    {DId, C1} = m_survey:persistent_id(Context),
-                                    {undefined, DId, C1};
-                                UId ->
-                                    {UId, undefined, Context}
-                             end,
-    m_survey:insert_survey_submission(SurveyId, UserId, PersistentId, StorageAnswers, Context1).
 
 maybe_mail(SurveyId, Answers, ResultId, IsEditing, Context) ->
     case IsEditing orelse probably_email(SurveyId, Context) of

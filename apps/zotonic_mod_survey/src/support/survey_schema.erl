@@ -1,8 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2011-2017 Arjan Scherpenisse <arjan@scherpenisse.net>
+%% @copyright 2011-2026 Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @doc Schema definition for the survey module.
+%% @end
 
-%% Copyright 2011-2017 Arjan Scherpenisse
+%% Copyright 2011-2026 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -72,7 +73,7 @@ install_schema_v2(Context) ->
                     id bigserial not null,
                     survey_id int not null,
                     user_id int,
-                    persistent character varying(32),
+                    persistent character varying(64),
                     is_anonymous bool not null default false,
                     language character varying(16),
                     points int not null default 0,
@@ -109,7 +110,16 @@ install_schema_v2(Context) ->
                 true ->
                     ok
             end,
-            ok
+            case z_db:column(survey_answers, persistent, Context) of
+                {ok, #column_def{ length = L1 }} when L1 < 64 ->
+                    [] = z_db:q("
+                        alter table survey_answers
+                        alter column persistent type character varying(64)",
+                        Context),
+                    z_db:flush(Context);
+                _ ->
+                    ok
+            end
     end,
     case z_db:table_exists(survey_answers_saved, Context) of
         false ->
@@ -117,7 +127,7 @@ install_schema_v2(Context) ->
                 create table survey_answers_saved (
                     survey_id int not null,
                     user_id int,
-                    persistent character varying(32),
+                    persistent character varying(64),
                     page_nr int not null default 1,
                     saved_args bytea,
                     created timestamp with time zone not null default current_timestamp,
@@ -145,7 +155,16 @@ install_schema_v2(Context) ->
             z_db:flush(Context),
             ok;
         true ->
-            ok
+            case z_db:column(survey_answers_saved, persistent, Context) of
+                {ok, #column_def{ length = L2 }} when L2 < 64 ->
+                    [] = z_db:q("
+                        alter table survey_answers_saved
+                        alter column persistent type character varying(64)",
+                        Context),
+                    z_db:flush(Context);
+                _ ->
+                    ok
+            end
     end.
 
 %% @doc Redo the results storage, group individual questions by user/answer

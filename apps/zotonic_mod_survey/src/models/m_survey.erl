@@ -62,9 +62,7 @@ Not yet documented.
     delete_results/2,
     get_questions/2,
 
-    rsc_merge/3,
-
-    persistent_id/1
+    rsc_merge/3
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -162,14 +160,16 @@ m_get([ <<"totals">>, SurveyId | Rest ], _Msg, Context) ->
 m_get([ <<"did_survey">>, SurveyId | Rest ], _Msg, Context) ->
     {ok, {did_survey(m_rsc:rid(SurveyId, Context), Context), Rest}};
 m_get([ <<"did_survey_answers">>, SurveyId | Rest ], _Msg, Context) ->
-    {UserId, PersistentId, Context1} = case z_acl:user(Context) of
-                                undefined ->
-                                    {DId, C1} = persistent_id(Context),
-                                    {undefined, DId, C1};
-                                UId ->
-                                    {UId, undefined, Context}
-                            end,
-    As = case single_result(m_rsc:rid(SurveyId, Context1), UserId, PersistentId, Context1) of
+    {UserId, PersistentId} = case z_acl:user(Context) of
+        undefined ->
+            case z_context:session_id(Context) of
+                {ok, SessionId} -> {undefined, SessionId};
+                {error, _} -> {undefined, undefined}
+            end;
+        UId ->
+            {UId, undefined}
+    end,
+    As = case single_result(m_rsc:rid(SurveyId, Context), UserId, PersistentId, Context) of
         None when None =:= undefined; None =:= [] ->
             [];
         Result ->
@@ -183,24 +183,28 @@ m_get([ <<"did_survey_answers">>, SurveyId | Rest ], _Msg, Context) ->
     end,
     {ok, {As, Rest}};
 m_get([ <<"did_survey_results">>, SurveyId | Rest ], _Msg, Context) ->
-    {UserId, PersistentId, Context1} = case z_acl:user(Context) of
-                                undefined ->
-                                    {DId, C1} = persistent_id(Context),
-                                    {undefined, DId, C1};
-                                UId ->
-                                    {UId, undefined, Context}
-                            end,
-    {ok, {single_result(SurveyId, UserId, PersistentId, Context1), Rest}};
+    {UserId, PersistentId} = case z_acl:user(Context) of
+        undefined ->
+            case z_context:session_id(Context) of
+                {ok, SessionId} -> {undefined, SessionId};
+                {error, _} -> {undefined, undefined}
+            end;
+        UId ->
+            {UId, undefined}
+    end,
+    {ok, {single_result(SurveyId, UserId, PersistentId, Context), Rest}};
 m_get([ <<"did_survey_results_readable">>, SurveyId | Rest ], _Msg, Context) ->
-    {UserId, PersistentId, Context1} = case z_acl:user(Context) of
-                                undefined ->
-                                    {DId, C1} = persistent_id(Context),
-                                    {undefined, DId, C1};
-                                UId ->
-                                    {UId, undefined, Context}
-                            end,
-    RId = m_rsc:rid(SurveyId, Context1),
-    SurveyAnswer = single_result(RId, UserId, PersistentId, Context1),
+    {UserId, PersistentId} = case z_acl:user(Context) of
+        undefined ->
+            case z_context:session_id(Context) of
+                {ok, SessionId} -> {undefined, SessionId};
+                {error, _} -> {undefined, undefined}
+            end;
+        UId ->
+            {UId, undefined}
+    end,
+    RId = m_rsc:rid(SurveyId, Context),
+    SurveyAnswer = single_result(RId, UserId, PersistentId, Context),
     {ok, {survey_answer_prep:readable_stored_result(RId, SurveyAnswer, Context), Rest}};
 m_get([ <<"is_allowed_results_download">>, SurveyId | Rest ], _Msg, Context) ->
     {ok, {is_allowed_results_download(m_rsc:rid(SurveyId, Context), Context), Rest}};
@@ -260,13 +264,37 @@ result_columns(SurveyId, Format, _Context) ->
     }),
     {error, unknown_format}.
 
+%% @doc Check if filling in the survey needs a persistent session id for anonymous users.
+%% A session id is never needed for logged in users. This uses the cotonic-sid, which is
+%% also stored in the localStorage of the browser and stays stable.
+is_persistent_id_needed(Id, Context) ->
+    case z_auth:is_auth(Context) of
+        true ->
+            false;
+        false ->
+            case z_convert:to_binary(m_rsc:p(Id, <<"survey_multiple">>, Context)) of
+                <<>> -> true;       % Default: once per user
+                <<"0">> -> true;    % Once per user
+                <<"1">> -> false;   % Insert as many times you want
+                <<"2">> -> false;   % Save & later editing -- only for users
+                <<"3">> -> true;    % Once per user - continue later
+                _ -> false
+            end
+    end.
 
--spec persistent_id( z:context() ) -> {binary() | undefined, z:context()}.
-persistent_id(Context) ->
-    {Result, Context1} = m_client_local_storage:device_id(Context),
-    case Result of
-        {ok, DeviceId} -> {DeviceId, Context1};
-        {error, _} -> {undefined, Context1}
+%% @doc Check if the survey can only be done by logged in users.
+is_user_needed(Id, Context) ->
+    case z_convert:to_binary(m_rsc:p(Id, <<"survey_multiple">>, Context)) of
+        <<"2">> -> true;    % Save & later editing -- only for users
+        _ -> false
+    end.
+
+%% @doc Check if a survey can be submitted multiple times for the same user/persistent.
+is_survey_multiple(SurveyId, Context) ->
+    case m_rsc:p_no_acl(SurveyId, <<"survey_multiple">>, Context) of
+        1 -> true;
+        <<"1">> -> true;
+        _ -> false
     end.
 
 -spec is_allowed_results_download(m_rsc:resource_id(), z:context()) -> boolean().
@@ -280,21 +308,27 @@ get_handlers(Context) ->
     z_notifier:foldr(#survey_get_handlers{}, [], Context).
 
 
-%% @doc Check if the current user/browser did the survey
+%% @doc Check if the current user/browser did the survey.
 -spec did_survey(m_rsc:resource_id(), z:context()) -> boolean().
 did_survey(SurveyId, Context) ->
     case z_acl:user(Context) of
         undefined ->
-            {DId, Context1} = persistent_id(Context),
-            find_answer_id(SurveyId, undefined, DId, Context1) /= undefined;
+            case z_context:session_id(Context) of
+                {ok, SessionId} -> find_answer_id(SurveyId, undefined, SessionId, Context) /= undefined;
+                {error, _} -> false
+            end;
         UserId ->
             find_answer_id(SurveyId, UserId, undefined, Context) /= undefined
     end.
 
-
-%% @doc Replace a survey answer
--spec replace_survey_submission( integer(), {user, m_rsc:resource_id()} | integer(), list(), z:context() )
-     -> {ok, integer()} | {error, term()}.
+%% @doc Replace a survey answer for a user or a specific answer.
+-spec replace_survey_submission(SurveyId, AnswerRef, Answers, Context) -> {ok, AnswerId} | {error, Reason} when
+    SurveyId :: m_rsc:resource_id(),
+    AnswerRef :: {user, m_rsc:resource_id()} | pos_integer(),
+    Answers :: list(),
+    Context :: z:context(),
+    AnswerId :: pos_integer(),
+    Reason :: term().
 replace_survey_submission(SurveyId, {user, UserId}, Answers, Context) ->
     case z_db:q1("
         select id
@@ -323,7 +357,7 @@ replace_survey_submission(SurveyId, AnswerId, Answers, Context) when is_integer(
         Context)
     of
         {ok, 1} ->
-            {UserId,Persistent} = z_db:q_row("
+            {UserId, Persistent} = z_db:q_row("
                 select user_id, persistent
                 from survey_answers
                 where id = $1",
@@ -360,18 +394,50 @@ publish(SurveyId, UserId, _Persistent, Context) ->
         ],
         Context).
 
-%% @doc Save a survey, connect to the current user (if any)
--spec insert_survey_submission(m_rsc:resource_id(), list(), z:context()) -> {ok, pos_integer()} | {error, any()}.
+%% @doc Save a survey, connect to the current user (if any) or persistent id.
+-spec insert_survey_submission(SurveyId, Answers, Context) -> {ok, AnswerId} | {error, Reason} when
+    SurveyId :: m_rsc:resource_id(),
+    Answers :: list(),
+    Context :: z:context(),
+    AnswerId :: pos_integer(),
+    Reason :: term().
 insert_survey_submission(SurveyId, Answers, Context) ->
     case z_acl:user(Context) of
         undefined ->
-            {DeviceId, Context1} = persistent_id(Context),
-            insert_survey_submission(SurveyId, undefined, DeviceId, Answers, Context1);
+            case is_user_needed(SurveyId, Context) of
+                true ->
+                    {error, user_needed};
+                false ->
+                    case is_persistent_id_needed(SurveyId, Context) of
+                        true ->
+                            case z_context:session_id(Context) of
+                                {ok, PersistentId} ->
+                                    insert_survey_submission(SurveyId, undefined, PersistentId, Answers, Context);
+                                {error, _} ->
+                                    {error, session_needed}
+                            end;
+                        false ->
+                            case z_context:session_id(Context) of
+                                {ok, PersistentId} ->
+                                    insert_survey_submission(SurveyId, undefined, PersistentId, Answers, Context);
+                                {error, _} ->
+                                    insert_survey_submission(SurveyId, undefined, undefined, Answers, Context)
+                            end
+                    end
+            end;
         UserId ->
             insert_survey_submission(SurveyId, UserId, undefined, Answers, Context)
     end.
 
 %% @doc Save or replace a survey, resetting the created if needed.
+-spec insert_survey_submission(SurveyId, UserId, PersistentId, Answers, Context) -> {ok, AnswerId} | {error, Reason} when
+    SurveyId :: m_rsc:resource_id(),
+    UserId :: m_rsc:resource_id() | undefined,
+    PersistentId :: binary() | undefined,
+    Answers :: list(),
+    Context :: z:context(),
+    AnswerId :: pos_integer(),
+    Reason :: term().
 insert_survey_submission(SurveyId, UserId, PersistentId, Answers, Context) ->
     case is_survey_multiple(SurveyId, Context) of
         true ->
@@ -386,13 +452,8 @@ insert_survey_submission(SurveyId, UserId, PersistentId, Answers, Context) ->
             end
     end.
 
-is_survey_multiple(SurveyId, Context) ->
-    case m_rsc:p_no_acl(SurveyId, survey_multiple, Context) of
-        1 -> true;
-        <<"1">> -> true;
-        _ -> false
-    end.
-
+find_answer_id(_SurveyId, undefined, undefined, _Context) ->
+    undefined;
 find_answer_id(SurveyId, undefined, PersistentId, Context) ->
     z_db:q1("select id
              from survey_answers
@@ -408,20 +469,31 @@ find_answer_id(SurveyId, UserId, _PersistendId, Context) ->
             [SurveyId, UserId],
             Context).
 
--spec insert_survey_submission_1(m_rsc:resource_id(), undefined | m_rsc:resource_id(), binary(), list(), z:context() )
-    -> {ok, pos_integer()|undefined} | {error, term()}.
+-spec insert_survey_submission_1(SurveyId, UserId, PersistentId, Answers, Context) -> {ok, AnswerId} | {error, Reason} when
+    SurveyId :: m_rsc:resource_id(),
+    UserId :: m_rsc:resource_id() | undefined,
+    PersistentId :: binary() | undefined,
+    Answers :: list(),
+    Context :: z:context(),
+    AnswerId :: pos_integer(),
+    Reason :: term().
 insert_survey_submission_1(SurveyId, UserId, PersistentId, Answers, Context) ->
     {UserId1, PersistentId1} = if
         is_integer(UserId) -> {UserId, undefined};
         true -> {undefined, PersistentId}
     end,
-    case do_insert_checked(SurveyId, UserId1, PersistentId1, Answers, Context) of
-        {ok, _} = Ok ->
-            publish(SurveyId, UserId1, PersistentId1, Context),
-            maybe_mail_max_results_reached(SurveyId, Context),
-            Ok;
-        {error, _} = Error ->
-            Error
+    case is_persistent_id_needed(SurveyId, Context) of
+        true when PersistentId1 =:= undefined ->
+            {error, persistent_id_needed};
+        _ ->
+            case do_insert_checked(SurveyId, UserId1, PersistentId1, Answers, Context) of
+                {ok, _} = Ok ->
+                    publish(SurveyId, UserId1, PersistentId1, Context),
+                    maybe_mail_max_results_reached(SurveyId, Context),
+                    Ok;
+                {error, _} = Error ->
+                    Error
+            end
     end.
 
 %% @private

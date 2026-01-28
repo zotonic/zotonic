@@ -1,10 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2011 Marc Worrell
-%% Date: 2010-01-15
-%%
+%% @copyright 2010-2026 Marc Worrell
 %% @doc Model for managing the comments on a page.
+%% @end
 
-%% Copyright 2010-2011 Marc Worrell
+%% Copyright 2010-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -126,13 +125,20 @@ get(CommentId, Context) ->
 
 
 %% @doc Insert a new comment. Fetches the submitter information from the Context.
--spec insert(m_rsc:resource(), Name::string(), Email::string(), Message::string(), Is_visible::boolean(), z:context()) -> {ok, pos_integer()} | {error, any()}.
-insert(RscId, Name, Email, Message, Is_visible, Context) ->
+-spec insert(RscId, Name, Email, Message, IsVisible, Context) -> {ok, CommentId} | {error, any()} when
+    RscId :: m_rsc:resource(),
+    Name :: string() | binary(),
+    Email :: string() | binary(),
+    Message :: string() | binary(),
+    IsVisible :: boolean(),
+    Context :: z:context(),
+    CommentId :: pos_integer().
+insert(RscId, Name, Email, Message, IsVisible, Context) ->
     case z_acl:rsc_visible(RscId, Context)
         and (z_auth:is_auth(Context)
             orelse z_convert:to_bool(m_config:get_value(mod_comment, anonymous, true, Context))) of
         true ->
-            Email = z_string:trim(Email),
+            Email1 = z_string:trim(Email),
             Name1 = z_html:escape(z_string:trim(Name)),
             Message1 = z_sanitize:escape_link(z_string:trim(Message), Context),
             KeepInformed = z_convert:to_bool(z_context:get_q(<<"keep_informed">>, Context, false)),
@@ -142,20 +148,20 @@ insert(RscId, Name, Email, Message, Is_visible, Context) ->
                 true ->
                     {undefined, Context};
                 false ->
-                    case m_client_local_storage:device_id(Context) of
+                    case m_client_local_storage:ensure_device_id(Context) of
                         {{ok, CId}, Ctx} -> {CId, Ctx};
                         {{error, _}, Ctx} -> {undefined, Ctx}
                     end
             end,
             Props = [
                 {rsc_id, m_rsc:rid(RscId, Context)},
-                {is_visible, Is_visible},
+                {is_visible, IsVisible},
                 {user_id, z_acl:user(Context)},
                 {persistent_id, DeviceId},
                 {name, Name1},
                 {message, Message1},
-                {email, Email},
-                {gravatar_code, gravatar_code(Email)},
+                {email, Email1},
+                {gravatar_code, gravatar_code(Email1)},
                 {keep_informed, KeepInformed},
                 {ip_address, IPAddress},
                 {user_agent, UserAgent}

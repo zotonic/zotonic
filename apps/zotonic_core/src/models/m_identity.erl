@@ -34,7 +34,7 @@ The following m\\_identity model properties are available in templates:
 
 | Property  | Description                                                                      | Example value |
 | --------- | -------------------------------------------------------------------------------- | ------------- |
-| is\\\\_user | Check if a page id is an user. Return a bool. Usage: m.identity\\\\[page\\\\_id\\\\].is\\\\_user | true          |
+| is\\\\_user | Check if a page id is a user. Return a bool. Usage: m.identity\\\\[page\\\\_id\\\\].is\\\\_user | true          |
 | username  | Fetch the username, if any, of a user. Returns a binary or undefined. Usage: m.identity\\\\[page\\\\_id\\\\].username | <<”admin”>>   |
 ").
 -author("Marc Worrell <marc@worrell.nl").
@@ -372,7 +372,7 @@ get_user_info(Context) ->
     get_user_info(z_acl:user(Context), Context).
 
 %% @doc Return the user_id, username and last login of the resource id. Returns empty values
-%% if the resource is not an user.
+%% if the resource is not a user.
 -spec get_user_info(RscId, Context) -> UserInfo when
     RscId :: m_rsc:resource(),
     Context :: z:context(),
