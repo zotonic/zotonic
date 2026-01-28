@@ -22,23 +22,14 @@
                 {% catinclude "_rsc_item.tpl" edge.subject_id show_medium %}
             </td>
             <td class="clickable">
-                <strong>
-                    <span {% include "_language_attrs.tpl" %}>{{ edge.predicate_id.title }}</span>
+                <div>
+                    <strong {% include "_language_attrs.tpl" %}>{{ edge.predicate_id.title }}</strong>
                     {% if m.acl.is_allowed.link[edge.subject_id] %}
-                        <button id="{{ #unlink.id }}" class="btn btn-xs btn-default">{_ Disconnect _}</button>
-                        {% wire id=#unlink.id
-                            action={confirm
-                                text=[_"Are you sure you want to disconnect:", " ", edge.object_id.title, "?" ]
-                                ok=_"Disconnect"
-                                action={unlink
-                                    subject_id=edge.subject_id
-                                    edge_id=edge.id
-                                    hide=#tr.id
-                                }
-                            }
-                        %}
+                        <div class="btn-group btn-group-xs pull-right">
+                            {% all include "_admin_edge_action.tpl" edge=edge tr_id=#tr.id %}
+                        </div>
                     {% endif %}
-                </strong><br/>
+                </div>
                 <div class="text-muted">
                     <span class="edge-date">
                         {{ edge.created|date:_"d M Y, H:i" }}
