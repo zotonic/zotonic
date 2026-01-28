@@ -145,7 +145,7 @@ delete(Key, BridgeTopic, Context) ->
 
 %% @doc Return the unique device id. Might fetch it from the local storage of the
 %% user agent. The device id is cached in the process memo cache.
--spec fetch_device_id( z:context() ) -> {ok, binary()} | {error, error()}.
+-spec fetch_device_id( z:context() ) -> {ok, binary()} | {error, error() | enoent}.
 fetch_device_id(Context) ->
     case z_memo:get(z_device_id) of
         undefined ->
