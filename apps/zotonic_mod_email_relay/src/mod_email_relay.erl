@@ -74,7 +74,7 @@ Add more documentation
             key => is_user_relay,
             type => boolean,
             default => false,
-            description => "[EXPERIMENTAL - DO NOT USE] Relay received emails for an user directly to known users."
+            description => "[EXPERIMENTAL - DO NOT USE] Relay received emails for a user directly to known users."
         }
     ]).
 

@@ -418,7 +418,7 @@ Return:
 %% Type: foldl
 -doc("
 Check for logon options, called if logon\\_submit returns undefined. This is used to fetch external (or local)
-authentication links for an username. Return:: `map()`
+authentication links for a username. Return:: `map()`
 
 Type:
 
