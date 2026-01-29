@@ -38,7 +38,7 @@
 				</label>
 				<label class="checkbox">
 					<input type="checkbox" class="{% if nosubmit %}nosubmit{% endif %}" name="page-options-is_hide_back" {% if options.is_hide_back %}checked{% endif %}>
-					{_ Remove "Back" button. If there is instant question feedback then it will be shown after submit. _}
+					{_ Remove "Back" button. Feedback if wrong or correct will be shown after submit. _}
 				</label>
 			{% endblock %}
 		</div>
