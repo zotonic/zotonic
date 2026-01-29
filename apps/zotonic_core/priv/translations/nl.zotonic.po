@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-01-29 15:52\n"
+"PO-Revision-Date: 2026-01-29 17:57\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -12268,7 +12268,7 @@ msgstr "Rood"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:41
 msgid "Remove \"Back\" button. Feedback if wrong or correct will be shown after submit."
-msgstr ""
+msgstr "Verwijder de knop \"Terug\". Feedback indien fout of correct wordt getoond na verzenden."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:21
 msgid "Remove \"Back\" button. If there is instant question feedback then it will be shown after submit."
