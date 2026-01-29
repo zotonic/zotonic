@@ -176,6 +176,12 @@ Add more documentation
     module_name/1
 ]).
 
+%% Testing
+-export([
+    fetch_page/2,
+    page_has_feedback/2
+]).
+
 -include_lib("zotonic_core/include/zotonic.hrl").
 -include_lib("zotonic_mod_survey/include/survey.hrl").
 
@@ -613,10 +619,12 @@ render_next_page(SurveyId, PageNr, Direction, Answers, History, Editing, Args, C
                     SavedArgs = [
                         {answers, Answers2},
                         {answers_novalidate, AnswersNoValidate2},
-                        {page_nr, NewPageNr}
+                        {page_nr, NewPageNr},
+                        {is_feedback_view, false}
                         | proplists:delete(answers,
                             proplists:delete(answers_novalidate,
-                                proplists:delete(page_nr, Args)))
+                                proplists:delete(page_nr,
+                                    proplists:delete(is_feedback_view, Args))))
                     ],
                     maybe_save_intermediate_results(Editing, SurveyId, PageNr, SavedArgs, Context),
 
@@ -718,8 +726,16 @@ page_has_feedback(Nr, Qs) ->
         {L, _Nr1} -> has_feedback(L)
     end.
 
-has_feedback(Blocks) when is_list(Blocks) ->
-    lists:any(fun(B) -> has_feedback_1(B) end, Blocks).
+has_feedback([]) -> false;
+has_feedback([B|Bs]) ->
+    case is_page_end(B) of
+        true -> false;
+        false ->
+            case has_feedback_1(B) of
+                true -> true;
+                false -> has_feedback(Bs)
+            end
+    end.
 
 has_feedback_1(#{ <<"is_test_direct">> := true }) ->
     false;
@@ -992,7 +1008,12 @@ fetch_question_name([Q|Qs] = QQs, Name, Nr, State) ->
 fetch_page(Nr, []) ->
     {[], Nr};
 fetch_page(Nr, L) ->
-    fetch_page(1, Nr, L).
+    L1 = lists:filter(
+        fun
+            (#{ <<"name">> := <<"survey_feedback">> }) -> false;
+            (_) -> true
+         end, L),
+    fetch_page(1, Nr, L1).
 
 fetch_page(_, Nr, []) ->
     {[], Nr};
@@ -1021,9 +1042,10 @@ takepage([], Acc) ->
 takepage([Q|L], Acc) ->
     case is_page_end(Q) of
         true ->
-            % Always add the page-end to the list of questions, so that
+            % Always add the page-ends to the list of questions, so that
             % the template can decide to show a Next button or not.
-            lists:reverse([ Q | Acc ]);
+            Ends = lists:takewhile(fun is_page_end/1, L),
+            lists:reverse([ Q | Acc ], Ends);
         _ ->
             case maps:get(<<"name">>, Q, undefined) of
                 <<"survey_feedback">> -> takepage(L, Acc);
