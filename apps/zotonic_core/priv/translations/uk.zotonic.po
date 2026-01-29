@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-01-28 13:50\n"
+"PO-Revision-Date: 2026-01-29 15:53\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -350,7 +350,7 @@ msgstr "Скасувати"
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:28
-#: zotonic_mod_survey/src/mod_survey.erl:281
+#: zotonic_mod_survey/src/mod_survey.erl:287
 msgid "Category"
 msgstr "Категорія"
 
@@ -494,7 +494,7 @@ msgstr "Не вдалося перейти до групи співпраці."
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
-#: zotonic_mod_survey/src/mod_survey.erl:247
+#: zotonic_mod_survey/src/mod_survey.erl:253
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 msgid "Delete"
 msgstr "Видалити"
@@ -2021,7 +2021,7 @@ msgid "Make a new page or media"
 msgstr "Створіть нову сторінку або медіа"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
-#: zotonic_mod_survey/src/mod_survey.erl:282
+#: zotonic_mod_survey/src/mod_survey.erl:288
 msgid "Matching"
 msgstr "Збіг"
 
@@ -4270,9 +4270,9 @@ msgstr "Встановити ім'я користувача / пароль"
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:73
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:128
-#: zotonic_mod_survey/src/mod_survey.erl:1077
 #: zotonic_mod_survey/src/mod_survey.erl:1099
-#: zotonic_mod_survey/src/mod_survey.erl:1107
+#: zotonic_mod_survey/src/mod_survey.erl:1121
+#: zotonic_mod_survey/src/mod_survey.erl:1129
 msgid "Sorry"
 msgstr "Вибачте"
 
@@ -7469,7 +7469,7 @@ msgid "Started tracing template inclusions for your session."
 msgstr "Розпочато включення шаблонів трасування для вашого сеансу."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:51
-#: zotonic_mod_survey/src/mod_survey.erl:290
+#: zotonic_mod_survey/src/mod_survey.erl:296
 msgid "Stop"
 msgstr "Зупинити"
 
@@ -11616,7 +11616,7 @@ msgstr "Зведені результати від усіх респондент
 msgid "Agree"
 msgstr "Згоден"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1090
+#: zotonic_mod_survey/src/mod_survey.erl:1112
 msgid "Already submitted"
 msgstr "Вже подано"
 
@@ -11664,7 +11664,7 @@ msgstr "Ви впевнені, що хочете видалити цю стор�
 msgid "Are you sure you want to delete this question?"
 msgstr "Ви впевнені, що хочете видалити це запитання?"
 
-#: zotonic_mod_survey/src/mod_survey.erl:246
+#: zotonic_mod_survey/src/mod_survey.erl:252
 msgid "Are you sure you want to delete this result?"
 msgstr "Ви впевнені, що хочете видалити цей результат?"
 
@@ -11679,7 +11679,7 @@ msgid "Because you can edit, you can proceed for testing."
 msgstr "Оскільки ви можете редагувати, ви можете переходити до тестування."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:112
-#: zotonic_mod_survey/src/mod_survey.erl:287
+#: zotonic_mod_survey/src/mod_survey.erl:293
 msgid "Button"
 msgstr "Кнопка"
 
@@ -11744,7 +11744,7 @@ msgstr "Не вдалося додати одержувачів."
 msgid "Could not create the mailinglist."
 msgstr "Не вдалося створити список розсилки."
 
-#: zotonic_mod_survey/src/mod_survey.erl:286
+#: zotonic_mod_survey/src/mod_survey.erl:292
 msgid "Country select"
 msgstr "Виберіть країну"
 
@@ -11872,7 +11872,7 @@ msgstr "Відгук, якщо коректно"
 msgid "Feedback if wrong"
 msgstr "Відгук, якщо неправильно"
 
-#: zotonic_mod_survey/src/mod_survey.erl:291
+#: zotonic_mod_survey/src/mod_survey.erl:297
 msgid "File upload"
 msgstr "Завантаження файлу"
 
@@ -11998,7 +11998,7 @@ msgstr "Перейдіть до запитання на наступній ст�
 msgid "Jump to this question label (must be on an other page below)"
 msgstr "Перейти до цієї мітки запитання (повинен бути на іншій сторінці нижче)"
 
-#: zotonic_mod_survey/src/mod_survey.erl:279
+#: zotonic_mod_survey/src/mod_survey.erl:285
 msgid "Likert"
 msgstr "Лайкерт"
 
@@ -12009,7 +12009,7 @@ msgstr "Лайкерт"
 msgid "Link with person"
 msgstr "Посилання на людину"
 
-#: zotonic_mod_survey/src/mod_survey.erl:285
+#: zotonic_mod_survey/src/mod_survey.erl:291
 msgid "Long answer"
 msgstr "Довга відповідь"
 
@@ -12074,7 +12074,7 @@ msgstr "Можливі декілька відповідей"
 msgid "Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer."
 msgstr "Можливі декілька відповідей: за правильну відповідь нараховуються бали <i>і</i> бал за а, <i>не</i> за неправильну відповідь. За замовчуванням: 1 бал за правильну відповідь, 1 бал за неправильну відповідь."
 
-#: zotonic_mod_survey/src/mod_survey.erl:292
+#: zotonic_mod_survey/src/mod_survey.erl:298
 msgid "Multiple choice"
 msgstr "Широкий вибір"
 
@@ -12091,7 +12091,7 @@ msgstr "Кілька блоків розриву сторінок об’єдн�
 msgid "Multiple times per user/browser (each time with new results)"
 msgstr "Кілька разів на користувача/браузер (кожен раз з новими результатами)"
 
-#: zotonic_mod_survey/src/mod_survey.erl:283
+#: zotonic_mod_survey/src/mod_survey.erl:289
 msgid "Narrative"
 msgstr "Розповідь"
 
@@ -12137,7 +12137,7 @@ msgstr "Приймайте лише зображення."
 msgid "Options from a page category"
 msgstr "Параметри з категорії сторінки"
 
-#: zotonic_mod_survey/src/mod_survey.erl:288
+#: zotonic_mod_survey/src/mod_survey.erl:294
 msgid "Page break"
 msgstr "Розрив сторінки"
 
@@ -12145,7 +12145,7 @@ msgstr "Розрив сторінки"
 msgid "Page jump condition"
 msgstr "Умова переходу сторінки"
 
-#: zotonic_mod_survey/src/mod_survey.erl:289
+#: zotonic_mod_survey/src/mod_survey.erl:295
 msgid "Page options"
 msgstr ""
 
@@ -12240,7 +12240,7 @@ msgstr "Питання з короткою відповіддю"
 #: zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8
-#: zotonic_mod_survey/src/mod_survey.erl:276
+#: zotonic_mod_survey/src/mod_survey.erl:282
 msgid "Questions"
 msgstr "Запитання"
 
@@ -12262,6 +12262,9 @@ msgid "Red"
 msgstr "червоний"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:41
+msgid "Remove \"Back\" button. Feedback if wrong or correct will be shown after submit."
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:21
 msgid "Remove \"Back\" button. If there is instant question feedback then it will be shown after submit."
 msgstr ""
@@ -12286,7 +12289,7 @@ msgstr "Видаліть кнопку «Далі». Відповіді не бу
 msgid "Required, this question must be answered."
 msgstr "Обов’язково, на це запитання потрібно відповісти."
 
-#: zotonic_mod_survey/src/mod_survey.erl:264
+#: zotonic_mod_survey/src/mod_survey.erl:270
 msgid "Result deleted."
 msgstr "Результат видалено."
 
@@ -12348,7 +12351,7 @@ msgstr "Надіслати респонденту підтвердження. А
 msgid "Separate multiple email addresses with a comma."
 msgstr "Розділіть кілька адрес електронної пошти комою."
 
-#: zotonic_mod_survey/src/mod_survey.erl:284
+#: zotonic_mod_survey/src/mod_survey.erl:290
 msgid "Short answer"
 msgstr "Коротка відповідь"
 
@@ -12389,11 +12392,11 @@ msgstr "Щось пішло не так"
 msgid "Sorry, could not insert the new person."
 msgstr "На жаль, не вдалося вставити нову особу."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1079
+#: zotonic_mod_survey/src/mod_survey.erl:1101
 msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
 msgstr "Вибачте, максимальна кількість заявок досягнута. Ви більше не можете надіслати цю форму."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1092
+#: zotonic_mod_survey/src/mod_survey.erl:1114
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
 msgstr "Вибачте, ви вже надіслали свої відповіді. Перезавантажте сторінку, якщо ви хочете заповнити форму знову."
 
@@ -12555,7 +12558,7 @@ msgstr "Цей текст показаний як вступ до опитува
 msgid "This text is shown below the start button."
 msgstr "Цей текст показано під кнопкою «Пуск»."
 
-#: zotonic_mod_survey/src/mod_survey.erl:280
+#: zotonic_mod_survey/src/mod_survey.erl:286
 msgid "Thurstone"
 msgstr "Терстоун"
 
@@ -12585,7 +12588,7 @@ msgstr "Правда"
 msgid "True or false question"
 msgstr "Правдиве чи хибне запитання"
 
-#: zotonic_mod_survey/src/mod_survey.erl:277
+#: zotonic_mod_survey/src/mod_survey.erl:283
 msgid "True/False"
 msgstr "Правда/Неправда"
 
@@ -12601,7 +12604,7 @@ msgstr "Перевірка"
 msgid "View and edit results."
 msgstr "Перегляд і редагування результатів."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1100
+#: zotonic_mod_survey/src/mod_survey.erl:1122
 msgid "We are experiencing an overload, please try again in 10 minutes."
 msgstr "Ми відчуваємо перевантаження, спробуйте ще раз через 10 хвилин."
 
@@ -12627,7 +12630,7 @@ msgstr "Неправильно"
 msgid "Yes or no question"
 msgstr "Так чи ні питання"
 
-#: zotonic_mod_survey/src/mod_survey.erl:278
+#: zotonic_mod_survey/src/mod_survey.erl:284
 msgid "Yes/No"
 msgstr "Так/Ні"
 
@@ -12639,9 +12642,9 @@ msgstr "Ви вже заповнили це, але можете змінити 
 msgid "You already filled this in."
 msgstr "Ви вже заповнили це."
 
-#: zotonic_mod_survey/src/mod_survey.erl:253
-#: zotonic_mod_survey/src/mod_survey.erl:268
-#: zotonic_mod_survey/src/mod_survey.erl:1167
+#: zotonic_mod_survey/src/mod_survey.erl:259
+#: zotonic_mod_survey/src/mod_survey.erl:274
+#: zotonic_mod_survey/src/mod_survey.erl:1189
 msgid "You are not allowed to change these results."
 msgstr "Вам не дозволено змінювати ці результати."
 
@@ -12670,7 +12673,7 @@ msgstr ""
 msgid "Your result"
 msgstr "Ваш результат"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1108
+#: zotonic_mod_survey/src/mod_survey.erl:1130
 msgid "Your session was expired, please restart and try again."
 msgstr "Ваш сеанс минув, будь ласка, перезапустіть і повторіть спробу."
 
