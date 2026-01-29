@@ -1043,7 +1043,9 @@ session_id(Context) ->
 
 %% @doc Set the cotonic session id. Mostly used when on a request with
 %%      a cotonic session id in the cookie.
--spec set_session_id( binary(), z:context() ) -> z:context().
+-spec set_session_id( binary() | undefined, z:context() ) -> z:context().
+set_session_id(undefined, Context) ->
+    set(session_id, undefined, Context);
 set_session_id(Sid, Context) when size(Sid) =< 64 ->
     case is_valid_session_id(Sid) of
         true ->
