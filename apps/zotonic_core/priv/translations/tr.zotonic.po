@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-01-28 13:50\n"
+"PO-Revision-Date: 2026-01-29 15:53\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -350,7 +350,7 @@ msgstr "İptal Et"
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:28
-#: zotonic_mod_survey/src/mod_survey.erl:281
+#: zotonic_mod_survey/src/mod_survey.erl:287
 msgid "Category"
 msgstr "Kategori"
 
@@ -494,7 +494,7 @@ msgstr "İşbirliği grubuna taşınamadı."
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
-#: zotonic_mod_survey/src/mod_survey.erl:247
+#: zotonic_mod_survey/src/mod_survey.erl:253
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 msgid "Delete"
 msgstr "Sil"
@@ -2021,7 +2021,7 @@ msgid "Make a new page or media"
 msgstr "Yeni bir sayfa veya medya oluştur"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
-#: zotonic_mod_survey/src/mod_survey.erl:282
+#: zotonic_mod_survey/src/mod_survey.erl:288
 msgid "Matching"
 msgstr "Eşleşen"
 
@@ -4270,9 +4270,9 @@ msgstr "Kullanıcı adı / şifre oluştur"
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:73
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:128
-#: zotonic_mod_survey/src/mod_survey.erl:1077
 #: zotonic_mod_survey/src/mod_survey.erl:1099
-#: zotonic_mod_survey/src/mod_survey.erl:1107
+#: zotonic_mod_survey/src/mod_survey.erl:1121
+#: zotonic_mod_survey/src/mod_survey.erl:1129
 msgid "Sorry"
 msgstr "Üzgünüz"
 
@@ -7469,7 +7469,7 @@ msgid "Started tracing template inclusions for your session."
 msgstr "Oturumunuz için şablon eklemelerini izlemeye başladım."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:51
-#: zotonic_mod_survey/src/mod_survey.erl:290
+#: zotonic_mod_survey/src/mod_survey.erl:296
 msgid "Stop"
 msgstr "Bitir"
 
@@ -11616,7 +11616,7 @@ msgstr "Tüm katılımcıların toplu sonuçları"
 msgid "Agree"
 msgstr "Katıl"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1090
+#: zotonic_mod_survey/src/mod_survey.erl:1112
 msgid "Already submitted"
 msgstr "Zaten gönderildi"
 
@@ -11664,7 +11664,7 @@ msgstr "Bu <br/> sayfayı silmek istediğinize emin misiniz? Bu <br/> ayrıca sa
 msgid "Are you sure you want to delete this question?"
 msgstr "Bu soruyu silmek istediğinize emin misiniz?"
 
-#: zotonic_mod_survey/src/mod_survey.erl:246
+#: zotonic_mod_survey/src/mod_survey.erl:252
 msgid "Are you sure you want to delete this result?"
 msgstr "Bu sonucu silmek istediğinize emin misiniz?"
 
@@ -11679,7 +11679,7 @@ msgid "Because you can edit, you can proceed for testing."
 msgstr "Düzenleyebildiğiniz için test için ilerleyebilirsiniz."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:112
-#: zotonic_mod_survey/src/mod_survey.erl:287
+#: zotonic_mod_survey/src/mod_survey.erl:293
 msgid "Button"
 msgstr "Buton"
 
@@ -11744,7 +11744,7 @@ msgstr "Alıcılar eklenemedi."
 msgid "Could not create the mailinglist."
 msgstr "Posta listesi oluşturulamadı."
 
-#: zotonic_mod_survey/src/mod_survey.erl:286
+#: zotonic_mod_survey/src/mod_survey.erl:292
 msgid "Country select"
 msgstr "Ülke seçin"
 
@@ -11872,7 +11872,7 @@ msgstr "Geri bildirim doğruysa"
 msgid "Feedback if wrong"
 msgstr "Geri bildirim yanlış ise"
 
-#: zotonic_mod_survey/src/mod_survey.erl:291
+#: zotonic_mod_survey/src/mod_survey.erl:297
 msgid "File upload"
 msgstr "Dosya yükleme"
 
@@ -11998,7 +11998,7 @@ msgstr "Sonraki sayfadaki soruya atlayın."
 msgid "Jump to this question label (must be on an other page below)"
 msgstr "Bu soru etiketine atla (aşağıda başka bir sayfada olmalıdır)"
 
-#: zotonic_mod_survey/src/mod_survey.erl:279
+#: zotonic_mod_survey/src/mod_survey.erl:285
 msgid "Likert"
 msgstr "Likert"
 
@@ -12009,7 +12009,7 @@ msgstr "Likert"
 msgid "Link with person"
 msgstr "kişi ile bağlantı"
 
-#: zotonic_mod_survey/src/mod_survey.erl:285
+#: zotonic_mod_survey/src/mod_survey.erl:291
 msgid "Long answer"
 msgstr "Uzun cevap"
 
@@ -12074,7 +12074,7 @@ msgstr "Birden fazla cevap mümkündür"
 msgid "Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer."
 msgstr "Birden fazla cevap mümkündür: doğru cevap <i>için puan verilir ve yanlış cevap seçimi</i> değil <i>için</i> puan verilir. Varsayılan: Doğru cevap için 1 puan, yanlış cevap seçmemek için 1 puan."
 
-#: zotonic_mod_survey/src/mod_survey.erl:292
+#: zotonic_mod_survey/src/mod_survey.erl:298
 msgid "Multiple choice"
 msgstr "Çoktan seçmeli"
 
@@ -12091,7 +12091,7 @@ msgstr "Çoklu sayfa sonu bloklar birleştirilir."
 msgid "Multiple times per user/browser (each time with new results)"
 msgstr "Kullanıcı/tarayıcı başına birden çok kez (her seferinde yeni sonuçlarla)"
 
-#: zotonic_mod_survey/src/mod_survey.erl:283
+#: zotonic_mod_survey/src/mod_survey.erl:289
 msgid "Narrative"
 msgstr "Öykü"
 
@@ -12137,7 +12137,7 @@ msgstr "Yalnızca resimleri kabul et."
 msgid "Options from a page category"
 msgstr "Sayfa kategorisinden seçenekler"
 
-#: zotonic_mod_survey/src/mod_survey.erl:288
+#: zotonic_mod_survey/src/mod_survey.erl:294
 msgid "Page break"
 msgstr "Sayfa sonu"
 
@@ -12145,7 +12145,7 @@ msgstr "Sayfa sonu"
 msgid "Page jump condition"
 msgstr "Sayfa atlama koşulu"
 
-#: zotonic_mod_survey/src/mod_survey.erl:289
+#: zotonic_mod_survey/src/mod_survey.erl:295
 msgid "Page options"
 msgstr ""
 
@@ -12240,7 +12240,7 @@ msgstr "Kısa cevaplı soru"
 #: zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8
-#: zotonic_mod_survey/src/mod_survey.erl:276
+#: zotonic_mod_survey/src/mod_survey.erl:282
 msgid "Questions"
 msgstr "Sorular"
 
@@ -12262,6 +12262,9 @@ msgid "Red"
 msgstr "Kırmızı"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:41
+msgid "Remove \"Back\" button. Feedback if wrong or correct will be shown after submit."
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:21
 msgid "Remove \"Back\" button. If there is instant question feedback then it will be shown after submit."
 msgstr ""
@@ -12286,7 +12289,7 @@ msgstr "\"İleri\" düğmesini kaldırın. Bir sonraki sayfaya geçiş düğmesi
 msgid "Required, this question must be answered."
 msgstr "Gerekli, bu soruya cevap verilmeli."
 
-#: zotonic_mod_survey/src/mod_survey.erl:264
+#: zotonic_mod_survey/src/mod_survey.erl:270
 msgid "Result deleted."
 msgstr "Sonuç silindi."
 
@@ -12348,7 +12351,7 @@ msgstr "Yanıtlayana bir onay gönderin. E-posta adresi bilinmelidir (giriş yap
 msgid "Separate multiple email addresses with a comma."
 msgstr "Birden fazla e-posta adresini virgülle ayırın."
 
-#: zotonic_mod_survey/src/mod_survey.erl:284
+#: zotonic_mod_survey/src/mod_survey.erl:290
 msgid "Short answer"
 msgstr "Kısa cevap"
 
@@ -12389,11 +12392,11 @@ msgstr "Bir şey yanlış gitti"
 msgid "Sorry, could not insert the new person."
 msgstr "Maalesef yeni kişi eklenemedi."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1079
+#: zotonic_mod_survey/src/mod_survey.erl:1101
 msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
 msgstr "Üzgünüz, maksimum gönderim sayısına ulaşıldı. Artık bu formu gönderemezsiniz."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1092
+#: zotonic_mod_survey/src/mod_survey.erl:1114
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
 msgstr "Üzgünüz, cevaplarınızı zaten gönderdiniz. Formu tekrar doldurmak istiyorsanız sayfayı yeniden yükleyin."
 
@@ -12555,7 +12558,7 @@ msgstr "Bu metin ankete giriş olarak gösterilmiştir."
 msgid "This text is shown below the start button."
 msgstr "Bu metin, başlat düğmesinin altında gösterilir."
 
-#: zotonic_mod_survey/src/mod_survey.erl:280
+#: zotonic_mod_survey/src/mod_survey.erl:286
 msgid "Thurstone"
 msgstr "Thurstone"
 
@@ -12585,7 +12588,7 @@ msgstr "Gerçek"
 msgid "True or false question"
 msgstr "Doğru veya yanlış soru"
 
-#: zotonic_mod_survey/src/mod_survey.erl:277
+#: zotonic_mod_survey/src/mod_survey.erl:283
 msgid "True/False"
 msgstr "Doğru/Yanlış"
 
@@ -12601,7 +12604,7 @@ msgstr "Doğrulama"
 msgid "View and edit results."
 msgstr "Sonuçları görüntüleyin ve düzenleyin."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1100
+#: zotonic_mod_survey/src/mod_survey.erl:1122
 msgid "We are experiencing an overload, please try again in 10 minutes."
 msgstr "Aşırı yüklenme yaşıyoruz, lütfen 10 dakika sonra tekrar deneyin."
 
@@ -12627,7 +12630,7 @@ msgstr "Yanlış"
 msgid "Yes or no question"
 msgstr "evet mi hayır mı soru"
 
-#: zotonic_mod_survey/src/mod_survey.erl:278
+#: zotonic_mod_survey/src/mod_survey.erl:284
 msgid "Yes/No"
 msgstr "Evet/Hayır"
 
@@ -12639,9 +12642,9 @@ msgstr "Burayı önceden doldurdun, fakat önceki cevaplarınızı değiştirebi
 msgid "You already filled this in."
 msgstr "Burayı önceden doldurdun."
 
-#: zotonic_mod_survey/src/mod_survey.erl:253
-#: zotonic_mod_survey/src/mod_survey.erl:268
-#: zotonic_mod_survey/src/mod_survey.erl:1167
+#: zotonic_mod_survey/src/mod_survey.erl:259
+#: zotonic_mod_survey/src/mod_survey.erl:274
+#: zotonic_mod_survey/src/mod_survey.erl:1189
 msgid "You are not allowed to change these results."
 msgstr "Bu sonuçları değiştirmeye izin verilmiyor."
 
@@ -12670,7 +12673,7 @@ msgstr ""
 msgid "Your result"
 msgstr "Senin sonucun"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1108
+#: zotonic_mod_survey/src/mod_survey.erl:1130
 msgid "Your session was expired, please restart and try again."
 msgstr "Oturumunuz sona erdi, lütfen yeniden başlatıp tekrar deneyin."
 
