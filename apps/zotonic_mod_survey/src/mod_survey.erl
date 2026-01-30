@@ -178,7 +178,7 @@ Add more documentation
 
 %% Testing
 -export([
-    fetch_page/2,
+    drop_till_page/2,
     page_has_feedback/2
 ]).
 
@@ -519,18 +519,6 @@ maybe_save_intermediate_results(undefined, SurveyId, PageNr, SubmitArgs, Context
 maybe_save_intermediate_results(_Editing, _SurveyId, _PageNr, _SubmitArgs, _Context) ->
     ok.
 
-%% @doc Delete any intermediate results for the user / device.
--spec maybe_delete_saved(SurveyId, Context) -> ok | {error, Reason} when
-    SurveyId :: m_rsc:resource_id(),
-    Context :: z:context(),
-    Reason :: term().
-maybe_delete_saved(SurveyId, Context) ->
-    case z_convert:to_binary(m_rsc:p(SurveyId, <<"survey_multiple">>, Context)) of
-        <<"3">> -> m_survey_saved:delete_saved(SurveyId, Context);
-        _ -> ok
-    end.
-
-
 normalize_answers(undefined) -> [];
 normalize_answers(L) -> lists:map(fun normalize_answer/1, L).
 
@@ -721,7 +709,7 @@ push_history(PageNr, H) -> [ PageNr | H ].
 page_has_feedback(0, _Qs) ->
     false;
 page_has_feedback(Nr, Qs) ->
-    case fetch_page(Nr, Qs) of
+    case drop_till_page(Nr, Qs) of
         {[], _Nr} -> false;
         {L, _Nr1} -> has_feedback(L)
     end.
@@ -908,7 +896,7 @@ go_button_target(Submitter, Questions, Answers, Context) ->
     end.
 
 go_page(Nr, Qs, _Answers, exact, _Context) ->
-    case fetch_page(Nr, Qs) of
+    case drop_till_page(Nr, Qs) of
         {[], _Nr} -> submit;
         {L,Nr1} ->
             L1 = lists:dropwhile(fun is_page_end/1, L),
@@ -916,7 +904,7 @@ go_page(Nr, Qs, _Answers, exact, _Context) ->
             {L2,Nr1}
     end;
 go_page(Nr, Qs, Answers, forward, Context) ->
-    case eval_page_jumps(fetch_page(Nr, Qs), Answers, Context) of
+    case eval_page_jumps(drop_till_page(Nr, Qs), Answers, Context) of
         stop -> stop;
         submit -> submit;
         {error, _} = Error -> Error;
@@ -1005,33 +993,33 @@ fetch_question_name([Q|Qs] = QQs, Name, Nr, State) ->
 %% @doc Fetch the Nth page. Multiple page breaks in a row count as a single page break.
 %%      Returns the position at the page breaks before the page, so that eventual jump
 %%      expressions can be evaluated.
-fetch_page(Nr, []) ->
+drop_till_page(Nr, []) ->
     {[], Nr};
-fetch_page(Nr, L) ->
+drop_till_page(Nr, L) ->
     L1 = lists:filter(
         fun
             (#{ <<"name">> := <<"survey_feedback">> }) -> false;
             (_) -> true
          end, L),
-    fetch_page(1, Nr, L1).
+    drop_till_page(1, Nr, L1).
 
-fetch_page(_, Nr, []) ->
+drop_till_page(_, Nr, []) ->
     {[], Nr};
-fetch_page(N, Nr, L) when N >= Nr ->
+drop_till_page(N, Nr, L) when N >= Nr ->
     {L, N};
-fetch_page(N, Nr, L) when N =:= Nr - 1 ->
+drop_till_page(N, Nr, L) when N =:= Nr - 1 ->
     L1 = lists:dropwhile(fun(B) -> not is_page_end(B) end, L),
     {L1, Nr};
-fetch_page(N, Nr, [B|Bs]) when N < Nr ->
+drop_till_page(N, Nr, [B|Bs]) when N < Nr ->
     case is_page_end(B) of
         true ->
             L1 = lists:dropwhile(fun is_page_end/1, Bs),
-            fetch_page(N+1, Nr, L1);
+            drop_till_page(N+1, Nr, L1);
         false ->
-            fetch_page(N, Nr, Bs)
+            drop_till_page(N, Nr, Bs)
     end;
-fetch_page(N, Nr, [_|Bs]) ->
-    fetch_page(N, Nr, Bs).
+drop_till_page(N, Nr, [_|Bs]) ->
+    drop_till_page(N, Nr, Bs).
 
 
 takepage(L) ->
@@ -1151,7 +1139,7 @@ do_submit_1(SurveyId, Questions, Answers, undefined, SubmitArgs, Context) ->
                 {error, _} = Error -> Error
             end;
         ok ->
-            maybe_delete_saved(SurveyId, Context),
+            m_survey_saved:delete_saved(SurveyId, Context),
             maybe_mail(SurveyId, Answers, undefined, false, Context),
             ok;
         {save, #context{} = SaveContext} ->
@@ -1166,7 +1154,7 @@ do_submit_1(SurveyId, Questions, Answers, undefined, SubmitArgs, Context) ->
                 {error, _} = Error -> Error
             end;
         {ok, _ContextOrRender} = Handled ->
-            maybe_delete_saved(SurveyId, Context),
+            m_survey_saved:delete_saved(SurveyId, Context),
             Handled;
         {error, _Reason} = Error ->
             Error
@@ -1214,7 +1202,7 @@ save_submit(SurveyId, FoundAnswers, Answers, Context) ->
     StorageAnswers = survey_answers_to_storage(FoundAnswers),
     case m_survey:insert_survey_submission(SurveyId, StorageAnswers, Context) of
         {ok, ResultId} ->
-            maybe_delete_saved(SurveyId, Context),
+            m_survey_saved:delete_saved(SurveyId, Context),
             maybe_mail(SurveyId, Answers, ResultId, false, Context),
             {ok, ResultId};
         {error, _} = Error ->
