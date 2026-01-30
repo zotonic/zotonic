@@ -95,14 +95,37 @@
 
 				{% if not editing or pages > 1 %}
 					{% if not id.survey_is_autostart or page_nr > 1 %}
-						<a id="{{ #cancel }}" href="#" class="btn btn-lg btn-default">{_ Stop without saving _}</a>
-						{% if viewer == 'overlay' %}
-							{% wire id=#cancel action={confirm text=_"Are you sure you want to stop without saving?" ok=_"Stop without saving" cancel=_"Continue" action={overlay_close}} %}
-						{% elseif viewer == 'dialog' %}
-							{% wire id=#cancel action={confirm text=_"Are you sure you want to stop without saving?" ok=_"Stop without saving" cancel=_"Continue" action={dialog_close}} %}
-						{% else %}
-							{% wire id=#cancel action={confirm text=_"Are you sure you want to stop without saving?" ok=_"Stop without saving" cancel=_"Continue" action={redirect id=id}} %}
-						{% endif %}
+						{% with (viewer == 'overlay')|if
+									:{overlay_close}
+									:(
+										(viewer == 'dialog')|if
+											:{dialog_close}
+											:{redirect id=id}
+									)
+							as action
+						%}
+							{% if id.survey_multiple == 3 %}
+								<a id="{{ #cancel }}" href="#" class="btn btn-lg btn-default">{_ Stop _}</a>
+								{% wire id=#cancel
+										action={confirm
+											text=_"Are you sure you want to stop? You can continue later."
+											ok=_"Stop and continue later"
+											cancel=_"Continue"
+											action=action
+										}
+								%}
+							{% else %}
+								<a id="{{ #cancel }}" href="#" class="btn btn-lg btn-default">{_ Stop without saving _}</a>
+								{% wire id=#cancel
+										action={confirm
+											text=_"Are you sure you want to stop without saving?"
+											ok=_"Stop without saving"
+											cancel=_"Continue"
+											action=action
+										}
+								%}
+							{% endif %}
+						{% endwith %}
 					{% endif %}
 				{% else %}
 					<a id="{{ #cancel }}" href="#" class="btn btn-lg btn-default">{_ Cancel _}</a>
