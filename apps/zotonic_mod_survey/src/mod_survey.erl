@@ -429,9 +429,13 @@ survey_start(Args, Context) ->
             Editing = {editing, AnswerId, undefined},
             Args1 = [
                 {answer_user_id, ResultUserId},
-                {survey_session_nonce, z_nonce:nonce(?SURVEY_FILL_NONCE_TIMEOUT)}
+                {survey_session_nonce, z_nonce:nonce(?SURVEY_FILL_NONCE_TIMEOUT)},
+                {viewer, proplists:get_value(viewer, Args)},
+                {element_id, proplists:get_value(element_id, Args)}
                 | proplists:delete(answer_user_id,
-                    proplists:delete(survey_session_nonce, Args))
+                    proplists:delete(survey_session_nonce,
+                        proplists:delete(viewer,
+                            proplists:delete(element_id, Args))))
             ],
             render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context);
         false ->
@@ -450,8 +454,12 @@ survey_start(Args, Context) ->
                     {answers, Answers} = proplists:lookup(answers, PrevArgs),
                     History = proplists:get_value(history, PrevArgs, []),
                     PrevArgs1 = [
-                        {survey_session_nonce, z_nonce:nonce(?SURVEY_FILL_NONCE_TIMEOUT)}
-                        | proplists:delete(survey_session_nonce, PrevArgs)
+                        {survey_session_nonce, z_nonce:nonce(?SURVEY_FILL_NONCE_TIMEOUT)},
+                        {viewer, proplists:get_value(viewer, Args)},
+                        {element_id, proplists:get_value(element_id, Args)}
+                        | proplists:delete(survey_session_nonce,
+                            proplists:delete(viewer,
+                                proplists:delete(element_id, PrevArgs)))
                     ],
                     render_next_page(SurveyId, PageNr, exact, Answers, History, undefined, PrevArgs1, Context);
                 {error, _} ->
@@ -589,7 +597,6 @@ render_next_page(SurveyId, PageNr, Direction, Answers, History, Editing, Args, C
 
             IsFeedbackNeeded = Direction =:= forward
                         andalso proplists:get_value(is_feedback_view, Args) =/= true
-                        andalso <<"3">> =:= z_convert:to_binary(m_rsc:p(SurveyId, <<"survey_multiple">>, Context))
                         andalso page_has_feedback(PageNr - 1, Questions),
 
             {Next, IsFeedbackView} = if
@@ -1009,7 +1016,8 @@ drop_till_page(N, Nr, L) when N >= Nr ->
     {L, N};
 drop_till_page(N, Nr, L) when N =:= Nr - 1 ->
     L1 = lists:dropwhile(fun(B) -> not is_page_end(B) end, L),
-    {L1, Nr};
+    L2 = lists:dropwhile(fun(B) -> is_page_end(B) end, L1),
+    {L2, Nr};
 drop_till_page(N, Nr, [B|Bs]) when N < Nr ->
     case is_page_end(B) of
         true ->
