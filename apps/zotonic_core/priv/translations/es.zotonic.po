@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-01-29 15:52\n"
+"PO-Revision-Date: 2026-01-30 11:09\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -325,7 +325,7 @@ msgstr "¿Está seguro de que quiere devolver todas las reglas ACL a sus version
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:113
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person_new.tpl:85
 #: zotonic_mod_survey/priv/templates/_dialog_survey_mailinglist.tpl:49
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:108
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:131
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:16
 #: zotonic_mod_translation/priv/templates/_dialog_language_delete.tpl:6
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:115
@@ -4270,9 +4270,9 @@ msgstr "Asignar usuario / clave"
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:73
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:128
-#: zotonic_mod_survey/src/mod_survey.erl:1099
-#: zotonic_mod_survey/src/mod_survey.erl:1121
-#: zotonic_mod_survey/src/mod_survey.erl:1129
+#: zotonic_mod_survey/src/mod_survey.erl:1087
+#: zotonic_mod_survey/src/mod_survey.erl:1109
+#: zotonic_mod_survey/src/mod_survey.erl:1117
 msgid "Sorry"
 msgstr "Lo sentimos"
 
@@ -5379,9 +5379,8 @@ msgstr "Falla de confirmación"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:67
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:88
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:100
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:102
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:104
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:113
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:123
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:13
 msgid "Continue"
 msgstr "Continuar"
@@ -5607,8 +5606,8 @@ msgid "Multiple accounts"
 msgstr "Multiples cuentas"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:209
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:113
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:118
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:136
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:141
 msgid "Next"
 msgstr "Siguiente"
 
@@ -7469,6 +7468,7 @@ msgid "Started tracing template inclusions for your session."
 msgstr "Comenzó a rastrear las inclusiones de plantillas para su sesión."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:51
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:108
 #: zotonic_mod_survey/src/mod_survey.erl:296
 msgid "Stop"
 msgstr "Alto"
@@ -11616,7 +11616,7 @@ msgstr "Resultados agregados de todos los encuestados"
 msgid "Agree"
 msgstr "Estoy de acuerdo"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1112
+#: zotonic_mod_survey/src/mod_survey.erl:1100
 msgid "Already submitted"
 msgstr "Ya enviado"
 
@@ -11668,11 +11668,13 @@ msgstr "¿Estas seguro de querer eliminar esta pregunta?"
 msgid "Are you sure you want to delete this result?"
 msgstr "¿Estas seguro de querer eliminar este resultado?"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:100
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:102
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:104
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:121
 msgid "Are you sure you want to stop without saving?"
 msgstr "¿Estás seguro de que quieres parar sin guardar?"
+
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:111
+msgid "Are you sure you want to stop? You can continue later."
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/survey.tpl:25
 msgid "Because you can edit, you can proceed for testing."
@@ -12392,11 +12394,11 @@ msgstr "Algo salió mal"
 msgid "Sorry, could not insert the new person."
 msgstr "Lo sentimos, no se pudo insertar la nueva persona."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1101
+#: zotonic_mod_survey/src/mod_survey.erl:1089
 msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
 msgstr "Lo sentimos, se ha alcanzado el número máximo de envíos. Ya no puede enviar este formulario."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1114
+#: zotonic_mod_survey/src/mod_survey.erl:1102
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
 msgstr "Lo sentimos, ya has enviado tus respuestas. Vuelve a cargar la página si deseas completar el formulario nuevamente."
 
@@ -12404,10 +12406,12 @@ msgstr "Lo sentimos, ya has enviado tus respuestas. Vuelve a cargar la página s
 msgid "Start"
 msgstr "Inicio"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:98
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:100
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:102
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:104
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:112
+msgid "Stop and continue later"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:118
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:122
 msgid "Stop without saving"
 msgstr "Deténgase sin guardar"
 
@@ -12435,8 +12439,8 @@ msgstr "Totalmente de acuerdo"
 msgid "Strongly Disagree"
 msgstr "Muy en desacuerdo"
 
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:113
-#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:116
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:136
+#: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:139
 #: zotonic_mod_wires/src/scomps/scomp_wires_button.erl:81
 msgid "Submit"
 msgstr "Enviar"
@@ -12605,7 +12609,7 @@ msgstr "Validación"
 msgid "View and edit results."
 msgstr "Ver y editar resultados."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1122
+#: zotonic_mod_survey/src/mod_survey.erl:1110
 msgid "We are experiencing an overload, please try again in 10 minutes."
 msgstr "Estamos experimentando una sobrecarga, por favor intente nuevamente en 10 minutos."
 
@@ -12645,7 +12649,7 @@ msgstr "Ya has rellenado esto."
 
 #: zotonic_mod_survey/src/mod_survey.erl:259
 #: zotonic_mod_survey/src/mod_survey.erl:274
-#: zotonic_mod_survey/src/mod_survey.erl:1189
+#: zotonic_mod_survey/src/mod_survey.erl:1177
 msgid "You are not allowed to change these results."
 msgstr "No tiene permitido cambiar estos resultados."
 
@@ -12674,7 +12678,7 @@ msgstr ""
 msgid "Your result"
 msgstr "Su resultado"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1130
+#: zotonic_mod_survey/src/mod_survey.erl:1118
 msgid "Your session was expired, please restart and try again."
 msgstr "Su sesión ha expirado, por favor reinicie e intente nuevamente."
 
