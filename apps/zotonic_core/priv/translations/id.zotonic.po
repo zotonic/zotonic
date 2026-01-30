@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-01-28 13:51\n"
+"PO-Revision-Date: 2026-01-29 15:53\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -350,7 +350,7 @@ msgstr "Batal"
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:28
-#: zotonic_mod_survey/src/mod_survey.erl:281
+#: zotonic_mod_survey/src/mod_survey.erl:287
 msgid "Category"
 msgstr "Ketegori"
 
@@ -494,7 +494,7 @@ msgstr "Tidak bisa bergerak untuk kolaborasi kelompok."
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
-#: zotonic_mod_survey/src/mod_survey.erl:247
+#: zotonic_mod_survey/src/mod_survey.erl:253
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 msgid "Delete"
 msgstr "Hapus"
@@ -2021,7 +2021,7 @@ msgid "Make a new page or media"
 msgstr "Membuat sebuah halaman baru atau media"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
-#: zotonic_mod_survey/src/mod_survey.erl:282
+#: zotonic_mod_survey/src/mod_survey.erl:288
 msgid "Matching"
 msgstr "Pencocokan"
 
@@ -4270,9 +4270,9 @@ msgstr "Setelan nama pengguna/kata sandi"
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:73
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:128
-#: zotonic_mod_survey/src/mod_survey.erl:1077
 #: zotonic_mod_survey/src/mod_survey.erl:1099
-#: zotonic_mod_survey/src/mod_survey.erl:1107
+#: zotonic_mod_survey/src/mod_survey.erl:1121
+#: zotonic_mod_survey/src/mod_survey.erl:1129
 msgid "Sorry"
 msgstr "Maaf"
 
@@ -7468,7 +7468,7 @@ msgid "Started tracing template inclusions for your session."
 msgstr "Mulai menelusuri penyertaan templat untuk sesi Anda."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:51
-#: zotonic_mod_survey/src/mod_survey.erl:290
+#: zotonic_mod_survey/src/mod_survey.erl:296
 msgid "Stop"
 msgstr "Berhenti"
 
@@ -11616,7 +11616,7 @@ msgstr "Hasil gabungan dari semua responden"
 msgid "Agree"
 msgstr "Setuju"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1090
+#: zotonic_mod_survey/src/mod_survey.erl:1112
 msgid "Already submitted"
 msgstr "Sudah dikirimkan"
 
@@ -11664,7 +11664,7 @@ msgstr "Apakah anda yakin anda ingin untuk menghapus halaman ini?<br/>Ini juga m
 msgid "Are you sure you want to delete this question?"
 msgstr "Apakah anda yakin anda ingin menghapus pertanyaan ini?"
 
-#: zotonic_mod_survey/src/mod_survey.erl:246
+#: zotonic_mod_survey/src/mod_survey.erl:252
 msgid "Are you sure you want to delete this result?"
 msgstr "Apakah anda yakin anda ingin menghapus hasil ini?"
 
@@ -11679,7 +11679,7 @@ msgid "Because you can edit, you can proceed for testing."
 msgstr "Karena Anda dapat mengedit, Anda dapat melanjutkan untuk pengujian."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:112
-#: zotonic_mod_survey/src/mod_survey.erl:287
+#: zotonic_mod_survey/src/mod_survey.erl:293
 msgid "Button"
 msgstr "Tombol"
 
@@ -11744,7 +11744,7 @@ msgstr "Tidak dapat menambahkan penerima."
 msgid "Could not create the mailinglist."
 msgstr "Tidak dapat membuat milis."
 
-#: zotonic_mod_survey/src/mod_survey.erl:286
+#: zotonic_mod_survey/src/mod_survey.erl:292
 msgid "Country select"
 msgstr "Pilih negara"
 
@@ -11872,7 +11872,7 @@ msgstr "Umpan balik jika benar"
 msgid "Feedback if wrong"
 msgstr "Umpan balik jika salah"
 
-#: zotonic_mod_survey/src/mod_survey.erl:291
+#: zotonic_mod_survey/src/mod_survey.erl:297
 msgid "File upload"
 msgstr "Unggah Berkas"
 
@@ -11998,7 +11998,7 @@ msgstr "Melompat ke sebuah pertanyaan pada halaman selanjutnya."
 msgid "Jump to this question label (must be on an other page below)"
 msgstr "Lompat ke label pertanyaan ini (harus ada di halaman lain di bawah)"
 
-#: zotonic_mod_survey/src/mod_survey.erl:279
+#: zotonic_mod_survey/src/mod_survey.erl:285
 msgid "Likert"
 msgstr "Likert"
 
@@ -12009,7 +12009,7 @@ msgstr "Likert"
 msgid "Link with person"
 msgstr "Tautan dengan orang"
 
-#: zotonic_mod_survey/src/mod_survey.erl:285
+#: zotonic_mod_survey/src/mod_survey.erl:291
 msgid "Long answer"
 msgstr "Jawaban panjang"
 
@@ -12074,7 +12074,7 @@ msgstr "Beberapa jawaban mungkin"
 msgid "Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer."
 msgstr "Kemungkinan jawaban ganda: poin diberikan untuk jawaban yang benar <i>dan</i> poin diberikan untuk <i>bukan</i> yang memilih jawaban yang salah. Default: 1 poin untuk jawaban yang benar, 1 poin untuk tidak memilih jawaban yang salah."
 
-#: zotonic_mod_survey/src/mod_survey.erl:292
+#: zotonic_mod_survey/src/mod_survey.erl:298
 msgid "Multiple choice"
 msgstr "Pilihan ganda"
 
@@ -12091,7 +12091,7 @@ msgstr "Beberapa blok istirahat halaman digabung menjadi satu."
 msgid "Multiple times per user/browser (each time with new results)"
 msgstr "Beberapa kali per pengguna/browser (setiap kali dengan hasil baru)"
 
-#: zotonic_mod_survey/src/mod_survey.erl:283
+#: zotonic_mod_survey/src/mod_survey.erl:289
 msgid "Narrative"
 msgstr "Narasi"
 
@@ -12137,7 +12137,7 @@ msgstr "Hanya menerima gambar."
 msgid "Options from a page category"
 msgstr "Pilihan dari sebuah halaman kategori"
 
-#: zotonic_mod_survey/src/mod_survey.erl:288
+#: zotonic_mod_survey/src/mod_survey.erl:294
 msgid "Page break"
 msgstr "Jeda halaman"
 
@@ -12145,7 +12145,7 @@ msgstr "Jeda halaman"
 msgid "Page jump condition"
 msgstr "Halaman melompat kondisi"
 
-#: zotonic_mod_survey/src/mod_survey.erl:289
+#: zotonic_mod_survey/src/mod_survey.erl:295
 msgid "Page options"
 msgstr ""
 
@@ -12240,7 +12240,7 @@ msgstr "Pertanyaan dengan jawaban singkat"
 #: zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8
-#: zotonic_mod_survey/src/mod_survey.erl:276
+#: zotonic_mod_survey/src/mod_survey.erl:282
 msgid "Questions"
 msgstr "Pertanyaan"
 
@@ -12262,6 +12262,9 @@ msgid "Red"
 msgstr "Merah"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:41
+msgid "Remove \"Back\" button. Feedback if wrong or correct will be shown after submit."
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:21
 msgid "Remove \"Back\" button. If there is instant question feedback then it will be shown after submit."
 msgstr ""
@@ -12286,7 +12289,7 @@ msgstr "Hapus tombol \"Berikutnya\". Tidak ada jawaban yang akan dikirimkan kecu
 msgid "Required, this question must be answered."
 msgstr "Diperlukan, pertanyaan ini harus dijawab."
 
-#: zotonic_mod_survey/src/mod_survey.erl:264
+#: zotonic_mod_survey/src/mod_survey.erl:270
 msgid "Result deleted."
 msgstr "Hasil dihapus."
 
@@ -12348,7 +12351,7 @@ msgstr "Kirim konfirmasi ke responden. Alamat email harus diketahui (masuk respo
 msgid "Separate multiple email addresses with a comma."
 msgstr "Pisahkan alamat email dengan koma."
 
-#: zotonic_mod_survey/src/mod_survey.erl:284
+#: zotonic_mod_survey/src/mod_survey.erl:290
 msgid "Short answer"
 msgstr "Jawaban singkat"
 
@@ -12389,11 +12392,11 @@ msgstr "Ada yang salah"
 msgid "Sorry, could not insert the new person."
 msgstr "Maaf, tidak dapat memasukkan orang baru."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1079
+#: zotonic_mod_survey/src/mod_survey.erl:1101
 msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
 msgstr "Maaf, jumlah pengiriman maksimum telah tercapai. Anda tidak dapat lagi mengirimkan formulir ini."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1092
+#: zotonic_mod_survey/src/mod_survey.erl:1114
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
 msgstr "Maaf, Anda sudah mengirimkan jawaban Anda. Muat ulang halaman jika Anda ingin mengisi formulir lagi."
 
@@ -12555,7 +12558,7 @@ msgstr "Teks ini ditampilkan sebagai pengantar survei."
 msgid "This text is shown below the start button."
 msgstr "Teks ini ditampilkan di bawah tombol mulai."
 
-#: zotonic_mod_survey/src/mod_survey.erl:280
+#: zotonic_mod_survey/src/mod_survey.erl:286
 msgid "Thurstone"
 msgstr "Thurstone"
 
@@ -12585,7 +12588,7 @@ msgstr "Benar"
 msgid "True or false question"
 msgstr "Pertanyaan benar atau salah"
 
-#: zotonic_mod_survey/src/mod_survey.erl:277
+#: zotonic_mod_survey/src/mod_survey.erl:283
 msgid "True/False"
 msgstr "Benar/salah"
 
@@ -12601,7 +12604,7 @@ msgstr "Validasi"
 msgid "View and edit results."
 msgstr "Lihat dan edit hasil."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1100
+#: zotonic_mod_survey/src/mod_survey.erl:1122
 msgid "We are experiencing an overload, please try again in 10 minutes."
 msgstr "Kami sedang mengalami kelebihan beban, silakan coba lagi dalam 10 menit."
 
@@ -12627,7 +12630,7 @@ msgstr "Salah"
 msgid "Yes or no question"
 msgstr "Ya atau tidak pertanyaan"
 
-#: zotonic_mod_survey/src/mod_survey.erl:278
+#: zotonic_mod_survey/src/mod_survey.erl:284
 msgid "Yes/No"
 msgstr "Ya/Tidak"
 
@@ -12639,9 +12642,9 @@ msgstr "Anda sudah diisi ini, tetapi anda dapat mengubah jawaban sebelumnya."
 msgid "You already filled this in."
 msgstr "Anda sudah mengisi ini."
 
-#: zotonic_mod_survey/src/mod_survey.erl:253
-#: zotonic_mod_survey/src/mod_survey.erl:268
-#: zotonic_mod_survey/src/mod_survey.erl:1167
+#: zotonic_mod_survey/src/mod_survey.erl:259
+#: zotonic_mod_survey/src/mod_survey.erl:274
+#: zotonic_mod_survey/src/mod_survey.erl:1189
 msgid "You are not allowed to change these results."
 msgstr "Anda tidak diizinkan untuk mengubah hasil tersebut."
 
@@ -12670,7 +12673,7 @@ msgstr ""
 msgid "Your result"
 msgstr "Hasil Anda"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1108
+#: zotonic_mod_survey/src/mod_survey.erl:1130
 msgid "Your session was expired, please restart and try again."
 msgstr "Sesi Anda telah kedaluwarsa, silakan mulai ulang dan coba lagi."
 

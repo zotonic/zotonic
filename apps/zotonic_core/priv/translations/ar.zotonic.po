@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-01-28 13:50\n"
+"PO-Revision-Date: 2026-01-29 15:52\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -350,7 +350,7 @@ msgstr "ألغي"
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:28
-#: zotonic_mod_survey/src/mod_survey.erl:281
+#: zotonic_mod_survey/src/mod_survey.erl:287
 msgid "Category"
 msgstr "فئة"
 
@@ -494,7 +494,7 @@ msgstr "تعذر الانتقال إلى مجموعة التعاون."
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
-#: zotonic_mod_survey/src/mod_survey.erl:247
+#: zotonic_mod_survey/src/mod_survey.erl:253
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 msgid "Delete"
 msgstr "احذف"
@@ -2021,7 +2021,7 @@ msgid "Make a new page or media"
 msgstr "أنشئ صفحة جديدة أو عنصر وسائط جديد"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
-#: zotonic_mod_survey/src/mod_survey.erl:282
+#: zotonic_mod_survey/src/mod_survey.erl:288
 msgid "Matching"
 msgstr "مطابقة"
 
@@ -4270,9 +4270,9 @@ msgstr "قم بتعيين اسم المستخدم / كلمة المرور"
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:73
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:128
-#: zotonic_mod_survey/src/mod_survey.erl:1077
 #: zotonic_mod_survey/src/mod_survey.erl:1099
-#: zotonic_mod_survey/src/mod_survey.erl:1107
+#: zotonic_mod_survey/src/mod_survey.erl:1121
+#: zotonic_mod_survey/src/mod_survey.erl:1129
 msgid "Sorry"
 msgstr "آسف"
 
@@ -7469,7 +7469,7 @@ msgid "Started tracing template inclusions for your session."
 msgstr "تم بدء تتبع تضمينات القالب لجلستك."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:51
-#: zotonic_mod_survey/src/mod_survey.erl:290
+#: zotonic_mod_survey/src/mod_survey.erl:296
 msgid "Stop"
 msgstr "توقف"
 
@@ -11616,7 +11616,7 @@ msgstr "النتائج المجمعة من جميع المستجيبين"
 msgid "Agree"
 msgstr "يوافق على"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1090
+#: zotonic_mod_survey/src/mod_survey.erl:1112
 msgid "Already submitted"
 msgstr "تم تقديمه بالفعل"
 
@@ -11664,7 +11664,7 @@ msgstr "هل أنت متأكد أنك تريد حذف هذه الصفحة؟<br/>
 msgid "Are you sure you want to delete this question?"
 msgstr "هل أنت متأكد أنك تريد حذف هذا السؤال؟"
 
-#: zotonic_mod_survey/src/mod_survey.erl:246
+#: zotonic_mod_survey/src/mod_survey.erl:252
 msgid "Are you sure you want to delete this result?"
 msgstr "هل أنت متأكد أنك تريد حذف هذه النتيجة؟"
 
@@ -11679,7 +11679,7 @@ msgid "Because you can edit, you can proceed for testing."
 msgstr "نظرًا لأنه يمكنك التعديل ، يمكنك المتابعة للاختبار."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:112
-#: zotonic_mod_survey/src/mod_survey.erl:287
+#: zotonic_mod_survey/src/mod_survey.erl:293
 msgid "Button"
 msgstr "زر"
 
@@ -11744,7 +11744,7 @@ msgstr "تعذرت إضافة المستلمين."
 msgid "Could not create the mailinglist."
 msgstr "تعذر إنشاء القائمة البريدية."
 
-#: zotonic_mod_survey/src/mod_survey.erl:286
+#: zotonic_mod_survey/src/mod_survey.erl:292
 msgid "Country select"
 msgstr "اختر البلد"
 
@@ -11872,7 +11872,7 @@ msgstr "ردود الفعل إذا كانت صحيحة"
 msgid "Feedback if wrong"
 msgstr "ردود الفعل إذا كانت خاطئة"
 
-#: zotonic_mod_survey/src/mod_survey.erl:291
+#: zotonic_mod_survey/src/mod_survey.erl:297
 msgid "File upload"
 msgstr "تحميل الملف"
 
@@ -11998,7 +11998,7 @@ msgstr "القفز إلى سؤال في الصفحة التالية."
 msgid "Jump to this question label (must be on an other page below)"
 msgstr "انتقل إلى تسمية السؤال هذه (يجب أن تكون في صفحة أخرى أدناه)"
 
-#: zotonic_mod_survey/src/mod_survey.erl:279
+#: zotonic_mod_survey/src/mod_survey.erl:285
 msgid "Likert"
 msgstr "ليكرت"
 
@@ -12009,7 +12009,7 @@ msgstr "ليكرت"
 msgid "Link with person"
 msgstr "ربط مع شخص"
 
-#: zotonic_mod_survey/src/mod_survey.erl:285
+#: zotonic_mod_survey/src/mod_survey.erl:291
 msgid "Long answer"
 msgstr "اجابة طويلة"
 
@@ -12074,7 +12074,7 @@ msgstr "إجابات متعددة ممكنة"
 msgid "Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer."
 msgstr "إجابات متعددة ممكنة: يتم إعطاء نقاط للإجابة الصحيحة <i>وتعطى نقطة</i> مقابل <i>وليس</i> لاختيار الإجابة الخاطئة. الافتراضي: نقطة واحدة للإجابة الصحيحة ، ونقطة واحدة لعدم اختيار إجابة خاطئة."
 
-#: zotonic_mod_survey/src/mod_survey.erl:292
+#: zotonic_mod_survey/src/mod_survey.erl:298
 msgid "Multiple choice"
 msgstr "متعدد الخيارات"
 
@@ -12091,7 +12091,7 @@ msgstr "يتم دمج كتل فواصل الصفحات المتعددة في و�
 msgid "Multiple times per user/browser (each time with new results)"
 msgstr "عدة مرات لكل مستخدم / متصفح (في كل مرة تظهر فيها نتائج جديدة)"
 
-#: zotonic_mod_survey/src/mod_survey.erl:283
+#: zotonic_mod_survey/src/mod_survey.erl:289
 msgid "Narrative"
 msgstr "سرد"
 
@@ -12137,7 +12137,7 @@ msgstr "قبول الصور فقط."
 msgid "Options from a page category"
 msgstr "خيارات من فئة الصفحة"
 
-#: zotonic_mod_survey/src/mod_survey.erl:288
+#: zotonic_mod_survey/src/mod_survey.erl:294
 msgid "Page break"
 msgstr "فاصل صفحة"
 
@@ -12145,7 +12145,7 @@ msgstr "فاصل صفحة"
 msgid "Page jump condition"
 msgstr "شرط الانتقال إلى الصفحة"
 
-#: zotonic_mod_survey/src/mod_survey.erl:289
+#: zotonic_mod_survey/src/mod_survey.erl:295
 msgid "Page options"
 msgstr "خيارات الصفحة"
 
@@ -12240,7 +12240,7 @@ msgstr "سؤال مع إجابة قصيرة"
 #: zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8
-#: zotonic_mod_survey/src/mod_survey.erl:276
+#: zotonic_mod_survey/src/mod_survey.erl:282
 msgid "Questions"
 msgstr "أسئلة"
 
@@ -12262,6 +12262,9 @@ msgid "Red"
 msgstr "أحمر"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:41
+msgid "Remove \"Back\" button. Feedback if wrong or correct will be shown after submit."
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:21
 msgid "Remove \"Back\" button. If there is instant question feedback then it will be shown after submit."
 msgstr ""
@@ -12286,7 +12289,7 @@ msgstr "إزالة زر \"التالي\". لن يتم إرسال أي إجابا
 msgid "Required, this question must be answered."
 msgstr "مطلوب ، يجب الإجابة على هذا السؤال."
 
-#: zotonic_mod_survey/src/mod_survey.erl:264
+#: zotonic_mod_survey/src/mod_survey.erl:270
 msgid "Result deleted."
 msgstr "تم حذف النتيجة."
 
@@ -12348,7 +12351,7 @@ msgstr "أرسل تأكيدًا إلى المستفتى. يجب أن يكون ع
 msgid "Separate multiple email addresses with a comma."
 msgstr "افصل بين عناوين البريد الإلكتروني المتعددة بفاصلة."
 
-#: zotonic_mod_survey/src/mod_survey.erl:284
+#: zotonic_mod_survey/src/mod_survey.erl:290
 msgid "Short answer"
 msgstr "اجابة قصيرة"
 
@@ -12389,11 +12392,11 @@ msgstr "هناك خطأ ما"
 msgid "Sorry, could not insert the new person."
 msgstr "عذرا ، لا يمكن إدراج الشخص الجديد."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1079
+#: zotonic_mod_survey/src/mod_survey.erl:1101
 msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
 msgstr "عذرًا، تم الوصول إلى الحد الأقصى لعدد الطلبات المقدمة. لم يعد بإمكانك إرسال هذا النموذج."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1092
+#: zotonic_mod_survey/src/mod_survey.erl:1114
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
 msgstr "عذراً، لقد قمت بإرسال إجاباتك بالفعل. قم بإعادة تحميل الصفحة إذا كنت تريد ملء النموذج مرة أخرى."
 
@@ -12555,7 +12558,7 @@ msgstr "يتم عرض هذا النص كمقدمة للمسح."
 msgid "This text is shown below the start button."
 msgstr "يظهر هذا النص أسفل زر البداية."
 
-#: zotonic_mod_survey/src/mod_survey.erl:280
+#: zotonic_mod_survey/src/mod_survey.erl:286
 msgid "Thurstone"
 msgstr "ثورستون"
 
@@ -12585,7 +12588,7 @@ msgstr "صحيح"
 msgid "True or false question"
 msgstr "سؤال صحيح أم خطأ"
 
-#: zotonic_mod_survey/src/mod_survey.erl:277
+#: zotonic_mod_survey/src/mod_survey.erl:283
 msgid "True/False"
 msgstr "خطأ صحيح"
 
@@ -12601,7 +12604,7 @@ msgstr "التحقق من الصحة"
 msgid "View and edit results."
 msgstr "عرض وتحرير النتائج."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1100
+#: zotonic_mod_survey/src/mod_survey.erl:1122
 msgid "We are experiencing an overload, please try again in 10 minutes."
 msgstr "نحن نواجه مشكلة التحميل الزائد، يرجى المحاولة مرة أخرى بعد 10 دقائق."
 
@@ -12627,7 +12630,7 @@ msgstr "خاطئ"
 msgid "Yes or no question"
 msgstr "نعم أو لا سؤال"
 
-#: zotonic_mod_survey/src/mod_survey.erl:278
+#: zotonic_mod_survey/src/mod_survey.erl:284
 msgid "Yes/No"
 msgstr "نعم / لا"
 
@@ -12639,9 +12642,9 @@ msgstr "لقد ملأت هذا بالفعل ، لكن يمكنك تغيير إج
 msgid "You already filled this in."
 msgstr "لقد ملأت هذا بالفعل."
 
-#: zotonic_mod_survey/src/mod_survey.erl:253
-#: zotonic_mod_survey/src/mod_survey.erl:268
-#: zotonic_mod_survey/src/mod_survey.erl:1167
+#: zotonic_mod_survey/src/mod_survey.erl:259
+#: zotonic_mod_survey/src/mod_survey.erl:274
+#: zotonic_mod_survey/src/mod_survey.erl:1189
 msgid "You are not allowed to change these results."
 msgstr "لا يسمح لك بتغيير هذه النتائج."
 
@@ -12670,7 +12673,7 @@ msgstr ""
 msgid "Your result"
 msgstr "نتيجتك"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1108
+#: zotonic_mod_survey/src/mod_survey.erl:1130
 msgid "Your session was expired, please restart and try again."
 msgstr "لقد انتهت الجلسة الخاصة بك، يرجى إعادة التشغيل والمحاولة مرة أخرى."
 
