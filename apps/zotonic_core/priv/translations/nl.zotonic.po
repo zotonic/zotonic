@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-01-30 11:09\n"
+"PO-Revision-Date: 2026-01-30 12:25\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -11679,7 +11679,7 @@ msgstr "Weet je zeker dat je wilt stoppen zonder op te slaan?"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:111
 msgid "Are you sure you want to stop? You can continue later."
-msgstr ""
+msgstr "Weet je zeker dat je wilt stoppen? Je kunt later verdergaan."
 
 #: zotonic_mod_survey/priv/templates/survey.tpl:25
 msgid "Because you can edit, you can proceed for testing."
@@ -12413,7 +12413,7 @@ msgstr "Begin"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:112
 msgid "Stop and continue later"
-msgstr ""
+msgstr "Stoppen en later doorgaan"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:118
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:122
