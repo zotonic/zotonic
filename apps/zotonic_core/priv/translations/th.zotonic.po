@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-01-30 11:10\n"
+"PO-Revision-Date: 2026-02-02 11:54\n"
 "Last-Translator: \n"
 "Language-Team: Thai\n"
 "MIME-Version: 1.0\n"
@@ -4270,9 +4270,9 @@ msgstr "ตั้งชื่อผู้ใช้ / รหัสผ่าน"
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:73
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:128
-#: zotonic_mod_survey/src/mod_survey.erl:1087
-#: zotonic_mod_survey/src/mod_survey.erl:1109
-#: zotonic_mod_survey/src/mod_survey.erl:1117
+#: zotonic_mod_survey/src/mod_survey.erl:1099
+#: zotonic_mod_survey/src/mod_survey.erl:1121
+#: zotonic_mod_survey/src/mod_survey.erl:1129
 msgid "Sorry"
 msgstr "ขออภัย"
 
@@ -11608,7 +11608,7 @@ msgstr "เพิ่มไปยังรายชื่อผู้รับจ
 msgid "Add to mailinglist"
 msgstr "เพิ่มไปยังรายชื่อผู้รับจดหมาย"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:103
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:109
 msgid "Aggregated results from all respondents"
 msgstr "ผลรวมจากผู้ตอบแบบสอบถามทั้งหมด"
 
@@ -11616,7 +11616,7 @@ msgstr "ผลรวมจากผู้ตอบแบบสอบถามท
 msgid "Agree"
 msgstr "ตกลง"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1100
+#: zotonic_mod_survey/src/mod_survey.erl:1112
 msgid "Already submitted"
 msgstr "ส่งไปแล้ว"
 
@@ -11731,8 +11731,8 @@ msgstr "คลิกที่ “แก้ไข” เพื่อดูแล�
 msgid "Closed"
 msgstr "ปิด"
 
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:105
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:139
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:106
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:140
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
 msgid "Correct"
 msgstr "ถูกต้อง"
@@ -11878,18 +11878,14 @@ msgstr "ข้อเสนอแนะหากผิด"
 msgid "File upload"
 msgstr "อัปโหลดไฟล์"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:44
-msgid "Fill in"
-msgstr "กรอก"
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:56
-msgid "Fill in and edit later after saving (one set of results)"
-msgstr "กรอกและแก้ไขภายหลังบันทึก (ชุดผลลัพธ์)"
-
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:96
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:16
 msgid "Fill in the gaps"
 msgstr "เติมคำลงในช่องว่าง"
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:41
+msgid "Filling in"
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:3
 msgid "Find a person to link the answer to. If you do not find a person then you can create a new person."
@@ -11907,11 +11903,11 @@ msgstr "สำหรับช่วงวันที่ คุณยังส�
 msgid "Go to question"
 msgstr "ไปที่คำถาม"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:190
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:191
 msgid "Handle this form with"
 msgstr "จัดการแบบฟอร์มนี้ด้วย"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:169
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:170
 msgid "Handling"
 msgstr "การจัดการ"
 
@@ -11938,7 +11934,7 @@ msgstr "ค่าที่ซ่อนอยู่ บันทึกด้ว�
 msgid "Hide from results"
 msgstr "ซ่อนจากผลลัพธ์"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:125
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:128
 msgid "Hide progress information"
 msgstr "ซ่อนข้อมูลความคืบหน้า"
 
@@ -11955,7 +11951,7 @@ msgstr "ฉัน"
 msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color]."
 msgstr "ฉันอายุ [age] ฉันชอบไอศกรีม [icecream=vanilla|strawberry|chocolate|other] และสีที่ฉันชอบคือ [color]"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:78
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:80
 msgid "If this number of answers has been submitted then the start button is deactivated and an email is sent to the <em>Handling</em> addresses below. Leave empty for no limit."
 msgstr "หากจำนวนคำตอบนี้ถูกส่งมาแล้ว ปุ่มเริ่มต้นจะถูกปิดใช้งาน และอีเมลจะถูกส่งไปยังที่<em>อยู่อีเมลที่ระบุไว้</em>ด้านล่างนี้ ให้เว้นว่างไว้หากต้องการไม่จำกัดจำนวน"
 
@@ -12015,8 +12011,8 @@ msgstr "เชื่อมโยงกับบุคคล"
 msgid "Long answer"
 msgstr "คำตอบยาว"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:172
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:173
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:174
 msgid "Mail results to"
 msgstr "ส่งผลลัพธ์ไปที่"
 
@@ -12042,8 +12038,8 @@ msgstr "จับคู่คำถาม"
 msgid "Maximal value"
 msgstr "ค่าสูงสุด"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:69
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:75
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:70
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:77
 msgid "Maximum number of submissions"
 msgstr "จำนวนการส่งสูงสุด"
 
@@ -12089,9 +12085,9 @@ msgstr "ปรนัยหรือคำถามแบบทดสอบ"
 msgid "Multiple page break blocks are merged into one."
 msgstr "บล็อกแบ่งหน้าหลายบล็อกรวมเป็นหนึ่งเดียว"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:52
-msgid "Multiple times per user/browser (each time with new results)"
-msgstr "หลายครั้งต่อผู้ใช้/เบราว์เซอร์ (ทุกครั้งที่มีผลลัพธ์ใหม่)"
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:50
+msgid "Multiple times – each time with new results"
+msgstr ""
 
 #: zotonic_mod_survey/src/mod_survey.erl:289
 msgid "Narrative"
@@ -12123,12 +12119,20 @@ msgstr "จำนวนผู้รับที่เพิ่มในราย
 msgid "Numeric input, show totals for this field in the results."
 msgstr "ป้อนตัวเลข แสดงผลรวมสำหรับฟิลด์นี้ในผลลัพธ์"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:48
-msgid "Once only per user/browser"
-msgstr "หนึ่งครั้งต่อผู้ใช้ / เบราว์เซอร์เท่านั้น"
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:46
+msgid "Once (no editing after submit)"
+msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:60
-msgid "One time per user/browser with later continuation of questions (one set of results)"
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:62
+msgid "Once is per logged in respondent, or per browser for anonymous respondents. For anonymous respondents a cookie with a unique id is used to identify the browser."
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:54
+msgid "Once per user — submit and edit later (only for logged in users)"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:58
+msgid "Once — save halfway and continue later (no editing after submit)"
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:33
@@ -12162,7 +12166,7 @@ msgstr "ผ่าน?"
 msgid "Passed"
 msgstr "ผ่านไป"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:153
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:155
 msgid "Passing score"
 msgstr "คะแนนผ่าน"
 
@@ -12205,7 +12209,7 @@ msgstr "หลัก"
 msgid "Printable list"
 msgstr "รายการที่พิมพ์ได้"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:120
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:123
 msgid "Progress"
 msgstr "ความคืบหน้า"
 
@@ -12307,13 +12311,13 @@ msgstr "ผล"
 msgid "Results editor"
 msgstr "ตัวแก้ไขผลลัพธ์"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:95
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:101
 msgid "Results from the respondent"
 msgstr "ผลลัพธ์จากผู้ตอบ"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:99
-msgid "Results from the respondent - if passed only"
-msgstr "ผลลัพธ์จากผู้ตอบแบบสอบถาม - หากผ่านเท่านั้น"
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:105
+msgid "Results from the respondent – if passed only"
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
 msgid "Results until"
@@ -12345,11 +12349,11 @@ msgstr "เลือกรายชื่อผู้รับจดหมาย
 msgid "Select your country"
 msgstr "เลือกประเทศของคุณ"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:183
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:184
 msgid "Send a confirmation to the respondent. The email address must be known (logged in respondents) or you can add a short text field with the label “email” and the validation set to \"must be an email address\"."
 msgstr "ส่งการยืนยันไปยังผู้ตอบ ต้องระบุที่อยู่อีเมล (ผู้ตอบเข้าสู่ระบบ) หรือคุณสามารถเพิ่มช่องข้อความสั้นที่มีป้ายกำกับว่า \"อีเมล\" และตั้งค่าการตรวจสอบเป็น \"ต้องเป็นที่อยู่อีเมล\""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:175
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:176
 msgid "Separate multiple email addresses with a comma."
 msgstr "แยกที่อยู่อีเมลหลายรายการด้วยลูกน้ำ"
 
@@ -12365,11 +12369,11 @@ msgstr "แสดงแผนภูมิ"
 msgid "Show email addresses"
 msgstr "แสดงที่อยู่อีเมล"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:137
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:140
 msgid "Show progress bar"
 msgstr "แสดงแถบความคืบหน้า"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:131
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:134
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "แสดงข้อมูลความคืบหน้าเป็น“<em>คำถาม 3/10</em>”"
 
@@ -12394,11 +12398,11 @@ msgstr "อะไรบางอย่างผิดปกติ"
 msgid "Sorry, could not insert the new person."
 msgstr "ขออภัย ไม่สามารถแทรกคนใหม่ได้"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1089
+#: zotonic_mod_survey/src/mod_survey.erl:1101
 msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
 msgstr "ขออภัย จำนวนการส่งสูงสุดถึงแล้ว คุณไม่สามารถส่งแบบฟอร์มนี้ได้อีกต่อไป"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1102
+#: zotonic_mod_survey/src/mod_survey.erl:1114
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
 msgstr "ขออภัย คุณได้ส่งคำตอบของคุณไปแล้ว โหลดหน้าใหม่อีกครั้งหากคุณต้องการกรอกแบบฟอร์มอีกครั้ง"
 
@@ -12460,7 +12464,7 @@ msgstr "ลบคะแนนสำหรับคำตอบที่ผิด
 msgid "Survey editor"
 msgstr "ตัวแก้ไขแบบสำรวจ"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:148
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:150
 msgid "Test pass percentage"
 msgstr "เปอร์เซ็นต์การผ่านการทดสอบ"
 
@@ -12472,7 +12476,7 @@ msgstr "ข้อความ รูปภาพ วิดีโอ"
 msgid "Thank you for filling in our survey."
 msgstr "ขอขอบคุณที่ตอบแบบสำรวจของเรา"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:91
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:97
 msgid "Thank you text only"
 msgstr "ข้อความขอบคุณเท่านั้น"
 
@@ -12544,7 +12548,7 @@ msgstr "แบบฟอร์มนี้ถูกปิดใช้งาน �
 msgid "This is a result for:"
 msgstr "นี่เป็นผลลัพธ์สำหรับ:"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:160
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:162
 msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
 msgstr "นี่คือเปอร์เซ็นต์ที่จำเป็นในการผ่านแบบทดสอบหรือแบบทดสอบ ใช้เฉพาะเมื่อคุณได้เพิ่มแบบทดสอบหรือคำถามทดสอบ"
 
@@ -12608,11 +12612,11 @@ msgstr "การตรวจสอบ"
 msgid "View and edit results."
 msgstr "ดูและแก้ไขผลลัพธ์"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1110
+#: zotonic_mod_survey/src/mod_survey.erl:1122
 msgid "We are experiencing an overload, please try again in 10 minutes."
 msgstr "เรากำลังประสบปัญหาข้อมูลล้น กรุณาลองใหม่อีกครั้งในอีก 10 นาที"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:87
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:92
 msgid "When finished show"
 msgstr "เมื่อเสร็จสิ้นการแสดง"
 
@@ -12624,8 +12628,8 @@ msgstr "เมื่อไม่มีเงื่อนไขใดเป็น
 msgid "White"
 msgstr "สีขาว"
 
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:105
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:139
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:106
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:140
 msgid "Wrong"
 msgstr "ผิด"
 
@@ -12648,7 +12652,7 @@ msgstr "คุณกรอกข้อมูลนี้แล้ว"
 
 #: zotonic_mod_survey/src/mod_survey.erl:259
 #: zotonic_mod_survey/src/mod_survey.erl:274
-#: zotonic_mod_survey/src/mod_survey.erl:1177
+#: zotonic_mod_survey/src/mod_survey.erl:1189
 msgid "You are not allowed to change these results."
 msgstr "คุณไม่ได้รับอนุญาตให้เปลี่ยนแปลงผลลัพธ์เหล่านี้"
 
@@ -12677,7 +12681,7 @@ msgstr ""
 msgid "Your result"
 msgstr "ผลลัพธ์ของคุณ"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1118
+#: zotonic_mod_survey/src/mod_survey.erl:1130
 msgid "Your session was expired, please restart and try again."
 msgstr "เซสชั่นของคุณหมดอายุแล้ว กรุณาเริ่มต้นใหม่และลองอีกครั้ง"
 
