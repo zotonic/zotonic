@@ -610,6 +610,7 @@ render_next_page(SurveyId, PageNr, Direction, Answers, History, Editing, Args, C
 
             case Next of
                 {L, NewPageNr} when is_list(L) ->
+
                     % Maybe save the intermediate results.
                     SavedArgs = [
                         {answers, Answers2},
@@ -893,6 +894,8 @@ go_button_target(Submitter, Questions, Answers, Context) ->
         end,
         Questions),
     TargetName = maps:get(<<"target">>, Button, <<>>),
+    % The target might be a jump block, evaluate any jump conditions at
+    % the block, or just skip if the jump target is a normal question block.
     case eval_page_jumps(fetch_question_name(Questions, TargetName, 1, in_q), Answers, Context) of
         stop -> stop;
         submit -> submit;
@@ -905,19 +908,20 @@ go_button_target(Submitter, Questions, Answers, Context) ->
 go_page(Nr, Qs, _Answers, exact, _Context) ->
     case drop_till_page(Nr, Qs) of
         {[], _Nr} -> submit;
-        {L,Nr1} ->
-            L1 = lists:dropwhile(fun is_page_end/1, L),
-            L2 = takepage(L1),
-            {L2,Nr1}
+        {PageStart, Nr1} ->
+            Page = takepage(PageStart),
+            {Page, Nr1}
     end;
 go_page(Nr, Qs, Answers, forward, Context) ->
-    case eval_page_jumps(drop_till_page(Nr, Qs), Answers, Context) of
+    {PrevPageStart, _Nr1} = drop_till_page(Nr - 1, Qs),
+    PrevPageEnd = lists:dropwhile(fun(B) -> not is_page_end(B) end, PrevPageStart),
+    case eval_page_jumps({PrevPageEnd, Nr}, Answers, Context) of
         stop -> stop;
         submit -> submit;
         {error, _} = Error -> Error;
-        {L1, Nr1} ->
-            L2 = takepage(L1),
-            {L2,Nr1}
+        {NextPageStart, NextNr} ->
+            NextPage = takepage(NextPageStart),
+            {NextPage, NextNr}
     end.
 
 
@@ -927,12 +931,12 @@ eval_page_jumps(submit, _Answers, _Context) ->
     submit;
 eval_page_jumps({[], _Nr}, _Answers, _Context) ->
     submit;
-eval_page_jumps({[Q|L],Nr} = QsNr, Answers, Context) ->
+eval_page_jumps({[Q|L], Nr} = QsNr, Answers, Context) ->
     case is_page_end(Q) of
         true ->
             case test(Q, Answers, Context) of
                 ok ->
-                    eval_page_jumps({L,Nr}, Answers, Context);
+                    eval_page_jumps({L, Nr}, Answers, Context);
                 {jump, Name} ->
                     % Go to question 'name', count pagebreaks in between for the new page nr
                     % Only allow jumping forward to prevent endless loops.
@@ -978,7 +982,7 @@ fetch_question_name(_, <<"stop">>, _Nr, _State) ->
 fetch_question_name(_, <<"submit">>, _Nr, _State) ->
     submit;
 fetch_question_name([], _Name, Nr, _State) ->
-    % Page not found - should show error/warning here
+    % Page not found - maybe show error/warning here
     {[], Nr};
 fetch_question_name([Q|Qs] = QQs, Name, Nr, State) ->
     case maps:get(<<"name">>, Q, undefined) of
@@ -987,19 +991,19 @@ fetch_question_name([Q|Qs] = QQs, Name, Nr, State) ->
         _QName ->
             case is_page_end(Q) of
                 true ->
-                    case State of
-                        in_q -> fetch_question_name(Qs, Name, Nr+1, in_pagebreak);
-                        in_pagebreak -> fetch_question_name(Qs, Name, Nr, in_pagebreak)
-                    end;
+                    % Keep counting page numbers
+                    Nr1 = case State of
+                        in_q -> Nr + 1;
+                        in_pagebreak -> Nr
+                    end,
+                    fetch_question_name(Qs, Name, Nr1, in_pagebreak);
                 false ->
                     fetch_question_name(Qs, Name, Nr, in_q)
             end
     end.
 
-
 %% @doc Fetch the Nth page. Multiple page breaks in a row count as a single page break.
-%%      Returns the position at the page breaks before the page, so that eventual jump
-%%      expressions can be evaluated.
+%% Returns the position after the page jumps of the previous page.
 drop_till_page(Nr, []) ->
     {[], Nr};
 drop_till_page(Nr, L) ->
