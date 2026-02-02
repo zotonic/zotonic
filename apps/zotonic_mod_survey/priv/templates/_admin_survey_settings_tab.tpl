@@ -89,7 +89,7 @@
 		<hr>
 
 		<fieldset>
-			<h4>{_ When finished show _}</h4>
+			<h4>{_ After submit show _}</h4>
 			<div class="form-group">
 				<div class="controls">
 					<label class="radio">
@@ -114,7 +114,7 @@
 			{% block survey_settings_finished %}{% endblock %}
 		</fieldset>
 	{% else %}
-		<input type="hidden" name="survey_show_results" id="survey_show_results" value="1" />
+		<input type="hidden" name="survey_show_results" id="survey_show_results" value="1">
 	{% endif %}
 
 	<hr>

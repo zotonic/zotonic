@@ -179,7 +179,7 @@ Add more documentation
 %% Testing
 -export([
     drop_till_page/2,
-    page_has_feedback/2
+    page_has_feedback_view/2
 ]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").
@@ -597,7 +597,7 @@ render_next_page(SurveyId, PageNr, Direction, Answers, History, Editing, Args, C
 
             IsFeedbackNeeded = Direction =:= forward
                         andalso proplists:get_value(is_feedback_view, Args) =/= true
-                        andalso page_has_feedback(PageNr - 1, Questions),
+                        andalso page_has_feedback_view(PageNr - 1, Questions),
 
             {Next, IsFeedbackView} = if
                 IsFeedbackNeeded ->
@@ -714,12 +714,16 @@ push_history(PageNr, []) -> [ PageNr ];
 push_history(PageNr, [PageNr|_] = H) -> H;
 push_history(PageNr, H) -> [ PageNr | H ].
 
-page_has_feedback(0, _Qs) ->
+page_has_feedback_view(0, _Qs) ->
     false;
-page_has_feedback(Nr, Qs) ->
+page_has_feedback_view(Nr, Qs) ->
     case drop_till_page(Nr, Qs) of
         {[], _Nr} -> false;
-        {L, _Nr1} -> has_feedback(L)
+        {L, _Nr1} ->
+            case has_feedback(L) of
+                true -> is_hide_back(takepage(L));
+                false -> false
+            end
     end.
 
 has_feedback([]) -> false;
@@ -732,6 +736,11 @@ has_feedback([B|Bs]) ->
                 false -> has_feedback(Bs)
             end
     end.
+
+is_hide_back([]) -> false;
+is_hide_back([ #{ <<"type">> := <<"survey_page_options">> } = B | _ ]) ->
+    not maps:get(<<"is_hide_back">>, B, false);
+is_hide_back([ _ | Bs ]) -> is_hide_back(Bs).
 
 has_feedback_1(#{ <<"is_test_direct">> := true }) ->
     false;
@@ -902,7 +911,7 @@ go_button_target(Submitter, Questions, Answers, Context) ->
         {error, _} = Error -> Error;
         {L1, Nr1} ->
             L2 = takepage(L1),
-            {L2,Nr1}
+            {L2, Nr1}
     end.
 
 go_page(Nr, Qs, _Answers, exact, _Context) ->
