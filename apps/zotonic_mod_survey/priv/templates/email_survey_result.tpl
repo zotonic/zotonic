@@ -85,8 +85,9 @@
 					</tr>
 			    {% elseif blk.type|match:"^survey_.*"
 			    	  and blk.type != 'survey_page_break'
+			    	  and blk.type != 'survey_page_options'
+			    	  and blk.type != 'survey_stop'
 			    	  and blk.name != 'survey_feedback'
-			    	  and blk.name != 'survey_stop'
 			   	%}
 					<tr style="border-top: 1px solid #ccc">
 						<td valign="top" style="padding: 8px; line-height: 18px; text-align: left; vertical-align: top; border-top: 1px solid #dddddd; max-width:45%;">
