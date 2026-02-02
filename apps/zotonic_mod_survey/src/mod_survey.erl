@@ -739,7 +739,7 @@ has_feedback([B|Bs]) ->
 
 is_hide_back([]) -> false;
 is_hide_back([ #{ <<"type">> := <<"survey_page_options">> } = B | _ ]) ->
-    not maps:get(<<"is_hide_back">>, B, false);
+    maps:get(<<"is_hide_back">>, B, false);
 is_hide_back([ _ | Bs ]) -> is_hide_back(Bs).
 
 has_feedback_1(#{ <<"is_test_direct">> := true }) ->
