@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-02 11:54\n"
+"PO-Revision-Date: 2026-02-02 15:54\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -4270,9 +4270,9 @@ msgstr "Установить имя / пароль"
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:73
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:128
-#: zotonic_mod_survey/src/mod_survey.erl:1099
-#: zotonic_mod_survey/src/mod_survey.erl:1121
-#: zotonic_mod_survey/src/mod_survey.erl:1129
+#: zotonic_mod_survey/src/mod_survey.erl:1108
+#: zotonic_mod_survey/src/mod_survey.erl:1130
+#: zotonic_mod_survey/src/mod_survey.erl:1138
 msgid "Sorry"
 msgstr "Извините"
 
@@ -11608,6 +11608,10 @@ msgstr "Добавить в существующий список рассылк
 msgid "Add to mailinglist"
 msgstr "Добавить в список рассылки"
 
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:92
+msgid "After submit show"
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:109
 msgid "Aggregated results from all respondents"
 msgstr "Сводные результаты от всех респондентов"
@@ -11616,7 +11620,7 @@ msgstr "Сводные результаты от всех респонденто
 msgid "Agree"
 msgstr "Согласиться"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1112
+#: zotonic_mod_survey/src/mod_survey.erl:1121
 msgid "Already submitted"
 msgstr "Уже отправлено"
 
@@ -12398,11 +12402,11 @@ msgstr "Что-то пошло не так"
 msgid "Sorry, could not insert the new person."
 msgstr "Извините, не удалось вставить нового человека."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1101
+#: zotonic_mod_survey/src/mod_survey.erl:1110
 msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
 msgstr "Извините, максимальное количество заявок достигнуто. Вы больше не можете отправить эту форму."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1114
+#: zotonic_mod_survey/src/mod_survey.erl:1123
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
 msgstr "Извините, вы уже отправили свои ответы. Перезагрузите страницу, если хотите заполнить форму еще раз."
 
@@ -12612,13 +12616,9 @@ msgstr "Проверка"
 msgid "View and edit results."
 msgstr "Просмотр и редактирование результатов."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1122
+#: zotonic_mod_survey/src/mod_survey.erl:1131
 msgid "We are experiencing an overload, please try again in 10 minutes."
 msgstr "У нас перегрузка, повторите попытку через 10 минут."
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:92
-msgid "When finished show"
-msgstr "По окончании шоу"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:32
 msgid "When no condition is true then the question following this break will be the next page."
@@ -12652,7 +12652,7 @@ msgstr "Ты уже заполнил это."
 
 #: zotonic_mod_survey/src/mod_survey.erl:259
 #: zotonic_mod_survey/src/mod_survey.erl:274
-#: zotonic_mod_survey/src/mod_survey.erl:1189
+#: zotonic_mod_survey/src/mod_survey.erl:1198
 msgid "You are not allowed to change these results."
 msgstr "Вы не имеете права изменять эти результаты."
 
@@ -12681,7 +12681,7 @@ msgstr ""
 msgid "Your result"
 msgstr "Ваш результат"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1130
+#: zotonic_mod_survey/src/mod_survey.erl:1139
 msgid "Your session was expired, please restart and try again."
 msgstr "Ваш сеанс истек, пожалуйста, перезапустите и повторите попытку."
 
