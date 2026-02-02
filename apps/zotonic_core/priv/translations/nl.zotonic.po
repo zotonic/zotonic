@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-02 15:53\n"
+"PO-Revision-Date: 2026-02-02 17:31\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -11615,7 +11615,7 @@ msgstr "Toevoegen aan mailinglijst"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:92
 msgid "After submit show"
-msgstr ""
+msgstr "Na indienen show"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:109
 msgid "Aggregated results from all respondents"
