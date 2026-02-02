@@ -4416,9 +4416,9 @@ msgstr ""
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:73
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:128
-#: zotonic_mod_survey/src/mod_survey.erl:1087
-#: zotonic_mod_survey/src/mod_survey.erl:1109
-#: zotonic_mod_survey/src/mod_survey.erl:1117
+#: zotonic_mod_survey/src/mod_survey.erl:1099
+#: zotonic_mod_survey/src/mod_survey.erl:1121
+#: zotonic_mod_survey/src/mod_survey.erl:1129
 msgid "Sorry"
 msgstr ""
 
@@ -12309,7 +12309,7 @@ msgstr ""
 msgid "Add to mailinglist"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:103
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:109
 msgid "Aggregated results from all respondents"
 msgstr ""
 
@@ -12317,7 +12317,7 @@ msgstr ""
 msgid "Agree"
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:1100
+#: zotonic_mod_survey/src/mod_survey.erl:1112
 msgid "Already submitted"
 msgstr ""
 
@@ -12434,8 +12434,8 @@ msgstr ""
 msgid "Closed"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:105
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:139
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:106
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:140
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:77
 msgid "Correct"
 msgstr ""
@@ -12582,17 +12582,13 @@ msgstr ""
 msgid "File upload"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:44
-msgid "Fill in"
-msgstr ""
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:56
-msgid "Fill in and edit later after saving (one set of results)"
-msgstr ""
-
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:96
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:16
 msgid "Fill in the gaps"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:41
+msgid "Filling in"
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:3
@@ -12614,11 +12610,11 @@ msgstr ""
 msgid "Go to question"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:190
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:191
 msgid "Handle this form with"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:169
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:170
 msgid "Handling"
 msgstr ""
 
@@ -12647,7 +12643,7 @@ msgstr ""
 msgid "Hide from results"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:125
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:128
 msgid "Hide progress information"
 msgstr ""
 
@@ -12666,7 +12662,7 @@ msgid ""
 "ice cream and my favorite color is [color]."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:78
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:80
 msgid ""
 "If this number of answers has been submitted then the start button is "
 "deactivated and an email is sent to the <em>Handling</em> addresses below. "
@@ -12729,8 +12725,8 @@ msgstr ""
 msgid "Long answer"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:172
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:173
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:174
 msgid "Mail results to"
 msgstr ""
 
@@ -12756,8 +12752,8 @@ msgstr ""
 msgid "Maximal value"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:69
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:75
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:70
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:77
 msgid "Maximum number of submissions"
 msgstr ""
 
@@ -12806,8 +12802,8 @@ msgstr ""
 msgid "Multiple page break blocks are merged into one."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:52
-msgid "Multiple times per user/browser (each time with new results)"
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:50
+msgid "Multiple times – each time with new results"
 msgstr ""
 
 #: zotonic_mod_survey/src/mod_survey.erl:289
@@ -12840,14 +12836,23 @@ msgstr ""
 msgid "Numeric input, show totals for this field in the results."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:48
-msgid "Once only per user/browser"
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:46
+msgid "Once (no editing after submit)"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:60
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:62
 msgid ""
-"One time per user/browser with later continuation of questions (one set of "
-"results)"
+"Once is per logged in respondent, or per browser for anonymous respondents. "
+"For anonymous respondents a cookie with a unique id is used to identify the "
+"browser."
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:54
+msgid "Once per user — submit and edit later (only for logged in users)"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:58
+msgid "Once — save halfway and continue later (no editing after submit)"
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:33
@@ -12881,7 +12886,7 @@ msgstr ""
 msgid "Passed"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:153
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:155
 msgid "Passing score"
 msgstr ""
 
@@ -12924,7 +12929,7 @@ msgstr ""
 msgid "Printable list"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:120
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:123
 msgid "Progress"
 msgstr ""
 
@@ -13032,12 +13037,12 @@ msgstr ""
 msgid "Results editor"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:95
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:101
 msgid "Results from the respondent"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:99
-msgid "Results from the respondent - if passed only"
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:105
+msgid "Results from the respondent – if passed only"
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
@@ -13070,14 +13075,14 @@ msgstr ""
 msgid "Select your country"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:183
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:184
 msgid ""
 "Send a confirmation to the respondent. The email address must be known "
 "(logged in respondents) or you can add a short text field with the label "
 "“email” and the validation set to \"must be an email address\"."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:175
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:176
 msgid "Separate multiple email addresses with a comma."
 msgstr ""
 
@@ -13093,11 +13098,11 @@ msgstr ""
 msgid "Show email addresses"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:137
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:140
 msgid "Show progress bar"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:131
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:134
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr ""
 
@@ -13124,13 +13129,13 @@ msgstr ""
 msgid "Sorry, could not insert the new person."
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:1089
+#: zotonic_mod_survey/src/mod_survey.erl:1101
 msgid ""
 "Sorry, the maximum number of submissions has been reached. You can no longer "
 "submit this form."
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:1102
+#: zotonic_mod_survey/src/mod_survey.erl:1114
 msgid ""
 "Sorry, you already submitted your answers. Reload the page if you want to "
 "fill in the form again."
@@ -13194,7 +13199,7 @@ msgstr ""
 msgid "Survey editor"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:148
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:150
 msgid "Test pass percentage"
 msgstr ""
 
@@ -13206,7 +13211,7 @@ msgstr ""
 msgid "Thank you for filling in our survey."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:91
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:97
 msgid "Thank you text only"
 msgstr ""
 
@@ -13299,7 +13304,7 @@ msgstr ""
 msgid "This is a result for:"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:160
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:162
 msgid ""
 "This is the percentage needed to pass a quiz or test. Only used if you have "
 "added quiz or test questions."
@@ -13367,11 +13372,11 @@ msgstr ""
 msgid "View and edit results."
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:1110
+#: zotonic_mod_survey/src/mod_survey.erl:1122
 msgid "We are experiencing an overload, please try again in 10 minutes."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:87
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:92
 msgid "When finished show"
 msgstr ""
 
@@ -13385,8 +13390,8 @@ msgstr ""
 msgid "White"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:105
-#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:139
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:106
+#: zotonic_mod_survey/priv/templates/email_survey_result.tpl:140
 msgid "Wrong"
 msgstr ""
 
@@ -13409,7 +13414,7 @@ msgstr ""
 
 #: zotonic_mod_survey/src/mod_survey.erl:259
 #: zotonic_mod_survey/src/mod_survey.erl:274
-#: zotonic_mod_survey/src/mod_survey.erl:1177
+#: zotonic_mod_survey/src/mod_survey.erl:1189
 msgid "You are not allowed to change these results."
 msgstr ""
 
@@ -13440,7 +13445,7 @@ msgstr ""
 msgid "Your result"
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:1118
+#: zotonic_mod_survey/src/mod_survey.erl:1130
 msgid "Your session was expired, please restart and try again."
 msgstr ""
 
