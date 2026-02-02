@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-02 11:54\n"
+"PO-Revision-Date: 2026-02-02 15:54\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -4270,9 +4270,9 @@ msgstr "Setelan nama pengguna/kata sandi"
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:73
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:128
-#: zotonic_mod_survey/src/mod_survey.erl:1099
-#: zotonic_mod_survey/src/mod_survey.erl:1121
-#: zotonic_mod_survey/src/mod_survey.erl:1129
+#: zotonic_mod_survey/src/mod_survey.erl:1108
+#: zotonic_mod_survey/src/mod_survey.erl:1130
+#: zotonic_mod_survey/src/mod_survey.erl:1138
 msgid "Sorry"
 msgstr "Maaf"
 
@@ -11608,6 +11608,10 @@ msgstr "Tambahkan ke milis yang ada"
 msgid "Add to mailinglist"
 msgstr "Tambahkan ke milis"
 
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:92
+msgid "After submit show"
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:109
 msgid "Aggregated results from all respondents"
 msgstr "Hasil gabungan dari semua responden"
@@ -11616,7 +11620,7 @@ msgstr "Hasil gabungan dari semua responden"
 msgid "Agree"
 msgstr "Setuju"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1112
+#: zotonic_mod_survey/src/mod_survey.erl:1121
 msgid "Already submitted"
 msgstr "Sudah dikirimkan"
 
@@ -12398,11 +12402,11 @@ msgstr "Ada yang salah"
 msgid "Sorry, could not insert the new person."
 msgstr "Maaf, tidak dapat memasukkan orang baru."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1101
+#: zotonic_mod_survey/src/mod_survey.erl:1110
 msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
 msgstr "Maaf, jumlah pengiriman maksimum telah tercapai. Anda tidak dapat lagi mengirimkan formulir ini."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1114
+#: zotonic_mod_survey/src/mod_survey.erl:1123
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
 msgstr "Maaf, Anda sudah mengirimkan jawaban Anda. Muat ulang halaman jika Anda ingin mengisi formulir lagi."
 
@@ -12612,13 +12616,9 @@ msgstr "Validasi"
 msgid "View and edit results."
 msgstr "Lihat dan edit hasil."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1122
+#: zotonic_mod_survey/src/mod_survey.erl:1131
 msgid "We are experiencing an overload, please try again in 10 minutes."
 msgstr "Kami sedang mengalami kelebihan beban, silakan coba lagi dalam 10 menit."
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:92
-msgid "When finished show"
-msgstr "Setelah selesai tampilkan"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:32
 msgid "When no condition is true then the question following this break will be the next page."
@@ -12652,7 +12652,7 @@ msgstr "Anda sudah mengisi ini."
 
 #: zotonic_mod_survey/src/mod_survey.erl:259
 #: zotonic_mod_survey/src/mod_survey.erl:274
-#: zotonic_mod_survey/src/mod_survey.erl:1189
+#: zotonic_mod_survey/src/mod_survey.erl:1198
 msgid "You are not allowed to change these results."
 msgstr "Anda tidak diizinkan untuk mengubah hasil tersebut."
 
@@ -12681,7 +12681,7 @@ msgstr ""
 msgid "Your result"
 msgstr "Hasil Anda"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1130
+#: zotonic_mod_survey/src/mod_survey.erl:1139
 msgid "Your session was expired, please restart and try again."
 msgstr "Sesi Anda telah kedaluwarsa, silakan mulai ulang dan coba lagi."
 
