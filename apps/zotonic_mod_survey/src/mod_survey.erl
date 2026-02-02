@@ -601,7 +601,6 @@ render_next_page(SurveyId, PageNr, Direction, Answers, History, Editing, Args, C
 
             {Next, IsFeedbackView} = if
                 IsFeedbackNeeded ->
-                    ?DEBUG({feedback, PageNr-1}),
                     {go_page(PageNr-1, Questions, Answers2, exact, Context), true};
                 Submitter =:= undefined ->
                     {go_page(PageNr, Questions, Answers2, Direction, Context), false};
@@ -611,7 +610,6 @@ render_next_page(SurveyId, PageNr, Direction, Answers, History, Editing, Args, C
 
             case Next of
                 {L, NewPageNr} when is_list(L) ->
-                    ?DEBUG({new_pagenr, NewPageNr}),
 
                     % Maybe save the intermediate results.
                     SavedArgs = [
