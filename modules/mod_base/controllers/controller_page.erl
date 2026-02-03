@@ -40,7 +40,7 @@ resource_exists(ReqData, Context) ->
             true ->
                 maybe_redirect(Id, ContextQs);
             false ->
-                {false, ContextQs}
+                ?WM_REPLY(false, ContextQs)
         end
     catch
         _:_ -> ?WM_REPLY(false, ContextQs)
