@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-03 13:59\n"
+"PO-Revision-Date: 2026-02-03 16:22\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "MIME-Version: 1.0\n"
@@ -11613,15 +11613,7 @@ msgid "Add to mailinglist"
 msgstr "Добавить в список рассылки"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:99
-msgid "After all questions are answered and submitted, show one of the following."
-msgstr ""
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:96
-msgid "After the final submit of the form, show"
-msgstr ""
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
-msgid "After the maximum number of forms has been submitted, the start button is deactivated, and an email is sent to the <em>Handling</em> addresses below. Leave empty for no limit. This is useful for signup lists with a limited number of spots."
+msgid "After all questions are answered and submitted, one of the following is shown."
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:119
@@ -11970,6 +11962,10 @@ msgstr "я"
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27
 msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color]."
 msgstr "Мне [age] лет. Мне нравится мороженое [мороженое = ваниль | клубника | шоколад | другое], и мой любимый цвет - [color]."
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
+msgid "If the maximum number of forms has been submitted, then the start button is deactivated and an email is sent to the email addresses in the <em>handling</em> settings below. Leave empty for no limit. This is useful for signup lists with a limited number of spots."
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:26
 msgid "Immediately start with the questions, no “Start” button"
@@ -12374,6 +12370,10 @@ msgstr "Разделите несколько адресов электронн�
 #: zotonic_mod_survey/src/mod_survey.erl:298
 msgid "Short answer"
 msgstr "Короткий ответ"
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:96
+msgid "Show after the final submit of the form"
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:26
 msgid "Show charts"
