@@ -59,7 +59,7 @@
         		</label>
 			</div>
 			<p class="help-block">
-				{_ Once is per logged in respondent, or per browser for anonymous respondents. For anonymous respondents a cookie with a unique id is used to identify the browser. _}
+				{_ 'Once' means once by a respondent who is logged in or once per browser for anonymous respondents. For anonymous respondents a cookie with a unique id is used to identify the browser. _}
 			</p>
 
 			{% block survey_settings_fill %}{% endblock %}
