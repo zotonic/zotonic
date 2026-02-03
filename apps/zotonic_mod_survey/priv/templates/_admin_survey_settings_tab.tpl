@@ -54,11 +54,11 @@
         		</label>
         		<label class="radio">
         			<input type="radio" name="survey_multiple" value="3" {% if id.survey_multiple == 3 %}checked{% endif %}>
-        			{_ Once — save halfway and continue later (no editing after submit) _}
+        			{_ Once — save halfway and continue later + submit is final (no editing) _}
         		</label>
         		<label class="radio">
         			<input type="radio" name="survey_multiple" value="2" {% if id.survey_multiple == 2 %}checked{% endif %}>
-        			{_ Once — save halfway and continue later + logged in user can edit after submit _}
+        			{_ Once — save halfway and continue later + edit after submit (logged in users only) _}
         		</label>
 			</div>
 
