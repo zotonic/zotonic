@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-03 13:58\n"
+"PO-Revision-Date: 2026-02-03 14:13\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -11553,7 +11553,7 @@ msgstr "niet bereikbaar of lokaal IP"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:45
 msgid "'Once' means once by a respondent who is logged in or once per browser for anonymous respondents. To identify the browser of anonymous respondents, a cookie containing a unique ID is utilized."
-msgstr ""
+msgstr "Eén keer' betekent één keer door een respondent die is ingelogd of één keer per browser voor anonieme respondenten. Om de browser van anonieme respondenten te identificeren, wordt een cookie met een unieke ID gebruikt."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:28
 msgid "Add a question or block"
@@ -11619,15 +11619,15 @@ msgstr "Toevoegen aan mailinglijst"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:99
 msgid "After all questions are answered and submitted, show one of the following."
-msgstr ""
+msgstr "Nadat alle vragen zijn beantwoord en ingediend, toon je een van de volgende."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:96
 msgid "After the final submit of the form, show"
-msgstr ""
+msgstr "Toon na het definitief verzenden van het formulier"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
 msgid "After the maximum number of forms has been submitted, the start button is deactivated, and an email is sent to the <em>Handling</em> addresses below. Leave empty for no limit. This is useful for signup lists with a limited number of spots."
-msgstr ""
+msgstr "Nadat het maximale aantal formulieren is ingediend, wordt de startknop gedeactiveerd en wordt er een e-mail gestuurd naar de onderstaande <em>handlingadressen</em>. Laat leeg voor geen limiet. Dit is handig voor aanmeldingslijsten met een beperkt aantal plekken."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:119
 msgid "Aggregated results from all respondents"
@@ -11745,7 +11745,7 @@ msgstr "Keuzes"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:45
 msgid "Choose how many times a respondent can fill in this form."
-msgstr ""
+msgstr "Kies hoe vaak een respondent dit formulier kan invullen."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:2
 msgid "Click on “Edit” to see and change the entered data."
@@ -12131,7 +12131,7 @@ msgstr "Volgende pagina van de categorie"
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:41
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:26
 msgid "No \"Back\" button to this page. If correct/wrong feedback is filled in, then show it directly after this page."
-msgstr ""
+msgstr "Geen \"Terug\"-knop naar deze pagina. Als er goede/foute feedback is ingevuld, toon deze dan direct na deze pagina."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:118
 msgid "No results yet."
@@ -12139,7 +12139,7 @@ msgstr "Nog geen resultaten."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:101
 msgid "Note that if you select a special handler below, then that handler may override this setting."
-msgstr ""
+msgstr "Merk op dat als je hieronder een speciale afhandeling selecteert, die afhandeling deze instelling kan overschrijven."
 
 #: zotonic_mod_survey/src/support/survey_admin.erl:129
 #: zotonic_mod_survey/src/support/survey_admin.erl:173
@@ -12160,7 +12160,7 @@ msgstr "Eenmaal - halverwege opslaan en later verdergaan (niet bewerken na indie
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:61
 msgid "Once — save halfway and continue later + logged in user can edit after submit"
-msgstr ""
+msgstr "Eenmaal - halverwege opslaan en later verdergaan + ingelogde gebruiker kan bewerken na indienen"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:33
 msgid "Only accept images."
@@ -12573,7 +12573,7 @@ msgstr "Dit is het percentage dat nodig is om te slagen voor een een quiz of toe
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
 msgid "This is useful for signup lists with a limited number of spots."
-msgstr ""
+msgstr "Dit is handig voor aanmeldingslijsten met een beperkt aantal plekken."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "This text is shown after the form has been submitted."
