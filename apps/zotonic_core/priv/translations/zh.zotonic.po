@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-02 11:54\n"
+"PO-Revision-Date: 2026-02-03 13:59\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -350,7 +350,7 @@ msgstr "取消"
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:28
-#: zotonic_mod_survey/src/mod_survey.erl:287
+#: zotonic_mod_survey/src/mod_survey.erl:295
 msgid "Category"
 msgstr "分类"
 
@@ -388,10 +388,10 @@ msgstr "改变了配置。"
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:21
 #: zotonic_mod_survey/priv/templates/_survey_results.tpl:56
 #: zotonic_mod_survey/priv/templates/_survey_results.tpl:61
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:49
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:54
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:79
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:84
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:45
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:50
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:63
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:68
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:30
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:35
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:40
@@ -494,7 +494,7 @@ msgstr "无法移至合作团队"
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
-#: zotonic_mod_survey/src/mod_survey.erl:253
+#: zotonic_mod_survey/src/mod_survey.erl:261
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 msgid "Delete"
 msgstr "删除"
@@ -2021,7 +2021,7 @@ msgid "Make a new page or media"
 msgstr "创建新页面或媒体条目"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
-#: zotonic_mod_survey/src/mod_survey.erl:288
+#: zotonic_mod_survey/src/mod_survey.erl:296
 msgid "Matching"
 msgstr "匹配"
 
@@ -4270,9 +4270,9 @@ msgstr "设置用户名/密码"
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:73
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:128
-#: zotonic_mod_survey/src/mod_survey.erl:1099
-#: zotonic_mod_survey/src/mod_survey.erl:1121
-#: zotonic_mod_survey/src/mod_survey.erl:1129
+#: zotonic_mod_survey/src/mod_survey.erl:1151
+#: zotonic_mod_survey/src/mod_survey.erl:1173
+#: zotonic_mod_survey/src/mod_survey.erl:1181
 msgid "Sorry"
 msgstr "对不起"
 
@@ -7469,7 +7469,7 @@ msgstr "开始跟踪您的会话的模板包含内容。"
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:51
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:108
-#: zotonic_mod_survey/src/mod_survey.erl:296
+#: zotonic_mod_survey/src/mod_survey.erl:304
 msgid "Stop"
 msgstr "中止"
 
@@ -11546,6 +11546,10 @@ msgstr "你需要成为管理员才能申请证书。"
 msgid "not reachable or local IP"
 msgstr "无法到达或本地IP"
 
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:45
+msgid "'Once' means once by a respondent who is logged in or once per browser for anonymous respondents. To identify the browser of anonymous respondents, a cookie containing a unique ID is utilized."
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:28
 msgid "Add a question or block"
 msgstr "添加一个问题或阻止"
@@ -11608,7 +11612,19 @@ msgstr "添加到现有邮件列表"
 msgid "Add to mailinglist"
 msgstr "添加到邮件列表"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:109
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:99
+msgid "After all questions are answered and submitted, show one of the following."
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:96
+msgid "After the final submit of the form, show"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
+msgid "After the maximum number of forms has been submitted, the start button is deactivated, and an email is sent to the <em>Handling</em> addresses below. Leave empty for no limit. This is useful for signup lists with a limited number of spots."
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:119
 msgid "Aggregated results from all respondents"
 msgstr "所有受访者的汇总结果"
 
@@ -11616,7 +11632,7 @@ msgstr "所有受访者的汇总结果"
 msgid "Agree"
 msgstr "同意"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1112
+#: zotonic_mod_survey/src/mod_survey.erl:1164
 msgid "Already submitted"
 msgstr "已提交"
 
@@ -11633,7 +11649,7 @@ msgstr "另一个页面、视频或图像。"
 msgid "Answer"
 msgstr "回答"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:20
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:22
 msgid "Answering"
 msgstr "回答"
 
@@ -11664,7 +11680,7 @@ msgstr "你确定要删除本页吗？<br/>这也将删除本页的所有问题�
 msgid "Are you sure you want to delete this question?"
 msgstr "你确定要删除这个问题吗？"
 
-#: zotonic_mod_survey/src/mod_survey.erl:252
+#: zotonic_mod_survey/src/mod_survey.erl:260
 msgid "Are you sure you want to delete this result?"
 msgstr "你确定要删除这个结果吗？"
 
@@ -11681,7 +11697,7 @@ msgid "Because you can edit, you can proceed for testing."
 msgstr "因为您可以编辑，所以您可以继续进行测试。"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:112
-#: zotonic_mod_survey/src/mod_survey.erl:293
+#: zotonic_mod_survey/src/mod_survey.erl:301
 msgid "Button"
 msgstr "按钮"
 
@@ -11722,6 +11738,10 @@ msgstr "检查正确答案并给每个答案点。"
 msgid "Choices"
 msgstr "选择"
 
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:45
+msgid "Choose how many times a respondent can fill in this form."
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:2
 msgid "Click on “Edit” to see and change the entered data."
 msgstr "单击“编辑”以查看和更改输入的数据。"
@@ -11746,7 +11766,7 @@ msgstr "无法添加收件人。"
 msgid "Could not create the mailinglist."
 msgstr "无法创建邮件列表。"
 
-#: zotonic_mod_survey/src/mod_survey.erl:292
+#: zotonic_mod_survey/src/mod_survey.erl:300
 msgid "Country select"
 msgstr "国家选择"
 
@@ -11782,7 +11802,7 @@ msgstr "创建"
 msgid "Danger"
 msgstr "危险"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:31
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:33
 msgid "Deactivated"
 msgstr "停用"
 
@@ -11874,7 +11894,7 @@ msgstr "如果正确，请反馈"
 msgid "Feedback if wrong"
 msgstr "如有错误，请反馈"
 
-#: zotonic_mod_survey/src/mod_survey.erl:297
+#: zotonic_mod_survey/src/mod_survey.erl:305
 msgid "File upload"
 msgstr "文件上传"
 
@@ -11883,7 +11903,7 @@ msgstr "文件上传"
 msgid "Fill in the gaps"
 msgstr "填补差距"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:41
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:43
 msgid "Filling in"
 msgstr ""
 
@@ -11903,11 +11923,11 @@ msgstr "对于日期范围，您还可以使用相对日期，如 <code>-5 年</
 msgid "Go to question"
 msgstr "进入问题"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:191
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:202
 msgid "Handle this form with"
 msgstr "处理此表单"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:170
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:181
 msgid "Handling"
 msgstr "处理"
 
@@ -11934,11 +11954,11 @@ msgstr "隐藏值，与表单一起保存但不显示给填写表单的人。"
 msgid "Hide from results"
 msgstr "隐藏结果"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:128
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:138
 msgid "Hide progress information"
 msgstr "隐藏进度信息"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:27
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:29
 msgid "Hide the user’s id or browser-id from result exports"
 msgstr "在结果导出中隐藏用户的ID或浏览器ID。"
 
@@ -11951,11 +11971,7 @@ msgstr "我是"
 msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color]."
 msgstr "我今年 [age] 岁。我喜欢 [icecream=vanilla|strawberry|chocolate|other] 冰淇淋，我最喜欢的颜色是 [color]。"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:80
-msgid "If this number of answers has been submitted then the start button is deactivated and an email is sent to the <em>Handling</em> addresses below. Leave empty for no limit."
-msgstr "如果提交的答案达到此数量，开始按钮将失效，并向以下<em>处理</em>地址发送电子邮件。留空表示无限制。"
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:24
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:26
 msgid "Immediately start with the questions, no “Start” button"
 msgstr "立即开始做题，不需要 \"开始 \"按钮"
 
@@ -11996,7 +12012,7 @@ msgstr "跳到下一页的问题。"
 msgid "Jump to this question label (must be on an other page below)"
 msgstr "跳转到这个问题标签（必须在下面的其他页面上）"
 
-#: zotonic_mod_survey/src/mod_survey.erl:285
+#: zotonic_mod_survey/src/mod_survey.erl:293
 msgid "Likert"
 msgstr "李克特量表"
 
@@ -12007,12 +12023,12 @@ msgstr "李克特量表"
 msgid "Link with person"
 msgstr "与人联系"
 
-#: zotonic_mod_survey/src/mod_survey.erl:291
+#: zotonic_mod_survey/src/mod_survey.erl:299
 msgid "Long answer"
 msgstr "长答案"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:173
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:174
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:184
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:185
 msgid "Mail results to"
 msgstr "将结果邮寄给"
 
@@ -12038,8 +12054,9 @@ msgstr "匹配问题"
 msgid "Maximal value"
 msgstr "最大值"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:70
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:69
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:77
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:84
 msgid "Maximum number of submissions"
 msgstr "最多提交数量"
 
@@ -12072,7 +12089,7 @@ msgstr "允许选择多个答案"
 msgid "Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer."
 msgstr "可能有多个答案：正确答案 <i>分，选择错误答案 <i>而不是</i> 得</i> 分。默认值：答对得 1 分，未选错得 1 分。"
 
-#: zotonic_mod_survey/src/mod_survey.erl:298
+#: zotonic_mod_survey/src/mod_survey.erl:306
 msgid "Multiple choice"
 msgstr "多项选择"
 
@@ -12081,15 +12098,15 @@ msgstr "多项选择"
 msgid "Multiple choice or quiz question"
 msgstr "多项选择或测验问题"
 
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:33
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:38
 msgid "Multiple page break blocks are merged into one."
 msgstr "多个页面块会被合成一个。"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:50
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:53
 msgid "Multiple times – each time with new results"
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:289
+#: zotonic_mod_survey/src/mod_survey.erl:297
 msgid "Narrative"
 msgstr "陈述"
 
@@ -12106,9 +12123,18 @@ msgstr "新的结果。"
 msgid "Next page in category"
 msgstr "下一页的类别"
 
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:41
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:26
+msgid "No \"Back\" button to this page. If correct/wrong feedback is filled in, then show it directly after this page."
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:118
 msgid "No results yet."
 msgstr "还没有结果。"
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:101
+msgid "Note that if you select a special handler below, then that handler may override this setting."
+msgstr ""
 
 #: zotonic_mod_survey/src/support/survey_admin.erl:129
 #: zotonic_mod_survey/src/support/survey_admin.erl:173
@@ -12119,20 +12145,16 @@ msgstr "添加到邮件列表的收件人数量："
 msgid "Numeric input, show totals for this field in the results."
 msgstr "数字输入，在结果中显示该字段的总计。"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:46
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:49
 msgid "Once (no editing after submit)"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:62
-msgid "Once is per logged in respondent, or per browser for anonymous respondents. For anonymous respondents a cookie with a unique id is used to identify the browser."
-msgstr ""
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:54
-msgid "Once per user — submit and edit later (only for logged in users)"
-msgstr ""
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:58
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:57
 msgid "Once — save halfway and continue later (no editing after submit)"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:61
+msgid "Once — save halfway and continue later + logged in user can edit after submit"
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:33
@@ -12143,15 +12165,15 @@ msgstr "只接受图片。"
 msgid "Options from a page category"
 msgstr "页面类别中的选项"
 
-#: zotonic_mod_survey/src/mod_survey.erl:294
+#: zotonic_mod_survey/src/mod_survey.erl:302
 msgid "Page break"
 msgstr "页面中断"
 
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:11
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:16
 msgid "Page jump condition"
 msgstr "页面跳转条件"
 
-#: zotonic_mod_survey/src/mod_survey.erl:295
+#: zotonic_mod_survey/src/mod_survey.erl:303
 msgid "Page options"
 msgstr ""
 
@@ -12166,7 +12188,7 @@ msgstr "经过？"
 msgid "Passed"
 msgstr "通过"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:155
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:167
 msgid "Passing score"
 msgstr "合格分数"
 
@@ -12209,7 +12231,7 @@ msgstr "主要"
 msgid "Printable list"
 msgstr "可打印列表"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:123
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:133
 msgid "Progress"
 msgstr "进展情况"
 
@@ -12223,8 +12245,8 @@ msgstr "问题"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:21
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:63
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:28
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:23
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:33
 msgid "Question label"
 msgstr "问题标签"
 
@@ -12246,7 +12268,7 @@ msgstr "简短回答的问题"
 #: zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8
-#: zotonic_mod_survey/src/mod_survey.erl:282
+#: zotonic_mod_survey/src/mod_survey.erl:290
 msgid "Questions"
 msgstr "疑问"
 
@@ -12267,16 +12289,8 @@ msgstr "随机化答案"
 msgid "Red"
 msgstr "红色"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:41
-msgid "Remove \"Back\" button. Feedback if wrong or correct will be shown after submit."
-msgstr ""
-
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:21
-msgid "Remove \"Back\" button. If there is instant question feedback then it will be shown after submit."
-msgstr ""
-
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:37
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:17
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:22
 msgid "Remove \"Next\" button. No answers will be submitted unless you add a button jump to a next page."
 msgstr "删除“下一页”按钮。除非您添加跳转至下一页的按钮，否则不会提交任何答案。"
 
@@ -12295,7 +12309,7 @@ msgstr "删除“下一页”按钮。除非您添加跳转至下一页的按钮
 msgid "Required, this question must be answered."
 msgstr "必须填写"
 
-#: zotonic_mod_survey/src/mod_survey.erl:270
+#: zotonic_mod_survey/src/mod_survey.erl:278
 msgid "Result deleted."
 msgstr "结果删了。"
 
@@ -12311,11 +12325,11 @@ msgstr "查看结果"
 msgid "Results editor"
 msgstr "结果编辑器"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:101
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:111
 msgid "Results from the respondent"
 msgstr "答辩人的结果"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:105
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:115
 msgid "Results from the respondent – if passed only"
 msgstr ""
 
@@ -12349,15 +12363,15 @@ msgstr "选择邮件列表"
 msgid "Select your country"
 msgstr "选择你的国家"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:184
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:195
 msgid "Send a confirmation to the respondent. The email address must be known (logged in respondents) or you can add a short text field with the label “email” and the validation set to \"must be an email address\"."
 msgstr "向受访者发送确认信。电子邮件地址必须是已知的（在受访者中登录），或者您可以添加带有标签“电子邮件”和验证设置为“必须是电子邮件地址”的短文本字段。"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:176
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:187
 msgid "Separate multiple email addresses with a comma."
 msgstr "用逗号分隔多个电子邮件地址。"
 
-#: zotonic_mod_survey/src/mod_survey.erl:290
+#: zotonic_mod_survey/src/mod_survey.erl:298
 msgid "Short answer"
 msgstr "短答案"
 
@@ -12369,15 +12383,15 @@ msgstr "显示图表"
 msgid "Show email addresses"
 msgstr "显示 e-mail 地址"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:140
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:150
 msgid "Show progress bar"
 msgstr "显示进度条"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:134
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:144
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "显示进度信息，如“<em>问题 3/10</em>”"
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:106
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:102
 msgid "Show results (admin only)"
 msgstr "显示结果（仅限管理员"
 
@@ -12398,11 +12412,11 @@ msgstr "出错"
 msgid "Sorry, could not insert the new person."
 msgstr "抱歉，无法插入新人。"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1101
+#: zotonic_mod_survey/src/mod_survey.erl:1153
 msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
 msgstr "抱歉，已达到提交数量上限。您不能再提交此表格。"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1114
+#: zotonic_mod_survey/src/mod_survey.erl:1166
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
 msgstr "抱歉，您已提交答案。如果您想再次填写表格，请重新加载页面。"
 
@@ -12464,7 +12478,7 @@ msgstr "错答减分（总分不低于0分）。"
 msgid "Survey editor"
 msgstr "问卷调查编辑器"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:150
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:161
 msgid "Test pass percentage"
 msgstr "考试合格率"
 
@@ -12476,7 +12490,7 @@ msgstr "文字、图片、视频"
 msgid "Thank you for filling in our survey."
 msgstr "谢谢你填写我们的问卷调查。"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:97
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:107
 msgid "Thank you text only"
 msgstr "谢谢你只发短信"
 
@@ -12504,7 +12518,7 @@ msgstr "以下是已填写的内容："
 msgid "The maximum number of submissions for <a href=\"{url}\"><b>{title}</b></a> on {site} has been reached."
 msgstr "上的 <a href=\"{url}\"><b>{title}</b></a> {site} 的提交数量已达到上限。"
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:75
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:59
 msgid "The maximum number of submissions has been reached, you cannot fill this in anymore."
 msgstr "已达到提交的最大数量，您不能再填写。"
 
@@ -12528,7 +12542,7 @@ msgstr "现在有 <b>{n}</b> {max}。"
 msgid "There was an error while handling your answers. We are terribly sorry about this."
 msgstr "处理回答时出错。我们对此感到万分抱歉。"
 
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:9
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:14
 msgid "This block contains options for a page. The presence of this block signals the end of the questions for a page."
 msgstr ""
 
@@ -12552,6 +12566,10 @@ msgstr "这是一个结果，因为："
 msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
 msgstr "这是通过测验或测试所需的百分比。仅在您添加了测验或测试问题时使用。"
 
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
+msgid "This is useful for signup lists with a limited number of spots."
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "This text is shown after the form has been submitted."
 msgstr "此文本在提交表单后显示。"
@@ -12566,11 +12584,11 @@ msgstr "此文显示为调查介绍。"
 msgid "This text is shown below the start button."
 msgstr "此文本显示在开始按钮下方。"
 
-#: zotonic_mod_survey/src/mod_survey.erl:286
+#: zotonic_mod_survey/src/mod_survey.erl:294
 msgid "Thurstone"
 msgstr "瑟斯顿量表"
 
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:16
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:21
 msgid "To question"
 msgstr "跳转到问题"
 
@@ -12596,7 +12614,7 @@ msgstr "真"
 msgid "True or false question"
 msgstr "真假问题"
 
-#: zotonic_mod_survey/src/mod_survey.erl:283
+#: zotonic_mod_survey/src/mod_survey.erl:291
 msgid "True/False"
 msgstr "真/假"
 
@@ -12612,15 +12630,11 @@ msgstr "验证"
 msgid "View and edit results."
 msgstr "查看和编辑结果。"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1122
+#: zotonic_mod_survey/src/mod_survey.erl:1174
 msgid "We are experiencing an overload, please try again in 10 minutes."
 msgstr "我们正处于超载状态，请 10 分钟后重试。"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:92
-msgid "When finished show"
-msgstr "完成后显示"
-
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:32
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:37
 msgid "When no condition is true then the question following this break will be the next page."
 msgstr "当没有条件成立时，所有此中断后面的问题将成为下个页面。"
 
@@ -12638,21 +12652,21 @@ msgstr "错误的"
 msgid "Yes or no question"
 msgstr "是或否问题"
 
-#: zotonic_mod_survey/src/mod_survey.erl:284
+#: zotonic_mod_survey/src/mod_survey.erl:292
 msgid "Yes/No"
 msgstr "是/否"
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:33
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:29
 msgid "You already filled this in, but you can change your previous answers."
 msgstr "你已经填好了，但你可以改变你之前的答案。"
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:45
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:41
 msgid "You already filled this in."
 msgstr "你已经填好了"
 
-#: zotonic_mod_survey/src/mod_survey.erl:259
-#: zotonic_mod_survey/src/mod_survey.erl:274
-#: zotonic_mod_survey/src/mod_survey.erl:1189
+#: zotonic_mod_survey/src/mod_survey.erl:267
+#: zotonic_mod_survey/src/mod_survey.erl:282
+#: zotonic_mod_survey/src/mod_survey.erl:1241
 msgid "You are not allowed to change these results."
 msgstr "你不允许改变这些结果。"
 
@@ -12664,15 +12678,11 @@ msgstr "您无权查看结果。"
 msgid "You must be allowed to edit the form, to edit its results."
 msgstr "您必须被允许编辑表格，才能编辑其结果。"
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:29
-msgid "You need to be logged in to fill this in."
-msgstr ""
-
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:20
 msgid "You received this email because your email address is configured in the settings as the handling address."
 msgstr "您收到这封邮件是因为您的电子邮件地址在设置中被配置为处理地址。"
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:62
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:76
 msgid "You started filling this in and will continue where you left off."
 msgstr ""
 
@@ -12681,7 +12691,7 @@ msgstr ""
 msgid "Your result"
 msgstr "您的结果"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1130
+#: zotonic_mod_survey/src/mod_survey.erl:1182
 msgid "Your session was expired, please restart and try again."
 msgstr "您的会话已过期，请重新启动并重试。"
 
@@ -12739,8 +12749,8 @@ msgstr "必须是 e-mail 地址"
 msgid "must be an email address"
 msgstr "必须是电子邮件地址"
 
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:13
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:24
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:29
 msgid "name >= 2"
 msgstr "名字>=2"
 
