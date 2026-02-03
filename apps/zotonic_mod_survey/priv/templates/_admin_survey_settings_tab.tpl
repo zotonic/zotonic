@@ -16,6 +16,8 @@
 {% endblock %}
 
 {% block widget_content %}
+{% with m.survey.handlers as handlers %}
+
  	<fieldset>
  		<h4>{_ Answering _}</h4>
 		<div class="form-group">
@@ -40,6 +42,7 @@
 	<fieldset>
     	<h4>{_ Filling in _}</h4>
 		<div class="form-group">
+			<p class="help-block">{_ Choose how many times a respondent can fill in this form. _} {_ Once is per logged in respondent, or per browser for anonymous respondents. For anonymous respondents a cookie with a unique id is used to identify the browser. _}</p>
         	<div class="controls">
         		<label class="radio">
         			<input type="radio" name="survey_multiple" value="0" {% if not id.survey_multiple %}checked{% endif %}>
@@ -58,11 +61,15 @@
         			{_ Once — save halfway and continue later (no editing after submit) _}
         		</label>
 			</div>
-			<p class="help-block">
-				{_ Once is per logged in respondent, or per browser for anonymous respondents. For anonymous respondents a cookie with a unique id is used to identify the browser. _}
-			</p>
 
 			{% block survey_settings_fill %}{% endblock %}
+
+        	<br>
+
+			<h5>{_ Maximum number of submissions _}</h5>
+	        <p class="help-block">
+	        	{_ After the maximum number of forms has been submitted, the start button is deactivated, and an email is sent to the <em>Handling</em> addresses below. Leave empty for no limit. This is useful for signup lists with a limited number of spots. _} {_ This is useful for signup lists with a limited number of spots. _}
+	        </p>
 
 			<div class="label-floating">
 		        <input type="number" name="survey_max_results_int" id="{{ #survey_max_results }}" 
@@ -76,9 +83,6 @@
 		        <label for="{{ #survey_max_results }}">
 		        	{_ Maximum number of submissions _}
 		        </label>
-		        <p class="help-block">
-		        	{_ If this number of answers has been submitted then the start button is deactivated and an email is sent to the <em>Handling</em> addresses below. Leave empty for no limit. _}
-		        </p>
 		    </div>
 		</div>
 
@@ -89,8 +93,14 @@
 		<hr>
 
 		<fieldset>
-			<h4>{_ After submit show _}</h4>
+			<h4>{_ After the final submit of the form, show _}</h4>
 			<div class="form-group">
+				<p class="help-block">
+					{_ After all questions are answered and submitted, show one of the following. _}
+					{% if handlers %}
+						{_ Note that if you select a special handler below, then that handler may override this setting. _}
+					{% endif %}
+				</p>
 				<div class="controls">
 					<label class="radio">
 	        			<input type="radio" name="survey_show_results" value="" {% if not id.survey_show_results %}checked{% endif %}>
@@ -146,8 +156,10 @@
 	</fieldset>
 
 	{% if not id.is_a.poll %}
+		<hr>
 		<fieldset>
 			<h4>{_ Test pass percentage _}</h4>
+	        <p class="help-block">{_ This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions. _}</p>
 			<div class="form-group">
 				<div class="input-group" style="max-width: 12ch">
 			        <input type="number" name="survey_test_percentage" id="{{ #survey_test_percentage }}" 
@@ -159,7 +171,6 @@
 			        			type={numericality minimum=0 maximum=100}
 			        %}
 			    </div>
-		        <p class="help-block muted">{_ This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions. _}</p>
 			</div>
 		</fieldset>
 	{% endif %}
@@ -186,7 +197,7 @@
 			</div>
 		</div>
 
-		{% if m.survey.handlers|length %}
+		{% if handlers %}
 			<div class="form-group">
 				<label class="control-label">{_ Handle this form with _}</label>
 				<div>
@@ -202,4 +213,5 @@
 
 		{% block survey_settings_handling %}{% endblock %}
 	</fieldset>
+{% endwith %}
 {% endblock %}
