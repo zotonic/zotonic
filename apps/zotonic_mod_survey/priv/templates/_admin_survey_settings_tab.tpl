@@ -68,7 +68,7 @@
 
 			<h5>{_ Maximum number of submissions _}</h5>
 	        <p class="help-block">
-	        	{_ After the maximum number of forms has been submitted, the start button is deactivated, and an email is sent to the <em>Handling</em> addresses below. Leave empty for no limit. This is useful for signup lists with a limited number of spots. _} {_ This is useful for signup lists with a limited number of spots. _}
+	        	{_ If the maximum number of forms has been submitted, then the start button is deactivated and an email is sent to the email addresses in the <em>handling</em> settings below. Leave empty for no limit. This is useful for signup lists with a limited number of spots. _} {_ This is useful for signup lists with a limited number of spots. _}
 	        </p>
 
 			<div class="label-floating">
@@ -93,10 +93,10 @@
 		<hr>
 
 		<fieldset>
-			<h4>{_ After the final submit of the form, show _}</h4>
+			<h4>{_ Show after the final submit of the form _}</h4>
 			<div class="form-group">
 				<p class="help-block">
-					{_ After all questions are answered and submitted, show one of the following. _}
+					{_ After all questions are answered and submitted, one of the following is shown. _}
 					{% if handlers %}
 						{_ Note that if you select a special handler below, then that handler may override this setting. _}
 					{% endif %}
