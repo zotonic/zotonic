@@ -203,7 +203,7 @@
 				<div>
 					<select class="form-control" name="survey_handler" id="survey_handler">
 						<option value=""></option>
-						{% for val,desc in m.survey.handlers %}
+						{% for val,desc in handlers %}
 							<option value="{{ val }}" {% if id.survey_handler == val %}selected{% endif %}>{{ desc }}</option>
 						{% endfor %}
 					</select>
