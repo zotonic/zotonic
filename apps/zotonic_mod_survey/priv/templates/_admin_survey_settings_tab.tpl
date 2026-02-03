@@ -42,7 +42,7 @@
 	<fieldset>
     	<h4>{_ Filling in _}</h4>
 		<div class="form-group">
-			<p class="help-block">{_ Choose how many times a respondent can fill in this form. _} {_ Once is per logged in respondent, or per browser for anonymous respondents. For anonymous respondents a cookie with a unique id is used to identify the browser. _}</p>
+			<p class="help-block">{_ Choose how many times a respondent can fill in this form. _} {_ 'Once' means once by a respondent who is logged in or once per browser for anonymous respondents. For anonymous respondents a cookie with a unique id is used to identify the browser. _}</p>
         	<div class="controls">
         		<label class="radio">
         			<input type="radio" name="survey_multiple" value="0" {% if not id.survey_multiple %}checked{% endif %}>

@@ -18,7 +18,7 @@
             </label>
             <label class="checkbox">
                 <input type="checkbox" name="options.is_hide_back" {% if blk.is_hide_back %}checked{% endif %}>
-                {_ Remove "Back" button. If there is instant question feedback then it will be shown after submit. _}
+                {_ Remove "Back" button and if correct/wrong feedback is filled in, show it directly after this page. _}
             </label>
         </div>
     </div>
