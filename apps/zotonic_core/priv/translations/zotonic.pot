@@ -12318,19 +12318,8 @@ msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:99
 msgid ""
-"After all questions are answered and submitted, show one of the following."
-msgstr ""
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:96
-msgid "After the final submit of the form, show"
-msgstr ""
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
-msgid ""
-"After the maximum number of forms has been submitted, the start button is "
-"deactivated, and an email is sent to the <em>Handling</em> addresses below. "
-"Leave empty for no limit. This is useful for signup lists with a limited "
-"number of spots."
+"After all questions are answered and submitted, one of the following is "
+"shown."
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:119
@@ -12688,6 +12677,14 @@ msgstr ""
 msgid ""
 "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] "
 "ice cream and my favorite color is [color]."
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
+msgid ""
+"If the maximum number of forms has been submitted, then the start button is "
+"deactivated and an email is sent to the email addresses in the <em>handling</"
+"em> settings below. Leave empty for no limit. This is useful for signup "
+"lists with a limited number of spots."
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:26
@@ -13105,6 +13102,10 @@ msgstr ""
 
 #: zotonic_mod_survey/src/mod_survey.erl:298
 msgid "Short answer"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:96
+msgid "Show after the final submit of the form"
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:26
