@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-03 16:22\n"
+"PO-Revision-Date: 2026-02-03 17:25\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -11619,7 +11619,7 @@ msgstr "Toevoegen aan mailinglijst"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:99
 msgid "After all questions are answered and submitted, one of the following is shown."
-msgstr ""
+msgstr "Nadat alle vragen zijn beantwoord en ingediend, wordt een van de volgende opties weergegeven."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:119
 msgid "Aggregated results from all respondents"
@@ -11970,7 +11970,7 @@ msgstr "Ik ben [leeftijd] jaar oud. Ik hou van [ijs=vanille|aardbei|chocola|over
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
 msgid "If the maximum number of forms has been submitted, then the start button is deactivated and an email is sent to the email addresses in the <em>handling</em> settings below. Leave empty for no limit. This is useful for signup lists with a limited number of spots."
-msgstr ""
+msgstr "Als het maximale aantal formulieren is ingediend, wordt de startknop gedeactiveerd en wordt er een e-mail gestuurd naar de e-mailadressen in de onderstaande <em>afhandelingsinstellingen</em>. Laat leeg voor geen limiet. Dit is handig voor aanmeldingslijsten met een beperkt aantal plekken."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:26
 msgid "Immediately start with the questions, no “Start” button"
@@ -12378,7 +12378,7 @@ msgstr "Kort antwoord"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:96
 msgid "Show after the final submit of the form"
-msgstr ""
+msgstr "Tonen na het definitief verzenden van het formulier"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:26
 msgid "Show charts"
