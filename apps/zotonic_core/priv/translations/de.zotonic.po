@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-03 13:59\n"
+"PO-Revision-Date: 2026-02-03 16:22\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -11615,16 +11615,8 @@ msgid "Add to mailinglist"
 msgstr "Zur Mailingliste hinzufügen"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:99
-msgid "After all questions are answered and submitted, show one of the following."
-msgstr "Nachdem alle Fragen beantwortet und eingereicht wurden, zeigen Sie eine der folgenden Möglichkeiten."
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:96
-msgid "After the final submit of the form, show"
-msgstr "Nach dem endgültigen Absenden des Formulars, zeigen Sie"
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
-msgid "After the maximum number of forms has been submitted, the start button is deactivated, and an email is sent to the <em>Handling</em> addresses below. Leave empty for no limit. This is useful for signup lists with a limited number of spots."
-msgstr "Nachdem die maximale Anzahl von Formularen eingereicht wurde, wird die Start-Schaltfläche deaktiviert und eine E-Mail an die unten angegebenen <em>Bearbeitungsadressen</em> gesendet. Leer lassen für keine Begrenzung. Dies ist nützlich für Anmeldelisten mit einer begrenzten Anzahl von Plätzen."
+msgid "After all questions are answered and submitted, one of the following is shown."
+msgstr "Nachdem alle Fragen beantwortet und eingereicht wurden, wird eines der folgenden Ergebnisse angezeigt."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:119
 msgid "Aggregated results from all respondents"
@@ -11972,6 +11964,10 @@ msgstr "Ich bin"
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_narrative.tpl:27
 msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color]."
 msgstr "Ich bin [age] Jahre alt. Ich mag [icecream=vanilla|strawberry|chocolate|other] Eis und meine Lieblingsfarbe ist [color]."
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
+msgid "If the maximum number of forms has been submitted, then the start button is deactivated and an email is sent to the email addresses in the <em>handling</em> settings below. Leave empty for no limit. This is useful for signup lists with a limited number of spots."
+msgstr "Wenn die maximale Anzahl von Formularen eingereicht wurde, wird die Start-Schaltfläche deaktiviert und eine E-Mail an die E-Mail-Adressen in den unten stehenden <em>Einstellungen</em> gesendet. Leer lassen für keine Begrenzung. Dies ist nützlich für Anmeldelisten mit einer begrenzten Anzahl von Plätzen."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:26
 msgid "Immediately start with the questions, no “Start” button"
@@ -12376,6 +12372,10 @@ msgstr "Trennen Sie mehrere E-Mail-Adressen mit einem Komma."
 #: zotonic_mod_survey/src/mod_survey.erl:298
 msgid "Short answer"
 msgstr "Kurze Antwort"
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:96
+msgid "Show after the final submit of the form"
+msgstr "Nach dem endgültigen Absenden des Formulars anzeigen"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:26
 msgid "Show charts"
