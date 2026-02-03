@@ -24,7 +24,7 @@ Check the list of blocks and collect all options for that page.
 Options are:
 
  * `is_stop_page`: stop survey, no submit button
- * `is_hide_back`: hide back button
+ * `is_no_back`: back to this page is not allowed
 
 The options could be in two types of blocks: the `survey_stop` and the `survey_page_options` blocks.
 The `survey_stop` block is deprecated in favor of the `survey_page_options` block.
@@ -53,7 +53,7 @@ option_block(#{ <<"type">> := <<"survey_stop">> }, Acc) ->
     };
 option_block(#{ <<"type">> := <<"survey_page_options">> } = Opts, Acc) ->
     Acc#{
-        <<"is_hide_back">> => maps:get(<<"is_hide_back">>, Opts, maps:get(<<"is_hide_back">>, Acc, false)),
+        <<"is_no_back">> => maps:get(<<"is_no_back">>, Opts, maps:get(<<"is_no_back">>, Acc, false)),
         <<"is_stop_page">> => maps:get(<<"is_stop_page">>, Opts, maps:get(<<"is_stop_page">>, Acc, false))
     };
 option_block(_Block, Acc) ->

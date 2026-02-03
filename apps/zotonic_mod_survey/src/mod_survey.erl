@@ -170,6 +170,9 @@ Add more documentation
     save_submit/2,
     survey_start/2,
 
+    is_save_intermediate/2,
+    is_page_back_allowed/3,
+
     collect_answers/4,
     render_next_page/8,
     go_button_target/4,
@@ -209,9 +212,14 @@ event(#submit{message={survey_next, Args}}, Context) ->
             % Back button pressed, no validation of query args.
             case History of
                 [_,PageNr|History1] ->
-                    render_update(
-                        render_next_page(SurveyId, PageNr, exact, Answers, History1, Editing, Args, Context),
-                        Args, Context);
+                    case is_page_back_allowed(SurveyId, PageNr, Context) of
+                        true ->
+                            render_update(
+                                render_next_page(SurveyId, PageNr, exact, Answers, History1, Editing, Args, Context),
+                                Args, Context);
+                        false ->
+                            Context
+                    end;
                 _History ->
                     render_update(
                         render_next_page(SurveyId, 0, exact, Answers, [], Editing, Args, Context),
@@ -440,10 +448,10 @@ survey_start(Args, Context) ->
             render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context);
         false ->
             Editing = proplists:get_value(editing, Args),
-            MaybePrevArgs = case z_convert:to_binary(m_rsc:p(SurveyId, <<"survey_multiple">>, Context)) of
-                <<"3">> when Editing =:= undefined ->
+            MaybePrevArgs = case is_save_intermediate(SurveyId, Context) of
+                true when Editing =:= undefined ->
                     m_survey_saved:get_saved(SurveyId, Context);
-                _ ->
+                false ->
                     {error, enoent}
             end,
             case MaybePrevArgs of
@@ -510,6 +518,45 @@ unregister_nonce(SessionNonce) when is_binary(SessionNonce) ->
 %%====================================================================
 
 
+%% @doc Check if the survey is configured to save intermediate results
+-spec is_save_intermediate(SurveyId, Context) -> boolean() when
+    SurveyId :: m_rsc:resource_id(),
+    Context :: z:context().
+is_save_intermediate(SurveyId, Context) ->
+    case z_convert:to_binary(m_rsc:p(SurveyId, <<"survey_multiple">>, Context)) of
+        <<"2">> -> true;
+        <<"3">> -> true;
+        _ -> false
+    end.
+
+%% @doc Check if the given page is configured to allow to go back to that page
+%% from a later page.
+-spec is_page_back_allowed(SurveyId, PageNr, Context) -> boolean() when
+    SurveyId :: m_rsc:resource_id(),
+    PageNr :: integer(),
+    Context :: z:context().
+is_page_back_allowed(SurveyId, PageNr, Context) ->
+    case m_rsc:p(SurveyId, <<"blocks">>, Context) of
+        Questions when is_list(Questions) ->
+            case drop_till_page(PageNr, Questions) of
+                {[], _} ->
+                    false;
+                {L, _} ->
+                    is_page_back_allowed(takepage(L))
+            end;
+        _ ->
+            false
+    end.
+
+is_page_back_allowed(L) ->
+    not lists:any(fun has_no_page_back_option/1, L).
+
+has_no_page_back_option(#{ <<"type">> := <<"survey_page_options">>, <<"is_no_back">> := IsHideBack }) ->
+    IsHideBack;
+has_no_page_back_option(_) ->
+    false.
+
+
 %% @doc If the survey is set to save intermediate results then those are saved to the
 %% survey_saved model.
 -spec maybe_save_intermediate_results(Editing, SurveyId, PageNr, SubmitArgs, Context) -> ok | {error, Reason} when
@@ -520,8 +567,8 @@ unregister_nonce(SessionNonce) when is_binary(SessionNonce) ->
     Context :: z:context(),
     Reason :: term().
 maybe_save_intermediate_results(undefined, SurveyId, PageNr, SubmitArgs, Context) ->
-    case z_convert:to_binary(m_rsc:p(SurveyId, <<"survey_multiple">>, Context)) of
-        <<"3">> -> m_survey_saved:put_saved(SurveyId, PageNr, SubmitArgs, Context);
+    case is_save_intermediate(SurveyId, Context) of
+        true -> m_survey_saved:put_saved(SurveyId, PageNr, SubmitArgs, Context);
         _ -> ok
     end;
 maybe_save_intermediate_results(_Editing, _SurveyId, _PageNr, _SubmitArgs, _Context) ->
@@ -710,9 +757,10 @@ render_next_page(SurveyId, PageNr, Direction, Answers, History, Editing, Args, C
                 ]}
     end.
 
-push_history(PageNr, []) -> [ PageNr ];
-push_history(PageNr, [PageNr|_] = H) -> H;
-push_history(PageNr, H) -> [ PageNr | H ].
+push_history(PageNr, []) -> [ PageNr ];             % first page
+push_history(PageNr, [PageNr|_] = H) -> H;          % stay
+push_history(PageNr, [_,PageNr|H]) -> [PageNr|H];   % back
+push_history(PageNr, H) -> [ PageNr | H ].          % forward
 
 page_has_feedback_view(0, _Qs) ->
     false;
@@ -721,7 +769,7 @@ page_has_feedback_view(Nr, Qs) ->
         {[], _Nr} -> false;
         {L, _Nr1} ->
             case has_feedback(L) of
-                true -> is_hide_back(takepage(L));
+                true -> not is_page_back_allowed(takepage(L));
                 false -> false
             end
     end.
@@ -736,11 +784,6 @@ has_feedback([B|Bs]) ->
                 false -> has_feedback(Bs)
             end
     end.
-
-is_hide_back([]) -> false;
-is_hide_back([ #{ <<"type">> := <<"survey_page_options">> } = B | _ ]) ->
-    maps:get(<<"is_hide_back">>, B, false);
-is_hide_back([ _ | Bs ]) -> is_hide_back(Bs).
 
 has_feedback_1(#{ <<"is_test_direct">> := true }) ->
     false;

@@ -479,7 +479,7 @@ page_options_block() ->
     #{
         <<"blocks[].type">> => <<"survey_page_options">>,
         <<"blocks[].name">> => z_ids:id(),
-        <<"blocks[].is_hide_back">> => false,
+        <<"blocks[].is_no_back">> => false,
         <<"blocks[].is_stop_page">> => false
     }.
 
