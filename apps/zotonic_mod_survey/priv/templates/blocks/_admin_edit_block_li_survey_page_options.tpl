@@ -13,11 +13,11 @@
     <div class="row">
         <div class="col-md-12">
             <label class="checkbox">
-                <input type="checkbox" name="blocks[].is_stop_page" {% if blk.is_stop_page %}checked{% endif %}>
+                <input type="checkbox" name="is_stop_page" {% if blk.is_stop_page %}checked{% endif %}>
                 {_ Remove "Next" button. No answers will be submitted unless you add a button jump to a next page. _}
             </label>
             <label class="checkbox">
-                <input type="checkbox" name="blocks[].is_no_back" {% if blk.is_no_back %}checked{% endif %}>
+                <input type="checkbox" name="page-options-is_no_back" {% if blk.is_no_back %}checked{% endif %}>
                 {_ No "Back" button to this page. If correct/wrong feedback is filled in, then show it directly after this page. _}
             </label>
         </div>
