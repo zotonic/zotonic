@@ -17,8 +17,8 @@
                 {_ Remove "Next" button. No answers will be submitted unless you add a button jump to a next page. _}
             </label>
             <label class="checkbox">
-                <input type="checkbox" name="options.is_hide_back" {% if blk.is_hide_back %}checked{% endif %}>
-                {_ Remove "Back" button and if correct/wrong feedback is filled in, show it directly after this page. _}
+                <input type="checkbox" name="is_no_back" {% if blk.is_no_back %}checked{% endif %}>
+                {_ No "Back" button to this page. If correct/wrong feedback is filled in, then show it directly after this page. _}
             </label>
         </div>
     </div>
