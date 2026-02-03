@@ -5,6 +5,11 @@
 {% block widget_id %}edit-block-{{ name }}{% endblock %}
 
 {% block widget_content %}
+    {% comment %}
+        This block should not be used to edit the jumps. Normally the survey questions editor
+        is used to edit the page jumps and ensure the correct structure of the pages.
+    {% endcomment %}
+
     {% if id.is_editable %}
     <div class="row">
         <div class="col-lg-6 col-md-6">

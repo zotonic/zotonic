@@ -89,7 +89,7 @@
 		{% else %}
 			{% with questions|survey_page_options as options %}
 
-				{% if page_nr > 1 and not options.is_hide_back %}
+				{% if id|survey_is_history_back:history %}
 					<button class="btn btn-default" formnovalidate type="submit">{_ Back _}</button>
 				{% endif %}
 
@@ -104,7 +104,7 @@
 									)
 							as action
 						%}
-							{% if id.survey_multiple == 3 %}
+							{% if id|survey_is_save_intermediate %}
 								<a id="{{ #cancel }}" href="#" class="btn btn-lg btn-default">{_ Stop _}</a>
 								{% wire id=#cancel
 										action={confirm

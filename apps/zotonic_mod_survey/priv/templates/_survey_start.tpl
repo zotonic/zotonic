@@ -5,7 +5,7 @@
 {% if id.survey_is_disabled and not id.is_editable %}
     <p><em>{_ Closed _}</em></p>
 {% elseif answer_id and id.is_editable %}
-    {# Change existing answer #}
+    {# Change existing answer from any user by an editor/admin #}
     {% wire
         postback={survey_start
             id=id
@@ -23,11 +23,7 @@
                 viewer=viewer
                 element_id=element_id|default:"survey-question"
     %}
-{% elseif id.survey_multiple == 2 and not m.acl.user %}
-    {# Single entry form and previous answers are allowed to be changed by a logged in user #}
-    <p><span class="fa fa-exclamation-triangle"></span>
-    {_ You need to be logged in to fill this in. _}</p>
-{% elseif id.survey_multiple == 2 and did_survey %}
+{% elseif id.survey_multiple == 2 and did_survey and m.acl.user %}
     {# Single entry form and previous answers are allowed to be changed by a logged in user #}
     <p><span class="fa fa-info-circle"></span>
     {_ You already filled this in, but you can change your previous answers. _}</p>
@@ -56,18 +52,6 @@
                 action={dialog_close}
         %}
     {% endif %}
-{% elseif id.survey_multiple == 3 and not is_max_results_reached and m.survey_saved.has_saved[id] %}
-    {# Single entry form with intermediate saved results can be continued. #}
-    <p><span class="fa fa-info-circle"></span>
-    {_ You started filling this in and will continue where you left off. _}</p>
-    {% include "_survey_start_button.tpl"
-                id=id
-                answers=answers|default:m.survey.did_survey_answers[id]
-                viewer=viewer
-                is_autostart=is_autostart
-                is_survey_saved
-                element_id=element_id|default:"survey-question"
-    %}
 {% elseif is_max_results_reached %}
     {# Maximum number of submissions has been reached. #}
     <p class="alert alert-info">
@@ -86,6 +70,18 @@
                 action={dialog_close}
         %}
     {% endif %}
+{% elseif id|survey_is_save_intermediate and m.survey_saved.has_saved[id] %}
+    {# Single entry form with intermediate saved results can be continued. #}
+    <p><span class="fa fa-info-circle"></span>
+    {_ You started filling this in and will continue where you left off. _}</p>
+    {% include "_survey_start_button.tpl"
+                id=id
+                answers=answers|default:m.survey.did_survey_answers[id]
+                viewer=viewer
+                is_autostart=is_autostart
+                is_survey_saved
+                element_id=element_id|default:"survey-question"
+    %}
 {% else %}
     {# Show start button or start with the first page. #}
     {% include "_survey_start_button.tpl"

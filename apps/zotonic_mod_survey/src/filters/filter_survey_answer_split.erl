@@ -1,7 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2012 Marc Worrell
+%% @copyright 2012-2026 Marc Worrell
+%% @doc Filter to split multi-value survey answers on the '#' character.
+%% @end
 
-%% Copyright 2012 Marc Worrell
+%% Copyright 2012-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -17,9 +19,22 @@
 
 -module(filter_survey_answer_split).
 -moduledoc("
-Todo
+Filter to split multi-value survey answers on the '#' character.
 
-Not yet documented.
+If a question can have multiple answers then they can be stored in a single
+string separated by the '#' character. This filter splits such strings.
+
+Examples of usage:
+
+  {{ answer | survey_answer_split }}
+
+will split the variable 'answer' on the '#' character.
+
+Question types that can have multiple answers are:
+
+  * thurstone
+  * multiple choice
+  * category select
 ").
 
 -export([
