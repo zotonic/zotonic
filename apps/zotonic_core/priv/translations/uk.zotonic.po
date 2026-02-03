@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-02 15:54\n"
+"PO-Revision-Date: 2026-02-03 13:59\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -350,7 +350,7 @@ msgstr "Скасувати"
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:45
 #: zotonic_mod_admin_identity/priv/templates/_admin_overview_list_page1.tpl:11
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:28
-#: zotonic_mod_survey/src/mod_survey.erl:287
+#: zotonic_mod_survey/src/mod_survey.erl:295
 msgid "Category"
 msgstr "Категорія"
 
@@ -388,10 +388,10 @@ msgstr "Змінена конфігурація."
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:21
 #: zotonic_mod_survey/priv/templates/_survey_results.tpl:56
 #: zotonic_mod_survey/priv/templates/_survey_results.tpl:61
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:49
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:54
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:79
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:84
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:45
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:50
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:63
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:68
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:30
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:35
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:40
@@ -494,7 +494,7 @@ msgstr "Не вдалося перейти до групи співпраці."
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:106
 #: zotonic_mod_survey/priv/templates/page_admin_frontend_edit.tpl:17
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_thurstone.tpl:125
-#: zotonic_mod_survey/src/mod_survey.erl:253
+#: zotonic_mod_survey/src/mod_survey.erl:261
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 msgid "Delete"
 msgstr "Видалити"
@@ -2021,7 +2021,7 @@ msgid "Make a new page or media"
 msgstr "Створіть нову сторінку або медіа"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab_find_description.tpl:6
-#: zotonic_mod_survey/src/mod_survey.erl:288
+#: zotonic_mod_survey/src/mod_survey.erl:296
 msgid "Matching"
 msgstr "Збіг"
 
@@ -4270,9 +4270,9 @@ msgstr "Встановити ім'я користувача / пароль"
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:27
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:73
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:128
-#: zotonic_mod_survey/src/mod_survey.erl:1108
-#: zotonic_mod_survey/src/mod_survey.erl:1130
-#: zotonic_mod_survey/src/mod_survey.erl:1138
+#: zotonic_mod_survey/src/mod_survey.erl:1151
+#: zotonic_mod_survey/src/mod_survey.erl:1173
+#: zotonic_mod_survey/src/mod_survey.erl:1181
 msgid "Sorry"
 msgstr "Вибачте"
 
@@ -7469,7 +7469,7 @@ msgstr "Розпочато включення шаблонів трасуван�
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:51
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:108
-#: zotonic_mod_survey/src/mod_survey.erl:296
+#: zotonic_mod_survey/src/mod_survey.erl:304
 msgid "Stop"
 msgstr "Зупинити"
 
@@ -11546,6 +11546,10 @@ msgstr "Щоб запитувати сертифікати, потрібно б�
 msgid "not reachable or local IP"
 msgstr "недоступний або локальний IP"
 
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:45
+msgid "'Once' means once by a respondent who is logged in or once per browser for anonymous respondents. To identify the browser of anonymous respondents, a cookie containing a unique ID is utilized."
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:28
 msgid "Add a question or block"
 msgstr "Додайте запитання або заблокуйте"
@@ -11608,11 +11612,19 @@ msgstr "Додати до існуючого списку розсилки"
 msgid "Add to mailinglist"
 msgstr "Додати до списку розсилки"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:92
-msgid "After submit show"
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:99
+msgid "After all questions are answered and submitted, show one of the following."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:109
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:96
+msgid "After the final submit of the form, show"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
+msgid "After the maximum number of forms has been submitted, the start button is deactivated, and an email is sent to the <em>Handling</em> addresses below. Leave empty for no limit. This is useful for signup lists with a limited number of spots."
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:119
 msgid "Aggregated results from all respondents"
 msgstr "Зведені результати від усіх респондентів"
 
@@ -11620,7 +11632,7 @@ msgstr "Зведені результати від усіх респондент
 msgid "Agree"
 msgstr "Згоден"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1121
+#: zotonic_mod_survey/src/mod_survey.erl:1164
 msgid "Already submitted"
 msgstr "Вже подано"
 
@@ -11637,7 +11649,7 @@ msgstr "Інша сторінка, відео чи зображення."
 msgid "Answer"
 msgstr "Відповідь"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:20
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:22
 msgid "Answering"
 msgstr "Відповідаючи"
 
@@ -11668,7 +11680,7 @@ msgstr "Ви впевнені, що хочете видалити цю стор�
 msgid "Are you sure you want to delete this question?"
 msgstr "Ви впевнені, що хочете видалити це запитання?"
 
-#: zotonic_mod_survey/src/mod_survey.erl:252
+#: zotonic_mod_survey/src/mod_survey.erl:260
 msgid "Are you sure you want to delete this result?"
 msgstr "Ви впевнені, що хочете видалити цей результат?"
 
@@ -11685,7 +11697,7 @@ msgid "Because you can edit, you can proceed for testing."
 msgstr "Оскільки ви можете редагувати, ви можете переходити до тестування."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:112
-#: zotonic_mod_survey/src/mod_survey.erl:293
+#: zotonic_mod_survey/src/mod_survey.erl:301
 msgid "Button"
 msgstr "Кнопка"
 
@@ -11726,6 +11738,10 @@ msgstr "Перевірте правильні відповіді та дайте
 msgid "Choices"
 msgstr "Вибір"
 
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:45
+msgid "Choose how many times a respondent can fill in this form."
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:2
 msgid "Click on “Edit” to see and change the entered data."
 msgstr "Натисніть «Редагувати», щоб переглянути та змінити введені дані."
@@ -11750,7 +11766,7 @@ msgstr "Не вдалося додати одержувачів."
 msgid "Could not create the mailinglist."
 msgstr "Не вдалося створити список розсилки."
 
-#: zotonic_mod_survey/src/mod_survey.erl:292
+#: zotonic_mod_survey/src/mod_survey.erl:300
 msgid "Country select"
 msgstr "Виберіть країну"
 
@@ -11786,7 +11802,7 @@ msgstr "Створено"
 msgid "Danger"
 msgstr "Небезпека"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:31
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:33
 msgid "Deactivated"
 msgstr "Деактивовано"
 
@@ -11878,7 +11894,7 @@ msgstr "Відгук, якщо коректно"
 msgid "Feedback if wrong"
 msgstr "Відгук, якщо неправильно"
 
-#: zotonic_mod_survey/src/mod_survey.erl:297
+#: zotonic_mod_survey/src/mod_survey.erl:305
 msgid "File upload"
 msgstr "Завантаження файлу"
 
@@ -11887,7 +11903,7 @@ msgstr "Завантаження файлу"
 msgid "Fill in the gaps"
 msgstr "Заповніть пропуски"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:41
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:43
 msgid "Filling in"
 msgstr ""
 
@@ -11907,11 +11923,11 @@ msgstr "Для діапазонів дат ви також можете вико
 msgid "Go to question"
 msgstr "Перейти до питання"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:191
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:202
 msgid "Handle this form with"
 msgstr "Обробити цю форму за допомогою"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:170
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:181
 msgid "Handling"
 msgstr "Обробка"
 
@@ -11938,11 +11954,11 @@ msgstr "Приховане значення, збережене разом із 
 msgid "Hide from results"
 msgstr "Приховати від результатів"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:128
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:138
 msgid "Hide progress information"
 msgstr "Приховати інформацію про прогрес"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:27
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:29
 msgid "Hide the user’s id or browser-id from result exports"
 msgstr "Приховати ідентифікатор користувача або ідентифікатор браузера від експорту результатів"
 
@@ -11955,11 +11971,7 @@ msgstr "я"
 msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color]."
 msgstr "Мені [age] років. Мені подобається [морозиво=ваніль|полуниця|шоколад|інше] морозиво, і мій улюблений колір [color]."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:80
-msgid "If this number of answers has been submitted then the start button is deactivated and an email is sent to the <em>Handling</em> addresses below. Leave empty for no limit."
-msgstr "Якщо було надіслано таку кількість відповідей, кнопка \"Старт\" деактивується, а на вказані нижче адреси <em>обробки</em> буде надіслано електронний лист. Залиште поле порожнім для необмеженої кількості відповідей."
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:24
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:26
 msgid "Immediately start with the questions, no “Start” button"
 msgstr "Негайно почніть із запитань, без кнопки «Почати»."
 
@@ -12000,7 +12012,7 @@ msgstr "Перейдіть до запитання на наступній ст�
 msgid "Jump to this question label (must be on an other page below)"
 msgstr "Перейти до цієї мітки запитання (повинен бути на іншій сторінці нижче)"
 
-#: zotonic_mod_survey/src/mod_survey.erl:285
+#: zotonic_mod_survey/src/mod_survey.erl:293
 msgid "Likert"
 msgstr "Лайкерт"
 
@@ -12011,12 +12023,12 @@ msgstr "Лайкерт"
 msgid "Link with person"
 msgstr "Посилання на людину"
 
-#: zotonic_mod_survey/src/mod_survey.erl:291
+#: zotonic_mod_survey/src/mod_survey.erl:299
 msgid "Long answer"
 msgstr "Довга відповідь"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:173
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:174
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:184
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:185
 msgid "Mail results to"
 msgstr "Надішліть результати на адресу"
 
@@ -12042,8 +12054,9 @@ msgstr "Відповідне запитання"
 msgid "Maximal value"
 msgstr "Максимальне значення"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:70
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:69
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:77
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:84
 msgid "Maximum number of submissions"
 msgstr "Максимальна кількість заявок"
 
@@ -12076,7 +12089,7 @@ msgstr "Можливі декілька відповідей"
 msgid "Multiple answers possible: points are given for the correct answer <i>and</i> points are given for <i>not</i> choosing the wrong answer. Default: 1 point for a correct answer, 1 point for not choosing a wrong answer."
 msgstr "Можливі декілька відповідей: за правильну відповідь нараховуються бали <i>і</i> бал за а, <i>не</i> за неправильну відповідь. За замовчуванням: 1 бал за правильну відповідь, 1 бал за неправильну відповідь."
 
-#: zotonic_mod_survey/src/mod_survey.erl:298
+#: zotonic_mod_survey/src/mod_survey.erl:306
 msgid "Multiple choice"
 msgstr "Широкий вибір"
 
@@ -12085,15 +12098,15 @@ msgstr "Широкий вибір"
 msgid "Multiple choice or quiz question"
 msgstr "Запитання з кількома варіантами або вікторини"
 
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:33
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:38
 msgid "Multiple page break blocks are merged into one."
 msgstr "Кілька блоків розриву сторінок об’єднуються в один."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:50
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:53
 msgid "Multiple times – each time with new results"
 msgstr ""
 
-#: zotonic_mod_survey/src/mod_survey.erl:289
+#: zotonic_mod_survey/src/mod_survey.erl:297
 msgid "Narrative"
 msgstr "Розповідь"
 
@@ -12110,9 +12123,18 @@ msgstr "Новий результат:"
 msgid "Next page in category"
 msgstr "Наступна сторінка в категорії"
 
+#: zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:41
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:26
+msgid "No \"Back\" button to this page. If correct/wrong feedback is filled in, then show it directly after this page."
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:118
 msgid "No results yet."
 msgstr "Результатів ще немає."
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:101
+msgid "Note that if you select a special handler below, then that handler may override this setting."
+msgstr ""
 
 #: zotonic_mod_survey/src/support/survey_admin.erl:129
 #: zotonic_mod_survey/src/support/survey_admin.erl:173
@@ -12123,20 +12145,16 @@ msgstr "Кількість одержувачів, доданих до спис�
 msgid "Numeric input, show totals for this field in the results."
 msgstr "Числове введення, відображення підсумків для цього поля в результатах."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:46
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:49
 msgid "Once (no editing after submit)"
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:62
-msgid "Once is per logged in respondent, or per browser for anonymous respondents. For anonymous respondents a cookie with a unique id is used to identify the browser."
-msgstr ""
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:54
-msgid "Once per user — submit and edit later (only for logged in users)"
-msgstr ""
-
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:58
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:57
 msgid "Once — save halfway and continue later (no editing after submit)"
+msgstr ""
+
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:61
+msgid "Once — save halfway and continue later + logged in user can edit after submit"
 msgstr ""
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:33
@@ -12147,15 +12165,15 @@ msgstr "Приймайте лише зображення."
 msgid "Options from a page category"
 msgstr "Параметри з категорії сторінки"
 
-#: zotonic_mod_survey/src/mod_survey.erl:294
+#: zotonic_mod_survey/src/mod_survey.erl:302
 msgid "Page break"
 msgstr "Розрив сторінки"
 
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:11
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:16
 msgid "Page jump condition"
 msgstr "Умова переходу сторінки"
 
-#: zotonic_mod_survey/src/mod_survey.erl:295
+#: zotonic_mod_survey/src/mod_survey.erl:303
 msgid "Page options"
 msgstr ""
 
@@ -12170,7 +12188,7 @@ msgstr "Пас?"
 msgid "Passed"
 msgstr "Пройшов"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:155
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:167
 msgid "Passing score"
 msgstr "Прохідний бал"
 
@@ -12213,7 +12231,7 @@ msgstr "Первинний"
 msgid "Printable list"
 msgstr "Список для друку"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:123
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:133
 msgid "Progress"
 msgstr "Прогрес"
 
@@ -12227,8 +12245,8 @@ msgstr "Питання"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_j.tpl:21
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_button.tpl:63
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:28
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:23
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:33
 msgid "Question label"
 msgstr "Етикетка з питанням"
 
@@ -12250,7 +12268,7 @@ msgstr "Питання з короткою відповіддю"
 #: zotonic_mod_survey/priv/templates/_admin_edit_blocks.survey.tpl:7
 #: zotonic_mod_survey/priv/templates/_admin_edit_main_parts.survey.tpl:5
 #: zotonic_mod_survey/priv/templates/_admin_frontend_edit.survey.tpl:8
-#: zotonic_mod_survey/src/mod_survey.erl:282
+#: zotonic_mod_survey/src/mod_survey.erl:290
 msgid "Questions"
 msgstr "Запитання"
 
@@ -12271,16 +12289,8 @@ msgstr "Вибір відповідей"
 msgid "Red"
 msgstr "червоний"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:41
-msgid "Remove \"Back\" button. Feedback if wrong or correct will be shown after submit."
-msgstr ""
-
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:21
-msgid "Remove \"Back\" button. If there is instant question feedback then it will be shown after submit."
-msgstr ""
-
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:37
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:17
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:22
 msgid "Remove \"Next\" button. No answers will be submitted unless you add a button jump to a next page."
 msgstr "Видаліть кнопку «Далі». Відповіді не будуть надсилатися, якщо ви не додасте кнопку переходу на наступну сторінку."
 
@@ -12299,7 +12309,7 @@ msgstr "Видаліть кнопку «Далі». Відповіді не бу
 msgid "Required, this question must be answered."
 msgstr "Обов’язково, на це запитання потрібно відповісти."
 
-#: zotonic_mod_survey/src/mod_survey.erl:270
+#: zotonic_mod_survey/src/mod_survey.erl:278
 msgid "Result deleted."
 msgstr "Результат видалено."
 
@@ -12315,11 +12325,11 @@ msgstr "Результати"
 msgid "Results editor"
 msgstr "Редактор результатів"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:101
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:111
 msgid "Results from the respondent"
 msgstr "Результати респондента"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:105
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:115
 msgid "Results from the respondent – if passed only"
 msgstr ""
 
@@ -12353,15 +12363,15 @@ msgstr "Виберіть список розсилки"
 msgid "Select your country"
 msgstr "Виберіть свою країну"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:184
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:195
 msgid "Send a confirmation to the respondent. The email address must be known (logged in respondents) or you can add a short text field with the label “email” and the validation set to \"must be an email address\"."
 msgstr "Надіслати респонденту підтвердження. Адреса електронної пошти має бути відома (респонденти, які ввійшли в систему), або ви можете додати коротке текстове поле з міткою «email» і для перевірки встановлено значення «повинна бути адресою електронної пошти»."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:176
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:187
 msgid "Separate multiple email addresses with a comma."
 msgstr "Розділіть кілька адрес електронної пошти комою."
 
-#: zotonic_mod_survey/src/mod_survey.erl:290
+#: zotonic_mod_survey/src/mod_survey.erl:298
 msgid "Short answer"
 msgstr "Коротка відповідь"
 
@@ -12373,15 +12383,15 @@ msgstr "Показати діаграми"
 msgid "Show email addresses"
 msgstr "Показати електронні адреси"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:140
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:150
 msgid "Show progress bar"
 msgstr "Показати індикатор виконання"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:134
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:144
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "Показати інформацію про прогрес як «<em>Питання 3/10</em>»"
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:106
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:102
 msgid "Show results (admin only)"
 msgstr "Показати результати (лише адміністратор)"
 
@@ -12402,11 +12412,11 @@ msgstr "Щось пішло не так"
 msgid "Sorry, could not insert the new person."
 msgstr "На жаль, не вдалося вставити нову особу."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1110
+#: zotonic_mod_survey/src/mod_survey.erl:1153
 msgid "Sorry, the maximum number of submissions has been reached. You can no longer submit this form."
 msgstr "Вибачте, максимальна кількість заявок досягнута. Ви більше не можете надіслати цю форму."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1123
+#: zotonic_mod_survey/src/mod_survey.erl:1166
 msgid "Sorry, you already submitted your answers. Reload the page if you want to fill in the form again."
 msgstr "Вибачте, ви вже надіслали свої відповіді. Перезавантажте сторінку, якщо ви хочете заповнити форму знову."
 
@@ -12468,7 +12478,7 @@ msgstr "Віднімайте бали за неправильні відпові
 msgid "Survey editor"
 msgstr "Редактор опитування"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:150
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:161
 msgid "Test pass percentage"
 msgstr "Відсоток проходження тесту"
 
@@ -12480,7 +12490,7 @@ msgstr "Текст, зображення, відео"
 msgid "Thank you for filling in our survey."
 msgstr "Дякуємо, що заповнили наше опитування."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:97
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:107
 msgid "Thank you text only"
 msgstr "Лише текст подяки"
 
@@ -12508,7 +12518,7 @@ msgstr "Заповнено:"
 msgid "The maximum number of submissions for <a href=\"{url}\"><b>{title}</b></a> on {site} has been reached."
 msgstr "Максимальна кількість заявок на участь у конкурсі <a href=\"{url}\"><b>{title}</b></a> на сайті {site} досягнуто максимальної кількості заявок."
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:75
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:59
 msgid "The maximum number of submissions has been reached, you cannot fill this in anymore."
 msgstr "Максимальна кількість заявок досягнута, ви не можете більше заповнювати цю форму."
 
@@ -12532,7 +12542,7 @@ msgstr "Наразі є <b>{n}</b> заявок з максимальної кі
 msgid "There was an error while handling your answers. We are terribly sorry about this."
 msgstr "Під час обробки ваших відповідей сталася помилка. Ми страшенно шкодуємо про це."
 
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:9
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:14
 msgid "This block contains options for a page. The presence of this block signals the end of the questions for a page."
 msgstr ""
 
@@ -12556,6 +12566,10 @@ msgstr "Це результат для:"
 msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
 msgstr "Це відсоток, необхідний для проходження тесту або тесту. Використовується, лише якщо Ви додали запитання вікторини або тесту."
 
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
+msgid "This is useful for signup lists with a limited number of spots."
+msgstr ""
+
 #: zotonic_mod_survey/priv/templates/_admin_survey_edit_feedback.tpl:18
 msgid "This text is shown after the form has been submitted."
 msgstr "Цей текст відображається після надсилання форми."
@@ -12570,11 +12584,11 @@ msgstr "Цей текст показаний як вступ до опитува
 msgid "This text is shown below the start button."
 msgstr "Цей текст показано під кнопкою «Пуск»."
 
-#: zotonic_mod_survey/src/mod_survey.erl:286
+#: zotonic_mod_survey/src/mod_survey.erl:294
 msgid "Thurstone"
 msgstr "Терстоун"
 
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:16
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:21
 msgid "To question"
 msgstr "На запитання"
 
@@ -12600,7 +12614,7 @@ msgstr "Правда"
 msgid "True or false question"
 msgstr "Правдиве чи хибне запитання"
 
-#: zotonic_mod_survey/src/mod_survey.erl:283
+#: zotonic_mod_survey/src/mod_survey.erl:291
 msgid "True/False"
 msgstr "Правда/Неправда"
 
@@ -12616,11 +12630,11 @@ msgstr "Перевірка"
 msgid "View and edit results."
 msgstr "Перегляд і редагування результатів."
 
-#: zotonic_mod_survey/src/mod_survey.erl:1131
+#: zotonic_mod_survey/src/mod_survey.erl:1174
 msgid "We are experiencing an overload, please try again in 10 minutes."
 msgstr "Ми відчуваємо перевантаження, спробуйте ще раз через 10 хвилин."
 
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:32
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:37
 msgid "When no condition is true then the question following this break will be the next page."
 msgstr "Якщо жодна умова не відповідає дійсності, то питання після цієї перерви буде наступною сторінкою."
 
@@ -12638,21 +12652,21 @@ msgstr "Неправильно"
 msgid "Yes or no question"
 msgstr "Так чи ні питання"
 
-#: zotonic_mod_survey/src/mod_survey.erl:284
+#: zotonic_mod_survey/src/mod_survey.erl:292
 msgid "Yes/No"
 msgstr "Так/Ні"
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:33
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:29
 msgid "You already filled this in, but you can change your previous answers."
 msgstr "Ви вже заповнили це, але можете змінити свої попередні відповіді."
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:45
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:41
 msgid "You already filled this in."
 msgstr "Ви вже заповнили це."
 
-#: zotonic_mod_survey/src/mod_survey.erl:259
-#: zotonic_mod_survey/src/mod_survey.erl:274
-#: zotonic_mod_survey/src/mod_survey.erl:1198
+#: zotonic_mod_survey/src/mod_survey.erl:267
+#: zotonic_mod_survey/src/mod_survey.erl:282
+#: zotonic_mod_survey/src/mod_survey.erl:1241
 msgid "You are not allowed to change these results."
 msgstr "Вам не дозволено змінювати ці результати."
 
@@ -12664,15 +12678,11 @@ msgstr "Ви не маєте права переглядати результа�
 msgid "You must be allowed to edit the form, to edit its results."
 msgstr "Вам необхідно дозволити редагувати форму, редагувати її результати."
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:29
-msgid "You need to be logged in to fill this in."
-msgstr ""
-
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:20
 msgid "You received this email because your email address is configured in the settings as the handling address."
 msgstr "Ви отримали цей лист, тому що ваша електронна адреса вказана в налаштуваннях як адреса обробки."
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:62
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:76
 msgid "You started filling this in and will continue where you left off."
 msgstr ""
 
@@ -12681,7 +12691,7 @@ msgstr ""
 msgid "Your result"
 msgstr "Ваш результат"
 
-#: zotonic_mod_survey/src/mod_survey.erl:1139
+#: zotonic_mod_survey/src/mod_survey.erl:1182
 msgid "Your session was expired, please restart and try again."
 msgstr "Ваш сеанс минув, будь ласка, перезапустіть і повторіть спробу."
 
@@ -12739,8 +12749,8 @@ msgstr "має бути адреса електронної пошти"
 msgid "must be an email address"
 msgstr "має бути адресою електронної пошти"
 
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:13
-#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:24
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:18
+#: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_break.tpl:29
 msgid "name >= 2"
 msgstr "ім'я >= 2"
 
