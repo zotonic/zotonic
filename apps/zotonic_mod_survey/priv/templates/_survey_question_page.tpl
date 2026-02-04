@@ -105,8 +105,10 @@
 							as action
 						%}
 							{% if id|survey_is_save_intermediate %}
-								<a id="{{ #cancel }}" href="#" class="btn btn-lg btn-default">{_ Stop _}</a>
-								{% wire id=#cancel
+								<button class="btn btn-lg btn-default" id="{{ #save }}" name="z_survey_save" formnovalidate type="submit">
+									{_ Save and stop _}
+								</button>
+								{% wire name="survey-stop-confirm"
 										action={confirm
 											text=_"Are you sure you want to stop? You can continue later."
 											ok=_"Stop and continue later"
@@ -114,8 +116,9 @@
 											action=action
 										}
 								%}
+								{% wire name="survey-close" action=action %}
 							{% else %}
-								<a id="{{ #cancel }}" href="#" class="btn btn-lg btn-default">{_ Stop without saving _}</a>
+								<a id="{{ #cancel }}" href="#" class="btn btn-lg btn-default">{_ Stop _}</a>
 								{% wire id=#cancel
 										action={confirm
 											text=_"Are you sure you want to stop without saving?"
