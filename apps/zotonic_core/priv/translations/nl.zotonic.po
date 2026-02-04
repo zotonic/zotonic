@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-04 11:13\n"
+"PO-Revision-Date: 2026-02-04 12:11\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -7044,7 +7044,7 @@ msgstr "Alle niet-optionele <tt>{include}</tt> uitspraken verwijzen naar bestaan
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:161
 msgid "All templates are checked for missing includes or missing <tt>{ext}</tt> template references."
-msgstr "Alle sjablonen worden gecontroleerd op ontbrekende bevat of ontbrekende <tt>{ext}</tt> sjabloonreferenties."
+msgstr "Alle sjablonen worden gecontroleerd op ontbrekende includes of ontbrekende <tt>{ext}</tt> sjabloonreferenties."
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:42
 msgid "All templates are compiling."
@@ -7326,11 +7326,11 @@ msgstr "Match een request URL, toon overeenkomstige dispatchregel"
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:50
 msgid "Missing included templates"
-msgstr "Er ontbreken meegeleverde sjablonen"
+msgstr "Ontbrekende bijgesloten sjablonen"
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:112
 msgid "Missing optional included templates"
-msgstr "Er ontbreken optionele meegeleverde sjablonen"
+msgstr "Er ontbreken optionele bijgesloten sjablonen"
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:174
 msgid "Missing {extends} or {overrules}"
@@ -8327,7 +8327,7 @@ msgstr "De instellingen werken goed en zijn bewaard."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:73
 msgid "Settings are working fine."
-msgstr "Instellingen werken prima."
+msgstr "Instellingen werken correct."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:207
 msgid "Storage"
@@ -10716,11 +10716,11 @@ msgstr "Je kunt dit token hierna niet meer zien, dus kopieer het en bewaar het o
 
 #: zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:49
 msgid "for authentication"
-msgstr "voor verificatie"
+msgstr "voor autenticatie"
 
 #: zotonic_mod_oauth2/priv/templates/_oauth2_consumer_fields.tpl:52
 msgid "for fetching a single token"
-msgstr "voor het ophalen van een enkel token"
+msgstr "voor het ophalen van een enkele token"
 
 #: zotonic_mod_oembed/priv/templates/_admin_authentication_service.tpl:9
 msgid "API Key can be found on"
@@ -11553,7 +11553,7 @@ msgstr "niet bereikbaar of lokaal IP"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:45
 msgid "'Once' means once by a respondent who is logged in or once per browser for anonymous respondents. To identify the browser of anonymous respondents, a cookie containing a unique ID is utilized."
-msgstr "Eén keer' betekent één keer door een respondent die is ingelogd of één keer per browser voor anonieme respondenten. Om de browser van anonieme respondenten te identificeren, wordt een cookie met een unieke ID gebruikt."
+msgstr "'Eén keer' betekent één keer door een respondent die is ingelogd of één keer per browser voor anonieme respondenten. Om de browser van anonieme respondenten te identificeren, wordt een cookie met een unieke ID gebruikt."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:91
 msgid "<b>Note</b>: For the features 'once', 'edit after submit', and checking the maximum number of submitted forms to function, the form needs to have the saved results. If a handler (chosen in the <em>handling</em> settings below) does not save the results, these features will not be available."
@@ -12131,7 +12131,7 @@ msgstr "Volgende pagina van de categorie"
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:41
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:26
 msgid "No \"Back\" button to this page. If correct/wrong feedback is filled in, then show it directly after this page."
-msgstr "Geen \"Terug\"-knop naar deze pagina. Als er goede/foute feedback is ingevuld, toon deze dan direct na deze pagina."
+msgstr "Geen \"Terug\"-knop naar deze pagina. Als er goede/foute feedback is ingevuld, wordt deze direct na deze pagina weergegeven."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:118
 msgid "No results yet."
@@ -12152,15 +12152,15 @@ msgstr "Numerieke invoer, toon totalen voor dit veld in de resultaten."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:49
 msgid "Once (no editing after submit)"
-msgstr "Eenmalig (niet bewerken na indienen)"
+msgstr "Eenmalig (na indienen niet meer bewerken)"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:61
 msgid "Once — save halfway and continue later + edit after submit (logged in users only)"
-msgstr "Eenmaal - halverwege opslaan en later verdergaan + bewerken na verzenden (alleen ingelogde gebruikers)"
+msgstr "Eenmaal - tussentijds opslaan en later verdergaan + bewerken na verzenden (alleen ingelogde gebruikers)"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:57
 msgid "Once — save halfway and continue later + submit is final (no editing)"
-msgstr "Eenmaal - halverwege opslaan en later verdergaan + indienen is definitief (niet bewerken)"
+msgstr "Eenmaal - tussentijds opslaan en later verdergaan + indienen is definitief (niet bewerken)"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:33
 msgid "Only accept images."
@@ -12386,7 +12386,7 @@ msgstr "Kort antwoord"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:104
 msgid "Show after the final submit of the form"
-msgstr "Tonen na het definitief verzenden van het formulier"
+msgstr "Weergeven na het definitief indienen van het formulier"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:26
 msgid "Show charts"
@@ -12512,7 +12512,7 @@ msgstr "Bedankt tekst"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:91
 msgid "The 'continue later' feature operates independently of the chosen form handler."
-msgstr "De 'later verder gaan' functie werkt onafhankelijk van de gekozen formulier afhandelaar."
+msgstr "De 'later verder gaan' functie werkt onafhankelijk van de gekozen formulier handler."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_charts.tpl:14
 msgid "The charts show aggregated results from closed questions like thurstone and yes/no."
@@ -12536,7 +12536,7 @@ msgstr "Het maximum aantal inzendingen voor <a href=\"{url}\"><b>{title}</b></a>
 
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:59
 msgid "The maximum number of submissions has been reached, you cannot fill this in anymore."
-msgstr "Het maximum aantal inzendingen is bereikt, u kunt dit niet meer invullen."
+msgstr "Het maximum aantal inzendingen is bereikt. Dit kan niet meer worden ingevuld."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:3
 msgid "The result can be linked to an existing person or to a newly created person."
@@ -12700,7 +12700,7 @@ msgstr "Je hebt deze e-mail ontvangen omdat je e-mailadres in de instellingen is
 
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:76
 msgid "You started filling this in and will continue where you left off."
-msgstr "Je bent begonnen met invullen en gaat verder waar je gebleven was."
+msgstr "Je was eerder al begonnen met invullen en gaat verder waar je gebleven was."
 
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:50
@@ -12709,7 +12709,7 @@ msgstr "Jouw resultaat"
 
 #: zotonic_mod_survey/src/mod_survey.erl:1221
 msgid "Your session was expired, please restart and try again."
-msgstr "Uw sessie is verlopen, start opnieuw op en probeer het opnieuw."
+msgstr "De sessie is verlopen, start opnieuw op en probeer het nog een keer."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:99
 msgid "chocolate"
