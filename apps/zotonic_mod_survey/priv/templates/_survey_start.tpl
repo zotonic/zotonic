@@ -71,7 +71,7 @@
         %}
     {% endif %}
 {% elseif id|survey_is_save_intermediate and m.survey_saved.has_saved[id] %}
-    {# Single entry form with intermediate saved results can be continued. #}
+    {# Single entry form with intermediate saved results that will be continued. #}
     <p><span class="fa fa-info-circle"></span>
     {_ You started filling this in and will continue where you left off. _}</p>
     {% include "_survey_start_button.tpl"
