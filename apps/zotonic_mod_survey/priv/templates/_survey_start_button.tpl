@@ -8,24 +8,6 @@
     %}
 {% else %}
     <p class="buttons survey-start clearfix">
-        <button id="{{ #survey_next }}" class="btn btn-lg btn-primary">
-            {% if is_survey_saved %}
-                {_ Continue _}
-            {% else %}
-                {{ start_button_text|default:_"Start" }}
-            {% endif %}
-        </button>
-        {% wire id=#survey_next
-            postback={survey_start
-                id=id
-                answers=answers
-                answer_user_id=answer_user_id
-                viewer=viewer
-                element_id=element_id|default:"survey-question"
-            }
-            delegate="mod_survey"
-        %}
-
         {% if viewer == 'overlay' %}
             <button id="{{ #survey_close }}" class="btn btn-lg btn-default">{_ Close _}</button>
             {% wire id=#survey_close
@@ -60,5 +42,23 @@
                 }
             {% endjavascript %}
         {% endif %}
+
+        <button id="{{ #survey_next }}" class="btn btn-lg btn-primary">
+            {% if is_survey_saved %}
+                {_ Continue _}
+            {% else %}
+                {{ start_button_text|default:_"Start" }}
+            {% endif %}
+        </button>
+        {% wire id=#survey_next
+            postback={survey_start
+                id=id
+                answers=answers
+                answer_user_id=answer_user_id
+                viewer=viewer
+                element_id=element_id|default:"survey-question"
+            }
+            delegate="mod_survey"
+        %}
     </p>
 {% endif %}

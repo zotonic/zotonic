@@ -79,7 +79,7 @@
                 answers=answers|default:m.survey.did_survey_answers[id]
                 viewer=viewer
                 is_autostart=is_autostart
-                is_survey_saved
+                is_survey_saved=true
                 element_id=element_id|default:"survey-question"
     %}
 {% else %}
