@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-04 12:11\n"
+"PO-Revision-Date: 2026-02-04 13:19\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -9476,7 +9476,7 @@ msgstr "Voorbeeld mailing"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:88
 msgid "Query, for example:"
-msgstr "Vraag bijvoorbeeld:"
+msgstr "Query, bijvoorbeeld:"
 
 #: zotonic_mod_mailinglist/priv/templates/mailing_page.collection.tpl:28
 msgid "Read more on the web"
@@ -9602,7 +9602,7 @@ msgstr "Verstuurd op"
 
 #: zotonic_mod_mailinglist/priv/templates/_admin_edit_content_mailinglist.tpl:57
 msgid "Show all recipients"
-msgstr "Toon alle ontvangers"
+msgstr "Alle ontvangers weergeven"
 
 #: zotonic_mod_mailinglist/priv/templates/_scomp_mailinglist_subscribe.tpl:31
 msgid "Sorry, I could not subscribe you to the mailing list. Please try again later or with another e-mail address."
@@ -11557,7 +11557,7 @@ msgstr "'Eén keer' betekent één keer door een respondent die is ingelogd of �
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:91
 msgid "<b>Note</b>: For the features 'once', 'edit after submit', and checking the maximum number of submitted forms to function, the form needs to have the saved results. If a handler (chosen in the <em>handling</em> settings below) does not save the results, these features will not be available."
-msgstr "<b>Opmerking</b>: De functies 'eenmalig', 'wijzigen na verzenden' en het controleren van het maximum aantal verzonden formulieren werken alleen als de resultaten van het formulier zijn opgeslagen. Als een afhandeling (gekozen in de <em>afhandelinginstellingen</em> hieronder) de resultaten niet opslaat, zijn deze functies niet beschikbaar."
+msgstr "<b>Opmerking</b>: De functies 'eenmalig', 'wijzigen na indienen' en het instellen van het maximum aantal verzonden formulieren werken alleen als de resultaten van het formulier zijn opgeslagen. Als een afhandeling (gekozen in de <em>afhandelinginstellingen</em> hieronder) de resultaten niet opslaat, zijn deze functies niet beschikbaar."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_editor.tpl:28
 msgid "Add a question or block"
@@ -11974,7 +11974,7 @@ msgstr "Ik ben [leeftijd] jaar oud. Ik hou van [ijs=vanille|aardbei|chocola|over
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
 msgid "If the maximum number of forms has been submitted, then the start button is deactivated and an email is sent to the email addresses in the <em>handling</em> settings below. Leave empty for no limit. This is useful for signup lists with a limited number of spots."
-msgstr "Als het maximale aantal formulieren is ingediend, wordt de startknop gedeactiveerd en wordt er een e-mail gestuurd naar de e-mailadressen in de onderstaande <em>afhandelingsinstellingen</em>. Laat leeg voor geen limiet. Dit is handig voor aanmeldingslijsten met een beperkt aantal plekken."
+msgstr ""
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:26
 msgid "Immediately start with the questions, no “Start” button"
@@ -12156,11 +12156,11 @@ msgstr "Eenmalig (na indienen niet meer bewerken)"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:61
 msgid "Once — save halfway and continue later + edit after submit (logged in users only)"
-msgstr "Eenmaal - tussentijds opslaan en later verdergaan + bewerken na verzenden (alleen ingelogde gebruikers)"
+msgstr "Eenmalig - tussentijds opslaan en later verdergaan + bewerken na verzenden (alleen ingelogde gebruikers)"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:57
 msgid "Once — save halfway and continue later + submit is final (no editing)"
-msgstr "Eenmaal - tussentijds opslaan en later verdergaan + indienen is definitief (niet bewerken)"
+msgstr "Eenmalig - tussentijds opslaan en later verdergaan + indienen is definitief (niet meer bewerken)"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:33
 msgid "Only accept images."
@@ -12696,7 +12696,7 @@ msgstr "Je hebt toestemming nodig om het formulier te bewerken, om de resultaten
 
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:20
 msgid "You received this email because your email address is configured in the settings as the handling address."
-msgstr "Je hebt deze e-mail ontvangen omdat je e-mailadres in de instellingen is geconfigureerd als het afhandelingsadres."
+msgstr "Je hebt deze e-mail ontvangen omdat je e-mailadres in de formulier-instellingen is geconfigureerd als het afhandelingsadres."
 
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:76
 msgid "You started filling this in and will continue where you left off."
