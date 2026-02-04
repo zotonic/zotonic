@@ -84,6 +84,14 @@
 		        	{_ Maximum number of submissions _}
 		        </label>
 		    </div>
+
+			{% if handlers %}
+				<p class="help-block">
+					<br>
+					{_ <b>Note</b>: For the features 'once', 'edit after submit', and checking the maximum number of submitted forms to function, the form needs to have the saved results. If a handler (chosen in the <em>handling</em> settings below) does not save the results, these features will not be available. _} {_ The 'continue later' feature operates independently of the chosen form handler. _}
+				</p>
+			{% endif %}
+
 		</div>
 
 		{% block survey_settings_filling_in %}{% endblock %}

@@ -282,13 +282,6 @@ is_persistent_id_needed(Id, Context) ->
             end
     end.
 
-%% @doc Check if the survey can only be done by logged in users.
-is_user_needed(Id, Context) ->
-    case z_convert:to_binary(m_rsc:p(Id, <<"survey_multiple">>, Context)) of
-        <<"2">> -> true;    % Save & later editing -- only for users
-        _ -> false
-    end.
-
 %% @doc Check if a survey can be submitted multiple times for the same user/persistent.
 is_survey_multiple(SurveyId, Context) ->
     case m_rsc:p_no_acl(SurveyId, <<"survey_multiple">>, Context) of
@@ -404,25 +397,20 @@ publish(SurveyId, UserId, _Persistent, Context) ->
 insert_survey_submission(SurveyId, Answers, Context) ->
     case z_acl:user(Context) of
         undefined ->
-            case is_user_needed(SurveyId, Context) of
+            case is_persistent_id_needed(SurveyId, Context) of
                 true ->
-                    {error, user_needed};
+                    case z_context:session_id(Context) of
+                        {ok, PersistentId} ->
+                            insert_survey_submission(SurveyId, undefined, PersistentId, Answers, Context);
+                        {error, _} ->
+                            {error, session_needed}
+                    end;
                 false ->
-                    case is_persistent_id_needed(SurveyId, Context) of
-                        true ->
-                            case z_context:session_id(Context) of
-                                {ok, PersistentId} ->
-                                    insert_survey_submission(SurveyId, undefined, PersistentId, Answers, Context);
-                                {error, _} ->
-                                    {error, session_needed}
-                            end;
-                        false ->
-                            case z_context:session_id(Context) of
-                                {ok, PersistentId} ->
-                                    insert_survey_submission(SurveyId, undefined, PersistentId, Answers, Context);
-                                {error, _} ->
-                                    insert_survey_submission(SurveyId, undefined, undefined, Answers, Context)
-                            end
+                    case z_context:session_id(Context) of
+                        {ok, PersistentId} ->
+                            insert_survey_submission(SurveyId, undefined, PersistentId, Answers, Context);
+                        {error, _} ->
+                            insert_survey_submission(SurveyId, undefined, undefined, Answers, Context)
                     end
             end;
         UserId ->
@@ -487,7 +475,16 @@ insert_survey_submission_1(SurveyId, UserId, PersistentId, Answers, Context) ->
             {error, persistent_id_needed};
         _ ->
             case do_insert_checked(SurveyId, UserId1, PersistentId1, Answers, Context) of
-                {ok, _} = Ok ->
+                {ok, AnswerId} = Ok ->
+                    ?LOG_INFO(#{
+                        in => zotonic_mod_survey,
+                        text => <<"Inserted survey submission">>,
+                        result => ok,
+                        survey_id => SurveyId,
+                        answer_id => AnswerId,
+                        user_id => UserId1,
+                        persistent_id => PersistentId1
+                    }),
                     publish(SurveyId, UserId1, PersistentId1, Context),
                     maybe_mail_max_results_reached(SurveyId, Context),
                     Ok;

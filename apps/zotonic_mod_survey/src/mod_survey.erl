@@ -209,21 +209,30 @@ event(#submit{message={survey_next, Args}}, Context) ->
     Editing = proplists:get_value(editing, Args),
     case z_convert:to_bool(z_context:get_q(<<"z_formnovalidate">>, Context)) of
         true ->
-            % Back button pressed, no validation of query args.
-            case History of
-                [_,PageNr|History1] ->
-                    case is_page_back_allowed(SurveyId, PageNr, Context) of
-                        true ->
+            case z_context:get_q(<<"z_submitter">>, Context) of
+                <<"z_survey_save">> ->
+                    if
+                        Editing =:= undefined -> save_page(SurveyId, Answers, Args, Context);
+                        true -> ok
+                    end,
+                    z_render:wire({script, [ {script, <<"z_event('survey-stop-confirm');">>} ]}, Context);
+                _ ->
+                    % Back button pressed, no validation of query args.
+                    case History of
+                        [_,PageNr|History1] ->
+                            case is_page_back_allowed(SurveyId, PageNr, Context) of
+                                true ->
+                                    render_update(
+                                        render_next_page(SurveyId, PageNr, exact, Answers, History1, Editing, Args, Context),
+                                        Args, Context);
+                                false ->
+                                    Context
+                            end;
+                        _History ->
                             render_update(
-                                render_next_page(SurveyId, PageNr, exact, Answers, History1, Editing, Args, Context),
-                                Args, Context);
-                        false ->
-                            Context
-                    end;
-                _History ->
-                    render_update(
-                        render_next_page(SurveyId, 0, exact, Answers, [], Editing, Args, Context),
-                        Args, Context)
+                                render_next_page(SurveyId, 0, exact, Answers, [], Editing, Args, Context),
+                                Args, Context)
+                    end
             end;
         false ->
             % Submit button pressed, query args are validated.
@@ -596,6 +605,29 @@ render_update(#render{} = Render, Args, Context) ->
     TargetId = proplists:get_value(element_id, Args, <<"survey-question">>),
     z_render:update(TargetId, Render, Context).
 
+%% @doc Merge the current submit with the known answers and save the intermediate results.
+save_page(SurveyId, Answers, Args, Context) when is_integer(SurveyId) ->
+    case is_save_intermediate(SurveyId, Context) of
+        true ->
+            AnswersNoValidate = z_convert:to_list(proplists:get_value(answers_novalidate, Args, [])),
+            {SubmittedAnswers, _Submitter0} = get_args(Context),
+            SubmittedAnswers1 = group_multiselect(SubmittedAnswers),
+            % Remove the newly submitted question answers from both the validated and the unvalidated lists.
+            % The user could be backing through multiple pages, effectively removing the answers from the validated answers.
+            Answers1 = lists:foldl(fun({Arg,_Val}, Acc) -> proplists:delete(Arg, Acc) end, Answers, SubmittedAnswers1),
+            AnswersNoValidate1 = lists:foldl(fun({Arg,_Val}, Acc) -> proplists:delete(Arg, Acc) end, AnswersNoValidate, SubmittedAnswers1),
+            AnswersNoValidate2 = AnswersNoValidate1 ++ SubmittedAnswers1,
+            SavedArgs = [
+                {answers, Answers1},
+                {answers_novalidate, AnswersNoValidate2}
+                | proplists:delete(answers,
+                    proplists:delete(answers_novalidate, Args))
+            ],
+            PageNr = proplists:get_value(page_nr, Args, 1),
+            m_survey_saved:put_saved(SurveyId, PageNr, SavedArgs, Context);
+        false ->
+            ok
+    end.
 
 %% @doc Fetch the next page from the survey, update the page view
 -spec render_next_page(SurveyId, PageNr, Direction, Answers, History, Editing, Args, Context) -> Result
@@ -707,7 +739,7 @@ render_next_page(SurveyId, PageNr, Direction, Answers, History, Editing, Args, C
                         in => zotonic_mod_survey,
                         result => error,
                         reason => page_not_found,
-                        rsc_id => SurveyId,
+                        survey_id => SurveyId,
                         page_name => Name
                     }),
                     NameSafe = z_html:escape(Name),
@@ -720,7 +752,7 @@ render_next_page(SurveyId, PageNr, Direction, Answers, History, Editing, Args, C
                         result => error,
                         reason => Reason,
                         page_nr => PageNr,
-                        rsc_id => SurveyId
+                        survey_id => SurveyId
                     }),
                     z_render:growl_error("Error evaluating submit.", Context);
 
@@ -737,7 +769,14 @@ render_next_page(SurveyId, PageNr, Direction, Answers, History, Editing, Args, C
                             SubmitContext;
                         {ok, #render{} = SubmitRender} ->
                             SubmitRender;
-                        {error, _Reason} ->
+                        {error, Reason} ->
+                            ?LOG_WARNING(#{
+                                in => zotonic_mod_survey,
+                                text => <<"Survey submission error">>,
+                                result => error,
+                                reason => Reason,
+                                survey_id => SurveyId
+                            }),
                             #render{
                                 template="_survey_error.tpl",
                                 vars=[
