@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-04 13:19\n"
+"PO-Revision-Date: 2026-02-04 18:34\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -11553,7 +11553,7 @@ msgstr "niet bereikbaar of lokaal IP"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:45
 msgid "'Once' means once by a respondent who is logged in or once per browser for anonymous respondents. To identify the browser of anonymous respondents, a cookie containing a unique ID is utilized."
-msgstr "'Eén keer' betekent één keer door een respondent die is ingelogd of één keer per browser voor anonieme respondenten. Om de browser van anonieme respondenten te identificeren, wordt een cookie met een unieke ID gebruikt."
+msgstr "'Eenmalig' betekent één keer door een respondent die is ingelogd of één keer per browser voor anonieme respondenten. Om de browser van anonieme respondenten te identificeren, wordt een cookie met een unieke ID gebruikt."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:91
 msgid "<b>Note</b>: For the features 'once', 'edit after submit', and checking the maximum number of submitted forms to function, the form needs to have the saved results. If a handler (chosen in the <em>handling</em> settings below) does not save the results, these features will not be available."
@@ -11974,7 +11974,7 @@ msgstr "Ik ben [leeftijd] jaar oud. Ik hou van [ijs=vanille|aardbei|chocola|over
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:71
 msgid "If the maximum number of forms has been submitted, then the start button is deactivated and an email is sent to the email addresses in the <em>handling</em> settings below. Leave empty for no limit. This is useful for signup lists with a limited number of spots."
-msgstr ""
+msgstr "Als het maximale aantal formulieren is ingediend, wordt de startknop gedeactiveerd en wordt er een e-mail gestuurd naar de e-mailadressen hieronder bij  <em>Afhandeling</em>. Laat leeg voor geen limiet. Dit is handig voor aanmeldingslijsten met een beperkt aantal plekken."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:26
 msgid "Immediately start with the questions, no “Start” button"
@@ -12156,7 +12156,7 @@ msgstr "Eenmalig (na indienen niet meer bewerken)"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:61
 msgid "Once — save halfway and continue later + edit after submit (logged in users only)"
-msgstr "Eenmalig - tussentijds opslaan en later verdergaan + bewerken na verzenden (alleen ingelogde gebruikers)"
+msgstr "Eenmalig - tussentijds opslaan en later verdergaan + bewerken na indienen (alleen ingelogde gebruikers)"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:57
 msgid "Once — save halfway and continue later + submit is final (no editing)"
