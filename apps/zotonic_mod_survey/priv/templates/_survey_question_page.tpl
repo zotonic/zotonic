@@ -85,7 +85,7 @@
 		{% endif %}
 
 		{% if is_feedback_view %}
-			<button type="submit" class="btn btn-primary btn-lg survey-next">{_ Continue _}</button>
+			<button class="btn btn-primary btn-lg survey-next" type="submit">{_ Continue _}</button>
 		{% else %}
 			{% with questions|survey_page_options as options %}
 
@@ -105,7 +105,7 @@
 							as action
 						%}
 							{% if id|survey_is_save_intermediate %}
-								<button class="btn btn-default" id="{{ #save }}" name="z_survey_save" formnovalidate type="submit">
+								<button id="{{ #save }}" class="btn btn-default" name="z_survey_save" formnovalidate type="submit">
 									{_ Save and stop _}
 								</button>
 								{% wire name="survey-stop-confirm"
@@ -118,7 +118,7 @@
 								%}
 								{% wire name="survey-close" action=action %}
 							{% else %}
-								<a id="{{ #cancel }}" href="#" class="btn btn-lg btn-default">{_ Stop _}</a>
+								<button id="{{ #cancel }}" class="btn btn-default" type="button">{_ Stop _}</button>
 								{% wire id=#cancel
 										action={confirm
 											text=_"Are you sure you want to stop without saving?"
@@ -131,12 +131,12 @@
 						{% endwith %}
 					{% endif %}
 				{% else %}
-					<a id="{{ #cancel }}" href="#" class="btn btn-lg btn-default">{_ Cancel _}</a>
+					<button id="{{ #cancel }}" class="btn btn-lg btn-default" type="button">{_ Cancel _}</button>
 					{% wire id=#cancel action={dialog_close} %}
 				{% endif %}
 
 				{% if editing %}
-					<button type="submit" class="btn btn-lg btn-primary">{% if page_nr == pages %}{_ Submit _}{% else %}{_ Next _}{% endif %}</button>
+					<button type="submit" class="btn btn-primary btn-lg">{% if page_nr == pages %}{_ Submit _}{% else %}{_ Next _}{% endif %}</button>
 				{% elseif not options.is_stop_page and not questions|survey_is_submit %}
 					{% if page_nr == pages or questions|survey_is_pagebreak_submit %}
 						<button type="submit" class="btn btn-primary btn-lg survey-submit">{_ Submit _}</button>

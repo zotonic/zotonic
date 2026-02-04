@@ -224,7 +224,7 @@ has_saved_persistent(SurveyId, PersistentNr, Context) ->
         Context) == 1.
 
 
-%% @doc Delete the intermediate answers for the current user or the persistent
+%% @doc Delete the intermediate answers for the current user and/or the persistent
 %% id from the user agent.
 -spec delete_saved(SurveyId, Context) -> ok when
     SurveyId :: m_rsc:resource() | undefined,
@@ -232,20 +232,21 @@ has_saved_persistent(SurveyId, PersistentNr, Context) ->
 delete_saved(undefined, _Context) ->
     ok;
 delete_saved(SurveyId, Context) when is_integer(SurveyId) ->
-    case z_acl:user(Context) of
-        undefined ->
-            case z_context:session_id(Context) of
-                {ok, PersistentNr} ->
-                    delete_saved_persistent(SurveyId, PersistentNr, Context);
-                {error, _} ->
-                    ok
-            end;
-        UserId ->
-            delete_saved_user(SurveyId, UserId, Context)
+    case z_auth:is_auth(Context) of
+        true -> delete_saved_user(SurveyId, z_acl:user(Context), Context);
+        false -> ok
+    end,
+    case z_context:session_id(Context) of
+        {ok, PersistentNr} ->
+            delete_saved_persistent(SurveyId, PersistentNr, Context);
+        {error, _} ->
+            ok
     end;
 delete_saved(SurveyId, Context) ->
     delete_saved(m_rsc:rid(SurveyId, Context), Context).
 
+delete_saved_user(_SurveyId, undefined, _Context) ->
+    ok;
 delete_saved_user(SurveyId, UserId, Context) ->
     z_db:q1("
         delete from survey_answers_saved
