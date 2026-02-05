@@ -170,7 +170,6 @@ Add more documentation
     save_submit/2,
     survey_start/2,
 
-    is_save_intermediate/2,
     is_page_back_allowed/3,
 
     collect_answers/4,
@@ -457,7 +456,7 @@ survey_start(Args, Context) ->
             render_next_page(SurveyId, 1, exact, Answers, [], Editing, Args1, Context);
         false ->
             Editing = proplists:get_value(editing, Args),
-            MaybePrevArgs = case is_save_intermediate(SurveyId, Context) of
+            MaybePrevArgs = case m_survey:is_save_intermediate(SurveyId, Context) of
                 true when Editing =:= undefined ->
                     m_survey_saved:get_saved(SurveyId, Context);
                 false ->
@@ -527,17 +526,6 @@ unregister_nonce(SessionNonce) when is_binary(SessionNonce) ->
 %%====================================================================
 
 
-%% @doc Check if the survey is configured to save intermediate results
--spec is_save_intermediate(SurveyId, Context) -> boolean() when
-    SurveyId :: m_rsc:resource_id(),
-    Context :: z:context().
-is_save_intermediate(SurveyId, Context) ->
-    case z_convert:to_binary(m_rsc:p(SurveyId, <<"survey_multiple">>, Context)) of
-        <<"2">> -> true;
-        <<"3">> -> true;
-        _ -> false
-    end.
-
 %% @doc Check if the given page is configured to allow to go back to that page
 %% from a later page.
 -spec is_page_back_allowed(SurveyId, PageNr, Context) -> boolean() when
@@ -576,7 +564,7 @@ has_no_page_back_option(_) ->
     Context :: z:context(),
     Reason :: term().
 maybe_save_intermediate_results(undefined, SurveyId, PageNr, SubmitArgs, Context) ->
-    case is_save_intermediate(SurveyId, Context) of
+    case m_survey:is_save_intermediate(SurveyId, Context) of
         true -> m_survey_saved:put_saved(SurveyId, PageNr, SubmitArgs, Context);
         _ -> ok
     end;
@@ -607,7 +595,7 @@ render_update(#render{} = Render, Args, Context) ->
 
 %% @doc Merge the current submit with the known answers and save the intermediate results.
 save_page(SurveyId, Answers, Args, Context) when is_integer(SurveyId) ->
-    case is_save_intermediate(SurveyId, Context) of
+    case m_survey:is_save_intermediate(SurveyId, Context) of
         true ->
             AnswersNoValidate = z_convert:to_list(proplists:get_value(answers_novalidate, Args, [])),
             {SubmittedAnswers, _Submitter0} = get_args(Context),

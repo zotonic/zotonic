@@ -31,7 +31,11 @@ Not yet documented.
 
     result_columns/3,
 
+    is_persistent_id_needed/2,
+    is_answers_editable/2,
+    is_save_intermediate/2,
     is_allowed_results_download/2,
+
     get_handlers/1,
     insert_survey_submission/3,
     insert_survey_submission/5,
@@ -269,17 +273,8 @@ result_columns(SurveyId, Format, _Context) ->
 %% also stored in the localStorage of the browser and stays stable.
 is_persistent_id_needed(Id, Context) ->
     case z_auth:is_auth(Context) of
-        true ->
-            false;
-        false ->
-            case z_convert:to_binary(m_rsc:p(Id, <<"survey_multiple">>, Context)) of
-                <<>> -> true;       % Default: once per user
-                <<"0">> -> true;    % Once per user
-                <<"1">> -> false;   % Insert as many times you want
-                <<"2">> -> false;   % Save & later editing -- only for users
-                <<"3">> -> true;    % Once per user - continue later
-                _ -> false
-            end
+        true -> false;
+        false -> is_save_intermediate(Id, Context)
     end.
 
 %% @doc Check if a survey can be submitted multiple times for the same user/persistent.
@@ -287,6 +282,25 @@ is_survey_multiple(SurveyId, Context) ->
     case m_rsc:p_no_acl(SurveyId, <<"survey_multiple">>, Context) of
         1 -> true;
         <<"1">> -> true;
+        _ -> false
+    end.
+
+%% @doc Check if the survey is configured to save intermediate results
+-spec is_save_intermediate(SurveyId, Context) -> boolean() when
+    SurveyId :: m_rsc:resource_id(),
+    Context :: z:context().
+is_save_intermediate(SurveyId, Context) ->
+    z_convert:to_bool(m_rsc:p(SurveyId, <<"is_survey_save_intermediate">>, Context)).
+
+%% @doc Check if the survey is configured to allow users to edit their
+%% previous answers.
+-spec is_answers_editable(SurveyId, Context) -> boolean() when
+    SurveyId :: m_rsc:resource_id(),
+    Context :: z:context().
+is_answers_editable(SurveyId, Context) ->
+    case m_rsc:p(Id, <<"survey_multiple">>, Context) of
+        2 -> true;
+        <<"2">> -> true;
         _ -> false
     end.
 
