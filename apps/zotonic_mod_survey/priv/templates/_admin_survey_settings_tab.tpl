@@ -68,6 +68,8 @@
         	</div>
 		</div>
 
+<hr>
+
 		<div class="form-group">
 			<h5>{_ Maximum number of submissions _}</h5>
 	        <p class="help-block">
