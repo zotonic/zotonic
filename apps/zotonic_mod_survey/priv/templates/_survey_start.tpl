@@ -15,6 +15,18 @@
         }
         delegate="mod_survey"
     %}
+{% elseif id|survey_is_save_intermediate and m.survey_saved.has_saved[id] and not is_max_results_reached %}
+    {# Single entry form with intermediate saved results that will be continued. #}
+    <p><span class="fa fa-info-circle"></span>
+    {_ You started filling this in and will continue where you left off. _}</p>
+    {% include "_survey_start_button.tpl"
+                id=id
+                answers=answers|default:m.survey.did_survey_answers[id]
+                viewer=viewer
+                is_autostart=is_autostart
+                is_survey_saved=true
+                element_id=element_id|default:"survey-question"
+    %}
 {% elseif id.survey_multiple == 1 and not is_max_results_reached %}
     {# Multiple entry form and still available. #}
     {% include "_survey_start_button.tpl"
@@ -70,18 +82,6 @@
                 action={dialog_close}
         %}
     {% endif %}
-{% elseif id|survey_is_save_intermediate and m.survey_saved.has_saved[id] %}
-    {# Single entry form with intermediate saved results that will be continued. #}
-    <p><span class="fa fa-info-circle"></span>
-    {_ You started filling this in and will continue where you left off. _}</p>
-    {% include "_survey_start_button.tpl"
-                id=id
-                answers=answers|default:m.survey.did_survey_answers[id]
-                viewer=viewer
-                is_autostart=is_autostart
-                is_survey_saved=true
-                element_id=element_id|default:"survey-question"
-    %}
 {% else %}
     {# Show start button or start with the first page. #}
     {% include "_survey_start_button.tpl"
@@ -92,6 +92,7 @@
                 element_id=element_id|default:"survey-question"
     %}
 {% endif %}
+
 
 {% endwith %}
 {% endwith %}
