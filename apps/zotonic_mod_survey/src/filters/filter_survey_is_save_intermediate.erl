@@ -31,6 +31,6 @@ Always returns a boolean value.
 survey_is_save_intermediate(undefined, _Context) ->
     false;
 survey_is_save_intermediate(SurveyId, Context) when is_integer(SurveyId) ->
-    mod_survey:is_save_intermediate(SurveyId, Context);
+    m_survey:is_save_intermediate(SurveyId, Context);
 survey_is_save_intermediate(SurveyId, Context) ->
     survey_is_save_intermediate(m_rsc:rid(SurveyId, Context), Context).

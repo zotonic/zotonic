@@ -46,29 +46,32 @@
         	<div class="controls">
         		<label class="radio">
         			<input type="radio" name="survey_multiple" value="0" {% if not id.survey_multiple %}checked{% endif %}>
-        			{_ Once (no editing after submit) _}
+        			{_ Once — submit is final (no editing after submit) _}
+        		</label>
+        		<label class="radio">
+        			<input type="radio" name="survey_multiple" value="2" {% if id.survey_multiple == 2 %}checked{% endif %}>
+        			{_ Once — edit after submit (logged in users only) _}
         		</label>
         		<label class="radio">
         			<input type="radio" name="survey_multiple" value="1" {% if id.survey_multiple == 1 %}checked{% endif %}>
         			{_ Multiple times – each time with new results _}
         		</label>
-        		<label class="radio">
-        			<input type="radio" name="survey_multiple" value="3" {% if id.survey_multiple == 3 %}checked{% endif %}>
-        			{_ Once — save halfway and continue later + submit is final (no editing) _}
-        		</label>
-        		<label class="radio">
-        			<input type="radio" name="survey_multiple" value="2" {% if id.survey_multiple == 2 %}checked{% endif %}>
-        			{_ Once — save halfway and continue later + edit after submit (logged in users only) _}
-        		</label>
 			</div>
 
 			{% block survey_settings_fill %}{% endblock %}
+		</div>
 
-        	<br>
+		<div class="form-group">
+        	<div class="controls">
+       			<input type="checkbox" name="is_survey_save_intermediate" {% if id.is_survey_save_intermediate %}checked{% endif %}>
+       			{_ Save progress for later continuation _}
+        	</div>
+		</div>
 
+		<div class="form-group">
 			<h5>{_ Maximum number of submissions _}</h5>
 	        <p class="help-block">
-	        	{_ If the maximum number of forms has been submitted, then the start button is deactivated and an email is sent to the email addresses in the <em>handling</em> settings below. Leave empty for no limit. This is useful for signup lists with a limited number of spots. _} {_ This is useful for signup lists with a limited number of spots. _}
+	        	{_ If the maximum number of forms has been submitted, then the start button is deactivated and an email is sent to the email addresses in the <em>handling</em> settings below. Leave empty for no limit. This is useful for signup lists with a limited number of spots. _}
 	        </p>
 
 			<div class="label-floating">
