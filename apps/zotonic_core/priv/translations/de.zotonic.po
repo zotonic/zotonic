@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-05 13:57\n"
+"PO-Revision-Date: 2026-02-05 17:19\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -12149,11 +12149,11 @@ msgstr "Numerische Eingabe, Gesamtsummen für dieses Feld in den Ergebnissen anz
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:53
 msgid "Once — edit after submit (logged in users only)"
-msgstr ""
+msgstr "Einmal - nach dem Absenden bearbeiten (nur angemeldete Benutzer)"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:49
 msgid "Once — submit is final (no editing after submit)"
-msgstr ""
+msgstr "Einmal eingereicht - endgültig (keine Bearbeitung nach dem Einreichen)"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:33
 msgid "Only accept images."
@@ -12341,7 +12341,7 @@ msgstr "Speichern und anhalten"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:67
 msgid "Save progress for later continuation"
-msgstr ""
+msgstr "Fortschritte für spätere Fortsetzungen speichern"
 
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
 msgid "Saved"
