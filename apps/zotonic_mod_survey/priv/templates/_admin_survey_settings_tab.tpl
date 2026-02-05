@@ -64,7 +64,7 @@
 		<div class="form-group">
         	<div class="controls">
        			<input type="checkbox" name="is_survey_save_intermediate" {% if id.is_survey_save_intermediate %}checked{% endif %}>
-       			{_ Save halfway and continue later _}
+       			{_ Save progress for later continuation _}
         	</div>
 		</div>
 
