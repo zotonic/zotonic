@@ -274,7 +274,9 @@ result_columns(SurveyId, Format, _Context) ->
 is_persistent_id_needed(SurveyId, Context) ->
     case z_auth:is_auth(Context) of
         true -> false;
-        false -> is_save_intermediate(SurveyId, Context)
+        false ->
+            not is_survey_multiple(SurveyId, Context)
+            orelse is_save_intermediate(SurveyId, Context)
     end.
 
 %% @doc Check if a survey can be submitted multiple times for the same user/persistent.
