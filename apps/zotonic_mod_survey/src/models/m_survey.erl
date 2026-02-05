@@ -271,10 +271,10 @@ result_columns(SurveyId, Format, _Context) ->
 %% @doc Check if filling in the survey needs a persistent session id for anonymous users.
 %% A session id is never needed for logged in users. This uses the cotonic-sid, which is
 %% also stored in the localStorage of the browser and stays stable.
-is_persistent_id_needed(Id, Context) ->
+is_persistent_id_needed(SurveyId, Context) ->
     case z_auth:is_auth(Context) of
         true -> false;
-        false -> is_save_intermediate(Id, Context)
+        false -> is_save_intermediate(SurveyId, Context)
     end.
 
 %% @doc Check if a survey can be submitted multiple times for the same user/persistent.
@@ -298,16 +298,16 @@ is_save_intermediate(SurveyId, Context) ->
     SurveyId :: m_rsc:resource_id(),
     Context :: z:context().
 is_answers_editable(SurveyId, Context) ->
-    case m_rsc:p(Id, <<"survey_multiple">>, Context) of
+    case m_rsc:p(SurveyId, <<"survey_multiple">>, Context) of
         2 -> true;
         <<"2">> -> true;
         _ -> false
     end.
 
 -spec is_allowed_results_download(m_rsc:resource_id(), z:context()) -> boolean().
-is_allowed_results_download(Id, Context) ->
-    z_acl:rsc_editable(Id, Context)
-    orelse z_notifier:first(#survey_is_allowed_results_download{id=Id}, Context) =:= true.
+is_allowed_results_download(SurveyId, Context) ->
+    z_acl:rsc_editable(SurveyId, Context)
+    orelse z_notifier:first(#survey_is_allowed_results_download{id=SurveyId}, Context) =:= true.
 
 %% @doc Return the list of known survey handlers
 -spec get_handlers(z:context()) -> list({atom(), binary()}).
