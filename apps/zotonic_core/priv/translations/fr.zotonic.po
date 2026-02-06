@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-05 13:57\n"
+"PO-Revision-Date: 2026-02-06 16:34\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "MIME-Version: 1.0\n"
@@ -388,10 +388,10 @@ msgstr "Configuration changée."
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:21
 #: zotonic_mod_survey/priv/templates/_survey_results.tpl:56
 #: zotonic_mod_survey/priv/templates/_survey_results.tpl:61
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:45
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:50
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:63
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:68
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:57
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:62
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:75
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:80
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:12
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:17
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:22
@@ -11550,7 +11550,7 @@ msgstr "non joignable ou IP locale"
 msgid "'Once' means once by a respondent who is logged in or once per browser for anonymous respondents. To identify the browser of anonymous respondents, a cookie containing a unique ID is utilized."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:94
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:96
 msgid "<b>Note</b>: For the features 'once', 'edit after submit', and checking the maximum number of submitted forms to function, the form needs to have the saved results. If a handler (chosen in the <em>handling</em> settings below) does not save the results, these features will not be available."
 msgstr ""
 
@@ -11616,11 +11616,11 @@ msgstr "Ajouter à la liste de diffusion existante"
 msgid "Add to mailinglist"
 msgstr "Ajouter à la liste de diffusion"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:110
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:112
 msgid "After all questions are answered and submitted, one of the following is shown."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:130
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:132
 msgid "Aggregated results from all respondents"
 msgstr "Résultats agrégés de tous les répondants"
 
@@ -11919,11 +11919,11 @@ msgstr "Pour les plages de dates, vous pouvez également utiliser des dates rela
 msgid "Go to question"
 msgstr "Passer à la question"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:213
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:215
 msgid "Handle this form with"
 msgstr "Traitez ce formulaire avec"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:192
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:194
 msgid "Handling"
 msgstr "Gestion"
 
@@ -11950,7 +11950,7 @@ msgstr "Valeur masquée, enregistrée avec le formulaire mais non visible par la
 msgid "Hide from results"
 msgstr "Masquer des résultats"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:149
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:151
 msgid "Hide progress information"
 msgstr "Masquer la progression"
 
@@ -11967,7 +11967,7 @@ msgstr "Je suis"
 msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color]."
 msgstr "J'ai [age] ans. J'aime la crème glacée [icecream=vanilla|fraise|chocolat|autre] et ma couleur préférée est [color]."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:74
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:76
 msgid "If the maximum number of forms has been submitted, then the start button is deactivated and an email is sent to the email addresses in the <em>handling</em> settings below. Leave empty for no limit. This is useful for signup lists with a limited number of spots."
 msgstr ""
 
@@ -12027,8 +12027,8 @@ msgstr "Lien avec la personne"
 msgid "Long answer"
 msgstr "Longue réponse"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:195
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:196
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:197
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:198
 msgid "Mail results to"
 msgstr "Envoyez les résultats à"
 
@@ -12054,9 +12054,9 @@ msgstr "Question correspondante"
 msgid "Maximal value"
 msgstr "Valeur maximale"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:72
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:80
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:87
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:74
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:82
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:89
 msgid "Maximum number of submissions"
 msgstr "Nombre maximum de soumissions"
 
@@ -12132,7 +12132,7 @@ msgstr ""
 msgid "No results yet."
 msgstr "Pas encore de résultats."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:112
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:114
 msgid "Note that if you select a special handler below, then that handler may override this setting."
 msgstr ""
 
@@ -12184,7 +12184,7 @@ msgstr "Passer?"
 msgid "Passed"
 msgstr "Réussi"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:178
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:180
 msgid "Passing score"
 msgstr "Note de passage"
 
@@ -12227,7 +12227,7 @@ msgstr "Principal"
 msgid "Printable list"
 msgstr "Liste imprimable"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:144
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:146
 msgid "Progress"
 msgstr "Progression"
 
@@ -12321,11 +12321,11 @@ msgstr "Résultats"
 msgid "Results editor"
 msgstr "Editeur de résultats"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:122
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:124
 msgid "Results from the respondent"
 msgstr "Résultats du répondant"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:126
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:128
 msgid "Results from the respondent – if passed only"
 msgstr ""
 
@@ -12367,11 +12367,11 @@ msgstr "Sélectionnez la liste de diffusion"
 msgid "Select your country"
 msgstr "Choisissez votre pays"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:206
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:208
 msgid "Send a confirmation to the respondent. The email address must be known (logged in respondents) or you can add a short text field with the label “email” and the validation set to \"must be an email address\"."
 msgstr "Envoyez une confirmation au répondant. L'adresse e-mail doit être connue (répondants connectés) ou vous pouvez ajouter un court champ de texte avec le libellé « e-mail » et la validation définie sur « doit être une adresse e-mail »."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:198
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:200
 msgid "Separate multiple email addresses with a comma."
 msgstr "Séparez plusieurs adresses e-mail par une virgule."
 
@@ -12379,7 +12379,7 @@ msgstr "Séparez plusieurs adresses e-mail par une virgule."
 msgid "Short answer"
 msgstr "Réponse courte"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:107
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:109
 msgid "Show after the final submit of the form"
 msgstr ""
 
@@ -12391,15 +12391,15 @@ msgstr "Afficher les graphiques"
 msgid "Show email addresses"
 msgstr "Afficher les adresses e-mail"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:161
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:163
 msgid "Show progress bar"
 msgstr "Afficher la barre de progression"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:155
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:157
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "Afficher la progression façon “<em>Question 3/10</em>”"
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:102
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:103
 msgid "Show results (admin only)"
 msgstr "Montrer les résultats (admin seulement)"
 
@@ -12485,7 +12485,7 @@ msgstr "Soustrayez les points pour les mauvaises réponses (total jamais inféri
 msgid "Survey editor"
 msgstr "Éditeur de sondage"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:172
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:174
 msgid "Test pass percentage"
 msgstr "Pourcentage de réussite au test"
 
@@ -12497,7 +12497,7 @@ msgstr "Texte, image, vidéo"
 msgid "Thank you for filling in our survey."
 msgstr "Merci d'avoir répondu à notre enquête."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:118
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:120
 msgid "Thank you text only"
 msgstr "Texte de remerciement uniquement"
 
@@ -12505,7 +12505,7 @@ msgstr "Texte de remerciement uniquement"
 msgid "Thank you text."
 msgstr "Texte de remerciement"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:94
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:96
 msgid "The 'continue later' feature operates independently of the chosen form handler."
 msgstr ""
 
@@ -12529,7 +12529,7 @@ msgstr "Les champs suivants ont été remplis :"
 msgid "The maximum number of submissions for <a href=\"{url}\"><b>{title}</b></a> on {site} has been reached."
 msgstr "Le nombre maximum de soumissions pour <a href=\"{url}\"><b>{title}</b></a> sur {site} a été atteint."
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:59
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:71
 msgid "The maximum number of submissions has been reached, you cannot fill this in anymore."
 msgstr "Le nombre maximum de soumissions a été atteint, vous ne pouvez plus remplir ce formulaire."
 
@@ -12573,7 +12573,7 @@ msgstr "Ce formulaire est désactivé. Parce que vous pouvez éditer, vous pouve
 msgid "This is a result for:"
 msgstr "C'est un résultat pour:"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:173
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:175
 msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
 msgstr "C'est le pourcentage nécessaire pour réussir un quiz ou un test. Uniquement utilisé si vous avez ajouté des questions de quiz ou de test."
 
@@ -12663,11 +12663,11 @@ msgstr "oui ou non question"
 msgid "Yes/No"
 msgstr "Oui/Non"
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:29
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:41
 msgid "You already filled this in, but you can change your previous answers."
 msgstr "Vous l'avez déjà rempli, mais vous pouvez modifier vos réponses précédentes."
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:41
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:53
 msgid "You already filled this in."
 msgstr "Vous l'avez déjà rempli."
 
@@ -12689,7 +12689,7 @@ msgstr "Vous devez être autorisé à modifier le formulaire, à modifier ses r�
 msgid "You received this email because your email address is configured in the settings as the handling address."
 msgstr "Vous avez reçu cet e-mail parce que votre adresse e-mail est configurée dans les paramètres comme adresse de traitement."
 
-#: zotonic_mod_survey/priv/templates/_survey_start.tpl:76
+#: zotonic_mod_survey/priv/templates/_survey_start.tpl:21
 msgid "You started filling this in and will continue where you left off."
 msgstr ""
 
