@@ -977,7 +977,12 @@ p_no_acl(Id, <<"page_url_abs">>, Context) ->
         PagePath ->
             case path_for_lang(PagePath, Context) of
                 <<>> -> page_url(Id, true, Context);
-                Path -> opt_url_abs(z_notifier:foldl(#url_rewrite{args = [{id, Id}]}, Path, Context), true, Context)
+                Path ->
+                    RewriteArgs = [
+                        {id, Id}
+                        | z_context:get(extra_args, Context, [])
+                    ],
+                    opt_url_abs(z_notifier:foldl(#url_rewrite{args = RewriteArgs}, Path, Context), true, Context)
             end
     end;
 p_no_acl(Id, <<"page_url">>, Context) ->
@@ -987,7 +992,12 @@ p_no_acl(Id, <<"page_url">>, Context) ->
         PagePath ->
             case path_for_lang(PagePath, Context) of
                 <<>> -> page_url(Id, false, Context);
-                Path -> opt_url_abs(z_notifier:foldl(#url_rewrite{args = [{id, Id}]}, Path, Context), false, Context)
+                Path ->
+                    RewriteArgs = [
+                        {id, Id}
+                        | z_context:get(extra_args, Context, [])
+                    ],
+                    opt_url_abs(z_notifier:foldl(#url_rewrite{args = RewriteArgs}, Path, Context), false, Context)
             end
     end;
 p_no_acl(Id, <<"translation">>, Context) ->
