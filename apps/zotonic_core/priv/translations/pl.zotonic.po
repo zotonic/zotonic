@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-09 16:14\n"
+"PO-Revision-Date: 2026-02-09 18:10\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 
 #: zotonic_core/src/support/z_fetch.erl:222
 msgid "Could not fetch the remote resource URL."
-msgstr "Nie udało się pobrać adresu URL zdalnego zasobu."
+msgstr "Nie udało się pobrać adresu URL zdalnego zasobu.\n"
 
 #: zotonic_core/src/support/z_fetch.erl:208
 msgid "Forbidden to access the remote resource URL."
@@ -396,7 +396,7 @@ msgstr "Zmieniona konfiguracja."
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:17
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:22
 msgid "Close"
-msgstr "terminar"
+msgstr "Zamknij"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_content_acl.tpl:33
 msgid "Collaboration group managers"
@@ -446,7 +446,7 @@ msgstr "Grupa tematyczna"
 #: zotonic_mod_admin/priv/templates/_action_dialog_connect_tab_find.tpl:131
 #: zotonic_mod_content_groups/src/mod_content_groups.erl:206
 msgid "Content groups"
-msgstr "Grupa tematyczna"
+msgstr "Grupy tematyczne"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:76
 msgid "Content rules for collaboration group members and managers"
@@ -523,7 +523,7 @@ msgstr "Usuwam ..."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:33
 msgid "Deny"
-msgstr "Zaprzeczyć"
+msgstr "Odmowa"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:43
 msgid "Edit &amp; link rights on the collaboration groups"
@@ -607,7 +607,7 @@ msgstr "Po zaimportowaniu, lista zasad zostanie odświeżona."
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_acl_rules_publish_buttons.tpl:40
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rules_import.tpl:17
 msgid "Keep"
-msgstr "Trzymaj"
+msgstr "Zachowaj"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:159
 msgid "Manage own"
@@ -1046,7 +1046,7 @@ msgstr "<em>Bez tytułu</em>"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_person.tpl:14
 msgid "<strong>First</strong> also known as given name, forename or Christen name.<br/><strong>Middle</strong> often shortened to an initial like in <em>John D. Rockefeller</em>.<br/><strong>Surname prefix</strong> like the Dutch <em>van, van de, der</em>.<br/><strong>Surname</strong> also known as family name or last name."
-msgstr "<strong>Pierwsze</strong> znany również jako imię lub nadane imię chrześcijańskie.<br/><strong>Drugie</strong> często skrócone do inicjału, jak w <em>John D. Rockefeller</em>.<br/><strong>Prefiks nazwiska</strong> jak w holenderskim <em>van, van de, der</em>.<br/><strong>Nazwisko</strong>."
+msgstr "<strong>Pierwsze</strong> znane również jako imię lub nadane imię.<br/><strong>Drugie</strong> często skrócone do inicjału, jak w <em>John D. Rockefeller</em>.<br/><strong>Prefiks nazwiska</strong> jak w holenderskim <em>van, van de, der</em>.<br/><strong>Nazwisko</strong> znane także jako nazwisko rodowe lub nazwisko rodzinne."
 
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:123
 msgid "A copy that will remain connected so that a new version can be fetched."
@@ -1066,7 +1066,7 @@ msgstr "O kategoriach"
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:56
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:96
 msgid "About {n} items found."
-msgstr "Znaleziono około {n} elementów."
+msgstr "Znaleziono około {n} pozycji."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.tpl:18
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_acl.tpl:62
@@ -1125,7 +1125,7 @@ msgstr "Zaawansowane"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_duplicate_rsc.tpl:2
 msgid "After the duplication you can edit the new page. The new page will unpublished."
-msgstr "Po duplikacji możesz edytować nową stronę. Nowa strona zostanie wycofana z publikacji."
+msgstr "Po powieleniu możesz edytować nową stronę. Nowa strona nie zostanie opublikowana."
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:36
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:32
@@ -1156,12 +1156,12 @@ msgstr "Wszystkie strony zostały opróżnione."
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:7
 msgid "Allocated"
-msgstr "Asygnowany"
+msgstr "Przydzielone"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:28
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:29
 msgid "Alternative telephone"
-msgstr "Alternatywny telefon"
+msgstr "Alternatywny numer telefonu"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:115
 msgid "Amount"
@@ -1267,7 +1267,7 @@ msgstr "Zapisane w pamięci podręcznej"
 
 #: zotonic_mod_admin/src/actions/action_admin_admin_tasks.erl:46
 msgid "Caches have been flushed."
-msgstr "Skrytki zostały opróżnione."
+msgstr "Pamięć podręczna została wyczyszczona."
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_change_category.tpl:8
 msgid "Category name:"
@@ -1371,7 +1371,7 @@ msgstr "Połączony z"
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:134
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:100
 msgid "Connections"
-msgstr "Znajomości"
+msgstr "Połączenia"
 
 #: zotonic_mod_admin/priv/templates/_action_dialog_edit_basics.media.tpl:24
 msgid "Content type"
@@ -1416,7 +1416,7 @@ msgstr "Kraj"
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:261
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:120
 msgid "Create"
-msgstr "Stwórz"
+msgstr "Utwórz"
 
 #: zotonic_mod_admin/priv/templates/_rsc_preview.tpl:3
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:40
@@ -1441,7 +1441,7 @@ msgstr "Utworzono dnia"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:12
 msgid "Created:"
-msgstr "Stworzony:"
+msgstr "Utworzono:"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:272
 msgid "Creation date, newest first"
@@ -1455,7 +1455,7 @@ msgstr "Data utworzenia, najpierw najstarsze"
 #: zotonic_mod_admin/priv/templates/admin.tpl:8
 #: zotonic_mod_admin/src/mod_admin.erl:457
 msgid "Dashboard"
-msgstr "Kokpit"
+msgstr "Pulpit"
 
 #: zotonic_mod_admin/priv/templates/admin_status.tpl:39
 msgid "Data Directory"
@@ -1497,7 +1497,7 @@ msgstr "Usuń, jeśli żadna inna strona nie jest połączona z tą stroną."
 #: zotonic_mod_admin/priv/templates/_action_dialog_new_rsc_tab.tpl:239
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:90
 msgid "Delete if not connected anymore"
-msgstr "Usuń, jeśli nie jest już podłączony"
+msgstr "Usuń, jeśli nie jest już połączony"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_bulk_actions.tpl:7
 msgid "Delete selected pages"
@@ -1638,7 +1638,7 @@ msgstr "Adres e-mail do faktur"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:133
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:135
 msgid "Email address for public display"
-msgstr "Adres e-mail do publicznej prezentacji"
+msgstr "Adres e-mail do publicznego wyświetlania"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:5
 #: zotonic_mod_oembed/priv/templates/_admin_edit_media.tpl:13
@@ -1809,7 +1809,7 @@ msgstr "Znajdź stronę"
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:211
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:215
 msgid "Findable"
-msgstr "Znaleźć"
+msgstr "Do znalezienia"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:175
 msgid "Finished"
@@ -1843,7 +1843,7 @@ msgstr "Od"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:5
 msgid "Function"
-msgstr "Funkcjonować"
+msgstr "Funkcja"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:131
 msgid "Has connections with predicate"
@@ -1851,11 +1851,11 @@ msgstr "Ma powiązania z predykatem"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:185
 msgid "Has medium"
-msgstr "Ma średnie"
+msgstr "Ma nośnik "
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:181
 msgid "Has medium attached"
-msgstr "Ma dołączone medium"
+msgstr "Ma dołączony nośnik "
 
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:21
 #: zotonic_mod_admin/priv/templates/blocks/_admin_edit_block_li_header.tpl:22
@@ -1929,7 +1929,7 @@ msgstr "Blok wbudowany"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:147
 msgid "Is connected with predicate"
-msgstr "Łączy się z predykatem"
+msgstr "Jest związany z predykatem"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:69
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:65
@@ -8398,7 +8398,7 @@ msgstr "Nie masz uprawnień do zmiany tych ustawień."
 
 #: zotonic_mod_filestore/src/support/filestore_admin.erl:109
 msgid "You are not allowed to use this."
-msgstr ""
+msgstr "Nie możesz tego zmienić."
 
 #: zotonic_mod_filestore/priv/templates/admin_filestore.tpl:9
 msgid "Zotonic can store uploaded and resized files in the cloud. Here you can configure the location and access keys for the cloud service."
@@ -11618,7 +11618,7 @@ msgstr "Dodaj do listy mailingowej"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:112
 msgid "After all questions are answered and submitted, one of the following is shown."
-msgstr ""
+msgstr "Po udzieleniu odpowiedzi na wszystkie pytania i ich przesłaniu wyświetlony zostanie jeden z poniższych komunikatów."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:132
 msgid "Aggregated results from all respondents"
@@ -11736,7 +11736,7 @@ msgstr "Wybory"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:45
 msgid "Choose how many times a respondent can fill in this form."
-msgstr ""
+msgstr "Wybierz, ile razy respondent może wypełnić ten formularz."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:2
 msgid "Click on “Edit” to see and change the entered data."
@@ -11901,7 +11901,7 @@ msgstr "Wypełnić luki"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:43
 msgid "Filling in"
-msgstr ""
+msgstr "Wypełnianie"
 
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:3
 msgid "Find a person to link the answer to. If you do not find a person then you can create a new person."
@@ -11969,7 +11969,7 @@ msgstr "Mam [age] lat. Lubię lody [lody=waniliowe|truskawkowe|czekoladowe|inne]
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:76
 msgid "If the maximum number of forms has been submitted, then the start button is deactivated and an email is sent to the email addresses in the <em>handling</em> settings below. Leave empty for no limit. This is useful for signup lists with a limited number of spots."
-msgstr ""
+msgstr "Jeśli przesłano maksymalną liczbę formularzy, przycisk uruchamiania zostanie dezaktywowany, a wiadomość e-mail zostanie wysłana na adresy e-mail podane w poniższych ustawieniach <em>obsługi</em>. Pozostaw puste dla braku limitu. Jest to przydatne w przypadku list subskrypcyjnych z ograniczoną liczbą miejsc."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:26
 msgid "Immediately start with the questions, no “Start” button"
@@ -12104,7 +12104,7 @@ msgstr "Wielokrotne bloki podziału stron są połączone w jeden."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:57
 msgid "Multiple times – each time with new results"
-msgstr ""
+msgstr "Wielokrotnie - za każdym razem z nowymi wynikami"
 
 #: zotonic_mod_survey/src/mod_survey.erl:305
 msgid "Narrative"
@@ -12126,7 +12126,7 @@ msgstr "Następna strona w kategorii"
 #: zotonic_mod_survey/priv/templates/_admin_survey_question_page.tpl:41
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:26
 msgid "No \"Back\" button to this page. If correct/wrong feedback is filled in, then show it directly after this page."
-msgstr ""
+msgstr "Brak przycisku \"Powrót\" do tej strony. Jeśli wypełniono poprawną/błędną opinię, wyświetl ją bezpośrednio po tej stronie."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:118
 msgid "No results yet."
@@ -12134,7 +12134,7 @@ msgstr "Brak wyników."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:114
 msgid "Note that if you select a special handler below, then that handler may override this setting."
-msgstr ""
+msgstr "Pamiętaj, że jeśli wybierzesz specjalną obsługę poniżej, może ona zastąpić to ustawienie."
 
 #: zotonic_mod_survey/src/support/survey_admin.erl:129
 #: zotonic_mod_survey/src/support/survey_admin.erl:173
@@ -12147,11 +12147,11 @@ msgstr "Wprowadzanie numeryczne, pokaż sumy dla tego pola w wynikach."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:53
 msgid "Once — edit after submit (logged in users only)"
-msgstr ""
+msgstr "Raz - edytuj po wysłaniu (tylko zalogowani użytkownicy)"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:49
 msgid "Once — submit is final (no editing after submit)"
-msgstr ""
+msgstr "Jednorazowe przesłanie jest ostateczne (brak edycji po przesłaniu)"
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:33
 msgid "Only accept images."
@@ -12171,7 +12171,7 @@ msgstr "Stan skoku strony"
 
 #: zotonic_mod_survey/src/mod_survey.erl:311
 msgid "Page options"
-msgstr ""
+msgstr "Opcje strony"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_editor_results.tpl:25
 msgid "Pass?"
@@ -12327,7 +12327,7 @@ msgstr "Wyniki uzyskane od respondenta"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:128
 msgid "Results from the respondent – if passed only"
-msgstr ""
+msgstr "Wyniki od respondenta - tylko w przypadku zaliczenia"
 
 #: zotonic_mod_survey/priv/templates/survey_results_printable.tpl:42
 msgid "Results until"
@@ -12335,11 +12335,11 @@ msgstr "Wyniki do"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:109
 msgid "Save and stop"
-msgstr ""
+msgstr "Zapisz i zatrzymaj"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:67
 msgid "Save progress for later continuation"
-msgstr ""
+msgstr "Zapisz postęp, aby kontynuować później."
 
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
 msgid "Saved"
@@ -12381,7 +12381,7 @@ msgstr "Krótka odpowiedź"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:109
 msgid "Show after the final submit of the form"
-msgstr ""
+msgstr "Pokaż po ostatecznym przesłaniu formularza."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:26
 msgid "Show charts"
@@ -12434,7 +12434,7 @@ msgstr "Początek"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:114
 msgid "Stop and continue later"
-msgstr ""
+msgstr "Zatrzymaj i kontynuuj później"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:125
 msgid "Stop without saving"
@@ -12507,7 +12507,7 @@ msgstr "Dziękuję za tekst."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:96
 msgid "The 'continue later' feature operates independently of the chosen form handler."
-msgstr ""
+msgstr "Funkcja \"kontynuuj później\" działa niezależnie od wybranej obsługi formularza."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_charts.tpl:14
 msgid "The charts show aggregated results from closed questions like thurstone and yes/no."
@@ -12555,7 +12555,7 @@ msgstr "Pojawił się błąd podczas obsługiwania twoich odpowiedzi. Strasznie 
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_page_options.tpl:14
 msgid "This block contains options for a page. The presence of this block signals the end of the questions for a page."
-msgstr ""
+msgstr "Ten blok zawiera opcje dla strony. Obecność tego bloku sygnalizuje koniec pytań dla strony."
 
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_upload.tpl:14
 msgid "This block show a file upload field. This can only be used as the last question of a form. The default form routines can’t handle file upload, you will need to add your own form handler to your site or module."
@@ -12691,7 +12691,7 @@ msgstr "Otrzymałeś tę wiadomość e-mail, ponieważ Twój adres e-mail jest s
 
 #: zotonic_mod_survey/priv/templates/_survey_start.tpl:21
 msgid "You started filling this in and will continue where you left off."
-msgstr ""
+msgstr "Zacząłeś to wypełniać i będziesz kontynuował tam, gdzie skończyłeś."
 
 #: zotonic_mod_survey/priv/templates/_survey_results_user.tpl:26
 #: zotonic_mod_survey/priv/templates/email_survey_result.tpl:50
