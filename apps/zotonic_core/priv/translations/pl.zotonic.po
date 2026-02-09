@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-09 20:09\n"
+"PO-Revision-Date: 2026-02-09 21:20\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -5271,12 +5271,12 @@ msgstr "Musisz teraz ustawić hasło uwierzytelniania dwuskładnikowego. Przy na
 
 #: zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:11
 msgid "You need to be allowed to edit the system configuration to view or change the two-factor authentication configuration."
-msgstr "Musisz mieć pozwolenie na edycję konfiguracji systemu, aby wyświetlić lub zmienić konfigurację uwierzytelniania dwuskładnikowego."
+msgstr "Aby wyświetlić lub zmienić konfigurację uwierzytelniania dwuskładnikowego, musisz mieć możliwość edycji konfiguracji systemu."
 
 #: zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:56
 #: zotonic_mod_authentication/src/actions/action_authentication_auth_disconnect.erl:64
 msgid "Access denied"
-msgstr "Brak dostępu"
+msgstr "Odmowa dostępu"
 
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:35
 msgid "Active sessions in the last hour"
@@ -5338,11 +5338,11 @@ msgstr "Zmień hasło"
 
 #: zotonic_mod_authentication/priv/templates/_logon_change_title.tpl:5
 msgid "Change your password"
-msgstr "Zmień swoje hasło"
+msgstr "Zmiana hasła"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:78
 msgid "Change your permissions"
-msgstr "Zmień swoje uprawnienia"
+msgstr "Zmiana uprawnień"
 
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:93
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:109
@@ -5383,7 +5383,7 @@ msgstr "Potwierdzenie nie powiodło się"
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:126
 #: zotonic_mod_survey/priv/templates/_survey_start_button.tpl:48
 msgid "Continue"
-msgstr "continuar"
+msgstr "Kontynuuj"
 
 #: zotonic_mod_authentication/priv/templates/_logon_change_form_fields.tpl:2
 msgid "Current password"
@@ -5399,7 +5399,7 @@ msgstr "Zduplikowany e-mail"
 
 #: zotonic_mod_authentication/priv/templates/logon_error/message.pw.tpl:2
 msgid "Either the email or the password you entered is incorrect. Please try again."
-msgstr "Podany adres e-mail lub hasło są nieprawidłowe. Proszę spróbuj ponownie."
+msgstr "Wprowadzony adres e-mail lub hasło są nieprawidłowe. Spróbuj ponownie."
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:7
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:13
@@ -5445,7 +5445,7 @@ msgstr "Każda sesja zostanie przerwana i użytkownik zostanie wylogowany."
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:108
 msgid "Expected another account"
-msgstr "Oczekiwano innego konta"
+msgstr "Oczekiwane inne konto"
 
 #: zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:3
 #: zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:7
@@ -5503,7 +5503,7 @@ msgstr "Przejdź do strony swojego profilu"
 
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:104
 msgid "H:i:s"
-msgstr "Jego"
+msgstr "H:i:s"
 
 #: zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:14
 msgid "Here you can set all the application keys, secrets and other configurations to integrate with external services like Facebook and Twitter."
@@ -5519,7 +5519,7 @@ msgstr "Jednak ten adres e-mail nie należy do żadnego z naszych użytkowników
 
 #: zotonic_mod_authentication/priv/templates/_logon_reset_form.tpl:30
 msgid "I forgot my password"
-msgstr "Zapomniałeś / zapomniałaś hasła?"
+msgstr "Zapomniałem / zapomniałam hasła"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:29
 msgid "I want to create a new account"
@@ -5573,7 +5573,7 @@ msgstr "Ostatnio widziany"
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:202
 #: zotonic_mod_authentication/priv/templates/_logon_off.tpl:4
 msgid "Log in"
-msgstr "Zaloguj sie"
+msgstr "Zaloguj się"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_title.tpl:1
 #: zotonic_mod_authentication/priv/templates/logon.tpl:11
@@ -5582,7 +5582,7 @@ msgstr "Zaloguj się do"
 
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:127
 msgid "Log in with your existing {site} account to connect the accounts. You only have to do this once."
-msgstr "Zaloguj się na swoje istniejące konto {site} , aby połączyć konta. Trzeba to zrobić tylko raz."
+msgstr "Zaloguj się za pomocą istniejącego konta {site} , aby połączyć konta. Wystarczy zrobić to tylko raz."
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:115
 msgid "Log on with"
@@ -5620,7 +5620,7 @@ msgstr "Brak dostępu"
 
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:111
 msgid "No recent known logons"
-msgstr "Brak ostatnio znanych logowań"
+msgstr "Brak znanych ostatnich logowań"
 
 #: zotonic_mod_authentication/priv/templates/sessions.tpl:40
 msgid "Note: sessions will appear here only when actively used by a browser tab, it’s recommended to keep this page open for a while."
@@ -5758,7 +5758,7 @@ msgstr "Przepraszamy, Twój kod resetowania hasła jest nieznany lub wygasł"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:184
 msgid "Stay logged on unless I log off."
-msgstr "Pozostań zalogowany, chyba że się wyloguję."
+msgstr "Pozostaje zalogowany, dopóki się nie wyloguję."
 
 #: zotonic_mod_authentication/priv/templates/logon_error/message.password_change_match.tpl:2
 msgid "The new password must be different from the previous one. Please try again."
