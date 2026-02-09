@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-06 16:35\n"
+"PO-Revision-Date: 2026-02-09 14:00\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -8516,7 +8516,7 @@ msgstr "Afhankelijk van de bestandsnaam kunnen de gegevens worden geïmporteerd 
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:21
 msgid "Every row in the CSV or XLSX file contains a single page. The columns are the properties."
-msgstr "Elke rij in het CSV- of XLSX-bestand bevat een enkele pagina. De kolommen zijn de eigenschappen."
+msgstr "Elke rij in het CSV- of XLSX-bestand bevat één pagina. De kolommen zijn de eigenschappen."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:78
 msgid "For example, the English title would have the column name: <code>title$en</code>"
