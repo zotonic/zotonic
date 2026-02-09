@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-06 16:34\n"
+"PO-Revision-Date: 2026-02-09 16:14\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -11686,7 +11686,7 @@ msgstr "Czy na pewno chcesz zatrzymać bez zapisywania?"
 
 #: zotonic_mod_survey/priv/templates/_survey_question_page.tpl:113
 msgid "Are you sure you want to stop? You can continue later."
-msgstr ""
+msgstr "Czy na pewno chcesz zatrzymać? Możesz kontynuować później."
 
 #: zotonic_mod_survey/priv/templates/survey.tpl:25
 msgid "Because you can edit, you can proceed for testing."
