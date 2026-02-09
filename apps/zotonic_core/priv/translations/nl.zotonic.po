@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-09 14:00\n"
+"PO-Revision-Date: 2026-02-09 16:14\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -12344,7 +12344,7 @@ msgstr "Opslaan en stoppen"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:67
 msgid "Save progress for later continuation"
-msgstr "Vooruitgang opslaan voor latere voortzetting"
+msgstr "Tussentijds opslaan om later verder te gaan"
 
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
 msgid "Saved"
