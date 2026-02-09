@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-09 19:11\n"
+"PO-Revision-Date: 2026-02-09 20:09\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -3801,7 +3801,7 @@ msgstr "Certyfikaty SSL"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:5
 msgid "Self signed certificate"
-msgstr "Samopodpisany certyfikat"
+msgstr "Samodzielnie podpisany certyfikat"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:193
 #: zotonic_mod_admin_identity/src/mod_admin_identity.erl:236
@@ -3830,7 +3830,7 @@ msgstr "Wysłano e-mail do"
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_email_test_result.tpl:7
 msgid "Show log for message"
-msgstr "Pokaż dziennik wiadomości"
+msgstr "Pokaż log dla wiadomości"
 
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:8
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:98
@@ -3847,7 +3847,7 @@ msgstr "Konfiguracja systemu Zotonic jest skonfigurowana do korzystania z przeka
 
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_new.erl:69
 msgid "The config key already exists, please choose another key name."
-msgstr "Parametr już istnieje, wybierz inną nazwę klucza."
+msgstr "Klucz konfiguracji już istnieje, wybierz inną nazwę klucza."
 
 #: zotonic_mod_admin_config/priv/templates/admin_config_email.tpl:148
 msgid "The default FROM address for emails. Defaults to"
@@ -3863,7 +3863,7 @@ msgstr "Nazwa hosta używana przez klienta podczas dostarczania poczty elektroni
 
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_delete.tpl:4
 msgid "This can't be undone. The configuration key will be lost forever."
-msgstr "Tej operacji nie da się cofnąć. Parametr zostanie nieodwracalnie usunięty."
+msgstr "Tej operacji nie da się cofnąć. Klucz konfiguracyjny zostanie nieodwracalnie usunięty."
 
 #: zotonic_mod_admin_config/priv/templates/_admin_config_ssl_panel.tpl:13
 msgid "This certificate is generated and signed by Zotonic. It will be used if no other certificates are available."
@@ -3914,7 +3914,7 @@ msgstr "Nazwa Użytkownika"
 #: zotonic_mod_oauth2/priv/templates/admin_oauth2_consumers_tokens.tpl:40
 #: zotonic_mod_ssl_letsencrypt/priv/templates/_ssl_letsencrypt_status.tpl:39
 msgid "Valid till"
-msgstr "Ważny do"
+msgstr "Ważne do"
 
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:18
 #: zotonic_mod_admin_config/priv/templates/_action_dialog_config_edit.tpl:19
@@ -4055,7 +4055,7 @@ msgstr "Kliknij OK, aby zalogować się jako ten użytkownik. Zostaniesz przekie
 
 #: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:16
 msgid "Click on the link to confirm your email address. Copy the whole link and paste it in your browser if this doesn't work."
-msgstr "Kliknij łącze, aby potwierdzić swój adres e-mail. Skopiuj cały link i wklej go do przeglądarki, jeśli to nie zadziała."
+msgstr "Kliknij łącze, aby potwierdzić swój adres e-mail. Jeśli to nie zadziała, skopiuj cały link i wklej go w przeglądarce."
 
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_set_username_password.tpl:9
 msgid "Click “delete” to remove any existing username/password from the person; this person will no longer be a user."
@@ -4089,7 +4089,7 @@ msgstr "Usunięto konto użytkownika."
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:109
 msgid "Duplicate username, please choose another username."
-msgstr "Wybrany nazwa użytkownika już istnieje, wybierz inny."
+msgstr "Wybrana nazwa użytkownika już istnieje, wybierz inną."
 
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:36
 #: zotonic_mod_admin_identity/priv/templates/_action_dialog_user_add.tpl:38
@@ -4140,7 +4140,7 @@ msgstr "Witaj"
 
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity.tpl:12
 msgid "Help about user credentials"
-msgstr "Dane uwierzytelniające - pomoc"
+msgstr "Pomoc dotycząca danych logowania użytkownika"
 
 #: zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:8
 msgid "Hi"
@@ -4201,7 +4201,7 @@ msgstr "Nowe hasło"
 
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:96
 msgid "No users found."
-msgstr "Nie znaleziono żadnego użytkownika."
+msgstr "Nie znaleziono użytkowników."
 
 #: zotonic_mod_admin_identity/priv/templates/_identity_verify_table.tpl:68
 msgid "No verified e-mail addresses."
@@ -4318,7 +4318,7 @@ msgstr "W bazie danych nie można zmienić hasła użytkownika admin. Edytuj pli
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:119
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:125
 msgid "The username is already in use, please try another."
-msgstr "Ta nazwa użytkownika jest już używana, spróbuj innej."
+msgstr "Nazwa użytkownika jest już używana, spróbuj użyć innej."
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_delete_username.erl:53
 msgid "There is no username coupled to this person."
@@ -4342,7 +4342,7 @@ msgstr "Ta osoba jest również użytkownikiem."
 
 #: zotonic_mod_admin_identity/priv/templates/_admin_edit_sidebar_identity_live.tpl:59
 msgid "This person is not yet a user."
-msgstr "Ta osoba nie ma uprawnień użytkownika."
+msgstr "Ta osoba nie jest jeszcze użytkownikiem."
 
 #: zotonic_mod_admin_identity/priv/templates/identity_verify.tpl:29
 msgid "This verification key is unknown."
@@ -4423,7 +4423,7 @@ msgstr "Po dodaniu poświadczeń do osoby osoba ta staje się użytkownikiem. Os
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_user_add.erl:111
 msgid "You are not allowed to create the person page."
-msgstr "Nie masz uprawnień do tworzenia stron użytkownikow."
+msgstr "Nie masz uprawnień do tworzenia stron użytkowników."
 
 #: zotonic_mod_admin_identity/src/actions/action_admin_identity_dialog_set_username_password.erl:93
 msgid "You are not allowed to delete this user account."
@@ -4458,7 +4458,7 @@ msgstr "Aby dodawać użytkowników, musisz być administratorem."
 
 #: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:25
 msgid "You received this email because you verified your email address. You will not receive any additional emails because of this request."
-msgstr "Otrzymałeś tego e-maila, ponieważ zweryfikowałeś swój adres e-mail. W związku z tą prośbą nie będziesz otrzymywać żadnych dodatkowych e-maili."
+msgstr "Otrzymałeś tę wiadomość, ponieważ zweryfikowałeś swój adres e-mail. Nie otrzymasz żadnych dodatkowych wiadomości e-mail w związku z tą prośbą."
 
 #: zotonic_mod_admin_identity/priv/templates/email_identity_verify.tpl:12
 msgid "Your account name is"
@@ -4482,7 +4482,7 @@ msgstr "Twoje dane logowania do"
 #: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:26
 #: zotonic_mod_signup/priv/templates/_signup_form_fields_username.tpl:82
 msgid "Your new password is too short or not strong enough. Use a: uppercase letter, lowercase letter, number, and symbol."
-msgstr "Twoje nowe hasło jest za krótkie lub niewystarczająco silne. Użyj a: wielka litera, mała litera, cyfra i symbol."
+msgstr "Nowe hasło jest zbyt krótkie lub niewystarczająco silne. Użyj: wielkiej litery, małej litery, cyfry i symbolu."
 
 #: zotonic_mod_admin_identity/priv/templates/email_admin_new_user.tpl:20
 msgid "Your username is:"
@@ -4537,7 +4537,7 @@ msgstr "Łączyć"
 #: zotonic_mod_admin_merge/priv/templates/_admin_edit_sidebar.tpl:8
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:28
 msgid "Merge pages"
-msgstr "Łączyć strony"
+msgstr "Scalanie stron"
 
 #: zotonic_mod_admin_merge/priv/templates/admin_merge.tpl:12
 msgid "Merge two pages together. You can select with which page to merge and which page will remain after the merge."
@@ -4569,7 +4569,7 @@ msgstr "Wybierz prawą"
 
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:30
 msgid "Select the winner from two pages. The loser will get merged into the winner. Only the winner remains."
-msgstr "Wybierz zwycięzcę z dwóch stron. Przegrany zostanie połączony ze zwycięzcą. Zostaje tylko zwycięzca."
+msgstr "Wybierz zwycięzcę z dwóch stron. Przegrany zostanie połączony ze zwycięzcą. Pozostanie tylko zwycięzca."
 
 #: zotonic_mod_admin_merge/priv/templates/admin_merge_compare.tpl:34
 msgid "Select the winning page"
@@ -4611,7 +4611,7 @@ msgstr "Nie masz uprawnień aby edytować zwycięzcę."
 
 #: zotonic_mod_admin_merge/src/mod_admin_merge.erl:103
 msgid "not implemented yet"
-msgstr "jeszcze niezaimplementowane"
+msgstr "jeszcze nie wdrożone"
 
 #: zotonic_mod_admin_modules/priv/templates/_dialog_admin_modules_activate_depending.tpl:34
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:123
@@ -4634,7 +4634,7 @@ msgstr "Zależności cykliczne"
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:33
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:118
 msgid "Deactivate"
-msgstr "Wyłącz"
+msgstr "Dezaktywuj"
 
 #: zotonic_mod_admin_modules/priv/templates/admin_modules.tpl:18
 msgid "Deactivate these modules if you are not using them, or check the installation of the system."
@@ -4925,7 +4925,7 @@ msgstr "Zwykle nowe połączenia wstawiane są po istniejących połączeniach. 
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:4
 msgid "Valid between"
-msgstr "Ważne między"
+msgstr "Obowiązuje pomiędzy"
 
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:74
 msgid "You are not allowed to create this predicate."
@@ -4962,7 +4962,7 @@ msgstr "Pamięć podręczna plików"
 
 #: zotonic_mod_admin_statistics/priv/templates/stat_panel/memory_usage.tpl:3
 msgid "Memory Usage"
-msgstr "Zużycie pamięci"
+msgstr "Wykorzystanie pamięci"
 
 #: zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:3
 #: zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:8
@@ -4978,7 +4978,7 @@ msgstr "Statystyki"
 
 #: zotonic_mod_admin_statistics/priv/templates/stat_panel/system_usage.tpl:3
 msgid "System Usage"
-msgstr "Wykorzystanie systemu"
+msgstr "Użycie systemu"
 
 #: zotonic_mod_admin_statistics/priv/templates/admin_statistics.tpl:9
 msgid "This page shows (real-time) system statistics like memory use and requests."
@@ -4992,7 +4992,7 @@ msgstr "Album"
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:21
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:22
 msgid "Album artist"
-msgstr "Albumowiec"
+msgstr "Wykonawca albumu"
 
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:27
 msgid "Album is a compilation of songs by various artists"
@@ -5011,7 +5011,7 @@ msgstr "Kompozytor"
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:46
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:47
 msgid "Copyright"
-msgstr "prawa autorskie"
+msgstr "Prawa autorskie"
 
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:38
 #: zotonic_mod_audio/priv/templates/_admin_edit_content.audio.tpl:39
@@ -5035,7 +5035,7 @@ msgstr "2FA"
 #: zotonic_mod_auth2fa/src/mod_auth2fa.erl:122
 #: zotonic_mod_auth2fa/src/mod_auth2fa.erl:164
 msgid "Add two-factor authentication"
-msgstr "Dodaj dwuskładnikowe uwierzytelnianie"
+msgstr "Dodaj uwierzytelnianie dwuskładnikowe"
 
 #: zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:27
 msgid "After you scanned the QR code, please enter the passcode generated by your two-factor authentication app below."
@@ -5053,7 +5053,7 @@ msgstr "Zapytaj po zalogowaniu"
 #: zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:55
 #: zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:87
 msgid "Ask on every page"
-msgstr "Zapytaj na każdej stronie"
+msgstr "Pytaj na każdej stronie"
 
 #: zotonic_mod_auth2fa/src/mod_auth2fa.erl:59
 msgid "Changed the 2FA setting."
@@ -5076,7 +5076,7 @@ msgstr "Konfiguracja domyślna"
 
 #: zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:24
 msgid "Define who should use two-factor authentication, this is the default setting for all users."
-msgstr "Zdefiniuj kto powinien używać dwuskładnikowego uwierzytelniania, jest to ustawienie domyślne dla wszystkich użytkowników."
+msgstr "Zdefiniuj, kto powinien korzystać z uwierzytelniania dwuskładnikowego, jest to ustawienie domyślne dla wszystkich użytkowników."
 
 #: zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:21
 msgid "Enable two-factor authentication..."
@@ -5109,7 +5109,7 @@ msgstr "Na każdej ładowanej stronie pojawia się okno dialogowe umożliwiając
 
 #: zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:46
 msgid "On the first page load a dialog appears for setting the two-factor authentication."
-msgstr "Na pierwszej stronie ładowania pojawi się okno dialogowe umożliwiające ustawienie uwierzytelniania dwuskładnikowego."
+msgstr "Po załadowaniu pierwszej strony pojawi się okno dialogowe umożliwiające ustawienie uwierzytelniania dwuskładnikowego."
 
 #: zotonic_mod_auth2fa/priv/templates/_auth2fa_user_actions.tpl:31
 #: zotonic_mod_auth2fa/src/mod_auth2fa.erl:68
@@ -5129,11 +5129,11 @@ msgstr "Tylko sam użytkownik lub administrator może usunąć uwierzytelnianie 
 #: zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:33
 #: zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:85
 msgid "Optional"
-msgstr "Opcjonalny"
+msgstr "Opcjonalnie"
 
 #: zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:29
 msgid "Passcode generated by your app"
-msgstr "Hasło wygenerowane przez Twoją aplikację"
+msgstr "Kod dostępu wygenerowany przez aplikację"
 
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_remove.tpl:17
 msgid "Please enter the current two-factor authentication code to remove the two-factor authentication from this account."
@@ -5158,7 +5158,7 @@ msgstr "Zeskanuj kod QR uwierzytelniania dwuskładnikowego za pomocą aplikacji,
 
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:66
 msgid "Set passcode"
-msgstr "Ustal kod dostępu"
+msgstr "Ustaw kod dostępu"
 
 #: zotonic_mod_auth2fa/src/mod_auth2fa.erl:61
 msgid "Sorry, you are not allowed to change the 2FA settings."
@@ -5182,7 +5182,7 @@ msgstr "Sukces"
 #: zotonic_mod_auth2fa/priv/templates/_dialog_auth2fa_passcode.tpl:51
 #: zotonic_mod_auth2fa/priv/templates/_logon_login_set_passcode.tpl:35
 msgid "The clock of your computer is more than 20 seconds off. This can cause problems with two-factor authentication."
-msgstr "Zegar komputera przesunie się o ponad 20 sekund. Może to powodować problemy z uwierzytelnianiem dwuskładnikowym."
+msgstr "Zegar komputera jest opóźniony o ponad 20 sekund. Może to powodować problemy z uwierzytelnianiem dwuskładnikowym."
 
 #: zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:35
 msgid "The two-factor authentication can be added per user in the admin or (if available on the site) on their profile page."
@@ -5196,7 +5196,7 @@ msgstr "Hasło uwierzytelniania dwuskładnikowego jest nieprawidłowe. Proszę s
 
 #: zotonic_mod_auth2fa/priv/templates/admin_auth2fa_config.tpl:68
 msgid "The user will be prompted to set the two-factor authentication before being allowed to log in."
-msgstr "Przed zalogowaniem się użytkownik zostanie poproszony o ustawienie uwierzytelniania dwuskładnikowego."
+msgstr "Użytkownik zostanie poproszony o ustawienie uwierzytelniania dwuskładnikowego, zanim będzie mógł się zalogować."
 
 #: zotonic_mod_auth2fa/priv/templates/_admin_edit_sidebar.person.tpl:6
 #: zotonic_mod_auth2fa/src/mod_auth2fa.erl:176
