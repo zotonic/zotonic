@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-10 14:57\n"
+"PO-Revision-Date: 2026-02-10 16:05\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -6521,15 +6521,15 @@ msgstr "ID strony"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:115
 msgid "Pong Count"
-msgstr "Liczenie ponga"
+msgstr "Zliczanie Pongów"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:121
 msgid "Pong Errors"
-msgstr "Błędy ponga"
+msgstr "Błędy Pong"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:118
 msgid "Pong Latency"
-msgstr "Opóźnienie ponga"
+msgstr "Latencja Pong"
 
 #: zotonic_mod_base/priv/templates/_powered_by_zotonic.tpl:1
 msgid "Powered by Zotonic"
@@ -6545,7 +6545,7 @@ msgstr "Wróć do strony głównej"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:144
 msgid "Service Worker?"
-msgstr "Pracownik serwisu?"
+msgstr "Service Worker (skrypt serwisowy przeglądarki)?"
 
 #: zotonic_mod_base/priv/templates/_session_info.tpl:2
 msgid "Session Id"
@@ -6573,7 +6573,7 @@ msgstr "Wsparcie dla pracy offline i komunikacji pomiędzy kilkoma zakładkami w
 
 #: zotonic_mod_base/priv/templates/_bridge_warning.tpl:4
 msgid "Test your connection"
-msgstr "Przetestuj swoje połączenie"
+msgstr "Przetestuj połączenie"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:54
 msgid "Tests"
@@ -6609,15 +6609,15 @@ msgstr "Poniższy test sprawdza połączenie między Twoim komputerem, Google i 
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:78
 msgid "There should not be any timeouts, if there are timeouts then your internet connection is losing packets."
-msgstr "Nie powinno być żadnych limitów czasu, jeśli są limity czasu, twoje połączenie internetowe traci pakiety."
+msgstr "Nie powinno być żadnych przerw czasowych, jeśli są, oznacza to, że połączenie internetowe traci pakiety."
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:135
 msgid "This tests the authentication with the server."
-msgstr "To testuje uwierzytelnianie na serwerze."
+msgstr "Testuje to uwierzytelnianie na serwerze."
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:101
 msgid "This tests the communication with the server."
-msgstr "To testuje komunikację z serwerem."
+msgstr "Testuje to komunikację z serwerem."
 
 #: zotonic_mod_base/priv/templates/directory_index.tpl:15
 msgid "Type"
@@ -6625,15 +6625,15 @@ msgstr "Rodzaj"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:131
 msgid "Web Worker Status"
-msgstr "Status pracownika internetowego"
+msgstr "Status Web Workera"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:109
 msgid "Websocket"
-msgstr "Gniazdo sieciowe"
+msgstr "Gniazdo sieciowe WebSocket"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:106
 msgid "Websocket Support?"
-msgstr "Wsparcie dla gniazd sieciowych?"
+msgstr "Obsługa WebSocketów?"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:251
@@ -6655,7 +6655,7 @@ msgstr "Możesz spróbować zalogować się jako inny użytkownik."
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:65
 msgid "Your browser as it identifies itself to our server and your IP address. This is essential information for the help desk, but we do not store any personal data."
-msgstr "Twoja przeglądarka, ponieważ identyfikuje się z naszym serwerem i Twoim adresem IP. Jest to niezbędna informacja dla help desku, ale nie przechowujemy żadnych danych osobowych."
+msgstr "Twoja przeglądarka identyfikująca się z naszym serwerem i Twój adres IP. Jest to niezbędna informacja dla działu pomocy technicznej, ale żadne dane osobowe nie są przechowywane."
 
 #: zotonic_mod_base/priv/templates/error.tpl:16
 #: zotonic_mod_mailinglist/priv/templates/_admin_mailing_status_overview.tpl:74
@@ -6775,7 +6775,7 @@ msgstr "Nie możesz usunąć komentarza."
 
 #: zotonic_mod_comment/src/controllers/controller_admin_comments.erl:93
 msgid "You are not allowed to toggle the comment."
-msgstr "Nie możesz zmienić komentarza."
+msgstr "Nie można przełączyć komentarza."
 
 #: zotonic_mod_comment/priv/templates/_comments_form.tpl:7
 #: zotonic_mod_comment/priv/templates/_comments_moderation.tpl:1
@@ -6802,7 +6802,7 @@ msgstr "Dziękujemy!"
 
 #: zotonic_mod_contact/priv/templates/contact.tpl:33
 msgid "Your message has been submitted! We’ll get in touch soon."
-msgstr "Twoja wiadomość została wysłana! Wkrótce się skontaktujemy."
+msgstr "Twoja wiadomość została wysłana! Wkrótce się z Tobą skontaktujemy."
 
 #: zotonic_mod_contact/priv/templates/email_contact.tpl:3
 msgid "contact form on"
@@ -6814,15 +6814,15 @@ msgstr "został przesłany."
 
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:1
 msgid "Are you sure you want to delete the following content groups:"
-msgstr "Czy na pewno chcesz usunąć następujące grupy treści:"
+msgstr "Czy na pewno chcesz usunąć następujące grupy zawartości?"
 
 #: zotonic_mod_content_groups/priv/templates/_admin_edit_sidebar_content_group.tpl:4
 msgid "Content Group"
-msgstr "Grupa tematyczna"
+msgstr "Grupa zawartości"
 
 #: zotonic_mod_content_groups/src/mod_content_groups.erl:84
 msgid "Delete is canceled, there are pages in this content group."
-msgstr "Anulowano usunięcie, w tej grupie tematycznej znajdują się strony."
+msgstr "Anulowano usunięcie; w tej grupie tematycznej znajdują się strony."
 
 #: zotonic_mod_content_groups/src/mod_content_groups.erl:107
 msgid "Edit Page"
@@ -6846,7 +6846,7 @@ msgstr "Zatrzymano na stronie:"
 
 #: zotonic_mod_content_groups/priv/templates/_action_dialog_delete_rsc.content_group.tpl:47
 msgid "There are no pages in these content groups."
-msgstr "W tych grupach treści nie ma stron."
+msgstr "W tych grupach zawartości nie ma stron.\n"
 
 #: zotonic_mod_content_groups/priv/templates/_admin_edit_sidebar_content_group.tpl:12
 msgid "This page is part of the group:"
@@ -6887,7 +6887,7 @@ msgstr "Odrzuć wszystko"
 
 #: zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:16
 msgid "Detailed explanation of cookie types. Leave a field empty if you don't want to show this type of cookie"
-msgstr "Szczegółowe wyjaśnienie rodzajów plików cookie. Pozostaw puste pole, jeśli nie chcesz wyświetlać tego typu plików cookie"
+msgstr "Szczegółowe wyjaśnienie typów plików cookie. Pozostaw pole puste, jeśli nie chcesz wyświetlać tego typu plików cookie."
 
 #: zotonic_mod_cookie_consent/priv/templates/_admin_edit_content.name.cookie_consent.tpl:19
 msgid "Functional"
@@ -6907,12 +6907,12 @@ msgstr "Więcej informacji o plikach cookie"
 
 #: zotonic_mod_cookie_consent/priv/templates/_media_cookie_consent.tpl:13
 msgid "Please consent to cookies to display external content."
-msgstr "Proszę wyrazić zgodę na pliki cookie w celu wyświetlania treści zewnętrznych."
+msgstr "Prosimy o wyrażenie zgody na pliki cookie w celu wyświetlania treści zewnętrznych."
 
 #: zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:29
 #: zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:46
 msgid "Strictly necessary"
-msgstr "Absolutnie konieczne"
+msgstr "Niezbędne"
 
 #: zotonic_mod_cookie_consent/priv/templates/_cookie_consent.tpl:5
 msgid "This website uses cookies"
@@ -6941,7 +6941,7 @@ msgstr "Licencja"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:8
 msgid "License and attribution"
-msgstr "Licencja i uznanie"
+msgstr "Licencja i atrybucja"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:55
 msgid "More about licenses:"
@@ -6953,7 +6953,7 @@ msgstr "Domena publiczna"
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:16
 msgid "The license and the attribution of this page."
-msgstr "Licencja i przypisanie tej strony."
+msgstr "Licencja i atrybucja tej strony."
 
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:50
 #: zotonic_mod_copyright/priv/templates/_admin_edit_sidebar_copyright.tpl:51
@@ -7016,11 +7016,11 @@ msgstr "<i>Nie znaleziono modułu.</i>"
 #: zotonic_mod_development/priv/templates/_development_template_graph.tpl:5
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:80
 msgid "<tt>{extends}</tt> are shown with a striped line, <tt>{overrules}</tt> are shown with a dotted line."
-msgstr "<tt>{extends}</tt> są pokazane linią w paski, <tt>{overrules}</tt> są pokazane linią przerywaną."
+msgstr "<tt>{extends}</tt> są pokazane linią w paski, <tt>{overrules}</tt> są oznaczone linią przerywaną."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:37
 msgid "A graph of all templates, and by whom they are included, is generated and automatically updated."
-msgstr "Wykres wszystkich szablonów i osób, które je zawierają, jest generowany i automatycznie aktualizowany."
+msgstr "Wykres wszystkich szablonów i osób, które je dołączyły, jest generowany i automatycznie aktualizowany."
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:5
 msgid "Action"
@@ -7044,7 +7044,7 @@ msgstr "Wszystkie szablony są sprawdzane pod kątem brakujących dołączeń lu
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:42
 msgid "All templates are compiling."
-msgstr "Wszystkie szablony się kompilują."
+msgstr "Wszystkie szablony są kompilowane."
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:164
 #: zotonic_mod_development/priv/templates/admin_development.tpl:180
@@ -7104,20 +7104,20 @@ msgstr "Nie można skopiować pliku dot do schowka."
 
 #: zotonic_mod_development/src/support/z_development_dispatch.erl:46
 msgid "Could not fetch tracer output, please try again."
-msgstr "Nie udało się pobrać danych wyjściowych śledzenia, spróbuj ponownie."
+msgstr "Nie można pobrać danych wyjściowych trailera, spróbuj ponownie."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:8
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:12
 msgid "Cross-reference check of all templates"
-msgstr "Kontrola powiązań we wszystkich szablonach"
+msgstr "Sprawdzenie odwołań krzyżowych wszystkich szablonów"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:158
 msgid "Cross-reference check of templates"
-msgstr "Kontrola powiązań w szablonach"
+msgstr "Sprawdzenie odwołań krzyżowych szablonów"
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:30
 msgid "Cross-reference check results"
-msgstr "Wyniki kontroli powiązań"
+msgstr "Wyniki sprawdzenia odwołań krzyżowych"
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:30
 msgid "Dependency graph"
@@ -7134,7 +7134,7 @@ msgstr "Wykres zależności wszystkich szablonów"
 
 #: zotonic_mod_development/priv/templates/_development_template_graph.tpl:3
 msgid "Dependency graph of all templates. Only includes using a direct string value for the template are shown."
-msgstr "Wykres zależności wszystkich szablonów. Wyświetlane jest tylko użycie bezpośredniej wartości ciągu znaków dla szablonu."
+msgstr "Wykres zależności wszystkich szablonów. Pokazywane są tylko elementy używające bezpośredniej wartości ciągu dla szablonu."
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:79
 msgid "Dependency graph of all traced templates. All includes are shown."
@@ -7143,7 +7143,7 @@ msgstr "Wykres zależności wszystkich prześledzonych szablonów. Pokazane są 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:3
 #: zotonic_mod_development/src/mod_development.erl:803
 msgid "Development"
-msgstr "Narzędzia programisty"
+msgstr "Rozwój"
 
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:3
 msgid "Development - Function Call Tracing"
@@ -7163,11 +7163,11 @@ msgstr "Wyłączone śledzenie zapytań bazy danych"
 
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:49
 msgid "Dispatch Name"
-msgstr "Nazwa wysyłki"
+msgstr "Nazwa dyspozytora"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:199
 msgid "Dispatch rule debugging"
-msgstr "Wyślij reguły debugowania"
+msgstr "Debugowanie reguł dyspozytora"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:42
 msgid "Download CSS and JavaScript files as separate files. Don’t combine them in one URL."
@@ -7195,7 +7195,7 @@ msgstr "Wprowadź moduł i funkcję, którą chcesz śledzić. Jeśli nie zostan
 
 #: zotonic_mod_development/src/mod_development.erl:348
 msgid "Error changing the console logs."
-msgstr "Błąd podczas zmiany dzienników konsoli."
+msgstr "Błąd podczas zmiany logów konsoli."
 
 #: zotonic_mod_development/priv/templates/admin_development_observers.tpl:19
 msgid "Event"
@@ -7211,11 +7211,11 @@ msgstr "Wyjaśnij"
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:191
 msgid "Extends"
-msgstr "Rozciąga się"
+msgstr "Rozszerza się"
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:32
 msgid "Final dispatch"
-msgstr "Ostateczna wysyłka"
+msgstr "Końcowe wywołanie"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:150
 msgid "Find"
@@ -7261,7 +7261,7 @@ msgstr "Wykres wszystkich zależności szablonu"
 
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:36
 msgid "Hostalias"
-msgstr "Hostalii"
+msgstr "Hostalias"
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:63
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:125
@@ -7297,7 +7297,7 @@ msgstr "Śledzenie na żywo wywołań funkcji na serwerze (tylko dla użytkownik
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:32
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:36
 msgid "Live traces of template rendering"
-msgstr "Żywe ślady renderowania szablonów"
+msgstr "Śledzenie na żywo renderowania szablonu"
 
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:13
 msgid "Live tracing of function calls on the server."
@@ -7360,7 +7360,7 @@ msgstr "Brak uprawnień dostępu do dzienników konsoli."
 #: zotonic_mod_development/src/mod_development.erl:302
 #: zotonic_mod_development/src/mod_development.erl:329
 msgid "No permission to use mod_development."
-msgstr "Brak pozwolenia na używanie mod_development."
+msgstr "Brak uprawnień do korzystania z mod_development."
 
 #: zotonic_mod_development/priv/templates/_development_template.tpl:12
 msgid "Not found"
@@ -7382,12 +7382,12 @@ msgstr "Tylko użytkownik admin może korzystać ze śledzenia wywołań funkcji
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:140
 msgid "Optional category for catinclude"
-msgstr "Kategoria fakultatywna dla kotów, w tym"
+msgstr "Opcjonalna kategoria dla catinclude"
 
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:71
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:77
 msgid "Permanent redirect"
-msgstr "Trwałe przekierowanie"
+msgstr "Stałe przekierowanie"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:185
 msgid "Recompile templates"
@@ -7399,11 +7399,11 @@ msgstr "Przeadresuj"
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:18
 msgid "Refresh"
-msgstr "Odświeżać"
+msgstr "Odśwież"
 
 #: zotonic_mod_development/priv/templates/admin_development_templates_graph.tpl:18
 msgid "Rerun graph"
-msgstr "Uruchom ponownie wykres"
+msgstr "Ponowne uruchomienie grafu"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:89
 msgid "Set the class <tt>environment-development</tt> on the <tt>&lt;html&gt;</tt> element of your pages to see the server log in the browser console.<br>In development, admin pages always show the server log in the javascript console."
@@ -7427,7 +7427,7 @@ msgstr "Pokaż ścieżki do dołączonych plików szablonów w wygenerowanych sz
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:94
 msgid "Show server log in the browser console"
-msgstr "Pokaż dziennik serwera w konsoli przeglądarki"
+msgstr "Pokaż log serwera w konsoli przeglądarki"
 
 #: zotonic_mod_development/priv/templates/admin_development.tpl:7
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:7
@@ -7437,15 +7437,15 @@ msgstr "Pokaż dziennik serwera w konsoli przeglądarki"
 #: zotonic_mod_development/priv/templates/admin_development_templates_trace.tpl:31
 #: zotonic_mod_development/priv/templates/admin_development_templates_xref.tpl:7
 msgid "Site Development"
-msgstr "Rozwój strony"
+msgstr "Rozwój witryny"
 
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:24
 msgid "Site Dispatch Rules"
-msgstr "Zasady wysyłki witryny"
+msgstr "Zasady dystrybucji zadań w witrynie"
 
 #: zotonic_mod_development/priv/templates/admin_development_dispatch_details.tpl:29
 msgid "Site Name"
-msgstr "Nazwa strony"
+msgstr "Nazwa witryny"
 
 #: zotonic_mod_development/priv/templates/admin_development_function_trace.tpl:34
 msgid "Start Tracing"
