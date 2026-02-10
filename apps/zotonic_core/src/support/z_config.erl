@@ -306,6 +306,7 @@ default(smtp_dns_blocklist) -> z_email_dnsbl:dns_blocklist();
 default(smtp_dns_allowlist) -> z_email_dnsbl:dns_allowlist();
 default(smtp_delete_sent_after) -> 240;
 default(smtp_is_blackhole) -> false;
+default(smtp_max_senders) -> 5;
 default(mqtt_listen_ip) -> ?MODULE:get(listen_ip);
 default(mqtt_listen_ip6) -> ?MODULE:get(listen_ip6);
 default(mqtt_listen_port) -> 1883;
@@ -408,6 +409,7 @@ all() ->
             smtp_dns_blocklist,
             smtp_dns_allowlist,
             smtp_delete_sent_after,
+            smtp_max_senders,
             mqtt_listen_ip,
             mqtt_listen_ip6,
             mqtt_listen_port,
