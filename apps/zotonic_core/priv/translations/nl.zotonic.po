@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-09 16:14\n"
+"PO-Revision-Date: 2026-02-10 09:30\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -7527,7 +7527,7 @@ msgstr "Deze sjablonen bevatten <tt>{optional}</tt> uitspraken die verwijzen naa
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:52
 msgid "These templates have non optional <tt>{include}</tt> statements that are referring to missing templates."
-msgstr "Deze sjablonen bevatten niet-optionele <tt>{include}</tt> -verklaringen die verwijzen naar ontbrekende sjablonen."
+msgstr "Deze sjablonen bevatten niet-optionele <tt>{include}</tt> -statements die verwijzen naar ontbrekende sjablonen."
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:4
 msgid "These templates have syntax errors and could not be checked for included templates."
@@ -12109,7 +12109,7 @@ msgstr "Meerdere pagina-onderbrekingen worden samengevoegd tot één."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:57
 msgid "Multiple times – each time with new results"
-msgstr "Meerdere keren - elke keer met nieuwe resultaten"
+msgstr "Meerdere keren  — iedere keer met nieuwe resultaten"
 
 #: zotonic_mod_survey/src/mod_survey.erl:305
 msgid "Narrative"
@@ -12152,7 +12152,7 @@ msgstr "Numerieke invoer, toon totalen voor dit veld in de resultaten."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:53
 msgid "Once — edit after submit (logged in users only)"
-msgstr "Eenmalig— bewerken mogelijk na indienen (alleen ingelogde gebruikers)"
+msgstr "Eenmalig — bewerken mogelijk na indienen (alleen ingelogde gebruikers)"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:49
 msgid "Once — submit is final (no editing after submit)"
