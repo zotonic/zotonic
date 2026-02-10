@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-06 16:35\n"
+"PO-Revision-Date: 2026-02-10 09:30\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -7527,7 +7527,7 @@ msgstr "Deze sjablonen bevatten <tt>{optional}</tt> uitspraken die verwijzen naa
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:52
 msgid "These templates have non optional <tt>{include}</tt> statements that are referring to missing templates."
-msgstr "Deze sjablonen bevatten niet-optionele <tt>{include}</tt> -verklaringen die verwijzen naar ontbrekende sjablonen."
+msgstr "Deze sjablonen bevatten niet-optionele <tt>{include}</tt> -statements die verwijzen naar ontbrekende sjablonen."
 
 #: zotonic_mod_development/priv/templates/_development_template_xref.tpl:4
 msgid "These templates have syntax errors and could not be checked for included templates."
@@ -8516,7 +8516,7 @@ msgstr "Afhankelijk van de bestandsnaam kunnen de gegevens worden geïmporteerd 
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:21
 msgid "Every row in the CSV or XLSX file contains a single page. The columns are the properties."
-msgstr "Elke rij in het CSV- of XLSX-bestand bevat een enkele pagina. De kolommen zijn de eigenschappen."
+msgstr "Elke rij in het CSV- of XLSX-bestand bevat één pagina. De kolommen zijn de eigenschappen."
 
 #: zotonic_mod_import_csv/priv/templates/admin_import.tpl:78
 msgid "For example, the English title would have the column name: <code>title$en</code>"
@@ -12109,7 +12109,7 @@ msgstr "Meerdere pagina-onderbrekingen worden samengevoegd tot één."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:57
 msgid "Multiple times – each time with new results"
-msgstr "Meerdere keren - elke keer met nieuwe resultaten"
+msgstr "Meerdere keren  — iedere keer met nieuwe resultaten"
 
 #: zotonic_mod_survey/src/mod_survey.erl:305
 msgid "Narrative"
@@ -12152,7 +12152,7 @@ msgstr "Numerieke invoer, toon totalen voor dit veld in de resultaten."
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:53
 msgid "Once — edit after submit (logged in users only)"
-msgstr "Eenmalig— bewerken mogelijk na indienen (alleen ingelogde gebruikers)"
+msgstr "Eenmalig — bewerken mogelijk na indienen (alleen ingelogde gebruikers)"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:49
 msgid "Once — submit is final (no editing after submit)"
@@ -12344,7 +12344,7 @@ msgstr "Opslaan en stoppen"
 
 #: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:67
 msgid "Save progress for later continuation"
-msgstr "Vooruitgang opslaan voor latere voortzetting"
+msgstr "Tussentijds opslaan om later verder te gaan"
 
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:1
 msgid "Saved"

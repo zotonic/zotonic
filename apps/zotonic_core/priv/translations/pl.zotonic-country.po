@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2025-04-02 13:54\n"
+"PO-Revision-Date: 2026-02-09 18:10\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -113,7 +113,7 @@ msgid "British Indian Ocean Territory"
 msgstr "Brytyjskie Terytorium Oceanu Indyjskiego"
 
 msgid "Brunei Darussalam"
-msgstr "Azja/Brunei"
+msgstr "Brunei"
 
 msgid "Bulgaria"
 msgstr "Bułgaria"
@@ -164,10 +164,10 @@ msgid "Comoros"
 msgstr "Komory"
 
 msgid "Congo"
-msgstr "Kongo (Kinszasa)"
+msgstr "Republika Konga"
 
 msgid "Congo, The Democratic Republic of the"
-msgstr "Kongo, Republika Demokratyczna"
+msgstr "Demokratyczna Republika Konga"
 
 msgid "Cook Islands"
 msgstr "Wyspy Cooka"
@@ -284,7 +284,7 @@ msgid "Guadeloupe"
 msgstr "Gwadelupa"
 
 msgid "Guam"
-msgstr "Pacyfik/Guam"
+msgstr "Guam"
 
 msgid "Guatemala"
 msgstr "Gwatemala"
@@ -314,7 +314,7 @@ msgid "Honduras"
 msgstr "Honduras"
 
 msgid "Hong Kong"
-msgstr "Azja/Hongkong"
+msgstr "Hongkong"
 
 msgid "Hungary"
 msgstr "Węgry"
@@ -356,7 +356,7 @@ msgid "Japan"
 msgstr "Japonia"
 
 msgid "Jersey"
-msgstr "Golf"
+msgstr "Jersey"
 
 msgid "Jordan"
 msgstr "Jordania"
@@ -377,7 +377,7 @@ msgid "Kuwait"
 msgstr "Kuwejt"
 
 msgid "Kyrgyzstan"
-msgstr "Republika Środkowoafrykańska"
+msgstr "Kirgistan"
 
 msgid "Laos"
 msgstr "Laos"
@@ -407,7 +407,7 @@ msgid "Luxembourg"
 msgstr "Luksemburg"
 
 msgid "Macao"
-msgstr "Azja/Makau"
+msgstr "Makau"
 
 msgid "Macedonia"
 msgstr "Macedonia"
@@ -488,7 +488,7 @@ msgid "Netherlands"
 msgstr "Holandia"
 
 msgid "New Caledonia"
-msgstr "Francuskie Terytoria Południowe i Antarktyczne"
+msgstr "Nowa Kaledonia"
 
 msgid "New Zealand"
 msgstr "Nowa Zelandia"
@@ -506,7 +506,7 @@ msgid "Niue"
 msgstr "Niue"
 
 msgid "Norfolk Island"
-msgstr "Norfolk"
+msgstr "Wyspa Norfolk"
 
 msgid "North Korea"
 msgstr "Korea Północna"
@@ -545,7 +545,7 @@ msgid "Philippines"
 msgstr "Filipiny"
 
 msgid "Pitcairn Island"
-msgstr "Wyspa Bouveta"
+msgstr "Wyspa Pitcairn"
 
 msgid "Poland"
 msgstr "Polska"
@@ -560,7 +560,7 @@ msgid "Qatar"
 msgstr "Katar"
 
 msgid "Reunion"
-msgstr "Zjazd"
+msgstr "Reunion"
 
 msgid "Romania"
 msgstr "Rumunia"
@@ -578,13 +578,13 @@ msgid "Saint Helena"
 msgstr "Wyspa Świętej Heleny"
 
 msgid "Saint Kitts and Nevis Anguilla"
-msgstr "Saint Christopher-Nevis-Anguilla"
+msgstr "Saint Kitts i Nevis Anguilla"
 
 msgid "Saint Lucia"
 msgstr "święta Lucia"
 
 msgid "Saint Martin (French)"
-msgstr "Saint Martin (francuski)"
+msgstr "Saint Martin"
 
 msgid "Saint Pierre and Miquelon"
 msgstr "Saint-Pierre i Miquelon"
@@ -620,7 +620,7 @@ msgid "Singapore"
 msgstr "Singapur"
 
 msgid "Sint Maarten (Dutch)"
-msgstr "Sint Maarten (holenderski)"
+msgstr "Sint Maarten"
 
 msgid "Slovakia"
 msgstr "Słowacja"
@@ -632,7 +632,7 @@ msgid "Solomon Islands"
 msgstr "Wyspy Salomona"
 
 msgid "Somalia"
-msgstr "Somali"
+msgstr "Somalia"
 
 msgid "South Africa"
 msgstr "Republika Południowej Afryki"
@@ -662,7 +662,7 @@ msgid "Svalbard and Jan Mayen Islands"
 msgstr "Svalbard i Jan Mayen"
 
 msgid "Swaziland"
-msgstr "Suazi"
+msgstr "Eswatini"
 
 msgid "Sweden"
 msgstr "Szwecja"
@@ -686,7 +686,7 @@ msgid "Thailand"
 msgstr "Tajlandia"
 
 msgid "Togo"
-msgstr "Iść"
+msgstr "Togo"
 
 msgid "Tokelau"
 msgstr "Tokelau"
@@ -701,10 +701,10 @@ msgid "Tunisia"
 msgstr "Tunezja"
 
 msgid "Turkmenistan"
-msgstr "Turkmenia"
+msgstr "Turkmenistan"
 
 msgid "Turks and Caicos Islands"
-msgstr "Turks i Caicos"
+msgstr "Wyspy Turks i Caicos"
 
 msgid "Tuvalu"
 msgstr "Tuvalu"
@@ -752,7 +752,7 @@ msgid "Virgin Islands (USA)"
 msgstr "Wyspy Dziewicze Stanów Zjednoczonych"
 
 msgid "Wallis and Futuna Islands"
-msgstr "Turks i Caicos"
+msgstr "Wyspy Wallis i Futuna"
 
 msgid "West Bank Administered by Israel"
 msgstr "Zachodni Brzeg pod kontrolą Izraela"
