@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-09 21:20\n"
+"PO-Revision-Date: 2026-02-10 14:57\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "MIME-Version: 1.0\n"
@@ -5816,11 +5816,11 @@ msgstr "Zbyt wiele ponownych prób."
 
 #: zotonic_mod_authentication/priv/templates/logon_error/message.dataleak.tpl:3
 msgid "Use a: uppercase letter, lowercase letter, number, and symbol."
-msgstr "Użyj a: wielka litera, mała litera, cyfra i symbol."
+msgstr "Użyj: wielkiej litery, małej litery, cyfry i symbolu."
 
 #: zotonic_mod_authentication/priv/templates/logon_error/message.unequal.tpl:2
 msgid "Use non alphabetical characters, digits and upper/lower case letters to make it harder to guess."
-msgstr "Używaj znaków innych niż alfabetyczne, cyfr oraz wielkich i małych liter, aby utrudnić odgadnięcie."
+msgstr "Używaj znaków spoza alfabetu, cyfr i wielkich/małych liter, aby utrudnić odgadnięcie."
 
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:100
 msgid "Verify your account"
@@ -5828,7 +5828,7 @@ msgstr "Zweryfikuj swoje konto"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:104
 msgid "We cannot connect you to the right account. Contact support of {site} to help you merge the accounts and then try again."
-msgstr "Nie możemy połączyć Cię z właściwym kontem. Skontaktuj się z obsługą {site} , aby pomóc Ci scalić konta, a następnie spróbuj ponownie."
+msgstr "Nie możemy połączyć Cię z właściwym kontem. Skontaktuj się z pomocą techniczną {site} , aby pomóc Ci połączyć konta, a następnie spróbuj ponownie."
 
 #: zotonic_mod_authentication/priv/templates/_logon_box.tpl:116
 msgid "We don’t seem to have any valid email address or other electronic communication address of you."
@@ -5842,7 +5842,7 @@ msgstr "Wysłaliśmy wiadomość e-mail z linkiem do zresetowania hasła"
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:32
 #: zotonic_mod_survey/priv/templates/_dialog_survey_link_person.tpl:88
 msgid "Y-m-d"
-msgstr "Ymd"
+msgstr "Y-m-d"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:5
 msgid "You are about to create a new account."
@@ -5875,7 +5875,7 @@ msgstr "Możesz zalogować się za pomocą następującej usługi zewnętrznej"
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:9
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:18
 msgid "You have requested a new password for"
-msgstr "Poprosiłeś o nowe hasło dla"
+msgstr "Zażądano nowego hasła dla"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:75
 msgid "You have to share your email address to be able to log in."
@@ -5887,11 +5887,11 @@ msgstr "Możesz spróbować zalogować się jako inny użytkownik."
 
 #: zotonic_mod_authentication/priv/templates/admin_authentication_services.tpl:11
 msgid "You need to be allowed to edit the system configuration to view or change the configured App Keys."
-msgstr "Musisz mieć pozwolenie na edycję konfiguracji systemu, aby wyświetlić lub zmienić skonfigurowane klucze aplikacji."
+msgstr "Aby wyświetlić lub zmienić skonfigurowane klucze aplikacji, musisz mieć możliwość edycji konfiguracji systemu."
 
 #: zotonic_mod_authentication/priv/templates/email_password_reset.tpl:39
 msgid "You received this email as you entered your username or email address to reset your password. You will not receive any other emails because of this request."
-msgstr "Otrzymałeś tę wiadomość e-mail po wprowadzeniu nazwy użytkownika lub adresu e-mail w celu zresetowania hasła. W związku z tą prośbą nie będziesz otrzymywać żadnych innych wiadomości e-mail."
+msgstr "Otrzymałeś tę wiadomość e-mail, ponieważ wprowadziłeś swoją nazwę użytkownika lub adres e-mail, aby zresetować hasło. Nie otrzymasz żadnych innych wiadomości e-mail w związku z tą prośbą."
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:111
 msgid "You used another account on {service} than was expected."
@@ -5945,7 +5945,7 @@ msgstr "lub"
 
 #: zotonic_mod_authentication/priv/templates/_logon_login_form_fields.tpl:123
 msgid "or you can enter the password that you have for"
-msgstr "lub możesz wprowadzić hasło, które masz dla"
+msgstr "lub możesz wprowadzić hasło, które posiadasz dla"
 
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:85
 #: zotonic_mod_authentication/priv/templates/_logon_service_error.tpl:95
@@ -6034,7 +6034,7 @@ msgstr "Magazyn plików w chmurze jest włączony. Pliki lokalne nie zostaną za
 
 #: zotonic_mod_backup/src/actions/action_backup_backup_start.erl:54
 msgid "Could not start the backup because a backup is already in progress."
-msgstr "Nie można rozpocząć tworzenia kopii zapasowej, ponieważ inna kopia zapasowa jest już w toku."
+msgstr "Nie można rozpocząć tworzenia kopii zapasowej, ponieważ trwa już tworzenie kopii zapasowej."
 
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:61
 msgid "Deleted"
@@ -6056,7 +6056,7 @@ msgstr "Usunięte strony"
 
 #: zotonic_mod_backup/priv/templates/admin_backup.tpl:14
 msgid "Directory"
-msgstr "Informator"
+msgstr "Katalog"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:81
 msgid "Do not encrypt backups."
@@ -6066,7 +6066,7 @@ msgstr "Nie szyfruj kopii zapasowych."
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:31
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:52
 msgid "Do not make a daily backup."
-msgstr "Nie rób codziennej kopii zapasowej."
+msgstr "Nie twórz codziennej kopii zapasowej."
 
 #: zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:35
 msgid "Download backup file"
@@ -6108,7 +6108,7 @@ msgstr "Można go znaleźć w"
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_revert_confirm.tpl:11
 msgid "It could be that a connected dependent page was deleted because of the deletion of this page, such a deleted dependent page can also be recovered."
-msgstr "Może się zdarzyć, że połączona zależna strona zostanie usunięta z powodu usunięcia tej strony. Taką usuniętą zależną stronę można również odzyskać."
+msgstr "Może się zdarzyć, że połączona strona zależna została usunięta z powodu usunięcia tej strony, taką usuniętą stronę zależną można również odzyskać."
 
 #: zotonic_mod_backup/priv/templates/_admin_edit_sidebar.tpl:29
 msgid "List and restore an earlier version"
@@ -6116,7 +6116,7 @@ msgstr "Wymień i przywróć wcześniejszą wersję"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:12
 msgid "List of recently deleted pages found in the resource revisions log."
-msgstr "Lista ostatnio usuniętych stron znaleziona w dzienniku rewizji zasobów."
+msgstr "Lista ostatnio usuniętych stron znalezionych w dzienniku zmian zasobów."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:15
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:39
@@ -6198,12 +6198,12 @@ msgstr "Przywróć wcześniejszą wersję..."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:26
 msgid "Revert to this version..."
-msgstr "Wróć do tej wersji..."
+msgstr "Przywróć tę wersję..."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:14
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:60
 msgid "Revisions are kept for {n} months."
-msgstr "Wersje przechowywane są przez {n} miesięcy."
+msgstr "Poprawki są przechowywane przez {n} miesięcy."
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:3
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:46
@@ -6213,12 +6213,12 @@ msgstr "Zmiany dla"
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:15
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:61
 msgid "Revisions of active users are kept for {n} days."
-msgstr "Recenzje aktywnych użytkowników są przechowywane przez {n} dni."
+msgstr "Zmiany aktywnych użytkowników są przechowywane przez {n} dni."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:16
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:62
 msgid "Revisions of deleted users are kept for {n} days."
-msgstr "Wersje usuniętych użytkowników są przechowywane przez {n} dni."
+msgstr "Zmiany usuniętych użytkowników są przechowywane przez {n} dni."
 
 #: zotonic_mod_backup/priv/templates/_dialog_backup_upload.tpl:3
 msgid "Select the backup file you want to upload. The file must be a .bert file."
@@ -6226,11 +6226,11 @@ msgstr "Wybierz plik kopii zapasowej, który chcesz przesłać. Plik musi być p
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_export_panel.tpl:8
 msgid "Show import/export panel on the edit pages in the admin."
-msgstr "Pokaż panel importu/eksportu na stronach edycji w panelu administracyjnym."
+msgstr "Wyświetlanie panelu importu/eksportu na stronach edycji w panelu administracyjnym."
 
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:131
 msgid "Sorry, a global Zotonic configuration is set and cannot be changed."
-msgstr "Niestety, globalna konfiguracja Zotonic jest ustawiona i nie można jej zmienić."
+msgstr "Przepraszamy, globalna konfiguracja Zotonic jest ustawiona i nie można jej zmienić."
 
 #: zotonic_mod_backup/src/actions/action_backup_backup_start.erl:57
 msgid "Sorry, manual backups are disabled"
@@ -6238,7 +6238,7 @@ msgstr "Przepraszamy, ręczne tworzenie kopii zapasowych jest wyłączone"
 
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:91
 msgid "Sorry, there is no module that can import this."
-msgstr "Przepraszamy, nie ma modułu, który może to zaimportować."
+msgstr "Niestety, nie ma modułu, który mógłby to zaimportować."
 
 #: zotonic_mod_backup/src/controllers/controller_admin_backup.erl:98
 #: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:123
@@ -6293,7 +6293,7 @@ msgstr "Konfiguracja kopii zapasowej jest ustawiona następująco:"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:7
 msgid "The backup module uses a global Zotonic configuration. The configuration cannot be changed here."
-msgstr "Moduł kopii zapasowej używa globalnej konfiguracji Zotonic. Konfiguracji nie można tutaj zmienić."
+msgstr "Moduł kopii zapasowej wykorzystuje globalną konfigurację Zotonic. Konfiguracji nie można zmienić w tym miejscu."
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_config_backup_config.tpl:75
 msgid "The encryption configuration is set to:"
@@ -6324,7 +6324,7 @@ msgstr "Za pomocą panelu importu/eksportu możesz pobrać stronę w postaci pli
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_list.tpl:43
 msgid "Y-m-d H:i – l"
-msgstr "Ymd H:i – l"
+msgstr "Y-m-d H:i - l"
 
 #: zotonic_mod_backup/priv/templates/admin_backup_revision.tpl:39
 #: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:119
@@ -6335,7 +6335,7 @@ msgstr "Nie masz uprawnień do odzyskania tej strony."
 #: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:83
 #: zotonic_mod_backup/src/controllers/controller_admin_backup_revision.erl:110
 msgid "You are not allowed to see the revisions"
-msgstr "Nie masz uprawnień do przeglądania wersji"
+msgstr "Nie masz uprawnień do przeglądania zmian"
 
 #: zotonic_mod_backup/priv/templates/_admin_backup_widget_backup_now.tpl:8
 msgid "You can have one backup per day of the week, older ones will be overwritten."
@@ -6395,7 +6395,7 @@ msgstr "Parametry"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:140
 msgid "Auth Web Worker?"
-msgstr "Uwierzytelniający pracownik sieciowy?"
+msgstr "Web Worker do uwierzytelniania"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:142
 msgid "Authentication"
@@ -6449,7 +6449,7 @@ msgstr "Funkcja/ szablon"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:41
 msgid "General connection speed and quality, for which we test with a Google server and our own server."
-msgstr "Ogólna szybkość i jakość połączenia, które testujemy z serwerem Google i naszym własnym serwerem."
+msgstr "Ogólna szybkość i jakość połączenia, które testujemy za pomocą serwera Google i naszego własnego serwera."
 
 #: zotonic_mod_base/priv/templates/error.tpl:10
 msgid "Gone"
@@ -6457,12 +6457,12 @@ msgstr "Nie istnieje"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:47
 msgid "If the authentication with the server works."
-msgstr "Czy uwierzytelnianie z serwerem działa."
+msgstr "Jeśli uwierzytelnianie z serwerem działa."
 
 #: zotonic_mod_base/priv/templates/directory_index.tpl:4
 #: zotonic_mod_base/priv/templates/directory_index.tpl:8
 msgid "Index of"
-msgstr "Zawartość"
+msgstr "Indeks"
 
 #: zotonic_mod_base/src/filters/filter_content_type_label.erl:48
 msgid "JSON"
@@ -6474,15 +6474,15 @@ msgstr "JSON-LD"
 
 #: zotonic_mod_base/priv/templates/error.403.tpl:30
 msgid "Login"
-msgstr "Zaloguj sie"
+msgstr "Zaloguj się"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:112
 msgid "MQTT Bridge"
-msgstr "Most MQTT"
+msgstr "Mostek MQTT"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:96
 msgid "MQTT Bridge Connection Status"
-msgstr "Stan połączenia mostka MQTT"
+msgstr "Status połączenia mostka MQTT"
 
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:145
 #: zotonic_mod_base/priv/templates/tests/connection_test.tpl:187
