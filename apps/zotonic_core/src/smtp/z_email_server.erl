@@ -73,7 +73,7 @@
 
 -record(state, {smtp_relay, smtp_relay_opts, smtp_relay_tls_options, smtp_no_mx_lookups,
                 smtp_verp_as_from, smtp_bcc, override,
-                sending=[], delete_sent_after, poll_ref}).
+                sending=[], delete_sent_after, poll_ref, smtp_max_senders}).
 -record(email_queue, {id, retry_on=inc_timestamp(os:timestamp(), 1), retry=0,
                       recipient, email, created=os:timestamp(), sent,
                       pickled_context}).
@@ -2133,7 +2133,7 @@ email_max_domain(Domain) ->
 %% Some mail providers have problems handling more than two connections
 email_max_domain_1([<<"net">>, <<"upcmail">> | _]) -> 2;
 email_max_domain_1([<<"nl">>, <<"timing">> | _]) -> 2;
-email_max_domain_1(_) -> ?EMAIL_MAX_DOMAIN.
+email_max_domain_1(_) -> z_config:get(smtp_max_senders, ?EMAIL_MAX_DOMAIN).
 
 %% @doc Simple header encoding.
 encode_header({Header, Value}) when is_list(Header)->
