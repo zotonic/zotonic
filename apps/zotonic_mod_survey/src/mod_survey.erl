@@ -1367,6 +1367,8 @@ mail_respondent(SurveyId, Answers, ResultId, PrepAnswers, SurveyResult, IsEditin
                 Email ->
                     % We use a sudo for the mailing, as the survey might be filled in
                     % using a special access link, so there is no user or ACL context available.
+                    % Set the 'recipient_id' in case there is a user logged in. This is used
+                    % by the mailer and the email logger.
                     Vars = [
                         {id, SurveyId},
                         {answers, PrepAnswers},
