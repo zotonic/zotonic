@@ -1328,6 +1328,8 @@ mail_result(SurveyId, PrepAnswers, SurveyResult, Attachments, Context) ->
     case m_survey:survey_emails(SurveyId, Context) of
         [] -> skip;
         Es ->
+            % We use a sudo for the mailing, as the survey might be filled in
+            % using a special access link, so there is no user or ACL context available.
             lists:foreach(
                 fun(E) ->
                     Vars = [
@@ -1342,7 +1344,7 @@ mail_result(SurveyId, PrepAnswers, SurveyResult, Attachments, Context) ->
                         vars=Vars,
                         attachments=Attachments
                     },
-                    z_email:send(EmailRec, Context)
+                    z_email:send(EmailRec, z_acl:sudo(Context))
                 end,
                 Es)
     end.
@@ -1363,12 +1365,17 @@ mail_respondent(SurveyId, Answers, ResultId, PrepAnswers, SurveyResult, IsEditin
                 undefined ->
                     skip;
                 Email ->
+                    % We use a sudo for the mailing, as the survey might be filled in
+                    % using a special access link, so there is no user or ACL context available.
+                    % Set the 'recipient_id' in case there is a user logged in. This is used
+                    % by the mailer and the email logger.
                     Vars = [
                         {id, SurveyId},
                         {answers, PrepAnswers},
-                        {result, SurveyResult}
+                        {result, SurveyResult},
+                        {recipient_id, z_acl:user(Context)}
                     ],
-                    z_email:send_render(Email, "email_survey_result.tpl", Vars, Context),
+                    z_email:send_render(Email, "email_survey_result.tpl", Vars, z_acl:sudo(Context)),
                     ok
             end;
         false ->
