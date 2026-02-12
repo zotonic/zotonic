@@ -57,20 +57,22 @@ init(Options, Context) ->
 header(_Header, #state{} = State, _Context) ->
     {ok, <<"[">>, State}.
 
-row(Row, #state{ is_first_row = IsFirstRow, props = Props } = State, Context) when is_integer(Row) ->
+row(Row, #state{ props = Props } = State, Context) when is_integer(Row) ->
     case row_value(Row, Props, Context) of
         {ok, JSON} ->
-            Data = [
-                case IsFirstRow of
-                    true -> <<>>;
-                    false -> $,
-                end,
-                jsxrecord:encode(JSON)
-            ],
-            {ok, Data, State#state{ is_first_row = false }};
+            row(JSON, State, Context);
         {error, _} ->
             {ok, <<>>, State}
     end;
+row(Row, #state{ is_first_row = IsFirstRow } = State, _Context) when is_map(Row) ->
+    Data = [
+        case IsFirstRow of
+            true -> <<>>;
+            false -> $,
+        end,
+        jsxrecord:encode(Row)
+    ],
+    {ok, Data, State#state{ is_first_row = false }};
 row(_Row, #state{} = State, _Context) ->
     {ok, <<>>, State}.
 
