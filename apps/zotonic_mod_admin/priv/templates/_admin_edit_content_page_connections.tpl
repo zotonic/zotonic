@@ -52,7 +52,9 @@
 
 {% if not hide_all_connections %}
     <div class="form-group">
-       <a class="btn btn-default btn-sm" href="{% url admin_edges qhassubject=id %}"><i class="glyphicon glyphicon-list"></i> {_ View all connections _}</a>
+       <a class="btn btn-default btn-sm" href="{% url admin_edges qhassubject=id %}">
+          ○→ {_ View all connections _}
+      </a>
     </div>
 {% endif %}
 

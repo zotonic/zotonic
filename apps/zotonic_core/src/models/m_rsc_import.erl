@@ -1,8 +1,10 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2010-2025 Arjan Scherpenisse
+%% @copyright 2010-2026 Arjan Scherpenisse
 %% @doc Importing non-authoritative things exported by m_rsc_export into the system.
 %% @end
 
+%% Copyright 2010-2026 Arjan Scherpenisse
+%%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
@@ -28,6 +30,7 @@
     mark_imported/3,
 
     fetch_preview/2,
+    fetch_preview/3,
 
     is_imported/2,
 
@@ -43,18 +46,21 @@
     import_uri_recursive_async/3,
 
     reimport/2,
+    reimport/3,
     reimport/4,
     reimport_recursive/2,
     reimport_recursive/4,
     reimport_recursive_async/2,
 
     update_medium_uri/4,
+    import_medium_task/8,
 
     install/1
 ]).
 
+
 -export([
-    import_referred_ids_task/3
+    import_referred_ids_task/4
 ]).
 
 -type option() :: {props_forced, map()}                 % Properties overlayed over the imported properties
@@ -64,13 +70,17 @@
                 | {is_import_deleted, boolean()}
                 | is_authoritative                      % If set then make a local copy, do not save uri
                 | {is_authoritative, boolean()}
+                | is_no_medium_download                 % If set then do not download media files
+                | {is_no_medium_download, boolean()}
                 | {allow_category, [ binary() ]}
                 | {allow_predicate, [ binary() ]}
                 | {deny_category, [ binary() ]}
                 | {deny_predicate, [ binary() ]}
                 | {fetch_options, z_url_fetch:options()}
                 | {uri_template, binary()}
-                | {is_forced_update, boolean()}.               % Set to true on forced medium imports
+                | {is_forced_update, boolean()}         % Set to true on forced medium imports
+                | {filtermap_rsc, mfa()}
+                | {filtermap_edges, mfa()}.
 -type options() :: [ option() ].
 
 -type import_result() :: {ok, {m_rsc:resource_id(), import_map()}}
@@ -92,12 +102,21 @@
 % List of categories that are filtered per default.
 -define(DEFAULT_DENY_CATEGORY, [ <<"meta">> ]).
 
+% 10 minutes delay between retries of media download
+-define(MEDIA_DOWNLOAD_RETRY_DELAY, 600).
+
+% 1 hour delay between retries of media download with 503-like errors
+-define(MEDIA_DOWNLOAD_503_RETRY_DELAY, 3600).
+
+% Retry media downloads max 10 times.
+-define(MEDIA_DOWNLOAD_MAX_RETRY, 10).
+
 
 -spec m_get( list(), zotonic_model:opt_msg(), z:context() ) -> zotonic_model:return().
 m_get([ <<"fetch_raw">> | Rest ], #{ payload := Uri }, Context) ->
     case z_auth:is_auth(Context) of
         true ->
-            case fetch_raw(Uri, Context) of
+            case fetch_raw(Uri, [], Context) of
                 {ok, JSON} ->
                     {ok, {JSON, Rest}};
                 {error, _} = Error ->
@@ -178,9 +197,11 @@ set_import_status(Rsc, Status, Context) when is_map(Status) ->
             end
     end.
 
-
 %% @doc Mark a resource as imported, set the import result.
--spec mark_imported( m_rsc:resource_id(), atom() | binary() | string(), z:context() ) -> ok | {error, enoent}.
+-spec mark_imported(RscId, Status, Context) -> ok | {error, enoent} when
+    RscId :: m_rsc:resource_id(),
+    Status :: atom() | binary() | string(),
+    Context :: z:context().
 mark_imported(RscId, Status, Context) ->
     case z_db:q("
         update rsc_import
@@ -196,7 +217,13 @@ mark_imported(RscId, Status, Context) ->
 
 
 %% @doc Find or create a placeholder resource for later import of referred ids.
--spec maybe_create_empty( map(), map(), options(), z:context() ) -> {ok, {m_rsc:resource_id(), map()}} | {error, term()}.
+-spec maybe_create_empty(Rsc, ImportedAcc, Options, Context) -> {ok, {RscId, NewImportedAcc}} | {error, term()} when
+    Rsc :: map(),
+    ImportedAcc :: import_map(),
+    Options :: options(),
+    Context :: z:context(),
+    RscId :: m_rsc:resource_id(),
+    NewImportedAcc :: import_map().
 maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
     case is_known_resource(Rsc, ImportedAcc, Options, Context) of
         false ->
@@ -209,37 +236,45 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
                         <<"title">> => maps:get(<<"title">>, Rsc, undefined),
                         <<"name">> => maps:get(<<"name">>, Rsc, undefined)
                     },
+                    PropsForced = proplists:get_value(props_forced, Options, #{}),
+                    PropsDefault = proplists:get_value(props_default, Options, #{}),
+                    Props1 = case maps:get(<<"content_group_id">>, PropsForced,
+                                        maps:get(<<"content_group_id">>, PropsDefault, undefined)) of
+                        undefined ->
+                            Props;
+                        CGId ->
+                            Props#{
+                                <<"content_group_id">> => CGId
+                            }
+                    end,
                     Props2 = case proplists:get_value(is_authoritative, Options, false) of
                         true ->
-                            Props#{
+                            Props1#{
                                 <<"is_authoritative">> => true,
                                 <<"uri">> => undefined
                             };
                         false ->
-                            Props#{
+                            Props1#{
                                 <<"is_authoritative">> => false,
                                 <<"uri">> => Uri
                             }
                     end,
-                    UpdateOptions = [
-                        {is_escape_texts, false},
-                        is_import
-                    ],
-                    InsertResult = z_db:transaction(fun(Ctx) ->
-                        case m_rsc:insert(Props2, UpdateOptions, Context) of
-                            {ok, NewId} ->
-                                Import = #{
-                                    <<"id">> => NewId,
-                                    <<"uri">> => Uri,
-                                    <<"host">> => host(Uri),
-                                    <<"user_id">> => z_acl:user(Ctx),
-                                    <<"options">> => Options
-                                },
-                                z_db:insert(rsc_import, Import, Context);
-                            {error, _} = Error ->
-                                Error
-                        end
-                    end, Context),
+                    InsertResult = case filtermap_rsc(Props2, Options, Context) of
+                        {true, Props3} ->
+                            UpdateOptions = [
+                                {is_escape_texts, false},
+                                is_import
+                            ],
+                            case m_rsc:insert(Props3, UpdateOptions, Context) of
+                                {ok, NewId} ->
+                                    save_import_options(NewId, Uri, <<>>, Options, Context),
+                                    {ok, NewId};
+                                {error, _} = Error ->
+                                    Error
+                            end;
+                        false ->
+                            {error, filtered}
+                    end,
                     case InsertResult of
                         {ok, LocalId} ->
                             ImportedAcc1 = ImportedAcc#{
@@ -271,7 +306,7 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
                             }),
                             Rsc1 = Rsc#{ <<"name">> => Name },
                             maybe_create_empty(Rsc1, ImportedAcc, Options, Context);
-                        {error, Reason} = Error ->
+                        {error, Reason} ->
                             ?LOG_NOTICE(#{
                                 text => <<"Not importing menu entry from remote">>,
                                 in => zotonic_core,
@@ -280,9 +315,9 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
                                 uri => Uri,
                                 category => Cat
                             }),
-                            Error
+                            {error, Reason}
                     end;
-                {error, Reason} = Error  ->
+                {error, Reason}  ->
                     % Unknown category, deny access
                     ?LOG_INFO(#{
                         text => <<"Not importing menu entry from remote, category disallowed">>,
@@ -292,7 +327,7 @@ maybe_create_empty(Rsc, ImportedAcc, Options, Context) ->
                         uri => Uri,
                         rsc => Rsc
                     }),
-                    Error
+                    {error, Reason}
             end;
         {true, RscId} ->
             {ok, {RscId, ImportedAcc}}
@@ -310,7 +345,7 @@ is_known_resource(Rsc, ImportedAcc, Options, Context) ->
                 RId ->
                     case proplists:get_value(is_authoritative, Options, false) of
                         true ->
-                            case m_rsc:p_no_acl(RId, is_authoritative, Context) of
+                            case m_rsc:p_no_acl(RId, <<"is_authoritative">>, Context) of
                                 true ->
                                     {true, RId};
                                 false ->
@@ -326,6 +361,71 @@ is_known_resource(Rsc, ImportedAcc, Options, Context) ->
             end
     end.
 
+%% @doc Optionally let a callback check the to be imported resource. The callback
+%% can modify the resource or suppress the import.
+-spec filtermap_rsc( Rsc, options(), z:context() ) -> boolean() | {true, Rsc1} when
+    Rsc :: map(),
+    Rsc1 :: map().
+filtermap_rsc(Rsc, Options, Context) ->
+    case proplists:get_value(filtermap_rsc, Options) of
+        {M, F, A} when is_atom(M), is_atom(F), is_list(A) ->
+            z_utils:ensure_existing_module(M),
+            case erlang:function_exported(M, F, length(A) + 3) of
+                true ->
+                    case erlang:apply(M, F, A ++ [ Rsc, Options, Context ]) of
+                        {true, Rsc1} when is_map(Rsc1) -> {true, Rsc1};
+                        true -> {true, Rsc};
+                        false -> false
+                    end;
+                false ->
+                    ?LOG_WARNING(#{
+                        text => <<"Invalid filtermap_rsc callback">>,
+                        in => zotonic_core,
+                        result => error,
+                        reason => invalid_callback,
+                        module => M,
+                        function => F,
+                        args => A,
+                        arity => length(A) + 3
+                    }),
+                    false
+            end;
+        undefined ->
+            {true, Rsc}
+    end.
+
+%% @doc Filter the map with edges being imported for the given local resource id.
+%% The callback can modify of removed the edge import.
+-spec filtermap_edges( m_rsc:resource_id(), Edges, options(), z:context() ) -> boolean() | {true, Edges1} when
+    Edges :: map(),
+    Edges1 :: map().
+filtermap_edges(LocalId, Edges, Options, Context) ->
+    case proplists:get_value(filtermap_edges, Options) of
+        {M, F, A} when is_atom(M), is_atom(F), is_list(A) ->
+            z_utils:ensure_existing_module(M),
+            case erlang:function_exported(M, F, length(A) + 4) of
+                true ->
+                    case erlang:apply(M, F, A ++ [ LocalId, Edges, Options, Context ]) of
+                        {true, Edges1} when is_map(Edges1) -> {true, Edges1};
+                        true -> {true, Edges};
+                        false -> false
+                    end;
+                false ->
+                    ?LOG_WARNING(#{
+                        text => <<"Invalid filtermap_edges callback">>,
+                        in => zotonic_core,
+                        result => error,
+                        reason => invalid_callback,
+                        module => M,
+                        function => F,
+                        args => A,
+                        arity => length(A) + 4
+                    }),
+                    false
+            end;
+        undefined ->
+            {true, Edges}
+    end.
 
 %% @doc Reimport a non-authoritative resource or placeholder using the saved import flags.
 -spec reimport_recursive( m_rsc:resource_id(), z:context() ) -> import_result().
@@ -343,7 +443,7 @@ reimport_recursive(Id, RefIds, Options, Context) ->
                 end,
                 #{ LocalId => true },
                 RefIds),
-            RefIds2 = import_referred_ids(RefIds1, Imported, Context),
+            RefIds2 = import_referred_ids(RefIds1, Imported, Options, Context),
             {ok, {LocalId, RefIds2}};
         {error, _} = Error ->
             Error
@@ -353,9 +453,16 @@ reimport_recursive(Id, RefIds, Options, Context) ->
 %% reimport of all objects.
 -spec reimport_recursive_async( m_rsc:resource_id(), z:context() ) -> import_result().
 reimport_recursive_async(Id, Context) ->
-    case reimport(Id, Context) of
+    reimport_recursive_async(Id, saved, Context).
+
+-spec reimport_recursive_async(Id, Options, Context) -> import_result() when
+    Id :: m_rsc:resource_id(),
+    Options :: options() | saved,
+    Context :: z:context().
+reimport_recursive_async(Id, Options, Context) ->
+    case reimport(Id, Options, Context) of
         {ok, {LocalId, RefIds}} ->
-            Args = [ RefIds, #{ LocalId => true } ],
+            Args = [ RefIds, #{ LocalId => true }, Options ],
             case z_sidejob:start(?MODULE, import_referred_ids_task, Args, Context) of
                 {ok, _} ->
                     {ok, {LocalId, RefIds}};
@@ -366,14 +473,18 @@ reimport_recursive_async(Id, Context) ->
             Error
     end.
 
--spec import_referred_ids_task( map(), map(), z:context() ) -> ok.
-import_referred_ids_task(RefIds, ImportedIds, Context) ->
-    _ = import_referred_ids(RefIds, ImportedIds, Context),
+-spec import_referred_ids_task(RefIds, ImportedIds, Options, Context) -> ok when
+    RefIds :: map(),
+    ImportedIds :: map(),
+    Options :: options() | saved,
+    Context :: z:context().
+import_referred_ids_task(RefIds, ImportedIds, Options, Context) ->
+    _ = import_referred_ids(RefIds, ImportedIds, Options, Context),
     ok.
 
 %% @doc Recursively import all resources connected to the given resources. Return a map
 %% of local resource ids that are imported or referred.
-import_referred_ids(RefIds, ImportedIds, Context) ->
+import_referred_ids(RefIds, ImportedIds, Options, Context) ->
     {NewRefIds, NewImportedIds} = maps:fold(
         fun(Uri, LocalId, {ImpAcc, ImpIdsAcc}) ->
             case maps:is_key(LocalId, ImpIdsAcc) of
@@ -386,7 +497,7 @@ import_referred_ids(RefIds, ImportedIds, Context) ->
                                 Uri => LocalId
                             };
                         false ->
-                            case reimport_1(LocalId, ImpAcc, false, Context) of
+                            case reimport_1(LocalId, ImpAcc, false, Options, Context) of
                                 {ok, {NewLocalId, ImpAcc1}} ->
                                     ImpAcc1#{
                                         Uri => NewLocalId
@@ -406,7 +517,7 @@ import_referred_ids(RefIds, ImportedIds, Context) ->
     NewCount = maps:size(NewRefIds),
     case NewCount of
         OldCount -> NewRefIds;
-        _ -> import_referred_ids(NewRefIds, NewImportedIds, Context)
+        _ -> import_referred_ids(NewRefIds, NewImportedIds, Options, Context)
     end.
 
 
@@ -421,25 +532,43 @@ import_referred_ids(RefIds, ImportedIds, Context) ->
 
 
 %% @doc Reimport a non-authoritative resource or placeholder using the saved import flags.
--spec reimport( m_rsc:resource_id(), z:context() ) -> import_result().
+-spec reimport(Id, Context) -> import_result() when
+    Id :: m_rsc:resource_id(),
+    Context :: z:context().
 reimport(Id, Context) ->
-    reimport_1(Id, #{}, true, Context).
+    reimport(Id, saved, Context).
 
-reimport_1(Id, ImportedAcc, IsForceImport, Context) ->
+%% @doc Reimport a non-authoritative resource or placeholder using the given extra import flags.
+-spec reimport(Id, Options, Context) -> import_result() when
+    Id :: m_rsc:resource_id(),
+    Options :: options() | saved,
+    Context :: z:context().
+reimport(Id, Options, Context) ->
+    reimport_1(Id, #{}, true, Options, Context).
+
+
+-spec reimport_1(Id, ImportedAcc, IsForceImport, Options, Context) -> import_result() when
+    Id :: m_rsc:resource_id(),
+    ImportedAcc :: import_map(),
+    IsForceImport :: boolean(),
+    Options :: options() | saved,
+    Context :: z:context().
+reimport_1(Id, ImportedAcc, IsForceImport, NewOptions, Context) ->
     case z_db:select(rsc_import, Id, Context) of
         {ok, #{
-            <<"options">> := Options,
+            <<"options">> := SavedOptions,
             <<"uri">> := Uri,
-            <<"last_import_status">> := Status
+            <<"last_import_status">> := LastImportStatus
         }} ->
             case IsForceImport
                 orelse (
-                    not m_rsc:p(Id, is_authoritative, Context)
-                    orelse Status =/= <<"ok">>
+                    not m_rsc:p_no_acl(Id, <<"is_authoritative">>, Context)
+                    orelse LastImportStatus =/= <<"ok">>
                 )
             of
                 true ->
-                    case fetch_json(Uri, Context) of
+                    Options = merge_options(NewOptions, SavedOptions),
+                    case fetch_json(Uri, Options, Context) of
                         {ok, {RscId, ImportMap}} when is_integer(RscId) ->
                             {ok, {RscId, maps:merge(ImportMap, ImportedAcc)}};
                         {ok, JSON} ->
@@ -450,24 +579,26 @@ reimport_1(Id, ImportedAcc, IsForceImport, Context) ->
                 false ->
                     {ok, {Id, ImportedAcc}}
             end;
-        {error, enoent} ->
-            reimport_nonauth(Id, ImportedAcc, Context);
+        {error, enoent} when NewOptions =:= saved ->
+            reimport_nonauth(Id, ImportedAcc, [], Context);
+        {error, enoent} when is_list(NewOptions) ->
+            reimport_nonauth(Id, ImportedAcc, NewOptions, Context);
         {error, _} = Error ->
             Error
     end.
 
-reimport_nonauth(Id, ImportedAcc, Context) ->
-    case m_rsc:p_no_acl(Id, is_authoritative, Context) of
+reimport_nonauth(Id, ImportedAcc, Options, Context) ->
+    case m_rsc:p_no_acl(Id, <<"is_authoritative">>, Context) of
         false ->
-            case m_rsc:p_no_acl(Id, uri_raw, Context) of
+            case m_rsc:p_no_acl(Id, <<"uri_raw">>, Context) of
                 <<>> ->
                     {error, uri};
                 Uri ->
-                    case fetch_json(Uri, Context) of
+                    case fetch_json(Uri, Options, Context) of
                         {ok, {RscId, ImportMap}} when is_integer(RscId) ->
                             {ok, {RscId, maps:merge(ImportMap, ImportedAcc)}};
                         {ok, JSON} ->
-                            import_data(Id, Uri, JSON, ImportedAcc, [], Context);
+                            import_data(Id, Uri, JSON, ImportedAcc, Options, Context);
                         {error, _} = Error ->
                             Error
                     end
@@ -482,29 +613,44 @@ reimport_nonauth(Id, ImportedAcc, Context) ->
     RefIds :: map(),
     Options :: options() | saved,
     Context :: z:context().
-reimport(Id, RefIds, Options, Context) ->
-    {Uri, Options1} = case z_db:select(rsc_import, Id, Context) of
+reimport(Id, RefIds, NewOptions, Context) ->
+    {Uri, Options} = case z_db:select(rsc_import, Id, Context) of
         {ok, #{
             <<"uri">> := ImportUri,
             <<"options">> := SavedOptions
-        }} when Options =:= saved ->
+        }} when NewOptions =:= saved ->
             {ImportUri, SavedOptions};
         {ok, #{
-            <<"uri">> := ImportUri
+            <<"uri">> := ImportUri,
+            <<"options">> := SavedOptions
         }} ->
-            {ImportUri, Options};
+            {ImportUri, merge_options(NewOptions, SavedOptions)};
         {error, _} ->
-            m_rsc:p(Id, uri_raw, Context)
+            {m_rsc:p(Id, uri_raw, Context), NewOptions}
     end,
-    case fetch_json(Uri, Context) of
+    case fetch_json(Uri, Options, Context) of
         {ok, {RscId, ImportMap}} when is_integer(RscId) ->
             {ok, {RscId, maps:merge(ImportMap, RefIds)}};
         {ok, JSON} ->
-            import_data(Id, Uri, JSON, RefIds, Options1, Context);
+            import_data(Id, Uri, JSON, RefIds, Options, Context);
         {error, _} = Error ->
             Error
     end.
 
+%% @doc Merge two sets of import options. One is the set defined on the
+%% current reimport, and one is the set used when importing the previous time.
+merge_options(saved, SavedOptions) ->
+    SavedOptions;
+merge_options(NewOptions, SavedOptions) ->
+    KeysNew = proplists:get_keys(NewOptions),
+    KeysSaved = proplists:get_keys(SavedOptions),
+    KeysOnlyInSaved = KeysSaved -- KeysNew -- [ is_forced_update, is_import_deleted ],
+    lists:foldl(
+        fun(K, Acc) ->
+            [ {K, proplists:get_value(K, SavedOptions)} | Acc ]
+        end,
+        NewOptions,
+        KeysOnlyInSaved).
 
 -spec update_medium_uri(LocalId, Uri, Options, Context) -> {ok, m_rsc:resource_id()} | {error, term()} when
     LocalId :: m_rsc:resource_id(),
@@ -514,7 +660,7 @@ reimport(Id, RefIds, Options, Context) ->
 update_medium_uri(LocalId, Uri, Options, Context) ->
     case z_acl:rsc_editable(LocalId, Context) of
         true ->
-            case fetch_json(Uri, Context) of
+            case fetch_json(Uri, Options, Context) of
                 {ok, {RscId, ImportMap}} when is_integer(RscId) ->
                     {ok, {RscId, ImportMap}};
                 {ok, #{ <<"result">> := JSON, <<"status">> := <<"ok">> }} ->
@@ -529,9 +675,9 @@ update_medium_uri(LocalId, Uri, Options, Context) ->
     end.
 
 
-fetch_json(undefined, _Context) ->
+fetch_json(undefined, _Options, _Context) ->
     {error, uri};
-fetch_json(Uri, Context) ->
+fetch_json(Uri, Options, Context) ->
     Site = z_context:site(Context),
     case z_sites_dispatcher:get_site_for_url(Uri) of
         {ok, Site} ->
@@ -563,11 +709,12 @@ fetch_json(Uri, Context) ->
                     }),
                     Error;
                 undefined ->
-                    Options = [
+                    FetchOptions = [
                         {accept, "application/json"},
                         {user_agent, "Zotonic"}
+                        | proplists:get_value(fetch_options, Options, [])
                     ],
-                    case z_fetch:fetch(Uri, Options, Context) of
+                    case z_fetch:fetch(Uri, FetchOptions, Context) of
                         {ok, {_FinalUrl, _Hs, _Size, Body}} ->
                             JSON = jsxrecord:decode(Body),
                             {ok, JSON};
@@ -606,9 +753,12 @@ fetch_json(Uri, Context) ->
 
 
 %% @doc Fetch a raw version of the resource at the Url. No sanitization.
--spec fetch_raw(Uri :: binary() | map(), z:context()) -> {ok, map()} | {error, term()}.
-fetch_raw(Uri, Context) when is_binary(Uri) ->
-    case fetch_json(Uri, Context) of
+-spec fetch_raw(Uri, Options, Context) -> {ok, map()} | {error, term()} when
+    Uri :: string() | binary() | map(),
+    Options :: options(),
+    Context :: z:context().
+fetch_raw(Uri, Options, Context) when is_binary(Uri); is_list(Uri) ->
+    case fetch_json(Uri, Options, Context) of
         {ok, #{
             <<"status">> := <<"ok">>,
             <<"result">> := #{
@@ -624,17 +774,28 @@ fetch_raw(Uri, Context) when is_binary(Uri) ->
         {error, _} = Error ->
             Error
     end;
-fetch_raw(#{ <<"uri">> := Uri }, Context) ->
-    fetch_raw(Uri, Context);
-fetch_raw(_, _Context) ->
+fetch_raw(#{ <<"uri">> := Uri }, Options, Context) ->
+    fetch_raw(Uri, Options, Context);
+fetch_raw(_, _Options, _Context) ->
     {error, enoent}.
 
 
 %% @doc Fetch a sanitized version of the resource at the Url. Without edges, mapping of embedded
 %% ids etc. This is to be used as a simple and quick preview of the resource at the given Uri.
--spec fetch_preview( string() | binary(), z:context() ) -> {ok, m_rsc:props()} | {error, term()}.
+-spec fetch_preview(Url, Context) -> {ok, m_rsc:props()} | {error, term()} when
+    Url :: string() | binary(),
+    Context :: z:context().
 fetch_preview(Url, Context) ->
-    case fetch_raw(Url, Context) of
+    fetch_preview(Url, [], Context).
+
+%% @doc Fetch a sanitized version of the resource at the Url. Without edges, mapping of embedded
+%% ids etc. This is to be used as a simple and quick preview of the resource at the given Uri.
+-spec fetch_preview(Url, Options, Context) -> {ok, m_rsc:props()} | {error, term()} when
+    Url :: string() | binary(),
+    Options :: options(),
+    Context :: z:context().
+fetch_preview(Url, Options, Context) ->
+    case fetch_raw(Url, Options, Context) of
         {ok, #{
             <<"is_a">> := IsA,
             <<"resource">> := Rsc,
@@ -740,14 +901,19 @@ import_doc(OptLocalId, Doc, ImpAcc, Options, Context) ->
     end.
 
 %% @doc Import a non-authoritative resource from a remote URI using default import options.
--spec import_uri( string() | binary(), z:context() ) -> import_result().
+-spec import_uri(Uri, Context) -> import_result() when
+    Uri :: string() | binary(),
+    Context :: z:context().
 import_uri(Uri, Context) ->
     import_uri(Uri, [], Context).
 
 %% @doc Import a non-authoritative resource from a remote URI.
--spec import_uri( string() | binary(), options(), z:context() ) -> import_result().
+-spec import_uri(Uri, Options, Context) -> import_result() when
+    Uri :: string() | binary(),
+    Options :: options() | saved,
+    Context :: z:context().
 import_uri(Uri, Options, Context) ->
-    case fetch_json(Uri, Context) of
+    case fetch_json(Uri, Options, Context) of
         {ok, JSON} ->
             import_data(undefined, Uri, JSON, #{}, Options, Context);
         {error, _} = Error ->
@@ -755,22 +921,28 @@ import_uri(Uri, Options, Context) ->
     end.
 
 %% @doc Recursive import of resources.
--spec import_uri_recursive( string() | binary(), options(), z:context() ) -> import_result().
+-spec import_uri_recursive(Uri, Options, Context) -> import_result() when
+    Uri :: string() | binary(),
+    Options :: options() | saved,
+    Context :: z:context().
 import_uri_recursive(Uri, Options, Context) ->
     case import_uri(Uri, Options, Context) of
         {ok, {LocalId, RefIds}} ->
-            RefIds1 = import_referred_ids(RefIds, [], Context),
+            RefIds1 = import_referred_ids(RefIds, #{}, Options, Context),
             {ok, {LocalId, RefIds1}};
         {error, _} = Error ->
             Error
     end.
 
 %% @doc Recursive import of resources, async import of all referred ids.
--spec import_uri_recursive_async( string() | binary(), options(), z:context() ) -> import_result().
+-spec import_uri_recursive_async(Uri, Options, Context) -> import_result() when
+    Uri :: string() | binary(),
+    Options :: options() | saved,
+    Context :: z:context().
 import_uri_recursive_async(Uri, Options, Context) ->
     case import_uri(Uri, Options, Context) of
         {ok, {LocalId, RefIds}} ->
-            Args = [ RefIds, #{ LocalId => true } ],
+            Args = [ RefIds, #{ LocalId => true }, Options ],
             case z_sidejob:start(?MODULE, import_referred_ids_task, Args, Context) of
                 {ok, _} ->
                     {ok, {LocalId, RefIds}};
@@ -834,6 +1006,7 @@ import(OptLocalId, #{
                     },
                     case update_rsc(OptLocalId, RemoteRId, Rsc2, ImportedAcc1, Options, Context) of
                         {ok, LocalId} ->
+                            save_import_options(LocalId, Uri, ok, Options, Context),
                             ImportedAcc2 = ImportedAcc1#{
                                 Uri => LocalId
                             },
@@ -850,21 +1023,6 @@ import(OptLocalId, #{
                                     import_edges(LocalId, JSON, ImportedAcc2, EdgeOptions, Context);
                                 _ ->
                                     ImportedAcc2
-                            end,
-                            case mark_imported(LocalId, ok, Context) of
-                                ok ->
-                                    ok;
-                                {error, enoent} ->
-                                    Import = #{
-                                        <<"id">> => LocalId,
-                                        <<"uri">> => Uri,
-                                        <<"host">> => host(Uri),
-                                        <<"user_id">> => z_acl:user(Context),
-                                        <<"options">> => Options,
-                                        <<"last_import_date">> => calendar:universal_time(),
-                                        <<"last_import_status">> => <<"ok">>
-                                    },
-                                    z_db:insert(rsc_import, Import, Context)
                             end,
                             {ok, {LocalId, ImportedAcc3}};
                         {error, Reason} = Error ->
@@ -893,6 +1051,34 @@ import(_OptLocalId, JSON, _ImportedAcc, _Options, _Context) ->
     }),
     {error, status}.
 
+
+%% @doc Mark a resource as imported, set the import result and save the
+%% options and user id used for this last import.
+-spec save_import_options(RscId, Uri, Status, Options, Context) -> ok when
+    RscId :: m_rsc:resource_id(),
+    Uri :: binary(),
+    Status :: atom() | binary() | string(),
+    Options :: options(),
+    Context :: z:context().
+save_import_options(RscId, Uri, Status, Options, Context) ->
+    Import = #{
+        <<"uri">> => Uri,
+        <<"host">> => host(Uri),
+        <<"user_id">> => z_acl:user(Context),
+        <<"options">> => Options,
+        <<"last_import_date">> => calendar:universal_time(),
+        <<"last_import_status">> => Status
+    },
+    case z_db:update(rsc_import, RscId, Import, Context) of
+        {ok, 0} ->
+            Import1 = Import#{
+                <<"id">> => RscId
+            },
+            {ok, _} = z_db:insert(rsc_import, Import1, Context),
+            ok;
+        {ok, 1} ->
+            ok
+    end.
 
 update_rsc(OptLocalId, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
     case update_rsc_1(OptLocalId, RemoteRId, Rsc, ImportedAcc, Options, Context) of
@@ -934,7 +1120,15 @@ update_rsc(OptLocalId, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
             Error
     end.
 
-update_rsc_1(undefined, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
+update_rsc_1(OptLocalId, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
+    case filtermap_rsc(Rsc, Options, Context) of
+        false ->
+            {error, filtered};
+        {true, Rsc1} ->
+            update_rsc_2(OptLocalId, RemoteRId, Rsc1, ImportedAcc, Options, Context)
+    end.
+
+update_rsc_2(undefined, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
     RscLang = ensure_language_prop(Rsc),
     UpdateOptions = [
         {is_escape_texts, false},
@@ -960,7 +1154,7 @@ update_rsc_1(undefined, RemoteRId, Rsc, ImportedAcc, Options, Context) ->
                     m_rsc:update(LocalId, RscLang, UpdateOptions, Context)
             end
     end;
-update_rsc_1(LocalId, _RemoteRId, Rsc, _ImportedAcc, _Options, Context) when is_integer(LocalId) ->
+update_rsc_2(LocalId, _RemoteRId, Rsc, _ImportedAcc, _Options, Context) when is_integer(LocalId) ->
     RscLang = ensure_language_prop(Rsc),
     UpdateOptions = [
         {is_escape_texts, false},
@@ -1070,8 +1264,8 @@ cleanup_map_ids(RemoteRId, Rsc, UriTemplate, ImportedAcc, Options, Context) ->
             };
         _ ->
             Rsc3#{
-                <<"uri">> => maps:get(<<"uri">>, RemoteRId),
-                <<"is_authoritative">> => false
+                <<"is_authoritative">> => false,
+                <<"uri">> => maps:get(<<"uri">>, RemoteRId)
             }
     end,
 
@@ -1262,52 +1456,73 @@ is_html_prop(K) ->
 
 maybe_import_medium(LocalId, #{ <<"medium">> := Medium, <<"medium_url">> := MediaUrl } = JSON, Options, Context)
     when is_binary(MediaUrl), MediaUrl =/= <<>>, is_map(Medium) ->
-    % If medium is outdated (compare with created date in medium record)
-    %    - download URL
-    %    - save into medium, ensure medium created date has been set (aka copied)
-    % TODO: add medium created date option (to set equal to imported medium)
-    Created = maps:get(<<"created">>, Medium, calendar:universal_time()),
-    RemoteMedium = #{
-        <<"created">> => Created
-    },
-    IsForcedUpdate = z_convert:to_bool( proplists:get_value(is_forced_update, Options, Context) ),
-    LocalMedium = m_media:get(LocalId, Context),
-    case IsForcedUpdate orelse is_newer_medium(RemoteMedium, LocalMedium) of
-        true ->
-            MediaOptions = [
-                {is_escape_texts, false},
-                is_import,
-                no_touch,
-                {fetch_options, proplists:get_value(fetch_options, Options, [])}
-            ],
-            RscProps = #{
-                <<"original_filename">> => maps:get(<<"original_filename">>, Medium, undefined)
-            },
-            RscProps1 = case JSON of
-                #{ <<"resource">> := Rsc } when is_map(Rsc) ->
-                    RscProps#{
-                        <<"medium_language">> => maps:get(<<"medium_language">>, Rsc, undefined),
-                        <<"medium_edit_settings">> => maps:get(<<"medium_edit_settings">>, Rsc, undefined)
-                    };
-                _ ->
-                    RscProps#{
-                        <<"medium_language">> => undefined,
-                        <<"medium_edit_settings">> => undefined
-                    }
-            end,
-            _ = m_media:replace_url(MediaUrl, LocalId, RscProps1, MediaOptions, Context);
+    case proplists:get_bool(is_no_medium_download, Options) of
         false ->
+            % If medium is outdated (compare with created date in medium record)
+            %    - download URL
+            %    - save into medium, ensure medium created date has been set (aka copied)
+            % TODO: add medium created date option (to set equal to imported medium)
+            Created = maps:get(<<"created">>, Medium, calendar:universal_time()),
+            RemoteMedium = #{
+                <<"created">> => Created
+            },
+            IsForcedUpdate = proplists:get_bool(is_forced_update, Options),
+            LocalMedium = m_media:get(LocalId, Context),
+            case IsForcedUpdate orelse is_newer_medium(RemoteMedium, LocalMedium) of
+                true ->
+                    OptFetchOptions = case proplists:get_value(fetch_options, Options) of
+                        Opt when is_list(Opt) -> [ {fetch_options, Opt} ];
+                        _ -> []
+                    end,
+                    MediaOptions = [
+                        {is_escape_texts, false},
+                        is_import,
+                        no_touch
+                        | OptFetchOptions
+                    ],
+                    RscProps = #{
+                        <<"original_filename">> => maps:get(<<"original_filename">>, Medium, undefined)
+                    },
+                    RscProps1 = case JSON of
+                        #{ <<"resource">> := Rsc } when is_map(Rsc) ->
+                            RscProps#{
+                                <<"medium_language">> => maps:get(<<"medium_language">>, Rsc, undefined),
+                                <<"medium_edit_settings">> => maps:get(<<"medium_edit_settings">>, Rsc, undefined)
+                            };
+                        _ ->
+                            RscProps#{
+                                <<"medium_language">> => undefined,
+                                <<"medium_edit_settings">> => undefined
+                            }
+                    end,
+                    % Place this in a task to avoid slowing down the main import task, and to
+                    % be able to retry on failure. Use the local resource id as the task id to
+                    % avoid multiple concurrent tasks for the same resource.
+                    z_pivot_rsc:insert_task(
+                        ?MODULE,
+                        import_medium_task,
+                        LocalId,
+                        [0, calendar:universal_time(), MediaUrl, LocalId, RscProps1, MediaOptions, z_context:pickle(Context)],
+                        Context
+                    );
+                false ->
+                    % No need to update medium, as local medium is newer than the imported medium.
+                    ok
+            end;
+        true ->
+            % Configured to skip medium downloads
             ok
     end,
     {ok, LocalId};
-maybe_import_medium(LocalId, #{ <<"medium">> := Medium }, _Options, Context)
-    when is_map(Medium) ->
+maybe_import_medium(LocalId, #{ <<"medium">> := Medium }, _Options, Context) when is_map(Medium) ->
     % Overwrite local medium record with the imported medium record
     % [ sanitize any HTML in the medium record ]
     case z_notifier:first(#media_import_medium{ id = LocalId, medium = Medium }, Context) of
         undefined ->
             ?LOG_NOTICE(#{
                 text => <<"Resource import dropped medium record">>,
+                result => error,
+                reason => no_handler,
                 in => zotonic_core,
                 rsc_id => LocalId
             }),
@@ -1320,8 +1535,7 @@ maybe_import_medium(LocalId, #{ <<"medium">> := Medium }, _Options, Context)
             Error
     end;
 maybe_import_medium(LocalId, #{}, _Options, Context) ->
-    % If no medium:
-    %    Delete local medium record (if any)
+    % If no medium to import, then delete local medium record (if any).
     case m_media:get(LocalId, Context) of
         undefined ->
             {ok, LocalId};
@@ -1337,6 +1551,86 @@ is_newer_medium(#{ <<"created">> := _ }, undefined) ->
 is_newer_medium(_, _) ->
     false.
 
+
+%% @doc Import medium record task, if the media URL is present and either the local medium
+%% record is missing or outdated.
+-spec import_medium_task(RetryCt, StartDT, MediaUrl, LocalId,
+                         RscProps, MediaOptions, PickledContext, Context) -> Result when
+    RetryCt :: non_neg_integer(),
+    StartDT :: calendar:datetime(),
+    MediaUrl :: binary(),
+    LocalId :: m_rsc:resource_id(),
+    RscProps :: map(),
+    MediaOptions :: m_media:options(),
+    PickledContext :: binary(),
+    Context :: z:context(),
+    Result :: z_pivot_rsc:task_return().
+import_medium_task(RetryCt, StartDT, MediaUrl, LocalId, RscProps, MediaOptions, PickledContext, Context) ->
+    case is_medium_import_still_needed(StartDT, LocalId, Context) of
+        true ->
+            RetryArgs = [
+                RetryCt+1, StartDT, MediaUrl, LocalId, RscProps, MediaOptions, PickledContext
+            ],
+            ContextImport = z_context:depickle(PickledContext),
+            case m_media:replace_url(MediaUrl, LocalId, RscProps, MediaOptions, ContextImport) of
+                {ok, _} ->
+                    ok;
+                {error, Reason} ->
+                    % Typical error if the remote closes the connection drops whilst
+                    % the download is progressing.
+                    case is_medium_import_retry(RetryCt, Reason) of
+                        true ->
+                            ?LOG_WARNING(#{
+                                text => <<"Importing medium delayed">>,
+                                in => zotonic_core,
+                                result => error,
+                                reason => Reason,
+                                media_url => MediaUrl,
+                                rsc_id => LocalId,
+                                retry_ct => RetryCt
+                            }),
+                            {delay, medium_import_backoff_delay(RetryCt+1, Reason), RetryArgs};
+                        false ->
+                            ?LOG_ERROR(#{
+                                text => <<"Importing medium failed">>,
+                                in => zotonic_core,
+                                result => error,
+                                reason => Reason,
+                                media_url => MediaUrl,
+                                rsc_id => LocalId
+                            }),
+                            ok
+                    end
+            end;
+        false ->
+            ok
+    end.
+
+%% @doc Check if the medium import is still needed, by comparing the created date of the local medium
+%% record with the start date of the import. Newer medium records are not replaced, as they might
+%% have been uploaded after the import started.
+is_medium_import_still_needed(StartDT, LocalId, Context) ->
+    case m_rsc:exists(LocalId, Context) of
+        true ->
+            case m_media:get(LocalId, Context) of
+                undefined -> true;
+                #{ <<"created">> := Created } -> Created =< StartDT
+            end;
+        false ->
+            false
+    end.
+
+is_medium_import_retry(RetryCt, _Reason) when RetryCt >= ?MEDIA_DOWNLOAD_MAX_RETRY -> false;
+is_medium_import_retry(_RetryCt, {shutdown, server_closed}) -> true;
+is_medium_import_retry(_RetryCt, {503, _FinalUrl, _Hs, _Sz, _Body}) -> true;
+is_medium_import_retry(_RetryCt, _Reason) -> false.
+
+medium_import_backoff_delay(RetryCt, {502, _FinalUrl, _Hs, _Sz, _Body}) ->
+    erlang:max(1, RetryCt-2) * ?MEDIA_DOWNLOAD_503_RETRY_DELAY;
+medium_import_backoff_delay(RetryCt, {503, _FinalUrl, _Hs, _Sz, _Body}) ->
+    erlang:max(1, RetryCt-2) * ?MEDIA_DOWNLOAD_503_RETRY_DELAY;
+medium_import_backoff_delay(RetryCt, _Reason) ->
+    erlang:max(1, RetryCt-2) * ?MEDIA_DOWNLOAD_RETRY_DELAY.
 
 % <<"edges">> := #{
 %   <<"depiction">> => #{
@@ -1368,43 +1662,54 @@ is_newer_medium(_, _) ->
 % }
 
 %% @doc Import all edges, return a list of newly created objects
-import_edges(LocalId, #{ <<"edges">> := Edges }, ImportedAcc, Options, Context) when is_map(Edges) ->
-    % Delete all edges with predicates not mentioned in the import
-    LocalPredicates = [ z_convert:to_binary(P) || P <- m_edge:object_predicates(LocalId, Context) ],
-    ImportPredicates = maps:keys(Edges),
+import_edges(LocalId, #{ <<"edges">> := Edges } = Rsc, ImportedAcc, Options, Context) when is_map(Edges) ->
+    case filtermap_edges(LocalId, Edges, Options, Context) of
+        {true, FilteredEdges} ->
+            % Delete all edges with predicates not mentioned in the import
+            LocalPredicates = [ z_convert:to_binary(P) || P <- m_edge:object_predicates(LocalId, Context) ],
+            ImportPredicates = maps:keys(FilteredEdges),
 
-    lists:foreach(
-        fun
-            (<<"hasusergroup">>) ->
-                % Local ACL predicate - keep as is
-                ok;
-            (P) ->
-                % Delete all edges for predicate P
-                m_edge:set_sequence(LocalId, P, [], Context)
-        end,
-        LocalPredicates -- ImportPredicates),
+            lists:foreach(
+                fun
+                    (<<"hasusergroup">>) ->
+                        % Local ACL predicate - keep as is
+                        ok;
+                    (P) ->
+                        % Delete all edges for predicate P
+                        m_edge:set_sequence(LocalId, P, [], Context)
+                end,
+                LocalPredicates -- ImportPredicates),
 
-    % Sync predicates present in the import data.
-    maps:fold(
-        fun
-            (Name, #{ <<"predicate">> := Pred, <<"objects">> := Os }, Acc) ->
-                case find_allowed_predicate(Name, Pred, Options, Context) of
-                    {ok, PredId} ->
-                        replace_edges(LocalId, PredId, Os, Acc, Options, Context);
-                    {error, _} ->
+            % Sync predicates present in the import data.
+            maps:fold(
+                fun
+                    (Name, #{ <<"predicate">> := Pred, <<"objects">> := Os }, Acc) ->
+                        case find_allowed_predicate(Name, Pred, Options, Context) of
+                            {ok, PredId} ->
+                                replace_edges(LocalId, PredId, Os, Acc, Options, Context);
+                            {error, _} ->
+                                Acc
+                        end;
+                    (Name, V, Acc) ->
+                        ?LOG_WARNING(#{
+                            text => <<"Import of unknown predicate">>,
+                            in => zotonic_core,
+                            name => Name,
+                            props => V
+                        }),
                         Acc
-                end;
-            (Name, V, Acc) ->
-                ?LOG_WARNING(#{
-                    text => <<"Import of unknown predicate">>,
-                    in => zotonic_core,
-                    name => Name,
-                    props => V
-                }),
-                Acc
-        end,
-        ImportedAcc,
-        Edges);
+                end,
+                ImportedAcc,
+                FilteredEdges);
+        false ->
+            ?LOG_INFO(#{
+                text => <<"Importing edges skipped, denied by filtermap_edges">>,
+                in => zotonic_core,
+                local_id => LocalId,
+                remote_id => maps:get(<<"id">>, Rsc, undefined)
+            }),
+            ImportedAcc
+    end;
 import_edges(LocalId, Rsc, ImportedAcc, _Options, _Context) ->
     ?LOG_INFO(#{
         text => <<"Importing edges without 'edges' key">>,
@@ -1552,7 +1857,7 @@ matching_category(Name, Cats, Context) ->
 -spec find_category(RId, Rsc, Context) -> m_rsc:resource_id() | undefined when
     RId :: map(),
     Rsc :: map(),
-    Context :: z:context(). 
+    Context :: z:context().
 find_category(RId, Rsc, Context) ->
     RscCatId = case maps:get(<<"category_id">>, Rsc, undefined) of
         #{ <<"name">> := Name, <<"uri">> := CatUri } ->

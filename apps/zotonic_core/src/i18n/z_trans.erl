@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2025 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Translate english sentences into other languages, following
 %% the GNU gettext principle.
 %% @end
 
-%% Copyright 2009-2025 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -37,7 +37,8 @@
 
 -include_lib("../../include/zotonic.hrl").
 
-%% @doc Fetch all translations for the given string.
+%% @doc Fetch all translations for the given English string. If no translations are
+%% found then a trans record with the given string is returned.
 -spec translations(z:trans() | binary() | string(), z:context()) -> z:trans().
 translations(#trans{ tr = Tr0 } = Trans0, Context) ->
     case lists:keyfind(en, 1, Tr0) of
@@ -73,14 +74,16 @@ merge_trs([{Lang,_} = LT|Rest], Acc) ->
     end.
 
 %% @doc Prepare a translations table based on all .po files in the active modules.
-%%      Returns a map of english sentences with all their translations
+%%      Returns a map of English sentences with all their translations
 -spec parse_translations(z:context()) -> map().
 parse_translations(Context) ->
     Mods = z_module_indexer:translations(Context),
     ParsePOFiles = parse_mod_pofiles(Mods, []),
     build_index(ParsePOFiles, #{}).
 
-%% @doc Parse all .po files. Results in a dict {label, [iso_code,trans]}
+%% @doc Parse all .po files. Results in a map with per found label
+%% a list of translations: [iso_code, trans]. Usually, the labels
+%% are the English sentences.
 parse_mod_pofiles([], Acc) ->
     lists:reverse(Acc);
 parse_mod_pofiles([{_Module, POFiles}|Rest], Acc) ->
@@ -112,17 +115,22 @@ add_labels(Lang, [{Label,Trans}|Rest], Acc) when is_binary(Trans), is_binary(Lab
             add_labels(Lang, Rest, Acc#{ Label => [{Lang,Trans}] })
     end.
 
-%% @doc Strict translation lookup of a language version
--spec lookup(Text, Context) -> Translation | undefined when
+%% @doc Strict translation lookup of a language version using the languages
+%% if the context. If no translation is found or the input is undefined, then
+%% undefined is returned.
+-spec lookup(Text, Context) -> Translation when
     Text :: z:trans() | binary() | string() | undefined,
     Context :: z:context(),
-    Translation :: binary().
+    Translation :: binary() | undefined.
 lookup(Trans, Context) ->
     lookup(Trans, z_context:languages(Context), Context).
 
+%% @doc Strict translation lookup of a language version using the given language
+%% or languages. If no translation is found or the input is undefined, then
+%% undefined is returned.
 -spec lookup(Text, Language, Context) -> Translation | undefined when
     Text :: z:trans() | binary() | string() | undefined,
-    Language :: atom() | [ atom() ],
+    Language :: z_language:language_code() | [ z_language:language_code() ],
     Context :: z:context(),
     Translation :: binary().
 lookup(undefined, _Lang, _Context) ->
@@ -153,25 +161,27 @@ lookup(_Text, _Langs, _Context) ->
     undefined.
 
 %% @doc Non strict translation lookup of a language version.
-%%      In order check: requested languages, default configured language, english, any
+%% In order check: requested languages, default configured language, english, any
+%% If no translation is found, then the empty binary string is returned.
 -spec lookup_fallback(Text, OptContext) -> Translation when
     Text :: z:trans() | binary() | string() | list() | undefined,
     OptContext :: z:context() | undefined,
-    Translation :: binary() | undefined.
+    Translation :: binary().
 lookup_fallback(undefined, _OptContext) ->
-    undefined;
+    <<>>;
 lookup_fallback(Trans, undefined) ->
     lookup_fallback(Trans, [en], undefined);
 lookup_fallback(Trans, Context) ->
     lookup_fallback(Trans, z_context:languages(Context), Context).
 
 %% @doc Non strict translation lookup of a language version.
-%%      In order check: requested languages, default configured language, english, any
+%% In order check: requested languages, default configured language, english, any
+%% If no translation is found, then the empty binary string is returned.
 -spec lookup_fallback(Text, Language, OptContext) -> Translation when
     Text :: z:trans() | binary() | string() | list() | undefined,
-    Language :: atom() | [ atom() ] | binary(),
+    Language :: z_language:language_code() | [ z_language:language_code() ] | binary(),
     OptContext :: z:context() | undefined,
-    Translation :: binary() | undefined.
+    Translation :: binary().
 lookup_fallback(Text, Lang, OptContext) when is_list(Text) ->
     case is_iodata(Text) of
         true ->
@@ -200,7 +210,7 @@ lookup_fallback(Text, Lang, OptContext) when is_binary(Lang) ->
         {error, _} when is_binary(Text) ->
             Text;
         {error, _} ->
-            undefined
+            <<>>
     end;
 lookup_fallback(#trans{ tr = Tr }, Langs, OptContext) when is_list(Langs) ->
     case find_first(Langs, Tr) of
@@ -216,7 +226,7 @@ lookup_fallback(#trans{ tr = Tr }, Langs, OptContext) when is_list(Langs) ->
 lookup_fallback(Text, _Lang, _Context) when is_binary(Text) ->
     Text;
 lookup_fallback(_Text, _Lang, _Context) ->
-    undefined.
+    <<>>.
 
 is_iodata([H|T]) when is_integer(H), H >= 1 -> is_iodata(T);
 is_iodata([H|T]) when is_binary(H) -> is_iodata(T);
@@ -237,12 +247,14 @@ find_first([Lang|Langs], Tr) ->
         {_, Text} -> Text
     end.
 
+-spec take_english_or_first(Tr) -> binary() when
+    Tr :: [ {z_language:language_code(), binary()} ].
 take_english_or_first(Tr) ->
     case lists:keyfind(en, 1, Tr) of
         false ->
             case Tr of
                 [{_,Text}|_] -> Text;
-                _ -> undefined
+                _ -> <<>>
             end;
         {_, Text} ->
             Text
@@ -335,13 +347,8 @@ trans(#trans{} = Trans, #context{} = Context) ->
     trans(Trans, z_context:languages(Context));
 trans(#trans{ tr = Tr }, Langs) ->
     case find_first(Langs, Tr) of
-        undefined ->
-            case take_english_or_first(Tr) of
-                undefined -> <<>>;
-                T -> T
-            end;
-        T ->
-            T
+        undefined -> take_english_or_first(Tr);
+        T -> T
     end;
 trans(Text, _Lang) when is_binary(Text) ->
     Text;

@@ -4,8 +4,8 @@
 
 {% block content %}
     {% with
-        20,
-        "20"
+        100,
+        "100"
         as
         default_pagelen,
         default_pagelen_label
@@ -13,6 +13,8 @@
         {% with q.qpagelen|default:default_pagelen as qpagelen %}
             {% with q.qpredicate as qpredicate %}
                 <form id="{{ #form }}" method="GET" action="{% url admin_edges %}" class="form-inline">
+                    <input type="hidden" name="qhassubject" value="{{ q.qhassubject|escape }}">
+                    <input type="hidden" name="qhasobject" value="{{ q.qhasobject|escape }}">
                     <div class="btn-group pull-right">
                         <div class="btn-group">
                             {% include "_admin_button_dropdown.tpl"
@@ -55,10 +57,10 @@
                     <p>
                         {_ Only showing connections with: _}
                         {% if q.qhassubject %}
-                            {_ subject _} <a href="{% url admin_edit_rsc id=q.qhassubject %}">{{ m.rsc[q.qhassubject].title|default:_"Untitled" }}</a>
+                            <b>{_ subject _}</b> <a href="{% url admin_edit_rsc id=q.qhassubject %}">{{ m.rsc[q.qhassubject].title|default:_"Untitled" }}</a>
                         {% endif %}
                         {% if q.qhasobject %}
-                            {_ object _} <a href="{% url admin_edit_rsc id=q.qhasobject %}">{{ m.rsc[q.qhasobject].title|default:_"Untitled" }}</a>
+                            <b>{_ object _}</b> <a href="{% url admin_edit_rsc id=q.qhasobject %}">{{ m.rsc[q.qhasobject].title|default:_"Untitled" }}</a>
                         {% endif %}
                     </p>
                 {% endif %}
