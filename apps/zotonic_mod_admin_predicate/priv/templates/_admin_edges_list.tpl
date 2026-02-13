@@ -12,7 +12,7 @@
             <th width="30%">
                 {_ Predicate _} &rarr;
                 {% if m.rsc[q.qpredicate].id as id %}
-                    <a class="btn btn-default btn-xs" href="{% url admin_edges qhassubject=q.qhassubject qhasobect=q.qhasobject %}" title="{_ Remove predicate filter _}">
+                    <a class="btn btn-default btn-xs" href="{% url admin_edges qhassubject=q.qhassubject qhasobject=q.qhasobject %}" title="{_ Remove predicate filter _}">
                         &times; {{ id.title }}
                     </a>
                 {% endif %}
