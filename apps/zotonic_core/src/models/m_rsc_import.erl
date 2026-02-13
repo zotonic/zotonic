@@ -395,7 +395,7 @@ filtermap_rsc(Rsc, Options, Context) ->
     end.
 
 %% @doc Filter the map with edges being imported for the given local resource id.
-%% The callback can modify of removed the edge import.
+%% The callback can modify or remove the edge import.
 -spec filtermap_edges( m_rsc:resource_id(), Edges, options(), z:context() ) -> boolean() | {true, Edges1} when
     Edges :: map(),
     Edges1 :: map().
