@@ -182,20 +182,15 @@ lookup_fallback(Trans, Context) ->
     Language :: z_language:language_code() | [ z_language:language_code() ] | binary(),
     OptContext :: z:context() | undefined,
     Translation :: binary().
-lookup_fallback(Text, Lang, OptContext) when is_list(Text) ->
-    case is_iodata(Text) of
+lookup_fallback(TextList, Lang, OptContext) when is_list(TextList) ->
+    case is_iodata(TextList) of
         true ->
-            Text1 = unicode:characters_to_binary(Text, utf8),
+            Text1 = unicode:characters_to_binary(TextList, utf8),
             lookup_fallback(Text1, Lang, OptContext);
         false ->
             T1 = lists:map(
-                fun(T) ->
-                    case lookup_fallback(T, Lang, OptContext) of
-                        undefined -> <<>>;
-                        T1 -> T1
-                    end
-                end,
-                Text),
+                fun(T) -> lookup_fallback(T, Lang, OptContext) end,
+                TextList),
             case unicode:characters_to_binary(T1, utf8) of
                 S when is_binary(S) -> S;
                 _ -> <<>>

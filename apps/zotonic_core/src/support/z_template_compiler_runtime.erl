@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016-2025 Marc Worrell
+%% @copyright 2016-2026 Marc Worrell
 %% @doc Runtime for the compiled templates with Zotonic specific interfaces.
 %% @end
 
-%% Copyright 2016-2025 Marc Worrell
+%% Copyright 2016-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -585,7 +585,6 @@ spaceless_tag(Value, TplVars, Context) ->
 -spec to_bool(Value :: term(), Context :: term()) -> boolean().
 to_bool(#trans{} = Tr, Context) ->
     case z_trans:lookup_fallback(Tr, Context) of
-        undefined -> false;
         <<>> -> false;
         _ -> true
     end;

@@ -1,11 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2025 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Mailinglist implementation. Mailings are pages sent to a list of recipients.
 %% Recipients are either email addresses in the recipients table, resources matching
 %% the mailinglist query, or resources subscribed to the mailinglist using an edge.
 %% @end
 
-%% Copyright 2009-2025 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -512,7 +512,7 @@ handle_call({#dropbox_file{ filename = File }, _SenderContext}, _From, State = #
                 case import_file(File, true, ListId, C) of
                     ok ->
                         Title = case z_trans:lookup_fallback(m_rsc:p_no_acl(ListId, <<"title">>, C), C) of
-                            undefined -> integer_to_binary(ListId);
+                            <<>> -> integer_to_binary(ListId);
                             T -> T
                         end,
                         z_email:send_admin(
