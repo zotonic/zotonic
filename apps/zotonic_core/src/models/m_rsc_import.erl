@@ -1078,9 +1078,31 @@ save_import_options(RscId, Uri, Status, Options, Context) ->
             Import1 = Import#{
                 <<"id">> => RscId
             },
-            {ok, _} = z_db:insert(rsc_import, Import1, Context),
-            ok;
+            case z_db:insert(rsc_import, Import1, Context) of
+                {ok, _} ->
+                    ok;
+                {error, Reason} ->
+                    ?LOG_WARNING(#{
+                        text => <<"Error inserting import options">>,
+                        in => zotonic_core,
+                        result => error,
+                        reason => Reason,
+                        rsc_id => RscId,
+                        uri => Uri
+                    }),
+                    ok
+            end;
         {ok, 1} ->
+            ok;
+        {error, Reason} ->
+            ?LOG_WARNING(#{
+                text => <<"Error updating import options">>,
+                in => zotonic_core,
+                result => error,
+                reason => Reason,
+                rsc_id => RscId,
+                uri => Uri
+            }),
             ok
     end.
 
