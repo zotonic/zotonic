@@ -46,22 +46,21 @@
                 </form>
             {% endwith %}
             <div class="admin-header">
-                <h2>
-                    {% if q.qpredicate %}
-                        {_ Page connections with the predicate _}: {{ m.rsc[q.qpredicate].title }}
-                    {% else %}
-                        {_ Page connections overview _}
-                    {% endif %}
-                </h2>
-                {% if q.qhassubject or q.qhasobject %}
+                <h2>{_ Page connections overview _}</h2>
+                {% if q.qhassubject or q.qhasobject or q.qpredicate %}
                     <p>
-                        {_ Only showing connections with: _}
-                        {% if q.qhassubject %}
-                            <b>{_ subject _}</b> <a href="{% url admin_edit_rsc id=q.qhassubject %}">{{ m.rsc[q.qhassubject].title|default:_"Untitled" }}</a>
-                        {% endif %}
-                        {% if q.qhasobject %}
-                            <b>{_ object _}</b> <a href="{% url admin_edit_rsc id=q.qhasobject %}">{{ m.rsc[q.qhasobject].title|default:_"Untitled" }}</a>
-                        {% endif %}
+                        {% trans "List {predicate} connections from {subject} to {object}."
+                                 subject=q.qhassubject|if
+                                            :("<em>"++m.rsc[q.qhassubject].title|default:_"Untitled"++"</em>")
+                                            :_"any subject"
+                                 object=q.qhasobject|if
+                                            :("<em>"++m.rsc[q.qhasobject].title|default:_"Untitled"++"</em>")
+                                            :_"any object"
+                                 predicate=q.qpredicate|if
+                                            :("<em>"++m.rsc[q.qpredicate].title|default:_"Untitled"++"</em>")
+                                            :_"all"
+
+                        %}
                     </p>
                 {% endif %}
             </div>

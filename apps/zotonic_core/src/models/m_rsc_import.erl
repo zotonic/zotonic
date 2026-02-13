@@ -51,6 +51,7 @@
     reimport_recursive/2,
     reimport_recursive/4,
     reimport_recursive_async/2,
+    reimport_recursive_async/3,
 
     update_medium_uri/4,
     import_medium_task/8,
@@ -449,12 +450,15 @@ reimport_recursive(Id, RefIds, Options, Context) ->
             Error
     end.
 
-%% @doc Reimport a non-authoritative resource or placeholder using the saved import flags, async
-%% reimport of all objects.
+%% @doc Reimport a non-authoritative resource or placeholder using the saved import flags.
+%% All objects are reimported asynchronously using a sidejob.
 -spec reimport_recursive_async( m_rsc:resource_id(), z:context() ) -> import_result().
 reimport_recursive_async(Id, Context) ->
     reimport_recursive_async(Id, saved, Context).
 
+%% @doc Reimport a non-authoritative resource or placeholder using the given import flags overlayed
+%% over the saved import flags.
+%% All objects are reimported asynchronously using a sidejob.
 -spec reimport_recursive_async(Id, Options, Context) -> import_result() when
     Id :: m_rsc:resource_id(),
     Options :: options() | saved,
@@ -1574,6 +1578,14 @@ import_medium_task(RetryCt, StartDT, MediaUrl, LocalId, RscProps, MediaOptions, 
             ContextImport = z_context:depickle(PickledContext),
             case m_media:replace_url(MediaUrl, LocalId, RscProps, MediaOptions, ContextImport) of
                 {ok, _} ->
+                    ?LOG_INFO(#{
+                        text => <<"Importing medium succeeded">>,
+                        in => zotonic_core,
+                        result => ok,
+                        media_url => MediaUrl,
+                        rsc_id => LocalId,
+                        retry_ct => RetryCt
+                    }),
                     ok;
                 {error, Reason} ->
                     % Typical error if the remote closes the connection whilst
