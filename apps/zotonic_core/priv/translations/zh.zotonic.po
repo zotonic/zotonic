@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-06 16:34\n"
+"PO-Revision-Date: 2026-02-13 14:47\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "MIME-Version: 1.0\n"
@@ -436,7 +436,7 @@ msgstr "内容"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:16
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_visible_for.tpl:2
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:58
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:62
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:50
 #: zotonic_mod_content_groups/priv/templates/_admin_overview_filter_panel.tpl:6
 #: zotonic_mod_content_groups/priv/templates/_dialog_admin_bulk_update.tpl:5
 msgid "Content group"
@@ -456,6 +456,7 @@ msgstr "制定给合作团队的成员和经理的内容规则"
 msgid "Could not move to collaboration group."
 msgstr "无法移至合作团队"
 
+#: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:40
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:51
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:190
 #: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:10
@@ -498,10 +499,6 @@ msgstr "无法移至合作团队"
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 msgid "Delete"
 msgstr "删除"
-
-#: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:40
-msgid "Delete all user groups"
-msgstr "删除所有用户群"
 
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:448
 msgid "Delete is canceled, there are users in the user groups."
@@ -704,8 +701,8 @@ msgid "Options for the ACL module."
 msgstr "ACL 模块的选项。"
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:31
-msgid "Or click <strong>Delete all user groups</strong> to disconnect all users and delete the user groups."
-msgstr "或者点击 <strong>删除所有用户组</strong> 断开所有用户的连接并删除用户组。"
+msgid "Or click <strong>Delete</strong> to disconnect all users and delete the user listed groups."
+msgstr ""
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:154
 msgid "Own content"
@@ -957,6 +954,7 @@ msgid "You have to use a special URL, as provided by the an editor or administra
 msgstr "你必须使用一个特殊的URL，由编辑或管理员提供。"
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:88
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 msgid "all"
 msgstr "都"
 
@@ -1064,7 +1062,7 @@ msgstr "关于类别"
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:192
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:131
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:56
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:96
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:97
 msgid "About {n} items found."
 msgstr "找到大约 {n} 项目。"
 
@@ -1139,14 +1137,14 @@ msgstr "全天"
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:14
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:94
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:103
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:82
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:83
 msgid "All media"
 msgstr "所有媒体"
 
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:13
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:93
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:102
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:81
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:82
 msgid "All pages"
 msgstr "所有页面"
 
@@ -1274,7 +1272,7 @@ msgid "Category name:"
 msgstr "类别名称："
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:42
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:50
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:58
 msgid "Category:"
 msgstr "类别："
 
@@ -1368,6 +1366,7 @@ msgstr "连接自"
 msgid "Connected to"
 msgstr "连接到"
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:71
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:134
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:100
 msgid "Connections"
@@ -1692,7 +1691,7 @@ msgstr "检查网站时出错。"
 msgid "Error creating the page."
 msgstr "创建页面时出错。"
 
-#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:48
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:52
 msgid "Error importing page from the remote server."
 msgstr "从远程服务器导入页面时出错。"
 
@@ -1933,7 +1932,7 @@ msgstr "与谓词连接"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:69
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:65
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:39
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:41
 msgid "Items per page"
 msgstr "每页项目"
 
@@ -2016,7 +2015,7 @@ msgstr "新建一个页面"
 
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:4
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:92
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:71
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:72
 msgid "Make a new page or media"
 msgstr "创建新页面或媒体条目"
 
@@ -2369,7 +2368,7 @@ msgid "Powered by"
 msgstr "技术支持"
 
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:23
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:8
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:13
 msgid "Predicate"
 msgstr "谓词"
 
@@ -2490,6 +2489,10 @@ msgstr "重定向到上述网站的页面浏览"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:52
 msgid "Redirect to website on page view"
 msgstr "在页面上重定向到网站"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:74
+msgid "Referrers"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:3
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:9
@@ -2658,7 +2661,7 @@ msgstr "短标题"
 msgid "Show address on edit page"
 msgstr "在编辑页面显示地址"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:58
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:66
 msgid "Show all {title} pages"
 msgstr "显示全部 {title} 页"
 
@@ -2803,7 +2806,7 @@ msgstr "街道地址(续)"
 msgid "Structure"
 msgstr "架构"
 
-#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:35
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:39
 msgid "Succesfully imported page from the remote server."
 msgstr "从远程服务器成功导入页面。"
 
@@ -3107,12 +3110,13 @@ msgstr "未发表"
 #: zotonic_mod_admin/src/mod_admin.erl:1097
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:99
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:163
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:54
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:57
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:60
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:59
 #: zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13
 #: zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
-#: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:279
+#: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:276
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:10
 msgid "Untitled"
 msgstr "未命名"
@@ -3210,7 +3214,8 @@ msgstr "有效期为："
 msgid "View"
 msgstr "查看"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:55
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:56
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:70
 #: zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:27
 msgid "View all connections"
 msgstr "查看所有连接"
@@ -3219,7 +3224,8 @@ msgstr "查看所有连接"
 msgid "View all pages from this category"
 msgstr "查看此类别的所有页面"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:53
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:54
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:73
 msgid "View all referrers"
 msgstr "查看所有引用"
 
@@ -3351,7 +3357,7 @@ msgstr "添加媒体条目"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:14
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:19
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:39
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:60
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:6
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:16
 msgid "by"
@@ -3371,7 +3377,7 @@ msgstr "由"
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:76
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:77
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:78
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:35
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:56
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:31
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:46
 #: zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:14
@@ -3469,7 +3475,7 @@ msgid "undo"
 msgstr "撤销"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:34
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:50
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:58
 #: zotonic_mod_admin/priv/templates/_choose_media.tpl:9
 #: zotonic_mod_admin/priv/templates/_rsc_edge_item.tpl:9
 #: zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:11
@@ -3503,7 +3509,7 @@ msgstr "查看站点"
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:193
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:132
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:57
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:97
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:98
 msgid "{n} items found."
 msgstr "找到{n} 项目。"
 
@@ -4743,7 +4749,7 @@ msgid "A predicate denotes traits or aspects of a page and expresses a relations
 msgstr "谓词表示一个页面的特征或方面，表达两个页面之间的关系。\n"
 "    这种关系总是定向的，从主体到客体。<br/>谓词是在本体中定义的，比如 <a href=\"http://sioc-project.org/\">SIOC</a>。  在这个页面你可以定义Zotonic已知的谓词。"
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:23
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:25
 msgid "All Predicates"
 msgstr "所有谓词"
 
@@ -4795,7 +4801,7 @@ msgstr "不显示在资源编辑页面的连接列表中。"
 msgid "Enter the title of the new predicate:"
 msgstr "请填写新谓词的标题"
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:26
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:28
 msgid "Filter on predicate"
 msgstr "谓词过滤"
 
@@ -4815,6 +4821,10 @@ msgstr "在现有连接之前插入新连接。"
 msgid "Instead of a search box this will show a list of all pages in the <i>To</i> categories checked above. At least one category must be checked."
 msgstr "这将显示上面选中的 <i>到</i> 类别中的所有页面的列表，而不是搜索框。必须至少检查一个类别。"
 
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:52
+msgid "List {predicate} connections from {subject} to {object}."
+msgstr ""
+
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:19
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:54
 msgid "Make a new predicate"
@@ -4824,11 +4834,11 @@ msgstr "创建新谓词"
 msgid "Make predicate"
 msgstr "创建谓词"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:59
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:98
 msgid "No page connections found."
 msgstr "没有找到页面连接。"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:57
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:96
 msgid "No page connections with the predicate:"
 msgstr "与谓语没有页面连接。"
 
@@ -4836,13 +4846,9 @@ msgstr "与谓语没有页面连接。"
 msgid "No predicates found."
 msgstr "没有找到谓词。"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:11
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:21
 msgid "Object"
 msgstr "对象"
-
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:56
-msgid "Only showing connections with:"
-msgstr "只显示与的联系。"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:108
 msgid "Ontologies define predicates for a defined set of subject and object categories. Sometimes it is more practical to have the predicate’s connection direction reversed from the formal definition. Export and import functions can use this option to swap subject/object relation when exporting or importing data."
@@ -4852,13 +4858,9 @@ msgstr "本体为一组已定义的主题和客体类别定义谓词。有时，
 msgid "Or click <strong>Delete All Connections</strong> to delete all connections with this predicate."
 msgstr "或者点击 <strong>删除所有连接</strong> 删除所有与此谓词的连接。"
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:51
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:49
 msgid "Page connections overview"
 msgstr "页面连接概述"
-
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:49
-msgid "Page connections with the predicate"
-msgstr "与谓语的页面连接"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:3
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:12
@@ -4869,6 +4871,32 @@ msgstr "谓词"
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edge_action.tpl:8
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edge_action.tpl:13
 msgid "Remove connection"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:23
+msgid "Remove object filter"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:15
+msgid "Remove predicate filter"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:7
+msgid "Remove subject filter"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:40
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:72
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:87
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:107
+msgid "Show all incoming connections"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:37
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:69
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:84
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:104
+msgid "Show all outgoing connections"
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:98
@@ -4935,13 +4963,13 @@ msgstr "你不允许创建这个谓词。"
 msgid "You can define for which categories the predicate is shown on the edit page.  You can also define which categories of objects will be found when searching for a page to connect to. When you don’t check anything then all categories are valid."
 msgstr "您可以定义在编辑页面上显示谓词的类别。您还可以定义在搜索要连接的页面时将找到哪些类别的对象。当您不选中任何内容时，所有类别均有效。"
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
-msgid "object"
-msgstr "对象"
-
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58
-msgid "subject"
-msgstr "课题"
+msgid "any object"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:55
+msgid "any subject"
+msgstr ""
 
 #: zotonic_mod_admin_statistics/priv/templates/stat_panel/database.tpl:3
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:147
@@ -11550,7 +11578,7 @@ msgstr "无法到达或本地IP"
 msgid "'Once' means once by a respondent who is logged in or once per browser for anonymous respondents. To identify the browser of anonymous respondents, a cookie containing a unique ID is utilized."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:96
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:94
 msgid "<b>Note</b>: For the features 'once', 'edit after submit', and checking the maximum number of submitted forms to function, the form needs to have the saved results. If a handler (chosen in the <em>handling</em> settings below) does not save the results, these features will not be available."
 msgstr ""
 
@@ -11616,11 +11644,11 @@ msgstr "添加到现有邮件列表"
 msgid "Add to mailinglist"
 msgstr "添加到邮件列表"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:112
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:110
 msgid "After all questions are answered and submitted, one of the following is shown."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:132
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:130
 msgid "Aggregated results from all respondents"
 msgstr "所有受访者的汇总结果"
 
@@ -11919,11 +11947,11 @@ msgstr "对于日期范围，您还可以使用相对日期，如 <code>-5 年</
 msgid "Go to question"
 msgstr "进入问题"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:215
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:213
 msgid "Handle this form with"
 msgstr "处理此表单"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:194
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:192
 msgid "Handling"
 msgstr "处理"
 
@@ -11950,7 +11978,7 @@ msgstr "隐藏值，与表单一起保存但不显示给填写表单的人。"
 msgid "Hide from results"
 msgstr "隐藏结果"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:151
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:149
 msgid "Hide progress information"
 msgstr "隐藏进度信息"
 
@@ -11967,7 +11995,7 @@ msgstr "我是"
 msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color]."
 msgstr "我今年 [age] 岁。我喜欢 [icecream=vanilla|strawberry|chocolate|other] 冰淇淋，我最喜欢的颜色是 [color]。"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:76
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:74
 msgid "If the maximum number of forms has been submitted, then the start button is deactivated and an email is sent to the email addresses in the <em>handling</em> settings below. Leave empty for no limit. This is useful for signup lists with a limited number of spots."
 msgstr ""
 
@@ -12027,8 +12055,8 @@ msgstr "与人联系"
 msgid "Long answer"
 msgstr "长答案"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:197
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:198
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:195
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:196
 msgid "Mail results to"
 msgstr "将结果邮寄给"
 
@@ -12054,9 +12082,9 @@ msgstr "匹配问题"
 msgid "Maximal value"
 msgstr "最大值"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:74
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:82
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:89
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:72
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:80
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:87
 msgid "Maximum number of submissions"
 msgstr "最多提交数量"
 
@@ -12132,7 +12160,7 @@ msgstr ""
 msgid "No results yet."
 msgstr "还没有结果。"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:114
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:112
 msgid "Note that if you select a special handler below, then that handler may override this setting."
 msgstr ""
 
@@ -12184,7 +12212,7 @@ msgstr "经过？"
 msgid "Passed"
 msgstr "通过"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:180
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:178
 msgid "Passing score"
 msgstr "合格分数"
 
@@ -12227,7 +12255,7 @@ msgstr "主要"
 msgid "Printable list"
 msgstr "可打印列表"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:146
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:144
 msgid "Progress"
 msgstr "进展情况"
 
@@ -12321,11 +12349,11 @@ msgstr "查看结果"
 msgid "Results editor"
 msgstr "结果编辑器"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:124
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:122
 msgid "Results from the respondent"
 msgstr "答辩人的结果"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:128
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:126
 msgid "Results from the respondent – if passed only"
 msgstr ""
 
@@ -12367,11 +12395,11 @@ msgstr "选择邮件列表"
 msgid "Select your country"
 msgstr "选择你的国家"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:208
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:206
 msgid "Send a confirmation to the respondent. The email address must be known (logged in respondents) or you can add a short text field with the label “email” and the validation set to \"must be an email address\"."
 msgstr "向受访者发送确认信。电子邮件地址必须是已知的（在受访者中登录），或者您可以添加带有标签“电子邮件”和验证设置为“必须是电子邮件地址”的短文本字段。"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:200
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:198
 msgid "Separate multiple email addresses with a comma."
 msgstr "用逗号分隔多个电子邮件地址。"
 
@@ -12379,7 +12407,7 @@ msgstr "用逗号分隔多个电子邮件地址。"
 msgid "Short answer"
 msgstr "短答案"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:109
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:107
 msgid "Show after the final submit of the form"
 msgstr ""
 
@@ -12391,11 +12419,11 @@ msgstr "显示图表"
 msgid "Show email addresses"
 msgstr "显示 e-mail 地址"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:163
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:161
 msgid "Show progress bar"
 msgstr "显示进度条"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:157
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:155
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "显示进度信息，如“<em>问题 3/10</em>”"
 
@@ -12451,7 +12479,6 @@ msgstr "储值"
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:43
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:21
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:43
-#: zotonic_mod_survey/src/questions/survey_q_likert.erl:54
 #: zotonic_mod_survey/src/questions/survey_q_likert.erl:55
 msgid "Strongly Agree"
 msgstr "强烈同意"
@@ -12460,7 +12487,6 @@ msgstr "强烈同意"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:11
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:35
 #: zotonic_mod_survey/src/questions/survey_q_likert.erl:59
-#: zotonic_mod_survey/src/questions/survey_q_likert.erl:60
 msgid "Strongly Disagree"
 msgstr "强烈不同意"
 
@@ -12485,7 +12511,7 @@ msgstr "错答减分（总分不低于0分）。"
 msgid "Survey editor"
 msgstr "问卷调查编辑器"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:174
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:172
 msgid "Test pass percentage"
 msgstr "考试合格率"
 
@@ -12497,7 +12523,7 @@ msgstr "文字、图片、视频"
 msgid "Thank you for filling in our survey."
 msgstr "谢谢你填写我们的问卷调查。"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:120
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:118
 msgid "Thank you text only"
 msgstr "谢谢你只发短信"
 
@@ -12505,7 +12531,7 @@ msgstr "谢谢你只发短信"
 msgid "Thank you text."
 msgstr "谢谢你的短信。"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:96
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:94
 msgid "The 'continue later' feature operates independently of the chosen form handler."
 msgstr ""
 
@@ -12573,7 +12599,7 @@ msgstr "此表单已禁用。因为您可以编辑，所以您可以继续进行
 msgid "This is a result for:"
 msgstr "这是一个结果，因为："
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:175
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:173
 msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
 msgstr "这是通过测验或测试所需的百分比。仅在您添加了测验或测试问题时使用。"
 

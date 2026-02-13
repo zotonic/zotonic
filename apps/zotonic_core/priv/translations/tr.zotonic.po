@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-06 16:34\n"
+"PO-Revision-Date: 2026-02-13 14:47\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "MIME-Version: 1.0\n"
@@ -436,7 +436,7 @@ msgstr "İçerik"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:16
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_visible_for.tpl:2
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:58
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:62
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:50
 #: zotonic_mod_content_groups/priv/templates/_admin_overview_filter_panel.tpl:6
 #: zotonic_mod_content_groups/priv/templates/_dialog_admin_bulk_update.tpl:5
 msgid "Content group"
@@ -456,6 +456,7 @@ msgstr "İşbirliği grupları yöneticileri ve üyeleri için içerik kurallar�
 msgid "Could not move to collaboration group."
 msgstr "İşbirliği grubuna taşınamadı."
 
+#: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:40
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:51
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:190
 #: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:10
@@ -498,10 +499,6 @@ msgstr "İşbirliği grubuna taşınamadı."
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 msgid "Delete"
 msgstr "Sil"
-
-#: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:40
-msgid "Delete all user groups"
-msgstr "Tüm kullanıcı gruplarını sil"
 
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:448
 msgid "Delete is canceled, there are users in the user groups."
@@ -704,8 +701,8 @@ msgid "Options for the ACL module."
 msgstr "ACL modülü seçenekleri."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:31
-msgid "Or click <strong>Delete all user groups</strong> to disconnect all users and delete the user groups."
-msgstr "Yada tüm kullanıcıların bağlantılarını kesmek ve tüm kullanıcı gruplarını silmek için <strong>Tüm kullanıcı gruplarını sil</strong>'e tıklayın."
+msgid "Or click <strong>Delete</strong> to disconnect all users and delete the user listed groups."
+msgstr ""
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:154
 msgid "Own content"
@@ -957,6 +954,7 @@ msgid "You have to use a special URL, as provided by the an editor or administra
 msgstr "Düzenleyici ya da yönetici tarafından sağlanan özel bir URL kullanabilirsiniz."
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:88
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 msgid "all"
 msgstr "tümü"
 
@@ -1064,7 +1062,7 @@ msgstr "Kategoriler hakkında"
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:192
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:131
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:56
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:96
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:97
 msgid "About {n} items found."
 msgstr "Yaklaşık {n} ürün bulundu."
 
@@ -1139,14 +1137,14 @@ msgstr "Tüm gün"
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:14
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:94
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:103
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:82
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:83
 msgid "All media"
 msgstr "Tüm medya"
 
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:13
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:93
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:102
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:81
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:82
 msgid "All pages"
 msgstr "Tüm sayfalar"
 
@@ -1274,7 +1272,7 @@ msgid "Category name:"
 msgstr "Kategori adı:"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:42
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:50
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:58
 msgid "Category:"
 msgstr "Kategori:"
 
@@ -1368,6 +1366,7 @@ msgstr "Şuradan bağlanıldı:"
 msgid "Connected to"
 msgstr "Bağlı"
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:71
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:134
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:100
 msgid "Connections"
@@ -1692,7 +1691,7 @@ msgstr "Web sitesini kontrol etme hatası."
 msgid "Error creating the page."
 msgstr "Sayfa oluşturulurken hata meydana geldi."
 
-#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:48
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:52
 msgid "Error importing page from the remote server."
 msgstr "Uzak sunucudan sayfa içe aktarılırken hata oluştu."
 
@@ -1933,7 +1932,7 @@ msgstr "yüklem ile bağlantılıdır"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:69
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:65
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:39
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:41
 msgid "Items per page"
 msgstr "Sayfa başına öğe"
 
@@ -2016,7 +2015,7 @@ msgstr "Yeni bir sayfa oluştur"
 
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:4
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:92
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:71
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:72
 msgid "Make a new page or media"
 msgstr "Yeni bir sayfa veya medya oluştur"
 
@@ -2369,7 +2368,7 @@ msgid "Powered by"
 msgstr "Destekçi:"
 
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:23
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:8
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:13
 msgid "Predicate"
 msgstr "Öncül"
 
@@ -2490,6 +2489,10 @@ msgstr "Sayfa görünümünde yukarıdaki web sitesine yönlendir"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:52
 msgid "Redirect to website on page view"
 msgstr "Sayfa görünümünde web sitesine yönlendir"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:74
+msgid "Referrers"
+msgstr "Değinenler"
 
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:3
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:9
@@ -2658,7 +2661,7 @@ msgstr "Kısa başlık"
 msgid "Show address on edit page"
 msgstr "Düzenleme sayfasında adresi göster"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:58
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:66
 msgid "Show all {title} pages"
 msgstr "{title} sayfanın tümünü göster"
 
@@ -2803,7 +2806,7 @@ msgstr "Adres satır 2"
 msgid "Structure"
 msgstr "Yapı"
 
-#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:35
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:39
 msgid "Succesfully imported page from the remote server."
 msgstr "Uzak sunucudan sayfa başarıyla içe aktarıldı."
 
@@ -3107,12 +3110,13 @@ msgstr "yayınlanmamış"
 #: zotonic_mod_admin/src/mod_admin.erl:1097
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:99
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:163
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:54
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:57
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:60
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:59
 #: zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13
 #: zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
-#: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:279
+#: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:276
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:10
 msgid "Untitled"
 msgstr "Başlıksız"
@@ -3210,7 +3214,8 @@ msgstr "Geçerli:"
 msgid "View"
 msgstr "Görüntüle"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:55
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:56
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:70
 #: zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:27
 msgid "View all connections"
 msgstr "Tüm bağlantıları görüntüleyin"
@@ -3219,7 +3224,8 @@ msgstr "Tüm bağlantıları görüntüleyin"
 msgid "View all pages from this category"
 msgstr "Bu kategorideki tüm sayfaları incele"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:53
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:54
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:73
 msgid "View all referrers"
 msgstr "Tüm referansları göster"
 
@@ -3351,7 +3357,7 @@ msgstr "medya öğesi ekle"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:14
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:19
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:39
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:60
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:6
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:16
 msgid "by"
@@ -3371,7 +3377,7 @@ msgstr "yazan"
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:76
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:77
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:78
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:35
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:56
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:31
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:46
 #: zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:14
@@ -3469,7 +3475,7 @@ msgid "undo"
 msgstr "geri al"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:34
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:50
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:58
 #: zotonic_mod_admin/priv/templates/_choose_media.tpl:9
 #: zotonic_mod_admin/priv/templates/_rsc_edge_item.tpl:9
 #: zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:11
@@ -3503,7 +3509,7 @@ msgstr "ziyaret et"
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:193
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:132
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:57
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:97
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:98
 msgid "{n} items found."
 msgstr "{n} ürün bulundu."
 
@@ -4743,7 +4749,7 @@ msgid "A predicate denotes traits or aspects of a page and expresses a relations
 msgstr "Bir dayanak, bir sayfanın niteliklerini veya yönlerini gösterir ve iki sayfa arasındaki ilişkiyi ifade eder.\n"
 "     İlişki daima nesneden nesneye doğru yönlendirilir. <br/> Koşullar, <a href=\"http://sioc-project.org/\"> SIOC </a> gibi ontolojilerde tanımlanır. Bu sayfada, Zotonic tarafından bilinen predicateleri olarak tanımlayabilirsiniz."
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:23
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:25
 msgid "All Predicates"
 msgstr "Tüm Tahminler"
 
@@ -4795,7 +4801,7 @@ msgstr "Kaynak düzenleme sayfasındaki bağlantılar listesinde gösterme."
 msgid "Enter the title of the new predicate:"
 msgstr "Yeni öncülün başlığını doldurunuz."
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:26
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:28
 msgid "Filter on predicate"
 msgstr "Yüklenicide filtreleme"
 
@@ -4815,6 +4821,10 @@ msgstr "Mevcut bağlantılardan önce yeni bağlantılar ekleyin."
 msgid "Instead of a search box this will show a list of all pages in the <i>To</i> categories checked above. At least one category must be checked."
 msgstr "Bu, bir arama kutusu yerine yukarıda işaretlenen <i></i> kadar kategorilerdeki tüm sayfaların bir listesini gösterecektir. En az bir kategori işaretlenmelidir."
 
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:52
+msgid "List {predicate} connections from {subject} to {object}."
+msgstr ""
+
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:19
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:54
 msgid "Make a new predicate"
@@ -4824,11 +4834,11 @@ msgstr "Yeni bir öncül oluştur"
 msgid "Make predicate"
 msgstr "Öncül oluştur"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:59
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:98
 msgid "No page connections found."
 msgstr "Hiçbir sayfa bağlantısı bulunamadı."
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:57
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:96
 msgid "No page connections with the predicate:"
 msgstr "Yüklemle sayfa bağlantısı yok:"
 
@@ -4836,13 +4846,9 @@ msgstr "Yüklemle sayfa bağlantısı yok:"
 msgid "No predicates found."
 msgstr "Yüklemler bulunamadı."
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:11
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:21
 msgid "Object"
 msgstr "Nesne"
-
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:56
-msgid "Only showing connections with:"
-msgstr "Yalnızca şunlarla bağlantılar gösteriliyor:"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:108
 msgid "Ontologies define predicates for a defined set of subject and object categories. Sometimes it is more practical to have the predicate’s connection direction reversed from the formal definition. Export and import functions can use this option to swap subject/object relation when exporting or importing data."
@@ -4852,13 +4858,9 @@ msgstr "Ontolojiler, tanımlanmış bir dizi konu ve nesne kategorisi için yük
 msgid "Or click <strong>Delete All Connections</strong> to delete all connections with this predicate."
 msgstr "Veya bu yüklemle tüm bağlantıları silmek için <strong> Tüm Bağlantıları Sil </strong>'i tıklayın."
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:51
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:49
 msgid "Page connections overview"
 msgstr "Sayfa bağlantılarına genel bakış"
-
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:49
-msgid "Page connections with the predicate"
-msgstr "Yükleniciyle yapılan sayfa bağlantıları"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:3
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:12
@@ -4869,6 +4871,32 @@ msgstr "Öncüller"
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edge_action.tpl:8
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edge_action.tpl:13
 msgid "Remove connection"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:23
+msgid "Remove object filter"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:15
+msgid "Remove predicate filter"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:7
+msgid "Remove subject filter"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:40
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:72
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:87
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:107
+msgid "Show all incoming connections"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:37
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:69
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:84
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:104
+msgid "Show all outgoing connections"
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:98
@@ -4935,13 +4963,13 @@ msgstr "Bu yüklemi yaratma izniniz yok."
 msgid "You can define for which categories the predicate is shown on the edit page.  You can also define which categories of objects will be found when searching for a page to connect to. When you don’t check anything then all categories are valid."
 msgstr "Önermenin düzenleme sayfasında hangi kategoriler için gösterileceğini tanımlayabilirsiniz. Ayrıca, bağlanılacak bir sayfa ararken hangi nesne kategorilerinin bulunacağını da tanımlayabilirsiniz. Hiçbir şeyi işaretlemediğinizde tüm kategoriler geçerlidir."
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
-msgid "object"
-msgstr "nesne"
-
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58
-msgid "subject"
-msgstr "konu"
+msgid "any object"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:55
+msgid "any subject"
+msgstr ""
 
 #: zotonic_mod_admin_statistics/priv/templates/stat_panel/database.tpl:3
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:147
@@ -11550,7 +11578,7 @@ msgstr "erişilebilir değil yada yerel IP"
 msgid "'Once' means once by a respondent who is logged in or once per browser for anonymous respondents. To identify the browser of anonymous respondents, a cookie containing a unique ID is utilized."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:96
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:94
 msgid "<b>Note</b>: For the features 'once', 'edit after submit', and checking the maximum number of submitted forms to function, the form needs to have the saved results. If a handler (chosen in the <em>handling</em> settings below) does not save the results, these features will not be available."
 msgstr ""
 
@@ -11616,11 +11644,11 @@ msgstr "Mevcut posta listesine ekle"
 msgid "Add to mailinglist"
 msgstr "Posta listesine ekle"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:112
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:110
 msgid "After all questions are answered and submitted, one of the following is shown."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:132
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:130
 msgid "Aggregated results from all respondents"
 msgstr "Tüm katılımcıların toplu sonuçları"
 
@@ -11919,11 +11947,11 @@ msgstr "Tarih aralıkları için <code>-5 yıl</code>gibi göreli tarihleri de k
 msgid "Go to question"
 msgstr "Soruya gidin"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:215
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:213
 msgid "Handle this form with"
 msgstr "Bu formu ile işleyin"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:194
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:192
 msgid "Handling"
 msgstr "Kullanma"
 
@@ -11950,7 +11978,7 @@ msgstr "Formla birlikte kaydedilen ancak formu dolduran kişiye gösterilmeyen g
 msgid "Hide from results"
 msgstr "Sonuçları gizle"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:151
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:149
 msgid "Hide progress information"
 msgstr "İlerleme bilgilerini gizle"
 
@@ -11967,7 +11995,7 @@ msgstr "Ben"
 msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color]."
 msgstr "[age] yaşındayım. [icecream=vanilla|çilek|çikolata|diğer] dondurmayı severim ve en sevdiğim renk [color]."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:76
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:74
 msgid "If the maximum number of forms has been submitted, then the start button is deactivated and an email is sent to the email addresses in the <em>handling</em> settings below. Leave empty for no limit. This is useful for signup lists with a limited number of spots."
 msgstr ""
 
@@ -12027,8 +12055,8 @@ msgstr "kişi ile bağlantı"
 msgid "Long answer"
 msgstr "Uzun cevap"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:197
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:198
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:195
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:196
 msgid "Mail results to"
 msgstr "Posta sonuçları"
 
@@ -12054,9 +12082,9 @@ msgstr "eşleşen soru"
 msgid "Maximal value"
 msgstr "Maksimum değer"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:74
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:82
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:89
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:72
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:80
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:87
 msgid "Maximum number of submissions"
 msgstr "Maksimum başvuru sayısı"
 
@@ -12132,7 +12160,7 @@ msgstr ""
 msgid "No results yet."
 msgstr "Henüz sonuç yok."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:114
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:112
 msgid "Note that if you select a special handler below, then that handler may override this setting."
 msgstr ""
 
@@ -12184,7 +12212,7 @@ msgstr "Geçmek?"
 msgid "Passed"
 msgstr "Geçti"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:180
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:178
 msgid "Passing score"
 msgstr "Geçme puanı"
 
@@ -12227,7 +12255,7 @@ msgstr "Başlıca"
 msgid "Printable list"
 msgstr "Yazdırılabilir liste"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:146
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:144
 msgid "Progress"
 msgstr "İlerleme"
 
@@ -12321,11 +12349,11 @@ msgstr "Sonuçlar"
 msgid "Results editor"
 msgstr "Sonuç düzenleyici"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:124
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:122
 msgid "Results from the respondent"
 msgstr "Karşı taraftan alınan sonuçlar"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:128
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:126
 msgid "Results from the respondent – if passed only"
 msgstr ""
 
@@ -12367,11 +12395,11 @@ msgstr "posta listesi seçin"
 msgid "Select your country"
 msgstr "Ülkenizi seçin"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:208
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:206
 msgid "Send a confirmation to the respondent. The email address must be known (logged in respondents) or you can add a short text field with the label “email” and the validation set to \"must be an email address\"."
 msgstr "Yanıtlayana bir onay gönderin. E-posta adresi bilinmelidir (giriş yapan katılımcılar) veya \"e-posta\" etiketli kısa bir metin alanı ekleyebilir ve doğrulama \"bir e-posta adresi olmalıdır\" olarak ayarlayabilirsiniz."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:200
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:198
 msgid "Separate multiple email addresses with a comma."
 msgstr "Birden fazla e-posta adresini virgülle ayırın."
 
@@ -12379,7 +12407,7 @@ msgstr "Birden fazla e-posta adresini virgülle ayırın."
 msgid "Short answer"
 msgstr "Kısa cevap"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:109
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:107
 msgid "Show after the final submit of the form"
 msgstr ""
 
@@ -12391,11 +12419,11 @@ msgstr "Grafikleri göster"
 msgid "Show email addresses"
 msgstr "E-posta adreslerini göster"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:163
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:161
 msgid "Show progress bar"
 msgstr "İlerleme çubuğunu göster"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:157
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:155
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "Gelişim bilgilerini \"<em>Soru 3/10</em>\" olarak göster"
 
@@ -12451,7 +12479,6 @@ msgstr "depolanan değer"
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:43
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:21
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:43
-#: zotonic_mod_survey/src/questions/survey_q_likert.erl:54
 #: zotonic_mod_survey/src/questions/survey_q_likert.erl:55
 msgid "Strongly Agree"
 msgstr "Kesinlikle Katılıyorum"
@@ -12460,7 +12487,6 @@ msgstr "Kesinlikle Katılıyorum"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:11
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:35
 #: zotonic_mod_survey/src/questions/survey_q_likert.erl:59
-#: zotonic_mod_survey/src/questions/survey_q_likert.erl:60
 msgid "Strongly Disagree"
 msgstr "Kesinlikle Katılmıyorum"
 
@@ -12485,7 +12511,7 @@ msgstr "Yanlış cevaplar için puanları çıkar (toplam asla 0'dan az olmaz)"
 msgid "Survey editor"
 msgstr "Anket editörü"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:174
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:172
 msgid "Test pass percentage"
 msgstr "Test geçme yüzdesi"
 
@@ -12497,7 +12523,7 @@ msgstr "Metin, resim, video"
 msgid "Thank you for filling in our survey."
 msgstr "Anketimizi doldurduğunuz için teşekkür ederiz."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:120
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:118
 msgid "Thank you text only"
 msgstr "Sadece teşekkür metinleri"
 
@@ -12505,7 +12531,7 @@ msgstr "Sadece teşekkür metinleri"
 msgid "Thank you text."
 msgstr "Teşekkür metni."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:96
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:94
 msgid "The 'continue later' feature operates independently of the chosen form handler."
 msgstr ""
 
@@ -12573,7 +12599,7 @@ msgstr "Bu form devre dışı bırakıldı. Düzenleyebildiğiniz için test iç
 msgid "This is a result for:"
 msgstr "Bunun sonucudur:"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:175
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:173
 msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
 msgstr "Bu, bir sınavı veya testi geçmek için gereken yüzdedir. Yalnızca sınav veya test soruları eklediyseniz kullanılır."
 

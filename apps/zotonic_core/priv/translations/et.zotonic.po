@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-06 16:35\n"
+"PO-Revision-Date: 2026-02-13 14:48\n"
 "Last-Translator: \n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
@@ -436,7 +436,7 @@ msgstr "Sisu"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:16
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_visible_for.tpl:2
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:58
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:62
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:50
 #: zotonic_mod_content_groups/priv/templates/_admin_overview_filter_panel.tpl:6
 #: zotonic_mod_content_groups/priv/templates/_dialog_admin_bulk_update.tpl:5
 msgid "Content group"
@@ -456,6 +456,7 @@ msgstr "Sisureeglid koostöögrupi liikmetele ja juhtidele"
 msgid "Could not move to collaboration group."
 msgstr "Koostöögruppi ei saanud liikuda."
 
+#: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:40
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:51
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:190
 #: zotonic_mod_admin/priv/templates/_action_dialog_delete_rsc.tpl:10
@@ -498,10 +499,6 @@ msgstr "Koostöögruppi ei saanud liikuda."
 #: zotonic_mod_translation/priv/templates/_dialog_rsc_language.tpl:25
 msgid "Delete"
 msgstr "Kustuta"
-
-#: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:40
-msgid "Delete all user groups"
-msgstr "Kustutage kõik kasutajagrupid"
 
 #: zotonic_mod_acl_user_groups/src/mod_acl_user_groups.erl:448
 msgid "Delete is canceled, there are users in the user groups."
@@ -704,8 +701,8 @@ msgid "Options for the ACL module."
 msgstr "ACL-mooduli valikud."
 
 #: zotonic_mod_acl_user_groups/priv/templates/_action_dialog_delete_rsc.acl_user_group.tpl:31
-msgid "Or click <strong>Delete all user groups</strong> to disconnect all users and delete the user groups."
-msgstr "Või klõpsake nuppu <strong>Kustuta kõik kasutajagrupid</strong> kõigi kasutajate ühenduse katkestamiseks ja kasutajagruppide kustutamiseks."
+msgid "Or click <strong>Delete</strong> to disconnect all users and delete the user listed groups."
+msgstr ""
 
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:154
 msgid "Own content"
@@ -957,6 +954,7 @@ msgid "You have to use a special URL, as provided by the an editor or administra
 msgstr "Peate kasutama redaktori või administraatori pakutavat spetsiaalset URL-i."
 
 #: zotonic_mod_acl_user_groups/priv/templates/admin_acl_rules.tpl:88
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
 msgid "all"
 msgstr "kõik"
 
@@ -1064,7 +1062,7 @@ msgstr "Kategooriate kohta"
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:192
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:131
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:56
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:96
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:97
 msgid "About {n} items found."
 msgstr "Leiti umbes {n} üksust."
 
@@ -1139,14 +1137,14 @@ msgstr "Terve päev"
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:14
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:94
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:103
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:82
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:83
 msgid "All media"
 msgstr "Kogu meedia"
 
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:13
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:93
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:102
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:81
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:82
 msgid "All pages"
 msgstr "Kõik lehed"
 
@@ -1274,7 +1272,7 @@ msgid "Category name:"
 msgstr "Kategooria nimi:"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:42
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:50
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:58
 msgid "Category:"
 msgstr "Kategooria:"
 
@@ -1368,6 +1366,7 @@ msgstr "Ühendatud aadressilt"
 msgid "Connected to"
 msgstr "Ühendatud:"
 
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:71
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:134
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:100
 msgid "Connections"
@@ -1692,7 +1691,7 @@ msgstr "Viga veebisaidi kontrollimisel."
 msgid "Error creating the page."
 msgstr "Viga lehe loomisel."
 
-#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:48
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:52
 msgid "Error importing page from the remote server."
 msgstr "Viga lehe kaugserverist importimisel."
 
@@ -1933,7 +1932,7 @@ msgstr "On seotud predikaadiga"
 
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:69
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:65
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:39
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:41
 msgid "Items per page"
 msgstr "Üksusi lehel"
 
@@ -2016,7 +2015,7 @@ msgstr "Loo uus leht"
 
 #: zotonic_mod_admin/priv/templates/_admin_dashboard_buttons.tpl:4
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:92
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:71
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:72
 msgid "Make a new page or media"
 msgstr "Tehke uus leht või meedium"
 
@@ -2369,7 +2368,7 @@ msgid "Powered by"
 msgstr "Powered by"
 
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:23
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:8
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:13
 msgid "Predicate"
 msgstr "Predikaat"
 
@@ -2490,6 +2489,10 @@ msgstr "Suunake lehevaates ülalolevale veebisaidile"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_address.tpl:52
 msgid "Redirect to website on page view"
 msgstr "Suunake veebisaidile lehevaatel"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:74
+msgid "Referrers"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:3
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:9
@@ -2658,7 +2661,7 @@ msgstr "L√ºhipealkiri"
 msgid "Show address on edit page"
 msgstr "Kuva aadress redigeerimislehel"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:58
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:66
 msgid "Show all {title} pages"
 msgstr "Kuva kõik {title} lehekülge"
 
@@ -2803,7 +2806,7 @@ msgstr "T√§nav rida 2"
 msgid "Structure"
 msgstr "Struktuur"
 
-#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:35
+#: zotonic_mod_admin/src/support/z_admin_rsc_import.erl:39
 msgid "Succesfully imported page from the remote server."
 msgstr "Leht imporditi edukalt kaugserverist."
 
@@ -3107,12 +3110,13 @@ msgstr "Avaldamata"
 #: zotonic_mod_admin/src/mod_admin.erl:1097
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:99
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:163
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:54
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:57
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:60
 #: zotonic_mod_backup/priv/templates/admin_backup_deleted.tpl:59
 #: zotonic_mod_search/priv/templates/_search_view_list_item.media.tpl:13
 #: zotonic_mod_search/priv/templates/_search_view_list_item.tpl:8
-#: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:279
+#: zotonic_mod_seo/src/support/seo_jsonld_webpage.erl:276
 #: zotonic_mod_survey/priv/templates/email_survey_full.tpl:10
 msgid "Untitled"
 msgstr "Pealkirjata"
@@ -3210,7 +3214,8 @@ msgstr "Kehtiv:"
 msgid "View"
 msgstr "Vaade"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:55
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:56
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:70
 #: zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:27
 msgid "View all connections"
 msgstr "Kuva kõik ühendused"
@@ -3219,7 +3224,8 @@ msgstr "Kuva kõik ühendused"
 msgid "View all pages from this category"
 msgstr "Kuva kõik selle kategooria lehed"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:53
+#: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:54
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:73
 msgid "View all referrers"
 msgstr "Vaata k√µiki viitajaid"
 
@@ -3351,7 +3357,7 @@ msgstr "meediaüksuse lisamine"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:14
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:19
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:39
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:60
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:6
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:16
 msgid "by"
@@ -3371,7 +3377,7 @@ msgstr "poolt"
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:76
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:77
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:78
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:35
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:56
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:31
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:46
 #: zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:14
@@ -3469,7 +3475,7 @@ msgid "undo"
 msgstr "v√µta tagasi"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:34
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:50
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:58
 #: zotonic_mod_admin/priv/templates/_choose_media.tpl:9
 #: zotonic_mod_admin/priv/templates/_rsc_edge_item.tpl:9
 #: zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:11
@@ -3503,7 +3509,7 @@ msgstr "k√ºlasta saiti"
 #: zotonic_mod_admin/priv/templates/admin_media.tpl:193
 #: zotonic_mod_admin/priv/templates/admin_overview.tpl:132
 #: zotonic_mod_admin/priv/templates/admin_referrers.tpl:57
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:97
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:98
 msgid "{n} items found."
 msgstr "{n} üksust leitud."
 
@@ -4743,7 +4749,7 @@ msgid "A predicate denotes traits or aspects of a page and expresses a relations
 msgstr "Predikaat tähistab lehe tunnuseid või aspekte ja väljendab suhet kahe lehe vahel.\n"
 "    Seos on alati suunatud subjektilt objektile.<br/>Predikaadid on määratletud ontoloogiates, näiteks <a href=\"http://sioc-project.org/\">SIOC</a>. Sellel lehel saate määratleda Zotonicule teadaolevad predikaadid."
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:23
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:25
 msgid "All Predicates"
 msgstr "Kõik predikaadid"
 
@@ -4795,7 +4801,7 @@ msgstr "Ära kuva ressursi redigeerimise lehel ühenduste loendis."
 msgid "Enter the title of the new predicate:"
 msgstr "Sisestage uue predikaadi pealkiri:"
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:26
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:28
 msgid "Filter on predicate"
 msgstr "Filtreeri predikaadil"
 
@@ -4815,6 +4821,10 @@ msgstr "Sisestage uued ühendused enne olemasolevaid ühendusi."
 msgid "Instead of a search box this will show a list of all pages in the <i>To</i> categories checked above. At least one category must be checked."
 msgstr "Otsingukasti asemel kuvatakse kõigi ülaltoodud kategooriate <i>kuni</i> lehtede loend. Kontrollida tuleb vähemalt ühte kategooriat."
 
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:52
+msgid "List {predicate} connections from {subject} to {object}."
+msgstr ""
+
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:19
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:54
 msgid "Make a new predicate"
@@ -4824,11 +4834,11 @@ msgstr "Tehke uus predikaat"
 msgid "Make predicate"
 msgstr "Tehke predikaat"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:59
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:98
 msgid "No page connections found."
 msgstr "Leheühendusi ei leitud."
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:57
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:96
 msgid "No page connections with the predicate:"
 msgstr "Predikaadiga pole leheühendusi:"
 
@@ -4836,13 +4846,9 @@ msgstr "Predikaadiga pole leheühendusi:"
 msgid "No predicates found."
 msgstr "Predikaate ei leitud."
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:11
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:21
 msgid "Object"
 msgstr "Objekt"
-
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:56
-msgid "Only showing connections with:"
-msgstr "Kuvatakse ainult ühendused:"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:108
 msgid "Ontologies define predicates for a defined set of subject and object categories. Sometimes it is more practical to have the predicate’s connection direction reversed from the formal definition. Export and import functions can use this option to swap subject/object relation when exporting or importing data."
@@ -4852,13 +4858,9 @@ msgstr "Ontoloogiad määravad kindlaks määratud subjektide ja objektide kateg
 msgid "Or click <strong>Delete All Connections</strong> to delete all connections with this predicate."
 msgstr "Või klõpsake nuppu <strong>Kustuta kõik ühendused</strong> et kustutada kõik selle predikaadiga ühendused."
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:51
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:49
 msgid "Page connections overview"
 msgstr "Leheühenduste ülevaade"
-
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:49
-msgid "Page connections with the predicate"
-msgstr "Leheühendused predikaadiga"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:3
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:12
@@ -4869,6 +4871,32 @@ msgstr "Predikaadid"
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edge_action.tpl:8
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edge_action.tpl:13
 msgid "Remove connection"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:23
+msgid "Remove object filter"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:15
+msgid "Remove predicate filter"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:7
+msgid "Remove subject filter"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:40
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:72
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:87
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:107
+msgid "Show all incoming connections"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:37
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:69
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:84
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:104
+msgid "Show all outgoing connections"
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:98
@@ -4935,13 +4963,13 @@ msgstr "Teil pole lubatud seda predikaati luua."
 msgid "You can define for which categories the predicate is shown on the edit page.  You can also define which categories of objects will be found when searching for a page to connect to. When you don’t check anything then all categories are valid."
 msgstr "Saate määrata, milliste kategooriate jaoks predikaati redigeerimislehel näidatakse. Samuti saate määrata, millised objektide kategooriad leitakse, kui otsite lehte, millega ühenduse luua. Kui te midagi ei kontrolli, kehtivad kõik kategooriad."
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:61
-msgid "object"
-msgstr "objekt"
-
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58
-msgid "subject"
-msgstr "teema"
+msgid "any object"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:55
+msgid "any subject"
+msgstr ""
 
 #: zotonic_mod_admin_statistics/priv/templates/stat_panel/database.tpl:3
 #: zotonic_mod_zotonic_site_management/priv/templates/addsite.tpl:147
@@ -11550,7 +11578,7 @@ msgstr "pole kättesaadav ega kohalik IP"
 msgid "'Once' means once by a respondent who is logged in or once per browser for anonymous respondents. To identify the browser of anonymous respondents, a cookie containing a unique ID is utilized."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:96
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:94
 msgid "<b>Note</b>: For the features 'once', 'edit after submit', and checking the maximum number of submitted forms to function, the form needs to have the saved results. If a handler (chosen in the <em>handling</em> settings below) does not save the results, these features will not be available."
 msgstr ""
 
@@ -11616,11 +11644,11 @@ msgstr "Lisa olemasolevasse postitusloendisse"
 msgid "Add to mailinglist"
 msgstr "Lisa meililisti"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:112
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:110
 msgid "After all questions are answered and submitted, one of the following is shown."
 msgstr ""
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:132
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:130
 msgid "Aggregated results from all respondents"
 msgstr "Koondtulemused kõigilt vastajatelt"
 
@@ -11919,11 +11947,11 @@ msgstr "Kuupäevavahemike jaoks saate kasutada ka suhtelisi kuupäevi, näiteks 
 msgid "Go to question"
 msgstr "Mine küsimuse juurde"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:215
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:213
 msgid "Handle this form with"
 msgstr "Käsitle seda vormi koos"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:194
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:192
 msgid "Handling"
 msgstr "Käitlemine"
 
@@ -11950,7 +11978,7 @@ msgstr "Varjatud väärtus, salvestatud koos vormiga, kuid seda ei kuvata vormi 
 msgid "Hide from results"
 msgstr "Peida tulemuste eest"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:151
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:149
 msgid "Hide progress information"
 msgstr "Peida edenemisteave"
 
@@ -11967,7 +11995,7 @@ msgstr "Ma olen"
 msgid "I am [age] years old. I like [icecream=vanilla|strawberry|chocolate|other] ice cream and my favorite color is [color]."
 msgstr "Olen [age] -aastane. Mulle meeldib [jäätise = vanilli | maasika | šokolaadi | muu] jäätis ja minu lemmikvärv on [color]."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:76
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:74
 msgid "If the maximum number of forms has been submitted, then the start button is deactivated and an email is sent to the email addresses in the <em>handling</em> settings below. Leave empty for no limit. This is useful for signup lists with a limited number of spots."
 msgstr ""
 
@@ -12027,8 +12055,8 @@ msgstr "Seos inimesega"
 msgid "Long answer"
 msgstr "Pikk vastus"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:197
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:198
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:195
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:196
 msgid "Mail results to"
 msgstr "Saatke tulemused aadressile"
 
@@ -12054,9 +12082,9 @@ msgstr "Sobiv küsimus"
 msgid "Maximal value"
 msgstr "Maksimaalne väärtus"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:74
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:82
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:89
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:72
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:80
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:87
 msgid "Maximum number of submissions"
 msgstr "Maksimaalne esitatavate dokumentide arv"
 
@@ -12132,7 +12160,7 @@ msgstr ""
 msgid "No results yet."
 msgstr "Tulemusi veel pole."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:114
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:112
 msgid "Note that if you select a special handler below, then that handler may override this setting."
 msgstr ""
 
@@ -12184,7 +12212,7 @@ msgstr "Üle andma?"
 msgid "Passed"
 msgstr "Läbitud"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:180
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:178
 msgid "Passing score"
 msgstr "Läbimise tulemus"
 
@@ -12227,7 +12255,7 @@ msgstr "Esmane"
 msgid "Printable list"
 msgstr "Prinditav nimekiri"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:146
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:144
 msgid "Progress"
 msgstr "Edusammud"
 
@@ -12321,11 +12349,11 @@ msgstr "Tulemused"
 msgid "Results editor"
 msgstr "Tulemuste redaktor"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:124
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:122
 msgid "Results from the respondent"
 msgstr "Tulemused vastajalt"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:128
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:126
 msgid "Results from the respondent – if passed only"
 msgstr ""
 
@@ -12367,11 +12395,11 @@ msgstr "Valige meililist"
 msgid "Select your country"
 msgstr "Valige oma riik"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:208
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:206
 msgid "Send a confirmation to the respondent. The email address must be known (logged in respondents) or you can add a short text field with the label “email” and the validation set to \"must be an email address\"."
 msgstr "Saatke vastajale kinnitus. E-posti aadress peab olema teada (sisselogitud vastajad) või lisada lühikese tekstivälja sildiga “e-post” ja valideerimiseks määrata “peab olema meiliaadress”."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:200
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:198
 msgid "Separate multiple email addresses with a comma."
 msgstr "Eraldage mitu e-posti aadressi komaga."
 
@@ -12379,7 +12407,7 @@ msgstr "Eraldage mitu e-posti aadressi komaga."
 msgid "Short answer"
 msgstr "Lühike vastus"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:109
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:107
 msgid "Show after the final submit of the form"
 msgstr ""
 
@@ -12391,11 +12419,11 @@ msgstr "Kuva diagrammid"
 msgid "Show email addresses"
 msgstr "Kuva e-posti aadressid"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:163
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:161
 msgid "Show progress bar"
 msgstr "Kuva edenemisriba"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:157
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:155
 msgid "Show progress information as “<em>Question 3/10</em>”"
 msgstr "Kuva edenemisteave kui “<em>küsimus 3/10</em>”"
 
@@ -12451,7 +12479,6 @@ msgstr "Salvestatud väärtus"
 #: zotonic_mod_survey/priv/templates/blocks/_admin_edit_block_li_survey_likert.tpl:43
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:21
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:43
-#: zotonic_mod_survey/src/questions/survey_q_likert.erl:54
 #: zotonic_mod_survey/src/questions/survey_q_likert.erl:55
 msgid "Strongly Agree"
 msgstr "Nõustun kindlalt"
@@ -12460,7 +12487,6 @@ msgstr "Nõustun kindlalt"
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:11
 #: zotonic_mod_survey/priv/templates/blocks/_block_view_survey_likert.tpl:35
 #: zotonic_mod_survey/src/questions/survey_q_likert.erl:59
-#: zotonic_mod_survey/src/questions/survey_q_likert.erl:60
 msgid "Strongly Disagree"
 msgstr "Üldse ei nõustu"
 
@@ -12485,7 +12511,7 @@ msgstr "Lahutage punktid valede vastuste eest (kokku mitte vähem kui 0)"
 msgid "Survey editor"
 msgstr "Uuringu toimetaja"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:174
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:172
 msgid "Test pass percentage"
 msgstr "Testi läbimise protsent"
 
@@ -12497,7 +12523,7 @@ msgstr "Tekst, pilt, video"
 msgid "Thank you for filling in our survey."
 msgstr "Täname teid meie uuringu täitmise eest."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:120
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:118
 msgid "Thank you text only"
 msgstr "Ainult aitäh tekst"
 
@@ -12505,7 +12531,7 @@ msgstr "Ainult aitäh tekst"
 msgid "Thank you text."
 msgstr "Aitäh tekst."
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:96
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:94
 msgid "The 'continue later' feature operates independently of the chosen form handler."
 msgstr ""
 
@@ -12573,7 +12599,7 @@ msgstr "See vorm on keelatud. Kuna saate redigeerida, võite jätkata testimist.
 msgid "This is a result for:"
 msgstr "Selle tulemus on:"
 
-#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:175
+#: zotonic_mod_survey/priv/templates/_admin_survey_settings_tab.tpl:173
 msgid "This is the percentage needed to pass a quiz or test. Only used if you have added quiz or test questions."
 msgstr "See on viktoriini või testi sooritamiseks vajalik protsent. Kasutatakse ainult siis, kui olete lisanud viktoriini või testküsimusi."
 
