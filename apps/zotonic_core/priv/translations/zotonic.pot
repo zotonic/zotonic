@@ -4997,10 +4997,6 @@ msgid ""
 "categories checked above. At least one category must be checked."
 msgstr ""
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:52
-msgid "List {predicate} connections from {subject} to {object}."
-msgstr ""
-
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:19
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:54
 msgid "Make a new predicate"
@@ -5148,6 +5144,10 @@ msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:4
 msgid "Valid between"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:52
+msgid "View {predicate} references from {subject} to {object}."
 msgstr ""
 
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:74

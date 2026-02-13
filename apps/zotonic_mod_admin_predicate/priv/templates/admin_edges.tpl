@@ -49,7 +49,7 @@
                 <h2>{_ Page connections overview _}</h2>
                 {% if q.qhassubject or q.qhasobject or q.qpredicate %}
                     <p>
-                        {% trans "List {predicate} connections from {subject} to {object}."
+                        {% trans "View {predicate} references from {subject} to {object}."
                                  subject=q.qhassubject|if
                                             :("<em>"++m.rsc[q.qhassubject].title|default:_"Untitled"++"</em>")
                                             :_"any subject"
