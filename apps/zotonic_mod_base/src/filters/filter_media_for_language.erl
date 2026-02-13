@@ -143,7 +143,10 @@ media_1(Ids, Context) when is_list(Ids) ->
         #{},
         LangIds),
     Tr = #trans{ tr = maps:to_list(Grouped) },
-    z_trans:lookup_fallback(Tr, Context);
+    case z_trans:lookup_fallback(Tr, Context) of
+        <<>> -> [];
+        MediaIds -> MediaIds
+    end;
 media_1(Ids, Context) ->
     L = z_template_compiler_runtime:to_list(Ids, Context),
     media_1(L, Context).
