@@ -34,15 +34,9 @@
         {% if edge.subject_id.is_visible or edge.object_id.is_visible %}
         <tr id="{{ #tr.id }}">
             <td class="{% if not edge.subject_id.is_published %}unpublished{% endif %}" data-href="{% url admin_edit_rsc id=edge.subject_id %}">
-                {% if q.qhassubject == edge.subject_id %}
-                    <span class="btn btn-link pull-right disabled" style="margin-left: 10px" aria-disabled="true" tabindex="-1" aria-label="{_ Show all outgoing connections _}" title="{_ Show all outgoing connections _}">
-                        ○→
-                    </span>
-                {% else %}
-                    <a class="btn btn-link pull-right" style="margin-left: 10px" href="{% url admin_edges qhassubject=edge.subject_id %}" aria-label="{_ Show all outgoing connections _}" title="{_ Show all outgoing connections _}">
-                        ○→
-                    </a>
-                {% endif %}
+                <a class="btn btn-link pull-right{% if q.qhassubject == edge.subject_id %} disabled{% endif %}" style="margin-left: 10px" href="{% url admin_edges qhassubject=edge.subject_id %}" {% if q.qhassubject == edge.subject_id %}aria-disabled="true" tabindex="-1"{% endif %} aria-label="{_ Show all outgoing connections _}" title="{_ Show all outgoing connections _}">
+                    ○→
+                </a>
                 <a class="btn btn-link pull-left" style="margin-right: 10px" href="{% url admin_edges qhasobject=edge.subject_id %}" aria-label="{_ Show all incoming connections _}" title="{_ Show all incoming connections _}">
                     →○
                 </a>
@@ -75,15 +69,9 @@
                 <a class="btn btn-link pull-right" style="margin-left: 10px" href="{% url admin_edges qhassubject=edge.object_id %}" aria-label="{_ Show all outgoing connections _}" title="{_ Show all outgoing connections _}">
                     ○→
                 </a>
-                {% if q.qhasobject == edge.object_id %}
-                    <span class="btn btn-link pull-left disabled" style="margin-right: 10px" aria-disabled="true" tabindex="-1" aria-label="{_ Show all incoming connections _}" title="{_ Show all incoming connections _}">
-                        →○
-                    </span>
-                {% else %}
-                    <a class="btn btn-link pull-left" style="margin-right: 10px" href="{% url admin_edges qhasobject=edge.object_id %}" aria-label="{_ Show all incoming connections _}" title="{_ Show all incoming connections _}">
-                        →○
-                    </a>
-                {% endif %}
+                <a class="btn btn-link pull-left{% if q.qhasobject == edge.object_id %} disabled{% endif %}" style="margin-right: 10px" href="{% url admin_edges qhasobject=edge.object_id %}" {% if q.qhasobject == edge.object_id %}aria-disabled="true" tabindex="-1"{% endif %} aria-label="{_ Show all incoming connections _}" title="{_ Show all incoming connections _}">
+                    →○
+                </a>
                 {% catinclude "_rsc_item.tpl" edge.object_id show_medium %}
             </td>
         </tr>
@@ -93,9 +81,9 @@
         <tr>
             <td>
                 {% if m.rsc[q.qhassubject].id as id %}
-                    <span class="btn btn-link pull-right disabled" style="margin-left: 10px" aria-disabled="true" tabindex="-1" aria-label="{_ Show all outgoing connections _}" title="{_ Show all outgoing connections _}">
+                    <a class="btn btn-link pull-right disabled" style="margin-left: 10px" href="{% url admin_edges qhassubject=id %}" aria-disabled="true" tabindex="-1" aria-label="{_ Show all outgoing connections _}" title="{_ Show all outgoing connections _}">
                         ○→
-                    </span>
+                    </a>
                     <a class="btn btn-link pull-left" style="margin-right: 10px" href="{% url admin_edges qhasobject=id %}" aria-label="{_ Show all incoming connections _}" title="{_ Show all incoming connections _}">
                         →○
                     </a>
@@ -116,7 +104,7 @@
                     <a class="btn btn-link pull-right" style="margin-left: 10px" href="{% url admin_edges qhassubject=id %}" aria-label="{_ Show all outgoing connections _}" title="{_ Show all outgoing connections _}">
                         ○→
                     </a>
-                    <span class="btn btn-link pull-left disabled" style="margin-right: 10px" aria-disabled="true" tabindex="-1" aria-label="{_ Show all incoming connections _}" title="{_ Show all incoming connections _}">
+                    <a class="btn btn-link pull-left disabled" style="margin-right: 10px" href="{% url admin_edges qhasobject=id %}" aria-disabled="true" tabindex="-1" aria-label="{_ Show all incoming connections _}" title="{_ Show all incoming connections _}">
                         →○
                     </span>
                     {% catinclude "_rsc_item.tpl" id show_medium %}

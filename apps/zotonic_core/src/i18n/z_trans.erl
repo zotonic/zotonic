@@ -116,7 +116,7 @@ add_labels(Lang, [{Label,Trans}|Rest], Acc) when is_binary(Trans), is_binary(Lab
     end.
 
 %% @doc Strict translation lookup of a language version using the languages
-%% if the context. If no translation is found or the input is undefined, then
+%% in the context. If no translation is found or the input is undefined, then
 %% undefined is returned.
 -spec lookup(Text, Context) -> Translation when
     Text :: z:trans() | binary() | string() | undefined,
