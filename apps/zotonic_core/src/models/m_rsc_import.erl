@@ -1576,7 +1576,7 @@ import_medium_task(RetryCt, StartDT, MediaUrl, LocalId, RscProps, MediaOptions, 
                 {ok, _} ->
                     ok;
                 {error, Reason} ->
-                    % Typical error if the remote closes the connection drops whilst
+                    % Typical error if the remote closes the connection whilst
                     % the download is progressing.
                     case is_medium_import_retry(RetryCt, Reason) of
                         true ->
