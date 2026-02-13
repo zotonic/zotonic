@@ -37,7 +37,7 @@
                 <a class="btn btn-link pull-right" style="margin-left: 10px" href="{% url admin_edges qhassubject=edge.subject_id %}" {% if q.qhassubject == edge.subject_id %}disabled{% endif %} title="{_ Show all outgoing connections _}">
                     ○→
                 </a>
-                <a class="btn btn-link pull-left" style="margin-right: 10px" href="{% url admin_edges qhasobject=edge.subject_id %}" title="{_ Show all incoming connections_}">
+                <a class="btn btn-link pull-left" style="margin-right: 10px" href="{% url admin_edges qhasobject=edge.subject_id %}" title="{_ Show all incoming connections _}">
                     →○
                 </a>
                 {% catinclude "_rsc_item.tpl" edge.subject_id show_medium %}
