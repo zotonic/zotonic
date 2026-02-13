@@ -1,11 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2023 Marc Worrell
+%% @copyright 2023-2026 Marc Worrell
 %% @doc Filter a list of media items by their 'medium_language' property,
 %% return the best matching with the current or given language. Only visible
 %% media items are returned.
 %% @end
 
-%% Copyright 2023 Marc Worrell
+%% Copyright 2023-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -144,10 +144,8 @@ media_1(Ids, Context) when is_list(Ids) ->
         LangIds),
     Tr = #trans{ tr = maps:to_list(Grouped) },
     case z_trans:lookup_fallback(Tr, Context) of
-        undefined ->
-            [];
-        SelectedIds ->
-            SelectedIds
+        <<>> -> [];
+        MediaIds -> MediaIds
     end;
 media_1(Ids, Context) ->
     L = z_template_compiler_runtime:to_list(Ids, Context),

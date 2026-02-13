@@ -28,7 +28,7 @@
 			{% validate id=#cgid name="acl_user_group_id" type={presence} %}
 		</div>
 
-		<p>{_ Or click <strong>Delete all user groups</strong> to disconnect all users and delete the user groups. _}</p>
+		<p>{_ Or click <strong>Delete</strong> to disconnect all users and delete the user listed groups. _}</p>
 
 		<p>{_ This can not be undone. _}</p>
 
@@ -37,7 +37,7 @@
 			{% button type="submit" class="btn btn-primary" text=_"Delete user group and move users" %}
 			{% button tag="a"
 					  class="btn btn-danger pull-left"
-					  text=_"Delete all user groups"
+					  text=_"Delete"
 					  postback={delete_all id=id}
 					  delegate=`mod_acl_user_groups`
 			%}

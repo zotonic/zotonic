@@ -1,7 +1,8 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2023 Marc Worrell
+%% @copyright 2011-2026 Marc Worrell
+%% @end
 
-%% Copyright 2011-2023 Marc Worrell
+%% Copyright 2011-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -50,13 +51,11 @@ prep_chart(Block, [{_, Vals}], Context) ->
     Labels = [
         5, 4, 3, 2, 1
     ],
-    Agree = case z_trans:lookup_fallback(maps:get(<<"agree">>, Block, undefined), Context) of
-        undefined -> ?__("Strongly Agree", Context);
+    Agree = case z_trans:lookup_fallback(maps:get(<<"agree">>, Block, <<>>), Context) of
         <<>> -> ?__("Strongly Agree", Context);
         Ag -> Ag
     end,
-    DisAgree = case z_trans:lookup_fallback(maps:get(<<"disagree">>, Block, undefined), Context) of
-        undefined -> ?__("Strongly Disagree", Context);
+    DisAgree = case z_trans:lookup_fallback(maps:get(<<"disagree">>, Block, <<>>), Context) of
         <<>> -> ?__("Strongly Disagree", Context);
         DisAg -> DisAg
     end,

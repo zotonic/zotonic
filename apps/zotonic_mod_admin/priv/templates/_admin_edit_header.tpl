@@ -20,7 +20,7 @@
             {% endif %}
         </span>
         &middot;
-        <span class="text-muted">{_ id: _} {{ id }}</span>
+        <span class="text-muted">{_ id: _}</span> {{ id }}
     </div>
 
     {% with id.depiction as depict %}
@@ -44,6 +44,14 @@
                         {{ cid.title }} &gt;
                     {% endfor %}
                     {{ cat_id.title }}
+
+                    {% if m.modules.active.mod_content_groups %}
+                        {% with id.content_group_id|default:m.rsc.default_content_group.id as cg_id %}
+                            <span class="text-muted" title="{_ Content group _}">
+                                ({{ cg_id.short_title|default:cg_id.title|truncatechars:20 }})
+                            </span>
+                        {% endwith %}
+                    {% endif %}
                 </a>
                 {% wire id="changecategory"
                     action={dialog_open
@@ -58,10 +66,13 @@
                     {% trans "Show all {title} pages" title=cat_id.title %}
                 </a>
 
-                {% if m.modules.active.mod_content_groups %}
-                    <small class="text-muted" title="{_ Content group _}">
-                        {{ id.content_group_id.title }}
-                    </small>
+                {% if m.modules.active.mod_admin_predicate %}
+                    <a class="btn btn-default btn-xs" href="{% url admin_edges qhassubject=id %}" title="{_ View all connections _}">
+                        ○→ {_ Connections _}
+                    </a>
+                    <a class="btn btn-default btn-xs" href="{% url admin_edges qhasobject=id %}" title="{_ View all referrers _}">
+                        →○ {_ Referrers _}
+                    </a>
                 {% endif %}
             </div>
         {% endwith %}

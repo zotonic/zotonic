@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2023-2025 Marc Worrell
+%% @copyright 2023-2026 Marc Worrell
 %% @doc Generate the JSON-LD for a webpage.
 %% The type of the generated JSON-LD is https://schema.org/WebPage
 %% @end
 
-%% Copyright 2023-2025 Marc Worrell
+%% Copyright 2023-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -52,8 +52,6 @@ generate(Id, Context) ->
 
 generate_1(Id, Context) ->
     CustomJSON = case z_trans:lookup_fallback(m_rsc:p(Id, <<"seo_ld_json">>, Context), Context) of
-        undefined ->
-            #{};
         <<>> ->
             #{};
         SeoJSON ->
@@ -89,7 +87,6 @@ generate_2(Id, CustomJSON, Context) ->
             OrgUrl
     end,
     OrgTitle = case title(site_organization, Context) of
-        undefined -> SiteTitle;
         <<>> -> SiteTitle;
         OrgT -> OrgT
     end,
@@ -302,7 +299,6 @@ description(Id, Context) ->
             SeoDesc
     end,
     case Desc of
-        undefined -> undefined;
         <<>> -> <<>>;
         _ -> filter_brlinebreaks:brlinebreaks(Desc, Context)
     end.
