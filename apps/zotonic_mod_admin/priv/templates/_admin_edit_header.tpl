@@ -67,7 +67,7 @@
                 </a>
 
                 {% if m.modules.active.mod_admin_predicate %}
-                    <a class="btn btn-default btn-xs" href="{% url admin_edges qhasobject=id %}" title="{_ View all connections _}">
+                    <a class="btn btn-default btn-xs" href="{% url admin_edges qhassubject=id %}" title="{_ View all connections _}">
                         ○→ {_ Connections _}
                     </a>
                     <a class="btn btn-default btn-xs" href="{% url admin_edges qhasobject=id %}" title="{_ View all referrers _}">
