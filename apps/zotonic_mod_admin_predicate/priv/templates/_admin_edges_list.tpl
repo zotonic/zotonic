@@ -81,7 +81,7 @@
         <tr>
             <td>
                 {% if m.rsc[q.qhassubject].id as id %}
-                    <a class="btn btn-link pull-right" style="margin-left: 10px" href="{% url admin_edges qhassubject=id %}" disabled  title="{_ Show all outgoing connections _}">
+                    <a class="btn btn-link pull-right" style="margin-left: 10px" href="{% url admin_edges qhassubject=id %}" disabled title="{_ Show all outgoing connections _}">
                         ○→
                     </a>
                     <a class="btn btn-link pull-left" style="margin-right: 10px" href="{% url admin_edges qhasobject=id %}" title="{_ Show all incoming connections _}">
