@@ -1623,6 +1623,7 @@ is_medium_import_still_needed(StartDT, LocalId, Context) ->
 is_medium_import_retry(RetryCt, _Reason) when RetryCt >= ?MEDIA_DOWNLOAD_MAX_RETRY -> false;
 is_medium_import_retry(_RetryCt, {shutdown, server_closed}) -> true;
 is_medium_import_retry(_RetryCt, {503, _FinalUrl, _Hs, _Sz, _Body}) -> true;
+is_medium_import_retry(_RetryCt, {502, _FinalUrl, _Hs, _Sz, _Body}) -> true;
 is_medium_import_retry(_RetryCt, _Reason) -> false.
 
 medium_import_backoff_delay(RetryCt, {502, _FinalUrl, _Hs, _Sz, _Body}) ->
