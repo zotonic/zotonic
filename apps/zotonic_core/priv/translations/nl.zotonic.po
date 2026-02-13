@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-13 14:48\n"
+"PO-Revision-Date: 2026-02-13 16:23\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -4825,10 +4825,6 @@ msgstr "Voeg nieuwe verbindingen in vóór bestaande verbindingen."
 msgid "Instead of a search box this will show a list of all pages in the <i>To</i> categories checked above. At least one category must be checked."
 msgstr "In plaats van een zoekveld wordt hier een lijst weergegeven met alle pagina's in de hierboven aangevinkte <i>naar</i> categorieën. Er moet minimaal één categorie worden aangevinkt."
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:52
-msgid "List {predicate} connections from {subject} to {object}."
-msgstr "Lijst {predicate} verbindingen van {subject} naar {object}."
-
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:19
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:54
 msgid "Make a new predicate"
@@ -4958,6 +4954,10 @@ msgstr "Gewoonlijk worden nieuwe verbindingen ingevoegd na bestaande verbindinge
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:4
 msgid "Valid between"
 msgstr "Geldig tussen"
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:52
+msgid "View {predicate} references from {subject} to {object}."
+msgstr "Bekijk {predicate} referenties van {subject} tot {object}."
 
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:74
 msgid "You are not allowed to create this predicate."

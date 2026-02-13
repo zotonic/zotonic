@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-13 14:48\n"
+"PO-Revision-Date: 2026-02-13 16:22\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "MIME-Version: 1.0\n"
@@ -4821,10 +4821,6 @@ msgstr "Insira novas conexões antes das conexões existentes."
 msgid "Instead of a search box this will show a list of all pages in the <i>To</i> categories checked above. At least one category must be checked."
 msgstr "Em vez de uma caixa de pesquisa, será exibida uma lista de todas as páginas nas categorias <i>a</i> marcadas acima. Pelo menos uma categoria deve ser verificada."
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:52
-msgid "List {predicate} connections from {subject} to {object}."
-msgstr ""
-
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:19
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:54
 msgid "Make a new predicate"
@@ -4954,6 +4950,10 @@ msgstr "Geralmente novas conexões são inseridas após conexões existentes. Ma
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:4
 msgid "Valid between"
 msgstr "Válido entre"
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:52
+msgid "View {predicate} references from {subject} to {object}."
+msgstr ""
 
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:74
 msgid "You are not allowed to create this predicate."

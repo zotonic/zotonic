@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-13 14:48\n"
+"PO-Revision-Date: 2026-02-13 16:22\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian\n"
 "MIME-Version: 1.0\n"
@@ -4820,10 +4820,6 @@ msgstr "Sisipkan koneksi baru sebelum koneksi yang ada."
 msgid "Instead of a search box this will show a list of all pages in the <i>To</i> categories checked above. At least one category must be checked."
 msgstr "Alih-alih kotak pencarian, ini akan menampilkan daftar semua halaman dalam kategori <i>Ke</i> yang dicentang di atas. Setidaknya satu kategori harus diperiksa."
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:52
-msgid "List {predicate} connections from {subject} to {object}."
-msgstr ""
-
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:19
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:54
 msgid "Make a new predicate"
@@ -4953,6 +4949,10 @@ msgstr "Biasanya koneksi baru disisipkan setelah koneksi yang sudah ada. Centang
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:4
 msgid "Valid between"
 msgstr "Berlaku antara"
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:52
+msgid "View {predicate} references from {subject} to {object}."
+msgstr ""
 
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:74
 msgid "You are not allowed to create this predicate."

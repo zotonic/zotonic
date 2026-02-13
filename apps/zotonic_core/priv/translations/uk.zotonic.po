@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-13 14:47\n"
+"PO-Revision-Date: 2026-02-13 16:22\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
 "MIME-Version: 1.0\n"
@@ -4821,10 +4821,6 @@ msgstr "Вставте нові з’єднання перед наявними.
 msgid "Instead of a search box this will show a list of all pages in the <i>To</i> categories checked above. At least one category must be checked."
 msgstr "Замість вікна пошуку відображатиметься список усіх сторінок у категоріях <i>до</i> , позначених вище. Принаймні одна категорія повинна бути позначена."
 
-#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:52
-msgid "List {predicate} connections from {subject} to {object}."
-msgstr ""
-
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:19
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:54
 msgid "Make a new predicate"
@@ -4954,6 +4950,10 @@ msgstr "Зазвичай нові з'єднання вставляються п�
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:4
 msgid "Valid between"
 msgstr "Діє між"
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:52
+msgid "View {predicate} references from {subject} to {object}."
+msgstr ""
 
 #: zotonic_mod_admin_predicate/src/actions/action_admin_predicate_dialog_predicate_new.erl:74
 msgid "You are not allowed to create this predicate."
