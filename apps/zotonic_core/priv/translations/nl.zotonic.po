@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-13 17:36\n"
+"PO-Revision-Date: 2026-02-19 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
@@ -436,7 +436,7 @@ msgstr "Inhoud"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:16
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_visible_for.tpl:2
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:58
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:50
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:51
 #: zotonic_mod_content_groups/priv/templates/_admin_overview_filter_panel.tpl:6
 #: zotonic_mod_content_groups/priv/templates/_dialog_admin_bulk_update.tpl:5
 msgid "Content group"
@@ -1234,6 +1234,8 @@ msgstr "Beschikbaar"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:8
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:170
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:18
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:40
 #: zotonic_mod_survey/priv/templates/_survey_end.tpl:28
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:23
@@ -1274,12 +1276,12 @@ msgstr "De caches zijn geleegd."
 msgid "Category name:"
 msgstr "Categorienaam:"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:42
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:58
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:43
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:59
 msgid "Category:"
 msgstr "Categorie:"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:41
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:42
 msgid "Change category"
 msgstr "Verander categorie"
 
@@ -1369,7 +1371,7 @@ msgstr "Verbonden vanaf"
 msgid "Connected to"
 msgstr "Verbonden met"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:71
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:72
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:134
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:100
 msgid "Connections"
@@ -1613,6 +1615,8 @@ msgstr "E-mailadres"
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:66
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:58
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:23
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:21
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:121
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:19
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:39
@@ -1846,6 +1850,15 @@ msgstr "Van"
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:5
 msgid "Function"
 msgstr "Functie"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:78
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:41
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:76
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:94
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:117
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:20
+msgid "Graph"
+msgstr "Grafiek"
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:131
 msgid "Has connections with predicate"
@@ -2328,6 +2341,8 @@ msgid "Pages overview"
 msgstr "Paginaoverzicht"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:75
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:36
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:27
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:4
 msgid "Path"
@@ -2403,7 +2418,7 @@ msgstr "Bescherm tegen verwijderen"
 msgid "Protected"
 msgstr "Beschermd"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:37
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:38
 #: zotonic_mod_admin/priv/templates/_admin_overview_list_flags.tpl:2
 msgid "Protected, not deletable"
 msgstr "Beschermd, niet verwijderbaar"
@@ -2493,7 +2508,7 @@ msgstr "Stuur door naar de bovenstaande website bij het bekijken van de pagina"
 msgid "Redirect to website on page view"
 msgstr "Stuur door naar website bij bekijken van de pagina"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:74
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:75
 msgid "Referrers"
 msgstr "Verwijzingen"
 
@@ -2665,7 +2680,7 @@ msgstr "Korte titel"
 msgid "Show address on edit page"
 msgstr "Toon adres op editpagina"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:66
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:67
 msgid "Show all {title} pages"
 msgstr "Toon alle {title} pagina's"
 
@@ -3114,6 +3129,8 @@ msgstr "Ongepubliceerd"
 #: zotonic_mod_admin/src/mod_admin.erl:1097
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:99
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:163
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:9
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:43
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:54
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:57
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:60
@@ -3212,6 +3229,7 @@ msgstr "Geldig voor:"
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:10
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:52
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:142
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:26
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:41
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:38
@@ -3219,7 +3237,7 @@ msgid "View"
 msgstr "Bekijk"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:56
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:70
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:71
 #: zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:27
 msgid "View all connections"
 msgstr "Bekijk alle connecties"
@@ -3229,9 +3247,13 @@ msgid "View all pages from this category"
 msgstr "Bekijk alle pagina's binnen deze categorie"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:54
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:73
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:74
 msgid "View all referrers"
 msgstr "Bekijk verwijzende pagina's"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:77
+msgid "View connection graph"
+msgstr "Verbindingsgrafiek weergeven"
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:17
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:28
@@ -3361,7 +3383,7 @@ msgstr "Media-item toevoegen"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:14
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:19
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:60
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:63
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:6
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:16
 msgid "by"
@@ -3381,7 +3403,7 @@ msgstr "door"
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:76
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:77
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:78
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:56
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:59
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:31
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:46
 #: zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:14
@@ -3478,8 +3500,8 @@ msgstr "systeeminhoud"
 msgid "undo"
 msgstr "ongedaan maken"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:34
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:58
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:35
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:59
 #: zotonic_mod_admin/priv/templates/_choose_media.tpl:9
 #: zotonic_mod_admin/priv/templates/_rsc_edge_item.tpl:9
 #: zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:11
@@ -4755,7 +4777,7 @@ msgstr "Een predicaat drukt een relatie uit tussen twee pagina’s. Deze relatie
 msgid "All Predicates"
 msgstr "Alle predicaten"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_extra_buttons.tpl:2
+#: zotonic_mod_admin_predicate/priv/templates/_admin_extra_buttons.tpl:1
 msgid "All page connections"
 msgstr "Alle paginaconnecties"
 
@@ -4772,6 +4794,10 @@ msgid "Are you sure you want to remove the <strong>{{ predicate }}</strong>\n"
 msgstr "Weet je zeker dat je de <strong>{{ predicate }}</strong>\n"
 "    verbinding tussen <strong>{{ subject }}</strong>\n"
 "          en <strong>{{ object }}</strong>?"
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:33
+msgid "Beta"
+msgstr "Bèta"
 
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:9
 msgid "Change the predicate on all existing page connections to:"
@@ -4813,9 +4839,21 @@ msgstr "Filter op predicaat"
 msgid "From category"
 msgstr "Van categorie"
 
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:12
+msgid "Graph overview for:"
+msgstr "Grafiekenoverzicht voor:"
+
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:8
 msgid "Help about predicates"
 msgstr "Hulp over predicaten"
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:27
+msgid "Hide or show pages that are not on the path from the start page."
+msgstr "Verberg of toon pagina's die niet op het pad van de startpagina liggen."
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:26
+msgid "Hide previously added pages and connections."
+msgstr "Verberg eerder toegevoegde pagina's en verbindingen."
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:75
 msgid "Insert new connections before existing connections."
@@ -4834,17 +4872,22 @@ msgstr "Maak een nieuw predicaat"
 msgid "Make predicate"
 msgstr "Maak predicaat"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:98
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:107
 msgid "No page connections found."
 msgstr "Geen paginaconnecties gevonden."
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:96
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:105
 msgid "No page connections with the predicate:"
 msgstr "Geen paginaconnecties met het predicaat:"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:53
 msgid "No predicates found."
 msgstr "Geen predicaten gevonden."
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:52
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:38
+msgid "No such page or page not visible."
+msgstr "Geen dergelijke pagina of pagina niet zichtbaar."
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:21
 msgid "Object"
@@ -4857,6 +4900,11 @@ msgstr "Ontologieën definiëren predikaten voor een gedefinieerde reeks subject
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:25
 msgid "Or click <strong>Delete All Connections</strong> to delete all connections with this predicate."
 msgstr "Of klik <strong>Verwijder alle connecties</strong> om alle connecties met dit predicaat te verwijderen."
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:3
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:50
+msgid "Page connections graph"
+msgstr "Grafiek paginaconnecties"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:49
 msgid "Page connections overview"
@@ -4885,19 +4933,30 @@ msgstr "Predicaat filter verwijderen"
 msgid "Remove subject filter"
 msgstr "Verwijder onderwerp filter"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:40
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:72
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:87
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:107
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:3
+msgid "Selected page"
+msgstr "Geselecteerde pagina"
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:43
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:78
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:96
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:119
 msgid "Show all incoming connections"
 msgstr "Alle inkomende verbindingen weergeven"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:37
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:69
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:84
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:104
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:72
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:90
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:113
 msgid "Show all outgoing connections"
 msgstr "Alle uitgaande verbindingen weergeven"
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:40
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:75
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:93
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:116
+msgid "Show graph of all connections"
+msgstr "Toon grafiek van alle verbindingen"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:98
 msgid "Some predicates are mostly for internal purposes. Check this if you don’t want to show this predicate on the <em>Connected to</em> list."
@@ -4906,6 +4965,10 @@ msgstr "Sommige predicaten zijn vooral voor interne doeleinden. Vink dit aan als
 #: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:78
 msgid "Sorry, you are not allowed to insert connections with this predicate."
 msgstr "Sorry, je hebt geen rechten connecties met dit predicaat toe te voegen."
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:26
+msgid "Step back"
+msgstr "Stap terug"
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:5
 msgid "Subject"
@@ -4927,9 +4990,17 @@ msgstr "Er bestaat al een predicaat met deze naam."
 msgid "This directs the indexers to not include the titles of connected pages with this predicate. Normally titles of connected pages are included, making it possible to eg. find articles by their author’s name."
 msgstr "Dit zorgt ervoor dat de indexeerders de titels van verbonden pagina's niet meerekenen met dit predikaat. Normaal gesproken worden titels van verbonden pagina's wel meegenomen, waardoor het mogelijk is om bijvoorbeeld artikelen te vinden op de naam van de auteur."
 
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:34
+msgid "This feature is in early development and may not work perfectly."
+msgstr "Deze functie is nog in ontwikkeling en werkt mogelijk niet perfect."
+
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:22
 msgid "This is used to filter the predicates in the <i>Page connections</i> panel and the pages in the connect dialogs."
 msgstr "Dit wordt gebruikt om de predikaten te filteren in het paneel <i>Paginaverbindingen</i> en de pagina's in de verbindingsdialogen."
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:127
+msgid "This page has too many connections to display all at once. Only the first 300 incoming or outgoing connections are shown."
+msgstr "Deze pagina heeft te veel verbindingen om allemaal tegelijk weer te geven. Alleen de eerste 300 inkomende of uitgaande verbindingen worden getoond."
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:21
 msgid "This predicate can be used between two pages of the following categories."
@@ -4938,6 +5009,10 @@ msgstr "Dit predikaat kan worden gebruikt tussen twee pagina's van de volgende c
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:43
 msgid "To category"
 msgstr "Naar categorie"
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:126
+msgid "Too many connections"
+msgstr "Te veel verbindingen"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:28
 msgid "URI"
@@ -4966,6 +5041,14 @@ msgstr "Het is niet toegestaan om dit predicaat aan te maken."
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:9
 msgid "You can define for which categories the predicate is shown on the edit page.  You can also define which categories of objects will be found when searching for a page to connect to. When you don’t check anything then all categories are valid."
 msgstr "Je kunt instellen voor welke categorieën het predicaat wordt getoond op de bewerkpagina.  Je kunt ook instellen welke categorieën objecten worden gevonden bij het zoeken naar een pagina om mee te verbinden. Als je niets aanvinkt, zijn alle categorieën geldig."
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:28
+msgid "Zoom In"
+msgstr "Inzoomen"
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:29
+msgid "Zoom Out"
+msgstr "Uitzoomen"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58
 msgid "any object"
