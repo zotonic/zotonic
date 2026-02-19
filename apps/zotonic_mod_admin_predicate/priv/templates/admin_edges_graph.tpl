@@ -11,8 +11,14 @@
         <h2>
             <span class="text-muted">{_ Graph overview for: _}</span>
             {{ id.title }}
+            <a class="btn btn-default btn-xs"
+               data-onclick-topic="model/location/post/redirect/back"
+               href="{% url admin %}"
+            >
+                &lt; {_ Back _}
+            </a>
             <a class="btn btn-default btn-xs" href="{% url admin_edit_rsc id=id %}">
-                &lt; {_ Edit _}
+                {_ Edit _}
             </a>
         </h2>
 
@@ -84,6 +90,10 @@
                                 edges: m.payload.result.edges,
                                 nearResourceId: fromNodeId
                             });
+
+                            if (m.payload.result.is_truncated) {
+                                z_event("edges-truncated-warning");
+                            }
                         }
                     );
             });
@@ -113,6 +123,13 @@
                 }
                 action={fade_in target="active-resource"}
                 action={update target="active-resource" template="_admin_graph_resource.tpl"}
+        %}
+
+        {% wire name="edges-truncated-warning"
+                action={alert
+                    title=_"Too many connections"
+                    text=_"This page has too many connections to display all at once. Only the first 300 incoming or outgoing connections are shown."
+                }
         %}
     {% endif %}
 {% endblock %}

@@ -1,4 +1,4 @@
-{# Showed on top of the resource edit page #}
+{# Shown on top of the resource edit page #}
 <div class="admin-header">
     <div class="admin-header-meta">
         <a class="btn btn-default btn-xs"
@@ -7,20 +7,21 @@
         >
             &lt; {_ Back _}
         </a>
-        &nbsp;
-        <span class='admin-edit-dates'>
-            {_ Created: _} {{ id.created|date:"Y-m-d H:i" }}
-            {% if id.creator_id %}
-                {_ by _} <a href="{% url admin_edit_rsc id=id.creator_id %}">{% include "_name.tpl" id=id.creator_id %}</a>
-            {% endif %}
+        {% block header_meta %}
+            <span class='admin-edit-dates'>
+                {_ Created: _} {{ id.created|date:"Y-m-d H:i" }}
+                {% if id.creator_id %}
+                    {_ by _} <a href="{% url admin_edit_rsc id=id.creator_id %}">{% include "_name.tpl" id=id.creator_id %}</a>
+                {% endif %}
+                &middot;
+                {_ Modified: _} {{ id.modified|date:"Y-m-d H:i" }}
+                {% if id.modifier_id %}
+                    {_ by _} <a href="{% url admin_edit_rsc id=id.modifier_id %}">{% include "_name.tpl" id=id.modifier_id %}</a>
+                {% endif %}
+            </span>
             &middot;
-            {_ Modified: _} {{ id.modified|date:"Y-m-d H:i" }}
-            {% if id.modifier_id %}
-                {_ by _} <a href="{% url admin_edit_rsc id=id.modifier_id %}">{% include "_name.tpl" id=id.modifier_id %}</a>
-            {% endif %}
-        </span>
-        &middot;
-        <span class="text-muted">{_ id: _}</span> {{ id }}
+            <span class="text-muted">{_ id: _}</span> {{ id }}
+        {% endblock %}
     </div>
 
     {% with id.depiction as depict %}
