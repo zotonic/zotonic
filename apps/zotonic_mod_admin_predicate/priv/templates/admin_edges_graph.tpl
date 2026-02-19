@@ -123,8 +123,12 @@
 {% endblock %}
 
 {% block js_extra %}
+    {% comment %}
     <script src="https://cdn.jsdelivr.net/npm/graphology@0.26.0/dist/graphology.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sigma@3.0.2/dist/sigma.min.js"></script>
+    {% endcomment %}
 
+    {% lib "lib/js/graphology.umd.min.js" %}
+    {% lib "lib/js/sigma.min.js" %}
     {% lib "lib/js/admin-graph.js" %}
 {% endblock %}

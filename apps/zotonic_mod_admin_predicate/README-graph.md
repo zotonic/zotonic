@@ -246,7 +246,7 @@ ResourceGraph.getHiddenPredicates(); // -> [42, 91]
 
 ## Dependencies
 
-Loaded via CDN in `/Users/marc/Sites/misc/resource-graph/index.html`:
+Loaded via CDN:
 
 - Sigma.js
 - Graphology
