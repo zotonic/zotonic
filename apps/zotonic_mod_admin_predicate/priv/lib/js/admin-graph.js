@@ -455,6 +455,7 @@
     const dx = new Float32Array(nodeCount);
     const dy = new Float32Array(nodeCount);
     const mass = new Float32Array(nodeCount);
+    const sizeCache = new Float32Array(nodeCount);
 
     let maxDegree = 0;
     nodes.forEach((id, i) => {
@@ -470,6 +471,7 @@
       const degree = graph.degree(id);
       maxDegree = Math.max(maxDegree, degree);
       mass[i] = 1 + degree;
+      sizeCache[i] = graph.getNodeAttribute(id, "size") || 6;
     });
 
     const guardHighDegree = maxDegree > layoutGuard.maxDegreeSoftLimit;
@@ -497,15 +499,14 @@
         dy.fill(0);
 
         for (let i = 0; i < nodeCount; i += 1) {
+          const xi = x[i];
+          const yi = y[i];
+          const si = sizeCache[i];
           for (let j = i + 1; j < nodeCount; j += 1) {
-            const rx = x[i] - x[j];
-            const ry = y[i] - y[j];
+            const rx = xi - x[j];
+            const ry = yi - y[j];
             const dist = Math.sqrt(rx * rx + ry * ry) + 0.01;
-            const minDist =
-              ((graph.getNodeAttribute(nodes[i], "size") || 6) +
-                (graph.getNodeAttribute(nodes[j], "size") || 6) +
-                nodePadding) /
-              2;
+            const minDist = (si + sizeCache[j] + nodePadding) / 2;
             const overlap = Math.max(0, minDist - dist);
             const overlapForce = overlap * overlap * 0.1;
             const repulsion = (scalingRatio * scalingRatio) / dist + overlapForce;
@@ -617,12 +618,14 @@
           const dx = new Float32Array(count);
           const dy = new Float32Array(count);
           const mass = new Float32Array(count);
+          const sizeCache = new Float32Array(count);
           let maxDegree = 0;
           for (let i = 0; i < count; i++) {
             const n = nodes[i];
             x[i] = Number.isFinite(n.x) ? n.x : (Math.random() - 0.5) * 10;
             y[i] = Number.isFinite(n.y) ? n.y : (Math.random() - 0.5) * 10;
             mass[i] = 1 + n.degree;
+            sizeCache[i] = n.size || 6;
             if (n.degree > maxDegree) maxDegree = n.degree;
           }
 
@@ -650,11 +653,14 @@
               dy.fill(0);
 
               for (let i = 0; i < count; i++) {
+                const xi = x[i];
+                const yi = y[i];
+                const si = sizeCache[i];
                 for (let j = i + 1; j < count; j++) {
-                  const rx = x[i] - x[j];
-                  const ry = y[i] - y[j];
+                  const rx = xi - x[j];
+                  const ry = yi - y[j];
                   const dist = Math.sqrt(rx * rx + ry * ry) + 0.01;
-                  const minDist = ((nodes[i].size || 6) + (nodes[j].size || 6) + nodePadding) / 2;
+                  const minDist = (si + sizeCache[j] + nodePadding) / 2;
                   const overlap = Math.max(0, minDist - dist);
                   const overlapForce = overlap * overlap * 0.1;
                   const repulsion = (scalingRatio * scalingRatio) / dist + overlapForce;
@@ -799,17 +805,20 @@
   // Post-process layout to reduce remaining node overlap.
   function applyNudge(nodes, x, y, nodePadding) {
     const passes = 6;
+    const sizeCache = new Float32Array(nodes.length);
+    for (let i = 0; i < nodes.length; i += 1) {
+      sizeCache[i] = graph.getNodeAttribute(nodes[i], "size") || 6;
+    }
     for (let pass = 0; pass < passes; pass += 1) {
       for (let i = 0; i < nodes.length; i += 1) {
+        const xi = x[i];
+        const yi = y[i];
+        const si = sizeCache[i];
         for (let j = i + 1; j < nodes.length; j += 1) {
-          const rx = x[i] - x[j];
-          const ry = y[i] - y[j];
+          const rx = xi - x[j];
+          const ry = yi - y[j];
           const dist = Math.sqrt(rx * rx + ry * ry) + 0.0001;
-          const minDist =
-            ((graph.getNodeAttribute(nodes[i], "size") || 6) +
-              (graph.getNodeAttribute(nodes[j], "size") || 6) +
-              nodePadding) /
-            2;
+          const minDist = (si + sizeCache[j] + nodePadding) / 2;
           if (dist >= minDist) continue;
           const push = (minDist - dist) * 0.5;
           const fx = (rx / dist) * push;
