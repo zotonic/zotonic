@@ -91,7 +91,7 @@
                     action={dialog_media_upload intent="create"}
                 %}
                 <a class="btn btn-default" href="{% url admin_overview_rsc %}">{_ All pages _}</a>
-                <a class="btn btn-default{% if not q.qcat %} disabled{% endif %}" href="{% url admin_media %}">{_ All media _}</a>
+                <a class="btn btn-default{% if not q.qargs %} disabled{% endif %}" href="{% url admin_media %}">{_ All media _}</a>
                 {% all include "_admin_extra_buttons.tpl" %}
             </div>
 

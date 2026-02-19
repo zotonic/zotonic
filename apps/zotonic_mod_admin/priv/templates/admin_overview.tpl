@@ -99,7 +99,7 @@
 
                 {% all include "_admin_make_page_buttons.tpl" %}
 
-                <a class="btn btn-default{% if not q.qcat and not q.qquery_id %} disabled{% endif %}" href="{% url admin_overview_rsc %}">{_ All pages _}</a>
+                <a class="btn btn-default{% if not q.qargs%} disabled{% endif %}" href="{% url admin_overview_rsc %}">{_ All pages _}</a>
                 <a class="btn btn-default" href="{% url admin_media %}">{_ All media _}</a>
                 {% all include "_admin_extra_buttons.tpl" %}
             </div>

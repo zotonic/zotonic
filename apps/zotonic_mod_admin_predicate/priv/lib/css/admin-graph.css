@@ -1,0 +1,53 @@
+:root {
+  --graph-bg: #f5f1ea;
+  --graph-ink: #1b1b1b;
+  --graph-muted: #7a7368;
+  --graph-panel: #fff8ef;
+  --graph-accent: #e4572e;
+  --graph-node: #0f4c5c;
+  --graph-edge: #6b6b6b;
+  --graph-node-active: #e4572e;
+  --graph-edge-incoming: #2a9d8f;
+  --graph-edge-outgoing: #e4572e;
+  --graph-edge-path: #4c6ef5;
+  --graph-edge-hover-path: #7c3aed;
+  --graph-node-outline: #1b1b1b;
+  --graph-dim-node: #c7c3bb;
+  --graph-dim-edge: #d1ccc4; }
+
+* {
+  box-sizing: border-box; }
+
+.content-title {
+  padding: 0 15px; }
+
+.graph-container {
+  position: relative;
+  height: 100%;
+  padding: 4px;
+  background: #fbf6ef;
+  border: 0;
+  border-top: 1px solid #ccc; }
+  .graph-container .graph-viewer {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden; }
+  .graph-container .graph-active-resource {
+    top: 15px;
+    right: 15px;
+    position: absolute;
+    width: 300px;
+    height: auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background: #fff;
+    max-width: 30%;
+    max-height: 80%;
+    overflow-y: scroll;
+    overflow-x: hidden; }
+    .graph-container .graph-active-resource .graph-active-resource-header {
+      color: var(--graph-muted); }
+      .graph-container .graph-active-resource .graph-active-resource-header span {
+        color: black; }
+    .graph-container .graph-active-resource .graph-active-resource-path {
+      font-size: 0.9em; }

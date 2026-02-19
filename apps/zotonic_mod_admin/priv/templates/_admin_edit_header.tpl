@@ -73,6 +73,9 @@
                     <a class="btn btn-default btn-xs" href="{% url admin_edges qhasobject=id %}" title="{_ View all referrers _}">
                         →○ {_ Referrers _}
                     </a>
+                    <a class="btn btn-default btn-xs" href="{% url admin_edges_graph id=id %}" title="{_ View connection graph _}">
+                        ⋺ {_ Graph _}
+                    </a>
                 {% endif %}
             </div>
         {% endwith %}
