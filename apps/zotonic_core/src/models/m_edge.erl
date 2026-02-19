@@ -235,12 +235,8 @@ m_get([ <<"graph">> | Rest ], #{ payload := #{ <<"ids">> := Ids } = Payload }, C
         end,
         [],
         Payload),
-    case get_graph(Ids, Options, Context) of
-        {ok, Graph} ->
-            {ok, {Graph, Rest}};
-        {error, _} ->
-            {error, fail}
-    end;
+    {ok, Graph} = get_graph(Ids, Options, Context),
+    {ok, {Graph, Rest}};
 m_get([Id], _Msg, Context) ->
     case z_acl:rsc_visible(Id, Context) of
         true -> {ok, {get_edges(Id, Context), []}};
@@ -283,7 +279,8 @@ m_delete([<<"edge">>, Edge], _Msg, Context) ->
     Context :: z:context(),
     Graph :: #{
         nodes => [Node],
-        edges => [Edge]
+        edges => [Edge],
+        is_truncated => boolean()
     },
     Options :: [ Option ],
     Option :: unescape
@@ -300,7 +297,8 @@ m_delete([<<"edge">>, Edge], _Msg, Context) ->
         id => pos_integer(),
         from => m_rsc:resource_id(),
         to => m_rsc:resource_id(),
-        label => binary()
+        label => binary(),
+        predicate_id => m_rsc:resource_id()
     }.
 get_graph(Ids, Options, Context) ->
     Ids1 = lists:filtermap(
