@@ -1264,6 +1264,7 @@ msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:8
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:170
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:34
 #: zotonic_mod_survey/priv/templates/_survey_end.tpl:28
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:23
@@ -1646,6 +1647,8 @@ msgstr ""
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:66
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:58
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:23
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:15
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:121
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:19
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:39
@@ -1888,6 +1891,15 @@ msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:5
 msgid "Function"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:77
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:41
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:76
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:94
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:117
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:20
+msgid "Graph"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:131
@@ -2384,6 +2396,8 @@ msgid "Pages overview"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:75
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:36
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:21
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:4
 msgid "Path"
@@ -3200,6 +3214,8 @@ msgstr ""
 #: zotonic_mod_admin/src/mod_admin.erl:1097
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:99
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:163
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:9
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:43
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:54
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:57
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:60
@@ -3300,6 +3316,7 @@ msgstr ""
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:10
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:52
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:142
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:26
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:41
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:38
@@ -3319,6 +3336,10 @@ msgstr ""
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:54
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:73
 msgid "View all referrers"
+msgstr ""
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:76
+msgid "View connection graph"
 msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:17
@@ -3451,7 +3472,7 @@ msgstr ""
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:14
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:19
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:60
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:63
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:6
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:16
 msgid "by"
@@ -3471,7 +3492,7 @@ msgstr ""
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:76
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:77
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:78
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:56
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:59
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:31
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:46
 #: zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:14
@@ -4926,7 +4947,7 @@ msgstr ""
 msgid "All Predicates"
 msgstr ""
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_extra_buttons.tpl:2
+#: zotonic_mod_admin_predicate/priv/templates/_admin_extra_buttons.tpl:1
 msgid "All page connections"
 msgstr ""
 
@@ -4941,6 +4962,10 @@ msgid ""
 "Are you sure you want to remove the <strong>{{ predicate }}</strong>\n"
 "    connection between <strong>{{ subject }}</strong>\n"
 "          and <strong>{{ object }}</strong>?"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:27
+msgid "Beta"
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:9
@@ -4983,8 +5008,20 @@ msgstr ""
 msgid "From category"
 msgstr ""
 
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:12
+msgid "Graph overview for:"
+msgstr ""
+
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:8
 msgid "Help about predicates"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:21
+msgid "Hide or show pages that are not on the path from the start page."
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:20
+msgid "Hide previously added pages and connections."
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:75
@@ -5006,16 +5043,21 @@ msgstr ""
 msgid "Make predicate"
 msgstr ""
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:98
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:107
 msgid "No page connections found."
 msgstr ""
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:96
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:105
 msgid "No page connections with the predicate:"
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:53
 msgid "No predicates found."
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:52
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:32
+msgid "No such page or page not visible."
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:21
@@ -5035,6 +5077,11 @@ msgstr ""
 msgid ""
 "Or click <strong>Delete All Connections</strong> to delete all connections "
 "with this predicate."
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:3
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:44
+msgid "Page connections graph"
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:49
@@ -5064,18 +5111,29 @@ msgstr ""
 msgid "Remove subject filter"
 msgstr ""
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:40
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:72
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:87
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:107
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:3
+msgid "Selected page"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:43
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:78
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:96
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:119
 msgid "Show all incoming connections"
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:37
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:69
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:84
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:104
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:72
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:90
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:113
 msgid "Show all outgoing connections"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:40
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:75
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:93
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:116
+msgid "Show graph of all connections"
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:98
@@ -5086,6 +5144,10 @@ msgstr ""
 
 #: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:78
 msgid "Sorry, you are not allowed to insert connections with this predicate."
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:20
+msgid "Step back"
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:5
@@ -5111,6 +5173,10 @@ msgid ""
 "This directs the indexers to not include the titles of connected pages with "
 "this predicate. Normally titles of connected pages are included, making it "
 "possible to eg. find articles by their author’s name."
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:28
+msgid "This feature is in early development and may not work perfectly."
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:22
@@ -5160,6 +5226,14 @@ msgid ""
 "page.  You can also define which categories of objects will be found when "
 "searching for a page to connect to. When you don’t check anything then all "
 "categories are valid."
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:22
+msgid "Zoom In"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:23
+msgid "Zoom Out"
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58
