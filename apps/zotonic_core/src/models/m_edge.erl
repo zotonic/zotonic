@@ -123,6 +123,7 @@ Or via a onclick topic.
     m_post/3,
     m_delete/3,
 
+    get_graph/3,
     get/2,
     get_triple/2,
     get_id/4,
@@ -173,6 +174,11 @@ Or via a onclick topic.
     insert_option/0
 ]).
 
+%% Default limit for the number of edges returned in the graph function.
+%% This is needed to prevent performance issues when a resource has a very
+%% large number of incoming and/or outgoing edges.
+-define(DEFAULT_GRAPH_EDGE_LIMIT, 5000).
+
 
 %% @doc Fetch all object/edge ids for a subject/predicate
 -spec m_get( list(), zotonic_model:opt_msg(), z:context()) -> zotonic_model:return().
@@ -215,6 +221,26 @@ m_get([ <<"id">>, SubjectId, Pred, ObjectId | Rest ], _Msg, Context) ->
         false ->
             {error, eacces}
     end;
+m_get([ <<"graph">> | Rest ], #{ payload := #{ <<"ids">> := Ids } = Payload }, Context) ->
+    Options = maps:fold(
+        fun
+            (<<"limit">>, Limit, Acc) ->
+                [ {limit, z_convert:to_integer(Limit)} | Acc ];
+            (<<"unescape">>, Unescape, Acc) ->
+                case z_convert:to_bool(Unescape) of
+                    true -> [ unescape | Acc ];
+                    false -> Acc
+                end;
+            (_K, _V, Acc) -> Acc
+        end,
+        [],
+        Payload),
+    case get_graph(Ids, Options, Context) of
+        {ok, Graph} ->
+            {ok, {Graph, Rest}};
+        {error, _} ->
+            {error, fail}
+    end;
 m_get([Id], _Msg, Context) ->
     case z_acl:rsc_visible(Id, Context) of
         true -> {ok, {get_edges(Id, Context), []}};
@@ -244,6 +270,170 @@ m_delete([<<"edge">>, Edge], _Msg, Context) ->
             {error, enoent};
         EdgeId ->
             delete(EdgeId, Context)
+    end.
+
+
+%% @doc Get the complete graph for the given resource ids. Returns a map
+%% with nodes and edges. The function accepts two options, 'limit' and
+%% 'unescape'. The 'limit' option limits the number of edges returned for
+%% each direction (in and out). The 'unescape' option unescapes the labels of
+%% the nodes and edges.
+-spec get_graph(Ids, Options, Context) -> {ok, Graph} when
+    Ids :: [ m_rsc:resource() ],
+    Context :: z:context(),
+    Graph :: #{
+        nodes => [Node],
+        edges => [Edge]
+    },
+    Options :: [ Option ],
+    Option :: unescape
+            | {limit, pos_integer()},
+    Node :: #{
+        id => m_rsc:resource_id(),
+        label => binary(),
+        category => binary(),
+        category_name => binary(),
+        category_id => m_rsc:resource_id(),
+        edgesLoaded => boolean()
+    },
+    Edge :: #{
+        id => pos_integer(),
+        from => m_rsc:resource_id(),
+        to => m_rsc:resource_id(),
+        label => binary()
+    }.
+get_graph(Ids, Options, Context) ->
+    Ids1 = lists:filtermap(
+        fun(Id) ->
+            case m_rsc:rid(Id, Context) of
+                undefined -> false;
+                RId ->
+                    case z_acl:rsc_visible(RId, Context) of
+                        true -> {true, RId};
+                        false -> false
+                    end
+            end
+        end,
+        Ids),
+    Limit = proplists:get_value(limit, Options, ?DEFAULT_GRAPH_EDGE_LIMIT),
+    Unescape = proplists:get_bool(unescape, Options),
+    Out = z_db:q("
+        select id, subject_id, predicate_id, object_id
+        from edge
+        where subject_id = any($1)
+        order by id desc
+        limit $2",
+        [ Ids1, Limit ],
+        Context),
+    In = z_db:q("
+        select id, subject_id, predicate_id, object_id
+        from edge
+        where object_id = any($1)
+        order by id desc
+        limit $2",
+        [ Ids1, Limit ],
+        Context),
+    IsTruncated = length(Out) >= Limit orelse length(In) >= Limit,
+    OutRscIds = [ ObjId || {_, _, _, ObjId} <- Out ],
+    InRscIds = [ SubjId || {_, SubjId, _, _} <- In ],
+    OutSet = sets:from_list(OutRscIds),
+    InSet = sets:from_list(InRscIds),
+    RootSet = sets:from_list(Ids1),
+    All = sets:union([ OutSet, InSet, RootSet ]),
+    AllIds = sets:to_list(All),
+    Nodes = lists:foldl(
+        fun(Id, Acc) ->
+            case z_acl:rsc_visible(Id, Context) of
+                true ->
+                    CatId = m_rsc:p_no_acl(Id, <<"category_id">>, Context),
+                    Acc#{
+                        Id => #{
+                            id => Id,
+                            label => title(Id, Unescape, Context),
+                            category => title(CatId, Unescape, Context),
+                            category_name => name(CatId, Context),
+                            category_id => CatId,
+                            edgesLoaded => sets:is_element(Id, RootSet)
+                        }
+                    };
+                false ->
+                    Acc
+            end
+        end,
+        #{},
+        AllIds),
+    Edges = lists:foldl(
+        fun({EdgeId, SubjId, PredId, ObjId}, Acc) ->
+            case not maps:is_key(EdgeId, Acc)
+                andalso maps:is_key(SubjId, Nodes)
+                andalso maps:is_key(ObjId, Nodes)
+            of
+                true ->
+                    Acc#{
+                        EdgeId => #{
+                            id => EdgeId,
+                            from => SubjId,
+                            to => ObjId,
+                            label => title(PredId, Unescape, Context),
+                            predicate_id => PredId
+                        }
+                    };
+                false ->
+                    Acc
+            end
+        end,
+        #{},
+        Out),
+    Edges1 = lists:foldl(
+        fun({EdgeId, SubjId, PredId, ObjId}, Acc) ->
+            case not maps:is_key(EdgeId, Acc)
+                andalso maps:is_key(SubjId, Nodes)
+                andalso maps:is_key(ObjId, Nodes)
+            of
+                true ->
+                    Acc#{
+                        EdgeId => #{
+                            id => EdgeId,
+                            from => SubjId,
+                            to => ObjId,
+                            label => title(PredId, Unescape, Context),
+                            predicate_id => PredId
+                        }
+                    };
+                false ->
+                    Acc
+            end
+        end,
+        Edges,
+        In),
+    {ok, #{
+        nodes => maps:values(Nodes),
+        edges => maps:values(Edges1),
+        is_truncated => IsTruncated
+    }}.
+
+title(Id, Unescape, Context) ->
+    case z_memo:get({title, Id}) of
+        undefined ->
+            T = z_trans:lookup_fallback(m_rsc:p_no_acl(Id, <<"title">>, Context), Context),
+            T1 = case z_utils:is_empty(T) of
+                true -> <<"(", (integer_to_binary(Id))/binary, ")">>;
+                false -> T
+            end,
+            T2 = case Unescape of
+                true -> z_html:unescape(T1);
+                false -> T1
+            end,
+            z_memo:set({title, Id}, T2),
+            T2;
+        Title ->
+            Title
+    end.
+
+name(Id, Context) ->
+    case m_rsc:p(Id, <<"name">>, Context) of
+        undefined -> <<>>;
+        Name -> Name
     end.
 
 %% @doc Get the complete edge with the id

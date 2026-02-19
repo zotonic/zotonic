@@ -112,6 +112,33 @@ details {
     }
 }
 
+body.admin-responsive {
+    height: 100vh;
+    max-height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-rows: $topbarHeight 1fr;
+    grid-template-columns: 1fr;
+
+    .admin-responsive-container {
+        grid-row: 2;
+        margin: 0;
+        min-height: 0;
+        height: 100%;
+        display: grid;
+        grid-template-rows: auto 1fr;
+
+        .content-title {
+            grid-row: 1;
+        }
+        .content {
+            grid-row: 2;
+            height: 100%;
+        }
+    }
+}
+
 .admin-container {
     margin: $baseMargin;
     margin-top: $topbarHeight + $topbarBottomMargin;

@@ -41,11 +41,16 @@
         {% include "_admin_menu.tpl" %}
     {% endblock %}
 
-    <div class="admin-container">
-        {% block content %}{% endblock %}
-    </div>
+    {% block container %}
+        <div class="admin-container">
+            {% block content %}{% endblock %}
+        </div>
+    {% endblock %}
 
-    {% include "_admin_footer.tpl" %}
+    {% block footer %}
+        {% include "_admin_footer.tpl" %}
+    {% endblock %}
+
     {% include "_bridge_warning.tpl" %}
 
     {% include "_admin_js_include.tpl" %}
