@@ -46,8 +46,6 @@
         </div>
 
         {% javascript %}
-            console.log("Fetching graph data for resource ID: {{ id }}");
-
             // Set a limit for the number of edges to fetch in each request to prevent
             // overwhelming the graph with too much data at once.
             // The limit is separately applied to the list of incoming and outgoing
@@ -91,9 +89,6 @@
             });
 
             window.addEventListener("resource:active-change", (e) => {
-                  console.log(
-                    "Active resource changed",
-                    e.detail.id, e.detail.path, e.detail.pathNodes, e.detail);
                 let showDetails = true;
                 const infoPanelDetails = document.querySelector("#active-resource details");
                 if (infoPanelDetails) {
