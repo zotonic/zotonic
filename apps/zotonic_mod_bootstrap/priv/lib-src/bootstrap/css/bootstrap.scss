@@ -1,0 +1,5 @@
+// Bootstrap 5 entrypoint with Bootstrap 3 compatibility layer.
+//
+// The Bootstrap 5 source must live in ../scss (see Makefile).
+@import "../scss/bootstrap";
+@import "../compat/bootstrap3-compat";
