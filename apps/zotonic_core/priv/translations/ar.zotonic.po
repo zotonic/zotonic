@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zotonic\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2026-02-13 16:22\n"
+"PO-Revision-Date: 2026-02-19 16:02\n"
 "Last-Translator: \n"
 "Language-Team: Arabic\n"
 "MIME-Version: 1.0\n"
@@ -436,7 +436,7 @@ msgstr "محتوى"
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_catcg.tpl:16
 #: zotonic_mod_acl_user_groups/priv/templates/_admin_edit_visible_for.tpl:2
 #: zotonic_mod_acl_user_groups/priv/templates/_dialog_acl_rule_edit.tpl:58
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:50
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:51
 #: zotonic_mod_content_groups/priv/templates/_admin_overview_filter_panel.tpl:6
 #: zotonic_mod_content_groups/priv/templates/_dialog_admin_bulk_update.tpl:5
 msgid "Content group"
@@ -1231,6 +1231,8 @@ msgstr "متاح"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:8
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:170
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:18
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:40
 #: zotonic_mod_survey/priv/templates/_survey_end.tpl:28
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:22
 #: zotonic_mod_survey/priv/templates/_survey_end_edit.tpl:23
@@ -1271,12 +1273,12 @@ msgstr "تم مسح ذاكرة التخزين المؤقت."
 msgid "Category name:"
 msgstr "اسم الفئة:"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:42
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:58
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:43
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:59
 msgid "Category:"
 msgstr "الفئة:"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:41
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:42
 msgid "Change category"
 msgstr "تغيير الفئة"
 
@@ -1366,7 +1368,7 @@ msgstr "متصل من"
 msgid "Connected to"
 msgstr "متصلا"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:71
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:72
 #: zotonic_mod_admin/priv/templates/_admin_media_import_list.tpl:134
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:100
 msgid "Connections"
@@ -1610,6 +1612,8 @@ msgstr "بريد إلكتروني"
 #: zotonic_mod_admin_config/priv/templates/admin_config.tpl:66
 #: zotonic_mod_admin_config/src/actions/action_admin_config_dialog_config_edit.erl:58
 #: zotonic_mod_admin_frontend/priv/templates/page_admin_frontend_edit.tpl:3
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:23
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:21
 #: zotonic_mod_editor_tinymce/priv/templates/_tinymce_dialog_zmedia_props.tpl:121
 #: zotonic_mod_mailinglist/priv/templates/admin_mailing_status.tpl:19
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:39
@@ -1843,6 +1847,15 @@ msgstr "من"
 #: zotonic_mod_admin/priv/templates/_admin_status_task_queue.tpl:5
 msgid "Function"
 msgstr "دور"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:78
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:41
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:76
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:94
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:117
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:20
+msgid "Graph"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_overview_filter_panel.tpl:131
 msgid "Has connections with predicate"
@@ -2325,6 +2338,8 @@ msgid "Pages overview"
 msgstr "نظرة عامة على الصفحات"
 
 #: zotonic_mod_admin/priv/templates/_admin_system_status.tpl:75
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:36
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:27
 #: zotonic_mod_custom_redirect/priv/templates/admin_custom_redirect.tpl:24
 #: zotonic_mod_development/priv/templates/_development_dispatch_trace.tpl:4
 msgid "Path"
@@ -2400,7 +2415,7 @@ msgstr "حماية من الحذف"
 msgid "Protected"
 msgstr "محمي"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:37
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:38
 #: zotonic_mod_admin/priv/templates/_admin_overview_list_flags.tpl:2
 msgid "Protected, not deletable"
 msgstr "محمي، غير قابل للحذف"
@@ -2490,7 +2505,7 @@ msgstr "إعادة التوجيه إلى الموقع أعلاه في عرض ا�
 msgid "Redirect to website on page view"
 msgstr "إعادة التوجيه إلى موقع الويب على عرض الصفحة"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:74
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:75
 msgid "Referrers"
 msgstr ""
 
@@ -2661,7 +2676,7 @@ msgstr "عنوان قصير"
 msgid "Show address on edit page"
 msgstr "إظهار العنوان في صفحة التحرير"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:66
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:67
 msgid "Show all {title} pages"
 msgstr "إظهار كافة {title} صفحات"
 
@@ -3110,6 +3125,8 @@ msgstr "غير منشورة"
 #: zotonic_mod_admin/src/mod_admin.erl:1097
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:99
 #: zotonic_mod_admin/src/actions/action_admin_dialog_edit_basics.erl:163
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:9
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:43
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:54
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:57
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:60
@@ -3208,6 +3225,7 @@ msgstr "صالح لـ:"
 #: zotonic_mod_admin/priv/templates/_admin_edit_floating_buttons.tpl:10
 #: zotonic_mod_admin/priv/templates/_admin_edit_media.tpl:52
 #: zotonic_mod_admin_frontend/priv/templates/_admin_frontend_edit.tpl:142
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:26
 #: zotonic_mod_mailinglist/priv/templates/admin_mailinglist.tpl:41
 #: zotonic_mod_survey/priv/templates/_admin_survey_results_tab.tpl:20
 #: zotonic_mod_translation/priv/templates/admin_translation.tpl:38
@@ -3215,7 +3233,7 @@ msgid "View"
 msgstr "رأي"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_connections.tpl:56
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:70
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:71
 #: zotonic_mod_admin/priv/templates/_rsc_edge_list.tpl:27
 msgid "View all connections"
 msgstr "عرض جميع الاتصالات"
@@ -3225,9 +3243,13 @@ msgid "View all pages from this category"
 msgstr "عرض كل الصفحات من هذه الفئة"
 
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_page_referrers.tpl:54
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:73
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:74
 msgid "View all referrers"
 msgstr "عرض جميع المُحيلين"
+
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:77
+msgid "View connection graph"
+msgstr ""
 
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:17
 #: zotonic_mod_admin/priv/templates/_admin_status_alert.tpl:28
@@ -3357,7 +3379,7 @@ msgstr "إضافة عنصر وسائط"
 #: zotonic_mod_admin/priv/templates/_admin_edit_content_note_inner.tpl:7
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:14
 #: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:19
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:60
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:63
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:6
 #: zotonic_mod_backup/priv/templates/_admin_backup_diff.tpl:16
 msgid "by"
@@ -3377,7 +3399,7 @@ msgstr "بواسطة"
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:76
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:77
 #: zotonic_mod_admin_identity/priv/templates/admin_users.tpl:78
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:56
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:59
 #: zotonic_mod_comment/priv/templates/admin_comments.tpl:31
 #: zotonic_mod_mailinglist/priv/templates/_dialog_mailing_page.tpl:46
 #: zotonic_mod_oauth2/priv/templates/_oauth2_apps_list.tpl:14
@@ -3474,8 +3496,8 @@ msgstr "محتوى النظام"
 msgid "undo"
 msgstr "الغاء التحميل"
 
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:34
-#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:58
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:35
+#: zotonic_mod_admin/priv/templates/_admin_edit_header.tpl:59
 #: zotonic_mod_admin/priv/templates/_choose_media.tpl:9
 #: zotonic_mod_admin/priv/templates/_rsc_edge_item.tpl:9
 #: zotonic_mod_admin/priv/templates/_rsc_edge_media.tpl:11
@@ -4753,7 +4775,7 @@ msgstr "يشير المسند إلى سمات أو جوانب صفحة ويعب�
 msgid "All Predicates"
 msgstr "كل المسندات"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_extra_buttons.tpl:2
+#: zotonic_mod_admin_predicate/priv/templates/_admin_extra_buttons.tpl:1
 msgid "All page connections"
 msgstr "كافة روابط الصفحة"
 
@@ -4767,6 +4789,10 @@ msgstr "هل أنت متأكد أنك تريد حذف"
 msgid "Are you sure you want to remove the <strong>{{ predicate }}</strong>\n"
 "    connection between <strong>{{ subject }}</strong>\n"
 "          and <strong>{{ object }}</strong>?"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:33
+msgid "Beta"
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:9
@@ -4809,9 +4835,21 @@ msgstr "تصفية على المسند"
 msgid "From category"
 msgstr "من فئة"
 
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:12
+msgid "Graph overview for:"
+msgstr ""
+
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:8
 msgid "Help about predicates"
 msgstr "مساعدة حول المسندات"
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:27
+msgid "Hide or show pages that are not on the path from the start page."
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:26
+msgid "Hide previously added pages and connections."
+msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:75
 msgid "Insert new connections before existing connections."
@@ -4830,17 +4868,22 @@ msgstr "قم بعمل مسند جديد"
 msgid "Make predicate"
 msgstr "جعل المسند"
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:98
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:107
 msgid "No page connections found."
 msgstr "لم يتم العثور على اتصالات الصفحة."
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:96
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:105
 msgid "No page connections with the predicate:"
 msgstr "لا توجد روابط صفحة مع المسند:"
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:53
 msgid "No predicates found."
 msgstr "لم يتم العثور على المسندات."
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:52
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:38
+msgid "No such page or page not visible."
+msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:21
 msgid "Object"
@@ -4853,6 +4896,11 @@ msgstr "تحدد الأنطولوجيا المسندات لمجموعة محدد
 #: zotonic_mod_admin_predicate/priv/templates/_action_dialog_delete_rsc.predicate.tpl:25
 msgid "Or click <strong>Delete All Connections</strong> to delete all connections with this predicate."
 msgstr "أو انقر فوق <strong>حذف كافة الاتصالات</strong> لحذف كافة الاتصالات بهذا المسند."
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:3
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:50
+msgid "Page connections graph"
+msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:49
 msgid "Page connections overview"
@@ -4881,18 +4929,29 @@ msgstr ""
 msgid "Remove subject filter"
 msgstr ""
 
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:40
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:72
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:87
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:107
+#: zotonic_mod_admin_predicate/priv/templates/_admin_graph_resource.tpl:3
+msgid "Selected page"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:43
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:78
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:96
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:119
 msgid "Show all incoming connections"
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:37
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:69
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:84
-#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:104
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:72
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:90
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:113
 msgid "Show all outgoing connections"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:40
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:75
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:93
+#: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:116
+msgid "Show graph of all connections"
 msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:98
@@ -4902,6 +4961,10 @@ msgstr "بعض المسندات هي في الغالب لأغراض داخلية
 #: zotonic_mod_admin_predicate/src/mod_admin_predicate.erl:78
 msgid "Sorry, you are not allowed to insert connections with this predicate."
 msgstr "عذرًا ، لا يُسمح لك بإدخال اتصالات مع هذا المسند."
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:26
+msgid "Step back"
+msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edges_list.tpl:5
 msgid "Subject"
@@ -4923,9 +4986,17 @@ msgstr "يوجد بالفعل مسند بهذا الاسم."
 msgid "This directs the indexers to not include the titles of connected pages with this predicate. Normally titles of connected pages are included, making it possible to eg. find articles by their author’s name."
 msgstr "يؤدي هذا إلى توجيه المفهرسين إلى عدم تضمين عناوين الصفحات المرتبطة بهذا المسند. عادةً ما يتم تضمين عناوين الصفحات المتصلة، مما يجعل من الممكن على سبيل المثال. ابحث عن المقالات حسب اسم مؤلفها."
 
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:34
+msgid "This feature is in early development and may not work perfectly."
+msgstr ""
+
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:22
 msgid "This is used to filter the predicates in the <i>Page connections</i> panel and the pages in the connect dialogs."
 msgstr "يتم استخدام هذا لتصفية المسندات في لوحة <i>اتصالات الصفحة</i> والصفحات الموجودة في مربعات حوار الاتصال."
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:127
+msgid "This page has too many connections to display all at once. Only the first 300 incoming or outgoing connections are shown."
+msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:21
 msgid "This predicate can be used between two pages of the following categories."
@@ -4934,6 +5005,10 @@ msgstr "يمكن استخدام هذا المسند بين صفحتين من ا�
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:43
 msgid "To category"
 msgstr "للفئة"
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:126
+msgid "Too many connections"
+msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_predicate.tpl:28
 msgid "URI"
@@ -4962,6 +5037,14 @@ msgstr "لا يسمح لك لإنشاء هذا المسند."
 #: zotonic_mod_admin_predicate/priv/templates/_admin_edit_content.predicate.tpl:9
 msgid "You can define for which categories the predicate is shown on the edit page.  You can also define which categories of objects will be found when searching for a page to connect to. When you don’t check anything then all categories are valid."
 msgstr "يمكنك تحديد الفئات التي سيتم عرض التنبؤ بها في صفحة التحرير. كما يمكنك تحديد فئات الكائنات التي سيتم العثور عليها عند البحث عن صفحة للاتصال بها. عندما لا تحدد أي شيء، تكون جميع الفئات صالحة."
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:28
+msgid "Zoom In"
+msgstr ""
+
+#: zotonic_mod_admin_predicate/priv/templates/admin_edges_graph.tpl:29
+msgid "Zoom Out"
+msgstr ""
 
 #: zotonic_mod_admin_predicate/priv/templates/admin_edges.tpl:58
 msgid "any object"
