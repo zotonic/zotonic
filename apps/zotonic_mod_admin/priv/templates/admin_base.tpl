@@ -13,7 +13,7 @@
         <meta name="robots" content="noindex,nofollow">
 
         {% lib
-            "css/admin-bootstrap3.css"
+            "css/admin-bootstrap5.min.css"
             minify
         %}
 
