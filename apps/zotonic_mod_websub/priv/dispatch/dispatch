@@ -1,0 +1,3 @@
+[
+    {websub, [ ".zotonic", "websub" ], controller_websub, []}
+].
