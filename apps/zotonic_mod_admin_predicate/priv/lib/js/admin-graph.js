@@ -1337,6 +1337,20 @@
     return hidden.sort((a, b) => a - b);
   }
 
+  // Replace the hidden-category list with a new set of ids.
+  function setHiddenCategories(categoryIds) {
+    resourceCategoryVisibility.clear();
+    if (Array.isArray(categoryIds)) {
+      categoryIds.forEach((id) => {
+        const key = Number(id);
+        if (Number.isFinite(key)) {
+          resourceCategoryVisibility.set(key, false);
+        }
+      });
+    }
+    applyVisibility();
+  }
+
   // Show or hide edges by predicate id.
   function setPredicateVisibility(predicateId, visible) {
     if (predicateId === undefined || predicateId === null) return;
@@ -1363,6 +1377,20 @@
       if (visible === false) hidden.push(key);
     });
     return hidden.sort((a, b) => a - b);
+  }
+
+  // Replace the hidden-predicate list with a new set of ids.
+  function setHiddenPredicates(predicateIds) {
+    predicateVisibility.clear();
+    if (Array.isArray(predicateIds)) {
+      predicateIds.forEach((id) => {
+        const key = Number(id);
+        if (Number.isFinite(key)) {
+          predicateVisibility.set(key, false);
+        }
+      });
+    }
+    applyVisibility();
   }
 
   // Apply category/predicate visibility to nodes and edges.
@@ -1735,10 +1763,12 @@
     hideCategory,
     showCategory,
     getHiddenCategories,
+    setHiddenCategories,
     setPredicateVisibility,
     hidePredicate,
     showPredicate,
     getHiddenPredicates,
+    setHiddenPredicates,
     markEdgesLoaded,
     markEdgesLoading,
     setEdgesLoadingTimeout,

@@ -1,10 +1,6 @@
 # Resource Graph (Sigma.js)
 
-This is a self-contained HTML demo that renders a directed resource graph using Sigma.js + Graphology (via CDN) and vanilla JavaScript only.
-
-## Open
-
-Open `/Users/marc/Sites/misc/resource-graph/index.html` in a browser.
+This is a self-contained HTML demo that renders a directed resource graph using Sigma.js + Graphology and vanilla JavaScript only.
 
 ## Features
 
@@ -36,8 +32,9 @@ ResourceGraph.refresh();
 
 ### API Details
 
-- `setGraph({ nodes, edges, startNodeId, useWorker })`
+- `setGraph({ nodes, edges, startNodeId, useWorker, setActiveToStart })`
   - Clears the graph, inserts data in batches, and runs the layout. Use `useWorker: true` to attempt worker layout.
+  - If `setActiveToStart` is true, sets the active node to `startNodeId` after the graph draws.
 - `resetGraph()`
   - Clears all nodes/edges and resets selection.
 - `addResources(nodes, createdNodes?, nearResourceId?)`
@@ -82,12 +79,16 @@ ResourceGraph.refresh();
   - Convenience wrappers.
 - `getHiddenCategories()`
   - Returns hidden category ids.
+- `setHiddenCategories(categoryIds)`
+  - Replace the hidden category list with the provided ids.
 - `setPredicateVisibility(predicateId, visible)`
   - Show/hide edges by predicate id.
 - `hidePredicate(predicateId)` / `showPredicate(predicateId)`
   - Convenience wrappers.
 - `getHiddenPredicates()`
   - Returns hidden predicate ids.
+- `setHiddenPredicates(predicateIds)`
+  - Replace the hidden predicate list with the provided ids.
 
 ## UI Button IDs
 
@@ -245,8 +246,6 @@ ResourceGraph.getHiddenPredicates(); // -> [42, 91]
 ```
 
 ## Dependencies
-
-Loaded via CDN:
 
 - Sigma.js
 - Graphology
