@@ -1,0 +1,64 @@
+/* Zotonic admin Bootstrap 5 build with Bootstrap 3 compatibility layer. */
+
+@import "bootstrap/scss/functions";
+@import "../zotonic-admin/scss/variables";
+
+// Map legacy admin variables to Bootstrap 5 equivalents
+$primary: $brand-primary;
+$success: $brand-success;
+$info: $brand-info;
+$warning: $brand-warning;
+$danger: $brand-danger;
+
+$body-bg: $body-bg;
+$body-color: $text-color;
+$link-color: $link-color;
+
+$font-family-sans-serif: $font-family-sans-serif;
+$font-family-monospace: $font-family-monospace;
+$font-size-root: $font-size-base;
+$font-size-base: 1rem;
+$line-height-base: $line-height-base;
+
+$border-radius: $border-radius-base;
+$border-radius-sm: $border-radius-small;
+$border-radius-lg: $border-radius-large;
+
+$input-border-radius: $border-radius-base;
+$input-border-radius-sm: $border-radius-small;
+$input-border-radius-lg: $border-radius-large;
+
+$input-padding-y: $padding-base-vertical;
+$input-padding-x: $padding-base-horizontal;
+$input-padding-y-sm: $padding-small-vertical;
+$input-padding-x-sm: $padding-small-horizontal;
+$input-padding-y-lg: $padding-large-vertical;
+$input-padding-x-lg: $padding-large-horizontal;
+
+$btn-padding-y: $padding-base-vertical;
+$btn-padding-x: $padding-base-horizontal;
+$btn-padding-y-sm: $padding-small-vertical;
+$btn-padding-x-sm: $padding-small-horizontal;
+$btn-padding-y-lg: $padding-large-vertical;
+$btn-padding-x-lg: $padding-large-horizontal;
+
+$navbar-light-color: $navbar-default-color;
+$navbar-light-hover-color: $navbar-default-link-hover-color;
+$navbar-light-active-color: $navbar-default-link-active-color;
+$navbar-light-bg: $navbar-default-bg;
+$navbar-light-border-color: $navbar-default-border;
+
+$navbar-dark-color: $navbar-inverse-link-color;
+$navbar-dark-hover-color: $navbar-inverse-link-hover-color;
+$navbar-dark-active-color: $navbar-inverse-link-active-color;
+$navbar-dark-bg: $navbar-inverse-bg;
+$navbar-dark-border-color: $navbar-inverse-border;
+
+@import "bootstrap/scss/bootstrap";
+
+// Bootstrap 3 compatibility shims used by admin templates
+@import "compat/bootstrap3-compat";
+
+// Zotonic admin overrides and components
+@import "zotonic/forms";
+@import "zotonic-admin";

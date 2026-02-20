@@ -1,0 +1,129 @@
+/* Forms and input definitions */
+
+.label-floating {
+    position: relative;
+    padding-top: $line-height-computed;
+
+    label,
+    label.control-label {
+        position: absolute;
+        top: 0;
+        display: none;
+        padding: 0;
+        margin: 0;
+        font-weight: bold;
+        font-size: $font-size-small;
+        color: $gray-light;
+        // text-transform: uppercase;
+    }
+
+    input:not(:placeholder-shown) + label,
+    textarea:not(:placeholder-shown) + label {
+        display: block;
+    }
+
+    select + label.control-label {
+        display: block;
+    }
+
+    input:focus + label,
+    textarea:focus + label,
+    select:focus + label {
+        color: $brand-primary;
+    }
+
+    input.field-title {
+        font-size: $font-size-h2;
+        height: (ceil($font-size-h2 * $line-height-large));
+    }
+
+    textarea.field-summary {
+        font-size: $font-size-large;
+    }
+
+    textarea.field-collapse,
+    textarea.field-summary {
+        &:placeholder-shown {
+            height: (ceil($font-size-large * $line-height-large)) + 10px;
+        }
+    }
+
+    &.has-error,
+    &.invalid {
+        input,
+        select,
+        textarea {
+            padding: 0 2px;
+            border-bottom: 2px solid $brand-danger;
+        }
+
+        label,
+        input::placeholder,
+        textarea::placeholder {
+            color: $brand-danger;
+        }
+    }
+
+    input:not(:placeholder-shown):invalid + label,
+    textarea:not(:placeholder-shown):invalid + label,
+    .did-submit :invalid + label {
+        color: $brand-primary;
+    }
+
+    input:not(:placeholder-shown):invalid,
+    textarea:not(:placeholder-shown):invalid,
+    .did-submit :invalid {
+        padding: 0 2px;
+        border-bottom: 2px solid $brand-danger;
+    }
+}
+
+.form-group label.control-label {
+    font-weight: bold;
+    font-size: $font-size-small;
+    color: $gray-light;
+}
+
+body .form-control,
+.form-control-small {
+    padding: 0 2px 1px 2px;
+    border: 0;
+    border-bottom: 1px solid $gray-lighter;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    background-color: rgba(250, 250, 250, 0.5);
+
+    &:focus {
+        padding: 0 2px;
+        border-bottom: 2px solid $brand-primary;
+        box-shadow: none;
+        -webkit-box-shadow: none;
+        background-color: rgba(255, 255, 235, 0.7);
+    }
+}
+
+.form-control.form-control-small {
+    width: 15em;
+    display: inline-block;
+}
+
+
+label {
+    input[type="checkbox"],
+    input[type="radio"] {
+        margin-right: 2px;
+    }
+}
+
+label.checkbox,
+label.radio {
+    font-weight: normal;
+
+    input[type="checkbox"],
+    input[type="radio"] {
+        position: relative;
+        margin-left: 0;
+        margin-top: 0;
+    }
+}
+
