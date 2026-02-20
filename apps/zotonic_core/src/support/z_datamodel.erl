@@ -69,7 +69,8 @@ manage(Module, Datamodel, Options, Context) ->
         [ manage_predicate(Module, Pred, Options, AdminContext) || Pred   <- Datamodel#datamodel.predicates ],
         [ manage_resource(Module, R, Options, AdminContext)     || R      <- Datamodel#datamodel.resources ],
         [ manage_medium(Module, Medium, Options, AdminContext)  || Medium <- Datamodel#datamodel.media ],
-        [ manage_edge(Module, Edge, Options, AdminContext)      || Edge   <- Datamodel#datamodel.edges ]
+        [ manage_edge(Module, Edge, Options, AdminContext)      || Edge   <- Datamodel#datamodel.edges ],
+        [ manage_data(Module, Data, AdminContext)               || Data   <- Datamodel#datamodel.data ]
     end),
     ok.
 
@@ -255,6 +256,9 @@ manage_resource(Module, {Name, Category, Props0}, Options, Context) ->
             }),
             ok
     end.
+
+manage_data(Module, Data, AdminContext) ->
+    z_notifier:first(#manage_data{module = Module, props = Data}, AdminContext).
 
 update_new_props(Module, Id, NewProps, Options, Context) ->
     case map_props( m_rsc:p_no_acl(Id, <<"managed_props">>, Context) ) of
