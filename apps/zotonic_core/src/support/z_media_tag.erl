@@ -1,5 +1,5 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell, David de Boer
+%% @copyright 2009-2026 Marc Worrell, David de Boer
 %% @doc Generate media urls and html for viewing media, based on the filename, size and optional filters.
 %% Does not generate media previews itself, this is done when fetching the image.
 %%
@@ -9,7 +9,7 @@
 %% /media/attachment/2007/03/31/wedding.jpg
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell, David de Boer
+%% Copyright 2009-2026 Marc Worrell, David de Boer
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -486,17 +486,24 @@ drop_undefined(L) when is_list(L) ->
         L).
 
 get_link(Media, true, Context) ->
-    Id = media_id(Media),
-    case m_rsc:p(Id, website, Context) of
-        None when None =:= []; None =:= <<>>; None =:= undefined ->
-            m_rsc:p(Id, page_url, Context);
-        Website ->
-            Website
-    end;
+    get_link_for_id(media_id(Media), Context);
 get_link(_Media, Id, Context) when is_integer(Id) ->
-    m_rsc:p(Id, page_url, Context);
+    get_link_for_id(Id, Context);
 get_link(_Media, HRef, _Context) when is_binary(HRef); is_list(HRef) ->
     HRef.
+
+get_link_for_id(undefined, _Context) ->
+    undefined;
+get_link_for_id(Id, Context) ->
+    case m_rsc:p(Id, <<"website">>, Context) of
+        None when None =:= []; None =:= <<>>; None =:= undefined ->
+            m_rsc:p(Id, <<"page_url">>, Context);
+        Website ->
+            case z_convert:to_bool(m_rsc:p(Id, <<"is_website_redirect">>, Context)) of
+                true -> Website;
+                false -> m_rsc:p(Id, <<"page_url">>, Context)
+            end
+    end.
 
 media_id([{_,_}|_] = List) ->
     proplists:get_value(id, List);
