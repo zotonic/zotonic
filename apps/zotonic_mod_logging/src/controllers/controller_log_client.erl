@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019 Marc Worrell <marc@worrell.nl>
-%% @doc Log client side events
+%% @copyright 2019-2025 Marc Worrell <marc@worrell.nl>
+%% @doc Log client side events to the admin UI log.
+%% @end
 
-%% Copyright 2019 Marc Worrell
+%% Copyright 2019-2025 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,9 +19,13 @@
 
 -module(controller_log_client).
 -moduledoc("
-Todo
+Controller to log UI errors and events.
 
-Not yet documented.
+The user-agent can post JSON events to this controller. The events will be logged
+in the admin-ui log and can be viewed in the admin interface.
+
+Rate limiting is applied at the logger level, the events themselves are added to
+a ring buffer to prevent overload of the loggers.
 ").
 
 -author("Marc Worrell <marc@worrell.nl>").
@@ -32,7 +37,7 @@ Not yet documented.
     process/4
 ]).
 
--include_lib("zotonic_core/include/zotonic.hrl").
+% -include_lib("zotonic_core/include/zotonic.hrl").
 
 % Default max body length (50KB) for HTTP log requests.
 -define(MAX_BODY_LENGTH, 50*1024).
@@ -62,17 +67,7 @@ log(Body, Context) ->
     Body1 = filter_text(Body),
     case json_decode(Body1) of
         {ok, LogEvent} when is_map(LogEvent) ->
-            case mod_logging:is_ui_ratelimit_check(Context) of
-                true ->
-                    m_log_ui:insert_event(LogEvent, Context),
-                    ?LOG_INFO(#{
-                        text => <<"UI event">>,
-                        in => zotonic_mod_logging,
-                        event => Body1
-                    });
-                false ->
-                    ok
-            end;
+            m_log_ui:log_event(LogEvent, Context);
         {error, _} ->
             ok
     end.
