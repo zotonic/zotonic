@@ -77,6 +77,11 @@
   let layoutJobId = 0;
   let layoutWorker = null;
   let defaultUseWorker = false;
+  let dragNodeId = null;
+  let dragNodeIndex = null;
+  let dragStart = null;
+  let dragActive = false;
+  let dragTarget = null;
   const layoutSettings = {
     iterations: 300,
     stepsPerFrame: 5,
@@ -250,6 +255,88 @@
       updateFocusSets();
       sigma.refresh();
     });
+
+    sigma.on("downNode", ({ node, event }) => {
+      dragNodeId = node;
+      dragNodeIndex = null;
+      dragStart = { x: event.x, y: event.y };
+      dragTarget = null;
+      dragActive = false;
+      const raw = event && (event.original || event.event || event);
+      if (raw && typeof raw.preventDefault === "function") {
+        raw.preventDefault();
+      }
+      if (raw && typeof raw.stopPropagation === "function") {
+        raw.stopPropagation();
+      }
+      window.addEventListener("pointermove", onPointerMove, { passive: false });
+      window.addEventListener("pointerup", onPointerUp, { passive: false });
+    });
+  }
+
+  // Convert pointer coordinates to graph coordinates.
+  function getGraphCoords(clientX, clientY) {
+    const rect = container.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+    if (sigma && typeof sigma.viewportToGraph === "function") {
+      return sigma.viewportToGraph({ x, y });
+    }
+    if (sigma && sigma.getCamera && typeof sigma.getCamera().viewportToGraph === "function") {
+      return sigma.getCamera().viewportToGraph({ x, y });
+    }
+    return null;
+  }
+
+  function onPointerMove(event) {
+    if (!dragNodeId) return;
+    if (typeof event.preventDefault === "function") {
+      event.preventDefault();
+    }
+    if (typeof event.stopPropagation === "function") {
+      event.stopPropagation();
+    }
+    const coords = getGraphCoords(event.clientX, event.clientY);
+    if (!coords) return;
+    if (!dragActive) {
+      const dx = event.clientX - (dragStart ? dragStart.x : event.clientX);
+      const dy = event.clientY - (dragStart ? dragStart.y : event.clientY);
+      if (Math.hypot(dx, dy) < 4) {
+        return;
+      }
+      dragActive = true;
+      if (sigma && typeof sigma.getCamera === "function") {
+        const cam = sigma.getCamera();
+        if (cam && typeof cam.disable === "function") {
+          cam.disable();
+        }
+      }
+      if (!layoutRunning) {
+        runForceAtlas2({ useWorker: defaultUseWorker });
+      }
+      dragNodeIndex = null;
+    }
+    dragTarget = coords;
+    graph.setNodeAttribute(dragNodeId, "x", coords.x);
+    graph.setNodeAttribute(dragNodeId, "y", coords.y);
+    graph.setNodeAttribute(dragNodeId, "posAuto", false);
+    sigma.refresh();
+  }
+
+  function onPointerUp() {
+    if (!dragNodeId) return;
+    dragNodeId = null;
+    dragNodeIndex = null;
+    dragTarget = null;
+    dragActive = false;
+    window.removeEventListener("pointermove", onPointerMove);
+    window.removeEventListener("pointerup", onPointerUp);
+    if (sigma && typeof sigma.getCamera === "function") {
+      const cam = sigma.getCamera();
+      if (cam && typeof cam.enable === "function") {
+        cam.enable();
+      }
+    }
   }
 
 
@@ -449,6 +536,7 @@
     const nodes = graph.nodes();
     const edges = graph.edges();
     const index = new Map(nodes.map((id, i) => [id, i]));
+    let dragIndex = dragNodeId ? index.get(dragNodeId) : null;
     const nodeCount = nodes.length;
     const x = new Float32Array(nodeCount);
     const y = new Float32Array(nodeCount);
@@ -541,7 +629,17 @@
           dy[i] -= (y[i] / dist) * gravityForce * mass[i] * safeGravityScale;
         }
 
+        if (dragNodeId && dragIndex === null) {
+          dragIndex = index.get(dragNodeId) ?? null;
+        }
         for (let i = 0; i < nodeCount; i += 1) {
+          if (dragIndex !== null && i === dragIndex && dragTarget) {
+            x[i] = dragTarget.x;
+            y[i] = dragTarget.y;
+            dx[i] = 0;
+            dy[i] = 0;
+            continue;
+          }
           x[i] += (dx[i] / (slowDown || 1)) * 0.1;
           y[i] += (dy[i] / (slowDown || 1)) * 0.1;
           if (!Number.isFinite(x[i]) || !Number.isFinite(y[i])) {
