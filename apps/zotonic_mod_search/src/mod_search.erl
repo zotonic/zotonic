@@ -799,7 +799,32 @@ search(_, _, _, _) ->
 trim(undefined, _Context) -> <<>>;
 trim(S, _Context) when is_binary(S) -> z_string:trim(S);
 trim(#trans{} = Tr, Context) -> trim(z_trans:lookup_fallback(Tr, Context), Context);
+trim(S, Context) when is_list(S) -> trim(characters_to_binary(S), Context);
 trim(S, Context) -> trim(z_convert:to_binary(S), Context).
+
+characters_to_binary(S) when is_list(S) ->
+    case unicode:characters_to_binary(S) of
+        {incomplete, B, R} ->
+            ?LOG_NOTICE(#{
+                in => zotonic_mod_search,
+                text => <<"Error in characters_to_binary/1: incomplete UTF-8 sequence">>,
+                result => error,
+                input => S,
+                remaining => R
+            }),
+            z_string:sanitize_utf8(B);
+        {error, B, R} ->
+            ?LOG_NOTICE(#{
+                in => zotonic_mod_search,
+                text => <<"Error in characters_to_binary/1: illegal UTF-8 sequence">>,
+                result => error,
+                input => S,
+                remaining => R
+            }),
+            B;
+        B when is_binary(B) ->
+            B
+    end.
 
 %% @doc Expand a search string like "hello wor" to a PostgreSQL tsquery string.
 %%      If the search string ends in a word character then a wildcard is appended
@@ -830,13 +855,17 @@ to_tsquery(Text, Context) when is_binary(Text) ->
             TsQuery
     end;
 to_tsquery(Text, Context) when is_list(Text) ->
-    to_tsquery(z_convert:to_binary(Text), Context).
-
+    to_tsquery(characters_to_binary(Text), Context).
 
 to_tsquery_1(Text, Context) when is_binary(Text) ->
     Stemmer = z_pivot_rsc:stemmer_language(Context),
-    [{TsQuery}] = z_db:q("select plainto_tsquery($2, $1)", [z_pivot_rsc:cleanup_tsv_text(Text), Stemmer], Context),
+    Text1 = cleanup_text(Text),
+    [{TsQuery}] = z_db:q("select websearch_to_tsquery($2, $1)", [Text1, Stemmer], Context),
     fixup_tsquery(z_convert:to_list(Stemmer), append_wildcard(Text, TsQuery)).
+
+cleanup_text(Text) ->
+    Text1 = z_string:sanitize_utf8(Text),
+    z_string:normalize(Text1).
 
 is_separator(C) when C < $0 -> true;
 is_separator(C) when C >= $0, C =< $9 -> false;
