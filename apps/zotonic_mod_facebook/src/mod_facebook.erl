@@ -19,11 +19,8 @@
 
 -module(mod_facebook).
 -moduledoc("
-The mod_facebook module plugs into the [authentication
-systen](/id/doc_developerguide_access_control#guide-authentication) to enable [Facebook
-login](https://developers.facebook.com/docs/facebook-login/) on your site.
-
-
+The mod_facebook module plugs into the [authentication system](/id/doc_developerguide_access_control#guide-authentication)
+to enable [Facebook login](https://developers.facebook.com/docs/facebook-login/) on your site.
 
 Configuration
 -------------

@@ -26,7 +26,7 @@ embed option for Youtube and Vimeo URLs. It will also cleanup pasted embed code 
 
 When used in the Zotonic site, the \\{% media %\\} tag then displays the embed code.
 
-This module is accompanies [mod_oembed](/id/doc_module_mod_oembed) and can be used for integrating with services that
+This module accompanies [mod_oembed](/id/doc_module_mod_oembed) and can be used for integrating with services that
 do not have oEmbed support but do provide HTML embed-code functionality.
 Video embed helper module for normalizing and rendering embeddable media URLs/code.
 

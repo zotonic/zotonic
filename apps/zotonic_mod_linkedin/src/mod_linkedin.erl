@@ -22,10 +22,8 @@
 
 -module(mod_linkedin).
 -moduledoc("
-The mod_linkedin module plugs into the [authentication
-systen](/id/doc_developerguide_access_control#guide-authentication) to enable LinkedIn login on your site.
-
-
+The mod_linkedin module plugs into the [authentication system](/id/doc_developerguide_access_control#guide-authentication)
+to enable LinkedIn login on your site.
 
 Configuration
 -------------
@@ -38,7 +36,6 @@ See also
 
 Accepted Events
 ---------------
-
 
 Delegate callbacks:
 

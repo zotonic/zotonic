@@ -18,6 +18,7 @@
 
 -module(mod_content_groups).
 -moduledoc("
+Module for content group support and ACL-aware content group behavior.
 
 Accepted Events
 ---------------
@@ -37,7 +38,7 @@ Delegate callbacks:
 See also
 
 [mod_acl_user_groups](/id/doc_module_mod_acl_user_groups)
-Module for content group support and ACL-aware content group behavior.").
+").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Content Groups").
