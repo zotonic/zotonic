@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017-2019 Marc Worrell
+%% @copyright 2017-2026 Marc Worrell
 %% @doc Model for mod_development
+%% @end
 
-%% Copyright 2017-2019 Marc Worrell
+%% Copyright 2017-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,7 +19,24 @@
 
 -module(m_development).
 -moduledoc("
-Not yet documented.
+Model for development and diagnostics controls, including tracing flags, observer lists, cache/compile/reindex actions, and dispatch info.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/is_dbtrace/...` | Return whether database query tracing is currently enabled. |
+| `get` | `/+cfg/...` | Resolve `+cfg` and return the matching value via `m_config:get_boolean`. |
+| `get` | `/function_tracing_enabled/...` | Return whether function tracing controls are enabled for current user/session. |
+| `get` | `/list_observers/...` | Return registered notifier observers for inspection (admin/development access required). |
+| `get` | `/record_info/+record/...` | Return runtime record-field metadata for record name `+record`. |
+| `get` | `/recompile/...` | Return config flag controlling whether runtime recompile action is enabled. |
+| `get` | `/flush/...` | Return config flag controlling whether cache flush action is enabled. |
+| `get` | `/reindex/...` | Return config flag controlling whether reindex action is enabled. |
+| `get` | `/dispatch_info/...` | Return dispatch rule info/inspection data for development diagnostics. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 
 -behaviour (zotonic_model).

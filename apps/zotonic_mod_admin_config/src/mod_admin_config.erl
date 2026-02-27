@@ -54,6 +54,18 @@ On this page it is possible to send a test email.
 
 Email modules like `zotonic_mod_mailgun` provide additional settings panels on this page. This is possible by adding a
 template with the name `_admin_config_email_panel.tpl`.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_admin_menu`: Handle `admin_menu` notifications using `z_acl:is_admin_editable`.
+
+Delegate callbacks:
+
+- `event/2` with `submit` messages: `config_save`, `test_email`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

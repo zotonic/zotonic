@@ -67,6 +67,20 @@ Permanent or temporary redirects
 A redirection can be permanent or temporary. A permanent redirect will be remembered by the visiting browser (and search
 engines), replacing any occurence of the redirected location. A temporary redirect will not be remembered and be retried
 on every visit.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_admin_menu`: Handle `admin_menu` notifications using `m_custom_redirect:is_allowed`.
+- `observe_dispatch`: Called when the path didn't match any dispatch rule using `m_custom_redirect:get_dispatch`.
+- `observe_dispatch_host`: Called when the host didn't match any site config using `m_custom_redirect:list_dispatch_host`.
+
+Delegate callbacks:
+
+- `event/2` with `submit` messages: `custom_redirects`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

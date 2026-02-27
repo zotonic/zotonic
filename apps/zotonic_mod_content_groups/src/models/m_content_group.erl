@@ -1,9 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015 Marc Worrell
+%% @copyright 2015-2026 Marc Worrell
 %%
 %% @doc Model for content group memberships.
+%% @end
 
-%% Copyright 2015 Marc Worrell
+%% Copyright 2015-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,7 +20,16 @@
 
 -module(m_content_group).
 -moduledoc("
-Not yet documented.
+Model for content-group checks, currently exposing whether a content group is in use.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/is_used/+cgid/...` | Return whether content group `+cgid` (or any of its child content groups) is referenced by at least one resource `content_group_id`. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 
@@ -47,4 +57,3 @@ is_used(ContentGroup, Context) ->
                   z_db:q1("select id from rsc where content_group_id = $1", [Id], Context) =/= undefined
               end,
               Ids).
-

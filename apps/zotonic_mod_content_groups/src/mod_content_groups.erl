@@ -1,7 +1,8 @@
-%% @copyright 2015 Marc Worrell
+%% @copyright 2015-2026 Marc Worrell
 %% @doc Adds content groups to enable access-control rules on resources.
+%% @end
 
-%% Copyright 2015 Marc Worrell
+%% Copyright 2015-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,10 +21,24 @@
 See also
 
 [mod\\_acl\\_user\\_groups](/id/doc_module_mod_acl_user_groups)
+Module for content group support and ACL-aware content group behavior.
 
-Todo
 
-Not yet documented.
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_admin_menu`: Handle `admin_menu` notifications using `m_hierarchy:ensure`.
+- `observe_rsc_delete`: Do not allow a content group to be removed iff there are resources in that content group using `m_content_group:is_used`.
+- `observe_rsc_get`: Handle `rsc_get` notifications using `m_category:is_meta`.
+- `observe_rsc_update_done`: Handle `rsc_update_done` notifications using `m_hierarchy:ensure`.
+
+Delegate callbacks:
+
+- `event/2` with `postback` messages: `delete_all`.
+- `event/2` with `submit` messages: `delete_move`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

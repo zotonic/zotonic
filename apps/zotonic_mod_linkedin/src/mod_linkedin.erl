@@ -35,6 +35,15 @@ Configuration
 See also
 
 *   [mod\\_facebook](/id/doc_module_mod_facebook)
+
+Accepted Events
+---------------
+
+
+Delegate callbacks:
+
+- `event/2` with `submit` messages: `admin_linkedin`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

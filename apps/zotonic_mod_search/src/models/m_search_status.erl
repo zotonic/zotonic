@@ -1,8 +1,8 @@
 %% @doc Search model, used as an interface to the search functions of modules etc.
-%% @copyright 2024 Marc Worrell
+%% @copyright 2024-2026 Marc Worrell
 %% @end
 
-%% Copyright 2024 Marc Worrell
+%% Copyright 2024-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,7 +18,17 @@
 
 -module(m_search_status).
 -moduledoc("
-Not yet documented.
+Model for search subsystem status, including facet table health checks and facet definition metadata.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/facets/is_table_ok/...` | Return whether facet storage tables/indexes are present and healthy. |
+| `get` | `/facets/definition/...` | Return configured/template facet definition map used by search faceting. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

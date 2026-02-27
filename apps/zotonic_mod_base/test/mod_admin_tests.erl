@@ -1,4 +1,7 @@
 -module(mod_admin_tests).
+-moduledoc("
+EUnit tests for admin-related rendering and wire behavior.
+").
 
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").

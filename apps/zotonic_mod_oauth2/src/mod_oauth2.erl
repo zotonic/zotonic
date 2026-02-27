@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019-2025 Marc Worrell
+%% @copyright 2019-2026 Marc Worrell
 %% @doc OAuth2 (https://tools.ietf.org/html/draft-ietf-oauth-v2-26)
 %% @end
 
-%% Copyright 2019-2025 Marc Worrell
+%% Copyright 2019-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,9 +19,26 @@
 
 -module(mod_oauth2).
 -moduledoc("
-Todo
+OAuth2 provider module for app/client/token management and authorization flows.
 
-Not yet documented.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_admin_menu`: Handle `admin_menu` notifications using `cowmachine_req:get_req_header`.
+- `observe_request_context`: Check if there is a valid Authorization header or 'access_token' argument using `z_context:get`.
+- `observe_search_query`: Queries to find OAuth2 tokens using `z_datetime:next_hour`.
+- `observe_tick_24h`: Periodically delete expired server side tokens using `m_oauth2:delete_expired_tokens`.
+- `observe_tick_3h`: Periodically try to extend tokens that are expiring in the next 8 hours using `z_datetime:next_hour`.
+- `observe_url_fetch_options`: Check if the current user has a token for the given host using `z_acl:user`.
+
+Delegate callbacks:
+
+- `event/2` with `postback` messages: `oauth2_app_delete`, `oauth2_app_token_delete`, `oauth2_app_token_generate`, `oauth2_consumer_delete`, `oauth2_consumer_token_delete`, `oauth2_fetch_consumer_token`.
+- `event/2` with `submit` messages: `oauth2_app_insert`, `oauth2_app_token_new`, `oauth2_app_update`, `oauth2_authorize`, `oauth2_consumer_insert`, `oauth2_consumer_token_new`, `oauth2_consumer_update`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2025 Marc Worrell
+%% @copyright 2011-2026 Marc Worrell
 %% @doc Relay e-mails via other Zotonic servers.
 %% @end
 
-%% Copyright 2011-2025 Marc Worrell
+%% Copyright 2011-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,17 +23,31 @@ See also
 
 [mod\\_email\\_receive](/id/doc_module_mod_email_receive), [E-mail handling](/id/doc_developerguide_email#guide-email).
 
-Enables the Zotonic site to relay emails for the site’s users to their real email addresses.
+This module supports relaying email between Zotonic servers.
 
-The user’s email address is username@hostname, where the hostname is the hostname as configured in the [site’s
-config file](/id/doc_developerguide_sites#guide-site-anatomy). Any mails to those addresses get forwarded to the
-user’s email address, as configured in the user [resource](/id/doc_glossary#term-resource).
+With `is_email_relay` enabled, this server forwards outbound email payloads to another Zotonic relay server at
+`email_relay_url`. The two servers authenticate requests using shared secrets:
+`email_relay_send_secret` for sending relay requests and `email_relay_receive_secret` for receiving relay requests.
+The relay server sends delivery status updates back through webhook reports.
 
-Any email that has no valid recipient is rejected.
+The optional `is_user_relay` mode relays inbound messages for local `username@hostname` addresses directly to user
+mailbox addresses from identity/resource data. This user-relay mode is experimental and should not be relied on for
+production mail flow.
 
-Todo
 
-Add more documentation
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_email_bounced`: If the bounced email is a relayed email, then forward a delivery report using `z_db:q`.
+- `observe_email_failed`: If the failed email is a relayed email, then forward a delivery report using `z_string:sanitize_utf8`.
+- `observe_email_received`: Check if the recipient is a known user, if so redirect the received e-mail as-is to that user using `m_config:get_boolean`.
+- `observe_email_send_encoded`: Relay an email via another Zotonic server using `m_config:get_boolean`.
+- `observe_email_sent`: If the sent email is a relayed email, then forward a delivery report using `z_db:q`.
+- `observe_email_status`: Forward blocking/unblocking of email addresses to the relaying Zotonic server using `m_config:get_boolean`.
+- `observe_tick_24h`: Handle `tick_24h` notifications using `m_email_relay:periodic_cleanup`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 
@@ -442,5 +456,4 @@ observe_tick_24h(tick_24h, Context) ->
 
 manage_schema(_Version, Context) ->
     m_email_relay:install(Context).
-
 

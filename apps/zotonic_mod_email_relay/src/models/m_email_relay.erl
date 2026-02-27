@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2024 Marc Worrell
+%% @copyright 2024-2026 Marc Worrell
 %% @doc Accept complete rendered emails for relay, receive delivery reports
 %% and updates to manual changes of email block status.
 %% @end
 
-%% Copyright 2024 Marc Worrell
+%% Copyright 2024-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,7 +20,18 @@
 
 -module(m_email_relay).
 -moduledoc("
-Not yet documented.
+Model for email relay API endpoints, handling relay delivery requests and relay status updates.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `post` | `/relay` | Accept `recipient` + encoded `email`, decode the MIME message, deduplicate by external message id, store relay bookkeeping, and queue local delivery (requires relay auth/secret). No further lookups. |
+| `post` | `/relay/recipient` | Accept `recipient` + `is_blocked`, normalize the email key, then block or clear recipient status in `m_email_status` (requires relay auth/secret). No further lookups. |
+| `post` | `/status` | Accept `delivery_report` with relay outcome details (`type`, `message_nr`, `recipient`, optional `status`) and forward it to `z_email_server:delivery_report/4` (requires status auth/secret). No further lookups. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 
 -export([
@@ -329,4 +340,3 @@ install(Context) ->
             z_db:flush(Context),
             ok
     end.
-

@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017-2023 Marc Worrell
+%% @copyright 2017-2026 Marc Worrell
 %% @doc Model for mod_admin
 %% @end
 
-%% Copyright 2017-2023 Marc Worrell
+%% Copyright 2017-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -35,7 +35,22 @@ There are two properties available:
      ```
 2.   Default `published` setting for the new-resource dialog
      
-     \\{% if m.admin.rsc\\_dialog\\_is\\_published %\\} ... \\{% endif %\\}
+     {% if m.admin.rsc_dialog_is_published %} ... {% endif %}
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/pivot_queue_count/...` | Return pivot queue counts as a map with `backlog` and `total` (requires `use` permission on `mod_admin`). |
+| `get` | `/rsc_dialog_is_published/...` | Return whether the admin new-resource dialog defaults `is_published` to true. |
+| `get` | `/rsc_dialog_is_dependent/...` | Return whether the admin new-resource dialog defaults `is_dependent` to true. |
+| `get` | `/rsc_dialog_hide_dependent/...` | Return whether the `is_dependent` option is hidden in the admin new-resource dialog. |
+| `get` | `/edge_list_max_length/...` | Return the configured maximum number of edges shown in admin edge lists (`undefined` when unset). |
+| `get` | `/connect_created_me/...` | Return whether newly created resources are auto-connected to the current user in admin flows. |
+| `get` | `/is_notrack_refers/...` | Return whether admin “refers” views should avoid tracking referer updates (`mod_admin.is_notrack_refers`). |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 
 -export([ m_get/3 ]).

@@ -1,5 +1,9 @@
 %% @doc Tests for mod_acl_user_groups
+%% @end
 -module(mod_acl_user_groups_tests).
+-moduledoc("
+EUnit tests for ACL user-group authorization behavior.
+").
 
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").

@@ -45,6 +45,20 @@ an image is resized using the `{% image %}` tag.
 The original image stays untouched. Downloads will download the original image.
 
 If the original image should be used for a preview then pass the `original` argument to the `{% image %}` tag options.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_media_preview_options`: Expand the image modifications that influence the generated preview image using `m_image_edit:get_settings`.
+- `observe_media_upload_rsc_props`: Handle `media_upload_rsc_props` notifications using `m_image_edit:sanitize`.
+- `observe_rsc_update`: Handle `rsc_update` notifications using `m_image_edit:sanitize`.
+
+Delegate callbacks:
+
+- `event/2` with `submit` messages: `edit_form`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 
@@ -224,4 +238,3 @@ is_crop_center(center) -> true;
 is_crop_center(<<"center">>) -> true;
 is_crop_center("center") -> true;
 is_crop_center(_) -> false.
-

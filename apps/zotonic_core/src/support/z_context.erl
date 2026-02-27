@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2025  Marc Worrell
+%% @copyright 2009-2026  Marc Worrell
 %% @doc Request context for Zotonic request evaluation.
 %% @end
 
-%% Copyright 2009-2025 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -257,7 +257,7 @@ set_server_names(#context{ site = Site } = Context) ->
     }.
 
 
-%% @doc Maps the site in the request to a site in the sites folder.
+%% @doc Return the site name for the context or request.
 -spec site(z:context() | cowboy_req:req()) -> atom().
 site(#context{site=Site}) ->
     Site;

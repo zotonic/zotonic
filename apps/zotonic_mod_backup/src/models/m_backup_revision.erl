@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2012-2025 Marc Worrell
+%% @copyright 2012-2026 Marc Worrell
 %% @doc Manage a resource's revisions, manages a table of edge changes
-% and medium records.
 %% @end
+% and medium records.
 
-%% Copyright 2012-2025 Marc Worrell
+%% Copyright 2012-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,7 +20,20 @@
 
 -module(m_backup_revision).
 -moduledoc("
-Not yet documented.
+Model for resource revision backup metadata, including revision list/title retrieval and revision retention settings.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/list/+id/...` | Return revision history entries for resource `+id` as associative rows, newest-first where applicable. |
+| `get` | `/title/+id/...` | Return title for `+id`: current resource title when it exists, otherwise archived revision title (admin backup access). |
+| `get` | `/retention_months/...` | Return `mod_backup.revision_retention_months` (months to keep revision backups). |
+| `get` | `/user_retention_days/...` | Return retention period in days for backups tied to active user resources (`backup_config:user_retention_days/1`). |
+| `get` | `/deleted_user_retention_days/...` | Return retention period in days for backups tied to deleted user resources (`backup_config:deleted_user_retention_days/1`). |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 
 -behaviour(zotonic_model).

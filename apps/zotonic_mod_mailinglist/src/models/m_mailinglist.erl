@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2024 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Mailinglist model.
 %% @end
 
-%% Copyright 2009-2024 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,7 +19,27 @@
 
 -module(m_mailinglist).
 -moduledoc("
-Not yet documented.
+Model for mailinglist operations and reporting, including recipient counts, delivery stats, subscriptions, and scheduled mailings.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/count_recipients/+mailingid/...` | Return count information from `z_acl:is_allowed`. |
+| `get` | `/stats/+mailingid/...` | Return stats from `z_acl:rsc_editable`. |
+| `get` | `/rsc_stats/+rscid/...` | Return rsc stats from `z_acl:is_allowed`. |
+| `get` | `/recipient/+recipientid/...` | Return mailinglist recipient record for recipient id `+recipientid`. |
+| `get` | `/scheduled/+rscid/...` | Return scheduled mailing jobs/entries associated with resource `+rscid`. |
+| `get` | `/confirm_key/+confirmkey/...` | Return subscription confirmation payload for confirmation key `+confirmkey`. |
+| `get` | `/subscription/+listid/+email/...` | Return `subscription` result for `+listid` and `+email` using `z_acl:is_allowed`. |
+| `get` | `/subscriptions` | Return mailinglist subscriptions for the currently authenticated user. No further lookups. |
+| `get` | `/subscriptions/key/+undefined/...` | Return subscriptions for the currently authenticated user (same result as `/subscriptions`) when no key value is present. |
+| `get` | `/subscriptions/key/+key/...` | Decode recipient key `+key` and return matching subscriptions by email or recipient/list id encoded in that key. |
+| `get` | `/subscriptions/+rscid/...` | Return subscriptions list for user/resource id `+rscid`. |
+| `get` | `/subscriptions/+key/...` | Return subscriptions list decoded from subscriptions key/token `+key`. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

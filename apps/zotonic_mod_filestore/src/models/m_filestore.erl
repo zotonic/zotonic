@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2014-2025 Marc Worrell
+%% @copyright 2014-2026 Marc Worrell
 %% @doc Models for file-storage administration
 %% @end
 
-%% Copyright 2014-2025 Marc Worrell
+%% Copyright 2014-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ create table filestore (
 )
 ```
 
-The path is the local path, relative to the site’s `files` directory. For example: `archive/2008/12/10/tycho.jpg`
+The path is the local path, relative to the site's `files` directory. For example: `archive/2008/12/10/tycho.jpg`
 
 The service describes what kind of service or protocol is used for the remote storage. Currently the service is always
 set to `s3`.
@@ -68,6 +68,23 @@ The upload queue holds file paths of newly added files that need to be uploaded.
 
 Periodically the system polls this table to see if any files need uploading. Any entry older than 10 minutes will be
 handled and an upload process will be started.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/stats/...` | Return admin-only filestore totals: archived media count/size, queued upload count, queued move/delete counts, cloud-stored count/size, and estimated local count/size. |
+| `get` | `/service/...` | Return the configured filestore backend service identifier from `filestore_config:service/1` (admin-only). |
+| `get` | `/s3url/...` | Return the configured S3 endpoint/base URL used for remote object location resolution (admin-only). |
+| `get` | `/s3key/...` | Return the configured S3 access key id for filestore credentials (admin-only). |
+| `get` | `/s3secret/...` | Return the configured S3 secret key only when caller is admin and filestore config is not locked. |
+| `get` | `/is_config_locked/...` | Return whether filestore credential/config values are locked (non-editable/hidden) in this site instance (admin-only). |
+| `get` | `/is_upload_enabled/...` | Return whether background upload/offload from local `files` storage to remote filestore is enabled (admin-only). |
+| `get` | `/is_local_keep/...` | Return whether local files are retained after successful remote storage, instead of being scheduled for deletion (admin-only). |
+| `get` | `/delete_interval/...` | Return the configured delay interval used before deleting local files after offload to remote storage (admin-only). |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 
 -export([

@@ -1,9 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015 Marc Worrell
+%% @copyright 2015-2026 Marc Worrell
 %%
 %% @doc Model for user group memberships.
+%% @end
 
-%% Copyright 2015 Marc Worrell
+%% Copyright 2015-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,7 +20,19 @@
 
 -module(m_acl_user_group).
 -moduledoc("
-Not yet documented.
+Model for ACL user-group helper values in mod_acl_user_groups, including collaboration-group settings and category usage checks.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/has_collaboration_groups/...` | Return whether collaboration groups are configured and available in the current ACL setup (`acl_user_groups_checks:has_collab_groups/1`). |
+| `get` | `/is_used/+cat/...` | Return whether ACL user group `+cat` (or any of its child groups) is referenced by a `hasusergroup` edge. |
+| `get` | `/collab_group_update/...` | Return module config `mod_acl_user_groups.collab_group_update` (collaboration-group update policy). |
+| `get` | `/collab_group_link/...` | Return module config `mod_acl_user_groups.collab_group_link` (collaboration-group link behavior). |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 
@@ -70,4 +83,3 @@ is_used(UserGroup, Context) ->
 %% @doc Return the user groups for the current user
 user_groups(Context) ->
     acl_user_groups_checks:user_groups(Context).
-

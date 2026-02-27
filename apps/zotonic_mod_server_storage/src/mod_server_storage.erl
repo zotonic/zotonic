@@ -133,6 +133,15 @@ There are two configuration keys, both need a number:
 *   `mod_server_storage.storage_maxsize` The maximum stored size in bytes, both the keys and the values are counted. Default is 100 KB.
 
 Note that the storage is in-memory, so it is best to set the storage maxsize and expire as low as possible.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_request_context`: Periodic ping for the session, done by the client using `m_server_storage:ping`.
+- `observe_server_storage`: Decoupling of server storage from other modules using `m_server_storage:lookup`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

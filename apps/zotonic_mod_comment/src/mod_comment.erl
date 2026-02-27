@@ -25,6 +25,20 @@ The module has an admin comment overview, allowing the administrator to review t
 
 To enable commenting in your site, include `_comments.tpl` on your resource’s page template, passing an id parameter
 for the resource on which you want users to be able to comment.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_admin_menu`: Contribute module entries to the admin menu tree.
+- `observe_rsc_merge`: Move all comments from one resource to another using `m_comment:merge`.
+- `observe_search_query`: Return the list of recent comments using `m_comment:search`.
+
+Delegate callbacks:
+
+- `event/2` with `submit` messages: `newcomment`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

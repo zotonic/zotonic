@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2021 Marc Worrell
+%% @copyright 2021-2026 Marc Worrell
 %% @doc Model to support signup views.
+%% @end
 
-%% Copyright 2021 Marc Worrell
+%% Copyright 2021-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,6 +24,16 @@ Exported APIs:
 *   `model/signup/get/confirm_redirect` return the URL for redirecting the current user after a signup.
     
     This is done by calling (first) the `#signup_confirm_redirect{ id = UserId }` notification. If `undefined` is returned then the URL defaults to the personal page of the user. If no user is logged on then the URL of the home page (dispatch rule `home`) is returned.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/confirm_redirect/...` | Return post-signup redirect URL: `#signup_confirm_redirect{id=UserId}` notifier result when provided, otherwise user `page_url`, and `home` URL when no user is logged in. |
+| `get` | `/config/username_equals_email/...` | Return `mod_signup.username_equals_email` boolean setting (default `false`) indicating whether signup usernames must equal email addresses. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 
 -behaviour(zotonic_model).

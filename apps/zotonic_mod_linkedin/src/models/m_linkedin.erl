@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017 Marc Worrell
+%% @copyright 2017-2026 Marc Worrell
 %% @doc Model for mod_linkedin
+%% @end
 
-%% Copyright 2017 Marc Worrell
+%% Copyright 2017-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,7 +19,16 @@
 
 -module(m_linkedin).
 -moduledoc("
-Not yet documented.
+Model for LinkedIn integration helpers, currently exposing whether LinkedIn auth integration is enabled.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/useauth/...` | Return whether LinkedIn authentication integration is enabled. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 
 -behaviour (zotonic_model).

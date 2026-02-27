@@ -1,7 +1,8 @@
 %% @doc Track imported data, used to check on duplicate imports and track what is imported.
 %% @author Marc Worrell <marc@worrell.nl>
+%% @end
 
-%% Copyright 2015 Marc Worrell
+%% Copyright 2015-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.

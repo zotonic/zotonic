@@ -40,6 +40,15 @@ Customizing exports
 -------------------
 
 To customize data selection and the properties that are exported, observe one or several of the [export notifications](/id/doc_reference_notifications_import_export#export-notifications).
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_content_types_dispatch`: Add extra content-type to the 'id' controller; as fallbacks for content-types using `export_encoder:content_types_dispatch`.
+- `observe_export_resource_content_disposition`: Return the download content-disposition header for generated exports.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

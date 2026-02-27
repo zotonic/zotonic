@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017-2025 Marc Worrell
+%% @copyright 2017-2026 Marc Worrell
 %% @doc Periodic tasks and ticks for other modules.
 %% @end
 
-%% Copyright 2017-2025 Marc Worrell
+%% Copyright 2017-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,13 +19,10 @@
 
 -module(mod_cron).
 -moduledoc("
-Provides periodic events and scheduling of regular module specific jobs.
+Provides periodic tick notifications and module-defined cron job scheduling.
 
-Current this module sends *tick* notifications at periodic intervals. These ticks can be observed to implement periodic tasks.
-
-Other modules can schedule jobs which should be triggered at specific intervals
-
-
+This module both sends periodic *tick* notifications (which can be observed by modules) and reads each module’s
+`-mod_cron_jobs` attribute to register scheduled jobs at specific intervals.
 
 tick
 ----
@@ -67,42 +64,52 @@ The *tick* observers are called one by one in a separate process. So a slow hand
 
 
 
-Schedule Module Specific Jobs
------------------------------
+`-mod_cron_jobs` Module Attribute
+---------------------------------
 
-When you want to schedule regular jobs, when you want your module to perorm jobs at regular intervals it is possible to
-use mod\\_cron to schedule those jobs.
+Modules can define periodic jobs using the module attribute `-mod_cron_jobs`.
 
-For example, if you want to send out an automated weekly reminder to your users you can do this by defining a module
-specific task in your module.
+`mod_cron` reads this attribute from active modules and registers each job with `erlcron`.
 
-Example:
+Each entry is one of:
 
+* `{RunWhen, {Module, Function, Args}}`
+* `{RunWhen, {Module, Function, Args}, JobOpts}`
+
+Where:
+
+* `RunWhen` is an `erlcron` schedule tuple (daily/weekly/every/etc.).
+* `{Module, Function, Args}` is the MFA to call.
+* `JobOpts` are optional `erlcron` job options.
+
+Important: `mod_cron` appends the site `Context` as the last argument when calling the MFA, so the target function must
+accept one extra argument.
+
+### Example
 
 ```erlang
 -mod_depends([cron]).
 -mod_cron_jobs([
     {{weekly, mon, {10, 0, 0}}, {?MODULE, send_weekly_reminders, []}}
 ]).
-```
 
-This definition will be read and will cause the function send\\_weekly\\_reminders to be called at monday’s on 10:00
-UTC. The function will be called with a context of the site.
-
-Example:
-
-
-```erlang
 send_weekly_reminders(Context) ->
     Events = get_this_weeks_events(Context),
     send_email_reminders(Events, Context).
 ```
 
-This function will then send out reminders of events taking place the coming week. Its definition will cause it to be
-called on monday moring 10:00 UTC. Note that the Context parameter will automatically be added to the function call.
+This schedules `send_weekly_reminders/1` every Monday at 10:00 UTC.
 
-The scheduling of events is done by erlcron. For online documentation on how to schedule jobs and their syntax
-definition, see: <https://hexdocs.pm/erlcron/readme.html>
+Scheduling syntax is provided by `erlcron`, see:
+<https://hexdocs.pm/erlcron/readme.html>
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_tick_1h`: Run periodic hourly cron checks and enqueue due jobs.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 
@@ -261,4 +268,3 @@ cancel_jobs(Module, #state{ jobs = Jobs }=State) ->
 
 cancel_jobs(Jobs) ->
     lists:foreach( fun(Job) -> _ = erlcron:cancel(Job) end, Jobs).
-

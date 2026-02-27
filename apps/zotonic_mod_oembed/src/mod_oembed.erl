@@ -1,9 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2011-2025 Arjan Scherpenisse <arjan@scherpenisse.net>
+%% @copyright 2011-2026 Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @doc Enables embedding media from their URL.
 %% @end
 
-%% Copyright 2011-2025 Arjan Scherpenisse <arjan@scherpenisse.net>
+%% Copyright 2011-2026 Arjan Scherpenisse <arjan@scherpenisse.net>
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -91,6 +91,23 @@ Requests the OEmbed service to return an HTML embed code with the requested maxi
 `mod_oembed.maxheight`
 
 Requests the OEmbed service to return an HTML embed code with the requested maximum height. Not set by default.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_media_import`: Handle `media_import` notifications using `z_html:unescape`.
+- `observe_media_import_medium`: Import a embedded medium for a rsc_import using `m_media:get`.
+- `observe_media_stillimage`: Return the filename of a still image to be used for image tags using `oembed_admin:count_missing`.
+- `observe_media_viewer`: Return the media viewer for the embedded video (that is, when using `z_string:to_name`.
+- `observe_rsc_update`: Check if the update contains video embed information using `z_acl:is_allowed`.
+
+Delegate callbacks:
+
+- `event/2` with `postback` messages: `fix_missing`.
+- `event/2` with `submit` messages: `admin_oembed`.
+
 ").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 

@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Model for predicates
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
 -module(m_predicate).
 -moduledoc("
 Retrieve information about predicates. Predicates are the labels on edges (connections between resources) that give
-meaning to an edge. An example is the predicate “author” which refers to the authors of an article. Predicates form
+meaning to an edge. An example is the predicate \"author\" which refers to the authors of an article. Predicates form
 together with the referring and the referred page a triple `{subject, predicate, object}`.
 
 Each predicate has a list of valid subject categories and valid object categories. This is used to filter the list of
@@ -35,16 +35,37 @@ A full predicate definition can be fetched by name or id with:
 ```
 
 Which both return a property list with information about the predicate. The property list contains all page properties
-and the properties: “pred” which is the atomic predicate name, “subject” which is a list of valid subject
-categories and “object” with is a list of valid object categories.
+and the properties: \"pred\" which is the atomic predicate name, \"subject\" which is a list of valid subject
+categories and \"object\" with is a list of valid object categories.
 
-The following m\\_predicate model properties are available in templates:
+The following m_predicate model properties are available in templates:
 
 | Property           | Description                                                                      | Example value                                                         |
 | ------------------ | -------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| all                | Return a property list of all predicates. Keys are the atomic predicate name, values are property lists with information about the predicate. The property list contains all page properties and the properties: “pred” which is the atomic predicate name, “subject” which is a list of valid subject categories and “object” with is a list of valid object categories. | `[{about, [{pred,,about},{subject,[104]}, {object,[]}, {id,300}, … ]` |
-| object\\\\_category  | Used to derive the list of valid object categories for a predicate. Example usage: `m.predicate.object_category.author` Note: Each id is a 1-tuple. | `[{104}, … ]`                                                         |
-| subject\\\\_category | Used to derive the list of valid subject categories for a predicate. Example usage: `m.predicate.subject_category.author` Note: Each id is a 1-tuple. | `[{674}, … ]`                                                         |
+| all                | Return a property list of all predicates. Keys are the atomic predicate name, values are property lists with information about the predicate. The property list contains all page properties and the properties: \"pred\" which is the atomic predicate name, \"subject\" which is a list of valid subject categories and \"object\" with is a list of valid object categories. | `[{about, [{pred,about}, {subject,[104]}, {object,[]}, {id,300}, ...]}]` |
+| object_category  | Used to derive the list of valid object categories for a predicate. Example usage: `m.predicate.object_category.author` Note: Each id is a 1-tuple. | `[{104}, ...]`                                                         |
+| subject_category | Used to derive the list of valid subject categories for a predicate. Example usage: `m.predicate.subject_category.author` Note: Each id is a 1-tuple. | `[{674}, ...]`                                                         |
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/` | Return full predicate definition list (same as `/all`), keyed by predicate name. No further lookups. |
+| `get` | `/all/...` | Return all predicate definitions with allowed subject/object categories and predicate metadata. |
+| `get` | `/is_used/+pred/...` | Return whether predicate `+pred` is referenced by at least one row in `edge`. |
+| `get` | `/object_resources/+key/...` | Return visible/published resources allowed as objects for predicate `+key`, bucketed by matching valid object category and title-sorted. |
+| `get` | `/object_category/+key/...` | Return list of valid object category ids for predicate `+key` (empty means unrestricted). |
+| `get` | `/subject_category/+key/...` | Return list of valid subject category ids for predicate `+key` (empty means unrestricted). |
+| `get` | `/is_valid_object_in_category/+predicate/+category/...` | Return whether category `+category` is valid for objects of `+predicate`, including inverse ancestor matching fallback. |
+| `get` | `/is_valid_object_subcategory/+predicate/+category/...` | Return whether `+category` is valid object category for `+predicate`, allowing ancestor matches (`IsSubcats=true`). |
+| `get` | `/is_valid_object_category/+predicate/+category/...` | Return whether `+category` is directly valid object category for `+predicate` (`IsSubcats=false`). |
+| `get` | `/is_valid_subject_subcategory/+predicate/+category/...` | Return whether `+category` is valid subject category for `+predicate`, including subject ancestor/subcategory matching (`IsSubcats=true`). |
+| `get` | `/is_valid_subject_category/+predicate/+category/...` | Return whether `+category` is directly valid subject category for `+predicate` (`IsSubcats=false`). |
+| `get` | `/predicate/+key/...` | Return predicate definition for `+key` (id/name), including `pred`, `subject`, and `object` fields; `undefined` if unknown. |
+| `get` | `/+key/...` | Alias for `/predicate/+key/...`; return predicate definition for `+key` or `undefined`. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

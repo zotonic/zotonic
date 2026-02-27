@@ -147,6 +147,14 @@ openssl req -x509 -nodes -days 3650 -subj '/CN=www.example.com' -newkey rsa:2048
 ```
 
 This generates a private key of 2048 bits and a certificate that is valid for 10 years.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_ssl_options`: Return the certificates of this site using `z_depcache:memo`.
+
 ").
 
 -mod_title("SSL - CA").

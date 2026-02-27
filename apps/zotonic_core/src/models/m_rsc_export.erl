@@ -1,7 +1,8 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2010-2021 Arjan Scherpenisse
+%% @copyright 2010-2026 Arjan Scherpenisse
 %%
 %% @doc Export function for resources.
+%% @end
 
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -61,6 +62,57 @@
 
 
 -module(m_rsc_export).
+-moduledoc("
+Export a full resource representation for API and model access.
+
+This model returns a normalized export map for a resource id, name, or URI. The export includes:
+
+* essential identifiers (`id`, `name`, `is_a`, `uri`, `uri_template`, `page_url`)
+* resource properties (`resource`)
+* medium information and URLs (`medium`, `medium_url`, `preview_url`, `depiction_url`)
+* outgoing edges grouped by predicate (`edges`)
+
+Access control is applied while building the export:
+
+* resources that are not visible return `eacces` or `enoent`
+* edge predicates and edge objects are only included when visible
+* `hasusergroup` edges are intentionally omitted
+
+Example export shape:
+
+```erlang
+#{
+    <<\"id\">> => 112233,
+    <<\"uri\">> => <<\"http://www.example.com/id/112233\">>,
+    <<\"is_a\">> => [<<\"text\">>, <<\"article\">>],
+    <<\"resource\">> => #{
+        <<\"title\">> => <<\"Foo\">>
+    },
+    <<\"medium\">> => #{},
+    <<\"edges\">> => #{
+        <<\"depiction\">> => #{
+            <<\"predicate\">> => #{ <<\"name\">> => <<\"depiction\">> },
+            <<\"objects\">> => [
+                #{
+                    <<\"object_id\">> => #{ <<\"id\">> => 28992 },
+                    <<\"seq\">> => 1
+                }
+            ]
+        }
+    }
+}
+```
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/full/+id/...` | Export full representation for resource `+id` using `full/2`. |
+| `get` | `/+id/...` | Export full representation for resource `+id` using `full/2`. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
+").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -behaviour(zotonic_model).

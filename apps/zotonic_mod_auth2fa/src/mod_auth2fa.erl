@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019-2024 Marc Worrell
+%% @copyright 2019-2026 Marc Worrell
 %% @doc Add 2FA TOTP authentication
 %% @end
 
-%% Copyright 2019-2024 Marc Worrell
+%% Copyright 2019-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,9 +19,22 @@
 
 -module(mod_auth2fa).
 -moduledoc("
-Todo
+Two-factor authentication module adding TOTP setup, verification flows, and related auth checks.
 
-Not yet documented.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_admin_menu`: Add admin menu for external services using `m_auth2fa:is_totp_enabled`.
+- `observe_auth_postcheck`: Check the 2FA code, called after password check passed using `m_auth2fa:is_totp_enabled`.
+
+Delegate callbacks:
+
+- `event/2` with `postback` messages: `auth2fa_remove_confirm`, `auth2fa_ug`, `dialog_2fa`, `request_2fa`.
+- `event/2` with `submit` messages: `auth2fa_remove`, `auth2fa_set`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

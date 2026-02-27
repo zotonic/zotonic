@@ -1,9 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2010-2024 Arjan Scherpenisse
+%% @copyright 2010-2026 Arjan Scherpenisse
 %% @doc Simple database logging.
 %% @end
 
-%% Copyright 2010-2024 Arjan Scherpenisse
+%% Copyright 2010-2026 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -65,9 +65,18 @@ E-mail log
 The e-mail log is a separate view, which lists which email messages have been sent to which recipients. Any mail that
 gets sent gets logged here.
 
-Todo
+This module stores selected log events in the site database and provides admin views and APIs to inspect those logs, including e-mail delivery log entries.
 
-Add more documentation
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_acl_is_allowed`: Handle `acl_is_allowed` notifications using `z_acl:is_allowed`.
+- `observe_admin_menu`: Handle `admin_menu` notifications using `m_log:install`.
+- `observe_search_query`: Handle `search_query` notifications using `z_acl:is_allowed`.
+- `observe_tick_1h`: Handle `tick_1h` notifications using `m_log:periodic_cleanup`.
+
 ").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 -behaviour(gen_server).
@@ -659,4 +668,3 @@ to_list(V) ->
 
 opt_user(undefined) -> [];
 opt_user(Id) -> [" (", integer_to_list(Id), ")"].
-

@@ -28,6 +28,24 @@ This module tracks for all outgoing email addresses:
 *   Latest error message
 
 With this it will be much easier to get feedback on all outgoing email.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_email_bounced`: Mark an email address as bouncing, only marks for messages which we know we have sent using `m_email_status:mark_bounced`.
+- `observe_email_failed`: Handle `email_failed` notifications using `m_email_status:mark_failed`.
+- `observe_email_is_blocked`: Handle `email_is_blocked` notifications using `m_email_status:is_blocked`.
+- `observe_email_is_recipient_ok`: Handle `email_is_recipient_ok` notifications using `m_email_status:is_ok_to_send`.
+- `observe_email_received`: Handle `email_received` notifications using `m_email_status:mark_received`.
+- `observe_email_sent`: Handle `email_sent` notifications using `m_email_status:mark_sent`.
+- `observe_tick_24h`: Handle `tick_24h` notifications using `m_email_status:periodic_cleanup`.
+
+Delegate callbacks:
+
+- `event/2` with `postback` messages: `email_status_block`, `email_status_reset`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

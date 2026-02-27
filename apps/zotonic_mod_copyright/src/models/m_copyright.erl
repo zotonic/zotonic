@@ -1,6 +1,20 @@
 -module(m_copyright).
 -moduledoc("
-Not yet documented.
+Model for copyright and rights metadata helpers, including Creative Commons lists, rights statement lookup, and attribution/year values.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/list/creative_commons/...` | Return the predefined Creative Commons rights descriptor list (name/url/title/short/icons maps). |
+| `get` | `/list/rights_statements/...` | Return the predefined RightsStatements.org descriptor list (name/url/title/short/icons maps). |
+| `get` | `/lookup/+name/...` | Look up rights descriptor by code or URL `+name` across built-in rights lists; returns a synthesized fallback descriptor when no match exists. |
+| `get` | `/rights/...` | Return site default rights code from `mod_copyright.rights`, defaulting to `CR` (`All Rights Reserved`) when unset. |
+| `get` | `/year/...` | Return site default copyright year from `mod_copyright.year`, defaulting to current UTC year when unset. |
+| `get` | `/attribution/...` | Return site default attribution from `mod_copyright.attribution`, defaulting to `m.site.title` when unset. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 
 -export([

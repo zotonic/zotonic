@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2022 Marc Worrell
+%% @copyright 2010-2026 Marc Worrell
 %% @doc Model for the accessing the HTTP request properties. Exposes Cowmachine's wrq.erl
+%% @end
 
-%% Copyright 2010-2022 Marc Worrell
+%% Copyright 2010-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,7 +21,7 @@
 -moduledoc("
 This model gives access to the request variables from within a template.
 
-Sometimes you need direct access to request variables in your template. The m\\_req model is meant for this. It exposes
+Sometimes you need direct access to request variables in your template. The m_req model is meant for this. It exposes
 some values from the Cowmachine request record.
 
 
@@ -83,8 +84,48 @@ This will show something like:
 Please note that all values are raw and not escaped, take care to escape the values before you use them in your
 templates, using the [escape](/id/doc_template_filter_filter_escape) filter.
 
-The [make\\_list](/id/doc_template_filter_filter_make_list) filter is used to force the evaluation of the model;
+The [make_list](/id/doc_template_filter_filter_make_list) filter is used to force the evaluation of the model;
 otherwise it would just print `{m,req,undefined}`.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/+key/...` | Return request/context value for key `+key` (must map to an existing atom key); returns `unknown_key` for unknown key names. |
+| `get` | `/` | Return default request overview list from `values/1` (`method`, `version`, `peer`, `is_ssl`, `host`, `port`, `raw_path`, `path`, `qs`, `referrer`, `user_agent`, `is_crawler`, `headers`, `timezone`, `language`). No further lookups. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
+
+Known Keys
+----------
+
+The following keys are recognized by `m.req.+key`:
+
+| Key | Description |
+| --- | --- |
+| `method` | HTTP method as binary, for example `<<\"GET\">>`. |
+| `version` | HTTP protocol version tuple, for example `{1,1}`. |
+| `peer` | Remote client IP as binary text. |
+| `peer_ip` | Remote client IP as tuple form. |
+| `is_ssl` | Whether request is HTTPS (`true`/`false`). |
+| `scheme` | Request scheme (`<<\"http\">>` / `<<\"https\">>`). |
+| `host` | Request host header (without path). |
+| `port` | Effective request port (proxy-aware; site config port when not proxied). |
+| `raw_path` | Raw request path including query string. |
+| `path` | Request path without query string. |
+| `qs` | Parsed query arguments list. |
+| `headers` | All request headers as `{Name, Value}` pairs. |
+| `referer` | `Referer` request header value. |
+| `referrer` | Alias of `referer`. |
+| `user_agent` | User-Agent header value (truncated to max 500 chars). |
+| `is_crawler` | Whether User-Agent is detected as crawler. |
+| `site` | Current Zotonic site name. |
+| `timezone` | Current request/context timezone. |
+| `language` | Current request/context language. |
+| `is_http_request` | Context flag indicating HTTP request processing context. |
+| `session_id` | Current session id when available, else `undefined`. |
+| `csp_nonce` | CSP nonce for the current response/context. |
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

@@ -1,8 +1,9 @@
-%% @doc Import tab or comma separated files. There must be an import definition for the file to be accepted.
 %% @author Marc Worrell <marc@worrell.nl>
+%% @copyright 2010-2026 Marc Worrell
+%% @doc Import tab or comma separated files. There must be an import definition for the file to be accepted.
 %% @end
 
-%% Copyright 2010-2025 Marc Worrell
+%% Copyright 2010-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,10 +32,21 @@ To determine whether it can import a file, it uses a notification:
 
 If the notification is not returning anything, it tries to map the columns found in the first row of the CSV file to
 [resource](/id/doc_glossary#term-resource) column names.
+CSV/XLSX import module for admin-driven and watched-folder data imports.
 
-Todo
 
-Add more documentation
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_admin_menu`: Add menu item to 'Content' admin menu using `z_acl:is_allowed`.
+- `observe_dropbox_file`: Handle a drop folder file when it is a tsv/csv file we know using `z_acl:user`.
+
+Delegate callbacks:
+
+- `event/2` with `submit` messages: `csv_upload`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

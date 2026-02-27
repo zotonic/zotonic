@@ -114,6 +114,26 @@ And when you want to force a specific language:
 ```erlang
 <div {% include \"_language_attrs.tpl\" language=`en` %} >This is English content</div>
 ```
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_admin_menu`: Handle `admin_menu` notifications using `translation_detect:detect`.
+- `observe_dispatch_rewrite`: Grabs the language from the path parts and sets it as the page language (if that using `z_utils:only_digits`.
+- `observe_language_detect`: Handle `language_detect` notifications using `translation_detect:detect`.
+- `observe_request_context`: Check if the user has a preferred language (in the user's config) using `z_context:get_cookie`.
+- `observe_scomp_script_render`: Handle `scomp_script_render` notifications using `z_context:language`.
+- `observe_set_user_language`: Handle `set_user_language` notifications using `m_rsc:p_no_acl`.
+- `observe_url_rewrite`: Handle `url_rewrite` notifications using `z_context:language`.
+- `observe_user_context`: Handle `user_context` notifications using `m_rsc:p_no_acl`.
+
+Delegate callbacks:
+
+- `event/2` with `postback` messages: `language_default`, `language_delete`, `language_status`, `set_language`, `toggle_url_rewrite`, `translation_generate`, `translation_reload`.
+- `event/2` with `submit` messages: `language_add`, `language_list`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

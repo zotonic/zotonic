@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2021-2022 Marc Worrell
+%% @copyright 2021-2026 Marc Worrell
 %% @doc Model for tracking all URLs to be included in the sitemap.
+%% @end
 
-%% Copyright 2021-2022 Marc Worrell
+%% Copyright 2021-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,7 +19,17 @@
 
 -module(m_seo_sitemap).
 -moduledoc("
-Not yet documented.
+Model for sitemap generation metadata, including available urlsets and paged urlset export values.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/urlsets/...` | Return sitemap source groups from `seo_sitemap:urlsets/1`, used to build sitemap index entries per source/language set. |
+| `get` | `/urlset/+source/+offset/+limit/...` | Return sitemap URL entries for source `+source` using offset/limit paging (offset defaults to `1`, limit defaults to and is capped at `?URLSET_SIZE`). |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 
 -export([

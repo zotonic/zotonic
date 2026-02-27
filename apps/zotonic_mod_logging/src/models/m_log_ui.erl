@@ -1,8 +1,9 @@
 %% @author Marc Worrell
-%% @copyright 2019-2021 Marc Worrell
+%% @copyright 2019-2026 Marc Worrell
 %% @doc Model for ui log messages.
+%% @end
 
-%% Copyright 2019-2021 Marc Worrell
+%% Copyright 2019-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,7 +19,16 @@
 
 -module(m_log_ui).
 -moduledoc("
-Not yet documented.
+Model for admin UI log retrieval by index, gated by admin permissions.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/+index/...` | Return UI log row with id `+index` from table `log_ui` (or `undefined` if missing); admin-only access. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Marc Worrell").
 
@@ -237,4 +247,3 @@ install(Context) ->
                       ],
             [ z_db:q("create index "++Name++" on log ("++Cols++")", Context) || {Name, Cols} <- Indices ]
     end.
-

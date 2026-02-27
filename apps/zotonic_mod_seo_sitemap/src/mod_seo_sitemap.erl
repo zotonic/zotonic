@@ -101,6 +101,20 @@ dispatch rule like this:
 
 You will be able to write your own sitemap.xml file (in a mysitemap.tpl template) without using mod\\_seo\\_sitemap.
 This might be handy if you serve mostly static files.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_rsc_pivot_done`: Handle `rsc_pivot_done` notifications using `m_seo_sitemap:update_rsc`.
+- `observe_seo_sitemap_index`: Return the number of entries in the mod_seo_sitemap managed sitemaps using `m_seo_sitemap:count`.
+- `observe_seo_sitemap_urlset`: Return the urlset belonging to the slice given using `m_seo_sitemap:slice`.
+
+Delegate callbacks:
+
+- `event/2` with `postback` messages: `sitemap_rebuild`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

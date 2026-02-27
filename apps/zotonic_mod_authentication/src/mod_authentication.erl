@@ -83,6 +83,27 @@ site.ip\\_allowlist
 
 If the admin password is set to `admin` then logon is only allowed from local IP addresses. This configuration overrules
 the `ip_allowlist` global configuration and enables other IP addresses to login as `admin` if the password is set to `admin`.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_admin_menu`: Contribute module entries to the admin menu tree.
+- `observe_auth_client_logon_user`: Send a request to the client to login a user using `z_context:client_topic`.
+- `observe_auth_client_switch_user`: Send a request to the client to switch users using `z_acl:sudo_user`.
+- `observe_auth_options_update`: Handle `auth_options_update` notifications using `m_acl_rule:is_valid_code`.
+- `observe_auth_validated`: Handle validated external-auth identities and map them to local user/signup flows.
+- `observe_logon_options`: Handle `logon_options` notifications using `z_string:to_lower`.
+- `observe_logon_submit`: Check username/password against the identity tables using `m_identity:check_username_pw`.
+- `observe_request_context`: Check for authentication cookies in the request using `z_context:get`.
+- `observe_tick_1h`: Handle `tick_1h` notifications using `m_identity:cleanup_logon_history`.
+
+Delegate callbacks:
+
+- `event/2` with `postback` messages: `close_all_sessions`.
+- `event/2` with `submit` messages: `signup_confirm`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

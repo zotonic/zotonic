@@ -30,6 +30,22 @@ blocked for an hour.
 If a username is used for a successful login, then a special *device-id* cookie is placed on the user-agent. This
 device-id ensures that that particular user-agent is allowed its own five tries. This prevents a username to be blocked
 on known devices by tries on other devices. The device-id cookie is only valid for a single username.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_auth_checked`: Handle the result of the password authentication, register all failures using `m_ratelimit:delete_event`.
+- `observe_auth_logon`: Authentication succeeded, set the device id cookie (if we have a username from auth_checked) using `z_ids:id`.
+- `observe_auth_precheck`: Check if rate limiting applies to this authentication request using `m_ratelimit:is_event_limited`.
+- `observe_auth_reset`: Auth reset requested, register it against the device cookie using `m_ratelimit:is_event_limited`.
+- `observe_tick_6h`: Prune logged auth events using `m_ratelimit:prune`.
+
+Delegate callbacks:
+
+- `event/2` with `postback` messages: `reset_ratelimit`.
+
 ").
 
 -author("Marc Worrell <marc@worrell.nl>").

@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019 Marc Worrell
+%% @copyright 2019-2026 Marc Worrell
 %% @doc Fetch the status of the sites.
+%% @end
 
-%% Copyright 2019 Marc Worrell
+%% Copyright 2019-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -17,6 +18,22 @@
 %% limitations under the License.
 
 -module(m_zotonic_status).
+-moduledoc("
+Model for system-wide site status information.
+
+This model exposes status checks for running sites and site URL/status data, primarily for administrators.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/sites_status/...` | Return the status of all non-builtin sites (admin only). |
+| `get` | `/site_url/+site/...` | Return the absolute URL configured for site `+site` (admin only). |
+| `get` | `/check/...` | Return a health check result indicating whether all sites are running. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 -behaviour(zotonic_model).

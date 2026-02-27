@@ -1,10 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% Date: 2009-07-02
 %% @doc Support for editing predicates in the admin module.  Also hooks into the rsc update function to
 %% save the specific fields for predicates
+%% @end
 
-%% Copyright 2009 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -34,10 +35,25 @@ The following [ACL permissions](/id/doc_developerguide_access_control#guide-auth
 
 *   to view the page, [use permission](/id/doc_module_mod_acl_user_groups) on the ‘mod\\_admin\\_predicate’ module
 *   to edit and delete predicates, [edit and delete permissions](/id/doc_module_mod_acl_user_groups#content-acl) on category ‘predicate’.
+Admin module for managing edge predicates and predicate resources in the backend.
 
-Todo
 
-Add more documentation
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_admin_menu`: Handle `admin_menu` notifications using `m_rsc:rid`.
+- `observe_rsc_delete`: Do not allow a predicate to be removed iff there are edges with that predicate using `m_predicate:is_used`.
+- `observe_rsc_update`: Check if the update contains information for a predicate using `m_predicate:update_noflush`.
+- `observe_rsc_update_done`: Whenever a predicate has been updated we have to flush the predicate cache using `m_predicate:flush`.
+- `observe_search_query`: Handle `search_query` notifications using `m_rsc:rid`.
+
+Delegate callbacks:
+
+- `event/2` with `postback` messages: `delete_all`.
+- `event/2` with `submit` messages: `delete_move`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

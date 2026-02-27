@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2025 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc The base module, implementing basic Zotonic scomps, actions, models and validators.
 %% @end
 
-%% Copyright 2009-2025 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -28,10 +28,21 @@ rules](/id/doc_dispatch_index#all-dispatch-rules), [Actions](/id/template_action
 
 Note that the amount of templates has been kept to a minimum in this module, so that sites are free to implement
 whatever templates they want.
+Core base module providing fundamental dispatch rules, actions, and template components used across sites.
 
-Todo
 
-Add more documentation
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_content_types_dispatch`: Add an extra content-type to the 'id' controller using `controller_api:content_types_provided`.
+- `observe_dispatch`: Check if there is a controller or template matching the path using `z_url:url_path_encode`.
+- `observe_edge_delete`: If an edge is deleted, then force a repivot of the subject using `z_pivot_rsc:insert_queue`.
+- `observe_edge_insert`: If an edge is inserted, then force a repivot of the subject using `z_pivot_rsc:insert_queue`.
+- `observe_hierarchy_updated`: Handle `hierarchy_updated` notifications using `m_category:renumber`.
+- `observe_media_stillimage`: Return the filename of a still image to be used for image tags using `z_media_preview:can_generate_preview`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

@@ -3,11 +3,11 @@
 %% coding: utf-8
 
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2025 Marc Worrell
+%% @copyright 2011-2026 Marc Worrell
 %% @doc Localization of Zotonic.  Country, timezone, and other lookups.
 %% @end
 
-%% Copyright 2011-2025 Marc Worrell
+%% Copyright 2011-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,10 +24,19 @@
 -module(mod_l10n).
 -moduledoc("
 Localization of Zotonic. Provides lookups for country, month, week names.
+Localization module providing locale, country, and timezone data and related helpers.
 
-Todo
 
-Add more documentation
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_admin_menu`: Handle `admin_menu` notifications using `m_l10n:country_name`.
+- `observe_pivot_rsc_data`: Expand the two letter iso code country depending on the languages in the resource using `m_l10n:country_name`.
+- `observe_request_context`: Check if the user has a preferred timezone using `z_acl:user`.
+- `observe_user_context`: Handle `user_context` notifications using `m_rsc:p_no_acl`.
+
 ").
 
 -author("Marc Worrell <marc@worrell.nl>").

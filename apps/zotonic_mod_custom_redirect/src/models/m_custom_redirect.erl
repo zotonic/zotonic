@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013-2025 Marc Worrell
+%% @copyright 2013-2026 Marc Worrell
 %% @doc Model for configurable host/path redirects
 %% @end
 
-%% Copyright 2013-2025 Marc Worrell
+%% Copyright 2013-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,7 +19,17 @@
 
 -module(m_custom_redirect).
 -moduledoc("
-Not yet documented.
+Model for custom redirect records, exposing redirect list and individual redirect lookup by id.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/list/...` | Return all configured custom redirect records visible in admin redirect management (requires `use` on `mod_custom_redirect`). |
+| `get` | `/+id/...` | Return custom redirect record by numeric id `+id`, or `undefined` when not found (requires `use` on `mod_custom_redirect`). |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

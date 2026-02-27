@@ -1,4 +1,7 @@
 -module(mod_translation_tests).
+-moduledoc("
+EUnit tests for translation helper behavior.
+").
 
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").

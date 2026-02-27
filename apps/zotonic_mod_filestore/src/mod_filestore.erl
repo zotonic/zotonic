@@ -185,10 +185,22 @@ After a cache process stops it will keep running for a short period to handle la
 
 Filezcache entries are started by the mod\\_filestore and filled by either moving a local file to the cache or by
 s3filez download processes.
-
-Todo
+External file storage module for media/file offloading and synchronization.
 
 The statistics are generated dynamically, which is not a good idea with many files. This will be changed.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_admin_menu`: Handle `admin_menu` notifications using `z_url:url_path_encode`.
+- `observe_filestore`: Handle `filestore` notifications using `z_media_identify:guess_mime`.
+- `observe_filestore_credentials_lookup`: Map the local path to the URL of the remotely stored file using `filestore_config:service`.
+- `observe_filestore_credentials_revlookup`: Given the service, find the credentials to do a lookup of the remote file using `filestore_config:service`.
+- `observe_filestore_request`: Handle `filestore_request` notifications using `filestore_request:upload`.
+- `observe_media_update_done`: Handle `media_update_done` notifications using `z_media_identify:guess_mime`.
+
 ").
 
 -author("Marc Worrell <marc@worrell.nl>").

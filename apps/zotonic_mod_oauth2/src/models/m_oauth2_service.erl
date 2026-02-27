@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2020-2025 Marc Worrell
+%% @copyright 2020-2026 Marc Worrell
 %% @doc OAuth2 model for authentication using remote OAuth2 services.
 %% @end
 
-%% Copyright 2020-2025 Marc Worrell
+%% Copyright 2020-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,7 +19,17 @@
 
 -module(m_oauth2_service).
 -moduledoc("
-Not yet documented.
+Model for OAuth2 service flow helpers, including redirect URL generation and oauth redirect processing.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/redirect_url/...` | Return the absolute callback URL for `oauth2_service_redirect`, used as redirect URI in remote OAuth/OIDC provider configuration. |
+| `post` | `/oauth-redirect` | Process OAuth/OIDC redirect payload (`state_id`, signed `state_data`, provider `qargs`, session id), validate state/expiry, exchange authorization code for access token, and return login/signup continuation result (`token`, `confirm`, `need_logon`, `need_passcode`, `set_passcode`) or an error. No further lookups. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 
 -behaviour(zotonic_model).
@@ -469,5 +479,4 @@ url(Arg, InitialQArgs) ->
         _ ->
             undefined
     end.
-
 

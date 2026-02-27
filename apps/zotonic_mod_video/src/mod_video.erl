@@ -61,6 +61,17 @@ The video module extends the `{% media %}` tag for viewing `video/mp4` videos.
 
 It uses the template `_video_viewer.tpl` for viewing. For the best viewing results, add `css/video.css` to your included
 css files.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_media_stillimage`: Return the filename of a still image to be used for image tags using `supervisor:start_link`.
+- `observe_media_upload_preprocess`: If a video file is uploaded, queue it for conversion to video/mp4 using `z_video_info:info`.
+- `observe_media_upload_props`: After a video file is processed, generate a preview image using `z_media_archive:abspath`.
+- `observe_media_viewer`: Return the media viewer for the mp4 video using `z_template:render`.
+
 ").
 
 -author("Marc Worrell <marc@worrell.nl>").
@@ -325,4 +336,3 @@ queue_path(Filename, Context) ->
 
 preview_filename(Id, Context) ->
     m_media:make_preview_unique(Id, <<".jpg">>, Context).
-

@@ -1,9 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2015 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %%
 %% @doc Model for categories.  Add, change and re-order categories.
+%% @end
 
-%% Copyright 2009-2015 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -65,21 +66,21 @@ An example of a category tree, as returned by `{% print m.category.tree %}`:
 About the complete category tree
 --------------------------------
 
-The following m\\_category model properties are available in templates:
+The following m_category model properties are available in templates:
 
 | Property           | Description                                                                      | Example value      |
 | ------------------ | -------------------------------------------------------------------------------- | ------------------ |
-| tree               | Return the complete forest of category trees as nested property lists.           | See above.         |
-| tree2              | Return the forest of category trees as nested property lists. Up to the children of the children. | See above.         |
-| tree\\\\_flat        | Return a list of tuples for the category tree. This list is intended for select lists. There is a special field for the indentation. The returned list consists of proplists. The list does not contain the “meta” category, which contains the categories “predicate”, “category” etc. | See above entries. |
-| tree\\\\_flat\\\\_meta | Same as tree\\\\_flat but with the categories in the meta category.                | See above entries. |
+| tree | Return the complete forest of category trees as nested property lists. | `See above.` |
+| tree2 | Return the forest of category trees as nested property lists. Up to the children of the children. | `See above.` |
+| tree_flat | Return a list of tuples for the category tree. This list is intended for select lists. There is a special field for the indentation. The returned list consists of proplists. The list does not contain the \"meta\" category, which contains the categories \"predicate\", \"category\" etc. | `See above entries.` |
+| tree_flat_meta | Same as tree_flat but with the categories in the meta category. | `See above entries.` |
 
 
 
 About a single category
 -----------------------
 
-The m\\_category has some special properties defined when fetching a category, they are accessed by id or category name.
+The m_category has some special properties defined when fetching a category, they are accessed by id or category name.
 For example:
 
 
@@ -90,20 +91,42 @@ For example:
 
 | Property    | Description                                                                      | Example value                         |
 | ----------- | -------------------------------------------------------------------------------- | ------------------------------------- |
-| tree        | The category tree below and including the indexing category.                     | See above.                            |
-| tree1       | The list of direct children below the indexing category.                         | See above.                            |
-| tree2       | The category tree below and including the indexing category, up to the children of the children. | See above.                            |
-| tree\\\\_flat | The category tree below and including the indexing category, up to the children of the children. As a flattened list. | See above.                            |
-| path        | List of parent category ids from the root till the category, excluding the indexing category. | \\\\[ 104, 106 \\\\]                      |
-| is\\\\_a      | List of the parent category names form the root till the category, including the current category. | \\\\[ text, article, news \\\\]           |
-| image       | A random depiction for this category. The returned image filename comes from one of the pages within this category. | <<”2009/10/20/flat-world-proof.jpg”>> |
-| parent\\\\_id | The page id of the parent category. Returns an integer or, for a root category, undefined. | 104                                   |
-| nr          | The category nr. Used for building the tree, will change when categories are added or removed. An integer. | 2                                     |
-| level       | The depth of the category. Level 1 is the root, 2 and more are below the root.   | 1                                     |
-| left        | The lowest value of the nr range of this category, including its sub categories. | 2                                     |
-| right       | The highest value of the nr range of this category, including its sub categories. | 8                                     |
-| name        | The unique page name of this category. A binary.                                 | <<”text”>>                            |
-| path        | The path through the hierarchy of categories to this category.                   | \\\\[104, 106\\\\]                        |
+| tree | The category tree below and including the indexing category. | `See above.` |
+| tree1 | The list of direct children below the indexing category. | `See above.` |
+| tree2 | The category tree below and including the indexing category, up to the children of the children. | `See above.` |
+| tree_flat | The category tree below and including the indexing category, up to the children of the children. As a flattened list. | `See above.` |
+| path | List of parent category ids from the root till the category, excluding the indexing category. | `[ 104, 106 ]` |
+| is_a | List of the parent category names form the root till the category, including the current category. | `[ text, article, news ]` |
+| image | A random depiction for this category. The returned image filename comes from one of the pages within this category. | `<<\"2009/10/20/flat-world-proof.jpg\">>` |
+| parent_id | The page id of the parent category. Returns an integer or, for a root category, undefined. | `104` |
+| nr | The category nr. Used for building the tree, will change when categories are added or removed. An integer. | `2` |
+| level | The depth of the category. Level 1 is the root, 2 and more are below the root. | `1` |
+| left | The lowest value of the nr range of this category, including its sub categories. | `2` |
+| right | The highest value of the nr range of this category, including its sub categories. | `8` |
+| name | The unique page name of this category. A binary. | `<<\"text\">>` |
+| path | The path through the hierarchy of categories to this category. | `[104, 106]` |
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/tree/...` | Return full category forest as nested hierarchy records (all non-meta roots and descendants). |
+| `get` | `/tree2/...` | Return category forest in the limited `tree2` representation (up to grandchildren level). |
+| `get` | `/menu/...` | Return category forest formatted for menu rendering (hierarchy plus display metadata). |
+| `get` | `/tree_flat/...` | Return flattened category list for selection UIs, excluding the `meta` branch. |
+| `get` | `/tree_flat_meta/...` | Return flattened category list including the `meta` branch categories. |
+| `get` | `/is_used/+cat/...` | Return whether any resource is assigned to `+cat` or one of its descendant categories. |
+| `get` | `/+cat/path/...` | Return ancestor category id path for `+cat`; returns `undefined` when category is unknown. |
+| `get` | `/+cat/is_a/...` | Return `is_a` ancestry (category names) for `+cat`; returns `undefined` when category is unknown. |
+| `get` | `/+cat/tree/...` | Return nested subtree rooted at `+cat`; returns `undefined` when category is unknown. |
+| `get` | `/+cat/tree_flat/...` | Return flattened subtree list rooted at `+cat`; returns `undefined` when category is unknown. |
+| `get` | `/+cat/tree1/...` | Return direct-child tree level for `+cat`; returns `undefined` when category is unknown. |
+| `get` | `/+cat/tree2/...` | Return subtree of `+cat` in `tree2` format (up to grandchildren); returns `undefined` when unknown. |
+| `get` | `/+cat/image/...` | Return a random depiction filename from resources in category `+cat`; returns `undefined` when category is unknown. |
+| `get` | `/+cat/...` | Return category record for `+cat` (id/name/nr/level/left/right/parent metadata); returns `undefined` when unknown. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

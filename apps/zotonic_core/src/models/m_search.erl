@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2024 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Search model, used as an interface to the search functions of modules etc.
 %% @end
 
-%% Copyright 2009-2024 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -29,17 +29,17 @@
 -moduledoc("
 See also
 
-[Search](/id/doc_developerguide_search#guide-datamodel-query-model) , [pager](/id/doc_template_scomp_scomp_pager#scomp-pager) tag , [mod\\_search](/id/doc_module_mod_search) module , [Custom search](/id/doc_cookbook_custom_search#cookbook-custom-search)
+[Search](/id/doc_developerguide_search#guide-datamodel-query-model) , [pager](/id/doc_template_scomp_scomp_pager#scomp-pager) tag , [mod_search](/id/doc_module_mod_search) module , [Custom search](/id/doc_cookbook_custom_search#cookbook-custom-search)
 
-The m\\_search model provides access to different kinds of search queries for searching through models.
+The m_search model provides access to different kinds of search queries for searching through models.
 
-Most searches in Zotonic are implemented in the [mod\\_search](/id/doc_module_mod_search) module, searching through the
+Most searches in Zotonic are implemented in the [mod_search](/id/doc_module_mod_search) module, searching through the
 `rsc` table in different kinds of ways.
 
 Though, any module can implement a search by observing the `search_query` notification.
 
 The search module is used inside templates. For example, the following snippet fetches the latest 10 modified pages in
-the “text” category:
+the \"text\" category:
 
 
 ```django
@@ -56,6 +56,22 @@ Another example, searching for a text and requesting the second page with 20 res
     {{ m.rsc[id].title }}
 {% endfor %}
 ```
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/paged/+searchname/...` | Run named search `+searchname` with request arguments and return paged search results. |
+| `get` | `/count/+searchname/...` | Run named search `+searchname` and return only the total match count. |
+| `get` | `/paged/+name_props_searchprops/...` | Run deprecated tuple-style search (`{Name, Props}`) and return paged results. |
+| `get` | `/+name_props_searchprops/...` | Run deprecated tuple-style search (`{Name, Props}`) and return non-paged results. |
+| `get` | `/paged` | Run search from payload/query arguments and return paged results. No further lookups. |
+| `get` | `/count` | Run search from payload/query arguments and return only the count. No further lookups. |
+| `get` | `/+searchname/...` | Run named search `+searchname` with request arguments and return results. |
+| `get` | `/` | Run search from payload/query arguments using the default search handling. No further lookups. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 
@@ -325,4 +341,3 @@ get_paging_props(Props, _Context) when is_list(Props) ->
     P1 = proplists:delete(page, Props),
     P2 = proplists:delete(pagelen, P1),
     {Page, PageLen, P2}.
-

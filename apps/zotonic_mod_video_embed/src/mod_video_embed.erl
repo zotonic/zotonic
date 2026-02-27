@@ -1,11 +1,11 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2022 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Enables embedding video's as media pages.  Handles the embed information for showing video's.
 %% The embed information is stored in the medium table associated with the page. You can not have embed
 %% information and a medium file. Either one or the other.
 %% @end
 
-%% Copyright 2009-2022 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -32,10 +32,24 @@ When used in the Zotonic site, the \\{% media %\\} tag then displays the embed c
 
 This module is accompanies [mod\\_oembed](/id/doc_module_mod_oembed) and can be used for integrating with services that
 do not have oEmbed support but do provide HTML embed-code functionality.
+Video embed helper module for normalizing and rendering embeddable media URLs/code.
 
-Todo
 
-Add more documentation
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_media_import`: Recognize youtube and vimeo URLs, generate the correct embed code using `z_url_metadata:p`.
+- `observe_media_import_medium`: Import a embedded medium for a rsc_import using `z_sanitize:html`.
+- `observe_media_stillimage`: Return the still image filename used for embedded-media previews.
+- `observe_media_viewer`: Return the media viewer for the embedded video (that is, when it is an embedded media) using `z_template:render_to_iolist`.
+- `observe_rsc_update`: Check if the update contains video embed information using `z_acl:is_allowed`.
+
+Delegate callbacks:
+
+- `event/2` with `submit` messages: `add_video_embed`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2025 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Model for the zotonic site configuration
 %% @end
 
-%% Copyright 2009-2025 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 -moduledoc("
 Retrieve information that is stored in the [site
 configuration](/id/doc_developerguide_configuration_site_configuration#ref-site-configuration). If you want to query
-values from the config table instead, you should use [m\\_config](/id/doc_model_model_config).
+values from the config table instead, you should use [m_config](/id/doc_model_model_config).
 
 Note
 
@@ -33,7 +33,7 @@ rights. Exceptions are keys starting with `public` or `{{ m.site.title }}`, host
 Fetch a site configuration key
 ------------------------------
 
-Example, fetching the site configuration key “hostname”:
+Example, fetching the site configuration key \"hostname\":
 
 
 ```django
@@ -59,8 +59,8 @@ It is easy to loop over all site configurations:
 Overriding config values
 ------------------------
 
-Zotonic has two places where a site’s configuration is kept. One is in the site’s config files, the other in the
-config table. The config table (accessible through [m\\_config](/id/doc_model_model_config)) overrules any module
+Zotonic has two places where a site's configuration is kept. One is in the site's config files, the other in the
+config table. The config table (accessible through [m_config](/id/doc_model_model_config)) overrules any module
 settings from the config file, for rows where the module key of the config value is set to site.
 
 Within the site configuration, you can override module-specific configuration: Module configurations are defined with a
@@ -71,7 +71,7 @@ property key equal to the module name, with a property list as value. For exampl
 {mod_foo, [ {hostname, \"localhost\"} ]}
 ```
 
-will put the default “hostname” setting of the imaginary `mod_foo` module to `localhost`.
+will put the default \"hostname\" setting of the imaginary `mod_foo` module to `localhost`.
 
 
 
@@ -82,19 +82,44 @@ Sites have the following default config settings:
 
 | Property                    | Description                                                                      | Example value       |
 | --------------------------- | -------------------------------------------------------------------------------- | ------------------- |
-| environment                 | Set the DTAP status of the site. Can be one of production, development, test, acceptance, education or backup. Default: production | development         |
-| hostname                    | The hostname of the site                                                         | example.com         |
-| title                       | The title of the site.                                                           | “My Awesome Blog”   |
-| protocol                    | The main protocol of the site. Used to construct urls. Default “http”.           | “https”             |
-| document\\\\_domain           | The document domain used for cross domain iframe javascripts. Default is the same as the cookie\\\\_domain. | www.example.com     |
-| cookie\\\\_domain             | The domain to use on cookies. This defaults to undefined, which will equal the domain of the current request. | .example.com        |
-| session\\\\_expire\\\\_inactive | User inactivity timeout after seeing that the user has not been active. Default: 14400 (4 hours) | 3600 (1 hour)       |
-| autologon\\\\_expire          | Auto logon cookie timeout setting. Default: 15552000 (3 months)                  | 31536000 (365 days) |
-| site                        | The name of the site, an atom.                                                   | wwwzotonic.         |
-| hsts                        | Indicate if the site should use Strict Transport Security. When set, the browser will no longer use insecure http to access the site. Warning: Be sure your site is accessible via https before enabeling this feature. Default: false | true                |
-| hsts\\\\_maxage               | The time, in seconds which browsers are allowed to remember the HSTS setting of the site. Default: 17280000 (200 days) |                     |
-| hsts\\\\_include\\\\_subdomains | When set, the browser also does not use http for subdomains. Default: false      |                     |
-| hsts\\\\_preload              | When set, the site’s HSTS setting will be stored by the browser vender. This means that browsers only use https. Use with care, because it is hard to revert wrong settings. Default: false |                     |
+| environment | Set the DTAP status of the site. Can be one of production, development, test, acceptance, education or backup. Default: production | `development` |
+| hostname | The hostname of the site | `example.com` |
+| title | The title of the site. | `\"My Awesome Blog\"` |
+| protocol | The main protocol of the site. Used to construct urls. Default \"http\". | `\"https\"` |
+| document_domain | The document domain used for cross domain iframe javascripts. Default is the same as the cookie_domain. | `www.example.com` |
+| cookie_domain | The domain to use on cookies. This defaults to undefined, which will equal the domain of the current request. | `.example.com` |
+| session_expire_inactive | User inactivity timeout after seeing that the user has not been active. Default: 14400 (4 hours) | `3600 (1 hour)` |
+| autologon_expire | Auto logon cookie timeout setting. Default: 15552000 (3 months) | `31536000 (365 days)` |
+| site | The name of the site, an atom. | `wwwzotonic.` |
+| hsts | Indicate if the site should use Strict Transport Security. When set, the browser will no longer use insecure http to access the site. Warning: Be sure your site is accessible via https before enabeling this feature. Default: false | `true` |
+| hsts_maxage               | The time, in seconds which browsers are allowed to remember the HSTS setting of the site. Default: 17280000 (200 days) |                     |
+| hsts_include_subdomains | When set, the browser also does not use http for subdomains. Default: false      |                     |
+| hsts_preload              | When set, the site's HSTS setting will be stored by the browser vender. This means that browsers only use https. Use with care, because it is hard to revert wrong settings. Default: false |                     |
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/site/...` | Return the current site name (atom) from the request context. |
+| `get` | `/environment/...` | Return the resolved DTAP environment (`development`, `test`, `acceptance`, `production`, `education`, or `backup`). |
+| `get` | `/hostname/...` | Return the configured hostname for the current site/request. |
+| `get` | `/hostname_port/...` | Return hostname including configured HTTP port. |
+| `get` | `/hostname_ssl_port/...` | Return hostname including configured HTTPS port. |
+| `get` | `/hostalias/...` | Return the configured `hostalias` site setting. |
+| `get` | `/protocol/...` | Return the site protocol used for URL construction (typically `http` or `https`). |
+| `get` | `/is_ssl/...` | Return whether the site is currently considered SSL-enabled. |
+| `get` | `/title/...` | Return the configured site title as binary text. |
+| `get` | `/subtitle/...` | Return the configured site subtitle as binary text (empty binary when unset). |
+| `get` | `/email_from/...` | Return the effective sender address used for outgoing email. |
+| `get` | `/pagelen/...` | Return default search page length (configured value or fallback default). |
+| `get` | `/language/...` | Return the current request language. |
+| `get` | `/default_language/...` | Return the site default language. |
+| `get` | `/security/...` | Return generated `security.txt` data (`contact`, optional `policy`/`hiring`, and `expires`). |
+| `get` | `/+key/...` | Return site config value for `+key` when the key is public or caller is admin; otherwise `undefined`. |
+| `get` | `/` | Return all site configuration key/value pairs for admins, otherwise an empty list. No further lookups. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

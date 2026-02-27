@@ -1,5 +1,5 @@
-% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2021-2025 Marc Worrell
+%% @author Marc Worrell <marc@worrell.nl>
+%% @copyright 2021-2026 Marc Worrell
 %% @doc OAuth2 model managing consumers for access to remote sites. The user tokens
 %% are inserted into the identity table. The type of the token is 'mod_oauth2' and
 %% the key is a combination of the name of the consumer app and the remote user-id.
@@ -8,7 +8,7 @@
 %% this way (per consumer application).
 %% @end
 
-%% Copyright 2021-2025 Marc Worrell
+%% Copyright 2021-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,7 +24,22 @@
 
 -module(m_oauth2_consumer).
 -moduledoc("
-Not yet documented.
+Model for OAuth2 consumer configuration and token access, including consumer lists and per-consumer token retrieval.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/consumers` | Return admin-only list of all consumer apps with owner, grant type, credential presence, and per-consumer token count. No further lookups. |
+| `get` | `/consumers/list/auth/...` | Return consumer apps that can be used for OAuth login (`is_use_auth`, non-`client_credentials`, and configured app credentials). |
+| `get` | `/consumers/list/import/...` | Return consumer apps enabled for import (`is_use_import`), including whether credentials are configured. |
+| `get` | `/consumers/list/...` | Return consumer apps usable for auth or import, excluding `client_credentials` grant type entries. |
+| `get` | `/consumers/+consumerid/tokens/...` | Return admin-only identity-token rows linked to consumer `+consumerid` (`user_id`, expires, created, modified). |
+| `get` | `/consumers/+consumerid/...` | Return consumer details for `+consumerid`; admins get full config, non-admins get limited public fields (`id`, `name`, `description`, `domain`). |
+| `get` | `/is_connected/+name/...` | Return whether current user has an identity key for consumer `+name` (`mod_oauth2` key prefix match); checks presence only, not token validity. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 
 -export([
@@ -814,4 +829,3 @@ manage_data({version, 12}, Context) ->
         Apps);
 manage_data(_, _Context) ->
     ok.
-

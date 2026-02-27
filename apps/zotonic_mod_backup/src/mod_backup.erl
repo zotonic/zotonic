@@ -109,6 +109,27 @@ checking again for a new backup.
 
 If a failover is needed, then change the DNS to point to the new server, remove the `priv/BACKUP` file and restart the
 site to start the site normally.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_admin_menu`: Handle `admin_menu` notifications using `m_backup_revision:medium_delete_check`.
+- `observe_backup_download`: Handle `backup_download` notifications using `file:filename_all`.
+- `observe_backup_list`: Handle `backup_list` notifications using `file:filename_all`.
+- `observe_backup_restore`: Handle `backup_restore` notifications using `file:filename_all`.
+- `observe_backup_start`: Handle `backup_start` notifications using `file:filename_all`.
+- `observe_edge_delete`: Handle `edge_delete` notifications using `m_backup_revision:edge_delete`.
+- `observe_edge_insert`: Handle `edge_insert` notifications using `m_backup_revision:edge_insert`.
+- `observe_m_config_update`: Handle `m_config_update` notifications using `m_config:get_boolean`.
+- `observe_media_update_done`: Handle `media_update_done` notifications using `m_backup_revision:medium_insert`.
+- `observe_rsc_delete`: Handle `rsc_delete` notifications using `m_backup_revision:medium_delete_check`.
+- `observe_rsc_update_done`: Handle `rsc_update_done` notifications using `m_backup_revision:save_revision`.
+- `observe_rsc_upload`: Handle `rsc_upload` notifications using `backup_rsc_upload:rsc_upload`.
+- `observe_search_query`: Handle `search_query` notifications using `z_acl:is_allowed`.
+- `observe_tick_24h`: Handle `tick_24h` notifications using `m_site:environment`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 -behaviour(gen_server).
@@ -1134,4 +1155,3 @@ name(Context) ->
                 integer_to_binary(Day)
             ])
     end.
-

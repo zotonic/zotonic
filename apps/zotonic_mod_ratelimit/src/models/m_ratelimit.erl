@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019-2023 Driebit BV
+%% @copyright 2019-2026 Driebit BV
 %% @doc Rate limiting of authentication tries and other types of requests
+%% @end
 
-%% Copyright 2019-2023 Driebit BV
+%% Copyright 2019-2026 Driebit BV
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,7 +19,16 @@
 
 -module(m_ratelimit).
 -moduledoc("
-Not yet documented.
+Model for exposing current ratelimit timeout information for the active request context.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/timeout/...` | Return the configured ratelimit event window (seconds) from `mod_ratelimit.event_period`; defaults to `3600` when unset. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 
 -behaviour(zotonic_model).

@@ -30,6 +30,15 @@ entries. If you delete posts, a next import will not re-create the entries: it w
 You can override this behaviour by checking the “import previously deleted content” button.
 
 **Note:** YMMV with importing 2 .wxr files from different blogs: as the unique keys of the entries are based on the WordPress numeric ids, it is possible that content from the second one will overwrite content from the previous import.
+
+Accepted Events
+---------------
+
+
+Delegate callbacks:
+
+- `event/2` with `submit` messages: `wxr_upload`.
+
 ").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 

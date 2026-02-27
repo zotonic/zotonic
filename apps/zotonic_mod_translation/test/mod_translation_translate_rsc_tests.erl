@@ -1,4 +1,7 @@
 -module(mod_translation_translate_rsc_tests).
+-moduledoc("
+EUnit tests for resource translation map transformations.
+").
 
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").

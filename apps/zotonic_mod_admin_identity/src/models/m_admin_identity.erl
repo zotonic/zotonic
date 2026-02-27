@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017 Marc Worrell
+%% @copyright 2017-2026 Marc Worrell
 %% @doc Model for mod_admin_identity
+%% @end
 
-%% Copyright 2017 Marc Worrell
+%% Copyright 2017-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,7 +19,18 @@
 
 -module(m_admin_identity).
 -moduledoc("
-Not yet documented.
+Model for admin identity configuration values, including password policy regex and default category/content-group for new users.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/password_regex/...` | Return `mod_admin_identity.password_regex` used to validate admin-set passwords. |
+| `get` | `/new_user_category/...` | Return default category for newly created users from `mod_admin_identity.new_user_category` (fallback: `person`). |
+| `get` | `/new_user_contentgroup/...` | Return default content group for newly created users from `mod_admin_identity.new_user_contentgroup` (fallback: `default_content_group`). |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 
 -behaviour (zotonic_model).

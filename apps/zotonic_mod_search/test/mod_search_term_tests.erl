@@ -1,4 +1,7 @@
 -module(mod_search_term_tests).
+-moduledoc("
+EUnit tests for search term/query map normalization.
+").
 
 -include_lib("eunit/include/eunit.hrl").
 props_map1_test() ->

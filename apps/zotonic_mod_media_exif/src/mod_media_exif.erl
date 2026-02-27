@@ -27,6 +27,14 @@ Properties extracted from the uploaded file are:
 *   Crop center (derived from the focusing area)
 *   Orientation
 *   Date (start, end and original publication date)
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_media_upload_rsc_props`: Handle `media_upload_rsc_props` notifications using `z_props:from_list`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

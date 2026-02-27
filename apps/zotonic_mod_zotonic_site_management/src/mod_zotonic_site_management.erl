@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016 Marc Worrell
+%% @copyright 2016-2026 Marc Worrell
 %% @doc Site management module
+%% @end
 
-%% Copyright 2016 Marc Worrell
+%% Copyright 2016-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,9 +19,17 @@
 
 -module(mod_zotonic_site_management).
 -moduledoc("
-Todo
+Site management module for creating, configuring, and controlling managed Zotonic sites.
 
-Not yet documented.
+
+Accepted Events
+---------------
+
+
+Delegate callbacks:
+
+- `event/2` with `submit` messages: `addsite`.
+
 ").
 
 -author("Marc Worrell <marc@worrell.nl>").

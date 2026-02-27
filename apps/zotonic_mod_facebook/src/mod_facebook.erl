@@ -36,6 +36,19 @@ Configuration
 
 If you need extended permissions, add them to the ‘Scope’ textbox. Note that the module needs the ‘email’
 permission for login to work.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_search_query`: Handle `search_query` notifications using `z_acl:is_allowed`.
+
+Delegate callbacks:
+
+- `event/2` with `postback` messages: `logon_redirect`.
+- `event/2` with `submit` messages: `admin_facebook`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

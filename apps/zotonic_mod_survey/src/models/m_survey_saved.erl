@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2026 Marc Worrell
+%% @copyright 2026-2026 Marc Worrell
 %% @doc Model for accessing intermediate survey answers for users.
 %% @end
 
-%% Copyright 2026 Marc Worrell
+%% Copyright 2026-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,6 +23,16 @@ Model for saving and retrieving intermediate survey answers for users. There can
 only be a single intermediate result per user/survey or, for anonymous users per
 persistent-id/survey. The intermediate results are deleted when the survey is
 finished.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/get_saved/+surveyid/...` | Return saved intermediate survey row for `+surveyid`, resolved by logged-in user id or (anonymous) session persistent id; `enoent` when none exists. |
+| `get` | `/has_saved/+surveyid/...` | Return whether a saved intermediate row exists for `+surveyid`, resolved by logged-in user id or anonymous session persistent id. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

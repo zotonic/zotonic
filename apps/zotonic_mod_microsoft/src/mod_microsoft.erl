@@ -33,6 +33,15 @@ Here the following can de configured:
 On the [Azure Portal App registrations](https://go.microsoft.com/fwlink/?linkid=2083908) an App can be registered and configured.
 
 The redirect path for the app is shown on top of the `/admin/authentication-services` screen and is of the format: `https://example.com/oauth-service/redirect`
+
+Accepted Events
+---------------
+
+
+Delegate callbacks:
+
+- `event/2` with `submit` messages: `admin_microsoft`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

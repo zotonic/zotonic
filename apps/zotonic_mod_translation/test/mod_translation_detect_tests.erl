@@ -1,6 +1,9 @@
 %% @hidden
 
 -module(mod_translation_detect_tests).
+-moduledoc("
+EUnit tests for language detection tokenization and n-gram matching.
+").
 
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").

@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016-2025 Marc Worrell
+%% @copyright 2016-2026 Marc Worrell
 %% @doc Model returning information about SSL certificates, security directory
 %% and available configurations.
 %% @end
 
-%% Copyright 2016-2025 Marc Worrell
+%% Copyright 2016-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,7 +20,19 @@
 
 -module(m_admin_config).
 -moduledoc("
-Not yet documented.
+Model for admin configuration views, including SSL certificate info, security directory info, and selected module config values.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/ssl_certificates/...` | Return discovered SSL certificate metadata for admin users; returns `[]` for non-admin requests. |
+| `get` | `/security_dir/...` | Return the resolved security directory path for admin users; returns empty binary for non-admin requests or lookup errors. |
+| `get` | `/configs/...` | Return collected admin-config entries (`mod_admin_config:collect_configs/1`) for admin users; returns `[]` for non-admin requests. |
+| `get` | `/config/+module/+key/...` | Return the config entry map matching module `+module` and key `+key` from collected admin-config entries, or `undefined` if not found (admin-only). |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 
 -behaviour(zotonic_model).

@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2025 Marc Worrell
+%% @copyright 2025-2026 Marc Worrell
 %% @doc Model for dispatching requests.
 %% @end
 
-%% Copyright 2025 Marc Worrell
+%% Copyright 2025-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -136,6 +136,20 @@ Here the selected dispatch rule was something like:
 
 Because `id` and `slug` are part of the path, they are included in the generated URL path, the other arguments are added
 as query parameters.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/url` | Dispatch full URL from payload field `url`, returning matched rule/controller/options/bindings for this site only (`enoent` on mismatch or no match). No further lookups. |
+| `get` | `/url/+url` | Dispatch full URL `+url`, returning matched rule/controller/options/bindings when it resolves to the current site; otherwise `enoent`. No further lookups. |
+| `get` | `/path` | Dispatch path from payload field `path`, returning matched rule/controller/options/bindings (`enoent` when no rule matches). No further lookups. |
+| `get` | `/path/...` | Dispatch supplied path segments (percent-encoded and joined) and return matched rule/controller/options/bindings. |
+| `get` | `/url_for/+name/...` | Generate relative URL for dispatch rule `+name` using payload args (path vars consumed by rule, remaining args as query params); `enoent` when rule is unknown. |
+| `get` | `/abs_url_for/+name/...` | Generate absolute URL for dispatch rule `+name` from `url_for` result and current site host/scheme; `enoent` when rule is unknown. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 
@@ -258,4 +272,3 @@ maybe_encode_strings(#{ controller_options := Opts } = Disp) ->
     };
 maybe_encode_strings(Disp) ->
     Disp.
-

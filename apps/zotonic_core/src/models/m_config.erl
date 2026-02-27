@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2024 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Model for the zotonic config table. Performs a fallback to the site configuration when
 %% a key is not defined in the configuration table.
 %% @end
 
-%% Copyright 2009-2024 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,17 +20,17 @@
 
 -module(m_config).
 -moduledoc("
-Zotonic has two places where a site’s configuration is kept:
+Zotonic has two places where a site's configuration is kept:
 
-*   the site’s [config file](/id/doc_developerguide_configuration_site_configuration#ref-site-configuration) (accessible through [m\\_site](/id/doc_model_model_site))
-*   the site’s `config` database table. Entries in the config table overrule any module settings from the config file.
+*   the site's [config file](/id/doc_developerguide_configuration_site_configuration#ref-site-configuration) (accessible through [m_site](/id/doc_model_model_site))
+*   the site's `config` database table. Entries in the config table overrule any module settings from the config file.
 
 Note
 
 Configuration keys are only accessible from templates using `{{ m.config }}` for users with administrator rights. To
 access other configs, use or add specific models.
 
-All m\\_config keys can be thought of as tuples `{Module, Key,
+All m_config keys can be thought of as tuples `{Module, Key,
 Value}`, where Value is a complex value that can have a text value but also any other properties. Only configuration
 with text values can be edited in admin.
 
@@ -41,7 +41,7 @@ The config model table has different access methods. Below are examples of what 
 Fetch the value of a config key
 -------------------------------
 
-Example, fetching the config key value of mod\\_emailer.from\\_email:
+Example, fetching the config key value of mod_emailer.from_email:
 
 
 ```django
@@ -55,7 +55,7 @@ Or, from Erlang:
 m_config:get_value(mod_emailer, email_from, Context).
 ```
 
-Where m.config.mod\\_emailer.email\\_from returns a property list which is much like:
+Where m.config.mod_emailer.email_from returns a property list which is much like:
 
 
 ```django
@@ -75,7 +75,7 @@ config file](/id/doc_developerguide_configuration_site_configuration#ref-site-co
 parameter there.
 
 When the config key would have any extra value (besides the value property) then they would be visible as extra
-properties and the property “props” would not have been present.
+properties and the property \"props\" would not have been present.
 
 When the configuration comes from the site config then the id property is not present.
 
@@ -90,7 +90,7 @@ might change in the futurr:
 
 ```django
 {% for key, value in m.config.mod_emailer %}
-    …
+    ...
 {% endfor %}
 ```
 
@@ -106,7 +106,7 @@ change in the future:
 ```django
 {% for mod,keys in m.config %}
     {% for key,value in keys %}
-    …
+    ...
     {% endfor %}
 {% endfor %}
 ```
@@ -116,14 +116,14 @@ change in the future:
 Listening for config changes
 ----------------------------
 
-m\\_config uses z\\_notifier to broadcast events when values are changed or deleted:
+m_config uses z_notifier to broadcast events when values are changed or deleted:
 
 
 ```django
 #m_config_update{module=Module, key=Key, value=Value}
 ```
 
-for “complex” property value updates/inserts a slighly different notification is used:
+for \"complex\" property value updates/inserts a slighly different notification is used:
 
 
 ```django
@@ -136,6 +136,17 @@ For config key deletes, the `#m_config_update{}` record is broadcast with `undef
 ```django
 #m_config_update{module=Module, key=Key, value=undefined}
 ```
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/` | Return all site config values grouped by module (admin only). No further lookups. |
+| `get` | `/+module` | Return all site config key/value pairs for module `+module` (admin only). No further lookups. |
+| `get` | `/+module/+key/...` | Return site config value for key `+key` in module `+module` (admin only). |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 
