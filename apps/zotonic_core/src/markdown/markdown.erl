@@ -1428,8 +1428,9 @@ htmlchars1([{tags, Tag} | T], Acc)   -> htmlchars1(T, [Tag | Acc]);
 htmlchars1([?CR, ?LF | T], Acc)      -> htmlchars1(T, ["\n" | Acc]);
 htmlchars1([?LF | T], Acc)           -> htmlchars1(T, ["\n" | Acc]);
 htmlchars1([?CR | T], Acc)           -> htmlchars1(T, ["\r" | Acc]);
-%% emphasis is a bit strange - must be preceeded by or followed by
-%% white space to work and can also be escaped
+%% emphasis is a bit strange - it is disabled when delimiters appear immediately
+%% after an alphanumeric character (opening delimiter) or immediately before an
+%% alphanumeric character (closing delimiter). Can also be escaped
 %% there is a non-space filling white space represented by the atom 'none'
 %% which is created in the parser (NOT IN THE LEXER!) and which triggers
 %% emphasis or strong tags being turned on...
