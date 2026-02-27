@@ -869,12 +869,20 @@ Return:
 *   path: `binary`
 *   host: `unknown`
 ").
--callback observe_dispatch_rewrite(#dispatch_rewrite{}, Acc, z:context()) -> Result when
-    Acc :: binary(),
-    Result :: binary().
--callback pid_observe_dispatch_rewrite(pid(), #dispatch_rewrite{}, Acc, z:context()) -> Result when
-    Acc :: binary(),
-    Result :: binary().
+-callback observe_dispatch_rewrite(#dispatch_rewrite{}, Acc, z:context()) -> Acc1 when
+    Acc :: {Tokens, Bindings},
+    Tokens :: [ binary() ],
+    Bindings :: list(),
+    Acc1 :: {Tokens1, Bindings1},
+    Tokens1 :: [ binary() ],
+    Bindings1 :: list().
+-callback pid_observe_dispatch_rewrite(pid(), #dispatch_rewrite{}, Acc, z:context()) -> Acc1 when
+    Acc :: {Tokens, Bindings},
+    Tokens :: [ binary() ],
+    Bindings :: list(),
+    Acc1 :: {Tokens1, Bindings1},
+    Tokens1 :: [ binary() ],
+    Bindings1 :: list().
 
 -optional_callbacks([ observe_dispatch_rewrite/3, pid_observe_dispatch_rewrite/4 ]).
 
