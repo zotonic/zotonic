@@ -97,3 +97,23 @@ Another sentence"/utf8>>,
 
     ?assertEqual(Text2, z_string:trim(z_markdown:to_markdown(Html))),
     ok.
+
+%% Test that inline emphasis/strong/del delimiters are not applied when the
+%% opening delimiter immediately follows an alphanumeric character, or when
+%% the closing delimiter is immediately followed by an alphanumeric character.
+inline_markup_test() ->
+    %% Opening delimiter after alphanumeric: no emphasis/strong/del should be applied.
+    ?assertEqual(<<"<p>foo_bar</p>">>, z_markdown:to_html(<<"foo_bar">>)),
+    ?assertEqual(<<"<p>test*value</p>">>, z_markdown:to_html(<<"test*value">>)),
+    ?assertEqual(<<"<p>abc~~def</p>">>, z_markdown:to_html(<<"abc~~def">>)),
+    ?assertEqual(<<"<p>test**value</p>">>, z_markdown:to_html(<<"test**value">>)),
+    ?assertEqual(<<"<p>test___value</p>">>, z_markdown:to_html(<<"test___value">>)),
+    %% Closing delimiter before alphanumeric: no emphasis/strong/del should be applied.
+    ?assertEqual(<<"<p>_foo_bar</p>">>, z_markdown:to_html(<<"_foo_bar">>)),
+    ?assertEqual(<<"<p>**foo**bar</p>">>, z_markdown:to_html(<<"**foo**bar">>)),
+    ?assertEqual(<<"<p>~~foo~~bar</p>">>, z_markdown:to_html(<<"~~foo~~bar">>)),
+    %% Mixed: delimiter followed by space should still trigger markup.
+    ?assertEqual(<<"<p><em>foo</em> bar</p>">>, z_markdown:to_html(<<"_foo_ bar">>)),
+    ?assertEqual(<<"<p><strong>foo</strong> bar</p>">>, z_markdown:to_html(<<"**foo** bar">>)),
+    ?assertEqual(<<"<p><del>foo</del> bar</p>">>, z_markdown:to_html(<<"~~foo~~ bar">>)),
+    ok.
