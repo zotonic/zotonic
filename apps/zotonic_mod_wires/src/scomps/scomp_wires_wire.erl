@@ -147,7 +147,7 @@ Wire an action to a MQTT topic
 
 Note
 
-[mod\\_mqtt](/id/doc_module_mod_mqtt) must be enabled before wiring to a topic
+[mod_mqtt](/id/doc_module_mod_mqtt) must be enabled before wiring to a topic
 
 Use `{% wire type={mqtt topic=... topic=...} %}` to connect to one or more MQTT topics.
 
@@ -186,7 +186,7 @@ The wire tag accepts the following arguments:
 
 See also
 
-the tag [wire\\_args](/id/doc_template_scomp_scomp_wire_args#scomp-wire-args) and the list of predefined [Actions](/id/template_action#actions).
+the tag [wire_args](/id/doc_template_scomp_scomp_wire_args#scomp-wire-args) and the list of predefined [Actions](/id/template_action#actions).
 ").
 -behaviour(zotonic_scomp).
 

@@ -18,10 +18,6 @@
 
 -module(filter_escape_link).
 -moduledoc("
-See also
-
-[urlize](/id/doc_template_filter_filter_urlize)
-
 Convert any URLs in a plaintext into HTML links, with adding the `rel=\"nofollow\"` attribute, and replaces all newlines
 with `<br\\>` tags.
 
@@ -40,7 +36,10 @@ Outputs:
 ```
 
 This filter is very useful when displaying user-generated plaintexts, like comments.
-").
+
+See also
+
+[urlize](/id/doc_template_filter_filter_urlize)").
 
 -export([escape_link/2]).
 

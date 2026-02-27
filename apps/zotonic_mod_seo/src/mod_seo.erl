@@ -27,13 +27,13 @@ and Google Universal Analytics.
 SEO data
 --------
 
-mod\\_seo adds metadata to your pages to improve your website’s display and ranking in search engine (e.g. Google)
+mod_seo adds metadata to your pages to improve your website’s display and ranking in search engine (e.g. Google)
 results. This metadata includes [structured data](https://developers.google.com/search/docs/guides/intro-structured-data):
 
 Google uses structured data that it finds on the web to understand the content of the page, as well as to gather
 information about the web and the world in general.
 
-Following Google’s recommendations, mod\\_seo adds data in the [Schema.org](https://schema.org) vocabulary, using the
+Following Google’s recommendations, mod_seo adds data in the [Schema.org](https://schema.org) vocabulary, using the
 JSON-LD format. This enables [search features](https://developers.google.com/search/docs/guides/search-features) such as
 rich results, carousels and the sitelinks searchbox.
 

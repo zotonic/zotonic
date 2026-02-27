@@ -18,10 +18,6 @@
 
 -module(filter_is_site_url).
 -moduledoc("
-See also
-
-[sanitize\\_url](/id/doc_template_filter_filter_sanitize_url), [url\\_abs](/id/doc_template_filter_filter_url_abs), [url](/id/doc_template_filter_filter_url), [urlencode](/id/doc_template_filter_filter_urlencode)
-
 Test if the given URL is a url for the current site.
 
 If the current site handles requests for the hostname `example.com`, then all of the following expressions will echo `true`:
@@ -42,7 +38,10 @@ The following will echo `false`:
 {{ \"example.com\"|is_site_url }}
 {{ \"//foo.test\"|is_site_url }}
 ```
-").
+
+See also
+
+[sanitize_url](/id/doc_template_filter_filter_sanitize_url), [url_abs](/id/doc_template_filter_filter_url_abs), [url](/id/doc_template_filter_filter_url), [urlencode](/id/doc_template_filter_filter_urlencode)").
 -export([is_site_url/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

@@ -18,10 +18,6 @@
 
 -module(filter_escape_ical).
 -moduledoc("
-See also
-
-[escape](/id/doc_template_filter_filter_escape)
-
 Escape the value according to the RFC2445 rules.
 
 A double quote becomes `\\\"`; a comma becomes `\\,`; a colon becomes `\":\"`; a semicolon becomes `\\;`; a backslash
@@ -37,7 +33,10 @@ For example:
 ```
 
 When the value is `abc:d;e` then the output is `abc\":\"d\\;e`.
-").
+
+See also
+
+[escape](/id/doc_template_filter_filter_escape)").
 -export([escape_ical/2]).
 
 

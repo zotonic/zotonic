@@ -18,10 +18,6 @@
 
 -module(filter_format_duration).
 -moduledoc("
-See also
-
-[format\\_number](/id/doc_template_filter_filter_format_number), [format\\_integer](/id/doc_template_filter_filter_format_integer), [format\\_price](/id/doc_template_filter_filter_format_price)
-
 Show a duration in hours, minutes and seconds.
 
 Takes as input a number representing a number of seconds. Outputs a human readable form.
@@ -43,7 +39,10 @@ And:
 ```
 
 Will ouput `1h0m1s`.
-").
+
+See also
+
+[format_number](/id/doc_template_filter_filter_format_number), [format_integer](/id/doc_template_filter_filter_format_integer), [format_price](/id/doc_template_filter_filter_format_price)").
 -export([format_duration/2]).
 
 

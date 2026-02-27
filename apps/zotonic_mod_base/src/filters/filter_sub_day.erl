@@ -18,10 +18,6 @@
 
 -module(filter_sub_day).
 -moduledoc("
-See also
-
-[add\\_day](/id/doc_template_filter_filter_add_day), [sub\\_week](/id/doc_template_filter_filter_sub_week), [sub\\_month](/id/doc_template_filter_filter_sub_month), [sub\\_year](/id/doc_template_filter_filter_sub_year)
-
 Subtracts a day from a date. The value must be of the form `{{Y,M,D},{H,I,S}}`.
 
 For example:
@@ -43,7 +39,10 @@ For example:
 ```
 
 When the value is `{{2008,12,10},{15,30,0}}` then the output is `{{2008,12,7},{15,30,0}}`.
-").
+
+See also
+
+[add_day](/id/doc_template_filter_filter_add_day), [sub_week](/id/doc_template_filter_filter_sub_week), [sub_month](/id/doc_template_filter_filter_sub_month), [sub_year](/id/doc_template_filter_filter_sub_year)").
 -export([sub_day/2, sub_day/3]).
 
 sub_day(undefined, _Context) ->

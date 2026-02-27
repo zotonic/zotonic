@@ -18,10 +18,6 @@
 
 -module(validator_base_custom).
 -moduledoc("
-See also
-
-[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators)
-
 Support for custom client-side (JavaScript-based) validators.
 
 This call simply adds a `z_add_validator()` JavaScript call which adds a custom validator based on the arguments given
@@ -54,7 +50,10 @@ The `args` are available if the validation is added using the LiveValidation Jav
 
 Note that this validation does not do any server side validation. Because there is no server side validation, the value
 of the `input` element is not available via `z_context:get_q_validated/2` but only via `z_context:get_q/2`.
-").
+
+See also
+
+[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators)").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_validator/5, validate/5]).
 

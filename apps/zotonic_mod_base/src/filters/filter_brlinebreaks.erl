@@ -18,10 +18,6 @@
 
 -module(filter_brlinebreaks).
 -moduledoc("
-See also
-
-[linebreaksbr](/id/doc_template_filter_filter_linebreaksbr)
-
 Translate HTML `<br/\\>` elements into ASCII newlines (`\\n`).
 
 The following string:
@@ -34,7 +30,10 @@ The following string:
 will evaluate to `foo\\nbar`.
 
 **Note:** Non-closing line breaks (`<br\\>`) are currently not converted.
-").
+
+See also
+
+[linebreaksbr](/id/doc_template_filter_filter_linebreaksbr)").
 -export([brlinebreaks/2]).
 
 brlinebreaks(S, Context) ->

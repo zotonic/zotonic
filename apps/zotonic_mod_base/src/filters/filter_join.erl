@@ -18,10 +18,6 @@
 
 -module(filter_join).
 -moduledoc("
-See also
-
-[element](/id/doc_template_filter_filter_element), [tail](/id/doc_template_filter_filter_tail), [split](/id/doc_template_filter_filter_split)
-
 Joins the elements of a list. Joins the elements of the input list together, separated by the argument.
 
 For example:
@@ -49,7 +45,10 @@ Jan, Piet or Klaas
 ```
 
 The spaces around the last separator are added by the filter.
-").
+
+See also
+
+[element](/id/doc_template_filter_filter_element), [tail](/id/doc_template_filter_filter_tail), [split](/id/doc_template_filter_filter_split)").
 -export([join/2, join/3, join/4]).
 
 

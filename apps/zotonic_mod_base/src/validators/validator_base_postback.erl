@@ -18,10 +18,6 @@
 
 -module(validator_base_postback).
 -moduledoc("
-See also
-
-[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators)
-
 Performs a custom server side validation of an input value. This allows you to add your own validation logic to HTML
 form fields.
 
@@ -59,7 +55,10 @@ observe_validate_username({validate_username, {postback, Id, Value, _Args}}, Con
 is_valid(Value) ->
     %% ...
 ```
-").
+
+See also
+
+[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators)").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([
     render_validator/5,

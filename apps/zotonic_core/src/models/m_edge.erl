@@ -19,10 +19,6 @@
 
 -module(m_edge).
 -moduledoc("
-See also
-
-[m_rsc](/id/doc_model_model_rsc), [m_media](/id/doc_model_model_media)
-
 Access information about page connections.
 
 Edges represent the connections between resources. They are implemented as tuples `{EdgeId, SubjectId, PredicateId, ObjectId,
@@ -202,7 +198,9 @@ cotonic.broker.call(
 );
 ```
 
-").
+See also
+
+[m_rsc](/id/doc_model_model_rsc), [m_media](/id/doc_model_model_media)").
 -author("Marc Worrell <marc@worrell.nl").
 
 -behaviour(zotonic_model).

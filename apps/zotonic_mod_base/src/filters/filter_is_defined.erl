@@ -18,10 +18,6 @@
 
 -module(filter_is_defined).
 -moduledoc("
-See also
-
-[is\\_undefined](/id/doc_template_filter_filter_is_undefined), [if\\_undefined](/id/doc_template_filter_filter_if_undefined), [if](/id/doc_template_filter_filter_if)
-
 Tests if a value is defined.
 
 Checks if the value is not empty and outputs a boolean true or false. This is useful in combination with the
@@ -35,7 +31,10 @@ For example:
 ```
 
 When the value is “foo” then the output “The value was defined”.
-").
+
+See also
+
+[is_undefined](/id/doc_template_filter_filter_is_undefined), [if_undefined](/id/doc_template_filter_filter_if_undefined), [if](/id/doc_template_filter_filter_if)").
 -export([is_defined/2]).
 
 

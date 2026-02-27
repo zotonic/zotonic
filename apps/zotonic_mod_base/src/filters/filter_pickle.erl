@@ -21,8 +21,8 @@
 -moduledoc("
 Pickle an Erlang value so that it can be safely submitted with a form.
 
-The Erlang value is encoded using erlang:term\\_to\\_binary/1 and signed with the site’s secret key. In Erlang the
-value can be unpacked using z\\_utils:depickle/2
+The Erlang value is encoded using erlang:term_to_binary/1 and signed with the site’s secret key. In Erlang the
+value can be unpacked using z_utils:depickle/2
 
 Usage:
 

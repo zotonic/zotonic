@@ -18,10 +18,6 @@
 
 -module(filter_in_future).
 -moduledoc("
-See also
-
-[in\\_past](/id/doc_template_filter_filter_in_past)
-
 Tests if a date is in the future.
 
 Tests if the value is a date and in the future. The value must be a tuple of the format `{Y,M,D}` or
@@ -35,7 +31,10 @@ For example:
 ```
 
 This outputs “That day has yet to come.” if the value is a date and in the future.
-").
+
+See also
+
+[in_past](/id/doc_template_filter_filter_in_past)").
 -export([in_future/2]).
 
 

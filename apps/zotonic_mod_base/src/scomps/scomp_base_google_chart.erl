@@ -125,7 +125,7 @@ Valid arguments for a data record are:
 
 See also
 
-tags [chart\\_pie](/id/doc_template_scomp_scomp_chart_pie#scomp-chart-pie) and [chart\\_pie3d](/id/doc_template_scomp_scomp_chart_pie3d#scomp-chart-pie3d).
+tags [chart_pie](/id/doc_template_scomp_scomp_chart_pie#scomp-chart-pie) and [chart_pie3d](/id/doc_template_scomp_scomp_chart_pie3d#scomp-chart-pie3d).
 ").
 -behaviour(zotonic_scomp).
 

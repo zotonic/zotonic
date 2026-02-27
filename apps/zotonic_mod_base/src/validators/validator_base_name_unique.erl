@@ -14,10 +14,6 @@
 %% limitations under the License.
 -module(validator_base_name_unique).
 -moduledoc("
-See also
-
-[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators), [username\\_unique](/id/doc_template_validator_validator_username_unique), [page\\_path\\_unique](/id/doc_template_validator_validator_page_path_unique)
-
 A [validator](/id/doc_developerguide_forms_and_validation#guide-validators) to check whether a resource’s name is unique:
 
 
@@ -42,7 +38,10 @@ You can also pass a `failure_message`:
 <input type=\"text\" id=\"name\" name=\"name\" value=\"\" />
 {% validate id=\"name\" type={name_unique id=id failure_message=_\"Eek! Already used!\"} %}
 ```
-").
+
+See also
+
+[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators), [username_unique](/id/doc_template_validator_validator_username_unique), [page_path_unique](/id/doc_template_validator_validator_page_path_unique)").
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 

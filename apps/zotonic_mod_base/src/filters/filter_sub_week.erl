@@ -18,10 +18,6 @@
 
 -module(filter_sub_week).
 -moduledoc("
-See also
-
-[sub\\_day](/id/doc_template_filter_filter_sub_day), [add\\_week](/id/doc_template_filter_filter_add_week), [sub\\_month](/id/doc_template_filter_filter_sub_month), [sub\\_year](/id/doc_template_filter_filter_sub_year)
-
 Subtracts a week from a date. The value must be of the form `{{Y,M,D},{H,I,S}}`.
 
 For example:
@@ -43,7 +39,10 @@ For example:
 ```
 
 When the value is `{{2008,12,10},{15,30,0}}` then the output is `{{2008,11,19},{15,30,0}}`.
-").
+
+See also
+
+[sub_day](/id/doc_template_filter_filter_sub_day), [add_week](/id/doc_template_filter_filter_add_week), [sub_month](/id/doc_template_filter_filter_sub_month), [sub_year](/id/doc_template_filter_filter_sub_year)").
 -export([sub_week/2, sub_week/3]).
 
 sub_week(undefined, _Context) ->

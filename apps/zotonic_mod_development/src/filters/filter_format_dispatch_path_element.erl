@@ -20,7 +20,7 @@
 -moduledoc("
 Format dispatch path element so variables will be more visible.
 
-See [mod\\_development](/id/doc_module_mod_development)
+See [mod_development](/id/doc_module_mod_development)
 
 Todo
 

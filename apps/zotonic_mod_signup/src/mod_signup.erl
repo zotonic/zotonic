@@ -62,7 +62,7 @@ Defaults to `default_content_group`.
 
 `mod_signup.``depiction_as_medium`
 
-If set then any depiction\\_url is added as a medium record to the person who signed up. Normally the depiction is added
+If set then any depiction_url is added as a medium record to the person who signed up. Normally the depiction is added
 as a separate *depending* image resource and connected from the person using a `depiction` predicate.
 
 

@@ -18,14 +18,6 @@
 
 -module(mod_acl_user_groups).
 -moduledoc("
-See also
-
-[Access control](/id/doc_developerguide_access_control#guide-auth)
-
-See also
-
-[mod\\_content\\_groups](/id/doc_module_mod_content_groups)
-
 This module adds rule-based access control.
 
 *   All resources (pages) are put into a content group.
@@ -177,20 +169,20 @@ The protected properties are:
 
 *   email
 *   phone
-*   phone\\_mobile
-*   phone\\_alt
-*   address\\_street\\_1
-*   address\\_street\\_2
-*   address\\_postcode
-*   address\\_city
-*   date\\_start
-*   date\\_end
-*   location\\_lat
-*   location\\_lng
-*   pivot\\_location\\_lat
-*   pivot\\_location\\_lng
-*   pivot\\_geocode
-*   pivot\\_geocode\\_qhash
+*   phone_mobile
+*   phone_alt
+*   address_street_1
+*   address_street_2
+*   address_postcode
+*   address_city
+*   date_start
+*   date_end
+*   location_lat
+*   location_lng
+*   pivot_location_lat
+*   pivot_location_lng
+*   pivot_geocode
+*   pivot_geocode_qhash
 
 
 
@@ -315,30 +307,32 @@ Accepted Events
 
 This module handles the following notifier callbacks:
 
-- `observe_acl_add_sql_check`: Handle `acl_add_sql_check` notifications using `acl_user_groups_checks:acl_add_sql_check`.
-- `observe_acl_context_authenticated`: Handle `acl_context_authenticated` notifications using `acl_user_groups_checks:acl_context_authenticated`.
-- `observe_acl_is_allowed`: Handle `acl_is_allowed` notifications using `acl_user_groups_checks:acl_is_allowed`.
-- `observe_acl_is_allowed_prop`: Handle `acl_is_allowed_prop` notifications using `acl_user_groups_checks:acl_is_allowed_prop`.
-- `observe_acl_is_owner`: Handle `acl_is_owner` notifications using `m_config:get_boolean`.
-- `observe_acl_logoff`: Handle `acl_logoff` notifications using `acl_user_groups_checks:acl_logoff`.
-- `observe_acl_logon`: Handle `acl_logon` notifications using `acl_user_groups_checks:acl_logon`.
-- `observe_acl_user_groups`: Handle `acl_user_groups` notifications using `acl_user_groups_checks:user_groups_all`.
-- `observe_admin_menu`: Handle `admin_menu` notifications using `z_utils:name_for_site`.
-- `observe_edge_delete`: Handle `edge_delete` notifications using `z:info`.
-- `observe_edge_insert`: Log membership changes when relevant group edges are inserted.
-- `observe_hierarchy_updated`: Handle `hierarchy_updated` notifications using `m_rsc:props`.
-- `observe_rsc_delete`: Do now allow the deletion of a acl_user_group if that group is still used using `m_acl_user_group:is_used`.
-- `observe_rsc_get`: Ensure that the privacy property is set using `m_category:is_a_prim`.
-- `observe_rsc_insert`: Add default content group when resource is inserted without one using `acl_user_groups_checks:default_content_group`.
-- `observe_rsc_update`: Handle `rsc_update` notifications using `acl_user_groups_checks:rsc_update_check`.
-- `observe_rsc_update_done`: Handle `rsc_update_done` notifications using `m_hierarchy:ensure`.
+- `observe_acl_add_sql_check`: Add ACL SQL constraints to search/query plans so result sets are filtered by user-group/content-group permissions.
+- `observe_acl_context_authenticated`: Refresh the authenticated context with resolved ACL group state after login/session auth changes.
+- `observe_acl_is_allowed`: Evaluate resource/action permission checks against compiled user-group/content-group ACL rules.
+- `observe_acl_is_allowed_prop`: Evaluate property-level view permissions, allowing anonymous `view` when no object is supplied.
+- `observe_acl_is_owner`: Treat users as owner of their own person resource, creator-owned resources, and optionally author-linked resources when `author_is_owner` is enabled.
+- `observe_acl_logoff`: Clear cached ACL group state from the context on logoff.
+- `observe_acl_logon`: Populate ACL group state for the logging-in user.
+- `observe_acl_user_groups`: Return the full effective user-group list for the current user.
+- `observe_admin_menu`: Add admin menu entries for User groups, Collaboration groups, and Access control rules.
+- `observe_edge_delete`: Log removal of `hasusergroup`, `hascollabmember`, and `hascollabmanager` membership edges.
+- `observe_edge_insert`: Log additions of `hasusergroup`, `hascollabmember`, and `hascollabmanager` membership edges.
+- `observe_hierarchy_updated`: Rebuild published/edit ACL lookup tables when category, content-group, or acl-user-group hierarchies change.
+- `observe_rsc_delete`: Block deletion of acl user groups that are still referenced by ACL rules or memberships.
+- `observe_rsc_get`: Set a default `privacy` value on resources without one (`collab_member` for persons, otherwise `public`).
+- `observe_rsc_insert`: Assign a default `content_group_id` on insert when none is provided, based on the resource category.
+- `observe_rsc_update`: Validate ACL-related updates and prevent non-ACL-admin users from changing `acl_mime_allowed` and `acl_upload_size`.
+- `observe_rsc_update_done`: Rebuild the `acl_user_group` hierarchy when a resource changes into or out of that category.
 
 Delegate callbacks:
 
 - `event/2` with `postback` messages: `delete_all`, `set_config`.
 - `event/2` with `submit` messages: `delete_move`.
 
-").
+See also
+
+[mod_content_groups](/id/doc_module_mod_content_groups), [Access control](/id/doc_developerguide_access_control#guide-auth)").
 
 -mod_title("ACL User Groups").
 -mod_description("Organize users into hierarchical groups").

@@ -19,10 +19,6 @@
 
 -module(filter_urlize).
 -moduledoc("
-See also
-
-[escape\\_link](/id/doc_template_filter_filter_escape_link)
-
 Find urls in the given input and make them clickable.
 
 Example:
@@ -39,8 +35,11 @@ Outputs:
 <a href=\"http://foo.bar/\">http://foo.bar/</a>
 ```
 
-This filter is very similar to the [escape\\_link](/id/doc_template_filter_filter_escape_link) filter.
-").
+This filter is very similar to the [escape_link](/id/doc_template_filter_filter_escape_link) filter.
+
+See also
+
+[escape_link](/id/doc_template_filter_filter_escape_link)").
 
 -export([urlize/2]).
 

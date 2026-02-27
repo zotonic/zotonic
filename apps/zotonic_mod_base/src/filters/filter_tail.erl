@@ -18,10 +18,6 @@
 
 -module(filter_tail).
 -moduledoc("
-See also
-
-[first](/id/doc_template_filter_filter_first), [nthtail](/id/doc_template_filter_filter_nthtail)
-
 Fetch the tail of a list.
 
 Returns the tail of a list. Useful when you want to skip the first element of a list when looping.
@@ -34,7 +30,10 @@ For example:
 ```
 
 When value is the list `[1,2,3]` then the output is `23`.
-").
+
+See also
+
+[first](/id/doc_template_filter_filter_first), [nthtail](/id/doc_template_filter_filter_nthtail)").
 -export([tail/2]).
 
 

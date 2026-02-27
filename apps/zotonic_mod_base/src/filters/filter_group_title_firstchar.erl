@@ -18,11 +18,7 @@
 
 -module(filter_group_title_firstchar).
 -moduledoc("
-See also
-
-[group\\_firstchar](/id/doc_template_filter_filter_group_firstchar)
-
-Similar to [group\\_firstchar](/id/doc_template_filter_filter_group_firstchar), but always uses the `title` column from
+Similar to [group_firstchar](/id/doc_template_filter_filter_group_firstchar), but always uses the `title` column from
 the rsc table.
 
 This is merely a shortcut, simplifying the template syntax:
@@ -46,7 +42,10 @@ This is merely a shortcut, simplifying the template syntax:
 ```
 
 Groups alphabetically on title, in four columns.
-").
+
+See also
+
+[group_firstchar](/id/doc_template_filter_filter_group_firstchar)").
 -export([group_title_firstchar/3]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

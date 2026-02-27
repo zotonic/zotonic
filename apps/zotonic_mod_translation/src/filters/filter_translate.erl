@@ -19,10 +19,6 @@
 
 -module(filter_translate).
 -moduledoc("
-See also
-
-[translation](/id/doc_template_filter_filter_translation)
-
 Translates a (English) value to the current language or the given language.
 
 If the input is a `#trans{}` record then it is extended with the translations from the .po files before the language
@@ -45,7 +41,10 @@ An example with a specific language:
 ```
 
 The output would be `\"Annuleer\"`.
-").
+
+See also
+
+[translation](/id/doc_template_filter_filter_translation)").
 -export([
     translate/2,
     translate/3

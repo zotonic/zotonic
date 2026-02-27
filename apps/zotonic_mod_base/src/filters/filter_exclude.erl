@@ -18,10 +18,6 @@
 
 -module(filter_exclude).
 -moduledoc("
-See also
-
-[is\\_visible](/id/doc_template_filter_filter_is_visible), [is\\_a](/id/doc_template_filter_filter_is_a), [filter](/id/doc_template_filter_filter_filter)
-
 Filters a list on the value of a property, either on absence or inequality.
 
 This is the inverse of [filter](/id/doc_template_filter_filter_filter).
@@ -83,8 +79,11 @@ Below is another example of inversely filtering a list:
 {% endwith %}
 ```
 
-The example above filters against a search result and returns only elements whose `name` **is not** “page\\_home\\_gallery”.
-").
+The example above filters against a search result and returns only elements whose `name` **is not** “page_home_gallery”.
+
+See also
+
+[is_visible](/id/doc_template_filter_filter_is_visible), [is_a](/id/doc_template_filter_filter_is_a), [filter](/id/doc_template_filter_filter_filter)").
 -export([
 	exclude/3,
 	exclude/4

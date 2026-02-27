@@ -19,10 +19,6 @@
 
 -module(m_rsc_gone).
 -moduledoc("
-See also
-
-[The Zotonic data model](/id/doc_userguide_datamodel#guide-datamodel), [m_rsc](/id/doc_model_model_rsc)
-
 This model tracks deleted resources (see [m_rsc](/id/doc_model_model_rsc)). Its primary goal is to be able to
 determine if a resource never existed, has been deleted or has been replaced by another resource.
 
@@ -70,7 +66,10 @@ Available Model API Paths
 | `get` | `/+id/is_gone/...` | Return whether gone (`is_gone`). |
 
 `/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
-").
+
+See also
+
+[The Zotonic data model](/id/doc_userguide_datamodel#guide-datamodel), [m_rsc](/id/doc_model_model_rsc)").
 -author("Marc Worrell <marc@worrell.nl").
 
 -behaviour(zotonic_model).

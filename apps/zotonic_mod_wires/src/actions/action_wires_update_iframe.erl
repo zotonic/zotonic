@@ -18,10 +18,6 @@
 
 -module(action_wires_update_iframe).
 -moduledoc("
-See also
-
-action [update](/id/doc_template_action_action_update).
-
 Note
 
 This action is only used to update an `iframe` element. Use the [update](/id/doc_template_action_action_update) action
@@ -47,7 +43,10 @@ When clicked, the contents of the iframe will be set to the rendered `email.tpl`
 | catinclude | Add this argument to use a [catinclude](/id/doc_template_tag_tag_catinclude) instead of a normal include of the template. The id argument *must* be present for a catinclude to work. | catinclude id=1            |
 
 All other arguments are passed as-is to the included template(s).
-").
+
+See also
+
+action [update](/id/doc_template_action_action_update).").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([
     render_action/4

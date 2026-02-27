@@ -18,10 +18,6 @@
 
 -module(filter_chunk).
 -moduledoc("
-See also
-
-[split\\_in](/id/doc_template_filter_filter_split_in), [vsplit\\_in](/id/doc_template_filter_filter_vsplit_in)
-
 This filter splits a list in shorter lists. It splits an array in sub-arrays of at most a given length. This is useful
 when displaying a list of items in columns or rows.
 
@@ -35,9 +31,12 @@ For example:
 ```
 
 This displays `1 2 * 3 4 * 5 *`, as the array is split in three chunks. The last chunk is not filled to the maximum
-length. Then number of chunks depends on the length of the input list, this in contrary to the split\\_in filters where
+length. Then number of chunks depends on the length of the input list, this in contrary to the split_in filters where
 the number of splits is fixed and the length per split is variable.
-").
+
+See also
+
+[split_in](/id/doc_template_filter_filter_split_in), [vsplit_in](/id/doc_template_filter_filter_vsplit_in)").
 -export([chunk/3]).
 
 

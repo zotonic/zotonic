@@ -18,10 +18,6 @@
 
 -module(filter_in_past).
 -moduledoc("
-See also
-
-[in\\_future](/id/doc_template_filter_filter_in_future)
-
 Tests if a date is in the past.
 
 Tests if the value is a date and in the past. The value must be a tuple of the format `{Y,M,D}` or `{{Y,M,D},{H,I,S}}`.
@@ -35,7 +31,10 @@ For example:
 ```
 
 This outputs “Those days have gone.” if the value is a date and in the past.
-").
+
+See also
+
+[in_future](/id/doc_template_filter_filter_in_future)").
 -export([in_past/2]).
 
 

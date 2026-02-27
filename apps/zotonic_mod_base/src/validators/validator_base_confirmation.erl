@@ -18,10 +18,6 @@
 
 -module(validator_base_confirmation).
 -moduledoc("
-See also
-
-[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators)
-
 Check if two inputs are the same.
 
 Useful when a form requires double entry of a password or e-mail address to prevent typos.
@@ -46,7 +42,10 @@ Arguments
 | ----------------- | -------------------------------------------------------------------------------- | --------------------------------- |
 | match             | The id of the input field that should have the same value.                       | `match=\"field1\"`                  |
 | failure\\\\_message | Message to be shown when the two fields are unequal. Defaults to “Does not match.” | `failure_message=\"Please retry.\"` |
-").
+
+See also
+
+[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators)").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_validator/5, validate/5]).
 

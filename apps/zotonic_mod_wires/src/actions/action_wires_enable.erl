@@ -18,10 +18,6 @@
 
 -module(action_wires_enable).
 -moduledoc("
-See also
-
-action [disable](/id/doc_template_action_action_disable).
-
 Resets the “disabled” attribute of a HTML tag and removes the CSS class “disabled”.
 
 Example:
@@ -38,7 +34,10 @@ After clicking the button the input will be:
 ```django
 <input id=\"myid\" class=\"\" type=\"text\" value=\"hello\" />
 ```
-").
+
+See also
+
+action [disable](/id/doc_template_action_action_disable).").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
 

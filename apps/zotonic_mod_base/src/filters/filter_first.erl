@@ -18,10 +18,6 @@
 
 -module(filter_first).
 -moduledoc("
-See also
-
-[tail](/id/doc_template_filter_filter_tail), [last](/id/doc_template_filter_filter_last)
-
 Returns the first character or element.
 
 Returns the first byte of a binary or the first element of a list. An empty binary is returned when the input is empty.
@@ -63,7 +59,10 @@ Or, with a string:
 ```
 
 The filtered value is `\"he\"`.
-").
+
+See also
+
+[tail](/id/doc_template_filter_filter_tail), [last](/id/doc_template_filter_filter_last)").
 -export([
     first/2,
     first/3

@@ -19,10 +19,6 @@
 
 -module(filter_date).
 -moduledoc("
-See also
-
-[date\\_range](/id/doc_template_filter_filter_date_range), [datediff](/id/doc_template_filter_filter_datediff), [timesince](/id/doc_template_filter_filter_timesince), [now](/id/doc_template_tag_tag_now)
-
 Formats a date or datetime according to the format specified in the argument.
 
 The date should be a tuple `{Y,M,D}` and the datetime should be a tuple `{{Y,M,D},{H,I,S}}`. Dates and datetimes are
@@ -162,7 +158,10 @@ Will output 10 October 1990. This also works with datetimes:
 ```
 
 Will output 10 October 1990 - 10:11:12.
-").
+
+See also
+
+[date_range](/id/doc_template_filter_filter_date_range), [datediff](/id/doc_template_filter_filter_datediff), [timesince](/id/doc_template_filter_filter_timesince), [now](/id/doc_template_tag_tag_now)").
 
 -export([
   date/3,

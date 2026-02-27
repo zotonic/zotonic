@@ -18,10 +18,6 @@
 
 -module(validator_base_presence).
 -moduledoc("
-See also
-
-[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators)
-
 Check if an input has been filled in or checked.
 
 For example when a title must be entered:
@@ -40,7 +36,10 @@ Arguments
 | Argument          | Description                                                | Example                           |
 | ----------------- | ---------------------------------------------------------- | --------------------------------- |
 | failure\\\\_message | Message to be shown when field is empty. Defaults to “\\\\*” | `failure_message=\"Please enter.\"` |
-").
+
+See also
+
+[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators)").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_validator/5, validate/5]).
 

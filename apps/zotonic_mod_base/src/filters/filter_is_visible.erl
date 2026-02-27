@@ -18,10 +18,6 @@
 
 -module(filter_is_visible).
 -moduledoc("
-See also
-
-[is\\_a](/id/doc_template_filter_filter_is_a), [is\\_not\\_a](/id/doc_template_filter_filter_is_not_a), [filter](/id/doc_template_filter_filter_filter)
-
 Filter a list of resource ids so that only the visible ids remain.
 
 This filter can be applied to a list of resource ids or a single resource id.
@@ -52,7 +48,10 @@ Whilst:
 ```
 
 Lists only the first three collection members that are visible.
-").
+
+See also
+
+[is_a](/id/doc_template_filter_filter_is_a), [is_not_a](/id/doc_template_filter_filter_is_not_a), [filter](/id/doc_template_filter_filter_filter)").
 -export([is_visible/2, is_visible/3]).
 
 

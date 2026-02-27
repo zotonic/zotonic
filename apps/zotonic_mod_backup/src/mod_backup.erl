@@ -20,7 +20,7 @@
 
 -module(mod_backup).
 -moduledoc("
-mod\\_backup serves two different purposes: it makes a nightly backup of your files and database, and can also
+mod_backup serves two different purposes: it makes a nightly backup of your files and database, and can also
 backup/restore individual [resource](/id/doc_glossary#term-resource) items.
 
 
@@ -31,7 +31,7 @@ Daily backup of database and files
 Losing data is bad for business. This applies to your customers as well if you are building sites for them. It is
 critical to keep backups of any Zotonic sites you develop.
 
-After enabling mod\\_backup, it will make a backup of the site’s data and configuration every night at 3 AM. It keeps
+After enabling mod_backup, it will make a backup of the site’s data and configuration every night at 3 AM. It keeps
 the last 7 daily copies of the data and a weekly backup for the last 4 weeks, so you have always a backup to roll back to.
 
 The backups are stored under `backup` in the files directory of your site. Check in the admin under System > Status to
@@ -47,11 +47,11 @@ stored in a safe location to be able to decrypt the backups. When encryption is 
 
 The zotonic shell command `decrypt` can be used to decrypt encrypted zotonic backup files.
 
-If [mod\\_filestore](/id/doc_module_mod_filestore) is enabled then the media files are not backed up, as it is assumed
+If [mod_filestore](/id/doc_module_mod_filestore) is enabled then the media files are not backed up, as it is assumed
 that the files are already backed up on the cloud filestore. The data backups are uploaded to the cloud filestore, so
 they are also backed up.
 
-If [mod\\_filestore](/id/doc_module_mod_filestore) is not enabled then we advise to add a
+If [mod_filestore](/id/doc_module_mod_filestore) is not enabled then we advise to add a
 [cron](http://en.wikipedia.org/wiki/Cron) script to the server for copying the data to remote storage.
 
 

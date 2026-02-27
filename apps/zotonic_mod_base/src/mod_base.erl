@@ -19,11 +19,7 @@
 
 -module(mod_base).
 -moduledoc("
-See also
-
-[dispatch rules](/id/doc_dispatch_index#all-dispatch-rules).
-
-mod\\_base is the base module, which acts as a container module holding most of Zotonic basic [dispatch
+mod_base is the base module, which acts as a container module holding most of Zotonic basic [dispatch
 rules](/id/doc_dispatch_index#all-dispatch-rules), [Actions](/id/template_action#actions) and [Module tags](/id/template_tag#scomps).
 
 Note that the amount of templates has been kept to a minimum in this module, so that sites are free to implement
@@ -43,7 +39,9 @@ This module handles the following notifier callbacks:
 - `observe_hierarchy_updated`: Handle `hierarchy_updated` notifications using `m_category:renumber`.
 - `observe_media_stillimage`: Return the filename of a still image to be used for image tags using `z_media_preview:can_generate_preview`.
 
-").
+See also
+
+[dispatch rules](/id/doc_dispatch_index#all-dispatch-rules).").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Zotonic Base").

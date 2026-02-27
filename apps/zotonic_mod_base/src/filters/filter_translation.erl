@@ -20,10 +20,6 @@
 
 -module(filter_translation).
 -moduledoc("
-See also
-
-[translate](/id/doc_template_filter_filter_translate)
-
 Lookup a specific translation in a translated text. If the text is not translated then the text is returned as-is.
 
 The filter takes as input a value or other variable and as argument the language to be shown.
@@ -45,7 +41,10 @@ If the variable `text` has the value:
 Then this will show `Hello`, even if the current template language is set to `nl`.
 
 This filter is especially useful for filling in forms with language specific strings to be edited.
-").
+
+See also
+
+[translate](/id/doc_template_filter_filter_translate)").
 
 -export([
     translation/3

@@ -80,7 +80,7 @@ ACL options
 
 See also
 
-[controller\\_page](/id/doc_controller_controller_page).
+[controller_page](/id/doc_controller_controller_page).
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

@@ -60,9 +60,9 @@ This notification has the following fields:
 *   handler - A handler name (see below)
 *   answers - The answers that were filled in
 *   missing - answers that were missing
-*   answers\\_raw - Unprocessed answers, e.g. the raw submission
+*   answers_raw - Unprocessed answers, e.g. the raw submission
 
-To intercept a survey submission you would observe this survey\\_submit notification, and return `ok`:
+To intercept a survey submission you would observe this survey_submit notification, and return `ok`:
 
 
 ```erlang
@@ -80,7 +80,7 @@ The survey edit page has a dropdown for so-called “survey handlers”. A surve
 the resource that indicates the handler that needs to be taken. Handlers are collected using the
 `#survey_get_handlers{}` fold notification.
 
-For instance, the following defines a handler called “email\\_me”:
+For instance, the following defines a handler called “email_me”:
 
 
 ```erlang

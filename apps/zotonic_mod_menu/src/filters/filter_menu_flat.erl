@@ -18,10 +18,6 @@
 
 -module(filter_menu_flat).
 -moduledoc("
-See also
-
-[menu\\_subtree](/id/doc_template_filter_filter_menu_subtree), [menu\\_trail](/id/doc_template_filter_filter_menu_trail)
-
 Flattens the rsc menu structure for use in a template loop.
 
 Example:
@@ -32,7 +28,10 @@ Example:
 ...
 {% endif %}
 ```
-").
+
+See also
+
+[menu_subtree](/id/doc_template_filter_filter_menu_subtree), [menu_trail](/id/doc_template_filter_filter_menu_trail)").
 -export([menu_flat/2]).
 
 

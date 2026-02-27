@@ -43,10 +43,10 @@ This is a rather complicated example. It connects the typeahead action to the in
 will be shown in the &lt;ul/> with id suggestions. Only pages in the category person will be found.
 
 The listed suggestions will have two actions attached. One action will set the value of the hidden input element
-person\\_id to the id of the selected suggestion (which is a [page](/id/doc_glossary#term-page)). The other action will
+person_id to the id of the selected suggestion (which is a [page](/id/doc_glossary#term-page)). The other action will
 submit the form.
 
-The action\\_with\\_id arguments are always performed before the action arguments.
+The action_with_id arguments are always performed before the action arguments.
 
 The typeselect action accepts the following arguments:
 

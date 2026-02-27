@@ -19,13 +19,13 @@
 
 -module(controller_file_id).
 -moduledoc("
-Redirect to the controller controller\\_file.
+Redirect to the controller controller_file.
 
 This controller maps a resource id to the filename of the medium associated with the resource.
 
 For the redirect it uses the dispatch rule defined in the dispatch options.
 
-Examples from mod\\_base:
+Examples from mod_base:
 
 
 ```erlang
@@ -37,7 +37,7 @@ The first dispatch rule will redirect to the second. If no associated file was f
 
 See also
 
-[controller\\_file](/id/doc_controller_controller_file)
+[controller_file](/id/doc_controller_controller_file)
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

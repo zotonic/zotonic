@@ -18,10 +18,6 @@
 
 -module(filter_randomize).
 -moduledoc("
-See also
-
-[rand](/id/doc_template_filter_filter_rand), [random](/id/doc_template_filter_filter_random)
-
 Shuffle a list of values.
 
 For example:
@@ -32,7 +28,10 @@ For example:
 ```
 
 The output of this is the same list, but the order of the elements randomized. So for instance: \\[“c”, “a”, “b”\\].
-").
+
+See also
+
+[rand](/id/doc_template_filter_filter_rand), [random](/id/doc_template_filter_filter_random)").
 -export([randomize/2]).
 
 

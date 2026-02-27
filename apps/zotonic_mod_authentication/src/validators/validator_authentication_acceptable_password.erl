@@ -19,10 +19,6 @@
 
 -module(validator_authentication_acceptable_password).
 -moduledoc("
-See also
-
-[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators), [username\\_unique](/id/doc_template_validator_validator_username_unique)
-
 A [validator](/id/doc_developerguide_forms_and_validation#guide-validators) to check whether a password conforms to the
 password secutiry requirements.
 
@@ -74,7 +70,10 @@ password is empty:
             only_on_blur
 %}
 ```
-").
+
+See also
+
+[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators), [username_unique](/id/doc_template_validator_validator_username_unique)").
 
 -export([
     render_validator/5,

@@ -18,17 +18,13 @@
 
 -module(mod_audio).
 -moduledoc("
-See also
-
-[mod\\_video](/id/doc_module_mod_video), [mod\\_video\\_embed](/id/doc_module_mod_video_embed), [media](/id/doc_template_tag_tag_media)
-
 Adds support for viewing and handling audio medium items.
 
 This module parses audio files and extracts tags and an optional image from the audio file.
 
 Note
 
-mod\\_audio uses the command-line utilities `ffmpeg` and `ffprobe`. For mod\\_audio to function correctly they must be
+mod_audio uses the command-line utilities `ffmpeg` and `ffprobe`. For mod_audio to function correctly they must be
 present in the search path of Zotonic.
 
 
@@ -66,13 +62,13 @@ The following properties are extracted from the audio file, and can be edited in
 
 *   artist
 *   album
-*   album\\_artist
+*   album_artist
 *   composer
 *   genre
 *   track
 *   copyright
-*   is\\_compilation (boolean flag)
-*   org\\_pubdate, this is extracted form the `creation_time` tag
+*   is_compilation (boolean flag)
+*   org_pubdate, this is extracted form the `creation_time` tag
 
 If there is no resource title given when creating the audio page then the title from the tags is used. If that one is
 empty then the file’s basename is used.
@@ -86,7 +82,9 @@ This module handles the following notifier callbacks:
 - `observe_media_upload_rsc_props`: Set resource properties from the medium properties using `z_datetime:to_datetime`.
 - `observe_media_viewer`: Return the media viewer for the audio using `z_template:render`.
 
-").
+See also
+
+[mod_video](/id/doc_module_mod_video), [mod_video_embed](/id/doc_module_mod_video_embed), [media](/id/doc_template_tag_tag_media)").
 
 -author("Marc Worrell <marc@worrell.nl>").
 

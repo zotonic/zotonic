@@ -19,10 +19,6 @@
 
 -module(filter_split).
 -moduledoc("
-See also
-
-[join](/id/doc_template_filter_filter_join)
-
 Splits the filter value into a list of values.
 
 The input value is split by the filter argument, for example:
@@ -33,7 +29,10 @@ The input value is split by the filter argument, for example:
 ```
 
 Will create the list `[\"foo\", \"bar\", \"baz\"]`.
-").
+
+See also
+
+[join](/id/doc_template_filter_filter_join)").
 -export([split/3]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

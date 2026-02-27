@@ -22,10 +22,6 @@
 
 -module(filter_datediff).
 -moduledoc("
-See also
-
-[date](/id/doc_template_filter_filter_date)
-
 Calculate the difference between two dates, returning a single part of that difference.
 
 The filter takes a list with 2 parts \\[start, end\\] as date range argument.
@@ -40,7 +36,10 @@ Example, where start = 2012-02-02, end = 2012-03-01:
 ```
 
 Returns 1, since the difference in months between those 2 dates is 1.
-").
+
+See also
+
+[date](/id/doc_template_filter_filter_date)").
 -export([datediff/3]).
 
 datediff(undefined, _X, _Context) ->

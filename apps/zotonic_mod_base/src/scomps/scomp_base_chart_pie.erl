@@ -23,7 +23,7 @@
 -moduledoc("
 Show a pie chart.
 
-This is an utility tag providing a simplified interface to the pie chart feature of the [\\{% google\\_chart
+This is an utility tag providing a simplified interface to the pie chart feature of the [\\{% google_chart
 %\\}](/id/doc_template_scomp_scomp_google_chart#scomp-google-chart) tag. It has an easier way to define the data.
 
 Example of simple pie chart:
@@ -50,7 +50,7 @@ Or, as an image:
 
 
 
-The tag chart\\_pie accepts the following arguments:
+The tag chart_pie accepts the following arguments:
 
 | Argument | Description                                                                      | Example                                 |
 | -------- | -------------------------------------------------------------------------------- | --------------------------------------- |
@@ -60,11 +60,11 @@ The tag chart\\_pie accepts the following arguments:
 | width    | The width of the generated pie chart, in pixels. Defaults to 300.                | width=450                               |
 | height   | The height of the generated pie chart, in pixels. Defaults to 150.               | height=200                              |
 
-Other arguments can be found at the [google\\_chart](/id/doc_template_scomp_scomp_google_chart#scomp-google-chart) tag.
+Other arguments can be found at the [google_chart](/id/doc_template_scomp_scomp_google_chart#scomp-google-chart) tag.
 
 See also
 
-[google\\_chart](/id/doc_template_scomp_scomp_google_chart#scomp-google-chart) and [chart\\_pie3d](/id/doc_template_scomp_scomp_chart_pie3d#scomp-chart-pie3d).
+[google_chart](/id/doc_template_scomp_scomp_google_chart#scomp-google-chart) and [chart_pie3d](/id/doc_template_scomp_scomp_chart_pie3d#scomp-chart-pie3d).
 ").
 -author("Marc Worrell <marc@worrell.nl").
 -behaviour(zotonic_scomp).

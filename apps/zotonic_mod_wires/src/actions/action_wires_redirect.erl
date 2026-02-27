@@ -46,7 +46,7 @@ Example of using dispatch rules for the redirect location:
 ```
 
 When clicked the browser is redirected to the admin edit page for the [resource](/id/doc_glossary#term-resource) with
-the id of my\\_id.
+the id of my_id.
 
 This action can have the following arguments:
 

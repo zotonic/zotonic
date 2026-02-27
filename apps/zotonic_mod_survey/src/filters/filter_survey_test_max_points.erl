@@ -29,7 +29,7 @@ Usage:
 
 Return the number of points if all questions are corectly answered.
 
-See [mod\\_survey](/id/doc_module_mod_survey)
+See [mod_survey](/id/doc_module_mod_survey)
 ").
 
 -export([

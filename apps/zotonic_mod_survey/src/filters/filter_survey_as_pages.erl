@@ -24,7 +24,7 @@ Split the page blocks into pages, prepare them for easy display in the survey qu
 A page is split in two lists: one with questions and one with the page break/options/stop
 blocks.
 
-See [mod\\_survey](/id/doc_module_mod_survey)
+See [mod_survey](/id/doc_module_mod_survey)
 ").
 
 -export([

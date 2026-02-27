@@ -20,11 +20,11 @@
 -moduledoc("
 Show a page menu.
 
-This tag is part of the module mod\\_menu. The `{% menu %}` tag is used to generate the HTML for the menu defined in the admin.
+This tag is part of the module mod_menu. The `{% menu %}` tag is used to generate the HTML for the menu defined in the admin.
 
-You can define multiple menus in your site. By default there is one menu, called “main\\_menu”. If you want another
+You can define multiple menus in your site. By default there is one menu, called “main_menu”. If you want another
 one, create a page of type “page menu” (under “Categorization”) and start editing your menu. You can use the
-“menu\\_id” argument to select which menu you want to display.
+“menu_id” argument to select which menu you want to display.
 
 Example:
 

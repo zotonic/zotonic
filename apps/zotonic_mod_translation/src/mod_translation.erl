@@ -38,7 +38,7 @@ How content and static strings are translated is explained in full in [Translati
 Language as part of the URL
 ---------------------------
 
-By default, [mod\\_translation](#mod-translation) prefixes each URL (using [URL
+By default, [mod_translation](#mod-translation) prefixes each URL (using [URL
 rewriting](/id/doc_developerguide_dispatch_rules#guide-dispatch-rewriting)) in your website with the code of the current
 language. The idea behind this is that each language version of a [resource](/id/doc_glossary#term-resource) gets its
 own URL, and is as such indexable for Google.
@@ -53,7 +53,7 @@ Alternatively you can set the config key `mod_translation.rewrite_url` to `false
 Programmatically switching languages
 ------------------------------------
 
-In a template, you can use [mod\\_translation](#mod-translation)’s postback hook to switch between languages:
+In a template, you can use [mod_translation](#mod-translation)’s postback hook to switch between languages:
 
 
 ```erlang

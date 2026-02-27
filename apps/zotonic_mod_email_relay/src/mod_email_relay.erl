@@ -19,10 +19,6 @@
 
 -module(mod_email_relay).
 -moduledoc("
-See also
-
-[mod\\_email\\_receive](/id/doc_module_mod_email_receive), [E-mail handling](/id/doc_developerguide_email#guide-email).
-
 This module supports relaying email between Zotonic servers.
 
 With `is_email_relay` enabled, this server forwards outbound email payloads to another Zotonic relay server at
@@ -48,7 +44,9 @@ This module handles the following notifier callbacks:
 - `observe_email_status`: Forward blocking/unblocking of email addresses to the relaying Zotonic server using `m_config:get_boolean`.
 - `observe_tick_24h`: Handle `tick_24h` notifications using `m_email_relay:periodic_cleanup`.
 
-").
+See also
+
+[mod_email_receive](/id/doc_module_mod_email_receive), [E-mail handling](/id/doc_developerguide_email#guide-email).").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Email Relay").

@@ -19,11 +19,6 @@
 
 -module(mod_menu).
 -moduledoc("
-See also
-
-The filters [menu\\_flat](/id/doc_template_filter_filter_menu_flat),
-[menu\\_subtree](/id/doc_template_filter_filter_menu_subtree) and [menu\\_trail](/id/doc_template_filter_filter_menu_trail).
-
 Create nested navigation menus for your site.
 
 Activating the module in the admin enables a “menu” item in the admin navigation under “content”, which lets you
@@ -65,7 +60,10 @@ Delegate callbacks:
 - `event/2` with `postback` messages: `ensure_hasmenupart`.
 - `event/2` with `postback_notify` messages: `<<\"menuedit\">>`.
 
-").
+See also
+
+The filters [menu_flat](/id/doc_template_filter_filter_menu_flat),
+[menu_subtree](/id/doc_template_filter_filter_menu_subtree) and [menu_trail](/id/doc_template_filter_filter_menu_trail).").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Menus").

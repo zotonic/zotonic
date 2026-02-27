@@ -29,7 +29,7 @@ Example:
 {% button text=\"Init\" action={set_class target=\"x\" class=\"inited\"} %}
 ```
 
-This uses the jQuery attr(‘class’, class\\_name) method to set the new class.
+This uses the jQuery attr(‘class’, class_name) method to set the new class.
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).

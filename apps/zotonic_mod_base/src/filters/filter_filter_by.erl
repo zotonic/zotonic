@@ -19,12 +19,6 @@
 
 -module(filter_filter_by).
 -moduledoc("
-See also
-
-[filter](/id/doc_template_filter_filter_filter),
-[exclude](/id/doc_template_filter_filter_exclude),
-and [extract](/id/doc_template_filter_filter_extract)
-
 Filter a list of items based on a property value and optional predicate.
 
 This filter provides powerful filtering capabilities for lists of maps, proplists, or resources
@@ -92,7 +86,12 @@ Works seamlessly with Zotonic resources:
 ```
 
 If the input is undefined, the filter returns undefined.
-").
+
+See also
+
+[filter](/id/doc_template_filter_filter_filter),
+[exclude](/id/doc_template_filter_filter_exclude),
+and [extract](/id/doc_template_filter_filter_extract)").
 
 -export([filter_by/3, filter_by/4, filter_by/5]).
 

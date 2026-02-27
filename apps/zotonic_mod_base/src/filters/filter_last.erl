@@ -18,10 +18,6 @@
 
 -module(filter_last).
 -moduledoc("
-See also
-
-[first](/id/doc_template_filter_filter_first)
-
 Returns the last character or element.
 
 Returns the last element of the value. When the value is a list then the last element of the list is returned, when the
@@ -37,7 +33,10 @@ For example:
 When value is the list `hello` then the output will be `o`.
 
 **Note:** This function is not safe to use with multibyte character values, use with care.
-").
+
+See also
+
+[first](/id/doc_template_filter_filter_first)").
 -export([last/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

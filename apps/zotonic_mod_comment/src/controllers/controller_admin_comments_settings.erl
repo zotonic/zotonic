@@ -19,7 +19,7 @@
 
 -module(controller_admin_comments_settings).
 -moduledoc("
-Shows an admin settings screen where you can edit settings related to [mod\\_comment](/id/doc_module_mod_comment).
+Shows an admin settings screen where you can edit settings related to [mod_comment](/id/doc_module_mod_comment).
 
 Todo
 

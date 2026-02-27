@@ -28,7 +28,7 @@ This controller is used to show the HTML page of a [resource](/id/doc_glossary#t
 
 The user will be redirected to the `logon` URL when the current user is not allowed to view the page.
 
-This controller also adds a `noindex` response header when the page’s [seo\\_noindex](/id/doc_module_mod_seo) flag is set.
+This controller also adds a `noindex` response header when the page’s [seo_noindex](/id/doc_module_mod_seo) flag is set.
 
 Example dispatch rule:
 
@@ -83,7 +83,7 @@ ACL options
 
 See also
 
-[controller\\_template](/id/doc_controller_controller_template).
+[controller_template](/id/doc_controller_controller_template).
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

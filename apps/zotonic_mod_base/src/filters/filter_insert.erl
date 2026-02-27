@@ -18,10 +18,6 @@
 
 -module(filter_insert).
 -moduledoc("
-See also
-
-[append](/id/doc_template_filter_filter_append)
-
 Prepends the argument in front of the value.
 
 For example:
@@ -32,7 +28,10 @@ For example:
 ```
 
 When value is “hello” then the output will be “world hello”.
-").
+
+See also
+
+[append](/id/doc_template_filter_filter_append)").
 -export([insert/3]).
 
 insert(Input, Insert, Context) ->

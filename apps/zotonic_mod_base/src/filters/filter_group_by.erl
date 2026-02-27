@@ -42,7 +42,7 @@ When value is the three element list:
 ]
 ```
 
-then the output of group\\_by “a” will be the two element list:
+then the output of group_by “a” will be the two element list:
 
 
 ```django

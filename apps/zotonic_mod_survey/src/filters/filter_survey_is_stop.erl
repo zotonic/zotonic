@@ -21,7 +21,7 @@
 -moduledoc("
 Check if there is a ‘stop’ question in list of (survey) blocks
 
-See [mod\\_survey](/id/doc_module_mod_survey)
+See [mod_survey](/id/doc_module_mod_survey)
 
 Todo
 

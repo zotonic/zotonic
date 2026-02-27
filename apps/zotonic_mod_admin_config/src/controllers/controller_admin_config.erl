@@ -19,7 +19,7 @@
 
 -module(controller_admin_config).
 -moduledoc("
-Shows the admin config editor. Here you can edit the key/value pairs of [m\\_config](/id/doc_model_model_config).
+Shows the admin config editor. Here you can edit the key/value pairs of [m_config](/id/doc_model_model_config).
 
 
 
