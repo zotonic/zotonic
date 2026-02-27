@@ -18,10 +18,6 @@
 
 -module(validator_base_length).
 -moduledoc("
-See also
-
-[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators)
-
 Check the length of a text input.
 
 Test if the length of the input’s value is more than a minimum and/or less than a maximum length.
@@ -49,7 +45,10 @@ Arguments
 | wrong\\\\_length\\\\_message | Message for when the length is unequal to the value of the “is” argument. Defaults to “Must be . characters long.” |              |
 | too\\\\_short\\\\_message    | Message for when there are not enough characters entered. Defaults to “Must not be less than . characters long.” |              |
 | too\\\\_long\\\\_message     | Message for when there are too many characters entered. Defaults to “Must not be more than . characters long.” |              |
-").
+
+See also
+
+[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators)").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_validator/5, validate/5]).
 

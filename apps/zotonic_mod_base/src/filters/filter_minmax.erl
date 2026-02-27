@@ -18,10 +18,6 @@
 
 -module(filter_minmax).
 -moduledoc("
-See also
-
-[max](/id/doc_template_filter_filter_max), [min](/id/doc_template_filter_filter_min)
-
 Force the given value in the given range.
 
 This clamps the filter value between the two filter arguments.
@@ -36,7 +32,10 @@ Example:
 This will print `10`, since that is the minimum value allowed.
 
 Passing in `undefined` will not clamp the value but return `undefined`.
-").
+
+See also
+
+[max](/id/doc_template_filter_filter_max), [min](/id/doc_template_filter_filter_min)").
 -export([minmax/4]).
 
 minmax(undefined, _Min, _Max, _Context) ->

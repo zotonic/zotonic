@@ -19,12 +19,6 @@
 
 -module(action_wires_insert_bottom).
 -moduledoc("
-See also
-
-actions [insert\\_after](/id/doc_template_action_action_insert_after),
-[insert\\_before](/id/doc_template_action_action_insert_before),
-[insert\\_top](/id/doc_template_action_action_insert_top) and [update](/id/doc_template_action_action_update).
-
 Inserts HTML after the contents of an HTML element.
 
 Adds a template or a literal HTML text after the existing content.
@@ -47,9 +41,14 @@ Another example, now rendering a template:
 {% button text=\"hello\" action={insert_bottom target=\"mylist\" template=\"_list_item.tpl\" id=42} %}
 ```
 
-This insert the output of the template \\_list\\_item.tpl below the existing &lt;li/>. All arguments to the update
+This insert the output of the template \\_list_item.tpl below the existing &lt;li/>. All arguments to the update
 action are also arguments to the template.
-").
+
+See also
+
+actions [insert_after](/id/doc_template_action_action_insert_after),
+[insert_before](/id/doc_template_action_action_insert_before),
+[insert_top](/id/doc_template_action_action_insert_top) and [update](/id/doc_template_action_action_update).").
 -include_lib("zotonic_core/include/zotonic.hrl").
 
 -export([

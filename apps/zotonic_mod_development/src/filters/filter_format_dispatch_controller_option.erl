@@ -20,7 +20,7 @@
 -moduledoc("
 Format dispatch controller options.
 
-See [mod\\_development](/id/doc_module_mod_development)
+See [mod_development](/id/doc_module_mod_development)
 
 Todo
 

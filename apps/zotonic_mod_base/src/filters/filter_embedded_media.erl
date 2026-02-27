@@ -18,10 +18,6 @@
 
 -module(filter_embedded_media).
 -moduledoc("
-See also
-
-[show\\_media](/id/doc_template_filter_filter_show_media), [without\\_embedded\\_media](/id/doc_template_filter_filter_without_embedded_media), [media\\_for\\_language](/id/doc_template_filter_filter_media_for_language)
-
 Fetch media ids that are embedded in the `body`, `body_extra` and *text* blocks of your page.
 
 This filter lets you loop over every image that is embedded in the texts of the given page:
@@ -53,7 +49,10 @@ You can also fetch all media ids embedded in a text:
     {% media media_id width=315 extent %}
 {% endfor %}
 ```
-").
+
+See also
+
+[show_media](/id/doc_template_filter_filter_show_media), [without_embedded_media](/id/doc_template_filter_filter_without_embedded_media), [media_for_language](/id/doc_template_filter_filter_media_for_language)").
 -export([
     embedded_media/2,
     embedded_media/3

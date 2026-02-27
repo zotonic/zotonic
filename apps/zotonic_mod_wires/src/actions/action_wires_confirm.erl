@@ -21,10 +21,6 @@
 
 -module(action_wires_confirm).
 -moduledoc("
-See also
-
-actions [alert](/id/doc_template_action_action_alert) and [growl](/id/doc_template_action_action_growl).
-
 Show a JavaScript confirm message and on confirmation triggers one or more actions and/or sends a postback to the server.
 
 Example:
@@ -64,7 +60,10 @@ Confirm accepts the following arguments:
 | delegate        | Erlang module handling the postback. Defaults to the controller generating the page. | delegate=”my\\\\_event\\\\_module”                 |
 | is\\\\_danger     | If the ‘ok’ button should be flagged as dangerous.                               | is\\\\_danger                                    |
 | level           | Nesting of the dialog. Non negative integer, higher numbered levels are displayed above lower levels. Special level `\"top\"` to force display on top. | level=”top”                                    |
-").
+
+See also
+
+actions [alert](/id/doc_template_action_action_alert) and [growl](/id/doc_template_action_action_growl).").
 
 -export([
     render_action/4,

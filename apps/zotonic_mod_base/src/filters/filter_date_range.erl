@@ -19,10 +19,6 @@
 
 -module(filter_date_range).
 -moduledoc("
-See also
-
-[date](/id/doc_template_filter_filter_date)
-
 Show a date range.
 
 Filter to simplify displaying datetime ranges. When displaying a datetime range, the display of the dates and times
@@ -63,7 +59,7 @@ context. This timezone can be one of the following, in order of preference:
 *   Default timezone of the Zotonic server
 *   UTC
 
-A specific timezone can be enforced by adding a third parameter to the date\\_range-filter. For example, to display a
+A specific timezone can be enforced by adding a third parameter to the date_range-filter. For example, to display a
 date range in UTC:
 
 
@@ -77,7 +73,10 @@ Instead of the timezone, the following arguments are also accepted:
 *   `false` leave the timezone as is
 *   `undefined` leave the timezone as is
 *   a resource id (integer), set the timezone according to the tz property of the resource
-").
+
+See also
+
+[date](/id/doc_template_filter_filter_date)").
 -export([
 	date_range/3,
 	date_range/4

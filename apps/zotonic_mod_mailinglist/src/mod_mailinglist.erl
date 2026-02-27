@@ -46,7 +46,7 @@ When you want to add a subscribe template to your page then you will need the fo
 
 Where `mailing_id` should be set to the page id of your mailing list. This scomp includes the template
 `_scomp_mailinglist_subscribe.tpl`. The subscription form itself can be found in the template
-“\\_mailinglist\\_subscribe\\_form.tpl”. You should overrule the latter template when you want to add or remove
+“\\_mailinglist_subscribe_form.tpl”. You should overrule the latter template when you want to add or remove
 fields from the subscription form.
 
 It is possible to simplify the subscribe form by using the option `is_email_only`. When this parameter is used the users
@@ -92,13 +92,13 @@ form and finally a list of other mailing lists.
 Template used for the e-mails
 -----------------------------
 
-All e-mails use the [mailing\\_page.tpl](../templates/template_mailing_page.html#template-mailing-page) template. It is
+All e-mails use the [mailing_page.tpl](../templates/template_mailing_page.html#template-mailing-page) template. It is
 a very simple template that just tells why the recipient received the e-mail, refers to the sent content page on the
 Internet and finally shows the title, the summary and the body of the sent page.
 
 In the footer there is a link to the unsubscribe page.
 
-All e-mail templates extend from the [email\\_base.tpl](../templates/template_email_base.html#template-email-base)
+All e-mail templates extend from the [email_base.tpl](../templates/template_email_base.html#template-email-base)
 template. The following templates are used for e-mails:
 
 | Template                                                                         | Description                                                                      |

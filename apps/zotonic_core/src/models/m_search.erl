@@ -27,10 +27,6 @@
 
 -module(m_search).
 -moduledoc("
-See also
-
-[Search](/id/doc_developerguide_search#guide-datamodel-query-model) , [pager](/id/doc_template_scomp_scomp_pager#scomp-pager) tag , [mod_search](/id/doc_module_mod_search) module , [Custom search](/id/doc_cookbook_custom_search#cookbook-custom-search)
-
 The m_search model provides access to different kinds of search queries for searching through models.
 
 Most searches in Zotonic are implemented in the [mod_search](/id/doc_module_mod_search) module, searching through the
@@ -72,7 +68,10 @@ Available Model API Paths
 | `get` | `/` | Run search from payload/query arguments using the default search handling. No further lookups. |
 
 `/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
-").
+
+See also
+
+[Search](/id/doc_developerguide_search#guide-datamodel-query-model) , [pager](/id/doc_template_scomp_scomp_pager#scomp-pager) tag , [mod_search](/id/doc_module_mod_search) module , [Custom search](/id/doc_cookbook_custom_search#cookbook-custom-search)").
 -author("Marc Worrell <marc@worrell.nl").
 
 -behaviour(zotonic_model).

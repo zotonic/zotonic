@@ -32,7 +32,7 @@ The `survey_stop` block is deprecated in favor of the `survey_page_options` bloc
 When displaying or editing a survey, the `survey_page_options` block is collected together with all
 page jump blocks.
 
-See [mod\\_survey](/id/doc_module_mod_survey)
+See [mod_survey](/id/doc_module_mod_survey)
 ").
 
 -export([

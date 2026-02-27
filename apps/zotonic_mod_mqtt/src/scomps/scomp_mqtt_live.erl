@@ -22,7 +22,7 @@ Live updating templates connected to [MQTT topics](/id/doc_module_mod_mqtt).
 
 Note
 
-The live tag is provided by [mod\\_mqtt](/id/doc_module_mod_mqtt), which must be enabled.
+The live tag is provided by [mod_mqtt](/id/doc_module_mod_mqtt), which must be enabled.
 
 This tag renders templates that are automatically re-rendered after a publication to an MQTT topic.
 

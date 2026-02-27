@@ -24,7 +24,7 @@ for example [show](/id/doc_template_action_action_show), [hide](/id/doc_template
 
 Arguments:
 
-*   type - one of show, hide, remove, slide\\_toggle, toggle, set\\_class, add\\_class, remove\\_class, fade\\_in, fade\\_out, slide\\_up, slide\\_fade\\_out, slide\\_fade\\_in, disable, enable, effect, animate.
+*   type - one of show, hide, remove, slide_toggle, toggle, set_class, add_class, remove_class, fade_in, fade_out, slide_up, slide_fade_out, slide_fade_in, disable, enable, effect, animate.
 *   speed
 *   class
 *   easing

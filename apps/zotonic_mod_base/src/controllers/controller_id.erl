@@ -29,7 +29,7 @@ When no content types are requested then `text/html` is selected.
 
 This controller is also used for a page’s short url representation.
 
-Example dispatch rule (from mod\\_base):
+Example dispatch rule (from mod_base):
 
 
 ```erlang

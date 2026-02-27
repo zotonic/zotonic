@@ -28,14 +28,10 @@
 
 -module(filter_force_escape).
 -moduledoc("
-See also
-
-[escape](/id/doc_template_filter_filter_escape), [escape\\_check](/id/doc_template_filter_filter_escape_check)
-
 HTML escapes a text.
 
 Applies HTML escaping to a string (see the [escape](/id/doc_template_filter_filter_escape) filter for details). In
-contrary to the escape filter, the force\\_escape filter is applied immediately and returns a new, escaped string. This
+contrary to the escape filter, the force_escape filter is applied immediately and returns a new, escaped string. This
 is useful in the rare cases where you need multiple escaping or want to apply other filters to the escaped results.
 Normally, you want to use the [escape](/id/doc_template_filter_filter_escape) filter.
 
@@ -47,7 +43,10 @@ For example:
 ```
 
 If the value is `hel&lo` then the output is `hel&amp;lo`.
-").
+
+See also
+
+[escape](/id/doc_template_filter_filter_escape), [escape_check](/id/doc_template_filter_filter_escape_check)").
 -export([force_escape/2]).
 
 -author('rsaccon@gmail.com').

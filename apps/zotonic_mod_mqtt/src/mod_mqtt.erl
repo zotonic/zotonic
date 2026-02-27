@@ -123,11 +123,11 @@ Note that there are not automatic subscriptions for user topics. All subscriptio
 ### Access control
 
 All topics have access control added. For this an extra ACL object
-[#acl\\_mqtt\\{\\}](/id/doc_notification_acl_mqtt#acl-mqtt) is defined, with the actions `publish` and `subscribe`.
-Modules can observe the usual [acl\\_is\\_allowed](/id/doc_notification_acl_is_allowed#acl-is-allowed) notification to
+[#acl_mqtt\\{\\}](/id/doc_notification_acl_mqtt#acl-mqtt) is defined, with the actions `publish` and `subscribe`.
+Modules can observe the usual [acl_is_allowed](/id/doc_notification_acl_is_allowed#acl-is-allowed) notification to
 allow access to MQTT topics:
 
-your\\_site.erl
+your_site.erl
 ```erlang
 observe_acl_is_allowed(#acl_is_allowed{object = #acl_mqtt{topic = [ <<\"my\">>, <<\"topic\">> ]}}, _Context) ->
     %% Allow anonymous access on this topic

@@ -21,7 +21,7 @@
 Filters a list of menu items on visibility and existance. Only top-level menu items that are both visible and exist are
 kept in the list. Note that sub-menus are not filtered, they need to be filtered separately.
 
-The [is\\_visible](/id/doc_template_filter_filter_is_visible) filter can’t be used due to the structure of a menu item list.
+The [is_visible](/id/doc_template_filter_filter_is_visible) filter can’t be used due to the structure of a menu item list.
 
 Example:
 

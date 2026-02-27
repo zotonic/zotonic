@@ -21,7 +21,7 @@
 -moduledoc("
 Actions, tags (also known as screen components), and javascript for user interfaces using *wires*.
 
-Used by [mod\\_admin](/id/doc_module_mod_admin) and the other administrative modules.
+Used by [mod_admin](/id/doc_module_mod_admin) and the other administrative modules.
 
 Wires are actions that are directly coupled to user interface elements. These couplings are defined in the templates
 using the [wire](/id/doc_template_scomp_scomp_wire#scomp-wire) tag.

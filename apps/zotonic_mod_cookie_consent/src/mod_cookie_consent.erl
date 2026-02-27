@@ -49,7 +49,7 @@ Also, if you are using IFRAMEs, JS or CSS that sets non-functional cookies, chec
 HTML
 ----
 
-Media embedded via mod\\_oembed or mod\\_video\\_embed are automatically wrapped according to this method:
+Media embedded via mod_oembed or mod_video_embed are automatically wrapped according to this method:
 
 
 ```erlang

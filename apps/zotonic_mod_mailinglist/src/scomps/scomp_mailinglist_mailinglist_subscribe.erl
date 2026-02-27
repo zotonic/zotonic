@@ -34,8 +34,8 @@ Which form template to render. Defaults to the template `_scomp_mailinglist_subs
 
 All other parameters are passed in to the template which is being rendered.
 
-The form is at least supposed to have an email input field. Besides email, it can have name\\_first,
-name\\_surname\\_prefix and name\\_surname fields, which will be stored in the recipient table.
+The form is at least supposed to have an email input field. Besides email, it can have name_first,
+name_surname_prefix and name_surname fields, which will be stored in the recipient table.
 ").
 -behaviour(zotonic_scomp).
 

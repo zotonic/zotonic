@@ -20,10 +20,6 @@
 
 -module(filter_index_of).
 -moduledoc("
-See also
-
-[element](/id/doc_template_filter_filter_element)
-
 Returns the index of the first occurrence of the item in the given list.
 
 For example:
@@ -36,7 +32,10 @@ For example:
 Returns `2`.
 
 **Note:** Erlang list indices are always 1-based.
-").
+
+See also
+
+[element](/id/doc_template_filter_filter_element)").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -include_lib("zotonic_core/include/zotonic.hrl").

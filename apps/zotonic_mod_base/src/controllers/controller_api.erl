@@ -19,10 +19,6 @@
 
 -module(controller_api).
 -moduledoc("
-See also
-
-[Dispatch rules](/id/doc_developerguide_dispatch_rules) and [Controllers](/id/doc_developerguide_controllers).
-
 `controler_api` processes authorized REST API requests: It provides an easy way to create API calls to allow computer programs to perform functions on your Zotonic site.
 
 `controller_api` by default intercepts all URLs according to the patterns `/api/:topic`.
@@ -43,7 +39,10 @@ are contained in the payload.
 The API controller will publish a message to the topic, and wait for max 60 seconds for a response on the response topic.
 
 If there is a query argument `response_topic` then the API controller will only publish the message and immediately return.
-").
+
+See also
+
+[Dispatch rules](/id/doc_developerguide_dispatch_rules) and [Controllers](/id/doc_developerguide_controllers).").
 
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 -author("Marc Worrell <marc@worrell.nl>").

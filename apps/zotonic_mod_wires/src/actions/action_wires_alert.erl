@@ -21,10 +21,6 @@
 
 -module(action_wires_alert).
 -moduledoc("
-See also
-
-actions [growl](/id/doc_template_action_action_growl) and [confirm](/id/doc_template_action_action_confirm).
-
 Show an alert dialog.
 
 Example:
@@ -50,7 +46,10 @@ Alert accepts the following arguments:
 
 The alert dialog is rendered using the `_action_dialog_alert.tpl` template. Overrule this template to change the
 contents of the alert dialog.
-").
+
+See also
+
+actions [growl](/id/doc_template_action_action_growl) and [confirm](/id/doc_template_action_action_confirm).").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([
     render_action/4,

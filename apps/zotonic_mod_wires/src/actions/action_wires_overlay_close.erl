@@ -18,11 +18,6 @@
 
 -module(action_wires_overlay_close).
 -moduledoc("
-See also
-
-actions [overlay\\_open](/id/doc_template_action_action_overlay_open),
-[dialog\\_open](/id/doc_template_action_action_dialog_open) and [dialog](/id/doc_template_action_action_dialog).
-
 Closes the currently open overlay. When there is no overlay open then nothing happens.
 
 Example:
@@ -33,7 +28,11 @@ Example:
 ```
 
 This button closes any open overlay when clicked.
-").
+
+See also
+
+actions [overlay_open](/id/doc_template_action_action_overlay_open),
+[dialog_open](/id/doc_template_action_action_dialog_open) and [dialog](/id/doc_template_action_action_dialog).").
 -author("Marc Worrell <marc@worrell.nl").
 
 %% interface functions

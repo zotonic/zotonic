@@ -19,13 +19,6 @@
 
 -module(action_wires_slide_down).
 -moduledoc("
-See also
-
-actions [toggle](/id/doc_template_action_action_toggle), [show](/id/doc_template_action_action_show),
-[hide](/id/doc_template_action_action_hide), [fade\\_in](/id/doc_template_action_action_fade_in),
-[fade\\_out](/id/doc_template_action_action_fade_out), [slide\\_up](/id/doc_template_action_action_slide_up),
-[slide\\_fade\\_in](/id/doc_template_action_action_slide_fade_in) and [slide\\_fade\\_out](/id/doc_template_action_action_slide_fade_out).
-
 Show an element by animating the height.
 
 Example:
@@ -36,7 +29,13 @@ Example:
 ```
 
 Shows the element with id myid when the button is clicked.
-").
+
+See also
+
+actions [toggle](/id/doc_template_action_action_toggle), [show](/id/doc_template_action_action_show),
+[hide](/id/doc_template_action_action_hide), [fade_in](/id/doc_template_action_action_fade_in),
+[fade_out](/id/doc_template_action_action_fade_out), [slide_up](/id/doc_template_action_action_slide_up),
+[slide_fade_in](/id/doc_template_action_action_slide_fade_in) and [slide_fade_out](/id/doc_template_action_action_slide_fade_out).").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
 

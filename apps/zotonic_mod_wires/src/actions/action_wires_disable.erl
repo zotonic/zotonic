@@ -18,10 +18,6 @@
 
 -module(action_wires_disable).
 -moduledoc("
-See also
-
-action [enable](/id/doc_template_action_action_enable).
-
 Sets the “disabled” attribute of a HTML tag and adds the CSS class “disabled”.
 
 Example:
@@ -38,7 +34,10 @@ After clicking the button the input will be:
 ```django
 <input id=\"myid\" disabled=\"disabled\" class=\"disabled\" type=\"text\" value=\"hello\" />
 ```
-").
+
+See also
+
+action [enable](/id/doc_template_action_action_enable).").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
 

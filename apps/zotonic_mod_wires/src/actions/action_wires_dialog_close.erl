@@ -21,10 +21,6 @@
 
 -module(action_wires_dialog_close).
 -moduledoc("
-See also
-
-actions [dialog\\_open](/id/doc_template_action_action_dialog_open) and [dialog](/id/doc_template_action_action_dialog).
-
 Closes a dialog. When there is no dialog open then nothing happens.
 
 Example, closing the top-most dialog:
@@ -45,7 +41,10 @@ To close all open dialogs, pass level 0:
 ```django
 {% button text=\"cancel\" action={dialog_close level=0} %}
 ```
-").
+
+See also
+
+actions [dialog_open](/id/doc_template_action_action_dialog_open) and [dialog](/id/doc_template_action_action_dialog).").
 -author("Marc Worrell <marc@worrell.nl").
 
 %% interface functions

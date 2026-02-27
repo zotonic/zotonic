@@ -21,10 +21,6 @@
 
 -module(filter_group_firstchar).
 -moduledoc("
-See also
-
-[group\\_title\\_firstchar](/id/doc_template_filter_filter_group_title_firstchar)
-
 Group a list of sorted [resource](/id/doc_model_model_rsc) ids on their first letter of the title or another rsc
 property. After grouping, it splits this list in a number of more-or-less even columns.
 
@@ -74,7 +70,10 @@ Groups the list of ids by title in three columns. It then uses nested for-loops 
 As you can see, all three columns have approximately the same size, although the size of the indiviual groups differs.
 
 When no nr. of columns is given, the groups are returned in a single column.
-").
+
+See also
+
+[group_title_firstchar](/id/doc_template_filter_filter_group_title_firstchar)").
 -export([group_firstchar/2,group_firstchar/3,group_firstchar/4]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

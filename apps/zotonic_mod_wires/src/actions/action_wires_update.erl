@@ -19,11 +19,6 @@
 
 -module(action_wires_update).
 -moduledoc("
-See also
-
-actions [update\\_iframe](/id/doc_template_action_action_update_iframe),
-[insert\\_top](/id/doc_template_action_action_insert_top) and [insert\\_bottom](/id/doc_template_action_action_insert_bottom).
-
 Updates the content of an HTML element with a template or a literal HTML text.
 
 Example:
@@ -38,7 +33,7 @@ When clicked, the contents of the div will be set to the HTML fragment &lt;p>Hel
 
 Note
 
-Use the [update\\_iframe](/id/doc_template_action_action_update_iframe) action for updating the contents of an `iframe` element.
+Use the [update_iframe](/id/doc_template_action_action_update_iframe) action for updating the contents of an `iframe` element.
 
 Another example, now rendering a template:
 
@@ -48,7 +43,7 @@ Another example, now rendering a template:
 {% button text=\"hello\" action={update target=\"mylist\" template=\"_list_item.tpl\" id=42} %}
 ```
 
-This updates the &lt;ul/> with the output of the template \\_list\\_item.tpl. All arguments to the update action are
+This updates the &lt;ul/> with the output of the template \\_list_item.tpl. All arguments to the update action are
 also arguments to the template.
 
 | Argument      | Description                                                                      | Example                       |
@@ -60,7 +55,11 @@ also arguments to the template.
 | catinclude    | Add this argument to use a [catinclude](/id/doc_template_tag_tag_catinclude) instead of a normal include of the template. The id argument *must* be present for a catinclude to work. | catinclude id=1               |
 
 All other arguments are passed as-is to the included template(s).
-").
+
+See also
+
+actions [update_iframe](/id/doc_template_action_action_update_iframe),
+[insert_top](/id/doc_template_action_action_insert_top) and [insert_bottom](/id/doc_template_action_action_insert_bottom).").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([
     render_action/4,

@@ -18,13 +18,9 @@
 
 -module(mod_ssl_ca).
 -moduledoc("
-See also
+The mod_ssl_ca module adds support for using SSL certificates bought from a Certificate Authority.
 
-[mod\\_ssl\\_letsencrypt](/id/doc_module_mod_ssl_letsencrypt), [Port configurations](/id/doc_developerguide_configuration_port_ssl_configuration#ref-port-ssl-configuration)
-
-The mod\\_ssl\\_ca module adds support for using SSL certificates bought from a Certificate Authority.
-
-A free alternative to CA provided tickets is Let’s Encrypt, see [mod\\_ssl\\_letsencrypt](/id/doc_module_mod_ssl_letsencrypt).
+A free alternative to CA provided tickets is Let’s Encrypt, see [mod_ssl_letsencrypt](/id/doc_module_mod_ssl_letsencrypt).
 
 
 
@@ -155,7 +151,9 @@ This module handles the following notifier callbacks:
 
 - `observe_ssl_options`: Return the certificates of this site using `z_depcache:memo`.
 
-").
+See also
+
+[mod_ssl_letsencrypt](/id/doc_module_mod_ssl_letsencrypt), [Port configurations](/id/doc_developerguide_configuration_port_ssl_configuration#ref-port-ssl-configuration)").
 
 -mod_title("SSL - CA").
 -mod_description("Use SSL Certificate from a Certificiate Authority.").

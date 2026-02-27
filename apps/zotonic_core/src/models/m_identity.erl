@@ -20,10 +20,6 @@
 
 -module(m_identity).
 -moduledoc("
-See also
-
-[Access control](/id/doc_developerguide_access_control#guide-auth), [mod_authentication](/id/doc_module_mod_authentication) or [mod_facebook](/id/doc_module_mod_facebook).
-
 The m_identity model manages usernames and other user identities.
 [mod_authentication](/id/doc_module_mod_authentication) uses it to store and check salted passwords, but also provides
 a safe storage for user tokens of any kind, as used by [mod_facebook](/id/doc_module_mod_facebook).
@@ -59,7 +55,10 @@ Available Model API Paths
 | `get` | `/+id/+type/...` | Return identity record for type `+type` on user/resource `+id` (admin only; `enoent` when missing). |
 
 `/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
-").
+
+See also
+
+[Access control](/id/doc_developerguide_access_control#guide-auth), [mod_authentication](/id/doc_module_mod_authentication) or [mod_facebook](/id/doc_module_mod_facebook).").
 -author("Marc Worrell <marc@worrell.nl").
 
 -behaviour(zotonic_model).

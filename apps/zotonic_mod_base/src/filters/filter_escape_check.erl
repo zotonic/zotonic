@@ -18,10 +18,6 @@
 
 -module(filter_escape_check).
 -moduledoc("
-See also
-
-[force\\_escape](/id/doc_template_filter_filter_force_escape), [escape](/id/doc_template_filter_filter_escape)
-
 Ensures thant an HTML escaped value is properly escaped.
 
 Checks for all reserved HTML characters if they are properly escaped.
@@ -39,7 +35,7 @@ The following characters are replaced:
 | `'`       | `&#039;`    |
 | `&`       | `&amp;`     |
 
-If you always want escaping to be applied, use the [force\\_escape](/id/doc_template_filter_filter_force_escape) filter.
+If you always want escaping to be applied, use the [force_escape](/id/doc_template_filter_filter_force_escape) filter.
 
 For example:
 
@@ -49,7 +45,10 @@ For example:
 ```
 
 When the value is `<hel&amp;lo\\>` then the output is `&lt;hel&amp;lo&gt;`.
-").
+
+See also
+
+[force_escape](/id/doc_template_filter_filter_force_escape), [escape](/id/doc_template_filter_filter_escape)").
 
 -export([ escape_check/ 2]).
 

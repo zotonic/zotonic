@@ -24,7 +24,7 @@ are git and mercurial.
 
 After enabling this module you will see a button **Update site** on the System -> Status page in the admin.
 
-This button is only available to users with the *use.mod\\_site\\_update* right.
+This button is only available to users with the *use.mod_site_update* right.
 
 After a pull of new code, Zotonic will do everything that is needed. Including compilation of source code, reloading of
 dispatch rules, reloading of translations and reindexing the template directories.
@@ -38,7 +38,7 @@ Webhook
 
 In GitHub and other systems it is possible to set a *webhook* that is called when new updates are pushed to the repository.
 
-In System > Modules there is a *Config* button next to the mod\\_site\\_update module. Click this and configure a secure
+In System > Modules there is a *Config* button next to the mod_site_update module. Click this and configure a secure
 token to be passed to the webhook.
 
 The URL for GitHub et al is:

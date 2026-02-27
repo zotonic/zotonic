@@ -19,10 +19,6 @@
 
 -module(mod_image_edit).
 -moduledoc("
-See also
-
-[image](/id/doc_template_tag_tag_image), [Arguments](/id/doc_template_tag_tag_image)
-
 Non destructive edits of images.
 
 This adds a *Edit image* button on the media panel in the admin.
@@ -59,7 +55,9 @@ Delegate callbacks:
 
 - `event/2` with `submit` messages: `edit_form`.
 
-").
+See also
+
+[image](/id/doc_template_tag_tag_image), [Arguments](/id/doc_template_tag_tag_image)").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -mod_title("Image Edit").

@@ -20,12 +20,6 @@
 
 -module(filter_default_if_none).
 -moduledoc("
-See also
-
-[default](/id/doc_template_filter_filter_default), [if](/id/doc_template_filter_filter_if),
-[is\\_defined](/id/doc_template_filter_filter_is_defined), [is\\_undefined](/id/doc_template_filter_filter_is_undefined),
-[if\\_undefined](/id/doc_template_filter_filter_if_undefined)
-
 Provide an alternative value in case a value is undefined.
 
 For example:
@@ -35,11 +29,15 @@ For example:
 {{ value|default_if_none:1 }}
 ```
 
-Same as [default\\_if\\_undefined](/id/doc_template_filter_filter_default_if_undefined).
+Same as [default_if_undefined](/id/doc_template_filter_filter_default_if_undefined).
 
 This filter is built-in in the template compiler and inlined when compiling templates.
 
-").
+See also
+
+[default](/id/doc_template_filter_filter_default), [if](/id/doc_template_filter_filter_if),
+[is_defined](/id/doc_template_filter_filter_is_defined), [is_undefined](/id/doc_template_filter_filter_is_undefined),
+[if_undefined](/id/doc_template_filter_filter_if_undefined)").
 -export([
     default_if_none/3
     ]).

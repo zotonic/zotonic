@@ -21,10 +21,6 @@
 
 -module(filter_media_for_language).
 -moduledoc("
-See also
-
-[show\\_media](/id/doc_template_filter_filter_show_media), [embedded\\_media](/id/doc_template_filter_filter_embedded_media), [without\\_embedded\\_media](/id/doc_template_filter_filter_without_embedded_media)
-
 Filter a list of media items by their `medium_language` property, return the best matching with the current or given
 language. Only visible media items are returned.
 
@@ -91,7 +87,10 @@ This filter can be used to show all connected media that are in a certain langua
    {% media media_id %}
 {% endfor %}
 ```
-").
+
+See also
+
+[show_media](/id/doc_template_filter_filter_show_media), [embedded_media](/id/doc_template_filter_filter_embedded_media), [without_embedded_media](/id/doc_template_filter_filter_without_embedded_media)").
 
 -export([
     media_for_language/2,

@@ -108,7 +108,7 @@ These widgets do not provide any localization abilities. Also note that there ar
 `_admin_widget_i18n.tpl`
 
 Complex widget example. Is used to edit localized rsc properties. It will be rendered as tabs. See /admin/edit/N top
-left to see the tabs. If mod\\_translation disabled, then i18n-widgets are displayed same as \\_admin\\_widget\\_std.tpl.
+left to see the tabs. If mod_translation disabled, then i18n-widgets are displayed same as \\_admin_widget_std.tpl.
 
 
 
@@ -117,14 +117,14 @@ Making an admin widget conditionally visible
 
 See also
 
-[admin\\_edit\\_widget\\_i18n.tpl](../templates/template_admin_edit_widget_i18n.html#template-admin-edit-widget-i18n), [inherit](/id/doc_template_tag_tag_inherit)
+[admin_edit_widget_i18n.tpl](../templates/template_admin_edit_widget_i18n.html#template-admin-edit-widget-i18n), [inherit](/id/doc_template_tag_tag_inherit)
 
 To make an entire admin widget visible or not, depending on some condition that you want to calculate inside the
-widget’s code, you can use the widget\\_wrapper block (which sits around the entire widget) in combination with the
+widget’s code, you can use the widget_wrapper block (which sits around the entire widget) in combination with the
 [inherit](/id/doc_template_tag_tag_inherit) tag, wrapping that with a condition.
 
-For instance, [mod\\_backup](/id/doc_module_mod_backup) uses this technique to display the import/export sidebar widget.
-Excerpt from mod\\_backup’s \\_admin\\_edit\\_sidebar.tpl:
+For instance, [mod_backup](/id/doc_module_mod_backup) uses this technique to display the import/export sidebar widget.
+Excerpt from mod_backup’s \\_admin_edit_sidebar.tpl:
 
 
 ```django
@@ -164,7 +164,7 @@ the completeness state of product descriptions.
 
 ### Setting up templates
 
-To make it work we are using 3 templates (where category\\_name is the lowercase name of your category):
+To make it work we are using 3 templates (where category_name is the lowercase name of your category):
 
 `_admin_overview_list.category_name.tpl`
 
@@ -270,7 +270,7 @@ Resources in the meta category can have ‘features’: certain resource propert
 that decide what to show or hide on certain pages in the admin. To use this, create a `_admin_features.category.tpl` in
 your module.
 
-For instance, the module mod\\_geomap defines the following `_admin_features.category.tpl` to create an extra checkbox
+For instance, the module mod_geomap defines the following `_admin_features.category.tpl` to create an extra checkbox
 so that per category can be defined whether or not the geodata box should be shown:
 
 
@@ -293,7 +293,7 @@ And on the edit page there is this check to conditionally include the geodata bo
 {% if id.category_id.is_feature_show_geodata|if_undefined:true %}
 ```
 
-The filter [if\\_undefined](/id/doc_template_filter_filter_if_undefined) is used so that the default value can be true
+The filter [if_undefined](/id/doc_template_filter_filter_if_undefined) is used so that the default value can be true
 when the checkbox has never been touched.
 
 
@@ -316,15 +316,15 @@ Available tabs are: `find,new,upload,url,embed,oembed,depiction`. More can be de
 
 Tab `depiction` is used for the TinyMCE image-link dialog; it shows all media connected using the `depiction` predicate.
 
-The configuration `mod_admin.rsc_dialog_is_published` defines the default *is\\_published* state for new resources.
-Setting this key to 1 will check the *is\\_published* checkbox.
+The configuration `mod_admin.rsc_dialog_is_published` defines the default *is_published* state for new resources.
+Setting this key to 1 will check the *is_published* checkbox.
 
 The configuration `mod_admin.edge_list_max_length` defines the maximum number of connections shown per predicate in the
 connection list sidebar. If there are more connections then the list truncated, and the message \\_Too many connections,
 only the first and last are shown.\\_ is displayed. The default is 100 connections.
 
-The configuration `mod_admin.rsc_dialog_is_dependent` defines the default *is\\_dependent* state for new resources.
-Setting this key to 1 will check the *is\\_dependent* checkbox.
+The configuration `mod_admin.rsc_dialog_is_dependent` defines the default *is_dependent* state for new resources.
+Setting this key to 1 will check the *is_dependent* checkbox.
 
 With the configuration `mod_admin.rsc_dialog_hide_dependent` the *dependent* checkbox can be hidden for non admin users.
 

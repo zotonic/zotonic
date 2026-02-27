@@ -19,10 +19,6 @@
 
 -module(validator_base_numericality).
 -moduledoc("
-See also
-
-[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators)
-
 Numerical input and range check.
 
 Checks if the input is a number and within a certain range or equal to a fixed value. At the moment only integer inputs
@@ -62,7 +58,10 @@ Arguments
 | wrong\\\\_number\\\\_message     | Message to show when the entered number is unequal to the .is. argument. Defaults to “Must be ..” |                            |
 | too\\\\_low\\\\_message          | Message for when the entered number is less than the minimum allowed. Defaults to “Must not be less than ..” |                            |
 | too\\\\_high\\\\_message         | Message for when the entered number is greater than the maximum allowed. Defaults to “Must not be more than ..” |                            |
-").
+
+See also
+
+[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators)").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_validator/5, validate/5]).
 

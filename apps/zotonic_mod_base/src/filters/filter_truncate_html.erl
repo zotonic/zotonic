@@ -19,10 +19,6 @@
 
 -module(filter_truncate_html).
 -moduledoc("
-See also
-
-[truncate](/id/doc_template_filter_filter_truncate), [truncatechars](/id/doc_template_filter_filter_truncatechars)
-
 Truncate a HTML text to a maximum length.
 
 The HTML text is truncated to the maximum length specified with the argument. The text will be truncated at the maximum
@@ -54,7 +50,10 @@ An optional second argument defines which text will be added if the text is trun
 ```
 
 If the value is `hello <b\\>world</b\\>` then the output is `hello <b\\>wo (more)</b\\>`.
-").
+
+See also
+
+[truncate](/id/doc_template_filter_filter_truncate), [truncatechars](/id/doc_template_filter_filter_truncatechars)").
 -export([truncate_html/2, truncate_html/3, truncate_html/4]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

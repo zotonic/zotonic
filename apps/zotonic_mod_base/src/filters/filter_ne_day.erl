@@ -18,10 +18,6 @@
 
 -module(filter_ne_day).
 -moduledoc("
-See also
-
-[eq\\_day](/id/doc_template_filter_filter_eq_day)
-
 Tests if two dates are not equal.
 
 Tests if the value is a date and not equal to the argument. The value and the argument must be a tuple of the format
@@ -37,7 +33,10 @@ For example:
 This outputs “different days” if value and othervalue are dates and different.
 
 This is useful in combination with for example the if tag.
-").
+
+See also
+
+[eq_day](/id/doc_template_filter_filter_eq_day)").
 -export([ne_day/3]).
 
 

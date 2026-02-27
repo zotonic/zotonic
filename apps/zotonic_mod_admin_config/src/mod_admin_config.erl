@@ -18,7 +18,7 @@
 
 -module(mod_admin_config).
 -moduledoc("
-Add support for editing the site’s configuration values, as accessed through [m\\_config](/id/doc_model_model_config).
+Add support for editing the site’s configuration values, as accessed through [m_config](/id/doc_model_model_config).
 
 The page in the admin is a list of every configuration module, key and textual value. Entries can be added, removed, and
 edited, if the user has the permission to do so.
@@ -45,7 +45,7 @@ Email configuration
 
 See also
 
-[m\\_config](/id/doc_model_model_config)
+[m_config](/id/doc_model_model_config)
 
 Configuration of outgoing email. This module provides a settings page via the admin menu System > Email configuration,
 where all email related settings are grouped.

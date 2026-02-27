@@ -18,10 +18,6 @@
 
 -module(action_wires_mask).
 -moduledoc("
-See also
-
-action [unmask](/id/doc_template_action_action_unmask), [mask\\_progress](/id/doc_template_action_action_mask_progress)
-
 Places a mask over an element, useful for blocking user interaction during lengthy postbacks.
 
 Example:
@@ -36,7 +32,7 @@ Example:
    action={redirect dispatch=\"facebook_authorize\"} %}
 ```
 
-In this example the logon\\_outer div will be masked while the browser is being redirected to Facebook.
+In this example the logon_outer div will be masked while the browser is being redirected to Facebook.
 
 Form postbacks are automatically masked.
 
@@ -56,7 +52,10 @@ This action takes three possible arguments:
 | target   | The id of the element to be masked.                                              | target=”search-form”   |
 | message  | Message to show next to the spinner image.                                       | message=”Searching...” |
 | delay    | Delay (in milliseconds) before the mask is shown. Only shows the mask during lengthy actions. | delay=200              |
-").
+
+See also
+
+action [unmask](/id/doc_template_action_action_unmask), [mask_progress](/id/doc_template_action_action_mask_progress)").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).
 

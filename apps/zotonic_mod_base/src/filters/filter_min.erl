@@ -18,10 +18,6 @@
 
 -module(filter_min).
 -moduledoc("
-See also
-
-[max](/id/doc_template_filter_filter_max)
-
 Take the minimum of the filter value and its first argument.
 
 Usage with two values
@@ -63,7 +59,10 @@ Edge cases
 - `undefined | min:1000` returns `undefined`
 - `[] | max` (empty list) returns `undefined`
 - Works with translation tuple values.
-").
+
+See also
+
+[max](/id/doc_template_filter_filter_max)").
 
 -compile({no_auto_import, [min/2]}).
 

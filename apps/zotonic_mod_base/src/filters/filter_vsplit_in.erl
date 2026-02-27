@@ -19,15 +19,11 @@
 
 -module(filter_vsplit_in).
 -moduledoc("
-See also
-
-[chunk](/id/doc_template_filter_filter_chunk), [split\\_in](/id/doc_template_filter_filter_split_in)
-
 This filter splits a list in shorter lists. It splits an array in N sub-arrays of more or less equal length. This is
 useful when displaying a list of items in columns.
 
-Note that it splits the array in a different way than [split\\_in](/id/doc_template_filter_filter_split_in) does: The
-filter split\\_in takes alternating elements from the array, where vsplit\\_in takes complete runs at a time. See the
+Note that it splits the array in a different way than [split_in](/id/doc_template_filter_filter_split_in) does: The
+filter split_in takes alternating elements from the array, where vsplit_in takes complete runs at a time. See the
 example below.
 
 For example:
@@ -40,7 +36,10 @@ For example:
 ```
 
 This displays `1 2`. The variable b will be `[3,4]` and the variable c will be `[5,6]`.
-").
+
+See also
+
+[chunk](/id/doc_template_filter_filter_chunk), [split_in](/id/doc_template_filter_filter_split_in)").
 -export([vsplit_in/3]).
 
 

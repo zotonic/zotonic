@@ -24,7 +24,7 @@ Adds editing of resources, menu-trees and collections for non-admin users.
 With many sites it is needed to let “normal” users edit content. For those users the `/admin` interface is
 overwhelming and also gives too many options that only administrators should be using.
 
-For this use-case the mod\\_admin\\_frontend is created. It reuses some templates and parts of the normal admin, but in
+For this use-case the mod_admin_frontend is created. It reuses some templates and parts of the normal admin, but in
 such a way that only the most needed options and fields are present. It also enables editing a menu-tree or collection,
 side-by-side with the content in the menu-tree.
 
@@ -108,7 +108,7 @@ settings). This panel can be extended with extra tabs using the blocks `meta_tab
 
 See also
 
-[mod\\_admin](/id/doc_module_mod_admin), [menu\\_rsc](/id/doc_template_filter_filter_menu_rsc)
+[mod_admin](/id/doc_module_mod_admin), [menu_rsc](/id/doc_template_filter_filter_menu_rsc)
 
 Accepted Events
 ---------------

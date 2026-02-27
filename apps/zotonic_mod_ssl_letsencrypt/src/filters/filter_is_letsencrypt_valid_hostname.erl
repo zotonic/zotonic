@@ -19,10 +19,6 @@
 
 -module(filter_is_letsencrypt_valid_hostname).
 -moduledoc("
-See also
-
-[mod\\_ssl\\_letsencrypt](/id/doc_module_mod_ssl_letsencrypt)
-
 Test if a hostname can be used for a Let’s Encrypt certificate.
 
 Criteria are:
@@ -42,7 +38,10 @@ For example, check if the current site is reachable as *example.com*:
     Wow, this site is example.com!?!
 {% endif %}
 ```
-").
+
+See also
+
+[mod_ssl_letsencrypt](/id/doc_module_mod_ssl_letsencrypt)").
 
 -export([ is_letsencrypt_valid_hostname/2 ]).
 

@@ -18,11 +18,7 @@
 
 -module(mod_content_groups).
 -moduledoc("
-See also
-
-[mod\\_acl\\_user\\_groups](/id/doc_module_mod_acl_user_groups)
 Module for content group support and ACL-aware content group behavior.
-
 
 Accepted Events
 ---------------
@@ -39,6 +35,9 @@ Delegate callbacks:
 - `event/2` with `postback` messages: `delete_all`.
 - `event/2` with `submit` messages: `delete_move`.
 
+See also
+
+[mod_acl_user_groups](/id/doc_module_mod_acl_user_groups)
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

@@ -18,10 +18,6 @@
 
 -module(filter_is_undefined).
 -moduledoc("
-See also
-
-[is\\_defined](/id/doc_template_filter_filter_is_defined), [if\\_undefined](/id/doc_template_filter_filter_if_undefined), [if](/id/doc_template_filter_filter_if)
-
 Tests if a value is undefined.
 
 Checks if the value is empty and outputs a boolean true or false. This is useful in combination with the
@@ -35,7 +31,10 @@ For example:
 ```
 
 If the value is `[]` then the output is `The first elemeent of value was undefined`.
-").
+
+See also
+
+[is_defined](/id/doc_template_filter_filter_is_defined), [if_undefined](/id/doc_template_filter_filter_if_undefined), [if](/id/doc_template_filter_filter_if)").
 -export([is_undefined/2]).
 
 is_undefined(V, Context) ->

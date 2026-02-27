@@ -19,10 +19,6 @@
 
 -module(mod_oembed).
 -moduledoc("
-See also
-
-[mod\\_video\\_embed](/id/doc_module_mod_video_embed), [mod\\_video](/id/doc_module_mod_video), [mod\\_audio](/id/doc_module_mod_audio), [media](/id/doc_template_tag_tag_media)
-
 Makes media [resources](/id/doc_glossary#term-resource) from embeddable URLs through the
 [OEmbed](http://www.oembed.com/) protocol.
 
@@ -78,7 +74,7 @@ taken from the provider.
 Configuration options
 ---------------------
 
-The following [m\\_config](/id/doc_model_model_config) options are supported:
+The following [m_config](/id/doc_model_model_config) options are supported:
 
 `mod_oembed.embedly_key`
 
@@ -108,7 +104,9 @@ Delegate callbacks:
 - `event/2` with `postback` messages: `fix_missing`.
 - `event/2` with `submit` messages: `admin_oembed`.
 
-").
+See also
+
+[mod_video_embed](/id/doc_module_mod_video_embed), [mod_video](/id/doc_module_mod_video), [mod_audio](/id/doc_module_mod_audio), [media](/id/doc_template_tag_tag_media)").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -mod_title("OEmbed support").

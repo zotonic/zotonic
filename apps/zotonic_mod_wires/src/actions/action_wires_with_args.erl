@@ -26,7 +26,7 @@ This action takes a list of other actions. One or more arguments are added to th
 executed. This action is mostly used in included templates or callbacks. An example can be seen with the
 [typeselect](/id/doc_template_action_action_typeselect) action.
 
-Another example, assume we have a template “\\_list\\_action.tpl”:
+Another example, assume we have a template “\\_list_action.tpl”:
 
 
 ```erlang
@@ -44,7 +44,7 @@ Then we can pass an action to this template:
 ```
 
 The result will be a list of titles for the pages with id 1..5. Every title will be a link to its admin page, as the
-argument id will be added to the my\\_action.
+argument id will be added to the my_action.
 ").
 
 -export([

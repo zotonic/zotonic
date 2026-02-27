@@ -20,10 +20,6 @@
 
 -module(filter_escapejson).
 -moduledoc("
-See also
-
-[escape](/id/doc_template_filter_filter_escape), [escapejs](/id/doc_template_filter_filter_escapejs)
-
 Escapes the value for safe insertion into JSON strings.
 
 For example:
@@ -46,7 +42,10 @@ In Zotonic text properties of resources are automatically html escaped. In order
 values have to be unescaped first.
 
 Internally, this calls `z_utils:json_escape/1` to perform the string escaping.
-").
+
+See also
+
+[escape](/id/doc_template_filter_filter_escape), [escapejs](/id/doc_template_filter_filter_escapejs)").
 -export([escapejson/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

@@ -19,10 +19,6 @@
 
 -module(filter_is_a).
 -moduledoc("
-See also
-
-[is\\_not\\_a](/id/doc_template_filter_filter_is_not_a), [is\\_visible](/id/doc_template_filter_filter_is_visible), [filter](/id/doc_template_filter_filter_filter)
-
 Filter a list of resource ids on category, or test if a single resource id belongs to a category.
 
 This filter can be applied to a list of resource ids or a single resource id.
@@ -71,7 +67,10 @@ This will list all collection members that are a person. While:
 ```
 
 Lists only the first three collection members that are a person.
-").
+
+See also
+
+[is_not_a](/id/doc_template_filter_filter_is_not_a), [is_visible](/id/doc_template_filter_filter_is_visible), [filter](/id/doc_template_filter_filter_filter)").
 -export([is_a/3, is_a/4]).
 
 is_a(Arg, Cat, Context) when not is_integer(Cat), not is_atom(Cat) ->

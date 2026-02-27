@@ -18,10 +18,6 @@
 
 -module(filter_escape).
 -moduledoc("
-See also
-
-[force\\_escape](/id/doc_template_filter_filter_force_escape), [escape\\_check](/id/doc_template_filter_filter_escape_check)
-
 HTML escape a text. Escapes all reserved HTML characters in the value. Escaped strings are safe to be displayed in a
 HTML page. When you echo a query string argument or path variable then you must escape the value before displaying it on
 a HTML page.
@@ -37,7 +33,7 @@ The following characters are replaced:
 | `&`       | `&amp;`     |
 
 The escaping is only applied if the filter is not within an `{% autoescape on %}` block. If you always want escaping to
-be applied, use the [force\\_escape](/id/doc_template_filter_filter_force_escape) filter.
+be applied, use the [force_escape](/id/doc_template_filter_filter_force_escape) filter.
 
 For example:
 
@@ -49,7 +45,10 @@ For example:
 When the value is `<hel&lo\\>` then the output is `&lt;hel&amp;lo&gt;`.
 
 Note: this filter is not part of a module, it is built into the template compiler.
-").
+
+See also
+
+[force_escape](/id/doc_template_filter_filter_force_escape), [escape_check](/id/doc_template_filter_filter_escape_check)").
 -export([
     escape/2
     ]).

@@ -46,7 +46,7 @@ It currently returns `rtl` for Arabic (`ar`), Farsi (`fa`) and Hebrew (`he`).
 
 See also
 
-[language](/id/doc_template_filter_filter_language), [is\\_rtl](/id/doc_template_filter_filter_is_rtl)
+[language](/id/doc_template_filter_filter_language), [is_rtl](/id/doc_template_filter_filter_is_rtl)
 ").
 -export([
     language_dir/2

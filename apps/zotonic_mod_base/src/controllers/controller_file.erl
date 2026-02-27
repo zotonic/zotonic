@@ -25,10 +25,6 @@
 
 -module(controller_file).
 -moduledoc("
-See also
-
-[controller\\_file\\_id](/id/doc_controller_controller_file_id), [lib](/id/doc_template_tag_tag_lib), [image](/id/doc_template_tag_tag_image), [image\\_url](/id/doc_template_tag_tag_image_url)
-
 Serve an uploaded-, resized- or library file.
 
 This controller is used to serve files and images. It is able to manipulate an image according to the parameters supplied.
@@ -56,7 +52,7 @@ Example dispatch rules:
 {lib, [\"lib\", '*'], controller_file, [{root, [lib]}]}
 ```
 
-controller\\_file has the following dispatch options:
+controller_file has the following dispatch options:
 
 | Option                | Description                                                                      | Example                             |
 | --------------------- | -------------------------------------------------------------------------------- | ----------------------------------- |
@@ -90,7 +86,7 @@ The search root can be a list with one or more of the following:
 *   The atom lib for finding library files in the *lib* directory of modules.
 *   The atom template for finding files in the *template* directory of modules.
 *   A directory name (binary or string). This directory name must be absolute or relative to the *files* directory of the site.
-*   A tuple \\{module, ModuleName\\} to refer to a module. The module must implement the functions file\\_exists/2 and file\\_forbidden/2.
+*   A tuple \\{module, ModuleName\\} to refer to a module. The module must implement the functions file_exists/2 and file_forbidden/2.
 *   A tuple \\{id, RscId\\} where RscId is the unique name or id of a resource. The resource must have a medium record containing an uploaded file.
 
 Note that located files are aggressively cached. Changes to the lookup routines or files will take a while before they
@@ -111,7 +107,10 @@ the current implementation, the template will not receive the current language, 
 the future.
 
 New in version 0.11.
-").
+
+See also
+
+[controller_file_id](/id/doc_controller_controller_file_id), [lib](/id/doc_template_tag_tag_lib), [image](/id/doc_template_tag_tag_image), [image_url](/id/doc_template_tag_tag_image_url)").
 -export([
     service_available/1,
     allowed_methods/1,

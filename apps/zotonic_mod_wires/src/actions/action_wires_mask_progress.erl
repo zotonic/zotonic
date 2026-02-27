@@ -30,7 +30,7 @@ Example:
 {% wire action={mask_progress target=\"logon_outer\" percent=50} %}
 ```
 
-In this example the logon\\_outer progress bar will show as halfway (50%).
+In this example the logon_outer progress bar will show as halfway (50%).
 ").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_action/4]).

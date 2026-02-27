@@ -27,7 +27,7 @@ Here the following can de configured:
 
 *   Application ID: as found in the app registration
 *   Client Secret: as found in the app registration
-*   Scope: space separated list of scopes that you want the user to consent to. Examples are: email, offline\\_access and profile. The openid scope is always added automatically. Defaults to `email profile`.
+*   Scope: space separated list of scopes that you want the user to consent to. Examples are: email, offline_access and profile. The openid scope is always added automatically. Defaults to `email profile`.
 *   Tenant: Control who can sign in. Allowed values are: common, organizations, consumers, and tenant identifiers. Defaults to `common`.
 
 On the [Azure Portal App registrations](https://go.microsoft.com/fwlink/?linkid=2083908) an App can be registered and configured.

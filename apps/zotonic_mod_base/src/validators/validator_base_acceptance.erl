@@ -18,10 +18,6 @@
 
 -module(validator_base_acceptance).
 -moduledoc("
-See also
-
-[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators)
-
 Check if an input value evaluates to true.
 
 Can be used in combination with a check box that must be checked on submit.
@@ -42,7 +38,10 @@ Arguments
 | Argument          | Description                                                                 | Example                                      |
 | ----------------- | --------------------------------------------------------------------------- | -------------------------------------------- |
 | failure\\\\_message | Message to be shown when the input is true. Defaults to “Must be accepted.” | `failure_message=\"Please agree to our TOS.\"` |
-").
+
+See also
+
+[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators)").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_validator/5, validate/5]).
 

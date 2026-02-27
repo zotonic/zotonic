@@ -18,10 +18,6 @@
 
 -module(filter_menu_trail).
 -moduledoc("
-See also
-
-[menu\\_subtree](/id/doc_template_filter_filter_menu_subtree), [menu\\_flat](/id/doc_template_filter_filter_menu_flat)
-
 Return a breadcrumb navigation trail for the given id.
 
 This filter locates the filter value which represents the current page in the main menu or in the menu saved in the
@@ -48,11 +44,11 @@ Showing Menu Trail only for submenu items
 
 It is sometimes useful to suppress the menu trail on top level items. Here is how to do it.
 
-The [menu\\_trail](#filter-menu-trail) includes the whole path through the menu to the current page if it is reachable
+The [menu_trail](#filter-menu-trail) includes the whole path through the menu to the current page if it is reachable
 that way. Sometimes it may seem pointless to show the menu trail if we are on the first level of the menu. If we want to
 avoid this we need to avoid rendering a trail when it is less than two items long.
 
-One simple condition change to \\_article\\_chapeau.tpl from the blog skeleton makes this work:
+One simple condition change to \\_article_chapeau.tpl from the blog skeleton makes this work:
 
 
 ```django
@@ -67,9 +63,12 @@ One simple condition change to \\_article\\_chapeau.tpl from the blog skeleton m
 
 The key here is `{% if parents|length \\> 1 %}` in place of just `{% if parents %}`.
 
-The [if](/id/doc_template_tag_tag_if) tag is now rendering the menu\\_trail only if there are two or more items in it
+The [if](/id/doc_template_tag_tag_if) tag is now rendering the menu_trail only if there are two or more items in it
 which - as I mentioned before - happens when you are at least two levels deep in the menu.
-").
+
+See also
+
+[menu_subtree](/id/doc_template_filter_filter_menu_subtree), [menu_flat](/id/doc_template_filter_filter_menu_flat)").
 -export([menu_trail/2, menu_trail/3, test/0]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

@@ -14,10 +14,6 @@
 %% limitations under the License.
 -module(validator_base_page_path_unique).
 -moduledoc("
-See also
-
-[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators), [username\\_unique](/id/doc_template_validator_validator_username_unique), [name\\_unique](/id/doc_template_validator_validator_name_unique)
-
 A [validator](/id/doc_developerguide_forms_and_validation#guide-validators) to check whether a resource’s page path is unique:
 
 
@@ -42,7 +38,10 @@ You can also pass a `failure_message`:
 <input type=\"text\" id=\"page_path\" name=\"page_path\" value=\"\">
 {% validate id=\"page_path\" type={page_path_unique id=id failure_message=_\"Eek! Already used!\"} %}
 ```
-").
+
+See also
+
+[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators), [username_unique](/id/doc_template_validator_validator_username_unique), [name_unique](/id/doc_template_validator_validator_name_unique)").
 
 -include_lib("zotonic_core/include/zotonic.hrl").
 

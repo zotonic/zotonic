@@ -19,10 +19,6 @@
 
 -module(mod_logging).
 -moduledoc("
-See also
-
-For regular application logging, use [Logger](/id/doc_developerguide_logging#dev-logging) instead.
-
 Logs messages to the database and adds log views to the admin.
 
 
@@ -30,7 +26,7 @@ Logs messages to the database and adds log views to the admin.
 Logging messages to the database
 --------------------------------
 
-To persist a log message in the database, enable mod\\_logging in your Zotonic site. Then, in your code, send the
+To persist a log message in the database, enable mod_logging in your Zotonic site. Then, in your code, send the
 `#zlog{}` notification:
 
 
@@ -77,7 +73,9 @@ This module handles the following notifier callbacks:
 - `observe_search_query`: Handle `search_query` notifications using `z_acl:is_allowed`.
 - `observe_tick_1h`: Handle `tick_1h` notifications using `m_log:periodic_cleanup`.
 
-").
+See also
+
+For regular application logging, use [Logger](/id/doc_developerguide_logging#dev-logging) instead.").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 -behaviour(gen_server).
 

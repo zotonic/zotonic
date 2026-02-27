@@ -19,10 +19,6 @@
 
 -module(filter_append).
 -moduledoc("
-See also
-
-[insert](/id/doc_template_filter_filter_insert)
-
 Appends the argument to the value.
 
 For example:
@@ -33,7 +29,10 @@ For example:
 ```
 
 When value is `hello` then the output will be `hello world`.
-").
+
+See also
+
+[insert](/id/doc_template_filter_filter_insert)").
 -export([append/3]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

@@ -27,10 +27,6 @@
 
 -module(filter_urlencode).
 -moduledoc("
-See also
-
-[sanitize\\_url](/id/doc_template_filter_filter_sanitize_url), [is\\_site\\_url](/id/doc_template_filter_filter_is_site_url), [url\\_abs](/id/doc_template_filter_filter_url_abs), [url](/id/doc_template_filter_filter_url), [urldecode](/id/doc_template_filter_filter_urldecode)
-
 Make a text safe for URLs.
 
 Translates all url unsafe characters in the value to their percent encoding.
@@ -43,7 +39,10 @@ For example:
 ```
 
 When value is “msg=Hello&World” then the output is “msg%3DHello%26World”.
-").
+
+See also
+
+[sanitize_url](/id/doc_template_filter_filter_sanitize_url), [is_site_url](/id/doc_template_filter_filter_is_site_url), [url_abs](/id/doc_template_filter_filter_url_abs), [url](/id/doc_template_filter_filter_url), [urldecode](/id/doc_template_filter_filter_urldecode)").
 -export([urlencode/2]).
 
 -author('rsaccon@gmail.com').

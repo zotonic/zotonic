@@ -21,7 +21,7 @@
 -moduledoc("
 Note
 
-This module requires the presence of [mod\\_menu](/id/doc_module_mod_menu) for the required JavaScript files which make
+This module requires the presence of [mod_menu](/id/doc_module_mod_menu) for the required JavaScript files which make
 up the menu editor.
 
 Add support for editing [Categories](/id/doc_userguide_datamodel#guide-datamodel-categories) in the admin, by presenting
@@ -34,7 +34,7 @@ ACL permissions
 
 The following [ACL permissions](/id/doc_developerguide_access_control#guide-authorization) are required:
 
-*   to view the page, [use permission](/id/doc_module_mod_acl_user_groups) on the ‘mod\\_admin\\_category’ module
+*   to view the page, [use permission](/id/doc_module_mod_acl_user_groups) on the ‘mod_admin_category’ module
 *   to view the list of categories, [view permissions](/id/doc_module_mod_acl_user_groups#content-acl) on category ‘category’
 *   to edit and re-order the categories, [edit permissions](/id/doc_module_mod_acl_user_groups#content-acl) on category ‘category’.
 Admin module for managing category trees and category resources in the backend.

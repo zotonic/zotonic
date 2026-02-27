@@ -19,10 +19,6 @@
 
 -module(filter_to_boolean).
 -moduledoc("
-See also
-
-[to\\_binary](/id/doc_template_filter_filter_to_binary), [format\\_number](/id/doc_template_filter_filter_format_number), [format\\_integer](/id/doc_template_filter_filter_format_integer)
-
 Convert the input to a boolean value.
 
 Example:
@@ -35,7 +31,10 @@ Example:
 Results in the boolean value `true`.
 
 This filter uses the `z_convert:to_bool/1` function.
-").
+
+See also
+
+[to_binary](/id/doc_template_filter_filter_to_binary), [format_number](/id/doc_template_filter_filter_format_number), [format_integer](/id/doc_template_filter_filter_format_integer)").
 -export([to_boolean/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

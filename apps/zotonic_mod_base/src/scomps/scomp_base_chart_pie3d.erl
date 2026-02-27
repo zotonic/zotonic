@@ -23,7 +23,7 @@
 -moduledoc("
 Show a pie chart with 3D effect.
 
-This scomp is just a convenient interface to the [\\{% chart\\_pie
+This scomp is just a convenient interface to the [\\{% chart_pie
 %\\}](/id/doc_template_scomp_scomp_chart_pie#scomp-chart-pie) scomp with the `threed` argument set to true.
 
 For example:
@@ -51,7 +51,7 @@ Or, as an image:
 
 See also
 
-[google\\_chart](/id/doc_template_scomp_scomp_google_chart#scomp-google-chart) and [chart\\_pie](/id/doc_template_scomp_scomp_chart_pie#scomp-chart-pie).
+[google_chart](/id/doc_template_scomp_scomp_google_chart#scomp-google-chart) and [chart_pie](/id/doc_template_scomp_scomp_chart_pie#scomp-chart-pie).
 ").
 -author("Marc Worrell <marc@worrell.nl").
 -behaviour(zotonic_scomp).

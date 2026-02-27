@@ -18,10 +18,6 @@
 
 -module(validator_base_format).
 -moduledoc("
-See also
-
-[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators)
-
 Regular expression test.
 
 Checks if an input element’s value matches a regular expression. There is an optional `negate` argument to validate
@@ -53,7 +49,10 @@ Arguments
 | pattern           | The regular expression to match against.                                         | `pattern=\"[0-9][a-z]+\"`              |
 | negate            | Specify negate when you want to accept values that do not match the pattern.     | `negate`                             |
 | failure\\\\_message | Message to show when the input value does not match the pattern (or does match the pattern when the negate argument is given). Defaults to “Not valid.” | `failure_message=\"Invalid postcode\"` |
-").
+
+See also
+
+[Forms and validation](/id/doc_developerguide_forms_and_validation#guide-validators)").
 -include_lib("zotonic_core/include/zotonic.hrl").
 -export([render_validator/5, validate/5]).
 

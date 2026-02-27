@@ -19,10 +19,6 @@
 
 -module(mod_ssl_letsencrypt).
 -moduledoc("
-See also
-
-[mod\\_ssl\\_ca](/id/doc_module_mod_ssl_ca), [Port configurations](/id/doc_developerguide_configuration_port_ssl_configuration#ref-port-ssl-configuration)
-
 Request certificates from Let’s Encrypt.
 
 Let’s Encrypt &lt;https://www.letsencrypt.com/> provides free SSL certificates.
@@ -54,7 +50,7 @@ Requesting a certificate
 
 In the admin, go to System > Modules and ensure that `mod_ssl_letsencrypt` is enabled.
 
-After mod\\_ssl\\_letsencrypt is enabled, go to System > SSL Certificates.
+After mod_ssl_letsencrypt is enabled, go to System > SSL Certificates.
 
 In the *Let’s Encrypt* panel you can request a certificate. Check the alternative names you want to include in the
 certificates. (E.g. *example.com* and *www.example.com*).
@@ -112,7 +108,9 @@ Delegate callbacks:
 
 - `event/2` with `submit` messages: `request_cert`.
 
-").
+See also
+
+[mod_ssl_ca](/id/doc_module_mod_ssl_ca), [Port configurations](/id/doc_developerguide_configuration_port_ssl_configuration#ref-port-ssl-configuration)").
 
 -mod_title("SSL - Let's Encrypt").
 -mod_description("Use SSL Certificate from Let's Encrypt.").

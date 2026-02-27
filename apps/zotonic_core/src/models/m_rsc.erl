@@ -19,10 +19,6 @@
 
 -module(m_rsc).
 -moduledoc("
-See also
-
-[Resources](/id/doc_developerguide_resources#guide-datamodel-resources), [The Zotonic data model](/id/doc_userguide_datamodel#guide-datamodel), [m_edge](/id/doc_model_model_edge), [m_media](/id/doc_model_model_media), [m_rsc_gone](/id/doc_model_model_rsc_gone).
-
 The main resource model, which is the central part of the [Zotonic data
 model](/id/doc_userguide_datamodel#guide-datamodel). This model provides an interface to all resource (\"page\")
 information. It also provides an easy way to fetch edges from pages without needing to use the
@@ -168,7 +164,10 @@ Available Model API Paths
 | `delete` | `/+id` | Delete resource `+id`. No further lookups. |
 
 `/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
-").
+
+See also
+
+[Resources](/id/doc_developerguide_resources#guide-datamodel-resources), [The Zotonic data model](/id/doc_userguide_datamodel#guide-datamodel), [m_edge](/id/doc_model_model_edge), [m_media](/id/doc_model_model_media), [m_rsc_gone](/id/doc_model_model_rsc_gone).").
 -author("Marc Worrell <marc@worrell.nl>").
 
 -behaviour(zotonic_model).

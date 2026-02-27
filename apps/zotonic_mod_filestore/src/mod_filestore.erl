@@ -19,10 +19,6 @@
 
 -module(mod_filestore).
 -moduledoc("
-See also
-
-[m\\_filestore](/id/doc_model_model_filestore).
-
 Support for storing uploaded and generated images and documents on external services.
 
 
@@ -36,7 +32,7 @@ medium and file related notifications for any newly uploaded or generated files.
 If a file is added then the file is queued in an upload queue. After a delay a separate process polls this queue and
 will upload the file to the external service.
 
-If a file is needed and not locally available then the mod\\_filestore module will check its file registry to see if the
+If a file is needed and not locally available then the mod_filestore module will check its file registry to see if the
 file is stored on an external service. If so then then a *filezcache* process is added and a download of the file is started.
 
 The file is served from the filezcache whilst it is being downloaded.
@@ -52,7 +48,7 @@ Configuration
 
 ### S3 configuration
 
-Configure the following permissions on your S3 service for mod\\_filestore to work correctly:
+Configure the following permissions on your S3 service for mod_filestore to work correctly:
 
 | Resource                         | Permissions                                                                      |
 | -------------------------------- | -------------------------------------------------------------------------------- |
@@ -63,9 +59,9 @@ Configure the following permissions on your S3 service for mod\\_filestore to wo
 
 
 
-### mod\\_filestore configuration
+### mod_filestore configuration
 
-After the mod\\_filestore is enabled an extra menu entry ‘Cloud File Store’ is added to the ‘System’ menu in the admin.
+After the mod_filestore is enabled an extra menu entry ‘Cloud File Store’ is added to the ‘System’ menu in the admin.
 
 Selecting the menu will show the configuration panel for the Could File Store.
 
@@ -108,7 +104,7 @@ cloud service.
 
 Queues
 
-These are the queues being processed by mod\\_filestore. On a quiet (stable) system they are usually empty.
+These are the queues being processed by mod_filestore. On a quiet (stable) system they are usually empty.
 
 
 
@@ -129,7 +125,7 @@ that a freshly uploaded file vanishes (to the cache) whilst a preview-generation
 Notifications
 -------------
 
-The mod\\_filestore hooks into the following notifications, whose definitions can be found in `zotonic_file.hrl`:
+The mod_filestore hooks into the following notifications, whose definitions can be found in `zotonic_file.hrl`:
 
 `#filestore{}`
 
@@ -175,7 +171,7 @@ external S3 service, this makes it possible to have start serving a file before 
 This application manages a cache of downloaded files. The cache is shared between all sites. Every cache entry is
 managed by its own process, which can stream newly received data directly to any requesting processes.
 
-The filezcache keeps a presistent *disk\\_log* with a description of all files in the cache. This log is read on startup
+The filezcache keeps a presistent *disk_log* with a description of all files in the cache. This log is read on startup
 to repopulate the cache with already present files. For each file the size and a hash is stored to check cache consistency.
 
 The filezcache has a garbage collector. It keeps a pool of randomly selected cache entries, from which it will elect
@@ -183,7 +179,7 @@ randomly processes to be garbage-collected. The processes themselves will decide
 
 After a cache process stops it will keep running for a short period to handle late incoming requests.
 
-Filezcache entries are started by the mod\\_filestore and filled by either moving a local file to the cache or by
+Filezcache entries are started by the mod_filestore and filled by either moving a local file to the cache or by
 s3filez download processes.
 External file storage module for media/file offloading and synchronization.
 
@@ -201,7 +197,9 @@ This module handles the following notifier callbacks:
 - `observe_filestore_request`: Handle `filestore_request` notifications using `filestore_request:upload`.
 - `observe_media_update_done`: Handle `media_update_done` notifications using `z_media_identify:guess_mime`.
 
-").
+See also
+
+[m_filestore](/id/doc_model_model_filestore).").
 
 -author("Marc Worrell <marc@worrell.nl>").
 -mod_title("File Storage").

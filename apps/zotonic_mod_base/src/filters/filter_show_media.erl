@@ -19,10 +19,6 @@
 
 -module(filter_show_media).
 -moduledoc("
-See also
-
-[embedded\\_media](/id/doc_template_filter_filter_embedded_media), [without\\_embedded\\_media](/id/doc_template_filter_filter_without_embedded_media), [media\\_for\\_language](/id/doc_template_filter_filter_media_for_language)
-
 Convert the image markers in HTML from the Rich Text editor into image tags.
 
 When you add images in the Rich Text editor of the Zotonic admin, the HTML body text does not store `<img\\>` tags, but
@@ -89,7 +85,10 @@ You can add your own `_body_media.tpl` templates. It will be supplied with the f
 
 Besides the above all context variables are passed, this gives the Erlang code the possibility to change the behavior of
 the media rendering.
-").
+
+See also
+
+[embedded_media](/id/doc_template_filter_filter_embedded_media), [without_embedded_media](/id/doc_template_filter_filter_without_embedded_media), [media_for_language](/id/doc_template_filter_filter_media_for_language)").
 -export([show_media/2, show_media/3]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

@@ -18,11 +18,6 @@
 
 -module(action_wires_overlay_open).
 -moduledoc("
-See also
-
-actions [overlay\\_close](/id/doc_template_action_action_overlay_close),
-[dialog\\_open](/id/doc_template_action_action_dialog_open) and [dialog](/id/doc_template_action_action_dialog).
-
 Renders a template on the server and opens a full screen overlay with the HTML output of the template.
 
 Example:
@@ -51,7 +46,11 @@ The overlay action has the following arguments:
 | level    | Nesting of the overlay. Non negative integer, higher numbered levels are displayed above lower levels. Special level `\"top\"` to force display on top, above all dialogs and other overlays. | level=”top”               |
 
 All (extra) arguments are passed to the rendered template.
-").
+
+See also
+
+actions [overlay_close](/id/doc_template_action_action_overlay_close),
+[dialog_open](/id/doc_template_action_action_dialog_open) and [dialog](/id/doc_template_action_action_dialog).").
 -author("Marc Worrell <marc@worrell.nl").
 
 %% interface functions

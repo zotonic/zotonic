@@ -19,10 +19,6 @@
 
 -module(action_admin_link).
 -moduledoc("
-See also
-
-[unlink](/id/doc_template_action_action_unlink)
-
 Add an [edge](/id/doc_glossary#term-edge) between two [resources](/id/doc_glossary#term-resource). Used in the admin.
 
 The edge is selected with either:
@@ -51,14 +47,17 @@ For instance:
 
 Other arguments:
 
-*   element\\_id
-*   edge\\_template
+*   element_id
+*   edge_template
 *   action - actions executed after linking
 
 Todo
 
 Extend documentation
-").
+
+See also
+
+[unlink](/id/doc_template_action_action_unlink)").
 -author("Marc Worrell <marc@worrell.nl").
 
 -include_lib("zotonic_core/include/zotonic.hrl").

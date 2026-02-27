@@ -19,10 +19,6 @@
 
 -module(filter_upper).
 -moduledoc("
-See also
-
-[capfirst](/id/doc_template_filter_filter_capfirst), [lower](/id/doc_template_filter_filter_lower)
-
 Translates the value to upper case.
 
 For example:
@@ -35,7 +31,10 @@ For example:
 When value is “Hello World” then the output is “HELLO WORLD”.
 
 **Note:** There is partial support for multi-byte unicode characters.
-").
+
+See also
+
+[capfirst](/id/doc_template_filter_filter_capfirst), [lower](/id/doc_template_filter_filter_lower)").
 -export([upper/2]).
 
 -include_lib("zotonic_core/include/zotonic.hrl").

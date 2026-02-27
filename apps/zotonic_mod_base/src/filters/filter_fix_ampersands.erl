@@ -27,10 +27,6 @@
 
 -module(filter_fix_ampersands).
 -moduledoc("
-See also
-
-[escape](/id/doc_template_filter_filter_escape)
-
 Replaces ampersands in the value with “&amp;amp;” entities.
 
 For example:
@@ -41,7 +37,10 @@ For example:
 ```
 
 If the value is `hel&lo` then the output is `hel&amp;lo`.
-").
+
+See also
+
+[escape](/id/doc_template_filter_filter_escape)").
 -export([fix_ampersands/2]).
 
 -author('rsaccon@gmail.com').

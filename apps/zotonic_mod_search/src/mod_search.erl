@@ -21,11 +21,7 @@
 
 -module(mod_search).
 -moduledoc("
-See also
-
-[Search](/id/doc_developerguide_search#guide-datamodel-query-model), [Custom search](/id/doc_cookbook_custom_search#cookbook-custom-search)
-
-mod\\_search implements various ways of searching through the main resource table using [m\\_search](/id/doc_model_model_search).
+mod_search implements various ways of searching through the main resource table using [m_search](/id/doc_model_model_search).
 
 
 
@@ -38,7 +34,7 @@ search settings](https://www.postgresql.org/docs/current/static/textsearch-contr
 
 
 
-### mod\\_search.rank\\_behaviour
+### mod_search.rank_behaviour
 
 An integer representation to influence PostgreSQL search behaviour.
 
@@ -46,13 +42,13 @@ Default: `37` (`1 | 4 | 32`)
 
 
 
-### mod\\_search.rank\\_weight
+### mod_search.rank_weight
 
 A set of four numbers to override relative weights for the ABCD categories.
 
 Default: `{0.05, 0.25, 0.5, 1.0}`
 
-The following searches are implemented in mod\\_search:
+The following searches are implemented in mod_search:
 
 | Name                         | Description                                                                      | Required arguments           |
 | ---------------------------- | -------------------------------------------------------------------------------- | ---------------------------- |
@@ -112,7 +108,9 @@ Delegate callbacks:
 
 - `event/2` with `postback` messages: `facet_rebuild`.
 
-").
+See also
+
+[Search](/id/doc_developerguide_search#guide-datamodel-query-model), [Custom search](/id/doc_cookbook_custom_search#cookbook-custom-search)").
 -author("Marc Worrell <marc@worrell.nl>").
 -behaviour(gen_server).
 

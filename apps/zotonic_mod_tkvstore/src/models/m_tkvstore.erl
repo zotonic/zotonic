@@ -19,10 +19,6 @@
 
 -module(m_tkvstore).
 -moduledoc("
-See also
-
-[mod_tkvstore](/id/doc_module_mod_tkvstore)
-
 Simple read-only interface to the typed key-value store of [mod_tkvstore](/id/doc_module_mod_tkvstore). To get a value
 from the store: use m.tkvstore.type.key, like this:
 
@@ -73,7 +69,10 @@ Available Model API Paths
 | `get` | `/+type/+key/...` | Return admin-only typed-key value from `tkvstore` row (`type = +type`, `key = +key`), yielding stored `props` term or `undefined` when missing. |
 
 `/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
-").
+
+See also
+
+[mod_tkvstore](/id/doc_module_mod_tkvstore)").
 -author("Marc Worrell <marc@worrell.nl").
 
 -behaviour(zotonic_model).

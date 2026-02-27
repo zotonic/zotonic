@@ -27,7 +27,7 @@ Extend documentation
 
 See also
 
-[controller\\_authentication](/id/doc_controller_controller_authentication), [Authentication](/id/doc_developerguide_access_control#guide-authentication).
+[controller_authentication](/id/doc_controller_controller_authentication), [Authentication](/id/doc_developerguide_access_control#guide-authentication).
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

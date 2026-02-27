@@ -33,7 +33,7 @@ ACL permissions
 
 The following [ACL permissions](/id/doc_developerguide_access_control#guide-authorization) are required:
 
-*   to view the page, [use permission](/id/doc_module_mod_acl_user_groups) on the ‘mod\\_admin\\_predicate’ module
+*   to view the page, [use permission](/id/doc_module_mod_acl_user_groups) on the ‘mod_admin_predicate’ module
 *   to edit and delete predicates, [edit and delete permissions](/id/doc_module_mod_acl_user_groups#content-acl) on category ‘predicate’.
 Admin module for managing edge predicates and predicate resources in the backend.
 

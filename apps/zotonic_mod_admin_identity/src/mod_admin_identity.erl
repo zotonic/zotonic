@@ -61,7 +61,7 @@ After saving, your password complexity rule will now be enforced on all future p
 
 ### Advice on Building a Password Regular Expression
 
-A typical password\\_regex should start with ^.\\* and end with .\\*$. This allows everything by default and allows you
+A typical password_regex should start with ^.\\* and end with .\\*$. This allows everything by default and allows you
 to assert typical password rules like:
 
 *   must be at least 8 characters long (?=.\\{8,\\})
@@ -70,7 +70,7 @@ to assert typical password rules like:
 *   must have at least one upper-case letter (?=.\\*\\[A-Z\\])
 *   must have at least one special character (?=.\\*\\[@#$%^&+=\\])
 
-Putting those rules all together gives the following password\\_regex:
+Putting those rules all together gives the following password_regex:
 
 
 ```none

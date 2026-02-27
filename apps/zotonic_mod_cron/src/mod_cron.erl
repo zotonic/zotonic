@@ -30,18 +30,18 @@ tick
 For periodic tasks the system has various periodic tick events. They are named after their interval *s* for seconds, *m*
 for minutes, and *h* for hours.
 
-*   tick\\_1s
-*   tick\\_1m
-*   tick\\_10m
-*   tick\\_15m
-*   tick\\_30m
-*   tick\\_1h
-*   tick\\_2h
-*   tick\\_3h
-*   tick\\_4h
-*   tick\\_6h
-*   tick\\_12h
-*   tick\\_24h
+*   tick_1s
+*   tick_1m
+*   tick_10m
+*   tick_15m
+*   tick_30m
+*   tick_1h
+*   tick_2h
+*   tick_3h
+*   tick_4h
+*   tick_6h
+*   tick_12h
+*   tick_24h
 
 
 
