@@ -1520,7 +1520,7 @@ page_url(Id, IsAbs, Context) ->
                 undefined ->
                     Args = [
                         {id,RscId},
-                        {slug, slug(RscId, Context)}
+                        {slug, slug_no_acl(RscId, Context)}
                         | z_context:get(extra_args, Context, [])
                     ],
                     Url = page_url_path(CatPath, Args, Context),
@@ -1546,8 +1546,8 @@ page_url_path([CatName | Rest], Args, Context) ->
         Url -> Url
     end.
 
-slug(Id, Context) ->
-    case p(Id, <<"title_slug">>, Context) of
+slug_no_acl(Id, Context) ->
+    case p_no_acl(Id, <<"title_slug">>, Context) of
         undefined -> undefined;
         <<>> -> undefined;
         #trans{} = Tr -> z_trans:lookup_fallback(Tr, Context);
