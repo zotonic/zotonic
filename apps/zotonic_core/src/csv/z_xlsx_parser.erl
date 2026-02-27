@@ -3,7 +3,7 @@
 %% @doc Parse a XLSX spreadsheet file. As unpacking unchecked zip files
 %% can consume lots of memory, it is desirable to run this in a
 %% separate process and limit the amount of memory that can be used
-%% with `erlang:process_flag(max_heap_size, ...)`.
+%% with: erlang:process_flag(max_heap_size, ...).
 %% @end
 
 %% Copyright 2020-2025 Marc Worrell
@@ -33,7 +33,7 @@
 -define(DEFAULT_MAX_MEMORY, 160 * 1024 * 1024). % 160MB
 
 %% @doc Parse a XLSX file with safety on the maximum amount of memory used. The parsing
-%% is done in a separate process. Same as `parse_file/2` with no options.
+%% is done in a separate process. Same as `parse_file/2' with no options.
 -spec parse_file(file:filename_all()) -> {ok, Rows} | {error, term()} when
     Rows :: [ Row ],
     Row :: [ Cell ],
