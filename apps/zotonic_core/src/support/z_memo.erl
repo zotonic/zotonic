@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2025 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Simple memo functions.  Stores much used values in the process dictionary. Especially useful for
 %% ACL lookups or often used functions. This is enabled for all HTTP and MQTT requests.
 %% @end
 
-%% Copyright 2009-2025 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -57,11 +57,18 @@ disable() ->
 
 %% @doc Flush the memo cache and set the cache to the current user - needed when changing users
 flush(Context) ->
-	z_depcache:flush_process_dict(),
+	flush(),
 	case erlang:get(is_memo) of
 		true -> set_userid(Context);
 		_ -> ok
 	end.
+
+%% @doc Flush all memo keys from the process dict.
+flush() ->
+	z_depcache:flush_process_dict(),
+	[ erlang:erase(Key) || {memo, _} = Key <- erlang:get_keys() ],
+	erlang:erase(memo_userid),
+	ok.
 
 %% @doc If a new user id is set in the context, and the user is different from the previous user,
 %% then reset the memoization cache and start with the new user id.
@@ -72,7 +79,7 @@ set_userid(#context{ user_id = NewUserId, site = Site }) ->
 				{ok, Site, NewUserId} ->
 					ok; % same user, do nothing
 				_ ->
-					z_depcache:flush_process_dict(),
+					flush(),
 					erlang:put(memo_userid, {ok, Site, NewUserId})
 			end;
 		_ ->
@@ -90,31 +97,32 @@ is_enabled(#context{ user_id = UserId, site = Site }) ->
 
 %% @doc Check if the key is stored. Irrespective of current user-id or site context.
 get(Key) ->
-	erlang:get(Key).
+	erlang:get({memo, Key}).
 
 %% @doc Check if the cache is enabled for the user and if the key is stored.
 get(Key, Context) ->
 	case is_enabled(Context) of
-		true -> erlang:get(Key);
+		true -> erlang:get({memo, Key});
 		false -> undefined
 	end.
 
 %% @doc Store a key. Irrespective of current user-id or site context.
 set(Key, Value) ->
-	erlang:put(Key, Value),
+	erlang:put({memo, Key}, Value),
 	Value.
 
 %% @doc Store the value if enabled for the current user.
 set(Key, Value, Context) ->
 	case is_enabled(Context) of
-		true -> erlang:put(Key, Value);
+		true ->
+			erlang:put({memo, Key}, Value);
 		false -> nop
 	end,
 	Value.
 
 %% @doc Delete a key from the cache. Return the previous value and 'undefined' if not set.
 delete(Key) ->
-    erlang:erase(Key).
+    erlang:erase({memo, Key}).
 
 %% @doc Fetch the current memo settings, used when copying the memo settings to a new process.
 get_status() ->
@@ -128,7 +136,7 @@ set_status({true, MemoUserId}) ->
 		MemoUserId ->
 			ok;
 		_ ->
-			z_depcache:flush_process_dict(),
+			flush(),
 			erlang:put(memo_userid, MemoUserId)
 	end;
 set_status({_False, _MemoUserId}) ->
