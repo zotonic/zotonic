@@ -1,10 +1,10 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019-2025 Marc Worrell
+%% @copyright 2019-2026 Marc Worrell
 %% @doc Registry for authentication tokens giving access to users/resources on
 %% the local site.
 %% @end
 
-%% Copyright 2019-2025 Marc Worrell
+%% Copyright 2019-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,7 +20,26 @@
 
 -module(m_oauth2).
 -moduledoc("
-Not yet documented.
+Model for OAuth2 app/client/token administration and user token listings.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/client/+clientid/+redirecturl/...` | Validate enabled OAuth2 app `+clientid` and exact redirect URI match for `+redirecturl`, then return client metadata (`id`, `description`) for authorization flow. |
+| `get` | `/apps` | Return admin-only OAuth2 app overview list with auth/client-credentials settings and per-app token counts. No further lookups. |
+| `get` | `/apps/+appid` | Return admin-only OAuth2 app details for `+appid`, including app secret, redirect URLs, credential settings, and token count. No further lookups. |
+| `get` | `/apps/+appid/tokens/...` | Return admin-only token rows for app `+appid` (`user_id`, label, access flags, IP restriction, note, validity dates). |
+| `get` | `/user_groups/...` | Return ACL user-group ids available in the current context for token group restrictions. |
+| `get` | `/tokens` | Alias for `/tokens/list/me`, returning tokens for the current authenticated user. No further lookups. |
+| `get` | `/tokens/list/me` | Return token list for the current authenticated user, including app enable/description metadata. No further lookups. |
+| `get` | `/tokens/list` | Alias for `/tokens/list/me`, returning current-user tokens (not a global list). No further lookups. |
+| `get` | `/tokens/list/me/...` | Return token list for the current authenticated user; allowed for self or admin access rules. |
+| `get` | `/tokens/list/+userid/...` | Return token list for user `+userid` when caller is that user or admin; includes app metadata and token restrictions. |
+| `get` | `/tokens/+tokenid/...` | Return details for token `+tokenid` (and user-group restrictions when not full-access) when caller is token owner or admin. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 
 -behaviour(zotonic_model).
@@ -1057,4 +1076,3 @@ install_oauth2_app_table(Context) ->
     [] = z_db:q(
         "CREATE INDEX IF NOT EXISTS fki_oauth2_app_client_credentials_user_id ON oauth2_app (client_credentials_user_id)",
         Context).
-

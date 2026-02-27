@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017-2025 Marc Worrell
+%% @copyright 2017-2026 Marc Worrell
 %% @doc Model for mod_authentication
 %% @end
 
-%% Copyright 2017-2025 Marc Worrell
+%% Copyright 2017-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,7 +19,26 @@
 
 -module(m_authentication).
 -moduledoc("
-Not yet documented.
+Model for authentication state and login support checks, including password authentication flow helpers and reminder/verification actions.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/authenticate/password/...` | Validate username/password and return auth payload with short-lived `auth.token` and `cookie.token` plus cookie exchange URL. |
+| `get` | `/password_min_length/...` | Return configured minimum password length (`mod_authentication.password_min_length`, default `8`). |
+| `get` | `/is_one_step_logon/...` | Return site setting `mod_authentication.is_one_step_logon`. |
+| `get` | `/is_supported/rememberme/...` | Return whether remember-me authentication is supported (requires active database connection). |
+| `get` | `/status/...` | Return authentication status map with `is_authenticated`, `user_id`, `username`, language/timezone preferences, and auth options. |
+| `get` | `/is_rememberme/...` | Return site setting `mod_authentication.is_rememberme`. |
+| `post` | `/request-reminder` | Request password-reset reminders for payload `email`; sends reset mail(s) to matching accounts and returns normalized email. |
+| `post` | `/service-confirm` | Decode and validate signed auth payload (`auth` + `url`) and complete authentication confirmation flow. |
+| `post` | `/service-confirm-passcode` | Decode and validate signed auth-user payload, verify passcode, then complete authentication confirmation flow. |
+| `post` | `/send-verification-message` | Validate signed verification token and, if still valid, trigger identity-verification message delivery. |
+| `post` | `/acceptable-password` | Validate password against min-length/regex policy and leak-check policy (`ok`, `tooshort`, or `dataleak`). |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 
 -behaviour(zotonic_model).

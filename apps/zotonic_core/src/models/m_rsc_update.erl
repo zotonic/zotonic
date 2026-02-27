@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2025 Marc Worrell, Arjan Scherpenisse
+%% @copyright 2009-2026 Marc Worrell, Arjan Scherpenisse
 %% @doc Update routines for resources.  For use by the m_rsc module.
 %% @end
 
-%% Copyright 2009-2025 Marc Worrell, Arjan Scherpenisse
+%% Copyright 2009-2026 Marc Worrell, Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,6 +18,11 @@
 %% limitations under the License.
 
 -module(m_rsc_update).
+-moduledoc("
+Resource update helper module used by `m_rsc`.
+
+This module contains insert/update/delete/merge routines for resources and is logically part of the `m_rsc` model implementation. It is not exposed as a standalone model path endpoint.
+").
 -author("Marc Worrell <marc@worrell.nl").
 
 %% interface functions

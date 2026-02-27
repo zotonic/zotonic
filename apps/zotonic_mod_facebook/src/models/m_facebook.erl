@@ -1,9 +1,10 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
-%% @copyright 2011 Maas-Maarten Zeeman
+%% @copyright 2011-2026 Maas-Maarten Zeeman
 %%
 %% @doc Model for accessing facebook data via the graph api.
+%% @end
 
-%% Copyright 2011 Maas-Maarten Zeeman
+%% Copyright 2011-2026 Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,7 +20,18 @@
 
 -module(m_facebook).
 -moduledoc("
-Not yet documented.
+Model for Facebook integration helpers, including auth-use flag, profile picture fetch, and Graph API proxy calls.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/useauth/...` | Return whether Facebook authentication integration is enabled. |
+| `get` | `/picture/+key/...` | Return Facebook profile picture data/URL for key/user `+key`. |
+| `get` | `/+ct/+key/...` | Resolve `+ct` and `+key` and return the matching value via `do_graph_call`. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Maas-Maarten Zeeman <mmzeeman@xs4all.nl").
 

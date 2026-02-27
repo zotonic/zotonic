@@ -18,6 +18,18 @@
 %% limitations under the License.
 
 -module(m_rsc_import).
+-moduledoc("
+Import model for resources exported by `m_rsc_export`.
+
+This model handles import-preview and import operations for external resource exports. It keeps import status metadata and supports fetching raw export payloads for authenticated users.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/fetch_raw` | Fetch raw exported JSON from a remote URI provided in the payload, for authenticated users. No further lookups. |
+").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
 -behaviour(zotonic_model).

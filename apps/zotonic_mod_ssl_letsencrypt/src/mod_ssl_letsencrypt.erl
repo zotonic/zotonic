@@ -99,6 +99,19 @@ The default is the OS specific directory.
 
 If there is a directory `priv/security/letsencrypt` inside your site’s OTP application folder then that directory will
 be used.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_ssl_options`: Return the certificates of this site using `z_depcache:memo`.
+- `observe_tick_24h`: Period tick, used to check for cert upgrade using `gen_server:cast`.
+
+Delegate callbacks:
+
+- `event/2` with `submit` messages: `request_cert`.
+
 ").
 
 -mod_title("SSL - Let's Encrypt").

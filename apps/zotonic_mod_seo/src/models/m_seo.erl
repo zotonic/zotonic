@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2017-2023 Marc Worrell
+%% @copyright 2017-2026 Marc Worrell
 %% @doc Model for mod_seo configuration access and JSON-LD generation.
 %% @end
 
-%% Copyright 2017-2023 Marc Worrell
+%% Copyright 2017-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,7 +19,25 @@
 
 -module(m_seo).
 -moduledoc("
-Not yet documented.
+Model for SEO-related settings and generated SEO metadata, including webmaster verification keys, analytics settings, and JSON-LD output.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/noindex/...` | Return site default `noindex` setting for generated pages. |
+| `get` | `/keywords/...` | Return default SEO keywords configured for the site. |
+| `get` | `/description/...` | Return default SEO description configured for the site. |
+| `get` | `/bing/webmaster_verify/...` | Return the configured Bing webmaster verification token. |
+| `get` | `/google/webmaster_verify/...` | Return the configured Google webmaster verification token. |
+| `get` | `/google/analytics/...` | Return configured Google Analytics identifier/value. |
+| `get` | `/google/gtm/...` | Return configured Google Tag Manager container id/value. |
+| `get` | `/plausible/analytics/...` | Return whether Plausible analytics integration is enabled. |
+| `get` | `/yandex/webmaster_verify/...` | Return the configured Yandex webmaster verification token. |
+| `get` | `/jsonld/+id/...` | Return generated JSON-LD metadata document for resource/page `+id`. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 
 -behaviour(zotonic_model).

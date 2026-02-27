@@ -19,19 +19,20 @@
 
 -module(m_comment).
 -moduledoc("
-Accesses comments on a page.
+Model for comments attached to resources. It provides listing, moderation checks, counting, and retrieval of individual comments.
 
-Comments are stored in the `comment` table. Comments are no separate rsc records because that will add many extra
-records and also because of access control restrictions.
+Available Model API Paths
+-------------------------
 
-When a page is not visible to a certain user then its comments shouldn’t be visible as well. To simplify this check
-the comments are placed separate and made part of the rsc record.
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/anonymous/...` | Return whether anonymous comments are allowed; defaults to `true` when `mod_comment.anonymous` is unset. |
+| `get` | `/moderate/...` | Return whether new comments require moderation; defaults to `false` when `mod_comment.moderate` is unset/empty. |
+| `get` | `/rsc/+id/...` | Return all comment rows for resource `+id` (ascending by creation time; requires resource visibility). |
+| `get` | `/count/+id/...` | Return total comment count for resource `+id` (requires resource visibility). |
+| `get` | `/get/+commentid/...` | Return comment record `+commentid`, or `undefined` if missing; access is denied when the linked resource is not visible. |
 
-This separate comment table also helps with cleaning up comments when the rsc record is deleted.
-
-Todo
-
-Finish m\\_comment
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

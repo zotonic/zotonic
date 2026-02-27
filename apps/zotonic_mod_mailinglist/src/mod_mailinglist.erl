@@ -143,8 +143,7 @@ email address.
 
 The status page lists every mailing list in the system. On each row you see how many recipients the list has, and the
 status, e.g. if the mailing has already been sent to this list or not.
-
-Todo
+Mailing list module for managing recipient lists, subscriptions, and bulk mail delivery workflows.
 
 finish description of the mailing status page
 
@@ -155,6 +154,23 @@ You can schedule a mailing by publishing the page but setting its publication st
 your mailing to be send. The mailing list module checks every hour if there are any mailings ready for sending.
 
 An exception is made for the test mailing list, mailings to that mailing list are always sent.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_acl_is_allowed`: Allow mailinglist admin to add or remove subscribers to mailinglists using `z_acl:is_allowed`.
+- `observe_admin_menu`: Contribute module entries to the admin menu tree.
+- `observe_mailinglist_message`: Send status messages to a recipient using `z_context:set_language`.
+- `observe_search_query`: Handle `search_query` notifications using `z_context:set_language`.
+- `observe_tick_24h`: Every 24h cleanup the mailinglists recipients using `m_mailinglist:periodic_cleanup`.
+
+Delegate callbacks:
+
+- `event/2` with `postback` messages: `dialog_mailing_cancel_confirm`, `mailing_cancel`, `mailinglist_reset`, `mailinglist_unsubscribe`.
+- `event/2` with `submit` messages: `mailing_testaddress`, `mailinglist_combine`, `mailinglist_optout`, `mailinglist_upload`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 -behaviour(gen_server).

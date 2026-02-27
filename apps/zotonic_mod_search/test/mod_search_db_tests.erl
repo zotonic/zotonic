@@ -1,4 +1,7 @@
 -module(mod_search_db_tests).
+-moduledoc("
+EUnit tests for database-backed search query behavior and notifications.
+").
 
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("zotonic_core/include/zotonic.hrl").

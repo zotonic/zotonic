@@ -68,6 +68,15 @@ Site updates get their datamodel fixed by automatic restarts of modules, ensure 
 
 Zotonic updates are a bit more complicated. Small updates will be fine. Large updates that also change the datamodel or
 add new Erlang dependencies need more compilation and a system restart. So be careful with using this update button.
+
+Accepted Events
+---------------
+
+
+Delegate callbacks:
+
+- `event/2` with `postback` messages: `make`, `vcs_up`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

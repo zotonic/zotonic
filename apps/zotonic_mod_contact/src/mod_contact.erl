@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2025 Marc Worrell
+%% @copyright 2010-2026 Marc Worrell
 %% @doc Simple contact form.
 %% @end
 
-%% Copyright 2010-2025 Marc Worrell
+%% Copyright 2010-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,10 +20,17 @@
 -module(mod_contact).
 -moduledoc("
 Implements a basic contact form, which gets emailed to the configuration value `mod_contact.email`, when submitted.
+Contact form module handling form submission, validation, and delivery to configured recipients.
 
-Todo
 
-Add more documentation
+Accepted Events
+---------------
+
+
+Delegate callbacks:
+
+- `event/2` with `submit` messages: `contact`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

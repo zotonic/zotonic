@@ -115,10 +115,31 @@ The category and content group for this person can be configured via the followi
 
 *   `mod_survey.person_category`, default to `person`
 *   `mod_survey.person_content_group`, defaults to `default_content_group`
+Survey/form module for creating questionnaires and collecting/reporting submitted answers.
 
-Todo
 
-Add more documentation
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_acl_is_allowed`: Check access to the survey answers using `z_acl:rsc_editable`.
+- `observe_admin_edit_blocks`: Append the possible blocks for a survey's edit page using `m_rsc:is_a`.
+- `observe_admin_rscform`: Redo the page jumps into correct page break blocks using `survey_admin:admin_rscform`.
+- `observe_export_resource_data`: Fetch all ids making up the export, handles collections and search queries using `z_acl:rsc_editable`.
+- `observe_export_resource_filename`: Fetch the filename for the export using `m_survey:is_allowed_results_download`.
+- `observe_export_resource_header`: Fetch the header for the survey download using `m_survey:is_allowed_results_download`.
+- `observe_rsc_merge`: Rename the answers of the loser to the winner using `m_survey:rsc_merge`.
+- `observe_survey_get_handlers`: Add module-provided survey handlers to the available handler list.
+- `observe_survey_is_submit`: Check if the given block is a survey question with submit button using `m_survey:rsc_merge`.
+- `observe_survey_submit`: Process survey submissions for module handlers and return `undefined` for non-matching handlers.
+- `observe_tick_24h`: Every day prune old saved intermediate survey results using `m_survey_saved:prune_saved`.
+
+Delegate callbacks:
+
+- `event/2` with `postback` messages: `survey_back`, `survey_remove_result`, `survey_remove_result_confirm`, `survey_start`.
+- `event/2` with `submit` messages: `survey_next`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 
@@ -1453,4 +1474,3 @@ module_name(<<"survey_", Type/binary>>) ->
     list_to_atom("survey_q_"++z_convert:to_list(Type));
 module_name(_) ->
     undefined.
-

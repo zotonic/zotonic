@@ -371,6 +371,16 @@ All connections must authenticate using a username and password. The username is
 user’s site, for example: `foobar.com:myusername`. In this way Zotonic knows which site the user belongs to.
 
 If no matching site can be found, or if no hostname is given, then Zotonic will try to authenticate against the default site.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_acl_is_allowed`: Apply module ACL checks for the requested action/object.
+- `observe_action_event_type`: Handle the <tt>{live ...}</tt> event type using `scomp_mqtt_live:event_type_mqtt`.
+- `observe_module_activate`: Handle `module_activate` notifications using `z_acl:sudo`.
+
 ").
 
 -mod_title("MQTT").
@@ -478,4 +488,3 @@ observe_action_event_type(#action_event_type{event={mqtt, _Args}} = Ev, Context)
     scomp_mqtt_live:event_type_mqtt(Ev, Context);
 observe_action_event_type(_, _Context) ->
     undefined.
-

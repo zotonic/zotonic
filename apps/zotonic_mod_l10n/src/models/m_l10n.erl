@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011 Marc Worrell
+%% @copyright 2011-2026 Marc Worrell
 %% @doc Localization of Zotonic.  Country, and other lookups.
+%% @end
 
-%% Copyright 2011 Marc Worrell
+%% Copyright 2011-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,7 +19,20 @@
 
 -module(m_l10n).
 -moduledoc("
-Not yet documented.
+Model for localization helpers, including countries, country names, available timezones, and site timezone settings.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/countries/...` | Return all ISO country codes with country names translated in the current context language, sorted by translated name. |
+| `get` | `/country_name/+code/...` | Return the translated country name for ISO code `+code` using language fallback rules; returns `+code` itself when unknown. |
+| `get` | `/timezones/...` | Return all timezone identifiers from the bundled timezone database (`qdate_localtime`) as binaries. |
+| `get` | `/default_timezone/...` | Return site timezone setting `mod_l10n.timezone` used as default timezone. |
+| `get` | `/timezone_is_fixed/...` | Return site flag `mod_l10n.timezone_is_fixed` indicating if user timezone selection is disabled. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 
 -author("Marc Worrell <marc@worrell.nl>").
@@ -99,4 +113,3 @@ timezones() ->
         Tzs ->
             Tzs
     end.
-

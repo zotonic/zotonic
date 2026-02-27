@@ -76,6 +76,16 @@ The following properties are extracted from the audio file, and can be edited in
 
 If there is no resource title given when creating the audio page then the title from the tags is used. If that one is
 empty then the file’s basename is used.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_media_upload_props`: Set medium properties from the uploaded file using `z_media_archive:abspath`.
+- `observe_media_upload_rsc_props`: Set resource properties from the medium properties using `z_datetime:to_datetime`.
+- `observe_media_viewer`: Return the media viewer for the audio using `z_template:render`.
+
 ").
 
 -author("Marc Worrell <marc@worrell.nl>").

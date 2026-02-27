@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2021 Marc Worrell
+%% @copyright 2021-2026 Marc Worrell
 %% @doc Model for uploading files
+%% @end
 
-%% Copyright 2021 Marc Worrell
+%% Copyright 2021-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -69,6 +70,18 @@ Status `\"error\"` is returned if the name is unknown or any error occured.
 The offset must be an integer and the message payload must be binary data.
 
 `model/fileuploader/get/status/+name` fetch the current fileupload status.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/status/+name/...` | Return sanitized upload status for `+name`: filename, total size, received bytes, completion flag, missing byte ranges, and absolute upload URL. |
+| `post` | `/new` | Start or resume upload `name` for payload `filename` + `size` after media-insert ACL check, then return sanitized upload status metadata. No further lookups. |
+| `post` | `/delete/+name` | Stop and remove the upload worker/session identified by `+name` via `z_fileuploader:stop/1`. No further lookups. |
+| `post` | `/upload/+name/+offset` | Append a binary chunk to upload `+name` at byte offset `+offset` and return updated sanitized upload status (including remaining ranges). No further lookups. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 
 -export([

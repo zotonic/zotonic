@@ -57,6 +57,14 @@ information how to configure this DNS entry, including the text to copy-paste in
 
 By default, the DKIM selector is set to the string `zotonic`. This will result in DNS lookups to the
 `zotonic._domainkey.yoursite.com` domain. You can change the selector name by adding a config value called `site.dkim_selector`.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_email_dkim_options`: Handle `email_dkim_options` notifications using `z_email_dkim:mimemail_options`.
+
 ").
 -author("Arjan Scherpenisse <arjan@miraclethings.nl>").
 

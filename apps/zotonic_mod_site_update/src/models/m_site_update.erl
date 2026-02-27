@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2019-2020 Marc Worrell
+%% @copyright 2019-2026 Marc Worrell
 %% @doc Fetch the status of the sites.
+%% @end
 
-%% Copyright 2019-2020 Marc Worrell
+%% Copyright 2019-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -31,9 +32,22 @@ https://yoursite.test/api/model/site_update/post/webhook/<token>
 
 Where `<token\\>` should be replaced with your configured token.
 
-The token can be configured in the admin on System > Modules and then the config of the mod\\_site\\_update module.
+The token can be configured in the admin on System > Modules and then the config of the mod_site_update module.
 
 The token is saved in the config key `mod_site_update.webhook_token`.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/is_vcs_site/...` | Return whether the current site source directory resolves to a VCS checkout (`.git`, `.hg`, or symlinked checkout). |
+| `get` | `/vcs_site/+site/...` | Return admin-only VCS tuple for site `+site` (`{git|hg, Path}`) or `false` when no repository is detected. |
+| `get` | `/vcs_zotonic/...` | Return admin-only VCS tuple for the Zotonic core library directory (`{git|hg, Path}`) or `false` when not under VCS. |
+| `post` | `/webhook` | Read webhook token from query arg `token`; if it matches `mod_site_update.webhook_token`, run VCS update (`git pull`/`hg pull -u`) for the current site. No further lookups. |
+| `post` | `/webhook/+token` | Use path token `+token`; if it matches `mod_site_update.webhook_token`, run VCS update (`git pull`/`hg pull -u`) for the current site. No further lookups. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

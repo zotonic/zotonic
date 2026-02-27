@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2025 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Administrative interface.  Aka backend.
-%% @enddoc
+%% @end
 
-%% Copyright 2009-2025 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,16 +19,12 @@
 
 -module(mod_admin).
 -moduledoc("
-Todo
-
-Finish documentation
-
-
+Admin backend module that wires the core admin interface, assets, and admin-specific event handling.
 
 Extending the admin menu
 ------------------------
 
-See [m\\_admin\\_menu](/id/doc_model_model_admin_menu) on how to extend the admin menu.
+See [m_admin_menu](/id/doc_model_model_admin_menu) on how to extend the admin menu.
 
 
 
@@ -94,7 +90,7 @@ Writing admin widget templates
 ------------------------------
 
 This section contains examples of templates to create widgets for the /admin. Each of these examples extends basic
-several widget templates from mod\\_admin. To write your own you need to drop example content and fill holes in these
+several widget templates from mod_admin. To write your own you need to drop example content and fill holes in these
 example widgets.
 
 You can use them as basis for your site admin-related tasks.
@@ -334,6 +330,25 @@ With the configuration `mod_admin.rsc_dialog_hide_dependent` the *dependent* che
 
 If the `mod_admin.connect_created_me` is set then the connect dialogs will per default filter for content made by the
 current user. The current setting is stored in the sessionStorage with the key `dialog_connect_created_me`.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_acl_is_owner`: If the given resource is a temporary resource then the current session using `filter_temporary_rsc:is_creator`.
+- `observe_admin_edit_blocks`: Provide standard resource block types for the admin edit block chooser.
+- `observe_admin_menu`: Contribute standard admin menu items.
+- `observe_module_ready`: When the module is ready, flush the admin_menu depcache using `z_depcache:flush`.
+- `observe_rsc_update_done`: After a resource is saved, ensure that all embedded resource references are using `m_config:get_boolean`.
+- `observe_sanitize_element`: Fix tinymce images that are the result of copying using `m_rsc:rid`.
+
+Delegate callbacks:
+
+- `event/2` with `postback` messages: `admin_note_delete_rsc`, `admin_rsc_redirect`, `delete_tasks`, `ensure_refers`.
+- `event/2` with `submit` messages: `admin_note_update_rsc`, `delete_all`, `dropbox_upload`, `update_all`.
+- `event/2` with `postback_notify` messages: `<<\"admin-insert-block\">>`, `<<\"feedback\">>`, `<<\"update\">>`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

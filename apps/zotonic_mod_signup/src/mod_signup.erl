@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2024 Marc Worrell
+%% @copyright 2010-2026 Marc Worrell
 %% @doc Let new members register themselves.
 %% @end
 
-%% Copyright 2010-2024 Marc Worrell
+%% Copyright 2010-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -132,10 +132,19 @@ Fired when a users have signed up and confirmed their identity (e.g. via e-mail)
 ### `signup_confirm_redirect{id=UserId}`
 
 Decide to which page a user gets redirected to after signup.
+User signup module handling registration, activation, and signup-related policies.
 
-Todo
 
-Add more documentation
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_identity_verification`: Handle `identity_verification` notifications using `z_auth:is_auth`.
+- `observe_logon_ready_page`: Return the url to redirect to when the user logged on, defaults to the user's personal page using `z_auth:is_auth`.
+- `observe_signup`: Add a new user or an existing person as user using `z_ids:id`.
+- `observe_signup_url`: Check if a module wants to redirect to the signup form using `z_ids:id`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

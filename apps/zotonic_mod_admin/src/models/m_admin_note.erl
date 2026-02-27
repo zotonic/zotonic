@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2022-2025 Marc Worrell
+%% @copyright 2022-2026 Marc Worrell
 %% @doc Note about a resource, edited in the admin, not part of the resource.
-%% @enddoc
+%% @end
 
-%% Copyright 2022-2025 Marc Worrell
+%% Copyright 2022-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -23,6 +23,15 @@ Add an editorial note to any resource.
 
 The note is entered on the admin edit page. Only people with edit permission on the resource *and* access to the admin
 are allowed to see and edit notes.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/rsc/+id/...` | Return admin note text/metadata attached to resource `+id`. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 
 -export([

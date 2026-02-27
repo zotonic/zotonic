@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2012-2023 Marc Worrell
+%% @copyright 2012-2026 Marc Worrell
 %% @doc Model for administration of deleted resources and their possible new location.
 %% @end
 
-%% Copyright 2012-2023 Marc Worrell
+%% Copyright 2012-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@
 -moduledoc("
 See also
 
-[The Zotonic data model](/id/doc_userguide_datamodel#guide-datamodel), [m\\_rsc](/id/doc_model_model_rsc)
+[The Zotonic data model](/id/doc_userguide_datamodel#guide-datamodel), [m_rsc](/id/doc_model_model_rsc)
 
-This model tracks deleted resources (see [m\\_rsc](/id/doc_model_model_rsc)). Its primary goal is to be able to
+This model tracks deleted resources (see [m_rsc](/id/doc_model_model_rsc)). Its primary goal is to be able to
 determine if a resource never existed, has been deleted or has been replaced by another resource.
 
 
@@ -34,7 +34,7 @@ Information kept
 Only very basic information of the deleted resource is kept in the `rsc_gone` table. It is enough for referring to a new
 location, giving correct errors or to determine who deleted a resource.
 
-It is not enough to undelete a resource. The module [mod\\_backup](/id/doc_module_mod_backup) retains enough information
+It is not enough to undelete a resource. The module [mod_backup](/id/doc_module_mod_backup) retains enough information
 about past versions to be able to undelete a resource. Currently there is no support for an undelete.
 
 
@@ -42,24 +42,34 @@ about past versions to be able to undelete a resource. Currently there is no sup
 Properties
 ----------
 
-Whenever a [m\\_rsc](/id/doc_model_model_rsc) record is deleted some information from that resource is copied to the
+Whenever a [m_rsc](/id/doc_model_model_rsc) record is deleted some information from that resource is copied to the
 `rsc_gone` table.
 
 The following properties are saved:
 
 | Property           | Description                                                                      | Example value                         |
 | ------------------ | -------------------------------------------------------------------------------- | ------------------------------------- |
-| id                 | Id of the resource, an integer.                                                  | 42                                    |
-| new\\\\_id           | If the resource is replaced by another resource then this is the id of that other resource. | 341                                   |
-| new\\\\_uri          | If the resource is moved to another place on the web then this is the uri of the new location. | <<”<http://example.com/hello>“>>      |
-| name               | The name (if any) of the deleted resource.                                       | <<”page\\\\_hello”>>                    |
-| uri                | The uri of the authoritative source for the resource.                            | <<”<http://foo.bar/hello>“>>          |
-| page\\\\_path        | The page path (if any) of the deleted resource.                                  | <<”/hello”>>                          |
-| is\\\\_authoritative | Whether the resource originated on this site or was imported and maintained on another site. Return a boolean. | true                                  |
-| creator\\\\_id       | The id of the creator of the deleted resource.                                   | 1                                     |
-| created            | The date the deleted resource was created.                                       | \\\\{\\\\{2008,12,10\\\\},\\\\{15,30,00\\\\}\\\\} |
-| modifier\\\\_id      | The id of the user that deleted the resource.                                    | 2718                                  |
-| modified           | The date the resource was deleted.                                               | \\\\{\\\\{2012,12,5\\\\},\\\\{23,59,59\\\\}\\\\}  |
+| id | Id of the resource, an integer. | `42` |
+| new_id | If the resource is replaced by another resource then this is the id of that other resource. | `341` |
+| new_uri | If the resource is moved to another place on the web then this is the uri of the new location. | `<<\"<http://example.com/hello>\">>` |
+| name | The name (if any) of the deleted resource. | `<<\"page_hello\">>` |
+| uri | The uri of the authoritative source for the resource. | `<<\"<http://foo.bar/hello>\">>` |
+| page_path | The page path (if any) of the deleted resource. | `<<\"/hello\">>` |
+| is_authoritative | Whether the resource originated on this site or was imported and maintained on another site. Return a boolean. | `true` |
+| creator_id | The id of the creator of the deleted resource. | `1` |
+| created | The date the deleted resource was created. | `{{2008,12,10},{15,30,00}}` |
+| modifier_id | The id of the user that deleted the resource. | `2718` |
+| modified | The date the resource was deleted. | `{{2012,12,5},{23,59,59}}` |
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/+id/new_location/...` | Return category data for +id. Uses `get_new_location`. |
+| `get` | `/+id/is_gone/...` | Return whether gone (`is_gone`). |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

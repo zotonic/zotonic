@@ -7,6 +7,9 @@ security or connectivity needs.
 The project is an Erlang umbrella application. Though the individual modules can also
 be used as modules pulled from Hex.pm using rebar dependencies.
 
+All files use utf-8 encoding and LF line endings. The project uses the Apache 2.0 license, unless
+otherwise noted in individual files, directories or modules.
+
 ## Folder Structure
 
 - `/apps`: Contains Erlang applications which implement modules and the core Zotonic system.

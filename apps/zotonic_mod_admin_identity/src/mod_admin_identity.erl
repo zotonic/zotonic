@@ -121,6 +121,22 @@ observe_identity_password_match(#identity_password_match{}, _Context) ->
 This checks the password against the old MD5 format. The `{ok,
 rehash}` return value indicates that the user’s password hash will be updated by Zotonic, and as such, this method is
 only called once per user, as the next time the password is stored using Zotonic’s internal hashing scheme.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_admin_menu`: Handle `admin_menu` notifications using `m_identity:get`.
+- `observe_identity_password_match`: Handle `identity_password_match` notifications using `z_utils:hex_decode`.
+- `observe_identity_verified`: Handle `identity_verified` notifications using `m_identity:set_verified`.
+- `observe_rsc_update`: Handle `rsc_update` notifications using `z_context:get`.
+- `observe_search_query`: Handle `search_query` notifications using `m_identity:get`.
+
+Delegate callbacks:
+
+- `event/2` with `postback` messages: `identity_add`, `identity_delete`, `identity_delete_confirm`, `identity_verify`, `identity_verify_check`, `identity_verify_confirm`, `identity_verify_preferred`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

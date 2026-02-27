@@ -1,9 +1,9 @@
 %% @author Arjan Scherpenisse <marc@worrell.nl>
-%% @copyright 2015-2025 Arjan Scherpenisse
+%% @copyright 2015-2026 Arjan Scherpenisse
 %% @doc Access to the ACL rules and configurations.
 %% @end
 
-%% Copyright 2015-2025 Arjan Scherpenisse
+%% Copyright 2015-2026 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,7 +19,31 @@
 
 -module(m_acl_rule).
 -moduledoc("
-Not yet documented.
+Model for ACL rule inspection and helper checks in mod_acl_user_groups, including insert/move checks, upload limits, mime checks, and ACL state lookups.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/is_valid_code/+code/...` | Return whether valid code (`is_valid_code`). |
+| `get` | `/generate_code/...` | Return a newly generated ACL rule invitation/access code. |
+| `get` | `/default_upload_size/...` | Return default maximum upload size enforced by ACL user-group checks. |
+| `get` | `/default_mime_allowed/...` | Return default MIME allowlist used by ACL upload checks. |
+| `get` | `/upload_size/...` | Return effective maximum upload size for the current user context. |
+| `get` | `/author_is_owner/...` | Return config flag `mod_acl_user_groups.author_is_owner`. |
+| `get` | `/can_insert/none/+categoryid/...` | Return whether insertion into category `+categoryid` is allowed without explicit content-group context. |
+| `get` | `/can_insert/acl_collaboration_group/+categoryid/...` | Return whether insertion into category `+categoryid` is allowed within collaboration-group context. |
+| `get` | `/can_insert/+contentgroupid/+categoryid/...` | Return `can_insert` result for `+contentgroupid` and `+categoryid` using `acl_user_groups_checks:can_insert_category`. |
+| `get` | `/can_move/+contentgroupid/+rscid/...` | Return `can_move` result for `+contentgroupid` and `+rscid` using `acl_user_groups_checks:can_move`. |
+| `get` | `/acl_user_groups_state/...` | Return identity data. Uses `acl_user_groups_checks:session_state`. |
+| `get` | `/+t/actions/...` | Return available ACL actions for ACL kind `+t`. |
+| `get` | `/+t/+s/+all_opts/...` | Return ACL rules for type `+t` and state `+s`, including option set `+all_opts` (`all_rules`). |
+| `get` | `/+t/+s/...` | Resolve `+t` and `+s` and return the matching value via `all_rules`. |
+| `get` | `/+t/undefined/...` | Return values for `/undefined` using +t. |
+| `get` | `/+t/+id/...` | Resolve `+t` and `+id` and return the matching value via `z_convert:to_integer`. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Arjan Scherpenisse <marc@worrell.nl").
 

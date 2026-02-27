@@ -36,6 +36,14 @@ can click the button to pop up a configuration dialog where you can set options 
 
 To create such a dialog yourself, include a template called `_admin_configure_module.tpl` in your `templates/` folder in
 your module.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_admin_menu`: Contribute module entries to the admin menu tree.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

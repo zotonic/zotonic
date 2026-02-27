@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2025 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Search engine optimization.  Provides admin interface for the SEO modules.
 %% @end
 
-%% Copyright 2009-2025 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -103,10 +103,17 @@ parameters](https://developers.google.com/analytics/devguides/collection/analyti
     \"sessionControl\": \"start\"
 }
 ```
+SEO module that adds metadata generation and admin SEO configuration options.
 
-Todo
 
-Add more documentation
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_admin_menu`: Contribute module entries to the admin menu tree.
+- `observe_content_security_header`: Ensure that the Google Tag manager works correctly with our CSP using `m_config:get_value`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

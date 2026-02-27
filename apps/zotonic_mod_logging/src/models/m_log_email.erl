@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2011-2023 Marc Worrell
+%% @copyright 2011-2026 Marc Worrell
 %% @doc Model for email log messages.
 %% @end
 
-%% Copyright 2011-2023 Marc Worrell
+%% Copyright 2011-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 
 -module(m_log_email).
 -moduledoc("
-Not yet documented.
+Model for email log lookups used by logging/admin views.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

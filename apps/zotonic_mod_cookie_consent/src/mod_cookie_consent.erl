@@ -101,6 +101,14 @@ Use the special `type=\"text/x-cookie-consent\"` and optionally the `data-cookie
 ```erlang
 <link type=\"text/x-cookie-consent\" data-cookie-consent=\"stats\" href=\"https://...\"></script>
 ```
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_media_viewer_consent`: Handle `media_viewer_consent` notifications using `z_template:render_to_iolist`.
+
 ").
 
 -export([

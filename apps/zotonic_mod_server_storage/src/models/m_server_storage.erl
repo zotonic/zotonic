@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2020 Marc Worrell
+%% @copyright 2020-2026 Marc Worrell
 %% @doc Model for server side data storage.
+%% @end
 
-%% Copyright 2020 Marc Worrell
+%% Copyright 2020-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,7 +21,20 @@
 -moduledoc("
 Model to access the server side storage of data.
 
-See the module documentation of [mod\\_server\\_storage](/id/doc_module_mod_server_storage) for information.
+See the module documentation of [mod_server_storage](/id/doc_module_mod_server_storage) for information.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/` | Return all non-secure server-storage key/value pairs for the current session id via `z_server_storage:lookup/2`. No further lookups. |
+| `get` | `/+key/...` | Return value for session key `+key` from non-secure server storage (or `not_found/no_session` error). |
+| `post` | `/+key` | Store payload under session key `+key` in non-secure server storage; starts storage for the session when missing. No further lookups. |
+| `delete` | `/+key` | Delete key `+key` from non-secure server storage for the current session. No further lookups. |
+| `delete` | `/` | Delete all non-secure server-storage keys for the current session. No further lookups. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 
 -behaviour(zotonic_model).

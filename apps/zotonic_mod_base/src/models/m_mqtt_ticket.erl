@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2020 Marc Worrell
+%% @copyright 2020-2026 Marc Worrell
 %% @doc Handle tickets for out of band MQTT actions via controller_mqtt_transport.
+%% @end
 
-%% Copyright 2020 Marc Worrell
+%% Copyright 2020-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,7 +21,7 @@
 -moduledoc("
 A ticketing system for out of band MQTT posts via HTTP.
 
-The controller [controller\\_mqtt\\_transport](/id/doc_controller_controller_mqtt_transport) can accept HTTP posts.
+The controller [controller_mqtt_transport](/id/doc_controller_controller_mqtt_transport) can accept HTTP posts.
 These posts MUST include a ticket and a topic for the payload to be sent.
 
 The ticket is obtained via `model/mqtt_ticket/post/new`. This can only be accessed via MQTT, as the routines will check
@@ -34,12 +35,22 @@ HTTP request context:
 *   MQTT client-topic
 *   MQTT routing-id
 *   ACL user id
-*   ACL auth\\_options
+*   ACL auth_options
 *   ACL read-only flag
 *   Timezone
 *   Language
 
 A ticket can only be used once.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `post` | `/new` | Create a one-time MQTT transport ticket for the current MQTT client context and return the generated ticket id (binary). No further lookups. |
+| `delete` | `/+ticket` | Invalidate/delete ticket `+ticket` and its stored context so it can no longer be exchanged. No further lookups. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 
 -behaviour(zotonic_model).

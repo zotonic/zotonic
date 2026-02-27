@@ -26,6 +26,17 @@ the winner. Properties of the winner are unchanged.
 After merging the loser will be deleted. Visits to the deleted page will be redirected to the winner page using a *410 Gone*.
 
 On the admin page editor a side panel is added for opening the merge page.
+
+Accepted Events
+---------------
+
+
+Delegate callbacks:
+
+- `event/2` with `postback` messages: `merge_select`.
+- `event/2` with `submit` messages: `merge`.
+- `event/2` with `postback_notify` messages: `<<\"feedback\">>`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

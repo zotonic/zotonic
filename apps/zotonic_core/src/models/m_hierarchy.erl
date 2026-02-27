@@ -1,7 +1,8 @@
-%% @copyright 2015 Marc Worrell
+%% @copyright 2015-2026 Marc Worrell
 %% @doc Model for named hierarchies
+%% @end
 
-%% Copyright 2015 Marc Worrell
+%% Copyright 2015-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -17,13 +18,31 @@
 
 -module(m_hierarchy).
 -moduledoc("
-The category hierarchy tables have been replaced by *m\\_hierarchy*. This model defines named hierarchies of resources (pages).
+The category hierarchy tables have been replaced by *m_hierarchy*. This model defines named hierarchies of resources (pages).
 
-If the categories are changed then the system needs to update the *pivot\\_category\\_nr* field of all resources. With
-the introduction of *m\\_hierarchy* this renumbering is much more efficient and will only affect a minimal number of resources.
+If the categories are changed then the system needs to update the *pivot_category_nr* field of all resources. With
+the introduction of *m_hierarchy* this renumbering is much more efficient and will only affect a minimal number of resources.
 
-The *m\\_hierarchy* module is also used for the content- and user group hierarchies, as used by the new
-*mod\\_acl\\_user\\_groups* module.
+The *m_hierarchy* module is also used for the content- and user group hierarchies, as used by the new
+*mod_acl_user_groups* module.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/+name/tree/...` | Return full hierarchy tree for hierarchy `+name`. |
+| `get` | `/+name/tree1/...` | Return first-level hierarchy tree for hierarchy `+name`. |
+| `get` | `/+name/tree_flat/...` | Return flat tree-ordered list for hierarchy `+name`. |
+| `get` | `/+name/menu/...` | Return hierarchy `+name` formatted as a menu tree. |
+| `get` | `/+name/menu_ensured/...` | Return menu hierarchy for `+name`, ensuring required parent nodes exist. |
+| `get` | `/+name/+id/menu_ensured/...` | Return menu subtree for hierarchy `+name` rooted at `+id`, ensuring missing parents are created. |
+| `get` | `/+name/+id/menu/...` | Return menu subtree for hierarchy `+name` rooted at resource `+id`. |
+| `get` | `/+name/+id/tree/...` | Return hierarchy subtree for `+name` rooted at resource `+id`. |
+| `get` | `/+name/+id/tree1/...` | Return first-level subtree for hierarchy `+name` rooted at resource `+id`. |
+| `get` | `/+name/+id/tree_flat/...` | Return flat tree-ordered list for hierarchy `+name` subtree rooted at resource `+id`. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 
 -export([

@@ -96,6 +96,22 @@ The following searches are implemented in mod\\_search:
 | keyword\\\\_cloud              | Return a list of `{keyword_id, count}` for all resources within a given category. The list is ordered on keyword title. Default predicate is `subject`, default category is `keyword`. Change optional `keywordpred` and `keywordcat` to create a different cloud. | cat, keywordpred, keywordcat |
 | previous                     | Given an id, return a list of “previous” ids in the given category. This list is ordered by publication date, latest first. | id, cat                      |
 | next                         | Given an id, return a list of “next” ids in the given category. This list is ordred by publication date, oldest first. | id, cat                      |
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_custom_pivot`: Handle `custom_pivot` notifications using `search_facet:pivot_rsc`.
+- `observe_filewatcher`: Handle `filewatcher` notifications using `search_facet:ensure_table`.
+- `observe_module_activate`: Handle `module_activate` notifications using `gen_server:cast`.
+- `observe_module_reindexed`: Check the search facet table if all modules are running and the indexer reindexed using `search_facet:ensure_table`.
+- `observe_search_query`: Handle `search_query` notifications using `search_query:search`.
+
+Delegate callbacks:
+
+- `event/2` with `postback` messages: `facet_rebuild`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 -behaviour(gen_server).

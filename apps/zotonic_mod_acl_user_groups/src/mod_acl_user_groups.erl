@@ -309,6 +309,35 @@ To back up your rules, go to *Auth > Access control rules* and click the ‘Expo
 include the full hierarchies of all user and content groups.
 
 You can import a previous backup by clicking the ‘Import edit rules…’ button.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_acl_add_sql_check`: Handle `acl_add_sql_check` notifications using `acl_user_groups_checks:acl_add_sql_check`.
+- `observe_acl_context_authenticated`: Handle `acl_context_authenticated` notifications using `acl_user_groups_checks:acl_context_authenticated`.
+- `observe_acl_is_allowed`: Handle `acl_is_allowed` notifications using `acl_user_groups_checks:acl_is_allowed`.
+- `observe_acl_is_allowed_prop`: Handle `acl_is_allowed_prop` notifications using `acl_user_groups_checks:acl_is_allowed_prop`.
+- `observe_acl_is_owner`: Handle `acl_is_owner` notifications using `m_config:get_boolean`.
+- `observe_acl_logoff`: Handle `acl_logoff` notifications using `acl_user_groups_checks:acl_logoff`.
+- `observe_acl_logon`: Handle `acl_logon` notifications using `acl_user_groups_checks:acl_logon`.
+- `observe_acl_user_groups`: Handle `acl_user_groups` notifications using `acl_user_groups_checks:user_groups_all`.
+- `observe_admin_menu`: Handle `admin_menu` notifications using `z_utils:name_for_site`.
+- `observe_edge_delete`: Handle `edge_delete` notifications using `z:info`.
+- `observe_edge_insert`: Log membership changes when relevant group edges are inserted.
+- `observe_hierarchy_updated`: Handle `hierarchy_updated` notifications using `m_rsc:props`.
+- `observe_rsc_delete`: Do now allow the deletion of a acl_user_group if that group is still used using `m_acl_user_group:is_used`.
+- `observe_rsc_get`: Ensure that the privacy property is set using `m_category:is_a_prim`.
+- `observe_rsc_insert`: Add default content group when resource is inserted without one using `acl_user_groups_checks:default_content_group`.
+- `observe_rsc_update`: Handle `rsc_update` notifications using `acl_user_groups_checks:rsc_update_check`.
+- `observe_rsc_update_done`: Handle `rsc_update_done` notifications using `m_hierarchy:ensure`.
+
+Delegate callbacks:
+
+- `event/2` with `postback` messages: `delete_all`, `set_config`.
+- `event/2` with `submit` messages: `delete_move`.
+
 ").
 
 -mod_title("ACL User Groups").
@@ -1156,4 +1185,3 @@ manage_data(_Version, _Context) ->
 
 page_actions(Actions, Context) ->
     z_notifier:first(#page_actions{ actions = Actions }, Context).
-

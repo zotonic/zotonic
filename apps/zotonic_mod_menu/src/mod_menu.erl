@@ -47,6 +47,24 @@ The module creates a new category named menu. This allows one to create multiple
 in the admin contains the hierarchical menu editor.
 
 The menu resource that is accessible from the admin page (Content > Menu) is the resource with the unique name `main_menu`.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_admin_menu`: Handle `admin_menu` notifications using `m_rsc:name_to_id`.
+- `observe_menu_get_rsc_ids`: Notifier handler to get all menu ids for the default menu using `m_rsc:name_to_id`.
+- `observe_menu_save`: Handle `menu_save` notifications using `m_rsc:name_to_id`.
+- `observe_rsc_get`: Normalize stored menu values by converting old tuple formats to `#rsc_tree` structures.
+- `observe_rsc_update`: Validate and normalize submitted menu structures during resource updates.
+- `observe_rsc_update_done`: Rebuild `hasmenupart` edges after menu changes so referenced resources are tracked correctly.
+
+Delegate callbacks:
+
+- `event/2` with `postback` messages: `ensure_hasmenupart`.
+- `event/2` with `postback_notify` messages: `<<\"menuedit\">>`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

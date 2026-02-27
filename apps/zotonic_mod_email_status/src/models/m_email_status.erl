@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015-2025 Marc Worrell
+%% @copyright 2015-2026 Marc Worrell
 %% @doc Model for registering the status per email recipient.
 %% @end
 
-%% Copyright 2015-2025 Marc Worrell
+%% Copyright 2015-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -21,6 +21,16 @@
 -module(m_email_status).
 -moduledoc("
 Tracks the send/bounce/error status of all outgoing emails.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/is_valid/+email/...` | Return the effective validity flag for `+email` from cached `email_status` data (normalized email, blocked/final-error aware); unknown addresses default to valid. |
+| `get` | `/+email/...` | Return the full `email_status` row for `+email` (delivery/error/block counters and timestamps) when caller is admin, has `mod_email_status` use rights, or may edit the user/resource owning that email identity. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 
 -behaviour (zotonic_model).
@@ -634,4 +644,3 @@ install(Context) ->
             end
     end,
     ok.
-

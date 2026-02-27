@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2009-2023 Marc Worrell
+%% @copyright 2009-2026 Marc Worrell
 %% @doc Model for resource representation as JSON-LD RDF data.
 %% @end
 
-%% Copyright 2009-2023 Marc Worrell
+%% Copyright 2009-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,9 +19,17 @@
 
 -module(m_rdf).
 -moduledoc("
-Todo
+Model for RDF summaries of resources. It provides short RDF-oriented summary maps for resources, with translated and non-translated variants.
 
-Not yet documented.
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/rsc/summary/trans/+id/...` | Return translated RDF summary data for resource `+id` (`summary_trans/2`). |
+| `get` | `/rsc/summary/+id/...` | Return summary data for +id. Uses `summary`. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

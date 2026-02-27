@@ -111,6 +111,15 @@ img.z-tinymce-media-size-small {
     width: 25%;
 }
 ```
+
+Accepted Events
+---------------
+
+Delegate callbacks:
+
+- `event/2` (no explicit `#postback/ #submit/ #postback_notify` message clauses documented in this module).
+
+
 ").
 -author("Arthur Clemens <arthurclemens@gmail.com>").
 

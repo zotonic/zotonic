@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2015-2025 Marc Worrell
+%% @copyright 2015-2026 Marc Worrell
 %% @doc Model for database and files backups
 %% @end
 
-%% Copyright 2015-2025 Marc Worrell
+%% Copyright 2015-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,7 +19,24 @@
 
 -module(m_backup).
 -moduledoc("
-Not yet documented.
+Model for backup configuration and operational status, including backup permissions, listing, directory, encryption settings, and active backup state.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/admin_panel/...` | Return backup admin-panel configuration/state map as provided by `backup_config:admin_panel/1`. |
+| `get` | `/allow_manual_backup/...` | Return whether the current site/user is allowed to start manual backups (`backup_config:allow_manual_backup/1`; requires `use` on `mod_backup`). |
+| `get` | `/allow_backup_download/...` | Return whether backup file download is allowed (`backup_config:allow_backup_download/1`; requires `use` on `mod_backup`). |
+| `get` | `/daily_dump/...` | Return configured daily dump setting as binary value (`backup_config:daily_dump/1`; requires `use` on `mod_backup`). |
+| `get` | `/encrypt_backups/...` | Return whether backup archives are configured to be encrypted (`backup_config:encrypt_backups/1`; requires `use` on `mod_backup`). |
+| `get` | `/has_encrypt_password/...` | Return whether a non-empty backup encryption password is configured (`backup_config:encrypt_password/1`; requires `use` on `mod_backup`). |
+| `get` | `/list_backups/...` | Return available backup files/entries from `mod_backup:list_backups/1` (requires `use` on `mod_backup`). |
+| `get` | `/is_backup_in_progress/...` | Return whether a backup job is currently running (`mod_backup:backup_in_progress/1`; requires `use` on `mod_backup`). |
+| `get` | `/directory/...` | Return the resolved backup directory path used for backup files (`backup_create:dir/1`; requires `use` on `mod_backup`). |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 
 -behaviour(zotonic_model).
@@ -84,4 +101,3 @@ m_get([ <<"directory">> | Rest ], _Msg, Context) ->
     end;
 m_get(_Vs, _Msg, _Context) ->
     {error, unknown_path}.
-

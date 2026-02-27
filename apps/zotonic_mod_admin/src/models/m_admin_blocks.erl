@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013 Marc Worrell
+%% @copyright 2013-2026 Marc Worrell
 %% @doc Zotonic: admin blocks model and interface
+%% @end
 
-%% Copyright 2013 Marc Worrell
+%% Copyright 2013-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,7 +19,16 @@
 
 -module(m_admin_blocks).
 -moduledoc("
-Not yet documented.
+Model for listing editable content blocks for a resource in the admin interface.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/list/+id/...` | Return the sorted admin edit block definitions available for resource `+id`, collected via `#admin_edit_blocks` notifications. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 

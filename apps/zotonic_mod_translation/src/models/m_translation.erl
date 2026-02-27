@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013-2025 Marc Worrell
+%% @copyright 2013-2026 Marc Worrell
 %% @doc Model for access to request language, language lists and language configuration.
 %% @end
 
-%% Copyright 2013-2025 Marc Worrell
+%% Copyright 2013-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,15 +19,15 @@
 
 -module(m_translation).
 -moduledoc("
-The m\\_translation model gives easy access to language and translation related information.
+The m_translation model gives easy access to language and translation related information.
 
 The following `m.translation` model properties are available in templates:
 
 | Property                  | Description                           |
 | ------------------------- | ------------------------------------- |
 | language                  | The current language.                 |
-| language\\\\_list           | The list of all configured languages. |
-| language\\\\_list\\\\_enabled | The list of all enabled languages.    |
+| language_list           | The list of all configured languages. |
+| language_list_enabled | The list of all enabled languages.    |
 
 This is an example of the languages returned by `m.translation.language_list`:
 
@@ -49,6 +49,39 @@ For example to list all enabled languages in a select box:
 {% endfor %}
 </select>
 ```
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/rewrite_url/...` | Return whether URLs should be rewritten to include language information. |
+| `get` | `/force_default/...` | Return whether requests should be forced to the default language. |
+| `get` | `/language/...` | Return the current request language. |
+| `get` | `/language_list_configured/...` | Return languages configured for this site. |
+| `get` | `/language_list_enabled/...` | Return languages currently enabled for frontend use. |
+| `get` | `/language_list_editable/...` | Return languages available for content editing. |
+| `get` | `/default_language/...` | Return the default site language. |
+| `get` | `/query_language/...` | Return the language selected from query/request context. |
+| `get` | `/x_default_language/...` | Return whether `x-default` language behavior is enabled. |
+| `get` | `/main_languages/...` | Return the set of main languages used by the site. |
+| `get` | `/all_languages/...` | Return full language definitions known by the system. |
+| `get` | `/enabled_language_codes/...` | Return enabled language codes. |
+| `get` | `/editable_language_codes/...` | Return editable language codes. |
+| `get` | `/language_list/...` | Return language list with metadata. |
+| `get` | `/language_list_sorted/...` | Return language list sorted for UI/display usage. |
+| `get` | `/language_stemmer/...` | Return configured stemmer language used for search/indexing. |
+| `get` | `/name/+code/...` | Return local/native language name for code `+code`. |
+| `get` | `/english_name/+code/...` | Return English language name for code `+code`. |
+| `get` | `/localized_name/+code/...` | Return language name for `+code` localized to the current request language. |
+| `get` | `/properties/+code/...` | Return language properties map for code `+code`. |
+| `get` | `/translate/...` | Translate text payload using configured translation services and options. |
+| `get` | `/has_translation_service/...` | Return whether any translation service is configured and available. |
+| `get` | `/detect/...` | Detect language of supplied text payload. |
+| `get` | `/detect_enabled/...` | Detect language only when detection is enabled for the site. |
+| `get` | `/has_language/+rscid/+language/...` | Return whether resource `+rscid` has content in language `+language`. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 
@@ -416,4 +449,3 @@ sort(List) ->
 
 sortfun({_, As}, {_, Bs}) ->
     maps:get(sort_key, As) =< maps:get(sort_key, Bs).
-

@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2013 Marc Worrell
+%% @copyright 2013-2026 Marc Worrell
 %% @doc Administrative interface version for use via a web site's frontend.
+%% @end
 
-%% Copyright 2013 Marc Worrell
+%% Copyright 2013-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,11 +19,6 @@
 
 -module(mod_admin_frontend).
 -moduledoc("
-Note
-
-This module is in active development. In the future live-editing and push-updates will be added. This might change the
-way the form and menu are handled.
-
 Adds editing of resources, menu-trees and collections for non-admin users.
 
 With many sites it is needed to let “normal” users edit content. For those users the `/admin` interface is
@@ -31,9 +27,6 @@ overwhelming and also gives too many options that only administrators should be 
 For this use-case the mod\\_admin\\_frontend is created. It reuses some templates and parts of the normal admin, but in
 such a way that only the most needed options and fields are present. It also enables editing a menu-tree or collection,
 side-by-side with the content in the menu-tree.
-
-
-
 
 
 Interface and dispatching
@@ -64,7 +57,6 @@ To edit a specific resource in the context of a menu that is non-standard for th
 ```
 
 
-
 Customizing and templates
 -------------------------
 
@@ -75,11 +67,9 @@ resource-column with the main editing form is rendered using `{% catinclude \"_a
 This column is loaded lazily via a postback.
 
 
-
 ### Customizing the menu column
 
 Extra content can be added above or below the menu view by overruling the blocks `above_menu` and `below_menu`.
-
 
 
 ### Customizing the main edit column
@@ -119,6 +109,16 @@ settings). This panel can be extended with extra tabs using the blocks `meta_tab
 See also
 
 [mod\\_admin](/id/doc_module_mod_admin), [menu\\_rsc](/id/doc_template_filter_filter_menu_rsc)
+
+Accepted Events
+---------------
+
+
+Delegate callbacks:
+
+- `event/2` with `postback` messages: `admin_menu_edit`.
+- `event/2` with `postback_notify` messages: `<<\"admin-menu-edit\">>`.
+
 ").
 
 -author("Marc Worrell <marc@worrell.nl>").

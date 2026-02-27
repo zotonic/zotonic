@@ -153,6 +153,21 @@ Configuration options
 
 Boolean value. If true, [lib](/id/doc_template_tag_tag_lib) files will be included separately instead of in one big
 concatenated file.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_admin_menu`: Handle `admin_menu` notifications using `z_utils:name_for_site`.
+- `observe_filewatcher`: Catch filewatcher file change events, reloads css or the open pages using `m_config:get_value`.
+- `observe_request_context`: Copy the database trace flag to a new (fresh) request process using `z_development_dbtrace:copy_from_session`.
+
+Delegate callbacks:
+
+- `event/2` with `postback` messages: `log_client_enable`, `template_graph`, `template_trace_fetch`, `template_trace_start`, `template_trace_stop`, `template_xref_check`.
+- `event/2` with `submit` messages: `function_trace`.
+
 ").
 -author("Marc Worrell <marc@worrell.nl>").
 -behaviour(gen_server).

@@ -22,20 +22,43 @@
 -moduledoc("
 See also
 
-[Access control](/id/doc_developerguide_access_control#guide-auth), [mod\\_authentication](/id/doc_module_mod_authentication) or [mod\\_facebook](/id/doc_module_mod_facebook).
+[Access control](/id/doc_developerguide_access_control#guide-auth), [mod_authentication](/id/doc_module_mod_authentication) or [mod_facebook](/id/doc_module_mod_facebook).
 
-The m\\_identity model manages usernames and other user identities.
-[mod\\_authentication](/id/doc_module_mod_authentication) uses it to store and check salted passwords, but also provides
-a safe storage for user tokens of any kind, as used by [mod\\_facebook](/id/doc_module_mod_facebook).
+The m_identity model manages usernames and other user identities.
+[mod_authentication](/id/doc_module_mod_authentication) uses it to store and check salted passwords, but also provides
+a safe storage for user tokens of any kind, as used by [mod_facebook](/id/doc_module_mod_facebook).
 
 Note that a user does not have to be of the person category per se, in Zotonic anything can have identities attached to it.
 
-The following m\\_identity model properties are available in templates:
+The following m_identity model properties are available in templates:
 
 | Property  | Description                                                                      | Example value |
 | --------- | -------------------------------------------------------------------------------- | ------------- |
-| is\\\\_user | Check if a page id is a user. Return a bool. Usage: m.identity\\\\[page\\\\_id\\\\].is\\\\_user | true          |
-| username  | Fetch the username, if any, of a user. Returns a binary or undefined. Usage: m.identity\\\\[page\\\\_id\\\\].username | <<”admin”>>   |
+| is_user | Check if a page id is a user. Return a bool. Usage: m.identity[page_id].is_user | `true` |
+| username | Fetch the username, if any, of a user. Returns a binary or undefined. Usage: m.identity[page_id].username | `<<\"admin\">>` |
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/lookup/+type/+key/...` | Return all filtered identity records matching normalized identity key `+key` for identity type `+type` (`propb` and secret fields are stripped; admin only). |
+| `get` | `/generate_password/...` | Return a newly generated random password string (`z_ids:password/0`). |
+| `get` | `/is_email_verified` | Return whether the current user’s primary `email_raw` has a matching verified `email` identity record. No further lookups. |
+| `get` | `/is_email_verified/+userid/...` | Return whether user `+userid` has a verified identity record for its primary `email_raw` address (editable by caller). |
+| `get` | `/+id/is_user/...` | Return whether resource `+id` has at least one identity of a user-defining type (`auth_identity_types`, default includes `username_pw`; requires visibility). |
+| `get` | `/+id/username/...` | Return the current username identity key for resource `+id` (requires edit permission on `+id`). |
+| `get` | `/+id/user_info/...` | Return user info map for `+id` with `user_id`, `username`, `visited`, `modified`, and `is_expired`; returns empty/default values when no `username_pw` identity exists (requires edit permission). |
+| `get` | `/+id/logon_history/...` | Return login history rows (`user_agent`, `ip_address`, `created`) ordered by newest first for user `+id` (self or admin). |
+| `get` | `/+id/all_types/...` | Return all identity `type` values present for user/resource `+id`; returns `[]` when caller cannot edit `+id`. |
+| `get` | `/+id/all` | Return all identities for user/resource `+id` as filtered identity records (admin only). No further lookups. |
+| `get` | `/+id/all/email/...` | Return all filtered `email` identities for user `+id`; ensures the resource primary email is represented as an identity when valid (requires edit permission). |
+| `get` | `/+id/all/+type/...` | Return filtered identity records of type `+type` for user/resource `+id` (admin only). |
+| `get` | `/get/+idnid/...` | Return one filtered identity record by identity id `+idnid` (admin only). |
+| `get` | `/verify/+idnid/+verifykey/...` | Return identity record `+idnid` only when `+verifykey` matches the stored `verify_key` using constant-time comparison; otherwise return `undefined`. |
+| `get` | `/+id/+type/...` | Return identity record for type `+type` on user/resource `+id` (admin only; `enoent` when missing). |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

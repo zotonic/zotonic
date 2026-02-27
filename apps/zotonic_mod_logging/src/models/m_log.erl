@@ -1,9 +1,9 @@
 %% @author Arjan Scherpenisse <arjan@scherpenisse.net>
-%% @copyright 2010-2024 Arjan Scherpenisse <arjan@scherpenisse.net>
+%% @copyright 2010-2026 Arjan Scherpenisse <arjan@scherpenisse.net>
 %% @doc Model for log messages.
 %% @end
 
-%% Copyright 2010-2024 Arjan Scherpenisse
+%% Copyright 2010-2026 Arjan Scherpenisse
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,7 +19,20 @@
 
 -module(m_log).
 -moduledoc("
-Not yet documented.
+Model for runtime logging state and access to server log entries for clients allowed to read logs.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/is_log_client_allowed/...` | Return whether the current context may use the live log client channel (`mod_logging:is_log_client_allowed/1`). |
+| `get` | `/is_log_client_session/...` | Return whether this session is registered as a log-client session (`mod_logging:is_log_client_session/1`); access denied when log-client use is not allowed. |
+| `get` | `/is_log_client_active/...` | Return whether live log-client streaming is currently active for this context (`mod_logging:is_log_client_active/1`); access denied when log-client use is not allowed. |
+| `get` | `/` | Return all log rows ordered newest-first, with decoded `props` merged into each row; requires `use` permission on `mod_logging`. No further lookups. |
+| `get` | `/+index/...` | Return log row with id `+index` from table `log` (or `undefined` if missing); requires `use` permission on `mod_logging`. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Arjan Scherpenisse <arjan@scherpenisse.net>").
 
@@ -175,4 +188,3 @@ install(Context) ->
                       ],
             [ z_db:q("create index "++Name++" on log ("++Cols++")", Context) || {Name, Cols} <- Indices ]
     end.
-

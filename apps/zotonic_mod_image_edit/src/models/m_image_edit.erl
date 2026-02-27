@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2021-2024 Marc Worrell
+%% @copyright 2021-2026 Marc Worrell
 %% @doc Model for fetching the image edit settings of a page.
 %% @end
 
-%% Copyright 2021-2024 Marc Worrell
+%% Copyright 2021-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -24,6 +24,15 @@ See also
 [image](/id/doc_template_tag_tag_image), [Arguments](/id/doc_template_tag_tag_image)
 
 Manages the `medium_edit_settings` property for non destructive image editing.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/settings/+id/...` | Return image-editor settings for media/resource `+id`, combining stored crop/edit settings with module defaults. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

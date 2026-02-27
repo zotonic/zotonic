@@ -19,7 +19,30 @@
 
 -module(m_survey).
 -moduledoc("
-Not yet documented.
+Model for survey reporting and participant state, including results, totals, per-user answers, exports, and result handlers.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/results/+id/...` | Return prepared public result summary for survey `+id` when `survey_show_results` is enabled or caller may download results; otherwise `eacces`. |
+| `get` | `/all_results/+list/...` | Return editable-only full result matrix for survey id `+list[1]`, sorted by column `+list[2]`, with captions row followed by answer rows. |
+| `get` | `/all_results/+id/...` | Return editable-only full result matrix for survey `+id` (`[captions | answers]`) from stored submissions. |
+| `get` | `/list_results/+id/...` | Return editable-only list view of survey submissions for `+id` via `list_results/2`. |
+| `get` | `/get_result/+surveyid/+answerid/...` | Return one submission (`+answerid`) for survey `+surveyid`; requires `view_result` ACL when a row exists. |
+| `get` | `/captions/+surveyid/...` | Return survey result/export captions for `+surveyid` from question block metadata. |
+| `get` | `/totals/+surveyid/...` | Return editable-only aggregate totals/statistics for survey `+surveyid`. |
+| `get` | `/did_survey/+surveyid/...` | Return whether the current user (or anonymous session id) already has a submission for survey `+surveyid`. |
+| `get` | `/did_survey_answers/+surveyid/...` | Return current user/session submitted answers for survey `+surveyid` as `{question_name, answer}` pairs, or empty list when none. |
+| `get` | `/did_survey_results/+surveyid/...` | Return full stored submission row for current user/session on survey `+surveyid` (or none). |
+| `get` | `/did_survey_results_readable/+surveyid/...` | Return human-readable rendering of current user/session submission for survey `+surveyid` via `survey_answer_prep:readable_stored_result/3`. |
+| `get` | `/is_allowed_results_download/+surveyid/...` | Return whether caller may export/download results for survey `+surveyid` (resource editable or notifier grant). |
+| `get` | `/is_max_results_reached/+surveyid/...` | Return whether survey `+surveyid` reached its configured submission limit. |
+| `get` | `/handlers/...` | Return registered survey handler modules from `#survey_get_handlers{}` notifier. |
+| `get` | `/result_columns/+surveyid/+format/...` | Return extra export columns for `+surveyid` in `text`/`html` format (download-permission checked); returns `unknown_format` for other formats. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 
@@ -1198,5 +1221,3 @@ survey_totals(Id, Context) ->
         _ ->
             []
     end.
-
-

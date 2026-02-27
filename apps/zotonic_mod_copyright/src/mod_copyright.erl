@@ -1,9 +1,9 @@
-%% @copyright 2024 Driebit BV
+%% @copyright 2024-2026 Driebit BV
 %% @doc Add a panel to the admin to manage the copyright and
 %% attribution of resources.
 %% @end
 
-%% Copyright 2024 Driebit BV
+%% Copyright 2024-2026 Driebit BV
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,9 +19,8 @@
 
 -module(mod_copyright).
 -moduledoc("
-Todo
+Module for copyright metadata, rights statements, and attribution helpers.
 
-Not yet documented.
 ").
 
 -mod_title("Copyright").
@@ -50,4 +49,3 @@ Not yet documented.
 
 -export([
 ]).
-

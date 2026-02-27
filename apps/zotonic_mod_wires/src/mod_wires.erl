@@ -25,6 +25,17 @@ Used by [mod\\_admin](/id/doc_module_mod_admin) and the other administrative mod
 
 Wires are actions that are directly coupled to user interface elements. These couplings are defined in the templates
 using the [wire](/id/doc_template_scomp_scomp_wire#scomp-wire) tag.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_acl_is_allowed`: Allow publish from clients to the transport topic using `z_render:output`.
+- `observe_output_html`: Render nested actions and scomp results using `z_render:output`.
+- `observe_page_actions`: Handle `page_actions` notifications using `z_render:clean`.
+- `observe_scomp_script_render`: Part of the {% script %} rendering in templates using `z_render:make_postback_info`.
+
 ").
 
 -mod_title("Wires and Actions").

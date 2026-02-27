@@ -1,8 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2010-2021 Marc Worrell
+%% @copyright 2010-2026 Marc Worrell
 %% @doc Simple store for key/value pairs
+%% @end
 
-%% Copyright 2010-2021 Marc Worrell
+%% Copyright 2010-2026 Marc Worrell
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -20,9 +21,9 @@
 -moduledoc("
 See also
 
-[mod\\_tkvstore](/id/doc_module_mod_tkvstore)
+[mod_tkvstore](/id/doc_module_mod_tkvstore)
 
-Simple read-only interface to the typed key-value store of [mod\\_tkvstore](/id/doc_module_mod_tkvstore). To get a value
+Simple read-only interface to the typed key-value store of [mod_tkvstore](/id/doc_module_mod_tkvstore). To get a value
 from the store: use m.tkvstore.type.key, like this:
 
 
@@ -44,7 +45,7 @@ To store data in a key, use `m_tkvstore:put/4`, as follows:
 m_tkvstore:put(KeyType, KeyVar, Value, Context).
 ```
 
-For instance, from within Erlang, let’s store edge data for a given edge id, 3434:
+For instance, from within Erlang, let's store edge data for a given edge id, 3434:
 
 
 ```erlang
@@ -63,6 +64,15 @@ Now, to retrieve it in the template, do the following:
 This will output the string `Hello`.
 
 Note that the value can be any type: not only a simple string but also a list, tuple, or any other Erlang composite type.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/+type/+key/...` | Return admin-only typed-key value from `tkvstore` row (`type = +type`, `key = +key`), yielding stored `props` term or `undefined` when missing. |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 -author("Marc Worrell <marc@worrell.nl").
 

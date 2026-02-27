@@ -52,6 +52,15 @@ All clamav results are logged, any infected files or other errors are logged to 
 
 Every hour the module checks if it can reach `clamd` using the configured settings. It will log an error if `clamd`
 can’t be reached, and an info message if it can be reached.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_media_upload_preprocess`: Check the uploaded file with clamav using `z_acl:user`.
+- `observe_tick_1h`: Periodic ping of clamav to check the settings using `z_clamav:ip_port`.
+
 ").
 
 -mod_title("ClamAV").

@@ -1,9 +1,9 @@
 %% @author Marc Worrell <marc@worrell.nl>
-%% @copyright 2016-2024 Marc Worrell, Maas-Maarten Zeeman
+%% @copyright 2016-2026 Marc Worrell, Maas-Maarten Zeeman
 %% @doc Fetch information about the SSL certificates
 %% @end
 
-%% Copyright 2016-2024 Marc Worrell, Maas-Maarten Zeeman
+%% Copyright 2016-2026 Marc Worrell, Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -19,7 +19,16 @@
 
 -module(m_ssl_letsencrypt).
 -moduledoc("
-Not yet documented.
+Model for Let's Encrypt status information, available to administrators.
+
+Available Model API Paths
+-------------------------
+
+| Method | Path pattern | Description |
+| --- | --- | --- |
+| `get` | `/status/...` | Return admin-only Let's Encrypt status from `mod_ssl_letsencrypt:status/1` (certificate/renewal state for this site). |
+
+`/+name` marks a variable path segment. A trailing `/...` means extra path segments are accepted for further lookups.
 ").
 
 -author("Marc Worrell <marc@worrell.nl").
@@ -51,4 +60,3 @@ m_get(_Vs, _Msg, _Context) ->
 
 status(Context) ->
     mod_ssl_letsencrypt:status(Context).
-

@@ -1,8 +1,9 @@
 %% @author Maas-Maarten Zeeman <mmzeeman@xs4all.nl>
-%% @copyright 2015-2021 Maas-Maarten Zeeman
+%% @copyright 2015-2026 Maas-Maarten Zeeman
 %% @doc Allow viewing system statistics.
+%% @end
 
-%% Copyright 2015-2021 Maas-Maarten Zeeman
+%% Copyright 2015-2026 Maas-Maarten Zeeman
 %%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
@@ -18,9 +19,16 @@
 
 -module(mod_admin_statistics).
 -moduledoc("
-Todo
+Admin module exposing site statistics views and related dashboard metrics.
 
-Not yet documented.
+
+Accepted Events
+---------------
+
+This module handles the following notifier callbacks:
+
+- `observe_admin_menu`: Contribute module entries to the admin menu tree.
+
 ").
 -author("Maas-Maarten Zeeman <mmzeeman@xs4all.nl>").
 
