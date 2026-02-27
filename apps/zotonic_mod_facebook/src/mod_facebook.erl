@@ -25,7 +25,9 @@ to enable [Facebook login](https://developers.facebook.com/docs/facebook-login/)
 Configuration
 -------------
 
-[Activate](/id/doc_developerguide_modules#activating-modules) mod_facebook, then head to ‘Auth’ > ‘External services’ in the admin interface to enter your Facebook app ID and secret. Enable Facebook login by checking the ‘Use Facebook authentication’ box. This will add a ‘Log in with Facebook’ button to the logon form on your site.
+[Activate](/id/doc_developerguide_modules#activating-modules) mod_facebook, then head to ‘Auth’ > ‘External services’ in the
+admin interface to enter your Facebook app ID and secret. Enable Facebook login by checking the ‘Use Facebook authentication’ box.
+This will add a ‘Log in with Facebook’ button to the logon form on your site.
 
 If you need extended permissions, add them to the ‘Scope’ textbox. Note that the module needs the ‘email’
 permission for login to work.
