@@ -1428,11 +1428,23 @@ htmlchars1([{tags, Tag} | T], Acc)   -> htmlchars1(T, [Tag | Acc]);
 htmlchars1([?CR, ?LF | T], Acc)      -> htmlchars1(T, ["\n" | Acc]);
 htmlchars1([?LF | T], Acc)           -> htmlchars1(T, ["\n" | Acc]);
 htmlchars1([?CR | T], Acc)           -> htmlchars1(T, ["\r" | Acc]);
-%% emphasis is a bit strange - must be preceeded by or followed by
-%% white space to work and can also be escaped
+%% emphasis is a bit strange - it is disabled when delimiters appear immediately
+%% after an alphanumeric character (opening delimiter) or immediately before an
+%% alphanumeric character (closing delimiter). Can also be escaped
 %% there is a non-space filling white space represented by the atom 'none'
 %% which is created in the parser (NOT IN THE LEXER!) and which triggers
 %% emphasis or strong tags being turned on...
+htmlchars1([ $_, $_, $_ | T ], [ Last | _ ] = A) when ?is_alnum(Last) -> htmlchars1(T, [$_, $_, $_ | A]);
+htmlchars1([ $_, $_ | T ], [ Last | _ ] = A) when ?is_alnum(Last) -> htmlchars1(T, [$_, $_ | A]);
+htmlchars1([ $_ | T ], [ Last | _ ] = A) when ?is_alnum(Last) -> htmlchars1(T, [$_ | A]);
+
+htmlchars1([ $*, $*, $* | T ], [ Last | _ ] = A) when ?is_alnum(Last) -> htmlchars1(T, [$*, $*, $* | A]);
+htmlchars1([ $*, $* | T ], [ Last | _ ] = A) when ?is_alnum(Last) -> htmlchars1(T, [$*, $* | A]);
+htmlchars1([ $* | T ], [ Last | _ ] = A) when ?is_alnum(Last) -> htmlchars1(T, [$* | A]);
+
+htmlchars1([ $~, $~ | T ], [ Last | _ ] = A) when ?is_alnum(Last) -> htmlchars1(T, [$~, $~ | A]);
+
+% superstrong
 htmlchars1([$\\, $*, $*, $* | T], A) -> htmlchars1(T, [$*, $*, $* | A]);
 htmlchars1([$*, $*, $* | T], A)      -> {T2, NewA} = superstrong(T, $*),
                                         htmlchars1(T2, [NewA | A]);
@@ -1444,7 +1456,6 @@ htmlchars1([$*, $* | T], A)          -> {T2, NewA} = strong(T, $*),
 htmlchars1([$\\, $* | T], A)         -> htmlchars1(T, [$* | A]);
 htmlchars1([$* | T], A)              -> {T2, NewA} = emphasis(T, $*),
                                         htmlchars1(T2, [NewA | A]);
-
 %% likewise for del
 htmlchars1([$\\, $~, $~ | T], A)     -> htmlchars1(T, [$~, $~ | A]);
 htmlchars1([$~, $~ | T], A)          -> {T2, NewA} = del(T, $~),
@@ -1491,6 +1502,8 @@ superstrong(List, Delim) -> interpolate3(List, Delim, "strong", "em", "", []).
 %% interpolate is for single delimiters...
 interpolate([], Delim, _Tag, _X, Acc) ->
     {[], [Delim] ++ htmlchars(lists:reverse(Acc))};
+interpolate([Delim, C | T], Delim, Tag, X, Acc) when ?is_alnum(C) ->
+    interpolate(T, Delim, Tag, X, [C, Delim | Acc]);
 interpolate([Delim | T], Delim, Tag, X, Acc) ->
     {T,  "<" ++ Tag ++ ">" ++ htmlchars(lists:reverse(Acc)) ++ X ++ "</" ++ Tag ++ ">"};
 interpolate([H | T], Delim, Tag, X, Acc) ->
@@ -1499,6 +1512,8 @@ interpolate([H | T], Delim, Tag, X, Acc) ->
 %% interpolate two is for double delimiters...
 interpolate2([], Delim, _Tag,  _X, Acc) ->
     {[], [Delim] ++ [Delim] ++ htmlchars(lists:reverse(Acc))};
+interpolate2([Delim, Delim, C | T], Delim, Tag, X, Acc) when ?is_alnum(C) ->
+    interpolate2(T, Delim, Tag, X, [C, Delim, Delim | Acc]);
 interpolate2([Delim, Delim | T], Delim, Tag, X, Acc) ->
     {T,  "<" ++ Tag ++ ">" ++ htmlchars(lists:reverse(Acc)) ++ X ++ "</" ++ Tag ++ ">"};
 interpolate2([H | T], Delim, Tag, X, Acc) ->
@@ -1507,6 +1522,8 @@ interpolate2([H | T], Delim, Tag, X, Acc) ->
 %% interpolate three is for triple delimiters...
 interpolate3([], D, _Tag1, Tag2, _X, Acc)           ->
     {[], "<" ++ Tag2 ++ ">" ++ [D] ++ "</" ++ Tag2 ++ ">" ++ htmlchars(lists:reverse(Acc))};
+interpolate3([D, D, D, C | T], D, Tag1, Tag2, X, Acc) when ?is_alnum(C) ->
+    interpolate3(T, D, Tag1, Tag2, X, [C, D, D, D | Acc]);
 interpolate3([D, D, D | T], D, Tag1, Tag2, _X, Acc) ->
     {T,  "<" ++ Tag1 ++ ">" ++  "<" ++ Tag2 ++ ">"
      ++ htmlchars(lists:reverse(Acc)) ++ "</" ++ Tag2 ++ ">" ++ "</" ++ Tag1 ++ ">"};
