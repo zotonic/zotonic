@@ -311,15 +311,13 @@
           cam.disable();
         }
       }
-      if (!layoutRunning) {
-        runForceAtlas2({ useWorker: defaultUseWorker });
-      }
       dragNodeIndex = null;
     }
     dragTarget = coords;
     graph.setNodeAttribute(dragNodeId, "x", coords.x);
     graph.setNodeAttribute(dragNodeId, "y", coords.y);
     graph.setNodeAttribute(dragNodeId, "posAuto", false);
+    ensureDragRelayout();
     sigma.refresh();
   }
 
@@ -337,6 +335,13 @@
         cam.enable();
       }
     }
+  }
+
+  // Keep the simulation active while dragging, restarting as needed.
+  function ensureDragRelayout() {
+    if (!dragActive || !dragNodeId) return;
+    if (layoutRunning) return;
+    runForceAtlas2({ useWorker: defaultUseWorker });
   }
 
 
@@ -684,6 +689,7 @@
     const nodes = graph.nodes();
     if (!nodes.length) return false;
     const edges = graph.edges();
+    stopLayout();
 
     const nodeIndex = new Map(nodes.map((id, i) => [id, i]));
     const positions = nodes.map((id) => ({
@@ -845,6 +851,7 @@
       const blob = new Blob([workerSource], { type: "application/javascript" });
       const workerUrl = URL.createObjectURL(blob);
       layoutWorker = new Worker(workerUrl);
+      layoutRunning = true;
 
       layoutWorker.onmessage = (event) => {
         const { jobId: resultId, positions, failed, partial } = event.data;
@@ -852,9 +859,11 @@
         if (failed || !positions) {
           layoutWorker.terminate();
           layoutWorker = null;
+          layoutRunning = false;
           initializePositions();
           fitCamera();
           sigma.refresh();
+          ensureDragRelayout();
           return;
         }
         positions.forEach((pos, i) => {
@@ -862,11 +871,17 @@
           graph.setNodeAttribute(nodeId, "x", pos.x);
           graph.setNodeAttribute(nodeId, "y", pos.y);
         });
+        if (dragNodeId && dragTarget && graph.hasNode(dragNodeId)) {
+          graph.setNodeAttribute(dragNodeId, "x", dragTarget.x);
+          graph.setNodeAttribute(dragNodeId, "y", dragTarget.y);
+        }
         sigma.refresh();
         if (!partial) {
           layoutWorker.terminate();
           layoutWorker = null;
+          layoutRunning = false;
           fitCamera();
+          ensureDragRelayout();
         }
       };
 
@@ -896,6 +911,7 @@
         layoutWorker.terminate();
         layoutWorker = null;
       }
+      layoutRunning = false;
       return false;
     }
   }
