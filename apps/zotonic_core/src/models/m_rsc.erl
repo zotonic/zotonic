@@ -195,6 +195,8 @@ See also
     merge_delete/4,
     update/3,
     update/4,
+    update_translation/4,
+    update_translation/5,
     duplicate/3,
     duplicate/4,
     touch/2,
@@ -715,60 +717,111 @@ get_acl_props(Name, Context) ->
 
 
 %% @doc Insert a new resource
--spec insert(props_all(), z:context()) -> {ok, resource_id()} | {error, term()}.
+-spec insert(Props, Context) -> {ok, ResourceId} | {error, term()} when
+        Props :: props_all(),
+        Context :: z:context(),
+        ResourceId :: resource_id().
 insert(Props, Context) ->
     m_rsc_update:insert(Props, [], Context).
 
--spec insert(props_all(), update_options(), z:context()) -> {ok, resource_id()} | {error, term()}.
+-spec insert(Props, Options, Context) -> {ok, ResourceId} | {error, term()} when
+        Props :: props_all(),
+        Options :: update_options(),
+        Context :: z:context(),
+        ResourceId :: resource_id().
 insert(Props, Options, Context) ->
     m_rsc_update:insert(Props, Options, Context).
 
 %% @doc Delete a resource
--spec delete(resource(), z:context()) -> ok | {error, term()}.
+-spec delete(Id, Context) -> ok | {error, term()} when
+        Id :: resource(),
+        Context :: z:context().
 delete(Id, Context) ->
     m_rsc_update:delete(Id, undefined, Context).
 
--spec delete(resource(), resource(), z:context()) -> ok | {error, term()}.
+-spec delete(Id, FollowUp, Context) -> ok | {error, term()} when
+        Id :: resource(),
+        FollowUp :: resource(),
+        Context :: z:context().
 delete(Id, FollowUp, Context) ->
     m_rsc_update:delete(Id, FollowUp, Context).
 
 %% @doc Merge a resource with another, delete the loser.
--spec merge_delete(resource(), resource(), z:context()) -> ok | {error, term()}.
+-spec merge_delete(WinnerId, LoserId, Context) -> ok | {error, term()} when
+        WinnerId :: resource(),
+        LoserId :: resource(),
+        Context :: z:context().
 merge_delete(WinnerId, LoserId, Context) ->
     m_rsc_update:merge_delete(WinnerId, LoserId, [ {is_merge_trans, false} ], Context).
 
 %% @doc Merge a resource with another, delete the loser.
--spec merge_delete(resource(), resource(), list(), z:context()) -> ok | {error, term()}.
+-spec merge_delete(WinnerId, LoserId, Options, Context) -> ok | {error, term()} when
+        WinnerId :: resource(),
+        LoserId :: resource(),
+        Options :: list(),
+        Context :: z:context().
 merge_delete(WinnerId, LoserId, Options, Context) ->
     m_rsc_update:merge_delete(WinnerId, LoserId, Options, Context).
 
 %% @doc Update a resource
--spec update(
-        resource(),
-        props_all() | update_function(),
-        z:context()
-    ) -> {ok, resource()} | {error, term()}.
+-spec update(Id, PropsOrFun, Context) -> {ok, UpdatedId} | {error, term()} when
+        Id :: resource(),
+        PropsOrFun :: props_all() | update_function(),
+        Context :: z:context(),
+        UpdatedId :: resource().
 update(Id, Props, Context) ->
     m_rsc_update:update(Id, Props, Context).
 
--spec update(
-        resource(),
-        props_all() | update_function(),
-        update_options(),
-        z:context()
-    ) -> {ok, resource()} | {error, term()}.
+-spec update(Id, PropsOrFun, Options, Context) -> {ok, UpdatedId} | {error, term()} when
+        Id :: resource(),
+        PropsOrFun :: props_all() | update_function(),
+        Options :: update_options(),
+        Context :: z:context(),
+        UpdatedId :: resource().
 update(Id, Props, Options, Context) ->
     m_rsc_update:update(Id, Props, Options, Context).
 
+%% @doc Update translations of (possibly nested) properties for one language.
+%%      The `Language` is normalized via language routines and the update is
+%%      merged with existing raw resource properties.
+-spec update_translation(Id, Language, Props, Context) -> {ok, UpdatedId} | {error, term()} when
+        Id :: m_rsc:resource(),
+        Language :: z_language:language(),
+        Props :: m_rsc:props_all(),
+        Context :: z:context(),
+        UpdatedId :: m_rsc:resource_id().
+update_translation(Id, Language, Props, Context) ->
+    m_rsc_update:update_translation(Id, Language, Props, Context).
+
+%% @doc Like `update_translation/4`, with extra update options.
+-spec update_translation(Id, Language, Props, Options, Context) -> {ok, UpdatedId} | {error, term()} when
+        Id :: m_rsc:resource(),
+        Language :: z_language:language(),
+        Props :: m_rsc:props_all(),
+        Options :: m_rsc:update_options(),
+        Context :: z:context(),
+        UpdatedId :: m_rsc:resource_id().
+update_translation(Id, Language, Props, Options, Context) ->
+    m_rsc_update:update_translation(Id, Language, Props, Options, Context).
+
 
 %% @doc Duplicate a resource.
--spec duplicate(resource(), props_all(), z:context()) ->
-    {ok, NewId :: resource_id()} | {error, Reason :: term()}.
+-spec duplicate(Id, Props, Context) -> {ok, NewId} | {error, Reason} when
+        Id :: resource(),
+        Props :: props_all(),
+        Context :: z:context(),
+        NewId :: resource_id(),
+        Reason :: term().
 duplicate(Id, Props, Context) ->
     m_rsc_update:duplicate(Id, Props, Context).
 
--spec duplicate(resource(), props_all(), duplicate_options(), z:context()) ->
-    {ok, NewId :: resource_id()} | {error, Reason :: term()}.
+-spec duplicate(Id, Props, Options, Context) -> {ok, NewId} | {error, Reason} when
+        Id :: resource(),
+        Props :: props_all(),
+        Options :: duplicate_options(),
+        Context :: z:context(),
+        NewId :: resource_id(),
+        Reason :: term().
 duplicate(Id, Props, Options, Context) ->
     m_rsc_update:duplicate(Id, Props, Options, Context).
 
@@ -1630,80 +1683,4 @@ postfix(N) -> integer_to_list(N).
 %% @doc Common properties, these are used by exporter and backup routines.
 -spec common_properties(z:context()) -> [binary()].
 common_properties(_Context) ->
-    [
-        <<"title">>,
-
-        <<"category_id">>,
-        <<"creator_id">>,
-        <<"modifier_id">>,
-
-        <<"created">>,
-        <<"modified">>,
-
-        <<"publication_start">>,
-        <<"publication_end">>,
-
-        <<"is_published">>,
-        <<"is_featured">>,
-        <<"is_protected">>,
-
-        <<"chapeau">>,
-        <<"subtitle">>,
-        <<"short_title">>,
-        <<"summary">>,
-
-        <<"name_prefix">>,
-        <<"name_first">>,
-        <<"name_surname_prefix">>,
-        <<"name_surname">>,
-
-        <<"phone">>,
-        <<"phone_mobile">>,
-        <<"phone_alt">>,
-        <<"phone_emergency">>,
-
-        <<"email">>,
-        <<"website">>,
-
-        <<"date_start">>,
-        <<"date_end">>,
-        <<"date_remarks">>,
-
-        <<"address_street_1">>,
-        <<"address_street_2">>,
-        <<"address_city">>,
-        <<"address_state">>,
-        <<"address_postcode">>,
-        <<"address_country">>,
-
-        <<"mail_email">>,
-        <<"mail_street_1">>,
-        <<"mail_street_2">>,
-        <<"mail_city">>,
-        <<"mail_state">>,
-        <<"mail_postcode">>,
-        <<"mail_country">>,
-
-        <<"billing_email">>,
-        <<"billing_street_1">>,
-        <<"billing_street_2">>,
-        <<"billing_city">>,
-        <<"billing_state">>,
-        <<"billing_postcode">>,
-        <<"billing_country">>,
-
-        <<"location_lng">>,
-        <<"location_lat">>,
-
-        <<"body">>,
-        <<"body_extra">>,
-        <<"blocks">>,
-
-        <<"page_path">>,
-        <<"name">>,
-
-        <<"seo_noindex">>,
-        <<"title_slug">>,
-        <<"custom_slug">>,
-        <<"seo_desc">>
-    ].
+    z_props:common_properties().
