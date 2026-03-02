@@ -76,7 +76,7 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
                             % TODO: add the notification here to let a module pick up the resize
                             % A remote server can then handle the resize request.
                             SiteDir = z_path:site_dir(Context),
-                            convert_1(os:find_executable("convert"), InFile, OutFile, Mime, FileProps, FiltersExpanded, SiteDir);
+                            convert_1(imagemagick_convert_cmd(), InFile, OutFile, Mime, FileProps, FiltersExpanded, SiteDir);
                         {error, Reason} = Error ->
                             ?LOG_WARNING(#{
                                 text => <<"Cannot expand mediaclass">>,
@@ -102,12 +102,51 @@ convert(InFile, MediumFilename, OutFile, Filters, Context) ->
             {error, Reason}
     end.
 
+%% @doc Find ImageMagick's 'convert' command on the current system, if any.
+%% This prefers the 'magick' command introduced in v7 if possible and
+%% otherwise falls back to the 'convert' one of previous ImageMagick's versions.
+%% Note: since system installations don't change that often, the result is cached.
+-spec imagemagick_convert_cmd() -> Cmd | false when Cmd :: string().
+imagemagick_convert_cmd() ->
+    Key = {?MODULE, imagemagick_convert_cmd},
+    case persistent_term:get(Key, undefined) of
+        undefined ->
+            ResultCmd = case os:find_executable("magick") of
+                false ->
+                    case os:find_executable("convert") of
+                        false -> false;
+                        Cmd -> z_filelib:os_filename(Cmd)
+                    end;
+                Cmd ->
+                    z_filelib:os_filename(Cmd)
+            end,
+            persistent_term:put(Key, ResultCmd),
+            ResultCmd;
+        ResultCmd ->
+            ResultCmd
+    end.
+
+-spec is_legacy_imagemagic() -> boolean().
+is_legacy_imagemagic() ->
+    Key = {?MODULE, is_legacy_imagemagic},
+    case persistent_term:get(Key, undefined) of
+        undefined ->
+            Result = case os:find_executable("magick") of
+                false -> true;
+                _Cmd -> false
+            end,
+            persistent_term:put(Key, Result),
+            Result;
+        Result ->
+            Result
+    end.
+
 convert_1(false, _InFile, _OutFile, _InMime, _FileProps, _Filters, _SiteDir) ->
     ?LOG_ERROR(#{
-        text => <<"Install ImageMagick 'convert' to generate previews of images.">>,
+        text => <<"Install ImageMagick to generate previews of images.">>,
         in => zotonic_core
     }),
-    {error, convert_missing};
+    {error, imagemagick_missing};
 convert_1(ConvertCmd, InFile, OutFile, InMime, FileProps, Filters, SiteDir) ->
     OutMime = z_media_identify:guess_mime(OutFile),
     case cmd_args(FileProps, Filters, OutMime) of
@@ -124,7 +163,7 @@ convert_2(CmdArgs, ConvertCmd, InFile, OutFile, InMime, FileProps, SiteDir) ->
     ok = z_filelib:ensure_dir(OutFile),
     Cmd = lists:flatten([
         "cd ", z_filelib:os_filename(SiteDir), "; ",
-        z_filelib:os_filename(ConvertCmd), " ",
+        ConvertCmd, " ",
         opt_density(FileProps),
         z_filelib:os_filename( unicode:characters_to_list(InFile) ++ infile_suffix(InMime) ), " ",
         lists:flatten(lists:join(32, CmdArgs)), " ",
@@ -454,7 +493,7 @@ filter2arg({make_image, <<"application/pdf">>}, Width, Height, _AllFilters) ->
 filter2arg(coalesce, Width, Height, _AllFilters) ->
     {Width, Height, "-coalesce"};
 filter2arg(deconstruct, Width, Height, _AllFilters) ->
-    {Width, Height, "-deconstruct"};
+    {Width, Height, ["-layers ", $", "CompareAny", $"]};
 filter2arg({make_image, Mime}, Width, Height, _AllFilters) when is_binary(Mime) ->
     {Width, Height, []};
 filter2arg({correct_orientation, Orientation}, Width, Height, _AllFilters) ->
@@ -551,31 +590,27 @@ filter2arg(lossless, Width, Height, _AllFilters) ->
 filter2arg({quality, Q}, Width, Height, _AllFilters) ->
     {Width,Height, ["-quality ",integer_to_list(Q)]};
 filter2arg({removebg, MatteFuzz}, Width, Height, AllFilters) ->
-    % Check if this is also contains a matter color.
     {Matte, Fuzz} = case binary:split(z_convert:to_binary(MatteFuzz), <<",">>) of
         [ M, F ] ->
-            {"-mattecolor "++z_filelib:os_escape(z_convert:to_list(M)), z_convert:to_integer(F)};
-        F ->
-            {"-matte", z_convert:to_integer(F)}
+            {"-mattecolor " ++z_filelib:os_escape(z_convert:to_list(M)), z_convert:to_integer(F)};
+        [ F ] ->
+            {"-alpha set", z_convert:to_integer(F)}
     end,
-    Filter = case lists:member(lossless, AllFilters) of
-                 true ->
-                     %% PNG images get the alpha channel flood-filled to remove the background.
-                     [Matte ++ " -fill none -fuzz ", integer_to_list(Fuzz), "% ",
-                      "-draw 'matte 0,0 floodfill' ",
-                      "-draw 'matte 0,", integer_to_list(Height-1), " floodfill' ",
-                      "-draw 'matte ", integer_to_list(Width-1), ",0 floodfill' ",
-                      "-draw 'matte ", integer_to_list(Width-1), ",", integer_to_list(Height-1), " floodfill' "
-                     ];
-                 false ->
-                     %% JPEG images get flood-filled with white to remove the background.
-                     [Matte ++ "-fill white -fuzz ", integer_to_list(Fuzz), "% ",
-                      "-draw 'color 0,0 floodfill' ",
-                      "-draw 'color 0,", integer_to_list(Height-1), " floodfill' ",
-                      "-draw 'color ", integer_to_list(Width-1), ",0 floodfill' ",
-                      "-draw 'color ", integer_to_list(Width-1), ",", integer_to_list(Height-1), " floodfill' "
-                     ]
-             end,
+    Fuzz = z_convert:to_integer(F),
+    Draw = case {lists:member(lossless, AllFilters), is_legacy_imagemagic()} of
+        %% PNG images get the alpha channel flood-filled to remove the background.
+        {true, true} -> "matte";
+        {true, false} -> "alpha";
+        %% JPEG images get flood-filled with white to remove the background.
+        _ -> "color"
+    end,
+    Filter = [
+        Matte ++ " -fill white -fuzz ", integer_to_list(Fuzz), "% ",
+        "-draw '" ++ Draw ++ " 0,0 floodfill' ",
+        "-draw '" ++ Draw ++ " 0,", integer_to_list(Height-1), " floodfill' ",
+        "-draw '" ++ Draw ++ " ", integer_to_list(Width-1), ",0 floodfill' ",
+        "-draw '" ++ Draw ++ " ", integer_to_list(Width-1), ",", integer_to_list(Height-1), " floodfill' "
+    ],
     {Width, Height, Filter};
 % Custom ImageMagick command line arguments -- only available from a mediaclass file
 filter2arg({magick, Arg}, Width, Height, _AllFilters) ->
